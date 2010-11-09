@@ -30,14 +30,14 @@
 #include "CommandDispatch.hxx"
 
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/chart2/XUndoManager.hpp>
+#include <com/sun/star/chart2/XDocumentActions.hpp>
 
 namespace chart
 {
 
 /** This is a CommandDispatch implementation for Undo and Redo.
 
-    You need to pass an UndoManager to this class that is then used for Undo and
+    You need to pass an DocumentActions to this class that is then used for Undo and
     Redo.  The changes are applied to the given XModel.
  */
 class UndoCommandDispatch : public CommandDispatch
@@ -77,7 +77,7 @@ private:
     ::com::sun::star::uno::Reference<
             ::com::sun::star::frame::XModel > m_xModel;
     ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XUndoManager > m_xUndoManager;
+            ::com::sun::star::chart2::XDocumentActions > m_xDocumentActions;
 };
 
 } //  namespace chart

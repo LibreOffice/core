@@ -34,7 +34,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
-#include <com/sun/star/chart2/XUndoManager.hpp>
+#include <com/sun/star/chart2/XDocumentActions.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 
@@ -67,9 +67,9 @@ class  ModifyBroadcaster;
 
 typedef ::cppu::WeakComponentImplHelper3<
             ::com::sun::star::util::XModifyBroadcaster,
-            ::com::sun::star::chart2::XUndoManager,
+            ::com::sun::star::chart2::XDocumentActions,
             ::com::sun::star::lang::XUnoTunnel >
-    UndoManager_Base;
+    DocumentActions_Base;
 
 } // namespace impl
 // ----------------------------------------
@@ -81,14 +81,14 @@ typedef ::cppu::WeakComponentImplHelper3<
     redo-stacks support the css::util::XCloneable interface, which is
     implemented such that the entire model is cloned.
  */
-class UndoManager :
+class DocumentActions :
         public MutexContainer,
         public ConfigItemListener,
-        public impl::UndoManager_Base
+        public impl::DocumentActions_Base
 {
 public:
-    explicit UndoManager( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rModel );
-    virtual ~UndoManager();
+    explicit DocumentActions( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rModel );
+    virtual ~DocumentActions();
 
     void addShapeUndoAction( SdrUndoAction* pAction );
 
@@ -97,7 +97,7 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelId();
-    static UndoManager* getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> xObj );
+    static DocumentActions* getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> xObj );
 
 protected:
     // ____ ConfigItemListener ____
@@ -111,7 +111,7 @@ protected:
         const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener )
         throw (::com::sun::star::uno::RuntimeException);
 
-    // ____ chart2::XUndoManager ____
+    // ____ chart2::XDocumentActions ____
     virtual void SAL_CALL preAction(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL preActionWithArguments( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArguments ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL postAction( const ::rtl::OUString& aUndoText ) throw (::com::sun::star::uno::RuntimeException);

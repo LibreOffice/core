@@ -80,7 +80,7 @@ void ChartController::StartTextEdit( const Point* pMousePixel )
     if(!pTextObj)
         return;
 
-    m_xUndoManager->preAction();
+    m_xDocumentActions->preAction();
     SdrOutliner* pOutliner = m_pDrawViewWrapper->getOutliner();
     //pOutliner->SetRefDevice(m_pChartWindow);
     //pOutliner->SetStyleSheetPool((SfxStyleSheetPool*)pStyleSheetPool);
@@ -166,7 +166,7 @@ bool ChartController::EndTextEdit()
 
             try
             {
-                m_xUndoManager->postAction( C2U("Edit Text") );
+                m_xDocumentActions->postAction( C2U("Edit Text") );
             }
             catch( uno::RuntimeException& e)
             {
@@ -177,7 +177,7 @@ bool ChartController::EndTextEdit()
         {
             try
             {
-                m_xUndoManager->cancelAction();
+                m_xDocumentActions->cancelAction();
             }
             catch ( uno::RuntimeException& e )
             {

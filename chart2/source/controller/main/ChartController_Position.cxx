@@ -139,7 +139,7 @@ void SAL_CALL ChartController::executeDispatch_PositionAndSize()
         ActionDescriptionProvider::createDescription(
             ActionDescriptionProvider::POS_SIZE,
             ObjectNameProvider::getName( ObjectIdentifier::getObjectType( aCID ))),
-        m_xUndoManager );
+        m_xDocumentActions );
 
     SfxAbstractTabDialog * pDlg = NULL;
     try

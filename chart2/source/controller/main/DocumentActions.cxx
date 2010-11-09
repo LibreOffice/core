@@ -28,8 +28,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_chart2.hxx"
 
-#include "UndoManager.hxx"
-#include "ImplUndoManager.hxx"
+#include "DocumentActions.hxx"
+#include "ImplDocumentActions.hxx"
 #include "DisposeHelper.hxx"
 #include "MutexContainer.hxx"
 #include "macros.hxx"
@@ -118,8 +118,8 @@ void ModifyBroadcaster::fireEvent()
 
 } // namespace impl
 
-UndoManager::UndoManager( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rModel ) :
-        impl::UndoManager_Base( m_aMutex ),
+DocumentActions::DocumentActions( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rModel ) :
+        impl::DocumentActions_Base( m_aMutex ),
     m_apUndoStack( new impl::UndoStack()),
     m_apRedoStack( new impl::UndoStack()),
     m_pLastRemeberedUndoElement( 0 ),
@@ -128,7 +128,7 @@ UndoManager::UndoManager( const ::com::sun::star::uno::Reference< ::com::sun::st
     m_aModel( rModel )
 {}
 
-UndoManager::~UndoManager()
+DocumentActions::~DocumentActions()
 {
     DisposeHelper::Dispose( m_xModifyBroadcaster );
     m_apUndoStack->disposeAndClear();
@@ -138,7 +138,7 @@ UndoManager::~UndoManager()
     m_pLastRemeberedUndoElement = 0;
 }
 
-void UndoManager::addShapeUndoAction( SdrUndoAction* pAction )
+void DocumentActions::addShapeUndoAction( SdrUndoAction* pAction )
 {
     if ( !pAction )
     {
@@ -158,13 +158,13 @@ void UndoManager::addShapeUndoAction( SdrUndoAction* pAction )
     }
 }
 
-Reference< XModel > UndoManager::impl_getModel() const
+Reference< XModel > DocumentActions::impl_getModel() const
 {
     Reference< XModel > xModel( m_aModel );
     return xModel;
 }
 
-void UndoManager::impl_undoRedo(
+void DocumentActions::impl_undoRedo(
     impl::UndoStack * pStackToRemoveFrom,
     impl::UndoStack * pStackToAddTo,
     bool bUndo )
@@ -214,7 +214,7 @@ void UndoManager::impl_undoRedo(
     }
 }
 
-void UndoManager::fireModifyEvent()
+void DocumentActions::fireModifyEvent()
 {
     if( m_xModifyBroadcaster.is())
         m_pModifyBroadcaster->fireEvent();
@@ -222,7 +222,7 @@ void UndoManager::fireModifyEvent()
 
 
 // ____ ConfigItemListener ____
-void UndoManager::notify( const ::rtl::OUString & rPropertyName )
+void DocumentActions::notify( const ::rtl::OUString & rPropertyName )
 {
     OSL_ENSURE( rPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Steps" )),
                 "Unwanted config property change Notified" );
@@ -230,7 +230,7 @@ void UndoManager::notify( const ::rtl::OUString & rPropertyName )
         retrieveConfigUndoSteps();
 }
 
-void UndoManager::retrieveConfigUndoSteps()
+void DocumentActions::retrieveConfigUndoSteps()
 {
     if( ! m_apUndoStepsConfigItem.get())
         m_apUndoStepsConfigItem.reset( new impl::UndoStepsConfigItem( *this ));
@@ -243,7 +243,7 @@ void UndoManager::retrieveConfigUndoSteps()
 }
 
 // ____ XModifyBroadcaster ____
-void SAL_CALL UndoManager::addModifyListener( const Reference< util::XModifyListener >& aListener )
+void SAL_CALL DocumentActions::addModifyListener( const Reference< util::XModifyListener >& aListener )
     throw (uno::RuntimeException)
 {
     if( ! m_xModifyBroadcaster.is())
@@ -254,7 +254,7 @@ void SAL_CALL UndoManager::addModifyListener( const Reference< util::XModifyList
     m_xModifyBroadcaster->addModifyListener( aListener );
 }
 
-void SAL_CALL UndoManager::removeModifyListener( const Reference< util::XModifyListener >& aListener )
+void SAL_CALL DocumentActions::removeModifyListener( const Reference< util::XModifyListener >& aListener )
     throw (uno::RuntimeException)
 {
     if( ! m_xModifyBroadcaster.is())
@@ -265,15 +265,15 @@ void SAL_CALL UndoManager::removeModifyListener( const Reference< util::XModifyL
     m_xModifyBroadcaster->removeModifyListener( aListener );
 }
 
-// ____ chart2::XUndoManager ____
-void SAL_CALL UndoManager::preAction(  )
+// ____ chart2::XDocumentActions ____
+void SAL_CALL DocumentActions::preAction(  )
     throw (uno::RuntimeException)
 {
     OSL_ENSURE( ! m_pLastRemeberedUndoElement, "Looks like postAction or cancelAction call was missing" );
     m_pLastRemeberedUndoElement = new impl::UndoElement( impl_getModel() );
 }
 
-void SAL_CALL UndoManager::preActionWithArguments(
+void SAL_CALL DocumentActions::preActionWithArguments(
     const Sequence< beans::PropertyValue >& aArguments )
     throw (uno::RuntimeException)
 {
@@ -299,7 +299,7 @@ void SAL_CALL UndoManager::preActionWithArguments(
         preAction();
 }
 
-void SAL_CALL UndoManager::postAction( const OUString& aUndoText )
+void SAL_CALL DocumentActions::postAction( const OUString& aUndoText )
     throw (uno::RuntimeException)
 {
     OSL_ENSURE( m_pLastRemeberedUndoElement, "Looks like preAction call was missing" );
@@ -321,14 +321,14 @@ void SAL_CALL UndoManager::postAction( const OUString& aUndoText )
     }
 }
 
-void SAL_CALL UndoManager::cancelAction()
+void SAL_CALL DocumentActions::cancelAction()
     throw (uno::RuntimeException)
 {
     delete m_pLastRemeberedUndoElement;
     m_pLastRemeberedUndoElement = 0;
 }
 
-void SAL_CALL UndoManager::cancelActionWithUndo(  )
+void SAL_CALL DocumentActions::cancelActionWithUndo(  )
     throw (uno::RuntimeException)
 {
     if( m_pLastRemeberedUndoElement )
@@ -338,58 +338,58 @@ void SAL_CALL UndoManager::cancelActionWithUndo(  )
     }
 }
 
-void SAL_CALL UndoManager::undo(  )
+void SAL_CALL DocumentActions::undo(  )
     throw (uno::RuntimeException)
 {
     OSL_ASSERT( m_apUndoStack.get() && m_apRedoStack.get());
     impl_undoRedo( m_apUndoStack.get(), m_apRedoStack.get(), true );
 }
 
-void SAL_CALL UndoManager::redo(  )
+void SAL_CALL DocumentActions::redo(  )
     throw (uno::RuntimeException)
 {
     OSL_ASSERT( m_apUndoStack.get() && m_apRedoStack.get());
     impl_undoRedo( m_apRedoStack.get(), m_apUndoStack.get(), false );
 }
 
-::sal_Bool SAL_CALL UndoManager::undoPossible()
+::sal_Bool SAL_CALL DocumentActions::undoPossible()
     throw (uno::RuntimeException)
 {
     return ! m_apUndoStack->empty();
 }
 
-::sal_Bool SAL_CALL UndoManager::redoPossible()
+::sal_Bool SAL_CALL DocumentActions::redoPossible()
     throw (uno::RuntimeException)
 {
     return ! m_apRedoStack->empty();
 }
 
-OUString SAL_CALL UndoManager::getCurrentUndoString()
+OUString SAL_CALL DocumentActions::getCurrentUndoString()
     throw (uno::RuntimeException)
 {
     return m_apUndoStack->topUndoString();
 }
 
-OUString SAL_CALL UndoManager::getCurrentRedoString()
+OUString SAL_CALL DocumentActions::getCurrentRedoString()
     throw (uno::RuntimeException)
 {
     return m_apRedoStack->topUndoString();
 }
 
-Sequence< OUString > SAL_CALL UndoManager::getAllUndoStrings()
+Sequence< OUString > SAL_CALL DocumentActions::getAllUndoStrings()
     throw (uno::RuntimeException)
 {
     return m_apUndoStack->getUndoStrings();
 }
 
-Sequence< OUString > SAL_CALL UndoManager::getAllRedoStrings()
+Sequence< OUString > SAL_CALL DocumentActions::getAllRedoStrings()
     throw (uno::RuntimeException)
 {
     return m_apRedoStack->getUndoStrings();
 }
 
 // ____ XUnoTunnel ____
-sal_Int64 UndoManager::getSomething( const Sequence< sal_Int8 >& rId )
+sal_Int64 DocumentActions::getSomething( const Sequence< sal_Int8 >& rId )
     throw (uno::RuntimeException)
 {
     if ( rId.getLength() == 16 && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(), rId.getConstArray(), 16 ) )
@@ -400,7 +400,7 @@ sal_Int64 UndoManager::getSomething( const Sequence< sal_Int8 >& rId )
 }
 
 // static
-const Sequence< sal_Int8 >& UndoManager::getUnoTunnelId()
+const Sequence< sal_Int8 >& DocumentActions::getUnoTunnelId()
 {
     static Sequence< sal_Int8 >* pSeq = 0;
     if( !pSeq )
@@ -417,13 +417,13 @@ const Sequence< sal_Int8 >& UndoManager::getUnoTunnelId()
 }
 
 // static
-UndoManager* UndoManager::getImplementation( const Reference< uno::XInterface > xObj )
+DocumentActions* DocumentActions::getImplementation( const Reference< uno::XInterface > xObj )
 {
-    UndoManager* pRet = NULL;
+    DocumentActions* pRet = NULL;
     Reference< lang::XUnoTunnel > xUT( xObj, uno::UNO_QUERY );
     if ( xUT.is() )
     {
-        pRet = reinterpret_cast< UndoManager* >( sal::static_int_cast< sal_IntPtr >( xUT->getSomething( getUnoTunnelId() ) ) );
+        pRet = reinterpret_cast< DocumentActions* >( sal::static_int_cast< sal_IntPtr >( xUT->getSomething( getUnoTunnelId() ) ) );
     }
     return pRet;
 }

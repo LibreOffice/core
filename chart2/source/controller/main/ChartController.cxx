@@ -53,13 +53,12 @@
 #include "AccessibleChartView.hxx"
 #include "DrawCommandDispatch.hxx"
 #include "ShapeController.hxx"
-#include "UndoManager.hxx"
+#include "DocumentActions.hxx"
 
 #include <comphelper/InlineContainer.hxx>
 
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
-#include <com/sun/star/chart2/XUndoSupplier.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #include <com/sun/star/frame/XLoadable.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
@@ -128,12 +127,11 @@ ChartController::ChartController(uno::Reference<uno::XComponentContext> const & 
     , m_bWaitingForDoubleClick(false)
     , m_bWaitingForMouseUp(false)
     , m_bConnectingToView(false)
-    , m_xUndoManager( 0 )
+    , m_xDocumentActions( 0 )
     , m_aDispatchContainer( m_xCC, this )
     , m_eDrawMode( CHARTDRAW_SELECT )
 {
     DBG_CTOR(ChartController,NULL);
-//     m_aDispatchContainer.setUndoManager( m_xUndoManager );
     m_aDoubleClickTimer.SetTimeoutHdl( LINK( this, ChartController, DoubleClickWaitingHdl ) );
 }
 
@@ -615,9 +613,7 @@ void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent 
     if( m_pChartWindow )
         m_pChartWindow->Invalidate();
 
-    uno::Reference< chart2::XUndoSupplier > xUndoSupplier( getModel(), uno::UNO_QUERY );
-    if( xUndoSupplier.is())
-        m_xUndoManager.set( xUndoSupplier->getUndoManager());
+    m_xDocumentActions.set( getModel(), uno::UNO_QUERY );
 
     return sal_True;
 }
@@ -818,7 +814,7 @@ void ChartController::impl_deleteDrawViewController()
         }
 
         m_xFrame.clear();
-        m_xUndoManager.clear();
+        m_xDocumentActions.clear();
 
         TheModelRef aModelRef( m_aModel, m_aModelMutex);
         m_aModel = NULL;
@@ -955,7 +951,7 @@ bool ChartController::impl_releaseThisModel( const uno::Reference< uno::XInterfa
         if( m_aModel.is() && m_aModel->getModel() == xModel )
         {
             m_aModel = NULL;
-            m_xUndoManager.clear();
+            m_xDocumentActions.clear();
             bReleaseModel = true;
         }
     }
@@ -1327,7 +1323,7 @@ void SAL_CALL ChartController::executeDispatch_ChartType()
 {
     // using assignment for broken gcc 3.3
     UndoLiveUpdateGuard aUndoGuard = UndoLiveUpdateGuard(
-        String( SchResId( STR_ACTION_EDIT_CHARTTYPE )), m_xUndoManager );
+        String( SchResId( STR_ACTION_EDIT_CHARTTYPE )), m_xDocumentActions );
 
     // /--
     ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
@@ -1352,7 +1348,7 @@ void SAL_CALL ChartController::executeDispatch_SourceData()
 
     // using assignment for broken gcc 3.3
     UndoLiveUpdateGuard aUndoGuard = UndoLiveUpdateGuard(
-        String( SchResId( STR_ACTION_EDIT_DATA_RANGES )), m_xUndoManager );
+        String( SchResId( STR_ACTION_EDIT_DATA_RANGES )), m_xDocumentActions );
     if( xChartDoc.is())
     {
         // /--
@@ -1380,7 +1376,7 @@ void SAL_CALL ChartController::executeDispatch_MoveSeries( sal_Bool bForward )
         ActionDescriptionProvider::createDescription(
             (bForward ? ActionDescriptionProvider::MOVE_TOTOP : ActionDescriptionProvider::MOVE_TOBOTTOM),
             String( SchResId( STR_OBJECT_DATASERIES ))),
-        m_xUndoManager );
+        m_xDocumentActions );
 
     bool bChanged = DiagramHelper::moveSeries( ChartModelHelper::findDiagram( getModel() ), xGivenDataSeries, bForward );
     if( bChanged )
@@ -1449,10 +1445,10 @@ IMPL_LINK( ChartController, NotifyUndoActionHdl, SdrUndoAction*, pUndoAction )
     ::rtl::OUString aObjectCID = m_aSelection.getSelectedCID();
     if ( aObjectCID.getLength() == 0 )
     {
-        UndoManager* pUndoManager = UndoManager::getImplementation( m_xUndoManager );
-        if ( pUndoManager )
+        DocumentActions* pDocumentActions = DocumentActions::getImplementation( m_xDocumentActions );
+        if ( pDocumentActions )
         {
-            pUndoManager->addShapeUndoAction( pUndoAction );
+            pDocumentActions->addShapeUndoAction( pUndoAction );
         }
     }
     return 0L;

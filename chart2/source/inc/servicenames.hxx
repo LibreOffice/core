@@ -62,7 +62,7 @@ namespace chart
 
 #define CHART_RENDERER_SERVICE_IMPLEMENTATION_NAME ::rtl::OUString::createFromAscii("com.sun.star.comp.chart2.ChartRenderer")
 
-#define CHART_UNDOMANAGER_SERVICE_NAME ::rtl::OUString::createFromAscii( "com.sun.star.chart2.UndoManager" )
+#define CHART_DOCUMENT_ACTIONS_SERVICE_NAME ::rtl::OUString::createFromAscii( "com.sun.star.chart2.DocumentActions" )
 
 //.............................................................................
 } //namespace chart

@@ -839,7 +839,7 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
             if( pChartDragMethod )
             {
                 UndoGuard aUndoGuard( pChartDragMethod->getUndoDescription(),
-                        m_xUndoManager );
+                        m_xDocumentActions );
 
                 if( pDrawViewWrapper->EndDragObj(false) )
                 {
@@ -872,7 +872,7 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
                             ActionDescriptionProvider::createDescription(
                                 eActionType,
                                 ObjectNameProvider::getName( ObjectIdentifier::getObjectType( m_aSelection.getSelectedCID() ))),
-                            m_xUndoManager );
+                            m_xDocumentActions );
                         bool bChanged = PositionAndSizeHelper::moveObject( m_aSelection.getSelectedCID()
                                         , getModel()
                                         , awt::Rectangle(aObjectRect.getX(),aObjectRect.getY(),aObjectRect.getWidth(),aObjectRect.getHeight())
@@ -1808,7 +1808,7 @@ bool ChartController::impl_moveOrResizeObject(
 
             ObjectType eObjectType = ObjectIdentifier::getObjectType( rCID );
             UndoGuard aUndoGuard( ActionDescriptionProvider::createDescription(
-                    eActionType, ObjectNameProvider::getName( eObjectType )), m_xUndoManager );
+                    eActionType, ObjectNameProvider::getName( eObjectType )), m_xDocumentActions );
             {
                 ControllerLockGuard aCLGuard( xChartModel );
                 if( bNeedShift )

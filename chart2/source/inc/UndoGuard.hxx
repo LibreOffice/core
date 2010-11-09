@@ -27,7 +27,7 @@
 #ifndef CHART2_UNDOGUARD_HXX
 #define CHART2_UNDOGUARD_HXX
 
-#include <com/sun/star/chart2/XUndoManager.hpp>
+#include <com/sun/star/chart2/XDocumentActions.hpp>
 
 // header for class OUString
 #include <rtl/ustring.hxx>
@@ -41,14 +41,14 @@ class UndoGuard_Base
 public:
     explicit UndoGuard_Base( const rtl::OUString & rUndoMessage
         , const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XUndoManager > & xUndoManager );
+            ::com::sun::star::chart2::XDocumentActions > & xDocumentActions );
     virtual ~UndoGuard_Base();
 
     void commitAction();
 
 protected:
     ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XUndoManager > m_xUndoManager;
+            ::com::sun::star::chart2::XDocumentActions > m_xDocumentActions;
 
     rtl::OUString   m_aUndoString;
     bool            m_bActionPosted;
@@ -63,7 +63,7 @@ class UndoGuard : public UndoGuard_Base
 public:
     explicit UndoGuard( const rtl::OUString& rUndoMessage
         , const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XUndoManager > & xUndoManager );
+            ::com::sun::star::chart2::XDocumentActions > & xDocumentActions );
     virtual ~UndoGuard();
 };
 
@@ -76,7 +76,7 @@ class UndoLiveUpdateGuard : public UndoGuard_Base
 public:
     explicit UndoLiveUpdateGuard( const rtl::OUString& rUndoMessage
         , const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XUndoManager > & xUndoManager );
+            ::com::sun::star::chart2::XDocumentActions > & xDocumentActions );
     virtual ~UndoLiveUpdateGuard();
 };
 
@@ -89,7 +89,7 @@ class UndoLiveUpdateGuardWithData :
 public:
     explicit UndoLiveUpdateGuardWithData( const rtl::OUString& rUndoMessage
         , const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XUndoManager > & xUndoManager );
+            ::com::sun::star::chart2::XDocumentActions > & xDocumentActions );
     virtual ~UndoLiveUpdateGuardWithData();
 };
 
@@ -98,7 +98,7 @@ class UndoGuardWithSelection : public UndoGuard_Base
 public:
     explicit UndoGuardWithSelection( const rtl::OUString& rUndoMessage
         , const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XUndoManager > & xUndoManager );
+            ::com::sun::star::chart2::XDocumentActions > & xDocumentActions );
     virtual ~UndoGuardWithSelection();
 };
 

@@ -42,7 +42,7 @@
 #include <cppuhelper/implbase12.hxx>
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
-#include <com/sun/star/chart2/XUndoManager.hpp>
+#include <com/sun/star/chart2/XDocumentActions.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
@@ -578,7 +578,7 @@ private:
 
     bool volatile       m_bConnectingToView;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XUndoManager > m_xUndoManager;
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDocumentActions > m_xDocumentActions;
     /// needed for dispatching URLs in FeatureStateEvents
     mutable ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer > m_xURLTransformer;
 

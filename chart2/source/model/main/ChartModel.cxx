@@ -73,6 +73,7 @@
 
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::uno::Any;
 using ::rtl::OUString;
 using ::osl::MutexGuard;
@@ -152,7 +153,7 @@ ChartModel::ChartModel( const ChartModel & rOther )
     , m_aGraphicObjectVector( rOther.m_aGraphicObjectVector )
     , m_xDataProvider( rOther.m_xDataProvider )
     , m_xInternalDataProvider( rOther.m_xInternalDataProvider )
-    , m_xUndoManager( NULL )
+    , m_xDocumentActions( NULL )
 {
     OSL_TRACE( "ChartModel: Copy-CTOR called" );
 
@@ -1342,14 +1343,110 @@ void SAL_CALL ChartModel::setParent( const Reference< uno::XInterface >& Parent 
         m_xParent.set( Parent, uno::UNO_QUERY );
 }
 
-// ____ XUndoManager ____
-Reference< chart2::XUndoManager > SAL_CALL ChartModel::getUndoManager()
-    throw (uno::RuntimeException)
+bool ChartModel::impl_getDocumentActions_lck()
+{
+    if ( !m_xDocumentActions.is() )
+        m_xDocumentActions.set( createInstance( CHART_DOCUMENT_ACTIONS_SERVICE_NAME ), uno::UNO_QUERY );
+    OSL_POSTCOND( m_xDocumentActions.is(), "ChartModel::impl_getDocumentActions_lck: could not create the legacy DocumentActions service!" );
+    return m_xDocumentActions.is();
+}
+
+// ____ XDocumentActions ____
+void SAL_CALL ChartModel::preAction(  ) throw (RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aModelMutex );
-    if ( !m_xUndoManager.is() )
-        m_xUndoManager.set( createInstance( CHART_UNDOMANAGER_SERVICE_NAME ), uno::UNO_QUERY );
-    return m_xUndoManager;
+    if ( impl_getDocumentActions_lck() )
+        m_xDocumentActions->preAction();
+}
+
+void SAL_CALL ChartModel::preActionWithArguments( const Sequence< beans::PropertyValue >& aArguments ) throw (RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aModelMutex );
+    if ( impl_getDocumentActions_lck() )
+        m_xDocumentActions->preActionWithArguments( aArguments );
+}
+
+void SAL_CALL ChartModel::postAction( const ::rtl::OUString& aUndoText ) throw (RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aModelMutex );
+    if ( impl_getDocumentActions_lck() )
+        m_xDocumentActions->postAction( aUndoText );
+}
+
+void SAL_CALL ChartModel::cancelAction(  ) throw (RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aModelMutex );
+    if ( impl_getDocumentActions_lck() )
+        m_xDocumentActions->cancelAction();
+}
+
+void SAL_CALL ChartModel::cancelActionWithUndo(  ) throw (RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aModelMutex );
+    if ( impl_getDocumentActions_lck() )
+        m_xDocumentActions->cancelActionWithUndo();
+}
+
+void SAL_CALL ChartModel::undo(  ) throw (RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aModelMutex );
+    if ( impl_getDocumentActions_lck() )
+        m_xDocumentActions->undo();
+}
+
+void SAL_CALL ChartModel::redo(  ) throw (RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aModelMutex );
+    if ( impl_getDocumentActions_lck() )
+        m_xDocumentActions->redo();
+}
+
+::sal_Bool SAL_CALL ChartModel::undoPossible(  ) throw (RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aModelMutex );
+    if ( impl_getDocumentActions_lck() )
+        return m_xDocumentActions->undoPossible();
+    return sal_False;
+}
+
+::sal_Bool SAL_CALL ChartModel::redoPossible(  ) throw (RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aModelMutex );
+    if ( impl_getDocumentActions_lck() )
+        return m_xDocumentActions->redoPossible();
+    return sal_False;
+}
+
+::rtl::OUString SAL_CALL ChartModel::getCurrentUndoString(  ) throw (RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aModelMutex );
+    if ( impl_getDocumentActions_lck() )
+        return m_xDocumentActions->getCurrentUndoString();
+    return ::rtl::OUString();
+}
+
+::rtl::OUString SAL_CALL ChartModel::getCurrentRedoString(  ) throw (RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aModelMutex );
+    if ( impl_getDocumentActions_lck() )
+        return m_xDocumentActions->getCurrentRedoString();
+    return ::rtl::OUString();
+}
+
+Sequence< ::rtl::OUString > SAL_CALL ChartModel::getAllUndoStrings(  ) throw (RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aModelMutex );
+    if ( impl_getDocumentActions_lck() )
+        return m_xDocumentActions->getAllUndoStrings();
+    return Sequence< ::rtl::OUString >();
+}
+
+Sequence< ::rtl::OUString > SAL_CALL ChartModel::getAllRedoStrings(  ) throw (RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aModelMutex );
+    if ( impl_getDocumentActions_lck() )
+        return m_xDocumentActions->getAllRedoStrings();
+    return Sequence< ::rtl::OUString >();
 }
 
 // ____ XDataSource ____

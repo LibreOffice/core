@@ -40,8 +40,8 @@ namespace chart
 {
 
 UndoGuard_Base::UndoGuard_Base( const OUString& rUndoString
-        , const uno::Reference< chart2::XUndoManager > & xUndoManager )
-        : m_xUndoManager( xUndoManager )
+        , const uno::Reference< chart2::XDocumentActions > & xDocumentActions )
+        : m_xDocumentActions( xDocumentActions )
         , m_aUndoString( rUndoString )
         , m_bActionPosted( false )
 {
@@ -53,85 +53,85 @@ UndoGuard_Base::~UndoGuard_Base()
 
 void UndoGuard_Base::commitAction()
 {
-    if( !m_bActionPosted && m_xUndoManager.is() )
-        m_xUndoManager->postAction( m_aUndoString );
+    if( !m_bActionPosted && m_xDocumentActions.is() )
+        m_xDocumentActions->postAction( m_aUndoString );
     m_bActionPosted = true;
 }
 
 //-----------------------------------------------------------------------------
 
 UndoGuard::UndoGuard( const OUString& rUndoString
-        , const uno::Reference< chart2::XUndoManager > & xUndoManager )
-        : UndoGuard_Base( rUndoString, xUndoManager )
+        , const uno::Reference< chart2::XDocumentActions > & xDocumentActions )
+        : UndoGuard_Base( rUndoString, xDocumentActions )
 {
-    if( m_xUndoManager.is() )
-        m_xUndoManager->preAction();
+    if( m_xDocumentActions.is() )
+        m_xDocumentActions->preAction();
 }
 
 UndoGuard::~UndoGuard()
 {
-    if( !m_bActionPosted && m_xUndoManager.is() )
-        m_xUndoManager->cancelAction();
+    if( !m_bActionPosted && m_xDocumentActions.is() )
+        m_xDocumentActions->cancelAction();
 }
 
 //-----------------------------------------------------------------------------
 
 UndoLiveUpdateGuard::UndoLiveUpdateGuard( const OUString& rUndoString
-        , const uno::Reference< chart2::XUndoManager > & xUndoManager )
-        : UndoGuard_Base( rUndoString, xUndoManager )
+        , const uno::Reference< chart2::XDocumentActions > & xDocumentActions )
+        : UndoGuard_Base( rUndoString, xDocumentActions )
 {
-    if( m_xUndoManager.is() )
-        m_xUndoManager->preAction();
+    if( m_xDocumentActions.is() )
+        m_xDocumentActions->preAction();
 }
 
 UndoLiveUpdateGuard::~UndoLiveUpdateGuard()
 {
-    if( !m_bActionPosted && m_xUndoManager.is() )
-        m_xUndoManager->cancelActionWithUndo();
+    if( !m_bActionPosted && m_xDocumentActions.is() )
+        m_xDocumentActions->cancelActionWithUndo();
 }
 
 //-----------------------------------------------------------------------------
 
 UndoLiveUpdateGuardWithData::UndoLiveUpdateGuardWithData( const OUString& rUndoString
-        , const uno::Reference< chart2::XUndoManager > & xUndoManager )
-        : UndoGuard_Base( rUndoString, xUndoManager )
+        , const uno::Reference< chart2::XDocumentActions > & xDocumentActions )
+        : UndoGuard_Base( rUndoString, xDocumentActions )
 {
-    if( m_xUndoManager.is() )
+    if( m_xDocumentActions.is() )
     {
         Sequence< beans::PropertyValue > aArgs(1);
         aArgs[0] = beans::PropertyValue(
             OUString( RTL_CONSTASCII_USTRINGPARAM("WithData")), -1, uno::Any(),
             beans::PropertyState_DIRECT_VALUE );
-        m_xUndoManager->preActionWithArguments( aArgs );
+        m_xDocumentActions->preActionWithArguments( aArgs );
     }
 }
 
 UndoLiveUpdateGuardWithData::~UndoLiveUpdateGuardWithData()
 {
-    if( !m_bActionPosted && m_xUndoManager.is() )
-        m_xUndoManager->cancelActionWithUndo();
+    if( !m_bActionPosted && m_xDocumentActions.is() )
+        m_xDocumentActions->cancelActionWithUndo();
 }
 
 //-----------------------------------------------------------------------------
 
 UndoGuardWithSelection::UndoGuardWithSelection( const rtl::OUString& rUndoString
-        , const uno::Reference< chart2::XUndoManager > & xUndoManager )
-        : UndoGuard_Base( rUndoString, xUndoManager )
+        , const uno::Reference< chart2::XDocumentActions > & xDocumentActions )
+        : UndoGuard_Base( rUndoString, xDocumentActions )
 {
-    if( m_xUndoManager.is() )
+    if( m_xDocumentActions.is() )
     {
         Sequence< beans::PropertyValue > aArgs(1);
         aArgs[0] = beans::PropertyValue(
             OUString( RTL_CONSTASCII_USTRINGPARAM("WithSelection")), -1, uno::Any(),
             beans::PropertyState_DIRECT_VALUE );
-        m_xUndoManager->preActionWithArguments( aArgs );
+        m_xDocumentActions->preActionWithArguments( aArgs );
     }
 }
 
 UndoGuardWithSelection::~UndoGuardWithSelection()
 {
-    if( !m_bActionPosted && m_xUndoManager.is() )
-        m_xUndoManager->cancelAction();
+    if( !m_bActionPosted && m_xDocumentActions.is() )
+        m_xDocumentActions->cancelAction();
 }
 
 } //  namespace chart

@@ -45,7 +45,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/container/XChild.hpp>
-#include <com/sun/star/chart2/XUndoSupplier.hpp>
+#include <com/sun/star/chart2/XDocumentActions.hpp>
 #include <com/sun/star/chart2/data/XDataSource.hpp>
 #include <com/sun/star/chart2/XChartTypeTemplate.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -108,7 +108,7 @@ typedef ::comphelper::WeakImplHelper20<
         ,::com::sun::star::container::XChild
         ,::com::sun::star::util::XModifyListener
         ,::com::sun::star::datatransfer::XTransferable
-        ,::com::sun::star::chart2::XUndoSupplier
+        ,::com::sun::star::chart2::XDocumentActions
         ,::com::sun::star::document::XDocumentPropertiesSupplier
         ,::com::sun::star::chart2::data::XDataSource
         >
@@ -171,8 +171,8 @@ private:
     bool                                  m_bIsDisposed;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                                           m_xPageBackground;
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XUndoManager >
-                                          m_xUndoManager;
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDocumentActions >
+                                          m_xDocumentActions;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>     m_xXMLNamespaceMap;
 
@@ -594,13 +594,41 @@ public:
         throw (::com::sun::star::lang::NoSupportException,
                ::com::sun::star::uno::RuntimeException);
 
-    // ____ XUndoSupplier ____
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XUndoManager > SAL_CALL getUndoManager()
+    // ____ XDocumentActions ____
+    virtual void SAL_CALL preAction(  )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL preActionWithArguments(
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArguments )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL postAction( const ::rtl::OUString& aUndoText )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL cancelAction(  )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL cancelActionWithUndo(  )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL undo(  )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL redo(  )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL undoPossible(  )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL redoPossible(  )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getCurrentUndoString(  )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getCurrentRedoString(  )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getAllUndoStrings(  )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getAllRedoStrings(  )
         throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XDataSource ____ allows access to the curently used data and data ranges
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XLabeledDataSequence > > SAL_CALL getDataSequences()
         throw (::com::sun::star::uno::RuntimeException);
+
+private:
+    bool impl_getDocumentActions_lck();
 };
 
 }  // namespace chart
