@@ -263,9 +263,9 @@ bool VtableFactory::createBlock(Block &block, sal_Int32 slotCount) const
     for (int i = strDirectory.getLength() == 0 ? 1 : 0; i < 2; ++i)
     {
         if (!strDirectory.getLength())
-            strDirectory = rtl::OUString::createFromAscii("/tmp");
+            strDirectory = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/tmp" ));
 
-        strDirectory += rtl::OUString::createFromAscii("/.execoooXXXXXX");
+        strDirectory += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/.execoooXXXXXX" ));
         rtl::OString aTmpName = rtl::OUStringToOString(strDirectory, osl_getThreadTextEncoding());
         char *tmpfname = new char[aTmpName.getLength()+1];
         strncpy(tmpfname, aTmpName.getStr(), aTmpName.getLength()+1);
