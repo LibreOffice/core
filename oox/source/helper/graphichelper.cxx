@@ -38,6 +38,7 @@
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <comphelper/seqstream.hxx>
 #include "oox/helper/containerhelper.hxx"
+#include "oox/helper/propertyset.hxx"
 #include "oox/token/tokens.hxx"
 
 namespace oox {
