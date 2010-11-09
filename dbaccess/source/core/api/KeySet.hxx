@@ -142,9 +142,11 @@ namespace dbaccess
 
         void impl_convertValue_throw(const ORowSetRow& _rInsertRow,const SelectColumnDescription& i_aMetaData);
         void initColumns();
-        void findTableColumnsMatching_throw( const ::com::sun::star::uno::Any& i_aTable
-                                            ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& i_xMeta
-                                            ,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& i_xQueryColumns);
+        void findTableColumnsMatching_throw( const ::com::sun::star::uno::Any& i_aTable,
+                                             const ::rtl::OUString& i_rUpdateTableName,
+                                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& i_xMeta,
+                                             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& i_xQueryColumns,
+                                             ::std::auto_ptr<SelectColumnsMetaData>& o_pKeyColumnNames);
         ::rtl::OUStringBuffer createKeyFilter();
         void tryRefetch(const ORowSetRow& _rInsertRow,bool bRefetch);
         void executeUpdate(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOrginalRow,const ::rtl::OUString& i_sSQL,const ::rtl::OUString& i_sTableName,const ::std::vector<sal_Int32>& _aIndexColumnPositions = ::std::vector<sal_Int32>());

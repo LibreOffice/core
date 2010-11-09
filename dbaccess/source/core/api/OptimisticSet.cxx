@@ -124,6 +124,7 @@ void OptimisticSet::construct(const Reference< XResultSet>& _xDriverSet,const ::
     initColumns();
 
     Reference<XDatabaseMetaData> xMeta = m_xConnection->getMetaData();
+    bool bCase = (xMeta.is() && xMeta->storesMixedCaseQuotedIdentifiers()) ? true : false;
     Reference<XColumnsSupplier> xQueryColSup(m_xComposer,UNO_QUERY);
     const Reference<XNameAccess> xQueryColumns = xQueryColSup->getColumns();
     const Reference<XTablesSupplier> xTabSup(m_xComposer,UNO_QUERY);
@@ -133,7 +134,9 @@ void OptimisticSet::construct(const Reference< XResultSet>& _xDriverSet,const ::
     const ::rtl::OUString* pTableNameEnd = pTableNameIter + aTableNames.getLength();
     for( ; pTableNameIter != pTableNameEnd ; ++pTableNameIter)
     {
-        findTableColumnsMatching_throw(xTables->getByName(*pTableNameIter),xMeta,xQueryColumns);
+        ::std::auto_ptr<SelectColumnsMetaData> pKeyColumNames(new SelectColumnsMetaData(bCase));
+        findTableColumnsMatching_throw(xTables->getByName(*pTableNameIter),*pTableNameIter,xMeta,xQueryColumns,pKeyColumNames);
+        m_pKeyColumnNames->insert(pKeyColumNames->begin(),pKeyColumNames->end());
     }
 
     // the first row is empty because it's now easier for us to distinguish when we are beforefirst or first

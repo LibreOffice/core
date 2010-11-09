@@ -676,7 +676,8 @@ void OApplicationController::onDocumentOpened( const ::rtl::OUString& _rName, co
 
     try
     {
-        m_pSubComponentManager->onSubComponentOpened( _rName, _nType, _eMode, _rxDefinition.is() ? _rxDefinition : _xDocument );
+        OSL_ENSURE( _xDocument.is(), "OApplicationController::onDocumentOpened: is there any *valid* scenario where this fails?" );
+        m_pSubComponentManager->onSubComponentOpened( _rName, _nType, _eMode, _xDocument.is() ? _xDocument : _rxDefinition );
 
         if ( _rxDefinition.is() )
         {

@@ -1070,9 +1070,9 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
     }
 }
 // -----------------------------------------------------------------------------
-void OFieldDescControl::InitializeControl(Control* _pControl,ULONG _nHelpId,bool _bAddChangeHandler)
+void OFieldDescControl::InitializeControl(Control* _pControl,const ::rtl::OString& _sHelpId,bool _bAddChangeHandler)
 {
-    _pControl->SetHelpId(_nHelpId);
+    _pControl->SetHelpId(_sHelpId);
     if ( _bAddChangeHandler )
         ((OPropListBoxCtrl*)_pControl)->SetSelectHdl(LINK(this,OFieldDescControl,ChangeHdl));
 
@@ -1089,7 +1089,7 @@ FixedText* OFieldDescControl::CreateText(USHORT _nTextRes)
     return pFixedText;
 }
 // -----------------------------------------------------------------------------
-OPropNumericEditCtrl* OFieldDescControl::CreateNumericControl(USHORT _nHelpStr,short _nProperty,ULONG _nHelpId)
+OPropNumericEditCtrl* OFieldDescControl::CreateNumericControl(USHORT _nHelpStr,short _nProperty,const rtl::OString& _sHelpId)
 {
     OPropNumericEditCtrl* pControl = new OPropNumericEditCtrl( this, _nHelpStr, _nProperty, WB_BORDER );
     pControl->SetDecimalDigits(0);
@@ -1097,7 +1097,7 @@ OPropNumericEditCtrl* OFieldDescControl::CreateNumericControl(USHORT _nHelpStr,s
     pControl->SetMax(0x7FFFFFFF);   // soll draussen geaendert werden, wenn noetig
     pControl->SetStrictFormat(TRUE);
 
-    InitializeControl(pControl,_nHelpId,false);
+    InitializeControl(pControl,_sHelpId,false);
 
     return pControl;
 }

@@ -1221,20 +1221,12 @@ void OOle2Obj::initializeChart( const uno::Reference< frame::XModel>& _xModel)
         OReportModel* pRptModel = static_cast<OReportModel*>(GetModel());
         pRptModel->GetUndoEnv().AddElement(lcl_getDataProvider(xObj));
 
-        uno::Sequence< beans::PropertyValue > aArgs( 4 );
-        aArgs[0] = beans::PropertyValue(
-            ::rtl::OUString::createFromAscii("CellRangeRepresentation"), -1,
-            uno::makeAny( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("all")) ), beans::PropertyState_DIRECT_VALUE );
-        aArgs[1] = beans::PropertyValue(
-            ::rtl::OUString::createFromAscii("HasCategories"), -1,
-            uno::makeAny( sal_True ), beans::PropertyState_DIRECT_VALUE );
-        aArgs[2] = beans::PropertyValue(
-            ::rtl::OUString::createFromAscii("FirstCellAsLabel"), -1,
-            uno::makeAny( sal_True ), beans::PropertyState_DIRECT_VALUE );
-        aArgs[3] = beans::PropertyValue(
-            ::rtl::OUString::createFromAscii("DataRowSource"), -1,
-            uno::makeAny( chart::ChartDataRowSource_COLUMNS ), beans::PropertyState_DIRECT_VALUE );
-        xReceiver->setArguments( aArgs );
+        ::comphelper::NamedValueCollection aArgs;
+        aArgs.put( "CellRangeRepresentation", uno::makeAny( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "all" ) ) ) );
+        aArgs.put( "HasCategories", uno::makeAny( sal_True ) );
+        aArgs.put( "FirstCellAsLabel", uno::makeAny( sal_True ) );
+        aArgs.put( "DataRowSource", uno::makeAny( chart::ChartDataRowSource_COLUMNS ) );
+        xReceiver->setArguments( aArgs.getPropertyValues() );
 
         if( xChartModel.is() )
             xChartModel->unlockControllers();

@@ -197,9 +197,11 @@ void OKeySet::initColumns()
     m_pParameterNames.reset( new SelectColumnsMetaData(bCase) );
     m_pForeignColumnNames.reset( new SelectColumnsMetaData(bCase) );
 }
-void OKeySet::findTableColumnsMatching_throw(const Any& i_aTable
-                                                   ,const Reference<XDatabaseMetaData>& i_xMeta
-                                                   ,const Reference<XNameAccess>& i_xQueryColumns)
+void OKeySet::findTableColumnsMatching_throw(   const Any& i_aTable,
+                                                const ::rtl::OUString& i_rUpdateTableName,
+                                                const Reference<XDatabaseMetaData>& i_xMeta,
+                                                const Reference<XNameAccess>& i_xQueryColumns,
+                                                ::std::auto_ptr<SelectColumnsMetaData>& o_pKeyColumnNames)
 {
     // first ask the database itself for the best columns which can be used
     Sequence< ::rtl::OUString> aBestColumnNames;
@@ -220,37 +222,48 @@ void OKeySet::findTableColumnsMatching_throw(const Any& i_aTable
         xPara->getPropertyValue(PROPERTY_REALNAME) >>= aParameterColumns[i];
     }
 
-    if ( m_sUpdateTableName.getLength() )
+    ::rtl::OUString sUpdateTableName( i_rUpdateTableName );
+    if ( sUpdateTableName.getLength() == 0 )
     {
-        ::dbaccess::getColumnPositions(i_xQueryColumns,aBestColumnNames,m_sUpdateTableName,(*m_pKeyColumnNames),true);
-        ::dbaccess::getColumnPositions(i_xQueryColumns,xTblColumns->getElementNames(),m_sUpdateTableName,(*m_pColumnNames),true);
-        ::dbaccess::getColumnPositions(i_xQueryColumns,aParameterColumns,m_sUpdateTableName,(*m_pParameterNames),true);
-    }
-    else
-    {
-        ::rtl::OUString sCatalog,sSchema,sTable;
-        Reference<XPropertySet> xTableProp(i_aTable,UNO_QUERY);
-        Any aCatalog = xTableProp->getPropertyValue(PROPERTY_CATALOGNAME);
-        aCatalog >>= sCatalog;
-        xTableProp->getPropertyValue(PROPERTY_SCHEMANAME)   >>= sSchema;
-        xTableProp->getPropertyValue(PROPERTY_NAME)         >>= sTable;
-        const ::rtl::OUString sComposedUpdateTableName = dbtools::composeTableName( i_xMeta, sCatalog, sSchema, sTable, sal_False, ::dbtools::eInDataManipulation );
-        ::dbaccess::getColumnPositions(i_xQueryColumns,aBestColumnNames,sComposedUpdateTableName,(*m_pKeyColumnNames),true);
-        ::dbaccess::getColumnPositions(i_xQueryColumns,xTblColumns->getElementNames(),sComposedUpdateTableName,(*m_pColumnNames),true);
-        ::dbaccess::getColumnPositions(i_xQueryColumns,aParameterColumns,sComposedUpdateTableName,(*m_pParameterNames),true);
+        OSL_ENSURE( false, "OKeySet::findTableColumnsMatching_throw: This is a fallback only - it won't work when the table has an alias name." );
+        // If i_aTable originates from a query composer, and is a table which appears with an alias in the SELECT statement,
+        // then the below code will not produce correct results.
+        // For instance, imagine a "SELECT alias.col FROM table AS alias". Now i_aTable would be the table named
+        // "table", so our sUpdateTableName would be "table" as well - not the information about the "alias" is
+        // already lost here.
+        // now getColumnPositions would travers the columns, and check which of them belong to the table denoted
+        // by sUpdateTableName. Since the latter is "table", but the columns only know that they belong to a table
+        // named "alias", there will be no matching - so getColumnPositions wouldn't find anything.
+
+        ::rtl::OUString sCatalog, sSchema, sTable;
+        Reference<XPropertySet> xTableProp( i_aTable, UNO_QUERY_THROW );
+        xTableProp->getPropertyValue( PROPERTY_CATALOGNAME )>>= sCatalog;
+        xTableProp->getPropertyValue( PROPERTY_SCHEMANAME ) >>= sSchema;
+        xTableProp->getPropertyValue( PROPERTY_NAME )       >>= sTable;
+        sUpdateTableName = dbtools::composeTableName( i_xMeta, sCatalog, sSchema, sTable, sal_False, ::dbtools::eInDataManipulation );
     }
 
-    SelectColumnsMetaData::const_iterator aPosIter = m_pKeyColumnNames->begin();
-    SelectColumnsMetaData::const_iterator aPosEnd = m_pKeyColumnNames->end();
-    for(;aPosIter != aPosEnd;++aPosIter)
+    ::dbaccess::getColumnPositions(i_xQueryColumns,aBestColumnNames,sUpdateTableName,(*o_pKeyColumnNames),true);
+    ::dbaccess::getColumnPositions(i_xQueryColumns,xTblColumns->getElementNames(),sUpdateTableName,(*m_pColumnNames),true);
+    ::dbaccess::getColumnPositions(i_xQueryColumns,aParameterColumns,sUpdateTableName,(*m_pParameterNames),true);
+
+    if ( o_pKeyColumnNames->empty() )
     {
-        if ( xTblColumns->hasByName(aPosIter->second.sRealName) )
-        {
-            Reference<XPropertySet> xProp(xTblColumns->getByName(aPosIter->second.sRealName),UNO_QUERY);
-            sal_Bool bAuto = sal_False;
-            if( (xProp->getPropertyValue(PROPERTY_ISAUTOINCREMENT) >>= bAuto) && bAuto)
-                m_aAutoColumns.push_back(aPosIter->first);
-        }
+        ::dbtools::throwGenericSQLException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Could not find any key column." ) ), *this );
+    }
+
+    for (   SelectColumnsMetaData::const_iterator keyColumn = o_pKeyColumnNames->begin();
+            keyColumn != o_pKeyColumnNames->end();
+            ++keyColumn
+        )
+    {
+        if ( !xTblColumns->hasByName( keyColumn->second.sRealName ) )
+            continue;
+
+        Reference<XPropertySet> xProp( xTblColumns->getByName( keyColumn->second.sRealName ), UNO_QUERY );
+        sal_Bool bAuto = sal_False;
+        if ( ( xProp->getPropertyValue( PROPERTY_ISAUTOINCREMENT ) >>= bAuto ) && bAuto )
+            m_aAutoColumns.push_back( keyColumn->first );
     }
 }
 ::rtl::OUStringBuffer OKeySet::createKeyFilter()
@@ -286,7 +299,7 @@ void OKeySet::construct(const Reference< XResultSet>& _xDriverSet,const ::rtl::O
     Reference<XDatabaseMetaData> xMeta = m_xConnection->getMetaData();
     Reference<XColumnsSupplier> xQueryColSup(m_xComposer,UNO_QUERY);
     const Reference<XNameAccess> xQueryColumns = xQueryColSup->getColumns();
-    findTableColumnsMatching_throw(makeAny(m_xTable),xMeta,xQueryColumns);
+    findTableColumnsMatching_throw(makeAny(m_xTable),m_sUpdateTableName,xMeta,xQueryColumns,m_pKeyColumnNames);
 
     // the first row is empty because it's now easier for us to distinguish when we are beforefirst or first
     // without extra varaible to be set

@@ -42,6 +42,7 @@ ModalDialog DLG_ORDERCRIT
     Closeable = TRUE ;
     ListBox LB_ORDERFIELD1
     {
+        HelpID = "dbaccess:ListBox:DLG_ORDERCRIT:LB_ORDERFIELD1";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 59 , 25 ) ;
         Size = MAP_APPFONT ( 60 , 72 ) ;
@@ -51,6 +52,7 @@ ModalDialog DLG_ORDERCRIT
     };
     ListBox LB_ORDERVALUE1
     {
+        HelpID = "dbaccess:ListBox:DLG_ORDERCRIT:LB_ORDERVALUE1";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 123 , 25 ) ;
         Size = MAP_APPFONT ( 60 , 36 ) ;
@@ -65,6 +67,7 @@ ModalDialog DLG_ORDERCRIT
     };
     ListBox LB_ORDERFIELD2
     {
+        HelpID = "dbaccess:ListBox:DLG_ORDERCRIT:LB_ORDERFIELD2";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 59 , 41 ) ;
         Size = MAP_APPFONT ( 60 , 72 ) ;
@@ -74,6 +77,7 @@ ModalDialog DLG_ORDERCRIT
     };
     ListBox LB_ORDERVALUE2
     {
+        HelpID = "dbaccess:ListBox:DLG_ORDERCRIT:LB_ORDERVALUE2";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 123 , 41 ) ;
         Size = MAP_APPFONT ( 60 , 36 ) ;
@@ -88,6 +92,7 @@ ModalDialog DLG_ORDERCRIT
     };
     ListBox LB_ORDERFIELD3
     {
+        HelpID = "dbaccess:ListBox:DLG_ORDERCRIT:LB_ORDERFIELD3";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 59 , 57 ) ;
         Size = MAP_APPFONT ( 60 , 72 ) ;
@@ -97,6 +102,7 @@ ModalDialog DLG_ORDERCRIT
     };
     ListBox LB_ORDERVALUE3
     {
+        HelpID = "dbaccess:ListBox:DLG_ORDERCRIT:LB_ORDERVALUE3";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 123 , 57 ) ;
         Size = MAP_APPFONT ( 60 , 36 ) ;
