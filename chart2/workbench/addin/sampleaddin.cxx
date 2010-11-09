@@ -314,12 +314,7 @@ void SAL_CALL SampleAddIn::refresh() throw( uno::RuntimeException )
                     xPage->add( mxMyText );
 
                     // change text
-                    OUString aText;
-//                  if( maLocale.Language.equalsIgnoreCase( OUString( RTL_CONSTASCII_USTRINGPARAM( "DE" ))))
-//                      aText = OUString( RTL_CONSTASCII_USTRINGPARAM( "Kleines Beispiel" ));
-//                  else
-                        aText = OUString( RTL_CONSTASCII_USTRINGPARAM( "Little Example" ));
-
+                    OUString aText(RTL_CONSTASCII_USTRINGPARAM( "Little Example" ));
                     uno::Reference< beans::XPropertySet > xTextProp( mxMyText, uno::UNO_QUERY );
                     if( xTextProp.is())
                     {
