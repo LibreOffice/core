@@ -32,13 +32,7 @@
 #undef SW_DLLIMPLEMENTATION
 #endif
 
-
-
-#define _INPDLG_CXX
-
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <unotools/charclass.hxx>
 #include <editeng/unolingu.hxx>
 #include <wrtsh.hxx>
@@ -48,12 +42,8 @@
 #include <inpdlg.hxx>
 #include <fldmgr.hxx>
 
-#ifndef _FLDUI_HRC
 #include <fldui.hrc>
-#endif
-#ifndef _INPDLG_HRC
 #include <inpdlg.hrc>
-#endif
 
 
 /*--------------------------------------------------------------------
@@ -128,7 +118,9 @@ SwFldInputDlg::SwFldInputDlg( Window *pParent, SwWrtShell &rS,
         //values are formatted - formulas are not
         CharClass aCC( SvxCreateLocale( pSetFld->GetLanguage() ));
         if( aCC.isNumeric( sFormula ))
-            aStr = pSetFld->Expand();
+        {
+            aStr = pSetFld->ExpandField(true);
+        }
         else
             aStr = sFormula;
         aLabelED.SetText( pSetFld->GetPromptText() );

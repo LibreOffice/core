@@ -31,7 +31,6 @@
 #include <vos/mutex.hxx>
 #include <sfx2/sfxbasecontroller.hxx>
 #include <SwXDocumentSettings.hxx>
-#include <SwXPrintPreviewSettings.hxx>
 #include <comphelper/MasterPropertySetInfo.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/i18n/XForbiddenCharacters.hpp>
@@ -221,7 +220,6 @@ SwXDocumentSettings::SwXDocumentSettings ( SwXTextDocument * pModel )
 , mpPrinter( NULL )
 {
     registerSlave ( new SwXPrintSettings ( PRINT_SETTINGS_DOCUMENT, mpModel->GetDocShell()->GetDoc() ) );
-    registerSlave ( new SwXPrintPreviewSettings ( mpModel->GetDocShell()->GetDoc() ) );
 }
 
 SwXDocumentSettings::~SwXDocumentSettings()

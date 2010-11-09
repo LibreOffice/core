@@ -33,6 +33,7 @@
  // RID_SVXDLG_POSTIT -----------------------------------------------------
 ModalDialog DLG_JAVAEDIT
 {
+    HelpID = "sw:ModalDialog:DLG_JAVAEDIT";
     OutputSize = TRUE ;
     SvLook = TRUE ;
     Size = MAP_APPFONT ( 248 , 157 ) ;
@@ -45,6 +46,7 @@ ModalDialog DLG_JAVAEDIT
     };
     Edit ED_TYPE
     {
+        HelpID = "sw:Edit:DLG_JAVAEDIT:ED_TYPE";
         Border = TRUE ;
         Text = "JavaScript" ;
          // Nicht uebersetzen!!!
@@ -54,6 +56,7 @@ ModalDialog DLG_JAVAEDIT
     };
     RadioButton RB_URL
     {
+        HelpID = "sw:RadioButton:DLG_JAVAEDIT:RB_URL";
         Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 55 , 10 ) ;
         TabStop = TRUE ;
@@ -61,6 +64,7 @@ ModalDialog DLG_JAVAEDIT
     };
     Edit ED_URL
     {
+        HelpID = "sw:Edit:DLG_JAVAEDIT:ED_URL";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 70 , 27 ) ;
         Size = MAP_APPFONT ( 87 , 12 ) ;
@@ -68,6 +72,7 @@ ModalDialog DLG_JAVAEDIT
     };
     PushButton PB_URL
     {
+        HelpID = "sw:PushButton:DLG_JAVAEDIT:PB_URL";
         Pos = MAP_APPFONT ( 163 , 26 ) ;
         Size = MAP_APPFONT ( 14 , 14 ) ;
         Text = "~..." ;
@@ -75,6 +80,7 @@ ModalDialog DLG_JAVAEDIT
     };
     RadioButton RB_EDIT
     {
+        HelpID = "sw:RadioButton:DLG_JAVAEDIT:RB_EDIT";
         Pos = MAP_APPFONT ( 12 , 40 ) ;
         Size = MAP_APPFONT ( 140 , 10 ) ;
         Text [ en-US ] = "~Text" ;
@@ -83,6 +89,7 @@ ModalDialog DLG_JAVAEDIT
     };
     MultiLineEdit ED_EDIT
     {
+        HelpID = "sw:MultiLineEdit:DLG_JAVAEDIT:ED_EDIT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 23 , 54 ) ;
         Size = MAP_APPFONT ( 155 , 91 ) ;
@@ -116,12 +123,14 @@ ModalDialog DLG_JAVAEDIT
     };
     ImageButton BTN_PREV
     {
+        HelpID = "sw:ImageButton:DLG_JAVAEDIT:BTN_PREV";
         Pos = MAP_APPFONT ( 191 , 60 ) ;
         Size = MAP_APPFONT ( 24 , 14 ) ;
         Symbol = IMAGEBUTTON_ARROW_LEFT ;
     };
     ImageButton BTN_NEXT
     {
+        HelpID = "sw:ImageButton:DLG_JAVAEDIT:BTN_NEXT";
         Pos = MAP_APPFONT ( 217 , 60 ) ;
         Size = MAP_APPFONT ( 24 , 14 ) ;
         Symbol = IMAGEBUTTON_ARROW_RIGHT ;
