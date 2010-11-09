@@ -302,8 +302,6 @@ public:
     void            DoRecalc( BOOL bApi );
     void            DoHardRecalc( BOOL bApi );
 
-    bool            CheckPrint( ScMarkData* pMarkData, bool bForceSelected, bool bIsAPI );
-
     void            UpdateOle( const ScViewData* pViewData, BOOL bSnapSize = FALSE );
     BOOL            IsOle();
 

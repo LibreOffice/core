@@ -553,11 +553,6 @@ String STR_REPLCELLSWARN
     Text [ en-US ] = "You are pasting data into cells that already contain data.\nDo you really want to overwrite the existing data?";
 };
 
-String STR_PRINT_NOTHING
-{
-    Text [ en-US ] = "There is nothing to print. The selected print range or sheet is empty.";
-};
-
 String SCSTR_ALLFILTER
 {
     Text [ en-US ] = "All";
