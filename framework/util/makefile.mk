@@ -101,6 +101,7 @@ LIB2OBJFILES=   \
                 $(SLO)$/framelistanalyzer.obj                   \
                 $(SLO)$/titlehelper.obj                         \
                 $(SLO)$/documentundoguard.obj                   \
+                $(SLO)$/undomanagerhelper.obj                   \
 
 # --- import classes library ---------------------------------------------------
 
@@ -158,7 +159,7 @@ SHL2STDLIBS=    \
                 $(CPPUHELPERLIB)                    \
                 $(CPPULIB)                          \
                 $(VOSLIB)                           \
-                $(SALLIB)
+                $(SALLIB)                           \
 
 SHL2DEF=        $(MISC)$/$(SHL2TARGET).def
 SHL2DEPN=       $(SHL1IMPLIBN) $(SHL1TARGETN)
@@ -422,6 +423,7 @@ $(MISC)$/$(SHL2TARGET).flt: makefile.mk
     @echo WEP>>$@
     @echo m_pLoader>$@
     @echo _TI2>>$@
+    @echo _TI3>>$@
     @echo LIBMAIN>>$@
     @echo LibMain>>$@
 

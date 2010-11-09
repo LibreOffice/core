@@ -44,6 +44,7 @@ mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\StartModule\statusbar
 ..\inc\helper\titlehelper.hxx %_DEST%\inc%_EXT%\framework\titlehelper.hxx
 ..\inc\classes\framelistanalyzer.hxx %_DEST%\inc%_EXT%\framework\framelistanalyzer.hxx
 ..\inc\helper\documentundoguard.hxx %_DEST%\inc%_EXT%\framework\documentundoguard.hxx
+..\inc\helper\undomanagerhelper.hxx %_DEST%\inc%_EXT%\framework\undomanagerhelper.hxx
 
 ..\uiconfig\startmodule\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\StartModule\menubar\*.xml
 ..\uiconfig\startmodule\toolbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\StartModule\toolbar\*.xml

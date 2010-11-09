@@ -96,34 +96,6 @@ namespace sfx2
         virtual ::sal_Bool SAL_CALL isLocked(  ) throw (::com::sun::star::uno::RuntimeException);
 
     private:
-        void impl_notify(
-                ::rtl::OUString const& i_title,
-                void ( SAL_CALL ::com::sun::star::document::XUndoManagerListener::*i_notificationMethod )( const ::com::sun::star::document::UndoManagerEvent& ),
-                SfxModelGuard& i_instanceLock
-            );
-
-        void impl_notify(
-                void ( SAL_CALL ::com::sun::star::document::XUndoManagerListener::*i_notificationMethod )( const ::com::sun::star::lang::EventObject& ),
-                SfxModelGuard& i_instanceLock
-            );
-
-        void impl_notify(
-                ::rtl::OUString const& i_title,
-                void ( SAL_CALL ::com::sun::star::document::XUndoManagerListener::*i_notificationMethod )( const ::com::sun::star::document::UndoManagerEvent& )
-            );
-
-        void impl_notify(
-                void ( SAL_CALL ::com::sun::star::document::XUndoManagerListener::*i_notificationMethod )( const ::com::sun::star::lang::EventObject& )
-            );
-
-        void impl_do_nolck(
-                USHORT ( ::svl::IUndoManager::*i_checkMethod )( bool const ) const,
-                BOOL ( ::svl::IUndoManager::*i_doMethod )(),
-                UniString ( ::svl::IUndoManager::*i_titleRetriever )( USHORT, bool const ) const,
-                void ( SAL_CALL ::com::sun::star::document::XUndoManagerListener::*i_notificationMethod )( const ::com::sun::star::document::UndoManagerEvent& )
-            );
-
-    private:
         ::boost::scoped_ptr< DocumentUndoManager_Impl > m_pImpl;
     };
 
