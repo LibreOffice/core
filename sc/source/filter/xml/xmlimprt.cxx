@@ -2107,7 +2107,7 @@ void ScXMLImport::SetChangeTrackingViewSettings(const com::sun::star::uno::Seque
         sal_Int32 nCount(rChangeProps.getLength());
         if (nCount)
         {
-            LockSolarMutex();
+            ScXMLImport::MutexGuard aGuard(*this);
             sal_Int16 nTemp16(0);
             ScChangeViewSettings* pViewSettings(new ScChangeViewSettings());
             for (sal_Int32 i = 0; i < nCount; ++i)
@@ -2183,7 +2183,6 @@ void ScXMLImport::SetChangeTrackingViewSettings(const com::sun::star::uno::Seque
                 }
             }
             pDoc->SetChangeViewSettings(*pViewSettings);
-            UnlockSolarMutex();
         }
     }
 }
@@ -2316,18 +2315,19 @@ sal_Int32 ScXMLImport::SetCurrencySymbol(const sal_Int32 nKey, const rtl::OUStri
                     lang::Locale aLocale;
                     if (GetDocument() && (xProperties->getPropertyValue(sLocale) >>= aLocale))
                     {
-                        LockSolarMutex();
-                        LocaleDataWrapper aLocaleData( GetDocument()->GetServiceManager(), aLocale );
-                        rtl::OUStringBuffer aBuffer(15);
-                        aBuffer.appendAscii("#");
-                        aBuffer.append( aLocaleData.getNumThousandSep() );
-                        aBuffer.appendAscii("##0");
-                        aBuffer.append( aLocaleData.getNumDecimalSep() );
-                        aBuffer.appendAscii("00 [$");
-                        aBuffer.append(rCurrency);
-                        aBuffer.appendAscii("]");
-                        UnlockSolarMutex();
-                        sFormatString = aBuffer.makeStringAndClear();
+                        {
+                            ScXMLImport::MutexGuard aGuard(*this);
+                            LocaleDataWrapper aLocaleData( GetDocument()->GetServiceManager(), aLocale );
+                            rtl::OUStringBuffer aBuffer(15);
+                            aBuffer.appendAscii("#");
+                            aBuffer.append( aLocaleData.getNumThousandSep() );
+                            aBuffer.appendAscii("##0");
+                            aBuffer.append( aLocaleData.getNumDecimalSep() );
+                            aBuffer.appendAscii("00 [$");
+                            aBuffer.append(rCurrency);
+                            aBuffer.appendAscii("]");
+                            sFormatString = aBuffer.makeStringAndClear();
+                        }
                         sal_Int32 nNewKey = xLocalNumberFormats->queryKey(sFormatString, aLocale, sal_True);
                         if (nNewKey == -1)
                             nNewKey = xLocalNumberFormats->addNew(sFormatString, aLocale);
@@ -2601,7 +2601,7 @@ void ScXMLImport::SetStylesToRangesFinished()
 void SAL_CALL ScXMLImport::setTargetDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc )
 throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
-    LockSolarMutex();
+    ScXMLImport::MutexGuard aGuard(*this);
     SvXMLImport::setTargetDocument( xDoc );
 
     uno::Reference<frame::XModel> xModel(xDoc, uno::UNO_QUERY);
@@ -2615,7 +2615,6 @@ throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::R
     uno::Reference<document::XActionLockable> xActionLockable(xDoc, uno::UNO_QUERY);
     if (xActionLockable.is())
         xActionLockable->addActionLock();
-    UnlockSolarMutex();
 }
 
 // XServiceInfo
@@ -2645,7 +2644,7 @@ throw(::com::sun::star::uno::RuntimeException)
 void SAL_CALL ScXMLImport::startDocument(void)
 throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException )
 {
-    LockSolarMutex();
+    ScXMLImport::MutexGuard aGuard(*this);
     SvXMLImport::startDocument();
     if (pDoc && !pDoc->IsImportingXML())
     {
@@ -2669,8 +2668,6 @@ throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeE
             pSheetData->StoreInitialNamespaces(rNamespaces);
         }
     }
-
-    UnlockSolarMutex();
 }
 
 sal_Int32 ScXMLImport::GetRangeType(const rtl::OUString sRangeType) const
@@ -2807,7 +2804,7 @@ void ScXMLImport::SetNamedRanges()
                         uno::Reference <sheet::XNamedRange> xNamedRange(xNamedRanges->getByName((*aItr)->sName), uno::UNO_QUERY);
                         if (xNamedRange.is())
                         {
-                            LockSolarMutex();
+                            ScXMLImport::MutexGuard aGuard(*this);
                             ScNamedRangeObj* pNamedRangeObj = ScNamedRangeObj::getImplementation( xNamedRange);
                             if (pNamedRangeObj)
                             {
@@ -2817,7 +2814,6 @@ void ScXMLImport::SetNamedRanges()
                                     ScXMLConverter::ParseFormula( sTempContent, false);
                                 pNamedRangeObj->SetContentWithGrammar( sTempContent, (*aItr)->eGrammar);
                             }
-                            UnlockSolarMutex();
                         }
                     }
                     delete *aItr;
@@ -2831,7 +2827,7 @@ void ScXMLImport::SetNamedRanges()
 void SAL_CALL ScXMLImport::endDocument(void)
 throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException )
 {
-    LockSolarMutex();
+    ScXMLImport::MutexGuard aGuard(*this);
     if (getImportFlags() & IMPORT_CONTENT)
     {
         if (GetModel().is())
@@ -2901,8 +2897,6 @@ throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeE
     {
         ScModelObj::getImplementation(GetModel())->AfterXMLLoading(sal_True);
     }
-
-    UnlockSolarMutex();
 }
 
 // XEventListener

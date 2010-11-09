@@ -117,7 +117,7 @@ void ScXMLTableSourceContext::EndElement()
         ScDocument* pDoc(GetScImport().GetDocument());
         if (xLinkable.is() && pDoc)
         {
-            GetScImport().LockSolarMutex();
+            ScXMLImport::MutexGuard aGuard(GetScImport());
             if (pDoc->RenameTab( static_cast<SCTAB>(GetScImport().GetTables().GetCurrentSheet()),
                 GetScImport().GetTables().GetCurrentSheetName(), sal_False, sal_True))
             {
@@ -140,7 +140,6 @@ void ScXMLTableSourceContext::EndElement()
                     nLinkMode, aFileString, aFilterString, aOptString,
                     aSheetString, nRefresh );
             }
-            GetScImport().UnlockSolarMutex();
         }
     }
 }
