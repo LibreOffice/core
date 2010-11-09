@@ -381,22 +381,6 @@ Sequence< OUString > SAL_CALL UndoManager::getAllRedoStrings()
     return m_apRedoStack->getUndoStrings();
 }
 
-// ____ XUndoHelper ____
-Reference< frame::XModel > SAL_CALL UndoManager::getModelCloneForUndo(
-    const Reference< frame::XModel >& xModelBeforeChange )
-    throw (uno::RuntimeException)
-{
-    return impl::UndoElement::cloneModel( xModelBeforeChange );
-}
-
-void SAL_CALL UndoManager::applyModelContent(
-    Reference< frame::XModel >& xModelToChange,
-    const Reference< frame::XModel >& xModelToCopyFrom )
-    throw (uno::RuntimeException)
-{
-    impl::UndoElement::applyModelContentToModel( xModelToChange, xModelToCopyFrom );
-}
-
 // ____ XUnoTunnel ____
 sal_Int64 UndoManager::getSomething( const Sequence< sal_Int8 >& rId )
     throw (uno::RuntimeException)

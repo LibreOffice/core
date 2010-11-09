@@ -35,10 +35,9 @@
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/chart2/XUndoManager.hpp>
-#include <com/sun/star/chart2/XUndoHelper.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
-#include <cppuhelper/compbase4.hxx>
+#include <cppuhelper/compbase3.hxx>
 #include <rtl/ustring.hxx>
 
 // for pair
@@ -65,10 +64,9 @@ class UndoElement;
 class  UndoStack;
 class  ModifyBroadcaster;
 
-typedef ::cppu::WeakComponentImplHelper4<
+typedef ::cppu::WeakComponentImplHelper3<
             ::com::sun::star::util::XModifyBroadcaster,
             ::com::sun::star::chart2::XUndoManager,
-            ::com::sun::star::chart2::XUndoHelper,
             ::com::sun::star::lang::XUnoTunnel >
     UndoManager_Base;
 
@@ -140,15 +138,6 @@ protected:
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getAllUndoStrings()
         throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getAllRedoStrings()
-        throw (::com::sun::star::uno::RuntimeException);
-
-    // ____ XUndoHelper ____
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > SAL_CALL getModelCloneForUndo(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModelBeforeChange )
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL applyModelContent(
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModelToChange,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModelToCopyFrom )
         throw (::com::sun::star::uno::RuntimeException);
 
 private:
