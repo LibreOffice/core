@@ -26,7 +26,7 @@ sub wanted {
 	&& die "Cannot install $_ extension!";
 }
 
-( $^O =~ /darwin/i ) || ( -f "/proc/meminfo" ) || die "The installer cannot work without javaldx running, which requires /proc to be mounted";
+( $^O =~ /openbsd/i ) || ( $^O =~ /darwin/i ) || ( -f "/proc/meminfo" ) || die "The installer cannot work without javaldx running, which requires /proc to be mounted";
 
 # Workaround for system Mozilla
 if ( $ENV{'SYSTEM_MOZILLA'} eq 'YES' ) {
