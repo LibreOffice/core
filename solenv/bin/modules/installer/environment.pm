@@ -47,7 +47,6 @@ sub create_pathvariables
     $variables{'solarpath'} = $solarpath;
 
     my $solarcommonpath = $environment->{'SOLARVERSION'} . $installer::globals::separator . "common" . $installer::globals::productextension;
-    # my $solarcommonpath = $environment->{'SOLARVERSION'} . $installer::globals::separator . $environment->{'COMMON_OUTDIR'} . $installer::globals::productextension;
     $variables{'solarcommonpath'} = $solarcommonpath;
 
     my $osdef = lc($environment->{'GUI'});
@@ -110,7 +109,6 @@ sub set_global_environment_variables
     my ( $environment ) = @_;
 
     $installer::globals::build = $environment->{'WORK_STAMP'};
-    # $installer::globals::minor = $environment->{'UPDMINOR'};
     $installer::globals::compiler = $environment->{'OUTPATH'};
 
     if ( $ENV{'UPDMINOR'} ) { $installer::globals::minor = $ENV{'UPDMINOR'}; }

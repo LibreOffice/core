@@ -306,7 +306,6 @@ BEGIN
     $productxpdfile = "setup.xpd";
     $xpd_files_prepared = 0;
     $defaultlanguage = "";
-    # @emptyxpdparents = ();
     @createdxpdfiles = ();
     @allxpdfiles = ();
     $isxpdplatform = 0;

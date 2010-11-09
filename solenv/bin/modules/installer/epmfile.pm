@@ -228,13 +228,9 @@ sub put_directories_into_epmfile
 
         if ( $onedir->{'Dir'} ) { $dir = $onedir->{'Dir'}; }
 
-        # if (!($dir =~ /\bPREDEFINED_/ ))
         if ((!($dir =~ /\bPREDEFINED_/ )) || ( $dir =~ /\bPREDEFINED_PROGDIR\b/ ))
         {
             my $hostname = $onedir->{'HostName'};
-
-            # not including simple directory "/opt"
-            # if (( $allvariables->{'SETSTATICPATH'} ) && ( $hostname eq $packagerootpath )) { next; }
 
             my $line = "d 755 root $group $hostname -\n";
 
@@ -356,7 +352,6 @@ sub create_epm_header
     # Determining the release version
     # This release version has to be listed in the line %version : %version versionnumber releasenumber
 
-    # if ( $variableshashref->{'PACKAGEVERSION'} ) { $installer::globals::packageversion = $variableshashref->{'PACKAGEVERSION'}; }
     if ( ! $onepackage->{'packageversion'} ) { installer::exiter::exit_program("ERROR: No packageversion defined for package: $onepackage->{'module'}!", "create_epm_header"); }
     $installer::globals::packageversion = $onepackage->{'packageversion'};
     installer::packagelist::resolve_packagevariables(\$installer::globals::packageversion, $variableshashref, 0);
@@ -598,14 +593,8 @@ sub create_epm_header
         $requires = "requires";         # the name in the packagelist
     }
 
-    # if ( $installer::globals::patch )
-    # {
-    #   $onepackage->{$provides} = "";
         my $isdict = 0;
         if ( $onepackage->{'packagename'} =~ /-dict-/ ) { $isdict = 1;  }
-
-    #   $onepackage->{$requires} = "";
-    # }
 
     if ( $onepackage->{$provides} )
     {
@@ -649,19 +638,6 @@ sub create_epm_header
             $onerequires =~ s/\s*$//;
             installer::packagelist::resolve_packagevariables2(\$onerequires, $variableshashref, 0, $isdict);
 
-            # Special handling for Solaris. In depend files, the names of the packages are required, not
-            # only the abbreviation. Therefore there is a special syntax for names in packagelist:
-            # solarisrequires = "SUNWcar (Name="Package name of SUNWcar"),SUNWkvm (Name="Package name of SUNWcar"), ...
-            # if ( $installer::globals::issolarispkgbuild )
-            # {
-            #   if ( $onerequires =~ /^\s*(.*?)\s+\(\s*Name\s*=\s*\"(.*?)\"\s*\)\s*$/ )
-            #   {
-            #       $onerequires = $1;
-            #       $packagename = $2;
-            #       $installer::globals::dependfilenames{$onerequires} = $packagename;
-            #   }
-            # }
-
             $line = "%requires" . " " . $onerequires . "\n";
             push(@epmheader, $line);
         }
@@ -682,19 +658,6 @@ sub create_epm_header
                 my $onerequires = ${$allrequires}[$i];
                 $onerequires =~ s/\s*$//;
                 installer::packagelist::resolve_packagevariables(\$onerequires, $variableshashref, 0);
-
-                # Special handling for Solaris. In depend files, the names of the packages are required, not
-                # only the abbreviation. Therefore there is a special syntax for names in packagelist:
-                # solarisrequires = "SUNWcar (Name="Package name of SUNWcar"),SUNWkvm (Name="Package name of SUNWcar"), ...
-                # if ( $installer::globals::issolarispkgbuild )
-                # {
-                #   if ( $onerequires =~ /^\s*(.*?)\s+\(\s*Name\s*=\s*\"(.*?)\"\s*\)\s*$/ )
-                #   {
-                #       $onerequires = $1;
-                #       $packagename = $2;
-                #       $installer::globals::dependfilenames{$onerequires} = $packagename;
-                #   }
-                # }
 
                 $line = "%requires" . " " . $onerequires . "\n";
                 push(@epmheader, $line);
@@ -762,8 +725,6 @@ sub replace_many_variables_in_shellscripts
     foreach $key (keys %{$variableshashref})
     {
         my $value = $variableshashref->{$key};
-        # $value = lc($value);  # lowercase !
-        # if ( $installer::globals::issolarisbuild) { $value =~ s/\.org/org/g; }    # openofficeorg instead of openoffice.org
         replace_variable_in_shellscripts($scriptref, $value, $key);
     }
 }
@@ -775,8 +736,6 @@ sub replace_many_variables_in_shellscripts
 sub adding_shellscripts_to_epm_file
 {
     my ($epmfileref, $shellscriptsfilename, $localrootpath, $allvariableshashref, $filesinpackage) = @_;
-
-    # $installer::globals::shellscriptsfilename
 
     push( @{$epmfileref}, "\n\n" );
 
@@ -1080,8 +1039,6 @@ sub set_revision_in_pkginfo
                 my $finalminor = $minor;
                 my $finalmicro = 0;
 
-                # if (( $packagename =~ /-ure\s*$/ ) && ( $finalmajor == 1 )) { $finalminor = 4; }
-
                 $version = "$finalmajor.$finalminor.$finalmicro";
             }
 
@@ -1318,7 +1275,6 @@ sub set_topdir_in_specfile
 {
     my ($changefile, $filename, $newepmdir) = @_;
 
-    # $newepmdir =~ s/^\s*\.//; # removing leading "."
     $newepmdir = cwd() . $installer::globals::separator . $newepmdir; # only absolute path allowed
 
     # removing "%define _topdir", if existing
@@ -1919,11 +1875,6 @@ sub include_patchinfos_into_pkginfo
     }
     $newline = "SUNW_PATCH_PROPERTIES=\n";
     add_one_line_into_file($changefile, $newline, $filename);
-    # $newline = "SUNW_PKGTYPE=usr\n";
-    # add_one_line_into_file($changefile, $newline, $filename);
-
-    # $newline = "SUNW_PKGVERS=1.0\n";
-    # add_one_line_into_file($changefile, $newline, $filename);
 }
 
 ############################################################
@@ -2103,7 +2054,6 @@ sub prepare_packages
 
     if ( $installer::globals::isrpmbuild )
     {
-        # if ( $localrelocatablepath =~ /^\s*$/ ) { $localrelocatablepath = "/"; }; # at least the "/"
         $filename =  $packagename . ".spec";
         $newline = "Prefix\:\ " . $localrelocatablepath . "\n";
     }
@@ -2118,9 +2068,6 @@ sub prepare_packages
         installer::files::save_file($completefilename, $changefile);
     }
 
-    # my $newepmdir = $completefilename;
-    # installer::pathanalyzer::get_path_from_fullqualifiedname(\$newepmdir);
-
     # adding new "topdir" and removing old "topdir" in specfile
 
     if ( $installer::globals::isrpmbuild )
@@ -2131,7 +2078,6 @@ sub prepare_packages
         if ( is_extension_package($changefile) ) { set_prereq_in_specfile($changefile); }
         set_license_in_specfile($changefile, $variableshashref);
         set_tab_into_datafile($changefile, $filesref);
-        # check_requirements_in_specfile($changefile);
         installer::files::save_file($completefilename, $changefile);
         if ( $installer::globals::patch ) { collect_patch_files($changefile, $packagename, $localrelocatablepath); }
     }
@@ -2245,7 +2191,6 @@ sub determine_rpm_version
     my $rpmout = "";
     my $systemcall = "";
 
-    # my $systemcall = "rpm --version |";
     # "rpm --version" has problems since LD_LIBRARY_PATH was removed. Therefore the content of $RPM has to be called.
     # "rpm --version" and "rpmbuild --version" have the same output. Therefore $RPM can be used. Its value
     # is saved in $installer::globals::rpm
@@ -2354,7 +2299,6 @@ sub create_packages_without_epm
         installer::pathanalyzer::get_path_from_fullqualifiedname(\$destinationdir);
         $destinationdir =~ s/\/\s*$//;  # removing ending slashes
 
-        # my $systemcall = "pkgmk -o -f $prototypefile -d $destinationdir \> /dev/null 2\>\&1";
         my $systemcall = "pkgmk -l 1073741824 -o -f $prototypefile -d $destinationdir 2\>\&1 |";
         installer::logger::print_message( "... $systemcall ...\n" );
 
@@ -2502,54 +2446,6 @@ sub create_packages_without_epm
             $infoline = "Success: Executed \"$systemcall\" successfully!\n";
             push( @installer::globals::logfileinfo, $infoline);
         }
-
-        ######################
-        # making pkg files
-        ######################
-
-        # my $streamname = $packagename . ".pkg";
-        # $systemcall = "pkgtrans $destinationdir $streamname $packagename";
-        # print "... $systemcall ...\n";
-
-        # $returnvalue = system($systemcall);
-
-        # $infoline = "Systemcall: $systemcall\n";
-        # push( @installer::globals::logfileinfo, $infoline);
-
-        # if ($returnvalue)
-        # {
-        #   $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
-        #   push( @installer::globals::logfileinfo, $infoline);
-        # }
-        # else
-        # {
-        #   $infoline = "Success: Executed \"$systemcall\" successfully!\n";
-        #   push( @installer::globals::logfileinfo, $infoline);
-        # }
-
-        #########################
-        # making tar.gz files
-        #########################
-
-        # my $targzname = $packagename . ".tar.gz";
-        # $systemcall = "cd $destinationdir; tar -cf - $packagename | gzip > $targzname";
-        # print "... $systemcall ...\n";
-
-        # $returnvalue = system($systemcall);
-
-        # $infoline = "Systemcall: $systemcall\n";
-        # push( @installer::globals::logfileinfo, $infoline);
-
-        # if ($returnvalue)
-        # {
-        #   $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
-        #   push( @installer::globals::logfileinfo, $infoline);
-        # }
-        # else
-        # {
-        #   $infoline = "Success: Executed \"$systemcall\" successfully!\n";
-        #   push( @installer::globals::logfileinfo, $infoline);
-        # }
     }
 
     # Linux: rpm -bb so8m35.spec    ( -> dependency check abklemmen? )
@@ -2559,11 +2455,8 @@ sub create_packages_without_epm
         my $specfilename = $epmdir . $packagename . ".spec";
         if (! -f $specfilename) { installer::exiter::exit_program("ERROR: Did not find file: $specfilename", "create_packages_without_epm"); }
 
-        # my $rpmcommand = "rpm";
         my $rpmcommand = $installer::globals::rpm;
         my $rpmversion = determine_rpm_version();
-
-        # if ( $rpmversion >= 4 ) { $rpmcommand = "rpmbuild"; }
 
         # saving globally for later usage
         $installer::globals::rpmcommand = $rpmcommand;
@@ -2614,7 +2507,6 @@ sub create_packages_without_epm
 
             for ( my $j = 0; $j <= $#rpmoutput; $j++ )
             {
-                # if ( $i < $maxrpmcalls ) { $rpmoutput[$j] =~ s/\bERROR\b/PROBLEM/ig; }
                 $rpmoutput[$j] =~ s/\bERROR\b/PROBLEM/ig;
                 push( @installer::globals::logfileinfo, "$rpmoutput[$j]");
             }
@@ -2717,38 +2609,12 @@ sub remove_temporary_epm_files
             $infoline = "Systemcall: $systemcall\n";
             push( @installer::globals::logfileinfo, $infoline);
         }
-
-        # removing the package
-
-#       my $removedir = $epmdir . $packagename;
-#
-#       my $systemcall = "rm -rf $removedir";
-#
-#       print "... $systemcall ...\n";
-#
-#       my $returnvalue = system($systemcall);
-#
-#       my $infoline = "Systemcall: $systemcall\n";
-#       push( @installer::globals::logfileinfo, $infoline);
-#
-#       if ($returnvalue)
-#       {
-#           $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
-#           push( @installer::globals::logfileinfo, $infoline);
-#       }
-#       else
-#       {
-#           $infoline = "Success: Executed \"$systemcall\" successfully!\n";
-#           push( @installer::globals::logfileinfo, $infoline);
-#       }
     }
 
     if ( $installer::globals::isrpmbuild )
     {
         my $removefile = $epmdir . $packagename . ".spec";
         my $destfile = $loggingdir . $packagename . ".spec.log";
-
-         # if (! -f $removefile) { next; }
 
         my $systemcall = "mv -f $removefile $destfile";
         system($systemcall);     # ignoring the return value
@@ -3177,40 +3043,6 @@ sub analyze_rootpath
     $rootpath =~ s/\/\s*$//;    # removing ending slash
 
     ##############################################################
-    # Version 1: "/opt" is variable and "openofficeorg20" fixed
-    ##############################################################
-
-    # my $staticpath = $rootpath;
-    # installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$staticpath);
-    # $$staticpathref = $staticpath;                # will be "openofficeorg20"
-
-    # my $relocatablepath = $rootpath;
-    # installer::pathanalyzer::get_path_from_fullqualifiedname(\$relocatablepath);
-    # $$relocatablepathref = $relocatablepath;      # will be "/opt/"
-
-    ##############################################################
-    # Version 2: "/opt/openofficeorg20" is variable and "" fixed
-    ##############################################################
-
-    # if ( $$relocatablepathref eq "" ) # relocatablepath is not defined in package list
-    # {
-    #   $$staticpathref = "";   # will be ""
-    #   $$relocatablepathref = $rootpath . "\/"; # relocatable path must end with "/", will be "/opt/openofficeorg20/"
-    #   # setting the static path to the hostname of the directory with style OFFICEDIRECTORY
-    #   if ( $allvariables->{'SETSTATICPATH'} ) { $$staticpathref = $installer::globals::officedirhostname; }
-    #
-    # }
-    # else  # relocatablepath is defined in package list
-    # {
-    #   $$relocatablepathref =~ s/\/\s*$//;         # removing ending slash
-    #   $$relocatablepathref = $$relocatablepathref . "\/"; # relocatable path must end with "/"
-    #   my $staticpath = $rootpath;
-    #   $staticpath =~ s/\Q$$relocatablepathref\E//;
-    #   $staticpath =~ s/\/\s*$//;
-    #   $$staticpathref = $staticpath;
-    # }
-
-    ##############################################################
     # Version 3: "/" is variable and "/opt/openofficeorg20" fixed
     ##############################################################
 
@@ -3230,7 +3062,6 @@ sub analyze_rootpath
     {
         $$relocatablepathref = "";
         # $$staticpathref is already "/opt/openoffice.org3", no additional $rootpath required.
-        # $$staticpathref = $rootpath . $installer::globals::separator . $$staticpathref;  # no relocatibility for Debian
     }
 
 }
@@ -3381,20 +3212,6 @@ sub finalize_linux_patch
     if ( ! ( $#{$rpmfiles} > -1 )) { installer::exiter::exit_program("ERROR: Could not find rpm in directory $newepmdir!", "finalize_linux_patch"); }
     for ( my $i = 0; $i <= $#{$rpmfiles}; $i++ ) { installer::pathanalyzer::make_absolute_filename_to_relative_filename(\${$rpmfiles}[$i]); }
 
-#   my $installline = "";
-#
-#   for ( my $i = 0; $i <= $#{$rpmfiles}; $i++ )
-#   {
-#       $installline = $installline . "  rpm --prefix \$PRODUCTINSTALLLOCATION -U $newepmdir/${$rpmfiles}[$i]\n";
-#   }
-#
-#   $installline =~ s/\s*$//;
-#
-#   for ( my $j = 0; $j <= $#{$scriptfile}; $j++ )
-#   {
-#       ${$scriptfile}[$j] =~ s/INSTALLLINES/$installline/;
-#   }
-
     # Searching packagename containing -core01
     my $found_package = 0;
     my $searchpackagename = "";
@@ -3421,7 +3238,6 @@ sub finalize_linux_patch
     my $productname = $allvariables->{'PRODUCTNAME'};
     $productname = lc($productname);
     $productname =~ s/ /_/g;    # abc office -> abc_office
-#   $productname =~ s/\.//g;    # openoffice.org -> openofficeorg
 
     $infoline = "Adding productname $productname into Linux patch script\n";
     push( @installer::globals::logfileinfo, $infoline);
@@ -3430,7 +3246,7 @@ sub finalize_linux_patch
 
     # Saving the file
 
-    my $newscriptfilename = "setup"; # $newepmdir . $installer::globals::separator . "setup";
+    my $newscriptfilename = "setup";
     installer::files::save_file($newscriptfilename, $scriptfile);
 
     $infoline = "Saved Linux patch setup $newscriptfilename \n";

@@ -241,9 +241,6 @@ sub resolving_archive_flag
 
             my $unzipdir;
 
-            # if ($iscommonfile) { $unzipdir = $commonunzipdirbase . $installer::globals::separator . $onelanguage . $installer::globals::separator; }
-            # else { $unzipdir = $platformunzipdirbase . $installer::globals::separator . $onelanguage . $installer::globals::separator; }
-
             $unzipdir = $platformunzipdirbase . $installer::globals::separator . $onelanguage . $installer::globals::separator;
 
             installer::systemactions::create_directory($unzipdir);  # creating language specific subdirectories
@@ -411,13 +408,9 @@ sub resolving_archive_flag
                                 $newfile{'Styles'} =~ s/\,\s*\,/\,/;
                                 $newfile{'Styles'} =~ s/\(\s*\,/\(/;
                                 $newfile{'Styles'} =~ s/\,\s*\)/\)/;
-                                # $infoline = "Removing PATCH flag from: $zipname\n";
-                                # push( @installer::globals::logfileinfo, $infoline);
                             }
                             else
                             {
-                                # $infoline = "Keeping PATCH flag at: $zipname\n";
-                                # push( @installer::globals::logfileinfo, $infoline);
                                 push( @keptpatchflags, $zipname); # collecting all PATCH flags
                             }
                         }

@@ -307,7 +307,6 @@ sub create_directories
                 {
                     my $number_of_languages = get_number_of_langs($languagestring);
                     chomp(my $shorter = `echo $languagestring | md5sum | sed -e "s/ .*//g"`);
-                    # $languagestring = $shorter;
                     my $id = substr($shorter, 0, 8); # taking only the first 8 digits
                     $languagestring = "lang_" . $number_of_languages . "_id_" . $id;
                 }
@@ -1100,8 +1099,6 @@ sub rename_directory
     else
     {
         installer::exiter::exit_program("ERROR: Could not move directory from $olddir to $newdir", "rename_directory");
-        # $infoline = "\nATTENTION: Could not move directory from $olddir to $newdir, \"rename_directory\"\n";
-        # push(@installer::globals::logfileinfo, $infoline);
     }
 
     return $newdir;

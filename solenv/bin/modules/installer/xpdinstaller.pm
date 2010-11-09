@@ -109,8 +109,6 @@ sub get_module
             $found = 1;
             last;
         }
-
-        # if ( ! $found ) { installer::exiter::exit_program("ERROR: Could not find module belonging to gid $modulegid!", "get_module (xpdinstaller)"); }
     }
 
     return $searchmodule;
@@ -581,7 +579,6 @@ sub get_size_value
 
     if (( $installer::globals::isrpmbuild ) && ( $isrpmfile ))
     {
-        # if ( ! $installer::globals::rpmquerycommand ) { installer::exiter::exit_program("ERROR: rpm not found for querying packages!", "get_size_value"); }
         if ( ! $installer::globals::rpmquerycommand ) { $installer::globals::rpmquerycommand = "rpm"; }
 
         my $systemcall = "$installer::globals::rpmquerycommand -qp --queryformat \"\[\%\{FILESIZES\}\\n\]\" $packagename 2\>\&1 |";
@@ -720,7 +717,6 @@ sub get_fullpkgname_value
             return $value;
         }
 
-        # if ( ! $installer::globals::rpmquerycommand ) { installer::exiter::exit_program("ERROR: rpm not found for querying packages!", "get_fullpkgname_value"); }
         if ( ! $installer::globals::rpmquerycommand ) { $installer::globals::rpmquerycommand = "rpm"; }
         my $systemcall = "$installer::globals::rpmquerycommand -qp $packagename |";
         my $ld_library_backup = $ENV{LD_LIBRARY_PATH};
@@ -1076,7 +1072,6 @@ sub set_productdir_tag
         if ( $allvariables->{"BRANDPACKAGEVERSION"} )
         {
             $productdir = $productdir . $allvariables->{"BRANDPACKAGEVERSION"};
-#           if ( $allvariables->{"LCPRODUCTEXTENSION"} ) { $productdir = $productdir . $allvariables->{"LCPRODUCTEXTENSION"}; }
         }
         else
         {
@@ -1487,7 +1482,6 @@ sub create_emptyparents_xpd_file
         push(@installer::globals::logfileinfo, $infoline);
     }
 
-    # push(@installer::globals::emptyxpdparents, $parentgid);
     push( @installer::globals::createdxpdfiles, $parentgid);
 
     return $grandpagid;
@@ -1558,7 +1552,6 @@ sub create_xpd_file
     my $xpddir = installer::systemactions::create_directories("xpdinstaller", $languagestringref);
     $xpddir =~ s/\/\s*$//;
     $installer::globals::xpddir = $xpddir;
-    # push(@installer::globals::removedirs, $xpddir);
 
     my $modulegid = $onepackage->{'module'};
 
@@ -1616,7 +1609,6 @@ sub create_xpd_file
         {
             my $create_missing_parent = is_empty_parent($parentgid, $allpackages);
 
-            # if (( $create_missing_parent ) && ( ! installer::existence::exists_in_array($parentgid, \@installer::globals::emptyxpdparents) ))
             if (( $create_missing_parent ) && ( ! installer::existence::exists_in_array($parentgid, \@installer::globals::createdxpdfiles) ))
             {
                 $grandpagid = create_emptyparents_xpd_file($parentgid, $modulesarrayref, $xpddir);
@@ -1627,7 +1619,6 @@ sub create_xpd_file
         {
             my $create_missing_parent = is_empty_parent($grandpagid, $allpackages);
 
-            # if (( $create_missing_parent ) && ( ! installer::existence::exists_in_array($parentgid, \@installer::globals::emptyxpdparents) ))
             if (( $create_missing_parent ) && ( ! installer::existence::exists_in_array($grandpagid, \@installer::globals::createdxpdfiles) ))
             {
                 create_emptyparents_xpd_file($grandpagid, $modulesarrayref, $xpddir);
@@ -1671,7 +1662,6 @@ sub create_xpd_file_for_childproject
 
     if ( $parentgid ne "root" )
     {
-        # my $create_missing_parent = is_empty_parent($parentgid, $allpackages);
         my $create_missing_parent = 1; # -> Always missing parent by child projects!
         # Parent is now created, if it was not created before. Attention: Parent module must not come later.
         if (( $create_missing_parent ) && ( ! installer::existence::exists_in_array($parentgid, \@installer::globals::createdxpdfiles) ))
@@ -1697,8 +1687,6 @@ sub create_xpd_file_for_systemintegration
     for ( my $i = 0; $i <= $#{$newcontent}; $i++ )
     {
         my $newpackagename = ${$newcontent}[$i];
-
-        # installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$newpackagename);
 
         my $infoline = "Creating xpd file for package: $newpackagename\n";
         push( @installer::globals::logfileinfo, $infoline);

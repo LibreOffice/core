@@ -331,45 +331,6 @@ sub get_java_language
 {
     my ( $language ) = @_;
 
-    # my $javalanguage = "";
-
-    # if ( $language eq "en-US" ) { $javalanguage = "en_US"; }
-    # elsif ( $language eq "ar" ) { $javalanguage = "ar_AR"; }
-    # elsif ( $language eq "bg" ) { $javalanguage = "bg_BG"; }
-    # elsif ( $language eq "ca" ) { $javalanguage = "ca_CA"; }
-    # elsif ( $language eq "cs" ) { $javalanguage = "cs_CS"; }
-    # elsif ( $language eq "da" ) { $javalanguage = "da_DA"; }
-    # elsif ( $language eq "de" ) { $javalanguage = "de"; }
-    # elsif ( $language eq "de" ) { $javalanguage = "de_DE"; }
-    # elsif ( $language eq "et" ) { $javalanguage = "et_ET"; }
-    # elsif ( $language eq "el" ) { $javalanguage = "el_EL"; }
-    # elsif ( $language eq "fi" ) { $javalanguage = "fi_FI"; }
-    # elsif ( $language eq "fr" ) { $javalanguage = "fr_FR"; }
-    # elsif ( $language eq "hu" ) { $javalanguage = "hu_HU"; }
-    # elsif ( $language eq "he" ) { $javalanguage = "he_HE"; }
-    # elsif ( $language eq "it" ) { $javalanguage = "it_IT"; }
-    # elsif ( $language eq "nl" ) { $javalanguage = "nl_NL"; }
-    # elsif ( $language eq "es" ) { $javalanguage = "es_ES"; }
-    # elsif ( $language eq "sv" ) { $javalanguage = "sv_SV"; }
-    # elsif ( $language eq "sk" ) { $javalanguage = "sk_SK"; }
-    # elsif ( $language eq "pl" ) { $javalanguage = "pl_PL"; }
-    # elsif ( $language eq "pt-BR" ) { $javalanguage = "pt_BR"; }
-    # elsif ( $language eq "ru" ) { $javalanguage = "ru_RU"; }
-    # elsif ( $language eq "tr" ) { $javalanguage = "tr_TR"; }
-    # elsif ( $language eq "ja" ) { $javalanguage = "ja"; }
-    # elsif ( $language eq "ja" ) { $javalanguage = "ja_JP"; }
-    # elsif ( $language eq "ko" ) { $javalanguage = "ko_KR"; }
-    # elsif ( $language eq "th" ) { $javalanguage = "th_TH"; }
-    # elsif ( $language eq "zh-CN" ) { $javalanguage = "zh_CN"; }
-    # elsif ( $language eq "zh-TW" ) { $javalanguage = "zh_TW"; }
-
-    # languages not defined yet
-    # if ( $javalanguage eq "" )
-    # {
-    #   $javalanguage = $language;
-    #   $javalanguage =~ s/\-/\_/;
-    # }
-
     $javalanguage = $language;
     $javalanguage =~ s/\-/\_/;
 

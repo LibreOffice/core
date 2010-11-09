@@ -922,25 +922,15 @@ sub create_services_rdb
         {
             my $registryfile = ${$registryfiles}[$i];
 
-            # my $servicesname = "services.rdb";
             my $servicesname = $registryfile->{'Name'};  # not unique!
             my $servicesgid = $registryfile->{'gid'};  # unique
             my $uniquedirname = $servicesgid . "_servicesrdb";
-            # my $uniquedirname = $servicesgid;
 
             my ($nativeservicesurlprefix, $javaservicesurlprefix) = set_url_prefixes($registryfile);
 
             installer::logger::include_header_into_logfile("Creating $servicesname ($servicesgid):");
 
-            # my $servicesdir = installer::systemactions::create_directories($servicesname, $languagestringref);
             my $servicesdir = installer::systemactions::create_directories($uniquedirname, $languagestringref);
-
-#           if ( $^O =~ /cygwin/i )
-#           {      # $servicesdir is used as a parameter for regcomp and has to be DOS style
-#               $servicesdir = qx{cygpath -d "$servicesdir"};
-#               chomp($servicesdir);
-#               $servicesdir =~ s/\\/\//g;
-#           }
 
             push(@installer::globals::removedirs, $servicesdir);
 
@@ -949,8 +939,6 @@ sub create_services_rdb
             # If there is an older version of this file, it has to be removed
             if ( -f $servicesfile ) { unlink($servicesfile); }
 
-            # if ((-f $servicesfile) && (!($installer::globals::services_rdb_created))) { $installer::globals::services_rdb_created = 1; }
-            # if ((!($installer::globals::services_rdb_created)) && $installer::globals::servicesrdb_can_be_created )   # This has to be done once
             if ( $installer::globals::servicesrdb_can_be_created )  # This has to be done always
             {
                 # Creating the services.rdb in directory "inprogress"
@@ -1009,7 +997,6 @@ sub create_services_rdb
 
                 # and now iteration over all files
 
-                # my $error_during_registration = register_all_components($filesarrayref, $regcompfileref, $servicesfile, $regcomprdb, $includepatharrayref);
                 my $error_during_registration = register_all_components($allvariableshashref, $servicesgid, $unocomponentfiles, $regcompfileref, $servicesfile, $regcomprdb, $includepatharrayref, $nativeservicesurlprefix, $javaservicesurlprefix);
 
                 if (defined $var_library_path) {
@@ -1061,7 +1048,6 @@ sub create_services_rdb
 
             # Adding the new services file source path to the filearray
             $registryfile->{'sourcepath'} = $servicesfile;  # setting the sourcepath!
-            # add_services_sourcepath_into_filearray( $filesarrayref, $servicesfile, $servicesname );
         }
     }
 

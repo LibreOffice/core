@@ -315,7 +315,6 @@ sub merge_registration_files
         {
             $databasegid = ${$databasegids}[$i];
 
-            # my $databasedirname = "starregistryrdb"; <- not unique!
             my $databasedirname = $databasegid . "_rdb"; # <- unique!
             my $databasedir = installer::systemactions::create_directories($databasedirname, $languagestringref);
             push(@installer::globals::removedirs, $databasedir);

@@ -369,7 +369,6 @@ sub check_logfile
 
         $line = "*********************************************************************\n";
         push(@output, $line);
-#       exit(-1);
     }
     else
     {
@@ -415,7 +414,6 @@ sub determine_ship_directory
     {
         my $number_of_languages = installer::systemactions::get_number_of_langs($languagestring);
         chomp(my $shorter = `echo $languagestring | md5sum | sed -e "s/ .*//g"`);
-        # $languagestring = $shorter;
         my $id = substr($shorter, 0, 8); # taking only the first 8 digits
         $languagestring = "lang_" . $number_of_languages . "_id_" . $id;
     }
@@ -629,11 +627,6 @@ sub read_encodinglist
 
     $installer::globals::msiencoding = \%msiencoding;
     $installer::globals::msilanguage = \%msilanguage;
-
-    # my $key;
-    # foreach $key (keys %{$installer::globals::msiencoding}) { print "A Key: $key : Value: $installer::globals::msiencoding->{$key}\n"; }
-    # foreach $key (keys %{$installer::globals::msilanguage}) { print "B Key: $key : Value: $installer::globals::msilanguage->{$key}\n"; }
-
 }
 
 #############################################################

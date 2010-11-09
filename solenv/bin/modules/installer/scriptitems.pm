@@ -809,7 +809,6 @@ sub replace_setup_variables
 
     if ( $localminor =~ /^\s*\w(\d+)\w*\s*$/ ) { $localminor = $1; }
 
-    # $updateid
     my $updateid = $productname . "_" . $userdirproductversion . "_" . $$languagestringref;
     $updateid =~ s/ /_/g;
 
@@ -1243,7 +1242,6 @@ sub get_Source_Directory_For_Files_From_Includepathlist
                 my $oldname = $onefile->{'Name'};
                 my $oldlanguage = $onefile->{'specificlanguage'};
                 my $newlanguage = "en-US";
-                # $onefile->{'Name'} =~ s/$oldlanguage\./$newlanguage\./;   # Example: tplwizfax_it.zip -> tplwizfax_en-US.zip
                 $onefilename = $onefile->{'Name'};
                 $onefilename =~ s/$oldlanguage\./$newlanguage\./;   # Example: tplwizfax_it.zip -> tplwizfax_en-US.zip
                 $onefilename =~ s/^\s*\Q$installer::globals::separator\E//;     # filename begins with a slash, for instance /registry/schema/org/openoffice/VCL.xcs
@@ -1255,7 +1253,6 @@ sub get_Source_Directory_For_Files_From_Includepathlist
                     $infoline = "WARNING: Using $onefilename instead of $oldname\n";
                     push( @installer::globals::logfileinfo, $infoline);
                     print "    $infoline";
-                    # if ( $onefile->{'destination'} ) { $onefile->{'destination'} =~ s/\Q$oldname\E/$onefile->{'Name'}/; }
 
                     # If the directory, in which the new file is installed, is not language dependent,
                     # the filename has to be changed to avoid installation conflicts
@@ -2013,18 +2010,14 @@ sub quoting_illegal_filenames
 
             # sourcepath and destination have to be quoted for epm list file
 
-            # $filename =~ s/\$/\$\$/g;
             $destpath =~ s/\$/\$\$/g;
             $sourcepath =~ s/\$/\$\$/g;
 
-            # my $infoline = "ATTENTION: Files: Renaming $onefile->{'Name'} to $filename\n";
-            # push( @installer::globals::logfileinfo, $infoline);
             my $infoline = "ATTENTION: Files: Quoting sourcepath $onefile->{'sourcepath'} to $sourcepath\n";
             push( @installer::globals::logfileinfo, $infoline);
             $infoline = "ATTENTION: Files: Quoting destination path $onefile->{'destination'} to $destpath\n";
             push( @installer::globals::logfileinfo, $infoline);
 
-            # $onefile->{'Name'} = $filename;
             $onefile->{'sourcepath'} = $sourcepath;
             $onefile->{'destination'} = $destpath;
         }
@@ -2089,7 +2082,6 @@ sub collect_directories_from_filesarray
             $directoryhash{'specificlanguage'} = $onefile->{'specificlanguage'};
             $directoryhash{'Dir'} = $onefile->{'Dir'};
             $directoryhash{'modules'} = $onefile->{'modules'}; # NEW, saving modules
-            # NEVER!!!  if ( ! $installer::globals::iswindowsbuild ) { $directoryhash{'Styles'} = "(CREATE)"; } # this directories must be created
 
             if ( $onefile->{'Dir'} eq "PREDEFINED_PROGDIR" ) { $predefinedprogdir_added = 1; }
 
@@ -2114,7 +2106,6 @@ sub collect_directories_from_filesarray
                     $directoryhash{'specificlanguage'} = $onefile->{'specificlanguage'};
                     $directoryhash{'Dir'} = $onefile->{'Dir'};
                     $directoryhash{'modules'} = $onefile->{'modules'}; # NEW, saving modules
-                    # NEVER!!! if ( ! $installer::globals::iswindowsbuild ) { $directoryhash{'Styles'} = "(CREATE)"; }  # this directories must be created
 
                     $alldirectoryhash{$destinationpath} = \%directoryhash;
                 }
@@ -2199,7 +2190,6 @@ sub collect_directories_with_create_flag_from_directoryarray
                 my %directoryhash = ();
                 $directoryhash{'HostName'} = $directoryname;
                 $directoryhash{'specificlanguage'} = $onedir->{'specificlanguage'};
-                # $directoryhash{'gid'} = $onedir->{'gid'};
                 $directoryhash{'Dir'} = $onedir->{'gid'};
                 $directoryhash{'Styles'} = $onedir->{'Styles'};
 
@@ -2472,7 +2462,6 @@ sub insert_for_item ($$$)
 {
     my ($hash, $item, $id) = @_;
 
-    # print STDERR "insert '$id' for '$item'\n";
     if (!defined $hash->{$item})
     {
         my @gids = ();
@@ -2526,7 +2515,6 @@ sub get_string_of_modulegids_for_itemgid
     my $haslanguagemodule = 0;
     my %foundmodules = ();
 
-    # print STDERR "lookup '" . lc($itemgid) . "'\n";
     my $gid_list = $module_lookup_table->{lc($itemgid)};
 
     for my $gid (@{$gid_list})
@@ -2545,8 +2533,6 @@ sub get_string_of_modulegids_for_itemgid
         my $isreallylanguagemodule = installer::worker::key_in_a_is_also_key_in_b(\%foundmodules, \%installer::globals::alllangmodules);
         if ( ! $isreallylanguagemodule ) { installer::exiter::exit_program("ERROR: \"$itemgid\" is assigned to modules with flag \"LANGUAGEMODULE\" and also to modules without this flag! Modules: $allmodules", "get_string_of_modulegids_for_itemgid");  }
     }
-
-    # print STDERR "get_string_for_itemgid ($itemgid, $itemname) => $allmodules, $haslanguagemodule\n";
 
     return ($allmodules, $haslanguagemodule);
 }

@@ -441,14 +441,6 @@ sub get_downloadname_language
         $languages =~ s/_en-US//;
     }
 
-    # en-US is default language and can be removed therefore
-    # for one-language installation sets
-
-    # if ( $languages =~ /^\s*en-US\s*$/ )
-    # {
-    #   $languages = "";
-    # }
-
     if ( length ($languages) > $installer::globals::max_lang_length )
     {
         $languages = 'multi';
@@ -590,7 +582,6 @@ sub get_download_platformname
     }
     else
     {
-        # $platformname = $installer::globals::packageformat;
         $platformname = $installer::globals::compiler;
     }
 
@@ -751,7 +742,6 @@ sub get_current_version
     my $infoline = "";
     my $versionstring = "";
     my $filename = "version.info";
-    # $filename = $installer::globals::ooouploaddir . $installer::globals::separator . $filename;
 
     if ( -f $filename )
     {
@@ -991,7 +981,6 @@ sub put_banner_bmp_into_template
 {
     my ($templatefile, $includepatharrayref, $allvariables) = @_;
 
-    # my $filename = "downloadbanner.bmp";
     if ( ! $allvariables->{'DOWNLOADBANNER'} ) { installer::exiter::exit_program("ERROR: DOWNLOADBANNER not defined in product definition!", "put_banner_bmp_into_template"); }
     my $filename = $allvariables->{'DOWNLOADBANNER'};
 
@@ -1021,7 +1010,6 @@ sub put_welcome_bmp_into_template
 {
     my ($templatefile, $includepatharrayref, $allvariables) = @_;
 
-    # my $filename = "downloadbitmap.bmp";
     if ( ! $allvariables->{'DOWNLOADBITMAP'} ) { installer::exiter::exit_program("ERROR: DOWNLOADBITMAP not defined in product definition!", "put_welcome_bmp_into_template"); }
     my $filename = $allvariables->{'DOWNLOADBITMAP'};
 
@@ -1051,7 +1039,6 @@ sub put_setup_ico_into_template
 {
     my ($templatefile, $includepatharrayref, $allvariables) = @_;
 
-    # my $filename = "downloadsetup.ico";
     if ( ! $allvariables->{'DOWNLOADSETUPICO'} ) { installer::exiter::exit_program("ERROR: DOWNLOADSETUPICO not defined in product definition!", "put_setup_ico_into_template"); }
     my $filename = $allvariables->{'DOWNLOADSETUPICO'};
 
@@ -1140,7 +1127,6 @@ sub put_windows_productpath_into_template
     if (length($locallangs) > $installer::globals::max_lang_length) { $locallangs = "multi lingual"; }
 
     if ( ! $installer::globals::languagepack ) { $productpath = $productpath . " (" . sprintf('%x', time()) . ")"; }
-    # if (( $installer::globals::languagepack ) && ( $installer::globals::unicodensis )) { $productpath = convert_textstring_to_utf16($productpath, $localnsisdir, "stringhelper.txt"); }
 
     replace_one_variable($templatefile, "PRODUCTPATHPLACEHOLDER", $productpath);
 }
@@ -1296,7 +1282,6 @@ sub nsis_language_converter
         my $infoline = "NSIS language_converter : Could not find nsis language for $language!\n";
         push( @installer::globals::logfileinfo, $infoline);
         $nsislanguage = "English";
-        # installer::exiter::exit_program("ERROR: Could not find nsis language for $language!", "nsis_language_converter");
     }
 
     return $nsislanguage;
@@ -1525,8 +1510,6 @@ sub convert_utf16_to_utf8
     my $savfilename = $filename . "_before.utf16";
     installer::systemactions::copy_one_file($filename, $savfilename);
 
-#   open( IN, "<:utf16", $filename ) || installer::exiter::exit_program("ERROR: Cannot open file $filename for reading", "convert_utf16_to_utf8");
-#   open( IN, "<:para:crlf:uni", $filename ) || installer::exiter::exit_program("ERROR: Cannot open file $filename for reading", "convert_utf16_to_utf8");
     open( IN, "<:encoding(UTF16-LE)", $filename ) || installer::exiter::exit_program("ERROR: Cannot open file $filename for reading", "convert_utf16_to_utf8");
     while ( $line = <IN> ) {
         push @localfile, $line;
@@ -1751,12 +1734,6 @@ sub get_path_to_nsis_sdk
         $nsispath = $ENV{'NSISSDK_SOURCE'}; # overriding the NSIS SDK with NSISSDK_SOURCE
     }
 
-#   if( ($^O =~ /cygwin/i) and $nsispath =~ /\\/ ) {
-#       # We need a POSIX path for W32-4nt-cygwin-perl
-#       $nsispath =~ s/\\/\\\\/g;
-#       chomp( $nsispath = qx{cygpath -u "$nsispath"} );
-#   }
-
     if ( $nsispath eq "" )
     {
         installer::logger::print_message( "... no Environment variable \"SOLARROOT\", \"NSIS_PATH\" or \"NSISSDK_SOURCE\" found and NSIS not found in path!", "get_path_to_nsis_sdk");
@@ -1870,9 +1847,6 @@ sub get_translation_file
 sub remove_english_for_nsis_installer
 {
     my ($languagestringref, $languagesarrayref) = @_;
-
-    # $$languagestringref =~ s/en-US_//;
-    # shift(@{$languagesarrayref});
 
     @{$languagesarrayref} = ("en-US");  # only english for NSIS installer!
 }
@@ -2151,9 +2125,6 @@ sub create_download_link_tree
                 push( @installer::globals::logfileinfo, $infoline);
 
                 create_link_tree($sourcedownloadfile, $destdownloadfilename, $versionstring);
-                # my $md5sumoutput = call_md5sum($downloadfile);
-                # my $md5sum = get_md5sum($md5sumoutput);
-
             }
         }
         else
