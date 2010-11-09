@@ -721,20 +721,12 @@ void lcl_SetColl(SwWrtShell* pWrtShell, USHORT nType,
                     SfxPrinter* pPrt, const String& rStyle,
                     USHORT nFontWhich)
 {
-    BOOL bDelete = FALSE;
-    const SfxFont* pFnt = pPrt ? pPrt->GetFontByName(rStyle): 0;
-    if(!pFnt)
-    {
-        pFnt = new SfxFont(FAMILY_DONTKNOW, rStyle);
-        bDelete = TRUE;
-    }
+    Font aFont( rStyle, Size( 0, 10 ) );
+    if( pPrt )
+        aFont = pPrt->GetFontMetric( aFont );
     SwTxtFmtColl *pColl = pWrtShell->GetTxtCollFromPool(nType);
-    pColl->SetFmtAttr(SvxFontItem(pFnt->GetFamily(), pFnt->GetName(),
-                aEmptyStr, pFnt->GetPitch(), pFnt->GetCharSet(), nFontWhich));
-    if(bDelete)
-    {
-        delete (SfxFont*) pFnt;
-    }
+    pColl->SetFmtAttr(SvxFontItem(aFont.GetFamily(), aFont.GetName(),
+                aEmptyStr, aFont.GetPitch(), aFont.GetCharSet(), nFontWhich));
 }
 /*-- 11.10.2005 15:47:52---------------------------------------------------
 
@@ -817,22 +809,13 @@ BOOL SwStdFontTabPage::FillItemSet( SfxItemSet& )
             FONT_GROUP_CJK == nFontGroup ? RES_CHRATR_CJK_FONTSIZE : RES_CHRATR_CTL_FONTSIZE);
         if(sStandard != sShellStd)
         {
-            BOOL bDelete = FALSE;
-            const SfxFont* pFnt = pPrinter ? pPrinter->GetFontByName(sStandard): 0;
-            if(!pFnt)
-            {
-                pFnt = new SfxFont(FAMILY_DONTKNOW, sStandard);
-                bDelete = TRUE;
-            }
-            pWrtShell->SetDefault(SvxFontItem(pFnt->GetFamily(), pFnt->GetName(),
-                                aEmptyStr, pFnt->GetPitch(), pFnt->GetCharSet(), nFontWhich));
+            Font aFont( sStandard, Size( 0, 10 ) );
+            if( pPrinter )
+                aFont = pPrinter->GetFontMetric( aFont );
+            pWrtShell->SetDefault(SvxFontItem(aFont.GetFamily(), aFont.GetName(),
+                                  aEmptyStr, aFont.GetPitch(), aFont.GetCharSet(), nFontWhich));
             SwTxtFmtColl *pColl = pWrtShell->GetTxtCollFromPool(RES_POOLCOLL_STANDARD);
             pColl->ResetFmtAttr(nFontWhich);
-            if(bDelete)
-            {
-                delete (SfxFont*) pFnt;
-                bDelete = FALSE;
-            }
 //          lcl_SetColl(pWrtShell, RES_POOLCOLL_STANDARD, pPrinter, sStandard);
             bMod = TRUE;
         }
@@ -938,15 +921,24 @@ void SwStdFontTabPage::Reset( const SfxItemSet& rSet)
     // #i94536# prevent duplication of font entries when 'reset' button is pressed
     if( !aStandardBox.GetEntryCount() )
     {
-        const USHORT nCount = pPrt->GetFontCount();
-        for (USHORT i = 0; i < nCount; ++i)
+        // get the set of disctinct available family names
+        std::set< String > aFontNames;
+        int nFontNames = pPrt->GetDevFontCount();
+        for( int i = 0; i < nFontNames; i++ )
         {
-            const String &rString = pPrt->GetFont(i)->GetName();
-            aStandardBox.InsertEntry( rString );
-            aTitleBox   .InsertEntry( rString );
-            aListBox    .InsertEntry( rString );
-            aLabelBox   .InsertEntry( rString );
-            aIdxBox     .InsertEntry( rString );
+            FontInfo aInf( pPrt->GetDevFont( i ) );
+            aFontNames.insert( aInf.GetName() );
+        }
+
+        // insert to listboxes
+        for( std::set< String >::const_iterator it = aFontNames.begin();
+             it != aFontNames.end(); ++it )
+        {
+            aStandardBox.InsertEntry( *it );
+            aTitleBox   .InsertEntry( *it );
+            aListBox    .InsertEntry( *it );
+            aLabelBox   .InsertEntry( *it );
+            aIdxBox     .InsertEntry( *it );
         }
     }
     if(SFX_ITEM_SET == rSet.GetItemState(FN_PARAM_STDFONTS, FALSE, &pItem))
