@@ -237,9 +237,6 @@ public:
     void                        AdjustVisArea(const Rectangle& rRect);
 
     // Printing Interface
-    virtual void                PreparePrint();
-    virtual ErrCode             DoPrint( SfxPrinter *pPrinter, BOOL bSilent, BOOL bIsAPI );
-    virtual USHORT              Print( SfxProgress &rProgress, BOOL bIsAPI );
     virtual SfxPrinter*         GetPrinter( BOOL bCreate = FALSE );
     virtual USHORT              SetPrinter( SfxPrinter *pNewPrinter, USHORT nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=FALSE );
     virtual SfxTabPage*         CreatePrintOptionsPage( Window *pParent, const SfxItemSet &rOptions );

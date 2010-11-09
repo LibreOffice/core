@@ -34,59 +34,10 @@
 #include <vcl/print.hxx>
 #endif
 
-class SfxFont;
 class SfxTabPage;
 class SfxItemSet;
 
 struct SfxPrinter_Impl;
-
-#define SFX_RANGE_NOTSET    ((USHORT)0xFFFF)
-
-// class SfxFontSizeInfo -------------------------------------------------
-
-class SfxFontSizeInfo
-{
-private:
-    static USHORT           pStaticSizes[];
-    Size*                   pSizes;
-    USHORT                  nSizes;
-    BOOL                    bScalable;
-
-public:
-    SfxFontSizeInfo( const SfxFont& rFont, const OutputDevice& rDevice );
-    ~SfxFontSizeInfo();
-
-    BOOL                    HasSize(const Size &rSize) const;
-    BOOL                    IsScalable() const { return bScalable; }
-
-    USHORT                  SizeCount() const { return nSizes; }
-    const Size&             GetSize( USHORT nNo ) const
-                            { return pSizes[nNo]; }
-};
-
-// class SfxFont ---------------------------------------------------------
-
-class SFX2_DLLPUBLIC SfxFont
-{
-private:
-    String                  aName;
-    FontFamily              eFamily;
-    FontPitch               ePitch;
-    CharSet                 eCharSet;
-
-    SfxFont&                operator=(const SfxFont& rFont); // not implemented
-
-public:
-    SfxFont( const FontFamily eFam,
-             const String& aName,
-             const FontPitch eFontPitch = PITCH_DONTKNOW,
-             const CharSet eFontCharSet = RTL_TEXTENCODING_DONTKNOW );
-    // ZugriffsMethoden:
-    inline const String&    GetName() const { return aName; }
-    inline FontFamily       GetFamily() const { return eFamily; }
-    inline FontPitch        GetPitch() const { return ePitch; }
-    inline CharSet          GetCharSet() const { return eCharSet; }
-};
 
 // class SfxPrinter ------------------------------------------------------
 
@@ -127,11 +78,6 @@ public:
 
     BOOL                    IsKnown() const { return bKnown; }
     BOOL                    IsOriginal() const { return bKnown; }
-
-        using OutputDevice::GetFont;
-    USHORT                  GetFontCount();
-    const SfxFont*          GetFont( USHORT nNo ) const;
-    const SfxFont*          GetFontByName( const String &rFontName );
 };
 
 #endif

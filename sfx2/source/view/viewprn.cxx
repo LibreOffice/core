@@ -855,22 +855,6 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
 
 //--------------------------------------------------------------------
 
-void SfxViewShell::PreparePrint()
-{
-}
-
-//--------------------------------------------------------------------
-
-
-ErrCode SfxViewShell::DoPrint( SfxPrinter* /*pPrinter*/,
-                               BOOL /*bSilent*/, BOOL /*bIsAPI*/ )
-{
-    DBG_ERROR( "DoPrint called, dead code !" );
-    return ERRCODE_IO_NOTSUPPORTED;
-}
-
-//--------------------------------------------------------------------
-
 BOOL SfxViewShell::IsPrinterLocked() const
 {
     return pImp->m_nPrinterLocks > 0;
@@ -896,13 +880,6 @@ void SfxViewShell::LockPrinter( BOOL bLock)
         Invalidate( SID_PRINTDOCDIRECT );
         Invalidate( SID_SETUPPRINTER );
     }
-}
-
-//--------------------------------------------------------------------
-
-USHORT SfxViewShell::Print( SfxProgress& /*rProgress*/, BOOL /*bIsAPI*/ )
-{
-    return 0;
 }
 
 //--------------------------------------------------------------------
