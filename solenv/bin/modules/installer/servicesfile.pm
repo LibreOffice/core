@@ -167,7 +167,7 @@ sub call_regcomp
 
     my $error_occured = 0;
 
-    my $systemcall = "$installer::globals::wrapcmd $$regcompfileref -register -r ".fix_cygwin_path($servicesfile)." -c "  . $installer::globals::quote . $filestring . $installer::globals::quote . " -wop=" . $installer::globals::quote . $urlprefix . $installer::globals::quote . " 2\>\&1 |";
+    my $systemcall = "$$regcompfileref -register -r ".fix_cygwin_path($servicesfile)." -c "  . $installer::globals::quote . $filestring . $installer::globals::quote . " -wop=" . $installer::globals::quote . $urlprefix . $installer::globals::quote . " 2\>\&1 |";
 
     open (REG, "$systemcall");
     while (<REG>) {push(@regcompoutput, $_); }
@@ -229,7 +229,7 @@ sub register_javacomponents
             {
                 my @regcompoutput = ();
 
-                my $systemcall = "$installer::globals::wrapcmd $$regcompfileref -register -br ".fix_cygwin_path($regcomprdb)." -r ".fix_cygwin_path($servicesfile)." -c " . $installer::globals::quote . $filestring . $installer::globals::quote . " -l com.sun.star.loader.Java2 -wop=" . $installer::globals::quote . $javaservicesurlprefix . $installer::globals::quote ." -env:URE_INTERNAL_JAVA_DIR=" . $installer::globals::quote . make_file_url($$ure_internal_java_dir_ref) . $installer::globals::quote . " 2\>\&1 |";
+                my $systemcall = "$$regcompfileref -register -br ".fix_cygwin_path($regcomprdb)." -r ".fix_cygwin_path($servicesfile)." -c " . $installer::globals::quote . $filestring . $installer::globals::quote . " -l com.sun.star.loader.Java2 -wop=" . $installer::globals::quote . $javaservicesurlprefix . $installer::globals::quote ." -env:URE_INTERNAL_JAVA_DIR=" . $installer::globals::quote . make_file_url($$ure_internal_java_dir_ref) . $installer::globals::quote . " 2\>\&1 |";
 
                 open (REG, "$systemcall");
                 while (<REG>) {push(@regcompoutput, $_); }
@@ -276,7 +276,7 @@ sub fix_cygwin_path
 {
     my ( $path ) = @_;
 
-    if ( $installer::globals::iswin eq 1 && $installer::globals::wrapcmd eq "" )
+    if ( $installer::globals::iswin eq 1 )
     {
     $path = qx{cygpath -m "$path"};
     chomp($path);
@@ -365,7 +365,7 @@ sub register_pythoncomponents
 
                 my @regcompoutput = ();
 
-                $systemcall = "$installer::globals::wrapcmd $$regcompfileref -register"
+                $systemcall = "$$regcompfileref -register"
                 . " -br " . fix_cygwin_path($$typesrdbref)
                 . " -br " . fix_cygwin_path($$pyunoservicesrdbref)
                 . " -r " . fix_cygwin_path($servicesfile)
@@ -715,7 +715,7 @@ sub prepare_regcomp_rdb
 
         chdir($to);
 
-        my $systemcall = "$installer::globals::wrapcmd $regcompfile -register -s -r " . fix_cygwin_path($regcomprdb) . " -c $libfilename";
+        my $systemcall = "$regcompfile -register -s -r " . fix_cygwin_path($regcomprdb) . " -c $libfilename";
 
         my $returnvalue = system($systemcall);
 
