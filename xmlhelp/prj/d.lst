@@ -7,4 +7,6 @@
 ..\util\*.xsl %_DEST%\bin%_EXT%\*.*
 ..\%__SRC%\lib\ihelplinker.lib %_DEST%\lib%_EXT%\ihelplinker.lib
 ..\%__SRC%\bin\helpxsl.zip %_DEST%\pck%_EXT%\helpxsl.zip
-
+..\%__SRC%\misc\LuceneHelpWrapper.component %_DEST%\xml%_EXT%\LuceneHelpWrapper.component
+..\%__SRC%\misc\tvhlp1.component %_DEST%\xml%_EXT%\tvhlp1.component
+..\%__SRC%\misc\ucpchelp1.component %_DEST%\xml%_EXT%\ucpchelp1.component

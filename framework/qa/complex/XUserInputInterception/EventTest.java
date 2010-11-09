@@ -45,15 +45,24 @@ import com.sun.star.lang.*;
 import com.sun.star.lang.EventObject;
 import com.sun.star.sheet.XSpreadsheetDocument;
 import com.sun.star.text.XTextDocument;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
 import com.sun.star.util.*;
-import com.sun.star.uno.*;
 import java.awt.Robot;
 import java.awt.event.InputEvent;
 
-import complexlib.ComplexTestCase;
 import util.AccessibilityTools;
 import util.SOfficeFactory;
 
+// ---------- junit imports -----------------
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.openoffice.test.OfficeConnection;
+import static org.junit.Assert.*;
+// ------------------------------------------
 //-----------------------------------------------
 /**
  * This <CODE>ComplexTest</CODE> checks the interface
@@ -64,7 +73,7 @@ import util.SOfficeFactory;
  * @short Check the interface XUserInputIntercaption
  * @descr checks is a simple way the interface XUserInputInteraction
  */
-public class EventTest extends ComplexTestCase {
+public class EventTest {
     //-------------------------------------------
     // some const
 
@@ -112,16 +121,16 @@ public class EventTest extends ComplexTestCase {
      * @return All test methods.
      * @todo Think about selection of tests from outside ...
      */
-    public String[] getTestMethodNames() {
-        return new String[]
-        { "checkTextDocument",
-          "checkCalcDocument",
-          "checkDrawDocument",
-          "checkImpressDocument",
-          "checkChartDocument",
-          "checkMathDocument",
-        };
-    }
+//    public String[] getTestMethodNames() {
+//        return new String[]
+//        { "checkTextDocument",
+//          "checkCalcDocument",
+//          "checkDrawDocument",
+//          "checkImpressDocument",
+//          "checkChartDocument",
+//          "checkMathDocument",
+//        };
+//    }
 
     //-------------------------------------------
     /**
@@ -130,17 +139,17 @@ public class EventTest extends ComplexTestCase {
      * @descr create an empty test frame, where we can load
      * different components inside.
      */
-    public void before() {
+@Before public void before() {
         // get uno service manager from global test environment
-        m_xMSF = (XMultiServiceFactory)param.getMSF();
+        m_xMSF = getMSF();
 
         // create frame instance
         try {
             // get a soffice factory object
-            m_SOF = SOfficeFactory.getFactory((XMultiServiceFactory) param.getMSF());
+            m_SOF = SOfficeFactory.getFactory(getMSF());
 
         } catch(java.lang.Throwable ex) {
-            failed("Could not create the XUserInputInterception instance.");
+            fail("Could not create the XUserInputInterception instance.");
         }
     }
 
@@ -151,12 +160,11 @@ public class EventTest extends ComplexTestCase {
      * @param xDoc the document to close
      */
     public void closeDoc(XInterface xDoc) {
-        XCloseable xClose = (XCloseable)UnoRuntime.queryInterface(
-                XCloseable.class, xDoc);
+        XCloseable xClose = UnoRuntime.queryInterface(XCloseable.class, xDoc);
         try {
             xClose.close(false);
         } catch(com.sun.star.util.CloseVetoException exVeto) {
-            log.println("document couldn't be closed successfully.");
+            System.out.println("document couldn't be closed successfully.");
         }
     }
 
@@ -166,14 +174,14 @@ public class EventTest extends ComplexTestCase {
      * @see com.sun.star.awt.XKeyHandler
      * @see com.sun.star.awt.XMouseClickHandler
      */
-    public void checkTextDocument(){
+    @Test public void checkTextDocument(){
 
         XTextDocument xDoc = null;
 
         try{
             xDoc = m_SOF.createTextDoc("WriterTest");
         } catch (com.sun.star.uno.Exception e){
-            failed("Could not create a text document: " +e.toString());
+            fail("Could not create a text document: " +e.toString());
         }
 
         checkListener(xDoc);
@@ -187,14 +195,14 @@ public class EventTest extends ComplexTestCase {
      * @see com.sun.star.awt.XKeyHandler
      * @see com.sun.star.awt.XMouseClickHandler
      */
-    public void checkImpressDocument(){
+    @Test public void checkImpressDocument(){
 
         XComponent xDoc = null;
 
         try{
             xDoc = m_SOF.createImpressDoc("ImpressTest");
         } catch (com.sun.star.uno.Exception e){
-            failed("Could not create an impress document: " +e.toString());
+            fail("Could not create an impress document: " +e.toString());
         }
 
         checkListener(xDoc);
@@ -208,20 +216,21 @@ public class EventTest extends ComplexTestCase {
      * @see com.sun.star.awt.XKeyHandler
      * @see com.sun.star.awt.XMouseClickHandler
      */
-    public void checkChartDocument(){
-
-        XChartDocument xDoc = null;
-
-        try{
-            xDoc = m_SOF.createChartDoc("ChartTest");
-        } catch (com.sun.star.uno.Exception e){
-            failed("Could not create a chart document: " +e.toString());
-        }
-
-        checkListener(xDoc);
-
-        closeDoc(xDoc);
-    }
+// TODO!
+//    @Test public void checkChartDocument(){
+//
+//        XChartDocument xDoc = null;
+//
+//        try{
+//            xDoc = m_SOF.createChartDoc("ChartTest");
+//        } catch (com.sun.star.uno.Exception e){
+//            fail("Could not create a chart document: " +e.toString());
+//        }
+//
+//        checkListener(xDoc);
+//
+//        closeDoc(xDoc);
+//    }
 
     /**
      * creates a math document and check the <CODE>XMouseClickHandler</CODE> and
@@ -229,14 +238,14 @@ public class EventTest extends ComplexTestCase {
      * @see com.sun.star.awt.XKeyHandler
      * @see com.sun.star.awt.XMouseClickHandler
      */
-    public void checkMathDocument(){
+    @Test public void checkMathDocument(){
 
         XComponent xDoc = null;
 
         try{
             xDoc = m_SOF.createMathDoc("MathTest");
         } catch (com.sun.star.uno.Exception e){
-            failed("Could not create a math document: " +e.toString());
+            fail("Could not create a math document: " +e.toString());
         }
 
         checkListener(xDoc);
@@ -250,14 +259,14 @@ public class EventTest extends ComplexTestCase {
      * @see com.sun.star.awt.XKeyHandler
      * @see com.sun.star.awt.XMouseClickHandler
      */
-    public void checkDrawDocument(){
+    @Test public void checkDrawDocument(){
 
         XComponent xDoc = null;
 
         try{
             xDoc = m_SOF.createDrawDoc("DrawTest");
         } catch (com.sun.star.uno.Exception e){
-            failed("Could not create a draw document: " +e.toString());
+            fail("Could not create a draw document: " +e.toString());
         }
 
         checkListener(xDoc);
@@ -271,14 +280,14 @@ public class EventTest extends ComplexTestCase {
      * @see com.sun.star.awt.XKeyHandler
      * @see com.sun.star.awt.XMouseClickHandler
      */
-    public void checkCalcDocument(){
+    @Test public void checkCalcDocument(){
 
         XSpreadsheetDocument xDoc = null;
 
         try{
             xDoc = m_SOF.createCalcDoc("CalcTest");
         } catch (com.sun.star.uno.Exception e){
-            failed("Could not create a calc document: " +e.toString());
+            fail("Could not create a calc document: " +e.toString());
         }
 
         checkListener(xDoc);
@@ -293,7 +302,7 @@ public class EventTest extends ComplexTestCase {
      */
     private void checkListener(XInterface xDoc){
 
-        XModel xModel = (XModel) UnoRuntime.queryInterface(XModel.class, xDoc);
+        XModel xModel = UnoRuntime.queryInterface(XModel.class, xDoc);
 
         XUserInputInterception xUII = getUII(xModel);
 
@@ -320,15 +329,15 @@ public class EventTest extends ComplexTestCase {
 
         xUII.addKeyHandler(keyListener);
 
-        log.println("starting thread to check the key listener...");
+        System.out.println("starting thread to check the key listener...");
         EventTrigger et = new EventTrigger(xModel, EventTriggerType.KEY_TEXT_INTO_DOC);
 
         et.run();
 
         util.utils.shortWait(m_threadWait);
-        log.println("key listener thread should be finished.");
+        System.out.println("key listener thread should be finished.");
 
-        assure("key event does not work!", m_keyPressed && m_keyReleased);
+        assertTrue("key event does not work!", m_keyPressed && m_keyReleased);
         xUII.removeKeyHandler(keyListener);
 
     }
@@ -354,15 +363,15 @@ public class EventTest extends ComplexTestCase {
 
         xUII.addMouseClickHandler(mouseListener);
 
-        log.println("starting thread to check the mouse listener...");
+        System.out.println("starting thread to check the mouse listener...");
         EventTrigger et = new EventTrigger(xModel, EventTriggerType.MOUSE_KLICK_INTO_DOC);
 
         et.run();
 
         util.utils.shortWait(m_threadWait);
-        log.println("mouse listener thread should be finished.");
+        System.out.println("mouse listener thread should be finished.");
 
-        assure("mouse event does not work!", m_mousePressed && m_mouseReleased);
+        assertTrue("mouse event does not work!", m_mousePressed && m_mouseReleased);
         xUII.removeMouseClickHandler(mouseListener);
     }
 
@@ -375,10 +384,9 @@ public class EventTest extends ComplexTestCase {
 
         XController xController = xModel.getCurrentController();
 
-        XUserInputInterception xUII = (XUserInputInterception) UnoRuntime.queryInterface(
-                XUserInputInterception.class, xController);
+        XUserInputInterception xUII = UnoRuntime.queryInterface(XUserInputInterception.class, xController);
         if (xUII == null) {
-            failed("could not get XUserInputInterception from XContoller", true);
+            fail("could not get XUserInputInterception from XContoller");
         }
          return xUII;
     }
@@ -395,7 +403,7 @@ public class EventTest extends ComplexTestCase {
          * @return returns <CODE>TRUE</CODE> in erery case
          */
         public boolean keyPressed( KeyEvent oEvent ){
-            log.println("XKeyHandler: keyPressed-Event");
+            System.out.println("XKeyHandler: keyPressed-Event");
             m_keyPressed = true;
             return true;
         }
@@ -406,7 +414,7 @@ public class EventTest extends ComplexTestCase {
          * @return returns <CODE>TRUE</CODE> in erery case
          */
         public boolean keyReleased( KeyEvent oEvent ){
-            log.println("XKeyHandler: keyReleased-Event");
+            System.out.println("XKeyHandler: keyReleased-Event");
             m_keyReleased = true;
             return true;
         }
@@ -415,7 +423,7 @@ public class EventTest extends ComplexTestCase {
          * @param oEvent refers to the object that fired the event.
          */
         public void disposing( EventObject oEvent ){
-            log.println("XKeyHandler: disposing-Event");
+            System.out.println("XKeyHandler: disposing-Event");
         }
     }
 
@@ -431,7 +439,7 @@ public class EventTest extends ComplexTestCase {
          * @return returns <CODE>TRUE</CODE> in erery case
          */
         public boolean mousePressed( MouseEvent oEvent ){
-            log.println("XMouseClickHandler: mousePressed-Event");
+            System.out.println("XMouseClickHandler: mousePressed-Event");
             m_mousePressed = true;
             return true;
         }
@@ -442,7 +450,7 @@ public class EventTest extends ComplexTestCase {
          * @return returns <CODE>TRUE</CODE> in erery case
          */
         public boolean mouseReleased( MouseEvent oEvent ){
-            log.println("XMouseClickHandler: mouseReleased-Event");
+            System.out.println("XMouseClickHandler: mouseReleased-Event");
             m_mouseReleased = true;
             return true;
         }
@@ -451,7 +459,7 @@ public class EventTest extends ComplexTestCase {
          * @param oEvent refers to the object that fired the event.
          */
         public void disposing( EventObject oEvent ){
-            log.println("XMouseClickHandler: disposing-Event");
+            System.out.println("XMouseClickHandler: disposing-Event");
         }
     };
 
@@ -529,7 +537,7 @@ public class EventTest extends ComplexTestCase {
                 // get the position and the range of a scroll bar
 
                 XWindow xWindow = at.getCurrentWindow(
-                                          (XMultiServiceFactory) param.getMSF(),
+                                          getMSF(),
                                           xModel);
 
                 XAccessible xRoot = at.getAccessibleObject(xWindow);
@@ -537,7 +545,7 @@ public class EventTest extends ComplexTestCase {
 
 
                 XAccessibleContext xPanel = at.getAccessibleObjectForRole(xRoot, AccessibleRole.PANEL);
-                XAccessibleComponent xPanelCont = (XAccessibleComponent) UnoRuntime.queryInterface(XAccessibleComponent.class, xPanel);
+                XAccessibleComponent xPanelCont = UnoRuntime.queryInterface(XAccessibleComponent.class, xPanel);
 
                 // the position of the panel
                 Point point = xPanelCont.getLocationOnScreen();
@@ -549,15 +557,15 @@ public class EventTest extends ComplexTestCase {
                     Robot rob = new Robot();
                     int x = point.X + (rect.Width / 2);
                     int y = point.Y + (rect.Height / 2);
-                    log.println("try to klick into the middle of the document");
+                    System.out.println("try to klick into the middle of the document");
                     rob.mouseMove(x, y);
                     rob.mousePress(InputEvent.BUTTON1_MASK);
                     rob.mouseRelease(InputEvent.BUTTON1_MASK);
                 } catch (java.awt.AWTException e) {
-                    log.println("couldn't press mouse button");
+                    System.out.println("couldn't press mouse button");
                 }
             } catch (java.lang.Exception e){
-                log.println("could not click into the scroll bar: " + e.toString());
+                System.out.println("could not click into the scroll bar: " + e.toString());
             }
         }
 
@@ -569,11 +577,11 @@ public class EventTest extends ComplexTestCase {
         private void keyIntoDoc(){
             try {
                 Robot rob = new Robot();
-                log.println("try to press 'A'");
+                System.out.println("try to press 'A'");
                 rob.keyPress(java.awt.event.KeyEvent.VK_A);
                 rob.keyRelease(java.awt.event.KeyEvent.VK_A);
             } catch (java.awt.AWTException e) {
-                log.println("couldn't press key");
+                System.out.println("couldn't press key");
             }
 
         }
@@ -591,4 +599,29 @@ public class EventTest extends ComplexTestCase {
         /** write some text into a spread sheet*/
         final public static int KEY_TEXT_INTO_DOC = 2;
     }
+
+
+
+
+    private XMultiServiceFactory getMSF()
+    {
+        final XMultiServiceFactory xMSF1 = UnoRuntime.queryInterface(XMultiServiceFactory.class, connection.getComponentContext().getServiceManager());
+        return xMSF1;
+    }
+
+    // setup and close connections
+    @BeforeClass public static void setUpConnection() throws Exception {
+        System.out.println("setUpConnection()");
+        connection.setUp();
+    }
+
+    @AfterClass public static void tearDownConnection()
+        throws InterruptedException, com.sun.star.uno.Exception
+    {
+        System.out.println("tearDownConnection()");
+        connection.tearDown();
+    }
+
+    private static final OfficeConnection connection = new OfficeConnection();
+
 }

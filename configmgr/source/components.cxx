@@ -29,6 +29,7 @@
 #include "sal/config.h"
 
 #include <algorithm>
+#include <cstddef>
 #include <list>
 
 #include "com/sun/star/beans/Optional.hpp"
@@ -43,8 +44,11 @@
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/uno/XInterface.hpp"
+#include "osl/conditn.hxx"
 #include "osl/diagnose.h"
 #include "osl/file.hxx"
+#include "osl/mutex.hxx"
+#include "osl/thread.hxx"
 #include "rtl/bootstrap.hxx"
 #include "rtl/logfile.h"
 #include "rtl/ref.hxx"
@@ -53,10 +57,12 @@
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
+#include "salhelper/simplereferenceobject.hxx"
 
 #include "additions.hxx"
 #include "components.hxx"
 #include "data.hxx"
+#include "lock.hxx"
 #include "modifications.hxx"
 #include "node.hxx"
 #include "nodemap.hxx"
@@ -146,6 +152,66 @@ bool canRemoveFromLayer(int layer, rtl::Reference< Node > const & node) {
 static bool singletonCreated = false;
 static Components * singleton = 0;
 
+}
+
+class Components::WriteThread:
+    public osl::Thread, public salhelper::SimpleReferenceObject
+{
+public:
+    static void * operator new(std::size_t size)
+    { return Thread::operator new(size); }
+
+    static void operator delete(void * pointer)
+    { Thread::operator delete(pointer); }
+
+    WriteThread(
+        rtl::Reference< WriteThread > * reference, Components & components,
+        rtl::OUString const & url, Data const & data);
+
+    void flush() { delay_.set(); }
+
+private:
+    virtual ~WriteThread() {}
+
+    virtual void SAL_CALL run();
+
+    virtual void SAL_CALL onTerminated() { release(); }
+
+    rtl::Reference< WriteThread > * reference_;
+    Components & components_;
+    rtl::OUString url_;
+    Data const & data_;
+    osl::Condition delay_;
+};
+
+Components::WriteThread::WriteThread(
+    rtl::Reference< WriteThread > * reference, Components & components,
+    rtl::OUString const & url, Data const & data):
+    reference_(reference), components_(components), url_(url), data_(data)
+{
+    OSL_ASSERT(reference != 0);
+    acquire();
+}
+
+void Components::WriteThread::run() {
+    TimeValue t = { 1, 0 }; // 1 sec
+    delay_.wait(&t); // must not throw; result_error is harmless and ignored
+    osl::MutexGuard g(lock); // must not throw
+    try {
+        try {
+            writeModFile(components_, url_, data_);
+        } catch (css::uno::RuntimeException & e) {
+            // Silently ignore write errors, instead of aborting:
+            OSL_TRACE(
+                "configmgr error writing modifications: %s",
+                rtl::OUStringToOString(
+                    e.Message, RTL_TEXTENCODING_UTF8).getStr());
+        }
+    } catch (...) {
+        reference_->clear();
+        throw;
+    }
+    reference_->clear();
 }
 
 void Components::initSingleton(
@@ -238,7 +304,23 @@ void Components::addModification(Path const & path) {
 }
 
 void Components::writeModifications() {
-    writeModFile(*this, getModificationFileUrl(), data_);
+    if (!writeThread_.is()) {
+        writeThread_ = new WriteThread(
+            &writeThread_, *this, getModificationFileUrl(), data_);
+        writeThread_->create();
+    }
+}
+
+void Components::flushModifications() {
+    rtl::Reference< WriteThread > thread;
+    {
+        osl::MutexGuard g(lock);
+        thread = writeThread_;
+    }
+    if (thread.is()) {
+        thread->flush();
+        thread->join();
+    }
 }
 
 void Components::insertExtensionXcsFile(
@@ -334,12 +416,14 @@ void Components::insertModificationXcuFile(
     Modifications * modifications)
 {
     OSL_ASSERT(modifications != 0);
+    Partial part(includedPaths, excludedPaths);
     try {
-        Partial part(includedPaths, excludedPaths);
-        parseXcuFile(fileUri, Data::NO_LAYER, data_, &part, modifications, 0);
-    } catch (css::uno::Exception & e) { //TODO: more specific exception catching
+        parseFileLeniently(
+            &parseXcuFile, fileUri, Data::NO_LAYER, data_, &part, modifications,
+            0);
+    } catch (css::container::NoSuchElementException & e) {
         OSL_TRACE(
-            "configmgr error inserting %s: %s",
+            "configmgr error inserting non-existing %s: %s",
             rtl::OUStringToOString(fileUri, RTL_TEXTENCODING_UTF8).getStr(),
             rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
     }
@@ -492,19 +576,31 @@ Components::Components(
                     "com.sun.star.comp.deployment.configuration."
                     "PackageRegistryBackend/configmgr.ini"))),
         true);
-    try {
-        parseModificationLayer();
-    } catch (css::uno::Exception & e) { //TODO: more specific exception catching
-        // Silently ignore unreadable parts of a corrupted user modification
-        // layer, instead of completely preventing OOo from starting:
-        OSL_TRACE(
-            "configmgr error reading user modification layer: %s",
-            rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
-    }
+    parseModificationLayer();
     RTL_LOGFILE_TRACE_AUTHOR("configmgr", "sb", "end parsing");
 }
 
 Components::~Components() {}
+
+void Components::parseFileLeniently(
+    FileParser * parseFile, rtl::OUString const & url, int layer, Data & data,
+    Partial const * partial, Modifications * modifications,
+    Additions * additions)
+{
+    OSL_ASSERT(parseFile != 0);
+    try {
+        (*parseFile)(url, layer, data, partial, modifications, additions);
+    } catch (css::container::NoSuchElementException &) {
+        throw;
+    } catch (css::uno::Exception & e) { //TODO: more specific exception catching
+        // Silently ignore invalid XML files, instead of completely preventing
+        // OOo from starting:
+        OSL_TRACE(
+            "configmgr error reading %s: %s",
+            rtl::OUStringToOString(url, RTL_TEXTENCODING_UTF8).getStr(),
+            rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
+    }
+}
 
 void Components::parseFiles(
     int layer, rtl::OUString const & extension, FileParser * parseFile,
@@ -557,7 +653,8 @@ void Components::parseFiles(
                 file.match(extension, file.getLength() - extension.getLength()))
             {
                 try {
-                    (*parseFile)(stat.getFileURL(), layer, data_, 0, 0, 0);
+                    parseFileLeniently(
+                        parseFile, stat.getFileURL(), layer, data_, 0, 0, 0);
                 } catch (css::container::NoSuchElementException & e) {
                     throw css::uno::RuntimeException(
                         (rtl::OUString(
@@ -584,7 +681,7 @@ void Components::parseFileList(
                 adds = data_.addExtensionXcuAdditions(url, layer);
             }
             try {
-                (*parseFile)(url, layer, data_, 0, 0, adds);
+                parseFileLeniently(parseFile, url, layer, data_, 0, 0, adds);
             } catch (css::container::NoSuchElementException & e) {
                 OSL_TRACE(
                     "configmgr file does not exist: %s",
@@ -746,13 +843,15 @@ rtl::OUString Components::getModificationFileUrl() const {
 
 void Components::parseModificationLayer() {
     try {
-        parseXcuFile(getModificationFileUrl(), Data::NO_LAYER, data_, 0, 0, 0);
+        parseFileLeniently(
+            &parseXcuFile, getModificationFileUrl(), Data::NO_LAYER, data_, 0,
+            0, 0);
     } catch (css::container::NoSuchElementException &) {
         OSL_TRACE(
             "configmgr user registrymodifications.xcu does not (yet) exist");
         // Migrate old user layer data (can be removed once migration is no
         // longer relevant, probably OOo 4; also see hack for xsi namespace in
-        // XmlReader constructor):
+        // xmlreader::XmlReader::registerNamespaceIri):
         parseFiles(
             Data::NO_LAYER, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".xcu")),
             &parseXcuFile,
