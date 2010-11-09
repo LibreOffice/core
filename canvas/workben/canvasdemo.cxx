@@ -93,7 +93,7 @@ class TestWindow : public Dialog
     public:
         TestWindow() : Dialog( (Window *) NULL )
         {
-            SetText( rtl::OUString::createFromAscii( "Canvas test" ) );
+            SetText( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Canvas test" )) );
             SetSizePixel( Size( 600, 450 ) );
             EnablePaint( true );
             Show();
@@ -153,8 +153,8 @@ class DemoRenderer
 
             lang::Locale aLocale;
             rendering::FontInfo aFontInfo;
-            aFontInfo.FamilyName = ::rtl::OUString::createFromAscii( "Swiss" );
-            aFontInfo.StyleName = ::rtl::OUString::createFromAscii( "SansSerif" );
+            aFontInfo.FamilyName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Swiss" ));
+            aFontInfo.StyleName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SansSerif" ));
             geometry::Matrix2D aFontMatrix( 1, 0,
                                             0, 1 );
             rendering::FontRequest aFontRequest( aFontInfo, 12.0, 0.0, aLocale );

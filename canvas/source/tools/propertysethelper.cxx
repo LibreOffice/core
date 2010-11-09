@@ -40,9 +40,9 @@ namespace canvas
         void throwUnknown( const ::rtl::OUString& aPropertyName )
         {
             throw beans::UnknownPropertyException(
-                ::rtl::OUString::createFromAscii("PropertySetHelper: property ") +
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PropertySetHelper: property " )) +
                 aPropertyName +
-                ::rtl::OUString::createFromAscii(" not found."),
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " not found." )),
                 uno::Reference< uno::XInterface >()
                 );
         }
@@ -50,9 +50,9 @@ namespace canvas
         void throwVeto( const ::rtl::OUString& aPropertyName )
         {
             throw beans::PropertyVetoException(
-                ::rtl::OUString::createFromAscii("PropertySetHelper: property ") +
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PropertySetHelper: property " )) +
                 aPropertyName +
-                ::rtl::OUString::createFromAscii(" access was vetoed."),
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " access was vetoed." )),
                 uno::Reference< uno::XInterface >() );
         }
 
