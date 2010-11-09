@@ -81,7 +81,7 @@ Reference< uno::XComponentContext > lcl_getComponentContext()
     {
         Reference< beans::XPropertySet > xFactProp( comphelper::getProcessServiceFactory(), uno::UNO_QUERY );
         if( xFactProp.is())
-            xFactProp->getPropertyValue(OUString::createFromAscii("DefaultContext")) >>= xContext;
+            xFactProp->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))) >>= xContext;
     }
     catch( uno::Exception& )
     {}
@@ -621,7 +621,7 @@ Reference< chart2::XDataSeries > SchXMLImportHelper::GetNewDataSeries(
                 {
                     xResult.set(
                         xContext->getServiceManager()->createInstanceWithContext(
-                            OUString::createFromAscii("com.sun.star.chart2.DataSeries"),
+                            OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.DataSeries" )),
                             xContext ), uno::UNO_QUERY_THROW );
                 }
                 if( xResult.is() )
@@ -956,7 +956,7 @@ OUString SAL_CALL SchXMLImport::getImplementationName() throw( uno::RuntimeExcep
         case IMPORT_SETTINGS:
         // there is no settings component in chart
         default:
-            return OUString::createFromAscii( "SchXMLImport" );
+            return OUString(RTL_CONSTASCII_USTRINGPARAM( "SchXMLImport" ));
     }
 }
 

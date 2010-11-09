@@ -1352,7 +1352,7 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
                 // get filter component
                 Reference< xml::sax::XDocumentHandler > xTmpDocHandler(
                     xFactory->createInstanceWithArguments(
-                    OUString::createFromAscii("com.sun.star.comp.Oasis2OOoTransformer"),
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Oasis2OOoTransformer")),
                                 aArgs), UNO_QUERY);
                 OSL_ENSURE( xTmpDocHandler.is(),
                     "can't instantiate OASIS transformer component" );

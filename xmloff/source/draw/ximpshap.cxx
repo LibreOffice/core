@@ -510,7 +510,7 @@ void SdXMLShapeContext::AddShape(const char* pServiceName )
             if ( OUString::createFromAscii(pServiceName).compareToAscii( "com.sun.star.drawing.OLE2Shape" ) == 0 &&
                  uno::Reference< text::XTextDocument >(GetImport().GetModel(), uno::UNO_QUERY).is() )
             {
-                xShape = uno::Reference< drawing::XShape >(xServiceFact->createInstance(OUString::createFromAscii("com.sun.star.drawing.temporaryForXMLImportOLE2Shape")), uno::UNO_QUERY);
+                xShape = uno::Reference< drawing::XShape >(xServiceFact->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.temporaryForXMLImportOLE2Shape"))), uno::UNO_QUERY);
             }
             else
             {

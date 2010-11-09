@@ -564,8 +564,8 @@ void XMLShapeExport::ImpExportDescription( const uno::Reference< drawing::XShape
         OUString aDescription;
 
         uno::Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY_THROW );
-        xProps->getPropertyValue( OUString::createFromAscii( "Title" ) ) >>= aTitle;
-        xProps->getPropertyValue( OUString::createFromAscii( "Description" ) ) >>= aDescription;
+        xProps->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( "Title" )) ) >>= aTitle;
+        xProps->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( "Description" )) ) >>= aDescription;
 
         if(aTitle.getLength())
         {
@@ -1144,7 +1144,7 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
                 {
                     if( aStr[ 0 ] == '#' )
                     {
-                        aStreamURL = OUString::createFromAscii( "vnd.sun.star.Package:" );
+                        aStreamURL = OUString(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.Package:" ));
                         aStreamURL = aStreamURL.concat( aStr.copy( 1, aStr.getLength() - 1 ) );
                     }
 
@@ -1593,7 +1593,7 @@ void XMLShapeExport::ImpExportOLE2Shape(
                 {
                     // OOo internal links have no storage persistance, URL is stored in the XML file
                     // the result LinkURL is empty in case the object is not a link
-                    xPropSet->getPropertyValue( OUString::createFromAscii( "LinkURL" ) ) >>= sURL;
+                    xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( "LinkURL" )) ) >>= sURL;
                 }
 
                 xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( "PersistName" ) ) ) >>= sPersistName;

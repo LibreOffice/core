@@ -173,10 +173,10 @@ uno::Reference< drawing::XShape > XMLShapeExport::checkForCustomShapeReplacement
                 {
                     uno::Sequence< uno::Any > aArgument( 1 );
                     uno::Sequence< beans::PropertyValue > aPropValues( 2 );
-                    aPropValues[ 0 ].Name = rtl::OUString::createFromAscii( "CustomShape" );
+                    aPropValues[ 0 ].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "CustomShape" ));
                     aPropValues[ 0 ].Value <<= xShape;
                     sal_Bool bForceGroupWithText = sal_True;
-                    aPropValues[ 1 ].Name = rtl::OUString::createFromAscii( "ForceGroupWithText" );
+                    aPropValues[ 1 ].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ForceGroupWithText" ));
                     aPropValues[ 1 ].Value <<= bForceGroupWithText;
                     aArgument[ 0 ] <<= aPropValues;
                     uno::Reference< uno::XInterface > xInterface( xFactory->createInstanceWithArguments( aEngine, aArgument ) );
@@ -685,7 +685,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
             {
                 uno::Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY );
                 OUString aLayerName;
-                xProps->getPropertyValue( OUString::createFromAscii( "LayerName" ) ) >>= aLayerName;
+                xProps->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( "LayerName" )) ) >>= aLayerName;
                 mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_LAYER, aLayerName );
 
             }
