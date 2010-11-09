@@ -199,12 +199,11 @@ void ScMyTables::NewSheet(const rtl::OUString& sTableName, const rtl::OUString& 
                         ScDocument *pDoc = ScXMLConverter::GetScDocument(rImport.GetModel());
                         if (pDoc)
                         {
-                            rImport.LockSolarMutex();
+                            ScXMLImport::MutexGuard aGuard(rImport);
                             String sTabName(String::CreateFromAscii("Table"));
                             pDoc->CreateValidTabName(sTabName);
                             rtl::OUString sOUTabName(sTabName);
                             xSheets->insertNewByName(sOUTabName, sal::static_int_cast<sal_Int16>(nCurrentSheet));
-                            rImport.UnlockSolarMutex();
                         }
                     }
                 }
@@ -228,12 +227,11 @@ void ScMyTables::NewSheet(const rtl::OUString& sTableName, const rtl::OUString& 
                                     ScDocument *pDoc = ScXMLConverter::GetScDocument(rImport.GetModel());
                                     if (pDoc)
                                     {
-                                        rImport.LockSolarMutex();
+                                        ScXMLImport::MutexGuard aGuard(rImport);
                                         String sTabName(String::CreateFromAscii("Table"));
                                         pDoc->CreateValidTabName(sTabName);
                                         rtl::OUString sOUTabName(sTabName);
                                         xNamed->setName(sOUTabName);
-                                        rImport.UnlockSolarMutex();
                                     }
                                 }
                         }
@@ -594,7 +592,8 @@ void ScMyTables::UpdateRowHeights()
 {
     if (rImport.GetModel().is())
     {
-        rImport.LockSolarMutex();
+        ScXMLImport::MutexGuard aGuard(rImport);
+
         // update automatic row heights
 
         // For sheets with any kind of shapes (including notes),
@@ -628,14 +627,12 @@ void ScMyTables::UpdateRowHeights()
                 pDoc->LockStreamValid( false );
             }
         }
-
-        rImport.UnlockSolarMutex();
     }
 }
 
 void ScMyTables::DeleteTable()
 {
-    rImport.LockSolarMutex();
+    ScXMLImport::MutexGuard aGuard(rImport);
 
     nCurrentColStylePos = 0;
     if (!maTables.empty())
@@ -672,8 +669,6 @@ void ScMyTables::DeleteTable()
         pProtect->setOption(ScTableProtection::SELECT_UNLOCKED_CELLS, maProtectionData.mbSelectUnprotectedCells);
         rImport.GetDocument()->SetTabProtection(static_cast<SCTAB>(nCurrentSheet), pProtect.get());
     }
-
-    rImport.UnlockSolarMutex();
 
     //#95582#; find out whether it was possible to set the sheet name
     // test it here, because if it is a linked table the name is changed by importing
