@@ -115,9 +115,9 @@ void SAL_CALL UndoCommandDispatch::dispatch(
         // /--
         ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
         if( URL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Undo" )))
-            m_xUndoManager->undo( m_xModel );
+            m_xUndoManager->undo();
         else
-            m_xUndoManager->redo( m_xModel );
+            m_xUndoManager->redo();
         // \--
     }
 }

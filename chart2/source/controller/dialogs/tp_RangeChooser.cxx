@@ -366,7 +366,7 @@ IMPL_LINK( RangeChooserTabPage, ChooseRangeHdl, void *, EMPTYARG )
 {
     rtl::OUString aRange = m_aED_Range.GetText();
     // using assignment for broken gcc 3.3
-    rtl::OUString aTitle = ::rtl::OUString( String( SchResId( STR_PAGE_DATA_RANGE ) ));
+    rtl::OUString aTitle = String( SchResId( STR_PAGE_DATA_RANGE ) );
 
     lcl_enableRangeChoosing( true, m_pParentDialog );
     m_rDialogModel.getRangeSelectionHelper()->chooseRange( aRange, aTitle, *this );

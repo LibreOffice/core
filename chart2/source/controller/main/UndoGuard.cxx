@@ -40,10 +40,8 @@ namespace chart
 {
 
 UndoGuard_Base::UndoGuard_Base( const OUString& rUndoString
-        , const uno::Reference< chart2::XUndoManager > & xUndoManager
-        , const uno::Reference< frame::XModel > & xModel )
-        : m_xModel( xModel )
-        , m_xUndoManager( xUndoManager )
+        , const uno::Reference< chart2::XUndoManager > & xUndoManager )
+        : m_xUndoManager( xUndoManager )
         , m_aUndoString( rUndoString )
         , m_bActionPosted( false )
 {
@@ -63,12 +61,11 @@ void UndoGuard_Base::commitAction()
 //-----------------------------------------------------------------------------
 
 UndoGuard::UndoGuard( const OUString& rUndoString
-        , const uno::Reference< chart2::XUndoManager > & xUndoManager
-        , const uno::Reference< frame::XModel > & xModel )
-        : UndoGuard_Base( rUndoString, xUndoManager, xModel )
+        , const uno::Reference< chart2::XUndoManager > & xUndoManager )
+        : UndoGuard_Base( rUndoString, xUndoManager )
 {
     if( m_xUndoManager.is() )
-        m_xUndoManager->preAction( m_xModel );
+        m_xUndoManager->preAction();
 }
 
 UndoGuard::~UndoGuard()
@@ -80,26 +77,24 @@ UndoGuard::~UndoGuard()
 //-----------------------------------------------------------------------------
 
 UndoLiveUpdateGuard::UndoLiveUpdateGuard( const OUString& rUndoString
-        , const uno::Reference< chart2::XUndoManager > & xUndoManager
-        , const uno::Reference< frame::XModel > & xModel )
-        : UndoGuard_Base( rUndoString, xUndoManager, xModel )
+        , const uno::Reference< chart2::XUndoManager > & xUndoManager )
+        : UndoGuard_Base( rUndoString, xUndoManager )
 {
     if( m_xUndoManager.is() )
-        m_xUndoManager->preAction( m_xModel );
+        m_xUndoManager->preAction();
 }
 
 UndoLiveUpdateGuard::~UndoLiveUpdateGuard()
 {
     if( !m_bActionPosted && m_xUndoManager.is() )
-        m_xUndoManager->cancelActionWithUndo( m_xModel );
+        m_xUndoManager->cancelActionWithUndo();
 }
 
 //-----------------------------------------------------------------------------
 
 UndoLiveUpdateGuardWithData::UndoLiveUpdateGuardWithData( const OUString& rUndoString
-        , const uno::Reference< chart2::XUndoManager > & xUndoManager
-        , const uno::Reference< frame::XModel > & xModel )
-        : UndoGuard_Base( rUndoString, xUndoManager, xModel )
+        , const uno::Reference< chart2::XUndoManager > & xUndoManager )
+        : UndoGuard_Base( rUndoString, xUndoManager )
 {
     if( m_xUndoManager.is() )
     {
@@ -107,22 +102,21 @@ UndoLiveUpdateGuardWithData::UndoLiveUpdateGuardWithData( const OUString& rUndoS
         aArgs[0] = beans::PropertyValue(
             OUString( RTL_CONSTASCII_USTRINGPARAM("WithData")), -1, uno::Any(),
             beans::PropertyState_DIRECT_VALUE );
-        m_xUndoManager->preActionWithArguments( m_xModel, aArgs );
+        m_xUndoManager->preActionWithArguments( aArgs );
     }
 }
 
 UndoLiveUpdateGuardWithData::~UndoLiveUpdateGuardWithData()
 {
     if( !m_bActionPosted && m_xUndoManager.is() )
-        m_xUndoManager->cancelActionWithUndo( m_xModel );
+        m_xUndoManager->cancelActionWithUndo();
 }
 
 //-----------------------------------------------------------------------------
 
 UndoGuardWithSelection::UndoGuardWithSelection( const rtl::OUString& rUndoString
-        , const uno::Reference< chart2::XUndoManager > & xUndoManager
-        , const uno::Reference< frame::XModel > & xModel )
-        : UndoGuard_Base( rUndoString, xUndoManager, xModel )
+        , const uno::Reference< chart2::XUndoManager > & xUndoManager )
+        : UndoGuard_Base( rUndoString, xUndoManager )
 {
     if( m_xUndoManager.is() )
     {
@@ -130,7 +124,7 @@ UndoGuardWithSelection::UndoGuardWithSelection( const rtl::OUString& rUndoString
         aArgs[0] = beans::PropertyValue(
             OUString( RTL_CONSTASCII_USTRINGPARAM("WithSelection")), -1, uno::Any(),
             beans::PropertyState_DIRECT_VALUE );
-        m_xUndoManager->preActionWithArguments( m_xModel, aArgs );
+        m_xUndoManager->preActionWithArguments( aArgs );
     }
 }
 

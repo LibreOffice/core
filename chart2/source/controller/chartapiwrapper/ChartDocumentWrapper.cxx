@@ -83,6 +83,7 @@ using namespace ::com::sun::star::chart;
 
 using ::com::sun::star::chart::XComplexDescriptionAccess;
 using ::com::sun::star::uno::Any;
+using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::beans::Property;
@@ -1413,7 +1414,8 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
     }
     else if ( aServiceSpecifier.equals( CHART_UNDOMANAGER_SERVICE_NAME ) )
     {
-        Reference< chart2::XUndoManager > xUndoManager( new UndoManager() );
+        Reference< XModel > xModel( queryInterface( XModel::static_type() ), UNO_QUERY_THROW );
+        Reference< chart2::XUndoManager > xUndoManager( new UndoManager( xModel ) );
         xResult.set( xUndoManager );
         bServiceFound = true;
     }

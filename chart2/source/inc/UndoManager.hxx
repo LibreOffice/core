@@ -36,6 +36,7 @@
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/chart2/XUndoManager.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 
 #include <cppuhelper/compbase3.hxx>
 #include <rtl/ustring.hxx>
@@ -86,7 +87,7 @@ class UndoManager :
         public impl::UndoManager_Base
 {
 public:
-    explicit UndoManager();
+    explicit UndoManager( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rModel );
     virtual ~UndoManager();
 
     void addShapeUndoAction( SdrUndoAction* pAction );
@@ -111,44 +112,30 @@ protected:
         throw (::com::sun::star::uno::RuntimeException);
 
     // ____ chart2::XUndoManager ____
-    virtual void SAL_CALL preAction( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModelBeforeChange )
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL preActionWithArguments(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModelBeforeChange,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArguments )
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL postAction( const ::rtl::OUString& aUndoText )
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL cancelAction()
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL cancelActionWithUndo( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModelToRestore )
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL undo( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xCurrentModel )
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL redo( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xCurrentModel )
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual ::sal_Bool SAL_CALL undoPossible()
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual ::sal_Bool SAL_CALL redoPossible()
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getCurrentUndoString()
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getCurrentRedoString()
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getAllUndoStrings()
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getAllRedoStrings()
-        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL preAction(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL preActionWithArguments( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArguments ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL postAction( const ::rtl::OUString& aUndoText ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL cancelAction(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL cancelActionWithUndo(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL undo(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL redo(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL undoPossible(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL redoPossible(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getCurrentUndoString(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getCurrentRedoString(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getAllUndoStrings(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getAllRedoStrings(  ) throw (::com::sun::star::uno::RuntimeException);
 
 private:
     void retrieveConfigUndoSteps();
     void fireModifyEvent();
     void impl_undoRedo(
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XModel > & xCurrentModel,
         impl::UndoStack * pStackToRemoveFrom,
         impl::UndoStack * pStackToAddTo,
         bool bUndo = true );
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
+        impl_getModel() const;
 
     ::std::auto_ptr< impl::UndoStack > m_apUndoStack;
     ::std::auto_ptr< impl::UndoStack > m_apRedoStack;
@@ -161,6 +148,7 @@ private:
             ::com::sun::star::util::XModifyBroadcaster > m_xModifyBroadcaster;
     // pointer is valid as long as m_xModifyBroadcaster.is()
     impl::ModifyBroadcaster * m_pModifyBroadcaster;
+    ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XModel > m_aModel;
 };
 
 } //  namespace chart

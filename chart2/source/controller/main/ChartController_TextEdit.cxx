@@ -80,7 +80,7 @@ void ChartController::StartTextEdit( const Point* pMousePixel )
     if(!pTextObj)
         return;
 
-    m_xUndoManager->preAction( getModel());
+    m_xUndoManager->preAction();
     SdrOutliner* pOutliner = m_pDrawViewWrapper->getOutliner();
     //pOutliner->SetRefDevice(m_pChartWindow);
     //pOutliner->SetStyleSheetPool((SfxStyleSheetPool*)pStyleSheetPool);

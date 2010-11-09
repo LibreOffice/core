@@ -60,10 +60,10 @@ namespace impl
 {
 
 void ImplApplyDataToModel(
-    Reference< frame::XModel > & xInOutModelToChange,
+    const Reference< frame::XModel > & xModel,
     const Reference< chart2::XInternalDataProvider > & xData )
 {
-    Reference< chart2::XChartDocument > xDoc( xInOutModelToChange, uno::UNO_QUERY );
+    Reference< chart2::XChartDocument > xDoc( xModel, uno::UNO_QUERY );
     OSL_ASSERT( xDoc.is() && xDoc->hasInternalDataProvider());
 
     // copy data from stored internal data provider
@@ -122,9 +122,9 @@ void UndoElement::dispose()
 }
 
 void UndoElement::applyToModel(
-    Reference< frame::XModel > & xInOutModelToChange )
+    const Reference< frame::XModel > & xModel )
 {
-    UndoElement::applyModelContentToModel( xInOutModelToChange, m_xModel );
+    UndoElement::applyModelContentToModel( xModel, m_xModel );
 }
 
 UndoElement * UndoElement::createFromModel(
@@ -157,22 +157,22 @@ Reference< frame::XModel > UndoElement::cloneModel( const Reference< frame::XMod
 
 // static
 void UndoElement::applyModelContentToModel(
-    Reference< frame::XModel > & xInOutModelToChange,
+    const Reference< frame::XModel > & xModel,
     const Reference< frame::XModel > & xModelToCopyFrom,
     const Reference< chart2::XInternalDataProvider > & xData /* = 0 */ )
 {
 
-    if( xModelToCopyFrom.is() && xInOutModelToChange.is())
+    if( xModelToCopyFrom.is() && xModel.is())
     {
         try
         {
             // /-- loccked controllers of destination
-            ControllerLockGuard aLockedControllers( xInOutModelToChange );
+            ControllerLockGuard aLockedControllers( xModel );
             Reference< chart2::XChartDocument > xSource( xModelToCopyFrom, uno::UNO_QUERY_THROW );
-            Reference< chart2::XChartDocument > xDestination( xInOutModelToChange, uno::UNO_QUERY_THROW );
+            Reference< chart2::XChartDocument > xDestination( xModel, uno::UNO_QUERY_THROW );
 
             // propagate the correct flag for plotting of hidden values to the data provider and all used sequences
-            ChartModelHelper::setIncludeHiddenCells( ChartModelHelper::isIncludeHiddenCells( xModelToCopyFrom ) , xInOutModelToChange );
+            ChartModelHelper::setIncludeHiddenCells( ChartModelHelper::isIncludeHiddenCells( xModelToCopyFrom ) , xModel );
 
             // diagram
             xDestination->setFirstDiagram( xSource->getFirstDiagram());
@@ -189,14 +189,14 @@ void UndoElement::applyModelContentToModel(
 
             // apply data (not applied in standard Undo)
             if( xData.is())
-                ImplApplyDataToModel( xInOutModelToChange, xData );
+                ImplApplyDataToModel( xModel, xData );
 
             // register all sequences at the internal data provider to get adapted
             // indexes when columns are added/removed
             if( xDestination->hasInternalDataProvider())
             {
                 Reference< chart2::XInternalDataProvider > xNewDataProvider( xDestination->getDataProvider(), uno::UNO_QUERY );
-                Reference< chart2::data::XDataSource > xUsedData( DataSourceHelper::getUsedData( xInOutModelToChange ));
+                Reference< chart2::data::XDataSource > xUsedData( DataSourceHelper::getUsedData( xModel ));
                 if( xUsedData.is() && xNewDataProvider.is())
                 {
                     Sequence< Reference< chart2::data::XLabeledDataSequence > > aData( xUsedData->getDataSequences());
@@ -278,9 +278,9 @@ void UndoElementWithData::dispose()
 }
 
 void UndoElementWithData::applyToModel(
-    Reference< frame::XModel > & xInOutModelToChange )
+    const Reference< frame::XModel > & xModel )
 {
-    UndoElement::applyModelContentToModel( xInOutModelToChange, m_xModel, m_xData );
+    UndoElement::applyModelContentToModel( xModel, m_xModel, m_xData );
 }
 
 UndoElement * UndoElementWithData::createFromModel(
@@ -340,10 +340,10 @@ void UndoElementWithSelection::dispose()
 }
 
 void UndoElementWithSelection::applyToModel(
-    Reference< frame::XModel > & xInOutModelToChange )
+    const Reference< frame::XModel > & xModel )
 {
-    UndoElement::applyModelContentToModel( xInOutModelToChange, m_xModel );
-    Reference< view::XSelectionSupplier > xCurrentSelectionSuppl( xInOutModelToChange->getCurrentController(), uno::UNO_QUERY );
+    UndoElement::applyModelContentToModel( xModel, m_xModel );
+    Reference< view::XSelectionSupplier > xCurrentSelectionSuppl( xModel->getCurrentController(), uno::UNO_QUERY );
     OSL_ASSERT( xCurrentSelectionSuppl.is() );
 
     if( xCurrentSelectionSuppl.is())

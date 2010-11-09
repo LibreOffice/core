@@ -36,7 +36,6 @@
 #include "ChartViewHelper.hxx"
 
 #include <com/sun/star/util/XCloneable.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 
 #include <unotools/configitem.hxx>
@@ -50,6 +49,7 @@ using namespace ::com::sun::star;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::frame::XModel;
 using ::rtl::OUString;
 
 
@@ -118,13 +118,14 @@ void ModifyBroadcaster::fireEvent()
 
 } // namespace impl
 
-UndoManager::UndoManager() :
+UndoManager::UndoManager( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rModel ) :
         impl::UndoManager_Base( m_aMutex ),
     m_apUndoStack( new impl::UndoStack()),
     m_apRedoStack( new impl::UndoStack()),
     m_pLastRemeberedUndoElement( 0 ),
     m_nMaxNumberOfUndos( 100 ),
-    m_pModifyBroadcaster( 0 )
+    m_pModifyBroadcaster( 0 ),
+    m_aModel( rModel )
 {}
 
 UndoManager::~UndoManager()
@@ -157,8 +158,13 @@ void UndoManager::addShapeUndoAction( SdrUndoAction* pAction )
     }
 }
 
+Reference< XModel > UndoManager::impl_getModel() const
+{
+    Reference< XModel > xModel( m_aModel );
+    return xModel;
+}
+
 void UndoManager::impl_undoRedo(
-    Reference< frame::XModel > & xCurrentModel,
     impl::UndoStack * pStackToRemoveFrom,
     impl::UndoStack * pStackToAddTo,
     bool bUndo )
@@ -169,6 +175,7 @@ void UndoManager::impl_undoRedo(
         impl::UndoElement * pTop( pStackToRemoveFrom->top());
         if( pTop )
         {
+            Reference< XModel > xModel( impl_getModel() );
             impl::ShapeUndoElement* pShapeUndoElement = dynamic_cast< impl::ShapeUndoElement* >( pTop );
             if ( pShapeUndoElement )
             {
@@ -191,13 +198,13 @@ void UndoManager::impl_undoRedo(
             {
                 // put a clone of current model into redo/undo stack with the same
                 // action string as the undo/redo
-                pStackToAddTo->push( pTop->createFromModel( xCurrentModel ));
+                pStackToAddTo->push( pTop->createFromModel( xModel ));
                 // change current model by properties of the model from undo
-                pTop->applyToModel( xCurrentModel );
+                pTop->applyToModel( xModel );
             }
             // remove the top undo element
             pStackToRemoveFrom->pop(), pTop = 0;
-            ChartViewHelper::setViewToDirtyState( xCurrentModel );
+            ChartViewHelper::setViewToDirtyState( xModel );
             fireModifyEvent();
         }
     }
@@ -259,18 +266,18 @@ void SAL_CALL UndoManager::removeModifyListener( const Reference< util::XModifyL
 }
 
 // ____ chart2::XUndoManager ____
-void SAL_CALL UndoManager::preAction( const Reference< frame::XModel >& xModelBeforeChange )
+void SAL_CALL UndoManager::preAction(  )
     throw (uno::RuntimeException)
 {
     OSL_ENSURE( ! m_pLastRemeberedUndoElement, "Looks like postAction or cancelAction call was missing" );
-    m_pLastRemeberedUndoElement = new impl::UndoElement( xModelBeforeChange );
+    m_pLastRemeberedUndoElement = new impl::UndoElement( impl_getModel() );
 }
 
 void SAL_CALL UndoManager::preActionWithArguments(
-    const Reference< frame::XModel >& xModelBeforeChange,
     const Sequence< beans::PropertyValue >& aArguments )
     throw (uno::RuntimeException)
 {
+    Reference< XModel > xModel( impl_getModel() );
     bool bActionHandled( false );
     OSL_ENSURE( ! m_pLastRemeberedUndoElement, "Looks like postAction or cancelAction call was missing" );
     if( aArguments.getLength() > 0 )
@@ -278,18 +285,18 @@ void SAL_CALL UndoManager::preActionWithArguments(
         OSL_ENSURE( aArguments.getLength() == 1, "More than one argument is not supported yet" );
         if( aArguments[0].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("WithData")))
         {
-            m_pLastRemeberedUndoElement = new impl::UndoElementWithData( xModelBeforeChange );
+            m_pLastRemeberedUndoElement = new impl::UndoElementWithData( xModel );
             bActionHandled = true;
         }
         else if( aArguments[0].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("WithSelection")))
         {
-            m_pLastRemeberedUndoElement = new impl::UndoElementWithSelection( xModelBeforeChange );
+            m_pLastRemeberedUndoElement = new impl::UndoElementWithSelection( xModel );
             bActionHandled = true;
         }
     }
 
     if( !bActionHandled )
-        preAction( xModelBeforeChange );
+        preAction();
 }
 
 void SAL_CALL UndoManager::postAction( const OUString& aUndoText )
@@ -321,28 +328,28 @@ void SAL_CALL UndoManager::cancelAction()
     m_pLastRemeberedUndoElement = 0;
 }
 
-void SAL_CALL UndoManager::cancelActionWithUndo( Reference< frame::XModel >& xModelToRestore )
+void SAL_CALL UndoManager::cancelActionWithUndo(  )
     throw (uno::RuntimeException)
 {
     if( m_pLastRemeberedUndoElement )
     {
-        m_pLastRemeberedUndoElement->applyToModel( xModelToRestore );
+        m_pLastRemeberedUndoElement->applyToModel( impl_getModel() );
         cancelAction();
     }
 }
 
-void SAL_CALL UndoManager::undo( Reference< frame::XModel >& xCurrentModel )
+void SAL_CALL UndoManager::undo(  )
     throw (uno::RuntimeException)
 {
     OSL_ASSERT( m_apUndoStack.get() && m_apRedoStack.get());
-    impl_undoRedo( xCurrentModel, m_apUndoStack.get(), m_apRedoStack.get(), true );
+    impl_undoRedo( m_apUndoStack.get(), m_apRedoStack.get(), true );
 }
 
-void SAL_CALL UndoManager::redo( Reference< frame::XModel >& xCurrentModel )
+void SAL_CALL UndoManager::redo(  )
     throw (uno::RuntimeException)
 {
     OSL_ASSERT( m_apUndoStack.get() && m_apRedoStack.get());
-    impl_undoRedo( xCurrentModel, m_apRedoStack.get(), m_apUndoStack.get(), false );
+    impl_undoRedo( m_apRedoStack.get(), m_apUndoStack.get(), false );
 }
 
 ::sal_Bool SAL_CALL UndoManager::undoPossible()

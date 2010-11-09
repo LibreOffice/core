@@ -70,8 +70,8 @@ public:
             ::com::sun::star::frame::XModel > & xModel );
 
     virtual void applyToModel(
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XModel > & xInOutModelToChange );
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::frame::XModel > & xModel );
 
     void setActionString( const ::rtl::OUString & rActionString );
     ::rtl::OUString getActionString() const;
@@ -80,7 +80,7 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & xModel );
 
     static void applyModelContentToModel(
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & xInOutModelToChange,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & xModel,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & xModelToCopyFrom,
         const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XInternalDataProvider > & xData = 0 );
 
@@ -112,8 +112,8 @@ public:
             ::com::sun::star::frame::XModel > & xModel );
 
     virtual void applyToModel(
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XModel > & xInOutModelToChange );
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::frame::XModel > & xModel );
 
 private:
     void initializeData();
@@ -139,8 +139,8 @@ public:
             ::com::sun::star::frame::XModel > & xModel );
 
     virtual void applyToModel(
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XModel > & xInOutModelToChange );
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::frame::XModel > & xModel );
 
 private:
     void initialize( const ::com::sun::star::uno::Reference<

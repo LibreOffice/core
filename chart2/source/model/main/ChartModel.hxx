@@ -203,7 +203,6 @@ private:
 
     void impl_killInternalData() throw( com::sun::star::util::CloseVetoException );
 
-    void impl_createOldModelAgg();
     void impl_store(
         const ::com::sun::star::uno::Sequence<
             ::com::sun::star::beans::PropertyValue >& rMediaDescriptor,
