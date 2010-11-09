@@ -1,22 +1,10 @@
 # unroll begin
 
 .IF "$(SRS1NAME)"!=""
-.IF "$(BUILDHIDS)"!=""
-HID1FILES=$(foreach,i,$(SRC1FILES:f) $(SRS)/$(i:s/.src/.hid/))
-HIDSRS1PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(SRS))/$(SRS1NAME)_srs.hid
-$(HIDSRS1PARTICLE) : $(HID1FILES)
-    @echo "Making:   " $(@:f)
-    @-$(RM) $@
-    $(COMMAND_ECHO)$(TYPE) $(mktmp  $(subst,/,/ $(HID1FILES))) | xargs -s 1000 cat > $@.$(ROUT).tmp
-    @$(RENAME) $@.$(ROUT).tmp $@
-
-ALLTAR : $(HIDSRS1PARTICLE)
-
-.ENDIF # "$(BUILDHIDS)"!=""
 
 $(MISC)/$(TARGET).$(SRS1NAME).dprr: $(LOCALIZE_ME_DEST)
 
-$(MISC)/$(TARGET).$(SRS1NAME).dprr: $(SRC1FILES) $(HIDSRS1PARTICLE) $(HID1FILES)
+$(MISC)/$(TARGET).$(SRS1NAME).dprr: $(SRC1FILES)
     @echo "Making:   " $(@:f)
     @@-$(RM) $(MISC)/$(TARGET).$(SRS1NAME).dprr
     $(COMMAND_ECHO)$(RSC) $(VERBOSITY) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERDEF) -fp={$(SRS)/$(SRS1NAME).srs} -fo=$@ -p=$(TARGET) $(SRC1FILES)
@@ -54,22 +42,10 @@ $(SRS)/$(SRS1NAME).srs: $(SRC1FILES)
 # unroll begin
 
 .IF "$(SRS2NAME)"!=""
-.IF "$(BUILDHIDS)"!=""
-HID2FILES=$(foreach,i,$(SRC2FILES:f) $(SRS)/$(i:s/.src/.hid/))
-HIDSRS2PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(SRS))/$(SRS2NAME)_srs.hid
-$(HIDSRS2PARTICLE) : $(HID2FILES)
-    @echo "Making:   " $(@:f)
-    @-$(RM) $@
-    $(COMMAND_ECHO)$(TYPE) $(mktmp  $(subst,/,/ $(HID2FILES))) | xargs -s 1000 cat > $@.$(ROUT).tmp
-    @$(RENAME) $@.$(ROUT).tmp $@
-
-ALLTAR : $(HIDSRS2PARTICLE)
-
-.ENDIF # "$(BUILDHIDS)"!=""
 
 $(MISC)/$(TARGET).$(SRS2NAME).dprr: $(LOCALIZE_ME_DEST)
 
-$(MISC)/$(TARGET).$(SRS2NAME).dprr: $(SRC2FILES) $(HIDSRS2PARTICLE) $(HID2FILES)
+$(MISC)/$(TARGET).$(SRS2NAME).dprr: $(SRC2FILES)
     @echo "Making:   " $(@:f)
     @@-$(RM) $(MISC)/$(TARGET).$(SRS2NAME).dprr
     $(COMMAND_ECHO)$(RSC) $(VERBOSITY) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERDEF) -fp={$(SRS)/$(SRS2NAME).srs} -fo=$@ -p=$(TARGET) $(SRC2FILES)
@@ -107,22 +83,10 @@ $(SRS)/$(SRS2NAME).srs: $(SRC2FILES)
 # unroll begin
 
 .IF "$(SRS3NAME)"!=""
-.IF "$(BUILDHIDS)"!=""
-HID3FILES=$(foreach,i,$(SRC3FILES:f) $(SRS)/$(i:s/.src/.hid/))
-HIDSRS3PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(SRS))/$(SRS3NAME)_srs.hid
-$(HIDSRS3PARTICLE) : $(HID3FILES)
-    @echo "Making:   " $(@:f)
-    @-$(RM) $@
-    $(COMMAND_ECHO)$(TYPE) $(mktmp  $(subst,/,/ $(HID3FILES))) | xargs -s 1000 cat > $@.$(ROUT).tmp
-    @$(RENAME) $@.$(ROUT).tmp $@
-
-ALLTAR : $(HIDSRS3PARTICLE)
-
-.ENDIF # "$(BUILDHIDS)"!=""
 
 $(MISC)/$(TARGET).$(SRS3NAME).dprr: $(LOCALIZE_ME_DEST)
 
-$(MISC)/$(TARGET).$(SRS3NAME).dprr: $(SRC3FILES) $(HIDSRS3PARTICLE) $(HID3FILES)
+$(MISC)/$(TARGET).$(SRS3NAME).dprr: $(SRC3FILES)
     @echo "Making:   " $(@:f)
     @@-$(RM) $(MISC)/$(TARGET).$(SRS3NAME).dprr
     $(COMMAND_ECHO)$(RSC) $(VERBOSITY) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERDEF) -fp={$(SRS)/$(SRS3NAME).srs} -fo=$@ -p=$(TARGET) $(SRC3FILES)
@@ -160,22 +124,10 @@ $(SRS)/$(SRS3NAME).srs: $(SRC3FILES)
 # unroll begin
 
 .IF "$(SRS4NAME)"!=""
-.IF "$(BUILDHIDS)"!=""
-HID4FILES=$(foreach,i,$(SRC4FILES:f) $(SRS)/$(i:s/.src/.hid/))
-HIDSRS4PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(SRS))/$(SRS4NAME)_srs.hid
-$(HIDSRS4PARTICLE) : $(HID4FILES)
-    @echo "Making:   " $(@:f)
-    @-$(RM) $@
-    $(COMMAND_ECHO)$(TYPE) $(mktmp  $(subst,/,/ $(HID4FILES))) | xargs -s 1000 cat > $@.$(ROUT).tmp
-    @$(RENAME) $@.$(ROUT).tmp $@
-
-ALLTAR : $(HIDSRS4PARTICLE)
-
-.ENDIF # "$(BUILDHIDS)"!=""
 
 $(MISC)/$(TARGET).$(SRS4NAME).dprr: $(LOCALIZE_ME_DEST)
 
-$(MISC)/$(TARGET).$(SRS4NAME).dprr: $(SRC4FILES) $(HIDSRS4PARTICLE) $(HID4FILES)
+$(MISC)/$(TARGET).$(SRS4NAME).dprr: $(SRC4FILES)
     @echo "Making:   " $(@:f)
     @@-$(RM) $(MISC)/$(TARGET).$(SRS4NAME).dprr
     $(COMMAND_ECHO)$(RSC) $(VERBOSITY) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERDEF) -fp={$(SRS)/$(SRS4NAME).srs} -fo=$@ -p=$(TARGET) $(SRC4FILES)
@@ -213,22 +165,10 @@ $(SRS)/$(SRS4NAME).srs: $(SRC4FILES)
 # unroll begin
 
 .IF "$(SRS5NAME)"!=""
-.IF "$(BUILDHIDS)"!=""
-HID5FILES=$(foreach,i,$(SRC5FILES:f) $(SRS)/$(i:s/.src/.hid/))
-HIDSRS5PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(SRS))/$(SRS5NAME)_srs.hid
-$(HIDSRS5PARTICLE) : $(HID5FILES)
-    @echo "Making:   " $(@:f)
-    @-$(RM) $@
-    $(COMMAND_ECHO)$(TYPE) $(mktmp  $(subst,/,/ $(HID5FILES))) | xargs -s 1000 cat > $@.$(ROUT).tmp
-    @$(RENAME) $@.$(ROUT).tmp $@
-
-ALLTAR : $(HIDSRS5PARTICLE)
-
-.ENDIF # "$(BUILDHIDS)"!=""
 
 $(MISC)/$(TARGET).$(SRS5NAME).dprr: $(LOCALIZE_ME_DEST)
 
-$(MISC)/$(TARGET).$(SRS5NAME).dprr: $(SRC5FILES) $(HIDSRS5PARTICLE) $(HID5FILES)
+$(MISC)/$(TARGET).$(SRS5NAME).dprr: $(SRC5FILES)
     @echo "Making:   " $(@:f)
     @@-$(RM) $(MISC)/$(TARGET).$(SRS5NAME).dprr
     $(COMMAND_ECHO)$(RSC) $(VERBOSITY) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERDEF) -fp={$(SRS)/$(SRS5NAME).srs} -fo=$@ -p=$(TARGET) $(SRC5FILES)
@@ -266,22 +206,10 @@ $(SRS)/$(SRS5NAME).srs: $(SRC5FILES)
 # unroll begin
 
 .IF "$(SRS6NAME)"!=""
-.IF "$(BUILDHIDS)"!=""
-HID6FILES=$(foreach,i,$(SRC6FILES:f) $(SRS)/$(i:s/.src/.hid/))
-HIDSRS6PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(SRS))/$(SRS6NAME)_srs.hid
-$(HIDSRS6PARTICLE) : $(HID6FILES)
-    @echo "Making:   " $(@:f)
-    @-$(RM) $@
-    $(COMMAND_ECHO)$(TYPE) $(mktmp  $(subst,/,/ $(HID6FILES))) | xargs -s 1000 cat > $@.$(ROUT).tmp
-    @$(RENAME) $@.$(ROUT).tmp $@
-
-ALLTAR : $(HIDSRS6PARTICLE)
-
-.ENDIF # "$(BUILDHIDS)"!=""
 
 $(MISC)/$(TARGET).$(SRS6NAME).dprr: $(LOCALIZE_ME_DEST)
 
-$(MISC)/$(TARGET).$(SRS6NAME).dprr: $(SRC6FILES) $(HIDSRS6PARTICLE) $(HID6FILES)
+$(MISC)/$(TARGET).$(SRS6NAME).dprr: $(SRC6FILES)
     @echo "Making:   " $(@:f)
     @@-$(RM) $(MISC)/$(TARGET).$(SRS6NAME).dprr
     $(COMMAND_ECHO)$(RSC) $(VERBOSITY) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERDEF) -fp={$(SRS)/$(SRS6NAME).srs} -fo=$@ -p=$(TARGET) $(SRC6FILES)
@@ -319,22 +247,10 @@ $(SRS)/$(SRS6NAME).srs: $(SRC6FILES)
 # unroll begin
 
 .IF "$(SRS7NAME)"!=""
-.IF "$(BUILDHIDS)"!=""
-HID7FILES=$(foreach,i,$(SRC7FILES:f) $(SRS)/$(i:s/.src/.hid/))
-HIDSRS7PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(SRS))/$(SRS7NAME)_srs.hid
-$(HIDSRS7PARTICLE) : $(HID7FILES)
-    @echo "Making:   " $(@:f)
-    @-$(RM) $@
-    $(COMMAND_ECHO)$(TYPE) $(mktmp  $(subst,/,/ $(HID7FILES))) | xargs -s 1000 cat > $@.$(ROUT).tmp
-    @$(RENAME) $@.$(ROUT).tmp $@
-
-ALLTAR : $(HIDSRS7PARTICLE)
-
-.ENDIF # "$(BUILDHIDS)"!=""
 
 $(MISC)/$(TARGET).$(SRS7NAME).dprr: $(LOCALIZE_ME_DEST)
 
-$(MISC)/$(TARGET).$(SRS7NAME).dprr: $(SRC7FILES) $(HIDSRS7PARTICLE) $(HID7FILES)
+$(MISC)/$(TARGET).$(SRS7NAME).dprr: $(SRC7FILES)
     @echo "Making:   " $(@:f)
     @@-$(RM) $(MISC)/$(TARGET).$(SRS7NAME).dprr
     $(COMMAND_ECHO)$(RSC) $(VERBOSITY) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERDEF) -fp={$(SRS)/$(SRS7NAME).srs} -fo=$@ -p=$(TARGET) $(SRC7FILES)
@@ -372,22 +288,10 @@ $(SRS)/$(SRS7NAME).srs: $(SRC7FILES)
 # unroll begin
 
 .IF "$(SRS8NAME)"!=""
-.IF "$(BUILDHIDS)"!=""
-HID8FILES=$(foreach,i,$(SRC8FILES:f) $(SRS)/$(i:s/.src/.hid/))
-HIDSRS8PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(SRS))/$(SRS8NAME)_srs.hid
-$(HIDSRS8PARTICLE) : $(HID8FILES)
-    @echo "Making:   " $(@:f)
-    @-$(RM) $@
-    $(COMMAND_ECHO)$(TYPE) $(mktmp  $(subst,/,/ $(HID8FILES))) | xargs -s 1000 cat > $@.$(ROUT).tmp
-    @$(RENAME) $@.$(ROUT).tmp $@
-
-ALLTAR : $(HIDSRS8PARTICLE)
-
-.ENDIF # "$(BUILDHIDS)"!=""
 
 $(MISC)/$(TARGET).$(SRS8NAME).dprr: $(LOCALIZE_ME_DEST)
 
-$(MISC)/$(TARGET).$(SRS8NAME).dprr: $(SRC8FILES) $(HIDSRS8PARTICLE) $(HID8FILES)
+$(MISC)/$(TARGET).$(SRS8NAME).dprr: $(SRC8FILES)
     @echo "Making:   " $(@:f)
     @@-$(RM) $(MISC)/$(TARGET).$(SRS8NAME).dprr
     $(COMMAND_ECHO)$(RSC) $(VERBOSITY) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERDEF) -fp={$(SRS)/$(SRS8NAME).srs} -fo=$@ -p=$(TARGET) $(SRC8FILES)
@@ -425,22 +329,10 @@ $(SRS)/$(SRS8NAME).srs: $(SRC8FILES)
 # unroll begin
 
 .IF "$(SRS9NAME)"!=""
-.IF "$(BUILDHIDS)"!=""
-HID9FILES=$(foreach,i,$(SRC9FILES:f) $(SRS)/$(i:s/.src/.hid/))
-HIDSRS9PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(SRS))/$(SRS9NAME)_srs.hid
-$(HIDSRS9PARTICLE) : $(HID9FILES)
-    @echo "Making:   " $(@:f)
-    @-$(RM) $@
-    $(COMMAND_ECHO)$(TYPE) $(mktmp  $(subst,/,/ $(HID9FILES))) | xargs -s 1000 cat > $@.$(ROUT).tmp
-    @$(RENAME) $@.$(ROUT).tmp $@
-
-ALLTAR : $(HIDSRS9PARTICLE)
-
-.ENDIF # "$(BUILDHIDS)"!=""
 
 $(MISC)/$(TARGET).$(SRS9NAME).dprr: $(LOCALIZE_ME_DEST)
 
-$(MISC)/$(TARGET).$(SRS9NAME).dprr: $(SRC9FILES) $(HIDSRS9PARTICLE) $(HID9FILES)
+$(MISC)/$(TARGET).$(SRS9NAME).dprr: $(SRC9FILES)
     @echo "Making:   " $(@:f)
     @@-$(RM) $(MISC)/$(TARGET).$(SRS9NAME).dprr
     $(COMMAND_ECHO)$(RSC) $(VERBOSITY) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERDEF) -fp={$(SRS)/$(SRS9NAME).srs} -fo=$@ -p=$(TARGET) $(SRC9FILES)
@@ -478,22 +370,10 @@ $(SRS)/$(SRS9NAME).srs: $(SRC9FILES)
 # unroll begin
 
 .IF "$(SRS10NAME)"!=""
-.IF "$(BUILDHIDS)"!=""
-HID10FILES=$(foreach,i,$(SRC10FILES:f) $(SRS)/$(i:s/.src/.hid/))
-HIDSRS10PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(SRS))/$(SRS10NAME)_srs.hid
-$(HIDSRS10PARTICLE) : $(HID10FILES)
-    @echo "Making:   " $(@:f)
-    @-$(RM) $@
-    $(COMMAND_ECHO)$(TYPE) $(mktmp  $(subst,/,/ $(HID10FILES))) | xargs -s 1000 cat > $@.$(ROUT).tmp
-    @$(RENAME) $@.$(ROUT).tmp $@
-
-ALLTAR : $(HIDSRS10PARTICLE)
-
-.ENDIF # "$(BUILDHIDS)"!=""
 
 $(MISC)/$(TARGET).$(SRS10NAME).dprr: $(LOCALIZE_ME_DEST)
 
-$(MISC)/$(TARGET).$(SRS10NAME).dprr: $(SRC10FILES) $(HIDSRS10PARTICLE) $(HID10FILES)
+$(MISC)/$(TARGET).$(SRS10NAME).dprr: $(SRC10FILES)
     @echo "Making:   " $(@:f)
     @@-$(RM) $(MISC)/$(TARGET).$(SRS10NAME).dprr
     $(COMMAND_ECHO)$(RSC) $(VERBOSITY) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERDEF) -fp={$(SRS)/$(SRS10NAME).srs} -fo=$@ -p=$(TARGET) $(SRC10FILES)
