@@ -43,6 +43,7 @@ import com.sun.star.awt.XWindow;
 import com.sun.star.lang.EventObject;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.wizards.common.Helper;
+import com.sun.star.wizards.common.HelpIds;
 import com.sun.star.wizards.common.IRenderer;
 import com.sun.star.wizards.ui.event.*;
 
@@ -255,7 +256,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
             btnBack = dialog.insertButton(name + "_btnBack", "prevPage", this, pNames1, new Object[]
                     {
                         btnSize,
-                        "HID:" + helpURL++,
+                        HelpIds.getHelpIdString(helpURL++),
                         new Integer(pos.Width),
                         new Integer(pos.Height + (imageSize.Height + gap.Height) * rows + gap.Height + imageTextHeight + 1),
                         step,
@@ -267,7 +268,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
             btnNext = dialog.insertButton(name + "_btnNext", "nextPage", this, pNames1, new Object[]
                     {
                         btnSize,
-                        "HID:" + helpURL++,
+                        HelpIds.getHelpIdString(helpURL++),
                         new Integer(pos.Width + (imageSize.Width + gap.Width) * cols + gap.Width - btnSize.intValue() + 1),
                         new Integer(pos.Height + (imageSize.Height + gap.Height) * rows + gap.Height + imageTextHeight + 1),
                         step,
@@ -354,7 +355,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
                     NO_BORDER,
                     BACKGROUND_COLOR,
                     m_imageHeight,
-                    "HID:" + helpURL++,
+                    HelpIds.getHelpIdString(helpURL++),
                     new Integer(getImagePosX(_col)),
                     new Integer(getImagePosY(_row)),
                     scaleImages,

@@ -112,7 +112,6 @@
 #define ENTRY_HEIGHT 16
 
 static const char ITEM_DESCRIPTOR_COMMANDURL[]  = "CommandURL";
-static const char ITEM_DESCRIPTOR_HELPURL[]     = "HelpURL";
 static const char ITEM_DESCRIPTOR_CONTAINER[]   = "ItemDescriptorContainer";
 static const char ITEM_DESCRIPTOR_LABEL[]       = "Label";
 static const char ITEM_DESCRIPTOR_TYPE[]        = "Type";
@@ -522,7 +521,6 @@ bool GetMenuItemData(
     const uno::Reference< container::XIndexAccess >& rItemContainer,
     sal_Int32 nIndex,
     OUString& rCommandURL,
-    OUString& rHelpURL,
     OUString& rLabel,
     sal_uInt16& rType,
     uno::Reference< container::XIndexAccess >& rSubMenu )
@@ -537,10 +535,6 @@ bool GetMenuItemData(
                 if ( aProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_COMMANDURL ))
                 {
                     aProp[i].Value >>= rCommandURL;
-                }
-                else if ( aProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_HELPURL ))
-                {
-                    aProp[i].Value >>= rHelpURL;
                 }
                 else if ( aProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_CONTAINER ))
                 {
@@ -570,7 +564,6 @@ bool GetToolbarItemData(
     const uno::Reference< container::XIndexAccess >& rItemContainer,
     sal_Int32 nIndex,
     OUString& rCommandURL,
-    OUString& rHelpURL,
     OUString& rLabel,
     sal_uInt16& rType,
     sal_Bool& rIsVisible,
@@ -591,10 +584,6 @@ bool GetToolbarItemData(
                 if ( aProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_STYLE ))
                 {
                     aProp[i].Value >>= rStyle;
-                }
-                else if ( aProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_HELPURL ))
-                {
-                    aProp[i].Value >>= rHelpURL;
                 }
                 else if (aProp[i].Name.equalsAscii(ITEM_DESCRIPTOR_CONTAINER))
                 {
@@ -638,11 +627,89 @@ ConvertSvxConfigEntry(
     static const OUString aDescriptorLabel(
             RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_LABEL ) );
 
-    static const OUString aDescriptorHelpURL(
-            RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_HELPURL ) );
+    static const OUString aDescriptorContainer(
+            RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_CONTAINER ) );
+
+    uno::Sequence< beans::PropertyValue > aPropSeq( 3 );
+
+    aPropSeq[0].Name = aDescriptorCommandURL;
+    aPropSeq[0].Value <<= rtl::OUString( pEntry->GetCommand() );
+
+    aPropSeq[1].Name = aDescriptorType;
+    aPropSeq[1].Value <<= css::ui::ItemType::DEFAULT;
+
+    // If the name has not been changed and the name is the same as
+    // in the default command to label map then the label can be stored
+    // as an empty string.
+    // It will be initialised again later using the command to label map.
+    aPropSeq[2].Name = aDescriptorLabel;
+    if ( pEntry->HasChangedName() == FALSE && pEntry->GetCommand().getLength() )
+    {
+        BOOL isDefaultName = FALSE;
+        try
+        {
+            uno::Any a( xCommandToLabelMap->getByName( pEntry->GetCommand() ) );
+            uno::Sequence< beans::PropertyValue > tmpPropSeq;
+            if ( a >>= tmpPropSeq )
+            {
+                for ( sal_Int32 i = 0; i < tmpPropSeq.getLength(); i++ )
+                {
+                    if ( tmpPropSeq[i].Name.equals( aDescriptorLabel ) )
+                    {
+                        OUString tmpLabel;
+                        tmpPropSeq[i].Value >>= tmpLabel;
+
+                        if ( tmpLabel.equals( pEntry->GetName() ) )
+                        {
+                            isDefaultName = TRUE;
+                        }
+
+                        break;
+                    }
+                }
+            }
+        }
+        catch ( container::NoSuchElementException& )
+        {
+            // isDefaultName is left as FALSE
+        }
+
+        if ( isDefaultName )
+        {
+            aPropSeq[2].Value <<= rtl::OUString();
+        }
+        else
+        {
+            aPropSeq[2].Value <<= rtl::OUString( pEntry->GetName() );
+        }
+    }
+    else
+    {
+        aPropSeq[2].Value <<= rtl::OUString( pEntry->GetName() );
+    }
+
+    return aPropSeq;
+}
+
+uno::Sequence< beans::PropertyValue >
+ConvertToolbarEntry(
+    const uno::Reference< container::XNameAccess >& xCommandToLabelMap,
+    const SvxConfigEntry* pEntry )
+{
+    static const OUString aDescriptorCommandURL (
+        RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_COMMANDURL ) );
+
+    static const OUString aDescriptorType(
+            RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_TYPE ) );
+
+    static const OUString aDescriptorLabel(
+            RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_LABEL ) );
 
     static const OUString aDescriptorContainer(
             RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_CONTAINER ) );
+
+    static const OUString aIsVisible(
+            RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_ISVISIBLE ) );
 
     uno::Sequence< beans::PropertyValue > aPropSeq( 4 );
 
@@ -702,98 +769,8 @@ ConvertSvxConfigEntry(
         aPropSeq[2].Value <<= rtl::OUString( pEntry->GetName() );
     }
 
-    aPropSeq[3].Name = aDescriptorHelpURL;
-    aPropSeq[3].Value <<= rtl::OUString( pEntry->GetHelpURL() );
-
-    return aPropSeq;
-}
-
-uno::Sequence< beans::PropertyValue >
-ConvertToolbarEntry(
-    const uno::Reference< container::XNameAccess >& xCommandToLabelMap,
-    const SvxConfigEntry* pEntry )
-{
-    static const OUString aDescriptorCommandURL (
-        RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_COMMANDURL ) );
-
-    static const OUString aDescriptorType(
-            RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_TYPE ) );
-
-    static const OUString aDescriptorLabel(
-            RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_LABEL ) );
-
-    static const OUString aDescriptorHelpURL(
-            RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_HELPURL ) );
-
-    static const OUString aDescriptorContainer(
-            RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_CONTAINER ) );
-
-    static const OUString aIsVisible(
-            RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_ISVISIBLE ) );
-
-    uno::Sequence< beans::PropertyValue > aPropSeq( 5 );
-
-    aPropSeq[0].Name = aDescriptorCommandURL;
-    aPropSeq[0].Value <<= rtl::OUString( pEntry->GetCommand() );
-
-    aPropSeq[1].Name = aDescriptorType;
-    aPropSeq[1].Value <<= css::ui::ItemType::DEFAULT;
-
-    // If the name has not been changed and the name is the same as
-    // in the default command to label map then the label can be stored
-    // as an empty string.
-    // It will be initialised again later using the command to label map.
-    aPropSeq[2].Name = aDescriptorLabel;
-    if ( pEntry->HasChangedName() == FALSE && pEntry->GetCommand().getLength() )
-    {
-        BOOL isDefaultName = FALSE;
-        try
-        {
-            uno::Any a( xCommandToLabelMap->getByName( pEntry->GetCommand() ) );
-            uno::Sequence< beans::PropertyValue > tmpPropSeq;
-            if ( a >>= tmpPropSeq )
-            {
-                for ( sal_Int32 i = 0; i < tmpPropSeq.getLength(); i++ )
-                {
-                    if ( tmpPropSeq[i].Name.equals( aDescriptorLabel ) )
-                    {
-                        OUString tmpLabel;
-                        tmpPropSeq[i].Value >>= tmpLabel;
-
-                        if ( tmpLabel.equals( pEntry->GetName() ) )
-                        {
-                            isDefaultName = TRUE;
-                        }
-
-                        break;
-                    }
-                }
-            }
-        }
-        catch ( container::NoSuchElementException& )
-        {
-            // isDefaultName is left as FALSE
-        }
-
-        if ( isDefaultName )
-        {
-            aPropSeq[2].Value <<= rtl::OUString();
-        }
-        else
-        {
-            aPropSeq[2].Value <<= rtl::OUString( pEntry->GetName() );
-        }
-    }
-    else
-    {
-        aPropSeq[2].Value <<= rtl::OUString( pEntry->GetName() );
-    }
-
-    aPropSeq[3].Name = aDescriptorHelpURL;
-    aPropSeq[3].Value <<= rtl::OUString( pEntry->GetHelpURL() );
-
-    aPropSeq[4].Name = aIsVisible;
-    aPropSeq[4].Value <<= pEntry->IsVisible();
+    aPropSeq[3].Name = aIsVisible;
+    aPropSeq[3].Value <<= pEntry->IsVisible();
 
     return aPropSeq;
 }
@@ -1186,14 +1163,13 @@ bool MenuSaveInData::LoadSubMenus(
     {
         uno::Reference< container::XIndexAccess >   xSubMenu;
         OUString                aCommandURL;
-        OUString                aHelpURL;
         OUString                aLabel;
         bool                    bIsUserDefined = TRUE;
 
         sal_uInt16 nType( css::ui::ItemType::DEFAULT );
 
         bool bItem = GetMenuItemData( xMenuSettings, nIndex,
-            aCommandURL, aHelpURL, aLabel, nType, xSubMenu );
+            aCommandURL, aLabel, nType, xSubMenu );
 
         if ( bItem )
         {
@@ -1235,7 +1211,6 @@ bool MenuSaveInData::LoadSubMenus(
                         aLabel, aCommandURL, TRUE );
 
                     pEntry->SetUserDefined( bIsUserDefined );
-                    pEntry->SetHelpURL( aHelpURL );
 
                     pEntries->push_back( pEntry );
 
@@ -1260,7 +1235,6 @@ bool MenuSaveInData::LoadSubMenus(
                     SvxConfigEntry* pEntry = new SvxConfigEntry(
                         aLabel, aCommandURL, FALSE );
                     pEntry->SetUserDefined( bIsUserDefined );
-                    pEntry->SetHelpURL( aHelpURL );
                     pEntries->push_back( pEntry );
                 }
             }
@@ -2157,7 +2131,6 @@ SvLBoxEntry* SvxConfigPage::AddFunction(
     SvxConfigEntry* pNewEntryData =
         new SvxConfigEntry( aDisplayName, aURL, FALSE );
     pNewEntryData->SetUserDefined( TRUE );
-    pNewEntryData->SetHelpURL( aURL );
 
     // check that this function is not already in the menu
     SvxConfigEntry* pParent = GetTopLevelSelection();
@@ -3066,21 +3039,9 @@ SvxConfigEntry::GetHelpText()
 {
     if ( aHelpText.getLength() == 0 )
     {
-        OUString helpid = OUString::createFromAscii( "helpid:" );
-        if ( aHelpURL.indexOf( helpid ) != -1 )
+        if ( aCommand.getLength() )
         {
-            aHelpURL = aHelpURL.copy( helpid.getLength() );
-        }
-
-        Help* pHelp = Application::GetHelp();
-        if ( aHelpURL.toInt32() != 0 )
-        {
-            aHelpText = pHelp->GetHelpText( aHelpURL.toInt32(), NULL );
-        }
-
-        if ( aHelpText.getLength() == 0 && aCommand.getLength() != 0 )
-        {
-            aHelpText = pHelp->GetHelpText( aCommand, NULL );
+            aHelpText = Application::GetHelp()->GetHelpText( aCommand, NULL );
         }
     }
 
@@ -4515,7 +4476,6 @@ bool ToolbarSaveInData::LoadToolbar(
     {
         uno::Reference< container::XIndexAccess >   xSubMenu;
         OUString                aCommandURL;
-        OUString                aHelpURL;
         OUString                aLabel;
         bool                    bIsUserDefined = TRUE;
         sal_Bool                bIsVisible;
@@ -4524,7 +4484,7 @@ bool ToolbarSaveInData::LoadToolbar(
         sal_uInt16 nType( css::ui::ItemType::DEFAULT );
 
         bool bItem = GetToolbarItemData( xToolbarSettings, nIndex, aCommandURL,
-            aHelpURL, aLabel, nType, bIsVisible, nStyle, xSubMenu );
+            aLabel, nType, bIsVisible, nStyle, xSubMenu );
 
         if ( bItem )
         {
@@ -4565,7 +4525,6 @@ bool ToolbarSaveInData::LoadToolbar(
                         aLabel, aCommandURL, TRUE );
 
                     pEntry->SetUserDefined( bIsUserDefined );
-                    pEntry->SetHelpURL( aHelpURL );
                     pEntry->SetVisible( bIsVisible );
 
                     pEntries->push_back( pEntry );
@@ -4577,7 +4536,6 @@ bool ToolbarSaveInData::LoadToolbar(
                     SvxConfigEntry* pEntry = new SvxConfigEntry(
                         aLabel, aCommandURL, FALSE );
                     pEntry->SetUserDefined( bIsUserDefined );
-                    pEntry->SetHelpURL( aHelpURL );
                     pEntry->SetVisible( bIsVisible );
                     pEntry->SetStyle( nStyle );
                     pEntries->push_back( pEntry );

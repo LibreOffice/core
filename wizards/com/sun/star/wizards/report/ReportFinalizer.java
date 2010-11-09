@@ -104,7 +104,7 @@ public class ReportFinalizer
                 },
                 new Object[]
                 {
-                    new Integer(12), "HID:34362", new Integer(95), new Integer(37), new Integer(ReportWizard.SOSTOREPAGE), new Short(curtabindex++), new Integer(209)
+                    new Integer(12), "HID:WIZARDS_HID_DLGREPORT_4_TITLE", new Integer(95), new Integer(37), new Integer(ReportWizard.SOSTOREPAGE), new Short(curtabindex++), new Integer(209)
                 });
 
         CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblChooseReportKind",
@@ -124,7 +124,7 @@ public class ReportFinalizer
                 },
                 new Object[]
                 {
-                    new Integer(10), "HID:34371", sSaveAsDocument, new Integer(95), new Integer(69), new Short((short) 0), new Integer(ReportWizard.SOSTOREPAGE), new Short(curtabindex++), new Integer(138)
+                    new Integer(10), "HID:WIZARDS_HID_DLGREPORT_5_OPTSTATDOCUMENT", sSaveAsDocument, new Integer(95), new Integer(69), new Short((short) 0), new Integer(ReportWizard.SOSTOREPAGE), new Short(curtabindex++), new Integer(138)
                 });
 
         CurUnoDialog.insertRadioButton("optCreateReportTemplate", TOGGLESUBTEMPLATECONTROLS_FUNCNAME, this,
@@ -134,7 +134,7 @@ public class ReportFinalizer
                 },
                 new Object[]
                 {
-                    new Integer(8), "HID:34370", sSaveAsTemplate, new Integer(95), new Integer(81), new Short((short) 1), new Integer(ReportWizard.SOSTOREPAGE), new Short(curtabindex++), new Integer(209)
+                    new Integer(8), "HID:WIZARDS_HID_DLGREPORT_5_OPTDYNTEMPLATE", sSaveAsTemplate, new Integer(95), new Integer(81), new Short((short) 1), new Integer(ReportWizard.SOSTOREPAGE), new Short(curtabindex++), new Integer(209)
                 });
 
 
@@ -156,7 +156,7 @@ public class ReportFinalizer
                 },
                 new Object[]
                 {
-                    new Integer(10), "HID:34374", sEditTemplate, new Integer(111), new Integer(105), new Integer(6), new Short(curtabindex++), new Integer(138)
+                    new Integer(10), "HID:WIZARDS_HID_DLGREPORT_5_OPTEDITTEMPLATE", sEditTemplate, new Integer(111), new Integer(105), new Integer(6), new Short(curtabindex++), new Integer(138)
                 });
 
         CurUnoDialog.insertRadioButton("optUseTemplate", TOGGLESUBTEMPLATECONTROLS_FUNCNAME, this,
@@ -166,7 +166,7 @@ public class ReportFinalizer
                 },
                 new Object[]
                 {
-                    new Integer(10), "HID:34375", sUseTemplate, new Integer(111), new Integer(115), new Short((short) 1), new Integer(ReportWizard.SOSTOREPAGE), new Short(curtabindex++), new Integer(138)
+                    new Integer(10), "HID:WIZARDS_HID_DLGREPORT_5_OPTUSETEMPLATE", sUseTemplate, new Integer(111), new Integer(115), new Short((short) 1), new Integer(ReportWizard.SOSTOREPAGE), new Short(curtabindex++), new Integer(138)
                 });
     }
 
