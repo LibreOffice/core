@@ -148,16 +148,6 @@ public:
         ::Window *pParent,
         const SfxItemSet &rOptions);
 
-    /// Forwarded to the print manager.
-    virtual USHORT Print (SfxProgress& rProgress, BOOL bIsAPI);
-
-    /// Forwarded to the print manager.
-    virtual ErrCode DoPrint (
-        SfxPrinter *pPrinter,
-        BOOL bSilent, BOOL bIsAPI );
-
-    virtual void PreparePrint ();
-
     /// Forward methods to main sub shell.
     virtual void WriteUserDataSequence (
         ::com::sun::star::uno::Sequence <

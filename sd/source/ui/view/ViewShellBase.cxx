@@ -667,39 +667,6 @@ SfxTabPage*  ViewShellBase::CreatePrintOptionsPage(
 
 
 
-USHORT  ViewShellBase::Print(SfxProgress&, BOOL bIsAPI)
-{
-    (void)bIsAPI;
-    return 0;
-    //    return mpImpl->mpPrintManager->Print (rProgress, bIsAPI, pDlg);
-}
-
-
-
-
-ErrCode ViewShellBase::DoPrint (
-    SfxPrinter* pPrinter,
-    BOOL bSilent, BOOL bIsAPI )
-{
-    (void)pPrinter;
-    (void)bSilent;
-    (void)bIsAPI;
-    return 0;
-    //return mpImpl->mpPrintManager->DoPrint (pPrinter, pPrintDialog, bSilent, bIsAPI );
-}
-
-
-
-
-void ViewShellBase::PreparePrint ()
-{
-    SfxViewShell::PreparePrint ();
-    //mpImpl->mpPrintManager->PreparePrint (pPrintDialog);
-}
-
-
-
-
 void ViewShellBase::UIActivating( SfxInPlaceClient* pClient )
 {
     mpImpl->ShowViewTabBar(false);
