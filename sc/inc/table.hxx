@@ -174,7 +174,7 @@ private:
     BOOL            bSharedNameInserted;
 
     ScRangeVec      aPrintRanges;
-    BOOL            bPrintEntireSheet;
+    bool            bPrintEntireSheet;
 
     ScRange*        pRepeatColRange;
     ScRange*        pRepeatRowRange;
@@ -587,7 +587,7 @@ public:
     USHORT          GetPrintRangeCount() const          { return static_cast< USHORT >( aPrintRanges.size() ); }
     const ScRange*  GetPrintRange(USHORT nPos) const;
     /** Returns true, if the sheet is always printed. */
-    BOOL            IsPrintEntireSheet() const          { return bPrintEntireSheet; }
+    bool            IsPrintEntireSheet() const          { return bPrintEntireSheet; }
 
     /** Removes all print ranges. */
     void            ClearPrintRanges();

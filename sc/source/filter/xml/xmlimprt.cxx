@@ -2912,6 +2912,17 @@ void ScXMLImport::DisposingModel()
     pDoc = NULL;
 }
 
+ScXMLImport::MutexGuard::MutexGuard(ScXMLImport& rImport) :
+    mrImport(rImport)
+{
+    mrImport.LockSolarMutex();
+}
+
+ScXMLImport::MutexGuard::~MutexGuard()
+{
+    mrImport.UnlockSolarMutex();
+}
+
 void ScXMLImport::LockSolarMutex()
 {
     // #i62677# When called from DocShell/Wrapper, the SolarMutex is already locked,
