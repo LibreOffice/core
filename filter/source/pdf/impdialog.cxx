@@ -33,7 +33,9 @@
 #include "vcl/svapp.hxx"
 #include "vcl/msgbox.hxx"
 #include "sfx2/passwd.hxx"
-#include "com/sun/star/uno/Sequence.hxx"
+
+#include "comphelper/storagehelper.hxx"
+
 #include "com/sun/star/text/XTextRange.hpp"
 #include "com/sun/star/drawing/XShapes.hpp"
 #include "com/sun/star/container/XIndexAccess.hpp"
@@ -392,8 +394,8 @@ Sequence< PropertyValue > ImpPDFTabDialog::GetFilterData()
     nElementAdded--;
 
 //add the permission password
-    aRet[ aRet.getLength() - nElementAdded ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "PermissionPassword" ) );
-    aRet[ aRet.getLength() - nElementAdded ].Value <<= OUString( msOwnerPassword );
+    aRet[ aRet.getLength() - nElementAdded ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "PreparedPermissionPassword" ) );
+    aRet[ aRet.getLength() - nElementAdded ].Value <<= maPreparedOwnerPassword;
     nElementAdded--;
 
 // this should be the last added...
@@ -1108,7 +1110,7 @@ void ImpPDFTabSecurityPage::GetFilterConfigItem( ImpPDFTabDialog* paParent  )
     paParent->mxPreparedPasswords = mxPreparedPasswords;
 
     paParent->mbRestrictPermissions = mbHaveOwnerPassword;
-    paParent->msOwnerPassword = msOwnerPassword;
+    paParent->maPreparedOwnerPassword = maPreparedOwnerPassword;
 
 //verify print status
     paParent->mnPrint = 0;
@@ -1200,14 +1202,12 @@ IMPL_LINK( ImpPDFTabSecurityPage, ClickmaPbSetPwdHdl, void*, EMPTYARG )
 
         mxPreparedPasswords = vcl::PDFWriter::InitEncryption( aOwnerPW, aUserPW, true );
 
-        // FIXME: used as parameter for hybrid PDF
         if( mbHaveOwnerPassword )
         {
-            // force deep copy, not ref count
-            msOwnerPassword = rtl::OUString( aOwnerPW.getStr(), aOwnerPW.getLength() );
+            maPreparedOwnerPassword = comphelper::OStorageHelper::CreatePackageEncryptionData( aOwnerPW );
         }
         else
-            msOwnerPassword = rtl::OUString();
+            maPreparedOwnerPassword = Sequence< NamedValue >();
 
         // trash clear text passwords string memory
         rtl_zeroMemory( (void*)aUserPW.getStr(), aUserPW.getLength() );

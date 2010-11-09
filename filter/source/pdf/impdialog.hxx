@@ -44,6 +44,8 @@
 
 #include "sfx2/tabdlg.hxx"
 
+#include "com/sun/star/beans/NamedValue.hpp"
+
 // ----------------
 // - ImpPDFDialog -
 // ----------------
@@ -128,7 +130,7 @@ protected:
     sal_Bool                    mbEncrypt;
 
     sal_Bool                    mbRestrictPermissions;
-    rtl::OUString               msOwnerPassword;
+    com::sun::star::uno::Sequence< com::sun::star::beans::NamedValue > maPreparedOwnerPassword;
     sal_Int32                   mnPrint;
     sal_Int32                   mnChangesAllowed;
     sal_Bool                    mbCanCopyOrExtract;
@@ -344,7 +346,7 @@ class ImpPDFTabSecurityPage : public SfxTabPage
 
     bool                        mbHaveOwnerPassword;
     bool                        mbHaveUserPassword;
-    rtl::OUString               msOwnerPassword;
+    com::sun::star::uno::Sequence< com::sun::star::beans::NamedValue > maPreparedOwnerPassword;
     String                      msOwnerPwdTitle;
 
     com::sun::star::uno::Reference< com::sun::star::beans::XMaterialHolder > mxPreparedPasswords;
