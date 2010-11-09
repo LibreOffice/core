@@ -558,7 +558,7 @@ bool Printer::StartJob( const rtl::OUString& i_rJobName, boost::shared_ptr<vcl::
     mnCurPage               = 1;
     mnCurPrintPage          = 1;
     mbPrinting              = TRUE;
-    if( ImplGetSVData()->maGDIData.mbPrinterPullModel )
+    if( GetCapabilities( PRINTER_CAPABILITIES_USEPULLMODEL ) )
     {
         mbJobActive             = TRUE;
         // sallayer does all necessary page printing
@@ -1029,6 +1029,14 @@ PrinterController::PageSize PrinterController::getFilteredPageFile( int i_nFilte
                     break;
                 case PrinterController::TBLR:
                     nCellX = (nSubPage / rMPS.nRows);
+                    nCellY = (nSubPage % rMPS.nRows);
+                    break;
+                case PrinterController::RLTB:
+                    nCellX = rMPS.nColumns - 1 - (nSubPage % rMPS.nColumns);
+                    nCellY = (nSubPage / rMPS.nColumns);
+                    break;
+                case PrinterController::TBRL:
+                    nCellX = rMPS.nColumns - 1 - (nSubPage / rMPS.nRows);
                     nCellY = (nSubPage % rMPS.nRows);
                     break;
                 }

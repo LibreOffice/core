@@ -25,10 +25,10 @@
  *
  ************************************************************************/
 
-package complex.toolkit.interface_tests;
+package complex.toolkit;
 
 import com.sun.star.accessibility.XAccessibleText;
-import lib.MultiMethodTest;
+// import lib.MultiMethodTest;
 //import lib.StatusException;
 //import lib.Status;
 import com.sun.star.beans.PropertyValue;
@@ -39,7 +39,7 @@ import com.sun.star.accessibility.AccessibleTextType;
 import com.sun.star.accessibility.TextSegment;
 import com.sun.star.uno.XInterface;
 import com.sun.star.uno.UnoRuntime;
-import share.LogWriter;
+// import share.LogWriter;
 
 /**
  * Testing <code>com.sun.star.accessibility.XAccessibleText</code>
@@ -76,7 +76,7 @@ import share.LogWriter;
  */
 public class _XAccessibleText {
 
-    private LogWriter log;
+    // private LogWriter log;
 
     private static final String className =
         "com.sun.star.accessibility.XAccessibleText" ;
@@ -91,11 +91,10 @@ public class _XAccessibleText {
     String editOnly = null;
 
 
-    public _XAccessibleText(XInterface object, LogWriter log, XMultiServiceFactory xMSF, String editOnly) {
-        oObj = (XAccessibleText)UnoRuntime.queryInterface(
-                                    XAccessibleText.class, object);
+    public _XAccessibleText(XInterface object, XMultiServiceFactory xMSF, String editOnly) {
+        oObj = UnoRuntime.queryInterface(XAccessibleText.class, object);
         this.xMSF = xMSF;
-        this.log = log;
+        // this.log = log;
         this.editOnly = editOnly;
     }
 
@@ -107,11 +106,12 @@ public class _XAccessibleText {
      * <ul>
      *  <li> <code>setCaretPosition()</code> </li>
      * </ul>
+     * @return
      */
     public boolean _getCaretPosition() {
 
         if (editOnly != null) {
-            log.println(editOnly);
+            System.out.println(editOnly);
             return true;
         }
 
@@ -123,7 +123,7 @@ public class _XAccessibleText {
 
             }
             int carPos = oObj.getCaretPosition();
-            log.println("getCaretPosition: " + carPos);
+            System.out.println("getCaretPosition: " + carPos);
             res = carPos == (chCount - 1);
         }
         return res;
@@ -138,36 +138,37 @@ public class _XAccessibleText {
      * <ul>
      *  <li> <code>getCharacterCount()</code> </li>
      * </ul>
+     * @return
      */
     public boolean _setCaretPosition() {
         boolean res = true;
 
         try {
-            log.println("setCaretPosition(-1):");
+            System.out.println("setCaretPosition(-1):");
             oObj.setCaretPosition(-1);
             res &= false;
-            log.println("exception was expected");
+            System.out.println("exception was expected");
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("expected exception");
+            System.out.println("expected exception");
             res &= true;
         }
 
         try {
-            log.println("setCaretPosition(chCount+1):");
+            System.out.println("setCaretPosition(chCount+1):");
             oObj.setCaretPosition(chCount+1);
             res &= false;
-            log.println("exception was expected");
+            System.out.println("exception was expected");
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("expected exception");
+            System.out.println("expected exception");
             res &= true;
         }
         if ( chCount > 0 ) {
             try {
-                log.println("setCaretPosition(chCount - 1)");
+                System.out.println("setCaretPosition(chCount - 1)");
                 oObj.setCaretPosition(chCount - 1);
                 res &= true;
             } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-                log.println("unexpected exception");
+                System.out.println("unexpected exception");
                 e.printStackTrace();
                 res &= false;
             }
@@ -186,46 +187,47 @@ public class _XAccessibleText {
      * <ul>
      *  <li> <code>getCharacterCount()</code> </li>
      * </ul>
+     * @return
      */
     public boolean _getCharacter() {
         boolean res = true;
 
         try {
-            log.println("getCharacter(-1)");
+            System.out.println("getCharacter(-1)");
             oObj.getCharacter(-1);
-            log.println("Exception was expected");
+            System.out.println("Exception was expected");
             res = false;
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("Expected exception");
+            System.out.println("Expected exception");
             res = true;
         }
 
         try {
-            log.println("getCharacter(chCount)");
+            System.out.println("getCharacter(chCount)");
             oObj.getCharacter(chCount);
-            log.println("Exception was expected");
+            System.out.println("Exception was expected");
             res &= false;
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("Expected exception");
+            System.out.println("Expected exception");
             res &= true;
         }
 
         try {
-            log.println("Checking of every character in the text...");
+            System.out.println("Checking of every character in the text...");
             boolean isEqCh = true;
             for(int i = 0; i < chCount; i++) {
                 char ch = oObj.getCharacter(i);
                 isEqCh = ch == text.charAt(i);
                 res &= isEqCh;
                 if (!isEqCh) {
-                    log.println("At the position " + i +
+                    System.out.println("At the position " + i +
                         "was expected character: " + text.charAt(i));
-                    log.println("but was returned: " + ch);
+                    System.out.println("but was returned: " + ch);
                     break;
                 }
             }
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("Unexpected exception");
+            System.out.println("Unexpected exception");
             e.printStackTrace();
             res &= false;
         }
@@ -243,38 +245,39 @@ public class _XAccessibleText {
      * <ul>
      *  <li> <code>getCharacterCount()</code> </li>
      * </ul>
+     * @return
      */
     public boolean _getCharacterAttributes() {
         boolean res = true;
 
         try {
-            log.println("getCharacterAttributes(-1)");
+            System.out.println("getCharacterAttributes(-1)");
             oObj.getCharacterAttributes(-1, new String[0]);
-            log.println("Exception was expected");
+            System.out.println("Exception was expected");
             res &= false;
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("Expected exception");
+            System.out.println("Expected exception");
             res &= true;
         }
 
         try {
-            log.println("getCharacterAttributes(chCount)");
+            System.out.println("getCharacterAttributes(chCount)");
             oObj.getCharacterAttributes(chCount, new String[0]);
-            log.println("Exception was expected");
+            System.out.println("Exception was expected");
             res &= false;
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("Expected exception");
+            System.out.println("Expected exception");
             res &= true;
         }
 
         try {
             if ( chCount > 0 ) {
-                log.println("getCharacterAttributes(chCount-1)");
+                System.out.println("getCharacterAttributes(chCount-1)");
                 PropertyValue[] props = oObj.getCharacterAttributes(chCount - 1, new String[0]);
                 res &= props != null;
             }
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("Unexpected exception");
+            System.out.println("Unexpected exception");
             e.printStackTrace();
             res &= false;
         }
@@ -293,41 +296,42 @@ public class _XAccessibleText {
      * <ul>
      *  <li> <code>getCharacterCount()</code> </li>
      * </ul>
+     * @return
      */
     public boolean _getCharacterBounds() {
         boolean res = true;
 
         try {
-            log.println("getCharacterBounds(-1)");
+            System.out.println("getCharacterBounds(-1)");
             oObj.getCharacterBounds(-1);
-            log.println("Exception was expected");
+            System.out.println("Exception was expected");
             res &= false;
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("Expected exception");
+            System.out.println("Expected exception");
             res &= true;
         }
 
         try {
-            log.println("getCharacterBounds(chCount)");
+            System.out.println("getCharacterBounds(chCount)");
             oObj.getCharacterBounds(chCount);
-            log.println("Exception was expected");
+            System.out.println("Exception was expected");
             res &= false;
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("Expected exception");
+            System.out.println("Expected exception");
             res &= true;
         }
 
         try {
             if (chCount > 0) {
-                log.println("getCharacterBounds(chCount-1)");
+                System.out.println("getCharacterBounds(chCount-1)");
                 chBounds = oObj.getCharacterBounds(chCount-1);
                 res &= chBounds != null;
-                log.println("rect: " + chBounds.X + ", " + chBounds.Y + ", " +
+                System.out.println("rect: " + chBounds.X + ", " + chBounds.Y + ", " +
                     chBounds.Width + ", " + chBounds.Height);
             }
 
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("Unexpected exception");
+            System.out.println("Unexpected exception");
             e.printStackTrace();
             res &= false;
         }
@@ -340,10 +344,11 @@ public class _XAccessibleText {
      * Calls the method and stores a returned value to the variable
      * <code>chCount</code>.
      * Has OK status if a returned value is equal to the text length.
+     * @return
      */
     public boolean _getCharacterCount() {
         chCount = oObj.getCharacterCount();
-        log.println("Character count:" + chCount);
+        System.out.println("Character count:" + chCount);
         boolean res = chCount == text.length();
         return res;
     }
@@ -358,21 +363,22 @@ public class _XAccessibleText {
      * <ul>
      *  <li> <code>getCharacterBounds()</code> </li>
      * </ul>
+     * @return
      */
     public boolean _getIndexAtPoint() {
 
         boolean res = true;
-        log.println("getIndexAtPoint(-1, -1):");
+        System.out.println("getIndexAtPoint(-1, -1):");
         Point pt = new Point(-1, -1);
         int index = oObj.getIndexAtPoint(pt);
-        log.println(Integer.toString(index));
+        System.out.println(Integer.toString(index));
         res &= index == -1;
 
         if (chBounds != null) {
             pt = new Point(chBounds.X , chBounds.Y );
-            log.println("getIndexAtPoint(" + pt.X + ", " + pt.Y + "):");
+            System.out.println("getIndexAtPoint(" + pt.X + ", " + pt.Y + "):");
             index = oObj.getIndexAtPoint(pt);
-            log.println(Integer.toString(index));
+            System.out.println(Integer.toString(index));
             res &= index == (chCount - 1);
         }
 
@@ -386,40 +392,41 @@ public class _XAccessibleText {
      * <ul>
      *  <li> <code>setSelection()</code> </li>
      * </ul>
+     * @return
      */
     public boolean _getSelectedText() {
         if (editOnly != null) {
-            log.println(editOnly);
+            System.out.println(editOnly);
             return true;
         }
 
         boolean res = true;
 
         try {
-            log.println("setSelection(0, 0)");
+            System.out.println("setSelection(0, 0)");
             oObj.setSelection(0, 0);
-            log.println("getSelectedText():");
+            System.out.println("getSelectedText():");
             String txt = oObj.getSelectedText();
-            log.println("'" + txt + "'");
+            System.out.println("'" + txt + "'");
             res &= txt.length() == 0;
 
-            log.println("setSelection(0, chCount)");
+            System.out.println("setSelection(0, chCount)");
             oObj.setSelection(0, chCount);
-            log.println("getSelectedText():");
+            System.out.println("getSelectedText():");
             txt = oObj.getSelectedText();
-            log.println("'" + txt + "'");
+            System.out.println("'" + txt + "'");
             res &= txt.equals(text);
 
             if (chCount > 2) {
-                log.println("setSelection(1, chCount-1)");
+                System.out.println("setSelection(1, chCount-1)");
                 oObj.setSelection(1, chCount - 1);
-                log.println("getSelectedText():");
+                System.out.println("getSelectedText():");
                 txt = oObj.getSelectedText();
-                log.println("'" + txt + "'");
+                System.out.println("'" + txt + "'");
                 res &= txt.equals(text.substring(1, chCount - 1));
             }
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("Unexpected exception");
+            System.out.println("Unexpected exception");
             e.printStackTrace();
             res &= false;
         }
@@ -434,31 +441,32 @@ public class _XAccessibleText {
      * <ul>
      *  <li> <code>setSelection()</code> </li>
      * </ul>
+     * @return
      */
     public boolean _getSelectionStart() {
         if (editOnly != null) {
-            log.println(editOnly);
+            System.out.println(editOnly);
             return true;
         }
 
         boolean res = true;
 
         try {
-            log.println("setSelection(0, chCount)");
+            System.out.println("setSelection(0, chCount)");
             oObj.setSelection(0, chCount);
             int start = oObj.getSelectionStart();
-            log.println("getSelectionStart():" + start);
+            System.out.println("getSelectionStart():" + start);
             res &= start == 0;
 
             if (chCount > 2) {
-                log.println("setSelection(1, chCount-1)");
+                System.out.println("setSelection(1, chCount-1)");
                 oObj.setSelection(1, chCount - 1);
                 start = oObj.getSelectionStart();
-                log.println("getSelectionStart():" + start);
+                System.out.println("getSelectionStart():" + start);
                 res &= start == 1;
             }
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("Unexpected exception");
+            System.out.println("Unexpected exception");
             e.printStackTrace();
             res &= false;
         }
@@ -473,31 +481,32 @@ public class _XAccessibleText {
      * <ul>
      *  <li> <code>setSelection()</code> </li>
      * </ul>
+     * @return
      */
     public boolean _getSelectionEnd() {
         if (editOnly != null) {
-            log.println(editOnly);
+            System.out.println(editOnly);
             return true;
         }
 
         boolean res = true;
 
         try {
-            log.println("setSelection(0, chCount)");
+            System.out.println("setSelection(0, chCount)");
             oObj.setSelection(0, chCount);
             int end = oObj.getSelectionEnd();
-            log.println("getSelectionEnd():" + end);
+            System.out.println("getSelectionEnd():" + end);
             res &= end == chCount;
 
             if (chCount > 2) {
-                log.println("setSelection(1, chCount-1)");
+                System.out.println("setSelection(1, chCount-1)");
                 oObj.setSelection(1, chCount - 1);
                 end = oObj.getSelectionEnd();
-                log.println("getSelectionEnd():" + end);
+                System.out.println("getSelectionEnd():" + end);
                 res &= end == chCount - 1;
             }
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("Unexpected exception");
+            System.out.println("Unexpected exception");
             e.printStackTrace();
             res &= false;
         }
@@ -513,67 +522,68 @@ public class _XAccessibleText {
      * <ul>
      *  <li> <code>getCharacterCount()</code> </li>
      * </ul>
+     * @return
      */
     public boolean _setSelection() {
         boolean res = true;
         boolean locRes = true;
 
         if (editOnly != null) {
-            log.println(editOnly);
+            System.out.println(editOnly);
             return true;
         }
 
         try {
-            log.println("setSelection(-1, chCount-1):");
+            System.out.println("setSelection(-1, chCount-1):");
             locRes = oObj.setSelection(-1, chCount - 1);
-            log.println(locRes + " exception was expected");
+            System.out.println(locRes + " exception was expected");
             res &= !locRes;
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("Expected exception");
+            System.out.println("Expected exception");
             res &= true;
         }
 
         try {
-            log.println("setSelection(0, chCount+1):");
+            System.out.println("setSelection(0, chCount+1):");
             locRes = oObj.setSelection(0, chCount + 1);
-            log.println(locRes + " excepion was expected");
+            System.out.println(locRes + " excepion was expected");
             res &= !locRes;
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("Expected exception");
+            System.out.println("Expected exception");
             res &= true;
         }
 
         try {
             if (chCount > 2) {
-                log.println("setSelection(1, chCount-1):");
+                System.out.println("setSelection(1, chCount-1):");
                 locRes = oObj.setSelection(1, chCount - 1);
-                log.println(Boolean.toString(locRes));
+                System.out.println(Boolean.toString(locRes));
                 res &= locRes;
 
-                log.println("setSelection(chCount-1, 1):");
+                System.out.println("setSelection(chCount-1, 1):");
                 locRes = oObj.setSelection(chCount - 1, 1);
-                log.println(Boolean.toString(locRes));
+                System.out.println(Boolean.toString(locRes));
                 res &= locRes;
             }
 
             if (chCount > 1) {
-                log.println("setSelection(0, chCount-1):");
+                System.out.println("setSelection(0, chCount-1):");
                 locRes = oObj.setSelection(0, chCount-1);
-                log.println(Boolean.toString(locRes));
+                System.out.println(Boolean.toString(locRes));
                 res &= locRes;
 
-                log.println("setSelection(chCount-1, 0):");
+                System.out.println("setSelection(chCount-1, 0):");
                 locRes = oObj.setSelection(chCount-1, 0);
-                log.println(Boolean.toString(locRes));
+                System.out.println(Boolean.toString(locRes));
                 res &= locRes;
             }
 
-            log.println("setSelection(0, 0):");
+            System.out.println("setSelection(0, 0):");
             locRes = oObj.setSelection(0, 0);
-            log.println(Boolean.toString(locRes));
+            System.out.println(Boolean.toString(locRes));
             res &= locRes;
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("Unexpected exception");
+            System.out.println("Unexpected exception");
             e.printStackTrace();
             res &= false;
         }
@@ -585,10 +595,11 @@ public class _XAccessibleText {
      * Calls the method and checks returned value.
      * Has OK status if returned string is not null
      * received from relation.
+     * @return
      */
     public boolean _getText() {
         text = oObj.getText();
-        log.println("getText: '" + text + "'");
+        System.out.println("getText: '" + text + "'");
         return (text != null);
     }
 
@@ -602,6 +613,7 @@ public class _XAccessibleText {
      * <ul>
      *  <li> <code>getCharacterCount()</code> </li>
      * </ul>
+     * @return
      */
     public boolean _getTextRange() {
         boolean res = true;
@@ -609,75 +621,75 @@ public class _XAccessibleText {
 
         try {
             if (chCount > 3) {
-                log.println("getTextRange(1, chCount - 2): ");
+                System.out.println("getTextRange(1, chCount - 2): ");
                 String txtRange = oObj.getTextRange(1, chCount - 2);
-                log.println(txtRange);
+                System.out.println(txtRange);
                 locRes = txtRange.equals(text.substring(1, chCount - 2));
                 res &= locRes;
                 if (!locRes) {
-                    log.println("Was expected: " +
+                    System.out.println("Was expected: " +
                         text.substring(1, chCount - 2));
                 }
             }
 
             if (chCount > 0) {
-                log.println("getTextRange(0, chCount-1): ");
+                System.out.println("getTextRange(0, chCount-1): ");
                 String txtRange = oObj.getTextRange(0, chCount-1);
-                log.println(txtRange);
+                System.out.println(txtRange);
                 locRes = txtRange.equals(text.substring(0, chCount - 1));
                 res &= locRes;
                 if (!locRes) {
-                    log.println("Was expected: " +
+                    System.out.println("Was expected: " +
                         text.substring(0, chCount - 1));
                 }
 
-                log.println("getTextRange(chCount, 0): ");
+                System.out.println("getTextRange(chCount, 0): ");
                 txtRange = oObj.getTextRange(chCount, 0);
-                log.println(txtRange);
+                System.out.println(txtRange);
                 res &= txtRange.equals(text);
 
-                log.println("getTextRange(0, 0): ");
+                System.out.println("getTextRange(0, 0): ");
                 txtRange = oObj.getTextRange(0, 0);
-                log.println(txtRange);
+                System.out.println(txtRange);
                 locRes = txtRange.equals("");
                 res &= locRes;
                 if (!locRes) {
-                    log.println("Empty string was expected");
+                    System.out.println("Empty string was expected");
                 }
             }
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("Unexpected exception");
+            System.out.println("Unexpected exception");
             e.printStackTrace();
             res &= false;
         }
 
         try {
-            log.println("getTextRange(-1, chCount - 1): ");
+            System.out.println("getTextRange(-1, chCount - 1): ");
             String txtRange = oObj.getTextRange(-1, chCount - 1);
-            log.println("Exception was expected");
+            System.out.println("Exception was expected");
             res &= false;
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("Expected exception");
+            System.out.println("Expected exception");
             res &= true;
         }
 
         try {
-            log.println("getTextRange(0, chCount + 1): ");
+            System.out.println("getTextRange(0, chCount + 1): ");
             String txtRange = oObj.getTextRange(0, chCount + 1);
-            log.println("Exception was expected");
+            System.out.println("Exception was expected");
             res &= false;
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("Expected exception");
+            System.out.println("Expected exception");
             res &= true;
         }
 
         try {
-            log.println("getTextRange(chCount+1, -1): ");
+            System.out.println("getTextRange(chCount+1, -1): ");
             String txtRange = oObj.getTextRange(chCount+1, -1);
-            log.println("Exception was expected");
+            System.out.println("Exception was expected");
             res &= false;
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("Expected exception");
+            System.out.println("Expected exception");
             res &= true;
         }
 
@@ -694,62 +706,63 @@ public class _XAccessibleText {
      * <ul>
      *  <li> <code>getCharacterCount()</code> </li>
      * </ul>
+     * @return
      */
     public boolean _getTextAtIndex() {
         boolean res = true;
 
         try {
-            log.println("getTextAtIndex(-1, AccessibleTextType.PARAGRAPH):");
+            System.out.println("getTextAtIndex(-1, AccessibleTextType.PARAGRAPH):");
             TextSegment txt =
                 oObj.getTextAtIndex(-1, AccessibleTextType.PARAGRAPH);
-            log.println("Exception was expected");
+            System.out.println("Exception was expected");
             res &= false;
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("Expected exception");
+            System.out.println("Expected exception");
             res &= true;
         } catch(com.sun.star.lang.IllegalArgumentException e) {
-            log.println("Expected exception");
+            System.out.println("Expected exception");
             res &= true;
         }
 
         try {
-            log.println("getTextAtIndex(chCount+1," +
+            System.out.println("getTextAtIndex(chCount+1," +
                 " AccessibleTextType.PARAGRAPH):");
             TextSegment txt = oObj.getTextAtIndex(chCount + 1,
                  AccessibleTextType.PARAGRAPH);
-            log.println("Exception was expected");
+            System.out.println("Exception was expected");
             res &= false;
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("Expected exception");
+            System.out.println("Expected exception");
             res &= true;
         }  catch(com.sun.star.lang.IllegalArgumentException e) {
-            log.println("Expected exception");
+            System.out.println("Expected exception");
             res &= true;
         }
 
 
         try {
             if ( chCount > 0 ) {
-                log.println("getTextAtIndex(chCount," +
+                System.out.println("getTextAtIndex(chCount," +
                     " AccessibleTextType.PARAGRAPH):");
                 TextSegment txt = oObj.getTextAtIndex(chCount,
                     AccessibleTextType.PARAGRAPH);
-                log.println("'" + txt.SegmentText + "'");
+                System.out.println("'" + txt.SegmentText + "'");
                 res &= txt.SegmentText.length() == 0;
 
-                log.println("getTextAtIndex(1," +
+                System.out.println("getTextAtIndex(1," +
                     " AccessibleTextType.PARAGRAPH):");
                 txt = oObj.getTextAtIndex(1,
                     AccessibleTextType.PARAGRAPH);
-                log.println("'" + txt.SegmentText + "'");
+                System.out.println("'" + txt.SegmentText + "'");
                 res &= txt.SegmentText.equals(text);
             }
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("Unexpected exception");
+            System.out.println("Unexpected exception");
             e.printStackTrace();
             res &= false;
         }  catch(com.sun.star.lang.IllegalArgumentException e) {
-            log.println("Unexpected exception");
+            System.out.println("Unexpected exception");
             res &= false;
         }
 
@@ -767,78 +780,79 @@ public class _XAccessibleText {
      * <ul>
      *  <li> <code>getCharacterCount()</code> </li>
      * </ul>
+     * @return
      */
     public boolean _getTextBeforeIndex() {
         boolean res = true;
 
         try {
-            log.println("getTextBeforeIndex(-1, AccessibleTextType.PARAGRAPH):");
+            System.out.println("getTextBeforeIndex(-1, AccessibleTextType.PARAGRAPH):");
             TextSegment txt = oObj.getTextBeforeIndex(-1,
                 AccessibleTextType.PARAGRAPH);
-            log.println("Exception was expected");
+            System.out.println("Exception was expected");
             res &= false;
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("Expected exception");
+            System.out.println("Expected exception");
             res &= true;
         }  catch(com.sun.star.lang.IllegalArgumentException e) {
-            log.println("Expected exception");
+            System.out.println("Expected exception");
             res &= true;
         }
 
 
         try {
-            log.println("getTextBeforeIndex(chCount+1, " +
+            System.out.println("getTextBeforeIndex(chCount+1, " +
                 "AccessibleTextType.PARAGRAPH):");
             TextSegment txt = oObj.getTextBeforeIndex(chCount + 1,
                 AccessibleTextType.PARAGRAPH);
-            log.println("Exception was expected");
+            System.out.println("Exception was expected");
             res &= false;
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("Expected exception");
+            System.out.println("Expected exception");
             res &= true;
         } catch(com.sun.star.lang.IllegalArgumentException e) {
-            log.println("Expected exception");
+            System.out.println("Expected exception");
             res &= true;
         }
 
         TextSegment txt = null;
         try {
             if (chCount > 0) {
-                log.println("getTextBeforeIndex(chCount," +
+                System.out.println("getTextBeforeIndex(chCount," +
                     " AccessibleTextType.PARAGRAPH):");
                 txt = oObj.getTextBeforeIndex(chCount,
                     AccessibleTextType.PARAGRAPH);
-                log.println("'" + txt.SegmentText + "'");
+                System.out.println("'" + txt.SegmentText + "'");
                 res &= txt.SegmentText.length() == chCount ;
 
-                log.println("getTextBeforeIndex(1," +
+                System.out.println("getTextBeforeIndex(1," +
                     " AccessibleTextType.PARAGRAPH):");
                 txt = oObj.getTextBeforeIndex(1,
                     AccessibleTextType.PARAGRAPH);
-                log.println("'" + txt.SegmentText + "'");
+                System.out.println("'" + txt.SegmentText + "'");
                 res &= txt.SegmentText.length() == 0;
             }
 
             if (chCount > 2) {
-                log.println("getTextBeforeIndex(chCount-1," +
+                System.out.println("getTextBeforeIndex(chCount-1," +
                     " AccessibleTextType.CHARACTER):");
                 txt = oObj.getTextBeforeIndex(chCount - 1,
                     AccessibleTextType.CHARACTER);
-                log.println("'" + txt.SegmentText + "'");
+                System.out.println("'" + txt.SegmentText + "'");
                 res &= txt.SegmentText.equals(text.substring(chCount - 2, chCount - 1));
-                log.println("getTextBeforeIndex(2," +
+                System.out.println("getTextBeforeIndex(2," +
                     " AccessibleTextType.CHARACTER):");
                 txt = oObj.getTextBeforeIndex(2,
                      AccessibleTextType.CHARACTER);
-                log.println("'" + txt.SegmentText + "'");
+                System.out.println("'" + txt.SegmentText + "'");
                 res &= txt.SegmentText.equals(text.substring(1, 2));
             }
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("Unexpected exception");
+            System.out.println("Unexpected exception");
             e.printStackTrace();
             res &= false;
         }  catch(com.sun.star.lang.IllegalArgumentException e) {
-            log.println("Unexpected exception");
+            System.out.println("Unexpected exception");
             res &= false;
         }
 
@@ -856,79 +870,80 @@ public class _XAccessibleText {
      * <ul>
      *  <li> <code>getCharacterCount()</code> </li>
      * </ul>
+     * @return
      */
     public boolean _getTextBehindIndex() {
         boolean res = true;
 
         try {
-            log.println("getTextBehindIndex(-1, AccessibleTextType.PARAGRAPH):");
+            System.out.println("getTextBehindIndex(-1, AccessibleTextType.PARAGRAPH):");
             TextSegment txt = oObj.getTextBehindIndex(-1,
                 AccessibleTextType.PARAGRAPH);
-            log.println("Exception was expected");
+            System.out.println("Exception was expected");
             res &= false;
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("Expected exception");
+            System.out.println("Expected exception");
             res &= true;
         } catch(com.sun.star.lang.IllegalArgumentException e) {
-            log.println("Expected exception");
+            System.out.println("Expected exception");
             res &= true;
         }
 
 
         try {
-            log.println("getTextBehindIndex(chCount+1, " +
+            System.out.println("getTextBehindIndex(chCount+1, " +
                 "AccessibleTextType.PARAGRAPH):");
             TextSegment txt = oObj.getTextBehindIndex(chCount + 1,
                 AccessibleTextType.PARAGRAPH);
-            log.println("Exception was expected");
+            System.out.println("Exception was expected");
             res &= false;
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("Expected exception");
+            System.out.println("Expected exception");
             res &= true;
         }  catch(com.sun.star.lang.IllegalArgumentException e) {
-            log.println("Expected exception");
+            System.out.println("Expected exception");
             res &= true;
         }
 
 
         try {
             if ( chCount > 0 ) {
-                log.println("getTextBehindIndex(chCount," +
+                System.out.println("getTextBehindIndex(chCount," +
                     " AccessibleTextType.PARAGRAPH):");
                 TextSegment txt = oObj.getTextBehindIndex(chCount,
                     AccessibleTextType.PARAGRAPH);
-                log.println("'" + txt.SegmentText + "'");
+                System.out.println("'" + txt.SegmentText + "'");
                 res &= txt.SegmentText.length() == 0;
 
-                log.println("getTextBehindIndex(chCount-1," +
+                System.out.println("getTextBehindIndex(chCount-1," +
                     " AccessibleTextType.PARAGRAPH):");
                 txt = oObj.getTextBehindIndex(chCount - 1,
                     AccessibleTextType.PARAGRAPH);
-                log.println("'" + txt.SegmentText + "'");
+                System.out.println("'" + txt.SegmentText + "'");
                 res &= txt.SegmentText.length() == 0;
             }
             if ( chCount > 1 ) {
-                log.println("getTextBehindIndex(1," +
+                System.out.println("getTextBehindIndex(1," +
                     " AccessibleTextType.CHARACTER):");
                 TextSegment txt = oObj.getTextBehindIndex(1,
                     AccessibleTextType.CHARACTER);
-                log.println("'" + txt.SegmentText + "'");
+                System.out.println("'" + txt.SegmentText + "'");
                 res &= txt.SegmentText.equals(text.substring(2, 3));
             }
             if (chCount > 2) {
-                log.println("getTextBehindIndex(chCount-2," +
+                System.out.println("getTextBehindIndex(chCount-2," +
                     " AccessibleTextType.CHARACTER):");
                 TextSegment txt = oObj.getTextBehindIndex(chCount - 2,
                      AccessibleTextType.CHARACTER);
-                log.println("'" + txt.SegmentText + "'");
+                System.out.println("'" + txt.SegmentText + "'");
                 res &= txt.SegmentText.equals(text.substring(chCount - 1, chCount));
             }
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("Unexpected exception");
+            System.out.println("Unexpected exception");
             e.printStackTrace();
             res &= false;
         }  catch(com.sun.star.lang.IllegalArgumentException e) {
-            log.println("Unexpected exception");
+            System.out.println("Unexpected exception");
             res &= false;
         }
 
@@ -942,40 +957,41 @@ public class _XAccessibleText {
      * Has OK status if exception was thrown for invalid parameters,
      * if exception wasn't thrown for valid parameter and if returned value for
      * valid parameter is equal to <code>true</code>.
+     * @return
      */
     public boolean _copyText() {
         boolean res = true;
         boolean locRes = true;
 
         if (editOnly != null) {
-            log.println(editOnly);
+            System.out.println(editOnly);
             return true;
         }
 
         try {
-            log.println("copyText(-1,chCount):");
+            System.out.println("copyText(-1,chCount):");
             oObj.copyText(-1, chCount);
-            log.println("Exception was expected");
+            System.out.println("Exception was expected");
             res &= false;
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("Expected exception");
+            System.out.println("Expected exception");
             res &= true;
         }
 
         try {
-            log.println("copyText(0,chCount+1):");
+            System.out.println("copyText(0,chCount+1):");
             oObj.copyText(0, chCount + 1);
-            log.println("Exception was expected");
+            System.out.println("Exception was expected");
             res &= false;
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("Expected exception");
+            System.out.println("Expected exception");
             res &= true;
         }
 
         try {
-            log.println("copyText(0,chCount):");
+            System.out.println("copyText(0,chCount):");
             locRes = oObj.copyText(0, chCount);
-            log.println(""+locRes);
+            System.out.println(""+locRes);
             res &= locRes;
 
             String cbText = null;
@@ -983,31 +999,31 @@ public class _XAccessibleText {
                 cbText =
                     util.SysUtils.getSysClipboardText(xMSF);
             } catch (com.sun.star.uno.Exception e) {
-                log.println("Couldn't access system clipboard :");
+                System.out.println("Couldn't access system clipboard :");
                 e.printStackTrace();
             }
-            log.println("Clipboard: '" + cbText + "'");
+            System.out.println("Clipboard: '" + cbText + "'");
             res &= text.equals(cbText);
 
             if (chCount > 2) {
-                log.println("copyText(1,chCount-1):");
+                System.out.println("copyText(1,chCount-1):");
                 locRes = oObj.copyText(1, chCount - 1);
-                log.println(""+locRes);
+                System.out.println(""+locRes);
                 res &= locRes;
 
                 try {
                     cbText = util.SysUtils.getSysClipboardText(xMSF);
                 } catch (com.sun.star.uno.Exception e) {
-                    log.println("Couldn't access system clipboard :");
+                    System.out.println("Couldn't access system clipboard :");
                     e.printStackTrace();
                 }
 
-                log.println("Clipboard: '" + cbText + "'");
+                System.out.println("Clipboard: '" + cbText + "'");
                 res &= text.substring(1, chCount - 1).equals(cbText);
             }
 
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("Unexpected exception");
+            System.out.println("Unexpected exception");
             e.printStackTrace();
             res &= false;
         }

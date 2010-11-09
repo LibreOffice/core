@@ -104,8 +104,8 @@ public:
     XubString           GetButtonText( USHORT nId ) const;
     void                SetButtonHelpText( USHORT nId, const XubString& rText );
     XubString           GetButtonHelpText( USHORT nId ) const;
-    void                SetButtonHelpId( USHORT nId, ULONG nHelpId );
-    ULONG               GetButtonHelpId( USHORT nId ) const;
+    void                SetButtonHelpId( USHORT nId, const rtl::OString& rHelpId );
+    rtl::OString        GetButtonHelpId( USHORT nId ) const;
 
     void                SetFocusButton( USHORT nId = BUTTONDIALOG_BUTTON_NOTFOUND ) { mnFocusButtonId = nId; }
     USHORT              GetFocusButton() const { return mnFocusButtonId; }

@@ -59,7 +59,7 @@ public:
     virtual ImplFontEntry*  CreateFontInstance( ImplFontSelectData& ) const;
     virtual sal_IntPtr      GetFontId() const;
 
-    ImplFontCharMap*        GetImplFontCharMap() const;
+    const ImplFontCharMap*  GetImplFontCharMap() const;
     bool                    HasChar( sal_uInt32 cChar ) const;
 
     void                    ReadOs2Table() const;
@@ -68,7 +68,7 @@ public:
 
 private:
     const ATSUFontID            mnFontId;
-    mutable ImplFontCharMap*    mpCharMap;
+    mutable const ImplFontCharMap*  mpCharMap;
     mutable bool                mbOs2Read;       // true if OS2-table related info is valid
     mutable bool                mbHasOs2Table;
     mutable bool                mbCmapEncodingRead; // true if cmap encoding of Mac font is read
@@ -281,7 +281,7 @@ public:
     // return only PairCount if (pKernPairs == NULL)
     virtual ULONG           GetKernPairs( ULONG nPairs, ImplKernPairData* pKernPairs );
     // get the repertoire of the current font
-    virtual ImplFontCharMap* GetImplFontCharMap() const;
+    virtual const ImplFontCharMap* GetImplFontCharMap() const;
     // graphics must fill supplied font list
     virtual void            GetDevFontList( ImplDevFontList* );
     // graphics should call ImplAddDevFontSubstitute on supplied
