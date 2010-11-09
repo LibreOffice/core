@@ -2061,6 +2061,7 @@ void Change( Menu* pMenu, SfxViewShell* pView )
                     if ( pSlot )
                     {
                         pMenu->InsertItem( pSlot->GetSlotId(), pMenu->GetItemText( nId ), pMenu->GetItemBits( nId ), nPos );
+                        pMenu->SetItemCommand( pSlot->GetSlotId(), aCmd );
                         pMenu->RemoveItem( nPos+1 );
                         break;
                     }
