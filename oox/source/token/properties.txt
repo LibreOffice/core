@@ -394,6 +394,8 @@ ShowPositiveError
 ShowZeroValues
 ShrinkToFit
 Size
+Size100thMM
+SizePixel
 SkipDuplicates
 SortInfo
 Sound
