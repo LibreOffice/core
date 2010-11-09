@@ -213,17 +213,17 @@ gb_StaticLibrary_OUTDIRLOCATION := $(OUTDIR)/lib
 
 # We are using a set of scopes that we might as well call classes.
 
-include $(foreach class,\
+include $(foreach class, \
     ComponentTarget \
-    LinkTarget\
-    Library\
-    StaticLibrary\
-    Executable\
-    SdiTarget\
-    AllLangResTarget\
-    Package\
-    PrecompiledHeaders\
-    Module\
+    LinkTarget \
+    Library \
+    StaticLibrary \
+    Executable \
+    SdiTarget \
+    AllLangResTarget \
+    Package \
+    PrecompiledHeaders \
+    Module \
 ,$(GBUILDDIR)/$(class).mk)
 
 # vim: set noet sw=4 ts=4:
