@@ -139,9 +139,9 @@ class SVL_DLLPUBLIC SfxListUndoAction : public SfxUndoAction, public SfxUndoArra
 class SAL_NO_VTABLE SfxUndoListener
 {
 public:
-    virtual void actionUndone( SfxUndoAction& i_action ) = 0;
-    virtual void actionRedone( SfxUndoAction& i_action ) = 0;
-    virtual void undoActionAdded( SfxUndoAction& i_action ) = 0;
+    virtual void actionUndone( const String& i_actionComment ) = 0;
+    virtual void actionRedone( const String& i_actionComment ) = 0;
+    virtual void undoActionAdded( const String& i_actionComment ) = 0;
     virtual void cleared() = 0;
     virtual void clearedRedo() = 0;
     virtual void listActionEntered( const String& i_comment ) = 0;
@@ -246,6 +246,12 @@ namespace svl
 
 //=========================================================================
 
+namespace svl { namespace undo { namespace impl
+{
+    class UndoManagerGuard;
+    class LockGuard;
+} } }
+
 struct SfxUndoManager_Data;
 class SVL_DLLPUBLIC SfxUndoManager : public ::svl::IUndoManager
 {
@@ -288,7 +294,16 @@ public:
     virtual void            RemoveUndoListener( SfxUndoListener& i_listener );
 
 private:
-    USHORT ImplLeaveListAction( const bool i_merge );
+    USHORT  ImplLeaveListAction( const bool i_merge );
+    bool    ImplAddUndoAction_NoNotify( SfxUndoAction* pAction, BOOL bTryMerge, ::svl::undo::impl::UndoManagerGuard& i_guard );
+    void    ImplClearRedo( ::svl::undo::impl::UndoManagerGuard& i_guard );
+    void    ImplClearUndo( ::svl::undo::impl::UndoManagerGuard& i_guard );
+    USHORT  ImplGetRedoActionCount_Lock( bool const i_currentLevel = CurrentLevel ) const;
+    bool    ImplIsUndoEnabled_Lock() const;
+    bool    ImplIsInListAction_Lock() const;
+    void    ImplEnableUndo_Lock( bool const i_enable );
+
+    friend ::svl::undo::impl::LockGuard;
 };
 
 //=========================================================================
