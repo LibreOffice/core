@@ -101,8 +101,7 @@ IDLFILES= \
     XTitle.idl \
     XTitled.idl \
     XTransformation.idl \
-    XUndoManager.idl \
-    XUndoSupplier.idl \
+    XDocumentActions.idl \
 
 # --- Targets ------------------------------------------------------
 
