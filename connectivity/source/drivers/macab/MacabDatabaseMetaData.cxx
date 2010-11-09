@@ -564,7 +564,7 @@ sal_Bool SAL_CALL MacabDatabaseMetaData::supportsANSI92IntermediateSQL(  ) throw
 {
     // if someday we support more than the default address book,
     // this method should return the URL which was used to create it
-    ::rtl::OUString aValue = ::rtl::OUString::createFromAscii("sdbc:address:macab:");
+    ::rtl::OUString aValue( RTL_CONSTASCII_USTRINGPARAM( "sdbc:address:macab:" ));
     return aValue;
 }
 // -------------------------------------------------------------------------
@@ -576,7 +576,7 @@ sal_Bool SAL_CALL MacabDatabaseMetaData::supportsANSI92IntermediateSQL(  ) throw
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL MacabDatabaseMetaData::getDriverName(  ) throw(SQLException, RuntimeException)
 {
-    ::rtl::OUString aValue = ::rtl::OUString::createFromAscii("macab");
+    ::rtl::OUString aValue( RTL_CONSTASCII_USTRINGPARAM( "macab" ));
     return aValue;
 }
 // -------------------------------------------------------------------------

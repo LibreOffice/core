@@ -193,7 +193,7 @@ void SAL_CALL OAdabasTable::alterColumnByName( const ::rtl::OUString& colName, c
                 const ::rtl::OUString sQuote = m_pConnection->getMetaData()->getIdentifierQuoteString(  );
                 const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
 
-                ::rtl::OUString sSql = ::rtl::OUString::createFromAscii("RENAME COLUMN ") ;
+                ::rtl::OUString sSql( RTL_CONSTASCII_USTRINGPARAM( "RENAME COLUMN " )) ;
                 sSql += ::dbtools::quoteName(sQuote,m_SchemaName) + sDot + ::dbtools::quoteName(sQuote,m_Name);
                 sSql += sDot + ::dbtools::quoteName(sQuote,colName);
                 sSql += ::rtl::OUString::createFromAscii(" TO ");
@@ -362,7 +362,7 @@ void OAdabasTable::rollbackTransAction()
 // -----------------------------------------------------------------------------
 ::rtl::OUString OAdabasTable::getAlterTableColumnPart(const ::rtl::OUString& _rsColumnName )
 {
-    ::rtl::OUString sSql = ::rtl::OUString::createFromAscii("ALTER TABLE ");
+    ::rtl::OUString sSql( RTL_CONSTASCII_USTRINGPARAM( "ALTER TABLE " ));
     const ::rtl::OUString sQuote = m_pConnection->getMetaData()->getIdentifierQuoteString(  );
     const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
 

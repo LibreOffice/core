@@ -65,7 +65,7 @@ sdbcx::ObjectType OKeys::appendObject( const ::rtl::OUString& _rForName, const R
 
     sal_Int32 nKeyType      = getINT32(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)));
 
-    ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("ALTER TABLE ");
+    ::rtl::OUString aSql( RTL_CONSTASCII_USTRINGPARAM( "ALTER TABLE " ));
     const ::rtl::OUString aQuote    = getTable()->getConnection()->getMetaData()->getIdentifierQuoteString(  );
     const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
 

@@ -60,7 +60,7 @@ SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(void* /*_pServiceMana
 
     try
     {
-        ::rtl::OUString sMainKeyName = ::rtl::OUString::createFromAscii("/");
+        ::rtl::OUString sMainKeyName( RTL_CONSTASCII_USTRINGPARAM( "/" ));
         sMainKeyName += ::drivermanager::OSDBCDriverManager::getImplementationName_static();
         sMainKeyName += ::rtl::OUString::createFromAscii("/UNO/SERVICES");
         Reference< XRegistryKey > xMainKey = _pRegistryKey->createKey(sMainKeyName);

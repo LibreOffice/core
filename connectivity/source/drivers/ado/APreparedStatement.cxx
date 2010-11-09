@@ -78,7 +78,7 @@ OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const OTypeInf
     {   // special handling for parameters
         /* we recusive replace all occurences of ? in the statement and replace them with name like "æ¬å" */
         sal_Int32 nParameterCount = 0;
-        ::rtl::OUString sDefaultName = ::rtl::OUString::createFromAscii("parame");
+        ::rtl::OUString sDefaultName( RTL_CONSTASCII_USTRINGPARAM( "parame" ));
         replaceParameterNodeName(pNode,sDefaultName,nParameterCount);
         pNode->parseNodeToStr( sNewSql, _pConnection );
         delete pNode;
@@ -225,7 +225,7 @@ void OPreparedStatement::setParameter(sal_Int32 parameterIndex, const DataTypeEn
     m_pParameters->get_Count(&nCount);
     if(nCount < (parameterIndex-1))
     {
-        ::rtl::OUString sDefaultName = ::rtl::OUString::createFromAscii("parame");
+        ::rtl::OUString sDefaultName( RTL_CONSTASCII_USTRINGPARAM( "parame" ));
         sDefaultName += ::rtl::OUString::valueOf(parameterIndex);
         ADOParameter* pParam = m_Command.CreateParameter(sDefaultName,_eType,adParamInput,_nSize,_Val);
         if(pParam)

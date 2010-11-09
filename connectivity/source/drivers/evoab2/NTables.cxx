@@ -60,7 +60,7 @@ typedef connectivity::sdbcx::OCollection OCollection_TYPE;
 
 ObjectType OEvoabTables::createObject(const ::rtl::OUString& aName)
 {
-    ::rtl::OUString aSchema = ::rtl::OUString::createFromAscii("%");
+    ::rtl::OUString aSchema( RTL_CONSTASCII_USTRINGPARAM( "%" ));
 
     Sequence< ::rtl::OUString > aTypes(1);
     aTypes[0] = ::rtl::OUString::createFromAscii("TABLE");

@@ -352,7 +352,7 @@ void OMySQLTable::dropDefaultValue(const ::rtl::OUString& _rColName)
 // -----------------------------------------------------------------------------
 ::rtl::OUString OMySQLTable::getAlterTableColumnPart()
 {
-    ::rtl::OUString sSql = ::rtl::OUString::createFromAscii("ALTER TABLE ");
+    ::rtl::OUString sSql( RTL_CONSTASCII_USTRINGPARAM( "ALTER TABLE " ));
     const ::rtl::OUString sQuote = getMetaData()->getIdentifierQuoteString(  );
 
     ::rtl::OUString sComposedName(

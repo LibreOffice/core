@@ -240,7 +240,7 @@ namespace
         static const ::rtl::OUString sComma(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(",")));
 
         const ::rtl::OUString sQuote(_xMetaData->getIdentifierQuoteString());
-        ::rtl::OUString sSql = ::rtl::OUString::createFromAscii(" (");
+        ::rtl::OUString sSql( RTL_CONSTASCII_USTRINGPARAM( " (" ));
         Reference< XPropertySet > xColProp;
 
         sal_Int32 nColCount  = _xColumns->getCount();
@@ -681,15 +681,15 @@ sal_Int32 getTablePrivileges(const Reference< XDatabaseMetaData>& _xMetaData,
         if ( xCurrentRow.is() )
         {
             ::rtl::OUString sUserWorkingFor = _xMetaData->getUserName();
-            static const ::rtl::OUString sSELECT    = ::rtl::OUString::createFromAscii("SELECT");
-            static const ::rtl::OUString sINSERT    = ::rtl::OUString::createFromAscii("INSERT");
-            static const ::rtl::OUString sUPDATE    = ::rtl::OUString::createFromAscii("UPDATE");
-            static const ::rtl::OUString sDELETE    = ::rtl::OUString::createFromAscii("DELETE");
-            static const ::rtl::OUString sREAD      = ::rtl::OUString::createFromAscii("READ");
-            static const ::rtl::OUString sCREATE    = ::rtl::OUString::createFromAscii("CREATE");
-            static const ::rtl::OUString sALTER     = ::rtl::OUString::createFromAscii("ALTER");
-            static const ::rtl::OUString sREFERENCE = ::rtl::OUString::createFromAscii("REFERENCE");
-            static const ::rtl::OUString sDROP      = ::rtl::OUString::createFromAscii("DROP");
+            static const ::rtl::OUString sSELECT( RTL_CONSTASCII_USTRINGPARAM( "SELECT" ));
+            static const ::rtl::OUString sINSERT( RTL_CONSTASCII_USTRINGPARAM( "INSERT" ));
+            static const ::rtl::OUString sUPDATE( RTL_CONSTASCII_USTRINGPARAM( "UPDATE" ));
+            static const ::rtl::OUString sDELETE( RTL_CONSTASCII_USTRINGPARAM( "DELETE" ));
+            static const ::rtl::OUString sREAD( RTL_CONSTASCII_USTRINGPARAM( "READ" ));
+            static const ::rtl::OUString sCREATE( RTL_CONSTASCII_USTRINGPARAM( "CREATE" ));
+            static const ::rtl::OUString sALTER( RTL_CONSTASCII_USTRINGPARAM( "ALTER" ));
+            static const ::rtl::OUString sREFERENCE( RTL_CONSTASCII_USTRINGPARAM( "REFERENCE" ));
+            static const ::rtl::OUString sDROP( RTL_CONSTASCII_USTRINGPARAM( "DROP" ));
             // after creation the set is positioned before the first record, per definitionem
 #ifdef DBG_UTIL
             Reference< XResultSetMetaDataSupplier > xSup(xPrivileges,UNO_QUERY);
@@ -750,7 +750,7 @@ sal_Int32 getTablePrivileges(const Reference< XDatabaseMetaData>& _xMetaData,
     }
     catch(const SQLException& e)
     {
-        static ::rtl::OUString sNotSupportedState = ::rtl::OUString::createFromAscii("IM001");
+        static ::rtl::OUString sNotSupportedState( RTL_CONSTASCII_USTRINGPARAM( "IM001" ));
         // some drivers don't support any privileges so we assume that we are allowed to do all we want :-)
         if(e.SQLState == sNotSupportedState)
             nPrivileges |=  Privilege::DROP         |

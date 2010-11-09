@@ -81,7 +81,7 @@ Reference< XPropertySet > OUsers::createDescriptor()
 // XAppend
 sdbcx::ObjectType OUsers::appendObject( const ::rtl::OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
-    ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("GRANT USAGE ON * TO ");
+    ::rtl::OUString aSql( RTL_CONSTASCII_USTRINGPARAM( "GRANT USAGE ON * TO " ));
     ::rtl::OUString aQuote  = m_xConnection->getMetaData()->getIdentifierQuoteString(  );
     ::rtl::OUString sUserName( _rForName );
     aSql += ::dbtools::quoteName(aQuote,sUserName)
@@ -106,7 +106,7 @@ sdbcx::ObjectType OUsers::appendObject( const ::rtl::OUString& _rForName, const 
 // XDrop
 void OUsers::dropObject(sal_Int32 /*_nPos*/,const ::rtl::OUString _sElementName)
 {
-    ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("REVOKE ALL ON * FROM ");
+    ::rtl::OUString aSql( RTL_CONSTASCII_USTRINGPARAM( "REVOKE ALL ON * FROM " ));
     ::rtl::OUString aQuote  = m_xConnection->getMetaData()->getIdentifierQuoteString(  );
     aSql += ::dbtools::quoteName(aQuote,_sElementName);
 

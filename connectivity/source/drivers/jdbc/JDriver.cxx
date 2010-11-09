@@ -129,7 +129,7 @@ sal_Bool SAL_CALL java_sql_Driver::acceptsURL( const ::rtl::OUString& url ) thro
     // I feel responsible for all jdbc url's
     sal_Bool bEnabled = sal_False;
     OSL_VERIFY_EQUALS( jfw_getEnabled( &bEnabled ), JFW_E_NONE, "error in jfw_getEnabled" );
-    static const ::rtl::OUString s_sJdbcPrefix = ::rtl::OUString::createFromAscii("jdbc:");
+    static const ::rtl::OUString s_sJdbcPrefix( RTL_CONSTASCII_USTRINGPARAM( "jdbc:" ));
     return bEnabled && 0 == url.compareTo(s_sJdbcPrefix, 5);
 }
 // -------------------------------------------------------------------------

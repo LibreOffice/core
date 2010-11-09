@@ -391,7 +391,7 @@ sal_Bool SAL_CALL ODbaseDatabaseMetaData::isReadOnly(  ) throw(SQLException, Run
     ::osl::MutexGuard aGuard( m_aMutex );
 
     sal_Bool bReadOnly = sal_False;
-    static ::rtl::OUString sReadOnly = ::rtl::OUString::createFromAscii("IsReadOnly");
+    static ::rtl::OUString sReadOnly( RTL_CONSTASCII_USTRINGPARAM( "IsReadOnly" ));
     ::ucbhelper::Content aFile(m_pConnection->getContent(),Reference< XCommandEnvironment >());
     aFile.getPropertyValue(sReadOnly) >>= bReadOnly;
 

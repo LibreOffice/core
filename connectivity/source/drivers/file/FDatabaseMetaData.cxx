@@ -973,7 +973,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsANSI92IntermediateSQL(  ) throw(SQL
 ::rtl::OUString SAL_CALL ODatabaseMetaData::getURL(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "ODatabaseMetaData::getURL" );
-    static const ::rtl::OUString aValue = ::rtl::OUString::createFromAscii("sdbc:file:");
+    static const ::rtl::OUString aValue( RTL_CONSTASCII_USTRINGPARAM( "sdbc:file:" ));
     return aValue;
 }
 // -------------------------------------------------------------------------

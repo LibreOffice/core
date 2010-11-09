@@ -567,7 +567,7 @@ sal_Bool SAL_CALL KabDatabaseMetaData::supportsANSI92IntermediateSQL(  ) throw(S
 {
     // if someday we support more than the default address book,
     // this method should return the URL which was used to create it
-    ::rtl::OUString aValue = ::rtl::OUString::createFromAscii("sdbc:address:kab:");
+    ::rtl::OUString aValue( RTL_CONSTASCII_USTRINGPARAM( "sdbc:address:kab:" ));
     return aValue;
 }
 // -------------------------------------------------------------------------
@@ -579,7 +579,7 @@ sal_Bool SAL_CALL KabDatabaseMetaData::supportsANSI92IntermediateSQL(  ) throw(S
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL KabDatabaseMetaData::getDriverName(  ) throw(SQLException, RuntimeException)
 {
-    ::rtl::OUString aValue = ::rtl::OUString::createFromAscii("kab");
+    ::rtl::OUString aValue( RTL_CONSTASCII_USTRINGPARAM( "kab" ));
     return aValue;
 }
 // -------------------------------------------------------------------------

@@ -105,7 +105,7 @@ sdbcx::ObjectType OIndexes::appendObject( const ::rtl::OUString& _rForName, cons
     if ( m_pTable->isNew() )
         ::dbtools::throwFunctionSequenceException(static_cast<XTypeProvider*>(this));
 
-    ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("CREATE ");
+    ::rtl::OUString aSql( RTL_CONSTASCII_USTRINGPARAM( "CREATE " ));
     ::rtl::OUString aQuote  = m_pTable->getMetaData()->getIdentifierQuoteString(  );
     const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
 
@@ -171,7 +171,7 @@ void OIndexes::dropObject(sal_Int32 /*_nPos*/,const ::rtl::OUString _sElementNam
         aSchema = _sElementName.copy(0,nLen);
         aName   = _sElementName.copy(nLen+1);
 
-        ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("DROP INDEX ");
+        ::rtl::OUString aSql( RTL_CONSTASCII_USTRINGPARAM( "DROP INDEX " ));
         ::rtl::OUString aQuote  = m_pTable->getMetaData()->getIdentifierQuoteString(  );
         const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
 

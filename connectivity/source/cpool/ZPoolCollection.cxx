@@ -49,31 +49,31 @@ using namespace connectivity;
 //--------------------------------------------------------------------
 static const ::rtl::OUString& getConnectionPoolNodeName()
 {
-    static ::rtl::OUString s_sNodeName = ::rtl::OUString::createFromAscii("org.openoffice.Office.DataAccess/ConnectionPool");
+    static ::rtl::OUString s_sNodeName( RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.Office.DataAccess/ConnectionPool" ));
     return s_sNodeName;
 }
 //--------------------------------------------------------------------
 static const ::rtl::OUString& getEnablePoolingNodeName()
 {
-    static ::rtl::OUString s_sNodeName = ::rtl::OUString::createFromAscii("EnablePooling");
+    static ::rtl::OUString s_sNodeName( RTL_CONSTASCII_USTRINGPARAM( "EnablePooling" ));
     return s_sNodeName;
 }
 //--------------------------------------------------------------------
 static const ::rtl::OUString& getDriverNameNodeName()
 {
-    static ::rtl::OUString s_sNodeName = ::rtl::OUString::createFromAscii("DriverName");
+    static ::rtl::OUString s_sNodeName( RTL_CONSTASCII_USTRINGPARAM( "DriverName" ));
     return s_sNodeName;
 }
 // -----------------------------------------------------------------------------
 static const ::rtl::OUString& getDriverSettingsNodeName()
 {
-    static ::rtl::OUString s_sNodeName = ::rtl::OUString::createFromAscii("DriverSettings");
+    static ::rtl::OUString s_sNodeName( RTL_CONSTASCII_USTRINGPARAM( "DriverSettings" ));
     return s_sNodeName;
 }
 //--------------------------------------------------------------------------
 static const ::rtl::OUString& getEnableNodeName()
 {
-    static ::rtl::OUString s_sNodeName = ::rtl::OUString::createFromAscii("Enable");
+    static ::rtl::OUString s_sNodeName( RTL_CONSTASCII_USTRINGPARAM( "Enable" ));
     return s_sNodeName;
 }
 
@@ -406,7 +406,7 @@ Reference< XInterface > OPoolCollection::createWithProvider(const Reference< XMu
             aCreationArgs[1] = makeAny(PropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("depth")), 0, makeAny((sal_Int32)-1), PropertyState_DIRECT_VALUE));
             aCreationArgs[2] = makeAny(PropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("lazywrite")), 0, makeAny(sal_True), PropertyState_DIRECT_VALUE));
 
-            static ::rtl::OUString sAccessService = ::rtl::OUString::createFromAscii("com.sun.star.configuration.ConfigurationAccess");
+            static ::rtl::OUString sAccessService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationAccess" ));
 
             xInterface = _rxConfProvider->createInstanceWithArguments(sAccessService, aCreationArgs);
             OSL_ENSURE(xInterface.is(), "::createWithProvider: could not create the node access!");

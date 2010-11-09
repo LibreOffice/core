@@ -112,7 +112,7 @@ sdbcx::ObjectType OTables::appendObject( const ::rtl::OUString& _rForName, const
 // -------------------------------------------------------------------------
 void OTables::setComments(const Reference< XPropertySet >& descriptor ) throw(SQLException, RuntimeException)
 {
-    ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("CREATE TABLE ");
+    ::rtl::OUString aSql( RTL_CONSTASCII_USTRINGPARAM( "CREATE TABLE " ));
     ::rtl::OUString aQuote  = static_cast<OAdabasCatalog&>(m_rParent).getConnection()->getMetaData()->getIdentifierQuoteString(  );
     const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
 
@@ -175,7 +175,7 @@ void OTables::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
         sal_Int32 nLen = _sElementName.indexOf('.');
         aSchema = _sElementName.copy(0,nLen);
         aName   = _sElementName.copy(nLen+1);
-        ::rtl::OUString aSql = ::rtl::OUString::createFromAscii("DROP ");
+        ::rtl::OUString aSql( RTL_CONSTASCII_USTRINGPARAM( "DROP " ));
         const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
 
         Reference<XPropertySet> xProp(xObject,UNO_QUERY);
@@ -202,7 +202,7 @@ void OTables::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
 // -------------------------------------------------------------------------
 void OTables::createTable( const Reference< XPropertySet >& descriptor )
 {
-    ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("CREATE TABLE ");
+    ::rtl::OUString aSql( RTL_CONSTASCII_USTRINGPARAM( "CREATE TABLE " ));
     ::rtl::OUString aQuote  = static_cast<OAdabasCatalog&>(m_rParent).getConnection()->getMetaData()->getIdentifierQuoteString(  );
     const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
     ::rtl::OUString sSchema;

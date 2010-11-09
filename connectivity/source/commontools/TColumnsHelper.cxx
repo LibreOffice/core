@@ -182,7 +182,7 @@ sdbcx::ObjectType OColumnsHelper::appendObject( const ::rtl::OUString& _rForName
         return cloneDescriptor( descriptor );
 
     Reference<XDatabaseMetaData> xMetaData = m_pTable->getConnection()->getMetaData();
-    ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("ALTER TABLE ");
+    ::rtl::OUString aSql( RTL_CONSTASCII_USTRINGPARAM( "ALTER TABLE " ));
     ::rtl::OUString aQuote  = xMetaData->getIdentifierQuoteString(  );
 
     aSql += ::dbtools::composeTableName( xMetaData, m_pTable, ::dbtools::eInTableDefinitions, false, false, true );
@@ -204,7 +204,7 @@ void OColumnsHelper::dropObject(sal_Int32 /*_nPos*/,const ::rtl::OUString _sElem
     OSL_ENSURE(m_pTable,"OColumnsHelper::dropByName: Table is null!");
     if ( m_pTable && !m_pTable->isNew() )
     {
-        ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("ALTER TABLE ");
+        ::rtl::OUString aSql( RTL_CONSTASCII_USTRINGPARAM( "ALTER TABLE " ));
         Reference<XDatabaseMetaData> xMetaData = m_pTable->getConnection()->getMetaData();
         ::rtl::OUString aQuote  = xMetaData->getIdentifierQuoteString(  );
 

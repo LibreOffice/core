@@ -202,16 +202,11 @@ Any SAL_CALL ODriverEnumeration::nextElement(  ) throw(NoSuchElementException, W
         try
         {
             // some strings we need
-            const ::rtl::OUString sConfigurationProviderServiceName =
-                ::rtl::OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider");
-            const ::rtl::OUString sDriverManagerConfigLocation =
-                ::rtl::OUString::createFromAscii("org.openoffice.Office.DataAccess/DriverManager");
-            const ::rtl::OUString sDriverPreferenceLocation =
-                ::rtl::OUString::createFromAscii("DriverPrecedence");
-            const ::rtl::OUString sNodePathArgumentName =
-                ::rtl::OUString::createFromAscii("nodepath");
-            const ::rtl::OUString sNodeAccessServiceName =
-                ::rtl::OUString::createFromAscii("com.sun.star.configuration.ConfigurationAccess");
+            const ::rtl::OUString sConfigurationProviderServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationProvider" ));
+            const ::rtl::OUString sDriverManagerConfigLocation( RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.Office.DataAccess/DriverManager" ));
+            const ::rtl::OUString sDriverPreferenceLocation( RTL_CONSTASCII_USTRINGPARAM( "DriverPrecedence" ));
+            const ::rtl::OUString sNodePathArgumentName( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ));
+            const ::rtl::OUString sNodeAccessServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationAccess" ));
 
             // create a configuration provider
             Reference< XMultiServiceFactory > xConfigurationProvider;

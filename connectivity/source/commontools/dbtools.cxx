@@ -432,7 +432,7 @@ SharedConnection lcl_connectRowSet(const Reference< XRowSet>& _rxRowSet, const R
 
         // build a connection with it's current settings (4. data source name, or 5. URL)
 
-        const ::rtl::OUString sUserProp = ::rtl::OUString::createFromAscii("User");
+        const ::rtl::OUString sUserProp( RTL_CONSTASCII_USTRINGPARAM( "User" ));
         ::rtl::OUString sDataSourceName;
         xRowSetProps->getPropertyValue(::rtl::OUString::createFromAscii("DataSourceName")) >>= sDataSourceName;
         ::rtl::OUString sURL;
@@ -989,7 +989,7 @@ Reference< XNumberFormatsSupplier> getNumberFormats(
     // ask the parent of the connection (should be an DatabaseAccess)
     Reference< XNumberFormatsSupplier> xReturn;
     Reference< XChild> xConnAsChild(_rxConn, UNO_QUERY);
-    ::rtl::OUString sPropFormatsSupplier = ::rtl::OUString::createFromAscii("NumberFormatsSupplier");
+    ::rtl::OUString sPropFormatsSupplier( RTL_CONSTASCII_USTRINGPARAM( "NumberFormatsSupplier" ));
     if (xConnAsChild.is())
     {
         Reference< XPropertySet> xConnParentProps(xConnAsChild->getParent(), UNO_QUERY);
@@ -1544,7 +1544,7 @@ void showError(const SQLExceptionInfo& _rInfo,
             aArgs[0] <<= PropertyValue(::rtl::OUString::createFromAscii("SQLException"), 0, _rInfo.get(), PropertyState_DIRECT_VALUE);
             aArgs[1] <<= PropertyValue(::rtl::OUString::createFromAscii("ParentWindow"), 0, makeAny(_xParent), PropertyState_DIRECT_VALUE);
 
-            static ::rtl::OUString s_sDialogServiceName = ::rtl::OUString::createFromAscii("com.sun.star.sdb.ErrorMessageDialog");
+            static ::rtl::OUString s_sDialogServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.ErrorMessageDialog" ));
             Reference< XExecutableDialog > xErrorDialog(
                 _xFactory->createInstanceWithArguments(s_sDialogServiceName, aArgs), UNO_QUERY);
             if (xErrorDialog.is())

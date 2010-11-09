@@ -70,7 +70,7 @@ void OAdabasUser::refreshGroups()
     TStringVector aVector;
     aVector.reserve(7); // we don't know the excatly count of users but this should fit the normal need
     Reference< XStatement > xStmt = m_pConnection->createStatement(  );
-    ::rtl::OUString aSql = ::rtl::OUString::createFromAscii("SELECT DISTINCT GROUPNAME FROM DOMAIN.USERS WHERE GROUPNAME IS NOT NULL AND GROUPNAME <> ' ' AND USERNAME = '");
+    ::rtl::OUString aSql( RTL_CONSTASCII_USTRINGPARAM( "SELECT DISTINCT GROUPNAME FROM DOMAIN.USERS WHERE GROUPNAME IS NOT NULL AND GROUPNAME <> ' ' AND USERNAME = '" ));
     aSql += getName( );
     aSql += ::rtl::OUString::createFromAscii("'");
 
@@ -136,7 +136,7 @@ void OAdabasUser::getAnyTablePrivileges(const ::rtl::OUString& objName, sal_Int3
     ::rtl::OUString sCatalog,sSchema,sTable;
     ::dbtools::qualifiedNameComponents(xMeta,objName,sCatalog,sSchema,sTable,::dbtools::eInDataManipulation);
     Reference<XStatement> xStmt = m_pConnection->createStatement();
-    ::rtl::OUString sSql = ::rtl::OUString::createFromAscii("SELECT REFTABLENAME,PRIVILEGES FROM DOMAIN.USR_USES_TAB WHERE REFOBJTYPE <> 'SYSTEM' AND DEFUSERNAME = '");
+    ::rtl::OUString sSql( RTL_CONSTASCII_USTRINGPARAM( "SELECT REFTABLENAME,PRIVILEGES FROM DOMAIN.USR_USES_TAB WHERE REFOBJTYPE <> 'SYSTEM' AND DEFUSERNAME = '" ));
     sSql += m_Name;
     sSql += ::rtl::OUString::createFromAscii("' AND REFTABLENAME = '");
     sSql += sTable;

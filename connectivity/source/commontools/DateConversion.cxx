@@ -274,7 +274,7 @@ void DBTypeConversion::setValue(const Reference<XColumnUpdate>& xVariant,
             {   // die Formatierung soll eigentlich als Prozent erfolgen, aber der String stellt nur eine
                 // einfache Nummer dar -> anpassen
                 ::rtl::OUString sExpanded(rString);
-                static ::rtl::OUString s_sPercentSymbol = ::rtl::OUString::createFromAscii("%");
+                static ::rtl::OUString s_sPercentSymbol( RTL_CONSTASCII_USTRINGPARAM( "%" ));
                     // need a method to add a sal_Unicode to a string, 'til then we use a static string
                 sExpanded += s_sPercentSymbol;
                 fValue = xFormatter->convertStringToNumber(nKeyToUse, sExpanded);

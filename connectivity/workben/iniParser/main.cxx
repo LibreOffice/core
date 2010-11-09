@@ -97,7 +97,7 @@ public:
             sal_uInt64 nSize = 0;
 
             osl_getFileSize(handle, &nSize);
-            OUString sectionName = OUString::createFromAscii("no name section");
+            OUString sectionName( RTL_CONSTASCII_USTRINGPARAM( "no name section" ));
             while (true)
             {
                 sal_uInt64 nPos;

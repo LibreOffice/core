@@ -283,7 +283,7 @@ namespace
 
         static const ::rtl::OUString s_sTableTypeView(RTL_CONSTASCII_USTRINGPARAM("VIEW"));
         static const ::rtl::OUString s_sTableTypeTable(RTL_CONSTASCII_USTRINGPARAM("TABLE"));
-        static const ::rtl::OUString s_sWildcard = ::rtl::OUString::createFromAscii("%");
+        static const ::rtl::OUString s_sWildcard( RTL_CONSTASCII_USTRINGPARAM( "%" ));
 
         // we want all catalogues, all schemas, all tables
         Sequence< ::rtl::OUString > sTableTypes(3);

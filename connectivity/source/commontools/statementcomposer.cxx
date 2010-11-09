@@ -193,7 +193,7 @@ namespace dbtools
 
                         // the filter
                         sal_Bool bApplyFilter = sal_True;
-                        const ::rtl::OUString sPropApply = ::rtl::OUString::createFromAscii( "ApplyFilter" );
+                        const ::rtl::OUString sPropApply( RTL_CONSTASCII_USTRINGPARAM( "ApplyFilter" ));
                         if ( ::comphelper::hasProperty( sPropApply, xQuery ) )
                         {
                             OSL_VERIFY( xQuery->getPropertyValue( sPropApply ) >>= bApplyFilter );

@@ -87,7 +87,7 @@ void _cdecl main( int argc, char * argv[] )
                     Reference<XResultSet> xRes = xStmt->executeQuery(OUString::createFromAscii("SELECT * FROM Tele"));
                     if(xRes.is())
                     {
-                        ::rtl::OUString aPat = ::rtl::OUString::createFromAscii("%s\t");
+                        ::rtl::OUString aPat( RTL_CONSTASCII_USTRINGPARAM( "%s\t" ));
                         Reference<XRow> xRow(xRes,UNO_QUERY);
                         Reference<XResultSetMetaData> xMeta = Reference<XResultSetMetaDataSupplier>(xRes,UNO_QUERY)->getMetaData();
                         for(sal_Int32 i=1;i<xMeta->getColumnCount();++i)

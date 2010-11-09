@@ -90,9 +90,9 @@ static NS_DEFINE_CID(kCharsetConverterManagerCID, NS_ICHARSETCONVERTERMANAGER_CI
 
 // Registry Keys
 
-static ::rtl::OUString szProfileSubtreeString=::rtl::OUString::createFromAscii("Profiles");
-static ::rtl::OUString szCurrentProfileString= ::rtl::OUString::createFromAscii("CurrentProfile");
-static ::rtl::OUString szDirectoryString =::rtl::OUString::createFromAscii("directory");
+static ::rtl::OUString szProfileSubtreeString( RTL_CONSTASCII_USTRINGPARAM( "Profiles" ));
+static ::rtl::OUString szCurrentProfileString( RTL_CONSTASCII_USTRINGPARAM( "CurrentProfile" ));
+static ::rtl::OUString szDirectoryString( RTL_CONSTASCII_USTRINGPARAM( "directory" ));
 
 #ifndef MAXPATHLEN
 #define MAXPATHLEN 1024

@@ -131,16 +131,16 @@ void OMySQLUser::findPrivilegesAndGrantPrivileges(const ::rtl::OUString& objName
 
     if ( xRes.is() )
     {
-        static const ::rtl::OUString sSELECT    = ::rtl::OUString::createFromAscii("SELECT");
-        static const ::rtl::OUString sINSERT    = ::rtl::OUString::createFromAscii("INSERT");
-        static const ::rtl::OUString sUPDATE    = ::rtl::OUString::createFromAscii("UPDATE");
-        static const ::rtl::OUString sDELETE    = ::rtl::OUString::createFromAscii("DELETE");
-        static const ::rtl::OUString sREAD      = ::rtl::OUString::createFromAscii("READ");
-        static const ::rtl::OUString sCREATE    = ::rtl::OUString::createFromAscii("CREATE");
-        static const ::rtl::OUString sALTER     = ::rtl::OUString::createFromAscii("ALTER");
-        static const ::rtl::OUString sREFERENCE = ::rtl::OUString::createFromAscii("REFERENCE");
-        static const ::rtl::OUString sDROP      = ::rtl::OUString::createFromAscii("DROP");
-        static const ::rtl::OUString sYes       = ::rtl::OUString::createFromAscii("YES");
+        static const ::rtl::OUString sSELECT( RTL_CONSTASCII_USTRINGPARAM( "SELECT" ));
+        static const ::rtl::OUString sINSERT( RTL_CONSTASCII_USTRINGPARAM( "INSERT" ));
+        static const ::rtl::OUString sUPDATE( RTL_CONSTASCII_USTRINGPARAM( "UPDATE" ));
+        static const ::rtl::OUString sDELETE( RTL_CONSTASCII_USTRINGPARAM( "DELETE" ));
+        static const ::rtl::OUString sREAD( RTL_CONSTASCII_USTRINGPARAM( "READ" ));
+        static const ::rtl::OUString sCREATE( RTL_CONSTASCII_USTRINGPARAM( "CREATE" ));
+        static const ::rtl::OUString sALTER( RTL_CONSTASCII_USTRINGPARAM( "ALTER" ));
+        static const ::rtl::OUString sREFERENCE( RTL_CONSTASCII_USTRINGPARAM( "REFERENCE" ));
+        static const ::rtl::OUString sDROP( RTL_CONSTASCII_USTRINGPARAM( "DROP" ));
+        static const ::rtl::OUString sYes( RTL_CONSTASCII_USTRINGPARAM( "YES" ));
 
         nRightsWithGrant = nRights = 0;
 

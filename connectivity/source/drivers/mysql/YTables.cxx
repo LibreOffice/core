@@ -157,7 +157,7 @@ void OTables::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
         ::rtl::OUString sCatalog,sSchema,sTable;
         ::dbtools::qualifiedNameComponents(m_xMetaData,_sElementName,sCatalog,sSchema,sTable,::dbtools::eInDataManipulation);
 
-        ::rtl::OUString aSql = ::rtl::OUString::createFromAscii("DROP ");
+        ::rtl::OUString aSql( RTL_CONSTASCII_USTRINGPARAM( "DROP " ));
 
         Reference<XPropertySet> xProp(xObject,UNO_QUERY);
         sal_Bool bIsView = xProp.is() && ::comphelper::getString(xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))) == ::rtl::OUString::createFromAscii("VIEW");

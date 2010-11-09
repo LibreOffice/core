@@ -327,7 +327,7 @@ void OHSQLTable::dropDefaultValue(const ::rtl::OUString& _rColName)
 // -----------------------------------------------------------------------------
 ::rtl::OUString OHSQLTable::getAlterTableColumnPart()
 {
-    ::rtl::OUString sSql = ::rtl::OUString::createFromAscii("ALTER TABLE ");
+    ::rtl::OUString sSql( RTL_CONSTASCII_USTRINGPARAM( "ALTER TABLE " ));
     const ::rtl::OUString sQuote = getMetaData()->getIdentifierQuoteString(  );
 
     ::rtl::OUString sComposedName( ::dbtools::composeTableName( getMetaData(), m_CatalogName, m_SchemaName, m_Name, sal_True, ::dbtools::eInTableDefinitions ) );
