@@ -261,7 +261,7 @@ ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const String& rNewName,
     pSearchParam( NULL ),
     pSearchText ( NULL ),
     pSortCollator( NULL ),
-    bPrintEntireSheet( FALSE ),
+    bPrintEntireSheet(true),
     pRepeatColRange( NULL ),
     pRepeatRowRange( NULL ),
     nLockCount( 0 ),
@@ -1664,7 +1664,7 @@ void ScTable::SetRepeatRowRange( const ScRange* pNew )
 void ScTable::ClearPrintRanges()
 {
     aPrintRanges.clear();
-    bPrintEntireSheet = FALSE;
+    bPrintEntireSheet = false;
 
     if (IsStreamValid())
         SetStreamValid(FALSE);
@@ -1672,7 +1672,7 @@ void ScTable::ClearPrintRanges()
 
 void ScTable::AddPrintRange( const ScRange& rNew )
 {
-    bPrintEntireSheet = FALSE;
+    bPrintEntireSheet = false;
     if( aPrintRanges.size() < 0xFFFF )
         aPrintRanges.push_back( rNew );
 
