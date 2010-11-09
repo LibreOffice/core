@@ -821,6 +821,16 @@ BOOL ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
             rMark.MarkFromRangeList( rRanges, FALSE );
             rMark.MarkToSimple();
 
+            if ( rMark.IsMultiMarked() )
+            {
+                // #i115266# copy behavior of old printing:
+                // treat multiple selection like a single selection with the enclosing range
+                ScRange aMultiMarkArea;
+                rMark.GetMultiMarkArea( aMultiMarkArea );
+                rMark.ResetMark();
+                rMark.SetMarkArea( aMultiMarkArea );
+            }
+
             if ( rMark.IsMarked() && !rMark.IsMultiMarked() )
             {
                 // a sheet object is treated like an empty selection: print the used area of the sheet
@@ -980,15 +990,17 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
     ScMarkData aMark;
     ScPrintSelectionStatus aStatus;
     String aPagesStr;
-    if ( !FillRenderMarkData( aSelection, rOptions, aMark, aStatus, aPagesStr ) )
-        throw lang::IllegalArgumentException();
-
-    if ( !pPrintFuncCache || !pPrintFuncCache->IsSameSelection( aStatus ) )
+    // #i115266# if FillRenderMarkData fails, keep nTotalPages at 0, but still handle getRenderer(0) below
+    long nTotalPages = 0;
+    if ( FillRenderMarkData( aSelection, rOptions, aMark, aStatus, aPagesStr ) )
     {
-        delete pPrintFuncCache;
-        pPrintFuncCache = new ScPrintFuncCache( pDocShell, aMark, aStatus );
+        if ( !pPrintFuncCache || !pPrintFuncCache->IsSameSelection( aStatus ) )
+        {
+            delete pPrintFuncCache;
+            pPrintFuncCache = new ScPrintFuncCache( pDocShell, aMark, aStatus );
+        }
+        nTotalPages = pPrintFuncCache->GetPageCount();
     }
-    long nTotalPages = pPrintFuncCache->GetPageCount();
     sal_Int32 nRenderer = lcl_GetRendererNum( nSelRenderer, aPagesStr, nTotalPages );
     if ( nRenderer >= nTotalPages )
     {

@@ -2805,7 +2805,7 @@ BOOL ScDocFunc::DeleteTable( SCTAB nTab, BOOL bRecord, BOOL /* bApi */ )
         if (bRecord)
         {
             SvShorts theTabs;
-            theTabs.Insert(nTab,theTabs.Count());
+            theTabs.push_back(nTab);
             rDocShell.GetUndoManager()->AddUndoAction(
                         new ScUndoDeleteTab( &rDocShell, theTabs, pUndoDoc, pUndoData ));
         }

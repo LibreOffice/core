@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--**********************************************************************
+*
+* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+*
+* Copyright 2000, 2010 Oracle and/or its affiliates.
+*
+* OpenOffice.org - a multi-platform office productivity suite
+*
+* This file is part of OpenOffice.org.
+*
+* OpenOffice.org is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License version 3
+* only, as published by the Free Software Foundation.
+*
+* OpenOffice.org is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU Lesser General Public License version 3 for more details
+* (a copy is included in the LICENSE file that accompanied this code).
+*
+* You should have received a copy of the GNU Lesser General Public License
+* version 3 along with OpenOffice.org.  If not, see
+* <http://www.openoffice.org/license.html>
+* for a copy of the LGPLv3 License.
+*
+**********************************************************************-->
+
+<component loader="com.sun.star.loader.SharedLibrary"
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.chart.AreaChartType">
+    <service name="com.sun.star.chart2.AreaChartType"/>
+    <service name="com.sun.star.chart2.ChartType"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.chart.BarChartType">
+    <service name="com.sun.star.chart2.BarChartType"/>
+    <service name="com.sun.star.chart2.ChartType"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.chart.BubbleChartType">
+    <service name="com.sun.star.beans.PropertySet"/>
+    <service name="com.sun.star.chart2.BubbleChartType"/>
+    <service name="com.sun.star.chart2.ChartType"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.chart.CandleStickChartType">
+    <service name="com.sun.star.beans.PropertySet"/>
+    <service name="com.sun.star.chart2.CandleStickChartType"/>
+    <service name="com.sun.star.chart2.ChartType"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.chart.ChartTypeManager">
+    <service name="com.sun.star.chart2.ChartTypeManager"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.chart.ColumnChartType">
+    <service name="com.sun.star.chart2.ChartType"/>
+    <service name="com.sun.star.chart2.ColumnChartType"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.chart.DataSeries">
+    <service name="com.sun.star.beans.PropertySet"/>
+    <service name="com.sun.star.chart2.DataPointProperties"/>
+    <service name="com.sun.star.chart2.DataSeries"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.chart.FilledNetChartType">
+    <service name="com.sun.star.beans.PropertySet"/>
+    <service name="com.sun.star.chart2.ChartType"/>
+    <service name="com.sun.star.chart2.FilledNetChartType"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.chart.FormattedString">
+    <service name="com.sun.star.beans.PropertySet"/>
+    <service name="com.sun.star.chart2.FormattedString"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.chart.LineChartType">
+    <service name="com.sun.star.beans.PropertySet"/>
+    <service name="com.sun.star.chart2.ChartType"/>
+    <service name="com.sun.star.chart2.LineChartType"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.chart.NetChartType">
+    <service name="com.sun.star.beans.PropertySet"/>
+    <service name="com.sun.star.chart2.ChartType"/>
+    <service name="com.sun.star.chart2.NetChartType"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.chart.PieChartType">
+    <service name="com.sun.star.beans.PropertySet"/>
+    <service name="com.sun.star.chart2.ChartType"/>
+    <service name="com.sun.star.chart2.PieChartType"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.chart.ScatterChartType">
+    <service name="com.sun.star.beans.PropertySet"/>
+    <service name="com.sun.star.chart2.ChartType"/>
+    <service name="com.sun.star.chart2.ScatterChartType"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.chart2.Axis">
+    <service name="com.sun.star.beans.PropertySet"/>
+    <service name="com.sun.star.chart2.Axis"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.chart2.CartesianCoordinateSystem2d">
+    <service name="com.sun.star.chart2.CartesianCoordinateSystem2d"/>
+    <service name="com.sun.star.chart2.CoordinateSystems.Cartesian"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.chart2.CartesianCoordinateSystem3d">
+    <service name="com.sun.star.chart2.CartesianCoordinateSystem3d"/>
+    <service name="com.sun.star.chart2.CoordinateSystems.Cartesian"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.chart2.ChartModel">
+    <service name="com.sun.star.chart.ChartDocument"/>
+    <service name="com.sun.star.chart2.ChartDocument"/>
+    <service name="com.sun.star.document.OfficeDocument"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.chart2.Diagram">
+    <service name="com.sun.star.beans.PropertySet"/>
+    <service name="com.sun.star.chart2.Diagram"/>
+    <service name="com.sun.star.layout.LayoutElement"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.chart2.GridProperties">
+    <service name="com.sun.star.beans.PropertySet"/>
+    <service name="com.sun.star.chart2.GridProperties"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.chart2.Legend">
+    <service name="com.sun.star.beans.PropertySet"/>
+    <service name="com.sun.star.chart2.Legend"/>
+    <service name="com.sun.star.drawing.FillProperties"/>
+    <service name="com.sun.star.drawing.LineProperties"/>
+    <service name="com.sun.star.layout.LayoutElement"/>
+    <service name="com.sun.star.style.CharacterProperties"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.chart2.PageBackground">
+    <service name="com.sun.star.beans.PropertySet"/>
+    <service name="com.sun.star.chart2.PageBackground"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.chart2.PolarCoordinateSystem2d">
+    <service name="com.sun.star.chart2.CoordinateSystems.Polar"/>
+    <service name="com.sun.star.chart2.PolarCoordinateSystem2d"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.chart2.PolarCoordinateSystem3d">
+    <service name="com.sun.star.chart2.CoordinateSystems.Polar"/>
+    <service name="com.sun.star.chart2.PolarCoordinateSystem3d"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.chart2.Title">
+    <service name="com.sun.star.beans.PropertySet"/>
+    <service name="com.sun.star.chart2.Title"/>
+    <service name="com.sun.star.layout.LayoutElement"/>
+    <service name="com.sun.star.style.ParagraphProperties"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.chart2.XMLFilter">
+    <service name="com.sun.star.document.ExportFilter"/>
+    <service name="com.sun.star.document.ImportFilter"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.chart2.report.XMLFilter">
+    <service name="com.sun.star.document.ExportFilter"/>
+    <service name="com.sun.star.document.ImportFilter"/>
+  </implementation>
+</component>

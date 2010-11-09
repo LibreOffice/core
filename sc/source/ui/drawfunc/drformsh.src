@@ -35,19 +35,19 @@
     ToolBoxItem\
     {\
         Identifier = SID_FRAME_TO_TOP ; \
-        HelpID = SID_FRAME_TO_TOP ; \
+        HelpID = CMD_SID_FRAME_TO_TOP ; \
     };\
     ToolBoxItem\
     {\
         Identifier = SID_FRAME_TO_BOTTOM ; \
-        HelpID = SID_FRAME_TO_BOTTOM ; \
+        HelpID = CMD_SID_FRAME_TO_BOTTOM ; \
     };
 
 #define MN_RENAME_OBJECT \
     MenuItem\
     {\
         Identifier = SID_RENAME_OBJECT ; \
-        HelpId = SID_RENAME_OBJECT ; \
+        HelpId = CMD_SID_RENAME_OBJECT ; \
         Text [ en-US ] = "Name...";\
     };
 
@@ -56,7 +56,7 @@
     MenuItem\
     {\
         Identifier = SID_TITLE_DESCRIPTION_OBJECT; \
-        HelpId = SID_TITLE_DESCRIPTION_OBJECT; \
+        HelpId = CMD_SID_TITLE_DESCRIPTION_OBJECT; \
         Text [ en-US ] = "Description...";\
     };
 
@@ -77,14 +77,14 @@
                 MenuItem\
                 {\
                     Identifier = SID_FRAME_UP ; \
-                    HelpId = SID_FRAME_UP ; \
+                    HelpId = CMD_SID_FRAME_UP ; \
                     /* ### ACHTUNG: Neuer Text in Resource? W~eiter nach vorn : Weiter nach vorn */\
                     Text [ en-US ] = "Bring ~Forward" ; \
                 };\
                 MenuItem\
                 {\
                     Identifier = SID_FRAME_DOWN ; \
-                    HelpId = SID_FRAME_DOWN ; \
+                    HelpId = CMD_SID_FRAME_DOWN ; \
                     /* ### ACHTUNG: Neuer Text in Resource? Weiter ~nach hinten : Weiter nach hinten */\
                     Text [ en-US ] = "Send Back~ward" ; \
                 };\
@@ -119,14 +119,14 @@
                 {\
                     RadioCheck = TRUE ; \
                     Identifier = SID_ANCHOR_PAGE ; \
-                    HelpId = SID_ANCHOR_PAGE ; \
+                    HelpId = CMD_SID_ANCHOR_PAGE ; \
                     Text [ en-US ] = "To P~age" ; \
                 };\
                 MenuItem\
                 {\
                     RadioCheck = TRUE ; \
                     Identifier = SID_ANCHOR_CELL ; \
-                    HelpId = SID_ANCHOR_CELL ; \
+                    HelpId = CMD_SID_ANCHOR_CELL ; \
                     Text [ en-US ] = "To ~Cell" ; \
                 };\
             };\
@@ -137,7 +137,7 @@
     MenuItem\
     {\
         Identifier = SID_OBJECT_ALIGN ; \
-        HelpId = SID_OBJECT_ALIGN ; \
+        HelpId = CMD_SID_OBJECT_ALIGN ; \
         Text [ en-US ] = "A~lignment" ; \
         SubMenu = Menu\
         {\

@@ -45,6 +45,7 @@ ModalDialog RID_SCDLG_IMPORTOPT
     };
     ComboBox ED_FIELDSEP
     {
+        HelpID = "sc:ComboBox:RID_SCDLG_IMPORTOPT:ED_FIELDSEP";
         Pos = MAP_APPFONT ( 70 , 30 ) ;
         Size = MAP_APPFONT ( 121 , 60 ) ;
         DropDown = TRUE ;
@@ -57,6 +58,7 @@ ModalDialog RID_SCDLG_IMPORTOPT
     };
     ComboBox ED_TEXTSEP
     {
+        HelpID = "sc:ComboBox:RID_SCDLG_IMPORTOPT:ED_TEXTSEP";
         Pos = MAP_APPFONT ( 70 , 46 ) ;
         Size = MAP_APPFONT ( 121 , 60 ) ;
         DropDown = TRUE ;
@@ -69,6 +71,7 @@ ModalDialog RID_SCDLG_IMPORTOPT
     };
     ListBox DDLB_FONT
     {
+        HelpID = "sc:ListBox:RID_SCDLG_IMPORTOPT:DDLB_FONT";
         Border = TRUE;
         Sort = TRUE;
         DropDown = TRUE ;
@@ -77,6 +80,7 @@ ModalDialog RID_SCDLG_IMPORTOPT
     };
     ListBox LB_FONT
     {
+        HelpID = "sc:ListBox:RID_SCDLG_IMPORTOPT:LB_FONT";
         Border = TRUE;
         Sort = TRUE;
         DropDown = FALSE ;
@@ -91,6 +95,7 @@ ModalDialog RID_SCDLG_IMPORTOPT
     };
     CheckBox CB_FIXEDWIDTH
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_IMPORTOPT:CB_FIXEDWIDTH";
         Pos = MAP_APPFONT( 12, 80 );
         Size = MAP_APPFONT( 172, 10 );
         Hide = TRUE;
@@ -98,6 +103,7 @@ ModalDialog RID_SCDLG_IMPORTOPT
     };
     CheckBox CB_SAVESHOWN
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_IMPORTOPT:CB_SAVESHOWN";
         Pos = MAP_APPFONT( 12, 66 );
         Size = MAP_APPFONT( 172, 10 );
         TabStop = TRUE;
