@@ -47,7 +47,7 @@ $(WORKDIR)/Clean/OutDir/lib/%$(gb_StaticLibrary_PLAINEXT) : $(call gb_LinkTarget
 # EVIL: gb_StaticLibrary and gb_Library need the same deliver rule because they are indistinguishable on windows
 $(gb_StaticLibrary_OUTDIRLOCATION)/%$(gb_StaticLibrary_PLAINEXT) : 
     $(call gb_Helper_abbreviate_dirs,\
-        mkdir -p $(dir $@) && $(call gb_Shadow_copy,$@,$<) \
+        $(call gb_Shadow_copy,$@,$<) \
             $(foreach target,$(AUXTARGETS), && $(call gb_Shadow_copy,$(target),$(dir $<)/$(notdir $(target)))))
 
 define gb_StaticLibrary_StaticLibrary

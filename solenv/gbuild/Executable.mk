@@ -40,7 +40,7 @@ $(call gb_Executable_get_clean_target,%) :
 
 $(call gb_Executable_get_target,%) :
     $(call gb_Helper_abbreviate_dirs,\
-        mkdir -p $(dir $@) && $(call gb_Shadow_copy,$@,$<) \
+        $(call gb_Shadow_copy,$@,$<) \
             $(foreach target,$(AUXTARGETS), && $(call gb_Shadow_copy,$(target),$(dir $<)/$(notdir $(target)))))
 
 define gb_Executable_Executable

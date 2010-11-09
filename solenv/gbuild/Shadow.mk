@@ -29,20 +29,22 @@
 # $(1) absolute OUTDIR path
 gb_Shadow__get_file = $(patsubst $(OUTDIR)%,$(SHADOWOUTDIR)%,$(1))
 
-gb_Shadow__copy_p = cp -f $(1) $(2) && touch -r $(1) $(2)
+define gb_Shadow__deliver
+mkdir -p $(dir $(2)) && cp -f $(1) $(2) && touch -r $(1) $(2)
+endef
 
 # copies the file from the younger source:
 # - either the file at the same location in the shadowoutdir
 # - or the workdir source
 # $(1) target in the outdir (full path)
-# $(2) source in the workdir (full path)
+# $(2) source in the workdir (full path) or an empty string
 ifneq ($(SHADOWOUTDIR),)
 define gb_Shadow_copy
-if [ $(2) ] && [ $(2) -nt $(call gb_Shadow__get_file,$(1)) ]; then $(call gb_Shadow__copy_p,$(2),$(1)); else $(call gb_Shadow__copy_p,$(call gb_Shadow__get_file,$(1)),$(1)); fi
-fi
+if [ $(2) ]; then $(call gb_Shadow__deliver,$(2),$(1)); else $(call gb_Shadow__deliver,$(call gb_Shadow__get_file,$(1)),$(1)); fi
 endef
+
 else
-gb_Shadow_copy = $(call gb_Shadow__copy_p,$(2),$(1))
+gb_Shadow_copy = $(call gb_Shadow__deliver,$(2),$(1))
 endif
 
 # vim: set noet sw=4 ts=4:

@@ -214,6 +214,7 @@ gb_StaticLibrary_OUTDIRLOCATION := $(OUTDIR)/lib
 # We are using a set of scopes that we might as well call classes.
 
 include $(foreach class, \
+    Shadow \
     ComponentTarget \
     LinkTarget \
     Library \
