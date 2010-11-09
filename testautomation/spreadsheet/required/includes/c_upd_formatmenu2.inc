@@ -29,23 +29,6 @@
 '*
 '* short description : Resource Test - Format Menu Part II
 '*
-'************************************************************************
-'*
-' #1 tFormatPrintRanges
-' #1 tFormatCharacter
-' #1 tFormatParagraph
-' #1 tFormatChangeCase
-' #1 tFormatStyles
-' #1 tFormatAutoFormat
-' #1 tFormatConditionalFormatting
-' #1 tFormatAnchor
-' #1 tFormatAlignment
-' #1 tFormatArrange
-' #1 tFormatFlip
-' #1 tFormatGroup
-' #0 tFormatControl
-
-'*
 '\***********************************************************************
 
 sub c_upd_formatmenu2
@@ -635,10 +618,7 @@ testcase tFormatAlignment
     
     '/// Load document from 'gTesttoolPath + "spreadsheet\required\input\twoobjects.ods"'
     printlog " Load document from 'gTesttoolPath + spreadsheet\required\input\twoobjects.ods"
-    Call hFileOpen (Convertpath (gTesttoolPath + "spreadsheet\required\input\twoobjects.ods" ))
-    '/// If the file is not editable, click the edit button on standardbar
-    printlog "If the file is not editable, click the edit button on standardbar"
-    call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( gTesttoolPath & "spreadsheet\required\input\twoobjects.ods" )
     '/// Select first object by Navigator
     printlog " Select first object by Navigator"
     Call fNavigatorSelectObject ("drawing objects", 1)
@@ -667,6 +647,7 @@ testcase tFormatAlignment
     '/// Close document
     printlog " Close document"
     Call hCloseDocument
+    hFileDelete( gLastWorkFile )
 
 endcase
 
@@ -747,10 +728,7 @@ testcase tFormatGroup
 
     '/// Load document from 'gTesttoolPath + "spreadsheet\required\input\twoobjects.ods"'
     printlog " Load document from 'gTesttoolPath + spreadsheet\required\input\twoobjects.ods"
-    Call hFileOpen (Convertpath (gTesttoolPath + "spreadsheet\required\input\twoobjects.ods" ))
-    '/// If the file is not editable, click the edit button on standardbar
-    printlog "If the file is not editable, click the edit button on standardbar"
-    call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( gTesttoolPath & "spreadsheet\required\input\twoobjects.ods" )
     '/// Select first object by Navigator
     printlog " Select first object by Navigator"
     Call fNavigatorSelectObject ("drawing objects", 1)
@@ -773,6 +751,7 @@ testcase tFormatGroup
     '/// Close document
     printlog " Close document"
     Call hCloseDocument
+    hFileDelete( gLastWorkFile )
 
 endcase
 

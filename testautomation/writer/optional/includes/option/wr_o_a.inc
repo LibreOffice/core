@@ -45,8 +45,8 @@ testcase tToolsOptionsWriterPrint
 
     Dim i as integer
     printlog "- Tools/Options/Writer: PrintWriter (real print)"
-    Call hFileOpen ( gTesttoolPath + "writer\optional\input\options\options3.sxw" )
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally(  gTesttoolPath + "writer\optional\input\options\options3.sxw" )
+    
 
     Printlog "  - check all (real print)"
     ToolsOptions
