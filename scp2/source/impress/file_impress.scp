@@ -29,12 +29,12 @@
 
 File gid_File_Lib_Placeware
     Name = LIBNAME(placeware);
-    PACKED_UNO_LIB_FILE_BODY;
+    PACKED_LIB_FILE_BODY;
 End
 
 File gid_File_Lib_Animcore
 	Name = SPECIAL_NAME(animcore);
-	PACKED_UNO_LIB_FILE_BODY;
+	PACKED_LIB_FILE_BODY;
 End
 
 File gid_File_Share_Registry_Impress_Xcd
