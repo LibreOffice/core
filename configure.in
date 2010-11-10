@@ -2240,7 +2240,7 @@ if test "$_os" = "SunOS"; then
       COMPATH=`echo $_cc | $SED -n "s/\/bin\/cc//p"`
       AC_MSG_CHECKING([the SunStudio C/C++ compiler version])
       dnl cc -V outputs to standard error!!!!
-      _sunstudio_string=`$CC -V 2>&1 | grep '^cc' | sed -e 's/.* C //'`
+      _sunstudio_string=`$CC -V 2>&1 | grep '^cc' | $SED -e 's/.* C //'`
       _sunstudio_version=`echo $_sunstudio_string | $AWK '{ print $1 }'`
       _sunstudio_major=`echo $_sunstudio_version | $AWK -F. '{ print $1 }'`
       if test "$_sunstudio_major" != "5"; then
@@ -2825,7 +2825,7 @@ _ACEOF
   AC_MSG_CHECKING([whether to use dynamic libgcc])
   if test -e "$MINGW_CLIB_DIR/libgcc_s.a"; then
     AC_MSG_CHECKING([dynamic libgcc name])
-    MINGW_GCCDLL_pattern=`nm $MINGW_CLIB_DIR/libgcc_s.a | sed -ne 's@.* _libgcc\(.*\)_dll_iname@libgcc\1.dll@p' | uniq | sed -e 's@_@?@g'`
+    MINGW_GCCDLL_pattern=`nm $MINGW_CLIB_DIR/libgcc_s.a | $SED -ne 's@.* _libgcc\(.*\)_dll_iname@libgcc\1.dll@p' | uniq | $SED -e 's@_@?@g'`
     MINGW_GCCDLL=`cd $COMPATH/bin && ls $MINGW_GCCDLL_pattern 2>/dev/null`
     if test -n "$MINGW_GCCDLL"; then
         MINGW_SHARED_GCCLIB=YES
@@ -2842,7 +2842,7 @@ _ACEOF
   AC_MSG_CHECKING([whether to use dynamic libstdc++])
   if test -e "$MINGW_CLIB_DIR/libstdc++_s.a" ; then
     AC_MSG_CHECKING([dynamic libstdc++ name])
-    MINGW_GXXDLL_pattern=`nm $MINGW_CLIB_DIR/libstdc++_s.a | sed -ne 's@.* _libstdc__\(.*\)_dll_iname@libstdc++\1.dll@p' | uniq | sed -e 's@_@?@g'`
+    MINGW_GXXDLL_pattern=`nm $MINGW_CLIB_DIR/libstdc++_s.a | $SED -ne 's@.* _libstdc__\(.*\)_dll_iname@libstdc++\1.dll@p' | uniq | $SED -e 's@_@?@g'`
     MINGW_GXXDLL=`cd $COMPATH/bin && ls $MINGW_GXXDLL_pattern 2>/dev/null`
     if test -n "$MINGW_GXXDLL"; then
         MINGW_SHARED_GXXLIB=YES
@@ -3445,9 +3445,9 @@ if test "$SOLAR_JAVA" != ""; then
         _gij_version=`$JAVAINTERPRETER --version | grep GNU | $SED -e 's@^[[^0-9]]*@@' -e 's@ .*@@' -e 's@,.*@@'`;
         _gij_longver=`echo $_gij_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
 
-      elif test `$JAVAINTERPRETER -version 2>&1 | awk '{ print }' | grep -c "BEA"` -gt 0; then
+      elif test `$JAVAINTERPRETER -version 2>&1 | $AWK '{ print }' | grep -c "BEA"` -gt 0; then
          AC_MSG_ERROR([No valid check available. Please check the block for your desired java in configure.in])
-      elif test `$JAVAINTERPRETER -version 2>&1 | awk '{ print }' | grep -c "IBM"` -gt 0; then
+      elif test `$JAVAINTERPRETER -version 2>&1 | $AWK '{ print }' | grep -c "IBM"` -gt 0; then
         JDK=ibm
 
         dnl IBM JDK specific tests
@@ -4486,7 +4486,7 @@ fi
 AC_SUBST(SYSTEM_PYTHON)
 AC_SUBST(PYTHON_CFLAGS)
 AC_SUBST(PYTHON_LIBS)
-HOME=`echo $HOME | sed 's:\\\\:/:g'`
+HOME=`echo $HOME | $SED 's:\\\\:/:g'`
 AC_SUBST(HOME)
 
 dnl ===================================================================
@@ -4634,7 +4634,7 @@ if test -n "$with_system_mysql" -o -n "$with_system_libs" && \
     AC_MSG_CHECKING([for MySQL Client library])
     MYSQL_INC=`$MYSQLCONFIG --include`
     MYSQL_LIB=`$MYSQLCONFIG --libs`
-    MYSQL_DEFINES=`$MYSQLCONFIG --cflags | sed -e s,$MYSQL_INC,,`
+    MYSQL_DEFINES=`$MYSQLCONFIG --cflags | $SED -e s,$MYSQL_INC,,`
     AC_MSG_RESULT([includes $MYSQL_INC, libraries $MYSQL_LIB])
 else
     SYSTEM_MYSQL=NO
@@ -7643,7 +7643,7 @@ else
   while test -h "$ANT"; do
      a_cwd=`pwd`
      a_basename=`basename "$ANT"`
-     a_script=`ls -l "$ANT" | sed "s/.*${a_basename} -> //g"`
+     a_script=`ls -l "$ANT" | $SED "s/.*${a_basename} -> //g"`
      cd "`dirname "$ANT"`"
      cd "`dirname "$a_script"`"
      ANT="`pwd`"/"`basename "$a_script"`"
