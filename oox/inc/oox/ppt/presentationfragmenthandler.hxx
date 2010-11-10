@@ -35,7 +35,7 @@
 #include "oox/ppt/slidepersist.hxx"
 #include "oox/core/fragmenthandler.hxx"
 #include "oox/core/relations.hxx"
-#include "customshowlistcontext.hxx"
+#include "oox/ppt/customshowlistcontext.hxx"
 
 #include <stack>
 #include <vector>

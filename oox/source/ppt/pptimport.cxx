@@ -57,10 +57,17 @@ uno::Reference< uno::XInterface > SAL_CALL PowerPointImport_createInstance(const
     return (cppu::OWeakObject*)new PowerPointImport( rSMgr );
 }
 
+#if OSL_DEBUG_LEVEL > 0
+XmlFilterBase* PowerPointImport::mpDebugFilterBase = NULL;
+#endif
+
 PowerPointImport::PowerPointImport( const uno::Reference< lang::XMultiServiceFactory > & rSMgr  )
     : XmlFilterBase( rSMgr )
     , mxChartConv( new ::oox::drawingml::chart::ChartConverter )
 {
+#if OSL_DEBUG_LEVEL > 0
+    mpDebugFilterBase = this;
+#endif
 }
 
 PowerPointImport::~PowerPointImport()

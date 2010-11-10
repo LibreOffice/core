@@ -103,10 +103,10 @@ void TextParagraph::insertAt(
         float fCharacterSize = 18;
         if ( pTextParagraphStyle.get() )
         {
-            pTextParagraphStyle->pushToPropSet( rFilterBase, xProps, aioBulletList, NULL, sal_False, fCharacterSize );
+            pTextParagraphStyle->pushToPropSet( &rFilterBase, xProps, aioBulletList, NULL, sal_False, fCharacterSize );
             fCharacterSize = pTextParagraphStyle->getCharHeightPoints( 18 );
         }
-        maProperties.pushToPropSet( rFilterBase, xProps, aioBulletList, &pTextParagraphStyle->getBulletList(), sal_True, fCharacterSize );
+        maProperties.pushToPropSet( &rFilterBase, xProps, aioBulletList, &pTextParagraphStyle->getBulletList(), sal_True, fCharacterSize );
 
         // empty paragraphs do not have bullets in ppt
         if ( !nParagraphSize )
