@@ -58,8 +58,8 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-static const rtl::OUString sSpreadsheetDocument( rtl::OUString::createFromAscii( "com.sun.star.sheet.SpreadsheetDocument" ) );
-static const rtl::OUString sTextDocument( rtl::OUString::createFromAscii( "com.sun.star.text.TextDocument" ) );
+static const rtl::OUString sSpreadsheetDocument( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.SpreadsheetDocument") );
+static const rtl::OUString sTextDocument( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextDocument") );
 
 typedef  std::hash_map< rtl::OUString,
 sal_Int32, ::rtl::OUStringHash,
@@ -89,7 +89,7 @@ public:
             m_xContext->getServiceManager(), uno::UNO_QUERY_THROW );
 
         uno::Reference< frame::XDesktop > xDesktop
-            (xSMgr->createInstanceWithContext(::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop"), m_xContext), uno::UNO_QUERY_THROW );
+            (xSMgr->createInstanceWithContext(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")), m_xContext), uno::UNO_QUERY_THROW );
         uno::Reference< container::XEnumeration > mxComponents = xDesktop->getComponents()->createEnumeration();
         while( mxComponents->hasMoreElements() )
         {
@@ -228,7 +228,7 @@ VbaDocumentsBase::Add() throw (uno::RuntimeException)
 
      uno::Reference< frame::XComponentLoader > xLoader(
         xSMgr->createInstanceWithContext(
-            ::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop"),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")),
                 mxContext), uno::UNO_QUERY_THROW );
     rtl::OUString sURL;
     if( meDocType == WORD_DOCUMENT )
@@ -274,11 +274,11 @@ VbaDocumentsBase::Open( const rtl::OUString& rFileName, const uno::Any& ReadOnly
     uno::Reference< lang::XMultiComponentFactory > xSMgr(
         mxContext->getServiceManager(), uno::UNO_QUERY_THROW );
     uno::Reference< frame::XDesktop > xDesktop
-        (xSMgr->createInstanceWithContext(::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop")                    , mxContext),
+        (xSMgr->createInstanceWithContext(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"))                    , mxContext),
         uno::UNO_QUERY_THROW );
     uno::Reference< frame::XComponentLoader > xLoader(
         xSMgr->createInstanceWithContext(
-        ::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop"),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")),
         mxContext),
         uno::UNO_QUERY_THROW );
 

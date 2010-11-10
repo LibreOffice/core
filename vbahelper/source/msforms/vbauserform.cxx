@@ -268,7 +268,7 @@ ScVbaUserForm::hasProperty( const ::rtl::OUString& aName ) throw (uno::RuntimeEx
         uno::Reference< beans::XPropertySet > xDlgProps( xControl->getModel(), uno::UNO_QUERY );
         if ( xDlgProps.is() )
         {
-            uno::Reference< container::XNameContainer > xAllChildren( xDlgProps->getPropertyValue( rtl::OUString::createFromAscii("AllDialogChildren" ) ), uno::UNO_QUERY_THROW );
+            uno::Reference< container::XNameContainer > xAllChildren( xDlgProps->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AllDialogChildren")) ), uno::UNO_QUERY_THROW );
             sal_Bool bRes =  xAllChildren->hasByName( aName );
             OSL_TRACE("ScVbaUserForm::hasProperty(%s) %d ---> %d", rtl::OUStringToOString( aName, RTL_TEXTENCODING_UTF8 ).getStr(), xAllChildren.is(), bRes );
             return bRes;

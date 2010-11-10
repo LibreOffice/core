@@ -47,7 +47,7 @@ ScVbaCommandBar::getName() throw ( uno::RuntimeException )
 {
     // This will get a "NULL length string" when Name is not set.
     uno::Reference< beans::XPropertySet > xPropertySet( m_xBarSettings, uno::UNO_QUERY_THROW );
-    uno::Any aName = xPropertySet->getPropertyValue( rtl::OUString::createFromAscii("UIName") );
+    uno::Any aName = xPropertySet->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UIName")) );
     rtl::OUString sName;
     aName >>= sName;
     if( sName.getLength() < 1 )
@@ -78,7 +78,7 @@ void SAL_CALL
 ScVbaCommandBar::setName( const ::rtl::OUString& _name ) throw (uno::RuntimeException)
 {
     uno::Reference< beans::XPropertySet > xPropertySet( m_xBarSettings, uno::UNO_QUERY_THROW );
-    xPropertySet->setPropertyValue( rtl::OUString::createFromAscii("UIName"), uno::makeAny( _name ) );
+    xPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UIName")), uno::makeAny( _name ) );
 
     pCBarHelper->ApplyChange( m_sResourceUrl, m_xBarSettings );
 }
@@ -160,7 +160,7 @@ ScVbaCommandBar::Controls( const uno::Any& aIndex ) throw (script::BasicErrorExc
     {
         uno::Reference< frame::XLayoutManager > xLayoutManager = pCBarHelper->getLayoutManager();
         uno::Reference< beans::XPropertySet > xPropertySet( xLayoutManager->getElement( m_sResourceUrl ), uno::UNO_QUERY_THROW );
-        xMenu.set( xPropertySet->getPropertyValue( rtl::OUString::createFromAscii("XMenuBar") ), uno::UNO_QUERY );
+        xMenu.set( xPropertySet->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("XMenuBar")) ), uno::UNO_QUERY );
     }
     uno::Reference< XCommandBarControls > xCommandBarControls( new ScVbaCommandBarControls( this, mxContext, m_xBarSettings, pCBarHelper, m_xBarSettings, m_sResourceUrl, xMenu ) );
     if( aIndex.hasValue() )

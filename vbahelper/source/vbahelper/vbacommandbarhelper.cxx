@@ -185,7 +185,7 @@ uno::Reference< frame::XLayoutManager > VbaCommandBarHelper::getLayoutManager() 
 {
     uno::Reference< frame::XFrame > xFrame( getModel()->getCurrentController()->getFrame(), uno::UNO_QUERY_THROW );
     uno::Reference< beans::XPropertySet > xPropertySet( xFrame, uno::UNO_QUERY_THROW );
-    uno::Reference< frame::XLayoutManager > xLayoutManager( xPropertySet->getPropertyValue( rtl::OUString::createFromAscii("LayoutManager") ), uno::UNO_QUERY_THROW );
+    uno::Reference< frame::XLayoutManager > xLayoutManager( xPropertySet->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LayoutManager")) ), uno::UNO_QUERY_THROW );
     return xLayoutManager;
 }
 
@@ -195,7 +195,7 @@ sal_Bool VbaCommandBarHelper::hasToolbar( const rtl::OUString& sResourceUrl, con
     {
         rtl::OUString sUIName;
         uno::Reference< beans::XPropertySet > xPropertySet( m_xDocCfgMgr->getSettings( sResourceUrl, sal_False ), uno::UNO_QUERY_THROW );
-        xPropertySet->getPropertyValue( rtl::OUString::createFromAscii(ITEM_DESCRIPTOR_UINAME) ) >>= sUIName;
+        xPropertySet->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ITEM_DESCRIPTOR_UINAME)) ) >>= sUIName;
         if( sName.equalsIgnoreAsciiCase( sUIName ) )
             return sal_True;
     }
@@ -216,7 +216,7 @@ rtl::OUString VbaCommandBarHelper::findToolbarByName( const css::uno::Reference<
     for( sal_Int32 i = 0; i < allNames.getLength(); i++ )
     {
         sResourceUrl = allNames[i];
-        if(sResourceUrl.indexOf( rtl::OUString::createFromAscii( ITEM_TOOLBAR_URL ) ) == 0 )
+        if(sResourceUrl.indexOf( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_TOOLBAR_URL )) ) == 0 )
         {
             if( hasToolbar( sResourceUrl, sName ) )
                 return sResourceUrl;
@@ -241,7 +241,7 @@ sal_Int32 VbaCommandBarHelper::findControlByName( const css::uno::Reference< css
     {
         rtl::OUString sLabel;
         xIndexAccess->getByIndex( i ) >>= aProps;
-        getPropertyValue( aProps, rtl::OUString::createFromAscii(ITEM_DESCRIPTOR_LABEL) ) >>= sLabel;
+        getPropertyValue( aProps, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ITEM_DESCRIPTOR_LABEL)) ) >>= sLabel;
         // handle the hotkey marker '~' (remove in toolbars (?), replace by '&' in menus)
         ::rtl::OUStringBuffer aBuffer;
         sal_Int32 index = sLabel.indexOf( sal_Unicode('~') );
@@ -268,8 +268,8 @@ sal_Int32 VbaCommandBarHelper::findControlByName( const css::uno::Reference< css
 
 rtl::OUString VbaCommandBarHelper::generateCustomURL()
 {
-    rtl::OUString url = rtl::OUString::createFromAscii( ITEM_TOOLBAR_URL );
-    url += rtl::OUString::createFromAscii( CUSTOM_TOOLBAR_STR );
+    rtl::OUString url(RTL_CONSTASCII_USTRINGPARAM( ITEM_TOOLBAR_URL ));
+    url += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( CUSTOM_TOOLBAR_STR ));
 
     // use a random number to minimize possible clash with existing custom toolbars
     srand( unsigned( time( NULL ) ));

@@ -73,8 +73,8 @@ ScVbaListBox::getValue() throw (uno::RuntimeException)
     m_xProps->getPropertyValue( SELECTEDITEMS ) >>= sSelection;
     m_xProps->getPropertyValue( ITEMS ) >>= sItems;
     if( getMultiSelect() )
-        throw uno::RuntimeException( rtl::OUString::createFromAscii(
-                    "Attribute use invalid." ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "Attribute use invalid." )), uno::Reference< uno::XInterface >() );
     uno::Any aRet;
     if ( sSelection.getLength() )
         aRet = uno::makeAny( sItems[ sSelection[ 0 ] ] );
@@ -86,8 +86,8 @@ ScVbaListBox::setValue( const uno::Any& _value ) throw (uno::RuntimeException)
 {
     if( getMultiSelect() )
     {
-        throw uno::RuntimeException( rtl::OUString::createFromAscii(
-                    "Attribute use invalid." ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "Attribute use invalid." )), uno::Reference< uno::XInterface >() );
     }
     rtl::OUString sValue = getAnyAsString( _value );
     uno::Sequence< rtl::OUString > sList;
@@ -105,8 +105,8 @@ ScVbaListBox::setValue( const uno::Any& _value ) throw (uno::RuntimeException)
         }
     }
     if( nValue == -1 )
-        throw uno::RuntimeException( rtl::OUString::createFromAscii(
-                    "Attribute use invalid." ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "Attribute use invalid." )), uno::Reference< uno::XInterface >() );
 
     uno::Sequence< sal_Int16 > nSelectedIndices(1);
     uno::Sequence< sal_Int16 > nOldSelectedIndices;
@@ -158,8 +158,8 @@ ScVbaListBox::Selected( sal_Int32 index ) throw (css::uno::RuntimeException)
     // the indices are but sal_Int16
     sal_Int16 nIndex = static_cast< sal_Int16 >( index );
     if( nIndex < 0 || nIndex >= nLength )
-        throw uno::RuntimeException( rtl::OUString::createFromAscii(
-                    "Error Number." ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "Error Number." )), uno::Reference< uno::XInterface >() );
     m_nIndex = nIndex;
     return uno::makeAny( uno::Reference< XPropValue > ( new ScVbaPropValue( this ) ) );
 }
@@ -192,8 +192,8 @@ ScVbaListBox::setValueEvent( const uno::Any& value )
 {
     sal_Bool bValue = sal_False;
     if( !(value >>= bValue) )
-        throw uno::RuntimeException( rtl::OUString::createFromAscii(
-                    "Invalid type\n. need boolean." ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "Invalid type\n. need boolean." )), uno::Reference< uno::XInterface >() );
     uno::Sequence< sal_Int16 > nList;
     m_xProps->getPropertyValue( SELECTEDITEMS ) >>= nList;
     sal_Int16 nLength = static_cast<sal_Int16>( nList.getLength() );

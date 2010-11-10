@@ -305,8 +305,8 @@ public:
             if ( ( Index1 >>= nIndex ) != sal_True )
             {
                 rtl::OUString message;
-                message = rtl::OUString::createFromAscii(
-                    "Couldn't convert index to Int32");
+                message = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "Couldn't convert index to Int32"));
                 throw  css::lang::IndexOutOfBoundsException( message,
                     css::uno::Reference< css::uno::XInterface >() );
             }
