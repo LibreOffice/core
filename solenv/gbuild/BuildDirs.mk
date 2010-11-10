@@ -54,7 +54,7 @@ ifneq ($(gb_LOCALBUILDDIR),)
 .PHONY : setuplocal
 setuplocal :
     mkdir -p $(OUTDIR) $(WORKDIR)
-    time rsync -a $(SOLARVERSION)/$(INPATH) $(OUTDIR)
+    time rsync -a $(SOLARVERSION)/$(INPATH)/ $(OUTDIR)
 
 endif
 

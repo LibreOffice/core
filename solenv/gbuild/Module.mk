@@ -51,7 +51,7 @@ all :
 clean : 
     $(call gb_Helper_announce,Cleanup for modules $(foreach module,$^,$(notdir $(module))) finished (loaded modules: $(sort $(gb_Module_ALLMODULES))).)
 
-.PHONY : all clean
+.PHONY : all clean install uninstall
 .DEFAULT_GOAL := all
 
 define gb_Module_Module

@@ -84,22 +84,22 @@ $(patsubst $(1):%,$(WORKDIR)/Headers/StaticLibrary/%,$(filter $(1):%,$(gb_Static
 endef
 
 $(eval $(call gb_Helper_make_clean_targets,\
+    AllLangResTarget \
+    ComponentTarget \
     LinkTarget \
+    Module \
+    NoexPrecompiledHeader \
     PackagePart \
+    PrecompiledHeader \
+    ResTarget \
     SdiTarget \
     SrsTarget \
-    PrecompiledHeader \
-    NoexPrecompiledHeader \
 ))
 
 $(eval $(call gb_Helper_make_outdir_clean_targets,\
-    AllLangResTarget \
-    ComponentTarget \
     Executable \
     Library \
-    Module \
     Package \
-    ResTarget \
     StaticLibrary \
 ))
 
