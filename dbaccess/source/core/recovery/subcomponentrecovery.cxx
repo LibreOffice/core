@@ -506,7 +506,7 @@ namespace dbaccess
         case REPORT:
             if ( sModuleIdentifier.equalsAscii( "com.sun.star.report.ReportDefinition" ) )
             {
-                // it's an SRB report desginer
+                // it's an SRB report designer
                 m_aCompDesc.bForEditing = true;
                 break;
             }
