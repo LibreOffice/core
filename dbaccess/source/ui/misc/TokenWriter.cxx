@@ -100,7 +100,7 @@ ODatabaseImportExport::ODatabaseImportExport(const ::svx::ODataAccessDescriptor&
                                              const Reference< XMultiServiceFactory >& _rM,
                                              const Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
                                              const String& rExchange)
-    :m_bBookmarkSelection( NULL )
+    :m_bBookmarkSelection( sal_False )
     ,m_xFormatter(_rxNumberF)
     ,m_xFactory(_rM)
     ,m_nCommandType(CommandType::TABLE)
@@ -131,7 +131,7 @@ ODatabaseImportExport::ODatabaseImportExport(const ::svx::ODataAccessDescriptor&
 // import data
 ODatabaseImportExport::ODatabaseImportExport( const ::dbtools::SharedConnection& _rxConnection,
         const Reference< XNumberFormatter >& _rxNumberF, const Reference< XMultiServiceFactory >& _rM )
-    :m_bBookmarkSelection( NULL )
+    :m_bBookmarkSelection( sal_False )
     ,m_xConnection(_rxConnection)
     ,m_xFormatter(_rxNumberF)
     ,m_xFactory(_rM)

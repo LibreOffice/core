@@ -37,6 +37,7 @@
 
 ModalDialog DLG_ADABASSTAT
 {
+    HelpID = "dbaccess:ModalDialog:DLG_ADABASSTAT";
     OutputSize  = TRUE ;
     Moveable    = TRUE ;
     Closeable   = TRUE ;
@@ -59,6 +60,7 @@ ModalDialog DLG_ADABASSTAT
 
     Edit ET_SYSDEVSPACE
     {
+        HelpID = "dbaccess:Edit:DLG_ADABASSTAT:ET_SYSDEVSPACE";
         Border      = TRUE ;
         Pos         = MAP_APPFONT ( 120 , 14 ) ;
         Size        = MAP_APPFONT ( 128 , 12 ) ;
@@ -75,6 +77,7 @@ ModalDialog DLG_ADABASSTAT
 
     Edit ET_TRANSACTIONLOG
     {
+        HelpID = "dbaccess:Edit:DLG_ADABASSTAT:ET_TRANSACTIONLOG";
         Border      = TRUE ;
         Pos         = MAP_APPFONT ( 120 , 31 ) ;
         Size        = MAP_APPFONT ( 128 , 12 ) ;
@@ -91,6 +94,7 @@ ModalDialog DLG_ADABASSTAT
 
     ListBox LB_DATADEVS
     {
+        HelpID = "dbaccess:ListBox:DLG_ADABASSTAT:LB_DATADEVS";
         Border      = TRUE ;
         Pos         = MAP_APPFONT ( 120 , 48 ) ;
         Size        = MAP_APPFONT ( 128 , 42 ) ;
@@ -115,6 +119,7 @@ ModalDialog DLG_ADABASSTAT
 
     Edit ET_SIZE
     {
+        HelpID = "dbaccess:Edit:DLG_ADABASSTAT:ET_SIZE";
         Border      = TRUE ;
         Pos         = MAP_APPFONT ( 120 , 109 ) ;
         Size        = MAP_APPFONT ( 60 , 12 ) ;
@@ -131,6 +136,7 @@ ModalDialog DLG_ADABASSTAT
 
     Edit ET_FREESIZE
     {
+        HelpID = "dbaccess:Edit:DLG_ADABASSTAT:ET_FREESIZE";
         Border      = TRUE ;
         Pos         = MAP_APPFONT ( 120 , 126 ) ;
         Size        = MAP_APPFONT ( 60 , 12 ) ;
@@ -147,6 +153,7 @@ ModalDialog DLG_ADABASSTAT
 
     NumericField ET_MEMORYUSING
     {
+        HelpID = "dbaccess:NumericField:DLG_ADABASSTAT:ET_MEMORYUSING";
         Border              = TRUE ;
         Pos                 = MAP_APPFONT ( 120 , 144 ) ;
         Size                = MAP_APPFONT ( 60 , 12 ) ;

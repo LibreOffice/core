@@ -28,84 +28,44 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#ifndef _COMPHELPER_SEQSTREAM_HXX
-#include <comphelper/seqstream.hxx>
-#endif
-#ifndef _COMPHELPER_UNO3_HXX_
-#include <comphelper/uno3.hxx>
-#endif
-#ifndef _COMPHELPER_EXTRACT_HXX_
-#include <comphelper/extract.hxx>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XKEYSSUPPLIER_HPP_
-#include <com/sun/star/sdbcx/XKeysSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
-#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_KEYTYPE_HPP_
-#include <com/sun/star/sdbcx/KeyType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_RESULTSETCONCURRENCY_HPP_
-#include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_COLUMNVALUE_HPP_
-#include <com/sun/star/sdbc/ColumnValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
-#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_PRIVILEGE_HPP_
-#include <com/sun/star/sdbcx/Privilege.hpp>
-#endif
-#ifndef _DBACORE_DATACOLUMN_HXX_
-#include "CRowSetDataColumn.hxx"
-#endif
-#ifndef DBACCESS_CORE_API_CROWSETCOLUMN_HXX
+
+#include "BookmarkSet.hxx"
 #include "CRowSetColumn.hxx"
-#endif
-#ifndef DBACCESS_CORE_API_ROWSETBASE_HXX
+#include "CRowSetDataColumn.hxx"
+#include "KeySet.hxx"
+#include "OptimisticSet.hxx"
 #include "RowSetBase.hxx"
-#endif
+#include "RowSetCache.hxx"
+#include "StaticSet.hxx"
+#include "WrappedResultSet.hxx"
+#include "core_resource.hrc"
+#include "core_resource.hxx"
+#include "dbastrings.hrc"
+
+/** === begin UNO includes === **/
+#include <com/sun/star/sdbc/ColumnValue.hpp>
+#include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
+#include <com/sun/star/sdbcx/CompareBookmark.hpp>
+#include <com/sun/star/sdbcx/KeyType.hpp>
+#include <com/sun/star/sdbcx/Privilege.hpp>
+#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
+#include <com/sun/star/sdbcx/XKeysSupplier.hpp>
+#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
+/** === end UNO includes === **/
+
+#include <comphelper/extract.hxx>
+#include <comphelper/property.hxx>
+#include <comphelper/seqstream.hxx>
+#include <comphelper/uno3.hxx>
 #include <connectivity/dbexception.hxx>
-#include <connectivity/sqlparse.hxx>
-#include <connectivity/sqlnode.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/sqliterator.hxx>
-#ifndef _COMPHELPER_PROPERTY_HXX_
-#include <comphelper/property.hxx>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_COMPAREBOOKMARK_HPP_
-#include <com/sun/star/sdbcx/CompareBookmark.hpp>
-#endif
-#ifndef _TOOLS_DEBUG_HXX
+#include <connectivity/sqlnode.hxx>
+#include <connectivity/sqlparse.hxx>
 #include <tools/debug.hxx>
-#endif
+#include <tools/diagnose_ex.h>
 
 #include <algorithm>
-#ifndef DBACCESS_CORE_API_ROWSETCACHE_HXX
-#include "RowSetCache.hxx"
-#endif
-#ifndef _DBA_CORE_RESOURCE_HXX_
-#include "core_resource.hxx"
-#endif
-#ifndef _DBA_CORE_RESOURCE_HRC_
-#include "core_resource.hrc"
-#endif
-#ifndef DBACCESS_CORE_API_BOOKMARKSET_HXX
-#include "BookmarkSet.hxx"
-#endif
-#ifndef DBACCESS_CORE_API_STATICSET_HXX
-#include "StaticSet.hxx"
-#endif
-#ifndef DBACCESS_CORE_API_KEYSET_HXX
-#include "KeySet.hxx"
-#endif
-#ifndef DBACCESS_SHARED_DBASTRINGS_HRC
-#include "dbastrings.hrc"
-#endif
-#include "WrappedResultSet.hxx"
-#include "OptimisticSet.hxx"
 
 using namespace dbaccess;
 using namespace dbtools;
@@ -158,17 +118,25 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
     try
     {
         Reference< XResultSetUpdate> xUp(_xRs,UNO_QUERY_THROW);
-        xUp->moveToInsertRow();
-        xUp->cancelRowUpdates();
-        _xRs->beforeFirst();
-        m_nPrivileges = Privilege::SELECT|Privilege::DELETE|Privilege::INSERT|Privilege::UPDATE;
-        m_pCacheSet = new WrappedResultSet();
-        m_xCacheSet = m_pCacheSet;
-        m_pCacheSet->construct(_xRs,i_sRowSetFilter);
-        return;
+        Reference< XPropertySet> xProp(_xRs,UNO_QUERY);
+        Reference< XPropertySetInfo > xPropInfo = xProp->getPropertySetInfo();
+        sal_Bool bBookmarkable = xPropInfo->hasPropertyByName(PROPERTY_ISBOOKMARKABLE) &&
+                                any2bool(xProp->getPropertyValue(PROPERTY_ISBOOKMARKABLE)) && Reference< XRowLocate >(_xRs, UNO_QUERY).is();
+        if ( bBookmarkable )
+        {
+            xUp->moveToInsertRow();
+            xUp->cancelRowUpdates();
+            _xRs->beforeFirst();
+            m_nPrivileges = Privilege::SELECT|Privilege::DELETE|Privilege::INSERT|Privilege::UPDATE;
+            m_pCacheSet = new WrappedResultSet();
+            m_xCacheSet = m_pCacheSet;
+            m_pCacheSet->construct(_xRs,i_sRowSetFilter);
+            return;
+        }
     }
-    catch(const Exception&)
+    catch(const Exception& ex)
     {
+        (void)ex;
     }
     _xRs->beforeFirst();
 
@@ -220,7 +188,10 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
                 }
                 catch(const Exception&)
                 {
+                    // DBG_UNHANDLED_EXCEPTION();
                 }
+                m_pCacheSet = NULL;
+                m_xCacheSet.clear();
             }
             else
             {

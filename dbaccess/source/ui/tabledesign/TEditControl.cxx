@@ -107,6 +107,8 @@
 #endif
 #include "dsntypes.hxx"
 
+#include "dbaccess_slotid.hrc"
+
 using namespace ::dbaui;
 using namespace ::comphelper;
 using namespace ::svt;
@@ -133,9 +135,6 @@ DBG_NAME(OTableEditorCtrl)
 //==============================================================================
 
 #define HANDLE_ID       0
-
-// Anzahl Spalten beim Neuanlegen
-#define NEWCOLS        128
 
 // default Spaltenbreiten
 #define FIELDNAME_WIDTH     100

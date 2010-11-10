@@ -72,6 +72,7 @@ ModalDialog RID_EXTENSION_NOT_PRESENT_DLG
 
     PushButton PB_DOWNLOAD
     {
+        HelpID = "dbaccess:PushButton:RID_EXTENSION_NOT_PRESENT_DLG:PB_DOWNLOAD";
         Pos = MAP_APPFONT ( DLG_WIDTH / 2 - (CELL_PADDING/2) - BUTTON_WIDTH, ACTION_LINE_START ) ;
         Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
         DefButton = TRUE ;

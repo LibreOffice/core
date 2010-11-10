@@ -33,11 +33,12 @@
 #include "com/sun/star/lang/XServiceInfo.hpp"
 #include "com/sun/star/chart2/data/XDatabaseDataProvider.hpp"
 #include "com/sun/star/chart2/XInternalDataProvider.hpp"
+#include <com/sun/star/chart/XComplexDescriptionAccess.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/sdbc/XParameters.hpp>
 #include <com/sun/star/container/XChild.hpp>
 
-#include "cppuhelper/compbase3.hxx"
+#include "cppuhelper/compbase4.hxx"
 #include "cppuhelper/basemutex.hxx"
 #include "cppuhelper/propertysetmixin.hxx"
 #include <cppuhelper/implementationentry.hxx>
@@ -52,8 +53,9 @@ namespace dbaccess
 {
 
 class DatabaseDataSource;
-typedef ::cppu::WeakComponentImplHelper3<   ::com::sun::star::chart2::data::XDatabaseDataProvider
+typedef ::cppu::WeakComponentImplHelper4<   ::com::sun::star::chart2::data::XDatabaseDataProvider
                                           , ::com::sun::star::container::XChild
+                                          , ::com::sun::star::chart::XComplexDescriptionAccess
                                           , ::com::sun::star::lang::XServiceInfo > TDatabaseDataProvider;
 
 class DatabaseDataProvider: private ::cppu::BaseMutex,
@@ -187,6 +189,26 @@ private:
     // conatiner::XChild
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getParent(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setParent( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& Parent ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
+
+    // ____ XComplexDescriptionAccess ____
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::rtl::OUString > > SAL_CALL        getComplexRowDescriptions() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setComplexRowDescriptions(        const ::com::sun::star::uno::Sequence<        ::com::sun::star::uno::Sequence< ::rtl::OUString > >& aRowDescriptions )        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::rtl::OUString > > SAL_CALL        getComplexColumnDescriptions() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setComplexColumnDescriptions(         const ::com::sun::star::uno::Sequence<        ::com::sun::star::uno::Sequence< ::rtl::OUString > >& aColumnDescriptions )        throw (::com::sun::star::uno::RuntimeException);
+
+    // ____ XChartDataArray (base of XComplexDescriptionAccess) ____
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< double > > SAL_CALL getData()        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setData(        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< double > >& aData )        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getRowDescriptions()        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setRowDescriptions(        const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aRowDescriptions )        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getColumnDescriptions()        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setColumnDescriptions(        const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aColumnDescriptions )        throw (::com::sun::star::uno::RuntimeException);
+
+    // ____ XChartData (base of XChartDataArray) ____
+    virtual void SAL_CALL addChartDataChangeEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::chart::XChartDataChangeEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeChartDataChangeEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::chart::XChartDataChangeEventListener >& aListener )throw (::com::sun::star::uno::RuntimeException);
+    virtual double SAL_CALL getNotANumber()throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL isNotANumber(double nNumber )throw (::com::sun::star::uno::RuntimeException);
 private:
     DatabaseDataProvider(DatabaseDataProvider &); // not defined
     void operator =(DatabaseDataProvider &); // not defined
@@ -201,7 +223,7 @@ private:
     void impl_fillRowSet_throw();
     void impl_executeRowSet_throw(::osl::ResettableMutexGuard& _rClearForNotifies);
     bool impl_fillParameters_nothrow( ::osl::ResettableMutexGuard& _rClearForNotifies);
-    void impl_fillInternalDataProvider_throw(sal_Bool _bHasCategories);
+    void impl_fillInternalDataProvider_throw(sal_Bool _bHasCategories,const ::com::sun::star::uno::Sequence< ::rtl::OUString >& i_aColumnNames);
     void impl_invalidateParameter_nothrow();
     ::com::sun::star::uno::Any impl_getNumberFormatKey_nothrow(const ::rtl::OUString & _sRangeRepresentation) const;
 
@@ -229,6 +251,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >                 m_xActiveConnection;
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >                     m_xRowSet;
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XInternalDataProvider >     m_xInternal;
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart::XComplexDescriptionAccess >  m_xComplexDescriptionAccess;
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XRangeXMLConversion>  m_xRangeConversion;
     ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler>          m_xHandler;
     // the object doin' most of the work - an SDB-rowset

@@ -67,9 +67,6 @@
 #ifndef _COM_SUN_STAR_SDB_XINTERACTIONDOCUMENTSAVE_HPP_
 #include <com/sun/star/sdb/XInteractionDocumentSave.hpp>
 #endif
-#ifndef _SVTOOLS_LOGINDLG_HXX_
-#include <svtools/logindlg.hxx>
-#endif
 #ifndef SFX_QUERYSAVEDOCUMENT_HXX
 #include <sfx2/QuerySaveDocument.hxx>
 #endif

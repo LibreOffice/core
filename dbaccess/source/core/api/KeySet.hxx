@@ -35,14 +35,14 @@
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
 #endif
+#include <memory>
 #include <map>
 
 #ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #endif
-#ifndef _COM_SUN_STAR_SDB_XSINGLESELECTQUERYANALYZER_HPP_
 #include <com/sun/star/sdb/XSingleSelectQueryAnalyzer.hpp>
-#endif
+#include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
 #endif
@@ -93,6 +93,7 @@ namespace dbaccess
     // is used when the source supports keys
     class OKeySet : public OCacheSet
     {
+    protected:
         OKeySetMatrix                                           m_aKeyMap;
         OKeySetMatrix::iterator                                 m_aKeyIter;
 
@@ -100,10 +101,10 @@ namespace dbaccess
 
         OUpdatedParameter                                       m_aUpdatedParameter;    // contains all parameter which have been updated and are needed for refetching
         ORowSetValueVector                                      m_aParameterValueForCache;
-        SelectColumnsMetaData*                                  m_pKeyColumnNames;      // contains all key column names
-        SelectColumnsMetaData*                                  m_pColumnNames;         // contains all column names
-        SelectColumnsMetaData*                                  m_pParameterNames;      // contains all parameter names
-        SelectColumnsMetaData*                                  m_pForeignColumnNames;  // contains all column names of the rest
+        ::std::auto_ptr<SelectColumnsMetaData>                  m_pKeyColumnNames;      // contains all key column names
+        ::std::auto_ptr<SelectColumnsMetaData>                  m_pColumnNames;         // contains all column names
+        ::std::auto_ptr<SelectColumnsMetaData>                  m_pParameterNames;      // contains all parameter names
+        ::std::auto_ptr<SelectColumnsMetaData>                  m_pForeignColumnNames;  // contains all column names of the rest
         connectivity::OSQLTable                                 m_xTable; // reference to our table
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>    m_xTableKeys;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPreparedStatement>   m_xStatement;
@@ -111,7 +112,6 @@ namespace dbaccess
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow>                 m_xRow;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryAnalyzer >   m_xComposer;
         ::rtl::OUString                                                                 m_sUpdateTableName;
-        ::rtl::OUString                                                                 m_aSelectComposedTableName;
         ::std::vector< ::rtl::OUString >                        m_aFilterColumns;
 
         sal_Bool m_bRowCountFinal;
@@ -141,7 +141,18 @@ namespace dbaccess
         sal_Bool fetchRow();
 
         void impl_convertValue_throw(const ORowSetRow& _rInsertRow,const SelectColumnDescription& i_aMetaData);
-    protected:
+        void initColumns();
+        void findTableColumnsMatching_throw( const ::com::sun::star::uno::Any& i_aTable,
+                                             const ::rtl::OUString& i_rUpdateTableName,
+                                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& i_xMeta,
+                                             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& i_xQueryColumns,
+                                             ::std::auto_ptr<SelectColumnsMetaData>& o_pKeyColumnNames);
+        ::rtl::OUStringBuffer createKeyFilter();
+        void tryRefetch(const ORowSetRow& _rInsertRow,bool bRefetch);
+        void executeUpdate(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOrginalRow,const ::rtl::OUString& i_sSQL,const ::rtl::OUString& i_sTableName,const ::std::vector<sal_Int32>& _aIndexColumnPositions = ::std::vector<sal_Int32>());
+        void executeInsert( const ORowSetRow& _rInsertRow,const ::rtl::OUString& i_sSQL,const ::rtl::OUString& i_sTableName = ::rtl::OUString(),bool bRefetch = false);
+        void executeStatement(::rtl::OUStringBuffer& io_aFilter,const ::rtl::OUString& i_sRowSetFilter,::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer>& io_xAnalyzer);
+
         virtual ~OKeySet();
     public:
         OKeySet(const connectivity::OSQLTable& _xTable,

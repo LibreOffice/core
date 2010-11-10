@@ -31,10 +31,12 @@
 #include "dbastrings.hrc"
 #include "cppuhelper/implbase1.hxx"
 #include <comphelper/types.hxx>
+#include <comphelper/namedvaluecollection.hxx>
 #include <connectivity/FValue.hxx>
 #include <connectivity/dbtools.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/sdb/XCompletedExecution.hpp>
@@ -43,6 +45,7 @@
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
+#include <com/sun/star/sdbc/XColumnLocate.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/chart/XChartDataArray.hpp>
@@ -72,6 +75,7 @@ DatabaseDataProvider::DatabaseDataProvider(uno::Reference< uno::XComponentContex
 {
     m_xInternal.set( m_xContext->getServiceManager()->createInstanceWithContext(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.chart.InternalDataProvider")),m_xContext ), uno::UNO_QUERY );
     m_xRangeConversion.set(m_xInternal,uno::UNO_QUERY);
+    m_xComplexDescriptionAccess.set(m_xInternal,uno::UNO_QUERY);
 
     osl_incrementInterlockedCount( &m_refCount );
     {
@@ -203,17 +207,24 @@ uno::Reference< chart2::data::XDataSource > SAL_CALL DatabaseDataProvider::creat
     osl::ResettableMutexGuard aClearForNotifies(m_aMutex);
     if ( createDataSourcePossible(_aArguments) )
     {
-        sal_Bool bHasCategories = sal_True;
-        const beans::PropertyValue* pArgIter = _aArguments.getConstArray();
-        const beans::PropertyValue* pArgEnd  = pArgIter + _aArguments.getLength();
-        for(;pArgIter != pArgEnd;++pArgIter)
+        try
         {
-            if ( pArgIter->Name.equalsAscii("HasCategories") )
-            {
-                pArgIter->Value >>= bHasCategories;
-                break;
-            }
+            uno::Reference< chart::XChartDataArray> xChartData( m_xInternal, uno::UNO_QUERY_THROW );
+            xChartData->setData( uno::Sequence< uno::Sequence< double > >() );
+            xChartData->setColumnDescriptions( uno::Sequence< ::rtl::OUString >() );
+            if ( m_xInternal->hasDataByRangeRepresentation( ::rtl::OUString::valueOf( sal_Int32(0) ) ) )
+                m_xInternal->deleteSequence(0);
         }
+        catch( const uno::Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+
+        ::comphelper::NamedValueCollection aArgs( _aArguments );
+        const sal_Bool bHasCategories = aArgs.getOrDefault( "HasCategories", sal_True );
+        uno::Sequence< ::rtl::OUString > aColumnNames =
+            aArgs.getOrDefault( "ColumnDescriptions", uno::Sequence< ::rtl::OUString >() );
+
         bool bRet = false;
         if ( m_Command.getLength() != 0 && m_xActiveConnection.is() )
         {
@@ -221,7 +232,7 @@ uno::Reference< chart2::data::XDataSource > SAL_CALL DatabaseDataProvider::creat
             {
                 impl_fillRowSet_throw();
                 impl_executeRowSet_throw(aClearForNotifies);
-                impl_fillInternalDataProvider_throw(bHasCategories);
+                impl_fillInternalDataProvider_throw(bHasCategories,aColumnNames);
                 bRet = true;
             }
             catch(const uno::Exception& /*e*/)
@@ -233,10 +244,10 @@ uno::Reference< chart2::data::XDataSource > SAL_CALL DatabaseDataProvider::creat
             uno::Reference< lang::XInitialization> xIni(m_xInternal,uno::UNO_QUERY);
             if ( xIni.is() )
             {
-                uno::Sequence< uno::Any > aArgs(1);
+                uno::Sequence< uno::Any > aInitArgs(1);
                 beans::NamedValue aParam(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CreateDefaultData")),uno::makeAny(sal_True));
-                aArgs[0] <<= aParam;
-                xIni->initialize(aArgs);
+                aInitArgs[0] <<= aParam;
+                xIni->initialize(aInitArgs);
             }
         }
 
@@ -247,41 +258,36 @@ uno::Reference< chart2::data::XDataSource > SAL_CALL DatabaseDataProvider::creat
 
 uno::Sequence< beans::PropertyValue > SAL_CALL DatabaseDataProvider::detectArguments(const uno::Reference< chart2::data::XDataSource > & _xDataSource) throw (uno::RuntimeException)
 {
-    uno::Sequence< beans::PropertyValue > aArguments( 4 );
-    aArguments[0] = beans::PropertyValue(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CellRangeRepresentation")), -1, uno::Any(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("all")) ),
-        beans::PropertyState_DIRECT_VALUE );
-    aArguments[1] = beans::PropertyValue(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataRowSource")), -1, uno::makeAny( chart::ChartDataRowSource_COLUMNS ),
-        beans::PropertyState_DIRECT_VALUE );
+    ::comphelper::NamedValueCollection aArguments;
+    aArguments.put( "CellRangeRepresentation", uno::Any( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "all" ) ) ) );
+    aArguments.put( "DataRowSource", uno::makeAny( chart::ChartDataRowSource_COLUMNS ) );
     // internal data always contains labels and categories
-    aArguments[2] = beans::PropertyValue(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FirstCellAsLabel")), -1, uno::makeAny( true ), beans::PropertyState_DIRECT_VALUE );
+    aArguments.put( "FirstCellAsLabel", uno::makeAny( sal_True ) );
+
     sal_Bool bHasCategories = sal_False;
     if( _xDataSource.is())
     {
-      uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aSequences(_xDataSource->getDataSequences());
-      const sal_Int32 nCount( aSequences.getLength());
-      for( sal_Int32 nIdx=0; nIdx<nCount; ++nIdx )
-      {
-          if( aSequences[nIdx].is() )
-          {
-              uno::Reference< beans::XPropertySet > xSeqProp( aSequences[nIdx]->getValues(), uno::UNO_QUERY );
-              ::rtl::OUString aRole;
-              if( xSeqProp.is() &&
-                  (xSeqProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Role"))) >>= aRole) &&
-                  aRole.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("categories")) )
-              {
-                  bHasCategories = sal_True;
-                  break;
-              }
-          }
-      }
+        uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aSequences(_xDataSource->getDataSequences());
+        const sal_Int32 nCount( aSequences.getLength());
+        for( sal_Int32 nIdx=0; nIdx<nCount; ++nIdx )
+        {
+            if( aSequences[nIdx].is() )
+            {
+                uno::Reference< beans::XPropertySet > xSeqProp( aSequences[nIdx]->getValues(), uno::UNO_QUERY );
+                ::rtl::OUString aRole;
+                if  (   xSeqProp.is()
+                    &&  ( xSeqProp->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Role" ) ) ) >>= aRole )
+                    &&  aRole.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "categories" ) )
+                    )
+                {
+                    bHasCategories = sal_True;
+                    break;
+                }
+            }
+        }
     }
-
-    aArguments[3] = beans::PropertyValue(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HasCategories")), -1, uno::makeAny( bHasCategories ), beans::PropertyState_DIRECT_VALUE );
-    return aArguments;
+    aArguments.put( "HasCategories", uno::makeAny( bHasCategories ) );
+    return aArguments.getPropertyValues();
 }
 // -----------------------------------------------------------------------------
 
@@ -310,6 +316,75 @@ uno::Reference< chart2::data::XDataSequence > SAL_CALL DatabaseDataProvider::cre
     }
     return xData;
 }
+
+uno::Sequence< uno::Sequence< rtl::OUString > > SAL_CALL DatabaseDataProvider::getComplexRowDescriptions() throw (uno::RuntimeException)
+{
+    return m_xComplexDescriptionAccess->getComplexRowDescriptions();
+}
+void SAL_CALL DatabaseDataProvider::setComplexRowDescriptions( const uno::Sequence< uno::Sequence< ::rtl::OUString > >& aRowDescriptions ) throw (uno::RuntimeException)
+{
+    m_xComplexDescriptionAccess->setComplexRowDescriptions(aRowDescriptions);
+}
+uno::Sequence< uno::Sequence< rtl::OUString > > SAL_CALL DatabaseDataProvider::getComplexColumnDescriptions() throw (uno::RuntimeException)
+{
+    return m_xComplexDescriptionAccess->getComplexColumnDescriptions();
+}
+void SAL_CALL DatabaseDataProvider::setComplexColumnDescriptions( const uno::Sequence< uno::Sequence< rtl::OUString > >& aColumnDescriptions ) throw (uno::RuntimeException)
+{
+    m_xComplexDescriptionAccess->setComplexColumnDescriptions(aColumnDescriptions);
+}
+// ____ XChartDataArray ____
+uno::Sequence< uno::Sequence< double > > SAL_CALL DatabaseDataProvider::getData()    throw (uno::RuntimeException)
+{
+    return m_xComplexDescriptionAccess->getData();
+}
+
+void SAL_CALL DatabaseDataProvider::setData( const uno::Sequence< uno::Sequence< double > >& rDataInRows )    throw (uno::RuntimeException)
+{
+    m_xComplexDescriptionAccess->setData(rDataInRows);
+}
+
+void SAL_CALL DatabaseDataProvider::setRowDescriptions( const uno::Sequence< rtl::OUString >& aRowDescriptions )    throw (uno::RuntimeException)
+{
+    m_xComplexDescriptionAccess->setRowDescriptions(aRowDescriptions);
+}
+
+void SAL_CALL DatabaseDataProvider::setColumnDescriptions( const uno::Sequence< rtl::OUString >& aColumnDescriptions )    throw (uno::RuntimeException)
+{
+    m_xComplexDescriptionAccess->setColumnDescriptions(aColumnDescriptions);
+}
+
+uno::Sequence< rtl::OUString > SAL_CALL DatabaseDataProvider::getRowDescriptions()    throw (uno::RuntimeException)
+{
+    return m_xComplexDescriptionAccess->getRowDescriptions();
+}
+
+uno::Sequence< rtl::OUString > SAL_CALL DatabaseDataProvider::getColumnDescriptions()    throw (uno::RuntimeException)
+{
+    return m_xComplexDescriptionAccess->getColumnDescriptions();
+}
+
+// ____ XChartData (base of XChartDataArray) ____
+void SAL_CALL DatabaseDataProvider::addChartDataChangeEventListener(const uno::Reference< ::com::sun::star::chart::XChartDataChangeEventListener >& x)    throw (uno::RuntimeException)
+{
+    m_xComplexDescriptionAccess->addChartDataChangeEventListener(x);
+}
+
+void SAL_CALL DatabaseDataProvider::removeChartDataChangeEventListener(const uno::Reference< ::com::sun::star::chart::XChartDataChangeEventListener >& x)    throw (uno::RuntimeException)
+{
+    m_xComplexDescriptionAccess->removeChartDataChangeEventListener(x);
+}
+
+double SAL_CALL DatabaseDataProvider::getNotANumber()    throw (uno::RuntimeException)
+{
+    return m_xComplexDescriptionAccess->getNotANumber();
+}
+
+::sal_Bool SAL_CALL DatabaseDataProvider::isNotANumber( double nNumber )    throw (uno::RuntimeException)
+{
+    return m_xComplexDescriptionAccess->isNotANumber(nNumber);
+}
+
 // -----------------------------------------------------------------------------
 
 uno::Reference< sheet::XRangeSelection > SAL_CALL DatabaseDataProvider::getRangeSelection() throw (uno::RuntimeException)
@@ -573,48 +648,136 @@ void DatabaseDataProvider::impl_executeRowSet_throw(::osl::ResettableMutexGuard&
     if ( impl_fillParameters_nothrow(_rClearForNotifies) )
         m_xRowSet->execute();
 }
+
 // -----------------------------------------------------------------------------
-void DatabaseDataProvider::impl_fillInternalDataProvider_throw(sal_Bool _bHasCategories)
+namespace
+{
+    struct ColumnDescription
+    {
+        ::rtl::OUString sName;
+        sal_Int32       nResultSetPosition;
+        sal_Int32       nDataType;
+
+        ColumnDescription()
+            :sName()
+            ,nResultSetPosition( 0 )
+            ,nDataType( sdbc::DataType::VARCHAR )
+        {
+        }
+        explicit ColumnDescription( const ::rtl::OUString& i_rName )
+            :sName( i_rName )
+            ,nResultSetPosition( 0 )
+            ,nDataType( sdbc::DataType::VARCHAR )
+        {
+        }
+    };
+
+    struct CreateColumnDescription : public ::std::unary_function< ::rtl::OUString, ColumnDescription >
+    {
+        ColumnDescription operator()( const ::rtl::OUString& i_rName )
+        {
+            return ColumnDescription( i_rName );
+        }
+    };
+
+    struct SelectColumnName : public ::std::unary_function< ColumnDescription, ::rtl::OUString >
+    {
+        const ::rtl::OUString& operator()( const ColumnDescription& i_rColumn )
+        {
+            return i_rColumn.sName;
+        }
+    };
+}
+
+// -----------------------------------------------------------------------------
+void DatabaseDataProvider::impl_fillInternalDataProvider_throw(sal_Bool _bHasCategories,const uno::Sequence< ::rtl::OUString >& i_aColumnNames)
 {
     // clear the data before fill the new one
-    uno::Reference< chart::XChartDataArray> xChartData(m_xInternal,uno::UNO_QUERY);
-    if ( xChartData.is() )
+    uno::Reference< sdbcx::XColumnsSupplier > xColSup(m_xRowSet,uno::UNO_QUERY_THROW);
+    uno::Reference< container::XNameAccess > xColumns( xColSup->getColumns(), uno::UNO_SET_THROW );
+    const uno::Sequence< ::rtl::OUString > aRowSetColumnNames( xColumns->getElementNames() );
+
+    typedef ::std::vector< ColumnDescription > ColumnDescriptions;
+    ColumnDescriptions aColumns;
+    bool bFirstColumnIsCategory = _bHasCategories;
+    if ( i_aColumnNames.getLength() )
     {
-        xChartData->setData(uno::Sequence< uno::Sequence<double> >());
-        xChartData->setColumnDescriptions(uno::Sequence< ::rtl::OUString >());
-        if ( m_xInternal->hasDataByRangeRepresentation(::rtl::OUString::valueOf(sal_Int32(0))) )
-            m_xInternal->deleteSequence(0);
+        // some normalizations ...
+        uno::Sequence< ::rtl::OUString > aImposedColumnNames( i_aColumnNames );
+
+        // strangely, there exist documents where the ColumnDescriptions end with a number of empty strings. /me
+        // thinks they're generated when you have a chart based on a result set with n columns, but remove some
+        // of those columns from the chart - it looks like a bug in the report XML export to me.
+        // So, get rid of the "trailing" empty columns
+        sal_Int32 nLastNonEmptyColName = aImposedColumnNames.getLength() - 1;
+        for ( ; nLastNonEmptyColName >= 0; --nLastNonEmptyColName )
+        {
+            if ( aImposedColumnNames[ nLastNonEmptyColName ].getLength() != 0 )
+                break;
+        }
+        aImposedColumnNames.realloc( nLastNonEmptyColName + 1 );
+
+        // second, for X-Y-charts the ColumnDescriptions exported by chart miss the name of the first (non-category)
+        // column. This, this results in a ColumnDescriptions array like <"", "col2", "col3">, where you'd expect
+        // <"col1", "col2", "col3">.
+        // Fix this with some heuristics:
+        if ( ( aImposedColumnNames.getLength() > 0 ) && ( aImposedColumnNames[0].getLength() == 0 ) )
+        {
+            const sal_Int32 nAssumedRowSetColumnIndex = _bHasCategories ? 1 : 0;
+            if ( nAssumedRowSetColumnIndex < aRowSetColumnNames.getLength() )
+                aImposedColumnNames[0] = aRowSetColumnNames[ nAssumedRowSetColumnIndex ];
+        }
+
+        const sal_Int32 nCount = aImposedColumnNames.getLength();
+        for ( sal_Int32 i = 0 ; i < nCount; ++i )
+        {
+            const ::rtl::OUString sColumnName( aImposedColumnNames[i] );
+            if ( !xColumns->hasByName( sColumnName ) )
+                continue;
+
+            if ( _bHasCategories && aColumns.empty() )
+            {
+                if ( aRowSetColumnNames.getLength() )
+                    aColumns.push_back( ColumnDescription( aRowSetColumnNames[0] ) );
+                else
+                    aColumns.push_back( ColumnDescription( sColumnName ) );
+                bFirstColumnIsCategory = true;
+            }
+            aColumns.push_back( ColumnDescription( sColumnName ) );
+        }
+    }
+    if ( aColumns.empty() )
+    {
+        aColumns.resize( aRowSetColumnNames.getLength() );
+        ::std::transform(
+            aRowSetColumnNames.getConstArray(),
+            aRowSetColumnNames.getConstArray() + aRowSetColumnNames.getLength(),
+            aColumns.begin(),
+            CreateColumnDescription()
+       );
     }
 
-    uno::Sequence< ::rtl::OUString > aColumns;
-    uno::Reference< sdbcx::XColumnsSupplier> xColSup(m_xRowSet,uno::UNO_QUERY_THROW);
-    uno::Reference< container::XNameAccess > xColumns = xColSup->getColumns();
-    if ( xColumns.is() )
-        aColumns = xColumns->getElementNames();
     // fill the data
-    uno::Reference< sdbc::XResultSet> xRes(m_xRowSet,uno::UNO_QUERY_THROW);
-    uno::Reference< sdbc::XRow> xRow(m_xRowSet,uno::UNO_QUERY_THROW);
-    uno::Reference< sdbc::XResultSetMetaData> xResultSetMetaData = uno::Reference< sdbc::XResultSetMetaDataSupplier>(m_xRowSet,uno::UNO_QUERY)->getMetaData();
+    uno::Reference< sdbc::XResultSet> xRes( m_xRowSet, uno::UNO_QUERY_THROW );
+    uno::Reference< sdbc::XRow> xRow( m_xRowSet,uno::UNO_QUERY_THROW );
+    uno::Reference< sdbc::XResultSetMetaDataSupplier > xSuppMeta( m_xRowSet,uno::UNO_QUERY_THROW );
+    uno::Reference< sdbc::XResultSetMetaData > xResultSetMetaData( xSuppMeta->getMetaData(), uno::UNO_SET_THROW );
+    uno::Reference< sdbc::XColumnLocate > xColumnLocate( m_xRowSet, uno::UNO_QUERY_THROW );
 
-    ::std::vector<sal_Int32> aColumnTypes;
-    uno::Sequence< uno::Any > aLabelArgs(1);
-    const sal_Int32 nCount = aColumns.getLength();
-    if ( nCount )
-        aColumnTypes.push_back(xResultSetMetaData->getColumnType(1));
-    for (sal_Int32 i = 1; i < nCount; ++i)
+    for (   ColumnDescriptions::iterator col = aColumns.begin();
+            col != aColumns.end();
+            ++col
+         )
     {
-        aColumnTypes.push_back(xResultSetMetaData->getColumnType(i+1));
-    } // for (sal_Int32 i = 1; i < nCount; ++i)
+        col->nResultSetPosition = xColumnLocate->findColumn( col->sName );
 
-    const ::rtl::OUString* pIter = aColumns.getConstArray();
-    const ::rtl::OUString* pEnd = pIter + aColumns.getLength();
-    for(sal_Int32 k = 0;pIter != pEnd;++pIter,++k)
-    {
-        uno::Reference< beans::XPropertySet> xColumn(xColumns->getByName(*pIter),uno::UNO_QUERY);
-        if ( xColumn.is() )
-        {
-            m_aNumberFormats.insert( ::std::map< ::rtl::OUString,uno::Any>::value_type(::rtl::OUString::valueOf(k),xColumn->getPropertyValue(PROPERTY_NUMBERFORMAT)));
-        }
+        const uno::Reference< beans::XPropertySet > xColumn( xColumns->getByName( col->sName ), uno::UNO_QUERY_THROW );
+        const uno::Any aNumberFormat( xColumn->getPropertyValue( PROPERTY_NUMBERFORMAT ) );
+        OSL_VERIFY( xColumn->getPropertyValue( PROPERTY_TYPE ) >>= col->nDataType );
+
+        const sal_Int32 columnIndex = col - aColumns.begin();
+        const ::rtl::OUString sRangeName = ::rtl::OUString::valueOf( columnIndex );
+        m_aNumberFormats.insert( ::std::map< ::rtl::OUString, uno::Any >::value_type( sRangeName, aNumberFormat ) );
     }
 
     ::std::vector< ::rtl::OUString > aRowLabels;
@@ -625,23 +788,31 @@ void DatabaseDataProvider::impl_fillInternalDataProvider_throw(sal_Bool _bHasCat
     {
         ++nRowCount;
 
-        aValue.fill(1,aColumnTypes[0],xRow);
-        aRowLabels.push_back(aValue.getString());
+        aValue.fill( aColumns[0].nResultSetPosition, aColumns[0].nDataType, xRow );
+        aRowLabels.push_back( aValue.getString() );
+
         ::std::vector< double > aRow;
-        for (sal_Int32 j = _bHasCategories ? 2 : 1,i = 0; j <= nCount; ++j,++i)
+        for (   ColumnDescriptions::const_iterator col = aColumns.begin();
+                col != aColumns.end();
+                ++col
+            )
         {
-            aValue.fill(j,aColumnTypes[j-1],xRow);
+            if ( bFirstColumnIsCategory && ( col == aColumns.begin() )  )
+                continue;
+
+            aValue.fill( col->nResultSetPosition, col->nDataType, xRow );
             if ( aValue.isNull() )
             {
                 double nValue;
                 ::rtl::math::setNan( &nValue );
-                aRow.push_back(nValue);
+                aRow.push_back( nValue );
             }
             else
-                aRow.push_back(aValue.getDouble());
-        } // for (sal_Int32 j = 2,i = 0; j <= nCount; ++j,++i)
-        aDataValues.push_back(aRow);
-    } // while( xRes->next() && (!m_RowLimit || nRowCount < m_RowLimit) )
+                aRow.push_back( aValue.getDouble() );
+        }
+
+        aDataValues.push_back( aRow );
+    }
 
     // insert default data when no rows exist
     if ( !nRowCount )
@@ -657,19 +828,29 @@ void DatabaseDataProvider::impl_fillInternalDataProvider_throw(sal_Bool _bHasCat
             aRowLabels.push_back(::rtl::OUString::valueOf(h+1));
             ::std::vector< double > aRow;
             const sal_Int32 nSize = sizeof(fDefaultData)/sizeof(fDefaultData[0]);
-            for (sal_Int32 j = 0; j < (nCount-1); ++j,++k)
+            for (size_t j = 0; j < (aColumns.size()-1); ++j,++k)
             {
                 if ( k >= nSize )
                     k = 0;
                 aRow.push_back(fDefaultData[k]);
-            } // for (sal_Int32 j = 0,k = 0; j < (nCount-1); ++j,++k)
+            } // for (sal_Int32 j = 0,k = 0; j < (aColumns.size()-1); ++j,++k)
             aDataValues.push_back(aRow);
         }
     } // if ( !nRowCount )
 
     uno::Reference< chart::XChartDataArray> xData(m_xInternal,uno::UNO_QUERY);
     xData->setRowDescriptions(uno::Sequence< ::rtl::OUString >(&(*aRowLabels.begin()),aRowLabels.size()));
-    xData->setColumnDescriptions(uno::Sequence< ::rtl::OUString >(aColumns.getArray()+ (_bHasCategories ? 1 : 0),aColumns.getLength() - (_bHasCategories ? 1 : 0) ));
+
+    const size_t nOffset = bFirstColumnIsCategory ? 1 : 0;
+    uno::Sequence< ::rtl::OUString > aColumnDescriptions( aColumns.size() - nOffset );
+    ::std::transform(
+        aColumns.begin() + nOffset,
+        aColumns.end(),
+        aColumnDescriptions.getArray(),
+        SelectColumnName()
+    );
+    xData->setColumnDescriptions( aColumnDescriptions );
+
     uno::Sequence< uno::Sequence< double > > aData(aDataValues.size());
     uno::Sequence< double >* pDataIter  = aData.getArray();
     uno::Sequence< double >* pDataEnd   = pDataIter + aData.getLength();

@@ -2751,6 +2751,7 @@ void SbaXDataBrowserController::unloading(const EventObject& /*aEvent*/) throw( 
 void SbaXDataBrowserController::unloaded(const EventObject& /*aEvent*/) throw( RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaui", "Ocke.Janssen@sun.com", "SbaXDataBrowserController::unloaded" );
+    m_xParser.clear();
     InvalidateAll();
         // do this asynchron, there are other listeners reacting on this message ...
         // (it's a little hack : the grid columns are listening to this event, too, and their bound field may
