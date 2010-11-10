@@ -31,7 +31,7 @@
 #include "helpid.h"
 ModalDialog DLG_MERGE_TABLE
 {
-    HelpID = FN_TABLE_MERGE_TABLE ;
+    HelpID = CMD_FN_TABLE_MERGE_TABLE ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 207 , 57 ) ;
@@ -63,6 +63,7 @@ ModalDialog DLG_MERGE_TABLE
     };
     RadioButton RB_MERGE_PREV
     {
+        HelpID = "sw:RadioButton:DLG_MERGE_TABLE:RB_MERGE_PREV";
         Pos = MAP_APPFONT ( 12 , 15 ) ;
         Size = MAP_APPFONT ( 130 , 10 ) ;
         Check = TRUE ;
@@ -71,6 +72,7 @@ ModalDialog DLG_MERGE_TABLE
     };
     RadioButton RB_MERGE_NEXT
     {
+        HelpID = "sw:RadioButton:DLG_MERGE_TABLE:RB_MERGE_NEXT";
         Pos = MAP_APPFONT ( 12 , 30 ) ;
         Size = MAP_APPFONT ( 130 , 10 ) ;
         Text [ en-US ] = "Join with ~next table";

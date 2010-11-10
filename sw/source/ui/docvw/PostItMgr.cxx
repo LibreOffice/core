@@ -1645,28 +1645,36 @@ void SwPostItMgr::CorrectPositions()
    if (!pFirstPostIt)
        return;
 
-   // yeah, I know, if this is a left page it could be wrong, but finding the page and the note is probably not even faster than just doing it
-   const long aAnchorX = mpEditWin->LogicToPixel( Point((long)(pFirstPostIt->Anchor()->GetSixthPosition().getX()),0)).X();
-   const long aAnchorY = mpEditWin->LogicToPixel( Point(0,(long)(pFirstPostIt->Anchor()->GetSixthPosition().getY()))).Y() + 1;
-   if (Point(aAnchorX,aAnchorY) != pFirstPostIt->GetPosPixel())
-   {
-       long aAnchorPosX = 0;
-       long aAnchorPosY = 0;
-       for (unsigned long n=0;n<mPages.size();n++)
-       {
-           for(SwSidebarItem_iterator i = mPages[n]->mList->begin(); i!= mPages[n]->mList->end(); i++)
-           {
-               if ((*i)->bShow && (*i)->pPostIt)
-               {
+    // yeah, I know,    if this is a left page it could be wrong, but finding the page and the note is probably not even faster than just doing it
+    // --> OD 2010-06-03 #i111964# - check, if anchor overlay object exists.
+    const long aAnchorX = pFirstPostIt->Anchor()
+                          ? mpEditWin->LogicToPixel( Point((long)(pFirstPostIt->Anchor()->GetSixthPosition().getX()),0)).X()
+                          : 0;
+    const long aAnchorY = pFirstPostIt->Anchor()
+                          ? mpEditWin->LogicToPixel( Point(0,(long)(pFirstPostIt->Anchor()->GetSixthPosition().getY()))).Y() + 1
+                          : 0;
+    // <--
+    if (Point(aAnchorX,aAnchorY) != pFirstPostIt->GetPosPixel())
+    {
+        long aAnchorPosX = 0;
+        long aAnchorPosY = 0;
+        for (unsigned long n=0;n<mPages.size();n++)
+        {
+            for(SwSidebarItem_iterator i = mPages[n]->mList->begin(); i!= mPages[n]->mList->end(); i++)
+            {
+                // --> OD 2010-06-03 #i111964# - check, if anchor overlay object exists.
+                if ( (*i)->bShow && (*i)->pPostIt && (*i)->pPostIt->Anchor() )
+                // <--
+                {
                     aAnchorPosX = mPages[n]->eSidebarPosition == sw::sidebarwindows::SIDEBAR_LEFT
                         ? mpEditWin->LogicToPixel( Point((long)((*i)->pPostIt->Anchor()->GetSeventhPosition().getX()),0)).X()
                         : mpEditWin->LogicToPixel( Point((long)((*i)->pPostIt->Anchor()->GetSixthPosition().getX()),0)).X();
                     aAnchorPosY = mpEditWin->LogicToPixel( Point(0,(long)((*i)->pPostIt->Anchor()->GetSixthPosition().getY()))).Y() + 1;
                     (*i)->pPostIt->SetPosPixel(Point(aAnchorPosX,aAnchorPosY));
                }
-           }
-       }
-   }
+            }
+        }
+    }
 }
 
 

@@ -71,7 +71,6 @@ one go*/
 #include <memory>
 
 #include "mathmlimport.hxx"
-#include "mathtype.hxx"
 #include <starmath.hrc>
 #include <unomodel.hxx>
 #include <document.hxx>

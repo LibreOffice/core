@@ -39,6 +39,7 @@
 #include <svl/zforlist.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
+#include <svl/PasswordHelper.hxx>
 #include <editeng/adjitem.hxx>
 #include <basic/sbx.hxx>
 #include <unotools/moduleoptions.hxx>
@@ -64,7 +65,7 @@
 #include <fmtfld.hxx>
 #include <node.hxx>
 #include <swwait.hxx>
-#include <swprtopt.hxx>
+#include <printdata.hxx>
 #include <frmatr.hxx>
 #include <view.hxx>         // fuer die aktuelle Sicht
 #include <edtwin.hxx>
@@ -894,7 +895,7 @@ void SwDocShell::Draw( OutputDevice* pDev, const JobSetup& rSetup,
     pDev->SetLineColor();
     pDev->SetBackground();
     BOOL bWeb = 0 != PTR_CAST(SwWebDocShell, this);
-    SwPrtOptions aOpts( aEmptyStr );
+    SwPrintData aOpts;
     ViewShell::PrtOle2( pDoc, SW_MOD()->GetUsrPref(bWeb), aOpts, pDev, aRect );
     pDev->Pop();
 
@@ -1367,3 +1368,79 @@ const ::sfx2::IXmlIdRegistry* SwDocShell::GetXmlIdRegistry() const
 {
     return pDoc ? &pDoc->GetXmlIdRegistry() : 0;
 }
+
+
+bool SwDocShell::IsChangeRecording() const
+{
+    return (pWrtShell->GetRedlineMode() & nsRedlineMode_t::REDLINE_ON) != 0;
+}
+
+
+bool SwDocShell::HasChangeRecordProtection() const
+{
+    return pWrtShell->getIDocumentRedlineAccess()->GetRedlinePassword().getLength() > 0;
+}
+
+
+void SwDocShell::SetChangeRecording( bool bActivate )
+{
+    USHORT nOn = bActivate ? nsRedlineMode_t::REDLINE_ON : 0;
+    USHORT nMode = pWrtShell->GetRedlineMode();
+    pWrtShell->SetRedlineModeAndCheckInsMode( (nMode & ~nsRedlineMode_t::REDLINE_ON) | nOn);
+}
+
+
+bool SwDocShell::SetProtectionPassword( const String &rNewPassword )
+{
+    const SfxAllItemSet aSet( GetPool() );
+    const SfxItemSet*   pArgs = &aSet;
+    const SfxPoolItem*  pItem = NULL;
+
+    IDocumentRedlineAccess* pIDRA = pWrtShell->getIDocumentRedlineAccess();
+    Sequence< sal_Int8 > aPasswd = pIDRA->GetRedlinePassword();
+    if (pArgs && SFX_ITEM_SET == pArgs->GetItemState( FN_REDLINE_PROTECT, FALSE, &pItem )
+        && ((SfxBoolItem*)pItem)->GetValue() == (aPasswd.getLength() > 0))
+        return false;
+
+    bool bRes = false;
+
+    if (rNewPassword.Len())
+    {
+        // when password protection is applied change tracking must always be active
+        SetChangeRecording( true );
+
+        Sequence< sal_Int8 > aNewPasswd;
+        SvPasswordHelper::GetHashPassword( aNewPasswd, rNewPassword );
+        pIDRA->SetRedlinePassword( aNewPasswd );
+        bRes = true;
+    }
+    else
+    {
+        pIDRA->SetRedlinePassword( Sequence< sal_Int8 >() );
+        bRes = true;
+    }
+
+    return bRes;
+}
+
+
+bool SwDocShell::GetProtectionHash( /*out*/ ::com::sun::star::uno::Sequence< sal_Int8 > &rPasswordHash )
+{
+    bool bRes = false;
+
+    const SfxAllItemSet aSet( GetPool() );
+    const SfxItemSet*   pArgs = &aSet;
+    const SfxPoolItem*  pItem = NULL;
+
+    IDocumentRedlineAccess* pIDRA = pWrtShell->getIDocumentRedlineAccess();
+    Sequence< sal_Int8 > aPasswdHash( pIDRA->GetRedlinePassword() );
+    if (pArgs && SFX_ITEM_SET == pArgs->GetItemState( FN_REDLINE_PROTECT, FALSE, &pItem )
+        && ((SfxBoolItem*)pItem)->GetValue() == (aPasswdHash.getLength() != 0))
+        return false;
+    rPasswordHash = aPasswdHash;
+    bRes = true;
+
+    return bRes;
+}
+
+

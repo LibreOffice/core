@@ -170,7 +170,7 @@ class SwSidebarWin : public Window
         virtual bool    IsProtected() {return mbReadonly;};
 
         DECL_LINK( WindowEventListener, VclSimpleEvent* );
-        inline const bool IsMouseOverSidebarWin() const { return mbMouseOver; }
+        inline bool IsMouseOverSidebarWin() const { return mbMouseOver; }
 
         void SetLanguage(const SvxLanguageItem aNewItem);
 

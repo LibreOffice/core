@@ -24,8 +24,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _AUTHFLD_HXX
-#define _AUTHFLD_HXX
+#ifndef SW_AUTHFLD_HXX
+#define SW_AUTHFLD_HXX
 
 #include "swdllapi.h"
 #include <fldbas.hxx>
@@ -166,6 +166,10 @@ class SwAuthorityField : public SwField
 {
     long            m_nHandle;
     mutable long    m_nTempSequencePos;
+
+    virtual String      Expand() const;
+    virtual SwField*    Copy() const;
+
 public:
     SwAuthorityField(SwAuthorityFieldType* pType, const String& rFieldContents);
     SwAuthorityField(SwAuthorityFieldType* pType, long nHandle);
@@ -173,8 +177,6 @@ public:
 
     const String&       GetFieldText(ToxAuthorityField eField) const;
 
-    virtual String      Expand() const;
-    virtual SwField*    Copy() const;
     virtual void        SetPar1(const String& rStr);
     virtual SwFieldType* ChgTyp( SwFieldType* );
 

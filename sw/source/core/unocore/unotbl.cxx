@@ -1009,12 +1009,9 @@ void SwXCell::setFormula(const OUString& rFormula) throw( uno::RuntimeException 
 double SwXCell::getValue(void) throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    double fRet = lcl_getValue( *this );
-    //lcl_getValue was changed thus it can return nan values,
-    //so I make this additional nan check here to not change the behaviour
-    //but maybe it would even be more correct to just return nan here? ... todo?
-    if( ::rtl::math::isNan( fRet ) )
-        fRet = 0.0;
+
+    double const fRet = lcl_getValue( *this );
+    // #i112652# a table cell may contain NaN as a value, do not filter that
     return fRet;
 }
 /*-- 11.12.98 10:56:26---------------------------------------------------
@@ -2287,17 +2284,6 @@ void    SwTableProperties_Impl::ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc)
     {
         rDoc.SetAttr( aSet, *rTbl.GetFrmFmt() );
     }
-}
-/* -----------------------------11.07.00 12:14--------------------------------
-
- ---------------------------------------------------------------------------*/
-SwXTextTable* SwXTextTable::GetImplementation(uno::Reference< XInterface> xRef )
-{
-    uno::Reference<lang::XUnoTunnel> xTunnel( xRef, uno::UNO_QUERY);
-    if(xTunnel.is())
-        return reinterpret_cast< SwXTextTable * >(
-                sal::static_int_cast< sal_IntPtr >( xTunnel->getSomething(SwXTextTable::getUnoTunnelId()) ));
-    return 0;
 }
 /* -----------------------------10.03.00 18:02--------------------------------
 

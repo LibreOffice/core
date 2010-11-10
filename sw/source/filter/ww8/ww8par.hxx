@@ -1164,6 +1164,7 @@ private:
     bool GetFontParams(USHORT, FontFamily&, String&, FontPitch&,
         rtl_TextEncoding&);
     bool SetNewFontAttr(USHORT nFCode, bool bSetEnums, USHORT nWhich);
+    USHORT CorrectResIdForCharset(CharSet nCharSet, USHORT nWhich);
     void ResetCharSetVars();
     void ResetCJKCharSetVars();
 

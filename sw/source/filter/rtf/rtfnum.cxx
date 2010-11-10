@@ -62,9 +62,6 @@
 
 #define RTF_NUMRULE_NAME "RTF_Num"
 
-SV_IMPL_VARARR( SwListArr, SwListEntry )
-
-
 void lcl_ExpandNumFmts( SwNumRule& rRule )
 {
     // dann noch das NumFormat in alle Ebenen setzen
@@ -343,7 +340,7 @@ void SwRTFParser::ReadListTable()
                             if( 1 == nNumOpenBrakets )
                             {
                                 if( aEntry.nListId )
-                                    aListArr.Insert( aEntry, aListArr.Count() );
+                                    aListArr.push_back( aEntry );
                                 aEntry.Clear();
                             }
                         }
@@ -510,7 +507,7 @@ void SwRTFParser::ReadListOverrideTable()
                     if( aEntry.nListId && aEntry.nListNo )
                     {
                         int nMatch=-1;
-                        for( USHORT n = aListArr.Count(); n; )
+                        for( size_t n = aListArr.size(); n; )
                         {
                             if( aListArr[ --n ].nListId == aEntry.nListId)
                             {
@@ -529,7 +526,7 @@ void SwRTFParser::ReadListOverrideTable()
                             {
                                 aEntry.nListDocPos=aListArr[nMatch2].nListDocPos;
                                 aEntry.nListTemplateId=aListArr[nMatch2].nListTemplateId;
-                                aListArr.Insert(aEntry, aListArr.Count());
+                                aListArr.push_back( aEntry );
                             }
                             if(pOrigRule)
                                 aListArr[nMatch2].nListDocPos = aEntry.nListDocPos;
@@ -573,7 +570,7 @@ void SwRTFParser::ReadListOverrideTable()
                 // dann erzeugen wir mal schnell eine Kopie von der NumRule,
                 // denn diese wird jetzt mal kurz veraendert.
                 if( aEntry.nListId )
-                    for( USHORT n = 0; n < aListArr.Count(); ++n )
+                    for( size_t n = 0; n < aListArr.size(); ++n )
                         if( aListArr[ n ].nListId == aEntry.nListId )
                         {
                             pRule = pDoc->GetNumRuleTbl()[
@@ -590,7 +587,7 @@ void SwRTFParser::ReadListOverrideTable()
                             // <--
                             pRule->SetAutoRule( FALSE );
                             nNumLvl = (BYTE)-1;
-                            aListArr.Insert( aEntry, aListArr.Count() );
+                            aListArr.push_back( aEntry );
                             break;
                         }
 
@@ -671,11 +668,11 @@ void SwRTFParser::ReadListOverrideTable()
 
                                 // now decrement all position in the listtable, which will
                                 // behind the doc-rule position
-                                for( USHORT n = aListArr.Count(); n; )
+                                for( size_t n = aListArr.size(); n; )
                                 {
                                     SwListEntry& rEntry = aListArr[ --n ];
                                     if( rEntry.nListDocPos == nRulePos )
-                                        aListArr.Remove( n );
+                                        aListArr.erase( aListArr.begin()+n );
                                     else if( rEntry.nListDocPos > nRulePos )
                                         --rEntry.nListDocPos;
                                 }
@@ -699,11 +696,11 @@ SwNumRule* SwRTFParser::GetNumRuleOfListNo( long nListNo, BOOL bRemoveFromList )
 {
     SwNumRule* pRet = 0;
     SwListEntry* pEntry;
-    for( USHORT n = aListArr.Count(); n; )
+    for( size_t n = aListArr.size(); n; )
         if( ( pEntry = &aListArr[ --n ])->nListNo == nListNo )
         {
             if( bRemoveFromList )
-                aListArr.Remove( n );
+                aListArr.erase( aListArr.begin()+n );
             else
             {
                 pEntry->bRuleUsed = TRUE;
@@ -743,14 +740,14 @@ void SwRTFParser::RemoveUnusedNumRules()
 {
     SwListEntry* pEntry;
     SvPtrarr aDelArr;
-    USHORT n;
-    for( n = aListArr.Count(); n; )
+    size_t n;
+    for( n = aListArr.size(); n; )
     {
         if( !( pEntry = &aListArr[ --n ])->bRuleUsed )
         {
             // really *NOT* used by anyone else?
             BOOL unused=TRUE;
-            for(USHORT j = 0;  j < aListArr.Count();  ++j)
+            for(size_t j = 0;  j < aListArr.size();  ++j)
             {
                 if (aListArr[n].nListNo==aListArr[j].nListNo)
                     unused&=!aListArr[j].bRuleUsed;
@@ -806,8 +803,8 @@ SwNumRule *SwRTFParser::ReadNumSecLevel( int nToken )
         // suche die Rule - steht unter Nummer 3
         nListNo = 3;
         bContinus = FALSE;
-        nLevel = MAXLEVEL <= nTokenValue ? MAXLEVEL - 1
-                                         : BYTE( nTokenValue - 1 );
+        nLevel = MAXLEVEL <= (unsigned long) nTokenValue ? MAXLEVEL - 1
+            : (!nTokenValue ? 0 : BYTE( nTokenValue - 1 ));
     }
     else
     {
@@ -815,9 +812,9 @@ SwNumRule *SwRTFParser::ReadNumSecLevel( int nToken )
         {
         case RTF_PNLVL:         nListNo = 3;
                                 bContinus = FALSE;
-                                nLevel = MAXLEVEL <= nTokenValue
+                                nLevel = MAXLEVEL <= (unsigned long) nTokenValue
                                                     ? MAXLEVEL - 1
-                                                    : BYTE( nTokenValue-1 );
+                                    : (!nTokenValue ? 0 : BYTE( nTokenValue-1 ));
                                 break;
 
         case RTF_PNLVLBODY:
@@ -847,7 +844,7 @@ SwNumRule *SwRTFParser::ReadNumSecLevel( int nToken )
                         RTL_CONSTASCII_STRINGPARAM( RTF_NUMRULE_NAME " 1" )));
         SwListEntry aEntry( nListNo, 0, pDoc->MakeNumRule( sTmp ));
         aEntry.nListNo = nListNo;
-        aListArr.Insert( aEntry, aListArr.Count() );
+        aListArr.push_back( aEntry );
         pCurRule = pDoc->GetNumRuleTbl()[ aEntry.nListDocPos ];
         // --> OD 2008-07-08 #i91400#
         pCurRule->SetName( pDoc->GetUniqueNumRuleName( &sTmp, FALSE ), *pDoc );

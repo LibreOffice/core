@@ -38,43 +38,34 @@ import complexlib.ComplexTestCase;
 import java.math.BigInteger;
 import java.util.Collection;
 import java.util.ArrayList;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.openoffice.test.OfficeConnection;
+import static org.junit.Assert.*;
 
-public class CheckFlies extends ComplexTestCase {
-    private XMultiServiceFactory m_xMsf = null;
-    private XTextDocument m_xDoc = null;
-
-    public String[] getTestMethodNames() {
-        return new String[]{"checkFlies"};
-    }
-
-    public void checkFlies()
-        throws com.sun.star.uno.Exception,
-            com.sun.star.io.IOException
+public class CheckFlies {
+    @Test public void checkFlies()
+        throws com.sun.star.uno.Exception
     {
-        try {
-            m_xMsf = (XMultiServiceFactory)param.getMSF();
-            m_xDoc = util.WriterTools.loadTextDoc(m_xMsf, util.utils.getFullTestURL("CheckFlies.odt"));
-            com.sun.star.text.XTextFramesSupplier xTFS = (com.sun.star.text.XTextFramesSupplier)UnoRuntime.queryInterface(
-                com.sun.star.text.XTextFramesSupplier.class,
-                m_xDoc);
-            checkTextFrames(xTFS);
-            com.sun.star.text.XTextGraphicObjectsSupplier xTGOS = (com.sun.star.text.XTextGraphicObjectsSupplier)UnoRuntime.queryInterface(
-                com.sun.star.text.XTextGraphicObjectsSupplier.class,
-                m_xDoc);
-            checkGraphicFrames(xTGOS);
-            com.sun.star.text.XTextEmbeddedObjectsSupplier xTEOS = (com.sun.star.text.XTextEmbeddedObjectsSupplier)UnoRuntime.queryInterface(
-                com.sun.star.text.XTextEmbeddedObjectsSupplier.class,
-                m_xDoc);
-            checkEmbeddedFrames(xTEOS);
-        } finally {
-            // closing test document
-            if(m_xDoc != null)
-                util.DesktopTools.closeDoc(m_xDoc);
-        }
+        com.sun.star.text.XTextFramesSupplier xTFS = (com.sun.star.text.XTextFramesSupplier)UnoRuntime.queryInterface(
+            com.sun.star.text.XTextFramesSupplier.class,
+            document);
+        checkTextFrames(xTFS);
+        com.sun.star.text.XTextGraphicObjectsSupplier xTGOS = (com.sun.star.text.XTextGraphicObjectsSupplier)UnoRuntime.queryInterface(
+            com.sun.star.text.XTextGraphicObjectsSupplier.class,
+            document);
+        checkGraphicFrames(xTGOS);
+        com.sun.star.text.XTextEmbeddedObjectsSupplier xTEOS = (com.sun.star.text.XTextEmbeddedObjectsSupplier)UnoRuntime.queryInterface(
+            com.sun.star.text.XTextEmbeddedObjectsSupplier.class,
+            document);
+        checkEmbeddedFrames(xTEOS);
     }
 
     private void checkEmbeddedFrames(com.sun.star.text.XTextEmbeddedObjectsSupplier xTGOS)
-        throws com.sun.star.lang.WrappedTargetException
+        throws com.sun.star.uno.Exception
     {
         Collection<String> vExpectedEmbeddedFrames = new ArrayList<String>();
         vExpectedEmbeddedFrames.add("Object1");
@@ -82,51 +73,42 @@ public class CheckFlies extends ComplexTestCase {
         com.sun.star.container.XNameAccess xEmbeddedFrames = xTGOS.getEmbeddedObjects();
         for(String sFrameName : xEmbeddedFrames.getElementNames())
         {
-            if(!vExpectedEmbeddedFrames.remove(sFrameName))
-                failed("Unexpected frame name");
-            try
-            {
-                xEmbeddedFrames.getByName(sFrameName);
-            }
-            catch(com.sun.star.container.NoSuchElementException e)
-            {
-                failed("Could not get embedded frame by name.");
-            }
-            if(!xEmbeddedFrames.hasByName(sFrameName))
-                failed("Could not find embedded frame by name.");
+            assertTrue(
+                "Unexpected frame name",
+                vExpectedEmbeddedFrames.remove(sFrameName));
+            xEmbeddedFrames.getByName(sFrameName);
+            assertTrue(
+                "Could not find embedded frame by name.",
+                xEmbeddedFrames.hasByName(sFrameName));
         }
-        if(!vExpectedEmbeddedFrames.isEmpty())
-            failed("Missing expected embedded frames.");
+        assertTrue(
+            "Missing expected embedded frames.",
+            vExpectedEmbeddedFrames.isEmpty());
         try
         {
             xEmbeddedFrames.getByName("Nonexisting embedded frame");
-            failed("Got nonexisting embedded frame");
+            fail("Got nonexisting embedded frame");
         }
         catch(com.sun.star.container.NoSuchElementException e)
         {}
-        if(xEmbeddedFrames.hasByName("Nonexisting embedded frame"))
-            failed("Has nonexisting embedded frame");
+        assertFalse(
+            "Has nonexisting embedded frame",
+            xEmbeddedFrames.hasByName("Nonexisting embedded frame"));
 
         com.sun.star.container.XIndexAccess xEmbeddedFramesIdx = (com.sun.star.container.XIndexAccess)UnoRuntime.queryInterface(
             com.sun.star.container.XIndexAccess.class,
             xEmbeddedFrames);
-        if(xEmbeddedFramesIdx.getCount() != nEmbeddedFrames)
-            failed("Unexpected number of embedded frames reported.");
+        assertEquals(
+            "Unexpected number of embedded frames reported.", nEmbeddedFrames,
+            xEmbeddedFramesIdx.getCount());
         for(int nCurrentFrameIdx = 0; nCurrentFrameIdx < xEmbeddedFramesIdx.getCount(); nCurrentFrameIdx++)
         {
-            try
-            {
-                xEmbeddedFramesIdx.getByIndex(nCurrentFrameIdx);
-            }
-            catch(com.sun.star.lang.IndexOutOfBoundsException e)
-            {
-                failed("Could not get embedded frame by index.");
-            }
+            xEmbeddedFramesIdx.getByIndex(nCurrentFrameIdx);
         }
     }
 
     private void checkGraphicFrames(com.sun.star.text.XTextGraphicObjectsSupplier xTGOS)
-        throws com.sun.star.lang.WrappedTargetException
+        throws com.sun.star.uno.Exception
     {
         Collection<String> vExpectedGraphicFrames = new ArrayList<String>();
         vExpectedGraphicFrames.add("graphics1");
@@ -134,51 +116,42 @@ public class CheckFlies extends ComplexTestCase {
         com.sun.star.container.XNameAccess xGraphicFrames = xTGOS.getGraphicObjects();
         for(String sFrameName : xGraphicFrames.getElementNames())
         {
-            if(!vExpectedGraphicFrames.remove(sFrameName))
-                failed("Unexpected frame name");
-            try
-            {
-                xGraphicFrames.getByName(sFrameName);
-            }
-            catch(com.sun.star.container.NoSuchElementException e)
-            {
-                failed("Could not get graphics frame by name.");
-            }
-            if(!xGraphicFrames.hasByName(sFrameName))
-                failed("Could not find graphics frame by name.");
+            assertTrue(
+                "Unexpected frame name",
+                vExpectedGraphicFrames.remove(sFrameName));
+            xGraphicFrames.getByName(sFrameName);
+            assertTrue(
+                "Could not find graphics frame by name.",
+                xGraphicFrames.hasByName(sFrameName));
         }
-        if(!vExpectedGraphicFrames.isEmpty())
-            failed("Missing expected graphics frames.");
+        assertTrue(
+            "Missing expected graphics frames.",
+            vExpectedGraphicFrames.isEmpty());
         try
         {
             xGraphicFrames.getByName("Nonexisting graphics frame");
-            failed("Got nonexisting graphics frame");
+            fail("Got nonexisting graphics frame");
         }
         catch(com.sun.star.container.NoSuchElementException e)
         {}
-        if(xGraphicFrames.hasByName("Nonexisting graphics frame"))
-            failed("Has nonexisting graphics frame");
+        assertFalse(
+            "Has nonexisting graphics frame",
+            xGraphicFrames.hasByName("Nonexisting graphics frame"));
 
         com.sun.star.container.XIndexAccess xGraphicFramesIdx = (com.sun.star.container.XIndexAccess)UnoRuntime.queryInterface(
             com.sun.star.container.XIndexAccess.class,
             xGraphicFrames);
-        if(xGraphicFramesIdx.getCount() != nGraphicFrames)
-            failed("Unexpected number of graphics frames reported.");
+        assertEquals(
+            "Unexpected number of graphics frames reported.", nGraphicFrames,
+            xGraphicFramesIdx.getCount());
         for(int nCurrentFrameIdx = 0; nCurrentFrameIdx < xGraphicFramesIdx.getCount(); nCurrentFrameIdx++)
         {
-            try
-            {
-                xGraphicFramesIdx.getByIndex(nCurrentFrameIdx);
-            }
-            catch(com.sun.star.lang.IndexOutOfBoundsException e)
-            {
-                failed("Could not get graphics frame by index.");
-            }
+            xGraphicFramesIdx.getByIndex(nCurrentFrameIdx);
         }
     }
 
     private void checkTextFrames(com.sun.star.text.XTextFramesSupplier xTFS)
-        throws com.sun.star.lang.WrappedTargetException
+        throws com.sun.star.uno.Exception
     {
         Collection<String> vExpectedTextFrames = new ArrayList<String>();
         vExpectedTextFrames.add("Frame1");
@@ -188,46 +161,62 @@ public class CheckFlies extends ComplexTestCase {
         com.sun.star.container.XNameAccess xTextFrames = xTFS.getTextFrames();
         for(String sFrameName : xTextFrames.getElementNames())
         {
-            if(!vExpectedTextFrames.remove(sFrameName))
-                failed("Unexpected frame name");
-            try
-            {
-                xTextFrames.getByName(sFrameName);
-            }
-            catch(com.sun.star.container.NoSuchElementException e)
-            {
-                failed("Could not get text frame by name.");
-            }
-            if(!xTextFrames.hasByName(sFrameName))
-                failed("Could not find text frame by name.");
+            assertTrue(
+                "Unexpected frame name",
+                vExpectedTextFrames.remove(sFrameName));
+            xTextFrames.getByName(sFrameName);
+            assertTrue(
+                "Could not find text frame by name.",
+                xTextFrames.hasByName(sFrameName));
         }
-        if(!vExpectedTextFrames.isEmpty())
-            failed("Missing expected text frames.");
+        assertTrue(
+            "Missing expected text frames.", vExpectedTextFrames.isEmpty());
         try
         {
             xTextFrames.getByName("Nonexisting Textframe");
-            failed("Got nonexisting text frame.");
+            fail("Got nonexisting text frame.");
         }
         catch(com.sun.star.container.NoSuchElementException e)
         {}
-        if(xTextFrames.hasByName("Nonexisting text frame"))
-            failed("Has nonexisting text frame.");
+        assertFalse(
+            "Has nonexisting text frame.",
+            xTextFrames.hasByName("Nonexisting text frame"));
 
         com.sun.star.container.XIndexAccess xTextFramesIdx = (com.sun.star.container.XIndexAccess)UnoRuntime.queryInterface(
             com.sun.star.container.XIndexAccess.class,
             xTextFrames);
-        if(xTextFramesIdx.getCount() != nTextFrames)
-            failed("Unexpected number of text frames reported.");
+        assertEquals(
+            "Unexpected number of text frames reported.", nTextFrames,
+            xTextFramesIdx.getCount());
         for(int nCurrentFrameIdx = 0; nCurrentFrameIdx < xTextFramesIdx.getCount(); nCurrentFrameIdx++)
         {
-            try
-            {
-                xTextFramesIdx.getByIndex(nCurrentFrameIdx);
-            }
-            catch(com.sun.star.lang.IndexOutOfBoundsException e)
-            {
-                failed("Could not get text frame by index.");
-            }
+            xTextFramesIdx.getByIndex(nCurrentFrameIdx);
         }
     }
+
+    @Before public void setUpDocument() throws com.sun.star.uno.Exception {
+        document = util.WriterTools.loadTextDoc(
+            UnoRuntime.queryInterface(
+                XMultiServiceFactory.class,
+                connection.getComponentContext().getServiceManager()),
+            TestDocument.getUrl("CheckFlies.odt"));
+    }
+
+    @After public void tearDownDocument() {
+        util.DesktopTools.closeDoc(document);
+    }
+
+    private XTextDocument document = null;
+
+    @BeforeClass public static void setUpConnection() throws Exception {
+        connection.setUp();
+    }
+
+    @AfterClass public static void tearDownConnection()
+        throws InterruptedException, com.sun.star.uno.Exception
+    {
+        connection.tearDown();
+    }
+
+    private static final OfficeConnection connection = new OfficeConnection();
 }
