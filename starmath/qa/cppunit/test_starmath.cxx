@@ -44,6 +44,7 @@ public:
     // tests
     void createDocument();
     void tmEditUndoRedo(SmDocShellRef &rDocShRef);
+    void tmEditFailure(SmDocShellRef &rDocShRef);
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(createDocument);
@@ -75,6 +76,31 @@ void Test::tearDown()
     uno::Reference< lang::XComponent >(m_context, uno::UNO_QUERY_THROW)->dispose();
 }
 
+void Test::tmEditFailure(SmDocShellRef &rDocShRef)
+{
+    rDocShRef->SetText(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("color a b over {a/}")));
+
+    const SmErrorDesc *pErrorDesc = rDocShRef->GetParser().NextError();
+
+    CPPUNIT_ASSERT_MESSAGE("Should be a PE_UNEXPECTED_CHAR",
+        pErrorDesc && pErrorDesc->Type == PE_UNEXPECTED_CHAR);
+
+    pErrorDesc = rDocShRef->GetParser().PrevError();
+
+    CPPUNIT_ASSERT_MESSAGE("Should be a PE_RGROUP_EXPECTED",
+        pErrorDesc && pErrorDesc->Type == PE_RGROUP_EXPECTED);
+
+    pErrorDesc = rDocShRef->GetParser().PrevError();
+
+    CPPUNIT_ASSERT_MESSAGE("Should be a PE_COLOR_EXPECTED",
+        pErrorDesc && pErrorDesc->Type == PE_COLOR_EXPECTED);
+
+    const SmErrorDesc *pLastErrorDesc = rDocShRef->GetParser().PrevError();
+
+    CPPUNIT_ASSERT_MESSAGE("Should be three syntax errors",
+        pLastErrorDesc && pLastErrorDesc == pErrorDesc);
+}
+
 void Test::tmEditUndoRedo(SmDocShellRef &rDocShRef)
 {
     EditEngine &rEditEngine = rDocShRef->GetEditEngine();
@@ -84,7 +110,7 @@ void Test::tmEditUndoRedo(SmDocShellRef &rDocShRef)
         rEditEngine.SetText(0, sStringOne);
         rDocShRef->UpdateText();
         rtl::OUString sFinalText = rDocShRef->GetText();
-        CPPUNIT_ASSERT_MESSAGE("Strings must match", sStringOne== sFinalText);
+        CPPUNIT_ASSERT_MESSAGE("Strings must match", sStringOne == sFinalText);
     }
 
     rtl::OUString sStringTwo(RTL_CONSTASCII_USTRINGPARAM("a over b"));
@@ -102,7 +128,7 @@ void Test::tmEditUndoRedo(SmDocShellRef &rDocShRef)
         rtl::OUString sFoo = rEditEngine.GetText();
         rDocShRef->UpdateText();
         rtl::OUString sFinalText = rDocShRef->GetText();
-        CPPUNIT_ASSERT_MESSAGE("Strings much match", sStringOne== sFinalText);
+        CPPUNIT_ASSERT_MESSAGE("Strings much match", sStringOne == sFinalText);
     }
 
     {
@@ -119,7 +145,7 @@ void Test::tmEditUndoRedo(SmDocShellRef &rDocShRef)
         rtl::OUString sFoo = rEditEngine.GetText();
         rDocShRef->UpdateText();
         rtl::OUString sFinalText = rDocShRef->GetText();
-        CPPUNIT_ASSERT_MESSAGE("Strings much match", sStringOne== sFinalText);
+        CPPUNIT_ASSERT_MESSAGE("Strings much match", sStringOne == sFinalText);
     }
 }
 
@@ -133,6 +159,7 @@ void Test::createDocument()
     rEditEngine.SetActiveView(&aEditView);
 
     tmEditUndoRedo(xDocShRef);
+    tmEditFailure(xDocShRef);
 
     xDocShRef.Clear();
 }
