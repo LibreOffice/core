@@ -1108,6 +1108,9 @@ sal_Bool SvStream::ReadCsvLine( String& rStr, sal_Bool bEmbeddedLineBreak,
 
     if (bEmbeddedLineBreak)
     {
+        // See if the separator(s) include tab.
+        bool bTabSep = lcl_UnicodeStrChr(pSeps, '\t') != NULL;
+
         const sal_Unicode* pSeps = rFieldSeparators.GetBuffer();
         xub_StrLen nLastOffset = 0;
         xub_StrLen nQuotes = 0;
@@ -1121,6 +1124,16 @@ sal_Bool SvStream::ReadCsvLine( String& rStr, sal_Bool bEmbeddedLineBreak,
             {
                 if (nQuotes)
                 {
+                    if (bTabSep && *p == '\t')
+                    {
+                        // When tab-delimited, tab char ends quoted sequence
+                        // even if we haven't reached the end quote.  Doing
+                        // this helps keep mal-formed rows from damaging
+                        // other, well-formed rows.
+                        nQuotes = 0;
+                        break;
+                    }
+
                     if (*p == cFieldQuote && !bBackslashEscaped)
                         ++nQuotes;
                     else if (bAllowBackslashEscape)
