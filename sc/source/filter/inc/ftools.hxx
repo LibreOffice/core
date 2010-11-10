@@ -37,6 +37,7 @@
 #include <tools/list.hxx>
 #include <tools/debug.hxx>
 #include <oox/helper/helper.hxx>
+#include <boost/noncopyable.hpp>
 #include "filter.hxx"
 #include "scdllapi.h"
 
@@ -138,20 +139,8 @@ void insert_value( Type& rnBitField, InsertType nValue, sal_uInt8 nStartBit, sal
 
 // ============================================================================
 
-/** Deriving from this class prevents copy construction. */
-class ScfNoCopy
-{
-private:
-                        ScfNoCopy( const ScfNoCopy& );
-    ScfNoCopy&          operator=( const ScfNoCopy& );
-protected:
-    inline              ScfNoCopy() {}
-};
-
-// ----------------------------------------------------------------------------
-
 /** Deriving from this class prevents construction in general. */
-class ScfNoInstance : private ScfNoCopy {};
+class ScfNoInstance : private boost::noncopyable {};
 
 // ============================================================================
 

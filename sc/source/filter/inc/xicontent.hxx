@@ -38,6 +38,8 @@
 
 #include <map>
 #include <boost/ptr_container/ptr_vector.hpp>
+#include <boost/noncopyable.hpp>
+
 
 /* ============================================================================
 Classes to import the big Excel document contents (related to several cells or
@@ -193,7 +195,7 @@ private:
 // Web queries ================================================================
 
 /** Stores the data of one web query. */
-class XclImpWebQuery : ScfNoCopy
+class XclImpWebQuery : private boost::noncopyable
 {
 public:
     explicit            XclImpWebQuery( const ScRange& rDestRange );

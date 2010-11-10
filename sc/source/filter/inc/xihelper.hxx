@@ -30,6 +30,7 @@
 #define SC_XIHELPER_HXX
 
 #include <editeng/editdata.hxx>
+#include <boost/noncopyable.hpp>
 #include "scmatrix.hxx"
 #include "xladdress.hxx"
 #include "xiroot.hxx"
@@ -165,7 +166,7 @@ struct XclFontData;
     Known but unsupported control sequences:
     &G                      picture
  */
-class XclImpHFConverter : protected XclImpRoot, ScfNoCopy
+class XclImpHFConverter : protected XclImpRoot, private boost::noncopyable
 {
 public:
     explicit            XclImpHFConverter( const XclImpRoot& rRoot );
@@ -288,7 +289,7 @@ class ScTokenArray;
 
 /** This class stores one cached value of a cached value list (used for instance in
     CRN, EXTERNNAME, tArray). */
-class XclImpCachedValue : ScfNoCopy
+class XclImpCachedValue : boost::noncopyable
 {
 public:
     /** Creates a cached value and reads contents from stream and stores it with its array address. */

@@ -29,6 +29,7 @@
 #ifndef SC_XEHELPER_HXX
 #define SC_XEHELPER_HXX
 
+#include <boost/noncopyable.hpp>
 #include "xladdress.hxx"
 #include "xeroot.hxx"
 #include "xestring.hxx"
@@ -364,7 +365,7 @@ class EditEngine;
     Known but unsupported control sequences:
     &G                      picture
  */
-class XclExpHFConverter : protected XclExpRoot, ScfNoCopy
+class XclExpHFConverter : protected XclExpRoot, private boost::noncopyable
 {
 public:
     explicit            XclExpHFConverter( const XclExpRoot& rRoot );
