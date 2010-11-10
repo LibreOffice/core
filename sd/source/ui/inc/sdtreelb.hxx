@@ -135,8 +135,6 @@ protected:
     SfxMedium*              mpOwnMedium;
     Image                   maImgOle;
     Image                   maImgGraphic;
-    Image                   maImgOleH;
-    Image                   maImgGraphicH;
     BOOL                    mbLinkableSelected;
     BOOL                    mbDragEnabled;
     String                  maDocName;

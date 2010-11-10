@@ -111,11 +111,7 @@ void SdInsertPagesObjsDlg::Reset()
         Color aColor( COL_WHITE );
         Bitmap aBmpText( SdResId( BMP_DOC_TEXT ) );
         Image aImgText( aBmpText, aColor );
-        Bitmap aBmpTextH( SdResId( BMP_DOC_TEXT_H ) );
-        Image aImgTextH( aBmpTextH, Color( COL_BLACK ) );
-        SvLBoxEntry* pEntry = aLbTree.InsertEntry( rName, aImgText, aImgText );
-        aLbTree.SetExpandedEntryBmp( pEntry, aImgTextH, BMP_COLOR_HIGHCONTRAST );
-        aLbTree.SetCollapsedEntryBmp( pEntry, aImgTextH, BMP_COLOR_HIGHCONTRAST );
+        aLbTree.InsertEntry( rName, aImgText, aImgText );
     }
 
     aCbxMasters.Check( TRUE );

@@ -863,8 +863,7 @@ void SdNavigatorWin::ApplyImageList()
     const bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
 
     maToolbox.SetImageList( bHighContrast ? maImageListH : maImageList );
-
-    maToolbox.SetItemImage(TBI_SHAPE_FILTER, BitmapEx(SdResId( bHighContrast ? BMP_GRAPHIC_H : BMP_GRAPHIC)));
+    maToolbox.SetItemImage( TBI_SHAPE_FILTER, BitmapEx( SdResId( BMP_GRAPHIC ) ) );
 
     SetDragImage();
 }

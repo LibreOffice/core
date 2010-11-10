@@ -280,97 +280,49 @@ Bitmap BMP_PAGE_EXCLUDED
 {
     File = "pageexcl.bmp" ;
 };
-Bitmap BMP_PAGE_EXCLUDED_H
-{
-    File = "pageexcl_h.bmp" ;
-};
 Bitmap BMP_PAGEOBJS_EXCLUDED
 {
     File = "pagobjex.bmp" ;
-};
-Bitmap BMP_PAGEOBJS_EXCLUDED_H
-{
-    File = "pagobjex_h.bmp" ;
 };
 Bitmap BMP_PAGEOBJS
 {
     File = "pageobjs.bmp" ;
 };
-Bitmap BMP_PAGEOBJS_H
-{
-    File = "pageobjs_h.bmp" ;
-};
 Bitmap BMP_OBJECTS
 {
     File = "objects.bmp" ;
-};
-Bitmap BMP_OBJECTS_H
-{
-    File = "objects_h.bmp" ;
 };
 Bitmap BMP_OLE
 {
     File = "ole.bmp" ;
 };
-Bitmap BMP_OLE_H
-{
-    File = "ole_h.bmp" ;
-};
 Bitmap BMP_GROUP
 {
     File = "group.bmp" ;
-};
-Bitmap BMP_GROUP_H
-{
-    File = "group_h.bmp" ;
 };
 Bitmap BMP_DOC_OPEN
 {
     File = "docopen.bmp" ;
 };
-Bitmap BMP_DOC_OPEN_H
-{
-    File = "docopen_h.bmp" ;
-};
 Bitmap BMP_DOC_CLOSED
 {
     File = "docclose.bmp" ;
-};
-Bitmap BMP_DOC_CLOSED_H
-{
-    File = "docclose_h.bmp" ;
 };
 Bitmap BMP_DOC_TEXT
 {
     File = "doctext.bmp" ;
 };
-Bitmap BMP_DOC_TEXT_H
-{
-    File = "doctext_h.bmp" ;
-};
 Bitmap BMP_EXPAND
 {
     File = "plus.bmp" ;
-};
-Bitmap BMP_EXPAND_H
-{
-    File = "plus_h.bmp" ;
 };
 Bitmap BMP_COLLAPSE
 {
     File = "minus.bmp" ;
 };
-Bitmap BMP_COLLAPSE_H
-{
-    File = "minus_h.bmp" ;
-};
 Bitmap BMP_GRAPHIC
 {
     File = "graphic.bmp" ;
-};
-Bitmap BMP_GRAPHIC_H
-{
-    File = "graphic_h.bmp" ;
 };
 Image IMG_PIPETTE_H
 {

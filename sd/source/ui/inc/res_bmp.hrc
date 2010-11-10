@@ -139,20 +139,8 @@
 #define BMP_EFFECT_UNCOVER_TO_LL            RID_APP_START+172
 
 #define BMP_PAGE_H                          RID_SD_START+213
-#define BMP_PAGEOBJS_H                      RID_SD_START+214
-#define BMP_OBJECTS_H                       RID_SD_START+215
-#define BMP_DOC_OPEN_H                      RID_SD_START+216
-#define BMP_DOC_CLOSED_H                    RID_SD_START+217
-#define BMP_DOC_TEXT_H                      RID_SD_START+218
-#define BMP_OLE_H                           RID_SD_START+219
-#define BMP_PAGE_EXCLUDED_H                 RID_SD_START+220
-#define BMP_PAGEOBJS_EXCLUDED_H             RID_SD_START+221
-#define BMP_EXPAND_H                        RID_SD_START+222
-#define BMP_COLLAPSE_H                      RID_SD_START+223
-#define BMP_GRAPHIC_H                       RID_SD_START+224
 
 #define BMP_FOIL_NONE_H                     RID_SD_START+225
-#define BMP_GROUP_H                         RID_SD_START+226
 #define BMP_WAIT_ICON_H                     RID_SD_START+229
 
 #define BMP_FADE_EFFECT_INDICATOR           RID_SD_START+331
