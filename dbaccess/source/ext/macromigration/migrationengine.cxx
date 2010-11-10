@@ -1163,7 +1163,7 @@ namespace dbmm
         aProgressMixer.registerPhase( PHASE_PYTHON, 1 );
         aProgressMixer.registerPhase( PHASE_JAVA, 1 );
         aProgressMixer.registerPhase( PHASE_BASIC, 5 );
-            // more weight than then others, assuming that usually, there are much more Basic macros than any other scripts
+            // more weight than the others, assuming that usually, there are many more Basic macros than any other scripts
         aProgressMixer.registerPhase( PHASE_DIALOGS, 1 );
 
         bool bSuccess = impl_checkScriptStorageStructure_nothrow( aSubDocument );
@@ -1232,7 +1232,7 @@ namespace dbmm
             // The bug requesting to change this is #i95409#.
             // Unfortunately, the storage implementation does not complain if you use invalid characters/names, but instead
             // it silently accepts them, and produces garbage in the file (#i95408).
-            // So, until especially the former is fixed, we need to strip the name from all invalid characters.
+            // So, until especially the former is fixed, we need to strip all invalid characters from the name.
             // #i95865# / 2008-11-06 / frank.schoenheit@sun.com
 
             // The general idea is to replace invalid characters with '_'. However, since "valid" essentially means
