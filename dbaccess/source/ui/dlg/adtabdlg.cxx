@@ -299,12 +299,9 @@ void QueryListFacade::updateTableObjectList( bool /*_bAllowViews*/ )
     {
         ImageProvider aImageProvider( m_xConnection );
         Image aQueryImage( aImageProvider.getDefaultImage( DatabaseObject::QUERY, false ) );
-        Image aQueryImageHC( aImageProvider.getDefaultImage( DatabaseObject::QUERY, true ) );
 
-        m_rQueryList.SetDefaultExpandedEntryBmp( aQueryImage, BMP_COLOR_NORMAL );
-        m_rQueryList.SetDefaultCollapsedEntryBmp( aQueryImage, BMP_COLOR_NORMAL );
-        m_rQueryList.SetDefaultExpandedEntryBmp( aQueryImageHC, BMP_COLOR_HIGHCONTRAST );
-        m_rQueryList.SetDefaultCollapsedEntryBmp( aQueryImageHC, BMP_COLOR_HIGHCONTRAST );
+        m_rQueryList.SetDefaultExpandedEntryBmp( aQueryImage );
+        m_rQueryList.SetDefaultCollapsedEntryBmp( aQueryImage );
 
         Reference< XQueriesSupplier > xSuppQueries( m_xConnection, UNO_QUERY_THROW );
         Reference< XNameAccess > xQueries( xSuppQueries->getQueries(), UNO_QUERY_THROW );

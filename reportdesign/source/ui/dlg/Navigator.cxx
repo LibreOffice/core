@@ -154,7 +154,6 @@ class NavigatorTree :   public ::cppu::BaseMutex
     AutoTimer                                                                   m_aDropActionTimer;
     Timer                                                                       m_aSynchronizeTimer;
     ImageList                                                                   m_aNavigatorImages;
-    ImageList                                                                   m_aNavigatorImagesHC;
     Point                                                                       m_aTimerTriggered;      // die Position, an der der DropTimer angeschaltet wurde
     DROP_ACTION                                                                 m_aDropActionType;
     OReportController&                                                          m_rController;
@@ -244,17 +243,10 @@ NavigatorTree::NavigatorTree( Window* pParent,OReportController& _rController )
     SetHelpId( HID_REPORT_NAVIGATOR_TREE );
 
     m_aNavigatorImages = ImageList( ModuleRes( RID_SVXIMGLIST_RPTEXPL ) );
-    m_aNavigatorImagesHC = ImageList( ModuleRes( RID_SVXIMGLIST_RPTEXPL_HC ) );
 
     SetNodeBitmaps(
         m_aNavigatorImages.GetImage( RID_SVXIMG_COLLAPSEDNODE ),
-        m_aNavigatorImages.GetImage( RID_SVXIMG_EXPANDEDNODE ),
-        BMP_COLOR_NORMAL
-    );
-    SetNodeBitmaps(
-        m_aNavigatorImagesHC.GetImage( RID_SVXIMG_COLLAPSEDNODE ),
-        m_aNavigatorImagesHC.GetImage( RID_SVXIMG_EXPANDEDNODE ),
-        BMP_COLOR_HIGHCONTRAST
+        m_aNavigatorImages.GetImage( RID_SVXIMG_EXPANDEDNODE )
     );
 
     SetDragDropMode(0xFFFF);
@@ -527,12 +519,6 @@ SvLBoxEntry* NavigatorTree::insertEntry(const ::rtl::OUString& _sName,SvLBoxEntr
     {
         const Image aImage( m_aNavigatorImages.GetImage( _nImageId ) );
         pEntry = InsertEntry(_sName,aImage,aImage,_pParent,FALSE,_nPosition,_pData);
-        if ( pEntry )
-        {
-            const Image aImageHC( m_aNavigatorImagesHC.GetImage( _nImageId ) );
-            SetExpandedEntryBmp( pEntry, aImageHC, BMP_COLOR_HIGHCONTRAST );
-            SetCollapsedEntryBmp( pEntry, aImageHC, BMP_COLOR_HIGHCONTRAST );
-        }
     }
     else
         pEntry = InsertEntry(_sName,_pParent,FALSE,_nPosition,_pData);

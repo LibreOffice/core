@@ -2082,10 +2082,8 @@ SvLBoxEntry* SbaTableQueryBrowser::implAppendEntry( SvLBoxEntry* _pParent, const
 
     SvLBoxEntry* pNewEntry = m_pTreeView->getListBox().InsertEntry( _rName, _pParent, _eEntryType == etQueryContainer , LIST_APPEND, _pUserData );
 
-    m_pTreeView->getListBox().SetExpandedEntryBmp( pNewEntry, aImage, BMP_COLOR_NORMAL );
-    m_pTreeView->getListBox().SetCollapsedEntryBmp( pNewEntry, aImage, BMP_COLOR_NORMAL );
-    m_pTreeView->getListBox().SetExpandedEntryBmp( pNewEntry, aImageHC, BMP_COLOR_HIGHCONTRAST );
-    m_pTreeView->getListBox().SetCollapsedEntryBmp( pNewEntry, aImageHC, BMP_COLOR_HIGHCONTRAST );
+    m_pTreeView->getListBox().SetExpandedEntryBmp(  pNewEntry, aImage );
+    m_pTreeView->getListBox().SetCollapsedEntryBmp( pNewEntry, aImage );
 
     return pNewEntry;
 }

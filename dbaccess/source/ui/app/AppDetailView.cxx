@@ -488,9 +488,16 @@ void OTasksWindow::fillTaskEntryList( const TaskEntryList& _rList )
 
     try
     {
-        Reference<XModuleUIConfigurationManagerSupplier> xModuleCfgMgrSupplier(getDetailView()->getBorderWin().getView()->getORB()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.ModuleUIConfigurationManagerSupplier"))),UNO_QUERY);
-        Reference<XUIConfigurationManager> xUIConfigMgr = xModuleCfgMgrSupplier->getUIConfigurationManager(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.OfficeDatabaseDocument")));
-        Reference<XImageManager> xImageMgr(xUIConfigMgr->getImageManager(),UNO_QUERY);
+        Reference< XModuleUIConfigurationManagerSupplier > xModuleCfgMgrSupplier(
+            getDetailView()->getBorderWin().getView()->getORB()->createInstance(
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.ModuleUIConfigurationManagerSupplier" ) )
+            ) ,
+            UNO_QUERY
+        );
+        Reference< XUIConfigurationManager > xUIConfigMgr = xModuleCfgMgrSupplier->getUIConfigurationManager(
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.OfficeDatabaseDocument" ) )
+        );
+        Reference< XImageManager > xImageMgr( xUIConfigMgr->getImageManager(), UNO_QUERY );
 
         // copy the commands so we can use them with the config managers
         Sequence< ::rtl::OUString > aCommands( _rList.size() );
@@ -499,24 +506,21 @@ void OTasksWindow::fillTaskEntryList( const TaskEntryList& _rList )
         for ( TaskEntryList::const_iterator pCopyTask = _rList.begin(); pCopyTask != aEnd; ++pCopyTask, ++pCommands )
             *pCommands = pCopyTask->sUNOCommand;
 
-        Sequence< Reference< XGraphic> > aImages = xImageMgr->getImages( ImageType::SIZE_DEFAULT | ImageType::COLOR_NORMAL, aCommands );
-        Sequence< Reference< XGraphic> > aHCImages = xImageMgr->getImages( ImageType::SIZE_DEFAULT | ImageType::COLOR_HIGHCONTRAST, aCommands );
+        Sequence< Reference< XGraphic> > aImages = xImageMgr->getImages(
+            ImageType::SIZE_DEFAULT | ImageType::COLOR_NORMAL ,
+            aCommands
+        );
 
         const Reference< XGraphic >* pImages( aImages.getConstArray() );
-        const Reference< XGraphic >* pHCImages( aHCImages.getConstArray() );
 
-        for ( TaskEntryList::const_iterator pTask = _rList.begin(); pTask != aEnd; ++pTask, ++pImages, ++pHCImages )
+        for ( TaskEntryList::const_iterator pTask = _rList.begin(); pTask != aEnd; ++pTask, ++pImages )
         {
             SvLBoxEntry* pEntry = m_aCreation.InsertEntry( pTask->sTitle );
             pEntry->SetUserData( reinterpret_cast< void* >( new TaskEntry( *pTask ) ) );
 
             Image aImage = Image( *pImages );
-            m_aCreation.SetExpandedEntryBmp( pEntry, aImage, BMP_COLOR_NORMAL );
-            m_aCreation.SetCollapsedEntryBmp( pEntry, aImage, BMP_COLOR_NORMAL );
-
-            Image aHCImage = Image( *pHCImages );
-            m_aCreation.SetExpandedEntryBmp( pEntry, aHCImage, BMP_COLOR_HIGHCONTRAST );
-            m_aCreation.SetCollapsedEntryBmp( pEntry, aHCImage, BMP_COLOR_HIGHCONTRAST );
+            m_aCreation.SetExpandedEntryBmp(  pEntry, aImage );
+            m_aCreation.SetCollapsedEntryBmp( pEntry, aImage );
         }
     }
     catch(Exception&)

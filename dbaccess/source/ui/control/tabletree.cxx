@@ -105,10 +105,8 @@ OTableTreeListBox::~OTableTreeListBox()
 void OTableTreeListBox::implSetDefaultImages()
 {
     ImageProvider aImageProvider;
-    SetDefaultExpandedEntryBmp( aImageProvider.getFolderImage( DatabaseObject::TABLE, false ), BMP_COLOR_NORMAL );
-    SetDefaultExpandedEntryBmp( aImageProvider.getFolderImage( DatabaseObject::TABLE, true ), BMP_COLOR_HIGHCONTRAST );
-    SetDefaultCollapsedEntryBmp( aImageProvider.getFolderImage( DatabaseObject::TABLE, false ), BMP_COLOR_NORMAL );
-    SetDefaultCollapsedEntryBmp( aImageProvider.getFolderImage( DatabaseObject::TABLE, true ), BMP_COLOR_HIGHCONTRAST );
+    SetDefaultExpandedEntryBmp(  aImageProvider.getFolderImage( DatabaseObject::TABLE, false ) );
+    SetDefaultCollapsedEntryBmp( aImageProvider.getFolderImage( DatabaseObject::TABLE, false ) );
 }
 
 // -----------------------------------------------------------------------------
@@ -510,10 +508,8 @@ SvLBoxEntry* OTableTreeListBox::implAddEntry(
         Image aImage, aImageHC;
         m_pImageProvider->getImages( _rTableName, DatabaseObject::TABLE, aImage, aImageHC );
 
-        SetExpandedEntryBmp( pRet, aImage, BMP_COLOR_NORMAL );
-        SetCollapsedEntryBmp( pRet, aImage, BMP_COLOR_NORMAL );
-        SetExpandedEntryBmp( pRet, aImageHC, BMP_COLOR_HIGHCONTRAST );
-        SetCollapsedEntryBmp( pRet, aImageHC, BMP_COLOR_HIGHCONTRAST );
+        SetExpandedEntryBmp( pRet, aImage );
+        SetCollapsedEntryBmp( pRet, aImage );
     }
     return pRet;
 }

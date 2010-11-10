@@ -782,12 +782,8 @@ void OAppDetailPageHelper::fillNames( const Reference< XNameAccess >& _xContaine
                 pEntry = pList->InsertEntry( *pIter, _pParent );
 
                 Image aImage = Image( ModuleRes( _nImageId ) );
-                pList->SetExpandedEntryBmp( pEntry, aImage, BMP_COLOR_NORMAL );
-                pList->SetCollapsedEntryBmp( pEntry, aImage, BMP_COLOR_NORMAL );
-
-                Image aHCImage = Image( ModuleRes( _nHighContrastImageId ) );
-                pList->SetExpandedEntryBmp( pEntry, aHCImage, BMP_COLOR_HIGHCONTRAST );
-                pList->SetCollapsedEntryBmp( pEntry, aHCImage, BMP_COLOR_HIGHCONTRAST );
+                pList->SetExpandedEntryBmp(  pEntry, aImage );
+                pList->SetCollapsedEntryBmp( pEntry, aImage );
             }
         }
     }
@@ -811,9 +807,7 @@ DBTreeListBox* OAppDetailPageHelper::createTree( DBTreeListBox* _pTreeView, cons
     _pTreeView->SetSelectionMode(MULTIPLE_SELECTION);
 
     _pTreeView->SetDefaultCollapsedEntryBmp( _rImage );
-    _pTreeView->SetDefaultCollapsedEntryBmp( _rImageHC, BMP_COLOR_HIGHCONTRAST );
     _pTreeView->SetDefaultExpandedEntryBmp( _rImage );
-    _pTreeView->SetDefaultExpandedEntryBmp( _rImageHC, BMP_COLOR_HIGHCONTRAST );
 
     _pTreeView->SetDoubleClickHdl(LINK(this, OAppDetailPageHelper, OnEntryDoubleClick));
     _pTreeView->SetEnterKeyHdl(LINK(this, OAppDetailPageHelper, OnEntryDoubleClick));
@@ -919,12 +913,8 @@ SvLBoxEntry* OAppDetailPageHelper::elementAdded(ElementType _eType,const ::rtl::
             pRet = pTreeView->InsertEntry( _rName, pEntry );
 
             Image aImage = Image( ModuleRes( nImageId ) );
-            pTreeView->SetExpandedEntryBmp( pRet, aImage, BMP_COLOR_NORMAL );
-            pTreeView->SetCollapsedEntryBmp( pRet, aImage, BMP_COLOR_NORMAL );
-
-            Image aHCImage = Image( ModuleRes( nImageIdH ) );
-            pTreeView->SetExpandedEntryBmp( pRet, aHCImage, BMP_COLOR_HIGHCONTRAST );
-            pTreeView->SetCollapsedEntryBmp( pRet, aHCImage, BMP_COLOR_HIGHCONTRAST );
+            pTreeView->SetExpandedEntryBmp(  pRet, aImage );
+            pTreeView->SetCollapsedEntryBmp( pRet, aImage );
         }
     }
     return pRet;
