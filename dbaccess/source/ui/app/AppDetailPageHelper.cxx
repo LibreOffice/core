@@ -193,7 +193,7 @@ namespace
         {
             SetTextColor( rStyleSettings.GetFieldTextColor() );
             SetTextFillColor();
-        } // if( bForeground || bFont )
+        }
 
         if( bBackground )
             SetBackground( rStyleSettings.GetFieldColor() );
@@ -543,13 +543,11 @@ sal_Bool OAppDetailPageHelper::isCutAllowed()
 // -----------------------------------------------------------------------------
 sal_Bool OAppDetailPageHelper::isCopyAllowed()
 {
-    //int nPos = getVisibleControlIndex();
     return sal_True;
 }
 // -----------------------------------------------------------------------------
 sal_Bool OAppDetailPageHelper::isPasteAllowed()
 {
-    //int nPos = getVisibleControlIndex();
     return sal_True;
 }
 // -----------------------------------------------------------------------------
@@ -992,8 +990,7 @@ IMPL_LINK( OAppDetailPageHelper, OnDeleteEntry, void*, /*NOINTERESTEDIN*/ )
 // -----------------------------------------------------------------------------
 void OAppDetailPageHelper::Resize()
 {
-    //////////////////////////////////////////////////////////////////////
-    // Abmessungen parent window
+    // parent window dimension
     Size aOutputSize( GetOutputSize() );
     long nOutputWidth  = aOutputSize.Width();
     long nOutputHeight = aOutputSize.Height();
@@ -1130,12 +1127,6 @@ void OAppDetailPageHelper::showPreview(const Reference< XContent >& _xContent)
             {
                 m_aPreview.Hide();
                 m_aDocumentInfo.Hide();
-
-                // Why the below code? It might have side effects, as the tree view needs to know
-                // its current selection for other purposes than the preview, too.
-//                DBTreeListBox* pTreeView = getCurrentView();
-//                if ( pTreeView )
-//                    pTreeView->clearCurrentSelection();
             }
         }
         catch( const Exception& )
@@ -1164,7 +1155,7 @@ void OAppDetailPageHelper::showPreview( const ::rtl::OUString& _sDataSourceName,
 
                 // work-around for #150518#: no layout manager (and thus no toolbars) in the preview
                 // Must be called after initialize ... but before any other call to this frame.
-                // Otherwhise frame throws "life time exceptions" as e.g. NON_INITIALIZED
+                // Otherwise frame throws "life time exceptions" as e.g. NON_INITIALIZED
                 Reference< XPropertySet > xFrameProps( m_xFrame, UNO_QUERY_THROW );
                 xFrameProps->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ) ), makeAny(Reference< XLayoutManager >()) );
 
@@ -1413,7 +1404,7 @@ void OPreviewWindow::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal
     {
         SetTextColor( rStyleSettings.GetFieldTextColor() );
         SetTextFillColor();
-    } // if( bForeground || bFont )
+    }
 
     if( bBackground )
         SetBackground( rStyleSettings.GetFieldColor() );

@@ -2500,9 +2500,6 @@ sal_Int8 OApplicationController::queryDrop( const AcceptDropEvent& _rEvt, const 
                                 nAction = DND_ACTION_NONE;
                         }
                     }
-                    /*else
-                        nAction = nActionAskedFor & DND_ACTION_COPYMOVE;
-                    */
                 }
                 return nAction;
             }

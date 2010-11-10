@@ -169,7 +169,7 @@ bool OApplicationSwapWindow::onContainerSelected( ElementType _eType )
         if ( _eType != E_NONE )
             m_eLastType = _eType;
         return true;
-    } // if ( m_rBorderWin.getView()->getAppController().onContainerSelect( _eType ) )
+    }
 
     PostUserEvent( LINK( this, OApplicationSwapWindow, ChangeToLastSelected ) );
     return false;

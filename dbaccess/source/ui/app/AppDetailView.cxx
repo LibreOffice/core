@@ -409,8 +409,6 @@ void OTasksWindow::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_B
         m_aHelpText.SetTextFillColor();
         m_aDescription.SetTextColor( rStyleSettings.GetFieldTextColor() );
         m_aDescription.SetTextFillColor();
-        //m_aFL.SetTextColor( rStyleSettings.GetFieldTextColor() );
-        //m_aFL.SetTextFillColor();
     }
 
     if( bBackground )
@@ -433,11 +431,6 @@ void OTasksWindow::setHelpText(USHORT _nId)
     {
         String sText = ModuleRes(_nId);
 
-        // calulate the size of the text field
-        // Size aHelpTextSize = m_aHelpText.GetSizePixel();
-        // Size aHelpTextPixelSize = LogicToPixel( aHelpTextSize, MAP_APPFONT );
-        // Rectangle aPrimaryRect( Point(0,0), aHelpTextSize );
-        // Rectangle aSuggestedRect( GetTextRect( aPrimaryRect, sText, TEXT_DRAW_MULTILINE | TEXT_DRAW_LEFT | TEXT_DRAW_WORDBREAK ) );
         m_aHelpText.SetText(sText);
     }
     else
@@ -458,8 +451,8 @@ IMPL_LINK(OTasksWindow, OnEntrySelectHdl, SvTreeListBox*, /*_pTreeBox*/)
 void OTasksWindow::Resize()
 {
     DBG_CHKTHIS(OTasksWindow,NULL);
-    //////////////////////////////////////////////////////////////////////
-    // Abmessungen parent window
+
+    // parent window dimension
     Size aOutputSize( GetOutputSize() );
     long nOutputWidth   = aOutputSize.Width();
     long nOutputHeight  = aOutputSize.Height();
@@ -471,9 +464,6 @@ void OTasksWindow::Resize()
     m_aCreation.SetPosSizePixel( Point(0, 0), Size(nHalfOutputWidth - n6PPT, nOutputHeight) );
     // i77897 make the m_aHelpText a little bit smaller. (-5)
     sal_Int32 nNewWidth = nOutputWidth - nHalfOutputWidth - aFLSize.Width() - 5;
-    // m_aHelpText.SetBackground( MAKE_SALCOLOR( 0xe0, 0xe0, 0xe0 ) );
-    // Wallpaper aLightGray(Color(0xe0, 0xe0, 0xe0));
-    // m_aHelpText.SetBackground( aLightGray );
     m_aDescription.SetPosSizePixel( Point(nHalfOutputWidth + n6PPT, 0), Size(nNewWidth, nOutputHeight) );
     Size aDesc = m_aDescription.CalcMinimumSize();
     m_aHelpText.SetPosSizePixel( Point(nHalfOutputWidth + n6PPT, aDesc.Height() ), Size(nNewWidth, nOutputHeight - aDesc.Height() - n6PPT) );
@@ -615,7 +605,6 @@ void OApplicationDetailView::ImplInitSettings( sal_Bool bFont, sal_Bool bForegro
     if( bBackground )
         SetBackground( rStyleSettings.GetFieldColor() );
 
-    //SetBackground( Wallpaper( GetSettings().GetStyleSettings().GetDialogColor() ) );
     m_aHorzSplitter.SetBackground( rStyleSettings.GetDialogColor() );
     m_aHorzSplitter.SetFillColor( rStyleSettings.GetDialogColor() );
     m_aHorzSplitter.SetTextFillColor(rStyleSettings.GetDialogColor() );
