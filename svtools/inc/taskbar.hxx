@@ -268,7 +268,7 @@ private:
     Image               maImage;
     XubString           maQuickHelpText;
     XubString           maHelpText;
-    ULONG               mnHelpId;
+    rtl::OString        maHelpId;
     USHORT              mnFlags;
 
 public:
@@ -289,8 +289,8 @@ public:
     const XubString&    GetQuickHelpText() const { return maQuickHelpText; }
     void                SetHelpText( const XubString& rStr ) { maHelpText = rStr; }
     const XubString&    GetHelpText() const { return maHelpText; }
-    void                SetHelpId( ULONG nHelpId ) { mnHelpId = nHelpId; }
-    ULONG               GetHelpId() const { return mnHelpId; }
+    void                SetHelpId( const rtl::OString& rHelpId ) { maHelpId = rHelpId; }
+    const rtl::OString& GetHelpId() const { return maHelpId; }
     void                SetFlags( USHORT nFlags ) { mnFlags = nFlags; }
     USHORT              GetFlags() const { return mnFlags; }
 

@@ -833,7 +833,10 @@ MatrixArranger::~MatrixArranger()
 {
 }
 
-Size MatrixArranger::getOptimalSize( WindowSizeType i_eType, std::vector<long>& o_rColumnWidths, std::vector<long>& o_rRowHeights ) const
+Size MatrixArranger::getOptimalSize( WindowSizeType i_eType,
+                                     std::vector<long>& o_rColumnWidths, std::vector<long>& o_rRowHeights,
+                                     std::vector<sal_Int32>& o_rColumnPrio, std::vector<sal_Int32>& o_rRowPrio
+                                    ) const
 {
     long nOuterBorder = getBorderValue( m_nOuterBorder );
     Size aMatrixSize( 2*nOuterBorder, 2*nOuterBorder );
@@ -852,6 +855,8 @@ Size MatrixArranger::getOptimalSize( WindowSizeType i_eType, std::vector<long>& 
     // now allocate row and column depth vectors
     o_rColumnWidths = std::vector< long >( nColumns, 0 );
     o_rRowHeights   = std::vector< long >( nRows, 0 );
+    o_rColumnPrio   = std::vector< sal_Int32 >( nColumns, 0 );
+    o_rRowPrio      = std::vector< sal_Int32 >( nRows, 0 );
 
     // get sizes an allocate them into rows/columns
     for( std::vector< MatrixElement >::const_iterator it = m_aElements.begin();
@@ -862,6 +867,10 @@ Size MatrixArranger::getOptimalSize( WindowSizeType i_eType, std::vector<long>& 
             o_rColumnWidths[ it->m_nX ] = aSize.Width();
         if( aSize.Height() > o_rRowHeights[ it->m_nY ] )
             o_rRowHeights[ it->m_nY ] = aSize.Height();
+        if( it->m_nExpandPriority > o_rColumnPrio[ it->m_nX ] )
+            o_rColumnPrio[ it->m_nX ] = it->m_nExpandPriority;
+        if( it->m_nExpandPriority > o_rRowPrio[ it->m_nY ] )
+            o_rRowPrio[ it->m_nY ] = it->m_nExpandPriority;
     }
 
     // add up sizes
@@ -883,8 +892,47 @@ Size MatrixArranger::getOptimalSize( WindowSizeType i_eType, std::vector<long>& 
 Size MatrixArranger::getOptimalSize( WindowSizeType i_eType ) const
 {
     std::vector<long> aColumnWidths, aRowHeights;
-    return getOptimalSize( i_eType, aColumnWidths, aRowHeights );
+    std::vector<sal_Int32> aColumnPrio, aRowPrio;
+    return getOptimalSize( i_eType, aColumnWidths, aRowHeights, aColumnPrio, aRowPrio );
 }
+
+void MatrixArranger::distributeExtraSize( std::vector<long>& io_rSizes, const std::vector<sal_Int32>& i_rPrios, long i_nExtraWidth )
+{
+    if( ! io_rSizes.empty()  && io_rSizes.size() == i_rPrios.size() ) // sanity check
+    {
+        // find all elements with the highest expand priority
+        size_t nElements = io_rSizes.size();
+        std::vector< size_t > aIndices;
+        sal_Int32 nHighPrio = 0;
+        for( size_t i = 0; i < nElements; i++ )
+        {
+            sal_Int32 nCurPrio = i_rPrios[ i ];
+            if( nCurPrio > nHighPrio )
+            {
+                aIndices.clear();
+                nHighPrio = nCurPrio;
+            }
+            if( nCurPrio == nHighPrio )
+                aIndices.push_back( i );
+        }
+
+        // distribute extra space evenly among collected elements
+        nElements = aIndices.size();
+        if( nElements > 0 )
+        {
+            long nDelta = i_nExtraWidth / nElements;
+            for( size_t i = 0; i < nElements; i++ )
+            {
+                io_rSizes[ aIndices[i] ] += nDelta;
+                i_nExtraWidth -= nDelta;
+            }
+            // add the last pixels to the last row element
+            if( i_nExtraWidth > 0 && nElements > 0 )
+                io_rSizes[aIndices.back()] += i_nExtraWidth;
+        }
+    }
+}
+
 
 void MatrixArranger::resize()
 {
@@ -894,19 +942,30 @@ void MatrixArranger::resize()
 
     // check if we can get optimal size, else fallback to minimal size
     std::vector<long> aColumnWidths, aRowHeights;
-    Size aOptSize( getOptimalSize( WINDOWSIZE_PREFERRED, aColumnWidths, aRowHeights ) );
+    std::vector<sal_Int32> aColumnPrio, aRowPrio;
+    Size aOptSize( getOptimalSize( WINDOWSIZE_PREFERRED, aColumnWidths, aRowHeights, aColumnPrio, aRowPrio ) );
     if( aOptSize.Height() > m_aManagedArea.GetHeight() ||
         aOptSize.Width() > m_aManagedArea.GetWidth() )
     {
         std::vector<long> aMinColumnWidths, aMinRowHeights;
-        getOptimalSize( WINDOWSIZE_MINIMUM, aMinColumnWidths, aMinRowHeights );
+        getOptimalSize( WINDOWSIZE_MINIMUM, aMinColumnWidths, aMinRowHeights, aColumnPrio, aRowPrio );
         if( aOptSize.Height() > m_aManagedArea.GetHeight() )
             aRowHeights = aMinRowHeights;
         if( aOptSize.Width() > m_aManagedArea.GetWidth() )
             aColumnWidths = aMinColumnWidths;
     }
 
-    // FIXME: distribute extra space available
+    // distribute extra space available
+    long nExtraSize = m_aManagedArea.GetWidth();
+    for( size_t i = 0; i < aColumnWidths.size(); ++i )
+        nExtraSize -= aColumnWidths[i] + m_nBorderX;
+    if( nExtraSize > 0 )
+        distributeExtraSize( aColumnWidths, aColumnPrio, nExtraSize );
+    nExtraSize =  m_aManagedArea.GetHeight();
+    for( size_t i = 0; i < aRowHeights.size(); ++i )
+        nExtraSize -= aRowHeights[i] + m_nBorderY;
+    if( nExtraSize > 0 )
+        distributeExtraSize( aRowHeights, aRowPrio, nExtraSize );
 
     // prepare offsets
     long nDistanceX = getBorderValue( m_nBorderX );

@@ -62,6 +62,10 @@ extern Sequence< OUString > SAL_CALL FontIdentificator_getSupportedServiceNames(
 extern OUString SAL_CALL FontIdentificator_getImplementationName();
 extern Reference< XInterface > SAL_CALL FontIdentificator_createInstance( const Reference< XMultiServiceFactory > & );
 
+extern Sequence< OUString > SAL_CALL StringMirror_getSupportedServiceNames();
+extern OUString SAL_CALL StringMirror_getImplementationName();
+extern Reference< XInterface > SAL_CALL StringMirror_createInstance( const Reference< XMultiServiceFactory > & );
+
 extern Sequence< OUString > SAL_CALL Clipboard_getSupportedServiceNames();
 extern OUString SAL_CALL Clipboard_getImplementationName();
 extern Reference< XSingleServiceFactory > SAL_CALL Clipboard_createFactory( const Reference< XMultiServiceFactory > & );
@@ -115,6 +119,12 @@ extern "C" {
                 xFactory = ::cppu::createSingleFactory(
                     xMgr, vcl::FontIdentificator_getImplementationName(), vcl::FontIdentificator_createInstance,
                     vcl::FontIdentificator_getSupportedServiceNames() );
+            }
+            else if( vcl::StringMirror_getImplementationName().equalsAscii( pImplementationName ) )
+            {
+                xFactory = ::cppu::createSingleFactory(
+                    xMgr, vcl::StringMirror_getImplementationName(), vcl::StringMirror_createInstance,
+                    vcl::StringMirror_getSupportedServiceNames() );
             }
             else if( vcl::Clipboard_getImplementationName().equalsAscii( pImplementationName ) )
             {

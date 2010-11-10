@@ -59,6 +59,8 @@ namespace vcl
             VirtualDevice       maPageVDev;
             rtl::OUString       maReplacementString;
             rtl::OUString       maToolTipString;
+            FixedLine           maHorzDim;
+            FixedLine           maVertDim;
 
             bool useHCColorReplacement() const;
         public:

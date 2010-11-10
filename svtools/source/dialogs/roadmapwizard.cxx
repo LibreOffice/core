@@ -239,15 +239,15 @@ namespace svt
     }
 
     //--------------------------------------------------------------------
-    void RoadmapWizard::SetRoadmapSmartHelpId( const SmartId& _rId, SmartIdUpdateMode _aMode )
+    void RoadmapWizard::SetRoadmapHelpId( const rtl::OString& _rId )
     {
-        m_pImpl->pRoadmap->SetSmartHelpId( _rId, _aMode );
+        m_pImpl->pRoadmap->SetHelpId( _rId );
     }
 
     //--------------------------------------------------------------------
-    SmartId RoadmapWizard::GetRoadmapSmartHelpId() const
+    const rtl::OString& RoadmapWizard::GetRoadmapHelpId() const
     {
-        return m_pImpl->pRoadmap->GetSmartHelpId();
+        return m_pImpl->pRoadmap->GetHelpId();
     }
 
     //--------------------------------------------------------------------

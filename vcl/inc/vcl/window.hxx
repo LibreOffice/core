@@ -50,7 +50,6 @@
 #include <rtl/ustring.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <vcl/smartid.hxx>
 #include <boost/shared_ptr.hpp>
 
 class VirtualDevice;
@@ -970,16 +969,12 @@ public:
     void                SetQuickHelpText( const XubString& rHelpText );
     const XubString&    GetQuickHelpText() const;
 
-    void                SetHelpId( ULONG nHelpId );     /// deprecated
-    ULONG               GetHelpId() const;              /// deprecated
-    void                SetSmartHelpId( const SmartId& aId, SmartIdUpdateMode aMode = SMART_SET_SMART );
-    SmartId             GetSmartHelpId() const;
+    void                SetHelpId( const rtl::OString& );
+    const rtl::OString& GetHelpId() const;
 
-    void                SetUniqueId( ULONG nUniqueId ); /// deprecated
-    ULONG               GetUniqueId() const;            /// deprecated
-    void                SetSmartUniqueId( const SmartId& aId, SmartIdUpdateMode aMode = SMART_SET_SMART );
-    SmartId             GetSmartUniqueId() const;
-    SmartId             GetSmartUniqueOrHelpId() const;
+    void                SetUniqueId( const rtl::OString& );
+    const rtl::OString& GetUniqueId() const;
+    const rtl::OString& GetUniqueOrHelpId() const;
 
     Window*             FindWindow( const Point& rPos ) const;
 

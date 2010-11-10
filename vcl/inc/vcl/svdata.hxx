@@ -28,20 +28,19 @@
 #ifndef _SV_SVDATA_HXX
 #define _SV_SVDATA_HXX
 
-#ifndef _VOS_THREAD_HXX
-#include <vos/thread.hxx>
-#endif
-#include <tools/string.hxx>
-#include <tools/gen.hxx>
-#include <tools/shl.hxx>
-#include <tools/link.hxx>
-#include <vcl/vclevent.hxx>
-#include <vcl/sv.h>
-#include <tools/color.hxx>
-#include <tools/debug.hxx>
-#include <vcl/dllapi.h>
-#include <com/sun/star/uno/Reference.hxx>
-#include <unotools/options.hxx>
+#include "vos/thread.hxx"
+#include "tools/string.hxx"
+#include "tools/gen.hxx"
+#include "tools/shl.hxx"
+#include "tools/link.hxx"
+#include "tools/fldunit.hxx"
+#include "vcl/vclevent.hxx"
+#include "vcl/sv.h"
+#include "tools/color.hxx"
+#include "tools/debug.hxx"
+#include "vcl/dllapi.h"
+#include "com/sun/star/uno/Reference.hxx"
+#include "unotools/options.hxx"
 
 namespace com {
 namespace sun {
@@ -249,6 +248,8 @@ struct ImplSVWinData
 // - ImplSVCtrlData -
 // ------------------
 
+typedef std::vector< std::pair< String, FieldUnit > > FieldUnitStringList;
+
 struct ImplSVCtrlData
 {
     ImageList*              mpCheckImgList;     // ImageList for CheckBoxes
@@ -272,6 +273,8 @@ struct ImplSVCtrlData
     ULONG                   mnLastRadioFColor;  // Letzte FaceColor fuer RadioImage
     ULONG                   mnLastRadioWColor;  // Letzte WindowColor fuer RadioImage
     ULONG                   mnLastRadioLColor;  // Letzte LightColor fuer RadioImage
+    FieldUnitStringList*    mpFieldUnitStrings; // list with field units
+    FieldUnitStringList*    mpCleanUnitStrings; // same list but with some "fluff" like spaces removed
 };
 
 
@@ -320,8 +323,7 @@ struct ImplSVNWFData
                                                           // checkbox
     bool                    mbScrollbarJumpPage;          // true for "jump to here" behavior
     int                     mnStatusBarLowerRightOffset;  // amount in pixel to avoid in the lower righthand corner
-                                                          // used on the Mac where the system resizer paints over
-                                                          // our window content
+    bool                    mbCanDrawWidgetAnySize;       // set to true currently on gtk
 };
 
 
@@ -394,6 +396,10 @@ inline VCL_DLLPUBLIC ImplSVData* ImplGetSVData() { return pImplSVData; }
 inline ImplSVData* ImplGetAppSVData() { return ImplGetSVData(); }
 
 bool ImplInitAccessBridge( BOOL bAllowCancel, BOOL &rCancelled );
+
+FieldUnitStringList* ImplGetFieldUnits();
+FieldUnitStringList* ImplGetCleanedFieldUnits();
+
 
 // -----------------------------------------------------------------------
 
