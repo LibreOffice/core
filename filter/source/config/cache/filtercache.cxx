@@ -550,14 +550,14 @@ void FilterCache::addStatePropsToItem(      EItemType        eType,
     {
         case E_TYPE :
             {
-                xPackage = css::uno::Reference< css::container::XNameAccess >(impl_openConfig(E_PROVIDER_TYPES), css::uno::UNO_QUERY);
+                xPackage = css::uno::Reference< css::container::XNameAccess >(impl_openConfig(E_PROVIDER_TYPES), css::uno::UNO_QUERY_THROW);
                 xPackage->getByName(CFGSET_TYPES) >>= xSet;
             }
             break;
 
         case E_FILTER :
             {
-                xPackage = css::uno::Reference< css::container::XNameAccess >(impl_openConfig(E_PROVIDER_FILTERS), css::uno::UNO_QUERY);
+                xPackage = css::uno::Reference< css::container::XNameAccess >(impl_openConfig(E_PROVIDER_FILTERS), css::uno::UNO_QUERY_THROW);
                 xPackage->getByName(CFGSET_FILTERS) >>= xSet;
             }
             break;
@@ -585,14 +585,14 @@ void FilterCache::addStatePropsToItem(      EItemType        eType,
                 }
                 /* <-- HACK */
 
-                xPackage = css::uno::Reference< css::container::XNameAccess >(impl_openConfig(E_PROVIDER_OTHERS), css::uno::UNO_QUERY);
+                xPackage = css::uno::Reference< css::container::XNameAccess >(impl_openConfig(E_PROVIDER_OTHERS), css::uno::UNO_QUERY_THROW);
                 xPackage->getByName(CFGSET_FRAMELOADERS) >>= xSet;
             }
             break;
 
         case E_CONTENTHANDLER :
             {
-                xPackage = css::uno::Reference< css::container::XNameAccess >(impl_openConfig(E_PROVIDER_OTHERS), css::uno::UNO_QUERY);
+                xPackage = css::uno::Reference< css::container::XNameAccess >(impl_openConfig(E_PROVIDER_OTHERS), css::uno::UNO_QUERY_THROW);
                 xPackage->getByName(CFGSET_CONTENTHANDLERS) >>= xSet;
             }
             break;
@@ -658,7 +658,7 @@ void FilterCache::flush()
 
     if (m_lChangedTypes.size() > 0)
     {
-        css::uno::Reference< css::container::XNameAccess > xConfig(impl_openConfig(E_PROVIDER_TYPES), css::uno::UNO_QUERY);
+        css::uno::Reference< css::container::XNameAccess > xConfig(impl_openConfig(E_PROVIDER_TYPES), css::uno::UNO_QUERY_THROW);
         css::uno::Reference< css::container::XNameAccess > xSet   ;
 
         xConfig->getByName(CFGSET_TYPES) >>= xSet;
@@ -670,7 +670,7 @@ void FilterCache::flush()
 
     if (m_lChangedFilters.size() > 0)
     {
-        css::uno::Reference< css::container::XNameAccess > xConfig(impl_openConfig(E_PROVIDER_FILTERS), css::uno::UNO_QUERY);
+        css::uno::Reference< css::container::XNameAccess > xConfig(impl_openConfig(E_PROVIDER_FILTERS), css::uno::UNO_QUERY_THROW);
         css::uno::Reference< css::container::XNameAccess > xSet   ;
 
         xConfig->getByName(CFGSET_FILTERS) >>= xSet;
@@ -1453,7 +1453,7 @@ void FilterCache::impl_load(EFillState eRequiredState)
         // Attention! If config couldnt be opened successfully
         // and exception os thrown automaticly and must be forwarded
         // to our calli ...
-        css::uno::Reference< css::container::XNameAccess > xTypes(impl_openConfig(E_PROVIDER_TYPES), css::uno::UNO_QUERY);
+        css::uno::Reference< css::container::XNameAccess > xTypes(impl_openConfig(E_PROVIDER_TYPES), css::uno::UNO_QUERY_THROW);
         {
             RTL_LOGFILE_CONTEXT( aLog, "framework (as96863) ::FilterCache::load std");
             impl_loadSet(xTypes, E_TYPE, E_READ_STANDARD, &m_lTypes);
@@ -1470,7 +1470,7 @@ void FilterCache::impl_load(EFillState eRequiredState)
         // Attention! If config couldnt be opened successfully
         // and exception os thrown automaticly and must be forwarded
         // to our calli ...
-        css::uno::Reference< css::container::XNameAccess > xTypes(impl_openConfig(E_PROVIDER_TYPES), css::uno::UNO_QUERY);
+        css::uno::Reference< css::container::XNameAccess > xTypes(impl_openConfig(E_PROVIDER_TYPES), css::uno::UNO_QUERY_THROW);
         {
             RTL_LOGFILE_CONTEXT( aLog, "framework (as96863) ::FilterCache::load all types");
             impl_loadSet(xTypes, E_TYPE, E_READ_UPDATE, &m_lTypes);
@@ -1487,7 +1487,7 @@ void FilterCache::impl_load(EFillState eRequiredState)
         // Attention! If config couldnt be opened successfully
         // and exception os thrown automaticly and must be forwarded
         // to our calli ...
-        css::uno::Reference< css::container::XNameAccess > xFilters(impl_openConfig(E_PROVIDER_FILTERS), css::uno::UNO_QUERY);
+        css::uno::Reference< css::container::XNameAccess > xFilters(impl_openConfig(E_PROVIDER_FILTERS), css::uno::UNO_QUERY_THROW);
         {
             RTL_LOGFILE_CONTEXT( aLog, "framework (as96863) ::FilterCache::load all filters");
             impl_loadSet(xFilters, E_FILTER, E_READ_ALL, &m_lFilters);
@@ -1504,7 +1504,7 @@ void FilterCache::impl_load(EFillState eRequiredState)
         // Attention! If config couldnt be opened successfully
         // and exception os thrown automaticly and must be forwarded
         // to our calli ...
-        css::uno::Reference< css::container::XNameAccess > xLoaders(impl_openConfig(E_PROVIDER_OTHERS), css::uno::UNO_QUERY);
+        css::uno::Reference< css::container::XNameAccess > xLoaders(impl_openConfig(E_PROVIDER_OTHERS), css::uno::UNO_QUERY_THROW);
         {
             RTL_LOGFILE_CONTEXT( aLog, "framework (as96863) ::FilterCache::load all frame loader");
             impl_loadSet(xLoaders, E_FRAMELOADER, E_READ_ALL, &m_lFrameLoaders);
@@ -1521,7 +1521,7 @@ void FilterCache::impl_load(EFillState eRequiredState)
         // Attention! If config couldnt be opened successfully
         // and exception os thrown automaticly and must be forwarded
         // to our calli ...
-        css::uno::Reference< css::container::XNameAccess > xHandlers(impl_openConfig(E_PROVIDER_OTHERS), css::uno::UNO_QUERY);
+        css::uno::Reference< css::container::XNameAccess > xHandlers(impl_openConfig(E_PROVIDER_OTHERS), css::uno::UNO_QUERY_THROW);
         {
             RTL_LOGFILE_CONTEXT( aLog, "framework (as96863) ::FilterCache::load all content handler");
             impl_loadSet(xHandlers, E_CONTENTHANDLER, E_READ_ALL, &m_lContentHandlers);
