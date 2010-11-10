@@ -1502,7 +1502,7 @@ void ScPosWnd::FillFunctions()
     SetText(aFirstName);
 }
 
-void __EXPORT ScPosWnd::Notify( SfxBroadcaster&, const SfxHint& rHint )
+void ScPosWnd::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( !bFormulaMode )
     {
@@ -1707,7 +1707,7 @@ void ScPosWnd::DoEnter()
                         if ( aNewRanges.Insert(pNew) )
                         {
                             ScDocFunc aFunc(*pDocShell);
-                            aFunc.ModifyRangeNames( aNewRanges, FALSE );
+                            aFunc.ModifyRangeNames( aNewRanges );
                             pViewSh->UpdateInputHandler(TRUE);
                         }
                         else

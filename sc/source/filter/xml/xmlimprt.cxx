@@ -93,6 +93,7 @@
 #include <com/sun/star/sheet/XNamedRange.hpp>
 #include <com/sun/star/sheet/XLabelRanges.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 #define SC_LOCALE           "Locale"
 #define SC_STANDARDFORMAT   "StandardFormat"
@@ -106,9 +107,10 @@
 using namespace com::sun::star;
 using namespace ::xmloff::token;
 using namespace ::formula;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::UNO_QUERY;
 using ::rtl::OUString;
-
-using rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 OUString SAL_CALL ScXMLImport_getImplementationName() throw()
 {
@@ -2742,89 +2744,126 @@ void ScXMLImport::SetLabelRanges()
     }
 }
 
+namespace {
+
+/**
+ * Used to switch off document modify and broadcast while populating named
+ * ranges during import.
+ */
+class NamedRangesSwitch
+{
+public:
+    NamedRangesSwitch(Reference<beans::XPropertySet>& xPropSet) :
+        mxPropSet(xPropSet), maPropName(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_MODIFY_BROADCAST))
+    {
+        uno::Any any;
+        any <<= sal_False;
+        mxPropSet->setPropertyValue(maPropName, any);
+    }
+
+    ~NamedRangesSwitch()
+    {
+        uno::Any any;
+        any <<= sal_True;
+        mxPropSet->setPropertyValue(maPropName, any);
+    }
+
+private:
+    Reference<beans::XPropertySet>& mxPropSet;
+    OUString maPropName;
+};
+
+}
+
 void ScXMLImport::SetNamedRanges()
 {
-    ScMyNamedExpressions* pNamedExpressions(GetNamedExpressions());
-    if (pNamedExpressions)
+    ScMyNamedExpressions* pNamedExpressions = GetNamedExpressions();
+    if (!pNamedExpressions)
+        return;
+
+    uno::Reference <beans::XPropertySet> xPropertySet (GetModel(), uno::UNO_QUERY);
+    if (!xPropertySet.is())
+        return;
+
+    uno::Reference <sheet::XNamedRanges> xNamedRanges(xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_NAMEDRANGES))), uno::UNO_QUERY);
+    if (!xNamedRanges.is())
+        return;
+
+    Reference<beans::XPropertySet> xPropSet(xNamedRanges, UNO_QUERY);
+    if (!xPropSet.is())
+        return;
+
+    NamedRangesSwitch aSwitch(xPropSet);
+
+    ScMyNamedExpressions::iterator aItr(pNamedExpressions->begin());
+    ScMyNamedExpressions::const_iterator aEndItr(pNamedExpressions->end());
+    table::CellAddress aCellAddress;
+    rtl::OUString sTempContent(RTL_CONSTASCII_USTRINGPARAM("0"));
+    while (aItr != aEndItr)
     {
-        uno::Reference <beans::XPropertySet> xPropertySet (GetModel(), uno::UNO_QUERY);
-        if (xPropertySet.is())
+        sal_Int32 nOffset(0);
+        if (ScRangeStringConverter::GetAddressFromString(
+            aCellAddress, (*aItr)->sBaseCellAddress, GetDocument(), FormulaGrammar::CONV_OOO, nOffset ))
         {
-            uno::Reference <sheet::XNamedRanges> xNamedRanges(xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_NAMEDRANGES))), uno::UNO_QUERY);
-            if (xNamedRanges.is())
+            try
             {
-                ScMyNamedExpressions::iterator aItr(pNamedExpressions->begin());
-                ScMyNamedExpressions::const_iterator aEndItr(pNamedExpressions->end());
-                table::CellAddress aCellAddress;
-                rtl::OUString sTempContent(RTL_CONSTASCII_USTRINGPARAM("0"));
-                while (aItr != aEndItr)
+                xNamedRanges->addNewByName((*aItr)->sName, sTempContent, aCellAddress, GetRangeType((*aItr)->sRangeType));
+            }
+            catch( uno::RuntimeException& )
+            {
+                DBG_ERROR("here are some Named Ranges with the same name");
+                uno::Reference < container::XIndexAccess > xIndex(xNamedRanges, uno::UNO_QUERY);
+                if (xIndex.is())
                 {
-                    sal_Int32 nOffset(0);
-                    if (ScRangeStringConverter::GetAddressFromString(
-                        aCellAddress, (*aItr)->sBaseCellAddress, GetDocument(), FormulaGrammar::CONV_OOO, nOffset ))
+                    sal_Int32 nMax(xIndex->getCount());
+                    sal_Bool bInserted(sal_False);
+                    sal_Int32 nCount(1);
+                    rtl::OUStringBuffer sName((*aItr)->sName);
+                    sName.append(sal_Unicode('_'));
+                    while (!bInserted && nCount <= nMax)
                     {
+                        rtl::OUStringBuffer sTemp(sName);
+                        sTemp.append(rtl::OUString::valueOf(nCount));
                         try
                         {
-                            xNamedRanges->addNewByName((*aItr)->sName, sTempContent, aCellAddress, GetRangeType((*aItr)->sRangeType));
+                            xNamedRanges->addNewByName(sTemp.makeStringAndClear(), sTempContent, aCellAddress, GetRangeType((*aItr)->sRangeType));
+                            bInserted = sal_True;
                         }
                         catch( uno::RuntimeException& )
                         {
-                            DBG_ERROR("here are some Named Ranges with the same name");
-                            uno::Reference < container::XIndexAccess > xIndex(xNamedRanges, uno::UNO_QUERY);
-                            if (xIndex.is())
-                            {
-                                sal_Int32 nMax(xIndex->getCount());
-                                sal_Bool bInserted(sal_False);
-                                sal_Int32 nCount(1);
-                                rtl::OUStringBuffer sName((*aItr)->sName);
-                                sName.append(sal_Unicode('_'));
-                                while (!bInserted && nCount <= nMax)
-                                {
-                                    rtl::OUStringBuffer sTemp(sName);
-                                    sTemp.append(rtl::OUString::valueOf(nCount));
-                                    try
-                                    {
-                                        xNamedRanges->addNewByName(sTemp.makeStringAndClear(), sTempContent, aCellAddress, GetRangeType((*aItr)->sRangeType));
-                                        bInserted = sal_True;
-                                    }
-                                    catch( uno::RuntimeException& )
-                                    {
-                                        ++nCount;
-                                    }
-                                }
-                            }
+                            ++nCount;
                         }
                     }
-                    ++aItr;
-                }
-                aItr = pNamedExpressions->begin();
-                while (aItr != aEndItr)
-                {
-                    sal_Int32 nOffset(0);
-                    if (ScRangeStringConverter::GetAddressFromString(
-                        aCellAddress, (*aItr)->sBaseCellAddress, GetDocument(), FormulaGrammar::CONV_OOO, nOffset ))
-                    {
-                        uno::Reference <sheet::XNamedRange> xNamedRange(xNamedRanges->getByName((*aItr)->sName), uno::UNO_QUERY);
-                        if (xNamedRange.is())
-                        {
-                            LockSolarMutex();
-                            ScNamedRangeObj* pNamedRangeObj = ScNamedRangeObj::getImplementation( xNamedRange);
-                            if (pNamedRangeObj)
-                            {
-                                sTempContent = (*aItr)->sContent;
-                                // Get rid of leading sheet dots in simple ranges.
-                                if (!(*aItr)->bIsExpression)
-                                    ScXMLConverter::ParseFormula( sTempContent, false);
-                                pNamedRangeObj->SetContentWithGrammar( sTempContent, (*aItr)->eGrammar);
-                            }
-                            UnlockSolarMutex();
-                        }
-                    }
-                    delete *aItr;
-                    aItr = pNamedExpressions->erase(aItr);
                 }
             }
         }
+        ++aItr;
+    }
+    aItr = pNamedExpressions->begin();
+    while (aItr != aEndItr)
+    {
+        sal_Int32 nOffset(0);
+        if (ScRangeStringConverter::GetAddressFromString(
+            aCellAddress, (*aItr)->sBaseCellAddress, GetDocument(), FormulaGrammar::CONV_OOO, nOffset ))
+        {
+            uno::Reference <sheet::XNamedRange> xNamedRange(xNamedRanges->getByName((*aItr)->sName), uno::UNO_QUERY);
+            if (xNamedRange.is())
+            {
+                LockSolarMutex();
+                ScNamedRangeObj* pNamedRangeObj = ScNamedRangeObj::getImplementation( xNamedRange);
+                if (pNamedRangeObj)
+                {
+                    sTempContent = (*aItr)->sContent;
+                    // Get rid of leading sheet dots in simple ranges.
+                    if (!(*aItr)->bIsExpression)
+                        ScXMLConverter::ParseFormula( sTempContent, false);
+                    pNamedRangeObj->SetContentWithGrammar( sTempContent, (*aItr)->eGrammar);
+                }
+                UnlockSolarMutex();
+            }
+        }
+        delete *aItr;
+        aItr = pNamedExpressions->erase(aItr);
     }
 }
 

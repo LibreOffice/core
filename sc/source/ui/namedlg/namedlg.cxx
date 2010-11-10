@@ -389,7 +389,7 @@ IMPL_LINK( ScNameDlg, OkBtnHdl, void *, EMPTYARG )
     {
         ScDocShell* pDocSh = pViewData->GetDocShell();
         ScDocFunc aFunc(*pDocSh);
-        aFunc.ModifyRangeNames( aLocalRangeName, FALSE );
+        aFunc.ModifyRangeNames( aLocalRangeName );
         Close();
     }
     return 0;

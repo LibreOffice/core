@@ -643,13 +643,14 @@
 
 // Solver
 #define SC_UNONAME_TIMEOUT          "Timeout"
-
 #define SC_UNO_SHAREDOC             "IsDocumentShared"
 
 // EventDescriptor
-
 #define SC_UNO_EVENTTYPE            "EventType"
 #define SC_UNO_SCRIPT               "Script"
+
+// Named ranges
+#define SC_UNO_MODIFY_BROADCAST     "ModifyAndBroadcast"
 
 #endif
 

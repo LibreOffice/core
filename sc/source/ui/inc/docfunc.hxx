@@ -180,8 +180,8 @@ public:
     BOOL            UnmergeCells( const ScRange& rRange, BOOL bRecord, BOOL bApi );
     bool            UnmergeCells( const ScCellMergeOption& rOption, BOOL bRecord, BOOL bApi );
 
-    BOOL            SetNewRangeNames( ScRangeName* pNewRanges, BOOL bApi );     // takes ownership of pNewRanges
-    BOOL            ModifyRangeNames( const ScRangeName& rNewRanges, BOOL bApi );
+    bool            SetNewRangeNames( ScRangeName* pNewRanges, bool bModifyDoc = true );     // takes ownership of pNewRanges
+    bool            ModifyRangeNames( const ScRangeName& rNewRanges );
 
     BOOL            CreateNames( const ScRange& rRange, USHORT nFlags, BOOL bApi );
     BOOL            InsertNameList( const ScAddress& rStartPos, BOOL bApi );

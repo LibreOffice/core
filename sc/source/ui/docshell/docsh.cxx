@@ -433,7 +433,7 @@ private:
 
 BOOL ScDocShell::LoadXML( SfxMedium* pLoadMedium, const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStor )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "sb99857", "ScDocShell::LoadXML" );
+    LoadMediumGuard aLoadGuard(&aDocument);
 
     //  MacroCallMode is no longer needed, state is kept in SfxObjectShell now
 
