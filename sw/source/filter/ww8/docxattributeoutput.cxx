@@ -310,6 +310,11 @@ void DocxAttributeOutput::StartParagraphProperties( const SwTxtNode& rNode )
     }
 
     InitCollectedParagraphProperties();
+}
+
+void DocxAttributeOutput::InitCollectedParagraphProperties()
+{
+    m_pSpacingAttrList = NULL;
 
     // Write the elements in the spec order
     static const sal_Int32 aOrder[] =
@@ -346,7 +351,10 @@ void DocxAttributeOutput::StartParagraphProperties( const SwTxtNode& rNode )
         FSNS( XML_w, XML_textboxTightWrap ),
         FSNS( XML_w, XML_outlineLvl ),
         FSNS( XML_w, XML_divId ),
-        FSNS( XML_w, XML_cnfStyle )
+        FSNS( XML_w, XML_cnfStyle ),
+        FSNS( XML_w, XML_rPr ),
+        FSNS( XML_w, XML_sectPr ),
+        FSNS( XML_w, XML_pPrChange )
     };
 
     // postpone the output so that we can later [in EndParagraphProperties()]
@@ -357,11 +365,6 @@ void DocxAttributeOutput::StartParagraphProperties( const SwTxtNode& rNode )
         aSeqOrder[i] = aOrder[i];
 
     m_pSerializer->mark( aSeqOrder );
-}
-
-void DocxAttributeOutput::InitCollectedParagraphProperties()
-{
-    m_pSpacingAttrList = NULL;
 }
 
 void DocxAttributeOutput::WriteCollectedParagraphProperties()
@@ -382,6 +385,7 @@ void DocxAttributeOutput::WriteCollectedParagraphProperties()
         m_pSerializer->singleElementNS( XML_w, XML_spacing, xAttrList );
     }
 
+    // Merge the marks for the ordered elements
     m_pSerializer->mergeTopMarks( );
 }
 
@@ -714,6 +718,61 @@ void DocxAttributeOutput::InitCollectedRunProperties()
     m_pFontsAttrList = NULL;
     m_pEastAsianLayoutAttrList = NULL;
     m_pCharLangAttrList = NULL;
+
+    // Write the elements in the spec order
+    static const sal_Int32 aOrder[] =
+    {
+        FSNS( XML_w, XML_rStyle ),
+        FSNS( XML_w, XML_rFonts ),
+        FSNS( XML_w, XML_b ),
+        FSNS( XML_w, XML_bCs ),
+        FSNS( XML_w, XML_i ),
+        FSNS( XML_w, XML_iCs ),
+        FSNS( XML_w, XML_caps ),
+        FSNS( XML_w, XML_smallCaps ),
+        FSNS( XML_w, XML_strike ),
+        FSNS( XML_w, XML_dstrike ),
+        FSNS( XML_w, XML_outline ),
+        FSNS( XML_w, XML_shadow ),
+        FSNS( XML_w, XML_emboss ),
+        FSNS( XML_w, XML_imprint ),
+        FSNS( XML_w, XML_noProof ),
+        FSNS( XML_w, XML_snapToGrid ),
+        FSNS( XML_w, XML_vanish ),
+        FSNS( XML_w, XML_webHidden ),
+        FSNS( XML_w, XML_color ),
+        FSNS( XML_w, XML_spacing ),
+        FSNS( XML_w, XML_w ),
+        FSNS( XML_w, XML_kern ),
+        FSNS( XML_w, XML_position ),
+        FSNS( XML_w, XML_sz ),
+        FSNS( XML_w, XML_szCs ),
+        FSNS( XML_w, XML_highlight ),
+        FSNS( XML_w, XML_u ),
+        FSNS( XML_w, XML_effect ),
+        FSNS( XML_w, XML_bdr ),
+        FSNS( XML_w, XML_shd ),
+        FSNS( XML_w, XML_fitText ),
+        FSNS( XML_w, XML_vertAlign ),
+        FSNS( XML_w, XML_rtl ),
+        FSNS( XML_w, XML_cs ),
+        FSNS( XML_w, XML_em ),
+        FSNS( XML_w, XML_lang ),
+        FSNS( XML_w, XML_eastAsianLayout ),
+        FSNS( XML_w, XML_specVanish ),
+        FSNS( XML_w, XML_oMath ),
+        FSNS( XML_w, XML_rPrChange )
+    };
+
+    // postpone the output so that we can later [in EndParagraphProperties()]
+    // prepend the properties before the run
+    sal_Int32 len = sizeof ( aOrder ) / sizeof( sal_Int32 );
+    uno::Sequence< sal_Int32 > aSeqOrder( len );
+    for ( sal_Int32 i = 0; i < len; i++ )
+        aSeqOrder[i] = aOrder[i];
+
+    m_pSerializer->mark( aSeqOrder );
+
 }
 
 void DocxAttributeOutput::WriteCollectedRunProperties()
@@ -742,6 +801,9 @@ void DocxAttributeOutput::WriteCollectedRunProperties()
 
         m_pSerializer->singleElementNS( XML_w, XML_lang, xAttrList );
     }
+
+    // Merge the marks for the ordered elements
+    m_pSerializer->mergeTopMarks();
 }
 
 void DocxAttributeOutput::EndRunProperties( const SwRedlineData* /*pRedlineData*/ )
@@ -2087,6 +2149,42 @@ void DocxAttributeOutput::StartSection()
 {
     m_pSerializer->startElementNS( XML_w, XML_sectPr, FSEND );
     m_bOpenedSectPr = true;
+
+    // Write the elements in the spec order
+    static const sal_Int32 aOrder[] =
+    {
+        FSNS( XML_w, XML_headerReference ),
+        FSNS( XML_w, XML_footerReference ),
+        FSNS( XML_w, XML_footnotePr ),
+        FSNS( XML_w, XML_endnotePr ),
+        FSNS( XML_w, XML_type ),
+        FSNS( XML_w, XML_pgSz ),
+        FSNS( XML_w, XML_pgMar ),
+        FSNS( XML_w, XML_paperSrc ),
+        FSNS( XML_w, XML_pgBorders ),
+        FSNS( XML_w, XML_lnNumType ),
+        FSNS( XML_w, XML_pgNumType ),
+        FSNS( XML_w, XML_cols ),
+        FSNS( XML_w, XML_formProt ),
+        FSNS( XML_w, XML_vAlign ),
+        FSNS( XML_w, XML_noEndnote ),
+        FSNS( XML_w, XML_titlePg ),
+        FSNS( XML_w, XML_textDirection ),
+        FSNS( XML_w, XML_bidi ),
+        FSNS( XML_w, XML_rtlGutter ),
+        FSNS( XML_w, XML_docGrid ),
+        FSNS( XML_w, XML_printerSettings ),
+        FSNS( XML_w, XML_sectPrChange )
+    };
+
+    // postpone the output so that we can later [in EndParagraphProperties()]
+    // prepend the properties before the run
+    sal_Int32 len = sizeof ( aOrder ) / sizeof( sal_Int32 );
+    uno::Sequence< sal_Int32 > aSeqOrder( len );
+    for ( sal_Int32 i = 0; i < len; i++ )
+        aSeqOrder[i] = aOrder[i];
+
+    m_pSerializer->mark( aSeqOrder );
 }
 
 void DocxAttributeOutput::EndSection()
@@ -2099,6 +2197,9 @@ void DocxAttributeOutput::EndSection()
 
         m_pSerializer->singleElementNS( XML_w, XML_pgMar, xAttrList );
     }
+
+    // Order the elements
+    m_pSerializer->mergeTopMarks( );
 
     m_pSerializer->endElementNS( XML_w, XML_sectPr );
     m_bOpenedSectPr = false;
@@ -3371,27 +3472,27 @@ void DocxAttributeOutput::FormatULSpace( const SvxULSpaceItem& rULSpace )
 
         HdFtDistanceGlue aDistances( *m_rExport.GetCurItemSet() );
 
+        sal_Int32 nHeader = 0;
         if ( aDistances.HasHeader() )
-        {
-            // Header top
-            m_pSpacingAttrList->add( FSNS( XML_w, XML_header ),
-                    OString::valueOf( sal_Int32( aDistances.dyaHdrTop ) ) );
-        }
+            nHeader = sal_Int32( aDistances.dyaHdrTop );
+        m_pSpacingAttrList->add( FSNS( XML_w, XML_header ), OString::valueOf( nHeader ) );
 
         // Page top
         m_pSpacingAttrList->add( FSNS( XML_w, XML_top ),
                 OString::valueOf( sal_Int32( aDistances.dyaTop ) ) );
 
+        sal_Int32 nFooter = 0;
         if ( aDistances.HasFooter() )
-        {
-            // Footer bottom
-            m_pSpacingAttrList->add( FSNS( XML_w, XML_footer ),
-                    OString::valueOf( sal_Int32( aDistances.dyaHdrBottom ) ) );
-        }
+            nFooter = sal_Int32( aDistances.dyaHdrBottom );
+        m_pSpacingAttrList->add( FSNS( XML_w, XML_footer ), OString::valueOf( nFooter ) );
 
         // Page Bottom
         m_pSpacingAttrList->add( FSNS( XML_w, XML_bottom ),
                 OString::valueOf( sal_Int32( aDistances.dyaBottom ) ) );
+
+        // FIXME Page Gutter is not handled ATM, setting to 0 as it's mandatory for OOXML
+        m_pSpacingAttrList->add( FSNS( XML_w, XML_gutter ),
+                OString::valueOf( sal_Int32( 0 ) ) );
 
     }
     else
