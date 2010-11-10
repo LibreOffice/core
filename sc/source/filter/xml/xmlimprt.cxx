@@ -2792,6 +2792,7 @@ void ScXMLImport::SetNamedRanges()
     if (!xPropSet.is())
         return;
 
+    // Turn off broadcasting while adding imported range names.
     NamedRangesSwitch aSwitch(xPropSet);
 
     ScMyNamedExpressions::iterator aItr(pNamedExpressions->begin());
