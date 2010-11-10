@@ -1330,7 +1330,7 @@ Module gid_Module_Root_Ure_Hidden
                  gid_Unixlink_File_Dl_Salhelper,
                  gid_Unixlink_File_Dl_Cppu,
                  gid_Unixlink_File_Dl_Cppuhelper,
-                 gid_Unixlink_File_Dl_PurpEnvHelper
+                 gid_Unixlink_File_Dl_PurpEnvHelper,
                  gid_Unixlink_File_Dl_Reg,
                  gid_Unixlink_File_Dl_Rmcxt,
                  gid_Unixlink_File_Dl_Store,
