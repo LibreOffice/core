@@ -5620,8 +5620,9 @@ AC_MSG_CHECKING([whether to enable RandR support])
 if test "$test_randr" = "yes" -a \( "$enable_randr" = "yes" -o "$enable_randr" = "TRUE" \) ; then
    if test -z "$enable_randr_link" -o "$enable_randr_link" = "no"; then
       XRANDR_DLOPEN="TRUE"
-      AC_MSG_RESULT([resorting to dlopen libXrandr at runtime])
+      AC_MSG_RESULT([configured to dlopen libXrandr at runtime])
    else
+      AC_MSG_RESULT([yes])
       XRANDR_DLOPEN="FALSE"
       PKG_CHECK_MODULES(XRANDR, xrandr >= 1.2, ENABLE_RANDR="TRUE", ENABLE_RANDR="")
       if test "$ENABLE_RANDR" != "TRUE"; then
@@ -5632,7 +5633,6 @@ if test "$test_randr" = "yes" -a \( "$enable_randr" = "yes" -o "$enable_randr" =
               [ AC_MSG_ERROR(libXrandr not found or functional) ], [])
          XRANDR_LIBS="-lXrandr "
          ENABLE_RANDR="TRUE"
-         AC_MSG_RESULT([enabling RandR support])
       fi
    fi
 else
