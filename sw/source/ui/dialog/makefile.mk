@@ -50,12 +50,12 @@ SRC1FILES =  \
         wordcountdialog.src
 
 EXCEPTIONSFILES = \
+        $(SLO)$/ascfldlg.obj \
         $(SLO)$/SwSpellDialogChildWindow.obj
 
 SLOFILES =  \
         $(SLO)$/abstract.obj \
         $(SLO)$/addrdlg.obj \
-        $(SLO)$/ascfldlg.obj \
         $(SLO)$/docstdlg.obj \
         $(SLO)$/macassgn.obj \
         $(SLO)$/SwSpellDialogChildWindow.obj \
