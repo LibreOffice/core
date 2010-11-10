@@ -43,6 +43,7 @@ public:
 
     // tests
     void createDocument();
+    void tmEditUndoRedo(SmDocShellRef &rDocShRef);
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(createDocument);
@@ -74,6 +75,54 @@ void Test::tearDown()
     uno::Reference< lang::XComponent >(m_context, uno::UNO_QUERY_THROW)->dispose();
 }
 
+void Test::tmEditUndoRedo(SmDocShellRef &rDocShRef)
+{
+    EditEngine &rEditEngine = rDocShRef->GetEditEngine();
+
+    rtl::OUString sStringOne(RTL_CONSTASCII_USTRINGPARAM("a under b"));
+    {
+        rEditEngine.SetText(0, sStringOne);
+        rDocShRef->UpdateText();
+        rtl::OUString sFinalText = rDocShRef->GetText();
+        CPPUNIT_ASSERT_MESSAGE("Strings must match", sStringOne== sFinalText);
+    }
+
+    rtl::OUString sStringTwo(RTL_CONSTASCII_USTRINGPARAM("a over b"));
+    {
+        rEditEngine.SetText(0, sStringTwo);
+        rDocShRef->UpdateText();
+        rtl::OUString sFinalText = rDocShRef->GetText();
+        CPPUNIT_ASSERT_MESSAGE("Strings must match", sStringTwo == sFinalText);
+    }
+
+    SfxRequest aUndo(SID_UNDO, SFX_CALLMODE_SYNCHRON, rDocShRef->GetPool());
+
+    {
+        rDocShRef->Execute(aUndo);
+        rtl::OUString sFoo = rEditEngine.GetText();
+        rDocShRef->UpdateText();
+        rtl::OUString sFinalText = rDocShRef->GetText();
+        CPPUNIT_ASSERT_MESSAGE("Strings much match", sStringOne== sFinalText);
+    }
+
+    {
+        rDocShRef->Execute(aUndo);
+        rtl::OUString sFoo = rEditEngine.GetText();
+        rDocShRef->UpdateText();
+        rtl::OUString sFinalText = rDocShRef->GetText();
+        CPPUNIT_ASSERT_MESSAGE("Must now be empty", !sFinalText.getLength());
+    }
+
+    SfxRequest aRedo(SID_REDO, SFX_CALLMODE_SYNCHRON, rDocShRef->GetPool());
+    {
+        rDocShRef->Execute(aRedo);
+        rtl::OUString sFoo = rEditEngine.GetText();
+        rDocShRef->UpdateText();
+        rtl::OUString sFinalText = rDocShRef->GetText();
+        CPPUNIT_ASSERT_MESSAGE("Strings much match", sStringOne== sFinalText);
+    }
+}
+
 void Test::createDocument()
 {
     SmDocShellRef xDocShRef = new SmDocShell(SFXOBJECTSHELL_STD_NORMAL);
@@ -83,48 +132,7 @@ void Test::createDocument()
     EditView aEditView(&rEditEngine, &aFoo);
     rEditEngine.SetActiveView(&aEditView);
 
-    rtl::OUString sStringOne(RTL_CONSTASCII_USTRINGPARAM("a under b"));
-    {
-        rEditEngine.SetText(0, sStringOne);
-        xDocShRef->UpdateText();
-        rtl::OUString sFinalText = xDocShRef->GetText();
-        CPPUNIT_ASSERT_MESSAGE("Strings must match", sStringOne== sFinalText);
-    }
-
-    rtl::OUString sStringTwo(RTL_CONSTASCII_USTRINGPARAM("a over b"));
-    {
-        rEditEngine.SetText(0, sStringTwo);
-        xDocShRef->UpdateText();
-        rtl::OUString sFinalText = xDocShRef->GetText();
-        CPPUNIT_ASSERT_MESSAGE("Strings must match", sStringTwo == sFinalText);
-    }
-
-    SfxRequest aUndo(SID_UNDO, SFX_CALLMODE_SYNCHRON, xDocShRef->GetPool());
-
-    {
-        xDocShRef->Execute(aUndo);
-        rtl::OUString sFoo = rEditEngine.GetText();
-        xDocShRef->UpdateText();
-        rtl::OUString sFinalText = xDocShRef->GetText();
-        CPPUNIT_ASSERT_MESSAGE("Strings much match", sStringOne== sFinalText);
-    }
-
-    {
-        xDocShRef->Execute(aUndo);
-        rtl::OUString sFoo = rEditEngine.GetText();
-        xDocShRef->UpdateText();
-        rtl::OUString sFinalText = xDocShRef->GetText();
-        CPPUNIT_ASSERT_MESSAGE("Must now be empty", !sFinalText.getLength());
-    }
-
-    SfxRequest aRedo(SID_REDO, SFX_CALLMODE_SYNCHRON, xDocShRef->GetPool());
-    {
-        xDocShRef->Execute(aRedo);
-        rtl::OUString sFoo = rEditEngine.GetText();
-        xDocShRef->UpdateText();
-        rtl::OUString sFinalText = xDocShRef->GetText();
-        CPPUNIT_ASSERT_MESSAGE("Strings much match", sStringOne== sFinalText);
-    }
+    tmEditUndoRedo(xDocShRef);
 
     xDocShRef.Clear();
 }
