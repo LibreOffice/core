@@ -39,6 +39,8 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
 using namespace ::com::sun::star;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Any;
 
 
 #include "nameuno.hxx"
@@ -70,6 +72,16 @@ const SfxItemPropertyMapEntry* lcl_GetNamedRangeMap()
     return aNamedRangeMap_Impl;
 }
 
+const SfxItemPropertyMapEntry* lcl_GetNamedRangesMap()
+{
+    static SfxItemPropertyMapEntry aNamedRangesMap_Impl[] =
+    {
+        {MAP_CHAR_LEN(SC_UNO_MODIFY_BROADCAST), 0,  &getBooleanCppuType(), 0, 0 },
+        {0,0,0,0,0,0}
+    };
+    return aNamedRangesMap_Impl;
+}
+
 //------------------------------------------------------------------------
 
 #define SCNAMEDRANGEOBJ_SERVICE     "com.sun.star.sheet.NamedRange"
@@ -89,7 +101,8 @@ sal_Bool lcl_UserVisibleName( const ScRangeData* pData )
 
 //------------------------------------------------------------------------
 
-ScNamedRangeObj::ScNamedRangeObj(ScDocShell* pDocSh, const String& rNm) :
+ScNamedRangeObj::ScNamedRangeObj(ScNamedRangesObj* pParent, ScDocShell* pDocSh, const String& rNm) :
+    mpParent(pParent),
     pDocShell( pDocSh ),
     aName( rNm )
 {
@@ -174,7 +187,7 @@ void ScNamedRangeObj::Modify_Impl( const String* pNewName, const ScTokenArray* p
                 if ( pNewRanges->Insert(pNew) )
                 {
                     ScDocFunc aFunc(*pDocShell);
-                    aFunc.SetNewRangeNames( pNewRanges, sal_True );
+                    aFunc.SetNewRangeNames( pNewRanges, mpParent->IsModifyAndBroadcast());
 
                     aName = aInsName;   //! broadcast?
                 }
@@ -478,7 +491,8 @@ ScNamedRangeObj* ScNamedRangeObj::getImplementation( const uno::Reference<uno::X
 //------------------------------------------------------------------------
 
 ScNamedRangesObj::ScNamedRangesObj(ScDocShell* pDocSh) :
-    pDocShell( pDocSh )
+    pDocShell( pDocSh ),
+    mbModifyAndBroadcast(true)
 {
     pDocShell->GetDocument()->AddUnoObject(*this);
 }
@@ -500,6 +514,11 @@ void ScNamedRangesObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
 }
 
+bool ScNamedRangesObj::IsModifyAndBroadcast() const
+{
+    return mbModifyAndBroadcast;
+}
+
 // sheet::XNamedRanges
 
 ScNamedRangeObj* ScNamedRangesObj::GetObjectByIndex_Impl(sal_uInt16 nIndex)
@@ -517,7 +536,7 @@ ScNamedRangeObj* ScNamedRangesObj::GetObjectByIndex_Impl(sal_uInt16 nIndex)
                 if (lcl_UserVisibleName(pData))         // interne weglassen
                 {
                     if ( nPos == nIndex )
-                        return new ScNamedRangeObj( pDocShell, pData->GetName() );
+                        return new ScNamedRangeObj(this, pDocShell, pData->GetName());
                     ++nPos;
                 }
             }
@@ -529,7 +548,7 @@ ScNamedRangeObj* ScNamedRangesObj::GetObjectByIndex_Impl(sal_uInt16 nIndex)
 ScNamedRangeObj* ScNamedRangesObj::GetObjectByName_Impl(const rtl::OUString& aName)
 {
     if ( pDocShell && hasByName(aName) )
-        return new ScNamedRangeObj( pDocShell, String(aName) );
+        return new ScNamedRangeObj(this, pDocShell, String(aName));
     return NULL;
 }
 
@@ -563,7 +582,7 @@ void SAL_CALL ScNamedRangesObj::addNewByName( const rtl::OUString& aName,
             if ( pNewRanges->Insert(pNew) )
             {
                 ScDocFunc aFunc(*pDocShell);
-                aFunc.SetNewRangeNames( pNewRanges, sal_True );
+                aFunc.SetNewRangeNames(pNewRanges, mbModifyAndBroadcast);
                 bDone = TRUE;
             }
             else
@@ -623,7 +642,7 @@ void SAL_CALL ScNamedRangesObj::removeByName( const rtl::OUString& aName )
                     ScRangeName* pNewRanges = new ScRangeName(*pNames);
                     pNewRanges->AtFree(nPos);
                     ScDocFunc aFunc(*pDocShell);
-                    aFunc.SetNewRangeNames( pNewRanges, sal_True );
+                    aFunc.SetNewRangeNames( pNewRanges, mbModifyAndBroadcast);
                     bDone = TRUE;
                 }
         }
@@ -698,6 +717,41 @@ sal_Bool SAL_CALL ScNamedRangesObj::hasElements() throw(uno::RuntimeException)
     SolarMutexGuard aGuard;
     return ( getCount() != 0 );
 }
+
+Reference<beans::XPropertySetInfo> SAL_CALL ScNamedRangesObj::getPropertySetInfo()
+                                                        throw(uno::RuntimeException)
+{
+    static Reference<beans::XPropertySetInfo> aRef(
+        new SfxItemPropertySetInfo(lcl_GetNamedRangesMap()));
+    return aRef;
+}
+
+void SAL_CALL ScNamedRangesObj::setPropertyValue(
+                        const rtl::OUString& rPropertyName, const uno::Any& aValue )
+                throw(beans::UnknownPropertyException, beans::PropertyVetoException,
+                        lang::IllegalArgumentException, lang::WrappedTargetException,
+                        uno::RuntimeException)
+{
+    if (rPropertyName.equalsAscii(SC_UNO_MODIFY_BROADCAST))
+    {
+        aValue >>= mbModifyAndBroadcast;
+    }
+}
+
+Any SAL_CALL ScNamedRangesObj::getPropertyValue( const rtl::OUString& rPropertyName )
+                throw(beans::UnknownPropertyException, lang::WrappedTargetException,
+                        uno::RuntimeException)
+{
+    Any aRet;
+    if (rPropertyName.equalsAscii(SC_UNO_MODIFY_BROADCAST))
+    {
+        aRet <<= mbModifyAndBroadcast;
+    }
+
+    return aRet;
+}
+
+SC_IMPL_DUMMY_PROPERTY_LISTENER( ScNamedRangesObj )
 
 uno::Any SAL_CALL ScNamedRangesObj::getByName( const rtl::OUString& aName )
             throw(container::NoSuchElementException,

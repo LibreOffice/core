@@ -1553,6 +1553,7 @@ public:
     BOOL            GetNoSetDirty() const { return bNoSetDirty; }
     void            SetInsertingFromOtherDoc( BOOL bVal ) { bInsertingFromOtherDoc = bVal; }
     BOOL            IsInsertingFromOtherDoc() const { return bInsertingFromOtherDoc; }
+    bool            IsLoadingMedium() const;
     void            SetLoadingMedium( bool bVal );
     void            SetImportingXML( bool bVal );
     bool            IsImportingXML() const { return bImportingXML; }

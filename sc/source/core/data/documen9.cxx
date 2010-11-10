@@ -675,6 +675,11 @@ void ScDocument::UpdateFontCharSet()
     }
 }
 
+bool ScDocument::IsLoadingMedium() const
+{
+    return bLoadingMedium;
+}
+
 void ScDocument::SetLoadingMedium( bool bVal )
 {
     bLoadingMedium = bVal;
