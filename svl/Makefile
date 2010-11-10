@@ -29,6 +29,7 @@ ifeq ($(strip $(SOLARENV)),)
 $(error No environment set!)
 endif
 
+gb_PARTITIALBUILD := T
 include $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/../SourcePath.mk
 GBUILDDIR := $(SOLARENV)/gbuild
 include $(GBUILDDIR)/gbuild.mk
