@@ -124,8 +124,8 @@ namespace dbaxml
                         (void)ex;
                         OSL_ASSERT(0);
                     }
-                } // if ( s_bFirstTime )
-            } // if ( m_eWhat == E_JAVA )
+                }
+            }
             else if ( m_eWhat == E_CALC )
             {
                 static bool s_bFirstTime = true;

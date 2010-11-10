@@ -241,10 +241,6 @@ ODBExport::ODBExport(const Reference< XMultiServiceFactory >& _rxMSF,sal_uInt16 
     m_xExportHelper = new SvXMLExportPropertyMapper(GetTableStylesPropertySetMapper());
     m_xColumnExportHelper = new OSpecialHanldeXMLExportPropertyMapper(GetColumnStylesPropertySetMapper());
 
-    //UniReference < XMLPropertySetMapper > xCellStylesPropertySetMapper = new XMLPropertySetMapper(OXMLHelper::GetCellStylesPropertySetMapper(),m_xPropHdlFactory);
-    //m_xCellExportHelper = new OSpecialHanldeXMLExportPropertyMapper(xCellStylesPropertySetMapper);
-    //m_xCellExportHelper = new OSpecialHanldeXMLExportPropertyMapper(GetCellStylesPropertySetMapper());
-    //m_xCellExportHelper->ChainExportMapper(XMLTextParagraphExport::CreateParaExtPropMapper(*this));
     m_xCellExportHelper = new OSpecialHanldeXMLExportPropertyMapper(GetCellStylesPropertySetMapper());
     m_xRowExportHelper = new OSpecialHanldeXMLExportPropertyMapper(OXMLHelper::GetRowStylesPropertySetMapper());
 
@@ -1234,9 +1230,9 @@ void ODBExport::exportAutoStyle(XPropertySet* _xProp)
                         }
                     }
                     ++aItr;
-                } // while ( aItr != aEnd )
+                }
 
-            } // if ( !aPropStates.empty() )
+            }
             if ( XML_STYLE_FAMILY_TABLE_CELL == pExportHelper[i].second.second )
                 ::std::copy( m_aCurrentPropertyStates.begin(), m_aCurrentPropertyStates.end(), ::std::back_inserter( aPropStates ));
             if ( !aPropStates.empty() )
