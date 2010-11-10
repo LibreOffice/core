@@ -27,6 +27,7 @@
 
 #include "oox/drawingml/fillpropertiesgroupcontext.hxx"
 #include "oox/helper/attributelist.hxx"
+#include "oox/helper/graphichelper.hxx"
 #include "oox/core/namespaces.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
@@ -170,7 +171,7 @@ BlipContext::BlipContext( ContextHandler& rParent,
         // internal picture URL
         OUString aFragmentPath = getFragmentPathFromRelId( aAttribs.getString( R_TOKEN( embed ), OUString() ) );
         if( aFragmentPath.getLength() > 0 )
-            mrBlipProps.mxGraphic = getFilter().importEmbeddedGraphic( aFragmentPath );
+            mrBlipProps.mxGraphic = getFilter().getGraphicHelper().importEmbeddedGraphic( aFragmentPath );
     }
     else if( aAttribs.hasAttribute( R_TOKEN( link ) ) )
     {
@@ -224,7 +225,15 @@ Reference< XFastContextHandler > BlipFillContext::createFastChildContext(
             return new BlipContext( *this, rxAttribs, mrBlipProps );
 
         case A_TOKEN( srcRect ):
-            // TODO
+            {
+                rtl::OUString aDefault( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "0" ) ) );
+                ::com::sun::star::geometry::IntegerRectangle2D aClipRect;
+                aClipRect.X1 = GetPercent( aAttribs.getString( XML_l, aDefault ) );
+                aClipRect.Y1 = GetPercent( aAttribs.getString( XML_t, aDefault ) );
+                aClipRect.X2 = GetPercent( aAttribs.getString( XML_r, aDefault ) );
+                aClipRect.Y2 = GetPercent( aAttribs.getString( XML_b, aDefault ) );
+                mrBlipProps.moClipRect = aClipRect;
+            }
         break;
 
         case A_TOKEN( tile ):

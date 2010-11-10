@@ -94,6 +94,9 @@ private:
     /** Processes the 'style' attribute. */
     void                setStyle( const ::rtl::OUString& rStyle );
 
+    /** Resolve a relation identifier to a fragment path. */
+    OptValue< ::rtl::OUString > decodeFragmentPath( const AttributeList& rAttribs, sal_Int32 nToken ) const;
+
 private:
     ShapeTypeModel&     mrTypeModel;
 };

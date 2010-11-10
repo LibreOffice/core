@@ -152,13 +152,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
     return OOXMLFactory::getInstance()->createFastChildContextFromStart(getContextHandler().get(), Element);
 }
 
-OOXMLParserState::Pointer_t OOXMLFastDocumentHandler::getParserState() const
-{
-    OOXMLParserState::Pointer_t pParserState;
-
-    return getContextHandler()->getParserState();
-}
-
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
 OOXMLFastDocumentHandler::createUnknownChildContext
 (const ::rtl::OUString &
@@ -200,9 +193,6 @@ void SAL_CALL OOXMLFastDocumentHandler::startDocument()
 void SAL_CALL OOXMLFastDocumentHandler::endDocument()
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
-#ifdef DEBUG_CONTEXT_STACK
-    OOXMLFastContextHandler::dumpOpenContexts();
-#endif
 }
 
 void SAL_CALL OOXMLFastDocumentHandler::setDocumentLocator
@@ -230,6 +220,11 @@ void OOXMLFastDocumentHandler::setDocument(OOXMLDocument * pDocument)
 void OOXMLFastDocumentHandler::setXNoteId(const ::rtl::OUString & rXNoteId)
 {
     msXNoteId = rXNoteId;
+}
+
+void OOXMLFastDocumentHandler::setIsSubstream( bool bSubstream )
+{
+    getContextHandler( )->getParserState( )->setInSectionGroup( bSubstream );
 }
 
 }}

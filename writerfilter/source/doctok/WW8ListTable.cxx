@@ -68,11 +68,6 @@ void WW8ListTable::initPayload()
     entryOffsets.push_back(nOffset);
 }
 
-sal_uInt32 WW8ListTable::calcPayloadOffset()
-{
-    return 0;
-}
-
 sal_uInt32 WW8ListTable::getEntryCount()
 {
     return getU16(0);

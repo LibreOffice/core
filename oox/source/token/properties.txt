@@ -103,6 +103,7 @@ D3DScenePerspective
 D3DSceneShadeMode
 DDELinks
 DatabaseRanges
+Decoration
 DefaultContext
 DefaultScrollValue
 DefaultSpinValue
@@ -165,6 +166,7 @@ Geometry3D
 GradientName
 Graphic
 GraphicColorMode
+GraphicCrop
 GraphicSize
 GraphicURL
 GridColor
@@ -250,6 +252,7 @@ LineStyle
 LineTransparence
 LineWidth
 LinkURL
+LoadReadonly
 LookUpLabels
 MajorTickmarks
 MarkPosition
@@ -257,9 +260,13 @@ MaxFieldCount
 MaxTextLen
 MediaType
 MinorTickmarks
+MirroredX
+MirroredY
 MissingValueTreatment
 Model
+ModifyPasswordHash
 MultiLine
+MultiPageValue
 MultiSelection
 Name
 NamedRanges
@@ -394,6 +401,7 @@ Suffix
 SwapXAndYAxis
 Symbol
 SymbolColor
+TabColor
 TabIndex
 TableBorder
 TableLayout
@@ -449,7 +457,6 @@ VisualEffect
 Weight
 WhiteDay
 Width
-WriteProtectionPassword
 WritingMode
 ZoomType
 ZoomValue

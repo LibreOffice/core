@@ -26,14 +26,13 @@
  ************************************************************************/
 
 #include "oox/ole/vbaproject.hxx"
-#include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/script/XLibraryContainer.hpp>
-#include <com/sun/star/script/XVBACompat.hpp>
+#include <com/sun/star/script/vba/XVBACompatibility.hpp>
 #include <rtl/tencinfo.h>
 #include <rtl/ustrbuf.h>
 #include <comphelper/configurationhelper.hxx>
@@ -52,27 +51,17 @@
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
-using ::com::sun::star::container::XNameAccess;
-using ::com::sun::star::container::XNameContainer;
-using ::com::sun::star::document::XEventsSupplier;
-using ::com::sun::star::document::XStorageBasedDocument;
-using ::com::sun::star::embed::XStorage;
-using ::com::sun::star::embed::XTransactedObject;
-using ::com::sun::star::frame::XModel;
-using ::com::sun::star::io::XStream;
-using ::com::sun::star::lang::XMultiServiceFactory;
-using ::com::sun::star::script::XLibraryContainer;
-using ::com::sun::star::script::XVBACompat;
-using ::com::sun::star::uno::Any;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::uno::UNO_SET_THROW;
-using ::com::sun::star::uno::XInterface;
 using ::comphelper::ConfigurationHelper;
 
-namespace ApiModuleType = ::com::sun::star::script::ModuleType;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::document;
+using namespace ::com::sun::star::embed;
+using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::script;
+using namespace ::com::sun::star::script::vba;
+using namespace ::com::sun::star::uno;
 
 namespace oox {
 namespace ole {
@@ -182,70 +171,6 @@ bool VbaProject::hasDialogs() const
 bool VbaProject::hasDialog( const OUString& rDialogName ) const
 {
     return mxDialogLib.is() && mxDialogLib->hasByName( rDialogName );
-}
-
-// Insert VBA code modules and VBA macros into modules ------------------------
-
-bool VbaProject::insertMacro( const OUString& rModuleName,
-        const OUString& rMacroName, const OUString& rMacroArgs,
-        const OUString& rMacroType, const OUString& rMacroCode )
-{
-    return
-        // do nothing if macros are imported as comments
-        isImportVbaExecutable() &&
-        // try to insert the macro (will check that the macro does not exist yet)
-        VbaHelper::insertMacro( mxBasicLib, rModuleName, rMacroName, rMacroArgs, rMacroType, rMacroCode );
-}
-
-// Attach VBA macros to generic or document events ----------------------------
-
-bool VbaProject::attachMacroToEvent( const Reference< XEventsSupplier >& rxEventsSupp,
-        const OUString& rEventName, const OUString& rModuleName, const OUString& rMacroName )
-{
-    return
-        // do not attach if macros are imported as comments
-        isImportVbaExecutable() &&
-        // check that the specified macro exists in the module
-        VbaHelper::hasMacro( mxBasicLib, rModuleName, rMacroName ) &&
-        // attach the macro to the events supplier
-        VbaHelper::attachMacroToEvent( rxEventsSupp, rEventName, maLibName, rModuleName, rMacroName );
-}
-
-bool VbaProject::attachMacroToDocumentEvent( const OUString& rEventName,
-        const OUString& rModuleName, const OUString& rMacroName )
-{
-    Reference< XEventsSupplier > xEventsSupp( mxDocModel, UNO_QUERY );
-    return attachMacroToEvent( xEventsSupp, rEventName, rModuleName, rMacroName );
-}
-
-bool VbaProject::attachMacroToEvent( const Reference< XEventsSupplier >& rxEventsSupp,
-        const OUString& rEventName, const OUString& rModuleName, const OUString& rMacroName,
-        const OUString& rProxyArgs, const OUString& rProxyType, const OUString& rProxyCode )
-{
-    // receive module source code, and check that the specified macro exists in the module
-    OUString aSourceCode = VbaHelper::getSourceCode( mxBasicLib, rModuleName );
-    if( isImportVbaExecutable() && VbaHelper::hasMacro( aSourceCode, rMacroName ) )
-    {
-        // create the name of the proxy macro, and the macro source code
-        OUString aProxyName = OUStringBuffer( rMacroName ).append( sal_Unicode( '_' ) ).
-            append( rEventName ).appendAscii( "_Proxy" ).makeStringAndClear();
-        // replace $MACRO and $PROXY placeholders in proxy source code
-        OUString aProxyCode = ::comphelper::string::searchAndReplaceAsciiL( rProxyCode, RTL_CONSTASCII_STRINGPARAM( "$MACRO" ), rMacroName );
-        aProxyCode = ::comphelper::string::searchAndReplaceAsciiL( aProxyCode, RTL_CONSTASCII_STRINGPARAM( "$PROXY" ), aProxyName );
-        // insert the new macro into the code module and attach it to the event
-        return
-            VbaHelper::insertMacro( mxBasicLib, rModuleName, aProxyName, rProxyArgs, rProxyType, aProxyCode ) &&
-            VbaHelper::attachMacroToEvent( rxEventsSupp, rEventName, maLibName, rModuleName, aProxyName );
-    }
-    return false;
-}
-
-bool VbaProject::attachMacroToDocumentEvent(
-        const OUString& rEventName, const OUString& rModuleName, const OUString& rMacroName,
-        const OUString& rProxyArgs, const OUString& rProxyType, const OUString& rProxyCode )
-{
-    Reference< XEventsSupplier > xEventsSupp( mxDocModel, UNO_QUERY );
-    return attachMacroToEvent( xEventsSupp, rEventName, rModuleName, rMacroName, rProxyArgs, rProxyType, rProxyCode );
 }
 
 // private --------------------------------------------------------------------
@@ -394,23 +319,23 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
             bExitLoop = (nLineLen >= 2) && (aLine[ 0 ] == '[') && (aLine[ nLineLen - 1 ] == ']');
             if( !bExitLoop && VbaHelper::extractKeyValue( aKey, aValue, aLine ) )
             {
-                sal_Int32 nType = ApiModuleType::UNKNOWN;
+                sal_Int32 nType = ModuleType::UNKNOWN;
                 if( aKey.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "Document" ) ) )
                 {
-                    nType = ApiModuleType::DOCUMENT;
+                    nType = ModuleType::DOCUMENT;
                     // strip automation server version from module names
                     sal_Int32 nSlashPos = aValue.indexOf( '/' );
                     if( nSlashPos >= 0 )
                         aValue = aValue.copy( 0, nSlashPos );
                 }
                 else if( aKey.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "Module" ) ) )
-                    nType = ApiModuleType::NORMAL;
+                    nType = ModuleType::NORMAL;
                 else if( aKey.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "Class" ) ) )
-                    nType = ApiModuleType::CLASS;
+                    nType = ModuleType::CLASS;
                 else if( aKey.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "BaseClass" ) ) )
-                    nType = ApiModuleType::FORM;
+                    nType = ModuleType::FORM;
 
-                if( (nType != ApiModuleType::UNKNOWN) && (aValue.getLength() > 0) )
+                if( (nType != ModuleType::UNKNOWN) && (aValue.getLength() > 0) )
                 {
                     OSL_ENSURE( aModules.has( aValue ), "VbaProject::importVba - module not found" );
                     if( VbaModule* pModule = aModules.get( aValue ).get() )
@@ -426,13 +351,23 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
         specified. */
     if( !aModules.empty() ) try
     {
-        // get the basic library
+        // get the model factory and the basic library
+        Reference< XMultiServiceFactory > xModelFactory( mxDocModel, UNO_QUERY_THROW );
         Reference< XNameContainer > xBasicLib( createBasicLibrary(), UNO_SET_THROW );
 
         // set library container to VBA compatibility mode
         try
         {
-            Reference< XVBACompat >( getLibraryContainer( PROP_BasicLibraries ), UNO_QUERY_THROW )->setVBACompatModeOn( sal_True );
+            Reference< XVBACompatibility >( getLibraryContainer( PROP_BasicLibraries ), UNO_QUERY_THROW )->setVBACompatibilityMode( sal_True );
+        }
+        catch( Exception& )
+        {
+        }
+
+        // create the VBAGlobals object, the model will store it in the Basic manager
+        try
+        {
+            xModelFactory->createInstance( CREATE_OUSTRING( "ooo.vba.VBAGlobals" ) );
         }
         catch( Exception& )
         {
@@ -442,7 +377,6 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
         Reference< XNameAccess > xDocObjectNA;
         try
         {
-            Reference< XMultiServiceFactory > xModelFactory( mxDocModel, UNO_QUERY_THROW );
             xDocObjectNA.set( xModelFactory->createInstance( CREATE_OUSTRING( "ooo.vba.VBAObjectModuleObjectProvider" ) ), UNO_QUERY );
         }
         catch( Exception& )
@@ -475,7 +409,7 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
             {
                 // resolve module name from storage name (which equals the module stream name)
                 VbaModule* pModule = aModulesByStrm.get( *aIt ).get();
-                OSL_ENSURE( pModule && (pModule->getType() == ApiModuleType::FORM),
+                OSL_ENSURE( pModule && (pModule->getType() == ModuleType::FORM),
                     "VbaProject::importVba - form substorage without form module" );
                 OUString aModuleName;
                 if( pModule )

@@ -198,9 +198,9 @@ void VbaSiteModel::importProperty( sal_Int32 nPropId, const OUString& rValue )
 {
     switch( nPropId )
     {
-        case XML_Name:                  maName = rValue;                                    break;
-        case XML_Tag:                   maTag = rValue;                                     break;
-        case XML_VariousPropertyBits:   mnFlags = AttributeList::decodeUnsigned( rValue );  break;
+        case XML_Name:                  maName = rValue;                                            break;
+        case XML_Tag:                   maTag = rValue;                                             break;
+        case XML_VariousPropertyBits:   mnFlags = AttributeConversion::decodeUnsigned( rValue );    break;
     }
 }
 
@@ -229,6 +229,11 @@ void VbaSiteModel::moveRelative( const AxPairData& rDistance )
 {
     maPos.first += rDistance.first;
     maPos.second += rDistance.second;
+}
+
+bool VbaSiteModel::isVisible() const
+{
+    return getFlag( mnFlags, VBA_SITE_VISIBLE );
 }
 
 bool VbaSiteModel::isContainer() const
@@ -326,7 +331,7 @@ void VbaSiteModel::convertProperties( PropertyMap& rPropMap,
         if( (0 <= nCtrlIndex) && (nCtrlIndex <= SAL_MAX_INT16) )
             rPropMap.setProperty( PROP_TabIndex, static_cast< sal_Int16 >( nCtrlIndex ) );
         // progress bar and group box support TabIndex, but not Tabstop...
-        if( (eCtrlType != API_CONTROL_PROGRESSBAR) && (eCtrlType != API_CONTROL_GROUPBOX) )
+        if( (eCtrlType != API_CONTROL_PROGRESSBAR) && (eCtrlType != API_CONTROL_GROUPBOX) && (eCtrlType != API_CONTROL_FRAME) && (eCtrlType != API_CONTROL_PAGE) )
             rPropMap.setProperty( PROP_Tabstop, getFlag( mnFlags, VBA_SITE_TABSTOP ) );
         rConv.convertPosition( rPropMap, maPos );
     }
@@ -365,6 +370,11 @@ void VbaFormControl::importModelOrStorage( BinaryInputStream& rInStrm, StorageBa
 OUString VbaFormControl::getControlName() const
 {
     return mxSiteModel.get() ? mxSiteModel->getName() : OUString();
+}
+
+sal_Int32 VbaFormControl::getControlId() const
+{
+    return mxSiteModel.get() ? mxSiteModel->getId() : -1;
 }
 
 void VbaFormControl::createAndConvert( sal_Int32 nCtrlIndex,
@@ -712,6 +722,30 @@ OUString lclGetQuotedString( const OUString& rCodeLine )
     return aBuffer.makeStringAndClear();
 }
 
+bool lclEatWhitespace( OUString& rCodeLine )
+{
+    sal_Int32 nIndex = 0;
+    while( (nIndex < rCodeLine.getLength()) && ((rCodeLine[ nIndex ] == ' ') || (rCodeLine[ nIndex ] == '\t')) )
+        ++nIndex;
+    if( nIndex > 0 )
+    {
+        rCodeLine = rCodeLine.copy( nIndex );
+        return true;
+    }
+    return false;
+}
+
+bool lclEatKeyword( OUString& rCodeLine, const OUString& rKeyword )
+{
+    if( rCodeLine.matchIgnoreAsciiCase( rKeyword ) )
+    {
+        rCodeLine = rCodeLine.copy( rKeyword.getLength() );
+        // success, if code line ends after keyword, or if whitespace follows
+        return (rCodeLine.getLength() == 0) || lclEatWhitespace( rCodeLine );
+    }
+    return false;
+}
+
 } // namespace
 
 // ----------------------------------------------------------------------------
@@ -745,10 +779,10 @@ void VbaUserForm::importForm( const Reference< XNameContainer >& rxDialogLib,
     while( !bBeginFound && !aFrameTextStrm.isEof() )
     {
         aLine = aFrameTextStrm.readLine().trim();
-        bBeginFound = VbaHelper::eatKeyword( aLine, aBegin );
+        bBeginFound = lclEatKeyword( aLine, aBegin );
     }
     // check for the specific GUID that represents VBA forms
-    if( !bBeginFound || !VbaHelper::eatKeyword( aLine, CREATE_OUSTRING( "{C62A69F0-16DC-11CE-9E98-00AA00574A4F}" ) ) )
+    if( !bBeginFound || !lclEatKeyword( aLine, CREATE_OUSTRING( "{C62A69F0-16DC-11CE-9E98-00AA00574A4F}" ) ) )
         return;
 
     // remaining line is the form name

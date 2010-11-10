@@ -38,17 +38,29 @@
 #include <com/sun/star/document/XDocumentInfoSupplier.hpp>
 #include <tools/urlobj.hxx>
 #include <osl/file.hxx>
+#include <unotools/pathoptions.hxx>
 
 using namespace ::com::sun::star;
+
+namespace ooo { namespace vba {
 
 const static rtl::OUString sUrlPart0 = rtl::OUString::createFromAscii( "vnd.sun.star.script:");
 const static rtl::OUString sUrlPart1 = rtl::OUString::createFromAscii( "?language=Basic&location=document");
 
-namespace ooo { namespace vba {
-
 String makeMacroURL( const String& sMacroName )
 {
     return sUrlPart0.concat( sMacroName ).concat( sUrlPart1 ) ;
+}
+
+::rtl::OUString extractMacroName( const ::rtl::OUString& rMacroUrl )
+{
+    if( (rMacroUrl.getLength() > sUrlPart0.getLength() + sUrlPart1.getLength()) &&
+        rMacroUrl.match( sUrlPart0 ) &&
+        rMacroUrl.match( sUrlPart1, rMacroUrl.getLength() - sUrlPart1.getLength() ) )
+    {
+        return rMacroUrl.copy( sUrlPart0.getLength(), rMacroUrl.getLength() - sUrlPart0.getLength() - sUrlPart1.getLength() );
+    }
+    return ::rtl::OUString();
 }
 
 SfxObjectShell* findShellForUrl( const rtl::OUString& sMacroURLOrPath )
@@ -97,7 +109,24 @@ SfxObjectShell* findShellForUrl( const rtl::OUString& sMacroURLOrPath )
             }
             else
             {
-                if ( aURL.equals( xModel->getURL() ) )
+                // sometimes just the name of the document ( without the path
+                // is used
+                bool bDocNameNoPathMatch = false;
+                if ( aURL.getLength() && aURL.indexOf( '/' ) == -1 )
+                {
+                    sal_Int32 lastSlashIndex = xModel->getURL().lastIndexOf( '/' );
+                    if ( lastSlashIndex > -1 )
+                    {
+                        bDocNameNoPathMatch = xModel->getURL().copy( lastSlashIndex + 1 ).equals( aURL );
+                        if ( !bDocNameNoPathMatch )
+                        {
+                            rtl::OUString aTmpName = rtl::OUString::createFromAscii("'") + xModel->getURL().copy( lastSlashIndex + 1 ) + rtl::OUString::createFromAscii("'");
+                            bDocNameNoPathMatch = aTmpName.equals( aURL );
+                        }
+                    }
+                }
+
+                if ( aURL.equals( xModel->getURL() ) || bDocNameNoPathMatch )
                 {
                     pFoundShell = pShell;
                     break;
@@ -186,9 +215,15 @@ VBAMacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const rtl::OUStrin
     if ( !pShell )
         return aRes;
     aRes.SetMacroDocContext( pShell );
+
+    // the name may be enclosed in apostrophs
+    ::rtl::OUString sMacroUrl = MacroName;
+    sal_Int32 nMacroLen = MacroName.getLength();
+    if( (nMacroLen >= 2) && (MacroName[0] == '\'') && (MacroName[nMacroLen-1] == '\'') )
+        sMacroUrl = MacroName.copy( 1, nMacroLen - 2 );
+
     // parse the macro name
-    sal_Int32 nDocSepIndex = MacroName.indexOfAsciiL( "!", 1 );
-    String sMacroUrl = MacroName;
+    sal_Int32 nDocSepIndex = sMacroUrl.indexOf( '!' );
 
     String sContainer;
     String sModule;
@@ -201,12 +236,22 @@ VBAMacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const rtl::OUStrin
         // recursively
 
         // assume for now that the document name is *this* document
-        String sDocUrlOrPath = MacroName.copy( 0, nDocSepIndex );
-        sMacroUrl = MacroName.copy( nDocSepIndex + 1 );
+        String sDocUrlOrPath = sMacroUrl.copy( 0, nDocSepIndex );
+        sMacroUrl = sMacroUrl.copy( nDocSepIndex + 1 );
         OSL_TRACE("doc search, current shell is 0x%x", pShell );
-        SfxObjectShell* pFoundShell = findShellForUrl( sDocUrlOrPath );
+        SfxObjectShell* pFoundShell = NULL;
+        if( bSearchGlobalTemplates )
+        {
+            SvtPathOptions aPathOpt;
+            String aAddinPath = aPathOpt.GetAddinPath();
+            if( rtl::OUString( sDocUrlOrPath ).indexOf( aAddinPath ) == 0 )
+                pFoundShell = pShell;
+        }
+        if( pFoundShell == NULL )
+            pFoundShell = findShellForUrl( sDocUrlOrPath );
         OSL_TRACE("doc search, after find, found shell is 0x%x", pFoundShell );
-        aRes = resolveVBAMacro( pFoundShell, sMacroUrl );
+        aRes = resolveVBAMacro( pFoundShell, sMacroUrl, bSearchGlobalTemplates );
+        return aRes;
     }
     else
     {
@@ -215,7 +260,7 @@ VBAMacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const rtl::OUStrin
         // document is created from )
 
         // macro format = Container.Module.Procedure
-        parseMacro( MacroName, sContainer, sModule, sProcedure );
+        parseMacro( sMacroUrl, sContainer, sModule, sProcedure );
         uno::Reference< lang::XMultiServiceFactory> xSF( pShell->GetModel(), uno::UNO_QUERY);
         uno::Reference< container::XNameContainer > xPrjNameCache;
         if ( xSF.is() )
@@ -320,14 +365,14 @@ VBAMacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const rtl::OUStrin
                 break;
             }
         }
+        aRes.SetResolvedMacro( sProcedure.Insert( '.', 0 ).Insert( sModule, 0).Insert( '.', 0 ).Insert( sContainer, 0 ) );
     }
-    aRes.SetResolvedMacro( sProcedure.Insert( '.', 0 ).Insert( sModule, 0).Insert( '.', 0 ).Insert( sContainer, 0 ) );
 
     return aRes;
 }
 
 // Treat the args as possible inouts ( convertion at bottom of method )
-sal_Bool executeMacro( SfxObjectShell* pShell, const String& sMacroName, uno::Sequence< uno::Any >& aArgs, uno::Any& /*aRet*/, const uno::Any& aCaller )
+sal_Bool executeMacro( SfxObjectShell* pShell, const String& sMacroName, uno::Sequence< uno::Any >& aArgs, uno::Any& aRet, const uno::Any& /*aCaller*/)
 {
     sal_Bool bRes = sal_False;
     if ( !pShell )
@@ -338,42 +383,25 @@ sal_Bool executeMacro( SfxObjectShell* pShell, const String& sMacroName, uno::Se
     uno::Sequence< uno::Any > aOutArgs;
 
     try
-    {
-        uno::Reference< script::provider::XScriptProvider > xScriptProvider;
-        uno::Reference< script::provider::XScriptProviderSupplier > xSPS( pShell->GetModel(), uno::UNO_QUERY_THROW );
-
-        xScriptProvider.set( xSPS->getScriptProvider(), uno::UNO_QUERY_THROW );
-
-        uno::Reference< script::provider::XScript > xScript( xScriptProvider->getScript( sUrl ), uno::UNO_QUERY_THROW );
-
-        if ( aCaller.hasValue() )
+    {   ErrCode nErr( ERRCODE_BASIC_INTERNAL_ERROR );
+        if ( pShell )
         {
-            uno::Reference< beans::XPropertySet > xProps( xScript, uno::UNO_QUERY );
-            if ( xProps.is() )
+            nErr = pShell->CallXScript( sUrl,
+                               aArgs, aRet, aOutArgsIndex, aOutArgs, false );
+            sal_Int32 nLen = aOutArgs.getLength();
+            // convert any out params to seem like they were inouts
+            if ( nLen )
             {
-                uno::Sequence< uno::Any > aCallerHack(1);
-                aCallerHack[ 0 ] = aCaller;
-                xProps->setPropertyValue( rtl::OUString::createFromAscii( "Caller" ), uno::makeAny( aCallerHack ) );
+                for ( sal_Int32 index=0; index < nLen; ++index )
+                {
+                    sal_Int32 nOutIndex = aOutArgsIndex[ index ];
+                    aArgs[ nOutIndex ] = aOutArgs[ index ];
+                }
             }
         }
-
-
-        xScript->invoke( aArgs, aOutArgsIndex, aOutArgs  );
-
-        sal_Int32 nLen = aOutArgs.getLength();
-        // convert any out params to seem like they were inouts
-        if ( nLen )
-        {
-            for ( sal_Int32 index=0; index < nLen; ++index )
-            {
-                sal_Int32 nOutIndex = aOutArgsIndex[ index ];
-                aArgs[ nOutIndex ] = aOutArgs[ index ];
-           }
-        }
-
-        bRes = sal_True;
+        bRes = ( nErr == ERRCODE_NONE );
     }
-    catch ( uno::Exception& e )
+    catch ( uno::Exception& )
     {
        bRes = sal_False;
     }

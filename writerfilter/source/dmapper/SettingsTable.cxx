@@ -28,15 +28,25 @@
  *
  ************************************************************************/
 
+#include <resourcemodel/ResourceModelHelper.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
+
 #include <SettingsTable.hxx>
 #include <doctok/resourceids.hxx>
 #include <ooxml/resourceids.hxx>
 #include <stdio.h>
-#include <ListTable.hxx>
 #include <ConversionHelper.hxx>
 #include <rtl/ustring.hxx>
 
+#ifdef DEBUG_DOMAINMAPPER
+#include <resourcemodel/QNameToString.hxx>
+#include "dmapperLoggers.hxx"
+#endif
+
 namespace writerfilter {
+
+using resourcemodel::resolveSprmProps;
+
 namespace dmapper
 {
 
@@ -44,8 +54,6 @@ struct SettingsTable_Impl
 {
     DomainMapper&       m_rDMapper;
     const uno::Reference< lang::XMultiServiceFactory > m_xTextFactory;
-
-    ListTablePtr        m_pListTable;
 
     ::rtl::OUString     m_sCharacterSpacing;
     ::rtl::OUString     m_sDecimalSymbol;
@@ -57,6 +65,21 @@ struct SettingsTable_Impl
     bool                m_bNoPunctuationKerning;
     bool                m_doNotIncludeSubdocsInStats; // Do Not Include Content in Text Boxes, Footnotes, and Endnotes in Document Statistics)
     bool                m_bRecordChanges;
+    int                 m_nEdit;
+    bool                m_bFormatting;
+    bool                m_bEnforcement;
+    int                 m_nCryptProviderType;
+    int                 m_nCryptAlgorithmClass;
+    int                 m_nCryptAlgorithmType;
+    ::rtl::OUString     m_sCryptAlgorithmSid;
+    int                 m_nCryptSpinCount;
+    ::rtl::OUString     m_sCryptProvider;
+    ::rtl::OUString     m_sAlgIdExt;
+    ::rtl::OUString     m_sAlgIdExtSource;
+    ::rtl::OUString     m_sCryptProviderTypeExt;
+    ::rtl::OUString     m_sCryptProviderTypeExtSource;
+    ::rtl::OUString     m_sHash;
+    ::rtl::OUString     m_sSalt;
 
     SettingsTable_Impl( DomainMapper& rDMapper, const uno::Reference< lang::XMultiServiceFactory > xTextFactory ) :
     m_rDMapper( rDMapper )
@@ -66,15 +89,14 @@ struct SettingsTable_Impl
     , m_bNoPunctuationKerning(false)
     , m_doNotIncludeSubdocsInStats(false)
     , m_bRecordChanges(false)
+    , m_nEdit(NS_ooxml::LN_Value_wordprocessingml_ST_DocProtect_none)
+    , m_bFormatting(false)
+    , m_bEnforcement(false)
+    , m_nCryptProviderType(NS_ooxml::LN_Value_wordprocessingml_ST_CryptProv_rsaAES)
+    , m_nCryptAlgorithmClass(NS_ooxml::LN_Value_wordprocessingml_ST_AlgClass_hash)
+    , m_nCryptAlgorithmType(NS_ooxml::LN_Value_wordprocessingml_ST_AlgType_typeAny)
+    , m_nCryptSpinCount(0)
     {}
-
-    ListTablePtr GetListTable()
-    {
-    if(!m_pListTable)
-        m_pListTable.reset(
-                   new ListTable( m_rDMapper, m_xTextFactory ));
-    return m_pListTable;
-    }
 };
 
 SettingsTable::SettingsTable(DomainMapper& rDMapper, const uno::Reference< lang::XMultiServiceFactory > xTextFactory) :
@@ -88,8 +110,15 @@ SettingsTable::~SettingsTable()
     delete m_pImpl;
 }
 
-void SettingsTable::attribute(Id /*Name*/, Value & val)
+void SettingsTable::attribute(Id nName, Value & val)
 {
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->startElement("SettingsTable.attribute");
+    dmapper_logger->attribute("name", (*QNameToString::Instance())(nName));
+    dmapper_logger->attribute("value", val.toString());
+#endif
+
+    (void) nName;
     int nIntValue = val.getInt();
     (void)nIntValue;
     ::rtl::OUString sValue = val.getString();
@@ -108,10 +137,18 @@ void SettingsTable::attribute(Id /*Name*/, Value & val)
     }
     }
 #endif
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->endElement("SettingsTable.attribute");
+#endif
 }
 
 void SettingsTable::sprm(Sprm& rSprm)
 {
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->startElement("SettingsTable.sprm");
+    dmapper_logger->chars(rSprm.toString());
+#endif
+
     sal_uInt32 nSprmId = rSprm.getId();
 
     Value::Pointer_t pValue = rSprm.getValue();
@@ -148,14 +185,6 @@ void SettingsTable::sprm(Sprm& rSprm)
         writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
         if( pProperties.get())
         pProperties->resolve(*this);
-    }
-    break;
-    /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
-    case NS_ooxml::LN_CT_Numbering_num: // 92613;
-    /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
-    case NS_ooxml::LN_CT_Numbering_abstractNum: //  92612;
-    {
-        m_pImpl->GetListTable()->sprm( rSprm );
     }
     break;
     /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
@@ -201,11 +230,20 @@ void SettingsTable::sprm(Sprm& rSprm)
         m_pImpl->m_bRecordChanges = bool(rSprm.getValue( )->getInt( ) );
     }
     break;
+    case NS_ooxml::LN_CT_Settings_documentProtection:
+        {
+            resolveSprmProps(*this, rSprm);
+        }
+        break;
     default:
     {
         OSL_ENSURE( false, "unknown sprmid in SettingsTable::sprm()");
     }
     }
+
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->endElement("SettingsTable.sprm");
+#endif
 }
 
 void SettingsTable::entry(int /*pos*/, writerfilter::Reference<Properties>::Pointer_t ref)

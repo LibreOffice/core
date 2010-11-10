@@ -48,9 +48,6 @@
 #include <vcl/gdimtf.hxx>
 
 #include <tools/bigint.hxx>
-#include "strings.hrc"
-#include "dlgepct.hrc"
-#include "dlgepct.hxx"
 
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
@@ -2330,58 +2327,4 @@ extern "C" BOOL __LOADONCALLAPI GraphicExport(SvStream & rStream, Graphic & rGra
         return aPictWriter.WritePict( aMTF, rStream, pFilterConfigItem );
     }
 }
-
-//================== GraphicDialog - die exportierte Funktion ================
-
-extern "C" BOOL SAL_CALL DoExportDialog( FltCallDialogParameter& rPara )
-{
-    BOOL    bRet = FALSE;
-
-    if ( rPara.pWindow )
-    {
-        ByteString  aResMgrName( "ept" );
-        ResMgr* pResMgr;
-
-        pResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
-
-        if( pResMgr )
-        {
-            rPara.pResMgr = pResMgr;
-            bRet = ( DlgExportEPCT( rPara ).Execute() == RET_OK );
-            delete pResMgr;
-        }
-        else
-            bRet = TRUE;
-    }
-
-    return bRet;
-}
-
-
-//=============================== fuer Windows ==============================
-#ifndef GCC
-#endif
-
-#ifdef WIN
-
-static HINSTANCE hDLLInst = 0;      // HANDLE der DLL
-
-extern "C" int CALLBACK LibMain( HINSTANCE hDLL, WORD, WORD nHeap, LPSTR )
-{
-#ifndef WNT
-    if ( nHeap )
-        UnlockData( 0 );
-#endif
-
-    hDLLInst = hDLL;
-
-    return TRUE;
-}
-
-extern "C" int CALLBACK WEP( int )
-{
-    return 1;
-}
-
-#endif
 

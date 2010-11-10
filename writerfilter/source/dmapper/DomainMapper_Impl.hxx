@@ -45,14 +45,15 @@
 #include <DomainMapperTableManager.hxx>
 #include <PropertyMap.hxx>
 #include <FontTable.hxx>
-#include <ListTable.hxx>
-#include <LFOTable.hxx>
+#include <NumberingManager.hxx>
 #include <StyleSheetTable.hxx>
 #include <SettingsTable.hxx>
 #include <ThemeTable.hxx>
 #include <SettingsTable.hxx>
 #include <GraphicImport.hxx>
 #include <OLEHandler.hxx>
+#include <FFDataHandler.hxx>
+#include <FormControlHelper.hxx>
 #include <map>
 
 #include <string.h>
@@ -135,6 +136,8 @@ class FieldContext
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xTOC;//TOX
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xTC;//TOX entry
     ::rtl::OUString                                                                 m_sHyperlinkURL;
+    FFDataHandler::Pointer_t                                                        m_pFFDataHandler;
+    FormControlHelper::Pointer_t                                                    m_pFormControlHelper;
 
 public:
     FieldContext(::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > xStart);
@@ -160,6 +163,13 @@ public:
     void    SetHyperlinkURL( const ::rtl::OUString& rURL ) { m_sHyperlinkURL = rURL; }
     const ::rtl::OUString&                                                      GetHyperlinkURL() { return m_sHyperlinkURL; }
 
+    void setFFDataHandler(FFDataHandler::Pointer_t pFFDataHandler) { m_pFFDataHandler = pFFDataHandler; }
+    FFDataHandler::Pointer_t getFFDataHandler() const { return m_pFFDataHandler; }
+
+    void setFormControlHelper(FormControlHelper::Pointer_t pFormControlHelper) { m_pFormControlHelper = pFormControlHelper; }
+    FormControlHelper::Pointer_t getFormControlHelper() const { return m_pFormControlHelper; }
+
+    ::std::vector<rtl::OUString> GetCommandParts() const;
 };
 
 struct TextAppendContext
@@ -296,15 +306,15 @@ private:
     _PageMar                                                                        m_aPageMargins;
 
 
-    DomainMapperTableManager m_TableManager;
+    // TableManagers are stacked: one for each stream to avoid any confusion
+    std::stack< boost::shared_ptr< DomainMapperTableManager > > m_aTableManagers;
 
     //each context needs a stack of currently used attributes
     FIB                     m_aFIB;
     PropertyStack           m_aPropertyStacks[NUMBER_OF_CONTEXTS];
     ContextStack            m_aContextStack;
     FontTablePtr            m_pFontTable;
-    ListTablePtr            m_pListTable;
-    LFOTablePtr             m_pLFOTable;
+    ListsManager::Pointer   m_pListTable;
     StyleSheetTablePtr      m_pStyleSheetTable;
     ThemeTablePtr           m_pThemeTable;
     SettingsTablePtr        m_pSettingsTable;
@@ -312,6 +322,7 @@ private:
 
 
     PropertyMapPtr                  m_pTopContext;
+    PropertyMapPtr           m_pLastSectionContext;
 
     ::std::vector<DeletableTabStop> m_aCurrentTabStops;
     sal_uInt32                      m_nCurrentTabStopIndex;
@@ -333,6 +344,8 @@ private:
     RedlineParamsPtr                m_pParaRedline;
     bool                            m_bIsParaChange;
 
+    bool                            m_bParaChanged;
+    bool                            m_bIsLastParaInSection;
 
     //annotation import
     uno::Reference< beans::XPropertySet >                                      m_xAnnotationField;
@@ -354,6 +367,11 @@ public:
             SourceDocumentType eDocumentType );
     DomainMapper_Impl();
     virtual ~DomainMapper_Impl();
+
+    SectionPropertyMap* GetLastSectionContext( )
+    {
+        return dynamic_cast< SectionPropertyMap* >( m_pLastSectionContext.get( ) );
+    }
 
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > GetPageStyles();
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >               GetBodyText();
@@ -379,6 +397,9 @@ public:
 
     void StartParaChange( );
     void EndParaChange( );
+
+    void RemoveLastParagraph( );
+    void SetIsLastParagraphInSection( bool bIsLast );
 
     void deferBreak( BreakType deferredBreakType );
     bool isBreakDeferred( BreakType deferredBreakType );
@@ -421,13 +442,7 @@ public:
             m_pStyleSheetTable.reset(new StyleSheetTable( m_rDMapper, m_xTextDocument ));
         return m_pStyleSheetTable;
     }
-    ListTablePtr GetListTable();
-    LFOTablePtr GetLFOTable()
-    {
-        if(!m_pLFOTable)
-            m_pLFOTable.reset( new LFOTable );
-        return m_pLFOTable;
-    }
+    ListsManager::Pointer GetListTable();
     ThemeTablePtr GetThemeTable()
     {
         if(!m_pThemeTable)
@@ -483,18 +498,63 @@ public:
     bool IsOpenField() const;
     //collect the pieces of the command
     void AppendFieldCommand(::rtl::OUString& rPartOfCommand);
+    void handleFieldAsk
+        (FieldContextPtr pContext,
+        PropertyNameSupplier& rPropNameSupplier,
+        uno::Reference< uno::XInterface > & xFieldInterface,
+        uno::Reference< beans::XPropertySet > xFieldProperties);
+    void handleAutoNum
+        (FieldContextPtr pContext,
+        PropertyNameSupplier& rPropNameSupplier,
+        uno::Reference< uno::XInterface > & xFieldInterface,
+        uno::Reference< beans::XPropertySet > xFieldProperties);
+    void handleAuthor
+        (FieldContextPtr pContext,
+        PropertyNameSupplier& rPropNameSupplier,
+        uno::Reference< uno::XInterface > & xFieldInterface,
+        uno::Reference< beans::XPropertySet > xFieldProperties);
+    void handleDocProperty
+        (FieldContextPtr pContext,
+        PropertyNameSupplier& rPropNameSupplier,
+        uno::Reference< uno::XInterface > & xFieldInterface,
+        uno::Reference< beans::XPropertySet > xFieldProperties);
+    void handleToc
+        (FieldContextPtr pContext,
+        PropertyNameSupplier& rPropNameSupplier,
+        uno::Reference< uno::XInterface > & xFieldInterface,
+        uno::Reference< beans::XPropertySet > xFieldProperties,
+        const ::rtl::OUString & sTOCServiceName);
     //the field command has to be closed (0x14 appeared)
     void CloseFieldCommand();
     //the _current_ fields require a string type result while TOCs accept richt results
     bool IsFieldResultAsString();
     //apply the result text to the related field
     void SetFieldResult( ::rtl::OUString& rResult );
+    // set FFData of top field context
+    void SetFieldFFData( FFDataHandler::Pointer_t pFFDataHandler );
     //the end of field is reached (0x15 appeared) - the command might still be open
     void PopFieldContext();
 
     void AddBookmark( const ::rtl::OUString& rBookmarkName, const ::rtl::OUString& rId );
 
-    DomainMapperTableManager& getTableManager() { return m_TableManager; }
+    DomainMapperTableManager& getTableManager()
+    {
+        boost::shared_ptr< DomainMapperTableManager > pMngr = m_aTableManagers.top();
+        return *pMngr.get( );
+    }
+
+    void appendTableManager( )
+    {
+        boost::shared_ptr< DomainMapperTableManager > pMngr(
+                new DomainMapperTableManager( m_eDocumentType == DOCUMENT_OOXML ) );
+        m_aTableManagers.push( pMngr );
+    }
+
+    void popTableManager( )
+    {
+        if ( m_aTableManagers.size( ) > 0 )
+            m_aTableManagers.pop( );
+    }
 
     void SetLineNumbering( sal_Int32 nLnnMod, sal_Int32 nLnc, sal_Int32 ndxaLnn );
     bool IsLineNumberingSet() const {return m_bLineNumberingSet;}
@@ -536,7 +596,7 @@ public:
     void ResetParaRedline( );
 
     void ApplySettingsTable();
-
+    SectionPropertyMap * GetSectionContext();
 };
 } //namespace dmapper
 } //namespace writerfilter

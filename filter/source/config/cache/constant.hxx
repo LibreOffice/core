@@ -114,13 +114,14 @@ extern rtl::OUString pFilterStrings[];
 #define  CFGDIRECTKEY_FORMATVERSION         _FILTER_CONFIG_FROM_ASCII_("/org.openoffice.Setup/Product/ooXMLFileFormatVersion"          )
 #define  CFGDIRECTKEY_PRODUCTNAME           _FILTER_CONFIG_FROM_ASCII_("/org.openoffice.Setup/Product/ooName"                          )
 
-/** @short  names of filter flags. */
+/** @short  names of filter flags, sorted in alphabetical order */
 #define  FLAGNAME_3RDPARTYFILTER    _FILTER_CONFIG_FROM_ASCII_("3RDPARTYFILTER"   )
 #define  FLAGNAME_ALIEN             _FILTER_CONFIG_FROM_ASCII_("ALIEN"            )
 #define  FLAGNAME_ASYNCHRON         _FILTER_CONFIG_FROM_ASCII_("ASYNCHRON"        )
 #define  FLAGNAME_BROWSERPREFERRED  _FILTER_CONFIG_FROM_ASCII_("BROWSERPREFERRED" )
 #define  FLAGNAME_CONSULTSERVICE    _FILTER_CONFIG_FROM_ASCII_("CONSULTSERVICE"   )
 #define  FLAGNAME_DEFAULT           _FILTER_CONFIG_FROM_ASCII_("DEFAULT"          )
+#define  FLAGNAME_ENCRYPTION        _FILTER_CONFIG_FROM_ASCII_("ENCRYPTION"       )
 #define  FLAGNAME_EXPORT            _FILTER_CONFIG_FROM_ASCII_("EXPORT"           )
 #define  FLAGNAME_IMPORT            _FILTER_CONFIG_FROM_ASCII_("IMPORT"           )
 #define  FLAGNAME_INTERNAL          _FILTER_CONFIG_FROM_ASCII_("INTERNAL"         )
@@ -129,6 +130,7 @@ extern rtl::OUString pFilterStrings[];
 #define  FLAGNAME_NOTINSTALLED      _FILTER_CONFIG_FROM_ASCII_("NOTINSTALLED"     )
 #define  FLAGNAME_OWN               _FILTER_CONFIG_FROM_ASCII_("OWN"              )
 #define  FLAGNAME_PACKED            _FILTER_CONFIG_FROM_ASCII_("PACKED"           )
+#define  FLAGNAME_PASSWORDTOMODIFY  _FILTER_CONFIG_FROM_ASCII_("PASSWORDTOMODIFY" )
 #define  FLAGNAME_PREFERRED         _FILTER_CONFIG_FROM_ASCII_("PREFERRED"        )
 #define  FLAGNAME_READONLY          _FILTER_CONFIG_FROM_ASCII_("READONLY"         )
 #define  FLAGNAME_SILENTEXPORT      _FILTER_CONFIG_FROM_ASCII_("SILENTEXPORT"     )
@@ -138,30 +140,32 @@ extern rtl::OUString pFilterStrings[];
 #define  FLAGNAME_USESOPTIONS       _FILTER_CONFIG_FROM_ASCII_("USESOPTIONS"      )
 #define  FLAGNAME_COMBINED          _FILTER_CONFIG_FROM_ASCII_("COMBINED"         )
 
-/** @short  values of filter flags */
-#define  FLAGVAL_3RDPARTYFILTER    0x00080000 // 524288
-#define  FLAGVAL_ALIEN             0x00000040 // 64
-#define  FLAGVAL_ALL               0xffffffff // 4294967295
-#define  FLAGVAL_ASYNCHRON         0x00004000 // 16384
-#define  FLAGVAL_BROWSERPREFERRED  0x00400000 // 4194304
-#define  FLAGVAL_CONSULTSERVICE    0x00040000 // 262144
-#define  FLAGVAL_DEFAULT           0x00000100 // 256
-#define  FLAGVAL_EXPORT            0x00000002 // 2
+/** @short  values of filter flags, sorted based on value */
 #define  FLAGVAL_IMPORT            0x00000001 // 1
-#define  FLAGVAL_INTERNAL          0x00000008 // 8
-#define  FLAGVAL_NOTINCHOOSER      0x00002000 // 8192
-#define  FLAGVAL_NOTINFILEDIALOG   0x00001000 // 4096
-#define  FLAGVAL_NOTINSTALLED      0x00020000 // 131072
-#define  FLAGVAL_OWN               0x00000020 // 32
-#define  FLAGVAL_PACKED            0x00100000 // 1048576
-#define  FLAGVAL_PREFERRED         0x10000000 // 268435456
-#define  FLAGVAL_READONLY          0x00010000 // 65536
-#define  FLAGVAL_SILENTEXPORT      0x00200000 // 2097152
-#define  FLAGVAL_SUPPORTSSELECTION 0x00000400 // 1024
+#define  FLAGVAL_EXPORT            0x00000002 // 2
 #define  FLAGVAL_TEMPLATE          0x00000004 // 4
+#define  FLAGVAL_INTERNAL          0x00000008 // 8
 #define  FLAGVAL_TEMPLATEPATH      0x00000010 // 16
+#define  FLAGVAL_OWN               0x00000020 // 32
+#define  FLAGVAL_ALIEN             0x00000040 // 64
 #define  FLAGVAL_USESOPTIONS       0x00000080 // 128
+#define  FLAGVAL_DEFAULT           0x00000100 // 256
+#define  FLAGVAL_SUPPORTSSELECTION 0x00000400 // 1024
+#define  FLAGVAL_NOTINFILEDIALOG   0x00001000 // 4096
+#define  FLAGVAL_NOTINCHOOSER      0x00002000 // 8192
+#define  FLAGVAL_ASYNCHRON         0x00004000 // 16384
+#define  FLAGVAL_READONLY          0x00010000 // 65536
+#define  FLAGVAL_NOTINSTALLED      0x00020000 // 131072
+#define  FLAGVAL_CONSULTSERVICE    0x00040000 // 262144
+#define  FLAGVAL_3RDPARTYFILTER    0x00080000 // 524288
+#define  FLAGVAL_PACKED            0x00100000 // 1048576
+#define  FLAGVAL_SILENTEXPORT      0x00200000 // 2097152
+#define  FLAGVAL_BROWSERPREFERRED  0x00400000 // 4194304
 #define  FLAGVAL_COMBINED          0x00800000 // 8388608
+#define  FLAGVAL_ENCRYPTION        0x01000000 // 16777216
+#define  FLAGVAL_PASSWORDTOMODIFY  0x02000000 // 33554432
+#define  FLAGVAL_PREFERRED         0x10000000 // 268435456
+#define  FLAGVAL_ALL               0xffffffff // 4294967295
 
 /** @short  uno service names of our document services
             provided by our application modules.

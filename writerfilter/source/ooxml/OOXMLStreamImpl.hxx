@@ -71,10 +71,6 @@ public:
      uno::Reference<io::XInputStream> xStorageStream,
      StreamType_t nType);
     OOXMLStreamImpl(OOXMLStreamImpl & rStream, const rtl::OUString & rId);
-    OOXMLStreamImpl
-    (uno::Reference<uno::XComponentContext> xContext,
-     uno::Reference<io::XInputStream> xStorageStream,
-     const rtl::OUString & rId);
 
     virtual ~OOXMLStreamImpl();
 

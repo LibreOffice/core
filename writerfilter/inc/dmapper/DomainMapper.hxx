@@ -62,6 +62,8 @@ namespace dmapper
 
 class PropertyMap;
 class DomainMapper_Impl;
+class ListsManager;
+class StyleSheetTable;
 
 // different context types require different sprm handling (e.g. names)
 enum SprmType
@@ -103,6 +105,7 @@ public:
     virtual void endSectionGroup();
     virtual void startParagraphGroup();
     virtual void endParagraphGroup();
+    virtual void markLastParagraphInSection();
     virtual void startCharacterGroup();
     virtual void endCharacterGroup();
     virtual void startShape( ::com::sun::star::uno::Reference< com::sun::star::drawing::XShape > xShape );
@@ -131,6 +134,8 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > GetCurrentTextRange();
 
     ::rtl::OUString getOrCreateCharStyle( PropertyValueVector_t& rCharProperties );
+    boost::shared_ptr< ListsManager > GetListTable( );
+    boost::shared_ptr< StyleSheetTable > GetStyleSheetTable( );
 
 private:
     void handleUnderlineType(const sal_Int32 nIntValue, const ::boost::shared_ptr<PropertyMap> pContext);
@@ -140,8 +145,6 @@ private:
     rtl::OUString getBracketStringFromEnum(const sal_Int32 nIntValue, const bool bIsPrefix = true);
     com::sun::star::style::TabAlign getTabAlignFromValue(const sal_Int32 nIntValue);
     sal_Unicode getFillCharFromValue(const sal_Int32 nIntValue);
-    void resolveAttributeProperties(Value & val);
-    void resolveSprmProps(Sprm & sprm_);
     sal_Int32 mnBackgroundColor;
     bool mbIsHighlightSet;
 };

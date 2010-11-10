@@ -95,7 +95,7 @@ public:
     void setDocument(OOXMLDocument * pDocument);
     void setXNoteId(const ::rtl::OUString & rXNoteId);
 
-    OOXMLParserState::Pointer_t getParserState() const;
+    void setIsSubstream( bool bSubstream );
 
 private:
     OOXMLFastDocumentHandler(OOXMLFastDocumentHandler &); // not defined

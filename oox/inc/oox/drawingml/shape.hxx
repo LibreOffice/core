@@ -127,6 +127,7 @@ public:
     ::rtl::OUString                 getName( ) { return msName; }
     void                            setId( const rtl::OUString& rId ) { msId = rId; }
     void                            setHidden( sal_Bool bHidden ) { mbHidden = bHidden; }
+    sal_Bool                        getHidden() const { return mbHidden; };
     void                            setSubType( sal_Int32 nSubType ) { mnSubType = nSubType; }
     sal_Int32                       getSubType() const { return mnSubType; }
     void                            setSubTypeIndex( sal_uInt32 nSubTypeIndex ) { mnSubTypeIndex = nSubTypeIndex; }

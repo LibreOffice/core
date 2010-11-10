@@ -2098,6 +2098,7 @@ css::uno::Sequence< ::rtl::OUString > FilterCache::impl_convertFlagField2FlagNam
     if ((nFlags & FLAGVAL_BROWSERPREFERRED ) == FLAGVAL_BROWSERPREFERRED ) lFlagNames.push_back(FLAGNAME_BROWSERPREFERRED );
     if ((nFlags & FLAGVAL_CONSULTSERVICE   ) == FLAGVAL_CONSULTSERVICE   ) lFlagNames.push_back(FLAGNAME_CONSULTSERVICE   );
     if ((nFlags & FLAGVAL_DEFAULT          ) == FLAGVAL_DEFAULT          ) lFlagNames.push_back(FLAGNAME_DEFAULT          );
+    if ((nFlags & FLAGVAL_ENCRYPTION       ) == FLAGVAL_ENCRYPTION       ) lFlagNames.push_back(FLAGNAME_ENCRYPTION       );
     if ((nFlags & FLAGVAL_EXPORT           ) == FLAGVAL_EXPORT           ) lFlagNames.push_back(FLAGNAME_EXPORT           );
     if ((nFlags & FLAGVAL_IMPORT           ) == FLAGVAL_IMPORT           ) lFlagNames.push_back(FLAGNAME_IMPORT           );
     if ((nFlags & FLAGVAL_INTERNAL         ) == FLAGVAL_INTERNAL         ) lFlagNames.push_back(FLAGNAME_INTERNAL         );
@@ -2106,6 +2107,7 @@ css::uno::Sequence< ::rtl::OUString > FilterCache::impl_convertFlagField2FlagNam
     if ((nFlags & FLAGVAL_NOTINSTALLED     ) == FLAGVAL_NOTINSTALLED     ) lFlagNames.push_back(FLAGNAME_NOTINSTALLED     );
     if ((nFlags & FLAGVAL_OWN              ) == FLAGVAL_OWN              ) lFlagNames.push_back(FLAGNAME_OWN              );
     if ((nFlags & FLAGVAL_PACKED           ) == FLAGVAL_PACKED           ) lFlagNames.push_back(FLAGNAME_PACKED           );
+    if ((nFlags & FLAGVAL_PASSWORDTOMODIFY ) == FLAGVAL_PASSWORDTOMODIFY ) lFlagNames.push_back(FLAGNAME_PASSWORDTOMODIFY );
     if ((nFlags & FLAGVAL_PREFERRED        ) == FLAGVAL_PREFERRED        ) lFlagNames.push_back(FLAGNAME_PREFERRED        );
     if ((nFlags & FLAGVAL_READONLY         ) == FLAGVAL_READONLY         ) lFlagNames.push_back(FLAGNAME_READONLY         );
     if ((nFlags & FLAGVAL_SILENTEXPORT     ) == FLAGVAL_SILENTEXPORT     ) lFlagNames.push_back(FLAGNAME_SILENTEXPORT     );
@@ -2160,6 +2162,11 @@ sal_Int32 FilterCache::impl_convertFlagNames2FlagField(const css::uno::Sequence<
             nField |= FLAGVAL_DEFAULT;
             continue;
         }
+        if (pNames[i].equals(FLAGNAME_ENCRYPTION))
+        {
+            nField |= FLAGVAL_ENCRYPTION;
+            continue;
+        }
         if (pNames[i].equals(FLAGNAME_EXPORT))
         {
             nField |= FLAGVAL_EXPORT;
@@ -2198,6 +2205,11 @@ sal_Int32 FilterCache::impl_convertFlagNames2FlagField(const css::uno::Sequence<
         if (pNames[i].equals(FLAGNAME_PACKED))
         {
             nField |= FLAGVAL_PACKED;
+            continue;
+        }
+        if (pNames[i].equals(FLAGNAME_PASSWORDTOMODIFY))
+        {
+            nField |= FLAGVAL_PASSWORDTOMODIFY;
             continue;
         }
         if (pNames[i].equals(FLAGNAME_PREFERRED))

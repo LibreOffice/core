@@ -1626,6 +1626,10 @@ void RecordStreamObject::implDumpRecordBody()
         }
         break;
 
+        case OOBIN_ID_OLESIZE:
+            dumpRange( "visible-range" );
+        break;
+
         case OOBIN_ID_PAGEMARGINS:
             dumpDec< double >( "left-margin" );
             dumpDec< double >( "right-margin" );

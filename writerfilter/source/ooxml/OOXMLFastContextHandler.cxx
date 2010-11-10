@@ -100,7 +100,7 @@ static string resourceToString
 
 set<OOXMLFastContextHandler *> aSetContexts;
 
-
+#ifdef DEBUG
 class OOXMLIdToString : public IdToString
 {
 public:
@@ -119,6 +119,7 @@ public:
         return s;
     }
 };
+#endif
 
 /*
   class OOXMLFastContextHandler
@@ -136,8 +137,7 @@ OOXMLFastContextHandler::OOXMLFastContextHandler
   mnTableDepth(0),
   mnInstanceNumber(mnInstanceCount),
   mnRefCount(0),
-  m_xContext(context),
-  mbFallback(false)
+  m_xContext(context)
 {
     mnInstanceCount++;
     aSetContexts.insert(this);
@@ -153,12 +153,13 @@ OOXMLFastContextHandler::OOXMLFastContextHandler
 : cppu::WeakImplHelper1<com::sun::star::xml::sax::XFastContextHandler>(),
   mpParent(pContext),
   mId(0),
+  mnDefine(0),
   mnToken(OOXML_FAST_TOKENS_END),
   mpStream(NULL),
   mnTableDepth(0),
   mnInstanceNumber(mnInstanceCount),
   mnRefCount(0),
-  mbFallback(false)
+  m_xContext(pContext->m_xContext)
 {
     if (pContext != NULL)
     {
@@ -179,29 +180,6 @@ OOXMLFastContextHandler::OOXMLFastContextHandler
 OOXMLFastContextHandler::~OOXMLFastContextHandler()
 {
     aSetContexts.erase(this);
-}
-
-void OOXMLFastContextHandler::dumpOpenContexts()
-{
-    debug_logger->startElement("open-contexts");
-    XMLTag aTag("open-contexts");
-
-    set<OOXMLFastContextHandler *>::iterator aIt(aSetContexts.begin());
-    while (aIt != aSetContexts.end())
-    {
-        debug_logger->startElement("open-context");
-        debug_logger->addTag((*aIt)->toTag());
-        debug_logger->endElement("open-context");
-
-        aIt++;
-    }
-
-    static char buffer[256];
-    snprintf(buffer, sizeof(buffer), "%" SAL_PRI_SIZET "u",
-             aSetContexts.size());
-
-    debug_logger->attribute("count", buffer);
-    debug_logger->endElement("open-contexts");
 }
 
 #ifdef DEBUG_MEMORY
@@ -231,11 +209,6 @@ void SAL_CALL OOXMLFastContextHandler::release()
 }
 #endif
 
-sal_uInt32 OOXMLFastContextHandler::getInstanceNumber() const
-{
-    return mnInstanceNumber;
-}
-
 // ::com::sun::star::xml::sax::XFastContextHandler:
 void SAL_CALL OOXMLFastContextHandler::startFastElement
 (Token_t Element,
@@ -254,10 +227,6 @@ void SAL_CALL OOXMLFastContextHandler::startFastElement
     static char buffer[256];
     snprintf(buffer, sizeof(buffer), "%ld: startFastElement", mnInstanceNumber);
     logger("MEMORY", buffer);
-#endif
-
-#if DEBUG
-    clog << "Token: " << fastTokenToId(Element) << endl;
 #endif
     attributes(Attribs);
     lcl_startFastElement(Element, Attribs);
@@ -465,6 +434,7 @@ void OOXMLFastContextHandler::lcl_endAction(Token_t Element)
     OOXMLFactory::getInstance()->endAction(this, Element);
 }
 
+#ifdef DEBUG
 XMLTag::Pointer_t OOXMLFastContextHandler::toPropertiesTag
     (OOXMLPropertySet::Pointer_t pProps)
 {
@@ -514,6 +484,7 @@ string OOXMLFastContextHandler::toString() const
 {
     return toTag()->toString();
 }
+#endif
 
 string OOXMLFastContextHandler::getResourceString() const
 {
@@ -549,16 +520,6 @@ void OOXMLFastContextHandler::setDefine(Id nDefine)
 Id OOXMLFastContextHandler::getDefine() const
 {
     return mnDefine;
-}
-
-void OOXMLFastContextHandler::setFallback(bool bFallback)
-{
-    mbFallback = bFallback;
-}
-
-bool OOXMLFastContextHandler::isFallback() const
-{
-    return mbFallback;
 }
 
 OOXMLParserState::Pointer_t OOXMLFastContextHandler::getParserState() const
@@ -770,6 +731,7 @@ void OOXMLFastContextHandler::setLastParagraphInSection()
 #endif
 
     mpParserState->setLastParagraphInSection(true);
+    mpStream->markLastParagraphInSection( );
 }
 
 void OOXMLFastContextHandler::newProperty
@@ -1032,26 +994,6 @@ void OOXMLFastContextHandler::sendTableProperties()
 #endif
 }
 
-void OOXMLFastContextHandler::clearCellProps()
-{
-#ifdef DEBUG_ELEMENT
-    debug_logger->element("clearCellProps");
-#endif
-
-    mpParserState->setCellProperties(OOXMLPropertySet::Pointer_t
-                                     (new OOXMLPropertySetImpl()));
-}
-
-void OOXMLFastContextHandler::clearRowProps()
-{
-#ifdef DEBUG_ELEMENT
-    debug_logger->element("clearRowProps");
-#endif
-
-    mpParserState->setRowProperties(OOXMLPropertySet::Pointer_t
-                                    (new OOXMLPropertySetImpl()));
-}
-
 void OOXMLFastContextHandler::clearTableProps()
 {
 #ifdef DEBUG_ELEMENT
@@ -1107,11 +1049,6 @@ void OOXMLFastContextHandler::setDefaultHexValue()
 
 void OOXMLFastContextHandler::setDefaultStringValue()
 {
-}
-
-const ::rtl::OUString & OOXMLFastContextHandler::getText() const
-{
-    return aEmptyStr;
 }
 
 void OOXMLFastContextHandler::setDocument(OOXMLDocument * pDocument)
@@ -1298,19 +1235,6 @@ OOXMLFastContextHandler::getComponentContext()
 }
 
 /*
-  class OOXMLFastContextHandlerNoResource
- */
-OOXMLFastContextHandlerNoResource::OOXMLFastContextHandlerNoResource
-(OOXMLFastContextHandler * pContext)
-: OOXMLFastContextHandler(pContext)
-{
-}
-
-OOXMLFastContextHandlerNoResource::~OOXMLFastContextHandlerNoResource()
-{
-}
-
-/*
   class OOXMLFastContextHandlerStream
  */
 
@@ -1352,12 +1276,6 @@ void OOXMLFastContextHandlerStream::sendProperty(Id nId)
     mpStream->utext(reinterpret_cast < const sal_uInt8 * >
                     (sText.getStr()),
                     sText.getLength());
-}
-
-void OOXMLFastContextHandlerStream::setPropertySetAttrs
-(OOXMLPropertySet::Pointer_t pPropertySetAttrs)
-{
-    mpPropertySetAttrs = pPropertySetAttrs;
 }
 
 OOXMLPropertySet::Pointer_t
@@ -1441,6 +1359,7 @@ OOXMLValue::Pointer_t OOXMLFastContextHandlerProperties::getValue() const
     return OOXMLValue::Pointer_t(new OOXMLPropertySetValue(mpPropertySet));
 }
 
+#ifdef DEBUG
 XMLTag::Pointer_t OOXMLFastContextHandlerProperties::toTag() const
 {
     XMLTag::Pointer_t pTag(OOXMLFastContextHandler::toTag());
@@ -1448,6 +1367,7 @@ XMLTag::Pointer_t OOXMLFastContextHandlerProperties::toTag() const
 
     return pTag;
 }
+#endif
 
 void OOXMLFastContextHandlerProperties::newProperty
 (const Id & rId, OOXMLValue::Pointer_t pVal)
@@ -1981,72 +1901,6 @@ void OOXMLFastContextHandlerTextTable::lcl_endFastElement
 /*
   class OOXMLFastContextHandlerShape
  */
-
-class ShapesNoAdd:
-    public ::cppu::WeakImplHelper1<
-        drawing::XShapes>
-{
-public:
-    explicit ShapesNoAdd(uno::Reference< uno::XComponentContext > const & context, uno::Reference< drawing::XShapes> const & xShapes);
-
-private:
-    // container::XElementAccess:
-    virtual uno::Type SAL_CALL getElementType() throw (uno::RuntimeException);
-    virtual ::sal_Bool SAL_CALL hasElements() throw (uno::RuntimeException);
-
-    // container::XIndexAccess:
-    virtual ::sal_Int32 SAL_CALL getCount() throw (uno::RuntimeException);
-    virtual uno::Any SAL_CALL getByIndex(::sal_Int32 Index) throw (uno::RuntimeException, lang::IndexOutOfBoundsException, lang::WrappedTargetException);
-
-    // drawing::XShapes:
-    virtual void SAL_CALL add(const uno::Reference< drawing::XShape > & xShape) throw (uno::RuntimeException);
-    virtual void SAL_CALL remove(const uno::Reference< drawing::XShape > & xShape) throw (uno::RuntimeException);
-
-    ShapesNoAdd(ShapesNoAdd &); // not defined
-    void operator =(ShapesNoAdd &); // not defined
-
-    virtual ~ShapesNoAdd() {}
-
-    uno::Reference< uno::XComponentContext > m_xContext;
-    uno::Reference< drawing::XShapes > m_xShapes;
-};
-
-ShapesNoAdd::ShapesNoAdd(uno::Reference< uno::XComponentContext > const & context, uno::Reference< drawing::XShapes> const & xShapes) :
-m_xContext(context), m_xShapes(xShapes)
-{}
-
-// container::XElementAccess:
-uno::Type SAL_CALL ShapesNoAdd::getElementType() throw (uno::RuntimeException)
-{
-    return m_xShapes->getElementType();
-}
-
-::sal_Bool SAL_CALL ShapesNoAdd::hasElements() throw (uno::RuntimeException)
-{
-    return m_xShapes->hasElements();
-}
-
-// container::XIndexAccess:
-::sal_Int32 SAL_CALL ShapesNoAdd::getCount() throw (uno::RuntimeException)
-{
-    return m_xShapes->getCount();
-}
-
-uno::Any SAL_CALL ShapesNoAdd::getByIndex(::sal_Int32 Index) throw (uno::RuntimeException, lang::IndexOutOfBoundsException, lang::WrappedTargetException)
-{
-    return m_xShapes->getByIndex(Index);
-}
-
-// drawing::XShapes:
-void SAL_CALL ShapesNoAdd::add(const uno::Reference< drawing::XShape > &
-                               ) throw (uno::RuntimeException)
-{
-}
-
-void SAL_CALL ShapesNoAdd::remove(const uno::Reference< drawing::XShape > & xShape) throw (uno::RuntimeException)
-{
-    m_xShapes->remove(xShape);
-}
 
 OOXMLFastContextHandlerShape::OOXMLFastContextHandlerShape
 (OOXMLFastContextHandler * pContext)

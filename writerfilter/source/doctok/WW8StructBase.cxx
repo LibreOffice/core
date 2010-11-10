@@ -26,7 +26,6 @@
  ************************************************************************/
 
 #include <WW8StructBase.hxx>
-#include <util.hxx>
 
 namespace writerfilter {
 namespace doctok {

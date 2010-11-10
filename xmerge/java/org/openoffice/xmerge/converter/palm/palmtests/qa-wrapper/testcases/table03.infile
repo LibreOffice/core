@@ -1,4 +1,0 @@
-# table03
-TEST|Table 3|QUICKWORD|table03
-ENTER_STRING_AT_LOCATION|77|31|, immediately after this sentence
-ENTER_STRING_AT_LOCATION|LEFT|75|This sentence comes after the table.

@@ -1,5 +1,0 @@
-# 
-# 
-TEST||MINICALC|c_addition
-MINICALC_ENTER_CELL|0|0| 3\n
-SLEEP|5

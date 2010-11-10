@@ -1,6 +1,0 @@
-# 
-# Spreadsheet - test Boolean entry change.
-# 
-TEST||MINICALC|c_boolean
-MINICALC_ENTER_CELL|1|0|TRUE\n
-SLEEP|5

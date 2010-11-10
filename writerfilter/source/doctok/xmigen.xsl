@@ -184,6 +184,76 @@
     </UML:Generalization>
   </xsl:template>
 
+  <xsl:template match="sprm">
+    <xsl:variable name="isww8resource">
+      <xsl:choose>
+        <xsl:when test="count(*) > 0">YES</xsl:when>
+        <xsl:otherwise>NO</xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <UML:Class>
+      <xsl:attribute name="xmi.id">
+        <xsl:value-of select="@name"/>
+      </xsl:attribute>
+      <xsl:attribute name="name">
+        <xsl:value-of select="@name"/>
+      </xsl:attribute>
+      <xsl:if test="$isww8resource='YES'">
+        <UML:ModelElement.stereotype>
+          <UML:Stereotype xmi.idref="ww8resource"/>
+        </UML:ModelElement.stereotype>
+      </xsl:if>
+      <UML:ModelElement.stereotype>
+        <UML:Stereotype xmi.idref="ww8sprm"/>
+      </UML:ModelElement.stereotype>
+      <xsl:call-template name="taggedvalue">
+        <xsl:with-param name="type">sprmcode</xsl:with-param>
+        <xsl:with-param name="value" select="@code"/>
+      </xsl:call-template>
+      <xsl:call-template name="taggedvalue">
+        <xsl:with-param name="type">sprmid</xsl:with-param>
+        <xsl:with-param name="value" select="@token"/>
+      </xsl:call-template>
+      <xsl:call-template name="taggedvalue">
+        <xsl:with-param name="type">kind</xsl:with-param>
+        <xsl:with-param name="value" select="@kind"/>
+      </xsl:call-template>
+      <xsl:apply-templates select="*"/>
+    </UML:Class>
+    <xsl:if test="$isww8resource='YES'">
+      <xsl:call-template name="generalization">
+        <xsl:with-param name="parent">Properties</xsl:with-param>
+        <xsl:with-param name="child" select="@name"/>
+      </xsl:call-template>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template name="generalization">
+    <xsl:param name="parent"/>
+    <xsl:param name="child"/>
+    <UML:Generalization isSpecification="false">
+      <xsl:attribute name="xmi.id">
+	<xsl:value-of select="$child"/>
+	<xsl:text>-</xsl:text>
+	<xsl:value-of select="$parent"/>
+      </xsl:attribute>
+      <UML:Generalization.child>
+	<UML:Class>
+	  <xsl:attribute name="xmi.idref">
+	    <xsl:value-of select="$child"/>
+	  </xsl:attribute>
+	</UML:Class>
+      </UML:Generalization.child>
+      <UML:Generalization.parent>
+	<UML:Class xmi.idref="Properties">
+	  <xsl:attribute name="xmi.idref">
+	    <xsl:value-of select="$parent"/>
+	  </xsl:attribute>
+	</UML:Class>
+      </UML:Generalization.parent>
+    </UML:Generalization>
+  </xsl:template>
+
   <xsl:template name="taggedvalue">
     <xsl:param name="type"/>
     <xsl:param name="value"/>
@@ -278,7 +348,7 @@
 
   <xsl:template match="bitfield">
     <xsl:variable name="offset">
-      <xsl:value-of select="sum(preceding-sibling::*/@size)"/>
+      <xsl:call-template name="calcoffset"/>
     </xsl:variable>
     <xsl:for-each select="bits">
       <xsl:call-template name="bits">

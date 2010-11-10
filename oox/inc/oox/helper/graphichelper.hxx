@@ -34,6 +34,7 @@
 #include <com/sun/star/awt/DeviceInfo.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include "oox/helper/binarystreambase.hxx"
+#include "oox/helper/storagebase.hxx"
 
 namespace com { namespace sun { namespace star {
     namespace awt { struct Point; }
@@ -68,8 +69,11 @@ class GraphicHelper
 public:
     explicit            GraphicHelper(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxGlobalFactory,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxTargetFrame );
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxTargetFrame,
+                            const StorageRef& rxStorage );
     virtual             ~GraphicHelper();
+
+    // System colors and predefined colors ------------------------------------
 
     /** Returns a system color specified by the passed XML token identifier. */
     sal_Int32           getSystemColor( sal_Int32 nToken, sal_Int32 nDefaultRgb = API_RGB_TRANSPARENT ) const;
@@ -77,6 +81,8 @@ public:
     virtual sal_Int32   getSchemeColor( sal_Int32 nToken ) const;
     /** Derived classes may implement to resolve a palette index to an RGB color. */
     virtual sal_Int32   getPaletteColor( sal_Int32 nPaletteIdx ) const;
+
+    // Device info and device dependent unit conversion -----------------------
 
     /** Returns information about the output device. */
     const ::com::sun::star::awt::DeviceInfo& getDeviceInfo() const;
@@ -109,6 +115,8 @@ public:
     /** Converts the passed size from 1/100 mm to AppFont units. */
     ::com::sun::star::awt::Size convertHmmToAppFont( const ::com::sun::star::awt::Size& rHmm ) const;
 
+    // Graphics and graphic objects  ------------------------------------------
+
     /** Imports a graphic from the passed input stream. */
     ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >
                         importGraphic(
@@ -117,6 +125,10 @@ public:
     /** Imports a graphic from the passed binary memory block. */
     ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >
                         importGraphic( const StreamDataSequence& rGraphicData ) const;
+
+    /** Imports a graphic from the storage stream with the passed path and name. */
+    ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >
+                        importEmbeddedGraphic( const ::rtl::OUString& rStreamName ) const;
 
     /** Creates a persistent graphic object from the passed graphic.
         @return  The URL of the created and internally cached graphic object. */
@@ -132,16 +144,28 @@ public:
         @return  The URL of the created and internally cached graphic object. */
     ::rtl::OUString     importGraphicObject( const StreamDataSequence& rGraphicData ) const;
 
+    /** Imports a graphic object from the storage stream with the passed path and name.
+        @return  The URL of the created and internally cached graphic object. */
+    ::rtl::OUString     importEmbeddedGraphicObject( const ::rtl::OUString& rStreamName ) const;
+
+    /** calculates the orignal size of a graphic which is necessary to be able to calculate cropping values
+        @return The original Graphic size in 100thmm */
+    ::com::sun::star::awt::Size getOriginalSize( const ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >& rxGraphic ) const;
+
+    // ------------------------------------------------------------------------
 private:
     typedef ::std::map< sal_Int32, sal_Int32 > SystemPalette;
     typedef ::std::deque< ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphicObject > > GraphicObjectDeque;
+    typedef ::std::map< ::rtl::OUString, ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > > EmbeddedGraphicMap;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > mxCompContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphicProvider > mxGraphicProvider;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XUnitConversion > mxUnitConversion;
     ::com::sun::star::awt::DeviceInfo maDeviceInfo; /// Current output device info.
     SystemPalette       maSystemPalette;            /// Maps system colors (XML tokens) to RGB color values.
+    StorageRef          mxStorage;                  /// Storage containing embedded graphics.
     mutable GraphicObjectDeque maGraphicObjects;    /// Caches all created graphic objects to keep them alive.
+    mutable EmbeddedGraphicMap maEmbeddedGraphics;  /// Maps all embedded graphics by their storage path.
     const ::rtl::OUString maGraphicObjScheme;       /// The URL scheme name for graphic objects.
     double              mfPixelPerHmmX;             /// Number of screen pixels per 1/100 mm in X direction.
     double              mfPixelPerHmmY;             /// Number of screen pixels per 1/100 mm in Y direction.

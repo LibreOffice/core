@@ -74,8 +74,18 @@ namespace core {
 
 namespace {
 
+struct UrlPool
+{
+    ::osl::Mutex        maMutex;
+    ::std::set< OUString > maUrls;
+};
+
+struct StaticUrlPool : public ::rtl::Static< UrlPool, StaticUrlPool > {};
+
+// ----------------------------------------------------------------------------
+
 /** This guard prevents recursive loading/saving of the same document. */
-class DocumentOpenedGuard : public ::osl::Mutex
+class DocumentOpenedGuard
 {
 public:
     explicit            DocumentOpenedGuard( const OUString& rUrl );
@@ -87,31 +97,28 @@ private:
                         DocumentOpenedGuard( const DocumentOpenedGuard& );
     DocumentOpenedGuard& operator=( const DocumentOpenedGuard& );
 
-    typedef ::std::set< OUString > UrlSet;
-    struct UrlPool : public ::rtl::Static< UrlSet, UrlPool > {};
-
-    UrlSet&             mrUrls;
     OUString            maUrl;
     bool                mbValid;
 };
 
-DocumentOpenedGuard::DocumentOpenedGuard( const OUString& rUrl ) :
-    mrUrls( UrlPool::get() )
+DocumentOpenedGuard::DocumentOpenedGuard( const OUString& rUrl )
 {
-    ::osl::MutexGuard aGuard( *this );
-    mbValid = (rUrl.getLength() == 0) || (mrUrls.count( rUrl ) == 0);
+    UrlPool& rUrlPool = StaticUrlPool::get();
+    ::osl::MutexGuard aGuard( rUrlPool.maMutex );
+    mbValid = (rUrl.getLength() == 0) || (rUrlPool.maUrls.count( rUrl ) == 0);
     if( mbValid && (rUrl.getLength() > 0) )
     {
-        mrUrls.insert( rUrl );
+        rUrlPool.maUrls.insert( rUrl );
         maUrl = rUrl;
     }
 }
 
 DocumentOpenedGuard::~DocumentOpenedGuard()
 {
-    ::osl::MutexGuard aGuard( *this );
+    UrlPool& rUrlPool = StaticUrlPool::get();
+    ::osl::MutexGuard aGuard( rUrlPool.maMutex );
     if( maUrl.getLength() > 0 )
-        mrUrls.erase( maUrl );
+        rUrlPool.maUrls.erase( maUrl );
 }
 
 } // namespace
@@ -130,10 +137,9 @@ enum FilterDirection
 
 struct FilterBaseImpl
 {
-    typedef ::boost::shared_ptr< GraphicHelper >            GraphicHelperRef;
-    typedef ::boost::shared_ptr< ModelObjectHelper >        ModelObjHelperRef;
-    typedef ::boost::shared_ptr< OleObjectHelper >          OleObjHelperRef;
-    typedef ::std::map< OUString, Reference< XGraphic > >   EmbeddedGraphicMap;
+    typedef ::boost::shared_ptr< GraphicHelper >        GraphicHelperRef;
+    typedef ::boost::shared_ptr< ModelObjectHelper >    ModelObjHelperRef;
+    typedef ::boost::shared_ptr< OleObjectHelper >      OleObjHelperRef;
 
     FilterDirection     meDirection;
     SequenceAsHashMap   maArguments;
@@ -144,7 +150,6 @@ struct FilterBaseImpl
     GraphicHelperRef    mxGraphicHelper;        /// Graphic and graphic object handling.
     ModelObjHelperRef   mxModelObjHelper;       /// Tables to create new named drawing objects.
     OleObjHelperRef     mxOleObjHelper;         /// OLE object handling.
-    EmbeddedGraphicMap  maEmbeddedGraphics;     /// Maps all imported embedded graphics by their path.
 
     Reference< XMultiServiceFactory >   mxGlobalFactory;
     Reference< XModel >                 mxModel;
@@ -200,11 +205,7 @@ void FilterBaseImpl::finalizeFilter()
 {
     try
     {
-        // clear the 'ComponentData' property in the descriptor
-        MediaDescriptor::iterator aIt = maMediaDesc.find( MediaDescriptor::PROP_COMPONENTDATA() );
-        if( aIt != maMediaDesc.end() )
-            aIt->second.clear();
-        // write the descriptor back to the document model (adds the password)
+        // write the descriptor back to the document model (adds the passwords)
         mxModel->attachResource( maFileUrl, maMediaDesc.getAsConstPropertyValueList() );
         // unlock the model controllers
         mxModel->unlockControllers();
@@ -248,11 +249,6 @@ const Reference< XMultiServiceFactory >& FilterBase::getGlobalFactory() const
     return mxImpl->mxGlobalFactory;
 }
 
-MediaDescriptor& FilterBase::getMediaDescriptor() const
-{
-    return mxImpl->maMediaDesc;
-}
-
 const Reference< XModel >& FilterBase::getModel() const
 {
     return mxImpl->mxModel;
@@ -276,6 +272,11 @@ const Reference< XStatusIndicator >& FilterBase::getStatusIndicator() const
 const Reference< XInteractionHandler >& FilterBase::getInteractionHandler() const
 {
     return mxImpl->mxInteractionHandler;
+}
+
+MediaDescriptor& FilterBase::getMediaDescriptor() const
+{
+    return mxImpl->maMediaDesc;
 }
 
 const OUString& FilterBase::getFileUrl() const
@@ -423,31 +424,6 @@ bool FilterBase::importBinaryData( StreamDataSequence& orDataSeq, const OUString
     return true;
 }
 
-Reference< XGraphic > FilterBase::importEmbeddedGraphic( const OUString& rStreamName ) const
-{
-    Reference< XGraphic > xGraphic;
-    OSL_ENSURE( rStreamName.getLength() > 0, "FilterBase::importEmbeddedGraphic - empty stream name" );
-    if( rStreamName.getLength() > 0 )
-    {
-        FilterBaseImpl::EmbeddedGraphicMap::const_iterator aIt = mxImpl->maEmbeddedGraphics.find( rStreamName );
-        if( aIt == mxImpl->maEmbeddedGraphics.end() )
-        {
-            xGraphic = getGraphicHelper().importGraphic( openInputStream( rStreamName ) );
-            if( xGraphic.is() )
-                mxImpl->maEmbeddedGraphics[ rStreamName ] = xGraphic;
-        }
-        else
-            xGraphic = aIt->second;
-    }
-    return xGraphic;
-}
-
-OUString FilterBase::importEmbeddedGraphicObject( const OUString& rStreamName ) const
-{
-    Reference< XGraphic > xGraphic = importEmbeddedGraphic( rStreamName );
-    return xGraphic.is() ? getGraphicHelper().createGraphicObject( xGraphic ) : OUString();
-}
-
 // com.sun.star.lang.XServiceInfo interface -----------------------------------
 
 OUString SAL_CALL FilterBase::getImplementationName() throw( RuntimeException )
@@ -560,7 +536,7 @@ Reference< XStream > FilterBase::implGetOutputStream( MediaDescriptor& rMediaDes
 
 void FilterBase::setMediaDescriptor( const Sequence< PropertyValue >& rMediaDescSeq )
 {
-    mxImpl->maMediaDesc = rMediaDescSeq;
+    mxImpl->maMediaDesc << rMediaDescSeq;
 
     switch( mxImpl->meDirection )
     {
@@ -587,11 +563,10 @@ void FilterBase::setMediaDescriptor( const Sequence< PropertyValue >& rMediaDesc
 GraphicHelper* FilterBase::implCreateGraphicHelper() const
 {
     // default: return base implementation without any special behaviour
-    return new GraphicHelper( mxImpl->mxGlobalFactory, mxImpl->mxTargetFrame );
+    return new GraphicHelper( mxImpl->mxGlobalFactory, mxImpl->mxTargetFrame, mxImpl->mxStorage );
 }
 
 // ============================================================================
 
 } // namespace core
 } // namespace oox
-

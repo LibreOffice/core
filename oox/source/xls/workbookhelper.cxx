@@ -43,6 +43,7 @@
 #include "properties.hxx"
 #include "oox/helper/progressbar.hxx"
 #include "oox/helper/propertyset.hxx"
+#include "oox/ole/vbaproject.hxx"
 #include "oox/drawingml/theme.hxx"
 #include "oox/xls/addressconverter.hxx"
 #include "oox/xls/biffinputstream.hxx"
@@ -50,7 +51,6 @@
 #include "oox/xls/defnamesbuffer.hxx"
 #include "oox/xls/excelchartconverter.hxx"
 #include "oox/xls/excelfilter.hxx"
-#include "oox/xls/excelvbaproject.hxx"
 #include "oox/xls/externallinkbuffer.hxx"
 #include "oox/xls/formulaparser.hxx"
 #include "oox/xls/pagesettings.hxx"
@@ -687,14 +687,12 @@ void WorkbookHelper::finalizeWorkbookImport()
     aDefPageStyle.setProperty< sal_Int16 >( PROP_FirstPageNumber, 0 );
 
     /*  Import the VBA project (after finalizing workbook settings which
-        contains the workbook code name), and attach VBA macros to document and
-        sheet events. */
+        contains the workbook code name). */
     StorageRef xVbaPrjStrg = mrBookData.getVbaProjectStorage();
     if( xVbaPrjStrg.get() && xVbaPrjStrg->isStorage() )
     {
-        VbaProject aVbaProject( getGlobalFactory(), getDocument() );
+        ::oox::ole::VbaProject aVbaProject( getGlobalFactory(), getBaseFilter().getModel(), CREATE_OUSTRING( "Calc" ) );
         aVbaProject.importVbaProject( *xVbaPrjStrg, getBaseFilter().getGraphicHelper() );
-        aVbaProject.attachToEvents();
     }
 }
 

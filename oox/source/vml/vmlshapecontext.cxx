@@ -44,9 +44,9 @@ namespace {
 
 /** Returns the boolean value from the specified VML attribute (if present).
  */
-OptValue< bool > lclDecodeBool( const AttributeList& rAttribs, sal_Int32 nElement )
+OptValue< bool > lclDecodeBool( const AttributeList& rAttribs, sal_Int32 nToken )
 {
-    OptValue< OUString > oValue = rAttribs.getString( nElement );
+    OptValue< OUString > oValue = rAttribs.getString( nToken );
     if( oValue.has() ) return OptValue< bool >( ConversionHelper::decodeBool( oValue.get() ) );
     return OptValue< bool >();
 }
@@ -54,18 +54,18 @@ OptValue< bool > lclDecodeBool( const AttributeList& rAttribs, sal_Int32 nElemen
 /** Returns the percentage value from the specified VML attribute (if present).
     The value will be normalized (1.0 is returned for 100%).
  */
-OptValue< double > lclDecodePercent( const AttributeList& rAttribs, sal_Int32 nElement, double fDefValue )
+OptValue< double > lclDecodePercent( const AttributeList& rAttribs, sal_Int32 nToken, double fDefValue )
 {
-    OptValue< OUString > oValue = rAttribs.getString( nElement );
+    OptValue< OUString > oValue = rAttribs.getString( nToken );
     if( oValue.has() ) return OptValue< double >( ConversionHelper::decodePercent( oValue.get(), fDefValue ) );
     return OptValue< double >();
 }
 
 /** Returns the integer value pair from the specified VML attribute (if present).
  */
-OptValue< Int32Pair > lclDecodeInt32Pair( const AttributeList& rAttribs, sal_Int32 nElement )
+OptValue< Int32Pair > lclDecodeInt32Pair( const AttributeList& rAttribs, sal_Int32 nToken )
 {
-    OptValue< OUString > oValue = rAttribs.getString( nElement );
+    OptValue< OUString > oValue = rAttribs.getString( nToken );
     OptValue< Int32Pair > oRetValue;
     if( oValue.has() )
     {
@@ -78,9 +78,9 @@ OptValue< Int32Pair > lclDecodeInt32Pair( const AttributeList& rAttribs, sal_Int
 
 /** Returns the percentage pair from the specified VML attribute (if present).
  */
-OptValue< DoublePair > lclDecodePercentPair( const AttributeList& rAttribs, sal_Int32 nElement )
+OptValue< DoublePair > lclDecodePercentPair( const AttributeList& rAttribs, sal_Int32 nToken )
 {
-    OptValue< OUString > oValue = rAttribs.getString( nElement );
+    OptValue< OUString > oValue = rAttribs.getString( nToken );
     OptValue< DoublePair > oRetValue;
     if( oValue.has() )
     {
@@ -170,7 +170,7 @@ ShapeContextBase::ShapeContextBase( ContextHandler2Helper& rParent ) :
         case VML_TOKEN( image ):
             return new ShapeContext( rParent, rAttribs, rShapes.createShape< ComplexShape >() );
     }
-    return false;
+    return 0;
 }
 
 // ============================================================================
@@ -235,16 +235,24 @@ ContextHandlerRef ShapeTypeContext::onCreateContext( sal_Int32 nElement, const A
             mrTypeModel.maFillModel.moFocus = lclDecodePercent( rAttribs, XML_focus, 0.0 );
             mrTypeModel.maFillModel.moFocusPos = lclDecodePercentPair( rAttribs, XML_focusposition );
             mrTypeModel.maFillModel.moFocusSize = lclDecodePercentPair( rAttribs, XML_focussize );
+            mrTypeModel.maFillModel.moBitmapPath = decodeFragmentPath( rAttribs, O_TOKEN( relid ) );
             mrTypeModel.maFillModel.moRotate = lclDecodeBool( rAttribs, XML_rotate );
         break;
         case VML_TOKEN( imagedata ):
-            OptValue< OUString > oGraphicRelId = rAttribs.getString( O_TOKEN( relid ) );
-            if( oGraphicRelId.has() )
-                mrTypeModel.moGraphicPath = getFragmentPathFromRelId( oGraphicRelId.get() );
+            mrTypeModel.moGraphicPath = decodeFragmentPath( rAttribs, O_TOKEN( relid ) );
             mrTypeModel.moGraphicTitle = rAttribs.getString( O_TOKEN( title ) );
         break;
     }
     return 0;
+}
+
+OptValue< OUString > ShapeTypeContext::decodeFragmentPath( const AttributeList& rAttribs, sal_Int32 nToken ) const
+{
+    OptValue< OUString > oFragmentPath;
+    OptValue< OUString > oRelId = rAttribs.getString( nToken );
+    if( oRelId.has() )
+        oFragmentPath = getFragmentPathFromRelId( oRelId.get() );
+    return oFragmentPath;
 }
 
 void ShapeTypeContext::setStyle( const OUString& rStyle )

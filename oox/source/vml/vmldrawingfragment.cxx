@@ -50,6 +50,7 @@ DrawingFragment::DrawingFragment( XmlFilterBase& rFilter, const OUString& rFragm
 
 Reference< XInputStream > DrawingFragment::openFragmentStream() const
 {
+    // #i104719# create an input stream that preprocesses the VML data
     return new InputStream( FragmentHandler2::openFragmentStream() );
 }
 

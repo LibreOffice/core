@@ -255,7 +255,7 @@ ContextHandlerRef OoxExternalLinkFragment::onCreateContext( sal_Int32 nElement, 
             if( nElement == XLS_TOKEN( oleItem ) ) mxExtName = mrExtLink.importOleItem( rAttribs );
         break;
     }
-    return false;
+    return 0;
 }
 
 void OoxExternalLinkFragment::onEndElement( const OUString& rChars )

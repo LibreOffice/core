@@ -38,6 +38,7 @@
 #include <comphelper/seqstream.hxx>
 #include "tokens.hxx"
 #include "oox/helper/containerhelper.hxx"
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 using ::rtl::OUString;
 using ::com::sun::star::awt::DeviceInfo;
@@ -52,6 +53,7 @@ using ::com::sun::star::graphic::GraphicObject;
 using ::com::sun::star::graphic::XGraphic;
 using ::com::sun::star::graphic::XGraphicObject;
 using ::com::sun::star::graphic::XGraphicProvider;
+using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::io::XInputStream;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::uno::Exception;
@@ -76,8 +78,9 @@ inline sal_Int32 lclConvertScreenPixelToHmm( double fPixel, double fPixelPerHmm 
 
 // ============================================================================
 
-GraphicHelper::GraphicHelper( const Reference< XMultiServiceFactory >& rxGlobalFactory, const Reference< XFrame >& rxTargetFrame ) :
+GraphicHelper::GraphicHelper( const Reference< XMultiServiceFactory >& rxGlobalFactory, const Reference< XFrame >& rxTargetFrame, const StorageRef& rxStorage ) :
     mxGraphicProvider( rxGlobalFactory->createInstance( CREATE_OUSTRING( "com.sun.star.graphic.GraphicProvider" ) ), UNO_QUERY ),
+    mxStorage( rxStorage ),
     maGraphicObjScheme( CREATE_OUSTRING( "vnd.sun.star.GraphicObject:" ) )
 {
     ::comphelper::ComponentContext aContext( rxGlobalFactory );
@@ -149,6 +152,8 @@ GraphicHelper::~GraphicHelper()
 {
 }
 
+// System colors and predefined colors ----------------------------------------
+
 sal_Int32 GraphicHelper::getSystemColor( sal_Int32 nToken, sal_Int32 nDefaultRgb ) const
 {
     return ContainerHelper::getMapElement( maSystemPalette, nToken, nDefaultRgb );
@@ -165,6 +170,8 @@ sal_Int32 GraphicHelper::getPaletteColor( sal_Int32 /*nPaletteIdx*/ ) const
     OSL_ENSURE( false, "GraphicHelper::getPaletteColor - palette colors not implemented" );
     return API_RGB_TRANSPARENT;
 }
+
+// Device info and device dependent unit conversion ---------------------------
 
 const DeviceInfo& GraphicHelper::getDeviceInfo() const
 {
@@ -267,6 +274,8 @@ Size GraphicHelper::convertHmmToAppFont( const Size& rHmm ) const
     return Size( 0, 0 );
 }
 
+// Graphics and graphic objects  ----------------------------------------------
+
 Reference< XGraphic > GraphicHelper::importGraphic( const Reference< XInputStream >& rxInStrm ) const
 {
     Reference< XGraphic > xGraphic;
@@ -290,6 +299,25 @@ Reference< XGraphic > GraphicHelper::importGraphic( const StreamDataSequence& rG
     {
         Reference< XInputStream > xInStrm( new ::comphelper::SequenceInputStream( rGraphicData ) );
         xGraphic = importGraphic( xInStrm );
+    }
+    return xGraphic;
+}
+
+Reference< XGraphic > GraphicHelper::importEmbeddedGraphic( const OUString& rStreamName ) const
+{
+    Reference< XGraphic > xGraphic;
+    OSL_ENSURE( rStreamName.getLength() > 0, "GraphicHelper::importEmbeddedGraphic - empty stream name" );
+    if( rStreamName.getLength() > 0 )
+    {
+        EmbeddedGraphicMap::const_iterator aIt = maEmbeddedGraphics.find( rStreamName );
+        if( aIt == maEmbeddedGraphics.end() )
+        {
+            xGraphic = importGraphic( mxStorage->openInputStream( rStreamName ) );
+            if( xGraphic.is() )
+                maEmbeddedGraphics[ rStreamName ] = xGraphic;
+        }
+        else
+            xGraphic = aIt->second;
     }
     return xGraphic;
 }
@@ -318,6 +346,35 @@ OUString GraphicHelper::importGraphicObject( const Reference< XInputStream >& rx
 OUString GraphicHelper::importGraphicObject( const StreamDataSequence& rGraphicData ) const
 {
     return createGraphicObject( importGraphic( rGraphicData ) );
+}
+
+OUString GraphicHelper::importEmbeddedGraphicObject( const OUString& rStreamName ) const
+{
+    Reference< XGraphic > xGraphic = importEmbeddedGraphic( rStreamName );
+    return xGraphic.is() ? createGraphicObject( xGraphic ) : OUString();
+}
+
+Size GraphicHelper::getOriginalSize( const Reference< XGraphic >& xGraphic ) const
+{
+    Size aSize100thMM( 0, 0 );
+    Reference< XPropertySet > xGraphicPropertySet( xGraphic, UNO_QUERY_THROW );
+    if ( xGraphicPropertySet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Size100thMM" ) ) ) >>= aSize100thMM )
+    {
+        if ( !aSize100thMM.Width && !aSize100thMM.Height )
+        {   // MAPMODE_PIXEL USED :-(
+            Size aSourceSizePixel( 0, 0 );
+            if ( xGraphicPropertySet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SizePixel" ) ) ) >>= aSourceSizePixel )
+            {
+                const DeviceInfo& rDeviceInfo = getDeviceInfo();
+                if ( rDeviceInfo.PixelPerMeterX && rDeviceInfo.PixelPerMeterY )
+                {
+                    aSize100thMM.Width = static_cast< sal_Int32 >( ( aSourceSizePixel.Width * 100000.0 ) / rDeviceInfo.PixelPerMeterX );
+                    aSize100thMM.Height = static_cast< sal_Int32 >( ( aSourceSizePixel.Height * 100000.0 ) / rDeviceInfo.PixelPerMeterY );
+                }
+            }
+        }
+    }
+    return aSize100thMM;
 }
 
 // ============================================================================

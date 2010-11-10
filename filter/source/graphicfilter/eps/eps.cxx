@@ -48,8 +48,6 @@
 #include <svtools/FilterConfigItem.hxx>
 #include <vcl/graphictools.hxx>
 #include "strings.hrc"
-#include "dlgeps.hrc"
-#include "dlgeps.hxx"
 
 #include <math.h>
 
@@ -2739,55 +2737,3 @@ extern "C" BOOL __LOADONCALLAPI GraphicExport( SvStream & rStream, Graphic & rGr
     return aPSWriter.WritePS( rGraphic, rStream, pFilterConfigItem );
 }
 
-//---------------------------------------------------------------------------------
-
-extern "C" BOOL __LOADONCALLAPI DoExportDialog( FltCallDialogParameter& rPara )
-{
-    BOOL bRet = FALSE;
-
-    if ( rPara.pWindow )
-    {
-        ByteString  aResMgrName( "eps" );
-        ResMgr* pResMgr;
-
-        pResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
-
-        if( pResMgr )
-        {
-            rPara.pResMgr = pResMgr;
-            bRet = ( DlgExportEPS( rPara ).Execute() == RET_OK );
-            delete pResMgr;
-        }
-        else
-            bRet = TRUE;
-    }
-
-    return bRet;
-}
-
-//================== ein bischen Muell fuer Windows ==========================
-#ifndef GCC
-#endif
-
-#ifdef WIN
-
-static HINSTANCE hDLLInst = 0;      // HANDLE der DLL
-
-extern "C" int CALLBACK LibMain( HINSTANCE hDLL, WORD, WORD nHeap, LPSTR )
-{
-#ifndef WNT
-    if ( nHeap )
-        UnlockData( 0 );
-#endif
-
-    hDLLInst = hDLL;
-
-    return TRUE;
-}
-
-extern "C" int CALLBACK WEP( int )
-{
-    return 1;
-}
-
-#endif

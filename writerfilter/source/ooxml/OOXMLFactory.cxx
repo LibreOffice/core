@@ -25,6 +25,8 @@
  *
  ************************************************************************/
 
+#include <stdio.h>
+
 #include <rtl/instance.hxx>
 #include <osl/mutex.hxx>
 #include "OOXMLFactory.hxx"
@@ -263,7 +265,13 @@ OOXMLFactory::createFastChildContext(OOXMLFastContextHandler * pHandler,
 
     OOXMLFactory_ns::Pointer_t pFactory = getFactoryForNamespace(nDefine);
 
-    return createFastChildContextFromFactory(pHandler, pFactory, Element);
+    uno::Reference< xml::sax::XFastContextHandler> ret;
+
+    //Avoid handling unknown tokens and recursing to death
+    if ((Element & 0xffff) < OOXML_FAST_TOKENS_END)
+        ret = createFastChildContextFromFactory(pHandler, pFactory, Element);
+
+    return ret;
 }
 
 void OOXMLFactory::characters(OOXMLFastContextHandler * pHandler,

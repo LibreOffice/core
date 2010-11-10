@@ -5380,7 +5380,7 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, SdrPowerPointImport& rMan, con
                 if ( nInstance == TSS_TYPE_PAGETITLE )
                     *pPtr = 0xb;
                 else
-                    aSpecMarkerList.Insert( (void*)( pPtr - pBuf | PPT_SPEC_NEWLINE ), LIST_APPEND );
+                    aSpecMarkerList.Insert( (void*)( (pPtr - pBuf) | PPT_SPEC_NEWLINE ), LIST_APPEND );
             }
             pPtr++;
         }
@@ -7121,6 +7121,10 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
 
                                                             PPTCharPropSet* pCurrent = (PPTCharPropSet*)aCharPropList.GetObject( nIdx );
                                                             sal_Int32       nNextStringLen = pCurrent->maString.Len();
+
+                                                            DBG_ASSERT( pFE->pField1, "missing field!" );
+                                                            if (!pFE->pField1)
+                                                                break;
 
                                                             const SvxURLField* pField = (const SvxURLField*)pFE->pField1->GetField();
 

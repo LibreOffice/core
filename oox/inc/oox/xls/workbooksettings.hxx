@@ -109,8 +109,6 @@ public:
 
     /** Sets the save external linked values flag, e.g. from the WSBOOL record. */
     void                setSaveExtLinkValues( bool bSaveExtLinks );
-    /** Imports the FILESHARING record. */
-    void                importFileSharing( BiffInputStream& rStrm );
     /** Imports the BOOKBOOL record. */
     void                importBookBool( BiffInputStream& rStrm );
     /** Imports the CALCCOUNT record. */
@@ -123,6 +121,8 @@ public:
     void                importDateMode( BiffInputStream& rStrm );
     /** Imports the DELTA record. */
     void                importDelta( BiffInputStream& rStrm );
+    /** Imports the FILESHARING record. */
+    void                importFileSharing( BiffInputStream& rStrm );
     /** Imports the HIDEOBJ record. */
     void                importHideObj( BiffInputStream& rStrm );
     /** Imports the ITERATION record. */

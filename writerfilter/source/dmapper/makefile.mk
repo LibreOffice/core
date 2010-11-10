@@ -47,11 +47,12 @@ SLOFILES= \
     $(SLO)$/DomainMapperTableHandler.obj \
     $(SLO)$/DomainMapperTableManager.obj \
     $(SLO)$/DomainMapper_Impl.obj \
+    $(SLO)$/FFDataHandler.obj \
+    $(SLO)$/FormControlHelper.obj \
     $(SLO)$/FontTable.obj \
     $(SLO)$/GraphicHelpers.obj \
     $(SLO)$/GraphicImport.obj \
-    $(SLO)$/LFOTable.obj \
-    $(SLO)$/ListTable.obj \
+    $(SLO)$/NumberingManager.obj  \
     $(SLO)$/MeasureHandler.obj \
     $(SLO)$/ModelEventListener.obj \
     $(SLO)$/OLEHandler.obj \

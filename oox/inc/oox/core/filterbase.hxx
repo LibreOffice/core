@@ -113,9 +113,6 @@ public:
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&
                         getGlobalFactory() const;
 
-    /** Returns the media descriptor. */
-    ::comphelper::MediaDescriptor& getMediaDescriptor() const;
-
     /** Returns the document model (always existing). */
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >&
                         getModel() const;
@@ -135,6 +132,9 @@ public:
     /** Returns the status interaction handler (may be null). */
     const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >&
                         getInteractionHandler() const;
+
+    /** Returns the media descriptor. */
+    ::comphelper::MediaDescriptor& getMediaDescriptor() const;
 
     /** Returns the URL of the imported or exported file. */
     const ::rtl::OUString& getFileUrl() const;
@@ -201,12 +201,6 @@ public:
     /** Imports the raw binary data from the specified stream.
         @return  True, if the data could be imported from the stream. */
     bool                importBinaryData( StreamDataSequence& orDataSeq, const ::rtl::OUString& rStreamName );
-
-    /** Imports a graphic from the storage stream with the passed path and name. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >
-                        importEmbeddedGraphic( const ::rtl::OUString& rStreamName ) const;
-    /** Imports a graphic object from the storage stream with the passed path and name. */
-    ::rtl::OUString     importEmbeddedGraphicObject( const ::rtl::OUString& rStreamName ) const;
 
     // com.sun.star.lang.XServiceInfo interface -------------------------------
 

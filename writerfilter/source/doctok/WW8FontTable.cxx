@@ -52,11 +52,6 @@ void WW8FontTable::initPayload()
     mnPlcfPayloadOffset = nOffset;
 }
 
-sal_uInt32 WW8FontTable::calcPayloadOffset()
-{
-    return 0;
-}
-
 sal_uInt32 WW8FontTable::getEntryCount()
 {
     return entryOffsets.size() - 1;
