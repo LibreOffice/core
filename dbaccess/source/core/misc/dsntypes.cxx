@@ -173,7 +173,7 @@ bool ODsnTypeCollection::isConnectionUrlRequired(const ::rtl::OUString& _sURL) c
             sRet = *aIter;
             sOldPattern = *aIter;
         }
-    } // for(;aIter != aEnd;++aIter)
+    }
     return sRet.GetChar(sRet.Len()-1) == '*';
 }
 // -----------------------------------------------------------------------------
@@ -203,7 +203,7 @@ String ODsnTypeCollection::getDatasourcePrefixFromMediaType(const ::rtl::OUStrin
             if ( !sFileExtension.getLength() && _sExtension.getLength() )
                 sFallbackURL = *pIter;
         }
-    } // for(;pIter != pEnd;++pIter )
+    }
 
     if ( !sURL.Len() && sFallbackURL.Len() )
         sURL = sFallbackURL;
@@ -239,7 +239,7 @@ void ODsnTypeCollection::extractHostNamePort(const ::rtl::OUString& _rDsn,String
         if ( _rsHostname.Len() )
             _rsHostname = _rsHostname.GetToken(_rsHostname.GetTokenCount('@') - 1,'@');
         _sDatabaseName = sUrl.GetToken(sUrl.GetTokenCount(':') - 1,':');
-    } // if ( _rDsn.matchIgnoreAsciiCaseAsciiL("jdbc:oracle:thin:",sizeof("jdbc:oracle:thin:")-1) )
+    }
     else if ( _rDsn.matchIgnoreAsciiCaseAsciiL("sdbc:address:ldap:",sizeof("sdbc:address:ldap:")-1) )
     {
         lcl_extractHostAndPort(sUrl,_sDatabaseName,_nPortNumber);
@@ -334,7 +334,7 @@ bool ODsnTypeCollection::isEmbeddedDatabase( const ::rtl::OUString& _sURL ) cons
             if ( sEmbeddedDatabaseURL.getLength() )
                 aInstalled.getNodeValue(s_sValue + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + sEmbeddedDatabaseURL + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/URL"))) >>= sEmbeddedDatabaseURL;
         }
-    } // if ( aInstalled.isValid() )
+    }
     if ( !sEmbeddedDatabaseURL.getLength() )
         sEmbeddedDatabaseURL = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:embedded:hsqldb"));
     return sEmbeddedDatabaseURL;
@@ -530,7 +530,7 @@ void ODsnTypeCollection::fillPageIds(const ::rtl::OUString& _sURL,::std::vector<
         {
             sOldPattern = *aIter;
         }
-    } // for(sal_Int32 i = 0;aIter != aEnd;++aIter,++i)
+    }
     return sOldPattern;
 }
 // -----------------------------------------------------------------------------

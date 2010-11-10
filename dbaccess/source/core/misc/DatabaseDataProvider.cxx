@@ -184,7 +184,7 @@ void SAL_CALL DatabaseDataProvider::initialize(const uno::Sequence< uno::Any > &
             pArgIter->Value >>= eRowSource;
             if ( eRowSource != ::com::sun::star::chart::ChartDataRowSource_COLUMNS )
                 return sal_False;
-        } // if ( pArgIter->Name.equalsAscii("DataRowSource") )
+        }
         else if ( pArgIter->Name.equalsAscii("CellRangeRepresentation") )
         {
             ::rtl::OUString sRange;
