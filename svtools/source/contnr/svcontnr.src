@@ -39,65 +39,29 @@ Image RID_IMG_TREENODE_EXPANDED
     MaskColor = Color { Red = 0xFF00; Green = 0x0000; Blue = 0xFF00; };
 };
 
-Image RID_IMG_TREENODE_COLLAPSED_HC
-{
-    ImageBitmap = Bitmap { File = "plus_sch.bmp"; } ;
-    MaskColor = Color { Red = 0xFF00; Green = 0x0000; Blue = 0xFF00; };
-};
-
-Image RID_IMG_TREENODE_EXPANDED_HC
-{
-    ImageBitmap = Bitmap { File = "minus_sch.bmp"; } ;
-    MaskColor = Color { Red = 0xFF00; Green = 0x0000; Blue = 0xFF00; };
-};
-
 // descriptions of accessible objects
 
 String STR_SVT_ACC_DESC_TABLISTBOX
 {
     Text [ en-US ] = "Row: %1, Column: %2";
 };
+
 String STR_SVT_ACC_DESC_FILEVIEW
 {
     Text [ en-US ] = ", Type: %1, URL: %2";
 };
+
 String STR_SVT_ACC_DESC_FOLDER
 {
     Text [ en-US ] = "Folder";
 };
+
 String STR_SVT_ACC_DESC_FILE
 {
     Text [ en-US ] = "File";
 };
+
 String STR_SVT_ACC_EMPTY_FIELD
 {
     Text [ en-US ] = "Empty Field";
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
