@@ -85,7 +85,6 @@ SwChangeDBDlg::SwChangeDBDlg(SwView& rVw) :
     aOKBT       (this, SW_RES(BT_OK         )),
     aCancelBT   (this, SW_RES(BT_CANCEL     )),
     aHelpBT     (this, SW_RES(BT_HELP       )),
-//  aChangeBT   (this, SW_RES(BT_CHANGEDB    )),
     aImageList      (SW_RES(ILIST_DB_DLG    )),
     aImageListHC    (SW_RES(ILIST_DB_DLG_HC )),
 
@@ -104,11 +103,7 @@ SwChangeDBDlg::SwChangeDBDlg(SwView& rVw) :
     aUsedDBTLB.SetSelectionMode(MULTIPLE_SELECTION);
     aUsedDBTLB.SetWindowBits(WB_HASLINES|WB_CLIPCHILDREN|WB_SORT|WB_HASBUTTONS|WB_HASBUTTONSATROOT|WB_HSCROLL);
     aUsedDBTLB.SetSpaceBetweenEntries(0);
-
-    aUsedDBTLB.SetNodeBitmaps( aImageList.GetImage(IMG_COLLAPSE),
-                    aImageList.GetImage(IMG_EXPAND  ), BMP_COLOR_NORMAL );
-    aUsedDBTLB.SetNodeBitmaps( aImageListHC.GetImage(IMG_COLLAPSE),
-                    aImageListHC.GetImage(IMG_EXPAND  ), BMP_COLOR_HIGHCONTRAST );
+    aUsedDBTLB.SetNodeBitmaps( aImageList.GetImage(IMG_COLLAPSE), aImageList.GetImage(IMG_EXPAND));
 
     Link aLink = LINK(this, SwChangeDBDlg, TreeSelectHdl);
 
@@ -187,11 +182,7 @@ SvLBoxEntry* SwChangeDBDlg::Insert(const String& rDBName)
     Image aTableImg = aImageList.GetImage(IMG_DBTABLE);
     Image aDBImg = aImageList.GetImage(IMG_DB);
     Image aQueryImg = aImageList.GetImage(IMG_DBQUERY);
-    Image aHCTableImg = aImageListHC.GetImage(IMG_DBTABLE);
-    Image aHCDBImg = aImageListHC.GetImage(IMG_DB);
-    Image aHCQueryImg = aImageListHC.GetImage(IMG_DBQUERY);
     Image& rToInsert = nCommandType ? aQueryImg : aTableImg;
-    Image& rHCToInsert = nCommandType ? aHCQueryImg : aHCTableImg;
     while ((pParent = aUsedDBTLB.GetEntry(nParent++)) != NULL)
     {
         if (sDBName == aUsedDBTLB.GetEntryText(pParent))
@@ -202,19 +193,13 @@ SvLBoxEntry* SwChangeDBDlg::Insert(const String& rDBName)
                     return pChild;
             }
             SvLBoxEntry* pRet = aUsedDBTLB.InsertEntry(sTableName, rToInsert, rToInsert, pParent);
-            aUsedDBTLB.SetExpandedEntryBmp(pRet, rHCToInsert, BMP_COLOR_HIGHCONTRAST);
-            aUsedDBTLB.SetCollapsedEntryBmp(pRet, rHCToInsert, BMP_COLOR_HIGHCONTRAST);
             pRet->SetUserData((void*)nCommandType);
             return pRet;
         }
     }
     pParent = aUsedDBTLB.InsertEntry(sDBName, aDBImg, aDBImg);
-    aUsedDBTLB.SetExpandedEntryBmp(pParent, aHCDBImg, BMP_COLOR_HIGHCONTRAST);
-    aUsedDBTLB.SetCollapsedEntryBmp(pParent, aHCDBImg, BMP_COLOR_HIGHCONTRAST);
 
     SvLBoxEntry* pRet = aUsedDBTLB.InsertEntry(sTableName, rToInsert, rToInsert, pParent);
-    aUsedDBTLB.SetExpandedEntryBmp(pRet, rHCToInsert, BMP_COLOR_HIGHCONTRAST);
-    aUsedDBTLB.SetCollapsedEntryBmp(pRet, rHCToInsert, BMP_COLOR_HIGHCONTRAST);
     pRet->SetUserData((void*)nCommandType);
     return pRet;
 }

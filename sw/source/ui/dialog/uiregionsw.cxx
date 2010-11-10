@@ -517,9 +517,6 @@ void SwEditRegionDlg::RecurseList( const SwSectionFmt* pFmt, SvLBoxEntry* pEntry
                                             *(pSect=pFmt->GetSection()) );
                 Image aImg = BuildBitmap( pSect->IsProtect(),pSect->IsHidden(), FALSE);
                 pEntry = aTree.InsertEntry(pSect->GetSectionName(), aImg, aImg);
-                Image aHCImg = BuildBitmap( pSect->IsProtect(),pSect->IsHidden(), TRUE);
-                aTree.SetExpandedEntryBmp(pEntry, aHCImg, BMP_COLOR_HIGHCONTRAST);
-                aTree.SetCollapsedEntryBmp(pEntry, aHCImg, BMP_COLOR_HIGHCONTRAST);
                 pEntry->SetUserData(pSectRepr);
                 RecurseList( pFmt, pEntry );
                 if (pEntry->HasChilds())
@@ -551,9 +548,6 @@ void SwEditRegionDlg::RecurseList( const SwSectionFmt* pFmt, SvLBoxEntry* pEntry
                                             pSect->IsHidden(), FALSE);
                     pNEntry = aTree.InsertEntry(
                         pSect->GetSectionName(), aImage, aImage, pEntry);
-                    Image aHCImg = BuildBitmap( pSect->IsProtect(),pSect->IsHidden(), TRUE);
-                    aTree.SetExpandedEntryBmp(pEntry, aHCImg, BMP_COLOR_HIGHCONTRAST);
-                    aTree.SetCollapsedEntryBmp(pEntry, aHCImg, BMP_COLOR_HIGHCONTRAST);
                     pNEntry->SetUserData(pSectRepr);
                     RecurseList( aTmpArr[n]->GetFmt(), pNEntry );
                     if( pNEntry->HasChilds())
@@ -919,11 +913,8 @@ IMPL_LINK( SwEditRegionDlg, ChangeProtectHdl, TriStateBox *, pBox )
         pRepr->GetSectionData().SetProtectFlag(bCheck);
         Image aImage = BuildBitmap( bCheck,
                                     STATE_CHECK == aHideCB.GetState(), FALSE);
-        aTree.SetExpandedEntryBmp(pEntry, aImage, BMP_COLOR_NORMAL);
-        aTree.SetCollapsedEntryBmp(pEntry, aImage, BMP_COLOR_NORMAL);
-        Image aHCImg = BuildBitmap( bCheck, STATE_CHECK == aHideCB.GetState(), TRUE);
-        aTree.SetExpandedEntryBmp(pEntry, aHCImg, BMP_COLOR_HIGHCONTRAST);
-        aTree.SetCollapsedEntryBmp(pEntry, aHCImg, BMP_COLOR_HIGHCONTRAST);
+        aTree.SetExpandedEntryBmp(  pEntry, aImage );
+        aTree.SetCollapsedEntryBmp( pEntry, aImage );
         pEntry = aTree.NextSelected(pEntry);
     }
     aPasswdCB.Enable(bCheck);
@@ -945,14 +936,11 @@ IMPL_LINK( SwEditRegionDlg, ChangeHideHdl, TriStateBox *, pBox )
     {
         SectReprPtr pRepr = (SectReprPtr) pEntry->GetUserData();
         pRepr->GetSectionData().SetHidden(STATE_CHECK == pBox->GetState());
+
         Image aImage = BuildBitmap(STATE_CHECK == aProtectCB.GetState(),
                                     STATE_CHECK == pBox->GetState(), FALSE);
-        aTree.SetExpandedEntryBmp(pEntry, aImage, BMP_COLOR_NORMAL);
-        aTree.SetCollapsedEntryBmp(pEntry, aImage, BMP_COLOR_NORMAL);
-        Image aHCImg = BuildBitmap( STATE_CHECK == aProtectCB.GetState(),
-                                    STATE_CHECK == pBox->GetState(), TRUE);
-        aTree.SetExpandedEntryBmp(pEntry, aHCImg, BMP_COLOR_HIGHCONTRAST);
-        aTree.SetCollapsedEntryBmp(pEntry, aHCImg, BMP_COLOR_HIGHCONTRAST);
+        aTree.SetExpandedEntryBmp(  pEntry, aImage );
+        aTree.SetCollapsedEntryBmp( pEntry, aImage );
 
         pEntry = aTree.NextSelected(pEntry);
     }

@@ -44,7 +44,6 @@ class SwWrtShell;
 class SW_DLLPUBLIC SwDBTreeList : public SvTreeListBox
 {
     ImageList       aImageList;
-    ImageList       aImageListHC;
     Image           aDBBMP;
     Image           aTableBMP;
     Image           aQueryBMP;
