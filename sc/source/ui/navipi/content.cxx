@@ -169,10 +169,6 @@ void ScContentTree::InitRoot( USHORT nType )
     USHORT nPos = nRootType ? 0 : pPosList[nType]-1;
     SvLBoxEntry* pNew = InsertEntry( aName, rImage, rImage, NULL, FALSE, nPos );
 
-    const Image& rHCImage = aHCEntryImages.GetImage( nType );
-    SetExpandedEntryBmp( pNew, rHCImage, BMP_COLOR_HIGHCONTRAST );
-    SetCollapsedEntryBmp( pNew, rHCImage, BMP_COLOR_HIGHCONTRAST );
-
     pRootNodes[nType] = pNew;
 }
 
