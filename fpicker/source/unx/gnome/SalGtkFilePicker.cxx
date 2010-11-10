@@ -909,6 +909,9 @@ uno::Sequence<rtl::OUString> SAL_CALL SalGtkFilePicker::getSelectedFiles() throw
                     {
                         static const OUString aStarDot = OUString::createFromAscii( "*." );
 
+                        ::rtl::OUString aNewFilter;
+                        ::rtl::OUString aOldFilter = getCurrentFilter();
+                        sal_Bool bChangeFilter = sal_True;
                         for ( FilterList::iterator aListIter = m_pFilterList->begin();
                               aListIter != m_pFilterList->end();
                               ++aListIter
@@ -916,11 +919,17 @@ uno::Sequence<rtl::OUString> SAL_CALL SalGtkFilePicker::getSelectedFiles() throw
                         {
                             if( aListIter->getFilter().indexOf( aStarDot+sExtension ) >= 0 )
                             {
-                                setCurrentFilter( aListIter->getTitle() );
+                                if( !aNewFilter.getLength() )
+                                    aNewFilter = aListIter->getTitle();
+
+                                if( aOldFilter == aListIter->getTitle() )
+                                    bChangeFilter = sal_False;
+
                                 bExtensionTypedIn = true;
-                                break;
                             }
                         }
+                        if( bChangeFilter && bExtensionTypedIn )
+                            setCurrentFilter( aNewFilter );
                     }
                 }
 
