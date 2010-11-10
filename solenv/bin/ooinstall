@@ -75,8 +75,7 @@ $ENV{LOCAL_COMMON_OUT} = $ENV{OUT};
 # the installer to use the English localization of the file instead.
 $ENV{DEFAULT_TO_ENGLISH_FOR_PACKING} = 1;
 
-# FIXME. Migrate to WITH_LANG?
-$langs=$ENV{OOO_LANGS_LIST};
+$langs=$ENV{WITH_LANG};
 $langs='en-US' if $langs eq '';
 $langs =~ s/\s+/,/g;
 # FIXME: hack... we get a useless , at the end which makes it being e.g. zu#
@@ -90,8 +89,8 @@ if ( defined $ENV{OODESTDIR} &&
 }
 
 $strip='';
-if ( defined $ENV{OOO_STRIP} &&
-     $ENV{OOO_STRIP} eq "no" ) {
+if ( defined $ENV{DISABLE_STRIP} &&
+     $ENV{DISABLE_STRIP} eq "TRUE" ) {
     $strip = "-dontstrip";
 }
 
