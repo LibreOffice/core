@@ -624,7 +624,9 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
                 final Section tableColumnProperties = new Section();
                 tableColumnProperties.setType("table-column-properties");
                 tableColumnProperties.setNamespace(style.getNamespace());
-                tableColumnProperties.setAttribute(style.getNamespace(), "column-width", columnWidth + getUnitsOfMeasure(null));
+                final String width = String.format("%f", columnWidth);
+                tableColumnProperties.setAttribute(style.getNamespace(),
+                        "column-width", width + getUnitsOfMeasure(null));
                 style.addNode(tableColumnProperties);
 
                 final AttributeList myAttrList = new AttributeList();

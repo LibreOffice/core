@@ -130,7 +130,7 @@
     <node oor:name="EntryNames">
         <node oor:name="SunReportBuilder" oor:op="replace">
             <prop oor:name="DisplayName">
-                <value xml:lang="en-US">Sun Report Builder</value>
+                <value xml:lang="en-US">Oracle Report Builder</value>
             </prop>
             <node oor:name="Entries">
                 <node oor:name="ReportHeader" oor:op="replace">

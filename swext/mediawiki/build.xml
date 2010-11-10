@@ -53,7 +53,7 @@
         <!-- build options -->
         <property name="sourcelevel" value="1.4"/>
         <property name="verbose" value="false"/>
-        <property name="debug" value="true"/>
+        <property name="debug" value="${antdebug}"/>
 
         <!-- build classpath -->
         <path id="classpath">
@@ -75,7 +75,7 @@
     </target>
 
     <target name="compile" depends="init">
-        <javac debug="${debug}" destdir="${classes}" classpathref="classpath"
+        <javac debug="${debug}" debuglevel="lines,vars,source" destdir="${classes}" classpathref="classpath"
                source="${sourcelevel}" verbose="${verbose}">
             <src path="src"/>
         </javac>
@@ -123,15 +123,6 @@
                 <filter token="WIKIEXTENSIONFILENAME" value="${name}"/>
             </filterset>
         </copy>
-        <copy todir="${out}/misc/${target}/package_tmp/help" overwrite="true" encoding="UTF-8">
-            <fileset dir="${out}/misc/${target}/help" includes="**/*.xhp" casesensitive="yes"/>
-            <filterset>
-                <filter token="WIKIEXTENSIONPRODUCTNAME" value="Wiki Publisher"/>
-                <filter token="WIKIEXTENSIONID" value="com.sun.wiki-publisher"/>
-                <filter token="WIKIEXTENSIONFILENAME" value="${name}"/>
-            </filterset>
-            <mapper type="regexp" from="^(.*[/\\])com.sun.sun-mediawiki([/\\].*)" to="\1com.sun.wiki-publisher\2"/>
-        </copy>
     </target>
 
     <target name="uno-package" depends="tmpdir, xcumerge, jar, init">
@@ -149,6 +140,8 @@
             <zipfileset dir="src" includes="uno-extension-manifest.xml" casesensitive="yes" fullpath="META-INF/manifest.xml"/>
             <zipfileset dir="dialogs" includes="**/*.xdl,**/*.xba,**/*.xlb" casesensitive="yes" prefix="WikiEditor"/>
             <zipfileset dir="${out}/misc/${target}/license" includes="LICENSE*" casesensitive="yes" prefix="license"/>
+            <zipfileset dir="${out}/misc/${target}/help" includes="**/*.idxl/*,**/*.*_,**/*.jar" casesensitive="yes" prefix="help"/>
+            <zipfileset dir="${out}/misc/${target}/help" includes="**/*.xhp" casesensitive="yes" prefix="help"/>
             <zipfileset dir="src" includes="THIRDPARTYLICENSEREADME.html" casesensitive="yes" prefix="license"/>
         </zip>
     </target>
@@ -161,14 +154,15 @@
             <fileset dir="${out}/misc/${target}/registry/schema/org/openoffice/Office/Custom" includes="*.xcs" casesensitive="yes"/>
             <fileset dir="${out}/misc/${target}/registry/data/org/openoffice/Office" includes="ProtocolHandler.xcu,Paths.xcu" casesensitive="yes"/>
             <fileset dir="${out}/misc/${target}/merge/org/openoffice/Office/Custom" includes="*.xcu" casesensitive="yes"/>
-            <fileset dir="${out}/misc/${target}/merge/org/openoffice/Office" includes="*.xcu" casesensitive="yes"/>
+            <fileset dir="${out}/misc/${target}/merge/org/openoffice/Office" includes="*.xcu"  excludes="**/ProtocolHandler.xcu,**/Paths.xcu" casesensitive="yes"/>
         <!-- FIXME: currently the build xcu files can not be used since the tag containing x-default attribute is thrown away, issue 99378
             <fileset dir="${out}/misc/${target}/merge/org/openoffice/TypeDetection" includes="*.xcu" casesensitive="yes"/>
          -->
             <fileset dir="src/registry/data/org/openoffice/TypeDetection" includes="*.xcu" casesensitive="yes"/>
             <zipfileset file="src/filter/odt2mediawiki.xsl" casesensitive="yes" fullpath="filter/odt2mediawiki.xsl"/>
             <zipfileset file="src/filter/mediawiki.ott" casesensitive="yes" fullpath="templates/MediaWiki/mediawiki.ott"/>
-            <zipfileset dir="${out}/misc/${target}/help" includes="**/*.xhp,component.txt" casesensitive="yes" prefix="help"/>
+            <zipfileset dir="${out}/misc/${target}/help" includes="component.txt" casesensitive="yes" prefix="help"/>
+            <zipfileset dir="${out}/misc/${target}_merge/help" includes="**/*.xhp" casesensitive="yes" prefix="help"/>
             <zipfileset dir="dialogs" includes="**/*.xdl,**/*.xba,**/*.xlb" casesensitive="yes" prefix="WikiEditor"/>
             <zipfileset dir="src" includes="uno-extension-manifest.xml" casesensitive="yes" fullpath="META-INF/manifest.xml"/>
             <zipfileset dir="${out}/misc/${target}/license" includes="LICENSE*" casesensitive="yes" prefix="license"/>

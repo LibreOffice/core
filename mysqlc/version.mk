@@ -35,4 +35,4 @@ MYSQLC_TITLE=MySQL Connector
 # the status of the extension
 # if this is different from "final", it will be appended to the title displayed in the Extension Manager
 # and also added to the file name of the resulting .oxt file
-MYSQLC_STATUS=Alpha
+MYSQLC_STATUS=final

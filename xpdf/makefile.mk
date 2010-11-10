@@ -48,7 +48,7 @@ dummy:
 
 TARFILE_NAME=xpdf-3.02
 TARFILE_MD5=599dc4cc65a07ee868cf92a667a913d2
-PATCH_FILES=$(TARFILE_NAME).patch
+PATCH_FILES=$(TARFILE_NAME).patch xpdf-3.02-sec.patch
 
 CONFIGURE_DIR=
 BUILD_DIR=$(CONFIGURE_DIR)
@@ -88,6 +88,8 @@ CXXFLAGS+=-malign-natural
 BUILD_ACTION=$(GNUMAKE) -j$(EXTMAXPROCESS)
 .ELSE
 .IF "$(COM)"=="GCC"
+LDFLAGS=-Wl,--enable-runtime-pseudo-reloc-v2
+.EXPORT : LDFLAGS
 CONFIGURE_ACTION=./configure --without-x --enable-multithreaded --enable-exceptions LIBS=-lgdi32
 BUILD_ACTION=$(GNUMAKE) -j$(EXTMAXPROCESS)
 .ELSE

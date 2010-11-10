@@ -30,16 +30,29 @@ PRJNAME=swext
 TARGET=$(PRJNAME)_help
 
 .INCLUDE : settings.mk
-.INCLUDE : target.mk
 
-.IF "$(ENABLE_MEDIAWIKI)" == "YES"
-PACKAGE=com.sun.sun-mediawiki
-
+.IF "$(WITH_LANG)"!=""
 # workaround for the problem in help, the help uses en instead of en-US
-MEDIAWIKI_LANG= en $(alllangiso)
+MEDIAWIKI_LANG=$(uniq en $(alllangiso))
+aux_alllangiso:=$(MEDIAWIKI_LANG)
+.ELSE          # "$(WITH_LANG)"!=""
+aux_alllangiso:=$(defaultlangiso)
+MEDIAWIKI_LANG=$(uniq en $(alllangiso))
+.ENDIF          # "$(WITH_LANG)"!=""
 
-OUT_MEDIAWIKI=$(MISC)$/mediawiki
-OUT_HELP=$(OUT_MEDIAWIKI)$/help
+.IF "$(ENABLE_MEDIAWIKI)" != "YES"
+all:
+    @echo Building mediawiki disabled...
+.ELSE           # "$(ENABLE_MEDIAWIKI)" != "YES"
+
+PACKAGE=com.sun.wiki-publisher
+
+OUT_MEDIAWIKI:=$(MISC)$/mediawiki
+
+LINKNAME:=help
+XHPLINKSRC:=$(OUT_MEDIAWIKI)/help
+
+XHPDEST=$(OUT_MEDIAWIKI)_merge/help
 
 XHPFILES= \
     wiki.xhp\
@@ -48,26 +61,27 @@ XHPFILES= \
     wikisend.xhp\
     wikisettings.xhp
 
-HLANGXHPFILES:=$(foreach,i,$(XHPFILES) $(foreach,j,$(MEDIAWIKI_LANG) $(OUT_HELP)$/$j$/$(PACKAGE)$/$(i:f)))
+LINKLINKFILES= \
+    $(PACKAGE)/{$(XHPFILES)}
 
-ALLTAR : $(OUT_MEDIAWIKI)$/$(TARGET).done $(OUT_HELP)$/component.txt
+# define with own language set
+HLANGXHPFILES=$(foreach,i,$(XHPFILES) $(foreach,j,$(MEDIAWIKI_LANG) $(XHPDEST)$/$j$/$(PACKAGE)$/$(i:f)))
 
-#$(OUT_MEDIAWIKI)$/xhp_changed.flag optix
+.INCLUDE : target.mk
+.INCLUDE : tg_help.mk
+.INCLUDE : extension_helplink.mk
 
-$(OUT_HELP)$/component.txt : component.txt
-    $(COPY) component.txt $(OUT_HELP)$/component.txt
+ALLTAR : $(OUT_MEDIAWIKI)/help/component.txt
 
-$(HLANGXHPFILES) : #$$(@:d)thisdir.created
-    -$(MKDIRHIER) $(@:d)
-    $(TOUCH) $(@:d)thisdir.created
+$(OUT_MEDIAWIKI)/help/component.txt : component.txt
+    @-$(MKDIRHIER) $(@:d)
+    $(COMMAND_ECHO)$(COPY) component.txt $@
 
-$(OUT_HELP)$/{$(MEDIAWIKI_LANG)}$/$(PACKAGE)$/%.xhp :| %.xhp
-    @$(TOUCH) $@
-# internal dependencies not sufficient to trigger merge?
-#    @$(NULL)
+$(OUT_MEDIAWIKI)/help/%.xhp : $(OUT_MEDIAWIKI)_merge/help/%.xhp
+    @-$(MKDIRHIER) $(@:d)
+    $(COMMAND_ECHO)cat $< | sed -e 's/@WIKIEXTENSIONPRODUCTNAME@/Wiki Publisher/g' | \
+        sed  's/@WIKIEXTENSIONID@/com.sun.wiki-publisher/g' | \
+        sed 's/@WIKIEXTENSIONFILENAME@/wiki-publisher/g' > $@
 
-
-$(OUT_MEDIAWIKI)$/$(TARGET).done : $(LOCALIZESDF) $(XHPFILES) $(HLANGXHPFILES)
-    @$(AUGMENT_LIBRARY_PATH) $(WRAPCMD) $(HELPEX) -QQ -p $(PRJNAME) -r $(PRJ) -i @$(mktmp $(uniq $(foreach,i,$? $(!eq,$(i:f),$(i:f:s/.xhp//) $(i:f) $(XHPFILES))))) -x $(OUT_HELP) -y $(PACKAGE) -l all -lf $(MEDIAWIKI_LANG:t",") -m $(LOCALIZESDF) && $(TOUCH) $@
-.ENDIF
+.ENDIF          # "$(ENABLE_MEDIAWIKI)" != "YES"
 

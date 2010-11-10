@@ -1085,10 +1085,12 @@ void SAL_CALL PresenterController::keyReleased (const awt::KeyEvent& rEvent)
         case awt::Key::F1:
             // Toggle the help view.
             if (mpWindowManager.get() != NULL)
+            {
                 if (mpWindowManager->GetViewMode() != PresenterWindowManager::VM_Help)
                     mpWindowManager->SetViewMode(PresenterWindowManager::VM_Help);
                 else
                     mpWindowManager->SetHelpViewState(false);
+            }
 
             break;
 

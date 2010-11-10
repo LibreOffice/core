@@ -33,16 +33,16 @@
 
 <meta>
       <topic id="textpresenterxml" indexer="include" status="PUBLISH">
-         <title xml-lang="en-US" id="tit" l10n="NEW">Oracle Presenter Console Keyboard Shortcuts</title>
+         <title xml-lang="en-US" id="tit" l10n="NEW">@PRESENTEREXTENSIONPRODUCTNAME@ Keyboard Shortcuts</title>
          <filename>/com.sun.PresenterScreen-PLATFORMID/presenter.xhp</filename>
       </topic>
    </meta>
    <body>
 <bookmark xml-lang="en-US" branch="hid/com.sun.PresenterScreen" id="bm_id3138439" localize="false"/>
-<bookmark xml-lang="en-US" branch="index" id="bm_id0921200912285678"><bookmark_value>Presenter Console shortcuts</bookmark_value>
+<bookmark xml-lang="en-US" branch="index" id="bm_id0921200912285678"><bookmark_value>@PRESENTEREXTENSIONPRODUCTNAME@ shortcuts</bookmark_value>
 </bookmark>
-<paragraph xml-lang="en-US" id="hd_id0921201912165661" role="heading" level="1" l10n="NEW">Oracle Presenter Console Keyboard Shortcuts</paragraph>
-      <paragraph xml-lang="en-US" id="par_id0921201912165656" role="paragraph" l10n="NEW">When running a slide show using the Oracle Presenter Console, you can use the following keys:</paragraph>
+<paragraph xml-lang="en-US" id="hd_id0921201912165661" role="heading" level="1" l10n="NEW">@PRESENTEREXTENSIONPRODUCTNAME@ Keyboard Shortcuts</paragraph>
+      <paragraph xml-lang="en-US" id="par_id0921201912165656" role="paragraph" l10n="NEW">When running a slide show using the @PRESENTEREXTENSIONPRODUCTNAME@, you can use the following keys:</paragraph>
       <table id="tbl_id0921200901051232">
          <tablerow>
             <tablecell>
@@ -158,7 +158,7 @@
          </tablerow>
          <tablerow>
             <tablecell>
-               <paragraph xml-lang="en-US" id="par_id0921200901104566" role="tablecontent" l10n="NEW">Show the Presenter Console</paragraph>
+               <paragraph xml-lang="en-US" id="par_id0921200901104566" role="tablecontent" l10n="NEW">Show the @PRESENTEREXTENSIONPRODUCTNAME@</paragraph>
             </tablecell>
             <tablecell>
                <paragraph xml-lang="en-US" id="par_id0921200901104544" role="tablecontent" l10n="NEW">Ctrl-'1'</paragraph>

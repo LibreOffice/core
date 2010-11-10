@@ -45,7 +45,7 @@
                     <value >GenericCategories</value>
                 </prop>
         <prop oor:name="ooSetupFactoryUIName">
-            <value>Base: Sun Report Builder</value>
+            <value >Base: Oracle Report Builder</value>
         </prop>
             </node>
     </node>

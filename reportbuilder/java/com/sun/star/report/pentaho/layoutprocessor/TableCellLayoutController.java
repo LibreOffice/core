@@ -81,7 +81,15 @@ public class TableCellLayoutController extends SectionLayoutController
             }
             else if ( "float".equals(valueType))
             {
-                attributeMap.setAttribute(OfficeNamespaces.OFFICE_NS, FormatValueUtility.VALUE, "1.#NAN");
+                attributeMap.setAttribute(OfficeNamespaces.OFFICE_NS,
+                    FormatValueUtility.VALUE, "NaN");
+            }
+            // #i114108#: except on form elements, the only value-type that can
+            // occur without an accomanying value attribute is "string"
+            else if (!"string".equals(valueType))
+            {
+                attributeMap.setAttribute(OfficeNamespaces.OFFICE_NS,
+                    FormatValueUtility.VALUE_TYPE, "string");
             }
         }
         catch (Exception e)

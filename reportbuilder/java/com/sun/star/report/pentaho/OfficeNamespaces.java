@@ -46,6 +46,7 @@ public class OfficeNamespaces
     public static final String DATASTYLE_NS = "urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0";
     public static final String SVG_NS = "urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0";
     public static final String CHART_NS = "urn:oasis:names:tc:opendocument:xmlns:chart:1.0";
+    public static final String CHARTOOO_NS = "http://openoffice.org/2010/chart";
     public static final String DR3D_NS = "urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0";
     public static final String MATHML_NS = "http://www.w3.org/1998/Math/MathML";
     public static final String FORM_NS = "urn:oasis:names:tc:opendocument:xmlns:form:1.0";
@@ -58,6 +59,7 @@ public class OfficeNamespaces
     public static final String XSD_NS = "http://www.w3.org/2001/XMLSchema";
     public static final String XSI_NS = "http://www.w3.org/2001/XMLSchema-instance";
     public static final String OOREPORT_NS = "http://openoffice.org/2005/report";
+    public static final String GRDDL_NS = "http://www.w3.org/2003/g/data-view#";
     public static final String CONFIG = "urn:oasis:names:tc:opendocument:xmlns:config:1.0";
     /**
      * @deprecated

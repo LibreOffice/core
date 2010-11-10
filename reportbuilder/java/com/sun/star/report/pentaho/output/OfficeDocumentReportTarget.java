@@ -138,6 +138,10 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
     public static final String VERTICAL_POS = "vertical-pos";
     private static final String ZERO_CM = "0cm";
 
+    /** the verison of the ODF specification to which generated documents
+     *  shall conform. */
+    public static final String ODF_VERSION = "1.2";
+
     protected static class BufferState
     {
 
@@ -363,6 +367,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
             rootAttributes.addNamespaceDeclaration("number", OfficeNamespaces.DATASTYLE_NS);
             rootAttributes.addNamespaceDeclaration("svg", OfficeNamespaces.SVG_NS);
             rootAttributes.addNamespaceDeclaration("chart", OfficeNamespaces.CHART_NS);
+            rootAttributes.addNamespaceDeclaration("chartooo", OfficeNamespaces.CHARTOOO_NS);
             rootAttributes.addNamespaceDeclaration("dr3d", OfficeNamespaces.DR3D_NS);
             rootAttributes.addNamespaceDeclaration("math", OfficeNamespaces.MATHML_NS);
             rootAttributes.addNamespaceDeclaration("form", OfficeNamespaces.FORM_NS);
@@ -374,7 +379,9 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
             rootAttributes.addNamespaceDeclaration("xforms", OfficeNamespaces.XFORMS_NS);
             rootAttributes.addNamespaceDeclaration("xsd", OfficeNamespaces.XSD_NS);
             rootAttributes.addNamespaceDeclaration("xsi", OfficeNamespaces.XSI_NS);
-            rootAttributes.setAttribute(OfficeNamespaces.OFFICE_NS, "version", "1.0");
+            rootAttributes.addNamespaceDeclaration("grddl", OfficeNamespaces.GRDDL_NS);
+            rootAttributes.setAttribute(OfficeNamespaces.OFFICE_NS, "version",
+                   ODF_VERSION);
 
             this.rootXmlWriter.writeXmlDeclaration("UTF-8");
             this.rootXmlWriter.writeTag(OfficeNamespaces.OFFICE_NS, "document-content", rootAttributes, XmlWriterSupport.OPEN);
