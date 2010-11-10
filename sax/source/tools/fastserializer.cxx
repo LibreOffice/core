@@ -30,6 +30,8 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/byteseq.hxx>
 
+#include <comphelper/sequenceasvector.hxx>
+
 #include <com/sun/star/xml/Attribute.hpp>
 #include <com/sun/star/xml/FastAttribute.hpp>
 #include <com/sun/star/xml/sax/XFastAttributeList.hpp>
@@ -40,6 +42,7 @@
 #include <cstdio>
 #endif
 
+using ::comphelper::SequenceAsVector;
 using ::rtl::OString;
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -465,9 +468,13 @@ namespace sax_fastparser {
 
     void FastSaxSerializer::ForSort::setCurrentElement( sal_Int32 nElement )
     {
-        mnCurrentElement = nElement;
-        if ( maData.find( nElement ) == maData.end() )
-            maData[ nElement ] = Int8Sequence();
+        SequenceAsVector< sal_Int32 > aOrder( maOrder );
+        if( std::find( aOrder.begin(), aOrder.end(), nElement ) != aOrder.end() )
+        {
+            mnCurrentElement = nElement;
+            if ( maData.find( nElement ) == maData.end() )
+                maData[ nElement ] = Int8Sequence();
+        }
     }
 
     void FastSaxSerializer::ForSort::prepend( const Int8Sequence &rWhat )
