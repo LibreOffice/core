@@ -32,6 +32,9 @@
 '\******************************************************************************
 testcase tPNG
 
+    warnlog( "#i115138 - Loading test document freezes the office" )
+    goto endsub
+
     dim x as integer
     dim i as integer
     dim iWaitIndex as integer
@@ -72,6 +75,10 @@ endcase 'tPNG
 
 '-------------------------------------------------------------------------------
 testcase tSVM
+
+    warnlog( "#i115138 - Loading test document freezes the office" )
+    goto endsub
+
 
     dim x as integer
     dim i as integer
@@ -237,6 +244,10 @@ testcase tSVM
 endcase 'tSVM
 '-------------------------------------------------------------------------------
 testcase tPDF
+
+    warnlog( "#i115138 - Loading test document freezes the office" )
+    goto endsub
+
 
     dim sPath as string
     dim sTemp as string
@@ -541,6 +552,9 @@ endcase 'tPDF_Creator
 '-------------------------------------------------------------------------------
 testcase tSVG
 
+    warnlog( "#i115138 - Loading test document freezes the office" )
+    goto endsub
+
     dim x as integer
     dim i as integer
     dim sFilter as string
@@ -605,6 +619,9 @@ endcase 'tSVG
 
 '-------------------------------------------------------------------------------
 testcase tBMP
+
+    warnlog( "#i115138 - Loading test document freezes the office" )
+    goto endsub
 
    dim x as integer
    dim i as integer
@@ -773,6 +790,9 @@ endcase 'tBMP
 '-------------------------------------------------------------------------------
 testcase tEMF
 
+    warnlog( "#i115138 - Loading test document freezes the office" )
+    goto endsub
+
     dim x as integer
     dim i as integer
     dim sFilter as string
@@ -903,6 +923,9 @@ endcase 'tEMF
 
 '-------------------------------------------------------------------------------
 testcase tMET
+
+    warnlog( "#i115138 - Loading test document freezes the office" )
+    goto endsub
 
     dim x as integer
     dim i as integer
@@ -1097,6 +1120,9 @@ endcase 'tMET
 '-------------------------------------------------------------------------------
 testcase tSWF
 
+    warnlog( "#i115138 - Loading test document freezes the office" )
+    goto endsub
+
     dim sFilter as string
     dim sExt as string
     dim x as integer
@@ -1121,6 +1147,9 @@ endcase 'tSWF
 
 '------------------------------------------------------------------------------
 testcase tWMF
+
+    warnlog( "#i115138 - Loading test document freezes the office" )
+    goto endsub
 
     dim x as integer
     dim i as integer

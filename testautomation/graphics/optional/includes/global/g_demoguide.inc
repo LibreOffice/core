@@ -215,17 +215,15 @@ testcase t_Interoperability
     gApplication   = "IMPRESS"
     
     printlog "Open PowerPoint presentation"
-    hFileOpen (Convertpath (gTesttoolPath + "graphics/required/input/dotNetOverview.ppt"))
+    hFileOpenLocally( gTesttoolPath + "graphics/required/input/dotNetOverview.ppt" )
 
-    Call sMakeReadOnlyDocumentEditable
-    
     printlog "Save the name of the origin background (taken from last slide)"
-    Kontext "DocumentImpress"
-    DocumentImpress.TypeKeys "<END>"
-    sleep (4)
-    sTemplatename = DocumentImpress.StatusGetText (6)
-    printlog "    Background = " & sTemplatename
-    
+        Kontext "DocumentImpress"
+        DocumentImpress.TypeKeys "<END>"
+        sleep (4)
+        sTemplatename = DocumentImpress.StatusGetText (6)
+        printlog "Background = " & sTemplatename     'Debugcode
+
     printlog "Choose a masterpage from right pane"
     
     Kontext "Tasks"
@@ -245,7 +243,7 @@ testcase t_Interoperability
     sleep (10)
     printlog "Verify that the background has changed"
     Kontext "DocumentImpress"
-    printlog "    Background is " & DocumentImpress.StatusGetText (6)     'Debugcode
+    printlog "Background is " & DocumentImpress.StatusGetText (6)     'Debugcode
     if DocumentImpress.StatusGetText (6) = sTemplatename then
             warnlog "The background is not changed"
         else printlog "    Background has been changed"
@@ -266,17 +264,17 @@ testcase t_Interoperability
     Kontext "DocumentImpress"
     Kontext "Slides"
     Kontext "SlidesControl"
-    SlidesControl.TypeKeys "<Mod1 X>"
+    SlidesControl.OpenContextMenu
+    sleep 1
+    hMenuSelectNr (8)
     Kontext "DocumentImpress"
-    DocumentImpress.TypeKeys "<HOME>"
+    DocumentImpress.TypeKeys "<HOME>", true
     Kontext "Slides"
     Kontext "SlidesControl"
-    SlidesControl.TypeKeys "<Mod1 V>"
-    kontext "InsertPaste"
-     if InsertPaste.Exists(1) then
-        Before.Check
-        InsertPaste.OK
-     endif
+    SlidesControl.OpenContextMenu
+    sleep 1
+    hMenuSelectNr (10)
+
      Printlog "    Verify that the slide was moved correctly"
      Kontext "Slides"
      sleep (5)
@@ -302,10 +300,9 @@ testcase t_Interoperability
     setclipboard("")
     try
         Kontext "DocumentImpressOutlineView"
-        DocumentImpressOutlineView.TypeKeys "<MOD1 HOME><SHIFT END>"
         DocumentImpressOutlineView.TypeKeys "<Mod1 C>"
         sleep (5)
-        if getclipboard() <> ".NET Enterprise" then
+        if getclipboard() <> ".NET Enterprise Federation" then
                 warnlog "Wrong selection in outlineview. Should be '.NET Enterprise', but is '" & getclipboard() +"'."
             else printlog "Switching to Outlineview was successfull"
         endif

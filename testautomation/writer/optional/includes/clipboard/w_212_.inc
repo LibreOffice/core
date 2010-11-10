@@ -80,7 +80,7 @@ testcase WriterToImpressText
             Call hCloseDocument
             printlog " Close saved document "
             wait 500
-            Call hFileOpen (gOfficepath + "user\work\writer_to_impress_text.odp",false)
+            hFileOpen( gOfficepath + "user\work\writer_to_impress_text.odp",false)
             printlog " Reopen saved document "
             Wait 500
             Call hCloseDocument
@@ -134,7 +134,7 @@ testcase WriterToImpressField
             Call hCloseDocument
             printlog " Close saved document "
             wait 500
-            Call hFileOpen (gOfficepath + "user\work\writer_to_impress_field.odp",false)
+            hFileOpen( gOfficepath + "user\work\writer_to_impress_field.odp",false)
             printlog " Reopen saved document "
             Wait 500
             Call hCloseDocument
@@ -188,7 +188,7 @@ testcase WriterToImpressTable
             Call hCloseDocument
             printlog " Close saved document "
             wait 500
-            Call hFileOpen (gOfficepath + "user\work\writer_to_impress_table.odp",false)
+            hFileOpen( gOfficepath + "user\work\writer_to_impress_table.odp",false)
             printlog " Reopen saved document "
             Wait 500
             Call hCloseDocument
@@ -242,7 +242,7 @@ testcase WriterToImpressFrame
             Call hCloseDocument
             printlog " Close saved document "
             wait 500
-            Call hFileOpen (gOfficepath + "user\work\writer_to_impress_frame.odp",false)
+            hFileOpen( gOfficepath + "user\work\writer_to_impress_frame.odp",false)
             printlog " Reopen saved document "
             Wait 500
             Call hCloseDocument
@@ -296,7 +296,7 @@ testcase WriterToImpressDrawingObject
             Call hCloseDocument
             printlog " Close saved document "
             wait 500
-            Call hFileOpen (gOfficepath + "user\work\writer_to_impress_draw.odp",false)
+            hFileOpen( gOfficepath + "user\work\writer_to_impress_draw.odp",false)
             printlog " Reopen saved document "
             Wait 500
             Call hCloseDocument
@@ -350,7 +350,7 @@ testcase WriterToImpressGraphicLinked
             Call hCloseDocument
             printlog " Close saved document "
             wait 500
-            Call hFileOpen (gOfficepath + "user\work\writer_to_impress_graphic1.odp",false)
+            hFileOpen( gOfficepath + "user\work\writer_to_impress_graphic1.odp",false)
             printlog " Reopen saved document "
             Wait 500
             Call hCloseDocument
@@ -404,7 +404,7 @@ testcase WriterToImpressGraphicEmbedded
             Call hCloseDocument
             printlog " Close saved document "
             wait 500
-            Call hFileOpen (gOfficepath + "user\work\writer_to_impress_graphic2.odp",false)
+            hFileOpen( gOfficepath + "user\work\writer_to_impress_graphic2.odp",false)
             printlog " Reopen saved document "
             Wait 500
             Call hCloseDocument
@@ -458,7 +458,7 @@ testcase WriterToImpressOLEObject
             Call hCloseDocument
             printlog " Close saved document "
             wait 500
-            Call hFileOpen (gOfficepath + "user\work\writer_to_impress_ole.odp",false)
+            hFileOpen( gOfficepath + "user\work\writer_to_impress_ole.odp",false)
             printlog " Reopen saved document "
             Wait 500
             Call hCloseDocument
@@ -512,7 +512,7 @@ testcase WriterToImpressControl
             Call hCloseDocument
             printlog " Close saved document "
             wait 500
-            Call hFileOpen (gOfficepath + "user\work\writer_to_impress_control.odp",false)
+            hFileOpen( gOfficepath + "user\work\writer_to_impress_control.odp",false)
             printlog " Reopen saved document "
             Wait 500
             Call hCloseDocument

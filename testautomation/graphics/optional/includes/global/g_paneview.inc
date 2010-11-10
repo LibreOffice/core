@@ -78,7 +78,7 @@ testcase tiMinimize_Maximize_Docking_SlidePane
         Sleep 1
         Slides.Size 300, 400
         Sleep 1
-        Slides.Size 150, 250
+        Slides.Size 170, 250
         Sleep 1
         Slides.Size xSize%, ySize%
         Sleep 1
@@ -451,7 +451,7 @@ testcase tdMinimize_Maximize_Docking_Pagepane
         Sleep 1
         Pagepane.Size 300, 400
         Sleep 1
-        Pagepane.Size 150, 250
+        Pagepane.Size 170, 250
         Sleep 1
         Pagepane.Size xSize%, ySize%
         Sleep 1

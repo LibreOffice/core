@@ -42,57 +42,60 @@
 
 testcase tiEditUndo
 
-    Dim sDatei as string
     Dim Ueber_Text_1 as string
+    dim sTestfile as string
+    dim sLocaltestfile as string
     
-    if (gApplication = "IMPRESS") then 
+    if (gApplication = "IMPRESS") then
         ExtensionString = "odp"
     else
         ExtensionString = "odg"
     end if
     
-    sDatei = gTesttoolPath + "graphics\required\input\leer."+ExtensionString
-    
-    hFileOpen ConvertPath (sDatei)
-    sleep 5
-    printlog "Checking for readonly state. If so, make it editable."
-    sMakeReadOnlyDocumentEditable
-
+    sTestfile = gTesttoolPath + "graphics\required\input\leer."+ExtensionString
+    printlog "Loading test file.."
+    hFileOpenLocally( sTestfile )
+    sleep 3
+    printlog "Selecting grey rectangle.."
     hTypeKeys "<TAB><TAB>"
     sleep 3
+    printlog "Opening Position and size dialog."
     ContextPositionAndSize
     Kontext
     if Messagebox.exists (5) then
-      Messagebox.SetPage TabPositionAndSize
+        Messagebox.SetPage TabPositionAndSize
     else
-      print "what"
+        printlog "Not the expected Dialog came up. Please check."
     endif
     Kontext "TabPositionAndSize"
     printlog "defining variable for original position of object"
-    Ueber_Text_1=PositionX.GetText				
+    Ueber_Text_1=PositionX.GetText
+    printlog "Canceling dialog."
     TabPositionAndSize.Cancel
     sleep 2
     Kontext "Toolbar"
     Auswahl.Click
     sleep 1
-    printlog "Bring Object backward"
-    ContextArrangeBringBackward					
+    printlog "Sending Rectangle backwards."
+    ContextArrangeBringBackward	
     sleep 1
+    printlog "Deselect."
     gMouseClick 60,60
     sleep 1
     Kontext "Toolbar"
     Auswahl.Click
     sleep 1
+    printlog "trying to select blue rectangle in front"
     hTypeKeys "<TAB><TAB>"
     Kontext "Toolbar"
     Auswahl.Click
     sleep 1
     printlog "Open Position and Size dialog, checking position"
-    ContextPositionAndSize					
+    ContextPositionAndSize
     Kontext
     Messagebox.SetPage TabPositionAndSize
     Kontext "TabPositionAndSize"
-    if PositionX=0 Then Warnlog "  Command was not completely executed, and it could not be undone."
+    if PositionX=0 Then Warnlog "Command was not completely executed, and it could not be undone."
     TabPositionAndSize.Cancel
     sleep 2
     gMouseClick 60,60
@@ -105,6 +108,7 @@ testcase tiEditUndo
     sleep 1
     Kontext "Toolbar"
     Auswahl.Click
+    printlog "Trying to select grey rectangle again."
     hTypeKeys "<TAB><TAB>"
     sleep 1
     Kontext "Toolbar"
@@ -114,12 +118,23 @@ testcase tiEditUndo
     kontext
     Messagebox.SetPage TabPositionAndSize
     kontext "TabPositionAndSize"
+    printlog "Checking if x Position is like ata the start again."
     if PositionX.GetText = Ueber_Text_1 then
       printlog "OK, last order could be redone"
     else
       warnlog "Last order could not be redone"
     end if
     TabPositionAndSize.Cancel
+    printlog "Close document"
+    sLocaltestfile = hFileGetLocalPath( gTesttoolPath + "leer."+ExtensionString )
+    printlog sLocaltestfile
+    if (FileExists (sLocaltestfile)) then
+        app.kill (sLocaltestfile)
+        printlog "Deleting used file."
+    else
+        warnlog "File is missing."
+    endif
+    Call hCloseDocument	
 
     printlog "Close document"
     Call hCloseDocument						

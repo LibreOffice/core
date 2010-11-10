@@ -56,8 +56,7 @@ testcase tiToolsSpellcheckCheck_AlwaysIgnore
         sExt = ".odp"
     endif
 
-    Call hFileOpen (gTesttoolpath + "graphics\required\input\recht_"+iSprache+sExt)
-    call fMakeDocumentWritable()
+    Call hFileOpenLocally (gTesttoolpath + "graphics\required\input\recht_"+iSprache+sExt)
 
     sleep(1)
 
@@ -256,7 +255,9 @@ testcase tiToolsSpellcheckError
     ' remove the word again from the dictionary
     delete_word_from_dictionary(sWrongWord,"IgnoreAllList")
 
-endcase 'tiToolsSpellcheckCheck
+    kill (convertPath(gOfficePath+"user/work/"+"recht_"+iSprache+sExt))
+endcase 'tiToolsSpellcheckCorrect
+
 '-------------------------------------------------------------------------------
 testcase tiToolsSpellcheckCheck_Change
 
@@ -281,9 +282,7 @@ testcase tiToolsSpellcheckCheck_Change
         sExt = ".odp"
     endif
 
-    Call hFileOpen (gTesttoolpath + "graphics\required\input\recht_"+iSprache+sExt)
-
-    call fMakeDocumentWritable
+    Call hFileOpenLocally (gTesttoolpath + "graphics\required\input\recht_"+iSprache+sExt)
 
     ' Perform the test now:
     printlog "Call Tools->Spellcheck"
@@ -327,8 +326,9 @@ testcase tiToolsSpellcheckCheck_Change
     
     printlog "Close document"
     Call hCloseDocument
+    kill (convertPath(gOfficePath+"user/work/"+"recht_"+iSprache+sExt))
 
-endcase
+endcase 'tiToolsSpellcheckCheck_Change
 '-------------------------------------------------------------------------------
 testcase tiToolsSpellcheckCheck_ChangeAll
 
@@ -355,9 +355,7 @@ testcase tiToolsSpellcheckCheck_ChangeAll
         sExt = ".odp"
     endif
 
-    Call hFileOpen (gTesttoolpath + "graphics\required\input\recht_"+iSprache+sExt)
-
-    call fMakeDocumentWritable()
+    Call hFileOpenLocally (gTesttoolpath + "graphics\required\input\recht_"+iSprache+sExt)
 
     ' Perform the test now:
     printlog "Call Tools->Spellcheck"
@@ -373,9 +371,12 @@ testcase tiToolsSpellcheckCheck_ChangeAll
 
     printlog "Close document"
     Call hCloseDocument
+    kill (convertPath(gOfficePath+"user/work/"+"recht_"+iSprache+sExt))
 
-endcase
+endcase 'tiToolsSpellcheckCheck_ChangeAll
+
 '-------------------------------------------------------------------------------
+
 function delete_all_added_words(aWords)
 
     '/// this function delete the words in sWords in all user dictionaries
@@ -419,10 +420,11 @@ function delete_all_added_words(aWords)
     Kontext "ExtrasOptionenDlg"
     printlog "Press button 'OK' on dialog 'Writing Aids'."
     ExtrasOptionenDlg.OK
-
+    
 end function 'delete_all_added_words
-   
+
 '-------------------------------------------------------------------------------
+
 function delete_word_from_dictionary(sWord as String, sDictionary as String)
 
     '/// this function delete the words in sWords in all user dictionaries
@@ -462,7 +464,9 @@ function delete_word_from_dictionary(sWord as String, sDictionary as String)
     printlog "Press button 'OK' on dialog 'Writing Aids'."
     ExtrasOptionenDlg.OK
 
-end function
+end function 'delete_word_from_dictionary
+
+'-------------------------------------------------------------------------------
 
 function fSelectWithString(oControl as Object,sText as String)
 
@@ -477,8 +481,9 @@ function fSelectWithString(oControl as Object,sText as String)
         endif
     next
 
-end function
+end function 'fSelectWithString
 
+'-------------------------------------------------------------------------------
 
 function getWordsForLanguage()
 
@@ -527,4 +532,4 @@ function getWordsForLanguage()
 
     getWordsForLanguage = aWords
 
-end function
+end function 'getWordsForLanguage

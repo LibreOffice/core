@@ -519,8 +519,10 @@ testcase tiFormatStylist
         goto endsub
     end select
 
+    printlog "Open new doc"
     Call hNewDocument
     sleep 2
+    printlog "call the navigator"
     Kontext "Gestalter"
     if Gestalter.Exists Then
         Warnlog "- Stylist exists, perhaps not closed last time a Impress doc was open"
@@ -530,11 +532,14 @@ testcase tiFormatStylist
 
     FormatStylist
     Kontext "Gestalter"
+    printlog "opening graphics styles"
     Grafikvorlagen.Click
     sleep 1
+    printlog "Select number 1"
     Vorlagenliste.Select Num1        ' num1
     sleep 1
     Printlog "- open Grafic template Dialogs using the context menue , checking if all resources exist"
+    printlog "Opening context menu"
     Vorlagenliste.OpenContextMenu
     sleep 1
     hMenuSelectNr (2)
@@ -544,6 +549,7 @@ testcase tiFormatStylist
     Messagebox.SetPage TabText
     Kontext "TabText"
     sleep 1
+    printlog "Canceling dialog"
     TabText.Cancel
     sleep 1
 
@@ -551,18 +557,21 @@ testcase tiFormatStylist
         Kontext "Gestalter"
         Printlog "- presentation templates"
         sleep 1
+        printlog "presentation styles"
         Praesentationsvorlagen.Click
 
         Vorlagenliste.Select Num2
         sleep 1
+        printlog "opening context menu"
         Vorlagenliste.OpenContextMenu
         sleep 1
+        printlog "selecting modify"
         hMenuSelectNr (1)
         sleep 1
         Kontext
         if Messagebox.exists (5) then
             try
-                '                    Messagebox.SetPage TabArea
+                printlog "Messagebox.SetPage TabArea"
                 Kontext "TabArea"
                 if TabArea.Exists = false then
                     warnlog "Where is TabArea?"
@@ -579,86 +588,111 @@ testcase tiFormatStylist
         Kontext "Gestalter"
         sleep 1
 
+        printlog "Select number 3"
         Vorlagenliste.Select Num3
         sleep 1
+        printlog "opening context menu of number 3"
         Vorlagenliste.OpenContextMenu
         sleep 1
         hMenuSelectNr (1)
         sleep 1
+        printlog "Check the styles..."
         call hWalkTheStyles (1,1)
         Kontext
+        printlog "setting tabpage indents and spacing"
         Messagebox.SetPage TabEinzuegeUndAbstaende
         Kontext "TabEinzuegeUndAbstaende"
         sleep 1
+        printlog "Canceling tabpage"
         TabEinzuegeUndAbstaende.Cancel
         sleep 1
         Kontext "Gestalter"
         sleep 1
 
+        printlog "Select number 4"
         Vorlagenliste.Select Num4
         sleep 1
+        printlog "opening context menu of number 4"
         Vorlagenliste.OpenContextMenu
         sleep 1
         hMenuSelectNr (1)
         sleep 1
         Kontext
+        printlog "setting tabpage TabFont"
         Messagebox.SetPage TabFont
         kontext "TabFont"
         Kontext
+        printlog "setting tabpage TabFontEffects"
         Messagebox.SetPage TabFontEffects
         kontext "TabFontEffects"
         Kontext
+        printlog "setting tabpage TabIndents and Spacing"
         Messagebox.SetPage TabEinzuegeUndAbstaende
         kontext "TabEinzuegeUndAbstaende"
         sleep 1
+        printlog "canceling TabIndents and Spacing"
         TabEinzuegeUndAbstaende.Cancel
         sleep 1
         Kontext "Gestalter"
         sleep 1
 
+        printlog "opening context menu of number 5"
         Vorlagenliste.Select Num5
         sleep 1
+        printlog "opening context menu of number 5"
         Vorlagenliste.OpenContextMenu
         sleep 1
         hMenuSelectNr (1)
         sleep 1
         Kontext
+        printlog "setting tabpage Tab Font"
         Messagebox.SetPage TabFont
         kontext "TabFont"
         Kontext
+        printlog "setting tabpage Tab FontEffects"
         Messagebox.SetPage TabFontEffects
         kontext "TabFontEffects"
         Kontext
+        printlog "setting tabpage TabIndents and Spacing"
         Messagebox.SetPage TabEinzuegeUndAbstaende
         kontext "TabEinzuegeUndAbstaende"
         sleep 1
         Kontext
+        printlog "setting tabpage Tab Bullets"
         Messagebox.SetPage TabBullet
         Kontext "TabBullet"
         sleep 1
         Kontext
+        printlog "setting tabpage Tab Numbering Type"
         Messagebox.SetPage TabNumerierungsart
         Kontext "TabNumerierungsart"
         sleep 1
         Kontext
+        printlog "setting tabpage Tab Graphics"
         Messagebox.SetPage TabGrafiken
         Kontext "TabGrafiken"
         sleep 1
         Kontext
+        printlog "setting tabpage Tab Numbering options"
         Messagebox.SetPage TabOptionenNumerierung
         Kontext "TabOptionenNumerierung"
         sleep 1
+        printlog "Canceling..."
         TabOptionenNumerierung.Cancel
         sleep 1
     endif
+    kontext "DocumentImpress"
+    printlog "Closing Stylist"
     if lcase(gPlatform) = "osx" then
         hTypekeys "<mod1 t>"
     else
-        hTypeKeys "<F11>"
+        Kontext "Gestalter"
+        Gestalter.Close 
     end if
     sleep 1
     Kontext "Gestalter"
     if Gestalter.Exists Then Warnlog "- Stylist could not be closed pressing F11"
+    printlog "Closing doc."
     Call hCloseDocument
 
 endcase 'tiFormatStylist
