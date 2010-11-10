@@ -117,10 +117,8 @@ StructPage::StructPage(Window* pParent):
                         WB_HASBUTTONS|WB_HSCROLL|WB_NOINITIALSELECTION);
 
     aTlbStruct.SetNodeDefaultImages();
-    aTlbStruct.SetDefaultExpandedEntryBmp( Image( ModuleRes( BMP_STR_OPEN ) ) );
+    aTlbStruct.SetDefaultExpandedEntryBmp(  Image( ModuleRes( BMP_STR_OPEN  ) ) );
     aTlbStruct.SetDefaultCollapsedEntryBmp( Image( ModuleRes( BMP_STR_CLOSE ) ) );
-    aTlbStruct.SetDefaultExpandedEntryBmp( Image( ModuleRes( BMP_STR_OPEN_H ) ), BMP_COLOR_HIGHCONTRAST );
-    aTlbStruct.SetDefaultCollapsedEntryBmp( Image( ModuleRes( BMP_STR_CLOSE_H ) ), BMP_COLOR_HIGHCONTRAST );
 
     FreeResource();
 

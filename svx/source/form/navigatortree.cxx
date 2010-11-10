@@ -207,8 +207,7 @@ namespace svxform
 
         SetNodeBitmaps(
             m_aNavigatorImages.GetImage( RID_SVXIMG_COLLAPSEDNODE ),
-            m_aNavigatorImages.GetImage( RID_SVXIMG_EXPANDEDNODE ),
-            BMP_COLOR_NORMAL
+            m_aNavigatorImages.GetImage( RID_SVXIMG_EXPANDEDNODE )
         );
 
         SetDragDropMode(0xFFFF);
@@ -662,11 +661,8 @@ namespace svxform
             SvLBoxEntry* pEntry = FindEntry( pData );
             if (pEntry)
             {   // das Image neu setzen
-                SetCollapsedEntryBmp( pEntry, pData->GetNormalImage(), BMP_COLOR_NORMAL );
-                SetExpandedEntryBmp( pEntry, pData->GetNormalImage(), BMP_COLOR_NORMAL );
-
-                SetCollapsedEntryBmp( pEntry, pData->GetHCImage(), BMP_COLOR_HIGHCONTRAST );
-                SetExpandedEntryBmp( pEntry, pData->GetHCImage(), BMP_COLOR_HIGHCONTRAST );
+                SetCollapsedEntryBmp( pEntry, pData->GetNormalImage() );
+                SetExpandedEntryBmp( pEntry, pData->GetNormalImage() );
             }
         }
 
@@ -719,12 +715,6 @@ namespace svxform
             pNewEntry = InsertEntry( pEntryData->GetText(),
                 pEntryData->GetNormalImage(), pEntryData->GetNormalImage(),
                 pParentEntry, sal_False, nRelPos, pEntryData );
-
-        if ( pNewEntry )
-        {
-            SetExpandedEntryBmp( pNewEntry, pEntryData->GetHCImage(), BMP_COLOR_HIGHCONTRAST );
-            SetCollapsedEntryBmp( pNewEntry, pEntryData->GetHCImage(), BMP_COLOR_HIGHCONTRAST );
-        }
 
         //////////////////////////////////////////////////////////////////////
         // Wenn Root-Eintrag Root expandieren

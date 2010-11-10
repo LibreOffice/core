@@ -1092,8 +1092,6 @@ RecoveryDialog::RecoveryDialog(Window*       pParent,
         sName += impl_getStatusString( rInfo );
         SvLBoxEntry* pEntry = m_aFileListLB.InsertEntry(sName, rInfo.StandardImage, rInfo.StandardImage);
         pEntry->SetUserData((void*)&rInfo);
-        m_aFileListLB.SetExpandedEntryBmp (pEntry, rInfo.HCImage, BMP_COLOR_HIGHCONTRAST);
-        m_aFileListLB.SetCollapsedEntryBmp(pEntry, rInfo.HCImage, BMP_COLOR_HIGHCONTRAST);
     }
 
     // mark first item

@@ -1163,8 +1163,7 @@ FmFilterNavigator::FmFilterNavigator( Window* pParent )
         ImageList aNavigatorImages( SVX_RES( RID_SVXIMGLIST_FMEXPL ) );
         SetNodeBitmaps(
             aNavigatorImages.GetImage( RID_SVXIMG_COLLAPSEDNODE ),
-            aNavigatorImages.GetImage( RID_SVXIMG_EXPANDEDNODE ),
-            BMP_COLOR_NORMAL
+            aNavigatorImages.GetImage( RID_SVXIMG_EXPANDEDNODE )
         );
     }
 
@@ -1565,12 +1564,7 @@ void FmFilterNavigator::Insert(FmFilterData* pItem, sal_Int32 nPos)
 
     // insert the item
     SvLBoxEntry* pParentEntry = FindEntry( pParent );
-    SvLBoxEntry* pNewEntry = InsertEntry(pItem->GetText(), pItem->GetImage(), pItem->GetImage(), pParentEntry, sal_False, nPos, pItem );
-    if ( pNewEntry )
-    {
-        SetExpandedEntryBmp( pNewEntry, pItem->GetImage( BMP_COLOR_HIGHCONTRAST ), BMP_COLOR_HIGHCONTRAST );
-        SetCollapsedEntryBmp( pNewEntry, pItem->GetImage( BMP_COLOR_HIGHCONTRAST ), BMP_COLOR_HIGHCONTRAST );
-    }
+    InsertEntry( pItem->GetText(), pItem->GetImage(), pItem->GetImage(), pParentEntry, sal_False, nPos, pItem );
     if ( pParentEntry )
         Expand( pParentEntry );
 }

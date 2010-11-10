@@ -1323,38 +1323,36 @@ USHORT SfxOrganizeListBox_Impl::GetLevelCount_Impl(SvLBoxEntry* pParent) const
 
 //-------------------------------------------------------------------------
 
-SvLBoxEntry* SfxOrganizeListBox_Impl::InsertEntryByBmpType( const XubString& rText, BMPTYPE eBmpType,
-    SvLBoxEntry* pParent, BOOL bChildsOnDemand, ULONG nPos, void* pUserData )
+SvLBoxEntry* SfxOrganizeListBox_Impl::InsertEntryByBmpType(
+    const XubString& rText,
+    BMPTYPE eBmpType,
+    SvLBoxEntry* pParent,
+    BOOL bChildsOnDemand,
+    ULONG nPos,
+    void* pUserData
+)
 {
     SvLBoxEntry*    pEntry = NULL;
     const Image*    pExp = NULL;
     const Image*    pCol = NULL;
-    const Image*    pExpHC = NULL;
-    const Image*    pColHC = NULL;
 
     switch( eBmpType )
     {
         case BMPTYPE_FOLDER:
             pExp = &aOpenedFolderBmp;
             pCol = &aClosedFolderBmp;
-            pExpHC = &aOpenedFolderBmpHC;
-            pColHC = &aClosedFolderBmpHC;
             break;
-        default:
-            DBG_ERROR( "SfxOrganizeListBox_Impl::InsertEntryByBmpType(): something forgotten?!" );
 
         case BMPTYPE_DOC:
             pExp = &aOpenedDocBmp;
             pCol = &aClosedDocBmp;
-            pExpHC = &aOpenedDocBmpHC;
-            pColHC = &aClosedDocBmpHC;
             break;
+
+        default:
+            DBG_ERROR( "SfxOrganizeListBox_Impl::InsertEntryByBmpType(): something forgotten?!" );
     }
 
     pEntry = SvTreeListBox::InsertEntry( rText, *pExp, *pCol, pParent, bChildsOnDemand, nPos, pUserData );
-
-    SetExpandedEntryBmp( pEntry, *pExpHC, BMP_COLOR_HIGHCONTRAST );
-    SetCollapsedEntryBmp( pEntry, *pColHC, BMP_COLOR_HIGHCONTRAST );
 
     return pEntry;
 }

@@ -111,19 +111,9 @@ TabPage RID_FORMULATAB_STRUCT
         ImageBitmap = Bitmap { File = "fapclose.bmp"; };
         MaskColor = STD_MASKCOLOR;
     };
-    Image BMP_STR_CLOSE_H
-    {
-        ImageBitmap = Bitmap { File = "fapclose_h.bmp"; };
-        MaskColor = STD_MASKCOLOR;
-    };
     Image BMP_STR_OPEN
     {
         ImageBitmap = Bitmap { File = "fapopen.bmp"; };
-        MaskColor = STD_MASKCOLOR;
-    };
-    Image BMP_STR_OPEN_H
-    {
-        ImageBitmap = Bitmap { File = "fapopen_h.bmp"; };
         MaskColor = STD_MASKCOLOR;
     };
     Image BMP_STR_END
