@@ -140,7 +140,7 @@ Sequence< OUString > OOXMLFormulaParser_getSupportedServiceNames()
 
 OUString OOXMLFormulaParser_getImplementationName()
 {
-    return CREATE_OUSTRING( "com.sun.star.comp.oox.OOXMLFormulaParser" );
+    return CREATE_OUSTRING( "com.sun.star.comp.oox.xls.FormulaParser" );
 }
 
 Reference< XInterface > SAL_CALL OOXMLFormulaParser_createInstance( const Reference< XComponentContext >& ) throw( Exception )

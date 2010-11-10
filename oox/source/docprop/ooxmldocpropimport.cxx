@@ -57,7 +57,7 @@ using ::rtl::OUString;
 
 OUString SAL_CALL DocumentPropertiesImport_getImplementationName()
 {
-    return CREATE_OUSTRING( "com.sun.star.comp.oox.docprop.DocumentPropertiesImport" );
+    return CREATE_OUSTRING( "com.sun.star.comp.oox.docprop.DocumentPropertiesImporter" );
 }
 
 Sequence< OUString > SAL_CALL DocumentPropertiesImport_getSupportedServiceNames()
