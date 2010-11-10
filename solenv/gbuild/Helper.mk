@@ -106,7 +106,7 @@ gb_Helper__deliverprefix += rm -rf $(1) &&
 endif
 
 define gb_Helper_deliver
-$(call gb_Helper__deliverprefix,$(2)) cp -pf $(1) $(2)
+$(call gb_Helper__deliverprefix,$(2)) cp -f $(1) $(2) && touch -r $(1) $(2)
 endef
 
 # vim: set noet sw=4 ts=4:
