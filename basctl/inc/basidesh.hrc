@@ -57,7 +57,6 @@
 #define RID_POPUP_DLGED                 ( RID_BASICIDE_START + 62 )
 #define RID_PRINTDLG_STRLIST            ( RID_BASICIDE_START + 78 )
 
-#define RID_IMG_LOCKED_HC               ( RID_BASICIDE_START +  6 )
 #define RID_IMGBTN_REMOVEWATCH          ( RID_BASICIDE_START +  8 )
 #define RID_IMGBTN_GOTOCALL             ( RID_BASICIDE_START +  9 )
 #define RID_IMGLST_LAYOUT_HC            ( RID_BASICIDE_START + 14 )

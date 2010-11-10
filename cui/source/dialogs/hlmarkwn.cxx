@@ -386,8 +386,6 @@ int SvxHlinkDlgMarkWnd::FillTree( uno::Reference< container::XNameAccess > xLink
                                                         pParentEntry,
                                                         FALSE, LIST_APPEND,
                                                         (void*)pData );
-                        maLbTree.SetExpandedEntryBmp( pEntry, aBmp, BMP_COLOR_HIGHCONTRAST );
-                        maLbTree.SetCollapsedEntryBmp( pEntry, aBmp, BMP_COLOR_HIGHCONTRAST );
                         nEntries++;
                     }
                     else

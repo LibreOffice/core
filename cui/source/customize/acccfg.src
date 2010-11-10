@@ -278,28 +278,12 @@ Resource RID_SVXPAGE_CONFIGGROUPBOX
         {
             File = "plus.bmp" ;
         };
-         // MaskColor = Color { Predefine = COL_GREEN ; };
     };
     Image BMP_EXPANDED
     {
         ImageBitmap = Bitmap
         {
             File = "minus.bmp" ;
-        };
-         // MaskColor = Color { Predefine = COL_GREEN ; };
-    };
-    Image BMP_EXPANDED_HC
-    {
-        ImageBitmap = Bitmap
-        {
-            File = "minus_h.bmp" ;
-        };
-    };
-    Image BMP_COLLAPSED_HC
-    {
-        ImageBitmap = Bitmap
-        {
-            File = "plus_h.bmp" ;
         };
     };
 };

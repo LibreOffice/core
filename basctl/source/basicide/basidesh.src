@@ -529,11 +529,6 @@ Image RID_IMG_LOCKED
     ImageBitmap = Bitmap { File = "locked.bmp" ; };
     MASKCOLOR
 };
-Image RID_IMG_LOCKED_HC
-{
-    ImageBitmap = Bitmap { File = "locked_h.bmp" ; };
-    MASKCOLOR
-};
 Image RID_IMG_INSTALLATION
 {
     ImageBitmap = Bitmap { File = "harddisk_16.png"; };

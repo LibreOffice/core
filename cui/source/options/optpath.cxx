@@ -355,8 +355,7 @@ void SvxPathTabPage::Reset( const SfxItemSet& )
                 SvLBoxEntry* pEntry = pPathBox->InsertEntry( aStr );
                 if ( bReadOnly )
                 {
-                    pPathBox->SetCollapsedEntryBmp( pEntry, pImpl->m_aLockImage, BMP_COLOR_NORMAL );
-                    pPathBox->SetCollapsedEntryBmp( pEntry, pImpl->m_aLockImageHC, BMP_COLOR_HIGHCONTRAST );
+                    pPathBox->SetCollapsedEntryBmp( pEntry, pImpl->m_aLockImage );
                 }
                 PathUserData_Impl* pPathImpl = new PathUserData_Impl(i);
                 pPathImpl->sUserPath = sUser;

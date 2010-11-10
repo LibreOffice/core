@@ -269,13 +269,8 @@ SvxConfigGroupListBox_Impl::SvxConfigGroupListBox_Impl(
 
     SetNodeBitmaps(
         aNavigatorImages.GetImage( RID_SVXIMG_COLLAPSEDNODE ),
-        aNavigatorImages.GetImage( RID_SVXIMG_EXPANDEDNODE ),
-        BMP_COLOR_NORMAL );
-
-    SetNodeBitmaps(
-        aNavigatorImages.GetImage( RID_SVXIMG_COLLAPSEDNODE ),
-        aNavigatorImages.GetImage( RID_SVXIMG_EXPANDEDNODE ),
-        BMP_COLOR_HIGHCONTRAST );
+        aNavigatorImages.GetImage( RID_SVXIMG_EXPANDEDNODE )
+    );
 }
 
 
@@ -420,12 +415,8 @@ void SvxConfigGroupListBox_Impl::fillScriptList( const Reference< browse::XBrows
 
                 ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
                 Image aImage = GetImage( theChild, aContext.getUNOContext(), bIsRootNode, BMP_COLOR_NORMAL );
-                SetExpandedEntryBmp( pNewEntry, aImage, BMP_COLOR_NORMAL );
-                SetCollapsedEntryBmp( pNewEntry, aImage, BMP_COLOR_NORMAL );
-
-                aImage = GetImage( theChild, aContext.getUNOContext(), bIsRootNode, BMP_COLOR_HIGHCONTRAST );
-                SetExpandedEntryBmp( pNewEntry, aImage, BMP_COLOR_HIGHCONTRAST );
-                SetCollapsedEntryBmp( pNewEntry, aImage, BMP_COLOR_HIGHCONTRAST );
+                SetExpandedEntryBmp( pNewEntry, aImage );
+                SetCollapsedEntryBmp( pNewEntry, aImage );
 
                 SvxGroupInfo_Impl* pInfo =
                     new SvxGroupInfo_Impl( SVX_CFGGROUP_SCRIPTCONTAINER, 0, theChild );
@@ -902,11 +893,8 @@ void SvxConfigGroupListBox_Impl::GroupSelected()
                             Image aImage = GetImage( children[n], Reference< XComponentContext >(), sal_False, BMP_COLOR_NORMAL );
                             SvLBoxEntry* pNewEntry =
                                 pFunctionListBox->InsertEntry( children[n]->getName(), NULL );
-                            pFunctionListBox->SetExpandedEntryBmp(pNewEntry, aImage, BMP_COLOR_NORMAL);
-                            pFunctionListBox->SetCollapsedEntryBmp(pNewEntry, aImage, BMP_COLOR_NORMAL);
-                            aImage = GetImage( children[n], Reference< XComponentContext >(), sal_False, BMP_COLOR_HIGHCONTRAST );
-                            pFunctionListBox->SetExpandedEntryBmp(pNewEntry, aImage, BMP_COLOR_HIGHCONTRAST);
-                            pFunctionListBox->SetCollapsedEntryBmp(pNewEntry, aImage, BMP_COLOR_HIGHCONTRAST);
+                            pFunctionListBox->SetExpandedEntryBmp( pNewEntry, aImage );
+                            pFunctionListBox->SetCollapsedEntryBmp(pNewEntry, aImage );
 
                             pNewEntry->SetUserData( _pGroupInfo );
 

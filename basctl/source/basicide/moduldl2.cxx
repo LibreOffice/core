@@ -1582,13 +1582,8 @@ SvLBoxEntry* LibPage::ImpInsertLibEntry( const String& rLibName, ULONG nPos )
     if (bProtected)
     {
         Image aImage(IDEResId(RID_IMG_LOCKED));
-        aLibBox.SetExpandedEntryBmp(pNewEntry, aImage, BMP_COLOR_NORMAL);
-        aLibBox.SetCollapsedEntryBmp(pNewEntry, aImage, BMP_COLOR_NORMAL);
-        aImage = Image(IDEResId(RID_IMG_LOCKED_HC));
-        aLibBox.SetExpandedEntryBmp(pNewEntry, aImage,
-                                    BMP_COLOR_HIGHCONTRAST);
-        aLibBox.SetCollapsedEntryBmp(pNewEntry, aImage,
-                                     BMP_COLOR_HIGHCONTRAST);
+        aLibBox.SetExpandedEntryBmp(pNewEntry, aImage);
+        aLibBox.SetCollapsedEntryBmp(pNewEntry, aImage);
     }
 
     // check, if library is link

@@ -463,9 +463,7 @@ struct SvxConfigGroupBoxResource_Impl : public Resource
     String m_aStrGroupStyles;
     String m_aScriptType;
     Image m_collapsedImage;
-    Image m_collapsedImage_hc;
     Image m_expandedImage;
-    Image m_expandedImage_hc;
 
     SvxConfigGroupBoxResource_Impl();
 };
@@ -488,9 +486,7 @@ SvxConfigGroupBoxResource_Impl::SvxConfigGroupBoxResource_Impl() :
     m_aStrGroupStyles(String(CUI_RES(STR_GROUP_STYLES))),
     m_aScriptType(String(CUI_RES(STR_BASICNAME))),
     m_collapsedImage(CUI_RES(BMP_COLLAPSED)),
-    m_collapsedImage_hc(CUI_RES(BMP_COLLAPSED_HC)),
-    m_expandedImage(CUI_RES(BMP_EXPANDED)),
-    m_expandedImage_hc(CUI_RES(BMP_EXPANDED_HC))
+    m_expandedImage(CUI_RES(BMP_EXPANDED))
 {
     FreeResource();
 }
@@ -501,8 +497,7 @@ SfxConfigGroupListBox_Impl::SfxConfigGroupListBox_Impl(
         , pImp(new SvxConfigGroupBoxResource_Impl()), pFunctionListBox(0), nMode( nConfigMode ), bShowSF( FALSE ), bShowBasic( TRUE ), pStylesInfo(0)
 {
     SetWindowBits( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_HASBUTTONS | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONSATROOT );
-    SetNodeBitmaps( pImp->m_collapsedImage, pImp->m_expandedImage, BMP_COLOR_NORMAL );
-    SetNodeBitmaps( pImp->m_collapsedImage_hc, pImp->m_expandedImage_hc, BMP_COLOR_HIGHCONTRAST );
+    SetNodeBitmaps( pImp->m_collapsedImage, pImp->m_expandedImage );
 
     // Check configuration to see whether only Basic macros,
     // only Scripting Framework scripts, or both should be listed
@@ -929,11 +924,8 @@ void SfxConfigGroupListBox_Impl::Init(const css::uno::Reference< css::lang::XMul
                                 Image aImage = GetImage( theChild, xCtx, bIsRootNode,BMP_COLOR_NORMAL );
                                 SvLBoxEntry* pNewEntry =
                                     InsertEntry( uiName, NULL);
-                                SetExpandedEntryBmp(pNewEntry, aImage, BMP_COLOR_NORMAL);
-                                SetCollapsedEntryBmp(pNewEntry, aImage, BMP_COLOR_NORMAL);
-                                aImage = GetImage( theChild, xCtx, bIsRootNode,BMP_COLOR_HIGHCONTRAST );
-                                SetExpandedEntryBmp(pNewEntry, aImage, BMP_COLOR_HIGHCONTRAST);
-                                SetCollapsedEntryBmp(pNewEntry, aImage, BMP_COLOR_HIGHCONTRAST);
+                                SetExpandedEntryBmp(  pNewEntry, aImage );
+                                SetCollapsedEntryBmp( pNewEntry, aImage );
 
                                 pNewEntry->SetUserData( pInfo );
                                 aArr.Insert( pInfo, aArr.Count() );
@@ -1275,11 +1267,8 @@ void SfxConfigGroupListBox_Impl::GroupSelected()
                                 Image aImage = GetImage( children[n], Reference< XComponentContext >(), sal_False, BMP_COLOR_NORMAL );
                                 SvLBoxEntry* pNewEntry =
                                     pFunctionListBox->InsertEntry( children[n]->getName(), NULL );
-                                pFunctionListBox->SetExpandedEntryBmp(pNewEntry, aImage, BMP_COLOR_NORMAL);
-                                pFunctionListBox->SetCollapsedEntryBmp(pNewEntry, aImage, BMP_COLOR_NORMAL);
-                                aImage = GetImage( children[n], Reference< XComponentContext >(), sal_False, BMP_COLOR_HIGHCONTRAST );
-                                pFunctionListBox->SetExpandedEntryBmp(pNewEntry, aImage, BMP_COLOR_HIGHCONTRAST);
-                                pFunctionListBox->SetCollapsedEntryBmp(pNewEntry, aImage, BMP_COLOR_HIGHCONTRAST);
+                                pFunctionListBox->SetExpandedEntryBmp( pNewEntry, aImage );
+                                pFunctionListBox->SetCollapsedEntryBmp(pNewEntry, aImage );
 
                                 pGrpInfo->sCommand = uri;
                                 pGrpInfo->sLabel = children[n]->getName();
@@ -1499,11 +1488,8 @@ void SfxConfigGroupListBox_Impl::RequestingChilds( SvLBoxEntry *pEntry )
                                 Image aImage = GetImage( theChild, Reference< XComponentContext >(), sal_False, BMP_COLOR_NORMAL );
                                 SvLBoxEntry* pNewEntry =
                                     InsertEntry( theChild->getName(), pEntry );
-                                SetExpandedEntryBmp(pNewEntry, aImage, BMP_COLOR_NORMAL);
-                                SetCollapsedEntryBmp(pNewEntry, aImage, BMP_COLOR_NORMAL);
-                                aImage = GetImage( theChild, Reference< XComponentContext >(), sal_False, BMP_COLOR_HIGHCONTRAST );
-                                SetExpandedEntryBmp(pNewEntry, aImage, BMP_COLOR_HIGHCONTRAST);
-                                SetCollapsedEntryBmp(pNewEntry, aImage, BMP_COLOR_HIGHCONTRAST);
+                                SetExpandedEntryBmp( pNewEntry, aImage );
+                                SetCollapsedEntryBmp(pNewEntry, aImage );
 
                                 pNewEntry->SetUserData( pGrpInfo );
                                 aArr.Insert( pGrpInfo, aArr.Count() );

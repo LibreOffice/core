@@ -87,13 +87,9 @@ void ShowErrorDialog( const Any& aException )
 SFTreeListBox::SFTreeListBox( Window* pParent, const ResId& rResId ) :
     SvTreeListBox( pParent, ResId( rResId.GetId(),*rResId.GetResMgr() ) ),
     m_hdImage(ResId(IMG_HARDDISK,*rResId.GetResMgr())),
-    m_hdImage_hc(ResId(IMG_HARDDISK_HC,*rResId.GetResMgr())),
     m_libImage(ResId(IMG_LIB,*rResId.GetResMgr())),
-    m_libImage_hc(ResId(IMG_LIB_HC,*rResId.GetResMgr())),
     m_macImage(ResId(IMG_MACRO,*rResId.GetResMgr())),
-    m_macImage_hc(ResId(IMG_MACRO_HC,*rResId.GetResMgr())),
     m_docImage(ResId(IMG_DOCUMENT,*rResId.GetResMgr())),
-    m_docImage_hc(ResId(IMG_DOCUMENT_HC,*rResId.GetResMgr())),
     m_sMyMacros(String(ResId(STR_MYMACROS,*rResId.GetResMgr()))),
     m_sProdMacros(String(ResId(STR_PRODMACROS,*rResId.GetResMgr())))
 {
@@ -395,14 +391,9 @@ SvLBoxEntry * SFTreeListBox::insertEntry(
         Image aImage = SvFileInformationManager::GetFileImage(
             INetURLObject(factoryURL), false,
             BMP_COLOR_NORMAL );
-        Image aHCImage = SvFileInformationManager::GetFileImage(
-            INetURLObject(factoryURL), false,
-            BMP_COLOR_HIGHCONTRAST );
         p = InsertEntry(
             rText, aImage, aImage, pParent, bChildrenOnDemand, LIST_APPEND,
             aUserData.release()); // XXX possible leak
-        SetExpandedEntryBmp(p, aHCImage, BMP_COLOR_HIGHCONTRAST);
-        SetCollapsedEntryBmp(p, aHCImage, BMP_COLOR_HIGHCONTRAST);
     }
     else
     {
@@ -415,33 +406,27 @@ SvLBoxEntry * SFTreeListBox::insertEntry(
     String const & rText, USHORT nBitmap, SvLBoxEntry * pParent,
     bool bChildrenOnDemand, std::auto_ptr< SFEntry > aUserData )
 {
-    Image aHCImage, aImage;
+    Image aImage;
     if( nBitmap == IMG_HARDDISK )
     {
         aImage = m_hdImage;
-        aHCImage = m_hdImage_hc;
     }
     else if( nBitmap == IMG_LIB )
     {
         aImage = m_libImage;
-        aHCImage = m_libImage_hc;
     }
     else if( nBitmap == IMG_MACRO )
     {
         aImage = m_macImage;
-        aHCImage = m_macImage_hc;
     }
     else if( nBitmap == IMG_DOCUMENT )
     {
         aImage = m_docImage;
-        aHCImage = m_docImage_hc;
     }
     SvLBoxEntry * p = InsertEntry(
         rText, aImage, aImage, pParent, bChildrenOnDemand, LIST_APPEND,
         aUserData.release()); // XXX possible leak
-    SetExpandedEntryBmp(p, aHCImage, BMP_COLOR_HIGHCONTRAST);
-    SetCollapsedEntryBmp(p, aHCImage, BMP_COLOR_HIGHCONTRAST);
-    return p;
+   return p;
 }
 
 void __EXPORT SFTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )

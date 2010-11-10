@@ -718,17 +718,13 @@ SvLBoxEntry* BasicTreeListBox::AddEntry(
     SvLBoxEntry* p = InsertEntry(
         rText, rImage, rImage, pParent, bChildrenOnDemand, LIST_APPEND,
         aUserData.release() ); // XXX possible leak
-    SetExpandedEntryBmp( p, rImageHC, BMP_COLOR_HIGHCONTRAST );
-    SetCollapsedEntryBmp( p, rImageHC, BMP_COLOR_HIGHCONTRAST );
     return p;
 }
 
 void BasicTreeListBox::SetEntryBitmaps( SvLBoxEntry * pEntry, const Image& rImage, const Image& rImageHC )
 {
-    SetExpandedEntryBmp( pEntry, rImage, BMP_COLOR_NORMAL );
-    SetCollapsedEntryBmp( pEntry, rImage, BMP_COLOR_NORMAL );
-    SetExpandedEntryBmp( pEntry, rImageHC, BMP_COLOR_HIGHCONTRAST );
-    SetCollapsedEntryBmp( pEntry, rImageHC, BMP_COLOR_HIGHCONTRAST );
+    SetExpandedEntryBmp(  pEntry, rImage );
+    SetCollapsedEntryBmp( pEntry, rImage );
 }
 
 LibraryType BasicTreeListBox::GetLibraryType() const

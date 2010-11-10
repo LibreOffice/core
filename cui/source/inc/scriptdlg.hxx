@@ -72,13 +72,9 @@ class SFTreeListBox : public SvTreeListBox
 private:
     USHORT          nMode;
     Image m_hdImage;
-    Image m_hdImage_hc;
     Image m_libImage;
-    Image m_libImage_hc;
     Image m_macImage;
-    Image m_macImage_hc;
     Image m_docImage;
-    Image m_docImage_hc;
     ::rtl::OUString m_sMyMacros;
     ::rtl::OUString m_sProdMacros;
 
