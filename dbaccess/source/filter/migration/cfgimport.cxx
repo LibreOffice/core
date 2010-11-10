@@ -302,7 +302,7 @@ void LoadTableFieldDesc(const Reference< XObjectInputStream>& _rxIn,PropertyValu
     ::rtl::OUString     aFieldName;     // column
     ::rtl::OUString     aFieldAlias;    // column alias
     ::rtl::OUString     aDatabaseName;  // qualifier or catalog
-    ::rtl::OUString     aFunctionName;  // enth"alt den Funktionsnamen, nur wenn eFunctionType != FKT_NONE gesetzt
+    ::rtl::OUString     aFunctionName;  // contains the function name if eFunctionType != FKT_NONE
 
     sal_Int32           eDataType;
     sal_Int32           eFunctionType;
@@ -509,7 +509,7 @@ void OCfgImport::createDataSource(const ::rtl::OUString& _sName)
         while( aRet.SearchAndReplaceAscii( "*.", String() ) != STRING_NOTFOUND ) ;
         sExtension = aRet;
     }
-    // then look for which of them settings are stored in the configuration
+    // then look for which of the settings are stored in the configuration
     ::rtl::OUString sFileName;
     try
     {
@@ -693,9 +693,6 @@ void SAL_CALL OCfgImport::addOrReplaceNode(
                 break;
         }
     }
-    /*if ( aName.equalsAscii("org.openoffice.Office.DataAccess") )
-        m_aStack.push(TElementStack::value_type(aName,0));
-    else*/
     if ( aName.equalsAscii("DataSources") )
         m_aStack.push(TElementStack::value_type(aName,DATASOURCES));
     else if ( aName.equalsAscii("DataSourceSettings") )
