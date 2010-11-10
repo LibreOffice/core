@@ -30,10 +30,9 @@ $(error No environment set!)
 endif
 
 gb_PARTITIALBUILD := T
-include $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/../SourcePath.mk
 GBUILDDIR := $(SOLARENV)/gbuild
 include $(GBUILDDIR)/gbuild.mk
 
-$(eval $(call gb_Module_make_global_targets,$(foreach module,$(lastword $(subst /, ,$(dir $(realpath $(firstword $(MAKEFILE_LIST)))))),$(CURRENTREPO)/$(module)/Module_$(module).mk)))
+$(eval $(call gb_Module_make_global_targets,$(shell ls $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/Module*.mk)))
 
 # vim: set noet sw=4 ts=4:
