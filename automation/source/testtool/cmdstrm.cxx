@@ -98,11 +98,12 @@ String CmdStream::WandleKeyEventString( String aKeys )
             {
                 Token = Work.GetToken(0,' ');
                 Work.Erase(0,Token.Len()+1);
-                ControlDef WhatName(Token,SmartId());
+                ControlDef WhatName(Token,rtl::OString());
                 USHORT nElement;
                 if (pKeyCodes->Seek_Entry(&WhatName,&nElement))
                 {
-                    USHORT nCode = (USHORT) pKeyCodes->GetObject(nElement)->pData->aUId.GetNum();
+                    // FIXME: HELPID
+                    USHORT nCode = 0;//(USHORT) pKeyCodes->GetObject(nElement)->pData->aUId.GetNum();
                     if ( nCode >= KEY_SHIFT )
                         nModify ^= nCode;
                     else

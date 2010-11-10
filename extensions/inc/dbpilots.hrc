@@ -27,29 +27,21 @@
 #ifndef EXTENSIONS_DBPILOT_HRC
 #define EXTENSIONS_DBPILOT_HRC
 
-#include "extensio.hrc"
-
-#define HID_GHIDWIZARD_PREVIOUS                 ( HID_DBP_START +   0)
-#define HID_GHIDWIZARD_NEXT                     ( HID_DBP_START +   1)
-#define HID_GHIDWIZARD_CANCEL                   ( HID_DBP_START +   2)
-#define HID_GHIDWIZARD_FINISH                   ( HID_DBP_START +   3)
-#define HID_GROUPWIZARD_PREVIOUS                ( HID_DBP_START +   4)
-#define HID_GROUPWIZARD_NEXT                    ( HID_DBP_START +   5)
-#define HID_GROUPWIZARD_CANCEL                  ( HID_DBP_START +   6)
-#define HID_GROUPWIZARD_FINISH                  ( HID_DBP_START +   7)
-#define HID_LISTWIZARD_PREVIOUS                 ( HID_DBP_START +   8)
-#define HID_LISTWIZARD_NEXT                     ( HID_DBP_START +   9)
-#define HID_LISTWIZARD_CANCEL                   ( HID_DBP_START +  10)
-#define HID_LISTWIZARD_FINISH                   ( HID_DBP_START +  11)
-#define HID_GRIDWIZARD_PREVIOUS                 ( HID_DBP_START +  12)
-#define HID_GRIDWIZARD_NEXT                     ( HID_DBP_START +  13)
-#define HID_GRIDWIZARD_CANCEL                   ( HID_DBP_START +  14)
-#define HID_GRIDWIZARD_FINISH                   ( HID_DBP_START +  15)
-    // !! if you add new IDs, please also adjust HID_ABP_LAST below !!
-#define HID_DBP_LAST    HID_GRIDWIZARD_FINISH
-
-#if HID_DBP_LAST > HID_DBP_END
-    #error help id range overflow (DBP)
-#endif
+#define HID_GHIDWIZARD_PREVIOUS                         "EXTENSIONS_HID_GHIDWIZARD_PREVIOUS"
+#define HID_GHIDWIZARD_NEXT                             "EXTENSIONS_HID_GHIDWIZARD_NEXT"
+#define HID_GHIDWIZARD_CANCEL                           "EXTENSIONS_HID_GHIDWIZARD_CANCEL"
+#define HID_GHIDWIZARD_FINISH                           "EXTENSIONS_HID_GHIDWIZARD_FINISH"
+#define HID_GROUPWIZARD_PREVIOUS                        "EXTENSIONS_HID_GROUPWIZARD_PREVIOUS"
+#define HID_GROUPWIZARD_NEXT                            "EXTENSIONS_HID_GROUPWIZARD_NEXT"
+#define HID_GROUPWIZARD_CANCEL                          "EXTENSIONS_HID_GROUPWIZARD_CANCEL"
+#define HID_GROUPWIZARD_FINISH                          "EXTENSIONS_HID_GROUPWIZARD_FINISH"
+#define HID_LISTWIZARD_PREVIOUS                         "EXTENSIONS_HID_LISTWIZARD_PREVIOUS"
+#define HID_LISTWIZARD_NEXT                             "EXTENSIONS_HID_LISTWIZARD_NEXT"
+#define HID_LISTWIZARD_CANCEL                           "EXTENSIONS_HID_LISTWIZARD_CANCEL"
+#define HID_LISTWIZARD_FINISH                           "EXTENSIONS_HID_LISTWIZARD_FINISH"
+#define HID_GRIDWIZARD_PREVIOUS                         "EXTENSIONS_HID_GRIDWIZARD_PREVIOUS"
+#define HID_GRIDWIZARD_NEXT                             "EXTENSIONS_HID_GRIDWIZARD_NEXT"
+#define HID_GRIDWIZARD_CANCEL                           "EXTENSIONS_HID_GRIDWIZARD_CANCEL"
+#define HID_GRIDWIZARD_FINISH                           "EXTENSIONS_HID_GRIDWIZARD_FINISH"
 
 #endif // EXTENSIONS_DBPILOT_HRC
