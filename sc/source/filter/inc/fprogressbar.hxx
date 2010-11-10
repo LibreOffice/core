@@ -29,6 +29,7 @@
 #ifndef SC_FPROGRESSBAR_HXX
 #define SC_FPROGRESSBAR_HXX
 
+#include <boost/noncopyable.hpp>
 #include "globstr.hrc"
 #include "ftools.hxx"
 #include "scdllapi.h"
@@ -111,7 +112,7 @@ const sal_Int32 SCF_INV_SEGMENT = -1;
         // not allowed (second segment active):   aProgress.Progress();
         // not allowed (first segment not empty): aProgress.GetSegmentProgressBar( nSeg1 );
  */
-class ScfProgressBar : ScfNoCopy
+class ScfProgressBar : private boost::noncopyable
 {
 public:
     explicit            ScfProgressBar( SfxObjectShell* pDocShell, const String& rText );
