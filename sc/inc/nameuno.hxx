@@ -52,7 +52,7 @@
 class ScDocShell;
 class ScRangeData;
 class ScTokenArray;
-
+class ScNamedRangesObj;
 
 class ScNamedRangeObj : public ::cppu::WeakImplHelper6<
                             ::com::sun::star::sheet::XNamedRange,
@@ -64,6 +64,7 @@ class ScNamedRangeObj : public ::cppu::WeakImplHelper6<
                         public SfxListener
 {
 private:
+    ScNamedRangesObj*       mpParent;
     ScDocShell*             pDocShell;
     String                  aName;
 
@@ -75,7 +76,7 @@ private:
                                         const formula::FormulaGrammar::Grammar eGrammar );
 
 public:
-                            ScNamedRangeObj(ScDocShell* pDocSh, const String& rNm);
+                            ScNamedRangeObj(ScNamedRangesObj* pParent, ScDocShell* pDocSh, const String& rNm);
     virtual                 ~ScNamedRangeObj();
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
@@ -173,16 +174,22 @@ public:
 };
 
 
-class ScNamedRangesObj : public ::cppu::WeakImplHelper5<
+class ScNamedRangesObj : public ::cppu::WeakImplHelper6<
                             ::com::sun::star::sheet::XNamedRanges,
                             ::com::sun::star::container::XEnumerationAccess,
                             ::com::sun::star::container::XIndexAccess,
+                            ::com::sun::star::beans::XPropertySet,
                             ::com::sun::star::document::XActionLockable,
                             ::com::sun::star::lang::XServiceInfo >,
                         public SfxListener
 {
 private:
     ScDocShell*             pDocShell;
+
+     // if true, adding new name or modifying existing one will set the
+     // document 'modified' and broadcast the change.  We turn this off during
+     // import.
+    sal_Bool                mbModifyAndBroadcast;
 
     ScNamedRangeObj*        GetObjectByIndex_Impl(sal_uInt16 nIndex);
     ScNamedRangeObj*        GetObjectByName_Impl(const ::rtl::OUString& aName);
@@ -199,6 +206,8 @@ public:
     virtual                 ~ScNamedRangesObj();
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+
+    bool                    IsModifyAndBroadcast() const;
 
                             // XNamedRanges
     virtual void SAL_CALL   addNewByName( const ::rtl::OUString& aName, const ::rtl::OUString& aContent,
@@ -237,6 +246,47 @@ public:
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType()
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL hasElements() throw(::com::sun::star::uno::RuntimeException);
+
+                            // XPropertySet
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
+                            SAL_CALL getPropertySetInfo()
+                                throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   setPropertyValue( const ::rtl::OUString& aPropertyName,
+                                    const ::com::sun::star::uno::Any& aValue )
+                                throw(::com::sun::star::beans::UnknownPropertyException,
+                                    ::com::sun::star::beans::PropertyVetoException,
+                                    ::com::sun::star::lang::IllegalArgumentException,
+                                    ::com::sun::star::lang::WrappedTargetException,
+                                    ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue(
+                                    const ::rtl::OUString& PropertyName )
+                                throw(::com::sun::star::beans::UnknownPropertyException,
+                                    ::com::sun::star::lang::WrappedTargetException,
+                                    ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   addPropertyChangeListener( const ::rtl::OUString& aPropertyName,
+                                    const ::com::sun::star::uno::Reference<
+                                        ::com::sun::star::beans::XPropertyChangeListener >& xListener )
+                                throw(::com::sun::star::beans::UnknownPropertyException,
+                                    ::com::sun::star::lang::WrappedTargetException,
+                                    ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   removePropertyChangeListener( const ::rtl::OUString& aPropertyName,
+                                    const ::com::sun::star::uno::Reference<
+                                        ::com::sun::star::beans::XPropertyChangeListener >& aListener )
+                                throw(::com::sun::star::beans::UnknownPropertyException,
+                                    ::com::sun::star::lang::WrappedTargetException,
+                                    ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   addVetoableChangeListener( const ::rtl::OUString& PropertyName,
+                                    const ::com::sun::star::uno::Reference<
+                                        ::com::sun::star::beans::XVetoableChangeListener >& aListener )
+                                throw(::com::sun::star::beans::UnknownPropertyException,
+                                    ::com::sun::star::lang::WrappedTargetException,
+                                    ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   removeVetoableChangeListener( const ::rtl::OUString& PropertyName,
+                                    const ::com::sun::star::uno::Reference<
+                                        ::com::sun::star::beans::XVetoableChangeListener >& aListener )
+                                throw(::com::sun::star::beans::UnknownPropertyException,
+                                    ::com::sun::star::lang::WrappedTargetException,
+                                    ::com::sun::star::uno::RuntimeException);
 
                             // XActionLockable
     virtual sal_Bool SAL_CALL isActionLocked() throw(::com::sun::star::uno::RuntimeException);
