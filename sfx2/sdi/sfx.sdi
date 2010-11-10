@@ -6411,7 +6411,7 @@ SfxBoolItem TaskBarVisible SID_TASKBAR
 ]
 
 //--------------------------------------------------------------------------
-SfxTemplateItem TemplateFamily5 SID_STYLE_FAMILY5
+SfxTemplateItem ListStyle SID_STYLE_FAMILY5
 
 [
     /* flags: */

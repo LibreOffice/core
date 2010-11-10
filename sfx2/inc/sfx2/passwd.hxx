@@ -88,7 +88,7 @@ public:
 
     void            SetMinLen( USHORT Len );
     void            SetMaxLen( USHORT Len );
-    void            SetEditHelpId( ULONG nId ) { maPasswordED.SetHelpId( nId ); }
+    void            SetEditHelpId( const rtl::OString& rId ) { maPasswordED.SetHelpId( rId ); }
     void            ShowExtras( USHORT nExtras ) { mnExtras = nExtras; }
     void            AllowAsciiOnly( bool i_bAsciiOnly = true ) { mbAsciiOnly = i_bAsciiOnly; }
 

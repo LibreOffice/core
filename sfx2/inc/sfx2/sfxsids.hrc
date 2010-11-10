@@ -423,7 +423,6 @@
 #define SID_INSERT_PLUGIN                   (SID_SFX_START + 672)
 #define SID_INSERT_SOUND                    (SID_SFX_START + 676)
 #define SID_INSERT_VIDEO                    (SID_SFX_START + 677)
-#define SID_INSERT_APPLET                   (SID_SFX_START + 673)
 
 #define SID_HYPERLINK_DIALOG                (SID_SFX_START + 678)
 

@@ -38,11 +38,11 @@ TARGET=rtf
 # --- Files --------------------------------------------------------
 
 EXCEPTIONSFILES= \
+        $(SLO)$/rtfitem.obj \
         $(SLO)$/svxrtf.obj
 
 SLOFILES= \
         $(EXCEPTIONSFILES) \
-        $(SLO)$/rtfitem.obj \
         $(SLO)$/rtfgrf.obj
 
 # ==========================================================================
