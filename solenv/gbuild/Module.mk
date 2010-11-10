@@ -32,6 +32,12 @@ gb_Module_ALLMODULES :=
 gb_Module_MODULELOCATIONS :=
 gb_Module_TARGETSTACK :=
 gb_Module_CLEANTARGETSTACK :=
+ifeq ($(gb_PARTITIALBUILD),$(true))
+gb_Module_PATHTOREPOROOT := /../
+else
+gb_Module_PATHTOREPOROOT :=
+endif
+
 
 .PHONY : $(call gb_Module_get_clean_target,%)
 $(call gb_Module_get_clean_target,%) :
@@ -88,7 +94,7 @@ ifneq ($$(gb_Module_TARGETSTACK),)
 $$(warn corrupted module target stack!)
 endif
 
-include $(dir $(1))/SourcePath.mk
+include $(dir $(1))$(gb_Module_PATHTOREPOROOT)/SourcePath.mk
 include $(1)
 
 all : $$(firstword $$(gb_Module_TARGETSTACK))
