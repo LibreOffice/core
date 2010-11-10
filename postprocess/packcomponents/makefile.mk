@@ -55,6 +55,22 @@ my_components = \
     charttools \
     chartview \
     comphelp4 \
+    component/framework/util/fwk \
+    component/framework/util/fwl \
+    component/framework/util/fwm \
+    component/sfx2/util/sfx \
+    component/svl/source/fsstor/fsstorage \
+    component/svl/source/passwordcontainer/passwordcontainer \
+    component/svl/util/svl \
+    component/svtools/source/hatchwindow/hatchwindowfactory \
+    component/svtools/source/productregistration/productregistration.uno \
+    component/svtools/util/svt \
+    component/sw/util/sw \
+    component/sw/util/swd \
+    component/sw/util/vbaswobj \
+    component/toolkit/util/tk \
+    component/xmloff/source/transform/xof \
+    component/xmloff/util/xo \
     configmgr \
     ctl \
     date \
@@ -81,12 +97,7 @@ my_components = \
     fpicker \
     fps_office \
     frm \
-    svl/source/fsstor/fsstorage \
-    framework/util/fwk \
-    framework/util/fwl \
-    framework/util/fwm \
     guesslang \
-    svtools/source/hatchwindow/hatchwindowfactory \
     hwp \
     hyphen \
     i18npool \
@@ -104,12 +115,10 @@ my_components = \
     oooimprovecore \
     oox \
     package2 \
-    svl/source/passwordcontainer/passwordcontainer \
     pcr \
     pdffilter \
     placeware \
     preload \
-    svtools/source/productregistration/productregistration.uno \
     protocolhandler \
     pythonloader \
     pythonscript \
@@ -127,7 +136,6 @@ my_components = \
     sdbc2 \
     sdbt \
     sdd \
-    sfx2/util/sfx \
     simplecanvas \
     slideshow \
     sm \
@@ -139,16 +147,11 @@ my_components = \
     srtrs1 \
     stringresource \
     svgfilter \
-    svl/util/svl \
-    svtools/util/svt \
     svx \
     svxcore \
-    sw/util/sw \
-    sw/util/swd \
     syssh \
     t602filter \
     textconversiondlgs \
-    toolkit/util/tk \
     tvhlp1 \
     ucb1 \
     ucpchelp1 \
@@ -167,7 +170,6 @@ my_components = \
     utl \
     uui \
     vbaobj \
-    sw/util/vbaswobj \
     vcl \
     vclcanvas \
     wpft \
@@ -176,8 +178,6 @@ my_components = \
     xmlfa \
     xmlfd \
     xmx \
-    xmloff/util/xo \
-    xmloff/source/transform/xof \
     xsltdlg \
     xsltfilter \
     xstor
