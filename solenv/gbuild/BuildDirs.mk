@@ -59,8 +59,9 @@ setuplocal :
 endif
 
 ifeq ($(strip $(gb_REPOS)),)
-gb_REPOS := $(SRCDIR)
+gb_REPOS := $(SOLARSRC)
 endif
+SRCDIR := $(firstword $(gb_REPOS))
 
 # HACK
 # unixify windoze paths
@@ -71,8 +72,5 @@ gb_REPOS := $(shell cygpath -u $(gb_REPOS))
 endif
 
 REPODIR := $(patsubst %/,%,$(dir $(firstword $(gb_REPOS))))
-ifeq ($(SRCDIR),)
-SRCDIR := $(REPODIR)/ooo
-endif
 
 # vim: set noet sw=4 ts=4:

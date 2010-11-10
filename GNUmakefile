@@ -30,11 +30,8 @@ $(error No environment set!)
 endif
 
 GBUILDDIR := $(SOLARENV)/gbuild
-include $(dir $(lastword $(MAKEFILE_LIST)))/SourcePath.mk
 include $(GBUILDDIR)/gbuild.mk
 
-$(eval $(call gb_Module_make_global_targets,$(shell ls $(SRCDIR)/Module_*.mk)))
-
-include $(foreach repo,$(filter-out $(SRCDIR),$(gb_REPOS)),$(repo)/$(notdir $(firstword $(MAKEFILE_LIST))))
+$(foreach repo,$(gb_REPOS),$(eval $(call gb_Module_make_global_targets,$(shell ls $(repo)/Module_*.mk))))
 
 # vim: set noet sw=4 ts=4:
