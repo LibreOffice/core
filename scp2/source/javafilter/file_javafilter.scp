@@ -76,6 +76,6 @@ STD_JAR_FILE( gid_File_Jar_Aportisdoc, aportisdoc )
 STD_JAR_FILE( gid_File_Jar_Pexcel, pexcel )
 STD_JAR_FILE( gid_File_Jar_Pocketword, pocketword )
 STD_JAR_FILE( gid_File_Jar_Xmerge, xmerge )
-UNO_JAR_FILE( gid_File_Jar_Xmergebridge, XMergeBridge )
+STD_JAR_FILE( gid_File_Jar_Xmergebridge, XMergeBridge )
 
 #endif

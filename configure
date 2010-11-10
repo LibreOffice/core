@@ -309,7 +309,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS EGREP AWK SED LOCAL_SOLENV _solenv UPD SOURCEVERSION build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os GNUTAR OSVERSION PTHREAD_CFLAGS PTHREAD_LIBS ENABLE_CRASHDUMP VC_STANDARD ENABLE_WERROR ENABLE_DEBUG PRODUCT PROFULLSWITCH PROEXT ENABLE_SYMBOLS DISABLE_STRIP ENABLE_CUPS ENABLE_FONTCONFIG TARFILE_LOCATION DO_FETCH_TARBALLS WITH_BINFILTER ENABLE_DIRECTX DISABLE_ACTIVEX DISABLE_ATL ENABLE_RPATH WITH_MYSPELL_DICTS SYSTEM_DICTS DICT_SYSTEM_DIR HYPH_SYSTEM_DIR THES_SYSTEM_DIR WITH_MINGWIN SHELLPATH GCC_HOME CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT COMPATH GCCVER HAVE_LD_BSYMBOLIC_FUNCTIONS ENABLE_PCH NO_HIDS GNUMAKE _cc HAVE_LD_HASH_STYLE PERL MSPDB_PATH COMEX USE_MINGW MIDL_PATH CSC_PATH FRAME_HOME CPP CXX CXXFLAGS ac_ct_CXX CXXCPP SIZEOF_LONG WORDS_BIGENDIAN LFS_CFLAGS ENABLE_VBA VBA_EXTENSION PAM NEW_SHADOW_API PAM_LINK CRYPT_LINK GXX_INCLUDE_PATH MINGW_LIB_INCLUDE_PATH MINGW_BACKWARD_INCLUDE_PATH MINGW_CLIB_DIR MINGW_SHARED_GCCLIB MINGW_GCCLIB_EH MINGW_SHARED_GXXLIB MINGW_GCCDLL MINGW_GXXDLL EXCEPTIONS STLPORT4 STLPORT_VER USE_SYSTEM_STL USE_CCACHE CCACHE HAVE_GCC_VISIBILITY_FEATURE ALLOC BUILD_VER_STRING SOLAR_JAVA JAVAINTERPRETER JAVACOMPILER JAVACISGCJ JAVADOC AWTLIB JAVAAOTCOMPILER JAVA_HOME JDK JAVAFLAGS JAVAIFLAGS DMAKE BUILD_DMAKE EPM DPKG PKGMK BUILD_EPM PKGFORMAT RPM GPERF MINGWCXX ac_ct_MINGWCXX MINGWSTRIP ac_ct_MINGWSTRIP BUILD_UNOWINREG SYSTEM_STDLIBS SYSTEM_ZLIB SYSTEM_JPEG SYSTEM_EXPAT PKG_CONFIG LIBWPD_CFLAGS LIBWPD_LIBS SYSTEM_LIBWPD CPPUNIT_CFLAGS CPPUNIT_LIBS SYSTEM_CPPUNIT FREETYPE_CFLAGS FREETYPE_LIBS USE_FT_EMBOLDEN LIBXSLT_CFLAGS LIBXSLT_LIBS XSLTPROC SYSTEM_LIBXSLT LIBXML_CFLAGS LIBXML_LIBS SYSTEM_LIBXML PYTHON PYTHON_VERSION PYTHON_PREFIX PYTHON_EXEC_PREFIX PYTHON_PLATFORM pythondir pkgpythondir pyexecdir pkgpyexecdir BZIP2 SYSTEM_PYTHON PYTHON_CFLAGS PYTHON_LIBS HOME SYSTEM_DB DB_VERSION DB_INCLUDES DB_JAR SYSTEM_LUCENE LUCENE_CORE_JAR LUCENE_ANALYZERS_JAR ENABLE_MYSQLC MYSQLCONFIG SYSTEM_MYSQL MYSQL_INC MYSQL_LIB MYSQL_DEFINES LIBMYSQL_PATH SYSTEM_MYSQL_CPPCONN SYSTEM_HSQLDB HSQLDB_JAR SYSTEM_BSH BSH_JAR SERIALIZER_JAR SYSTEM_SAXON SAXON_JAR CURLCONFIG SYSTEM_CURL CURL_CFLAGS CURL_LIBS SYSTEM_BOOST SYSTEM_VIGRA SYSTEM_ODBC_HEADERS WITH_MOZILLA WITH_LDAP WITH_OPENLDAP MOZ_NSS_CFLAGS MOZ_NSS_LIBS NSS_LIB MOZ_NSPR_CFLAGS MOZ_NSPR_LIBS NSPR_LIB MOZILLAXPCOM_CFLAGS MOZILLAXPCOM_LIBS MOZILLA_VERSION MOZILLA_TOOLKIT MOZGTK2_CFLAGS MOZGTK2_LIBS MOZLIBREQ_CFLAGS MOZLIBREQ_LIBS BUILD_MOZAB ENABLE_NSS_MODULE MOZILLABUILD SYSTEM_MOZILLA MOZ_FLAVOUR MOZ_INC MOZ_LIB MOZ_LIB_XPCOM MOZ_LDAP_CFLAGS SYSTEM_SANE_HEADER SYSTEM_GENBRK SYSTEM_GENCCODE SYSTEM_GENCMN SYSTEM_ICU GRAPHITE_CFLAGS GRAPHITE_LIBS ENABLE_GRAPHITE SYSTEM_GRAPHITE X_CFLAGS X_PRE_LIBS X_LIBS X_EXTRA_LIBS XINC XLIB XAU_LIBS DISABLE_XAW SYSTEM_XRENDER_HEADERS XRENDER_LINK XRANDR_CFLAGS XRANDR_LIBS XRANDR_DLOPEN ENABLE_RANDR DISABLE_NEON NEON_CFLAGS NEON_LIBS SYSTEM_NEON NEON_VERSION OPENSSL_CFLAGS OPENSSL_LIBS SYSTEM_OPENSSL ENABLE_AGG AGG_CFLAGS AGG_LIBS SYSTEM_AGG AGG_VERSION REDLAND_CFLAGS REDLAND_LIBS SYSTEM_REDLAND HUNSPELL_CFLAGS HUNSPELL_LIBS SYSTEM_HUNSPELL SYSTEM_HYPH HYPHEN_LIB SYSTEM_MYTHES SYSTEM_LPSOLVE PSDK_HOME WINDOWS_VISTA_PSDK DIRECTXSDK_HOME DIRECTXSDK_LIB NSIS_PATH BISON FLEX PATCH GNUCP GNUPATCH CYGWIN_PATH ML_EXE ASM_HOME ZIP UNZIP ZIP_HOME ENABLE_GTK ENABLE_KDE ENABLE_KDE4 GCONF_CFLAGS GCONF_LIBS ENABLE_GCONF GNOMEVFS_CFLAGS GNOMEVFS_LIBS ENABLE_GNOMEVFS GTK_CFLAGS GTK_LIBS DBUS_CFLAGS DBUS_LIBS GIO_CFLAGS GIO_LIBS ENABLE_GIO ENABLE_DBUS ENABLE_SYSTRAY_GTK CAIRO_CFLAGS CAIRO_LIBS ENABLE_CAIRO BUILD_PIXMAN SYSTEM_CAIRO ENABLE_OPENGL ENABLE_PRESENTER_EXTRA_UI ENABLE_MINIMIZER ENABLE_PRESENTER_SCREEN POPPLER_CFLAGS POPPLER_LIBS ENABLE_PDFIMPORT SYSTEM_POPPLER ENABLE_MEDIAWIKI SYSTEM_SERVLETAPI SERVLETAPI_JAR ENABLE_REPORTBUILDER SYSTEM_JFREEREPORT SAC_JAR LIBXML_JAR FLUTE_JAR JFREEREPORT_JAR LIBBASE_JAR LIBLAYOUT_JAR LIBLOADER_JAR LIBFORMULA_JAR LIBREPOSITORY_JAR LIBFONTS_JAR LIBSERIALIZER_JAR SYSTEM_APACHE_COMMONS COMMONS_CODEC_JAR COMMONS_LANG_JAR COMMONS_HTTPCLIENT_JAR COMMONS_LOGGING_JAR MOC KDE_CFLAGS KDE_LIBS MOC4 KDE4_CFLAGS KDE4_LIBS ENABLE_LOCKDOWN GOBJECT_CFLAGS GOBJECT_LIBS ENABLE_EVOAB2 ENABLE_KAB WITH_FONTS WITHOUT_PPDS WITHOUT_AFMS SCPDEFS USE_XINERAMA XINERAMA_LINK ANT ANT_HOME ANT_LIB OOO_JUNIT_JAR WITH_LANG WITH_POOR_HELP_LOCALIZATIONS WITH_DICT INTRO_BITMAPS ABOUT_BITMAPS OOO_VENDOR UNIXWRAPPERNAME ENABLE_STATIC_GTK ENABLE_LAYOUT VERBOSE LOCAL_SOLVER BUILD_TYPE LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS EGREP AWK SED LOCAL_SOLENV _solenv UPD SOURCEVERSION build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os GNUTAR OSVERSION PTHREAD_CFLAGS PTHREAD_LIBS ENABLE_CRASHDUMP VC_STANDARD ENABLE_WERROR ENABLE_DEBUG PRODUCT PROFULLSWITCH PROEXT ENABLE_SYMBOLS DISABLE_STRIP ENABLE_CUPS ENABLE_FONTCONFIG TARFILE_LOCATION DO_FETCH_TARBALLS WITH_BINFILTER ENABLE_DIRECTX DISABLE_ACTIVEX DISABLE_ATL ENABLE_RPATH WITH_MYSPELL_DICTS SYSTEM_DICTS DICT_SYSTEM_DIR HYPH_SYSTEM_DIR THES_SYSTEM_DIR WITH_MINGWIN SHELLPATH GCC_HOME CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT COMPATH GCCVER HAVE_LD_BSYMBOLIC_FUNCTIONS ENABLE_PCH GNUMAKE _cc HAVE_LD_HASH_STYLE PERL MSPDB_PATH COMEX USE_MINGW MIDL_PATH CSC_PATH FRAME_HOME CPP CXX CXXFLAGS ac_ct_CXX CXXCPP SIZEOF_LONG WORDS_BIGENDIAN LFS_CFLAGS ENABLE_VBA VBA_EXTENSION PAM NEW_SHADOW_API PAM_LINK CRYPT_LINK GXX_INCLUDE_PATH MINGW_LIB_INCLUDE_PATH MINGW_BACKWARD_INCLUDE_PATH MINGW_CLIB_DIR MINGW_SHARED_GCCLIB MINGW_GCCLIB_EH MINGW_SHARED_GXXLIB MINGW_GCCDLL MINGW_GXXDLL EXCEPTIONS STLPORT4 STLPORT_VER USE_SYSTEM_STL USE_CCACHE CCACHE HAVE_GCC_VISIBILITY_FEATURE ALLOC BUILD_VER_STRING SOLAR_JAVA JAVAINTERPRETER JAVACOMPILER JAVACISGCJ JAVADOC AWTLIB JAVAAOTCOMPILER JAVA_HOME JDK JAVAFLAGS JAVAIFLAGS DMAKE BUILD_DMAKE EPM DPKG PKGMK BUILD_EPM RPM PKGFORMAT GPERF BUILD_STAX MINGWCXX ac_ct_MINGWCXX MINGWSTRIP ac_ct_MINGWSTRIP BUILD_UNOWINREG SYSTEM_STDLIBS SYSTEM_ZLIB SYSTEM_JPEG SYSTEM_EXPAT PKG_CONFIG LIBWPD_CFLAGS LIBWPD_LIBS SYSTEM_LIBWPD CPPUNIT_CFLAGS CPPUNIT_LIBS SYSTEM_CPPUNIT FREETYPE_CFLAGS FREETYPE_LIBS USE_FT_EMBOLDEN LIBXSLT_CFLAGS LIBXSLT_LIBS XSLTPROC SYSTEM_LIBXSLT LIBXML_CFLAGS LIBXML_LIBS SYSTEM_LIBXML PYTHON PYTHON_VERSION PYTHON_PREFIX PYTHON_EXEC_PREFIX PYTHON_PLATFORM pythondir pkgpythondir pyexecdir pkgpyexecdir BZIP2 SYSTEM_PYTHON PYTHON_CFLAGS PYTHON_LIBS HOME SYSTEM_DB DB_VERSION DB_INCLUDES DB_JAR SYSTEM_LUCENE LUCENE_CORE_JAR LUCENE_ANALYZERS_JAR ENABLE_MYSQLC MYSQLCONFIG SYSTEM_MYSQL MYSQL_INC MYSQL_LIB MYSQL_DEFINES LIBMYSQL_PATH SYSTEM_MYSQL_CPPCONN SYSTEM_HSQLDB HSQLDB_JAR SYSTEM_BSH BSH_JAR SERIALIZER_JAR SYSTEM_SAXON SAXON_JAR CURLCONFIG SYSTEM_CURL CURL_CFLAGS CURL_LIBS SYSTEM_MDDS SYSTEM_BOOST SYSTEM_VIGRA SYSTEM_ODBC_HEADERS WITH_MOZILLA WITH_LDAP WITH_OPENLDAP MOZ_NSS_CFLAGS MOZ_NSS_LIBS NSS_LIB MOZ_NSPR_CFLAGS MOZ_NSPR_LIBS NSPR_LIB MOZILLAXPCOM_CFLAGS MOZILLAXPCOM_LIBS MOZILLA_VERSION MOZILLA_TOOLKIT MOZGTK2_CFLAGS MOZGTK2_LIBS MOZLIBREQ_CFLAGS MOZLIBREQ_LIBS BUILD_MOZAB ENABLE_NSS_MODULE MOZILLABUILD SYSTEM_MOZILLA MOZ_FLAVOUR MOZ_INC MOZ_LIB MOZ_LIB_XPCOM MOZ_LDAP_CFLAGS SYSTEM_SANE_HEADER SYSTEM_GENBRK SYSTEM_GENCCODE SYSTEM_GENCMN SYSTEM_ICU GRAPHITE_CFLAGS GRAPHITE_LIBS ENABLE_GRAPHITE SYSTEM_GRAPHITE X_CFLAGS X_PRE_LIBS X_LIBS X_EXTRA_LIBS XINC XLIB XAU_LIBS DISABLE_XAW SYSTEM_XRENDER_HEADERS XRENDER_LINK XRANDR_CFLAGS XRANDR_LIBS XRANDR_DLOPEN ENABLE_RANDR DISABLE_NEON NEON_CFLAGS NEON_LIBS SYSTEM_NEON NEON_VERSION OPENSSL_CFLAGS OPENSSL_LIBS SYSTEM_OPENSSL ENABLE_AGG AGG_CFLAGS AGG_LIBS SYSTEM_AGG AGG_VERSION REDLAND_CFLAGS REDLAND_LIBS SYSTEM_REDLAND HUNSPELL_CFLAGS HUNSPELL_LIBS SYSTEM_HUNSPELL SYSTEM_HYPH HYPHEN_LIB MYTHES_CFLAGS MYTHES_LIBS SYSTEM_MYTHES SYSTEM_LPSOLVE SYSTEM_LIBTEXTCAT SYSTEM_LIBTEXTCAT_DATA HAVE_GETOPT HAVE_READDIR_R SYSTEM_LIBC PSDK_HOME WINDOWS_VISTA_PSDK DIRECTXSDK_HOME DIRECTXSDK_LIB NSIS_PATH BISON FLEX PATCH GNUCP GNUPATCH CYGWIN_PATH ML_EXE ASM_HOME ZIP UNZIP ZIP_HOME ENABLE_GTK ENABLE_KDE ENABLE_KDE4 GCONF_CFLAGS GCONF_LIBS ENABLE_GCONF GNOMEVFS_CFLAGS GNOMEVFS_LIBS ENABLE_GNOMEVFS GTK_CFLAGS GTK_LIBS DBUS_CFLAGS DBUS_LIBS GIO_CFLAGS GIO_LIBS ENABLE_GIO ENABLE_DBUS ENABLE_SYSTRAY_GTK GSTREAMER_CFLAGS GSTREAMER_LIBS ENABLE_GSTREAMER CAIRO_CFLAGS CAIRO_LIBS ENABLE_CAIRO BUILD_PIXMAN SYSTEM_CAIRO ENABLE_OPENGL ENABLE_PRESENTER_EXTRA_UI ENABLE_MINIMIZER ENABLE_PRESENTER_SCREEN POPPLER_CFLAGS POPPLER_LIBS ENABLE_PDFIMPORT SYSTEM_POPPLER ENABLE_MEDIAWIKI SYSTEM_SERVLETAPI SERVLETAPI_JAR ENABLE_REPORTBUILDER SYSTEM_JFREEREPORT SAC_JAR LIBXML_JAR FLUTE_JAR JFREEREPORT_JAR LIBBASE_JAR LIBLAYOUT_JAR LIBLOADER_JAR LIBFORMULA_JAR LIBREPOSITORY_JAR LIBFONTS_JAR LIBSERIALIZER_JAR SYSTEM_APACHE_COMMONS COMMONS_CODEC_JAR COMMONS_LANG_JAR COMMONS_HTTPCLIENT_JAR COMMONS_LOGGING_JAR MOC KDE_CFLAGS KDE_LIBS MOC4 KDE4_CFLAGS KDE4_LIBS ENABLE_LOCKDOWN GOBJECT_CFLAGS GOBJECT_LIBS ENABLE_EVOAB2 ENABLE_KAB WITH_FONTS WITHOUT_PPDS WITHOUT_AFMS SCPDEFS USE_XINERAMA XINERAMA_LINK ANT ANT_HOME ANT_LIB OOO_JUNIT_JAR WITH_LANG WITH_POOR_HELP_LOCALIZATIONS WITH_DICT INTRO_BITMAPS ABOUT_BITMAPS OOO_VENDOR UNIXWRAPPERNAME ENABLE_STATIC_GTK ENABLE_LAYOUT VERBOSE nodep LOCAL_SOLVER BUILD_TYPE LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -874,8 +874,6 @@ Optional Features:
 
   --enable-pch            EXPERIMENTAL: Enables precompiled header support for C++.
 
-  --enable-hids            Enables generation of HelpId lists.
-
   --disable-mozilla       OO.o usually includes a strangely hacked up mozilla
                           binary for your platform, to build without this
                           version, use this option.
@@ -946,6 +944,9 @@ Optional Features:
 
   --disable-gtk           Determines whether to use Gtk+ vclplug on platforms
                           where Gtk+ is available.
+
+  --disable-gstreamer     Determines whether to use the GStreamer media
+                          backend on platforms where GStreamer is available.
 
   --disable-systray       Determines whether to build the systray quickstarter.
 
@@ -1049,6 +1050,8 @@ Optional Features:
 
   --enable-verbose        Increase build verbosity.
   --disable-verbose       Decrease build verbosity.
+
+  --disable-dependency-tracking  Disables generation of dependency information.
 
   --disable-largefile     omit support for large files
 
@@ -1220,6 +1223,8 @@ Optional Packages:
 
   --with-system-boost     Use boost already on system
 
+  --with-system-mdds      Use mdds already on system
+
   --with-system-vigra     Use vigra already on system
 
   --with-system-neon      Use neon already on system
@@ -1233,6 +1238,10 @@ Optional Packages:
   --with-system-altlinuxhyph    Use ALTLinuxhyph already on system
 
   --with-system-lpsolve         Use lpsolve already on system
+
+  --with-system-libtextcat      Use libtextcat already on system
+
+  --with-system-libtextcat-data Use libtextcat data already on system
 
   --with-system-cppunit         Use cppunit already on system
 
@@ -1440,7 +1449,9 @@ Optional Packages:
                           Usage: --with-build-version="Built by Jim"
 
   --with-alloc            Define which allocator to build with
-			                 (choices are oo, system, tcmalloc)
+                          (choices are oo, system, tcmalloc, jemalloc)
+
+                          Note that on FreeBSD/NetBSD system==jemalloc
 
   --with-x                use the X Window System
 
@@ -1970,11 +1981,6 @@ if test "${enable_pch+set}" = set; then
   enableval="$enable_pch"
 
 fi;
-# Check whether --enable-hids or --disable-hids was given.
-if test "${enable_hids+set}" = set; then
-  enableval="$enable_hids"
-
-fi;
 # Check whether --enable-mozilla or --disable-mozilla was given.
 if test "${enable_mozilla+set}" = set; then
   enableval="$enable_mozilla"
@@ -2043,8 +2049,6 @@ fi;
 if test "${with_system_stdlibs+set}" = set; then
   withval="$with_system_stdlibs"
 
-else
-  checkforstdlibproblems=yes
 fi;
 # Check whether --enable-cups or --disable-cups was given.
 if test "${enable_cups+set}" = set; then
@@ -2120,6 +2124,13 @@ if test "${enable_gtk+set}" = set; then
 
 else
   enable_gtk=yes
+fi;
+# Check whether --enable-gstreamer or --disable-gstreamer was given.
+if test "${enable_gstreamer+set}" = set; then
+  enableval="$enable_gstreamer"
+
+else
+  enable_gstreamer=yes
 fi;
 # Check whether --enable-systray or --disable-systray was given.
 if test "${enable_systray+set}" = set; then
@@ -2659,6 +2670,12 @@ if test "${with_system_boost+set}" = set; then
 
 fi;
 
+# Check whether --with-system-mdds or --without-system-mdds was given.
+if test "${with_system_mdds+set}" = set; then
+  withval="$with_system_mdds"
+
+fi;
+
 # Check whether --with-system-vigra or --without-system-vigra was given.
 if test "${with_system_vigra+set}" = set; then
   withval="$with_system_vigra"
@@ -2708,6 +2725,18 @@ fi;
 # Check whether --with-system-lpsolve or --without-system-lpsolve was given.
 if test "${with_system_lpsolve+set}" = set; then
   withval="$with_system_lpsolve"
+
+fi;
+
+# Check whether --with-system-libtextcat or --without-system-libtextcat was given.
+if test "${with_system_libtextcat+set}" = set; then
+  withval="$with_system_libtextcat"
+
+fi;
+
+# Check whether --with-external-libtextcat-data or --without-external-libtextcat-data was given.
+if test "${with_external_libtextcat_data+set}" = set; then
+  withval="$with_external_libtextcat_data"
 
 fi;
 
@@ -2950,6 +2979,11 @@ fi;
 # Check whether --enable-verbose or --disable-verbose was given.
 if test "${enable_verbose+set}" = set; then
   enableval="$enable_verbose"
+
+fi;
+# Check whether --enable-dependency-tracking or --disable-dependency-tracking was given.
+if test "${enable_dependency_tracking+set}" = set; then
+  enableval="$enable_dependency_tracking"
 
 fi;
 
@@ -3297,6 +3331,7 @@ case "$build_os" in
 		test_cups=yes
         test_randr=yes
 		test_freetype=yes
+        test_gstreamer=yes
 		_os=SunOS
 		# Extract the first word of "gtar", so it can be a program name with args.
 set dummy gtar; ac_word=$2
@@ -3376,7 +3411,8 @@ echo "$as_me: error: only sparc and i386 processors are supported" >&2;}
 		test_cups=yes
         test_randr=yes
 		test_freetype=yes
-		_os=Linux
+        test_gstreamer=yes
+        _os=Linux
 		;;
 	gnu)
 		test_cups=no
@@ -3386,6 +3422,7 @@ echo "$as_me: error: only sparc and i386 processors are supported" >&2;}
 		test_cups=no
 		test_cairo=yes
 		test_freetype=no
+        test_gstreamer=no
 		_os=WINNT
 		;;
 	darwin*) # Mac OS X
@@ -3394,6 +3431,7 @@ echo "$as_me: error: only sparc and i386 processors are supported" >&2;}
 		test_cairo=yes
         test_randr=no
 		test_freetype=no
+        test_gstreamer=no
 		_os=Darwin
       if test "$enable_systray" = "yes" && test "$enable_gtk" != "no"; then
          { echo "$as_me:$LINENO: WARNING: Disabling gtk-quickstarter - not supported on Mac. Use --disable-systray" >&5
@@ -3408,6 +3446,7 @@ echo "$as_me: WARNING: Disabling gtk-quickstarter - not supported on Mac. Use --
         test_randr=no
 		test_gtk=no
 		test_freetype=no
+        test_gstreamer=no
 		_os=OS2
 		;;
 	freebsd*)
@@ -3418,6 +3457,7 @@ echo "$as_me: WARNING: Disabling gtk-quickstarter - not supported on Mac. Use --
 		test_cups=yes
         test_randr=yes
 		test_freetype=yes
+        test_gstreamer=yes
 		echo "$as_me:$LINENO: checking the FreeBSD operating system release" >&5
 echo $ECHO_N "checking the FreeBSD operating system release... $ECHO_C" >&6
 		if test -n "$with_os_version"; then
@@ -3456,6 +3496,7 @@ echo "${ECHO_T}$PTHREAD_LIBS" >&6
 		test_cups=no
         test_randr=yes
 		test_freetype=yes
+        test_gstreamer=yes
 		PTHREAD_CFLAGS="-pthread"
 		PTHREAD_LIBS="-pthread -lpthread"
 		_os=NetBSD
@@ -3464,6 +3505,7 @@ echo "${ECHO_T}$PTHREAD_LIBS" >&6
 		test_cups=no
         test_randr=no
 		test_freetype=yes
+        test_gstreamer=yes
 	   PTHREAD_LIBS=-pthread
 		echo "AIX is an alpha port --- Use at own risk" >> warn
 		_os=AIX
@@ -4873,7 +4915,7 @@ done
         COMPATH=`echo $COMPATH | $SED "s@/[^/:]*\\\$@@"`;
 fi
 COMPATH=`echo $COMPATH | $SED "s@/[Bb][Ii][Nn]\\\$@@"`;
-echo $COMPATH
+
 GCCVER=20995
 if test \( "$_os" != "WINNT" -o "$WITH_MINGWIN" = "yes" \) -a "$GCC" = "yes"; then
     echo "$as_me:$LINENO: checking the GNU gcc compiler version" >&5
@@ -4897,8 +4939,8 @@ echo "$as_me: error: version \"$_gcc_version\" gives internal error with small."
    fi
    if test "$_os" = "Darwin" -a "$GCCVER" -ge "040100" ; then
       if test -z "$save_CC" -a -x "$GCC_HOME/bin/gcc-4.0" ; then
-         CC=$GCC_HOME/bin/gcc-4.0
-         GCCVER2=`"$CC" -dumpversion | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
+         export CC=$GCC_HOME/bin/gcc-4.0
+                   GCCVER2=`"$CC" -dumpversion | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
          if test "$GCCVER2" -ge "040000" -a "$GCCVER2" -lt "040100" ; then
             GCCVER=$GCCVER2
          fi
@@ -5014,19 +5056,6 @@ echo "$as_me: WARNING: Precompiled header not yet supported for your platform/co
    fi
 else
    ENABLE_PCH=""
-   echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-fi
-
-
-echo "$as_me:$LINENO: checking whether to enable hid list feature" >&5
-echo $ECHO_N "checking whether to enable hid list feature... $ECHO_C" >&6
-if test -n "$enable_hids" && test "$enable_hids" != "no"; then
-   NO_HIDS=""
-   echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-else
-   NO_HIDS="TRUE"
    echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
 fi
@@ -10490,6 +10519,203 @@ fi
 
     ALLOC="TCMALLOC";
 fi
+if test "$with_alloc" = "jemalloc"; then
+  if test "$_os" != "FreeBSD" -o "$_os" != "NetBSD"; then
+    echo "$as_me:$LINENO: result: jemalloc" >&5
+echo "${ECHO_T}jemalloc" >&6
+    save_CFLAGS=$CFLAGS
+    CFLAGS="$CFLAGS -pthread"
+
+echo "$as_me:$LINENO: checking for malloc in -ljemalloc" >&5
+echo $ECHO_N "checking for malloc in -ljemalloc... $ECHO_C" >&6
+if test "${ac_cv_lib_jemalloc_malloc+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-ljemalloc  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char malloc ();
+int
+main ()
+{
+malloc ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_jemalloc_malloc=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_lib_jemalloc_malloc=no
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_jemalloc_malloc" >&5
+echo "${ECHO_T}$ac_cv_lib_jemalloc_malloc" >&6
+if test $ac_cv_lib_jemalloc_malloc = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBJEMALLOC 1
+_ACEOF
+
+  LIBS="-ljemalloc $LIBS"
+
+else
+  { { echo "$as_me:$LINENO: error: jemalloc not found or functional. Install the jemalloc allocator." >&5
+echo "$as_me: error: jemalloc not found or functional. Install the jemalloc allocator." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+
+    ALLOC="JEMALLOC";
+    CFLAGS=$save_CFLAGS
+  else
+    echo "$as_me:$LINENO: result: system" >&5
+echo "${ECHO_T}system" >&6
+    ALLOC="SYS_ALLOC";
+
+
+
+
+for ac_func in malloc realloc calloc free
+do
+as_ac_var=`echo "ac_cv_func_$ac_func" | $as_tr_sh`
+echo "$as_me:$LINENO: checking for $ac_func" >&5
+echo $ECHO_N "checking for $ac_func... $ECHO_C" >&6
+if eval "test \"\${$as_ac_var+set}\" = set"; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+/* Define $ac_func to an innocuous variant, in case <limits.h> declares $ac_func.
+   For example, HP-UX 11i <limits.h> declares gettimeofday.  */
+#define $ac_func innocuous_$ac_func
+
+/* System header to define __stub macros and hopefully few prototypes,
+    which can conflict with char $ac_func (); below.
+    Prefer <limits.h> to <assert.h> if __STDC__ is defined, since
+    <limits.h> exists even on freestanding compilers.  */
+
+#ifdef __STDC__
+# include <limits.h>
+#else
+# include <assert.h>
+#endif
+
+#undef $ac_func
+
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char $ac_func ();
+/* The GNU C library defines this for functions which it implements
+    to always fail with ENOSYS.  Some functions are actually named
+    something starting with __ and the normal name is an alias.  */
+#if defined (__stub_$ac_func) || defined (__stub___$ac_func)
+choke me
+#else
+char (*f) () = $ac_func;
+#endif
+#ifdef __cplusplus
+}
+#endif
+
+int
+main ()
+{
+return f != $ac_func;
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  eval "$as_ac_var=yes"
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+eval "$as_ac_var=no"
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+fi
+echo "$as_me:$LINENO: result: `eval echo '${'$as_ac_var'}'`" >&5
+echo "${ECHO_T}`eval echo '${'$as_ac_var'}'`" >&6
+if test `eval echo '${'$as_ac_var'}'` = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define `echo "HAVE_$ac_func" | $as_tr_cpp` 1
+_ACEOF
+
+fi
+done
+
+  fi
+fi
 if test "$with_alloc" = "internal" -o -z "$with_alloc"; then
    echo "$as_me:$LINENO: result: internal" >&5
 echo "${ECHO_T}internal" >&6
@@ -10937,7 +11163,7 @@ echo "$as_me: error: $_javadoc_path not found set with_jdk_home" >&2;}
 fi
 
 if test "$SOLAR_JAVA" != ""; then
-        if test "$JDK" == "gcj" -a -z "$JAVA_HOME"; then
+        if test "$JDK" = "gcj" -a -z "$JAVA_HOME"; then
       if test "x$with_jdk_home" = "x" -a "$_gij_longver" -ge "40200"; then
         cat > findhome.java <<_ACEOF
 import java.io.File;
@@ -11038,7 +11264,7 @@ echo "$as_me: WARNING: in case JAVA_HOME is incorrectly set, some projects with 
          echo "JAVA_HOME was not explicitly informed with --with-jdk-home. the configure script" >> warn
          echo "attempted to find JAVA_HOME automatically, but apparently it failed" >> warn
          echo "in case JAVA_HOME is incorrectly set, some projects with not be built correctly" >> warn
-#         if test "$JDK" == "gcj"; then
+#         if test "$JDK" = "gcj"; then
 #             echo "e.g. install java-1.4.2-gcj-compat-devel and use --with-jdk-home=/usr/lib/jvm/java-1.4.2-gcj" >> warn
 #         fi
       fi
@@ -11957,10 +12183,14 @@ echo $ECHO_N "checking for rpm... $ECHO_C" >&6
           { { echo "$as_me:$LINENO: error: not found" >&5
 echo "$as_me: error: not found" >&2;}
    { (exit 1); exit 1; }; }
-       else
-	  RPM_PATH=`which $RPM`
+       elif "$RPM" --usage 2>&1 | $EGREP -- -bb >/dev/null; then
+          RPM_PATH=`which $RPM`
           echo "$as_me:$LINENO: result: $RPM_PATH" >&5
 echo "${ECHO_T}$RPM_PATH" >&6
+       else
+          { { echo "$as_me:$LINENO: error: cannot build packages. Try installing rpmbuild." >&5
+echo "$as_me: error: cannot build packages. Try installing rpmbuild." >&2;}
+   { (exit 1); exit 1; }; }
        fi
    fi
    if echo "$PKGFORMAT" | $EGREP deb 2>&1 >/dev/null; then
@@ -12114,12 +12344,13 @@ echo "$as_me: error: pkgmk needed for Solaris pkg creation. Install it." >&2;}
 
 
 
-
 else
    echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
    EPM=NO
+   PKGFORMAT=native
 fi
+
 
 
 # Extract the first word of "gperf", so it can be a program name with args.
@@ -12176,6 +12407,19 @@ else
 echo "$as_me: error: too old, you need at least 3.0.0" >&2;}
    { (exit 1); exit 1; }; }
 fi
+
+echo "$as_me:$LINENO: checking whether to build the stax" >&5
+echo $ECHO_N "checking whether to build the stax... $ECHO_C" >&6
+if test -f "./stax/download/jsr173_1.0_api.jar"; then
+   BUILD_STAX=NO
+   echo "$as_me:$LINENO: result: no, will use the prebuilt stax/download/jsr173_1.0_api.jar" >&5
+echo "${ECHO_T}no, will use the prebuilt stax/download/jsr173_1.0_api.jar" >&6
+else
+   BUILD_STAX=YES
+   echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+fi
+
 
 echo "$as_me:$LINENO: checking whether to build the ODK" >&5
 echo $ECHO_N "checking whether to build the ODK... $ECHO_C" >&6
@@ -12728,22 +12972,6 @@ fi
 
 
 
-
-if test "$_os" = "Linux" -a -z "$with_system_stdlibs" -a -z "$with_system_libs"; then
-  if test -n "$checkforstdlibproblems"; then
-    if test -f /etc/rpm/macros.prelink; then
-      with_system_stdlibs=yes
-      { echo "$as_me:$LINENO: WARNING: prelinked libgcc_s.so.1, enabling --with-system-stdlibs, use --without-system-stdlibs to override" >&5
-echo "$as_me: WARNING: prelinked libgcc_s.so.1, enabling --with-system-stdlibs, use --without-system-stdlibs to override" >&2;}
-      echo "prelinked libgcc_s.so.1, enabling --with-system-stdlibs, use --without-system-stdlibs to override" >> warn
-    elif test "$GCC" = "yes" -a ! -e `$CC -print-file-name=libgcc_s.so.1`; then
-      with_system_stdlibs=yes
-      { echo "$as_me:$LINENO: WARNING: platform doesn't have a libgcc_s.so.1, enabling --with-system-stdlibs, use --without-system-stdlibs to override" >&5
-echo "$as_me: WARNING: platform doesn't have a libgcc_s.so.1, enabling --with-system-stdlibs, use --without-system-stdlibs to override" >&2;}
-      echo "platform doesn't have a libgcc_s.so.1, enabling --with-system-stdlibs, use --without-system-stdlibs to override" >> warn
-    fi
-  fi
-fi
 
 echo "$as_me:$LINENO: checking whether to provide libstdc++/libgcc_s in the installset" >&5
 echo $ECHO_N "checking whether to provide libstdc++/libgcc_s in the installset... $ECHO_C" >&6
@@ -13688,16 +13916,6 @@ echo "$as_me: error: Library requirements (cppunit >= 1.12.1 ) not met; consider
    { (exit 1); exit 1; }; }
   fi
 
-    echo "$as_me:$LINENO: checking STL compatibility" >&5
-echo $ECHO_N "checking STL compatibility... $ECHO_C" >&6
-    if test "$WITH_STLPORT" != "no"; then
-	{ { echo "$as_me:$LINENO: error: to use system cppunit you need to use --without-stlport" >&5
-echo "$as_me: error: to use system cppunit you need to use --without-stlport" >&2;}
-   { (exit 1); exit 1; }; }
-    else
-	echo "$as_me:$LINENO: result: OK" >&5
-echo "${ECHO_T}OK" >&6
-    fi
 else
     echo "$as_me:$LINENO: result: internal" >&5
 echo "${ECHO_T}internal" >&6
@@ -13898,7 +14116,7 @@ fi
 if test -n "$with_system_libxslt" -o -n "$with_system_libs" && \
    test "$with_system_libxslt" != "no"; then
     if test -z "$with_system_libxml" -a -z "$with_system_libs" || \
-      test "$with_system_libxml" == "no"; then
+      test "$with_system_libxml" = "no"; then
       # somehow AC_MSG_WARN won't work...
        echo "to prevent incompatibilities between internal libxml2 and libxslt, the office will be build with system-libxml"
        echo "to prevent incompatibilities between internal libxml2 and libxslt, the office will be build with system-libxml" >> warn
@@ -13908,7 +14126,7 @@ fi
 if test -n "$with_system_libxml" -o -n "$with_system_libs" && \
    test "$with_system_libxml" != "no"; then
     if test -z "$with_system_libxslt" -a -z "$with_system_libs" || \
-      test "$with_system_libxslt" == "no"; then
+      test "$with_system_libxslt" = "no"; then
       # somehow AC_MSG_WARN won't work...
        echo "to prevent incompatibilities between internal libxslt and libxml2, the office will be build with system-libxslt"
        echo "to prevent incompatibilities between internal libxslt and libxml2, the office will be build with system-libxslt" >> warn
@@ -14932,7 +15150,27 @@ if test $ac_cv_file__usr_share_java_lucene_core_2_3_jar = yes; then
    LUCENE_CORE_JAR=/usr/share/java/lucene-core-2.3.jar
 else
 
-              echo "$as_me:$LINENO: checking for /usr/share/java/lucene.jar" >&5
+              echo "$as_me:$LINENO: checking for /usr/share/java/lucene-core.jar" >&5
+echo $ECHO_N "checking for /usr/share/java/lucene-core.jar... $ECHO_C" >&6
+if test "${ac_cv_file__usr_share_java_lucene_core_jar+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  test "$cross_compiling" = yes &&
+  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
+echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
+   { (exit 1); exit 1; }; }
+if test -r "/usr/share/java/lucene-core.jar"; then
+  ac_cv_file__usr_share_java_lucene_core_jar=yes
+else
+  ac_cv_file__usr_share_java_lucene_core_jar=no
+fi
+fi
+echo "$as_me:$LINENO: result: $ac_cv_file__usr_share_java_lucene_core_jar" >&5
+echo "${ECHO_T}$ac_cv_file__usr_share_java_lucene_core_jar" >&6
+if test $ac_cv_file__usr_share_java_lucene_core_jar = yes; then
+   LUCENE_CORE_JAR=/usr/share/java/lucene-core.jar
+else
+   echo "$as_me:$LINENO: checking for /usr/share/java/lucene.jar" >&5
 echo $ECHO_N "checking for /usr/share/java/lucene.jar... $ECHO_C" >&6
 if test "${ac_cv_file__usr_share_java_lucene_jar+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -14955,6 +15193,10 @@ else
    { { echo "$as_me:$LINENO: error: lucene-core.jar replacement not found" >&5
 echo "$as_me: error: lucene-core.jar replacement not found" >&2;}
    { (exit 1); exit 1; }; }
+
+fi
+
+
 
 fi
 
@@ -15071,6 +15313,26 @@ echo "$as_me: error: lucene-analyzers.jar not found." >&2;}
 fi
 
         fi
+        echo "$as_me:$LINENO: checking whether lucene is version 2.x" >&5
+echo $ECHO_N "checking whether lucene is version 2.x... $ECHO_C" >&6
+        export LUCENE_CORE_JAR
+        if $PERL -e 'use Archive::Zip;
+            my $file = "$ENV{'LUCENE_CORE_JAR'}";
+            my $zip = Archive::Zip->new( $file );
+            my $mf = $zip->contents ( "META-INF/MANIFEST.MF" );
+            if ( $mf =~ m/Specification-Version: 2.*/ ) {
+                exit 0;
+            } else {
+                exit 1;
+            }'; then
+            echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+         else
+            { { echo "$as_me:$LINENO: error: no, you need lucene 2" >&5
+echo "$as_me: error: no, you need lucene 2" >&2;}
+   { (exit 1); exit 1; }; }
+         fi
+
 else
     echo "$as_me:$LINENO: result: internal" >&5
 echo "${ECHO_T}internal" >&6
@@ -15567,35 +15829,35 @@ echo "$as_me: error: hsqldb.jar not found." >&2;}
    { (exit 1); exit 1; }; }
 fi
 
-        echo "$as_me:$LINENO: checking whether hsqldb is >= 1.8.0.9" >&5
-echo $ECHO_N "checking whether hsqldb is >= 1.8.0.9... $ECHO_C" >&6
+        echo "$as_me:$LINENO: checking whether hsqldb is 1.8.0.x" >&5
+echo $ECHO_N "checking whether hsqldb is 1.8.0.x... $ECHO_C" >&6
         export HSQLDB_JAR
         if $PERL -e 'use Archive::Zip;
             my $file = "$ENV{'HSQLDB_JAR'}";
             my $zip = Archive::Zip->new( $file );
             my $mf = $zip->contents ( "META-INF/MANIFEST.MF" );
-	    if ( $mf =~ m/Specification-Version: 1.8.*/ ) {
-	    	push @l, split(/\n/, $mf);
-	    	foreach my $line (@l) {
-		    if ($line =~ m/Specification-Version:/) {
-		        ($t, $version) = split (/:/,$line);
-		        $version =~ s/^\s//;
-		        ($a, $b, $c, $d) = split (/\./,$version);
-		        if (($c == "0" && $d > "8") || $c > 0)  {
-		            exit 0;
-		        } else {
-		            exit 1;
-		        }
-		    }
-		}
-	    } else {
-	        exit 1;
+            if ( $mf =~ m/Specification-Version: 1.8.*/ ) {
+               push @l, split(/\n/, $mf);
+               foreach my $line (@l) {
+                  if ($line =~ m/Specification-Version:/) {
+                      ($t, $version) = split (/:/,$line);
+                      $version =~ s/^\s//;
+                      ($a, $b, $c, $d) = split (/\./,$version);
+                      if ($c == "0" && $d > "8")  {
+                          exit 0;
+                      } else {
+                          exit 1;
+                      }
+                  }
+               }
+            } else {
+                exit 1;
             }'; then
             echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
          else
-            { { echo "$as_me:$LINENO: error: no, hsqldb >= 1.8.0.9 is needed" >&5
-echo "$as_me: error: no, hsqldb >= 1.8.0.9 is needed" >&2;}
+            { { echo "$as_me:$LINENO: error: no, you need hsqldb >= 1.8.0.9 but < 1.8.1" >&5
+echo "$as_me: error: no, you need hsqldb >= 1.8.0.9 but < 1.8.1" >&2;}
    { (exit 1); exit 1; }; }
          fi
 else
@@ -15962,6 +16224,179 @@ fi
 
 
 
+echo "$as_me:$LINENO: checking which mdds to use" >&5
+echo $ECHO_N "checking which mdds to use... $ECHO_C" >&6
+if test -n "$with_system_mdds" -o -n "$with_system_headers" && \
+	test "$with_system_mdds" != "no"; then
+    echo "$as_me:$LINENO: result: external" >&5
+echo "${ECHO_T}external" >&6
+    SYSTEM_MDDS=YES
+    ac_ext=cc
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+    if test "${ac_cv_header_mdds_flat_segment_tree_hpp+set}" = set; then
+  echo "$as_me:$LINENO: checking for mdds/flat_segment_tree.hpp" >&5
+echo $ECHO_N "checking for mdds/flat_segment_tree.hpp... $ECHO_C" >&6
+if test "${ac_cv_header_mdds_flat_segment_tree_hpp+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+fi
+echo "$as_me:$LINENO: result: $ac_cv_header_mdds_flat_segment_tree_hpp" >&5
+echo "${ECHO_T}$ac_cv_header_mdds_flat_segment_tree_hpp" >&6
+else
+  # Is the header compilable?
+echo "$as_me:$LINENO: checking mdds/flat_segment_tree.hpp usability" >&5
+echo $ECHO_N "checking mdds/flat_segment_tree.hpp usability... $ECHO_C" >&6
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+$ac_includes_default
+#include <mdds/flat_segment_tree.hpp>
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_cxx_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_header_compiler=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_header_compiler=no
+fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+echo "$as_me:$LINENO: result: $ac_header_compiler" >&5
+echo "${ECHO_T}$ac_header_compiler" >&6
+
+# Is the header present?
+echo "$as_me:$LINENO: checking mdds/flat_segment_tree.hpp presence" >&5
+echo $ECHO_N "checking mdds/flat_segment_tree.hpp presence... $ECHO_C" >&6
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+#include <mdds/flat_segment_tree.hpp>
+_ACEOF
+if { (eval echo "$as_me:$LINENO: \"$ac_cpp conftest.$ac_ext\"") >&5
+  (eval $ac_cpp conftest.$ac_ext) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } >/dev/null; then
+  if test -s conftest.err; then
+    ac_cpp_err=$ac_cxx_preproc_warn_flag
+    ac_cpp_err=$ac_cpp_err$ac_cxx_werror_flag
+  else
+    ac_cpp_err=
+  fi
+else
+  ac_cpp_err=yes
+fi
+if test -z "$ac_cpp_err"; then
+  ac_header_preproc=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+  ac_header_preproc=no
+fi
+rm -f conftest.err conftest.$ac_ext
+echo "$as_me:$LINENO: result: $ac_header_preproc" >&5
+echo "${ECHO_T}$ac_header_preproc" >&6
+
+# So?  What about this header?
+case $ac_header_compiler:$ac_header_preproc:$ac_cxx_preproc_warn_flag in
+  yes:no: )
+    { echo "$as_me:$LINENO: WARNING: mdds/flat_segment_tree.hpp: accepted by the compiler, rejected by the preprocessor!" >&5
+echo "$as_me: WARNING: mdds/flat_segment_tree.hpp: accepted by the compiler, rejected by the preprocessor!" >&2;}
+    { echo "$as_me:$LINENO: WARNING: mdds/flat_segment_tree.hpp: proceeding with the compiler's result" >&5
+echo "$as_me: WARNING: mdds/flat_segment_tree.hpp: proceeding with the compiler's result" >&2;}
+    ac_header_preproc=yes
+    ;;
+  no:yes:* )
+    { echo "$as_me:$LINENO: WARNING: mdds/flat_segment_tree.hpp: present but cannot be compiled" >&5
+echo "$as_me: WARNING: mdds/flat_segment_tree.hpp: present but cannot be compiled" >&2;}
+    { echo "$as_me:$LINENO: WARNING: mdds/flat_segment_tree.hpp:     check for missing prerequisite headers?" >&5
+echo "$as_me: WARNING: mdds/flat_segment_tree.hpp:     check for missing prerequisite headers?" >&2;}
+    { echo "$as_me:$LINENO: WARNING: mdds/flat_segment_tree.hpp: see the Autoconf documentation" >&5
+echo "$as_me: WARNING: mdds/flat_segment_tree.hpp: see the Autoconf documentation" >&2;}
+    { echo "$as_me:$LINENO: WARNING: mdds/flat_segment_tree.hpp:     section \"Present But Cannot Be Compiled\"" >&5
+echo "$as_me: WARNING: mdds/flat_segment_tree.hpp:     section \"Present But Cannot Be Compiled\"" >&2;}
+    { echo "$as_me:$LINENO: WARNING: mdds/flat_segment_tree.hpp: proceeding with the preprocessor's result" >&5
+echo "$as_me: WARNING: mdds/flat_segment_tree.hpp: proceeding with the preprocessor's result" >&2;}
+    { echo "$as_me:$LINENO: WARNING: mdds/flat_segment_tree.hpp: in the future, the compiler will take precedence" >&5
+echo "$as_me: WARNING: mdds/flat_segment_tree.hpp: in the future, the compiler will take precedence" >&2;}
+    (
+      cat <<\_ASBOX
+## ------------------------------------------ ##
+## Report this to the AC_PACKAGE_NAME lists.  ##
+## ------------------------------------------ ##
+_ASBOX
+    ) |
+      sed "s/^/$as_me: WARNING:     /" >&2
+    ;;
+esac
+echo "$as_me:$LINENO: checking for mdds/flat_segment_tree.hpp" >&5
+echo $ECHO_N "checking for mdds/flat_segment_tree.hpp... $ECHO_C" >&6
+if test "${ac_cv_header_mdds_flat_segment_tree_hpp+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_cv_header_mdds_flat_segment_tree_hpp=$ac_header_preproc
+fi
+echo "$as_me:$LINENO: result: $ac_cv_header_mdds_flat_segment_tree_hpp" >&5
+echo "${ECHO_T}$ac_cv_header_mdds_flat_segment_tree_hpp" >&6
+
+fi
+if test $ac_cv_header_mdds_flat_segment_tree_hpp = yes; then
+  :
+else
+  { { echo "$as_me:$LINENO: error: mdds/flat_segment_tree.hpp not found. install mdds" >&5
+echo "$as_me: error: mdds/flat_segment_tree.hpp not found. install mdds" >&2;}
+   { (exit 1); exit 1; }; }
+fi
+
+
+    ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
+else
+   echo "$as_me:$LINENO: result: internal" >&5
+echo "${ECHO_T}internal" >&6
+   BUILD_TYPE="$BUILD_TYPE MDDS"
+   SYSTEM_MDDS=NO
+fi
+
+
 echo "$as_me:$LINENO: checking which boost to use" >&5
 echo $ECHO_N "checking which boost to use... $ECHO_C" >&6
 if test -n "$with_system_boost" -o -n "$with_system_headers" && \
@@ -16261,8 +16696,8 @@ fi
 if test $ac_cv_header_boost_spirit_include_classic_core_hpp = yes; then
   :
 else
-  { { echo "$as_me:$LINENO: error: boost/spirit/include/classic_core.hpp not found. install boost >= 1.38" >&5
-echo "$as_me: error: boost/spirit/include/classic_core.hpp not found. install boost >= 1.38" >&2;}
+  { { echo "$as_me:$LINENO: error: boost/spirit/include/classic_core.hpp not found. install boost >= 1.36" >&5
+echo "$as_me: error: boost/spirit/include/classic_core.hpp not found. install boost >= 1.36" >&2;}
    { (exit 1); exit 1; }; }
 fi
 
@@ -17959,7 +18394,7 @@ Please recompile $tmp with --enable-ldap or use --with-openldap." >&2;}
 
     #e.g. http://fedoraproject.org/wiki/Releases/FeatureXULRunnerAPIChanges
     #the plugin pkg-config etc. reverts to "mozilla-plugin" with libxul
-    if test "$MOZ_FLAVOUR" == "libxul"; then
+    if test "$MOZ_FLAVOUR" = "libxul"; then
         MOZ_FLAVOUR="mozilla"
     fi
 
@@ -19198,7 +19633,7 @@ fi
 
 echo "$as_me:$LINENO: checking whether to enable graphite support" >&5
 echo $ECHO_N "checking whether to enable graphite support... $ECHO_C" >&6
-if test "$_os" = "WINNT" -o "$_os" = "Linux" && test "z$enable_graphite" == "z" -o "$enable_graphite" != "no" ; then
+if test "$_os" = "WINNT" -o "$_os" = "Linux" && test "z$enable_graphite" = "z" -o "$enable_graphite" != "no" ; then
     echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
     ENABLE_GRAPHITE="TRUE"
@@ -19450,7 +19885,7 @@ ac_x_header_dirs='
 /usr/openwin/share/include'
 
 if test "$ac_x_includes" = no; then
-  # Guess where to find include files, by looking for Xlib.h.
+  # Guess where to find include files, by looking for Intrinsic.h.
   # First, try using that file with no special directory specified.
   cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
@@ -19458,7 +19893,7 @@ _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-#include <X11/Xlib.h>
+#include <X11/Intrinsic.h>
 _ACEOF
 if { (eval echo "$as_me:$LINENO: \"$ac_cpp conftest.$ac_ext\"") >&5
   (eval $ac_cpp conftest.$ac_ext) 2>conftest.er1
@@ -19485,7 +19920,7 @@ else
 sed 's/^/| /' conftest.$ac_ext >&5
 
   for ac_dir in $ac_x_header_dirs; do
-  if test -r "$ac_dir/X11/Xlib.h"; then
+  if test -r "$ac_dir/X11/Intrinsic.h"; then
     ac_x_includes=$ac_dir
     break
   fi
@@ -19499,18 +19934,18 @@ if test "$ac_x_libraries" = no; then
   # See if we find them without any special options.
   # Don't add to $LIBS permanently.
   ac_save_LIBS=$LIBS
-  LIBS="-lX11 $LIBS"
+  LIBS="-lXt $LIBS"
   cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-#include <X11/Xlib.h>
+#include <X11/Intrinsic.h>
 int
 main ()
 {
-XrmInitialize ()
+XtMalloc (0)
   ;
   return 0;
 }
@@ -22470,6 +22905,7 @@ fi
 
 
 
+
 echo "$as_me:$LINENO: checking which libhunspell to use" >&5
 echo $ECHO_N "checking which libhunspell to use... $ECHO_C" >&6
 if test -n "$with_system_hunspell" -o -n "$with_system_libs" && \
@@ -23460,7 +23896,110 @@ if test -n "$with_system_mythes" && test "$with_system_mythes" != "no"; then
     echo "$as_me:$LINENO: result: external" >&5
 echo "${ECHO_T}external" >&6
     SYSTEM_MYTHES=YES
-    if test "${ac_cv_header_mythes_hxx+set}" = set; then
+    ac_ext=cc
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+
+  succeeded=no
+
+  if test -z "$PKG_CONFIG"; then
+    # Extract the first word of "pkg-config", so it can be a program name with args.
+set dummy pkg-config; ac_word=$2
+echo "$as_me:$LINENO: checking for $ac_word" >&5
+echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
+if test "${ac_cv_path_PKG_CONFIG+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  case $PKG_CONFIG in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_PKG_CONFIG="$PKG_CONFIG" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_exec_ext in '' $ac_executable_extensions; do
+  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_path_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
+    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+done
+
+  test -z "$ac_cv_path_PKG_CONFIG" && ac_cv_path_PKG_CONFIG="no"
+  ;;
+esac
+fi
+PKG_CONFIG=$ac_cv_path_PKG_CONFIG
+
+if test -n "$PKG_CONFIG"; then
+  echo "$as_me:$LINENO: result: $PKG_CONFIG" >&5
+echo "${ECHO_T}$PKG_CONFIG" >&6
+else
+  echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+fi
+
+  fi
+
+  if test "$PKG_CONFIG" = "no" ; then
+     echo "*** The pkg-config script could not be found. Make sure it is"
+     echo "*** in your path, or set the PKG_CONFIG environment variable"
+     echo "*** to the full path to pkg-config."
+     echo "*** Or see http://www.freedesktop.org/software/pkgconfig to get pkg-config."
+  else
+     PKG_CONFIG_MIN_VERSION=0.9.0
+     if $PKG_CONFIG --atleast-pkgconfig-version $PKG_CONFIG_MIN_VERSION; then
+        echo "$as_me:$LINENO: checking for mythes" >&5
+echo $ECHO_N "checking for mythes... $ECHO_C" >&6
+
+        if $PKG_CONFIG --exists "mythes" ; then
+            echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+            succeeded=yes
+
+            echo "$as_me:$LINENO: checking MYTHES_CFLAGS" >&5
+echo $ECHO_N "checking MYTHES_CFLAGS... $ECHO_C" >&6
+            MYTHES_CFLAGS=`$PKG_CONFIG --cflags "mythes"`
+            echo "$as_me:$LINENO: result: $MYTHES_CFLAGS" >&5
+echo "${ECHO_T}$MYTHES_CFLAGS" >&6
+
+            echo "$as_me:$LINENO: checking MYTHES_LIBS" >&5
+echo $ECHO_N "checking MYTHES_LIBS... $ECHO_C" >&6
+            MYTHES_LIBS=`$PKG_CONFIG --libs "mythes"`
+            echo "$as_me:$LINENO: result: $MYTHES_LIBS" >&5
+echo "${ECHO_T}$MYTHES_LIBS" >&6
+        else
+            MYTHES_CFLAGS=""
+            MYTHES_LIBS=""
+            ## If we have a custom action on failure, don't print errors, but
+            ## do set a variable so people can do so.
+            MYTHES_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "mythes"`
+
+        fi
+
+
+
+     else
+        echo "*** Your version of pkg-config is too old. You need version $PKG_CONFIG_MIN_VERSION or newer."
+        echo "*** See http://www.freedesktop.org/software/pkgconfig"
+     fi
+  fi
+
+  if test $succeeded = yes; then
+     MYTHES_PKGCONFIG=yes
+  else
+     MYTHES_PKGCONFIG=no
+  fi
+
+    if test "$MYTHES_PKGCONFIG" = "no"; then
+        if test "${ac_cv_header_mythes_hxx+set}" = set; then
   echo "$as_me:$LINENO: checking for mythes.hxx" >&5
 echo $ECHO_N "checking for mythes.hxx... $ECHO_C" >&6
 if test "${ac_cv_header_mythes_hxx+set}" = set; then
@@ -23490,7 +24029,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   cat conftest.err >&5
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
+	 { ac_try='test -z "$ac_cxx_werror_flag"
 			 || test ! -s conftest.err'
   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
   (eval $ac_try) 2>&5
@@ -23534,8 +24073,8 @@ if { (eval echo "$as_me:$LINENO: \"$ac_cpp conftest.$ac_ext\"") >&5
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); } >/dev/null; then
   if test -s conftest.err; then
-    ac_cpp_err=$ac_c_preproc_warn_flag
-    ac_cpp_err=$ac_cpp_err$ac_c_werror_flag
+    ac_cpp_err=$ac_cxx_preproc_warn_flag
+    ac_cpp_err=$ac_cpp_err$ac_cxx_werror_flag
   else
     ac_cpp_err=
   fi
@@ -23555,7 +24094,7 @@ echo "$as_me:$LINENO: result: $ac_header_preproc" >&5
 echo "${ECHO_T}$ac_header_preproc" >&6
 
 # So?  What about this header?
-case $ac_header_compiler:$ac_header_preproc:$ac_c_preproc_warn_flag in
+case $ac_header_compiler:$ac_header_preproc:$ac_cxx_preproc_warn_flag in
   yes:no: )
     { echo "$as_me:$LINENO: WARNING: mythes.hxx: accepted by the compiler, rejected by the preprocessor!" >&5
 echo "$as_me: WARNING: mythes.hxx: accepted by the compiler, rejected by the preprocessor!" >&2;}
@@ -23607,7 +24146,77 @@ fi
 
 
 
-echo "$as_me:$LINENO: checking for main in -lmythes" >&5
+echo "$as_me:$LINENO: checking for main in -lmythes-1.2" >&5
+echo $ECHO_N "checking for main in -lmythes-1.2... $ECHO_C" >&6
+if test "${ac_cv_lib_mythes_1_2_main+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lmythes-1.2  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+main ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_cxx_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_mythes_1_2_main=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_lib_mythes_1_2_main=no
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_mythes_1_2_main" >&5
+echo "${ECHO_T}$ac_cv_lib_mythes_1_2_main" >&6
+if test $ac_cv_lib_mythes_1_2_main = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBMYTHES_1_2 1
+_ACEOF
+
+  LIBS="-lmythes-1.2 $LIBS"
+
+else
+   MYTHES_FOUND=no
+fi
+
+ 	if test "$MYTHES_FOUND" = "no"; then
+            echo "$as_me:$LINENO: checking for main in -lmythes" >&5
 echo $ECHO_N "checking for main in -lmythes... $ECHO_C" >&6
 if test "${ac_cv_lib_mythes_main+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -23639,7 +24248,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
   cat conftest.err >&5
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
+	 { ac_try='test -z "$ac_cxx_werror_flag"
 			 || test ! -s conftest.err'
   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
   (eval $ac_try) 2>&5
@@ -23666,23 +24275,32 @@ fi
 echo "$as_me:$LINENO: result: $ac_cv_lib_mythes_main" >&5
 echo "${ECHO_T}$ac_cv_lib_mythes_main" >&6
 if test $ac_cv_lib_mythes_main = yes; then
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBMYTHES 1
-_ACEOF
-
-  LIBS="-lmythes $LIBS"
-
+  MYTHES_FOUND=yes
 else
-   { { echo "$as_me:$LINENO: error: mythes library not found." >&5
-echo "$as_me: error: mythes library not found." >&2;}
-   { (exit 1); exit 1; }; }
+   MYTHES_FOUND=no
 fi
+
+	fi
+	if test "$MYTHES_FOUND" = "no"; then
+		{ { echo "$as_me:$LINENO: error: mythes library not found!." >&5
+echo "$as_me: error: mythes library not found!." >&2;}
+   { (exit 1); exit 1; }; }
+	fi
+    fi
+    ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 else
     echo "$as_me:$LINENO: result: internal" >&5
 echo "${ECHO_T}internal" >&6
     SYSTEM_MYTHES=NO
+    BUILD_TYPE="$BUILD_TYPE MYTHES"
 fi
+
+
 
 
 echo "$as_me:$LINENO: checking which lpsolve to use" >&5
@@ -23838,6 +24456,155 @@ echo "$as_me: error: lpsolve headers not found." >&2;}
 fi
 
 
+    # some systems need this. Like Ubuntu....
+
+echo "$as_me:$LINENO: checking for floor in -lm" >&5
+echo $ECHO_N "checking for floor in -lm... $ECHO_C" >&6
+if test "${ac_cv_lib_m_floor+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lm  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char floor ();
+int
+main ()
+{
+floor ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_m_floor=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_lib_m_floor=no
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_m_floor" >&5
+echo "${ECHO_T}$ac_cv_lib_m_floor" >&6
+if test $ac_cv_lib_m_floor = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBM 1
+_ACEOF
+
+  LIBS="-lm $LIBS"
+
+fi
+
+
+echo "$as_me:$LINENO: checking for dlopen in -ldl" >&5
+echo $ECHO_N "checking for dlopen in -ldl... $ECHO_C" >&6
+if test "${ac_cv_lib_dl_dlopen+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-ldl  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char dlopen ();
+int
+main ()
+{
+dlopen ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_dl_dlopen=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_lib_dl_dlopen=no
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_dl_dlopen" >&5
+echo "${ECHO_T}$ac_cv_lib_dl_dlopen" >&6
+if test $ac_cv_lib_dl_dlopen = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBDL 1
+_ACEOF
+
+  LIBS="-ldl $LIBS"
+
+fi
+
 
 echo "$as_me:$LINENO: checking for make_lp in -llpsolve55" >&5
 echo $ECHO_N "checking for make_lp in -llpsolve55... $ECHO_C" >&6
@@ -23924,6 +24691,261 @@ echo "${ECHO_T}internal" >&6
 fi
 
 
+echo "$as_me:$LINENO: checking which libtextcat to use" >&5
+echo $ECHO_N "checking which libtextcat to use... $ECHO_C" >&6
+if test -n "$with_system_libtextcat" && test "$with_system_libtextcat" != "no"; then
+    echo "$as_me:$LINENO: result: external" >&5
+echo "${ECHO_T}external" >&6
+    SYSTEM_LIBTEXTCAT=YES
+    if test "${ac_cv_header_libtextcat_textcat_h+set}" = set; then
+  echo "$as_me:$LINENO: checking for libtextcat/textcat.h" >&5
+echo $ECHO_N "checking for libtextcat/textcat.h... $ECHO_C" >&6
+if test "${ac_cv_header_libtextcat_textcat_h+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+fi
+echo "$as_me:$LINENO: result: $ac_cv_header_libtextcat_textcat_h" >&5
+echo "${ECHO_T}$ac_cv_header_libtextcat_textcat_h" >&6
+else
+  # Is the header compilable?
+echo "$as_me:$LINENO: checking libtextcat/textcat.h usability" >&5
+echo $ECHO_N "checking libtextcat/textcat.h usability... $ECHO_C" >&6
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+$ac_includes_default
+#include <libtextcat/textcat.h>
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_header_compiler=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_header_compiler=no
+fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+echo "$as_me:$LINENO: result: $ac_header_compiler" >&5
+echo "${ECHO_T}$ac_header_compiler" >&6
+
+# Is the header present?
+echo "$as_me:$LINENO: checking libtextcat/textcat.h presence" >&5
+echo $ECHO_N "checking libtextcat/textcat.h presence... $ECHO_C" >&6
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+#include <libtextcat/textcat.h>
+_ACEOF
+if { (eval echo "$as_me:$LINENO: \"$ac_cpp conftest.$ac_ext\"") >&5
+  (eval $ac_cpp conftest.$ac_ext) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } >/dev/null; then
+  if test -s conftest.err; then
+    ac_cpp_err=$ac_c_preproc_warn_flag
+    ac_cpp_err=$ac_cpp_err$ac_c_werror_flag
+  else
+    ac_cpp_err=
+  fi
+else
+  ac_cpp_err=yes
+fi
+if test -z "$ac_cpp_err"; then
+  ac_header_preproc=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+  ac_header_preproc=no
+fi
+rm -f conftest.err conftest.$ac_ext
+echo "$as_me:$LINENO: result: $ac_header_preproc" >&5
+echo "${ECHO_T}$ac_header_preproc" >&6
+
+# So?  What about this header?
+case $ac_header_compiler:$ac_header_preproc:$ac_c_preproc_warn_flag in
+  yes:no: )
+    { echo "$as_me:$LINENO: WARNING: libtextcat/textcat.h: accepted by the compiler, rejected by the preprocessor!" >&5
+echo "$as_me: WARNING: libtextcat/textcat.h: accepted by the compiler, rejected by the preprocessor!" >&2;}
+    { echo "$as_me:$LINENO: WARNING: libtextcat/textcat.h: proceeding with the compiler's result" >&5
+echo "$as_me: WARNING: libtextcat/textcat.h: proceeding with the compiler's result" >&2;}
+    ac_header_preproc=yes
+    ;;
+  no:yes:* )
+    { echo "$as_me:$LINENO: WARNING: libtextcat/textcat.h: present but cannot be compiled" >&5
+echo "$as_me: WARNING: libtextcat/textcat.h: present but cannot be compiled" >&2;}
+    { echo "$as_me:$LINENO: WARNING: libtextcat/textcat.h:     check for missing prerequisite headers?" >&5
+echo "$as_me: WARNING: libtextcat/textcat.h:     check for missing prerequisite headers?" >&2;}
+    { echo "$as_me:$LINENO: WARNING: libtextcat/textcat.h: see the Autoconf documentation" >&5
+echo "$as_me: WARNING: libtextcat/textcat.h: see the Autoconf documentation" >&2;}
+    { echo "$as_me:$LINENO: WARNING: libtextcat/textcat.h:     section \"Present But Cannot Be Compiled\"" >&5
+echo "$as_me: WARNING: libtextcat/textcat.h:     section \"Present But Cannot Be Compiled\"" >&2;}
+    { echo "$as_me:$LINENO: WARNING: libtextcat/textcat.h: proceeding with the preprocessor's result" >&5
+echo "$as_me: WARNING: libtextcat/textcat.h: proceeding with the preprocessor's result" >&2;}
+    { echo "$as_me:$LINENO: WARNING: libtextcat/textcat.h: in the future, the compiler will take precedence" >&5
+echo "$as_me: WARNING: libtextcat/textcat.h: in the future, the compiler will take precedence" >&2;}
+    (
+      cat <<\_ASBOX
+## ------------------------------------------ ##
+## Report this to the AC_PACKAGE_NAME lists.  ##
+## ------------------------------------------ ##
+_ASBOX
+    ) |
+      sed "s/^/$as_me: WARNING:     /" >&2
+    ;;
+esac
+echo "$as_me:$LINENO: checking for libtextcat/textcat.h" >&5
+echo $ECHO_N "checking for libtextcat/textcat.h... $ECHO_C" >&6
+if test "${ac_cv_header_libtextcat_textcat_h+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_cv_header_libtextcat_textcat_h=$ac_header_preproc
+fi
+echo "$as_me:$LINENO: result: $ac_cv_header_libtextcat_textcat_h" >&5
+echo "${ECHO_T}$ac_cv_header_libtextcat_textcat_h" >&6
+
+fi
+if test $ac_cv_header_libtextcat_textcat_h = yes; then
+  :
+else
+   { { echo "$as_me:$LINENO: error: libtextcat headers not found." >&5
+echo "$as_me: error: libtextcat headers not found." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+
+
+
+echo "$as_me:$LINENO: checking for special_textcat_Init in -ltextcat" >&5
+echo $ECHO_N "checking for special_textcat_Init in -ltextcat... $ECHO_C" >&6
+if test "${ac_cv_lib_textcat_special_textcat_Init+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-ltextcat  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char special_textcat_Init ();
+int
+main ()
+{
+special_textcat_Init ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_textcat_special_textcat_Init=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_lib_textcat_special_textcat_Init=no
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_textcat_special_textcat_Init" >&5
+echo "${ECHO_T}$ac_cv_lib_textcat_special_textcat_Init" >&6
+if test $ac_cv_lib_textcat_special_textcat_Init = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBTEXTCAT 1
+_ACEOF
+
+  LIBS="-ltextcat $LIBS"
+
+else
+   { { echo "$as_me:$LINENO: error: libtextcat library not found or not suitable. libtextcat typically needs to be patched" >&5
+echo "$as_me: error: libtextcat library not found or not suitable. libtextcat typically needs to be patched" >&2;}
+   { (exit 1); exit 1; }; }
+fi
+
+else
+    echo "$as_me:$LINENO: result: internal" >&5
+echo "${ECHO_T}internal" >&6
+    SYSTEM_LIBTEXTCAT=NO
+    BUILD_TYPE="$BUILD_TYPE LIBTEXTCAT"
+fi
+
+
+echo "$as_me:$LINENO: checking which libtextcat data directory to use" >&5
+echo $ECHO_N "checking which libtextcat data directory to use... $ECHO_C" >&6
+if test -n "$with_system_libtextcat_data" && test "$with_system_libtextcat_data" != "no"; then
+    if test "$with_system_libtextcat_data" = "yes"; then
+        SYSTEM_LIBTEXTCAT_DATA=file:///usr/share/libtextcat
+    else
+        SYSTEM_LIBTEXTCAT_DATA=file://$with_system_libtextcat_data
+    fi
+    echo "$as_me:$LINENO: result: $SYSTEM_LIBTEXTCAT_DATA" >&5
+echo "${ECHO_T}$SYSTEM_LIBTEXTCAT_DATA" >&6
+else
+    echo "$as_me:$LINENO: result: internal" >&5
+echo "${ECHO_T}internal" >&6
+    BUILD_TYPE="$BUILD_TYPE LIBTEXTCATDATA"
+fi
+
+
 if test "$_os" = "Linux"; then
    echo "$as_me:$LINENO: checking whether libc is >= 2.1.1" >&5
 echo $ECHO_N "checking whether libc is >= 2.1.1... $ECHO_C" >&6
@@ -24006,6 +25028,227 @@ echo "$as_me: error: no, upgrade libc" >&2;}
    { (exit 1); exit 1; }; }
    fi
 fi
+
+if test "$_os" != "WNT"; then
+
+for ac_func in getopt
+do
+as_ac_var=`echo "ac_cv_func_$ac_func" | $as_tr_sh`
+echo "$as_me:$LINENO: checking for $ac_func" >&5
+echo $ECHO_N "checking for $ac_func... $ECHO_C" >&6
+if eval "test \"\${$as_ac_var+set}\" = set"; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+/* Define $ac_func to an innocuous variant, in case <limits.h> declares $ac_func.
+   For example, HP-UX 11i <limits.h> declares gettimeofday.  */
+#define $ac_func innocuous_$ac_func
+
+/* System header to define __stub macros and hopefully few prototypes,
+    which can conflict with char $ac_func (); below.
+    Prefer <limits.h> to <assert.h> if __STDC__ is defined, since
+    <limits.h> exists even on freestanding compilers.  */
+
+#ifdef __STDC__
+# include <limits.h>
+#else
+# include <assert.h>
+#endif
+
+#undef $ac_func
+
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char $ac_func ();
+/* The GNU C library defines this for functions which it implements
+    to always fail with ENOSYS.  Some functions are actually named
+    something starting with __ and the normal name is an alias.  */
+#if defined (__stub_$ac_func) || defined (__stub___$ac_func)
+choke me
+#else
+char (*f) () = $ac_func;
+#endif
+#ifdef __cplusplus
+}
+#endif
+
+int
+main ()
+{
+return f != $ac_func;
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  eval "$as_ac_var=yes"
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+eval "$as_ac_var=no"
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+fi
+echo "$as_me:$LINENO: result: `eval echo '${'$as_ac_var'}'`" >&5
+echo "${ECHO_T}`eval echo '${'$as_ac_var'}'`" >&6
+if test `eval echo '${'$as_ac_var'}'` = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define `echo "HAVE_$ac_func" | $as_tr_cpp` 1
+_ACEOF
+ HAVE_GETOPT=YES
+else
+  HAVE_GETOPT=NO
+fi
+done
+
+
+for ac_func in readdir_r
+do
+as_ac_var=`echo "ac_cv_func_$ac_func" | $as_tr_sh`
+echo "$as_me:$LINENO: checking for $ac_func" >&5
+echo $ECHO_N "checking for $ac_func... $ECHO_C" >&6
+if eval "test \"\${$as_ac_var+set}\" = set"; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+/* Define $ac_func to an innocuous variant, in case <limits.h> declares $ac_func.
+   For example, HP-UX 11i <limits.h> declares gettimeofday.  */
+#define $ac_func innocuous_$ac_func
+
+/* System header to define __stub macros and hopefully few prototypes,
+    which can conflict with char $ac_func (); below.
+    Prefer <limits.h> to <assert.h> if __STDC__ is defined, since
+    <limits.h> exists even on freestanding compilers.  */
+
+#ifdef __STDC__
+# include <limits.h>
+#else
+# include <assert.h>
+#endif
+
+#undef $ac_func
+
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char $ac_func ();
+/* The GNU C library defines this for functions which it implements
+    to always fail with ENOSYS.  Some functions are actually named
+    something starting with __ and the normal name is an alias.  */
+#if defined (__stub_$ac_func) || defined (__stub___$ac_func)
+choke me
+#else
+char (*f) () = $ac_func;
+#endif
+#ifdef __cplusplus
+}
+#endif
+
+int
+main ()
+{
+return f != $ac_func;
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  eval "$as_ac_var=yes"
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+eval "$as_ac_var=no"
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+fi
+echo "$as_me:$LINENO: result: `eval echo '${'$as_ac_var'}'`" >&5
+echo "${ECHO_T}`eval echo '${'$as_ac_var'}'`" >&6
+if test `eval echo '${'$as_ac_var'}'` = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define `echo "HAVE_$ac_func" | $as_tr_cpp` 1
+_ACEOF
+ HAVE_READDIR_R=YES
+else
+  HAVE_READDIR_R=NO
+fi
+done
+
+  if test "$HAVE_GETOPT" = "YES" -a "$HAVE_READDIR_R" = "YES"; then
+	SYSTEM_LIBC=YES
+  fi
+else
+  HAVE_GETOPT=NO
+  HAVE_READDIR_R=NO
+  SYSTEM_LIBC=YES
+fi
+
+
+
 
 if test \( "$_os" = "WINNT" \) ; then
 	echo "$as_me:$LINENO: checking for PSDK files" >&5
@@ -24581,14 +25824,12 @@ echo "$as_me: error: Configure did not find ml.exe assembler." >&2;}
        with_asm_home="ASM_IN_PATH"
     fi
   fi
-else
-	with_asm_home="NO_ASM_HOME"
-fi
-ASM_HOME="$with_asm_home"
-if test -n "$ASM_HOME"; then
   echo "$as_me:$LINENO: result: $ASM_HOME" >&5
 echo "${ECHO_T}$ASM_HOME" >&6
+else
+  with_asm_home="NO_ASM_HOME"
 fi
+ASM_HOME="$with_asm_home"
 
 
 if test -z "$with_zip_home"; then
@@ -25507,6 +26748,126 @@ fi
 
 
 
+GSTREAMER_CFLAGS=""
+GSTREAMER_LIBS=""
+ENABLE_GSTREAMER=""
+
+if test "$test_gstreamer" = "yes"; then
+    echo "$as_me:$LINENO: checking whether to build the GStreamer media backend" >&5
+echo $ECHO_N "checking whether to build the GStreamer media backend... $ECHO_C" >&6
+    if test "x$enable_gstreamer" != "xno" ; then
+
+  succeeded=no
+
+  if test -z "$PKG_CONFIG"; then
+    # Extract the first word of "pkg-config", so it can be a program name with args.
+set dummy pkg-config; ac_word=$2
+echo "$as_me:$LINENO: checking for $ac_word" >&5
+echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
+if test "${ac_cv_path_PKG_CONFIG+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  case $PKG_CONFIG in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_PKG_CONFIG="$PKG_CONFIG" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_exec_ext in '' $ac_executable_extensions; do
+  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_path_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
+    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+done
+
+  test -z "$ac_cv_path_PKG_CONFIG" && ac_cv_path_PKG_CONFIG="no"
+  ;;
+esac
+fi
+PKG_CONFIG=$ac_cv_path_PKG_CONFIG
+
+if test -n "$PKG_CONFIG"; then
+  echo "$as_me:$LINENO: result: $PKG_CONFIG" >&5
+echo "${ECHO_T}$PKG_CONFIG" >&6
+else
+  echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+fi
+
+  fi
+
+  if test "$PKG_CONFIG" = "no" ; then
+     echo "*** The pkg-config script could not be found. Make sure it is"
+     echo "*** in your path, or set the PKG_CONFIG environment variable"
+     echo "*** to the full path to pkg-config."
+     echo "*** Or see http://www.freedesktop.org/software/pkgconfig to get pkg-config."
+  else
+     PKG_CONFIG_MIN_VERSION=0.9.0
+     if $PKG_CONFIG --atleast-pkgconfig-version $PKG_CONFIG_MIN_VERSION; then
+        echo "$as_me:$LINENO: checking for gtk+-2.0 >= 2.4 gthread-2.0 gstreamer-0.10 gstreamer-interfaces-0.10 " >&5
+echo $ECHO_N "checking for gtk+-2.0 >= 2.4 gthread-2.0 gstreamer-0.10 gstreamer-interfaces-0.10 ... $ECHO_C" >&6
+
+        if $PKG_CONFIG --exists "gtk+-2.0 >= 2.4 gthread-2.0 gstreamer-0.10 gstreamer-interfaces-0.10 " ; then
+            echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+            succeeded=yes
+
+            echo "$as_me:$LINENO: checking GSTREAMER_CFLAGS" >&5
+echo $ECHO_N "checking GSTREAMER_CFLAGS... $ECHO_C" >&6
+            GSTREAMER_CFLAGS=`$PKG_CONFIG --cflags "gtk+-2.0 >= 2.4 gthread-2.0 gstreamer-0.10 gstreamer-interfaces-0.10 "`
+            echo "$as_me:$LINENO: result: $GSTREAMER_CFLAGS" >&5
+echo "${ECHO_T}$GSTREAMER_CFLAGS" >&6
+
+            echo "$as_me:$LINENO: checking GSTREAMER_LIBS" >&5
+echo $ECHO_N "checking GSTREAMER_LIBS... $ECHO_C" >&6
+            GSTREAMER_LIBS=`$PKG_CONFIG --libs "gtk+-2.0 >= 2.4 gthread-2.0 gstreamer-0.10 gstreamer-interfaces-0.10 "`
+            echo "$as_me:$LINENO: result: $GSTREAMER_LIBS" >&5
+echo "${ECHO_T}$GSTREAMER_LIBS" >&6
+        else
+            GSTREAMER_CFLAGS=""
+            GSTREAMER_LIBS=""
+            ## If we have a custom action on failure, don't print errors, but
+            ## do set a variable so people can do so.
+            GSTREAMER_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "gtk+-2.0 >= 2.4 gthread-2.0 gstreamer-0.10 gstreamer-interfaces-0.10 "`
+
+        fi
+
+
+
+     else
+        echo "*** Your version of pkg-config is too old. You need version $PKG_CONFIG_MIN_VERSION or newer."
+        echo "*** See http://www.freedesktop.org/software/pkgconfig"
+     fi
+  fi
+
+  if test $succeeded = yes; then
+     :
+  else
+     { { echo "$as_me:$LINENO: error: requirements to build the GStreamer media backend not met. Use --disable-gstreamer or install the missing packages" >&5
+echo "$as_me: error: requirements to build the GStreamer media backend not met. Use --disable-gstreamer or install the missing packages" >&2;}
+   { (exit 1); exit 1; }; }
+  fi
+
+        ENABLE_GSTREAMER="TRUE"
+        echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+    else
+        echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+    fi
+fi
+
+
+
+
+
+
 ENABLE_CAIRO=""
 BUILD_PIXMAN=""
 SYSTEM_CAIRO=""
@@ -26225,7 +27586,7 @@ echo "${ECHO_T}no" >&6
 fi
 
 
-if test "$ENABLE_MEDIAWIKI" == "YES"; then
+if test "$ENABLE_MEDIAWIKI" = "YES"; then
   echo "$as_me:$LINENO: checking which Servlet API Jar to use" >&5
 echo $ECHO_N "checking which Servlet API Jar to use... $ECHO_C" >&6
   if test -n "$with_system_servlet_api"; then
@@ -26289,9 +27650,9 @@ echo "$as_me: error: not existing. get it (did you get the -extensions tarball?)
   fi
   echo "$as_me:$LINENO: checking which jfreereport libs to use" >&5
 echo $ECHO_N "checking which jfreereport libs to use... $ECHO_C" >&6
-  if test "$with_system_jfreereport" == "yes"; then
-   	SYSTEM_JFREEREPORT=YES
-  	   echo "$as_me:$LINENO: result: external" >&5
+  if test "$with_system_jfreereport" = "yes"; then
+      SYSTEM_JFREEREPORT=YES
+      echo "$as_me:$LINENO: result: external" >&5
 echo "${ECHO_T}external" >&6
       if test -z $SAC_JAR; then
              SAC_JAR=/usr/share/java/sac.jar
@@ -27703,7 +29064,7 @@ if test "$test_kde4" = "yes" -a "$ENABLE_KDE4" = "TRUE" ; then
    kde_incdirs="/usr/include $x_includes"
    kde_libdirs="/usr/lib $x_libraries"
 
-   if test "$build_cpu" == "x86_64" ; then
+   if test "$build_cpu" = "x86_64" ; then
       qt_libdirs="$qt_libdirs /usr/lib64/qt4 /usr/lib64/qt /usr/lib64"
       kde_libdirs="$kde_libdirs /usr/lib64 /usr/lib64/kde4"
    fi
@@ -28104,6 +29465,7 @@ echo $ECHO_N "checking whether to include AFMs... $ECHO_C" >&6
 if test "$with_afms" != "no"; then
   echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
+  BUILD_TYPE="$BUILD_TYPE AFMS"
 else
   echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
@@ -28517,32 +29879,6 @@ else
     export ANT_HOME
   fi
 
-  ant_minver=1.6.0
-  # update for more extensions...
-  if test "$ENABLE_MEDIAWIKI" = "YES"; then
-    ant_minver=1.7.0
-  fi
-  ant_minminor1=`echo $ant_minver | cut -d"." -f2`
-
-  echo "$as_me:$LINENO: checking whether ant is >= $ant_minver" >&5
-echo $ECHO_N "checking whether ant is >= $ant_minver... $ECHO_C" >&6
-  ant_version=`$ANT -version | $AWK '{ print $4; }'`
-  ant_version_major=`echo $ant_version | cut -d. -f1`
-  ant_version_minor=`echo $ant_version | cut -d. -f2`
-echo "configure: ant_version $ant_version " >&5
-echo "configure: ant_version_major $ant_version_major " >&5
-echo "configure: ant_version_minor $ant_version_minor " >&5
-  if test "$ant_version_major" -ge "2"; then
-  	echo "$as_me:$LINENO: result: yes, $ant_version" >&5
-echo "${ECHO_T}yes, $ant_version" >&6
-  elif test "$ant_version_major" = "1" && test "$ant_version_minor" -ge "$ant_minminor1"; then
-  	echo "$as_me:$LINENO: result: yes, $ant_version" >&5
-echo "${ECHO_T}yes, $ant_version" >&6
-  else
-  	{ { echo "$as_me:$LINENO: error: no, you need at least ant >= $ant_minver" >&5
-echo "$as_me: error: no, you need at least ant >= $ant_minver" >&2;}
-   { (exit 1); exit 1; }; }
-  fi
   echo "$as_me:$LINENO: checking if $ANT works" >&5
 echo $ECHO_N "checking if $ANT works... $ECHO_C" >&6
 cat > conftest.java << EOF
@@ -28633,6 +29969,33 @@ fi
 
 fi
 
+ant_minver=1.6.0
+# update for more extensions...
+if test "$ENABLE_MEDIAWIKI" = "YES"; then
+  ant_minver=1.7.0
+fi
+ant_minminor1=`echo $ant_minver | cut -d"." -f2`
+
+echo "$as_me:$LINENO: checking whether ant is >= $ant_minver" >&5
+echo $ECHO_N "checking whether ant is >= $ant_minver... $ECHO_C" >&6
+ant_version=`$ANT -version | $AWK '{ print $4; }'`
+ant_version_major=`echo $ant_version | cut -d. -f1`
+ant_version_minor=`echo $ant_version | cut -d. -f2`
+echo "configure: ant_version $ant_version " >&5
+echo "configure: ant_version_major $ant_version_major " >&5
+echo "configure: ant_version_minor $ant_version_minor " >&5
+if test "$ant_version_major" -ge "2"; then
+   echo "$as_me:$LINENO: result: yes, $ant_version" >&5
+echo "${ECHO_T}yes, $ant_version" >&6
+elif test "$ant_version_major" = "1" && test "$ant_version_minor" -ge "$ant_minminor1"; then
+   echo "$as_me:$LINENO: result: yes, $ant_version" >&5
+echo "${ECHO_T}yes, $ant_version" >&6
+else
+   { { echo "$as_me:$LINENO: error: no, you need at least ant >= $ant_minver" >&5
+echo "$as_me: error: no, you need at least ant >= $ant_minver" >&2;}
+   { (exit 1); exit 1; }; }
+fi
+
 if test "$ENABLE_MEDIAWIKI" = "YES"; then
 echo "$as_me:$LINENO: checking whether ant supports mapper type=\"regexp\"" >&5
 echo $ECHO_N "checking whether ant supports mapper type=\"regexp\"... $ECHO_C" >&6
@@ -28640,18 +30003,18 @@ rm -rf confdir
 mkdir confdir
 cat > conftest.java << EOF
     public class conftest {
-	int testmethod(int a, int b) {
+        int testmethod(int a, int b) {
             return a + b;
-	}
+        }
     }
 EOF
 
 cat > conftest.xml << EOF
     <project name="conftest" default="conftest">
-	<target name="conftest" depends="copytest">
+        <target name="conftest" depends="copytest">
             <javac srcdir="." includes="conftest.java">
-	    </javac>
-	</target>
+            </javac>
+        </target>
         <target name="copytest">
              <copy todir="confdir">
                  <fileset dir="confdir" includes="**/*.abc" casesensitive="yes"/>
@@ -28864,12 +30227,12 @@ fi
 echo "$as_me:$LINENO: checking build verbosity" >&5
 echo $ECHO_N "checking build verbosity... $ECHO_C" >&6
 if test -n "$enable_verbose"; then
-   if test "$enable_verbose" == "yes"; then
+   if test "$enable_verbose" = "yes"; then
       VERBOSE="TRUE"
       echo "$as_me:$LINENO: result: high" >&5
 echo "${ECHO_T}high" >&6
    fi
-   if test "$enable_verbose" == "no"; then
+   if test "$enable_verbose" = "no"; then
       VERBOSE="FALSE"
       echo "$as_me:$LINENO: result: low" >&5
 echo "${ECHO_T}low" >&6
@@ -28877,6 +30240,18 @@ echo "${ECHO_T}low" >&6
 else
    echo "$as_me:$LINENO: result: not set" >&5
 echo "${ECHO_T}not set" >&6
+fi
+
+
+echo "$as_me:$LINENO: checking whether to enable dependency tracking" >&5
+echo $ECHO_N "checking whether to enable dependency tracking... $ECHO_C" >&6
+if test "$enable_dependency_tracking" = "no"; then
+    nodep=TRUE
+    echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+else
+    echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
 fi
 
 
@@ -29607,7 +30982,6 @@ s,@COMPATH@,$COMPATH,;t t
 s,@GCCVER@,$GCCVER,;t t
 s,@HAVE_LD_BSYMBOLIC_FUNCTIONS@,$HAVE_LD_BSYMBOLIC_FUNCTIONS,;t t
 s,@ENABLE_PCH@,$ENABLE_PCH,;t t
-s,@NO_HIDS@,$NO_HIDS,;t t
 s,@GNUMAKE@,$GNUMAKE,;t t
 s,@_cc@,$_cc,;t t
 s,@HAVE_LD_HASH_STYLE@,$HAVE_LD_HASH_STYLE,;t t
@@ -29667,9 +31041,10 @@ s,@EPM@,$EPM,;t t
 s,@DPKG@,$DPKG,;t t
 s,@PKGMK@,$PKGMK,;t t
 s,@BUILD_EPM@,$BUILD_EPM,;t t
-s,@PKGFORMAT@,$PKGFORMAT,;t t
 s,@RPM@,$RPM,;t t
+s,@PKGFORMAT@,$PKGFORMAT,;t t
 s,@GPERF@,$GPERF,;t t
+s,@BUILD_STAX@,$BUILD_STAX,;t t
 s,@MINGWCXX@,$MINGWCXX,;t t
 s,@ac_ct_MINGWCXX@,$ac_ct_MINGWCXX,;t t
 s,@MINGWSTRIP@,$MINGWSTRIP,;t t
@@ -29736,6 +31111,7 @@ s,@CURLCONFIG@,$CURLCONFIG,;t t
 s,@SYSTEM_CURL@,$SYSTEM_CURL,;t t
 s,@CURL_CFLAGS@,$CURL_CFLAGS,;t t
 s,@CURL_LIBS@,$CURL_LIBS,;t t
+s,@SYSTEM_MDDS@,$SYSTEM_MDDS,;t t
 s,@SYSTEM_BOOST@,$SYSTEM_BOOST,;t t
 s,@SYSTEM_VIGRA@,$SYSTEM_VIGRA,;t t
 s,@SYSTEM_ODBC_HEADERS@,$SYSTEM_ODBC_HEADERS,;t t
@@ -29809,8 +31185,15 @@ s,@HUNSPELL_LIBS@,$HUNSPELL_LIBS,;t t
 s,@SYSTEM_HUNSPELL@,$SYSTEM_HUNSPELL,;t t
 s,@SYSTEM_HYPH@,$SYSTEM_HYPH,;t t
 s,@HYPHEN_LIB@,$HYPHEN_LIB,;t t
+s,@MYTHES_CFLAGS@,$MYTHES_CFLAGS,;t t
+s,@MYTHES_LIBS@,$MYTHES_LIBS,;t t
 s,@SYSTEM_MYTHES@,$SYSTEM_MYTHES,;t t
 s,@SYSTEM_LPSOLVE@,$SYSTEM_LPSOLVE,;t t
+s,@SYSTEM_LIBTEXTCAT@,$SYSTEM_LIBTEXTCAT,;t t
+s,@SYSTEM_LIBTEXTCAT_DATA@,$SYSTEM_LIBTEXTCAT_DATA,;t t
+s,@HAVE_GETOPT@,$HAVE_GETOPT,;t t
+s,@HAVE_READDIR_R@,$HAVE_READDIR_R,;t t
+s,@SYSTEM_LIBC@,$SYSTEM_LIBC,;t t
 s,@PSDK_HOME@,$PSDK_HOME,;t t
 s,@WINDOWS_VISTA_PSDK@,$WINDOWS_VISTA_PSDK,;t t
 s,@DIRECTXSDK_HOME@,$DIRECTXSDK_HOME,;t t
@@ -29845,6 +31228,9 @@ s,@GIO_LIBS@,$GIO_LIBS,;t t
 s,@ENABLE_GIO@,$ENABLE_GIO,;t t
 s,@ENABLE_DBUS@,$ENABLE_DBUS,;t t
 s,@ENABLE_SYSTRAY_GTK@,$ENABLE_SYSTRAY_GTK,;t t
+s,@GSTREAMER_CFLAGS@,$GSTREAMER_CFLAGS,;t t
+s,@GSTREAMER_LIBS@,$GSTREAMER_LIBS,;t t
+s,@ENABLE_GSTREAMER@,$ENABLE_GSTREAMER,;t t
 s,@CAIRO_CFLAGS@,$CAIRO_CFLAGS,;t t
 s,@CAIRO_LIBS@,$CAIRO_LIBS,;t t
 s,@ENABLE_CAIRO@,$ENABLE_CAIRO,;t t
@@ -29910,6 +31296,7 @@ s,@UNIXWRAPPERNAME@,$UNIXWRAPPERNAME,;t t
 s,@ENABLE_STATIC_GTK@,$ENABLE_STATIC_GTK,;t t
 s,@ENABLE_LAYOUT@,$ENABLE_LAYOUT,;t t
 s,@VERBOSE@,$VERBOSE,;t t
+s,@nodep@,$nodep,;t t
 s,@LOCAL_SOLVER@,$LOCAL_SOLVER,;t t
 s,@BUILD_TYPE@,$BUILD_TYPE,;t t
 s,@LIBOBJS@,$LIBOBJS,;t t
