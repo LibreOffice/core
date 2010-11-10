@@ -49,35 +49,10 @@
 # USE_SYSTEM_STL (Linux)
 
 SHELL := /bin/sh
-
-ifeq ($(strip $(SOLARSRC)),)
-$(error No environment set)
-endif
-
-# extend for JDK include (seems only needed in setsolar env?)
-SOLARINC += $(JDKINCS)
-
-OUTDIR := $(SOLARVERSION)/$(INPATH)
-WORKDIR := $(SOLARVERSION)/$(INPATH)/workdir
-ifeq ($(strip $(gb_REPOS)),)
-gb_REPOS := $(SRCDIR)
-endif
-
-# HACK
-ifeq ($(OS),WNT)
-WORKDIR := $(shell cygpath -u $(WORKDIR))
-OUTDIR := $(shell cygpath -u $(OUTDIR))
-gb_REPOS := $(shell cygpath -u $(gb_REPOS))
-endif
-
-REPODIR := $(patsubst %/,%,$(dir $(firstword $(gb_REPOS))))
-ifeq ($(SRCDIR),)
-SRCDIR := $(REPODIR)/ooo
-endif
-
 true := T
 false :=
 
+include $(GBUILDDIR)/BuildDirs.mk
 
 ifneq ($(strip $(PRODUCT)$(product)),)
 gb_PRODUCT := $(true)
@@ -105,11 +80,11 @@ else
 gb_ENABLE_PCH := $(false)
 endif
 
-
-gb_FULLDEPS := $(true)
-#gb_FULLDEPS := $(false)
-ifeq ($(MAKECMDGOALS),clean)
+# for clean, uninstall and setuplocal goals we switch of dependencies
+ifneq ($(filter clean uninstall setuplocal,$(MAKECMDGOALS)),)
 gb_FULLDEPS := $(false)
+else
+gb_FULLDEPS := $(true)
 endif
 
 include $(GBUILDDIR)/Helper.mk
@@ -205,25 +180,34 @@ gb_GLOBALDEFS := $(sort $(gb_GLOBALDEFS))
 
 include $(GBUILDDIR)/TargetLocations.mk
 
-# static members declared here because they are used globally
-
-gb_Library_OUTDIRLOCATION := $(OUTDIR)/lib
-gb_Library_DLLDIR := $(WORKDIR)/LinkTarget/Library
-gb_StaticLibrary_OUTDIRLOCATION := $(OUTDIR)/lib
-
 # We are using a set of scopes that we might as well call classes.
 
-include $(foreach class,\
+# It is important to include them in the right order as that is
+# -- at least in part -- defining precedence. This is not an issue in the
+# WORKDIR as there are no nameing collisions there, but OUTDIR is a mess
+# and precedence is important there. This is also platform dependant.
+# For example:
+# $(OUTDIR)/bin/% for executables collides
+#	with $(OUTDIR)/bin/%.res for resources on unix
+# $(OUTDIR)/lib/%.lib collides
+#	on windows (static and dynamic libs)
+# $(OUTDIR)/xml/% for packageparts collides
+#	with $(OUTDIR)/xml/component/%.component for components
+# This is less of an issue with GNU Make versions > 3.82 which matches for
+# shortest stem instead of first match. However, upon intoduction this version
+# is not available everywhere by default.
+
+include $(foreach class, \
     ComponentTarget \
-    LinkTarget\
-    Library\
-    StaticLibrary\
-    Executable\
-    SdiTarget\
-    AllLangResTarget\
-    Package\
-    PrecompiledHeaders\
-    Module\
+    AllLangResTarget \
+    LinkTarget \
+    Library \
+    StaticLibrary \
+    Executable \
+    SdiTarget \
+    Package \
+    PrecompiledHeaders \
+    Module \
 ,$(GBUILDDIR)/$(class).mk)
 
 # vim: set noet sw=4 ts=4:

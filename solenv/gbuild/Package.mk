@@ -29,7 +29,7 @@
 # PackagePart class
 
 $(foreach destination,$(call gb_PackagePart_get_destinations), $(destination)/%) :
-    mkdir -p $(dir $@) && cp -f $< $@ && touch -r $< $@
+    $(call gb_Helper_deliver,$<,$@)
 
 define gb_PackagePart_PackagePart
 $(OUTDIR)/$(1) : $(2) 

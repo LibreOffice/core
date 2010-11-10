@@ -35,8 +35,17 @@ COMMA :=,
 gb_Helper_NULLFILE := /dev/null
 
 gb_Helper_MISC := $(WORKDIR)/Misc
+
+# general propose phony target
 gb_Helper_PHONY := $(gb_Helper_MISC)/PHONY
+
+# general propose empty dummy target
 gb_Helper_MISCDUMMY := $(gb_Helper_MISC)/DUMMY
+
+# if ($true) then old files will get removed from the target location before
+# they are copied there. In multi-user environments, this is needed you need to
+# be the owner of the target file to be able to cp -pf 
+gb_Helper_CLEARONDELIVER := $(true)
 
 .PHONY : $(WORKDIR)/Misc/PHONY
 $(gb_Helper_MISCDUMMY) :
@@ -88,6 +97,16 @@ endef
 
 define gb_Helper_get_outdir_clean_target
 $$(subst $(OUTDIR)/,$(WORKDIR)/Clean/OutDir/,$(1))
+endef
+
+gb_Helper__deliverprefix = mkdir -p $(dir $(1)) &&
+
+ifeq ($(gb_Helper_CLEARONDELIVER),$(true))
+gb_Helper__deliverprefix += rm -rf $(1) &&
+endif
+
+define gb_Helper_deliver
+$(call gb_Helper__deliverprefix,$(2)) cp -pf $(1) $(2)
 endef
 
 # vim: set noet sw=4 ts=4:

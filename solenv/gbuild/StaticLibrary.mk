@@ -39,17 +39,16 @@
 
 # EVIL: gb_StaticLibrary and gb_Library need the same deliver rule because they are indistinguishable on windows
 .PHONY : $(WORKDIR)/Clean/OutDir/lib/%$(gb_StaticLibrary_PLAINEXT)
-$(WORKDIR)/Clean/OutDir/lib/%$(gb_StaticLibrary_PLAINEXT) : $(call gb_LinkTarget_get_clean_target,$(call gb_Library_get_linktargetname,%$(gb_StaticLibrary_PLAINEXT)))
+$(WORKDIR)/Clean/OutDir/lib/%$(gb_StaticLibrary_PLAINEXT) : $(call gb_LinkTarget_get_clean_target,$(call gb_StaticLibrary_get_linktargetname,%$(gb_StaticLibrary_PLAINEXT)))
     $(call gb_Helper_abbreviate_dirs,\
         rm -f $(OUTDIR)/lib/$*$(gb_StaticLibrary_PLAINEXT) \
             $(AUXTARGETS))
 
 # EVIL: gb_StaticLibrary and gb_Library need the same deliver rule because they are indistinguishable on windows
-# FIXME: this should be cp -pf but that might break on some nfs setups
 $(gb_StaticLibrary_OUTDIRLOCATION)/%$(gb_StaticLibrary_PLAINEXT) : 
     $(call gb_Helper_abbreviate_dirs,\
-        mkdir -p $(dir $@) && cp -f $< $@ \
-            $(foreach target,$(AUXTARGETS), && cp -f $(dir $<)/$(notdir $(target)) $(target)))
+        $(call gb_Helper_deliver,$<,$@) \
+            $(foreach target,$(AUXTARGETS), && $(call gb_Helper_deliver,$(dir $<)/$(notdir $(target)),$(target))))
 
 define gb_StaticLibrary_StaticLibrary
 ifeq (,$$(findstring $(1),$$(gb_StaticLibrary_KNOWNLIBS)))
