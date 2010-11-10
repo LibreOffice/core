@@ -49,35 +49,10 @@
 # USE_SYSTEM_STL (Linux)
 
 SHELL := /bin/sh
-
-ifeq ($(strip $(SOLARSRC)),)
-$(error No environment set)
-endif
-
-# extend for JDK include (seems only needed in setsolar env?)
-SOLARINC += $(JDKINCS)
-
-OUTDIR := $(SOLARVERSION)/$(INPATH)
-WORKDIR := $(SOLARVERSION)/$(INPATH)/workdir
-ifeq ($(strip $(gb_REPOS)),)
-gb_REPOS := $(SRCDIR)
-endif
-
-# HACK
-ifeq ($(OS),WNT)
-WORKDIR := $(shell cygpath -u $(WORKDIR))
-OUTDIR := $(shell cygpath -u $(OUTDIR))
-gb_REPOS := $(shell cygpath -u $(gb_REPOS))
-endif
-
-REPODIR := $(patsubst %/,%,$(dir $(firstword $(gb_REPOS))))
-ifeq ($(SRCDIR),)
-SRCDIR := $(REPODIR)/ooo
-endif
-
 true := T
 false :=
 
+include $(GBUILDDIR)/BuildDirs.mk
 
 ifneq ($(strip $(PRODUCT)$(product)),)
 gb_PRODUCT := $(true)
@@ -105,11 +80,11 @@ else
 gb_ENABLE_PCH := $(false)
 endif
 
-
-gb_FULLDEPS := $(true)
-#gb_FULLDEPS := $(false)
-ifeq ($(MAKECMDGOALS),clean)
+# for clean and uninstall goals we switch of dependencies
+ifneq ($(filter clean uninstall,$(MAKECMDGOALS)),)
 gb_FULLDEPS := $(false)
+else
+gb_FULLDEPS := $(true)
 endif
 
 include $(GBUILDDIR)/Helper.mk
@@ -223,7 +198,6 @@ include $(GBUILDDIR)/TargetLocations.mk
 # is not available everywhere by default.
 
 include $(foreach class, \
-    Shadow \
     ComponentTarget \
     AllLangResTarget \
     LinkTarget \

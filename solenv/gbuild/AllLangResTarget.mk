@@ -228,8 +228,8 @@ $(call gb_ResTarget_get_target,%) : $(gb_Helper_MISCDUMMY) | $(gb_ResTarget_RSCT
 
 $(call gb_ResTarget_get_outdir_target,%) :
     $(call gb_Helper_abbreviate_dirs,\
-        $(call gb_Shadow_deliver,$@,$<) && \
-        $(call gb_Shadow_deliver,$(ILSTTARGET),$(dir $<)/$(notdir $(ILSTTARGET))))
+        $(call gb_Helper_deliver,$<,$@) && \
+        $(call gb_Helper_deliver,$(dir $<)/$(notdir $(ILSTTARGET)),$(ILSTTARGET)))
 
 define gb_ResTarget_ResTarget
 $(call gb_ResTarget_get_target,$(1)) : LIBRARY = $(2)

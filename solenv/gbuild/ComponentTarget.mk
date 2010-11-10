@@ -59,7 +59,7 @@ $(call gb_ComponentTarget_get_target,%) :
     $(error unable to find component file $(call gb_ComponentTarget_get_source,,$*) in the repositories: $(gb_ComponentTarget_REPOS))
 
 $(call gb_ComponentTarget_get_external_target,%) :
-    $(call gb_Shadow_deliver,$@,$<)
+    $(call gb_Helper_deliver,$<,$@)
 
 define gb_ComponentTarget_ComponentTarget
 $(call gb_ComponentTarget_get_target,$(1)) : LIBFILENAME := $(2)

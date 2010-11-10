@@ -29,7 +29,7 @@
 # PackagePart class
 
 $(foreach destination,$(call gb_PackagePart_get_destinations), $(destination)/%) :
-    $(call gb_Shadow_deliver,$@,$<)
+    $(call gb_Helper_deliver,$<,$@)
 
 define gb_PackagePart_PackagePart
 $(OUTDIR)/$(1) : $(2) 

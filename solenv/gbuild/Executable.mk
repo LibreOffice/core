@@ -40,8 +40,8 @@ $(call gb_Executable_get_clean_target,%) :
 
 $(call gb_Executable_get_target,%) :
     $(call gb_Helper_abbreviate_dirs,\
-        $(call gb_Shadow_deliver,$@,$<) \
-            $(foreach target,$(AUXTARGETS), && $(call gb_Shadow_deliver,$(target),$(dir $<)/$(notdir $(target)))))
+        $(call gb_Helper_deliver,$<,$@) \
+            $(foreach target,$(AUXTARGETS), && $(call gb_Helper_deliver,$(dir $<)/$(notdir $(target)),$(target))))
 
 define gb_Executable_Executable
 $(call gb_Executable__Executable_impl,$(1),Executable/$(1)$(gb_Executable_EXT))

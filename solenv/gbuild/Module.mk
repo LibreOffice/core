@@ -92,6 +92,8 @@ include $(1)
 
 all : $$(firstword $$(gb_Module_TARGETSTACK))
 clean : $$(firstword $$(gb_Module_CLEANTARGETSTACK))
+install : all
+uninstall : clean
 
 ifneq ($$(words $$(gb_Module_TARGETSTACK)),1)
 $$(warn corrupted module target stack!)
