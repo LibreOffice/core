@@ -37,6 +37,7 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <tools/wldcrd.hxx>
 
+// TODO/LATER: The flags should be part of the UNO specification
 #define SFX_FILTER_IMPORT            0x00000001L
 #define SFX_FILTER_EXPORT            0x00000002L
 #define SFX_FILTER_TEMPLATE          0x00000004L
@@ -45,13 +46,13 @@
 #define SFX_FILTER_OWN               0x00000020L
 #define SFX_FILTER_ALIEN             0x00000040L
 #define SFX_FILTER_USESOPTIONS       0x00000080L
-#define SFX_FILTER_NOTINFILEDLG      0x00001000L
-#define SFX_FILTER_NOTINCHOOSER      0x00002000L
 
 #define SFX_FILTER_DEFAULT           0x00000100L
 #define SFX_FILTER_EXECUTABLE        0x00000200L
 #define SFX_FILTER_SUPPORTSSELECTION 0x00000400L
 #define SFX_FILTER_MAPTOAPPPLUG      0x00000800L
+#define SFX_FILTER_NOTINFILEDLG      0x00001000L
+#define SFX_FILTER_NOTINCHOOSER      0x00002000L
 #define SFX_FILTER_ASYNC             0x00004000L
 // Legt Objekt nur an, kein Laden
 #define SFX_FILTER_CREATOR           0x00008000L
@@ -64,26 +65,16 @@
 #define SFX_FILTER_SILENTEXPORT      0x00200000L
 
 #define SFX_FILTER_BROWSERPREFERED   0x00400000L
+
+#define SFX_FILTER_ENCRYPTION        0x01000000L
+#define SFX_FILTER_PASSWORDTOMODIFY  0x02000000L
+
 #define SFX_FILTER_PREFERED          0x10000000L
 
 #define SFX_FILTER_VERSION_NONE      0
 #define SFX_FILTER_NOTINSTALLED      SFX_FILTER_MUSTINSTALL | SFX_FILTER_CONSULTSERVICE
 
 #include <sfx2/sfxdefs.hxx>
-
-//========================================================================
-
-namespace sfx2 {
-
-/** Returns true if the passed string is the name of a Microsoft Office file
-    format filter supporting export of password protected documents.
-
-    This function is just a hack for #i105076# is fixed and needs to be removed
-    then.
- */
-SFX2_DLLPUBLIC bool CheckMSPasswordCapabilityForExport( const String& rFilterName );
-
-} // namespace sfx2
 
 //========================================================================
 class SfxFilterContainer;

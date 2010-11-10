@@ -155,6 +155,7 @@
 #define SID_RELOAD                          (SID_SFX_START + 508)
 #define SID_PRINTDOCDIRECT                  (SID_SFX_START + 509)
 #define SID_PICKLIST                        (SID_SFX_START + 510)
+#define SID_ATTR_XWINDOW                    (SID_SFX_START + 777)
 #define SID_PLUGIN_MODE                     (SID_SFX_START + 827)
 #define SID_EXPORTDOC                       (SID_SFX_START + 829)
 #define SID_EXPORTDOCASPDF                  (SID_SFX_START + 1673)
@@ -306,7 +307,9 @@
 #define SID_ACTIVATE_STYLE_APPLY            (SID_SFX_START + 1715)
 #define SID_FONT_NAME                       (SID_SFX_START + 1716)
 #define SID_DEFAULTFILENAME                 (SID_SFX_START + 1717)
-#define SID_SFX_free_START                  (SID_SFX_START + 1718)
+#define SID_MODIFYPASSWORDINFO              (SID_SFX_START + 1718)
+#define SID_RECOMMENDREADONLY               (SID_SFX_START + 1719)
+#define SID_SFX_free_START                  (SID_SFX_START + 1720)
 #define SID_SFX_free_END                    (SID_SFX_START + 3999)
 
 #define SID_OPEN_NEW_VIEW                   (SID_SFX_START + 520)
@@ -418,7 +421,6 @@
 #define SID_INSERT_PLUGIN                   (SID_SFX_START + 672)
 #define SID_INSERT_SOUND                    (SID_SFX_START + 676)
 #define SID_INSERT_VIDEO                    (SID_SFX_START + 677)
-#define SID_INSERT_APPLET                   (SID_SFX_START + 673)
 
 #define SID_HYPERLINK_DIALOG                (SID_SFX_START + 678)
 
@@ -1001,6 +1003,31 @@
 #define SID_RESTORE_EDITING_VIEW            (SID_SFX_START + 1663)
 
 #endif  // #ifndef _SFXSIDS_HRC
+
+//-----------------------------------------------------------------------
+// SfxSecurityPage related stuff
+
+#define FN_EDIT2                (SID_SW_START + 1800)
+#define FN_REDLINE_PROTECT      (FN_EDIT2 + 23)
+#define FN_REDLINE_ON           (FN_EDIT2 + 25)
+
+#define SID_HTML_MODE           (SID_SVX_START + 414)
+
+// Calc-Id's used for SfxSecurityPage
+#ifndef SC_FUNCTION_START
+#define SC_FUNCTION_START       (SID_SC_START + 200)
+#endif
+#ifndef FILE_MENU_END
+#define FILE_MENU_END           (SC_FUNCTION_START + 20)
+#endif
+#ifndef EDIT_MENU_START
+#define EDIT_MENU_START         (FILE_MENU_END)
+#endif
+#ifndef SC_VIEW_START
+#define SC_VIEW_START           (SID_SC_START)
+#endif
+#define FID_CHG_RECORD          (EDIT_MENU_START + 18)
+#define SID_CHG_PROTECT         (SC_VIEW_START + 84)
 
 // eof ------------------------------------------------------------------------
 

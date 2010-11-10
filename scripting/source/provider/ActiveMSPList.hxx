@@ -107,6 +107,7 @@ private:
     osl::Mutex m_mutex;
     ::rtl::OUString userDirString;
     ::rtl::OUString shareDirString;
+    ::rtl::OUString bundledDirString;
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
 };
 } // func_provider

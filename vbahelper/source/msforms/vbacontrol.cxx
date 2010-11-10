@@ -57,6 +57,7 @@
 #include "vbaprogressbar.hxx"
 #include "vbamultipage.hxx"
 #include "vbaspinbutton.hxx"
+#include "vbasystemaxcontrol.hxx"
 #include "vbaimage.hxx"
 #include <vbahelper/helperdecl.hxx>
 
@@ -254,6 +255,22 @@ void SAL_CALL ScVbaControl::SetFocus() throw (uno::RuntimeException)
     xWin->setFocus();
 }
 
+void SAL_CALL ScVbaControl::Move( double Left, double Top, const uno::Any& Width, const uno::Any& Height )
+    throw ( uno::RuntimeException )
+{
+    double nWidth = 0.0;
+    double nHeight = 0.0;
+
+    setLeft( Left );
+    setTop( Top );
+
+    if ( Width >>= nWidth )
+        setWidth( nWidth );
+
+    if ( Height >>= nHeight )
+        setHeight( nHeight );
+}
+
 rtl::OUString SAL_CALL
 ScVbaControl::getControlSource() throw (uno::RuntimeException)
 {
@@ -368,6 +385,20 @@ ScVbaControl::setControlTipText( const rtl::OUString& rsToolTip ) throw (css::un
     m_xProps->setPropertyValue
             (rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HelpText" ) ), uno::makeAny( rsToolTip ) );
 }
+
+::rtl::OUString SAL_CALL ScVbaControl::getTag()
+    throw (css::uno::RuntimeException)
+{
+    return m_aControlTag;
+}
+
+void SAL_CALL ScVbaControl::setTag( const ::rtl::OUString& aTag )
+    throw (css::uno::RuntimeException)
+{
+    m_aControlTag = aTag;
+}
+
+
 //ScVbaControlFactory
 
 ScVbaControlFactory::ScVbaControlFactory( const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< uno::XInterface >& xControl, const uno::Reference< frame::XModel >& xModel ): m_xContext( xContext ), m_xControl( xControl ), m_xModel( xModel )
@@ -383,7 +414,6 @@ ScVbaControl* ScVbaControlFactory::createControl( const uno::Reference< uno::XIn
     if ( !xControl.is() )
         throw uno::RuntimeException(); // really we should be more informative
     return createControl( xControl, xParent );
-
 }
 
 ScVbaControl* ScVbaControlFactory::createControl(const uno::Reference< drawing::XControlShape >& xControlShape,  const uno::Reference< uno::XInterface >& /*xParent*/ )  throw (uno::RuntimeException)
@@ -456,6 +486,8 @@ ScVbaControl* ScVbaControlFactory::createControl( const uno::Reference< awt::XCo
     pControl = new ScVbaMultiPage( xVbaParent, m_xContext, xControl, m_xModel, new UserFormGeometryHelper( m_xContext, xControl ), xParent );
     else if ( xServiceInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlSpinButtonModel") ) ) )
     pControl = new ScVbaSpinButton( xVbaParent, m_xContext, xControl, m_xModel, new UserFormGeometryHelper( m_xContext, xControl ) );
+    else if ( xServiceInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.custom.awt.UnoControlSystemAXContainerModel") ) ) )
+    pControl = new VbaSystemAXControl( xVbaParent, m_xContext, xControl, m_xModel, new UserFormGeometryHelper( m_xContext, xControl ) );
     else
         throw uno::RuntimeException( rtl::OUString::createFromAscii("Unsupported control " ), uno::Reference< uno::XInterface >() );
     return pControl;

@@ -1,65 +1,6 @@
 #include <svx/svxids.hrc>
 #include <svx/dialogs.hrc>
 
-ToolBox RID_SVX_EXTRUSION_BAR
-{
-    HelpId = RID_SVX_EXTRUSION_BAR ;
-    Align = BOXALIGN_BOTTOM ;
-    ItemList =
-    {
-        ToolBoxItem
-        {
-            Identifier = SID_EXTRUSION_TOOGLE ;
-            HelpID = SID_EXTRUSION_TOOGLE ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_EXTRUSION_TILT_DOWN ;
-            HelpID = SID_EXTRUSION_TILT_DOWN ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_EXTRUSION_TILT_UP ;
-            HelpID = SID_EXTRUSION_TILT_UP ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_EXTRUSION_TILT_LEFT ;
-            HelpID = SID_EXTRUSION_TILT_LEFT ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_EXTRUSION_TILT_RIGHT ;
-            HelpID = SID_EXTRUSION_TILT_RIGHT ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_EXTRUSION_DEPTH_FLOATER ;
-            HelpID = SID_EXTRUSION_DEPTH_FLOATER ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_EXTRUSION_DIRECTION_FLOATER ;
-            HelpID = SID_EXTRUSION_DIRECTION_FLOATER ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_EXTRUSION_LIGHTING_FLOATER ;
-            HelpID = SID_EXTRUSION_LIGHTING_FLOATER ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_EXTRUSION_SURFACE_FLOATER ;
-            HelpID = SID_EXTRUSION_SURFACE_FLOATER ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_EXTRUSION_3D_COLOR ;
-            HelpID = SID_EXTRUSION_3D_COLOR ;
-        };
-    };
-};
-
 String RID_SVX_EXTRUSION_BAR
 {
     Text [ en-US ] = "Extrusion";

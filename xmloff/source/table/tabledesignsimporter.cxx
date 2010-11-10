@@ -73,7 +73,7 @@ class TabelDesignsImporter : public SvXMLImport
     TabelDesignsImporter( const Reference< XMultiServiceFactory > & rSMgr );
     ~TabelDesignsImporter() throw ();
 
-    SvXMLImportContext* CreateContext(USHORT nPrefix, const OUString& rLocalName,   const Reference<XAttributeList>& xAttrList);
+    SvXMLImportContext* CreateContext(sal_uInt16 nPrefix, const OUString& rLocalName,   const Reference<XAttributeList>& xAttrList);
 }
 
 // --------------------------------------------------------------------
@@ -96,7 +96,7 @@ TabelDesignsImporter::~TabelDesignsImporter()
 
 // --------------------------------------------------------------------
 
-SvXMLImportContext* TabelDesignsImporter::CreateContext(USHORT nPrefix, const OUString& rLocalName, const Reference<XAttributeList>& xAttrList)
+SvXMLImportContext* TabelDesignsImporter::CreateContext(sal_uInt16 nPrefix, const OUString& rLocalName, const Reference<XAttributeList>& xAttrList)
 {
 }
 

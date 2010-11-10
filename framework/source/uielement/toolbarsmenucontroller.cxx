@@ -180,7 +180,7 @@ ToolbarsMenuController::~ToolbarsMenuController()
 }
 
 void ToolbarsMenuController::addCommand(
-    Reference< css::awt::XPopupMenu >& rPopupMenu, const rtl::OUString& rCommandURL, sal_uInt16 nHelpId, const rtl::OUString& rLabel )
+    Reference< css::awt::XPopupMenu >& rPopupMenu, const rtl::OUString& rCommandURL, const rtl::OUString& rLabel )
 {
     sal_uInt16        nItemId    = m_xPopupMenu->getItemCount()+1;
 
@@ -215,7 +215,6 @@ void ToolbarsMenuController::addCommand(
         PopupMenu* pVCLPopupMenu = (PopupMenu *)pPopupMenu->GetMenu();
         if ( !!aImage )
             pVCLPopupMenu->SetItemImage( nItemId, aImage );
-        pVCLPopupMenu->SetHelpId( nItemId, nHelpId );
     }
 
     m_aCommandVector.push_back( rCommandURL );
@@ -507,14 +506,14 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
              m_aModuleIdentifier.equalsAscii( "com.sun.star.presentation.PresentationDocument" ) ||
              m_aModuleIdentifier.equalsAscii( "com.sun.star.sheet.SpreadsheetDocument" ))
         {
-            addCommand( m_xPopupMenu, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CMD_HYPERLINKBAR )), 10360, aEmptyString );
+            addCommand( m_xPopupMenu, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CMD_HYPERLINKBAR )), aEmptyString );
             if ( m_aModuleIdentifier.equalsAscii( "com.sun.star.drawing.DrawingDocument" ) ||
                  m_aModuleIdentifier.equalsAscii( "com.sun.star.presentation.PresentationDocument" ))
-                addCommand( m_xPopupMenu, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CMD_COLORBAR )), 10417, aEmptyString );
+                addCommand( m_xPopupMenu, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CMD_COLORBAR )), aEmptyString );
             else if ( m_aModuleIdentifier.equalsAscii( "com.sun.star.sheet.SpreadsheetDocument" ))
-                addCommand( m_xPopupMenu, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CMD_INPUTLINEBAR )), 26241, aEmptyString );
+                addCommand( m_xPopupMenu, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CMD_INPUTLINEBAR )), aEmptyString );
             else
-                addCommand( m_xPopupMenu, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CMD_FORMULABAR )), 20128, aEmptyString );
+                addCommand( m_xPopupMenu, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CMD_FORMULABAR )), aEmptyString );
         }
 
         sal_Bool          bAddCommand( sal_True );
@@ -537,7 +536,7 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
                 m_xPopupMenu->insertSeparator( nItemCount+1 );
             }
 
-            addCommand( m_xPopupMenu, aConfigureToolbar, 5904, aEmptyString );
+            addCommand( m_xPopupMenu, aConfigureToolbar, aEmptyString );
         }
 
         // Add separator if no configure has been added
@@ -553,7 +552,7 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
 
         String aLabelStr = String( FwkResId( STR_RESTORE_TOOLBARS ));
         rtl::OUString aRestoreCmd( RTL_CONSTASCII_USTRINGPARAM( CMD_RESTOREVISIBILITY ));
-        addCommand( m_xPopupMenu, aRestoreCmd, 9999, aLabelStr );
+        addCommand( m_xPopupMenu, aRestoreCmd, aLabelStr );
     }
 }
 

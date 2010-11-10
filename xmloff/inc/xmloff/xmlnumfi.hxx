@@ -99,7 +99,7 @@ public:
     ~SvXMLNumFmtHelper();
 
     SvXMLStyleContext*  CreateChildContext( SvXMLImport& rImport,
-                USHORT nPrefix, const rtl::OUString& rLocalName,
+                sal_uInt16 nPrefix, const rtl::OUString& rLocalName,
                 const ::com::sun::star::uno::Reference<
                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                     SvXMLStylesContext& rStyles);
@@ -116,12 +116,12 @@ public:
 class SvXMLNumFmtDefaults
 {
 public:
-    static sal_Bool IsSystemLongDay( const SvtSysLocale& rSysLoc, BOOL bLong );
-    static sal_Bool IsSystemLongMonth( const SvtSysLocale& rSysLoc, BOOL bLong );
-    static sal_Bool IsSystemTextualMonth( const SvtSysLocale& rSysLoc, BOOL bLong );
-    static sal_Bool IsSystemLongYear( const SvtSysLocale& rSysLoc, BOOL bLong );
-    static sal_Bool IsSystemLongEra( const SvtSysLocale& rSysLoc, BOOL bLong );
-    static sal_Bool IsSystemLongDayOfWeek( const SvtSysLocale& rSysLoc, BOOL bLong );
+    static sal_Bool IsSystemLongDay( const SvtSysLocale& rSysLoc, sal_Bool bLong );
+    static sal_Bool IsSystemLongMonth( const SvtSysLocale& rSysLoc, sal_Bool bLong );
+    static sal_Bool IsSystemTextualMonth( const SvtSysLocale& rSysLoc, sal_Bool bLong );
+    static sal_Bool IsSystemLongYear( const SvtSysLocale& rSysLoc, sal_Bool bLong );
+    static sal_Bool IsSystemLongEra( const SvtSysLocale& rSysLoc, sal_Bool bLong );
+    static sal_Bool IsSystemLongDayOfWeek( const SvtSysLocale& rSysLoc, sal_Bool bLong );
 
     // return value is NfIndexTableOffset
     static sal_uInt16 GetDefaultDateFormat( SvXMLDateElementAttributes eDOW,
@@ -177,13 +177,13 @@ class XMLOFF_DLLPUBLIC SvXMLNumFormatContext : public SvXMLStyleContext
     SAL_DLLPRIVATE sal_Int32 PrivateGetKey();
 
 public:
-                SvXMLNumFormatContext( SvXMLImport& rImport, USHORT nPrfx,
+                SvXMLNumFormatContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
                                     const rtl::OUString& rLName,
                                     SvXMLNumImpData* pNewData, sal_uInt16 nNewType,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                     SvXMLStylesContext& rStyles );
-                SvXMLNumFormatContext( SvXMLImport& rImport, USHORT nPrfx,
+                SvXMLNumFormatContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
                                     const rtl::OUString& rLName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -191,7 +191,7 @@ public:
                                     SvXMLStylesContext& rStyles );
     virtual     ~SvXMLNumFormatContext();
 
-    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                     const rtl::OUString& rLocalName,
                                     const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );

@@ -249,10 +249,10 @@ sal_Bool SAL_CALL GrammarChecker::supportsService( const OUString& ServiceName )
 
     uno::Sequence< OUString > aSNL = getSupportedServiceNames();
     const OUString * pArray = aSNL.getConstArray();
-    for( INT32 i = 0; i < aSNL.getLength(); ++i )
+    for( sal_Int32 i = 0; i < aSNL.getLength(); ++i )
         if( pArray[i] == ServiceName )
-            return TRUE;
-    return FALSE;
+            return sal_True;
+    return sal_False;
 }
 
 uno::Sequence< OUString > GrammarChecker::getSupportedServiceNames_Static(  ) throw()
@@ -274,27 +274,6 @@ OUString SAL_CALL GrammarChecker::getImplementationName(  ) throw(uno::RuntimeEx
 {
     osl::Guard< osl::Mutex > aGuard(GetMutex());
     return getImplementationName_Static();
-}
-
-sal_Bool SAL_CALL GrammarChecker_writeInfo( void * /*pServiceManager*/, registry::XRegistryKey * pRegistryKey )
-{
-    try
-    {
-        String aImpl( '/' );
-        aImpl += GrammarChecker::getImplementationName_Static().getStr();
-        aImpl.AppendAscii( "/UNO/SERVICES" );
-        uno::Reference< registry::XRegistryKey > xNewKey =
-            pRegistryKey->createKey( aImpl );
-        uno::Sequence< OUString > aServices = GrammarChecker::getSupportedServiceNames_Static();
-        for( INT32 i = 0; i < aServices.getLength(); ++i )
-            xNewKey->createKey( aServices.getConstArray()[i] );
-
-        return sal_True;
-    }
-    catch(uno::Exception &)
-    {
-        return sal_False;
-    }
 }
 
 uno::Reference< uno::XInterface > SAL_CALL GrammarChecker_CreateInstance(

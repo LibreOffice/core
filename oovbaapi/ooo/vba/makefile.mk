@@ -1,4 +1,4 @@
-#*************************************************************************
+ #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
@@ -61,7 +61,7 @@ IDLFILES=\
     XFontBase.idl\
     XDialogsBase.idl\
     XDialogBase.idl\
-    XPageSetupBase.idl  \
+    XPageSetupBase.idl
 
 # ------------------------------------------------------------------
 .ENDIF

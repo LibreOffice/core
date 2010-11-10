@@ -92,7 +92,7 @@ namespace svt
             @param _rValue
                 the value to set
             @param _bIgnoreIllegalArgument
-                if <FALSE/>, an exception will be thrown if the given value is of improper type
+                if <sal_False/>, an exception will be thrown if the given value is of improper type
         */
         void                        implSetControlProperty(
                                         sal_Int16 _nControlId,

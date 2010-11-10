@@ -310,10 +310,10 @@ ToolBarManager::ToolBarManager( const Reference< XMultiServiceFactory >& rServic
     // set name for testtool, the useful part is after the last '/'
     sal_Int32 idx = rResourceName.lastIndexOf('/');
     idx++; // will become 0 if '/' not found: use full string
-    ::rtl::OUString  aHelpIdAsString( RTL_CONSTASCII_USTRINGPARAM( HELPID_PREFIX_TESTTOOL ));
+    ::rtl::OString  aHelpIdAsString( HELPID_PREFIX_TESTTOOL );
     ::rtl::OUString  aToolbarName = rResourceName.copy( idx );
-    aHelpIdAsString += aToolbarName;
-    m_pToolBar->SetSmartHelpId( SmartId( aHelpIdAsString ) );
+    aHelpIdAsString += rtl::OUStringToOString( aToolbarName, RTL_TEXTENCODING_UTF8 );;
+    m_pToolBar->SetHelpId( aHelpIdAsString );
 
     m_aAsyncUpdateControllersTimer.SetTimeout( 50 );
     m_aAsyncUpdateControllersTimer.SetTimeoutHdl( LINK( this, ToolBarManager, AsyncUpdateControllersHdl ) );
@@ -947,16 +947,16 @@ void ToolBarManager::CreateControllers()
         if ( nId == 0 )
             continue;
 
-        sal_Int16                    nWidth( sal_Int16( m_pToolBar->GetHelpId( nId )));
         rtl::OUString                aLoadURL( RTL_CONSTASCII_USTRINGPARAM( ".uno:OpenUrl" ));
         rtl::OUString                aCommandURL( m_pToolBar->GetItemCommand( nId ));
         sal_Bool                     bInit( sal_True );
         sal_Bool                     bCreate( sal_True );
         Reference< XStatusListener > xController;
+        CommandToInfoMap::iterator pCommandIter = m_aCommandMap.find( aCommandURL );
+        sal_Int16 nWidth = ( pCommandIter != m_aCommandMap.end() ? pCommandIter->second.nWidth : 0 );
 
         svt::ToolboxController* pController( 0 );
 
-        m_pToolBar->SetHelpId( nId, 0 ); // reset value again
         if ( bHasDisabledEntries )
         {
             aURL.Complete = aCommandURL;
@@ -1405,15 +1405,13 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                     if ( pIter == m_aCommandMap.end())
                     {
                         aCmdInfo.nId = nId;
+                        aCmdInfo.nWidth = nWidth;
                         m_aCommandMap.insert( CommandToInfoMap::value_type( aCommandURL, aCmdInfo ));
                     }
                     else
                     {
                         pIter->second.aIds.push_back( nId );
                     }
-
-                    // Add additional information for the controller to the obsolete help id
-                    m_pToolBar->SetHelpId( sal_uIntPtr( nWidth ));
 
                     if ( !bIsVisible )
                         m_pToolBar->HideItem( nId );

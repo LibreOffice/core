@@ -16,7 +16,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
+ *(a copy is included in the LICENSE file that accompanied this code).
  *
  * You should have received a copy of the GNU Lesser General Public License
  * version 3 along with OpenOffice.org.  If not, see
@@ -42,166 +42,156 @@ ModalDialog DLG_UUI_LOGIN
     Moveable = TRUE ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 265 , 170 ) ;
-    FixedText INFO_LOGIN_ERROR
+    Size = MAP_APPFONT( 177 , 247 ) ;
+    Text [ en-US ] = "Authentication Required" ;
+
+    FixedText FT_LOGIN_ERROR
     {
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 185 , 18 ) ;
+        Pos = MAP_APPFONT( 6 , 6 ) ;
+        Size = MAP_APPFONT( 165 , 8 ) ;
+        Text [ en-US ] = "Message from server:" ;
+    };
+
+    FixedText FT_INFO_LOGIN_ERROR
+    {
+        Pos = MAP_APPFONT( 6 , 14 ) ;
+        Size = MAP_APPFONT( 165 , 3*8 ) ;
         WordBreak = TRUE ;
     };
-    FixedLine GB_LOGIN_ERROR
+
+    FixedLine FL_LOGIN_1
     {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 197 , 8 ) ;
-        Text [ en-US ] = "Message from server" ;
+        Pos = MAP_APPFONT( 6 , 41 ) ;
+        Size = MAP_APPFONT( 165 , 8 ) ;
     };
-    FixedText INFO_LOGIN_REQUEST
+
+    FixedText FT_INFO_LOGIN_REQUEST
     {
-        Pos = MAP_APPFONT ( 12 , 55 ) ;
-        Size = MAP_APPFONT ( 185 , 18 ) ;
+        Pos = MAP_APPFONT( 6 , 52 ) ;
+        Size = MAP_APPFONT( 165 , 2*8 ) ;
         WordBreak = TRUE ;
-        Text [ en-US ] = "Enter the user name and password for %1 here." ;
+        Text [ en-US ] = "Enter user name and password for: \n%1" ;
     };
+
+    String STR_LOGIN_REALM
+    {
+        Text [ en-US ] = "Enter user name and password for: \n\"%2\" on %1" ;
+    };
+
+    FixedLine FL_LOGIN_2
+    {
+        Pos = MAP_APPFONT( 6 , 71 ) ;
+        Size = MAP_APPFONT( 165 , 8 ) ;
+    };
+
     FixedText FT_LOGIN_PATH
     {
-        Pos = MAP_APPFONT ( 12 , 77 ) ;
-        Size = MAP_APPFONT ( 57 , 10 ) ;
+        Pos = MAP_APPFONT( 6 , 84 ) ;
+        Size = MAP_APPFONT( 112 , 8 ) ;
         Text [ en-US ] = "~Path" ;
     };
+
     Edit ED_LOGIN_PATH
     {
+        HelpId = HID_LOGIN_DLG_PATH;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 72 , 76 ) ;
-        Size = MAP_APPFONT ( 108 , 12 ) ;
-    };
-    FixedText INFO_LOGIN_PATH
-    {
-        Hide = TRUE ;
-        Pos = MAP_APPFONT ( 72 , 77 ) ;
-        Size = MAP_APPFONT ( 125 , 10 ) ;
+        Pos = MAP_APPFONT( 6 , 95 ) ;
+        Size = MAP_APPFONT( 112 , 12 ) ;
     };
     PushButton BTN_LOGIN_PATH
     {
-        Pos = MAP_APPFONT ( 183 , 75 ) ;
-        Size = MAP_APPFONT ( 14 , 14 ) ;
-        Text = "~..." ;
+        HelpId = HID_LOGIN_DLG_BROWSE;
+        Pos = MAP_APPFONT( 121 , 94 ) ;
+        Size = MAP_APPFONT( 50 , 14 ) ;
+        Text = "~Browse..." ;
     };
+
     FixedText FT_LOGIN_USERNAME
     {
-        Pos = MAP_APPFONT ( 12 , 92 ) ;
-        Size = MAP_APPFONT ( 57 , 10 ) ;
+        Pos = MAP_APPFONT( 6 , 110 ) ;
+        Size = MAP_APPFONT( 165 , 8 ) ;
         Text [ en-US ] = "~User name" ;
     };
+
     Edit ED_LOGIN_USERNAME
     {
+        HelpId = HID_LOGIN_DLG_USER_NAME;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 72 , 91 ) ;
-        Size = MAP_APPFONT ( 125 , 12 ) ;
+        Pos = MAP_APPFONT( 6 , 121 ) ;
+        Size = MAP_APPFONT( 165 , 12 ) ;
     };
-    FixedText INFO_LOGIN_USERNAME
-    {
-        Hide = TRUE ;
-        Pos = MAP_APPFONT ( 72 , 92 ) ;
-        Size = MAP_APPFONT ( 125 , 10 ) ;
-    };
+
     FixedText FT_LOGIN_PASSWORD
     {
-        Pos = MAP_APPFONT ( 12 , 107 ) ;
-        Size = MAP_APPFONT ( 57 , 10 ) ;
+        Pos = MAP_APPFONT( 6 , 136 ) ;
+        Size = MAP_APPFONT( 165 , 8 ) ;
         Text [ en-US ] = "Pass~word" ;
     };
+
     Edit ED_LOGIN_PASSWORD
     {
+        HelpId = HID_LOGIN_DLG_PASSWORD;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 72 , 106 ) ;
-        Size = MAP_APPFONT ( 125 , 12 ) ;
+        Pos = MAP_APPFONT( 6 , 147 ) ;
+        Size = MAP_APPFONT( 165 , 12 ) ;
         PassWord = TRUE ;
     };
+
     FixedText FT_LOGIN_ACCOUNT
     {
-        Pos = MAP_APPFONT ( 12 , 122 ) ;
-        Size = MAP_APPFONT ( 57 , 10 ) ;
+        Pos = MAP_APPFONT( 6 , 162 ) ;
+        Size = MAP_APPFONT( 165 , 8 ) ;
         Text [ en-US ] = "A~ccount";
     };
+
     Edit ED_LOGIN_ACCOUNT
     {
+        HelpId = HID_LOGIN_DLG_ACCOUNT;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 72 , 121 ) ;
-        Size = MAP_APPFONT ( 125 , 12 ) ;
+        Pos = MAP_APPFONT( 6 , 173 ) ;
+        Size = MAP_APPFONT( 165 , 12 ) ;
         PassWord = TRUE ;
     };
+
     CheckBox CB_LOGIN_SAVEPASSWORD
     {
-        Pos = MAP_APPFONT ( 12 , 136 ) ;
-        Size = MAP_APPFONT ( 185 , 10 ) ;
-        Text [ en-US ] = "~Save password" ;
+        HelpId = HID_LOGIN_DLG_REMEMBER_PASSWORD;
+        Pos = MAP_APPFONT( 6 , 190 ) ;
+        Size = MAP_APPFONT( 165 , 10 ) ;
+        Text [ en-US ] = "~Remember password" ;
     };
+
     CheckBox CB_LOGIN_USESYSCREDS
     {
-        Pos = MAP_APPFONT ( 12 , 148 ) ;
-        Size = MAP_APPFONT ( 185 , 10 ) ;
-        Text [ en-US ] = "~Use System Credentials" ;
+        HelpId = HID_LOGIN_DLG_USE_SYSTEM_CREDENTIALS;
+        Pos = MAP_APPFONT( 6 , 203 ) ;
+        Size = MAP_APPFONT( 165 , 10 ) ;
+        Text [ en-US ] = "~Use system credentials" ;
     };
-    FixedLine GB_LOGIN_LOGIN
+
+    FixedLine FL_BUTTONS
     {
-        Pos = MAP_APPFONT ( 7 , 44 ) ;
-        Size = MAP_APPFONT ( 197 , 8 ) ;
-        Text [ en-US ] = "Log in" ;
+        Pos = MAP_APPFONT( 0 , 216 ) ;
+        Size = MAP_APPFONT( 177 , 8 ) ;
     };
-    OKButton BTN_LOGIN_OK
-    {
-        Pos = MAP_APPFONT ( 209 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        DefButton = TRUE ;
-    };
-    CancelButton BTN_LOGIN_CANCEL
-    {
-        Pos = MAP_APPFONT ( 209 , 23 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-    };
+
     HelpButton BTN_LOGIN_HELP
     {
-        Pos = MAP_APPFONT ( 209 , 43 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT( 6 , 227 ) ;
+        Size = MAP_APPFONT( 50 , 14 ) ;
     };
-    String STR_LOGIN_REALM
+
+    OKButton BTN_LOGIN_OK
     {
-        Text [ en-US ] = "Please enter user name and password for \"%2\" on %1 here." ;
+        Pos = MAP_APPFONT( 66 , 227 ) ;
+        Size = MAP_APPFONT( 50 , 14 ) ;
+        DefButton = TRUE ;
     };
-    Text [ en-US ] = "User Name and Password Required" ;
+
+    CancelButton BTN_LOGIN_CANCEL
+    {
+        Pos = MAP_APPFONT( 121 , 227 ) ;
+        Size = MAP_APPFONT( 50 , 14 ) ;
+    };
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

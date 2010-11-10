@@ -52,6 +52,13 @@ struct SbVar {                      // Variablen-Element:
     SbiExprListVector*  pvMorePar;  // Array of arrays foo(pPar)(avMorePar[0])(avMorePar[1])...
 };
 
+struct KeywordSymbolInfo
+{
+    String          m_aKeywordSymbol;
+    SbxDataType     m_eSbxDataType;
+    SbiToken        m_eTok;
+};
+
 enum SbiExprType {                  // Expression-Typen:
     SbSTDEXPR,                      // normaler Ausdruck
     SbLVALUE,                       // beliebiger lValue
@@ -76,6 +83,7 @@ enum SbiNodeType {
     SbxVARVAL,                      // aVar = Wert
     SbxTYPEOF,                      // TypeOf ObjExpr Is Type
     SbxNODE,                        // Node
+    SbxNEW,                         // new <type> expression
     SbxDUMMY
 };
 
@@ -107,9 +115,11 @@ class SbiExprNode {                  // Operatoren (und Operanden)
     void  FoldConstants();          // Constant Folding durchfuehren
     void  CollectBits();            // Umwandeln von Zahlen in Strings
     BOOL  IsOperand()               // TRUE, wenn Operand
-        { return BOOL( eNodeType != SbxNODE && eNodeType != SbxTYPEOF ); }
+        { return BOOL( eNodeType != SbxNODE && eNodeType != SbxTYPEOF && eNodeType != SbxNEW ); }
     BOOL  IsTypeOf()
         { return BOOL( eNodeType == SbxTYPEOF ); }
+    BOOL  IsNew()
+        { return BOOL( eNodeType == SbxNEW ); }
     BOOL  IsNumber();               // TRUE bei Zahlen
     BOOL  IsString();               // TRUE bei Strings
     BOOL  IsLvalue();               // TRUE, falls als Lvalue verwendbar
@@ -122,6 +132,7 @@ public:
     SbiExprNode( SbiParser*, const SbiSymDef&, SbxDataType, SbiExprList* = NULL );
     SbiExprNode( SbiParser*, SbiExprNode*, SbiToken, SbiExprNode* );
     SbiExprNode( SbiParser*, SbiExprNode*, USHORT );    // #120061 TypeOf
+    SbiExprNode( SbiParser*, USHORT );                  // new <type>
     virtual ~SbiExprNode();
 
     BOOL IsValid()                  { return BOOL( !bError ); }
@@ -166,9 +177,9 @@ protected:
     BOOL          bByVal;           // TRUE: ByVal-Parameter
     BOOL          bBracket;         // TRUE: Parameter list with brackets
     USHORT        nParenLevel;
-    SbiExprNode* Term();
+    SbiExprNode* Term( const KeywordSymbolInfo* pKeywordSymbolInfo = NULL );
     SbiExprNode* ObjTerm( SbiSymDef& );
-    SbiExprNode* Operand();
+    SbiExprNode* Operand( bool bUsedForTypeOf = false );
     SbiExprNode* Unary();
     SbiExprNode* Exp();
     SbiExprNode* MulDiv();
@@ -180,7 +191,8 @@ protected:
     SbiExprNode* Comp();
     SbiExprNode* Boolean();
 public:
-    SbiExpression( SbiParser*, SbiExprType = SbSTDEXPR, SbiExprMode eMode = EXPRMODE_STANDARD ); // Parsender Ctor
+    SbiExpression( SbiParser*, SbiExprType = SbSTDEXPR,
+        SbiExprMode eMode = EXPRMODE_STANDARD, const KeywordSymbolInfo* pKeywordSymbolInfo = NULL ); // Parsender Ctor
     SbiExpression( SbiParser*, const String& );
     SbiExpression( SbiParser*, double, SbxDataType = SbxDOUBLE );
     SbiExpression( SbiParser*, const SbiSymDef&, SbiExprList* = NULL );
@@ -222,7 +234,6 @@ class SbiExprList {                  // Basisklasse fuer Parameter und Dims
 protected:
     SbiParser* pParser;             // Parser
     SbiExpression* pFirst;          // Expressions
-    SbiProcDef* pProc;              // DECLARE-Funktion (Parameter-Anpassung)
     short nExpr;                    // Anzahl Expressions
     short nDim;                     // Anzahl Dimensionen
     BOOL  bError;                   // TRUE: Fehler
@@ -237,8 +248,6 @@ public:
     SbiExpression* Get( short );
     BOOL  Test( const SbiProcDef& );    // Parameter-Checks
     void  Gen();                    // Code-Erzeugung
-    // Setzen einer Funktionsdefinition zum Abgleich der Parameter
-    void SetProc( SbiProcDef* p )   { pProc = p; }
     void addExpression( SbiExpression* pExpr );
 };
 

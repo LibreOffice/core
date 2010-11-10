@@ -37,7 +37,10 @@
 #include "dp_gui_extlistbox.hxx"
 #include "dp_gui_shared.hxx"
 #include "dp_gui_theextmgr.hxx"
+#include "dp_gui_extensioncmdqueue.hxx"
 #include "dp_misc.h"
+#include "dp_update.hxx"
+#include "dp_identifier.hxx"
 
 #include "vcl/ctrl.hxx"
 #include "vcl/menu.hxx"
@@ -74,8 +77,6 @@
 #include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/XComponentContext.hpp"
 
-#include "com/sun/star/deployment/thePackageManagerFactory.hpp"
-
 #include <map>
 #include <vector>
 #include <boost/shared_ptr.hpp>
@@ -106,17 +107,6 @@ struct StrAllFiles : public rtl::StaticWithInit< const OUString, StrAllFiles >
         return ret;
     }
 };
-
-//------------------------------------------------------------------------------
-UpdateListEntry::UpdateListEntry( const uno::Reference< deployment::XPackage > &xPackage,
-                                  const uno::Reference< deployment::XPackageManager > &xPackageManager ) :
-    m_xPackage( xPackage ),
-    m_xPackageManager( xPackageManager )
-{}
-
-//------------------------------------------------------------------------------
-UpdateListEntry::~UpdateListEntry()
-{}
 
 //------------------------------------------------------------------------------
 //                            ExtBoxWithBtns_Impl
@@ -279,6 +269,9 @@ void ExtBoxWithBtns_Impl::SetButtonPos( const Rectangle& rRect )
 // -----------------------------------------------------------------------
 void ExtBoxWithBtns_Impl::SetButtonStatus( const TEntry_Impl pEntry )
 {
+    bool bShowOptionBtn = true;
+
+    pEntry->m_bHasButtons = false;
     if ( ( pEntry->m_eState == REGISTERED ) || ( pEntry->m_eState == NOT_AVAILABLE ) )
     {
         m_pEnableBtn->SetText( DialogHelper::getResourceString( RID_CTX_ITEM_DISABLE ) );
@@ -288,26 +281,36 @@ void ExtBoxWithBtns_Impl::SetButtonStatus( const TEntry_Impl pEntry )
     {
         m_pEnableBtn->SetText( DialogHelper::getResourceString( RID_CTX_ITEM_ENABLE ) );
         m_pEnableBtn->SetHelpId( HID_EXTENSION_MANAGER_LISTBOX_ENABLE );
+        bShowOptionBtn = false;
     }
 
-    if ( ( pEntry->m_eState == NOT_AVAILABLE ) || pEntry->m_bMissingDeps )
+    if ( ( !pEntry->m_bUser || ( pEntry->m_eState == NOT_AVAILABLE ) || pEntry->m_bMissingDeps )
+         && !pEntry->m_bMissingLic )
         m_pEnableBtn->Hide();
     else
     {
         m_pEnableBtn->Enable( !pEntry->m_bLocked );
         m_pEnableBtn->Show();
+        pEntry->m_bHasButtons = true;
     }
 
-    if ( pEntry->m_bHasOptions )
+    if ( pEntry->m_bHasOptions && bShowOptionBtn )
     {
         m_pOptionsBtn->Enable( pEntry->m_bHasOptions );
         m_pOptionsBtn->Show();
+        pEntry->m_bHasButtons = true;
     }
     else
         m_pOptionsBtn->Hide();
 
-    m_pRemoveBtn->Show();
-    m_pRemoveBtn->Enable( !pEntry->m_bLocked );
+    if ( pEntry->m_bUser || pEntry->m_bShared )
+    {
+        m_pRemoveBtn->Enable( !pEntry->m_bLocked );
+        m_pRemoveBtn->Show();
+        pEntry->m_bHasButtons = true;
+    }
+    else
+        m_pRemoveBtn->Hide();
 }
 
 // -----------------------------------------------------------------------
@@ -360,24 +363,28 @@ bool ExtBoxWithBtns_Impl::HandleTabKey( bool bReverse )
 // -----------------------------------------------------------------------
 MENU_COMMAND ExtBoxWithBtns_Impl::ShowPopupMenu( const Point & rPos, const long nPos )
 {
-    if ( nPos >= (long) getItemCount() )
-        return CMD_NONE;
-
-    PopupMenu aPopup;
-
-    aPopup.InsertItem( CMD_UPDATE, DialogHelper::getResourceString( RID_CTX_ITEM_CHECK_UPDATE ) );
-
-    if ( ! GetEntryData( nPos )->m_bLocked )
+    if ( ( nPos >= 0 ) && ( nPos < (long) getItemCount() ) )
     {
-        if ( GetEntryData( nPos )->m_eState == REGISTERED )
-            aPopup.InsertItem( CMD_DISABLE, DialogHelper::getResourceString( RID_CTX_ITEM_DISABLE ) );
-        else if ( GetEntryData( nPos )->m_eState != NOT_AVAILABLE )
-            aPopup.InsertItem( CMD_ENABLE, DialogHelper::getResourceString( RID_CTX_ITEM_ENABLE ) );
+        if ( ! GetEntryData( nPos )->m_bLocked )
+        {
+            PopupMenu aPopup;
 
-        aPopup.InsertItem( CMD_REMOVE, DialogHelper::getResourceString( RID_CTX_ITEM_REMOVE ) );
+            aPopup.InsertItem( CMD_UPDATE, DialogHelper::getResourceString( RID_CTX_ITEM_CHECK_UPDATE ) );
+
+            if ( GetEntryData( nPos )->m_bUser )
+            {
+                if ( GetEntryData( nPos )->m_eState == REGISTERED )
+                    aPopup.InsertItem( CMD_DISABLE, DialogHelper::getResourceString( RID_CTX_ITEM_DISABLE ) );
+                else if ( GetEntryData( nPos )->m_eState != NOT_AVAILABLE )
+                    aPopup.InsertItem( CMD_ENABLE, DialogHelper::getResourceString( RID_CTX_ITEM_ENABLE ) );
+            }
+
+            aPopup.InsertItem( CMD_REMOVE, DialogHelper::getResourceString( RID_CTX_ITEM_REMOVE ) );
+
+            return (MENU_COMMAND) aPopup.Execute( this, rPos );
+        }
     }
-
-    return (MENU_COMMAND) aPopup.Execute( this, rPos );
+    return CMD_NONE;
 }
 
 //------------------------------------------------------------------------------
@@ -394,17 +401,13 @@ void ExtBoxWithBtns_Impl::MouseButtonDown( const MouseEvent& rMEvt )
         switch( ShowPopupMenu( aMousePos, nPos ) )
         {
             case CMD_NONE:      break;
-            case CMD_ENABLE:    m_pParent->enablePackage( GetEntryData( nPos )->m_xPackageManager,
-                                                          GetEntryData( nPos )->m_xPackage, true );
+            case CMD_ENABLE:    m_pParent->enablePackage( GetEntryData( nPos )->m_xPackage, true );
                                 break;
-            case CMD_DISABLE:   m_pParent->enablePackage( GetEntryData( nPos )->m_xPackageManager,
-                                                          GetEntryData( nPos )->m_xPackage, false );
+            case CMD_DISABLE:   m_pParent->enablePackage( GetEntryData( nPos )->m_xPackage, false );
                                 break;
-            case CMD_UPDATE:    m_pParent->updatePackage( GetEntryData( nPos )->m_xPackageManager,
-                                                          GetEntryData( nPos )->m_xPackage );
+            case CMD_UPDATE:    m_pParent->updatePackage( GetEntryData( nPos )->m_xPackage );
                                 break;
-            case CMD_REMOVE:    m_pParent->removePackage( GetEntryData( nPos )->m_xPackageManager,
-                                                          GetEntryData( nPos )->m_xPackage );
+            case CMD_REMOVE:    m_pParent->removePackage( GetEntryData( nPos )->m_xPackage );
                                 break;
         }
     }
@@ -506,11 +509,14 @@ IMPL_LINK( ExtBoxWithBtns_Impl, HandleEnableBtn, void*, EMPTYARG )
     if ( nActive != EXTENSION_LISTBOX_ENTRY_NOTFOUND )
     {
         TEntry_Impl pEntry = GetEntryData( nActive );
-        const bool bEnable( pEntry->m_eState != REGISTERED );
 
-        m_pParent->enablePackage( pEntry->m_xPackageManager,
-                                  pEntry->m_xPackage,
-                                  bEnable );
+        if ( pEntry->m_bMissingLic )
+            m_pParent->acceptLicense( pEntry->m_xPackage );
+        else
+        {
+            const bool bEnable( pEntry->m_eState != REGISTERED );
+            m_pParent->enablePackage( pEntry->m_xPackage, bEnable );
+        }
     }
 
     return 1;
@@ -524,8 +530,7 @@ IMPL_LINK( ExtBoxWithBtns_Impl, HandleRemoveBtn, void*, EMPTYARG )
     if ( nActive != EXTENSION_LISTBOX_ENTRY_NOTFOUND )
     {
         TEntry_Impl pEntry = GetEntryData( nActive );
-        m_pParent->removePackage( pEntry->m_xPackageManager,
-                                  pEntry->m_xPackage );
+        m_pParent->removePackage( pEntry->m_xPackage );
     }
 
     return 1;
@@ -571,21 +576,21 @@ String DialogHelper::getResourceString( USHORT id )
 }
 
 //------------------------------------------------------------------------------
-bool DialogHelper::IsSharedPkgMgr( const uno::Reference< deployment::XPackageManager > &xPackageManager )
+bool DialogHelper::IsSharedPkgMgr( const uno::Reference< deployment::XPackage > &xPackage )
 {
-    if ( xPackageManager->getContext().equals( OUSTR("shared") ) )
+    if ( xPackage->getRepositoryName().equals( OUSTR("shared") ) )
         return true;
     else
         return false;
 }
 
 //------------------------------------------------------------------------------
-bool DialogHelper::continueOnSharedExtension( const uno::Reference< deployment::XPackageManager > &xPackageManager,
+bool DialogHelper::continueOnSharedExtension( const uno::Reference< deployment::XPackage > &xPackage,
                                               Window *pParent,
                                               const USHORT nResID,
                                               bool &bHadWarning )
 {
-    if ( !bHadWarning && IsSharedPkgMgr( xPackageManager ) )
+    if ( !bHadWarning && IsSharedPkgMgr( xPackage ) )
     {
         const ::vos::OGuard guard( Application::GetSolarMutex() );
         WarningBox aInfoBox( pParent, getResId( nResID ) );
@@ -759,17 +764,16 @@ void ExtMgrDialog::setGetExtensionsURL( const ::rtl::OUString &rURL )
 
 //------------------------------------------------------------------------------
 long ExtMgrDialog::addPackageToList( const uno::Reference< deployment::XPackage > &xPackage,
-                                     const uno::Reference< deployment::XPackageManager > &xPackageManager )
+                                     bool bLicenseMissing )
 {
     m_aUpdateBtn.Enable( true );
-    return m_pExtensionBox->addEntry( xPackage, xPackageManager );
+    return m_pExtensionBox->addEntry( xPackage, bLicenseMissing );
 }
 
 //------------------------------------------------------------------------------
-void ExtMgrDialog::prepareChecking( const uno::Reference< deployment::XPackageManager > &xPackageManager )
+void ExtMgrDialog::prepareChecking()
 {
-    if ( xPackageManager.is() )
-        m_pExtensionBox->prepareChecking( xPackageManager );
+    m_pExtensionBox->prepareChecking();
 }
 
 //------------------------------------------------------------------------------
@@ -793,68 +797,82 @@ bool ExtMgrDialog::removeExtensionWarn( const OUString &rExtensionName ) const
 }
 
 //------------------------------------------------------------------------------
-bool ExtMgrDialog::enablePackage( const uno::Reference< deployment::XPackageManager > &xPackageManager,
-                                  const uno::Reference< deployment::XPackage > &xPackage,
+bool ExtMgrDialog::enablePackage( const uno::Reference< deployment::XPackage > &xPackage,
                                   bool bEnable )
 {
-    if ( !xPackageManager.is() || !xPackage.is() )
+    if ( !xPackage.is() )
         return false;
 
     if ( bEnable )
     {
-        if ( ! continueOnSharedExtension( xPackageManager, this, RID_WARNINGBOX_ENABLE_SHARED_EXTENSION, m_bEnableWarning ) )
+        if ( ! continueOnSharedExtension( xPackage, this, RID_WARNINGBOX_ENABLE_SHARED_EXTENSION, m_bEnableWarning ) )
             return false;
     }
     else
     {
-        if ( ! continueOnSharedExtension( xPackageManager, this, RID_WARNINGBOX_DISABLE_SHARED_EXTENSION, m_bDisableWarning ) )
+        if ( ! continueOnSharedExtension( xPackage, this, RID_WARNINGBOX_DISABLE_SHARED_EXTENSION, m_bDisableWarning ) )
             return false;
     }
 
-    m_pManager->enablePackage( xPackage, bEnable );
+    m_pManager->getCmdQueue()->enableExtension( xPackage, bEnable );
 
     return true;
 }
 
 //------------------------------------------------------------------------------
-bool ExtMgrDialog::removePackage( const uno::Reference< deployment::XPackageManager > &xPackageManager,
-                                  const uno::Reference< deployment::XPackage > &xPackage )
+bool ExtMgrDialog::removePackage( const uno::Reference< deployment::XPackage > &xPackage )
 {
-    if ( !xPackageManager.is() || !xPackage.is() )
+    if ( !xPackage.is() )
         return false;
 
-    if ( !IsSharedPkgMgr( xPackageManager ) || m_bDeleteWarning )
+    if ( !IsSharedPkgMgr( xPackage ) || m_bDeleteWarning )
     {
         if ( ! removeExtensionWarn( xPackage->getDisplayName() ) )
             return false;
     }
 
-    if ( ! continueOnSharedExtension( xPackageManager, this, RID_WARNINGBOX_REMOVE_SHARED_EXTENSION, m_bDeleteWarning ) )
+    if ( ! continueOnSharedExtension( xPackage, this, RID_WARNINGBOX_REMOVE_SHARED_EXTENSION, m_bDeleteWarning ) )
         return false;
 
-    m_pManager->removePackage( xPackageManager, xPackage );
+    m_pManager->getCmdQueue()->removeExtension( xPackage );
 
     return true;
 }
 
 //------------------------------------------------------------------------------
-bool ExtMgrDialog::updatePackage( const uno::Reference< deployment::XPackageManager > &xPackageManager,
-                                  const uno::Reference< deployment::XPackage > &xPackage )
+bool ExtMgrDialog::updatePackage( const uno::Reference< deployment::XPackage > &xPackage )
 {
-    if ( !xPackageManager.is() || !xPackage.is() )
+    if ( !xPackage.is() )
         return false;
 
-    std::vector< TUpdateListEntry > vEntries;
-    TUpdateListEntry pEntry( new UpdateListEntry( xPackage, xPackageManager ) );
-    vEntries.push_back( pEntry );
+    // get the extension with highest version
+    uno::Sequence<uno::Reference<deployment::XPackage> > seqExtensions =
+    m_pManager->getExtensionManager()->getExtensionsWithSameIdentifier(
+        dp_misc::getIdentifier(xPackage), xPackage->getName(), uno::Reference<ucb::XCommandEnvironment>());
+    uno::Reference<deployment::XPackage> extension =
+        dp_misc::getExtensionWithHighestVersion(seqExtensions);
+    OSL_ASSERT(extension.is());
+    std::vector< css::uno::Reference< css::deployment::XPackage > > vEntries;
+    vEntries.push_back(extension);
 
-    m_pManager->updatePackages( vEntries );
+    m_pManager->getCmdQueue()->checkForUpdates( vEntries );
 
     return true;
 }
 
 //------------------------------------------------------------------------------
-uno::Sequence< OUString > ExtMgrDialog::raiseAddPicker( const uno::Reference< deployment::XPackageManager > &xPackageManager )
+bool ExtMgrDialog::acceptLicense( const uno::Reference< deployment::XPackage > &xPackage )
+{
+    if ( !xPackage.is() )
+        return false;
+
+    m_pManager->getCmdQueue()->acceptLicense( xPackage );
+
+    return true;
+}
+
+//------------------------------------------------------------------------------
+uno::Sequence< OUString > ExtMgrDialog::raiseAddPicker()
 {
     const uno::Any mode( static_cast< sal_Int16 >( ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE ) );
     const uno::Reference< uno::XComponentContext > xContext( m_pManager->getContext() );
@@ -872,7 +890,8 @@ uno::Sequence< OUString > ExtMgrDialog::raiseAddPicker( const uno::Reference< de
     t_string2string title2filter;
     OUString sDefaultFilter( StrAllFiles::get() );
 
-    const uno::Sequence< uno::Reference< deployment::XPackageTypeInfo > > packageTypes( xPackageManager->getSupportedPackageTypes() );
+    const uno::Sequence< uno::Reference< deployment::XPackageTypeInfo > > packageTypes(
+        m_pManager->getExtensionManager()->getSupportedPackageTypes() );
 
     for ( sal_Int32 pos = 0; pos < packageTypes.getLength(); ++pos )
     {
@@ -1026,8 +1045,7 @@ IMPL_LINK( ExtMgrDialog, HandleAddBtn, void*, EMPTYARG )
 {
     setBusy( true );
 
-    uno::Reference< deployment::XPackageManager > xUserPkgMgr = m_pManager->getUserPkgMgr();
-    uno::Sequence< OUString > aFileList = raiseAddPicker( xUserPkgMgr );
+    uno::Sequence< OUString > aFileList = raiseAddPicker();
 
     if ( aFileList.getLength() )
     {
@@ -1133,13 +1151,13 @@ void ExtMgrDialog::Resize()
     {
         ImplControlValue aValue;
         bool bNativeOK;
-        Region aControlRegion( Rectangle( (const Point&)Point(), m_aProgressBar.GetSizePixel() ) );
-        Region aNativeControlRegion, aNativeContentRegion;
+        Rectangle aControlRegion( Point( 0, 0 ), m_aProgressBar.GetSizePixel() );
+        Rectangle aNativeControlRegion, aNativeContentRegion;
         if( (bNativeOK = GetNativeControlRegion( CTRL_PROGRESS, PART_ENTIRE_CONTROL, aControlRegion,
                                                  CTRL_STATE_ENABLED, aValue, rtl::OUString(),
                                                  aNativeControlRegion, aNativeContentRegion ) ) != FALSE )
         {
-            nProgressHeight = aNativeControlRegion.GetBoundRect().GetHeight();
+            nProgressHeight = aNativeControlRegion.GetHeight();
         }
     }
 
@@ -1298,23 +1316,22 @@ UpdateRequiredDialog::~UpdateRequiredDialog()
 
 //------------------------------------------------------------------------------
 long UpdateRequiredDialog::addPackageToList( const uno::Reference< deployment::XPackage > &xPackage,
-                                             const uno::Reference< deployment::XPackageManager > &xPackageManager )
+                                             bool bLicenseMissing )
 {
     // We will only add entries to the list with unsatisfied dependencies
-    if ( !checkDependencies( xPackage ) )
+    if ( !bLicenseMissing && !checkDependencies( xPackage ) )
     {
-        m_bHasLockedEntries |= (bool) xPackageManager->isReadOnly();
+        m_bHasLockedEntries |= m_pManager->isReadOnly( xPackage );
         m_aUpdateBtn.Enable( true );
-        return m_pExtensionBox->addEntry( xPackage, xPackageManager );
+        return m_pExtensionBox->addEntry( xPackage );
     }
     return 0;
 }
 
 //------------------------------------------------------------------------------
-void UpdateRequiredDialog::prepareChecking( const uno::Reference< deployment::XPackageManager > &xPackageManager )
+void UpdateRequiredDialog::prepareChecking()
 {
-    if ( xPackageManager.is() )
-        m_pExtensionBox->prepareChecking( xPackageManager );
+    m_pExtensionBox->prepareChecking();
 }
 
 //------------------------------------------------------------------------------
@@ -1331,11 +1348,10 @@ void UpdateRequiredDialog::checkEntries()
 }
 
 //------------------------------------------------------------------------------
-bool UpdateRequiredDialog::enablePackage( const uno::Reference< deployment::XPackageManager > &,
-                                  const uno::Reference< deployment::XPackage > &xPackage,
-                                  bool bEnable )
+bool UpdateRequiredDialog::enablePackage( const uno::Reference< deployment::XPackage > &xPackage,
+                                          bool bEnable )
 {
-    m_pManager->enablePackage( xPackage, bEnable );
+    m_pManager->getCmdQueue()->enableExtension( xPackage, bEnable );
 
     return true;
 }
@@ -1451,20 +1467,18 @@ IMPL_LINK( UpdateRequiredDialog, HandleUpdateBtn, void*, EMPTYARG )
 {
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
-    std::vector< TUpdateListEntry > vUpdateEntries;
+    std::vector< uno::Reference< deployment::XPackage > > vUpdateEntries;
     sal_Int32 nCount = m_pExtensionBox->GetEntryCount();
 
     for ( sal_Int32 i = 0; i < nCount; ++i )
     {
         TEntry_Impl pEntry = m_pExtensionBox->GetEntryData( i );
-        TUpdateListEntry pUpdateEntry( new UpdateListEntry( pEntry->m_xPackage,
-                                                            pEntry->m_xPackageManager ) );
-        vUpdateEntries.push_back( pUpdateEntry );
+        vUpdateEntries.push_back( pEntry->m_xPackage );
     }
 
     aGuard.clear();
 
-    m_pManager->updatePackages( vUpdateEntries );
+    m_pManager->getCmdQueue()->checkForUpdates( vUpdateEntries );
 
     return 1;
 }
@@ -1580,13 +1594,13 @@ void UpdateRequiredDialog::Resize()
     {
         ImplControlValue aValue;
         bool bNativeOK;
-        Region aControlRegion( Rectangle( (const Point&)Point(), m_aProgressBar.GetSizePixel() ) );
-        Region aNativeControlRegion, aNativeContentRegion;
+        Rectangle aControlRegion( Point( 0, 0 ), m_aProgressBar.GetSizePixel() );
+        Rectangle aNativeControlRegion, aNativeContentRegion;
         if( (bNativeOK = GetNativeControlRegion( CTRL_PROGRESS, PART_ENTIRE_CONTROL, aControlRegion,
                                                  CTRL_STATE_ENABLED, aValue, rtl::OUString(),
                                                  aNativeControlRegion, aNativeContentRegion ) ) != FALSE )
         {
-            nProgressHeight = aNativeControlRegion.GetBoundRect().GetHeight();
+            nProgressHeight = aNativeControlRegion.GetHeight();
         }
     }
 
@@ -1719,7 +1733,7 @@ void UpdateRequiredDialog::disableAllEntries()
     for ( long nIndex = 0; nIndex < nCount; nIndex++ )
     {
         TEntry_Impl pEntry = m_pExtensionBox->GetEntryData( nIndex );
-        enablePackage( pEntry->m_xPackageManager, pEntry->m_xPackage, false );
+        enablePackage( pEntry->m_xPackage, false );
     }
 
     setBusy( false );

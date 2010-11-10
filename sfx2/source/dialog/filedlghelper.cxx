@@ -79,13 +79,14 @@
 #include <unotools/viewoptions.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <svtools/helpid.hrc>
-#include <svl/pickerhelper.hxx>
 #include <comphelper/docpasswordrequest.hxx>
+#include <comphelper/docpasswordhelper.hxx>
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <sfx2/app.hxx>
+#include <sfx2/frame.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfac.hxx>
 #include "openflag.hxx"
@@ -96,7 +97,7 @@
 #include "filtergrouping.hxx"
 #include <sfx2/request.hxx>
 #include "filedlgimpl.hxx"
-
+#include <helpid.hrc>
 #include <sfxlocal.hrc>
 
 //-----------------------------------------------------------------------------
@@ -219,55 +220,55 @@ OUString FileDialogHelper_Impl::handleHelpRequested( const FilePickerEvent& aEve
 {
     //!!! todo: cache the help strings (here or TRA)
 
-    ULONG nHelpId = 0;
+    rtl::OString sHelpId;
     // mapping from element id -> help id
     switch ( aEvent.ElementId )
     {
         case ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION :
-            nHelpId = HID_FILESAVE_AUTOEXTENSION;
+            sHelpId = HID_FILESAVE_AUTOEXTENSION;
             break;
 
         case ExtendedFilePickerElementIds::CHECKBOX_PASSWORD :
-            nHelpId = HID_FILESAVE_SAVEWITHPASSWORD;
+            sHelpId = HID_FILESAVE_SAVEWITHPASSWORD;
             break;
 
         case ExtendedFilePickerElementIds::CHECKBOX_FILTEROPTIONS :
-            nHelpId = HID_FILESAVE_CUSTOMIZEFILTER;
+            sHelpId = HID_FILESAVE_CUSTOMIZEFILTER;
             break;
 
         case ExtendedFilePickerElementIds::CHECKBOX_READONLY :
-            nHelpId = HID_FILEOPEN_READONLY;
+            sHelpId = HID_FILEOPEN_READONLY;
             break;
 
         case ExtendedFilePickerElementIds::CHECKBOX_LINK :
-            nHelpId = HID_FILEDLG_LINK_CB;
+            sHelpId = HID_FILEDLG_LINK_CB;
             break;
 
         case ExtendedFilePickerElementIds::CHECKBOX_PREVIEW :
-            nHelpId = HID_FILEDLG_PREVIEW_CB;
+            sHelpId = HID_FILEDLG_PREVIEW_CB;
             break;
 
         case ExtendedFilePickerElementIds::PUSHBUTTON_PLAY :
-            nHelpId = HID_FILESAVE_DOPLAY;
+            sHelpId = HID_FILESAVE_DOPLAY;
             break;
 
         case ExtendedFilePickerElementIds::LISTBOX_VERSION_LABEL :
         case ExtendedFilePickerElementIds::LISTBOX_VERSION :
-            nHelpId = HID_FILEOPEN_VERSION;
+            sHelpId = HID_FILEOPEN_VERSION;
             break;
 
         case ExtendedFilePickerElementIds::LISTBOX_TEMPLATE_LABEL :
         case ExtendedFilePickerElementIds::LISTBOX_TEMPLATE :
-            nHelpId = HID_FILESAVE_TEMPLATE;
+            sHelpId = HID_FILESAVE_TEMPLATE;
             break;
 
         case ExtendedFilePickerElementIds::LISTBOX_IMAGE_TEMPLATE_LABEL :
         case ExtendedFilePickerElementIds::LISTBOX_IMAGE_TEMPLATE :
-            nHelpId = HID_FILEOPEN_IMAGE_TEMPLATE;
+            sHelpId = HID_FILEOPEN_IMAGE_TEMPLATE;
             break;
 
         case ExtendedFilePickerElementIds::CHECKBOX_SELECTION :
-            nHelpId = HID_FILESAVE_SELECTION;
+            sHelpId = HID_FILESAVE_SELECTION;
             break;
 
         default:
@@ -277,7 +278,7 @@ OUString FileDialogHelper_Impl::handleHelpRequested( const FilePickerEvent& aEve
     OUString aHelpText;
     Help* pHelp = Application::GetHelp();
     if ( pHelp )
-        aHelpText = String( pHelp->GetHelpText( nHelpId, NULL ) );
+        aHelpText = String( pHelp->GetHelpText( String( ByteString(sHelpId), RTL_TEXTENCODING_UTF8), NULL ) );
     return aHelpText;
 }
 
@@ -465,31 +466,6 @@ sal_Bool FileDialogHelper_Impl::isInOpenMode() const
 
 // ------------------------------------------------------------------------
 
-namespace {
-
-bool lclCheckODFPasswordCapability( const SfxFilter* pFilter )
-{
-    return pFilter && pFilter->IsOwnFormat() && pFilter->UsesStorage() && (pFilter->GetVersion() >= SOFFICE_FILEFORMAT_60);
-}
-
-bool lclCheckMSPasswordCapability( const SfxFilter* pFilter )
-{
-    // TODO #i105076# this should be in the filter configuration!!!
-    return pFilter && CheckMSPasswordCapabilityForExport( pFilter->GetFilterName() );
-}
-
-bool lclCheckPasswordCapability( const SfxFilter* pFilter )
-{
-    return
-        lclCheckODFPasswordCapability( pFilter ) ||
-        // TODO #i105076# this should be in the filter configuration!!!
-        lclCheckMSPasswordCapability( pFilter );
-}
-
-}
-
-// ------------------------------------------------------------------------
-
 void FileDialogHelper_Impl::updateFilterOptionsBox()
 {
     if ( !m_bHaveFilterOptions )
@@ -546,10 +522,30 @@ void FileDialogHelper_Impl::updateSelectionBox()
     if ( !mbHasSelectionBox )
         return;
 
-    const SfxFilter* pFilter = getCurentSfxFilter();
-    mbSelectionFltrEnabled = updateExtendedControl(
-        ExtendedFilePickerElementIds::CHECKBOX_SELECTION,
-        ( mbSelectionEnabled && pFilter && ( pFilter->GetFilterFlags() & SFX_FILTER_SUPPORTSSELECTION ) != 0 ) );
+    // Does the selection box exist?
+    sal_Bool bSelectionBoxFound = sal_False;
+    uno::Reference< XControlInformation > xCtrlInfo( mxFileDlg, UNO_QUERY );
+    if ( xCtrlInfo.is() )
+    {
+        Sequence< ::rtl::OUString > aCtrlList = xCtrlInfo->getSupportedControls();
+        sal_uInt32 nCount = aCtrlList.getLength();
+        for ( sal_uInt32 nCtrl = 0; nCtrl < nCount; ++nCtrl )
+            if ( aCtrlList[ nCtrl ].equalsAscii("SelectionBox") )
+            {
+                bSelectionBoxFound = sal_False;
+                break;
+            }
+    }
+
+    if ( bSelectionBoxFound )
+    {
+        const SfxFilter* pFilter = getCurentSfxFilter();
+        mbSelectionFltrEnabled = updateExtendedControl(
+            ExtendedFilePickerElementIds::CHECKBOX_SELECTION,
+            ( mbSelectionEnabled && pFilter && ( pFilter->GetFilterFlags() & SFX_FILTER_SUPPORTSSELECTION ) != 0 ) );
+        uno::Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
+        xCtrlAccess->setValue( ExtendedFilePickerElementIds::CHECKBOX_SELECTION, 0, makeAny( (sal_Bool)mbSelection ) );
+    }
 }
 
 // ------------------------------------------------------------------------
@@ -560,9 +556,10 @@ void FileDialogHelper_Impl::enablePasswordBox( sal_Bool bInit )
 
     sal_Bool bWasEnabled = mbIsPwdEnabled;
 
+    const SfxFilter* pCurrentFilter = getCurentSfxFilter();
     mbIsPwdEnabled = updateExtendedControl(
         ExtendedFilePickerElementIds::CHECKBOX_PASSWORD,
-        lclCheckPasswordCapability( getCurentSfxFilter() )
+        pCurrentFilter && ( pCurrentFilter->GetFilterFlags() & SFX_FILTER_ENCRYPTION )
     );
 
     if( bInit )
@@ -1206,7 +1203,7 @@ void SAL_CALL PickerThread_Impl::run()
 }
 
 // ------------------------------------------------------------------------
-void FileDialogHelper_Impl::setControlHelpIds( const sal_Int16* _pControlId, const sal_Int32* _pHelpId )
+void FileDialogHelper_Impl::setControlHelpIds( const sal_Int16* _pControlId, const char** _pHelpId )
 {
     DBG_ASSERT( _pControlId && _pHelpId, "FileDialogHelper_Impl::setControlHelpIds: invalid array pointers!" );
     if ( !_pControlId || !_pHelpId )
@@ -1215,17 +1212,16 @@ void FileDialogHelper_Impl::setControlHelpIds( const sal_Int16* _pControlId, con
     // forward these ids to the file picker
     try
     {
-        const ::rtl::OUString sHelpIdPrefix( RTL_CONSTASCII_USTRINGPARAM( "HID:" ) );
+        const ::rtl::OUString sHelpIdPrefix( RTL_CONSTASCII_USTRINGPARAM( INET_HID_SCHEME ) );
         // the ids for the single controls
         uno::Reference< XFilePickerControlAccess > xControlAccess( mxFileDlg, UNO_QUERY );
         if ( xControlAccess.is() )
         {
             while ( *_pControlId )
             {
-                // calc the help id of the element
+                DBG_ASSERT( INetURLObject( rtl::OStringToOUString( *_pHelpId, RTL_TEXTENCODING_UTF8 ) ).GetProtocol() == INET_PROT_NOT_VALID, "Wrong HelpId!" );
                 ::rtl::OUString sId( sHelpIdPrefix );
-                sId += ::rtl::OUString::valueOf( *_pHelpId );
-                // set the help id
+                sId += ::rtl::OUString( *_pHelpId, strlen( *_pHelpId ), RTL_TEXTENCODING_UTF8 );
                 xControlAccess->setValue( *_pControlId, ControlActions::SET_HELP_URL, makeAny( sId ) );
 
                 ++_pControlId; ++_pHelpId;
@@ -1236,12 +1232,6 @@ void FileDialogHelper_Impl::setControlHelpIds( const sal_Int16* _pControlId, con
     {
         DBG_ERROR( "FileDialogHelper_Impl::setControlHelpIds: caught an exception while setting the help ids!" );
     }
-}
-
-// ------------------------------------------------------------------------
-void FileDialogHelper_Impl::setDialogHelpId( const sal_Int32 _nHelpId )
-{
-    svt::SetDialogHelpId( mxFileDlg, _nHelpId );
 }
 
 // ------------------------------------------------------------------------
@@ -1534,6 +1524,10 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
         {
             SFX_ITEMSET_ARG( rpSet, pPassItem, SfxStringItem, SID_PASSWORD, FALSE );
             mbPwdCheckBoxState = ( pPassItem != NULL );
+
+            // in case the document has password to modify, the dialog should be shown
+            SFX_ITEMSET_ARG( rpSet, pPassToModifyItem, SfxUnoAnyItem, SID_MODIFYPASSWORDINFO, FALSE );
+            mbPwdCheckBoxState |= ( pPassToModifyItem && pPassToModifyItem->GetValue().hasValue() );
         }
 
         SFX_ITEMSET_ARG( rpSet, pSelectItem, SfxBoolItem, SID_SELECTION, FALSE );
@@ -1544,6 +1538,9 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
 
         // the password will be set in case user decide so
         rpSet->ClearItem( SID_PASSWORD );
+        rpSet->ClearItem( SID_RECOMMENDREADONLY );
+        rpSet->ClearItem( SID_MODIFYPASSWORDINFO );
+
     }
 
     if ( mbHasPassword && !mbPwdCheckBoxState )
@@ -1620,13 +1617,15 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
         // set the filter
         getRealFilter( rFilter );
 
+        const SfxFilter* pCurrentFilter = getCurentSfxFilter();
+
         // fill the rpURLList
-        implGetAndCacheFiles(mxFileDlg, rpURLList, getCurentSfxFilter());
+        implGetAndCacheFiles( mxFileDlg, rpURLList, pCurrentFilter );
         if ( rpURLList == NULL || rpURLList->GetObject(0) == NULL )
             return ERRCODE_ABORT;
 
         // check, wether or not we have to display a password box
-        if ( mbHasPassword && mbIsPwdEnabled && xCtrlAccess.is() )
+        if ( pCurrentFilter && mbHasPassword && mbIsPwdEnabled && xCtrlAccess.is() )
         {
             try
             {
@@ -1640,18 +1639,38 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
                     if( xInteractionHandler.is() )
                     {
                         // TODO: need a save way to distinguish MS filters from other filters
-                        bool bMSType = CheckMSPasswordCapabilityForExport( rFilter );
+                        // for now MS-filters are the only alien filters that support encryption
+                        sal_Bool bMSType = !pCurrentFilter->IsOwnFormat();
                         ::comphelper::DocPasswordRequestType eType = bMSType ?
                             ::comphelper::DocPasswordRequestType_MS :
                             ::comphelper::DocPasswordRequestType_STANDARD;
 
-                        ::comphelper::DocPasswordRequest* pPasswordRequest = new ::comphelper::DocPasswordRequest(
-                            eType, ::com::sun::star::task::PasswordRequestMode_PASSWORD_CREATE, *(rpURLList->GetObject(0)) );
+                        ::rtl::Reference< ::comphelper::DocPasswordRequest > pPasswordRequest( new ::comphelper::DocPasswordRequest( eType, ::com::sun::star::task::PasswordRequestMode_PASSWORD_CREATE, *(rpURLList->GetObject(0)), ( pCurrentFilter->GetFilterFlags() & SFX_FILTER_PASSWORDTOMODIFY ) != 0 ) );
 
-                        uno::Reference< com::sun::star::task::XInteractionRequest > rRequest( pPasswordRequest );
+                        uno::Reference< com::sun::star::task::XInteractionRequest > rRequest( pPasswordRequest.get() );
                         xInteractionHandler->handle( rRequest );
                         if ( pPasswordRequest->isPassword() )
-                            rpSet->Put( SfxStringItem( SID_PASSWORD, pPasswordRequest->getPassword() ) );
+                        {
+                            if ( pPasswordRequest->getPassword().getLength() )
+                                rpSet->Put( SfxStringItem( SID_PASSWORD, pPasswordRequest->getPassword() ) );
+
+                            if ( pPasswordRequest->getRecommendReadOnly() )
+                                rpSet->Put( SfxBoolItem( SID_RECOMMENDREADONLY, sal_True ) );
+
+                            if ( bMSType )
+                            {
+                                // the empty password has 0 as Hash
+                                sal_Int32 nHash = SfxMedium::CreatePasswordToModifyHash( pPasswordRequest->getPasswordToModify(), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.TextDocument" ) ).equals( pCurrentFilter->GetServiceName() ) );
+                                if ( nHash )
+                                    rpSet->Put( SfxUnoAnyItem( SID_MODIFYPASSWORDINFO, uno::makeAny( nHash ) ) );
+                            }
+                            else
+                            {
+                                uno::Sequence< beans::PropertyValue > aModifyPasswordInfo = ::comphelper::DocPasswordHelper::GenerateNewModifyPasswordInfo( pPasswordRequest->getPasswordToModify() );
+                                if ( aModifyPasswordInfo.getLength() )
+                                    rpSet->Put( SfxUnoAnyItem( SID_MODIFYPASSWORDINFO, uno::makeAny( aModifyPasswordInfo ) ) );
+                            }
+                        }
                         else
                             return ERRCODE_ABORT;
                     }
@@ -1927,7 +1946,7 @@ void FileDialogHelper_Impl::addGraphicFilter()
         }
     }
 
-#if defined(WIN) || defined(WNT)
+#if defined(WNT)
     if ( aExtensions.Len() > 240 )
         aExtensions = DEFINE_CONST_UNICODE( FILEDIALOG_FILTER_ALL );
 #endif
@@ -2319,9 +2338,6 @@ void FileDialogHelper_Impl::SetContext( FileDialogHelper::Context _eNewContext )
     const OUString* pConfigId = GetLastFilterConfigId( _eNewContext );
     if( pConfigId )
         LoadLastUsedFilter( *pConfigId );
-
-//  if( nNewHelpId )
-//      this->setDialogHelpId( nNewHelpId );
 }
 
 // ------------------------------------------------------------------------
@@ -2467,15 +2483,9 @@ void FileDialogHelper::CreateMatcher( const String& rFactory )
 }
 
 // ------------------------------------------------------------------------
-void FileDialogHelper::SetControlHelpIds( const sal_Int16* _pControlId, const sal_Int32* _pHelpId )
+void FileDialogHelper::SetControlHelpIds( const sal_Int16* _pControlId, const char** _pHelpId )
 {
     mpImp->setControlHelpIds( _pControlId, _pHelpId );
-}
-
-// ------------------------------------------------------------------------
-void FileDialogHelper::SetDialogHelpId( const sal_Int32 _nHelpId )
-{
-    mpImp->setDialogHelpId( _nHelpId );
 }
 
 void FileDialogHelper::SetContext( Context _eNewContext )
@@ -2721,7 +2731,7 @@ void FileDialogHelper::SetDisplayDirectory( const String& _rPath )
         if ( sFolder.getLength() == 0 )
         {
             // _rPath is not a valid path -> fallback to home directory
-            NAMESPACE_VOS( OSecurity ) aSecurity;
+            vos:: OSecurity  aSecurity;
             aSecurity.getHomeDir( sFolder );
         }
         mpImp->displayFolder( sFolder );

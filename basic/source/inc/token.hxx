@@ -95,7 +95,7 @@ enum SbiToken {
     NUMBER=FIRSTEXTRA, FIXSTRING, SYMBOL, _CDECL_, BYVAL, BYREF,
     OUTPUT, RANDOM, APPEND, BINARY, ACCESS,
     LOCK, READ, PRESERVE, BASE, ANY, LIB, _OPTIONAL_,
-    EXPLICIT, COMPATIBLE, CLASSMODULE, PARAMARRAY,
+    EXPLICIT, COMPATIBLE, CLASSMODULE, PARAMARRAY, WITHEVENTS,
 
     // Ab hier kommen JavaScript-Tokens (gleiches enum, damit gleicher Typ)
     FIRSTJAVA,
@@ -120,7 +120,25 @@ enum SbiToken {
 #undef SbiTokenSHAREDTMPUNDEF
 #endif
 
+// #i109076
+class TokenLabelInfo
+{
+    bool* m_pTokenCanBeLabelTab;
+
+public:
+    TokenLabelInfo( void );
+    TokenLabelInfo( const TokenLabelInfo& rInfo )
+        : m_pTokenCanBeLabelTab( NULL )
+            { (void)rInfo; }
+    ~TokenLabelInfo();
+
+    bool canTokenBeLabel( SbiToken eTok )
+        { return m_pTokenCanBeLabelTab[eTok]; }
+};
+
 class SbiTokenizer : public SbiScanner {
+    TokenLabelInfo  m_aTokenLabelInfo;
+
 protected:
     SbiToken eCurTok;               // aktuelles Token
     SbiToken ePush;                 // Pushback-Token

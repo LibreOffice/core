@@ -44,6 +44,7 @@
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include "sbunoobj.hxx"
 #include "errobject.hxx"
+#include "sbtrace.hxx"
 
 using namespace ::com::sun::star;
 
@@ -155,6 +156,7 @@ SbiRuntime::pStep0 SbiRuntime::aStep0[] = { // Alle Opcodes ohne Operanden
     &SbiRuntime::StepVBASET,// vba-like set statement
     &SbiRuntime::StepERASE_CLEAR,// vba-like set statement
     &SbiRuntime::StepARRAYACCESS,// access TOS as array
+    &SbiRuntime::StepBYVAL,     // access TOS as array
 };
 
 SbiRuntime::pStep1 SbiRuntime::aStep1[] = { // Alle Opcodes mit einem Operanden
@@ -719,6 +721,12 @@ BOOL SbiRuntime::Step()
             if( pInst->IsReschedule() && bStaticGlobalEnableReschedule )
                 Application::Reschedule();
         }
+
+#ifdef DBG_TRACE_BASIC
+        UINT32 nPC = ( pCode - (const BYTE* )pImg->GetCode() );
+        dbg_traceStep( pMod, nPC, pINST->nCallLvl );
+#endif
+
         SbiOpcode eOp = (SbiOpcode ) ( *pCode++ );
         UINT32 nOp1, nOp2;
         if( eOp <= SbOP0_END )
@@ -755,6 +763,11 @@ BOOL SbiRuntime::Step()
         // (insbesondere nicht nach Compiler-Fehlern zur Laufzeit)
         if( nError && bRun )
         {
+#ifdef DBG_TRACE_BASIC
+            SbError nTraceErr = nError;
+            String aTraceErrMsg = GetSbData()->aErrMsg;
+            bool bTraceErrHandled = true;
+#endif
             SbError err = nError;
             ClearExprStack();
             nError = 0;
@@ -835,12 +848,19 @@ BOOL SbiRuntime::Step()
                 // Kein Error-Hdl gefunden -> altes Vorgehen
                 else
                 {
+#ifdef DBG_TRACE_BASIC
+                    bTraceErrHandled = false;
+#endif
                     pInst->Abort();
                 }
 
                 // ALT: Nur
                 // pInst->Abort();
             }
+
+#ifdef DBG_TRACE_BASIC
+            dbg_traceNotifyError( nTraceErr, aTraceErrMsg, bTraceErrHandled, pINST->nCallLvl );
+#endif
         }
     }
     return bRun;
@@ -906,7 +926,7 @@ sal_Int32 SbiRuntime::translateErrorToVba( SbError nError, String& rMsg )
     {
         // TEST, has to be vb here always
 #ifdef DBG_UTIL
-        SbError nTmp = StarBASIC::GetSfxFromVBError( USHORT( nError ) );
+        SbError nTmp = StarBASIC::GetSfxFromVBError( (USHORT)nError );
         DBG_ASSERT( nTmp, "No VB error!" );
 #endif
 
@@ -1231,9 +1251,7 @@ void SbiRuntime::DllCall
 
     SbxVariable* pRes = new SbxVariable( eResType );
     SbiDllMgr* pDllMgr = pInst->GetDllMgr();
-    ByteString aByteFuncName( aFuncName, gsl_getSystemTextEncoding() );
-    ByteString aByteDLLName( aDLLName, gsl_getSystemTextEncoding() );
-    SbError nErr = pDllMgr->Call( aByteFuncName.GetBuffer(), aByteDLLName.GetBuffer(), pArgs, *pRes, bCDecl );
+    SbError nErr = pDllMgr->Call( aFuncName, aDLLName, pArgs, *pRes, bCDecl );
     if( nErr )
         Error( nErr );
     PushVar( pRes );

@@ -54,7 +54,7 @@ TYPEINIT1(XMLAutoTextContainerEventImport, SvXMLImportContext);
 
 XMLAutoTextContainerEventImport::XMLAutoTextContainerEventImport(
     SvXMLImport& rImport,
-    USHORT nPrfx,
+    sal_uInt16 nPrfx,
     const OUString& rLName,
     const Reference<XNameReplace> & rEvnts ) :
         SvXMLImportContext(rImport, nPrfx, rLName),
@@ -67,7 +67,7 @@ XMLAutoTextContainerEventImport::~XMLAutoTextContainerEventImport()
 }
 
 SvXMLImportContext* XMLAutoTextContainerEventImport::CreateChildContext(
-    USHORT nPrefix,
+    sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList> & )
 {

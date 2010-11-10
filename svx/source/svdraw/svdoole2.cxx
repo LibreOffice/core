@@ -1714,8 +1714,8 @@ void SdrOle2Obj::ImpSetVisAreaSize()
         if ( pClient || bHasOwnClient )
         {
             // TODO/LATER: IMHO we need to do similar things when object is UIActive or OutplaceActive?! (MBA)
-            if ( (nMiscStatus & embed::EmbedMisc::MS_EMBED_RECOMPOSEONRESIZE) &&
-                    svt::EmbeddedObjectRef::TryRunningState( xObjRef.GetObject() )
+            if ( ((nMiscStatus & embed::EmbedMisc::MS_EMBED_RECOMPOSEONRESIZE) &&
+                    svt::EmbeddedObjectRef::TryRunningState( xObjRef.GetObject() ))
                     || xObjRef->getCurrentState() == embed::EmbedStates::INPLACE_ACTIVE
                     )
             {
@@ -1832,11 +1832,7 @@ void SdrOle2Obj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
             // if the object needs recompose on resize
             // the client site should be created before the resize will take place
             // check whether there is no client site and create it if necessary
-            if ( !SfxInPlaceClient::GetClient( dynamic_cast<SfxObjectShell*>(pModel->GetPersist()), xObjRef.GetObject() )
-              && !( mpImpl->pLightClient && xObjRef->getClientSite() == uno::Reference< embed::XEmbeddedClient >( mpImpl->pLightClient ) ) )
-            {
-                AddOwnLightClient();
-            }
+            AddOwnLightClient();
         }
     }
 
@@ -2197,26 +2193,32 @@ sal_Bool SdrOle2Obj::CalculateNewScaling( Fraction& aScaleWidth, Fraction& aScal
 sal_Bool SdrOle2Obj::AddOwnLightClient()
 {
     // The Own Light Client must be registered in object only using this method!
-    Connect();
-
-    if ( xObjRef.is() && mpImpl->pLightClient )
+    if ( !SfxInPlaceClient::GetClient( dynamic_cast<SfxObjectShell*>(pModel->GetPersist()), xObjRef.GetObject() )
+      && !( mpImpl->pLightClient && xObjRef->getClientSite() == uno::Reference< embed::XEmbeddedClient >( mpImpl->pLightClient ) ) )
     {
-        Fraction aScaleWidth;
-        Fraction aScaleHeight;
-        Size aObjAreaSize;
-        if ( CalculateNewScaling( aScaleWidth, aScaleHeight, aObjAreaSize ) )
+        Connect();
+
+        if ( xObjRef.is() && mpImpl->pLightClient )
         {
-            mpImpl->pLightClient->SetSizeScale( aScaleWidth, aScaleHeight );
-            try {
-                xObjRef->setClientSite( mpImpl->pLightClient );
-                return sal_True;
-            } catch( uno::Exception& )
-            {}
+            Fraction aScaleWidth;
+            Fraction aScaleHeight;
+            Size aObjAreaSize;
+            if ( CalculateNewScaling( aScaleWidth, aScaleHeight, aObjAreaSize ) )
+            {
+                mpImpl->pLightClient->SetSizeScale( aScaleWidth, aScaleHeight );
+                try {
+                    xObjRef->setClientSite( mpImpl->pLightClient );
+                    return sal_True;
+                } catch( uno::Exception& )
+                {}
+            }
+
         }
 
+        return sal_False;
     }
 
-    return sal_False;
+       return sal_True;
 }
 
 //////////////////////////////////////////////////////////////////////////////

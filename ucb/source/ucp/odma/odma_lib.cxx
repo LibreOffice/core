@@ -78,10 +78,6 @@ namespace odma
         if (bLoaded)
             return sal_True;
         ::rtl::OUString sPath;
-    #ifdef WIN
-        sPath = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ODMA.DLL"));
-
-    #endif
     #ifdef WNT
         sPath = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ODMA32.DLL"));
     #endif

@@ -62,7 +62,8 @@ using ::xmloff::token::XML_EVENT_LISTENERS;
 XMLEventExport::XMLEventExport(SvXMLExport& rExp,
                          const XMLEventNameTranslation* pTranslationTable) :
     sEventType(RTL_CONSTASCII_USTRINGPARAM("EventType")),
-    rExport(rExp)
+    rExport(rExp),
+    bExtNamespace(false)
 {
     AddTranslationTable(pTranslationTable);
 }
@@ -175,6 +176,16 @@ void XMLEventExport::Export( Reference<XNameAccess> & rAccess,
     }
 }
 
+void XMLEventExport::ExportExt( Reference<XNameAccess> & rAccess,
+                                sal_Bool bWhitespace )
+{
+    // set bExtNamespace flag to use XML_NAMESPACE_OFFICE_EXT namespace
+    // for events element (not for child elements)
+    bExtNamespace = true;
+    Export(rAccess, bWhitespace);
+    bExtNamespace = false;          // reset for future Export calls
+}
+
 /// export a singular event and wirte <office:events> container
 void XMLEventExport::ExportSingleEvent(
     Sequence<PropertyValue>& rEventValues,
@@ -270,13 +281,17 @@ void XMLEventExport::StartElement(sal_Bool bWhitespace)
     {
         rExport.IgnorableWhitespace();
     }
-    rExport.StartElement( XML_NAMESPACE_OFFICE, XML_EVENT_LISTENERS,
+    sal_uInt16 nNamespace = bExtNamespace ? XML_NAMESPACE_OFFICE_EXT
+                                          : XML_NAMESPACE_OFFICE;
+    rExport.StartElement( nNamespace, XML_EVENT_LISTENERS,
                           bWhitespace);
 }
 
 void XMLEventExport::EndElement(sal_Bool bWhitespace)
 {
-    rExport.EndElement(XML_NAMESPACE_OFFICE, XML_EVENT_LISTENERS, bWhitespace);
+    sal_uInt16 nNamespace = bExtNamespace ? XML_NAMESPACE_OFFICE_EXT
+                                          : XML_NAMESPACE_OFFICE;
+    rExport.EndElement(nNamespace, XML_EVENT_LISTENERS, bWhitespace);
     if (bWhitespace)
     {
         rExport.IgnorableWhitespace();
@@ -343,6 +358,10 @@ const XMLEventNameTranslation aStandardEventTable[] =
     { "OnFieldMerge",           XML_NAMESPACE_OFFICE, "field-merge" },
     { "OnFieldMergeFinished",   XML_NAMESPACE_OFFICE, "field-merge-finished" },
     { "OnLayoutFinished",       XML_NAMESPACE_OFFICE, "layout-finished" },
+    { "OnDoubleClick",      XML_NAMESPACE_OFFICE, "dblclick" },
+    { "OnRightClick",       XML_NAMESPACE_OFFICE, "contextmenu" },
+    { "OnChange",           XML_NAMESPACE_OFFICE, "content-changed" },
+    { "OnCalculate",        XML_NAMESPACE_OFFICE, "calculated" },
 
     { NULL, 0, 0 }
 };

@@ -39,6 +39,7 @@ namespace utl
 class SbUnoFactory;
 class SbTypeFactory;
 class SbOLEFactory;
+class SbFormFactory;
 class SbiInstance;
 class SbModule;
 
@@ -49,9 +50,15 @@ public:
     virtual SbxObject* CreateObject( const String& );
 };
 
+typedef ::std::vector< String > StringVector;
+
 struct SbClassData
 {
     SbxArrayRef     mxIfaces;
+
+    // types this module depends on because of use in Dim As New <type>
+    // needed for initialization order of class modules
+    StringVector    maRequiredTypes;
 
     SbClassData( void );
     ~SbClassData( void )
@@ -101,6 +108,7 @@ struct SbiGlobals
     SbTypeFactory*  pTypeFac;       // Factory for user defined types
     SbClassFactory* pClassFac;      // Factory for user defined classes (based on class modules)
     SbOLEFactory*   pOLEFac;        // Factory for OLE types
+    SbFormFactory*  pFormFac;       // Factory for user forms
     SbModule*       pMod;           // aktuell aktives Modul
     SbModule*       pCompMod;       // aktuell compiliertes Modul
     short           nInst;          // Anzahl BASICs
@@ -136,6 +144,7 @@ SbiGlobals* GetSbData();
 #define pTYPEFAC    GetSbData()->pTypeFac
 #define pCLASSFAC   GetSbData()->pClassFac
 #define pOLEFAC     GetSbData()->pOLEFac
+#define pFORMFAC    GetSbData()->pFormFac
 
 #endif
 

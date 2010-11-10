@@ -68,13 +68,13 @@ using rtl::OUString;
 // helper functions; implemented below
 Reference<XNode> lcl_createDomInstance();
 Reference<XNode> lcl_createElement( SvXMLImport& rImport,
-                                    USHORT nPrefix,
+                                    sal_uInt16 nPrefix,
                                     const OUString rLocalName,
                                     Reference<XNode> xParent);
 
 
 DomBuilderContext::DomBuilderContext( SvXMLImport& rImport,
-                                      USHORT nPrefix,
+                                      sal_uInt16 nPrefix,
                                       const OUString& rLocalName ) :
     SvXMLImportContext( rImport, nPrefix, rLocalName ),
     mxNode( lcl_createElement( rImport, nPrefix, rLocalName,
@@ -86,7 +86,7 @@ DomBuilderContext::DomBuilderContext( SvXMLImport& rImport,
 }
 
 DomBuilderContext::DomBuilderContext( SvXMLImport& rImport,
-                                      USHORT nPrefix,
+                                      sal_uInt16 nPrefix,
                                       const OUString& rLocalName,
                                       Reference<XNode>& xParent ) :
     SvXMLImportContext( rImport, nPrefix, rLocalName ),
@@ -114,7 +114,7 @@ Reference<XNode> DomBuilderContext::getNode()
 
 
 SvXMLImportContext* DomBuilderContext::CreateChildContext(
-    USHORT nPrefix,
+    sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList>& )
 {
@@ -214,7 +214,7 @@ Reference<XNode> lcl_createDomInstance()
 }
 
 Reference<XNode> lcl_createElement( SvXMLImport& rImport,
-                                    USHORT nPrefix,
+                                    sal_uInt16 nPrefix,
                                     const OUString rLocalName,
                                     Reference<XNode> xParent)
 {

@@ -51,20 +51,15 @@
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/system/SystemShellExecuteException.hpp>
 
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
-#endif
 #include <comphelper/storagehelper.hxx>
+#include "comphelper/configurationhelper.hxx"
 
-#ifndef _SVT_DOC_ADDRESSTEMPLATE_HXX_
 #include <svtools/addresstemplate.hxx>
-#endif
 #include <svl/visitem.hxx>
 #include <unotools/intlwrapper.hxx>
 
-#ifndef _UNOTOOLS_CONFIGMGR_HXX_
 #include <unotools/configmgr.hxx>
-#endif
 #include <tools/config.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/msgbox.hxx>
@@ -90,6 +85,7 @@
 #include <vos/process.hxx>
 #include <rtl/bootstrap.hxx>
 #include <cppuhelper/exc_hlp.hxx>
+#include <rtl/ustrbuf.hxx>
 
 #include <com/sun/star/script/provider/XScriptProviderFactory.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
@@ -350,11 +346,10 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             Help* pHelp = Application::GetHelp();
             if ( pHelp )
             {
-                ULONG nHelpId = ( rReq.GetSlot() == SID_HELP_SUPPORTPAGE ) ? 66056 : 0;
-                if ( 66056 == nHelpId )
+                if ( rReq.GetSlot() == SID_HELP_SUPPORTPAGE )
                 {
                     // show Support page with new URL
-                    String sHelpURL = SfxHelp::CreateHelpURL( nHelpId, String() );
+                    String sHelpURL = SfxHelp::CreateHelpURL( String::CreateFromAscii(".uno:HelpSupport"), String() );
                     String sParams = sHelpURL.Copy( sHelpURL.Search( '?' ) );
                     sHelpURL = String::CreateFromAscii("vnd.sun.star.help://shared/text/shared/05/00000001.xhp");
                     sHelpURL += sParams;
@@ -362,7 +357,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                     pHelp->Start( sHelpURL, NULL );
                 }
                 else
-                    pHelp->Start( nHelpId, NULL ); // show start page
+                    pHelp->Start( String::CreateFromAscii(".uno:HelpIndex"), NULL ); // show start page
                 bDone = TRUE;
             }
             break;
@@ -879,6 +874,31 @@ namespace
     }
 }
 
+static ::rtl::OUString getConfigurationStringValue(
+    const ::rtl::OUString& rPackage,
+    const ::rtl::OUString& rRelPath,
+    const ::rtl::OUString& rKey,
+    const ::rtl::OUString& rDefaultValue )
+{
+    ::rtl::OUString aDefVal( rDefaultValue );
+
+    try
+    {
+        ::comphelper::ConfigurationHelper::readDirectKey(
+            comphelper::getProcessServiceFactory(),
+            rPackage,
+            rRelPath,
+            rKey,
+            ::comphelper::ConfigurationHelper::E_READONLY) >>= aDefVal;
+    }
+    catch(const com::sun::star::uno::RuntimeException& exRun)
+    { throw exRun; }
+    catch(const com::sun::star::uno::Exception&)
+    {}
+
+    return aDefVal;
+}
+
 void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
 {
     DBG_MEMTEST();
@@ -924,8 +944,34 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                 uno::Reference< css::system::XSystemShellExecute > xSystemShell(
                     xSMGR->createInstance( DEFINE_CONST_UNICODE("com.sun.star.system.SystemShellExecute" ) ),
                     uno::UNO_QUERY_THROW );
-                if ( xSystemShell.is() )
-                    xSystemShell->execute( DEFINE_CONST_UNICODE("http://extensions.services.openoffice.org/dictionary?cid=926385"), ::rtl::OUString(), css::system::SystemShellExecuteFlags::DEFAULTS );
+
+                // read repository URL from configuration
+                ::rtl::OUString sTemplRepoURL =
+                    getConfigurationStringValue(
+                        ::rtl::OUString::createFromAscii("org.openoffice.Office.Common"),
+                        ::rtl::OUString::createFromAscii("Dictionaries"),
+                        ::rtl::OUString::createFromAscii("RepositoryURL"),
+                        ::rtl::OUString());
+
+                if ( xSystemShell.is() && sTemplRepoURL.getLength() > 0 )
+                {
+                    ::rtl::OUStringBuffer aURLBuf( sTemplRepoURL );
+                    aURLBuf.appendAscii( "?" );
+                    aURLBuf.appendAscii( "lang=" );
+
+                    // read locale from configuration
+                    ::rtl::OUString sLocale = getConfigurationStringValue(
+                        ::rtl::OUString::createFromAscii("org.openoffice.Setup"),
+                        ::rtl::OUString::createFromAscii("L10N"),
+                        ::rtl::OUString::createFromAscii("ooLocale"),
+                        ::rtl::OUString::createFromAscii("en-US"));
+
+                    aURLBuf.append( sLocale );
+                    xSystemShell->execute(
+                        aURLBuf.makeStringAndClear(),
+                        ::rtl::OUString(),
+                        css::system::SystemShellExecuteFlags::DEFAULTS );
+                }
             }
             catch( const ::com::sun::star::uno::Exception& )
             {

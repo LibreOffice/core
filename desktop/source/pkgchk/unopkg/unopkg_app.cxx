@@ -35,13 +35,17 @@
 #include "tools/extendapplicationenvironment.hxx"
 #include "rtl/ustrbuf.hxx"
 #include "rtl/uri.hxx"
+#include "rtl/bootstrap.hxx"
 #include "osl/thread.h"
 #include "osl/process.h"
 #include "osl/conditn.hxx"
+#include "osl/file.hxx"
 #include "cppuhelper/implbase1.hxx"
 #include "cppuhelper/exc_hlp.hxx"
 #include "comphelper/anytostring.hxx"
-#include "com/sun/star/deployment/thePackageManagerFactory.hpp"
+#include "comphelper/sequence.hxx"
+#include "com/sun/star/deployment/ExtensionManager.hpp"
+
 #include "com/sun/star/deployment/ui/PackageManagerDialog.hpp"
 #include "com/sun/star/ui/dialogs/XExecutableDialog.hpp"
 #include "com/sun/star/lang/DisposedException.hpp"
@@ -59,10 +63,24 @@ using ::rtl::OUString;
 namespace css = ::com::sun::star;
 namespace {
 
+struct ExtensionName
+{
+    OUString m_str;
+    ExtensionName( OUString const & str ) : m_str( str ) {}
+    bool operator () ( Reference<deployment::XPackage> const & e ) const
+    {
+        if (m_str.equals(dp_misc::getIdentifier(e))
+             ||  m_str.equals(e->getName()))
+            return true;
+        return false;
+    }
+};
+
 //------------------------------------------------------------------------------
 const char s_usingText [] =
 "\n"
 "using: " APP_NAME " add <options> extension-path...\n"
+"       " APP_NAME " validate <options> extension-identifier...\n"
 "       " APP_NAME " remove <options> extension-identifier...\n"
 "       " APP_NAME " list <options> extension-identifier...\n"
 "       " APP_NAME " reinstall <options>\n"
@@ -72,6 +90,8 @@ const char s_usingText [] =
 "\n"
 "sub-commands:\n"
 " add                     add extension\n"
+" validate                checks the prerequisites of an installed extension and"
+"                         registers it if possible\n"
 " remove                  remove extensions by identifier\n"
 " reinstall               expert feature: reinstall all deployed extensions\n"
 " list                    list information about deployed extensions\n"
@@ -89,6 +109,8 @@ const char s_usingText [] =
 "                                         deployment context;\n"
 "                                         run only when no concurrent Office\n"
 "                                         process(es) are running!\n"
+" --bundled               expert feature: operate on bundled extensions. Only\n"
+"                                         works with list, validate, reinstall;\n"
 " --deployment-context    expert feature: explicit deployment context\n"
 "     <context>\n"
 "\n"
@@ -149,12 +171,13 @@ void DialogClosedListenerImpl::dialogClosed(
 // installed with OOo 2.2 or later could not normally be found via its file
 // name.
 Reference<deployment::XPackage> findPackage(
-    Reference<deployment::XPackageManager> const & manager,
+    OUString const & repository,
+    Reference<deployment::XExtensionManager> const & manager,
     Reference<ucb::XCommandEnvironment > const & environment,
     OUString const & idOrFileName )
 {
     Sequence< Reference<deployment::XPackage> > ps(
-        manager->getDeployedPackages(
+        manager->getDeployedExtensions(repository,
             Reference<task::XAbortChannel>(), environment ) );
     for ( sal_Int32 i = 0; i < ps.getLength(); ++i )
         if ( dp_misc::getIdentifier( ps[i] ) == idOrFileName )
@@ -214,7 +237,7 @@ extern "C" int unopkg_main()
     bool subcmd_add = false;
     bool subcmd_gui = false;
     OUString logFile;
-    OUString deploymentContext;
+    OUString repository;
     OUString cmdArg;
     ::std::vector<OUString> cmdPackages;
 
@@ -250,7 +273,7 @@ extern "C" int unopkg_main()
             return 0;
         }
         else if (isOption( info_version, &nPos )) {
-            dp_misc::writeConsole("\n"APP_NAME" Version 3.0\n");
+            dp_misc::writeConsole("\n"APP_NAME" Version 3.3\n");
             return 0;
         }
         //consume all bootstrap variables which may occur before the subcommannd
@@ -279,7 +302,7 @@ extern "C" int unopkg_main()
                      !readOption( &option_force, info_force, &nPos ) &&
                      !readOption( &option_bundled, info_bundled, &nPos ) &&
                      !readOption( &option_suppressLicense, info_suppressLicense, &nPos ) &&
-                     !readArgument( &deploymentContext, info_context, &nPos ) &&
+                     !readArgument( &repository, info_context, &nPos ) &&
                      !isBootstrapVariable(&nPos))
             {
                 osl_getCommandArg( nPos, &cmdArg.pData );
@@ -312,25 +335,18 @@ extern "C" int unopkg_main()
             }
         }
 
-        //make sure the bundled option was provided together with shared
-        if (option_bundled && !option_shared)
+        if (repository.getLength() == 0)
         {
-            dp_misc::writeConsoleError(
-                "\nERROR: option --bundled can only be used together with --shared!");
-            return 1;
-        }
-
-
-        xComponentContext = getUNO(
-            disposeGuard, option_verbose, option_shared, subcmd_gui,
-            xLocalComponentContext );
-
-        if (deploymentContext.getLength() == 0) {
-            deploymentContext = option_shared ? OUSTR("shared") : OUSTR("user");
+            if (option_shared)
+                repository = OUSTR("shared");
+            else if (option_bundled)
+                repository = OUSTR("bundled");
+            else
+                repository = OUSTR("user");
         }
         else
         {
-            if (deploymentContext.equalsAsciiL(
+            if (repository.equalsAsciiL(
                     RTL_CONSTASCII_STRINGPARAM("shared") )) {
                 option_shared = true;
             }
@@ -343,15 +359,67 @@ extern "C" int unopkg_main()
             }
         }
 
-        Reference<deployment::XPackageManagerFactory> xPackageManagerFactory(
-            deployment::thePackageManagerFactory::get( xComponentContext ) );
-        Reference<deployment::XPackageManager> xPackageManager(
-            xPackageManagerFactory->getPackageManager( deploymentContext ) );
+        if (subCommand.equals(OUSTR("reinstall")))
+        {
+            //We must prevent that services and types are loaded by UNO,
+            //otherwise we cannot delete the registry data folder.
+            OUString extensionUnorc;
+            if (repository.equals(OUSTR("user")))
+                extensionUnorc = OUSTR("$UNO_USER_PACKAGES_CACHE/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/unorc");
+            else if (repository.equals(OUSTR("shared")))
+                extensionUnorc = OUSTR("$SHARED_EXTENSIONS_USER/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/unorc");
+            else if (repository.equals(OUSTR("bundled")))
+                extensionUnorc = OUSTR("$BUNDLED_EXTENSIONS_USER/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/unorc");
+            else
+                OSL_ASSERT(0);
+
+            ::rtl::Bootstrap::expandMacros(extensionUnorc);
+            oslFileError e = osl_removeFile(extensionUnorc.pData);
+            if (e != osl_File_E_None && e != osl_File_E_NOENT)
+                throw Exception(OUSTR("Could not delete ") + extensionUnorc, 0);
+        }
+        else if (subCommand.equals(OUSTR("sync")))
+        {
+            //sync is private!!!! Only for bundled extensions!!!
+            //For performance reasons unopkg sync is called during the setup and
+            //creates the registration data for the repository of the bundled
+            //extensions. It is then copied to the user installation during
+            //startup of OOo (userdata/extensions/bundled).  The registration
+            //data is in the brand installation and must be removed when
+            //uninstalling OOo.  We do this here, before UNO is
+            //bootstrapped. Otherwies files could be locked by this process.
+
+            //If there is no folder left in
+            //$BRAND_BASE_DIR/share/extensions
+            //then we can delete the registration data at
+            //$BUNDLED_EXTENSIONS_USER
+            if (hasNoFolder(OUSTR("$BRAND_BASE_DIR/share/extensions")))
+            {
+                removeFolder(OUSTR("$BUNDLED_EXTENSIONS_USER"));
+                //return otherwise we create the registration data again
+                return 0;
+            }
+
+        }
+
+        xComponentContext = getUNO(
+            disposeGuard, option_verbose, option_shared, subcmd_gui,
+            xLocalComponentContext );
+
+        Reference<deployment::XExtensionManager> xExtensionManager(
+            deployment::ExtensionManager::get( xComponentContext ) );
 
         Reference< ::com::sun::star::ucb::XCommandEnvironment > xCmdEnv(
             createCmdEnv( xComponentContext, logFile,
-                          option_force, option_verbose, option_bundled,
-                          option_suppressLicense) );
+                          option_force, option_verbose) );
+
+        //synchronize bundled/shared extensions
+        //Do not synchronize when command is "reinstall". This could add types and services to UNO and
+        //prevent the deletion of the registry data folder
+        //synching is done in XExtensionManager.reinstall
+        if (!subcmd_gui && ! subCommand.equals(OUSTR("reinstall"))
+            && ! dp_misc::office_is_running())
+            dp_misc::syncRepositories(xCmdEnv);
 
         if (subcmd_add ||
             subCommand.equalsAsciiL(
@@ -362,35 +430,32 @@ extern "C" int unopkg_main()
                 OUString const & cmdPackage = cmdPackages[ pos ];
                 if (subcmd_add)
                 {
-                    Reference<deployment::XPackage> xPackage(
-                        xPackageManager->addPackage(
-                            cmdPackage, OUString() /* to be detected */,
-                            Reference<task::XAbortChannel>(), xCmdEnv ) );
-                    OSL_ASSERT( xPackage.is() );
+                    beans::NamedValue nvSuppress(
+                        OUSTR("SUPPRESS_LICENSE"), option_suppressLicense ?
+                        makeAny(OUSTR("1")):makeAny(OUSTR("0")));
+                        xExtensionManager->addExtension(
+                            cmdPackage, Sequence<beans::NamedValue>(&nvSuppress, 1),
+                            repository, Reference<task::XAbortChannel>(), xCmdEnv);
                 }
                 else
                 {
                     try
                     {
-                        xPackageManager->removePackage(
-                            cmdPackage, cmdPackage,
+                        xExtensionManager->removeExtension(
+                            cmdPackage, cmdPackage, repository,
                             Reference<task::XAbortChannel>(), xCmdEnv );
                     }
                     catch (lang::IllegalArgumentException &)
                     {
                         Reference<deployment::XPackage> p(
-                            findPackage(
-                                xPackageManager, xCmdEnv, cmdPackage ) );
-                        //Todo. temporary preventing exception in bundled case.
-                        //In case of a bundled extension, remove would be called as a result of
-                        //uninstalling a rpm. Then we do not want to show an error when the
-                        //extension does not exist, because the package will be uninstalled anyway
-                        //and the error would only confuse people.
-                        if ( !p.is() && !option_bundled)
+                             findPackage(repository,
+                                xExtensionManager, xCmdEnv, cmdPackage ) );
+                        if ( !p.is())
                             throw;
                         else if (p.is())
-                            xPackageManager->removePackage(
+                            xExtensionManager->removeExtension(
                                 ::dp_misc::getIdentifier(p), p->getName(),
+                                repository,
                                 Reference<task::XAbortChannel>(), xCmdEnv );
                     }
                 }
@@ -399,37 +464,136 @@ extern "C" int unopkg_main()
         else if (subCommand.equalsAsciiL(
                      RTL_CONSTASCII_STRINGPARAM("reinstall") ))
         {
-            xPackageManager->reinstallDeployedPackages(
-                Reference<task::XAbortChannel>(), xCmdEnv );
+            xExtensionManager->reinstallDeployedExtensions(
+                repository, Reference<task::XAbortChannel>(), xCmdEnv);
         }
         else if (subCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("list") ))
         {
-            Sequence< Reference<deployment::XPackage> > packages;
+            ::std::vector<Reference<deployment::XPackage> > vecExtUnaccepted;
+            ::comphelper::sequenceToContainer(vecExtUnaccepted,
+                    xExtensionManager->getExtensionsWithUnacceptedLicenses(
+                        repository, xCmdEnv));
+
+            //This vector tells what XPackage  in allExtensions has an
+            //unaccepted license.
+            std::vector<bool> vecUnaccepted;
+            std::vector<Reference<deployment::XPackage> > allExtensions;
             if (cmdPackages.empty())
             {
-                packages = xPackageManager->getDeployedPackages(
-                    Reference<task::XAbortChannel>(), xCmdEnv );
+                Sequence< Reference<deployment::XPackage> >
+                    packages = xExtensionManager->getDeployedExtensions(
+                        repository, Reference<task::XAbortChannel>(), xCmdEnv );
+
+                ::std::vector<Reference<deployment::XPackage> > vec_packages;
+                ::comphelper::sequenceToContainer(vec_packages, packages);
+
+                //First copy the extensions with the unaccepted license
+                //to vector allExtensions.
+                allExtensions.resize(vecExtUnaccepted.size() + vec_packages.size());
+
+                ::std::vector<Reference<deployment::XPackage> >::iterator i_all_ext =
+                      ::std::copy(vecExtUnaccepted.begin(), vecExtUnaccepted.end(),
+                                  allExtensions.begin());
+                //Now copy those we got from getDeployedExtensions
+                ::std::copy(vec_packages.begin(), vec_packages.end(), i_all_ext);
+
+                //Now prepare the vector which tells what extension has an
+                //unaccepted license
+                vecUnaccepted.resize(vecExtUnaccepted.size() + vec_packages.size());
+                ::std::vector<bool>::iterator i_unaccepted =
+                      ::std::fill_n(vecUnaccepted.begin(),
+                                    vecExtUnaccepted.size(), true);
+                ::std::fill_n(i_unaccepted, vec_packages.size(), false);
+
                 dp_misc::writeConsole(
-                    OUSTR("all deployed ") + deploymentContext + OUSTR(" packages:\n"));
+                    OUSTR("All deployed ") + repository + OUSTR(" extensions:\n\n"));
             }
             else
             {
-                packages.realloc( cmdPackages.size() );
+                //The user provided the names (ids or file names) of the extensions
+                //which shall be listed
                 for ( ::std::size_t pos = 0; pos < cmdPackages.size(); ++pos )
+                {
+                    Reference<deployment::XPackage> extension;
                     try
                     {
-                        packages[ pos ] = xPackageManager->getDeployedPackage(
-                            cmdPackages[ pos ], cmdPackages[ pos ], xCmdEnv );
+                        extension = xExtensionManager->getDeployedExtension(
+                            repository, cmdPackages[ pos ], cmdPackages[ pos ], xCmdEnv );
                     }
                     catch (lang::IllegalArgumentException &)
                     {
-                        packages[ pos ] = findPackage(
-                            xPackageManager, xCmdEnv, cmdPackages[ pos ] );
-                        if ( !packages[ pos ].is() )
-                            throw;
+                        extension = findPackage(repository,
+                            xExtensionManager, xCmdEnv, cmdPackages[ pos ] );
                     }
+
+                    //Now look if the requested extension has an unaccepted license
+                    bool bUnacceptedLic = false;
+                    if (!extension.is())
+                    {
+                        ::std::vector<Reference<deployment::XPackage> >::const_iterator
+                            i = ::std::find_if(
+                                vecExtUnaccepted.begin(),
+                                vecExtUnaccepted.end(), ExtensionName(cmdPackages[pos]));
+                        if (i != vecExtUnaccepted.end())
+                        {
+                            extension = *i;
+                            bUnacceptedLic = true;
+                        }
+                    }
+
+                    if (extension.is())
+                    {
+                        allExtensions.push_back(extension);
+                        vecUnaccepted.push_back(bUnacceptedLic);
+                    }
+
+                    else
+                        throw lang::IllegalArgumentException(
+                            OUSTR("There is no such extension deployed: ") +
+                            cmdPackages[pos],0,-1);
+                }
+
             }
-            printf_packages( packages, xCmdEnv );
+
+            printf_packages(allExtensions, vecUnaccepted, xCmdEnv );
+        }
+        else if (subCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("validate") ))
+        {
+            ::std::vector<Reference<deployment::XPackage> > vecExtUnaccepted;
+            ::comphelper::sequenceToContainer(
+                vecExtUnaccepted, xExtensionManager->getExtensionsWithUnacceptedLicenses(
+                    repository, xCmdEnv));
+
+            for ( ::std::size_t pos = 0; pos < cmdPackages.size(); ++pos )
+            {
+                Reference<deployment::XPackage> extension;
+                try
+                {
+                    extension = xExtensionManager->getDeployedExtension(
+                        repository, cmdPackages[ pos ], cmdPackages[ pos ], xCmdEnv );
+                }
+                catch (lang::IllegalArgumentException &)
+                {
+                    extension = findPackage(
+                        repository, xExtensionManager, xCmdEnv, cmdPackages[ pos ] );
+                }
+
+                if (!extension.is())
+                {
+                    ::std::vector<Reference<deployment::XPackage> >::const_iterator
+                        i = ::std::find_if(
+                            vecExtUnaccepted.begin(),
+                            vecExtUnaccepted.end(), ExtensionName(cmdPackages[pos]));
+                    if (i != vecExtUnaccepted.end())
+                    {
+                        extension = *i;
+                    }
+                }
+
+                if (extension.is())
+                    xExtensionManager->checkPrerequisitesAndEnable(
+                        extension, Reference<task::XAbortChannel>(), xCmdEnv);
+            }
         }
         else if (subCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("gui") ))
         {
@@ -446,6 +610,15 @@ extern "C" int unopkg_main()
 
             xDialog->startExecuteModal(xListener);
             dialogEnded.wait();
+        }
+        else if (subCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("sync")))
+        {
+            //This sub command may be removed later and is only there to have a
+            //possibility to start extension synching without any output.
+            //This is just here so we do not get an error, because of an unknown
+            //sub-command. We do synching before
+            //the sub-commands are processed.
+
         }
         else
         {

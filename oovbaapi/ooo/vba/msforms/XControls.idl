@@ -41,6 +41,13 @@ interface XControls
 {
     interface ooo::vba::XCollection;
     void Move( [in] double cx, [in] double cy );
+
+    // the following two methods should be actually part of XCollection, but at least Add conflicts with
+    // methods in the derived from XCollection interfaces
+    // thus the methods are declared in the top-level interface
+    any  Add( [in] any Object, [in] any StringKey, [in] any Before, [in] any After );
+    void Remove( [in] any StringKeyOrIndex );
+
 };
 }; }; };
 

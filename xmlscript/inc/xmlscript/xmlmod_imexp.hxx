@@ -45,6 +45,7 @@ struct ModuleDescriptor
     ::rtl::OUString aName;
     ::rtl::OUString aLanguage;
     ::rtl::OUString aCode;
+    ::rtl::OUString aModuleType; // VBA
 };
 
 void

@@ -41,7 +41,8 @@ INCPRE += inc
 
 SLOFILES = \
         $(SLO)$/dp_backend.obj \
-        $(SLO)$/dp_registry.obj
+        $(SLO)$/dp_registry.obj \
+        $(SLO)$/dp_backenddb.obj
 
 .INCLUDE : ..$/target.pmk
 .INCLUDE : target.mk

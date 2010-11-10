@@ -453,9 +453,9 @@ bool SbiRuntime::implIsClass( SbxObject* pObj, const String& aClass )
 }
 
 bool SbiRuntime::checkClass_Impl( const SbxVariableRef& refVal,
-    const String& aClass, bool bRaiseErrors )
+    const String& aClass, bool bRaiseErrors, bool bDefault )
 {
-    bool bOk = true;
+    bool bOk = bDefault;
 
     SbxDataType t = refVal->GetType();
     if( t == SbxOBJECT )
@@ -489,6 +489,8 @@ bool SbiRuntime::checkClass_Impl( const SbxVariableRef& refVal,
             }
             else
             {
+                bOk = true;
+
                 SbClassModuleObject* pClassModuleObject = PTR_CAST(SbClassModuleObject,pObj);
                 if( pClassModuleObject != NULL )
                     pClassModuleObject->triggerInitializeEvent();
@@ -532,7 +534,8 @@ void SbiRuntime::StepTESTCLASS( UINT32 nOp1 )
 {
     SbxVariableRef xObjVal = PopVar();
     String aClass( pImg->GetString( static_cast<short>( nOp1 ) ) );
-    bool bOk = checkClass_Impl( xObjVal, aClass, false );
+    bool bDefault = !bVBAEnabled;
+    bool bOk = checkClass_Impl( xObjVal, aClass, false, bDefault );
 
     SbxVariable* pRet = new SbxVariable;
     pRet->PutBool( bOk );

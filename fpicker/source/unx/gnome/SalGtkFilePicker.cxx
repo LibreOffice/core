@@ -33,13 +33,13 @@
 //------------------------------------------------------------------------
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <cppuhelper/interfacecontainer.h>
 #include <osl/diagnose.h>
+#include <osl/process.h>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/ControlActions.hpp>
 #include <com/sun/star/uno/Any.hxx>
@@ -96,13 +96,15 @@ namespace
 
 static void expandexpanders(GtkContainer *pWidget)
 {
+    GdkThreadLock aLock;
+
     GList *pChildren = gtk_container_get_children(pWidget);
     for( GList *p = pChildren; p; p = p->next )
     {
         if GTK_IS_CONTAINER(GTK_WIDGET(p->data))
             expandexpanders(GTK_CONTAINER(GTK_WIDGET(p->data)));
         if GTK_IS_EXPANDER(GTK_WIDGET(p->data))
-            gtk_expander_set_expanded(GTK_EXPANDER(GTK_WIDGET(p->data)), TRUE);
+            gtk_expander_set_expanded(GTK_EXPANDER(GTK_WIDGET(p->data)), sal_True);
     }
     g_list_free(pChildren);
 }
@@ -114,6 +116,8 @@ void SalGtkFilePicker::dialog_mapped_cb(GtkWidget *, SalGtkFilePicker *pobjFP)
 
 void SalGtkFilePicker::InitialMapping()
 {
+    GdkThreadLock aLock;
+
     if (!mbPreviewState )
     {
         gtk_widget_hide( m_pPreview );
@@ -122,41 +126,8 @@ void SalGtkFilePicker::InitialMapping()
     gtk_widget_set_size_request (m_pPreview, -1, -1);
 }
 
-static void lcl_setGTKLanguage(const uno::Reference<lang::XMultiServiceFactory>& xServiceMgr)
-{
-    static bool bSet = false;
-    if (bSet)
-        return;
-
-    OUString sUILocale;
-    try
-    {
-        uno::Reference<lang::XMultiServiceFactory> xConfigMgr =
-          uno::Reference<lang::XMultiServiceFactory>(xServiceMgr->createInstance(
-            OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider")),
-              UNO_QUERY_THROW );
-
-        Sequence< Any > theArgs(1);
-        theArgs[ 0 ] <<= OUString::createFromAscii("org.openoffice.Office.Linguistic/General");
-
-        uno::Reference< container::XNameAccess > xNameAccess =
-          uno::Reference< container::XNameAccess >(xConfigMgr->createInstanceWithArguments(
-            OUString::createFromAscii("com.sun.star.configuration.ConfigurationAccess"), theArgs ),
-              UNO_QUERY_THROW );
-
-        if (xNameAccess.is())
-            xNameAccess->getByName(OUString::createFromAscii("UILocale")) >>= sUILocale;
-    } catch (...) {}
-
-    if (sUILocale.getLength())
-    {
-        sUILocale = rtl::OUString::createFromAscii("LANGUAGE=") + sUILocale.replace('-', '_');
-        putenv(strdup(rtl::OUStringToOString(sUILocale, osl_getThreadTextEncoding()).getStr()));
-    }
-    bSet = true;
-}
-
 SalGtkFilePicker::SalGtkFilePicker( const uno::Reference<lang::XMultiServiceFactory>& xServiceMgr ) :
+    SalGtkPicker(xServiceMgr),
     cppu::WeakComponentImplHelper10<
         XFilterManager,
             XFilterGroupManager,
@@ -180,8 +151,6 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference<lang::XMultiServiceFact
     m_PreviewImageWidth( 256 ),
     m_PreviewImageHeight( 256 )
 {
-    lcl_setGTKLanguage(xServiceMgr);
-
     int i;
 
     for( i = 0; i < TOGGLE_LAST; i++ )
@@ -208,6 +177,8 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference<lang::XMultiServiceFact
     CResourceProvider aResProvider;
     OUString aFilePickerTitle = aResProvider.getResString( FILE_PICKER_TITLE_OPEN );
 
+    GdkThreadLock aLock;
+
     m_pDialog = gtk_file_chooser_dialog_new(
             OUStringToOString( aFilePickerTitle, RTL_TEXTENCODING_UTF8 ).getStr(),
             NULL,
@@ -218,17 +189,17 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference<lang::XMultiServiceFact
 
     gtk_dialog_set_default_response( GTK_DIALOG (m_pDialog), GTK_RESPONSE_ACCEPT );
 
-    gtk_file_chooser_set_local_only( GTK_FILE_CHOOSER( m_pDialog ), FALSE );
-    gtk_file_chooser_set_select_multiple( GTK_FILE_CHOOSER( m_pDialog ), FALSE );
+    gtk_file_chooser_set_local_only( GTK_FILE_CHOOSER( m_pDialog ), sal_False );
+    gtk_file_chooser_set_select_multiple( GTK_FILE_CHOOSER( m_pDialog ), sal_False );
 
-    m_pVBox = gtk_vbox_new( FALSE, 0 );
+    m_pVBox = gtk_vbox_new( sal_False, 0 );
 
     // We don't want clickable items to have a huge hit-area
-    GtkWidget *pHBox = gtk_hbox_new( FALSE, 0 );
-    GtkWidget *pThinVBox = gtk_vbox_new( FALSE, 0 );
+    GtkWidget *pHBox = gtk_hbox_new( sal_False, 0 );
+    GtkWidget *pThinVBox = gtk_vbox_new( sal_False, 0 );
 
-    gtk_box_pack_end (GTK_BOX( m_pVBox ), pHBox, FALSE, FALSE, 0);
-    gtk_box_pack_start (GTK_BOX( pHBox ), pThinVBox, FALSE, FALSE, 0);
+    gtk_box_pack_end (GTK_BOX( m_pVBox ), pHBox, sal_False, sal_False, 0);
+    gtk_box_pack_start (GTK_BOX( pHBox ), pThinVBox, sal_False, sal_False, 0);
     gtk_widget_show( pHBox );
     gtk_widget_show( pThinVBox );
 
@@ -258,12 +229,12 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference<lang::XMultiServiceFact
                 break;
         }
 
-        gtk_box_pack_end( GTK_BOX( pThinVBox ), m_pToggles[i], FALSE, FALSE, 0 );
+        gtk_box_pack_end( GTK_BOX( pThinVBox ), m_pToggles[i], sal_False, sal_False, 0 );
     }
 
     for( i = 0; i < LIST_LAST; i++ )
     {
-        m_pHBoxs[i] = gtk_hbox_new( FALSE, 0 );
+        m_pHBoxs[i] = gtk_hbox_new( sal_False, 0 );
 
         m_pAligns[i] = gtk_alignment_new(0, 0, 0, 1);
 
@@ -288,18 +259,18 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference<lang::XMultiServiceFact
         }
 
         gtk_container_add( GTK_CONTAINER( m_pAligns[i]), m_pLists[i] );
-        gtk_box_pack_end( GTK_BOX( m_pHBoxs[i] ), m_pAligns[i], FALSE, FALSE, 0 );
+        gtk_box_pack_end( GTK_BOX( m_pHBoxs[i] ), m_pAligns[i], sal_False, sal_False, 0 );
 
-        gtk_box_pack_end( GTK_BOX( m_pHBoxs[i] ), m_pListLabels[i], FALSE, FALSE, 0 );
+        gtk_box_pack_end( GTK_BOX( m_pHBoxs[i] ), m_pListLabels[i], sal_False, sal_False, 0 );
 
-        gtk_box_pack_end( GTK_BOX( m_pVBox ), m_pHBoxs[i], FALSE, FALSE, 0 );
+        gtk_box_pack_end( GTK_BOX( m_pVBox ), m_pHBoxs[i], sal_False, sal_False, 0 );
     }
 
     aLabel = aResProvider.getResString( FILE_PICKER_FILE_TYPE );
     m_pFilterExpander = gtk_expander_new_with_mnemonic(
         OUStringToOString( aLabel, RTL_TEXTENCODING_UTF8 ).getStr());
 
-    gtk_box_pack_end( GTK_BOX( m_pVBox ), m_pFilterExpander, FALSE, TRUE, 0 );
+    gtk_box_pack_end( GTK_BOX( m_pVBox ), m_pFilterExpander, sal_False, sal_True, 0 );
 
     GtkWidget *scrolled_window = gtk_scrolled_window_new (NULL, NULL);
     gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
@@ -317,11 +288,11 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference<lang::XMultiServiceFact
         case 0:
             break;
         case 1:
-            gtk_expander_set_expanded(GTK_EXPANDER(m_pFilterExpander), TRUE);
+            gtk_expander_set_expanded(GTK_EXPANDER(m_pFilterExpander), sal_True);
             break;
         case 2:
             expandexpanders(GTK_CONTAINER(m_pDialog));
-            gtk_expander_set_expanded(GTK_EXPANDER(m_pFilterExpander), TRUE);
+            gtk_expander_set_expanded(GTK_EXPANDER(m_pFilterExpander), sal_True);
             break;
     }
 
@@ -338,8 +309,8 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference<lang::XMultiServiceFact
     {
         column = gtk_tree_view_column_new ();
         cell = gtk_cell_renderer_text_new ();
-        gtk_tree_view_column_set_expand (column, TRUE);
-        gtk_tree_view_column_pack_start (column, cell, FALSE);
+        gtk_tree_view_column_set_expand (column, sal_True);
+        gtk_tree_view_column_pack_start (column, cell, sal_False);
         gtk_tree_view_column_set_attributes (column, cell, "text", i, (char *)NULL);
         gtk_tree_view_append_column (GTK_TREE_VIEW(m_pFilterView), column);
     }
@@ -385,14 +356,12 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference<lang::XMultiServiceFact
 void SAL_CALL SalGtkFilePicker::addFilePickerListener( const uno::Reference<XFilePickerListener>& xListener )
     throw( uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     m_xListener = xListener;
 }
 
 void SAL_CALL SalGtkFilePicker::removeFilePickerListener( const uno::Reference<XFilePickerListener>& )
     throw( uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     m_xListener.clear();
 }
 
@@ -591,6 +560,8 @@ shrinkFilterName( const rtl::OUString &rFilterName, bool bAllowNoStar = false )
 static void
 dialog_remove_buttons( GtkDialog *pDialog )
 {
+    GdkThreadLock aLock;
+
     g_return_if_fail( GTK_IS_DIALOG( pDialog ) );
 
     GList *pChildren =
@@ -700,7 +671,6 @@ void SAL_CALL SalGtkFilePicker::appendFilter( const rtl::OUString& aTitle, const
     throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
     OSL_ASSERT( m_pDialog != NULL );
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
     if( FilterNameExists( aTitle ) )
             throw IllegalArgumentException();
@@ -721,7 +691,6 @@ void SAL_CALL SalGtkFilePicker::setCurrentFilter( const rtl::OUString& aTitle )
     throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
     OSL_ASSERT( m_pDialog != NULL );
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
     OSL_TRACE( "Setting current filter to %s\n",
         OUStringToOString( aTitle, RTL_TEXTENCODING_UTF8 ).getStr() );
@@ -763,6 +732,9 @@ void SalGtkFilePicker::UpdateFilterfromUI()
     // from the filter of the files glob on which he is currently searching
     if (!mnHID_FolderChange || !mnHID_SelectionChange)
         return;
+
+    GdkThreadLock aLock;
+
     GtkTreeSelection* selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(m_pFilterView));
     GtkTreeIter iter;
     GtkTreeModel *model;
@@ -782,7 +754,6 @@ void SalGtkFilePicker::UpdateFilterfromUI()
 rtl::OUString SAL_CALL SalGtkFilePicker::getCurrentFilter() throw( uno::RuntimeException )
 {
     OSL_ASSERT( m_pDialog != NULL );
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
     OSL_TRACE( "GetCURRENTfilter\n" );
 
@@ -802,7 +773,6 @@ void SAL_CALL SalGtkFilePicker::appendFilterGroup( const rtl::OUString& /*sGroup
     throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
     OSL_ASSERT( m_pDialog != NULL );
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
     // TODO m_pImpl->appendFilterGroup( sGroupTitle, aFilters );
     // check the names
@@ -832,7 +802,8 @@ void SAL_CALL SalGtkFilePicker::appendFilterGroup( const rtl::OUString& /*sGroup
 void SAL_CALL SalGtkFilePicker::setMultiSelectionMode( sal_Bool bMode ) throw( uno::RuntimeException )
 {
     OSL_ASSERT( m_pDialog != NULL );
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+    GdkThreadLock aLock;
 
     gtk_file_chooser_set_select_multiple( GTK_FILE_CHOOSER(m_pDialog), bMode );
 }
@@ -841,7 +812,8 @@ void SAL_CALL SalGtkFilePicker::setDefaultName( const rtl::OUString& aName )
     throw( uno::RuntimeException )
 {
     OSL_ASSERT( m_pDialog != NULL );
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+    GdkThreadLock aLock;
 
     OString aStr = OUStringToOString( aName, RTL_TEXTENCODING_UTF8 );
     GtkFileChooserAction eAction = gtk_file_chooser_get_action( GTK_FILE_CHOOSER( m_pDialog ) );
@@ -877,7 +849,8 @@ uno::Sequence<rtl::OUString> SAL_CALL SalGtkFilePicker::getFiles() throw( uno::R
 uno::Sequence<rtl::OUString> SAL_CALL SalGtkFilePicker::getSelectedFiles() throw( uno::RuntimeException )
 {
     OSL_ASSERT( m_pDialog != NULL );
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+    GdkThreadLock aLock;
 
     GSList* pPathList = gtk_file_chooser_get_uris( GTK_FILE_CHOOSER(m_pDialog) );
 
@@ -927,6 +900,9 @@ uno::Sequence<rtl::OUString> SAL_CALL SalGtkFilePicker::getSelectedFiles() throw
                     {
                         static const OUString aStarDot = OUString::createFromAscii( "*." );
 
+                        ::rtl::OUString aNewFilter;
+                        ::rtl::OUString aOldFilter = getCurrentFilter();
+                        sal_Bool bChangeFilter = sal_True;
                         for ( FilterList::iterator aListIter = m_pFilterList->begin();
                               aListIter != m_pFilterList->end();
                               ++aListIter
@@ -934,11 +910,17 @@ uno::Sequence<rtl::OUString> SAL_CALL SalGtkFilePicker::getSelectedFiles() throw
                         {
                             if( aListIter->getFilter().indexOf( aStarDot+sExtension ) >= 0 )
                             {
-                                setCurrentFilter( aListIter->getTitle() );
+                                if( !aNewFilter.getLength() )
+                                    aNewFilter = aListIter->getTitle();
+
+                                if( aOldFilter == aListIter->getTitle() )
+                                    bChangeFilter = sal_False;
+
                                 bExtensionTypedIn = true;
-                                break;
                             }
                         }
+                        if( bChangeFilter )
+                            setCurrentFilter( aNewFilter );
                     }
                 }
 
@@ -1014,7 +996,8 @@ sal_Int16 SAL_CALL SalGtkFilePicker::execute() throw( uno::RuntimeException )
 {
     OSL_TRACE( "1: HERE WE ARE\n");
     OSL_ASSERT( m_pDialog != NULL );
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+    GdkThreadLock aLock;
 
     sal_Int16 retVal = 0;
 
@@ -1171,6 +1154,8 @@ namespace
 {
     void HackWidthToFirst(GtkComboBox *pWidget)
     {
+        GdkThreadLock aLock;
+
         GtkRequisition requisition;
         gtk_widget_size_request(GTK_WIDGET(pWidget), &requisition);
         gtk_widget_set_size_request(GTK_WIDGET(pWidget), requisition.width, -1);
@@ -1179,6 +1164,8 @@ namespace
 
 void SalGtkFilePicker::HandleSetListValue(GtkComboBox *pWidget, sal_Int16 nControlAction, const uno::Any& rValue)
 {
+    GdkThreadLock aLock;
+
     switch (nControlAction)
     {
         case ControlActions::ADD_ITEM:
@@ -1253,6 +1240,8 @@ void SalGtkFilePicker::HandleSetListValue(GtkComboBox *pWidget, sal_Int16 nContr
 
 uno::Any SalGtkFilePicker::HandleGetListValue(GtkComboBox *pWidget, sal_Int16 nControlAction) const
 {
+    GdkThreadLock aLock;
+
     uno::Any aAny;
     switch (nControlAction)
     {
@@ -1312,15 +1301,15 @@ void SAL_CALL SalGtkFilePicker::setValue( sal_Int16 nControlId, sal_Int16 nContr
     throw( uno::RuntimeException )
 {
     OSL_ASSERT( m_pDialog != NULL );
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
     OSL_TRACE( "SETTING VALUE %d\n", nControlAction );
     GType tType;
     GtkWidget *pWidget;
 
+    GdkThreadLock aLock;
+
     if( !( pWidget = getWidget( nControlId, &tType ) ) )
         OSL_TRACE("enable unknown control %d\n", nControlId);
-
     else if( tType == GTK_TYPE_TOGGLE_BUTTON )
     {
         sal_Bool bChecked = false;
@@ -1340,15 +1329,16 @@ uno::Any SAL_CALL SalGtkFilePicker::getValue( sal_Int16 nControlId, sal_Int16 nC
     throw( uno::RuntimeException )
 {
     OSL_ASSERT( m_pDialog != NULL );
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
     uno::Any aRetval;
 
     GType tType;
     GtkWidget *pWidget;
 
+    GdkThreadLock aLock;
+
     if( !( pWidget = getWidget( nControlId, &tType ) ) )
         OSL_TRACE("enable unknown control %d\n", nControlId);
-
     else if( tType == GTK_TYPE_TOGGLE_BUTTON )
         aRetval <<= (sal_Bool) gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON( pWidget ) );
     else if( tType == GTK_TYPE_COMBO_BOX )
@@ -1364,24 +1354,24 @@ void SAL_CALL SalGtkFilePicker::enableControl( sal_Int16 nControlId, sal_Bool bE
 throw( uno::RuntimeException )
 {
     OSL_ASSERT( m_pDialog != NULL );
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
     GtkWidget *pWidget;
 
+    GdkThreadLock aLock;
+
     if ( nControlId == ExtendedFilePickerElementIds::LISTBOX_FILTER_SELECTOR )
         gtk_expander_set_expanded( GTK_EXPANDER( m_pFilterExpander ), bEnable );
-
     else if( ( pWidget = getWidget( nControlId ) ) )
     {
         if( bEnable )
         {
             OSL_TRACE( "enable\n" );
-            gtk_widget_set_sensitive( pWidget, TRUE );
+            gtk_widget_set_sensitive( pWidget, sal_True );
         }
         else
         {
             OSL_TRACE( "disable\n" );
-            gtk_widget_set_sensitive( pWidget, FALSE );
+            gtk_widget_set_sensitive( pWidget, sal_False );
         }
     }
     else
@@ -1392,10 +1382,11 @@ void SAL_CALL SalGtkFilePicker::setLabel( sal_Int16 nControlId, const ::rtl::OUS
     throw( uno::RuntimeException )
 {
     OSL_ASSERT( m_pDialog != NULL );
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
     GType tType;
     GtkWidget *pWidget;
+
+    GdkThreadLock aLock;
 
     if( !( pWidget = getWidget( nControlId, &tType ) ) )
     {
@@ -1419,7 +1410,7 @@ void SAL_CALL SalGtkFilePicker::setLabel( sal_Int16 nControlId, const ::rtl::OUS
     }
     else if( tType == GTK_TYPE_TOGGLE_BUTTON || tType == GTK_TYPE_BUTTON || tType == GTK_TYPE_LABEL )
         g_object_set( pWidget, "label", aTxt.getStr(),
-                      "use_underline", TRUE, (char *)NULL );
+                      "use_underline", sal_True, (char *)NULL );
     else
         OSL_TRACE("Can't set label on list\n");
 }
@@ -1428,18 +1419,17 @@ rtl::OUString SAL_CALL SalGtkFilePicker::getLabel( sal_Int16 nControlId )
     throw( uno::RuntimeException )
 {
     OSL_ASSERT( m_pDialog != NULL );
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
     GType tType;
     OString aTxt;
     GtkWidget *pWidget;
 
+    GdkThreadLock aLock;
+
     if( !( pWidget = getWidget( nControlId, &tType ) ) )
         OSL_TRACE("Get label on unknown control %d\n", nControlId);
-
     else if( tType == GTK_TYPE_TOGGLE_BUTTON || tType == GTK_TYPE_BUTTON || tType == GTK_TYPE_LABEL )
         aTxt = gtk_button_get_label( GTK_BUTTON( pWidget ) );
-
     else
         OSL_TRACE("Can't get label on list\n");
 
@@ -1453,7 +1443,6 @@ rtl::OUString SAL_CALL SalGtkFilePicker::getLabel( sal_Int16 nControlId )
 uno::Sequence<sal_Int16> SAL_CALL SalGtkFilePicker::getSupportedImageFormats() throw( uno::RuntimeException )
 {
     OSL_ASSERT( m_pDialog != NULL );
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
     // TODO return m_pImpl->getSupportedImageFormats();
     return 0;
@@ -1462,7 +1451,6 @@ uno::Sequence<sal_Int16> SAL_CALL SalGtkFilePicker::getSupportedImageFormats() t
 sal_Int32 SAL_CALL SalGtkFilePicker::getTargetColorDepth() throw( uno::RuntimeException )
 {
     OSL_ASSERT( m_pDialog != NULL );
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
     // TODO return m_pImpl->getTargetColorDepth();
     return 0;
@@ -1471,18 +1459,14 @@ sal_Int32 SAL_CALL SalGtkFilePicker::getTargetColorDepth() throw( uno::RuntimeEx
 sal_Int32 SAL_CALL SalGtkFilePicker::getAvailableWidth() throw( uno::RuntimeException )
 {
     OSL_ASSERT( m_pDialog != NULL );
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-    // TODO return m_pImpl->getAvailableWidth();
     return m_PreviewImageWidth;
 }
 
 sal_Int32 SAL_CALL SalGtkFilePicker::getAvailableHeight() throw( uno::RuntimeException )
 {
     OSL_ASSERT( m_pDialog != NULL );
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-    // TODO return m_pImpl->getAvailableHeight();
     return m_PreviewImageHeight;
 }
 
@@ -1490,7 +1474,6 @@ void SAL_CALL SalGtkFilePicker::setImage( sal_Int16 /*aImageFormat*/, const uno:
     throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
     OSL_ASSERT( m_pDialog != NULL );
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
     // TODO m_pImpl->setImage( aImageFormat, aImage );
 }
@@ -1499,6 +1482,9 @@ void SalGtkFilePicker::implChangeType( GtkTreeSelection *selection )
 {
     CResourceProvider aResProvider;
     OUString aLabel = aResProvider.getResString( FILE_PICKER_FILE_TYPE );
+
+    GdkThreadLock aLock;
+
     GtkTreeIter iter;
     GtkTreeModel *model;
     if (gtk_tree_selection_get_selected (selection, &model, &iter))
@@ -1523,6 +1509,8 @@ void SalGtkFilePicker::type_changed_cb( GtkTreeSelection *selection, SalGtkFileP
 
 void SalGtkFilePicker::unselect_type()
 {
+    GdkThreadLock aLock;
+
     gtk_tree_selection_unselect_all(gtk_tree_view_get_selection(GTK_TREE_VIEW(m_pFilterView)));
 }
 
@@ -1560,7 +1548,7 @@ void SalGtkFilePicker::update_preview_cb( GtkFileChooser *file_chooser, SalGtkFi
     GtkWidget *preview;
     char *filename;
     GdkPixbuf *pixbuf;
-    gboolean have_preview = FALSE;
+    gboolean have_preview = sal_False;
 
     preview = pobjFP->m_pPreview;
     filename = gtk_file_chooser_get_preview_filename( file_chooser );
@@ -1589,11 +1577,12 @@ void SalGtkFilePicker::update_preview_cb( GtkFileChooser *file_chooser, SalGtkFi
 sal_Bool SAL_CALL SalGtkFilePicker::setShowState( sal_Bool bShowState ) throw( uno::RuntimeException )
 {
     OSL_ASSERT( m_pDialog != NULL );
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
     // TODO return m_pImpl->setShowState( bShowState );
     if( bShowState != mbPreviewState )
     {
+        GdkThreadLock aLock;
+
         if( bShowState )
         {
             // Show
@@ -1622,9 +1611,7 @@ sal_Bool SAL_CALL SalGtkFilePicker::setShowState( sal_Bool bShowState ) throw( u
 sal_Bool SAL_CALL SalGtkFilePicker::getShowState() throw( uno::RuntimeException )
 {
     OSL_ASSERT( m_pDialog != NULL );
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-    // TODO return m_pImpl->getShowState();
     return mbPreviewState;
 }
 
@@ -1740,6 +1727,8 @@ void SAL_CALL SalGtkFilePicker::initialize( const uno::Sequence<uno::Any>& aArgu
                 1 );
     }
 
+    GdkThreadLock aLock;
+
     if( GTK_FILE_CHOOSER_ACTION_SAVE == eAction )
     {
         CResourceProvider aResProvider;
@@ -1801,7 +1790,6 @@ void SalGtkFilePicker::preview_toggled_cb( GtkObject *cb, SalGtkFilePicker* pobj
 void SAL_CALL SalGtkFilePicker::cancel() throw( uno::RuntimeException )
 {
     OSL_ASSERT( m_pDialog != NULL );
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
     // TODO m_pImpl->cancel();
 }
@@ -1848,6 +1836,8 @@ uno::Sequence<rtl::OUString> SAL_CALL SalGtkFilePicker::getSupportedServiceNames
 //-------------------------------------------------
 void SalGtkFilePicker::SetCurFilter( const OUString& rFilter )
 {
+    GdkThreadLock aLock;
+
     // Get all the filters already added
     GSList *filters = gtk_file_chooser_list_filters ( GTK_FILE_CHOOSER( m_pDialog ) );
     bool bFound = false;
@@ -1875,22 +1865,22 @@ extern "C"
 static gboolean
 case_insensitive_filter (const GtkFileFilterInfo *filter_info, gpointer data)
 {
-    gboolean bRetval = FALSE;
+    gboolean bRetval = sal_False;
     const char *pFilter = (const char *) data;
 
-    g_return_val_if_fail( data != NULL, FALSE );
-    g_return_val_if_fail( filter_info != NULL, FALSE );
+    g_return_val_if_fail( data != NULL, sal_False );
+    g_return_val_if_fail( filter_info != NULL, sal_False );
 
     if( !filter_info->uri )
-        return FALSE;
+        return sal_False;
 
     const char *pExtn = strrchr( filter_info->uri, '.' );
     if( !pExtn )
-        return FALSE;
+        return sal_False;
     pExtn++;
 
     if( !g_ascii_strcasecmp( pFilter, pExtn ) )
-        bRetval = TRUE;
+        bRetval = sal_True;
 
 #ifdef DEBUG
     fprintf( stderr, "'%s' match extn '%s' vs '%s' yeilds %d\n",
@@ -1903,6 +1893,8 @@ case_insensitive_filter (const GtkFileFilterInfo *filter_info, gpointer data)
 
 int SalGtkFilePicker::implAddFilter( const OUString& rFilter, const OUString& rType )
 {
+    GdkThreadLock aLock;
+
     GtkFileFilter *filter = gtk_file_filter_new();
 
     OUString aShrunkName = shrinkFilterName( rFilter );
@@ -1981,6 +1973,9 @@ int SalGtkFilePicker::implAddFilterGroup( const OUString& /*_rFilter*/, const Se
 void SalGtkFilePicker::SetFilters()
 {
     OSL_TRACE( "start setting filters\n");
+
+    GdkThreadLock aLock;
+
     int nAdded = 0;
     if( m_pFilterList && !m_pFilterList->empty() )
     {

@@ -60,7 +60,8 @@ class Window;
 
 namespace com { namespace sun { namespace star {
     namespace awt { class XThrobber; }
-    namespace deployment { class XPackageManager; }
+    namespace deployment { class XExtensionManager;
+                           class XPackage; }
     namespace uno { class XComponentContext; }
 } } }
 
@@ -82,16 +83,17 @@ public:
        @param parent
        the parent window, may be null
 
-       @param selectedPackages
-       if non-null, only check for updates for the selected packages
-
-       @param packageManagers
-       if non-null, check for updates for all managed packages
+       @param vExtensionList
+       check for updates for the contained extensions. There must only be one extension with
+       a particular identifier. If one extension is installed in several repositories, then the
+       one with the highest version must be used, because it contains the latest known update
+       information.
     */
     UpdateDialog(
         com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > const & context,
         Window * parent,
-        const std::vector< dp_gui::TUpdateListEntry > &vExtensionList,
+        const std::vector< com::sun::star::uno::Reference<
+        com::sun::star::deployment::XPackage > > & vExtensionList,
         std::vector< dp_gui::UpdateData > * updateData);
 
     ~UpdateDialog();
@@ -141,6 +143,7 @@ private:
         UpdateDialog & m_dialog;
     };
 
+
     friend class CheckListBox;
 
     void insertItem(
@@ -168,9 +171,14 @@ private:
 
     void initDescription();
     void clearDescription();
+    bool showDescription(::com::sun::star::uno::Reference<
+                         ::com::sun::star::deployment::XPackage > const & aExtension);
+    bool showDescription(std::pair< rtl::OUString, rtl::OUString > const & pairPublisher,
+                         rtl::OUString const & sReleaseNotes);
     bool showDescription( ::com::sun::star::uno::Reference<
         ::com::sun::star::xml::dom::XNode > const & aUpdateInfo);
     bool showDescription( const String& rDescription, bool bWithPublisher );
+    bool isReadOnly( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage ) const;
 
     DECL_LINK(selectionHandler, void *);
     DECL_LINK(allHandler, void *);
@@ -204,8 +212,6 @@ private:
     rtl::OUString m_noInstall;
     rtl::OUString m_noDependency;
     rtl::OUString m_noDependencyCurVer;
-    rtl::OUString m_noPermission;
-    rtl::OUString m_noPermissionVista;
     rtl::OUString m_browserbased;
     rtl::OUString m_version;
     std::vector< dp_gui::UpdateData > m_enabledUpdates;
@@ -214,6 +220,7 @@ private:
     std::vector< UpdateDialog::SpecificError > m_specificErrors;
     std::vector< dp_gui::UpdateData > & m_updateData;
     rtl::Reference< UpdateDialog::Thread > m_thread;
+    ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XExtensionManager > m_xExtensionManager;
 
     Point m_aFirstLinePos;
     Size m_aFirstLineSize;

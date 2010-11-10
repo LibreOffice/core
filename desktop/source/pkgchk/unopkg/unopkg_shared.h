@@ -162,14 +162,12 @@ css::uno::Reference<css::ucb::XCommandEnvironment> createCmdEnv(
     css::uno::Reference<css::uno::XComponentContext> const & xContext,
     ::rtl::OUString const & logFile,
     bool option_force_overwrite,
-    bool option_verbose,
-    bool option_bundled,
-    bool option_suppressLicense);
-
+    bool option_verbose);
 //==============================================================================
 void printf_packages(
-    css::uno::Sequence<
-    css::uno::Reference<css::deployment::XPackage> > const & seq,
+    ::std::vector<
+    css::uno::Reference<css::deployment::XPackage> > const & allExtensions,
+    ::std::vector<bool> const & vecUnaccepted,
     css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
     sal_Int32 level = 0 );
 
@@ -180,5 +178,11 @@ css::uno::Reference<css::uno::XComponentContext> getUNO(
     DisposeGuard & disposeGuard, bool verbose, bool shared, bool bGui,
     css::uno::Reference<css::uno::XComponentContext> & out_LocalComponentContext);
 
+bool hasNoFolder(::rtl::OUString const & folderUrl);
+
+void removeFolder(::rtl::OUString const & folderUrl);
+
 }
+
+
 

@@ -57,10 +57,8 @@ namespace css = com::sun::star;
 using sfx2::appl::ImeStatusWindow;
 
 ImeStatusWindow::ImeStatusWindow(
-    SfxApplication & rApplication,
     css::uno::Reference< css::lang::XMultiServiceFactory > const &
         rServiceFactory):
-    m_rApplication(rApplication),
     m_xServiceFactory(rServiceFactory),
     m_bDisposed(false)
 {}
@@ -161,7 +159,9 @@ ImeStatusWindow::propertyChange(css::beans::PropertyChangeEvent const & )
     throw (css::uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    m_rApplication.Invalidate(SID_SHOW_IME_STATUS_WINDOW);
+    SfxApplication* pApp = SfxApplication::Get();
+    if (pApp)
+    pApp->Invalidate(SID_SHOW_IME_STATUS_WINDOW);
 }
 
 css::uno::Reference< css::beans::XPropertySet > ImeStatusWindow::getConfig()

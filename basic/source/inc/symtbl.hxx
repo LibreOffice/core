@@ -132,7 +132,9 @@ protected:
     BOOL       bAs      : 1;        // TRUE: Datentyp per AS XXX definiert
     BOOL       bGlobal  : 1;        // TRUE: Global-Variable
     BOOL       bParamArray : 1;     // TRUE: ParamArray parameter
+    BOOL       bWithEvents : 1;     // TRUE: Declared WithEvents
     USHORT     nDefaultId;          // Symbol number of default value
+    short      nFixedStringLength;  // String length in: Dim foo As String*Length
 public:
     SbiSymDef( const String& );
     virtual ~SbiSymDef();
@@ -156,7 +158,9 @@ public:
     BOOL       IsDefined() const{ return bChained;  }
     void       SetOptional()    { bOpt = TRUE;      }
     void       SetParamArray()  { bParamArray = TRUE;       }
-    void       SetByVal()       { bByVal = TRUE;    }
+    void       SetWithEvents()  { bWithEvents = TRUE;       }
+    void       SetByVal( BOOL bByVal_ = TRUE )
+                { bByVal = bByVal_; }
     void       SetStatic( BOOL bAsStatic = TRUE )       { bStatic = bAsStatic;  }
     void       SetNew()         { bNew = TRUE;      }
     void       SetDefinedAs()   { bAs = TRUE;       }
@@ -165,11 +169,14 @@ public:
     USHORT     GetDefaultId( void ) { return nDefaultId; }
     BOOL       IsOptional() const{ return bOpt;     }
     BOOL       IsParamArray() const{ return bParamArray; }
+    BOOL       IsWithEvents() const{ return bWithEvents; }
     BOOL       IsByVal() const  { return bByVal;    }
     BOOL       IsStatic() const { return bStatic;   }
     BOOL       IsNew() const    { return bNew;      }
     BOOL       IsDefinedAs() const { return bAs;    }
     BOOL       IsGlobal() const { return bGlobal;   }
+    short      GetFixedStringLength( void ) const { return nFixedStringLength; }
+    void       SetFixedStringLength( short n ) { nFixedStringLength = n; }
 
     SbiSymPool& GetPool();
     UINT32     Define();        // Symbol in Code definieren

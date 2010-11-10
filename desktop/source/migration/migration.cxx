@@ -413,7 +413,7 @@ static void insertSorted(migrations_available& rAvailableMigrations, supported_m
         {
             rAvailableMigrations.insert(pIter, aSupportedMigration );
             bInserted = true;
-            break;
+            break; // i111193: insert invalidates iterator!
         }
         ++pIter;
     }

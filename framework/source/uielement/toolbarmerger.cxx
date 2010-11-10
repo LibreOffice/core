@@ -512,7 +512,6 @@ bool ToolBarMerger::MergeItems(
                 pToolbar->InsertSeparator( sal_uInt16( nInsPos ));
             else
             {
-                ToolBarMerger::CreateToolbarItem( pToolbar, sal_uInt16( nInsPos ), rItemId, rItem );
                 CommandToInfoMap::iterator pIter = rCommandMap.find( rItem.aCommandURL );
                 if ( pIter == rCommandMap.end())
                 {
@@ -524,6 +523,8 @@ bool ToolBarMerger::MergeItems(
                 {
                     pIter->second.aIds.push_back( rItemId );
                 }
+
+                ToolBarMerger::CreateToolbarItem( pToolbar, rCommandMap, sal_uInt16( nInsPos ), rItemId, rItem );
             }
 
             ++nIndex;
@@ -691,7 +692,7 @@ bool ToolBarMerger::RemoveItems(
     return pResult;
 }
 
-void ToolBarMerger::CreateToolbarItem( ToolBox* pToolbar, sal_uInt16 nPos, sal_uInt16 nItemId, const AddonToolbarItem& rItem )
+void ToolBarMerger::CreateToolbarItem( ToolBox* pToolbar, CommandToInfoMap& rCommandMap, sal_uInt16 nPos, sal_uInt16 nItemId, const AddonToolbarItem& rItem )
 {
     pToolbar->InsertItem( nItemId, rItem.aLabel, 0, nPos );
     pToolbar->SetItemCommand( nItemId, rItem.aCommandURL );
@@ -700,8 +701,9 @@ void ToolBarMerger::CreateToolbarItem( ToolBox* pToolbar, sal_uInt16 nPos, sal_u
     pToolbar->EnableItem( nItemId, sal_True );
     pToolbar->SetItemState( nItemId, STATE_NOCHECK );
 
-    // Use obsolete help id to transport the width of the item
-    pToolbar->SetHelpId( nItemId, rItem.nWidth );
+    CommandToInfoMap::iterator pIter = rCommandMap.find( rItem.aCommandURL );
+    if ( pIter != rCommandMap.end() )
+        pIter->second.nWidth = rItem.nWidth;
 
     // Use the user data to store add-on specific data with the toolbar item
     AddonsParams* pAddonParams = new AddonsParams;

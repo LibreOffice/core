@@ -35,8 +35,7 @@ ENABLE_EXCEPTIONS=	TRUE
 
 # --- Generate -----------------------------------------------------
 
-SLOFILES=           $(SLO)$/filter.obj              \
-                    $(SLO)$/frameloader.obj         \
+SLOFILES=           $(SLO)$/frameloader.obj         \
                     $(SLO)$/contenthandler.obj      \
                     $(SLO)$/containerquery.obj
 

@@ -53,7 +53,7 @@ void SAL_CALL CDialogCustomControlBase::SetFont(HFONT hFont)
         m_CustomControlHandle,
         WM_SETFONT,
         (WPARAM)hFont,
-        (LPARAM)TRUE);
+        (LPARAM)sal_True);
 }
 
 //-----------------------------------

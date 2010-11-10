@@ -1716,6 +1716,7 @@ namespace xmloff { namespace token {
         TOKEN( "symbol-image-name",               XML_SYMBOL_IMAGE_NAME ),
         TOKEN( "symbol-width",                    XML_SYMBOL_WIDTH ),
         TOKEN( "system",                          XML_SYSTEM ),
+        TOKEN( "tab-color",                       XML_TAB_COLOR ),
         TOKEN( "tab-stop",                        XML_TAB_STOP ),
         TOKEN( "tab-stop-distance",               XML_TAB_STOP_DISTANCE ),
         TOKEN( "tab-stops",                       XML_TAB_STOPS ),
@@ -3081,8 +3082,8 @@ namespace xmloff { namespace token {
         TOKEN( "axis-label-position",   XML_AXIS_LABEL_POSITION ),
         TOKEN( "near-axis",             XML_NEAR_AXIS ),
         TOKEN( "near-axis-other-side",  XML_NEAR_AXIS_OTHER_SIDE ),
-        TOKEN( "outside-minimum",       XML_OUTSIDE_START ),
-        TOKEN( "outside-maximum",       XML_OUTSIDE_END ),
+        TOKEN( "outside-start",         XML_OUTSIDE_START ),
+        TOKEN( "outside-end",           XML_OUTSIDE_END ),
         TOKEN( "tick-mark-position",    XML_TICK_MARK_POSITION ),
         TOKEN( "at-labels",             XML_AT_LABELS ),
         TOKEN( "at-axis",               XML_AT_AXIS ),
@@ -3105,6 +3106,12 @@ namespace xmloff { namespace token {
         TOKEN( "chartooo", XML_NP_CHART_EXT ),
         TOKEN( "http://openoffice.org/2010/chart", XML_N_CHART_EXT ),
         TOKEN( "coordinate-region",    XML_COORDINATE_REGION ),
+
+        TOKEN( "diagonal-bl-tr-widths", XML_DIAGONAL_BL_TR_WIDTHS ),
+        TOKEN( "diagonal-tl-br-widths", XML_DIAGONAL_TL_BR_WIDTHS ),
+
+        TOKEN( "outside-minimum",       XML_OUTSIDE_MINIMUM ),
+        TOKEN( "outside-maximum",       XML_OUTSIDE_MAXIMUM ),
 
 #if OSL_DEBUG_LEVEL > 0
         { 0, NULL, NULL,                       XML_TOKEN_END }

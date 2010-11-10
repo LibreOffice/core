@@ -88,8 +88,8 @@ class VistaFilePickerEventHandler : public ::cppu::BaseMutex
         //------------------------------------------------------------------------------------
         virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID rIID    ,
                                                          void** ppObject);
-        virtual ULONG STDMETHODCALLTYPE AddRef();
-        virtual ULONG STDMETHODCALLTYPE Release();
+        virtual sal_uIntPtr STDMETHODCALLTYPE AddRef();
+        virtual sal_uIntPtr STDMETHODCALLTYPE Release();
 
         //------------------------------------------------------------------------------------
         // IFileDialogEvents

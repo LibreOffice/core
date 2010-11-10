@@ -59,6 +59,27 @@ void Modifications::add(Path const & path) {
     p->children.clear();
 }
 
+void Modifications::remove(Path const & path) {
+    OSL_ASSERT(!path.empty());
+    Node * p = &root_;
+    for (Path::const_iterator i(path.begin());;) {
+        Node::Children::iterator j(p->children.find(*i));
+        if (j == p->children.end()) {
+            break;
+        }
+        if (++i == path.end()) {
+            p->children.erase(j);
+            if (p->children.empty()) {
+                Path parent(path);
+                parent.pop_back();
+                remove(parent);
+            }
+            break;
+        }
+        p = &j->second;
+    }
+}
+
 Modifications::Node const & Modifications::getRoot() const {
     return root_;
 }

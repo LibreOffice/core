@@ -365,17 +365,6 @@ void  SfxObjectShell::TriggerHelpPI(USHORT nIdx1, USHORT nIdx2, USHORT)
     {
         SfxStyleSheetBasePool *pStylePool = GetStyleSheetPool();
         SetOrganizerSearchMask(pStylePool);
-#ifdef WIR_KOENNEN_WIEDER_HILFE_FUER_STYLESHEETS
-        SfxStyleSheetBase *pStyle = (*pStylePool)[nIdx2];
-        if(pStyle)
-        {
-            String aHelpFile;
-            ULONG nHelpId=pStyle->GetHelpId(aHelpFile);
-            SfxHelpPI* pHelpPI = SFX_APP()->GetHelpPI();
-            if ( pHelpPI && nHelpId )
-                pHelpPI->LoadTopic( nHelpId );
-        }
-#endif
     }
 }
 
@@ -1240,5 +1229,53 @@ void SfxObjectShell::SetSaveVersionOnClose( sal_Bool bNew )
     if ( pImp->bSaveVersionOnClose != bNew )
         SetModified( TRUE );
     pImp->bSaveVersionOnClose = bNew;
+}
+
+sal_uInt32 SfxObjectShell::GetModifyPasswordHash() const
+{
+    return pImp->m_nModifyPasswordHash;
+}
+
+sal_Bool SfxObjectShell::SetModifyPasswordHash( sal_uInt32 nHash )
+{
+    if ( ( !IsReadOnly() && !IsReadOnlyUI() )
+      || !(pImp->nFlagsInProgress & SFX_LOADED_MAINDOCUMENT ) )
+    {
+        // the hash can be changed only in editable documents,
+        // or during loading of document
+        pImp->m_nModifyPasswordHash = nHash;
+        return sal_True;
+    }
+
+    return sal_False;
+}
+
+uno::Sequence< beans::PropertyValue > SfxObjectShell::GetModifyPasswordInfo() const
+{
+    return pImp->m_aModifyPasswordInfo;
+}
+
+sal_Bool SfxObjectShell::SetModifyPasswordInfo( const uno::Sequence< beans::PropertyValue >& aInfo )
+{
+    if ( ( !IsReadOnly() && !IsReadOnlyUI() )
+      || !(pImp->nFlagsInProgress & SFX_LOADED_MAINDOCUMENT ) )
+    {
+        // the hash can be changed only in editable documents,
+        // or during loading of document
+        pImp->m_aModifyPasswordInfo = aInfo;
+        return sal_True;
+    }
+
+    return sal_False;
+}
+
+void SfxObjectShell::SetModifyPasswordEntered( sal_Bool bEntered )
+{
+    pImp->m_bModifyPasswordEntered = bEntered;
+}
+
+sal_Bool SfxObjectShell::IsModifyPasswordEntered()
+{
+    return pImp->m_bModifyPasswordEntered;
 }
 

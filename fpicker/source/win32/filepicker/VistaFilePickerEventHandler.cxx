@@ -103,15 +103,15 @@ HRESULT STDMETHODCALLTYPE VistaFilePickerEventHandler::QueryInterface(REFIID rII
 }
 
 //-----------------------------------------------------------------------------------------
-ULONG STDMETHODCALLTYPE VistaFilePickerEventHandler::AddRef()
+sal_uIntPtr STDMETHODCALLTYPE VistaFilePickerEventHandler::AddRef()
 {
     return osl_incrementInterlockedCount(&m_nRefCount);
 }
 
 //-----------------------------------------------------------------------------------------
-ULONG STDMETHODCALLTYPE VistaFilePickerEventHandler::Release()
+sal_uIntPtr STDMETHODCALLTYPE VistaFilePickerEventHandler::Release()
 {
-    ULONG nReturn = --m_nRefCount;
+    sal_uIntPtr nReturn = --m_nRefCount;
     if ( m_nRefCount == 0 )
         delete this;
 
@@ -332,7 +332,7 @@ STDMETHODIMP VistaFilePickerEventHandler::OnButtonClicked(IFileDialogCustomize* 
 //-----------------------------------------------------------------------------------------
 STDMETHODIMP VistaFilePickerEventHandler::OnCheckButtonToggled(IFileDialogCustomize* /*pCustomize*/,
                                                                DWORD                 nIDCtl    ,
-                                                               BOOL                  bChecked  )
+                                                               sal_Bool                  bChecked  )
 {
     /*
     if (nIDCtl == css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION)

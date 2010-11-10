@@ -470,6 +470,32 @@ void SfxObjectShell::SetReadOnlyUI( sal_Bool bReadOnly )
 
 //-------------------------------------------------------------------------
 
+void SfxObjectShell::SetReadOnly()
+{
+    // Let the document be completely readonly, means that the
+    // medium open mode is adjusted accordingly, and the write lock
+    // on the file is removed.
+
+     if ( pMedium && !IsReadOnlyMedium() )
+    {
+        sal_Bool bWasROUI = IsReadOnly();
+
+        pMedium->UnlockFile( sal_False );
+
+        // the storage-based mediums are already based on the temporary file
+        // so UnlockFile has already closed the locking stream
+        if ( !pMedium->HasStorage_Impl() && IsLoadingFinished() )
+            pMedium->CloseInStream();
+
+        pMedium->SetOpenMode( SFX_STREAM_READONLY, pMedium->IsDirect(), sal_True );
+        pMedium->GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, sal_True ) );
+
+        if ( !bWasROUI )
+            Broadcast( SfxSimpleHint(SFX_HINT_MODECHANGED) );
+    }
+}
+//-------------------------------------------------------------------------
+
 sal_Bool SfxObjectShell::IsReadOnly() const
 {
     return pImp->bReadOnlyUI || IsReadOnlyMedium();
@@ -706,7 +732,7 @@ void SfxObjectShell::FreeSharedFile( const ::rtl::OUString& aTempFileURL )
     SetSharedXMLFlag( sal_False );
 
     if ( IsDocShared() && aTempFileURL.getLength()
-      && !SfxMedium::EqualURLs( aTempFileURL, GetSharedFileURL() ) )
+      && !::utl::UCBContentHelper::EqualURLs( aTempFileURL, GetSharedFileURL() ) )
     {
         if ( pImp->m_bAllowShareControlFileClean )
         {
@@ -1362,6 +1388,9 @@ void SfxObjectShell::FinishedLoading( sal_uInt16 nFlags )
         pImp->bImportDone = sal_True;
         if( !IsAbortingImport() )
             PositionView_Impl();
+
+        if ( ( GetModifyPasswordHash() || GetModifyPasswordInfo().getLength() ) && !IsModifyPasswordEntered() )
+            SetReadOnly();
 
         // Salvage
         if ( pSalvageItem )

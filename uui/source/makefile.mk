@@ -48,7 +48,6 @@ SLOFILES = \
     $(SLO)$/masterpasscrtdlg.obj \
     $(SLO)$/openlocked.obj \
     $(SLO)$/passworddlg.obj \
-    $(SLO)$/passcrtdlg.obj \
     $(SLO)$/fltdlg.obj \
     $(SLO)$/interactionhandler.obj \
     $(SLO)$/requeststringresolver.obj \
@@ -60,6 +59,7 @@ SLOFILES = \
     $(SLO)$/lockfailed.obj \
     $(SLO)$/trylater.obj \
     $(SLO)$/newerverwarn.obj \
+    $(SLO)$/nameclashdlg.obj \
     $(SLO)$/passwordcontainer.obj
 
 SRS1NAME=$(TARGET)
@@ -71,7 +71,6 @@ SRC1FILES = \
     masterpasscrtdlg.src \
     openlocked.src \
     passworddlg.src \
-    passcrtdlg.src \
     passworderrs.src \
     fltdlg.src \
     unknownauthdlg.src\
@@ -81,6 +80,7 @@ SRC1FILES = \
     alreadyopen.src\
     lockfailed.src\
     trylater.src\
+    nameclashdlg.src\
     newerverwarn.src
 
 .INCLUDE: target.mk

@@ -45,6 +45,7 @@
 #include "runtime.hxx"
 #include "token.hxx"
 #include "sbunoobj.hxx"
+#include "sbtrace.hxx"
 
 
 //#include <basic/hilight.hxx>
@@ -53,9 +54,10 @@
 #include <basic/basrdll.hxx>
 #include <vos/mutex.hxx>
 #include <basic/sbobjmod.hxx>
+#include <cppuhelper/implbase2.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/script/ModuleType.hpp>
-#include <com/sun/star/script/XVBACompat.hpp>
+#include <com/sun/star/script/vba/XVBACompatibility.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 using namespace com::sun::star;
@@ -76,15 +78,362 @@ using namespace com::sun::star;
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 #include <vcl/svapp.hxx>
+#include <map>
+#include <com/sun/star/reflection/XProxyFactory.hpp>
+#include <cppuhelper/implbase1.hxx>
+#include <basic/sbobjmod.hxx>
+#include <com/sun/star/uno/XAggregation.hpp>
+#include <map>
+#include <com/sun/star/script/XInvocation.hpp>
+
  using namespace ::com::sun::star;
+using namespace com::sun::star::lang;
+using namespace com::sun::star::reflection;
+using namespace com::sun::star::beans;
+using namespace com::sun::star::script;
+
 
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/awt/XDialogProvider.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
+#include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XControl.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/anytostring.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
+
+typedef ::cppu::WeakImplHelper1< XInvocation > DocObjectWrapper_BASE;
+typedef ::std::map< sal_Int16, Any, ::std::less< sal_Int16 > > OutParamMap;
+::com::sun::star::uno::Any sbxToUnoValue( SbxVariable* pVar );
+void unoToSbxValue( SbxVariable* pVar, const ::com::sun::star::uno::Any& aValue );
+
+class DocObjectWrapper : public DocObjectWrapper_BASE
+{
+    Reference< XAggregation >  m_xAggProxy;
+    Reference< XInvocation >  m_xAggInv;
+    Reference< XTypeProvider > m_xAggregateTypeProv;
+    Sequence< Type >           m_Types;
+    SbModule*                m_pMod;
+    SbMethodRef getMethod( const rtl::OUString& aName ) throw (RuntimeException);
+    SbPropertyRef getProperty( const rtl::OUString& aName ) throw (RuntimeException);
+    String mName; // for debugging
+
+public:
+    DocObjectWrapper( SbModule* pMod );
+    virtual ~DocObjectWrapper();
+
+    virtual void SAL_CALL acquire() throw();
+    virtual void SAL_CALL release() throw();
+
+    virtual Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (RuntimeException)
+    {
+        if( !m_xAggregateTypeProv.is() )
+            throw RuntimeException();
+        return m_xAggregateTypeProv->getImplementationId();
+    }
+
+    virtual Reference< XIntrospectionAccess > SAL_CALL getIntrospection(  ) throw (RuntimeException);
+
+    virtual Any SAL_CALL invoke( const ::rtl::OUString& aFunctionName, const Sequence< Any >& aParams, Sequence< ::sal_Int16 >& aOutParamIndex, Sequence< Any >& aOutParam ) throw (IllegalArgumentException, CannotConvertException, InvocationTargetException, RuntimeException);
+    virtual void SAL_CALL setValue( const ::rtl::OUString& aPropertyName, const Any& aValue ) throw (UnknownPropertyException, CannotConvertException, InvocationTargetException, RuntimeException);
+    virtual Any SAL_CALL getValue( const ::rtl::OUString& aPropertyName ) throw (UnknownPropertyException, RuntimeException);
+    virtual ::sal_Bool SAL_CALL hasMethod( const ::rtl::OUString& aName ) throw (RuntimeException);
+    virtual ::sal_Bool SAL_CALL hasProperty( const ::rtl::OUString& aName ) throw (RuntimeException);
+    virtual  Any SAL_CALL queryInterface( const Type& aType ) throw ( RuntimeException );
+
+    virtual Sequence< Type > SAL_CALL getTypes() throw ( RuntimeException );
+};
+
+DocObjectWrapper::DocObjectWrapper( SbModule* pVar ) : m_pMod( pVar ), mName( pVar->GetName() )
+{
+    SbObjModule* pMod = PTR_CAST(SbObjModule,pVar);
+    if ( pMod )
+    {
+        if ( pMod->GetModuleType() == ModuleType::DOCUMENT )
+        {
+            Reference< XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
+            // Use proxy factory service to create aggregatable proxy.
+            SbUnoObject* pUnoObj = PTR_CAST(SbUnoObject,pMod->GetObject() );
+            Reference< XInterface > xIf;
+            if ( pUnoObj )
+            {
+                   Any aObj = pUnoObj->getUnoAny();
+                   aObj >>= xIf;
+                   if ( xIf.is() )
+                   {
+                       m_xAggregateTypeProv.set( xIf, UNO_QUERY );
+                       m_xAggInv.set( xIf, UNO_QUERY );
+                   }
+            }
+            if ( xIf.is() )
+            {
+                try
+                {
+                    Reference< XMultiComponentFactory > xMFac( xFactory, UNO_QUERY_THROW );
+                    Reference< XPropertySet> xPSMPropertySet( xMFac, UNO_QUERY_THROW );
+                    Reference< XComponentContext >  xCtx;
+                    xPSMPropertySet->getPropertyValue(
+                    String( RTL_CONSTASCII_USTRINGPARAM("DefaultContext") ) ) >>= xCtx;
+                    Reference< XProxyFactory > xProxyFac( xMFac->createInstanceWithContext( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.reflection.ProxyFactory" ) ), xCtx  ), UNO_QUERY_THROW );
+                    m_xAggProxy = xProxyFac->createProxy( xIf );
+                }
+                catch(  Exception& )
+                {
+                    OSL_ENSURE( false, "DocObjectWrapper::DocObjectWrapper: Caught exception!" );
+                }
+            }
+
+            if ( m_xAggProxy.is() )
+            {
+                osl_incrementInterlockedCount( &m_refCount );
+
+                /* i35609 - Fix crash on Solaris. The setDelegator call needs
+                    to be in its own block to ensure that all temporary Reference
+                    instances that are acquired during the call are released
+                    before m_refCount is decremented again */
+                {
+                    m_xAggProxy->setDelegator( static_cast< cppu::OWeakObject * >( this ) );
+                }
+
+                 osl_decrementInterlockedCount( &m_refCount );
+            }
+        }
+    }
+}
+
+void SAL_CALL
+DocObjectWrapper::acquire() throw ()
+{
+    osl_incrementInterlockedCount( &m_refCount );
+    OSL_TRACE("DocObjectWrapper::acquire(%s) 0x%x refcount is now %d", rtl::OUStringToOString( mName, RTL_TEXTENCODING_UTF8 ).getStr(), this, m_refCount );
+}
+void SAL_CALL
+DocObjectWrapper::release() throw ()
+{
+    if ( osl_decrementInterlockedCount( &m_refCount ) == 0 )
+    {
+        OSL_TRACE("DocObjectWrapper::release(%s) 0x%x refcount is now %d", rtl::OUStringToOString( mName, RTL_TEXTENCODING_UTF8 ).getStr(), this, m_refCount );
+        delete this;
+    }
+    else
+        OSL_TRACE("DocObjectWrapper::release(%s) 0x%x refcount is now %d", rtl::OUStringToOString( mName, RTL_TEXTENCODING_UTF8 ).getStr(), this, m_refCount );
+}
+
+DocObjectWrapper::~DocObjectWrapper()
+{
+}
+
+Sequence< Type > SAL_CALL DocObjectWrapper::getTypes()
+    throw ( RuntimeException )
+{
+    if ( m_Types.getLength() == 0 )
+    {
+        Sequence< Type > sTypes;
+        if ( m_xAggregateTypeProv.is() )
+            sTypes = m_xAggregateTypeProv->getTypes();
+        m_Types.realloc( sTypes.getLength() + 1 );
+        Type* pPtr = m_Types.getArray();
+        for ( int i=0; i<m_Types.getLength(); ++i, ++pPtr )
+        {
+            if ( i == 0 )
+                *pPtr = XInvocation::static_type( NULL );
+            else
+                *pPtr = sTypes[ i - 1 ];
+        }
+    }
+    return m_Types;
+}
+
+Reference< XIntrospectionAccess > SAL_CALL
+DocObjectWrapper::getIntrospection(  ) throw (RuntimeException)
+{
+    return NULL;
+}
+
+Any SAL_CALL
+DocObjectWrapper::invoke( const ::rtl::OUString& aFunctionName, const Sequence< Any >& aParams, Sequence< ::sal_Int16 >& aOutParamIndex, Sequence< Any >& aOutParam ) throw (IllegalArgumentException, CannotConvertException, InvocationTargetException, RuntimeException)
+{
+    if ( m_xAggInv.is() &&  m_xAggInv->hasMethod( aFunctionName ) )
+            return m_xAggInv->invoke( aFunctionName, aParams, aOutParamIndex, aOutParam );
+    SbMethodRef pMethod = getMethod( aFunctionName );
+    if ( !pMethod )
+        throw RuntimeException();
+    // check number of parameters
+    sal_Int32 nParamsCount = aParams.getLength();
+    SbxInfo* pInfo = pMethod->GetInfo();
+    if ( pInfo )
+    {
+        sal_Int32 nSbxOptional = 0;
+        USHORT n = 1;
+        for ( const SbxParamInfo* pParamInfo = pInfo->GetParam( n ); pParamInfo; pParamInfo = pInfo->GetParam( ++n ) )
+        {
+            if ( ( pParamInfo->nFlags & SBX_OPTIONAL ) != 0 )
+                ++nSbxOptional;
+            else
+                nSbxOptional = 0;
+        }
+        sal_Int32 nSbxCount = n - 1;
+        if ( nParamsCount < nSbxCount - nSbxOptional )
+        {
+            throw RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "wrong number of parameters!" ) ), Reference< XInterface >() );
+        }
+    }
+    // set parameters
+    SbxArrayRef xSbxParams;
+    if ( nParamsCount > 0 )
+    {
+        xSbxParams = new SbxArray;
+        const Any* pParams = aParams.getConstArray();
+        for ( sal_Int32 i = 0; i < nParamsCount; ++i )
+        {
+            SbxVariableRef xSbxVar = new SbxVariable( SbxVARIANT );
+            unoToSbxValue( static_cast< SbxVariable* >( xSbxVar ), pParams[i] );
+            xSbxParams->Put( xSbxVar, static_cast< USHORT >( i ) + 1 );
+
+            // Enable passing by ref
+            if ( xSbxVar->GetType() != SbxVARIANT )
+                xSbxVar->SetFlag( SBX_FIXED );
+        }
+    }
+    if ( xSbxParams.Is() )
+        pMethod->SetParameters( xSbxParams );
+
+    // call method
+    SbxVariableRef xReturn = new SbxVariable;
+    ErrCode nErr = SbxERR_OK;
+
+    nErr = pMethod->Call( xReturn );
+    Any aReturn;
+    // get output parameters
+    if ( xSbxParams.Is() )
+    {
+        SbxInfo* pInfo_ = pMethod->GetInfo();
+        if ( pInfo_ )
+        {
+            OutParamMap aOutParamMap;
+            for ( USHORT n = 1, nCount = xSbxParams->Count(); n < nCount; ++n )
+            {
+                const SbxParamInfo* pParamInfo = pInfo_->GetParam( n );
+                if ( pParamInfo && ( pParamInfo->eType & SbxBYREF ) != 0 )
+                {
+                    SbxVariable* pVar = xSbxParams->Get( n );
+                    if ( pVar )
+                    {
+                        SbxVariableRef xVar = pVar;
+                        aOutParamMap.insert( OutParamMap::value_type( n - 1, sbxToUnoValue( xVar ) ) );
+                    }
+                }
+            }
+            sal_Int32 nOutParamCount = aOutParamMap.size();
+            aOutParamIndex.realloc( nOutParamCount );
+            aOutParam.realloc( nOutParamCount );
+            sal_Int16* pOutParamIndex = aOutParamIndex.getArray();
+            Any* pOutParam = aOutParam.getArray();
+            for ( OutParamMap::iterator aIt = aOutParamMap.begin(); aIt != aOutParamMap.end(); ++aIt, ++pOutParamIndex, ++pOutParam )
+            {
+                *pOutParamIndex = aIt->first;
+                *pOutParam = aIt->second;
+            }
+        }
+    }
+
+    // get return value
+    aReturn = sbxToUnoValue( xReturn );
+
+    pMethod->SetParameters( NULL );
+
+    return aReturn;
+}
+
+void SAL_CALL
+DocObjectWrapper::setValue( const ::rtl::OUString& aPropertyName, const Any& aValue ) throw (UnknownPropertyException, CannotConvertException, InvocationTargetException, RuntimeException)
+{
+    if ( m_xAggInv.is() &&  m_xAggInv->hasProperty( aPropertyName ) )
+            return m_xAggInv->setValue( aPropertyName, aValue );
+
+    SbPropertyRef pProperty = getProperty( aPropertyName );
+    if ( !pProperty.Is() )
+       throw UnknownPropertyException();
+    unoToSbxValue( (SbxVariable*) pProperty, aValue );
+}
+
+Any SAL_CALL
+DocObjectWrapper::getValue( const ::rtl::OUString& aPropertyName ) throw (UnknownPropertyException, RuntimeException)
+{
+    if ( m_xAggInv.is() &&  m_xAggInv->hasProperty( aPropertyName ) )
+            return m_xAggInv->getValue( aPropertyName );
+
+    SbPropertyRef pProperty = getProperty( aPropertyName );
+    if ( !pProperty.Is() )
+       throw UnknownPropertyException();
+
+    SbxVariable* pProp = ( SbxVariable* ) pProperty;
+    if ( pProp->GetType() == SbxEMPTY )
+        pProperty->Broadcast( SBX_HINT_DATAWANTED );
+
+    Any aRet = sbxToUnoValue( pProp );
+    return aRet;
+}
+
+::sal_Bool SAL_CALL
+DocObjectWrapper::hasMethod( const ::rtl::OUString& aName ) throw (RuntimeException)
+{
+    if ( m_xAggInv.is() && m_xAggInv->hasMethod( aName ) )
+        return sal_True;
+    return getMethod( aName ).Is();
+}
+
+::sal_Bool SAL_CALL
+DocObjectWrapper::hasProperty( const ::rtl::OUString& aName ) throw (RuntimeException)
+{
+    sal_Bool bRes = sal_False;
+    if ( m_xAggInv.is() && m_xAggInv->hasProperty( aName ) )
+        bRes = sal_True;
+    else bRes = getProperty( aName ).Is();
+    return bRes;
+}
+
+Any SAL_CALL DocObjectWrapper::queryInterface( const Type& aType )
+    throw ( RuntimeException )
+{
+    Any aRet = DocObjectWrapper_BASE::queryInterface( aType );
+    if ( aRet.hasValue() )
+        return aRet;
+    else if ( m_xAggProxy.is() )
+        aRet = m_xAggProxy->queryAggregation( aType );
+    return aRet;
+}
+
+SbMethodRef DocObjectWrapper::getMethod( const rtl::OUString& aName ) throw (RuntimeException)
+{
+    SbMethodRef pMethod = NULL;
+    if ( m_pMod )
+    {
+        USHORT nSaveFlgs = m_pMod->GetFlags();
+        // Limit search to this module
+        m_pMod->ResetFlag( SBX_GBLSEARCH );
+        pMethod = (SbMethod*) m_pMod->SbModule::Find( aName,  SbxCLASS_METHOD );
+        m_pMod->SetFlags( nSaveFlgs );
+    }
+
+    return pMethod;
+}
+
+SbPropertyRef DocObjectWrapper::getProperty( const rtl::OUString& aName ) throw (RuntimeException)
+{
+    SbPropertyRef pProperty = NULL;
+    if ( m_pMod )
+    {
+        USHORT nSaveFlgs = m_pMod->GetFlags();
+        // Limit search to this module.
+        m_pMod->ResetFlag( SBX_GBLSEARCH );
+        pProperty = (SbProperty*)m_pMod->SbModule::Find( aName,  SbxCLASS_PROPERTY );
+        m_pMod->SetFlag( nSaveFlgs );
+    }
+
+    return pProperty;
+}
 
 TYPEINIT1(SbModule,SbxObject)
 TYPEINIT1(SbMethod,SbxMethod)
@@ -95,11 +444,7 @@ TYPEINIT1(SbJScriptMethod,SbMethod)
 TYPEINIT1(SbObjModule,SbModule)
 TYPEINIT1(SbUserFormModule,SbObjModule)
 
-SV_DECL_VARARR(SbiBreakpoints,USHORT,4,4)
-SV_IMPL_VARARR(SbiBreakpoints,USHORT)
-
-
-SV_IMPL_VARARR(HighlightPortions, HighlightPortion)
+typedef std::vector<HighlightPortion> HighlightPortions;
 
 bool getDefaultVBAMode( StarBASIC* pb )
 {
@@ -112,9 +457,9 @@ bool getDefaultVBAMode( StarBASIC* pb )
             uno::Reference< beans::XPropertySet > xProp( aDoc, uno::UNO_QUERY );
             if ( xProp.is() )
             {
-                uno::Reference< script::XVBACompat > xVBAMode( xProp->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BasicLibraries") ) ), uno::UNO_QUERY );
+                uno::Reference< script::vba::XVBACompatibility > xVBAMode( xProp->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BasicLibraries") ) ), uno::UNO_QUERY );
                 if ( xVBAMode.is() )
-                    bResult = ( xVBAMode->getVBACompatModeOn() == sal_True );
+                    bResult = xVBAMode->getVBACompatibilityMode() == sal_True;
             }
         }
     }
@@ -190,16 +535,33 @@ SbModule::SbModule( const String& rName,  BOOL bVBACompat )
     SetName( rName );
     SetFlag( SBX_EXTSEARCH | SBX_GBLSEARCH );
     SetModuleType( script::ModuleType::NORMAL );
+
+    // #i92642: Set name property to intitial name
+    SbxVariable* pNameProp = pProps->Find( String( RTL_CONSTASCII_USTRINGPARAM("Name") ), SbxCLASS_PROPERTY );
+    if( pNameProp != NULL )
+        pNameProp->PutString( GetName() );
 }
 
 SbModule::~SbModule()
 {
+    OSL_TRACE("Module named %s is destructing", rtl::OUStringToOString( GetName(), RTL_TEXTENCODING_UTF8 ).getStr() );
     if( pImage )
         delete pImage;
     if( pBreaks )
         delete pBreaks;
     if( pClassData )
         delete pClassData;
+        mxWrapper = NULL;
+}
+
+uno::Reference< script::XInvocation >
+SbModule::GetUnoModule()
+{
+    if ( !mxWrapper.is() )
+        mxWrapper = new DocObjectWrapper( this );
+
+    OSL_TRACE("Module named %s returning wrapper mxWrapper (0x%x)", rtl::OUStringToOString( GetName(), RTL_TEXTENCODING_UTF8 ).getStr(), mxWrapper.get() );
+    return mxWrapper;
 }
 
 BOOL SbModule::IsCompiled() const
@@ -366,7 +728,7 @@ SbxVariable* SbModule::Find( const XubString& rName, SbxClassType t )
 {
     // make sure a search in an uninstatiated class module will fail
     SbxVariable* pRes = SbxObject::Find( rName, t );
-    if ( bIsProxyModule )
+    if ( bIsProxyModule && !GetSbData()->bRunInit )
         return NULL;
     if( !pRes && pImage )
     {
@@ -452,7 +814,19 @@ void SbModule::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
             }
         }
         else
-            SbxObject::SFX_NOTIFY( rBC, rBCType, rHint, rHintType );
+        {
+            // #i92642: Special handling for name property to avoid
+            // side effects when using name as variable implicitely
+            bool bForwardToSbxObject = true;
+
+            ULONG nId = pHint->GetId();
+            if( (nId == SBX_HINT_DATAWANTED || nId == SBX_HINT_DATACHANGED) &&
+                pVar->GetName().EqualsIgnoreCaseAscii( "name" ) )
+                    bForwardToSbxObject = false;
+
+            if( bForwardToSbxObject )
+                SbxObject::SFX_NOTIFY( rBC, rBCType, rHint, rHintType );
+        }
     }
 }
 
@@ -646,7 +1020,7 @@ void ClearUnoObjectsInRTL_Impl( StarBASIC* pBasic )
     if( ((StarBASIC*)p) != pBasic )
         ClearUnoObjectsInRTL_Impl_Rek( (StarBASIC*)p );
 }
-BOOL SbModule::IsVBACompat()
+BOOL SbModule::IsVBACompat() const
 {
     return mbVBACompat;
 }
@@ -667,6 +1041,9 @@ USHORT SbModule::Run( SbMethod* pMeth )
     StarBASICRef xBasic;
     if( bDelInst )
     {
+#ifdef DBG_TRACE_BASIC
+        dbg_InitTrace();
+#endif
         // #32779: Basic waehrend der Ausfuehrung festhalten
         xBasic = (StarBASIC*) GetParent();
 
@@ -745,17 +1122,27 @@ USHORT SbModule::Run( SbMethod* pMeth )
             SbModule* pOldMod = pMOD;
             pMOD = this;
             SbiRuntime* pRt = new SbiRuntime( this, pMeth, pMeth->nStart );
+
+#ifdef DBG_TRACE_BASIC
+            dbg_traceNotifyCall( this, pMeth, pINST->nCallLvl );
+#endif
+
             pRt->pNext = pINST->pRun;
             if( pRt->pNext )
                 pRt->pNext->block();
             pINST->pRun = pRt;
             if ( mbVBACompat )
-                        {
+            {
                 pINST->EnableCompatibility( TRUE );
-                        }
+            }
             while( pRt->Step() ) {}
             if( pRt->pNext )
                 pRt->pNext->unblock();
+
+#ifdef DBG_TRACE_BASIC
+            bool bLeave = true;
+            dbg_traceNotifyCall( this, pMeth, pINST->nCallLvl, bLeave );
+#endif
 
             // #63710 Durch ein anderes Thread-Handling bei Events kann es passieren,
             // dass show-Aufruf an einem Dialog zurueckkehrt (durch schliessen des
@@ -850,9 +1237,20 @@ void SbModule::RunInit()
         pMOD = this;
         // Der Init-Code beginnt immer hier
         SbiRuntime* pRt = new SbiRuntime( this, NULL, 0 );
+
+#ifdef DBG_TRACE_BASIC
+        dbg_traceNotifyCall( this, NULL, 0 );
+#endif
+
         pRt->pNext = pINST->pRun;
         pINST->pRun = pRt;
         while( pRt->Step() ) {}
+
+#ifdef DBG_TRACE_BASIC
+        bool bLeave = true;
+        dbg_traceNotifyCall( this, NULL, 0, bLeave );
+#endif
+
         pINST->pRun = pRt->pNext;
         delete pRt;
         pMOD = pOldMod;
@@ -867,6 +1265,33 @@ void SbModule::RunInit()
 }
 
 // Mit private/dim deklarierte Variablen loeschen
+
+void SbModule::AddVarName( const String& aName )
+{
+    // see if the name is added allready
+    std::vector< String >::iterator it_end = mModuleVariableNames.end();
+    for ( std::vector< String >::iterator it = mModuleVariableNames.begin(); it != it_end; ++it )
+    {
+        if ( aName == *it )
+            return;
+    }
+    mModuleVariableNames.push_back( aName );
+}
+
+void SbModule::RemoveVars()
+{
+    std::vector< String >::iterator it_end = mModuleVariableNames.end();
+    for ( std::vector< String >::iterator it = mModuleVariableNames.begin(); it != it_end; ++it )
+    {
+    // We don't want a Find being called in a derived class ( e.g.
+    // SbUserform because it could trigger say an initialise event
+    // which would cause basic to be re-run in the middle of the init ( and remember RemoveVars is called from compile and we don't want code to run as part of the compile )
+    SbxVariableRef p = SbModule::Find( *it, SbxCLASS_PROPERTY );
+    if( p.Is() )
+        Remove (p);
+    }
+}
+
 void SbModule::ClearPrivateVars()
 {
     for( USHORT i = 0 ; i < pProps->Count() ; i++ )
@@ -1049,15 +1474,15 @@ BOOL SbModule::IsBreakable( USHORT nLine ) const
     return FALSE;
 }
 
-USHORT SbModule::GetBPCount() const
+size_t SbModule::GetBPCount() const
 {
-    return pBreaks ? pBreaks->Count() : 0;
+    return pBreaks ? pBreaks->size() : 0;
 }
 
-USHORT SbModule::GetBP( USHORT n ) const
+USHORT SbModule::GetBP( size_t n ) const
 {
-    if( pBreaks && n < pBreaks->Count() )
-        return pBreaks->GetObject( n );
+    if( pBreaks && n < pBreaks->size() )
+        return pBreaks->operator[]( n );
     else
         return 0;
 }
@@ -1066,11 +1491,9 @@ BOOL SbModule::IsBP( USHORT nLine ) const
 {
     if( pBreaks )
     {
-        const USHORT* p = pBreaks->GetData();
-        USHORT n = pBreaks->Count();
-        for( USHORT i = 0; i < n; i++, p++ )
+        for( size_t i = 0; i < pBreaks->size(); i++ )
         {
-            USHORT b = *p;
+            USHORT b = pBreaks->operator[]( i );
             if( b == nLine )
                 return TRUE;
             if( b < nLine )
@@ -1086,18 +1509,16 @@ BOOL SbModule::SetBP( USHORT nLine )
         return FALSE;
     if( !pBreaks )
         pBreaks = new SbiBreakpoints;
-    const USHORT* p = pBreaks->GetData();
-    USHORT n = pBreaks->Count();
-    USHORT i;
-    for( i = 0; i < n; i++, p++ )
+    size_t i;
+    for( i = 0; i < pBreaks->size(); i++ )
     {
-        USHORT b = *p;
+        USHORT b = pBreaks->operator[]( i );
         if( b == nLine )
             return TRUE;
         if( b < nLine )
             break;
     }
-    pBreaks->Insert( &nLine, 1, i );
+    pBreaks->insert( pBreaks->begin() + i, nLine );
 
     // #38568: Zur Laufzeit auch hier SbDEBUG_BREAK setzen
     if( pINST && pINST->pRun )
@@ -1111,19 +1532,19 @@ BOOL SbModule::ClearBP( USHORT nLine )
     BOOL bRes = FALSE;
     if( pBreaks )
     {
-        const USHORT* p = pBreaks->GetData();
-        USHORT n = pBreaks->Count();
-        for( USHORT i = 0; i < n; i++, p++ )
+        for( size_t i = 0; i < pBreaks->size(); i++ )
         {
-            USHORT b = *p;
+            USHORT b = pBreaks->operator[]( i );
             if( b == nLine )
             {
-                pBreaks->Remove( i, 1 ); bRes = TRUE; break;
+                pBreaks->erase( pBreaks->begin() + i );
+                bRes = TRUE;
+                break;
             }
             if( b < nLine )
                 break;
         }
-        if( !pBreaks->Count() )
+        if( pBreaks->empty() )
             delete pBreaks, pBreaks = NULL;
     }
     return bRes;
@@ -1131,7 +1552,8 @@ BOOL SbModule::ClearBP( USHORT nLine )
 
 void SbModule::ClearAllBP()
 {
-    delete pBreaks; pBreaks = NULL;
+    delete pBreaks;
+    pBreaks = NULL;
 }
 
 void
@@ -1159,7 +1581,7 @@ BOOL SbModule::LoadData( SvStream& rStrm, USHORT nVer )
     Clear();
     if( !SbxObject::LoadData( rStrm, 1 ) )
         return FALSE;
-    // Sicherheitshalber...
+    // Precaution...
     SetFlag( SBX_EXTSEARCH | SBX_GBLSEARCH );
     BYTE bImage;
     rStrm >> bImage;
@@ -1583,9 +2005,9 @@ SbObjModule::Find( const XubString& rName, SbxClassType t )
     return pVar;
 }
 
-typedef ::cppu::WeakImplHelper1< awt::XTopWindowListener > EventListener_BASE;
+typedef ::cppu::WeakImplHelper2< awt::XTopWindowListener, awt::XWindowListener > FormObjEventListener_BASE;
 
-class FormObjEventListenerImpl : public EventListener_BASE
+class FormObjEventListenerImpl : public FormObjEventListener_BASE
 {
     SbUserFormModule* mpUserForm;
     uno::Reference< lang::XComponent > mxComponent;
@@ -1595,39 +2017,57 @@ class FormObjEventListenerImpl : public EventListener_BASE
     sal_Bool mbShowing;
     FormObjEventListenerImpl(); // not defined
     FormObjEventListenerImpl(const FormObjEventListenerImpl&); // not defined
+
 public:
-    FormObjEventListenerImpl( SbUserFormModule* pUserForm, const uno::Reference< lang::XComponent >& xComponent ) : mpUserForm( pUserForm ), mxComponent( xComponent) , mbDisposed( false ), mbOpened( sal_False ), mbActivated( sal_False ), mbShowing( sal_False )
+    FormObjEventListenerImpl( SbUserFormModule* pUserForm, const uno::Reference< lang::XComponent >& xComponent ) :
+        mpUserForm( pUserForm ), mxComponent( xComponent) ,
+        mbDisposed( false ), mbOpened( sal_False ), mbActivated( sal_False ), mbShowing( sal_False )
     {
         if ( mxComponent.is() )
         {
-        uno::Reference< awt::XTopWindow > xList( mxComponent, uno::UNO_QUERY_THROW );;
-            OSL_TRACE("*********** Registering the listener");
-            xList->addTopWindowListener( this );
+            OSL_TRACE("*********** Registering the listeners");
+            try
+            {
+                uno::Reference< awt::XTopWindow >( mxComponent, uno::UNO_QUERY_THROW )->addTopWindowListener( this );
+            }
+            catch( uno::Exception& ) {}
+            try
+            {
+                uno::Reference< awt::XWindow >( mxComponent, uno::UNO_QUERY_THROW )->addWindowListener( this );
+            }
+            catch( uno::Exception& ) {}
         }
     }
 
-    ~FormObjEventListenerImpl()
+    virtual ~FormObjEventListenerImpl()
     {
         removeListener();
     }
-    sal_Bool isShowing() { return mbShowing; }
+
+    sal_Bool isShowing() const { return mbShowing; }
+
     void removeListener()
     {
-        try
+        if ( mxComponent.is() && !mbDisposed )
         {
-            if ( mxComponent.is() && !mbDisposed )
+            OSL_TRACE("*********** Removing the listeners");
+            try
             {
-                uno::Reference< awt::XTopWindow > xList( mxComponent, uno::UNO_QUERY_THROW );;
-                OSL_TRACE("*********** Removing the listener");
-                xList->removeTopWindowListener( this );
-                mxComponent = NULL;
+                uno::Reference< awt::XTopWindow >( mxComponent, uno::UNO_QUERY_THROW )->removeTopWindowListener( this );
             }
+            catch( uno::Exception& ) {}
+            try
+            {
+                uno::Reference< awt::XWindow >( mxComponent, uno::UNO_QUERY_THROW )->removeWindowListener( this );
+            }
+            catch( uno::Exception& ) {}
         }
-        catch( uno::Exception& ) {}
+        mxComponent.clear();
     }
+
     virtual void SAL_CALL windowOpened( const lang::EventObject& /*e*/ ) throw (uno::RuntimeException)
     {
-        if ( mpUserForm  )
+        if ( mpUserForm )
         {
             mbOpened = sal_True;
             mbShowing = sal_True;
@@ -1674,12 +2114,23 @@ public:
     }
     //liuchen 2009-7-21
 
-    virtual void SAL_CALL windowClosed( const lang::EventObject& /*e*/ ) throw (uno::RuntimeException) { mbOpened = sal_False; mbShowing = sal_False; }
-    virtual void SAL_CALL windowMinimized( const lang::EventObject& /*e*/ ) throw (uno::RuntimeException) {}
-    virtual void SAL_CALL windowNormalized( const lang::EventObject& /*e*/ ) throw (uno::RuntimeException){}
+    virtual void SAL_CALL windowClosed( const lang::EventObject& /*e*/ ) throw (uno::RuntimeException)
+    {
+        mbOpened = sal_False;
+        mbShowing = sal_False;
+    }
+
+    virtual void SAL_CALL windowMinimized( const lang::EventObject& /*e*/ ) throw (uno::RuntimeException)
+    {
+    }
+
+    virtual void SAL_CALL windowNormalized( const lang::EventObject& /*e*/ ) throw (uno::RuntimeException)
+    {
+    }
+
     virtual void SAL_CALL windowActivated( const lang::EventObject& /*e*/ ) throw (uno::RuntimeException)
     {
-        if ( mpUserForm  )
+        if ( mpUserForm )
         {
             mbActivated = sal_True;
             if ( mbOpened )
@@ -1692,36 +2143,62 @@ public:
 
     virtual void SAL_CALL windowDeactivated( const lang::EventObject& /*e*/ ) throw (uno::RuntimeException)
     {
-        if ( mpUserForm  )
-            mpUserForm->triggerDeActivateEvent();
+        if ( mpUserForm )
+            mpUserForm->triggerDeactivateEvent();
     }
 
+    virtual void SAL_CALL windowResized( const awt::WindowEvent& /*e*/ ) throw (uno::RuntimeException)
+    {
+        if ( mpUserForm )
+        {
+            mpUserForm->triggerResizeEvent();
+            mpUserForm->triggerLayoutEvent();
+        }
+    }
 
-    virtual void SAL_CALL disposing( const lang::EventObject& Source ) throw (uno::RuntimeException)
+    virtual void SAL_CALL windowMoved( const awt::WindowEvent& /*e*/ ) throw (uno::RuntimeException)
+    {
+        if ( mpUserForm )
+            mpUserForm->triggerLayoutEvent();
+    }
+
+    virtual void SAL_CALL windowShown( const lang::EventObject& /*e*/ ) throw (uno::RuntimeException)
+    {
+    }
+
+    virtual void SAL_CALL windowHidden( const lang::EventObject& /*e*/ ) throw (uno::RuntimeException)
+    {
+    }
+
+    virtual void SAL_CALL disposing( const lang::EventObject& /*Source*/ ) throw (uno::RuntimeException)
     {
         OSL_TRACE("** Userform/Dialog disposing");
         mbDisposed = true;
-        uno::Any aSource;
-        aSource <<= Source;
-        mxComponent = NULL;
+        mxComponent.clear();
         if ( mpUserForm )
             mpUserForm->ResetApiObj();
     }
 };
 
 SbUserFormModule::SbUserFormModule( const String& rName, const com::sun::star::script::ModuleInfo& mInfo, bool bIsCompat )
-    :SbObjModule( rName, mInfo, bIsCompat ), mbInit( false )
+    : SbObjModule( rName, mInfo, bIsCompat )
+    , m_mInfo( mInfo )
+    , mbInit( false )
 {
-        m_xModel.set( mInfo.ModuleObject, uno::UNO_QUERY_THROW );
+    m_xModel.set( mInfo.ModuleObject, uno::UNO_QUERY_THROW );
+}
+
+SbUserFormModule::~SbUserFormModule()
+{
 }
 
 void SbUserFormModule::ResetApiObj()
 {
-        if (  m_xDialog.is() ) // probably someone close the dialog window
+    if (  m_xDialog.is() ) // probably someone close the dialog window
     {
-            triggerTerminateEvent();
-        }
-        pDocObject = NULL;
+        triggerTerminateEvent();
+    }
+    pDocObject = NULL;
     m_xDialog = NULL;
 }
 
@@ -1777,23 +2254,22 @@ void SbUserFormModule::triggerMethod( const String& aMethodToRun, Sequence< Any 
 
 void SbUserFormModule::triggerActivateEvent( void )
 {
-        OSL_TRACE("**** entering SbUserFormModule::triggerActivate");
-    triggerMethod( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("UserForm_activate") ) );
-        OSL_TRACE("**** leaving SbUserFormModule::triggerActivate");
+    OSL_TRACE("**** entering SbUserFormModule::triggerActivate");
+    triggerMethod( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("UserForm_Activate") ) );
+    OSL_TRACE("**** leaving SbUserFormModule::triggerActivate");
 }
 
-void SbUserFormModule::triggerDeActivateEvent( void )
+void SbUserFormModule::triggerDeactivateEvent( void )
 {
-        OSL_TRACE("**** SbUserFormModule::triggerDeActivate");
-    triggerMethod( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Userform_DeActivate") ) );
+    OSL_TRACE("**** SbUserFormModule::triggerDeactivate");
+    triggerMethod( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Userform_Deactivate") ) );
 }
 
 void SbUserFormModule::triggerInitializeEvent( void )
-
 {
     if ( mbInit )
         return;
-        OSL_TRACE("**** SbUserFormModule::triggerInitializeEvent");
+    OSL_TRACE("**** SbUserFormModule::triggerInitializeEvent");
     static String aInitMethodName( RTL_CONSTASCII_USTRINGPARAM("Userform_Initialize") );
     triggerMethod( aInitMethodName );
     mbInit = true;
@@ -1801,13 +2277,52 @@ void SbUserFormModule::triggerInitializeEvent( void )
 
 void SbUserFormModule::triggerTerminateEvent( void )
 {
-       OSL_TRACE("**** SbUserFormModule::triggerTerminateEvent");
+    OSL_TRACE("**** SbUserFormModule::triggerTerminateEvent");
     static String aTermMethodName( RTL_CONSTASCII_USTRINGPARAM("Userform_Terminate") );
     triggerMethod( aTermMethodName );
     mbInit=false;
 }
 
-void SbUserFormModule::load()
+void SbUserFormModule::triggerLayoutEvent( void )
+{
+    static String aMethodName( RTL_CONSTASCII_USTRINGPARAM("Userform_Layout") );
+    triggerMethod( aMethodName );
+}
+
+void SbUserFormModule::triggerResizeEvent( void )
+{
+    static String aMethodName( RTL_CONSTASCII_USTRINGPARAM("Userform_Resize") );
+    triggerMethod( aMethodName );
+}
+
+SbUserFormModuleInstance* SbUserFormModule::CreateInstance()
+{
+    SbUserFormModuleInstance* pInstance = new SbUserFormModuleInstance( this, GetName(), m_mInfo, IsVBACompat() );
+    return pInstance;
+}
+
+SbUserFormModuleInstance::SbUserFormModuleInstance( SbUserFormModule* pParentModule,
+    const String& rName, const com::sun::star::script::ModuleInfo& mInfo, bool bIsVBACompat )
+        : SbUserFormModule( rName, mInfo, bIsVBACompat )
+        , m_pParentModule( pParentModule )
+{
+}
+
+BOOL SbUserFormModuleInstance::IsClass( const XubString& rName ) const
+{
+    BOOL bParentNameMatches = m_pParentModule->GetName().EqualsIgnoreCaseAscii( rName );
+    BOOL bRet = bParentNameMatches || SbxObject::IsClass( rName );
+    return bRet;
+}
+
+SbxVariable* SbUserFormModuleInstance::Find( const XubString& rName, SbxClassType t )
+{
+    SbxVariable* pVar = m_pParentModule->Find( rName, t );
+    return pVar;
+}
+
+
+void SbUserFormModule::Load()
 {
     OSL_TRACE("** load() ");
     // forces a load
@@ -1845,21 +2360,20 @@ void SbUserFormModule::Unload()
     if( pMeth )
     {
         OSL_TRACE("Attempting too run the UnloadObjectMethod");
-                m_xDialog = NULL; //release ref to the uno object
+        m_xDialog.clear(); //release ref to the uno object
         SbxValues aVals;
-               FormObjEventListenerImpl* pFormListener = dynamic_cast< FormObjEventListenerImpl* >( m_DialogListener.get() );
         bool bWaitForDispose = true; // assume dialog is showing
-                if ( pFormListener )
+        if ( m_DialogListener.get() )
         {
-            bWaitForDispose = pFormListener->isShowing();
+            bWaitForDispose = m_DialogListener->isShowing();
             OSL_TRACE("Showing %d", bWaitForDispose );
         }
         pMeth->Get( aVals);
-                if ( !bWaitForDispose )
-                {
-                    // we've either already got a dispose or we'er never going to get one
+        if ( !bWaitForDispose )
+        {
+            // we've either already got a dispose or we'er never going to get one
             ResetApiObj();
-                } // else wait for dispose
+        } // else wait for dispose
         OSL_TRACE("UnloadObject completed ( we hope )");
     }
 }
@@ -1897,9 +2411,8 @@ void SbUserFormModule::InitObject()
             pDocObject = new SbUnoObject( GetName(), uno::makeAny( xVBAFactory->createInstanceWithArguments( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.msforms.UserForm")), aArgs  ) ) );
             uno::Reference< lang::XComponent > xComponent( aArgs[ 1 ], uno::UNO_QUERY_THROW );
             // remove old listener if it exists
-            FormObjEventListenerImpl* pFormListener = dynamic_cast< FormObjEventListenerImpl* >( m_DialogListener.get() );
-            if ( pFormListener )
-                pFormListener->removeListener();
+            if ( m_DialogListener.get() )
+                m_DialogListener->removeListener();
             m_DialogListener = new FormObjEventListenerImpl( this, xComponent );
 
             triggerInitializeEvent();

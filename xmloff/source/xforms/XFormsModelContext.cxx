@@ -78,7 +78,7 @@ static SvXMLTokenMapEntry aChildren[] =
 
 
 XFormsModelContext::XFormsModelContext( SvXMLImport& rImport,
-                                        USHORT nPrefix,
+                                        sal_uInt16 nPrefix,
                                         const OUString& rLocalName ) :
     TokenContext( rImport, nPrefix, rLocalName, aAttributes, aChildren ),
     mxModel( lcl_createXFormsModel() )

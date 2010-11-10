@@ -80,3 +80,33 @@
     return sResult;
 }
 @end
+
+NSString* resolveAlias( NSString* i_pSystemPath )
+{
+    NSString* pResolvedPath = nil;
+    CFURLRef rUrl = CFURLCreateWithFileSystemPath( kCFAllocatorDefault,
+                                                   (CFStringRef)i_pSystemPath,
+                                                   kCFURLPOSIXPathStyle, false);
+    if( rUrl != NULL )
+    {
+        FSRef rFS;
+        if( CFURLGetFSRef( rUrl, &rFS ) )
+        {
+            MacOSBoolean bIsFolder = false;
+            MacOSBoolean bAlias = false;
+            OSErr err = FSResolveAliasFile( &rFS, true, &bIsFolder, &bAlias);
+            if( (err == noErr) && bAlias )
+            {
+                CFURLRef rResolvedUrl = CFURLCreateFromFSRef( kCFAllocatorDefault, &rFS );
+                if( rResolvedUrl != NULL )
+                {
+                    pResolvedPath = (NSString*)CFURLCopyFileSystemPath( rResolvedUrl, kCFURLPOSIXPathStyle );
+                    CFRelease( rResolvedUrl );
+                }
+            }
+        }
+        CFRelease( rUrl );
+    }
+    
+    return pResolvedPath;
+}

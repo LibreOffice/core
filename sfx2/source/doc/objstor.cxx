@@ -195,6 +195,13 @@ sal_Bool SfxObjectShell::SaveAs( SfxMedium& rMedium )
 
 //-------------------------------------------------------------------------
 
+sal_Bool SfxObjectShell::QuerySlotExecutable( USHORT /*nSlotId*/ )
+{
+    return sal_True;
+}
+
+//-------------------------------------------------------------------------
+
 sal_Bool GetPasswd_Impl( const SfxItemSet* pSet, ::rtl::OUString& rPasswd )
 {
     const SfxPoolItem* pItem = NULL;
@@ -1182,7 +1189,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
     if ( pMedium
       && pMedium->GetName().CompareIgnoreCaseToAscii( "private:stream", 14 ) != COMPARE_EQUAL
       && rMedium.GetName().CompareIgnoreCaseToAscii( "private:stream", 14 ) != COMPARE_EQUAL
-      && SfxMedium::EqualURLs( pMedium->GetName(), rMedium.GetName() ) )
+      && ::utl::UCBContentHelper::EqualURLs( pMedium->GetName(), rMedium.GetName() ) )
     {
         bStoreToSameLocation = sal_True;
         AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Save" ) ) );
@@ -1332,7 +1339,6 @@ sal_Bool SfxObjectShell::SaveTo_Impl
         {
             if ( pFilt->GetServiceName() != rMedium.GetFilter()->GetServiceName() )
             {
-//REMOVE            rMedium.GetStorage()->SetClass( SvFactory::GetServerName( nFormat ), nFormat, pFilt->GetTypeName() );
                 datatransfer::DataFlavor aDataFlavor;
                 SotExchange::GetFormatDataFlavor( nFormat, aDataFlavor );
 
@@ -1911,7 +1917,25 @@ sal_Bool SfxObjectShell::ConnectTmpStorage_Impl(
             bResult = SaveCompleted( xTmpStorage );
 
             if ( bResult )
+            {
                 pImp->pBasicManager->setStorage( xTmpStorage );
+
+                // Get rid of this workaround after issue i113914 is fixed
+                try
+                {
+                    uno::Reference< script::XStorageBasedLibraryContainer > xBasicLibraries( pImp->xBasicLibraries, uno::UNO_QUERY_THROW );
+                    xBasicLibraries->setRootStorage( xTmpStorage );
+                }
+                catch( uno::Exception& )
+                {}
+                try
+                {
+                    uno::Reference< script::XStorageBasedLibraryContainer > xDialogLibraries( pImp->xDialogLibraries, uno::UNO_QUERY_THROW );
+                    xDialogLibraries->setRootStorage( xTmpStorage );
+                }
+                catch( uno::Exception& )
+                {}
+            }
         }
         catch( uno::Exception& )
         {}
@@ -2049,9 +2073,6 @@ sal_Bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed )
         }
         else
         {
-//REMOVE                if( pFilter->UsesStorage() )
-//REMOVE                    pMedium->GetStorage();
-//REMOVE                else if( pMedium->GetOpenMode() & STREAM_WRITE )
             if( pMedium->GetOpenMode() & STREAM_WRITE )
                 pMedium->GetInStream();
             xStorage = GetStorage();
@@ -2060,6 +2081,22 @@ sal_Bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed )
         // TODO/LATER: may be this code will be replaced, but not sure
         // Set storage in document library containers
         pImp->pBasicManager->setStorage( xStorage );
+
+        // Get rid of this workaround after issue i113914 is fixed
+        try
+        {
+            uno::Reference< script::XStorageBasedLibraryContainer > xBasicLibraries( pImp->xBasicLibraries, uno::UNO_QUERY_THROW );
+            xBasicLibraries->setRootStorage( xStorage );
+        }
+        catch( uno::Exception& )
+        {}
+        try
+        {
+            uno::Reference< script::XStorageBasedLibraryContainer > xDialogLibraries( pImp->xDialogLibraries, uno::UNO_QUERY_THROW );
+            xDialogLibraries->setRootStorage( xStorage );
+        }
+        catch( uno::Exception& )
+        {}
     }
     else
     {
@@ -2589,9 +2626,6 @@ sal_Bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
 
         SetError(pMediumTmp->GetErrorCode(), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
 
-//REMOVE            if ( !IsHandsOff() )
-//REMOVE            pMediumTmp->Close();
-
         sal_Bool bOpen( sal_False );
         bOpen = DoSaveCompleted( pMediumTmp );
         DBG_ASSERT(bOpen,"Fehlerbehandlung fuer DoSaveCompleted nicht implementiert");
@@ -2602,13 +2636,7 @@ sal_Bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
         SetError( pMediumTmp->GetError(), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
 
         // reconnect to object storage
-//REMOVE            if ( IsHandsOff() )
-//REMOVE            {
-//REMOVE                if ( !DoSaveCompleted( pRetrMedium ) )
-//REMOVE                    DBG_ERROR("Case not handled - no way to get a storage!");
-//REMOVE            }
-//REMOVE            else
-            DoSaveCompleted( 0 );
+        DoSaveCompleted( 0 );
 
         if( pRetrMedium->GetItemSet() )
         {
@@ -2867,8 +2895,6 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
     else
         pNewFile->SetFilter( GetFactory().GetFilterContainer()->GetAnyFilter( SFX_FILTER_IMPORT | SFX_FILTER_EXPORT ) );
 
-//REMOVE        // saving is alway done using a temporary file
-//REMOVE        pNewFile->CreateTempFileNoCopy();
     if ( pNewFile->GetErrorCode() != ERRCODE_NONE )
     {
         // creating temporary file failed ( f.e. floppy disk not inserted! )
@@ -2905,18 +2931,8 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
         SetError( pNewFile->GetErrorCode(), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
 
         // notify the document that saving was done successfully
-//REMOVE            if ( bCopyTo )
-//REMOVE            {
-//REMOVE                if ( IsHandsOff() )
-//REMOVE                    bOk = DoSaveCompleted( pMedium );
-//REMOVE            }
-//REMOVE            else
         if ( !bCopyTo )
         {
-            // Muss !!!
-//REMOVE                if ( bToOwnFormat )
-//REMOVE                    SetFileName( pNewFile->GetPhysicalName() );
-
             bOk = DoSaveCompleted( pNewFile );
         }
         else
@@ -2948,31 +2964,12 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
             //       by the storage
             DELETEZ( pNewFile );
         }
-
-        // TODO/LATER: there is no need in the following code in case HandsOff is not used,
-        //             hope we will not have to introduce it back
-//REMOVE            String aPasswd;
-//REMOVE            if ( IsOwnStorageFormat_Impl( *GetMedium() ) && GetPasswd_Impl( GetMedium()->GetItemSet(), aPasswd ) )
-//REMOVE            {
-//REMOVE                try
-//REMOVE                {
-//REMOVE                    // the following code must throw an exception in case of failure
-//REMOVE                    ::comphelper::OStorageHelper::SetCommonStoragePassword( GetMedium->GetStorage(), aPasswd );
-//REMOVE                }
-//REMOVE                catch( uno::Exception& )
-//REMOVE                {
-//REMOVE                    // TODO: handle the error
-//REMOVE                }
-//REMOVE            }
     }
     else
     {
         SetError( pNewFile->GetErrorCode(), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
 
-//REMOVE            // reconnect to the old storage
-//REMOVE            if ( IsHandsOff() )
-//REMOVE                DoSaveCompleted( pMedium );
-//REMOVE            else
+        // reconnect to the old storage
         DoSaveCompleted( 0 );
 
         DELETEZ( pNewFile );
@@ -3153,9 +3150,6 @@ sal_Bool SfxObjectShell::LoadOwnFormat( SfxMedium& rMedium )
     uno::Reference< embed::XStorage > xStorage = rMedium.GetStorage();
     if ( xStorage.is() )
     {
-//REMOVE            if ( rMedium.GetFileVersion() )
-//REMOVE                xStor->SetVersion( rMedium.GetFileVersion() );
-
         // Password
         SFX_ITEMSET_ARG( rMedium.GetItemSet(), pPasswdItem, SfxStringItem, SID_PASSWORD, sal_False );
         if ( pPasswdItem || ERRCODE_IO_ABORT != CheckPasswd_Impl( this, SFX_APP()->GetPool(), pMedium ) )

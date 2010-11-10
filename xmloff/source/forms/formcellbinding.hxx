@@ -57,7 +57,7 @@ namespace xmloff
 
     public:
         /** determines whether the given control model lives in a spreadsheet document
-            <p>If this method returns <FALSE/>, you cannot instantiate a CellBindingHelper with
+            <p>If this method returns <sal_False/>, you cannot instantiate a CellBindingHelper with
             this model, since then no of it's functionality will be available.</p>
         */
         static  sal_Bool    livesInSpreadsheetDocument(
@@ -81,7 +81,7 @@ namespace xmloff
     public:
         /** gets a cell binding for the given address
             @precond
-                isCellBindingAllowed returns <TRUE/>
+                isCellBindingAllowed returns <sal_True/>
         */
         ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XValueBinding >
                         createCellBindingFromStringAddress(
@@ -134,7 +134,7 @@ namespace xmloff
         /** sets a new binding for our control model
             @precond
                 the control model is bindable (which is implied by <member>isCellBindingAllowed</member>
-                returning <TRUE/>)
+                returning <sal_True/>)
         */
         void            setBinding(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XValueBinding >& _rxBinding
@@ -143,7 +143,7 @@ namespace xmloff
         /** sets a list source for our control model
             @precond
                 the control model is a list sink (which is implied by <member>isListCellRangeAllowed</member>
-                returning <TRUE/>)
+                returning <sal_True/>)
         */
         void            setListSource(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XListEntrySource >& _rxSource
@@ -254,11 +254,11 @@ namespace xmloff
             @param _rOutputValue
                 the output property value for the conversion service
             @param _bIsRange
-                if <TRUE/>, the RangeAddressConversion service will be used, else
+                if <sal_True/>, the RangeAddressConversion service will be used, else
                 the AddressConversion service
 
             @return
-                <TRUE/> if any only if the conversion was successfull
+                <sal_True/> if any only if the conversion was successfull
 
             @see com::sun::star::table::CellAddressConversion
             @see com::sun::star::table::CellRangeAddressConversion

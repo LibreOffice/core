@@ -1708,6 +1708,7 @@ namespace xmloff { namespace token {
         XML_SYMBOL_IMAGE_NAME,
         XML_SYMBOL_WIDTH,
         XML_SYSTEM,
+        XML_TAB_COLOR,
         XML_TAB_STOP,
         XML_TAB_STOP_DISTANCE,
         XML_TAB_STOPS,
@@ -3105,6 +3106,12 @@ namespace xmloff { namespace token {
         XML_NP_CHART_EXT,
         XML_N_CHART_EXT,
         XML_COORDINATE_REGION,
+
+        XML_DIAGONAL_BL_TR_WIDTHS,
+        XML_DIAGONAL_TL_BR_WIDTHS,
+
+        XML_OUTSIDE_MINIMUM,//#i114142#
+        XML_OUTSIDE_MAXIMUM,//#i114142#
 
         XML_TOKEN_END
     };

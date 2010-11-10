@@ -30,7 +30,7 @@
 #include "sal/config.h"
 #include "xmloff/dllapi.h"
 
-#include <tools/solar.h> // for USHORT
+#include <tools/solar.h> // for sal_uInt16
 #include <com/sun/star/uno/Reference.hxx>
 
 class SvXMLImport;
@@ -51,7 +51,7 @@ namespace com { namespace sun { namespace star {
 /** create import context for xforms:model element. */
 XMLOFF_DLLPUBLIC SvXMLImportContext* createXFormsModelContext(
     SvXMLImport& rImport,
-    USHORT nPrefix,
+    sal_uInt16 nPrefix,
     const rtl::OUString& rLocalName );
 
 /** perform the actual binding of an XForms-binding with the suitable control

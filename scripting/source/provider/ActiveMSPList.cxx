@@ -59,6 +59,7 @@ ActiveMSPList::ActiveMSPList(  const Reference< XComponentContext > & xContext )
 {
     userDirString = ::rtl::OUString::createFromAscii("user");
     shareDirString =  ::rtl::OUString::createFromAscii("share");
+    bundledDirString = ::rtl::OUString::createFromAscii("bundled");
 }
 
 ActiveMSPList::~ActiveMSPList()
@@ -307,6 +308,12 @@ ActiveMSPList::createNonDocMSPs()
         Reference< provider::XScriptProvider > shareMsp( m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext( serviceName, args, m_xContext ), UNO_QUERY );
         // should check if provider reference is valid
         m_hMsps[ shareDirString ] = shareMsp;
+
+        args[ 0 ] <<= bundledDirString;
+        Reference< provider::XScriptProvider > bundledMsp( m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext( serviceName, args, m_xContext ), UNO_QUERY );
+        // should check if provider reference is valid
+        m_hMsps[ bundledDirString ] = bundledMsp;
+
         created = true;
     }
 

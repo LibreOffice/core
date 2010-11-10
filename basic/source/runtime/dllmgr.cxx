@@ -25,647 +25,714 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_basic.hxx"
+#include "sal/config.h"
 
-#include <stdlib.h>
-#ifdef OS2
-#define INCL_DOSMODULEMGR
-#include <svpm.h>
-#endif
+#include <algorithm>
+#include <cstddef>
+#include <list>
+#include <map>
+#include <vector>
 
-#if defined( WIN ) || defined( WNT )
-#ifndef _SVWIN_H
-#undef WB_LEFT
-#undef WB_RIGHT
-#include <tools/svwin.h>
-#endif
-#endif
-#include <tools/debug.hxx>
-#include <tools/string.hxx>
-#include <tools/errcode.hxx>
-#include <basic/sbxvar.hxx>
-#include <basic/sbx.hxx>
+#include "basic/sbx.hxx"
+#include "basic/sbxvar.hxx"
+#include "osl/thread.h"
+#include "rtl/ref.hxx"
+#include "rtl/string.hxx"
+#include "rtl/ustring.hxx"
+#include "salhelper/simplereferenceobject.hxx"
+#include "tools/svwin.h"
 
-#if defined(WIN)
-typedef HINSTANCE SbiDllHandle;
-typedef FARPROC SbiDllProc;
-#elif defined(WNT)
-typedef HMODULE SbiDllHandle;
-typedef int(*SbiDllProc)();
-#elif defined(OS2)
-typedef HMODULE SbiDllHandle;
-typedef PFN SbiDllProc;
-#else
-typedef void* SbiDllHandle;
-typedef void* SbiDllProc;
-#endif
+#undef max
 
-#define _DLLMGR_CXX
 #include "dllmgr.hxx"
-#include <basic/sberrors.hxx>
 
-#ifndef WINAPI
-#ifdef WNT
-#define WINAPI __far __pascal
-#endif
-#endif
+/* Open issues:
+
+   Only 32-bit Windows for now.
+
+   Missing support for functions returning structs (see TODO in call()).
+
+   Missing support for additional data types (64 bit integers, Any, ...; would
+   trigger OSL_ASSERT(false) in various switches).
+
+   It is assumed that the variables passed into SbiDllMgr::Call to represent
+   the arguments and return value have types that exactly match the Declare
+   statement; it would be better if this code had access to the function
+   signature from the Declare statement, so that it could convert the passed
+   variables accordingly.
+*/
+
+#if defined WNT // only 32-bit Windows, actually
 
 extern "C" {
-#if defined(INTEL) && (defined(WIN) || defined(WNT))
 
-extern INT16 WINAPI CallINT( SbiDllProc, char *stack, short nstack);
-extern INT32 WINAPI CallLNG( SbiDllProc, char *stack, short nstack);
-#ifndef WNT
-extern float WINAPI CallSNG( SbiDllProc, char *stack, short nstack);
-#endif
-extern double WINAPI CallDBL( SbiDllProc, char *stack, short nstack);
-extern char* WINAPI CallSTR( SbiDllProc, char *stack, short nstack);
-// extern CallFIX( SbiDllProc, char *stack, short nstack);
+int __stdcall DllMgr_call32(FARPROC, void const * stack, std::size_t size);
+double __stdcall DllMgr_callFp(FARPROC, void const * stack, std::size_t size);
 
-#else
-
-INT16 CallINT( SbiDllProc, char *, short ) { return 0; }
-INT32 CallLNG( SbiDllProc, char *, short ) { return 0; }
-float CallSNG( SbiDllProc, char *, short ) { return 0; }
-double CallDBL( SbiDllProc, char *, short) { return 0; }
-char* CallSTR( SbiDllProc, char *, short ) { return 0; }
-#endif
 }
 
-SV_IMPL_OP_PTRARR_SORT(ImplDllArr,ByteStringPtr)
+namespace {
 
-/* mit Optimierung An stuerzt unter Win95 folgendes Makro ab:
-declare Sub MessageBeep Lib "user32" (ByVal long)
-sub main
-    MessageBeep( 1 )
-end sub
-*/
-#if defined (WNT) && defined (MSC)
-//#pragma optimize ("", off)
-#endif
+char * address(std::vector< char > & blob) {
+    return blob.empty() ? 0 : &blob[0];
+}
 
-//
-// ***********************************************************************
-//
+SbError convert(rtl::OUString const & source, rtl::OString * target) {
+    return
+        source.convertToString(
+            target, osl_getThreadTextEncoding(),
+            (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR |
+             RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR))
+        ? ERRCODE_NONE : ERRCODE_BASIC_BAD_ARGUMENT;
+        //TODO: more specific errcode?
+}
 
-class ImplSbiProc : public ByteString
-{
-    SbiDllProc pProc;
-    ImplSbiProc();
-    ImplSbiProc( const ImplSbiProc& );
+SbError convert(char const * source, sal_Int32 length, rtl::OUString * target) {
+    return
+        rtl_convertStringToUString(
+            &target->pData, source, length, osl_getThreadTextEncoding(),
+            (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR |
+             RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR |
+             RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR))
+        ? ERRCODE_NONE : ERRCODE_BASIC_BAD_ARGUMENT;
+        //TODO: more specific errcode?
+}
 
-public:
-    ImplSbiProc( const ByteString& rName, SbiDllProc pFunc )
-        : ByteString( rName ) { pProc = pFunc;  }
-    SbiDllProc GetProc() const { return pProc; }
+struct UnmarshalData {
+    UnmarshalData(SbxVariable * theVariable, void * theBuffer):
+        variable(theVariable), buffer(theBuffer) {}
+
+    SbxVariable * variable;
+    void * buffer;
 };
 
-//
-// ***********************************************************************
-//
+struct StringData: public UnmarshalData {
+    StringData(SbxVariable * theVariable, void * theBuffer, bool theSpecial):
+        UnmarshalData(theVariable, theBuffer), special(theSpecial) {}
 
-class ImplSbiDll : public ByteString
-{
-    ImplDllArr      aProcArr;
-    SbiDllHandle    hDLL;
-
-    ImplSbiDll( const ImplSbiDll& );
-public:
-    ImplSbiDll( const ByteString& rName, SbiDllHandle hHandle )
-        : ByteString( rName ) { hDLL = hHandle; }
-    ~ImplSbiDll();
-    SbiDllHandle GetHandle() const { return hDLL; }
-    SbiDllProc GetProc( const ByteString& rName ) const;
-    void InsertProc( const ByteString& rName, SbiDllProc pProc );
+    bool special;
 };
 
-ImplSbiDll::~ImplSbiDll()
-{
-    USHORT nCount = aProcArr.Count();
-    for( USHORT nCur = 0; nCur < nCount; nCur++ )
-    {
-        ImplSbiProc* pProc = (ImplSbiProc*)aProcArr.GetObject( nCur );
-        delete pProc;
-    }
-}
-
-SbiDllProc ImplSbiDll::GetProc( const ByteString& rName ) const
-{
-    USHORT nPos;
-    BOOL bRet = aProcArr.Seek_Entry( (ByteStringPtr)&rName, &nPos );
-    if( bRet )
-    {
-        ImplSbiProc* pImplProc = (ImplSbiProc*)aProcArr.GetObject(nPos);
-        return pImplProc->GetProc();
-    }
-    return (SbiDllProc)0;
-}
-
-void ImplSbiDll::InsertProc( const ByteString& rName, SbiDllProc pProc )
-{
-    DBG_ASSERT(aProcArr.Seek_Entry((ByteStringPtr)&rName,0)==0,"InsertProc: Already in table");
-    ImplSbiProc* pImplProc = new ImplSbiProc( rName, pProc );
-    aProcArr.Insert( (ByteStringPtr)pImplProc );
-}
-
-
-//
-// ***********************************************************************
-//
-
-SbiDllMgr::SbiDllMgr( const SbiDllMgr& )
-{
-}
-
-SbiDllMgr::SbiDllMgr()
-{
-}
-
-SbiDllMgr::~SbiDllMgr()
-{
-    USHORT nCount = aDllArr.Count();
-    for( USHORT nCur = 0; nCur < nCount; nCur++ )
-    {
-        ImplSbiDll* pDll = (ImplSbiDll*)aDllArr.GetObject( nCur );
-        FreeDllHandle( pDll->GetHandle() );
-        delete pDll;
-    }
-}
-
-void SbiDllMgr::FreeDll( const ByteString& rDllName )
-{
-    USHORT nPos;
-    BOOL bRet = aDllArr.Seek_Entry( (ByteStringPtr)&rDllName, &nPos );
-    if( bRet )
-    {
-        ImplSbiDll* pDll = (ImplSbiDll*)aDllArr.GetObject(nPos);
-        FreeDllHandle( pDll->GetHandle() );
-        delete pDll;
-        aDllArr.Remove( nPos, 1 );
-    }
-}
-
-
-ImplSbiDll* SbiDllMgr::GetDll( const ByteString& rDllName )
-{
-    USHORT nPos;
-    ImplSbiDll* pDll = 0;
-    BOOL bRet = aDllArr.Seek_Entry( (ByteStringPtr)&rDllName, &nPos );
-    if( bRet )
-        pDll = (ImplSbiDll*)aDllArr.GetObject(nPos);
-    else
-    {
-        SbiDllHandle hDll = CreateDllHandle( rDllName );
-        if( hDll )
-        {
-            pDll = new ImplSbiDll( rDllName, hDll );
-            aDllArr.Insert( (ByteStringPtr)pDll );
-        }
-    }
-    return pDll;
-}
-
-SbiDllProc SbiDllMgr::GetProc( ImplSbiDll* pDll, const ByteString& rProcName )
-{
-    DBG_ASSERT(pDll,"GetProc: No dll-ptr");
-    SbiDllProc pProc;
-    pProc = pDll->GetProc( rProcName );
-    if( !pProc )
-    {
-        pProc = GetProcAddr( pDll->GetHandle(), rProcName );
-        if( pProc )
-            pDll->InsertProc( rProcName, pProc );
-    }
-    return pProc;
-}
-
-
-SbError SbiDllMgr::Call( const char* pProcName, const char* pDllName,
-    SbxArray* pArgs, SbxVariable& rResult, BOOL bCDecl )
-{
-    DBG_ASSERT(pProcName&&pDllName,"Call: Bad parms");
-    SbError nSbErr = 0;
-    ByteString aDllName( pDllName );
-    CheckDllName( aDllName );
-    ImplSbiDll* pDll = GetDll( aDllName );
-    if( pDll )
-    {
-        SbiDllProc pProc = GetProc( pDll, pProcName );
-        if( pProc )
-        {
-            if( bCDecl )
-                nSbErr = CallProcC( pProc, pArgs, rResult );
-            else
-                nSbErr = CallProc( pProc, pArgs, rResult );
-        }
-        else
-            nSbErr = SbERR_PROC_UNDEFINED;
-    }
-    else
-        nSbErr = SbERR_BAD_DLL_LOAD;
-    return nSbErr;
-}
-
-//  ***********************************************************************
-//  ******************* abhaengige Implementationen ***********************
-//  ***********************************************************************
-
-void SbiDllMgr::CheckDllName( ByteString& rDllName )
-{
-#if defined(WIN) || defined(WNT) || defined(OS2)
-    if( rDllName.Search('.') == STRING_NOTFOUND )
-        rDllName += ".DLL";
-#else
-    (void)rDllName;
-#endif
-}
-
-
-SbiDllHandle SbiDllMgr::CreateDllHandle( const ByteString& rDllName )
-{
-    (void)rDllName;
-
-#if defined(UNX)
-    SbiDllHandle hLib=0;
-#else
-    SbiDllHandle hLib;
-#endif
-
-#if defined(WIN)
-    hLib = LoadLibrary( (const char*)rDllName );
-    if( (ULONG)hLib < 32 )
-        hLib = 0;
-
-#elif defined(WNT)
-    hLib = LoadLibrary( rDllName.GetBuffer() );
-    if( !(ULONG)hLib  )
-    {
-#ifdef DBG_UTIL
-        ULONG nLastErr;
-        nLastErr = GetLastError();
-#endif
-        hLib = 0;
+class MarshalData: private boost::noncopyable {
+public:
+    std::vector< char > * newBlob() {
+        blobs_.push_front(std::vector< char >());
+        return &blobs_.front();
     }
 
-#elif defined(OS2)
-    char cErr[ 100 ];
-    if( DosLoadModule( (PSZ) cErr, 100, (const char*)rDllName.GetBuffer(), &hLib ) )
-        hLib = 0;
-#endif
-    return hLib;
+    std::vector< UnmarshalData > unmarshal;
+
+    std::vector< StringData > unmarshalStrings;
+
+private:
+    std::list< std::vector< char > > blobs_;
+};
+
+std::size_t align(std::size_t address, std::size_t alignment) {
+    // alignment = 2^k for some k >= 0
+    return (address + (alignment - 1)) & ~(alignment - 1);
 }
 
-void SbiDllMgr::FreeDllHandle( SbiDllHandle hLib )
+char * align(
+    std::vector< char > & blob, std::size_t alignment, std::size_t offset,
+    std::size_t add)
 {
-#if defined(WIN) || defined(WNT)
-    if( hLib )
-        FreeLibrary ((HINSTANCE) hLib);
-#elif defined(OS2)
-       if( hLib )
-               DosFreeModule( (HMODULE) hLib );
-#else
-    (void)hLib;
-#endif
+    std::vector< char >::size_type n = blob.size();
+    n = align(n - offset, alignment) + offset; //TODO: overflow in align()
+    blob.resize(n + add); //TODO: overflow
+    return address(blob) + n;
 }
 
-SbiDllProc SbiDllMgr::GetProcAddr(SbiDllHandle hLib, const ByteString& rProcName)
+template< typename T > void add(
+    std::vector< char > & blob, T const & data, std::size_t alignment,
+    std::size_t offset)
 {
-    char buf1 [128] = "";
-    char buf2 [128] = "";
-
-    SbiDllProc pProc = 0;
-    int nOrd = 0;
-
-    // Ordinal?
-    if( rProcName.GetBuffer()[0] == '@' )
-        nOrd = atoi( rProcName.GetBuffer()+1 );
-
-    // Moegliche Parameter weg:
-    DBG_ASSERT( sizeof(buf1) > rProcName.Len(),
-                "SbiDllMgr::GetProcAddr: buffer to small!" );
-    strncpy( buf1, rProcName.GetBuffer(), sizeof(buf1)-1 );
-    char *p = strchr( buf1, '#' );
-    if( p )
-        *p = 0;
-
-    DBG_ASSERT( sizeof(buf2) > strlen(buf1) + 1,
-                "SbiDllMgr::GetProcAddr: buffer to small!" );
-    strncpy( buf2, "_",  sizeof(buf2)-1 );
-    strncat( buf2, buf1, sizeof(buf2)-1-strlen(buf2) );
-
-#if defined(WIN) || defined(WNT)
-    if( nOrd > 0 )
-        pProc = (SbiDllProc)GetProcAddress( hLib, (char*)(long) nOrd );
-    else
-    {
-        // 2. mit Parametern:
-        pProc = (SbiDllProc)GetProcAddress ( hLib, rProcName.GetBuffer() );
-        // 3. nur der Name:
-        if (!pProc)
-            pProc = (SbiDllProc)GetProcAddress( hLib, buf1 );
-        // 4. der Name mit Underline vorweg:
-        if( !pProc )
-            pProc = (SbiDllProc)GetProcAddress( hLib, buf2 );
-    }
-
-#elif defined(OS2)
-    PSZ pp;
-    APIRET rc;
-    // 1. Ordinal oder mit Parametern:
-    rc = DosQueryProcAddr( hLib, nOrd, pp = (char*)rProcName.GetBuffer(), &pProc );
-    // 2. nur der Name:
-    if( rc )
-        rc = DosQueryProcAddr( hLib, 0, pp = (PSZ)buf1, &pProc );
-    // 3. der Name mit Underline vorweg:
-    if( rc )
-        rc = DosQueryProcAddr( hLib, 0, pp = (PSZ)buf2, &pProc );
-    if( rc )
-        pProc = NULL;
-    else
-    {
-        // 16-bit oder 32-bit?
-        ULONG nInfo = 0;
-        if( DosQueryProcType( hLib, nOrd, pp, &nInfo ) )
-            nInfo = 0;;
-    }
-#else
-    (void)hLib;
-#endif
-    return pProc;
+    *reinterpret_cast< T * >(align(blob, alignment, offset, sizeof (T))) = data;
 }
 
-SbError SbiDllMgr::CallProc( SbiDllProc pProc, SbxArray* pArgs,
-  SbxVariable& rResult )
-{
-//  ByteString aStr("Calling DLL at ");
-//  aStr += (ULONG)pProc;
-//  InfoBox( 0, aStr ).Execute();
-    INT16 nInt16; int nInt; INT32 nInt32; double nDouble;
-    char* pStr;
-
-    USHORT nSize;
-    char* pStack = (char*)CreateStack( pArgs, nSize );
-    switch( rResult.GetType() )
-    {
+std::size_t alignment(SbxVariable * variable) {
+    OSL_ASSERT(variable != 0);
+    if ((variable->GetType() & SbxARRAY) == 0) {
+        switch (variable->GetType()) {
         case SbxINTEGER:
-            nInt16 = CallINT(pProc, pStack, (short)nSize );
-            rResult.PutInteger( nInt16 );
-            break;
-
-        case SbxUINT:
-        case SbxUSHORT:
-            nInt16 = (INT16)CallINT(pProc, pStack, (short)nSize );
-            rResult.PutUShort( (USHORT)nInt16 );
-            break;
-
-        case SbxERROR:
-            nInt16 = (INT16)CallINT(pProc, pStack, (short)nSize );
-            rResult.PutErr( (USHORT)nInt16 );
-            break;
-
-        case SbxINT:
-            nInt = CallINT(pProc, pStack, (short)nSize );
-            rResult.PutInt( nInt );
-            break;
-
+            return 2;
         case SbxLONG:
-            nInt32 = CallLNG(pProc, pStack, (short)nSize );
-            rResult.PutLong( nInt32 );
-            break;
-
-        case SbxULONG:
-            nInt32 = CallINT(pProc, pStack, (short)nSize );
-            rResult.PutULong( (ULONG)nInt32 );
-            break;
-
-#ifndef WNT
         case SbxSINGLE:
-        {
-            float nSingle = CallSNG(pProc, pStack, (short)nSize );
-            rResult.PutSingle( nSingle );
-            break;
-        }
-#endif
-
-        case SbxDOUBLE:
-#ifdef WNT
-        case SbxSINGLE:
-#endif
-            nDouble = CallDBL(pProc, pStack, (short)nSize );
-            rResult.PutDouble( nDouble );
-            break;
-
-        case SbxDATE:
-            nDouble = CallDBL(pProc, pStack, (short)nSize );
-            rResult.PutDate( nDouble );
-            break;
-
-        case SbxCHAR:
-        case SbxBYTE:
-        case SbxBOOL:
-            nInt16 = CallINT(pProc, pStack, (short)nSize );
-            rResult.PutByte( (BYTE)nInt16 );
-            break;
-
         case SbxSTRING:
-        case SbxLPSTR:
-            pStr = CallSTR(pProc, pStack, (short)nSize );
-            rResult.PutString( String::CreateFromAscii( pStr ) );
-            break;
-
-        case SbxNULL:
-        case SbxEMPTY:
-            nInt16 = CallINT(pProc, pStack, (short)nSize );
-            // Rueckgabe nur zulaessig, wenn variant!
-            if( !rResult.IsFixed() )
-                rResult.PutInteger( nInt16 );
-            break;
-
-        case SbxCURRENCY:
+            return 4;
+        case SbxDOUBLE:
+            return 8;
         case SbxOBJECT:
-        case SbxDATAOBJECT:
-        default:
-            CallINT(pProc, pStack, (short)nSize );
-            break;
-    }
-    delete [] pStack;
-
-    if( pArgs )
-    {
-        // die Laengen aller uebergebenen Strings anpassen
-        USHORT nCount = pArgs->Count();
-        for( USHORT nCur = 1; nCur < nCount; nCur++ )
-        {
-            SbxVariable* pVar = pArgs->Get( nCur );
-            BOOL bIsString = ( pVar->GetType() == SbxSTRING ) ||
-                             ( pVar->GetType() == SbxLPSTR  );
-
-            if( pVar->GetFlags() & SBX_REFERENCE )
             {
-                pVar->ResetFlag( SBX_REFERENCE );   // Sbx moechte es so
-                if( bIsString )
-                {
-                    ByteString aByteStr( (char*)pVar->GetUserData() );
-                    String aStr( aByteStr, gsl_getSystemTextEncoding() );
-                    pVar->PutString( aStr );
+                std::size_t n = 1;
+                SbxArray * props = PTR_CAST(SbxObject, variable->GetObject())->
+                    GetProperties();
+                for (USHORT i = 0; i < props->Count(); ++i) {
+                    n = std::max(n, alignment(props->Get(i)));
                 }
+                return n;
             }
-            if( bIsString )
-            {
-                delete (char*)(pVar->GetUserData());
-                pVar->SetUserData( 0 );
-            }
+        case SbxBOOL:
+        case SbxBYTE:
+            return 1;
+        default:
+            OSL_ASSERT(false);
+            return 1;
+        }
+    } else {
+        SbxDimArray * arr = PTR_CAST(SbxDimArray, variable->GetObject());
+        int dims = arr->GetDims();
+        std::vector< INT32 > low(dims);
+        for (int i = 0; i < dims; ++i) {
+            INT32 up;
+            arr->GetDim32(i + 1, low[i], up);
+        }
+        return alignment(arr->Get32(&low[0]));
+    }
+}
+
+SbError marshal(
+    bool outer, SbxVariable * variable, bool special,
+    std::vector< char > & blob, std::size_t offset, MarshalData & data);
+
+SbError marshalString(
+    SbxVariable * variable, bool special, MarshalData & data, void ** buffer)
+{
+    OSL_ASSERT(variable != 0 && buffer != 0);
+    rtl::OString str;
+    SbError e = convert(variable->GetString(), &str);
+    if (e != ERRCODE_NONE) {
+        return e;
+    }
+    std::vector< char > * blob = data.newBlob();
+    blob->insert(blob->begin(), str.getStr(), str.getStr() + str.getLength());
+    *buffer = address(*blob);
+    data.unmarshalStrings.push_back(StringData(variable, *buffer, special));
+    return ERRCODE_NONE;
+}
+
+SbError marshalStruct(
+    SbxVariable * variable, std::vector< char > & blob, std::size_t offset,
+    MarshalData & data)
+{
+    OSL_ASSERT(variable != 0);
+    SbxArray * props = PTR_CAST(SbxObject, variable->GetObject())->
+        GetProperties();
+    for (USHORT i = 0; i < props->Count(); ++i) {
+        SbError e = marshal(false, props->Get(i), false, blob, offset, data);
+        if (e != ERRCODE_NONE) {
+            return e;
         }
     }
-    return 0;
+    return ERRCODE_NONE;
 }
 
-SbError SbiDllMgr::CallProcC( SbiDllProc pProc, SbxArray* pArgs,
-    SbxVariable& rResult )
+SbError marshalArray(
+    SbxVariable * variable, std::vector< char > & blob, std::size_t offset,
+    MarshalData & data)
 {
-    (void)pProc;
-    (void)pArgs;
-    (void)rResult;
-
-    DBG_ERROR("C calling convention not supported");
-    return SbERR_BAD_ARGUMENT;
-}
-
-void* SbiDllMgr::CreateStack( SbxArray* pArgs, USHORT& rSize )
-{
-    if( !pArgs )
-    {
-        rSize = 0;
-        return 0;
+    OSL_ASSERT(variable != 0);
+    SbxDimArray * arr = PTR_CAST(SbxDimArray, variable->GetObject());
+    int dims = arr->GetDims();
+    std::vector< INT32 > low(dims);
+    std::vector< INT32 > up(dims);
+    for (int i = 0; i < dims; ++i) {
+        arr->GetDim32(i + 1, low[i], up[i]);
     }
-    char* pStack = new char[ 2048 ];
-    char* pTop = pStack;
-    USHORT nCount = pArgs->Count();
-    // erstes Element ueberspringen
-#ifndef WIN
-    for( USHORT nCur = 1; nCur < nCount; nCur++ )
+    for (std::vector< INT32 > idx = low;;) {
+        SbError e = marshal(
+            false, arr->Get32(&idx[0]), false, blob, offset, data);
+        if (e != ERRCODE_NONE) {
+            return e;
+        }
+        int i = dims - 1;
+        while (idx[i] == up[i]) {
+            idx[i] = low[i];
+            if (i == 0) {
+                return ERRCODE_NONE;
+            }
+            --i;
+        }
+        ++idx[i];
+    }
+}
+
+// 8-aligned structs are only 4-aligned on stack, so alignment of members in
+// such structs must take that into account via "offset"
+SbError marshal(
+    bool outer, SbxVariable * variable, bool special,
+    std::vector< char > & blob, std::size_t offset, MarshalData & data)
+{
+    OSL_ASSERT(variable != 0);
+    if ((variable->GetFlags() & SBX_REFERENCE) == 0) {
+        if ((variable->GetType() & SbxARRAY) == 0) {
+            switch (variable->GetType()) {
+            case SbxINTEGER:
+                add(blob, variable->GetInteger(), outer ? 4 : 2, offset);
+                break;
+            case SbxLONG:
+                add(blob, variable->GetLong(), 4, offset);
+                break;
+            case SbxSINGLE:
+                add(blob, variable->GetSingle(), 4, offset);
+                break;
+            case SbxDOUBLE:
+                add(blob, variable->GetDouble(), outer ? 4 : 8, offset);
+                break;
+            case SbxSTRING:
+                {
+                    void * p;
+                    SbError e = marshalString(variable, special, data, &p);
+                    if (e != ERRCODE_NONE) {
+                        return e;
+                    }
+                    add(blob, p, 4, offset);
+                    break;
+                }
+            case SbxOBJECT:
+                {
+                    align(blob, outer ? 4 : alignment(variable), offset, 0);
+                    SbError e = marshalStruct(variable, blob, offset, data);
+                    if (e != ERRCODE_NONE) {
+                        return e;
+                    }
+                    break;
+                }
+            case SbxBOOL:
+                add(blob, variable->GetBool(), outer ? 4 : 1, offset);
+                break;
+            case SbxBYTE:
+                add(blob, variable->GetByte(), outer ? 4 : 1, offset);
+                break;
+            default:
+                OSL_ASSERT(false);
+                break;
+            }
+        } else {
+            SbError e = marshalArray(variable, blob, offset, data);
+            if (e != ERRCODE_NONE) {
+                return e;
+            }
+        }
+    } else {
+        if ((variable->GetType() & SbxARRAY) == 0) {
+            switch (variable->GetType()) {
+            case SbxINTEGER:
+            case SbxLONG:
+            case SbxSINGLE:
+            case SbxDOUBLE:
+            case SbxBOOL:
+            case SbxBYTE:
+                add(blob, variable->data(), 4, offset);
+                break;
+            case SbxSTRING:
+                {
+                    std::vector< char > * blob2 = data.newBlob();
+                    void * p;
+                    SbError e = marshalString(variable, special, data, &p);
+                    if (e != ERRCODE_NONE) {
+                        return e;
+                    }
+                    add(*blob2, p, 4, 0);
+                    add(blob, address(*blob2), 4, offset);
+                    break;
+                }
+            case SbxOBJECT:
+                {
+                    std::vector< char > * blob2 = data.newBlob();
+                    SbError e = marshalStruct(variable, *blob2, 0, data);
+                    if (e != ERRCODE_NONE) {
+                        return e;
+                    }
+                    void * p = address(*blob2);
+                    if (outer) {
+                        data.unmarshal.push_back(UnmarshalData(variable, p));
+                    }
+                    add(blob, p, 4, offset);
+                    break;
+                }
+            default:
+                OSL_ASSERT(false);
+                break;
+            }
+        } else {
+            std::vector< char > * blob2 = data.newBlob();
+            SbError e = marshalArray(variable, *blob2, 0, data);
+            if (e != ERRCODE_NONE) {
+                return e;
+            }
+            void * p = address(*blob2);
+            if (outer) {
+                data.unmarshal.push_back(UnmarshalData(variable, p));
+            }
+            add(blob, p, 4, offset);
+        }
+    }
+    return ERRCODE_NONE;
+}
+
+template< typename T > T read(void const ** pointer) {
+    T const * p = static_cast< T const * >(*pointer);
+    *pointer = static_cast< void const * >(p + 1);
+    return *p;
+}
+
+void const * unmarshal(SbxVariable * variable, void const * data) {
+    OSL_ASSERT(variable != 0);
+    if ((variable->GetType() & SbxARRAY) == 0) {
+        switch (variable->GetType()) {
+        case SbxINTEGER:
+            variable->PutInteger(read< sal_Int16 >(&data));
+            break;
+        case SbxLONG:
+            variable->PutLong(read< sal_Int32 >(&data));
+            break;
+        case SbxSINGLE:
+            variable->PutSingle(read< float >(&data));
+            break;
+        case SbxDOUBLE:
+            variable->PutDouble(read< double >(&data));
+            break;
+        case SbxSTRING:
+            read< char * >(&data); // handled by unmarshalString
+            break;
+        case SbxOBJECT:
+            {
+                data = reinterpret_cast< void const * >(
+                    align(
+                        reinterpret_cast< sal_uIntPtr >(data),
+                        alignment(variable)));
+                SbxArray * props = PTR_CAST(SbxObject, variable->GetObject())->
+                    GetProperties();
+                for (USHORT i = 0; i < props->Count(); ++i) {
+                    data = unmarshal(props->Get(i), data);
+                }
+                break;
+            }
+        case SbxBOOL:
+            variable->PutBool(read< sal_Bool >(&data));
+            break;
+        case SbxBYTE:
+            variable->PutByte(read< sal_uInt8 >(&data));
+            break;
+        default:
+            OSL_ASSERT(false);
+            break;
+        }
+    } else {
+        SbxDimArray * arr = PTR_CAST(SbxDimArray, variable->GetObject());
+        int dims = arr->GetDims();
+        std::vector< INT32 > low(dims);
+        std::vector< INT32 > up(dims);
+        for (int i = 0; i < dims; ++i) {
+            arr->GetDim32(i + 1, low[i], up[i]);
+        }
+        for (std::vector< INT32 > idx = low;;) {
+            data = unmarshal(arr->Get32(&idx[0]), data);
+            int i = dims - 1;
+            while (idx[i] == up[i]) {
+                idx[i] = low[i];
+                if (i == 0) {
+                    goto done;
+                }
+                --i;
+            }
+            ++idx[i];
+        }
+    done:;
+    }
+    return data;
+}
+
+SbError unmarshalString(StringData const & data, SbxVariable & result) {
+    rtl::OUString str;
+    if (data.buffer != 0) {
+        char const * p = static_cast< char const * >(data.buffer);
+        sal_Int32 len;
+        if (data.special) {
+            len = static_cast< sal_Int32 >(result.GetULong());
+            if (len < 0) { // i.e., DWORD result >= 2^31
+                return ERRCODE_BASIC_BAD_ARGUMENT;
+                    //TODO: more specific errcode?
+            }
+        } else {
+            len = rtl_str_getLength(p);
+        }
+        SbError e = convert(p, len, &str);
+        if (e != ERRCODE_NONE) {
+            return e;
+        }
+    }
+    data.variable->PutString(String(str));
+    return ERRCODE_NONE;
+}
+
+struct ProcData {
+    rtl::OString name;
+    FARPROC proc;
+};
+
+SbError call(
+    rtl::OUString const & dll, ProcData const & proc, SbxArray * arguments,
+    SbxVariable & result)
+{
+    std::vector< char > stack;
+    MarshalData data;
+    // For DWORD GetLogicalDriveStringsA(DWORD nBufferLength, LPSTR lpBuffer)
+    // from kernel32, upon return, filled lpBuffer length is result DWORD, which
+    // requires special handling in unmarshalString; other functions might
+    // require similar treatment, too:
+    bool special =
+        dll.equalsIgnoreAsciiCaseAsciiL(
+            RTL_CONSTASCII_STRINGPARAM("KERNEL32.DLL")) &&
+        (proc.name ==
+         rtl::OString(RTL_CONSTASCII_STRINGPARAM("GetLogicalDriveStringsA")));
+    for (USHORT i = 1; i < (arguments == 0 ? 0 : arguments->Count()); ++i) {
+        SbError e = marshal(
+            true, arguments->Get(i), special && i == 2, stack, stack.size(),
+            data);
+        if (e != ERRCODE_NONE) {
+            return e;
+        }
+        align(stack, 4, 0, 0);
+    }
+    switch (result.GetType()) {
+    case SbxEMPTY:
+        DllMgr_call32(proc.proc, address(stack), stack.size());
+        break;
+    case SbxINTEGER:
+        result.PutInteger(
+            static_cast< sal_Int16 >(
+                DllMgr_call32(proc.proc, address(stack), stack.size())));
+        break;
+    case SbxLONG:
+        result.PutLong(
+            static_cast< sal_Int32 >(
+                DllMgr_call32(proc.proc, address(stack), stack.size())));
+        break;
+    case SbxSINGLE:
+        result.PutSingle(
+            static_cast< float >(
+                DllMgr_callFp(proc.proc, address(stack), stack.size())));
+        break;
+    case SbxDOUBLE:
+        result.PutDouble(
+            DllMgr_callFp(proc.proc, address(stack), stack.size()));
+        break;
+    case SbxSTRING:
+        {
+            char const * s1 = reinterpret_cast< char const * >(
+                DllMgr_call32(proc.proc, address(stack), stack.size()));
+            rtl::OUString s2;
+            SbError e = convert(s1, rtl_str_getLength(s1), &s2);
+            if (e != ERRCODE_NONE) {
+                return e;
+            }
+            result.PutString(String(s2));
+            break;
+        }
+    case SbxOBJECT:
+        //TODO
+        DllMgr_call32(proc.proc, address(stack), stack.size());
+        break;
+    case SbxBOOL:
+        result.PutBool(
+            static_cast< sal_Bool >(
+                DllMgr_call32(proc.proc, address(stack), stack.size())));
+        break;
+    case SbxBYTE:
+        result.PutByte(
+            static_cast< sal_uInt8 >(
+                DllMgr_call32(proc.proc, address(stack), stack.size())));
+        break;
+    default:
+        OSL_ASSERT(false);
+        break;
+    }
+    for (USHORT i = 1; i < (arguments == 0 ? 0 : arguments->Count()); ++i) {
+        arguments->Get(i)->ResetFlag(SBX_REFERENCE);
+            //TODO: skipped for errors?!?
+    }
+    for (std::vector< UnmarshalData >::iterator i(data.unmarshal.begin());
+         i != data.unmarshal.end(); ++i)
+    {
+        unmarshal(i->variable, i->buffer);
+    }
+    for (std::vector< StringData >::iterator i(data.unmarshalStrings.begin());
+         i != data.unmarshalStrings.end(); ++i)
+    {
+        SbError e = unmarshalString(*i, result);
+        if (e != ERRCODE_NONE) {
+            return e;
+        }
+    }
+    return ERRCODE_NONE;
+}
+
+SbError getProcData(HMODULE handle, rtl::OUString const & name, ProcData * proc)
+{
+    OSL_ASSERT(proc != 0);
+    if (name.getLength() != 0 && name[0] == '@') { //TODO: "@" vs. "#"???
+        sal_Int32 n = name.copy(1).toInt32(); //TODO: handle bad input
+        if (n <= 0 || n > 0xFFFF) {
+            return ERRCODE_BASIC_BAD_ARGUMENT; //TODO: more specific errcode?
+        }
+        FARPROC p = GetProcAddress(handle, reinterpret_cast< LPCSTR >(n));
+        if (p != 0) {
+            proc->name = rtl::OString(RTL_CONSTASCII_STRINGPARAM("#")) +
+                rtl::OString::valueOf(n);
+            proc->proc = p;
+            return ERRCODE_NONE;
+        }
+    } else {
+        rtl::OString name8;
+        SbError e = convert(name, &name8);
+        if (e != ERRCODE_NONE) {
+            return e;
+        }
+        FARPROC p = GetProcAddress(handle, name8.getStr());
+        if (p != 0) {
+            proc->name = name8;
+            proc->proc = p;
+            return ERRCODE_NONE;
+        }
+        sal_Int32 i = name8.indexOf('#');
+        if (i != -1) {
+            name8 = name8.copy(0, i);
+            p = GetProcAddress(handle, name8.getStr());
+            if (p != 0) {
+                proc->name = name8;
+                proc->proc = p;
+                return ERRCODE_NONE;
+            }
+        }
+        rtl::OString real(
+            rtl::OString(RTL_CONSTASCII_STRINGPARAM("_")) + name8);
+        p = GetProcAddress(handle, real.getStr());
+        if (p != 0) {
+            proc->name = real;
+            proc->proc = p;
+            return ERRCODE_NONE;
+        }
+        real = name8 + rtl::OString(RTL_CONSTASCII_STRINGPARAM("A"));
+        p = GetProcAddress(handle, real.getStr());
+        if (p != 0) {
+            proc->name = real;
+            proc->proc = p;
+            return ERRCODE_NONE;
+        }
+    }
+    return ERRCODE_BASIC_PROC_UNDEFINED;
+}
+
+struct Dll: public salhelper::SimpleReferenceObject {
+private:
+    typedef std::map< rtl::OUString, ProcData > Procs;
+
+    virtual ~Dll();
+
+public:
+    Dll(): handle(0) {}
+
+    SbError getProc(rtl::OUString const & name, ProcData * proc);
+
+    HMODULE handle;
+    Procs procs;
+};
+
+Dll::~Dll() {
+    if (handle != 0 && !FreeLibrary(handle)) {
+        OSL_TRACE("FreeLibrary(%p) failed with %u", handle, GetLastError());
+    }
+}
+
+SbError Dll::getProc(rtl::OUString const & name, ProcData * proc) {
+    Procs::iterator i(procs.find(name));
+    if (i != procs.end()) {
+        *proc = i->second;
+        return ERRCODE_NONE;
+    }
+    SbError e = getProcData(handle, name, proc);
+    if (e == ERRCODE_NONE) {
+        procs.insert(Procs::value_type(name, *proc));
+    }
+    return e;
+}
+
+rtl::OUString fullDllName(rtl::OUString const & name) {
+    rtl::OUString full(name);
+    if (full.indexOf('.') == -1) {
+        full += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".DLL"));
+    }
+    return full;
+}
+
+}
+
+struct SbiDllMgr::Impl: private boost::noncopyable {
+private:
+    typedef std::map< rtl::OUString, rtl::Reference< Dll > > Dlls;
+
+public:
+    Dll * getDll(rtl::OUString const & name);
+
+    Dlls dlls;
+};
+
+Dll * SbiDllMgr::Impl::getDll(rtl::OUString const & name) {
+    Dlls::iterator i(dlls.find(name));
+    if (i == dlls.end()) {
+        i = dlls.insert(Dlls::value_type(name, new Dll)).first;
+        HMODULE h = LoadLibraryW(reinterpret_cast<LPCWSTR>(name.getStr()));
+        if (h == 0) {
+            dlls.erase(i);
+            return 0;
+        }
+        i->second->handle = h;
+    }
+    return i->second.get();
+}
+
+SbError SbiDllMgr::Call(
+    rtl::OUString const & function, rtl::OUString const & library,
+    SbxArray * arguments, SbxVariable & result, bool cdeclConvention)
+{
+    if (cdeclConvention) {
+        return ERRCODE_BASIC_NOT_IMPLEMENTED;
+    }
+    rtl::OUString dllName(fullDllName(library));
+    Dll * dll = impl_->getDll(dllName);
+    if (dll == 0) {
+        return ERRCODE_BASIC_BAD_DLL_LOAD;
+    }
+    ProcData proc;
+    SbError e = dll->getProc(function, &proc);
+    if (e != ERRCODE_NONE) {
+        return e;
+    }
+    return call(dllName, proc, arguments, result);
+}
+
+void SbiDllMgr::FreeDll(rtl::OUString const & library) {
+    impl_->dlls.erase(library);
+}
+
 #else
-    // unter 16-Bit Windows anders rum (OS/2 ?????)
-    for( USHORT nCur = nCount-1; nCur >= 1; nCur-- )
-#endif
-    {
-        SbxVariable* pVar = pArgs->Get( nCur );
-        // AB 22.1.1996, Referenz
-        if( pVar->GetFlags() & SBX_REFERENCE )  // Es ist eine Referenz
-        {
-            switch( pVar->GetType() )
-            {
-                case SbxINTEGER:
-                case SbxUINT:
-                case SbxINT:
-                case SbxUSHORT:
-                case SbxLONG:
-                case SbxULONG:
-                case SbxSINGLE:
-                case SbxDOUBLE:
-                case SbxCHAR:
-                case SbxBYTE:
-                case SbxBOOL:
-                    *((void**)pTop) = (void*)&(pVar->aData);
-                    pTop += sizeof( void* );
-                    break;
 
-                case SbxSTRING:
-                case SbxLPSTR:
-                    {
-                    USHORT nLen = 256;
-                    ByteString rStr( pVar->GetString(), gsl_getSystemTextEncoding() );
-                    if( rStr.Len() > 255 )
-                        nLen = rStr.Len() + 1;
+struct SbiDllMgr::Impl {};
 
-                    char* pStr = new char[ nLen ];
-                    strcpy( pStr, rStr.GetBuffer() ); // #100211# - checked
-                    // ist nicht so sauber, aber wir sparen ein Pointerarray
-                    DBG_ASSERT(sizeof(UINT32)>=sizeof(char*),"Gleich krachts im Basic");
-                    pVar->SetUserData( (sal_uIntPtr)pStr );
-                    *((const char**)pTop) = pStr;
-                    pTop += sizeof( char* );
-                    }
-                    break;
-
-                case SbxNULL:
-                case SbxEMPTY:
-                case SbxERROR:
-                case SbxDATE:
-                case SbxCURRENCY:
-                case SbxOBJECT:
-                case SbxDATAOBJECT:
-                default:
-                    break;
-            }
-        }
-        else
-        {
-            // ByVal
-            switch( pVar->GetType() )
-            {
-                case SbxINTEGER:
-                case SbxUINT:
-                case SbxINT:
-                case SbxUSHORT:
-                    *((INT16*)pTop) = pVar->GetInteger();
-                    pTop += sizeof( INT16 );
-                    break;
-
-                case SbxLONG:
-                case SbxULONG:
-                    *((INT32*)pTop) = pVar->GetLong();
-                    pTop += sizeof( INT32 );
-                    break;
-
-                case SbxSINGLE:
-                    *((float*)pTop) = pVar->GetSingle();
-                    pTop += sizeof( float );
-                    break;
-
-                case SbxDOUBLE:
-                    *((double*)pTop) = pVar->GetDouble();
-                    pTop += sizeof( double );
-                    break;
-
-                case SbxSTRING:
-                case SbxLPSTR:
-                    {
-                    char* pStr = new char[ pVar->GetString().Len() + 1 ];
-                    ByteString aByteStr( pVar->GetString(), gsl_getSystemTextEncoding() );
-                    strcpy( pStr, aByteStr.GetBuffer() ); // #100211# - checked
-                    // ist nicht so sauber, aber wir sparen ein Pointerarray
-                    DBG_ASSERT(sizeof(UINT32)>=sizeof(char*),"Gleich krachts im Basic");
-                    pVar->SetUserData( (sal_uIntPtr)pStr );
-                    *((const char**)pTop) = pStr;
-                    pTop += sizeof( char* );
-                    }
-                    break;
-
-                case SbxCHAR:
-                case SbxBYTE:
-                case SbxBOOL:
-                    *((BYTE*)pTop) = pVar->GetByte();
-                    pTop += sizeof( BYTE );
-                    break;
-
-                case SbxNULL:
-                case SbxEMPTY:
-                case SbxERROR:
-                case SbxDATE:
-                case SbxCURRENCY:
-                case SbxOBJECT:
-                case SbxDATAOBJECT:
-                default:
-                    break;
-            }
-        }
-    }
-    rSize = (USHORT)((ULONG)pTop - (ULONG)pStack);
-    return pStack;
+SbError SbiDllMgr::Call(
+    rtl::OUString const &, rtl::OUString const &, SbxArray *, SbxVariable &,
+    bool)
+{
+    return ERRCODE_BASIC_NOT_IMPLEMENTED;
 }
 
+void SbiDllMgr::FreeDll(rtl::OUString const &) {}
 
+#endif
 
+SbiDllMgr::SbiDllMgr(): impl_(new Impl) {}
 
+SbiDllMgr::~SbiDllMgr() {}

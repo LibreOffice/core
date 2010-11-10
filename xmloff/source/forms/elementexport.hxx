@@ -255,7 +255,7 @@ namespace xmloff
                 <li>obtained from a database query (in various ways)</li>
             </ul>
 
-            In the latter two cases, this method will return <FALSE/>
+            In the latter two cases, this method will return <sal_False/>
         */
         bool controlHasUserSuppliedListEntries() const;
     };

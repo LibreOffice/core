@@ -24,18 +24,14 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef __ooo_vba_XApplicationBase_idl__
 #define __ooo_vba_XApplicationBase_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __ooo_vba_XHelperInterface_idl__
 #include <ooo/vba/XHelperInterface.idl>
-#endif
 
 module ooo {  module vba {
+
 //=============================================================================
 
 interface XApplicationBase
@@ -44,14 +40,23 @@ interface XApplicationBase
 
     [attribute] boolean ScreenUpdating;
     [attribute] boolean DisplayStatusBar;
+     [attribute] boolean Interactive;
+     [attribute] boolean Visible;
+
     [attribute, readonly] string Version;
+    [attribute, readonly] any VBE;
+    [attribute, readonly] any VBProjects;
 
     void Quit();
 
     any CommandBars( [in] any aIndex );
     void Run([in] string MacroName, [in] /*Optional*/ any varg1, [in] /*Optional*/ any varg2, [in] /*Optional*/ any varg3, [in] /*Optional*/ any varg4, [in] /*Optional*/ any varg5, [in] /*Optional*/ any varg6, [in] /*Optional*/ any varg7, [in] /*Optional*/ any varg8, [in] /*Optional*/ any varg9, [in] /*Optional*/ any varg10, [in] /*Optional*/ any varg11, [in] /*Optional*/ any varg12, [in] /*Optional*/ any varg13, [in] /*Optional*/ any varg14, [in] /*Optional*/ any varg15, [in] /*Optional*/ any varg16, [in] /*Optional*/ any varg17, [in] /*Optional*/ any varg18, [in] /*Optional*/ any varg19, [in] /*Optional*/ any varg20, [in] /*Optional*/ any varg21, [in] /*Optional*/ any varg22, [in] /*Optional*/ any varg23, [in] /*Optional*/ any varg24, [in] /*Optional*/ any varg25, [in] /*Optional*/ any varg26, [in] /*Optional*/ any varg27, [in] /*Optional*/ any varg28, [in] /*Optional*/ any varg29, [in] /*Optional*/ any varg30);
+    void OnTime( [in] any aEarliestTime, [in] string aFunction, [in] any aLatestTime, [in] any aSchedule );
     float CentimetersToPoints([in] float Centimeters );
+    void Undo();
 };
+
+//=============================================================================
 
 }; };
 

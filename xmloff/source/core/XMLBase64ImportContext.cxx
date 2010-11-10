@@ -45,7 +45,7 @@ TYPEINIT1( XMLBase64ImportContext, SvXMLImportContext );
 
 
 XMLBase64ImportContext::XMLBase64ImportContext(
-        SvXMLImport& rImport, USHORT nPrfx, const OUString& rLName,
+        SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
         const Reference< XAttributeList >&,
         const Reference< XOutputStream >& rOut ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),

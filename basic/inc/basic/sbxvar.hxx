@@ -178,7 +178,7 @@ struct SbxValues
         sal_uInt64      uInt64;
         int             nInt;
         unsigned int    nUInt;
-        String*         pString;
+        ::rtl::OUString* pOUString;
         SbxDecimal*     pDecimal;
 
         SbxBase*        pObj;
@@ -212,7 +212,7 @@ struct SbxValues
     SbxValues( double _nDouble ): nDouble( _nDouble ), eType(SbxDOUBLE) {}
     SbxValues( int _nInt ): nInt( _nInt ), eType(SbxINT) {}
     SbxValues( unsigned int _nUInt ): nUInt( _nUInt ), eType(SbxUINT) {}
-    SbxValues( const String* _pString ): pString( (String*) _pString ), eType(SbxSTRING) {}
+    SbxValues( const ::rtl::OUString* _pString ): pOUString( (::rtl::OUString*)_pString ), eType(SbxSTRING) {}
     SbxValues( SbxBase* _pObj ): pObj( _pObj ), eType(SbxOBJECT) {}
     SbxValues( sal_Unicode* _pChar ): pChar( _pChar ), eType(SbxLPSTR) {}
     SbxValues( void* _pData ): pData( _pData ), eType(SbxPOINTER) {}
@@ -230,8 +230,6 @@ class SbxValueImpl;
 
 class SbxValue : public SbxBase
 {
-    friend class SbiDllMgr; // BASIC-Runtime must access aData
-
     SbxValueImpl* mpSbxValueImplImpl;   // Impl data
 
     // #55226 Transport additional infos
@@ -239,7 +237,8 @@ class SbxValue : public SbxBase
     SbxValue* TheRealValue() const;
 protected:
     SbxValues aData; // Data
-    String    aPic;  // Picture-String
+    ::rtl::OUString aPic;  // Picture-String
+    String          aToolString;  // tool string copy
 
     virtual void Broadcast( ULONG );    // Broadcast-Call
     virtual ~SbxValue();
@@ -289,6 +288,8 @@ public:
     const SbxValues& GetValues_Impl() const { return aData; }
     virtual BOOL Put( const SbxValues& );
 
+    inline SbxValues * data() { return &aData; }
+
     SbxINT64 GetCurrency() const;
     SbxINT64 GetLong64() const;
     SbxUINT64 GetULong64() const;
@@ -303,6 +304,7 @@ public:
     UINT16 GetErr() const;
     const  String& GetString() const;
     const  String& GetCoreString() const;
+    ::rtl::OUString GetOUString() const;
     SbxDecimal* GetDecimal() const;
     SbxBase* GetObject() const;
     BOOL     HasObject() const;
@@ -325,8 +327,8 @@ public:
     BOOL PutDate( double );
     BOOL PutBool( BOOL );
     BOOL PutErr( USHORT );
-    BOOL PutStringExt( const String& );     // with extended analysis (International, "TRUE"/"FALSE")
-    BOOL PutString( const String& );
+    BOOL PutStringExt( const ::rtl::OUString& );     // with extended analysis (International, "TRUE"/"FALSE")
+    BOOL PutString( const ::rtl::OUString& );
     BOOL PutString( const sal_Unicode* );   // Type = SbxSTRING
     BOOL PutpChar( const sal_Unicode* );    // Type = SbxLPSTR
     BOOL PutDecimal( SbxDecimal* pDecimal );
@@ -447,6 +449,9 @@ class SbxVariable : public SbxValue
     String           maName;            // Name, if available
     SbxArrayRef      mpPar;             // Parameter-Array, if set
     USHORT           nHash;             // Hash-ID for search
+
+    SbxVariableImpl* getImpl( void );
+
 protected:
     SbxInfoRef  pInfo;              // Probably called information
     sal_uIntPtr nUserData;          // User data for Call()
@@ -491,6 +496,10 @@ public:
     inline const SbxObject* GetParent() const { return pParent; }
     inline SbxObject* GetParent() { return pParent; }
     virtual void SetParent( SbxObject* );
+
+    const String& GetDeclareClassName( void );
+    void SetDeclareClassName( const String& );
+    void SetComListener( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xComListener );
 
     static USHORT MakeHashCode( const String& rName );
 };

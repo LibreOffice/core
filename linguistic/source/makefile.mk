@@ -29,7 +29,7 @@ PRJ=..
 
 PRJNAME=linguistic
 TARGET=lng
-ENABLE_EXCEPTIONS=TRUE
+ENABLE_EXCEPTIONS=sal_True
 
 #----- Settings ---------------------------------------------------------
 
@@ -91,9 +91,8 @@ DEF1DES     =Linguistic main DLL
 
 
 .IF "$(GUI)"=="WNT"
-DEF1EXPORT1 = component_writeInfo
-DEF1EXPORT2 = component_getFactory
-DEF1EXPORT3 = component_getImplementationEnvironment
+DEF1EXPORT1 = component_getFactory
+DEF1EXPORT2 = component_getImplementationEnvironment
 .ENDIF
 
 # --- Targets ------------------------------------------------------
@@ -109,3 +108,11 @@ $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo component >> $@
     @echo __CT >> $@
 
+
+ALLTAR : $(MISC)/lng.component
+
+$(MISC)/lng.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        lng.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt lng.component

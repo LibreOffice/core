@@ -298,8 +298,8 @@ namespace xmloff
             @param _bAttributeDefault
                 the default value for the attribute.
             @param _bInverseSemantics
-                if <TRUE/>, a attribute value of <TRUE/> means a property value of <FALSE/> and vice verse.<br/>
-                if <FALSE/>, the attribute value is used as property value directly
+                if <sal_True/>, a attribute value of <sal_True/> means a property value of <sal_False/> and vice verse.<br/>
+                if <sal_False/>, the attribute value is used as property value directly
         */
         void    addBooleanProperty(
             const sal_Char* _pAttributeName, const ::rtl::OUString& _rPropertyName,

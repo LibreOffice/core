@@ -108,7 +108,7 @@ void SAL_CALL SvtFolderPicker::startExecuteModal( const Reference< ::com::sun::s
     m_xListener = xListener;
     prepareDialog();
     prepareExecute();
-    getDialog()->EnableAutocompletion( TRUE );
+    getDialog()->EnableAutocompletion( sal_True );
     getDialog()->StartExecuteModal( LINK( this, SvtFolderPicker, DialogClosedHdl ) );
 }
 
@@ -124,7 +124,7 @@ sal_Int16 SvtFolderPicker::implExecutePicker( )
     prepareExecute();
 
     // now we are ready to execute the dialog
-    getDialog()->EnableAutocompletion( FALSE );
+    getDialog()->EnableAutocompletion( sal_False );
     sal_Int16 nRet = getDialog()->Execute();
 
     return nRet;

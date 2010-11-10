@@ -140,15 +140,15 @@ void FilterDialog::ChangeFilters( const FilterNameList* pFilterNames )
 /*-************************************************************************************************************//**
     @short      ask user for his decision
     @descr      We show the dialog and if user finish it with "OK" - we try to find selected item in internal saved
-                name list (which you must set in "ChangeFilters()"!). If we return TRUE as result, you can use out
+                name list (which you must set in "ChangeFilters()"!). If we return sal_True as result, you can use out
                 parameter "pSelectedItem" as pointer into your FilterNameList to get selected item realy ...
-                but if we return FALSE ... user hsa cancel the dialog ... you shouldnt do that. pSelectedItem isnt
+                but if we return sal_False ... user hsa cancel the dialog ... you shouldnt do that. pSelectedItem isnt
                 set to any valid value then. We don't change them ...
 
     @seealso    method ChangeFilters()
 
     @param      "pSelectedItem", returns result of selection as pointer into set list of filter names
-                                 (valid for function return TRUE only!)
+                                 (valid for function return sal_True only!)
     @return     true  => pSelectedItem parameter points into name list and represent use decision
                 false => use has cancelled dialog (pSelectedItem isnt valid then!)
 

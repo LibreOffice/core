@@ -496,7 +496,7 @@ namespace xmloff
         sal_Int32       m_nEmptyValueItems;     /// number of empty value items encountered during reading
 
         sal_Bool        m_bEncounteredLSAttrib;
-        sal_Bool        m_bLinkWithIndexes;     /** <TRUE/> if and only if we should use a cell value binding
+        sal_Bool        m_bLinkWithIndexes;     /** <sal_True/> if and only if we should use a cell value binding
                                                     which exchanges the selection index (instead of the selection text
                                                 */
 

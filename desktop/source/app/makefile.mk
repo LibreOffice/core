@@ -35,10 +35,23 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+.INCLUDE : ../deployment/inc/dp_misc.mk
 
 .IF "$(ENABLE_GNOMEVFS)"=="TRUE"
 CFLAGS+=-DGNOME_VFS_ENABLED
 .ENDIF
+
+# .IF "$(OS)" == "WNT"
+# .IF "$(COM)" == "GCC"
+# DEPLOYMENTMISCLIB = -ldeploymentmisc$(DLLPOSTFIX)
+# .ELSE
+# DEPLOYMENTMISCLIB = ideploymentmisc$(DLLPOSTFIX).lib
+# .ENDIF
+# .ELIF "$(OS)" == "OS2"
+# DEPLOYMENTMISCLIB = ideploymentmisc$(DLLPOSTFIX).lib
+# .ELSE
+# DEPLOYMENTMISCLIB = -ldeploymentmisc$(DLLPOSTFIX)
+# .ENDIF
 
 SHL1TARGET = sofficeapp
 SHL1OBJS = \
@@ -67,6 +80,7 @@ SHL1STDLIBS = \
     $(COMPHELPERLIB) \
     $(CPPUHELPERLIB) \
     $(CPPULIB) \
+    $(DEPLOYMENTMISCLIB) \
     $(I18NISOLANGLIB) \
     $(SALLIB) \
     $(SFXLIB) \

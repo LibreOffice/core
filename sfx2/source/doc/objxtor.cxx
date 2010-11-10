@@ -247,6 +247,8 @@ SfxObjectShell_Impl::SfxObjectShell_Impl( SfxObjectShell& _rDocShell )
     ,m_bCreateTempStor( sal_False )
     ,m_bIsInit( sal_False )
     ,m_bIncomplEncrWarnShown( sal_False )
+    ,m_nModifyPasswordHash( 0 )
+    ,m_bModifyPasswordEntered( sal_False )
 {
     SfxObjectShell* pDoc = &_rDocShell;
     SfxObjectShellArr_Impl &rArr = SFX_APP()->GetObjectShells_Impl();
@@ -522,6 +524,13 @@ SfxObjectShell* SfxObjectShell::Current()
 {
     SfxViewFrame *pFrame = SfxViewFrame::Current();
     return pFrame ? pFrame->GetObjectShell() : 0;
+}
+
+//-------------------------------------------------------------------------
+
+sal_Bool SfxObjectShell::IsInPrepareClose() const
+{
+    return pImp->bInPrepareClose;
 }
 
 //------------------------------------------------------------------------
@@ -1074,3 +1083,43 @@ void SfxObjectShell::SetInitialized_Impl( const bool i_fromInitNew )
         SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_LOADFINISHED, GlobalEventConfig::GetEventName(STR_EVENT_LOADFINISHED), this ) );
     }
 }
+
+
+bool SfxObjectShell::IsChangeRecording() const
+{
+    // currently this function needs to be overwritten by Writer and Calc only
+    DBG_ASSERT( 0, "function not implemented" );
+    return false;
+}
+
+
+bool SfxObjectShell::HasChangeRecordProtection() const
+{
+    // currently this function needs to be overwritten by Writer and Calc only
+    DBG_ASSERT( 0, "function not implemented" );
+    return false;
+}
+
+
+void SfxObjectShell::SetChangeRecording( bool /*bActivate*/ )
+{
+    // currently this function needs to be overwritten by Writer and Calc only
+    DBG_ASSERT( 0, "function not implemented" );
+}
+
+
+bool SfxObjectShell::SetProtectionPassword( const String & /*rPassword*/ )
+{
+    // currently this function needs to be overwritten by Writer and Calc only
+    DBG_ASSERT( 0, "function not implemented" );
+    return false;
+}
+
+
+bool SfxObjectShell::GetProtectionHash( /*out*/ ::com::sun::star::uno::Sequence< sal_Int8 > & /*rPasswordHash*/ )
+{
+    // currently this function needs to be overwritten by Writer and Calc only
+    DBG_ASSERT( 0, "function not implemented" );
+    return false;
+}
+

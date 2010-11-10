@@ -287,7 +287,7 @@ public:
         const ::rtl::OUString& rLName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
-    virtual BOOL IsTransient() const;
+    virtual sal_Bool IsTransient() const;
     virtual void EndElement();
     virtual void Characters( const ::rtl::OUString& rChars );
 

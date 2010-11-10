@@ -49,6 +49,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/DeploymentException.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -70,6 +71,7 @@
 #include <com/sun/star/bridge/oleautomation/Date.hpp>
 #include <com/sun/star/bridge/oleautomation/Decimal.hpp>
 #include <com/sun/star/bridge/oleautomation/Currency.hpp>
+#include <com/sun/star/bridge/oleautomation/XAutomationObject.hpp>
 
 
 using com::sun::star::uno::Reference;
@@ -299,7 +301,12 @@ SbUnoObject* createOLEObject_Impl( const String& aType )
     SbUnoObject* pUnoObj = NULL;
     if( xOLEFactory.is() )
     {
-        Reference< XInterface > xOLEObject = xOLEFactory->createInstance( aType );
+        // some type names available in VBA can not be directly used in COM
+        ::rtl::OUString aOLEType = aType;
+        if ( aOLEType.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SAXXMLReader30" ) ) ) )
+            aOLEType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Msxml2.SAXXMLReader.3.0" ) );
+
+        Reference< XInterface > xOLEObject = xOLEFactory->createInstance( aOLEType );
         if( xOLEObject.is() )
         {
             Any aAny;
@@ -910,7 +917,7 @@ Type getUnoTypeForSbxBaseType( SbxDataType eType )
         case SbxVARIANT:    aRetType = ::getCppuType( (Any*)0 ); break;
         //case SbxDATAOBJECT: break;
         case SbxCHAR:       aRetType = ::getCppuType( (sal_Unicode*)0 ); break;
-        case SbxBYTE:       aRetType = ::getCppuType( (sal_Int16*)0 ); break;
+        case SbxBYTE:       aRetType = ::getCppuType( (sal_Int8*)0 ); break;
         case SbxUSHORT:     aRetType = ::getCppuType( (sal_uInt16*)0 ); break;
         case SbxULONG:      aRetType = ::getCppuType( (sal_uInt32*)0 ); break;
         //case SbxLONG64:   break;
@@ -1074,8 +1081,19 @@ Any sbxToUnoValueImpl( SbxVariable* pVar, bool bBlockConversionToSmallestType = 
     if( eBaseType == SbxOBJECT )
     {
         SbxBaseRef xObj = (SbxBase*)pVar->GetObject();
-        if( xObj.Is() && xObj->ISA(SbUnoAnyObject) )
-            return ((SbUnoAnyObject*)(SbxBase*)xObj)->getValue();
+        if( xObj.Is() )
+        {
+            if( xObj->ISA(SbUnoAnyObject) )
+                return ((SbUnoAnyObject*)(SbxBase*)xObj)->getValue();
+            if( xObj->ISA(SbClassModuleObject) )
+            {
+                Any aRetAny;
+                SbClassModuleObject* pClassModuleObj = (SbClassModuleObject*)(SbxBase*)xObj;
+                SbModule* pClassModule = pClassModuleObj->getClassModule();
+                if( pClassModule->createCOMWrapperForIface( aRetAny, pClassModuleObj ) )
+                    return aRetAny;
+            }
+        }
     }
 
     Type aType = getUnoTypeForSbxValue( pVar );
@@ -1448,7 +1466,7 @@ Any sbxToUnoValue( SbxVariable* pVar, const Type& rType, Property* pUnoProperty 
             aRetVal.setValue( &c , getCharCppuType() );
             break;
         }
-        case TypeClass_STRING:          aRetVal <<= ::rtl::OUString( pVar->GetString() ); break;
+        case TypeClass_STRING:          aRetVal <<= pVar->GetOUString(); break;
         case TypeClass_FLOAT:           aRetVal <<= pVar->GetSingle(); break;
         case TypeClass_DOUBLE:          aRetVal <<= pVar->GetDouble(); break;
         //case TypeClass_OCTET:         break;
@@ -1581,12 +1599,18 @@ String getBasicObjectTypeName( SbxObject* pObj )
 bool checkUnoObjectType( SbUnoObject* pUnoObj,
     const String& aClass )
 {
-    bool result = false;
     Any aToInspectObj = pUnoObj->getUnoAny();
     TypeClass eType = aToInspectObj.getValueType().getTypeClass();
     if( eType != TypeClass_INTERFACE )
         return false;
     const Reference< XInterface > x = *(Reference< XInterface >*)aToInspectObj.getValue();
+
+    // Return true for XInvocation based objects as interface type names don't count then
+    Reference< XInvocation > xInvocation( x, UNO_QUERY );
+    if( xInvocation.is() )
+        return true;
+
+    bool result = false;
     Reference< XTypeProvider > xTypeProvider( x, UNO_QUERY );
     if( xTypeProvider.is() )
     {
@@ -2247,6 +2271,7 @@ Reference< XInvocation > createDynamicInvocationFor( const Any& aAny );
 SbUnoObject::SbUnoObject( const String& aName_, const Any& aUnoObj_ )
     : SbxObject( aName_ )
     , bNeedIntrospection( TRUE )
+    , bIgnoreNativeCOMObjectMembers( FALSE )
 {
     static Reference< XIntrospection > xIntrospection;
 
@@ -2292,6 +2317,12 @@ SbUnoObject::SbUnoObject( const String& aName_, const Any& aUnoObj_ )
             bNeedIntrospection = FALSE;
             return;
         }
+
+        // Ignore introspection based members for COM objects to avoid
+        // hiding of equally named COM symbols, e.g. XInvocation::getValue
+        Reference< oleautomation::XAutomationObject > xAutomationObject( aUnoObj_, UNO_QUERY );
+        if( xAutomationObject.is() )
+            bIgnoreNativeCOMObjectMembers = TRUE;
     }
 
     maTmpUnoObj = aUnoObj_;
@@ -2535,7 +2566,7 @@ SbxVariable* SbUnoObject::Find( const String& rName, SbxClassType t )
     if( !pRes )
     {
         ::rtl::OUString aUName( rName );
-        if( mxUnoAccess.is() )
+        if( mxUnoAccess.is() && !bIgnoreNativeCOMObjectMembers )
         {
             if( mxExactName.is() )
             {
@@ -2695,10 +2726,12 @@ void SbUnoObject::implCreateAll( void )
 
     // Instrospection besorgen
     Reference< XIntrospectionAccess > xAccess = mxUnoAccess;
-    if( !xAccess.is() )
+    if( !xAccess.is() || bIgnoreNativeCOMObjectMembers )
     {
         if( mxInvocation.is() )
             xAccess = mxInvocation->getIntrospection();
+        else if( bIgnoreNativeCOMObjectMembers )
+            return;
     }
     if( !xAccess.is() )
         return;
@@ -3744,7 +3777,7 @@ BasicAllListener_Impl::~BasicAllListener_Impl()
 
 void BasicAllListener_Impl::firing_impl( const AllEventObject& Event, Any* pRet )
 {
-    NAMESPACE_VOS(OGuard) guard( Application::GetSolarMutex() );
+    vos::OGuard guard( Application::GetSolarMutex() );
 
     if( xSbxObj.Is() )
     {
@@ -3809,7 +3842,7 @@ Any BasicAllListener_Impl::approveFiring( const AllEventObject& Event ) throw ( 
 // Methoden von XEventListener
 void BasicAllListener_Impl ::disposing(const EventObject& ) throw ( RuntimeException )
 {
-    NAMESPACE_VOS(OGuard) guard( Application::GetSolarMutex() );
+    vos::OGuard guard( Application::GetSolarMutex() );
 
     xSbxObj.Clear();
 }
@@ -4133,5 +4166,269 @@ void RTL_Impl_CreateUnoValue( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
     SbxVariableRef refVar = rPar.Get(0);
     SbxObjectRef xUnoAnyObject = new SbUnoAnyObject( aConvertedVal );
     refVar->PutObject( xUnoAnyObject );
+}
+
+//==========================================================================
+
+typedef WeakImplHelper1< XInvocation > ModuleInvocationProxyHelper;
+
+class ModuleInvocationProxy : public ModuleInvocationProxyHelper
+{
+    ::rtl::OUString     m_aPrefix;
+    SbxObjectRef        m_xScopeObj;
+    bool                m_bProxyIsClassModuleObject;
+
+public:
+    ModuleInvocationProxy( const ::rtl::OUString& aPrefix, SbxObjectRef xScopeObj );
+    ~ModuleInvocationProxy()
+    {}
+
+    // XInvocation
+    virtual Reference< XIntrospectionAccess > SAL_CALL getIntrospection() throw();
+    virtual void SAL_CALL setValue( const ::rtl::OUString& rProperty, const Any& rValue )
+        throw( UnknownPropertyException );
+    virtual Any SAL_CALL getValue( const ::rtl::OUString& rProperty )
+        throw( UnknownPropertyException );
+    virtual sal_Bool SAL_CALL hasMethod( const ::rtl::OUString& rName ) throw();
+    virtual sal_Bool SAL_CALL hasProperty( const ::rtl::OUString& rProp ) throw();
+
+    virtual Any SAL_CALL invoke( const ::rtl::OUString& rFunction,
+                                 const Sequence< Any >& rParams,
+                                 Sequence< sal_Int16 >& rOutParamIndex,
+                                 Sequence< Any >& rOutParam )
+        throw( CannotConvertException, InvocationTargetException );
+};
+
+ModuleInvocationProxy::ModuleInvocationProxy( const ::rtl::OUString& aPrefix, SbxObjectRef xScopeObj )
+    : m_aPrefix( aPrefix + ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("_") ) )
+    , m_xScopeObj( xScopeObj )
+{
+    m_bProxyIsClassModuleObject = xScopeObj.Is() ? xScopeObj->ISA(SbClassModuleObject) : false;
+}
+
+Reference< XIntrospectionAccess > SAL_CALL ModuleInvocationProxy::getIntrospection() throw()
+{
+    return Reference< XIntrospectionAccess >();
+}
+
+void SAL_CALL ModuleInvocationProxy::setValue( const ::rtl::OUString& rProperty, const Any& rValue ) throw( UnknownPropertyException )
+{
+    if( !m_bProxyIsClassModuleObject )
+        throw UnknownPropertyException();
+
+    vos::OGuard guard( Application::GetSolarMutex() );
+
+    ::rtl::OUString aPropertyFunctionName( RTL_CONSTASCII_USTRINGPARAM( "Property Set ") );
+    aPropertyFunctionName += m_aPrefix;
+    aPropertyFunctionName += rProperty;
+
+    SbxVariable* p = m_xScopeObj->Find( aPropertyFunctionName, SbxCLASS_METHOD );
+    SbMethod* pMeth = p != NULL ? PTR_CAST(SbMethod,p) : NULL;
+    if( pMeth == NULL )
+    {
+        // TODO: Check vba behavior concernig missing function
+        //StarBASIC::Error( SbERR_NO_METHOD, aFunctionName );
+        throw UnknownPropertyException();
+    }
+
+    // Setup parameter
+    SbxArrayRef xArray = new SbxArray;
+    SbxVariableRef xVar = new SbxVariable( SbxVARIANT );
+    unoToSbxValue( (SbxVariable*)xVar, rValue );
+    xArray->Put( xVar, 1 );
+
+    // Call property method
+    SbxVariableRef xValue = new SbxVariable;
+    pMeth->SetParameters( xArray );
+    pMeth->Call( xValue );
+    //aRet = sbxToUnoValue( xValue );
+    pMeth->SetParameters( NULL );
+
+    // TODO: OutParameter?
+
+    // throw InvocationTargetException();
+
+    //return aRet;
+
+}
+
+Any SAL_CALL ModuleInvocationProxy::getValue( const ::rtl::OUString& rProperty ) throw( UnknownPropertyException )
+{
+    if( !m_bProxyIsClassModuleObject )
+        throw UnknownPropertyException();
+
+    vos::OGuard guard( Application::GetSolarMutex() );
+
+    ::rtl::OUString aPropertyFunctionName( RTL_CONSTASCII_USTRINGPARAM( "Property Get ") );
+    aPropertyFunctionName += m_aPrefix;
+    aPropertyFunctionName += rProperty;
+
+    SbxVariable* p = m_xScopeObj->Find( aPropertyFunctionName, SbxCLASS_METHOD );
+    SbMethod* pMeth = p != NULL ? PTR_CAST(SbMethod,p) : NULL;
+    if( pMeth == NULL )
+    {
+        // TODO: Check vba behavior concernig missing function
+        //StarBASIC::Error( SbERR_NO_METHOD, aFunctionName );
+        throw UnknownPropertyException();
+    }
+
+    // Call method
+    SbxVariableRef xValue = new SbxVariable;
+    pMeth->Call( xValue );
+    Any aRet = sbxToUnoValue( xValue );
+    return aRet;
+}
+
+sal_Bool SAL_CALL ModuleInvocationProxy::hasMethod( const ::rtl::OUString& ) throw()
+{
+    return sal_False;
+}
+
+sal_Bool SAL_CALL ModuleInvocationProxy::hasProperty( const ::rtl::OUString& ) throw()
+{
+    return sal_False;
+}
+
+Any SAL_CALL ModuleInvocationProxy::invoke( const ::rtl::OUString& rFunction,
+                                            const Sequence< Any >& rParams,
+                                            Sequence< sal_Int16 >&,
+                                            Sequence< Any >& )
+    throw( CannotConvertException, InvocationTargetException )
+{
+    vos::OGuard guard( Application::GetSolarMutex() );
+
+    Any aRet;
+    if( !m_xScopeObj.Is() )
+        return aRet;
+
+    ::rtl::OUString aFunctionName = m_aPrefix;
+    aFunctionName += rFunction;
+
+    SbxVariable* p = m_xScopeObj->Find( aFunctionName, SbxCLASS_METHOD );
+    SbMethod* pMeth = p != NULL ? PTR_CAST(SbMethod,p) : NULL;
+    if( pMeth == NULL )
+    {
+        // TODO: Check vba behavior concernig missing function
+        //StarBASIC::Error( SbERR_NO_METHOD, aFunctionName );
+        return aRet;
+    }
+
+    // Setup parameters
+    SbxArrayRef xArray;
+    sal_Int32 nParamCount = rParams.getLength();
+    if( nParamCount )
+    {
+        xArray = new SbxArray;
+        const Any *pArgs = rParams.getConstArray();
+        for( sal_Int32 i = 0 ; i < nParamCount ; i++ )
+        {
+            SbxVariableRef xVar = new SbxVariable( SbxVARIANT );
+            unoToSbxValue( (SbxVariable*)xVar, pArgs[i] );
+            xArray->Put( xVar, sal::static_int_cast< USHORT >(i+1) );
+        }
+    }
+
+    // Call method
+    SbxVariableRef xValue = new SbxVariable;
+    if( xArray.Is() )
+        pMeth->SetParameters( xArray );
+    pMeth->Call( xValue );
+    aRet = sbxToUnoValue( xValue );
+    pMeth->SetParameters( NULL );
+
+    // TODO: OutParameter?
+
+    return aRet;
+}
+
+Reference< XInterface > createComListener( const Any& aControlAny, const ::rtl::OUString& aVBAType,
+                                           const ::rtl::OUString& aPrefix, SbxObjectRef xScopeObj )
+{
+    Reference< XInterface > xRet;
+
+    Reference< XComponentContext > xContext = getComponentContext_Impl();
+    Reference< XMultiComponentFactory > xServiceMgr( xContext->getServiceManager() );
+
+    Reference< XInvocation > xProxy = new ModuleInvocationProxy( aPrefix, xScopeObj );
+
+    Sequence<Any> args( 3 );
+    args[0] <<= aControlAny;
+    args[1] <<= aVBAType;
+    args[2] <<= xProxy;
+
+    try
+    {
+        xRet = xServiceMgr->createInstanceWithArgumentsAndContext(
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.custom.UnoComListener")),
+            args, xContext );
+    }
+    catch( const Exception& )
+    {
+        implHandleAnyException( ::cppu::getCaughtException() );
+    }
+
+    return xRet;
+}
+
+// Handle module implements mechanism for OLE types
+bool SbModule::createCOMWrapperForIface( Any& o_rRetAny, SbClassModuleObject* pProxyClassModuleObject )
+{
+    // For now: Take first interface that allows to instantiate COM wrapper
+    // TODO: Check if support for multiple interfaces is needed
+
+    Reference< XComponentContext > xContext = getComponentContext_Impl();
+    Reference< XMultiComponentFactory > xServiceMgr( xContext->getServiceManager() );
+    Reference< XSingleServiceFactory > xComImplementsFactory
+    (
+        xServiceMgr->createInstanceWithContext(
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.custom.ComImplementsFactory")), xContext ),
+        UNO_QUERY
+    );
+    if( !xComImplementsFactory.is() )
+        return false;
+
+    bool bSuccess = false;
+
+    SbxArray* pModIfaces = pClassData->mxIfaces;
+    USHORT nCount = pModIfaces->Count();
+    for( USHORT i = 0 ; i < nCount ; ++i )
+    {
+        SbxVariable* pVar = pModIfaces->Get( i );
+        ::rtl::OUString aIfaceName = pVar->GetName();
+
+        if( aIfaceName.getLength() != 0 )
+        {
+            ::rtl::OUString aPureIfaceName = aIfaceName;
+            sal_Int32 indexLastDot = aIfaceName.lastIndexOf('.');
+            if ( indexLastDot > -1 )
+                aPureIfaceName = aIfaceName.copy( indexLastDot + 1 );
+
+            Reference< XInvocation > xProxy = new ModuleInvocationProxy( aPureIfaceName, pProxyClassModuleObject );
+
+            Sequence<Any> args( 2 );
+            args[0] <<= aIfaceName;
+            args[1] <<= xProxy;
+
+            Reference< XInterface > xRet;
+            bSuccess = false;
+            try
+            {
+                xRet = xComImplementsFactory->createInstanceWithArguments( args );
+                bSuccess = true;
+            }
+            catch( const Exception& )
+            {
+                implHandleAnyException( ::cppu::getCaughtException() );
+            }
+
+            if( bSuccess )
+            {
+                o_rRetAny <<= xRet;
+                break;
+            }
+        }
+     }
+
+    return bSuccess;
 }
 

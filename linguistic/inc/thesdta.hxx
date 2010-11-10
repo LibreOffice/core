@@ -51,7 +51,7 @@ class ThesaurusMeaning :
 protected:
     ::rtl::OUString aText;              // one of the found 'meanings' for the looked up text
     ::rtl::OUString aLookUpText;        // text that was looked up in the thesaurus
-    INT16           nLookUpLanguage;    // language of the text that was looked up
+    sal_Int16           nLookUpLanguage;    // language of the text that was looked up
 
     // disallow copy-constructor and assignment-operator for now
     ThesaurusMeaning(const ThesaurusMeaning &);
@@ -59,7 +59,7 @@ protected:
 
 public:
     ThesaurusMeaning(const ::rtl::OUString &rText,
-            const ::rtl::OUString &rLookUpText, INT16 nLookUpLang );
+            const ::rtl::OUString &rLookUpText, sal_Int16 nLookUpLang );
     virtual ~ThesaurusMeaning();
 
     // XMeaning

@@ -52,7 +52,7 @@ XMLEnumPropertyHdl::~XMLEnumPropertyHdl()
 
 sal_Bool XMLEnumPropertyHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
-    USHORT nValue = 0;
+    sal_uInt16 nValue = 0;
 
     if( SvXMLUnitConverter::convertEnum( nValue, rStrImpValue, mpEnumMap ) )
     {

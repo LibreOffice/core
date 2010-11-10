@@ -86,7 +86,7 @@ namespace xmloff
             This way a performance optimization can be done for faster access to the control ids</p>
 
             @return
-                <TRUE/> if the page has been examined before. If <FALSE/> is returned, this is a serious error.
+                <sal_True/> if the page has been examined before. If <sal_False/> is returned, this is a serious error.
 
             @see getControlId
             @see examineForms

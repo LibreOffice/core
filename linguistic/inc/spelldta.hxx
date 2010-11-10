@@ -61,21 +61,21 @@ namespace linguistic
         MergeProposalSeqs(
                 ::com::sun::star::uno::Sequence< ::rtl::OUString > &rAlt1,
                 ::com::sun::star::uno::Sequence< ::rtl::OUString > &rAlt2,
-                BOOL bAllowDuplicates );
+                sal_Bool bAllowDuplicates );
 
 void    SeqRemoveNegEntries(
                 ::com::sun::star::uno::Sequence< ::rtl::OUString > &rSeq,
                 ::com::sun::star::uno::Reference<
                     ::com::sun::star::linguistic2::XDictionaryList > &rxDicList,
-                INT16 nLanguage );
+                sal_Int16 nLanguage );
 
-BOOL    SeqHasEntry(
+sal_Bool    SeqHasEntry(
                 const ::com::sun::star::uno::Sequence< ::rtl::OUString > &rSeq,
                 const ::rtl::OUString &rTxt);
 
 ///////////////////////////////////////////////////////////////////////////
 
-void SearchSimilarText( const rtl::OUString &rText, INT16 nLanguage,
+void SearchSimilarText( const rtl::OUString &rText, sal_Int16 nLanguage,
         ::com::sun::star::uno::Reference<
             ::com::sun::star::linguistic2::XDictionaryList > &xDicList,
         std::vector< rtl::OUString > & rDicListProps );
@@ -92,8 +92,8 @@ class SpellAlternatives :
 {
     ::com::sun::star::uno::Sequence< ::rtl::OUString >  aAlt;   // list of alternatives, may be empty.
     ::rtl::OUString         aWord;
-    INT16                   nType;          // type of failure
-    INT16                   nLanguage;
+    sal_Int16                   nType;          // type of failure
+    sal_Int16                   nLanguage;
 
     // disallow copy-constructor and assignment-operator for now
     SpellAlternatives(const SpellAlternatives &);
@@ -101,9 +101,9 @@ class SpellAlternatives :
 
 public:
     SpellAlternatives();
-    SpellAlternatives(const ::rtl::OUString &rWord, INT16 nLang, INT16 nFailureType,
+    SpellAlternatives(const ::rtl::OUString &rWord, sal_Int16 nLang, sal_Int16 nFailureType,
                       const ::rtl::OUString &rRplcWord );
-    SpellAlternatives(const ::rtl::OUString &rWord, INT16 nLang, INT16 nFailureType,
+    SpellAlternatives(const ::rtl::OUString &rWord, sal_Int16 nLang, sal_Int16 nFailureType,
                       const ::com::sun::star::uno::Sequence< ::rtl::OUString > &rAlternatives );
     virtual ~SpellAlternatives();
 
@@ -119,8 +119,8 @@ public:
     virtual void SAL_CALL setFailureType( ::sal_Int16 nFailureType ) throw (::com::sun::star::uno::RuntimeException);
 
     // non-interface specific functions
-    void    SetWordLanguage(const ::rtl::OUString &rWord, INT16 nLang);
-    void    SetFailureType(INT16 nTypeP);
+    void    SetWordLanguage(const ::rtl::OUString &rWord, sal_Int16 nLang);
+    void    SetFailureType(sal_Int16 nTypeP);
     void    SetAlternatives(
                 const ::com::sun::star::uno::Sequence< ::rtl::OUString > &rAlt );
 };

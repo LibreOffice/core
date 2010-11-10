@@ -43,6 +43,9 @@
 #include <vcl/svapp.hxx>
 #include <unotools/textsearch.hxx>
 
+Reference< XInterface > createComListener( const Any& aControlAny, const ::rtl::OUString& aVBAType,
+                                           const ::rtl::OUString& aPrefix, SbxObjectRef xScopeObj );
+
 #include <algorithm>
 
 SbxVariable* getDefaultProp( SbxVariable* pRef );
@@ -135,7 +138,6 @@ void SbiRuntime::StepCompare( SbxOperator eOp )
         }
 
     }
-#ifndef WIN
     static SbxVariable* pTRUE = NULL;
     static SbxVariable* pFALSE = NULL;
 
@@ -159,12 +161,6 @@ void SbiRuntime::StepCompare( SbxOperator eOp )
         }
         PushVar( pFALSE );
     }
-#else
-    BOOL bRes = p2->Compare( eOp, *p1 );
-    SbxVariable* pRes = new SbxVariable;
-    pRes->PutBool( bRes );
-    PushVar( pRes );
-#endif
 }
 
 void SbiRuntime::StepEXP()      { StepArith( SbxEXP );      }
@@ -309,9 +305,21 @@ void SbiRuntime::StepIS()
 {
     SbxVariableRef refVar1 = PopVar();
     SbxVariableRef refVar2 = PopVar();
-    BOOL bRes = BOOL(
-        refVar1->GetType() == SbxOBJECT
-     && refVar2->GetType() == SbxOBJECT );
+
+    SbxDataType eType1 = refVar1->GetType();
+    SbxDataType eType2 = refVar2->GetType();
+    if ( eType1 == SbxEMPTY )
+    {
+        refVar1->Broadcast( SBX_HINT_DATAWANTED );
+        eType1 = refVar1->GetType();
+    }
+    if ( eType2 == SbxEMPTY )
+    {
+        refVar2->Broadcast( SBX_HINT_DATAWANTED );
+        eType2 = refVar2->GetType();
+    }
+
+    BOOL bRes = BOOL( eType1 == SbxOBJECT && eType2 == SbxOBJECT );
     if ( bVBAEnabled  && !bRes )
         Error( SbERR_INVALID_USAGE_OBJECT );
     bRes = ( bRes && refVar1->GetObject() == refVar2->GetObject() );
@@ -416,118 +424,143 @@ void SbiRuntime::StepPUT()
 void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, bool bHandleDefaultProp )
 {
     // #67733 Typen mit Array-Flag sind auch ok
-    SbxDataType eValType = refVal->GetType();
-    SbxDataType eVarType = refVar->GetType();
-        if( (eValType != SbxOBJECT
-            && eValType != SbxEMPTY
-// seems like when using the default method its possible for objects
-// to be empty ( no broadcast has taken place yet ) or the actual value is
 
-            && !bHandleDefaultProp
-            && !(eValType & SbxARRAY)) ||
-            (eVarType != SbxOBJECT
-            && eVarType != SbxEMPTY
-            && !bHandleDefaultProp
-            && !(eVarType & SbxARRAY) ) )
+    // Check var, !object is no error for sure if, only if type is fixed
+    SbxDataType eVarType = refVar->GetType();
+    if( !bHandleDefaultProp && eVarType != SbxOBJECT && !(eVarType & SbxARRAY) && refVar->IsFixed() )
+    {
+        Error( SbERR_INVALID_USAGE_OBJECT );
+        return;
+    }
+
+    // Check value, !object is no error for sure if, only if type is fixed
+    SbxDataType eValType = refVal->GetType();
+//  bool bGetValObject = false;
+    if( !bHandleDefaultProp && eValType != SbxOBJECT && !(eValType & SbxARRAY) && refVal->IsFixed() )
+    {
+        Error( SbERR_INVALID_USAGE_OBJECT );
+        return;
+    }
+
+    // Getting in here causes problems with objects with default properties
+    // if they are SbxEMPTY I guess
+    if ( !bHandleDefaultProp || ( bHandleDefaultProp && eValType == SbxOBJECT ) )
+    {
+    // Auf refVal GetObject fuer Collections ausloesen
+        SbxBase* pObjVarObj = refVal->GetObject();
+        if( pObjVarObj )
+        {
+            SbxVariableRef refObjVal = PTR_CAST(SbxObject,pObjVarObj);
+
+            // #67733 Typen mit Array-Flag sind auch ok
+            if( refObjVal )
+                refVal = refObjVal;
+            else if( !(eValType & SbxARRAY) )
+                refVal = NULL;
+        }
+    }
+
+    // #52896 Wenn Uno-Sequences bzw. allgemein Arrays einer als
+    // Object deklarierten Variable zugewiesen werden, kann hier
+    // refVal ungueltig sein!
+    if( !refVal )
     {
         Error( SbERR_INVALID_USAGE_OBJECT );
     }
     else
     {
-        // Getting in here causes problems with objects with default properties
-        // if they are SbxEMPTY I guess
-        if ( !bHandleDefaultProp || ( bHandleDefaultProp && refVal->GetType() == SbxOBJECT ) )
+        // Store auf die eigene Methode (innerhalb einer Function)?
+        BOOL bFlagsChanged = FALSE;
+        USHORT n = 0;
+        if( (SbxVariable*) refVar == (SbxVariable*) pMeth )
         {
-        // Auf refVal GetObject fuer Collections ausloesen
-            SbxBase* pObjVarObj = refVal->GetObject();
-            if( pObjVarObj )
-            {
-                SbxVariableRef refObjVal = PTR_CAST(SbxObject,pObjVarObj);
+            bFlagsChanged = TRUE;
+            n = refVar->GetFlags();
+            refVar->SetFlag( SBX_WRITE );
+        }
+        SbProcedureProperty* pProcProperty = PTR_CAST(SbProcedureProperty,(SbxVariable*)refVar);
+        if( pProcProperty )
+            pProcProperty->setSet( true );
 
-                // #67733 Typen mit Array-Flag sind auch ok
-                if( refObjVal )
-                    refVal = refObjVal;
-                else if( !(eValType & SbxARRAY) )
-                    refVal = NULL;
+        if ( bHandleDefaultProp )
+        {
+            // get default properties for lhs & rhs where necessary
+            // SbxVariable* defaultProp = NULL; unused variable
+            bool bLHSHasDefaultProp = false;
+            // LHS try determine if a default prop exists
+            if ( refVar->GetType() == SbxOBJECT )
+            {
+                SbxVariable* pDflt = getDefaultProp( refVar );
+                if ( pDflt )
+                {
+                    refVar = pDflt;
+                    bLHSHasDefaultProp = true;
+                }
+            }
+            // RHS only get a default prop is the rhs has one
+            if (  refVal->GetType() == SbxOBJECT )
+            {
+                // check if lhs is a null object
+                // if it is then use the object not the default property
+                SbxObject* pObj = NULL;
+
+
+                pObj = PTR_CAST(SbxObject,(SbxVariable*)refVar);
+
+                // calling GetObject on a SbxEMPTY variable raises
+                // object not set errors, make sure its an Object
+                if ( !pObj && refVar->GetType() == SbxOBJECT )
+                {
+                    SbxBase* pObjVarObj = refVar->GetObject();
+                    pObj = PTR_CAST(SbxObject,pObjVarObj);
+                }
+                SbxVariable* pDflt = NULL;
+                if ( pObj || bLHSHasDefaultProp )
+                    // lhs is either a valid object || or has a defaultProp
+                    pDflt = getDefaultProp( refVal );
+                if ( pDflt )
+                    refVal = pDflt;
             }
         }
 
-        // #52896 Wenn Uno-Sequences bzw. allgemein Arrays einer als
-        // Object deklarierten Variable zugewiesen werden, kann hier
-        // refVal ungueltig sein!
-        if( !refVal )
+        // Handle withevents
+        BOOL bWithEvents = refVar->IsSet( SBX_WITH_EVENTS );
+        if ( bWithEvents )
         {
-            Error( SbERR_INVALID_USAGE_OBJECT );
-        }
-        else
-        {
-            // Store auf die eigene Methode (innerhalb einer Function)?
-            BOOL bFlagsChanged = FALSE;
-            USHORT n = 0;
-            if( (SbxVariable*) refVar == (SbxVariable*) pMeth )
+            Reference< XInterface > xComListener;
+
+            SbxBase* pObj = refVal->GetObject();
+            SbUnoObject* pUnoObj = (pObj != NULL) ? PTR_CAST(SbUnoObject,pObj) : NULL;
+            if( pUnoObj != NULL )
             {
-                bFlagsChanged = TRUE;
-                n = refVar->GetFlags();
-                refVar->SetFlag( SBX_WRITE );
-            }
-            SbProcedureProperty* pProcProperty = PTR_CAST(SbProcedureProperty,(SbxVariable*)refVar);
-            if( pProcProperty )
-                pProcProperty->setSet( true );
+                Any aControlAny = pUnoObj->getUnoAny();
+                String aDeclareClassName = refVar->GetDeclareClassName();
+                ::rtl::OUString aVBAType = aDeclareClassName;
+                ::rtl::OUString aPrefix = refVar->GetName();
+                SbxObjectRef xScopeObj = refVar->GetParent();
+                xComListener = createComListener( aControlAny, aVBAType, aPrefix, xScopeObj );
 
-            if ( bHandleDefaultProp )
-            {
-                // get default properties for lhs & rhs where necessary
-                // SbxVariable* defaultProp = NULL; unused variable
-                bool bLHSHasDefaultProp = false;
-                // LHS try determine if a default prop exists
-                if ( refVar->GetType() == SbxOBJECT )
-                {
-                    SbxVariable* pDflt = getDefaultProp( refVar );
-                    if ( pDflt )
-                    {
-                        refVar = pDflt;
-                        bLHSHasDefaultProp = true;
-                    }
-                }
-                // RHS only get a default prop is the rhs has one
-                if (  refVal->GetType() == SbxOBJECT )
-                {
-                    // check if lhs is a null object
-                    // if it is then use the object not the default property
-                    SbxObject* pObj = NULL;
-
-
-                    pObj = PTR_CAST(SbxObject,(SbxVariable*)refVar);
-
-                    // calling GetObject on a SbxEMPTY variable raises
-                    // object not set errors, make sure its an Object
-                    if ( !pObj && refVar->GetType() == SbxOBJECT )
-                    {
-                        SbxBase* pObjVarObj = refVar->GetObject();
-                        pObj = PTR_CAST(SbxObject,pObjVarObj);
-                    }
-                    SbxVariable* pDflt = NULL;
-                    if ( pObj || bLHSHasDefaultProp )
-                        // lhs is either a valid object || or has a defaultProp
-                        pDflt = getDefaultProp( refVal );
-                    if ( pDflt )
-                        refVal = pDflt;
-                }
+                refVal->SetDeclareClassName( aDeclareClassName );
+                refVal->SetComListener( xComListener );     // Hold reference
             }
 
             *refVar = *refVal;
-
-            // lhs is a property who's value is currently (Empty e.g. no broadcast yet)
-            // in this case if there is a default prop involved the value of the
-            // default property may infact be void so the type will also be SbxEMPTY
-            // in this case we do not want to call checkUnoStructCopy 'cause that will
-            // cause an error also
-            if ( !bHandleDefaultProp || ( bHandleDefaultProp && ( refVar->GetType() != SbxEMPTY ) ) )
-            // #67607 Uno-Structs kopieren
-                checkUnoStructCopy( refVal, refVar );
-            if( bFlagsChanged )
-                refVar->SetFlags( n );
         }
+        else
+        {
+            *refVar = *refVal;
+        }
+
+        // lhs is a property who's value is currently (Empty e.g. no broadcast yet)
+        // in this case if there is a default prop involved the value of the
+        // default property may infact be void so the type will also be SbxEMPTY
+        // in this case we do not want to call checkUnoStructCopy 'cause that will
+        // cause an error also
+        if ( !bHandleDefaultProp || ( bHandleDefaultProp && ( refVar->GetType() != SbxEMPTY ) ) )
+        // #67607 Uno-Structs kopieren
+            checkUnoStructCopy( refVal, refVar );
+        if( bFlagsChanged )
+            refVar->SetFlags( n );
     }
 }
 
@@ -906,6 +939,19 @@ void SbiRuntime::StepARRAYACCESS()
     refVar->SetParameters( refArgv );
     PopArgv();
     PushVar( CheckArray( refVar ) );
+}
+
+void SbiRuntime::StepBYVAL()
+{
+    // Copy variable on stack to break call by reference
+    SbxVariableRef pVar = PopVar();
+    SbxDataType t = pVar->GetType();
+
+    SbxVariable* pCopyVar = new SbxVariable( t );
+    pCopyVar->SetFlag( SBX_READWRITE );
+    *pCopyVar = *pVar;
+
+    PushVar( pCopyVar );
 }
 
 // Einrichten eines Argvs

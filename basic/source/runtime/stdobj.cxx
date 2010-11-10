@@ -216,10 +216,12 @@ static Methods aMethods[] = {
 { "Dir",            SbxSTRING,    2 | _FUNCTION, RTLNAME(Dir),0             },
   { "FileSpec",     SbxSTRING,        _OPT, NULL,0 },
   { "attrmask",     SbxINTEGER,       _OPT, NULL,0 },
+{ "DoEvents",       SbxEMPTY,     _FUNCTION, RTLNAME(DoEvents),0            },
 { "DumpAllObjects", SbxEMPTY,     2 | _SUB, RTLNAME(DumpAllObjects),0       },
   { "FileSpec",     SbxSTRING, 0,NULL,0 },
   { "DumpAll",      SbxINTEGER,       _OPT, NULL,0 },
 
+{ "Empty",        SbxVARIANT,        _CPROP,    RTLNAME(Empty),0         },
 { "EqualUnoObjects",SbxBOOL,      2 | _FUNCTION, RTLNAME(EqualUnoObjects),0 },
   { "Variant",      SbxVARIANT, 0,NULL,0 },
   { "Variant",      SbxVARIANT, 0,NULL,0 },
@@ -360,6 +362,8 @@ static Methods aMethods[] = {
   { "String",       SbxSTRING, 0,NULL,0 },
   { "Count",        SbxLONG, 0,NULL,0 },
 { "Len",            SbxLONG,      1 | _FUNCTION, RTLNAME(Len),0             },
+  { "StringOrVariant", SbxVARIANT, 0,NULL,0 },
+{ "LenB",           SbxLONG,      1 | _FUNCTION, RTLNAME(Len),0             },
   { "StringOrVariant", SbxVARIANT, 0,NULL,0 },
 { "Load",           SbxNULL,      1 | _FUNCTION, RTLNAME(Load),0            },
   { "object",       SbxOBJECT, 0,NULL,0 },
@@ -627,6 +631,10 @@ SbiStdObject::SbiStdObject( const String& r, StarBASIC* pb ) : SbxObject( r )
         p->nHash = SbxVariable::MakeHashCode( aName_ );
         p += ( p->nArgs & _ARGSMASK ) + 1;
     }
+
+    // #i92642: Remove default properties
+    Remove( XubString( RTL_CONSTASCII_USTRINGPARAM("Name") ), SbxCLASS_DONTCARE );
+    Remove( XubString( RTL_CONSTASCII_USTRINGPARAM("Parent") ), SbxCLASS_DONTCARE );
 
     SetParent( pb );
 

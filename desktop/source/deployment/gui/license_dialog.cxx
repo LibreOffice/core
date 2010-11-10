@@ -116,6 +116,7 @@ struct LicenseDialogImpl : public ModalDialog
     LicenseDialogImpl(
         Window * pParent,
         css::uno::Reference< css::uno::XComponentContext > const & xContext,
+        const ::rtl::OUString & sExtensionName,
         const ::rtl::OUString & sLicenseText);
 
     virtual void Activate();
@@ -193,6 +194,7 @@ void LicenseView::Notify( SfxBroadcaster&, const SfxHint& rHint )
 LicenseDialogImpl::LicenseDialogImpl(
     Window * pParent,
     cssu::Reference< cssu::XComponentContext > const & xContext,
+    const ::rtl::OUString & sExtensionName,
     const ::rtl::OUString & sLicenseText):
         ModalDialog(pParent, DpGuiResId(RID_DLG_LICENSE))
         ,m_xComponentContext(xContext)
@@ -225,6 +227,7 @@ LicenseDialogImpl::LicenseDialogImpl(
     m_fiArrow1.Show(true);
     m_fiArrow2.Show(false);
     m_mlLicense.SetText(sLicenseText);
+    m_ftHead.SetText(m_ftHead.GetText() + OUString('\n') + sExtensionName);
 
     m_mlLicense.SetEndReachedHdl( LINK(this, LicenseDialogImpl, EndReachedHdl) );
     m_mlLicense.SetScrolledHdl( LINK(this, LicenseDialogImpl, ScrolledHdl) );
@@ -296,7 +299,7 @@ LicenseDialog::LicenseDialog( Sequence<Any> const& args,
                           Reference<XComponentContext> const& xComponentContext)
     : m_xComponentContext(xComponentContext)
 {
-    comphelper::unwrapArgs( args, m_parent, m_sLicenseText );
+    comphelper::unwrapArgs( args, m_parent, m_sExtensionName, m_sLicenseText );
 }
 
 // XExecutableDialog
@@ -315,8 +318,10 @@ sal_Int16 LicenseDialog::execute() throw (RuntimeException)
 
 sal_Int16 LicenseDialog::solar_execute()
 {
-    std::auto_ptr<LicenseDialogImpl> dlg(new LicenseDialogImpl(
-        VCLUnoHelper::GetWindow(m_parent), m_xComponentContext, m_sLicenseText));
+    std::auto_ptr<LicenseDialogImpl> dlg(
+        new LicenseDialogImpl(
+            VCLUnoHelper::GetWindow(m_parent),
+            m_xComponentContext, m_sExtensionName, m_sLicenseText));
 
     return dlg->Execute();
 }

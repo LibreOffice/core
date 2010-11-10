@@ -1,4 +1,4 @@
- /*************************************************************************
+/*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -30,6 +30,8 @@
 #include <basic/sbx.hxx>
 #include "sbcomp.hxx"
 
+SbxObject* cloneTypeObjectImpl( const SbxObject& rTypeObj );
+
 // Deklaration einer Variablen
 // Bei Fehlern wird bis zum Komma oder Newline geparst.
 // Returnwert: eine neue Instanz, die eingefuegt und dann geloescht wird.
@@ -37,6 +39,12 @@
 
 SbiSymDef* SbiParser::VarDecl( SbiDimList** ppDim, BOOL bStatic, BOOL bConst )
 {
+    bool bWithEvents = false;
+    if( Peek() == WITHEVENTS )
+    {
+        Next();
+        bWithEvents = true;
+    }
     if( !TestSymbol() ) return NULL;
     SbxDataType t = eScanType;
     SbiSymDef* pDef = bConst ? new SbiConstDef( aSym ) : new SbiSymDef( aSym );
@@ -47,6 +55,8 @@ SbiSymDef* SbiParser::VarDecl( SbiDimList** ppDim, BOOL bStatic, BOOL bConst )
     pDef->SetType( t );
     if( bStatic )
         pDef->SetStatic();
+    if( bWithEvents )
+        pDef->SetWithEvents();
     TypeDecl( *pDef );
     if( !ppDim && pDim )
     {
@@ -107,8 +117,10 @@ void SbiParser::TypeDecl( SbiSymDef& rDef, BOOL bAsNewAlreadyParsed )
                         Next();
                         SbiConstExpression aSize( this );
                         nSize = aSize.GetShortValue();
-                        if( nSize < 0 )
+                        if( nSize < 0 || (bVBASupportOn && nSize <= 0) )
                             Error( SbERR_OUT_OF_RANGE );
+                        else
+                            rDef.SetFixedStringLength( nSize );
                     }
                 }
                 break;
@@ -149,6 +161,9 @@ void SbiParser::TypeDecl( SbiSymDef& rDef, BOOL bAsNewAlreadyParsed )
 
                     // In den String-Pool uebernehmen
                     rDef.SetTypeId( aGblStrings.Add( aCompleteName ) );
+
+                    if( rDef.IsNew() && pProc == NULL )
+                        aRequiredTypes.push_back( aCompleteName );
                 }
                 eType = SbxOBJECT;
                 break;
@@ -209,7 +224,7 @@ void SbiParser::DefVar( SbiOpcode eOp, BOOL bStatic )
 
     // #110004 It can also be a sub/function
     if( !bConst && (eCurTok == SUB || eCurTok == FUNCTION || eCurTok == PROPERTY ||
-                    eCurTok == STATIC || eCurTok == ENUM || eCurTok == DECLARE) )
+                    eCurTok == STATIC || eCurTok == ENUM || eCurTok == DECLARE || eCurTok == TYPE) )
     {
         // Next token is read here, because !bConst
         bool bPrivate = ( eFirstTok == PRIVATE );
@@ -242,6 +257,13 @@ void SbiParser::DefVar( SbiOpcode eOp, BOOL bStatic )
         {
             Next();
             DefDeclare( bPrivate );
+            return;
+        }
+        // #i109049
+        else if( eCurTok == TYPE )
+        {
+            Next();
+            DefType( bPrivate );
             return;
         }
     }
@@ -349,9 +371,15 @@ void SbiParser::DefVar( SbiOpcode eOp, BOOL bStatic )
                                 break;
                 default:        eOp2 = _LOCAL;
             }
-            aGen.Gen(
-                eOp2, pDef->GetId(),
-                sal::static_int_cast< UINT16 >( pDef->GetType() ) );
+            UINT32 nOpnd2 = sal::static_int_cast< UINT16 >( pDef->GetType() );
+            if( pDef->IsWithEvents() )
+                nOpnd2 |= SBX_TYPE_WITH_EVENTS_FLAG;
+
+            short nFixedStringLength = pDef->GetFixedStringLength();
+            if( nFixedStringLength >= 0 )
+                nOpnd2 |= (SBX_FIXED_LEN_STRING_FLAG + (UINT32(nFixedStringLength) << 17));     // len = all bits above 0x10000
+
+            aGen.Gen( eOp2, pDef->GetId(), nOpnd2 );
         }
 
         // Initialisierung fuer selbstdefinierte Datentypen
@@ -473,7 +501,7 @@ void SbiParser::DefVar( SbiOpcode eOp, BOOL bStatic )
         // d.h. pPool muss immer am Schleifen-Ende zurueckgesetzt werden.
         // auch bei break
         pPool = pOldPool;
-        continue;       // MyBreak Ã¼berspingen
+        continue;       // MyBreak überspingen
     MyBreak:
         pPool = pOldPool;
         break;
@@ -506,18 +534,7 @@ void SbiParser::Erase()
 {
     while( !bAbort )
     {
-        if( !TestSymbol() ) return;
-        String aName( aSym );
-        SbxDataType eType = eScanType;
-        SbiSymDef* pDef = pPool->Find( aName );
-        if( !pDef )
-        {
-            if( bExplicit )
-                Error( SbERR_UNDEF_VAR, aName );
-            pDef = pPool->AddSym( aName );
-            pDef->SetType( eType );
-        }
-        SbiExpression aExpr( this, *pDef );
+        SbiExpression aExpr( this, SbLVALUE );
         aExpr.Gen();
         aGen.Gen( _ERASE );
         if( !TestComma() ) break;
@@ -576,12 +593,14 @@ void SbiParser::DefType( BOOL bPrivate )
         }
         if( pElem )
         {
-            SbxArray *pTypeMembers = pType -> GetProperties();
-            if (pTypeMembers -> Find (pElem->GetName(),SbxCLASS_DONTCARE))
+            SbxArray *pTypeMembers = pType->GetProperties();
+            String aElemName = pElem->GetName();
+            if( pTypeMembers->Find( aElemName, SbxCLASS_DONTCARE) )
                 Error (SbERR_VAR_DEFINED);
             else
             {
-                SbxProperty *pTypeElem = new SbxProperty (pElem->GetName(),pElem->GetType());
+                SbxDataType eElemType = pElem->GetType();
+                SbxProperty *pTypeElem = new SbxProperty( aElemName, eElemType );
                 if( pDim )
                 {
                     SbxDimArray* pArray = new SbxDimArray( pElem->GetType() );
@@ -617,6 +636,21 @@ void SbiParser::DefType( BOOL bPrivate )
                     pTypeElem->ResetFlag( SBX_FIXED );
                     pTypeElem->PutObject( pArray );
                     pTypeElem->SetFlags( nSavFlags );
+                }
+                // Nested user type?
+                if( eElemType == SbxOBJECT )
+                {
+                    USHORT nElemTypeId = pElem->GetTypeId();
+                    if( nElemTypeId != 0 )
+                    {
+                        String aTypeName( aGblStrings.Find( nElemTypeId ) );
+                        SbxObject* pTypeObj = static_cast< SbxObject* >( rTypeArray->Find( aTypeName, SbxCLASS_OBJECT ) );
+                        if( pTypeObj != NULL )
+                        {
+                            SbxObject* pCloneObj = cloneTypeObjectImpl( *pTypeObj );
+                            pTypeElem->PutObject( pCloneObj );
+                        }
+                    }
                 }
                 delete pDim;
                 pTypeMembers->Insert( pTypeElem, pTypeMembers->Count() );
@@ -843,7 +877,7 @@ SbiProcDef* SbiParser::ProcDecl( BOOL bDecl )
             }
             if( bCompatible && Peek() == PARAMARRAY )
             {
-                if( bByVal || bByVal || bOptional )
+                if( bByVal || bOptional )
                     Error( SbERR_UNEXPECTED, PARAMARRAY );
                 Next();
                 bParamArray = TRUE;
@@ -915,6 +949,8 @@ void SbiParser::DefDeclare( BOOL bPrivate )
       Error( SbERR_UNEXPECTED, eCurTok );
     else
     {
+        bool bFunction = (eCurTok == FUNCTION);
+
         SbiProcDef* pDef = ProcDecl( TRUE );
         if( pDef )
         {
@@ -939,7 +975,70 @@ void SbiParser::DefDeclare( BOOL bPrivate )
                 aPublics.Add( pDef );
 
             if ( pDef )
+            {
                 pDef->SetPublic( !bPrivate );
+
+                // New declare handling
+                if( pDef->GetLib().Len() > 0 )
+                {
+                    if( bNewGblDefs && nGblChain == 0 )
+                    {
+                        nGblChain = aGen.Gen( _JUMP, 0 );
+                        bNewGblDefs = FALSE;
+                    }
+
+                    USHORT nSavLine = nLine;
+                    aGen.Statement();
+                    pDef->Define();
+                    pDef->SetLine1( nSavLine );
+                    pDef->SetLine2( nSavLine );
+
+                    SbiSymPool& rPool = pDef->GetParams();
+                    USHORT nParCount = rPool.GetSize();
+
+                    SbxDataType eType = pDef->GetType();
+                    if( bFunction )
+                        aGen.Gen( _PARAM, 0, sal::static_int_cast< UINT16 >( eType ) );
+
+                    if( nParCount > 1 )
+                    {
+                        aGen.Gen( _ARGC );
+
+                        for( USHORT i = 1 ; i < nParCount ; ++i )
+                        {
+                            SbiSymDef* pParDef = rPool.Get( i );
+                            SbxDataType eParType = pParDef->GetType();
+
+                            aGen.Gen( _PARAM, i, sal::static_int_cast< UINT16 >( eParType ) );
+                            aGen.Gen( _ARGV );
+
+                            USHORT nTyp = sal::static_int_cast< USHORT >( pParDef->GetType() );
+                            if( pParDef->IsByVal() )
+                            {
+                                // Reset to avoid additional byval in call to wrapper function
+                                pParDef->SetByVal( FALSE );
+                                nTyp |= 0x8000;
+                            }
+                            aGen.Gen( _ARGTYP, nTyp );
+                        }
+                    }
+
+                    aGen.Gen( _LIB, aGblStrings.Add( pDef->GetLib() ) );
+
+                    SbiOpcode eOp = pDef->IsCdecl() ? _CALLC : _CALL;
+                    USHORT nId = pDef->GetId();
+                    if( pDef->GetAlias().Len() )
+                        nId = ( nId & 0x8000 ) | aGblStrings.Add( pDef->GetAlias() );
+                    if( nParCount > 1 )
+                        nId |= 0x8000;
+                    aGen.Gen( eOp, nId, sal::static_int_cast< UINT16 >( eType ) );
+
+                    if( bFunction )
+                        aGen.Gen( _PUT );
+
+                    aGen.Gen( _LEAVE );
+                }
+            }
         }
     }
 }

@@ -16,6 +16,8 @@ import uno
 import re
 
 #to implement com::sun::star::mail::XMailServiceProvider
+#and
+#to implement com.sun.star.mail.XMailMessage
 
 from com.sun.star.mail import XMailServiceProvider
 from com.sun.star.mail import XMailService
@@ -37,7 +39,7 @@ from email import Encoders
 from email.Header import Header
 from email.MIMEMultipart import MIMEMultipart
 from email.Utils import formatdate
-from email.Utils import formataddr
+from email.Utils import parseaddr
 
 import sys, smtplib, imaplib, poplib
 
@@ -118,30 +120,46 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 			print >> sys.stderr, "PyMailSMPTService sendMailMessage"
 		recipients = xMailMessage.getRecipients()
 		sendermail = xMailMessage.SenderAddress
-                sendername = xMailMessage.SenderName
+		sendername = xMailMessage.SenderName
 		subject = xMailMessage.Subject
 		ccrecipients = xMailMessage.getCcRecipients()
 		bccrecipients = xMailMessage.getBccRecipients()
 		if dbg:
 			print >> sys.stderr, "PyMailSMPTService subject", subject
-			print >> sys.stderr, "PyMailSMPTService from", sendername.encode('utf-8'), sendermail
-                        print >> sys.stderr, "PyMailSMTPService from", formataddr((sendername.encode('utf-8'), sendermail))
+			print >> sys.stderr, "PyMailSMPTService from", sendername.encode('utf-8')
+			print >> sys.stderr, "PyMailSMTPService from", sendermail
 			print >> sys.stderr, "PyMailSMPTService send to", recipients
 
 		attachments = xMailMessage.getAttachments()
 
+		textmsg = Message()
+
 		content = xMailMessage.Body
 		flavors = content.getTransferDataFlavors()
-		flavor = flavors[0]
 		if dbg:
-			print >> sys.stderr, "PyMailSMPTService mimetype is", flavor.MimeType
-		textbody = content.getTransferData(flavor)
+			print >> sys.stderr, "PyMailSMPTService flavors len", len(flavors)
 
-		textmsg = Message()
-		mimeEncoding = re.sub("charset=.*", "charset=UTF-8", flavor.MimeType)
-		textmsg['Content-Type'] = mimeEncoding
-	        textmsg['MIME-Version'] = '1.0'
-		textmsg.set_payload(textbody.encode('utf-8'))
+		#Use first flavor that's sane for an email body
+		for flavor in flavors:
+			if flavor.MimeType.find('text/html') != -1 or flavor.MimeType.find('text/plain') != -1:
+				if dbg:
+					print >> sys.stderr, "PyMailSMPTService mimetype is", flavor.MimeType
+				textbody = content.getTransferData(flavor)
+				try:
+					textbody = textbody.value
+				except:
+					pass
+				textbody = textbody.encode('utf-8')
+
+				if len(textbody):
+					mimeEncoding = re.sub("charset=.*", "charset=UTF-8", flavor.MimeType)
+					if mimeEncoding.find('charset=UTF-8') == -1:
+						mimeEncoding = mimeEncoding + "; charset=UTF-8"
+					textmsg['Content-Type'] = mimeEncoding
+					textmsg['MIME-Version'] = '1.0'
+					textmsg.set_payload(textbody)
+
+				break
 
 		if (len(attachments)):
 			msg = MIMEMultipart()
@@ -150,15 +168,31 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 		else:
 			msg = textmsg
 
-                msg['Subject'] = subject
-		msg['From'] = formataddr((sendername.encode('utf-8'), sendermail))
+		hdr = Header(sendername, 'utf-8')
+		hdr.append('<'+sendermail+'>','us-ascii')
+		msg['Subject'] = subject
+		msg['From'] = hdr
 		msg['To'] = COMMASPACE.join(recipients)
 		if len(ccrecipients):
 			msg['Cc'] = COMMASPACE.join(ccrecipients)
 		if xMailMessage.ReplyToAddress != '':
 			msg['Reply-To'] = xMailMessage.ReplyToAddress
-		msg['X-Mailer'] = "OpenOffice.org 2.0 via Caolan's mailmerge component"
 
+		mailerstring = "OpenOffice.org 2.0 via Caolan's mailmerge component"
+		try:
+			ctx = uno.getComponentContext() 
+			aConfigProvider = ctx.ServiceManager.createInstance("com.sun.star.configuration.ConfigurationProvider")
+			prop = uno.createUnoStruct('com.sun.star.beans.PropertyValue')
+			prop.Name = "nodepath"
+			prop.Value = "/org.openoffice.Setup/Product"
+			aSettings = aConfigProvider.createInstanceWithArguments("com.sun.star.configuration.ConfigurationAccess",
+				(prop,))
+			mailerstring = aSettings.getByName("ooName") + " " + \
+				aSettings.getByName("ooSetupVersion") + " via Caolan's mailmerge component"
+		except:
+			pass
+		
+		msg['X-Mailer'] = mailerstring
 		msg['Date'] = formatdate(localtime=True)
 
 		for attachment in attachments:
@@ -344,9 +378,63 @@ class PyMailServiceProvider(unohelper.Base, XMailServiceProvider):
 		else:
 			print >> sys.stderr, "PyMailServiceProvider, unknown TYPE", aType
 
+class PyMailMessage(unohelper.Base, XMailMessage):
+	def __init__( self, ctx, sTo='', sFrom='', Subject='', Body=None, aMailAttachment=None ):
+		if dbg:
+			print >> sys.stderr, "PyMailMessage init"
+		self.ctx = ctx
+
+		self.recipients = sTo,
+		self.ccrecipients = ()
+		self.bccrecipients = ()
+		self.aMailAttachments = ()
+		if aMailAttachment != None:
+			self.aMailAttachments = aMailAttachment, 
+
+		self.SenderName, self.SenderAddress = parseaddr(sFrom)
+		self.ReplyToAddress = sFrom
+		self.Subject = Subject
+		self.Body = Body
+		if dbg:
+			print >> sys.stderr, "post PyMailMessage init"
+	def addRecipient( self, recipient ):
+		if dbg:
+			print >> sys.stderr, "PyMailMessage.addRecipient", recipient
+		self.recipients = self.recipients, recipient
+	def addCcRecipient( self, ccrecipient ):
+		if dbg:
+			print >> sys.stderr, "PyMailMessage.addCcRecipient", ccrecipient
+		self.ccrecipients = self.ccrecipients, ccrecipient
+	def addBccRecipient( self, bccrecipient ):
+		if dbg:
+			print >> sys.stderr, "PyMailMessage.addBccRecipient", bccrecipient
+		self.bccrecipients = self.bccrecipients, bccrecipient
+	def getRecipients( self ):
+		if dbg:
+			print >> sys.stderr, "PyMailMessage.getRecipients", self.recipients
+		return self.recipients
+	def getCcRecipients( self ):
+		if dbg:
+			print >> sys.stderr, "PyMailMessage.getCcRecipients", self.ccrecipients
+		return self.ccrecipients
+	def getBccRecipients( self ):
+		if dbg:
+			print >> sys.stderr, "PyMailMessage.getBccRecipients", self.bccrecipients
+		return self.bccrecipients
+	def addAttachment( self, aMailAttachment ):
+		if dbg:
+			print >> sys.stderr, "PyMailMessage.addAttachment"
+		self.aMailAttachments = self.aMailAttachments, aMailAttachment
+	def getAttachments( self ):
+		if dbg:
+			print >> sys.stderr, "PyMailMessage.getAttachments"
+		return self.aMailAttachments
+
 # pythonloader looks for a static g_ImplementationHelper variable
 g_ImplementationHelper = unohelper.ImplementationHelper()
 g_ImplementationHelper.addImplementation( \
 	PyMailServiceProvider, "org.openoffice.pyuno.MailServiceProvider",
 		("com.sun.star.mail.MailServiceProvider",),)
-
+g_ImplementationHelper.addImplementation( \
+	PyMailMessage, "org.openoffice.pyuno.MailMessage",
+		("com.sun.star.mail.MailMessage",),)

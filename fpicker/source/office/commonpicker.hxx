@@ -188,7 +188,7 @@ namespace svt
 
         /** handle a single argument from the XInitialization::initialize method
 
-            @return <TRUE/> if the argument could be handled
+            @return <sal_True/> if the argument could be handled
         */
         virtual sal_Bool    implHandleInitializationArgument(
                                 const ::rtl::OUString& _rName,

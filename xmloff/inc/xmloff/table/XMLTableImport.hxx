@@ -54,10 +54,10 @@ public:
     XMLTableImport( SvXMLImport& rImport, const rtl::Reference< XMLPropertySetMapper >& xCellPropertySetMapper, const rtl::Reference< XMLPropertyHandlerFactory >& xFactoryRef );
     virtual ~XMLTableImport();
 
-    SvXMLImportContext* CreateTableContext( USHORT nPrfx, const ::rtl::OUString& rLName,
+    SvXMLImportContext* CreateTableContext( sal_uInt16 nPrfx, const ::rtl::OUString& rLName,
                                             ::com::sun::star::uno::Reference< ::com::sun::star::table::XColumnRowRange >& xColumnRowRange );
 
-    SvXMLStyleContext* CreateTableTemplateContext( USHORT nPrfx, const ::rtl::OUString& rLName, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
+    SvXMLStyleContext* CreateTableTemplateContext( sal_uInt16 nPrfx, const ::rtl::OUString& rLName, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
     rtl::Reference< SvXMLImportPropertyMapper > GetCellImportPropertySetMapper() const { return mxCellImportPropertySetMapper; }
     rtl::Reference< SvXMLImportPropertyMapper > GetRowImportPropertySetMapper() const { return mxRowImportPropertySetMapper; }

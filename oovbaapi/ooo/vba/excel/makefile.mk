@@ -29,7 +29,7 @@ PRJ=..$/..$/..
 PRJNAME=oovapi
 
 TARGET=excel
-PACKAGE=ooo$/vba$/Excel
+PACKAGE=ooo$/vba$/excel
 
 # --- Settings -----------------------------------------------------
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
@@ -39,6 +39,8 @@ PACKAGE=ooo$/vba$/Excel
 
 IDLFILES= XGlobals.idl\
     Globals.idl\
+    SheetObject.idl\
+    SheetObjects.idl\
     XApplication.idl\
     XComment.idl\
     XComments.idl\
@@ -92,6 +94,7 @@ IDLFILES= XGlobals.idl\
     Window.idl \
      XHyperlink.idl \
      Hyperlink.idl \
+     XHyperlinks.idl \
      XPageSetup.idl \
      XPageBreak.idl \
      XHPageBreak.idl \

@@ -97,11 +97,11 @@ namespace linguistic
 
 ::osl::Mutex &  GetLinguMutex();
 
-LocaleDataWrapper & GetLocaleDataWrapper( INT16 nLang );
+LocaleDataWrapper & GetLocaleDataWrapper( sal_Int16 nLang );
 
 ///////////////////////////////////////////////////////////////////////////
 
-rtl_TextEncoding GetTextEncoding( INT16 nLanguage );
+rtl_TextEncoding GetTextEncoding( sal_Int16 nLanguage );
 
 inline ::rtl::OUString BS2OU(const ByteString &rText, rtl_TextEncoding nEnc)
 {
@@ -131,9 +131,9 @@ LanguageType
     LanguageToLocale( ::com::sun::star::lang::Locale& rLocale, LanguageType eLang );
 
 ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale >
-    LangSeqToLocaleSeq( const ::com::sun::star::uno::Sequence< INT16 > &rLangSeq );
+    LangSeqToLocaleSeq( const ::com::sun::star::uno::Sequence< sal_Int16 > &rLangSeq );
 
-::com::sun::star::uno::Sequence< INT16 >
+::com::sun::star::uno::Sequence< sal_Int16 >
     LocaleSeqToLangSeq( ::com::sun::star::uno::Sequence<
         ::com::sun::star::lang::Locale > &rLocaleSeq );
 
@@ -141,17 +141,17 @@ LanguageType
 
 // checks if file pointed to by rURL is readonly
 // and may also check return if such a file exists or not
-BOOL    IsReadOnly( const String &rURL, BOOL *pbExist = 0 );
+sal_Bool    IsReadOnly( const String &rURL, sal_Bool *pbExist = 0 );
 
 // checks if a file with the given URL exists
-BOOL    FileExists( const String &rURL );
+sal_Bool    FileExists( const String &rURL );
 
 #ifdef TL_OUTDATED
 // returns complete file URL for given filename that is to be searched in
 // the specified path
 String  GetFileURL( SvtPathOptions::Pathes ePath, const String &rFileName );
 
-String  GetModulePath( SvtPathOptions::Pathes ePath, BOOL bAddAccessDelim = TRUE );
+String  GetModulePath( SvtPathOptions::Pathes ePath, sal_Bool bAddAccessDelim = sal_True );
 #endif
 
 ///////////////////////////////////////////////////////////////////////////
@@ -171,7 +171,7 @@ String     SearchFileInPaths( const String &rFile, const ::com::sun::star::uno::
 
 ///////////////////////////////////////////////////////////////////////////
 
-INT32       GetPosInWordToCheck( const rtl::OUString &rTxt, INT32 nPos );
+sal_Int32       GetPosInWordToCheck( const rtl::OUString &rTxt, sal_Int32 nPos );
 
 ::com::sun::star::uno::Reference<
     ::com::sun::star::linguistic2::XHyphenatedWord >
@@ -181,19 +181,19 @@ INT32       GetPosInWordToCheck( const rtl::OUString &rTxt, INT32 nPos );
 
 ///////////////////////////////////////////////////////////////////////////
 
-BOOL        IsUpper( const String &rText, xub_StrLen nPos, xub_StrLen nLen, INT16 nLanguage );
-BOOL        IsLower( const String &rText, xub_StrLen nPos, xub_StrLen nLen, INT16 nLanguage );
+sal_Bool        IsUpper( const String &rText, xub_StrLen nPos, xub_StrLen nLen, sal_Int16 nLanguage );
+sal_Bool        IsLower( const String &rText, xub_StrLen nPos, xub_StrLen nLen, sal_Int16 nLanguage );
 
-inline BOOL        IsUpper( const String &rText, INT16 nLanguage )     { return IsUpper( rText, 0, rText.Len(), nLanguage ); }
-inline BOOL        IsLower( const String &rText, INT16 nLanguage )     { return IsLower( rText, 0, rText.Len(), nLanguage ); }
+inline sal_Bool        IsUpper( const String &rText, sal_Int16 nLanguage )     { return IsUpper( rText, 0, rText.Len(), nLanguage ); }
+inline sal_Bool        IsLower( const String &rText, sal_Int16 nLanguage )     { return IsLower( rText, 0, rText.Len(), nLanguage ); }
 
-String      ToLower( const String &rText, INT16 nLanguage );
-String      ToUpper( const String &rText, INT16 nLanguage );
-String      ToTitle( const String &rText, INT16 nLanguage );
-sal_Unicode ToLower( const sal_Unicode cChar, INT16 nLanguage );
-sal_Unicode ToUpper( const sal_Unicode cChar, INT16 nLanguage );
-BOOL        HasDigits( const ::rtl::OUString &rText );
-BOOL        IsNumeric( const String &rText );
+String      ToLower( const String &rText, sal_Int16 nLanguage );
+String      ToUpper( const String &rText, sal_Int16 nLanguage );
+String      ToTitle( const String &rText, sal_Int16 nLanguage );
+sal_Unicode ToLower( const sal_Unicode cChar, sal_Int16 nLanguage );
+sal_Unicode ToUpper( const sal_Unicode cChar, sal_Int16 nLanguage );
+sal_Bool        HasDigits( const ::rtl::OUString &rText );
+sal_Bool        IsNumeric( const String &rText );
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -205,11 +205,11 @@ BOOL        IsNumeric( const String &rText );
 
 ///////////////////////////////////////////////////////////////////////////
 
-BOOL IsUseDicList( const ::com::sun::star::beans::PropertyValues &rProperties,
+sal_Bool IsUseDicList( const ::com::sun::star::beans::PropertyValues &rProperties,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet > &rxPropSet );
 
-BOOL IsIgnoreControlChars( const ::com::sun::star::beans::PropertyValues &rProperties,
+sal_Bool IsIgnoreControlChars( const ::com::sun::star::beans::PropertyValues &rProperties,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet > &rxPropSet );
 
@@ -217,8 +217,8 @@ BOOL IsIgnoreControlChars( const ::com::sun::star::beans::PropertyValues &rPrope
     ::com::sun::star::linguistic2::XDictionaryEntry >
         SearchDicList(
             const ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XDictionaryList >& rDicList,
-            const ::rtl::OUString& rWord, INT16 nLanguage,
-            BOOL bSearchPosDics, BOOL bSearchSpellEntry );
+            const ::rtl::OUString& rWord, sal_Int16 nLanguage,
+            sal_Bool bSearchPosDics, sal_Bool bSearchSpellEntry );
 
 sal_uInt8 AddEntryToDic(
     ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XDictionary >  &rxDic,

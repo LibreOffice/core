@@ -30,6 +30,8 @@ PRJ=..$/..
 PRJNAME=basic
 TARGET=runtime
 
+ENABLE_EXCEPTIONS = TRUE
+
 # --- Settings -----------------------------------------------------------
 
 .INCLUDE :  settings.mk
@@ -53,28 +55,11 @@ SLOFILES=	\
     $(SLO)$/ddectrl.obj	\
     $(SLO)$/dllmgr.obj
 
-.IF "$(GUI)$(CPU)" == "WINI"
-SLOFILES+=	$(SLO)$/win.obj
-.ENDIF
-
 .IF "$(GUI)$(COM)$(CPU)" == "WNTMSCI"
 SLOFILES+=	$(SLO)$/wnt.obj
-.ENDIF
-
-.IF "$(GUI)$(COM)$(CPU)" == "WNTGCCI"
+.ELIF "$(GUI)$(COM)$(CPU)" == "WNTGCCI"
 SLOFILES+=	$(SLO)$/wnt-mingw.obj
 .ENDIF
-
-.IF "$(GUI)$(CPU)" == "OS2I"
-#FIXME SLOFILES+= $(SLO)$/os2.obj
-.ENDIF
-
-EXCEPTIONSFILES=$(SLO)$/step0.obj	\
-        $(SLO)$/step2.obj	\
-        $(SLO)$/methods.obj	\
-        $(SLO)$/methods1.obj	\
-        $(SLO)$/iosys.obj	\
-        $(SLO)$/runtime.obj
 
 # --- Targets -------------------------------------------------------------
 

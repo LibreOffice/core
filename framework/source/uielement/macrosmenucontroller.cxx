@@ -48,6 +48,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <dispatch/uieventloghelper.hxx>
 #include "helper/mischelper.hxx"
+#include "helpid.hrc"
 #include <vos/mutex.hxx>
 
 using namespace com::sun::star::uno;
@@ -101,8 +102,6 @@ void MacrosMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPo
     String aDisplayName = RetrieveLabelFromCommand( aCommand );
     pPopupMenu->InsertItem( 2, aDisplayName );
     pPopupMenu->SetItemCommand( 2, aCommand );
-    //pPopupMenu->SetHelpId( 2, HID_SVX_BASIC_MACRO_ORGANIZER );
-    pPopupMenu->SetHelpId( 2, 40012 );
 
     // insert providers but not basic or java
     addScriptItems( pPopupMenu, 4);
@@ -222,8 +221,6 @@ void MacrosMenuController::addScriptItems( PopupMenu* pPopupMenu, sal_uInt16 sta
                     aDisplayName.Append( ellipsis );
                     pPopupMenu->InsertItem( itemId, aDisplayName );
                     pPopupMenu->SetItemCommand( itemId, aCommand );
-                    //pPopupMenu->SetHelpId( itemId, HID_SVX_COMMON_MACRO_ORGANIZER );
-                    pPopupMenu->SetHelpId( itemId, 40014 );
                     itemId++;
                     break;
                 }

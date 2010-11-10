@@ -29,6 +29,7 @@
 #include "precompiled_framework.hxx"
 
 #include "backingwindow.hxx"
+#include "classes/resource.hrc"
 #include "framework.hrc"
 #include "classes/fwkresid.hxx"
 #include <services.h>
@@ -231,15 +232,15 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     if( mxDesktop.is() )
         mxDesktopDispatchProvider = Reference< XDispatchProvider >( mxDesktop, UNO_QUERY );
 
-    maWriterButton.SetSmartHelpId( SmartId( String( RTL_CONSTASCII_USTRINGPARAM( ".HelpId:StartCenter:WriterButton" ) ) ) );
-    maCalcButton.SetSmartHelpId( SmartId( String( RTL_CONSTASCII_USTRINGPARAM( ".HelpId:StartCenter:CalcButton" ) ) ) );
-    maImpressButton.SetSmartHelpId( SmartId( String( RTL_CONSTASCII_USTRINGPARAM( ".HelpId:StartCenter:ImpressButton" ) ) ) );
-    maDrawButton.SetSmartHelpId( SmartId( String( RTL_CONSTASCII_USTRINGPARAM( ".HelpId:StartCenter:DrawButton" ) ) ) );
-    maDBButton.SetSmartHelpId( SmartId( String( RTL_CONSTASCII_USTRINGPARAM( ".HelpId:StartCenter:DBButton" ) ) ) );
-    maMathButton.SetSmartHelpId( SmartId( String( RTL_CONSTASCII_USTRINGPARAM( ".HelpId:StartCenter:MathButton" ) ) ) );
-    maTemplateButton.SetSmartHelpId( SmartId( String( RTL_CONSTASCII_USTRINGPARAM( ".HelpId:StartCenter:TemplateButton" ) ) ) );
-    maOpenButton.SetSmartHelpId( SmartId( String( RTL_CONSTASCII_USTRINGPARAM( ".HelpId:StartCenter:OpenButton" ) ) ) );
-    maToolbox.SetSmartHelpId( SmartId( String( RTL_CONSTASCII_USTRINGPARAM( ".HelpId:StartCenter:Toolbox" ) ) ) );
+    maWriterButton.SetHelpId( ".HelpId:StartCenter:WriterButton" );
+    maCalcButton.SetHelpId( ".HelpId:StartCenter:CalcButton" );
+    maImpressButton.SetHelpId( ".HelpId:StartCenter:ImpressButton" );
+    maDrawButton.SetHelpId( ".HelpId:StartCenter:DrawButton" );
+    maDBButton.SetHelpId( ".HelpId:StartCenter:DBButton" );
+    maMathButton.SetHelpId( ".HelpId:StartCenter:MathButton" );
+    maTemplateButton.SetHelpId( ".HelpId:StartCenter:TemplateButton" );
+    maOpenButton.SetHelpId( ".HelpId:StartCenter:OpenButton" );
+    maToolbox.SetHelpId( ".HelpId:StartCenter:Toolbox" );
 
     // init background
     initBackground();
@@ -388,8 +389,13 @@ void BackingWindow::prepareRecentFileMenu()
             aBuf.append( aMenuTitle );
             mpRecentMenu->InsertItem( static_cast<sal_uInt16>(i+1), aBuf.makeStringAndClear() );
         }
-        maOpenButton.SetPopupMenu( mpRecentMenu );
     }
+    else
+    {
+        String aNoDoc( FwkResId( STR_NODOCUMENT ) );
+        mpRecentMenu->InsertItem( 0xffff, aNoDoc );
+    }
+    maOpenButton.SetPopupMenu( mpRecentMenu );
 }
 
 void BackingWindow::initBackground()
@@ -460,7 +466,7 @@ void BackingWindow::initBackground()
 
     maOpenButton.SetMenuMode( MENUBUTTON_MENUMODE_TIMED );
     maOpenButton.SetSelectHdl( LINK( this, BackingWindow, SelectHdl ) );
-    prepareRecentFileMenu();
+    maOpenButton.SetActivateHdl( LINK( this, BackingWindow, ActivateHdl ) );
 }
 
 void BackingWindow::initControls()
@@ -1053,6 +1059,13 @@ IMPL_LINK( BackingWindow, SelectHdl, Button*, pButton )
             dispatchURL( maRecentFiles[nItem].aTargetURL, rtl::OUString(), xFrame, maRecentFiles[nItem].aArgSeq );
         }
     }
+    return 0;
+}
+
+IMPL_LINK( BackingWindow, ActivateHdl, Button*, pButton )
+{
+    if( pButton == &maOpenButton )
+        prepareRecentFileMenu();
     return 0;
 }
 

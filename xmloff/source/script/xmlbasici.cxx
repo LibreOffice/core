@@ -40,7 +40,7 @@ using namespace ::com::sun::star::uno;
 // XMLBasicImportContext
 // =============================================================================
 
-XMLBasicImportContext::XMLBasicImportContext( SvXMLImport& rImport, USHORT nPrfx, const ::rtl::OUString& rLName,
+XMLBasicImportContext::XMLBasicImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const ::rtl::OUString& rLName,
         const Reference< frame::XModel >& rxModel )
     :SvXMLImportContext( rImport, nPrfx, rLName )
     ,m_xModel( rxModel )
@@ -73,7 +73,7 @@ XMLBasicImportContext::~XMLBasicImportContext()
 // -----------------------------------------------------------------------------
 
 SvXMLImportContext* XMLBasicImportContext::CreateChildContext(
-    USHORT nPrefix, const ::rtl::OUString& rLocalName,
+    sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName,
     const Reference< xml::sax::XAttributeList >& )
 {
     SvXMLImportContext* pContext = 0;
@@ -140,7 +140,7 @@ void XMLBasicImportContext::Characters( const ::rtl::OUString& rChars )
 // XMLBasicImportChildContext
 // =============================================================================
 
-XMLBasicImportChildContext::XMLBasicImportChildContext( SvXMLImport& rImport, USHORT nPrfx, const ::rtl::OUString& rLName,
+XMLBasicImportChildContext::XMLBasicImportChildContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const ::rtl::OUString& rLName,
         const Reference< xml::sax::XDocumentHandler >& rxHandler )
     :SvXMLImportContext( rImport, nPrfx, rLName )
     ,m_xHandler( rxHandler )
@@ -156,7 +156,7 @@ XMLBasicImportChildContext::~XMLBasicImportChildContext()
 // -----------------------------------------------------------------------------
 
 SvXMLImportContext* XMLBasicImportChildContext::CreateChildContext(
-    USHORT nPrefix, const ::rtl::OUString& rLocalName,
+    sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName,
     const Reference< xml::sax::XAttributeList >& )
 {
     return new XMLBasicImportChildContext( GetImport(), nPrefix, rLocalName, m_xHandler );

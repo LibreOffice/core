@@ -31,7 +31,7 @@
 #include "cppuhelper/implementationentry.hxx"
 #include "basicmigration.hxx"
 #include "wordbookmigration.hxx"
-#include "extensionmigration.hxx"
+//#include "extensionmigration.hxx"
 
 extern "C"
 {
@@ -48,11 +48,11 @@ extern "C"
         migration::WordbookMigration_getSupportedServiceNames, ::cppu::createSingleComponentFactory,
         0, 0
     },
-    {
-        migration::ExtensionMigration_create, migration::ExtensionMigration_getImplementationName,
-        migration::ExtensionMigration_getSupportedServiceNames, ::cppu::createSingleComponentFactory,
-        0, 0
-    },
+//     {
+//         migration::ExtensionMigration_create, migration::ExtensionMigration_getImplementationName,
+//         migration::ExtensionMigration_getSupportedServiceNames, ::cppu::createSingleComponentFactory,
+//         0, 0
+//     },
     { 0, 0, 0, 0, 0, 0 }
 };
 
@@ -61,13 +61,6 @@ void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-
-sal_Bool SAL_CALL component_writeInfo(
-    void * pServiceManager, void * pRegistryKey )
-{
-    return ::cppu::component_writeInfoHelper(
-        pServiceManager, pRegistryKey, entries );
 }
 
 void * SAL_CALL component_getFactory(

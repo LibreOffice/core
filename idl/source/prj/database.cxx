@@ -698,10 +698,8 @@ SvMetaClass * SvIdlDataBase::ReadKnownClass( SvTokenStream & rInStm )
 *************************************************************************/
 void SvIdlDataBase::Write( const ByteString & rText )
 {
-#ifndef W31
     if( nVerbosity != 0 )
         fprintf( stdout, "%s", rText.GetBuffer() );
-#endif
 }
 
 /*************************************************************************
@@ -715,7 +713,6 @@ void SvIdlDataBase::WriteError( const ByteString & rErrWrn,
                                 sal_uIntPtr nRow, sal_uIntPtr nColumn ) const
 {
     //Fehlerbehandlung
-#ifndef W31
     fprintf( stderr, "\n%s --- %s: ( %ld, %ld )\n",
              rFileName.GetBuffer(), rErrWrn.GetBuffer(), nRow, nColumn );
 
@@ -723,7 +720,6 @@ void SvIdlDataBase::WriteError( const ByteString & rErrWrn,
     { // Fehler gesetzt
         fprintf( stderr, "\t%s\n", rErrorText.GetBuffer() );
     }
-#endif
 }
 
 /*************************************************************************
@@ -734,7 +730,6 @@ void SvIdlDataBase::WriteError( const ByteString & rErrWrn,
 void SvIdlDataBase::WriteError( SvTokenStream & rInStm )
 {
     //Fehlerbehandlung
-#ifndef W31
     String aFileName( rInStm.GetFileName() );
     ByteString aErrorText;
     sal_uIntPtr nRow = 0, nColumn = 0;
@@ -794,7 +789,6 @@ void SvIdlDataBase::WriteError( SvTokenStream & rInStm )
         if( aN.Len() )
             fprintf( stderr, "%s versus %s\n", pTok->GetString().GetBuffer(), aN.GetBuffer() );
     }
-#endif
 }
 
 /****************** SvIdlWorkingBase ****************************************/

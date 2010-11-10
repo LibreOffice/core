@@ -95,8 +95,8 @@ public:
 
     const rtl::OUString getModuleId(){ return maModuleId; }
     rtl::OUString findToolbarByName( const css::uno::Reference< css::container::XNameAccess >& xNameAccess, const rtl::OUString& sName ) throw (css::uno::RuntimeException);
-    static sal_Int32 findControlByName( const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess, const rtl::OUString& sName ) throw (css::uno::RuntimeException);
+    static sal_Int32 findControlByName( const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess, const rtl::OUString& sName, bool bMenu = false ) throw (css::uno::RuntimeException);
     static rtl::OUString generateCustomURL();
 };
 
-#endif//VBA_COMMANDBARHELPER_HXX
+#endif //VBA_COMMANDBARHELPER_HXX

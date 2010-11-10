@@ -33,9 +33,8 @@
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ControlActions.hpp>
 #include <vcl/lstbox.hxx>
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HPP_
 #include <com/sun/star/uno/Sequence.hxx>
-#endif
+#include <tools/urlobj.hxx>
 
 #include <algorithm>
 #include <functional>
@@ -201,37 +200,36 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
-    void OControlAccess::setHelpURL( Window* _pControl, const ::rtl::OUString& _rURL, sal_Bool _bFileView )
+    void OControlAccess::setHelpURL( Window* _pControl, const ::rtl::OUString& sHelpURL, sal_Bool _bFileView )
     {
-        String sHelpURL( _rURL );
-        if ( COMPARE_EQUAL == sHelpURL.CompareIgnoreCaseToAscii( "HID:", sizeof( "HID:" ) - 1 ) )
-        {
-            String sID = sHelpURL.Copy( sizeof( "HID:" ) - 1 );
-            sal_Int32 nHelpId = sID.ToInt32();
+        rtl::OUString sHelpID( sHelpURL );
+        INetURLObject aHID( sHelpURL );
+        if ( aHID.GetProtocol() == INET_PROT_HID )
+              sHelpID = aHID.GetURLPath();
 
-            if ( _bFileView )
-                // the file view "overloaded" the SetHelpId
-                static_cast< SvtFileView* >( _pControl )->SetHelpId( nHelpId );
-            else
-                _pControl->SetHelpId( nHelpId );
-        }
+        // URLs should always be UTF8 encoded and escaped
+        rtl::OString sID( rtl::OUStringToOString( sHelpID, RTL_TEXTENCODING_UTF8 ) );
+        if ( _bFileView )
+            // the file view "overloaded" the SetHelpId
+            static_cast< SvtFileView* >( _pControl )->SetHelpId( sID );
         else
-        {
-            DBG_ERRORFILE( "OControlAccess::setHelpURL: unsupported help URL type!" );
-        }
+            _pControl->SetHelpId( sID );
     }
 
     //---------------------------------------------------------------------
     ::rtl::OUString OControlAccess::getHelpURL( Window* _pControl, sal_Bool _bFileView )
     {
-        sal_Int32 nHelpId = _pControl->GetHelpId();
+        rtl::OString aHelpId = _pControl->GetHelpId();
         if ( _bFileView )
             // the file view "overloaded" the SetHelpId
-            nHelpId = static_cast< SvtFileView* >( _pControl )->GetHelpId( );
+            aHelpId = static_cast< SvtFileView* >( _pControl )->GetHelpId( );
 
-        ::rtl::OUString sHelpURL( RTL_CONSTASCII_USTRINGPARAM( "HID:" ) );
-        sHelpURL += ::rtl::OUString::valueOf( (sal_Int32)nHelpId );
-
+        ::rtl::OUString sHelpURL;
+        ::rtl::OUString aTmp( rtl::OStringToOUString( aHelpId, RTL_TEXTENCODING_UTF8 ) );
+        INetURLObject aHID( aTmp );
+        if ( aHID.GetProtocol() == INET_PROT_NOT_VALID )
+            sHelpURL = rtl::OUString::createFromAscii( INET_HID_SCHEME );
+        sHelpURL += aTmp;
         return sHelpURL;
     }
 
@@ -539,7 +537,7 @@ namespace svt
             {
                 sal_Int32 nPos = 0;
                 if ( _rValue >>= nPos )
-                    _pListbox->RemoveEntry( (USHORT) nPos );
+                    _pListbox->RemoveEntry( (sal_uInt16) nPos );
             }
             break;
 
@@ -677,7 +675,7 @@ namespace svt
                 sal_Int32 nPos = 0;
                 if ( _rValue >>= nPos )
                 {
-                    static_cast< ListBox* >( _pControl )->SelectEntryPos( (USHORT) nPos );
+                    static_cast< ListBox* >( _pControl )->SelectEntryPos( (sal_uInt16) nPos );
                 }
                 else if ( !_bIgnoreIllegalArgument )
                 {
@@ -739,7 +737,7 @@ namespace svt
 
                 Sequence< ::rtl::OUString > aItems( static_cast< ListBox* >( _pControl )->GetEntryCount() );
                 ::rtl::OUString* pItems = aItems.getArray();
-                for ( USHORT i=0; i<static_cast< ListBox* >( _pControl )->GetEntryCount(); ++i )
+                for ( sal_uInt16 i=0; i<static_cast< ListBox* >( _pControl )->GetEntryCount(); ++i )
                     *pItems++ = static_cast< ListBox* >( _pControl )->GetEntry( i );
 
                 aReturn <<= aItems;
@@ -751,7 +749,7 @@ namespace svt
                 DBG_ASSERT( WINDOW_LISTBOX == _pControl->GetType(),
                     "OControlAccess::implGetControlProperty: invalid control/property combination!" );
 
-                USHORT nSelected = static_cast< ListBox* >( _pControl )->GetSelectEntryPos();
+                sal_uInt16 nSelected = static_cast< ListBox* >( _pControl )->GetSelectEntryPos();
                 ::rtl::OUString sSelected;
                 if ( LISTBOX_ENTRY_NOTFOUND != nSelected )
                     sSelected = static_cast< ListBox* >( _pControl )->GetSelectEntry();
@@ -764,7 +762,7 @@ namespace svt
                 DBG_ASSERT( WINDOW_LISTBOX == _pControl->GetType(),
                     "OControlAccess::implGetControlProperty: invalid control/property combination!" );
 
-                USHORT nSelected = static_cast< ListBox* >( _pControl )->GetSelectEntryPos();
+                sal_uInt16 nSelected = static_cast< ListBox* >( _pControl )->GetSelectEntryPos();
                 if ( LISTBOX_ENTRY_NOTFOUND != nSelected )
                     aReturn <<= (sal_Int32)static_cast< ListBox* >( _pControl )->GetSelectEntryPos();
                 else

@@ -393,7 +393,7 @@ void SAL_CALL CFilePreview::enable( sal_Bool bEnable )
     m_bEnabled = bEnable;
 
     // force a redraw
-    InvalidateRect( m_hwnd, NULL, TRUE );
+    InvalidateRect( m_hwnd, NULL, sal_True );
     UpdateWindow( m_hwnd );
 }
 
@@ -435,7 +435,7 @@ sal_Bool SAL_CALL CFilePreview::update( const rtl::OUString& aFileName )
             loadFile( aFileName );
 
             // force a complete window redraw
-            InvalidateRect( m_hwnd, NULL, TRUE );
+            InvalidateRect( m_hwnd, NULL, sal_True );
             UpdateWindow( m_hwnd );
         }
     }
@@ -548,12 +548,12 @@ sal_Bool CFilePreview::loadFile( const rtl::OUString& aFileName )
         goto CLEANUP_AND_EXIT;
 
     hr = CreateStreamOnHGlobal(
-        hGlobal, FALSE, &pIStream );
+        hGlobal, sal_False, &pIStream );
 
     if ( SUCCEEDED( hr ) )
     {
         hr = OleLoadPicture(
-            pIStream, fsize, FALSE,
+            pIStream, fsize, sal_False,
             __uuidof( IPicture ), (LPVOID*)&m_IPicture );
     }
 
@@ -601,7 +601,7 @@ LRESULT CALLBACK CFilePreview::WndProc(
         // a result of handling WM_NCCREATE what
         // leads to a failure of CreateWindow[Ex]!!!
     case WM_NCCREATE:
-        lResult = TRUE;
+        lResult = sal_True;
         break;
 
     default:

@@ -41,19 +41,19 @@ class XMLVisAreaContext : public SvXMLImportContext
 {
 public:
     // read all attributes and set the values in rRect
-    XMLVisAreaContext( SvXMLImport& rImport, USHORT nPrfx, const rtl::OUString& rLName,
+    XMLVisAreaContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                       Rectangle& rRect, const MapUnit aMapUnit);
 
-    XMLVisAreaContext( SvXMLImport& rImport, USHORT nPrfx, const rtl::OUString& rLName,
+    XMLVisAreaContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                       ::com::sun::star::awt::Rectangle& rRect, const sal_Int16 nMeasureUnit);
 
     virtual ~XMLVisAreaContext();
 
-    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                                     const rtl::OUString& rLocalName,
                                                     const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );

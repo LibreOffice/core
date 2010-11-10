@@ -73,8 +73,8 @@ SvHashTable::SvHashTable( sal_uInt32 nMaxEntries )
 SvHashTable::~SvHashTable()
 {
 #ifdef DOS_NIE
-    printf( "Maximum: %ld, FÅllung: %ld\n", (ULONG)nMax, (ULONG)nFill );
-    printf( "Anfragen: %ld, Versuche: %ld", (ULONG)lAsk, (ULONG)lTry );
+    printf( "Maximum: %ld, FÅllung: %ld\n", (sal_uIntPtr)nMax, (sal_uIntPtr)nFill );
+    printf( "Anfragen: %ld, Versuche: %ld", (sal_uIntPtr)lAsk, (sal_uIntPtr)lTry );
     if( lTry != 0 )
         printf( ", V/E = %ld\n", lTry / lAsk );
 #endif
@@ -141,10 +141,6 @@ sal_Bool SvHashTable::Test_Insert( const void * pElement, sal_Bool bInsert,
 SvStringHashTable::SvStringHashTable( sal_uInt32 nMaxEntries )
         : SvHashTable( nMaxEntries )
 {
-#ifdef WIN
-    DBG_ASSERT( (sal_uInt32)nMaxEntries * sizeof( SvStringHashEntry ) <= 0xFF00,
-                "Hash table size cannot exeed 64k byte" )
-#endif
     pEntries = new SvStringHashEntry[ nMaxEntries ];
 
     // RefCount auf eins setzen

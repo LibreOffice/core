@@ -171,8 +171,8 @@ class SbxArray : public SbxBase
 {
 // #100883 Method to set method directly to parameter array
     friend class SbMethod;
-    friend class SbTypeFactory;
     friend class SbClassModuleObject;
+    friend SbxObject* cloneTypeObjectImpl( const SbxObject& rTypeObj );
     void PutDirect( SbxVariable* pVar, UINT32 nIdx );
 
     SbxArrayImpl* mpSbxArrayImpl; // Impl data

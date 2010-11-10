@@ -68,7 +68,7 @@ using rtl::OUString;
 
 SvXMLImportContext* createXFormsModelContext(
     SvXMLImport& rImport,
-    USHORT nPrefix,
+    sal_uInt16 nPrefix,
     const rtl::OUString& rLocalName )
 {
     return new XFormsModelContext( rImport, nPrefix, rLocalName );

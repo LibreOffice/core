@@ -249,14 +249,14 @@ namespace xmloff
 
         /** moves the m_aCurrentPage* members to the positions specifying the given page.
 
-            @return <TRUE/> if there already were structures for the given page
+            @return <sal_True/> if there already were structures for the given page
         */
         sal_Bool implMoveIterators(
             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& _rxDrawPage,
             sal_Bool _bClear);
 
         /** check the object given if it's a control, if so, examine it.
-            @return <TRUE/> if the object has been handled
+            @return <sal_True/> if the object has been handled
         */
         sal_Bool checkExamineControl(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject);
 

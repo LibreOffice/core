@@ -182,7 +182,7 @@ static __FAR_DATA SvXMLEnumMapEntry aXMLChartClassMap[] =
 
 SchXMLChartTypeEnum GetChartTypeEnum( const OUString& rClassName )
 {
-    USHORT nEnumVal = XML_CHART_CLASS_UNKNOWN;
+    sal_uInt16 nEnumVal = XML_CHART_CLASS_UNKNOWN;
     if( !SvXMLUnitConverter::convertEnum(
                                     nEnumVal, rClassName, aXMLChartClassMap ) )
         nEnumVal = XML_CHART_CLASS_UNKNOWN;
@@ -598,6 +598,29 @@ void exportText( SvXMLExport& rExport, const OUString& rText, bool bConvertTabsL
     {
         rExport.GetDocHandler()->characters( rText );
     }
+}
+
+void exportRangeToSomewhere( SvXMLExport& rExport, const ::rtl::OUString& rValue )
+{
+    //with issue #i366# and CWS chart20 ranges for error bars were introduced
+    //to keep them during copy paste from calc to impress for example it
+    //was necessary to introduce a mapping between the used ranges within calc and the data written to the local table
+    //this is why we write this ranges here
+
+    //#i113950# first the range was exported to attribute text:id, but that attribute does not allow arbitrary strings anymore within ODF 1.2
+    //as an alternative the range info is now saved into the description at an empty group element (not very nice, but ODF conform)
+
+    const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion( SvtSaveOptions().GetODFDefaultVersion() );
+    if( nCurrentODFVersion == SvtSaveOptions::ODFVER_010 || nCurrentODFVersion == SvtSaveOptions::ODFVER_011 )
+        return;//svg:desc is not allowed at draw:g in ODF1.0; but as the ranges for error bars are anyhow not allowed within ODF1.0 nor ODF1.1 we do not need the information
+
+    SvXMLElementExport aEmptyShapeGroup( rExport, XML_NAMESPACE_DRAW,
+                              ::xmloff::token::GetXMLToken( ::xmloff::token::XML_G ),
+                              sal_True, sal_False );
+    SvXMLElementExport aDescription( rExport, XML_NAMESPACE_SVG,
+                              ::xmloff::token::GetXMLToken( ::xmloff::token::XML_DESC ),
+                              sal_True, sal_False );
+    rExport.GetDocHandler()->characters( rValue );
 }
 
 Reference< chart2::XRegressionCurve > getRegressionCurve(

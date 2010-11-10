@@ -89,7 +89,7 @@ bool lcl_ConvertAttr( OUString & rOutAttribute, sal_Int32 nParam )
 
 // -----------------------------------------------------------------------------
 
-XMLTransformerContext *XMLTransformerBase::CreateContext( USHORT nPrefix,
+XMLTransformerContext *XMLTransformerBase::CreateContext( sal_uInt16 nPrefix,
     const OUString& rLocalName, const OUString& rQName )
 {
     XMLTransformerActions::key_type aKey( nPrefix, rLocalName );
@@ -616,8 +616,8 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                                 // --> OD 2004-10-29 #i13778#,#i36248#
                                 // apply correct twip-to-1/100mm
                                 nMeasure = (sal_Int32)( nMeasure >= 0
-                                                        ? ((nMeasure*127L+36L)/72L)
-                                                        : ((nMeasure*127L-36L)/72L) );
+                                                        ? ((nMeasure*127+36)/72)
+                                                        : ((nMeasure*127-36)/72) );
                                 // <--
 
                                 rtl::OUStringBuffer aBuffer;
@@ -778,8 +778,8 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                                 // --> OD 2004-10-29 #i13778#,#i36248#
                                 // apply correct 1/100mm-to-twip conversion
                                 nMeasure = (sal_Int32)( nMeasure >= 0
-                                                        ? ((nMeasure*72L+63L)/127L)
-                                                        : ((nMeasure*72L-63L)/127L) );
+                                                        ? ((nMeasure*72+63)/127)
+                                                        : ((nMeasure*72-63)/127) );
                                 // <--
 
                                 OUStringBuffer aBuffer;
@@ -1201,7 +1201,7 @@ sal_Bool XMLTransformerBase::NegPercent( OUString& rValue )
     sal_Bool bNeg = sal_False;
     double nVal = 0;
 
-    sal_Int32 nPos = 0L;
+    sal_Int32 nPos = 0;
     sal_Int32 nLen = rValue.getLength();
 
     // skip white space

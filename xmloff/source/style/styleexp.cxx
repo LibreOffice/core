@@ -477,7 +477,7 @@ void XMLStyleExport::exportStyleFamily(
         {
             if( !bUsed || xStyle->isInUse() )
             {
-                BOOL bExported = exportStyle( xStyle, rXMLFamily, rPropMapper,
+                sal_Bool bExported = exportStyle( xStyle, rXMLFamily, rPropMapper,
                                               xStyles,pPrefix );
                 if( bUsed && bFirstStyle && bExported  )
                 {

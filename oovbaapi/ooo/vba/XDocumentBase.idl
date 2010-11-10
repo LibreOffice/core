@@ -38,6 +38,8 @@
 module ooo {  module vba {
 //=============================================================================
 
+
+
 interface XDocumentBase
 {
     interface ::ooo::vba::XHelperInterface;
@@ -46,6 +48,7 @@ interface XDocumentBase
     [attribute, readonly] string  Path;
     [attribute, readonly] string  FullName;
     [attribute] boolean Saved;
+    [attribute, readonly] any VBProject; // Michael E. Bohn
 
     void Close([in] any SaveChanges, [in] any FileName, [in] any RouteWorkBook);
     void Save();

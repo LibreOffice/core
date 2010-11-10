@@ -3594,6 +3594,34 @@ SfxVoidItem MacroOrganizer SID_MACROORGANIZER
 ]
 
 //--------------------------------------------------------------------------
+SfxBoolItem ReccomendReadonly SID_RECOMMENDREADONLY
+
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = TRUE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    Readonly = TRUE,
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = ;
+]
+
+
+//--------------------------------------------------------------------------
 SfxVoidItem RunMacro SID_RUNMACRO
 ()
 [
@@ -6383,7 +6411,7 @@ SfxBoolItem TaskBarVisible SID_TASKBAR
 ]
 
 //--------------------------------------------------------------------------
-SfxTemplateItem TemplateFamily5 SID_STYLE_FAMILY5
+SfxTemplateItem ListStyle SID_STYLE_FAMILY5
 
 [
     /* flags: */

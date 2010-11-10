@@ -30,11 +30,10 @@
 #include <com/sun/star/ui/XModuleUIConfigurationManager.hpp>
 #include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>
-#ifndef _COM_SUN_STAR_UI_UIElementType_HPP_
 #include <com/sun/star/ui/UIElementType.hpp>
-#endif
 #include <comphelper/processfactory.hxx>
 #include <vbahelper/vbahelper.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <time.h>
 #include <map>
 
@@ -233,7 +232,7 @@ rtl::OUString VbaCommandBarHelper::findToolbarByName( const css::uno::Reference<
 }
 
 // if found, return the position of the control. if not found, return -1
-sal_Int32 VbaCommandBarHelper::findControlByName( const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess, const rtl::OUString& sName ) throw (css::uno::RuntimeException)
+sal_Int32 VbaCommandBarHelper::findControlByName( const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess, const rtl::OUString& sName, bool bMenu ) throw (css::uno::RuntimeException)
 {
     sal_Int32 nCount = xIndexAccess->getCount();
     css::uno::Sequence< css::beans::PropertyValue > aProps;
@@ -242,17 +241,21 @@ sal_Int32 VbaCommandBarHelper::findControlByName( const css::uno::Reference< css
         rtl::OUString sLabel;
         xIndexAccess->getByIndex( i ) >>= aProps;
         getPropertyValue( aProps, rtl::OUString::createFromAscii(ITEM_DESCRIPTOR_LABEL) ) >>= sLabel;
-        // handle the hotkey character '~'
-        rtl::OUString sNewLabel;
+        // handle the hotkey marker '~' (remove in toolbars (?), replace by '&' in menus)
+        ::rtl::OUStringBuffer aBuffer;
         sal_Int32 index = sLabel.indexOf( sal_Unicode('~') );
         if( index < 0 )
-            sNewLabel = sLabel;
-        else if( index == 0 )
-            sNewLabel = sLabel.copy( index + 1);
-        else if( index == sNewLabel.getLength() - 1 )
-            sNewLabel = sLabel.copy(0, index );
+        {
+            aBuffer = sLabel;
+        }
         else
-            sNewLabel = sLabel.copy( 0, index ) + sLabel.copy( index + 1 );
+        {
+            aBuffer.append( sLabel.copy( 0, index ) );
+            if( bMenu )
+                aBuffer.append( sal_Unicode( '&' ) );
+            aBuffer.append( sLabel.copy( index + 1 ) );
+        }
+        rtl::OUString sNewLabel = aBuffer.makeStringAndClear();
         OSL_TRACE("VbaCommandBarHelper::findControlByName, control name: %s", rtl::OUStringToOString( sNewLabel, RTL_TEXTENCODING_UTF8 ).getStr() );
         if( sName.equalsIgnoreAsciiCase( sNewLabel ) )
             return i;

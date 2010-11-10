@@ -30,9 +30,6 @@
 #include <basic/basmgr.hxx>
 #include <basic/sbstar.hxx>
 
-#ifdef WIN
-#define _TL_LANG_SPECIAL
-#endif
 #include <svl/svdde.hxx>
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
@@ -74,57 +71,11 @@
 
 using ::basic::BasicManagerRepository;
 
-#ifdef DBG_UTIL
-DECLARE_LIST( SfxFrameWindowFactoryArray_Impl, SfxFrameWindowFactory* )
-SV_DECL_PTRARR(SfxInitLinkList, Link*, 2, 2)
-#endif
-
 //===================================================================
 BOOL SfxApplication::QueryExit_Impl()
 {
     BOOL bQuit = TRUE;
 
-/*
-    BOOL bPrinting = FALSE;
-    for ( SfxViewShell *pViewSh = SfxViewShell::GetFirst();
-          !bPrinting && pViewSh;
-          pViewSh = SfxViewShell::GetNext(*pViewSh) )
-    {
-        SfxPrinter *pPrinter = pViewSh->GetPrinter();
-        bPrinting = pPrinter && pPrinter->IsPrinting();
-    }
-
-    if ( bPrinting )
-    {
-        // Benutzer fragen, ob abgebrochen werden soll
-        if ( RET_OK == QueryBox( 0, SfxResId( MSG_ISPRINTING_QUERYABORT ) ).Execute() )
-        {
-            // alle Jobs canceln
-            for ( SfxViewShell *pViewSh = SfxViewShell::GetFirst();
-                  !bPrinting && pViewSh;
-                  pViewSh = SfxViewShell::GetNext(*pViewSh) )
-            {
-                SfxPrinter *pPrinter = pViewSh->GetPrinter();
-                if ( pPrinter && pPrinter->IsPrinting() )
-                    pPrinter->AbortJob();
-            }
-
-            // da das Canceln asynchron ist, Quit erstmal wieder verlassen
-            GetDispatcher_Impl()->Execute( SID_QUITAPP, SFX_CALLMODE_ASYNCHRON );
-            DBG_TRACE( "QueryExit => FALSE (printing)" );
-            return FALSE;
-        }
-    }
-*/
-/*
-    SfxObjectShell *pLastDocSh = SfxObjectShell::GetFirst();
-    if ( bQuit )
-    {
-        // Jetzt zur Sicherheit auch hidden Frames abr"aumen
-        SfxViewFrame::CloseHiddenFrames_Impl();
-        pLastDocSh = SfxObjectShell::GetFirst();
-    }
-*/
     // will trotzdem noch jemand, den man nicht abschiessen kann, die App haben?
     if ( !bQuit )
     {
@@ -197,22 +148,18 @@ void SfxApplication::Deinitialize()
 
     delete pAppData_Impl->pLabelResMgr;
 
-#ifdef DBG_UTIL
     DELETEX(pAppData_Impl->pSlotPool);
     DELETEX(pAppData_Impl->pEventConfig);
     SfxMacroConfig::Release_Impl();
     DELETEX(pAppData_Impl->pFactArr);
     DELETEX(pAppData_Impl->pInitLinkList);
-#endif
 
-#ifdef DBG_UTIL
     DELETEX(pAppData_Impl->pTbxCtrlFac);
     DELETEX(pAppData_Impl->pStbCtrlFac);
     DELETEX(pAppData_Impl->pMenuCtrlFac);
     DELETEX(pAppData_Impl->pViewFrames);
     DELETEX(pAppData_Impl->pViewShells);
     DELETEX(pAppData_Impl->pObjShells);
-#endif
 
     //TODO/CLEANTUP
     //ReleaseArgs could be used instead!

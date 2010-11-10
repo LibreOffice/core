@@ -495,7 +495,7 @@ void XMLTableExport::exportTableStyles()
     XMLStyleExport aStEx(mrExport, OUString(), mrExport.GetAutoStylePool().get());
 
     // write graphic family styles
-    aStEx.exportStyleFamily("cell", OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME)), mxCellExportPropertySetMapper.get(), TRUE, XML_STYLE_FAMILY_TABLE_CELL);
+    aStEx.exportStyleFamily("cell", OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME)), mxCellExportPropertySetMapper.get(), sal_True, XML_STYLE_FAMILY_TABLE_CELL);
 
     exportTableTemplates();
 }

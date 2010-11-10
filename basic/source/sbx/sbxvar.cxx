@@ -39,6 +39,9 @@
 #include <math.h>
 #include <ctype.h>
 
+#include "com/sun/star/uno/XInterface.hpp"
+using namespace com::sun::star::uno;
+
 ///////////////////////////// SbxVariable //////////////////////////////
 
 TYPEINIT1(SbxVariable,SbxValue)
@@ -49,10 +52,28 @@ extern UINT32 nVarCreator;          // in SBXBASE.CXX, fuer LoadData()
 static ULONG nVar = 0;
 #endif
 
+///////////////////////////// SbxVariableImpl ////////////////////////////
+
+class SbxVariableImpl
+{
+    friend class SbxVariable;
+    String                      m_aDeclareClassName;
+    Reference< XInterface >     m_xComListener;
+
+    SbxVariableImpl( void )
+    {}
+    SbxVariableImpl( const SbxVariableImpl& r )
+        : m_aDeclareClassName( r.m_aDeclareClassName )
+        , m_xComListener( r.m_xComListener )
+    {}
+};
+
+
 ///////////////////////////// Konstruktoren //////////////////////////////
 
 SbxVariable::SbxVariable() : SbxValue()
 {
+    mpSbxVariableImpl = NULL;
     pCst = NULL;
     pParent = NULL;
     nUserData = 0;
@@ -66,6 +87,9 @@ SbxVariable::SbxVariable() : SbxValue()
 SbxVariable::SbxVariable( const SbxVariable& r )
            : SvRefBase( r ), SbxValue( r ), mpPar( r.mpPar ), pInfo( r.pInfo )
 {
+    mpSbxVariableImpl = NULL;
+    if( r.mpSbxVariableImpl != NULL )
+        mpSbxVariableImpl = new SbxVariableImpl( *r.mpSbxVariableImpl );
     pCst = NULL;
     if( r.CanRead() )
     {
@@ -91,6 +115,7 @@ SbxVariable::SbxVariable( const SbxVariable& r )
 
 SbxVariable::SbxVariable( SbxDataType t, void* p ) : SbxValue( t, p )
 {
+    mpSbxVariableImpl = NULL;
     pCst = NULL;
     pParent = NULL;
     nUserData = 0;
@@ -111,6 +136,7 @@ SbxVariable::~SbxVariable()
         maName.AssignAscii( aCellsStr, sizeof( aCellsStr )-1 );
     GetSbxData_Impl()->aVars.Remove( this );
 #endif
+    delete mpSbxVariableImpl;
     delete pCst;
 }
 
@@ -213,9 +239,9 @@ const XubString& SbxVariable::GetName( SbxNameType t ) const
         if( i )
             aTmp += ',';
         if( q->nFlags & SBX_OPTIONAL )
-            aTmp += SbxRes( STRING_OPTIONAL );
+            aTmp += String( SbxRes( STRING_OPTIONAL ) );
         if( q->eType & SbxBYREF )
-            aTmp += SbxRes( STRING_BYREF );
+            aTmp += String( SbxRes( STRING_BYREF ) );
         aTmp += q->aName;
         cType = ' ';
         // Kurzer Typ? Dann holen, evtl. ist dieser 0.
@@ -237,12 +263,12 @@ const XubString& SbxVariable::GetName( SbxNameType t ) const
             // langer Typ?
             if( t != SbxNAME_SHORT )
             {
-                aTmp += SbxRes( STRING_AS );
+                aTmp += String( SbxRes( STRING_AS ) );
                 if( nt < 32 )
-                    aTmp += SbxRes(
-                        sal::static_int_cast< USHORT >( STRING_TYPES + nt ) );
+                    aTmp += String( SbxRes(
+                        sal::static_int_cast< USHORT >( STRING_TYPES + nt ) ) );
                 else
-                    aTmp += SbxRes( STRING_ANY );
+                    aTmp += String( SbxRes( STRING_ANY ) );
             }
         }
     }
@@ -250,15 +276,15 @@ const XubString& SbxVariable::GetName( SbxNameType t ) const
     // Langer Typ? Dann holen
     if( t == SbxNAME_LONG_TYPES && et != SbxEMPTY )
     {
-        aTmp += SbxRes( STRING_AS );
+        aTmp += String( SbxRes( STRING_AS ) );
         if( et < 32 )
-            aTmp += SbxRes(
-                sal::static_int_cast< USHORT >( STRING_TYPES + et ) );
+            aTmp += String( SbxRes(
+                sal::static_int_cast< USHORT >( STRING_TYPES + et ) ) );
         else
-            aTmp += SbxRes( STRING_ANY );
+            aTmp += String( SbxRes( STRING_ANY ) );
     }
-    ((SbxVariable*) this)->aPic = aTmp;
-    return aPic;
+    ((SbxVariable*) this)->aToolString = aTmp;
+    return aToolString;
 }
 
 // Einen simplen Hashcode erzeugen: Es werden die ersten 6 Zeichen gewertet.
@@ -287,6 +313,11 @@ USHORT SbxVariable::MakeHashCode( const XubString& rName )
 SbxVariable& SbxVariable::operator=( const SbxVariable& r )
 {
     SbxValue::operator=( r );
+    delete mpSbxVariableImpl;
+    if( r.mpSbxVariableImpl != NULL )
+        mpSbxVariableImpl = new SbxVariableImpl( *r.mpSbxVariableImpl );
+    else
+        mpSbxVariableImpl = NULL;
     return *this;
 }
 
@@ -346,6 +377,32 @@ void SbxVariable::SetParent( SbxObject* p )
     pParent = p;
 }
 
+SbxVariableImpl* SbxVariable::getImpl( void )
+{
+    if( mpSbxVariableImpl == NULL )
+        mpSbxVariableImpl = new SbxVariableImpl();
+    return mpSbxVariableImpl;
+}
+
+const String& SbxVariable::GetDeclareClassName( void )
+{
+    SbxVariableImpl* pImpl = getImpl();
+    return pImpl->m_aDeclareClassName;
+}
+
+void SbxVariable::SetDeclareClassName( const String& rDeclareClassName )
+{
+    SbxVariableImpl* pImpl = getImpl();
+    pImpl->m_aDeclareClassName = rDeclareClassName;
+}
+
+void SbxVariable::SetComListener( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xComListener )
+{
+    SbxVariableImpl* pImpl = getImpl();
+    pImpl->m_xComListener = xComListener;
+}
+
+
 ////////////////////////////// Laden/Speichern /////////////////////////////
 
 BOOL SbxVariable::LoadData( SvStream& rStrm, USHORT nVer )
@@ -374,9 +431,10 @@ BOOL SbxVariable::LoadData( SvStream& rStrm, USHORT nVer )
         if( nType == SbxNULL && GetClass() == SbxCLASS_METHOD )
             nType = SbxEMPTY;
         SbxValues aTmp;
-        XubString aVal;
+        String aTmpString;
+        ::rtl::OUString aVal;
         aTmp.eType = aData.eType = (SbxDataType) nType;
-        aTmp.pString = &aVal;
+        aTmp.pOUString = &aVal;
         switch( nType )
         {
             case SbxBOOL:
@@ -388,10 +446,10 @@ BOOL SbxVariable::LoadData( SvStream& rStrm, USHORT nVer )
             case SbxSINGLE:
             {
                 // Floats als ASCII
-                rStrm.ReadByteString( aVal, RTL_TEXTENCODING_ASCII_US );
+                rStrm.ReadByteString( aTmpString, RTL_TEXTENCODING_ASCII_US );
                 double d;
                 SbxDataType t;
-                if( ImpScan( aVal, d, t, NULL ) != SbxERR_OK || t == SbxDOUBLE )
+                if( ImpScan( aTmpString, d, t, NULL ) != SbxERR_OK || t == SbxDOUBLE )
                 {
                     aTmp.nSingle = 0;
                     return FALSE;
@@ -403,9 +461,9 @@ BOOL SbxVariable::LoadData( SvStream& rStrm, USHORT nVer )
             case SbxDOUBLE:
             {
                 // Floats als ASCII
-                rStrm.ReadByteString( aVal, RTL_TEXTENCODING_ASCII_US );
+                rStrm.ReadByteString( aTmpString, RTL_TEXTENCODING_ASCII_US );
                 SbxDataType t;
-                if( ImpScan( aVal, aTmp.nDouble, t, NULL ) != SbxERR_OK )
+                if( ImpScan( aTmpString, aTmp.nDouble, t, NULL ) != SbxERR_OK )
                 {
                     aTmp.nDouble = 0;
                     return FALSE;
@@ -413,7 +471,8 @@ BOOL SbxVariable::LoadData( SvStream& rStrm, USHORT nVer )
                 break;
             }
             case SbxSTRING:
-                rStrm.ReadByteString( aVal, RTL_TEXTENCODING_ASCII_US );
+                rStrm.ReadByteString( aTmpString, RTL_TEXTENCODING_ASCII_US );
+                aVal = aTmpString;
                 break;
             case SbxEMPTY:
             case SbxNULL:

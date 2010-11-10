@@ -33,11 +33,9 @@ ENABLE_EXCEPTIONS = TRUE
 
 .INCLUDE: settings.mk
 .INCLUDE: rtlbootstrap.mk
+.INCLUDE: versionlist.mk
 
-#TODO: The underlying OOo base version needed here is currently only available
-# as instsetoo_native/util/openoffice.lst OOOBASEVERSION, so hard-coding it here
-# for now (see issue 110653):
-my_version = 3.3
+my_version = $(OOOBASEVERSIONMAJOR).$(OOOBASEVERSIONMINOR)
 
 DLLPRE =
 

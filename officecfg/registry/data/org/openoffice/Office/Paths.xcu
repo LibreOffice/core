@@ -98,7 +98,13 @@
             </node>
         </node>
 
-        <node oor:name="Gallery" oor:op="fuse" oor:mandatory="true">
+    <node oor:name="Libraries" oor:op="fuse" oor:mandatory="true">
+      <node oor:name="InternalPaths">
+        <node oor:name="$(progpath)/libraries" oor:op="fuse" />
+      </node>
+    </node>
+
+    <node oor:name="Gallery" oor:op="fuse" oor:mandatory="true">
             <node oor:name="InternalPaths">
                      <node oor:name="$(insturl)/share/gallery" oor:op="fuse" />
             </node>
@@ -163,7 +169,8 @@
 
                 <node oor:name="Fingerprint" oor:op="fuse" oor:mandatory="true">
                         <node oor:name="InternalPaths">
-                              <node oor:name="$(insturl)/share/fingerprint" oor:op="fuse" />
+                              <node install:module="internallibtextcatdata" oor:name="$(insturl)/share/fingerprint" oor:op="fuse"/>
+                              <node install:module="externallibtextcatdata" oor:name="${SYSTEM_LIBTEXTCAT_DATA}" oor:op="fuse"/>
                         </node>
                 </node>
 

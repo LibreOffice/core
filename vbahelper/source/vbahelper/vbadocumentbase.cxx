@@ -24,17 +24,19 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include <vbahelper/vbadocumentbase.hxx>
-#include <vbahelper/helperdecl.hxx>
-#include <comphelper/unwrapargs.hxx>
+
+#include "vbahelper/vbadocumentbase.hxx"
+#include "vbahelper/helperdecl.hxx"
 
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/util/XProtectable.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/document/XEmbeddedScripts.hpp> //Michael E. Bohn
 #include <com/sun/star/beans/XPropertySet.hpp>
 
+#include <comphelper/unwrapargs.hxx>
 #include <tools/urlobj.hxx>
 #include <osl/file.hxx>
 
@@ -179,14 +181,14 @@ void
 VbaDocumentBase::setSaved( sal_Bool bSave ) throw (uno::RuntimeException)
 {
     uno::Reference< util::XModifiable > xModifiable( getModel(), uno::UNO_QUERY_THROW );
-    xModifiable->setModified( bSave );
+    xModifiable->setModified( !bSave );
 }
 
 sal_Bool
 VbaDocumentBase::getSaved() throw (uno::RuntimeException)
 {
     uno::Reference< util::XModifiable > xModifiable( getModel(), uno::UNO_QUERY_THROW );
-    return xModifiable->isModified();
+    return !xModifiable->isModified();
 }
 
 void
@@ -202,6 +204,25 @@ VbaDocumentBase::Activate() throw (uno::RuntimeException)
 {
     uno::Reference< frame::XFrame > xFrame( getModel()->getCurrentController()->getFrame(), uno::UNO_QUERY_THROW );
     xFrame->activate();
+}
+
+uno::Any SAL_CALL
+VbaDocumentBase::getVBProject() throw (uno::RuntimeException)
+{
+    try // return empty object on error
+    {
+        uno::Sequence< uno::Any > aArgs( 2 );
+        aArgs[ 0 ] <<= uno::Reference< XHelperInterface >( this );
+        aArgs[ 1 ] <<= mxModel;
+        uno::Reference< lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager(), uno::UNO_SET_THROW );
+        uno::Reference< uno::XInterface > xVBProjects = xServiceManager->createInstanceWithArgumentsAndContext(
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBProject" ) ), aArgs, mxContext );
+        return uno::Any( xVBProjects );
+    }
+    catch( uno::Exception& )
+    {
+    }
+    return uno::Any();
 }
 
 rtl::OUString&

@@ -30,7 +30,7 @@ PRJ=..$/..
 PRJNAME=xmloff
 TARGET=style
 
-ENABLE_EXCEPTIONS=TRUE
+ENABLE_EXCEPTIONS=sal_True
 
 # --- Settings -----------------------------------------------------
 

@@ -24,6 +24,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef OOVBAAPI_VBA_COLLECTION_IMPL_HXX
 #define OOVBAAPI_VBA_COLLECTION_IMPL_HXX
 
@@ -44,16 +45,100 @@
 
 #include <vector>
 
+// ============================================================================
+
 typedef ::cppu::WeakImplHelper1< css::container::XEnumeration > EnumerationHelper_BASE;
 
+// ============================================================================
+
+/** A wrapper that holds a com.sun.star.container.XIndexAccess and provides a
+    com.sun.star.container.XEnumeration.
+
+    Can be used to provide an enumeration from an index container that contains
+    completely constructed/initialized VBA implementation objects. CANNOT be
+    used to provide an enumeration from an index container with other objects
+    (e.g. UNO objects) where construction of the VBA objects is needed first.
+ */
+class VBAHELPER_DLLPUBLIC SimpleIndexAccessToEnumeration : public EnumerationHelper_BASE
+{
+public:
+    explicit SimpleIndexAccessToEnumeration(
+            const css::uno::Reference< css::container::XIndexAccess >& rxIndexAccess ) throw (css::uno::RuntimeException) :
+        mxIndexAccess( rxIndexAccess ), mnIndex( 0 ) {}
+
+    virtual sal_Bool SAL_CALL hasMoreElements() throw (css::uno::RuntimeException)
+    {
+        return mnIndex < mxIndexAccess->getCount();
+    }
+
+    virtual css::uno::Any SAL_CALL nextElement() throw (css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException)
+    {
+        if( !hasMoreElements() )
+            throw css::container::NoSuchElementException();
+        return mxIndexAccess->getByIndex( mnIndex++ );
+    }
+
+private:
+    css::uno::Reference< css::container::XIndexAccess > mxIndexAccess;
+    sal_Int32 mnIndex;
+};
+
+// ============================================================================
+
+/** A wrapper that holds a com.sun.star.container.XEnumeration or a
+    com.sun.star.container.XIndexAccess and provides an enumeration of VBA objects.
+
+    The method nextElement() needs to be implemented by the derived class. This
+    class can be used to convert an enumeration or an index container
+    containing UNO objects to an enumeration providing the related VBA objects.
+ */
+class VBAHELPER_DLLPUBLIC SimpleEnumerationBase : public EnumerationHelper_BASE
+{
+public:
+    explicit SimpleEnumerationBase(
+            const css::uno::Reference< ov::XHelperInterface >& rxParent,
+            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+            const css::uno::Reference< css::container::XEnumeration >& rxEnumeration ) throw (css::uno::RuntimeException) :
+        mxParent( rxParent ), mxContext( rxContext ), mxEnumeration( rxEnumeration ) {}
+
+    explicit SimpleEnumerationBase(
+            const css::uno::Reference< ov::XHelperInterface >& rxParent,
+            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+            const css::uno::Reference< css::container::XIndexAccess >& rxIndexAccess ) throw (css::uno::RuntimeException) :
+        mxParent( rxParent ), mxContext( rxContext ), mxEnumeration( new SimpleIndexAccessToEnumeration( rxIndexAccess ) ) {}
+
+    virtual sal_Bool SAL_CALL hasMoreElements() throw (css::uno::RuntimeException)
+    {
+        return mxEnumeration->hasMoreElements();
+    }
+
+    virtual css::uno::Any SAL_CALL nextElement() throw (css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException)
+    {
+        return createCollectionObject( mxEnumeration->nextElement() );
+    }
+
+    /** Derived classes implement creation of a VBA implementation object from
+        the passed container element. */
+    virtual css::uno::Any createCollectionObject( const css::uno::Any& rSource ) = 0;
+
+protected:
+    css::uno::Reference< ov::XHelperInterface > mxParent;
+    css::uno::Reference< css::uno::XComponentContext > mxContext;
+    css::uno::Reference< css::container::XEnumeration > mxEnumeration;
+};
+
+// ============================================================================
+
+// deprecated, use SimpleEnumerationBase instead!
 class VBAHELPER_DLLPUBLIC EnumerationHelperImpl : public EnumerationHelper_BASE
 {
 protected:
+    css::uno::WeakReference< ov::XHelperInterface > m_xParent;
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
     css::uno::Reference< css::container::XEnumeration > m_xEnumeration;
 public:
 
-    EnumerationHelperImpl( const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XEnumeration >& xEnumeration ) throw ( css::uno::RuntimeException ) : m_xContext( xContext ),  m_xEnumeration( xEnumeration ) { }
+    EnumerationHelperImpl( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XEnumeration >& xEnumeration ) throw ( css::uno::RuntimeException ) : m_xParent( xParent ), m_xContext( xContext ),  m_xEnumeration( xEnumeration ) { }
     virtual ::sal_Bool SAL_CALL hasMoreElements(  ) throw (css::uno::RuntimeException) { return m_xEnumeration->hasMoreElements(); }
 };
 
@@ -181,6 +266,14 @@ protected:
         // need to adjust for vba index ( for which first element is 1 )
         return createCollectionObject( m_xIndexAccess->getByIndex( nIndex - 1 ) );
     }
+
+    virtual void UpdateCollectionIndex( const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess )
+    {
+        css::uno::Reference< css::container::XNameAccess > xNameAccess( xIndexAccess, css::uno::UNO_QUERY_THROW );
+        m_xIndexAccess = xIndexAccess;
+        m_xNameAccess = xNameAccess;
+    }
+
 public:
     ScVbaCollectionBase( const css::uno::Reference< ov::XHelperInterface >& xParent,   const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess ) : BaseColBase( xParent, xContext ), m_xIndexAccess( xIndexAccess ){ m_xNameAccess.set(m_xIndexAccess, css::uno::UNO_QUERY); }
     //XCollection

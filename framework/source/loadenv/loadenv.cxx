@@ -36,9 +36,6 @@
 #endif
 #include <classes/framelistanalyzer.hxx>
 
-#ifndef __FRAMEWORK_CONSTANT_FILTER_HXX_
-#include <constant/filter.hxx>
-#endif
 #include <dispatch/interaction.hxx>
 
 #ifndef __FRAMEWORK_CONSTANT_FRAMELOADER_HXX_
@@ -106,6 +103,7 @@
 #include <unotools/moduleoptions.hxx>
 #include <svtools/sfxecode.hxx>
 #include <unotools/processfactory.hxx>
+#include <unotools/ucbhelper.hxx>
 #include <comphelper/configurationhelper.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>
@@ -1410,7 +1408,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
             // don't check the complete URL here.
             // use its main part - ignore optional jumpmarks!
             const ::rtl::OUString sURL = xModel->getURL();
-            if (!m_aURL.Main.equals(sURL))
+            if (!::utl::UCBContentHelper::EqualURLs( m_aURL.Main, sURL ))
             {
                 xTask.clear ();
                 continue;
@@ -1774,7 +1772,10 @@ void LoadEnv::impl_makeFrameWindowVisible(const css::uno::Reference< css::awt::X
             ::comphelper::ConfigurationHelper::E_READONLY);
         a >>= bForceFrontAndFocus;
 
-        pWindow->Show(sal_True, (bForceFrontAndFocus || bForceToFront) ? SHOW_FOREGROUNDTASK : 0 );
+        if( pWindow->IsVisible() && (bForceFrontAndFocus || bForceToFront) )
+            pWindow->ToTop();
+        else
+            pWindow->Show(sal_True, (bForceFrontAndFocus || bForceToFront) ? SHOW_FOREGROUNDTASK : 0 );
     }
 
 /* #i19976#

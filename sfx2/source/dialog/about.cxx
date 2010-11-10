@@ -55,7 +55,7 @@
 #include "sfxresid.hxx"
 #include <sfx2/sfxdefs.hxx>
 #include <sfx2/app.hxx>
-
+#include <sfx2/sfxcommands.h>
 #include "dialog.hrc"
 
 // defines ---------------------------------------------------------------
@@ -172,20 +172,6 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
     rtl::OUString sProduct;
     utl::ConfigManager::GetDirectConfigProperty(utl::ConfigManager::PRODUCTNAME) >>= sProduct;
 
-    if ( sProduct.equals( rtl::OUString::createFromAscii("StarOffice") ) ||
-         sProduct.equals( rtl::OUString::createFromAscii("StarSuite") ) )
-    {
-        // --> PB 2004-11-18 #118455# new copyright text (only in french version show a french text)
-        ::com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
-        ::rtl::OUString sFrenchLang( DEFINE_CONST_OUSTRING( "fr" ) );
-        if ( aLocale.Language.equals( sFrenchLang ) )
-        {
-            String sNewCopyrightText( ResId( ABOUT_STR_FRENCH_COPYRIGHT, *rId.GetResMgr() ) );
-            aCopyrightText.SetText( sNewCopyrightText );
-        }
-        // <--
-    }
-
     // load image from module path
     aAppLogo = SfxApplication::GetApplicationLogo();
 
@@ -297,24 +283,7 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
 
     FreeResource();
 
-    // explizite Help-Id
-    SetHelpId( SID_ABOUT );
-
-    //#112429# replace occurences of "StarOffice" in the "StarSuite" version
-    String sCopyright( aCopyrightText.GetText() );
-    if(sProduct.equals(rtl::OUString::createFromAscii("StarSuite")))
-    {
-        String sSO(String::CreateFromAscii("StarOffice"));
-        sCopyright.SearchAndReplaceAll(sSO, sProduct);
-    }
-
-    String sNewYear( DEFINE_CONST_UNICODE("2005") );
-    xub_StrLen nIdx = sCopyright.SearchAndReplace( DEFINE_CONST_UNICODE("2002"), sNewYear );
-    if ( STRING_NOTFOUND == nIdx )
-        nIdx = sCopyright.SearchAndReplace( DEFINE_CONST_UNICODE("2003"), sNewYear );
-    if ( STRING_NOTFOUND == nIdx )
-        nIdx = sCopyright.SearchAndReplace( DEFINE_CONST_UNICODE("2004"), sNewYear );
-    aCopyrightText.SetText( sCopyright );
+    SetHelpId( CMD_SID_ABOUT );
 }
 
 // -----------------------------------------------------------------------

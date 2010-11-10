@@ -89,6 +89,7 @@
 #include "newerverwarn.hxx"
 
 #include "iahndl.hxx"
+#include "nameclashdlg.hxx"
 
 /** === begin UNO using === **/
 using ::com::sun::star::uno::Sequence;
@@ -185,7 +186,7 @@ UUIInteractionHelper::handleRequest(
         HandleData aHD(rRequest);
         Link aLink(&aHD,handlerequest);
         pApp->PostUserEvent(aLink,this);
-        ULONG locks = Application::ReleaseSolarMutex();
+        sal_uIntPtr locks = Application::ReleaseSolarMutex();
         aHD.wait();
         Application::AcquireSolarMutex(locks);
         return aHD.bHandled;
@@ -246,7 +247,7 @@ UUIInteractionHelper::getStringFromRequest(
         HandleData aHD(rRequest);
         Link aLink(&aHD,getstringfromrequest);
         pApp->PostUserEvent(aLink,this);
-        ULONG locks = Application::ReleaseSolarMutex();
+        sal_uIntPtr locks = Application::ReleaseSolarMutex();
         aHD.wait();
         Application::AcquireSolarMutex(locks);
         return aHD.m_aResult;
@@ -867,8 +868,6 @@ UUIInteractionHelper::handleRequest_impl(
             if ( handleCertificateValidationRequest( rRequest ) )
                 return true;
 
-// @@@ Todo #i29340#: activate!
-#if 0
             ucb::NameClashResolveRequest aNameClashResolveRequest;
             if (aAnyRequest >>= aNameClashResolveRequest)
             {
@@ -876,7 +875,7 @@ UUIInteractionHelper::handleRequest_impl(
                                               rRequest->getContinuations());
                 return true;
             }
-#endif
+
             if ( handleMasterPasswordRequest( rRequest ) )
                 return true;
 
@@ -1153,7 +1152,7 @@ UUIInteractionHelper::getInteractionHandler()
 
 namespace {
 
-USHORT
+sal_uInt16
 executeMessageBox(
     Window * pParent,
     rtl::OUString const & rTitle,
@@ -1165,7 +1164,7 @@ executeMessageBox(
 
     MessBox xBox( pParent, nButtonMask, rTitle, rMessage );
 
-    USHORT aResult = xBox.Execute();
+    sal_uInt16 aResult = xBox.Execute();
     switch( aResult )
     {
     case BUTTONID_OK:
@@ -1188,40 +1187,26 @@ executeMessageBox(
     return aResult;
 }
 
-// @@@ Todo #i29340#: activate!
-#if 0
-enum NameClashResolveDialogResult { ABORT, RENAME, OVERWRITE };
-
-NameClashResolveDialogResult
-executeNameClashResolveDialog(
-    Window * /*pParent*/,
-    rtl::OUString const & /*rTargetFolderURL*/,
-    rtl::OUString const & /*rClashingName*/,
-    rtl::OUString & /*rProposedNewName*/)
+NameClashResolveDialogResult executeSimpleNameClashResolveDialog( Window *pParent,
+                                                                  rtl::OUString const & rTargetFolderURL,
+                                                                  rtl::OUString const & rClashingName,
+                                                                  rtl::OUString & rProposedNewName,
+                                                                  bool bAllowOverwrite )
 {
-    // @@@ Todo DV: execute overwrite-rename dialog, deliver result
-    OSL_ENSURE( false,
-                "executeNameClashResolveDialog not yet implemented!" );
-    return ABORT;
+    std::auto_ptr< ResMgr > xManager( ResMgr::CreateResMgr( CREATEVERSIONRESMGR_NAME( uui ) ) );
+    if ( !xManager.get() )
+        return ABORT;
+
+    NameClashDialog aDialog( pParent, xManager.get(), rTargetFolderURL,
+                             rClashingName, rProposedNewName, bAllowOverwrite );
+
+    NameClashResolveDialogResult eResult = (NameClashResolveDialogResult) aDialog.Execute();
+    rProposedNewName = aDialog.getNewName();
+    return eResult;
 }
 
-NameClashResolveDialogResult
-executeSimpleNameClashResolveDialog(
-    Window * /*pParent*/,
-    rtl::OUString const & /*rTargetFolderURL*/,
-    rtl::OUString const & /*rClashingName*/,
-    rtl::OUString & /*rProposedNewName*/)
-{
-    // @@@ Todo DV: execute rename-only dialog, deliver result
-    OSL_ENSURE( false,
-                "executeSimpleNameClashResolveDialog not yet implemented!" );
-    return ABORT;
-}
-#endif
 } // namespace
 
-// @@@ Todo #i29340#: activate!
-#if 0
 void
 UUIInteractionHelper::handleNameClashResolveRequest(
     ucb::NameClashResolveRequest const & rRequest,
@@ -1251,18 +1236,12 @@ UUIInteractionHelper::handleNameClashResolveRequest(
 
     NameClashResolveDialogResult eResult = ABORT;
     rtl::OUString aProposedNewName( rRequest.ProposedNewName );
-    if ( xReplaceExistingData.is() )
-        eResult = executeNameClashResolveDialog(
-            getParentProperty(),
-            rRequest.TargetFolderURL,
-            rRequest.ClashingName,
-            aProposedNewName);
-    else
-        eResult = executeSimpleNameClashResolveDialog(
-            getParentProperty(),
-            rRequest.TargetFolderURL,
-            rRequest.ClashingName,
-            aProposedNewName);
+
+    eResult = executeSimpleNameClashResolveDialog( getParentProperty(),
+                    rRequest.TargetFolderURL,
+                    rRequest.ClashingName,
+                    aProposedNewName,
+                    xReplaceExistingData.is() );
 
     switch ( eResult )
     {
@@ -1282,14 +1261,8 @@ UUIInteractionHelper::handleNameClashResolveRequest(
             "No ReplaceExistingData continuation available!" );
         xReplaceExistingData->select();
         break;
-
-    default:
-        OSL_ENSURE( false, "Unknown NameClashResolveDialogResult value. "
-                           "Interaction Request not handled!" );
-        break;
     }
 }
-#endif
 
 void
 UUIInteractionHelper::handleGenericErrorRequest(
@@ -1603,7 +1576,7 @@ ErrorResource::getString(ErrCode nErrorCode, rtl::OUString * pString)
     const SAL_THROW(())
 {
     OSL_ENSURE(pString, "specification violation");
-    ResId aResId(static_cast< USHORT >(nErrorCode & ERRCODE_RES_MASK),
+    ResId aResId(static_cast< sal_uInt16 >(nErrorCode & ERRCODE_RES_MASK),
                  *m_pResMgr);
     aResId.SetRT(RSC_STRING);
     if (!IsAvailableRes(aResId))

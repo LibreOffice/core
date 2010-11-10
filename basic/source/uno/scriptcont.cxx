@@ -41,6 +41,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/task/ErrorCodeIOException.hpp>
+#include <com/sun/star/script/ModuleType.hpp>
 #include <comphelper/processfactory.hxx>
 #ifndef _COMPHELPER_STORAGEHELPER_HXX_
 #include <comphelper/storagehelper.hxx>
@@ -60,6 +61,7 @@
 #include <svtools/ehdl.hxx>
 #include <basic/basmgr.hxx>
 #include <basic/sbmod.hxx>
+#include <basic/basicmanagerrepository.hxx>
 #include "modsizeexceeded.hxx"
 #include <xmlscript/xmlmod_imexp.hxx>
 #include <cppuhelper/factory.hxx>
@@ -184,9 +186,9 @@ bool SAL_CALL SfxScriptLibraryContainer::isLibraryElementValid( Any aElement ) c
 
 void SAL_CALL SfxScriptLibraryContainer::writeLibraryElement
 (
-    Any aElement,
+    const Reference < XNameContainer >& xLib,
     const OUString& aElementName,
-    Reference< XOutputStream > xOutput
+    const Reference< XOutputStream >& xOutput
 )
     throw(Exception)
 {
@@ -211,13 +213,41 @@ void SAL_CALL SfxScriptLibraryContainer::writeLibraryElement
     xmlscript::ModuleDescriptor aMod;
     aMod.aName = aElementName;
     aMod.aLanguage = maScriptLanguage;
+    Any aElement = xLib->getByName( aElementName );
     aElement >>= aMod.aCode;
+
+    Reference< script::vba::XVBAModuleInfo > xModInfo( xLib, UNO_QUERY );
+    if( xModInfo.is() && xModInfo->hasModuleInfo( aElementName ) )
+    {
+        script::ModuleInfo aModInfo = xModInfo->getModuleInfo( aElementName );
+        switch( aModInfo.ModuleType )
+        {
+        case ModuleType::NORMAL:
+            aMod.aModuleType = OUString( RTL_CONSTASCII_USTRINGPARAM("normal") );
+            break;
+        case ModuleType::CLASS:
+            aMod.aModuleType = OUString( RTL_CONSTASCII_USTRINGPARAM("class") );
+            break;
+        case ModuleType::FORM:
+            aMod.aModuleType = OUString( RTL_CONSTASCII_USTRINGPARAM("form") );
+            break;
+        case ModuleType::DOCUMENT:
+            aMod.aModuleType = OUString( RTL_CONSTASCII_USTRINGPARAM("document") );
+            break;
+        case ModuleType::UNKNOWN:
+            // nothing
+            break;
+        }
+    }
+
     xmlscript::exportScriptModule( xHandler, aMod );
 }
 
 
 Any SAL_CALL SfxScriptLibraryContainer::importLibraryElement
-    ( const OUString& aFile, const uno::Reference< io::XInputStream >& xInStream )
+    ( const Reference < XNameContainer >& xLib,
+      const OUString& aElementName, const OUString& aFile,
+      const uno::Reference< io::XInputStream >& xInStream )
 {
     Any aRetAny;
 
@@ -279,6 +309,85 @@ Any SAL_CALL SfxScriptLibraryContainer::importLibraryElement
     // TODO: Check language
     // aMod.aLanguage
     // aMod.aName ignored
+    if( aMod.aModuleType.getLength() > 0 )
+    {
+        if( !getVBACompatibilityMode() )
+        {
+            setVBACompatibilityMode( sal_True );
+
+            Any aGlobs;
+            Sequence< Any > aArgs(1);
+            Reference<frame::XModel > xModel( mxOwnerDocument );
+            aArgs[ 0 ] <<= xModel;
+
+            BasicManager* pBasicMgr = getBasicManager();
+            if( pBasicMgr )
+            {
+                aGlobs <<= ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.excel.Globals" ) ), aArgs );
+                pBasicMgr->SetGlobalUNOConstant( "VBAGlobals", aGlobs );
+            }
+            pBasicMgr = BasicManagerRepository::getApplicationBasicManager( sal_False );
+            if( pBasicMgr )
+                pBasicMgr->SetGlobalUNOConstant( "ThisExcelDoc", aArgs[0] );
+        }
+
+        script::ModuleInfo aModInfo;
+        aModInfo.ModuleType = ModuleType::UNKNOWN;
+        if( aMod.aModuleType.equalsAsciiL(
+                    RTL_CONSTASCII_STRINGPARAM("normal") ))
+        {
+            aModInfo.ModuleType = ModuleType::NORMAL;
+        }
+        else if( aMod.aModuleType.equalsAsciiL(
+                    RTL_CONSTASCII_STRINGPARAM("class") ))
+        {
+            aModInfo.ModuleType = ModuleType::CLASS;
+        }
+        else if( aMod.aModuleType.equalsAsciiL(
+                    RTL_CONSTASCII_STRINGPARAM("form") ))
+        {
+            aModInfo.ModuleType = ModuleType::FORM;
+            aModInfo.ModuleObject = mxOwnerDocument;
+        }
+        else if( aMod.aModuleType.equalsAsciiL(
+                    RTL_CONSTASCII_STRINGPARAM("document") ))
+        {
+            aModInfo.ModuleType = ModuleType::DOCUMENT;
+            Reference<frame::XModel > xModel( mxOwnerDocument );
+            Reference< XMultiServiceFactory> xSF( xModel, UNO_QUERY);
+            Reference< container::XNameAccess > xVBACodeNameAccess;
+            if( xSF.is() )
+            {
+                try
+                {
+                    xVBACodeNameAccess.set( xSF->createInstance(
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                            "ooo.vba.VBAObjectModuleObjectProvider"))),
+                        UNO_QUERY );
+                }
+                catch(uno::Exception&) {}
+            }
+            if( xVBACodeNameAccess.is() )
+            {
+                try
+                {
+                    aModInfo.ModuleObject.set( xVBACodeNameAccess->getByName( aElementName), uno::UNO_QUERY );
+                }
+                catch(uno::Exception&)
+                {
+                    OSL_TRACE("Failed to get documument object for %s", rtl::OUStringToOString( aElementName, RTL_TEXTENCODING_UTF8 ).getStr() );
+                }
+            }
+        }
+
+        Reference< script::vba::XVBAModuleInfo > xVBAModuleInfo( xLib, UNO_QUERY );
+        if( xVBAModuleInfo.is() )
+        {
+            if( xVBAModuleInfo->hasModuleInfo( aElementName ) )
+                xVBAModuleInfo->removeModuleInfo( aElementName );
+            xVBAModuleInfo->insertModuleInfo( aElementName, aModInfo );
+        }
+    }
 
     return aRetAny;
 }
@@ -574,8 +683,8 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
 
             if( pLib->mbPasswordVerified || pLib->mbDoc50Password )
             {
-                Any aElement = pLib->getByName( aElementName );
-                if( !isLibraryElementValid( aElement ) )
+                /*Any aElement = pLib->getByName( aElementName );*/
+                if( !isLibraryElementValid( pLib->getByName( aElementName ) ) )
                 {
                 #if OSL_DEBUG_LEVEL > 0
                     ::rtl::OStringBuffer aMessage;
@@ -606,7 +715,8 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
                     setStreamKey( xSourceStream, pLib->maPassword );
 
                     Reference< XOutputStream > xOutput = xSourceStream->getOutputStream();
-                    writeLibraryElement( aElement, aElementName, xOutput );
+                    Reference< XNameContainer > xLib( pLib );
+                    writeLibraryElement( xLib, aElementName, xOutput );
                     // writeLibraryElement should have the stream already closed
                     // xOutput->closeOutput();
                 }
@@ -659,8 +769,8 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
                 aElementInetObj.setExtension( OUString( RTL_CONSTASCII_USTRINGPARAM("pba") ) );
                 String aElementPath = aElementInetObj.GetMainURL( INetURLObject::NO_DECODE );
 
-                Any aElement = pLib->getByName( aElementName );
-                if( !isLibraryElementValid( aElement ) )
+                /*Any aElement = pLib->getByName( aElementName );*/
+                if( !isLibraryElementValid( pLib->getByName( aElementName ) ) )
                 {
                 #if OSL_DEBUG_LEVEL > 0
                     ::rtl::OStringBuffer aMessage;
@@ -741,7 +851,8 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
                     xProps->setPropertyValue( aPropName, uno::makeAny( aMime ) );
 
                     Reference< XOutputStream > xOut = xSourceStream->getOutputStream();
-                    writeLibraryElement( aElement, aElementName, xOut );
+                    Reference< XNameContainer > xLib( pLib );
+                    writeLibraryElement( xLib, aElementName, xOut );
                     // i50568: sax writer already closes stream
                     // xOut->closeOutput();
 
@@ -903,7 +1014,10 @@ sal_Bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                         if ( !xInStream.is() )
                             throw io::IOException(); // read access denied, seems to be impossible
 
-                        Any aAny = importLibraryElement( aSourceStreamName, xInStream );
+                        Reference< XNameContainer > xLib( pLib );
+                        Any aAny = importLibraryElement( xLib,
+                                        aElementName, aSourceStreamName,
+                                           xInStream );
                         if( pLib->hasByName( aElementName ) )
                         {
                             if( aAny.hasValue() )
@@ -1006,7 +1120,11 @@ sal_Bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                                 if ( !xInStream.is() )
                                     throw io::IOException(); // read access denied, seems to be impossible
 
-                                Any aAny = importLibraryElement( aSourceStreamName, xInStream );
+                                Reference< XNameContainer > xLib( pLib );
+                                Any aAny = importLibraryElement( xLib,
+                                                aElementName,
+                                                aSourceStreamName,
+                                                xInStream );
                                 if( pLib->hasByName( aElementName ) )
                                 {
                                     if( aAny.hasValue() )

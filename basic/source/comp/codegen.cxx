@@ -138,11 +138,10 @@ void SbiCodeGen::Save()
         pCLASSFAC->AddClassModule( &rMod );
 
         nIfaceCount = pParser->aIfaceVector.size();
+        if( !rMod.pClassData )
+            rMod.pClassData = new SbClassData;
         if( nIfaceCount )
         {
-            if( !rMod.pClassData )
-                rMod.pClassData = new SbClassData;
-
             for( int i = 0 ; i < nIfaceCount ; i++ )
             {
                 const String& rIfaceName = pParser->aIfaceVector[i];
@@ -152,6 +151,8 @@ void SbiCodeGen::Save()
                 pIfaces->Insert( pIfaceVar, pIfaces->Count() );
             }
         }
+
+        rMod.pClassData->maRequiredTypes = pParser->aRequiredTypes;
     }
     else
     {
@@ -161,6 +162,7 @@ void SbiCodeGen::Save()
             rMod.mnType = com::sun::star::script::ModuleType::NORMAL;
         rMod.bIsProxyModule = false;
     }
+
     if( pParser->bText )
         p->SetFlag( SBIMG_COMPARETEXT );
     // GlobalCode-Flag
@@ -256,6 +258,10 @@ void SbiCodeGen::Save()
                     // #110004
                     if( !pProc->IsPublic() )
                         pMeth->SetFlag( SBX_PRIVATE );
+
+                    // Declare? -> Hidden
+                    if( pProc->GetLib().Len() > 0 )
+                        pMeth->SetFlag( SBX_HIDDEN );
 
                     pMeth->nStart = pProc->GetAddr();
                     pMeth->nLine1 = pProc->GetLine1();

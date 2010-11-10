@@ -33,6 +33,7 @@
 #endif
 
 #include "osl/diagnose.h"
+#include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/time.h>
 #include <osl/file.hxx>
@@ -2054,9 +2055,14 @@ shell::copy_recursive( const rtl::OUString& srcUnqPath,
                 rtl::OUString newDstUnqPath = dstUnqPath;
                 rtl::OUString tit;
                 if( aFileStatus.isValid( FileStatusMask_FileName ) )
-                    tit = aFileStatus.getFileName();
+                    tit = rtl::Uri::encode( aFileStatus.getFileName(),
+                                          rtl_UriCharClassPchar,
+                                          rtl_UriEncodeIgnoreEscapes,
+                                          RTL_TEXTENCODING_UTF8 );
+
                 if( newDstUnqPath.lastIndexOf( sal_Unicode('/') ) != newDstUnqPath.getLength()-1 )
                     newDstUnqPath += rtl::OUString::createFromAscii( "/" );
+
                 newDstUnqPath += tit;
 
                 if ( newSrcUnqPath != dstUnqPath )

@@ -49,9 +49,9 @@ namespace xmloff
 #define BOOLATTR_INVERSE_SEMANTICS      0x04
     // if sal_True, indicates that the semantic of the property refered by <arg>_pPropertyName</arg>
     // is inverse to the semantic of the XML attribute.<br/>
-    // I.e. if the property value is <TRUE/>, <FALSE/> has to be written and vice versa.
+    // I.e. if the property value is <sal_True/>, <sal_False/> has to be written and vice versa.
     // <p>Be careful with <arg>_bDefault</arg> and <arg>_bInverseSemantics</arg>: if <arg>_bInverseSemantics</arg>
-    // is <TRUE/>, the current property value is inverted <em>before</em> comparing it to the default.</p>
+    // is <sal_True/>, the current property value is inverted <em>before</em> comparing it to the default.</p>
 
     class IFormsExportContext;
     //=====================================================================

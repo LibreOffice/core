@@ -53,67 +53,61 @@
 //============================================================================
 class LoginDialog : public ModalDialog
 {
+    FixedText       aErrorFT;
     FixedInfo       aErrorInfo;
-    FixedLine       aErrorGB;
+    FixedLine       aLogin1FL;
     FixedInfo       aRequestInfo;
+    FixedLine       aLogin2FL;
     FixedText       aPathFT;
     Edit            aPathED;
-    FixedInfo       aPathInfo;
     PushButton      aPathBtn;
     FixedText       aNameFT;
     Edit            aNameED;
-    FixedInfo       aNameInfo;
     FixedText       aPasswordFT;
     Edit            aPasswordED;
     FixedText       aAccountFT;
     Edit            aAccountED;
     CheckBox        aSavePasswdBtn;
     CheckBox        aUseSysCredsCB;
-    FixedLine       aLoginGB;
+    FixedLine       aButtonsFL;
     OKButton        aOKBtn;
     CancelButton    aCancelBtn;
     HelpButton      aHelpBtn;
 
-    void            HideControls_Impl( USHORT nFlags );
-    void            EnableUseSysCredsControls_Impl( BOOL bUseSysCredsEnabled );
+    void            HideControls_Impl( sal_uInt16 nFlags );
+    void            EnableUseSysCredsControls_Impl( sal_Bool bUseSysCredsEnabled );
 
     DECL_LINK( OKHdl_Impl, OKButton * );
     DECL_LINK( PathHdl_Impl, PushButton * );
     DECL_LINK( UseSysCredsHdl_Impl, CheckBox * );
 
 public:
-    LoginDialog( Window* pParent, USHORT nFlags,
+    LoginDialog( Window* pParent, sal_uInt16 nFlags,
                  const String& rServer, const String* pRealm,
                  ResMgr * pResMgr );
+    virtual ~LoginDialog();
 
-    String          GetPath() const { return aPathED.GetText(); }
-    void            SetPath( const String& rNewPath )
-                        { aPathED.SetText( rNewPath );
-                          aPathInfo.SetText( rNewPath );}
-    String          GetName() const { return aNameED.GetText(); }
-    void            SetName( const String& rNewName );
-    String          GetPassword() const { return aPasswordED.GetText(); }
-    void            SetPassword( const String& rNew )
-                        { aPasswordED.SetText( rNew ); }
-    String          GetAccount() const { return aAccountED.GetText(); }
-    void            SetAccount( const String& rNew )
-                        { aAccountED.SetText( rNew ); }
-    BOOL            IsSavePassword() const
-                        { return aSavePasswdBtn.IsChecked(); }
-    void            SetSavePassword( BOOL bSave )
-                        { aSavePasswdBtn.Check( bSave ); }
-    void            SetSavePasswordText( const String& rTxt )
-                        { aSavePasswdBtn.SetText( rTxt ); }
-    BOOL            IsUseSystemCredentials() const
-                        { return aUseSysCredsCB.IsChecked(); }
-    void            SetUseSystemCredentials( BOOL bUse );
-    void            SetErrorText( const String& rTxt )
-                        { aErrorInfo.SetText( rTxt ); }
-    void            SetLoginRequestText( const String& rTxt )
-                        { aRequestInfo.SetText( rTxt ); }
+    String          GetPath() const                             { return aPathED.GetText(); }
+    void            SetPath( const String& rNewPath )           { aPathED.SetText( rNewPath ); }
+    String          GetName() const                             { return aNameED.GetText(); }
+    void            SetName( const String& rNewName )           { aNameED.SetText( rNewName ); }
+    String          GetPassword() const                         { return aPasswordED.GetText(); }
+    void            SetPassword( const String& rNew )           { aPasswordED.SetText( rNew ); }
+    String          GetAccount() const                          { return aAccountED.GetText(); }
+    void            SetAccount( const String& rNew )            { aAccountED.SetText( rNew ); }
+    sal_Bool            IsSavePassword() const                      { return aSavePasswdBtn.IsChecked(); }
+    void            SetSavePassword( sal_Bool bSave )               { aSavePasswdBtn.Check( bSave ); }
+    void            SetSavePasswordText( const String& rTxt )   { aSavePasswdBtn.SetText( rTxt ); }
+    sal_Bool            IsUseSystemCredentials() const              { return aUseSysCredsCB.IsChecked(); }
+    void            SetUseSystemCredentials( sal_Bool bUse );
+    void            SetErrorText( const String& rTxt )          { aErrorInfo.SetText( rTxt ); }
+    void            SetLoginRequestText( const String& rTxt )   { aRequestInfo.SetText( rTxt ); }
     void            ClearPassword();
     void            ClearAccount();
 };
+
+// -----------------------------------------------------------------------
+
 
 //............................................................................
 //............................................................................

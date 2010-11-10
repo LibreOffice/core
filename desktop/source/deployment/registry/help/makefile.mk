@@ -44,7 +44,8 @@ SRC1FILES = \
         dp_help.src
 
 SLOFILES = \
-        $(SLO)$/dp_help.obj
+        $(SLO)$/dp_help.obj \
+        $(SLO)$/dp_helpbackenddb.obj
 
 .INCLUDE : ..$/..$/target.pmk
 .INCLUDE : target.mk

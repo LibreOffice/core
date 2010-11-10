@@ -30,7 +30,7 @@
 
 #include "namecont.hxx"
 #include <basic/basmgr.hxx>
-#include <com/sun/star/script/XVBAModuleInfo.hpp>
+#include <com/sun/star/script/vba/XVBAModuleInfo.hpp>
 #include <comphelper/uno3.hxx>
 
 class BasicManager;
@@ -53,14 +53,17 @@ class SfxScriptLibraryContainer : public SfxLibraryContainer, public OldBasicPas
     virtual bool SAL_CALL isLibraryElementValid( ::com::sun::star::uno::Any aElement ) const;
     virtual void SAL_CALL writeLibraryElement
     (
-        ::com::sun::star::uno::Any aElement,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer>& xLibrary,
         const ::rtl::OUString& aElementName,
-        ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > xOutput
+        const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& xOutput
     )
         throw(::com::sun::star::uno::Exception);
 
     virtual ::com::sun::star::uno::Any SAL_CALL importLibraryElement
-        ( const ::rtl::OUString& aFile,
+    (
+        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer>& xLibrary,
+        const ::rtl::OUString& aElementName,
+        const ::rtl::OUString& aFile,
         const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xElementStream );
 
     virtual void SAL_CALL importFromOldStorage( const ::rtl::OUString& aFile );
@@ -138,7 +141,7 @@ public:
 //============================================================================
 typedef std::hash_map< ::rtl::OUString, ::com::sun::star::script::ModuleInfo, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > ModuleInfoMap;
 
-typedef ::cppu::ImplHelper1 <   ::com::sun::star::script::XVBAModuleInfo
+typedef ::cppu::ImplHelper1 <   ::com::sun::star::script::vba::XVBAModuleInfo
                             >   SfxScriptLibrary_BASE;
 
 class SfxScriptLibrary : public SfxLibrary

@@ -67,8 +67,8 @@
 #include <com/sun/star/script/XStarBasicLibraryInfo.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <com/sun/star/script/ModuleInfo.hpp>
-#include <com/sun/star/script/XVBAModuleInfo.hpp>
-#include <com/sun/star/script/XVBACompat.hpp>
+#include <com/sun/star/script/vba/XVBACompatibility.hpp>
+#include <com/sun/star/script/vba/XVBAModuleInfo.hpp>
 
 #include <cppuhelper/implbase1.hxx>
 
@@ -240,7 +240,7 @@ void BasMgrContainerListenerImpl::addLibraryModulesImpl( BasicManager* pMgr,
             Any aElement = xLibNameAccess->getByName( aModuleName );
             ::rtl::OUString aMod;
             aElement >>= aMod;
-            Reference< XVBAModuleInfo > xVBAModuleInfo( xLibNameAccess, UNO_QUERY );
+            Reference< vba::XVBAModuleInfo > xVBAModuleInfo( xLibNameAccess, UNO_QUERY );
             if ( xVBAModuleInfo.is() && xVBAModuleInfo->hasModuleInfo( aModuleName ) )
             {
                 ModuleInfo mInfo = xVBAModuleInfo->getModuleInfo( aModuleName );
@@ -285,9 +285,9 @@ void SAL_CALL BasMgrContainerListenerImpl::elementInserted( const ContainerEvent
         StarBASIC* pLib = mpMgr->GetLib( aName );
         if ( pLib )
         {
-            Reference<XVBACompat> xVBACompat( xScriptCont, UNO_QUERY );
+            Reference< vba::XVBACompatibility > xVBACompat( xScriptCont, UNO_QUERY );
             if ( xVBACompat.is() )
-                pLib->SetVBAEnabled( xVBACompat->getVBACompatModeOn() );
+                pLib->SetVBAEnabled( xVBACompat->getVBACompatibilityMode() );
         }
     }
     else
@@ -302,7 +302,7 @@ void SAL_CALL BasMgrContainerListenerImpl::elementInserted( const ContainerEvent
             {
             ::rtl::OUString aMod;
             Event.Element >>= aMod;
-                Reference< XVBAModuleInfo > xVBAModuleInfo( Event.Source, UNO_QUERY );
+                Reference< vba::XVBAModuleInfo > xVBAModuleInfo( Event.Source, UNO_QUERY );
                 if ( xVBAModuleInfo.is() && xVBAModuleInfo->hasModuleInfo( aName ) )
                 {
                     ModuleInfo mInfo = xVBAModuleInfo->getModuleInfo( aName );
@@ -1789,7 +1789,7 @@ bool BasicManager::GetGlobalUNOConstant( const sal_Char* _pAsciiName, ::com::sun
 {
     bool bRes = false;
     StarBASIC* pStandardLib = GetStdLib();
-    OSL_PRECOND( pStandardLib, "BasicManager::SetGlobalUNOConstant: no lib to insert into!" );
+    OSL_PRECOND( pStandardLib, "BasicManager::GetGlobalUNOConstant: no lib to read from!" );
     if ( pStandardLib )
         bRes = pStandardLib->GetUNOConstant( _pAsciiName, aOut );
     return bRes;

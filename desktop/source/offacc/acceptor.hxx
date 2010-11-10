@@ -83,6 +83,7 @@ private:
     OUString m_aProtocol;
 
     sal_Bool m_bInit;
+    bool m_bDying;
 
 public:
     Acceptor( const Reference< XMultiServiceFactory >& aFactory );

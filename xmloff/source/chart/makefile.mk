@@ -29,7 +29,7 @@ PRJ					= ..$/..
 PRJNAME				= xmloff
 TARGET				= chart
 AUTOSEG				= true
-ENABLE_EXCEPTIONS	= TRUE
+ENABLE_EXCEPTIONS	= sal_True
 
 # --- Settings -----------------------------------------------------
 

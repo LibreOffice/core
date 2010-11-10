@@ -45,14 +45,14 @@ class SdXMLDrawPageContext : public SdXMLGenericPageContext
 
     bool                        mbHadSMILNodes;
 public:
-    SdXMLDrawPageContext( SdXMLImport& rImport, USHORT nPrfx,
+    SdXMLDrawPageContext( SdXMLImport& rImport, sal_uInt16 nPrfx,
         const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes);
     virtual ~SdXMLDrawPageContext();
 
     virtual SvXMLImportContext *CreateChildContext(
-        USHORT nPrefix, const rtl::OUString& rLocalName,
+        sal_uInt16 nPrefix, const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList );
     virtual void EndElement();
 
@@ -67,11 +67,11 @@ class SdXMLBodyContext : public SvXMLImportContext
     SdXMLImport& GetSdImport() { return (SdXMLImport&)GetImport(); }
 
 public:
-    SdXMLBodyContext( SdXMLImport& rImport, USHORT nPrfx, const rtl::OUString& rLocalName );
+    SdXMLBodyContext( SdXMLImport& rImport, sal_uInt16 nPrfx, const rtl::OUString& rLocalName );
     virtual ~SdXMLBodyContext();
 
     virtual SvXMLImportContext *CreateChildContext(
-        USHORT nPrefix, const rtl::OUString& rLocalName,
+        sal_uInt16 nPrefix, const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList );
 };
 

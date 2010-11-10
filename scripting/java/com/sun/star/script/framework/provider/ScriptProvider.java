@@ -213,26 +213,40 @@ public abstract class ScriptProvider
                 }
                 else
                 {
+                    String extensionDb = null;
+                    String extensionRepository = null;
+                    if ( originalContextURL.startsWith( "bundled" ) )
+                    {
+                        contextUrl = "vnd.sun.star.expand:$BUNDLED_EXTENSIONS";
+                        extensionDb = "vnd.sun.star.expand:${$BRAND_BASE_DIR/program/" + PathUtils.BOOTSTRAP_NAME + "::UserInstallation}/user";
+                        extensionRepository = "bundled";
+                    }
+
                     if ( originalContextURL.startsWith( "share" ) )
                     {
                         contextUrl = "vnd.sun.star.expand:${$BRAND_BASE_DIR/program/" + PathUtils.BOOTSTRAP_NAME + "::BaseInstallation}/share";
+                        extensionDb = "vnd.sun.star.expand:${$BRAND_BASE_DIR/program/" + PathUtils.BOOTSTRAP_NAME + "::UserInstallation}/user";
+                        extensionRepository = "shared";
                     }
                     else if ( originalContextURL.startsWith( "user" ) )
                     {
                         contextUrl = "vnd.sun.star.expand:${$BRAND_BASE_DIR/program/" + PathUtils.BOOTSTRAP_NAME + "::UserInstallation}/user";
+                        extensionDb = "vnd.sun.star.expand:${$BRAND_BASE_DIR/program/" + PathUtils.BOOTSTRAP_NAME + "::UserInstallation}/user";
+                        extensionRepository = "user";
                     }
 
                     if ( originalContextURL.endsWith( "uno_packages") )
                     {
                         isPkgProvider = true;
                     }
-                    if ( originalContextURL.endsWith( "uno_packages") &&  !originalContextURL.equals( contextUrl  ) )
+                    if ( originalContextURL.endsWith( "uno_packages") &&  !originalContextURL.equals( contextUrl  )
+                            && !extensionRepository.equals("bundled"))
                     {
                         contextUrl = PathUtils.make_url( contextUrl, "uno_packages"  );
                     }
                     if ( isPkgProvider )
                     {
-                        m_container = new UnoPkgContainer( m_xContext, contextUrl, language  );
+                        m_container = new UnoPkgContainer( m_xContext, contextUrl, extensionDb, extensionRepository, language  );
                     }
                     else
                     {

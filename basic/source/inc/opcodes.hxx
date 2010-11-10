@@ -93,6 +93,7 @@ enum SbiOpcode {
     _VBASET,            // VBA-like Set
     _ERASE_CLEAR,       // Erase array and clear variable
     _ARRAYACCESS,       // Assign parameters to TOS and get value, used for array of arrays
+    _BYVAL,             // byref -> byval for lvalue parameter passed in call
     SbOP0_END,
 
     // Alle Opcodes mit einem Operanden

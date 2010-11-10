@@ -89,7 +89,7 @@ void SfxBasicManagerCreationListener::onBasicManagerCreated( const Reference< XM
         m_rAppData.OnApplicationBasicManagerCreated( _rBasicManager );
 }
 
-SfxAppData_Impl::SfxAppData_Impl( SfxApplication* pApp ) :
+SfxAppData_Impl::SfxAppData_Impl( SfxApplication* ) :
         pDdeService( 0 ),
         pDocTopics( 0 ),
         pTriggerTopic(0),
@@ -116,8 +116,7 @@ SfxAppData_Impl::SfxAppData_Impl( SfxApplication* pApp ) :
         nRescheduleLocks(0),
         nInReschedule(0),
         nAsynchronCalls(0),
-        m_xImeStatusWindow(new sfx2::appl::ImeStatusWindow(
-                               *pApp, comphelper::getProcessServiceFactory()))
+        m_xImeStatusWindow(new sfx2::appl::ImeStatusWindow(comphelper::getProcessServiceFactory()))
     , pTbxCtrlFac(0)
     , pStbCtrlFac(0)
     , pViewFrames(0)

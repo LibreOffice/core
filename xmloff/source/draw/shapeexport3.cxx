@@ -212,13 +212,13 @@ void XMLShapeExport::ImpExport3DShape(
                 double fXMax = 0;
                 double fYMin = 0;
                 double fYMax = 0;
-                BOOL bInit(FALSE);
+                sal_Bool bInit(sal_False);
                 sal_Int32 nOuterSequenceCount(xPolyPolygon3D.SequenceX.getLength());
                 drawing::DoubleSequence* pInnerSequenceX = xPolyPolygon3D.SequenceX.getArray();
                 drawing::DoubleSequence* pInnerSequenceY = xPolyPolygon3D.SequenceY.getArray();
 
                 sal_Int32 a;
-                for( a= 0L; a < nOuterSequenceCount; a++)
+                for (a = 0; a < nOuterSequenceCount; a++)
                 {
                     sal_Int32 nInnerSequenceCount(pInnerSequenceX->getLength());
                     double* pArrayX = pInnerSequenceX->getArray();
@@ -247,7 +247,7 @@ void XMLShapeExport::ImpExport3DShape(
                         {
                             fXMin = fXMax = fX;
                             fYMin = fYMax = fY;
-                            bInit = TRUE;
+                            bInit = sal_True;
                         }
                     }
 
@@ -268,7 +268,7 @@ void XMLShapeExport::ImpExport3DShape(
                 pInnerSequenceX = xPolyPolygon3D.SequenceX.getArray();
                 pInnerSequenceY = xPolyPolygon3D.SequenceY.getArray();
 
-                for(a = 0L; a < nOuterSequenceCount; a++)
+                for (a = 0; a < nOuterSequenceCount; a++)
                 {
                     sal_Int32 nInnerSequenceCount(pInnerSequenceX->getLength());
                     double* pArrayX = pInnerSequenceX->getArray();
@@ -288,7 +288,7 @@ void XMLShapeExport::ImpExport3DShape(
                     // calculate closed flag
                     awt::Point* pFirst = aPoly.getArray();
                     awt::Point* pLast = pFirst + (nInnerSequenceCount - 1);
-                    BOOL bClosed = (pFirst->X == pLast->X && pFirst->Y == pLast->Y);
+                    sal_Bool bClosed = (pFirst->X == pLast->X && pFirst->Y == pLast->Y);
 
                     aSvgDElement.AddPolygon(&aPoly, 0L, aMinPoint,
                         aMaxSize, bClosed);

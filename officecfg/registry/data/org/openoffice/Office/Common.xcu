@@ -157,6 +157,11 @@
       <value install:module="wnt">WIN</value>
     </prop>
   </node>
+  <node oor:name="Dictionaries">
+    <prop oor:name="RepositoryURL" install:module="brand">
+      <value>${DICT_REPO_URL}</value>
+    </prop>
+  </node>
   <node oor:name="AutoCorrect">
     <prop oor:name="ReplaceSingleQuote" install:module="korea">
       <value>true</value>

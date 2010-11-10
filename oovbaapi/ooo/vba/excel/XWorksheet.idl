@@ -66,12 +66,14 @@ interface XWorksheet
     [attribute, readonly] boolean ProtectionMode;
     [attribute, readonly] boolean ProtectContents;
     [attribute, readonly] boolean ProtectDrawingObjects;
+    [attribute, readonly] boolean ProtectScenarios;
     [attribute, readonly] XRange UsedRange;
     [attribute, readonly] XWorksheet Next;
     [attribute, readonly] XWorksheet Previous;
     [attribute, readonly] string CodeName;
      [attribute, readonly] short Index;
      [attribute] long EnableSelection;
+    [attribute] boolean AutoFilterMode;
 
     void Activate();
     void Calculate( );
@@ -83,6 +85,8 @@ interface XWorksheet
     void Protect([in] any Password,[in] any DrawingObjects ,[in] any Contents,[in] any Scenarios,[in] any UserInterfaceOnly);
     void Unprotect([in] any Password );
     void CheckSpelling([in] any CustomDictionary,[in] any IgnoreUppercase, [in] any AlwaysSuggest,[in] any SpellingLang );
+    void ShowDataForm();
+
     XRange Range([in] any Cell1, [in] any Cell2 );
     any ChartObjects([in] any Index);
     any PivotTables([in] any Index);
@@ -92,23 +96,33 @@ interface XWorksheet
     any HPageBreaks([in] any Index);
     any VPageBreaks([in] any Index);
     any OLEObjects([in] any Index);
-    void ShowDataForm();
     any Shapes([in] any Index);
 
+    /*  The following form control related symbols do not refer to ActiveX form
+        controls embedded in the sheet, but to the old-style drawing controls
+        of Excel. This is an Excel-only feature. */
+    any Buttons( [in] any aIndex );
+    any CheckBoxes( [in] any aIndex );
+    any DropDowns( [in] any aIndex );
+    any GroupBoxes( [in] any aIndex );
+    any Labels( [in] any aIndex );
+    any ListBoxes( [in] any aIndex );
+    any OptionButtons( [in] any aIndex );
+    any ScrollBars( [in] any aIndex );
+    any Spinners( [in] any aIndex );
 
 // FIXME: should prolly inherit from Range somehow...
     XRange Cells([in] any RowIndex, [in] any ColumnIndex);
     XRange Rows([in] any aIndex);
     XRange Columns([in] any aIndex);
+    any Hyperlinks( [in] any aIndex );
+    any Names( [in] any Index );
 
     any Evaluate( [in] string Name);
-
 
     void setEnableCalculation([in] boolean EnableCalculation) raises(com::sun::star::script::BasicErrorException);
     boolean getEnableCalculation() raises(com::sun::star::script::BasicErrorException);
     void PrintOut( [in] any From, [in] any To, [in] any Copies, [in] any Preview, [in] any ActivePrinter, [in] any PrintToFile, [in] any Collate, [in] any PrToFileName, [in] any IgnorePrintAreas );
-
-
 };
 
 //=============================================================================
@@ -116,5 +130,3 @@ interface XWorksheet
 }; }; };
 
 #endif
-
-

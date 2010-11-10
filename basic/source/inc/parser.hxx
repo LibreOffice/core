@@ -34,7 +34,7 @@
 
 
 #include <vector>
-typedef ::std::vector< String > IfaceVector;
+typedef ::std::vector< String > StringVector;
 
 struct SbiParseStack;
 
@@ -81,7 +81,8 @@ public:
     BOOL          bText;            // OPTION COMPARE TEXT
     BOOL          bExplicit;        // TRUE: OPTION EXPLICIT
     BOOL          bClassModule;     // TRUE: OPTION ClassModule
-    IfaceVector   aIfaceVector;     // Holds all interfaces implemented by a class module
+    StringVector  aIfaceVector;     // Holds all interfaces implemented by a class module
+    StringVector  aRequiredTypes;   // Types used in Dim As New <type> outside subs
     SbxDataType   eDefTypes[26];    // DEFxxx-Datentypen
 
     SbiParser( StarBASIC*, SbModule* );
@@ -99,7 +100,7 @@ public:
     BOOL TestComma();               // Komma oder EOLN?
     void TestEoln();                // EOLN?
 
-    void Symbol();                  // Let oder Call
+    void Symbol( const KeywordSymbolInfo* pKeywordSymbolInfo = NULL );  // Let oder Call
     void ErrorStmnt();              // ERROR n
     void NotImp();                  // nicht implementiert
     void BadBlock();                // LOOP/WEND/NEXT
@@ -119,6 +120,7 @@ public:
     void If();                      // IF
     void Implements();              // IMPLEMENTS
     void Input();                   // INPUT, INPUT #
+    void Line();                    // LINE -> LINE INPUT [#] (#i92642)
     void LineInput();               // LINE INPUT, LINE INPUT #
     void LSet();                    // LSET
     void Name();                    // NAME .. AS ..

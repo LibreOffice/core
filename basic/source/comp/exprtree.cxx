@@ -38,7 +38,8 @@
 |*
 ***************************************************************************/
 
-SbiExpression::SbiExpression( SbiParser* p, SbiExprType t, SbiExprMode eMode )
+SbiExpression::SbiExpression( SbiParser* p, SbiExprType t,
+    SbiExprMode eMode, const KeywordSymbolInfo* pKeywordSymbolInfo )
 {
     pParser = p;
     bError = bByVal = bBased = bBracket = FALSE;
@@ -46,7 +47,7 @@ SbiExpression::SbiExpression( SbiParser* p, SbiExprType t, SbiExprMode eMode )
     eCurExpr = t;
     m_eMode = eMode;
     pNext = NULL;
-    pExpr = (t != SbSTDEXPR ) ? Term() : Boolean();
+    pExpr = (t != SbSTDEXPR ) ? Term( pKeywordSymbolInfo ) : Boolean();
     if( t != SbSYMBOL )
         pExpr->Optimize();
     if( t == SbLVALUE && !pExpr->IsLvalue() )
@@ -114,7 +115,7 @@ static BOOL DoParametersFollow( SbiParser* p, SbiExprType eCurExpr, SbiToken eTo
     if( !p->WhiteSpace() || eCurExpr != SbSYMBOL )
         return FALSE;
     if (   eTok == NUMBER || eTok == MINUS || eTok == FIXSTRING
-        || eTok == SYMBOL || eTok == COMMA  || eTok == DOT || eTok == NOT )
+        || eTok == SYMBOL || eTok == COMMA  || eTok == DOT || eTok == NOT || eTok == BYVAL )
     {
         return TRUE;
     }
@@ -177,7 +178,7 @@ static SbiSymDef* AddSym
 
 // Zur Zeit sind sogar Keywords zugelassen (wg. gleichnamiger Dflt-Properties)
 
-SbiExprNode* SbiExpression::Term( void )
+SbiExprNode* SbiExpression::Term( const KeywordSymbolInfo* pKeywordSymbolInfo )
 {
     if( pParser->Peek() == DOT )
     {
@@ -204,11 +205,11 @@ SbiExprNode* SbiExpression::Term( void )
         return pNd;
     }
 
-    SbiToken eTok = pParser->Next();
+    SbiToken eTok = (pKeywordSymbolInfo == NULL) ? pParser->Next() : pKeywordSymbolInfo->m_eTok;
     // Anfang des Parsings merken
     pParser->LockColumn();
-    String aSym( pParser->GetSym() );
-    SbxDataType eType = pParser->GetType();
+    String aSym( (pKeywordSymbolInfo == NULL) ? pParser->GetSym() : pKeywordSymbolInfo->m_aKeywordSymbol );
+    SbxDataType eType = (pKeywordSymbolInfo == NULL) ? pParser->GetType() : pKeywordSymbolInfo->m_eSbxDataType;
     SbiParameters* pPar = NULL;
     SbiExprListVector* pvMoreParLcl = NULL;
     // Folgen Parameter?
@@ -280,6 +281,12 @@ SbiExprNode* SbiExpression::Term( void )
         // AB 31.3.1996: In Parser-Methode ausgelagert
         // (wird auch in SbiParser::DefVar() in DIM.CXX benoetigt)
         pDef = pParser->CheckRTLForSym( aSym, eType );
+
+        // #i109184: Check if symbol is or later will be defined inside module
+        SbModule& rMod = pParser->aGen.GetModule();
+        SbxArray* pModMethods = rMod.GetMethods();
+        if( pModMethods->Find( aSym, SbxCLASS_DONTCARE ) )
+            pDef = NULL;
     }
     if( !pDef )
     {
@@ -330,15 +337,6 @@ SbiExprNode* SbiExpression::Term( void )
                 // aber nur, wenn die Var nicht mit AS XXX definiert ist
                 // damit erwischen wir n% = 5 : print n
                 eType = eDefType;
-        }
-        // Funktion?
-        if( pDef->GetProcDef() )
-        {
-            SbiProcDef* pProc = pDef->GetProcDef();
-            if( pPar && pProc->GetLib().Len() )     // DECLARE benutzt?
-                pPar->SetProc( pProc );
-            // Wenn keine Pars, vorerst nichts machen
-            // Pruefung auf Typ-Anzahl waere denkbar
         }
         // Typcheck bei Variablen:
         // ist explizit im Scanner etwas anderes angegeben?
@@ -417,13 +415,27 @@ SbiExprNode* SbiExpression::ObjTerm( SbiSymDef& rObj )
     String aSym( pParser->GetSym() );
     SbxDataType eType = pParser->GetType();
     SbiParameters* pPar = NULL;
+    SbiExprListVector* pvMoreParLcl = NULL;
     eTok = pParser->Peek();
     // Parameter?
     if( DoParametersFollow( pParser, eCurExpr, eTok ) )
     {
-        pPar = new SbiParameters( pParser );
+        bool bStandaloneExpression = false;
+        pPar = new SbiParameters( pParser, bStandaloneExpression );
         bError |= !pPar->IsValid();
         eTok = pParser->Peek();
+
+        // i109624 check for additional sets of parameters
+        while( eTok == LPAREN )
+        {
+            if( pvMoreParLcl == NULL )
+                pvMoreParLcl = new SbiExprListVector();
+            SbiParameters* pAddPar = new SbiParameters( pParser );
+            pvMoreParLcl->push_back( pAddPar );
+            bError |= !pPar->IsValid();
+            eTok = pParser->Peek();
+        }
+
     }
     BOOL bObj = BOOL( ( eTok == DOT || eTok == EXCLAM ) && !pParser->WhiteSpace() );
     if( bObj )
@@ -450,6 +462,7 @@ SbiExprNode* SbiExpression::ObjTerm( SbiSymDef& rObj )
 
     SbiExprNode* pNd = new SbiExprNode( pParser, *pDef, eType );
     pNd->aVar.pPar = pPar;
+    pNd->aVar.pvMorePar = pvMoreParLcl;
     if( bObj )
     {
         // Falls wir etwas mit Punkt einscannen, muss der
@@ -483,7 +496,7 @@ SbiExprNode* SbiExpression::ObjTerm( SbiSymDef& rObj )
 //      Funktionen
 //      geklammerte Ausdruecke
 
-SbiExprNode* SbiExpression::Operand()
+SbiExprNode* SbiExpression::Operand( bool bUsedForTypeOf )
 {
     SbiExprNode *pRes;
     SbiToken eTok;
@@ -494,7 +507,7 @@ SbiExprNode* SbiExpression::Operand()
         case SYMBOL:
             pRes = Term();
             // process something like "IF Not r Is Nothing Then .."
-            if( pParser->IsVBASupportOn() && pParser->Peek() == IS )
+            if( !bUsedForTypeOf && pParser->IsVBASupportOn() && pParser->Peek() == IS )
             {
                 eTok = pParser->Next();
                 pRes = new SbiExprNode( pParser, pRes, eTok, Like() );
@@ -576,12 +589,22 @@ SbiExprNode* SbiExpression::Unary()
         case TYPEOF:
         {
             pParser->Next();
-            SbiExprNode* pObjNode = Operand();
+            bool bUsedForTypeOf = true;
+            SbiExprNode* pObjNode = Operand( bUsedForTypeOf );
             pParser->TestToken( IS );
             String aDummy;
             SbiSymDef* pTypeDef = new SbiSymDef( aDummy );
             pParser->TypeDecl( *pTypeDef, TRUE );
             pNd = new SbiExprNode( pParser, pObjNode, pTypeDef->GetTypeId() );
+            break;
+        }
+        case NEW:
+        {
+            pParser->Next();
+            String aStr;
+            SbiSymDef* pTypeDef = new SbiSymDef( aStr );
+            pParser->TypeDecl( *pTypeDef, TRUE );
+            pNd = new SbiExprNode( pParser, pTypeDef->GetTypeId() );
             break;
         }
         default:
@@ -836,7 +859,6 @@ SbiExprList::SbiExprList( SbiParser* p )
 {
     pParser = p;
     pFirst = NULL;
-    pProc = NULL;
     nExpr  =
     nDim   = 0;
     bError =
@@ -938,6 +960,14 @@ SbiParameters::SbiParameters( SbiParser* p, BOOL bStandaloneExpression, BOOL bPa
         // Benannte Argumente: entweder .name= oder name:=
         else
         {
+            bool bByVal = false;
+            if( eTok == BYVAL )
+            {
+                bByVal = true;
+                pParser->Next();
+                eTok = pParser->Peek();
+            }
+
             if( bAssumeExprLParenMode )
             {
                 pExpr = new SbiExpression( pParser, SbSTDEXPR, EXPRMODE_LPAREN_PENDING );
@@ -961,11 +991,16 @@ SbiParameters::SbiParameters( SbiParser* p, BOOL bStandaloneExpression, BOOL bPa
                 {
                     bBracket = TRUE;
                     delete pExpr;
+                    if( bByVal )
+                        pParser->Error( SbERR_LVALUE_EXPECTED );
                     return;
                 }
             }
             else
                 pExpr = new SbiExpression( pParser );
+
+            if( bByVal && pExpr->IsLvalue() )
+                pExpr->SetByVal();
 
             //pExpr = bConst ? new SbiConstExpression( pParser )
             //              : new SbiExpression( pParser );

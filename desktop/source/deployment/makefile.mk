@@ -53,7 +53,6 @@ SHL1VERSIONMAP = $(SOLARENV)/src/component.map
 
 SHL1LIBS = \
     $(SLB)$/deployment_manager.lib \
-    $(SLB)$/deployment_migration.lib \
     $(SLB)$/deployment_registry.lib \
     $(SLB)$/deployment_registry_executable.lib \
     $(SLB)$/deployment_registry_component.lib \
@@ -111,3 +110,11 @@ RESLIB1SRSFILES += $(SRS)$/deployment_misc.srs
 
 .INCLUDE : target.mk
 
+
+ALLTAR : $(MISC)/deployment.component
+
+$(MISC)/deployment.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        deployment.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt deployment.component

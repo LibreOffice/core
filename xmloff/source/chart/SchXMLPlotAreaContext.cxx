@@ -307,7 +307,7 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
         rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
         rtl::OUString aLocalName;
         rtl::OUString aValue = xAttrList->getValueByIndex( i );
-        USHORT nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ))
         {
@@ -511,7 +511,7 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
 }
 
 SvXMLImportContext* SchXMLPlotAreaContext::CreateChildContext(
-    USHORT nPrefix,
+    sal_uInt16 nPrefix,
     const rtl::OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
@@ -1044,13 +1044,13 @@ void SchXMLAxisContext::StartElement( const uno::Reference< xml::sax::XAttribute
         rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
         rtl::OUString aLocalName;
         rtl::OUString aValue = xAttrList->getValueByIndex( i );
-        USHORT nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ))
         {
             case XML_TOK_AXIS_DIMENSION:
                 {
-                    USHORT nEnumVal;
+                    sal_uInt16 nEnumVal;
                     if( rImport.GetMM100UnitConverter().convertEnum( nEnumVal, aValue, aXMLAxisClassMap ))
                         maCurrentAxis.eClass = ( SchXMLAxisClass )nEnumVal;
                 }
@@ -1237,18 +1237,23 @@ void SchXMLAxisContext::CreateAxis()
 
         case SCH_XML_AXIS_Z:
             {
+                bool bSettingZAxisSuccedded = false;
                 try
                 {
-                    xDiaProp->setPropertyValue(
-                        rtl::OUString::createFromAscii( "HasZAxis" ), aTrueBool );
+                    rtl::OUString sHasZAxis( rtl::OUString::createFromAscii( "HasZAxis" ) );
+                    xDiaProp->setPropertyValue( sHasZAxis, aTrueBool );
+                    xDiaProp->getPropertyValue( sHasZAxis ) >>= bSettingZAxisSuccedded;
                 }
                 catch( beans::UnknownPropertyException & )
                 {
                     DBG_ERROR( "Couldn't turn on z axis" );
                 }
-                uno::Reference< chart::XAxisZSupplier > xSuppl( mxDiagram, uno::UNO_QUERY );
-                if( xSuppl.is())
-                    xProp = xSuppl->getZAxis();
+                if( bSettingZAxisSuccedded )
+                {
+                    uno::Reference< chart::XAxisZSupplier > xSuppl( mxDiagram, uno::UNO_QUERY );
+                    if( xSuppl.is())
+                        xProp = xSuppl->getZAxis();
+                }
             }
             break;
         case SCH_XML_AXIS_UNDEF:
@@ -1505,7 +1510,7 @@ void SchXMLAxisContext::SetAxisTitle()
 }
 
 SvXMLImportContext* SchXMLAxisContext::CreateChildContext(
-    USHORT p_nPrefix,
+    sal_uInt16 p_nPrefix,
     const rtl::OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
@@ -1540,7 +1545,7 @@ SvXMLImportContext* SchXMLAxisContext::CreateChildContext(
             {
                 rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
                 rtl::OUString aLocalName;
-                USHORT nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+                sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
                 if( nPrefix == XML_NAMESPACE_CHART )
                 {
@@ -1607,7 +1612,7 @@ void SchXMLDataPointContext::StartElement( const uno::Reference< xml::sax::XAttr
     {
         rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
         rtl::OUString aLocalName;
-        USHORT nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
         if( nPrefix == XML_NAMESPACE_CHART )
         {
@@ -1655,7 +1660,7 @@ void SchXMLCategoriesContext::StartElement( const uno::Reference< xml::sax::XAtt
     {
         rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
         rtl::OUString aLocalName;
-        USHORT nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
         if( nPrefix == XML_NAMESPACE_TABLE &&
             IsXMLToken( aLocalName, XML_CELL_RANGE_ADDRESS ) )
@@ -1790,7 +1795,7 @@ void SchXMLCoordinateRegionContext::StartElement( const uno::Reference< xml::sax
         rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
         rtl::OUString aLocalName;
         rtl::OUString aValue = xAttrList->getValueByIndex( i );
-        USHORT nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
         m_rPositioning.readPositioningAttribute( nPrefix, aLocalName, aValue );
     }
 }
@@ -1826,7 +1831,7 @@ void SchXMLWallFloorContext::StartElement( const uno::Reference< xml::sax::XAttr
         {
             rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
             rtl::OUString aLocalName;
-            USHORT nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+            sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
             if( nPrefix == XML_NAMESPACE_CHART &&
                 IsXMLToken( aLocalName, XML_STYLE_NAME ) )
@@ -1889,7 +1894,7 @@ void SchXMLStockContext::StartElement( const uno::Reference< xml::sax::XAttribut
         {
             rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
             rtl::OUString aLocalName;
-            USHORT nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+            sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
             if( nPrefix == XML_NAMESPACE_CHART &&
                 IsXMLToken( aLocalName, XML_STYLE_NAME ) )
@@ -1966,7 +1971,7 @@ void SchXMLStatisticsObjectContext::StartElement( const uno::Reference< xml::sax
     {
         rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
         rtl::OUString aLocalName;
-        USHORT nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
         if( nPrefix == XML_NAMESPACE_CHART )
         {
@@ -1999,7 +2004,7 @@ void SchXMLStatisticsObjectContext::StartElement( const uno::Reference< xml::sax
 }
 
 SvXMLImportContext* SchXMLStatisticsObjectContext::CreateChildContext(
-    USHORT nPrefix,
+    sal_uInt16 nPrefix,
     const rtl::OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
@@ -2059,7 +2064,7 @@ void SchXMLEquationContext::StartElement( const uno::Reference< xml::sax::XAttri
         rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
         rtl::OUString aLocalName;
         rtl::OUString aValue = xAttrList->getValueByIndex( i );
-        USHORT nPrefix = rImport.GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        sal_uInt16 nPrefix = rImport.GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ))
         {

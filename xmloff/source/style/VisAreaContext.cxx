@@ -46,7 +46,7 @@ using namespace ::xmloff::token;
 //------------------------------------------------------------------
 
 XMLVisAreaContext::XMLVisAreaContext( SvXMLImport& rImport,
-                                              USHORT nPrfx,
+                                              sal_uInt16 nPrfx,
                                                    const rtl::OUString& rLName,
                                               const uno::Reference<xml::sax::XAttributeList>& xAttrList,
                                               Rectangle& rRect, const MapUnit aMapUnit ) :
@@ -62,7 +62,7 @@ XMLVisAreaContext::XMLVisAreaContext( SvXMLImport& rImport,
 }
 
 XMLVisAreaContext::XMLVisAreaContext( SvXMLImport& rImport,
-                                         USHORT nPrfx,
+                                         sal_uInt16 nPrfx,
                                                    const rtl::OUString& rLName,
                                               const uno::Reference<xml::sax::XAttributeList>& xAttrList,
                                             ::com::sun::star::awt::Rectangle& rRect, const sal_Int16 nMeasureUnit ) :
@@ -88,7 +88,7 @@ void XMLVisAreaContext::process( const uno::Reference< xml::sax::XAttributeList>
     {
         rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
         rtl::OUString aLocalName;
-        USHORT nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName(
+        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
         rtl::OUString sValue = xAttrList->getValueByIndex( i );
 
@@ -118,7 +118,7 @@ void XMLVisAreaContext::process( const uno::Reference< xml::sax::XAttributeList>
     }
 }
 
-SvXMLImportContext *XMLVisAreaContext::CreateChildContext( USHORT nPrefix,
+SvXMLImportContext *XMLVisAreaContext::CreateChildContext( sal_uInt16 nPrefix,
                                      const rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& )

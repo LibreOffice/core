@@ -40,7 +40,7 @@ typedef CollTestImplHelper< ov::XCommandBars > CommandBars_BASE;
 class ScVbaCommandBars : public CommandBars_BASE
 {
 private:
-    VbaCommandBarHelperRef pCBarHelper;
+    VbaCommandBarHelperRef m_pCBarHelper;
 
 public:
     ScVbaCommandBars( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess, const css::uno::Reference< css::frame::XModel >& xModel ) throw (css::uno::RuntimeException);

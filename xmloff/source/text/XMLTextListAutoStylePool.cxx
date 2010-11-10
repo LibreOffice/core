@@ -203,7 +203,7 @@ sal_Bool XMLTextListAutoStylePool::HasName( const OUString& rName ) const
 
 sal_uInt32 XMLTextListAutoStylePool::Find( XMLTextListAutoStylePoolEntry_Impl* pEntry ) const
 {
-    ULONG nPos;
+    sal_uIntPtr nPos;
     if( !pEntry->IsNamed() && mxNumRuleCompare.is() )
     {
         const sal_uInt32 nCount = pPool->Count();

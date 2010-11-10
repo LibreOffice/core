@@ -67,6 +67,7 @@ Acceptor::Acceptor( const Reference< XMultiServiceFactory >& rFactory )
     , m_aConnectString()
     , m_aProtocol()
     , m_bInit(sal_False)
+    , m_bDying(false)
 {
     m_rSMgr = rFactory;
     m_rAcceptor = Reference< XAcceptor > (m_rSMgr->createInstance(
@@ -88,6 +89,9 @@ Acceptor::~Acceptor()
         osl::MutexGuard g(m_aMutex);
         t = m_thread;
     }
+    //prevent locking if the thread is still waiting
+    m_bDying = true;
+    m_cEnable.set();
     osl_joinWithThread(t);
     {
         // Make the final state of m_bridges visible to this thread (since
@@ -117,6 +121,8 @@ void SAL_CALL Acceptor::run()
             RTL_LOGFILE_CONTEXT_TRACE( aLog, "desktop (lo119109)"\
                 "Acceptor::run waiting for office to come up");
             m_cEnable.wait();
+            if (m_bDying) //see destructor
+                break;
             RTL_LOGFILE_CONTEXT_TRACE( aLog, "desktop (lo119109)"\
                 "Acceptor::run now enabled and continuing");
 
@@ -309,23 +315,6 @@ void SAL_CALL
 component_getImplementationEnvironment(const sal_Char **ppEnvironmentTypeName, uno_Environment **)
 {
     *ppEnvironmentTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME ;
-}
-
-sal_Bool SAL_CALL
-component_writeInfo(void *pServiceManager, void *pRegistryKey)
-{
-    Reference< XMultiServiceFactory > xMan(reinterpret_cast< XMultiServiceFactory* >(pServiceManager));
-    Reference< XRegistryKey > xKey(reinterpret_cast< XRegistryKey* >(pRegistryKey));
-
-    // register service
-    ::rtl::OUString aTempStr;
-    ::rtl::OUString aImpl(RTL_CONSTASCII_USTRINGPARAM("/"));
-    aImpl += Acceptor::impl_getImplementationName();
-    aImpl += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
-    Reference< XRegistryKey > xNewKey = xKey->createKey(aImpl);
-    xNewKey->createKey(Acceptor::impl_getSupportedServiceNames()[0]);
-
-    return sal_True;
 }
 
 void * SAL_CALL
