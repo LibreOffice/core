@@ -303,7 +303,7 @@ private:
     bool    ImplIsInListAction_Lock() const;
     void    ImplEnableUndo_Lock( bool const i_enable );
 
-    friend ::svl::undo::impl::LockGuard;
+    friend class ::svl::undo::impl::LockGuard;
 };
 
 //=========================================================================
