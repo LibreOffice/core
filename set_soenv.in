@@ -174,7 +174,6 @@ chomp( $oldPATH );                  # cut off new line
 # C. Setting the constant values.
 #
 # Setting platform independent constant values.
-print "Setting platform independent values... ";
 # NB: Language options now set at 'ToFile' stage.
 $BMP_WRITES_FLAG      = "TRUE";
 $BUILD_SOSL_RELEASE   = "TRUE";
@@ -922,8 +921,7 @@ else
 #
 # E. Determining the envionment values based on the information
 #    that was gathered earlier on.
-#
-print "Setting the environment variables... ";
+
 $USR                  = $ds."usr";
 $ETC                  = $ds."etc";
 $BIN                  = $ds."bin";
@@ -1551,13 +1549,10 @@ else
 {  AddWarning( "set_soenv", "$platform not configured for system dependant include dir" );
 }
 
-#
-print "done\n";
 
 #
 # F. Setting the different aliases.
 #
-print "Setting the aliases... ";
 # 1. alias for a full product make.
 	$mkout           = '"perl $SOLARENV/bin/mkout.pl"';
 	$deliver         = '"perl $SOLARENV/bin/deliver.pl"';
@@ -1566,7 +1561,7 @@ print "Setting the aliases... ";
 	$zipdep          = '"perl $SOLARENV/bin/zipdep.pl"';
 # 3. alias for a full product make
 $nmake           = '"dmake"';
-print "done\n";
+
 #
 #--------------------------
 # VI. Open the output file.
@@ -2120,7 +2115,6 @@ ToFile( "ENV_SCRIPT", "$outfile", "e" );
 print OUT "export $exportvars$newline";
 print OUT "unset $unsetvars$newline";
 
-
 #
 #---------------------------
 # VIII. Closing output file.
@@ -2154,28 +2148,18 @@ if (rename( $outfile, $tmp ) ne 1)
 #
 print "$newline";
 print "*********************************************************".
-      "******************* $newline"."*"."$newline";
-print "* LibreOffice $UPD configuration. $newline";
-for ( $tmp = 0; $tmp < 2; $tmp++ )
-{  print "* $newline";
-}
-print "* Configuration part of LibreOffice $UPD build is finished. $newline* $newline";
-print "* NB! Be aware that you might not be able to build LibreOffice if you $newline".
-      "* ignore any warning message that were generated during this configuration $newline".
-      "* process. $newline* $newline";
+      "*******************$newline*$newline";
+print "* LibreOffice $UPD configuration finished. $newline*$newline";
 
 if ( $Warning ne "" )
-{  print "$Warning*";
-   print "$newline";
+{  print "$Warning*$newline";
 }
 
 print "*********************************************************".
       "******************* $newline";
 
-print "\nTo build, do:\n";
-print "  \$ make\n\n";
-print "Developer installation (after you have built):\n";
-print "  \$ make dev-install\n\n";
+print "\nTo build, issue:\nmake\n\n";
+print "For the developer installation, issue:\nmake dev-install\n\n";
 
 $bootfile = "bootstrap";
 open( OUT, ">$bootfile" ) ||
@@ -2198,7 +2182,6 @@ if (rename( $bootfile, $tmp ) ne 1)
 {  `mv -f $bootfile $tmp`;
 }
 
-print "Configure completed\n";
 if ( $Warning ne "" ) {
 	print "***** WARNINGS ISSUED *****\n";
 }
