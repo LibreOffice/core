@@ -1108,10 +1108,11 @@ sal_Bool SvStream::ReadCsvLine( String& rStr, sal_Bool bEmbeddedLineBreak,
 
     if (bEmbeddedLineBreak)
     {
+        const sal_Unicode* pSeps = rFieldSeparators.GetBuffer();
+
         // See if the separator(s) include tab.
         bool bTabSep = lcl_UnicodeStrChr(pSeps, '\t') != NULL;
 
-        const sal_Unicode* pSeps = rFieldSeparators.GetBuffer();
         xub_StrLen nLastOffset = 0;
         xub_StrLen nQuotes = 0;
         while (!IsEof() && rStr.Len() < STRING_MAXLEN)
