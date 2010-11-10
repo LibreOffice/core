@@ -74,8 +74,6 @@
 
 #include <boost/static_assert.hpp>
 #include <algorithm>
-#include <iostream>
-#include <fstream>
 
 using namespace ::com::sun::star;
 

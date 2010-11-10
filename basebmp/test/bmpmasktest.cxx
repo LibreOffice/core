@@ -45,23 +45,12 @@
 #include <basebmp/color.hxx>
 #include <basebmp/scanlineformats.hxx>
 #include <basebmp/bitmapdevice.hxx>
-#include <basebmp/debug.hxx>
 #include "tools.hxx"
-
-#include <iostream>
-#include <fstream>
 
 using namespace ::basebmp;
 
 namespace
 {
-/*
-        std::ofstream output("32bpp_test.dump");
-        debugDump( rDevice, output );
-        std::ofstream output2("32bpp_bmp.dump");
-        debugDump( rBmp, output2 );
-*/
-
 class BmpMaskTest : public CppUnit::TestFixture
 {
 private:
@@ -180,7 +169,6 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-// -----------------------------------------------------------------------------
 CPPUNIT_TEST_SUITE_REGISTRATION(BmpMaskTest);
 }
 

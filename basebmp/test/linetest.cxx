@@ -40,21 +40,12 @@
 #include <basebmp/color.hxx>
 #include <basebmp/scanlineformats.hxx>
 #include <basebmp/bitmapdevice.hxx>
-#include <basebmp/debug.hxx>
 #include "tools.hxx"
-
-#include <iostream>
-#include <fstream>
 
 using namespace ::basebmp;
 
 namespace
 {
-/*
-  std::ofstream output("32bpp_test.dump");
-  debugDump( mpDevice32bpp, output );
-*/
-
 class LineTest : public CppUnit::TestFixture
 {
 private:
@@ -217,7 +208,6 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-// -----------------------------------------------------------------------------
 CPPUNIT_TEST_SUITE_REGISTRATION(LineTest);
 }
 
