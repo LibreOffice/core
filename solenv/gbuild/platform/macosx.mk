@@ -304,17 +304,6 @@ gb_Library_FILENAMES := \
     $(foreach lib,$(gb_Library_UNOLIBS),$(lib):$(lib)$(gb_Library_UNOEXT)) \
     $(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):$(gb_Library_UNOVERPRE)$(lib)$(gb_Library_PLAINEXT)) \
 
-# HACKS
-gb_Library_FILENAMES := $(patsubst comphelper:libcomphelper%,comphelper:libcomphelp4%,$(gb_Library_FILENAMES))
-gb_Library_FILENAMES := $(patsubst cppuhelper:libcppuhelper%,cppuhelper:libuno_cppuhelper%,$(gb_Library_FILENAMES))
-gb_Library_FILENAMES := $(patsubst ucbhelper:libucbhelper%,ucbhelper:libucbhelper4%,$(gb_Library_FILENAMES))
-gb_Library_FILENAMES := $(patsubst jvmfwk:libuno_jvmfwk%,jvmfwk:libjvmfwk%,$(gb_Library_FILENAMES))
-gb_Library_FILENAMES := $(patsubst salhelper:libsalhelper%,salhelper:libuno_salhelper%,$(gb_Library_FILENAMES))
-
-ifeq ($(USE_SYSTEM_STL),YES)
-gb_Library_FILENAMES := $(patsubst stl:%,stl:libstdc++.dylib,$(gb_Library_FILENAMES))
-gb_Library_TARGETS := $(filter-out stl,$(gb_Library_TARGETS))
-endif
 
 gb_Library_Library_platform =
 

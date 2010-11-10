@@ -120,6 +120,7 @@ endif
 endif
 endif
 
+include $(foreach repo,$(gb_REPOS),$(repo)/Platformfixes.mk)
 gb_Library_KNOWNLIBS := $(foreach namescheme,$(gb_Library_NAMESCHEMES),$(gb_Library_$(namescheme)LIBS))
 gb_StaticLibrary_KNOWNLIBS := $(foreach namescheme,$(gb_StaticLibrary_NAMESCHEMES),$(gb_StaticLibrary_$(namescheme)LIBS))
 
