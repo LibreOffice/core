@@ -169,7 +169,7 @@ class AbstractSdInsertLayerDlg_Impl : public AbstractSdInsertLayerDlg
     DECL_ABSTDLG_BASE(AbstractSdInsertLayerDlg_Impl,SdInsertLayerDlg)
     virtual void    GetAttr( SfxItemSet& rOutAttrs ) ;
     //from class Window
-    virtual void    SetHelpId( ULONG nHelpId ) ;
+    virtual void    SetHelpId( const rtl::OString& rHelpId ) ;
 };
 
 // add for SdInsertPasteDlg
@@ -207,14 +207,6 @@ class AbstractSdStartPresDlg_Impl : public AbstractSdStartPresDlg
 {
     DECL_ABSTDLG_BASE(AbstractSdStartPresDlg_Impl,SdStartPresentationDlg)
     virtual void    GetAttr( SfxItemSet& rOutAttrs );
-};
-
-// add for SdPrintDlg
-class SdPrintDlg;
-class AbstractSdPrintDlg_Impl : public AbstractSdPrintDlg
-{
-    DECL_ABSTDLG_BASE(AbstractSdPrintDlg_Impl,SdPrintDlg)
-    virtual USHORT  GetAttr();
 };
 
 // add for SdPresLayoutDlg
@@ -281,7 +273,6 @@ public:
     virtual SfxAbstractTabDialog*       CreateSdOutlineBulletTabDlg ( ::Window* pParent, const SfxItemSet* pAttr, ::sd::View* pView = NULL );
     virtual SfxAbstractTabDialog*       CreateSdParagraphTabDlg ( ::Window* pParent, const SfxItemSet* pAttr );
     virtual AbstractSdStartPresDlg*     CreateSdStartPresentationDlg( ::Window* pWindow, const SfxItemSet& rInAttrs, List& rPageNames, List* pCSList );
-    virtual AbstractSdPrintDlg*         CreateSdPrintDlg( ::Window* pWindow ); //add for SdPrintDlg
     virtual SfxAbstractTabDialog*       CreateSdPresLayoutTemplateDlg( SfxObjectShell* pDocSh, ::Window* pParent, SdResId DlgId, SfxStyleSheetBase& rStyleBase, PresentationObjects ePO, SfxStyleSheetBasePool* pSSPool );
     virtual AbstractSdPresLayoutDlg*    CreateSdPresLayoutDlg( ::sd::DrawDocShell* pDocShell, ::sd::ViewShell* pViewShell, ::Window* pWindow, const SfxItemSet& rInAttrs);
     virtual SfxAbstractTabDialog*       CreateSdTabTemplateDlg( ::Window* pParent, const SfxObjectShell* pDocShell, SfxStyleSheetBase& rStyleBase, SdrModel* pModel, SdrView* pView );

@@ -213,7 +213,7 @@
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:HangulHanjaConversion"/>
           <menu:menuitem menu:id=".uno:ChineseConversion"/>
-          <menu:menuitem menu:id=".uno:Thesaurus"/>
+          <menu:menuitem menu:id=".uno:ThesaurusDialog"/>
           <menu:menuitem menu:id=".uno:Hyphenation"/>
           <menu:menuseparator/>
           <menu:menuitem menu:id=".uno:MoreDictionaries"/>

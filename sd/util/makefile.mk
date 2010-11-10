@@ -50,6 +50,7 @@ RESLIB1SRSFILES=\
     $(SRS)$/notes.srs			\
     $(SRS)$/animui.srs			\
     $(SRS)$/slideshow.srs		\
+    $(SRS)$/slsview.srs			\
     $(SRS)$/uitable.srs			\
     $(SRS)$/view.srs			\
     $(SRS)$/uiannotations.srs	\
@@ -85,7 +86,7 @@ SHL1STDLIBS+= \
     $(CPPUHELPERLIB) \
     $(CPPULIB) \
     $(VOSLIB) \
-    $(CANVASLIB) \
+    $(CANVASTOOLSLIB) \
     $(SALLIB) \
     $(AVMEDIALIB)
 
@@ -230,7 +231,7 @@ SHL4OBJS += $(SLO)$/pchname.obj \
 .ENDIF # "$(GUI)$(COM)" == "WNTMSC"
 
 # $(ISDLIB) is build in SHL1TARGET
-.IF "$(GUI)" == "UNX"
+.IF "$(GUI)"=="UNX" || ("$(COM)"=="GCC" && "$(GUI)"=="WNT")
 SHL4DEPN=$(SHL1TARGETN)
 SHL5DEPN=$(SHL1TARGETN)
 .ELSE
@@ -275,3 +276,16 @@ $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo Making: $@
     @$(TYPE) sd.flt > $@
 
+ALLTAR : $(MISC)/sd.component $(MISC)/sdd.component
+
+$(MISC)/sd.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        sd.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt sd.component
+
+$(MISC)/sdd.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        sdd.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL2TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt sdd.component

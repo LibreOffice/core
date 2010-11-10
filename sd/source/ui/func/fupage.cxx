@@ -318,7 +318,12 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
                 pTempSet.reset( new SfxItemSet( mpDoc->GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST, 0) );
 
                 pTempSet->Put( XFillStyleItem( XFILL_BITMAP ) );
-                pTempSet->Put( XFillBitmapItem( String(RTL_CONSTASCII_USTRINGPARAM("background")), XOBitmap(aGraphic) ) );
+
+                // MigrateItemSet makes sure the XFillBitmapItem will have a unique name
+                SfxItemSet aMigrateSet( mpDoc->GetPool(), XATTR_FILLBITMAP, XATTR_FILLBITMAP );
+                aMigrateSet.Put( XFillBitmapItem( String(RTL_CONSTASCII_USTRINGPARAM("background")), XOBitmap(aGraphic) ) );
+                mpDoc->MigrateItemSet( &aMigrateSet, pTempSet.get(), NULL );
+
                 pTempSet->Put( XFillBmpStretchItem( TRUE ));
                 pTempSet->Put( XFillBmpTileItem( FALSE ));
             }
@@ -447,6 +452,16 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
                 pUndoMgr->AddUndoAction(pUndoGroup);
                 pUndoMgr->LeaveListAction();
 
+            }
+
+            // if background filling is set to master pages then clear from page set
+            if( mbMasterPage || bSetToAllPages )
+            {
+                for( USHORT nWhich = XATTR_FILL_FIRST; nWhich <= XATTR_FILL_LAST; nWhich++ )
+                {
+                    pTempSet->ClearItem( nWhich );
+                }
+                pTempSet->Put(XFillStyleItem(XFILL_NONE));
             }
 
             const SfxPoolItem *pItem;

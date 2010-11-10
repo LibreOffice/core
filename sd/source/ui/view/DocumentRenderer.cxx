@@ -27,6 +27,8 @@
 
 #include "precompiled_sd.hxx"
 
+#include <com/sun/star/beans/XPropertySet.hpp>
+
 #include "DocumentRenderer.hxx"
 #include "DocumentRenderer.hrc"
 
@@ -122,7 +124,7 @@ namespace {
 
         sal_Int32 GetHandoutPageCount (void) const
         {
-            sal_uInt32 nIndex = static_cast<sal_Int32>(mrProperties.getIntValue("SlidesPerPage", sal_Int32(4)));
+            sal_uInt32 nIndex = static_cast<sal_Int32>(mrProperties.getIntValue("SlidesPerPage", sal_Int32(0)));
             if (nIndex<maSlidesPerPage.size())
                 return maSlidesPerPage[nIndex];
             else if ( ! maSlidesPerPage.empty())
@@ -464,8 +466,9 @@ namespace {
                                     CreateChoice(_STR_IMPRESS_PRINT_UI_SLIDESPERPAGE_CHOICES_HELP),
                                     OUString( RTL_CONSTASCII_USTRINGPARAM( "SlidesPerPage" ) ),
                                     GetSlidesPerPageSequence(),
-                                    4,
+                                    0,
                                     OUString( RTL_CONSTASCII_USTRINGPARAM( "List" ) ),
+                                    Sequence< sal_Bool >(),
                                     aContentOpt
                                     )
                                 );
@@ -479,6 +482,7 @@ namespace {
                                     CreateChoice(_STR_IMPRESS_PRINT_UI_ORDER_CHOICES),
                                     0,
                                     OUString( RTL_CONSTASCII_USTRINGPARAM( "List" ) ),
+                                    Sequence< sal_Bool >(),
                                     aSlidesPerPageOpt )
                                 );
             }
@@ -554,6 +558,7 @@ namespace {
                                     CreateChoice(_STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES),
                                     0,
                                     OUString( RTL_CONSTASCII_USTRINGPARAM( "Radio" ) ),
+                                    Sequence< sal_Bool >(),
                                     aPageOptionsOpt
                                     )
                                 );
@@ -569,6 +574,7 @@ namespace {
                                     CreateChoice(_STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES_DRAW),
                                     0,
                                     OUString( RTL_CONSTASCII_USTRINGPARAM( "Radio" ) ),
+                                    Sequence< sal_Bool >(),
                                     aPageOptionsOpt
                                     )
                                 );
@@ -600,6 +606,7 @@ namespace {
                                 CreateChoice(_STR_IMPRESS_PRINT_UI_BROCHURE_INCLUDE_LIST),
                                 0,
                                 OUString( RTL_CONSTASCII_USTRINGPARAM( "List" ) ),
+                                Sequence< sal_Bool >(),
                                 aIncludeOpt
                                 )
                             );
@@ -672,7 +679,8 @@ namespace {
             const Sequence<rtl::OUString> aChoice (
                 CreateChoice(_STR_IMPRESS_PRINT_UI_SLIDESPERPAGE_CHOICES));
             maSlidesPerPage.clear();
-            for (sal_Int32 nIndex=0,nCount=aChoice.getLength(); nIndex<nCount; ++nIndex)
+            maSlidesPerPage.push_back(0); // first is using the default
+            for (sal_Int32 nIndex=1,nCount=aChoice.getLength(); nIndex<nCount; ++nIndex)
                 maSlidesPerPage.push_back(aChoice[nIndex].toInt32());
             return aChoice;
         }
@@ -996,6 +1004,9 @@ namespace {
         {
             SdPage& rHandoutPage (*rDocument.GetSdPage(0, PK_HANDOUT));
 
+            Reference< com::sun::star::beans::XPropertySet > xHandoutPage( rHandoutPage.getUnoPage(), UNO_QUERY );
+            const rtl::OUString sPageNumber( RTL_CONSTASCII_USTRINGPARAM( "Number" ) );
+
             // Collect the page objects of the handout master.
             std::vector<SdrPageObj*> aHandoutPageObjects;
             SdrObjListIter aShapeIter (rHandoutPage);
@@ -1050,7 +1061,15 @@ namespace {
                 }
             }
 
-            rViewShell.SetPrintedHandoutPageNum(mnHandoutPageIndex + 1);
+            if( xHandoutPage.is() ) try
+            {
+                xHandoutPage->setPropertyValue( sPageNumber, Any( static_cast<sal_Int16>(mnHandoutPageIndex) ) );
+            }
+            catch( Exception& )
+            {
+            }
+            rViewShell.SetPrintedHandoutPageNum( mnHandoutPageIndex + 1 );
+
             MapMode aMap (rPrinter.GetMapMode());
             rPrinter.SetMapMode(maMap);
 
@@ -1067,6 +1086,13 @@ namespace {
                 msPageString,
                 maPageStringOffset);
 
+            if( xHandoutPage.is() ) try
+            {
+                xHandoutPage->setPropertyValue( sPageNumber, Any( static_cast<sal_Int16>(0) ) );
+            }
+            catch( Exception& )
+            {
+            }
             rViewShell.SetPrintedHandoutPageNum(1);
 
             // Restore outlines.
@@ -1080,7 +1106,8 @@ namespace {
                         pPathObj->SetMergedItem(XLineStyleItem(XLINE_SOLID));
                 }
             }
-        }
+
+       }
 
     private:
         const USHORT mnHandoutPageIndex;
@@ -1223,6 +1250,7 @@ public:
             return;
 
         bool bIsValueChanged = processProperties( rOptions );
+        bool bIsPaperChanged = false;
 
         // The RenderDevice property is handled specially: its value is
         // stored in mpPrinter instead of being retrieved on demand.
@@ -1234,14 +1262,21 @@ public:
             VCLXDevice* pDevice = VCLXDevice::GetImplementation(xRenderDevice);
             OutputDevice* pOut = pDevice ? pDevice->GetOutputDevice() : NULL;
             mpPrinter = dynamic_cast<Printer*>(pOut);
+            Size aPageSizePixel = mpPrinter ? mpPrinter->GetPaperSizePixel() : Size();
+            if( aPageSizePixel != maPrinterPageSizePixel )
+            {
+                bIsPaperChanged = true;
+                maPrinterPageSizePixel = aPageSizePixel;
+            }
         }
 
         if (bIsValueChanged)
         {
             if ( ! mpOptions )
                 mpOptions.reset(new PrintOptions(*this, maSlidesPerPage));
-            PreparePages();
         }
+        if( bIsValueChanged || bIsPaperChanged )
+            PreparePages();
     }
 
 
@@ -1371,6 +1406,7 @@ private:
     ViewShellBase& mrBase;
     bool mbIsDisposed;
     Printer* mpPrinter;
+    Size maPrinterPageSizePixel;
     ::boost::scoped_ptr<PrintOptions> mpOptions;
     ::std::vector< ::boost::shared_ptr< ::sd::PrinterPage> > maPrinterPages;
     ::boost::scoped_ptr<DrawView> mpPrintView;
@@ -1528,6 +1564,7 @@ private:
         AutoLayout eLayout = AUTOLAYOUT_HANDOUT6;
         switch (nSlidesPerHandout)
         {
+            case 0: eLayout = AUTOLAYOUT_NONE; break; // AUTOLAYOUT_HANDOUT1; break;
             case 1: eLayout = AUTOLAYOUT_HANDOUT1; break;
             case 2: eLayout = AUTOLAYOUT_HANDOUT2; break;
             case 3: eLayout = AUTOLAYOUT_HANDOUT3; break;
@@ -1885,12 +1922,17 @@ private:
                 ++nShapeCount;
         }
 
+        const USHORT nPageCount = mrBase.GetDocument()->GetSdPageCount(PK_STANDARD);
+        const USHORT nHandoutPageCount = nShapeCount ? (nPageCount + nShapeCount - 1) / nShapeCount : 0;
+        pViewShell->SetPrintedHandoutPageCount( nHandoutPageCount );
+        mrBase.GetDocument()->setHandoutPageCount( nHandoutPageCount );
+
         // Distribute pages to handout pages.
         ::std::vector<USHORT> aPageIndices;
         std::vector<SdPage*> aPagesVector;
         for (USHORT
                  nIndex=0,
-                 nCount=mrBase.GetDocument()->GetSdPageCount(PK_STANDARD),
+                 nCount= nPageCount,
                  nHandoutPageIndex=0;
              nIndex <= nCount;
              ++nIndex)

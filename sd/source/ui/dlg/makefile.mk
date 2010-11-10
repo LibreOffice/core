@@ -63,7 +63,6 @@ SRC1FILES =\
     navigatr.src\
     sdpreslt.src\
     morphdlg.src\
-    printdlg.src\
     dlgfield.src\
     custsdlg.src\
     brkdlg.src\
@@ -71,8 +70,7 @@ SRC1FILES =\
     dlgolbul.src \
     LayerDialog.src			\
     PaneDockingWindow.src \
-    layeroptionsdlg.src \
-    printdialog.src
+    layeroptionsdlg.src
 
 SLOFILES =  \
         $(SLO)$/inspagob.obj \
@@ -102,7 +100,6 @@ SLOFILES =  \
         $(SLO)$/navigatr.obj \
         $(SLO)$/sdpreslt.obj \
         $(SLO)$/morphdlg.obj	\
-        $(SLO)$/printdlg.obj	\
         $(SLO)$/dlgfield.obj	\
         $(SLO)$/custsdlg.obj	\
         $(SLO)$/brkdlg.obj      \
@@ -120,8 +117,7 @@ SLOFILES =  \
         $(SLO)$/sdabstdlg.obj \
         $(SLO)$/PaneChildWindows.obj			\
         $(SLO)$/PaneDockingWindow.obj			\
-        $(SLO)$/PaneShells.obj \
-        $(SLO)$/printdialog.obj
+        $(SLO)$/PaneShells.obj
 
 LIB1TARGET= $(SLB)$/$(TARGET).lib
 
@@ -147,8 +143,7 @@ LIB1OBJFILES= \
         $(SLO)$/sdabstdlg.obj \
         $(SLO)$/PaneChildWindows.obj		\
         $(SLO)$/PaneDockingWindow.obj		\
-        $(SLO)$/PaneShells.obj \
-        $(SLO)$/printdialog.obj
+        $(SLO)$/PaneShells.obj
 
 
 LIB2TARGET= $(SLB)$/sdui.lib
@@ -173,7 +168,6 @@ LIB2OBJFILES= \
         $(SLO)$/dlgolbul.obj \
         $(SLO)$/paragr.obj \
         $(SLO)$/present.obj \
-        $(SLO)$/printdlg.obj \
         $(SLO)$/prltempl.obj \
         $(SLO)$/sdpreslt.obj \
         $(SLO)$/tabtempl.obj \

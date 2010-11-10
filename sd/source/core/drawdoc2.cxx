@@ -307,10 +307,10 @@ void SdDrawDocument::UpdatePageRelativeURLs(const String& rOldName, const String
         return;
 
     SfxItemPool& pPool(GetPool());
-    USHORT nCount = pPool.GetItemCount(EE_FEATURE_FIELD);
-    for (USHORT nOff = 0; nOff < nCount; nOff++)
+    sal_uInt32 nCount = pPool.GetItemCount2(EE_FEATURE_FIELD);
+    for (sal_uInt32 nOff = 0; nOff < nCount; nOff++)
     {
-        const SfxPoolItem *pItem = pPool.GetItem(EE_FEATURE_FIELD, nOff);
+        const SfxPoolItem *pItem = pPool.GetItem2(EE_FEATURE_FIELD, nOff);
         const SvxFieldItem* pFldItem = dynamic_cast< const SvxFieldItem * > (pItem);
 
         if(pFldItem)
@@ -352,10 +352,10 @@ void SdDrawDocument::UpdatePageRelativeURLs(SdPage* pPage, USHORT nPos, sal_Int3
     bool bNotes = (pPage->GetPageKind() == PK_NOTES);
 
     SfxItemPool& pPool(GetPool());
-    USHORT nCount = pPool.GetItemCount(EE_FEATURE_FIELD);
-    for (USHORT nOff = 0; nOff < nCount; nOff++)
+    sal_uInt32 nCount = pPool.GetItemCount2(EE_FEATURE_FIELD);
+    for (sal_uInt32 nOff = 0; nOff < nCount; nOff++)
     {
-        const SfxPoolItem *pItem = pPool.GetItem(EE_FEATURE_FIELD, nOff);
+        const SfxPoolItem *pItem = pPool.GetItem2(EE_FEATURE_FIELD, nOff);
         const SvxFieldItem* pFldItem;
 
         if ((pFldItem = dynamic_cast< const SvxFieldItem * > (pItem)) != 0)
@@ -1354,7 +1354,8 @@ USHORT SdDrawDocument::CreatePage (
     AutoLayout eStandardLayout,
     AutoLayout eNotesLayout,
     BOOL bIsPageBack,
-    BOOL bIsPageObj)
+    BOOL bIsPageObj,
+    const sal_Int32 nInsertPosition)
 {
     SdPage* pPreviousStandardPage;
     SdPage* pPreviousNotesPage;
@@ -1422,16 +1423,17 @@ USHORT SdDrawDocument::CreatePage (
     pNotesPage->setHeaderFooterSettings( pPreviousNotesPage->getHeaderFooterSettings() );
 
     return InsertPageSet (
-        pActualPage, ePageKind,
+        pActualPage,
+        ePageKind,
         sStandardPageName,
         sNotesPageName,
         eStandardLayout,
         eNotesLayout,
         bIsPageBack,
         bIsPageObj,
-
         pStandardPage,
-        pNotesPage);
+        pNotesPage,
+        nInsertPosition);
 }
 
 
@@ -1473,7 +1475,8 @@ USHORT SdDrawDocument::DuplicatePage (
     AutoLayout eStandardLayout,
     AutoLayout eNotesLayout,
     BOOL bIsPageBack,
-    BOOL bIsPageObj)
+    BOOL bIsPageObj,
+    const sal_Int32 nInsertPosition)
 {
     SdPage* pPreviousStandardPage;
     SdPage* pPreviousNotesPage;
@@ -1500,16 +1503,17 @@ USHORT SdDrawDocument::DuplicatePage (
     pNotesPage = (SdPage*) pPreviousNotesPage->Clone();
 
     return InsertPageSet (
-        pActualPage, ePageKind,
+        pActualPage,
+        ePageKind,
         sStandardPageName,
         sNotesPageName,
         eStandardLayout,
         eNotesLayout,
         bIsPageBack,
         bIsPageObj,
-
         pStandardPage,
-        pNotesPage);
+        pNotesPage,
+        nInsertPosition);
 }
 
 
@@ -1524,9 +1528,9 @@ USHORT SdDrawDocument::InsertPageSet (
     AutoLayout eNotesLayout,
     BOOL bIsPageBack,
     BOOL bIsPageObj,
-
     SdPage* pStandardPage,
-    SdPage* pNotesPage)
+    SdPage* pNotesPage,
+    sal_Int32 nInsertPosition)
 {
     SdPage* pPreviousStandardPage;
     SdPage* pPreviousNotesPage;
@@ -1556,13 +1560,16 @@ USHORT SdDrawDocument::InsertPageSet (
         eNotesLayout = pPreviousNotesPage->GetAutoLayout();
     }
 
+    OSL_ASSERT(nNotesPageNum==nStandardPageNum+1);
+    if (nInsertPosition < 0)
+        nInsertPosition = nStandardPageNum;
 
     // Set up and insert the standard page.
     SetupNewPage (
         pPreviousStandardPage,
         pStandardPage,
         aStandardPageName,
-        nStandardPageNum,
+        nInsertPosition,
         bIsPageBack,
         bIsPageObj);
 
@@ -1572,7 +1579,7 @@ USHORT SdDrawDocument::InsertPageSet (
         pPreviousNotesPage,
         pNotesPage,
         aNotesPageName,
-        nNotesPageNum,
+        nInsertPosition+1,
         bIsPageBack,
         bIsPageObj);
 

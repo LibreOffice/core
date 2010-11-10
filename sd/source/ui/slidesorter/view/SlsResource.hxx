@@ -24,13 +24,24 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#define DLG_PRINT_WARNINGS 828
-#define FI_INFO 1
-#define RBT_SCALE 1
-#define RBT_POSTER 2
-#define RBT_CUT 3
-#define GRP_OPTIONS 1
-#define BTN_OK 1
-#define BTN_CANCEL 1
-#define BTN_HELP 1
 
+#ifndef SD_SLIDESORTER_RESOURCE_HXX
+#define SD_SLIDESORTER_RESOURCE_HXX
+
+#include "view/SlsResource.hrc"
+#include "sdresid.hxx"
+#include <tools/rc.hxx>
+
+namespace sd { namespace slidesorter { namespace view {
+
+class LocalResource : public Resource
+{
+public:
+    LocalResource (const sal_uInt16 nResourceId) : Resource(SdResId(nResourceId)){}
+    ~LocalResource (void) { FreeResource(); }
+};
+
+
+} } } // end of namespace ::sd::slidesorter::view
+
+#endif
