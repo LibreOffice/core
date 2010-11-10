@@ -778,7 +778,6 @@ sub dmake_dir {
             print "$dmake\n";
             print $check_error_string;
         } else {
-            print "\n" if ( ! $show );
             print "Entering $job_name\n";
         };
         remove_from_dependencies($job_name, \%local_deps_hash) if (!$child);
