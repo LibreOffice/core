@@ -26,30 +26,30 @@
 #*************************************************************************
 
 # GUI String in the installer ("Java Runtime Environment (${JAVAVERSION})")
-JAVAVERSION=Java 6 Update 20
-WINDOWSJAVAVERSION=Java 6 Update 20
+JAVAVERSION=Java 6 Update 22
+WINDOWSJAVAVERSION=Java 6 Update 22
 
 # Windows (scp2 and downloadtemplate.nsi)
-WINDOWSJAVAFILENAME=jre-6u20-windows-i586.exe
-WINDOWSJAVAREGISTRYENTRY=1.6.0_20
+WINDOWSJAVAFILENAME=jre-6u22-windows-i586.exe
+WINDOWSJAVAREGISTRYENTRY=1.6.0_22
 
 # Linux (scp2)
-LINUXJAVAFILENAME=jre-6u20-linux-i586.rpm
+LINUXJAVAFILENAME=jre-6u22-linux-i586.rpm
 # Linux (rpmUnit.xml, rpm -qp <filename> )
-LINUXJAVANAME=jre-1.6.0_20-fcs
+LINUXJAVANAME=jre-1.6.0_22-fcs
 
 # Linux-x64 (scp2)
-LINUXX64JAVAFILENAME=jre-6u20-linux-amd64.rpm
+LINUXX64JAVAFILENAME=jre-6u22-linux-amd64.rpm
 
 # Solaris Sparc (scp2)
-SOLSJAVARTPACKED=SUNWj6rt_1_6_0_20_sparc.tar.gz
-SOLSJAVACFGPACKED=SUNWj6cfg_1_6_0_20_sparc.tar.gz
-SOLSJAVAMANPACKED=SUNWj6man_1_6_0_20_sparc.tar.gz
+SOLSJAVARTPACKED=SUNWj6rt_1_6_0_22_sparc.tar.gz
+SOLSJAVACFGPACKED=SUNWj6cfg_1_6_0_22_sparc.tar.gz
+SOLSJAVAMANPACKED=SUNWj6man_1_6_0_22_sparc.tar.gz
 
 # Solaris x86 (scp2)
-SOLIJAVARTPACKED=SUNWj6rt_1_6_0_20_x86.tar.gz
-SOLIJAVACFGPACKED=SUNWj6cfg_1_6_0_20_x86.tar.gz
-SOLIJAVAMANPACKED=SUNWj6man_1_6_0_20_x86.tar.gz
+SOLIJAVARTPACKED=SUNWj6rt_1_6_0_22_x86.tar.gz
+SOLIJAVACFGPACKED=SUNWj6cfg_1_6_0_22_x86.tar.gz
+SOLIJAVAMANPACKED=SUNWj6man_1_6_0_22_x86.tar.gz
 
 # Solaris (pkgUnit.xml, needs only to be changed in major changes)
 SOLARISJAVART=SUNWj6rt

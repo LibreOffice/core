@@ -130,7 +130,7 @@ void SAL_CALL AccessibleBrowseBoxHeaderCell::grabFocus()
 // -----------------------------------------------------------------------------
 namespace
 {
-    Rectangle getRectangle(IAccessibleTableProvider* _pBrowseBox,sal_Int32 _nRowColIndex, BOOL _bOnScreen,BOOL _bRowBar)
+    Rectangle getRectangle(IAccessibleTableProvider* _pBrowseBox,sal_Int32 _nRowColIndex, sal_Bool _bOnScreen,sal_Bool _bRowBar)
     {
         sal_Int32 nRow  = 0;
         sal_uInt16 nCol =  (sal_uInt16)_nRowColIndex;
@@ -140,20 +140,20 @@ namespace
             nCol = 0;
         }
 
-        Rectangle aRet(_pBrowseBox->GetFieldRectPixelAbs( nRow , nCol, TRUE, _bOnScreen));
+        Rectangle aRet(_pBrowseBox->GetFieldRectPixelAbs( nRow , nCol, sal_True, _bOnScreen));
         return Rectangle(aRet.TopLeft() - Point(0,aRet.GetHeight()),aRet.GetSize());
     }
 }
 
 Rectangle AccessibleBrowseBoxHeaderCell::implGetBoundingBox()
 {
-    return getRectangle(mpBrowseBox,m_nColumnRowId,FALSE,isRowBarCell());
+    return getRectangle(mpBrowseBox,m_nColumnRowId,sal_False,isRowBarCell());
 }
 // -----------------------------------------------------------------------------
 
 Rectangle AccessibleBrowseBoxHeaderCell::implGetBoundingBoxOnScreen()
 {
-    return getRectangle(mpBrowseBox,m_nColumnRowId,TRUE,isRowBarCell());
+    return getRectangle(mpBrowseBox,m_nColumnRowId,sal_True,isRowBarCell());
 }
 // -----------------------------------------------------------------------------
 sal_Int32 SAL_CALL AccessibleBrowseBoxHeaderCell::getAccessibleIndexInParent()

@@ -190,7 +190,7 @@ public:
     // XAccessibleComponent ---------------------------------------------------
 
     /** @return
-        <TRUE/>, if the point lies within the bounding box of this object. */
+        <sal_True/>, if the point lies within the bounding box of this object. */
     virtual sal_Bool SAL_CALL containsPoint( const ::com::sun::star::awt::Point& rPoint )
         throw ( ::com::sun::star::uno::RuntimeException );
 
@@ -212,15 +212,15 @@ public:
     virtual ::com::sun::star::awt::Size SAL_CALL getSize()
         throw ( ::com::sun::star::uno::RuntimeException );
 
-    /** @return  <TRUE/>, if the object is showing. */
+    /** @return  <sal_True/>, if the object is showing. */
     virtual sal_Bool SAL_CALL isShowing()
         throw ( ::com::sun::star::uno::RuntimeException );
 
-    /** @return  <TRUE/>, if the object is visible. */
+    /** @return  <sal_True/>, if the object is visible. */
     virtual sal_Bool SAL_CALL isVisible()
         throw ( ::com::sun::star::uno::RuntimeException );
 
-    /** @return  <TRUE/>, if the object can accept the focus. */
+    /** @return  <sal_True/>, if the object can accept the focus. */
     virtual sal_Bool SAL_CALL isFocusTraversable()
         throw ( ::com::sun::star::uno::RuntimeException );
 
@@ -302,7 +302,7 @@ public:
             const ::com::sun::star::uno::Any& rNewValue,
 
     const ::com::sun::star::uno::Any& rOldValue );
-    /** @return  <TRUE/>, if the object is not disposed or disposing. */
+    /** @return  <sal_True/>, if the object is not disposed or disposing. */
     sal_Bool isAlive() const;
 
 protected:
@@ -312,7 +312,7 @@ protected:
         its parent accessible window. Derived classes may implement different
         behaviour.
         @attention  This method requires locked mutex's and a living object.
-        @return  <TRUE/>, if the object is really showing. */
+        @return  <sal_True/>, if the object is really showing. */
     virtual sal_Bool implIsShowing();
 
     /** Derived classes return the bounding box relative to the parent window.

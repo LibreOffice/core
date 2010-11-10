@@ -618,7 +618,7 @@ namespace accessibility
             throw IndexOutOfBoundsException();
 
         sal_Int32 nLen = nEndIndex - nStartIndex + 1;
-        ::svt::OStringTransfer::CopyString( sText.Copy( (USHORT)nStartIndex, (USHORT)nLen ), getListBox() );
+        ::svt::OStringTransfer::CopyString( sText.Copy( (sal_uInt16)nStartIndex, (sal_uInt16)nLen ), getListBox() );
 
         return sal_True;
     }
@@ -725,7 +725,7 @@ namespace accessibility
         if ( !pEntry )
             throw IndexOutOfBoundsException();
 
-        getListBox()->Select( pEntry, TRUE );
+        getListBox()->Select( pEntry, sal_True );
     }
     // -----------------------------------------------------------------------------
     sal_Bool SAL_CALL AccessibleListBoxEntry::isAccessibleChildSelected( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
@@ -759,7 +759,7 @@ namespace accessibility
         {
             SvLBoxEntry* pEntry = getListBox()->GetEntry( pParent, i );
             if ( getListBox()->IsSelected( pEntry ) )
-                getListBox()->Select( pEntry, FALSE );
+                getListBox()->Select( pEntry, sal_False );
         }
     }
     // -----------------------------------------------------------------------------
@@ -779,7 +779,7 @@ namespace accessibility
         {
             SvLBoxEntry* pEntry = getListBox()->GetEntry( pParent, i );
             if ( !getListBox()->IsSelected( pEntry ) )
-                getListBox()->Select( pEntry, TRUE );
+                getListBox()->Select( pEntry, sal_True );
         }
     }
     // -----------------------------------------------------------------------------
@@ -851,7 +851,7 @@ namespace accessibility
         if ( !pEntry )
             throw IndexOutOfBoundsException();
 
-        getListBox()->Select( pEntry, FALSE );
+        getListBox()->Select( pEntry, sal_False );
     }
     sal_Int32 SAL_CALL AccessibleListBoxEntry::getCaretPosition(  ) throw (::com::sun::star::uno::RuntimeException)
     {

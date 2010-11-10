@@ -331,7 +331,7 @@ Reference< XAccessible > VCLXAccessibleStatusBar::getAccessibleChild( sal_Int32 
     {
         if ( m_pStatusBar )
         {
-            sal_uInt16 nItemId = m_pStatusBar->GetItemId( (USHORT)i );
+            sal_uInt16 nItemId = m_pStatusBar->GetItemId( (sal_uInt16)i );
 
             xChild = new VCLXAccessibleStatusBarItem( m_pStatusBar, nItemId );
 

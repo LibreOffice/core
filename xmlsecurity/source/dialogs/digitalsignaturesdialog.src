@@ -32,7 +32,7 @@
 ModalDialog RID_XMLSECDLG_DIGSIG
 {
     HelpId = HID_XMLSEC_DLG_DIGSIG;
-    Size = MAP_APPFONT( DS_WIDTH, DS_HEIGHT );
+    Size = MAP_APPFONT( 234, 191 );
     OutputSize = TRUE;
     Closeable = TRUE;
     Moveable = TRUE;
@@ -42,30 +42,30 @@ ModalDialog RID_XMLSECDLG_DIGSIG
 
     FixedText FT_HINT_DOC
     {
-        Pos = MAP_APPFONT( DS_COL_0, DS_ROW_0 );
-        Size = MAP_APPFONT( DS_COL_7-DS_COL_0, RSC_CD_FIXEDTEXT_HEIGHT );
+        Pos = MAP_APPFONT( 6, 3 );
+        Size = MAP_APPFONT( 222, 8 );
         Hide = TRUE;
         Text [ en-US ] = "The following have signed the document content:";
     };
     FixedText FT_HINT_BASIC
     {
-        Pos = MAP_APPFONT( DS_COL_0, DS_ROW_0 );
-        Size = MAP_APPFONT( DS_COL_7-DS_COL_0, RSC_CD_FIXEDTEXT_HEIGHT );
+        Pos = MAP_APPFONT( 6, 3 );
+        Size = MAP_APPFONT( 222, 8 );
         Hide = TRUE;
         Text [ en-US ] = "The following have signed the document macro:";
     };
     FixedText FT_HINT_PACK
     {
-        Pos = MAP_APPFONT( DS_COL_0, DS_ROW_0 );
-        Size = MAP_APPFONT( DS_COL_7-DS_COL_0, RSC_CD_FIXEDTEXT_HEIGHT );
+        Pos = MAP_APPFONT( 6, 3 );
+        Size = MAP_APPFONT( 222, 8 );
         Hide = TRUE;
         Text [ en-US ] = "The following have signed this package:";
     };
     Control LB_SIGNATURES
     {
         HelpId = HID_XMLSEC_CTRL_SIGNATURESDLG;
-        Pos = MAP_APPFONT( DS_COL_0, DS_ROW_1 );
-        Size = MAP_APPFONT( DS_LB_WIDTH, DS_ROW_2-DS_ROW_1 );
+        Pos = MAP_APPFONT( 6, 14 );
+        Size = MAP_APPFONT( 222, 109 );
         SVLook = TRUE;
         Border = TRUE;
     };
@@ -88,8 +88,8 @@ ModalDialog RID_XMLSECDLG_DIGSIG
 
     FixedImage IMG_STATE_VALID
     {
-        Pos = MAP_APPFONT( DS_COL_0, DS_ROW_2A );
-        Size = MAP_APPFONT( IMG1_WIDTH, IMG1_HEIGHT );
+        Pos = MAP_APPFONT( 6, 127 );
+        Size = MAP_APPFONT( 33, 22 );
         Fixed = Image
         {
             ImageBitmap = Bitmap { File = "signet_11x16.png"; };
@@ -98,22 +98,22 @@ ModalDialog RID_XMLSECDLG_DIGSIG
     };
     FixedText FI_STATE_VALID
     {
-        Pos = MAP_APPFONT( DS_COL_0, DS_ROW_2A );
-        Size = MAP_APPFONT( DS_COL_7-DS_COL_0, RSC_CD_FIXEDTEXT_HEIGHT );
+        Pos = MAP_APPFONT( 6, 127 );
+        Size = MAP_APPFONT( 222, 8 );
         Hide = TRUE;
         Text [ en-US ] = "The signatures in this document are valid";
     };
     FixedText FI_STATE_OLDSIGNATURE
     {
-        Pos = MAP_APPFONT( DS_COL_0, DS_ROW_2A );
-        Size = MAP_APPFONT( DS_COL_7-DS_COL_0, RSC_CD_FIXEDTEXT_HEIGHT );
+        Pos = MAP_APPFONT( 6, 127 );
+        Size = MAP_APPFONT( 222, 8 );
         Hide = TRUE;
         Text [ en-US ] = "Not all parts of the document are signed";
     };
     FixedImage IMG_STATE_BROKEN
     {
-        Pos = MAP_APPFONT( DS_COL_0, DS_ROW_2A );
-        Size = MAP_APPFONT( IMG1_WIDTH, IMG1_HEIGHT );
+        Pos = MAP_APPFONT( 6, 127 );
+        Size = MAP_APPFONT( 33, 22 );
         Fixed = Image
         {
             ImageBitmap = Bitmap { File = "caution_11x16.png"; };
@@ -122,15 +122,15 @@ ModalDialog RID_XMLSECDLG_DIGSIG
     };
     FixedText FI_STATE_BROKEN
     {
-        Pos = MAP_APPFONT( DS_COL_0, DS_ROW_2A );
-        Size = MAP_APPFONT( DS_COL_7-DS_COL_0, RSC_CD_FIXEDTEXT_HEIGHT );
+        Pos = MAP_APPFONT( 6, 127 );
+        Size = MAP_APPFONT( 222, 8 );
         Hide = TRUE;
         Text [ en-US ] = "The signatures in this document are invalid";
     };
     FixedImage IMG_STATE_NOTVALIDATED
     {
-        Pos = MAP_APPFONT( DS_COL_0, DS_ROW_2A );
-        Size = MAP_APPFONT( IMG1_WIDTH, IMG1_HEIGHT );
+        Pos = MAP_APPFONT( 6, 127 );
+        Size = MAP_APPFONT( 33, 22 );
         Fixed = Image
         {
             ImageBitmap = Bitmap { File = "notcertificate_16.png"; };
@@ -139,48 +139,47 @@ ModalDialog RID_XMLSECDLG_DIGSIG
     };
     FixedText FI_STATE_NOTVALIDATED
     {
-        Pos = MAP_APPFONT( DS_COL_0, DS_ROW_2A );
-        Size = MAP_APPFONT( DS_COL_7-DS_COL_0, RSC_CD_FIXEDTEXT_HEIGHT );
+        Pos = MAP_APPFONT( 6, 127 );
+        Size = MAP_APPFONT( 222, 8 );
         Hide = TRUE;
     };
     PushButton BTN_VIEWCERT
     {
-        Pos = MAP_APPFONT( DS_COL_1, DS_ROW_3 );
-        Size = MAP_APPFONT( DS_COL_2-DS_COL_1, RSC_CD_PUSHBUTTON_HEIGHT );
+        HelpID = "xmlsecurity:PushButton:RID_XMLSECDLG_DIGSIG:BTN_VIEWCERT";
+        Pos = MAP_APPFONT( 6, 142 );
+        Size = MAP_APPFONT( 70, 14 );
         Text [ en-US ] = "View Certificate...";
     };
     PushButton BTN_ADDCERT
     {
-        Pos = MAP_APPFONT( DS_COL_3, DS_ROW_3 );
-        Size = MAP_APPFONT( DS_COL_4-DS_COL_3, RSC_CD_PUSHBUTTON_HEIGHT );
-        Text [ en-US ] = "Add...";
+        HelpID = "xmlsecurity:PushButton:RID_XMLSECDLG_DIGSIG:BTN_ADDCERT";
+        Pos = MAP_APPFONT( 82, 142 );
+        Size = MAP_APPFONT( 70, 14 );
+        Text [ en-US ] = "Sign Document...";
     };
     PushButton BTN_REMOVECERT
     {
-        Pos = MAP_APPFONT( DS_COL_5, DS_ROW_3 );
-        Size = MAP_APPFONT( DS_COL_6-DS_COL_5, RSC_CD_PUSHBUTTON_HEIGHT );
+        HelpID = "xmlsecurity:PushButton:RID_XMLSECDLG_DIGSIG:BTN_REMOVECERT";
+        Pos = MAP_APPFONT( 158, 142 );
+        Size = MAP_APPFONT( 70, 14 );
         Text [ en-US ] = "Remove";
     };
     FixedLine FL_BOTTOM_SEP
     {
-        Pos = MAP_APPFONT( 0, DLGS_BOTTOM_FL_Y( DS_HEIGHT ) );
-        Size = MAP_APPFONT( DS_WIDTH, RSC_CD_FIXEDLINE_HEIGHT );
+        Pos = MAP_APPFONT( 0, 160 );
+        Size = MAP_APPFONT( 234, 8 );
     };
     OKButton BTN_OK
     {
         DefButton = TRUE;
-        Pos = MAP_APPFONT( DLGS_BOTTOM_OK_X( DS_WIDTH ), DLGS_BOTTOM_BTN_Y( DS_HEIGHT ) );
-        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
-    };
-    CancelButton BTN_CANCEL
-    {
-        Pos = MAP_APPFONT( DLGS_BOTTOM_CANCEL_X( DS_WIDTH ), DLGS_BOTTOM_BTN_Y( DS_HEIGHT ) );
-        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+        Pos = MAP_APPFONT( 178, 171 );
+        Size = MAP_APPFONT( 50, 14 );
+        Text [ en-US ] = "Close";
     };
     HelpButton BTN_HELP
     {
-        Pos = MAP_APPFONT( DLGS_BOTTOM_HELP_X( DS_WIDTH ), DLGS_BOTTOM_BTN_Y( DS_HEIGHT ) );
-        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+        Pos = MAP_APPFONT( 6, 171 );
+        Size = MAP_APPFONT( 50, 14 );
     };
     Image IMG_STATE_VALID_HC
     {

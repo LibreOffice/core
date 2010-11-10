@@ -135,7 +135,6 @@ public:
 
 
     void                    SetPageWidth( USHORT nPageWidth );
-    void                    SetMaxDistance( USHORT nMaxDist );
     void                    EnableRelativeMode();
     void                    EnableRegisterMode();
     void                    EnableAutoFirstLine();

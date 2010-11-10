@@ -156,7 +156,7 @@ protected:
     /// Index in parent.  This is settable from the outside.
     sal_Int32   m_nIndexInParent;
     sal_Int32   m_nLastTopEntry;
-    USHORT      m_nLastSelectedPos;
+    sal_uInt16      m_nLastSelectedPos;
     bool        m_bDisableProcessEvent;
     bool        m_bVisible;
 
@@ -189,8 +189,8 @@ protected:
     /** Call this method when the item list has been changed, i.e. items
         have been deleted or inserted.
         @param bItemInserted
-            Indicate whether items have been inserted (<TRUE/>) or removed
-            (<FALSE/>).
+            Indicate whether items have been inserted (<sal_True/>) or removed
+            (<sal_False/>).
         @param nIndex
             Index of the new or removed item.  A value of -1 indicates that
             the whole list has been cleared.
@@ -215,8 +215,8 @@ private:
     void adjustEntriesIndexInParent(ListItems::iterator& _aBegin,::std::mem_fun_t<bool,VCLXAccessibleListItem>& _rMemFun);
     void UpdateEntryRange_Impl (void);
 protected:
-    void UpdateSelection_Impl (USHORT nPos = 0);
-    BOOL checkEntrySelected(USHORT _nPos,
+    void UpdateSelection_Impl (sal_uInt16 nPos = 0);
+    sal_Bool checkEntrySelected(sal_uInt16 _nPos,
                             ::com::sun::star::uno::Any& _rNewValue,
                             ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxNewAcc);
 private:

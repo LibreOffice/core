@@ -313,7 +313,7 @@ namespace accessibility
                 {
                     sal_uInt16 nPageId = (sal_uInt16)(sal_IntPtr) rVclWindowEvent.GetData();
 
-                    if ( nPageId == TABBAR_PAGE_NOTFOUND )
+                    if ( nPageId == TabBar::PAGE_NOT_FOUND )
                     {
                         for ( sal_Int32 i = m_aAccessibleChildren.size() - 1; i >= 0; --i )
                             RemoveChild( i );
@@ -488,7 +488,7 @@ namespace accessibility
         {
             if ( m_pTabBar )
             {
-                sal_uInt16 nPageId = m_pTabBar->GetPageId( (USHORT)i );
+                sal_uInt16 nPageId = m_pTabBar->GetPageId( (sal_uInt16)i );
 
                 xChild = new AccessibleTabBarPage( m_pTabBar, nPageId, this );
 
@@ -715,7 +715,7 @@ namespace accessibility
 
         if ( m_pTabBar )
         {
-            m_pTabBar->SetCurPageId( m_pTabBar->GetPageId( (USHORT)nChildIndex ) );
+            m_pTabBar->SetCurPageId( m_pTabBar->GetPageId( (sal_uInt16)nChildIndex ) );
             m_pTabBar->Update();
             m_pTabBar->ActivatePage();
             m_pTabBar->Select();
@@ -732,7 +732,7 @@ namespace accessibility
             throw IndexOutOfBoundsException();
 
         sal_Bool bSelected = sal_False;
-        if ( m_pTabBar && m_pTabBar->GetCurPageId() == m_pTabBar->GetPageId( (USHORT)nChildIndex ) )
+        if ( m_pTabBar && m_pTabBar->GetCurPageId() == m_pTabBar->GetPageId( (sal_uInt16)nChildIndex ) )
             bSelected = sal_True;
 
         return bSelected;

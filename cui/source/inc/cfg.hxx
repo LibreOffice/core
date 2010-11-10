@@ -75,8 +75,6 @@ public:
     SvxConfigDialog( Window*, const SfxItemSet* );
     ~SvxConfigDialog();
 
-    void                        ActivateTabPage( USHORT );
-
     virtual void                PageCreated( USHORT nId, SfxTabPage &rPage );
     virtual short               Ok();
 
@@ -258,12 +256,6 @@ private:
 
 public:
 
-    SvxConfigEntry(
-        const ::com::sun::star::uno::Sequence<
-            ::com::sun::star::beans::PropertyValue >& rProperties,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::container::XNameAccess >& rCommandToLabelMap );
-
     SvxConfigEntry( const ::rtl::OUString& rDisplayName,
                     const ::rtl::OUString& rCommandURL,
                     bool bPopup = FALSE,
@@ -337,11 +329,6 @@ public:
 
     sal_Int32   GetStyle() { return nStyle; }
     void        SetStyle( sal_Int32 style ) { nStyle = style; }
-
-    com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >
-        GetProperties(
-            const ::com::sun::star::uno::Reference<
-            ::com::sun::star::container::XNameAccess >& rCommandToLabelMap );
 };
 
 class SvxMenuEntriesListBox : public SvTreeListBox
@@ -694,7 +681,6 @@ public:
     void            RestoreToolbar( SvxConfigEntry* pToolbar );
     void            RemoveToolbar( SvxConfigEntry* pToolbar );
     void            ApplyToolbar( SvxConfigEntry* pToolbar );
-    void            ReloadToolbar( const rtl::OUString& rURL );
 
     rtl::OUString   GetSystemUIName( const rtl::OUString& rResourceURL );
 
@@ -744,7 +730,7 @@ public:
             aBtnOK.Enable( rLink.Call( this ) > 0 );
     }
 
-    void    SetEditHelpId(ULONG nHelpId) {aEdtName.SetHelpId(nHelpId);}
+    void    SetEditHelpId( const rtl::OString& aHelpId) {aEdtName.SetHelpId(aHelpId);}
 };
 
 class SvxIconSelectorDialog : public ModalDialog

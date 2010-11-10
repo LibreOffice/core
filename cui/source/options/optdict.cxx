@@ -168,6 +168,7 @@ IMPL_LINK( SvxNewDictionaryDialog, OKHdl_Impl, Button *, EMPTYARG )
             String aURL( linguistic::GetWritableDictionaryURL( sDict ) );
             xNewDic = Reference< XDictionary > (
                     xDicList->createDictionary( sDict, aLocale, eType, aURL ) , UNO_QUERY );
+            xNewDic->setActive( sal_True );
         }
         DBG_ASSERT(xNewDic.is(), "NULL pointer");
     }

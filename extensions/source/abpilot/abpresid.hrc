@@ -29,6 +29,7 @@
 #define EXTENSIONS_ABPRESID_HRC
 
 #include "abpilot.hrc"
+#include "extensio.hrc"
 
 //========================================================================
 // basics

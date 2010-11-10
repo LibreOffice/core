@@ -74,10 +74,7 @@ using namespace ::com::sun::star;
 #define FIXTODOUBLE( nFix )     ((double)nFix.Whole+(double)nFix.Frac/65536.)
 #define FIXTOLONG( nFix )       ((long)floor(FIXTODOUBLE(nFix)+0.5))
 
-#if defined WIN
-#define TWAIN_LIBNAME           "TWAIN.DLL"
-#define TWAIN_FUNCNAME          "DSM_Entry"
-#elif defined WNT
+#if defined WNT
 #define TWAIN_LIBNAME           "TWAIN_32.DLL"
 #define TWAIN_FUNCNAME          "DSM_Entry"
 #endif
@@ -109,7 +106,7 @@ class ImpTwain : public ::cppu::WeakImplHelper1< util::XCloseListener >
     TW_IDENTITY                                 aSrcIdent;
     Link                                        aNotifyLink;
     DSMENTRYPROC                                pDSM;
-    NAMESPACE_VOS( OModule )*                   pMod;
+    vos:: OModule *                 pMod;
     ULONG                                       nCurState;
     HWND                                        hTwainWnd;
     HHOOK                                       hTwainHook;
@@ -887,7 +884,11 @@ static Twain aTwain;
 // - ScannerManager -
 // ------------------
 
-void ScannerManager::DestroyData()
+void ScannerManager::AcquireData()
+{
+}
+
+void ScannerManager::ReleaseData()
 {
     if( mpData )
     {
@@ -979,7 +980,7 @@ SEQ( sal_Int8 ) ScannerManager::getDIB() throw()
         }
 
         GlobalUnlock( hDIB );
-        DestroyData();
+        ReleaseData();
     }
 
     return aRet;
@@ -1009,7 +1010,7 @@ BOOL SAL_CALL ScannerManager::configureScanner( ScannerContext& rContext )
     if( rContext.InternalData != 0 || rContext.ScannerName != ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TWAIN" ) ) )
         throw ScannerException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Scanner does not exist" ) ), xThis, ScanError_InvalidContext );
 
-    DestroyData();
+    ReleaseData();
 
     return aTwain.SelectSource( *this );
 }
@@ -1025,7 +1026,7 @@ void SAL_CALL ScannerManager::startScan( const ScannerContext& rContext, const u
     if( rContext.InternalData != 0 || rContext.ScannerName != ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TWAIN" ) ) )
         throw ScannerException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Scanner does not exist" ) ), xThis, ScanError_InvalidContext );
 
-    DestroyData();
+    ReleaseData();
     aTwain.PerformTransfer( *this, rxListener );
 }
 

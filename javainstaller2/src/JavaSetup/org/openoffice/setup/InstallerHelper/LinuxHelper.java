@@ -381,6 +381,39 @@ import java.util.Vector;public class LinuxHelper {
         return databasePath;
     }
 
+    public void investigateDebian(InstallData data) {
+
+        // First check: Is this a Debian system?
+
+        String dpkgFile = "/usr/bin/dpkg";
+
+        if ( new File(dpkgFile).exists() ) {
+
+            data.setIsDebianSystem(true);
+
+            // Second check: If this is a Debian system, is "--force-debian" required? Older
+            // versions do not support "--force-debian".
+
+            // String rpmQuery = "rpm --help;
+            String[] rpmQueryArray = new String[2];
+            rpmQueryArray[0] = "rpm";
+            rpmQueryArray[1] = "--help";
+
+            Vector returnVector = new Vector();
+            Vector returnErrorVector = new Vector();
+            int returnValue = ExecuteProcess.executeProcessReturnVector(rpmQueryArray, returnVector, returnErrorVector);
+
+            // Checking if the return vector contains the string "force-debian"
+
+            for (int i = 0; i < returnVector.size(); i++) {
+                String line = (String) returnVector.get(i);
+                if ( line.indexOf("force-debian") > -1 ) {
+                    data.setUseForceDebian(true);
+                }
+            }
+        }
+    }
+
     public void getLinuxFileInfo(PackageDescription packageData) {
         // analyzing a string like "openoffice-core01-2.0.3-159" as "name-version-release"
         InstallData data = InstallData.getInstance();

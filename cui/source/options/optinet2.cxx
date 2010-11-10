@@ -136,47 +136,6 @@ const char* SEARCHENGINE_GROUP  = "SearchEngines-$(vlang)";
 
 // -----------------------------------------------------------------------
 
-String lcl_MakeTabEntry(const SfxFilter* pFilter)
-{
-    String sEntry(pFilter->GetMimeType());
-    sEntry += '\t';
-    sEntry += pFilter->GetWildcard().GetWildCard();
-    sEntry += '\t';
-    sEntry += pFilter->GetName();
-#if defined(OS2)
-    sEntry += '\t';
-    sEntry += pFilter->GetTypeName();
-#endif
-    return sEntry;
-}
-
-// -----------------------------------------------------------------------
-
-BOOL IsJavaInstalled_Impl( /*!!!SfxIniManager* pIniMgr*/ )
-{
-    BOOL bRet = FALSE;
-/*!!! (pb) needs new implementation
-    String aIniEntry;
-    String aFullName = Config::GetConfigName( pIniMgr->Get( SFX_KEY_USERCONFIG_PATH ),
-                                              String::CreateFromAscii("java") );
-    INetURLObject aIniFileObj( aFullName, INET_PROT_FILE );
-    String aIniPath = aIniFileObj.getName();
-    if ( pIniMgr->SearchFile( aIniPath ) )
-    {
-        Config aJavaCfg( aIniPath );
-        aJavaCfg.SetGroup( "Java" );
-        ByteString sTemp = aJavaCfg.ReadKey( ByteString(::rtl::OUStringToOString(pIniMgr->GetKeyName( SFX_KEY_JAVA_SYSTEMCLASSPATH ),RTL_TEXTENCODING_UTF8)) );
-        String aJavaSystemClassPath = ::rtl::OStringToOUString(sTemp,RTL_TEXTENCODING_UTF8);
-        String aJavaRuntimeLib = ::rtl::OStringToOUString(aJavaCfg.ReadKey( "RuntimeLib" ),RTL_TEXTENCODING_UTF8);
-        if ( aJavaSystemClassPath.Len() && aJavaRuntimeLib.Len() )
-            bRet = TRUE;
-    }
-*/
-    return bRet;
-}
-
-// -----------------------------------------------------------------------
-
 void SvxNoSpaceEdit::KeyInput( const KeyEvent& rKEvent )
 {
     if ( bOnlyNumeric )
@@ -1130,146 +1089,6 @@ IMPL_LINK( SvxSearchTabPage, SearchPartHdl_Impl, RadioButton *, EMPTYARG )
     return 0;
 }
 
-// -----------------------------------------------------------------------
-
-/********************************************************************/
-/********************************************************************/
-/*                                                                  */
-/*  SvxOtherTabPage                                                 */
-/*                                                                  */
-/********************************************************************/
-/********************************************************************/
-
-/*-----------------15.05.97 09:51-------------------
-
---------------------------------------------------*/
-/*
-SvxPatternField::SvxPatternField( Window* pParent, const ResId& rResId ) :
-
-    PatternField( pParent, rResId ),
-
-    sMsg233 ( ResId( ST_MSG_233 ) ),
-    sMsg255 ( ResId( ST_MSG_255 ) )
-
-{
-    FreeResource();
-    SelectFixedFont();
-} */
-
-/*-----------------15.05.97 09:51-------------------
-
---------------------------------------------------*/
-
-/*void SvxPatternField::KeyInput( const KeyEvent& rKEvt )
-{
-    PatternField::KeyInput( rKEvt );
-    BOOL bDelete = ( rKEvt.GetKeyCode().GetCode() == KEY_DELETE );
-    String sEntry( GetText() );
-    sEntry[(USHORT)3] = '.';
-    sEntry[(USHORT)7] = '.';
-    sEntry[(USHORT)11] = '.';
-    Selection aSelection( GetSelection() );
-    String sPart( sEntry.GetToken( 0, '.' ) );
-    USHORT i, nPart( sPart.EraseLeadingChars() );
-    BOOL bSet = FALSE;
-
-    if ( sPart.Len() && ( !nPart || nPart > 255 ) )
-    {
-        // der erste Part darf nicht 0 und nicht gr"osser 255 sein
-        String sMsg( sPart );
-        sMsg += ' ';
-        sMsg += sMsg233;
-        InfoBox( this, sMsg ).Execute();
-
-        if ( nPart == 0 )
-            sPart = "  1";
-        else
-            sPart = "255";
-        sEntry.SetToken( 0, '.', sPart );
-        bSet = TRUE;
-    };
-
-    for ( i = 1; i < 4; i++ )
-    {
-        // die anderen Parts d"urfen nicht gr"osser 255 sein
-        sPart = sEntry.GetToken( i, '.' );
-        nPart = sPart.EraseLeadingChars();
-
-        if ( nPart > 255 )
-        {
-            String sMsg( sPart );
-            sMsg += ' ';
-            sMsg += sMsg255;
-            InfoBox( this, sMsg ).Execute();
-
-            if ( nPart == 0 )
-                sPart = "  1";
-            else
-                sPart = "255";
-            sEntry.SetToken( i, '.', sPart );
-            bSet = TRUE;
-        };
-    }
-
-    if ( bSet )
-    {
-        SetText( sEntry );
-        SetSelection( aSelection );
-    }
-}
-*/
-// -----------------------------------------------------------------------
-#if 0
-long SvxPatternField::Notify( NotifyEvent& rNEvt )
-{
-    return PatternField::Notify( rNEvt );
-/*! long nHandled = 0;
-
-    if ( rNEvt.GetType() == EVENT_KEYUP )
-    {
-        const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
-        KeyInput( *pKEvt );
-        nHandled = 1;
-    }
-    return nHandled;*/
-}
-#endif
-
-// class JavaScriptDisableQueryBox_Impl --------------------------------------
-
-class JavaScriptDisableQueryBox_Impl : public ModalDialog
-{
-private:
-    FixedImage      aImage;
-    FixedText       aWarningFT;
-    CheckBox        aDisableCB;
-    OKButton        aYesBtn;
-    CancelButton    aNoBtn;
-
-public:
-    JavaScriptDisableQueryBox_Impl( Window* pParent );
-
-    BOOL        IsWarningDisabled() const { return aDisableCB.IsChecked(); }
-};
-
-JavaScriptDisableQueryBox_Impl::JavaScriptDisableQueryBox_Impl( Window* pParent ) :
-
-    ModalDialog( pParent, CUI_RES( RID_SVXDLG_OPT_JAVASCRIPT_DISABLE ) ),
-
-    aImage      ( this, CUI_RES( IMG_JSCPT_WARNING ) ),
-    aWarningFT  ( this, CUI_RES( FT_JSCPT_WARNING ) ),
-    aDisableCB  ( this, CUI_RES( CB_JSCPT_DISABLE ) ),
-    aYesBtn     ( this, CUI_RES( BTN_JSCPT_YES ) ),
-    aNoBtn      ( this, CUI_RES( BTN_JSCPT_NO ) )
-
-{
-    FreeResource();
-
-    aYesBtn.SetText( Button::GetStandardText( BUTTON_YES ) );
-    aNoBtn.SetText( Button::GetStandardText( BUTTON_NO ) );
-    aImage.SetImage( WarningBox::GetStandardImage() );
-}
-
 //#98647#----------------------------------------------
 void SvxScriptExecListBox::RequestHelp( const HelpEvent& rHEvt )
 {   // try to show tips just like as on toolbars
@@ -1329,17 +1148,10 @@ SvxSecurityTabPage::SvxSecurityTabPage( Window* pParent, const SfxItemSet& rSet 
     ,maMacroSecFL       ( this, CUI_RES( FL_SEC_MACROSEC ) )
     ,maMacroSecFI       ( this, CUI_RES( FI_SEC_MACROSEC ) )
     ,maMacroSecPB       ( this, CUI_RES( PB_SEC_MACROSEC ) )
-    ,maFilesharingFL    ( this, CUI_RES( FL_SEC_FILESHARING ) )
-    ,maRecommReadOnlyCB ( this, CUI_RES( CB_SEC_RECOMMREADONLY ) )
-    ,maRecordChangesCB  ( this, CUI_RES( CB_SEC_RECORDCHANGES ) )
-    ,maProtectRecordsPB ( this, CUI_RES( PB_SEC_PROTRECORDS ) )
 
     ,mpSecOptions       ( new SvtSecurityOptions )
     ,mpSecOptDlg        ( NULL )
-    ,meRedlingMode      ( RL_NONE )
 
-    ,msProtectRecordsStr(               CUI_RES( STR_SEC_PROTRECORDS ) )
-    ,msUnprotectRecordsStr(             CUI_RES( STR_SEC_UNPROTRECORDS ) )
     ,msPasswordStoringDeactivateStr(    CUI_RES( STR_SEC_NOPASSWDSAVE ) )
 
 {
@@ -1353,8 +1165,6 @@ SvxSecurityTabPage::SvxSecurityTabPage( Window* pParent, const SfxItemSet& rSet 
     maMasterPasswordCB.SetClickHdl( LINK( this, SvxSecurityTabPage, MasterPasswordCBHdl ) );
     maShowConnectionsPB.SetClickHdl( LINK( this, SvxSecurityTabPage, ShowPasswordsHdl ) );
     maMacroSecPB.SetClickHdl( LINK( this, SvxSecurityTabPage, MacroSecPBHdl ) );
-    maProtectRecordsPB.SetClickHdl( LINK( this, SvxSecurityTabPage, ProtectRecordsPBHdl ) );
-    maRecordChangesCB.SetClickHdl( LINK( this, SvxSecurityTabPage, RecordChangesCBHdl ) );
 
     ActivatePage( rSet );
 }
@@ -1524,127 +1334,6 @@ IMPL_LINK( SvxSecurityTabPage, MacroSecPBHdl, void*, EMPTYARG )
     return 0;
 }
 
-namespace
-{
-    enum RedlineFunc    { RF_ON, RF_PROTECT };
-
-    const SfxBoolItem* ExecuteRecordChangesFunc( SvxSecurityTabPage::RedliningMode _eMode, RedlineFunc _eFunc, BOOL _bVal, Window* _pParent = NULL )
-    {
-        const SfxBoolItem* pRet = NULL;
-
-        if( _eMode != SvxSecurityTabPage::RL_NONE )
-        {
-            USHORT nSlot;
-            if ( _eMode == SvxSecurityTabPage::RL_WRITER )
-                nSlot = ( _eFunc == RF_ON )? FN_REDLINE_ON : FN_REDLINE_PROTECT;
-            else
-                nSlot = ( _eFunc == RF_ON )? FID_CHG_RECORD : SID_CHG_PROTECT;
-
-            // execute
-            SfxViewShell* pViewSh = SfxViewShell::Current();
-            if( pViewSh )
-            {
-                bool bNeedItem = ( _eMode == SvxSecurityTabPage::RL_WRITER || _eFunc != RF_ON );
-                SfxBoolItem* pItem = bNeedItem ? new SfxBoolItem( nSlot, _bVal ) : NULL;
-                SfxDispatcher* pDisp = pViewSh->GetDispatcher();
-                if ( _pParent )
-                {
-                    OfaPtrItem aParentItem( SID_ATTR_PARENTWINDOW, _pParent );
-                    pRet = static_cast< const SfxBoolItem* >(
-                        pDisp->Execute( nSlot, SFX_CALLMODE_SYNCHRON, &aParentItem, pItem, 0L ) );
-                }
-                else
-                    pRet = static_cast< const SfxBoolItem* >(
-                        pDisp->Execute( nSlot, SFX_CALLMODE_SYNCHRON, pItem, 0L ) );
-                delete pItem;
-            }
-        }
-
-        return pRet;
-    }
-
-    bool QueryState( USHORT _nSlot, bool& _rValue )
-    {
-        bool bRet = false;
-
-        SfxViewShell* pViewSh = SfxViewShell::Current();
-        if( pViewSh )
-        {
-            const SfxPoolItem* pItem;
-            SfxDispatcher* pDisp = pViewSh->GetDispatcher();
-            bRet = SFX_ITEM_AVAILABLE <= pDisp->QueryState( _nSlot, pItem );
-            if( bRet )
-                _rValue = ( static_cast< const SfxBoolItem* >( pItem ) )->GetValue();
-        }
-
-        return bRet;
-    }
-
-    bool QueryRecordChangesProtectionState( SvxSecurityTabPage::RedliningMode _eMode, bool& _rValue )
-    {
-        bool bRet = false;
-
-        if( _eMode != SvxSecurityTabPage::RL_NONE )
-        {
-            USHORT nSlot = ( _eMode == SvxSecurityTabPage::RL_WRITER )? FN_REDLINE_PROTECT : SID_CHG_PROTECT;
-            bRet = QueryState( nSlot, _rValue );
-        }
-
-        return bRet;
-    }
-
-    bool QueryRecordChangesState( SvxSecurityTabPage::RedliningMode _eMode, bool& _rValue )
-    {
-        bool bRet = false;
-
-        if( _eMode != SvxSecurityTabPage::RL_NONE )
-        {
-            USHORT nSlot = ( _eMode == SvxSecurityTabPage::RL_WRITER )? FN_REDLINE_ON : FID_CHG_RECORD;
-            bRet = QueryState( nSlot, _rValue );
-        }
-
-        return bRet;
-    }
-}
-
-IMPL_LINK( SvxSecurityTabPage, RecordChangesCBHdl, void*, EMPTYARG )
-{
-    ExecuteRecordChangesFunc( meRedlingMode, RF_ON, maRecordChangesCB.IsChecked(), this );
-    CheckRecordChangesState();
-    return 0;
-}
-
-IMPL_LINK( SvxSecurityTabPage, ProtectRecordsPBHdl, void*, EMPTYARG )
-{
-    bool bProt;
-    QueryRecordChangesProtectionState( meRedlingMode, bProt );
-    ExecuteRecordChangesFunc( meRedlingMode, RF_PROTECT, !bProt, this );
-    CheckRecordChangesState();
-
-    if ( QueryRecordChangesProtectionState( meRedlingMode, bProt ) )
-    {
-        // RecordChangesCB is enabled if protection is off
-        maRecordChangesCB.Enable( !bProt );
-        // toggle text of button "Protect" <-> "Unprotect"
-        String sNewText = bProt ? msUnprotectRecordsStr : msProtectRecordsStr;
-        maProtectRecordsPB.SetText( sNewText );
-    }
-    return 0;
-}
-
-void SvxSecurityTabPage::CheckRecordChangesState( void )
-{
-    bool bVal;
-    if( QueryRecordChangesState( meRedlingMode, bVal ) )
-    {
-        maRecordChangesCB.Enable();
-        maRecordChangesCB.Check( bVal );
-    }
-    else
-        maRecordChangesCB.Disable();        // because now we don't know the state!
-
-    maProtectRecordsPB.Enable( QueryRecordChangesProtectionState( meRedlingMode, bVal ) );
-}
 
 void SvxSecurityTabPage::InitControls()
 {
@@ -1661,30 +1350,13 @@ void SvxSecurityTabPage::InitControls()
         maMacroSecFL.Hide();
         maMacroSecFI.Hide();
         maMacroSecPB.Hide();
-
-        // rearrange the following controls
-        Point aNewPos = maFilesharingFL.GetPosPixel();
-        long nDelta = aNewPos.Y() - maMacroSecFL.GetPosPixel().Y();
-
-        Window* pWins[] =
-        {
-            &maFilesharingFL, &maRecommReadOnlyCB, &maRecordChangesCB, &maProtectRecordsPB
-        };
-        Window** pCurrent = pWins;
-        const sal_Int32 nCount = sizeof( pWins ) / sizeof( pWins[ 0 ] );
-        for ( sal_Int32 i = 0; i < nCount; ++i, ++pCurrent )
-        {
-            aNewPos = (*pCurrent)->GetPosPixel();
-            aNewPos.Y() -= nDelta;
-            (*pCurrent)->SetPosPixel( aNewPos );
-        }
     }
 
     // one button too small for its text?
     sal_Int32 i = 0;
     long nBtnTextWidth = 0;
     Window* pButtons[] = { &maSecurityOptionsPB, &maMasterPasswordPB,
-                            &maShowConnectionsPB, &maMacroSecPB, &maProtectRecordsPB };
+                           &maShowConnectionsPB, &maMacroSecPB };
     Window** pButton = pButtons;
     const sal_Int32 nBCount = sizeof( pButtons ) / sizeof( pButtons[ 0 ] );
     for ( ; i < nBCount; ++i, ++pButton )
@@ -1724,8 +1396,7 @@ void SvxSecurityTabPage::InitControls()
         }
 
         Window* pControls[] = { &maSecurityOptionsFI, &maSavePasswordsCB,
-                                &maMasterPasswordFI, &maMacroSecFI,
-                                &maRecommReadOnlyCB, &maRecordChangesCB };
+                                &maMasterPasswordFI, &maMacroSecFI };
         Window** pControl = pControls;
         const sal_Int32 nCCount = sizeof( pControls ) / sizeof( pControls[ 0 ] );
         for ( i = 0; i < nCCount; ++i, ++pControl )
@@ -1793,25 +1464,6 @@ int SvxSecurityTabPage::DeactivatePage( SfxItemSet* _pSet )
 
 namespace
 {
-/*    bool Enable( const SvtSecurityOptions& _rOpt, SvtSecurityOptions::EOption _eOpt, Control& _rCtrl, FixedImage& _rImg )
-    {
-        bool    b = _rOpt.IsOptionEnabled( _eOpt );
-        _rCtrl.Enable( b );
-        _Img.Show( !b );
-        return b;
-    }
-*/
-    bool EnableAndSet( const SvtSecurityOptions& _rOpt, SvtSecurityOptions::EOption _eOpt,
-                                                        CheckBox& _rCtrl, FixedImage& _rImg )
-    {
-//        bool    b = Enable( _rOpt, _eOpt, _rCtrl, _rImg );
-        bool    b = _rOpt.IsOptionEnabled( _eOpt );
-        _rCtrl.Enable( b );
-        _rImg.Show( !b );
-        _rCtrl.Check( _rOpt.IsOptionSet( _eOpt ) );
-        return b;
-    }
-
     bool CheckAndSave( SvtSecurityOptions& _rOpt, SvtSecurityOptions::EOption _eOpt, const bool _bIsChecked, bool& _rModfied )
     {
         bool bModified = false;
@@ -1844,15 +1496,6 @@ BOOL SvxSecurityTabPage::FillItemSet( SfxItemSet& )
         CheckAndSave( *mpSecOptions, SvtSecurityOptions::E_CTRLCLICK_HYPERLINK, mpSecOptDlg->IsCtrlHyperlinkChecked(), bModified );
     }
 
-    // document options
-    SfxObjectShell* pCurDocShell = SfxObjectShell::Current();
-    if( pCurDocShell )
-    {
-        if( pCurDocShell->HasSecurityOptOpenReadOnly() )
-            pCurDocShell->SetSecurityOptOpenReadOnly( maRecommReadOnlyCB.IsChecked() );
-
-    }
-
     return bModified;
 }
 
@@ -1860,65 +1503,10 @@ BOOL SvxSecurityTabPage::FillItemSet( SfxItemSet& )
 
 void SvxSecurityTabPage::Reset( const SfxItemSet& )
 {
-    String sNewText = msProtectRecordsStr;
     SfxObjectShell* pCurDocShell = SfxObjectShell::Current();
     if( pCurDocShell )
     {
-        bool bIsHTMLDoc = false;
-        SfxViewShell* pViewSh = SfxViewShell::Current();
-        if( pViewSh )
-        {
-            const SfxPoolItem* pItem;
-            SfxDispatcher* pDisp = pViewSh->GetDispatcher();
-            if ( SFX_ITEM_AVAILABLE <= pDisp->QueryState( SID_HTML_MODE, pItem ) )
-            {
-                USHORT nMode = static_cast< const SfxUInt16Item* >( pItem )->GetValue();
-                bIsHTMLDoc = ( ( nMode & HTMLMODE_ON ) != 0 );
-            }
-        }
-
-        sal_Bool bIsReadonly = pCurDocShell->IsReadOnly();
-        if( pCurDocShell->HasSecurityOptOpenReadOnly() && !bIsHTMLDoc )
-        {
-            maRecommReadOnlyCB.Check( pCurDocShell->IsSecurityOptOpenReadOnly() );
-            maRecommReadOnlyCB.Enable( !bIsReadonly );
-        }
-        else
-            maRecommReadOnlyCB.Disable();
-
-        bool bVal;
-        if ( QueryRecordChangesState( RL_WRITER, bVal ) && !bIsHTMLDoc )
-            meRedlingMode = RL_WRITER;
-        else if( QueryRecordChangesState( RL_CALC, bVal ) )
-            meRedlingMode = RL_CALC;
-        else
-            meRedlingMode = RL_NONE;
-
-        if ( meRedlingMode != RL_NONE )
-        {
-            maRecordChangesCB.Check( bVal );
-            maRecordChangesCB.Enable( !bVal && !bIsReadonly );
-            maProtectRecordsPB.Enable(
-                QueryRecordChangesProtectionState( meRedlingMode, bVal ) && !bIsReadonly );
-            // set the right text
-            if ( bVal )
-                sNewText = msUnprotectRecordsStr;
-        }
-        else
-        {
-            // only Writer and Calc support redlining
-            maRecordChangesCB.Disable();
-            maProtectRecordsPB.Disable();
-        }
     }
-    else
-    {   // no doc -> hide document settings
-        maRecommReadOnlyCB.Disable();
-        maRecordChangesCB.Disable();
-        maProtectRecordsPB.Disable();
-    }
-
-    maProtectRecordsPB.SetText( sNewText );
 }
 
 //added by jmeng begin

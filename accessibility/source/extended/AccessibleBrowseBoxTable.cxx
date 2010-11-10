@@ -239,7 +239,7 @@ OUString SAL_CALL AccessibleBrowseBoxTable::getImplementationName()
 
 Rectangle AccessibleBrowseBoxTable::implGetBoundingBox()
 {
-    return mpBrowseBox->calcTableRect(FALSE);
+    return mpBrowseBox->calcTableRect(sal_False);
 }
 
 Rectangle AccessibleBrowseBoxTable::implGetBoundingBoxOnScreen()

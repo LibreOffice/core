@@ -1,9 +1,8 @@
-lc  lingucomponent  :      linguistic libtextcat svl HYPHEN:hyphen HUNSPELL:hunspell NULL
+lc  lingucomponent  :      linguistic LIBTEXTCAT:libtextcat LIBTEXTCATDATA:libtextcat svl HYPHEN:hyphen HUNSPELL:hunspell MYTHES:mythes NULL
 lc	lingucomponent								usr1	-	all	lc_mkout NULL
 lc  lingucomponent\inc                                      nmake   -   all lc_inc NULL
 lc  lingucomponent\source\lingutil                          nmake   -   all lc_util lc_inc NULL
-lc	lingucomponent\source\thesaurus\mythes					nmake	-	all	lc_mythes lc_util lc_inc NULL
-lc	lingucomponent\source\thesaurus\libnth					nmake	-	all	lc_libnth lc_mythes lc_util lc_inc NULL
+lc	lingucomponent\source\thesaurus\libnth					nmake	-	all	lc_libnth lc_util lc_inc NULL
 lc  lingucomponent\source\spellcheck\spell                  nmake   -   all lc_libspell lc_util lc_inc NULL
 lc  lingucomponent\source\hyphenator\altlinuxhyph\hyphen    nmake   -   all lc_libhyphen lc_util lc_inc NULL
 lc  lingucomponent\source\languageguessing                  nmake   -   all lc_languageguessing lc_util lc_inc NULL

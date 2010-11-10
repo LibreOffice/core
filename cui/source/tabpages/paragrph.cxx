@@ -957,13 +957,6 @@ void SvxStdParagraphTabPage::SetPageWidth( USHORT nPageWidth )
 {
     nWidth = nPageWidth;
 }
-/*-----------------16.01.97 18.01-------------------
-
---------------------------------------------------*/
-void SvxStdParagraphTabPage::SetMaxDistance( USHORT nMaxDist )
-{
-    nAbst = nMaxDist;
-}
 
 /*-----------------17.01.97 08.11-------------------
 

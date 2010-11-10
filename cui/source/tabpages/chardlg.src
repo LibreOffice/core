@@ -58,6 +58,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
     };
     ComboBox LB_WEST_NAME
     {
+        HelpID = "cui:ComboBox:RID_SVXPAGE_CHAR_NAME:LB_WEST_NAME";
         Border = TRUE;
         Pos = MAP_APPFONT ( 12 , 25 );
         Size = MAP_APPFONT ( 80 , 72 );
@@ -66,6 +67,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
     };
     ComboBox LB_WEST_NAME_NOCJK
     {
+        HelpID = "cui:ComboBox:RID_SVXPAGE_CHAR_NAME:LB_WEST_NAME_NOCJK";
         Border = TRUE;
         Pos = MAP_APPFONT ( 12 , 17 );
         Size = MAP_APPFONT ( 112 , 71 );
@@ -86,6 +88,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
     };
     ComboBox LB_WEST_STYLE
     {
+        HelpID = "cui:ComboBox:RID_SVXPAGE_CHAR_NAME:LB_WEST_STYLE";
         Border = TRUE;
         Pos = MAP_APPFONT ( 96 , 25 );
         Size = MAP_APPFONT ( 40 , 48 );
@@ -101,6 +104,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
     };
     ComboBox LB_WEST_STYLE_NOCJK
     {
+        HelpID = "cui:ComboBox:RID_SVXPAGE_CHAR_NAME:LB_WEST_STYLE_NOCJK";
         Border = TRUE;
         Pos = MAP_APPFONT ( 130 , 17 );
         Size = MAP_APPFONT ( 72 , 71 );
@@ -128,6 +132,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
     };
     MetricBox LB_WEST_SIZE
     {
+        HelpID = "cui:MetricBox:RID_SVXPAGE_CHAR_NAME:LB_WEST_SIZE";
         Border = TRUE;
         Pos = MAP_APPFONT ( 140 , 25 );
         Size = MAP_APPFONT ( 38 , 72 );
@@ -136,6 +141,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
     };
     MetricBox LB_WEST_SIZE_NOCJK
     {
+        HelpID = "cui:MetricBox:RID_SVXPAGE_CHAR_NAME:LB_WEST_SIZE_NOCJK";
         Border = TRUE;
         Pos = MAP_APPFONT ( 208 , 17 );
         Size = MAP_APPFONT ( 40 , 71 );
@@ -156,6 +162,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
     };
     ListBox LB_WEST_LANG
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_CHAR_NAME:LB_WEST_LANG";
         Border = TRUE;
         Pos = MAP_APPFONT ( 182 , 25 );
         Size = MAP_APPFONT ( 66 , 72 );
@@ -165,6 +172,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
     };
     ListBox LB_WEST_LANG_NOCJK
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_CHAR_NAME:LB_WEST_LANG_NOCJK";
         Border = TRUE;
         Pos = MAP_APPFONT ( 130 , 105 );
         Size = MAP_APPFONT ( 72 , 72 );
@@ -186,6 +194,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
     };
     ComboBox LB_EAST_NAME
     {
+        HelpID = "cui:ComboBox:RID_SVXPAGE_CHAR_NAME:LB_EAST_NAME";
         Border = TRUE;
         Pos = MAP_APPFONT ( 12 , 65 );
         Size = MAP_APPFONT ( 80 , 72 );
@@ -200,6 +209,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
     };
     ComboBox LB_EAST_STYLE
     {
+        HelpID = "cui:ComboBox:RID_SVXPAGE_CHAR_NAME:LB_EAST_STYLE";
         Border = TRUE;
         Pos = MAP_APPFONT ( 96 , 65 );
         Size = MAP_APPFONT ( 40 , 48 );
@@ -221,6 +231,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
     };
     MetricBox LB_EAST_SIZE
     {
+        HelpID = "cui:MetricBox:RID_SVXPAGE_CHAR_NAME:LB_EAST_SIZE";
         Border = TRUE;
         Pos = MAP_APPFONT ( 140 , 65 );
         Size = MAP_APPFONT ( 38 , 72 );
@@ -235,6 +246,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
     };
     ListBox LB_EAST_LANG
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_CHAR_NAME:LB_EAST_LANG";
         Border = TRUE;
         Pos = MAP_APPFONT ( 182 , 65 );
         Size = MAP_APPFONT ( 66 , 72 );
@@ -256,6 +268,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
     };
     ComboBox LB_CTL_NAME
     {
+        HelpID = "cui:ComboBox:RID_SVXPAGE_CHAR_NAME:LB_CTL_NAME";
         Border = TRUE;
         Pos = MAP_APPFONT ( 12 , 105 );
         Size = MAP_APPFONT ( 80 , 72 );
@@ -270,6 +283,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
     };
     ComboBox LB_CTL_STYLE
     {
+        HelpID = "cui:ComboBox:RID_SVXPAGE_CHAR_NAME:LB_CTL_STYLE";
         Border = TRUE;
         Pos = MAP_APPFONT ( 96 , 105 );
         Size = MAP_APPFONT ( 40 , 48 );
@@ -291,6 +305,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
     };
     MetricBox LB_CTL_SIZE
     {
+        HelpID = "cui:MetricBox:RID_SVXPAGE_CHAR_NAME:LB_CTL_SIZE";
         Border = TRUE;
         Pos = MAP_APPFONT ( 140 , 105 );
         Size = MAP_APPFONT ( 38 , 72 );
@@ -305,6 +320,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
     };
     ListBox LB_CTL_LANG
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_CHAR_NAME:LB_CTL_LANG";
         Border = TRUE;
         Pos = MAP_APPFONT ( 182 , 105 );
         Size = MAP_APPFONT ( 66 , 72 );
@@ -339,6 +355,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
     };
     ListBox LB_COLOR2
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_CHAR_NAME:LB_COLOR2";
         Border = TRUE;
         Pos = MAP_APPFONT ( 12 , 105 );
         Size = MAP_APPFONT ( 58 , 100 );
@@ -370,6 +387,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     };
     ListBox LB_FONTCOLOR
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_CHAR_EFFECTS:LB_FONTCOLOR";
         Border = TRUE;
         Pos = MAP_APPFONT ( 10 , 15 );
         Size = MAP_APPFONT ( 82 , 72 );
@@ -384,6 +402,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     };
     ListBox LB_EFFECTS2
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_CHAR_EFFECTS:LB_EFFECTS2";
         Pos = MAP_APPFONT ( 10 , 44 ) ;
         Size = MAP_APPFONT ( 82 , 56 ) ;
         DropDown = TRUE;
@@ -404,6 +423,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     };
     ListBox LB_RELIEF
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_CHAR_EFFECTS:LB_RELIEF";
         Pos = MAP_APPFONT ( 10 , 73 ) ;
         Size = MAP_APPFONT ( 82 , 56 ) ;
         DropDown = TRUE;
@@ -416,18 +436,21 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     };
     TriStateBox CB_OUTLINE
     {
+        HelpID = "cui:TriStateBox:RID_SVXPAGE_CHAR_EFFECTS:CB_OUTLINE";
         Pos = MAP_APPFONT ( 10 , 93 ) ;
         Size = MAP_APPFONT ( 82 , 10 ) ;
         Text [ en-US ] = "Out~line" ;
     };
     TriStateBox CB_SHADOW
     {
+        HelpID = "cui:TriStateBox:RID_SVXPAGE_CHAR_EFFECTS:CB_SHADOW";
         Pos = MAP_APPFONT ( 10 , 107 ) ;
         Size = MAP_APPFONT ( 82 , 10 ) ;
         Text [ en-US ] = "Sha~dow" ;
     };
     TriStateBox CB_BLINKING
     {
+        HelpID = "cui:TriStateBox:RID_SVXPAGE_CHAR_EFFECTS:CB_BLINKING";
         Pos = MAP_APPFONT ( 10 , 121 ) ;
         Size = MAP_APPFONT ( 82 , 10 ) ;
         Hide = TRUE;
@@ -435,6 +458,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     };
     TriStateBox CB_CHARHIDDEN
     {
+        HelpID = "cui:TriStateBox:RID_SVXPAGE_CHAR_EFFECTS:CB_CHARHIDDEN";
         Pos = MAP_APPFONT ( 10 , 135 ) ;
         Size = MAP_APPFONT ( 82 , 10 ) ;
         Text [ en-US ] = "H~idden" ;
@@ -453,6 +477,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     };
     ListBox LB_OVERLINE
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_CHAR_EFFECTS:LB_OVERLINE";
         Border = TRUE;
         Pos = MAP_APPFONT ( 110 , 15 );
         Size = MAP_APPFONT ( 68 , 72 );
@@ -487,6 +512,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     };
     ListBox LB_OVERLINE_COLOR
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_CHAR_EFFECTS:LB_OVERLINE_COLOR";
         Border = TRUE;
         Pos = MAP_APPFONT ( 184 , 15 );
         Size = MAP_APPFONT ( 68 , 100 );
@@ -501,6 +527,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     };
     ListBox LB_STRIKEOUT
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_CHAR_EFFECTS:LB_STRIKEOUT";
         Border = TRUE;
         Pos = MAP_APPFONT ( 110 , 44 );
         Size = MAP_APPFONT ( 68 , 72 );
@@ -524,6 +551,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     };
     ListBox LB_UNDERLINE
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_CHAR_EFFECTS:LB_UNDERLINE";
         Border = TRUE;
         Pos = MAP_APPFONT ( 110 , 73 );
         Size = MAP_APPFONT ( 68 , 72 );
@@ -558,6 +586,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     };
     ListBox LB_UNDERLINE_COLOR
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_CHAR_EFFECTS:LB_UNDERLINE_COLOR";
         Border = TRUE;
         Pos = MAP_APPFONT ( 184 , 73 );
         Size = MAP_APPFONT ( 68 , 100 );
@@ -566,6 +595,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     };
     CheckBox CB_INDIVIDUALWORDS
     {
+        HelpID = "cui:CheckBox:RID_SVXPAGE_CHAR_EFFECTS:CB_INDIVIDUALWORDS";
         Pos = MAP_APPFONT ( 110 , 93 );
         Size = MAP_APPFONT ( 68 , 10 );
         TabStop = TRUE;
@@ -584,6 +614,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     };
     ListBox LB_EMPHASIS
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_CHAR_EFFECTS:LB_EMPHASIS";
         Border = TRUE;
         Pos = MAP_APPFONT ( 110 , 128 );
         Size = MAP_APPFONT ( 68 , 72 );
@@ -606,6 +637,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     };
     ListBox LB_POSITION
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_CHAR_EFFECTS:LB_POSITION";
         Border = TRUE;
         Pos = MAP_APPFONT ( 184 , 128 );
         Size = MAP_APPFONT ( 68 , 48 );
@@ -680,6 +712,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
     };
     RadioButton RB_HIGHPOS
     {
+        HelpID = "cui:RadioButton:RID_SVXPAGE_CHAR_POSITION:RB_HIGHPOS";
         Pos = MAP_APPFONT ( 12 , 16 );
         Size = MAP_APPFONT ( 58 , 10 );
         Text [ en-US ] = "Superscript" ;
@@ -687,6 +720,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
     };
     RadioButton RB_NORMALPOS
     {
+        HelpID = "cui:RadioButton:RID_SVXPAGE_CHAR_POSITION:RB_NORMALPOS";
         Pos = MAP_APPFONT ( 12 , 30 );
         Size = MAP_APPFONT ( 58 , 10 );
         Text [ en-US ] = "Normal" ;
@@ -694,6 +728,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
     };
     RadioButton RB_LOWPOS
     {
+        HelpID = "cui:RadioButton:RID_SVXPAGE_CHAR_POSITION:RB_LOWPOS";
         Pos = MAP_APPFONT ( 12 , 44 );
         Size = MAP_APPFONT ( 58 , 10 );
         Text [ en-US ] = "Subscript" ;
@@ -707,6 +742,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
     };
     MetricField ED_HIGHLOW
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_CHAR_POSITION:ED_HIGHLOW";
         Border = TRUE;
         Pos = MAP_APPFONT ( 136 , 14 );
         Size = MAP_APPFONT ( 30 , 12 );
@@ -723,6 +759,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
     };
     CheckBox CB_HIGHLOW
     {
+        HelpID = "cui:CheckBox:RID_SVXPAGE_CHAR_POSITION:CB_HIGHLOW";
         Pos = MAP_APPFONT ( 172 , 16 );
         Size = MAP_APPFONT ( 76 , 10 );
         Text [ en-US ] = "A~utomatic" ;
@@ -736,6 +773,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
     };
     MetricField ED_FONTSIZE
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_CHAR_POSITION:ED_FONTSIZE";
         Border = TRUE;
         Pos = MAP_APPFONT ( 136 , 30 );
         Size = MAP_APPFONT ( 30 , 12 );
@@ -764,6 +802,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
     };
     RadioButton RB_0_DEG
     {
+        HelpID = "cui:RadioButton:RID_SVXPAGE_CHAR_POSITION:RB_0_DEG";
         Pos = MAP_APPFONT ( 12 , 70 );
         Size = MAP_APPFONT ( 46 , 10 );
         TabStop = TRUE;
@@ -771,6 +810,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
     };
     RadioButton RB_90_DEG
     {
+        HelpID = "cui:RadioButton:RID_SVXPAGE_CHAR_POSITION:RB_90_DEG";
         Pos = MAP_APPFONT ( 62 , 70 );
         Size = MAP_APPFONT ( 46 , 10 );
         TabStop = TRUE;
@@ -778,6 +818,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
     };
     RadioButton RB_270_DEG
     {
+        HelpID = "cui:RadioButton:RID_SVXPAGE_CHAR_POSITION:RB_270_DEG";
         Pos = MAP_APPFONT ( 112 , 70 );
         Size = MAP_APPFONT ( 46 , 10 );
         TabStop = TRUE;
@@ -785,6 +826,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
     };
     CheckBox CB_FIT_TO_LINE
     {
+        HelpID = "cui:CheckBox:RID_SVXPAGE_CHAR_POSITION:CB_FIT_TO_LINE";
         Pos = MAP_APPFONT ( 162 , 70 );
         Size = MAP_APPFONT ( 86 , 10 );
         TabStop = TRUE;
@@ -798,6 +840,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
     };
     MetricField MF_SCALE_WIDTH
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_CHAR_POSITION:MF_SCALE_WIDTH";
         Border = TRUE;
         Pos = MAP_APPFONT ( 94 , 84 );
         Size = MAP_APPFONT ( 30 , 12 );
@@ -820,6 +863,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
     };
     ListBox LB_KERNING2
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_CHAR_POSITION:LB_KERNING2";
         Border = TRUE;
         Pos = MAP_APPFONT ( 12 , 111 );
         Size = MAP_APPFONT ( 72 , 48 ) ;
@@ -840,6 +884,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
     };
     MetricField ED_KERNING2
     {
+        HelpID = "cui:MetricField:RID_SVXPAGE_CHAR_POSITION:ED_KERNING2";
         Border = TRUE;
         Pos = MAP_APPFONT ( 112 , 111 );
         Size = MAP_APPFONT ( 40 , 12 );
@@ -853,6 +898,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
     };
     CheckBox CB_PAIRKERNING
     {
+        HelpID = "cui:CheckBox:RID_SVXPAGE_CHAR_POSITION:CB_PAIRKERNING";
         Pos = MAP_APPFONT ( 156 , 113 );
         Size = MAP_APPFONT ( 92 , 10 );
         Text [ en-US ] = "~Pair kerning" ;
@@ -887,6 +933,7 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
     };
     CheckBox CB_TWOLINES
     {
+        HelpID = "cui:CheckBox:RID_SVXPAGE_CHAR_TWOLINES:CB_TWOLINES";
         Pos = MAP_APPFONT ( 12 , 14 );
         Size = MAP_APPFONT ( 236 , 10 );
         Text [ en-US ] = "~Write in double lines" ;
@@ -906,6 +953,7 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
     };
     ListBox ED_STARTBRACKET
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_CHAR_TWOLINES:ED_STARTBRACKET";
         Pos = MAP_APPFONT ( 12 , 52 );
         Size = MAP_APPFONT ( 90 , 72 );
         TabStop = TRUE;
@@ -928,6 +976,7 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
     };
     ListBox ED_ENDBRACKET
     {
+        HelpID = "cui:ListBox:RID_SVXPAGE_CHAR_TWOLINES:ED_ENDBRACKET";
         Pos = MAP_APPFONT ( 108 , 52 );
         Size = MAP_APPFONT ( 90 , 72 );
         TabStop = TRUE;

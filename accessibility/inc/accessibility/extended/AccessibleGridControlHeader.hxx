@@ -125,12 +125,12 @@ public:
     getSelectedAccessibleColumns()
         throw ( ::com::sun::star::uno::RuntimeException );
 
-    /** @return  <TRUE/>, if the specified row is completely selected. */
+    /** @return  <sal_True/>, if the specified row is completely selected. */
     virtual sal_Bool SAL_CALL isAccessibleRowSelected( sal_Int32 nRow )
         throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
                 ::com::sun::star::uno::RuntimeException );
 
-    /** @return  <TRUE/>, if the specified column is completely selected. */
+    /** @return  <sal_True/>, if the specified column is completely selected. */
     virtual sal_Bool SAL_CALL isAccessibleColumnSelected( sal_Int32 nColumn )
         throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
                 ::com::sun::star::uno::RuntimeException );
@@ -143,7 +143,7 @@ public:
         throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
                 ::com::sun::star::uno::RuntimeException );
 
-    /** @return  <TRUE/>, if the specified cell is selected. */
+    /** @return  <sal_True/>, if the specified cell is selected. */
     virtual sal_Bool SAL_CALL isAccessibleSelected( sal_Int32 nRow, sal_Int32 nColumn )
         throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
                 ::com::sun::star::uno::RuntimeException );
@@ -190,9 +190,9 @@ protected:
 
     // internal helper methods ------------------------------------------------
 
-    /** @return  <TRUE/>, if the objects is a header bar for rows. */
+    /** @return  <sal_True/>, if the objects is a header bar for rows. */
     inline sal_Bool isRowBar() const;
-    /** @return  <TRUE/>, if the objects is a header bar for columns. */
+    /** @return  <sal_True/>, if the objects is a header bar for columns. */
     inline sal_Bool isColumnBar() const;
 };
 

@@ -48,8 +48,8 @@ namespace accessibility
     {
     private:
         TriState m_eState;
-        BOOL m_bEnabled;
-        BOOL m_bIsTriState;
+        sal_Bool m_bEnabled;
+        sal_Bool m_bIsTriState;
 
     protected:
         virtual ~AccessibleCheckBoxCell() {}

@@ -235,24 +235,6 @@ class AbstractSpellDialog_Impl : public AbstractSpellDialog
     virtual SfxBindings& GetBindings();
 };
 
-//for SvxSpellCheckDialog begin
-//STRIP001 class AbstractSvxSpellCheckDialog_Impl : public AbstractSvxSpellCheckDialog //add for FmShowColsDialog
-//STRIP001 {
-//STRIP001 SvxSpellCheckDialog * pDlg;
-//STRIP001 public
-//STRIP001 AbstractSvxSpellCheckDialog_Impl ( SvxSpellCheckDialog* p)
-//STRIP001 : pDlg(p)
-//STRIP001 {}
-//STRIP001 virtual  USHORT          Execute() ;
-//STRIP001 virtual  void SetNewEditWord( const String& _rNew ) ;
-//STRIP001 virtual void SetLanguage( sal_uInt16 nLang ) ;
-//STRIP001 virtual void HideAutoCorrect() ;
-//STRIP001 virtual String   GetNewEditWord();
-//STRIP001 virtual void SetNewEditWord( const String& _rNew );
-//STRIP001 }
-//for SvxSpellCheckDialog end
-
-
 //for SearchProgress begin
 class SearchProgress;
 class AbstractSearchProgress_Impl : public AbstractSearchProgress
@@ -414,9 +396,9 @@ class AbstractSvxNameDialog_Impl :public AbstractSvxNameDialog
     DECL_ABSTDLG_BASE(AbstractSvxNameDialog_Impl,SvxNameDialog)
     virtual void    GetName( String& rName ) ;
     virtual void    SetCheckNameHdl( const Link& rLink, bool bCheckImmediately = false ) ;
-    virtual void    SetEditHelpId(ULONG nHelpId) ;
+    virtual void    SetEditHelpId(const rtl::OString&) ;
     //from class Window
-    virtual void    SetHelpId( ULONG nHelpId ) ;
+    virtual void    SetHelpId( const rtl::OString& ) ;
     virtual void    SetText( const XubString& rStr ) ;
 private:
     Link aCheckNameHdl;
@@ -486,7 +468,7 @@ class AbstractSvxMultiFileDialog_Impl :public AbstractSvxMultiFileDialog
     virtual void            EnableRadioButtonMode();
     virtual void            SetTitle( const String& rNewTitle );
     //From Class Window
-    virtual void    SetHelpId( ULONG nHelpId ) ;
+    virtual void    SetHelpId( const rtl::OString& ) ;
 
 };
 //for SvxMultiFileDialog end
@@ -589,6 +571,19 @@ private:
 };
 //add for SvxPostItDialog end
 
+//for PasswordToOpenModifyDialog begin
+class PasswordToOpenModifyDialog;
+class AbstractPasswordToOpenModifyDialog_Impl : public AbstractPasswordToOpenModifyDialog
+{
+    DECL_ABSTDLG_BASE( AbstractPasswordToOpenModifyDialog_Impl, PasswordToOpenModifyDialog )
+
+    virtual String  GetPasswordToOpen() const;
+    virtual String  GetPasswordToModify() const;
+    virtual bool    IsRecommendToOpenReadonly() const;
+};
+//for PasswordToOpenModifyDialog end
+
+
 //------------------------------------------------------------------------
 //AbstractDialogFactory_Impl implementations
 class AbstractDialogFactory_Impl : public SvxAbstractDialogFactory
@@ -636,10 +631,10 @@ public:
                                             const SfxItemSet& rAttr,
                                             SvxDistributeHorizontal eHor = SvxDistributeHorizontalNone,
                                             SvxDistributeVertical eVer = SvxDistributeVerticalNone);
-    virtual SfxAbstractInsertObjectDialog* CreateInsertObjectDialog( Window* pParent, USHORT nSlotId,
+    virtual SfxAbstractInsertObjectDialog* CreateInsertObjectDialog( Window* pParent, const rtl::OUString& rCommmand,
             const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStor,
             const SvObjectServerList* pList = 0 );
-    virtual VclAbstractDialog*          CreateEditObjectDialog( Window* pParent, USHORT nSlotId,
+    virtual VclAbstractDialog*          CreateEditObjectDialog( Window* pParent, const rtl::OUString& rCommmand,
             const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >& xObj );
    virtual  SfxAbstractPasteDialog*         CreatePasteDialog( Window* pParent );
    virtual  SfxAbstractLinksDialog*         CreateLinksDialog( Window* pParent, sfx2::LinkManager* pMgr, BOOL bHTML, sfx2::SvBaseLink* p=0  );
@@ -795,7 +790,9 @@ public:
     virtual VclAbstractDialog*          CreateOptionsDialog(
         Window* pParent, const rtl::OUString& rExtensionId, const rtl::OUString& rApplicationContext );
 
-    virtual SvxAbstractInsRowColDlg* CreateSvxInsRowColDlg( Window* pParent, bool bCol, ULONG nHelpId );
+    virtual SvxAbstractInsRowColDlg* CreateSvxInsRowColDlg( Window* pParent, bool bCol, const rtl::OString& sHelpId );
+
+    virtual AbstractPasswordToOpenModifyDialog *    CreatePasswordToOpenModifyDialog( Window * pParent, sal_uInt16 nMinPasswdLen, sal_uInt16 nMaxPasswdLen, bool bIsPasswordToModify );
 };
 
 #endif

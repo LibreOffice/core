@@ -103,3 +103,11 @@ RESLIB1SRSFILES= $(SRSFILELIST)
 
 .ENDIF # "$(header)" == ""
 
+
+ALLTAR : $(MISC)/basctl.component
+
+$(MISC)/basctl.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        basctl.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt basctl.component

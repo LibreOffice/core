@@ -365,7 +365,7 @@ BOOL ModulWindow::BasicExecute()
                         break;
                     }
                 }
-                else if  ( !pMethod || ( nStart < nCurMethodStart ) )
+                else if  ( !pMethod || ( nStart < nCurMethodStart && !pM->IsHidden() ) )
                 {
                     pMethod = pM;
                     nCurMethodStart = nStart;

@@ -64,20 +64,9 @@ private:
     List            maConsList;
     Graphic*        mpGraphic;
     SvStream*       mpStm;
-    GraphicFilter*  mpFilter;
     sal_uInt32      mnTransIndex;
-    sal_uInt32      mnStatus;
     sal_Bool        mbConsInit;
-    sal_Bool        mbStmDel;
-    Link            maErrorHdl;
-    sal_uInt32      mnLastError;
-
-    sal_uInt32      mnExtra2;
-
-    sal_Bool        mbAsync;
-    sal_Bool        mbExtra1;
-    sal_Bool        mbExtra2;
-    sal_Bool        mbExtra3;
+    Link            maDoneHdl;
 
     sal_Bool        ImplImportGraphic( Graphic& rGraphic );
     void            ImplUpdateData( const Graphic& rGraphic );
@@ -92,13 +81,10 @@ public:
     void            SetImage( const ::rtl::OUString& rPath );
     void            SetImage( SvStream& rStm );
 
-    void            SetErrorHandler( const Link& rErrorHdl ) { maErrorHdl = rErrorHdl; }
-    const Link&     GetErrorHandler() const { return maErrorHdl; }
-
-    sal_uInt32      GetLastError() const { return mnLastError; }
-    void            ResetLastError() { mnLastError = 0; }
-
     void            NewDataAvailable();
+
+    void            SetDoneHdl( const Link& i_rHdl ) { maDoneHdl = i_rHdl; }
+    const Link&     GetDoneHdl() const { return maDoneHdl; }
 
     // ::com::sun::star::uno::XInterface
     ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);

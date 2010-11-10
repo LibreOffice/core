@@ -65,56 +65,6 @@ using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::uno;
 
-// class SvxJavaTable ----------------------------------------------------
-
-SvxJavaTable::SvxJavaTable( Window* _pParent, const ResId& _rId ) :
-
-    SvxSimpleTable( _pParent, _rId )
-
-{
-}
-
-SvxJavaTable::~SvxJavaTable()
-{
-}
-
-void SvxJavaTable::SetTabs()
-{
-    SvxSimpleTable::SetTabs();
-/*
-    USHORT nAdjust = SV_LBOXTAB_ADJUST_RIGHT | SV_LBOXTAB_ADJUST_LEFT |
-                     SV_LBOXTAB_ADJUST_CENTER | SV_LBOXTAB_ADJUST_NUMERIC | SV_LBOXTAB_FORCE;
-    if ( aTabs.Count() > 0 )
-    {
-        SvLBoxTab* pTab = (SvLBoxTab*)aTabs.GetObject(0);
-        pTab->nFlags &= ~nAdjust;
-        pTab->nFlags |= SV_LBOXTAB_PUSHABLE | SV_LBOXTAB_ADJUST_CENTER | SV_LBOXTAB_FORCE;
-    }
-*/
-}
-
-void SvxJavaTable::MouseButtonUp( const MouseEvent& _rMEvt )
-{
-    m_aCurMousePoint = _rMEvt.GetPosPixel();
-    SvxSimpleTable::MouseButtonUp( _rMEvt );
-}
-
-void SvxJavaTable::KeyInput( const KeyEvent& rKEvt )
-{
-    if ( !rKEvt.GetKeyCode().GetModifier() && KEY_SPACE == rKEvt.GetKeyCode().GetCode() )
-    {
-        SvLBoxEntry* pEntry = FirstSelected();
-        if ( GetCheckButtonState( pEntry ) == SV_BUTTON_UNCHECKED )
-        {
-            SetCheckButtonState( pEntry, SV_BUTTON_CHECKED );
-            GetCheckButtonHdl().Call( NULL );
-            return ;
-        }
-    }
-
-    SvxSimpleTable::KeyInput( rKEvt );
-}
-
 // -----------------------------------------------------------------------
 
 bool areListsEqual( const Sequence< ::rtl::OUString >& rListA, const Sequence< ::rtl::OUString >& rListB )

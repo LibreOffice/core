@@ -74,3 +74,11 @@ SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 
 .INCLUDE : target.mk
 
+
+ALLTAR : $(MISC)/log.component
+
+$(MISC)/log.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        log.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt log.component

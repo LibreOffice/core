@@ -8,5 +8,4 @@ SetFeatureState
 SetNewFeatureState
 ShowOnlineUpdateDialog
 RegisterExtensions
-DeregisterExtensions
 RemoveExtensions

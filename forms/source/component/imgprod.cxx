@@ -190,11 +190,7 @@ ErrCode ImgProdLockBytes::Stat( SvLockBytesStat* pStat, SvLockBytesStatFlag eFla
 
 ImageProducer::ImageProducer() :
     mpStm       ( NULL ),
-    mpFilter    ( NULL ),
-    mnStatus    ( 0UL ),
-    mbConsInit  ( sal_False ),
-    mnLastError ( 0UL ),
-    mbAsync     ( sal_False )
+    mbConsInit  ( sal_False )
 {
     mpGraphic = new Graphic;
     DBG_ASSERT( Application::GetFilterHdl().IsSet(), "ImageProducer::ImageProducer(): No filter handler set" );
@@ -206,9 +202,6 @@ ImageProducer::~ImageProducer()
 {
     delete mpGraphic;
     mpGraphic = NULL;
-
-    delete mpFilter;
-    mpFilter = NULL;
 
     delete mpStm;
     mpStm = NULL;
@@ -261,7 +254,6 @@ void ImageProducer::SetImage( const ::rtl::OUString& rPath )
     maURL = rPath;
     mpGraphic->Clear();
     mbConsInit = sal_False;
-    mbAsync = sal_False;
     delete mpStm;
 
     if ( ::svt::GraphicAccess::isSupportedURL( maURL ) )
@@ -284,7 +276,6 @@ void ImageProducer::SetImage( SvStream& rStm )
     maURL = ::rtl::OUString();
     mpGraphic->Clear();
     mbConsInit = sal_False;
-    mbAsync = sal_False;
 
     delete mpStm;
     mpStm = new SvStream( new ImgProdLockBytes( &rStm, sal_False ) );
@@ -297,7 +288,6 @@ void ImageProducer::setImage( ::com::sun::star::uno::Reference< ::com::sun::star
     maURL = ::rtl::OUString();
     mpGraphic->Clear();
     mbConsInit = sal_False;
-    mbAsync = sal_False;
     delete mpStm;
 
     if( rInputStmRef.is() )
@@ -318,9 +308,7 @@ void ImageProducer::NewDataAvailable()
 
 void ImageProducer::startProduction() throw(::com::sun::star::uno::RuntimeException)
 {
-    ResetLastError();
-
-    if( maConsList.Count() )
+    if( maConsList.Count() || maDoneHdl.IsSet() )
     {
         bool bNotifyEmptyGraphics = false;
 
@@ -331,8 +319,8 @@ void ImageProducer::startProduction() throw(::com::sun::star::uno::RuntimeExcept
             // graphic is cleared if a new Stream is set
             if( ( mpGraphic->GetType() == GRAPHIC_NONE ) || mpGraphic->GetContext() )
             {
-                if( !ImplImportGraphic( *mpGraphic ) && maErrorHdl.IsSet() )
-                    maErrorHdl.Call( this );
+                if ( ImplImportGraphic( *mpGraphic ) && maDoneHdl.IsSet() )
+                    maDoneHdl.Call( mpGraphic );
             }
 
             if( mpGraphic->GetType() != GRAPHIC_NONE )
@@ -363,6 +351,9 @@ void ImageProducer::startProduction() throw(::com::sun::star::uno::RuntimeExcept
             // delete interfaces in temporary list
             for( pCons = aTmp.First(); pCons; pCons = aTmp.Next() )
                 delete (::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer > *) pCons;
+
+            if ( maDoneHdl.IsSet() )
+                maDoneHdl.Call( NULL );
         }
     }
 }
@@ -371,32 +362,15 @@ void ImageProducer::startProduction() throw(::com::sun::star::uno::RuntimeExcept
 
 sal_Bool ImageProducer::ImplImportGraphic( Graphic& rGraphic )
 {
-    USHORT  nFilter = GRFILTER_FORMAT_DONTKNOW;
-    short   nRet;
-    sal_Bool    bRet = sal_False;
-
     if( ERRCODE_IO_PENDING == mpStm->GetError() )
         mpStm->ResetError();
 
     mpStm->Seek( 0UL );
 
-    if( mpFilter )
-        nRet = mpFilter->ImportGraphic( rGraphic, String(), *mpStm, nFilter );
-    else
-    {
-        if( GraphicConverter::Import( *mpStm, rGraphic ) == ERRCODE_NONE )
-            nRet = GRFILTER_OK;
-        else
-            nRet = GRFILTER_FILTERERROR;
-    }
+    sal_Bool bRet = GraphicConverter::Import( *mpStm, rGraphic ) == ERRCODE_NONE;
 
     if( ERRCODE_IO_PENDING == mpStm->GetError() )
         mpStm->ResetError();
-
-    if( nRet == GRFILTER_OK )
-        bRet = sal_True;
-    else
-        mnLastError = nRet;
 
     return bRet;
 }
@@ -405,10 +379,6 @@ sal_Bool ImageProducer::ImplImportGraphic( Graphic& rGraphic )
 
 void ImageProducer::ImplUpdateData( const Graphic& rGraphic )
 {
-    // asynchronous?
-    if( mpGraphic->GetContext() )
-        mbAsync = sal_True;
-
     ImplInitConsumer( rGraphic );
 
     if( mbConsInit && maConsList.Count() )
@@ -425,7 +395,7 @@ void ImageProducer::ImplUpdateData( const Graphic& rGraphic )
 
         // iterate through interfaces
         for( pCons = aTmp.First(); pCons; pCons = aTmp.Next() )
-            ( *(::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer > *) pCons )->complete( mnStatus = ::com::sun::star::awt::ImageStatus::IMAGESTATUS_STATICIMAGEDONE, this );
+            ( *(::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer > *) pCons )->complete( ::com::sun::star::awt::ImageStatus::IMAGESTATUS_STATICIMAGEDONE, this );
 
         // delete interfaces in temporary list
         for( pCons = aTmp.First(); pCons; pCons = aTmp.Next() )
