@@ -51,6 +51,7 @@ SRC1FILES =	\
 EXCEPTIONSFILES = \
         $(SLO)$/mailconfigpage.obj \
         $(SLO)$/optcomp.obj \
+        $(SLO)$/optpage.obj \
         $(SLO)$/optload.obj
 
 SLOFILES =	\
@@ -61,7 +62,6 @@ SLOFILES =	\
         $(SLO)$/dbconfig.obj \
         $(SLO)$/fontcfg.obj \
         $(SLO)$/modcfg.obj \
-        $(SLO)$/optpage.obj \
         $(SLO)$/prtopt.obj \
         $(SLO)$/uinums.obj \
         $(SLO)$/usrpref.obj \
