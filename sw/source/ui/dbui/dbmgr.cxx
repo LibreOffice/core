@@ -62,10 +62,8 @@
 #include <unotools/tempfile.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svl/urihelper.hxx>
-#ifndef _SVSTDARR_HXX
 #define _SVSTDARR_STRINGSDTOR
 #include <svl/svstdarr.hxx>
-#endif
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <svl/stritem.hxx>
@@ -86,7 +84,6 @@
 #include <swundo.hxx>
 #include <flddat.hxx>
 #include <modcfg.hxx>
-#include <swprtopt.hxx>
 #include <shellio.hxx>
 #include <dbui.hxx>
 #include <dbmgr.hxx>

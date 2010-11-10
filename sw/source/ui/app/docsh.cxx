@@ -65,7 +65,7 @@
 #include <fmtfld.hxx>
 #include <node.hxx>
 #include <swwait.hxx>
-#include <swprtopt.hxx>
+#include <printdata.hxx>
 #include <frmatr.hxx>
 #include <view.hxx>         // fuer die aktuelle Sicht
 #include <edtwin.hxx>
@@ -879,7 +879,7 @@ void SwDocShell::Draw( OutputDevice* pDev, const JobSetup& rSetup,
     pDev->SetLineColor();
     pDev->SetBackground();
     BOOL bWeb = 0 != PTR_CAST(SwWebDocShell, this);
-    SwPrtOptions aOpts( aEmptyStr );
+    SwPrintData aOpts;
     ViewShell::PrtOle2( pDoc, SW_MOD()->GetUsrPref(bWeb), aOpts, pDev, aRect );
     pDev->Pop();
 

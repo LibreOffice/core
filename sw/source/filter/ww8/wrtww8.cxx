@@ -1286,7 +1286,7 @@ void WW8_WrtBookmarks::Append( WW8_CP nStartCp, const String& rNm,  const ::sw::
 
         aSttCps.Insert(nStartCp, nPos);
         aEndCps.Insert(nStartCp, nPos);
-        aFieldMarks.Insert(BOOL(false), nPos);
+        aFieldMarks.insert(aFieldMarks.begin() + nPos, BOOL(false));
         maSwBkmkNms.insert(aIter, rNm);
     }
     else
@@ -2861,10 +2861,10 @@ void MSWordExportBase::CollectOutlineBookmarks(const SwDoc &rDoc)
     const SwTxtINetFmt* pTxtAttr;
     const SwTxtNode* pTxtNd;
 
-    USHORT n, nMaxItems = rDoc.GetAttrPool().GetItemCount( RES_TXTATR_INETFMT );
+    sal_uInt32 n, nMaxItems = rDoc.GetAttrPool().GetItemCount2( RES_TXTATR_INETFMT );
     for( n = 0; n < nMaxItems; ++n )
     {
-        if( 0 != (pINetFmt = (SwFmtINetFmt*)rDoc.GetAttrPool().GetItem(
+        if( 0 != (pINetFmt = (SwFmtINetFmt*)rDoc.GetAttrPool().GetItem2(
             RES_TXTATR_INETFMT, n ) ) &&
             0 != ( pTxtAttr = pINetFmt->GetTxtINetFmt()) &&
             0 != ( pTxtNd = pTxtAttr->GetpTxtNode() ) &&
@@ -2875,10 +2875,10 @@ void MSWordExportBase::CollectOutlineBookmarks(const SwDoc &rDoc)
     }
 
     const SwFmtURL *pURL;
-    nMaxItems = rDoc.GetAttrPool().GetItemCount( RES_URL );
+    nMaxItems = rDoc.GetAttrPool().GetItemCount2( RES_URL );
     for( n = 0; n < nMaxItems; ++n )
     {
-        if( 0 != (pURL = (SwFmtURL*)rDoc.GetAttrPool().GetItem(
+        if( 0 != (pURL = (SwFmtURL*)rDoc.GetAttrPool().GetItem2(
             RES_URL, n ) ) )
         {
             AddLinkTarget( pURL->GetURL() );
