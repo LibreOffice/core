@@ -33,7 +33,7 @@
 //_________________________________________________________________________________________________________________
 
 #include <threadhelp/inoncopyable.h>
-#include <threadhelp/imutex.h>
+#include <framework/imutex.hxx>
 
 //#ifndef __FRAMEWORK_THREADHELP_THREADHELPBASE_HXX_
 //#include <threadhelp/threadhelpbase.hxx>
