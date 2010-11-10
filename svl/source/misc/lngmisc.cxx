@@ -27,6 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svl.hxx"
+
 #include <lngmisc.hxx>
 #include <tools/solar.h>
 #include <tools/string.hxx>
@@ -130,6 +131,38 @@ sal_Bool ReplaceControlChars( rtl::OUString &rTxt, sal_Char /*aRplcChar*/ )
         bModified = sal_True;
     }
     return bModified;
+}
+
+
+String GetThesaurusReplaceText( const String &rText )
+{
+    // The strings for synonyms returned by the thesaurus sometimes have some
+    // explanation text put in between '(' and ')' or a trailing '*'.
+    // These parts should not be put in the ReplaceEdit Text that may get
+    // inserted into the document. Thus we strip them from the text.
+
+    String aText( rText );
+
+    xub_StrLen nPos = aText.Search( sal_Unicode('(') );
+    while (STRING_NOTFOUND != nPos)
+    {
+        xub_StrLen nEnd = aText.Search( sal_Unicode(')'), nPos );
+        if (STRING_NOTFOUND != nEnd)
+            aText.Erase( nPos, nEnd-nPos+1 );
+        else
+            break;
+        nPos = aText.Search( sal_Unicode('(') );
+    }
+
+    nPos = aText.Search( sal_Unicode('*') );
+    if (STRING_NOTFOUND != nPos)
+        aText.Erase( nPos );
+
+    // remove any possible remaining ' ' that may confuse the thesaurus
+    // when it gets called with the text
+    aText.EraseLeadingAndTrailingChars( sal_Unicode(' ') );
+
+    return aText;
 }
 
 ///////////////////////////////////////////////////////////////////////////

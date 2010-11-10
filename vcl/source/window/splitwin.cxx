@@ -49,7 +49,8 @@
 
 // =======================================================================
 
-// Achtung: Darf keine Objekte enthalten, da mit memmove/memcpy gearbeitet wird
+// Attention: Must not contain non-PODs because array is enlarged/copied
+// with the use of memmove/memcpy.
 struct ImplSplitItem
 {
     long                mnSize;
@@ -71,6 +72,10 @@ struct ImplSplitItem
     SplitWindowItemBits mnBits;
     sal_Bool                mbFixed;
     sal_Bool                mbSubSize;
+    /// Minimal width or height of the item.  -1 means no restriction.
+    long                mnMinSize;
+    /// Maximal width or height of the item.  -1 means no restriction.
+    long                mnMaxSize;
 };
 
 struct ImplSplitSet
@@ -84,6 +89,28 @@ struct ImplSplitSet
     sal_uInt16              mnId;
     sal_Bool                mbCalcPix;
 };
+
+
+
+/** Check whether the given size is inside the valid range defined by
+    [rItem.mnMinSize,rItem.mnMaxSize].  When it is not inside it then return
+    the upper or lower bound, respectively. Otherwise return the given size
+    unmodified.
+    Note that either mnMinSize and/or mnMaxSize can be -1 in which case the
+    size has not lower or upper bound.
+*/
+namespace {
+    long ValidateSize (const long nSize, const ImplSplitItem rItem)
+    {
+        if (rItem.mnMinSize>=0 && nSize<rItem.mnMinSize)
+            return rItem.mnMinSize;
+        else if (rItem.mnMaxSize>0 && nSize>rItem.mnMaxSize)
+            return rItem.mnMaxSize;
+        else
+            return nSize;
+    }
+}
+
 
 #define SPLITWIN_SPLITSIZE              3
 #define SPLITWIN_SPLITSIZEEX            4
@@ -2850,7 +2877,7 @@ void SplitWindow::InsertItem( sal_uInt16 nId, Window* pWindow, long nSize,
     DBG_ASSERT( !ImplFindItem( mpMainSet, nId, nDbgDummy ), "SplitWindow::InsertItem() - Id already exists" );
 #endif
 
-    // Size muss min. 1 sein
+    // Size has to be at least 1.
     if ( nSize < 1 )
         nSize = 1;
 
@@ -2858,7 +2885,7 @@ void SplitWindow::InsertItem( sal_uInt16 nId, Window* pWindow, long nSize,
     ImplSplitSet* pNewSet;
     ImplSplitItem* pItem;
 
-    // Platz fuer neues Item schaffen
+    // Make room for the new item.
     if ( nPos > pSet->mnItems )
         nPos = pSet->mnItems;
     ImplSplitItem* pNewItems = new ImplSplitItem[pSet->mnItems+1];
@@ -2871,19 +2898,21 @@ void SplitWindow::InsertItem( sal_uInt16 nId, Window* pWindow, long nSize,
     pSet->mnItems++;
     pSet->mbCalcPix = sal_True;
 
-    // Item anlegen und erweitern
+    // Create and initialize item.
     pItem           = &(pSet->mpItems[nPos]);
     memset( pItem, 0, sizeof( ImplSplitItem ) );
     pItem->mnSize   = nSize;
     pItem->mnId     = nId;
     pItem->mnBits   = nBits;
+    pItem->mnMinSize=-1;
+    pItem->mnMaxSize=-1;
 
     if ( pWindow )
     {
         pItem->mpWindow         = pWindow;
         pItem->mpOrgParent      = pWindow->GetParent();
 
-        // Window mit SplitWindow verbinden
+        // Attach window to SplitWindow.
         pWindow->Hide();
         pWindow->SetParent( this );
     }
@@ -3251,6 +3280,10 @@ void SplitWindow::SplitItem( sal_uInt16 nId, long nNewSize,
     nItems = pSet->mnItems;
     pItems = pSet->mpItems;
 
+    // When there is an explicit minimum or maximum size then move nNewSize
+    // into that range (when it is not yet already in it.)
+    nNewSize = ValidateSize(nNewSize, pItems[nPos]);
+
     if ( mbCalc )
     {
         pItems[nPos].mnSize = nNewSize;
@@ -3551,6 +3584,36 @@ long SplitWindow::GetItemSize( sal_uInt16 nId, SplitWindowItemBits nBits ) const
     else
         return 0;
 }
+
+
+
+
+void SplitWindow::SetItemSizeRange (sal_uInt16 nId, const Range aRange)
+{
+    sal_uInt16 nPos;
+    ImplSplitSet* pSet = ImplFindItem(mpBaseSet, nId, nPos);
+
+    if (pSet != NULL)
+    {
+        pSet->mpItems[nPos].mnMinSize = aRange.Min();
+        pSet->mpItems[nPos].mnMaxSize = aRange.Max();
+    }
+}
+
+
+
+
+Range SplitWindow::GetItemSizeRange (sal_uInt16 nId) const
+{
+    sal_uInt16 nPos;
+    ImplSplitSet* pSet = ImplFindItem(mpBaseSet, nId, nPos);
+
+    if (pSet != NULL)
+        return Range (pSet->mpItems[nPos].mnMinSize, pSet->mpItems[nPos].mnMaxSize);
+    else
+        return Range(-1,-1);
+}
+
 
 // -----------------------------------------------------------------------
 

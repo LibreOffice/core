@@ -55,53 +55,54 @@ int bText=0;
 
 %%
 
-"<Readme"[^\>]*\> {
-	WorkOnTokenSet( XRM_README_START, yytext );
+"<p "[^\>]*xml:lang[^\>]*\> {
+	WorkOnTokenSet( XRM_TEXT_START , yytext );
 }
 
-"</Readme>" {
-	WorkOnTokenSet( XRM_README_END, yytext );
-}
-
-"<apochelp"[^\>]*\> {
-	WorkOnTokenSet( XRM_README_START, yytext );
-}
-
-"</apochelp>" {
-	WorkOnTokenSet( XRM_README_END, yytext );
-}
-
-"<Section"[^\>]*\> {
-	WorkOnTokenSet( XRM_SECTION_START, yytext );
-}
-
-"</Section>" {
-	WorkOnTokenSet( XRM_SECTION_END, yytext );
-}
-
-"<Paragraph"[^\>]*\> {
-	WorkOnTokenSet( XRM_PARAGRAPH_START, yytext );
-}
-
-"</Paragraph>" {
-	WorkOnTokenSet( XRM_PARAGRAPH_END, yytext );
-}
-
-"<Text"[^\>]*\> {
-	WorkOnTokenSet( XRM_TEXT_START, yytext );
-}
-
-"</Text>" {
+"</p>" {
 	WorkOnTokenSet( XRM_TEXT_END, yytext );
 }
 
-"<List"[^\>]*\> {
-	WorkOnTokenSet( XRM_LIST_START, yytext );
+"<h1 "[^\>]*xml:lang[^\>]*\> {
+	WorkOnTokenSet( XRM_TEXT_START , yytext );
 }
 
-"</List>" {
-	WorkOnTokenSet( XRM_LIST_END, yytext );
+"</h1>" {
+	WorkOnTokenSet( XRM_TEXT_END, yytext );
 }
+"<h2 "[^\>]*xml:lang[^\>]*\> {
+	WorkOnTokenSet( XRM_TEXT_START , yytext );
+}
+
+"</h2>" {
+	WorkOnTokenSet( XRM_TEXT_END, yytext );
+}
+"<h3 "[^\>]*xml:lang[^\>]*\> {
+	WorkOnTokenSet( XRM_TEXT_START , yytext );
+}
+
+"</h3>" {
+	WorkOnTokenSet( XRM_TEXT_END, yytext );
+}
+"<h4 "[^\>]*xml:lang[^\>]*\> {
+	WorkOnTokenSet( XRM_TEXT_START , yytext );
+}
+
+"</h4>" {
+	WorkOnTokenSet( XRM_TEXT_END, yytext );
+}
+"<h5 "[^\>]*xml:lang[^\>]*\> {
+	WorkOnTokenSet( XRM_TEXT_START , yytext );
+}
+
+"</h5>" {
+	WorkOnTokenSet( XRM_TEXT_END, yytext );
+}
+
+
+
+
+
 
 "<!--"	{
 	char c1 = 0, c2 = 0, c3 = input();
@@ -179,10 +180,6 @@ main( int argc, char* argv[])
 	FILE *pFile;
 
 	pOutput = GetOutputFile( argc, argv );
-    if( !isQuiet() ){
-        fprintf( stdout, "\nXrmEx 0.9 Copyright 2000, 2010 Oracle and/or its affiliates. All Rights Reserved.\n" );
-	    fprintf( stdout, "===================================================================================\n" );
-    }
 
 	if ( !pOutput ) {
 		fprintf( stdout, "Syntax: XRMEX[-p Prj][-r PrjRoot]-i FileIn [-o FileOut][-m DataBase][-e][-b][-u][-NOUTF8][-L l1,l2,...]\n" );
@@ -221,7 +218,6 @@ main( int argc, char* argv[])
 	nRetValue = GetError();
 	EndXrmExport();
 
-	if( !isQuiet() ) fprintf( stdout, "\n===================================\n\n" );
     removeTempFile();
 	/* return error level */
 	return nRetValue;

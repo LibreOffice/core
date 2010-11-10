@@ -40,7 +40,6 @@
 #include <vcl/combobox.h>
 #include <vcl/fldunit.hxx>
 #include <vcl/lstbox.h>
-#include <vcl/smartid.hxx>
 #include <vcl/wintypes.hxx>
 
 class Button;
@@ -162,10 +161,8 @@ public:
     String GetText() const;
     void SetStyle( WinBits style );
     void SetUpdateMode( bool mode );
-    void SetHelpId( sal_uIntPtr id );
-    sal_uIntPtr GetHelpId() const;
-    void SetSmartHelpId( SmartId const&, SmartIdUpdateMode mode=SMART_SET_SMART );
-    SmartId GetSmartHelpId() const;
+    void SetHelpId( const rtl::OString& id );
+    const rtl::OString& GetHelpId() const;
     void EnterWait ();
     void LeaveWait ();
     bool IsWait () const;
@@ -582,20 +579,20 @@ public:
 #define DECL_MESSAGE_BOX_CTORS(Name)\
     public:\
     Name##Box (::Window *parent, char const* message,\
-               char const* yes=0, char const* no=0, sal_uIntPtr help_id=0,\
+               char const* yes=0, char const* no=0, const rtl::OString& help_id=rtl::OString(),\
                char const* xml_file="message-box.xml", char const* id="message-box");\
     Name##Box (::Window *parent, rtl::OUString const& message,\
                rtl::OUString yes=String (),\
                rtl::OUString no=String (),\
-               sal_uIntPtr help_id=0,\
+               const rtl::OString& help_id=rtl::OString(),\
                char const* xml_file="message-box.xml", char const* id="message-box");\
     Name##Box (::Window *parent, WinBits, char const* message,\
-               char const* yes=0, char const* no=0, sal_uIntPtr help_id=0,\
+               char const* yes=0, char const* no=0, const rtl::OString& help_id=rtl::OString(),\
                char const* xml_file="message-box.xml", char const* id="message-box");\
     Name##Box (::Window *parent, WinBits, rtl::OUString const& message,\
                rtl::OUString yes=String (),\
                rtl::OUString no=String (),\
-               sal_uIntPtr help_id=0,\
+               const rtl::OString& help_id=rtl::OString(),\
                char const* xml_file="message-box.xml", char const* id="message-box")\
 
 class TOOLKIT_DLLPUBLIC MessageBox : public Dialog
@@ -616,10 +613,10 @@ protected:
     YesButton yesButton;
 
     void bits_init (WinBits bits, rtl::OUString const& message,
-                    rtl::OUString yes, rtl::OUString, sal_uIntPtr help_id);
+                    rtl::OUString yes, rtl::OUString, const rtl::OString& help_id);
     void init (rtl::OUString const& message,
-               rtl::OUString const& yes, rtl::OUString const& no, sal_uIntPtr help_id);
-    void init (char const* message, char const* yes, char const* no, sal_uIntPtr help_id);
+               rtl::OUString const& yes, rtl::OUString const& no, const rtl::OString& help_id);
+    void init (char const* message, char const* yes, char const* no, const rtl::OString& help_id);
 };
 
 #define CLASS_MESSAGE_BOX(Name)\

@@ -77,11 +77,10 @@ atk_wrapper_focus_idle_handler (gpointer data)
     uno::Reference< accessibility::XAccessible > xAccessible = xNextFocusObject;
     if( xAccessible.get() == reinterpret_cast < accessibility::XAccessible * > (data) )
     {
+        AtkObject *atk_obj = xAccessible.is() ? atk_object_wrapper_ref( xAccessible ) : NULL;
         // Gail does not notify focus changes to NULL, so do we ..
-        if( xAccessible.is() )
+        if( atk_obj )
         {
-            AtkObject *atk_obj = atk_object_wrapper_ref( xAccessible );
-
 #ifdef ENABLE_TRACING
             fprintf(stderr, "notifying focus event for %p\n", atk_obj);
 #endif
@@ -92,7 +91,7 @@ atk_wrapper_focus_idle_handler (gpointer data)
             // also emit state-changed:focused event under the same condition.
             {
                 AtkObjectWrapper* wrapper_obj = ATK_OBJECT_WRAPPER (atk_obj);
-                if( !wrapper_obj->mpText && wrapper_obj->mpContext )
+                if( wrapper_obj && !wrapper_obj->mpText && wrapper_obj->mpContext )
                 {
                     uno::Any any = wrapper_obj->mpContext->queryInterface( accessibility::XAccessibleText::static_type(NULL) );
                     if ( typelib_TypeClass_INTERFACE == any.pType->eTypeClass &&

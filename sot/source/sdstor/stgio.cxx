@@ -158,7 +158,7 @@ class EasyFat
 
 public:
     EasyFat( StgIo & rIo, StgStrm *pFatStream, sal_Int32 nPSize );
-    ~EasyFat() { delete pFat; delete pFree; }
+    ~EasyFat() { delete[] pFat; delete[] pFree; }
     sal_Int32 GetPageSize() { return nPageSize; }
     sal_Int32 Count() { return nPages; }
     sal_Int32 operator[]( sal_Int32 nOffset ) { return pFat[ nOffset ]; }

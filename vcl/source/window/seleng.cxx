@@ -218,8 +218,15 @@ sal_Bool SelectionEngine::SelMouseButtonDown( const MouseEvent& rMEvt )
     Point aPos = rMEvt.GetPosPixel();
     aLastMove = rMEvt;
 
-    pWin->CaptureMouse();
-    nFlags |= SELENG_IN_SEL;
+    if( !rMEvt.IsRight() )
+    {
+        pWin->CaptureMouse();
+        nFlags |= SELENG_IN_SEL;
+    }
+    else
+    {
+        nModifier = 0;
+    }
 
     switch ( nModifier )
     {
@@ -327,7 +334,7 @@ sal_Bool SelectionEngine::SelMouseButtonDown( const MouseEvent& rMEvt )
 |*
 *************************************************************************/
 
-sal_Bool SelectionEngine::SelMouseButtonUp( const MouseEvent& /* rMEvt */ )
+sal_Bool SelectionEngine::SelMouseButtonUp( const MouseEvent& rMEvt )
 {
     aWTimer.Stop();
     //DbgOut("Up");
@@ -336,7 +343,11 @@ sal_Bool SelectionEngine::SelMouseButtonUp( const MouseEvent& /* rMEvt */ )
         nFlags &= ~(SELENG_CMDEVT | SELENG_WAIT_UPEVT | SELENG_IN_SEL);
         return sal_False;
     }
-    pWin->ReleaseMouse();
+
+    if( !rMEvt.IsRight() )
+    {
+       pWin->ReleaseMouse();
+    }
 
     if( (nFlags & SELENG_WAIT_UPEVT) && !(nFlags & SELENG_CMDEVT) &&
         eSelMode != SINGLE_SELECTION)

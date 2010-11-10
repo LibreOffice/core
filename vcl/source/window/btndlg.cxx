@@ -530,22 +530,19 @@ XubString ButtonDialog::GetButtonHelpText( sal_uInt16 nId ) const
 
 // -----------------------------------------------------------------------
 
-void ButtonDialog::SetButtonHelpId( sal_uInt16 nId, sal_uIntPtr nHelpId )
+void ButtonDialog::SetButtonHelpId( sal_uInt16 nId, const rtl::OString& rHelpId )
 {
     ImplBtnDlgItem* pItem = ImplGetItem( nId );
 
     if ( pItem )
-        pItem->mpPushButton->SetHelpId( nHelpId );
+        pItem->mpPushButton->SetHelpId( rHelpId );
 }
 
 // -----------------------------------------------------------------------
 
-sal_uIntPtr ButtonDialog::GetButtonHelpId( sal_uInt16 nId ) const
+rtl::OString ButtonDialog::GetButtonHelpId( sal_uInt16 nId ) const
 {
     ImplBtnDlgItem* pItem = ImplGetItem( nId );
 
-    if ( pItem )
-        return pItem->mpPushButton->GetHelpId();
-    else
-        return 0;
+    return pItem ? rtl::OString( pItem->mpPushButton->GetHelpId() ) : rtl::OString();
 }

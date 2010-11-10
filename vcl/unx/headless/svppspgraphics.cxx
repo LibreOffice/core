@@ -323,7 +323,7 @@ void PspGraphics::drawPolyPolygon( sal_uInt32           nPoly,
     m_pPrinterGfx->DrawPolyPolygon (nPoly, pPoints, (const Point**)pPtAry);
 }
 
-bool PspGraphics::drawPolyLine( const ::basegfx::B2DPolygon&, const ::basegfx::B2DVector& /*rLineWidths*/, basegfx::B2DLineJoin /*eJoin*/ )
+bool PspGraphics::drawPolyLine( const ::basegfx::B2DPolygon&, double /*fTransparency*/, const ::basegfx::B2DVector& /*rLineWidths*/, basegfx::B2DLineJoin /*eJoin*/ )
 {
         // TODO: implement and advertise OutDevSupport_B2DDraw support
         return false;
@@ -683,16 +683,13 @@ void PspGraphics::DrawServerFontLayout( const ServerFontLayout& rLayout )
     DrawPrinterLayout( rLayout, *m_pPrinterGfx, true );
 }
 
-ImplFontCharMap* PspGraphics::GetImplFontCharMap() const
+const ImplFontCharMap* PspGraphics::GetImplFontCharMap() const
 {
-    // TODO: get ImplFontCharMap directly from fonts
     if( !m_pServerFont[0] )
         return NULL;
 
-    CmapResult aCmapResult;
-    if( !m_pServerFont[0]->GetFontCodeRanges( aCmapResult ) )
-        return NULL;
-    return new ImplFontCharMap( aCmapResult );
+    const ImplFontCharMap* pIFCMap = m_pServerFont[0]->GetImplFontCharMap();
+    return pIFCMap;
 }
 
 USHORT PspGraphics::SetFont( ImplFontSelectData *pEntry, int nFallbackLevel )
@@ -792,7 +789,7 @@ void PspGraphics::GetDevFontSubstList( OutputDevice* pOutDev )
     }
 }
 
-void PspGraphics::GetFontMetric( ImplFontMetricData *pMetric )
+void PspGraphics::GetFontMetric( ImplFontMetricData *pMetric, int )
 {
     const psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
     psp::PrintFontInfo aInfo;

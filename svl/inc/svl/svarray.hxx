@@ -39,12 +39,6 @@
 *           enthaelt. (Sie werden im Speicher verschoben, koennen also
 *           z.B. keine String sein)
 *
-*       SV_DECL_OBJARR(nm, AE, IS, GS)
-*       SV_IMPL_OBJARR( nm, AE )
-*           definiere/implementiere ein Array das Objecte enthaelt.
-*           (Hier koennen es auch Strings sein)
-*
-*
 *       SV_DECL_PTRARR(nm, AE, IS, GS)
 *       SV_IMPL_PTRARR(nm, AE)
 *           definiere/implementiere ein Array das Pointer haelt. Diese
@@ -85,10 +79,6 @@
 *           defieniere/implementiere ein Sort-Array mit einfachen Objecten.
 *           Basiert auf einem VARARR.
 *           Sortierung mit Hilfe der Object-operatoren "<" und "=="
-*
-* JP 23.12.94 neu:
-*       SV_DECL_PTRARR_STACK(nm, AE, IS, GS)
-*           ein Stack mit einem PtrArray als Grundlage.
 *
 * JP 09.10.96:  vordefinierte Arrays:
 *   VarArr:     SvBools, SvULongs, SvUShorts, SvLongs, SvShorts
@@ -207,8 +197,6 @@ public:\
 
 #define _SV_DECL_VARARR(nm, AE, IS, GS ) \
 _SV_DECL_VARARR_GEN(nm, AE, IS, GS, AE & )
-#define _SV_DECL_VARARR_PLAIN(nm, AE, IS, GS ) \
-_SV_DECL_VARARR_GEN(nm, AE, IS, GS, AE )
 
 #define SV_DECL_VARARR_GEN(nm, AE, IS, GS, AERef, vis )\
 _SV_DECL_VARARR_GEN(nm, AE, IS, GS, AERef, vis )\
@@ -219,14 +207,9 @@ nm& operator=( const nm& );\
 
 #define SV_DECL_VARARR(nm, AE, IS, GS ) \
 SV_DECL_VARARR_GEN(nm, AE, IS, GS, AE &, )
-#define SV_DECL_VARARR_PLAIN(nm, AE, IS, GS ) \
-SV_DECL_VARARR_GEN(nm, AE, IS, GS, AE, )
 
 #define SV_DECL_VARARR_VISIBILITY(nm, AE, IS, GS, vis ) \
 SV_DECL_VARARR_GEN(nm, AE, IS, GS, AE &, vis )
-
-#define SV_DECL_VARARR_PLAIN_VISIBILITY(nm, AE, IS, GS, vis ) \
-SV_DECL_VARARR_GEN(nm, AE, IS, GS, AE, vis )
 
 #define SV_IMPL_VARARR_GEN( nm, AE, AERef )\
 nm::nm( sal_uInt16 nInit, sal_uInt8 )\
@@ -329,192 +312,6 @@ _SVVARARR_IMPL_GET_OP_INLINE(nm, AE )\
 
 #define SV_IMPL_VARARR( nm, AE ) \
 SV_IMPL_VARARR_GEN( nm, AE, AE & )
-#define SV_IMPL_VARARR_PLAIN( nm, AE ) \
-SV_IMPL_VARARR_GEN( nm, AE, AE )
-
-#if defined(PRODUCT)
-
-#define _SVOBJARR_DEF_GET_OP_INLINE( nm,ArrElem )\
-ArrElem& operator[](sal_uInt16 nP) const { return *(pData+nP); }\
-\
-void Insert( const nm *pI, sal_uInt16 nP,\
-                sal_uInt16 nS = 0, sal_uInt16 nE = USHRT_MAX )\
-{\
-    if( USHRT_MAX == nE ) \
-        nE = pI->nA; \
-    if( nS < nE ) \
-        Insert( (const ArrElem*)pI->pData+nS, (sal_uInt16)nE-nS, nP );\
-}
-
-#define _SVOBJARR_IMPL_GET_OP_INLINE( nm, ArrElem )
-
-#else
-
-#define _SVOBJARR_DEF_GET_OP_INLINE( nm,ArrElem ) \
-ArrElem& operator[](sal_uInt16 nP) const;\
-void Insert( const nm *pI, sal_uInt16 nP,\
-                sal_uInt16 nS = 0, sal_uInt16 nE = USHRT_MAX );
-
-#define _SVOBJARR_IMPL_GET_OP_INLINE( nm, ArrElem )\
-ArrElem& nm::operator[](sal_uInt16 nP) const\
-{\
-    DBG_ASSERT( pData && nP < nA,"Op[]");\
-    return *(pData+nP);\
-}\
-void nm::Insert( const nm *pI, sal_uInt16 nP, sal_uInt16 nStt, sal_uInt16 nE )\
-{\
-    DBG_ASSERT( nP <= nA,"Ins,Ar[Start.End]");\
-    if( USHRT_MAX == nE ) \
-        nE = pI->nA; \
-    if( nStt < nE ) \
-        Insert( (const ArrElem*)pI->pData+nStt, (sal_uInt16)nE-nStt, nP );\
-}
-
-#endif
-
-#define _SV_DECL_OBJARR(nm, AE, IS, GS)\
-typedef sal_Bool (*FnForEach_##nm)( const AE&, void* );\
-class nm\
-{\
-protected:\
-    AE    *pData;\
-    sal_uInt16 nFree;\
-    sal_uInt16 nA;\
-\
-    void _resize(size_t n);\
-    void _destroy();\
-\
-public:\
-    nm( sal_uInt16= IS, sal_uInt8= GS );\
-    ~nm() { _destroy(); }\
-\
-    _SVOBJARR_DEF_GET_OP_INLINE(nm,AE)\
-    AE& GetObject(sal_uInt16 nP) const { return (*this)[nP]; } \
-\
-    void Insert( const AE &aE, sal_uInt16 nP );\
-    void Insert( const AE *pE, sal_uInt16 nL, sal_uInt16 nP );\
-    void Remove( sal_uInt16 nP, sal_uInt16 nL = 1 );\
-    sal_uInt16 Count() const { return nA; }\
-    const AE* GetData() const { return (const AE*)pData; }\
-\
-    void ForEach( CONCAT( FnForEach_, nm ) fnForEach, void* pArgs = 0 )\
-    {\
-        _ForEach( 0, nA, fnForEach, pArgs );\
-    }\
-    void ForEach( sal_uInt16 nS, sal_uInt16 nE, \
-                    CONCAT( FnForEach_, nm ) fnForEach, void* pArgs = 0 )\
-    {\
-        _ForEach( nS, nE, fnForEach, pArgs );\
-    }\
-\
-    void _ForEach( sal_uInt16 nStt, sal_uInt16 nE, \
-            CONCAT( FnForEach_, nm ) fnCall, void* pArgs = 0 );\
-\
-
-#define SV_DECL_OBJARR(nm, AE, IS, GS)\
-_SV_DECL_OBJARR(nm, AE, IS, GS)\
-private:\
-nm( const nm& );\
-nm& operator=( const nm& );\
-};
-
-#define SV_IMPL_OBJARR( nm, AE )\
-nm::nm( sal_uInt16 nInit, sal_uInt8 )\
-    : pData (0),\
-      nFree (nInit),\
-      nA    (0)\
-{\
-    if( nInit )\
-    {\
-        pData = (AE*)(rtl_allocateMemory(sizeof(AE) * nInit));\
-        DBG_ASSERT( pData, "CTOR, allocate");\
-    }\
-}\
-\
-void nm::_destroy()\
-{\
-    if(pData)\
-    {\
-        AE* pTmp=pData;\
-        for(sal_uInt16 n=0; n < nA; n++,pTmp++ )\
-        {\
-            pTmp->~AE();\
-        }\
-        rtl_freeMemory(pData);\
-        pData = 0;\
-    }\
-}\
-\
-void nm::_resize (size_t n)\
-{\
-    sal_uInt16 nL = ((n < USHRT_MAX) ? sal_uInt16(n) : USHRT_MAX);\
-    AE* pE = (AE*)(rtl_reallocateMemory (pData, sizeof(AE) * nL));\
-    if ((pE != 0) || (nL == 0))\
-    {\
-        pData = pE;\
-        nFree = nL - nA;\
-    }\
-}\
-\
-void nm::Insert( const AE &aE, sal_uInt16 nP )\
-{\
-    DBG_ASSERT( nP <= nA && nA < USHRT_MAX,"Ins 1");\
-    if (nFree < 1)\
-        _resize (nA + ((nA > 1) ? nA : 1));\
-    if( pData && nP < nA )\
-        memmove( pData+nP+1, pData+nP, (nA-nP) * sizeof( AE ));\
-    AE* pTmp = pData+nP;\
-    new( (DummyType*) pTmp ) AE( (AE&)aE );\
-    ++nA; --nFree;\
-}\
-\
-void nm::Insert( const AE* pE, sal_uInt16 nL, sal_uInt16 nP )\
-{\
-    DBG_ASSERT(nP<=nA && ((long)nA+nL) < USHRT_MAX, "Ins n");\
-    if (nFree < nL)\
-        _resize (nA + ((nA > nL) ? nA : nL));\
-    if( pData && nP < nA )\
-        memmove( pData+nP+nL, pData+nP, (nA-nP) * sizeof( AE ));\
-    if( pE )\
-    {\
-        AE* pTmp = pData+nP;\
-        for( sal_uInt16 n = 0; n < nL; n++, pTmp++, pE++)\
-        {\
-             new( (DummyType*) pTmp ) AE( (AE&)*pE );\
-        }\
-    }\
-    nA = nA + nL; nFree = nFree - nL;\
-}\
-\
-void nm::Remove( sal_uInt16 nP, sal_uInt16 nL )\
-{\
-    if( !nL )\
-        return;\
-    DBG_ASSERT( nP < nA && nP + nL <= nA,"Del");\
-    AE* pTmp=pData+nP;\
-    sal_uInt16 nCtr = nP;\
-    for(sal_uInt16 n=0; n < nL; n++,pTmp++,nCtr++)\
-    {\
-        if( nCtr < nA )\
-            pTmp->~AE();\
-    }\
-    if( pData && nP+1 < nA )\
-        memmove( pData+nP, pData+nP+nL, (nA-nP-nL) * sizeof( AE ));\
-    nA = nA - nL; nFree = nFree + nL;\
-    if (nFree > nA) \
-        _resize (nA);\
-}\
-\
-void nm::_ForEach( sal_uInt16 nStt, sal_uInt16 nE, \
-            CONCAT( FnForEach_, nm ) fnCall, void* pArgs )\
-{\
-    if( nStt >= nE || nE > nA )\
-        return;\
-    for( ; nStt < nE && (*fnCall)( *(pData+nStt), pArgs ); nStt++)\
-        ;\
-}\
-\
-_SVOBJARR_IMPL_GET_OP_INLINE(nm, AE)\
 
 #define _SV_DECL_PTRARR_DEF_GEN( nm, AE, IS, GS, AERef, vis )\
 _SV_DECL_VARARR_GEN( nm, AE, IS, GS, AERef, vis)\
@@ -523,8 +320,6 @@ sal_uInt16 GetPos( const AERef aE ) const;\
 
 #define _SV_DECL_PTRARR_DEF( nm, AE, IS, GS, vis )\
 _SV_DECL_PTRARR_DEF_GEN( nm, AE, IS, GS, AE &, vis )
-#define _SV_DECL_PTRARR_DEF_PLAIN( nm, AE, IS, GS, vis )\
-_SV_DECL_PTRARR_DEF_GEN( nm, AE, IS, GS, AE, vis )
 
 #define SV_DECL_PTRARR_GEN(nm, AE, IS, GS, Base, AERef, VPRef, vis )\
 typedef sal_Bool (*FnForEach_##nm)( const AERef, void* );\
@@ -580,13 +375,9 @@ private:\
 
 #define SV_DECL_PTRARR(nm, AE, IS, GS )\
 SV_DECL_PTRARR_GEN(nm, AE, IS, GS, SvPtrarr, AE &, VoidPtr &, )
-#define SV_DECL_PTRARR_PLAIN(nm, AE, IS, GS )\
-SV_DECL_PTRARR_GEN(nm, AE, IS, GS, SvPtrarrPlain, AE, VoidPtr, )
 
 #define SV_DECL_PTRARR_VISIBILITY(nm, AE, IS, GS, vis )\
 SV_DECL_PTRARR_GEN(nm, AE, IS, GS, SvPtrarr, AE &, VoidPtr &, vis )
-#define SV_DECL_PTRARR_PLAIN_VISIBILITY(nm, AE, IS, GS, vis )\
-SV_DECL_PTRARR_GEN(nm, AE, IS, GS, SvPtrarrPlain, AE, VoidPtr, vis )
 
 #define SV_DECL_PTRARR_DEL_GEN(nm, AE, IS, GS, Base, AERef, VPRef, vis )\
 typedef sal_Bool (*FnForEach_##nm)( const AERef, void* );\
@@ -643,13 +434,9 @@ private:\
 
 #define SV_DECL_PTRARR_DEL(nm, AE, IS, GS )\
 SV_DECL_PTRARR_DEL_GEN(nm, AE, IS, GS, SvPtrarr, AE &, VoidPtr &, )
-#define SV_DECL_PTRARR_DEL_PLAIN(nm, AE, IS, GS )\
-SV_DECL_PTRARR_DEL_GEN(nm, AE, IS, GS, SvPtrarrPlain, AE, VoidPtr, )
 
 #define SV_DECL_PTRARR_DEL_VISIBILITY(nm, AE, IS, GS, vis )\
 SV_DECL_PTRARR_DEL_GEN(nm, AE, IS, GS, SvPtrarr, AE &, VoidPtr &, vis)
-#define SV_DECL_PTRARR_DEL_PLAIN_VISIBILITY(nm, AE, IS, GS, vis )\
-SV_DECL_PTRARR_DEL_GEN(nm, AE, IS, GS, SvPtrarrPlain, AE, VoidPtr, vis)
 
 #define SV_IMPL_PTRARR_GEN(nm, AE, Base)\
 void nm::DeleteAndDestroy( sal_uInt16 nP, sal_uInt16 nL )\
@@ -664,12 +451,9 @@ void nm::DeleteAndDestroy( sal_uInt16 nP, sal_uInt16 nL )\
 
 #define SV_IMPL_PTRARR(nm, AE )\
 SV_IMPL_PTRARR_GEN(nm, AE, SvPtrarr )
-#define SV_IMPL_PTRARR_PLAIN(nm, AE )\
-SV_IMPL_PTRARR_GEN(nm, AE, SvPtrarrPlain )
 
 typedef void* VoidPtr;
 _SV_DECL_PTRARR_DEF( SvPtrarr, VoidPtr, 0, 1, SVL_DLLPUBLIC )
-_SV_DECL_PTRARR_DEF_PLAIN( SvPtrarrPlain, VoidPtr, 0, 1, SVL_DLLPUBLIC )
 
 // SORTARR - Begin
 
@@ -983,69 +767,21 @@ SV_IMPL_VARARR(nm##_SAR, AE)\
 _SV_IMPL_SORTAR_ALG( nm,AE )\
 _SV_SEEK_OBJECT( nm,AE )
 
-#define SV_DECL_PTRARR_STACK(nm, AE, IS, GS)\
-class nm: private SvPtrarr \
-{\
-public:\
-    nm( sal_uInt16 nIni=IS, sal_uInt8 nG=GS )\
-        : SvPtrarr(nIni,nG) {}\
-    void Insert( const nm *pI, sal_uInt16 nP,\
-                sal_uInt16 nS = 0, sal_uInt16 nE = USHRT_MAX ) {\
-        SvPtrarr::Insert( pI, nP, nS, nE ); \
-    }\
-    void Remove( sal_uInt16 nP, sal_uInt16 nL = 1 ) {\
-        SvPtrarr::Remove( nP, nL ); \
-    }\
-    void Push( const AE &aE ) {\
-        SvPtrarr::Insert( (const VoidPtr &)aE, SvPtrarr::Count() );\
-    }\
-    sal_uInt16 Count() const { return SvPtrarr::Count(); }\
-    AE operator[](sal_uInt16 nP) const {\
-        return (AE)SvPtrarr::operator[]( nP );\
-    }\
-    AE GetObject(sal_uInt16 nP) const {\
-        return (AE)SvPtrarr::GetObject( nP );\
-    }\
-    AE Pop(){\
-        AE pRet = 0;\
-        if( SvPtrarr::Count() ){\
-            pRet = GetObject( SvPtrarr::Count()-1 );\
-            SvPtrarr::Remove(Count()-1);\
-        }\
-        return pRet;\
-    }\
-    AE Top() const {\
-        AE pRet = 0;\
-        if( SvPtrarr::Count() )\
-            pRet = GetObject( SvPtrarr::Count()-1 ); \
-        return pRet;\
-    }\
-};
-
 #if defined (C40) || defined (C41) || defined (C42) || defined(C50) || defined(C52)
 #define C40_INSERT( c, p, n) Insert( (c const *) p, n )
-#define C40_PUSH( c, p) Push( (c const *) p )
 #define C40_PTR_INSERT( c, p) Insert( (c const *) p )
-#define C40_REMOVE( c, p ) Remove( (c const *) p )
 #define C40_REPLACE( c, p, n) Replace( (c const *) p, n )
-#define C40_PTR_REPLACE( c, p) Replace( (c const *) p )
 #define C40_GETPOS( c, r) GetPos( (c const *)r )
 #else
 #if defined WTC || defined ICC || defined HPUX || (defined GCC && __GNUC__ >= 3) || (defined(WNT) && _MSC_VER >= 1400)
 #define C40_INSERT( c, p, n ) Insert( (c const *&) p, n )
-#define C40_PUSH( c, p) Push( (c const *&) p )
 #define C40_PTR_INSERT( c, p ) Insert( (c const *&) p )
-#define C40_REMOVE( c, p ) Remove( (c const *&) p )
 #define C40_REPLACE( c, p, n ) Replace( (c const *&) p, n )
-#define C40_PTR_REPLACE( c, p ) Replace( (c const *&) p )
 #define C40_GETPOS( c, r) GetPos( (c const *&) r )
 #else
 #define C40_INSERT( c, p, n ) Insert( p, n )
-#define C40_PUSH( c, p) Push( p )
 #define C40_PTR_INSERT( c, p ) Insert( p )
-#define C40_REMOVE( c, p) Remove( p )
 #define C40_REPLACE( c, p, n ) Replace( p, n )
-#define C40_PTR_REPLACE( c, p ) Replace( p )
 #define C40_GETPOS( c, r) GetPos( r )
 #endif
 #endif

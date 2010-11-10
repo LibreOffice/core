@@ -184,18 +184,31 @@ void OutputDevice::DrawTransparent( const basegfx::B2DPolyPolygon& rB2DPolyPoly,
 
     if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW)
         && mpGraphics->supportsOperation(OutDevSupport_B2DDraw)
-        && ROP_OVERPAINT == GetRasterOp()
-        && IsFillColor())
+        && ROP_OVERPAINT == GetRasterOp() )
     {
         // b2dpolygon support not implemented yet on non-UNX platforms
         const ::basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
         basegfx::B2DPolyPolygon aB2DPolyPolygon(rB2DPolyPoly);
 
-        // transform the polygon and ensure closed
-        aB2DPolyPolygon.transform(aTransform);
-        aB2DPolyPolygon.setClosed(true);
+        // transform the polygon into device space and ensure it is closed
+        aB2DPolyPolygon.transform( aTransform );
+        aB2DPolyPolygon.setClosed( true );
 
-        if(mpGraphics->DrawPolyPolygon(aB2DPolyPolygon, fTransparency, this))
+        bool bDrawnOk = true;
+        if( IsFillColor() )
+            bDrawnOk = mpGraphics->DrawPolyPolygon( aB2DPolyPolygon, fTransparency, this );
+        if( bDrawnOk && IsLineColor() )
+        {
+            const basegfx::B2DVector aHairlineWidth(1,1);
+            const int nPolyCount = aB2DPolyPolygon.count();
+            for( int nPolyIdx = 0; nPolyIdx < nPolyCount; ++nPolyIdx )
+            {
+                const ::basegfx::B2DPolygon aOnePoly = aB2DPolyPolygon.getB2DPolygon( nPolyIdx );
+                mpGraphics->DrawPolyLine( aOnePoly, fTransparency, aHairlineWidth, ::basegfx::B2DLINEJOIN_NONE, this );
+            }
+        }
+
+        if( bDrawnOk )
         {
 #if 0
             // MetaB2DPolyPolygonAction is not implemented yet:
@@ -287,14 +300,17 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
 
         // get the polygon in device coordinates
         basegfx::B2DPolyPolygon aB2DPolyPolygon( rPolyPoly.getB2DPolyPolygon() );
-        aB2DPolyPolygon.setClosed( true );
         const ::basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
         aB2DPolyPolygon.transform( aTransform );
 
-        // draw the transparent polygon
-        bDrawn = mpGraphics->DrawPolyPolygon( aB2DPolyPolygon, nTransparencePercent*0.01, this );
+        const double fTransparency = 0.01 * nTransparencePercent;
+        if( mbFillColor )
+        {
+            // draw the transparent polygon
+            // NOTE: filled polygons are assumed to be drawn as if they were always closed
+            bDrawn = mpGraphics->DrawPolyPolygon( aB2DPolyPolygon, fTransparency, this );
+        }
 
-        // DrawTransparent() assumes that the border is NOT to be drawn transparently???
         if( mbLineColor )
         {
             // disable the fill color for now
@@ -305,7 +321,7 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
             for( int nPolyIdx = 0; nPolyIdx < nPolyCount; ++nPolyIdx )
             {
                 const ::basegfx::B2DPolygon& rPolygon = aB2DPolyPolygon.getB2DPolygon( nPolyIdx );
-                mpGraphics->DrawPolyLine( rPolygon, aLineWidths, ::basegfx::B2DLINEJOIN_NONE, this );
+                bDrawn = mpGraphics->DrawPolyLine( rPolygon, fTransparency, aLineWidths, ::basegfx::B2DLINEJOIN_NONE, this );
             }
             // prepare to restore the fill color
             mbInitFillColor = mbFillColor;
@@ -329,6 +345,12 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
 
         if( OUTDEV_PRINTER == meOutDevType )
         {
+            if(100 <= nTransparencePercent)
+            {
+                // #i112959# 100% transparent, draw nothing
+                return;
+            }
+
             Rectangle       aPolyRect( LogicToPixel( rPolyPoly ).GetBoundRect() );
             const Size      aDPISize( LogicToPixel( Size( 1, 1 ), MAP_INCH ) );
             const long      nBaseExtent = Max( FRound( aDPISize.Width() / 300. ), 1L );
@@ -343,30 +365,40 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
                 case( 25 ): nMove = nBaseExtent * 3; break;
                 case( 50 ): nMove = nBaseExtent * 4; break;
                 case( 75 ): nMove = nBaseExtent * 6; break;
-                            // TODO What is the correct VALUE???
+
+                // #i112959#  very transparent (88 < nTransparencePercent <= 99)
+                case( 100 ): nMove = nBaseExtent * 8; break;
+
+                // #i112959# not transparent (nTransparencePercent < 13)
                 default:    nMove = 0; break;
             }
 
             Push( PUSH_CLIPREGION | PUSH_LINECOLOR );
             IntersectClipRegion( rPolyPoly );
             SetLineColor( GetFillColor() );
-
-            Rectangle aRect( aPolyRect.TopLeft(), Size( aPolyRect.GetWidth(), nBaseExtent ) );
-
             const sal_Bool bOldMap = mbMap;
             EnableMapMode( sal_False );
 
-            while( aRect.Top() <= aPolyRect.Bottom() )
+            if(nMove)
             {
-                DrawRect( aRect );
-                aRect.Move( 0, nMove );
-            }
+                Rectangle aRect( aPolyRect.TopLeft(), Size( aPolyRect.GetWidth(), nBaseExtent ) );
+                while( aRect.Top() <= aPolyRect.Bottom() )
+                {
+                    DrawRect( aRect );
+                    aRect.Move( 0, nMove );
+                }
 
-            aRect = Rectangle( aPolyRect.TopLeft(), Size( nBaseExtent, aPolyRect.GetHeight() ) );
-            while( aRect.Left() <= aPolyRect.Right() )
+                aRect = Rectangle( aPolyRect.TopLeft(), Size( nBaseExtent, aPolyRect.GetHeight() ) );
+                while( aRect.Left() <= aPolyRect.Right() )
+                {
+                    DrawRect( aRect );
+                    aRect.Move( nMove, 0 );
+                }
+            }
+            else
             {
-                DrawRect( aRect );
-                aRect.Move( nMove, 0 );
+                // #i112959# if not transparent, draw full rectangle in clip region
+                DrawRect( aPolyRect );
             }
 
             EnableMapMode( bOldMap );
@@ -1119,7 +1151,7 @@ void OutputDevice::Erase()
         {
             ImplControlValue    aControlValue;
             Point               aGcc3WorkaroundTemporary;
-            Region              aCtrlRegion( Rectangle( aGcc3WorkaroundTemporary, GetOutputSizePixel() ) );
+            Rectangle           aCtrlRegion( aGcc3WorkaroundTemporary, GetOutputSizePixel() );
             ControlState        nState = 0;
 
             if( pWindow->IsEnabled() )              nState |= CTRL_STATE_ENABLED;

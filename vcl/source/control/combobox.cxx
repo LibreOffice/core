@@ -139,8 +139,8 @@ void ComboBox::ImplCalcEditHeight()
     if ( !IsDropDownBox() )
         mnDDHeight += 4;
 
-    Region aCtrlRegion( Rectangle( (const Point&)Point(), Size( 10, 10 ) ) );
-    Region aBoundRegion, aContentRegion;
+    Rectangle aCtrlRegion( Point( 0, 0 ), Size( 10, 10 ) );
+    Rectangle aBoundRegion, aContentRegion;
     ImplControlValue aControlValue;
     ControlType aType = IsDropDownBox() ? CTRL_COMBOBOX : CTRL_EDITBOX;
     if( GetNativeControlRegion( aType, PART_ENTIRE_CONTROL,
@@ -149,7 +149,7 @@ void ComboBox::ImplCalcEditHeight()
                                 aControlValue, rtl::OUString(),
                                 aBoundRegion, aContentRegion ) )
     {
-        const long nNCHeight = aBoundRegion.GetBoundRect().GetHeight();
+        const long nNCHeight = aBoundRegion.GetHeight();
         if( mnDDHeight < nNCHeight )
             mnDDHeight = sal::static_int_cast<sal_uInt16>( nNCHeight );
     }
@@ -629,10 +629,10 @@ void ComboBox::Resize()
         Window *pBorder = GetWindow( WINDOW_BORDER );
         ImplControlValue aControlValue;
         Point aPoint;
-        Region aContent, aBound;
+        Rectangle aContent, aBound;
 
         // use the full extent of the control
-        Region aArea( Rectangle(aPoint, pBorder->GetOutputSizePixel()) );
+        Rectangle aArea( aPoint, pBorder->GetOutputSizePixel() );
 
         if ( GetNativeControlRegion(CTRL_COMBOBOX, PART_BUTTON_DOWN,
                 aArea, 0, aControlValue, rtl::OUString(), aBound, aContent) )
@@ -641,7 +641,7 @@ void ComboBox::Resize()
             aPoint = pBorder->ScreenToOutputPixel( OutputToScreenPixel( aPoint ) );
             aContent.Move(-aPoint.X(), -aPoint.Y());
 
-            mpBtn->SetPosSizePixel( aContent.GetBoundRect().Left(), nTop, aContent.GetBoundRect().getWidth(), (nBottom-nTop) );
+            mpBtn->SetPosSizePixel( aContent.Left(), nTop, aContent.getWidth(), (nBottom-nTop) );
 
             // adjust the size of the edit field
             if ( GetNativeControlRegion(CTRL_COMBOBOX, PART_SUB_EDIT,
@@ -651,13 +651,12 @@ void ComboBox::Resize()
                 aContent.Move(-aPoint.X(), -aPoint.Y());
 
                 // use the themes drop down size
-                Rectangle aContentRect = aContent.GetBoundRect();
-                mpSubEdit->SetPosSizePixel( aContentRect.TopLeft(), aContentRect.GetSize() );
+                mpSubEdit->SetPosSizePixel( aContent.TopLeft(), aContent.GetSize() );
             }
             else
             {
                 // use the themes drop down size for the button
-                aOutSz.Width() -= aContent.GetBoundRect().getWidth();
+                aOutSz.Width() -= aContent.getWidth();
                 mpSubEdit->SetSizePixel( aOutSz );
             }
         }
@@ -1010,6 +1009,14 @@ void ComboBox::Clear()
 {
     mpImplLB->Clear();
     CallEventListeners( VCLEVENT_COMBOBOX_ITEMREMOVED, (void*) sal_IntPtr(-1) );
+}
+// -----------------------------------------------------------------------
+
+Image ComboBox::GetEntryImage( sal_uInt16 nPos ) const
+{
+    if ( mpImplLB->GetEntryList()->HasEntryImage( nPos ) )
+        return mpImplLB->GetEntryList()->GetEntryImage( nPos );
+    return Image();
 }
 
 // -----------------------------------------------------------------------

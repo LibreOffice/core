@@ -193,7 +193,7 @@ void MultiLineEditSyntaxHighlight::UpdateData()
         GetTextEngine()->RemoveAttribs( nLine, sal_True );
         HighlightPortions aPortions;
         aHighlighter.getHighlightPortions( nLine, aLine, aPortions );
-        for ( sal_uInt16 i = 0; i < aPortions.Count(); i++ )
+        for ( size_t i = 0; i < aPortions.size(); i++ )
         {
             HighlightPortion& r = aPortions[i];
             GetTextEngine()->SetAttrib( TextAttribFontColor( GetColorValue(r.tokenType) ), nLine, r.nBegin, r.nEnd, sal_True );

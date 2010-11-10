@@ -41,6 +41,7 @@ struct MenuItemData;
 class Point;
 class Size;
 class Rectangle;
+class Menu;
 class MenuItemList;
 class HelpEvent;
 class Image;
@@ -102,6 +103,17 @@ typedef sal_uInt16 MenuItemBits;
 // forces images & toggle visibility for toolbar config popup
 #define MENU_FLAG_SHOWCHECKIMAGES     0x0008
 
+struct ImplMenuDelData
+{
+    ImplMenuDelData* mpNext;
+    const Menu* mpMenu;
+
+    ImplMenuDelData( const Menu* pMenu );
+    ~ImplMenuDelData();
+
+    bool isDeleted() const { return mpMenu == 0; }
+};
+
 // --------
 // - Menu -
 // --------
@@ -120,9 +132,9 @@ class VCL_DLLPUBLIC Menu : public Resource
     friend class MenuFloatingWindow;
     friend class PopupMenu;
     friend class SystemWindow;
-
+    friend struct ImplMenuDelData;
 private:
-    void*               pMenuData_NotUsedYet;
+    ImplMenuDelData*    mpFirstDel;
     MenuItemList*       pItemList;          // Liste mit den MenuItems
     MenuLogo*           pLogo;
     Menu*               pStartedFrom;
@@ -186,6 +198,8 @@ protected:
     // return value is Max( rCheckHeight, rRadioHeight )
     SAL_DLLPRIVATE long             ImplGetNativeCheckAndRadioSize( Window*, long& rCheckHeight, long& rRadioHeight, long &rMaxWidth ) const;
 
+    SAL_DLLPRIVATE void                ImplAddDel( ImplMenuDelData &rDel );
+    SAL_DLLPRIVATE void                ImplRemoveDel( ImplMenuDelData &rDel );
 public:
     SAL_DLLPRIVATE void             ImplKillLayoutData() const;
     SAL_DLLPRIVATE Menu*            ImplGetStartedFrom() const;
@@ -290,8 +304,8 @@ public:
     void                SetHelpCommand( sal_uInt16 nItemId, const XubString& rString );
     const XubString&    GetHelpCommand( sal_uInt16 nItemId ) const;
 
-    void                SetHelpId( sal_uInt16 nItemId, sal_uIntPtr nHelpId );
-    sal_uIntPtr             GetHelpId( sal_uInt16 nItemId ) const;
+    void                SetHelpId( sal_uInt16 nItemId, const rtl::OString& rHelpId );
+    rtl::OString        GetHelpId( sal_uInt16 nItemId ) const;
 
     void                SetActivateHdl( const Link& rLink )     { aActivateHdl = rLink; }
     const Link&         GetActivateHdl() const                  { return aActivateHdl; }

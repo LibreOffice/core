@@ -152,23 +152,21 @@ void DockingAreaWindow::Paint( const Rectangle& )
     EnableNativeWidget( sal_True ); // only required because the toolkit curently switches this flag off
     if( IsNativeControlSupported( CTRL_TOOLBAR, PART_ENTIRE_CONTROL ) )
     {
-        ImplControlValue    aControlValue;
-        ToolbarValue        aToolbarValue;
+        ToolbarValue        aControlValue;
 
         if( GetAlign() == WINDOWALIGN_TOP && ImplGetSVData()->maNWFData.mbMenuBarDockingAreaCommonBG )
         {
             // give NWF a hint that this dockingarea is adjacent to the menubar
             // useful for special gradient effects that should cover both windows
-            aToolbarValue.mbIsTopDockingArea = sal_True;
+            aControlValue.mbIsTopDockingArea = sal_True;
         }
-        aControlValue.setOptionalVal( (void *)(&aToolbarValue) );
         ControlState        nState = CTRL_STATE_ENABLED;
 
         if( !ImplGetSVData()->maNWFData.mbDockingAreaSeparateTB )
         {
             // draw a single toolbar background covering the whole docking area
             Point tmp;
-            Region aCtrlRegion( Rectangle( tmp, GetOutputSizePixel() ) );
+            Rectangle aCtrlRegion( tmp, GetOutputSizePixel() );
 
             DrawNativeControl( CTRL_TOOLBAR, IsHorizontal() ? PART_DRAW_BACKGROUND_HORZ : PART_DRAW_BACKGROUND_VERT,
                                aCtrlRegion, nState, aControlValue, rtl::OUString() );
@@ -231,7 +229,7 @@ void DockingAreaWindow::Paint( const Rectangle& )
                     aTBRect.Bottom()    = aOutSz.Height() - 1;
                 }
                 DrawNativeControl( CTRL_TOOLBAR, IsHorizontal() ? PART_DRAW_BACKGROUND_HORZ : PART_DRAW_BACKGROUND_VERT,
-                                   Region( aTBRect), nState, aControlValue, rtl::OUString() );
+                                   aTBRect, nState, aControlValue, rtl::OUString() );
             }
         }
     }

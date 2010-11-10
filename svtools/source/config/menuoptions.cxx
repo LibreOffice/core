@@ -314,8 +314,16 @@ void SvtMenuOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNames )
     // We need values from ALL notified configuration keys.
     DBG_ASSERT( !(seqPropertyNames.getLength()!=seqValues.getLength()), "SvtMenuOptions_Impl::Notify()\nI miss some values of configuration keys!\n" );
 
-    sal_Bool bMenuIcons = true;
-    sal_Bool bSystemMenuIcons = true;
+    sal_Bool bMenuSettingsChanged = sal_False;
+    sal_Bool bMenuIcons = sal_True;
+    sal_Bool bSystemMenuIcons = sal_True;
+    if (m_nMenuIcons == 2)
+        bMenuIcons = (sal_Bool)(Application::GetSettings().GetStyleSettings().GetUseImagesInMenus());
+    else
+    {
+        bSystemMenuIcons = sal_False;
+        bMenuIcons = m_nMenuIcons ? sal_True : sal_False;
+    }
 
     // Step over list of property names and get right value from coreesponding value list to set it on internal members!
     sal_Int32 nCount = seqPropertyNames.getLength();
@@ -334,12 +342,12 @@ void SvtMenuOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNames )
         else if( seqPropertyNames[nProperty] == PROPERTYNAME_SHOWICONSINMENUES )
         {
             DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtMenuOptions_Impl::SvtMenuOptions_Impl()\nWho has changed the value type of \"Office.Common\\View\\Menu\\ShowIconsInMenues\"?" );
-            seqValues[nProperty] >>= bMenuIcons;
+            bMenuSettingsChanged = seqValues[nProperty] >>= bMenuIcons;
         }
         else if( seqPropertyNames[nProperty] == PROPERTYNAME_SYSTEMICONSINMENUES )
         {
             DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtMenuOptions_Impl::SvtMenuOptions_Impl()\nWho has changed the value type of \"Office.Common\\View\\Menu\\IsSystemIconsInMenus\"?" );
-            seqValues[nProperty] >>= bSystemMenuIcons;
+            bMenuSettingsChanged = seqValues[nProperty] >>= bSystemMenuIcons;
         }
 
         #if OSL_DEBUG_LEVEL > 1
@@ -347,7 +355,8 @@ void SvtMenuOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNames )
         #endif
     }
 
-    m_nMenuIcons = bSystemMenuIcons ? 2 : bMenuIcons;
+    if ( bMenuSettingsChanged )
+        m_nMenuIcons = bSystemMenuIcons ? 2 : bMenuIcons;
 
     for ( sal_uInt16 n=0; n<aList.Count(); n++ )
         aList.GetObject(n)->Call( this );
@@ -377,11 +386,13 @@ void SvtMenuOptions_Impl::Commit()
                                                             break;
             //Output cache of current setting as possibly modified by System Theme for older version
             case PROPERTYHANDLE_SHOWICONSINMENUES       :   {
-                                                                seqValues[nProperty] <<=(sal_Bool)(Application::GetSettings().GetStyleSettings().GetUseImagesInMenus());
+                                                                sal_Bool bValue = (sal_Bool)(Application::GetSettings().GetStyleSettings().GetUseImagesInMenus());
+                                                                seqValues[nProperty] <<= bValue;
                                                             }
                                                             break;
             case PROPERTYHANDLE_SYSTEMICONSINMENUES     :   {
-                                                                seqValues[nProperty] <<= (m_nMenuIcons == 2 ? sal_True : sal_False) ;
+                                                                sal_Bool bValue = (m_nMenuIcons == 2 ? sal_True : sal_False) ;
+                                                                seqValues[nProperty] <<= bValue;
                                                             }
                                                             break;
         }

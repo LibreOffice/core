@@ -39,15 +39,8 @@
 class ImplPolygonData
 {
 public:
-#ifdef WIN
-    Point huge*     mpPointAry;
-    sal_uInt8*           mpFlagAry;
-    GLOBALHANDLE    mhPoints;
-#else
     Point*          mpPointAry;
     sal_uInt8*           mpFlagAry;
-#endif
-
     sal_uInt16          mnPoints;
     sal_uIntPtr           mnRefCount;
 };

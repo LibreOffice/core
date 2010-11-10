@@ -40,11 +40,10 @@ class ImpSvtData
 public:
     SfxItemDesruptorList_Impl * pItemDesruptList;
     ResMgr *        pResMgr;
-    ResMgr *        pPatchResMgr;
 
 private:
     ImpSvtData():
-        pItemDesruptList(0), pResMgr(0), pPatchResMgr(0)
+        pItemDesruptList(0), pResMgr(0)
     {}
 
     ~ImpSvtData();
@@ -52,25 +51,11 @@ private:
 public:
     ResMgr * GetResMgr(const ::com::sun::star::lang::Locale aLocale);
     ResMgr * GetResMgr(); // VCL dependant, only available in SVT, not in SVL!
-    ResMgr * GetPatchResMgr();
-    ResMgr * GetPatchResMgr(const ::com::sun::star::lang::Locale& aLocale);
 
     static ImpSvtData & GetSvtData();
 };
 
 //============================================================================
-
-class SvpResId: public ResId
-{
-public:
-    SvpResId( sal_uInt16 nId, const ::com::sun::star::lang::Locale aLocale ):
-        ResId( nId, *ImpSvtData::GetSvtData().GetResMgr( aLocale ) ) {}
-
-     // VCL dependant, only available in SVT, not in SVL!
-    SvpResId( sal_uInt16 nId );
-};
-
-
 class SvtResId: public ResId
 {
 public:

@@ -62,12 +62,7 @@ Help::~Help()
 
 // -----------------------------------------------------------------------
 
-sal_Bool Help::Start( sal_uIntPtr, const Window* )
-{
-    return sal_False;
-}
-
-void Help::OpenHelpAgent( sal_uIntPtr )
+void Help::OpenHelpAgent( const rtl::OString& )
 {
 }
 
@@ -78,11 +73,9 @@ sal_Bool Help::Start( const XubString&, const Window* )
     return sal_False;
 }
 
-// -----------------------------------------------------------------------
-
-XubString Help::GetHelpText( sal_uIntPtr, const Window* )
+sal_Bool Help::SearchKeyword( const XubString& )
 {
-    return ImplGetSVEmptyStr();
+    return sal_False;
 }
 
 // -----------------------------------------------------------------------
@@ -444,7 +437,7 @@ void HelpTextWindow::Paint( const Rectangle& )
     if ( IsNativeControlSupported( CTRL_TOOLTIP, PART_ENTIRE_CONTROL ) )
     {
         // #i46472# workaround gcc3.3 temporary problem
-        Region aCtrlRegion = Region( Rectangle( Point( 0, 0 ), GetOutputSizePixel() ) );
+        Rectangle aCtrlRegion( Point( 0, 0 ), GetOutputSizePixel() );
         ImplControlValue    aControlValue;
         bNativeOK = DrawNativeControl( CTRL_TOOLTIP, PART_ENTIRE_CONTROL, aCtrlRegion,
                                        0, aControlValue, rtl::OUString() );

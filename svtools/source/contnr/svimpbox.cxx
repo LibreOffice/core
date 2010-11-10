@@ -1067,14 +1067,14 @@ void SvImpLBox::DrawNet()
     //so that SvImpLBox::DrawNet() doesn't draw anything too
      if(pView->IsNativeControlSupported( CTRL_LISTNET, PART_ENTIRE_CONTROL)) {
         ImplControlValue    aControlValue;
-        Point aTemp(0,0);   // temporary needed for g++ 3.3.5
-        Region            aCtrlRegion( Rectangle(aTemp, Size( 0, 0 )) );
+        Point  aTemp(0,0);   // temporary needed for g++ 3.3.5
+        Rectangle aCtrlRegion( aTemp, Size( 0, 0 ) );
         ControlState        nState = CTRL_STATE_ENABLED;
-            if( pView->DrawNativeControl( CTRL_LISTNET, PART_ENTIRE_CONTROL,
-                    aCtrlRegion, nState, aControlValue, rtl::OUString() ) )
-            {
-                return;
-            }
+        if( pView->DrawNativeControl( CTRL_LISTNET, PART_ENTIRE_CONTROL,
+                                      aCtrlRegion, nState, aControlValue, rtl::OUString() ) )
+        {
+            return;
+        }
 
     }
 
@@ -2171,14 +2171,6 @@ void SvImpLBox::MouseButtonDown( const MouseEvent& rMEvt )
                 if( !bSimpleTravel && !aSelEng.IsAlwaysAdding())
                     SelAllDestrAnch( sal_False, sal_True ); // DeselectAll();
                 SetCursor( pEntry );
-
-                DBG_ERROR( "Please report what you did to get this assertion to FS!" );
-                    // The entry which has been double-clicked changed - and we select it, again.
-                    // I have situations where this behaviour does not make any sense at all - even more, it
-                    // leads to hacks to revert it's results.
-                    // So I'm not sure if this behaviour here is nonsense (which I believe at the moment),
-                    // or if there are really scenarious where it dones make sense ....
-                    // 07.12.2001 - 95727 - fs@openoffice.org
 
                 return;
             }

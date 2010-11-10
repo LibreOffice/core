@@ -102,6 +102,8 @@ LanguageType MsLangId::getRealLanguageWithoutConfig( LanguageType nLang )
             nLang = getSystemUILanguage();
             break;
         default:
+            /* TODO: would this be useful here? */
+            //nLang = MsLangId::getReplacementForObsoleteLanguage( nLang);
             ;   // nothing
     }
     if (nLang == LANGUAGE_DONTKNOW)
@@ -128,6 +130,8 @@ LanguageType MsLangId::getRealLanguage( LanguageType nLang )
                 nLang = nConfiguredSystemUILanguage;
             break;
         default:
+            /* TODO: would this be useful here? */
+            //nLang = MsLangId::getReplacementForObsoleteLanguage( nLang);
             ;   // nothing
     }
     if (nLang == LANGUAGE_DONTKNOW)
@@ -369,6 +373,7 @@ sal_Int16 MsLangId::getScriptType( LanguageType nLang )
         case LANGUAGE_USER_BODO_INDIA:
         case LANGUAGE_USER_DOGRI_INDIA:
         case LANGUAGE_USER_MAITHILI_INDIA:
+        case LANGUAGE_UIGHUR_CHINA:
             nScript = ::com::sun::star::i18n::ScriptType::COMPLEX;
             break;
 
@@ -450,6 +455,12 @@ LanguageType MsLangId::getReplacementForObsoleteLanguage( LanguageType nLang )
         // do not support.
         case LANGUAGE_SPANISH_DATED:
             nLang = LANGUAGE_SPANISH_MODERN;
+            break;
+
+         // Do not use ca-XV for document content.
+         /* TODO: remove in case we implement BCP47 language tags. */
+        case LANGUAGE_USER_CATALAN_VALENCIAN:
+            nLang = LANGUAGE_CATALAN;
             break;
     }
     return nLang;

@@ -481,6 +481,9 @@ void ToolbarMenu::implInit(const Reference< XFrame >& rFrame)
 {
     mpImpl = new ToolbarMenu_Impl( *this, rFrame );
 
+    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+    SetControlBackground( rStyleSettings.GetMenuColor() );
+
     initWindow();
 
     Window* pWindow = GetTopMostParentSystemWindow( this );
@@ -637,8 +640,6 @@ const Image& ToolbarMenu::getEntryImage( int nEntryId ) const
 void ToolbarMenu::initWindow()
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-
-    SetControlBackground( GetSettings().GetStyleSettings().GetFaceGradientColor() );
 
     SetPointFont( rStyleSettings.GetMenuFont() );
     SetBackground( Wallpaper( GetControlBackground() ) );
@@ -919,7 +920,7 @@ void ToolbarMenu::implHighlightEntry( int nHighlightEntry, bool bHighlight )
                 IntersectClipRegion( Rectangle( Point( nX, nY ), Size( aSz.Width(), pEntry->maSize.Height() ) ) );
                 Rectangle aCtrlRect( Point( nX, 0 ), Size( aPxSize.Width()-nX, aPxSize.Height() ) );
                 DrawNativeControl( CTRL_MENU_POPUP, PART_ENTIRE_CONTROL,
-                                   Region( aCtrlRect ),
+                                   aCtrlRect,
                                    CTRL_STATE_ENABLED,
                                    ImplControlValue(),
                                    OUString() );
@@ -927,7 +928,7 @@ void ToolbarMenu::implHighlightEntry( int nHighlightEntry, bool bHighlight )
                 {
                     bDrawItemRect = false;
                     if( sal_False == DrawNativeControl( CTRL_MENU_POPUP, PART_MENU_ITEM,
-                                                    Region( aItemRect ),
+                                                    aItemRect,
                                                     CTRL_STATE_SELECTED | ( pEntry->mbEnabled? CTRL_STATE_ENABLED: 0 ),
                                                     ImplControlValue(),
                                                     OUString() ) )
@@ -1311,13 +1312,12 @@ static void ImplPaintCheckBackground( Window* i_pWindow, const Rectangle& i_rRec
     if( i_pWindow->IsNativeControlSupported( CTRL_TOOLBAR, PART_BUTTON ) )
     {
         ImplControlValue    aControlValue;
-        Region              aCtrlRegion( i_rRect );
         ControlState        nState = CTRL_STATE_PRESSED | CTRL_STATE_ENABLED;
 
         aControlValue.setTristateVal( BUTTONVALUE_ON );
 
         bNativeOk = i_pWindow->DrawNativeControl( CTRL_TOOLBAR, PART_BUTTON,
-                                                  aCtrlRegion, nState, aControlValue,
+                                                  i_rRect, nState, aControlValue,
                                                   rtl::OUString() );
     }
 
@@ -1334,10 +1334,10 @@ static long ImplGetNativeCheckAndRadioSize( Window* pWin, long& rCheckHeight, lo
     rMaxWidth = rCheckHeight = rRadioHeight = 0;
 
     ImplControlValue aVal;
-    Region aNativeBounds;
-    Region aNativeContent;
+    Rectangle aNativeBounds;
+    Rectangle aNativeContent;
     Point tmp( 0, 0 );
-    Region aCtrlRegion( Rectangle( tmp, Size( 100, 15 ) ) );
+    Rectangle aCtrlRegion( tmp, Size( 100, 15 ) );
     if( pWin->IsNativeControlSupported( CTRL_MENU_POPUP, PART_MENU_ITEM_CHECK_MARK ) )
     {
         if( pWin->GetNativeControlRegion( ControlType(CTRL_MENU_POPUP),
@@ -1350,8 +1350,8 @@ static long ImplGetNativeCheckAndRadioSize( Window* pWin, long& rCheckHeight, lo
                                           aNativeContent )
         )
         {
-            rCheckHeight = aNativeBounds.GetBoundRect().GetHeight();
-            rMaxWidth = aNativeContent.GetBoundRect().GetWidth();
+            rCheckHeight = aNativeBounds.GetHeight();
+            rMaxWidth = aNativeContent.GetWidth();
         }
     }
     if( pWin->IsNativeControlSupported( CTRL_MENU_POPUP, PART_MENU_ITEM_RADIO_MARK ) )
@@ -1366,8 +1366,8 @@ static long ImplGetNativeCheckAndRadioSize( Window* pWin, long& rCheckHeight, lo
                                           aNativeContent )
         )
         {
-            rRadioHeight = aNativeBounds.GetBoundRect().GetHeight();
-            rMaxWidth = Max (rMaxWidth, aNativeContent.GetBoundRect().GetWidth());
+            rRadioHeight = aNativeBounds.GetHeight();
+            rMaxWidth = Max (rMaxWidth, aNativeContent.GetWidth());
         }
     }
     return (rCheckHeight > rRadioHeight) ? rCheckHeight : rRadioHeight;
@@ -1491,7 +1491,7 @@ void ToolbarMenu::implPaint( ToolbarMenuEntry* pThisOnly, bool bHighlighted )
                             aTmpPos.Y() = aOuterCheckRect.Top() + (aOuterCheckRect.GetHeight() - nCtrlHeight)/2;
 
                             Rectangle aCheckRect( aTmpPos, Size( nCtrlHeight, nCtrlHeight ) );
-                            DrawNativeControl( CTRL_MENU_POPUP, nPart, Region( aCheckRect ), nState, ImplControlValue(), OUString() );
+                            DrawNativeControl( CTRL_MENU_POPUP, nPart, aCheckRect, nState, ImplControlValue(), OUString() );
                         }
                         else if ( pEntry->mbChecked ) // by default do nothing for unchecked items
                         {

@@ -405,6 +405,7 @@ void    SalGraphics::DrawRect( long nX, long nY, long nWidth, long nHeight, cons
 }
 bool SalGraphics::drawPolyLine(
     const basegfx::B2DPolygon& /*rPolyPolygon*/,
+    double /*fTransparency*/,
     const basegfx::B2DVector& /*rLineWidths*/,
     basegfx::B2DLineJoin /*eLineJoin*/)
 {
@@ -536,7 +537,7 @@ sal_Bool SalGraphics::DrawPolyPolygonBezier( sal_uInt32 i_nPoly, const sal_uInt3
     return bRet;
 }
 
-bool SalGraphics::DrawPolyLine( const ::basegfx::B2DPolygon& i_rPolygon,
+bool SalGraphics::DrawPolyLine( const ::basegfx::B2DPolygon& i_rPolygon, double fTransparency,
     const ::basegfx::B2DVector& i_rLineWidth, basegfx::B2DLineJoin i_eLineJoin,
     const OutputDevice* i_pOutDev )
 {
@@ -544,10 +545,10 @@ bool SalGraphics::DrawPolyLine( const ::basegfx::B2DPolygon& i_rPolygon,
     if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) )
     {
         basegfx::B2DPolygon aMirror( mirror( i_rPolygon, i_pOutDev ) );
-        bRet = drawPolyLine( aMirror, i_rLineWidth, i_eLineJoin );
+        bRet = drawPolyLine( aMirror, fTransparency, i_rLineWidth, i_eLineJoin );
     }
     else
-        bRet = drawPolyLine( i_rPolygon, i_rLineWidth, i_eLineJoin );
+        bRet = drawPolyLine( i_rPolygon, fTransparency, i_rLineWidth, i_eLineJoin );
     return bRet;
 }
 
@@ -668,13 +669,13 @@ sal_Bool    SalGraphics::DrawEPS( long nX, long nY, long nWidth, long nHeight, v
     return drawEPS( nX, nY, nWidth, nHeight,  pPtr, nSize );
 }
 
-sal_Bool SalGraphics::HitTestNativeControl( ControlType nType, ControlPart nPart, const Region& rControlRegion,
+sal_Bool SalGraphics::HitTestNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
                                                 const Point& aPos, sal_Bool& rIsInside, const OutputDevice *pOutDev )
 {
     if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) || (pOutDev && pOutDev->IsRTLEnabled()) )
     {
         Point pt( aPos );
-        Region rgn( rControlRegion );
+        Rectangle rgn( rControlRegion );
         mirror( pt.X(), pOutDev );
         mirror( rgn, pOutDev );
         return hitTestNativeControl( nType, nPart, rgn, pt, rIsInside );
@@ -683,51 +684,48 @@ sal_Bool SalGraphics::HitTestNativeControl( ControlType nType, ControlPart nPart
         return hitTestNativeControl( nType, nPart, rControlRegion, aPos, rIsInside );
 }
 
-void SalGraphics::mirror( ControlType nType, const ImplControlValue& rVal, const OutputDevice* pOutDev, bool bBack ) const
+void SalGraphics::mirror( ControlType , const ImplControlValue& rVal, const OutputDevice* pOutDev, bool bBack ) const
 {
-    if( rVal.getOptionalVal() )
+    switch( rVal.getType() )
     {
-        switch( nType )
+        case CTRL_SLIDER:
         {
-            case CTRL_SLIDER:
-            {
-                SliderValue* pSlVal = reinterpret_cast<SliderValue*>(rVal.getOptionalVal());
-                mirror(pSlVal->maThumbRect,pOutDev,bBack);
-            }
-            break;
-            case CTRL_SCROLLBAR:
-            {
-                ScrollbarValue* pScVal = reinterpret_cast<ScrollbarValue*>(rVal.getOptionalVal());
-                mirror(pScVal->maThumbRect,pOutDev,bBack);
-                mirror(pScVal->maButton1Rect,pOutDev,bBack);
-                mirror(pScVal->maButton2Rect,pOutDev,bBack);
-            }
-            break;
-            case CTRL_SPINBOX:
-            case CTRL_SPINBUTTONS:
-            {
-                SpinbuttonValue* pSpVal = reinterpret_cast<SpinbuttonValue*>(rVal.getOptionalVal());
-                mirror(pSpVal->maUpperRect,pOutDev,bBack);
-                mirror(pSpVal->maLowerRect,pOutDev,bBack);
-            }
-            break;
-            case CTRL_TOOLBAR:
-            {
-                ToolbarValue* pTVal = reinterpret_cast<ToolbarValue*>(rVal.getOptionalVal());
-                mirror(pTVal->maGripRect,pOutDev,bBack);
-            }
-            break;
+            SliderValue* pSlVal = static_cast<SliderValue*>(const_cast<ImplControlValue*>(&rVal));
+            mirror(pSlVal->maThumbRect,pOutDev,bBack);
         }
+        break;
+        case CTRL_SCROLLBAR:
+        {
+            ScrollbarValue* pScVal = static_cast<ScrollbarValue*>(const_cast<ImplControlValue*>(&rVal));
+            mirror(pScVal->maThumbRect,pOutDev,bBack);
+            mirror(pScVal->maButton1Rect,pOutDev,bBack);
+            mirror(pScVal->maButton2Rect,pOutDev,bBack);
+        }
+        break;
+        case CTRL_SPINBOX:
+        case CTRL_SPINBUTTONS:
+        {
+            SpinbuttonValue* pSpVal = static_cast<SpinbuttonValue*>(const_cast<ImplControlValue*>(&rVal));
+            mirror(pSpVal->maUpperRect,pOutDev,bBack);
+            mirror(pSpVal->maLowerRect,pOutDev,bBack);
+        }
+        break;
+        case CTRL_TOOLBAR:
+        {
+            ToolbarValue* pTVal = static_cast<ToolbarValue*>(const_cast<ImplControlValue*>(&rVal));
+            mirror(pTVal->maGripRect,pOutDev,bBack);
+        }
+        break;
     }
 }
 
-sal_Bool SalGraphics::DrawNativeControl( ControlType nType, ControlPart nPart, const Region& rControlRegion,
+sal_Bool SalGraphics::DrawNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
                                                 ControlState nState, const ImplControlValue& aValue,
                                                 const OUString& aCaption, const OutputDevice *pOutDev )
 {
     if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) || (pOutDev && pOutDev->IsRTLEnabled()) )
     {
-        Region rgn( rControlRegion );
+        Rectangle rgn( rControlRegion );
         mirror( rgn, pOutDev );
         mirror( nType, aValue, pOutDev );
         sal_Bool bRet = drawNativeControl( nType, nPart, rgn, nState, aValue, aCaption );
@@ -738,13 +736,13 @@ sal_Bool SalGraphics::DrawNativeControl( ControlType nType, ControlPart nPart, c
         return drawNativeControl( nType, nPart, rControlRegion, nState, aValue, aCaption );
 }
 
-sal_Bool SalGraphics::DrawNativeControlText( ControlType nType, ControlPart nPart, const Region& rControlRegion,
+sal_Bool SalGraphics::DrawNativeControlText( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
                                                 ControlState nState, const ImplControlValue& aValue,
                                                 const OUString& aCaption, const OutputDevice *pOutDev )
 {
     if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) || (pOutDev && pOutDev->IsRTLEnabled()) )
     {
-        Region rgn( rControlRegion );
+        Rectangle rgn( rControlRegion );
         mirror( rgn, pOutDev );
         mirror( nType, aValue, pOutDev );
         sal_Bool bRet = drawNativeControlText( nType, nPart, rgn, nState, aValue, aCaption );
@@ -755,13 +753,13 @@ sal_Bool SalGraphics::DrawNativeControlText( ControlType nType, ControlPart nPar
         return drawNativeControlText( nType, nPart, rControlRegion, nState, aValue, aCaption );
 }
 
-sal_Bool SalGraphics::GetNativeControlRegion( ControlType nType, ControlPart nPart, const Region& rControlRegion, ControlState nState,
+sal_Bool SalGraphics::GetNativeControlRegion( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion, ControlState nState,
                                                 const ImplControlValue& aValue, const OUString& aCaption,
-                                                Region &rNativeBoundingRegion, Region &rNativeContentRegion, const OutputDevice *pOutDev )
+                                                Rectangle &rNativeBoundingRegion, Rectangle &rNativeContentRegion, const OutputDevice *pOutDev )
 {
     if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) || (pOutDev && pOutDev->IsRTLEnabled()) )
     {
-        Region rgn( rControlRegion );
+        Rectangle rgn( rControlRegion );
         mirror( rgn, pOutDev );
         mirror( nType, aValue, pOutDev );
         if( getNativeControlRegion( nType, nPart, rgn, nState, aValue, aCaption,

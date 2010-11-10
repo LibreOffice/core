@@ -244,8 +244,8 @@ ColorData Color::HSBtoRGB( sal_uInt16 nHue, sal_uInt16 nSat, sal_uInt16 nBri )
         f = dH - n;
 
         sal_uInt8 a = (sal_uInt8) ( nB * ( 100 - nSat ) / 100 );
-        sal_uInt8 b = (sal_uInt8) ( nB * ( 100 - ( (double)nSat * f + 0.5 ) ) / 100 );
-        sal_uInt8 c = (sal_uInt8) ( nB * ( 100 - ( (double)nSat * ( 1.0 - f ) + 0.5 ) ) / 100 );
+        sal_uInt8 b = (sal_uInt8) ( nB * ( 100 - ( (double)nSat * f ) ) / 100 );
+        sal_uInt8 c = (sal_uInt8) ( nB * ( 100 - ( (double)nSat * ( 1.0 - f ) ) ) / 100 );
 
         switch( n )
         {

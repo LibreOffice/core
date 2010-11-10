@@ -156,6 +156,7 @@ protected:
     virtual void    CursorMoved( SvLBoxEntry* pNewCursor );
     virtual void    PreparePaint( SvLBoxEntry* );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void    StateChanged( StateChangedType nStateChange );
 
     void            InitSettings(sal_Bool bFont,sal_Bool bForeground,sal_Bool bBackground);
     sal_Bool            IsCellFocusEnabled() const;

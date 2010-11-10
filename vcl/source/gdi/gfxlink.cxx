@@ -28,6 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
+#include <osl/file.h>
 #include <tools/vcompat.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
@@ -398,12 +399,10 @@ ImpSwap::ImpSwap( sal_uInt8* pData, sal_uIntPtr nDataSize ) :
     {
         ::utl::TempFile aTempFile;
 
-        maURL = INetURLObject(aTempFile.GetURL());
-
-        if( maURL.GetMainURL( INetURLObject::NO_DECODE ).getLength() )
+        maURL = aTempFile.GetURL();
+        if( maURL.getLength() )
         {
-            SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( maURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READWRITE | STREAM_SHARE_DENYWRITE );
-
+            SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( maURL, STREAM_READWRITE | STREAM_SHARE_DENYWRITE );
             if( pOStm )
             {
                 pOStm->Write( pData, mnDataSize );
@@ -412,28 +411,8 @@ ImpSwap::ImpSwap( sal_uInt8* pData, sal_uIntPtr nDataSize ) :
 
                 if( bError )
                 {
-                    try
-                    {
-                        ::ucbhelper::Content aCnt( maURL.GetMainURL( INetURLObject::NO_DECODE ),
-                                             ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
-
-                        aCnt.executeCommand( ::rtl::OUString::createFromAscii( "delete" ),
-                                             ::com::sun::star::uno::makeAny( sal_Bool( sal_True ) ) );
-                    }
-                    catch( const ::com::sun::star::ucb::ContentCreationException& )
-                    {
-                    }
-                    catch( const ::com::sun::star::uno::RuntimeException& )
-                    {
-                    }
-                    catch( const ::com::sun::star::ucb::CommandAbortedException& )
-                    {
-                    }
-                    catch( const ::com::sun::star::uno::Exception& )
-                    {
-                    }
-
-                    maURL = INetURLObject();
+                    osl_removeFile( maURL.pData );
+                    maURL = String();
                 }
             }
         }
@@ -445,28 +424,7 @@ ImpSwap::ImpSwap( sal_uInt8* pData, sal_uIntPtr nDataSize ) :
 ImpSwap::~ImpSwap()
 {
     if( IsSwapped() )
-    {
-        try
-        {
-            ::ucbhelper::Content aCnt( maURL.GetMainURL( INetURLObject::NO_DECODE ),
-                                 ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
-
-            aCnt.executeCommand( ::rtl::OUString::createFromAscii( "delete" ),
-                                 ::com::sun::star::uno::makeAny( sal_Bool( sal_True ) ) );
-        }
-        catch( const ::com::sun::star::ucb::ContentCreationException& )
-        {
-        }
-        catch( const ::com::sun::star::uno::RuntimeException& )
-        {
-        }
-        catch( const ::com::sun::star::ucb::CommandAbortedException& )
-        {
-        }
-        catch( const ::com::sun::star::uno::Exception& )
-        {
-        }
-    }
+        osl_removeFile( maURL.pData );
 }
 
 // ------------------------------------------------------------------------
@@ -477,8 +435,7 @@ sal_uInt8* ImpSwap::GetData() const
 
     if( IsSwapped() )
     {
-        SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( maURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READWRITE );
-
+        SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( maURL, STREAM_READWRITE );
         if( pIStm )
         {
             pData = new sal_uInt8[ mnDataSize ];

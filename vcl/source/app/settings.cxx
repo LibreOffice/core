@@ -424,7 +424,10 @@ ImplStyleData::ImplStyleData()
     mnPushButtonStyle           = 0;
     mnTabControlStyle           = 0;
     mnLogoDisplayTime           = LOGO_DISPLAYTIME_STARTTIME;
-    mnDragFullOptions           = 0;
+    mnDragFullOptions           = DRAGFULL_OPTION_WINDOWMOVE | DRAGFULL_OPTION_WINDOWSIZE |
+                                  DRAGFULL_OPTION_OBJECTMOVE | DRAGFULL_OPTION_OBJECTSIZE |
+                                  DRAGFULL_OPTION_DOCKING    | DRAGFULL_OPTION_SPLIT      |
+                                  DRAGFULL_OPTION_SCROLL;
     mnAnimationOptions          = 0;
     mnSelectionOptions          = 0;
     mnDisplayOptions            = 0;
@@ -1041,6 +1044,8 @@ sal_Bool StyleSettings::operator ==( const StyleSettings& rSet ) const
          (mpData->mnUseSystemUIFonts        == rSet.mpData->mnUseSystemUIFonts)         &&
          (mpData->mnUseFlatBorders          == rSet.mpData->mnUseFlatBorders)           &&
          (mpData->mnUseFlatMenues           == rSet.mpData->mnUseFlatMenues)            &&
+         (mpData->mnSymbolsStyle            == rSet.mpData->mnSymbolsStyle)             &&
+         (mpData->mnPreferredSymbolsStyle   == rSet.mpData->mnPreferredSymbolsStyle)    &&
          (mpData->maFaceColor               == rSet.mpData->maFaceColor)                &&
          (mpData->maCheckedColor            == rSet.mpData->maCheckedColor)             &&
          (mpData->maLightColor              == rSet.mpData->maLightColor)               &&
@@ -1235,7 +1240,7 @@ sal_Bool MiscSettings::GetEnableATToolSupport() const
             &hkey) )
         {
             DWORD dwType;
-            BYTE Data[6]; // possible values: "true", "false", "1", "0", DWORD
+            sal_uInt8 Data[6]; // possible values: "true", "false", "1", "0", DWORD
             DWORD cbData = sizeof(Data);
 
             if( ERROR_SUCCESS == RegQueryValueEx(hkey, "SupportAssistiveTechnology",
@@ -1313,7 +1318,7 @@ void MiscSettings::SetEnableATToolSupport( sal_Bool bEnable )
             &hkey) )
         {
             DWORD dwType;
-            BYTE Data[6]; // possible values: "true", "false", 1, 0
+            sal_uInt8 Data[6]; // possible values: "true", "false", 1, 0
             DWORD cbData = sizeof(Data);
 
             if( ERROR_SUCCESS == RegQueryValueEx(hkey, "SupportAssistiveTechnology",
@@ -1324,7 +1329,7 @@ void MiscSettings::SetEnableATToolSupport( sal_Bool bEnable )
                     case REG_SZ:
                         RegSetValueEx(hkey, "SupportAssistiveTechnology",
                             NULL, dwType,
-                            bEnable ? (BYTE *) "true" : (BYTE *) "false",
+                            bEnable ? (sal_uInt8 *) "true" : (sal_uInt8 *) "false",
                             bEnable ? sizeof("true") : sizeof("false"));
                         break;
                     case REG_DWORD:

@@ -268,8 +268,8 @@ private:
     Image               maImage;
     XubString           maQuickHelpText;
     XubString           maHelpText;
-    sal_uIntPtr               mnHelpId;
-    sal_uInt16              mnFlags;
+    rtl::OString        maHelpId;
+    sal_uInt16          mnFlags;
 
 public:
                         TaskStatusFieldItem();
@@ -289,10 +289,10 @@ public:
     const XubString&    GetQuickHelpText() const { return maQuickHelpText; }
     void                SetHelpText( const XubString& rStr ) { maHelpText = rStr; }
     const XubString&    GetHelpText() const { return maHelpText; }
-    void                SetHelpId( sal_uIntPtr nHelpId ) { mnHelpId = nHelpId; }
-    sal_uIntPtr               GetHelpId() const { return mnHelpId; }
+    void                SetHelpId( const rtl::OString& rHelpId ) { maHelpId = rHelpId; }
+    const rtl::OString& GetHelpId() const { return maHelpId; }
     void                SetFlags( sal_uInt16 nFlags ) { mnFlags = nFlags; }
-    sal_uInt16              GetFlags() const { return mnFlags; }
+    sal_uInt16          GetFlags() const { return mnFlags; }
 
     const TaskStatusFieldItem& operator=( const TaskStatusFieldItem& rItem );
 };

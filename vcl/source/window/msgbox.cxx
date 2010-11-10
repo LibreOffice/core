@@ -196,10 +196,9 @@ MessBox::MessBox( Window* pParent, const ResId& rResId ) :
     sal_uInt16 nLoButtons   = ReadShortRes();
     sal_uInt16 nHiDefButton = ReadShortRes();
     sal_uInt16 nLoDefButton = ReadShortRes();
-    sal_uInt16 nHiHelpId    = ReadShortRes();
-    sal_uInt16 nLoHelpId    = ReadShortRes();
+    rtl::OString aHelpId( ReadByteStringRes() );
     /* sal_uInt16 bSysModal = */ ReadShortRes();
-    SetHelpId( ((sal_uIntPtr)nHiHelpId << 16) + nLoHelpId );
+    SetHelpId( aHelpId );
     WinBits nBits = (((sal_uIntPtr)nHiButtons << 16) + nLoButtons) |
                     (((sal_uIntPtr)nHiDefButton << 16) + nLoDefButton);
     ImplInit( pParent, nBits | WB_MOVEABLE | WB_HORZ | WB_CENTER );
@@ -233,7 +232,7 @@ MessBox::~MessBox()
 
 void MessBox::ImplPosControls()
 {
-    if ( GetHelpId() )
+    if ( GetHelpId().getLength() )
     {
         if ( !mbHelpBtn )
         {

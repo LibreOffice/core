@@ -72,7 +72,7 @@ key [value]
 #define IP_NO_ERROR         0x0000
 #define IP_UNEXPECTED_EOF   0x0001
 
-#define REPLACE_VARIABLES   TRUE
+#define REPLACE_VARIABLES   sal_True
 
 class TOOLS_DLLPUBLIC InformationParser
 {

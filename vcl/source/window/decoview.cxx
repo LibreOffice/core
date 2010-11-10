@@ -877,12 +877,12 @@ static void ImplDrawFrame( OutputDevice* pDev, Rectangle& rRect,
         if( pWin->GetType() == WINDOW_BORDERWINDOW )
             nValueStyle |= FRAME_DRAW_BORDERWINDOWBORDER;
         ImplControlValue aControlValue( nValueStyle );
-        Region aBound, aContent;
-        Region aNatRgn( rRect );
+        Rectangle aBound, aContent;
+        Rectangle aNatRgn( rRect );
         if(pWin && pWin->GetNativeControlRegion(CTRL_FRAME, PART_BORDER,
             aNatRgn, 0, aControlValue, rtl::OUString(), aBound, aContent) )
         {
-            rRect = aContent.GetBoundRect();
+            rRect = aContent;
         }
         else if ( nStyle & FRAME_DRAW_MONO )
             ImplDrawDPILineRect( pDev, rRect, NULL, bRound );
@@ -922,15 +922,15 @@ static void ImplDrawFrame( OutputDevice* pDev, Rectangle& rRect,
             if( pWin->GetType() == WINDOW_BORDERWINDOW )
                 nValueStyle |= FRAME_DRAW_BORDERWINDOWBORDER;
             ImplControlValue aControlValue( nValueStyle );
-            Region aBound, aContent;
-            Region aNatRgn( rRect );
+            Rectangle aBound, aContent;
+            Rectangle aNatRgn( rRect );
             if( pWin->GetNativeControlRegion(CTRL_FRAME, PART_BORDER,
                 aNatRgn, 0, aControlValue, rtl::OUString(), aBound, aContent) )
             {
                 if( pWin->DrawNativeControl( CTRL_FRAME, PART_BORDER, aContent, CTRL_STATE_ENABLED,
                              aControlValue, rtl::OUString()) )
                 {
-                    rRect = aContent.GetBoundRect();
+                    rRect = aContent;
                     return;
                 }
             }

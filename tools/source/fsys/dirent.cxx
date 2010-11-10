@@ -136,13 +136,13 @@ sal_Bool bInRedirection = sal_True;
 #else
 sal_Bool bInRedirection = sal_False;
 #endif
-static NAMESPACE_VOS( OMutex )* pRedirectMutex = 0;
+static vos:: OMutex * pRedirectMutex = 0;
 
 //------------------------------------------------------------------------
 void FSysRedirector::Register( FSysRedirector *pRedirector )
 {
         if ( pRedirector )
-                pRedirectMutex = new NAMESPACE_VOS( OMutex );
+                pRedirectMutex = new vos:: OMutex ;
         else
                 DELETEZ( pRedirectMutex );
         _pRedirector = pRedirector;
@@ -165,7 +165,7 @@ void FSysRedirector::DoRedirect( String &rPath )
         // Redirection is acessible only by one thread per time
         // dont move the guard behind the bInRedirection check!!!
         // think of nested calls (when called from callback)
-        NAMESPACE_VOS( OGuard ) aGuard( pRedirectMutex );
+        vos:: OGuard  aGuard( pRedirectMutex );
 
         // if already in redirection, dont redirect
         if ( bInRedirection )
@@ -1040,8 +1040,8 @@ DirEntry* DirEntry::ImpChangeParent( DirEntry* pNewParent, sal_Bool bNormalize )
 sal_Bool DirEntry::Exists( FSysAccess nAccess ) const
 {
 #ifndef BOOTSTRAP
-    static NAMESPACE_VOS(OMutex) aLocalMutex;
-    NAMESPACE_VOS(OGuard) aGuard( aLocalMutex );
+    static vos::OMutex aLocalMutex;
+    vos::OGuard aGuard( aLocalMutex );
 #endif
         if ( !IsValid() )
                 return sal_False;

@@ -17,6 +17,7 @@ mkdir: %_DEST%\inc%_EXT%\vcl
 ..\inc\vcl\alpha.hxx %_DEST%\inc%_EXT%\vcl\alpha.hxx
 ..\inc\vcl\animate.hxx %_DEST%\inc%_EXT%\vcl\animate.hxx
 ..\inc\vcl\apptypes.hxx %_DEST%\inc%_EXT%\vcl\apptypes.hxx
+..\inc\vcl\arrange.hxx %_DEST%\inc%_EXT%\vcl\arrange.hxx
 ..\inc\vcl\bitmap.hxx %_DEST%\inc%_EXT%\vcl\bitmap.hxx
 ..\inc\vcl\bitmapex.hxx %_DEST%\inc%_EXT%\vcl\bitmapex.hxx
 ..\inc\vcl\bmpacc.hxx %_DEST%\inc%_EXT%\vcl\bmpacc.hxx
@@ -56,7 +57,6 @@ mkdir: %_DEST%\inc%_EXT%\vcl
 ..\inc\vcl\help.hxx %_DEST%\inc%_EXT%\vcl\help.hxx
 ..\inc\vcl\image.hxx %_DEST%\inc%_EXT%\vcl\image.hxx
 ..\inc\vcl\imagerepository.hxx %_DEST%\inc%_EXT%\vcl\imagerepository.hxx
-..\inc\vcl\imgcons.hxx %_DEST%\inc%_EXT%\vcl\imgcons.hxx
 ..\inc\vcl\imgctrl.hxx %_DEST%\inc%_EXT%\vcl\imgctrl.hxx
 ..\inc\vcl\impdel.hxx %_DEST%\inc%_EXT%\vcl\impdel.hxx
 ..\inc\vcl\inputctx.hxx %_DEST%\inc%_EXT%\vcl\inputctx.hxx
@@ -144,7 +144,6 @@ mkdir: %_DEST%\inc%_EXT%\vcl
 ..\inc\vcl\pdfextoutdevdata.hxx %_DEST%\inc%_EXT%\vcl\pdfextoutdevdata.hxx
 ..\inc\vcl\pngread.hxx %_DEST%\inc%_EXT%\vcl\pngread.hxx
 ..\inc\vcl\pngwrite.hxx %_DEST%\inc%_EXT%\vcl\pngwrite.hxx
-..\inc\vcl\smartid.hxx %_DEST%\inc%_EXT%\vcl\smartid.hxx
 ..\inc\vcl\configsettings.hxx %_DEST%\inc%_EXT%\vcl\configsettings.hxx
 ..\inc\vcl\ImageListProvider.hxx %_DEST%\inc%_EXT%\vcl\ImageListProvider.hxx
 ..\inc\vcl\fontmanager.hxx %_DEST%\inc%_EXT%\vcl\fontmanager.hxx
@@ -154,3 +153,4 @@ mkdir: %_DEST%\inc%_EXT%\vcl
 ..\inc\vcl\helper.hxx %_DEST%\inc%_EXT%\vcl\helper.hxx
 ..\inc\vcl\strhelper.hxx %_DEST%\inc%_EXT%\vcl\strhelper.hxx
 ..\inc\vcl\lazydelete.hxx %_DEST%\inc%_EXT%\vcl\lazydelete.hxx
+..\%__SRC%\misc\vcl.component %_DEST%\xml%_EXT%\vcl.component

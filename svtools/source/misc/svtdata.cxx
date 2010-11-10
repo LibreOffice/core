@@ -61,25 +61,6 @@ ResMgr * ImpSvtData::GetResMgr()
     return GetResMgr(Application::GetSettings().GetUILocale());
 }
 
-ResMgr * ImpSvtData::GetPatchResMgr(const ::com::sun::star::lang::Locale& aLocale)
-{
-    if (!pPatchResMgr)
-    {
-        pPatchResMgr = ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(svp), aLocale);
-    }
-    return pPatchResMgr;
-}
-
-ResMgr * ImpSvtData::GetPatchResMgr()
-{
-    return GetPatchResMgr(Application::GetSettings().GetUILocale());
-}
-
-SvpResId::SvpResId( sal_uInt16 nId ) :
-    ResId( nId, *ImpSvtData::GetSvtData().GetPatchResMgr() )
-{
-}
-
 //============================================================================
 // static
 ImpSvtData & ImpSvtData::GetSvtData()

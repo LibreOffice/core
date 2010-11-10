@@ -64,7 +64,7 @@ static sal_uInt16 aWndFunc(
 
 
 {
-    NAMESPACE_VOS( OGuard ) aGuard( Application::GetSolarMutex() );
+    vos:: OGuard  aGuard( Application::GetSolarMutex() );
 
     // aus den Flags die benoetigten WinBits ermitteln
     WinBits eBits=0;
@@ -377,7 +377,7 @@ sal_Bool SfxErrorHandler::GetErrorString(
     */
 
 {
-    NAMESPACE_VOS( OGuard ) aGuard( Application::GetSolarMutex() );
+    vos:: OGuard  aGuard( Application::GetSolarMutex() );
 
     sal_Bool bRet = sal_False;
     rStr=String(SvtResId(RID_ERRHDL_CLASS));
@@ -454,7 +454,7 @@ sal_Bool SfxErrorContext::GetString(sal_uIntPtr nErrId, String &rStr)
     }
     if( pMgr )
     {
-        NAMESPACE_VOS( OGuard ) aGuard( Application::GetSolarMutex() );
+        vos:: OGuard  aGuard( Application::GetSolarMutex() );
 
         ResId aResId( nResId, *pMgr );
 

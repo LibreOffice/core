@@ -57,10 +57,6 @@ sal_uInt16 IMapObject::nActualTextEncoding = (sal_uInt16) RTL_TEXTENCODING_DONTK
 /******************************************************************************/
 
 
-#ifdef WIN
-#pragma optimize ( "", off )
-#endif
-
 IMapObject::IMapObject()
     : bActive( false )
     , nReadVersion( 0 )
@@ -1223,10 +1219,4 @@ void ImageMap::Read( SvStream& rIStm, const String& rBaseURL )
 
     rIStm.SetNumberFormatInt( nOldFormat );
 }
-
-
-#ifdef WIN
-#pragma optimize ( "", on )
-#endif
-
 

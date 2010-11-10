@@ -70,7 +70,6 @@ private:
     sal_Bool                mbRestoreUnqId;
     sal_Bool                mbSingleLine;
     sal_Bool                mbScroll;
-    sal_Bool                mbRestoreSmartId;
     sal_Bool                mbSmallInvalidate;
     sal_Bool                mbExtraSpace;
     Link                maActivateHdl;
@@ -177,8 +176,8 @@ public:
     void                SetHelpText( sal_uInt16 nPageId, const XubString& rText );
     const XubString&    GetHelpText( sal_uInt16 nPageId ) const;
 
-    void                SetHelpId( sal_uInt16 nPageId, sal_uIntPtr nHelpId );
-    sal_uIntPtr               GetHelpId( sal_uInt16 nPageId ) const;
+    void                SetHelpId( sal_uInt16 nPageId, const rtl::OString& rHelpId );
+    rtl::OString        GetHelpId( sal_uInt16 nPageId ) const;
 
     void                SetPageImage( sal_uInt16 nPageId, const Image& rImage );
     const Image*        GetPageImage( sal_uInt16 nPageId ) const;
@@ -188,9 +187,9 @@ public:
     const XubString&    GetHelpText() const
                             { return Control::GetHelpText(); }
 
-    void                SetHelpId( sal_uIntPtr nId )
-                            { Control::SetHelpId( nId ); }
-    sal_uIntPtr               GetHelpId() const
+    void                SetHelpId( const rtl::OString& rId )
+                            { Control::SetHelpId( rId ); }
+    const rtl::OString& GetHelpId() const
                             { return Control::GetHelpId(); }
 
     void                SetActivatePageHdl( const Link& rLink ) { maActivateHdl = rLink; }

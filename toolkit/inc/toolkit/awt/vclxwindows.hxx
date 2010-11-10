@@ -82,7 +82,6 @@
 #include <com/sun/star/awt/XDateField.hpp>
 #include <com/sun/star/awt/XComboBox.hpp>
 #include <com/sun/star/awt/XCheckBox.hpp>
-#include <com/sun/star/awt/XImageConsumer.hpp>
 #include <com/sun/star/awt/XItemListListener.hpp>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/implbase3.hxx>
@@ -93,7 +92,6 @@
 #include <cppuhelper/implbase1.hxx>
 
 #include <vcl/pointr.hxx>
-#include <vcl/imgcons.hxx>
 #include <vcl/image.hxx>
 
 class Button;
@@ -111,17 +109,14 @@ class VclSimpleEvent;
 class VclMenuEvent;
 
 //  ----------------------------------------------------
-//  class VCLXImageConsumer
-//    deriving from VCLXWindow and XImageConsumer
+//  class VCLXGraphicControl
+//    deriving from VCLXWindow, drawing the graphic which exists as "Graphic" at the model
 //  ----------------------------------------------------
 
 
-typedef ::cppu::ImplInheritanceHelper1< VCLXWindow, ::com::sun::star::awt::XImageConsumer >  VCLXImageConsumer_Base;
-class TOOLKIT_DLLPUBLIC VCLXImageConsumer : public VCLXImageConsumer_Base
+class TOOLKIT_DLLPUBLIC VCLXGraphicControl : public VCLXWindow
 {
 private:
-    /// implements our XImageConsumer functionality
-    ImageConsumer               maImageConsumer;
     /// the image we currently display
     Image                       maImage;
 
@@ -132,19 +127,9 @@ protected:
     // ::com::sun::star::awt::XWindow
     void SAL_CALL setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, sal_Int16 Flags ) throw(::com::sun::star::uno::RuntimeException);
 
-    // ::com::sun::star::awt::XImageConsumer
-    void SAL_CALL init( sal_Int32 Width, sal_Int32 Height ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL setColorModel( sal_Int16 BitCount, const ::com::sun::star::uno::Sequence< sal_Int32 >& RGBAPal, sal_Int32 RedMask, sal_Int32 GreenMask, sal_Int32 BlueMask, sal_Int32 AlphaMask ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL setPixelsByBytes( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, const ::com::sun::star::uno::Sequence< sal_Int8 >& aProducerData, sal_Int32 nOffset, sal_Int32 nScanSize ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL setPixelsByLongs( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, const ::com::sun::star::uno::Sequence< sal_Int32 >& aProducerData, sal_Int32 nOffset, sal_Int32 nScanSize ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL complete( sal_Int32 Status, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageProducer >& xProducer ) throw(::com::sun::star::uno::RuntimeException);
-
     // ::com::sun::star::awt::VclWindowPeer
     void SAL_CALL setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Any SAL_CALL getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException);
-
-protected:
-    void            ImplUpdateImage( sal_Bool bGetNewImage );
 
 protected:
     /** forward our bitmap to our window
@@ -155,6 +140,7 @@ protected:
         @see GetBitmap
     */
     virtual void    ImplSetNewImage();
+
 public:
     static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
@@ -164,7 +150,7 @@ public:
 //  ----------------------------------------------------
 //  class VCLXButton
 //  ----------------------------------------------------
-typedef ::cppu::ImplInheritanceHelper2  <   VCLXImageConsumer
+typedef ::cppu::ImplInheritanceHelper2  <   VCLXGraphicControl
                                         ,   ::com::sun::star::awt::XButton
                                         ,   ::com::sun::star::awt::XToggleButton
                                         >   VCLXButton_Base;
@@ -213,7 +199,7 @@ public:
 //  ----------------------------------------------------
 //  class VCLXImageControl
 //  ----------------------------------------------------
-class VCLXImageControl : public VCLXImageConsumer
+class VCLXImageControl : public VCLXGraphicControl
 {
 public:
                     VCLXImageControl();
@@ -230,6 +216,7 @@ public:
 
     static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
+
 protected:
     virtual void    ImplSetNewImage();
 };
@@ -239,7 +226,7 @@ protected:
 //  ----------------------------------------------------
 class VCLXCheckBox :    public ::com::sun::star::awt::XCheckBox,
                         public ::com::sun::star::awt::XButton,
-                        public VCLXImageConsumer
+                        public VCLXGraphicControl
 {
 private:
     ActionListenerMultiplexer   maActionListeners;
@@ -297,7 +284,7 @@ public:
 //  ----------------------------------------------------
 class VCLXRadioButton : public ::com::sun::star::awt::XRadioButton,
                         public ::com::sun::star::awt::XButton,
-                        public VCLXImageConsumer
+                        public VCLXGraphicControl
 {
 private:
     ItemListenerMultiplexer     maItemListeners;
@@ -408,7 +395,7 @@ public:
 
     // ::com::sun::star::awt::XDialog2
     virtual void SAL_CALL endDialog( ::sal_Int32 Result ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setHelpId( ::sal_Int32 Id ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setHelpId( const rtl::OUString& Id ) throw (::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::XDialog
     void SAL_CALL setTitle( const ::rtl::OUString& Title ) throw(::com::sun::star::uno::RuntimeException);
@@ -760,8 +747,10 @@ public:
 //  ----------------------------------------------------
 //  class VCLXComboBox
 //  ----------------------------------------------------
-class VCLXComboBox :    public ::com::sun::star::awt::XComboBox,
-                        public VCLXEdit
+typedef ::cppu::ImplInheritanceHelper2  <   VCLXEdit
+                                        ,   ::com::sun::star::awt::XComboBox
+                                        ,   ::com::sun::star::awt::XItemListListener > VCLXComboBox_Base;
+class VCLXComboBox :    public VCLXComboBox_Base
 {
 private:
     ActionListenerMultiplexer   maActionListeners;
@@ -775,15 +764,6 @@ protected:
 public:
                         VCLXComboBox();
     ~VCLXComboBox();
-
-    // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    void                                        SAL_CALL acquire() throw()  { OWeakObject::acquire(); }
-    void                                        SAL_CALL release() throw()  { OWeakObject::release(); }
-
-    // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
 
      // ::com::sun::star::lang::XComponent
     void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -814,6 +794,15 @@ public:
     // ::com::sun::star::awt::VclWindowPeer
     void SAL_CALL setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Any SAL_CALL getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException);
+
+    // XItemListListener
+    virtual void SAL_CALL listItemInserted( const ::com::sun::star::awt::ItemListEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL listItemRemoved( const ::com::sun::star::awt::ItemListEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL listItemModified( const ::com::sun::star::awt::ItemListEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL allItemsRemoved( const ::com::sun::star::lang::EventObject& Event ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL itemListChanged( const ::com::sun::star::lang::EventObject& Event ) throw (::com::sun::star::uno::RuntimeException);
+    // XEventListener
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& i_rEvent ) throw (::com::sun::star::uno::RuntimeException);
 
     static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }

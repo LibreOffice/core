@@ -342,8 +342,8 @@ void ScrollBar::ImplCalc( sal_Bool bUpdate )
     Rectangle& maTrackRect = mpData->maTrackRect;  // TODO: remove when maTrackRect is no longer in mpData
     if ( mbCalcSize )
     {
-        const Region aControlRegion( Rectangle( (const Point&)Point(0,0), aSize ) );
-        Region aBtn1Region, aBtn2Region, aTrackRegion, aBoundingRegion;
+        const Rectangle aControlRegion( Point(0,0), aSize );
+        Rectangle aBtn1Region, aBtn2Region, aTrackRegion, aBoundingRegion;
 
         if ( GetStyle() & WB_HORZ )
         {
@@ -352,8 +352,8 @@ void ScrollBar::ImplCalc( sal_Bool bUpdate )
                  GetNativeControlRegion( CTRL_SCROLLBAR, PART_BUTTON_RIGHT,
                         aControlRegion, 0, ImplControlValue(), rtl::OUString(), aBoundingRegion, aBtn2Region ) )
             {
-                maBtn1Rect = aBtn1Region.GetBoundRect();
-                maBtn2Rect = aBtn2Region.GetBoundRect();
+                maBtn1Rect = aBtn1Region;
+                maBtn2Rect = aBtn2Region;
             }
             else
             {
@@ -366,7 +366,7 @@ void ScrollBar::ImplCalc( sal_Bool bUpdate )
 
             if ( GetNativeControlRegion( CTRL_SCROLLBAR, PART_TRACK_HORZ_AREA,
                      aControlRegion, 0, ImplControlValue(), rtl::OUString(), aBoundingRegion, aTrackRegion ) )
-                maTrackRect = aTrackRegion.GetBoundRect();
+                maTrackRect = aTrackRegion;
             else
                 maTrackRect = Rectangle( maBtn1Rect.TopRight(), maBtn2Rect.BottomLeft() );
 
@@ -393,8 +393,8 @@ void ScrollBar::ImplCalc( sal_Bool bUpdate )
                  GetNativeControlRegion( CTRL_SCROLLBAR, PART_BUTTON_DOWN,
                         aControlRegion, 0, ImplControlValue(), rtl::OUString(), aBoundingRegion, aBtn2Region ) )
             {
-                maBtn1Rect = aBtn1Region.GetBoundRect();
-                maBtn2Rect = aBtn2Region.GetBoundRect();
+                maBtn1Rect = aBtn1Region;
+                maBtn2Rect = aBtn2Region;
             }
             else
             {
@@ -407,7 +407,7 @@ void ScrollBar::ImplCalc( sal_Bool bUpdate )
 
             if ( GetNativeControlRegion( CTRL_SCROLLBAR, PART_TRACK_VERT_AREA,
                      aControlRegion, 0, ImplControlValue(), rtl::OUString(), aBoundingRegion, aTrackRegion ) )
-                maTrackRect = aTrackRegion.GetBoundRect();
+                maTrackRect = aTrackRegion;
             else
                 maTrackRect = Rectangle( maBtn1Rect.BottomLeft()+Point(0,1), maBtn2Rect.TopRight() );
 
@@ -524,7 +524,7 @@ void ScrollBar::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, 
 
 sal_Bool ScrollBar::ImplDrawNative( sal_uInt16 nDrawFlags )
 {
-    ImplControlValue aControlValue( BUTTONVALUE_DONTKNOW, rtl::OUString(), 0 );
+    ScrollbarValue scrValue;
 
     sal_Bool bNativeOK = IsNativeControlSupported(CTRL_SCROLLBAR, PART_ENTIRE_CONTROL);
     if( bNativeOK )
@@ -535,7 +535,6 @@ sal_Bool ScrollBar::ImplDrawNative( sal_uInt16 nDrawFlags )
         if( IsNativeControlSupported(CTRL_SCROLLBAR, bHorz ? PART_DRAW_BACKGROUND_HORZ : PART_DRAW_BACKGROUND_VERT) )
         {
             ControlState        nState = ( IsEnabled() ? CTRL_STATE_ENABLED : 0 ) | ( HasFocus() ? CTRL_STATE_FOCUSED : 0 );
-            ScrollbarValue  scrValue;
 
             scrValue.mnMin = mnMinRange;
             scrValue.mnMax = mnMaxRange;
@@ -570,20 +569,14 @@ sal_Bool ScrollBar::ImplDrawNative( sal_uInt16 nDrawFlags )
                 }
             }
 
-            aControlValue.setOptionalVal( (void *)(&scrValue) );
-
-#if 1
-            Region aCtrlRegion;
+            Rectangle aCtrlRegion;
             aCtrlRegion.Union( maBtn1Rect );
             aCtrlRegion.Union( maBtn2Rect );
             aCtrlRegion.Union( maPage1Rect );
             aCtrlRegion.Union( maPage2Rect );
             aCtrlRegion.Union( maThumbRect );
-#else
-            const Region aCtrlRegion( Rectangle( Point(0,0), GetOutputSizePixel() ) );
-#endif
             bNativeOK = DrawNativeControl( CTRL_SCROLLBAR, (bHorz ? PART_DRAW_BACKGROUND_HORZ : PART_DRAW_BACKGROUND_VERT),
-                            aCtrlRegion, nState, aControlValue, rtl::OUString() );
+                            aCtrlRegion, nState, scrValue, rtl::OUString() );
         }
         else
       {
@@ -591,8 +584,8 @@ sal_Bool ScrollBar::ImplDrawNative( sal_uInt16 nDrawFlags )
         {
             sal_uInt32  part1 = bHorz ? PART_TRACK_HORZ_LEFT : PART_TRACK_VERT_UPPER;
             sal_uInt32  part2 = bHorz ? PART_TRACK_HORZ_RIGHT : PART_TRACK_VERT_LOWER;
-            Region      aCtrlRegion1( maPage1Rect );
-            Region      aCtrlRegion2( maPage2Rect );
+            Rectangle   aCtrlRegion1( maPage1Rect );
+            Rectangle   aCtrlRegion2( maPage2Rect );
             ControlState nState1 = (IsEnabled() ? CTRL_STATE_ENABLED : 0) | (HasFocus() ? CTRL_STATE_FOCUSED : 0);
             ControlState nState2 = nState1;
 
@@ -613,18 +606,18 @@ sal_Bool ScrollBar::ImplDrawNative( sal_uInt16 nDrawFlags )
 
             if ( nDrawFlags & SCRBAR_DRAW_PAGE1 )
                 bNativeOK = DrawNativeControl( CTRL_SCROLLBAR, part1, aCtrlRegion1, nState1,
-                                aControlValue, rtl::OUString() );
+                                scrValue, rtl::OUString() );
 
             if ( nDrawFlags & SCRBAR_DRAW_PAGE2 )
                 bNativeOK = DrawNativeControl( CTRL_SCROLLBAR, part2, aCtrlRegion2, nState2,
-                                aControlValue, rtl::OUString() );
+                                scrValue, rtl::OUString() );
         }
         if ( (nDrawFlags & SCRBAR_DRAW_BTN1) || (nDrawFlags & SCRBAR_DRAW_BTN2) )
         {
             sal_uInt32  part1 = bHorz ? PART_BUTTON_LEFT : PART_BUTTON_UP;
             sal_uInt32  part2 = bHorz ? PART_BUTTON_RIGHT : PART_BUTTON_DOWN;
-            Region      aCtrlRegion1( maBtn1Rect );
-            Region      aCtrlRegion2( maBtn2Rect );
+            Rectangle   aCtrlRegion1( maBtn1Rect );
+            Rectangle   aCtrlRegion2( maBtn2Rect );
             ControlState nState1 = HasFocus() ? CTRL_STATE_FOCUSED : 0;
             ControlState nState2 = nState1;
 
@@ -655,16 +648,16 @@ sal_Bool ScrollBar::ImplDrawNative( sal_uInt16 nDrawFlags )
 
             if ( nDrawFlags & SCRBAR_DRAW_BTN1 )
                 bNativeOK = DrawNativeControl( CTRL_SCROLLBAR, part1, aCtrlRegion1, nState1,
-                                aControlValue, rtl::OUString() );
+                                scrValue, rtl::OUString() );
 
             if ( nDrawFlags & SCRBAR_DRAW_BTN2 )
                 bNativeOK = DrawNativeControl( CTRL_SCROLLBAR, part2, aCtrlRegion2, nState2,
-                                aControlValue, rtl::OUString() );
+                                scrValue, rtl::OUString() );
         }
         if ( (nDrawFlags & SCRBAR_DRAW_THUMB) && !maThumbRect.IsEmpty() )
         {
             ControlState    nState = IsEnabled() ? CTRL_STATE_ENABLED : 0;
-            Region      aCtrlRegion( maThumbRect );
+            Rectangle       aCtrlRegion( maThumbRect );
 
             if ( mnStateFlags & SCRBAR_STATE_THUMB_DOWN )
                 nState |= CTRL_STATE_PRESSED;
@@ -683,7 +676,7 @@ sal_Bool ScrollBar::ImplDrawNative( sal_uInt16 nDrawFlags )
             }
 
             bNativeOK = DrawNativeControl( CTRL_SCROLLBAR, (bHorz ? PART_THUMB_HORZ : PART_THUMB_VERT),
-                    aCtrlRegion, nState, aControlValue, rtl::OUString() );
+                    aCtrlRegion, nState, scrValue, rtl::OUString() );
         }
       }
     }
@@ -920,7 +913,7 @@ void ScrollBar::ImplDoMouseAction( const Point& rMousePos, sal_Bool bCallAction 
     sal_Bool    bIsInside = sal_False;
 
     Point aPoint( 0, 0 );
-    Region aControlRegion( Rectangle( aPoint, GetOutputSizePixel() ) );
+    Rectangle aControlRegion( aPoint, GetOutputSizePixel() );
 
     switch ( meScrollType )
     {
@@ -953,7 +946,7 @@ void ScrollBar::ImplDoMouseAction( const Point& rMousePos, sal_Bool bCallAction 
         case SCROLL_PAGEUP:
             // HitTestNativeControl, see remark at top of file
             if ( HitTestNativeControl( CTRL_SCROLLBAR, bHorizontal? PART_TRACK_HORZ_LEFT: PART_TRACK_VERT_UPPER,
-                                       Region( maPage1Rect ), rMousePos, bIsInside )?
+                                       maPage1Rect, rMousePos, bIsInside )?
                     bIsInside:
                     maPage1Rect.IsInside( rMousePos ) )
             {
@@ -967,7 +960,7 @@ void ScrollBar::ImplDoMouseAction( const Point& rMousePos, sal_Bool bCallAction 
         case SCROLL_PAGEDOWN:
             // HitTestNativeControl, see remark at top of file
             if ( HitTestNativeControl( CTRL_SCROLLBAR, bHorizontal? PART_TRACK_HORZ_RIGHT: PART_TRACK_VERT_LOWER,
-                                       Region( maPage2Rect ), rMousePos, bIsInside )?
+                                       maPage2Rect, rMousePos, bIsInside )?
                     bIsInside:
                     maPage2Rect.IsInside( rMousePos ) )
             {
@@ -1030,7 +1023,7 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
         sal_Bool            bDragToMouse = sal_False;
 
         Point aPoint( 0, 0 );
-        Region aControlRegion( Rectangle( aPoint, GetOutputSizePixel() ) );
+        Rectangle aControlRegion( aPoint, GetOutputSizePixel() );
 
         if ( HitTestNativeControl( CTRL_SCROLLBAR, bHorizontal? PART_BUTTON_LEFT: PART_BUTTON_UP,
                     aControlRegion, rMousePos, bIsInside )?
@@ -1063,7 +1056,7 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
         else
         {
             bool bThumbHit = HitTestNativeControl( CTRL_SCROLLBAR, bHorizontal? PART_THUMB_HORZ : PART_THUMB_VERT,
-                                                   Region( maThumbRect ), rMousePos, bIsInside )
+                                                   maThumbRect, rMousePos, bIsInside )
                              ? bIsInside : maThumbRect.IsInside( rMousePos );
             bool bDragHandling = rMEvt.IsMiddle() || bThumbHit || ImplGetSVData()->maNWFData.mbScrollbarJumpPage;
             if( bDragHandling )
@@ -1112,7 +1105,7 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
 
                 // HitTestNativeControl, see remark at top of file
                 if ( HitTestNativeControl( CTRL_SCROLLBAR, bHorizontal? PART_TRACK_HORZ_LEFT : PART_TRACK_VERT_UPPER,
-                                           Region( maPage1Rect ), rMousePos, bIsInside )?
+                                           maPage1Rect, rMousePos, bIsInside )?
                     bIsInside:
                     maPage1Rect.IsInside( rMousePos ) )
                 {
@@ -1387,7 +1380,7 @@ Rectangle* ScrollBar::ImplFindPartRect( const Point& rPt )
     sal_Bool    bIsInside = sal_False;
 
     Point aPoint( 0, 0 );
-    Region aControlRegion( Rectangle( aPoint, GetOutputSizePixel() ) );
+    Rectangle aControlRegion( aPoint, GetOutputSizePixel() );
 
     if( HitTestNativeControl( CTRL_SCROLLBAR, bHorizontal? PART_BUTTON_LEFT: PART_BUTTON_UP,
                 aControlRegion, rPt, bIsInside )?
@@ -1401,19 +1394,19 @@ Rectangle* ScrollBar::ImplFindPartRect( const Point& rPt )
         return &maBtn2Rect;
     // HitTestNativeControl, see remark at top of file
     else if( HitTestNativeControl( CTRL_SCROLLBAR,  bHorizontal ? PART_TRACK_HORZ_LEFT : PART_TRACK_VERT_UPPER,
-                Region( maPage1Rect ), rPt, bIsInside)?
+                maPage1Rect, rPt, bIsInside)?
             bIsInside:
             maPage1Rect.IsInside( rPt ) )
         return &maPage1Rect;
     // HitTestNativeControl, see remark at top of file
     else if( HitTestNativeControl( CTRL_SCROLLBAR,  bHorizontal ? PART_TRACK_HORZ_RIGHT : PART_TRACK_VERT_LOWER,
-                Region( maPage2Rect ), rPt, bIsInside)?
+                maPage2Rect, rPt, bIsInside)?
             bIsInside:
             maPage2Rect.IsInside( rPt ) )
         return &maPage2Rect;
     // HitTestNativeControl, see remark at top of file
     else if( HitTestNativeControl( CTRL_SCROLLBAR,  bHorizontal ? PART_THUMB_HORZ : PART_THUMB_VERT,
-                Region( maThumbRect ), rPt, bIsInside)?
+                maThumbRect, rPt, bIsInside)?
              bIsInside:
              maThumbRect.IsInside( rPt ) )
         return &maThumbRect;

@@ -493,6 +493,14 @@ void LCCTYPENode::generateCode (const OFileWriter &of) const
     if (aDoubleQuoteStart == aDoubleQuoteEnd)
         fprintf( stderr, "Warning: %s\n",
                 "DoubleQuotationStart equals DoubleQuotationEnd. Not necessarily an error, but unusual.");
+    /* TODO: should equalness of single and double quotes be an error? Would
+     * need to adapt quite some locales' data. */
+    if (aQuoteStart == aDoubleQuoteStart)
+        fprintf( stderr, "Warning: %s\n",
+                "QuotationStart equals DoubleQuotationStart. Not necessarily an error, but unusual.");
+    if (aQuoteEnd == aDoubleQuoteEnd)
+        fprintf( stderr, "Warning: %s\n",
+                "QuotationEnd equals DoubleQuotationEnd. Not necessarily an error, but unusual.");
 
     writeParameterCheckLen( of, "TimeAM", "timeAM", 1, -1);
     writeParameterCheckLen( of, "TimePM", "timePM", 1, -1);
@@ -689,7 +697,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                             incErrorInt( "ThousandSeparator not present in FormatCode formatindex=\"%d\".",
                                     formatindex);
                     }
-                    if (nDec <= nGrp)
+                    if (nDec >= 0 && nGrp >= 0 && nDec <= nGrp)
                         incErrorInt( "Ordering of ThousandSeparator and DecimalSeparator not correct in formatindex=\"%d\".",
                                 formatindex);
                 }
@@ -724,7 +732,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                             incErrorInt( "Time100SecSeparator+00 not present in FormatCode formatindex=\"%d\".",
                                     formatindex);
                     }
-                    if (n100s <= nTime)
+                    if (n100s >= 0 && nTime >= 0 && n100s <= nTime)
                         incErrorInt( "Ordering of Time100SecSeparator and TimeSeparator not correct in formatindex=\"%d\".",
                                 formatindex);
                 }

@@ -1081,6 +1081,8 @@ void WMFReader::ReadWMF()
     nEMFRec         = 0;
     nEMFSize        = 0;
 
+    sal_Bool bEMFAvailable = sal_False;
+
     pOut->SetMapMode( MM_ANISOTROPIC );
     pOut->SetWinOrg( Point() );
     pOut->SetWinExt( Size( 1, 1 ) );
@@ -1117,50 +1119,53 @@ void WMFReader::ReadWMF()
 
                     break;
                 }
-                if( aBmpSaveList.Count() &&
-                    ( nFunction != W_META_STRETCHDIB ) &&
-                    ( nFunction != W_META_DIBBITBLT ) &&
-                    ( nFunction != W_META_DIBSTRETCHBLT ) )
+                if ( !bEMFAvailable )
                 {
-                    pOut->ResolveBitmapActions( aBmpSaveList );
-                }
-                if ( !nSkipActions )
-                    ReadRecordParams( nFunction );
-                else
-                    nSkipActions--;
-
-                if( pEMFStream && nEMFRecCount == nEMFRec )
-                {
-                    GDIMetaFile aMeta;
-                    pEMFStream->Seek( 0 );
-                    EnhWMFReader* pEMFReader = new EnhWMFReader ( *pEMFStream, aMeta );
-                    sal_Bool bRead = pEMFReader->ReadEnhWMF();
-                    delete pEMFReader; // destroy first!!!
-
-                    if( bRead )
+                    if( aBmpSaveList.Count() &&
+                        ( nFunction != W_META_STRETCHDIB ) &&
+                        ( nFunction != W_META_DIBBITBLT ) &&
+                        ( nFunction != W_META_DIBSTRETCHBLT ) )
                     {
-                       pOut->AddFromGDIMetaFile( aMeta );
-                       pOut->SetrclFrame( Rectangle(0, 0, aMeta.GetPrefSize().Width(), aMeta.GetPrefSize().Height() ));
-                       // we have successfully read the embedded EMF data
-                       // no need to process WMF data further
-                       break;
+                        pOut->ResolveBitmapActions( aBmpSaveList );
                     }
+                    if ( !nSkipActions )
+                        ReadRecordParams( nFunction );
                     else
+                        nSkipActions--;
+
+                    if( pEMFStream && nEMFRecCount == nEMFRec )
                     {
-                        // something went wrong
-                        // continue with WMF, don't try this again
-                        delete pEMFStream;
-                        pEMFStream = NULL;
+                        GDIMetaFile aMeta;
+                        pEMFStream->Seek( 0 );
+                        EnhWMFReader* pEMFReader = new EnhWMFReader ( *pEMFStream, aMeta );
+                        bEMFAvailable = pEMFReader->ReadEnhWMF();
+                        delete pEMFReader; // destroy first!!!
+
+                        if( bEMFAvailable )
+                        {
+                            pOut->AddFromGDIMetaFile( aMeta );
+                            pOut->SetrclFrame( Rectangle(0, 0, aMeta.GetPrefSize().Width(), aMeta.GetPrefSize().Height() ));
+
+                            // the stream needs to be set to the wmf end position,
+                            // otherwise the GfxLink that is created will be incorrect
+                            // (leading to graphic loss after swapout/swapin).
+                            // so we will proceed normally, but are ignoring further wmf
+                            // records
+                        }
+                        else
+                        {
+                            // something went wrong
+                            // continue with WMF, don't try this again
+                            delete pEMFStream;
+                            pEMFStream = NULL;
+                        }
                     }
-
                 }
-
                 nPos += nRecSize * 2;
                 if ( nPos <= nEndPos )
                     pWMF->Seek( nPos  );
                 else
                     pWMF->SetError( SVSTREAM_FILEFORMAT_ERROR );
-
             }
         }
         else

@@ -1058,29 +1058,10 @@ static sal_Unicode getAccel( const String& rStr )
     return nChar;
 }
 
-Window* Window::GetLabelFor() const
+static Window* ImplGetLabelFor( Window* pFrameWindow, WindowType nMyType, Window* pLabel, sal_Unicode nAccel )
 {
-    if ( mpWindowImpl->mbDisableAccessibleLabelForRelation )
-        return NULL;
-
     Window* pWindow = NULL;
-    Window* pFrameWindow = ImplGetFrameWindow();
 
-    WinBits nFrameStyle = pFrameWindow->GetStyle();
-    if( ! ( nFrameStyle & WB_DIALOGCONTROL )
-        || ( nFrameStyle & WB_NODIALOGCONTROL )
-        )
-        return NULL;
-
-    if ( mpWindowImpl->mpRealParent )
-        pWindow = mpWindowImpl->mpRealParent->GetParentLabelFor( this );
-
-    if( pWindow )
-        return pWindow;
-
-    sal_Unicode nAccel = getAccel( GetText() );
-
-    WindowType nMyType = GetType();
     if( nMyType == WINDOW_FIXEDTEXT     ||
         nMyType == WINDOW_FIXEDLINE     ||
         nMyType == WINDOW_GROUPBOX )
@@ -1092,7 +1073,7 @@ Window* Window::GetLabelFor() const
         // get index, form start and form end
         sal_uInt16 nIndex=0, nFormStart=0, nFormEnd=0;
         pSWindow = ::ImplFindDlgCtrlWindow( pFrameWindow,
-                                           const_cast<Window*>(this),
+                                           pLabel,
                                            nIndex,
                                            nFormStart,
                                            nFormEnd );
@@ -1139,32 +1120,39 @@ Window* Window::GetLabelFor() const
     return pWindow;
 }
 
-// -----------------------------------------------------------------------
-
-Window* Window::GetLabeledBy() const
+Window* Window::GetLabelFor() const
 {
-    if ( mpWindowImpl->mbDisableAccessibleLabeledByRelation )
+    if ( mpWindowImpl->mbDisableAccessibleLabelForRelation )
         return NULL;
 
     Window* pWindow = NULL;
     Window* pFrameWindow = ImplGetFrameWindow();
 
+    WinBits nFrameStyle = pFrameWindow->GetStyle();
+    if( ! ( nFrameStyle & WB_DIALOGCONTROL )
+        || ( nFrameStyle & WB_NODIALOGCONTROL )
+        )
+        return NULL;
+
     if ( mpWindowImpl->mpRealParent )
-        pWindow = mpWindowImpl->mpRealParent->GetParentLabeledBy( this );
+        pWindow = mpWindowImpl->mpRealParent->GetParentLabelFor( this );
 
     if( pWindow )
         return pWindow;
 
-    // #i62723#, #104191# checkboxes and radiobuttons are not supposed to have labels
-    if( GetType() == WINDOW_CHECKBOX || GetType() == WINDOW_RADIOBUTTON )
-        return NULL;
+    sal_Unicode nAccel = getAccel( GetText() );
 
-//    if( ! ( GetType() == WINDOW_FIXEDTEXT     ||
-//            GetType() == WINDOW_FIXEDLINE     ||
-//            GetType() == WINDOW_GROUPBOX ) )
-    // #i100833# MT 2010/02: Group box and fixed lines can also lable a fixed text.
-    // See tools/options/print for example.
-    WindowType nMyType = GetType();
+    pWindow = ImplGetLabelFor( pFrameWindow, GetType(), const_cast<Window*>(this), nAccel );
+    if( ! pWindow && mpWindowImpl->mpRealParent )
+        pWindow = ImplGetLabelFor( mpWindowImpl->mpRealParent, GetType(), const_cast<Window*>(this), nAccel );
+    return pWindow;
+}
+
+// -----------------------------------------------------------------------
+
+static Window* ImplGetLabeledBy( Window* pFrameWindow, WindowType nMyType, Window* pLabeled )
+{
+    Window* pWindow = NULL;
     if ( (nMyType != WINDOW_GROUPBOX) && (nMyType != WINDOW_FIXEDLINE) )
     {
         // search for a control that labels this window
@@ -1176,16 +1164,16 @@ Window* Window::GetLabeledBy() const
         // get form start and form end and index of this control
         sal_uInt16 nIndex, nFormStart, nFormEnd;
         Window* pSWindow = ::ImplFindDlgCtrlWindow( pFrameWindow,
-                                                    const_cast<Window*>(this),
+                                                    pLabeled,
                                                     nIndex,
                                                     nFormStart,
                                                     nFormEnd );
         if( pSWindow && nIndex != nFormStart )
         {
-            if( GetType() == WINDOW_PUSHBUTTON      ||
-                GetType() == WINDOW_HELPBUTTON      ||
-                GetType() == WINDOW_OKBUTTON        ||
-                GetType() == WINDOW_CANCELBUTTON )
+            if( nMyType == WINDOW_PUSHBUTTON        ||
+                nMyType == WINDOW_HELPBUTTON        ||
+                nMyType == WINDOW_OKBUTTON      ||
+                nMyType == WINDOW_CANCELBUTTON )
             {
                 nFormStart = nIndex-1;
             }
@@ -1214,6 +1202,39 @@ Window* Window::GetLabeledBy() const
             }
         }
     }
+    return pWindow;
+}
+
+Window* Window::GetLabeledBy() const
+{
+    if ( mpWindowImpl->mbDisableAccessibleLabeledByRelation )
+        return NULL;
+
+    Window* pWindow = NULL;
+    Window* pFrameWindow = ImplGetFrameWindow();
+
+    if ( mpWindowImpl->mpRealParent )
+    {
+        pWindow = mpWindowImpl->mpRealParent->GetParentLabeledBy( this );
+
+        if( pWindow )
+            return pWindow;
+    }
+
+    // #i62723#, #104191# checkboxes and radiobuttons are not supposed to have labels
+    if( GetType() == WINDOW_CHECKBOX || GetType() == WINDOW_RADIOBUTTON )
+        return NULL;
+
+//    if( ! ( GetType() == WINDOW_FIXEDTEXT     ||
+//            GetType() == WINDOW_FIXEDLINE     ||
+//            GetType() == WINDOW_GROUPBOX ) )
+    // #i100833# MT 2010/02: Group box and fixed lines can also lable a fixed text.
+    // See tools/options/print for example.
+
+    pWindow = ImplGetLabeledBy( pFrameWindow, GetType(), const_cast<Window*>(this) );
+    if( ! pWindow && mpWindowImpl->mpRealParent )
+        pWindow = ImplGetLabeledBy( mpWindowImpl->mpRealParent, GetType(), const_cast<Window*>(this) );
+
     return pWindow;
 }
 

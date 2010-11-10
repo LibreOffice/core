@@ -99,7 +99,6 @@ ImplToolItem::ImplToolItem()
     mnId            = 0;
     mpWindow        = NULL;
     mpUserData      = NULL;
-    mnHelpId        = 0;
     meType          = TOOLBOXITEM_BUTTON;
     mnBits          = 0;
     meState         = STATE_NOCHECK;
@@ -124,7 +123,6 @@ ImplToolItem::ImplToolItem( sal_uInt16 nItemId, const Image& rImage,
     mnId            = nItemId;
     mpWindow        = NULL;
     mpUserData      = NULL;
-    mnHelpId        = 0;
     meType          = TOOLBOXITEM_BUTTON;
     mnBits          = nItemBits;
     meState         = STATE_NOCHECK;
@@ -149,7 +147,6 @@ ImplToolItem::ImplToolItem( sal_uInt16 nItemId, const XubString& rText,
     mnId            = nItemId;
     mpWindow        = NULL;
     mpUserData      = NULL;
-    mnHelpId        = 0;
     meType          = TOOLBOXITEM_BUTTON;
     mnBits          = nItemBits;
     meState         = STATE_NOCHECK;
@@ -175,7 +172,6 @@ ImplToolItem::ImplToolItem( sal_uInt16 nItemId, const Image& rImage,
     mnId            = nItemId;
     mpWindow        = NULL;
     mpUserData      = NULL;
-    mnHelpId        = 0;
     meType          = TOOLBOXITEM_BUTTON;
     mnBits          = nItemBits;
     meState         = STATE_NOCHECK;
@@ -204,7 +200,7 @@ ImplToolItem::ImplToolItem( const ImplToolItem& rItem ) :
         maQuickHelpText         ( rItem.maQuickHelpText ),
         maHelpText              ( rItem.maHelpText ),
         maCommandStr            ( rItem.maCommandStr ),
-        mnHelpId                ( rItem.mnHelpId ),
+        maHelpId                ( rItem.maHelpId ),
         maRect                  ( rItem.maRect ),
         maCalcRect              ( rItem.maCalcRect ),
         maItemSize              ( rItem.maItemSize ),
@@ -243,7 +239,7 @@ ImplToolItem& ImplToolItem::operator=( const ImplToolItem& rItem )
     maQuickHelpText         = rItem.maQuickHelpText;
     maHelpText              = rItem.maHelpText;
     maCommandStr            = rItem.maCommandStr;
-    mnHelpId                = rItem.mnHelpId;
+    maHelpId                = rItem.maHelpId;
     maRect                  = rItem.maRect;
     maCalcRect              = rItem.maCalcRect;
     mnSepSize               = rItem.mnSepSize;
@@ -595,7 +591,7 @@ void ToolBox::InsertItem( const ResId& rResId, sal_uInt16 nPos )
         aItem.mnBits = (ToolBoxItemBits)ReadLongRes();
 
     if( nObjMask & RSC_TOOLBOXITEM_HELPID )
-        aItem.mnHelpId = ReadLongRes();
+        aItem.maHelpId = ReadByteStringRes();
 
     if ( nObjMask & RSC_TOOLBOXITEM_TEXT )
     {
@@ -1923,24 +1919,31 @@ const XubString& ToolBox::GetHelpText( sal_uInt16 nItemId ) const
 
 // -----------------------------------------------------------------------
 
-void ToolBox::SetHelpId( sal_uInt16 nItemId, sal_uIntPtr nHelpId )
+void ToolBox::SetHelpId( sal_uInt16 nItemId, const rtl::OString& rHelpId )
 {
     ImplToolItem* pItem = ImplGetItem( nItemId );
 
     if ( pItem )
-        pItem->mnHelpId = nHelpId;
+        pItem->maHelpId = rHelpId;
 }
 
 // -----------------------------------------------------------------------
 
-sal_uIntPtr ToolBox::GetHelpId( sal_uInt16 nItemId ) const
+rtl::OString ToolBox::GetHelpId( sal_uInt16 nItemId ) const
 {
+    rtl::OString aRet;
+
     ImplToolItem* pItem = ImplGetItem( nItemId );
 
     if ( pItem )
-        return pItem->mnHelpId;
-    else
-        return 0;
+    {
+        if ( pItem->maHelpId.getLength() )
+            aRet = pItem->maHelpId;
+        else
+            aRet = ::rtl::OUStringToOString( pItem->maCommandStr, RTL_TEXTENCODING_UTF8 );
+    }
+
+    return aRet;
 }
 
 // -----------------------------------------------------------------------

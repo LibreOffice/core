@@ -57,10 +57,10 @@ class ImplFontAttrCache;
 class ImplWinFontData : public ImplFontData
 {
 public:
-                            ImplWinFontData( const ImplDevFontAttributes&,
+    explicit                ImplWinFontData( const ImplDevFontAttributes&,
                                 int nFontHeight, BYTE eWinCharSet,
                                 BYTE nPitchAndFamily  );
-                            ~ImplWinFontData();
+    virtual                 ~ImplWinFontData();
 
     virtual ImplFontData*   Clone() const;
     virtual ImplFontEntry*  CreateFontInstance( ImplFontSelectData& ) const;
@@ -82,7 +82,7 @@ public:
     bool                    SupportsGraphite() const    { return mbHasGraphiteSupport; }
 #endif
 
-    ImplFontCharMap*        GetImplFontCharMap() const;
+    const ImplFontCharMap*  GetImplFontCharMap() const;
     const Ucs2SIntMap* GetEncodingVector() const { return mpEncodingVector; }
     void SetEncodingVector( const Ucs2SIntMap* pNewVec ) const
     {
@@ -127,9 +127,9 @@ public:
 #endif // GNG_VERT_HACK
 };
 
-// -------------------
-// - SalGraphicsData -
-// -------------------
+// ------------------
+// - WinSalGraphics -
+// ------------------
 
 class WinSalGraphics : public SalGraphics
 {
@@ -179,7 +179,7 @@ public:
     HFONT                   ImplDoSetFont( ImplFontSelectData* i_pFont, float& o_rFontScale, HFONT& o_rOldFont );
 
 public:
-    WinSalGraphics();
+    explicit WinSalGraphics();
     virtual ~WinSalGraphics();
 
 protected:
@@ -194,9 +194,9 @@ protected:
     virtual void        drawPolygon( sal_uIntPtr nPoints, const SalPoint* pPtAry );
     virtual void        drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints, PCONSTSALPOINT* pPtAry );
     virtual bool        drawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double fTransparency );
-    virtual bool        drawPolyLine( const ::basegfx::B2DPolygon&, const ::basegfx::B2DVector& rLineWidth, basegfx::B2DLineJoin);
-    virtual sal_Bool    drawPolyLineBezier( sal_uIntPtr nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry );
-    virtual sal_Bool    drawPolygonBezier( sal_uIntPtr nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry );
+    virtual bool        drawPolyLine( const ::basegfx::B2DPolygon&, double fTransparency, const ::basegfx::B2DVector& rLineWidth, basegfx::B2DLineJoin );
+    virtual sal_Bool    drawPolyLineBezier( sal_uIntPtr nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry );
+    virtual sal_Bool    drawPolygonBezier( sal_uIntPtr nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry );
     virtual sal_Bool    drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt32* pPoints, const SalPoint* const* pPtAry, const BYTE* const* pFlgAry );
 
     // CopyArea --> No RasterOp, but ClipRegion
@@ -227,17 +227,17 @@ protected:
     virtual sal_Bool        drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, sal_uIntPtr nSize );
 
     // native widget rendering methods that require mirroring
-    virtual sal_Bool        hitTestNativeControl( ControlType nType, ControlPart nPart, const Region& rControlRegion,
+    virtual sal_Bool        hitTestNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
                                               const Point& aPos, sal_Bool& rIsInside );
-    virtual sal_Bool        drawNativeControl( ControlType nType, ControlPart nPart, const Region& rControlRegion,
+    virtual sal_Bool        drawNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
                                            ControlState nState, const ImplControlValue& aValue,
                                            const rtl::OUString& aCaption );
-    virtual sal_Bool        drawNativeControlText( ControlType nType, ControlPart nPart, const Region& rControlRegion,
+    virtual sal_Bool        drawNativeControlText( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
                                                ControlState nState, const ImplControlValue& aValue,
                                                const rtl::OUString& aCaption );
-    virtual sal_Bool        getNativeControlRegion( ControlType nType, ControlPart nPart, const Region& rControlRegion, ControlState nState,
+    virtual sal_Bool        getNativeControlRegion( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion, ControlState nState,
                                                 const ImplControlValue& aValue, const rtl::OUString& aCaption,
-                                                Region &rNativeBoundingRegion, Region &rNativeContentRegion );
+                                                Rectangle &rNativeBoundingRegion, Rectangle &rNativeContentRegion );
 
     virtual bool        drawAlphaBitmap( const SalTwoRect&,
                                          const SalBitmap& rSourceBitmap,
@@ -282,12 +282,12 @@ public:
     // set the font
     virtual sal_uInt16         SetFont( ImplFontSelectData*, int nFallbackLevel );
     // get the current font's etrics
-    virtual void            GetFontMetric( ImplFontMetricData* );
+    virtual void            GetFontMetric( ImplFontMetricData*, int nFallbackLevel );
     // get kernign pairs of the current font
     // return only PairCount if (pKernPairs == NULL)
     virtual sal_uIntPtr         GetKernPairs( sal_uIntPtr nPairs, ImplKernPairData* pKernPairs );
     // get the repertoire of the current font
-    virtual ImplFontCharMap* GetImplFontCharMap() const;
+    virtual const ImplFontCharMap* GetImplFontCharMap() const;
     // graphics must fill supplied font list
     virtual void            GetDevFontList( ImplDevFontList* );
     // graphics should call ImplAddDevFontSubstitute on supplied
@@ -359,11 +359,11 @@ public:
 };
 
 // Init/Deinit Graphics
-void    ImplSalInitGraphics( WinSalGraphics* mpData );
-void    ImplSalDeInitGraphics( WinSalGraphics* mpData );
+void    ImplSalInitGraphics( WinSalGraphics* );
+void    ImplSalDeInitGraphics( WinSalGraphics* );
 void    ImplUpdateSysColorEntries();
 int     ImplIsSysColorEntry( SalColor nSalColor );
-void    ImplGetLogFontFromFontSelect( HDC hDC, const ImplFontSelectData*,
+void    ImplGetLogFontFromFontSelect( HDC, const ImplFontSelectData*,
             LOGFONTW&, bool bTestVerticalAvail );
 
 // -----------
@@ -397,7 +397,10 @@ inline bool ImplWinFontData::HasChar( sal_uInt32 cChar ) const
         cChar -= 0xF000;
     else if( mbAliasSymbolsHigh && (cChar <= 0xFF) )
         cChar += 0xF000;
+    else
+        return false;
     return mpUnicodeMap->HasChar( cChar );
 }
 
 #endif // _SV_SALGDI_H
+

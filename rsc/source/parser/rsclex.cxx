@@ -175,11 +175,16 @@ int MakeToken( YYSTYPE * pTokenVal ){
             c = pFI->GetFastChar();
             if( c == '"' )
             {
-                c = pFI->GetFastChar();
+                do
+                {
+                    c = pFI->GetFastChar();
+                }
+                while(  c == ' ' || c == '\t' );
                 if( c == '"' )
                 {
-                    aBuf.append( '"' );
-                    aBuf.append( '"' );
+                    // this is a continued string
+                    // note: multiline string continuations are handled by the parser
+                    // see rscyacc.y
                 }
                 else
                     bDone = sal_True;

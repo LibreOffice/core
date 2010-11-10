@@ -95,7 +95,7 @@ sal_Bool INetImage::Read( SvStream& rIStm, sal_uIntPtr nFormat )
 /*
     --> structure size  MUST - alignment of 4!
     int     iSize;              // size of all data, including variable length strings
-    BOOL    bIsMap;             // For server side maps
+    sal_Bool    bIsMap;             // For server side maps
     sal_Int32   iWidth;             // Fixed size data correspond to fields in LO_ImageDataStruct
     sal_Int32   iHeight;            //   and EDT_ImageData
     sal_Int32   iHSpace;
@@ -112,7 +112,7 @@ sal_Bool INetImage::Read( SvStream& rIStm, sal_uIntPtr nFormat )
             ByteString sData;
 
             nFilePos = rIStm.Tell();
-            // skip over iSize (int), bIsMao ( BOOL ) alignment of 4 !!!!
+            // skip over iSize (int), bIsMao ( sal_Bool ) alignment of 4 !!!!
             rIStm.SeekRel( 8 );
             rIStm >> nVal;  aSizePixel.Width() = nVal;
             rIStm >> nVal;  aSizePixel.Height() = nVal;

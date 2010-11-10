@@ -243,6 +243,11 @@ void ImplPolygon::ImplSetSize( sal_uInt16 nNewSize, sal_Bool bResize )
 void ImplPolygon::ImplSplit( sal_uInt16 nPos, sal_uInt16 nSpace, ImplPolygon* pInitPoly )
 {
     const sal_uIntPtr   nSpaceSize = nSpace * sizeof( Point );
+
+    //Can't fit this in :-(, throw ?
+    if (mnPoints + nSpace > USHRT_MAX)
+        return;
+
     const sal_uInt16    nNewSize = mnPoints + nSpace;
 
     if( nPos >= mnPoints )

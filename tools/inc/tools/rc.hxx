@@ -87,6 +87,9 @@ class TOOLS_DLLPUBLIC Resource
     // read a string from resource data and increment pointer
     UniString ReadStringRes()
     { return m_pResMgr->ReadString(); }
+    // read a byte string from resource data and increment pointer
+    rtl::OString ReadByteStringRes()
+    { return m_pResMgr->ReadByteString(); }
 
     // Gibt die Resource frei (this-Zeiger fuer Fehlerueberpruefung)
     // free the resource from m_pResMgr's stack (pass this ptr for validation)

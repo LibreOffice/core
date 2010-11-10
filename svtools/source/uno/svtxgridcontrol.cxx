@@ -191,7 +191,7 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
         }
         case BASEPROPERTY_GRID_HEADER_BACKGROUND:
         {
-            sal_Int32 colorHeader = 0x000000;
+            sal_Int32 colorHeader = 0xFFFFFF;
             if( aValue >>= colorHeader )
             {
                 m_pTableModel->setHeaderBackgroundColor(colorHeader);
@@ -200,7 +200,7 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
         }
         case BASEPROPERTY_GRID_LINE_COLOR:
         {
-            sal_Int32 colorLine = 0x000000;
+            sal_Int32 colorLine = 0xFFFFFF;
             if( aValue >>= colorLine )
             {
                 m_pTableModel->setLineColor(colorLine);
@@ -209,7 +209,7 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
         }
         case BASEPROPERTY_GRID_EVEN_ROW_BACKGROUND:
         {
-            sal_Int32 colorEvenRow = 0x000000;
+            sal_Int32 colorEvenRow = 0xFFFFFF;
             if( aValue >>= colorEvenRow )
             {
                 m_pTableModel->setEvenRowBackgroundColor(colorEvenRow);
@@ -218,7 +218,7 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
         }
         case BASEPROPERTY_GRID_ROW_BACKGROUND:
         {
-            sal_Int32 colorBackground = 0x000000;
+            sal_Int32 colorBackground = 0xFFFFFF;
             if( aValue >>= colorBackground )
             {
                 m_pTableModel->setOddRowBackgroundColor(colorBackground);
@@ -227,7 +227,7 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
         }
         case BASEPROPERTY_TEXTCOLOR:
         {
-            sal_Int32 colorText = 0xFFFFFF;
+            sal_Int32 colorText = 0x000000;
             if( aValue >>= colorText )
             {
                 m_pTableModel->setTextColor(colorText);
@@ -673,10 +673,10 @@ void SAL_CALL SVTXGridControl::selectRows(const ::com::sun::star::uno::Sequence<
         if((start >= 0 && start < m_pTableModel->getRowCount()) && (end >= 0 && end < m_pTableModel->getRowCount()))
         {
             std::vector<RowPos>& selectedRows = pTable->GetSelectedRows();
-            if(!selectedRows.empty())
-                selectedRows.clear();
             if(eSelMode == SINGLE_SELECTION)
             {
+                if(!selectedRows.empty())
+                    selectedRows.clear();
                 if(rangeOfRows.getLength() == 1)
                     selectedRows.push_back(start);
                 else
@@ -685,7 +685,10 @@ void SAL_CALL SVTXGridControl::selectRows(const ::com::sun::star::uno::Sequence<
             else
             {
                 for(int i=0;i<seqSize;i++)
-                    selectedRows.push_back(rangeOfRows[i]);
+                {
+                    if(!isSelectedIndex(rangeOfRows[i]))
+                        selectedRows.push_back(rangeOfRows[i]);
+                }
             }
             pTable->selectionChanged(true);
             pTable->InvalidateDataWindow(start, end, false);
@@ -713,24 +716,23 @@ void SAL_CALL SVTXGridControl::selectAllRows() throw (::com::sun::star::uno::Run
         SetSynthesizingVCLEvent( sal_False );
     }
 }
+
 void SAL_CALL SVTXGridControl::deselectRows(const ::com::sun::star::uno::Sequence< ::sal_Int32 >& rangeOfRows) throw (::com::sun::star::uno::RuntimeException)
 {
     TableControl* pTable = (TableControl*)GetWindow();
     std::vector<RowPos>& selectedRows = pTable->GetSelectedRows();
     std::vector<RowPos>::iterator itStart = selectedRows.begin();
     std::vector<RowPos>::iterator itEnd = selectedRows.end();
-    sal_Int32 start = rangeOfRows[0];
-    sal_Int32 end = rangeOfRows[rangeOfRows.getLength()-1];
-    if((start >= 0 && start < m_pTableModel->getRowCount()) && (end >= 0 && end < m_pTableModel->getRowCount()))
+    for(int i = 0; i < rangeOfRows.getLength(); i++ )
     {
-        std::vector<RowPos>::iterator iter = std::find(itStart, itEnd, start);
-        selectedRows.erase(iter, iter+(end-start)+1);
-        pTable->selectionChanged(true);
-        pTable->InvalidateDataWindow(start, end, false);
-        SetSynthesizingVCLEvent( sal_True );
-        pTable->Select();
-        SetSynthesizingVCLEvent( sal_False );
+        std::vector<RowPos>::iterator iter = std::find(itStart, itEnd, rangeOfRows[i]);
+        selectedRows.erase(iter);
     }
+    pTable->selectionChanged(true);
+    pTable->Invalidate();
+    SetSynthesizingVCLEvent( sal_True );
+    pTable->Select();
+    SetSynthesizingVCLEvent( sal_False );
 }
 
 void SAL_CALL SVTXGridControl::deselectAllRows() throw (::com::sun::star::uno::RuntimeException)
@@ -869,7 +871,7 @@ void SVTXGridControl::ImplCallItemListeners()
             aEvent.Range = diff;
         }
         //selected row changed
-        else if(diff == 0)
+        else if(diff == 0 && actSelRowCount != 0)
         {
             aEvent.Row = selRows[actSelRowCount-1];
             aEvent.Action = com::sun::star::awt::grid::SelectionEventType(2);

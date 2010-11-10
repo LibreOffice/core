@@ -25,7 +25,8 @@
  *
  ************************************************************************/
 #include <svl/brdcst.hxx>
-
+#include <boost/shared_ptr.hpp>
+#include <deque>
 
 #ifndef DELETEZ
 #define DELETEZ(pPtr) { delete pPtr; pPtr = 0; }
@@ -53,16 +54,17 @@ struct SfxPoolVersion_Impl
                     {}
 };
 
-SV_DECL_PTRARR( SfxPoolItemArrayBase_Impl, SfxPoolItem*, 0, 5 )
-SV_DECL_PTRARR_DEL( SfxPoolVersionArr_Impl, SfxPoolVersion_Impl*, 0, 2 )
+typedef std::deque<SfxPoolItem*> SfxPoolItemArrayBase_Impl;
+
+typedef boost::shared_ptr< SfxPoolVersion_Impl > SfxPoolVersion_ImplPtr;
+typedef std::deque< SfxPoolVersion_ImplPtr > SfxPoolVersionArr_Impl;
 
 struct SfxPoolItemArray_Impl: public SfxPoolItemArrayBase_Impl
 {
-    sal_uInt16  nFirstFree;
+    size_t  nFirstFree;
 
-    SfxPoolItemArray_Impl (sal_uInt16 nInitSize = 0)
-        : SfxPoolItemArrayBase_Impl( nInitSize ),
-          nFirstFree( 0 )
+    SfxPoolItemArray_Impl ()
+        : nFirstFree( 0 )
     {}
 };
 
@@ -96,7 +98,8 @@ struct SfxItemPool_Impl
 
     void DeleteItems()
     {
-        delete[] ppPoolItems; ppPoolItems = 0;
+        delete[] ppPoolItems;
+        ppPoolItems = 0;
     }
 };
 

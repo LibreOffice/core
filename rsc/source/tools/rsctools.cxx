@@ -32,7 +32,7 @@
 // C and C++ Includes.
 #include <stdlib.h>
 #include <stdio.h>
-#if defined ( DOS ) || defined ( WIN ) || defined (WNT )
+#if defined (WNT )
 #include <direct.h>
 #endif
 #if defined ( OS2 ) && !defined ( GCC )
@@ -50,10 +50,6 @@
 #include <osl/file.h>
 #include <rtl/alloc.h>
 #include <rtl/memory.h>
-
-#if defined (WIN)
-#define ONLY_NEW
-#endif
 
 using namespace rtl;
 

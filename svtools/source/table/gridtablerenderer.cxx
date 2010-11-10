@@ -109,7 +109,10 @@ namespace svt { namespace table
         DBG_ASSERT( !!pColumn, "GridTableRenderer::PaintColumnHeader: invalid column model object!" );
         if ( !!pColumn )
             sHeaderText = pColumn->getName();
-        _rDevice.SetTextColor(m_pImpl->rModel.getTextColor());
+        if(m_pImpl->rModel.getTextColor() != 0x000000)
+            _rDevice.SetTextColor(m_pImpl->rModel.getTextColor());
+        else
+            _rDevice.SetTextColor(_rStyle.GetFieldTextColor());
         sal_uIntPtr nHorFlag = TEXT_DRAW_LEFT;
         sal_uIntPtr nVerFlag = TEXT_DRAW_TOP;
         if(m_pImpl->rModel.getVerticalAlign() == 1)
@@ -146,6 +149,11 @@ namespace svt { namespace table
         Color aRowBackground = m_pImpl->rModel.getOddRowBackgroundColor();
         Color line =  m_pImpl->rModel.getLineColor();
         Color aRowBackground2 = m_pImpl->rModel.getEvenRowBackgroundColor();
+        Color fieldColor = _rStyle.GetFieldColor();
+        if(aRowBackground == 0xFFFFFF)
+            aRowBackground = fieldColor;
+        if(aRowBackground2 == 0xFFFFFF)
+            aRowBackground2 = fieldColor;
         //if row is selected background color becomes blue, and lines should be also blue
         //if they aren't user defined
         if(_bSelected)
@@ -161,7 +169,7 @@ namespace svt { namespace table
         //and set line color to be the same
         else
         {
-            if(aRowBackground2 != 0xFFFFFF && _nRow%2)
+            if(aRowBackground2 != fieldColor && _nRow%2)
             {
                 aRowBackground = aRowBackground2;
                 if(line == 0xFFFFFF)
@@ -170,7 +178,7 @@ namespace svt { namespace table
                     _rDevice.SetLineColor(line);
             }
             //fill the rows with alternating background colors if second background color is specified
-            else if(aRowBackground != 0xFFFFFF && line == 0xFFFFFF)
+            else if(aRowBackground != fieldColor && line == 0xFFFFFF)
                 _rDevice.SetLineColor(aRowBackground);
             else
             {
@@ -195,7 +203,10 @@ namespace svt { namespace table
         _rDevice.Push( PUSH_LINECOLOR);
         _rDevice.SetLineColor(_rStyle.GetSeparatorColor());
         _rDevice.DrawLine( _rArea.BottomLeft(), _rArea.BottomRight() );
-        _rDevice.SetTextColor(m_pImpl->rModel.getTextColor());
+        if(m_pImpl->rModel.getTextColor() != 0x000000)
+            _rDevice.SetTextColor(m_pImpl->rModel.getTextColor());
+        else
+            _rDevice.SetTextColor(_rStyle.GetFieldTextColor());
         sal_uIntPtr nHorFlag = TEXT_DRAW_LEFT;
         sal_uIntPtr nVerFlag = TEXT_DRAW_TOP;
         if(m_pImpl->rModel.getVerticalAlign() == 1)
@@ -221,44 +232,42 @@ namespace svt { namespace table
     void GridTableRenderer::PaintCellImage( ColPos _nColumn, bool _bSelected, bool _bActive,
         OutputDevice& _rDevice, const Rectangle& _rArea, const StyleSettings& _rStyle, Image* _pCellData )
    {
-        _rDevice.Push( PUSH_LINECOLOR | PUSH_FILLCOLOR | PUSH_CLIPREGION);
-    _rDevice.IntersectClipRegion( _rArea );
-    Color background1 = m_pImpl->rModel.getOddRowBackgroundColor();
-    Color background2 = m_pImpl->rModel.getEvenRowBackgroundColor();
-    Color line = m_pImpl->rModel.getLineColor();
-    //if row is selected and line color isn't user specified, set it blue
-    if(_bSelected)
-    {
-        if(line == 0xFFFFFF)
-            _rDevice.SetLineColor(_rStyle.GetHighlightColor());
-        else
-            _rDevice.SetLineColor(line);
-    }
-    //else set line color to the color of row background
-    else
-    {
-        if(background2 != 0xFFFFFF && m_pImpl->nCurrentRow%2)
+        _rDevice.Push( PUSH_LINECOLOR | PUSH_FILLCOLOR);
+        Color background1 = m_pImpl->rModel.getOddRowBackgroundColor();
+        Color background2 = m_pImpl->rModel.getEvenRowBackgroundColor();
+        Color line = m_pImpl->rModel.getLineColor();
+        //if row is selected and line color isn't user specified, set it blue
+        if(_bSelected)
         {
             if(line == 0xFFFFFF)
-                _rDevice.SetLineColor(background2);
+                _rDevice.SetLineColor(_rStyle.GetHighlightColor());
             else
                 _rDevice.SetLineColor(line);
         }
-        else if(background1 != 0xFFFFFF && line == 0xFFFFFF)
-            _rDevice.SetLineColor(background1);
+        //else set line color to the color of row background
         else
         {
-            //if line color is set, then it was user defined and should be visible
-            //if it wasn't set, it'll be the same as the default background color, so lines still won't be visible
-            _rDevice.SetLineColor(line);
+            if(background2 != 0xFFFFFF && m_pImpl->nCurrentRow%2)
+            {
+                if(line == 0xFFFFFF)
+                    _rDevice.SetLineColor(background2);
+                else
+                    _rDevice.SetLineColor(line);
+            }
+            else if(background1 != 0xFFFFFF && line == 0xFFFFFF)
+                _rDevice.SetLineColor(background1);
+            else
+            {
+                //if line color is set, then it was user defined and should be visible
+                //if it wasn't set, it'll be the same as the default background color, so lines still won't be visible
+                _rDevice.SetLineColor(line);
+            }
         }
-    }
-    _rDevice.DrawLine( _rArea.BottomRight(), _rArea.TopRight() );
-    {
-            // TODO: remove those temporary place holders
-            Rectangle aRect( _rArea );
-            ++aRect.Left(); --aRect.Right();
-            aRect.Top(); aRect.Bottom();
+        _rDevice.DrawLine( _rArea.BottomRight(), _rArea.TopRight() );
+
+        Rectangle aRect( _rArea );
+        ++aRect.Left(); --aRect.Right();
+        aRect.Top(); aRect.Bottom();
         Point imagePos(Point(aRect.Left(), aRect.Top()));
         Size imageSize = _pCellData->GetSizePixel();
         if(aRect.GetWidth() > imageSize.Width())
@@ -281,8 +290,7 @@ namespace svt { namespace table
             imageSize.Height() = aRect.GetHeight()-1;
         Image& image (*_pCellData);
         _rDevice.DrawImage(imagePos, imageSize, image, 0);
-        }
-    _rDevice.Pop();
+        _rDevice.Pop();
 
         (void)_bActive;
         // no special painting for the active cell at the moment
@@ -293,48 +301,47 @@ namespace svt { namespace table
         OutputDevice& _rDevice, const Rectangle& _rArea, const StyleSettings& _rStyle, rtl::OUString& _rText )
    {
         _rDevice.Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
-    Color background1 = m_pImpl->rModel.getOddRowBackgroundColor();
-    Color background2 = m_pImpl->rModel.getEvenRowBackgroundColor();
-    Color line = m_pImpl->rModel.getLineColor();
-    //if row is selected and line color isn't user specified, set it blue
-    if(_bSelected)
-    {
-        if(line == 0xFFFFFF)
-            _rDevice.SetLineColor(_rStyle.GetHighlightColor());
-        else
-            _rDevice.SetLineColor(line);
-    }
-    //else set line color to the color of row background
-    else
-    {
-        if(background2 != 0xFFFFFF && m_pImpl->nCurrentRow%2)
+        Color background1 = m_pImpl->rModel.getOddRowBackgroundColor();
+        Color background2 = m_pImpl->rModel.getEvenRowBackgroundColor();
+        Color line = m_pImpl->rModel.getLineColor();
+        //if row is selected and line color isn't user specified, set it blue
+        if(_bSelected)
         {
             if(line == 0xFFFFFF)
-                _rDevice.SetLineColor(background2);
+                _rDevice.SetLineColor(_rStyle.GetHighlightColor());
             else
                 _rDevice.SetLineColor(line);
         }
-        else if(background1 != 0xFFFFFF && line == 0xFFFFFF)
-            _rDevice.SetLineColor(background1);
+        //else set line color to the color of row background
         else
         {
-            //if Line color is set, then it was user defined and should be visible
-            //if it wasn't set, it'll be the same as the default background color, so lines still won't be visible
-            _rDevice.SetLineColor(line);
+            if(background2 != 0xFFFFFF && m_pImpl->nCurrentRow%2)
+            {
+                if(line == 0xFFFFFF)
+                    _rDevice.SetLineColor(background2);
+                else
+                    _rDevice.SetLineColor(line);
+            }
+            else if(background1 != 0xFFFFFF && line == 0xFFFFFF)
+                _rDevice.SetLineColor(background1);
+            else
+            {
+                //if Line color is set, then it was user defined and should be visible
+                //if it wasn't set, it'll be the same as the default background color, so lines still won't be visible
+                _rDevice.SetLineColor(line);
+            }
         }
-    }
-    _rDevice.DrawLine( _rArea.BottomRight(), _rArea.TopRight() );
-        {
-           //  TODO: remove those temporary place holders
-            Rectangle aRect( _rArea );
-            ++aRect.Left(); --aRect.Right();
-            aRect.Top(); aRect.Bottom();
+        _rDevice.DrawLine( _rArea.BottomRight(), _rArea.TopRight() );
+
+        Rectangle aRect( _rArea );
+        ++aRect.Left(); --aRect.Right();
+        aRect.Top(); aRect.Bottom();
         if(_bSelected)
-        {
             _rDevice.SetTextColor(_rStyle.GetHighlightTextColor());
-        }
-        else
+        else if(m_pImpl->rModel.getTextColor() != 0x000000)
             _rDevice.SetTextColor(m_pImpl->rModel.getTextColor());
+        else
+            _rDevice.SetTextColor(_rStyle.GetFieldTextColor());
         sal_uIntPtr nHorFlag = TEXT_DRAW_LEFT;
         sal_uIntPtr nVerFlag = TEXT_DRAW_TOP;
         if(m_pImpl->rModel.getVerticalAlign() == 1)
@@ -348,8 +355,8 @@ namespace svt { namespace table
         Rectangle textRect(_rArea);
         textRect.Left()+=4; textRect.Right()-=4;
         textRect.Bottom()-=2;
-            _rDevice.DrawText( textRect, _rText, nHorFlag | nVerFlag | TEXT_DRAW_CLIP);
-        }
+        _rDevice.DrawText( textRect, _rText, nHorFlag | nVerFlag | TEXT_DRAW_CLIP);
+
         _rDevice.Pop();
         (void)_bActive;
         // no special painting for the active cell at the moment

@@ -78,7 +78,7 @@ public:
                     ShowBitmap( Window* pParent, const Bitmap& rBmp );
 
     virtual void    Paint( const Rectangle& );
-    virtual BOOL    Close();
+    virtual sal_Bool    Close();
 };
 
 // -----------------------------------------------------------------------
@@ -282,11 +282,11 @@ void ShowBitmap::Paint( const Rectangle& )
 
 // -----------------------------------------------------------------------
 
-BOOL ShowBitmap::Close()
+sal_Bool ShowBitmap::Close()
 {
     Hide();
     delete this;
-    return TRUE;
+    return sal_True;
 }
 
 // -----------------------------------------------------------------------
@@ -352,8 +352,8 @@ MyFontDialog::MyFontDialog( Window* pParent ) :
 {
     pList = NULL;
 
-    aFontBox.EnableWYSIWYG( TRUE );
-    aFontBox.EnableSymbols( TRUE );
+    aFontBox.EnableWYSIWYG( sal_True );
+    aFontBox.EnableSymbols( sal_True );
     aFontBox.SetPosSizePixel( Point( 10, 10 ), Size( 140, 140 ) );
     aFontBox.SetSelectHdl( LINK( this, MyFontDialog, SelectFont ) );
     aFontBox.SetLoseFocusHdl( LINK( this, MyFontDialog, SelectFont ) );
@@ -421,7 +421,7 @@ MyFontDialog::MyFontDialog( Window* pParent ) :
     {
     aColorBox.SetPosSizePixel( Point( 15, 305 ), Size( 130, 100 ) );
     aColorBox.SetSelectHdl( LINK( this, MyFontDialog, AttrHdl ) );
-    aColorBox.SetUpdateMode( FALSE );
+    aColorBox.SetUpdateMode( sal_False );
     aColorBox.InsertEntry( Color( COL_BLACK ),         XubString( RTL_CONSTASCII_USTRINGPARAM( "Black" ) ) );
     aColorBox.InsertEntry( Color( COL_BLUE ),          XubString( RTL_CONSTASCII_USTRINGPARAM( "Blue" ) ) );
     aColorBox.InsertEntry( Color( COL_GREEN ),         XubString( RTL_CONSTASCII_USTRINGPARAM( "Green" ) ) );
@@ -438,7 +438,7 @@ MyFontDialog::MyFontDialog( Window* pParent ) :
     aColorBox.InsertEntry( Color( COL_LIGHTMAGENTA ),  XubString( RTL_CONSTASCII_USTRINGPARAM( "LightMagenta" ) ) );
     aColorBox.InsertEntry( Color( COL_YELLOW ),        XubString( RTL_CONSTASCII_USTRINGPARAM( "Yellow" ) ) );
     aColorBox.InsertEntry( Color( COL_WHITE ),         XubString( RTL_CONSTASCII_USTRINGPARAM( "White" ) ) );
-    aColorBox.SetUpdateMode( TRUE );
+    aColorBox.SetUpdateMode( sal_True );
     aColorBox.Show();
     }
 
@@ -515,7 +515,7 @@ void MyFontDialog::SetAttr()
     aFont.SetShadow( aShadowBox.IsChecked() );
     aFont.SetOutline( aOutlineBox.IsChecked() );
     aFont.SetOrientation( aLineOrientSlider.GetOrientation() );
-    aFont.SetTransparent( TRUE );
+    aFont.SetTransparent( sal_True );
     aMapText.SetText( pList->GetFontMapText( aFont ) );
     aShowFont.SetFont( aFont );
 }
@@ -545,12 +545,12 @@ long MyTabBar::DeactivatePage()
         QueryBox aQueryBox( this, WB_YES_NO | WB_DEF_YES,
                             XubString( RTL_CONSTASCII_USTRINGPARAM( "Deactivate" ) ) );
         if ( aQueryBox.Execute() == RET_YES )
-            return TRUE;
+            return sal_True;
         else
-            return FALSE;
+            return sal_False;
     }
     else
-        return TRUE;
+        return sal_True;
 }
 
 // -----------------------------------------------------------------------
@@ -750,7 +750,7 @@ MyWin::MyWin( Window* pParent, WinBits aWinStyle ) :
 
     {
     aColorList.SetPosSizePixel( Point( 10, nY ), Size( 130, 180 ) );
-    aColorList.SetUpdateMode( FALSE );
+    aColorList.SetUpdateMode( sal_False );
     aColorList.InsertEntry( Color( COL_BLACK ),         XubString( RTL_CONSTASCII_USTRINGPARAM( "Black" ) ) );
     aColorList.InsertEntry( Color( COL_BLUE ),          XubString( RTL_CONSTASCII_USTRINGPARAM( "Blue" ) ) );
     aColorList.InsertEntry( Color( COL_GREEN ),         XubString( RTL_CONSTASCII_USTRINGPARAM( "Green" ) ) );
@@ -767,7 +767,7 @@ MyWin::MyWin( Window* pParent, WinBits aWinStyle ) :
     aColorList.InsertEntry( Color( COL_LIGHTMAGENTA ),  XubString( RTL_CONSTASCII_USTRINGPARAM( "LightMagenta" ) ) );
     aColorList.InsertEntry( Color( COL_YELLOW ),        XubString( RTL_CONSTASCII_USTRINGPARAM( "Yellow" ) ) );
     aColorList.InsertEntry( Color( COL_WHITE ),         XubString( RTL_CONSTASCII_USTRINGPARAM( "White" ) ) );
-    aColorList.SetUpdateMode( TRUE );
+    aColorList.SetUpdateMode( sal_True );
     aColorList.SetSelectHdl( LINK( this, MyWin, SelectHdl ) );
     aColorList.Show();
     }
@@ -818,7 +818,7 @@ MyWin::MyWin( Window* pParent, WinBits aWinStyle ) :
     }
 
     {
-    aCalendarField.EnableEmptyFieldValue( TRUE );
+    aCalendarField.EnableEmptyFieldValue( sal_True );
     aCalendarField.SetCalendarStyle( aCalendarField.GetCalendarStyle() | WB_RANGESELECT );
     aCalendarField.SetSelectHdl( LINK( this, MyWin, CalSelectHdl ) );
 //    aCalendarField.SetDate( Date() );

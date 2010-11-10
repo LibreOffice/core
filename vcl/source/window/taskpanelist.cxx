@@ -206,7 +206,7 @@ sal_Bool TaskPaneList::HandleKeyEvent( KeyEvent aKeyEvent )
     sal_Bool bFocusInList = sal_False;
     KeyCode aKeyCode = aKeyEvent.GetKeyCode();
     sal_Bool bForward = !aKeyCode.IsShift();
-    if( aKeyCode.GetCode() == KEY_F6 ) // F6
+    if( aKeyCode.GetCode() == KEY_F6 && ! aKeyCode.IsMod2() ) // F6
     {
         bSplitterOnly = aKeyCode.IsMod1() && aKeyCode.IsShift();
 

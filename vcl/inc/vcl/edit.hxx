@@ -247,6 +247,10 @@ public:
 
     virtual XubString GetSurroundingText() const;
     virtual Selection GetSurroundingTextSelection() const;
+
+    // returns the minimum size a bordered Edit should have given the current
+    // global style settings (needed by sc's inputwin.cxx)
+    static Size GetMinimumEditSize();
 };
 
 inline sal_uIntPtr Edit::IsUpdateDataEnabled() const

@@ -40,7 +40,7 @@ PDFWriter::AnyWidget::~AnyWidget()
 
 PDFWriter::PDFWriter( const PDFWriter::PDFWriterContext& rContext )
         :
-        pImplementation( new PDFWriterImpl( rContext ) )
+        pImplementation( new PDFWriterImpl( rContext, *this ) )
 {
 }
 
@@ -568,4 +568,9 @@ void PDFWriter::DrawPolyPolygon( const PolyPolygon& rPolyPoly, sal_Int32 nPatter
 std::set< PDFWriter::ErrorCode > PDFWriter::GetErrors()
 {
     return ((PDFWriterImpl*)pImplementation)->getErrors();
+}
+
+void PDFWriter::PlayMetafile( const GDIMetaFile& i_rMTF, const vcl::PDFWriter::PlayMetafileContext& i_rPlayContext, PDFExtOutDevData* i_pData )
+{
+    ((PDFWriterImpl*)pImplementation)->playMetafile( i_rMTF, i_pData, i_rPlayContext, NULL);
 }

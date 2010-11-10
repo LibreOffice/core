@@ -961,8 +961,8 @@ sal_Bool Bitmap::ImplScaleFast( const double& rScaleX, const double& rScaleY )
             const long  nScanlineSize = pWriteAcc->GetScanlineSize();
             const long  nNewWidth1 = nNewWidth - 1L;
             const long  nNewHeight1 = nNewHeight - 1L;
-            const long  nWidth1 = pReadAcc->Width() - 1L;
-            const long  nHeight1 = pReadAcc->Height() - 1L;
+            const long  nWidth = pReadAcc->Width();
+            const long  nHeight = pReadAcc->Height();
             long*       pLutX = new long[ nNewWidth ];
             long*       pLutY = new long[ nNewHeight ];
             long        nX, nY, nMapY, nActY = 0L;
@@ -970,10 +970,10 @@ sal_Bool Bitmap::ImplScaleFast( const double& rScaleX, const double& rScaleY )
             if( nNewWidth1 && nNewHeight1 )
             {
                 for( nX = 0L; nX < nNewWidth; nX++ )
-                    pLutX[ nX ] = nX * nWidth1 / nNewWidth1;
+                    pLutX[ nX ] = nX * nWidth / nNewWidth;
 
                 for( nY = 0L; nY < nNewHeight; nY++ )
-                    pLutY[ nY ] = nY * nHeight1 / nNewHeight1;
+                    pLutY[ nY ] = nY * nHeight / nNewHeight;
 
                 while( nActY < nNewHeight )
                 {

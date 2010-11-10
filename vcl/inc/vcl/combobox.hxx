@@ -138,6 +138,7 @@ public:
 
     sal_uInt16          GetEntryPos( const XubString& rStr ) const;
     sal_uInt16          GetEntryPos( const void* pData ) const;
+    Image           GetEntryImage( sal_uInt16 nPos ) const;
     XubString       GetEntry( sal_uInt16 nPos ) const;
     sal_uInt16          GetEntryCount() const;
 

@@ -66,6 +66,8 @@ public:
     SAL_DLLPRIVATE void             ImplSetSymbolAlign( SymbolAlign eAlign );
     SAL_DLLPRIVATE SymbolAlign      ImplGetSymbolAlign() const;
     SAL_DLLPRIVATE void             ImplSetSmallSymbol( sal_Bool bSmall = sal_True );
+    SAL_DLLPRIVATE const Rectangle& ImplGetSymbolRect() const;
+    SAL_DLLPRIVATE void             ImplSetSymbolRect(const Rectangle&);
 
 protected:
                         Button( WindowType nType );
@@ -130,7 +132,7 @@ protected:
     SAL_DLLPRIVATE WinBits         ImplInitStyle( const Window* pPrevWindow, WinBits nStyle );
     SAL_DLLPRIVATE void            ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
     SAL_DLLPRIVATE void            ImplDrawPushButtonContent( OutputDevice* pDev, sal_uIntPtr nDrawFlags,
-                                               const Rectangle& rRect, bool bLayout );
+                                               const Rectangle& rRect, bool bLayout, bool bMenuBtnSep );
     SAL_DLLPRIVATE void            ImplDrawPushButton( bool bLayout = false );
     using Button::ImplGetTextStyle;
     SAL_DLLPRIVATE sal_uInt16          ImplGetTextStyle( sal_uIntPtr nDrawFlags ) const;

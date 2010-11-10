@@ -609,10 +609,10 @@ namespace svt { namespace table
                 if(pColumn->getMinWidth() == 0 && bResizable)
                 {
                     pColumn->setMinWidth(1);
-                    minColWithoutFixedSum+=m_rAntiImpl.LogicToPixel( Size( 1, 0 ), MAP_APPFONT ).Width();
+                    minColWithoutFixedSum+=m_rAntiImpl.PixelToLogic( Size( 1, 0 ), MAP_APPFONT ).Width();
                 }
                 if(pColumn->getMaxWidth() == 0 && bResizable)
-                    pColumn->setMaxWidth(m_rAntiImpl.LogicToPixel( Size( (int)gridWidth, 0 ), MAP_APPFONT ).Width());
+                    pColumn->setMaxWidth(m_rAntiImpl.PixelToLogic( Size( (int)gridWidth, 0 ), MAP_APPFONT ).Width());
                 if( colPrefWidth != 0)
                 {
                     if(m_bResizingGrid)
@@ -884,6 +884,16 @@ namespace svt { namespace table
         // position it
         if ( m_pHScroll )
         {
+            TableSize nVisibleUnits = lcl_getColumnsVisibleWithin( aDataCellPlayground, m_nLeftColumn, *this, false );
+            int nRange = m_nColumnCount;
+            if( m_nLeftColumn + nVisibleUnits == nRange-1)
+            {
+                if(m_aAccColumnWidthsPixel[nRange-2] - m_aAccColumnWidthsPixel[m_nLeftColumn] + m_aColumnWidthsPixel[nRange-1]>aDataCellPlayground.GetWidth())
+                {
+                    m_pHScroll->SetVisibleSize( nVisibleUnits -1 );
+                    m_pHScroll->SetPageSize(nVisibleUnits -1);
+                }
+            }
             Rectangle aScrollbarArea(
                 Point( 0, aDataCellPlayground.Bottom() + 1 ),
                 Size( aDataCellPlayground.Right() + 1, nScrollbarMetrics )
@@ -1000,7 +1010,6 @@ namespace svt { namespace table
                     *m_pDataWindow, aCell.getRect(), rStyle );
             }
         }
-
         // the area occupied by the row header, if any
         Rectangle aRowHeaderArea;
         if ( m_pModel->hasRowHeaders() )
@@ -1014,12 +1023,13 @@ namespace svt { namespace table
             //to avoid double lines when scrolling vertically
             if(m_nTopRow != 0)
                 --aRowHeaderArea.Top();
+            --aRowHeaderArea.Right();
             pRenderer->PaintHeaderArea(*m_pDataWindow, aRowHeaderArea, false, true, rStyle);
             // Note that strictly, aRowHeaderArea also contains the intersection between column
             // and row header area. However, below we go to paint this intersection, again,
             // so this hopefully doesn't hurt if we already paint it here.
 
-            if ( getModel()->hasColumnHeaders() )
+            if ( m_pModel->hasColumnHeaders() )
             {
                 TableCellGeometry aIntersection( *this, Rectangle( Point( 0, 0 ),
                     aAllCellsWithHeaders.BottomRight() ), COL_ROW_HEADERS, ROW_COL_HEADERS );
@@ -1030,6 +1040,7 @@ namespace svt { namespace table
                     --aInters.Top();
                     --aInters.Bottom();
                 }
+                --aInters.Right();
                 pRenderer->PaintHeaderArea(
                     *m_pDataWindow, aInters, true, true, rStyle
                 );
@@ -1068,6 +1079,11 @@ namespace svt { namespace table
                 --aRect.Top();
             if(m_nLeftColumn != 0)
                 --aRect.Left();
+            else
+            {
+                if(m_pModel->hasRowHeaders())
+                    --aRect.Left();
+            }
             // give the redenderer a chance to prepare the row
             pRenderer->PrepareRow( aRowIterator.getRow(), isActiveRow, isSelectedRow,
             *m_pDataWindow, aRect, rStyle );
@@ -1908,6 +1924,11 @@ namespace svt { namespace table
         return -1;
     }
     //-------------------------------------------------------------------------------
+    bool TableControl_Impl::isTooltipActive()
+    {
+        return m_rAntiImpl.isTooltip();
+    }
+    //-------------------------------------------------------------------------------
     ::rtl::OUString& TableControl_Impl::setTooltip(const Point& rPoint )
     {
         ::rtl::OUString aTooltipText;
@@ -2033,8 +2054,8 @@ namespace svt { namespace table
         {
             m_pDataWindow->HideTracking();
             PColumnModel pColumn = m_pModel->getColumnModel(m_nResizingColumn);
-            int maxWidth = pColumn->getMaxWidth();
-            int minWidth = pColumn->getMinWidth();
+            int maxWidth = m_rAntiImpl.LogicToPixel( Size( pColumn->getMaxWidth(), 0 ), MAP_APPFONT ).Width();
+            int minWidth = m_rAntiImpl.LogicToPixel( Size( pColumn->getMinWidth(), 0 ), MAP_APPFONT ).Width();
             int resizeCol = m_nResizingColumn-m_nLeftColumn;
             //new position of mouse
             int actX = rPoint.X();
@@ -2044,7 +2065,7 @@ namespace svt { namespace table
             int leftX = 0;
             if(m_nResizingColumn > m_nLeftColumn)
                 leftX = m_aVisibleColumnWidthsPixel[resizeCol-1];
-            else if(m_nResizingColumn == 0 && m_pModel->hasRowHeaders())
+            else if(m_nResizingColumn == m_nLeftColumn && m_pModel->hasRowHeaders())
                 leftX = m_rAntiImpl.LogicToPixel( Size( m_pModel->getRowHeaderWidth(), 0 ), MAP_APPFONT ).Width();
             int actWidth = actX - leftX;
             int newActWidth = 0;
@@ -2057,7 +2078,7 @@ namespace svt { namespace table
                     pColumn->setPreferredWidth(newActWidth);
                 }
                 else
-                    pColumn->setPreferredWidth(minWidth);
+                    pColumn->setPreferredWidth(pColumn->getMinWidth());
                 if(m_nLeftColumn != 0)
                     impl_updateLeftColumn();
         }
@@ -2069,7 +2090,7 @@ namespace svt { namespace table
                 pColumn->setPreferredWidth(newActWidth);
             }
             else
-                pColumn->setPreferredWidth(maxWidth);
+                pColumn->setPreferredWidth(pColumn->getMaxWidth());
         }
         m_nCurColumn = m_nResizingColumn;
         impl_ni_updateColumnWidths();

@@ -57,8 +57,6 @@
 #include <tools/string.hxx>
 #include <tools/gen.hxx>
 
-#include <svl/svarray.hxx>
-
 
 // Token-Typen TT_...
 enum TokenTypes
@@ -79,8 +77,7 @@ enum TokenTypes
 struct HighlightPortion { sal_uInt16 nBegin; sal_uInt16 nEnd; TokenTypes tokenType; };
 
 
-
-SV_DECL_VARARR(HighlightPortions, HighlightPortion, 0, 16)
+typedef std::vector<HighlightPortion> HighlightPortions;
 
 /////////////////////////////////////////////////////////////////////////
 // Hilfsklasse zur Untersuchung von JavaScript-Modulen, zunaechst zum

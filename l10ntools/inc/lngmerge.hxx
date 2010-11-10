@@ -58,7 +58,7 @@ private:
                     const ByteString &rPrj ,
                     const ByteString &rRoot , const ByteString &sActFileName , const ByteString &sID );
 public:
-    LngParser( const ByteString &rLngFile, sal_Bool bUTF8, sal_Bool bULFFormat, bool bQuiet_in );
+    LngParser( const ByteString &rLngFile, sal_Bool bUTF8, sal_Bool bULFFormat );
     ~LngParser();
 
     sal_Bool CreateSDF( const ByteString &rSDFFile, const ByteString &rPrj, const ByteString &rRoot );

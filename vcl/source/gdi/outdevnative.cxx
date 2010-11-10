@@ -59,6 +59,38 @@ static bool lcl_enableNativeWidget( const OutputDevice& i_rDevice )
     }
 }
 
+ImplControlValue::~ImplControlValue()
+{
+}
+
+ScrollbarValue::~ScrollbarValue()
+{
+}
+
+SliderValue::~SliderValue()
+{
+}
+
+TabitemValue::~TabitemValue()
+{
+}
+
+SpinbuttonValue::~SpinbuttonValue()
+{
+}
+
+ToolbarValue::~ToolbarValue()
+{
+}
+
+MenubarValue::~MenubarValue()
+{
+}
+
+PushButtonValue::~PushButtonValue()
+{
+}
+
 // -----------------------------------------------------------------------
 // These functions are mainly passthrough functions that allow access to
 // the SalFrame behind a Window object for native widget rendering purposes.
@@ -83,7 +115,7 @@ sal_Bool OutputDevice::IsNativeControlSupported( ControlType nType, ControlPart 
 
 sal_Bool OutputDevice::HitTestNativeControl( ControlType nType,
                               ControlPart nPart,
-                              const Region& rControlRegion,
+                              const Rectangle& rControlRegion,
                               const Point& aPos,
                               sal_Bool& rIsInside )
 {
@@ -95,7 +127,7 @@ sal_Bool OutputDevice::HitTestNativeControl( ControlType nType,
             return sal_False;
 
     Point aWinOffs( mnOutOffX, mnOutOffY );
-    Region screenRegion( rControlRegion );
+    Rectangle screenRegion( rControlRegion );
     screenRegion.Move( aWinOffs.X(), aWinOffs.Y());
 
     return( mpGraphics->HitTestNativeControl(nType, nPart, screenRegion, Point( aPos.X() + mnOutOffX, aPos.Y() + mnOutOffY ),
@@ -104,47 +136,117 @@ sal_Bool OutputDevice::HitTestNativeControl( ControlType nType,
 
 // -----------------------------------------------------------------------
 
+static boost::shared_ptr< ImplControlValue > lcl_transformControlValue( const ImplControlValue& rVal, OutputDevice& rDev )
+{
+    boost::shared_ptr< ImplControlValue > aResult;
+    switch( rVal.getType() )
+    {
+    case CTRL_SLIDER:
+        {
+            const SliderValue* pSlVal = static_cast<const SliderValue*>(&rVal);
+            SliderValue* pNew = new SliderValue( *pSlVal );
+            aResult.reset( pNew );
+            pNew->maThumbRect = rDev.ImplLogicToDevicePixel( pSlVal->maThumbRect );
+        }
+        break;
+    case CTRL_SCROLLBAR:
+        {
+            const ScrollbarValue* pScVal = static_cast<const ScrollbarValue*>(&rVal);
+            ScrollbarValue* pNew = new ScrollbarValue( *pScVal );
+            aResult.reset( pNew );
+            pNew->maThumbRect = rDev.ImplLogicToDevicePixel( pScVal->maThumbRect );
+            pNew->maButton1Rect = rDev.ImplLogicToDevicePixel( pScVal->maButton1Rect );
+            pNew->maButton2Rect = rDev.ImplLogicToDevicePixel( pScVal->maButton2Rect );
+        }
+        break;
+    case CTRL_SPINBUTTONS:
+        {
+            const SpinbuttonValue* pSpVal = static_cast<const SpinbuttonValue*>(&rVal);
+            SpinbuttonValue* pNew = new SpinbuttonValue( *pSpVal );
+            aResult.reset( pNew );
+            pNew->maUpperRect = rDev.ImplLogicToDevicePixel( pSpVal->maUpperRect );
+            pNew->maLowerRect = rDev.ImplLogicToDevicePixel( pSpVal->maLowerRect );
+        }
+        break;
+    case CTRL_TOOLBAR:
+        {
+            const ToolbarValue* pTVal = static_cast<const ToolbarValue*>(&rVal);
+            ToolbarValue* pNew = new ToolbarValue( *pTVal );
+            aResult.reset( pNew );
+            pNew->maGripRect = rDev.ImplLogicToDevicePixel( pTVal->maGripRect );
+        }
+        break;
+    case CTRL_TAB_ITEM:
+        {
+            const TabitemValue* pTIVal = static_cast<const TabitemValue*>(&rVal);
+            TabitemValue* pNew = new TabitemValue( *pTIVal );
+            aResult.reset( pNew );
+        }
+        break;
+    case CTRL_MENUBAR:
+        {
+            const MenubarValue* pMVal = static_cast<const MenubarValue*>(&rVal);
+            MenubarValue* pNew = new MenubarValue( *pMVal );
+            aResult.reset( pNew );
+        }
+        break;
+    case CTRL_PUSHBUTTON:
+        {
+            const PushButtonValue* pBVal = static_cast<const PushButtonValue*>(&rVal);
+            PushButtonValue* pNew = new PushButtonValue( *pBVal );
+            aResult.reset( pNew );
+        }
+        break;
+    case CTRL_GENERIC:
+            aResult.reset( new ImplControlValue( rVal ) );
+            break;
+    default:
+        OSL_ENSURE( 0, "unknown ImplControlValue type !" );
+        break;
+    }
+    return aResult;
+}
+
+#if 0
 static void lcl_moveControlValue( ControlType nType, const ImplControlValue& aValue, const Point& rDelta )
 {
-    if( aValue.getOptionalVal() )
+    switch( aValue.getType() )
     {
-        switch( nType )
+        case CTRL_SLIDER:
         {
-            case CTRL_SLIDER:
-            {
-                SliderValue* pSlVal = reinterpret_cast<SliderValue*>(aValue.getOptionalVal());
-                pSlVal->maThumbRect.Move( rDelta.X(), rDelta.Y() );
-            }
-            break;
-            case CTRL_SCROLLBAR:
-            {
-                ScrollbarValue* pScVal = reinterpret_cast<ScrollbarValue*>(aValue.getOptionalVal());
-                pScVal->maThumbRect.Move( rDelta.X(), rDelta.Y() );
-                pScVal->maButton1Rect.Move( rDelta.X(), rDelta.Y() );
-                pScVal->maButton2Rect.Move( rDelta.X(), rDelta.Y() );
-            }
-            break;
-            case CTRL_SPINBOX:
-            case CTRL_SPINBUTTONS:
-            {
-                SpinbuttonValue* pSpVal = reinterpret_cast<SpinbuttonValue*>(aValue.getOptionalVal());
-                pSpVal->maUpperRect.Move( rDelta.X(), rDelta.Y() );
-                pSpVal->maLowerRect.Move( rDelta.X(), rDelta.Y() );
-            }
-            break;
-            case CTRL_TOOLBAR:
-            {
-                ToolbarValue* pTVal = reinterpret_cast<ToolbarValue*>(aValue.getOptionalVal());
-                pTVal->maGripRect.Move( rDelta.X(), rDelta.Y() );
-            }
-            break;
+            SliderValue* pSlVal = static_cast<SliderValue*>(const_cast<ImplControlValue*>(&aValue));
+            pSlVal->maThumbRect.Move( rDelta.X(), rDelta.Y() );
         }
+        break;
+        case CTRL_SCROLLBAR:
+        {
+            ScrollbarValue* pScVal = static_cast<ScrollbarValue*>(const_cast<ImplControlValue*>(&aValue));
+            pScVal->maThumbRect.Move( rDelta.X(), rDelta.Y() );
+            pScVal->maButton1Rect.Move( rDelta.X(), rDelta.Y() );
+            pScVal->maButton2Rect.Move( rDelta.X(), rDelta.Y() );
+        }
+        break;
+        case CTRL_SPINBOX:
+        case CTRL_SPINBUTTONS:
+        {
+            SpinbuttonValue* pSpVal = static_cast<SpinbuttonValue*>(const_cast<ImplControlValue*>(&aValue));
+            pSpVal->maUpperRect.Move( rDelta.X(), rDelta.Y() );
+            pSpVal->maLowerRect.Move( rDelta.X(), rDelta.Y() );
+        }
+        break;
+        case CTRL_TOOLBAR:
+        {
+            ToolbarValue* pTVal = static_cast<ToolbarValue*>(const_cast<ImplControlValue*>(&aValue));
+            pTVal->maGripRect.Move( rDelta.X(), rDelta.Y() );
+        }
+        break;
     }
 }
+#endif
 
 sal_Bool OutputDevice::DrawNativeControl( ControlType nType,
                             ControlPart nPart,
-                            const Region& rControlRegion,
+                            const Rectangle& rControlRegion,
                             ControlState nState,
                             const ImplControlValue& aValue,
                             ::rtl::OUString aCaption )
@@ -183,22 +285,15 @@ sal_Bool OutputDevice::DrawNativeControl( ControlType nType,
 
     // Convert the coordinates from relative to Window-absolute, so we draw
     // in the correct place in platform code
-    Point aWinOffs( mnOutOffX, mnOutOffY );
-    Region screenRegion( rControlRegion );
-    screenRegion.Move( aWinOffs.X(), aWinOffs.Y());
-
-    // do so for ImplControlValue members, also
-    lcl_moveControlValue( nType, aValue, aWinOffs );
+    boost::shared_ptr< ImplControlValue > aScreenCtrlValue( lcl_transformControlValue( aValue, *this ) );
+    Rectangle screenRegion( ImplLogicToDevicePixel( rControlRegion ) );
 
     Region aTestRegion( GetActiveClipRegion() );
     aTestRegion.Intersect( rControlRegion );
     if( aTestRegion == rControlRegion )
         nState |= CTRL_CACHING_ALLOWED;   // control is not clipped, caching allowed
 
-    sal_Bool bRet = mpGraphics->DrawNativeControl(nType, nPart, screenRegion, nState, aValue, aCaption, this );
-
-    // transform back ImplControlValue members
-    lcl_moveControlValue( nType, aValue, Point()-aWinOffs );
+    sal_Bool bRet = mpGraphics->DrawNativeControl(nType, nPart, screenRegion, nState, *aScreenCtrlValue, aCaption, this );
 
     return bRet;
 }
@@ -208,7 +303,7 @@ sal_Bool OutputDevice::DrawNativeControl( ControlType nType,
 
 sal_Bool OutputDevice::DrawNativeControlText(ControlType nType,
                             ControlPart nPart,
-                            const Region& rControlRegion,
+                            const Rectangle& rControlRegion,
                             ControlState nState,
                             const ImplControlValue& aValue,
                             ::rtl::OUString aCaption )
@@ -233,15 +328,10 @@ sal_Bool OutputDevice::DrawNativeControlText(ControlType nType,
 
     // Convert the coordinates from relative to Window-absolute, so we draw
     // in the correct place in platform code
-    Point aWinOffs( mnOutOffX, mnOutOffY );
-    Region screenRegion( rControlRegion );
-    screenRegion.Move( aWinOffs.X(), aWinOffs.Y());
-    lcl_moveControlValue( nType, aValue, aWinOffs );
+    boost::shared_ptr< ImplControlValue > aScreenCtrlValue( lcl_transformControlValue( aValue, *this ) );
+    Rectangle screenRegion( ImplLogicToDevicePixel( rControlRegion ) );
 
-    sal_Bool bRet = mpGraphics->DrawNativeControlText(nType, nPart, screenRegion, nState, aValue, aCaption, this );
-
-    // transform back ImplControlValue members
-    lcl_moveControlValue( nType, aValue, Point()-aWinOffs );
+    sal_Bool bRet = mpGraphics->DrawNativeControlText(nType, nPart, screenRegion, nState, *aScreenCtrlValue, aCaption, this );
 
     return bRet;
 }
@@ -251,12 +341,12 @@ sal_Bool OutputDevice::DrawNativeControlText(ControlType nType,
 
 sal_Bool OutputDevice::GetNativeControlRegion(  ControlType nType,
                                 ControlPart nPart,
-                                const Region& rControlRegion,
+                                const Rectangle& rControlRegion,
                                 ControlState nState,
                                 const ImplControlValue& aValue,
                                 ::rtl::OUString aCaption,
-                                Region &rNativeBoundingRegion,
-                                Region &rNativeContentRegion )
+                                Rectangle &rNativeBoundingRegion,
+                                Rectangle &rNativeContentRegion )
 {
     if( !lcl_enableNativeWidget( *this ) )
         return sal_False;
@@ -267,22 +357,18 @@ sal_Bool OutputDevice::GetNativeControlRegion(  ControlType nType,
 
     // Convert the coordinates from relative to Window-absolute, so we draw
     // in the correct place in platform code
-    Point aWinOffs( mnOutOffX, mnOutOffY );
-    Region screenRegion( rControlRegion );
-    screenRegion.Move( aWinOffs.X(), aWinOffs.Y());
-    lcl_moveControlValue( nType, aValue, aWinOffs );
+    boost::shared_ptr< ImplControlValue > aScreenCtrlValue( lcl_transformControlValue( aValue, *this ) );
+    Rectangle screenRegion( ImplLogicToDevicePixel( rControlRegion ) );
 
-    sal_Bool bRet = mpGraphics->GetNativeControlRegion(nType, nPart, screenRegion, nState, aValue,
+    sal_Bool bRet = mpGraphics->GetNativeControlRegion(nType, nPart, screenRegion, nState, *aScreenCtrlValue,
                                 aCaption, rNativeBoundingRegion,
                                 rNativeContentRegion, this );
     if( bRet )
     {
         // transform back native regions
-        rNativeBoundingRegion.Move( -aWinOffs.X(), -aWinOffs.Y() );
-        rNativeContentRegion.Move( -aWinOffs.X(), -aWinOffs.Y() );
+        rNativeBoundingRegion = ImplDevicePixelToLogic( rNativeBoundingRegion );
+        rNativeContentRegion = ImplDevicePixelToLogic( rNativeContentRegion );
     }
-    // transform back ImplControlValue members
-    lcl_moveControlValue( nType, aValue, Point()-aWinOffs );
 
     return bRet;
 }

@@ -773,7 +773,7 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
                 sal_Bool bWrapped = sal_False;
                 while( pWin )
                 {
-                    if( !pWin->ImplIsRealParentPath( this ) &&
+                    if( !pWin->ImplIsRealParentPath( this ) && ( pWin != this ) &&
                         pWin->ImplGetWindow()->IsTopWindow() && pWin->mpWindowImpl->mbReallyVisible )
                     {
                         SalFrameGeometry g = pWin->mpWindowImpl->mpFrame->GetGeometry();

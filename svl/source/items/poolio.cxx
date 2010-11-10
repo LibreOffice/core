@@ -178,10 +178,10 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
     // Version-Maps
     {
         SfxMultiVarRecordWriter aVerRec( &rStream, SFX_ITEMPOOL_REC_VERSIONMAP, 0 );
-        for ( sal_uInt16 nVerNo = 0; nVerNo < pImp->aVersions.Count(); ++nVerNo )
+        for ( size_t nVerNo = 0; nVerNo < pImp->aVersions.size(); ++nVerNo )
         {
             aVerRec.NewContent();
-            SfxPoolVersion_Impl *pVer = pImp->aVersions[nVerNo];
+            SfxPoolVersion_ImplPtr pVer = pImp->aVersions[nVerNo];
             rStream << pVer->_nVer << pVer->_nStart << pVer->_nEnd;
             sal_uInt16 nCount = pVer->_nEnd - pVer->_nStart + 1;
             sal_uInt16 nNewWhich = 0;
@@ -207,7 +207,7 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
             SfxPoolItemArray_Impl **pArr = pImp->ppPoolItems;
             SfxPoolItem **ppDefItem = ppStaticDefaults;
             const sal_uInt16 nSize = GetSize_Impl();
-            for ( sal_uInt16 i = 0; i < nSize && !rStream.GetError(); ++i, ++pArr, ++ppDefItem )
+            for ( size_t i = 0; i < nSize && !rStream.GetError(); ++i, ++pArr, ++ppDefItem )
             {
                 // Version des Items feststellen
                 sal_uInt16 nItemVersion = (*ppDefItem)->GetVersion( _nFileFormatVersion );
@@ -229,16 +229,16 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
                     aWhichIdsRec.NewContent(nSlotId, 0);
                     rStream << (*ppDefItem)->Which();
                     rStream << nItemVersion;
-                    const sal_uInt16 nCount = (*pArr)->Count();
-                    DBG_ASSERT(nCount, "ItemArr ist leer");
+                    const sal_uInt32 nCount = ::std::min<size_t>( (*pArr)->size(), SAL_MAX_UINT32 );
+                    DBG_ASSERT(nCount, "ItemArr is empty");
                     rStream << nCount;
 
                     // Items an sich schreiben
                     SfxMultiMixRecordWriter aItemsRec( &rStream, SFX_ITEMPOOL_REC_ITEMS, 0 );
-                    for ( sal_uInt16 j = 0; j < nCount; ++j )
+                    for ( size_t j = 0; j < nCount; ++j )
                     {
                         // Item selbst besorgen
-                        const SfxPoolItem *pItem = (*pArr)->GetObject(j);
+                        const SfxPoolItem *pItem = (*pArr)->operator[](j);
                         if ( pItem && pItem->GetRefCount() ) //! siehe anderes MI-REF
                         {
                             aItemsRec.NewContent(j, 'X' );
@@ -353,8 +353,8 @@ void SfxItemPool::LoadCompleted()
             if ( *ppItemArr )
             {
                 // "uber alle Items mit dieser Which-Id iterieren
-                SfxPoolItem** ppHtArr = (SfxPoolItem**)(*ppItemArr)->GetData();
-                for( sal_uInt16 n = (*ppItemArr)->Count(); n; --n, ++ppHtArr )
+                SfxPoolItemArrayBase_Impl::iterator ppHtArr = (*ppItemArr)->begin();
+                for( size_t n = (*ppItemArr)->size(); n; --n, ++ppHtArr )
                     if (*ppHtArr)
                     {
                         #ifdef DBG_UTIL
@@ -382,15 +382,15 @@ void SfxItemPool::LoadCompleted()
 //============================================================================
 // This had to be moved to a method of its own to keep Solaris GCC happy:
 void SfxItemPool::readTheItems (
-    SvStream & rStream, sal_uInt16 nItemCount, sal_uInt16 nVersion,
+    SvStream & rStream, sal_uInt32 nItemCount, sal_uInt16 nVersion,
     SfxPoolItem * pDefItem, SfxPoolItemArray_Impl ** ppArr)
 {
     SfxMultiRecordReader aItemsRec( &rStream, SFX_ITEMPOOL_REC_ITEMS );
 
-    SfxPoolItemArray_Impl *pNewArr = new SfxPoolItemArray_Impl( nItemCount );
+    SfxPoolItemArray_Impl *pNewArr = new SfxPoolItemArray_Impl();
     SfxPoolItem *pItem = 0;
 
-    sal_uInt16 n, nLastSurrogate = sal_uInt16(-1);
+    sal_uIntPtr n, nLastSurrogate = sal_uIntPtr(-1);
     while (aItemsRec.GetContent())
     {
         // n"achstes Surrogat holen
@@ -400,7 +400,7 @@ void SfxItemPool::readTheItems (
 
         // fehlende auff"ullen
         for ( pItem = 0, n = nLastSurrogate+1; n < nSurrogate; ++n )
-            pNewArr->C40_INSERT(SfxPoolItem, pItem, n);
+            pNewArr->push_back( (SfxPoolItem*) pItem );
         nLastSurrogate = nSurrogate;
 
         // Ref-Count und Item laden
@@ -408,7 +408,7 @@ void SfxItemPool::readTheItems (
         rStream >> nRef;
 
         pItem = pDefItem->Create(rStream, nVersion);
-        pNewArr->C40_INSERT(SfxPoolItem, pItem, nSurrogate);
+        pNewArr->push_back( (SfxPoolItem*) pItem );
 
         if ( !bPersistentRefCounts )
             // bis <SfxItemPool::LoadCompleted()> festhalten
@@ -424,33 +424,32 @@ void SfxItemPool::readTheItems (
 
     // fehlende auff"ullen
     for ( pItem = 0, n = nLastSurrogate+1; n < nItemCount; ++n )
-        pNewArr->C40_INSERT(SfxPoolItem, pItem, n);
+        pNewArr->push_back( (SfxPoolItem*) pItem );
 
     SfxPoolItemArray_Impl *pOldArr = *ppArr;
     *ppArr = pNewArr;
 
     // die Items merken, die schon im Pool sind
-    int bEmpty = sal_True;
+    bool bEmpty = true;
     if ( 0 != pOldArr )
-        for ( n = 0; bEmpty && n < pOldArr->Count(); ++n )
-            bEmpty = pOldArr->GetObject(n) == 0;
+        for ( n = 0; bEmpty && n < pOldArr->size(); ++n )
+            bEmpty = pOldArr->operator[](n) == 0;
     DBG_ASSERTWARNING( bEmpty, "loading non-empty pool" );
     if ( !bEmpty )
     {
         // f"ur alle alten suchen, ob ein gleiches neues existiert
-        for ( sal_uInt16 nOld = 0; nOld < pOldArr->Count(); ++nOld )
+        for ( size_t nOld = 0; nOld < pOldArr->size(); ++nOld )
         {
             SfxPoolItem *pOldItem = (*pOldArr)[nOld];
             if ( pOldItem )
             {
-                sal_uInt16 nFree = USHRT_MAX;
-                int bFound = sal_False;
-                sal_uInt16 nCount = (*ppArr)->Count();
-                for ( sal_uInt16 nNew = nCount; !bFound && nNew--; )
+                sal_uInt32 nFree = SAL_MAX_UINT32;
+                bool bFound = false;
+                for ( size_t nNew = (*ppArr)->size(); nNew--; )
                 {
                     // geladenes Item
                     SfxPoolItem *&rpNewItem =
-                        (SfxPoolItem*&)(*ppArr)->GetData()[nNew];
+                        (SfxPoolItem*&)(*ppArr)->operator[](nNew);
 
                     // surrogat unbenutzt?
                     if ( !rpNewItem )
@@ -464,17 +463,18 @@ void SfxItemPool::readTheItems (
                         SetRefCount( *rpNewItem, 0 );
                         delete rpNewItem;
                         rpNewItem = pOldItem;
-                        bFound = sal_True;
+                        bFound = true;
+                        break;
                     }
                 }
 
                 // vorhervorhandene, nicht geladene uebernehmen
                 if ( !bFound )
                 {
-                    if ( nFree != USHRT_MAX )
-                        (SfxPoolItem*&)(*ppArr)->GetData()[nFree] = pOldItem;
+                    if ( nFree != SAL_MAX_UINT32 )
+                        (SfxPoolItem*&)(*ppArr)->operator[](nFree) = pOldItem;
                     else
-                        (*ppArr)->C40_INSERT( SfxPoolItem, pOldItem, nCount );
+                        (*ppArr)->push_back( (SfxPoolItem*) pOldItem );
                 }
             }
         }
@@ -495,14 +495,14 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
 
         // "uber alle Which-Werte iterieren
         SfxPoolItemArray_Impl** ppItemArr = pImp->ppPoolItems;
-        for( sal_uInt16 nArrCnt = GetSize_Impl(); nArrCnt; --nArrCnt, ++ppItemArr )
+        for( size_t nArrCnt = GetSize_Impl(); nArrCnt; --nArrCnt, ++ppItemArr )
         {
             // ist "uberhaupt ein Item mit dem Which-Wert da?
             if ( *ppItemArr )
             {
                 // "uber alle Items mit dieser Which-Id iterieren
-                SfxPoolItem** ppHtArr = (SfxPoolItem**)(*ppItemArr)->GetData();
-                for( sal_uInt16 n = (*ppItemArr)->Count(); n; --n, ++ppHtArr )
+                SfxPoolItemArrayBase_Impl::iterator ppHtArr = (*ppItemArr)->begin();
+                for( size_t n = (*ppItemArr)->size(); n; --n, ++ppHtArr )
                     if (*ppHtArr)
                     {
                         #ifdef DBG_UTIL
@@ -611,10 +611,10 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
             rStream >> nVersion >> nHStart >> nHEnd;
             sal_uInt16 nCount = nHEnd - nHStart + 1;
 
-            // Version neuer als bekannt?
-            if ( nVerNo >= pImp->aVersions.Count() )
+            // Is new version is known?
+            if ( nVerNo >= pImp->aVersions.size() )
             {
-                // neue Version hinzufuegen
+                // Add new Version
                 sal_uInt16 *pMap = new sal_uInt16[nCount];
                 for ( sal_uInt16 n = 0; n < nCount; ++n )
                     rStream >> pMap[n];
@@ -632,7 +632,8 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
         while ( aWhichIdsRec.GetContent() )
         {
             // SlotId, Which-Id und Item-Version besorgen
-            sal_uInt16 nCount, nVersion, nWhich;
+            sal_uInt32 nCount;
+            sal_uInt16 nVersion, nWhich;
             //!sal_uInt16 nSlotId = aWhichIdsRec.GetContentTag();
             rStream >> nWhich;
             if ( pImp->nLoadingVersion != pImp->nVersion )
@@ -799,10 +800,10 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
             sal_uInt16 nCount = nHEnd - nHStart + 1;
             sal_uInt16 nBytes = (nCount)*sizeof(sal_uInt16);
 
-            // Version neuer als bekannt?
-            if ( nVerNo >= pImp->aVersions.Count() )
+            // Is new version is known?
+            if ( nVerNo >= pImp->aVersions.size() )
             {
-                // neue Version hinzufuegen
+                // Add new Version
                 sal_uInt16 *pMap = new sal_uInt16[nCount];
                 for ( sal_uInt16 n = 0; n < nCount; ++n )
                     rStream >> pMap[n];
@@ -849,7 +850,7 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
 
             sal_uInt16 nIndex = GetIndex_Impl(nWhich);
             ppArr = pImp->ppPoolItems + nIndex;
-            pNewArr = new SfxPoolItemArray_Impl( nCount );
+            pNewArr = new SfxPoolItemArray_Impl();
             pDefItem = *(ppStaticDefaults + nIndex);
         }
 
@@ -897,8 +898,8 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
                             AddRef(*pItem, nRef);
                     }
                 }
-
-                pNewArr->C40_INSERT( SfxPoolItem, pItem, j);
+                //pNewArr->insert( pItem, j );
+                pNewArr->push_back( (SfxPoolItem*) pItem );
 
                 // restliche gespeicherte Laenge skippen (neueres Format)
                 nLastPos = rStream.Tell();
@@ -924,24 +925,23 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
             // die Items merken, die schon im Pool sind
             int bEmpty = sal_True;
             if ( 0 != pOldArr )
-                for ( sal_uInt16 n = 0; bEmpty && n < pOldArr->Count(); ++n )
-                    bEmpty = pOldArr->GetObject(n) == 0;
+                for ( size_t n = 0; bEmpty && n < pOldArr->size(); ++n )
+                    bEmpty = pOldArr->operator[](n) == 0;
             DBG_ASSERTWARNING( bEmpty, "loading non-empty pool" );
             if ( !bEmpty )
             {
                 // f"ur alle alten suchen, ob ein gleiches neues existiert
-                for ( sal_uInt16 nOld = 0; nOld < pOldArr->Count(); ++nOld )
+                for ( size_t nOld = 0; nOld < pOldArr->size(); ++nOld )
                 {
                     SfxPoolItem *pOldItem = (*pOldArr)[nOld];
                     if ( pOldItem )
                     {
-                        int bFound = sal_False;
-                        for ( sal_uInt16 nNew = 0;
-                              !bFound && nNew < (*ppArr)->Count();
-                              ++nNew )
+                        bool bFound = false;
+                        for ( size_t nNew = 0;
+                              nNew < (*ppArr)->size();  ++nNew )
                         {
                             SfxPoolItem *&rpNewItem =
-                                (SfxPoolItem*&)(*ppArr)->GetData()[nNew];
+                                (SfxPoolItem*&)(*ppArr)->operator[](nNew);
 
                             if ( rpNewItem && *rpNewItem == *pOldItem )
                             {
@@ -949,11 +949,11 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
                                 SetRefCount( *rpNewItem, 0 );
                                 delete rpNewItem;
                                 rpNewItem = pOldItem;
-                                bFound = sal_True;
+                                bFound = true;
                                 SFX_TRACE( "reusing item", pOldItem );
+                                break;
                             }
                         }
-                        //! DBG_ASSERT( bFound, "old-item not found in file" );
                         if ( !bFound )
                         {
                             SFX_TRACE( "item not found: ", pOldItem );
@@ -1039,7 +1039,7 @@ const SfxPoolItem* SfxItemPool::LoadSurrogate
     L"adt Surrogat aus 'rStream' und liefert das dadurch in 'rRefPool'
     repr"asentierte SfxPoolItem zu"ruck. Ist das im Stream befindliche
     Surrogat == SFX_ITEMS_DIRECT (!SFX_ITEM_POOLABLE) wird 0 zur"uckgegeben,
-    das Item ist direkt aus dem Stream zu laden. Bei 0xfff0 (SFX_ITEMS_NULL)
+    das Item ist direkt aus dem Stream zu laden. Bei 0xfffffff0 (SFX_ITEMS_NULL)
     wird auch 0 zurueckgegeben und rWhich auf 0 gesetzt, das Item ist nicht
     verfuegbar.
 
@@ -1071,15 +1071,15 @@ const SfxPoolItem* SfxItemPool::LoadSurrogate
 */
 
 {
-    // erstmal das Surrogat lesen
-    sal_uInt16 nSurrogat;
+    // Read the first surrogate
+    sal_uInt32 nSurrogat;
     rStream >> nSurrogat;
 
-    // direkt gespeichertes Item?
+    // Is item stored directly?
     if ( SFX_ITEMS_DIRECT == nSurrogat )
         return 0;
 
-    // nicht vorhandenes Item?
+    // Item does not exist?
     if ( SFX_ITEMS_NULL == nSurrogat )
     {
         rWhich = 0;
@@ -1114,13 +1114,13 @@ const SfxPoolItem* SfxItemPool::LoadSurrogate
             if ( pTarget->IsInRange(rWhich) )
             {
                 // dflt-Attribut?
-                if ( SFX_ITEMS_STATICDEFAULT == nSurrogat )
+                if ( SFX_ITEMS_DEFAULT == nSurrogat )
                     return *(pTarget->ppStaticDefaults +
                             pTarget->GetIndex_Impl(rWhich));
 
                 SfxPoolItemArray_Impl* pItemArr = *(pTarget->pImp->ppPoolItems +
                         pTarget->GetIndex_Impl(rWhich));
-                pItem = pItemArr && nSurrogat < pItemArr->Count()
+                pItem = pItemArr && nSurrogat < pItemArr->size()
                             ? (*pItemArr)[nSurrogat]
                             : 0;
                 if ( !pItem )
@@ -1184,17 +1184,17 @@ int SfxItemPool::StoreSurrogate
         int bRealSurrogate = IsItemFlag(*pItem, SFX_ITEM_POOLABLE);
         rStream << ( bRealSurrogate
                         ? GetSurrogate( pItem )
-                        : (sal_uInt16) SFX_ITEMS_DIRECT );
+                        : SFX_ITEMS_DIRECT );
         return bRealSurrogate;
     }
 
-    rStream << (sal_uInt16) SFX_ITEMS_NULL;
+    rStream << SFX_ITEMS_NULL;
     return sal_True;
 }
 
 // -----------------------------------------------------------------------
 
-sal_uInt16 SfxItemPool::GetSurrogate(const SfxPoolItem *pItem) const
+sal_uInt32 SfxItemPool::GetSurrogate(const SfxPoolItem *pItem) const
 {
     DBG_CHKTHIS(SfxItemPool, 0);
     DBG_ASSERT( pItem, "no 0-Pointer Surrogate" );
@@ -1210,18 +1210,18 @@ sal_uInt16 SfxItemPool::GetSurrogate(const SfxPoolItem *pItem) const
 
     // Pointer auf static- oder pool-dflt-Attribut?
     if( IsStaticDefaultItem(pItem) || IsPoolDefaultItem(pItem) )
-        return SFX_ITEMS_STATICDEFAULT;
+        return SFX_ITEMS_DEFAULT;
 
     SfxPoolItemArray_Impl* pItemArr = *(pImp->ppPoolItems + GetIndex_Impl(pItem->Which()));
-    DBG_ASSERT(pItemArr, "ItemArr nicht vorhanden");
-    const sal_uInt16 nCount = pItemArr->Count();
-    for ( sal_uInt16 i = 0; i < nCount; ++i )
+    DBG_ASSERT(pItemArr, "ItemArr is not available");
+
+    for ( size_t i = 0; i < pItemArr->size(); ++i )
     {
         const SfxPoolItem *p = (*pItemArr)[i];
         if ( p == pItem )
             return i;
     }
-    SFX_ASSERT( 0, pItem->Which(), "Item nicht im Pool");
+    SFX_ASSERT( 0, pItem->Which(), "Item not in the pool");
     return SFX_ITEMS_NULL;
 }
 
@@ -1326,10 +1326,10 @@ void SfxItemPool::SetVersionMap
 */
 
 {
-    // neuen Map-Eintrag erzeugen und einf"ugen
-    const SfxPoolVersion_Impl *pVerMap = new SfxPoolVersion_Impl(
-                nVer, nOldStart, nOldEnd, pOldWhichIdTab );
-    pImp->aVersions.Insert( pVerMap, pImp->aVersions.Count() );
+    // create new map entry to insert
+    const SfxPoolVersion_ImplPtr pVerMap = SfxPoolVersion_ImplPtr( new SfxPoolVersion_Impl(
+                nVer, nOldStart, nOldEnd, pOldWhichIdTab ) );
+    pImp->aVersions.push_back( pVerMap );
 
     DBG_ASSERT( nVer > pImp->nVersion, "Versions not sorted" );
     pImp->nVersion = nVer;
@@ -1398,9 +1398,9 @@ sal_uInt16 SfxItemPool::GetNewWhich
     if ( nDiff > 0 )
     {
         // von der Top-Version bis runter zur File-Version stufenweise mappen
-        for ( sal_uInt16 nMap = pImp->aVersions.Count(); nMap > 0; --nMap )
+        for ( size_t nMap = pImp->aVersions.size(); nMap > 0; --nMap )
         {
-            SfxPoolVersion_Impl *pVerInfo = pImp->aVersions[nMap-1];
+            SfxPoolVersion_ImplPtr pVerInfo = pImp->aVersions[nMap-1];
             if ( pVerInfo->_nVer > pImp->nVersion )
             {   sal_uInt16 nOfs;
                 sal_uInt16 nCount = pVerInfo->_nEnd - pVerInfo->_nStart + 1;
@@ -1424,9 +1424,9 @@ sal_uInt16 SfxItemPool::GetNewWhich
     else if ( nDiff < 0 )
     {
         // von der File-Version bis zur aktuellen Version stufenweise mappen
-        for ( sal_uInt16 nMap = 0; nMap < pImp->aVersions.Count(); ++nMap )
+        for ( size_t nMap = 0; nMap < pImp->aVersions.size(); ++nMap )
         {
-            SfxPoolVersion_Impl *pVerInfo = pImp->aVersions[nMap];
+            SfxPoolVersion_ImplPtr pVerInfo = pImp->aVersions[nMap];
             if ( pVerInfo->_nVer > pImp->nLoadingVersion )
             {
                 DBG_ASSERT( nFileWhich >= pVerInfo->_nStart &&
@@ -1637,7 +1637,8 @@ const SfxPoolItem* SfxItemPool::LoadItem( SvStream &rStream, int bDirect,
         else
         {
             // WID in der Version nicht vorhanden => ueberspringen
-            sal_uInt16 nSurro, nVersion, nLen;
+            sal_uInt32 nSurro;
+            sal_uInt16 nVersion, nLen;
             rStream >> nSurro;
             if ( SFX_ITEMS_DIRECT == nSurro )
             {

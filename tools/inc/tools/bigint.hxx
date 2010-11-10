@@ -108,8 +108,8 @@ public:
     void            Abs();
     void            DivMod( const BigInt &rDivisor, BigInt &rMod );
 #ifdef _TLBIGINT_INT64
-    sal_Bool            INT64 ( SbxINT64  *p ) const;
-    sal_Bool            UINT64( SbxUINT64 *p ) const;
+    sal_Bool            sal_Int64 ( SbxINT64  *p ) const;
+    sal_Bool            sal_uInt64( SbxUINT64 *p ) const;
 #endif
 
     BigInt&         operator  =( const BigInt& rVal );

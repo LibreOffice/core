@@ -284,7 +284,8 @@ removeSpoolDir (const rtl::OUString& rSpoolDir)
     nChar  = psp::appendStr ("rm -rf ",     pSystem);
     nChar += psp::appendStr (aSysPathByte.getStr(), pSystem + nChar);
 
-    system (pSystem);
+    if (system (pSystem) == -1)
+        OSL_ENSURE( 0, "psprint: couldn't remove spool directory" );
 }
 
 /* creates a spool directory with a "pidgin random" value based on
@@ -340,7 +341,8 @@ PrinterJob::~PrinterJob ()
     delete mpJobTrailer;
 
     // XXX should really call osl::remove routines
-    removeSpoolDir (maSpoolDirName);
+    if( maSpoolDirName.getLength() )
+        removeSpoolDir (maSpoolDirName);
 
     // osl::Directory::remove (maSpoolDirName);
 }
@@ -494,6 +496,10 @@ PrinterJob::StartJob (
 sal_Bool
 PrinterJob::EndJob ()
 {
+    // no pages ? that really means no print job
+    if( maPageList.empty() )
+        return sal_False;
+
     // write document setup (done here because it
     // includes the accumulated fonts
     if( mpJobHeader )
@@ -609,7 +615,7 @@ PrinterJob::EndJob ()
     {
         PrinterInfoManager& rPrinterInfoManager = PrinterInfoManager::get();
         if (0 == rPrinterInfoManager.endSpool( m_aLastJobData.m_aPrinterName,
-            maJobTitle, pDestFILE, m_aDocumentJobData ))
+            maJobTitle, pDestFILE, m_aDocumentJobData, true ))
         {
             bSuccess = sal_False;
         }

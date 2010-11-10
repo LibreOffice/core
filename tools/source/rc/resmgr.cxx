@@ -46,6 +46,7 @@
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <rtl/strbuf.hxx>
 #include <tools/urlobj.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/bootstrap.hxx>
@@ -837,18 +838,18 @@ void ResMgr::RscError_Impl( const sal_Char* pMessage, ResMgr* pResMgr,
 
 static void RscException_Impl()
 {
-    switch ( NAMESPACE_VOS(OSignalHandler)::raise( OSL_SIGNAL_USER_RESOURCEFAILURE, (void*)"" ) )
+    switch ( vos::OSignalHandler::raise( OSL_SIGNAL_USER_RESOURCEFAILURE, (void*)"" ) )
     {
-        case NAMESPACE_VOS(OSignalHandler)::TAction_CallNextHandler:
+        case vos::OSignalHandler::TAction_CallNextHandler:
             abort();
 
-        case NAMESPACE_VOS(OSignalHandler)::TAction_Ignore:
+        case vos::OSignalHandler::TAction_Ignore:
             return;
 
-        case NAMESPACE_VOS(OSignalHandler)::TAction_AbortApplication:
+        case vos::OSignalHandler::TAction_AbortApplication:
             abort();
 
-        case NAMESPACE_VOS(OSignalHandler)::TAction_KillApplication:
+        case vos::OSignalHandler::TAction_KillApplication:
             exit(-1);
     }
 }
@@ -1351,7 +1352,8 @@ sal_uInt64 ResMgr::GetUInt64( void* pDatum )
 // -----------------------------------------------------------------------
 sal_uInt32 ResMgr::GetStringWithoutHook( UniString& rStr, const sal_uInt8* pStr )
 {
-    sal_uInt32 nRet = GetStringSize( pStr );
+    sal_uInt32 nLen=0;
+    sal_uInt32 nRet = GetStringSize( pStr, nLen );
     UniString aString( (sal_Char*)pStr, RTL_TEXTENCODING_UTF8,
                        RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_MAPTOPRIVATE |
                        RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_DEFAULT |
@@ -1370,11 +1372,20 @@ sal_uInt32 ResMgr::GetString( UniString& rStr, const sal_uInt8* pStr )
     return nRet;
 }
 
+sal_uInt32 ResMgr::GetByteString( rtl::OString& rStr, const sal_uInt8* pStr )
+{
+    sal_uInt32 nLen=0;
+    sal_uInt32 nRet = GetStringSize( pStr, nLen );
+    rStr = rtl::OString( (const sal_Char*)pStr, nLen );
+    return nRet;
+}
+
 // ------------------------------------------------------------------
 
-sal_uInt32 ResMgr::GetStringSize( const sal_uInt8* pStr )
+sal_uInt32 ResMgr::GetStringSize( const sal_uInt8* pStr, sal_uInt32& nLen )
 {
-    return GetStringSize( strlen( (const char*)pStr ) );
+    nLen = static_cast< sal_uInt32 >( strlen( (const char*)pStr ) );
+    return GetStringSize( nLen );
 }
 
 // -----------------------------------------------------------------------
@@ -1765,90 +1776,125 @@ UniString ResMgr::ReadString()
     return aRet;
 }
 
+rtl::OString ResMgr::ReadByteString()
+{
+    osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );
+
+    if( pFallbackResMgr )
+        return pFallbackResMgr->ReadByteString();
+
+    rtl::OString aRet;
+
+    const ImpRCStack& rTop = aStack[nCurStack];
+    if( (rTop.Flags & RC_NOTFOUND) )
+    {
+        #if OSL_DEBUG_LEVEL > 0
+        aRet = OString( "<resource not found>" );
+        #endif
+    }
+    else
+        Increment( GetByteString( aRet, (const sal_uInt8*)GetClass() ) );
+
+    return aRet;
+}
+
 // -----------------------------------------------------------------------
 
-sal_uIntPtr ResMgr::GetAutoHelpId()
+rtl::OString ResMgr::GetAutoHelpId()
 {
     osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );
 
     if( pFallbackResMgr )
         return pFallbackResMgr->GetAutoHelpId();
 
-    DBG_ASSERT( nCurStack, "resource stack empty in Auto help id generation" );
+    OSL_ENSURE( nCurStack, "resource stack empty in Auto help id generation" );
     if( nCurStack < 1 || nCurStack > 2 )
-        return 0;
+        return rtl::OString();
 
-    const ImpRCStack *pRC = StackTop( nCurStack==1 ? 0 : 1 );
+    // prepare HID, start with resource prefix
+    rtl::OStringBuffer aHID( 32 );
+    aHID.append( rtl::OUStringToOString( pImpRes->aPrefix, RTL_TEXTENCODING_UTF8 ) );
+    aHID.append( '.' );
 
-    DBG_ASSERT( pRC->pResource, "MM hat gesagt, dass der immer einen hat" );
-    sal_uIntPtr nGID = pRC->pResource->GetId();
+    // append type
+    const ImpRCStack *pRC = StackTop();
+    OSL_ENSURE( pRC, "missing resource stack level" );
 
-    if( !nGID || nGID > 32767 )
-        return 0;
-
-    sal_uIntPtr nHID = 0;
-
-    // GGGg gggg::gggg gggg::ggLL LLLl::llll llll
-    switch( pRC->pResource->GetRT() ) { // maximal 7
-        case RSC_DOCKINGWINDOW:
-            nHID += 0x20000000L;
-        case RSC_WORKWIN:
-            nHID += 0x20000000L;
-        case RSC_MODELESSDIALOG:
-            nHID += 0x20000000L;
-        case RSC_FLOATINGWINDOW:
-            nHID += 0x20000000L;
-        case RSC_MODALDIALOG:
-            nHID += 0x20000000L;
-        case RSC_TABPAGE:
-            nHID += 0x20000000L;
-
-            if( nCurStack == 2 ) {
-                pRC = StackTop();
-                sal_uIntPtr nLID = pRC->pResource->GetId();
-
-                if( !nLID || nLID > 511 )
-                    return 0;
-
-                switch( pRC->pResource->GetRT() ) { // maximal 32
-                    case RSC_TABCONTROL:        nHID |= 0x0000; break;
-                    case RSC_RADIOBUTTON:       nHID |= 0x0200; break;
-                    case RSC_CHECKBOX:          nHID |= 0x0400; break;
-                    case RSC_TRISTATEBOX:       nHID |= 0x0600; break;
-                    case RSC_EDIT:              nHID |= 0x0800; break;
-                    case RSC_MULTILINEEDIT:     nHID |= 0x0A00; break;
-                    case RSC_MULTILISTBOX:      nHID |= 0x0C00; break;
-                    case RSC_LISTBOX:           nHID |= 0x0E00; break;
-                    case RSC_COMBOBOX:          nHID |= 0x1000; break;
-                    case RSC_PUSHBUTTON:        nHID |= 0x1200; break;
-                    case RSC_SPINFIELD:         nHID |= 0x1400; break;
-                    case RSC_PATTERNFIELD:      nHID |= 0x1600; break;
-                    case RSC_NUMERICFIELD:      nHID |= 0x1800; break;
-                    case RSC_METRICFIELD:       nHID |= 0x1A00; break;
-                    case RSC_CURRENCYFIELD:     nHID |= 0x1C00; break;
-                    case RSC_DATEFIELD:         nHID |= 0x1E00; break;
-                    case RSC_TIMEFIELD:         nHID |= 0x2000; break;
-                    case RSC_IMAGERADIOBUTTON:  nHID |= 0x2200; break;
-                    case RSC_NUMERICBOX:        nHID |= 0x2400; break;
-                    case RSC_METRICBOX:         nHID |= 0x2600; break;
-                    case RSC_CURRENCYBOX:       nHID |= 0x2800; break;
-                    case RSC_DATEBOX:           nHID |= 0x2A00; break;
-                    case RSC_TIMEBOX:           nHID |= 0x2C00; break;
-                    case RSC_IMAGEBUTTON:       nHID |= 0x2E00; break;
-                    case RSC_MENUBUTTON:        nHID |= 0x3000; break;
-                    case RSC_MOREBUTTON:        nHID |= 0x3200; break;
+    if ( nCurStack == 1 )
+    {
+        // auto help ids for top level windows
+        switch( pRC->pResource->GetRT() ) {
+            case RSC_DOCKINGWINDOW:     aHID.append( "DockingWindow" );    break;
+            case RSC_WORKWIN:           aHID.append( "WorkWindow" );       break;
+            case RSC_MODELESSDIALOG:    aHID.append( "ModelessDialog" );   break;
+            case RSC_FLOATINGWINDOW:    aHID.append( "FloatingWindow" );   break;
+            case RSC_MODALDIALOG:       aHID.append( "ModalDialog" );      break;
+            case RSC_TABPAGE:           aHID.append( "TabPage" );          break;
+            default: return rtl::OString();
+        }
+    }
+    else
+    {
+        // only controls with the following parents get auto help ids
+        const ImpRCStack *pRC1 = StackTop(1);
+        switch( pRC1->pResource->GetRT() ) {
+            case RSC_DOCKINGWINDOW:
+            case RSC_WORKWIN:
+            case RSC_MODELESSDIALOG:
+            case RSC_FLOATINGWINDOW:
+            case RSC_MODALDIALOG:
+            case RSC_TABPAGE:
+                // intentionally no breaks!
+                // auto help ids for controls
+                switch( pRC->pResource->GetRT() ) {
+                    case RSC_TABCONTROL:        aHID.append( "TabControl" );       break;
+                    case RSC_RADIOBUTTON:       aHID.append( "RadioButton" );      break;
+                    case RSC_CHECKBOX:          aHID.append( "CheckBox" );         break;
+                    case RSC_TRISTATEBOX:       aHID.append( "TriStateBox" );      break;
+                    case RSC_EDIT:              aHID.append( "Edit" );             break;
+                    case RSC_MULTILINEEDIT:     aHID.append( "MultiLineEdit" );    break;
+                    case RSC_MULTILISTBOX:      aHID.append( "MultiListBox" );     break;
+                    case RSC_LISTBOX:           aHID.append( "ListBox" );          break;
+                    case RSC_COMBOBOX:          aHID.append( "ComboBox" );         break;
+                    case RSC_PUSHBUTTON:        aHID.append( "PushButton" );       break;
+                    case RSC_SPINFIELD:         aHID.append( "SpinField" );        break;
+                    case RSC_PATTERNFIELD:      aHID.append( "PatternField" );     break;
+                    case RSC_NUMERICFIELD:      aHID.append( "NumericField" );     break;
+                    case RSC_METRICFIELD:       aHID.append( "MetricField" );      break;
+                    case RSC_CURRENCYFIELD:     aHID.append( "CurrencyField" );    break;
+                    case RSC_DATEFIELD:         aHID.append( "DateField" );        break;
+                    case RSC_TIMEFIELD:         aHID.append( "TimeField" );        break;
+                    case RSC_IMAGERADIOBUTTON:  aHID.append( "ImageRadioButton" ); break;
+                    case RSC_NUMERICBOX:        aHID.append( "NumericBox" );       break;
+                    case RSC_METRICBOX:         aHID.append( "MetricBox" );        break;
+                    case RSC_CURRENCYBOX:       aHID.append( "CurrencyBox" );      break;
+                    case RSC_DATEBOX:           aHID.append( "DateBox" );          break;
+                    case RSC_TIMEBOX:           aHID.append( "TimeBox" );          break;
+                    case RSC_IMAGEBUTTON:       aHID.append( "ImageButton" );      break;
+                    case RSC_MENUBUTTON:        aHID.append( "MenuButton" );       break;
+                    case RSC_MOREBUTTON:        aHID.append( "MoreButton" );       break;
                     default:
-                        return 0;
-                } // of switch
-                nHID |= nLID;
-            } // of if
-            break;
-        default:
-            return 0;
-    } // of switch
-    nHID |= nGID << 14;
+                        // no type, no auto HID
+                        return rtl::OString();
+                }
+                break;
+            default:
+                return rtl::OString();
+        }
+    }
 
-    return nHID;
+    // append resource id hierarchy
+    for( int nOff = nCurStack-1; nOff >= 0; nOff-- )
+    {
+        aHID.append( '.' );
+        pRC = StackTop( nOff );
+
+        OSL_ENSURE( pRC->pResource, "missing resource in resource stack level !" );
+        if( pRC->pResource )
+            aHID.append( sal_Int32( pRC->pResource->GetId() ) );
+    }
+
+    return aHID.makeStringAndClear();
 }
 
 // -----------------------------------------------------------------------
@@ -1919,7 +1965,7 @@ SimpleResMgr* SimpleResMgr::Create( const sal_Char* pPrefixName, com::sun::star:
 // -----------------------------------------------------------------------
 bool SimpleResMgr::IsAvailable( RESOURCE_TYPE _resourceType, sal_uInt32 _resourceId )
 {
-    NAMESPACE_VOS(OGuard) aGuard(m_aAccessSafety);
+    vos::OGuard aGuard(m_aAccessSafety);
 
     if ( ( RSC_STRING != _resourceType ) && ( RSC_RESOURCE != _resourceType ) )
         return false;
@@ -1931,7 +1977,7 @@ bool SimpleResMgr::IsAvailable( RESOURCE_TYPE _resourceType, sal_uInt32 _resourc
 // -----------------------------------------------------------------------
 UniString SimpleResMgr::ReadString( sal_uInt32 nId )
 {
-    NAMESPACE_VOS(OGuard) aGuard(m_aAccessSafety);
+    vos::OGuard aGuard(m_aAccessSafety);
 
     DBG_ASSERT( m_pResImpl, "SimpleResMgr::ReadString : have no impl class !" );
     // perhaps constructed with an invalid filename ?
@@ -2002,7 +2048,7 @@ const ::com::sun::star::lang::Locale& SimpleResMgr::GetLocale() const
 
 sal_uInt32 SimpleResMgr::ReadBlob( sal_uInt32 nId, void** pBuffer )
 {
-    NAMESPACE_VOS(OGuard) aGuard(m_aAccessSafety);
+    vos::OGuard aGuard(m_aAccessSafety);
 
     DBG_ASSERT( m_pResImpl, "SimpleResMgr::ReadBlob : have no impl class !" );
 

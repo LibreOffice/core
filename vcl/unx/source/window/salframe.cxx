@@ -665,6 +665,7 @@ X11SalFrame::X11SalFrame( SalFrame *pParent, ULONG nSalFrameStyle, SystemParentD
     mhStackingWindow            = None;
     mhForeignParent             = None;
     mhBackgroundPixmap          = None;
+    m_bSetFocusOnMap            = false;
 
     pGraphics_                  = NULL;
     pFreeGraphics_              = NULL;
@@ -1226,14 +1227,11 @@ void X11SalFrame::Show( BOOL bVisible, BOOL bNoActivate )
         }
 
         XLIB_Time nUserTime = 0;
-        if( ! bNoActivate && (nStyle_ & (SAL_FRAME_STYLE_OWNERDRAWDECORATION|SAL_FRAME_STYLE_TOOLWINDOW)) == 0 )
-        {
-            if( GetDisplay()->getWMAdaptor()->getWindowManagerName().EqualsAscii("Metacity") )
-                nUserTime = pDisplay_->GetLastUserEventTime( true );
-            else
-                nUserTime = pDisplay_->GetLastUserEventTime();
-        }
+        if( ! bNoActivate && (nStyle_ & (SAL_FRAME_STYLE_OWNERDRAWDECORATION)) == 0 )
+            nUserTime = pDisplay_->GetLastUserEventTime( true );
         GetDisplay()->getWMAdaptor()->setUserTime( this, nUserTime );
+        if( ! bNoActivate && (nStyle_ & SAL_FRAME_STYLE_TOOLWINDOW) )
+            m_bSetFocusOnMap = true;
 
         // actually map the window
         if( m_bXEmbed )
@@ -3146,6 +3144,100 @@ GetAlternateKeyCode( const USHORT nKeyCode )
     return aAlternate;
 }
 
+void X11SalFrame::beginUnicodeSequence()
+{
+    rtl::OUString& rSeq( GetX11SalData()->GetUnicodeAccumulator() );
+    DeletionListener aDeleteWatch( this );
+
+    if( rSeq.getLength() )
+        endUnicodeSequence();
+
+    rSeq = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "u" ) );
+
+    if( ! aDeleteWatch.isDeleted() )
+    {
+        USHORT nTextAttr = SAL_EXTTEXTINPUT_ATTR_UNDERLINE;
+        SalExtTextInputEvent aEv;
+        aEv.mnTime          = 0;
+        aEv.maText          = rSeq;
+        aEv.mpTextAttr      = &nTextAttr;
+        aEv.mnCursorPos     = 0;
+        aEv.mnDeltaStart    = 0;
+        aEv.mnCursorFlags   = 0;
+        aEv.mbOnlyCursor    = FALSE;
+
+        CallCallback(SALEVENT_EXTTEXTINPUT, (void*)&aEv);
+    }
+}
+
+bool X11SalFrame::appendUnicodeSequence( sal_Unicode c )
+{
+    bool bRet = false;
+    rtl::OUString& rSeq( GetX11SalData()->GetUnicodeAccumulator() );
+    if( rSeq.getLength() > 0 )
+    {
+        // range check
+        if( (c >= sal_Unicode('0') && c <= sal_Unicode('9')) ||
+            (c >= sal_Unicode('a') && c <= sal_Unicode('f')) ||
+            (c >= sal_Unicode('A') && c <= sal_Unicode('F')) )
+        {
+            rtl::OUStringBuffer aBuf( rSeq.getLength() + 1 );
+            aBuf.append( rSeq );
+            aBuf.append( c );
+            rSeq = aBuf.makeStringAndClear();
+            std::vector<USHORT> attribs( rSeq.getLength(), SAL_EXTTEXTINPUT_ATTR_UNDERLINE );
+
+            SalExtTextInputEvent aEv;
+            aEv.mnTime          = 0;
+            aEv.maText          = rSeq;
+            aEv.mpTextAttr      = &attribs[0];
+            aEv.mnCursorPos     = 0;
+            aEv.mnDeltaStart    = 0;
+            aEv.mnCursorFlags   = 0;
+            aEv.mbOnlyCursor    = FALSE;
+
+            CallCallback(SALEVENT_EXTTEXTINPUT, (void*)&aEv);
+            bRet = true;
+        }
+        else
+            bRet = endUnicodeSequence();
+    }
+    else
+        endUnicodeSequence();
+    return bRet;
+}
+
+bool X11SalFrame::endUnicodeSequence()
+{
+    rtl::OUString& rSeq( GetX11SalData()->GetUnicodeAccumulator() );
+
+    DeletionListener aDeleteWatch( this );
+    if( rSeq.getLength() > 1 && rSeq.getLength() < 6 )
+    {
+        // cut the "u"
+        rtl::OUString aNumbers( rSeq.copy( 1 ) );
+        sal_Int32 nValue = aNumbers.toInt32( 16 );
+        if( nValue >= 32 )
+        {
+            USHORT nTextAttr = SAL_EXTTEXTINPUT_ATTR_UNDERLINE;
+            SalExtTextInputEvent aEv;
+            aEv.mnTime          = 0;
+            aEv.maText          = rtl::OUString( sal_Unicode(nValue) );
+            aEv.mpTextAttr      = &nTextAttr;
+            aEv.mnCursorPos     = 0;
+            aEv.mnDeltaStart    = 0;
+            aEv.mnCursorFlags   = 0;
+            aEv.mbOnlyCursor    = FALSE;
+            CallCallback(SALEVENT_EXTTEXTINPUT, (void*)&aEv);
+        }
+    }
+    bool bWasInput = rSeq.getLength() > 0;
+    rSeq = rtl::OUString();
+    if( bWasInput && ! aDeleteWatch.isDeleted() )
+        CallCallback(SALEVENT_ENDEXTTEXTINPUT, NULL);
+    return bWasInput;
+}
+
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
 {
@@ -3190,6 +3282,9 @@ long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
         nModCode |= KEY_MOD1;
     if( pEvent->state & Mod1Mask )
         nModCode |= KEY_MOD2;
+
+    if( nModCode != (KEY_SHIFT|KEY_MOD1) )
+        endUnicodeSequence();
 
     if(     nKeySym == XK_Shift_L   || nKeySym == XK_Shift_R
         ||  nKeySym == XK_Control_L || nKeySym == XK_Control_R
@@ -3314,6 +3409,33 @@ long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
     if( !nKeyCode && !nLen && !nKeyString)
         return 0;
 
+    DeletionListener aDeleteWatch( this );
+
+    if( nModCode == (KEY_SHIFT | KEY_MOD1) && pEvent->type == XLIB_KeyPress )
+    {
+        USHORT nSeqKeyCode = pDisplay_->GetKeyCode( nUnmodifiedKeySym, &aDummy );
+        if( nSeqKeyCode == KEY_U )
+        {
+            beginUnicodeSequence();
+            return 1;
+        }
+        else if( nSeqKeyCode >= KEY_0 && nSeqKeyCode <= KEY_9 )
+        {
+            if( appendUnicodeSequence( sal_Unicode( '0' ) + sal_Unicode(nSeqKeyCode - KEY_0) ) )
+                return 1;
+        }
+        else if( nSeqKeyCode >= KEY_A && nSeqKeyCode <= KEY_F )
+        {
+            if( appendUnicodeSequence( sal_Unicode( 'a' ) + sal_Unicode(nSeqKeyCode - KEY_A) ) )
+                return 1;
+        }
+        else
+            endUnicodeSequence();
+    }
+
+    if( aDeleteWatch.isDeleted() )
+        return 0;
+
     rtl_TextEncoding nEncoding;
 
     if (mpInputContext != NULL && mpInputContext->IsMultiLingual() )
@@ -3371,8 +3493,6 @@ long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
         pString = pBuffer;
         nSize   = 0;
     }
-
-    DeletionListener aDeleteWatch( this );
 
     if (   mpInputContext != NULL
         && mpInputContext->UseContext()
@@ -4172,6 +4292,7 @@ long X11SalFrame::Dispatch( XEvent *pEvent )
                                     &aEvent );
                     }
 
+                    bool bSetFocus = m_bSetFocusOnMap;
                     /*  #99570# another workaround for sawfish: if a transient window for the same parent is shown
                      *  sawfish does not set the focus to it. Applies only for click to focus mode.
                      */
@@ -4181,7 +4302,7 @@ long X11SalFrame::Dispatch( XEvent *pEvent )
                         // since this will lead to a parent loose-focus, close status,
                         // reget focus, open status, .... flicker loop
                         if ( (I18NStatus::get().getStatusFrame() != this) )
-                            XSetInputFocus( GetXDisplay(), GetShellWindow(), RevertToParent, CurrentTime );
+                            bSetFocus = true;
                     }
 
                     /*
@@ -4219,10 +4340,21 @@ long X11SalFrame::Dispatch( XEvent *pEvent )
                                         mpParent->GetShellWindow(),
                                         RevertToParent,
                                         CurrentTime );
+                        bSetFocus = false;
                     }
+
+                    if( bSetFocus )
+                    {
+                        XSetInputFocus( GetXDisplay(),
+                                        GetShellWindow(),
+                                        RevertToParent,
+                                        CurrentTime );
+                    }
+
 
                     RestackChildren();
                     mbInShow = FALSE;
+                    m_bSetFocusOnMap = false;
                 }
                 break;
 

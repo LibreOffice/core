@@ -613,13 +613,6 @@ void BrowseBox::Resize()
     if (IsZoom())
         nSBSize = (sal_uIntPtr)(nSBSize * (double)GetZoom());
 
-    long nSize = pDataWin->GetPosPixel().Y();
-    if( !getDataWindow()->bNoHScroll )
-        nSize += aHScroll.GetSizePixel().Height();
-
-    if ( GetOutputSizePixel().Height() < nSize )
-        return;
-
     DoHideCursor( "Resize" );
     sal_uInt16 nOldVisibleRows =
         (sal_uInt16)(pDataWin->GetOutputSizePixel().Height() / GetDataRowHeight() + 1);

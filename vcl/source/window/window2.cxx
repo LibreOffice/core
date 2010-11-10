@@ -1442,114 +1442,30 @@ Window* Window::ImplGetTopmostFrameWindow()
     return pTopmostParent->mpWindowImpl->mpFrameWindow;
 }
 
-// making these Methods out of line to be able to change them lateron without complete rebuild
-// TODO: Set the SmartId in here and remove mpWindowImpl->mnHelpId
-void Window::SetHelpId( sal_uIntPtr nHelpId )
+void Window::SetHelpId( const rtl::OString& rHelpId )
 {
-    SetSmartHelpId(SmartId(nHelpId));
+    mpWindowImpl->maHelpId = rHelpId;
 }
 
-sal_uIntPtr Window::GetHelpId() const
+const rtl::OString& Window::GetHelpId() const
 {
-    return mpWindowImpl->mnHelpId;
+    return mpWindowImpl->maHelpId;
 }
 
-void Window::SetSmartHelpId( const SmartId& aId, SmartIdUpdateMode aMode )
+void Window::SetUniqueId( const rtl::OString& rUniqueId )
 {
-    // create SmartId if required
-    if ( (aMode == SMART_SET_STR) || (aMode == SMART_SET_ALL) || ( (aMode == SMART_SET_SMART) && aId.HasString() ) )
-    {
-        if ( !ImplGetWinData()->mpSmartHelpId )
-            ImplGetWinData()->mpSmartHelpId = new SmartId();
-    }
-
-    // if we have a SmartId (eather from earlier call or just created) fill with new values
-    if ( mpWindowImpl->mpWinData && mpWindowImpl->mpWinData->mpSmartHelpId )
-        ImplGetWinData()->mpSmartHelpId->UpdateId( aId, aMode );
-
-    if ( (aMode == SMART_SET_NUM) || (aMode == SMART_SET_ALL) || ( (aMode == SMART_SET_SMART) && aId.HasNumeric() ) )
-    {
-        mpWindowImpl->mnHelpId = aId.GetNum();
-    }
+    mpWindowImpl->maUniqId = rUniqueId;
 }
 
-SmartId Window::GetSmartHelpId() const
+const rtl::OString& Window::GetUniqueId() const
 {
-    if ( mpWindowImpl->mpWinData && mpWindowImpl->mpWinData->mpSmartHelpId )
-    {
-        if ( mpWindowImpl->mnHelpId || mpWindowImpl->mpWinData->mpSmartHelpId->HasNumeric() )
-            mpWindowImpl->mpWinData->mpSmartHelpId->UpdateId( SmartId( mpWindowImpl->mnHelpId ), SMART_SET_NUM );
-        return *mpWindowImpl->mpWinData->mpSmartHelpId;
-    }
-    else
-    {
-        if ( mpWindowImpl->mnHelpId )
-            return SmartId( mpWindowImpl->mnHelpId );
-        else
-            return SmartId();
-    }
+    return mpWindowImpl->maUniqId;
 }
 
-
-// making these Methods out of line to be able to change them lateron without complete rebuild
-// TODO: Set the SmartId in here and remove mpWindowImpl->mnUniqId
-void Window::SetUniqueId( sal_uIntPtr nUniqueId ) { mpWindowImpl->mnUniqId = nUniqueId; }
-sal_uIntPtr Window::GetUniqueId() const { return mpWindowImpl->mnUniqId; }
-
-
-void Window::SetSmartUniqueId( const SmartId& aId, SmartIdUpdateMode aMode )
+const rtl::OString& Window::GetUniqueOrHelpId() const
 {
-    // create SmartId if required
-    if ( (aMode == SMART_SET_STR) || (aMode == SMART_SET_ALL) || ( (aMode == SMART_SET_SMART) && aId.HasString() ) )
-    {
-        if ( !ImplGetWinData()->mpSmartUniqueId )
-            ImplGetWinData()->mpSmartUniqueId = new SmartId();
-    }
-
-    // if we have a SmartId (eather from earlier call or just created) fill with new values
-    if ( mpWindowImpl->mpWinData && mpWindowImpl->mpWinData->mpSmartUniqueId )
-        ImplGetWinData()->mpSmartUniqueId->UpdateId( aId, aMode );
-
-    if ( (aMode == SMART_SET_NUM) || (aMode == SMART_SET_ALL) || ( (aMode == SMART_SET_SMART) && aId.HasNumeric() ) )
-        mpWindowImpl->mnUniqId = aId.GetNum();
+    return mpWindowImpl->maUniqId.getLength() ? mpWindowImpl->maUniqId : mpWindowImpl->maHelpId;
 }
-
-SmartId Window::GetSmartUniqueId() const
-{
-    if ( mpWindowImpl->mpWinData && mpWindowImpl->mpWinData->mpSmartUniqueId )
-    {
-        if ( mpWindowImpl->mnUniqId || mpWindowImpl->mpWinData->mpSmartUniqueId->HasNumeric() )
-            mpWindowImpl->mpWinData->mpSmartUniqueId->UpdateId( SmartId( mpWindowImpl->mnUniqId ), SMART_SET_NUM );
-        return *mpWindowImpl->mpWinData->mpSmartUniqueId;
-    }
-    else
-    {
-        if ( mpWindowImpl->mnUniqId )
-            return SmartId( mpWindowImpl->mnUniqId );
-        else
-            return SmartId();
-    }
-}
-
-SmartId Window::GetSmartUniqueOrHelpId() const
-{
-    if ( ( mpWindowImpl->mpWinData && mpWindowImpl->mpWinData->mpSmartHelpId ) || mpWindowImpl->mnHelpId )
-    {
-        if ( ( mpWindowImpl->mpWinData && mpWindowImpl->mpWinData->mpSmartUniqueId ) || mpWindowImpl->mnUniqId )
-        {
-            SmartId aTemp = GetSmartHelpId();
-            aTemp.UpdateId( GetSmartUniqueId() );
-            return aTemp;
-        }
-        else
-            return GetSmartHelpId();
-    }
-    else
-        return GetSmartUniqueId();
-}
-
-
-
 
 // --------- old inline methods ---------------
 

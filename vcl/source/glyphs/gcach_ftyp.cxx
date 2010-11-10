@@ -301,6 +301,7 @@ FtFontInfo::FtFontInfo( const ImplDevFontAttributes& rDevFontAttributes,
     mnSynthetic( nSynthetic ),
     mnFontId( nFontId ),
     maDevFontAttributes( rDevFontAttributes ),
+    mpFontCharMap( NULL ),
     mpChar2Glyph( NULL ),
     mpGlyph2Char( NULL ),
     mpExtraKernInfo( pExtraKernInfo )
@@ -318,6 +319,8 @@ FtFontInfo::FtFontInfo( const ImplDevFontAttributes& rDevFontAttributes,
 
 FtFontInfo::~FtFontInfo()
 {
+    if( mpFontCharMap )
+        mpFontCharMap->DeReference();
     delete mpExtraKernInfo;
     delete mpChar2Glyph;
     delete mpGlyph2Char;
@@ -520,10 +523,25 @@ void* FreetypeServerFont::GetFtFace() const
 
 FreetypeManager::~FreetypeManager()
 {
-// This crashes on Solaris 10
-// TODO: check which versions have this problem
-//
-// FT_Error rcFT = FT_Done_FreeType( aLibFT );
+    // an application about to exit can omit garbage collecting the heap
+    // since it makes things slower and introduces risks if the heap was not perfect
+    // for debugging, for memory grinding or leak checking the env allows to force GC
+    const char* pEnv = getenv( "SAL_FORCE_GC_ON_EXIT" );
+    if( pEnv && (*pEnv != '0') )
+    {
+        // cleanup container of fontinfos
+        for( FontList::const_iterator it = maFontList.begin(); it != maFontList.end(); ++it )
+        {
+            FtFontInfo* pInfo = (*it).second;
+            delete pInfo;
+        }
+        maFontList.clear();
+
+#if 0   // FT_Done_FreeType crashes on Solaris 10
+    // TODO: check which versions have this problem
+    FT_Error rcFT = FT_Done_FreeType( aLibFT );
+#endif
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -895,6 +913,9 @@ void FreetypeServerFont::SetFontOptions( const ImplFontOptions& rFontOptions)
        }
     }
 #endif
+
+    if( mnPrioEmbedded <= 0 )
+        mnLoadFlags |= FT_LOAD_NO_BITMAP;
 }
 
 // -----------------------------------------------------------------------
@@ -1730,16 +1751,39 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
 // determine unicode ranges in font
 // -----------------------------------------------------------------------
 
-// TODO: replace with GetFontCharMap()
-bool FreetypeServerFont::GetFontCodeRanges( CmapResult& rResult ) const
+const ImplFontCharMap* FreetypeServerFont::GetImplFontCharMap( void ) const
 {
-    rResult.mbSymbolic = mpFontInfo->IsSymbolFont();
+    const ImplFontCharMap* pIFCMap = mpFontInfo->GetImplFontCharMap();
+    return pIFCMap;
+}
+
+const ImplFontCharMap* FtFontInfo::GetImplFontCharMap( void )
+{
+    // check if the charmap is already cached
+    if( mpFontCharMap )
+        return mpFontCharMap;
+
+    // get the charmap and cache it
+    CmapResult aCmapResult;
+    bool bOK = GetFontCodeRanges( aCmapResult );
+    if( bOK )
+        mpFontCharMap = new ImplFontCharMap( aCmapResult );
+    else
+               mpFontCharMap = ImplFontCharMap::GetDefaultMap();
+    mpFontCharMap->AddReference();
+    return mpFontCharMap;
+}
+
+// TODO: merge into method GetFontCharMap()
+bool FtFontInfo::GetFontCodeRanges( CmapResult& rResult ) const
+{
+    rResult.mbSymbolic = IsSymbolFont();
 
     // TODO: is the full CmapResult needed on platforms calling this?
     if( FT_IS_SFNT( maFaceFT ) )
     {
         sal_uIntPtr nLength = 0;
-        const unsigned char* pCmap = mpFontInfo->GetTable( "cmap", &nLength );
+        const unsigned char* pCmap = GetTable( "cmap", &nLength );
         if( pCmap && (nLength > 0) )
             if( ParseCMAP( pCmap, nLength, rResult ) )
                 return true;

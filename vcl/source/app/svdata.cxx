@@ -27,47 +27,49 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
+
 #include <string.h>
 
-#ifndef _SV_SVSYS_HXX
-#include <svsys.h>
-#endif
-#include <vcl/salinst.hxx>
-#include <vcl/salframe.hxx>
+#include "rtl/instance.hxx"
+#include "osl/process.h"
+#include "osl/file.hxx"
 
-#ifndef _VOS_MUTEX_HXX
-#include <vos/mutex.hxx>
-#endif
+#include "svsys.h"
 
-#include <osl/process.h>
-#include <osl/file.hxx>
-#include <uno/current_context.hxx>
-#include <cppuhelper/implbase1.hxx>
-#include <tools/debug.hxx>
-#include <unotools/fontcfg.hxx>
-#include <vcl/configsettings.hxx>
-#include <vcl/svdata.hxx>
-#include <vcl/window.h>
-#include <vcl/svapp.hxx>
-#include <vcl/wrkwin.hxx>
-#include <vcl/msgbox.hxx>
-#include <vcl/unohelp.hxx>
-#include <vcl/button.hxx> // for Button::GetStandardText
-#include <vcl/dockwin.hxx>  // for DockingManager
-#include <vcl/salimestatus.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/awt/XExtendedToolkit.hpp>
-#include <com/sun/star/java/JavaNotConfiguredException.hpp>
-#include <com/sun/star/java/JavaVMCreationFailureException.hpp>
-#include <com/sun/star/java/MissingJavaRuntimeException.hpp>
-#include <com/sun/star/java/JavaDisabledException.hpp>
+#include "tools/debug.hxx"
+#include "tools/resary.hxx"
 
-#include <com/sun/star/lang/XComponent.hpp>
+#include "vcl/salinst.hxx"
+#include "vcl/salframe.hxx"
+#include "vcl/configsettings.hxx"
+#include "vcl/svdata.hxx"
+#include "vcl/window.h"
+#include "vcl/svapp.hxx"
+#include "vcl/wrkwin.hxx"
+#include "vcl/msgbox.hxx"
+#include "vcl/unohelp.hxx"
+#include "vcl/button.hxx" // for Button::GetStandardText
+#include "vcl/dockwin.hxx"  // for DockingManager
+#include "vcl/salimestatus.hxx"
+#include "vcl/salsys.hxx"
+#include "vcl/svids.hrc"
+
+#include "unotools/fontcfg.hxx"
+
+#include "vos/mutex.hxx"
+
+#include "cppuhelper/implbase1.hxx"
+#include "uno/current_context.hxx"
+
+#include "com/sun/star/lang/XMultiServiceFactory.hpp"
+#include "com/sun/star/lang/XComponent.hpp"
+#include "com/sun/star/awt/XExtendedToolkit.hpp"
+#include "com/sun/star/java/JavaNotConfiguredException.hpp"
+#include "com/sun/star/java/JavaVMCreationFailureException.hpp"
+#include "com/sun/star/java/MissingJavaRuntimeException.hpp"
+#include "com/sun/star/java/JavaDisabledException.hpp"
 
 #include <stdio.h>
-#include <vcl/salsys.hxx>
-#include <vcl/svids.hrc>
-#include <rtl/instance.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -111,7 +113,6 @@ void ImplInitSVData()
 
     // init global instance data
     memset( pImplSVData, 0, sizeof( ImplSVData ) );
-    pImplSVData->maHelpData.mbAutoHelpId = sal_True;
     pImplSVData->maHelpData.mbAutoHelpId = sal_True;
     pImplSVData->maNWFData.maMenuBarHighlightTextColor = Color( COL_TRANSPARENT );
 
@@ -163,6 +164,11 @@ void ImplDeInitSVData()
         delete pSVData->maAppData.mpMSFTempFileName;
         pSVData->maAppData.mpMSFTempFileName = NULL;
     }
+
+    if( pSVData->maCtrlData.mpFieldUnitStrings )
+        delete pSVData->maCtrlData.mpFieldUnitStrings, pSVData->maCtrlData.mpFieldUnitStrings = NULL;
+    if( pSVData->maCtrlData.mpCleanUnitStrings )
+        delete pSVData->maCtrlData.mpCleanUnitStrings, pSVData->maCtrlData.mpCleanUnitStrings = NULL;
 }
 
 // -----------------------------------------------------------------------
@@ -238,6 +244,52 @@ ResId VclResId( sal_Int32 nId )
         throw std::bad_alloc();
 
     return ResId( nId, *pMgr );
+}
+
+FieldUnitStringList* ImplGetFieldUnits()
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    if( ! pSVData->maCtrlData.mpFieldUnitStrings )
+    {
+        ResMgr* pResMgr = ImplGetResMgr();
+        if( pResMgr )
+        {
+            ResStringArray aUnits( ResId (SV_FUNIT_STRINGS, *pResMgr) );
+            sal_uInt32 nUnits = aUnits.Count();
+            pSVData->maCtrlData.mpFieldUnitStrings = new FieldUnitStringList();
+            pSVData->maCtrlData.mpFieldUnitStrings->reserve( nUnits );
+            for( sal_uInt32 i = 0; i < nUnits; i++ )
+            {
+                std::pair< String, FieldUnit > aElement( aUnits.GetString(i), static_cast<FieldUnit>(aUnits.GetValue(i)) );
+                pSVData->maCtrlData.mpFieldUnitStrings->push_back( aElement );
+            }
+        }
+    }
+    return pSVData->maCtrlData.mpFieldUnitStrings;
+}
+
+FieldUnitStringList* ImplGetCleanedFieldUnits()
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    if( ! pSVData->maCtrlData.mpCleanUnitStrings )
+    {
+        FieldUnitStringList* pUnits = ImplGetFieldUnits();
+        if( pUnits )
+        {
+            size_t nUnits = pUnits->size();
+            pSVData->maCtrlData.mpCleanUnitStrings = new FieldUnitStringList();
+            pSVData->maCtrlData.mpCleanUnitStrings->reserve( nUnits );
+            for( size_t i = 0; i < nUnits; i++ )
+            {
+                String aUnit( (*pUnits)[i].first );
+                aUnit.EraseAllChars( sal_Unicode( ' ' ) );
+                aUnit.ToLowerAscii();
+                std::pair< String, FieldUnit > aElement( aUnit, (*pUnits)[i].second );
+                pSVData->maCtrlData.mpCleanUnitStrings->push_back( aElement );
+            }
+        }
+    }
+    return pSVData->maCtrlData.mpCleanUnitStrings;
 }
 
 DockingManager* ImplGetDockingManager()

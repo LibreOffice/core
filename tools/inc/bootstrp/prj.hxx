@@ -264,7 +264,7 @@ private:
 
     static Link aDBNotFoundHdl;
 protected:
-    NAMESPACE_VOS( OMutex ) aMutex;
+    vos:: OMutex  aMutex;
 
     sal_uInt16          nStarMode;
     SolarFileList   aFileList;

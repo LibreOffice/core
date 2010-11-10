@@ -55,7 +55,6 @@ namespace svt { namespace table
         Link                m_aMouseButtonDownHdl;
          Link               m_aMouseButtonUpHdl;
         Link                m_aSelectHdl;
-        RowPos              m_nRowAlreadySelected;
     public:
         TableDataWindow( TableControl_Impl& _rTableControl );
         inline void         SetMouseButtonDownHdl( const Link& rLink )  { m_aMouseButtonDownHdl = rLink; }
@@ -74,6 +73,11 @@ namespace svt { namespace table
         virtual void        CaptureMouse();
         virtual void        ReleaseMouse();
         virtual long        Notify(NotifyEvent& rNEvt);
+        virtual void        SetControlBackground(const Color& rColor);
+        virtual void        SetControlBackground();
+
+        void                SetBackground(const Wallpaper& rColor);
+        void                SetBackground();
     };
 //........................................................................
 } } // namespace svt::table

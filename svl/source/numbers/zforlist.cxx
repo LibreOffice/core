@@ -1697,6 +1697,58 @@ sal_Bool SvNumberFormatter::GetPreviewStringGuess( const String& sFormatString,
     return sal_False;
 }
 
+sal_Bool SvNumberFormatter::GetPreviewString( const String& sFormatString,
+                                          const String& sPreviewString,
+                                          String& sOutString,
+                                          Color** ppColor,
+                                          LanguageType eLnge )
+{
+    if (sFormatString.Len() == 0)               // no empty string
+        return sal_False;
+
+    xub_StrLen nCheckPos = STRING_NOTFOUND;
+    sal_uInt32 nKey;
+    if (eLnge == LANGUAGE_DONTKNOW)
+        eLnge = IniLnge;
+    ChangeIntl(eLnge);                          // switch if needed
+    eLnge = ActLnge;
+    String sTmpString = sFormatString;
+    SvNumberformat* p_Entry = new SvNumberformat( sTmpString,
+                                                  pFormatScanner,
+                                                  pStringScanner,
+                                                  nCheckPos,
+                                                  eLnge);
+    if (nCheckPos == 0)                          // String ok
+    {
+        String aNonConstPreview( sPreviewString);
+        // May have to create standard formats for this locale.
+        sal_uInt32 CLOffset = ImpGenerateCL(eLnge);
+        nKey = ImpIsEntry( p_Entry->GetFormatstring(), CLOffset, eLnge);
+        if (nKey != NUMBERFORMAT_ENTRY_NOT_FOUND)       // already present
+            GetOutputString( aNonConstPreview, nKey, sOutString, ppColor);
+        else
+        {
+            // If the format is valid but not a text format and does not
+            // include a text subformat, an empty string would result. Same as
+            // in SvNumberFormatter::GetOutputString()
+            if (p_Entry->IsTextFormat() || p_Entry->HasTextFormat())
+                p_Entry->GetOutputString( aNonConstPreview, sOutString, ppColor);
+            else
+            {
+                *ppColor = NULL;
+                sOutString = sPreviewString;
+            }
+        }
+        delete p_Entry;
+        return sal_True;
+    }
+    else
+    {
+        delete p_Entry;
+        return sal_False;
+    }
+}
+
 sal_uInt32 SvNumberFormatter::TestNewString(const String& sFormatString,
                                       LanguageType eLnge)
 {

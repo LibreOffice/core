@@ -61,7 +61,6 @@ ByteString sOutputFile;
 ByteString sOutputFileX;
 ByteString sOutputFileY;
 ByteString sSDFFile;
-bool bQuiet;
 
 /*****************************************************************************/
 sal_Bool ParseCommandLine( int argc, char* argv[])
@@ -73,7 +72,6 @@ sal_Bool ParseCommandLine( int argc, char* argv[])
     bUTF8 = sal_True;
     sPrj = "";
     sPrjRoot = "";
-    bQuiet = false;
     Export::sLanguages = "";
     Export::sForcedLanguages = "";
 
@@ -110,9 +108,6 @@ sal_Bool ParseCommandLine( int argc, char* argv[])
         else if ( ByteString( argv[ i ]).ToUpperAscii() == "-E" ) {
             nState = STATE_ERRORLOG;
             bErrorLog = sal_False;
-        }
-        else if ( ByteString( argv[ i ] ).ToUpperAscii() == "-QQ" ) {
-            bQuiet = true;
         }
         else if ( ByteString( argv[ i ]).ToUpperAscii() == "-UTF8" ) {
             nState = STATE_UTF8;
@@ -188,13 +183,12 @@ sal_Bool ParseCommandLine( int argc, char* argv[])
 void Help()
 /*****************************************************************************/
 {
-    fprintf( stdout, "Syntax: HELPEX[-p Prj][-r PrjRoot]-i FileIn ( -o FileOut | -x path -y relfile )[-m DataBase][-e][-b][-u][-L l1,l2,...][-QQ] -LF l1,l2 \n" );
+    fprintf( stdout, "Syntax: HELPEX[-p Prj][-r PrjRoot]-i FileIn ( -o FileOut | -x path -y relfile )[-m DataBase][-e][-b][-u][-L l1,l2,...] -LF l1,l2 \n" );
     fprintf( stdout, " Prj:      Project\n" );
     fprintf( stdout, " PrjRoot:  Path to project root (..\\.. etc.)\n" );
     fprintf( stdout, " FileIn:   Source file (*.lng)\n" );
     fprintf( stdout, " FileOut:  Destination file (*.*)\n" );
     fprintf( stdout, " DataBase: Mergedata (*.sdf)\n" );
-    fprintf( stdout, " -QQ: quiet output\n" );
     fprintf( stdout, " -L: Restrict the handled languages. l1,l2,... are elements of (en-US,fr,de...)\n" );
     fprintf( stdout, "     A fallback language can be defined like this: l1=f1.\n" );
     fprintf( stdout, "     f1, f2,... are also elements of (en-US,fr,de...)\n" );

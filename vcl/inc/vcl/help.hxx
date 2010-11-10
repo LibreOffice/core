@@ -52,8 +52,8 @@ class Window;
 #define QUICKHELP_BIDI_RTL  ((sal_uInt16)0x8000)
 
 // By changes you must also change: rsc/vclrsc.hxx
-#define OOO_HELP_INDEX          ((sal_uIntPtr)0xFFFFFFFF)
-#define OOO_HELP_HELPONHELP     ((sal_uIntPtr)0xFFFFFFFE)
+#define OOO_HELP_INDEX          ".help:index"
+#define OOO_HELP_HELPONHELP     ".help:helponhelp"
 
 // --------
 // - Help -
@@ -71,10 +71,9 @@ public:
     void                SetHelpFile( const String& rFileName ) { maHelpFile = rFileName; }
     const String&       GetHelpFile() const { return maHelpFile; }
 
-    virtual sal_Bool        Start( sal_uIntPtr nHelpId, const Window* pWindow  );
-    virtual sal_Bool        Start( const XubString& rKeyWord, const Window* pWindow );
-    virtual void        OpenHelpAgent( sal_uIntPtr nHelpId );
-    virtual XubString   GetHelpText( sal_uIntPtr nHelpId, const Window* pWindow );
+    virtual sal_Bool        Start( const XubString& rHelpId, const Window* pWindow );
+    virtual sal_Bool        SearchKeyword( const XubString& rKeyWord );
+    virtual void        OpenHelpAgent( const rtl::OString& rHelpId );
     virtual XubString   GetHelpText( const String& aHelpURL, const Window* pWindow );
 
     static void         EnableContextHelp();

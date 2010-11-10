@@ -176,16 +176,36 @@ OUString SAL_CALL FastLocatorImpl::getSystemId(void) throw (RuntimeException)
 }
 
 // --------------------------------------------------------------------
+
+ParserData::ParserData()
+{
+}
+
+ParserData::~ParserData()
+{
+}
+
+// --------------------------------------------------------------------
+
+Entity::Entity( const ParserData& rData ) :
+    ParserData( rData )
+{
+    // performance-Improvment. Reference is needed when calling the startTag callback.
+    // Handing out the same object with every call is allowed (see sax-specification)
+    mxAttributes.set( new FastAttributeList( mxTokenHandler ) );
+}
+
+Entity::~Entity()
+{
+}
+
+// --------------------------------------------------------------------
 // FastSaxParser implementation
 // --------------------------------------------------------------------
 
 FastSaxParser::FastSaxParser()
 {
     mxDocumentLocator.set( new FastLocatorImpl( this ) );
-
-    // performance-Improvment. Reference is needed when calling the startTag callback.
-    // Handing out the same object with every call is allowed (see sax-specification)
-    mxAttributes.set( new FastAttributeList( mxTokenHandler ) );
 }
 
 // --------------------------------------------------------------------
@@ -200,46 +220,43 @@ FastSaxParser::~FastSaxParser()
 
 void FastSaxParser::pushContext()
 {
-    bool bRootContext = false;
-    SaxContextImplPtr p;
-    if( maContextStack.empty() )
+    Entity& rEntity = getEntity();
+    if( rEntity.maContextStack.empty() )
     {
-        p.reset( new SaxContextImpl() );
-        bRootContext = true;
+        rEntity.maContextStack.push( SaxContextImplPtr( new SaxContextImpl ) );
+        DefineNamespace( OString("xml"), "http://www.w3.org/XML/1998/namespace");
     }
     else
     {
-        p.reset( new SaxContextImpl( maContextStack.top() ) );
+        rEntity.maContextStack.push( SaxContextImplPtr( new SaxContextImpl( rEntity.maContextStack.top() ) ) );
     }
-    maContextStack.push( p );
-
-    if( bRootContext )
-        DefineNamespace( OString("xml"), "http://www.w3.org/XML/1998/namespace");
 }
 
 // --------------------------------------------------------------------
 
 void FastSaxParser::popContext()
 {
-    OSL_ENSURE( !maContextStack.empty(), "sax::FastSaxParser::popContext(), pop without push?" );
-    if( !maContextStack.empty() )
-        maContextStack.pop();
+    Entity& rEntity = getEntity();
+    OSL_ENSURE( !rEntity.maContextStack.empty(), "sax::FastSaxParser::popContext(), pop without push?" );
+    if( !rEntity.maContextStack.empty() )
+        rEntity.maContextStack.pop();
 }
 
 // --------------------------------------------------------------------
 
 void FastSaxParser::DefineNamespace( const OString& rPrefix, const sal_Char* pNamespaceURL )
 {
-    OSL_ENSURE( !maContextStack.empty(), "sax::FastSaxParser::DefineNamespace(), I need a context!" );
-    if( !maContextStack.empty() )
+    Entity& rEntity = getEntity();
+    OSL_ENSURE( !rEntity.maContextStack.empty(), "sax::FastSaxParser::DefineNamespace(), I need a context!" );
+    if( !rEntity.maContextStack.empty() )
     {
-        sal_uInt32 nOffset = maContextStack.top()->mnNamespaceCount++;
+        sal_uInt32 nOffset = rEntity.maContextStack.top()->mnNamespaceCount++;
 
-        if( maNamespaceDefines.size() <= nOffset )
-            maNamespaceDefines.resize( maNamespaceDefines.size() + 64 );
+        if( rEntity.maNamespaceDefines.size() <= nOffset )
+            rEntity.maNamespaceDefines.resize( rEntity.maNamespaceDefines.size() + 64 );
 
         const OUString aNamespaceURL( pNamespaceURL, strlen( pNamespaceURL ), RTL_TEXTENCODING_UTF8 );
-        maNamespaceDefines[nOffset].reset( new NamespaceDefine( rPrefix, GetNamespaceToken( aNamespaceURL ), aNamespaceURL ) );
+        rEntity.maNamespaceDefines[nOffset].reset( new NamespaceDefine( rPrefix, GetNamespaceToken( aNamespaceURL ), aNamespaceURL ) );
     }
 }
 
@@ -249,7 +266,7 @@ sal_Int32 FastSaxParser::GetToken( const OString& rToken )
 {
     Sequence< sal_Int8 > aSeq( (sal_Int8*)rToken.getStr(), rToken.getLength() );
 
-    return mxTokenHandler->getTokenFromUTF8( aSeq );
+    return getEntity().mxTokenHandler->getTokenFromUTF8( aSeq );
 }
 
 sal_Int32 FastSaxParser::GetToken( const sal_Char* pToken, sal_Int32 nLen /* = 0 */ )
@@ -259,7 +276,7 @@ sal_Int32 FastSaxParser::GetToken( const sal_Char* pToken, sal_Int32 nLen /* = 0
 
     Sequence< sal_Int8 > aSeq( (sal_Int8*)pToken, nLen );
 
-    return mxTokenHandler->getTokenFromUTF8( aSeq );
+    return getEntity().mxTokenHandler->getTokenFromUTF8( aSeq );
 }
 
 // --------------------------------------------------------------------
@@ -268,12 +285,13 @@ sal_Int32 FastSaxParser::GetTokenWithPrefix( const OString& rPrefix, const OStri
 {
     sal_Int32 nNamespaceToken = FastToken::DONTKNOW;
 
-    sal_uInt32 nNamespace = maContextStack.top()->mnNamespaceCount;
+    Entity& rEntity = getEntity();
+    sal_uInt32 nNamespace = rEntity.maContextStack.top()->mnNamespaceCount;
     while( nNamespace-- )
     {
-        if( maNamespaceDefines[nNamespace]->maPrefix == rPrefix )
+        if( rEntity.maNamespaceDefines[nNamespace]->maPrefix == rPrefix )
         {
-            nNamespaceToken = maNamespaceDefines[nNamespace]->mnToken;
+            nNamespaceToken = rEntity.maNamespaceDefines[nNamespace]->mnToken;
             break;
         }
 
@@ -295,14 +313,15 @@ sal_Int32 FastSaxParser::GetTokenWithPrefix( const sal_Char*pPrefix, int nPrefix
 {
     sal_Int32 nNamespaceToken = FastToken::DONTKNOW;
 
-    sal_uInt32 nNamespace = maContextStack.top()->mnNamespaceCount;
+    Entity& rEntity = getEntity();
+    sal_uInt32 nNamespace = rEntity.maContextStack.top()->mnNamespaceCount;
     while( nNamespace-- )
     {
-        const OString& rPrefix( maNamespaceDefines[nNamespace]->maPrefix );
+        const OString& rPrefix( rEntity.maNamespaceDefines[nNamespace]->maPrefix );
         if( (rPrefix.getLength() == nPrefixLen) &&
             (strncmp( rPrefix.getStr(), pPrefix, nPrefixLen ) == 0 ) )
         {
-            nNamespaceToken = maNamespaceDefines[nNamespace]->mnToken;
+            nNamespaceToken = rEntity.maNamespaceDefines[nNamespace]->mnToken;
             break;
         }
 
@@ -335,12 +354,13 @@ sal_Int32 FastSaxParser::GetNamespaceToken( const OUString& rNamespaceURL )
 
 OUString FastSaxParser::GetNamespaceURL( const OString& rPrefix ) throw (SAXException)
 {
-    if( !maContextStack.empty() )
+    Entity& rEntity = getEntity();
+    if( !rEntity.maContextStack.empty() )
     {
-        sal_uInt32 nNamespace = maContextStack.top()->mnNamespaceCount;
+        sal_uInt32 nNamespace = rEntity.maContextStack.top()->mnNamespaceCount;
         while( nNamespace-- )
-            if( maNamespaceDefines[nNamespace]->maPrefix == rPrefix )
-                return maNamespaceDefines[nNamespace]->maNamespaceURL;
+            if( rEntity.maNamespaceDefines[nNamespace]->maPrefix == rPrefix )
+                return rEntity.maNamespaceDefines[nNamespace]->maNamespaceURL;
     }
 
     throw SAXException(); // prefix that has no defined namespace url
@@ -348,16 +368,17 @@ OUString FastSaxParser::GetNamespaceURL( const OString& rPrefix ) throw (SAXExce
 
 OUString FastSaxParser::GetNamespaceURL( const sal_Char*pPrefix, int nPrefixLen ) throw(SAXException)
 {
-    if( pPrefix && !maContextStack.empty() )
+    Entity& rEntity = getEntity();
+    if( pPrefix && !rEntity.maContextStack.empty() )
     {
-        sal_uInt32 nNamespace = maContextStack.top()->mnNamespaceCount;
+        sal_uInt32 nNamespace = rEntity.maContextStack.top()->mnNamespaceCount;
         while( nNamespace-- )
         {
-            const OString& rPrefix( maNamespaceDefines[nNamespace]->maPrefix );
+            const OString& rPrefix( rEntity.maNamespaceDefines[nNamespace]->maPrefix );
             if( (rPrefix.getLength() == nPrefixLen) &&
                 (strncmp( rPrefix.getStr(), pPrefix, nPrefixLen ) == 0 ) )
             {
-                return maNamespaceDefines[nNamespace]->maNamespaceURL;
+                return rEntity.maNamespaceDefines[nNamespace]->maNamespaceURL;
             }
         }
     }
@@ -421,7 +442,7 @@ void FastSaxParser::parseStream( const InputSource& maStructSource) throw (SAXEx
     // Only one text at one time
     MutexGuard guard( maMutex );
 
-    struct Entity entity;
+    Entity entity( maData );
     entity.maStructSource = maStructSource;
 
     if( !entity.maStructSource.aInputStream.is() )
@@ -442,26 +463,23 @@ void FastSaxParser::parseStream( const InputSource& maStructSource) throw (SAXEx
     XML_SetCharacterDataHandler( entity.mpParser, call_callbackCharacters );
     XML_SetExternalEntityRefHandler( entity.mpParser, call_callbackExternalEntityRef );
 
-    // maSavedException used to transport exceptions through C callbacks
-    maSavedException.clear();
-
     pushEntity( entity );
     try
     {
         // start the document
-        if( mxDocumentHandler.is() )
+        if( entity.mxDocumentHandler.is() )
         {
             Reference< XLocator > xLoc( mxDocumentLocator.get() );
-            mxDocumentHandler->setDocumentLocator( xLoc );
-            mxDocumentHandler->startDocument();
+            entity.mxDocumentHandler->setDocumentLocator( xLoc );
+            entity.mxDocumentHandler->startDocument();
         }
 
         parse();
 
         // finish document
-        if( mxDocumentHandler.is() )
+        if( entity.mxDocumentHandler.is() )
         {
-            mxDocumentHandler->endDocument();
+            entity.mxDocumentHandler->endDocument();
         }
     }
     catch( SAXException & )
@@ -489,13 +507,12 @@ void FastSaxParser::parseStream( const InputSource& maStructSource) throw (SAXEx
 
 void FastSaxParser::setFastDocumentHandler( const Reference< XFastDocumentHandler >& Handler ) throw (RuntimeException)
 {
-    mxDocumentHandler = Handler;
+    maData.mxDocumentHandler = Handler;
 }
 
 void SAL_CALL FastSaxParser::setTokenHandler( const Reference< XFastTokenHandler >& Handler ) throw (RuntimeException)
 {
-    mxTokenHandler = Handler;
-    mxAttributes.set( new FastAttributeList( mxTokenHandler ) );
+    maData.mxTokenHandler = Handler;
 }
 
 void SAL_CALL FastSaxParser::registerNamespace( const OUString& NamespaceURL, sal_Int32 NamespaceToken ) throw (IllegalArgumentException, RuntimeException)
@@ -513,17 +530,17 @@ void SAL_CALL FastSaxParser::registerNamespace( const OUString& NamespaceURL, sa
 
 void FastSaxParser::setErrorHandler(const Reference< XErrorHandler > & Handler) throw (RuntimeException)
 {
-    mxErrorHandler = Handler;
+    maData.mxErrorHandler = Handler;
 }
 
 void FastSaxParser::setEntityResolver(const Reference < XEntityResolver > & Resolver) throw (RuntimeException)
 {
-    mxEntityResolver = Resolver;
+    maData.mxEntityResolver = Resolver;
 }
 
 void FastSaxParser::setLocale( const Locale & Locale ) throw (RuntimeException)
 {
-    maLocale = Locale;
+    maData.maLocale = Locale;
 }
 
 Sequence< OUString > FastSaxParser::getSupportedServiceNames_Static(void)
@@ -619,29 +636,30 @@ void FastSaxParser::parse()
     const int BUFFER_SIZE = 16 * 1024;
     Sequence< sal_Int8 > seqOut( BUFFER_SIZE );
 
+    Entity& rEntity = getEntity();
     int nRead = 0;
     do
     {
-        nRead = getEntity().maConverter.readAndConvert( seqOut, BUFFER_SIZE );
+        nRead = rEntity.maConverter.readAndConvert( seqOut, BUFFER_SIZE );
         if( nRead <= 0 )
         {
-            XML_Parse( getEntity().mpParser, (const char*) seqOut.getConstArray(), 0, 1 );
+            XML_Parse( rEntity.mpParser, (const char*) seqOut.getConstArray(), 0, 1 );
             break;
         }
 
-        bool bContinue = XML_Parse( getEntity().mpParser, (const char*) seqOut.getConstArray(), nRead, 0 ) != 0;
+        bool bContinue = XML_Parse( rEntity.mpParser, (const char*) seqOut.getConstArray(), nRead, 0 ) != 0;
         // callbacks used inside XML_Parse may have caught an exception
-        if( !bContinue || maSavedException.hasValue() )
+        if( !bContinue || rEntity.maSavedException.hasValue() )
         {
             // Error during parsing !
-            XML_Error xmlE = XML_GetErrorCode( getEntity().mpParser );
+            XML_Error xmlE = XML_GetErrorCode( rEntity.mpParser );
             OUString sSystemId = mxDocumentLocator->getSystemId();
             sal_Int32 nLine = mxDocumentLocator->getLineNumber();
 
             SAXParseException aExcept(
                 lclGetErrorMessage( xmlE, sSystemId, nLine ),
                 Reference< XInterface >(),
-                Any( &maSavedException, getCppuType( &maSavedException ) ),
+                Any( &rEntity.maSavedException, getCppuType( &rEntity.maSavedException ) ),
                 mxDocumentLocator->getPublicId(),
                 mxDocumentLocator->getSystemId(),
                 mxDocumentLocator->getLineNumber(),
@@ -649,8 +667,8 @@ void FastSaxParser::parse()
             );
 
             // error handler is set, it may throw the exception
-            if( mxErrorHandler.is() )
-                mxErrorHandler->fatalError( Any( aExcept ) );
+            if( rEntity.mxErrorHandler.is() )
+                rEntity.mxErrorHandler->fatalError( Any( aExcept ) );
 
             // error handler has not thrown, but parsing cannot go on, the
             // exception MUST be thrown
@@ -680,9 +698,10 @@ struct AttributeData
 void FastSaxParser::callbackStartElement( const XML_Char* pwName, const XML_Char** awAttributes )
 {
     Reference< XFastContextHandler > xParentContext;
-    if( !maContextStack.empty() )
+    Entity& rEntity = getEntity();
+    if( !rEntity.maContextStack.empty() )
     {
-        xParentContext = maContextStack.top()->mxContext;
+        xParentContext = rEntity.maContextStack.top()->mxContext;
         if( !xParentContext.is() )
         {
             // we ignore current elements, so no processing needed
@@ -693,7 +712,7 @@ void FastSaxParser::callbackStartElement( const XML_Char* pwName, const XML_Char
 
     pushContext();
 
-    mxAttributes->clear();
+    rEntity.mxAttributes->clear();
 
     // create attribute map and process namespace instructions
     int i = 0;
@@ -734,7 +753,7 @@ void FastSaxParser::callbackStartElement( const XML_Char* pwName, const XML_Char
                 if( (nNameLen == 5) && (strcmp( pName, "xmlns" ) == 0) )
                 {
                     // namespace of the element found
-                    maContextStack.top()->maNamespace = OUString( awAttributes[i+1], strlen( awAttributes[i+1] ), RTL_TEXTENCODING_UTF8 );
+                    rEntity.maContextStack.top()->maNamespace = OUString( awAttributes[i+1], strlen( awAttributes[i+1] ), RTL_TEXTENCODING_UTF8 );
                 }
                 else
                 {
@@ -752,17 +771,17 @@ void FastSaxParser::callbackStartElement( const XML_Char* pwName, const XML_Char
             {
                 sal_Int32 nAttributeToken = GetTokenWithPrefix( aIt->maPrefix, aIt->maName );
                 if( nAttributeToken != FastToken::DONTKNOW )
-                    mxAttributes->add( nAttributeToken, aIt->maValue );
+                    rEntity.mxAttributes->add( nAttributeToken, aIt->maValue );
                 else
-                    mxAttributes->addUnknown( GetNamespaceURL( aIt->maPrefix ), aIt->maName, aIt->maValue );
+                    rEntity.mxAttributes->addUnknown( GetNamespaceURL( aIt->maPrefix ), aIt->maName, aIt->maValue );
             }
             else
             {
                 sal_Int32 nAttributeToken = GetToken( aIt->maName );
                 if( nAttributeToken != FastToken::DONTKNOW )
-                    mxAttributes->add( nAttributeToken, aIt->maValue );
+                    rEntity.mxAttributes->add( nAttributeToken, aIt->maValue );
                 else
-                    mxAttributes->addUnknown( aIt->maName, aIt->maValue );
+                    rEntity.mxAttributes->addUnknown( aIt->maName, aIt->maValue );
             }
         }
 
@@ -770,31 +789,31 @@ void FastSaxParser::callbackStartElement( const XML_Char* pwName, const XML_Char
         splitName( pwName, pPrefix, nPrefixLen, pName, nNameLen );
         if( nPrefixLen > 0 )
             nElementToken = GetTokenWithPrefix( pPrefix, nPrefixLen, pName, nNameLen );
-        else if( maContextStack.top()->maNamespace.getLength() > 0 )
-            nElementToken = GetTokenWithNamespaceURL( maContextStack.top()->maNamespace, pName, nNameLen );
+        else if( rEntity.maContextStack.top()->maNamespace.getLength() > 0 )
+            nElementToken = GetTokenWithNamespaceURL( rEntity.maContextStack.top()->maNamespace, pName, nNameLen );
         else
             nElementToken = GetToken( pName );
-        maContextStack.top()->mnElementToken = nElementToken;
+        rEntity.maContextStack.top()->mnElementToken = nElementToken;
 
-        Reference< XFastAttributeList > xAttr( mxAttributes.get() );
+        Reference< XFastAttributeList > xAttr( rEntity.mxAttributes.get() );
         Reference< XFastContextHandler > xContext;
         if( nElementToken == FastToken::DONTKNOW )
         {
             if( nPrefixLen > 0 )
-                maContextStack.top()->maNamespace = GetNamespaceURL( pPrefix, nPrefixLen );
+                rEntity.maContextStack.top()->maNamespace = GetNamespaceURL( pPrefix, nPrefixLen );
 
-            const OUString aNamespace( maContextStack.top()->maNamespace );
+            const OUString aNamespace( rEntity.maContextStack.top()->maNamespace );
             const OUString aElementName( pPrefix, nPrefixLen, RTL_TEXTENCODING_UTF8 );
-            maContextStack.top()->maElementName = aElementName;
+            rEntity.maContextStack.top()->maElementName = aElementName;
 
             if( xParentContext.is() )
                 xContext = xParentContext->createUnknownChildContext( aNamespace, aElementName, xAttr );
             else
-                xContext = mxDocumentHandler->createUnknownChildContext( aNamespace, aElementName, xAttr );
+                xContext = rEntity.mxDocumentHandler->createUnknownChildContext( aNamespace, aElementName, xAttr );
 
             if( xContext.is() )
             {
-                maContextStack.top()->mxContext = xContext;
+                rEntity.maContextStack.top()->mxContext = xContext;
                 xContext->startUnknownElement( aNamespace, aElementName, xAttr );
             }
         }
@@ -803,28 +822,29 @@ void FastSaxParser::callbackStartElement( const XML_Char* pwName, const XML_Char
             if( xParentContext.is() )
                 xContext = xParentContext->createFastChildContext( nElementToken, xAttr );
             else
-                xContext = mxDocumentHandler->createFastChildContext( nElementToken, xAttr );
+                xContext = rEntity.mxDocumentHandler->createFastChildContext( nElementToken, xAttr );
 
 
             if( xContext.is() )
             {
-                maContextStack.top()->mxContext = xContext;
+                rEntity.maContextStack.top()->mxContext = xContext;
                 xContext->startFastElement( nElementToken, xAttr );
             }
         }
     }
     catch( Exception& e )
     {
-        maSavedException <<= e;
+        rEntity.maSavedException <<= e;
     }
 }
 
 void FastSaxParser::callbackEndElement( const XML_Char* )
 {
-    OSL_ENSURE( !maContextStack.empty(), "FastSaxParser::callbackEndElement - no context" );
-    if( !maContextStack.empty() )
+    Entity& rEntity = getEntity();
+    OSL_ENSURE( !rEntity.maContextStack.empty(), "FastSaxParser::callbackEndElement - no context" );
+    if( !rEntity.maContextStack.empty() )
     {
-        SaxContextImplPtr pContext( maContextStack.top() );
+        SaxContextImplPtr pContext = rEntity.maContextStack.top();
         const Reference< XFastContextHandler >& xContext( pContext->mxContext );
         if( xContext.is() ) try
         {
@@ -836,7 +856,7 @@ void FastSaxParser::callbackEndElement( const XML_Char* )
         }
         catch( Exception& e )
         {
-            maSavedException <<= e;
+            rEntity.maSavedException <<= e;
         }
 
         popContext();
@@ -846,14 +866,15 @@ void FastSaxParser::callbackEndElement( const XML_Char* )
 
 void FastSaxParser::callbackCharacters( const XML_Char* s, int nLen )
 {
-    const Reference< XFastContextHandler >& xContext( maContextStack.top()->mxContext );
+    Entity& rEntity = getEntity();
+    const Reference< XFastContextHandler >& xContext( rEntity.maContextStack.top()->mxContext );
     if( xContext.is() ) try
     {
         xContext->characters( OUString( s, nLen, RTL_TEXTENCODING_UTF8 ) );
     }
     catch( Exception& e )
     {
-        maSavedException <<= e;
+        rEntity.maSavedException <<= e;
     }
 }
 
@@ -863,22 +884,23 @@ int FastSaxParser::callbackExternalEntityRef( XML_Parser parser,
     bool bOK = true;
     InputSource source;
 
-    struct Entity entity;
+    Entity& rCurrEntity = getEntity();
+    Entity aNewEntity( rCurrEntity );
 
-    if( mxEntityResolver.is() ) try
+    if( rCurrEntity.mxEntityResolver.is() ) try
     {
-        entity.maStructSource = mxEntityResolver->resolveEntity(
+        aNewEntity.maStructSource = rCurrEntity.mxEntityResolver->resolveEntity(
             OUString( publicId, strlen( publicId ), RTL_TEXTENCODING_UTF8 ) ,
             OUString( systemId, strlen( systemId ), RTL_TEXTENCODING_UTF8 ) );
     }
     catch( SAXParseException & e )
     {
-        maSavedException <<= e;
+        rCurrEntity.maSavedException <<= e;
         bOK = false;
     }
     catch( SAXException & e )
     {
-        maSavedException <<= SAXParseException(
+        rCurrEntity.maSavedException <<= SAXParseException(
             e.Message, e.Context, e.WrappedException,
             mxDocumentLocator->getPublicId(),
             mxDocumentLocator->getSystemId(),
@@ -887,43 +909,42 @@ int FastSaxParser::callbackExternalEntityRef( XML_Parser parser,
         bOK = false;
     }
 
-    if( entity.maStructSource.aInputStream.is() )
+    if( aNewEntity.maStructSource.aInputStream.is() )
     {
-        entity.mpParser = XML_ExternalEntityParserCreate( parser, context, 0 );
-        if( ! entity.mpParser )
+        aNewEntity.mpParser = XML_ExternalEntityParserCreate( parser, context, 0 );
+        if( !aNewEntity.mpParser )
         {
             return false;
         }
 
-        entity.maConverter.setInputStream( entity.maStructSource.aInputStream );
-        pushEntity( entity );
+        aNewEntity.maConverter.setInputStream( aNewEntity.maStructSource.aInputStream );
+        pushEntity( aNewEntity );
         try
         {
             parse();
         }
         catch( SAXParseException & e )
         {
-            maSavedException <<= e;
+            rCurrEntity.maSavedException <<= e;
             bOK = false;
         }
         catch( IOException &e )
         {
             SAXException aEx;
             aEx.WrappedException <<= e;
-            maSavedException <<= aEx;
+            rCurrEntity.maSavedException <<= aEx;
             bOK = false;
         }
         catch( RuntimeException &e )
         {
             SAXException aEx;
             aEx.WrappedException <<= e;
-            maSavedException <<= aEx;
+            rCurrEntity.maSavedException <<= aEx;
             bOK = false;
         }
 
         popEntity();
-
-        XML_ParserFree( entity.mpParser );
+        XML_ParserFree( aNewEntity.mpParser );
     }
 
     return bOK;

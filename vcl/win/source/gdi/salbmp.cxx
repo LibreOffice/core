@@ -509,8 +509,8 @@ void WinSalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly )
             {
                 PBITMAPINFO     pBI = (PBITMAPINFO) GlobalLock( mhDIB );
                 const sal_uInt16    nCount = pBuffer->maPalette.GetEntryCount();
-
-                memcpy( pBI->bmiColors, pBuffer->maPalette.ImplGetColorBuffer(), nCount * sizeof( RGBQUAD ) );
+                const sal_uInt16    nDIBColorCount = ImplGetDIBColorCount( mhDIB );
+                memcpy( pBI->bmiColors, pBuffer->maPalette.ImplGetColorBuffer(), Min( nDIBColorCount, nCount ) * sizeof( RGBQUAD ) );
                 GlobalUnlock( mhDIB );
             }
 

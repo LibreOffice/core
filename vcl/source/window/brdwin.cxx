@@ -1151,15 +1151,13 @@ void ImplSmallBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHei
             if( mbNWFBorder )
             {
                 ImplControlValue aControlValue;
-                Region aCtrlRegion( Rectangle( (const Point&)Point(), Size( mnWidth < 10 ? 10 : mnWidth, mnHeight < 10 ? 10 : mnHeight ) ) );
-                Region aBoundingRgn( aCtrlRegion );
-                Region aContentRgn( aCtrlRegion );
+                Rectangle aCtrlRegion( (const Point&)Point(), Size( mnWidth < 10 ? 10 : mnWidth, mnHeight < 10 ? 10 : mnHeight ) );
+                Rectangle aBounds( aCtrlRegion );
+                Rectangle aContent( aCtrlRegion );
                 if( pWin->GetNativeControlRegion( aCtrlType, PART_ENTIRE_CONTROL, aCtrlRegion,
                                                   CTRL_STATE_ENABLED, aControlValue, rtl::OUString(),
-                                                  aBoundingRgn, aContentRgn ) )
+                                                  aBounds, aContent ) )
                 {
-                    Rectangle aBounds( aBoundingRgn.GetBoundRect() );
-                    Rectangle aContent( aContentRgn.GetBoundRect() );
                     mnLeftBorder    = aContent.Left() - aBounds.Left();
                     mnRightBorder   = aBounds.Right() - aContent.Right();
                     mnTopBorder     = aContent.Top() - aBounds.Top();
@@ -1346,13 +1344,16 @@ void ImplSmallBorderWindowView::DrawWindow( sal_uInt16 nDrawFlags, OutputDevice*
             nState |= CTRL_STATE_ROLLOVER;
 
         Point aPoint;
-        Region aCtrlRegion( Rectangle( aPoint, Size( mnWidth, mnHeight ) ) );
+        Rectangle aCtrlRegion( aPoint, Size( mnWidth, mnHeight ) );
 
-        Region aBoundingRgn( Rectangle( aPoint, Size( mnWidth, mnHeight ) ) );
-        Region aContentRgn=aCtrlRegion;
-        if(pWin->GetNativeControlRegion( aCtrlType, aCtrlPart, aCtrlRegion,
-            nState, aControlValue, rtl::OUString(), aBoundingRgn, aContentRgn )) {
-                        aCtrlRegion=aContentRgn;
+        Rectangle aBoundingRgn( aPoint, Size( mnWidth, mnHeight ) );
+        Rectangle aContentRgn( aCtrlRegion );
+        if( ! ImplGetSVData()->maNWFData.mbCanDrawWidgetAnySize &&
+            pWin->GetNativeControlRegion( aCtrlType, aCtrlPart, aCtrlRegion,
+                                          nState, aControlValue, rtl::OUString(),
+                                          aBoundingRgn, aContentRgn ))
+        {
+            aCtrlRegion=aContentRgn;
         }
 
         bNativeOK = pWin->DrawNativeControl( aCtrlType, aCtrlPart, aCtrlRegion, nState,

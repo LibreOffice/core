@@ -88,8 +88,8 @@
 
 #include "vcl/dialog.hxx"
 #include "vcl/unowrap.hxx"
-#include "dndlcon.hxx"
-#include "dndevdis.hxx"
+#include "vcl/dndlcon.hxx"
+#include "vcl/dndevdis.hxx"
 #include "vcl/impbmpconv.hxx"
 #include "unotools/confignode.hxx"
 #include "vcl/gdimtf.hxx"
@@ -243,18 +243,17 @@ void Window::ImplInitAppFontData( Window* pWindow )
         // of control sizes, if yes, make app font scalings larger
         // so dialog positioning is not completely off
         ImplControlValue aControlValue;
-        Region aCtrlRegion( (const Rectangle&)Rectangle( Point(), Size( nTextWidth < 10 ? 10 : nTextWidth, nTextHeight < 10 ? 10 : nTextHeight ) ) );
-        Region aBoundingRgn( aCtrlRegion );
-        Region aContentRgn( aCtrlRegion );
+        Rectangle aCtrlRegion( Point(), Size( nTextWidth < 10 ? 10 : nTextWidth, nTextHeight < 10 ? 10 : nTextHeight ) );
+        Rectangle aBoundingRgn( aCtrlRegion );
+        Rectangle aContentRgn( aCtrlRegion );
         if( pWindow->GetNativeControlRegion( CTRL_EDITBOX, PART_ENTIRE_CONTROL, aCtrlRegion,
                                              CTRL_STATE_ENABLED, aControlValue, rtl::OUString(),
                                              aBoundingRgn, aContentRgn ) )
         {
-            Rectangle aContentRect( aContentRgn.GetBoundRect() );
             // comment: the magical +6 is for the extra border in bordered
             // (which is the standard) edit fields
-            if( aContentRect.GetHeight() - nTextHeight > (nTextHeight+4)/4 )
-                pSVData->maGDIData.mnAppFontY = (aContentRect.GetHeight()-4) * 10;
+            if( aContentRgn.GetHeight() - nTextHeight > (nTextHeight+4)/4 )
+                pSVData->maGDIData.mnAppFontY = (aContentRgn.GetHeight()-4) * 10;
         }
     }
 
@@ -613,8 +612,6 @@ void Window::ImplInitWindowData( WindowType nType )
     mpWindowImpl->mnX                 = 0;            // X-Position to Parent
     mpWindowImpl->mnY                 = 0;            // Y-Position to Parent
     mpWindowImpl->mnAbsScreenX        = 0;            // absolute X-position on screen, used for RTL window positioning
-    mpWindowImpl->mnHelpId            = 0;            // help id
-    mpWindowImpl->mnUniqId            = 0;            // unique id
     mpWindowImpl->mpChildClipRegion   = NULL;         // Child-Clip-Region when ClipChildren
     mpWindowImpl->mpPaintRegion       = NULL;         // Paint-ClipRegion
     mpWindowImpl->mnStyle             = 0;            // style (init in ImplInitWindow)
@@ -1180,20 +1177,14 @@ void Window::ImplCallMove()
 
 // -----------------------------------------------------------------------
 
-static sal_uIntPtr ImplAutoHelpID( ResMgr* pResMgr )
+static rtl::OString ImplAutoHelpID( ResMgr* pResMgr )
 {
-    if ( !Application::IsAutoHelpIdEnabled() )
-        return 0;
+    rtl::OString aRet;
 
-    sal_uIntPtr nHID = 0;
+    if( pResMgr && Application::IsAutoHelpIdEnabled() )
+        aRet = pResMgr->GetAutoHelpId();
 
-    DBG_ASSERT( pResMgr, "No res mgr for auto help id" );
-    if( ! pResMgr )
-        return 0;
-
-    nHID = pResMgr->GetAutoHelpId();
-
-    return nHID;
+    return aRet;
 }
 
 // -----------------------------------------------------------------------
@@ -1213,22 +1204,23 @@ WinBits Window::ImplInitRes( const ResId& rResId )
 
 void Window::ImplLoadRes( const ResId& rResId )
 {
-    // newer move this line after IncrementRes
-    char* pRes = (char*)GetClassRes();
-    pRes += 12;
-    sal_uInt32 nHelpId = (sal_uInt32)GetLongRes( (void*)pRes );
-    if ( !nHelpId )
-        nHelpId = ImplAutoHelpID( rResId.GetResMgr() );
-    SetHelpId( nHelpId );
-
     sal_uIntPtr nObjMask = ReadLongRes();
+
+    // we need to calculate auto helpids before the resource gets closed
+    // if the resource  only contains flags, it will be closed before we try to read a help id
+    // so we always create an auto help id that might be overwritten later
+    // HelpId
+    rtl::OString aHelpId = ImplAutoHelpID( rResId.GetResMgr() );
 
     // ResourceStyle
     sal_uIntPtr nRSStyle = ReadLongRes();
     // WinBits
     ReadLongRes();
-    // HelpId
-    ReadLongRes();
+
+    if( nObjMask & WINDOW_HELPID )
+        aHelpId = ReadByteStringRes();
+
+    SetHelpId( aHelpId );
 
     sal_Bool  bPos  = sal_False;
     sal_Bool  bSize = sal_False;
@@ -1295,7 +1287,7 @@ void Window::ImplLoadRes( const ResId& rResId )
     if ( nObjMask & WINDOW_EXTRALONG )
         SetData( (void*)ReadLongRes() );
     if ( nObjMask & WINDOW_UNIQUEID )
-        SetUniqueId( (sal_uIntPtr)ReadLongRes() );
+        SetUniqueId( ReadByteStringRes() );
 
     if ( nObjMask & WINDOW_BORDER_STYLE )
     {
@@ -1323,8 +1315,6 @@ ImplWinData* Window::ImplGetWinData() const
         mpWindowImpl->mpWinData->mnIsTopWindow  = (sal_uInt16) ~0;  // not initialized yet, 0/1 will indicate TopWindow (see IsTopWindow())
         mpWindowImpl->mpWinData->mbMouseOver      = sal_False;
         mpWindowImpl->mpWinData->mbEnableNativeWidget = (pNoNWF && *pNoNWF) ? sal_False : sal_True; // sal_True: try to draw this control with native theme API
-        mpWindowImpl->mpWinData->mpSmartHelpId    = NULL;
-        mpWindowImpl->mpWinData->mpSmartUniqueId  = NULL;
    }
 
     return mpWindowImpl->mpWinData;
@@ -4735,10 +4725,6 @@ Window::~Window()
             delete mpWindowImpl->mpWinData->mpFocusRect;
         if ( mpWindowImpl->mpWinData->mpTrackRect )
             delete mpWindowImpl->mpWinData->mpTrackRect;
-        if ( mpWindowImpl->mpWinData->mpSmartHelpId )
-            delete mpWindowImpl->mpWinData->mpSmartHelpId;
-        if ( mpWindowImpl->mpWinData->mpSmartUniqueId )
-            delete mpWindowImpl->mpWinData->mpSmartUniqueId;
 
         delete mpWindowImpl->mpWinData;
     }
@@ -4980,29 +4966,18 @@ void Window::RequestHelp( const HelpEvent& rHEvt )
     }
     else
     {
-        SmartId aSmartId = GetSmartHelpId();
-
-        sal_uIntPtr nNumHelpId = 0;
-        String aStrHelpId;
-        if( aSmartId.HasString() )
-            aStrHelpId = aSmartId.GetStr();
-        if( aSmartId.HasNumeric() )
-            nNumHelpId = aSmartId.GetNum();
-
-        if ( !nNumHelpId && aStrHelpId.Len() == 0 && ImplGetParent() )
+        String aStrHelpId( rtl::OStringToOUString( GetHelpId(), RTL_TEXTENCODING_UTF8 ) );
+        if ( aStrHelpId.Len() == 0 && ImplGetParent() )
             ImplGetParent()->RequestHelp( rHEvt );
         else
         {
-            if ( !nNumHelpId && aStrHelpId.Len() == 0 )
-                nNumHelpId = OOO_HELP_INDEX;
-
             Help* pHelp = Application::GetHelp();
             if ( pHelp )
             {
                 if( aStrHelpId.Len() > 0 )
                     pHelp->Start( aStrHelpId, this );
                 else
-                    pHelp->Start( nNumHelpId, this );
+                    pHelp->Start( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OOO_HELP_INDEX ) ), this );
             }
         }
     }
@@ -8131,32 +8106,22 @@ const XubString& Window::GetHelpText() const
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
-    SmartId aSmartId = GetSmartHelpId();
-
-    sal_uIntPtr nNumHelpId = 0;
-    String aStrHelpId;
-    if( aSmartId.HasString() )
-        aStrHelpId = aSmartId.GetStr();
-    if( aSmartId.HasNumeric() )
-        nNumHelpId = aSmartId.GetNum();
+    String aStrHelpId( rtl::OStringToOUString( GetHelpId(), RTL_TEXTENCODING_UTF8 ) );
     bool bStrHelpId = (aStrHelpId.Len() > 0);
 
-    if ( !mpWindowImpl->maHelpText.Len() && (nNumHelpId || bStrHelpId) )
+    if ( !mpWindowImpl->maHelpText.Len() && bStrHelpId )
     {
         if ( !IsDialog() && (mpWindowImpl->mnType != WINDOW_TABPAGE) && (mpWindowImpl->mnType != WINDOW_FLOATINGWINDOW) )
         {
             Help* pHelp = Application::GetHelp();
             if ( pHelp )
             {
-                if( bStrHelpId )
-                    ((Window*)this)->mpWindowImpl->maHelpText = pHelp->GetHelpText( aStrHelpId, this );
-                else
-                    ((Window*)this)->mpWindowImpl->maHelpText = pHelp->GetHelpText( nNumHelpId, this );
+                ((Window*)this)->mpWindowImpl->maHelpText = pHelp->GetHelpText( aStrHelpId, this );
                 mpWindowImpl->mbHelpTextDynamic = sal_False;
             }
         }
     }
-    else if( mpWindowImpl->mbHelpTextDynamic && (nNumHelpId || bStrHelpId) )
+    else if( mpWindowImpl->mbHelpTextDynamic && bStrHelpId )
     {
         static const char* pEnv = getenv( "HELP_DEBUG" );
         if( pEnv && *pEnv )
@@ -8164,10 +8129,7 @@ const XubString& Window::GetHelpText() const
             rtl::OUStringBuffer aTxt( 64+mpWindowImpl->maHelpText.Len() );
             aTxt.append( mpWindowImpl->maHelpText );
             aTxt.appendAscii( "\n------------------\n" );
-            if( bStrHelpId )
-                aTxt.append( rtl::OUString( aStrHelpId ) );
-            else
-                aTxt.append( sal_Int32( nNumHelpId ) );
+            aTxt.append( rtl::OUString( aStrHelpId ) );
             mpWindowImpl->maHelpText = aTxt.makeStringAndClear();
         }
         mpWindowImpl->mbHelpTextDynamic = sal_False;
@@ -8650,7 +8612,10 @@ Reference< XClipboard > Window::GetClipboard()
 
                 if( xFactory.is() )
                 {
-                    mpWindowImpl->mpFrameData->mxClipboard = Reference< XClipboard >( xFactory->createInstance( OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboard" ) ), UNO_QUERY );
+                    mpWindowImpl->mpFrameData->mxClipboard = Reference< XClipboard >( xFactory->createInstance( OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboardExt" ) ), UNO_QUERY );
+
+                    if( !mpWindowImpl->mpFrameData->mxClipboard.is() )
+                        mpWindowImpl->mpFrameData->mxClipboard = Reference< XClipboard >( xFactory->createInstance( OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboard" ) ), UNO_QUERY );
 
 #if defined(UNX) && !defined(QUARTZ)          // unix clipboard needs to be initialized
                     if( mpWindowImpl->mpFrameData->mxClipboard.is() )
@@ -8711,6 +8676,9 @@ Reference< XClipboard > Window::GetPrimarySelection()
                     OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboard" ), aArgumentList ), UNO_QUERY );
 #   else
                     static Reference< XClipboard >  s_xSelection;
+
+                    if ( !s_xSelection.is() )
+                         s_xSelection = Reference< XClipboard >( xFactory->createInstance( OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.GenericClipboardExt" ) ), UNO_QUERY );
 
                     if ( !s_xSelection.is() )
                          s_xSelection = Reference< XClipboard >( xFactory->createInstance( OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.GenericClipboard" ) ), UNO_QUERY );
@@ -9396,7 +9364,7 @@ void Window::DrawSelectionBackground( const Rectangle& rRect,
         if( bDark )
             aSelectionFillCol = COL_BLACK;
         else
-            nPercent = bRoundEdges ? 90 : 80;  // just checked (light)
+            nPercent = 80;  // just checked (light)
     }
     else
     {
@@ -9411,7 +9379,7 @@ void Window::DrawSelectionBackground( const Rectangle& rRect,
                 nPercent = 0;
             }
             else
-                nPercent = bRoundEdges ? 50 : 20;          // selected, pressed or checked ( very dark )
+                nPercent = bRoundEdges ? 40 : 20;          // selected, pressed or checked ( very dark )
         }
         else if( bChecked || highlight == 1 )
         {
@@ -9424,7 +9392,7 @@ void Window::DrawSelectionBackground( const Rectangle& rRect,
                 nPercent = 0;
             }
             else
-                nPercent = bRoundEdges ? 70 : 35;          // selected, pressed or checked ( very dark )
+                nPercent = bRoundEdges ? 60 : 35;          // selected, pressed or checked ( very dark )
         }
         else
         {
@@ -9440,7 +9408,7 @@ void Window::DrawSelectionBackground( const Rectangle& rRect,
                     nPercent = 0;
             }
             else
-                nPercent = bRoundEdges ? 80 : 70;          // selected ( dark )
+                nPercent = 70;          // selected ( dark )
         }
     }
 

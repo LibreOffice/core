@@ -104,8 +104,8 @@ public:
     XubString           GetButtonText( sal_uInt16 nId ) const;
     void                SetButtonHelpText( sal_uInt16 nId, const XubString& rText );
     XubString           GetButtonHelpText( sal_uInt16 nId ) const;
-    void                SetButtonHelpId( sal_uInt16 nId, sal_uIntPtr nHelpId );
-    sal_uIntPtr             GetButtonHelpId( sal_uInt16 nId ) const;
+    void                SetButtonHelpId( sal_uInt16 nId, const rtl::OString& rHelpId );
+    rtl::OString        GetButtonHelpId( sal_uInt16 nId ) const;
 
     void                SetFocusButton( sal_uInt16 nId = BUTTONDIALOG_BUTTON_NOTFOUND ) { mnFocusButtonId = nId; }
     sal_uInt16              GetFocusButton() const { return mnFocusButtonId; }

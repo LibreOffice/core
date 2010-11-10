@@ -79,10 +79,14 @@ const AquaSalMenu* AquaSalMenu::pCurrentMenuBar = NULL;
 
 -(void)showPreferences: (id) sender
 {
+    YIELD_GUARD;
+
     [self showDialog: SHOWDIALOG_ID_PREFERENCES];
 }
 -(void)showAbout: (id) sender
 {
+    YIELD_GUARD;
+
     [self showDialog: SHOWDIALOG_ID_ABOUT];
 }
 @end
@@ -203,11 +207,12 @@ static void initAppMenu()
 
 // =======================================================================
 
-SalMenu* AquaSalInstance::CreateMenu( BOOL bMenuBar )
+SalMenu* AquaSalInstance::CreateMenu( BOOL bMenuBar, Menu* pVCLMenu )
 {
     initAppMenu();
 
     AquaSalMenu *pAquaSalMenu = new AquaSalMenu( bMenuBar );
+    pAquaSalMenu->mpVCLMenu = pVCLMenu;
 
     return pAquaSalMenu;
 }
@@ -369,6 +374,10 @@ bool AquaSalMenu::ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rR
     displayPopupFrame.origin.x = pWin->ImplGetFrame()->maGeometry.nX - pParentAquaSalFrame->maGeometry.nX + offset;
     displayPopupFrame.origin.y = pWin->ImplGetFrame()->maGeometry.nY - pParentAquaSalFrame->maGeometry.nY + offset;
     pParentAquaSalFrame->VCLToCocoa(displayPopupFrame, false);
+
+    // #i111992# if this menu was opened due to a key event, prevent dispatching that yet again
+    if( [pParentNSView respondsToSelector: @selector(clearLastEvent)] )
+        [pParentNSView performSelector:@selector(clearLastEvent)];
 
     // open popup menu
     NSPopUpButtonCell * pPopUpButtonCell = [[NSPopUpButtonCell alloc] initTextCell:@"" pullsDown:NO];

@@ -183,8 +183,8 @@ public:
     using Window::GetQuickHelpText;
     const XubString&    GetQuickHelpText( sal_uInt16 nItemId ) const;
 
-    void                SetHelpId( sal_uInt16 nItemId, sal_uIntPtr nHelpId );
-    sal_uIntPtr             GetHelpId( sal_uInt16 nItemId ) const;
+    void                SetHelpId( sal_uInt16 nItemId, const rtl::OString& rHelpId );
+    rtl::OString        GetHelpId( sal_uInt16 nItemId ) const;
 
     void                SetBottomBorder( sal_Bool bBottomBorder = sal_True );
     sal_Bool                IsBottomBorder() const { return mbBottomBorder; }
@@ -205,9 +205,9 @@ public:
     const XubString&    GetHelpText() const
                             { return Window::GetHelpText(); }
 
-    void                SetHelpId( sal_uIntPtr nId )
-                            { Window::SetHelpId( nId ); }
-    sal_uIntPtr             GetHelpId() const
+    void                SetHelpId( const rtl::OString& rId )
+                            { Window::SetHelpId( rId ); }
+    const rtl::OString& GetHelpId() const
                             { return Window::GetHelpId(); }
 
     Size                CalcWindowSizePixel() const;

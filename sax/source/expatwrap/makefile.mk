@@ -72,5 +72,16 @@ DEF1NAME=		$(SHL1TARGET)
 
 .INCLUDE :	target.mk
 
+ALLTAR : $(MISC)/sax.component $(MISC)/sax.inbuild.component
 
+$(MISC)/sax.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        sax.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt sax.component
 
+$(MISC)/sax.inbuild.component .ERRREMOVE : \
+        $(SOLARENV)/bin/createcomponent.xslt sax.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_INBUILD_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt sax.component

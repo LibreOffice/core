@@ -201,6 +201,18 @@ public:
                                    sal_Bool bPropGreat = sal_False );
     void                SetItemSize( sal_uInt16 nId, long nNewSize );
     long                GetItemSize( sal_uInt16 nId ) const;
+    /** Set a range that limits the (variable part of the) size with an
+        upper and a lower bound (both are valid values themselves.)
+        @param nId
+            Id of the item for which the size limits are set.
+        @param aRange
+            Values of -1 define missing bounds, thus setting a range (-1,-1)
+            (the default) removes the size limitiation.
+    */
+    void                SetItemSizeRange (sal_uInt16 nId, const Range aRange);
+    /** Return the current size limits for the specified item.
+    */
+    Range               GetItemSizeRange (sal_uInt16 nId) const;
     long                GetItemSize( sal_uInt16 nId, SplitWindowItemBits nBits ) const;
     void                SetItemBits( sal_uInt16 nId, SplitWindowItemBits nNewBits );
     SplitWindowItemBits GetItemBits( sal_uInt16 nId ) const;

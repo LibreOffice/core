@@ -320,9 +320,6 @@ typedef sal_uInt16 TabBarPageBits;
 // - TabBar-Types -
 // ----------------
 
-#define TABBAR_APPEND          ((sal_uInt16)0xFFFF)
-#define TABBAR_PAGE_NOTFOUND   ((sal_uInt16)0xFFFF)
-
 #define TABBAR_RENAMING_YES    ((long)sal_True)
 #define TABBAR_RENAMING_NO     ((long)sal_False)
 #define TABBAR_RENAMING_CANCEL ((long)2)
@@ -400,6 +397,9 @@ private:
                     DECL_DLLPRIVATE_LINK( ImplClickHdl, ImplTabButton* );
 
 public:
+    static const sal_uInt16 APPEND;
+    static const sal_uInt16 PAGE_NOT_FOUND;
+
                     TabBar( Window* pParent, WinBits nWinStyle = WB_STDTABBAR );
     virtual         ~TabBar();
 
@@ -424,9 +424,14 @@ public:
 
     void            InsertPage( sal_uInt16 nPageId, const XubString& rText,
                                 TabBarPageBits nBits = 0,
-                                sal_uInt16 nPos = TABBAR_APPEND );
+                                sal_uInt16 nPos = TabBar::APPEND );
     void            RemovePage( sal_uInt16 nPageId );
     void            MovePage( sal_uInt16 nPageId, sal_uInt16 nNewPos );
+
+    Color           GetTabBgColor( sal_uInt16 nPageId ) const;
+    void            SetTabBgColor( sal_uInt16 nPageId, const Color& aTabBgColor );
+    sal_Bool        IsDefaultTabBgColor( sal_uInt16 nPageId );
+
     void            Clear();
 
     void            EnablePage( sal_uInt16 nPageId, sal_Bool bEnable = sal_True );
@@ -453,7 +458,7 @@ public:
     void            SelectPage( sal_uInt16 nPageId, sal_Bool bSelect = sal_True );
     void            SelectPageRange( sal_Bool bSelect = sal_False,
                                      sal_uInt16 nStartPos = 0,
-                                     sal_uInt16 nEndPos = TABBAR_APPEND );
+                                     sal_uInt16 nEndPos = TabBar::APPEND );
     sal_uInt16          GetSelectPage( sal_uInt16 nSelIndex = 0 ) const;
     sal_uInt16          GetSelectPageCount() const;
     sal_Bool            IsPageSelected( sal_uInt16 nPageId ) const;
@@ -511,8 +516,8 @@ public:
     XubString       GetPageText( sal_uInt16 nPageId ) const;
     void            SetHelpText( sal_uInt16 nPageId, const XubString& rText );
     XubString       GetHelpText( sal_uInt16 nPageId ) const;
-    void            SetHelpId( sal_uInt16 nPageId, sal_uIntPtr nHelpId );
-    sal_uIntPtr           GetHelpId( sal_uInt16 nPageId ) const;
+    void            SetHelpId( sal_uInt16 nPageId, const rtl::OString& nHelpId );
+    rtl::OString    GetHelpId( sal_uInt16 nPageId ) const;
 
     long            GetSplitSize() const { return mnSplitSize; }
     long            GetMinSize() const;
@@ -521,9 +526,9 @@ public:
                         { Window::SetHelpText( rText ); }
     XubString       GetHelpText() const
                         { return Window::GetHelpText(); };
-    void            SetHelpId( sal_uIntPtr nId )
-                        { Window::SetHelpId( nId ); }
-    sal_uIntPtr           GetHelpId() const
+    void            SetHelpId( const rtl::OString& rId )
+                        { Window::SetHelpId( rId ); }
+    const rtl::OString& GetHelpId() const
                         { return Window::GetHelpId(); }
 
     void            SetStyle( WinBits nStyle );

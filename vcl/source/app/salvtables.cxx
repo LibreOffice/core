@@ -74,6 +74,29 @@ void SalInstance::FillFontPathList( std::list< rtl::OString >& )
     // do nothing
 }
 
+SalMenu* SalInstance::CreateMenu( sal_Bool, Menu* )
+{
+    // default: no native menus
+    return NULL;
+}
+
+void SalInstance::DestroyMenu( SalMenu* pMenu )
+{
+    (void)pMenu;
+    OSL_ENSURE( pMenu == 0, "DestroyMenu called with non-native menus" );
+}
+
+SalMenuItem* SalInstance::CreateMenuItem( const SalItemParams* )
+{
+    return NULL;
+}
+
+void SalInstance::DestroyMenuItem( SalMenuItem* pItem )
+{
+    (void)pItem;
+    OSL_ENSURE( pItem == 0, "DestroyMenu called with non-native menus" );
+}
+
 SalTimer::~SalTimer()
 {
 }
