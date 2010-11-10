@@ -592,12 +592,14 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, const ScDrawObjData& rData, bool b
     {
         //! nicht mehrere Undos fuer ein Objekt erzeugen (hinteres kann dann weggelassen werden)
 
+        SCCOL nLastCol;
+        SCROW nLastRow;
         if( bValid1 )
         {
             Point aPos( pDoc->GetColOffset( nCol1, nTab1 ), pDoc->GetRowOffset( nRow1, nTab1 ) );
-            if( (pDoc->GetColFlags( nCol1, nTab1 ) & CR_HIDDEN) == 0 )
+            if (!pDoc->ColHidden(nCol1, nTab1, nLastCol))
                 aPos.X() += pDoc->GetColWidth( nCol1, nTab1 ) / 4;
-            if( (pDoc->GetRowFlags( nRow1, nTab1 ) & CR_HIDDEN) == 0 )
+            if (!pDoc->RowHidden(nRow1, nTab1, nLastRow))
                 aPos.Y() += pDoc->GetRowHeight( nRow1, nTab1 ) / 2;
             TwipsToMM( aPos.X() );
             TwipsToMM( aPos.Y() );
@@ -629,9 +631,9 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, const ScDrawObjData& rData, bool b
         if( bValid2 )
         {
             Point aPos( pDoc->GetColOffset( nCol2, nTab2 ), pDoc->GetRowOffset( nRow2, nTab2 ) );
-            if( (pDoc->GetColFlags( nCol2, nTab2 ) & CR_HIDDEN) == 0 )
+            if (!pDoc->ColHidden(nCol2, nTab2, nLastCol))
                 aPos.X() += pDoc->GetColWidth( nCol2, nTab2 ) / 4;
-            if( (pDoc->GetRowFlags( nRow2, nTab2 ) & CR_HIDDEN) == 0 )
+            if (!pDoc->RowHidden(nRow2, nTab2, nLastRow))
                 aPos.Y() += pDoc->GetRowHeight( nRow2, nTab2 ) / 2;
             TwipsToMM( aPos.X() );
             TwipsToMM( aPos.Y() );
@@ -735,8 +737,8 @@ BOOL ScDrawLayer::GetPrintArea( ScRange& rRange, BOOL bSetHor, BOOL bSetVer ) co
     }
     if (!bSetVer)
     {
-        nStartY = pDoc->FastGetRowHeight( 0, rRange.aStart.Row()-1, nTab);
-        nEndY = nStartY + pDoc->FastGetRowHeight( rRange.aStart.Row(),
+        nStartY = pDoc->GetRowHeight( 0, rRange.aStart.Row()-1, nTab);
+        nEndY = nStartY + pDoc->GetRowHeight( rRange.aStart.Row(),
                 rRange.aEnd.Row(), nTab);
         nStartY = (long)(nStartY * HMM_PER_TWIPS);
         nEndY   = (long)(nEndY   * HMM_PER_TWIPS);
@@ -817,9 +819,9 @@ BOOL ScDrawLayer::GetPrintArea( ScRange& rRange, BOOL bSetHor, BOOL bSetVer ) co
         {
             nStartY = (long) (nStartY / HMM_PER_TWIPS);
             nEndY = (long) (nEndY / HMM_PER_TWIPS);
-            SCROW nRow = pDoc->FastGetRowForHeight( nTab, nStartY);
+            SCROW nRow = pDoc->GetRowForHeight( nTab, nStartY);
             rRange.aStart.SetRow( nRow>0 ? (nRow-1) : 0);
-            nRow = pDoc->FastGetRowForHeight( nTab, nEndY);
+            nRow = pDoc->GetRowForHeight( nTab, nEndY);
             rRange.aEnd.SetRow( nRow == MAXROW ? MAXROW :
                     (nRow>0 ? (nRow-1) : 0));
         }
@@ -1041,9 +1043,9 @@ void ScDrawLayer::MoveArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SCR
         for (SCsCOL s=-1; s>=nDx; s--)
             aMove.X() -= pDoc->GetColWidth(s+(SCsCOL)nCol1,nTab);
     if (nDy > 0)
-        aMove.Y() += pDoc->FastGetRowHeight( nRow1, nRow1+nDy-1, nTab);
+        aMove.Y() += pDoc->GetRowHeight( nRow1, nRow1+nDy-1, nTab);
     else
-        aMove.Y() -= pDoc->FastGetRowHeight( nRow1+nDy, nRow1-1, nTab);
+        aMove.Y() -= pDoc->GetRowHeight( nRow1+nDy, nRow1-1, nTab);
 
     if ( bNegativePage )
         aMove.X() = -aMove.X();
@@ -1115,9 +1117,9 @@ void ScDrawLayer::HeightChanged( SCTAB nTab, SCROW nRow, long nDifTwips )
     Rectangle aRect;
     Point aTopLeft;
 
-    aRect.Top() += pDoc->FastGetRowHeight( 0, nRow-1, nTab);
+    aRect.Top() += pDoc->GetRowHeight( 0, nRow-1, nTab);
     aTopLeft.Y() = aRect.Top();
-    aRect.Top() += pDoc->FastGetRowHeight(nRow,nTab);
+    aRect.Top() += pDoc->GetRowHeight(nRow, nTab);
 
     aRect.Bottom() = MAXMM;
     aRect.Left() = 0;
@@ -1143,14 +1145,14 @@ BOOL ScDrawLayer::HasObjectsInRows( SCTAB nTab, SCROW nStartRow, SCROW nEndRow )
 
     Rectangle aTestRect;
 
-    aTestRect.Top() += pDoc->FastGetRowHeight( 0, nStartRow-1, nTab);
+    aTestRect.Top() += pDoc->GetRowHeight( 0, nStartRow-1, nTab);
 
     if (nEndRow==MAXROW)
         aTestRect.Bottom() = MAXMM;
     else
     {
         aTestRect.Bottom() = aTestRect.Top();
-        aTestRect.Bottom() += pDoc->FastGetRowHeight( nStartRow, nEndRow, nTab);
+        aTestRect.Bottom() += pDoc->GetRowHeight( nStartRow, nEndRow, nTab);
         TwipsToMM( aTestRect.Bottom() );
     }
 
@@ -1706,7 +1708,7 @@ Rectangle ScDrawLayer::GetCellRect( ScDocument& rDoc, const ScAddress& rPos, boo
         for( SCCOL nCol = 0; nCol < rPos.Col(); ++nCol )
             aTopLeft.X() += rDoc.GetColWidth( nCol, rPos.Tab() );
         if( rPos.Row() > 0 )
-            aTopLeft.Y() += rDoc.FastGetRowHeight( 0, rPos.Row() - 1, rPos.Tab() );
+            aTopLeft.Y() += rDoc.GetRowHeight( 0, rPos.Row() - 1, rPos.Tab() );
 
         // find bottom-right position of passed cell address
         ScAddress aEndPos = rPos;
@@ -1721,7 +1723,7 @@ Rectangle ScDrawLayer::GetCellRect( ScDocument& rDoc, const ScAddress& rPos, boo
         Point aBotRight = aTopLeft;
         for( SCCOL nCol = rPos.Col(); nCol <= aEndPos.Col(); ++nCol )
             aBotRight.X() += rDoc.GetColWidth( nCol, rPos.Tab() );
-        aBotRight.Y() += rDoc.FastGetRowHeight( rPos.Row(), aEndPos.Row(), rPos.Tab() );
+        aBotRight.Y() += rDoc.GetRowHeight( rPos.Row(), aEndPos.Row(), rPos.Tab() );
 
         // twips -> 1/100 mm
         aTopLeft.X() = static_cast< long >( aTopLeft.X() * HMM_PER_TWIPS );

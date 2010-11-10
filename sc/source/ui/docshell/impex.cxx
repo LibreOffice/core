@@ -1441,7 +1441,7 @@ BOOL ScImportExport::Doc2Text( SvStream& rStrm )
 
     for (nRow = nStartRow; nRow <= nEndRow; nRow++)
     {
-        if (bIncludeFiltered || !pDoc->IsFiltered( nRow, aRange.aStart.Tab() ))
+        if (bIncludeFiltered || !pDoc->RowFiltered( nRow, aRange.aStart.Tab() ))
         {
             for (nCol = nStartCol; nCol <= nEndCol; nCol++)
             {

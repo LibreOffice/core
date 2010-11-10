@@ -271,20 +271,19 @@ void ScViewUtil::UnmarkFiltered( ScMarkData& rMark, ScDocument* pDoc )
     for (SCTAB nTab=0; nTab<nTabCount; nTab++)
         if ( rMark.GetTableSelect(nTab ) )
         {
-            ScCompressedArrayIterator<SCROW, BYTE> aIter(pDoc->GetRowFlagsArray(nTab), nStartRow, nEndRow);
-            do
+            for (SCROW nRow = nStartRow; nRow <= nEndRow; ++nRow)
             {
-                if (*aIter & CR_FILTERED)
+                SCROW nLastRow = nRow;
+                if (pDoc->RowFiltered(nRow, nTab, NULL, &nLastRow))
                 {
                     // use nStartCol/nEndCol, so the multi mark area isn't extended to all columns
                     // (visible in repaint for indentation)
-
-                    rMark.SetMultiMarkArea( ScRange( nStartCol, aIter.GetRangeStart(), nTab,
-                                                     nEndCol, aIter.GetRangeEnd(), nTab ), FALSE );
+                    rMark.SetMultiMarkArea(
+                        ScRange(nStartCol, nRow, nTab, nEndCol, nLastRow, nTab), false);
                     bChanged = true;
+                    nRow = nLastRow;
                 }
             }
-            while (aIter.NextRange());
         }
 
     if ( bChanged && !rMark.HasAnyMultiMarks() )
@@ -295,34 +294,29 @@ void ScViewUtil::UnmarkFiltered( ScMarkData& rMark, ScDocument* pDoc )
 
 
 // static
-bool ScViewUtil::FitToUnfilteredRows( ScRange & rRange, const ScDocument * pDoc, size_t nRows )
+bool ScViewUtil::FitToUnfilteredRows( ScRange & rRange, ScDocument * pDoc, size_t nRows )
 {
     SCTAB nTab = rRange.aStart.Tab();
     bool bOneTabOnly = (nTab == rRange.aEnd.Tab());
     // Always fit the range on its first sheet.
     DBG_ASSERT( bOneTabOnly, "ScViewUtil::ExtendToUnfilteredRows: works only on one sheet");
     SCROW nStartRow = rRange.aStart.Row();
-    // FillArrayForCondition() usually is the fastest to determine such a set
-    // in one pass, even if the array isn't used but the last element.
-    SCROW* pArr = new SCROW[nRows];
-    size_t nCount = pDoc->GetRowFlagsArray( nTab).FillArrayForCondition(
-            nStartRow, MAXROW, CR_FILTERED, 0, pArr, nRows);
-    if (nCount)
-        rRange.aEnd.SetRow( pArr[nCount-1]);
-    delete [] pArr;
-    return nCount == nRows && bOneTabOnly;
+    SCROW nLastRow = pDoc->LastNonFilteredRow(nStartRow, MAXROW, nTab);
+    if (ValidRow(nLastRow))
+        rRange.aEnd.SetRow(nLastRow);
+    SCROW nCount = pDoc->CountNonFilteredRows(nStartRow, MAXROW, nTab);
+    return static_cast<size_t>(nCount) == nRows && bOneTabOnly;
 }
 
 
 // static
-bool ScViewUtil::HasFiltered( const ScRange& rRange, const ScDocument* pDoc )
+bool ScViewUtil::HasFiltered( const ScRange& rRange, ScDocument* pDoc )
 {
     SCROW nStartRow = rRange.aStart.Row();
     SCROW nEndRow = rRange.aEnd.Row();
     for (SCTAB nTab=rRange.aStart.Tab(); nTab<=rRange.aEnd.Tab(); nTab++)
     {
-        if ( pDoc->GetRowFlagsArray( nTab).HasCondition( nStartRow, nEndRow,
-                CR_FILTERED, CR_FILTERED ) )
+        if (pDoc->HasFilteredRows(nStartRow, nEndRow, nTab))
             return true;
     }
 

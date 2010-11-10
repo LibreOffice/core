@@ -146,7 +146,7 @@ void XclExpDffSheetAnchor::ImplSetFlags( const SdrObject& rSdrObj )
 
 void XclExpDffSheetAnchor::ImplCalcAnchorRect( const Rectangle& rRect, MapUnit eMapUnit )
 {
-    maAnchor.SetRect( GetDoc(), mnScTab, rRect, eMapUnit );
+    maAnchor.SetRect( GetRoot(), mnScTab, rRect, eMapUnit );
 }
 
 // ----------------------------------------------------------------------------
@@ -175,7 +175,7 @@ void XclExpDffEmbeddedAnchor::ImplCalcAnchorRect( const Rectangle& rRect, MapUni
 XclExpDffNoteAnchor::XclExpDffNoteAnchor( const XclExpRoot& rRoot, const Rectangle& rRect ) :
     XclExpDffAnchorBase( rRoot, EXC_ESC_ANCHOR_SIZELOCKED )
 {
-    maAnchor.SetRect( GetDoc(), rRoot.GetCurrScTab(), rRect, MAP_100TH_MM );
+    maAnchor.SetRect( rRoot, rRoot.GetCurrScTab(), rRect, MAP_100TH_MM );
 }
 
 // ----------------------------------------------------------------------------
@@ -841,7 +841,7 @@ void XclExpTbxControlObj::WriteSubRecs( XclExpStream& rStrm )
             }
             else if( mnObjType == EXC_OBJTYPE_DROPDOWN )
             {
-                rStrm << sal_uInt16( 0 ) << mnLineCount;
+                rStrm << sal_uInt16( 0 ) << mnLineCount << sal_uInt16( 0 ) << sal_uInt16( 0 );
             }
 
             rStrm.EndRecord();

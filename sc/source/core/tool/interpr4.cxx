@@ -231,6 +231,12 @@ double ScInterpreter::ConvertStringToValue( const String& rStr )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ConvertStringToValue" );
     double fValue = 0.0;
+    if (mnStringNoValueError == errCellNoValue)
+    {
+        // Requested that all strings result in 0, error handled by caller.
+        SetError( mnStringNoValueError);
+        return fValue;
+    }
     ::rtl::OUString aStr( rStr);
     rtl_math_ConversionStatus eStatus;
     sal_Int32 nParseEnd;
@@ -537,9 +543,14 @@ BOOL ScInterpreter::CreateDoubleArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                             SCCOL nCol2, SCROW nRow2, SCTAB nTab2, BYTE* pCellArr)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::CreateDoubleArr" );
-#if SC_ROWLIMIT_MORE_THAN_64K
-#error row limit 64k
+
+    // Old Add-Ins are hard limited to USHORT values.
+#if MAXCOLCOUNT_DEFINE > USHRT_MAX
+#error Add check for columns > USHRT_MAX!
 #endif
+    if (nRow1 > USHRT_MAX || nRow2 > USHRT_MAX)
+        return FALSE;
+
     USHORT nCount = 0;
     USHORT* p = (USHORT*) pCellArr;
     *p++ = static_cast<USHORT>(nCol1);
@@ -618,9 +629,14 @@ BOOL ScInterpreter::CreateStringArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                     BYTE* pCellArr)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::CreateStringArr" );
-#if SC_ROWLIMIT_MORE_THAN_64K
-#error row limit 64k
+
+    // Old Add-Ins are hard limited to USHORT values.
+#if MAXCOLCOUNT_DEFINE > USHRT_MAX
+#error Add check for columns > USHRT_MAX!
 #endif
+    if (nRow1 > USHRT_MAX || nRow2 > USHRT_MAX)
+        return FALSE;
+
     USHORT nCount = 0;
     USHORT* p = (USHORT*) pCellArr;
     *p++ = static_cast<USHORT>(nCol1);
@@ -713,9 +729,14 @@ BOOL ScInterpreter::CreateCellArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                   BYTE* pCellArr)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::CreateCellArr" );
-#if SC_ROWLIMIT_MORE_THAN_64K
-#error row limit 64k
+
+    // Old Add-Ins are hard limited to USHORT values.
+#if MAXCOLCOUNT_DEFINE > USHRT_MAX
+#error Add check for columns > USHRT_MAX!
 #endif
+    if (nRow1 > USHRT_MAX || nRow2 > USHRT_MAX)
+        return FALSE;
+
     USHORT nCount = 0;
     USHORT* p = (USHORT*) pCellArr;
     *p++ = static_cast<USHORT>(nCol1);
@@ -2125,7 +2146,7 @@ void ScInterpreter::ScExternal()
     if (ScGlobal::GetFuncCollection()->SearchFunc(aFuncName, nIndex))
     {
         FuncData* pFuncData = (FuncData*)ScGlobal::GetFuncCollection()->At(nIndex);
-        if (nParamCount == pFuncData->GetParamCount() - 1)
+        if (nParamCount <= MAXFUNCPARAM && nParamCount == pFuncData->GetParamCount() - 1)
         {
             ParamType   eParamType[MAXFUNCPARAM];
             void*       ppParam[MAXFUNCPARAM];
@@ -3949,5 +3970,10 @@ StackVar ScInterpreter::Interpret()
     while( maxsp-- )
         (*p++)->DecRef();
 
-    return xResult->GetType();
+    StackVar eType = xResult->GetType();
+    if (eType == svMatrix)
+        // Results are immutable in case they would be reused as input for new
+        // interpreters.
+        static_cast<ScToken*>(xResult.operator->())->GetMatrix()->SetImmutable( true);
+    return eType;
 }

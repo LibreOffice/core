@@ -60,6 +60,7 @@ class ScCellRangeObj;
 class ScCellRangesObj;
 class ScDocShell;
 class ScDocument;
+class ScRangeList;
 
 //typedef InheritedHelperInterfaceImpl1< ov::excel::XRange >  ScVbaRange_BASE;
 typedef ScVbaFormat< ov::excel::XRange > ScVbaRange_BASE;
@@ -127,13 +128,26 @@ public:
     ScVbaRange( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::sheet::XSheetCellRangeContainer >& xRanges, sal_Bool bIsRows = false, sal_Bool bIsColumns = false ) throw ( css::lang::IllegalArgumentException );
     ScVbaRange( css::uno::Sequence< css::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext >const& xContext ) throw ( css::lang::IllegalArgumentException );
 
-    ScDocument* getScDocument();
-    ScDocShell* getScDocShell();
+    ScDocument* getScDocument() throw (css::uno::RuntimeException);
+    ScDocShell* getScDocShell() throw (css::uno::RuntimeException);
+
+    /** Returns the ScVbaRange implementation object for the passed VBA Range object. */
+    static ScVbaRange* getImplementation( const css::uno::Reference< ov::excel::XRange >& rxRange );
+
+    css::uno::Reference< css::frame::XModel > getUnoModel() throw (css::uno::RuntimeException);
+    static css::uno::Reference< css::frame::XModel > getUnoModel( const css::uno::Reference< ov::excel::XRange >& rxRange ) throw (css::uno::RuntimeException);
+
+    const ScRangeList& getScRangeList() throw (css::uno::RuntimeException);
+    static const ScRangeList& getScRangeList( const css::uno::Reference< ov::excel::XRange >& rxRange ) throw (css::uno::RuntimeException);
 
     virtual ~ScVbaRange();
      virtual css::uno::Reference< ov::XHelperInterface > thisHelperIface() { return this; }
     bool isSingleCellRange();
-        static css::uno::Reference< ov::excel::XRange > getRangeObjectForName( const css::uno::Reference< css::uno::XComponentContext >& xContext, const rtl::OUString& sRangeName, ScDocShell* pDocSh, formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_XL_A1  ) throw ( css::uno::RuntimeException );
+
+    static css::uno::Reference< ov::excel::XRange > getRangeObjectForName(
+        const css::uno::Reference< css::uno::XComponentContext >& xContext,
+        const rtl::OUString& sRangeName, ScDocShell* pDocSh,
+        formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_XL_A1  ) throw ( css::uno::RuntimeException );
 
     // Attributes
     virtual css::uno::Any SAL_CALL getValue() throw (css::uno::RuntimeException);
@@ -173,6 +187,7 @@ public:
     virtual css::uno::Any SAL_CALL getPageBreak() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setPageBreak( const css::uno::Any& _pagebreak ) throw (css::uno::RuntimeException);
     virtual css::uno::Reference< ov::excel::XValidation > SAL_CALL getValidation() throw (css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL getPrefixCharacter() throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL getShowDetail() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setShowDetail(const css::uno::Any& aShowDetail) throw (css::uno::RuntimeException);
     // Methods
@@ -212,6 +227,7 @@ public:
     virtual css::uno::Reference< ov::excel::XRange > SAL_CALL Range( const css::uno::Any &Cell1, const css::uno::Any &Cell2 ) throw (css::uno::RuntimeException);
     virtual css::uno::Reference< ov::excel::XRange > Range( const css::uno::Any &Cell1, const css::uno::Any &Cell2, bool bForceUseInpuRangeTab ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL getCellRange(  ) throw (css::uno::RuntimeException);
+    static css::uno::Any getCellRange( const css::uno::Reference< ov::excel::XRange >& rxRange ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL PasteSpecial( const css::uno::Any& Paste, const css::uno::Any& Operation, const css::uno::Any& SkipBlanks, const css::uno::Any& Transpose ) throw (css::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL Replace( const ::rtl::OUString& What, const ::rtl::OUString& Replacement, const css::uno::Any& LookAt, const css::uno::Any& SearchOrder, const css::uno::Any& MatchCase, const css::uno::Any& MatchByte, const css::uno::Any& SearchFormat, const css::uno::Any& ReplaceFormat ) throw (css::uno::RuntimeException);
     virtual css::uno::Reference< ov::excel::XRange > SAL_CALL Find( const css::uno::Any& What, const css::uno::Any& After, const css::uno::Any& LookIn, const css::uno::Any& LookAt, const css::uno::Any& SearchOrder, const css::uno::Any& SearchDirection, const css::uno::Any& MatchCase, const css::uno::Any& MatchByte, const css::uno::Any& SearchFormat ) throw (css::uno::RuntimeException);
@@ -227,6 +243,7 @@ public:
                 const css::uno::Any& ConsecutinveDelimiter, const css::uno::Any& Tab, const css::uno::Any& Semicolon, const css::uno::Any& Comma,
                 const css::uno::Any& Space, const css::uno::Any& Other, const css::uno::Any& OtherChar, const css::uno::Any& FieldInfo,
                 const css::uno::Any& DecimalSeparator, const css::uno::Any& ThousandsSeparator, const css::uno::Any& TrailingMinusNumbers ) throw (css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL Hyperlinks( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException);
 
     virtual void SAL_CALL AutoFilter( const css::uno::Any& Field, const css::uno::Any& Criteria1, const css::uno::Any& Operator, const css::uno::Any& Criteria2, const css::uno::Any& VisibleDropDown ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL Insert( const css::uno::Any& Shift, const css::uno::Any& CopyOrigin ) throw (css::uno::RuntimeException);

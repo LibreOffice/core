@@ -375,14 +375,14 @@ void XclImpPageSettings::Finalize()
     {
         SCROW nScRow = static_cast< SCROW >( *aIt );
         if( nScRow <= MAXROW )
-            rDoc.SetRowFlags( nScRow, nScTab, rDoc.GetRowFlags( nScRow, nScTab ) | CR_MANUALBREAK );
+            rDoc.SetRowBreak(nScRow, nScTab, false, true);
     }
 
     for( aIt = maData.maVerPageBreaks.begin(), aEnd = maData.maVerPageBreaks.end(); aIt != aEnd; ++aIt )
     {
         SCCOL nScCol = static_cast< SCCOL >( *aIt );
         if( nScCol <= MAXCOL )
-            rDoc.SetColFlags( nScCol, nScTab, rDoc.GetColFlags( nScCol, nScTab ) | CR_MANUALBREAK );
+            rDoc.SetColBreak(nScCol, nScTab, false, true);
     }
 }
 

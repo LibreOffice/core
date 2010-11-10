@@ -76,7 +76,8 @@ SLOFILES =  \
 EXCEPTIONSFILES= \
     $(SLO)$/undoblk3.obj \
     $(SLO)$/undocell.obj \
-    $(SLO)$/undostyl.obj
+    $(SLO)$/undostyl.obj \
+    $(SLO)$/undotab.obj
 
 # --- Tagets -------------------------------------------------------
 

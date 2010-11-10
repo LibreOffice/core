@@ -25,6 +25,9 @@
  *
  ************************************************************************/
 
+#ifndef __com_sun_star_sheet_NoConvergenceException_idl__
+#include <com/sun/star/sheet/NoConvergenceException.idl>
+#endif
 
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/beans/XPropertySet.idl>
@@ -145,19 +148,23 @@ module addin
 
         /// besseli.
         double getBesseli( [in] double Num, [in] long Order )
-            raises( com::sun::star::lang::IllegalArgumentException );
+            raises( com::sun::star::lang::IllegalArgumentException,
+                    com::sun::star::sheet::NoConvergenceException );
 
         /// besselj.
         double getBesselj( [in] double Num, [in] long Order )
-            raises( com::sun::star::lang::IllegalArgumentException );
+            raises( com::sun::star::lang::IllegalArgumentException,
+                    com::sun::star::sheet::NoConvergenceException );
 
         /// besselk.
         double getBesselk( [in] double Num, [in] long Order )
-            raises( com::sun::star::lang::IllegalArgumentException );
+            raises( com::sun::star::lang::IllegalArgumentException,
+                    com::sun::star::sheet::NoConvergenceException );
 
         /// bessely.
         double getBessely( [in] double Num, [in] long Order )
-            raises( com::sun::star::lang::IllegalArgumentException );
+            raises( com::sun::star::lang::IllegalArgumentException,
+                    com::sun::star::sheet::NoConvergenceException );
 
         /// bin2oct.
         string getBin2Oct(

@@ -40,10 +40,13 @@
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/queryinterface.hxx>
 
+#include <map>
+
 #include <svx/xtable.hxx>
 
 #include "vbainterior.hxx"
 #include "vbapalette.hxx"
+#include "document.hxx"
 
 #define STATIC_TABLE_SIZE( array )  (sizeof(array)/sizeof(*(array)))
 #define COLORMAST 0xFFFFFF

@@ -49,6 +49,7 @@
 using ::rtl::math::approxEqual;
 using ::std::vector;
 using ::rtl::OUString;
+using ::std::set;
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -345,7 +346,7 @@ BOOL ScValueIterator::GetThis(double& rValue, USHORT& rErr)
         if ( nColRow < pCol->nCount && pCol->pItems[nColRow].nRow <= nEndRow )
         {
             nRow = pCol->pItems[nColRow].nRow + 1;
-            if ( !bSubTotal || !pDoc->pTab[nTab]->IsFiltered( nRow-1 ) )
+            if ( !bSubTotal || !pDoc->pTab[nTab]->RowFiltered( nRow-1 ) )
             {
                 ScBaseCell* pCell = pCol->pItems[nColRow].pCell;
                 ++nColRow;
@@ -940,11 +941,6 @@ ScDBQueryDataIterator::ScDBQueryDataIterator(ScDocument* pDocument, ScDBQueryPar
     }
 }
 
-bool ScDBQueryDataIterator::GetThis(Value& rValue)
-{
-    return mpData->getCurrent(rValue);
-}
-
 bool ScDBQueryDataIterator::GetFirst(Value& rValue)
 {
     return mpData->getFirst(rValue);
@@ -1071,7 +1067,7 @@ ScBaseCell* ScCellIterator::GetThis()
         if ( nColRow < pCol->nCount && pCol->pItems[nColRow].nRow <= nEndRow )
         {
             nRow = pCol->pItems[nColRow].nRow;
-            if ( !bSubTotal || !pDoc->pTab[nTab]->IsFiltered( nRow ) )
+            if ( !bSubTotal || !pDoc->pTab[nTab]->RowFiltered( nRow ) )
             {
                 ScBaseCell* pCell = pCol->pItems[nColRow].pCell;
 
@@ -1257,14 +1253,6 @@ ScBaseCell* ScQueryCellIterator::GetNext()
     if ( nTestEqualCondition )
         nTestEqualCondition = nTestEqualConditionEnabled;
     return GetThis();
-}
-
-ULONG ScQueryCellIterator::GetNumberFormat()
-{
-    ScColumn* pCol = &(pDoc->pTab[nTab])->aCol[nCol];
-    lcl_IterGetNumberFormat( nNumFormat, pAttrArray,
-        nAttrEndRow, pCol->pAttrArray, nRow, pDoc );
-    return nNumFormat;
 }
 
 void ScQueryCellIterator::AdvanceQueryParamEntryField()
@@ -2147,3 +2135,24 @@ const ScPatternAttr* ScAttrRectIterator::GetNext( SCCOL& rCol1, SCCOL& rCol2,
     return NULL;        // is nix mehr
 }
 
+// ============================================================================
+
+SCROW ScRowBreakIterator::NOT_FOUND = -1;
+
+ScRowBreakIterator::ScRowBreakIterator(set<SCROW>& rBreaks) :
+    mrBreaks(rBreaks),
+    maItr(rBreaks.begin()), maEnd(rBreaks.end())
+{
+}
+
+SCROW ScRowBreakIterator::first()
+{
+    maItr = mrBreaks.begin();
+    return maItr == maEnd ? NOT_FOUND : *maItr;
+}
+
+SCROW ScRowBreakIterator::next()
+{
+    ++maItr;
+    return maItr == maEnd ? NOT_FOUND : *maItr;
+}

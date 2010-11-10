@@ -937,7 +937,10 @@ BOOL ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
     }
 
     if (!bCopy)
+    {
+        pDoc->InvalidatePageBreaks(nTab);
         pDoc->UpdatePageBreaks( nTab );
+    }
 
     // #i23299# because of Subtotal functions, the whole rows must be set dirty
     ScRange aDirtyRange( 0 , aLocalParam.nRow1, nDestTab,
@@ -1275,6 +1278,13 @@ BOOL ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
                 //  output range must be set at pNewObj
 
                 pDestObj = new ScDPObject( *pNewObj );
+
+                // #i94570# When changing the output position in the dialog, a new table is created
+                // with the settings from the old table, including the name.
+                // So we have to check for duplicate names here (before inserting).
+                if ( pDoc->GetDPCollection()->GetByName(pDestObj->GetName()) )
+                    pDestObj->SetName( String() );      // ignore the invalid name, create a new name below
+
                 pDestObj->SetAlive(TRUE);
                 if ( !pDoc->GetDPCollection()->InsertNewTable(pDestObj) )
                 {

@@ -45,6 +45,7 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
     mpScData( 0 ),
     mcBuiltIn( EXC_BUILTIN_UNKNOWN ),
     mnScTab( SCTAB_MAX ),
+    mbFunction( false ),
     mbVBName( false )
 {
     ExcelToSc& rFmlaConv = GetOldFmlaConverter();
@@ -93,7 +94,8 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
 
     // 2) *** convert sheet index and name *** --------------------------------
 
-    // Visual Basic procedure
+    // functions and VBA
+    mbFunction = ::get_flag( nFlags, EXC_NAME_FUNC );
     mbVBName = ::get_flag( nFlags, EXC_NAME_VB );
 
     // get built-in name, or convert characters invalid in Calc
@@ -132,7 +134,8 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
     if( nXclTab != EXC_NAME_GLOBAL )
     {
         sal_uInt16 nUsedTab = (GetBiff() == EXC_BIFF8) ? nXclTab : nExtSheet;
-        maScName.Append( '_' ).Append( String::CreateFromInt32( nUsedTab ) );
+        // #163146# do not rename sheet-local names by default, this breaks VBA scripts
+//        maScName.Append( '_' ).Append( String::CreateFromInt32( nUsedTab ) );
         // TODO: may not work for BIFF5, handle skipped sheets (all BIFF)
         mnScTab = static_cast< SCTAB >( nUsedTab - 1 );
     }
@@ -208,7 +211,8 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
 
     // 4) *** create a defined name in the Calc document *** ------------------
 
-    if( pTokArr && (bBuiltIn || !::get_flag( nFlags, EXC_NAME_HIDDEN )) && !mbVBName )
+    // #163146# do not ignore hidden names (may be regular names created by VBA scripts)
+    if( pTokArr /*&& (bBuiltIn || !::get_flag( nFlags, EXC_NAME_HIDDEN ))*/ && !mbFunction && !mbVBName )
     {
         // create the Calc name data
         ScRangeData* pData = new ScRangeData( GetDocPtr(), maScName, *pTokArr, ScAddress(), nNameType );

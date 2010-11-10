@@ -58,6 +58,7 @@ class ScDPShowDetailDlg;
 class ScNewScenarioDlg;
 class ScShowTabDlg;
 class ScStringInputDlg;
+class ScTabBgColorDlg;
 class ScImportOptionsDlg;
 class SfxTabDialog;
 class ScSortWarningDlg;
@@ -325,7 +326,7 @@ class AbstractScShowTabDlg_Impl : public AbstractScShowTabDlg  //add for ScShowT
     DECL_ABSTDLG_BASE(AbstractScShowTabDlg_Impl,ScShowTabDlg)
     virtual void    Insert( const String& rString, BOOL bSelected );
     virtual USHORT  GetSelectEntryCount() const;
-    virtual void SetDescription(const String& rTitle, const String& rFixedText,ULONG nDlgHelpId, ULONG nLbHelpId );
+    virtual void SetDescription(const String& rTitle, const String& rFixedText, const rtl::OString& sDlgHelpId, const rtl::OString& sLbHelpId );
     virtual String  GetSelectEntry(USHORT nPos) const;
     virtual USHORT  GetSelectEntryPos(USHORT nPos) const;
 };
@@ -334,6 +335,12 @@ class AbstractScStringInputDlg_Impl :  public AbstractScStringInputDlg  //add fo
 {
     DECL_ABSTDLG_BASE( AbstractScStringInputDlg_Impl, ScStringInputDlg )
     virtual void GetInputString( String& rString ) const;
+};
+
+class AbstractScTabBgColorDlg_Impl :  public AbstractScTabBgColorDlg  //add for ScTabBgColorDlg
+{
+    DECL_ABSTDLG_BASE( AbstractScTabBgColorDlg_Impl, ScTabBgColorDlg )
+    virtual void GetSelectedColor( Color& rColor ) const;
 };
 
 class AbstractScImportOptionsDlg_Impl : public AbstractScImportOptionsDlg  //add for ScImportOptionsDlg
@@ -517,8 +524,16 @@ public:
                                                                 const String& rTitle,
                                                                 const String& rEditTitle,
                                                                 const String& rDefault,
-                                                                ULONG nHelpId ,
+                                                                const rtl::OString& sHelpId, const rtl::OString& sEditHelpId,
                                                                 int nId );
+
+    virtual AbstractScTabBgColorDlg * CreateScTabBgColorDlg (  Window* pParent, //add for ScStringInputDlg
+                                                                const String& rTitle, //Dialog Title
+                                                                const String& rTabBgColorNoColorText, //Label for no tab color
+                                                                const Color& rDefaultColor, //Currently selected Color
+                                                                const rtl::OString& sHelpId ,
+                                                                int nId );
+
     virtual AbstractScImportOptionsDlg * CreateScImportOptionsDlg ( Window*                 pParent, //add for ScImportOptionsDlg
                                                                     int nId,
                                                                     BOOL                    bAscii = TRUE,

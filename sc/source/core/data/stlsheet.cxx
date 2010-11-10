@@ -171,7 +171,7 @@ SfxItemSet& __EXPORT ScStyleSheet::GetItemSet()
                     //  gespeicherte Printer noch nicht geladen ist!
 
                     ScDocument* pDoc = ((ScStyleSheetPool&)GetPool()).GetDocument();
-                    if ( pDoc && pDoc->IsLoadingDone() )
+                    if ( pDoc )
                     {
                         // Setzen von sinnvollen Default-Werten:
                         SvxPageItem     aPageItem( ATTR_PAGE );

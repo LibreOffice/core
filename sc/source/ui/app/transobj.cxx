@@ -602,25 +602,23 @@ void ScTransferObj::InitDocShell()
         //  widths / heights
         //  (must be copied before CopyFromClip, for drawing objects)
 
-        SCCOL nCol;
-        SCROW nRow;
+        SCCOL nCol, nLastCol;
         SCTAB nSrcTab = aBlock.aStart.Tab();
         pDestDoc->SetLayoutRTL(0, pDoc->IsLayoutRTL(nSrcTab));
         for (nCol=nStartX; nCol<=nEndX; nCol++)
-            if ( pDoc->GetColFlags( nCol, nSrcTab ) & CR_HIDDEN )
+            if ( pDoc->ColHidden(nCol, nSrcTab, nLastCol) )
                 pDestDoc->ShowCol( nCol, 0, FALSE );
             else
                 pDestDoc->SetColWidth( nCol, 0, pDoc->GetColWidth( nCol, nSrcTab ) );
 
         ScBitMaskCompressedArray< SCROW, BYTE> & rDestRowFlags =
             pDestDoc->GetRowFlagsArrayModifiable(0);
-        ScCompressedArrayIterator< SCROW, BYTE> aIter( pDoc->GetRowFlagsArray(
-                    nSrcTab), nStartY, nEndY);
-        for ( ; aIter; ++aIter )
+
+        for (SCROW nRow = nStartY; nRow <= nEndY; ++nRow)
         {
-            nRow = aIter.GetPos();
-            BYTE nSourceFlags = *aIter;
-            if ( nSourceFlags & CR_HIDDEN )
+            BYTE nSourceFlags = pDoc->GetRowFlags(nRow, nSrcTab);
+            SCROW nLastRow = -1;
+            if ( pDoc->RowHidden(nRow, nSrcTab, nLastRow) )
                 pDestDoc->ShowRow( nRow, 0, FALSE );
             else
             {
@@ -684,7 +682,7 @@ void ScTransferObj::InitDocShell()
 
         for (nCol=0; nCol<nStartX; nCol++)
             nPosX += pDestDoc->GetColWidth( nCol, 0 );
-        nPosY += pDestDoc->FastGetRowHeight( 0, nStartY-1, 0 );
+        nPosY += pDestDoc->GetRowHeight( 0, nStartY-1, 0 );
         nPosX = (long) ( nPosX * HMM_PER_TWIPS );
         nPosY = (long) ( nPosY * HMM_PER_TWIPS );
 
@@ -701,9 +699,9 @@ void ScTransferObj::InitDocShell()
                 break;
             nSizeX += nAdd;
         }
-        for (nRow=nStartY; nRow<=nEndY; nRow++)
+        for (SCROW nRow=nStartY; nRow<=nEndY; nRow++)
         {
-            long nAdd = pDestDoc->FastGetRowHeight( nRow, 0 );
+            long nAdd = pDestDoc->GetRowHeight( nRow, 0 );
             if ( nSizeY+nAdd > aPaperSize.Height() && nSizeY )  // above limit?
                 break;
             nSizeY += nAdd;

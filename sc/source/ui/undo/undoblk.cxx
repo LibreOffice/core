@@ -592,7 +592,7 @@ ScUndoDeleteMulti::ScUndoDeleteMulti( ScDocShell* pNewDocShell,
 
 __EXPORT ScUndoDeleteMulti::~ScUndoDeleteMulti()
 {
-    delete pRanges;
+    delete [] pRanges;
 }
 
 String __EXPORT ScUndoDeleteMulti::GetComment() const
@@ -1148,10 +1148,10 @@ ScUndoDragDrop::ScUndoDragDrop( ScDocShell* pNewDocShell,
     BOOL bIncludeFiltered = bCut;
     if ( !bIncludeFiltered )
     {
-        //  manually find number of non-filtered rows
-        SCROW nPastedCount = pDocShell->GetDocument()->GetRowFlagsArray(
-                aSrcRange.aStart.Tab()).CountForCondition(
-                aSrcRange.aStart.Row(), aSrcRange.aEnd.Row(), CR_FILTERED, 0);
+        // find number of non-filtered rows
+        SCROW nPastedCount = pDocShell->GetDocument()->CountNonFilteredRows(
+            aSrcRange.aStart.Row(), aSrcRange.aEnd.Row(), aSrcRange.aStart.Tab());
+
         if ( nPastedCount == 0 )
             nPastedCount = 1;
         aDestEnd.SetRow( aNewDestPos.Row() + nPastedCount - 1 );

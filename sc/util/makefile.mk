@@ -255,6 +255,7 @@ LIB8OBJFILES = \
         $(SLO)$/attrdlg.obj	\
         $(SLO)$/scuiimoptdlg.obj	\
         $(SLO)$/strindlg.obj		\
+        $(SLO)$/tabbgcolordlg.obj   \
         $(SLO)$/shtabdlg.obj		\
         $(SLO)$/scendlg.obj		\
         $(SLO)$/pvfundlg.obj	\
@@ -314,7 +315,7 @@ SHL9STDLIBS= \
         $(ISCLIB) \
         $(VCLLIB) \
         $(TKLIB) \
-        $(SVXMSFILTERLIB)		\
+        $(MSFILTERLIB)		\
         $(FORLIB)
 
 SHL9DEPN=$(SHL1TARGETN) $(SHL8TARGETN)
@@ -341,3 +342,23 @@ ALLTAR:	$(MISC)$/linkinc.ls  $(COMP)
 
 build_extn : $(SHL9TARGETN)
     $(PERL) createExtPackage.pl $(COMMONBIN)$/vbaapi.oxt  $(SOLARBINDIR)$/oovbaapi.rdb $(LIBCOMPNAME)
+
+ALLTAR : $(MISC)/sc.component $(MISC)/scd.component $(MISC)/vbaobj.component
+
+$(MISC)/sc.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        sc.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt sc.component
+
+$(MISC)/scd.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        scd.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL2TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt scd.component
+
+$(MISC)/vbaobj.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        vbaobj.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL9TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt vbaobj.component

@@ -28,67 +28,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
-//------------------------------------------------------------------------
-
-#ifdef WIN
-
-// SFX
-#define _SFXAPPWIN_HXX
-#define _SFX_SAVEOPT_HXX
-//#define _SFX_CHILDWIN_HXX ***
-#define _SFXCTRLITEM_HXX
-#define _SFXPRNMON_HXX
-#define _INTRO_HXX
-#define _SFXMSGDESCR_HXX
-#define _SFXMSGPOOL_HXX
-#define _SFXFILEDLG_HXX
-#define _PASSWD_HXX
-#define _SFXTBXCTRL_HXX
-#define _SFXSTBITEM_HXX
-#define _SFXMNUITEM_HXX
-#define _SFXIMGMGR_HXX
-#define _SFXTBXMGR_HXX
-#define _SFXSTBMGR_HXX
-#define _SFX_MINFITEM_HXX
-#define _SFXEVENT_HXX
-
-//#define _SI_HXX
-//#define SI_NODRW
-#define _SI_DLL_HXX
-#define _SIDLL_HXX
-#define _SI_NOITEMS
-#define _SI_NOOTHERFORMS
-#define _SI_NOSBXCONTROLS
-#define _SINOSBXCONTROLS
-#define _SI_NODRW         //
-#define _SI_NOCONTROL
-#define _VCBRW_HXX
-#define _VCTRLS_HXX
-//#define _VCSBX_HXX
-#define _VCONT_HXX
-#define _VDRWOBJ_HXX
-#define _VCATTR_HXX
-
-
-#define _SVX_DAILDLL_HXX
-#define _SVX_HYPHEN_HXX
-#define _SVX_IMPGRF_HXX
-#define _SVX_OPTITEMS_HXX
-#define _SVX_OPTGERL_HXX
-#define _SVX_OPTSAVE_HXX
-#define _SVX_OPTSPELL_HXX
-#define _SVX_OPTPATH_HXX
-#define _SVX_OPTLINGU_HXX
-#define _SVX_RULER_HXX
-#define _SVX_RULRITEM_HXX
-#define _SVX_SPLWRAP_HXX
-#define _SVX_SPLDLG_HXX
-#define _SVX_THESDLG_HXX
-
-#endif  //WIN
-
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
@@ -112,8 +51,8 @@
 #include "hints.hxx"        // fuer Paint-Broadcast
 #include "prnsave.hxx"
 #include "tabprotection.hxx"
-
-// STATIC DATA -----------------------------------------------------------
+#include "sheetevents.hxx"
+#include "segmenttree.hxx"
 
 // -----------------------------------------------------------------------
 
@@ -131,14 +70,20 @@ ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const String& rNewName,
     nRepeatStartY( SCROW_REPEAT_NONE ),
     pTabProtection( NULL ),
     pColWidth( NULL ),
-    pRowHeight( NULL ),
+    mpRowHeights( static_cast<ScFlatUInt16RowSegments*>(NULL) ),
     pColFlags( NULL ),
     pRowFlags( NULL ),
+    mpHiddenCols(new ScFlatBoolColSegments),
+    mpHiddenRows(new ScFlatBoolRowSegments),
+    mpFilteredCols(new ScFlatBoolColSegments),
+    mpFilteredRows(new ScFlatBoolRowSegments),
     pOutlineTable( NULL ),
+    pSheetEvents( NULL ),
     bTableAreaValid( FALSE ),
     bVisible( TRUE ),
     bStreamValid( FALSE ),
     bPendingRowHeights( FALSE ),
+    bCalcNotification( FALSE ),
     nTab( nNewTab ),
     nRecalcLvl( 0 ),
     pDocument( pDoc ),
@@ -151,8 +96,10 @@ ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const String& rNewName,
     nLockCount( 0 ),
     pScenarioRanges( NULL ),
     aScenarioColor( COL_LIGHTGRAY ),
+    aTabBgColor( COL_AUTO ),
     nScenarioFlags( 0 ),
-    bActiveScenario( FALSE )
+    bActiveScenario( FALSE ),
+    mbPageBreaksValid(false)
 {
 
     if (bColInfo)
@@ -169,7 +116,7 @@ ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const String& rNewName,
 
     if (bRowInfo)
     {
-        pRowHeight = new ScSummableCompressedArray< SCROW, USHORT>( MAXROW, ScGlobal::nStdRowHeight);
+        mpRowHeights.reset(new ScFlatUInt16RowSegments(ScGlobal::nStdRowHeight));
         pRowFlags  = new ScBitMaskCompressedArray< SCROW, BYTE>( MAXROW, 0);
     }
 
@@ -211,8 +158,8 @@ ScTable::~ScTable()
 
     delete[] pColWidth;
     delete[] pColFlags;
-    delete pRowHeight;
     delete pRowFlags;
+    delete pSheetEvents;
     delete pOutlineTable;
     delete pSearchParam;
     delete pSearchText;
@@ -269,6 +216,22 @@ void ScTable::SetLayoutRTL( BOOL bSet )
 void ScTable::SetLoadingRTL( BOOL bSet )
 {
     bLoadingRTL = bSet;
+}
+
+const Color& ScTable::GetTabBgColor() const
+{
+    return aTabBgColor;
+}
+
+void ScTable::SetTabBgColor(const Color& rColor)
+{
+    if (aTabBgColor != rColor)
+    {
+        // The tab color has changed.  Set this table 'modified'.
+        aTabBgColor = rColor;
+        if (IsStreamValid())
+            SetStreamValid(false);
+    }
 }
 
 void ScTable::SetScenario( BOOL bFlag )
@@ -969,9 +932,10 @@ BOOL ScTable::ValidNextPos( SCCOL nCol, SCROW nRow, const ScMarkData& rMark,
         //  auf der naechsten Zelle landet, auch wenn die geschuetzt/nicht markiert ist.
         //! per Extra-Parameter steuern, nur fuer Cursor-Bewegung ???
 
-        if ( pRowFlags && ( pRowFlags->GetValue(nRow) & CR_HIDDEN ) )
+        if (RowHidden(nRow))
             return FALSE;
-        if ( pColFlags && ( pColFlags[nCol] & CR_HIDDEN ) )
+
+        if (ColHidden(nCol))
             return FALSE;
     }
 
@@ -998,8 +962,8 @@ void ScTable::GetNextPos( SCCOL& rCol, SCROW& rRow, SCsCOL nMovX, SCsROW nMovY,
     {
         BOOL bUp = ( nMovY < 0 );
         nRow = rMark.GetNextMarked( nCol, nRow, bUp );
-        while ( VALIDROW(nRow) && ((pRowFlags && (pRowFlags->GetValue(nRow) & CR_HIDDEN)) ||
-                pDocument->HasAttrib(nCol, nRow, nTab, nCol, nRow, nTab, HASATTR_OVERLAPPED)) )
+        while ( VALIDROW(nRow) &&
+                (RowHidden(nRow) || pDocument->HasAttrib(nCol, nRow, nTab, nCol, nRow, nTab, HASATTR_OVERLAPPED)) )
         {
             //  #53697# ausgeblendete ueberspringen (s.o.)
             nRow += nMovY;
@@ -1009,7 +973,7 @@ void ScTable::GetNextPos( SCCOL& rCol, SCROW& rRow, SCsCOL nMovX, SCsROW nMovY,
         while ( nRow < 0 || nRow > MAXROW )
         {
             nCol = sal::static_int_cast<SCsCOL>( nCol + static_cast<SCsCOL>(nMovY) );
-            while ( VALIDCOL(nCol) && pColFlags && (pColFlags[nCol] & CR_HIDDEN) )
+            while ( VALIDCOL(nCol) && ColHidden(nCol) )
                 nCol = sal::static_int_cast<SCsCOL>( nCol + static_cast<SCsCOL>(nMovY) );   //  #53697# skip hidden rows (see above)
             if (nCol < 0)
             {
@@ -1028,8 +992,8 @@ void ScTable::GetNextPos( SCCOL& rCol, SCROW& rRow, SCsCOL nMovX, SCsROW nMovY,
             else if (nRow > MAXROW)
                 nRow = 0;
             nRow = rMark.GetNextMarked( nCol, nRow, bUp );
-            while ( VALIDROW(nRow) && ((pRowFlags && (pRowFlags->GetValue(nRow) & CR_HIDDEN)) ||
-                    pDocument->HasAttrib(nCol, nRow, nTab, nCol, nRow, nTab, HASATTR_OVERLAPPED)) )
+            while ( VALIDROW(nRow) &&
+                    (RowHidden(nRow) || pDocument->HasAttrib(nCol, nRow, nTab, nCol, nRow, nTab, HASATTR_OVERLAPPED)) )
             {
                 //  #53697# ausgeblendete ueberspringen (s.o.)
                 nRow += nMovY;
@@ -1420,93 +1384,140 @@ void ScTable::ExtendPrintArea( OutputDevice* pDev,
     double nPPTX = aPix1000.X() / 1000.0;
     double nPPTY = aPix1000.Y() / 1000.0;
 
-    BOOL bEmpty[MAXCOLCOUNT];
-    for (SCCOL i=0; i<=MAXCOL; i++)
-        bEmpty[i] = ( aCol[i].GetCellCount() == 0 );
+    // First, mark those columns that we need to skip i.e. hidden and empty columns.
 
-    SCSIZE nIndex;
-    SCCOL nPrintCol = rEndCol;
-    SCSIZE nRowFlagsIndex;
-    SCROW nRowFlagsEndRow;
-    BYTE nRowFlag = pRowFlags->GetValue( nStartRow, nRowFlagsIndex, nRowFlagsEndRow);
-    for (SCROW nRow = nStartRow; nRow<=nEndRow; nRow++)
+    ScFlatBoolColSegments aSkipCols;
+    aSkipCols.setInsertFromBack(true); // speed optimazation.
+    aSkipCols.setFalse(0, MAXCOL);
+    for (SCCOL i = 0; i <= MAXCOL; ++i)
     {
-        if (nRow > nRowFlagsEndRow)
-            nRowFlag = pRowFlags->GetNextValue( nRowFlagsIndex, nRowFlagsEndRow);
-        if ( ( nRowFlag & CR_HIDDEN ) == 0 )
+        SCCOL nLastCol = i;
+        if (ColHidden(i, NULL, &nLastCol))
         {
-            SCCOL nDataCol = rEndCol;
-            while (nDataCol > 0 && ( bEmpty[nDataCol] || !aCol[nDataCol].Search(nRow,nIndex) ) )
-                --nDataCol;
-            if ( ( pColFlags[nDataCol] & CR_HIDDEN ) == 0 )
+            // Columns are hidden in this range.
+            aSkipCols.setTrue(i, nLastCol);
+        }
+        else
+        {
+            // These columns are visible.  Check for empty columns.
+            for (SCCOL j = i; j <= nLastCol; ++j)
             {
-                ScBaseCell* pCell = aCol[nDataCol].GetCell(nRow);
-                if (pCell)
-                {
-                    CellType eType = pCell->GetCellType();
-                    if (eType == CELLTYPE_STRING || eType == CELLTYPE_EDIT
-                        || (eType == CELLTYPE_FORMULA && !((ScFormulaCell*)pCell)->IsValue()) )
-                    {
-                        BOOL bFormula = FALSE;  //! uebergeben
-                        long nPixel = pCell->GetTextWidth();
-
-                        // Breite bereits im Idle-Handler berechnet?
-                        if ( TEXTWIDTH_DIRTY == nPixel )
-                        {
-                            ScNeededSizeOptions aOptions;
-                            aOptions.bTotalSize  = TRUE;
-                            aOptions.bFormula    = bFormula;
-                            aOptions.bSkipMerged = FALSE;
-
-                            Fraction aZoom(1,1);
-                            nPixel = aCol[nDataCol].GetNeededSize( nRow,
-                                                        pDev,nPPTX,nPPTY,aZoom,aZoom,
-                                                        TRUE, aOptions );
-                            pCell->SetTextWidth( (USHORT)nPixel );
-                        }
-
-                        long nTwips = (long) (nPixel / nPPTX);
-                        long nDocW = GetColWidth( nDataCol );
-
-                        long nMissing = nTwips - nDocW;
-                        if ( nMissing > 0 )
-                        {
-                            //  look at alignment
-
-                            const ScPatternAttr* pPattern = GetPattern( nDataCol, nRow );
-                            const SfxItemSet* pCondSet = NULL;
-                            if ( ((const SfxUInt32Item&)pPattern->GetItem(ATTR_CONDITIONAL)).GetValue() )
-                                pCondSet = pDocument->GetCondResult( nDataCol, nRow, nTab );
-
-                            SvxCellHorJustify eHorJust = (SvxCellHorJustify)((const SvxHorJustifyItem&)
-                                            pPattern->GetItem( ATTR_HOR_JUSTIFY, pCondSet )).GetValue();
-                            if ( eHorJust == SVX_HOR_JUSTIFY_CENTER )
-                                nMissing /= 2;                          // distributed into both directions
-                            else
-                            {
-                                // STANDARD is LEFT (only text is handled here)
-                                BOOL bRight = ( eHorJust == SVX_HOR_JUSTIFY_RIGHT );
-                                if ( IsLayoutRTL() )
-                                    bRight = !bRight;
-                                if ( bRight )
-                                    nMissing = 0;       // extended only to the left (logical)
-                            }
-                        }
-
-                        SCCOL nCol = nDataCol;
-                        while (nMissing > 0 && nCol < MAXCOL)
-                        {
-                            ++nCol;
-                            nMissing -= GetColWidth( nCol );
-                        }
-                        if (nCol>nPrintCol)
-                            nPrintCol = nCol;
-                    }
-                }
+                if (aCol[j].GetCellCount() == 0)
+                    // empty
+                    aSkipCols.setTrue(j,j);
             }
         }
+        i = nLastCol;
     }
-    rEndCol = nPrintCol;
+
+    ScFlatBoolColSegments::RangeData aColData;
+    for (SCCOL nCol = rEndCol; nCol >= 0; --nCol)
+    {
+        if (!aSkipCols.getRangeData(nCol, aColData))
+            // Failed to get the data.  This should never happen!
+            return;
+
+        if (aColData.mbValue)
+        {
+            // Skip these columns.
+            nCol = aColData.mnCol1; // move toward 0.
+            continue;
+        }
+
+        // These are visible and non-empty columns.
+        for (SCCOL nDataCol = nCol; 0 <= nDataCol && nDataCol >= aColData.mnCol1; --nDataCol)
+        {
+            SCCOL nPrintCol = nDataCol;
+            VisibleDataCellIterator aIter(*mpHiddenRows, aCol[nDataCol]);
+            ScBaseCell* pCell = aIter.reset(nStartRow);
+            if (!pCell)
+                // No visible cells found in this column.  Skip it.
+                continue;
+
+            while (pCell)
+            {
+                SCCOL nNewCol = nDataCol;
+                SCROW nRow = aIter.getRow();
+                if (nRow > nEndRow)
+                    // Went past the last row position.  Bail out.
+                    break;
+
+                MaybeAddExtraColumn(nNewCol, nRow, pDev, nPPTX, nPPTY);
+                if (nNewCol > nPrintCol)
+                    nPrintCol = nNewCol;
+                pCell = aIter.next();
+            }
+
+            if (nPrintCol > rEndCol)
+                // Make sure we don't shrink the print area.
+                rEndCol = nPrintCol;
+        }
+        nCol = aColData.mnCol1; // move toward 0.
+    }
+}
+
+void ScTable::MaybeAddExtraColumn(SCCOL& rCol, SCROW nRow, OutputDevice* pDev, double nPPTX, double nPPTY)
+{
+    ScBaseCell* pCell = aCol[rCol].GetCell(nRow);
+    if (!pCell || !pCell->HasStringData())
+        return;
+
+    bool bFormula = false;  //! ueberge
+    long nPixel = pCell->GetTextWidth();
+
+    // Breite bereits im Idle-Handler berechnet?
+    if ( TEXTWIDTH_DIRTY == nPixel )
+    {
+        ScNeededSizeOptions aOptions;
+        aOptions.bTotalSize  = TRUE;
+        aOptions.bFormula    = bFormula;
+        aOptions.bSkipMerged = FALSE;
+
+        Fraction aZoom(1,1);
+        nPixel = aCol[rCol].GetNeededSize(
+            nRow, pDev, nPPTX, nPPTY, aZoom, aZoom, true, aOptions );
+        pCell->SetTextWidth( (USHORT)nPixel );
+    }
+
+    long nTwips = (long) (nPixel / nPPTX);
+    long nDocW = GetColWidth( rCol );
+
+    long nMissing = nTwips - nDocW;
+    if ( nMissing > 0 )
+    {
+        //  look at alignment
+
+        const ScPatternAttr* pPattern = GetPattern( rCol, nRow );
+        const SfxItemSet* pCondSet = NULL;
+        if ( ((const SfxUInt32Item&)pPattern->GetItem(ATTR_CONDITIONAL)).GetValue() )
+            pCondSet = pDocument->GetCondResult( rCol, nRow, nTab );
+
+        SvxCellHorJustify eHorJust = (SvxCellHorJustify)((const SvxHorJustifyItem&)
+                        pPattern->GetItem( ATTR_HOR_JUSTIFY, pCondSet )).GetValue();
+        if ( eHorJust == SVX_HOR_JUSTIFY_CENTER )
+            nMissing /= 2;                          // distributed into both directions
+        else
+        {
+            // STANDARD is LEFT (only text is handled here)
+            bool bRight = ( eHorJust == SVX_HOR_JUSTIFY_RIGHT );
+            if ( IsLayoutRTL() )
+                bRight = !bRight;
+            if ( bRight )
+                nMissing = 0;       // extended only to the left (logical)
+        }
+    }
+
+    SCCOL nNewCol = rCol;
+    while (nMissing > 0 && nNewCol < MAXCOL)
+    {
+        ScBaseCell* pNextCell = aCol[nNewCol+1].GetCell(nRow);
+        if (pNextCell && pNextCell->GetCellType() != CELLTYPE_NOTE)
+            // Cell content in a next column ends display of this string.
+            nMissing = 0;
+        else
+            nMissing -= GetColWidth(++nNewCol);
+    }
+    rCol = nNewCol;
 }
 
 void ScTable::DoColResize( SCCOL nCol1, SCCOL nCol2, SCSIZE nAdd )
@@ -1597,7 +1608,104 @@ void ScTable::RestorePrintRanges( const ScPrintSaverTab& rSaveTab )
     UpdatePageBreaks(NULL);
 }
 
+SCROW ScTable::VisibleDataCellIterator::ROW_NOT_FOUND = -1;
 
+ScTable::VisibleDataCellIterator::VisibleDataCellIterator(ScFlatBoolRowSegments& rRowSegs, ScColumn& rColumn) :
+    mrRowSegs(rRowSegs),
+    mrColumn(rColumn),
+    mpCell(NULL),
+    mnCurRow(ROW_NOT_FOUND),
+    mnUBound(ROW_NOT_FOUND)
+{
+}
 
+ScTable::VisibleDataCellIterator::~VisibleDataCellIterator()
+{
+}
 
+ScBaseCell* ScTable::VisibleDataCellIterator::reset(SCROW nRow)
+{
+    if (nRow > MAXROW)
+    {
+        mnCurRow = ROW_NOT_FOUND;
+        return NULL;
+    }
+
+    ScFlatBoolRowSegments::RangeData aData;
+    if (!mrRowSegs.getRangeData(nRow, aData))
+    {
+        mnCurRow = ROW_NOT_FOUND;
+        return NULL;
+    }
+
+    if (!aData.mbValue)
+    {
+        // specified row is visible.  Take it.
+        mnCurRow = nRow;
+        mnUBound = aData.mnRow2;
+    }
+    else
+    {
+        // specified row is not-visible.  The first visible row is the start of
+        // the next segment.
+        mnCurRow = aData.mnRow2 + 1;
+        mnUBound = mnCurRow; // get range data on the next iteration.
+        if (mnCurRow > MAXROW)
+        {
+            // Make sure the row doesn't exceed our current limit.
+            mnCurRow = ROW_NOT_FOUND;
+            return NULL;
+        }
+    }
+
+    mpCell = mrColumn.GetCell(mnCurRow);
+    if (mpCell)
+        // First visible cell found.
+        return mpCell;
+
+    // Find a first visible cell below this row (if any).
+    return next();
+}
+
+ScBaseCell* ScTable::VisibleDataCellIterator::next()
+{
+    if (mnCurRow == ROW_NOT_FOUND)
+        return NULL;
+
+    while (mrColumn.GetNextDataPos(mnCurRow))
+    {
+        if (mnCurRow > mnUBound)
+        {
+            // We don't know the visibility of this row range.  Query it.
+            ScFlatBoolRowSegments::RangeData aData;
+            if (!mrRowSegs.getRangeData(mnCurRow, aData))
+            {
+                mnCurRow = ROW_NOT_FOUND;
+                return NULL;
+            }
+
+            if (aData.mbValue)
+            {
+                // This row is invisible.  Skip to the last invisible row and
+                // try again.
+                mnCurRow = mnUBound = aData.mnRow2;
+                continue;
+            }
+
+            // This row is visible.
+            mnUBound = aData.mnRow2;
+        }
+
+        mpCell = mrColumn.GetCell(mnCurRow);
+        if (mpCell)
+            return mpCell;
+    }
+    mnCurRow = ROW_NOT_FOUND;
+    return NULL;
+}
+
+SCROW ScTable::VisibleDataCellIterator::getRow() const
+{
+    return mnCurRow;
+}
 

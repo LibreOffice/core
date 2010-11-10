@@ -30,6 +30,7 @@
 
 #include "excimp8.hxx"
 
+#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 
 #include <scitems.hxx>
 #include <comphelper/processfactory.hxx>
@@ -54,6 +55,7 @@
 #include <editeng/flditem.hxx>
 #include <svx/xflclit.hxx>
 #include <filter/msfilter/svxmsbas.hxx>
+#include <basic/basmgr.hxx>
 
 #include <vcl/graph.hxx>
 #include <vcl/bmpacc.hxx>
@@ -64,6 +66,7 @@
 #include <tools/string.hxx>
 #include <tools/urlobj.hxx>
 #include <rtl/math.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/charclass.hxx>
 #include <drwlayer.hxx>
@@ -99,27 +102,19 @@
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
-#include <basic/basmgr.hxx>
 #include <cppuhelper/component_context.hxx>
-#include <com/sun/star/container/XNameContainer.hpp>
 #include <sfx2/app.hxx>
 
 using namespace com::sun::star;
-
-
-#define INVALID_POS     0xFFFFFFFF
-
-
+using ::rtl::OUString;
 
 
 ImportExcel8::ImportExcel8( XclImpRootData& rImpData, SvStream& rStrm ) :
-    ImportExcel( rImpData, rStrm ), mnTab(0)
+    ImportExcel( rImpData, rStrm )
 {
+    // replace BIFF2-BIFF5 formula importer with BIFF8 formula importer
     delete pFormConv;
-
     pFormConv = pExcRoot->pFmlaConverter = new ExcelToSc8( GetRoot() );
-
-    bHasBasic = FALSE;
 }
 
 
@@ -228,27 +223,6 @@ void ImportExcel8::Labelsst( void )
 }
 
 
-void ImportExcel8::Codename( BOOL bWorkbookGlobals )
-{
-    if( bHasBasic )
-    {
-        String aName( aIn.ReadUniString() );
-        if( aName.Len() )
-        {
-            if( bWorkbookGlobals )
-            {
-                GetExtDocOptions().GetDocSettings().maGlobCodeName = aName;
-                GetDoc().SetCodeName( aName );
-            }
-            else
-            {
-                GetExtDocOptions().AppendCodeName( aName );
-                GetDoc().SetCodeName( mnTab++, aName );
-            }
-        }
-    }
-}
-
 void ImportExcel8::SheetProtection( void )
 {
     GetSheetProtectBuffer().ReadOptions( aIn, GetCurrScTab() );
@@ -268,17 +242,6 @@ void ImportExcel8::ReadBasic( void )
         {
             SvxImportMSVBasic aBasicImport( *pShell, *xRootStrg, bLoadCode, bLoadStrg );
             bool bAsComment = !bLoadExecutable;
-            if ( !bAsComment )
-            {
-                uno::Any aGlobs;
-                uno::Sequence< uno::Any > aArgs(1);
-                aArgs[ 0 ] <<= pShell->GetModel();
-                aGlobs <<= ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.excel.Globals" ) ), aArgs );
-                pShell->GetBasicManager()->SetGlobalUNOConstant( "VBAGlobals", aGlobs );
-                BasicManager* pAppMgr = SFX_APP()->GetBasicManager();
-                if ( pAppMgr )
-                    pAppMgr->SetGlobalUNOConstant( "ThisExcelDoc", aArgs[ 0 ] );
-            }
             aBasicImport.Import( EXC_STORAGE_VBA_PROJECT, EXC_STORAGE_VBA, bAsComment );
         }
     }
@@ -294,9 +257,8 @@ void ImportExcel8::EndSheet( void )
 
 void ImportExcel8::PostDocLoad( void )
 {
-    // delay reading basic until sheet object ( codenames etc. ) are read
-
-    if ( bHasBasic )
+    // reading basic has been delayed until sheet objects (codenames etc.) are read
+    if( HasBasic() )
         ReadBasic();
     // #i11776# filtered ranges before outlines and hidden rows
     if( pExcRoot->pAutoFilterBuffer )
@@ -317,24 +279,30 @@ void ImportExcel8::PostDocLoad( void )
     }
 
     // read doc info (no docshell while pasting from clipboard)
-    if( SfxObjectShell* pShell = GetDocShell() )
-    {
-        // BIFF5+ without storage is possible
-        SotStorageRef xRootStrg = GetRootStorage();
-        if( xRootStrg.Is() )
-        {
-            uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
-                pShell->GetModel(), uno::UNO_QUERY_THROW);
-            uno::Reference<document::XDocumentProperties> xDocProps
-                = xDPS->getDocumentProperties();
-            sfx2::LoadOlePropertySet(xDocProps, GetRootStorage());
-        }
-    }
+    LoadDocumentProperties();
 
     // #i45843# Pivot tables are now handled outside of PostDocLoad, so they are available
     // when formula cells are calculated, for the GETPIVOTDATA function.
 }
 
+void ImportExcel8::LoadDocumentProperties()
+{
+    // no docshell while pasting from clipboard
+    if( SfxObjectShell* pShell = GetDocShell() )
+    {
+        // BIFF5+ without storage is possible
+        SotStorageRef xRootStrg = GetRootStorage();
+        if( xRootStrg.Is() ) try
+        {
+            uno::Reference< document::XDocumentPropertiesSupplier > xDPS( pShell->GetModel(), uno::UNO_QUERY_THROW );
+            uno::Reference< document::XDocumentProperties > xDocProps( xDPS->getDocumentProperties(), uno::UNO_SET_THROW );
+            sfx2::LoadOlePropertySet( xDocProps, xRootStrg );
+        }
+        catch( uno::Exception& )
+        {
+        }
+    }
+}
 
 //___________________________________________________________________
 // autofilter

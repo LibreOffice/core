@@ -34,30 +34,44 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-uno::Any AnnotationToComment( const uno::Any& aSource, uno::Reference< uno::XComponentContext > & xContext )
+uno::Any AnnotationToComment( const uno::Any& aSource, uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< frame::XModel >& xModel )
 {
     uno::Reference< sheet::XSheetAnnotation > xAnno( aSource, uno::UNO_QUERY_THROW );
     uno::Reference< container::XChild > xChild( xAnno, uno::UNO_QUERY_THROW );
     uno::Reference< table::XCellRange > xCellRange( xChild->getParent(), uno::UNO_QUERY_THROW );
 
     // #FIXME needs to find the correct Parent
-    return uno::makeAny( uno::Reference< excel::XComment > ( new ScVbaComment( uno::Reference< XHelperInterface >(), xContext, xCellRange ) ) );
+    return uno::makeAny( uno::Reference< excel::XComment > (
+        new ScVbaComment( uno::Reference< XHelperInterface >(), xContext, xModel, xCellRange ) ) );
 }
 
 class CommentEnumeration : public EnumerationHelperImpl
 {
+    css::uno::Reference< css::frame::XModel > mxModel;
 public:
-    CommentEnumeration( const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XEnumeration >& xEnumeration ) throw ( uno::RuntimeException ) : EnumerationHelperImpl( xContext, xEnumeration ) {}
+    CommentEnumeration(
+            const uno::Reference< XHelperInterface >& xParent,
+            const uno::Reference< uno::XComponentContext >& xContext,
+            const uno::Reference< container::XEnumeration >& xEnumeration,
+            const uno::Reference< frame::XModel >& xModel ) throw ( uno::RuntimeException ) :
+        EnumerationHelperImpl( xParent, xContext, xEnumeration ),
+        mxModel( xModel, uno::UNO_SET_THROW )
+    {}
 
     virtual uno::Any SAL_CALL nextElement() throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
     {
-        return AnnotationToComment( m_xEnumeration->nextElement(),  m_xContext );
+        return AnnotationToComment( m_xEnumeration->nextElement(), m_xContext, mxModel );
     }
 
 };
 
-ScVbaComments::ScVbaComments( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< container::XIndexAccess >& xIndexAccess  )
-: ScVbaComments_BASE( xParent, xContext, xIndexAccess )
+ScVbaComments::ScVbaComments(
+        const uno::Reference< XHelperInterface >& xParent,
+        const uno::Reference< uno::XComponentContext > & xContext,
+        const uno::Reference< frame::XModel >& xModel,
+        const uno::Reference< container::XIndexAccess >& xIndexAccess  ) :
+    ScVbaComments_BASE( xParent, xContext, xIndexAccess ),
+    mxModel( xModel, uno::UNO_SET_THROW )
 {
 }
 
@@ -67,14 +81,13 @@ uno::Reference< container::XEnumeration >
 ScVbaComments::createEnumeration() throw (uno::RuntimeException)
 {
     uno::Reference< container::XEnumerationAccess > xEnumAccess( m_xIndexAccess, uno::UNO_QUERY_THROW );
-
-    return new CommentEnumeration( mxContext, xEnumAccess->createEnumeration() );
+    return new CommentEnumeration( mxParent, mxContext, xEnumAccess->createEnumeration(), mxModel );
 }
 
 uno::Any
 ScVbaComments::createCollectionObject( const css::uno::Any& aSource )
 {
-    return AnnotationToComment( aSource,  mxContext );
+    return AnnotationToComment( aSource,  mxContext, mxModel );
 }
 
 uno::Type

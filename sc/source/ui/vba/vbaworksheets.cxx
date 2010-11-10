@@ -52,6 +52,7 @@
 #include "vbaglobals.hxx"
 #include "vbaworksheet.hxx"
 #include "vbaworkbook.hxx"
+#include "unonames.hxx"
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
@@ -62,6 +63,27 @@ typedef ::cppu::WeakImplHelper3< container::XNameAccess, container::XIndexAccess
 // a map ( or hashmap ) wont do as we need also to preserve the order
 // (as added ) of the items
 typedef std::vector< uno::Reference< sheet::XSpreadsheet > >  SheetMap;
+
+
+// #FIXME #TODO the implementation of the Sheets collections sucks,
+// e.g. there is no support for tracking sheets added/removed from the collection
+
+uno::Reference< uno::XInterface >
+lcl_getModulAsUnoObject( const uno::Reference< sheet::XSpreadsheet >& xSheet, const uno::Reference< frame::XModel >& xModel ) throw ( uno::RuntimeException )
+{
+    uno::Reference< uno::XInterface > xRet;
+    if ( !xSheet.is() )
+        throw uno::RuntimeException();
+    uno::Reference< beans::XPropertySet > xProps( xSheet, uno::UNO_QUERY_THROW );
+    rtl::OUString sName;
+    xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_CODENAME ) ) ) >>= sName;
+
+    ScDocShell* pShell = excel::getDocShell( xModel );
+
+    if ( pShell )
+        xRet = getUnoDocModule(  sName, pShell );
+    return xRet;
+}
 
 class WorkSheetsEnumeration : public SheetEnumeration_BASE
 {
@@ -145,14 +167,24 @@ public:
 class SheetsEnumeration : public EnumerationHelperImpl
 {
     uno::Reference< frame::XModel > m_xModel;
-    uno::WeakReference< XHelperInterface > m_xParent;
 public:
-    SheetsEnumeration( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XEnumeration >& xEnumeration,  const uno::Reference< frame::XModel >& xModel  ) throw ( uno::RuntimeException ) : EnumerationHelperImpl( xContext, xEnumeration ), m_xModel( xModel ), m_xParent( xParent ) {}
+    SheetsEnumeration( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XEnumeration >& xEnumeration,  const uno::Reference< frame::XModel >& xModel  ) throw ( uno::RuntimeException ) : EnumerationHelperImpl( xParent, xContext, xEnumeration ), m_xModel( xModel ) {}
 
     virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
     {
         uno::Reference< sheet::XSpreadsheet > xSheet( m_xEnumeration->nextElement(), uno::UNO_QUERY_THROW );
-        return uno::makeAny( uno::Reference< excel::XWorksheet > ( new ScVbaWorksheet( m_xParent, m_xContext, xSheet, m_xModel ) ) );
+        uno::Reference< uno::XInterface > xIf = lcl_getModulAsUnoObject( xSheet, m_xModel );
+        uno::Any aRet;
+        if ( !xIf.is() )
+                {
+            // if the Sheet is in a document created by the api unfortunately ( at the
+            // moment, it actually wont have the special Document modules
+            uno::Reference< excel::XWorksheet > xNewSheet( new ScVbaWorksheet( m_xParent, m_xContext, xSheet, m_xModel ) );
+            aRet <<= xNewSheet;
+                }
+                else
+            aRet <<= xIf;
+        return aRet;
     }
 
 };
@@ -188,7 +220,18 @@ uno::Any
 ScVbaWorksheets::createCollectionObject( const uno::Any& aSource )
 {
     uno::Reference< sheet::XSpreadsheet > xSheet( aSource, uno::UNO_QUERY );
-    return uno::makeAny( uno::Reference< excel::XWorksheet > ( new ScVbaWorksheet( getParent(), mxContext, xSheet, mxModel ) ) );
+    uno::Reference< XInterface > xIf = lcl_getModulAsUnoObject( xSheet, mxModel );
+    uno::Any aRet;
+    if ( !xIf.is() )
+    {
+        // if the Sheet is in a document created by the api unfortunately ( at the
+        // moment, it actually wont have the special Document modules
+        uno::Reference< excel::XWorksheet > xNewSheet( new ScVbaWorksheet( getParent(), mxContext, xSheet, mxModel ) );
+        aRet <<= xNewSheet;
+    }
+    else
+        aRet <<= xIf;
+    return aRet;
 }
 
 // XWorksheets
@@ -434,4 +477,25 @@ ScVbaWorksheets::getServiceNames()
         sNames[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.Worksheets") );
     }
     return sNames;
+}
+
+/*static*/ bool ScVbaWorksheets::nameExists( uno::Reference <sheet::XSpreadsheetDocument>& xSpreadDoc, const ::rtl::OUString & name, SCTAB& nTab ) throw ( lang::IllegalArgumentException )
+{
+    if (!xSpreadDoc.is())
+        throw lang::IllegalArgumentException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "nameExists() xSpreadDoc is null" ) ), uno::Reference< uno::XInterface  >(), 1 );
+    uno::Reference <container::XIndexAccess> xIndex( xSpreadDoc->getSheets(), uno::UNO_QUERY );
+    if ( xIndex.is() )
+    {
+        SCTAB  nCount = static_cast< SCTAB >( xIndex->getCount() );
+        for (SCTAB i=0; i < nCount; i++)
+        {
+            uno::Reference< container::XNamed > xNamed( xIndex->getByIndex(i), uno::UNO_QUERY_THROW );
+            if (xNamed->getName() == name)
+            {
+                nTab = i;
+                return true;
+            }
+        }
+    }
+    return false;
 }

@@ -203,13 +203,16 @@ const SCSIZE PIVOT_MAXPAGEFIELD = 10;
                                     // FILTERED und MANUALSIZE nur fuer Zeilen moeglich
 const BYTE   CR_HIDDEN      = 1;
 //const BYTE CR_MARKED      = 2;
-const BYTE   CR_PAGEBREAK   = 4;
+//const BYTE CR_PAGEBREAK   = 4;
 const BYTE   CR_MANUALBREAK = 8;
 const BYTE   CR_FILTERED    = 16;
 const BYTE   CR_MANUALSIZE  = 32;
+const BYTE   CR_ALL         = (CR_HIDDEN | CR_MANUALBREAK | CR_FILTERED | CR_MANUALSIZE);
 
-//  was davon kommt in die Datei:
-#define CR_SAVEMASK     ( ~CR_PAGEBREAK )
+typedef BYTE ScBreakType;
+const ScBreakType BREAK_NONE   = 0;
+const ScBreakType BREAK_PAGE   = 1;
+const ScBreakType BREAK_MANUAL = 2;
 
 // Insert-/Delete-Flags
 const USHORT IDF_NONE       = 0x0000;

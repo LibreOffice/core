@@ -34,6 +34,8 @@
 // header for define DELETEZ
 #include <tools/solar.h>
 
+#include <tools/debug.hxx>
+
 //.............................................................................
 namespace chart
 {
@@ -115,7 +117,11 @@ void SAL_CALL WrappedPropertySet::setPropertyValue( const OUString& rPropertyNam
         else if( xInnerPropertySet.is() )
             xInnerPropertySet->setPropertyValue( rPropertyName, rValue );
         else
-            throw beans::UnknownPropertyException();
+        {
+#if OSL_DEBUG_LEVEL > 1
+            DBG_ERROR("found no inner property set to map to");
+#endif
+        }
     }
     catch( beans::UnknownPropertyException& ex )
     {
@@ -160,7 +166,11 @@ Any SAL_CALL WrappedPropertySet::getPropertyValue( const OUString& rPropertyName
         else if( xInnerPropertySet.is() )
             aRet = xInnerPropertySet->getPropertyValue( rPropertyName );
         else
-            throw beans::UnknownPropertyException();
+        {
+#if OSL_DEBUG_LEVEL > 1
+            DBG_ERROR("found no inner property set to map to");
+#endif
+        }
     }
     catch( beans::UnknownPropertyException& ex )
     {

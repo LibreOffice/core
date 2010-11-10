@@ -31,6 +31,7 @@
 #include <rtl/math.hxx>
 
 using ::com::sun::star::lang::IllegalArgumentException;
+using ::com::sun::star::sheet::NoConvergenceException;
 
 namespace sca {
 namespace analysis {
@@ -47,92 +48,128 @@ const double THRESHOLD  = 30.0;     // Threshold for usage of approximation form
 const double MAXEPSILON = 1e-10;    // Maximum epsilon for end of iteration.
 const sal_Int32 MAXITER = 100;      // Maximum number of iterations.
 
-
 // ============================================================================
 // BESSEL J
 // ============================================================================
 
 /*  The BESSEL function, first kind, unmodified:
-
-                     inf                                  (-1)^k (x/2)^(n+2k)
-        J_n(x)  =  SUM   TERM(n,k)   with   TERM(n,k) := ---------------------
-                     k=0                                       k! (n+k)!
-
-    Approximation for the BESSEL function, first kind, unmodified, for great x:
-
-        J_n(x)  ~  sqrt( 2 / (PI x) ) cos( x - n PI/2 - PI/4 )  for  x>=0.
- */
+    The algorithm follows
+    http://www.reference-global.com/isbn/978-3-11-020354-7
+    Numerical Mathematics 1 / Numerische Mathematik 1,
+    An algorithm-based introduction / Eine algorithmisch orientierte Einführung
+    Deuflhard, Peter; Hohmann, Andreas
+    Berlin, New York (Walter de Gruyter) 2008
+    4. überarb. u. erw. Aufl. 2008
+    eBook ISBN: 978-3-11-020355-4
+    Chapter 6.3.2 , algorithm 6.24
+    The source is in German.
+    The BesselJ-function is a special case of the adjoint summation with
+    a_k = 2*(k-1)/x for k=1,...
+    b_k = -1, for all k, directly substituted
+    m_0=1, m_k=2 for k even, and m_k=0 for k odd, calculated on the fly
+    alpha_k=1 for k=N and alpha_k=0 otherwise
+*/
 
 // ----------------------------------------------------------------------------
 
-double BesselJ( double x, sal_Int32 n ) throw( IllegalArgumentException )
+double BesselJ( double x, sal_Int32 N ) throw (IllegalArgumentException, NoConvergenceException)
+
 {
-    if( n < 0 )
+    if( N < 0 )
         throw IllegalArgumentException();
+    if (x==0.0)
+        return (N==0) ? 1.0 : 0.0;
 
-    double fResult = 0.0;
-    if( fabs( x ) <= THRESHOLD )
+    /*  The algorithm works only for x>0, therefore remember sign. BesselJ
+        with integer order N is an even function for even N (means J(-x)=J(x))
+        and an odd function for odd N (means J(-x)=-J(x)).*/
+    double fSign = (N % 2 == 1 && x < 0) ? -1.0 : 1.0;
+    double fX = fabs(x);
+
+    const double fMaxIteration = 9000000.0; //experimental, for to return in < 3 seconds
+    double fEstimateIteration = fX * 1.5 + N;
+    bool bAsymptoticPossible = pow(fX,0.4) > N;
+    if (fEstimateIteration > fMaxIteration)
     {
-        /*  Start the iteration without TERM(n,0), which is set here.
+        if (bAsymptoticPossible)
+            return fSign * sqrt(f_2_DIV_PI/fX)* cos(fX-N*f_PI_DIV_2-f_PI_DIV_4);
+        else
+            throw NoConvergenceException();
+    }
 
-                TERM(n,0) = (x/2)^n / n!
-         */
-        double fTerm = pow( x / 2.0, (double)n ) / Fak( n );
-        sal_Int32 nK = 1;   // Start the iteration with k=1.
-        fResult = fTerm;    // Start result with TERM(n,0).
+    double epsilon = 1.0e-15; // relative error
+    bool bHasfound = false;
+    double k= 0.0;
+    // e_{-1} = 0; e_0 = alpha_0 / b_2
+    double  u ; // u_0 = e_0/f_0 = alpha_0/m_0 = alpha_0
 
-        const double fSqrX = x * x / -4.0;
+    // first used with k=1
+    double m_bar;         // m_bar_k = m_k * f_bar_{k-1}
+    double g_bar;         // g_bar_k = m_bar_k - a_{k+1} + g_{k-1}
+    double g_bar_delta_u; // g_bar_delta_u_k = f_bar_{k-1} * alpha_k
+                          // - g_{k-1} * delta_u_{k-1} - m_bar_k * u_{k-1}
+    // f_{-1} = 0.0; f_0 = m_0 / b_2 = 1/(-1) = -1
+    double g = 0.0;       // g_0= f_{-1} / f_0 = 0/(-1) = 0
+    double delta_u = 0.0; // dummy initialize, first used with * 0
+    double f_bar = -1.0;  // f_bar_k = 1/f_k, but only used for k=0
 
-        do
-        {
-            /*  Calculation of TERM(n,k) from TERM(n,k-1):
-
-                                   (-1)^k (x/2)^(n+2k)
-                    TERM(n,k)  =  ---------------------
-                                        k! (n+k)!
-
-                                   (-1)(-1)^(k-1) (x/2)^2 (x/2)^(n+2(k-1))
-                               =  -----------------------------------------
-                                           k (k-1)! (n+k) (n+k-1)!
-
-                                   -(x/2)^2     (-1)^(k-1) (x/2)^(n+2(k-1))
-                               =  ---------- * -----------------------------
-                                    k(n+k)            (k-1)! (n+k-1)!
-
-                                   -(x^2/4)
-                               =  ---------- TERM(n,k-1)
-                                    k(n+k)
-             */
-            fTerm *= fSqrX;    // defined above as -(x^2/4)
-            fTerm /= (nK * (nK + n));
-            fResult += fTerm;
-        }
-        while( (fabs( fTerm ) > MAXEPSILON) && (++nK < MAXITER) );
+    if (N==0)
+    {
+        //k=0; alpha_0 = 1.0
+        u = 1.0; // u_0 = alpha_0
+        // k = 1.0; at least one step is necessary
+        // m_bar_k = m_k * f_bar_{k-1} ==> m_bar_1 = 0.0
+        g_bar_delta_u = 0.0;    // alpha_k = 0.0, m_bar = 0.0; g= 0.0
+        g_bar = - 2.0/fX;       // k = 1.0, g = 0.0
+        delta_u = g_bar_delta_u / g_bar;
+        u = u + delta_u ;       // u_k = u_{k-1} + delta_u_k
+        g = -1.0 / g_bar;       // g_k=b_{k+2}/g_bar_k
+        f_bar = f_bar * g;      // f_bar_k = f_bar_{k-1}* g_k
+        k = 2.0;
+        // From now on all alpha_k = 0.0 and k > N+1
     }
     else
-    {
-        /*  Approximation for the BESSEL function, first kind, unmodified:
-
-                J_n(x)  ~  sqrt( 2 / (PI x) ) cos( x - n PI/2 - PI/4 )  for  x>=0.
-
-            The BESSEL function J_n with n IN {0,2,4,...} is axially symmetric at
-            x=0, means J_n(x) = J_n(-x). Therefore the approximation for x<0 is:
-
-                J_n(x)  =  J_n(|x|)  for  x<0  and  n IN {0,2,4,...}.
-
-            The BESSEL function J_n with n IN {1,3,5,...} is point-symmetric at
-            x=0, means J_n(x) = -J_n(-x). Therefore the approximation for x<0 is:
-
-                J_n(x)  =  -J_n(|x|)  for  x<0  and  n IN {1,3,5,...}.
-         */
-        double fXAbs = fabs( x );
-        fResult = sqrt( f_2_DIV_PI / fXAbs ) * cos( fXAbs - n * f_PI_DIV_2 - f_PI_DIV_4 );
-        if( (n & 1) && (x < 0.0) )
-            fResult = -fResult;
+    {   // N >= 1 and alpha_k = 0.0 for k<N
+        u=0.0; // u_0 = alpha_0
+        for (k =1.0; k<= N-1; k = k + 1.0)
+        {
+            m_bar=2.0 * fmod(k-1.0, 2.0) * f_bar;
+            g_bar_delta_u = - g * delta_u - m_bar * u; // alpha_k = 0.0
+            g_bar = m_bar - 2.0*k/fX + g;
+            delta_u = g_bar_delta_u / g_bar;
+            u = u + delta_u;
+            g = -1.0/g_bar;
+            f_bar=f_bar * g;
+        }
+        // Step alpha_N = 1.0
+        m_bar=2.0 * fmod(k-1.0, 2.0) * f_bar;
+        g_bar_delta_u = f_bar - g * delta_u - m_bar * u; // alpha_k = 1.0
+        g_bar = m_bar - 2.0*k/fX + g;
+        delta_u = g_bar_delta_u / g_bar;
+        u = u + delta_u;
+        g = -1.0/g_bar;
+        f_bar = f_bar * g;
+        k = k + 1.0;
     }
-    return fResult;
+    // Loop until desired accuracy, always alpha_k = 0.0
+    do
+    {
+        m_bar = 2.0 * fmod(k-1.0, 2.0) * f_bar;
+        g_bar_delta_u = - g * delta_u - m_bar * u;
+        g_bar = m_bar - 2.0*k/fX + g;
+        delta_u = g_bar_delta_u / g_bar;
+        u = u + delta_u;
+        g = -1.0/g_bar;
+        f_bar = f_bar * g;
+        bHasfound = (fabs(delta_u)<=fabs(u)*epsilon);
+        k = k + 1.0;
+    }
+    while (!bHasfound && k <= fMaxIteration);
+    if (bHasfound)
+        return u * fSign;
+    else
+        throw NoConvergenceException(); // unlikely to happen
 }
-
 
 // ============================================================================
 // BESSEL I
@@ -151,7 +188,7 @@ double BesselJ( double x, sal_Int32 n ) throw( IllegalArgumentException )
 
 // ----------------------------------------------------------------------------
 
-double BesselI( double x, sal_Int32 n ) throw( IllegalArgumentException )
+double BesselI( double x, sal_Int32 n ) throw( IllegalArgumentException, NoConvergenceException )
 {
     if( n < 0 )
         throw IllegalArgumentException();
@@ -222,7 +259,7 @@ double BesselI( double x, sal_Int32 n ) throw( IllegalArgumentException )
 
 // ============================================================================
 
-double Besselk0( double fNum ) throw( IllegalArgumentException )
+double Besselk0( double fNum ) throw( IllegalArgumentException, NoConvergenceException )
 {
     double  fRet;
 
@@ -248,7 +285,7 @@ double Besselk0( double fNum ) throw( IllegalArgumentException )
 }
 
 
-double Besselk1( double fNum ) throw( IllegalArgumentException )
+double Besselk1( double fNum ) throw( IllegalArgumentException, NoConvergenceException )
 {
     double  fRet;
 
@@ -275,7 +312,7 @@ double Besselk1( double fNum ) throw( IllegalArgumentException )
 }
 
 
-double BesselK( double fNum, sal_Int32 nOrder ) throw( IllegalArgumentException )
+double BesselK( double fNum, sal_Int32 nOrder ) throw( IllegalArgumentException, NoConvergenceException )
 {
     switch( nOrder )
     {
@@ -301,87 +338,136 @@ double BesselK( double fNum, sal_Int32 nOrder ) throw( IllegalArgumentException 
     }
 }
 
+// ============================================================================
+// BESSEL Y
+// ============================================================================
 
-double Bessely0( double fNum ) throw( IllegalArgumentException )
+/*  The BESSEL function, second kind, unmodified:
+    The algorithm for order 0 and for order 1 follows
+    http://www.reference-global.com/isbn/978-3-11-020354-7
+    Numerical Mathematics 1 / Numerische Mathematik 1,
+    An algorithm-based introduction / Eine algorithmisch orientierte Einführung
+    Deuflhard, Peter; Hohmann, Andreas
+    Berlin, New York (Walter de Gruyter) 2008
+    4. überarb. u. erw. Aufl. 2008
+    eBook ISBN: 978-3-11-020355-4
+    Chapter 6.3.2 , algorithm 6.24
+    The source is in German.
+    See #i31656# for a commented version of the implementation, attachment #desc6
+    http://www.openoffice.org/nonav/issues/showattachment.cgi/63609/Comments%20to%20the%20implementation%20of%20the%20Bessel%20functions.odt
+*/
+
+double Bessely0( double fX ) throw( IllegalArgumentException, NoConvergenceException )
 {
-    double  fRet;
+    if (fX <= 0)
+        throw IllegalArgumentException();
+    const double fMaxIteration = 9000000.0; // should not be reached
+    if (fX > 5.0e+6) // iteration is not considerable better then approximation
+        return sqrt(1/f_PI/fX)
+                *(rtl::math::sin(fX)-rtl::math::cos(fX));
+    const double epsilon = 1.0e-15;
+    const double EulerGamma = 0.57721566490153286060;
+    double alpha = log(fX/2.0)+EulerGamma;
+    double u = alpha;
 
-    if( fNum < 8.0 )
+    double k = 1.0;
+    double m_bar = 0.0;
+    double g_bar_delta_u = 0.0;
+    double g_bar = -2.0 / fX;
+    double delta_u = g_bar_delta_u / g_bar;
+    double g = -1.0/g_bar;
+    double f_bar = -1 * g;
+
+    double sign_alpha = 1.0;
+    double km1mod2;
+    bool bHasFound = false;
+    k = k + 1;
+    do
     {
-        double  y = fNum * fNum;
-
-        double  f1 = -2957821389.0 + y * ( 7062834065.0 + y * ( -512359803.6 +
-                    y * ( 10879881.29 + y * ( -86327.92757 + y * 228.4622733 ) ) ) );
-
-        double  f2 = 40076544269.0 + y * ( 745249964.8 + y * ( 7189466.438 +
-                    y * ( 47447.26470 + y * ( 226.1030244 + y ) ) ) );
-
-        fRet = f1 / f2 + 0.636619772 * BesselJ( fNum, 0 ) * log( fNum );
+        km1mod2 = fmod(k-1.0,2.0);
+        m_bar=(2.0*km1mod2) * f_bar;
+        if (km1mod2 == 0.0)
+            alpha = 0.0;
+        else
+        {
+           alpha = sign_alpha * (4.0/k);
+           sign_alpha = -sign_alpha;
+        }
+        g_bar_delta_u = f_bar * alpha - g * delta_u - m_bar * u;
+        g_bar = m_bar - (2.0*k)/fX + g;
+        delta_u = g_bar_delta_u / g_bar;
+        u = u+delta_u;
+        g = -1.0 / g_bar;
+        f_bar = f_bar*g;
+        bHasFound = (fabs(delta_u)<=fabs(u)*epsilon);
+        k=k+1;
     }
+    while (!bHasFound && k<fMaxIteration);
+    if (bHasFound)
+        return u*f_2_DIV_PI;
     else
-    {
-        double  z = 8.0 / fNum;
-        double  y = z * z;
-        double  xx = fNum - 0.785398164;
-
-        double  f1 = 1.0 + y * ( -0.1098628627e-2 + y * ( 0.2734510407e-4 +
-                        y * ( -0.2073370639e-5 + y * 0.2093887211e-6 ) ) );
-
-        double  f2 = -0.1562499995e-1 + y * ( 0.1430488765e-3 +
-                        y * ( -0.6911147651e-5 + y * ( 0.7621095161e-6 +
-                        y * ( -0.934945152e-7 ) ) ) );
-
-        fRet = sqrt( 0.636619772 / fNum ) * ( sin( xx ) * f1 + z * cos( xx ) * f2 );
-    }
-
-    return fRet;
+        throw NoConvergenceException(); // not likely to happen
 }
 
-
-double Bessely1( double fNum ) throw( IllegalArgumentException )
+// See #i31656# for a commented version of this implementation, attachment #desc6
+// http://www.openoffice.org/nonav/issues/showattachment.cgi/63609/Comments%20to%20the%20implementation%20of%20the%20Bessel%20functions.odt
+double Bessely1( double fX ) throw( IllegalArgumentException, NoConvergenceException )
 {
-    double  fRet;
-
-    if( fNum < 8.0 )
+    if (fX <= 0)
+        throw IllegalArgumentException();
+    const double fMaxIteration = 9000000.0; // should not be reached
+    if (fX > 5.0e+6) // iteration is not considerable better then approximation
+        return - sqrt(1/f_PI/fX)
+                *(rtl::math::sin(fX)+rtl::math::cos(fX));
+    const double epsilon = 1.0e-15;
+    const double EulerGamma = 0.57721566490153286060;
+    double alpha = 1.0/fX;
+    double f_bar = -1.0;
+    double g = 0.0;
+    double u = alpha;
+    double k = 1.0;
+    double m_bar = 0.0;
+    alpha = 1.0 - EulerGamma - log(fX/2.0);
+    double g_bar_delta_u = -alpha;
+    double g_bar = -2.0 / fX;
+    double delta_u = g_bar_delta_u / g_bar;
+    u = u + delta_u;
+    g = -1.0/g_bar;
+    f_bar = f_bar * g;
+    double sign_alpha = -1.0;
+    double km1mod2; //will be (k-1) mod 2
+    double q; // will be (k-1) div 2
+    bool bHasFound = false;
+    k = k + 1.0;
+    do
     {
-        double  y = fNum * fNum;
-
-        double  f1 = fNum * ( -0.4900604943e13 + y * ( 0.1275274390e13 +
-                        y * ( -0.5153438139e11 + y * ( 0.7349264551e9 +
-                        y * ( -0.4237922726e7 + y * 0.8511937935e4 ) ) ) ) );
-
-        double  f2 = 0.2499580570e14 + y * ( 0.4244419664e12 +
-                        y * ( 0.3733650367e10 + y * ( 0.2245904002e8 +
-                        y * ( 0.1020426050e6 + y * ( 0.3549632885e3 + y ) ) ) ) );
-
-        fRet = f1 / f2 + 0.636619772 * ( BesselJ( fNum, 1 ) * log( fNum ) - 1.0 / fNum );
+        km1mod2 = fmod(k-1.0,2.0);
+        m_bar=(2.0*km1mod2) * f_bar;
+        q = (k-1.0)/2.0;
+        if (km1mod2 == 0.0) // k is odd
+        {
+           alpha = sign_alpha * (1.0/q + 1.0/(q+1.0));
+           sign_alpha = -sign_alpha;
+        }
+        else
+            alpha = 0.0;
+        g_bar_delta_u = f_bar * alpha - g * delta_u - m_bar * u;
+        g_bar = m_bar - (2.0*k)/fX + g;
+        delta_u = g_bar_delta_u / g_bar;
+        u = u+delta_u;
+        g = -1.0 / g_bar;
+        f_bar = f_bar*g;
+        bHasFound = (fabs(delta_u)<=fabs(u)*epsilon);
+        k=k+1;
     }
+    while (!bHasFound && k<fMaxIteration);
+    if (bHasFound)
+        return -u*2.0/f_PI;
     else
-    {
-#if 0
-        // #i12430# don't know the intention of this piece of code...
-        double  z = 8.0 / fNum;
-        double  y = z * z;
-        double  xx = fNum - 2.356194491;
-
-        double  f1 = 1.0 + y * ( 0.183105e-2 + y * ( -0.3516396496e-4 +
-                        y * ( 0.2457520174e-5 + y * ( -0.240337019e6 ) ) ) );
-
-        double  f2 = 0.04687499995 + y * ( -0.2002690873e-3 +
-                        y * ( 0.8449199096e-5 + y * ( -0.88228987e-6 +
-                        y * 0.105787412e-6 ) ) );
-
-        fRet = sqrt( 0.636619772 / fNum ) * ( sin( xx ) * f1 + z * cos( xx ) * f2 );
-#endif
-        // #i12430# ...but this seems to work much better.
-        fRet = sqrt( 0.636619772 / fNum ) * sin( fNum - 2.356194491 );
-    }
-
-    return fRet;
+        throw NoConvergenceException();
 }
 
-
-double BesselY( double fNum, sal_Int32 nOrder ) throw( IllegalArgumentException )
+double BesselY( double fNum, sal_Int32 nOrder ) throw( IllegalArgumentException, NoConvergenceException )
 {
     switch( nOrder )
     {
@@ -406,7 +492,6 @@ double BesselY( double fNum, sal_Int32 nOrder ) throw( IllegalArgumentException 
         }
     }
 }
-
 
 // ============================================================================
 

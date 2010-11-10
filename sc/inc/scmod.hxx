@@ -155,7 +155,6 @@ public:
                     ScModule( SfxObjectFactory* pFact );
     virtual         ~ScModule();
 
-    virtual void        FillStatusBar(StatusBar &rBar);
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
     virtual void        ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 );
     void                DeleteCfg();
@@ -282,13 +281,11 @@ SC_DLLPUBLIC    void                    SetAppOptions   ( const ScAppOptions& rO
     void                SetInSharedDocSaving( bool bNew )   { mbIsInSharedDocSaving = bNew; }
     bool                IsInSharedDocSaving() const         { return mbIsInSharedDocSaving; }
 
-    //<!--Added by PengYunQuan for Validity Cell Range Picker
     SC_DLLPUBLIC BOOL   RegisterRefWindow( USHORT nSlotId, Window *pWnd );
     SC_DLLPUBLIC BOOL   UnregisterRefWindow( USHORT nSlotId, Window *pWnd );
     SC_DLLPUBLIC BOOL   IsAliveRefDlg( USHORT nSlotId, Window *pWnd );
     SC_DLLPUBLIC Window * Find1RefWindow( USHORT nSlotId, Window *pWndAncestor );
     SC_DLLPUBLIC Window * Find1RefWindow( Window *pWndAncestor );
-    //-->Added by PengYunQuan for Validity Cell Range Picker
 };
 
 #define SC_MOD() ( *(ScModule**) GetAppData(SHL_CALC) )

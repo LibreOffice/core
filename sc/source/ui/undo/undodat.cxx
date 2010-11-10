@@ -1027,7 +1027,10 @@ void __EXPORT ScUndoQuery::Undo()
         pDoc->SetDBCollection( new ScDBCollection( *pUndoDB ), TRUE );
 
     if (!bCopy)
+    {
+        pDoc->InvalidatePageBreaks(nTab);
         pDoc->UpdatePageBreaks( nTab );
+    }
 
     ScRange aDirtyRange( 0 , aQueryParam.nRow1, nTab,
         MAXCOL, aQueryParam.nRow2, nTab );

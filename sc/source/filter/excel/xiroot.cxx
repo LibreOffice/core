@@ -29,6 +29,8 @@
 #include "precompiled_sc.hxx"
 #include "xiroot.hxx"
 #include "addincol.hxx"
+#include "document.hxx"
+#include "scextopt.hxx"
 #include "xltracer.hxx"
 #include "xihelper.hxx"
 #include "xiformula.hxx"
@@ -49,7 +51,8 @@
 XclImpRootData::XclImpRootData( XclBiff eBiff, SfxMedium& rMedium,
         SotStorageRef xRootStrg, ScDocument& rDoc, rtl_TextEncoding eTextEnc ) :
     XclRootData( eBiff, rMedium, xRootStrg, rDoc, eTextEnc, false ),
-    mbHasCodePage( false )
+    mbHasCodePage( false ),
+    mbHasBasic( false )
 {
 }
 
@@ -272,5 +275,25 @@ String XclImpRoot::GetScAddInName( const String& rXclName ) const
     return rXclName;
 }
 
-// ============================================================================
+void XclImpRoot::ReadCodeName( XclImpStream& rStrm, bool bGlobals )
+{
+    if( mrImpData.mbHasBasic && (GetBiff() == EXC_BIFF8) )
+    {
+        String aName = rStrm.ReadUniString();
+        if( aName.Len() > 0 )
+        {
+            if( bGlobals )
+            {
+                GetExtDocOptions().GetDocSettings().maGlobCodeName = aName;
+                GetDoc().SetCodeName( aName );
+            }
+            else
+            {
+                GetExtDocOptions().SetCodeName( GetCurrScTab(), aName );
+                GetDoc().SetCodeName( GetCurrScTab(), aName );
+            }
+        }
+    }
+}
 
+// ============================================================================

@@ -65,14 +65,17 @@
 #include <com/sun/star/sheet/DataPilotTableHeaderData.hpp>
 #include <com/sun/star/sheet/DataPilotTablePositionData.hpp>
 #include <com/sun/star/sheet/DataPilotTablePositionType.hpp>
+#include <com/sun/star/sheet/DimensionFlags.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/sheet/XDrillDownDataSupplier.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <svl/zforlist.hxx>     // IsNumberFormat
 
 #include <vector>
@@ -85,6 +88,8 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::Any;
+using ::com::sun::star::uno::Exception;
+using ::com::sun::star::lang::XComponent;
 using ::com::sun::star::sheet::DataPilotTableHeaderData;
 using ::com::sun::star::sheet::DataPilotTablePositionData;
 using ::com::sun::star::beans::XPropertySet;
@@ -215,6 +220,7 @@ ScDPObject::~ScDPObject()
     delete pImpDesc;
     delete pServDesc;
     mnCacheId = -1; // Wang Xu Ming - DataPilot migration
+    InvalidateSource();
 }
 
 ScDataObject* ScDPObject::Clone() const
@@ -410,7 +416,7 @@ void ScDPObject::CreateOutput()
                 nNewRow = 0;
 
             ScAddress aStart( aOutRange.aStart );
-            aStart.SetRow( (USHORT) nNewRow );
+            aStart.SetRow(nNewRow);
             pOutput->SetPosition( aStart );
 
             //! modify aOutRange?
@@ -530,6 +536,18 @@ void ScDPObject::InvalidateData()
 
 void ScDPObject::InvalidateSource()
 {
+    Reference< XComponent > xObjectComp( xSource, UNO_QUERY );
+    if ( xObjectComp.is() )
+    {
+        try
+        {
+            xObjectComp->dispose();
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+    }
     xSource = NULL;
     mpTableData.reset();
 }
@@ -828,7 +846,7 @@ bool ScDPObject::IsDimNameInUse(const OUString& rName) const
     return false;
 }
 
-String ScDPObject::GetDimName( long nDim, BOOL& rIsDataLayout )
+String ScDPObject::GetDimName( long nDim, BOOL& rIsDataLayout, sal_Int32* pFlags )
 {
     rIsDataLayout = FALSE;
     String aRet;
@@ -862,6 +880,10 @@ String ScDPObject::GetDimName( long nDim, BOOL& rIsDataLayout )
                     rIsDataLayout = TRUE;
                 else
                     aRet = String( aName );
+
+                if (pFlags)
+                    *pFlags = ScUnoHelpFunctions::GetLongProperty( xDimProp,
+                                rtl::OUString::createFromAscii(SC_UNO_FLAGS), 0 );
             }
         }
     }
@@ -1986,6 +2008,8 @@ BOOL ScDPObject::FillLabelData(ScPivotParam& rParam)
                 GetHierarchies(nDim, pNewLabel->maHiers);
                 GetMembers(nDim, GetUsedHierarchy(nDim), pNewLabel->maMembers);
                 lcl_FillLabelData(*pNewLabel, xDimProp);
+                pNewLabel->mnFlags = ScUnoHelpFunctions::GetLongProperty( xDimProp,
+                                        rtl::OUString::createFromAscii(SC_UNO_FLAGS), 0 );
                 rParam.maLabelArray.push_back(pNewLabel);
             }
         }
@@ -2214,6 +2238,32 @@ void ScDPObject::ConvertOrientation( ScDPSaveData& rSaveData,
     }
 }
 
+// static
+bool ScDPObject::IsOrientationAllowed( USHORT nOrient, sal_Int32 nDimFlags )
+{
+    bool bAllowed = true;
+    switch (nOrient)
+    {
+        case sheet::DataPilotFieldOrientation_PAGE:
+            bAllowed = ( nDimFlags & sheet::DimensionFlags::NO_PAGE_ORIENTATION ) == 0;
+            break;
+        case sheet::DataPilotFieldOrientation_COLUMN:
+            bAllowed = ( nDimFlags & sheet::DimensionFlags::NO_COLUMN_ORIENTATION ) == 0;
+            break;
+        case sheet::DataPilotFieldOrientation_ROW:
+            bAllowed = ( nDimFlags & sheet::DimensionFlags::NO_ROW_ORIENTATION ) == 0;
+            break;
+        case sheet::DataPilotFieldOrientation_DATA:
+            bAllowed = ( nDimFlags & sheet::DimensionFlags::NO_DATA_ORIENTATION ) == 0;
+            break;
+        default:
+            {
+                // allowed to remove from previous orientation
+            }
+    }
+    return bAllowed;
+}
+
 // -----------------------------------------------------------------------
 
 //  static
@@ -2277,6 +2327,9 @@ uno::Sequence<rtl::OUString> ScDPObject::GetRegisteredSources()
     return aSeq;
 }
 
+// use getContext from addincol.cxx
+uno::Reference<uno::XComponentContext> getContext(uno::Reference<lang::XMultiServiceFactory> xMSF);
+
 //  static
 uno::Reference<sheet::XDimensionsSupplier> ScDPObject::CreateSource( const ScDPServiceDesc& rDesc )
 {
@@ -2301,12 +2354,26 @@ uno::Reference<sheet::XDimensionsSupplier> ScDPObject::CreateSource( const ScDPS
                     if ( xIntFac.is() )
                     {
                         uno::Reference<lang::XServiceInfo> xInfo( xIntFac, uno::UNO_QUERY );
-                        uno::Reference<lang::XSingleServiceFactory> xFac( xIntFac, uno::UNO_QUERY );
-                        if ( xFac.is() && xInfo.is() && xInfo->getImplementationName() == aImplName )
+                        if ( xInfo.is() && xInfo->getImplementationName() == aImplName )
                         {
                             try
                             {
-                                uno::Reference<uno::XInterface> xInterface = xFac->createInstance();
+                                // #i113160# try XSingleComponentFactory in addition to (old) XSingleServiceFactory,
+                                // passing the context to the component (see ScUnoAddInCollection::Initialize)
+
+                                uno::Reference<uno::XInterface> xInterface;
+                                uno::Reference<uno::XComponentContext> xCtx = getContext(xManager);
+                                uno::Reference<lang::XSingleComponentFactory> xCFac( xIntFac, uno::UNO_QUERY );
+                                if (xCtx.is() && xCFac.is())
+                                    xInterface = xCFac->createInstanceWithContext(xCtx);
+
+                                if (!xInterface.is())
+                                {
+                                    uno::Reference<lang::XSingleServiceFactory> xFac( xIntFac, uno::UNO_QUERY );
+                                    if ( xFac.is() )
+                                        xInterface = xFac->createInstance();
+                                }
+
                                 uno::Reference<lang::XInitialization> xInit( xInterface, uno::UNO_QUERY );
                                 if (xInit.is())
                                 {
@@ -2432,6 +2499,14 @@ void ScDPCollection::WriteRefsTo( ScDPCollection& r ) const
         }
         DBG_ASSERT( nCount == r.nCount, "WriteRefsTo: couldn't restore all entries" );
     }
+}
+
+ScDPObject* ScDPCollection::GetByName(const String& rName) const
+{
+    for (USHORT i=0; i<nCount; i++)
+        if (static_cast<const ScDPObject*>(pItems[i])->GetName() == rName)
+            return static_cast<ScDPObject*>(pItems[i]);
+    return NULL;
 }
 
 String ScDPCollection::CreateNewName( USHORT nMin ) const

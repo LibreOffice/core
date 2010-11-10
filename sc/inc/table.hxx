@@ -39,11 +39,19 @@
 #include "compressedarray.hxx"
 
 #include <memory>
+#include <set>
+#include <boost/shared_ptr.hpp>
 
 namespace utl {
     class SearchParam;
     class TextSearch;
 }
+
+namespace com { namespace sun { namespace star {
+    namespace sheet {
+        struct TablePageBreakData;
+    }
+} } }
 
 class SfxItemSet;
 class SfxStyleSheetBase;
@@ -63,6 +71,7 @@ class ScPrintSaverTab;
 class ScProgress;
 class ScProgress;
 class ScRangeList;
+class ScSheetEvents;
 class ScSortInfoArray;
 class ScStyleSheet;
 class ScTableLink;
@@ -72,6 +81,9 @@ struct RowInfo;
 struct ScFunctionData;
 struct ScLineFlags;
 class CollatorWrapper;
+class ScFlatUInt16RowSegments;
+class ScFlatBoolRowSegments;
+class ScFlatBoolColSegments;
 
 
 class ScTable
@@ -111,12 +123,23 @@ private:
     ::std::auto_ptr<ScTableProtection> pTabProtection;
 
     USHORT*         pColWidth;
-    ScSummableCompressedArray< SCROW, USHORT>*  pRowHeight;
+    ::boost::shared_ptr<ScFlatUInt16RowSegments> mpRowHeights;
 
     BYTE*           pColFlags;
     ScBitMaskCompressedArray< SCROW, BYTE>*     pRowFlags;
+    ::boost::shared_ptr<ScFlatBoolColSegments>  mpHiddenCols;
+    ::boost::shared_ptr<ScFlatBoolRowSegments>  mpHiddenRows;
+    ::boost::shared_ptr<ScFlatBoolColSegments>  mpFilteredCols;
+    ::boost::shared_ptr<ScFlatBoolRowSegments>  mpFilteredRows;
+
+    ::std::set<SCROW>                      maRowPageBreaks;
+    ::std::set<SCROW>                      maRowManualBreaks;
+    ::std::set<SCCOL>                      maColPageBreaks;
+    ::std::set<SCCOL>                      maColManualBreaks;
 
     ScOutlineTable* pOutlineTable;
+
+    ScSheetEvents*  pSheetEvents;
 
     SCCOL           nTableAreaX;
     SCROW           nTableAreaY;
@@ -126,6 +149,7 @@ private:
     BOOL            bVisible;
     BOOL            bStreamValid;
     BOOL            bPendingRowHeights;
+    BOOL            bCalcNotification;
 
     SCTAB           nTab;
     USHORT          nRecalcLvl;             // Rekursionslevel Size-Recalc
@@ -153,8 +177,10 @@ private:
 
     ScRangeList*    pScenarioRanges;
     Color           aScenarioColor;
+    Color           aTabBgColor;
     USHORT          nScenarioFlags;
     BOOL            bActiveScenario;
+    bool            mbPageBreaksValid;
 
 friend class ScDocument;                    // fuer FillInfo
 friend class ScDocumentIterator;
@@ -189,6 +215,9 @@ public:
     void        RemoveSubTotals( ScSubTotalParam& rParam );
     BOOL        DoSubTotals( ScSubTotalParam& rParam );
 
+    const ScSheetEvents* GetSheetEvents() const              { return pSheetEvents; }
+    void        SetSheetEvents( const ScSheetEvents* pNew );
+
     BOOL        IsVisible() const                            { return bVisible; }
     void        SetVisible( BOOL bVis );
 
@@ -197,6 +226,9 @@ public:
 
     BOOL        IsPendingRowHeights() const                  { return bPendingRowHeights; }
     void        SetPendingRowHeights( BOOL bSet );
+
+    BOOL        GetCalcNotification() const                  { return bCalcNotification; }
+    void        SetCalcNotification( BOOL bSet );
 
     BOOL        IsLayoutRTL() const                          { return bLayoutRTL; }
     BOOL        IsLoadingRTL() const                         { return bLoadingRTL; }
@@ -209,6 +241,8 @@ public:
     void        SetScenarioComment( const String& rComment ) { aComment = rComment; }
     const Color& GetScenarioColor() const                    { return aScenarioColor; }
     void        SetScenarioColor(const Color& rNew)          { aScenarioColor = rNew; }
+    const Color& GetTabBgColor() const;
+    void         SetTabBgColor(const Color& rColor);
     USHORT      GetScenarioFlags() const                     { return nScenarioFlags; }
     void        SetScenarioFlags(USHORT nNew)                { nScenarioFlags = nNew; }
     void        SetActiveScenario(BOOL bSet)                 { bActiveScenario = bSet; }
@@ -364,7 +398,8 @@ public:
 
     void        CopyUpdated( const ScTable* pPosTab, ScTable* pDestTab ) const;
 
-    void        InvalidateTableArea()                       { bTableAreaValid = FALSE; }
+    void        InvalidateTableArea();
+    void        InvalidatePageBreaks();
 
     BOOL        GetCellArea( SCCOL& rEndCol, SCROW& rEndRow ) const;            // FALSE = leer
     BOOL        GetTableArea( SCCOL& rEndCol, SCROW& rEndRow ) const;
@@ -463,7 +498,7 @@ public:
                                 SCCOL& rCol, SCROW& rRow, ScMarkData& rMark,
                                 String& rUndoStr, ScDocument* pUndoDoc);
 
-    void        FindMaxRotCol( RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nX1, SCCOL nX2 ) const;
+    void        FindMaxRotCol( RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nX1, SCCOL nX2 );
 
     void        GetBorderLines( SCCOL nCol, SCROW nRow,
                                 const SvxBorderLine** ppLeft, const SvxBorderLine** ppTop,
@@ -580,29 +615,49 @@ public:
     void        SetRowHeight( SCROW nRow, USHORT nNewHeight );
     BOOL        SetRowHeightRange( SCROW nStartRow, SCROW nEndRow, USHORT nNewHeight,
                                     double nPPTX, double nPPTY );
+
+    /**
+     * Set specified row height to specified ranges.  Don't check for drawing
+     * objects etc.  Just set the row height.  Nothing else.
+     *
+     * Note that setting a new row height via this function will not
+     * invalidate page breaks.
+     */
+    void        SetRowHeightOnly( SCROW nStartRow, SCROW nEndRow, USHORT nNewHeight );
+
                         // nPPT fuer Test auf Veraenderung
     void        SetManualHeight( SCROW nStartRow, SCROW nEndRow, BOOL bManual );
 
     USHORT      GetColWidth( SCCOL nCol ) const;
-    USHORT      GetRowHeight( SCROW nRow ) const;
+    SC_DLLPUBLIC USHORT GetRowHeight( SCROW nRow, SCROW* pStartRow = NULL, SCROW* pEndRow = NULL, bool bHiddenAsZero = true ) const;
     ULONG       GetRowHeight( SCROW nStartRow, SCROW nEndRow ) const;
     ULONG       GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow, double fScale ) const;
     ULONG       GetColOffset( SCCOL nCol ) const;
     ULONG       GetRowOffset( SCROW nRow ) const;
 
+    /**
+     * Get the last row such that the height of row 0 to the end row is as
+     * high as possible without exceeding the specified height value.
+     *
+     * @param nHeight maximum desired height
+     *
+     * @return SCROW last row of the range within specified height.
+     */
+    SCROW       GetRowForHeight(ULONG nHeight) const;
+
     USHORT      GetOriginalWidth( SCCOL nCol ) const;
     USHORT      GetOriginalHeight( SCROW nRow ) const;
 
-    USHORT      GetCommonWidth( SCCOL nEndCol ) const;
+    USHORT      GetCommonWidth( SCCOL nEndCol );
 
-    SCROW       GetHiddenRowCount( SCROW nRow ) const;
+    SCROW       GetHiddenRowCount( SCROW nRow );
 
-    void        ShowCol(SCCOL nCol, BOOL bShow);
-    void        ShowRow(SCROW nRow, BOOL bShow);
-    void        DBShowRow(SCROW nRow, BOOL bShow);
+    void        ShowCol(SCCOL nCol, bool bShow);
+    void        ShowRow(SCROW nRow, bool bShow);
+    void        DBShowRow(SCROW nRow, bool bShow);
 
-    void        ShowRows(SCROW nRow1, SCROW nRow2, BOOL bShow);
-    void        DBShowRows(SCROW nRow1, SCROW nRow2, BOOL bShow);
+    void        ShowRows(SCROW nRow1, SCROW nRow2, bool bShow);
+    void        DBShowRows(SCROW nRow1, SCROW nRow2, bool bShow);
 
     void        SetColFlags( SCCOL nCol, BYTE nNewFlags );
     void        SetRowFlags( SCROW nRow, BYTE nNewFlags );
@@ -616,15 +671,11 @@ public:
                 /// @return  the index of the last changed row (flags and row height, auto pagebreak is ignored).
     SCROW      GetLastChangedRow() const;
 
-    BOOL        IsFiltered(SCROW nRow) const;
-
     BYTE        GetColFlags( SCCOL nCol ) const;
     BYTE        GetRowFlags( SCROW nRow ) const;
 
     const ScBitMaskCompressedArray< SCROW, BYTE> * GetRowFlagsArray() const
                     { return pRowFlags; }
-    const ScSummableCompressedArray< SCROW, USHORT> * GetRowHeightArray() const
-                    { return pRowHeight; }
 
     BOOL        UpdateOutlineCol( SCCOL nStartCol, SCCOL nEndCol, BOOL bShow );
     BOOL        UpdateOutlineRow( SCROW nStartRow, SCROW nEndRow, BOOL bShow );
@@ -632,6 +683,65 @@ public:
     void        UpdatePageBreaks( const ScRange* pUserArea );
     void        RemoveManualBreaks();
     BOOL        HasManualBreaks() const;
+    void        SetRowManualBreaks( const ::std::set<SCROW>& rBreaks );
+    void        SetColManualBreaks( const ::std::set<SCCOL>& rBreaks );
+
+    void        GetAllRowBreaks(::std::set<SCROW>& rBreaks, bool bPage, bool bManual) const;
+    void        GetAllColBreaks(::std::set<SCCOL>& rBreaks, bool bPage, bool bManual) const;
+    bool        HasRowPageBreak(SCROW nRow) const;
+    bool        HasColPageBreak(SCCOL nCol) const;
+    bool        HasRowManualBreak(SCROW nRow) const;
+    bool        HasColManualBreak(SCCOL nCol) const;
+
+    /**
+     * Get the row position of the next manual break that occurs at or below
+     * specified row.  When no more manual breaks are present at or below
+     * the specified row, -1 is returned.
+     *
+     * @param nRow row at which the search begins.
+     *
+     * @return SCROW next row position with manual page break, or -1 if no
+     *         more manual breaks are present.
+     */
+    SCROW       GetNextManualBreak(SCROW nRow) const;
+
+    void        RemoveRowPageBreaks(SCROW nStartRow, SCROW nEndRow);
+    void        RemoveRowBreak(SCROW nRow, bool bPage, bool bManual);
+    void        RemoveColBreak(SCCOL nCol, bool bPage, bool bManual);
+    void        SetRowBreak(SCROW nRow, bool bPage, bool bManual);
+    void        SetColBreak(SCCOL nCol, bool bPage, bool bManual);
+    ::com::sun::star::uno::Sequence<
+        ::com::sun::star::sheet::TablePageBreakData> GetRowBreakData() const;
+
+    bool        RowHidden(SCROW nRow, SCROW* pFirstRow = NULL, SCROW* pLastRow = NULL) const;
+    bool        RowHidden(SCROW nRow, SCROW& rLastRow) const;
+    bool        HasHiddenRows(SCROW nStartRow, SCROW nEndRow) const;
+    bool        ColHidden(SCCOL nCol, SCCOL& rLastCol) const;
+    bool        ColHidden(SCCOL nCol, SCCOL* pFirstCol = NULL, SCCOL* pLastCol = NULL) const;
+    void        SetRowHidden(SCROW nStartRow, SCROW nEndRow, bool bHidden);
+    void        SetColHidden(SCCOL nStartCol, SCCOL nEndCol, bool bHidden);
+    void        CopyColHidden(ScTable& rTable, SCCOL nStartCol, SCCOL nEndCol);
+    void        CopyRowHidden(ScTable& rTable, SCROW nStartRow, SCROW nEndRow);
+    void        CopyRowHeight(ScTable& rSrcTable, SCROW nStartRow, SCROW nEndRow, SCROW nSrcOffset);
+    SCROW       FirstVisibleRow(SCROW nStartRow, SCROW nEndRow) const;
+    SCROW       LastVisibleRow(SCROW nStartRow, SCROW nEndRow) const;
+    SCROW       CountVisibleRows(SCROW nStartRow, SCROW nEndRow) const;
+    sal_uInt32  GetTotalRowHeight(SCROW nStartRow, SCROW nEndRow) const;
+
+    SCCOLROW    LastHiddenColRow(SCCOLROW nPos, bool bCol) const;
+
+    bool        RowFiltered(SCROW nRow, SCROW* pFirstRow = NULL, SCROW* pLastRow = NULL) const;
+    bool        ColFiltered(SCCOL nCol, SCCOL* pFirstCol = NULL, SCCOL* pLastCol = NULL) const;
+    bool        HasFilteredRows(SCROW nStartRow, SCROW nEndRow) const;
+    void        CopyColFiltered(ScTable& rTable, SCCOL nStartCol, SCCOL nEndCol);
+    void        CopyRowFiltered(ScTable& rTable, SCROW nStartRow, SCROW nEndRow);
+    void        SetRowFiltered(SCROW nStartRow, SCROW nEndRow, bool bFiltered);
+    void        SetColFiltered(SCCOL nStartCol, SCCOL nEndCol, bool bFiltered);
+    SCROW       FirstNonFilteredRow(SCROW nStartRow, SCROW nEndRow) const;
+    SCROW       LastNonFilteredRow(SCROW nStartRow, SCROW nEndRow) const;
+    SCROW       CountNonFilteredRows(SCROW nStartRow, SCROW nEndRow) const;
+
+    void        SyncColRowFlags();
 
     void        StripHidden( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2 );
     void        ExtendHidden( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2 );
@@ -750,14 +860,65 @@ private:
     void        StartNeededListeners(); // only for cells where NeedsListening()==TRUE
     void        SetRelNameDirty();
 
+    void        SetLoadingMedium(bool bLoading);
+
     SCSIZE      FillMaxRot( RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nX1, SCCOL nX2,
                             SCCOL nCol, SCROW nAttrRow1, SCROW nAttrRow2, SCSIZE nArrY,
-                            const ScPatternAttr* pPattern, const SfxItemSet* pCondSet ) const;
+                            const ScPatternAttr* pPattern, const SfxItemSet* pCondSet );
 
     // idle calculation of OutputDevice text width for cell
     // also invalidates script type, broadcasts for "calc as shown"
     void        InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress* pAdrTo,
                                      BOOL bNumFormatChanged, BOOL bBroadcast );
+
+    /**
+     * In case the cell text goes beyond the column width, move the max column
+     * position to the right.  This is called from ExtendPrintArea.
+     */
+    void        MaybeAddExtraColumn(SCCOL& rCol, SCROW nRow, OutputDevice* pDev, double nPPTX, double nPPTY);
+
+    /**
+     * Use this to iterate through non-empty visible cells in a single column.
+     */
+    class VisibleDataCellIterator
+    {
+    public:
+        static SCROW ROW_NOT_FOUND;
+
+        explicit VisibleDataCellIterator(ScFlatBoolRowSegments& rRowSegs, ScColumn& rColumn);
+        ~VisibleDataCellIterator();
+
+        /**
+         * Set the start row position.  In case there is not visible data cell
+         * at the specified row position, it will move to the position of the
+         * first visible data cell below that point.
+         *
+         * @return First visible data cell if found, or NULL otherwise.
+         */
+        ScBaseCell* reset(SCROW nRow);
+
+        /**
+         * Find the next visible data cell position.
+         *
+         * @return Next visible data cell if found, or NULL otherwise.
+         */
+        ScBaseCell* next();
+
+        /**
+         * Get the current row position.
+         *
+         * @return Current row position, or ROW_NOT_FOUND if the iterator
+         *         doesn't point to a valid data cell position.
+         */
+        SCROW getRow() const;
+
+    private:
+        ScFlatBoolRowSegments& mrRowSegs;
+        ScColumn& mrColumn;
+        ScBaseCell* mpCell;
+        SCROW mnCurRow;
+        SCROW mnUBound;
+    };
 };
 
 

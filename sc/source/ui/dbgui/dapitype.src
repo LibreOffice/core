@@ -58,6 +58,7 @@ ModalDialog RID_SCDLG_DAPITYPE
     };
     RadioButton BTN_SELECTION
     {
+        HelpID = "sc:RadioButton:RID_SCDLG_DAPITYPE:BTN_SELECTION";
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 164 , 10 ) ;
         TabStop = TRUE ;
@@ -65,6 +66,7 @@ ModalDialog RID_SCDLG_DAPITYPE
     };
     RadioButton BTN_DATABASE
     {
+        HelpID = "sc:RadioButton:RID_SCDLG_DAPITYPE:BTN_DATABASE";
         Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 164 , 10 ) ;
         TabStop = TRUE ;
@@ -72,6 +74,7 @@ ModalDialog RID_SCDLG_DAPITYPE
     };
     RadioButton BTN_EXTERNAL
     {
+        HelpID = "sc:RadioButton:RID_SCDLG_DAPITYPE:BTN_EXTERNAL";
         Pos = MAP_APPFONT ( 12 , 42 ) ;
         Size = MAP_APPFONT ( 164 , 10 ) ;
         TabStop = TRUE ;
@@ -125,6 +128,7 @@ ModalDialog RID_SCDLG_DAPISERVICE
     };
     ListBox LB_SERVICE
     {
+        HelpID = "sc:ListBox:RID_SCDLG_DAPISERVICE:LB_SERVICE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 56 , 12 ) ;
         Size = MAP_APPFONT ( 120 , 80 ) ;
@@ -139,6 +143,7 @@ ModalDialog RID_SCDLG_DAPISERVICE
     };
     Edit ED_SOURCE
     {
+        HelpID = "sc:Edit:RID_SCDLG_DAPISERVICE:ED_SOURCE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 56 , 28 ) ;
         Size = MAP_APPFONT ( 120 , 12 ) ;
@@ -152,6 +157,7 @@ ModalDialog RID_SCDLG_DAPISERVICE
     };
     Edit ED_NAME
     {
+        HelpID = "sc:Edit:RID_SCDLG_DAPISERVICE:ED_NAME";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 56 , 44 ) ;
         Size = MAP_APPFONT ( 120 , 12 ) ;
@@ -165,6 +171,7 @@ ModalDialog RID_SCDLG_DAPISERVICE
     };
     Edit ED_USER
     {
+        HelpID = "sc:Edit:RID_SCDLG_DAPISERVICE:ED_USER";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 56 , 60 ) ;
         Size = MAP_APPFONT ( 120 , 12 ) ;
@@ -178,6 +185,7 @@ ModalDialog RID_SCDLG_DAPISERVICE
     };
     Edit ED_PASSWD
     {
+        HelpID = "sc:Edit:RID_SCDLG_DAPISERVICE:ED_PASSWD";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 56 , 76 ) ;
         Size = MAP_APPFONT ( 120 , 12 ) ;
@@ -233,6 +241,7 @@ ModalDialog RID_SCDLG_DAPIDATA
     };
     ListBox LB_DATABASE
     {
+        HelpID = "sc:ListBox:RID_SCDLG_DAPIDATA:LB_DATABASE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 66 , 12 ) ;
         Size = MAP_APPFONT ( 110 , 80 ) ;
@@ -248,6 +257,7 @@ ModalDialog RID_SCDLG_DAPIDATA
     };
     ComboBox CB_OBJECT
     {
+        HelpID = "sc:ComboBox:RID_SCDLG_DAPIDATA:CB_OBJECT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 66 , 28 ) ;
         Size = MAP_APPFONT ( 110 , 80 ) ;
@@ -263,6 +273,7 @@ ModalDialog RID_SCDLG_DAPIDATA
     };
     ListBox LB_OBJTYPE
     {
+        HelpID = "sc:ListBox:RID_SCDLG_DAPIDATA:LB_OBJTYPE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 66 , 44 ) ;
         Size = MAP_APPFONT ( 110 , 80 ) ;

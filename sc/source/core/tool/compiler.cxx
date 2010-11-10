@@ -2504,7 +2504,40 @@ BOOL ScCompiler::IsOpCode( const String& rName, bool bInArray )
         aToken.SetOpCode(eOp);
         pRawToken = aToken.Clone();
     }
-    else
+    else if (mxSymbols->isODFF())
+    {
+        // ODFF names that are not written in the current mapping but to be
+        // recognized. New names will be written in a future relase, then
+        // exchange (!) with the names in
+        // formula/source/core/resource/core_resource.src to be able to still
+        // read the old names as well.
+        struct FunctionName
+        {
+            const sal_Char* pName;
+            OpCode          eOp;
+        };
+        static const FunctionName aOdffAliases[] = {
+            // Renamed old names:
+            // XXX none yet.
+            // Renamed new names:
+            { "BINOM.DIST.RANGE",               ocB },              // B -> BINOM.DIST.RANGE
+            { "LEGACY.TDIST",                   ocTDist },          // TDIST -> LEGACY.TDIST
+            { "ORG.OPENOFFICE.EASTERSUNDAY",    ocEasterSunday }    // EASTERSUNDAY -> ORG.OPENOFFICE.EASTERSUNDAY
+        };
+        static const size_t nOdffAliases = sizeof(aOdffAliases) / sizeof(aOdffAliases[0]);
+        for (size_t i=0; i<nOdffAliases; ++i)
+        {
+            if (rName.EqualsIgnoreCaseAscii( aOdffAliases[i].pName))
+            {
+                ScRawToken aToken;
+                aToken.SetOpCode( aOdffAliases[i].eOp);
+                pRawToken = aToken.Clone();
+                bFound = TRUE;
+                break;  // for
+            }
+        }
+    }
+    if (!bFound)
     {
         String aIntName;
         if (mxSymbols->hasExternals())
@@ -2887,6 +2920,7 @@ BOOL ScCompiler::IsReference( const String& rName )
 
 BOOL ScCompiler::IsMacro( const String& rName )
 {
+    String aName( rName);
     StarBASIC* pObj = 0;
     SfxObjectShell* pDocSh = pDoc->GetDocumentShell();
 
@@ -2898,7 +2932,14 @@ BOOL ScCompiler::IsMacro( const String& rName )
     else
         pObj = pSfxApp->GetBasic();
 
-    SbxMethod* pMeth = (SbxMethod*) pObj->Find( rName, SbxCLASS_METHOD );
+    // ODFF recommends to store user-defined functions prefixed with "USER.",
+    // use only unprefixed name if encountered. BASIC doesn't allow '.' in a
+    // function name so a function "USER.FOO" could not exist, and macro check
+    // is assigned the lowest priority in function name check.
+    if (FormulaGrammar::isODFF( GetGrammar()) && aName.EqualsIgnoreCaseAscii( "USER.", 0, 5))
+        aName.Erase( 0, 5);
+
+    SbxMethod* pMeth = (SbxMethod*) pObj->Find( aName, SbxCLASS_METHOD );
     if( !pMeth )
     {
         pSfxApp->LeaveBasicCall();
@@ -2913,7 +2954,7 @@ BOOL ScCompiler::IsMacro( const String& rName )
         return FALSE;
     }
     ScRawToken aToken;
-    aToken.SetExternal( rName.GetBuffer() );
+    aToken.SetExternal( aName.GetBuffer() );
     aToken.eOp = ocMacro;
     pRawToken = aToken.Clone();
     pSfxApp->LeaveBasicCall();

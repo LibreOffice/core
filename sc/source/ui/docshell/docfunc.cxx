@@ -50,9 +50,9 @@
 
 #include <basic/sbstar.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/script/XLibraryContainer.hpp>
-#include <com/sun/star/script/XVBAModuleInfo.hpp>
 #include <com/sun/star/script/ModuleType.hpp>
+#include <com/sun/star/script/XLibraryContainer.hpp>
+#include <com/sun/star/script/vba/XVBAModuleInfo.hpp>
 
 #include <list>
 
@@ -2605,7 +2605,6 @@ uno::Reference< uno::XInterface > GetDocModuleObject( SfxObjectShell& rDocSh, St
 
 script::ModuleInfo lcl_InitModuleInfo( SfxObjectShell& rDocSh, String& sModule )
 {
-    ::rtl::OUString sVbaOption( RTL_CONSTASCII_USTRINGPARAM( "Rem Attribute VBA_ModuleType=VBADocumentModule\nOption VBASupport 1\n" ));
     script::ModuleInfo sModuleInfo;
     sModuleInfo.ModuleType = script::ModuleType::DOCUMENT;
     sModuleInfo.ModuleObject = GetDocModuleObject( rDocSh, sModule );
@@ -2648,7 +2647,7 @@ void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, String& sModuleName, String
         if ( sTmpSource.getLength() == 0 )
             sTmpSource = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Rem Attribute VBA_ModuleType=VBADocumentModule\nOption VBASupport 1\n" ));
         aSourceAny <<= sTmpSource;
-        uno::Reference< script::XVBAModuleInfo > xVBAModuleInfo( xLib, uno::UNO_QUERY );
+        uno::Reference< script::vba::XVBAModuleInfo > xVBAModuleInfo( xLib, uno::UNO_QUERY );
         if ( xVBAModuleInfo.is() )
         {
             String sCodeName( genModuleName );
@@ -2679,7 +2678,7 @@ void VBA_DeleteModule( ScDocShell& rDocSh, String& sModuleName )
     }
     if( xLib.is() )
     {
-        uno::Reference< script::XVBAModuleInfo > xVBAModuleInfo( xLib, uno::UNO_QUERY );
+        uno::Reference< script::vba::XVBAModuleInfo > xVBAModuleInfo( xLib, uno::UNO_QUERY );
         if( xLib->hasByName( sModuleName ) )
             xLib->removeByName( sModuleName );
         if ( xVBAModuleInfo.is() )
@@ -2791,6 +2790,8 @@ BOOL ScDocFunc::DeleteTable( SCTAB nTab, BOOL bRecord, BOOL /* bApi */ )
             pUndoDoc->SetActiveScenario( nTab, bActive );
         }
         pUndoDoc->SetVisible( nTab, pDoc->IsVisible( nTab ) );
+        pUndoDoc->SetTabBgColor( nTab, pDoc->GetTabBgColor(nTab) );
+        pUndoDoc->SetSheetEvents( nTab, pDoc->GetSheetEvents( nTab ) );
 
         //  Drawing-Layer muss sein Undo selbst in der Hand behalten !!!
         pDoc->BeginDrawUndo();                          //  DeleteTab erzeugt ein SdrUndoDelPage
@@ -2805,7 +2806,7 @@ BOOL ScDocFunc::DeleteTable( SCTAB nTab, BOOL bRecord, BOOL /* bApi */ )
         if (bRecord)
         {
             SvShorts theTabs;
-            theTabs.Insert(nTab,theTabs.Count());
+            theTabs.push_back(nTab);
             rDocShell.GetUndoManager()->AddUndoAction(
                         new ScUndoDeleteTab( &rDocShell, theTabs, pUndoDoc, pUndoData ));
         }
@@ -2995,6 +2996,104 @@ BOOL ScDocFunc::RenameTable( SCTAB nTab, const String& rName, BOOL bRecord, BOOL
     return bSuccess;
 }
 
+bool ScDocFunc::SetTabBgColor( SCTAB nTab, const Color& rColor, bool bRecord, bool bApi )
+{
+
+    ScDocument* pDoc = rDocShell.GetDocument();
+    if (bRecord && !pDoc->IsUndoEnabled())
+        bRecord = false;
+    if ( !pDoc->IsDocEditable() || pDoc->IsTabProtected(nTab) )
+    {
+        if (!bApi)
+            rDocShell.ErrorMessage(STR_PROTECTIONERR); //TODO Check to see what this string is...
+        return false;
+    }
+
+    Color aOldTabBgColor;
+    aOldTabBgColor = pDoc->GetTabBgColor(nTab);
+
+    bool bSuccess = false;
+    pDoc->SetTabBgColor(nTab, rColor);
+    if ( pDoc->GetTabBgColor(nTab) == rColor)
+        bSuccess = true;
+    if (bSuccess)
+    {
+        if (bRecord)
+        {
+            rDocShell.GetUndoManager()->AddUndoAction(
+                new ScUndoTabColor( &rDocShell, nTab, aOldTabBgColor, rColor));
+        }
+        rDocShell.PostPaintExtras();
+        ScDocShellModificator aModificator( rDocShell );
+        aModificator.SetDocumentModified();
+        SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
+
+        bSuccess = true;
+    }
+    return bSuccess;
+}
+
+bool ScDocFunc::SetTabBgColor(
+    ScUndoTabColorInfo::List& rUndoTabColorList, bool bRecord, bool bApi )
+{
+    ScDocument* pDoc = rDocShell.GetDocument();
+    if (bRecord && !pDoc->IsUndoEnabled())
+        bRecord = false;
+
+    if ( !pDoc->IsDocEditable() )
+    {
+        if (!bApi)
+            rDocShell.ErrorMessage(STR_PROTECTIONERR); //TODO Get a better String Error...
+        return false;
+    }
+
+    USHORT nTab;
+    Color aNewTabBgColor;
+    bool bSuccess = true;
+    size_t nTabProtectCount = 0;
+    size_t nTabListCount = rUndoTabColorList.size();
+    for ( size_t i = 0; i < nTabListCount; ++i )
+    {
+        ScUndoTabColorInfo& rInfo = rUndoTabColorList[i];
+        nTab = rInfo.mnTabId;
+        if ( !pDoc->IsTabProtected(nTab) )
+        {
+            aNewTabBgColor = rInfo.maNewTabBgColor;
+            rInfo.maOldTabBgColor = pDoc->GetTabBgColor(nTab);
+            pDoc->SetTabBgColor(nTab, aNewTabBgColor);
+            if ( pDoc->GetTabBgColor(nTab) != aNewTabBgColor)
+            {
+                bSuccess = false;
+                break;
+            }
+        }
+        else
+        {
+            nTabProtectCount++;
+        }
+    }
+
+    if ( nTabProtectCount == nTabListCount )
+    {
+        if (!bApi)
+            rDocShell.ErrorMessage(STR_PROTECTIONERR); //TODO Get a better String Error...
+        return false;
+    }
+
+    if (bSuccess)
+    {
+        if (bRecord)
+        {
+            rDocShell.GetUndoManager()->AddUndoAction(
+                new ScUndoTabColor( &rDocShell, rUndoTabColorList));
+        }
+        rDocShell.PostPaintExtras();
+        ScDocShellModificator aModificator( rDocShell );
+        aModificator.SetDocumentModified();
+    }
+    return bSuccess;
+}
+
 //------------------------------------------------------------------------
 
 //! SetWidthOrHeight - noch doppelt zu ViewFunc !!!!!!
@@ -3097,7 +3196,9 @@ BOOL ScDocFunc::SetWidthOrHeight( BOOL bWidth, SCCOLROW nRangeCnt, SCCOLROW* pRa
                     for (SCROW nRow=nStartNo; nRow<=nEndNo; nRow++)
                     {
                         BYTE nOld = pDoc->GetRowFlags(nRow,nTab);
-                        if ( (nOld & CR_HIDDEN) == 0 && ( nOld & CR_MANUALSIZE ) )
+                        SCROW nLastRow = -1;
+                        bool bHidden = pDoc->RowHidden(nRow, nTab, nLastRow);
+                        if ( !bHidden && ( nOld & CR_MANUALSIZE ) )
                             pDoc->SetRowFlags( nRow, nTab, nOld & ~CR_MANUALSIZE );
                     }
                 }
@@ -3132,8 +3233,8 @@ BOOL ScDocFunc::SetWidthOrHeight( BOOL bWidth, SCCOLROW nRangeCnt, SCCOLROW* pRa
         {
             for (SCCOL nCol=static_cast<SCCOL>(nStartNo); nCol<=static_cast<SCCOL>(nEndNo); nCol++)
             {
-                if ( eMode != SC_SIZE_VISOPT ||
-                     (pDoc->GetColFlags( nCol, nTab ) & CR_HIDDEN) == 0 )
+                SCCOL nLastCol = -1;
+                if ( eMode != SC_SIZE_VISOPT || !pDoc->ColHidden(nCol, nTab, nLastCol) )
                 {
                     USHORT nThisSize = nSizeTwips;
 
@@ -3203,20 +3304,22 @@ BOOL ScDocFunc::InsertPageBreak( BOOL bColumn, const ScAddress& rPos,
     if (nPos == 0)
         return FALSE;                   // erste Spalte / Zeile
 
-    BYTE nFlags = bColumn ? pDoc->GetColFlags( static_cast<SCCOL>(nPos), nTab )
-        : pDoc->GetRowFlags( static_cast<SCROW>(nPos), nTab );
-    if (nFlags & CR_MANUALBREAK)
-        return TRUE;                    // Umbruch schon gesetzt
+    ScBreakType nBreak = bColumn ?
+        pDoc->HasColBreak(static_cast<SCCOL>(nPos), nTab) :
+        pDoc->HasRowBreak(static_cast<SCROW>(nPos), nTab);
+    if (nBreak & BREAK_MANUAL)
+        return true;
 
     if (bRecord)
         rDocShell.GetUndoManager()->AddUndoAction(
             new ScUndoPageBreak( &rDocShell, rPos.Col(), rPos.Row(), nTab, bColumn, TRUE ) );
 
-    nFlags |= CR_MANUALBREAK;
     if (bColumn)
-        pDoc->SetColFlags( static_cast<SCCOL>(nPos), nTab, nFlags );
+        pDoc->SetColBreak(static_cast<SCCOL>(nPos), nTab, false, true);
     else
-        pDoc->SetRowFlags( static_cast<SCROW>(nPos), nTab, nFlags );
+        pDoc->SetRowBreak(static_cast<SCROW>(nPos), nTab, false, true);
+
+    pDoc->InvalidatePageBreaks(nTab);
     pDoc->UpdatePageBreaks( nTab );
 
     if (pDoc->IsStreamValid(nTab))
@@ -3262,20 +3365,25 @@ BOOL ScDocFunc::RemovePageBreak( BOOL bColumn, const ScAddress& rPos,
 
     SCCOLROW nPos = bColumn ? static_cast<SCCOLROW>(rPos.Col()) :
         static_cast<SCCOLROW>(rPos.Row());
-    BYTE nFlags = bColumn ? pDoc->GetColFlags( static_cast<SCCOL>(nPos), nTab )
-        : pDoc->GetRowFlags( static_cast<SCROW>(nPos), nTab );
-    if ((nFlags & CR_MANUALBREAK)==0)
-        return FALSE;                           // kein Umbruch gesetzt
+
+    ScBreakType nBreak;
+    if (bColumn)
+        nBreak = pDoc->HasColBreak(static_cast<SCCOL>(nPos), nTab);
+    else
+        nBreak = pDoc->HasRowBreak(static_cast<SCROW>(nPos), nTab);
+    if ((nBreak & BREAK_MANUAL) == 0)
+        // There is no manual break.
+        return false;
 
     if (bRecord)
         rDocShell.GetUndoManager()->AddUndoAction(
             new ScUndoPageBreak( &rDocShell, rPos.Col(), rPos.Row(), nTab, bColumn, FALSE ) );
 
-    nFlags &= ~CR_MANUALBREAK;
     if (bColumn)
-        pDoc->SetColFlags( static_cast<SCCOL>(nPos), nTab, nFlags );
+        pDoc->RemoveColBreak(static_cast<SCCOL>(nPos), nTab, false, true);
     else
-        pDoc->SetRowFlags( static_cast<SCROW>(nPos), nTab, nFlags );
+        pDoc->RemoveRowBreak(static_cast<SCROW>(nPos), nTab, false, true);
+
     pDoc->UpdatePageBreaks( nTab );
 
     if (pDoc->IsStreamValid(nTab))

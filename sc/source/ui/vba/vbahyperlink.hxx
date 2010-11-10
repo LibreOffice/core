@@ -24,6 +24,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef SC_VBA_HYPERLINK_HXX
 #define SC_VBA_HYPERLINK_HXX
 
@@ -38,27 +39,50 @@ typedef InheritedHelperInterfaceImpl1< ov::excel::XHyperlink > HyperlinkImpl_BAS
 
 class ScVbaHyperlink : public HyperlinkImpl_BASE
 {
-    css::uno::Reference< css::table::XCell > mxCell;
-    css::uno::Reference< css::beans::XPropertySet > mxTextField;
-
 public:
-    ScVbaHyperlink( css::uno::Sequence< css::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext > const& xContext ) throw ( css::lang::IllegalArgumentException );
+    ScVbaHyperlink(
+        const css::uno::Sequence< css::uno::Any >& rArgs,
+        const css::uno::Reference< css::uno::XComponentContext >& rxContext ) throw (css::lang::IllegalArgumentException);
+
+    ScVbaHyperlink(
+        const css::uno::Reference< ov::XHelperInterface >& rxAnchor,
+        const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+        const css::uno::Any& rAddress, const css::uno::Any& rSubAddress,
+        const css::uno::Any& rScreenTip, const css::uno::Any& rTextToDisplay ) throw (css::uno::RuntimeException);
+
     virtual ~ScVbaHyperlink();
 
     // Attributes
-    virtual ::rtl::OUString SAL_CALL getAddress() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setAddress( const ::rtl::OUString &rAddress ) throw (css::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setName( const ::rtl::OUString &rName ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setName( const ::rtl::OUString& rName ) throw (css::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getAddress() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setAddress( const ::rtl::OUString& rAddress ) throw (css::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getSubAddress() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setSubAddress( const ::rtl::OUString& rSubAddress ) throw (css::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getScreenTip() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setScreenTip( const ::rtl::OUString& rScreenTip ) throw (css::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getTextToDisplay() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setTextToDisplay( const ::rtl::OUString &rTextToDisplay ) throw (css::uno::RuntimeException);
-
-    // Methods
-    virtual css::uno::Reference< ov::excel::XRange > SAL_CALL Range() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setTextToDisplay( const ::rtl::OUString& rTextToDisplay ) throw (css::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getType() throw (css::uno::RuntimeException);
+    virtual css::uno::Reference< ov::excel::XRange > SAL_CALL getRange() throw (css::uno::RuntimeException);
+    virtual css::uno::Reference< ov::msforms::XShape > SAL_CALL getShape() throw (css::uno::RuntimeException);
 
     // XHelperInterface
-    virtual rtl::OUString& getServiceImplName();
-    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    VBAHELPER_DECL_XHELPERINTERFACE
+
+private:
+    typedef ::std::pair< ::rtl::OUString, ::rtl::OUString > UrlComponents;
+
+    void ensureTextField() throw (css::uno::RuntimeException);
+    UrlComponents getUrlComponents() throw (css::uno::RuntimeException);
+    void setUrlComponents( const UrlComponents& rUrlComp ) throw (css::uno::RuntimeException);
+
+private:
+    css::uno::Reference< css::table::XCell > mxCell;
+    css::uno::Reference< css::beans::XPropertySet > mxTextField;
+    ::rtl::OUString maScreenTip;
+    long mnType;
 };
+
 #endif /* SC_VBA_HYPERLINK_HXX */
 

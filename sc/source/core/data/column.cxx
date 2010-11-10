@@ -600,12 +600,10 @@ const ScStyleSheet* ScColumn::GetAreaStyle( BOOL& rFound, SCROW nRow1, SCROW nRo
     return bEqual ? pStyle : NULL;
 }
 
-
-void ScColumn::FindStyleSheet( const SfxStyleSheetBase* pStyleSheet, BOOL* pUsed, BOOL bReset )
+void ScColumn::FindStyleSheet( const SfxStyleSheetBase* pStyleSheet, ScFlatBoolRowSegments& rUsedRows, bool bReset )
 {
-    pAttrArray->FindStyleSheet( pStyleSheet, pUsed, bReset );
+    pAttrArray->FindStyleSheet( pStyleSheet, rUsedRows, bReset );
 }
-
 
 BOOL ScColumn::IsStyleSheetUsed( const ScStyleSheet& rStyle, BOOL bGatherAllStyles ) const
 {
@@ -893,11 +891,6 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
             SvtBroadcaster* pBC2 = pCell2->ReleaseBroadcaster();
             pCell1->TakeBroadcaster( pBC2 );
             pCell2->TakeBroadcaster( pBC1 );
-
-            ScHint aHint1( SC_HINT_DATACHANGED, aPos1, pCell2 );
-            pDocument->Broadcast( aHint1 );
-            ScHint aHint2( SC_HINT_DATACHANGED, aPos2, pCell1 );
-            pDocument->Broadcast( aHint2 );
         }
         else
         {
@@ -918,7 +911,6 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
 
             // insert ColEntry at new position
             Insert( nRow2, pCell1 );
-            pDocument->Broadcast( ScHint( SC_HINT_DATACHANGED, aPos1, pDummyCell ) );
         }
 
         return;
@@ -999,14 +991,6 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
         Delete( nRow2 );            // deletes pCell2
     else if ( pNew2 )
         Insert( nRow2, pNew2 );     // deletes pCell2 (if existing), inserts pNew2
-
-    //  #64122# Bei Formeln hinterher nochmal broadcasten, damit die Formel nicht in irgendwelchen
-    //  FormulaTrack-Listen landet, ohne die Broadcaster beruecksichtigt zu haben
-    //  (erst hier, wenn beide Zellen eingefuegt sind)
-    if ( pBC1 && pFmlaCell2 )
-        pDocument->Broadcast( ScHint( SC_HINT_DATACHANGED, aPos1, pNew1 ) );
-    if ( pBC2 && pFmlaCell1 )
-        pDocument->Broadcast( ScHint( SC_HINT_DATACHANGED, aPos2, pNew2 ) );
 }
 
 
@@ -1402,7 +1386,7 @@ void ScColumn::CopyScenarioFrom( const ScColumn& rSrcCol )
     //  Dies ist die Szenario-Tabelle, die Daten werden hineinkopiert
 
     ScAttrIterator aAttrIter( pAttrArray, 0, MAXROW );
-    SCROW nStart, nEnd;
+    SCROW nStart = -1, nEnd = -1;
     const ScPatternAttr* pPattern = aAttrIter.Next( nStart, nEnd );
     while (pPattern)
     {
@@ -1433,7 +1417,7 @@ void ScColumn::CopyScenarioTo( ScColumn& rDestCol ) const
     //  Dies ist die Szenario-Tabelle, die Daten werden in die andere kopiert
 
     ScAttrIterator aAttrIter( pAttrArray, 0, MAXROW );
-    SCROW nStart, nEnd;
+    SCROW nStart = -1, nEnd = -1;
     const ScPatternAttr* pPattern = aAttrIter.Next( nStart, nEnd );
     while (pPattern)
     {
@@ -1482,7 +1466,7 @@ void ScColumn::MarkScenarioIn( ScMarkData& rDestMark ) const
     ScRange aRange( nCol, 0, nTab );
 
     ScAttrIterator aAttrIter( pAttrArray, 0, MAXROW );
-    SCROW nStart, nEnd;
+    SCROW nStart = -1, nEnd = -1;
     const ScPatternAttr* pPattern = aAttrIter.Next( nStart, nEnd );
     while (pPattern)
     {

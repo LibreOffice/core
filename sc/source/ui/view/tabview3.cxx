@@ -968,8 +968,8 @@ void ScTabView::MoveCursorRel( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode,
         BOOL bHFlip = FALSE;
         do
         {
-            BYTE nColFlags = pDoc->GetColFlags( nCurX, nTab );
-            bSkipCell = (nColFlags & CR_HIDDEN) || pDoc->IsHorOverlapped( nCurX, nCurY, nTab );
+            SCCOL nLastCol = -1;
+            bSkipCell = pDoc->ColHidden(nCurX, nTab, nLastCol) || pDoc->IsHorOverlapped( nCurX, nCurY, nTab );
             if (bSkipProtected && !bSkipCell)
                 bSkipCell = pDoc->HasAttrib(nCurX, nCurY, nTab, nCurX, nCurY, nTab, HASATTR_PROTECTED);
             if (bSkipUnprotected && !bSkipCell)
@@ -1010,8 +1010,8 @@ void ScTabView::MoveCursorRel( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode,
         BOOL bVFlip = FALSE;
         do
         {
-            BYTE nRowFlags = pDoc->GetRowFlags( nCurY, nTab );
-            bSkipCell = (nRowFlags & CR_HIDDEN) || pDoc->IsVerOverlapped( nCurX, nCurY, nTab );
+            SCROW nLastRow = -1;
+            bSkipCell = pDoc->RowHidden(nCurY, nTab, nLastRow) || pDoc->IsVerOverlapped( nCurX, nCurY, nTab );
             if (bSkipProtected && !bSkipCell)
                 bSkipCell = pDoc->HasAttrib(nCurX, nCurY, nTab, nCurX, nCurY, nTab, HASATTR_PROTECTED);
             if (bSkipUnprotected && !bSkipCell)
@@ -1682,6 +1682,7 @@ void ScTabView::SetTabNo( SCTAB nTab, BOOL bNew, BOOL bExtendSelection )
         }
 
         TabChanged();                                       // DrawView
+
         aViewData.GetViewShell()->WindowChanged();          // falls das aktive Fenster anders ist
         if ( !bUnoRefDialog )
             aViewData.GetViewShell()->DisconnectAllClients();   // important for floating frames
@@ -2093,17 +2094,18 @@ void ScTabView::PaintRangeFinder( long nNumber )
                             BOOL bHiddenEdge = FALSE;
                             SCROW nTmp;
                             ScDocument* pDoc = aViewData.GetDocument();
-                            while ( nCol1 > 0 && ( pDoc->GetColFlags( nCol1, nTab ) & CR_HIDDEN ) )
+                            SCCOL nLastCol = -1;
+                            while ( nCol1 > 0 && pDoc->ColHidden(nCol1, nTab, nLastCol) )
                             {
                                 --nCol1;
                                 bHiddenEdge = TRUE;
                             }
-                            while ( nCol2 < MAXCOL && ( pDoc->GetColFlags( nCol2, nTab ) & CR_HIDDEN ) )
+                            while ( nCol2 < MAXCOL && pDoc->ColHidden(nCol2, nTab, nLastCol) )
                             {
                                 ++nCol2;
                                 bHiddenEdge = TRUE;
                             }
-                            nTmp = pDoc->GetRowFlagsArray( nTab).GetLastForCondition( 0, nRow1, CR_HIDDEN, 0);
+                            nTmp = pDoc->LastVisibleRow(0, nRow1, nTab);
                             if (!ValidRow(nTmp))
                                 nTmp = 0;
                             if (nTmp < nRow1)
@@ -2111,7 +2113,7 @@ void ScTabView::PaintRangeFinder( long nNumber )
                                 nRow1 = nTmp;
                                 bHiddenEdge = TRUE;
                             }
-                            nTmp = pDoc->GetRowFlagsArray( nTab).GetFirstForCondition( nRow2, MAXROW, CR_HIDDEN, 0);
+                            nTmp = pDoc->FirstVisibleRow(nRow2, MAXROW, nTab);
                             if (!ValidRow(nTmp))
                                 nTmp = MAXROW;
                             if (nTmp > nRow2)

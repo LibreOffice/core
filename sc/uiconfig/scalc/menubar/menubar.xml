@@ -92,6 +92,7 @@
                     <menu:menuitem menu:id=".uno:Move"/>
                     <menu:menuitem menu:id=".uno:SelectTables"/>
                     <menu:menuitem menu:id=".uno:Remove"/>
+                    <menu:menuitem menu:id=".uno:TableEvents"/>
                 </menu:menupopup>
             </menu:menu>
             <menu:menu menu:id=".uno:DelBreakMenu">
@@ -215,6 +216,8 @@
                     <menu:menuitem menu:id=".uno:Hide"/>
                     <menu:menuitem menu:id=".uno:Show"/>
                     <menu:menuitem menu:id=".uno:SheetRightToLeft"/>
+                    <menu:menuseparator/>
+                    <menu:menuitem menu:id=".uno:SetTabBgColor"/>
                 </menu:menupopup>
             </menu:menu>
             <menu:menuitem menu:id=".uno:ToggleMergeCells"/>

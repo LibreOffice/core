@@ -420,7 +420,7 @@ BOOL ScOutlineDocFunc::SelectLevel( SCTAB nTab, BOOL bColumns, USHORT nLevel,
             if ( bColumns )
                 pDoc->ShowCol( static_cast<SCCOL>(i), nTab, bShow );
             else
-                if ( !bShow || !pDoc->IsFiltered( i,nTab ) )
+                if ( !bShow || !pDoc->RowFiltered( i,nTab ) )
                     pDoc->ShowRow( i, nTab, bShow );
         }
     }
@@ -518,7 +518,7 @@ BOOL ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, BOOL bRecord, 
             }
         }
         for ( i=nMin; i<=nMax; i++ )
-            if ( !pDoc->IsFiltered( i,nTab ) )              // weggefilterte nicht einblenden
+            if ( !pDoc->RowFiltered( i,nTab ) )             // weggefilterte nicht einblenden
                 pDoc->ShowRow( i, nTab, TRUE );
 
         pDoc->UpdatePageBreaks( nTab );
@@ -678,7 +678,7 @@ BOOL ScOutlineDocFunc::ShowOutline( SCTAB nTab, BOOL bColumns, USHORT nLevel, US
         if ( bColumns )
             pDoc->ShowCol( static_cast<SCCOL>(i), nTab, TRUE );
         else
-            if ( !pDoc->IsFiltered( i,nTab ) )              // weggefilterte nicht einblenden
+            if ( !pDoc->RowFiltered( i,nTab ) )             // weggefilterte nicht einblenden
                 pDoc->ShowRow( i, nTab, TRUE );
     }
 
@@ -701,6 +701,7 @@ BOOL ScOutlineDocFunc::ShowOutline( SCTAB nTab, BOOL bColumns, USHORT nLevel, US
 
     pArray->SetVisibleBelow( nLevel, nEntry, TRUE, TRUE );
 
+    pDoc->InvalidatePageBreaks(nTab);
     pDoc->UpdatePageBreaks( nTab );
 
     if (bPaint)
@@ -766,6 +767,7 @@ BOOL ScOutlineDocFunc::HideOutline( SCTAB nTab, BOOL bColumns, USHORT nLevel, US
 
     pArray->SetVisibleBelow( nLevel, nEntry, FALSE );
 
+    pDoc->InvalidatePageBreaks(nTab);
     pDoc->UpdatePageBreaks( nTab );
 
     if (bPaint)

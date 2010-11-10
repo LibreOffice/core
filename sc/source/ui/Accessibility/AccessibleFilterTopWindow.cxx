@@ -99,13 +99,6 @@ OUString ScAccessibleFilterTopWindow::getImplementationName() throw (RuntimeExce
     return OUString::createFromAscii("ScAccessibleFilterTopWindow");
 }
 
-Reference<XAccessible> ScAccessibleFilterTopWindow::getAccessibleChildMenu()
-{
-    if (!mxAccMenu.is())
-        mxAccMenu.set(new ScAccessibleFilterMenu(this, mpWindow, getAccessibleName(), ScMenuFloatingWindow::MENU_NOT_SELECTED, mpDoc));
-    return mxAccMenu;
-}
-
 void ScAccessibleFilterTopWindow::setAccessibleChild(
     const Reference<XAccessible>& rAccessible, ChildControlType eType)
 {

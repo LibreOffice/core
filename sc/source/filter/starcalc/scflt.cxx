@@ -1548,14 +1548,14 @@ void Sc10Import::LoadTables()
             rStream >> DataValue;
             if (DataValue != 0)
             {
-                BYTE nFlags = 0;
-                if ((DataValue & crfSoftBreak) == crfSoftBreak)
-                    nFlags |= CR_PAGEBREAK;
-                if ((DataValue & crfHardBreak) == crfHardBreak)
-                    nFlags |= CR_MANUALBREAK;
-                if ((DataValue & crfHidden) == crfHidden)
-                    nFlags |= CR_HIDDEN;
-                for (SCCOL k = static_cast<SCCOL>(DataStart); k <= static_cast<SCCOL>(DataEnd); k++) pDoc->SetColFlags(k, static_cast<SCTAB> (TabNo), nFlags);
+                bool bPageBreak   = ((DataValue & crfSoftBreak) == crfSoftBreak);
+                bool bManualBreak = ((DataValue & crfHardBreak) == crfHardBreak);
+                bool bHidden = ((DataValue & crfHidden) == crfHidden);
+                for (SCCOL k = static_cast<SCCOL>(DataStart); k <= static_cast<SCCOL>(DataEnd); k++)
+                {
+                    pDoc->SetColHidden(k, k, static_cast<SCTAB>(TabNo), bHidden);
+                    pDoc->SetColBreak(k, static_cast<SCTAB> (TabNo), bPageBreak, bManualBreak);
+                }
             }
             DataStart = DataEnd + 1;
         }
@@ -1598,14 +1598,14 @@ void Sc10Import::LoadTables()
             rStream >> DataValue;
             if (DataValue != 0)
             {
-                BYTE nFlags = 0;
-                if ((DataValue & crfSoftBreak) == crfSoftBreak)
-                    nFlags |= CR_PAGEBREAK;
-                if ((DataValue & crfHardBreak) == crfHardBreak)
-                    nFlags |= CR_MANUALBREAK;
-                if ((DataValue & crfHidden) == crfHidden)
-                    nFlags |= CR_HIDDEN;
-                for (SCROW l = static_cast<SCROW>(DataStart); l <= static_cast<SCROW>(DataEnd); l++) pDoc->SetRowFlags(l, static_cast<SCTAB> (TabNo), nFlags);
+                bool bPageBreak   = ((DataValue & crfSoftBreak) == crfSoftBreak);
+                bool bManualBreak = ((DataValue & crfHardBreak) == crfHardBreak);
+                bool bHidden      = ((DataValue & crfHidden) == crfHidden);
+                for (SCROW l = static_cast<SCROW>(DataStart); l <= static_cast<SCROW>(DataEnd); l++)
+                {
+                    pDoc->SetRowHidden(l, l, static_cast<SCTAB> (TabNo), bHidden);
+                    pDoc->SetRowBreak(l, static_cast<SCTAB> (TabNo), bPageBreak, bManualBreak);
+                }
             }
             DataStart = DataEnd + 1;
         }
@@ -2396,7 +2396,7 @@ void Sc10Import::LoadObjects()
         nStartX = (long) ( nStartX * HMM_PER_TWIPS );
         nStartX += (long) ( GraphHeader.x / nPPTX * HMM_PER_TWIPS );
         long nSizeX = (long) ( GraphHeader.w / nPPTX * HMM_PER_TWIPS );
-        long nStartY = pDoc->FastGetRowHeight( 0,
+        long nStartY = pDoc->GetRowHeight( 0,
                 static_cast<SCsROW>(GraphHeader.CarretY) - 1,
                 static_cast<SCTAB>(GraphHeader.CarretZ));
         nStartY = (long) ( nStartY * HMM_PER_TWIPS );

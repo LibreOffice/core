@@ -96,7 +96,8 @@ SLOFILES =  \
         $(SLO)$/XMLChangeTrackingImportHelper.obj \
         $(SLO)$/XMLTrackedChangesContext.obj \
         $(SLO)$/XMLExportSharedData.obj \
-        $(SLO)$/XMLEmptyContext.obj
+        $(SLO)$/XMLEmptyContext.obj \
+        $(SLO)$/XMLCodeNameProvider.obj
 
 
 NOOPTFILES= \

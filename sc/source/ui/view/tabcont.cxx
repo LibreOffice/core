@@ -59,13 +59,14 @@ ScTabControl::ScTabControl( Window* pParent, ScViewData* pData ) :
             DropTargetHelper( this ),
             DragSourceHelper( this ),
             pViewData( pData ),
-            nMouseClickPageId( TABBAR_PAGE_NOTFOUND ),
-            nSelPageIdByMouse( TABBAR_PAGE_NOTFOUND ),
+            nMouseClickPageId( TabBar::PAGE_NOT_FOUND ),
+            nSelPageIdByMouse( TabBar::PAGE_NOT_FOUND ),
             bErrorShown( FALSE )
 {
     ScDocument* pDoc = pViewData->GetDocument();
 
     String aString;
+    Color aTabBgColor;
     SCTAB nCount = pDoc->GetTableCount();
     for (SCTAB i=0; i<nCount; i++)
     {
@@ -77,6 +78,11 @@ ScTabControl::ScTabControl( Window* pParent, ScViewData* pData ) :
                     InsertPage( static_cast<sal_uInt16>(i)+1, aString, TPB_SPECIAL );
                 else
                     InsertPage( static_cast<sal_uInt16>(i)+1, aString );
+                if ( !pDoc->IsDefaultTabBgColor(i) )
+                {
+                    aTabBgColor = pDoc->GetTabBgColor(i);
+                    SetTabBgColor( static_cast<sal_uInt16>(i)+1, aTabBgColor );
+                }
             }
         }
     }
@@ -157,7 +163,7 @@ void ScTabControl::MouseButtonDown( const MouseEvent& rMEvt )
     if( rMEvt.IsLeft() && (rMEvt.GetModifier() == 0) )
         nMouseClickPageId = GetPageId( rMEvt.GetPosPixel() );
     else
-        nMouseClickPageId = TABBAR_PAGE_NOTFOUND;
+        nMouseClickPageId = TabBar::PAGE_NOT_FOUND;
 
     TabBar::MouseButtonDown( rMEvt );
 }
@@ -168,7 +174,7 @@ void ScTabControl::MouseButtonUp( const MouseEvent& rMEvt )
 
     // mouse button down and up on same page?
     if( nMouseClickPageId != GetPageId( aPos ) )
-        nMouseClickPageId = TABBAR_PAGE_NOTFOUND;
+        nMouseClickPageId = TabBar::PAGE_NOT_FOUND;
 
     if ( rMEvt.GetClicks() == 2 && rMEvt.IsLeft() && nMouseClickPageId != 0 && nMouseClickPageId != TAB_PAGE_NOTFOUND )
     {
@@ -185,7 +191,7 @@ void ScTabControl::MouseButtonUp( const MouseEvent& rMEvt )
         SfxDispatcher* pDispatcher = pViewData->GetViewShell()->GetViewFrame()->GetDispatcher();
         pDispatcher->Execute( nSlot, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD );
         // forget page ID, to be really sure that the dialog is not called twice
-        nMouseClickPageId = TABBAR_PAGE_NOTFOUND;
+        nMouseClickPageId = TabBar::PAGE_NOT_FOUND;
     }
 
     TabBar::MouseButtonUp( rMEvt );
@@ -197,7 +203,7 @@ void ScTabControl::Select()
     nSelPageIdByMouse = nMouseClickPageId;
     /*  Reset nMouseClickPageId, so that next Select() call may invalidate
         nSelPageIdByMouse (i.e. if called from keyboard). */
-    nMouseClickPageId = TABBAR_PAGE_NOTFOUND;
+    nMouseClickPageId = TabBar::PAGE_NOT_FOUND;
 
     ScModule* pScMod = SC_MOD();
     ScDocument* pDoc = pViewData->GetDocument();
@@ -262,6 +268,7 @@ void ScTabControl::Select()
     rBind.Invalidate( FID_DELETE_TABLE );
     rBind.Invalidate( FID_TABLE_SHOW );
     rBind.Invalidate( FID_TABLE_HIDE );
+    rBind.Invalidate( FID_TAB_SET_TAB_BG_COLOR );
 
         //  SetReference nur wenn der Konsolidieren-Dialog offen ist
         //  (fuer Referenzen ueber mehrere Tabellen)
@@ -288,16 +295,22 @@ void ScTabControl::UpdateStatus()
     SCTAB i;
     String aString;
     SCTAB nMaxCnt = Max( nCount, static_cast<SCTAB>(GetMaxId()) );
+    Color aTabBgColor;
 
     BOOL bModified = FALSE;                                     // Tabellen-Namen
     for (i=0; i<nMaxCnt && !bModified; i++)
     {
         if (pDoc->IsVisible(i))
+        {
             pDoc->GetName(i,aString);
+            aTabBgColor = pDoc->GetTabBgColor(i);
+        }
         else
+        {
             aString.Erase();
+        }
 
-        if (GetPageText(static_cast<sal_uInt16>(i)+1) != aString)
+        if ( (GetPageText(static_cast<sal_uInt16>(i)+1) != aString) || (GetTabBgColor(static_cast<sal_uInt16>(i)+1) != aTabBgColor) )
             bModified = TRUE;
     }
 
@@ -314,6 +327,11 @@ void ScTabControl::UpdateStatus()
                         InsertPage( static_cast<sal_uInt16>(i)+1, aString, TPB_SPECIAL );
                     else
                         InsertPage( static_cast<sal_uInt16>(i)+1, aString );
+                    if ( !pDoc->IsDefaultTabBgColor(i) )
+                    {
+                        aTabBgColor = pDoc->GetTabBgColor(i);
+                        SetTabBgColor( static_cast<sal_uInt16>(i)+1, aTabBgColor );
+                    }
                 }
             }
         }
@@ -371,7 +389,7 @@ void ScTabControl::ActivateView(BOOL bActivate)
 void ScTabControl::SetSheetLayoutRTL( BOOL bSheetRTL )
 {
     SetEffectiveRTL( bSheetRTL );
-    nSelPageIdByMouse = TABBAR_PAGE_NOTFOUND;
+    nSelPageIdByMouse = TabBar::PAGE_NOT_FOUND;
 }
 
 
@@ -607,12 +625,12 @@ void ScTabControl::EndRenaming()
 void ScTabControl::Mirror()
 {
     TabBar::Mirror();
-    if( nSelPageIdByMouse != TABBAR_PAGE_NOTFOUND )
+    if( nSelPageIdByMouse != TabBar::PAGE_NOT_FOUND )
     {
         Rectangle aRect( GetPageRect( GetCurPageId() ) );
         if( !aRect.IsEmpty() )
             SetPointerPosPixel( aRect.Center() );
-        nSelPageIdByMouse = TABBAR_PAGE_NOTFOUND;  // only once after a Select()
+        nSelPageIdByMouse = TabBar::PAGE_NOT_FOUND;  // only once after a Select()
     }
 }
 

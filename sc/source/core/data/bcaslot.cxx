@@ -47,8 +47,10 @@
 #define BCA_SLOTS_COL ((MAXCOLCOUNT_DEFINE) / 16)
 #if MAXROWCOUNT_DEFINE == 32000
 #define BCA_SLOTS_ROW 256
+#define BCA_SLICE 125
 #else
-#define BCA_SLOTS_ROW ((MAXROWCOUNT_DEFINE) / 128)
+#define BCA_SLICE 128
+#define BCA_SLOTS_ROW ((MAXROWCOUNT_DEFINE) / BCA_SLICE)
 #endif
 #define BCA_SLOT_COLS ((MAXCOLCOUNT_DEFINE) / BCA_SLOTS_COL)
 #define BCA_SLOT_ROWS ((MAXROWCOUNT_DEFINE) / BCA_SLOTS_ROW)
@@ -59,7 +61,7 @@
 #if (BCA_SLOT_ROWS * BCA_SLOTS_ROW) != (MAXROWCOUNT_DEFINE)
 #error bad BCA_SLOTS_ROW value!
 #endif
-// size of slot array
+// size of slot array if linear
 #define BCA_SLOTS_DEFINE (BCA_SLOTS_COL * BCA_SLOTS_ROW)
 // Arbitrary 2**31/8, assuming size_t can hold at least 2^31 values and
 // sizeof_ptr is at most 8 bytes. You'd probably doom your machine's memory
@@ -67,13 +69,59 @@
 #if BCA_SLOTS_DEFINE > 268435456
 #error BCA_SLOTS_DEFINE DOOMed!
 #endif
-// type safe constant
-const SCSIZE BCA_SLOTS = BCA_SLOTS_DEFINE;
 
 // STATIC DATA -----------------------------------------------------------
 
 TYPEINIT1( ScHint, SfxSimpleHint );
 TYPEINIT1( ScAreaChangedHint, SfxHint );
+
+struct ScSlotData
+{
+    SCROW  nStartRow;   // first row of this segment
+    SCROW  nStopRow;    // first row of next segment
+    SCSIZE nSlice;      // slice size in this segment
+    SCSIZE nCumulated;  // cumulated slots of previous segments
+
+    ScSlotData( SCROW r1, SCROW r2, SCSIZE s, SCSIZE c ) : nStartRow(r1), nStopRow(r2), nSlice(s), nCumulated(c) {}
+};
+typedef ::std::vector< ScSlotData > ScSlotDistribution;
+#if MAXROWCOUNT_DEFINE <= 65536
+// Linear distribution.
+static ScSlotDistribution aSlotDistribution( ScSlotData( 0, MAXROWCOUNT, BCA_SLOT_ROWS, 0));
+static SCSIZE nBcaSlotsRow = BCA_SLOTS_ROW;
+static SCSIZE nBcaSlots = BCA_SLOTS_DEFINE;
+#else
+// Logarithmic or any other distribution.
+// Upper sheet part usually is more populated and referenced and gets fine
+// grained resolution, larger data in larger hunks.
+// Could be further enhanced by also applying a different distribution of
+// column slots.
+static SCSIZE initSlotDistribution( ScSlotDistribution & rSD, SCSIZE & rBSR )
+{
+    SCSIZE nSlots = 0;
+    SCROW nRow1 = 0;
+    SCROW nRow2 = 32*1024;
+    SCSIZE nSlice = 128;
+    // Must be sorted by row1,row2!
+    while (nRow2 <= MAXROWCOUNT)
+    {
+        //fprintf( stderr, "r1,r2,slice,cum: %7zu, %7zu, %7zu, %7zu\n", (size_t)nRow1, (size_t)nRow2, (size_t)nSlice, (size_t)nSlots);
+        // {0,32k,128,0;32k,64k,256,0+256;64k,128k,512,0+256+128;128k,256k,1024,0+256+128+128;256k,512k,2048,...;512k,1M,4096,...}
+        rSD.push_back( ScSlotData( nRow1, nRow2, nSlice, nSlots));
+        nSlots += (nRow2 - nRow1) / nSlice;
+        nRow1 = nRow2;
+        nRow2 *= 2;
+        nSlice *= 2;
+    }
+    //fprintf( stderr, "Slices: %zu, slots per sheet: %zu, memory per referenced sheet: %zu\n", (size_t) nSlots, (size_t) nSlots * BCA_SLOTS_COL, (size_t) nSlots * BCA_SLOTS_COL * sizeof(void*));
+    rBSR = nSlots;
+    return nSlots;
+}
+static ScSlotDistribution aSlotDistribution;
+static SCSIZE nBcaSlotsRow;
+static SCSIZE nBcaSlots = initSlotDistribution( aSlotDistribution, nBcaSlotsRow) * BCA_SLOTS_COL;
+// Ensure that all static variables are initialized with this one call.
+#endif
 
 
 ScBroadcastAreaSlot::ScBroadcastAreaSlot( ScDocument* pDocument,
@@ -88,10 +136,16 @@ ScBroadcastAreaSlot::ScBroadcastAreaSlot( ScDocument* pDocument,
 ScBroadcastAreaSlot::~ScBroadcastAreaSlot()
 {
     for ( ScBroadcastAreas::iterator aIter( aBroadcastAreaTbl.begin());
-            aIter != aBroadcastAreaTbl.end(); ++aIter)
+            aIter != aBroadcastAreaTbl.end(); /* none */)
     {
-        if (!(*aIter)->DecRef())
-            delete *aIter;
+        // Prevent hash from accessing dangling pointer in case area is
+        // deleted.
+        ScBroadcastArea* pArea = *aIter;
+        // Erase all so no hash will be accessed upon destruction of the
+        // hash_set.
+        aBroadcastAreaTbl.erase( aIter++);
+        if (!pArea->DecRef())
+            delete pArea;
     }
 }
 
@@ -393,14 +447,14 @@ void ScBroadcastAreaSlot::UpdateInsert( ScBroadcastArea* pArea )
 
 ScBroadcastAreaSlotMachine::TableSlots::TableSlots()
 {
-    ppSlots = new ScBroadcastAreaSlot* [ BCA_SLOTS ];
-    memset( ppSlots, 0 , sizeof( ScBroadcastAreaSlot* ) * BCA_SLOTS );
+    ppSlots = new ScBroadcastAreaSlot* [ nBcaSlots ];
+    memset( ppSlots, 0 , sizeof( ScBroadcastAreaSlot* ) * nBcaSlots );
 }
 
 
 ScBroadcastAreaSlotMachine::TableSlots::~TableSlots()
 {
-    for ( ScBroadcastAreaSlot** pp = ppSlots + BCA_SLOTS; --pp >= ppSlots; /* nothing */ )
+    for ( ScBroadcastAreaSlot** pp = ppSlots + nBcaSlots; --pp >= ppSlots; /* nothing */ )
     {
         if (*pp)
             delete *pp;
@@ -417,16 +471,16 @@ ScBroadcastAreaSlotMachine::ScBroadcastAreaSlotMachine(
     pEOUpdateChain( NULL ),
     nInBulkBroadcast( 0 )
 {
-    for (TableSlotsMap::iterator iTab( aTableSlotsMap.begin());
-            iTab != aTableSlotsMap.end(); ++iTab)
-    {
-        delete (*iTab).second;
-    }
 }
 
 
 ScBroadcastAreaSlotMachine::~ScBroadcastAreaSlotMachine()
 {
+    for (TableSlotsMap::iterator iTab( aTableSlotsMap.begin());
+            iTab != aTableSlotsMap.end(); ++iTab)
+    {
+        delete (*iTab).second;
+    }
     delete pBCAlways;
 }
 
@@ -438,13 +492,21 @@ inline SCSIZE ScBroadcastAreaSlotMachine::ComputeSlotOffset(
     SCCOL nCol = rAddress.Col();
     if ( !ValidRow(nRow) || !ValidCol(nCol) )
     {
-        DBG_ASSERT( FALSE, "Row/Col ungueltig!" );
+        DBG_ERRORFILE( "Row/Col invalid, using first slot!" );
         return 0;
     }
-    else
-        return
-            static_cast<SCSIZE>(nRow) / BCA_SLOT_ROWS +
-            static_cast<SCSIZE>(nCol) / BCA_SLOT_COLS * BCA_SLOTS_ROW;
+    for (size_t i=0; i < aSlotDistribution.size(); ++i)
+    {
+        if (nRow < aSlotDistribution[i].nStopRow)
+        {
+            const ScSlotData& rSD = aSlotDistribution[i];
+            return rSD.nCumulated +
+                (static_cast<SCSIZE>(nRow - rSD.nStartRow)) / rSD.nSlice +
+                static_cast<SCSIZE>(nCol) / BCA_SLOT_COLS * nBcaSlotsRow;
+        }
+    }
+    DBG_ERRORFILE( "No slot found, using last!" );
+    return nBcaSlots - 1;
 }
 
 
@@ -459,9 +521,28 @@ void ScBroadcastAreaSlotMachine::ComputeAreaPoints( const ScRange& rRange,
 }
 
 
+inline void ComputeNextSlot( SCSIZE & nOff, SCSIZE & nBreak, ScBroadcastAreaSlot** & pp,
+        SCSIZE & nStart, ScBroadcastAreaSlot** const & ppSlots, SCSIZE const & nRowBreak )
+{
+    if ( nOff < nBreak )
+    {
+        ++nOff;
+        ++pp;
+    }
+    else
+    {
+        nStart += nBcaSlotsRow;
+        nOff = nStart;
+        pp = ppSlots + nOff;
+        nBreak = nOff + nRowBreak;
+    }
+}
+
+
 void ScBroadcastAreaSlotMachine::StartListeningArea( const ScRange& rRange,
         SvtListener* pListener )
 {
+    //fprintf( stderr, "StartListeningArea (c,r,t): %d, %d, %d, %d, %d, %d\n", (int)rRange.aStart.Col(), (int)rRange.aStart.Row(), (int)rRange.aStart.Tab(), (int)rRange.aEnd.Col(), (int)rRange.aEnd.Row(), (int)rRange.aEnd.Tab());
     if ( rRange == BCA_LISTEN_ALWAYS  )
     {
         if ( !pBCAlways )
@@ -500,18 +581,7 @@ void ScBroadcastAreaSlotMachine::StartListeningArea( const ScRange& rRange,
                 }
                 else
                     (*pp)->InsertListeningArea( pArea);
-                if ( nOff < nBreak )
-                {
-                    ++nOff;
-                    ++pp;
-                }
-                else
-                {
-                    nStart += BCA_SLOTS_ROW;
-                    nOff = nStart;
-                    pp = ppSlots + nOff;
-                    nBreak = nOff + nRowBreak;
-                }
+                ComputeNextSlot( nOff, nBreak, pp, nStart, ppSlots, nRowBreak);
             }
         }
     }
@@ -521,6 +591,7 @@ void ScBroadcastAreaSlotMachine::StartListeningArea( const ScRange& rRange,
 void ScBroadcastAreaSlotMachine::EndListeningArea( const ScRange& rRange,
         SvtListener* pListener )
 {
+    //fprintf( stderr, "EndListeningArea (c,r,t): %d, %d, %d, %d, %d, %d\n", (int)rRange.aStart.Col(), (int)rRange.aStart.Row(), (int)rRange.aStart.Tab(), (int)rRange.aEnd.Col(), (int)rRange.aEnd.Row(), (int)rRange.aEnd.Tab());
     if ( rRange == BCA_LISTEN_ALWAYS  )
     {
         DBG_ASSERT( pBCAlways, "ScBroadcastAreaSlotMachine::EndListeningArea: BCA_LISTEN_ALWAYS but none established");
@@ -547,7 +618,7 @@ void ScBroadcastAreaSlotMachine::EndListeningArea( const ScRange& rRange,
             SCSIZE nBreak = nOff + nRowBreak;
             ScBroadcastAreaSlot** pp = ppSlots + nOff;
             ScBroadcastArea* pArea = NULL;
-            if (nOff == 0 && nEnd == BCA_SLOTS-1)
+            if (nOff == 0 && nEnd == nBcaSlots-1)
             {
                 // Slightly optimized for 0,0,MAXCOL,MAXROW calls as they
                 // happen for insertion and deletion of sheets.
@@ -564,18 +635,7 @@ void ScBroadcastAreaSlotMachine::EndListeningArea( const ScRange& rRange,
                 {
                     if ( *pp )
                         (*pp)->EndListeningArea( rRange, pListener, pArea );
-                    if ( nOff < nBreak )
-                    {
-                        ++nOff;
-                        ++pp;
-                    }
-                    else
-                    {
-                        nStart += BCA_SLOTS_ROW;
-                        nOff = nStart;
-                        pp = ppSlots + nOff;
-                        nBreak = nOff + nRowBreak;
-                    }
+                    ComputeNextSlot( nOff, nBreak, pp, nStart, ppSlots, nRowBreak);
                 }
             }
         }
@@ -629,18 +689,7 @@ BOOL ScBroadcastAreaSlotMachine::AreaBroadcastInRange( const ScRange& rRange,
         {
             if ( *pp )
                 bBroadcasted |= (*pp)->AreaBroadcastInRange( rRange, rHint );
-            if ( nOff < nBreak )
-            {
-                ++nOff;
-                ++pp;
-            }
-            else
-            {
-                nStart += BCA_SLOTS_ROW;
-                nOff = nStart;
-                pp = ppSlots + nOff;
-                nBreak = nOff + nRowBreak;
-            }
+            ComputeNextSlot( nOff, nBreak, pp, nStart, ppSlots, nRowBreak);
         }
     }
     return bBroadcasted;
@@ -660,7 +709,7 @@ void ScBroadcastAreaSlotMachine::DelBroadcastAreasInRange(
         SCSIZE nOff = nStart;
         SCSIZE nBreak = nOff + nRowBreak;
         ScBroadcastAreaSlot** pp = ppSlots + nOff;
-        if (nOff == 0 && nEnd == BCA_SLOTS-1)
+        if (nOff == 0 && nEnd == nBcaSlots-1)
         {
             // Slightly optimized for 0,0,MAXCOL,MAXROW calls as they
             // happen for insertion and deletion of sheets.
@@ -677,18 +726,7 @@ void ScBroadcastAreaSlotMachine::DelBroadcastAreasInRange(
             {
                 if ( *pp )
                     (*pp)->DelBroadcastAreasInRange( rRange );
-                if ( nOff < nBreak )
-                {
-                    ++nOff;
-                    ++pp;
-                }
-                else
-                {
-                    nStart += BCA_SLOTS_ROW;
-                    nOff = nStart;
-                    pp = ppSlots + nOff;
-                    nBreak = nOff + nRowBreak;
-                }
+                ComputeNextSlot( nOff, nBreak, pp, nStart, ppSlots, nRowBreak);
             }
         }
     }
@@ -711,7 +749,7 @@ void ScBroadcastAreaSlotMachine::UpdateBroadcastAreas(
         SCSIZE nOff = nStart;
         SCSIZE nBreak = nOff + nRowBreak;
         ScBroadcastAreaSlot** pp = ppSlots + nOff;
-        if (nOff == 0 && nEnd == BCA_SLOTS-1)
+        if (nOff == 0 && nEnd == nBcaSlots-1)
         {
             // Slightly optimized for 0,0,MAXCOL,MAXROW calls as they
             // happen for insertion and deletion of sheets.
@@ -728,18 +766,7 @@ void ScBroadcastAreaSlotMachine::UpdateBroadcastAreas(
             {
                 if ( *pp )
                     (*pp)->UpdateRemove( eUpdateRefMode, rRange, nDx, nDy, nDz );
-                if ( nOff < nBreak )
-                {
-                    ++nOff;
-                    ++pp;
-                }
-                else
-                {
-                    nStart += BCA_SLOTS_ROW;
-                    nOff = nStart;
-                    pp = ppSlots + nOff;
-                    nBreak = nOff + nRowBreak;
-                }
+                ComputeNextSlot( nOff, nBreak, pp, nStart, ppSlots, nRowBreak);
             }
         }
     }
@@ -771,18 +798,7 @@ void ScBroadcastAreaSlotMachine::UpdateBroadcastAreas(
             {
                 if (*pp)
                     (*pp)->UpdateRemoveArea( pArea);
-                if ( nOff < nBreak )
-                {
-                    ++nOff;
-                    ++pp;
-                }
-                else
-                {
-                    nStart += BCA_SLOTS_ROW;
-                    nOff = nStart;
-                    pp = ppSlots + nOff;
-                    nBreak = nOff + nRowBreak;
-                }
+                ComputeNextSlot( nOff, nBreak, pp, nStart, ppSlots, nRowBreak);
             }
         }
 
@@ -876,18 +892,7 @@ void ScBroadcastAreaSlotMachine::UpdateBroadcastAreas(
                 if (!*pp)
                     *pp = new ScBroadcastAreaSlot( pDoc, this );
                 (*pp)->UpdateInsert( pArea );
-                if ( nOff < nBreak )
-                {
-                    ++nOff;
-                    ++pp;
-                }
-                else
-                {
-                    nStart += BCA_SLOTS_ROW;
-                    nOff = nStart;
-                    pp = ppSlots + nOff;
-                    nBreak = nOff + nRowBreak;
-                }
+                ComputeNextSlot( nOff, nBreak, pp, nStart, ppSlots, nRowBreak);
             }
         }
 

@@ -34,6 +34,7 @@
 #include <unotools/fontcvt.hxx>
 #include <sfx2/objsh.hxx>
 #include <editeng/editstat.hxx>
+#include <filter/msfilter/msvbahelper.hxx>
 #include "xestream.hxx"
 #include "document.hxx"
 #include "docuno.hxx"
@@ -45,6 +46,8 @@
 #include "xistream.hxx"
 #include "xiroot.hxx"
 #include "xltools.hxx"
+
+using ::rtl::OUString;
 
 // GUID import/export =========================================================
 
@@ -684,6 +687,37 @@ void XclTools::SkipSubStream( XclImpStream& rStrm )
     }
 }
 
+// Basic macro names ----------------------------------------------------------
+
+const OUString XclTools::maSbMacroPrefix( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.script:Standard." ) );
+const OUString XclTools::maSbMacroSuffix( RTL_CONSTASCII_USTRINGPARAM( "?language=Basic&location=document" ) );
+
+OUString XclTools::GetSbMacroUrl( const String& rMacroName, SfxObjectShell* pDocShell )
+{
+    OSL_ENSURE( rMacroName.Len() > 0, "XclTools::GetSbMacroUrl - macro name is empty" );
+    ::ooo::vba::VBAMacroResolvedInfo aMacroInfo = ::ooo::vba::resolveVBAMacro( pDocShell, rMacroName, false );
+    if( aMacroInfo.IsResolved() )
+        return ::ooo::vba::makeMacroURL( aMacroInfo.ResolvedMacro() );
+    return OUString();
+}
+
+OUString XclTools::GetSbMacroUrl( const String& rModuleName, const String& rMacroName, SfxObjectShell* pDocShell )
+{
+    OSL_ENSURE( rModuleName.Len() > 0, "XclTools::GetSbMacroUrl - module name is empty" );
+    OSL_ENSURE( rMacroName.Len() > 0, "XclTools::GetSbMacroUrl - macro name is empty" );
+    return GetSbMacroUrl( rModuleName + OUString( sal_Unicode( '.' ) ) + rMacroName, pDocShell );
+}
+
+String XclTools::GetXclMacroName( const OUString& rSbMacroUrl )
+{
+    sal_Int32 nSbMacroUrlLen = rSbMacroUrl.getLength();
+    sal_Int32 nMacroNameLen = nSbMacroUrlLen - maSbMacroPrefix.getLength() - maSbMacroSuffix.getLength();
+    if( (nMacroNameLen > 0) && rSbMacroUrl.matchIgnoreAsciiCase( maSbMacroPrefix, 0 ) &&
+            rSbMacroUrl.matchIgnoreAsciiCase( maSbMacroSuffix, nSbMacroUrlLen - maSbMacroSuffix.getLength() ) )
+        return rSbMacroUrl.copy( maSbMacroPrefix.getLength(), nMacroNameLen );
+    return String::EmptyString();
+}
+
 // read/write colors ----------------------------------------------------------
 
 XclImpStream& operator>>( XclImpStream& rStrm, Color& rColor )
@@ -700,4 +734,3 @@ XclExpStream& operator<<( XclExpStream& rStrm, const Color& rColor )
 }
 
 // ============================================================================
-

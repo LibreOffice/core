@@ -51,7 +51,8 @@
 #include <tools/tenccvt.hxx>
 
 #include <com/sun/star/text/WritingMode2.hpp>
-#include <com/sun/star/script/XVBACompat.hpp>
+#include <com/sun/star/script/vba/XVBACompatibility.hpp>
+#include <com/sun/star/sheet/TablePageBreakData.hpp>
 
 #include "document.hxx"
 #include "table.hxx"
@@ -94,8 +95,12 @@
 #include "clipparam.hxx"
 
 #include <map>
+#include <limits>
 
 namespace WritingMode2 = ::com::sun::star::text::WritingMode2;
+using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::sheet::TablePageBreakData;
+using ::std::set;
 
 struct ScDefaultAttr
 {
@@ -125,6 +130,7 @@ void ScDocument::MakeTable( SCTAB nTab,bool _bNeedsNameCheck )
             CreateValidTabName( aString );  // keine doppelten
 
         pTab[nTab] = new ScTable(this, nTab, aString);
+        pTab[nTab]->SetLoadingMedium(bLoadingMedium);
         ++nMaxTableNumber;
     }
 }
@@ -2009,9 +2015,6 @@ void ScDocument::CopyNonFilteredFromClip( SCCOL nCol1, SCROW nRow1,
     while ( nFlagTab < MAXTAB && !ppClipTab[nFlagTab] )
         ++nFlagTab;
 
-    const ScBitMaskCompressedArray< SCROW, BYTE> & rSourceFlags =
-        pCBFCP->pClipDoc->GetRowFlagsArray( nFlagTab);
-
     SCROW nSourceRow = rClipStartRow;
     SCROW nSourceEnd = 0;
     if (pCBFCP->pClipDoc->GetClipParam().maRanges.Count())
@@ -2021,12 +2024,15 @@ void ScDocument::CopyNonFilteredFromClip( SCCOL nCol1, SCROW nRow1,
     while ( nSourceRow <= nSourceEnd && nDestRow <= nRow2 )
     {
         // skip filtered rows
-        nSourceRow = rSourceFlags.GetFirstForCondition( nSourceRow, nSourceEnd, CR_FILTERED, 0);
+        nSourceRow = pCBFCP->pClipDoc->FirstNonFilteredRow(nSourceRow, nSourceEnd, nFlagTab);
 
         if ( nSourceRow <= nSourceEnd )
         {
             // look for more non-filtered rows following
-            SCROW nFollow = rSourceFlags.GetBitStateEnd( nSourceRow, CR_FILTERED, 0) - nSourceRow;
+            SCROW nLastRow = nSourceRow;
+            pCBFCP->pClipDoc->RowFiltered(nSourceRow, nFlagTab, NULL, &nLastRow);
+            SCROW nFollow = nLastRow - nSourceRow;
+
             if (nFollow > nSourceEnd - nSourceRow)
                 nFollow = nSourceEnd - nSourceRow;
             if (nFollow > nRow2 - nDestRow)
@@ -2434,8 +2440,7 @@ void ScDocument::GetClipArea(SCCOL& nClipX, SCROW& nClipY, BOOL bIncludeFiltered
         while ( nCountTab < MAXTAB && !pTab[nCountTab] )
             ++nCountTab;
 
-        SCROW nResult = GetRowFlagsArray( nCountTab).CountForCondition(
-                nStartRow, nEndRow, CR_FILTERED, 0);
+        SCROW nResult = CountNonFilteredRows(nStartRow, nEndRow, nCountTab);
 
         if ( nResult > 0 )
             nClipY = nResult - 1;
@@ -2474,8 +2479,13 @@ BOOL ScDocument::HasClipFilteredRows()
     if (!rClipRanges.Count())
         return false;
 
-    return GetRowFlagsArray( nCountTab).HasCondition( rClipRanges.First()->aStart.Row(),
-            rClipRanges.First()->aEnd.Row(), CR_FILTERED, CR_FILTERED);
+    for (ScRange* p = rClipRanges.First(); p; p = rClipRanges.Next())
+    {
+        bool bAnswer = pTab[nCountTab]->HasFilteredRows(p->aStart.Row(), p->aEnd.Row());
+        if (bAnswer)
+            return true;
+    }
+    return false;
 }
 
 
@@ -3051,6 +3061,19 @@ void ScDocument::CalcAfterLoad()
     bCalcingAfterLoad = FALSE;
 
     SetDetectiveDirty(FALSE);   // noch keine wirklichen Aenderungen
+
+    // #i112436# If formula cells are already dirty, they don't broadcast further changes.
+    // So the source ranges of charts must be interpreted even if they are not visible,
+    // similar to ScMyShapeResizer::CreateChartListener for loading own files (i104899).
+    if (pChartListenerCollection)
+    {
+        sal_uInt16 nChartCount = pChartListenerCollection->GetCount();
+        for ( sal_uInt16 nIndex = 0; nIndex < nChartCount; nIndex++ )
+        {
+            ScChartListener* pChartListener = static_cast<ScChartListener*>(pChartListenerCollection->At(nIndex));
+            InterpretDirtyCells(*pChartListener->GetRangeList());
+        }
+    }
 }
 
 
@@ -3098,6 +3121,11 @@ void ScDocument::SetRowHeightRange( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, 
             ( nStartRow, nEndRow, nNewHeight, 1.0, 1.0 );
 }
 
+void ScDocument::SetRowHeightOnly( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, USHORT nNewHeight )
+{
+    if ( ValidTab(nTab) && pTab[nTab] )
+        pTab[nTab]->SetRowHeightOnly( nStartRow, nEndRow, nNewHeight );
+}
 
 void ScDocument::SetManualHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, BOOL bManual )
 {
@@ -3142,11 +3170,20 @@ USHORT ScDocument::GetOriginalHeight( SCROW nRow, SCTAB nTab ) const
 }
 
 
-USHORT ScDocument::GetRowHeight( SCROW nRow, SCTAB nTab ) const
+USHORT ScDocument::GetRowHeight( SCROW nRow, SCTAB nTab, bool bHiddenAsZero ) const
 {
     if ( ValidTab(nTab) && pTab[nTab] )
-        return pTab[nTab]->GetRowHeight( nRow );
-    DBG_ERROR("Falsche Tabellennummer");
+        return pTab[nTab]->GetRowHeight( nRow, NULL, NULL, bHiddenAsZero );
+    DBG_ERROR("Wrong sheet number");
+    return 0;
+}
+
+
+USHORT ScDocument::GetRowHeight( SCROW nRow, SCTAB nTab, SCROW* pStartRow, SCROW* pEndRow, bool bHiddenAsZero ) const
+{
+    if ( ValidTab(nTab) && pTab[nTab] )
+        return pTab[nTab]->GetRowHeight( nRow, pStartRow, pEndRow, bHiddenAsZero );
+    DBG_ERROR("Wrong sheet number");
     return 0;
 }
 
@@ -3167,11 +3204,9 @@ ULONG ScDocument::GetRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab ) con
     return 0;
 }
 
-ULONG ScDocument::FastGetRowHeight( SCROW nStartRow, SCROW nEndRow,
-        SCTAB nTab ) const
+SCROW ScDocument::GetRowForHeight( SCTAB nTab, ULONG nHeight ) const
 {
-    return pTab[nTab]->pRowFlags->SumCoupledArrayForCondition( nStartRow,
-            nEndRow, CR_HIDDEN, 0, *(pTab[nTab]->pRowHeight));
+    return pTab[nTab]->GetRowForHeight(nHeight);
 }
 
 ULONG ScDocument::GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow,
@@ -3191,29 +3226,6 @@ ULONG ScDocument::GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow,
     DBG_ERROR("wrong sheet number");
     return 0;
 }
-
-
-const ScSummableCompressedArray< SCROW, USHORT> & ScDocument::GetRowHeightArray(
-        SCTAB nTab ) const
-{
-    const ScSummableCompressedArray< SCROW, USHORT> * pHeight;
-    if ( ValidTab(nTab) && pTab[nTab] )
-        pHeight = pTab[nTab]->GetRowHeightArray();
-    else
-    {
-        DBG_ERROR("wrong sheet number");
-        pHeight = 0;
-    }
-    if (!pHeight)
-    {
-        DBG_ERROR("no row heights at sheet");
-        static ScSummableCompressedArray< SCROW, USHORT> aDummy( MAXROW,
-                ScGlobal::nStdRowHeight);
-        pHeight = &aDummy;
-    }
-    return *pHeight;
-}
-
 
 SCROW ScDocument::GetHiddenRowCount( SCROW nRow, SCTAB nTab ) const
 {
@@ -3397,6 +3409,259 @@ const ScBitMaskCompressedArray< SCROW, BYTE> & ScDocument::GetRowFlagsArray(
     return *pFlags;
 }
 
+void ScDocument::GetAllRowBreaks(set<SCROW>& rBreaks, SCTAB nTab, bool bPage, bool bManual) const
+{
+    if (!ValidTab(nTab) || !pTab[nTab])
+        return;
+
+    pTab[nTab]->GetAllRowBreaks(rBreaks, bPage, bManual);
+}
+
+void ScDocument::GetAllColBreaks(set<SCCOL>& rBreaks, SCTAB nTab, bool bPage, bool bManual) const
+{
+    if (!ValidTab(nTab) || !pTab[nTab])
+        return;
+
+    pTab[nTab]->GetAllColBreaks(rBreaks, bPage, bManual);
+}
+
+ScBreakType ScDocument::HasRowBreak(SCROW nRow, SCTAB nTab) const
+{
+    ScBreakType nType = BREAK_NONE;
+    if (!ValidTab(nTab) || !pTab[nTab] || !ValidRow(nRow))
+        return nType;
+
+    if (pTab[nTab]->HasRowPageBreak(nRow))
+        nType |= BREAK_PAGE;
+
+    if (pTab[nTab]->HasRowManualBreak(nRow))
+        nType |= BREAK_MANUAL;
+
+    return nType;
+}
+
+ScBreakType ScDocument::HasColBreak(SCCOL nCol, SCTAB nTab) const
+{
+    ScBreakType nType = BREAK_NONE;
+    if (!ValidTab(nTab) || !pTab[nTab] || !ValidCol(nCol))
+        return nType;
+
+    if (pTab[nTab]->HasColPageBreak(nCol))
+        nType |= BREAK_PAGE;
+
+    if (pTab[nTab]->HasColManualBreak(nCol))
+        nType |= BREAK_MANUAL;
+
+    return nType;
+}
+
+void ScDocument::SetRowBreak(SCROW nRow, SCTAB nTab, bool bPage, bool bManual)
+{
+    if (!ValidTab(nTab) || !pTab[nTab] || !ValidRow(nRow))
+        return;
+
+    pTab[nTab]->SetRowBreak(nRow, bPage, bManual);
+}
+
+void ScDocument::SetColBreak(SCCOL nCol, SCTAB nTab, bool bPage, bool bManual)
+{
+    if (!ValidTab(nTab) || !pTab[nTab] || !ValidCol(nCol))
+        return;
+
+    pTab[nTab]->SetColBreak(nCol, bPage, bManual);
+}
+
+void ScDocument::RemoveRowBreak(SCROW nRow, SCTAB nTab, bool bPage, bool bManual)
+{
+    if (!ValidTab(nTab) || !pTab[nTab] || !ValidRow(nRow))
+        return;
+
+    pTab[nTab]->RemoveRowBreak(nRow, bPage, bManual);
+}
+
+void ScDocument::RemoveColBreak(SCCOL nCol, SCTAB nTab, bool bPage, bool bManual)
+{
+    if (!ValidTab(nTab) || !pTab[nTab] || !ValidCol(nCol))
+        return;
+
+    pTab[nTab]->RemoveColBreak(nCol, bPage, bManual);
+}
+
+Sequence<TablePageBreakData> ScDocument::GetRowBreakData(SCTAB nTab) const
+{
+    if (!ValidTab(nTab) || !pTab[nTab])
+        return Sequence<TablePageBreakData>();
+
+    return pTab[nTab]->GetRowBreakData();
+}
+
+bool ScDocument::RowHidden(SCROW nRow, SCTAB nTab, SCROW* pFirstRow, SCROW* pLastRow)
+{
+    if (!ValidTab(nTab) || !pTab[nTab])
+        return false;
+
+    return pTab[nTab]->RowHidden(nRow, pFirstRow, pLastRow);
+}
+
+bool ScDocument::RowHidden(SCROW nRow, SCTAB nTab, SCROW& rLastRow)
+{
+    if (!ValidTab(nTab) || !pTab[nTab])
+    {
+        rLastRow = nRow;
+        return false;
+    }
+
+    return pTab[nTab]->RowHidden(nRow, rLastRow);
+}
+
+
+bool ScDocument::HasHiddenRows(SCROW nStartRow, SCROW nEndRow, SCTAB nTab)
+{
+    if (!ValidTab(nTab) || !pTab[nTab])
+        return false;
+
+    return pTab[nTab]->HasHiddenRows(nStartRow, nEndRow);
+}
+
+bool ScDocument::ColHidden(SCCOL nCol, SCTAB nTab, SCCOL& rLastCol)
+{
+    if (!ValidTab(nTab) || !pTab[nTab])
+    {
+        rLastCol = nCol;
+        return false;
+    }
+
+    return pTab[nTab]->ColHidden(nCol, rLastCol);
+}
+
+bool ScDocument::ColHidden(SCCOL nCol, SCTAB nTab, SCCOL* pFirstCol, SCCOL* pLastCol)
+{
+    if (!ValidTab(nTab) || !pTab[nTab])
+    {
+        if (pFirstCol)
+            *pFirstCol = nCol;
+        if (pLastCol)
+            *pLastCol = nCol;
+        return false;
+    }
+
+    return pTab[nTab]->ColHidden(nCol, pFirstCol, pLastCol);
+}
+
+void ScDocument::SetRowHidden(SCROW nStartRow, SCROW nEndRow, SCTAB nTab, bool bHidden)
+{
+    if (!ValidTab(nTab) || !pTab[nTab])
+        return;
+
+    pTab[nTab]->SetRowHidden(nStartRow, nEndRow, bHidden);
+}
+
+void ScDocument::SetColHidden(SCCOL nStartCol, SCCOL nEndCol, SCTAB nTab, bool bHidden)
+{
+    if (!ValidTab(nTab) || !pTab[nTab])
+        return;
+
+    pTab[nTab]->SetColHidden(nStartCol, nEndCol, bHidden);
+}
+
+SCROW ScDocument::FirstVisibleRow(SCROW nStartRow, SCROW nEndRow, SCTAB nTab)
+{
+    if (!ValidTab(nTab) || !pTab[nTab])
+        return ::std::numeric_limits<SCROW>::max();;
+
+    return pTab[nTab]->FirstVisibleRow(nStartRow, nEndRow);
+}
+
+SCROW ScDocument::LastVisibleRow(SCROW nStartRow, SCROW nEndRow, SCTAB nTab)
+{
+    if (!ValidTab(nTab) || !pTab[nTab])
+        return ::std::numeric_limits<SCROW>::max();;
+
+    return pTab[nTab]->LastVisibleRow(nStartRow, nEndRow);
+}
+
+SCROW ScDocument::CountVisibleRows(SCROW nStartRow, SCROW nEndRow, SCTAB nTab)
+{
+    if (!ValidTab(nTab) || !pTab[nTab])
+        return 0;
+
+    return pTab[nTab]->CountVisibleRows(nStartRow, nEndRow);
+}
+
+bool ScDocument::RowFiltered(SCROW nRow, SCTAB nTab, SCROW* pFirstRow, SCROW* pLastRow)
+{
+    if (!ValidTab(nTab) || !pTab[nTab])
+        return false;
+
+    return pTab[nTab]->RowFiltered(nRow, pFirstRow, pLastRow);
+}
+
+bool ScDocument::HasFilteredRows(SCROW nStartRow, SCROW nEndRow, SCTAB nTab)
+{
+    if (!ValidTab(nTab) || !pTab[nTab])
+        return false;
+
+    return pTab[nTab]->HasFilteredRows(nStartRow, nEndRow);
+}
+
+bool ScDocument::ColFiltered(SCCOL nCol, SCTAB nTab, SCCOL* pFirstCol, SCCOL* pLastCol)
+{
+    if (!ValidTab(nTab) || !pTab[nTab])
+        return false;
+
+    return pTab[nTab]->ColFiltered(nCol, pFirstCol, pLastCol);
+}
+
+void ScDocument::SetRowFiltered(SCROW nStartRow, SCROW nEndRow, SCTAB nTab, bool bFiltered)
+{
+    if (!ValidTab(nTab) || !pTab[nTab])
+        return;
+
+    pTab[nTab]->SetRowFiltered(nStartRow, nEndRow, bFiltered);
+}
+
+void ScDocument::SetColFiltered(SCCOL nStartCol, SCCOL nEndCol, SCTAB nTab, bool bFiltered)
+{
+    if (!ValidTab(nTab) || !pTab[nTab])
+        return;
+
+    pTab[nTab]->SetColFiltered(nStartCol, nEndCol, bFiltered);
+}
+
+SCROW ScDocument::FirstNonFilteredRow(SCROW nStartRow, SCROW nEndRow, SCTAB nTab)
+{
+    if (!ValidTab(nTab) || !pTab[nTab])
+        return ::std::numeric_limits<SCROW>::max();;
+
+    return pTab[nTab]->FirstNonFilteredRow(nStartRow, nEndRow);
+}
+
+SCROW ScDocument::LastNonFilteredRow(SCROW nStartRow, SCROW nEndRow, SCTAB nTab)
+{
+    if (!ValidTab(nTab) || !pTab[nTab])
+        return ::std::numeric_limits<SCROW>::max();;
+
+    return pTab[nTab]->LastNonFilteredRow(nStartRow, nEndRow);
+}
+
+SCROW ScDocument::CountNonFilteredRows(SCROW nStartRow, SCROW nEndRow, SCTAB nTab)
+{
+    if (!ValidTab(nTab) || !pTab[nTab])
+        return 0;
+
+    return pTab[nTab]->CountNonFilteredRows(nStartRow, nEndRow);
+}
+
+void ScDocument::SyncColRowFlags()
+{
+    for (SCTAB i = 0; i <= nMaxTableNumber; ++i)
+    {
+        if (!ValidTab(i) || !pTab[i])
+            continue;
+
+        pTab[i]->SyncColRowFlags();
+    }
+}
 
 SCROW ScDocument::GetLastFlaggedRow( SCTAB nTab ) const
 {
@@ -3441,24 +3706,35 @@ SCCOL ScDocument::GetNextDifferentChangedCol( SCTAB nTab, SCCOL nStart) const
 
 SCROW ScDocument::GetNextDifferentChangedRow( SCTAB nTab, SCROW nStart, bool bCareManualSize) const
 {
-    if ( ValidTab(nTab) && pTab[nTab] && pTab[nTab]->GetRowFlagsArray() && pTab[nTab]->GetRowHeightArray() )
+    const ScBitMaskCompressedArray< SCROW, BYTE> * pRowFlagsArray;
+    if ( ValidTab(nTab) && pTab[nTab] && ((pRowFlagsArray = pTab[nTab]->GetRowFlagsArray()) != NULL) &&
+            pTab[nTab]->mpRowHeights && pTab[nTab]->mpHiddenRows )
     {
-        BYTE nStartFlags = pTab[nTab]->GetRowFlags(nStart);
-        USHORT nStartHeight = pTab[nTab]->GetOriginalHeight(nStart);
-        for (SCROW nRow = nStart + 1; nRow <= MAXROW; nRow++)
+        size_t nIndex;          // ignored
+        SCROW nFlagsEndRow;
+        SCROW nHiddenEndRow;
+        SCROW nHeightEndRow;
+        BYTE nFlags;
+        bool bHidden;
+        USHORT nHeight;
+        BYTE nStartFlags = nFlags = pRowFlagsArray->GetValue( nStart, nIndex, nFlagsEndRow);
+        bool bStartHidden = bHidden = pTab[nTab]->RowHidden( nStart, NULL, &nHiddenEndRow);
+        USHORT nStartHeight = nHeight = pTab[nTab]->GetRowHeight( nStart, NULL, &nHeightEndRow, false);
+        SCROW nRow;
+        while ((nRow = std::min( nHiddenEndRow, std::min( nFlagsEndRow, nHeightEndRow)) + 1) <= MAXROW)
         {
-            size_t nIndex;          // ignored
-            SCROW nFlagsEndRow;
-            SCROW nHeightEndRow;
-            BYTE nFlags = pTab[nTab]->GetRowFlagsArray()->GetValue( nRow, nIndex, nFlagsEndRow );
-            USHORT nHeight = pTab[nTab]->GetRowHeightArray()->GetValue( nRow, nIndex, nHeightEndRow );
-            if (((nStartFlags & CR_MANUALBREAK) != (nFlags & CR_MANUALBREAK)) ||
-                ((nStartFlags & CR_MANUALSIZE) != (nFlags & CR_MANUALSIZE)) ||
-                (bCareManualSize && (nStartFlags & CR_MANUALSIZE) && (nStartHeight != nHeight)) ||
-                (!bCareManualSize && ((nStartHeight != nHeight))))
+            if (nFlagsEndRow < nRow)
+                nFlags = pRowFlagsArray->GetValue( nRow, nIndex, nFlagsEndRow);
+            if (nHiddenEndRow < nRow)
+                bHidden = pTab[nTab]->RowHidden( nRow, NULL, &nHiddenEndRow);
+            if (nHeightEndRow < nRow)
+                nHeight = pTab[nTab]->GetRowHeight( nRow, NULL, &nHeightEndRow, false);
+            if (    ((nStartFlags & CR_MANUALBREAK) != (nFlags & CR_MANUALBREAK)) ||
+                    ((nStartFlags & CR_MANUALSIZE) != (nFlags & CR_MANUALSIZE)) ||
+                    (bStartHidden != bHidden) ||
+                    (bCareManualSize && (nStartFlags & CR_MANUALSIZE) && (nStartHeight != nHeight)) ||
+                    (!bCareManualSize && ((nStartHeight != nHeight))))
                 return nRow;
-
-            nRow = std::min( nFlagsEndRow, nHeightEndRow );
         }
         return MAXROW+1;
     }
@@ -3921,10 +4197,10 @@ bool ScDocument::HasAttrib( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
         ScDocumentPool* pPool = xPoolHelper->GetDocPool();
 
         BOOL bAnyItem = FALSE;
-        USHORT nRotCount = pPool->GetItemCount( ATTR_ROTATE_VALUE );
-        for (USHORT nItem=0; nItem<nRotCount; nItem++)
+        sal_uInt32 nRotCount = pPool->GetItemCount2( ATTR_ROTATE_VALUE );
+        for (sal_uInt32 nItem=0; nItem<nRotCount; nItem++)
         {
-            const SfxPoolItem* pItem = pPool->GetItem( ATTR_ROTATE_VALUE, nItem );
+            const SfxPoolItem* pItem = pPool->GetItem2( ATTR_ROTATE_VALUE, nItem );
             if ( pItem )
             {
                 // 90 or 270 degrees is former SvxOrientationItem - only look for other values
@@ -3949,10 +4225,10 @@ bool ScDocument::HasAttrib( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
         ScDocumentPool* pPool = xPoolHelper->GetDocPool();
 
         BOOL bHasRtl = FALSE;
-        USHORT nDirCount = pPool->GetItemCount( ATTR_WRITINGDIR );
-        for (USHORT nItem=0; nItem<nDirCount; nItem++)
+        sal_uInt32 nDirCount = pPool->GetItemCount2( ATTR_WRITINGDIR );
+        for (sal_uInt32 nItem=0; nItem<nDirCount; nItem++)
         {
-            const SfxPoolItem* pItem = pPool->GetItem( ATTR_WRITINGDIR, nItem );
+            const SfxPoolItem* pItem = pPool->GetItem2( ATTR_WRITINGDIR, nItem );
             if ( pItem && ((const SvxFrameDirectionItem*)pItem)->GetValue() == FRMDIR_HORI_RIGHT_TOP )
             {
                 bHasRtl = TRUE;
@@ -4663,11 +4939,11 @@ void ScDocument::UpdStlShtPtrsFrmNms()
 
     ScDocumentPool* pPool = xPoolHelper->GetDocPool();
 
-    USHORT nCount = pPool->GetItemCount(ATTR_PATTERN);
+    sal_uInt32 nCount = pPool->GetItemCount2(ATTR_PATTERN);
     ScPatternAttr* pPattern;
-    for (USHORT i=0; i<nCount; i++)
+    for (sal_uInt32 i=0; i<nCount; i++)
     {
-        pPattern = (ScPatternAttr*)pPool->GetItem(ATTR_PATTERN, i);
+        pPattern = (ScPatternAttr*)pPool->GetItem2(ATTR_PATTERN, i);
         if (pPattern)
             pPattern->UpdateStyleSheet();
     }
@@ -4681,11 +4957,11 @@ void ScDocument::StylesToNames()
 
     ScDocumentPool* pPool = xPoolHelper->GetDocPool();
 
-    USHORT nCount = pPool->GetItemCount(ATTR_PATTERN);
+    sal_uInt32 nCount = pPool->GetItemCount2(ATTR_PATTERN);
     ScPatternAttr* pPattern;
-    for (USHORT i=0; i<nCount; i++)
+    for (sal_uInt32 i=0; i<nCount; i++)
     {
-        pPattern = (ScPatternAttr*)pPool->GetItem(ATTR_PATTERN, i);
+        pPattern = (ScPatternAttr*)pPool->GetItem2(ATTR_PATTERN, i);
         if (pPattern)
             pPattern->StyleToName();
     }
@@ -4781,6 +5057,11 @@ void ScDocument::SetRepeatArea( SCTAB nTab, SCCOL nStartCol, SCCOL nEndCol, SCRO
         pTab[nTab]->SetRepeatArea( nStartCol, nEndCol, nStartRow, nEndRow );
 }
 
+void ScDocument::InvalidatePageBreaks(SCTAB nTab)
+{
+    if (ValidTab(nTab) && pTab[nTab])
+        pTab[nTab]->InvalidatePageBreaks();
+}
 
 void ScDocument::UpdatePageBreaks( SCTAB nTab, const ScRange* pUserArea )
 {
@@ -4960,6 +5241,12 @@ SfxUndoManager* ScDocument::GetUndoManager()
     return mpUndoManager;
 }
 
+ScRowBreakIterator* ScDocument::GetRowBreakIterator(SCTAB nTab) const
+{
+    if (ValidTab(nTab) && pTab[nTab])
+        return new ScRowBreakIterator(pTab[nTab]->maRowPageBreaks);
+    return NULL;
+}
 
 void ScDocument::EnableUndo( bool bVal )
 {
@@ -4972,8 +5259,8 @@ bool ScDocument::IsInVBAMode() const
     bool bResult = false;
     if ( pShell )
     {
-        com::sun::star::uno::Reference< com::sun::star::script::XVBACompat > xVBA( pShell->GetBasicContainer(), com::sun::star::uno::UNO_QUERY );
-        bResult = xVBA->getVBACompatModeOn();
+        com::sun::star::uno::Reference< com::sun::star::script::vba::XVBACompatibility > xVBA( pShell->GetBasicContainer(), com::sun::star::uno::UNO_QUERY );
+        bResult = xVBA.is() && xVBA->getVBACompatibilityMode();
     }
     return bResult;
 }

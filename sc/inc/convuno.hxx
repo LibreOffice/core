@@ -28,6 +28,7 @@
 #ifndef SC_CONVUNO_HXX
 #define SC_CONVUNO_HXX
 
+#include <algorithm>
 #include <i18npool/lang.h>
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
@@ -70,6 +71,19 @@ public:
     static inline void  FillApiEndAddress(
                             ::com::sun::star::table::CellAddress& rApiAddress,
                             const ::com::sun::star::table::CellRangeAddress& rApiRange );
+
+    /** Returns true, if the passed ranges have at least one common cell. */
+    static inline bool  Intersects(
+                            const ::com::sun::star::table::CellRangeAddress& rApiARange1,
+                            const ::com::sun::star::table::CellRangeAddress& rApiARange2 );
+    /** Returns true, if the passed address rApiInner is inside the passed range rApiOuter. */
+    static inline bool  Contains(
+                            const ::com::sun::star::table::CellRangeAddress& rApiOuter,
+                            const ::com::sun::star::table::CellAddress& rApiInner );
+    /** Returns true, if the passed range rApiInner is completely inside the passed range rApiOuter. */
+    static inline bool  Contains(
+                            const ::com::sun::star::table::CellRangeAddress& rApiOuter,
+                            const ::com::sun::star::table::CellRangeAddress& rApiInner );
 };
 
 
@@ -133,6 +147,33 @@ inline void ScUnoConversion::FillApiEndAddress(
     rApiAddress.Column = rApiRange.EndColumn;
     rApiAddress.Row = rApiRange.EndRow;
     rApiAddress.Sheet = rApiRange.Sheet;
+}
+
+inline bool ScUnoConversion::Intersects(
+        const ::com::sun::star::table::CellRangeAddress& rApiRange1,
+        const ::com::sun::star::table::CellRangeAddress& rApiRange2 )
+{
+    return (rApiRange1.Sheet == rApiRange2.Sheet) &&
+        (::std::max( rApiRange1.StartColumn, rApiRange2.StartColumn ) <= ::std::min( rApiRange1.EndColumn, rApiRange2.EndColumn )) &&
+        (::std::max( rApiRange1.StartRow, rApiRange2.StartRow ) <= ::std::min( rApiRange1.EndRow, rApiRange2.EndRow ));
+}
+
+inline bool ScUnoConversion::Contains(
+        const ::com::sun::star::table::CellRangeAddress& rApiOuter,
+        const ::com::sun::star::table::CellAddress& rApiInner )
+{
+    return (rApiOuter.Sheet == rApiInner.Sheet) &&
+        (rApiOuter.StartColumn <= rApiInner.Column) && (rApiInner.Column <= rApiOuter.EndColumn) &&
+        (rApiOuter.StartRow <= rApiInner.Row) && (rApiInner.Row <= rApiOuter.EndRow);
+}
+
+inline bool ScUnoConversion::Contains(
+        const ::com::sun::star::table::CellRangeAddress& rApiOuter,
+        const ::com::sun::star::table::CellRangeAddress& rApiInner )
+{
+    return (rApiOuter.Sheet == rApiInner.Sheet) &&
+        (rApiOuter.StartColumn <= rApiInner.StartColumn) && (rApiInner.EndColumn <= rApiOuter.EndColumn) &&
+        (rApiOuter.StartRow <= rApiInner.StartRow) && (rApiInner.EndRow <= rApiOuter.EndRow);
 }
 
 //___________________________________________________________________

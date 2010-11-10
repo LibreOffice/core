@@ -322,8 +322,9 @@ void ScOutputData::DrawGrid( BOOL bGrid, BOOL bPage )
     long nPosX;
     long nPosY;
     SCSIZE nArrY;
-    BYTE nOldFlags = 0;
-    BYTE nFlags;
+    ScBreakType nBreak    = BREAK_NONE;
+    ScBreakType nBreakOld = BREAK_NONE;
+
     BOOL bSingle;
     Color aPageColor;
     Color aManualColor;
@@ -378,27 +379,27 @@ void ScOutputData::DrawGrid( BOOL bGrid, BOOL bPage )
             if ( bPage )
             {
                 //  Seitenumbrueche auch in ausgeblendeten suchen
-                nFlags = 0;
                 SCCOL nCol = nXplus1;
                 while (nCol <= MAXCOL)
                 {
-                    BYTE nDocFl = pDoc->GetColFlags( nCol, nTab );
-                    nFlags = nDocFl & ( CR_PAGEBREAK | CR_MANUALBREAK );
-                    if ( nFlags || !(nDocFl & CR_HIDDEN) )
+                    nBreak = pDoc->HasColBreak(nCol, nTab);
+                    bool bHidden = pDoc->ColHidden(nCol, nTab);
+
+                    if ( nBreak || !bHidden )
                         break;
                     ++nCol;
                 }
 
-                if (nFlags != nOldFlags)
+                if (nBreak != nBreakOld)
                 {
                     aGrid.Flush();
-                    pDev->SetLineColor( (nFlags & CR_MANUALBREAK) ? aManualColor :
-                                     (nFlags) ? aPageColor : aGridColor );
-                    nOldFlags = nFlags;
+                    pDev->SetLineColor( (nBreak & BREAK_MANUAL) ? aManualColor :
+                                        nBreak ? aPageColor : aGridColor );
+                    nBreakOld = nBreak;
                 }
             }
 
-            BOOL bDraw = bGrid || nOldFlags;    // einfaches Gitter nur wenn eingestellt
+            BOOL bDraw = bGrid || nBreakOld;    // einfaches Gitter nur wenn eingestellt
 
             //! Mit dieser Abfrage wird zuviel weggelassen, wenn ein automatischer
             //! Umbruch mitten in den Wiederholungsspalten liegt.
@@ -409,7 +410,7 @@ void ScOutputData::DrawGrid( BOOL bGrid, BOOL bPage )
             {
                 if ( nX == MAXCOL )
                     bDraw = FALSE;
-                else if (pDoc->GetColFlags(nXplus1,nTab) & ( CR_PAGEBREAK | CR_MANUALBREAK ))
+                else if (pDoc->HasColBreak(nXplus1, nTab))
                     bDraw = FALSE;
             }
 #endif
@@ -488,6 +489,8 @@ void ScOutputData::DrawGrid( BOOL bGrid, BOOL bPage )
                                         //  Horizontale Linien
                                         //
 
+    bool bHiddenRow = true;
+    SCROW nHiddenEndRow = -1;
     nPosY = nScrY;
     for (nArrY=1; nArrY+1<nArrCount; nArrY++)
     {
@@ -500,28 +503,32 @@ void ScOutputData::DrawGrid( BOOL bGrid, BOOL bPage )
         {
             if ( bPage )
             {
-                //  Seitenumbrueche auch in ausgeblendeten suchen
-                nFlags = 0;
-                ScCompressedArrayIterator< SCROW, BYTE > aIter(
-                        pDoc->GetRowFlagsArray( nTab), nYplus1, MAXROW);
-                do
+                for (SCROW i = nYplus1; i <= MAXROW; ++i)
                 {
-                    BYTE nDocFl = *aIter;
-                    nFlags = nDocFl & ( CR_PAGEBREAK | CR_MANUALBREAK );
-                    if ( nFlags || !(nDocFl & CR_HIDDEN) )
+                    if (i > nHiddenEndRow)
+                        bHiddenRow = pDoc->RowHidden(i, nTab, nHiddenEndRow);
+                    /* TODO: optimize the row break thing for large hidden
+                     * segments where HasRowBreak() has to be called
+                     * nevertheless for each row, as a row break is drawn also
+                     * for hidden rows, above them. This needed to be done only
+                     * once per hidden segment, maybe giving manual breaks
+                     * priority. Something like GetNextRowBreak() and
+                     * GetNextManualRowBreak(). */
+                    nBreak = pDoc->HasRowBreak(i, nTab);
+                    if (!bHiddenRow || nBreak)
                         break;
-                } while (aIter.NextRange());
+                }
 
-                if (nFlags != nOldFlags)
+                if (nBreakOld != nBreak)
                 {
                     aGrid.Flush();
-                    pDev->SetLineColor( (nFlags & CR_MANUALBREAK) ? aManualColor :
-                                     (nFlags) ? aPageColor : aGridColor );
-                    nOldFlags = nFlags;
+                    pDev->SetLineColor( (nBreak & BREAK_MANUAL) ? aManualColor :
+                                        (nBreak) ? aPageColor : aGridColor );
+                    nBreakOld = nBreak;
                 }
             }
 
-            BOOL bDraw = bGrid || nOldFlags;    // einfaches Gitter nur wenn eingestellt
+            BOOL bDraw = bGrid || nBreakOld;    // einfaches Gitter nur wenn eingestellt
 
             //! Mit dieser Abfrage wird zuviel weggelassen, wenn ein automatischer
             //! Umbruch mitten in den Wiederholungszeilen liegt.
@@ -532,7 +539,7 @@ void ScOutputData::DrawGrid( BOOL bGrid, BOOL bPage )
             {
                 if ( nY == MAXROW )
                     bDraw = FALSE;
-                else if (pDoc->GetRowFlags(nYplus1,nTab) & ( CR_PAGEBREAK | CR_MANUALBREAK ))
+                else if (pDoc->HasRowBreak(nYplus1, nTab))
                     bDraw = FALSE;
             }
 #endif
@@ -654,7 +661,7 @@ void ScOutputData::FindRotated()
                 const ScPatternAttr* pPattern = pInfo->pPatternAttr;
                 const SfxItemSet* pCondSet = pInfo->pConditionSet;
 
-                if ( !pPattern && (pDoc->GetColFlags(nX,nTab) & CR_HIDDEN) == 0 )
+                if ( !pPattern && !pDoc->ColHidden(nX, nTab) )
                 {
                     pPattern = pDoc->GetPattern( nX, nY, nTab );
                     pCondSet = pDoc->GetCondResult( nX, nY, nTab );

@@ -52,17 +52,6 @@ namespace chart
 namespace wrapper
 {
 
-namespace
-{
-
-rtl::OUString lcl_getCIDForDiagram( const Reference< frame::XModel >& xChartModel )
-{
-    uno::Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
-    return ObjectIdentifier::createClassifiedIdentifierForObject( xDiagram, xChartModel );
-}
-
-} //anonymous namespace
-
 Chart2ModelContact::Chart2ModelContact(
     const Reference< uno::XComponentContext > & xContext ) :
         m_xContext( xContext ),

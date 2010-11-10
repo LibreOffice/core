@@ -144,8 +144,9 @@ bool ScGridWindow::DoAutoFilterButton( SCCOL nCol, SCROW nRow, const MouseEvent&
     Size aScrSize(nSizeX-1, nSizeY-1);
 
     // Check if the mouse cursor is clicking on the popup arrow box.
-    mpFilterButton.reset(new ScDPFieldButton(this, &GetSettings().GetStyleSettings(), &pViewData->GetZoomX(), &pViewData->GetZoomY()));
-    mpFilterButton->setBoundingBox(aScrPos, aScrSize);
+    mpFilterButton.reset(new ScDPFieldButton(this, &GetSettings().GetStyleSettings(), &pViewData->GetZoomX(), &pViewData->GetZoomY(), pDoc));
+    mpFilterButton->setBoundingBox(aScrPos, aScrSize, bLayoutRTL);
+    mpFilterButton->setPopupLeft(bLayoutRTL);   // #i114944# AutoFilter button is left-aligned in RTL
     Point aPopupPos;
     Size aPopupSize;
     mpFilterButton->getPopupBoundingBox(aPopupPos, aPopupSize);
@@ -309,10 +310,17 @@ void ScGridWindow::DPTestMouse( const MouseEvent& rMEvt, BOOL bMove )
                                                 aPosRect, nOrient, nDimPos );
     UpdateDragRect( bHasRange && bMove, aPosRect );
 
+    BOOL bIsDataLayout;
+    sal_Int32 nDimFlags = 0;
+    String aDimName = pDragDPObj->GetDimName( nDPField, bIsDataLayout, &nDimFlags );
+    bool bAllowed = !bHasRange || ScDPObject::IsOrientationAllowed( nOrient, nDimFlags );
+
     if (bMove)          // set mouse pointer
     {
         PointerStyle ePointer = POINTER_PIVOT_DELETE;
-        if ( bHasRange )
+        if ( !bAllowed )
+            ePointer = POINTER_NOTALLOWED;
+        else if ( bHasRange )
             switch (nOrient)
             {
                 case sheet::DataPilotFieldOrientation_COLUMN: ePointer = POINTER_PIVOT_COL; break;
@@ -327,15 +335,13 @@ void ScGridWindow::DPTestMouse( const MouseEvent& rMEvt, BOOL bMove )
         if (!bHasRange)
             nOrient = sheet::DataPilotFieldOrientation_HIDDEN;
 
-        BOOL bIsDataLayout;
-        String aDimName = pDragDPObj->GetDimName( nDPField, bIsDataLayout );
         if ( bIsDataLayout && ( nOrient != sheet::DataPilotFieldOrientation_COLUMN &&
                                 nOrient != sheet::DataPilotFieldOrientation_ROW ) )
         {
             //  removing data layout is not allowed
             pViewData->GetView()->ErrorMessage(STR_PIVOT_MOVENOTALLOWED);
         }
-        else
+        else if ( bAllowed )
         {
             ScDPSaveData aSaveData( *pDragDPObj->GetSaveData() );
 
@@ -366,6 +372,8 @@ void ScGridWindow::DPTestMouse( const MouseEvent& rMEvt, BOOL bMove )
 
 bool ScGridWindow::DPTestFieldPopupArrow(const MouseEvent& rMEvt, const ScAddress& rPos, ScDPObject* pDPObj)
 {
+    BOOL bLayoutRTL = pViewData->GetDocument()->IsLayoutRTL( pViewData->GetTabNo() );
+
     // Get the geometry of the cell.
     Point aScrPos = pViewData->GetScrPos(rPos.Col(), rPos.Row(), eWhich);
     long nSizeX, nSizeY;
@@ -374,7 +382,8 @@ bool ScGridWindow::DPTestFieldPopupArrow(const MouseEvent& rMEvt, const ScAddres
 
     // Check if the mouse cursor is clicking on the popup arrow box.
     ScDPFieldButton aBtn(this, &GetSettings().GetStyleSettings());
-    aBtn.setBoundingBox(aScrPos, aScrSize);
+    aBtn.setBoundingBox(aScrPos, aScrSize, bLayoutRTL);
+    aBtn.setPopupLeft(false);   // DataPilot popup is always right-aligned for now
     Point aPopupPos;
     Size aPopupSize;
     aBtn.getPopupBoundingBox(aPopupPos, aPopupSize);
@@ -515,9 +524,16 @@ void ScGridWindow::DPLaunchFieldPopupMenu(
         }
     }
 
+    BOOL bLayoutRTL = pViewData->GetDocument()->IsLayoutRTL( pViewData->GetTabNo() );
+
     Rectangle aCellRect(rScrPos, rScrSize);
     const Size& rPopupSize = mpDPFieldPopup->getWindowSize();
-    if (rScrSize.getWidth() > rPopupSize.getWidth())
+    if (bLayoutRTL)
+    {
+        // RTL: rScrPos is logical-left (visual right) position, always right-align with that
+        aCellRect.SetPos(Point(rScrPos.X() - rPopupSize.Width() + 1, rScrPos.Y()));
+    }
+    else if (rScrSize.getWidth() > rPopupSize.getWidth())
     {
         // If the cell width is larger than the popup window width, launch it
         // right-aligned with the cell.
@@ -933,7 +949,7 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, BOOL bUp )
                 BOOL bGrow = !bHide && nNew > nPagebreakBreak;
                 if ( bColumn )
                 {
-                    if ( pDoc->GetColFlags( static_cast<SCCOL>(nPagebreakBreak), nTab ) & CR_MANUALBREAK )
+                    if (pDoc->HasColBreak(static_cast<SCCOL>(nPagebreakBreak), nTab) & BREAK_MANUAL)
                     {
                         ScAddress aOldAddr( static_cast<SCCOL>(nPagebreakBreak), nPosY, nTab );
                         pViewFunc->DeletePageBreak( TRUE, TRUE, &aOldAddr, FALSE );
@@ -946,8 +962,8 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, BOOL bUp )
                     if ( bGrow )
                     {
                         //  vorigen Break auf hart, und Skalierung aendern
-                        if ( static_cast<SCCOL>(nPagebreakPrev) > aPagebreakSource.aStart.Col() &&
-                                !(pDoc->GetColFlags( static_cast<SCCOL>(nPagebreakPrev), nTab ) & CR_MANUALBREAK) )
+                        bool bManualBreak = (pDoc->HasColBreak(static_cast<SCCOL>(nPagebreakPrev), nTab) & BREAK_MANUAL);
+                        if ( static_cast<SCCOL>(nPagebreakPrev) > aPagebreakSource.aStart.Col() && !bManualBreak )
                         {
                             ScAddress aPrev( static_cast<SCCOL>(nPagebreakPrev), nPosY, nTab );
                             pViewFunc->InsertPageBreak( TRUE, TRUE, &aPrev, FALSE );
@@ -960,7 +976,7 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, BOOL bUp )
                 }
                 else
                 {
-                    if ( pDoc->GetRowFlags( nPagebreakBreak, nTab ) & CR_MANUALBREAK )
+                    if (pDoc->HasRowBreak(nPagebreakBreak, nTab) & BREAK_MANUAL)
                     {
                         ScAddress aOldAddr( nPosX, nPagebreakBreak, nTab );
                         pViewFunc->DeletePageBreak( FALSE, TRUE, &aOldAddr, FALSE );
@@ -973,8 +989,8 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, BOOL bUp )
                     if ( bGrow )
                     {
                         //  vorigen Break auf hart, und Skalierung aendern
-                        if ( nPagebreakPrev > aPagebreakSource.aStart.Row() &&
-                                !(pDoc->GetRowFlags( nPagebreakPrev, nTab ) & CR_MANUALBREAK) )
+                        bool bManualBreak = (pDoc->HasRowBreak(nPagebreakPrev, nTab) & BREAK_MANUAL);
+                        if ( nPagebreakPrev > aPagebreakSource.aStart.Row() && !bManualBreak )
                         {
                             ScAddress aPrev( nPosX, nPagebreakPrev, nTab );
                             pViewFunc->InsertPageBreak( FALSE, TRUE, &aPrev, FALSE );

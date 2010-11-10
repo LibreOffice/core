@@ -682,10 +682,6 @@ void ScInterpreter::ScNPV()
     }
 }
 
-#if defined(WIN) && defined(MSC)
-#pragma optimize("",off)
-#endif
-
 void ScInterpreter::ScIRR()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScIRR" );
@@ -752,10 +748,6 @@ void ScInterpreter::ScIRR()
     else
         PushError( errNoConvergence);
 }
-#if defined(WIN) && defined(MSC)
-#pragma optimize("",on)
-#endif
-
 
 void ScInterpreter::ScMIRR()
 {   // range_of_values ; rate_invest ; rate_reinvest

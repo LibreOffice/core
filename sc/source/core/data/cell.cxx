@@ -277,21 +277,21 @@ void ScBaseCell::StartListeningTo( ScDocument* pDoc )
                                 if ( rRef1.IsColRel() )
                                 {   // ColName
                                     pDoc->StartListeningArea( ScRange (
-                                        0,
+                                        rRef1.nCol,
                                         rRef1.nRow,
                                         rRef1.nTab,
-                                        MAXCOL,
-                                        rRef2.nRow,
+                                        rRef2.nCol,
+                                        MAXROW,
                                         rRef2.nTab ), pFormCell );
                                 }
                                 else
                                 {   // RowName
                                     pDoc->StartListeningArea( ScRange (
                                         rRef1.nCol,
-                                        0,
+                                        rRef1.nRow,
                                         rRef1.nTab,
-                                        rRef2.nCol,
-                                        MAXROW,
+                                        MAXCOL,
+                                        rRef2.nRow,
                                         rRef2.nTab ), pFormCell );
                                 }
                             }
@@ -367,21 +367,21 @@ void ScBaseCell::EndListeningTo( ScDocument* pDoc, ScTokenArray* pArr,
                                 if ( rRef1.IsColRel() )
                                 {   // ColName
                                     pDoc->EndListeningArea( ScRange (
-                                        0,
+                                        rRef1.nCol,
                                         rRef1.nRow,
                                         rRef1.nTab,
-                                        MAXCOL,
-                                        rRef2.nRow,
+                                        rRef2.nCol,
+                                        MAXROW,
                                         rRef2.nTab ), pFormCell );
                                 }
                                 else
                                 {   // RowName
                                     pDoc->EndListeningArea( ScRange (
                                         rRef1.nCol,
-                                        0,
+                                        rRef1.nRow,
                                         rRef1.nTab,
-                                        rRef2.nCol,
-                                        MAXROW,
+                                        MAXCOL,
+                                        rRef2.nRow,
                                         rRef2.nTab ), pFormCell );
                                 }
                             }

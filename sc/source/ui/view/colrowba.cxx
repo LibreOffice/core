@@ -98,7 +98,8 @@ USHORT ScColBar::GetEntrySize( SCCOLROW nEntryNo )
 {
     ScDocument* pDoc = pViewData->GetDocument();
     SCTAB nTab = pViewData->GetTabNo();
-    if ( pDoc->GetColFlags( static_cast<SCCOL>(nEntryNo), nTab ) & CR_HIDDEN )
+    SCCOL nLastCol = -1;
+    if (pDoc->ColHidden(static_cast<SCCOL>(nEntryNo), nTab, nLastCol))
         return 0;
     else
         return (USHORT) ScViewData::ToPixel( pDoc->GetColWidth( static_cast<SCCOL>(nEntryNo), nTab ), pViewData->GetPPTX() );
@@ -265,7 +266,8 @@ USHORT ScRowBar::GetEntrySize( SCCOLROW nEntryNo )
 {
     ScDocument* pDoc = pViewData->GetDocument();
     SCTAB nTab = pViewData->GetTabNo();
-    if ( pDoc->GetRowFlags( nEntryNo, nTab ) & CR_HIDDEN )
+    SCROW nLastRow = -1;
+    if (pDoc->RowHidden(nEntryNo, nTab, nLastRow))
         return 0;
     else
         return (USHORT) ScViewData::ToPixel( pDoc->GetOriginalHeight( nEntryNo,

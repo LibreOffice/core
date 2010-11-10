@@ -52,12 +52,14 @@ interface Tables
     FID_TAB_SELECTALL   [ ExecMethod = Execute; StateMethod = GetState; ]
     FID_TAB_DESELECTALL [ ExecMethod = Execute; StateMethod = GetState; ]
     FID_TAB_MENU_RENAME [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
-    FID_TAB_APPEND  [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
-    FID_INS_TABLE   [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
+    FID_TAB_APPEND      [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
+    FID_INS_TABLE       [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
     FID_INS_TABLE_EXT   [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
-    FID_TABLE_HIDE  [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
-    FID_TABLE_SHOW  [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
-        SID_SELECT_TABLES       [ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_TABLE_HIDE      [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
+    FID_TABLE_SHOW      [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
+    SID_SELECT_TABLES   [ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_TAB_MENU_SET_TAB_BG_COLOR   [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
+    FID_TAB_EVENTS      [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
 }
 
  // ===========================================================================
@@ -74,7 +76,6 @@ interface BaseSelection
     SID_INSERT_PLUGIN           [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
     SID_INSERT_SOUND            [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
     SID_INSERT_VIDEO            [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
-    SID_INSERT_APPLET           [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
     SID_INSERT_FLOATINGFRAME    [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
     SID_INSERT_AVMEDIA          [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
 

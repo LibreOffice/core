@@ -43,14 +43,30 @@ class ScVbaApplication : public ScVbaApplication_BASE
 {
 private:
     sal_Int32 m_xCalculation;
+    sal_Bool m_bDisplayAlerts;
+     sal_Bool m_bEnableEvents;
+
     rtl::OUString getOfficePath( const rtl::OUString& sPath ) throw ( css::uno::RuntimeException );
+
 protected:
-        virtual css::uno::Reference< css::frame::XModel > getCurrentDocument() throw (css::uno::RuntimeException);
+    virtual css::uno::Reference< css::frame::XModel > getCurrentDocument() throw (css::uno::RuntimeException);
+
 public:
     ScVbaApplication( const css::uno::Reference< css::uno::XComponentContext >& m_xContext );
     virtual ~ScVbaApplication();
 
     virtual SfxObjectShell* GetDocShell( const css::uno::Reference< css::frame::XModel >& xModel ) throw (css::uno::RuntimeException);
+
+    // XExactName
+    virtual ::rtl::OUString SAL_CALL getExactName( const ::rtl::OUString& aApproximateName ) throw (css::uno::RuntimeException);
+
+    // XInvocation
+    virtual css::uno::Reference< css::beans::XIntrospectionAccess >  SAL_CALL getIntrospection(void)  throw(css::uno::RuntimeException);
+    virtual css::uno::Any  SAL_CALL invoke(const rtl::OUString& FunctionName, const css::uno::Sequence< css::uno::Any >& Params, css::uno::Sequence< sal_Int16 >& OutParamIndex, css::uno::Sequence< css::uno::Any >& OutParam) throw(css::lang::IllegalArgumentException, css::script::CannotConvertException, css::reflection::InvocationTargetException, css::uno::RuntimeException);
+    virtual void  SAL_CALL setValue(const rtl::OUString& PropertyName, const css::uno::Any& Value) throw(css::beans::UnknownPropertyException, css::script::CannotConvertException, css::reflection::InvocationTargetException, css::uno::RuntimeException);
+    virtual css::uno::Any  SAL_CALL getValue(const rtl::OUString& PropertyName) throw(css::beans::UnknownPropertyException, css::uno::RuntimeException);
+    virtual sal_Bool  SAL_CALL hasMethod(const rtl::OUString& Name)  throw(css::uno::RuntimeException);
+    virtual sal_Bool  SAL_CALL hasProperty(const rtl::OUString& Name)  throw(css::uno::RuntimeException);
 
     // XApplication
     virtual ::rtl::OUString SAL_CALL PathSeparator(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
@@ -67,8 +83,8 @@ public:
     virtual css::uno::Any SAL_CALL getSelection() throw (css::uno::RuntimeException);
     virtual css::uno::Reference< ov::excel::XWorkbook > SAL_CALL getActiveWorkbook() throw (css::uno::RuntimeException);
     virtual css::uno::Reference< ov::excel::XRange > SAL_CALL getActiveCell() throw ( css::uno::RuntimeException);
- virtual css::uno::Reference< ov::excel::XWindow > SAL_CALL getActiveWindow() throw (css::uno::RuntimeException);
- virtual css::uno::Reference< ov::excel::XWorksheet > SAL_CALL getActiveSheet() throw (css::uno::RuntimeException);
+    virtual css::uno::Reference< ov::excel::XWindow > SAL_CALL getActiveWindow() throw (css::uno::RuntimeException);
+    virtual css::uno::Reference< ov::excel::XWorksheet > SAL_CALL getActiveSheet() throw (css::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL getDisplayFormulaBar() throw ( css::uno::RuntimeException );
     virtual void SAL_CALL setDisplayFormulaBar( ::sal_Bool _displayformulabar ) throw ( css::uno::RuntimeException );
 
@@ -86,7 +102,8 @@ public:
     virtual ::sal_Int32 SAL_CALL getCursor() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setCursor( ::sal_Int32 _cursor ) throw (css::uno::RuntimeException);
 
-    virtual double SAL_CALL CountA( const css::uno::Any& arg1 ) throw (css::uno::RuntimeException) ;
+    virtual sal_Bool SAL_CALL getEnableEvents() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setEnableEvents( sal_Bool bEnable ) throw (css::uno::RuntimeException);
 
     virtual css::uno::Any SAL_CALL Windows( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL wait( double time ) throw (css::uno::RuntimeException);

@@ -359,7 +359,7 @@ Point ScDetectiveFunc::GetDrawPos( SCCOL nCol, SCROW nRow, DrawPosMode eMode ) c
 
     for ( SCCOL i = 0; i < nCol; ++i )
         aPos.X() += pDoc->GetColWidth( i, nTab );
-    aPos.Y() += pDoc->FastGetRowHeight( 0, nRow - 1, nTab );
+    aPos.Y() += pDoc->GetRowHeight( 0, nRow - 1, nTab );
 
     aPos.X() = static_cast< long >( aPos.X() * HMM_PER_TWIPS );
     aPos.Y() = static_cast< long >( aPos.Y() * HMM_PER_TWIPS );

@@ -71,7 +71,6 @@ public:
     virtual void SAL_CALL SaveCopyAs( const rtl::OUString& Filename ) throw ( css::uno::RuntimeException);
     // code name
     virtual ::rtl::OUString SAL_CALL getCodeName() throw ( css::uno::RuntimeException);
-    virtual void SAL_CALL setCodeName( const ::rtl::OUString& sGlobCodeName ) throw (css::uno::RuntimeException);
 
     // XHelperInterface
     virtual rtl::OUString& getServiceImplName();

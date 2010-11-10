@@ -116,6 +116,7 @@ struct XclImpRootData : public XclRootData
     XclImpDocProtectRef mxDocProtect;       /// Document protection options.
 
     bool                mbHasCodePage;      /// true = CODEPAGE record exists.
+    bool                mbHasBasic;         /// true = document contains VB project.
 
     explicit            XclImpRootData( XclBiff eBiff, SfxMedium& rMedium,
                             SotStorageRef xRootStrg, ScDocument& rDoc, rtl_TextEncoding eTextEnc );
@@ -202,6 +203,13 @@ public:
     /** Returns the Calc add-in function name for an Excel function name. */
     String              GetScAddInName( const String& rXclName ) const;
 
+    /** Returns true, if the document contains a VB project. */
+    inline bool         HasBasic() const { return mrImpData.mbHasBasic; }
+    /** Called to indicate that the document contains a VB project. */
+    inline void         SetHasBasic() { mrImpData.mbHasBasic = true; }
+    /** Reads the CODENAME record and inserts the codename into the document. */
+    void                ReadCodeName( XclImpStream& rStrm, bool bGlobals );
+
 private:
     mutable XclImpRootData& mrImpData;      /// Reference to the global import data struct.
 };
@@ -209,4 +217,3 @@ private:
 // ============================================================================
 
 #endif
-

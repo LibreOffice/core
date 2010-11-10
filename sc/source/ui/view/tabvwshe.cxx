@@ -52,6 +52,7 @@
 #include "editsh.hxx"
 #include "dociter.hxx"
 #include "inputhdl.hxx"
+#include "document.hxx"
 
 //==================================================================
 
@@ -87,6 +88,22 @@ String __EXPORT ScTabViewShell::GetSelectionText( BOOL bWholeWord )
                 }
                 else
                     aRange.aEnd = aRange.aStart;
+            }
+            else
+            {
+                // #i111531# with 1M rows it was necessary to limit the range
+                // to the actually used data area.
+                SCCOL nCol1, nCol2;
+                SCROW nRow1, nRow2;
+                SCTAB nTab1, nTab2;
+                aRange.GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
+                if (pDoc->ShrinkToUsedDataArea( nTab1, nCol1, nRow1, nCol2, nRow2, false))
+                {
+                    aRange.aStart.SetCol( nCol1 );
+                    aRange.aStart.SetRow( nRow1 );
+                    aRange.aEnd.SetCol( nCol2 );
+                    aRange.aEnd.SetRow( nRow2 );
+                }
             }
 
             ScImportExport aObj( pDoc, aRange );

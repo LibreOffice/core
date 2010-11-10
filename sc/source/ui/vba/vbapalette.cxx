@@ -24,10 +24,12 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #include "vbapalette.hxx"
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
-
+#include <com/sun/star/container/XIndexAccess.hpp>
+#include "excelvbahelper.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
@@ -81,6 +83,11 @@ public:
     }
 
 };
+
+ScVbaPalette::ScVbaPalette( const uno::Reference< frame::XModel >& rxModel ) :
+    m_pShell( excel::getDocShell( rxModel ) )
+{
+}
 
 uno::Reference< container::XIndexAccess >
 ScVbaPalette::getDefaultPalette()

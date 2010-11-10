@@ -642,12 +642,34 @@ void ScDocumentPool::CheckRef( const SfxPoolItem& rItem )   // static
 
 void ScDocumentPool::StyleDeleted( ScStyleSheet* pStyle )
 {
-    USHORT nCount = GetItemCount(ATTR_PATTERN);
-    for (USHORT i=0; i<nCount; i++)
+    sal_uInt32 nCount = GetItemCount2(ATTR_PATTERN);
+    for (sal_uInt32 i=0; i<nCount; i++)
     {
-        ScPatternAttr* pPattern = (ScPatternAttr*)GetItem(ATTR_PATTERN, i);
+        ScPatternAttr* pPattern = (ScPatternAttr*)GetItem2(ATTR_PATTERN, i);
         if ( pPattern && pPattern->GetStyleSheet() == pStyle )
             pPattern->StyleToName();
+    }
+}
+
+void ScDocumentPool::CellStyleCreated( const String& rName )
+{
+    // If a style was created, don't keep any pattern with its name string in the pool,
+    // because it would compare equal to a pattern with a pointer to the new style.
+    // Calling StyleSheetChanged isn't enough because the pool may still contain items
+    // for undo or clipboard content.
+
+    sal_uInt32 nCount = GetItemCount2(ATTR_PATTERN);
+    for (sal_uInt32 i=0; i<nCount; i++)
+    {
+        ScPatternAttr *const pPattern =
+            const_cast<ScPatternAttr*>(
+                static_cast<ScPatternAttr const*>(GetItem2(ATTR_PATTERN, i)));
+        if ( pPattern && pPattern->GetStyleSheet() == NULL )
+        {
+            const String* pStyleName = pPattern->GetStyleName();
+            if ( pStyleName && *pStyleName == rName )
+                pPattern->UpdateStyleSheet();           // find and store style pointer
+        }
     }
 }
 

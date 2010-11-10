@@ -626,7 +626,3 @@ void ScAccessibleContextBase::IsObjectValid() const
         throw lang::DisposedException();
 }
 
-void ScAccessibleContextBase::SetRole(sal_Int16 nRole)
-{
-    maRole = nRole;
-}

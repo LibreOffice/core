@@ -79,6 +79,7 @@ SLO1FILES =  \
         $(SLO)$/filtuno.obj \
         $(SLO)$/unodoc.obj \
         $(SLO)$/addruno.obj \
+        $(SLO)$/eventuno.obj \
         $(SLO)$/listenercalls.obj \
         $(SLO)$/cellvaluebinding.obj \
         $(SLO)$/celllistsource.obj \

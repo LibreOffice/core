@@ -401,17 +401,13 @@ void __EXPORT ScGridWindow::Paint( const Rectangle& rRect )
         nScrX += ScViewData::ToPixel( pDoc->GetColWidth( nX2, nTab ), nPPTX );
     }
 
-    long nScrY = ScViewData::ToPixel( pDoc->GetRowHeight( nY1, nTab ), nPPTY );
-    while ( nScrY <= aPixRect.Top() && nY1 < MAXROW )
-    {
-        ++nY1;
-        nScrY += ScViewData::ToPixel( pDoc->GetRowHeight( nY1, nTab ), nPPTY );
-    }
+    long nScrY = 0;
+    ScViewData::AddPixelsWhile( nScrY, aPixRect.Top(), nY1, MAXROW, nPPTY, pDoc, nTab);
     SCROW nY2 = nY1;
-    while ( nScrY <= aPixRect.Bottom() && nY2 < MAXROW )
+    if (nScrY <= aPixRect.Bottom() && nY2 < MAXROW)
     {
         ++nY2;
-        nScrY += ScViewData::ToPixel( pDoc->GetRowHeight( nY2, nTab ), nPPTY );
+        ScViewData::AddPixelsWhile( nScrY, aPixRect.Bottom(), nY2, MAXROW, nPPTY, pDoc, nTab);
     }
 
     Draw( nX1,nY1,nX2,nY2, SC_UPDATE_MARKS );           // nicht weiterzeichnen
@@ -448,6 +444,12 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     if (nXRight > MAXCOL) nXRight = MAXCOL;
     SCROW nYBottom = nPosY + pViewData->VisibleCellsY(eVWhich);
     if (nYBottom > MAXROW) nYBottom = MAXROW;
+
+    // Store the current visible range.
+    maVisibleRange.mnCol1 = nPosX;
+    maVisibleRange.mnCol2 = nXRight;
+    maVisibleRange.mnRow1 = nPosY;
+    maVisibleRange.mnRow2 = nYBottom;
 
     if (nX1 > nXRight || nY1 > nYBottom)
         return;                                         // unsichtbar
@@ -744,6 +746,15 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     if ( !bLogicText )
         aOutputData.DrawStrings(FALSE);     // in pixel MapMode
 
+    // edit cells and printer-metrics text must be before the buttons
+    // (DataPilot buttons contain labels in UI font)
+
+    pContentDev->SetMapMode(pViewData->GetLogicMode(eWhich));
+    if ( bLogicText )
+        aOutputData.DrawStrings(TRUE);      // in logic MapMode if bTextWysiwyg is set
+    aOutputData.DrawEdit(TRUE);
+    pContentDev->SetMapMode(MAP_PIXEL);
+
         // Autofilter- und Pivot-Buttons
 
     DrawButtons( nX1, nY1, nX2, nY2, aTabInfo, pContentDev );          // Pixel
@@ -753,14 +764,6 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     if ( rOpts.GetOption( VOPT_NOTES ) )
         aOutputData.DrawNoteMarks();
 
-        // Edit-Zellen
-
-    pContentDev->SetMapMode(pViewData->GetLogicMode(eWhich));
-    if ( bLogicText )
-        aOutputData.DrawStrings(TRUE);      // in logic MapMode if bTextWysiwyg is set
-    aOutputData.DrawEdit(TRUE);
-
-    pContentDev->SetMapMode(MAP_PIXEL);
     if ( !bGridFirst && ( bGrid || bPage ) )
     {
         aOutputData.DrawGrid( bGrid, bPage );
@@ -1086,7 +1089,7 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                     if ( nBreak >= nX1 && nBreak <= nX2+1 )
                     {
                         //! hidden suchen
-                        if ( pDoc->GetColFlags( nBreak, nTab ) & CR_MANUALBREAK )
+                        if (pDoc->HasColBreak(nBreak, nTab) & BREAK_MANUAL)
                             pContentDev->SetFillColor( aManual );
                         else
                             pContentDev->SetFillColor( aAutomatic );
@@ -1105,7 +1108,7 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                     if ( nBreak >= nY1 && nBreak <= nY2+1 )
                     {
                         //! hidden suchen
-                        if ( pDoc->GetRowFlags( nBreak, nTab ) & CR_MANUALBREAK )
+                        if (pDoc->HasRowBreak(nBreak, nTab) & BREAK_MANUAL)
                             pContentDev->SetFillColor( aManual );
                         else
                             pContentDev->SetFillColor( aAutomatic );
@@ -1202,14 +1205,14 @@ void ScGridWindow::DrawButtons( SCCOL nX1, SCROW /*nY1*/, SCCOL nX2, SCROW /*nY2
 {
     aComboButton.SetOutputDevice( pContentDev );
 
-    ScDPFieldButton aCellBtn(pContentDev, &GetSettings().GetStyleSettings(), &pViewData->GetZoomX(), &pViewData->GetZoomY());
+    ScDocument* pDoc = pViewData->GetDocument();
+    ScDPFieldButton aCellBtn(pContentDev, &GetSettings().GetStyleSettings(), &pViewData->GetZoomX(), &pViewData->GetZoomY(), pDoc);
 
     SCCOL nCol;
     SCROW nRow;
     SCSIZE nArrY;
     SCSIZE nQuery;
     SCTAB           nTab = pViewData->GetTabNo();
-    ScDocument*     pDoc = pViewData->GetDocument();
     ScDBData*       pDBData = NULL;
     ScQueryParam*   pQueryParam = NULL;
 
@@ -1288,7 +1291,8 @@ void ScGridWindow::DrawButtons( SCCOL nX1, SCROW /*nY1*/, SCCOL nX2, SCROW /*nY2
                     pViewData->GetMergeSizePixel( nCol, nRow, nSizeX, nSizeY );
                     Point aScrPos = pViewData->GetScrPos( nCol, nRow, eWhich );
 
-                    aCellBtn.setBoundingBox(aScrPos, Size(nSizeX-1, nSizeY-1));
+                    aCellBtn.setBoundingBox(aScrPos, Size(nSizeX-1, nSizeY-1), bLayoutRTL);
+                    aCellBtn.setPopupLeft(bLayoutRTL);   // #i114944# AutoFilter button is left-aligned in RTL
                     aCellBtn.setDrawBaseButton(false);
                     aCellBtn.setDrawPopupButton(true);
                     aCellBtn.setHasHiddenMember(bArrowState);
@@ -1312,17 +1316,13 @@ void ScGridWindow::DrawButtons( SCCOL nX1, SCROW /*nY1*/, SCCOL nX2, SCROW /*nY2
                     pViewData->GetMergeSizePixel( nCol, nRow, nSizeX, nSizeY );
                     long nPosX = aScrPos.X();
                     long nPosY = aScrPos.Y();
-                    if ( bLayoutRTL )
-                    {
-                        // overwrite the right, not left (visually) grid as long as the
-                        // left/right colors of the button borders aren't mirrored.
-                        nPosX -= nSizeX - 2;
-                    }
+                    // bLayoutRTL is handled in setBoundingBox
 
                     String aStr;
                     pDoc->GetString(nCol, nRow, nTab, aStr);
                     aCellBtn.setText(aStr);
-                    aCellBtn.setBoundingBox(Point(nPosX, nPosY), Size(nSizeX-1, nSizeY-1));
+                    aCellBtn.setBoundingBox(Point(nPosX, nPosY), Size(nSizeX-1, nSizeY-1), bLayoutRTL);
+                    aCellBtn.setPopupLeft(false);   // DataPilot popup is always right-aligned for now
                     aCellBtn.setDrawBaseButton(true);
                     aCellBtn.setDrawPopupButton(pInfo->bPopupButton);
                     aCellBtn.setHasHiddenMember(pInfo->bFilterActive);
@@ -1374,7 +1374,7 @@ Rectangle ScGridWindow::GetListValButtonRect( const ScAddress& rButtonPos )
     const ScMergeAttr* pMerge = static_cast<const ScMergeAttr*>(pDoc->GetAttr( nCol,nRow,nTab, ATTR_MERGE ));
     if ( pMerge->GetColMerge() > 1 )
         nNextCol = nCol + pMerge->GetColMerge();    // next cell after the merged area
-    while ( nNextCol <= MAXCOL && (pDoc->GetColFlags( nNextCol, nTab ) & CR_HIDDEN) )
+    while ( nNextCol <= MAXCOL && pDoc->ColHidden(nNextCol, nTab) )
         ++nNextCol;
     BOOL bNextCell = ( nNextCol <= MAXCOL );
     if ( bNextCell )
@@ -1577,7 +1577,7 @@ void ScGridWindow::InvertSimple( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
                         if ( pMergeFlag->IsVerOverlapped() && ( bDoHidden || bFirstRow ) )
                         {
                             while ( pMergeFlag->IsVerOverlapped() && nThisY > 0 &&
-                                        ( (pDoc->GetRowFlags( nThisY-1, nTab ) & CR_HIDDEN) || bFirstRow ) )
+                                    (pDoc->RowHidden(nThisY-1, nTab) || bFirstRow) )
                             {
                                 --nThisY;
                                 pPattern = pDoc->GetPattern( nX, nThisY, nTab );
@@ -1764,7 +1764,7 @@ void ScGridWindow::GetSelectionRects( ::std::vector< Rectangle >& rPixelRects )
                         if ( pMergeFlag->IsVerOverlapped() && ( bDoHidden || bFirstRow ) )
                         {
                             while ( pMergeFlag->IsVerOverlapped() && nThisY > 0 &&
-                                        ( (pDoc->GetRowFlags( nThisY-1, nTab ) & CR_HIDDEN) || bFirstRow ) )
+                                    (pDoc->RowHidden(nThisY-1, nTab) || bFirstRow) )
                             {
                                 --nThisY;
                                 pPattern = pDoc->GetPattern( nX, nThisY, nTab );

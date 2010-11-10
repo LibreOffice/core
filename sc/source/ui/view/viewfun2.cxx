@@ -28,8 +28,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
@@ -86,6 +84,7 @@
 #include "funcdesc.hxx"
 #include "docuno.hxx"
 #include "charthelper.hxx"
+#include "tabbgcolor.hxx"
 
 #include <basic/sbstar.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -2149,8 +2148,7 @@ BOOL ScViewFunc::DeleteTables(const SvShorts &TheTabs, BOOL bRecord )
     ScDocShell* pDocSh  = GetViewData()->GetDocShell();
     ScDocument* pDoc    = pDocSh->GetDocument();
     BOOL bVbaEnabled = pDoc ? pDoc->IsInVBAMode() : FALSE;
-    SCTAB       nNewTab = TheTabs[0];
-    int         i;
+    SCTAB       nNewTab = TheTabs.front();
     WaitObject aWait( GetFrameWin() );
     if (bRecord && !pDoc->IsUndoEnabled())
         bRecord = FALSE;
@@ -2170,9 +2168,9 @@ BOOL ScViewFunc::DeleteTables(const SvShorts &TheTabs, BOOL bRecord )
 //      pUndoDoc->InitUndo( pDoc, 0, nCount-1 );        // incl. Ref.
 
         String aOldName;
-        for(i=0;i<TheTabs.Count();i++)
+        for (size_t i = 0; i < TheTabs.size(); i++)
         {
-            SCTAB nTab = TheTabs[sal::static_int_cast<USHORT>(i)];
+            SCTAB nTab = TheTabs[i];
             if (i==0)
                 pUndoDoc->InitUndo( pDoc, nTab,nTab, TRUE,TRUE );   // incl. Spalten/Zeilenflags
             else
@@ -2201,6 +2199,8 @@ BOOL ScViewFunc::DeleteTables(const SvShorts &TheTabs, BOOL bRecord )
                 pUndoDoc->SetActiveScenario( nTab, bActive );
             }
             pUndoDoc->SetVisible( nTab, pDoc->IsVisible( nTab ) );
+            pUndoDoc->SetTabBgColor( nTab, pDoc->GetTabBgColor(nTab) );
+            pUndoDoc->SetSheetEvents( nTab, pDoc->GetSheetEvents( nTab ) );
 
             if ( pDoc->IsTabProtected( nTab ) )
                 pUndoDoc->SetTabProtection(nTab, pDoc->GetTabProtection(nTab));
@@ -2218,11 +2218,11 @@ BOOL ScViewFunc::DeleteTables(const SvShorts &TheTabs, BOOL bRecord )
 
     BOOL bDelDone = FALSE;
 
-    for(i=TheTabs.Count()-1;i>=0;i--)
+    for (size_t i = TheTabs.size(); i > 0; i--)
     {
         String sCodeName;
-        BOOL bHasCodeName = pDoc->GetCodeName( TheTabs[sal::static_int_cast<USHORT>(i)], sCodeName );
-        if (pDoc->DeleteTab( TheTabs[sal::static_int_cast<USHORT>(i)], pUndoDoc ))
+        BOOL bHasCodeName = pDoc->GetCodeName( TheTabs[i-1], sCodeName );
+        if (pDoc->DeleteTab( TheTabs[i-1], pUndoDoc ))
         {
             bDelDone = TRUE;
             if( bVbaEnabled )
@@ -2232,7 +2232,7 @@ BOOL ScViewFunc::DeleteTables(const SvShorts &TheTabs, BOOL bRecord )
                     VBA_DeleteModule( *pDocSh, sCodeName );
                 }
             }
-            pDocSh->Broadcast( ScTablesHint( SC_TAB_DELETED, TheTabs[sal::static_int_cast<USHORT>(i)] ) );
+            pDocSh->Broadcast( ScTablesHint( SC_TAB_DELETED, TheTabs[i-1] ) );
         }
     }
     if (bRecord)
@@ -2288,6 +2288,28 @@ BOOL ScViewFunc::RenameTable( const String& rName, SCTAB nTab )
     return bSuccess;
 }
 
+
+//----------------------------------------------------------------------------
+
+bool ScViewFunc::SetTabBgColor( const Color& rColor, SCTAB nTab )
+{
+    bool bSuccess = GetViewData()->GetDocShell()->GetDocFunc().SetTabBgColor( nTab, rColor, TRUE, FALSE );
+    if (bSuccess)
+    {
+        GetViewData()->GetViewShell()->UpdateInputHandler();
+    }
+    return bSuccess;
+}
+
+bool ScViewFunc::SetTabBgColor( ScUndoTabColorInfo::List& rUndoSetTabBgColorInfoList )
+{
+    bool bSuccess = GetViewData()->GetDocShell()->GetDocFunc().SetTabBgColor( rUndoSetTabBgColorInfoList, TRUE, FALSE );
+    if (bSuccess)
+    {
+        GetViewData()->GetViewShell()->UpdateInputHandler();
+    }
+    return bSuccess;
+}
 
 //----------------------------------------------------------------------------
 
@@ -2560,13 +2582,13 @@ void ScViewFunc::MoveTable( USHORT nDestDocNo, SCTAB nDestTab, BOOL bCopy )
             {
                 String aTabName;
                 pDoc->GetName( i, aTabName);
-                TheTabs.Insert(i,TheTabs.Count());
+                TheTabs.push_back(i);
                 for(SCTAB j=i+1;j<nTabCount;j++)
                 {
                     if((!pDoc->IsVisible(j))&&(pDoc->IsScenario(j)))
                     {
                         pDoc->GetName( j, aTabName);
-                        TheTabs.Insert(j,TheTabs.Count());
+                        TheTabs.push_back(j);
                         i=j;
                     }
                     else break;
@@ -2586,7 +2608,7 @@ void ScViewFunc::MoveTable( USHORT nDestDocNo, SCTAB nDestTab, BOOL bCopy )
         if(nDestTab==SC_TAB_APPEND)
             nDestTab=pDestDoc->GetTableCount();
         SCTAB nDestTab1=nDestTab;
-        for( USHORT j=0; j<TheTabs.Count(); j++, nDestTab1++ )
+        for( size_t j=0; j<TheTabs.size(); j++, nDestTab1++ )
         {   // #63304# insert sheets first and update all references
             String aName;
             pDoc->GetName( TheTabs[j], aName );
@@ -2600,7 +2622,7 @@ void ScViewFunc::MoveTable( USHORT nDestDocNo, SCTAB nDestTab, BOOL bCopy )
         if ( nErrVal > 0 )
         {
             nDestTab1 = nDestTab;
-            for(USHORT i=0;i<TheTabs.Count();i++)
+            for(size_t i=0;i<TheTabs.size();i++)
             {
                 nErrVal = pDestDoc->TransferTab( pDoc, TheTabs[i], nDestTab1,
                     FALSE );        // no insert
@@ -2638,7 +2660,7 @@ void ScViewFunc::MoveTable( USHORT nDestDocNo, SCTAB nDestTab, BOOL bCopy )
             pDestDoc->GetName(nDestTab, sName);
             pDestShell->GetUndoManager()->AddUndoAction(
                             new ScUndoImportTab( pDestShell, nDestTab,
-                                static_cast<SCTAB>(TheTabs.Count()), FALSE));
+                                static_cast<SCTAB>(TheTabs.size()), FALSE));
 
         }
         else
@@ -2691,7 +2713,7 @@ void ScViewFunc::MoveTable( USHORT nDestDocNo, SCTAB nDestTab, BOOL bCopy )
             if ( pDestDoc->IsChartListenerCollectionNeedsUpdate() )
                 pDestDoc->UpdateChartListenerCollection();
 
-            pDestDoc->DeleteTab(static_cast<SCTAB>(TheTabs.Count()));   // alte erste Tabelle
+            pDestDoc->DeleteTab(static_cast<SCTAB>(TheTabs.size()));   // first old table
 //?         pDestDoc->SelectTable(0, TRUE);     // neue erste Tabelle selektieren
             if (pDestViewSh)
                 pDestViewSh->TabChanged();      // Pages auf dem Drawing-Layer
@@ -2707,12 +2729,12 @@ void ScViewFunc::MoveTable( USHORT nDestDocNo, SCTAB nDestTab, BOOL bCopy )
             pDestShell->PostPaintGridAll();
         }
 
-        TheTabs.Remove(0,TheTabs.Count());
+        TheTabs.clear();
 
         pDestShell->SetDocumentModified();
         SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
     }
-    else                    // innerhalb des Dokuments
+    else                    // within the documents
     {
 
         ScMarkData& rMark       = GetViewData()->GetMarkData();
@@ -2781,7 +2803,7 @@ void ScViewFunc::MoveTable( USHORT nDestDocNo, SCTAB nDestTab, BOOL bCopy )
                 pDoc->SetVisible(nDestTab1,bVisible );
             }
 
-            TheTabs.Insert(nMovTab,TheTabs.Count());
+            TheTabs.push_back(nMovTab);
 
             if(!bCopy)
             {
@@ -2791,7 +2813,7 @@ void ScViewFunc::MoveTable( USHORT nDestDocNo, SCTAB nDestTab, BOOL bCopy )
                 }
             }
 
-            TheDestTabs.Insert(nDestTab1,TheDestTabs.Count());
+            TheDestTabs.push_back(nDestTab1);
             delete pString;
         }
 

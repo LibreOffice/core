@@ -160,7 +160,9 @@ enum
     PROP_DOCUMENT_BASEDIAGRAM,
     PROP_DOCUMENT_ADDITIONAL_SHAPES,
     PROP_DOCUMENT_UPDATE_ADDIN,
-    PROP_DOCUMENT_NULL_DATE
+    PROP_DOCUMENT_NULL_DATE,
+    PROP_DOCUMENT_DISABLE_COMPLEX_CHARTTYPES,
+    PROP_DOCUMENT_DISABLE_DATATABLE_DIALOG
 };
 
 void lcl_AddPropertiesToVector(
@@ -232,6 +234,19 @@ void lcl_AddPropertiesToVector(
                   PROP_DOCUMENT_NULL_DATE,
                   ::getCppuType( static_cast< const ::com::sun::star::util::DateTime * >(0)),
                   beans::PropertyAttribute::MAYBEVOID ));
+
+    rOutProperties.push_back(
+        Property( C2U( "DisableComplexChartTypes" ),
+                  PROP_DOCUMENT_DISABLE_COMPLEX_CHARTTYPES,
+                  ::getBooleanCppuType(),
+                  //#i112666# no PropertyChangeEvent is fired on change so far
+                  beans::PropertyAttribute::MAYBEDEFAULT ) );
+    rOutProperties.push_back(
+        Property( C2U( "DisableDataTableDialog" ),
+                  PROP_DOCUMENT_DISABLE_DATATABLE_DIALOG,
+                  ::getBooleanCppuType(),
+                  //#i112666# no PropertyChangeEvent is fired on change so far
+                  beans::PropertyAttribute::MAYBEDEFAULT ) );
 }
 
 const uno::Sequence< Property > & lcl_GetPropertySequence()
@@ -1583,6 +1598,8 @@ const std::vector< WrappedProperty* > ChartDocumentWrapper::createWrappedPropert
     aWrappedProperties.push_back( new WrappedAdditionalShapesProperty( *this ) );
     aWrappedProperties.push_back( new WrappedRefreshAddInAllowedProperty( *this ) );
     aWrappedProperties.push_back( new WrappedIgnoreProperty( C2U("NullDate"),Any() ) ); // i99104
+    aWrappedProperties.push_back( new WrappedIgnoreProperty( C2U( "DisableComplexChartTypes" ), uno::makeAny( sal_False ) ) );
+    aWrappedProperties.push_back( new WrappedIgnoreProperty( C2U( "DisableDataTableDialog" ), uno::makeAny( sal_False ) ) );
 
     return aWrappedProperties;
 }

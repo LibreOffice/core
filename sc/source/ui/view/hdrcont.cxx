@@ -102,7 +102,7 @@ ScHeaderControl::ScHeaderControl( Window* pParent, SelectionEngine* pSelectionEn
 
     nWidth = nSmallWidth = aSize.Width();
     nBigWidth = LogicToPixel( Size( GetTextWidth(
-        String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("88888")) ), 0 ) ).Width() + 4;
+        String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("8888888")) ), 0 ) ).Width() + 5;
 
     SetBackground();    // sonst Probleme auf OS/2 !?!?!
 }

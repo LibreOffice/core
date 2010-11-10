@@ -37,6 +37,7 @@
 
 #include "undostyl.hxx"
 #include "docsh.hxx"
+#include "docpool.hxx"
 #include "stlpool.hxx"
 #include "printfun.hxx"
 #include "scmod.hxx"
@@ -166,6 +167,9 @@ void ScUndoModifyStyle::DoChange( ScDocShell* pDocSh, const String& rName,
     {
         // create style (with new name)
         pStyle = &pStlPool->Make( aNewName, eStyleFamily, SFXSTYLEBIT_USERDEF );
+
+        if ( eStyleFamily == SFX_STYLE_FAMILY_PARA )
+            pDoc->GetPool()->CellStyleCreated( aNewName );
     }
 
     if ( pStyle )

@@ -52,6 +52,7 @@
 #include "scmod.hxx"        // SC_MOD
 #include "inputopt.hxx"     // GetExpandRefs
 #include "conditio.hxx"
+#include "sheetevents.hxx"
 #include <tools/shl.hxx>
 
 
@@ -452,6 +453,8 @@ void ScDocument::TrackFormulas( ULONG nHintId )
     if ( pFormulaTrack )
     {
         erBEEPER();
+        // outside the loop, check if any sheet has a "calculate" event script
+        bool bCalcEvent = HasAnySheetEventScript( SC_SHEETEVENT_CALCULATE, true );
         SvtBroadcaster* pBC;
         ScFormulaCell* pTrack;
         ScFormulaCell* pNext;
@@ -465,6 +468,9 @@ void ScDocument::TrackFormulas( ULONG nHintId )
             //  Repaint fuer bedingte Formate mit relativen Referenzen:
             if ( pCondFormList )
                 pCondFormList->SourceChanged( pTrack->aPos );
+            // for "calculate" event, keep track of which sheets are affected by tracked formulas
+            if ( bCalcEvent )
+                SetCalcNotification( pTrack->aPos.Tab() );
             pTrack = pTrack->GetNextTrack();
         } while ( pTrack );
         pTrack = pFormulaTrack;

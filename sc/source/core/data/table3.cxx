@@ -208,17 +208,14 @@ void ScTable::SortReorder( ScSortInfoArray* pArray, ScProgress& rProgress )
 {
     BOOL bByRow = aSortParam.bByRow;
     SCSIZE nCount = pArray->GetCount();
+    SCCOLROW nStart = pArray->GetStart();
     ScSortInfo** ppInfo = pArray->GetFirstArray();
-    // hngngn.. Win16 legacy? Table has ULONG count but can only be initialized using USHORT :-/
-    // FIXME: use std::vector instead, would be better anyway (type safe)
-    USHORT nArghl = (nCount > USHRT_MAX ? USHRT_MAX : static_cast<USHORT>(nCount));
-    Table aTable( nArghl );
+    ::std::vector<ScSortInfo*> aTable(nCount);
     SCSIZE nPos;
     for ( nPos = 0; nPos < nCount; nPos++ )
-    {
-        aTable.Insert( ppInfo[nPos]->nOrg, (void*) ppInfo[nPos] );
-    }
-    SCCOLROW nDest = pArray->GetStart();
+        aTable[ppInfo[nPos]->nOrg - nStart] = ppInfo[nPos];
+
+    SCCOLROW nDest = nStart;
     for ( nPos = 0; nPos < nCount; nPos++, nDest++ )
     {
         SCCOLROW nOrg = ppInfo[nPos]->nOrg;
@@ -231,9 +228,9 @@ void ScTable::SortReorder( ScSortInfoArray* pArray, ScProgress& rProgress )
             // neue Position des weggeswapten eintragen
             ScSortInfo* p = ppInfo[nPos];
             p->nOrg = nDest;
-            p = (ScSortInfo*) aTable.Replace( nDest, (void*) p );
+            ::std::swap(p, aTable[nDest-nStart]);
             p->nOrg = nOrg;
-            p = (ScSortInfo*) aTable.Replace( nOrg, (void*) p );
+            ::std::swap(p, aTable[nOrg-nStart]);
             DBG_ASSERT( p == ppInfo[nPos], "SortReorder: nOrg MisMatch" );
         }
         rProgress.SetStateOnPercent( nPos );
@@ -449,14 +446,17 @@ void ScTable::SwapRow(SCROW nRow1, SCROW nRow2)
             }
         }
     }
-    if (bGlobalKeepQuery && pRowFlags)
+    if (bGlobalKeepQuery)
     {
-        BYTE nRow1Flags = pRowFlags->GetValue(nRow1);
-        BYTE nRow2Flags = pRowFlags->GetValue(nRow2);
-        BYTE nFlags1 = nRow1Flags & ( CR_HIDDEN | CR_FILTERED );
-        BYTE nFlags2 = nRow2Flags & ( CR_HIDDEN | CR_FILTERED );
-        pRowFlags->SetValue( nRow1, (nRow1Flags & ~( CR_HIDDEN | CR_FILTERED )) | nFlags2);
-        pRowFlags->SetValue( nRow2, (nRow2Flags & ~( CR_HIDDEN | CR_FILTERED )) | nFlags1);
+        bool bRow1Hidden = RowHidden(nRow1);
+        bool bRow2Hidden = RowHidden(nRow2);
+        SetRowHidden(nRow1, nRow1, bRow2Hidden);
+        SetRowHidden(nRow2, nRow2, bRow1Hidden);
+
+        bool bRow1Filtered = RowFiltered(nRow1);
+        bool bRow2Filtered = RowFiltered(nRow2);
+        SetRowFiltered(nRow1, nRow1, bRow2Filtered);
+        SetRowFiltered(nRow2, nRow2, bRow1Filtered);
     }
 }
 
@@ -616,7 +616,7 @@ void ScTable::RemoveSubTotals( ScSubTotalParam& rParam )
             if ( pCell->GetCellType() == CELLTYPE_FORMULA )
                 if (((ScFormulaCell*)pCell)->IsSubTotal())
                 {
-                    SetRowFlags(nRow+1,GetRowFlags(nRow+1)&(~CR_MANUALBREAK));
+                    RemoveRowBreak(nRow+1, false, true);
                     pDocument->DeleteRow( 0,nTab, MAXCOL,nTab, nRow, 1 );
                     --nEndRow;
                     aIter = ScColumnIterator( &aCol[nCol],nRow,nEndRow );
@@ -784,9 +784,7 @@ BOOL ScTable::DoSubTotals( ScSubTotalParam& rParam )
                     bBlockVis = FALSE;
                     if ( rParam.bPagebreak && nRow < MAXROW &&
                             aRowEntry.nSubStartRow != nStartRow && nLevel == 0)
-                        SetRowFlags( aRowEntry.nSubStartRow,
-                                GetRowFlags(aRowEntry.nSubStartRow) |
-                                CR_MANUALBREAK);
+                        SetRowBreak(aRowEntry.nSubStartRow, false, true);
 
                     if (bSpaceLeft)
                     {
@@ -839,13 +837,6 @@ BOOL ScTable::DoSubTotals( ScSubTotalParam& rParam )
                         SetString( nGroupCol[aRowEntry.nGroupNo], aRowEntry.nDestRow, nTab, aOutString );
                         ApplyStyle( nGroupCol[aRowEntry.nGroupNo], aRowEntry.nDestRow, *pStyle );
 
-/*                      if (rParam.bPagebreak && nRow < MAXROW)
-                        {
-                            BYTE nFlags = GetRowFlags( nRow+1 );
-                            nFlags |= CR_MANUALBREAK;
-                            SetRowFlags( nRow+1, nFlags );
-                        }
-*/
                         ++nRow;
                         ++nEndRow;
                         aRowEntry.nSubStartRow = nRow;
@@ -859,11 +850,7 @@ BOOL ScTable::DoSubTotals( ScSubTotalParam& rParam )
                         }
                     }
                 }
-                if (!pRowFlags)
-                    bBlockVis = TRUE;
-                else
-                    if ( (pRowFlags->GetValue(nRow) & CR_FILTERED) == 0 )
-                        bBlockVis = TRUE;
+                bBlockVis = !RowFiltered(nRow);
             }
         }
         else
@@ -1935,8 +1922,8 @@ void ScTable::UpdateSelectionFunction( ScFunctionData& rData,
     SCCOL nCol;
     if ( rMark.IsMultiMarked() )
         for (nCol=0; nCol<=MAXCOL && !rData.bError; nCol++)
-            if ( !pColFlags || !( pColFlags[nCol] & CR_HIDDEN ) )
-                aCol[nCol].UpdateSelectionFunction( rMark, rData, pRowFlags,
+            if ( !pColFlags || !ColHidden(nCol) )
+                aCol[nCol].UpdateSelectionFunction( rMark, rData, *mpHiddenRows,
                                                     bSingle && ( nCol >= nStartCol && nCol <= nEndCol ),
                                                     nStartRow, nEndRow );
 
@@ -1944,8 +1931,8 @@ void ScTable::UpdateSelectionFunction( ScFunctionData& rData,
 
     if ( bSingle && !rMark.IsMarkNegative() )
         for (nCol=nStartCol; nCol<=nEndCol && !rData.bError; nCol++)
-            if ( !pColFlags || !( pColFlags[nCol] & CR_HIDDEN ) )
-                aCol[nCol].UpdateAreaFunction( rData, pRowFlags, nStartRow, nEndRow );
+            if ( !pColFlags || !ColHidden(nCol) )
+                aCol[nCol].UpdateAreaFunction( rData, *mpHiddenRows, nStartRow, nEndRow );
 }
 
 void ScTable::FindConditionalFormat( ULONG nKey, ScRangeList& rList )

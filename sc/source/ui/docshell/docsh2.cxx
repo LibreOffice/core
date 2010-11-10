@@ -93,7 +93,7 @@ BOOL __EXPORT ScDocShell::InitNew( const uno::Reference < embed::XStorage >& xSt
     aDocument.SetDrawDefaults();        // drawing layer defaults that are set only in InitNew
 
     // InitOptions sets the document languages, must be called before CreateStandardStyles
-    InitOptions();
+    InitOptions(false);
 
     aDocument.GetStyleSheetPool()->CreateStandardStyles();
     aDocument.UpdStlShtPtrsFrmNms();

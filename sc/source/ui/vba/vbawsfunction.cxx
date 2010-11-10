@@ -31,6 +31,7 @@
 #include <com/sun/star/beans/XIntrospectionAccess.hpp>
 #include <com/sun/star/sheet/XFunctionAccess.hpp>
 #include <com/sun/star/sheet/XCellRangesQuery.hpp>
+#include <com/sun/star/sheet/XCellRangeAddressable.hpp>
 #include <com/sun/star/sheet/CellFlags.hpp>
 #include <com/sun/star/reflection/XIdlMethod.hpp>
 #include <com/sun/star/beans/MethodConcept.hpp>
@@ -44,10 +45,27 @@
 using namespace com::sun::star;
 using namespace ooo::vba;
 
-ScVbaWSFunction::ScVbaWSFunction( const uno::Reference< XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext): ScVbaWSFunction_BASE( xParent, xContext )
+namespace {
+
+void lclConvertDoubleToBoolean( uno::Any& rAny )
 {
+    if( rAny.has< double >() )
+    {
+        double fValue = rAny.get< double >();
+        if( fValue == 0.0 )
+            rAny <<= false;
+        else if( fValue == 1.0 )
+            rAny <<= true;
+        // do nothing for other values or types
+    }
 }
 
+} // namespace
+
+ScVbaWSFunction::ScVbaWSFunction( const uno::Reference< XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext ) :
+    ScVbaWSFunction_BASE( xParent, xContext )
+{
+}
 
 uno::Reference< beans::XIntrospectionAccess >
 ScVbaWSFunction::getIntrospection(void)  throw(uno::RuntimeException)
@@ -58,33 +76,101 @@ ScVbaWSFunction::getIntrospection(void)  throw(uno::RuntimeException)
 uno::Any SAL_CALL
 ScVbaWSFunction::invoke(const rtl::OUString& FunctionName, const uno::Sequence< uno::Any >& Params, uno::Sequence< sal_Int16 >& /*OutParamIndex*/, uno::Sequence< uno::Any >& /*OutParam*/) throw(lang::IllegalArgumentException, script::CannotConvertException, reflection::InvocationTargetException, uno::RuntimeException)
 {
-    uno::Reference< lang::XMultiComponentFactory > xSMgr( mxContext->getServiceManager(), uno::UNO_QUERY_THROW );
-    uno::Reference< sheet::XFunctionAccess > xFunctionAccess(
-                        xSMgr->createInstanceWithContext(::rtl::OUString::createFromAscii(
-                        "com.sun.star.sheet.FunctionAccess"), mxContext),
-                        ::uno::UNO_QUERY_THROW);
-    uno::Sequence< uno::Any > aParamTemp;
-    sal_Int32 nParamCount = Params.getLength();
-    aParamTemp.realloc(nParamCount);
-    const uno::Any* aArray = Params.getConstArray();
-    uno::Any* aArrayTemp = aParamTemp.getArray();
-
-    for (int i=0; i < Params.getLength();i++)
+    // create copy of parameters, replace Excel range objects with UNO range objects
+    uno::Sequence< uno::Any > aParamTemp( Params );
+    if( aParamTemp.hasElements() )
     {
-        uno::Reference<excel::XRange> myRange( aArray[ i ], uno::UNO_QUERY );
-        if ( myRange.is() )
+        uno::Any* pArray = aParamTemp.getArray();
+        uno::Any* pArrayEnd = pArray + aParamTemp.getLength();
+        for( ; pArray < pArrayEnd; ++pArray )
         {
-            aArrayTemp[i] = myRange->getCellRange();
-            continue;
+            uno::Reference< excel::XRange > myRange( *pArray, uno::UNO_QUERY );
+            if( myRange.is() )
+                *pArray = myRange->getCellRange();
+            OSL_TRACE("Param[%d] is %s", (int)(pArray - aParamTemp.getConstArray()), rtl::OUStringToOString( comphelper::anyToString( *pArray ), RTL_TEXTENCODING_UTF8 ).getStr() );
         }
-        aArrayTemp[i]= aArray[i];
     }
 
-    for ( int count=0; count < aParamTemp.getLength(); ++count )
-        OSL_TRACE("Param[%d] is %s",
-            count, rtl::OUStringToOString( comphelper::anyToString( aParamTemp[count] ), RTL_TEXTENCODING_UTF8 ).getStr()  );
+    uno::Any aRet;
+    bool bAsArray = true;
 
-    uno::Any aRet = xFunctionAccess->callFunction(FunctionName,aParamTemp);
+    // special handing for some functions that don't work correctly in FunctionAccess
+    ScCompiler aCompiler( 0, ScAddress() );
+    OpCode eOpCode = aCompiler.GetEnglishOpCode( FunctionName.toAsciiUpperCase() );
+    switch( eOpCode )
+    {
+        // ISLOGICAL does not work in array formula mode
+        case ocIsLogical:
+        {
+            if( aParamTemp.getLength() != 1 )
+                throw lang::IllegalArgumentException();
+            const uno::Any& rParam = aParamTemp[ 0 ];
+            if( rParam.has< bool >() )
+            {
+                aRet <<= true;
+            }
+            else if( rParam.has< uno::Reference< table::XCellRange > >() ) try
+            {
+                uno::Reference< sheet::XCellRangeAddressable > xRangeAddr( rParam, uno::UNO_QUERY_THROW );
+                table::CellRangeAddress aRangeAddr = xRangeAddr->getRangeAddress();
+                bAsArray = (aRangeAddr.StartColumn != aRangeAddr.EndColumn) || (aRangeAddr.StartRow != aRangeAddr.EndRow);
+            }
+            catch( uno::Exception& )
+            {
+            }
+        }
+        break;
+        default:;
+    }
+
+    if( !aRet.hasValue() )
+    {
+        uno::Reference< lang::XMultiComponentFactory > xSMgr( mxContext->getServiceManager(), uno::UNO_QUERY_THROW );
+        uno::Reference< sheet::XFunctionAccess > xFunctionAccess( xSMgr->createInstanceWithContext(
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sheet.FunctionAccess" ) ), mxContext ),
+            uno::UNO_QUERY_THROW );
+        uno::Reference< beans::XPropertySet > xPropSet( xFunctionAccess, uno::UNO_QUERY_THROW );
+        xPropSet->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsArrayFunction" ) ), uno::Any( bAsArray ) );
+        aRet = xFunctionAccess->callFunction( FunctionName, aParamTemp );
+    }
+
+    /*  Convert return value from double to to Boolean for some functions that
+        return Booleans. */
+    typedef uno::Sequence< uno::Sequence< uno::Any > > AnySeqSeq;
+    if( (eOpCode == ocIsEmpty) || (eOpCode == ocIsString) || (eOpCode == ocIsNonString) || (eOpCode == ocIsLogical) ||
+        (eOpCode == ocIsRef) || (eOpCode == ocIsValue) || (eOpCode == ocIsFormula) || (eOpCode == ocIsNA) ||
+        (eOpCode == ocIsErr) || (eOpCode == ocIsError) || (eOpCode == ocIsEven) || (eOpCode == ocIsOdd) ||
+        (eOpCode == ocAnd) || (eOpCode == ocOr) || (eOpCode == ocNot) || (eOpCode == ocTrue) || (eOpCode == ocFalse) )
+    {
+        if( aRet.has< AnySeqSeq >() )
+        {
+            AnySeqSeq aAnySeqSeq = aRet.get< AnySeqSeq >();
+            for( sal_Int32 nRow = 0; nRow < aAnySeqSeq.getLength(); ++nRow )
+                for( sal_Int32 nCol = 0; nCol < aAnySeqSeq[ nRow ].getLength(); ++nCol )
+                    lclConvertDoubleToBoolean( aAnySeqSeq[ nRow ][ nCol ] );
+            aRet <<= aAnySeqSeq;
+        }
+        else
+        {
+            lclConvertDoubleToBoolean( aRet );
+        }
+    }
+
+    /*  Hack/workaround (?): shorten single-row matrix to simple array, shorten
+        1x1 matrix to single value. */
+    if( aRet.has< AnySeqSeq >() )
+    {
+        AnySeqSeq aAnySeqSeq = aRet.get< AnySeqSeq >();
+        if( aAnySeqSeq.getLength() == 1 )
+        {
+            if( aAnySeqSeq[ 0 ].getLength() == 1 )
+                aRet = aAnySeqSeq[ 0 ][ 0 ];
+            else
+                aRet <<= aAnySeqSeq[ 0 ];
+        }
+    }
+
+#if 0
     // MATCH function should alwayse return a double value, but currently if the first argument is XCellRange, MATCH function returns an array instead of a double value. Don't know why?
     // To fix this issue in safe, current solution is to convert this array to a double value just for MATCH function.
     String aUpper( FunctionName );
@@ -101,6 +187,8 @@ ScVbaWSFunction::invoke(const rtl::OUString& FunctionName, const uno::Sequence< 
                 throw uno::RuntimeException();
         aRet <<= fVal;
     }
+#endif
+
     return aRet;
 }
 
@@ -122,7 +210,7 @@ ScVbaWSFunction::hasMethod(const rtl::OUString& Name)  throw(uno::RuntimeExcepti
     sal_Bool bIsFound = sal_False;
     try
     {
-        // the function name contained in the com.sun.star.sheet.FunctionDescription service is alwayse localized.
+    // the function name contained in the com.sun.star.sheet.FunctionDescription service is alwayse localized.
         // but the function name used in WorksheetFunction is a programmatic name (seems English).
         // So m_xNameAccess->hasByName( Name ) may fail to find name when a function name has a localized name.
         ScCompiler aCompiler( NULL, ScAddress() );

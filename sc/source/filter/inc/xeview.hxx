@@ -131,6 +131,20 @@ private:
     sal_uInt8           mnPane;             /// Pane identifier of this selection.
 };
 
+class XclExpTabBgColor : public XclExpRecord
+{
+public:
+    explicit            XclExpTabBgColor( const XclTabViewData& rTabViewData );
+
+    /* virtual void        SaveXml( XclExpXmlStream& rStrm ); TODO Fix XML Saving Stream */
+private:
+    /** Writes the contents of the SHEETEXT record. */
+    virtual void        WriteBody( XclExpStream& rStrm );
+
+private:
+    const XclTabViewData&  mrTabViewData;             /// view settings data of current sheet.
+};
+
 // View settings ==============================================================
 
 /** Contains all view settings records for a single sheet. */
@@ -153,6 +167,7 @@ private:
     void                WriteScl( XclExpStream& rStrm ) const;
     void                WritePane( XclExpStream& rStrm ) const;
     void                WriteSelection( XclExpStream& rStrm, sal_uInt8 nPane ) const;
+    void                WriteTabBgColor( XclExpStream& rStrm ) const;
 
 private:
     XclTabViewData      maData;             /// All view settings for a sheet.

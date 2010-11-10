@@ -43,7 +43,7 @@ using namespace ::com::sun::star;
 #include "scitems.hxx"
 #include <sfx2/fcontnr.hxx>
 #include <editeng/eeitem.hxx>
-
+#include <sfx2/objface.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/docfile.hxx>
@@ -66,6 +66,7 @@ using namespace ::com::sun::star;
 #include <svx/svditer.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/fmshell.hxx>
+#include <svtools/xwindowitem.hxx>
 #include <sfx2/passwd.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/docinsert.hxx>
@@ -120,9 +121,9 @@ using namespace ::com::sun::star;
 #include "scresid.hxx" //add by CHINA001
 #include "scabstdlg.hxx" //CHINA001
 #include "externalrefmgr.hxx"
-
 #include "sharedocdlg.hxx"
 #include "conditio.hxx"
+#include "sheetevents.hxx"
 
 //------------------------------------------------------------------
 
@@ -623,8 +624,8 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     // getting real parent window when called from Security-Options TP
                     Window* pParent = NULL;
                     const SfxPoolItem* pParentItem;
-                    if( pReqArgs && SFX_ITEM_SET == pReqArgs->GetItemState( SID_ATTR_PARENTWINDOW, FALSE, &pParentItem ) )
-                        pParent = ( Window* ) ( ( const OfaPtrItem* ) pParentItem )->GetValue();
+                    if( pReqArgs && SFX_ITEM_SET == pReqArgs->GetItemState( SID_ATTR_XWINDOW, FALSE, &pParentItem ) )
+                        pParent = ( ( const XWindowItem* ) pParentItem )->GetWindowPtr();
 
                     // desired state
                     ScChangeTrack* pChangeTrack = pDoc->GetChangeTrack();
@@ -664,17 +665,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
 
                     if ( bDo )
                     {
-                        //  update "accept changes" dialog
-                        //! notify all views
-                        SfxViewFrame* pViewFrm = SfxViewFrame::Current();
-                        if ( pViewFrm && pViewFrm->HasChildWindow(FID_CHG_ACCEPT) )
-                        {
-                            SfxChildWindow* pChild = pViewFrm->GetChildWindow(FID_CHG_ACCEPT);
-                            if (pChild)
-                            {
-                                ((ScAcceptChgDlgWrapper*)pChild)->ReInitDlg();
-                            }
-                        }
+                        UpdateAcceptChangesDialog();
 
                         // Slots invalidieren
                         if (pBindings)
@@ -693,8 +684,8 @@ void ScDocShell::Execute( SfxRequest& rReq )
             {
                 Window* pParent = NULL;
                 const SfxPoolItem* pParentItem;
-                if( pReqArgs && SFX_ITEM_SET == pReqArgs->GetItemState( SID_ATTR_PARENTWINDOW, FALSE, &pParentItem ) )
-                    pParent = ( Window* ) ( ( const OfaPtrItem* ) pParentItem )->GetValue();
+                if( pReqArgs && SFX_ITEM_SET == pReqArgs->GetItemState( SID_ATTR_XWINDOW, FALSE, &pParentItem ) )
+                    pParent = ( ( const XWindowItem* ) pParentItem )->GetWindowPtr();
                 if ( ExecuteChangeProtectionDialog( pParent ) )
                 {
                     rReq.Done();
@@ -1164,6 +1155,21 @@ void ScDocShell::Execute( SfxRequest& rReq )
 
 //------------------------------------------------------------------
 
+void UpdateAcceptChangesDialog()
+{
+    //  update "accept changes" dialog
+    //! notify all views
+    SfxViewFrame* pViewFrm = SfxViewFrame::Current();
+    if ( pViewFrm && pViewFrm->HasChildWindow( FID_CHG_ACCEPT ) )
+    {
+        SfxChildWindow* pChild = pViewFrm->GetChildWindow( FID_CHG_ACCEPT );
+        if ( pChild )
+            ((ScAcceptChgDlgWrapper*)pChild)->ReInitDlg();
+    }
+}
+
+//------------------------------------------------------------------
+
 BOOL ScDocShell::ExecuteChangeProtectionDialog( Window* _pParent, BOOL bJustQueryIfProtected )
 {
     BOOL bDone = FALSE;
@@ -1182,7 +1188,7 @@ BOOL ScDocShell::ExecuteChangeProtectionDialog( Window* _pParent, BOOL bJustQuer
             _pParent ? _pParent : GetActiveDialogParent(), &aText );
         pDlg->SetText( aTitle );
         pDlg->SetMinLen( 1 );
-        pDlg->SetHelpId( SID_CHG_PROTECT );
+        pDlg->SetHelpId( GetStaticInterface()->GetSlot(SID_CHG_PROTECT)->GetCommand() );
         pDlg->SetEditHelpId( HID_CHG_PROTECT );
         if ( !bProtected )
             pDlg->ShowExtras( SHOWEXTRAS_CONFIRM );
@@ -1217,15 +1223,7 @@ BOOL ScDocShell::ExecuteChangeProtectionDialog( Window* _pParent, BOOL bJustQuer
             }
             if ( bProtected != pChangeTrack->IsProtected() )
             {
-                //  update "accept changes" dialog
-                //! notify all views
-                SfxViewFrame* pViewFrm = SfxViewFrame::Current();
-                if ( pViewFrm && pViewFrm->HasChildWindow( FID_CHG_ACCEPT ) )
-                {
-                    SfxChildWindow* pChild = pViewFrm->GetChildWindow( FID_CHG_ACCEPT );
-                    if ( pChild )
-                        ((ScAcceptChgDlgWrapper*)pChild)->ReInitDlg();
-                }
+                UpdateAcceptChangesDialog();
                 bDone = TRUE;
             }
         }
@@ -1291,6 +1289,14 @@ void ScDocShell::DoHardRecalc( BOOL /* bApi */ )
     if ( pSh )
         pSh->UpdateCharts(TRUE);
 
+    // set notification flags for "calculate" event (used in SFX_HINT_DATACHANGED broadcast)
+    // (might check for the presence of any formulas on each sheet)
+    SCTAB nTabCount = aDocument.GetTableCount();
+    SCTAB nTab;
+    if (aDocument.HasAnySheetEventScript( SC_SHEETEVENT_CALCULATE, true )) // search also for VBA hendler
+        for (nTab=0; nTab<nTabCount; nTab++)
+            aDocument.SetCalcNotification(nTab);
+
     // CalcAll doesn't broadcast value changes, so SC_HINT_CALCALL is broadcasted globally
     // in addition to SFX_HINT_DATACHANGED.
     aDocument.BroadcastUno( SfxSimpleHint( SC_HINT_CALCALL ) );
@@ -1298,8 +1304,7 @@ void ScDocShell::DoHardRecalc( BOOL /* bApi */ )
 
     // use hard recalc also to disable stream-copying of all sheets
     // (somewhat consistent with charts)
-    SCTAB nTabCount = aDocument.GetTableCount();
-    for (SCTAB nTab=0; nTab<nTabCount; nTab++)
+    for (nTab=0; nTab<nTabCount; nTab++)
         if (aDocument.IsStreamValid(nTab))
             aDocument.SetStreamValid(nTab, FALSE);
 
@@ -1484,12 +1489,12 @@ BOOL ScDocShell::AdjustPrintZoom( const ScRange& rRange )
         SCROW nEndRow = rRange.aEnd.Row();
         if ( pRepeatRow && nStartRow >= pRepeatRow->aStart.Row() )
         {
-            nBlkTwipsY += aDocument.FastGetRowHeight( pRepeatRow->aStart.Row(),
+            nBlkTwipsY += aDocument.GetRowHeight( pRepeatRow->aStart.Row(),
                     pRepeatRow->aEnd.Row(), nTab );
             if ( nStartRow <= pRepeatRow->aEnd.Row() )
                 nStartRow = pRepeatRow->aEnd.Row() + 1;
         }
-        nBlkTwipsY += aDocument.FastGetRowHeight( nStartRow, nEndRow, nTab );
+        nBlkTwipsY += aDocument.GetRowHeight( nStartRow, nEndRow, nTab );
 
         Size aPhysPage;
         long nHdr, nFtr;

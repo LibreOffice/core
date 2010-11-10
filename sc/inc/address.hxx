@@ -82,9 +82,10 @@ const SCSIZE   SCSIZE_MAX   = ::std::numeric_limits<SCSIZE>::max();
 // A define to handle critical sections we hopefully don't need very often.
 #define SC_ROWLIMIT_MORE_THAN_32K 1     /* set to 1 if we throw the switch */
 
-// The maximum values. Defines are needed for preprocessor checks in
-// bcaslot.cxx, otherwise type safe constants are preferred.
-#define MAXROWCOUNT_DEFINE 65536
+// The maximum values. Defines are needed for preprocessor checks, for example
+// in bcaslot.cxx, otherwise type safe constants are preferred.
+//#define MAXROWCOUNT_DEFINE 65536
+#define MAXROWCOUNT_DEFINE 1048576
 #define MAXCOLCOUNT_DEFINE 1024
 
 // Count values
@@ -123,16 +124,14 @@ const SCROW SCROW_REPEAT_NONE = SCROW_MAX;
 // #if SC_ROWLIMIT_MORE_THAN_64K
 // #error row limit 64k
 // #endif
-#define SC_ROWLIMIT_MORE_THAN_64K 0     /* set to 1 if we throw the switch */
+#if MAXROWCOUNT_DEFINE > 65536
+#define SC_ROWLIMIT_MORE_THAN_64K 1
+#else
+#define SC_ROWLIMIT_MORE_THAN_64K 0
+#endif
 const SCROW SCROWS64K = 65536;
 
 // === old stuff defines =====================================================
-
-#ifdef WIN
-// Under 16bit Windows rows still had to be limited to 8192.
-// (define manually for testing)
-#define SC_LIMIT_ROWS
-#endif
 
 #define MAXROW_30   8191
 #define MAXROW_40   31999

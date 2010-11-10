@@ -73,7 +73,8 @@ UNOTYPES=\
     com.sun.star.uno.XComponentContext \
     com.sun.star.util.Date \
     com.sun.star.util.XNumberFormatter \
-    com.sun.star.util.XNumberFormatTypes
+    com.sun.star.util.XNumberFormatTypes \
+    com.sun.star.sheet.NoConvergenceException
 
 # --- Files -------------------------------------
 
@@ -132,3 +133,11 @@ $(BIN)$/analysisadd.rdb: $(ALLIDLFILES)
     touch $@
 
 
+
+ALLTAR : $(MISC)/analysis.component
+
+$(MISC)/analysis.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        analysis.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt analysis.component

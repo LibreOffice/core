@@ -80,7 +80,7 @@
 #include <math.h>
 
 //! Autofilter-Breite mit column.cxx zusammenfassen
-#define DROPDOWN_BITMAP_SIZE        17
+#define DROPDOWN_BITMAP_SIZE        18
 
 #define DRAWTEXT_MAX    32767
 
@@ -114,6 +114,7 @@ class ScDrawStringsVars
     long                nMaxDigitWidth;
     long                nSignWidth;
     long                nDotWidth;
+    long                nExpWidth;
 
     ScBaseCell*         pLastCell;
     ULONG               nValueFormat;
@@ -170,11 +171,11 @@ public:
 
 private:
     void        SetHashText();
-    long        GetMaxDigitWidth();
+    long        GetMaxDigitWidth();     // in logic units
     long        GetSignWidth();
     long        GetDotWidth();
+    long        GetExpWidth();
     void        TextChanged();
-    long        ConvertWidthLogicToPixel( long nWidth ) const;
 };
 
 //==================================================================
@@ -193,6 +194,7 @@ ScDrawStringsVars::ScDrawStringsVars(ScOutputData* pData, BOOL bPTL) :
     nMaxDigitWidth( 0 ),
     nSignWidth( 0 ),
     nDotWidth( 0 ),
+    nExpWidth( 0 ),
     pLastCell   ( NULL ),
     nValueFormat( 0 ),
     bLineBreak  ( FALSE ),
@@ -262,6 +264,7 @@ void ScDrawStringsVars::SetPattern( const ScPatternAttr* pNew, const SfxItemSet*
     nMaxDigitWidth = 0;
     nSignWidth     = 0;
     nDotWidth      = 0;
+    nExpWidth      = 0;
 
     pPattern = pNew;
     pCondSet = pSet;
@@ -417,6 +420,7 @@ void ScDrawStringsVars::SetPatternSimple( const ScPatternAttr* pNew, const SfxIt
     nMaxDigitWidth = 0;
     nSignWidth     = 0;
     nDotWidth      = 0;
+    nExpWidth      = 0;
     //  wird gerufen, wenn sich die Font-Variablen nicht aendern (!StringDiffer)
 
     pPattern = pNew;
@@ -513,6 +517,10 @@ void ScDrawStringsVars::SetHashText()
 
 void ScDrawStringsVars::SetTextToWidthOrHash( ScBaseCell* pCell, long nWidth )
 {
+    // #i113045# do the single-character width calculations in logic units
+    if (bPixelToLogic)
+        nWidth = pOutput->pRefDevice->PixelToLogic(Size(nWidth,0)).Width();
+
     if (!pCell)
         return;
 
@@ -547,7 +555,7 @@ void ScDrawStringsVars::SetTextToWidthOrHash( ScBaseCell* pCell, long nWidth )
         // Failed to get output string.  Bail out.
         return;
 
-    sal_uInt8 nSignCount = 0, nDecimalCount = 0;
+    sal_uInt8 nSignCount = 0, nDecimalCount = 0, nExpCount = 0;
     xub_StrLen nLen = aString.Len();
     sal_Unicode cDecSep = ScGlobal::GetpLocaleData()->getLocaleItem().decimalSeparator.getStr()[0];
     for (xub_StrLen i = 0; i < nLen; ++i)
@@ -557,13 +565,23 @@ void ScDrawStringsVars::SetTextToWidthOrHash( ScBaseCell* pCell, long nWidth )
             ++nSignCount;
         else if (c == cDecSep)
             ++nDecimalCount;
+        else if (c == sal_Unicode('E'))
+            ++nExpCount;
     }
+
+    // #i112250# A small value might be formatted as "0" when only counting the digits,
+    // but fit into the column when considering the smaller width of the decimal separator.
+    if (aString.EqualsAscii("0") && fVal != 0.0)
+        nDecimalCount = 1;
+
     if (nDecimalCount)
         nWidth += (nMaxDigit - GetDotWidth()) * nDecimalCount;
     if (nSignCount)
         nWidth += (nMaxDigit - GetSignWidth()) * nSignCount;
+    if (nExpCount)
+        nWidth += (nMaxDigit - GetExpWidth()) * nExpCount;
 
-    if (nDecimalCount || nSignCount)
+    if (nDecimalCount || nSignCount || nExpCount)
     {
         // Re-calculate.
         nNumDigits = static_cast<sal_uInt16>(nWidth / nMaxDigit);
@@ -573,10 +591,6 @@ void ScDrawStringsVars::SetTextToWidthOrHash( ScBaseCell* pCell, long nWidth )
     }
 
     long nActualTextWidth = pOutput->pFmtDevice->GetTextWidth(aString);
-
-    if (bPixelToLogic)
-        nActualTextWidth = ConvertWidthLogicToPixel(nActualTextWidth);
-
     if (nActualTextWidth > nWidth)
     {
         // Even after the decimal adjustment the text doesn't fit.  Give up.
@@ -585,6 +599,7 @@ void ScDrawStringsVars::SetTextToWidthOrHash( ScBaseCell* pCell, long nWidth )
     }
 
     TextChanged();
+    pLastCell = NULL;   // #i113022# equal cell and format in another column may give different string
 }
 
 void ScDrawStringsVars::SetAutoText( const String& rAutoText )
@@ -629,9 +644,6 @@ long ScDrawStringsVars::GetMaxDigitWidth()
         long n = pOutput->pFmtDevice->GetTextWidth(String(cDigit));
         nMaxDigitWidth = ::std::max(nMaxDigitWidth, n);
     }
-
-    if (bPixelToLogic)
-        nMaxDigitWidth = ConvertWidthLogicToPixel(nMaxDigitWidth);
     return nMaxDigitWidth;
 }
 
@@ -641,8 +653,6 @@ long ScDrawStringsVars::GetSignWidth()
         return nSignWidth;
 
     nSignWidth = pOutput->pFmtDevice->GetTextWidth(String('-'));
-    if (bPixelToLogic)
-        nSignWidth = ConvertWidthLogicToPixel(nSignWidth);
     return nSignWidth;
 }
 
@@ -653,9 +663,16 @@ long ScDrawStringsVars::GetDotWidth()
 
     const ::rtl::OUString& sep = ScGlobal::GetpLocaleData()->getLocaleItem().decimalSeparator;
     nDotWidth = pOutput->pFmtDevice->GetTextWidth(sep);
-    if (bPixelToLogic)
-        nDotWidth = ConvertWidthLogicToPixel(nDotWidth);
     return nDotWidth;
+}
+
+long ScDrawStringsVars::GetExpWidth()
+{
+    if (nExpWidth > 0)
+        return nExpWidth;
+
+    nExpWidth = pOutput->pFmtDevice->GetTextWidth(String('E'));
+    return nExpWidth;
 }
 
 void ScDrawStringsVars::TextChanged()
@@ -682,13 +699,6 @@ void ScDrawStringsVars::TextChanged()
     nOriginalWidth = aTextSize.Width();
     if ( bPixelToLogic )
         aTextSize = pRefDevice->LogicToPixel( aTextSize );
-}
-
-long ScDrawStringsVars::ConvertWidthLogicToPixel( long nWidth ) const
-{
-    Size aSize(nWidth, pOutput->pFmtDevice->GetTextHeight());
-    aSize = pOutput->pRefDevice->LogicToPixel(aSize);
-    return aSize.Width();
 }
 
 BOOL ScDrawStringsVars::HasEditCharacters() const
@@ -844,7 +854,7 @@ BOOL ScOutputData::GetMergeOrigin( SCCOL nX, SCROW nY, SCSIZE nArrY,
     while (bHOver)              // nY konstant
     {
         --rOverX;
-        bHidden = ( (pDoc->GetColFlags(rOverX,nTab) & CR_HIDDEN) != 0 );
+        bHidden = pDoc->ColHidden(rOverX, nTab);
         if ( !bDoMerge && !bHidden )
             return FALSE;
 
@@ -868,7 +878,7 @@ BOOL ScOutputData::GetMergeOrigin( SCCOL nX, SCROW nY, SCSIZE nArrY,
     while (bVOver)
     {
         --rOverY;
-        bHidden = ( (pDoc->GetRowFlags(rOverY,nTab) & CR_HIDDEN) != 0 );
+        bHidden = pDoc->RowHidden(rOverY, nTab);
         if ( !bDoMerge && !bHidden )
             return FALSE;
 
@@ -876,8 +886,8 @@ BOOL ScOutputData::GetMergeOrigin( SCCOL nX, SCROW nY, SCSIZE nArrY,
             --nArrY;                        // lokale Kopie !
 
         if (rOverX >= nX1 && rOverY >= nY1 &&
-            (pDoc->GetColFlags(rOverX,nTab) & CR_HIDDEN) == 0 &&
-            (pDoc->GetRowFlags(rOverY,nTab) & CR_HIDDEN) == 0 &&
+            !pDoc->ColHidden(rOverX, nTab) &&
+            !pDoc->RowHidden(rOverY, nTab) &&
             pRowInfo[nArrY].nRowNo == rOverY)
         {
 //          rVirtPosY -= pRowInfo[nArrY].nHeight;
@@ -1264,7 +1274,8 @@ void ScOutputData::GetOutputArea( SCCOL nX, SCSIZE nArrY, long nPosX, long nPosY
              ( static_cast<const ScMergeFlagAttr&>(rPattern.GetItem(ATTR_MERGE_FLAG)).GetValue() & SC_MF_AUTO ) &&
              ( !bBreak || pRefDevice == pFmtDevice ) )
         {
-            long nFilter = Min( nMergeSizeY, (long) DROPDOWN_BITMAP_SIZE );
+            // filter drop-down width is now independent from row height
+            const long nFilter = DROPDOWN_BITMAP_SIZE;
             BOOL bFit = ( nNeeded + nFilter <= nMergeSizeX );
             if ( bFit || bCellIsValue )
             {
@@ -2176,7 +2187,7 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                     if (bDoCell)
                     {
                         if ( nCellY == nY && nCellX >= nX1 && nCellX <= nX2 &&
-                             (pDoc->GetColFlags(nCellX,nTab) & CR_HIDDEN) == 0 )
+                             !pDoc->ColHidden(nCellX, nTab) )
                         {
                             CellInfo& rCellInfo = pThisRowInfo->pCellInfo[nCellX+1];
                             pPattern = rCellInfo.pPatternAttr;
@@ -3506,20 +3517,11 @@ void ScOutputData::DrawRotated(BOOL bPixelToLogic)
                                             eOrient!=SVX_ORIENTATION_STACKED &&
                                             pInfo && pInfo->bAutoFilter)
                                     {
-                                        if (pRowInfo[nArrY].nHeight < DROPDOWN_BITMAP_SIZE)
-                                        {
-                                            if (bPixelToLogic)
-                                                nAvailWidth -= pRefDevice->PixelToLogic(Size(0,pRowInfo[nArrY].nHeight)).Height();
-                                            else
-                                                nAvailWidth -= pRowInfo[nArrY].nHeight;
-                                        }
+                                        // filter drop-down width is now independent from row height
+                                        if (bPixelToLogic)
+                                            nAvailWidth -= pRefDevice->PixelToLogic(Size(0,DROPDOWN_BITMAP_SIZE)).Height();
                                         else
-                                        {
-                                            if (bPixelToLogic)
-                                                nAvailWidth -= pRefDevice->PixelToLogic(Size(0,DROPDOWN_BITMAP_SIZE)).Height();
-                                            else
-                                                nAvailWidth -= DROPDOWN_BITMAP_SIZE;
-                                        }
+                                            nAvailWidth -= DROPDOWN_BITMAP_SIZE;
                                         long nComp = nEngineWidth;
                                         if (nAvailWidth<nComp) nAvailWidth=nComp;
                                     }

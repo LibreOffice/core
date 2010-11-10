@@ -28,14 +28,16 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
+#include "xlescher.hxx"
+
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
 #include <svx/unoapi.hxx>
-#include "xestream.hxx"
 #include "document.hxx"
+#include "xestream.hxx"
 #include "xistream.hxx"
-#include "xlescher.hxx"
-#include <filter/msfilter/msvbahelper.hxx>
+#include "xlroot.hxx"
+#include "xltools.hxx"
 
 using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;
@@ -109,15 +111,15 @@ long lclGetYFromRow( ScDocument& rDoc, SCTAB nScTab, sal_uInt16 nXclRow, sal_uIn
 /** Calculates an object column position from a drawing layer X position (in twips). */
 void lclGetColFromX(
         ScDocument& rDoc, SCTAB nScTab, sal_uInt16& rnXclCol,
-        sal_uInt16& rnOffset, sal_uInt16 nXclStartCol,
+        sal_uInt16& rnOffset, sal_uInt16 nXclStartCol, sal_uInt16 nXclMaxCol,
         long& rnStartW, long nX, double fScale )
 {
     // rnStartW in conjunction with nXclStartCol is used as buffer for previously calculated width
     long nTwipsX = static_cast< long >( nX / fScale + 0.5 );
     long nColW = 0;
-    for( rnXclCol = nXclStartCol; rnXclCol <= MAXCOL; ++rnXclCol )
+    for( rnXclCol = nXclStartCol; rnXclCol <= nXclMaxCol; ++rnXclCol )
     {
-        nColW = rDoc.GetColWidth( static_cast<SCCOL>(rnXclCol), nScTab );
+        nColW = rDoc.GetColWidth( static_cast< SCCOL >( rnXclCol ), nScTab );
         if( rnStartW + nColW > nTwipsX )
             break;
         rnStartW += nColW;
@@ -127,28 +129,27 @@ void lclGetColFromX(
 
 /** Calculates an object row position from a drawing layer Y position (in twips). */
 void lclGetRowFromY(
-        ScDocument& rDoc, SCTAB nScTab,
-        sal_uInt16& rnXclRow, sal_uInt16& rnOffset, sal_uInt16 nXclStartRow,
+        ScDocument& rDoc, SCTAB nScTab, sal_uInt16& rnXclRow,
+        sal_uInt16& rnOffset, sal_uInt16 nXclStartRow, sal_uInt16 nXclMaxRow,
         long& rnStartH, long nY, double fScale )
 {
     // rnStartH in conjunction with nXclStartRow is used as buffer for previously calculated height
     long nTwipsY = static_cast< long >( nY / fScale + 0.5 );
     long nRowH = 0;
-    ScCoupledCompressedArrayIterator< SCROW, BYTE, USHORT> aIter(
-            rDoc.GetRowFlagsArray( nScTab), static_cast<SCROW>(nXclStartRow),
-            MAXROW, CR_HIDDEN, 0, rDoc.GetRowHeightArray( nScTab));
-    for ( ; aIter; ++aIter )
+    bool bFound = false;
+    for( SCROW nRow = static_cast< SCROW >( nXclStartRow ); nRow <= nXclMaxRow; ++nRow )
     {
-        nRowH = *aIter;
+        nRowH = rDoc.GetRowHeight( nRow, nScTab );
         if( rnStartH + nRowH > nTwipsY )
         {
-            rnXclRow = static_cast< sal_uInt16 >( aIter.GetPos() );
+            rnXclRow = static_cast< sal_uInt16 >( nRow );
+            bFound = true;
             break;
         }
         rnStartH += nRowH;
     }
-    if (!aIter)
-        rnXclRow = static_cast< sal_uInt16 >( aIter.GetIterEnd() );  // down to the bottom..
+    if( !bFound )
+        rnXclRow = nXclMaxRow;
     rnOffset = static_cast< sal_uInt16 >( nRowH ? ((nTwipsY - rnStartH) * 256.0 / nRowH + 0.5) : 0 );
 }
 
@@ -177,8 +178,9 @@ XclObjAnchor::XclObjAnchor() :
 {
 }
 
-Rectangle XclObjAnchor::GetRect( ScDocument& rDoc, SCTAB nScTab, MapUnit eMapUnit ) const
+Rectangle XclObjAnchor::GetRect( const XclRoot& rRoot, SCTAB nScTab, MapUnit eMapUnit ) const
 {
+    ScDocument& rDoc = rRoot.GetDoc();
     double fScale = lclGetTwipsScale( eMapUnit );
     Rectangle aRect(
         lclGetXFromCol( rDoc, nScTab, maFirst.mnCol, mnLX, fScale ),
@@ -192,20 +194,24 @@ Rectangle XclObjAnchor::GetRect( ScDocument& rDoc, SCTAB nScTab, MapUnit eMapUni
     return aRect;
 }
 
-void XclObjAnchor::SetRect( ScDocument& rDoc, SCTAB nScTab, const Rectangle& rRect, MapUnit eMapUnit )
+void XclObjAnchor::SetRect( const XclRoot& rRoot, SCTAB nScTab, const Rectangle& rRect, MapUnit eMapUnit )
 {
-    Rectangle aRect( rRect );
+    ScDocument& rDoc = rRoot.GetDoc();
+    sal_uInt16 nXclMaxCol = rRoot.GetXclMaxPos().Col();
+    sal_uInt16 nXclMaxRow = static_cast<sal_uInt16>( rRoot.GetXclMaxPos().Row());
+
     // #106948# adjust coordinates in mirrored sheets
+    Rectangle aRect( rRect );
     if( rDoc.IsLayoutRTL( nScTab ) )
         lclMirrorRectangle( aRect );
 
     double fScale = lclGetTwipsScale( eMapUnit );
     long nDummy = 0;
-    lclGetColFromX( rDoc, nScTab, maFirst.mnCol, mnLX, 0,             nDummy, aRect.Left(),   fScale );
-    lclGetColFromX( rDoc, nScTab, maLast.mnCol,  mnRX, maFirst.mnCol, nDummy, aRect.Right(),  fScale );
+    lclGetColFromX( rDoc, nScTab, maFirst.mnCol, mnLX, 0,             nXclMaxCol, nDummy, aRect.Left(),   fScale );
+    lclGetColFromX( rDoc, nScTab, maLast.mnCol,  mnRX, maFirst.mnCol, nXclMaxCol, nDummy, aRect.Right(),  fScale );
     nDummy = 0;
-    lclGetRowFromY( rDoc, nScTab, maFirst.mnRow, mnTY, 0,             nDummy, aRect.Top(),    fScale );
-    lclGetRowFromY( rDoc, nScTab, maLast.mnRow,  mnBY, maFirst.mnRow, nDummy, aRect.Bottom(), fScale );
+    lclGetRowFromY( rDoc, nScTab, maFirst.mnRow, mnTY, 0,             nXclMaxRow, nDummy, aRect.Top(),    fScale );
+    lclGetRowFromY( rDoc, nScTab, maLast.mnRow,  mnBY, maFirst.mnRow, nXclMaxRow, nDummy, aRect.Bottom(), fScale );
 }
 
 void XclObjAnchor::SetRect( const Size& rPageSize, sal_Int32 nScaleX, sal_Int32 nScaleY,
@@ -326,33 +332,7 @@ Reference< XControlModel > XclControlHelper::GetControlModel( Reference< XShape 
     return xCtrlModel;
 }
 
-#define EXC_MACRONAME_PRE "vnd.sun.star.script:Standard."
-#define EXC_MACRONAME_SUF "?language=Basic&location=document"
-
-OUString XclControlHelper::GetScMacroName( const String& rXclMacroName, SfxObjectShell* pDocShell )
-{
-    String sTmp( rXclMacroName );
-    if( rXclMacroName.Len() > 0 )
-    {
-        ooo::vba::VBAMacroResolvedInfo aMacro = ooo::vba::resolveVBAMacro( pDocShell, rXclMacroName, false );
-        if ( aMacro.IsResolved() )
-            return ooo::vba::makeMacroURL( aMacro.ResolvedMacro() );
-
-    }
-    return OUString();
-}
-
-String XclControlHelper::GetXclMacroName( const OUString& rScMacroName )
-{
-    const OUString saMacroNamePre = CREATE_OUSTRING( EXC_MACRONAME_PRE );
-    const OUString saMacroNameSuf = CREATE_OUSTRING( EXC_MACRONAME_SUF );
-    sal_Int32 snScMacroNameLen = rScMacroName.getLength();
-    sal_Int32 snXclMacroNameLen = snScMacroNameLen - saMacroNamePre.getLength() - saMacroNameSuf.getLength();
-    if( (snXclMacroNameLen > 0) && rScMacroName.matchIgnoreAsciiCase( saMacroNamePre, 0 ) &&
-            rScMacroName.matchIgnoreAsciiCase( saMacroNameSuf, snScMacroNameLen - saMacroNameSuf.getLength() ) )
-        return rScMacroName.copy( saMacroNamePre.getLength(), snXclMacroNameLen );
-    return String::EmptyString();
-}
+namespace {
 
 static const struct
 {
@@ -369,17 +349,17 @@ spTbxListenerData[] =
     /*EXC_TBX_EVENT_CHANGE*/    { "XChangeListener",     "changed"                }
 };
 
-#define EXC_MACROSCRIPT "Script"
+} // namespace
 
 bool XclControlHelper::FillMacroDescriptor( ScriptEventDescriptor& rDescriptor,
-        XclTbxEventType eEventType, const String& rXclMacroName, SfxObjectShell* pShell )
+        XclTbxEventType eEventType, const String& rXclMacroName, SfxObjectShell* pDocShell )
 {
     if( rXclMacroName.Len() > 0 )
     {
         rDescriptor.ListenerType = OUString::createFromAscii( spTbxListenerData[ eEventType ].mpcListenerType );
         rDescriptor.EventMethod = OUString::createFromAscii( spTbxListenerData[ eEventType ].mpcEventMethod );
-        rDescriptor.ScriptType = CREATE_OUSTRING( EXC_MACROSCRIPT );
-        rDescriptor.ScriptCode = GetScMacroName( rXclMacroName, pShell );
+        rDescriptor.ScriptType = CREATE_OUSTRING( "Script" );
+        rDescriptor.ScriptCode = XclTools::GetSbMacroUrl( rXclMacroName, pDocShell );
         return true;
     }
     return false;
@@ -389,12 +369,11 @@ String XclControlHelper::ExtractFromMacroDescriptor(
         const ScriptEventDescriptor& rDescriptor, XclTbxEventType eEventType )
 {
     if( (rDescriptor.ScriptCode.getLength() > 0) &&
-            rDescriptor.ScriptType.equalsIgnoreAsciiCaseAscii( EXC_MACROSCRIPT ) &&
+            rDescriptor.ScriptType.equalsIgnoreAsciiCaseAscii( "Script" ) &&
             rDescriptor.ListenerType.equalsAscii( spTbxListenerData[ eEventType ].mpcListenerType ) &&
             rDescriptor.EventMethod.equalsAscii( spTbxListenerData[ eEventType ].mpcEventMethod ) )
-        return GetXclMacroName( rDescriptor.ScriptCode );
+        return XclTools::GetXclMacroName( rDescriptor.ScriptCode );
     return String::EmptyString();
 }
 
 // ============================================================================
-

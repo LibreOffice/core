@@ -2195,28 +2195,19 @@ void ScViewFunc::SetWidthOrHeight( BOOL bWidth, SCCOLROW nRangeCnt, SCCOLROW* pR
                         {
                             //  fuer alle eingeblendeten CR_MANUALSIZE loeschen,
                             //  dann SetOptimalHeight mit bShrink = FALSE
-                            ScCompressedArrayIterator< SCROW, BYTE> aIter(
-                                    pDoc->GetRowFlagsArray( nTab), nStartNo,
-                                    nEndNo);
-                            do
+                            for (SCROW nRow = nStartNo; nRow <= nEndNo; ++nRow)
                             {
-                                BYTE nOld = *aIter;
-                                if ( (nOld & CR_HIDDEN) == 0 && ( nOld & CR_MANUALSIZE ) )
+                                SCROW nLastRow = nRow;
+                                if (pDoc->RowHidden(nRow, nTab, NULL, &nLastRow))
                                 {
-                                    SCROW nRangeEnd = aIter.GetRangeEnd();
-                                    pDoc->SetRowFlags( aIter.GetRangeStart(),
-                                            nRangeEnd, nTab,
-                                            nOld & ~CR_MANUALSIZE);
-                                    aIter.Resync( nRangeEnd);
-                                    // Range may be extended due to merges and
-                                    // now aIter.GetRangeEnd() may point behind
-                                    // the previous row, but all flags of this
-                                    // range have the CR_MANUALSIZE bit
-                                    // removed, so it is safe to continue with
-                                    // the next range, not necessary to catch
-                                    // up with the remaining rows.
+                                    nRow = nLastRow;
+                                    continue;
                                 }
-                            } while (aIter.NextRange());
+
+                                BYTE nOld = pDoc->GetRowFlags(nRow, nTab);
+                                if (nOld & CR_MANUALSIZE)
+                                    pDoc->SetRowFlags(nRow, nTab, nOld & ~CR_MANUALSIZE);
+                            }
                         }
 
                         double nPPTX = GetViewData()->GetPPTX();
@@ -2258,8 +2249,7 @@ void ScViewFunc::SetWidthOrHeight( BOOL bWidth, SCCOLROW nRangeCnt, SCCOLROW* pR
                 {
                     for (SCCOL nCol=static_cast<SCCOL>(nStartNo); nCol<=static_cast<SCCOL>(nEndNo); nCol++)
                     {
-                        if ( eMode != SC_SIZE_VISOPT ||
-                             (pDoc->GetColFlags( nCol, nTab ) & CR_HIDDEN) == 0 )
+                        if ( eMode != SC_SIZE_VISOPT || !pDoc->ColHidden(nCol, nTab) )
                         {
                             USHORT nThisSize = nSizeTwips;
 

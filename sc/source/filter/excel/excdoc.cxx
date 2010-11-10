@@ -200,17 +200,12 @@ void ExcTable::FillAsHeader( ExcBoundsheetList& rBoundsheetList )
     UINT16  nExcTabCount    = rTabInfo.GetXclTabCount();
     UINT16  nCodenames      = static_cast< UINT16 >( GetExtDocOptions().GetCodeNameCount() );
 
-    sal_uInt16 nWriteProtHash = 0;
-    if( SfxObjectShell* pDocShell = GetDocShell() )
-    {
-        ScfPropertySet aPropSet( pDocShell->GetModel() );
-        sal_Int32 nApiHash = 0;
-        if( aPropSet.GetProperty( nApiHash, CREATE_OUSTRING( "WriteProtectionPassword" ) ) && (0 < nApiHash) && (nApiHash <= SAL_MAX_UINT16) )
-        {
-            nWriteProtHash = static_cast< sal_uInt16 >( nApiHash );
-            Add( new XclExpEmptyRecord( EXC_ID_WRITEPROT ) );
-        }
-    }
+    SfxObjectShell* pShell = GetDocShell();
+    sal_uInt16 nWriteProtHash = pShell ? pShell->GetModifyPasswordHash() : 0;
+    bool bRecommendReadOnly = pShell && pShell->IsLoadReadonly();
+
+    if( (nWriteProtHash > 0) || bRecommendReadOnly )
+        Add( new XclExpEmptyRecord( EXC_ID_WRITEPROT ) );
 
     // TODO: correct codepage for BIFF5?
     sal_uInt16 nCodePage = XclTools::GetXclCodePage( (GetBiff() <= EXC_BIFF5) ? RTL_TEXTENCODING_MS_1252 : RTL_TEXTENCODING_UNICODE );
@@ -234,7 +229,7 @@ void ExcTable::FillAsHeader( ExcBoundsheetList& rBoundsheetList )
         Add( new XclExpWriteAccess );
     }
 
-    Add( new XclExpFileSharing( GetRoot(), nWriteProtHash ) );
+    Add( new XclExpFileSharing( GetRoot(), nWriteProtHash, bRecommendReadOnly ) );
     Add( new XclExpUInt16Record( EXC_ID_CODEPAGE, nCodePage ) );
 
     if( GetBiff() == EXC_BIFF8 )
@@ -425,7 +420,7 @@ void ExcTable::FillAsHeader( ExcBoundsheetList& rBoundsheetList )
 }
 
 
-void ExcTable::FillAsTable( size_t nCodeNameIdx )
+void ExcTable::FillAsTable( SCTAB nCodeNameIdx )
 {
     InitializeTable( mnScTab );
 
@@ -555,7 +550,7 @@ void ExcTable::FillAsTable( size_t nCodeNameIdx )
     Add( new ExcEof );
 }
 
-void ExcTable::FillAsXmlTable( size_t nCodeNameIdx )
+void ExcTable::FillAsXmlTable( SCTAB nCodeNameIdx )
 {
     RootData& rR = GetOldRoot();
 
@@ -645,7 +640,7 @@ void ExcTable::FillAsXmlTable( size_t nCodeNameIdx )
 }
 
 
-void ExcTable::FillAsEmptyTable( size_t nCodeNameIdx )
+void ExcTable::FillAsEmptyTable( SCTAB nCodeNameIdx )
 {
     InitializeTable( mnScTab );
 
@@ -728,7 +723,7 @@ void ExcDocument::ReadDoc( void )
     aHeader.FillAsHeader( maBoundsheetList );
 
     SCTAB nScTab = 0, nScTabCount = GetTabInfo().GetScTabCount();
-    size_t nCodeNameIdx = 0, nCodeNameCount = GetExtDocOptions().GetCodeNameCount();
+    SCTAB nCodeNameIdx = 0, nCodeNameCount = GetExtDocOptions().GetCodeNameCount();
 
     for( ; nScTab < nScTabCount; ++nScTab )
     {

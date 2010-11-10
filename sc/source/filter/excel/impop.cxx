@@ -87,7 +87,7 @@
 #include "excimp8.hxx"
 #include "excform.hxx"
 
-#if defined( WNT ) || defined( WIN )
+#if defined( WNT )
 #include <math.h>
 #else
 #include <stdlib.h>
@@ -122,7 +122,8 @@ ImportExcel::ImportExcel( XclImpRootData& rImpData, SvStream& rStrm ):
     ImportTyp( &rImpData.mrDoc, rImpData.meTextEnc ),
     XclImpRoot( rImpData ),
     maStrm( rStrm, GetRoot() ),
-    aIn( maStrm )
+    aIn( maStrm ),
+    maScOleSize( ScAddress::INITIALIZE_INVALID )
 {
     mnLastRefIdx = 0;
     nBdshtTab = 0;
@@ -178,15 +179,16 @@ void ImportExcel::ReadFileSharing()
     maStrm >> nRecommendReadOnly >> nPasswordHash;
 
     if( (nRecommendReadOnly != 0) || (nPasswordHash != 0) )
+    {
         if( SfxItemSet* pItemSet = GetMedium().GetItemSet() )
             pItemSet->Put( SfxBoolItem( SID_DOC_READONLY, TRUE ) );
 
-    if( nPasswordHash != 0 )
-    {
-        if( SfxObjectShell* pDocShell = GetDocShell() )
+        if( SfxObjectShell* pShell = GetDocShell() )
         {
-            ScfPropertySet aPropSet( pDocShell->GetModel() );
-            aPropSet.SetProperty( CREATE_OUSTRING( "WriteProtectionPassword" ), static_cast< sal_Int32 >( nPasswordHash ) );
+            if( nRecommendReadOnly != 0 )
+                pShell->SetLoadReadonly( sal_True );
+            if( nPasswordHash != 0 )
+                pShell->SetModifyPasswordHash( nPasswordHash );
         }
     }
 }
@@ -919,8 +921,7 @@ void ImportExcel::Olesize( void )
     aXclOleSize.Read( maStrm, false );
 
     SCTAB nScTab = GetCurrScTab();
-    ScRange& rOleSize = GetExtDocOptions().GetDocSettings().maOleSize;
-    GetAddressConverter().ConvertRange( rOleSize, aXclOleSize, nScTab, nScTab, false );
+    GetAddressConverter().ConvertRange( maScOleSize, aXclOleSize, nScTab, nScTab, false );
 }
 
 
@@ -1204,45 +1205,40 @@ void ImportExcel::PostDocLoad( void )
     // process all drawing objects (including OLE, charts, controls; after hiding rows/columns; before visible OLE area)
     GetObjectManager().ConvertObjects();
 
-    // visible area if embedded OLE
-    if( ScModelObj* pDocObj = GetDocModelObj() )
+    // visible area (used if this document is an embedded OLE object)
+    if( SfxObjectShell* pDocShell = GetDocShell() )
     {
-        if( SfxObjectShell* pEmbObj = pDocObj->GetEmbeddedObject() )
+        // visible area if embedded
+        const ScExtDocSettings& rDocSett = GetExtDocOptions().GetDocSettings();
+        SCTAB nDisplScTab = rDocSett.mnDisplTab;
+
+        /*  #i44077# If a new OLE object is inserted from file, there is no
+            OLESIZE record in the Excel file. Calculate used area from file
+            contents (used cells and drawing objects). */
+        if( !maScOleSize.IsValid() )
         {
-            // visible area if embedded
-            const ScExtDocSettings& rDocSett = GetExtDocOptions().GetDocSettings();
-            SCTAB nDisplScTab = rDocSett.mnDisplTab;
-
-            // first try if there was an OLESIZE record
-            ScRange aScOleSize = rDocSett.maOleSize;
-
-            /*  #i44077# If a new OLE object is inserted from file, there
-                is no OLESIZE record in the Excel file. Calculate used area
-                from file contents (used cells and drawing objects). */
-            if( !aScOleSize.IsValid() )
-            {
-                // used area of displayed sheet (cell contents)
-                if( const ScExtTabSettings* pTabSett = GetExtDocOptions().GetTabSettings( nDisplScTab ) )
-                    aScOleSize = pTabSett->maUsedArea;
-                // add all valid drawing objects
-                ScRange aScObjArea = GetObjectManager().GetUsedArea( nDisplScTab );
-                if( aScObjArea.IsValid() )
-                    aScOleSize.ExtendTo( aScObjArea );
-            }
-
-            // valid size found - set it at the document
-            if( aScOleSize.IsValid() )
-            {
-                pEmbObj->SetVisArea( GetDoc().GetMMRect(
-                    aScOleSize.aStart.Col(), aScOleSize.aStart.Row(),
-                    aScOleSize.aEnd.Col(), aScOleSize.aEnd.Row(), nDisplScTab ) );
-                GetDoc().SetVisibleTab( nDisplScTab );
-            }
+            // used area of displayed sheet (cell contents)
+            if( const ScExtTabSettings* pTabSett = GetExtDocOptions().GetTabSettings( nDisplScTab ) )
+                maScOleSize = pTabSett->maUsedArea;
+            // add all valid drawing objects
+            ScRange aScObjArea = GetObjectManager().GetUsedArea( nDisplScTab );
+            if( aScObjArea.IsValid() )
+                maScOleSize.ExtendTo( aScObjArea );
         }
 
-        // #111099# open forms in alive mode (has no effect, if no controls in document)
-        pDocObj->setPropertyValue( CREATE_OUSTRING( SC_UNO_APPLYFMDES ), uno::Any( false ) );
+        // valid size found - set it at the document
+        if( maScOleSize.IsValid() )
+        {
+            pDocShell->SetVisArea( GetDoc().GetMMRect(
+                maScOleSize.aStart.Col(), maScOleSize.aStart.Row(),
+                maScOleSize.aEnd.Col(), maScOleSize.aEnd.Row(), nDisplScTab ) );
+            GetDoc().SetVisibleTab( nDisplScTab );
+        }
     }
+
+    // #111099# open forms in alive mode (has no effect, if no controls in document)
+    if( ScModelObj* pDocObj = GetDocModelObj() )
+        pDocObj->setPropertyValue( CREATE_OUSTRING( SC_UNO_APPLYFMDES ), uno::Any( false ) );
 
     // enables extended options to be set to the view after import
     GetExtDocOptions().SetChanged( true );

@@ -50,6 +50,7 @@
 #include <tools/tenccvt.hxx>
 #include <tools/list.hxx>
 #include <rtl/crc.h>
+#include <basic/basmgr.hxx>
 
 #include "document.hxx"
 #include "table.hxx"
@@ -93,7 +94,8 @@
 #include "tabprotection.hxx"
 #include "formulaparserpool.hxx"
 #include "clipparam.hxx"
-#include <basic/basmgr.hxx>
+
+using namespace com::sun::star;
 
 // pImpl because including lookupcache.hxx in document.hxx isn't wanted, and
 // dtor plus helpers are convenient.
@@ -188,11 +190,11 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
 //      bNoSetDirty( TRUE ),
         bNoSetDirty( FALSE ),
         bInsertingFromOtherDoc( FALSE ),
-        bImportingXML( FALSE ),
+        bLoadingMedium( false ),
+        bImportingXML( false ),
         bXMLFromWrapper( FALSE ),
         bCalcingAfterLoad( FALSE ),
         bNoListening( FALSE ),
-        bLoadingDone( TRUE ),
         bIdleDisabled( FALSE ),
         bInLinkUpdate( FALSE ),
         bChartListenerCollectionNeedsUpdate( FALSE ),
@@ -897,6 +899,8 @@ BOOL ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
         SetNoListening( TRUE );     // noch nicht bei CopyToTable/Insert
         pTab[nOldPos]->CopyToTable(0, 0, MAXCOL, MAXROW, IDF_ALL, (pOnlyMarked != NULL),
                                         pTab[nNewPos], pOnlyMarked );
+        pTab[nNewPos]->SetTabBgColor(pTab[nOldPos]->GetTabBgColor());
+
         SCsTAB nDz;
 /*      if (nNewPos < nOldPos)
             nDz = ((short)nNewPos) - (short)nOldPos + 1;
@@ -1116,11 +1120,11 @@ ULONG ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
 
             String sCodeName;
             String sSource;
-            com::sun::star::uno::Reference< com::sun::star::script::XLibraryContainer > xLibContainer = pSrcShell->GetBasicContainer();
-            com::sun::star::uno::Reference< com::sun::star::container::XNameContainer > xLib;
+            uno::Reference< script::XLibraryContainer > xLibContainer = pSrcShell->GetBasicContainer();
+            uno::Reference< container::XNameContainer > xLib;
             if( xLibContainer.is() )
             {
-                com::sun::star::uno::Any aLibAny = xLibContainer->getByName( aLibName );
+                uno::Any aLibAny = xLibContainer->getByName( aLibName );
                 aLibAny >>= xLib;
             }
 

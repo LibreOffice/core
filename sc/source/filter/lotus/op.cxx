@@ -73,7 +73,7 @@
 #include <string.h>
 #include <math.h>
 #include <ctype.h>
-#if defined( MAC ) || defined( ICC )
+#if defined( ICC )
 #include <stdlib.h>
 #endif
 
@@ -226,7 +226,7 @@ void OP_ColumnWidth( SvStream& r, UINT16 /*n*/ )
         nBreite = ( UINT16 ) ( TWIPS_PER_CHAR * nWidthSpaces );
     else
     {
-        pDoc->SetColFlags( static_cast<SCCOL> (nCol), 0, pDoc->GetColFlags( static_cast<SCCOL> (nCol), 0 ) | CR_HIDDEN );
+        pDoc->SetColHidden(static_cast<SCCOL>(nCol), static_cast<SCCOL>(nCol), 0, true);
         nBreite = nDefWidth;
     }
 
@@ -335,7 +335,7 @@ void OP_HiddenCols( SvStream& r, UINT16 /*n*/ )
         {
             if( nAkt & 0x01 )   // unterstes Bit gesetzt?
                 // -> Hidden Col
-                pDoc->SetColFlags( nCount, 0, pDoc->GetColFlags( nCount, 0 ) | CR_HIDDEN );
+                pDoc->SetColHidden(nCount, nCount, 0, true);
 
             nCount++;
             nAkt = nAkt / 2;    // der Naechste bitte...

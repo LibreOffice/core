@@ -160,9 +160,6 @@ void ScViewDataTable::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>
         pSettings[SC_TABLE_ZOOM_VALUE].Value <<= nZoomValue;
         pSettings[SC_TABLE_PAGE_VIEW_ZOOM_VALUE].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_PAGEVIEWZOOMVALUE));
         pSettings[SC_TABLE_PAGE_VIEW_ZOOM_VALUE].Value <<= nPageZoomValue;
-
-//        pSettings[SC_TABLE_SELECTED].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_TABLESELECTED));
-//        pSettings[SC_TABLE_SELECTED].Value <<= bool(rViewData.GetMarkData().GetTableSelect( nTab ));
     }
 }
 
@@ -272,6 +269,17 @@ void ScViewDataTable::ReadUserDataSequence(const uno::Sequence <beans::PropertyV
             bool bSelected = false;
             aSettings[i].Value >>= bSelected;
             rViewData.GetMarkData().SelectTable( nTab, bSelected );
+        }
+        else if (sName.compareToAscii(SC_UNONAME_TABCOLOR) == 0)
+        {
+            // There are documents out there that have their tab color defined as a view setting.
+            sal_Int32 nColor = COL_AUTO;
+            aSettings[i].Value >>= nColor;
+            if (static_cast<ColorData>(nColor) != COL_AUTO)
+            {
+                ScDocument* pDoc = rViewData.GetDocument();
+                pDoc->SetTabBgColor(nTab, Color(static_cast<ColorData>(nColor)));
+            }
         }
     }
     if (eHSplitMode == SC_SPLIT_FIX)
@@ -1595,7 +1603,7 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
                 nScrPosY = 65535;
             else
             {
-                nTSize = pDoc->FastGetRowHeight( nY, nTabNo );
+                nTSize = pDoc->GetRowHeight( nY, nTabNo );
                 if (nTSize)
                 {
                     long nSizeYPix = ToPixel( nTSize, nPPTY );
@@ -1604,7 +1612,7 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
                 else if ( nY < MAXROW )
                 {
                     // skip multiple hidden rows (forward only for now)
-                    SCROW nNext = pDoc->FastGetFirstNonHiddenRow( nY + 1, nTabNo );
+                    SCROW nNext = pDoc->FirstVisibleRow(nY + 1, MAXROW, nTabNo);
                     if ( nNext > MAXROW )
                         nY = MAXROW;
                     else
@@ -1616,7 +1624,7 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
         for (nY=nPosY; nY>nWhereY;)
         {
             --nY;
-            nTSize = pDoc->FastGetRowHeight( nY, nTabNo );
+            nTSize = pDoc->GetRowHeight( nY, nTabNo );
             if (nTSize)
             {
                 long nSizeYPix = ToPixel( nTSize, nPPTY );
@@ -1688,51 +1696,32 @@ SCROW ScViewData::CellsAtY( SCsROW nPosY, SCsROW nDir, ScVSplitPos eWhichY, USHO
     if (pView)
         ((ScViewData*)this)->aScrSize.Height() = pView->GetGridHeight(eWhichY);
 
-    SCROW   nY;
-    USHORT  nScrPosY = 0;
-
     if (nScrSizeY == SC_SIZE_NONE) nScrSizeY = (USHORT) aScrSize.Height();
 
-    if (nDir==1)
-        nY = nPosY;             // vorwaerts
-    else
-        nY = nPosY-1;           // rueckwaerts
+    SCROW nY;
 
-    BOOL bOut = FALSE;
-    for ( ; nScrPosY<=nScrSizeY && !bOut; nY+=nDir )
+    if (nDir==1)
     {
-        SCsROW  nRowNo = nY;
-        if ( nRowNo < 0 || nRowNo > MAXROW )
-            bOut = TRUE;
-        else
-        {
-//          USHORT nTSize = pDoc->GetRowHeight( nRowNo, nTabNo );
-            USHORT nTSize = pDoc->FastGetRowHeight( nRowNo, nTabNo );
-            if (nTSize)
-            {
-                long nSizeYPix = ToPixel( nTSize, nPPTY );
-                nScrPosY = sal::static_int_cast<USHORT>( nScrPosY + (USHORT) nSizeYPix );
-            }
-            else if ( nDir == 1 && nRowNo < MAXROW )
-            {
-                // skip multiple hidden rows (forward only for now)
-                SCROW nNext = pDoc->FastGetFirstNonHiddenRow( nRowNo + 1, nTabNo );
-                if ( nNext > MAXROW )
-                {
-                    // same behavior as without the optimization: set bOut with nY=MAXROW+1
-                    nY = MAXROW+1;
-                    bOut = TRUE;
-                }
-                else
-                    nY = nNext - 1;     // +=nDir advances to next visible row
-            }
-        }
-    }
-
-    if (nDir==1)
+        // forward
+        nY = nPosY;
+        long nScrPosY = 0;
+        AddPixelsWhile( nScrPosY, nScrSizeY, nY, MAXROW, nPPTY, pDoc, nTabNo);
+        // Original loop ended on last evaluated +1 or if that was MAXROW even
+        // on MAXROW+2.
+        nY += (nY == MAXROW ? 2 : 1);
         nY -= nPosY;
+    }
     else
+    {
+        // backward
+        nY = nPosY-1;
+        long nScrPosY = 0;
+        AddPixelsWhileBackward( nScrPosY, nScrSizeY, nY, 0, nPPTY, pDoc, nTabNo);
+        // Original loop ended on last evaluated -1 or if that was 0 even on
+        // -2.
+        nY -= (nY == 0 ? 2 : 1);
         nY = (nPosY-1)-nY;
+    }
 
     if (nY>0) --nY;
     return nY;
@@ -1779,11 +1768,19 @@ BOOL ScViewData::GetMergeSizePixel( SCCOL nX, SCROW nY, long& rSizeXPix, long& r
         for (SCCOL i=0; i<nCountX; i++)
             nOutWidth += ToPixel( pDoc->GetColWidth(nX+i,nTabNo), nPPTX );
         SCROW nCountY = pMerge->GetRowMerge();
-        ScCoupledCompressedArrayIterator< SCROW, BYTE, USHORT> aIter(
-                pDoc->GetRowFlagsArray( nTabNo), nY, nY+nCountY-1, CR_HIDDEN,
-                0, pDoc->GetRowHeightArray( nTabNo));
-        for ( ; aIter; ++aIter )
-            nOutHeight += ToPixel( *aIter, nPPTY );
+
+        for (SCROW nRow = nY; nRow <= nY+nCountY-1; ++nRow)
+        {
+            SCROW nLastRow = nRow;
+            if (pDoc->RowHidden(nRow, nTabNo, NULL, &nLastRow))
+            {
+                nRow = nLastRow;
+                continue;
+            }
+
+            USHORT nHeight = pDoc->GetRowHeight(nRow, nTabNo);
+            nOutHeight += ToPixel(nHeight, nPPTY);
+        }
 
         rSizeXPix = nOutWidth;
         rSizeYPix = nOutHeight;
@@ -1840,20 +1837,14 @@ BOOL ScViewData::GetPosFromPixel( long nClickX, long nClickY, ScSplitPos eWhich,
     }
 
     if (nClickY > 0)
-    {
-        while ( rPosY<=MAXROW && nClickY >= nScrY )
-        {
-            nScrY += ToPixel( pDoc->FastGetRowHeight( rPosY, nTabNo ), nPPTY );
-            ++rPosY;
-        }
-        --rPosY;
-    }
+        AddPixelsWhile( nScrY, nClickY, rPosY, MAXROW, nPPTY, pDoc, nTabNo );
     else
     {
+        /* TODO: could need some "SubPixelsWhileBackward" method */
         while ( rPosY>0 && nClickY < nScrY )
         {
             --rPosY;
-            nScrY -= ToPixel( pDoc->FastGetRowHeight( rPosY, nTabNo ), nPPTY );
+            nScrY -= ToPixel( pDoc->GetRowHeight( rPosY, nTabNo ), nPPTY );
         }
     }
 
@@ -1969,20 +1960,24 @@ void ScViewData::SetPosY( ScVSplitPos eWhich, SCROW nNewPosY )
         SCROW nOldPosY = pThisTab->nPosY[eWhich];
         long nTPosY = pThisTab->nTPosY[eWhich];
         long nPixPosY = pThisTab->nPixPosY[eWhich];
-        SCROW i;
+        SCROW i, nHeightEndRow;
         if ( nNewPosY > nOldPosY )
             for ( i=nOldPosY; i<nNewPosY; i++ )
             {
-                long nThis = pDoc->FastGetRowHeight( i,nTabNo );
-                nTPosY -= nThis;
-                nPixPosY -= ToPixel(sal::static_int_cast<USHORT>(nThis), nPPTY);
+                long nThis = pDoc->GetRowHeight( i, nTabNo, NULL, &nHeightEndRow );
+                SCROW nRows = std::min( nNewPosY, nHeightEndRow + 1) - i;
+                i = nHeightEndRow;
+                nTPosY -= nThis * nRows;
+                nPixPosY -= ToPixel(sal::static_int_cast<USHORT>(nThis), nPPTY) * nRows;
             }
         else
             for ( i=nNewPosY; i<nOldPosY; i++ )
             {
-                long nThis = pDoc->FastGetRowHeight( i,nTabNo );
-                nTPosY += nThis;
-                nPixPosY += ToPixel(sal::static_int_cast<USHORT>(nThis), nPPTY);
+                long nThis = pDoc->GetRowHeight( i, nTabNo, NULL, &nHeightEndRow );
+                SCROW nRows = std::min( nOldPosY, nHeightEndRow + 1) - i;
+                i = nHeightEndRow;
+                nTPosY += nThis * nRows;
+                nPixPosY += ToPixel(sal::static_int_cast<USHORT>(nThis), nPPTY) * nRows;
             }
 
         pThisTab->nPosY[eWhich] = nNewPosY;
@@ -2010,7 +2005,7 @@ void ScViewData::RecalcPixPos()             // nach Zoom-Aenderungen
         long nPixPosY = 0;
         SCROW nPosY = pThisTab->nPosY[eWhich];
         for (SCROW j=0; j<nPosY; j++)
-            nPixPosY -= ToPixel(pDoc->FastGetRowHeight(j,nTabNo), nPPTY);
+            nPixPosY -= ToPixel(pDoc->GetRowHeight(j,nTabNo), nPPTY);
         pThisTab->nPixPosY[eWhich] = nPixPosY;
     }
 }
@@ -2053,7 +2048,7 @@ void ScViewData::SetScreen( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
 
     for (nRow=nRow1; nRow<=nRow2; nRow++)
     {
-        nTSize = pDoc->FastGetRowHeight( nRow, nTabNo );
+        nTSize = pDoc->GetRowHeight( nRow, nTabNo );
         if (nTSize)
         {
             nSizePix = ToPixel( nTSize, nPPTY );
@@ -2095,7 +2090,7 @@ void ScViewData::SetScreenPos( const Point& rVisAreaStart )
     bEnd = FALSE;
     while (!bEnd)
     {
-        nAdd = (long) pDoc->FastGetRowHeight(nY1,nTabNo);
+        nAdd = (long) pDoc->GetRowHeight(nY1,nTabNo);
         if (nSize+nAdd <= nTwips+1 && nY1<MAXROW)
         {
             nSize += nAdd;
@@ -3047,7 +3042,7 @@ BOOL ScViewData::UpdateFixY( SCTAB nTab )               // TRUE = Wert geaendert
     long nNewPos = 0;
     for (SCROW nY=pTabData[nTab]->nPosY[SC_SPLIT_TOP]; nY<nFix; nY++)
     {
-        USHORT nTSize = pLocalDoc->FastGetRowHeight( nY, nTab );
+        USHORT nTSize = pLocalDoc->GetRowHeight( nY, nTab );
         if (nTSize)
         {
             long nPix = ToPixel( nTSize, nPPTY );
@@ -3103,5 +3098,82 @@ ScAddress ScViewData::GetCurPos() const
 }
 
 
+// static
+void ScViewData::AddPixelsWhile( long & rScrY, long nEndPixels, SCROW & rPosY,
+        SCROW nEndRow, double nPPTY, const ScDocument * pDoc, SCTAB nTabNo )
+{
+    SCROW nRow = rPosY;
+    while (rScrY <= nEndPixels && nRow <= nEndRow)
+    {
+        SCROW nHeightEndRow;
+        USHORT nHeight = pDoc->GetRowHeight( nRow, nTabNo, NULL, &nHeightEndRow);
+        if (nHeightEndRow > nEndRow)
+            nHeightEndRow = nEndRow;
+        if (!nHeight)
+            nRow = nHeightEndRow + 1;
+        else
+        {
+            SCROW nRows = nHeightEndRow - nRow + 1;
+            sal_Int64 nPixel = ToPixel( nHeight, nPPTY);
+            sal_Int64 nAdd = nPixel * nRows;
+            if (nAdd + rScrY > nEndPixels)
+            {
+                sal_Int64 nDiff = rScrY + nAdd - nEndPixels;
+                nRows -= static_cast<SCROW>(nDiff / nPixel);
+                nAdd = nPixel * nRows;
+                // We're looking for a value that satisfies loop condition.
+                if (nAdd + rScrY <= nEndPixels)
+                {
+                    ++nRows;
+                    nAdd += nPixel;
+                }
+            }
+            rScrY += static_cast<long>(nAdd);
+            nRow += nRows;
+        }
+    }
+    if (nRow > rPosY)
+        --nRow;
+    rPosY = nRow;
+}
 
 
+// static
+void ScViewData::AddPixelsWhileBackward( long & rScrY, long nEndPixels,
+        SCROW & rPosY, SCROW nStartRow, double nPPTY, const ScDocument * pDoc,
+        SCTAB nTabNo )
+{
+    SCROW nRow = rPosY;
+    while (rScrY <= nEndPixels && nRow >= nStartRow)
+    {
+        SCROW nHeightStartRow;
+        USHORT nHeight = pDoc->GetRowHeight( nRow, nTabNo, &nHeightStartRow, NULL);
+        if (nHeightStartRow < nStartRow)
+            nHeightStartRow = nStartRow;
+        if (!nHeight)
+            nRow = nHeightStartRow - 1;
+        else
+        {
+            SCROW nRows = nRow - nHeightStartRow + 1;
+            sal_Int64 nPixel = ToPixel( nHeight, nPPTY);
+            sal_Int64 nAdd = nPixel * nRows;
+            if (nAdd + rScrY > nEndPixels)
+            {
+                sal_Int64 nDiff = nAdd + rScrY - nEndPixels;
+                nRows -= static_cast<SCROW>(nDiff / nPixel);
+                nAdd = nPixel * nRows;
+                // We're looking for a value that satisfies loop condition.
+                if (nAdd + rScrY <= nEndPixels)
+                {
+                    ++nRows;
+                    nAdd += nPixel;
+                }
+            }
+            rScrY += static_cast<long>(nAdd);
+            nRow -= nRows;
+        }
+    }
+    if (nRow < rPosY)
+        ++nRow;
+    rPosY = nRow;
+}

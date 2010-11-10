@@ -42,10 +42,16 @@
 #include <ooo/vba/excel/XPageSetup.hpp>
 #include <ooo/vba/excel/XHPageBreaks.hpp>
 #include <ooo/vba/excel/XVPageBreaks.hpp>
-#include <ooo/vba/excel/XChartObjects.hpp>
 
 #include <vbahelper/vbahelperinterface.hxx>
 #include "address.hxx"
+
+namespace ooo { namespace vba { namespace excel {
+    class XChartObjects;
+    class XHyperlinks;
+} } }
+
+class ScVbaSheetObjectsBase;
 
 typedef InheritedHelperInterfaceImpl1< ov::excel::XWorksheet >  WorksheetImpl_BASE;
 
@@ -54,12 +60,17 @@ class ScVbaWorksheet : public WorksheetImpl_BASE
     css::uno::Reference< css::sheet::XSpreadsheet > mxSheet;
     css::uno::Reference< css::frame::XModel > mxModel;
     css::uno::Reference< ov::excel::XChartObjects > mxCharts;
+    css::uno::Reference< ov::excel::XHyperlinks > mxHlinks;
+    ::rtl::Reference< ScVbaSheetObjectsBase > mxButtons;
 
     css::uno::Reference< ov::excel::XWorksheet > getSheetAtOffset(SCTAB offset) throw (css::uno::RuntimeException);
     css::uno::Reference< ov::excel::XRange > getSheetRange() throw (css::uno::RuntimeException);
 
     css::uno::Reference< css::container::XNameAccess > getFormControls();
     css::uno::Any getControlShape( const rtl::OUString& sName );
+
+    css::uno::Reference< css::beans::XPropertySet > getFirstDBRangeProperties() throw (css::uno::RuntimeException);
+
 protected:
 
     ScVbaWorksheet( const css::uno::Reference< ov::XHelperInterface >& xParent,  const css::uno::Reference< css::uno::XComponentContext >& xContext );
@@ -70,7 +81,7 @@ public:
         const css::uno::Reference< css::frame::XModel >& xModel )throw (css::uno::RuntimeException)  ;
     ScVbaWorksheet( css::uno::Sequence< css::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext >const& xContext ) throw ( css::lang::IllegalArgumentException );
 
-    virtual ~ScVbaWorksheet() {}
+    virtual ~ScVbaWorksheet();
 
     virtual css::uno::Reference< css::frame::XModel > getModel()
     { return mxModel; }
@@ -87,6 +98,7 @@ public:
     virtual ::sal_Bool SAL_CALL getProtectionMode() throw (css::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL getProtectContents() throw (css::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL getProtectDrawingObjects() throw (css::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL getProtectScenarios() throw (css::uno::RuntimeException);
     virtual css::uno::Reference< ov::excel::XRange > SAL_CALL getUsedRange() throw (css::uno::RuntimeException) ;
     virtual css::uno::Any SAL_CALL ChartObjects( const css::uno::Any& Index ) throw (css::uno::RuntimeException);
     virtual css::uno::Reference< ov::excel::XOutline > SAL_CALL Outline( ) throw (css::uno::RuntimeException);
@@ -98,6 +110,8 @@ public:
      virtual sal_Int16 SAL_CALL getIndex() throw (css::uno::RuntimeException);
      virtual sal_Int32 SAL_CALL getEnableSelection() throw (css::uno::RuntimeException);
      virtual void SAL_CALL setEnableSelection( sal_Int32 nSelection ) throw (css::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL getAutoFilterMode() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setAutoFilterMode( sal_Bool bAutoFilterMode ) throw (css::uno::RuntimeException);
 
     // Methods
     virtual void SAL_CALL Activate() throw (css::uno::RuntimeException);
@@ -120,9 +134,22 @@ public:
     virtual css::uno::Any SAL_CALL Evaluate( const ::rtl::OUString& Name ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL PivotTables( const css::uno::Any& Index ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL Comments( const css::uno::Any& Index ) throw (css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL Hyperlinks( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL Names( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException);
 
     virtual css::uno::Any SAL_CALL OLEObjects( const css::uno::Any& Index ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL Shapes( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException);
+
+    virtual css::uno::Any SAL_CALL Buttons( const css::uno::Any& rIndex ) throw (css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL CheckBoxes( const css::uno::Any& rIndex ) throw (css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL DropDowns( const css::uno::Any& rIndex ) throw (css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL GroupBoxes( const css::uno::Any& rIndex ) throw (css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL Labels( const css::uno::Any& rIndex ) throw (css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL ListBoxes( const css::uno::Any& rIndex ) throw (css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL OptionButtons( const css::uno::Any& rIndex ) throw (css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL ScrollBars( const css::uno::Any& rIndex ) throw (css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL Spinners( const css::uno::Any& rIndex ) throw (css::uno::RuntimeException);
+
     virtual void SAL_CALL setEnableCalculation( ::sal_Bool EnableCalculation ) throw ( css::script::BasicErrorException, css::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL getEnableCalculation(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
     virtual void SAL_CALL ShowDataForm(  ) throw (css::uno::RuntimeException);
@@ -135,7 +162,6 @@ public:
     virtual ::sal_Bool SAL_CALL hasProperty( const ::rtl::OUString& aName ) throw (css::uno::RuntimeException);
     // CodeName
     virtual rtl::OUString SAL_CALL getCodeName() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setCodeName( const rtl::OUString& sCodeName ) throw (css::uno::RuntimeException);
     sal_Int16 getSheetID() throw (css::uno::RuntimeException);
 
     virtual void SAL_CALL PrintOut( const css::uno::Any& From, const css::uno::Any& To, const css::uno::Any& Copies, const css::uno::Any& Preview, const css::uno::Any& ActivePrinter, const css::uno::Any& PrintToFile, const css::uno::Any& Collate, const css::uno::Any& PrToFileName, const css::uno::Any& IgnorePrintAreas ) throw (css::uno::RuntimeException);

@@ -372,68 +372,6 @@ void ScModule::DeleteCfg()
 }
 
 //------------------------------------------------------------------
-
-#define TEXT_WIDTH(s)   rStatusBar.GetTextWidth((s))
-
-void ScModule::FillStatusBar(StatusBar& rStatusBar)
-{
-    // Dokumentposition (Tabelle x / y)
-    rStatusBar.InsertItem( SID_STATUS_DOCPOS,
-                            TEXT_WIDTH( String().Fill( 10, 'X' ) ),
-                            SIB_LEFT|SIB_AUTOSIZE );
-    rStatusBar.SetHelpId( SID_STATUS_DOCPOS, SID_STATUS_DOCPOS );
-
-    // Seitenvorlage
-    rStatusBar.InsertItem( SID_STATUS_PAGESTYLE,
-                            TEXT_WIDTH( String().Fill( 15, 'X' ) ),
-                            SIB_LEFT|SIB_AUTOSIZE );
-    rStatusBar.SetHelpId( SID_STATUS_PAGESTYLE, SID_STATUS_PAGESTYLE );
-
-    // Einfuege-/Ueberschreibmodus
-    rStatusBar.InsertItem( SID_ATTR_INSERT,
-                            SvxInsertStatusBarControl::GetDefItemWidth(rStatusBar),
-                            SIB_CENTER );
-    rStatusBar.SetHelpId( SID_ATTR_INSERT, SID_ATTR_INSERT );
-
-    // Selektionsmodus
-    rStatusBar.InsertItem( SID_STATUS_SELMODE,
-                            SvxSelectionModeControl::GetDefItemWidth(rStatusBar),
-                            SIB_CENTER );
-    rStatusBar.SetHelpId( SID_STATUS_SELMODE, SID_STATUS_SELMODE );
-
-    // Dokument geaendert
-    rStatusBar.InsertItem( SID_DOC_MODIFIED,
-                            SvxModifyControl::GetDefItemWidth(rStatusBar));
-
-    // signatures
-    rStatusBar.InsertItem( SID_SIGNATURE, XmlSecStatusBarControl::GetDefItemWidth( rStatusBar ), SIB_USERDRAW );
-    rStatusBar.SetHelpId(SID_SIGNATURE, SID_SIGNATURE);
-
-
-    rStatusBar.SetHelpId( SID_DOC_MODIFIED, SID_DOC_MODIFIED );
-
-    // den aktuellen Kontext anzeigen Uhrzeit / FramePos / TabellenInfo / Errors
-    rStatusBar.InsertItem( SID_ATTR_SIZE,
-                            SvxPosSizeStatusBarControl::GetDefItemWidth(rStatusBar),
-                            SIB_AUTOSIZE|SIB_LEFT|SIB_USERDRAW);
-    rStatusBar.SetHelpId( SID_ATTR_SIZE, SID_ATTR_SIZE );
-
-    // Ma"sstab
-    rStatusBar.InsertItem( SID_ATTR_ZOOM,
-        SvxZoomStatusBarControl::GetDefItemWidth(rStatusBar),
-        SIB_CENTER );
-    rStatusBar.SetHelpId( SID_ATTR_ZOOM, SID_ATTR_ZOOM );
-
-    // ZoomSlider
-    rStatusBar.InsertItem( SID_ATTR_ZOOMSLIDER,
-        TEXT_WIDTH( String().Fill( 15, 'X' ) ),
-        SIB_CENTER );
-    rStatusBar.SetHelpId( SID_ATTR_ZOOMSLIDER, SID_ATTR_ZOOMSLIDER );
-}
-
-#undef TEXT_WIDTH
-
-//------------------------------------------------------------------
 //
 //      von der Applikation verschoben:
 //
@@ -1908,21 +1846,19 @@ IMPL_LINK( ScModule, IdleHandler, Timer*, EMPTYARG )
     if ( pDocSh )
     {
         ScDocument* pDoc = pDocSh->GetDocument();
-        if ( pDoc->IsLoadingDone() )
-        {
-            BOOL bLinks = pDoc->IdleCheckLinks();
-            BOOL bWidth = pDoc->IdleCalcTextWidth();
-            BOOL bSpell = pDoc->ContinueOnlineSpelling();
-            if ( bSpell )
-                aSpellTimer.Start();                    // da ist noch was
 
-            bMore = bLinks || bWidth || bSpell;         // ueberhaupt noch was?
+        BOOL bLinks = pDoc->IdleCheckLinks();
+        BOOL bWidth = pDoc->IdleCalcTextWidth();
+        BOOL bSpell = pDoc->ContinueOnlineSpelling();
+        if ( bSpell )
+            aSpellTimer.Start();                    // da ist noch was
 
-            //  While calculating a Basic formula, a paint event may have occured,
-            //  so check the bNeedsRepaint flags for this document's views
-            if (bWidth)
-                lcl_CheckNeedsRepaint( pDocSh );
-        }
+        bMore = bLinks || bWidth || bSpell;         // ueberhaupt noch was?
+
+        //  While calculating a Basic formula, a paint event may have occured,
+        //  so check the bNeedsRepaint flags for this document's views
+        if (bWidth)
+            lcl_CheckNeedsRepaint( pDocSh );
     }
 
     ULONG nOldTime = aIdleTimer.GetTimeout();
@@ -2192,9 +2128,6 @@ IMPL_LINK( ScModule, CalcFieldValueHdl, EditFieldInfo*, pInfo )
     return 0;
 }
 
-
-
-//<!--Added by PengYunQuan for Validity Cell Range Picker
 BOOL ScModule::RegisterRefWindow( USHORT nSlotId, Window *pWnd )
 {
     std::list<Window*> & rlRefWindow = m_mapRefWindow[nSlotId];
@@ -2244,10 +2177,13 @@ BOOL  ScModule::IsAliveRefDlg( USHORT nSlotId, Window *pWnd )
 
 Window *  ScModule::Find1RefWindow( USHORT nSlotId, Window *pWndAncestor )
 {
+    if (!pWndAncestor)
+        return NULL;
+
     std::map<USHORT, std::list<Window*> >::iterator iSlot = m_mapRefWindow.find( nSlotId );
 
     if( iSlot == m_mapRefWindow.end() )
-        return FALSE;
+        return NULL;
 
     std::list<Window*> & rlRefWindow = iSlot->second;
 
@@ -2262,6 +2198,9 @@ Window *  ScModule::Find1RefWindow( USHORT nSlotId, Window *pWndAncestor )
 
 Window *  ScModule::Find1RefWindow( Window *pWndAncestor )
 {
+    if (!pWndAncestor)
+        return NULL;
+
     while( Window *pParent = pWndAncestor->GetParent() ) pWndAncestor = pParent;
 
     for( std::map<USHORT, std::list<Window*> >::iterator i = m_mapRefWindow.begin();
@@ -2272,4 +2211,4 @@ Window *  ScModule::Find1RefWindow( Window *pWndAncestor )
 
     return NULL;
 }
-//<!--Added by PengYunQuan for Validity Cell Range Picker
+

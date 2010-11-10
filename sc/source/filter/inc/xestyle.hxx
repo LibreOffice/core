@@ -58,7 +58,8 @@ enum XclExpColorType
     EXC_COLOR_CHARTLINE,        /// Line in a chart.
     EXC_COLOR_CHARTAREA,        /// Area in a chart.
     EXC_COLOR_CTRLTEXT,         /// Text color in a form control.
-    EXC_COLOR_GRID              /// Spreadsheet grid color.
+    EXC_COLOR_GRID,              /// Spreadsheet grid color.
+    EXC_COLOR_TABBG             /// Spreadsheet tab bg color.
 };
 
 // ----------------------------------------------------------------------------
