@@ -179,7 +179,7 @@ void Process::SetImage( const String &aAppPath, const String &aAppParams, const 
 BOOL Process::Start()
 { // Start program
     BOOL bSuccess=FALSE;
-    if ( m_pProcess && !ImplIsRunning() )
+    if ( m_aProcessName.getLength() && !ImplIsRunning() )
     {
         bWasGPF = FALSE;
 #ifdef WNT
