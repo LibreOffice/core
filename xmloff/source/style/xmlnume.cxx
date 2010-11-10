@@ -489,6 +489,7 @@ void SvxXMLNumRuleExport::exportLevelStyle( INT32 nLevel,
             }
         }
 
+        {
             SvXMLElementExport aElement( GetExport(), XML_NAMESPACE_STYLE,
                                       XML_LIST_LEVEL_PROPERTIES, sal_True, sal_True );
 
@@ -539,6 +540,7 @@ void SvxXMLNumRuleExport::exportLevelStyle( INT32 nLevel,
                                              XML_LIST_LEVEL_LABEL_ALIGNMENT,
                                              sal_True, sal_True );
             }
+        }
 
         if( NumberingType::CHAR_SPECIAL == eType )
         {
