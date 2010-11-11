@@ -579,9 +579,7 @@ public:
     virtual void                TriggerHelpPI(
                                     sal_uInt16 nIdx1, sal_uInt16 nIdx2, sal_uInt16 nIdx3);
 
-    virtual Bitmap              GetStyleFamilyBitmap(SfxStyleFamily eFamily );
-
-    virtual Bitmap              GetStyleFamilyBitmap(SfxStyleFamily eFamily, BmpColorMode eColorMode );
+    virtual Bitmap              GetStyleFamilyBitmap(SfxStyleFamily eFamily);
 
     virtual sal_Bool            Insert( SfxObjectShell &rSource,
                                         sal_uInt16 nSourceIdx1,

@@ -465,7 +465,7 @@ void   SfxObjectShell::GetContent(String &rText,
             bCanDel=((pStyle->GetMask() & SFXSTYLEBIT_USERDEF)
                      == SFXSTYLEBIT_USERDEF);
             rClosedBitmap = rOpenedBitmap =
-                GetStyleFamilyBitmap(pStyle->GetFamily(), eColorMode );
+                GetStyleFamilyBitmap(pStyle->GetFamily());
         }
             break;
         case CONTENT_MACRO:
@@ -474,15 +474,8 @@ void   SfxObjectShell::GetContent(String &rText,
 }
 
 //--------------------------------------------------------------------
-Bitmap SfxObjectShell::GetStyleFamilyBitmap( SfxStyleFamily eFamily )
-{
-    DBG_ERRORFILE( "Non high contrast method called. Please update calling code!" );
-    return SfxObjectShell::GetStyleFamilyBitmap( eFamily, BMP_COLOR_NORMAL );
-}
 
-//--------------------------------------------------------------------
-
-Bitmap SfxObjectShell::GetStyleFamilyBitmap(SfxStyleFamily eFamily, BmpColorMode eColorMode )
+Bitmap SfxObjectShell::GetStyleFamilyBitmap(SfxStyleFamily eFamily)
 {
     USHORT nResId = 0;
     switch(eFamily)
