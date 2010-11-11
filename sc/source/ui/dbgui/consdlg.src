@@ -28,7 +28,7 @@
 ModelessDialog RID_SCDLG_CONSOLIDATE
 {
     OutputSize = TRUE ;
-    HelpId = SID_OPENDLG_CONSOLIDATE ;
+    HelpId = CMD_SID_OPENDLG_CONSOLIDATE ;
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 280 , 154 ) ;
@@ -37,6 +37,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
     Closeable = FALSE ;
     ListBox LB_FUNC
     {
+        HelpID = "sc:ListBox:RID_SCDLG_CONSOLIDATE:LB_FUNC";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 17 ) ;
         Size = MAP_APPFONT ( 212 , 90 ) ;
@@ -59,6 +60,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
     };
     Edit ED_DATA_AREA
     {
+        HelpID = "sc:Edit:RID_SCDLG_CONSOLIDATE:ED_DATA_AREA";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 100 , 106 ) ;
         Size = MAP_APPFONT ( 104 , 12 ) ;
@@ -66,6 +68,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
     };
     Edit ED_DEST_AREA
     {
+        HelpID = "sc:Edit:RID_SCDLG_CONSOLIDATE:ED_DEST_AREA";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 100 , 135 ) ;
         Size = MAP_APPFONT ( 104 , 12 ) ;
@@ -73,6 +76,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
     };
     ImageButton RB_DATA_AREA
     {
+        HelpID = "sc:ImageButton:RID_SCDLG_CONSOLIDATE:RB_DATA_AREA";
         Pos = MAP_APPFONT ( 206 , 105 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = TRUE ;
@@ -80,6 +84,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
     };
     ImageButton RB_DEST_AREA
     {
+        HelpID = "sc:ImageButton:RID_SCDLG_CONSOLIDATE:RB_DEST_AREA";
         Pos = MAP_APPFONT ( 206 , 134 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = TRUE ;
@@ -87,6 +92,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
     };
     ListBox LB_DATA_AREA
     {
+        HelpID = "sc:ListBox:RID_SCDLG_CONSOLIDATE:LB_DATA_AREA";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 106 ) ;
         Size = MAP_APPFONT ( 90 , 90 ) ;
@@ -95,6 +101,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
     };
     ListBox LB_DEST_AREA
     {
+        HelpID = "sc:ListBox:RID_SCDLG_CONSOLIDATE:LB_DEST_AREA";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 135 ) ;
         Size = MAP_APPFONT ( 90 , 90 ) ;
@@ -103,6 +110,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
     };
     MultiListBox LB_CONSAREAS
     {
+        HelpID = "sc:MultiListBox:RID_SCDLG_CONSOLIDATE:LB_CONSAREAS";
         SimpleMode = TRUE ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 46 ) ;
@@ -135,6 +143,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
     };
     CheckBox BTN_BYROW
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_CONSOLIDATE:BTN_BYROW";
         Pos = MAP_APPFONT ( 12 , 165 ) ;
         Size = MAP_APPFONT ( 94 , 10 ) ;
         Text [ en-US ] = "~Row labels" ;
@@ -142,6 +151,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
     };
     CheckBox BTN_BYCOL
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_CONSOLIDATE:BTN_BYCOL";
         Pos = MAP_APPFONT ( 12 , 179 ) ;
         Size = MAP_APPFONT ( 94 , 10 ) ;
         TabStop = TRUE ;
@@ -167,6 +177,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
     };
     CheckBox BTN_REFS
     {
+        HelpID = "sc:CheckBox:RID_SCDLG_CONSOLIDATE:BTN_REFS";
         Pos = MAP_APPFONT ( 121 , 165 ) ;
         Size = MAP_APPFONT ( 94 , 10 ) ;
         Text [ en-US ] = "~Link to source data" ;
@@ -193,6 +204,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
     };
     MoreButton BTN_MORE
     {
+        HelpID = "sc:MoreButton:RID_SCDLG_CONSOLIDATE:BTN_MORE";
         Pos = MAP_APPFONT ( 224 , 134 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
@@ -201,6 +213,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
     };
     PushButton BTN_REMOVE
     {
+        HelpID = "sc:PushButton:RID_SCDLG_CONSOLIDATE:BTN_REMOVE";
         Pos = MAP_APPFONT ( 224 , 114 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Delete" ;
@@ -208,6 +221,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
     };
     PushButton BTN_ADD
     {
+        HelpID = "sc:PushButton:RID_SCDLG_CONSOLIDATE:BTN_ADD";
         Pos = MAP_APPFONT ( 224 , 96 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Add" ;

@@ -25,7 +25,7 @@
  *
  ************************************************************************/
 
-package complex.dataPilot.interfaceTests.sheet;
+package complex.dataPilot;
 
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XIndexAccess;
@@ -34,11 +34,11 @@ import com.sun.star.sheet.DataPilotFieldOrientation;
 import com.sun.star.sheet.XDataPilotDescriptor;
 import com.sun.star.table.CellRangeAddress;
 import com.sun.star.uno.UnoRuntime;
-import lib.MultiMethodTest;
-import lib.Status;
+// import lib.MultiMethodTest;
+// import lib.Status;
 //import lib.StatusException;
 import lib.TestParameters;
-import share.LogWriter;
+// import share.LogWriter;
 
 /**
 * Testing <code>com.sun.star.sheet.XDataPilotDescriptor</code>
@@ -81,29 +81,29 @@ public class _XDataPilotDescriptor {
     /**
      * The log writer
      */
-    private LogWriter log = null;
+//    private LogWriter log = null;
 
     /**
      * Constructor: gets the object to test, a logger and the test parameters
      * @param xObj The test object
-     * @param log A log writer
      * @param param The test parameters
      */
-    public _XDataPilotDescriptor(XDataPilotDescriptor xObj,
-                                    LogWriter log, TestParameters param) {
+    public _XDataPilotDescriptor(XDataPilotDescriptor xObj/*,
+                                    LogWriter log*/, TestParameters param) {
         oObj = xObj;
-        this.log = log;
+        // this.log = log;
         this.param = param;
     }
 
     /**
     * Retrieves object relations.
-    * @throws StatusException If one of relations not found.
-    */
+
+     * @return
+     */
     public boolean before() {
         Integer amount = (Integer)param.get("FIELDSAMOUNT");
         if (amount == null) {
-            log.println("Relation 'FIELDSAMOUNT' not found");
+            System.out.println("Relation 'FIELDSAMOUNT' not found");
             return false;
         }
         tEnvFieldsAmount = amount.intValue();
@@ -118,7 +118,8 @@ public class _XDataPilotDescriptor {
     * <ul>
     *  <li> <code> setSourceRange() </code> : to have current source range </li>
     * </ul>
-    */
+     * @return
+     */
     public boolean _getSourceRange(){
 //        requiredMethod("setSourceRange()");
         boolean bResult = true;
@@ -144,7 +145,8 @@ public class _XDataPilotDescriptor {
     *  <li> <code> getHiddenFields() </code> </li>
     *  <li> <code> getPageFields() </code> </li>
     * </ul>
-    */
+     * @return
+     */
     public boolean _setSourceRange(){
 /*        executeMethod("getColumnFields()") ;
         executeMethod("getRowFields()") ;
@@ -167,7 +169,8 @@ public class _XDataPilotDescriptor {
     * <ul>
     *  <li> <code> setTag() </code> : to have current tag </li>
     * </ul>
-    */
+     * @return
+     */
     public boolean _getTag(){
 //        requiredMethod("setTag()");
         boolean bResult = true;
@@ -181,7 +184,8 @@ public class _XDataPilotDescriptor {
     /**
     * Test just calls the method. <p>
     * Has <b> OK </b> status if the method successfully returns. <p>
-    */
+     * @return
+     */
     public boolean _setTag(){
         oObj.setTag(sTag);
         return true;
@@ -195,22 +199,23 @@ public class _XDataPilotDescriptor {
     * Has <b> OK </b> status if returned value isn't null, number of fields
     * goten from returned value is less than number of fields obtained by relation
     * and no exceptions were thrown. <p>
-    */
+     * @return
+     */
     public boolean _getDataPilotFields(){
         boolean bResult = true;
         XIndexAccess IA = null;
 
         IA = oObj.getDataPilotFields();
         if (IA == null) {
-            log.println("Returned value is null.");
+            System.out.println("Returned value is null.");
             return false;
-        } else {log.println("getDataPilotFields returned not Null value -- OK");}
+        } else {System.out.println("getDataPilotFields returned not Null value -- OK");}
 
         fieldsAmount = IA.getCount();
         if (fieldsAmount < tEnvFieldsAmount) {
-            log.println("Number of fields is less than number goten by relation.");
+            System.out.println("Number of fields is less than number goten by relation.");
             return false;
-        } else {log.println("count of returned fields -- OK");}
+        } else {System.out.println("count of returned fields -- OK");}
 
         fieldsNames = new String[tEnvFieldsAmount];
         int i = -1 ;
@@ -220,24 +225,23 @@ public class _XDataPilotDescriptor {
             try {
                 field = IA.getByIndex(i);
             } catch(com.sun.star.lang.WrappedTargetException e) {
-                e.printStackTrace((java.io.PrintWriter)log);
+                e.printStackTrace();
                 return false;
             } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-                e.printStackTrace((java.io.PrintWriter)log);
+                e.printStackTrace();
                 return false;
             }
 
-            XNamed named = (XNamed)
-                UnoRuntime.queryInterface(XNamed.class, field);
+            XNamed named = UnoRuntime.queryInterface(XNamed.class, field);
             String name = named.getName();
 
-            log.println("Field : '" + name + "' ... ") ;
+            System.out.println("Field : '" + name + "' ... ") ;
 
             if (!name.equals("Data")) {
 
                 fieldsNames[cnt] = name ;
 
-                XPropertySet props = (XPropertySet)
+                XPropertySet props =
                     UnoRuntime.queryInterface(XPropertySet.class, field);
 
                 try {
@@ -245,44 +249,49 @@ public class _XDataPilotDescriptor {
                     case 0 :
                         props.setPropertyValue("Orientation",
                             DataPilotFieldOrientation.COLUMN);
-                        log.println("  Column") ;
+                        System.out.println("  Column") ;
                         break;
                     case 1 :
                         props.setPropertyValue("Orientation",
                             DataPilotFieldOrientation.ROW);
-                        log.println("  Row") ;
+                        System.out.println("  Row") ;
                         break;
                     case 2 :
                         props.setPropertyValue("Orientation",
                             DataPilotFieldOrientation.DATA);
-                        log.println("  Data") ;
+                        System.out.println("  Data") ;
                         break;
                     case 3 :
                         props.setPropertyValue("Orientation",
                             DataPilotFieldOrientation.HIDDEN);
-                        log.println("  Hidden") ;
+                        System.out.println("  Hidden") ;
                         break;
                     case 4 :
                         props.setPropertyValue("Orientation",
                             DataPilotFieldOrientation.PAGE);
-                        log.println("  Page") ;
+                        System.out.println("  Page") ;
                         props.setPropertyValue("CurrentPage", "20");
                         break;
                 } } catch (com.sun.star.lang.WrappedTargetException e) {
-                    e.printStackTrace((java.io.PrintWriter)log);
+                    e.printStackTrace();
                     return false;
                 } catch (com.sun.star.lang.IllegalArgumentException e) {
-                    e.printStackTrace((java.io.PrintWriter)log);
+                    e.printStackTrace();
                     return false;
                 } catch (com.sun.star.beans.PropertyVetoException e) {
-                    e.printStackTrace((java.io.PrintWriter)log);
+                    e.printStackTrace();
                     return false;
                 } catch (com.sun.star.beans.UnknownPropertyException e) {
-                    e.printStackTrace((java.io.PrintWriter)log);
+                    e.printStackTrace();
                     return false;
                 }
-                if (++cnt > 4) break;
-            } else {
+                if (++cnt > 4)
+                {
+                    break;
+                }
+            }
+            else
+            {
                 return false;
             }
         }
@@ -299,10 +308,11 @@ public class _XDataPilotDescriptor {
     * <ul>
     *  <li> <code> getDataPilotFields() </code> : to have array of field names </li>
     * </ul>
-    */
+     * @return
+     */
     public boolean _getColumnFields(){
 //        requiredMethod("getDataPilotFields()");
-        log.println("getColumnFields") ;
+        System.out.println("getColumnFields") ;
         XIndexAccess IA = oObj.getColumnFields();
         return CheckNames(IA, 0);
     }
@@ -316,10 +326,11 @@ public class _XDataPilotDescriptor {
     * <ul>
     *  <li> <code> getDataPilotFields() </code> : to have array of field names </li>
     * </ul>
-    */
+     * @return
+     */
     public boolean _getDataFields(){
 //        requiredMethod("getDataPilotFields()");
-        log.println("getDataFields") ;
+        System.out.println("getDataFields") ;
         XIndexAccess IA = oObj.getDataFields();
         return CheckNames(IA, 2);
     }
@@ -333,10 +344,11 @@ public class _XDataPilotDescriptor {
     * <ul>
     *  <li> <code> getDataPilotFields() </code> : to have array of field names </li>
     * </ul>
-    */
+     * @return
+     */
     public boolean _getHiddenFields(){
 //        requiredMethod("getDataPilotFields()");
-        log.println("getHiddenFields") ;
+        System.out.println("getHiddenFields") ;
         XIndexAccess IA = oObj.getHiddenFields();
         return CheckNames(IA, 3);
     }
@@ -350,10 +362,11 @@ public class _XDataPilotDescriptor {
     * <ul>
     *  <li> <code> getDataPilotFields() </code> : to have array of field names </li>
     * </ul>
-    */
+     * @return
+     */
     public boolean _getRowFields(){
 //        requiredMethod("getDataPilotFields()");
-        log.println("getRowFields") ;
+        System.out.println("getRowFields") ;
         XIndexAccess IA = oObj.getRowFields();
         boolean bResult = CheckNames(IA, 1);
         return bResult;
@@ -367,10 +380,11 @@ public class _XDataPilotDescriptor {
     * <ul>
     *  <li> <code> getDataPilotFields() </code> : to have array of field names </li>
     * </ul>
-    */
+     * @return
+     */
     public boolean _getPageFields(){
 //        requiredMethod("getDataPilotFields()");
-        log.println("getPageFields") ;
+        System.out.println("getPageFields") ;
         XIndexAccess IA = oObj.getPageFields();
         boolean bResult = CheckNames(IA, 4);
         return bResult;
@@ -380,7 +394,8 @@ public class _XDataPilotDescriptor {
     * Test calls the method and checks returned value. <p>
     * Has <b> OK </b> status if returned value isn't null
     * and no exceptions were thrown. <p>
-    */
+     * @return
+     */
     public boolean _getFilterDescriptor(){
         boolean bResult = oObj.getFilterDescriptor() != null;
         return bResult;
@@ -396,46 +411,46 @@ public class _XDataPilotDescriptor {
     * false otherwise
     * @see com.sun.star.container.XNamed
     */
-    boolean CheckNames(XIndexAccess IA, int rem) {
+    private boolean CheckNames(XIndexAccess IA, int rem) {
         String name = null;
 
         if (IA == null) {
-            log.println("Null retruned.") ;
+            System.out.println("Null retruned.") ;
             return false ;
         }
 
         if (fieldsNames[rem] == null) {
-            log.println("No fields were set to this orientation - cann't check result") ;
+            System.out.println("No fields were set to this orientation - cann't check result") ;
             return true ;
         }
 
         if (IA.getCount() == 0) {
-            log.println("No fields found. Must be at least '"
+            System.out.println("No fields found. Must be at least '"
                 + fieldsNames[rem] + "'") ;
             return false ;
         }
 
         try {
-            log.println("Fields returned ") ;
+            System.out.println("Fields returned ") ;
             for (int i = 0; i < IA.getCount(); i++) {
                 Object field = IA.getByIndex(i);
-                XNamed named = (XNamed)UnoRuntime.queryInterface
+                XNamed named = UnoRuntime.queryInterface
                     (XNamed.class, field);
                 name = named.getName();
-                log.println(" " + name) ;
+                System.out.println(" " + name) ;
                 if (fieldsNames[rem].equals(name)) {
-                    log.println(" - OK") ;
+                    System.out.println(" - OK") ;
                     return true ;
                 }
             }
         } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace((java.io.PrintWriter)log);
+            e.printStackTrace();
             return false ;
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace((java.io.PrintWriter)log);
+            e.printStackTrace();
             return false ;
         }
-        log.println(" - FAILED (field " + fieldsNames[rem] + " was not found.") ;
+        System.out.println(" - FAILED (field " + fieldsNames[rem] + " was not found.") ;
         return false ;
     }
 

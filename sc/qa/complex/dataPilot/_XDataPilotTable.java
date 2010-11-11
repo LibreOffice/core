@@ -25,16 +25,16 @@
  *
  ************************************************************************/
 
-package complex.dataPilot.interfaceTests.sheet;
+package complex.dataPilot;
 
 import com.sun.star.sheet.XDataPilotTable;
 import com.sun.star.table.CellAddress;
 import com.sun.star.table.CellRangeAddress;
 import com.sun.star.table.XCell;
-import lib.Status;
+// import lib.Status;
 //import lib.StatusException;
 import lib.TestParameters;
-import share.LogWriter;
+// import share.LogWriter;
 
 /**
 * Testing <code>com.sun.star.sheet.XDataPilotTable</code>
@@ -71,18 +71,18 @@ public class _XDataPilotTable {
     /**
      * The log writer
      */
-    private LogWriter log = null;
+    // private LogWriter log = null;
 
     /**
      * Constructor: gets the object to test, a logger and the test parameters
      * @param xObj The test object
-     * @param log A log writer
+
      * @param param The test parameters
      */
-    public _XDataPilotTable(XDataPilotTable xObj,
-                                    LogWriter log, TestParameters param) {
+    public _XDataPilotTable(XDataPilotTable xObj/*,
+                                    LogWriter log*/, TestParameters param) {
         oObj = xObj;
-        this.log = log;
+        // this.log = log;
         this.param = param;
     }
 
@@ -94,7 +94,7 @@ public class _XDataPilotTable {
 
         if (xCellForChange == null || OutputRange == null ||
                 xCellForCheck == null) {
-            log.println("Relation not found");
+            System.out.println("Relation not found");
             return false;
         }
         return true;
@@ -103,7 +103,8 @@ public class _XDataPilotTable {
     * Test calls the method and checks returned value using value obtained by
     * object relation <code>'OUTPUTRANGE'</code>. <p>
     * Has <b> OK </b> status if values are equal. <p>
-    */
+     * @return
+     */
     public boolean _getOutputRange(){
         boolean bResult = true;
         CellRangeAddress objRange = oObj.getOutputRange();
@@ -119,13 +120,14 @@ public class _XDataPilotTable {
     * relation 'CELLFORCHECK'.<p>
     * Has <b>OK</b> status if value of the cell obtained by object relation
     * 'CELLFORCHECK' is changed. <p>
-    */
+     * @return
+     */
     public boolean _refresh(){
         xCellForChange.setValue(changeValue);
         double oldData = xCellForCheck.getValue();
         oObj.refresh();
         double newData = xCellForCheck.getValue();
-        log.println("Old data:" + oldData + "; new data:" + newData);
+        System.out.println("Old data:" + oldData + "; new data:" + newData);
 
         return oldData != newData;
     }

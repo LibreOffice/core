@@ -27,7 +27,7 @@
 
 package complex.calcPreview;
 
-import complexlib.ComplexTestCase;
+// import complexlib.ComplexTestCase;
 
 import com.sun.star.awt.XWindow;
 import com.sun.star.container.XIndexAccess;
@@ -35,13 +35,13 @@ import com.sun.star.frame.XController;
 import com.sun.star.frame.XDispatch;
 import com.sun.star.frame.XDispatchProvider;
 import com.sun.star.frame.XModel;
-import com.sun.star.lang.XComponent;
+// import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sheet.XSpreadsheet;
-import com.sun.star.sheet.XSpreadsheetDocument;
+// import com.sun.star.sheet.XSpreadsheetDocument;
 import com.sun.star.sheet.XSpreadsheets;
 import com.sun.star.table.XCell;
-import com.sun.star.uno.Any;
+// import com.sun.star.uno.Any;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
@@ -59,7 +59,7 @@ import util.SOfficeFactory;
 import util.utils;
 
 import com.sun.star.beans.XPropertySet;
-import com.sun.star.beans.XPropertySetInfo;
+// import com.sun.star.beans.XPropertySetInfo;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.lang.XComponent;
 import com.sun.star.sheet.XHeaderFooterContent;
@@ -67,20 +67,30 @@ import com.sun.star.sheet.XSpreadsheetDocument;
 import com.sun.star.style.XStyle;
 import com.sun.star.style.XStyleFamiliesSupplier;
 import com.sun.star.text.XText;
-import com.sun.star.drawing.XDrawPageSupplier;
-import com.sun.star.drawing.XDrawPage;
-import com.sun.star.drawing.XShape;
-import com.sun.star.drawing.XShapes;
+// import com.sun.star.drawing.XDrawPageSupplier;
+// import com.sun.star.drawing.XDrawPage;
+// import com.sun.star.drawing.XShape;
+// import com.sun.star.drawing.XShapes;
 
 
-import com.sun.star.beans.Property;
-import com.sun.star.lang.XServiceInfo;
+// import com.sun.star.beans.Property;
+// import com.sun.star.lang.XServiceInfo;
+
+
+
+// import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.openoffice.test.OfficeConnection;
+import static org.junit.Assert.*;
 
 /**
  * A complex test for the preview of Calc documents. This complex test
  * needs interaction from the user: documents have to be resized and moved.
  */
-public class ViewForwarder extends ComplexTestCase {
+public class ViewForwarder {
 
     /** The MultiServiceFactory **/
     private XMultiServiceFactory mXMSF = null;
@@ -88,34 +98,40 @@ public class ViewForwarder extends ComplexTestCase {
     /** Get all test methods.
      * @return The test methods.
      */
-    public String[] getTestMethodNames() {
-        return new String[]{"checkPositiveViewForwarder",
-                            "checkNegativeViewForwarder",
-                            "checkPreviewHeaderCells",
-                            "checkPreviewShape"
-                            };
-    }
+//    public String[] getTestMethodNames() {
+//        return new String[]{"checkPositiveViewForwarder",
+//                            "checkNegativeViewForwarder",
+//                            "checkPreviewHeaderCells",
+//                            "checkPreviewShape"
+//                            };
+//    }
 
     /**
      * Get a MultiServiceFactory from the Office before the test.
      */
-    public void before() {
-        mXMSF = (XMultiServiceFactory)param.getMSF();
+    @Before public void before()
+    {
+        mXMSF = UnoRuntime.queryInterface(XMultiServiceFactory.class, connection.getComponentContext().getServiceManager());
+        // SOfficeFactory SOF = SOfficeFactory.getFactory(mXMSF);
+
+        // param = new TestParameters();
+        // param.put("ServiceFactory", xMsf);
+        // mXMSF = (XMultiServiceFactory)param.getMSF();
     }
 
 
     /** Create a spreadsheet document, insert some text, header and footer.
      * Let the user resize the document and check the contents.
      */
-    public void checkPositiveViewForwarder() {
+    @Test public void checkPositiveViewForwarder() {
         SOfficeFactory SOF = SOfficeFactory.getFactory( mXMSF );
         XSpreadsheetDocument xSpreadsheetDoc = null;
 
         try {
-            log.println("Creating a spreadsheet document");
+            System.out.println("Creating a spreadsheet document");
             xSpreadsheetDoc = SOF.createCalcDoc(null);
         } catch (com.sun.star.uno.Exception e) {
-            failed(e.getMessage());
+            fail(e.getMessage());
             return;
         }
 
@@ -125,7 +141,7 @@ public class ViewForwarder extends ComplexTestCase {
         XCell xCell = null;
         try {
             XSpreadsheets oSheets = xSpreadsheetDoc.getSheets() ;
-            XIndexAccess oIndexSheets = (XIndexAccess)
+            XIndexAccess oIndexSheets =
                 UnoRuntime.queryInterface(XIndexAccess.class, oSheets);
             Object o = oIndexSheets.getByIndex(0);
             XSpreadsheet oSheet = (XSpreadsheet)AnyConverter.toObject(
@@ -138,23 +154,23 @@ public class ViewForwarder extends ComplexTestCase {
             xCell = oSheet.getCellByPosition(0, 2) ;
             xCell.setFormula("Cell 2");
         } catch(com.sun.star.lang.IllegalArgumentException e) {
-            log.println("Exception ceating relation :");
-            failed(e.getMessage());
+            System.out.println("Exception ceating relation :");
+            fail(e.getMessage());
         } catch(com.sun.star.lang.WrappedTargetException e) {
-            log.println("Exception ceating relation :");
-            failed(e.getMessage());
+            System.out.println("Exception ceating relation :");
+            fail(e.getMessage());
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("Exception ceating relation :");
-            failed(e.getMessage());
+            System.out.println("Exception ceating relation :");
+            fail(e.getMessage());
         }
 
-        XModel aModel = (XModel)
+        XModel aModel =
             UnoRuntime.queryInterface(XModel.class, xSpreadsheetDoc);
 
         XController xController = aModel.getCurrentController();
 
         // get page styles
-        XStyleFamiliesSupplier StyleFam = (XStyleFamiliesSupplier)
+        XStyleFamiliesSupplier StyleFam =
             UnoRuntime.queryInterface(
                 XStyleFamiliesSupplier.class,
                 xSpreadsheetDoc );
@@ -170,17 +186,17 @@ public class ViewForwarder extends ComplexTestCase {
             StdStyle = (XStyle)AnyConverter.toObject(
                             new com.sun.star.uno.Type(XStyle.class), o);
         } catch(com.sun.star.lang.IllegalArgumentException e) {
-            failed(e.getMessage());
+            fail(e.getMessage());
         } catch(com.sun.star.lang.WrappedTargetException e){
-            failed(e.getMessage());
+            fail(e.getMessage());
             return;
         } catch(com.sun.star.container.NoSuchElementException e){
-            failed(e.getMessage());
+            fail(e.getMessage());
             return;
         }
 
         //get the property-set
-        final XPropertySet PropSet = (XPropertySet)
+        final XPropertySet PropSet =
             UnoRuntime.queryInterface(XPropertySet.class, StdStyle);
 
         XHeaderFooterContent RPHFC = null;
@@ -192,12 +208,12 @@ public class ViewForwarder extends ComplexTestCase {
                     new com.sun.star.uno.Type(XHeaderFooterContent.class), o);
 
         } catch(com.sun.star.lang.IllegalArgumentException e) {
-            failed(e.getMessage());
+            fail(e.getMessage());
         } catch(com.sun.star.lang.WrappedTargetException e){
-            failed(e.getMessage());
+            fail(e.getMessage());
             return;
         } catch(com.sun.star.beans.UnknownPropertyException e){
-            failed(e.getMessage());
+            fail(e.getMessage());
             return;
         }
 
@@ -218,12 +234,12 @@ public class ViewForwarder extends ComplexTestCase {
             RPHFC = (XHeaderFooterContent)AnyConverter.toObject(
                     new com.sun.star.uno.Type(XHeaderFooterContent.class), o);
         } catch(com.sun.star.lang.IllegalArgumentException e) {
-            failed(e.getMessage());
+            fail(e.getMessage());
         } catch(com.sun.star.lang.WrappedTargetException e){
-            failed(e.getMessage());
+            fail(e.getMessage());
             return;
         } catch(com.sun.star.beans.UnknownPropertyException e){
-            failed(e.getMessage());
+            fail(e.getMessage());
             return;
         }
 
@@ -239,9 +255,9 @@ public class ViewForwarder extends ComplexTestCase {
 
         // switching to 'Page Preview' mode
         try {
-            XDispatchProvider xDispProv = (XDispatchProvider)
+            XDispatchProvider xDispProv =
                 UnoRuntime.queryInterface(XDispatchProvider.class, xController);
-            XURLTransformer xParser = (com.sun.star.util.XURLTransformer)
+            XURLTransformer xParser =
                 UnoRuntime.queryInterface(XURLTransformer.class,
             mXMSF.createInstance("com.sun.star.util.URLTransformer"));
             // Because it's an in/out parameter we must use an
@@ -253,9 +269,11 @@ public class ViewForwarder extends ComplexTestCase {
             URL aURL = aParseURL[0];
             XDispatch xDispatcher = xDispProv.queryDispatch(aURL, "", 0);
             if(xDispatcher != null)
+            {
                 xDispatcher.dispatch( aURL, null );
+            }
         } catch (com.sun.star.uno.Exception e) {
-            failed("Couldn't change mode");
+            fail("Couldn't change mode");
             return;
         }
 
@@ -263,7 +281,7 @@ public class ViewForwarder extends ComplexTestCase {
             Thread.sleep(500);
         } catch (InterruptedException ex) {}
 
-        log.println("Press any key after resizing ");
+        System.out.println("Press any key after resizing ");
         try{
             byte[]b = new byte[16];
             System.in.read(b);
@@ -283,34 +301,34 @@ public class ViewForwarder extends ComplexTestCase {
                 (xRoot, AccessibleRole.HEADER, "").getAccessibleChild(0);
             oObj = parent.getAccessibleContext().getAccessibleChild(0);
         } catch (com.sun.star.lang.IndexOutOfBoundsException iabe) {
-            failed(iabe.getMessage());
+            fail(iabe.getMessage());
             return;
         }
 
-        log.println("ImplementationName " + utils.getImplName(oObj));
+        System.out.println("ImplementationName " + utils.getImplName(oObj));
 
-        XAccessibleComponent accPC = (XAccessibleComponent)
+        XAccessibleComponent accPC =
                 UnoRuntime.queryInterface(XAccessibleComponent.class, parent);
 
-        log.println("Parent-BoundsX= "+accPC.getBounds().X);
-        log.println("Parent-BoundsY= "+accPC.getBounds().Y);
-        log.println("Parent-BoundsWidth= "+accPC.getBounds().Width);
-        log.println("Parent-BoundsHeight= "+accPC.getBounds().Height);
+        System.out.println("Parent-BoundsX= "+accPC.getBounds().X);
+        System.out.println("Parent-BoundsY= "+accPC.getBounds().Y);
+        System.out.println("Parent-BoundsWidth= "+accPC.getBounds().Width);
+        System.out.println("Parent-BoundsHeight= "+accPC.getBounds().Height);
 
-        XAccessibleComponent accPPC = (XAccessibleComponent)
+        XAccessibleComponent accPPC =
                         UnoRuntime.queryInterface(XAccessibleComponent.class,
                         parent.getAccessibleContext().getAccessibleParent());
 
-        log.println("P-Parent-BoundsX= "+accPPC.getBounds().X);
-        log.println("P-Parent-BoundsY= "+accPPC.getBounds().Y);
-        log.println("P-Parent-BoundsWidth= "+accPPC.getBounds().Width);
-        log.println("P-Parent-BoundsHeight= "+accPPC.getBounds().Height);
+        System.out.println("P-Parent-BoundsX= "+accPPC.getBounds().X);
+        System.out.println("P-Parent-BoundsY= "+accPPC.getBounds().Y);
+        System.out.println("P-Parent-BoundsWidth= "+accPPC.getBounds().Width);
+        System.out.println("P-Parent-BoundsHeight= "+accPPC.getBounds().Height);
 
         try {
             Thread.sleep(500);
         } catch (InterruptedException ex) {}
 
-        log.println("Press any key when the second line is on top");
+        System.out.println("Press any key when the second line is on top");
         try{
             byte[]b = new byte[16];
             System.in.read(b);
@@ -319,46 +337,46 @@ public class ViewForwarder extends ComplexTestCase {
         }
 
         try {
-            log.println("ChildCount: "+
+            System.out.println("ChildCount: "+
                     parent.getAccessibleContext().getAccessibleChildCount());
-            log.println("Getting child 0 again");
+            System.out.println("Getting child 0 again");
             oObj = parent.getAccessibleContext().getAccessibleChild(0);
         } catch (com.sun.star.lang.IndexOutOfBoundsException iabe) {
-            failed(iabe.getMessage());
+            fail(iabe.getMessage());
             return;
         }
 
-        XAccessibleText accT = (XAccessibleText)
+        XAccessibleText accT =
                 UnoRuntime.queryInterface(XAccessibleText.class, oObj);
-        log.println("Getting the text: "+accT.getText());
+        System.out.println("Getting the text: "+accT.getText());
 
-        XAccessibleComponent accC = (XAccessibleComponent)
+        XAccessibleComponent accC =
                 UnoRuntime.queryInterface(XAccessibleComponent.class, oObj);
-        log.println("BoundsX= "+accC.getBounds().X);
-        log.println("BoundsY= "+accC.getBounds().Y);
-        log.println("BoundsWidth= "+accC.getBounds().Width);
-        log.println("BoundsHeight= "+accC.getBounds().Height);
+        System.out.println("BoundsX= "+accC.getBounds().X);
+        System.out.println("BoundsY= "+accC.getBounds().Y);
+        System.out.println("BoundsWidth= "+accC.getBounds().Width);
+        System.out.println("BoundsHeight= "+accC.getBounds().Height);
 
-        accPC = (XAccessibleComponent)
+        accPC =
                 UnoRuntime.queryInterface(XAccessibleComponent.class, parent);
 
-        log.println("Parent-BoundsX= "+accPC.getBounds().X);
-        log.println("Parent-BoundsY= "+accPC.getBounds().Y);
-        log.println("Parent-BoundsWidth= "+accPC.getBounds().Width);
-        log.println("Parent-BoundsHeight= "+accPC.getBounds().Height);
+        System.out.println("Parent-BoundsX= "+accPC.getBounds().X);
+        System.out.println("Parent-BoundsY= "+accPC.getBounds().Y);
+        System.out.println("Parent-BoundsWidth= "+accPC.getBounds().Width);
+        System.out.println("Parent-BoundsHeight= "+accPC.getBounds().Height);
 
-        accPPC = (XAccessibleComponent)
+        accPPC =
         UnoRuntime.queryInterface(XAccessibleComponent.class,
                         parent.getAccessibleContext().getAccessibleParent());
 
-        log.println("P-Parent-BoundsX= "+accPPC.getBounds().X);
-        log.println("P-Parent-BoundsY= "+accPPC.getBounds().Y);
-        log.println("P-Parent-BoundsWidth= "+accPPC.getBounds().Width);
-        log.println("P-Parent-BoundsHeight= "+accPPC.getBounds().Height);
+        System.out.println("P-Parent-BoundsX= "+accPPC.getBounds().X);
+        System.out.println("P-Parent-BoundsY= "+accPPC.getBounds().Y);
+        System.out.println("P-Parent-BoundsWidth= "+accPPC.getBounds().Width);
+        System.out.println("P-Parent-BoundsHeight= "+accPPC.getBounds().Height);
 
 
 
-        log.println("Press any key when the footer is visible.");
+        System.out.println("Press any key when the footer is visible.");
         try{
             byte[]b = new byte[16];
             System.in.read(b);
@@ -370,53 +388,53 @@ public class ViewForwarder extends ComplexTestCase {
             parent = at.getAccessibleObjectForRole
                 (xRoot, AccessibleRole.FOOTER, "").getAccessibleChild(0);
         } catch (com.sun.star.lang.IndexOutOfBoundsException iabe) {
-            failed(iabe.getMessage());
+            fail(iabe.getMessage());
             return;
         }
 
-        accPC = (XAccessibleComponent)
+        accPC =
                 UnoRuntime.queryInterface(XAccessibleComponent.class, parent);
 
         try {
-            log.println("ChildCount: "+
+            System.out.println("ChildCount: "+
                     parent.getAccessibleContext().getAccessibleChildCount());
-            log.println("Getting child 0 again");
+            System.out.println("Getting child 0 again");
             oObj = parent.getAccessibleContext().getAccessibleChild(0);
         } catch (com.sun.star.lang.IndexOutOfBoundsException iabe) {
-            failed(iabe.getMessage());
+            fail(iabe.getMessage());
             return;
         }
 
-        accT = (XAccessibleText)
+        accT =
                 UnoRuntime.queryInterface(XAccessibleText.class, oObj);
-        log.println("Getting the text: "+accT.getText());
+        System.out.println("Getting the text: "+accT.getText());
 
-        accC = (XAccessibleComponent)
+        accC =
                 UnoRuntime.queryInterface(XAccessibleComponent.class, oObj);
-        log.println("BoundsX= "+accC.getBounds().X);
-        log.println("BoundsY= "+accC.getBounds().Y);
-        log.println("BoundsWidth= "+accC.getBounds().Width);
-        log.println("BoundsHeight= "+accC.getBounds().Height);
+        System.out.println("BoundsX= "+accC.getBounds().X);
+        System.out.println("BoundsY= "+accC.getBounds().Y);
+        System.out.println("BoundsWidth= "+accC.getBounds().Width);
+        System.out.println("BoundsHeight= "+accC.getBounds().Height);
 
-        accPC = (XAccessibleComponent)
+        accPC =
                 UnoRuntime.queryInterface(XAccessibleComponent.class, parent);
 
-        log.println("Parent-BoundsX= "+accPC.getBounds().X);
-        log.println("Parent-BoundsY= "+accPC.getBounds().Y);
-        log.println("Parent-BoundsWidth= "+accPC.getBounds().Width);
-        log.println("Parent-BoundsHeight= "+accPC.getBounds().Height);
+        System.out.println("Parent-BoundsX= "+accPC.getBounds().X);
+        System.out.println("Parent-BoundsY= "+accPC.getBounds().Y);
+        System.out.println("Parent-BoundsWidth= "+accPC.getBounds().Width);
+        System.out.println("Parent-BoundsHeight= "+accPC.getBounds().Height);
 
-        accPPC = (XAccessibleComponent)
+        accPPC =
         UnoRuntime.queryInterface(XAccessibleComponent.class,
                         parent.getAccessibleContext().getAccessibleParent());
 
-        log.println("P-Parent-BoundsX= "+accPPC.getBounds().X);
-        log.println("P-Parent-BoundsY= "+accPPC.getBounds().Y);
-        log.println("P-Parent-BoundsWidth= "+accPPC.getBounds().Width);
-        log.println("P-Parent-BoundsHeight= "+accPPC.getBounds().Height);
+        System.out.println("P-Parent-BoundsX= "+accPPC.getBounds().X);
+        System.out.println("P-Parent-BoundsY= "+accPPC.getBounds().Y);
+        System.out.println("P-Parent-BoundsWidth= "+accPPC.getBounds().Width);
+        System.out.println("P-Parent-BoundsHeight= "+accPPC.getBounds().Height);
 
 
-        log.println("Press any key when the page content is on top");
+        System.out.println("Press any key when the page content is on top");
         try{
             byte[]b = new byte[16];
             System.in.read(b);
@@ -428,22 +446,22 @@ public class ViewForwarder extends ComplexTestCase {
             parent = at.getAccessibleObjectForRole
                 (xRoot, AccessibleRole.DOCUMENT, "").getAccessibleChild(0);
         } catch (com.sun.star.lang.IndexOutOfBoundsException iabe) {
-            failed(iabe.getMessage());
+            fail(iabe.getMessage());
             return;
         }
         System.out.println("PARENT: " + parent.getAccessibleContext().getAccessibleName());
-        accPC = (XAccessibleComponent)
+        accPC =
                 UnoRuntime.queryInterface(XAccessibleComponent.class, parent);
 
         int cCount = 0;
         try {
             cCount =
                parent.getAccessibleContext().getAccessibleChildCount();
-            log.println("ChildCount: "+cCount);
-            log.println("Getting child 0 again");
+            System.out.println("ChildCount: "+cCount);
+            System.out.println("Getting child 0 again");
             oObj = parent.getAccessibleContext().getAccessibleChild(0);
         } catch (com.sun.star.lang.IndexOutOfBoundsException iabe) {
-            failed(iabe.getMessage());
+            fail(iabe.getMessage());
             return;
         }
 
@@ -452,7 +470,7 @@ public class ViewForwarder extends ComplexTestCase {
                 XAccessible xA = parent.getAccessibleContext().getAccessibleChild(i);
                 System.out.println("NAME object " + i + ": " + xA.getAccessibleContext().getAccessibleName());
             } catch (com.sun.star.lang.IndexOutOfBoundsException iabe) {
-                failed(iabe.getMessage());
+                fail(iabe.getMessage());
                 return;
             }
         }
@@ -460,43 +478,47 @@ public class ViewForwarder extends ComplexTestCase {
         System.out.println("SERVICES:");
         util.dbg.getSuppServices(oObj);
 
-        XAccessibleValue accV = (XAccessibleValue)
+        XAccessibleValue accV =
                 UnoRuntime.queryInterface(XAccessibleValue.class, oObj);
         Object o = accV.getCurrentValue();
         if (o instanceof String)
+        {
             System.out.println("Value: " + (String)o);
+        }
         else
+        {
             System.out.println("Name of Object: " + o.getClass().getName());
-        log.println("Getting the value: "+accV.getCurrentValue());
+        }
+        System.out.println("Getting the value: "+accV.getCurrentValue());
 
 
 
 
-        accC = (XAccessibleComponent)
+        accC =
                 UnoRuntime.queryInterface(XAccessibleComponent.class, oObj);
-        log.println("BoundsX= "+accC.getBounds().X);
-        log.println("BoundsY= "+accC.getBounds().Y);
-        log.println("BoundsWidth= "+accC.getBounds().Width);
-        log.println("BoundsHeight= "+accC.getBounds().Height);
+        System.out.println("BoundsX= "+accC.getBounds().X);
+        System.out.println("BoundsY= "+accC.getBounds().Y);
+        System.out.println("BoundsWidth= "+accC.getBounds().Width);
+        System.out.println("BoundsHeight= "+accC.getBounds().Height);
 
-        accPC = (XAccessibleComponent)
+        accPC =
                 UnoRuntime.queryInterface(XAccessibleComponent.class, parent);
 
-        log.println("Parent-BoundsX= "+accPC.getBounds().X);
-        log.println("Parent-BoundsY= "+accPC.getBounds().Y);
-        log.println("Parent-BoundsWidth= "+accPC.getBounds().Width);
-        log.println("Parent-BoundsHeight= "+accPC.getBounds().Height);
+        System.out.println("Parent-BoundsX= "+accPC.getBounds().X);
+        System.out.println("Parent-BoundsY= "+accPC.getBounds().Y);
+        System.out.println("Parent-BoundsWidth= "+accPC.getBounds().Width);
+        System.out.println("Parent-BoundsHeight= "+accPC.getBounds().Height);
 
-        accPPC = (XAccessibleComponent)
+        accPPC =
                 UnoRuntime.queryInterface(XAccessibleComponent.class,
                         parent.getAccessibleContext().getAccessibleParent());
 
-        log.println("P-Parent-BoundsX= "+accPPC.getBounds().X);
-        log.println("P-Parent-BoundsY= "+accPPC.getBounds().Y);
-        log.println("P-Parent-BoundsWidth= "+accPPC.getBounds().Width);
-        log.println("P-Parent-BoundsHeight= "+accPPC.getBounds().Height);
+        System.out.println("P-Parent-BoundsX= "+accPPC.getBounds().X);
+        System.out.println("P-Parent-BoundsY= "+accPPC.getBounds().Y);
+        System.out.println("P-Parent-BoundsWidth= "+accPPC.getBounds().Width);
+        System.out.println("P-Parent-BoundsHeight= "+accPPC.getBounds().Height);
 
-        XComponent xComp = (XComponent)UnoRuntime.queryInterface(
+        XComponent xComp = UnoRuntime.queryInterface(
                                     XComponent.class, xSpreadsheetDoc);
         xComp.dispose();
     }
@@ -512,15 +534,15 @@ public class ViewForwarder extends ComplexTestCase {
      * Create a spreadsheet document, insert some text, header and footer.
      * Let the user resize the document and check the contents.
      */
-    public void checkNegativeViewForwarder() {
+    @Test public void checkNegativeViewForwarder() {
         SOfficeFactory SOF = SOfficeFactory.getFactory( mXMSF );
         XSpreadsheetDocument xSpreadsheetDoc = null;
 
         try {
-            log.println("Creating a spreadsheet document");
+            System.out.println("Creating a spreadsheet document");
             xSpreadsheetDoc = SOF.createCalcDoc(null);
         } catch (com.sun.star.uno.Exception e) {
-            failed(e.getMessage());
+            fail(e.getMessage());
             return;
         }
 
@@ -530,7 +552,7 @@ public class ViewForwarder extends ComplexTestCase {
         XCell xCell = null;
         try {
             XSpreadsheets oSheets = xSpreadsheetDoc.getSheets() ;
-            XIndexAccess oIndexSheets = (XIndexAccess)
+            XIndexAccess oIndexSheets =
                 UnoRuntime.queryInterface(XIndexAccess.class, oSheets);
             Object o = oIndexSheets.getByIndex(0);
             XSpreadsheet oSheet = (XSpreadsheet)AnyConverter.toObject(
@@ -543,23 +565,23 @@ public class ViewForwarder extends ComplexTestCase {
             xCell = oSheet.getCellByPosition(0, 2) ;
             xCell.setFormula("Cell 2");
         } catch(com.sun.star.lang.IllegalArgumentException e) {
-            log.println("Exception ceating relation :");
-            failed(e.getMessage());
+            System.out.println("Exception ceating relation :");
+            fail(e.getMessage());
         } catch(com.sun.star.lang.WrappedTargetException e) {
-            log.println("Exception ceating relation :");
-            failed(e.getMessage());
+            System.out.println("Exception ceating relation :");
+            fail(e.getMessage());
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("Exception ceating relation :");
-            failed(e.getMessage());
+            System.out.println("Exception ceating relation :");
+            fail(e.getMessage());
         }
 
-        XModel aModel = (XModel)
+        XModel aModel =
             UnoRuntime.queryInterface(XModel.class, xSpreadsheetDoc);
 
         XController xController = aModel.getCurrentController();
 
         // get page styles
-        XStyleFamiliesSupplier StyleFam = (XStyleFamiliesSupplier)
+        XStyleFamiliesSupplier StyleFam =
             UnoRuntime.queryInterface(
                 XStyleFamiliesSupplier.class,
                 xSpreadsheetDoc );
@@ -575,34 +597,34 @@ public class ViewForwarder extends ComplexTestCase {
             StdStyle = (XStyle)AnyConverter.toObject(
                             new com.sun.star.uno.Type(XStyle.class), o);
         } catch(com.sun.star.lang.IllegalArgumentException e) {
-            failed(e.getMessage());
+            fail(e.getMessage());
         } catch(com.sun.star.lang.WrappedTargetException e){
-            failed(e.getMessage());
+            fail(e.getMessage());
             return;
         } catch(com.sun.star.container.NoSuchElementException e){
-            failed(e.getMessage());
+            fail(e.getMessage());
             return;
         }
 
         //get the property-set
-        final XPropertySet PropSet = (XPropertySet)
+        final XPropertySet PropSet =
             UnoRuntime.queryInterface(XPropertySet.class, StdStyle);
 
         XHeaderFooterContent RPHFC = null;
 
         // get the header
-        log.println( "Creating a test environment" );
+        System.out.println( "Creating a test environment" );
         try {
             Object o = PropSet.getPropertyValue("RightPageHeaderContent");
             RPHFC = (XHeaderFooterContent)AnyConverter.toObject(
                     new com.sun.star.uno.Type(XHeaderFooterContent.class), o);
         } catch(com.sun.star.lang.IllegalArgumentException e) {
-            failed(e.getMessage());
+            fail(e.getMessage());
         } catch(com.sun.star.lang.WrappedTargetException e){
-            failed(e.getMessage());
+            fail(e.getMessage());
             return;
         } catch(com.sun.star.beans.UnknownPropertyException e){
-            failed(e.getMessage());
+            fail(e.getMessage());
             return;
         }
 
@@ -623,12 +645,12 @@ public class ViewForwarder extends ComplexTestCase {
             RPHFC = (XHeaderFooterContent)AnyConverter.toObject(
                     new com.sun.star.uno.Type(XHeaderFooterContent.class), o);
         } catch(com.sun.star.lang.IllegalArgumentException e) {
-            failed(e.getMessage());
+            fail(e.getMessage());
         } catch(com.sun.star.lang.WrappedTargetException e){
-            failed(e.getMessage());
+            fail(e.getMessage());
             return;
         } catch(com.sun.star.beans.UnknownPropertyException e){
-            failed(e.getMessage());
+            fail(e.getMessage());
             return;
         }
 
@@ -644,9 +666,9 @@ public class ViewForwarder extends ComplexTestCase {
 
         // switching to 'Page Preview' mode
         try {
-            XDispatchProvider xDispProv = (XDispatchProvider)
+            XDispatchProvider xDispProv =
                 UnoRuntime.queryInterface(XDispatchProvider.class, xController);
-            XURLTransformer xParser = (com.sun.star.util.XURLTransformer)
+            XURLTransformer xParser =
                 UnoRuntime.queryInterface(XURLTransformer.class,
             mXMSF.createInstance("com.sun.star.util.URLTransformer"));
             // Because it's an in/out parameter we must use an
@@ -658,9 +680,11 @@ public class ViewForwarder extends ComplexTestCase {
             URL aURL = aParseURL[0];
             XDispatch xDispatcher = xDispProv.queryDispatch(aURL, "", 0);
             if(xDispatcher != null)
+            {
                 xDispatcher.dispatch( aURL, null );
+            }
         } catch (com.sun.star.uno.Exception e) {
-            failed("Couldn't change mode");
+            fail("Couldn't change mode");
             return;
         }
 
@@ -668,7 +692,7 @@ public class ViewForwarder extends ComplexTestCase {
             Thread.sleep(500);
         } catch (InterruptedException ex) {}
 
-        log.println("Press any key after resizing ");
+        System.out.println("Press any key after resizing ");
         try{
             byte[]b = new byte[16];
             System.in.read(b);
@@ -688,34 +712,34 @@ public class ViewForwarder extends ComplexTestCase {
                 (xRoot, AccessibleRole.HEADER, "").getAccessibleChild(0);
             oObj = parent.getAccessibleContext().getAccessibleChild(0);
         } catch (com.sun.star.lang.IndexOutOfBoundsException iabe) {
-            failed(iabe.getMessage());
+            fail(iabe.getMessage());
             return;
         }
 
-        log.println("ImplementationName " + utils.getImplName(oObj));
+        System.out.println("ImplementationName " + utils.getImplName(oObj));
 
-        XAccessibleComponent accPC = (XAccessibleComponent)
+        XAccessibleComponent accPC =
                 UnoRuntime.queryInterface(XAccessibleComponent.class, parent);
 
-        log.println("Parent-BoundsX= "+accPC.getBounds().X);
-        log.println("Parent-BoundsY= "+accPC.getBounds().Y);
-        log.println("Parent-BoundsWidth= "+accPC.getBounds().Width);
-        log.println("Parent-BoundsHeight= "+accPC.getBounds().Height);
+        System.out.println("Parent-BoundsX= "+accPC.getBounds().X);
+        System.out.println("Parent-BoundsY= "+accPC.getBounds().Y);
+        System.out.println("Parent-BoundsWidth= "+accPC.getBounds().Width);
+        System.out.println("Parent-BoundsHeight= "+accPC.getBounds().Height);
 
-        XAccessibleComponent accPPC = (XAccessibleComponent)
+        XAccessibleComponent accPPC =
                         UnoRuntime.queryInterface(XAccessibleComponent.class,
                         parent.getAccessibleContext().getAccessibleParent());
 
-        log.println("P-Parent-BoundsX= "+accPPC.getBounds().X);
-        log.println("P-Parent-BoundsY= "+accPPC.getBounds().Y);
-        log.println("P-Parent-BoundsWidth= "+accPPC.getBounds().Width);
-        log.println("P-Parent-BoundsHeight= "+accPPC.getBounds().Height);
+        System.out.println("P-Parent-BoundsX= "+accPPC.getBounds().X);
+        System.out.println("P-Parent-BoundsY= "+accPPC.getBounds().Y);
+        System.out.println("P-Parent-BoundsWidth= "+accPPC.getBounds().Width);
+        System.out.println("P-Parent-BoundsHeight= "+accPPC.getBounds().Height);
 
         try {
             Thread.sleep(500);
         } catch (InterruptedException ex) {}
 
-        log.println("Press any key when the header is not visible.");
+        System.out.println("Press any key when the header is not visible.");
         try{
             byte[]b = new byte[16];
             System.in.read(b);
@@ -726,24 +750,26 @@ public class ViewForwarder extends ComplexTestCase {
         int childCount = 0;
         childCount =
                 parent.getAccessibleContext().getAccessibleChildCount();
-        log.println("ChildCount: "+childCount);
+        System.out.println("ChildCount: "+childCount);
 
         if (childCount != 0)
-            failed("Could access header although it was not visible on page.");
+        {
+            fail("Could access header although it was not visible on page.");
+        }
 
 
         try {
             parent = at.getAccessibleObjectForRole
                 (xRoot, AccessibleRole.FOOTER, "").getAccessibleChild(0);
         } catch (com.sun.star.lang.IndexOutOfBoundsException iabe) {
-            failed(iabe.getMessage());
+            fail(iabe.getMessage());
             return;
         }
 
-        accPC = (XAccessibleComponent)
+        accPC =
                 UnoRuntime.queryInterface(XAccessibleComponent.class, parent);
 
-        log.println("Press any key when the footer is not visible.");
+        System.out.println("Press any key when the footer is not visible.");
         try{
             byte[]b = new byte[16];
             System.in.read(b);
@@ -753,12 +779,14 @@ public class ViewForwarder extends ComplexTestCase {
 
         childCount =
                 parent.getAccessibleContext().getAccessibleChildCount();
-        log.println("ChildCount: "+childCount);
+        System.out.println("ChildCount: "+childCount);
 
         if (childCount != 0)
-            failed("Could access footer although it was not visible on page.");
+        {
+            fail("Could access footer although it was not visible on page.");
+        }
 
-        XComponent xComp = (XComponent)UnoRuntime.queryInterface(
+        XComponent xComp =UnoRuntime.queryInterface(
                                         XComponent.class, xSpreadsheetDoc);
         xComp.dispose();
 
@@ -770,21 +798,21 @@ public class ViewForwarder extends ComplexTestCase {
     /**
      * Check the preview of header cells
      */
-    public void checkPreviewHeaderCells() {
+    @Test public void checkPreviewHeaderCells() {
 
         XInterface oObj = null;
         SOfficeFactory SOF = SOfficeFactory.getFactory( mXMSF);
         XSpreadsheetDocument xSpreadsheetDoc = null;
 
         try {
-            log.println("Creating a spreadsheet document");
+            System.out.println("Creating a spreadsheet document");
             xSpreadsheetDoc = SOF.createCalcDoc(null);
         } catch (com.sun.star.uno.Exception e) {
-            failed(e.getMessage());
+            fail(e.getMessage());
             return;
         }
 
-        XModel xModel = (XModel)
+        XModel xModel =
             UnoRuntime.queryInterface(XModel.class, xSpreadsheetDoc);
 
         XController xController = xModel.getCurrentController();
@@ -792,70 +820,70 @@ public class ViewForwarder extends ComplexTestCase {
         //setting value of cell A1
         XCell xCell = null;
         try {
-            log.println("Getting spreadsheet") ;
+            System.out.println("Getting spreadsheet") ;
             XSpreadsheets oSheets = xSpreadsheetDoc.getSheets() ;
-            XIndexAccess oIndexSheets = (XIndexAccess)
+            XIndexAccess oIndexSheets =
             UnoRuntime.queryInterface(XIndexAccess.class, oSheets);
             Object o = oIndexSheets.getByIndex(0);
             XSpreadsheet oSheet = (XSpreadsheet)AnyConverter.toObject(
                             new com.sun.star.uno.Type(XSpreadsheet.class), o);
 
-            log.println("Getting a cell from sheet") ;
+            System.out.println("Getting a cell from sheet") ;
             xCell = oSheet.getCellByPosition(0, 0);
         } catch(com.sun.star.lang.IllegalArgumentException e) {
-            failed(e.getMessage());
+            fail(e.getMessage());
         } catch (com.sun.star.lang.WrappedTargetException e) {
-            failed(e.getMessage());
+            fail(e.getMessage());
             return;
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            failed(e.getMessage());
+            fail(e.getMessage());
             return;
         }
 
         xCell.setFormula("Value");
 
         //setting property 'PrintHeaders' of the style 'Default'
-        XStyleFamiliesSupplier xSFS = (XStyleFamiliesSupplier)
+        XStyleFamiliesSupplier xSFS =
             UnoRuntime.queryInterface(XStyleFamiliesSupplier.class,
                                                             xSpreadsheetDoc);
         XNameAccess xNA = xSFS.getStyleFamilies();
         XPropertySet xPropSet = null;
         try {
             Object oPageStyles = xNA.getByName("PageStyles");
-            xNA = (XNameAccess)
+            xNA =
                 UnoRuntime.queryInterface(XNameAccess.class, oPageStyles);
             Object oDefStyle = xNA.getByName("Default");
-            xPropSet = (XPropertySet)
+            xPropSet =
                 UnoRuntime.queryInterface(XPropertySet.class, oDefStyle);
         } catch(com.sun.star.lang.WrappedTargetException e) {
-            failed(e.getMessage());
+            fail(e.getMessage());
             return;
         } catch(com.sun.star.container.NoSuchElementException e) {
-            failed(e.getMessage());
+            fail(e.getMessage());
             return;
         }
 
         try {
             xPropSet.setPropertyValue("PrintHeaders", new Boolean(true));
         } catch(com.sun.star.lang.WrappedTargetException e) {
-            failed(e.getMessage());
+            fail(e.getMessage());
             return;
         } catch(com.sun.star.lang.IllegalArgumentException e) {
-            failed(e.getMessage());
+            fail(e.getMessage());
             return;
         } catch(com.sun.star.beans.PropertyVetoException e) {
-            failed(e.getMessage());
+            fail(e.getMessage());
             return;
         } catch(com.sun.star.beans.UnknownPropertyException e) {
-            failed(e.getMessage());
+            fail(e.getMessage());
             return;
         }
 
         //switching to 'Print Preview' mode
         try {
-            XDispatchProvider xDispProv = (XDispatchProvider)
+            XDispatchProvider xDispProv =
                 UnoRuntime.queryInterface(XDispatchProvider.class, xController);
-            XURLTransformer xParser = (com.sun.star.util.XURLTransformer)
+            XURLTransformer xParser =
                 UnoRuntime.queryInterface(XURLTransformer.class,
             mXMSF.createInstance("com.sun.star.util.URLTransformer"));
             URL[] aParseURL = new URL[1];
@@ -865,9 +893,11 @@ public class ViewForwarder extends ComplexTestCase {
             URL aURL = aParseURL[0];
             XDispatch xDispatcher = xDispProv.queryDispatch(aURL, "", 0);
             if(xDispatcher != null)
+            {
                 xDispatcher.dispatch( aURL, null );
+            }
         } catch (com.sun.star.uno.Exception e) {
-            failed(e.getMessage());
+            fail(e.getMessage());
             return;
         }
 
@@ -882,9 +912,9 @@ public class ViewForwarder extends ComplexTestCase {
         XWindow xWindow = at.getCurrentWindow(mXMSF, xModel);
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
-//        log.println("ImplementationName " + utils.getImplName(oObj));
+//        System.out.println("ImplementationName " + utils.getImplName(oObj));
 
-        log.println("Press any key when the header cell is on top.");
+        System.out.println("Press any key when the header cell is on top.");
         try{
             byte[]b = new byte[16];
             System.in.read(b);
@@ -905,7 +935,7 @@ public class ViewForwarder extends ComplexTestCase {
             oObj = at.getAccessibleObjectForRole
                 (xRoot, AccessibleRole.TABLE, "").getAccessibleChild(2);
         } catch (com.sun.star.lang.IndexOutOfBoundsException iabe) {
-            failed(iabe.getMessage());
+            fail(iabe.getMessage());
             return;
         }
 
@@ -921,26 +951,26 @@ public class ViewForwarder extends ComplexTestCase {
         try {
             System.out.println("Children now: " + accCtx.getAccessibleChild(0).getAccessibleContext().getAccessibleChildCount());
         } catch (com.sun.star.lang.IndexOutOfBoundsException iabe) {
-            failed(iabe.getMessage());
+            fail(iabe.getMessage());
             return;
         }
 */
 
-        XAccessibleValue accV = (XAccessibleValue)
+        XAccessibleValue accV =
                 UnoRuntime.queryInterface(XAccessibleValue.class, oObj);
         Object o = accV.getCurrentValue();
-        log.println("Getting the value: "+o + " is void " + util.utils.isVoid(o));
+        System.out.println("Getting the value: "+o + " is void " + util.utils.isVoid(o));
 
 
-        XAccessibleComponent accC = (XAccessibleComponent)
+        XAccessibleComponent accC =
                 UnoRuntime.queryInterface(XAccessibleComponent.class, oObj);
 
-        log.println("BoundsX= "+accC.getBounds().X);
-        log.println("BoundsY= "+accC.getBounds().Y);
-        log.println("BoundsWidth= "+accC.getBounds().Width);
-        log.println("BoundsHeight= "+accC.getBounds().Height);
+        System.out.println("BoundsX= "+accC.getBounds().X);
+        System.out.println("BoundsY= "+accC.getBounds().Y);
+        System.out.println("BoundsWidth= "+accC.getBounds().Width);
+        System.out.println("BoundsHeight= "+accC.getBounds().Height);
 
-        XComponent xComp = (XComponent)UnoRuntime.queryInterface(
+        XComponent xComp = UnoRuntime.queryInterface(
                                         XComponent.class, xSpreadsheetDoc);
         xComp.dispose();
 
@@ -954,7 +984,7 @@ public class ViewForwarder extends ComplexTestCase {
      * Check the preview of Shapes: load a document with shapes and see, if they
      * are accessible.
      */
-    public void checkPreviewShape() {
+    @Test public void checkPreviewShape() {
         SOfficeFactory SOF = SOfficeFactory.getFactory( mXMSF );
         XSpreadsheetDocument xSpreadsheetDoc = null;
         XComponent xComp = null;
@@ -962,14 +992,15 @@ public class ViewForwarder extends ComplexTestCase {
 
         try {
             String docName = "calcshapes.sxc";
-            log.println("Loading a spreadsheetdocument.");
-            String url = utils.getFullURL(
-                        (String)param.get("TestDocumentPath") + "/" + docName);
-            log.println("loading document '" + url + "'");
+            System.out.println("Loading a spreadsheetdocument.");
+            // String url = utils.getFullURL((String)param.get("TestDocumentPath") + "/" + docName);
+            String url = TestDocument.getUrl(docName);
+            System.out.println("loading document '" + url + "'");
             xComp = SOF.loadDocument(url);
-
-        } catch (com.sun.star.uno.Exception e) {
-            failed(e.getMessage());
+            assertNotNull(xComp);
+        }
+        catch (com.sun.star.uno.Exception e) {
+            fail(e.getMessage());
             return;
         }
 
@@ -980,22 +1011,22 @@ public class ViewForwarder extends ComplexTestCase {
         }
 
         if (xComp == null) {
-            failed("loading document failed.");
+            fail("loading document failed.");
             return;
         }
 
-        xSpreadsheetDoc = (XSpreadsheetDocument)UnoRuntime.queryInterface(
+        xSpreadsheetDoc = UnoRuntime.queryInterface(
                                             XSpreadsheetDocument.class, xComp);
-        XModel aModel = (XModel)
+        XModel aModel =
             UnoRuntime.queryInterface(XModel.class, xSpreadsheetDoc);
 
         XController xController = aModel.getCurrentController();
 
         // switching to 'Page Preview' mode
         try {
-            XDispatchProvider xDispProv = (XDispatchProvider)
+            XDispatchProvider xDispProv =
                 UnoRuntime.queryInterface(XDispatchProvider.class, xController);
-            XURLTransformer xParser = (com.sun.star.util.XURLTransformer)
+            XURLTransformer xParser =
                 UnoRuntime.queryInterface(XURLTransformer.class,
             mXMSF.createInstance("com.sun.star.util.URLTransformer"));
             // Because it's an in/out parameter we must use an
@@ -1007,9 +1038,11 @@ public class ViewForwarder extends ComplexTestCase {
             URL aURL = aParseURL[0];
             XDispatch xDispatcher = xDispProv.queryDispatch(aURL, "", 0);
             if(xDispatcher != null)
+            {
                 xDispatcher.dispatch( aURL, null );
+            }
         } catch (com.sun.star.uno.Exception e) {
-            failed("Couldn't change mode");
+            fail("Couldn't change mode");
             return;
         }
 
@@ -1021,7 +1054,7 @@ public class ViewForwarder extends ComplexTestCase {
 
 
 
-        log.println("Press any key when a shape is on top.");
+        System.out.println("Press any key when a shape is on top.");
         try{
             byte[]b = new byte[16];
             System.in.read(b);
@@ -1039,18 +1072,30 @@ public class ViewForwarder extends ComplexTestCase {
         try {
             XAccessibleContext con = at.getAccessibleObjectForRole
                                 (xRoot, AccessibleRole.SHAPE, "");
-            log.println("Name of AccessibleContext: " + con.getAccessibleName());
+            System.out.println("Name of AccessibleContext: " + con.getAccessibleName());
             oObj = con;
         } catch (Exception e) {
-            failed(e.getMessage());
+            fail(e.getMessage());
             return;
         }
 
-        log.println("ImplementationName: " + utils.getImplName(oObj));
+        System.out.println("ImplementationName: " + utils.getImplName(oObj));
         util.dbg.printInterfaces(oObj);
 
         xComp.dispose();
     }
+
+    @BeforeClass public static void setUpConnection() throws Exception {
+        connection.setUp();
+    }
+
+    @AfterClass public static void tearDownConnection()
+        throws InterruptedException, com.sun.star.uno.Exception
+    {
+        connection.tearDown();
+    }
+
+    private static final OfficeConnection connection = new OfficeConnection();
 
 }
 
