@@ -25,19 +25,17 @@
 #
 #*************************************************************************
 
-gb_REPOSITORYDIRNAME := SRCDIR
+$(eval $(call gb_Helper_register_repository,SRCDIR))
 
 
-gb_Executable_UREBIN := \
+gb_Executable_UREBIN +=
 
-gb_Executable_SDK := \
-
-gb_Executable_OOO := \
-
-gb_Executable_BRAND := \
+gb_Executable_SDK +=
+gb_Executable_OOO +=
+gb_Executable_BRAND +=
 
 # not installed
-gb_Executable_NONE := \
+gb_Executable_NONE +=\
     mkunroll \
     rscdep \
     so_checksum \
@@ -46,7 +44,7 @@ gb_Executable_NONE := \
     bmpsum \
     g2g \
 
-gb_Library_OOOLIBS :=\
+gb_Library_OOOLIBS +=\
     avmedia \
     basegfx \
     cui \
@@ -83,15 +81,15 @@ gb_Library_OOOLIBS :=\
     xof \
     xcr \
 
-gb_Library_PLAINLIBS_URE :=\
+gb_Library_PLAINLIBS_URE +=\
     xml2 \
 
-gb_Library_PLAINLIBS_OOO :=\
+gb_Library_PLAINLIBS_OOO +=\
     icuuc \
 
 
 # => OOOLIB
-gb_Library_RTLIBS :=\
+gb_Library_RTLIBS +=\
     comphelper \
     i18nisolang1 \
     i18nutil \
@@ -99,17 +97,17 @@ gb_Library_RTLIBS :=\
     vos3 \
 
 # => URELIB
-gb_Library_RTVERLIBS :=\
+gb_Library_RTVERLIBS +=\
     cppuhelper \
     salhelper \
 
 # => URELIB
-gb_Library_STLLIBS :=\
+gb_Library_STLLIBS +=\
     stl \
 
-gb_Library_UNOLIBS_URE := \
+gb_Library_UNOLIBS_URE +=\
 
-gb_Library_UNOLIBS_OOO := \
+gb_Library_UNOLIBS_OOO +=\
     fsstorage \
     hatchwindowfactory \
     passwordcontainer \
@@ -118,12 +116,12 @@ gb_Library_UNOLIBS_OOO := \
 
 
 # => URELIB
-gb_Library_UNOVERLIBS :=\
+gb_Library_UNOVERLIBS +=\
     cppu \
     jvmfwk \
     sal \
 
-gb_StaticLibrary_PLAINLIBS :=\
+gb_StaticLibrary_PLAINLIBS +=\
     jpeglib \
     ooopathutils \
     salcpprt \

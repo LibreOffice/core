@@ -109,13 +109,63 @@ define gb_Helper_deliver
 $(call gb_Helper__deliverprefix,$(2)) cp -f $(1) $(2) && touch -r $(1) $(2)
 endef
 
-define gb_Helper_add_repo
-gb_REPOSITORYDIRNAME :=
+define gb_Helper_register_repository
+gb_Helper_CURRENTREPOSITORY := $(1)
+
+endef
+
+define gb_Helper_add_repository
+gb_Helper_CURRENTREPOSITORY :=
 include $(1)/Repository.mk
-ifeq ($$(gb_REPOSITORYDIRNAME),)
-$$(error no gb_REPOSITORYDIRNAME set for repository $(1))
+ifeq ($$(gb_Helper_CURRENTREPOSITORY),)
+$$(error no gb_Helper_register_repository in Repository.mk for repository $(1))
 endif
-$$(gb_REPOSITORYDIRNAME) := $(1)
+$$(gb_Helper_CURRENTREPOSITORY) := $(1)
+
+endef
+
+define gb_Helper_add_repositories
+$(foreach repo,$(1),$(call gb_Helper_add_repository,$(repo)))
+endef
+
+define gb_Helper_init_registries
+gb_Library_NAMESCHEMES := OOO PLAIN RT RTVER STL UNO UNOVER
+gb_StaticLibrary_NAMESCHEMES := PLAIN
+
+gb_Executable_UREBIN :=
+gb_Executable_SDK :=
+gb_Executable_OOO :=
+gb_Executable_BRAND :=
+gb_Executable_NONE :=
+gb_Library_OOOLIBS :=
+gb_Library_PLAINLIBS_URE :=
+gb_Library_PLAINLIBS_OOO :=
+gb_Library_RTLIBS :=
+gb_Library_RTVERLIBS :=
+gb_Library_STLLIBS :=
+gb_Library_UNOLIBS_URE :=
+gb_Library_UNOLIBS_OOO :=
+gb_Library_UNOVERLIBS :=
+gb_StaticLibrary_PLAINLIBS :=
+endef
+
+define gb_Helper_collect_libtargets
+gb_Library_PLAINLIBS := \
+    $$(gb_Library_PLAINLIBS_URE) \
+    $$(gb_Library_PLAINLIBS_OOO) \
+
+gb_Library_UNOLIBS := \
+    $$(gb_Library_UNOLIBS_URE) \
+    $$(gb_Library_UNOLIBS_OOO) \
+
+gb_Library_TARGETS := $$(foreach namescheme,$$(gb_Library_NAMESCHEMES),$$(gb_Library_$$(namescheme)LIBS))
+gb_StaticLibrary_TARGETS := $$(foreach namescheme,$$(gb_StaticLibrary_NAMESCHEMES),$$(gb_StaticLibrary_$$(namescheme)LIBS))
+
+endef
+
+define gb_Helper_collect_knownlibs
+gb_Library_KNOWNLIBS := $$(foreach namescheme,$$(gb_Library_NAMESCHEMES),$$(gb_Library_$$(namescheme)LIBS))
+gb_StaticLibrary_KNOWNLIBS := $$(foreach namescheme,$$(gb_StaticLibrary_NAMESCHEMES),$$(gb_StaticLibrary_$$(namescheme)LIBS))
 
 endef
 
