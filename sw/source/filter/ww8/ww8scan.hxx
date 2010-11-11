@@ -1464,11 +1464,13 @@ protected:
     UINT16  istdMaxFixedWhenSaved;     // How many fixed-index istds are there?
     UINT16  nVerBuiltInNamesWhenSaved; // Current version of built-in stylenames
     // ftc used by StandardChpStsh for this document
-    UINT16  ftcStandardChpStsh;
+    UINT16  ftcAsci;
     // CJK ftc used by StandardChpStsh for this document
-    UINT16  ftcStandardChpCJKStsh;
+    UINT16  ftcFE;
+    // CTL/Other ftc used by StandardChpStsh for this document
+    UINT16  ftcOther;
     // CTL ftc used by StandardChpStsh for this document
-    UINT16  ftcStandardChpCTLStsh;
+    UINT16  ftcBi;
 
     //No copying
     WW8Style(const WW8Style&);

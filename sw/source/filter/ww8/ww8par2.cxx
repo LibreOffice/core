@@ -3920,28 +3920,17 @@ WW8RStyle::WW8RStyle(WW8Fib& _rFib, SwWW8ImplReader* pI)
 
 void WW8RStyle::Set1StyleDefaults()
 {
+    // see #i25247#, #i25561#, #i48064#, #i92341# for default font
     if (!bCJKFontChanged)   // Style no CJK Font? set the default
-        pIo->SetNewFontAttr(ftcStandardChpCJKStsh, true, RES_CHRATR_CJK_FONT);
-
-    // see i25247
-    const WW8_FFN* pF = pIo->pFonts->GetFont(3);
-    if (pF)
-    {
-        rtl_TextEncoding eEnc = WW8Fib::GetFIBCharset(pF->chs);
-        if ((ftcStandardChpCTLStsh == 0) && (eEnc == RTL_TEXTENCODING_MS_1255))
-            ftcStandardChpCTLStsh = 3;
-    }
-
-    if (ftcStandardChpCJKStsh == 0)
-        ftcStandardChpCJKStsh = 2;
+        pIo->SetNewFontAttr(ftcFE, true, RES_CHRATR_CJK_FONT);
 
     if (!bCTLFontChanged)   // Style no CTL Font? set the default
-        pIo->SetNewFontAttr(ftcStandardChpCTLStsh, true, RES_CHRATR_CTL_FONT);
+        pIo->SetNewFontAttr(ftcBi, true, RES_CHRATR_CTL_FONT);
 
     //#88976# western 2nd to make western charset conversion the default
     if (!bFontChanged)      // Style has no Font? set the default,
     {
-        pIo->SetNewFontAttr(ftcStandardChpStsh, true, RES_CHRATR_FONT);
+        pIo->SetNewFontAttr(ftcAsci, true, RES_CHRATR_FONT);
         /* removed by a patch from cmc for #i52786#
         if (pIo->bVer67)
             SetStyleCharSet(pIo->pCollA[pIo->nAktColl]);
