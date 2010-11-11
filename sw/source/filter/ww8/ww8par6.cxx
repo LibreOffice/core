@@ -3690,18 +3690,18 @@ void SwWW8ImplReader::Read_FontCode( USHORT nId, const BYTE* pData, short nLen )
     {                       // (siehe sprmCSymbol) gesetzte Font !
         switch( nId )
         {
-    //      case 0x4a51:    //font to bias towards all else being equal ?
             case 113:
-            case 0x4a5E:
+            case 0x4A51:    //"Other" font, override with BiDi if it exists
+            case 0x4A5E:    //BiDi Font
                 nId = RES_CHRATR_CTL_FONT;
                 break;
             case 93:
             case 111:
-            case 0x4a4f:
+            case 0x4A4f:
                 nId = RES_CHRATR_FONT;
                 break;
             case 112:
-            case 0x4a50:
+            case 0x4A50:
                 nId = RES_CHRATR_CJK_FONT;
                 break;
             default:
@@ -5916,8 +5916,8 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
         {0x085B, 0},                                 //"sprmCFDiacColor"
         {0x085C, &SwWW8ImplReader::Read_BoldBiDiUsw},//"sprmCFBoldBi"
         {0x085D, &SwWW8ImplReader::Read_BoldBiDiUsw},//"sprmCFItalicBi"
-        {0x4A5E, &SwWW8ImplReader::Read_FontCode},
-        {0x485F, &SwWW8ImplReader::Read_Language},   // "sprmCLidBi"
+        {0x4A5E, &SwWW8ImplReader::Read_FontCode},   //"sprmCFtcBi"
+        {0x485F, &SwWW8ImplReader::Read_Language},   //"sprmCLidBi"
       //0x4A60, ? ? ?,                               //"sprmCIcoBi",
         {0x4A61, &SwWW8ImplReader::Read_FontSize},   //"sprmCHpsBi"
         {0xCA62, 0},                                 //"sprmCDispFldRMark"
