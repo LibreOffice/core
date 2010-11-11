@@ -65,10 +65,6 @@ SvLBoxEntry* StructListBox::InsertStaticEntry(
         SvLBoxEntry* pParent, ULONG nPos, IFormulaToken* pToken )
 {
     SvLBoxEntry* pEntry = InsertEntry( rText, rEntryImg, rEntryImg, pParent, FALSE, nPos, pToken );
-    SvLBoxContextBmp* pBmpItem = static_cast< SvLBoxContextBmp* >( pEntry->GetFirstItem( SV_ITEM_ID_LBOXCONTEXTBMP ) );
-    DBG_ASSERT( pBmpItem, "StructListBox::InsertStaticEntry - missing item" );
-    pBmpItem->SetBitmap1( rEntryImgHC, BMP_COLOR_HIGHCONTRAST );
-    pBmpItem->SetBitmap2( rEntryImgHC, BMP_COLOR_HIGHCONTRAST );
     return pEntry;
 }
 
