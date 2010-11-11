@@ -362,8 +362,7 @@ SvtIconWindow_Impl::SvtIconWindow_Impl( Window* pParent ) :
 
     // insert the categories
     // "New Document"
-    sal_Bool bHiContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
-    Image aImage( SvtResId( bHiContrast ? IMG_SVT_NEWDOC_HC : IMG_SVT_NEWDOC ) );
+    Image aImage( SvtResId( IMG_SVT_NEWDOC ) );
     nMaxTextLength = aImage.GetSizePixel().Width();
     String aEntryStr = String( SvtResId( STR_SVT_NEWDOC ) );
     SvxIconChoiceCtrlEntry* pEntry =
@@ -380,7 +379,7 @@ SvtIconWindow_Impl::SvtIconWindow_Impl( Window* pParent ) :
     {
         aEntryStr = String( SvtResId( STR_SVT_TEMPLATES ) );
         pEntry = aIconCtrl.InsertEntry(
-            aEntryStr, Image( SvtResId( bHiContrast ? IMG_SVT_TEMPLATES_HC : IMG_SVT_TEMPLATES ) ), ICON_POS_TEMPLATES );
+            aEntryStr, Image( SvtResId( IMG_SVT_TEMPLATES ) ), ICON_POS_TEMPLATES );
         pEntry->SetUserData( new String( aTemplateRootURL ) );
         pEntry->SetQuickHelpText( String( SvtResId( STR_SVT_TEMPLATES_HELP ) ) );
         DBG_ASSERT( !pEntry->GetBoundRect().IsEmpty(), "empty rectangle" );
@@ -392,7 +391,7 @@ SvtIconWindow_Impl::SvtIconWindow_Impl( Window* pParent ) :
     // "My Documents"
     aEntryStr = String( SvtResId( STR_SVT_MYDOCS ) );
     pEntry = aIconCtrl.InsertEntry(
-        aEntryStr, Image( SvtResId( bHiContrast ? IMG_SVT_MYDOCS_HC : IMG_SVT_MYDOCS ) ), ICON_POS_MYDOCS );
+        aEntryStr, Image( SvtResId( IMG_SVT_MYDOCS ) ), ICON_POS_MYDOCS );
     pEntry->SetUserData( new String( aMyDocumentsRootURL ) );
     pEntry->SetQuickHelpText( String( SvtResId( STR_SVT_MYDOCS_HELP ) ) );
     DBG_ASSERT( !pEntry->GetBoundRect().IsEmpty(), "empty rectangle" );
@@ -403,7 +402,7 @@ SvtIconWindow_Impl::SvtIconWindow_Impl( Window* pParent ) :
     // "Samples"
     aEntryStr = String( SvtResId( STR_SVT_SAMPLES ) );
     pEntry = aIconCtrl.InsertEntry(
-        aEntryStr, Image( SvtResId( bHiContrast ? IMG_SVT_SAMPLES_HC : IMG_SVT_SAMPLES ) ), ICON_POS_SAMPLES );
+        aEntryStr, Image( SvtResId( IMG_SVT_SAMPLES ) ), ICON_POS_SAMPLES );
     pEntry->SetUserData( new String( aSamplesFolderRootURL ) );
     pEntry->SetQuickHelpText( String( SvtResId( STR_SVT_SAMPLES_HELP ) ) );
     DBG_ASSERT( !pEntry->GetBoundRect().IsEmpty(), "empty rectangle" );
@@ -569,16 +568,19 @@ ULONG SvtIconWindow_Impl::GetRootPos( const String& rURL ) const
     return nPos;
 }
 
+/******
+ * @param _bHiContrast: unused and noop. FIXME: remove me
+ */
 void SvtIconWindow_Impl::UpdateIcons( sal_Bool _bHiContrast )
 {
     aIconCtrl.GetEntry( ICON_POS_NEWDOC )->SetImage(
-        Image( SvtResId( _bHiContrast ? IMG_SVT_NEWDOC_HC : IMG_SVT_NEWDOC ) ) );
+        Image( SvtResId( IMG_SVT_NEWDOC ) ) );
     aIconCtrl.GetEntry( ICON_POS_TEMPLATES )->SetImage(
-        Image( SvtResId( _bHiContrast ? IMG_SVT_TEMPLATES_HC : IMG_SVT_TEMPLATES ) ) );
+        Image( SvtResId( IMG_SVT_TEMPLATES ) ) );
     aIconCtrl.GetEntry( ICON_POS_MYDOCS )->SetImage(
-        Image( SvtResId( _bHiContrast ? IMG_SVT_MYDOCS_HC : IMG_SVT_MYDOCS ) ) );
+        Image( SvtResId( IMG_SVT_MYDOCS ) ) );
     aIconCtrl.GetEntry( ICON_POS_SAMPLES )->SetImage(
-        Image( SvtResId( _bHiContrast ? IMG_SVT_SAMPLES_HC : IMG_SVT_SAMPLES ) ) );
+        Image( SvtResId( IMG_SVT_SAMPLES ) ) );
 }
 /* -----------------27.11.2002 16:58-----------------
  *
@@ -1341,24 +1343,23 @@ void SvtTemplateWindow::InitToolBoxImages()
 {
     SvtMiscOptions aMiscOpt;
     BOOL bLarge = aMiscOpt.AreCurrentSymbolsLarge();
-    sal_Bool bHiContrast = aFileViewTB.GetSettings().GetStyleSettings().GetHighContrastMode();
 
     aFileViewTB.SetItemImage( TI_DOCTEMPLATE_BACK, Image( SvtResId(
-        bLarge ? bHiContrast ? IMG_SVT_DOCTEMPL_HC_BACK_LARGE : IMG_SVT_DOCTEMPLATE_BACK_LARGE
-               : bHiContrast ? IMG_SVT_DOCTEMPL_HC_BACK_SMALL : IMG_SVT_DOCTEMPLATE_BACK_SMALL ) ) );
+        bLarge ? IMG_SVT_DOCTEMPLATE_BACK_LARGE
+               : IMG_SVT_DOCTEMPLATE_BACK_SMALL ) ) );
     aFileViewTB.SetItemImage( TI_DOCTEMPLATE_PREV, Image( SvtResId(
-        bLarge ? bHiContrast ? IMG_SVT_DOCTEMPL_HC_PREV_LARGE : IMG_SVT_DOCTEMPLATE_PREV_LARGE
-               : bHiContrast ? IMG_SVT_DOCTEMPL_HC_PREV_SMALL : IMG_SVT_DOCTEMPLATE_PREV_SMALL ) ) );
+        bLarge ? IMG_SVT_DOCTEMPLATE_PREV_LARGE
+               : IMG_SVT_DOCTEMPLATE_PREV_SMALL ) ) );
     aFileViewTB.SetItemImage( TI_DOCTEMPLATE_PRINT, Image( SvtResId(
-        bLarge ? bHiContrast ? IMG_SVT_DOCTEMPL_HC_PRINT_LARGE : IMG_SVT_DOCTEMPLATE_PRINT_LARGE
-               : bHiContrast ? IMG_SVT_DOCTEMPL_HC_PRINT_SMALL : IMG_SVT_DOCTEMPLATE_PRINT_SMALL ) ) );
+        bLarge ? IMG_SVT_DOCTEMPLATE_PRINT_LARGE
+               : IMG_SVT_DOCTEMPLATE_PRINT_SMALL ) ) );
 
     aFrameWinTB.SetItemImage( TI_DOCTEMPLATE_DOCINFO, Image( SvtResId(
-        bLarge ? bHiContrast ? IMG_SVT_DOCTEMPL_HC_DOCINFO_LARGE : IMG_SVT_DOCTEMPLATE_DOCINFO_LARGE
-               : bHiContrast ? IMG_SVT_DOCTEMPL_HC_DOCINFO_SMALL : IMG_SVT_DOCTEMPLATE_DOCINFO_SMALL ) ) );
+        bLarge ? IMG_SVT_DOCTEMPLATE_DOCINFO_LARGE
+               : IMG_SVT_DOCTEMPLATE_DOCINFO_SMALL ) ) );
     aFrameWinTB.SetItemImage( TI_DOCTEMPLATE_PREVIEW, Image( SvtResId(
-        bLarge ? bHiContrast ? IMG_SVT_DOCTEMPL_HC_PREVIEW_LARGE : IMG_SVT_DOCTEMPLATE_PREVIEW_LARGE
-               : bHiContrast ? IMG_SVT_DOCTEMPL_HC_PREVIEW_SMALL : IMG_SVT_DOCTEMPLATE_PREVIEW_SMALL ) ) );
+        bLarge ? IMG_SVT_DOCTEMPLATE_PREVIEW_LARGE
+               : IMG_SVT_DOCTEMPLATE_PREVIEW_SMALL ) ) );
 }
 
 // ------------------------------------------------------------------------

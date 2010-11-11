@@ -52,12 +52,6 @@ Image IMG_SVT_NEWDOC
     MaskColor = MASK_COL_MAGENTA
 };
 
-Image IMG_SVT_NEWDOC_HC
-{
-    ImageBitmap = Bitmap { File = "new_doc_h.bmp" ; };
-    MaskColor = MASK_COL_MAGENTA
-};
-
 String STR_SVT_MYDOCS
 {
     Text [ en-US ] = "My Documents";
@@ -66,12 +60,6 @@ String STR_SVT_MYDOCS
 Image IMG_SVT_MYDOCS
 {
     ImageBitmap = Bitmap { File = "my_docs.bmp" ; };
-    MaskColor = MASK_COL_MAGENTA
-};
-
-Image IMG_SVT_MYDOCS_HC
-{
-    ImageBitmap = Bitmap { File = "my_docs_h.bmp" ; };
     MaskColor = MASK_COL_MAGENTA
 };
 
@@ -86,12 +74,6 @@ Image IMG_SVT_TEMPLATES
     MaskColor = MASK_COL_MAGENTA
 };
 
-Image IMG_SVT_TEMPLATES_HC
-{
-    ImageBitmap = Bitmap { File = "template_h.bmp" ; };
-    MaskColor = MASK_COL_MAGENTA
-};
-
 String STR_SVT_SAMPLES
 {
     Text [ en-US ] = "Samples";
@@ -100,12 +82,6 @@ String STR_SVT_SAMPLES
 Image IMG_SVT_SAMPLES
 {
     ImageBitmap = Bitmap { File = "samples.bmp" ; };
-    MaskColor = MASK_COL_MAGENTA
-};
-
-Image IMG_SVT_SAMPLES_HC
-{
-    ImageBitmap = Bitmap { File = "samples_h.bmp" ; };
     MaskColor = MASK_COL_MAGENTA
 };
 
@@ -170,36 +146,6 @@ Image IMG_SVT_DOCTEMPLATE_PRINT_LARGE
     ImageBitmap = Bitmap { File = "lc05509.bmp" ; };
     MaskColor = MASK_COL_MAGENTA
 };
-Image IMG_SVT_DOCTEMPL_HC_BACK_SMALL
-{
-    ImageBitmap = Bitmap { File = "back_small_h.bmp" ; };
-    MaskColor = MASK_COL_MAGENTA
-};
-Image IMG_SVT_DOCTEMPL_HC_BACK_LARGE
-{
-    ImageBitmap = Bitmap { File = "back_large_h.bmp" ; };
-    MaskColor = MASK_COL_MAGENTA
-};
-Image IMG_SVT_DOCTEMPL_HC_PREV_SMALL
-{
-    ImageBitmap = Bitmap { File = "up_small_h.bmp" ; };
-    MaskColor = MASK_COL_MAGENTA
-};
-Image IMG_SVT_DOCTEMPL_HC_PREV_LARGE
-{
-    ImageBitmap = Bitmap { File = "up_large_h.bmp" ; };
-    MaskColor = MASK_COL_MAGENTA
-};
-Image IMG_SVT_DOCTEMPL_HC_PRINT_SMALL
-{
-    ImageBitmap = Bitmap { File = "sch05509.bmp" ; };
-    MaskColor = MASK_COL_MAGENTA
-};
-Image IMG_SVT_DOCTEMPL_HC_PRINT_LARGE
-{
-    ImageBitmap = Bitmap { File = "lch05509.bmp" ; };
-    MaskColor = MASK_COL_MAGENTA
-};
 
 ToolBox TB_SVT_FRAMEWIN
 {
@@ -244,26 +190,6 @@ Image IMG_SVT_DOCTEMPLATE_PREVIEW_SMALL
 Image IMG_SVT_DOCTEMPLATE_PREVIEW_LARGE
 {
     ImageBitmap = Bitmap { File = "preview_large.bmp" ; };
-    MaskColor = MASK_COL_MAGENTA
-};
-Image IMG_SVT_DOCTEMPL_HC_DOCINFO_SMALL
-{
-    ImageBitmap = Bitmap { File = "info_small_h.bmp" ; };
-    MaskColor = MASK_COL_MAGENTA
-};
-Image IMG_SVT_DOCTEMPL_HC_DOCINFO_LARGE
-{
-    ImageBitmap = Bitmap { File = "info_large_h.bmp" ; };
-    MaskColor = MASK_COL_MAGENTA
-};
-Image IMG_SVT_DOCTEMPL_HC_PREVIEW_SMALL
-{
-    ImageBitmap = Bitmap { File = "preview_small_h.bmp" ; };
-    MaskColor = MASK_COL_MAGENTA
-};
-Image IMG_SVT_DOCTEMPL_HC_PREVIEW_LARGE
-{
-    ImageBitmap = Bitmap { File = "preview_large_h.bmp" ; };
     MaskColor = MASK_COL_MAGENTA
 };
 

@@ -37,21 +37,9 @@ IMAGE RID_IMG_SCALABLEFONT
     MaskColor = IMAGE_STDBTN_COLOR ;
 };
 
-IMAGE RID_IMG_SCALABLEFONT_HC
-{
-    ImageBitmap = Bitmap { File = "scalfont_h.bmp" ; };
-    MaskColor = IMAGE_STDBTN_COLOR ;
-};
-
 IMAGE RID_IMG_PRINTERFONT
 {
     ImageBitmap = Bitmap { File = "prnfont.bmp" ; };
-    MaskColor = IMAGE_STDBTN_COLOR ;
-};
-
-IMAGE RID_IMG_PRINTERFONT_HC
-{
-    ImageBitmap = Bitmap { File = "prnfont_h.bmp" ; };
     MaskColor = IMAGE_STDBTN_COLOR ;
 };
 
@@ -61,19 +49,13 @@ IMAGE RID_IMG_BITMAPFONT
     MaskColor = IMAGE_STDBTN_COLOR ;
 };
 
-IMAGE RID_IMG_BITMAPFONT_HC
-{
-    ImageBitmap = Bitmap { File = "bmpfont_h.bmp" ; };
-    MaskColor = IMAGE_STDBTN_COLOR ;
-};
-
 String STR_SVT_AUTOMATIC_COLOR
 {
     Text [ en-US ] = "Automatic";
 };
 
 /*
- * ressources for CollatorRessource / CollatorRessourceData resp.
+ * resources for CollatorRessource / CollatorRessourceData resp.
  */
 
 String STR_SVT_COLLATE_ALPHANUMERIC
