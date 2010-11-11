@@ -289,9 +289,8 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
         }
         if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_OUTLINE_TEXT_AUTOFIT ) )
         {
-            SdrObject* const pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-            bool const bSet = ((const SdrTextFitToSizeTypeItem*)pObj->GetMergedItemSet().GetItem(SDRATTR_TEXT_FITTOSIZE))->GetValue() != SDRTEXTFIT_NONE;
-            }
+            const SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+            const bool bSet = ((const SdrTextFitToSizeTypeItem*)pObj->GetMergedItemSet().GetItem(SDRATTR_TEXT_FITTOSIZE))->GetValue() != SDRTEXTFIT_NONE;
             rSet.Put(SfxBoolItem(SID_OUTLINE_TEXT_AUTOFIT, bSet));
         }
 
