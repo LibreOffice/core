@@ -34,10 +34,6 @@
 #include <sfx2/lnkbase.hxx>
 
 #include <sfx2/objsh.hxx>
-//REMOVE    #ifndef SO2_DECL_SVEMBEDDEDOBJECT_DEFINED
-//REMOVE    #define SO2_DECL_SVEMBEDDEDOBJECT_DEFINED
-//REMOVE    SO2_DECL_REF(SvEmbeddedObject)
-//REMOVE    #endif
 
 class ScDocShell;
 struct TableLink_Impl;

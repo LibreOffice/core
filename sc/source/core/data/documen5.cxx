@@ -49,11 +49,6 @@
 #include <svx/svdoole2.hxx>
 #include <svx/svdpage.hxx>
 
-//REMOVE    #ifndef SO2_DECL_SVINPLACEOBJECT_DEFINED
-//REMOVE    #define SO2_DECL_SVINPLACEOBJECT_DEFINED
-//REMOVE    SO2_DECL_REF(SvInPlaceObject)
-//REMOVE    #endif
-
 #include "document.hxx"
 #include "drwlayer.hxx"
 #include "chartarr.hxx"

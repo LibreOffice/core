@@ -152,8 +152,6 @@ void ScDLL::Init()
     ScModule* pMod = new ScModule( &ScDocShell::Factory() );
     (*ppShlPtr) = pMod;
 
-//REMOVE        ScDocShell::RegisterFactory( SDT_SC_DOCFACTPRIO );
-
     ScDocShell::Factory().SetDocumentServiceName( rtl::OUString::createFromAscii( "com.sun.star.sheet.SpreadsheetDocument" ) );
 
     ScGlobal::Init();       // erst wenn der ResManager initialisiert ist
