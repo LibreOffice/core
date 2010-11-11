@@ -130,7 +130,7 @@ public:
                   sal_uInt16 smallIcon)
             : m_mediaType(mediaType), m_fileFilter(fileFilter),
               m_shortDescr(shortDescr),
-              m_smallIcon(smallIcon))
+              m_smallIcon(smallIcon)
             {}
         // XPackageTypeInfo
         virtual ::rtl::OUString SAL_CALL getMediaType()
