@@ -1056,7 +1056,7 @@ void ODatabaseDocument::impl_storeAs_throw( const ::rtl::OUString& _rURL, const 
 Reference< XStorage > ODatabaseDocument::impl_createStorageFor_throw( const ::rtl::OUString& _rURL ) const
 {
     Reference < ::com::sun::star::ucb::XSimpleFileAccess > xTempAccess;
-    m_pImpl->m_aContext.createComponent( ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ,xTempAccess);
+    m_pImpl->m_aContext.createComponent( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess")) ,xTempAccess);
     Reference< io::XStream > xStream = xTempAccess->openFileReadWrite( _rURL );
     Reference< io::XTruncate > xTruncate(xStream,UNO_QUERY);
     if ( xTruncate.is() )
@@ -1760,7 +1760,7 @@ rtl::OUString ODatabaseDocument::getImplementationName(  ) throw(RuntimeExceptio
 
 rtl::OUString ODatabaseDocument::getImplementationName_static(  ) throw(RuntimeException)
 {
-    return rtl::OUString::createFromAscii("com.sun.star.comp.dba.ODatabaseDocument");
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.dba.ODatabaseDocument"));
 }
 
 Sequence< ::rtl::OUString > ODatabaseDocument::getSupportedServiceNames(  ) throw (RuntimeException)
@@ -2003,7 +2003,7 @@ uno::Reference< frame::XUntitledNumbers > ODatabaseDocument::impl_getUntitledHel
         xNumberedControllers.set(static_cast< ::cppu::OWeakObject* >(pHelper), uno::UNO_QUERY_THROW);
 
         pHelper->setOwner          (xThis);
-        //pHelper->setUntitledPrefix (::rtl::OUString::createFromAscii(" : "));
+        //pHelper->setUntitledPrefix (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" : ")));
 
         m_aNumberedControllers.insert(TNumberedController::value_type(sModuleId,xNumberedControllers));
     }

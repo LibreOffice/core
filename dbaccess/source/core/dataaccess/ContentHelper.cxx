@@ -363,24 +363,27 @@ Sequence< Any > OContentHelper::setPropertyValues(const Sequence< PropertyValue 
         {
             // Read-only property!
             aRet[ n ] <<= IllegalAccessException(
-                            rtl::OUString::createFromAscii(
-                                "Property is read-only!" ),
+                            ::rtl::OUString(
+                                RTL_CONSTASCII_USTRINGPARAM("Property is read-only!")
+                            ),
                             static_cast< cppu::OWeakObject * >( this ) );
         }
         else if ( rValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsDocument" ) ) )
         {
             // Read-only property!
             aRet[ n ] <<= IllegalAccessException(
-                            rtl::OUString::createFromAscii(
-                                "Property is read-only!" ),
+                            ::rtl::OUString(
+                                RTL_CONSTASCII_USTRINGPARAM("Property is read-only!")
+                            ),
                             static_cast< cppu::OWeakObject * >( this ) );
         }
         else if ( rValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsFolder" ) ) )
         {
             // Read-only property!
             aRet[ n ] <<= IllegalAccessException(
-                            rtl::OUString::createFromAscii(
-                                "Property is read-only!" ),
+                            ::rtl::OUString(
+                                RTL_CONSTASCII_USTRINGPARAM("Property is read-only!")
+                            ),
                             static_cast< cppu::OWeakObject * >( this ) );
         }
         else if ( rValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Title" ) ) )
@@ -415,8 +418,9 @@ Sequence< Any > OContentHelper::setPropertyValues(const Sequence< PropertyValue 
             else
             {
                 aRet[ n ] <<= IllegalTypeException(
-                                rtl::OUString::createFromAscii(
-                                    "Property value has wrong type!" ),
+                                ::rtl::OUString(
+                                    RTL_CONSTASCII_USTRINGPARAM("Property value has wrong type!")
+                                ),
                                 static_cast< cppu::OWeakObject * >( this ) );
             }
         }
@@ -424,8 +428,9 @@ Sequence< Any > OContentHelper::setPropertyValues(const Sequence< PropertyValue 
         else
         {
             aRet[ n ] <<= Exception(
-                            rtl::OUString::createFromAscii(
-                                "No property set for storing the value!" ),
+                            ::rtl::OUString(
+                                    RTL_CONSTASCII_USTRINGPARAM("No property set for storing the value!")
+                            ),
                             static_cast< cppu::OWeakObject * >( this ) );
         }
     }
@@ -486,27 +491,27 @@ Reference< XRow > OContentHelper::getPropertyValues( const Sequence< Property >&
     {
         // Append all Core Properties.
         xRow->appendString (
-            Property( rtl::OUString::createFromAscii( "ContentType" ),
+            Property( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ContentType")),
                       -1,
                       getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
                       PropertyAttribute::BOUND
                         | PropertyAttribute::READONLY ),
             getContentType() );
         xRow->appendString (
-            Property( rtl::OUString::createFromAscii( "Title" ),
+            Property( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title" )),
                       -1,
                       getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
                       PropertyAttribute::BOUND ),
             m_pImpl->m_aProps.aTitle );
         xRow->appendBoolean(
-            Property( rtl::OUString::createFromAscii( "IsDocument" ),
+            Property( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsDocument")),
                       -1,
                       getCppuBooleanType(),
                       PropertyAttribute::BOUND
                         | PropertyAttribute::READONLY ),
             m_pImpl->m_aProps.bIsDocument );
         xRow->appendBoolean(
-            Property( rtl::OUString::createFromAscii( "IsFolder" ),
+            Property( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsFolder")),
                       -1,
                       getCppuBooleanType(),
                       PropertyAttribute::BOUND

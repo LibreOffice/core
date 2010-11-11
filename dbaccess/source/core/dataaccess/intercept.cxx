@@ -171,12 +171,12 @@ void SAL_CALL OInterceptor::dispatch( const URL& _URL,const Sequence<PropertyVal
             if ( nInd == aNewArgs.getLength() )
             {
                 aNewArgs.realloc( nInd + 1 );
-                aNewArgs[nInd].Name = ::rtl::OUString::createFromAscii( "SaveTo" );
+                aNewArgs[nInd].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SaveTo"));
                 aNewArgs[nInd].Value <<= sal_True;
             }
 
             Reference< XDispatch > xDispatch = m_xSlaveDispatchProvider->queryDispatch(
-                _URL, ::rtl::OUString::createFromAscii( "_self" ), 0 );
+                _URL, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_self")), 0 );
             if ( xDispatch.is() )
                 xDispatch->dispatch( _URL, aNewArgs );
         }
@@ -204,7 +204,7 @@ IMPL_LINK( OInterceptor, OnDispatch, void*, _pDispatcher )
         if ( m_pContentHolder && m_pContentHolder->prepareClose() && m_xSlaveDispatchProvider.is() )
         {
             Reference< XDispatch > xDispatch = m_xSlaveDispatchProvider->queryDispatch(
-                pHelper->aURL, ::rtl::OUString::createFromAscii( "_self" ), 0 );
+                pHelper->aURL, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_self")), 0 );
             if ( xDispatch.is() )
             {
                 Reference< ::com::sun::star::document::XEventBroadcaster> xEvtB(m_pContentHolder->getComponent(),UNO_QUERY);

@@ -602,7 +602,7 @@ rtl::OUString ODatabaseSource::getImplementationName(  ) throw(RuntimeException)
 rtl::OUString ODatabaseSource::getImplementationName_static(  ) throw(RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::getImplementationName_static" );
-    return rtl::OUString::createFromAscii("com.sun.star.comp.dba.ODatabaseSource");
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.dba.ODatabaseSource"));
 }
 
 Sequence< ::rtl::OUString > ODatabaseSource::getSupportedServiceNames(  ) throw (RuntimeException)
@@ -680,13 +680,13 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const ::rtl::O
         sal_Int32 nArgPos = 0;
         if (sUser.getLength())
         {
-            aUserPwd[ nArgPos ].Name = ::rtl::OUString::createFromAscii("user");
+            aUserPwd[ nArgPos ].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("user"));
             aUserPwd[ nArgPos ].Value <<= sUser;
             ++nArgPos;
         }
         if (sPwd.getLength())
         {
-            aUserPwd[ nArgPos ].Name = ::rtl::OUString::createFromAscii("password");
+            aUserPwd[ nArgPos ].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("password"));
             aUserPwd[ nArgPos ].Value <<= sPwd;
         }
         Reference< XDriver > xDriver;
