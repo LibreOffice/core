@@ -68,6 +68,7 @@ SRCDIR := $(firstword $(gb_REPOS))
 # HACK
 # unixify windoze paths
 ifeq ($(OS),WNT)
+SRCDIR := $(shell cygpath -u $(SRCDIR))
 WORKDIR := $(shell cygpath -u $(WORKDIR))
 OUTDIR := $(shell cygpath -u $(OUTDIR))
 gb_REPOS := $(shell cygpath -u $(gb_REPOS))
