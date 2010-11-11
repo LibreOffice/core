@@ -66,7 +66,7 @@
 
 #include "../ui/inc/DrawDocShell.hxx"
 #include "Outliner.hxx"
-
+#include "app.hrc"
 #include "misc.hxx"
 #include "eetext.hxx"
 #include "drawdoc.hxx"

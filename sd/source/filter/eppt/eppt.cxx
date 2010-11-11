@@ -265,6 +265,11 @@ PPTWriter::~PPTWriter()
     void*  pPtr;
     delete mpExEmbed;
     delete mpPptEscherEx;
+    delete mpCurUserStrm;
+    delete mpPicStrm;
+    delete mpStrm;
+
+
 
     std::vector< PPTExStyleSheet* >::iterator aStyleSheetIter( maStyleSheetList.begin() );
     while( aStyleSheetIter < maStyleSheetList.end() )
