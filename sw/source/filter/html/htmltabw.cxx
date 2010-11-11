@@ -1186,7 +1186,7 @@ Writer& OutHTML_SwTblNode( Writer& rWrt, SwTableNode & rNode,
 
     const SwHTMLTableLayout *pLayout = rTbl.GetHTMLTableLayout();
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     ViewShell *pSh;
     rWrt.pDoc->GetEditShell( &pSh );
     if ( pSh && pSh->GetViewOptions()->IsTest1() )

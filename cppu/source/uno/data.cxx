@@ -360,7 +360,8 @@ sal_Bool SAL_CALL uno_type_isAssignableFromData(
 #endif
 
 #if defined(INTEL) \
-    && (defined(__GNUC__) && (defined(LINUX) || defined(FREEBSD) || defined(OS2)) || defined(MACOSX) \
+    && (defined(__GNUC__) && (defined(LINUX) || defined(FREEBSD) || defined(OS2) || \
+    defined(OPENBSD)) || defined(MACOSX) \
         || defined(__SUNPRO_CC) && defined(SOLARIS))
 #define MAX_ALIGNMENT_4
 #endif
@@ -373,7 +374,8 @@ sal_Bool SAL_CALL uno_type_isAssignableFromData(
     if (OFFSET_OF(s, m) != n) { fprintf( stderr, "### OFFSET_OF(" #s ", "  #m ") = %d instead of expected %d!!!\n", OFFSET_OF(s, m), n ); abort(); }
 
 #if OSL_DEBUG_LEVEL > 1
-#if defined(__GNUC__) && (defined(LINUX) || defined(FREEBSD)) && (defined(INTEL) || defined(POWERPC) || defined(X86_64) || defined(S390))
+#if defined(__GNUC__) && (defined(LINUX) || defined(FREEBSD) || defined(OPENBSD)) && \
+    (defined(INTEL) || defined(POWERPC) || defined(X86_64) || defined(S390))
 #define BINTEST_VERIFYSIZE( s, n ) \
     fprintf( stderr, "> sizeof(" #s ") = %d; __alignof__ (" #s ") = %d\n", sizeof(s), __alignof__ (s) ); \
     if (sizeof(s) != n) { fprintf( stderr, "### sizeof(" #s ") = %d instead of expected %d!!!\n", sizeof(s), n ); abort(); }

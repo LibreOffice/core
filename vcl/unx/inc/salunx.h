@@ -30,7 +30,8 @@
 #define _SALUNX_H
 
 // -=-= #includes =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#if defined SCO || defined LINUX || defined HPUX || defined FREEBSD || defined NETBSD
+#if defined SCO || defined LINUX || defined HPUX || defined FREEBSD || \
+    defined NETBSD || defined OPENBSD
 #include <sys/time.h>
 #elif defined AIX
 #include <time.h>

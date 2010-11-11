@@ -184,7 +184,7 @@ void SwLayVout::Enter(  ViewShell *pShell, SwRect &rRect, BOOL bOn )
 {
     Flush();
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         if( pShell->GetViewOptions()->IsTest3() )
         {
             ++nCount;

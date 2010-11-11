@@ -18,7 +18,7 @@
 	<key>CFBundleShortVersionString</key>
 	<string>9</string>
 	<key>CFBundleIdentifier</key>
-	<string>org.openoffice.script</string>
+	<string>org.libreoffice.script</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>

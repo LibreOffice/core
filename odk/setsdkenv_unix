@@ -10,7 +10,7 @@ if [ "$OSTYPE" = "Darwin" ]
 then
     OO_SDK_NAME=`basename $OO_SDK_HOME`
 else
-    OO_SDK_NAME=openoffice.org${OOVERSION}_sdk
+    OO_SDK_NAME=libreoffice${OOVERSION}_sdk
 fi
 
 export OO_SDK_HOME

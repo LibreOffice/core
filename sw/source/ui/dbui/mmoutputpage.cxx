@@ -1219,7 +1219,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
         }
         xTempDocShell->DoClose();
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
         sal_Int32 nTarget =
 #endif
                 rConfigItem.MoveResultSet(rInfo.nDBRow);

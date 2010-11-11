@@ -37,7 +37,7 @@
 
 //------------------------------------------------------------------------------
 ::osl::Mutex Tracer::s_aMapSafety;
-::std::map< ::oslThreadIdentifier, INT32, ::std::less< ::osl::ThreadIdentifier > >
+::std::map< ::oslThreadIdentifier, INT32, ::std::less< oslThreadIdentifier > >
         Tracer::s_aThreadIndents;
 
 //------------------------------------------------------------------------------

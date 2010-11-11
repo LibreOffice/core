@@ -137,7 +137,7 @@ BUILD_DIR=PC/VC6
 # solver during registration in insetoo_native
 .IF "$(CCNUMVER)" >= "001600000000"
 BUILD_ACTION=MSBuild.exe pcbuild.sln /t:Build /p:Configuration=Release /ToolsVersion:4.0
-.ELIF
+.ELSE
 BUILD_ACTION=$(COMPATH)$/vcpackages$/vcbuild.exe pcbuild.sln "Release|Win32"
 .ENDIF
 .ENDIF

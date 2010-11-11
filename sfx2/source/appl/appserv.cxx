@@ -356,6 +356,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             break;
         }
 
+        case SID_SHOW_CREDITS:
         case SID_SHOW_LICENSE:
         {
             try {
@@ -367,9 +368,27 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
               args[1].Value <<= sal_True;
 
               rtl::OUString aURL;
-              if ( checkURL ( "LICENSE.odt", aURL ) ||
-                   checkURL ( "LICENSE.html", aURL ) ||
-                   checkURL ( "LICENSE", aURL ) ) {
+              char const** pNames;
+              if( rReq.GetSlot() == SID_SHOW_LICENSE )
+              {
+                  static char const* pLicenseStrings[] =
+                  {
+                      "LICENSE.odt", "LICENSE.html", "LICENSE"
+                  };
+                  pNames = pLicenseStrings;
+              }
+              else
+              {
+                  static char const* pCreditsStrings[] =
+                  {
+                      "CREDITS.odt", "CREDITS.html", "CREDITS"
+                  };
+                  pNames = pCreditsStrings;
+              }
+
+              if ( checkURL ( pNames[0], aURL ) ||
+                   checkURL ( pNames[1], aURL ) ||
+                   checkURL ( pNames[2], aURL ) ) {
                   xLoader->loadComponentFromURL( aURL, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_blank")), 0, args );
               }
             } catch (const ::com::sun::star::uno::Exception &) {

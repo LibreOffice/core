@@ -82,7 +82,7 @@ namespace {
 extern "C" void * SAL_CALL allocExec(rtl_arena_type *, sal_Size * size) {
     sal_Size pagesize;
 #if defined SAL_UNX
-#if defined FREEBSD || defined NETBSD
+#if defined FREEBSD || defined NETBSD || defined OPENBSD
     pagesize = getpagesize();
 #else
     pagesize = sysconf(_SC_PAGESIZE);

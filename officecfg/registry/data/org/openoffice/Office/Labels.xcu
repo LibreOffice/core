@@ -31,6 +31,346 @@
 
  <node oor:name="Manufacturer">
 
+        <node oor:name="Tower" oor:op="replace">
+
+            <node oor:name="L0" oor:op="replace" oor:finalized="true">
+
+                <prop oor:name="Name">
+
+                    <value xml:lang="x-no-translate">true</value>
+                    <value xml:lang="en-US">CIL-W100 Mailing Label</value>
+                </prop>
+                <prop oor:name="Measure">
+
+                    <value>S;7000;3700;7000;3700;0;0;3;8</value>
+                </prop>
+            </node>
+            <node oor:name="L1" oor:op="replace" oor:finalized="true">
+
+                <prop oor:name="Name">
+
+                    <value xml:lang="x-no-translate">true</value>
+                    <value xml:lang="en-US">CIL-W101 Mailing Label</value>
+                </prop>
+                <prop oor:name="Measure">
+
+                    <value>S;10500;3700;10500;3700;0;0;2;8</value>
+                </prop>
+            </node>
+            <node oor:name="L2" oor:op="replace" oor:finalized="true">
+
+                <prop oor:name="Name">
+
+                    <value xml:lang="x-no-translate">true</value>
+                    <value xml:lang="en-US">CIL-W102 Freight Label</value>
+                </prop>
+                <prop oor:name="Measure">
+
+                    <value>S;10500;4720;10100;4600;200;420;2;6</value>
+                </prop>
+            </node>
+            <node oor:name="L3" oor:op="replace" oor:finalized="true">
+
+                <prop oor:name="Name">
+
+                    <value xml:lang="x-no-translate">true</value>
+                    <value xml:lang="en-US">CIL-W103 Freight Label</value>
+                </prop>
+                <prop oor:name="Measure">
+
+                    <value>S;10300;7000;10100;7000;300;420;2;4</value>
+                </prop>
+            </node>
+            <node oor:name="L4" oor:op="replace" oor:finalized="true">
+
+                <prop oor:name="Name">
+
+                    <value xml:lang="x-no-translate">true</value>
+                    <value xml:lang="en-US">CIL-W104 Freight Label</value>
+                </prop>
+                <prop oor:name="Measure">
+
+                    <value>S;10800;14400;9800;13900;200;420;2;2</value>
+                </prop>
+            </node>
+            <node oor:name="L5" oor:op="replace" oor:finalized="true">
+
+                <prop oor:name="Name">
+
+                    <value xml:lang="x-no-translate">true</value>
+                    <value xml:lang="en-US">CIL-W105 Freight Label</value>
+                </prop>
+                <prop oor:name="Measure">
+
+                    <value>S;19960;14500;19960;14500;500;400;1;2</value>
+                </prop>
+            </node>
+            <node oor:name="L6" oor:op="replace" oor:finalized="true">
+
+                <prop oor:name="Name">
+
+                    <value xml:lang="x-no-translate">true</value>
+                    <value xml:lang="en-US">CIL-W106 Freight Label</value>
+                </prop>
+                <prop oor:name="Measure">
+
+                    <value>S;21000;29600;21000;29600;0;0;1;1</value>
+                </prop>
+            </node>
+            <node oor:name="L7" oor:op="replace" oor:finalized="true">
+
+                <prop oor:name="Name">
+
+                    <value xml:lang="x-no-translate">true</value>
+                    <value xml:lang="en-US">CIL-W107 Mailing Label</value>
+                </prop>
+                <prop oor:name="Measure">
+
+                    <value>S;4060;2120;3810;2120;470;1160;5;13</value>
+                </prop>
+            </node>
+            <node oor:name="L8" oor:op="replace" oor:finalized="true">
+
+                <prop oor:name="Name">
+
+                    <value xml:lang="x-no-translate">true</value>
+                    <value xml:lang="en-US">CIL-W108 Mailing Label</value>
+                </prop>
+                <prop oor:name="Measure">
+
+                    <value>S;6600;3810;6350;3810;720;1590;3;7</value>
+                </prop>
+            </node>
+            <node oor:name="L9" oor:op="replace" oor:finalized="true">
+
+                <prop oor:name="Name">
+
+                    <value xml:lang="x-no-translate">true</value>
+                    <value xml:lang="en-US">CIL-W110 Mailing Label</value>
+                </prop>
+                <prop oor:name="Measure">
+
+                    <value>S;7000;3500;7000;3500;0;420;3;8</value>
+                </prop>
+            </node>
+            <node oor:name="L10" oor:op="replace" oor:finalized="true">
+
+                <prop oor:name="Name">
+
+                    <value xml:lang="x-no-translate">true</value>
+                    <value xml:lang="en-US">CIL-W111 Mailing Label</value>
+                </prop>
+                <prop oor:name="Measure">
+
+                    <value>S;10500;3500;10500;3500;0;420;2;8</value>
+                </prop>
+            </node>
+            <node oor:name="L11" oor:op="replace" oor:finalized="true">
+
+                <prop oor:name="Name">
+
+                    <value xml:lang="x-no-translate">true</value>
+                    <value xml:lang="en-US">CIL-W115 Mailing Label</value>
+                </prop>
+                <prop oor:name="Measure">
+
+                    <value>S;4050;2990;3850;2990;500;1450;5;9</value>
+                </prop>
+            </node>
+            <node oor:name="L12" oor:op="replace" oor:finalized="true">
+
+                <prop oor:name="Name">
+
+                    <value xml:lang="x-no-translate">true</value>
+                    <value xml:lang="en-US">CIL-W116 (32mm dia) Round</value>
+                </prop>
+                <prop oor:name="Measure">
+
+                    <value>S;3340;3520;3200;3200;500;1000;6;8</value>
+                </prop>
+            </node>
+            <node oor:name="L13" oor:op="replace" oor:finalized="true">
+
+                <prop oor:name="Name">
+
+                    <value xml:lang="x-no-translate">true</value>
+                    <value xml:lang="en-US">CIL-W117 (50mm dia) Round</value>
+                </prop>
+                <prop oor:name="Measure">
+
+                    <value>S;6450;5810;5000;5000;1500;800;3;5</value>
+                </prop>
+            </node>
+            <node oor:name="L14" oor:op="replace" oor:finalized="true">
+
+                <prop oor:name="Name">
+
+                    <value xml:lang="x-no-translate">true</value>
+                    <value xml:lang="en-US">CIL-W118 (80mm dia) Round</value>
+                </prop>
+                <prop oor:name="Measure">
+
+                    <value>S;9500;9500;8000;8000;1750;1450;2;3</value>
+                </prop>
+            </node>
+            <node oor:name="L15" oor:op="replace" oor:finalized="true">
+
+                <prop oor:name="Name">
+
+                    <value xml:lang="x-no-translate">true</value>
+                    <value xml:lang="en-US">CIL-W221 Wrap-around Disk Label</value>
+                </prop>
+                <prop oor:name="Measure">
+
+                    <value>S;10400;7000;7000;7000;1800;420;2;4</value>
+                </prop>
+            </node>
+            <node oor:name="L16" oor:op="replace" oor:finalized="true">
+
+                <prop oor:name="Name">
+
+                    <value xml:lang="x-no-translate">true</value>
+                    <value xml:lang="en-US">CIL-W222 Video Spine Label</value>
+                </prop>
+                <prop oor:name="Measure">
+
+                    <value>S;14500;1693;14500;1693;3260;1380;1;16</value>
+                </prop>
+            </node>
+            <node oor:name="L17" oor:op="replace" oor:finalized="true">
+
+                <prop oor:name="Name">
+
+                    <value xml:lang="x-no-translate">true</value>
+                    <value xml:lang="en-US">CIL-W223 Video Face Label</value>
+                </prop>
+                <prop oor:name="Measure">
+
+                    <value>S;7870;4660;7620;4660;2750;950;2;6</value>
+                </prop>
+            </node>
+            <node oor:name="L18" oor:op="replace" oor:finalized="true">
+
+                <prop oor:name="Name">
+
+                    <value xml:lang="x-no-translate">true</value>
+                    <value xml:lang="en-US">CIL-W224 Audio Cassette</value>
+                </prop>
+                <prop oor:name="Measure">
+
+                    <value>S;9150;4200;8900;4200;1470;2320;2;6</value>
+                </prop>
+            </node>
+            <node oor:name="L19" oor:op="replace" oor:finalized="true">
+
+                <prop oor:name="Name">
+
+                    <value xml:lang="x-no-translate">true</value>
+                    <value xml:lang="en-US">CIL-W225 Slide Mount</value>
+                </prop>
+                <prop oor:name="Measure">
+
+                    <value>S;5080;1270;4600;1110;560;1670;4;21</value>
+                </prop>
+            </node>
+            <node oor:name="L20" oor:op="replace" oor:finalized="true">
+
+                <prop oor:name="Name">
+
+                    <value xml:lang="x-no-translate">true</value>
+                    <value xml:lang="en-US">CIL-W227 Diskette Face</value>
+                </prop>
+                <prop oor:name="Measure">
+
+                    <value>S;9310;5200;7000;5200;2330;1920;2;5</value>
+                </prop>
+            </node>
+            <node oor:name="L21" oor:op="replace" oor:finalized="true">
+
+                <prop oor:name="Name">
+
+                    <value xml:lang="x-no-translate">true</value>
+                    <value xml:lang="en-US">CIL-P229 ID Photos</value>
+                </prop>
+                <prop oor:name="Measure">
+
+                    <value>S;3800;4800;3500;4500;1100;3050;5;5</value>
+                </prop>
+            </node>
+            <node oor:name="L22" oor:op="replace" oor:finalized="true">
+
+                <prop oor:name="Name">
+
+                    <value xml:lang="x-no-translate">true</value>
+                    <value xml:lang="en-US">CIL-B440 Business Cards</value>
+                </prop>
+                <prop oor:name="Measure">
+
+                    <value>S;10000;5500;8500;5500;1500;1000;2;5</value>
+                </prop>
+            </node>
+            <node oor:name="L23" oor:op="replace" oor:finalized="true">
+
+                <prop oor:name="Name">
+
+                    <value xml:lang="x-no-translate">true</value>
+                    <value xml:lang="en-US">CIL-W330 Lever Arch</value>
+                </prop>
+                <prop oor:name="Measure">
+
+                    <value>S;20000;6000;20000;6000;500;2960;1;4</value>
+                </prop>
+            </node>
+            <node oor:name="L24" oor:op="replace" oor:finalized="true">
+
+                <prop oor:name="Name">
+
+                    <value xml:lang="x-no-translate">true</value>
+                    <value xml:lang="en-US">CIL-P230 CD Business Card (78 x 59)</value>
+                </prop>
+                <prop oor:name="Measure">
+
+                    <value>S;10275;6956;7800;5900;1465;1500;2;4</value>
+                </prop>
+            </node>
+            <node oor:name="L25" oor:op="replace" oor:finalized="true">
+
+                <prop oor:name="Name">
+
+                    <value xml:lang="x-no-translate">true</value>
+                    <value xml:lang="en-US">CIL-W228 CD Label for CD Labeller</value>
+                </prop>
+                <prop oor:name="Measure">
+
+                    <value>S;11700;12800;11700;11700;4650;2800;1;2</value>
+                </prop>
+            </node>
+            <node oor:name="L26" oor:op="replace" oor:finalized="true">
+
+                <prop oor:name="Name">
+
+                    <value xml:lang="x-no-translate">true</value>
+                    <value xml:lang="en-US">CIL-W250 Full Face CD Label</value>
+                </prop>
+                <prop oor:name="Measure">
+
+                    <value>S;11700;13700;11700;11700;4650;2200;1;2</value>
+                </prop>
+            </node>
+            <node oor:name="L27" oor:op="replace" oor:finalized="true">
+
+                <prop oor:name="Name">
+
+                    <value xml:lang="x-no-translate">true</value>
+                    <value xml:lang="en-US">CIL-W251 Mini CD Label</value>
+                </prop>
+                <prop oor:name="Measure">
+
+                    <value>S;9800;9800;7800;7800;1700;1200;2;3</value>
+                </prop>
+            </node>
+        </node>
+
         <node oor:name="Avery A4" oor:op="replace">
 
             <node oor:name="L0" oor:op="replace" oor:finalized="true">

@@ -16,6 +16,13 @@
 //                 the need for manually calling regcomp and knowing what
 //                 services we need, and in what .so they are implemented
 
+#ifdef WNT
+# include <tools/prewin.h>
+# include <windows.h>
+# include <tools/postwin.h>
+# undef ERROR
+#endif
+
 #include "sal/config.h"
 
 #include <cppuhelper/bootstrap.hxx>

@@ -45,9 +45,16 @@ CFLAGS += -O
 
 .ELSE
 
-# msvc++: no inlining
 .IF "$(COM)" == "MSC"
+# msvc++: no inlining
 CFLAGS += -Ob0
+.IF "$(cppu_no_leak)" == ""
+.IF "$(bndchk)" == ""
+# msvc++: workaround for strange crash at exit: just don't do the
+# cleanup of types and whatnot...
+CFLAGS += -DCPPU_LEAK_STATIC_DATA
+.ENDIF
+.ENDIF
 .ENDIF
 
 .ENDIF

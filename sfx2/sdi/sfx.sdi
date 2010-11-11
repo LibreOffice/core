@@ -7391,6 +7391,31 @@ SfxVoidItem ShowLicense SID_SHOW_LICENSE
 ]
 
 //--------------------------------------------------------------------------
+SfxVoidItem ShowCredits SID_SHOW_CREDITS
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_APPLICATION;
+]
+
+//--------------------------------------------------------------------------
 SfxVoidItem HelpTutorials SID_HELP_TUTORIALS
 ()
 [

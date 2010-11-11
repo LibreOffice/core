@@ -140,7 +140,7 @@ void backtrace_symbols_fd( void **buffer, int size, int fd )
 #endif /* defined SOLARIS */
 
 
-#if defined FREEBSD || defined NETBSD
+#if defined FREEBSD || defined NETBSD || defined OPENBSD
 #include <dlfcn.h>
 #include <pthread.h>
 #include <setjmp.h>

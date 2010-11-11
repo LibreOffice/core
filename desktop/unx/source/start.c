@@ -60,6 +60,8 @@
 #define PIPEDEFAULTPATH      "/tmp"
 #define PIPEALTERNATEPATH    "/var/tmp"
 
+typedef enum { ProgressContinue, ProgressRestart, ProgressExit } ProgressStatus;
+
 /* Easier conversions: rtl_uString to rtl_String */
 static rtl_String *
 ustr_to_str( rtl_uString *pStr )
@@ -531,7 +533,7 @@ load_splash_defaults( rtl_uString *pAppPath, sal_Bool *pInhibitSplash )
 #define BUFFER_LEN 255
 
 /* Read the percent to show in splash. */
-static sal_Bool
+static ProgressStatus
 read_percent( int status_fd, int *pPercent )
 {
     static char pBuffer[BUFFER_LEN + 1];
@@ -570,16 +572,19 @@ read_percent( int status_fd, int *pPercent )
     fprintf( stderr, "Got status: %s\n", pBegin );
 #endif
     if ( !strncasecmp( pBegin, "end", 3 ) )
-        return sal_False;
+        return ProgressExit;
+    else if ( !strncasecmp( pBegin, "restart", 7 ) )
+        return ProgressRestart;
     else if ( sscanf( pBegin, "%d%%", pPercent ) )
-        return sal_True;
+        return ProgressContinue;
 
-    return sal_False;
+    /* unexpected - let's exit the splash to be safe */
+    return ProgressExit;
 }
 
 /* Periodically update the splash & the percent acconding to what
    status_fd says */
-static void
+static ProgressStatus
 show_splash( int status_fd )
 {
     int nRetval;
@@ -587,6 +592,7 @@ show_splash( int status_fd )
 
     int nPercent = 0;
     sal_Bool bFinish = sal_False;
+    ProgressStatus eResult;
 
     /* we want to watch status_fd */
     aPfd.fd = status_fd;
@@ -605,10 +611,19 @@ show_splash( int status_fd )
         if ( aPfd.revents & ( POLLERR | POLLHUP | POLLNVAL ) )
             bFinish = sal_True;
         else if ( nRetval > 0 )
-            bFinish = !read_percent( status_fd, &nPercent );
+        {
+            eResult = read_percent( status_fd, &nPercent );
+            bFinish = ( eResult != ProgressContinue );
+        }
         else if ( nRetval < 0 )
             bFinish = sal_True;
     } while ( !bFinish );
+
+#if OSL_DEBUG_LEVEL > 0
+    fprintf( stderr, "Finishing, result is %s\n",
+            ( eResult == ProgressContinue )? "continue" : ( ( eResult == ProgressRestart )? "restart" : "exit" ) );
+#endif
+    return eResult;
 }
 
 /* Simple system check. */
@@ -779,6 +794,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
     sal_Bool bSentArgs = sal_False;
     rtl_uString *pAppPath = NULL;
     rtl_uString *pPipePath = NULL;
+    ProgressStatus eResult = ProgressExit;
 
     /* turn SIGPIPE into an error */
     signal( SIGPIPE, SIG_IGN );
@@ -793,7 +809,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
     }
     ustr_debug( "App path", pAppPath );
 
-    bSendAndReport = argc > 1 && !strcmp (argv[1], "-qsend-and-report");
+    bSendAndReport = argc > 1 && !strcmp (argv[1], QSEND_AND_REPORT);
 
     pPipePath = get_pipe_path( pAppPath );
 
@@ -809,26 +825,28 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
         ustr_debug( "Failed to connect to pipe", pPipePath );
 #endif
 
-    if (bSendAndReport)
-        return !bSentArgs;
-
-    if ( !bSentArgs )
+    if ( !bSendAndReport && !bSentArgs )
     {
-        if ( !fork_app( pAppPath, &status_fd ) )
-            return 1;
+        /* we have to exec the binary */
+        do {
+            if ( !fork_app( pAppPath, &status_fd ) )
+                return 1;
 
-        if ( !bInhibitSplash )
-        {
-            load_splash_image( pAppPath );
-            load_splash_defaults( pAppPath, &bInhibitSplash );
-        }
+            if ( !bInhibitSplash )
+            {
+                load_splash_image( pAppPath );
+                load_splash_defaults( pAppPath, &bInhibitSplash );
+            }
 
-        if ( !bInhibitSplash && splash_create_window( argc, argv ) )
-        {
-            splash_draw_progress( 0 );
-            show_splash( status_fd );
-            splash_close_window();
-        }
+            if ( !bInhibitSplash && splash_create_window( argc, argv ) )
+            {
+                splash_draw_progress( 0 );
+                eResult = show_splash( status_fd );
+                splash_close_window();
+            }
+
+            close( status_fd );
+        } while ( eResult == ProgressRestart );
     }
 
     /* cleanup */
@@ -836,9 +854,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
     rtl_uString_release( pPipePath );
 
     close( fd );
-    close( status_fd );
 
-    return 0;
+    return bSendAndReport? !bSentArgs : 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -29,7 +29,7 @@
 #ifndef _SALAQUACONSTANTS_H_
 #define _SALAQUACONSTANTS_H_
 
-#define kAppFourCharCode 'OOo2'
+#define kAppFourCharCode 'LibO'
 #define kControlPropertyTracking 'Trck'
 #define kControlPropertyLastPartCode 'LsPc'
 #define kControlPropertySubType 'SuTy'

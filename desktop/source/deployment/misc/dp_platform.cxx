@@ -68,6 +68,8 @@
 #define PLATFORM_MACOSX_X86         "macosx_x86"
 #define PLATFORM_MACOSX_PPC         "macosx_powerpc"
 #define PLATFORM_OS2_X86            "os2_x86"
+#define PLATFORM_OPENBSD_X86        "openbsd_x86"
+#define PLATFORM_OPENBSD_X86_64     "openbsd_x86_64"
 
 
 #define PLATFORM_AIX_POWERPC        "aix_powerpc"
@@ -187,6 +189,10 @@ namespace
             ret = checkOSandCPU(OUSTR("OS2"), OUSTR("x86"));
         else if (token.equals(OUSTR(PLATFORM_AIX_POWERPC)))
             ret = checkOSandCPU(OUSTR("AIX"), OUSTR("PowerPC"));
+        else if (token.equals(OUSTR(PLATFORM_OPENBSD_X86)))
+            ret = checkOSandCPU(OUSTR("OpenBSD"), OUSTR("x86"));
+        else if (token.equals(OUSTR(PLATFORM_OPENBSD_X86_64)))
+            ret = checkOSandCPU(OUSTR("OpenBSD"), OUSTR("X86_64"));
         else
         {
             OSL_ENSURE(0, "Extension Manager: The extension supports an unknown platform. "

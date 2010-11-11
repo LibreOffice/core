@@ -33,7 +33,7 @@ EXTNAME=PresenterScreen
 
 ENABLE_EXCEPTIONS=TRUE
 # survive zip dependencies
-MAXLINELENGTH:=80000
+MAXLINELENGTH:=100000
 
 # --- Settings ----------------------------------
 

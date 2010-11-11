@@ -65,7 +65,7 @@ String RID_BUILDVERSION
 ModalDialog RID_DEFAULTABOUT
 {
     OutputSize = TRUE ;
-    Size = MAP_APPFONT ( 245 , 260 ) ;
+    Size = MAP_APPFONT ( 245 , 280 ) ;
     Moveable = TRUE ;
     SVLook = TRUE ;
     TEXT_DEFAULTABOUT
@@ -88,7 +88,7 @@ ModalDialog RID_DEFAULTABOUT
     {
         Border = FALSE ;
         Pos = MAP_APPFONT ( 54 , 25 ) ;
-        Size = MAP_APPFONT ( 168 , 51 ) ;
+        Size = MAP_APPFONT ( 168 , 71 ) ;
         IgnoreTab = TRUE ;
         ReadOnly = TRUE ;
         AutoVScroll = TRUE ;
@@ -98,7 +98,7 @@ ModalDialog RID_DEFAULTABOUT
         NoLabel = TRUE;
         TabStop = TRUE;
         Text [ en-US ] = "Contributor credits";
-        Pos = MAP_APPFONT ( 54 , 80 ) ;
+        Pos = MAP_APPFONT ( 54 , 100 ) ;
         Size = MAP_APPFONT ( 168 , 10 ) ;
     };
     String ABOUT_STR_VERSION

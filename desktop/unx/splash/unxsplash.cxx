@@ -84,7 +84,12 @@ void SAL_CALL UnxSplashScreen::end()
 void SAL_CALL UnxSplashScreen::reset()
     throw ( RuntimeException )
 {
-    // TODO?
+#if OSL_DEBUG_LEVEL > 1
+    fprintf( stderr, "UnxSplashScreen::reset()\n" );
+#endif
+
+    fprintf( m_pOutFd, "restart\n" );
+    fflush( m_pOutFd );
 }
 
 void SAL_CALL UnxSplashScreen::setText( const OUString& /*aText*/ )

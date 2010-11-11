@@ -131,7 +131,7 @@ namespace oooimprovecore
                 OUString::createFromAscii("HelpUrl"),
                 ::comphelper::ConfigurationHelper::E_READONLY) >>= help_url;
         else
-            help_url = OUString::createFromAscii("http://www.openoffice.org");
+            help_url = OUString::createFromAscii("http://www.libreoffice.org");
         {
             SolarMutexGuard aGuard;
             SfxAllItemSet aSet( SFX_APP()->GetPool() );

@@ -8,6 +8,7 @@
 # 3. When packaging (called from package-ooo), to install to DESTDIR
 
 use File::Find;
+use File::Path qw(mkpath);
 use Cwd;
 
 $path = '';
@@ -25,7 +26,7 @@ sub wanted {
 	&& die "Cannot install $_ extension!";
 }
 
-( $^O =~ /darwin/i ) || ( -f "/proc/meminfo" ) || die "The installer cannot work without javaldx running, which requires /proc to be mounted";
+( $^O =~ /openbsd/i ) || ( $^O =~ /darwin/i ) || ( -f "/proc/meminfo" ) || die "The installer cannot work without javaldx running, which requires /proc to be mounted";
 
 # Workaround for system Mozilla
 if ( $ENV{'SYSTEM_MOZILLA'} eq 'YES' ) {
@@ -38,10 +39,11 @@ $ENV{'PYTHONPATH'} = "$ENV{'SRC_ROOT'}/instsetoo_native/$ENV{'INPATH'}/bin:$ENV{
 for $arg (@ARGV) {
     if ($arg eq '-l') {
 	$do_link = 1;
-
     } elsif ($arg eq '-h' || $arg eq '--help') {
 	$help = 1;
     } else {
+	# Cwd::realpath does not work if the path does not exist
+	mkpath($arg) unless -d $arg;
 	$path = Cwd::realpath( $arg );
     }
 }
@@ -73,7 +75,7 @@ $ENV{LOCAL_COMMON_OUT} = $ENV{OUT};
 # the installer to use the English localization of the file instead.
 $ENV{DEFAULT_TO_ENGLISH_FOR_PACKING} = 1;
 
-$langs=$setup_vars{OOO_LANGS_LIST};
+$langs=$ENV{WITH_LANG};
 $langs='en-US' if $langs eq '';
 $langs =~ s/\s+/,/g;
 # FIXME: hack... we get a useless , at the end which makes it being e.g. zu#
@@ -81,14 +83,14 @@ $langs =~ s/\s+/,/g;
 $langs =~ s/,'/'/;
 
 $destdir='';
-if ( defined $setup_vars{OODESTDIR} &&
-     $setup_vars{OODESTDIR} ne "" ) {
-    $destdir = "-destdir \"$setup_vars{OODESTDIR}\"";
+if ( defined $ENV{OODESTDIR} &&
+     $ENV{OODESTDIR} ne "" ) {
+    $destdir = "-destdir \"$ENV{OODESTDIR}\"";
 }
 
 $strip='';
-if ( defined $setup_vars{OOO_STRIP} &&
-     $setup_vars{OOO_STRIP} eq "no" ) {
+if ( defined $ENV{DISABLE_STRIP} &&
+     $ENV{DISABLE_STRIP} eq "TRUE" ) {
     $strip = "-dontstrip";
 }
 

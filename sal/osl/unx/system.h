@@ -200,6 +200,32 @@
 #   define  NO_PTHREAD_RTL
 #endif
 
+#ifdef OPENBSD
+#   define  ETIME ETIMEDOUT
+#   define _POSIX_THREAD_SYSCALL_SOFT 1
+#   include <pthread.h>
+#   include <sys/sem.h>
+#   include <semaphore.h>
+#   include <dlfcn.h>
+#   include <sys/filio.h>
+#   include <sys/ioctl.h>
+#   include <sys/param.h>
+#   include <sys/time.h>
+#   include <sys/uio.h>
+#   include <sys/exec.h>
+#       include <sys/un.h>
+#   include <netinet/tcp.h>
+#       define  IORESOURCE_TRANSFER_BSD
+#   include <machine/endian.h>
+#      define  PTR_SIZE_T(s)   ((size_t *)&(s))
+#       define  IORESOURCE_TRANSFER_BSD
+#       define  IOCHANNEL_TRANSFER_BSD_RENO
+#       define  pthread_testcancel()
+#       define  NO_PTHREAD_PRIORITY
+#       define  NO_PTHREAD_RTL
+#       define  PTHREAD_SIGACTION                       pthread_sigaction
+#endif
+
 #ifdef SCO
 #   define AF_IPX -1
 #   include <strings.h>
@@ -349,7 +375,8 @@ int macxp_resolveAlias(char *path, int buflen);
 #if !defined(_WIN32)  && !defined(_WIN16) && !defined(OS2)  && \
     !defined(LINUX)   && !defined(NETBSD) && !defined(FREEBSD) && !defined(SCO)  && \
     !defined(AIX)     && !defined(HPUX)   && \
-    !defined(SOLARIS) && !defined(MACOSX)
+    !defined(SOLARIS) && !defined(MACOSX) && \
+    !defined(OPENBSD)
 #   error "Target platform not specified!"
 #endif
 

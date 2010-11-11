@@ -104,7 +104,7 @@ void _ScRangeListTabs::Append( ScSingleRefData a, SCsTAB nTab, const BOOL b )
     if( nTab < 0)
         nTab = a.nTab;
 
-    if( nTab >= 0 )
+    if( nTab >= 0 && nTab <= MAXTAB)
     {
         _ScRangeList*   p = ppTabLists[ nTab ];
 
@@ -169,7 +169,7 @@ void _ScRangeListTabs::Append( ScComplexRefData a, SCsTAB nTab, const BOOL b )
     if( nTab < -1)
         nTab = a.Ref1.nTab;
 
-    if( nTab >= 0 )
+    if( nTab >= 0 && nTab <= MAXTAB)
     {
         _ScRangeList*   p = ppTabLists[ nTab ];
 

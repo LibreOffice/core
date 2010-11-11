@@ -45,7 +45,7 @@
 extern "C" int mntctl( int cmd, size_t size, char* buf );
 #elif defined(NETBSD)
 #include <sys/mount.h>
-#elif defined(FREEBSD) || defined(MACOSX)
+#elif defined(FREEBSD) || defined(MACOSX) || defined(OPENBSD)
 #elif defined DECUNIX
 struct mnttab
 {
@@ -95,7 +95,8 @@ struct mymnttab
 };
 
 
-#if defined(NETBSD) || defined(FREEBSD) || defined(MACOSX)
+#if defined(NETBSD) || defined(FREEBSD) || defined(MACOSX) || \
+    defined(OPENBSD)
 BOOL GetMountEntry(dev_t /* dev */, struct mymnttab * /* mytab */ )
 {
     DBG_WARNING( "Sorry, not implemented: GetMountEntry" );

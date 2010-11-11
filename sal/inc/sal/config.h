@@ -92,7 +92,8 @@
 #define SAL_SYSCONFIGFILE( name ) name ".ini"
 #endif
 
-#if defined(SOLARIS) || defined(LINUX) || defined(NETBSD) || defined(FREEBSD) || defined(SCO) || defined(AIX)
+#if defined(SOLARIS) || defined(LINUX) || defined(NETBSD) || defined(FREEBSD) || \
+    defined(SCO) || defined(AIX) || defined(OPENBSD)
 #define SAL_UNX
 #define SAL_DLLEXTENSION ".so"
 #define SAL_DLLPREFIX "lib"

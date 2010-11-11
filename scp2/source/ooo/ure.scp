@@ -1002,7 +1002,7 @@ File gid_File_Dl_Stlport
 End
 #endif
 
-#if defined _gcc3 && !(defined FREEBSD || defined NETBSD \
+#if defined _gcc3 && !(defined FREEBSD || defined NETBSD || defined OPENBSD \
 	|| defined MACOSX || defined SYSTEM_STDLIBS || defined(WNT))
 File gid_File_Dl_GccS
     TXT_FILE_BODY;
@@ -1017,7 +1017,7 @@ File gid_File_Dl_GccS
 End
 #endif
 
-#if defined _gcc3 && !(defined FREEBSD || defined NETBSD \
+#if defined _gcc3 && !(defined FREEBSD || defined NETBSD || defined OPENBSD \
 	|| defined MACOSX || defined SYSTEM_STDLIBS || defined(WNT))
 File gid_File_Dl_Stdcpp
     Dir = SCP2_URE_DL_DIR;
@@ -1262,15 +1262,15 @@ Module gid_Module_Root_Ure_Hidden
             gid_Unixlink_File_Dl_Salhelper,
             gid_File_Dl_Profile_Uno,
             gid_File_Dl_Reg,
-            gid_Unixlink_File_Dl_Reg
+            gid_Unixlink_File_Dl_Reg,
             gid_File_Dl_Rmcxt,
-            gid_Unixlink_File_Dl_Rmcxt
+            gid_Unixlink_File_Dl_Rmcxt,
             gid_File_Dl_Store,
-            gid_Unixlink_File_Dl_Store
+            gid_Unixlink_File_Dl_Store,
             gid_File_Dl_Jvmaccess,
-            gid_Unixlink_File_Dl_Jvmaccess
+            gid_Unixlink_File_Dl_Jvmaccess,
             gid_File_Dl_Jvmfwk,
-            gid_Unixlink_File_Dl_Jvmfwk
+            gid_Unixlink_File_Dl_Jvmfwk,
             gid_File_Dl_Sunjavaplugin,
             gid_File_Dl_JrepropertiesClass,
             gid_File_Dl_Profile_Jvmfwk3rc,
@@ -1330,7 +1330,7 @@ Module gid_Module_Root_Ure_Hidden
                  gid_Unixlink_File_Dl_Salhelper,
                  gid_Unixlink_File_Dl_Cppu,
                  gid_Unixlink_File_Dl_Cppuhelper,
-                 gid_Unixlink_File_Dl_PurpEnvHelper
+                 gid_Unixlink_File_Dl_PurpEnvHelper,
                  gid_Unixlink_File_Dl_Reg,
                  gid_Unixlink_File_Dl_Rmcxt,
                  gid_Unixlink_File_Dl_Store,

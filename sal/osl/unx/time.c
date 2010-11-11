@@ -33,7 +33,8 @@
 #include <osl/time.h>
 
 /* FIXME: detection should be done in configure script */
-#if defined(MACOSX) || defined(FREEBSD) || defined(NETBSD) || defined(LINUX)
+#if defined(MACOSX) || defined(FREEBSD) || defined(NETBSD) || \
+    defined(LINUX) || defined(OPENBSD)
 #define STRUCT_TM_HAS_GMTOFF 1
 
 #elif defined(SOLARIS)

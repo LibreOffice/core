@@ -63,6 +63,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <vcl/font.hxx>
 
+using namespace sax_fastparser;
 using namespace ::comphelper;
 using namespace ::com::sun::star;
 
@@ -552,9 +553,7 @@ void DocxExport::WriteHeaderFooter( const SwFmt& rFmt, bool bHeader, const char*
         pFS = m_pFilter->openFragmentStreamWithSerializer( OUStringBuffer().appendAscii( "word/" ).append( aName ).makeStringAndClear(),
                     S( "application/vnd.openxmlformats-officedocument.wordprocessingml.header+xml" ) );
 
-        pFS->startElementNS( XML_w, XML_hdr,
-                FSNS( XML_xmlns, XML_w ), "http://schemas.openxmlformats.org/wordprocessingml/2006/main",
-                FSEND );
+        pFS->startElementNS( XML_w, XML_hdr, MainXmlNamespaces( pFS ));
     }
     else
     {
@@ -567,9 +566,7 @@ void DocxExport::WriteHeaderFooter( const SwFmt& rFmt, bool bHeader, const char*
         pFS = m_pFilter->openFragmentStreamWithSerializer( OUStringBuffer().appendAscii( "word/" ).append( aName ).makeStringAndClear(),
                     S( "application/vnd.openxmlformats-officedocument.wordprocessingml.footer+xml" ) );
 
-        pFS->startElementNS( XML_w, XML_ftr,
-                FSNS( XML_xmlns, XML_w ), "http://schemas.openxmlformats.org/wordprocessingml/2006/main",
-                FSEND );
+        pFS->startElementNS( XML_w, XML_ftr, MainXmlNamespaces( pFS ));
     }
 
     // switch the serializer to redirect the output to word/styles.xml
@@ -651,14 +648,7 @@ VMLExport& DocxExport::VMLExporter()
 void DocxExport::WriteMainText()
 {
     // setup the namespaces
-    m_pDocumentFS->startElementNS( XML_w, XML_document,
-            FSNS( XML_xmlns, XML_o ), "urn:schemas-microsoft-com:office:office",
-            FSNS( XML_xmlns, XML_r ), "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
-            FSNS( XML_xmlns, XML_v ), "urn:schemas-microsoft-com:vml",
-            FSNS( XML_xmlns, XML_w ), "http://schemas.openxmlformats.org/wordprocessingml/2006/main",
-            FSNS( XML_xmlns, XML_w10 ), "urn:schemas-microsoft-com:office:word",
-            FSNS( XML_xmlns, XML_wp ), "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing",
-            FSEND );
+    m_pDocumentFS->startElementNS( XML_w, XML_document, MainXmlNamespaces( m_pDocumentFS ));
 
     // body
     m_pDocumentFS->startElementNS( XML_w, XML_body, FSEND );
@@ -676,6 +666,18 @@ void DocxExport::WriteMainText()
     // finish body and document
     m_pDocumentFS->endElementNS( XML_w, XML_body );
     m_pDocumentFS->endElementNS( XML_w, XML_document );
+}
+
+XFastAttributeListRef DocxExport::MainXmlNamespaces( FSHelperPtr serializer )
+{
+    FastAttributeList* pAttr = serializer->createAttrList();
+    pAttr->add( FSNS( XML_xmlns, XML_o ), "urn:schemas-microsoft-com:office:office" );
+    pAttr->add( FSNS( XML_xmlns, XML_r ), "http://schemas.openxmlformats.org/officeDocument/2006/relationships" );
+    pAttr->add( FSNS( XML_xmlns, XML_v ), "urn:schemas-microsoft-com:vml" );
+    pAttr->add( FSNS( XML_xmlns, XML_w ), "http://schemas.openxmlformats.org/wordprocessingml/2006/main" );
+    pAttr->add( FSNS( XML_xmlns, XML_w10 ), "urn:schemas-microsoft-com:office:word" );
+    pAttr->add( FSNS( XML_xmlns, XML_wp ), "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" );
+    return XFastAttributeListRef( pAttr );
 }
 
 DocxExport::DocxExport( DocxExportFilter *pFilter, SwDoc *pDocument, SwPaM *pCurrentPam, SwPaM *pOriginalPam )

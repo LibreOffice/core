@@ -368,13 +368,13 @@ sub do_symlink
         }
     }
     else {
+        return unless -e $fullfrom;
         print "REMOVE: $to\n" if $opt_verbose;
         unlink $to;
         if ( $opt_delete ) {
             push_on_ziplist($to) if $opt_zip;
             return;
         }
-        return unless -e $fullfrom;
         print "SYMLIB: $from -> $to\n" if $opt_verbose;
         if ( !symlink("$from", "$to") ) {
             print_error("can't symlink $from -> $to: $!",0);

@@ -26,7 +26,7 @@ namespace text {
     class XTextRange;
 }
 namespace io {
-    struct XOutputStream;
+    class XOutputStream;
 }
 }}}
 

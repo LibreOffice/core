@@ -70,7 +70,8 @@ typedef pthread_mutex_t mutex_type;
 #define RTL_MUTEX_ACQUIRE(a)  pthread_mutex_lock((a))
 #define RTL_MUTEX_RELEASE(a)  pthread_mutex_unlock((a))
 
-#if   defined(FREEBSD) || defined(NETBSD) || defined(MACOSX)
+#if defined(FREEBSD) || defined(NETBSD) || defined(MACOSX) || \
+    defined(OPENBSD)
 static sal_Size __rtl_memory_vmpagesize (void)
 {
     /* xBSD */
@@ -88,7 +89,7 @@ static sal_Size __rtl_memory_vmpagesize (void)
     /* other */
     return (sal_Size)(0x2000);
 }
-#endif /* FREEBSD || NETBSD || MACOSX || LINUX || SOLARIS || AIX */
+#endif /* FREEBSD || NETBSD || MACOSX || LINUX || SOLARIS || AIX || OPENBSD*/
 
 #ifndef PROT_HEAP
 #define PROT_HEAP (PROT_READ | PROT_WRITE | PROT_EXEC)

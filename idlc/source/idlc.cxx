@@ -220,6 +220,8 @@ Idlc::Idlc(Options* pOptions)
     , m_errorCount(0)
     , m_warningCount(0)
     , m_lineNumber(0)
+    , m_offsetStart(0)
+    , m_offsetEnd(0)
     , m_parseState(PS_NoState)
 {
     m_pScopes = new AstStack();

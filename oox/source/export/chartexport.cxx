@@ -218,7 +218,7 @@ Reference< chart2::data::XLabeledDataSequence > lcl_getCategories( const Referen
     catch( uno::Exception & ex )
     {
         (void)ex; // avoid warning for pro build
-        OSL_ENSURE( false, OUStringToOString(
+        OSL_ENSURE( false, rtl::OUStringToOString(
                         OUString( RTL_CONSTASCII_USTRINGPARAM( "Exception caught. Type: " )) +
                         OUString::createFromAscii( typeid( ex ).name()) +
                         OUString( RTL_CONSTASCII_USTRINGPARAM( ", Message: " )) +
@@ -354,7 +354,7 @@ bool lcl_isSeriesAttachedToFirstAxis(
     catch( uno::Exception & ex )
     {
         (void)ex; // avoid warning for pro build
-        OSL_ENSURE( false, OUStringToOString(
+        OSL_ENSURE( false, rtl::OUStringToOString(
                         OUString( RTL_CONSTASCII_USTRINGPARAM( "Exception caught. Type: " )) +
                         OUString::createFromAscii( typeid( ex ).name()) +
                         OUString( RTL_CONSTASCII_USTRINGPARAM( ", Message: " )) +
@@ -374,7 +374,7 @@ OUString lcl_ConvertRange( const ::rtl::OUString & rRange, const Reference< char
         xDoc->getDataProvider(), uno::UNO_QUERY );
     if( xConversion.is())
         aResult = xConversion->convertRangeToXML( rRange );
-    OSL_TRACE("lcl_ConvertRange, the originla formula is %s, the new formula is %s ", OUStringToOString( rRange, RTL_TEXTENCODING_UTF8 ).getStr(), OUStringToOString( aResult, RTL_TEXTENCODING_UTF8 ).getStr());
+    OSL_TRACE("lcl_ConvertRange, the originla formula is %s, the new formula is %s ", rtl::OUStringToOString( rRange, RTL_TEXTENCODING_UTF8 ).getStr(), rtl::OUStringToOString( aResult, RTL_TEXTENCODING_UTF8 ).getStr());
     return aResult;
 }
 
@@ -673,7 +673,7 @@ OUString ChartExport::parseFormula( const OUString& rRange )
         aResult = aRange;
     }
 
-    OSL_TRACE("ChartExport::parseFormula, the originla formula is %s, the new formula is %s ", OUStringToOString( rRange, RTL_TEXTENCODING_UTF8 ).getStr(), OUStringToOString( aResult, RTL_TEXTENCODING_UTF8 ).getStr());
+    OSL_TRACE("ChartExport::parseFormula, the originla formula is %s, the new formula is %s ", rtl::OUStringToOString( rRange, RTL_TEXTENCODING_UTF8 ).getStr(), rtl::OUStringToOString( aResult, RTL_TEXTENCODING_UTF8 ).getStr());
     return aResult;
 }
 
@@ -831,7 +831,7 @@ void ChartExport::InitRangeSegmentationProperties( const Reference< chart2::XCha
         catch( uno::Exception & ex )
         {
             (void)ex; // avoid warning for pro build
-            OSL_ENSURE( false, OUStringToOString(
+            OSL_ENSURE( false, rtl::OUStringToOString(
                             OUString( RTL_CONSTASCII_USTRINGPARAM( "Exception caught. Type: " )) +
                             OUString::createFromAscii( typeid( ex ).name()) +
                             OUString( RTL_CONSTASCII_USTRINGPARAM( ", Message: " )) +
@@ -2645,7 +2645,7 @@ void ChartExport::exportDataPoints(
                 {
                     (void)rEx; // avoid warning for pro build
                     DBG_ERROR1( "Exception caught during Export of data point: %s",
-                                    OUStringToOString( rEx.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
+                                    rtl::OUStringToOString( rEx.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
                 }
             }
             else

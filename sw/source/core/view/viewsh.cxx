@@ -622,7 +622,7 @@ void ViewShell::LayoutIdle()
 
     SET_CURR_SHELL( this );
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     if( pOpt->IsTest5() )
         return;
 #endif

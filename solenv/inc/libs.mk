@@ -205,7 +205,8 @@ ZLIB3RDLIB=-lz
 ZLIB3RDLIB=-lzlib
 .ENDIF
 .IF "$(SYSTEM_JPEG)"=="YES"
-.IF "$(SOLAR_JAVA)" != "" && "$(JDK)" != "gcj" && "$(OS)" != "MACOSX"
+.IF "$(SOLAR_JAVA)" != "" && "$(JDK)" != "gcj" && "$(OS)" != "MACOSX" && \
+	"$(OS)" != "OPENBSD"
 #i34482# Blackdown/Sun jdk is in the libsearch patch and has a libjpeg :-(
 .IF "$(OS)" == "FREEBSD"
 JPEG3RDLIB=/usr/local/lib/libjpeg.so

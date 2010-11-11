@@ -171,6 +171,10 @@ interface Application
     [
         ExecMethod = MiscExec_Impl ;
     ]
+    SID_SHOW_CREDITS
+    [
+        ExecMethod = MiscExec_Impl ;
+    ]
     SID_RECENTFILELIST
     [
     ]

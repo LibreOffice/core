@@ -1055,6 +1055,12 @@
     HelpID = SID_SHOW_LICENSE ; \
     Text [ en-US ] = "License information..." ; \
 
+#define ITEM_SHOW_CREDITS \
+    Identifier = SID_SHOW_CREDITS ; \
+    Command = ".uno:ShowCredits" ; \
+    HelpID = SID_SHOW_CREDITS ; \
+    Text [ en-US ] = "%PRODUCTNAME Credits..." ;
+
 #define ITEM_HELP_ONLINE_REGISTRATION \
     Identifier = SID_ONLINE_REGISTRATION ; \
     Command = ".uno:OnlineRegistrationDlg" ; \
@@ -1111,6 +1117,10 @@
                 MenuItem\
                 {\
                     Separator = TRUE ; \
+                };\
+                MenuItem\
+                {\
+                    ITEM_SHOW_CREDITS\
                 };\
                 MenuItem\
                 {\

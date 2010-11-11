@@ -311,6 +311,7 @@ template<typename T> inline T Abs(T a) { return (a>=0?a:-a); }
 #define SYSTEM_UNXMACXI     33
 #define SYSTEM_OS2GCCI      34
 #define SYSTEM_UNXBSDX      35
+#define SYSTEM_UNXOBSD      36
 #define SYSTEM_WNTGCCI      99
 
 #if defined WNT
@@ -380,6 +381,8 @@ template<typename T> inline T Abs(T a) { return (a>=0?a:-a); }
   #define __DLLEXTENSION "mxp.dylib"
 #elif defined MACOSX && defined X86
   #define __DLLEXTENSION "mxi.dylib"
+#elif defined OPENBSD
+  #define __DLLEXTENSION "ob.so"
 #else
   #define __DLLEXTENSION ".so"
 #endif

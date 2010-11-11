@@ -765,7 +765,7 @@ ConfigurationValue const ConfigurationValues[] =
     {
         SETTING_REMOVE_PERSONAL_INFO,
         "/apps/openoffice/lockdown/remove_personal_info_on_save",
-        "Scripting/RemovePersonalInfoOnSaving",
+        "RemovePersonalInfoOnSaving",
         sal_False,
         SETTINGS_LAST
     },

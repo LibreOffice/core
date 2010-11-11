@@ -42,7 +42,7 @@
 #include <X11/keysym.h>
 #include <X11/Xutil.h>
 #include "tools/postx.h"
-#if defined(LINUX) || defined(NETBSD) || defined (FREEBSD)
+#if defined(LINUX) || defined(NETBSD) || defined (FREEBSD) || defined(OPENBSD)
 #include <sys/poll.h>
 #else
 #include <poll.h>

@@ -1951,7 +1951,7 @@ sub create_download_sets
     my $lastdir = $installationdir;
     installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$lastdir);
 
-    if ( $lastdir =~ /\./ ) { $lastdir =~ s/\./_download_inprogress\./ }
+    if ( $installer::globals::iswindowsbuild && $lastdir =~ /\./ ) { $lastdir =~ s/\./_download_inprogress\./ }
     else { $lastdir = $lastdir . "_download_inprogress"; }
 
     # removing existing directory "_native_packed_inprogress" and "_native_packed_witherror" and "_native_packed"

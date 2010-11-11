@@ -86,6 +86,7 @@ SHL1STDLIBS=\
     $(CPPULIB)					\
     $(CPPUHELPERLIB)			\
     $(SALLIB)					\
+    $(SALHELPERLIB)				\
     $(OLE32LIB)					\
     $(OLEAUT32LIB)				\
     $(UUIDLIB)					\

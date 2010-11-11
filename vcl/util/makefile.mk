@@ -332,7 +332,8 @@ SHL2STDLIBS+=`pkg-config --libs xrender`
 .IF "$(GUIBASE)"=="unx"
 
 SHL2STDLIBS += -lXext -lSM -lICE -lX11
-.IF "$(OS)"!="MACOSX" && "$(OS)"!="FREEBSD" && "$(OS)"!="NETBSD"
+.IF "$(OS)"!="MACOSX" && "$(OS)"!="FREEBSD" && "$(OS)"!="NETBSD" && \
+	&& "$(OS)"!="OPENBSD"
 # needed by salprnpsp.cxx
 SHL2STDLIBS+= -ldl
 .ENDIF

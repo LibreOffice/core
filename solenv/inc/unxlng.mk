@@ -112,8 +112,16 @@ CFLAGSDBGUTIL=
 # Compiler flags for enabling optimizations
 .IF "$(PRODUCT)"!=""
 CFLAGSOPT=$(CDEFAULTOPT) # optimizing for products
-.IF "$(USE_SYSTEM_STL)"!="YES"
-CFLAGSOPT+=-fno-strict-aliasing #STLPort headers are full of aliasing warnings
+
+GCCNUMVERSION_CMD=-dumpversion $(PIPEERROR) $(AWK) -v num=true -f $(SOLARENV)/bin/getcompver.awk
+GCCNUMVER:=$(shell @-$(CXX) $(GCCNUMVERSION_CMD))
+
+.IF "$(USE_SYSTEM_STL)"!="YES" || "$(GCCNUMVER)" <= "000400050000"
+#STLPort headers are full of aliasing warnings and
+#At least SLED 10.2 gcc 4.3 overly agressively optimizes
+#uno::Sequence into junk, so only strict-alias on compiler
+#later than 4.5.1
+CFLAGSOPT+=-fno-strict-aliasing
 .ENDIF
 .ELSE 	# "$(PRODUCT)"!=""
 CFLAGSOPT=   							# no optimizing for non products

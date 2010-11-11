@@ -1804,7 +1804,7 @@ const SwRect SwContourCache::ContourRect( const SwFmt* pFmt,
 
         delete pPolyPolygon;
         // UPPER_LOWER_TEST
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         const SwRootFrm* pTmpRootFrm = pFmt->getIDocumentLayoutAccess()->GetRootFrm();
         if( pTmpRootFrm->GetCurrShell() )
         {
