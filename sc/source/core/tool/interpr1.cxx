@@ -2760,7 +2760,7 @@ static ::rtl::OUString lcl_convertIntoHalfWidth( const ::rtl::OUString & rStr )
 
     if( bFirstASCCall )
     {
-        aTrans.loadModuleByImplName( ::rtl::OUString::createFromAscii( "FULLWIDTH_HALFWIDTH_LIKE_ASC" ), LANGUAGE_SYSTEM );
+        aTrans.loadModuleByImplName( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "FULLWIDTH_HALFWIDTH_LIKE_ASC" )), LANGUAGE_SYSTEM );
         bFirstASCCall = false;
     }
 
@@ -2775,7 +2775,7 @@ static ::rtl::OUString lcl_convertIntoFullWidth( const ::rtl::OUString & rStr )
 
     if( bFirstJISCall )
     {
-        aTrans.loadModuleByImplName( ::rtl::OUString::createFromAscii( "HALFWIDTH_FULLWIDTH_LIKE_JIS" ), LANGUAGE_SYSTEM );
+        aTrans.loadModuleByImplName( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "HALFWIDTH_FULLWIDTH_LIKE_JIS" )), LANGUAGE_SYSTEM );
         bFirstJISCall = false;
     }
 
