@@ -135,7 +135,7 @@ namespace connectivity
             /** retrieves the icon for HSQL TEXT TABLEs
             */
             ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >
-                impl_getTextTableIcon_nothrow( ::sal_Int32 _ColorMode );
+                impl_getTextTableIcon_nothrow();
         };
 
         //==========================================================================

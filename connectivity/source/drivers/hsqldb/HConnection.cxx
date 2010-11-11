@@ -219,7 +219,7 @@ namespace connectivity { namespace hsqldb
     }
 
     // -------------------------------------------------------------------
-    Reference< XGraphic > SAL_CALL OHsqlConnection::getTableIcon( const ::rtl::OUString& _TableName, ::sal_Int32 _ColorMode ) throw (RuntimeException)
+    Reference< XGraphic > SAL_CALL OHsqlConnection::getTableIcon( const ::rtl::OUString& _TableName, ::sal_Int32 /*_ColorMode*/ ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
 
@@ -227,7 +227,7 @@ namespace connectivity { namespace hsqldb
         if ( !impl_isTextTable_nothrow( _TableName ) )
             return NULL;
 
-        return impl_getTextTableIcon_nothrow( _ColorMode );
+        return impl_getTextTableIcon_nothrow();
     }
 
     // -------------------------------------------------------------------
@@ -347,7 +347,7 @@ namespace connectivity { namespace hsqldb
     }
 
     // -------------------------------------------------------------------
-    Reference< XGraphic > OHsqlConnection::impl_getTextTableIcon_nothrow( ::sal_Int32 _ColorMode )
+    Reference< XGraphic > OHsqlConnection::impl_getTextTableIcon_nothrow()
     {
         Reference< XGraphic > xGraphic;
         try
