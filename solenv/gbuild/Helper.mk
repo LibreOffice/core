@@ -126,11 +126,12 @@ endef
 
 define gb_Helper_add_repositories
 $(foreach repo,$(1),$(call gb_Helper_add_repository,$(repo)))
+
 endef
 
 define gb_Helper_init_registries
 gb_Executable_VALIDLAYERS := UREBIN SDK OOO BRAND NONE
-gb_Library_VALIDLAYERS := PLAINLIBS_URE PLAINLIBS_OOO RTLIBS RTVERLIBS STLLIBS UNOLIBS_URE UNOLIBS_OOO UNOVERLIBS
+gb_Library_VALIDLAYERS := OOOLIBS PLAINLIBS_URE PLAINLIBS_OOO RTLIBS RTVERLIBS STLLIBS UNOLIBS_URE UNOLIBS_OOO UNOVERLIBS
 gb_StaticLibrary_VALIDLAYERS := PLAINLIBS
 gb_Library_NAMESCHEMES := OOO PLAIN RT RTVER STL UNO UNOVER
 gb_StaticLibrary_NAMESCHEMES := PLAIN
@@ -167,6 +168,25 @@ $$(error $(1) is not a valid layer for executables. Valid layers are: $$(gb_Exec
 endif
 
 gb_Executable_$(1) += $(2)
+
+endef
+
+define gb_Helper_register_libraries
+ifeq ($$(filter $(1),$$(gb_Library_VALIDLAYERS)),)
+$$(error $(1) is not a valid layer for layer. Valid layers are: $$(gb_Library_VALIDLAYERS))
+endif
+
+gb_Library_$(1) += $(2)
+
+endef
+
+define gb_Helper_register_static_libraries
+ifeq ($$(filter $(1),$$(gb_StaticLibrary_VALIDLAYERS)),)
+$$(error $(1) is not a valid layer for layer. Valid layers are: $$(gb_StaticLibrary_VALIDLAYERS))
+endif
+
+gb_StaticLibrary_$(1) += $(2)
+
 endef
 
 # vim: set noet sw=4 ts=4:

@@ -38,7 +38,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     g2g \
 ))
 
-gb_Library_OOOLIBS +=\
+$(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     avmedia \
     basegfx \
     cui \
@@ -74,51 +74,54 @@ gb_Library_OOOLIBS +=\
     xo \
     xof \
     xcr \
+))
 
-gb_Library_PLAINLIBS_URE +=\
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
     xml2 \
+))
 
-gb_Library_PLAINLIBS_OOO +=\
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     icuuc \
+))
 
 
-# => OOOLIB
-gb_Library_RTLIBS +=\
+$(eval $(call gb_Helper_register_libraries,RTLIBS, \
     comphelper \
     i18nisolang1 \
     i18nutil \
     ucbhelper \
     vos3 \
+))
 
-# => URELIB
-gb_Library_RTVERLIBS +=\
+$(eval $(call gb_Helper_register_libraries,RTVERLIBS, \
     cppuhelper \
     salhelper \
+))
 
-# => URELIB
-gb_Library_STLLIBS +=\
+$(eval $(call gb_Helper_register_libraries,STLLIBS, \
     stl \
+))
 
-gb_Library_UNOLIBS_URE +=\
-
-gb_Library_UNOLIBS_OOO +=\
+$(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     fsstorage \
     hatchwindowfactory \
     passwordcontainer \
     productregistration \
     vbaswobj \
+))
 
 
-# => URELIB
-gb_Library_UNOVERLIBS +=\
+$(eval $(call gb_Helper_register_libraries,UNOVERLIBS, \
     cppu \
     jvmfwk \
     sal \
+))
 
-gb_StaticLibrary_PLAINLIBS +=\
+$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
     jpeglib \
     ooopathutils \
     salcpprt \
     zlib \
-    
+))
+
 # vim: set noet sw=4 ts=4:
