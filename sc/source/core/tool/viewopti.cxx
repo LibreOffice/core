@@ -406,10 +406,10 @@ Sequence<OUString> ScViewCfg::GetGridPropertyNames()
     //  adjust for metric system
     if (ScOptionsUtil::IsMetricSystem())
     {
-        pNames[SCGRIDOPT_RESOLU_X] = OUString::createFromAscii( "Resolution/XAxis/Metric" );
-        pNames[SCGRIDOPT_RESOLU_Y] = OUString::createFromAscii( "Resolution/YAxis/Metric" );
-        pNames[SCGRIDOPT_OPTION_X] = OUString::createFromAscii( "Option/XAxis/Metric" );
-        pNames[SCGRIDOPT_OPTION_Y] = OUString::createFromAscii( "Option/YAxis/Metric" );
+        pNames[SCGRIDOPT_RESOLU_X] = OUString(RTL_CONSTASCII_USTRINGPARAM( "Resolution/XAxis/Metric" ));
+        pNames[SCGRIDOPT_RESOLU_Y] = OUString(RTL_CONSTASCII_USTRINGPARAM( "Resolution/YAxis/Metric" ));
+        pNames[SCGRIDOPT_OPTION_X] = OUString(RTL_CONSTASCII_USTRINGPARAM( "Option/XAxis/Metric" ));
+        pNames[SCGRIDOPT_OPTION_Y] = OUString(RTL_CONSTASCII_USTRINGPARAM( "Option/YAxis/Metric" ));
     }
 
     return aNames;
@@ -417,9 +417,9 @@ Sequence<OUString> ScViewCfg::GetGridPropertyNames()
 
 
 ScViewCfg::ScViewCfg() :
-    aLayoutItem( OUString::createFromAscii( CFGPATH_LAYOUT ) ),
-    aDisplayItem( OUString::createFromAscii( CFGPATH_DISPLAY ) ),
-    aGridItem( OUString::createFromAscii( CFGPATH_GRID ) )
+    aLayoutItem( OUString(RTL_CONSTASCII_USTRINGPARAM( CFGPATH_LAYOUT )) ),
+    aDisplayItem( OUString(RTL_CONSTASCII_USTRINGPARAM( CFGPATH_DISPLAY )) ),
+    aGridItem( OUString(RTL_CONSTASCII_USTRINGPARAM( CFGPATH_GRID )) )
 {
     sal_Int32 nIntVal = 0;
 

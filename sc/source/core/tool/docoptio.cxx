@@ -148,9 +148,9 @@ void ScDocOptions::ResetDocOptions()
 void ScDocOptions::ResetFormulaSeparators()
 {
     // Defaults to the old separator values.
-    aFormulaSepArg = OUString::createFromAscii(";");
-    aFormulaSepArrayCol = OUString::createFromAscii(";");
-    aFormulaSepArrayRow = OUString::createFromAscii("|");
+    aFormulaSepArg = OUString(RTL_CONSTASCII_USTRINGPARAM(";"));
+    aFormulaSepArrayCol = OUString(RTL_CONSTASCII_USTRINGPARAM(";"));
+    aFormulaSepArrayRow = OUString(RTL_CONSTASCII_USTRINGPARAM("|"));
 
     const Locale& rLocale = *ScGlobal::GetLocale();
     const OUString& rLang = rLocale.Language;
@@ -189,12 +189,12 @@ void ScDocOptions::ResetFormulaSeparators()
         // if the decimal and list separators are equal, set the
         // parameter separator to be ';', unless they are both
         // semicolon in which case don't change the decimal separator.
-        aFormulaSepArg = OUString::createFromAscii(";");
+        aFormulaSepArg = OUString(RTL_CONSTASCII_USTRINGPARAM(";"));
 
-    aFormulaSepArrayCol = OUString::createFromAscii(",");
+    aFormulaSepArrayCol = OUString(RTL_CONSTASCII_USTRINGPARAM(","));
     if (cDecSep == sal_Unicode(','))
-        aFormulaSepArrayCol = OUString::createFromAscii(".");
-    aFormulaSepArrayRow = OUString::createFromAscii(";");
+        aFormulaSepArrayCol = OUString(RTL_CONSTASCII_USTRINGPARAM("."));
+    aFormulaSepArrayRow = OUString(RTL_CONSTASCII_USTRINGPARAM(";"));
 }
 
 const LocaleDataWrapper& ScDocOptions::GetLocaleDataWrapper()
@@ -346,7 +346,7 @@ Sequence<OUString> ScDocCfg::GetLayoutPropertyNames()
 
     //  adjust for metric system
     if (ScOptionsUtil::IsMetricSystem())
-        pNames[SCDOCLAYOUTOPT_TABSTOP] = OUString::createFromAscii( "TabStop/Metric" );
+        pNames[SCDOCLAYOUTOPT_TABSTOP] = OUString(RTL_CONSTASCII_USTRINGPARAM( "TabStop/Metric") );
 
     return aNames;
 }
@@ -366,10 +366,10 @@ Sequence<OUString> ScDocCfg::GetCompatPropertyNames()
 }
 
 ScDocCfg::ScDocCfg() :
-    aCalcItem( OUString::createFromAscii( CFGPATH_CALC ) ),
-    aFormulaItem(OUString::createFromAscii(CFGPATH_FORMULA)),
-    aLayoutItem(OUString::createFromAscii(CFGPATH_DOCLAYOUT)),
-    aCompatItem(OUString::createFromAscii(CFGPATH_COMPAT))
+    aCalcItem( OUString(RTL_CONSTASCII_USTRINGPARAM( CFGPATH_CALC )) ),
+    aFormulaItem(OUString(RTL_CONSTASCII_USTRINGPARAM(CFGPATH_FORMULA))),
+    aLayoutItem(OUString(RTL_CONSTASCII_USTRINGPARAM(CFGPATH_DOCLAYOUT))),
+    aCompatItem(OUString(RTL_CONSTASCII_USTRINGPARAM(CFGPATH_COMPAT)))
 {
     sal_Int32 nIntVal = 0;
     double fDoubleVal = 0;

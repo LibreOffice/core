@@ -244,7 +244,7 @@ void ScChartHelper::SetChartRanges( const uno::Reference< chart2::XChartDocument
 
     try
     {
-        rtl::OUString aPropertyNameRole( ::rtl::OUString::createFromAscii("Role") );
+        rtl::OUString aPropertyNameRole( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Role")) );
 
         uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aLabeledDataSequences( xDataSource->getDataSequences() );
         sal_Int32 nRange=0;
