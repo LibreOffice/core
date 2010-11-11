@@ -99,16 +99,12 @@ static const char*  IMAGELIST_XML_FILE[]  =
 {
     "sc_imagelist.xml",
     "lc_imagelist.xml",
-    "sch_imagelist.xml",
-    "lch_imagelist.xml"
 };
 
 static const char*  BITMAP_FILE_NAMES[]   =
 {
     "sc_userimages.png",
     "lc_userimages.png",
-    "sch_userimages.png",
-    "lch_userimages.png"
 };
 
 namespace framework
@@ -120,8 +116,6 @@ namespace framework
     {
         "res/commandimagelist/sc_",
         "res/commandimagelist/lc_",
-        "res/commandimagelist/sch_",
-        "res/commandimagelist/lch_"
     };
 
 typedef GraphicNameAccess CmdToXGraphicNameAccess;
