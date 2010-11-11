@@ -53,6 +53,11 @@ endif
 endif
 
 ifneq ($(gb_LOCALBUILDDIR),)
+
+ifneq ($(gb_DISABLELOCALBUILD),)
+$(error This is requesting a local build. This scenario has been disable because the environment is not correctly setup for it.)
+endif
+
 .PHONY : setuplocal
 setuplocal :
     mkdir -p $(OUTDIR) $(WORKDIR)
