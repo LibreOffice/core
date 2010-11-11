@@ -804,7 +804,7 @@ OUString Package::TypeInfo::getFileFilter() throw (RuntimeException)
  *                     This bool is a noop now.
  * @param smallIcon    Return the small version of the icon
  */
-Any Package::TypeInfo::getIcon( sal_Bool highContrast, sal_Bool smallIcon )
+Any Package::TypeInfo::getIcon( sal_Bool /*highContrast*/, sal_Bool smallIcon )
     throw (RuntimeException)
 {
     if (! smallIcon)
