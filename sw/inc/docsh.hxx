@@ -212,7 +212,7 @@ public:
                         USHORT nIdx2 = INDEX_IGNORE,
                         USHORT nIdx3 = INDEX_IGNORE);
 
-    virtual Bitmap      GetStyleFamilyBitmap( SfxStyleFamily eFamily, BmpColorMode eColorMode );
+    virtual Bitmap      GetStyleFamilyBitmap( SfxStyleFamily eFamily );
 
     // View setzen fuer Aktionen ueber Shell
     void          SetView(SwView* pVw);

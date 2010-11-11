@@ -181,7 +181,6 @@ BITMAP BMP_FEHLT { FILE = "x.bmp" ; };
 
 // Bitmap fuer die NumerierungsVorlagen im Organizer
 Bitmap BMP_STYLES_FAMILY_NUM { File = "styfamnu.bmp" ; };
-Bitmap BMP_STYLES_FAMILY_NUM_HC { File = "styfamnu_h.bmp" ; };
 
 String STR_ENV_TITLE
 {

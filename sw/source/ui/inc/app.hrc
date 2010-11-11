@@ -58,7 +58,6 @@
 
 // Bitmap fuer die NumerierungsVorlagen im Organizer
 #define BMP_STYLES_FAMILY_NUM           (RC_APP_BEGIN + 17)
-#define BMP_STYLES_FAMILY_NUM_HC        (RC_APP_BEGIN + 18)
 
 // Strings fuer Bereiche in der Konfiguration
 #define STR_GRP_FILE                    (RC_APP_BEGIN + 56)

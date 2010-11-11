@@ -1261,17 +1261,11 @@ void SwDocShell::FormatPage( const String& rPage, BOOL bColumn, SwWrtShell*     
     Edit( rPage, aEmptyStr, SFX_STYLE_FAMILY_PAGE, 0, FALSE, bColumn, pActShell);
 }
 
-Bitmap SwDocShell::GetStyleFamilyBitmap( SfxStyleFamily eFamily, BmpColorMode eColorMode )
+Bitmap SwDocShell::GetStyleFamilyBitmap( SfxStyleFamily eFamily )
 {
     if( SFX_STYLE_FAMILY_PSEUDO == eFamily )
-    {
-        if ( eColorMode == BMP_COLOR_NORMAL )
-            return Bitmap( SW_RES( BMP_STYLES_FAMILY_NUM ));
-        else
-            return Bitmap( SW_RES( BMP_STYLES_FAMILY_NUM_HC ));
-    }
-
-    return SfxObjectShell::GetStyleFamilyBitmap( eFamily, eColorMode );
+        return Bitmap( SW_RES( BMP_STYLES_FAMILY_NUM ));
+    return SfxObjectShell::GetStyleFamilyBitmap( eFamily );
 }
 
 
