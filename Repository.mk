@@ -28,14 +28,7 @@
 $(eval $(call gb_Helper_register_repository,SRCDIR))
 
 
-gb_Executable_UREBIN +=
-
-gb_Executable_SDK +=
-gb_Executable_OOO +=
-gb_Executable_BRAND +=
-
-# not installed
-gb_Executable_NONE +=\
+$(eval $(call gb_Helper_register_executables,NONE, \
     mkunroll \
     rscdep \
     so_checksum \
@@ -43,6 +36,7 @@ gb_Executable_NONE +=\
     bmp \
     bmpsum \
     g2g \
+))
 
 gb_Library_OOOLIBS +=\
     avmedia \

@@ -129,24 +129,16 @@ $(foreach repo,$(1),$(call gb_Helper_add_repository,$(repo)))
 endef
 
 define gb_Helper_init_registries
+gb_Executable_VALIDLAYERS := UREBIN SDK OOO BRAND NONE
+gb_Library_VALIDLAYERS := PLAINLIBS_URE PLAINLIBS_OOO RTLIBS RTVERLIBS STLLIBS UNOLIBS_URE UNOLIBS_OOO UNOVERLIBS
+gb_StaticLibrary_VALIDLAYERS := PLAINLIBS
 gb_Library_NAMESCHEMES := OOO PLAIN RT RTVER STL UNO UNOVER
 gb_StaticLibrary_NAMESCHEMES := PLAIN
 
-gb_Executable_UREBIN :=
-gb_Executable_SDK :=
-gb_Executable_OOO :=
-gb_Executable_BRAND :=
-gb_Executable_NONE :=
-gb_Library_OOOLIBS :=
-gb_Library_PLAINLIBS_URE :=
-gb_Library_PLAINLIBS_OOO :=
-gb_Library_RTLIBS :=
-gb_Library_RTVERLIBS :=
-gb_Library_STLLIBS :=
-gb_Library_UNOLIBS_URE :=
-gb_Library_UNOLIBS_OOO :=
-gb_Library_UNOVERLIBS :=
-gb_StaticLibrary_PLAINLIBS :=
+$$(foreach layer,$$(gb_Executable_VALIDLAYERS),$$(eval gb_Executable_$$(layer) :=))
+$$(foreach layer,$$(gb_Library_VALIDLAYERS),$$(eval gb_Library_$$(layer) :=))
+$$(foreach layer,$$(gb_StaticLibrary_VALIDLAYERS),$$(eval gb_StaticLibrary_$$(layer) :=))
+
 endef
 
 define gb_Helper_collect_libtargets
@@ -167,6 +159,14 @@ define gb_Helper_collect_knownlibs
 gb_Library_KNOWNLIBS := $$(foreach namescheme,$$(gb_Library_NAMESCHEMES),$$(gb_Library_$$(namescheme)LIBS))
 gb_StaticLibrary_KNOWNLIBS := $$(foreach namescheme,$$(gb_StaticLibrary_NAMESCHEMES),$$(gb_StaticLibrary_$$(namescheme)LIBS))
 
+endef
+
+define gb_Helper_register_executables
+ifeq ($$(filter $(1),$$(gb_Executable_VALIDLAYERS)),)
+$$(error $(1) is not a valid layer for executables. Valid layers are: $$(gb_Executable_VALIDLAYERS))
+endif
+
+gb_Executable_$(1) += $(2)
 endef
 
 # vim: set noet sw=4 ts=4:
