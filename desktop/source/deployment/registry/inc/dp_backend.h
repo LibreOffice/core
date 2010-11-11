@@ -121,16 +121,16 @@ public:
         const ::rtl::OUString m_mediaType;
         const ::rtl::OUString m_fileFilter;
         const ::rtl::OUString m_shortDescr;
-        const sal_uInt16 m_smallIcon, m_smallIcon_HC;
+        const sal_uInt16 m_smallIcon;
     public:
         virtual ~TypeInfo();
         TypeInfo( ::rtl::OUString const & mediaType,
                   ::rtl::OUString const & fileFilter,
                   ::rtl::OUString const & shortDescr,
-                  sal_uInt16 smallIcon, sal_uInt16 smallIcon_HC )
+                  sal_uInt16 smallIcon)
             : m_mediaType(mediaType), m_fileFilter(fileFilter),
               m_shortDescr(shortDescr),
-              m_smallIcon(smallIcon), m_smallIcon_HC(smallIcon_HC)
+              m_smallIcon(smallIcon))
             {}
         // XPackageTypeInfo
         virtual ::rtl::OUString SAL_CALL getMediaType()

@@ -104,18 +104,12 @@ public:
 
 
 inline void SfxOrganizeListBox_Impl::SetBitmaps(
-    const Image &rOFolder, const Image &rCFolder, const Image &rODoc, const Image &rCDoc,
-    const Image &rOFolderHC, const Image &rCFolderHC, const Image &rODocHC, const Image &rCDocHC )
+    const Image &rOFolder, const Image &rCFolder, const Image &rODoc, const Image &rCDoc )
 {
     aOpenedFolderBmp = rOFolder;
     aClosedFolderBmp = rCFolder;
     aOpenedDocBmp = rODoc;
     aClosedDocBmp = rCDoc;
-
-    aOpenedFolderBmpHC = rOFolderHC;
-    aClosedFolderBmpHC = rCFolderHC;
-    aOpenedDocBmpHC = rODocHC;
-    aClosedDocBmpHC = rCDocHC;
 
 }
 
@@ -325,15 +319,8 @@ void SfxOrganizeDlg_Impl::InitBitmaps( void )
     Image   aOpenedDocBmp( SfxResId( IMG_OPENED_DOC ) );
     Image   aClosedDocBmp( SfxResId( IMG_CLOSED_DOC ) );
 
-    Image   aOpenedFolderBmpHC( SfxResId( IMG_OPENED_FOLDER_HC ) );
-    Image   aClosedFolderBmpHC( SfxResId( IMG_CLOSED_FOLDER_HC ) );
-    Image   aOpenedDocBmpHC( SfxResId( IMG_OPENED_DOC_HC ) );
-    Image   aClosedDocBmpHC( SfxResId( IMG_CLOSED_DOC_HC ) );
-
-    aLeftLb.SetBitmaps( aOpenedFolderBmp, aClosedFolderBmp, aOpenedDocBmp, aClosedDocBmp,
-                        aOpenedFolderBmpHC, aClosedFolderBmpHC, aOpenedDocBmpHC, aClosedDocBmpHC );
-    aRightLb.SetBitmaps( aOpenedFolderBmp, aClosedFolderBmp, aOpenedDocBmp, aClosedDocBmp,
-                        aOpenedFolderBmpHC, aClosedFolderBmpHC, aOpenedDocBmpHC, aClosedDocBmpHC );
+    aLeftLb.SetBitmaps( aOpenedFolderBmp, aClosedFolderBmp, aOpenedDocBmp, aClosedDocBmp );
+    aRightLb.SetBitmaps( aOpenedFolderBmp, aClosedFolderBmp, aOpenedDocBmp, aClosedDocBmp );
 }
 
 //=========================================================================
@@ -1472,15 +1459,16 @@ const Image &SfxOrganizeListBox_Impl::GetClosedBmp(USHORT nLevel) const
 */
 
 {
-    BOOL            bHC = GetSettings().GetStyleSettings().GetHighContrastMode();
     const Image*    pRet = NULL;
 
     switch( nLevel )
     {
         default:    DBG_ERROR( "Bitmaps ueberindiziert" );
 
-        case 0:     pRet = bHC? &aClosedFolderBmpHC : &aClosedFolderBmp;        break;
-        case 1:     pRet = bHC? &aClosedDocBmpHC : &aClosedDocBmp;              break;
+        case 0:     pRet = &aClosedFolderBmp;
+            break;
+        case 1:     pRet = &aClosedDocBmp;
+            break;
     }
 
     return *pRet;

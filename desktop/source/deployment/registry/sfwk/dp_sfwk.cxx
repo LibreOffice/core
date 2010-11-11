@@ -168,7 +168,7 @@ BackendImpl::BackendImpl(
                        OUSTR("application/vnd.sun.star.framework-script"),
                        OUString() /* no file filter */,
                        OUSTR("Scripting Framework Script Library"),
-                       RID_IMG_SCRIPTLIB, RID_IMG_SCRIPTLIB_HC ) )
+                       RID_IMG_SCRIPTLIB ) )
 {
     if (! transientMode())
     {

@@ -62,14 +62,6 @@
 #define BMP_STYLES_FAMILY3                  (RID_SFX_DOC_START+ 4)
 #define BMP_STYLES_FAMILY4                  (RID_SFX_DOC_START+ 5)
 
-#define BMP_STYLES_CLOSED_HC                (RID_SFX_DOC_START+ 6)
-#define BMP_STYLES_OPENED_HC                (RID_SFX_DOC_START+ 7)
-
-#define BMP_STYLES_FAMILY1_HC               (RID_SFX_DOC_START+ 8)
-#define BMP_STYLES_FAMILY2_HC               (RID_SFX_DOC_START+ 9)
-#define BMP_STYLES_FAMILY3_HC               (RID_SFX_DOC_START+ 10)
-#define BMP_STYLES_FAMILY4_HC               (RID_SFX_DOC_START+ 11)
-
 #define STR_STYLES                          (RID_SFX_DOC_START+ 18)
 #define STR_MACROS                          (RID_SFX_DOC_START+ 19)
 

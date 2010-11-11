@@ -1770,7 +1770,6 @@ CustomPropertyLine::CustomPropertyLine( Window* pParent ) :
     m_aDateField.SetExtDateFormat( XTDATEF_SYSTEM_SHORT_YYYY );
 
     m_aRemoveButton.SetModeImage( SfxResId( SFX_IMG_PROPERTY_REMOVE ), BMP_COLOR_NORMAL );
-    m_aRemoveButton.SetModeImage( SfxResId( SFX_IMG_PROPERTY_REMOVE_HC ), BMP_COLOR_HIGHCONTRAST );
 }
 
 void CustomPropertyLine::SetRemoved()

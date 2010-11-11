@@ -30,7 +30,6 @@
 
  // -----------------------------------------------------------------------
 #define STD_MASKCOLOR Color { Red = 0xC000; Green = 0xC000; Blue = 0xC000; }
-#define STD_HC_MASKCOLOR Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; }
 
 FloatingWindow SID_RECORDING_FLOATWINDOW
 {

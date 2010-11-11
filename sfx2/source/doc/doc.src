@@ -72,9 +72,6 @@ String STR_QUERY_SAVE_DOCUMENT
 Bitmap BMP_STYLES_CLOSED { File = "newex.bmp" ; };
 Bitmap BMP_STYLES_OPENED { File = "newex.bmp" ; };
 
-Bitmap BMP_STYLES_CLOSED_HC { File = "newex_h.bmp" ; };
-Bitmap BMP_STYLES_OPENED_HC { File = "newex_h.bmp" ; };
-
 String STR_STYLES
 {
     Text [ en-US ] = "Styles" ;
@@ -99,11 +96,6 @@ Bitmap BMP_STYLES_FAMILY1 { File = "styfam1.bmp" ; };
 Bitmap BMP_STYLES_FAMILY2 { File = "styfam2.bmp" ; };
 Bitmap BMP_STYLES_FAMILY3 { File = "styfam3.bmp" ; };
 Bitmap BMP_STYLES_FAMILY4 { File = "styfam4.bmp" ; };
-
-Bitmap BMP_STYLES_FAMILY1_HC { File = "styfam1_h.bmp" ; };
-Bitmap BMP_STYLES_FAMILY2_HC { File = "styfam2_h.bmp" ; };
-Bitmap BMP_STYLES_FAMILY3_HC { File = "styfam3_h.bmp" ; };
-Bitmap BMP_STYLES_FAMILY4_HC { File = "styfam4_h.bmp" ; };
 
 ErrorBox MSG_PRINT_ERROR
 {

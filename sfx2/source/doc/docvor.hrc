@@ -29,10 +29,6 @@
 #define IMG_CLOSED_FOLDER       1
 #define IMG_OPENED_DOC          3
 #define IMG_CLOSED_DOC          4
-#define IMG_OPENED_FOLDER_HC    5
-#define IMG_CLOSED_FOLDER_HC    6
-#define IMG_OPENED_DOC_HC       7
-#define IMG_CLOSED_DOC_HC       8
 
 #define ACC_EDIT 1
 #define ID_COPY 201

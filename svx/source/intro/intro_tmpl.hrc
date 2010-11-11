@@ -28,7 +28,6 @@
 #include <svx/svxids.hrc>
 
 #define RID_IMGLIST_TREEOPT             (RID_OFA_START + 174)
-#define RID_IMGLIST_TREEOPT_HC          (RID_OFA_START + 175)
 
 #define OOO_CONTRIBUTOR_LIST \
 ItemList = \

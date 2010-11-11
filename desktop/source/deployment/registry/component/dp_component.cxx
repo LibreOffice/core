@@ -520,16 +520,14 @@ BackendImpl::BackendImpl(
                                    getPlatformString(),
                                    OUSTR("*" SAL_DLLEXTENSION),
                                    getResourceString(RID_STR_DYN_COMPONENT),
-                                   RID_IMG_COMPONENT,
-                                   RID_IMG_COMPONENT_HC ) ),
+                                   RID_IMG_COMPONENT) ),
       m_xJavaComponentTypeInfo( new Package::TypeInfo(
                                     OUSTR("application/"
                                           "vnd.sun.star.uno-component;"
                                           "type=Java"),
                                     OUSTR("*.jar"),
                                     getResourceString(RID_STR_JAVA_COMPONENT),
-                                    RID_IMG_JAVA_COMPONENT,
-                                    RID_IMG_JAVA_COMPONENT_HC ) ),
+                                    RID_IMG_JAVA_COMPONENT) ),
       m_xPythonComponentTypeInfo( new Package::TypeInfo(
                                       OUSTR("application/"
                                             "vnd.sun.star.uno-component;"
@@ -537,23 +535,21 @@ BackendImpl::BackendImpl(
                                       OUSTR("*.py"),
                                       getResourceString(
                                           RID_STR_PYTHON_COMPONENT),
-                                      RID_IMG_COMPONENT,
-                                      RID_IMG_COMPONENT_HC ) ),
+                                      RID_IMG_COMPONENT ) ),
       m_xRDBTypelibTypeInfo( new Package::TypeInfo(
                                  OUSTR("application/"
                                        "vnd.sun.star.uno-typelibrary;"
                                        "type=RDB"),
                                  OUSTR("*.rdb"),
                                  getResourceString(RID_STR_RDB_TYPELIB),
-                                 RID_IMG_TYPELIB, RID_IMG_TYPELIB_HC ) ),
+                                 RID_IMG_TYPELIB ) ),
       m_xJavaTypelibTypeInfo( new Package::TypeInfo(
                                   OUSTR("application/"
                                         "vnd.sun.star.uno-typelibrary;"
                                         "type=Java"),
                                   OUSTR("*.jar"),
                                   getResourceString(RID_STR_JAVA_TYPELIB),
-                                  RID_IMG_JAVA_TYPELIB,
-                                  RID_IMG_JAVA_TYPELIB_HC ) ),
+                                  RID_IMG_JAVA_TYPELIB ) ),
       m_typeInfos( 5 )
 {
     m_typeInfos[ 0 ] = m_xDynComponentTypeInfo;

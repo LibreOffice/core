@@ -672,11 +672,6 @@ Image SFX_IMG_PROPERTY_REMOVE
     ImageBitmap = Bitmap { File = "deleterow.bmp" ; };
     MaskColor = Color { Red=0xffff; Green=0x0000; Blue=0xffff; };
 };
-Image SFX_IMG_PROPERTY_REMOVE_HC
-{
-    ImageBitmap = Bitmap { File = "deleterow_h.bmp" ; };
-    MaskColor = Color { Red=0xffff; Green=0x0000; Blue=0xffff; };
-};
 
 QueryBox SFX_QB_WRONG_TYPE
 {

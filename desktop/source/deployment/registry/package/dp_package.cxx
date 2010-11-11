@@ -301,15 +301,13 @@ BackendImpl::BackendImpl(
                              OUSTR("application/vnd.sun.star.package-bundle"),
                              OUSTR("*.oxt;*.uno.pkg"),
                              getResourceString(RID_STR_PACKAGE_BUNDLE),
-                             RID_IMG_DEF_PACKAGE_BUNDLE,
-                             RID_IMG_DEF_PACKAGE_BUNDLE_HC ) ),
+                             RID_IMG_DEF_PACKAGE_BUNDLE ) ),
       m_xLegacyBundleTypeInfo( new Package::TypeInfo(
                                    OUSTR("application/"
                                          "vnd.sun.star.legacy-package-bundle"),
                                    OUSTR("*.zip"),
                                    m_xBundleTypeInfo->getShortDescription(),
-                                   RID_IMG_DEF_PACKAGE_BUNDLE,
-                                   RID_IMG_DEF_PACKAGE_BUNDLE_HC ) ),
+                                   RID_IMG_DEF_PACKAGE_BUNDLE ) ),
     m_typeInfos(2)
 {
     m_typeInfos[ 0 ] = m_xBundleTypeInfo;

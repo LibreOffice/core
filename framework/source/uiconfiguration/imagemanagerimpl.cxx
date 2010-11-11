@@ -427,8 +427,7 @@ static sal_Bool implts_checkAndScaleGraphic( uno::Reference< XGraphic >& rOutGra
     Size   aSize = aImage.GetSizePixel();
     bool   bMustScale( false );
 
-    if (( nImageType == ImageType_Color_Large ) ||
-        ( nImageType == ImageType_HC_Large ))
+    if ( nImageType == ImageType_Color_Large )
         bMustScale = ( aSize != aLargeSize );
     else
         bMustScale = ( aSize != aNormSize );

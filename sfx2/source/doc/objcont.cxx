@@ -437,37 +437,14 @@ void   SfxObjectShell::GetContent(String &rText,
             {
                 case CONTENT_STYLE:
                     nTextResId = STR_STYLES;
-                    if ( eColorMode == BMP_COLOR_NORMAL )
-                    {
-                        nClosedBitmapResId= BMP_STYLES_CLOSED;
-                        nOpenedBitmapResId= BMP_STYLES_OPENED;
-                    }
-                    else
-                    {
-                        nClosedBitmapResId= BMP_STYLES_CLOSED_HC;
-                        nOpenedBitmapResId= BMP_STYLES_OPENED_HC;
-                    }
-                    break;
-                case CONTENT_MACRO:
-                    nTextResId = STR_MACROS;
-                    if ( eColorMode == BMP_COLOR_NORMAL )
-                    {
-                        nClosedBitmapResId= BMP_STYLES_CLOSED;
-                        nOpenedBitmapResId= BMP_STYLES_OPENED;
-                    }
-                    else
-                    {
-                        nClosedBitmapResId= BMP_STYLES_CLOSED_HC;
-                        nOpenedBitmapResId= BMP_STYLES_OPENED_HC;
-                    }
-                    break;
-/*
-                case CONTENT_CONFIG:
-                    nTextResId = STR_CONFIG;
                     nClosedBitmapResId= BMP_STYLES_CLOSED;
                     nOpenedBitmapResId= BMP_STYLES_OPENED;
                     break;
- */
+                case CONTENT_MACRO:
+                    nTextResId = STR_MACROS;
+                    nClosedBitmapResId= BMP_STYLES_CLOSED;
+                    nOpenedBitmapResId= BMP_STYLES_OPENED;
+                    break;
             }
 
             if ( nTextResId )
@@ -493,19 +470,6 @@ void   SfxObjectShell::GetContent(String &rText,
             break;
         case CONTENT_MACRO:
             break;
-/*
-        case CONTENT_CONFIG:
-            if ( GetConfigManager() )
-            {
-                rText = GetConfigManager()->GetItem(i);
-                bCanDel = GetConfigManager()->CanDelete(i);
-            }
-            else
-                rText = String();
-            rClosedBitmap = Bitmap(SfxResId(BMP_STYLES_CLOSED));
-            rOpenedBitmap = Bitmap(SfxResId(BMP_STYLES_OPENED));
-            break;
-*/
     }
 }
 
@@ -524,16 +488,16 @@ Bitmap SfxObjectShell::GetStyleFamilyBitmap(SfxStyleFamily eFamily, BmpColorMode
     switch(eFamily)
     {
         case SFX_STYLE_FAMILY_CHAR:
-            nResId = ( eColorMode == BMP_COLOR_NORMAL ) ? BMP_STYLES_FAMILY1 : BMP_STYLES_FAMILY1_HC;
+            nResId = BMP_STYLES_FAMILY1;
             break;
         case SFX_STYLE_FAMILY_PARA:
-            nResId = ( eColorMode == BMP_COLOR_NORMAL ) ? BMP_STYLES_FAMILY2 : BMP_STYLES_FAMILY2_HC;
+            nResId = BMP_STYLES_FAMILY2;
             break;
         case SFX_STYLE_FAMILY_FRAME:
-            nResId = ( eColorMode == BMP_COLOR_NORMAL ) ? BMP_STYLES_FAMILY3 : BMP_STYLES_FAMILY3_HC;
+            nResId = BMP_STYLES_FAMILY3;
             break;
         case SFX_STYLE_FAMILY_PAGE :
-            nResId = ( eColorMode == BMP_COLOR_NORMAL ) ? BMP_STYLES_FAMILY4 : BMP_STYLES_FAMILY4_HC;
+            nResId = BMP_STYLES_FAMILY4;
             break;
         case SFX_STYLE_FAMILY_PSEUDO:
         case SFX_STYLE_FAMILY_ALL:

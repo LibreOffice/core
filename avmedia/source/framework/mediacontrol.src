@@ -32,91 +32,65 @@ String AVMEDIA_STR_OPEN
     Text[en-US] = "Open";
 };
 
-// ------------------------------------------------------------------------------
-
 String AVMEDIA_STR_INSERT
 {
     Text [ en-US ] = "Apply" ;
 };
-
-// ------------------------------------------------------------------------------
 
 String AVMEDIA_STR_PLAY
 {
     Text[en-US] = "Play";
 };
 
-// ------------------------------------------------------------------------------
-
 String AVMEDIA_STR_PAUSE
 {
     Text[en-US] = "Pause";
 };
-
-// ------------------------------------------------------------------------------
 
 String AVMEDIA_STR_STOP
 {
     Text[en-US] = "Stop";
 };
 
-// ------------------------------------------------------------------------------
-
 String AVMEDIA_STR_ENDLESS
 {
     Text[en-US] = "Repeat";
 };
-
-// ------------------------------------------------------------------------------
 
 String AVMEDIA_STR_MUTE
 {
     Text[en-US] = "Mute";
 };
 
-// ------------------------------------------------------------------------------
-
 String AVMEDIA_STR_ZOOM
 {
     Text[en-US] = "View";
 };
-
-// ------------------------------------------------------------------------------
 
 String AVMEDIA_STR_ZOOM_50
 {
     Text[en-US] = "50%";
 };
 
-// ------------------------------------------------------------------------------
-
 String AVMEDIA_STR_ZOOM_100
 {
     Text[en-US] = "100%";
 };
-
-// ------------------------------------------------------------------------------
 
 String AVMEDIA_STR_ZOOM_200
 {
     Text[en-US] = "200%";
 };
 
-// ------------------------------------------------------------------------------
-
 String AVMEDIA_STR_ZOOM_FIT
 {
     Text[en-US] = "Scaled";
 };
 
-// ------------------------------------------------------------------------------
-
 String AVMEDIA_STR_MEDIAPLAYER
 {
     Text[en-US] = "Media Player";
 };
-
-// ------------------------------------------------------------------------------
 
 ImageList AVMEDIA_IMGLST
 {
@@ -135,49 +109,9 @@ ImageList AVMEDIA_IMGLST
     IdCount = 7;
 };
 
-// ------------------------------------------------------------------------------
-
 ImageList AVMEDIA_IMGLST_L
 {
     Prefix = "avl";
-    MaskColor = Color{ Red = 0xff00; Green = 0x0000; Blue = 0xff00; };
-    IdList =
-    {
-        AVMEDIA_IMG_OPEN;
-        AVMEDIA_IMG_PLAY;
-        AVMEDIA_IMG_PAUSE;
-        AVMEDIA_IMG_STOP;
-        AVMEDIA_IMG_ENDLESS;
-        AVMEDIA_IMG_INSERT;
-        AVMEDIA_IMG_MUTE;
-    };
-    IdCount = 7;
-};
-
-// ------------------------------------------------------------------------------
-
-ImageList AVMEDIA_IMGLST_HC
-{
-    Prefix = "avh";
-    MaskColor = Color{ Red = 0xff00; Green = 0x0000; Blue = 0xff00; };
-    IdList =
-    {
-        AVMEDIA_IMG_OPEN;
-        AVMEDIA_IMG_PLAY;
-        AVMEDIA_IMG_PAUSE;
-        AVMEDIA_IMG_STOP;
-        AVMEDIA_IMG_ENDLESS;
-        AVMEDIA_IMG_INSERT;
-        AVMEDIA_IMG_MUTE;
-    };
-    IdCount = 7;
-};
-
-// ------------------------------------------------------------------------------
-
-ImageList AVMEDIA_IMGLST_L_HC
-{
-    Prefix = "avlh";
     MaskColor = Color{ Red = 0xff00; Green = 0x0000; Blue = 0xff00; };
     IdList =
     {

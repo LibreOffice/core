@@ -185,13 +185,13 @@ BackendImpl::BackendImpl(
                                      "vnd.sun.star.configuration-data"),
                                OUSTR("*.xcu"),
                                getResourceString(RID_STR_CONF_DATA),
-                               RID_IMG_CONF_XML, RID_IMG_CONF_XML_HC ) ),
+                               RID_IMG_CONF_XML ) ),
       m_xConfSchemaTypeInfo( new Package::TypeInfo(
                                  OUSTR("application/"
                                        "vnd.sun.star.configuration-schema"),
                                  OUSTR("*.xcs"),
                                  getResourceString(RID_STR_CONF_SCHEMA),
-                                 RID_IMG_CONF_XML, RID_IMG_CONF_XML_HC ) ),
+                                 RID_IMG_CONF_XML ) ),
       m_typeInfos( 2 )
 {
     m_typeInfos[ 0 ] = m_xConfDataTypeInfo;

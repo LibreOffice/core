@@ -135,7 +135,7 @@ BackendImpl::BackendImpl(
                                OUSTR("application/vnd.sun.star.help"),
                                rtl::OUString(),
                                getResourceString(RID_STR_HELP),
-                               RID_IMG_HELP, RID_IMG_HELP_HC ) ),
+                               RID_IMG_HELP ) ),
       m_typeInfos( 1 )
 {
     m_typeInfos[ 0 ] = m_xHelpTypeInfo;

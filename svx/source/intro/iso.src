@@ -129,12 +129,6 @@ ImageList RID_IMGLIST_TREEOPT
     MASK_COL
     IMGLST_IDLST
 };
-ImageList RID_IMGLIST_TREEOPT_HC
-{
-    Prefix = "trh";
-    MASK_COL
-    IMGLST_IDLST
-};
 
 #define MASK_COL2   MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; } ;
 #define X_IMAGE_LIST \
