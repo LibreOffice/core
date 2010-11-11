@@ -1642,8 +1642,8 @@ SvXMLImportContext *ScXMLImport::CreateContext( USHORT nPrefix,
     } else if ( (XML_NAMESPACE_OFFICE == nPrefix) &&
         ( IsXMLToken(rLocalName, XML_DOCUMENT)) ) {
             uno::Reference<xml::sax::XDocumentHandler> xDocBuilder(
-                mxServiceFactory->createInstance(::rtl::OUString::createFromAscii(
-                "com.sun.star.xml.dom.SAXDocumentBuilder")),
+                mxServiceFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "com.sun.star.xml.dom.SAXDocumentBuilder"))),
                 uno::UNO_QUERY_THROW);
             uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
                 GetModel(), uno::UNO_QUERY_THROW);
@@ -1941,8 +1941,8 @@ SvXMLImportContext *ScXMLImport::CreateMetaContext(
     if( !IsStylesOnlyMode() && (getImportFlags() & IMPORT_META))
     {
         uno::Reference<xml::sax::XDocumentHandler> xDocBuilder(
-            mxServiceFactory->createInstance(::rtl::OUString::createFromAscii(
-            "com.sun.star.xml.dom.SAXDocumentBuilder")),
+            mxServiceFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "com.sun.star.xml.dom.SAXDocumentBuilder"))),
             uno::UNO_QUERY_THROW);
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
             GetModel(), uno::UNO_QUERY_THROW);
