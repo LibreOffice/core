@@ -33,12 +33,12 @@ WORKDIR := $(SOLARVERSION)/$(INPATH)/workdir
 
 # if the goals do not include the targets install or uninstall we check if a
 # local overlay build dir was requested. We are making an distiction between
-# partitial and full builds. gb_LOCALPARTITIALBUILDDIR is only used here,
+# partitial and full builds. gb_LOCALPARTIALBUILDDIR is only used here,
 # later only gb_LOCALBUILDDIR is used.
 ifeq ($(filter install uninstall,$(MAKECMDGOALS)),)
-ifeq ($(gb_PARTITIALBUILD),$(true))
-ifneq ($(gb_LOCALPARTITIALBUILDDIR),)
-gb_LOCALBUILDDIR := $(gb_LOCALPARTITIALBUILDDIR)
+ifeq ($(gb_PARTIALBUILD),$(true))
+ifneq ($(gb_LOCALPARTIALBUILDDIR),)
+gb_LOCALBUILDDIR := $(gb_LOCALPARTIALBUILDDIR)
 OUTDIR := $(gb_LOCALBUILDDIR)/outdir/$(INPATH)
 WORKDIR := $(gb_LOCALBUILDDIR)/workdir/$(INPATH)
 else
