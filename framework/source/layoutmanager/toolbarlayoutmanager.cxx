@@ -595,27 +595,34 @@ bool ToolbarLayoutManager::hideToolbar( const ::rtl::OUString& rResourceURL )
     return false;
 }
 
-void ToolbarLayoutManager::refreshToolbarsVisibility()
+void ToolbarLayoutManager::refreshToolbarsVisibility( bool bAutomaticToolbars )
 {
     UIElementVector aUIElementVector;
+
+    ReadGuard aReadLock( m_aLock );
+    bool bVisible( m_bVisible );
+    aReadLock.unlock();
+
+    if ( !bVisible || !bAutomaticToolbars )
+        return;
+
     implts_getUIElementVectorCopy( aUIElementVector );
 
+    UIElement aUIElement;
     vos::OGuard aGuard( Application::GetSolarMutex() );
     UIElementVector::iterator pIter;
     for ( pIter = aUIElementVector.begin(); pIter != aUIElementVector.end(); pIter++ )
     {
-        Window* pWindow = getWindowFromXUIElement( pIter->m_xUIElement );
-        if ( pWindow )
+        if ( implts_readWindowStateData( pIter->m_aName, aUIElement ) &&
+             ( pIter->m_bVisible != aUIElement.m_bVisible ) && !pIter->m_bMasterHide )
         {
-            if ( pIter->m_bVisible && !pIter->m_bMasterHide )
+            WriteGuard aWriteLock( m_aLock );
+            UIElement& rUIElement = impl_findToolbar( pIter->m_aName );
+            if ( rUIElement.m_aName == pIter->m_aName )
             {
-                if ( pIter->m_bFloating )
-                    pWindow->Show( TRUE, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
-                else
-                    implts_setLayoutDirty();
+                rUIElement.m_bVisible = aUIElement.m_bVisible;
+                implts_setLayoutDirty();
             }
-            else
-                pWindow->Show( FALSE );
         }
     }
 }

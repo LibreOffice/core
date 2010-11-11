@@ -128,7 +128,7 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper3< ::com::sun::star::a
         bool showToolbar( const ::rtl::OUString& rResourceURL );
         bool hideToolbar( const ::rtl::OUString& rResourceURL );
 
-        void refreshToolbarsVisibility();
+        void refreshToolbarsVisibility( bool bAutomaticToolbars );
         void setFloatingToolbarsVisibility( bool bVisible );
         void setVisible(bool bVisible);
         bool isVisible() { return m_bVisible; }

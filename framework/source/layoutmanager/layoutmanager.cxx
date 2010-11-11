@@ -3135,13 +3135,13 @@ void SAL_CALL LayoutManager::elementReplaced( const ui::ConfigurationEvent& Even
 
         parseResourceURL( Event.ResourceURL, aElementType, aElementName );
         if ( aElementType.equalsIgnoreAsciiCaseAscii( UIRESOURCETYPE_TOOLBAR ))
-            {
-                if ( xToolbarManager.is() )
+        {
+            if ( xToolbarManager.is() )
             {
                 xToolbarManager->elementReplaced( Event );
                 bRefreshLayout = pToolbarManager->isLayoutDirty();
             }
-            }
+        }
         else
         {
             Reference< XUIElement >         xUIElement = implts_findElement( Event.ResourceURL );
@@ -3200,10 +3200,11 @@ void SAL_CALL LayoutManager::setFastPropertyValue_NoBroadcast( sal_Int32       n
                 ReadGuard aReadLock( m_aLock );
                 Reference< ui::XUIConfigurationListener > xToolbarManager( m_xToolbarManager );
                 ToolbarLayoutManager* pToolbarManager = m_pToolbarManager;
+                bool bAutomaticToolbars( m_bAutomaticToolbars );
                 aReadLock.unlock();
 
                 if ( pToolbarManager )
-                    pToolbarManager->refreshToolbarsVisibility();
+                    pToolbarManager->refreshToolbarsVisibility( bAutomaticToolbars );
             }
             break;
         }
