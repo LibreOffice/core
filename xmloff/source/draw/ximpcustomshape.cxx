@@ -1247,7 +1247,6 @@ void XMLEnhancedCustomShapeContext::EndElement()
             {
                 switch( EASGet( pValues->Name ) )
                 {
-                    case EAS_Position :
                     case EAS_RangeYMinimum :
                     case EAS_RangeYMaximum :
                     case EAS_RangeXMinimum :
@@ -1259,6 +1258,8 @@ void XMLEnhancedCustomShapeContext::EndElement()
                             pValues->Value.getValue()), pH );
                     }
                     break;
+
+                    case EAS_Position :
                     case EAS_Polar :
                     {
                         CheckAndResolveEquationParameter( (*((com::sun::star::drawing::EnhancedCustomShapeParameterPair*)

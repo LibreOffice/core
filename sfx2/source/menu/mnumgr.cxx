@@ -60,6 +60,7 @@
 #include <osl/file.hxx>
 #include <vcl/graph.hxx>
 #include <svtools/filter.hxx>
+#include <svl/lngmisc.hxx>
 
 #include <sfx2/mnumgr.hxx>
 
@@ -172,7 +173,6 @@ void InsertVerbs_Impl( SfxBindings* pBindings, const com::sun::star::uno::Sequen
 
             // einf"ugen
             pMenu->InsertItem( nId, aVerbs[n].VerbName );
-            pMenu->SetHelpId( nId, (ULONG) nId );
         }
     }
 }
@@ -244,7 +244,7 @@ PopupMenu* InsertThesaurusSubmenu_Impl( SfxBindings* pBindings, Menu* pSVMenu )
                 //! item ids should start with values > 0, since 0 has special meaning
                 const USHORT nId = i + 1;
 
-                String aItemText( GetThesaurusReplaceText_Impl( aSynonyms[i] ) );
+                String aItemText( linguistic::GetThesaurusReplaceText( aSynonyms[i] ) );
                 pThesSubMenu->InsertItem( nId, aItemText );
                 ::rtl::OUString aCmd( ::rtl::OUString::createFromAscii( ".uno:ThesaurusFromContext?WordReplace:string=" ) );
                 aCmd += aItemText;
@@ -484,10 +484,10 @@ void SfxPopupMenuManager::InsertSeparator( USHORT nPos )
 
 //-------------------------------------------------------------------------
 
-void SfxPopupMenuManager::InsertItem( USHORT nId, const String& rName, MenuItemBits nBits, USHORT nPos )
+void SfxPopupMenuManager::InsertItem( USHORT nId, const String& rName, MenuItemBits nBits, const rtl::OString& rHelpId, USHORT nPos )
 {
     pSVMenu->InsertItem( nId, rName, nBits,nPos );
-    pSVMenu->SetHelpId( nId, (ULONG) nId );
+    pSVMenu->SetHelpId( nId, rHelpId );
 }
 
 //-------------------------------------------------------------------------

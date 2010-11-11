@@ -235,6 +235,8 @@ private:
     css::uno::Reference<css::deployment::XPackageManager> m_bundledRepository;
     css::uno::Reference<css::deployment::XPackageManager> m_tmpRepository;
 
+    //only to be used within addExtension
+    ::osl::Mutex m_addMutex;
     /* contains the names of all repositories (except tmp) in order of there
        priority. That is, the first element is "user" follod by "shared" and
        then "bundled"
@@ -296,6 +298,21 @@ private:
     css::uno::Reference<css::deployment::XPackageManager>
     getPackageManager(::rtl::OUString const & repository)
         throw (css::lang::IllegalArgumentException);
+
+    bool doChecksForAddExtension(
+        css::uno::Reference<css::deployment::XPackageManager> const & xPackageMgr,
+        css::uno::Sequence<css::beans::NamedValue> const & properties,
+        css::uno::Reference<css::deployment::XPackage> const & xTmpExtension,
+        css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
+        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
+        css::uno::Reference<css::deployment::XPackage> & out_existingExtension )
+        throw (css::deployment::DeploymentException,
+               css::ucb::CommandFailedException,
+               css::ucb::CommandAbortedException,
+               css::lang::IllegalArgumentException,
+               css::uno::RuntimeException);
+
+
 };
 
 }
