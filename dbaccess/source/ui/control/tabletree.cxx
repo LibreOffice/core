@@ -149,13 +149,8 @@ void OTableTreeListBox::notifyHiContrastChanged()
                     m_pImageProvider->getImages( sCompleteName, DatabaseObject::TABLE, aImage, aImageHC );
                 }
 
-                pContextBitmapItem->SetBitmap1( aImage, BMP_COLOR_NORMAL );
-                pContextBitmapItem->SetBitmap2( aImage, BMP_COLOR_NORMAL );
-                pContextBitmapItem->SetBitmap1( aImageHC, BMP_COLOR_HIGHCONTRAST );
-                pContextBitmapItem->SetBitmap2( aImageHC, BMP_COLOR_HIGHCONTRAST );
-                // TODO: Now that we give both images to the entry item, it is not necessary anymore
-                // to do this anytime HC changes - the tree control will do this itself now.
-                // We would only need to properly initialize newly inserted entries.
+                pContextBitmapItem->SetBitmap1( aImage );
+                pContextBitmapItem->SetBitmap2( aImage );
                 break;
             }
         }

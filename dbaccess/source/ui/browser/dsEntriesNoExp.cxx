@@ -256,10 +256,8 @@ void SbaTableQueryBrowser::notifyHiContrastChanged()
 
                 SvLBoxContextBmp* pContextBitmapItem = static_cast< SvLBoxContextBmp* >( pItem );
 
-                pContextBitmapItem->SetBitmap1( aImage, BMP_COLOR_NORMAL );
-                pContextBitmapItem->SetBitmap2( aImage, BMP_COLOR_NORMAL );
-                pContextBitmapItem->SetBitmap1( aImageHC, BMP_COLOR_HIGHCONTRAST );
-                pContextBitmapItem->SetBitmap2( aImageHC, BMP_COLOR_HIGHCONTRAST );
+                pContextBitmapItem->SetBitmap1( aImage );
+                pContextBitmapItem->SetBitmap2( aImage );
                 break;
             }
 
