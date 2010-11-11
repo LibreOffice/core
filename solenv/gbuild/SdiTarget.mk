@@ -33,7 +33,7 @@ gb_SdiTarget_SVIDLAUXDEPS := $(call gb_Library_get_target,tl) $(call gb_Library_
 gb_SdiTarget_SVIDLCOMMAND := $(gb_SdiTarget_SVIDLPRECOMMAND) $(gb_SdiTarget_SVIDLTARGET)
 
 $(call gb_SdiTarget_get_target,%) : $(SRCDIR)/%.sdi | $(gb_SdiTarget_SVIDLTARGET) $(gb_SdiTarget_SVIDLAUXDEPS)
-    $(call gb_Helper_announce,Processing sdi $* ...)
+    $(call gb_Helper_announce,$*,$(true),SDI)
     $(call gb_Helper_abbreviate_dirs,\
         mkdir -p $(dir $(WORKDIR)/inc/$*) $(dir $@))
     $(call gb_Helper_abbreviate_dirs_native,\
@@ -50,7 +50,7 @@ $(call gb_SdiTarget_get_target,%) : $(SRCDIR)/%.sdi | $(gb_SdiTarget_SVIDLTARGET
 
 .PHONY : $(call gb_SdiTarget_get_clean_target,%)
 $(call gb_SdiTarget_get_clean_target,%) :
-    $(call gb_Helper_announce,Cleaning up sdi $* ...)
+    $(call gb_Helper_announce,$*,$(false),SDI)
     -$(call gb_Helper_abbreviate_dirs,\
         rm -f $(foreach ext,.hxx .ilb .lst .sid,\
             $(call gb_SdiTarget_get_target,$*)$(ext)) \

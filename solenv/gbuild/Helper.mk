@@ -51,8 +51,16 @@ gb_Helper_CLEARONDELIVER := $(true)
 $(gb_Helper_MISCDUMMY) :
     @mkdir -p $(dir $@) && touch $@
 
+define gb_Helper__format_type
+[ $(2) $(word 2,$(1) >==> Oo._) ]
+endef
+
+define gb_Helper__format_target
+$(1)
+endef
+
 define gb_Helper_announce
-$(info $(1))
+$(info $(call gb_Helper__format_type,$(2),$(3)) $(call gb_Helper__format_target,$(1)))
 endef
 
 define gb_Helper_abbreviate_dirs
