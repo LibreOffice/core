@@ -105,7 +105,7 @@ namespace dbaui
         // If no driver for embedded DBs is installed, and no dBase driver, then hide the "Create new database" option
         sal_Int32 nCreateNewDBIndex = m_pCollection->getIndexOf( m_pCollection->getEmbeddedDatabase() );
         if ( nCreateNewDBIndex == -1 )
-            nCreateNewDBIndex = m_pCollection->getIndexOf( ::rtl::OUString::createFromAscii( "sdbc:dbase:" ) );
+            nCreateNewDBIndex = m_pCollection->getIndexOf( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:dbase:")) );
         bool bHideCreateNew = ( nCreateNewDBIndex == -1 );
 
         // also, if our application policies tell us to hide the option, do it

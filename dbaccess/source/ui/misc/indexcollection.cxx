@@ -182,9 +182,9 @@ namespace dbaui
             }
 
             // set the properties
-            static const ::rtl::OUString s_sUniquePropertyName = ::rtl::OUString::createFromAscii("IsUnique");
-            static const ::rtl::OUString s_sSortPropertyName = ::rtl::OUString::createFromAscii("IsAscending");
-            static const ::rtl::OUString s_sNamePropertyName = ::rtl::OUString::createFromAscii("Name");
+            static const ::rtl::OUString s_sUniquePropertyName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsUnique"));
+            static const ::rtl::OUString s_sSortPropertyName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsAscending"));
+            static const ::rtl::OUString s_sNamePropertyName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name"));
             // the index' own props
             xIndexDescriptor->setPropertyValue(s_sUniquePropertyName, ::cppu::bool2any(_rPos->bUnique));
             xIndexDescriptor->setPropertyValue(s_sNamePropertyName, makeAny(_rPos->sName));
@@ -288,10 +288,10 @@ namespace dbaui
     //------------------------------------------------------------------
     void OIndexCollection::implFillIndexInfo(OIndex& _rIndex, Reference< XPropertySet > _rxDescriptor) SAL_THROW((Exception))
     {
-        static const ::rtl::OUString s_sPrimaryIndexPropertyName = ::rtl::OUString::createFromAscii("IsPrimaryKeyIndex");
-        static const ::rtl::OUString s_sUniquePropertyName = ::rtl::OUString::createFromAscii("IsUnique");
-        static const ::rtl::OUString s_sSortPropertyName = ::rtl::OUString::createFromAscii("IsAscending");
-        static const ::rtl::OUString s_sCatalogPropertyName = ::rtl::OUString::createFromAscii("Catalog");
+        static const ::rtl::OUString s_sPrimaryIndexPropertyName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsPrimaryKeyIndex"));
+        static const ::rtl::OUString s_sUniquePropertyName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsUnique"));
+        static const ::rtl::OUString s_sSortPropertyName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsAscending"));
+        static const ::rtl::OUString s_sCatalogPropertyName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Catalog"));
 
         _rIndex.bPrimaryKey = ::cppu::any2bool(_rxDescriptor->getPropertyValue(s_sPrimaryIndexPropertyName));
         _rIndex.bUnique = ::cppu::any2bool(_rxDescriptor->getPropertyValue(s_sUniquePropertyName));

@@ -764,7 +764,7 @@ void SbaXDataBrowserController::initFormatter()
     {
         // create a new formatter
         m_xFormatter = Reference< ::com::sun::star::util::XNumberFormatter > (
-            getORB()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.util.NumberFormatter")), UNO_QUERY);
+            getORB()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.NumberFormatter"))), UNO_QUERY);
         if (m_xFormatter.is())
             m_xFormatter->attachNumberFormatsSupplier(xSupplier);
     }
@@ -935,14 +935,14 @@ void SbaXDataBrowserController::RemoveColumnListener(const Reference< XPropertyS
 Reference< XRowSet >  SbaXDataBrowserController::CreateForm()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaui", "Ocke.Janssen@sun.com", "SbaXDataBrowserController::CreateForm" );
-    return Reference< XRowSet > (getORB()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.form.component.Form")), UNO_QUERY);
+    return Reference< XRowSet > (getORB()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.Form"))), UNO_QUERY);
 }
 
 //------------------------------------------------------------------------------
 Reference< ::com::sun::star::form::XFormComponent >  SbaXDataBrowserController::CreateGridModel()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaui", "Ocke.Janssen@sun.com", "SbaXDataBrowserController::CreateGridModel" );
-    return Reference< ::com::sun::star::form::XFormComponent > (getORB()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.form.component.GridControl")), UNO_QUERY);
+    return Reference< ::com::sun::star::form::XFormComponent > (getORB()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.GridControl"))), UNO_QUERY);
 }
 
 // -------------------------------------------------------------------------
@@ -1600,7 +1600,7 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
                     try
                     {
                         Reference< XPropertySet > xRowSetProps( getRowSet(), UNO_QUERY_THROW );
-                        OSL_VERIFY( xRowSetProps->getPropertyValue( ::rtl::OUString::createFromAscii( "AllowInserts" ) ) >>= bAllowInsertions );
+                        OSL_VERIFY( xRowSetProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AllowInserts")) ) >>= bAllowInsertions );
                     }
                     catch( const Exception& )
                     {
@@ -1619,7 +1619,7 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
                     try
                     {
                         Reference< XPropertySet > xRowSetProps( getRowSet(), UNO_QUERY_THROW );
-                        OSL_VERIFY( xRowSetProps->getPropertyValue( ::rtl::OUString::createFromAscii( "AllowDeletes" ) ) >>= bAllowDeletions );
+                        OSL_VERIFY( xRowSetProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AllowDeletes")) ) >>= bAllowDeletions );
                         OSL_VERIFY( xRowSetProps->getPropertyValue( PROPERTY_ROWCOUNT ) >>= nRowCount );
                         OSL_VERIFY( xRowSetProps->getPropertyValue( PROPERTY_ISNEW ) >>= bInsertionRow );
                     }
@@ -1736,9 +1736,9 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
                     break;  // no datasource -> no edit mode
 
                 sal_Int32 nDataSourcePrivileges = ::comphelper::getINT32(xDataSourceSet->getPropertyValue(PROPERTY_PRIVILEGES));
-                sal_Bool bInsertAllowedAndPossible = ((nDataSourcePrivileges & ::com::sun::star::sdbcx::Privilege::INSERT) != 0) && ::comphelper::getBOOL(xDataSourceSet->getPropertyValue(::rtl::OUString::createFromAscii("AllowInserts")));
-                sal_Bool bUpdateAllowedAndPossible = ((nDataSourcePrivileges & ::com::sun::star::sdbcx::Privilege::UPDATE) != 0) && ::comphelper::getBOOL(xDataSourceSet->getPropertyValue(::rtl::OUString::createFromAscii("AllowUpdates")));
-                sal_Bool bDeleteAllowedAndPossible = ((nDataSourcePrivileges & ::com::sun::star::sdbcx::Privilege::DELETE) != 0) && ::comphelper::getBOOL(xDataSourceSet->getPropertyValue(::rtl::OUString::createFromAscii("AllowDeletes")));
+                sal_Bool bInsertAllowedAndPossible = ((nDataSourcePrivileges & ::com::sun::star::sdbcx::Privilege::INSERT) != 0) && ::comphelper::getBOOL(xDataSourceSet->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AllowInserts"))));
+                sal_Bool bUpdateAllowedAndPossible = ((nDataSourcePrivileges & ::com::sun::star::sdbcx::Privilege::UPDATE) != 0) && ::comphelper::getBOOL(xDataSourceSet->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AllowUpdates"))));
+                sal_Bool bDeleteAllowedAndPossible = ((nDataSourcePrivileges & ::com::sun::star::sdbcx::Privilege::DELETE) != 0) && ::comphelper::getBOOL(xDataSourceSet->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AllowDeletes"))));
                 if (!bInsertAllowedAndPossible && !bUpdateAllowedAndPossible && !bDeleteAllowedAndPossible)
                     break;  // no insert/update/delete -> no edit mode
 
@@ -1992,9 +1992,9 @@ void SbaXDataBrowserController::ExecuteSearch()
     // prohibit the synchronization of the grid's display with the cursor's position
     Reference< XPropertySet >  xModelSet(getControlModel(), UNO_QUERY);
     DBG_ASSERT(xModelSet.is(), "SbaXDataBrowserController::ExecuteSearch : no model set ?!");
-    xModelSet->setPropertyValue(::rtl::OUString::createFromAscii("DisplayIsSynchron"), ::comphelper::makeBoolAny(sal_Bool(sal_False)));
-    xModelSet->setPropertyValue(::rtl::OUString::createFromAscii("AlwaysShowCursor"), ::comphelper::makeBoolAny(sal_Bool(sal_True)));
-    xModelSet->setPropertyValue(::rtl::OUString::createFromAscii("CursorColor"), makeAny(sal_Int32(COL_LIGHTRED)));
+    xModelSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DisplayIsSynchron")), ::comphelper::makeBoolAny(sal_Bool(sal_False)));
+    xModelSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AlwaysShowCursor")), ::comphelper::makeBoolAny(sal_Bool(sal_True)));
+    xModelSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CursorColor")), makeAny(sal_Int32(COL_LIGHTRED)));
 
     Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xNFS(::dbtools::getNumberFormats(::dbtools::getConnection(m_xRowSet), sal_True,getORB()));
 
@@ -2017,9 +2017,9 @@ void SbaXDataBrowserController::ExecuteSearch()
     }
 
     // restore the grid's normal operating state
-    xModelSet->setPropertyValue(::rtl::OUString::createFromAscii("DisplayIsSynchron"), ::comphelper::makeBoolAny(sal_Bool(sal_True)));
-    xModelSet->setPropertyValue(::rtl::OUString::createFromAscii("AlwaysShowCursor"), ::comphelper::makeBoolAny(sal_Bool(sal_False)));
-    xModelSet->setPropertyValue(::rtl::OUString::createFromAscii("CursorColor"), Any());
+    xModelSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DisplayIsSynchron")), ::comphelper::makeBoolAny(sal_Bool(sal_True)));
+    xModelSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AlwaysShowCursor")), ::comphelper::makeBoolAny(sal_Bool(sal_False)));
+    xModelSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CursorColor")), Any());
 }
 
 //------------------------------------------------------------------------------
@@ -2577,9 +2577,9 @@ IMPL_LINK(SbaXDataBrowserController, OnFoundData, FmFoundRecordInformation*, pIn
     // let the grid snyc it's display with the cursor
     Reference< XPropertySet >  xModelSet(getControlModel(), UNO_QUERY);
     DBG_ASSERT(xModelSet.is(), "SbaXDataBrowserController::OnFoundData : no model set ?!");
-    Any aOld = xModelSet->getPropertyValue(::rtl::OUString::createFromAscii("DisplayIsSynchron"));
-    xModelSet->setPropertyValue(::rtl::OUString::createFromAscii("DisplayIsSynchron"), ::comphelper::makeBoolAny(sal_Bool(sal_True)));
-    xModelSet->setPropertyValue(::rtl::OUString::createFromAscii("DisplayIsSynchron"), aOld);
+    Any aOld = xModelSet->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DisplayIsSynchron")));
+    xModelSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DisplayIsSynchron")), ::comphelper::makeBoolAny(sal_Bool(sal_True)));
+    xModelSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DisplayIsSynchron")), aOld);
 
     // and move to the field
     Reference< ::com::sun::star::container::XIndexAccess >  aColumnControls(getBrowserView()->getGridControl()->getPeer(), UNO_QUERY);
@@ -2624,9 +2624,9 @@ IMPL_LINK(SbaXDataBrowserController, OnCanceledNotFound, FmFoundRecordInformatio
         // let the grid snyc it's display with the cursor
         Reference< XPropertySet >  xModelSet(getControlModel(), UNO_QUERY);
         DBG_ASSERT(xModelSet.is(), "SbaXDataBrowserController::OnCanceledNotFound : no model set ?!");
-        Any aOld = xModelSet->getPropertyValue(::rtl::OUString::createFromAscii("DisplayIsSynchron"));
-        xModelSet->setPropertyValue(::rtl::OUString::createFromAscii("DisplayIsSynchron"), ::comphelper::makeBoolAny(sal_Bool(sal_True)));
-        xModelSet->setPropertyValue(::rtl::OUString::createFromAscii("DisplayIsSynchron"), aOld);
+        Any aOld = xModelSet->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DisplayIsSynchron")));
+        xModelSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DisplayIsSynchron")), ::comphelper::makeBoolAny(sal_Bool(sal_True)));
+        xModelSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DisplayIsSynchron")), aOld);
     }
     catch( const Exception& )
     {

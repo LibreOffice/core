@@ -354,8 +354,8 @@ void ODbaseIndexDialog::Init()
 
     Sequence< ::rtl::OUString> aFolderContent( ::utl::LocalFileHelper::GetFolderContents(m_aDSN,bFolder));
 
-    ::rtl::OUString aIndexExt = ::rtl::OUString::createFromAscii("ndx");
-    ::rtl::OUString aTableExt = ::rtl::OUString::createFromAscii("dbf");
+    ::rtl::OUString aIndexExt = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ndx"));
+    ::rtl::OUString aTableExt = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("dbf"));
 
     ::std::vector< String > aUsedIndexes;
 
@@ -541,7 +541,7 @@ void OTableInfo::WriteInfFile( const String& rDSN ) const
         try
         {
             ::ucbhelper::Content aContent(aURL.GetURLNoPass(),Reference<XCommandEnvironment>());
-            aContent.executeCommand( rtl::OUString::createFromAscii( "delete" ),makeAny( sal_Bool( sal_True ) ) );
+            aContent.executeCommand( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("delete")),makeAny( sal_Bool( sal_True ) ) );
         }
         catch (const Exception& e )
         {

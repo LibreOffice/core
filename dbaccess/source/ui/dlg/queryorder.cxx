@@ -247,8 +247,8 @@ void DlgOrderCrit::EnableLines()
     DBG_CHKTHIS(DlgOrderCrit,NULL);
     Reference<XDatabaseMetaData> xMetaData = m_xConnection->getMetaData();
     ::rtl::OUString sQuote  = xMetaData.is() ? xMetaData->getIdentifierQuoteString() : ::rtl::OUString();
-    static const ::rtl::OUString sDESC = ::rtl::OUString::createFromAscii(" DESC ");
-    static const ::rtl::OUString sASC  = ::rtl::OUString::createFromAscii(" ASC ");
+    static const ::rtl::OUString sDESC(RTL_CONSTASCII_USTRINGPARAM(" DESC "));
+    static const ::rtl::OUString sASC(RTL_CONSTASCII_USTRINGPARAM(" ASC "));
 
     Reference< XNameAccess> xColumns = Reference< XColumnsSupplier >(m_xQueryComposer,UNO_QUERY)->getColumns();
 
@@ -258,7 +258,7 @@ void DlgOrderCrit::EnableLines()
         if(m_aColumnList[i]->GetSelectEntryPos() != 0)
         {
             if(sOrder.getLength())
-                sOrder += ::rtl::OUString::createFromAscii(",");
+                sOrder += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","));
 
             String sName = m_aColumnList[i]->GetSelectEntry();
             try

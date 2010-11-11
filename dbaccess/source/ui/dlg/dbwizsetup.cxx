@@ -359,7 +359,7 @@ void ODbTypeWizDialogSetup::activateDatabasePath()
     {
         sal_Int32 nCreateNewDBIndex = m_pCollection->getIndexOf( m_pCollection->getEmbeddedDatabase() );
         if ( nCreateNewDBIndex == -1 )
-            nCreateNewDBIndex = m_pCollection->getIndexOf( ::rtl::OUString::createFromAscii( "sdbc:dbase:" ) );
+            nCreateNewDBIndex = m_pCollection->getIndexOf( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:dbase:")) );
         OSL_ENSURE( nCreateNewDBIndex != -1, "ODbTypeWizDialogSetup::activateDatabasePath: the GeneralPage should have prevented this!" );
         activatePath( static_cast< PathId >( nCreateNewDBIndex + 1 ), sal_True );
 
@@ -860,7 +860,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
         }
         else if ( m_pCollection->isFileSystemBased(eType) )
         {
-            Reference< XSimpleFileAccess > xSimpleFileAccess(getORB()->createInstance(::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" )), UNO_QUERY);
+            Reference< XSimpleFileAccess > xSimpleFileAccess(getORB()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess"))), UNO_QUERY);
             INetURLObject aDBPathURL(m_sWorkPath);
             aDBPathURL.Append(m_aDocURL.getBase());
             createUniqueFolderName(&aDBPathURL);
@@ -929,7 +929,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
     //-------------------------------------------------------------------------
     void ODbTypeWizDialogSetup::createUniqueFolderName(INetURLObject* pURL)
     {
-        Reference< XSimpleFileAccess > xSimpleFileAccess(getORB()->createInstance(::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" )), UNO_QUERY);
+        Reference< XSimpleFileAccess > xSimpleFileAccess(getORB()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess"))), UNO_QUERY);
         :: rtl::OUString sLastSegmentName = pURL->getName();
         sal_Bool bFolderExists = sal_True;
         sal_Int32 i = 1;
@@ -947,7 +947,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
     //-------------------------------------------------------------------------
     String ODbTypeWizDialogSetup::createUniqueFileName(const INetURLObject& _rURL)
     {
-        Reference< XSimpleFileAccess > xSimpleFileAccess(getORB()->createInstance(::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" )), UNO_QUERY);
+        Reference< XSimpleFileAccess > xSimpleFileAccess(getORB()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess"))), UNO_QUERY);
         :: rtl::OUString sFilename = _rURL.getName();
         ::rtl::OUString BaseName = _rURL.getBase();
         ::rtl::OUString sExtension = _rURL.getExtension();

@@ -332,7 +332,7 @@ void ODatabaseImportExport::initialize()
             // the result set may be already set with the datadescriptor
             if ( !m_xResultSet.is() )
             {
-                m_xResultSet.set( m_xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.sdb.RowSet" ) ), UNO_QUERY );
+                m_xResultSet.set( m_xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.RowSet")) ), UNO_QUERY );
                 Reference< XPropertySet > xProp( m_xResultSet, UNO_QUERY_THROW );
                 xProp->setPropertyValue( PROPERTY_ACTIVE_CONNECTION, makeAny( m_xConnection.getTyped() ) );
                 xProp->setPropertyValue( PROPERTY_COMMAND_TYPE, makeAny( m_nCommandType ) );
@@ -802,8 +802,8 @@ void OHTMLImportExport::WriteHeader()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLImportExport::WriteHeader" );
     uno::Reference<document::XDocumentProperties> xDocProps(
-        m_xFactory->createInstance(::rtl::OUString::createFromAscii(
-            "com.sun.star.document.DocumentProperties")),
+        m_xFactory->createInstance(::rtl::OUString(
+            RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.DocumentProperties"))),
         uno::UNO_QUERY);
     if (xDocProps.is()) {
         xDocProps->setTitle(m_sName);

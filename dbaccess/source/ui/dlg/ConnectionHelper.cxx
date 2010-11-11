@@ -785,18 +785,18 @@ DBG_NAME(OConnectionHelper)
             ::rtl::OUString sContentType;
             if ( INET_PROT_FILE == eProtocol )
             {
-                sContentType = ::rtl::OUString::createFromAscii( "application/vnd.sun.staroffice.fsys-folder" );
+                sContentType = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("application/vnd.sun.staroffice.fsys-folder"));
                 // the file UCP currently does not support the ContentType property
             }
             else
             {
-                Any aContentType = aParent.getPropertyValue( ::rtl::OUString::createFromAscii( "ContentType" ) );
+                Any aContentType = aParent.getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ContentType")) );
                 aContentType >>= sContentType;
             }
 
             // the properties which need to be set on the new content
             Sequence< ::rtl::OUString > aNewDirectoryProperties(1);
-            aNewDirectoryProperties[0] = ::rtl::OUString::createFromAscii("Title");
+            aNewDirectoryProperties[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title"));
 
             // the values to be set
             Sequence< Any > aNewDirectoryAttributes(1);

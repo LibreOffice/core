@@ -207,13 +207,13 @@ void SafeRemovePropertyListener(const Reference< XPropertySet > & xSet, const ::
 // -------------------------------------------------------------------------
 ::rtl::OUString SbaTableQueryBrowser::getImplementationName_Static() throw(RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii("org.openoffice.comp.dbu.ODatasourceBrowser");
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.dbu.ODatasourceBrowser"));
 }
 //-------------------------------------------------------------------------
 ::comphelper::StringSequence SbaTableQueryBrowser::getSupportedServiceNames_Static() throw(RuntimeException)
 {
     ::comphelper::StringSequence aSupported(1);
-    aSupported.getArray()[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdb.DataSourceBrowser");
+    aSupported.getArray()[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.DataSourceBrowser"));
     return aSupported;
 }
 //-------------------------------------------------------------------------
@@ -369,7 +369,7 @@ sal_Bool SbaTableQueryBrowser::Construct(Window* pParent)
         xDatabaseRegistrations->addDatabaseRegistrationsListener( this );
 
         // the collator for the string compares
-        m_xCollator = Reference< XCollator >( getORB()->createInstance(::rtl::OUString::createFromAscii( "com.sun.star.i18n.Collator" ) ), UNO_QUERY_THROW );
+        m_xCollator = Reference< XCollator >( getORB()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.Collator")) ), UNO_QUERY_THROW );
         m_xCollator->loadDefaultCollator( Application::GetSettings().GetLocale(), 0 );
     }
     catch(Exception&)
@@ -608,7 +608,7 @@ sal_Bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::
                     case DataType::BIT:
                     case DataType::BOOLEAN:
                     {
-                        aCurrentModelType = ::rtl::OUString::createFromAscii("CheckBox");
+                        aCurrentModelType = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CheckBox"));
                         aInitialValues.push_back( NamedValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "VisualEffect" ) ), makeAny( VisualEffect::FLAT ) ) );
                         sDefaultProperty = PROPERTY_DEFAULTSTATE;
 
@@ -628,7 +628,7 @@ sal_Bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::
                     case DataType::BINARY:
                     case DataType::VARBINARY:
                     case DataType::LONGVARBINARY:
-                        aCurrentModelType = ::rtl::OUString::createFromAscii("TextField");
+                        aCurrentModelType = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TextField"));
                         sDefaultProperty = PROPERTY_DEFAULTTEXT;
                         break;
 
@@ -637,12 +637,12 @@ sal_Bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::
                         bFormattedIsNumeric = sal_False;
                         // NO break!
                     default:
-                        aCurrentModelType = ::rtl::OUString::createFromAscii("FormattedField");
+                        aCurrentModelType = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FormattedField"));
                         sDefaultProperty = PROPERTY_EFFECTIVEDEFAULT;
 
                         if ( xSupplier.is() )
-                            aInitialValues.push_back( NamedValue( ::rtl::OUString::createFromAscii( "FormatsSupplier" ), makeAny( xSupplier ) ) );
-                        aInitialValues.push_back( NamedValue( ::rtl::OUString::createFromAscii( "TreatAsNumber" ), makeAny( (sal_Bool)bFormattedIsNumeric ) ) );
+                            aInitialValues.push_back( NamedValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FormatsSupplier")), makeAny( xSupplier ) ) );
+                        aInitialValues.push_back( NamedValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TreatAsNumber")), makeAny( (sal_Bool)bFormattedIsNumeric ) ) );
                         aCopyProperties.push_back( PROPERTY_FORMATKEY );
                         break;
                 }
@@ -1211,7 +1211,7 @@ void SbaTableQueryBrowser::connectExternalDispatches()
             )
         {
             feature->second.xDispatcher = xProvider->queryDispatch(
-                feature->second.aURL, ::rtl::OUString::createFromAscii("_parent"), FrameSearchFlag::PARENT
+                feature->second.aURL, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_parent")), FrameSearchFlag::PARENT
             );
 
             if ( feature->second.xDispatcher.get() == static_cast< XDispatch* >( this ) )
@@ -1428,7 +1428,7 @@ void SbaTableQueryBrowser::attachFrame(const Reference< ::com::sun::star::frame:
     Reference< XFrame > xCurrentFrame( getFrame() );
     if ( xCurrentFrame.is() )
     {
-        m_xCurrentFrameParent = xCurrentFrame->findFrame(::rtl::OUString::createFromAscii("_parent"),FrameSearchFlag::PARENT);
+        m_xCurrentFrameParent = xCurrentFrame->findFrame(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_parent")),FrameSearchFlag::PARENT);
         if ( m_xCurrentFrameParent.is() )
             m_xCurrentFrameParent->addFrameActionListener((::com::sun::star::frame::XFrameActionListener*)this);
 
@@ -3612,7 +3612,7 @@ void SbaTableQueryBrowser::loadMenu(const Reference< XFrame >& _xFrame)
             sTitle = aURL.getBase(INetURLObject::LAST_SEGMENT,true,INetURLObject::DECODE_WITH_CHARSET);
         if ( sName.getLength() )
         {
-            sName += ::rtl::OUString::createFromAscii(" - ");
+            sName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" - "));
             sName += sTitle;
             sTitle = sName;
         }

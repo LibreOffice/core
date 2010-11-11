@@ -209,7 +209,7 @@ OGenericUnoController::OGenericUnoController(const Reference< XMultiServiceFacto
 
     try
     {
-        m_xUrlTransformer = Reference< XURLTransformer > (_rM->createInstance(::rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer")), UNO_QUERY);
+        m_xUrlTransformer = Reference< XURLTransformer > (_rM->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))), UNO_QUERY);
     }
     catch(Exception&)
     {
@@ -330,7 +330,7 @@ void SAL_CALL OGenericUnoController::initialize( const Sequence< Any >& aArgumen
         Window* pParentWin = pParentComponent ? pParentComponent->GetWindow() : NULL;
         if (!pParentWin)
         {
-            throw IllegalArgumentException( ::rtl::OUString::createFromAscii( "Parent window is null" ), *this, 1 );
+            throw IllegalArgumentException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Parent window is null")), *this, 1 );
         }
 
         m_aInitParameters.assign( aArguments );
@@ -338,7 +338,7 @@ void SAL_CALL OGenericUnoController::initialize( const Sequence< Any >& aArgumen
 
         ODataView* pView = getView();
         if ( !pView )
-            throw RuntimeException( ::rtl::OUString::createFromAscii( "unable to create a view" ), *this );
+            throw RuntimeException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("unable to create a view")), *this );
 
         if ( m_bReadOnly || m_bPreview )
             pView->EnableInput( FALSE );
@@ -1314,7 +1314,7 @@ namespace
 void OGenericUnoController::openHelpAgent(rtl::OUString const& _suHelpStringURL )
 {
     rtl::OUString suURL(_suHelpStringURL);
-    rtl::OUString sLanguage = rtl::OUString::createFromAscii("Language=");
+    rtl::OUString sLanguage(RTL_CONSTASCII_USTRINGPARAM("Language="));
     if (suURL.indexOf(sLanguage) == -1)
     {
         AppendConfigToken(suURL, sal_False /* sal_False := add '&' */ );

@@ -144,7 +144,7 @@ sal_Bool OModuleRegistration::writeComponentInfos(
     {
         ::rtl::OUString aMainKeyName(sRootKey);
         aMainKeyName += *pImplName;
-        aMainKeyName += ::rtl::OUString::createFromAscii("/UNO/SERVICES");
+        aMainKeyName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
 
         try
         {

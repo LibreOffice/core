@@ -511,8 +511,8 @@ void fillTypeInfo(  const Reference< ::com::sun::star::sdbc::XConnection>& _rxCo
     // Information for a single SQL type
     if(xRs.is())
     {
-        static const ::rtl::OUString aB1 = ::rtl::OUString::createFromAscii(" [ ");
-        static const ::rtl::OUString aB2 = ::rtl::OUString::createFromAscii(" ]");
+        static const ::rtl::OUString aB1(RTL_CONSTASCII_USTRINGPARAM(" [ "));
+        static const ::rtl::OUString aB2(RTL_CONSTASCII_USTRINGPARAM(" ]"));
         Reference<XResultSetMetaData> xResultSetMetaData = Reference<XResultSetMetaDataSupplier>(xRs,UNO_QUERY)->getMetaData();
         ::connectivity::ORowSetValue aValue;
         ::std::vector<sal_Int32> aTypes;
@@ -1085,7 +1085,7 @@ sal_Bool appendToFilter(const Reference<XConnection>& _xConnection,
             xProp->getPropertyValue(PROPERTY_TABLEFILTER) >>= aFilter;
             // first check if we have something like SCHEMA.%
             sal_Bool bHasToInsert = sal_True;
-            static ::rtl::OUString sPattern = ::rtl::OUString::createFromAscii("%");
+            static ::rtl::OUString sPattern(RTL_CONSTASCII_USTRINGPARAM("%"));
             const ::rtl::OUString* pBegin = aFilter.getConstArray();
             const ::rtl::OUString* pEnd = pBegin + aFilter.getLength();
             for (;pBegin != pEnd; ++pBegin)
@@ -1231,7 +1231,7 @@ void fillAutoIncrementValue(const Reference<XPropertySet>& _xDatasource,
             pValue->Value >>= _rsAutoIncrementValue;
         pValue =::std::find_if(aInfo.getConstArray(),
                                                     aInfo.getConstArray() + aInfo.getLength(),
-                                                    ::std::bind2nd(TPropertyValueEqualFunctor(),::rtl::OUString::createFromAscii("IsAutoRetrievingEnabled") ));
+                                                    ::std::bind2nd(TPropertyValueEqualFunctor(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsAutoRetrievingEnabled")) ));
         if ( pValue && pValue != (aInfo.getConstArray() + aInfo.getLength()) )
             pValue->Value >>= _rAutoIncrementValueEnabled;
     }
@@ -1306,7 +1306,7 @@ namespace
         {
             ::ucbhelper::Content aCnt( INetURLObject( _rURL ).GetMainURL( INetURLObject::NO_DECODE ),
                                  Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
-            if ( ( aCnt.getPropertyValue( ::rtl::OUString::createFromAscii( "AnchorName" ) ) >>= sAnchor ) )
+            if ( ( aCnt.getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AnchorName")) ) >>= sAnchor ) )
             {
 
                 if ( sAnchor.getLength() > 0 )

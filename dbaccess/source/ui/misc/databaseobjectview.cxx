@@ -131,16 +131,16 @@ namespace dbaui
                 // if we have no externally provided frame, create one
                 if ( !m_xFrameLoader.is() )
                 {
-                    Reference< XSingleServiceFactory > xFact(m_xORB->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.TaskCreator")), UNO_QUERY_THROW);
+                    Reference< XSingleServiceFactory > xFact(m_xORB->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.TaskCreator"))), UNO_QUERY_THROW);
                     Sequence< Any > lArgs(2);
                     NamedValue      aProp;
                     sal_Int32       nArg = 0;
 
-                    aProp.Name    = ::rtl::OUString::createFromAscii("ParentFrame");
+                    aProp.Name    = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParentFrame"));
                     aProp.Value <<= m_xParentFrame;
                     lArgs[nArg++] <<= aProp;
 
-                    aProp.Name    = ::rtl::OUString::createFromAscii("TopWindow");
+                    aProp.Name    = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TopWindow"));
                     aProp.Value <<= sal_True;
                     lArgs[nArg++] <<= aProp;
 

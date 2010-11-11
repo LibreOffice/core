@@ -207,18 +207,18 @@ ODbDataSourceAdministrationHelper::ODbDataSourceAdministrationHelper(const Refer
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_NAMED_PIPE, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NamedPipe" ) ) ) );
 
     // special settings for adabas
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_SHUTSERVICE, ::rtl::OUString::createFromAscii("ShutdownDatabase")));
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_DATAINC, ::rtl::OUString::createFromAscii("DataCacheSizeIncrement")));
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_CACHESIZE, ::rtl::OUString::createFromAscii("DataCacheSize")));
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_CTRLUSER, ::rtl::OUString::createFromAscii("ControlUser")));
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_CTRLPWD, ::rtl::OUString::createFromAscii("ControlPassword")));
+    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_SHUTSERVICE, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ShutdownDatabase"))));
+    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_DATAINC, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataCacheSizeIncrement"))));
+    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_CACHESIZE, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataCacheSize"))));
+    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_CTRLUSER, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ControlUser"))));
+    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_CTRLPWD, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ControlPassword"))));
 
     // extra settings for odbc
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_USECATALOG, INFO_USECATALOG));
     // extra settings for a ldap address book
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_LDAP_BASEDN, INFO_CONN_LDAP_BASEDN));
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_LDAP_ROWCOUNT, INFO_CONN_LDAP_ROWCOUNT));
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_LDAP_USESSL, ::rtl::OUString::createFromAscii("UseSSL")));
+    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_LDAP_USESSL, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseSSL"))));
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_DOCUMENT_URL, PROPERTY_URL));
 
     // oracle
@@ -664,7 +664,7 @@ void ODbDataSourceAdministrationHelper::translateProperties(const Reference< XPr
             if (0 == pAdditionalInfo->Name.compareToAscii("JDBCDRV"))
             {   // compatibility
                 PropertyValue aCompatibility(*pAdditionalInfo);
-                aCompatibility.Name = ::rtl::OUString::createFromAscii("JavaDriverClass");
+                aCompatibility.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JavaDriverClass"));
                 aInfos.insert(aCompatibility);
             }
             else
