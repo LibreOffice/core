@@ -88,8 +88,7 @@ using namespace ::cppu;
 // Image sizes for our toolbars/menus
 const sal_Int32 IMAGE_SIZE_NORMAL         = 16;
 const sal_Int32 IMAGE_SIZE_LARGE          = 26;
-const sal_Int16 MAX_IMAGETYPE_VALUE       = ::com::sun::star::ui::ImageType::COLOR_HIGHCONTRAST|
-                                            ::com::sun::star::ui::ImageType::SIZE_LARGE;
+const sal_Int16 MAX_IMAGETYPE_VALUE       = ::com::sun::star::ui::ImageType::SIZE_LARGE;
 
 static const char   IMAGE_FOLDER[]        = "images";
 static const char   BITMAPS_FOLDER[]      = "Bitmaps";
@@ -98,13 +97,13 @@ static const char   IMAGE_EXTENSION[]     = ".png";
 static const char*  IMAGELIST_XML_FILE[]  =
 {
     "sc_imagelist.xml",
-    "lc_imagelist.xml",
+    "lc_imagelist.xml"
 };
 
 static const char*  BITMAP_FILE_NAMES[]   =
 {
     "sc_userimages.png",
-    "lc_userimages.png",
+    "lc_userimages.png"
 };
 
 namespace framework
@@ -115,7 +114,7 @@ namespace framework
     static const char* ImageType_Prefixes[ImageType_COUNT] =
     {
         "res/commandimagelist/sc_",
-        "res/commandimagelist/lc_",
+        "res/commandimagelist/lc_"
     };
 
 typedef GraphicNameAccess CmdToXGraphicNameAccess;
