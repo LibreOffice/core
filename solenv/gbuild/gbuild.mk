@@ -90,7 +90,9 @@ endif
 include $(GBUILDDIR)/Helper.mk
 gb_Library_NAMESCHEMES := OOO PLAIN RT RTVER STL UNO UNOVER
 gb_StaticLibrary_NAMESCHEMES := PLAIN
-include $(foreach repo,$(gb_REPOS),$(repo)/Targetnames.mk)
+
+$(foreach repo,$(gb_REPOS),$(eval $(call gb_Helper_add_repo,$(repo))))
+
 gb_Library_PLAINLIBS := \
     $(gb_Library_PLAINLIBS_URE) \
     $(gb_Library_PLAINLIBS_OOO) \
@@ -120,7 +122,8 @@ endif
 endif
 endif
 
-include $(foreach repo,$(gb_REPOS),$(repo)/Platformfixes.mk)
+include $(foreach repo,$(gb_REPOS),$(repo)/RepositoryFixes.mk)
+
 gb_Library_KNOWNLIBS := $(foreach namescheme,$(gb_Library_NAMESCHEMES),$(gb_Library_$(namescheme)LIBS))
 gb_StaticLibrary_KNOWNLIBS := $(foreach namescheme,$(gb_StaticLibrary_NAMESCHEMES),$(gb_StaticLibrary_$(namescheme)LIBS))
 

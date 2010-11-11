@@ -109,4 +109,14 @@ define gb_Helper_deliver
 $(call gb_Helper__deliverprefix,$(2)) cp -f $(1) $(2) && touch -r $(1) $(2)
 endef
 
+define gb_Helper_add_repo
+gb_REPOSITORYDIRNAME :=
+include $(1)/Repository.mk
+ifeq ($$(gb_REPOSITORYDIRNAME),)
+$$(error no gb_REPOSITORYDIRNAME set for repository $(1))
+endif
+$$(gb_REPOSITORYDIRNAME) := $(1)
+
+endef
+
 # vim: set noet sw=4 ts=4:

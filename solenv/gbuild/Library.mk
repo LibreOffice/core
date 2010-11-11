@@ -56,7 +56,7 @@ $(gb_Library_OUTDIRLOCATION)/%$(gb_Library_PLAINEXT) :
 define gb_Library_Library
 ifeq (,$$(findstring $(1),$$(gb_Library_KNOWNLIBS)))
 $$(info currently known libraries are: $(sort $(gb_Library_KNOWNLIBS)))
-$$(error Library $(1) must be registered in Targetnames.mk)
+$$(error Library $(1) must be registered in Repository.mk)
 endif
 $(call gb_Library_get_target,$(1)) : AUXTARGETS :=
 $(call gb_Library__Library_impl,$(1),$(call gb_Library_get_linktargetname,$(call gb_Library_get_filename,$(1))))
