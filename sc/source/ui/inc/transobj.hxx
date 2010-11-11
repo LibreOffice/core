@@ -53,8 +53,6 @@ private:
     SCROW                           nNonFiltered;       // non-filtered rows
     TransferableDataHelper          aOleData;
     TransferableObjectDescriptor    aObjDesc;
-//REMOVE        SvEmbeddedObjectRef             aDocShellRef;
-//REMOVE        SvEmbeddedObjectRef             aDrawPersistRef;
     SfxObjectShellRef               aDocShellRef;
     SfxObjectShellRef               aDrawPersistRef;
     com::sun::star::uno::Reference<com::sun::star::sheet::XSheetCellRanges> xDragSourceRanges;

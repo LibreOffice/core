@@ -30,11 +30,6 @@
 
 #include <vcl/scrbar.hxx>
 
-//REMOVE    #ifndef SO2_DECL_SVINPLACECLIENT_DEFINED
-//REMOVE    #define SO2_DECL_SVINPLACECLIENT_DEFINED
-//REMOVE    SO2_DECL_REF(SvInPlaceClient)
-//REMOVE    #endif
-
 #include <sfx2/ipclient.hxx>
 
 #include "viewutil.hxx"

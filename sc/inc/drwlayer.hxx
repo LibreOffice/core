@@ -99,7 +99,6 @@ public:
 class SC_DLLPUBLIC ScDrawLayer : public FmFormModel
 {
 private:
-//REMOVE        SotStorageRef   xPictureStorage;
     String          aName;
     ScDocument*     pDoc;
     SdrUndoGroup*   pUndoGroup;
@@ -127,8 +126,6 @@ public:
     virtual SvStream* GetDocumentStream(SdrDocumentStreamInfo& rStreamInfo) const;
 
     virtual SdrLayerID GetControlExportLayerId( const SdrObject & ) const;
-
-//REMOVE        void            ReleasePictureStorage();
 
     BOOL            HasObjects() const;
 

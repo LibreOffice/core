@@ -39,11 +39,6 @@
 #include <svtools/stdctrl.hxx>
 #include <svtools/inettbc.hxx>
 
-//REMOVE    #ifndef SO2_DECL_SVEMBEDDEDOBJECT_DEFINED
-//REMOVE    #define SO2_DECL_SVEMBEDDEDOBJECT_DEFINED
-//REMOVE    SO2_DECL_REF(SvEmbeddedObject)
-//REMOVE    #endif
-
 namespace sfx2 { class DocumentInserter; }
 namespace sfx2 { class FileDialogHelper; }
 
