@@ -643,6 +643,8 @@ void SwDoc::setJobsetup(/*[in]*/ const JobSetup &rJobSetup )
 
 SwPrintData* SwDoc::getPrintData() const
 {
+    if(!pPrtData)
+        ((SwDoc*)this)->pPrtData = new SwPrintData;
     return pPrtData;
 }
 
