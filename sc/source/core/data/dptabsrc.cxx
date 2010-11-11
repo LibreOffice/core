@@ -1732,9 +1732,9 @@ uno::Any SAL_CALL ScDPDimension::getPropertyValue( const rtl::OUString& aPropert
             aRet <<= uno::Sequence<sheet::TableFilterField>(0);
     }
     else if (aNameStr.EqualsAscii(SC_UNO_LAYOUTNAME))
-        aRet <<= mpLayoutName.get() ? *mpLayoutName : OUString::createFromAscii("");
+        aRet <<= mpLayoutName.get() ? *mpLayoutName : OUString(RTL_CONSTASCII_USTRINGPARAM(""));
     else if (aNameStr.EqualsAscii(SC_UNO_FIELD_SUBTOTALNAME))
-        aRet <<= mpSubtotalName.get() ? *mpSubtotalName : OUString::createFromAscii("");
+        aRet <<= mpSubtotalName.get() ? *mpSubtotalName : OUString(RTL_CONSTASCII_USTRINGPARAM(""));
     else if (aNameStr.EqualsAscii(SC_UNO_HAS_HIDDEN_MEMBER))
         aRet <<= mbHasHiddenMember;
     else if (aNameStr.EqualsAscii(SC_UNO_FLAGS))
