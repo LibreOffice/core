@@ -28,7 +28,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <float.h>
 #include <sfx2/app.hxx>
 #include <svl/zforlist.hxx>
@@ -44,15 +43,11 @@
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <dbfld.hxx>
-#ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
-#endif
 #include <docfld.hxx>
 #include <expfld.hxx>
 #include <txtatr.hxx>
-#ifndef _UNOFLDMID_H
 #include <unofldmid.h>
-#endif
 
 
 using namespace ::com::sun::star::sdbc;
@@ -281,27 +276,23 @@ SwField* SwDBField::Copy() const
     return pTmp;
 }
 
-String SwDBField::GetCntnt(BOOL bName) const
+String SwDBField::GetFieldName() const
 {
-    if(bName)
-    {
-        const String& rDBName = ((SwDBFieldType*)GetTyp())->GetName();
+    const String& rDBName = static_cast<SwDBFieldType*>(GetTyp())->GetName();
         //TODO/CLEANUP
         //Funktion tut nichts!
         //String sContent( SFX_APP()->LocalizeDBName(INI2NATIONAL,
         //                                    rDBName.GetToken(0, DB_DELIM)));
-        String sContent( rDBName.GetToken(0, DB_DELIM) );
+    String sContent( rDBName.GetToken(0, DB_DELIM) );
 
-        if (sContent.Len() > 1)
-        {
-            sContent += DB_DELIM;
-            sContent += rDBName.GetToken(1, DB_DELIM);
-            sContent += DB_DELIM;
-            sContent += rDBName.GetToken(2, DB_DELIM);
-        }
-        return lcl_DBTrennConv(sContent);
+    if (sContent.Len() > 1)
+    {
+        sContent += DB_DELIM;
+        sContent += rDBName.GetToken(1, DB_DELIM);
+        sContent += DB_DELIM;
+        sContent += rDBName.GetToken(2, DB_DELIM);
     }
-    return Expand();
+    return lcl_DBTrennConv(sContent);
 }
 
 //------------------------------------------------------------------------------
@@ -547,19 +538,15 @@ void SwDBNameInfField::SetDBData(const SwDBData & rDBData)
 
 //------------------------------------------------------------------------------
 
-String SwDBNameInfField::GetCntnt(BOOL bName) const
+String SwDBNameInfField::GetFieldName() const
 {
-    String sStr(SwField::GetCntnt(bName));
-
-    if(bName)
+    String sStr( SwField::GetFieldName() );
+    if (aDBData.sDataSource.getLength())
     {
-        if (aDBData.sDataSource.getLength())
-        {
-            sStr += ':';
-            sStr += String(aDBData.sDataSource);
-            sStr += DB_DELIM;
-            sStr += String(aDBData.sCommand);
-        }
+        sStr += ':';
+        sStr += String(aDBData.sDataSource);
+        sStr += DB_DELIM;
+        sStr += String(aDBData.sCommand);
     }
     return lcl_DBTrennConv(sStr);
 }

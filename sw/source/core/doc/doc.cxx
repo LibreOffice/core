@@ -100,7 +100,6 @@
 #include <fldupde.hxx>
 #include <swbaslnk.hxx>
 #include <printdata.hxx>
-#include <swprtopt.hxx>
 #include <cmdid.h>              // fuer den dflt - Printer in SetJob
 #include <statstr.hrc>          // StatLine-String
 #include <comcore.hrc>
@@ -1714,16 +1713,22 @@ sal_uInt16 SwDoc::GetPageCount() const
 const Size SwDoc::GetPageSize( sal_uInt16 nPageNum, bool bSkipEmptyPages ) const
 {
     Size aSize;
-    if( GetRootFrm() && nPageNum )
+    if ( GetRootFrm() && nPageNum )
     {
         const SwPageFrm* pPage = static_cast<const SwPageFrm*>
                                  (GetRootFrm()->Lower());
 
-        while( --nPageNum && pPage->GetNext() )
+        while ( --nPageNum && pPage->GetNext() )
+        {
             pPage = static_cast<const SwPageFrm*>( pPage->GetNext() );
+        }
 
-        if( !bSkipEmptyPages && pPage->IsEmptyPage() && pPage->GetNext() )
+        // switch to next page for an empty page, if empty pages are not skipped
+        // in order to get a sensible page size for an empty page - e.g. for printing.
+        if ( !bSkipEmptyPages && pPage->IsEmptyPage() && pPage->GetNext() )
+        {
             pPage = static_cast<const SwPageFrm*>( pPage->GetNext() );
+        }
 
         aSize = pPage->Frm().SSize();
     }
@@ -1837,10 +1842,10 @@ void SwDoc::DocInfoChgd( )
 const SwFmtRefMark* SwDoc::GetRefMark( const String& rName ) const
 {
     const SfxPoolItem* pItem;
-    USHORT nMaxItems = GetAttrPool().GetItemCount( RES_TXTATR_REFMARK );
-    for( USHORT n = 0; n < nMaxItems; ++n )
+    sal_uInt32 nMaxItems = GetAttrPool().GetItemCount2( RES_TXTATR_REFMARK );
+    for( sal_uInt32 n = 0; n < nMaxItems; ++n )
     {
-        if( 0 == (pItem = GetAttrPool().GetItem( RES_TXTATR_REFMARK, n ) ))
+        if( 0 == (pItem = GetAttrPool().GetItem2( RES_TXTATR_REFMARK, n ) ))
             continue;
 
         const SwFmtRefMark* pFmtRef = (SwFmtRefMark*)pItem;
@@ -1859,10 +1864,10 @@ const SwFmtRefMark* SwDoc::GetRefMark( USHORT nIndex ) const
     const SwTxtRefMark* pTxtRef;
     const SwFmtRefMark* pRet = 0;
 
-    USHORT nMaxItems = GetAttrPool().GetItemCount( RES_TXTATR_REFMARK );
-    USHORT nCount = 0;
-    for( USHORT n = 0; n < nMaxItems; ++n )
-        if( 0 != (pItem = GetAttrPool().GetItem( RES_TXTATR_REFMARK, n )) &&
+    sal_uInt32 nMaxItems = GetAttrPool().GetItemCount2( RES_TXTATR_REFMARK );
+    sal_uInt32 nCount = 0;
+    for( sal_uInt32 n = 0; n < nMaxItems; ++n )
+        if( 0 != (pItem = GetAttrPool().GetItem2( RES_TXTATR_REFMARK, n )) &&
             0 != (pTxtRef = ((SwFmtRefMark*)pItem)->GetTxtRefMark()) &&
             &pTxtRef->GetTxtNode().GetNodes() == &GetNodes() )
         {
@@ -1885,10 +1890,10 @@ USHORT SwDoc::GetRefMarks( SvStringsDtor* pNames ) const
     const SfxPoolItem* pItem;
     const SwTxtRefMark* pTxtRef;
 
-    USHORT nMaxItems = GetAttrPool().GetItemCount( RES_TXTATR_REFMARK );
-    USHORT nCount = 0;
-    for( USHORT n = 0; n < nMaxItems; ++n )
-        if( 0 != (pItem = GetAttrPool().GetItem( RES_TXTATR_REFMARK, n )) &&
+    sal_uInt32 nMaxItems = GetAttrPool().GetItemCount2( RES_TXTATR_REFMARK );
+    sal_uInt32 nCount = 0;
+    for( sal_uInt32 n = 0; n < nMaxItems; ++n )
+        if( 0 != (pItem = GetAttrPool().GetItem2( RES_TXTATR_REFMARK, n )) &&
             0 != (pTxtRef = ((SwFmtRefMark*)pItem)->GetTxtRefMark()) &&
             &pTxtRef->GetTxtNode().GetNodes() == &GetNodes() )
         {
@@ -2129,9 +2134,9 @@ const SwFmtINetFmt* SwDoc::FindINetAttr( const String& rName ) const
     const SwFmtINetFmt* pItem;
     const SwTxtINetFmt* pTxtAttr;
     const SwTxtNode* pTxtNd;
-    USHORT n, nMaxItems = GetAttrPool().GetItemCount( RES_TXTATR_INETFMT );
+    sal_uInt32 n, nMaxItems = GetAttrPool().GetItemCount2( RES_TXTATR_INETFMT );
     for( n = 0; n < nMaxItems; ++n )
-        if( 0 != (pItem = (SwFmtINetFmt*)GetAttrPool().GetItem(
+        if( 0 != (pItem = (SwFmtINetFmt*)GetAttrPool().GetItem2(
             RES_TXTATR_INETFMT, n ) ) &&
             pItem->GetName().Equals( rName ) &&
             0 != ( pTxtAttr = pItem->GetTxtINetFmt()) &&
@@ -2445,7 +2450,7 @@ BOOL SwDoc::ConvertFieldsToText()
                         nWhich != RES_REFPAGEGETFLD&&
                         nWhich != RES_REFPAGESETFLD))
                 {
-                    String sText = pField->GetCntnt();
+                    String sText = pField->ExpandField(true);
                     //database fields should not convert their command into text
                     if( RES_DBFLD == pCurType->Which() && !static_cast<const SwDBField*>(pField)->IsInitialized())
                         sText.Erase();
