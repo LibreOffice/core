@@ -27,7 +27,8 @@
 
 gb_ComponentTarget_REPOS := $(gb_REPOS)
 
-gb_ComponentTarget_XSLTCOMMAND := xsltproc
+gb_ComponentTarget_XSLTPROCTARGET := $(call gb_Executable_get_target,xsltproc)
+gb_ComponentTarget_XSLTPROCCOMMAND := $(gb_ComponentTarget_XSLTPROCPRECOMMAND) $(gb_ComponentTarget_XSLTPROCTARGET)
 gb_ComponentTarget_XSLTCOMMANDFILE := $(SOLARENV)/bin/createcomponent.xslt
 gb_ComponentTarget_get_source = $(1)/$(2).component
 
@@ -37,14 +38,14 @@ define gb_ComponentTarget__command
 $(call gb_Helper_announce,Processing $(2) ...)
 $(call gb_Helper_abbreviate_dirs_native,\
     mkdir -p $(dir $(1)) && \
-    $(gb_ComponentTarget_XSLTCOMMAND) --nonet --stringparam uri \
+    $(gb_ComponentTarget_XSLTPROCCOMMAND) --nonet --stringparam uri \
         '$(gb_ComponentTarget_PREFIXBASISNATIVE)$(LIBFILENAME)' -o $(1) \
         $(gb_ComponentTarget_XSLTCOMMANDFILE) $(2))
 
 endef
 
 define gb_ComponentTarget__rules
-$$(call gb_ComponentTarget_get_target,%) : $$(call gb_ComponentTarget_get_source,$(1),%)
+$$(call gb_ComponentTarget_get_target,%) : $$(call gb_ComponentTarget_get_source,$(1),%) | $(gb_ComponentTarget_XSLTPROCTARGET)
     $$(call gb_ComponentTarget__command,$$@,$$<)
 
 $$(call gb_ComponentTarget_get_clean_target,%) :

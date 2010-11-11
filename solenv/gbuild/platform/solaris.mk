@@ -308,6 +308,7 @@ endef
 
 # ComponentTarget
 
+gb_ComponentTarget_XSLTPROCPRECOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib
 gb_ComponentTarget_PREFIXBASISNATIVE := vnd.sun.star.expand:$$OOO_BASE_DIR/program/
 
 # vim: set noet sw=4 ts=4:
