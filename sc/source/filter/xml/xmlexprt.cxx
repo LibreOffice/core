@@ -527,7 +527,7 @@ ScXMLExport::ScXMLExport(
         // This name is reserved for the external ref cache tables.  This
         // should not conflict with user-defined styles since this name is
         // used for a table style which is not available in the UI.
-        sExternalRefTabStyleName = rtl::OUString::createFromAscii("ta_extref");
+        sExternalRefTabStyleName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ta_extref"));
         GetAutoStylePool()->RegisterName(XML_STYLE_FAMILY_TABLE_TABLE, sExternalRefTabStyleName);
 
         sAttrName = GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_TABLE, GetXMLToken(XML_NAME));
@@ -825,11 +825,11 @@ void ScXMLExport::_ExportMeta()
     CollectSharedData(nTableCount, nShapesCount, nCellCount);
 
     uno::Sequence<beans::NamedValue> stats(3);
-    stats[0] = beans::NamedValue(::rtl::OUString::createFromAscii("TableCount"),
+    stats[0] = beans::NamedValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TableCount")),
                 uno::makeAny(nTableCount));
-    stats[1] = beans::NamedValue(::rtl::OUString::createFromAscii("CellCount"),
+    stats[1] = beans::NamedValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CellCount")),
                 uno::makeAny(nCellCount));
-    stats[2] = beans::NamedValue(::rtl::OUString::createFromAscii("ObjectCount"),
+    stats[2] = beans::NamedValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ObjectCount")),
                 uno::makeAny(nShapesCount));
 
     // update document statistics at the model
@@ -1089,7 +1089,7 @@ void ScXMLExport::ExportColumns(const sal_Int32 nTable, const table::CellRangeAd
 void ScXMLExport::ExportExternalRefCacheStyles()
 {
     sal_Int32 nEntryIndex = GetCellStylesPropertySetMapper()->FindEntryIndex(
-        "NumberFormat", XML_NAMESPACE_STYLE, OUString::createFromAscii("data-style-name"));
+        "NumberFormat", XML_NAMESPACE_STYLE, OUString(RTL_CONSTASCII_USTRINGPARAM("data-style-name")));
 
     if (nEntryIndex < 0)
         // No entry index for the number format is found.
@@ -1103,7 +1103,7 @@ void ScXMLExport::ExportExternalRefCacheStyles()
     // Export each unique number format used in the external ref cache.
     vector<sal_uInt32> aNumFmts;
     pRefMgr->getAllCachedNumberFormats(aNumFmts);
-    const OUString aDefaultStyle = OUString::createFromAscii("Default").intern();
+    const OUString aDefaultStyle = OUString(RTL_CONSTASCII_USTRINGPARAM("Default")).intern();
     for (vector<sal_uInt32>::const_iterator itr = aNumFmts.begin(), itrEnd = aNumFmts.end();
           itr != itrEnd; ++itr)
     {
@@ -1130,7 +1130,7 @@ void ScXMLExport::ExportExternalRefCacheStyles()
         {
             sal_Bool bIsAuto;
             nIndex = pCellStyles->GetIndexOfStyleName(
-                aName, OUString::createFromAscii(XML_STYLE_FAMILY_TABLE_CELL_STYLES_PREFIX), bIsAuto);
+                aName, OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_CELL_STYLES_PREFIX)), bIsAuto);
         }
 
         // store the number format to index mapping for later use.
