@@ -357,10 +357,9 @@ sub get_folderitem_directory
 {
     my ($shortcut) = @_;
 
-    # my $directory = "$installer::globals::programmenufolder";  # default
     my $directory = "$installer::globals::officemenufolder";     # default
 
-    # The value $installer::globals::programmenufolder is not correct for the
+    # The default is not correct for the
     # PREDEFINED folders, like PREDEFINED_AUTOSTART
 
     if ( $shortcut->{'FolderID'} eq "PREDEFINED_AUTOSTART" )

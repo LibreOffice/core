@@ -235,7 +235,6 @@ sub create_defaultdir_directorynames
 
         $hostname =~ s/\Q$installer::globals::separator\E\s*$//;
         get_last_directory_name(\$hostname);
-        # installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$hostname); # making program/classes to classes
         my $uniquename = $onedir->{'uniquename'};
         my $shortstring;
         if (( $installer::globals::updatedatabase ) && ( exists($shortdirnamehashref->{$uniquename}) ))
@@ -309,15 +308,6 @@ sub create_directorytable_from_collection
 sub add_root_directories
 {
     my ($directorytableref, $allvariableshashref) = @_;
-
-#   my $sourcediraddon = "";
-#   if (($installer::globals::addchildprojects) ||
-#       ($installer::globals::patch) ||
-#       ($installer::globals::languagepack) ||
-#       ($allvariableshashref->{'CHANGETARGETDIR'}))
-#   {
-#       $sourcediraddon = "\:\.";
-#   }
 
     my $oneline = "";
 

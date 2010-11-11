@@ -79,7 +79,6 @@ sub merge_mergemodules_into_msi_database
             %installer::globals::mergemodules = ();
 
             my $mergemoduledir = installer::systemactions::create_directories("mergefiles", $languagestringref);
-            # push(@installer::globals::removedirs, $mergemoduledir);
 
             my $mergemodule;
             foreach $mergemodule ( @{$mergemodules} )
@@ -144,7 +143,6 @@ sub merge_mergemodules_into_msi_database
                 }
                 else
                 {
-                    # $systemcall = $msidb . " -d " . $filename . " -f " . $workdir . " -e File Component MsiAssembly Directory";
                     $systemcall = $msidb . " -d " . $filename . " -f " . $workdir . " -e \*";
                 }
 
@@ -1111,23 +1109,6 @@ sub change_file_table
     {
         if ( ! -d $unpackdir ) { installer::systemactions::create_directory($unpackdir); }
 
-        # Unpack the cab file, so that in can be included into the last office cabinet file. Attention: cararc.exe from cabsdk required.
-        # cabarc.exe -o X <fullcabfilepath>
-
-        # my $cabarcfilename = "cabarc.exe";
-        # my $cabarcfile = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$cabarcfilename, $includepatharrayref, 1);
-
-        # if ( ! -f $$cabarcfile )
-        # {
-        #   $cabarcfilename = "CABARC.EXE";
-        #   $cabarcfile = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$cabarcfilename, $includepatharrayref, 1);
-        #   if ( ! -f $$cabarcfile )
-        #   {
-        #       installer::exiter::exit_program("ERROR: cabarc.exe not found !", "change_file_table");
-        #   }
-        # }
-        # my $cabarc = $$cabarcfile;
-
         # changing directory
         my $from = cwd();
         my $to = $mergemodulehash->{'workdir'};
@@ -1153,9 +1134,6 @@ sub change_file_table
         }
 
         my $cabfilename = "MergeModule.CABinet";
-
-        # exclude cabinet file
-        # my $systemcall = $cabarc . " -o X " . $mergemodulehash->{'cabinetfile'};
 
         my $systemcall = "";
         if ( $^O =~ /cygwin/i ) {

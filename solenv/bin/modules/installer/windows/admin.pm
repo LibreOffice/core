@@ -54,13 +54,6 @@ sub unpack_cabinet_file
     # But this wrong expand.exe is typically in the PATH before this expand.exe, to unpack
     # cabinet files.
 
-#   if ( $^O =~ /cygwin/i )
-#   {
-#       $expandfile = $ENV{'SYSTEMROOT'} . "/system32/expand.exe"; # Has to be located in the systemdirectory
-#       $expandfile =~ s/\\/\//;
-#       if ( ! -f $expandfile ) { exit_program("ERROR: Did not find file $expandfile in the Windows system folder!"); }
-#   }
-
     if ( $^O =~ /cygwin/i )
     {
         $expandfile = qx(cygpath -u "$ENV{WINDIR}"/System32/expand.exe);
@@ -70,7 +63,6 @@ sub unpack_cabinet_file
     my $expandlogfile = $unpackdir . $installer::globals::separator . "expand.log";
 
     # exclude cabinet file
-    # my $systemcall = $cabarc . " -o X " . $mergemodulehash->{'cabinetfile'};
 
     my $systemcall = "";
     if ( $^O =~ /cygwin/i ) {
@@ -326,7 +318,6 @@ sub analyze_registry_file
             my $component = $6;
 
             my %helphash = ();
-            # $helphash{'Registry'} = $registry;
             $helphash{'Root'} = $root;
             $helphash{'Key'} = $key;
             $helphash{'Name'} = $name;
@@ -489,13 +480,7 @@ sub copy_files_into_directory_structure
             }
 
             if ( $destfile =~ /unopkg\.exe\s*$/ ) { $unopkgfile = $destfile; }
-
-            # installer::systemactions::copy_one_file($sourcefile, $destfile);
         }
-        # else  # allowing missing sequence numbers ?
-        # {
-        #   installer::exiter::exit_program("ERROR: No file assigned to sequence $i", "copy_files_into_directory_structure");
-        # }
     }
 
     return $unopkgfile;
@@ -805,8 +790,6 @@ sub remove_empty_dirs_in_folder
 
         # try to remove empty directory
         my $returnvalue = rmdir $dir;
-
-        # if ( $returnvalue ) { print "Successfully removed empty dir $dir\n"; }
     }
 }
 

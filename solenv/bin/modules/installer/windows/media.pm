@@ -351,7 +351,6 @@ sub create_media_table
         if ( $allvariables->{'CABFILENUMBER'} ) { $maxcabfilenumber = $allvariables->{'CABFILENUMBER'}; }
         my $allfiles = $#{$filesref} + 1;
         my $maxfilenumber = get_maximum_filenumber($allfiles, $maxcabfilenumber);
-        # my $maxfilenumber = 1000; # maximum 1000 files in each cabinet file
         my $cabfilenumber = 0;
         my $cabfull = 0;
         my $counter = 0;
@@ -385,7 +384,6 @@ sub create_media_table
                 $cabfilenumber++;
 
                 $media{'DiskId'} = get_media_diskid($cabfilenumber);
-                # $media{'LastSequence'} = get_media_lastsequence($onefile);
                 $media{'LastSequence'} = $i + 1;    # This should be correct, also for unsorted files collectors
                 $media{'DiskPrompt'} = get_media_diskprompt();
                 $media{'Cabinet'} = generate_cab_filename_for_some_cabs($allvariables, $cabfilenumber);
@@ -420,7 +418,6 @@ sub create_media_table
         my $maximumfile = $#{$filesref};
 
         $media{'DiskId'} = get_media_diskid($diskid);
-        # $media{'LastSequence'} = ${$filesref}[$maximumfile]->{'sequencenumber'};  # sequence number of the last file
         $media{'LastSequence'} = $maximumfile + 1; # This works also for unsorted file collector
         $media{'DiskPrompt'} = get_media_diskprompt();
         $media{'Cabinet'} = generate_cab_filename($allvariables);

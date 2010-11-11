@@ -773,7 +773,6 @@ sub create_files_table
 
     # The filenames must be collected because of uniqueness
     # 01-44-~1.DAT, 01-44-~2.DAT, ...
-    # my @shortnames = ();
     my %shortnames = ();
 
     if ( $installer::globals::updatedatabase ) { collect_shortnames_from_old_database($uniquefilenamehashref, \%shortnames); }
@@ -798,7 +797,6 @@ sub create_files_table
         $onefile->{'componentname'} = $file{'Component_'};
 
         # Collecting all components
-        # if (!(installer::existence::exists_in_array($file{'Component_'}, $allfilecomponentsref))) { push(@{$allfilecomponentsref}, $file{'Component_'}); }
 
         if ( ! exists($allfilecomponents{$file{'Component_'}}) ) { $allfilecomponents{$file{'Component_'}} = 1; }
 
@@ -880,7 +878,6 @@ sub create_files_table
         }
 
         # Collecting all language specific conditions
-        # if ( $onefile->{'haslanguagemodule'} )
         if ( $onefile->{'ismultilingual'} )
         {
             if ( $onefile->{'ComponentCondition'} ) { installer::exiter::exit_program("ERROR: Cannot set language condition. There is already another component condition for file $onefile->{'gid'}: \"$onefile->{'ComponentCondition'}\" !", "create_files_table"); }

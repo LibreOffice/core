@@ -334,7 +334,6 @@ sub readdatabase
     }
     else
     {
-        # installer::logger::print_message( "... no update process, no database found ...\n" );
         $infoline = "\nNo database found in $completelistname. This is no update process!\n\n";
     }
     push( @installer::globals::logfileinfo, $infoline);

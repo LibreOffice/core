@@ -166,8 +166,7 @@ sub get_productname_for_property_table
 
     if ( $installer::globals::languagepack )
     {
-        # my $langstring = get_language_string();   # Example (English, Deutsch)
-        my $langstring = get_english_language_string(); # New: (English, German)
+        my $langstring = get_english_language_string(); # Example: (English, German)
         $productname = $name . " " . $version . " Language Pack" . " " . $langstring;
     }
 

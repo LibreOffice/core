@@ -229,7 +229,6 @@ sub execute_msimsp
         $locallogfilename =~ s/\//\\\\/g;
 
         $localmspfilename =~ s/\\/\\\\/g; # path already contains backslash
-        # $localmspfilename =~ s/\//\\\\/g;
 
         $localmsimsptemppath = qx{cygpath -w "$localmsimsptemppath"};
         $localmsimsptemppath =~ s/\\/\\\\/g;
@@ -1082,10 +1081,7 @@ sub convert_unicode_to_ascii
     my $savfilename = $filename . "_before.unicode";
     installer::systemactions::copy_one_file($filename, $savfilename);
 
-#   open( IN, "<:utf16", $filename ) || installer::exiter::exit_program("ERROR: Cannot open file $filename for reading", "convert_unicode_to_ascii");
-#   open( IN, "<:para:crlf:uni", $filename ) || installer::exiter::exit_program("ERROR: Cannot open file $filename for reading", "convert_unicode_to_ascii");
     open( IN, "<:encoding(UTF16-LE)", $filename ) || installer::exiter::exit_program("ERROR: Cannot open file $filename for reading", "convert_unicode_to_ascii");
-#   open( IN, "<:encoding(UTF-8)", $filename ) || installer::exiter::exit_program("ERROR: Cannot open file $filename for reading", "convert_unicode_to_ascii");
     while ( $line = <IN> ) {
         push @localfile, $line;
     }
