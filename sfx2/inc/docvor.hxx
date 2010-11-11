@@ -102,8 +102,8 @@ public:
     void SetMgr(SfxOrganizeMgr *pM) { pMgr = pM; }
     void Reset();
     inline void SetBitmaps(
-                    const Image &rOFolderBmp, const Image &rCFolderBmp, const Image &rODocBmp, const Image &rCDocBmp,
-                    const Image &rOFolderBmpHC, const Image &rCFolderBmpHC, const Image &rODocBmpHC, const Image &rCDocBmpHC );
+                    const Image &rOFolderBmp, const Image &rCFolderBmp, const Image &rODocBmp, const Image &rCDocBmp
+                    );
     const Image &GetClosedBmp(USHORT nLevel) const;
     const Image &GetOpenedBmp(USHORT nLevel) const;
 
