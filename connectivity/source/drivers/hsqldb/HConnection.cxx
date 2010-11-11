@@ -359,13 +359,12 @@ namespace connectivity { namespace hsqldb
 
             // assemble the image URL
             ::rtl::OUStringBuffer aImageURL;
-            aImageURL.appendAscii( "private:graphicrepository/" );  // load the graphic from the global graphic repository
-            aImageURL.appendAscii( "database/" );                   // the relative path within the images.zip
-            if ( _ColorMode == GraphicColorMode::NORMAL )
-                aImageURL.appendAscii( LINKED_TEXT_TABLE_IMAGE_RESOURCE );
-            else
-                aImageURL.appendAscii( LINKED_TEXT_TABLE_IMAGE_RESOURCE_HC );
-                                                                    // the name of the graphic to use
+            // load the graphic from the global graphic repository
+            aImageURL.appendAscii( "private:graphicrepository/" );
+            // the relative path within the images.zip
+            aImageURL.appendAscii( "database/" );
+            aImageURL.appendAscii( LINKED_TEXT_TABLE_IMAGE_RESOURCE );
+            // the name of the graphic to use
             ::rtl::OUString sImageURL( aImageURL.makeStringAndClear() );
 
             // ask the provider to obtain a graphic
