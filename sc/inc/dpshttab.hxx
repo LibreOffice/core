@@ -42,10 +42,8 @@ namespace com { namespace sun { namespace star { namespace sheet {
 }}}}
 
 class ScDPDimension;
-// Wang Xu Ming -- 2009-8-17
-// DataPilot Migration - Cache&&Performance
 class ScDPItemData;
-// End Comments
+
 // --------------------------------------------------------------------
 //
 //  implementation of ScDPTableData with sheet data
@@ -59,15 +57,11 @@ struct ScSheetSourceDesc
     BOOL operator== ( const ScSheetSourceDesc& rOther ) const
         { return aSourceRange == rOther.aSourceRange &&
                  aQueryParam  == rOther.aQueryParam; }
-// Wang Xu Ming - DataPilot migration
-// Buffer&&Performance
     ScDPTableDataCache* CreateCache( ScDocument* pDoc, long nID = -1) const;
     ULONG CheckValidate( ScDocument* pDoc  ) const;
     ScDPTableDataCache* GetCache( ScDocument* pDoc, long nID ) const;
     ScDPTableDataCache*  GetExistDPObjectCache ( ScDocument* pDoc  ) const;
     long    GetCacheId( ScDocument* pDoc, long nID ) const;
-
-// End Comments
 };
 
 class SC_DLLPUBLIC ScSheetDPData : public ScDPTableData
@@ -81,11 +75,9 @@ private:
        ScDPCacheTable  aCacheTable;
 
 public:
-    // Wang Xu Ming -- 2009-8-17
-    // DataPilot Migration - Cache&&Performance
     ScSheetDPData( ScDocument* pD, const ScSheetSourceDesc& rDesc, long nCacheId = -1 );
-    virtual         ~ScSheetDPData();
-    // End Comments
+    virtual ~ScSheetDPData();
+
     virtual long                    GetColumnCount();
     virtual String                  getDimensionName(long nColumn);
     virtual BOOL                    getIsDataLayoutDimension(long nColumn);
