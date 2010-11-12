@@ -133,7 +133,7 @@ void SAL_CALL Window::setPointerType( sal_Int32 nPointerType )
 // XWindow
 // ------------------------------------------------------------------------------
 
-void SAL_CALL Window::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, sal_Int16 Flags )
+void SAL_CALL Window::setPosSize( sal_Int32 /*X*/, sal_Int32 /*Y*/, sal_Int32 /*Width*/, sal_Int32 /*Height*/, sal_Int16 /*Flags*/ )
     throw (uno::RuntimeException)
 {
 //     if( mnFrameWnd )
@@ -173,7 +173,7 @@ awt::Rectangle SAL_CALL Window::getPosSize()
 
 // ------------------------------------------------------------------------------
 
-void SAL_CALL Window::setVisible( sal_Bool bVisible )
+void SAL_CALL Window::setVisible( sal_Bool /*bVisible*/ )
     throw (uno::RuntimeException)
 {
 //     if( mnFrameWnd )
@@ -189,7 +189,7 @@ void SAL_CALL Window::setVisible( sal_Bool bVisible )
 
 // ------------------------------------------------------------------------------
 
-void SAL_CALL Window::setEnable( sal_Bool bEnable )
+void SAL_CALL Window::setEnable( sal_Bool /*bEnable*/ )
     throw (uno::RuntimeException)
 {
 //     if( mnFrameWnd )
