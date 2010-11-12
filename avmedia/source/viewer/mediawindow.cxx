@@ -382,8 +382,8 @@ void MediaWindow::getMediaFilters( FilterNameVector& rFilterNameVector )
     for( i = 0; i < ( sizeof( pFilters ) / sizeof( char* ) ); i += 2 )
     {
         rFilterNameVector.push_back( ::std::make_pair< ::rtl::OUString, ::rtl::OUString >(
-                                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( pFilters[ i ] )),
-                                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( pFilters[ i + 1 ] )) ) );
+                                        ::rtl::OUString::createFromAscii(pFilters[i]),
+                                        ::rtl::OUString::createFromAscii(pFilters[i+1]) ) );
     }
 }
 

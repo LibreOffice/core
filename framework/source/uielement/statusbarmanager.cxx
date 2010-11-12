@@ -79,7 +79,7 @@ using namespace ::com::sun::star;
 #endif
 
 const sal_Int32  HELPID_PREFIX_LENGTH    = 7;
-static const char*      HELPID_PREFIX           = "helpid:";
+static const char HELPID_PREFIX[] = "helpid:";
 
 // Property names of a menu/menu item ItemDescriptor
 static const char ITEM_DESCRIPTOR_COMMANDURL[]  = "CommandURL";
