@@ -1388,7 +1388,7 @@ void RtfAttributeOutput::WriteField_Impl( const SwField* pFld, ww::eField /*eTyp
     m_aRunText.append(m_rExport.OutString(rFldCmd, m_rExport.eCurrentEncoding));
     m_aRunText.append("}{" OOO_STRING_SVTOOLS_RTF_FLDRSLT " ");
     if (pFld)
-        m_aRunText.append(m_rExport.OutString(pFld->GetCntnt(), m_rExport.eDefaultEncoding));
+        m_aRunText.append(m_rExport.OutString(pFld->ExpandField(true), m_rExport.eDefaultEncoding));
     m_aRunText.append("}}");
 }
 

@@ -784,9 +784,9 @@ void wwFontHelper::InitFontTable(bool bWrtWW8,const SwDoc& rDoc)
     const USHORT aTypes[] = { RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT, 0 };
     for (const USHORT* pId = aTypes; *pId; ++pId)
     {
-        USHORT nMaxItem = rPool.GetItemCount( *pId );
+        USHORT nMaxItem = rPool.GetItemCount2( *pId );
         for( USHORT nGet = 0; nGet < nMaxItem; ++nGet )
-            if( 0 != (pFont = (const SvxFontItem*)rPool.GetItem(
+            if( 0 != (pFont = (const SvxFontItem*)rPool.GetItem2(
                             *pId, nGet )) )
             {
                 GetId(wwFont(pFont->GetFamilyName(), pFont->GetPitch(),

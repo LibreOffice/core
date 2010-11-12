@@ -525,10 +525,10 @@ void RtfExport::ExportDocument_Impl()
     // protected section in the document.
     {
         const SfxItemPool& rPool = pDoc->GetAttrPool();
-        USHORT nMaxItem = rPool.GetItemCount(RES_PROTECT);
+        USHORT nMaxItem = rPool.GetItemCount2(RES_PROTECT);
         for( USHORT n = 0; n < nMaxItem; ++n )
         {
-            const SvxProtectItem* pProtect = (const SvxProtectItem*)rPool.GetItem(RES_PROTECT, n);
+            const SvxProtectItem* pProtect = (const SvxProtectItem*)rPool.GetItem2(RES_PROTECT, n);
             if (pProtect && pProtect->IsCntntProtected())
             {
                 Strm() << OOO_STRING_SVTOOLS_RTF_FORMPROT;
@@ -1008,30 +1008,30 @@ void RtfExport::OutColorTable()
         if( 0 != ( pCol = (const SvxColorItem*)rPool.GetPoolDefaultItem(
                 RES_CHRATR_COLOR ) ))
             InsColor( pCol->GetValue() );
-        nMaxItem = rPool.GetItemCount(RES_CHRATR_COLOR);
+        nMaxItem = rPool.GetItemCount2(RES_CHRATR_COLOR);
         for( n = 0; n < nMaxItem; ++n )
         {
-            if( 0 != (pCol = (const SvxColorItem*)rPool.GetItem(
+            if( 0 != (pCol = (const SvxColorItem*)rPool.GetItem2(
                 RES_CHRATR_COLOR, n ) ) )
                 InsColor( pCol->GetValue() );
         }
 
         const SvxUnderlineItem* pUnder = (const SvxUnderlineItem*)GetDfltAttr( RES_CHRATR_UNDERLINE );
         InsColor( pUnder->GetColor() );
-        nMaxItem = rPool.GetItemCount(RES_CHRATR_UNDERLINE);
+        nMaxItem = rPool.GetItemCount2(RES_CHRATR_UNDERLINE);
         for( n = 0; n < nMaxItem;n++)
         {
-            if( 0 != (pUnder = (const SvxUnderlineItem*)rPool.GetItem( RES_CHRATR_UNDERLINE, n ) ) )
+            if( 0 != (pUnder = (const SvxUnderlineItem*)rPool.GetItem2( RES_CHRATR_UNDERLINE, n ) ) )
                 InsColor( pUnder->GetColor() );
 
         }
 
         const SvxOverlineItem* pOver = (const SvxOverlineItem*)GetDfltAttr( RES_CHRATR_OVERLINE );
         InsColor( pOver->GetColor() );
-        nMaxItem = rPool.GetItemCount(RES_CHRATR_OVERLINE);
+        nMaxItem = rPool.GetItemCount2(RES_CHRATR_OVERLINE);
         for( n = 0; n < nMaxItem;n++)
         {
-            if( 0 != (pOver = (const SvxOverlineItem*)rPool.GetItem( RES_CHRATR_OVERLINE, n ) ) )
+            if( 0 != (pOver = (const SvxOverlineItem*)rPool.GetItem2( RES_CHRATR_OVERLINE, n ) ) )
                 InsColor( pOver->GetColor() );
 
         }
@@ -1051,9 +1051,9 @@ void RtfExport::OutColorTable()
         {
             InsColor( pBkgrd->GetColor() );
         }
-        nMaxItem = rPool.GetItemCount( *pIds );
+        nMaxItem = rPool.GetItemCount2( *pIds );
         for( n = 0; n < nMaxItem; ++n )
-            if( 0 != (pBkgrd = (const SvxBrushItem*)rPool.GetItem(
+            if( 0 != (pBkgrd = (const SvxBrushItem*)rPool.GetItem2(
                     *pIds , n ) ))
             {
                 InsColor( pBkgrd->GetColor() );
@@ -1070,9 +1070,9 @@ void RtfExport::OutColorTable()
         {
             InsColor( pShadow->GetColor() );
         }
-        nMaxItem = rPool.GetItemCount(RES_SHADOW);
+        nMaxItem = rPool.GetItemCount2(RES_SHADOW);
         for( n = 0; n < nMaxItem; ++n )
-            if( 0 != (pShadow = (const SvxShadowItem*)rPool.GetItem(
+            if( 0 != (pShadow = (const SvxShadowItem*)rPool.GetItem2(
                 RES_SHADOW, n ) ) )
             {
                 InsColor( pShadow->GetColor() );
@@ -1085,9 +1085,9 @@ void RtfExport::OutColorTable()
         if( 0 != ( pBox = (const SvxBoxItem*)rPool.GetPoolDefaultItem(
                         RES_BOX ) ))
             InsColorLine( *pBox );
-        nMaxItem = rPool.GetItemCount(RES_BOX);
+        nMaxItem = rPool.GetItemCount2(RES_BOX);
         for( n = 0; n < nMaxItem; ++n )
-            if( 0 != (pBox = (const SvxBoxItem*)rPool.GetItem( RES_BOX, n ) ))
+            if( 0 != (pBox = (const SvxBoxItem*)rPool.GetItem2( RES_BOX, n ) ))
                 InsColorLine( *pBox );
     }
 
