@@ -120,7 +120,8 @@ te-IN    0  1098
 te       0  1098
 tg       0  1064   # Tajik
 th     874  1054
-ti-ER    0  1139
+ti       0  1139   # Tigrinya
+ti-ER    0  1139   # Tigrinya
 tn       0  1074   # Setsuana
 tr    1254  1055   # Turkish
 ts       0  1073   # Tsonga
