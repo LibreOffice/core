@@ -68,7 +68,7 @@ const char* OEMPreloadJob::serviceName = "com.sun.star.office.OEMPreloadJob";
 
 OUString OEMPreloadJob::GetImplementationName()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( implementationName));
+    return OUString::createFromAscii(implementationName);
 }
 
 Sequence< OUString > OEMPreloadJob::GetSupportedServiceNames()

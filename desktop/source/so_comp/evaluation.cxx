@@ -67,7 +67,7 @@ const char* SOEvaluation::serviceName = "com.sun.star.office.Evaluation";
 
 OUString SOEvaluation::GetImplementationName()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( implementationName));
+    return OUString::createFromAscii(implementationName);
 }
 
 Sequence< OUString > SOEvaluation::GetSupportedServiceNames()
