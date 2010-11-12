@@ -131,7 +131,7 @@ namespace
         if (!xFactory.is()) return SCERR_EXPORT_CONNECT;
 
         _rDrvMgr.set( xFactory->createInstance(
-                            rtl::OUString::createFromAscii( SC_SERVICE_DRVMAN ) ),
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_SERVICE_DRVMAN )) ),
                             uno::UNO_QUERY);
         DBG_ASSERT( _rDrvMgr.is(), "can't get DriverManager" );
         if (!_rDrvMgr.is()) return SCERR_EXPORT_CONNECT;
@@ -160,9 +160,9 @@ namespace
         }
 
         uno::Sequence<beans::PropertyValue> aProps(2);
-        aProps[0].Name = rtl::OUString::createFromAscii(SC_DBPROP_EXTENSION);
+        aProps[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_EXTENSION));
         aProps[0].Value <<= rtl::OUString( aExtension );
-        aProps[1].Name = rtl::OUString::createFromAscii(SC_DBPROP_CHARSET);
+        aProps[1].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_CHARSET));
         aProps[1].Value <<= aCharSetStr;
 
         _rConnection = _rDrvMgr->getConnectionWithInfo( aConnUrl, aProps );
@@ -192,7 +192,7 @@ BOOL ScDocShell::MoveFile( const INetURLObject& rSourceObj, const INetURLObject&
         ::ucbhelper::Content aDestPath( aDestPathObj.GetMainURL(INetURLObject::NO_DECODE),
                             uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
         uno::Reference< ::com::sun::star::ucb::XCommandInfo > xInfo = aDestPath.getCommands();
-        rtl::OUString aTransferName = rtl::OUString::createFromAscii( "transfer" );
+        rtl::OUString aTransferName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "transfer" ));
         if ( xInfo->hasCommandByName( aTransferName ) )
         {
             aDestPath.executeCommand( aTransferName, uno::makeAny(
@@ -225,7 +225,7 @@ BOOL ScDocShell::KillFile( const INetURLObject& rURL )
     {
         ::ucbhelper::Content aCnt( rURL.GetMainURL(INetURLObject::NO_DECODE),
                         uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
-        aCnt.executeCommand( rtl::OUString::createFromAscii( "delete" ),
+        aCnt.executeCommand( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "delete" )),
                                 comphelper::makeBoolAny( sal_True ) );
     }
     catch( uno::Exception& )
@@ -333,7 +333,7 @@ ULONG ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet,
         ScProgress aProgress( this, ScGlobal::GetRscString( STR_LOAD_DOC ), nRowCount );
         uno::Reference<lang::XMultiServiceFactory> xFactory = comphelper::getProcessServiceFactory();
         uno::Reference<sdbc::XRowSet> xRowSet( xFactory->createInstance(
-                            rtl::OUString::createFromAscii( SC_SERVICE_ROWSET ) ),
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_SERVICE_ROWSET )) ),
                             uno::UNO_QUERY);
         ::utl::DisposableComponent aRowSetHelper(xRowSet);
         uno::Reference<beans::XPropertySet> xRowProp( xRowSet, uno::UNO_QUERY );
@@ -345,19 +345,19 @@ ULONG ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet,
 
         aAny <<= xConnection;
         xRowProp->setPropertyValue(
-                    rtl::OUString::createFromAscii(SC_DBPROP_ACTIVECONNECTION), aAny );
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_ACTIVECONNECTION)), aAny );
 
         aAny <<= nType;
         xRowProp->setPropertyValue(
-                    rtl::OUString::createFromAscii(SC_DBPROP_COMMANDTYPE), aAny );
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_COMMANDTYPE)), aAny );
 
         aAny <<= rtl::OUString( aTabName );
         xRowProp->setPropertyValue(
-                    rtl::OUString::createFromAscii(SC_DBPROP_COMMAND), aAny );
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_COMMAND)), aAny );
 
         aAny <<= sal_False;
         xRowProp->setPropertyValue(
-                    rtl::OUString::createFromAscii(SC_DBPROP_PROPCHANGE_NOTIFY), aAny );
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_PROPCHANGE_NOTIFY)), aAny );
 
         xRowSet->execute();
 
@@ -877,7 +877,7 @@ ULONG ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet, BO
         if (!xTableDesc.is()) return SCERR_EXPORT_CONNECT;
 
         aAny <<= rtl::OUString( aTabName );
-        xTableDesc->setPropertyValue( rtl::OUString::createFromAscii(SC_DBPROP_NAME), aAny );
+        xTableDesc->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_NAME)), aAny );
 
         // create columns
 
@@ -910,31 +910,26 @@ ULONG ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet, BO
             if (!xColumnDesc.is()) return SCERR_EXPORT_CONNECT;
 
             aAny <<= pColNames[nCol];
-            xColumnDesc->setPropertyValue( rtl::OUString::createFromAscii(SC_DBPROP_NAME), aAny );
+            xColumnDesc->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_NAME)), aAny );
 
             aAny <<= pColTypes[nCol];
-            xColumnDesc->setPropertyValue( rtl::OUString::createFromAscii(SC_DBPROP_TYPE), aAny );
+            xColumnDesc->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_TYPE)), aAny );
 
             aAny <<= pColLengths[nCol];
-            xColumnDesc->setPropertyValue( rtl::OUString::createFromAscii(SC_DBPROP_PRECISION), aAny );
+            xColumnDesc->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_PRECISION)), aAny );
 
             aAny <<= pColScales[nCol];
-            xColumnDesc->setPropertyValue( rtl::OUString::createFromAscii(SC_DBPROP_SCALE), aAny );
+            xColumnDesc->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_SCALE)), aAny );
 
             xColumnsAppend->appendByDescriptor( xColumnDesc );
         }
 
         xTablesAppend->appendByDescriptor( xTableDesc );
 
-        // re-open connection
-//      xConnection = xDrvMan->getConnectionWithInfo( aConnUrl, aProps );
-//      DBG_ASSERT( xConnection.is(), "can't get Connection" );
-//      if (!xConnection.is()) return SCERR_EXPORT_CONNECT;
-
         // get row set for writing
         uno::Reference<lang::XMultiServiceFactory> xFactory = comphelper::getProcessServiceFactory();
         uno::Reference<sdbc::XRowSet> xRowSet( xFactory->createInstance(
-                            rtl::OUString::createFromAscii( SC_SERVICE_ROWSET ) ),
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_SERVICE_ROWSET )) ),
                             uno::UNO_QUERY);
         ::utl::DisposableComponent aRowSetHelper(xRowSet);
         uno::Reference<beans::XPropertySet> xRowProp( xRowSet, uno::UNO_QUERY );
@@ -943,15 +938,15 @@ ULONG ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet, BO
 
         aAny <<= xConnection;
         xRowProp->setPropertyValue(
-                    rtl::OUString::createFromAscii(SC_DBPROP_ACTIVECONNECTION), aAny );
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_ACTIVECONNECTION)), aAny );
 
         aAny <<= (sal_Int32) sdb::CommandType::TABLE;
         xRowProp->setPropertyValue(
-                    rtl::OUString::createFromAscii(SC_DBPROP_COMMANDTYPE), aAny );
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_COMMANDTYPE)), aAny );
 
         aAny <<= rtl::OUString( aTabName );
         xRowProp->setPropertyValue(
-                    rtl::OUString::createFromAscii(SC_DBPROP_COMMAND), aAny );
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_COMMAND)), aAny );
 
         xRowSet->execute();
 

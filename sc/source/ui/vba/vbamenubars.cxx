@@ -107,7 +107,7 @@ ScVbaMenuBars::Item( const uno::Any& aIndex, const uno::Any& /*aIndex2*/ ) throw
     if( nIndex == excel::XlSheetType::xlWorksheet )
     {
         uno::Any aSource;
-        aSource <<= rtl::OUString::createFromAscii( "Worksheet Menu Bar" );
+        aSource <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Worksheet Menu Bar" ));
         uno::Reference< XCommandBar > xCommandBar( m_xCommandBars->Item( aSource, uno::Any() ), uno::UNO_QUERY_THROW );
         uno::Reference< excel::XMenuBar > xMenuBar( new ScVbaMenuBar( this, mxContext, xCommandBar ) );
         return uno::makeAny( xMenuBar );

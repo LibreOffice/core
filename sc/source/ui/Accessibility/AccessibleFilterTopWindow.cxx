@@ -97,7 +97,7 @@ Reference<XAccessible> ScAccessibleFilterTopWindow::getAccessibleChild(
 
 OUString ScAccessibleFilterTopWindow::getImplementationName() throw (RuntimeException)
 {
-    return OUString::createFromAscii("ScAccessibleFilterTopWindow");
+    return OUString(RTL_CONSTASCII_USTRINGPARAM("ScAccessibleFilterTopWindow"));
 }
 
 void ScAccessibleFilterTopWindow::setAccessibleChild(
