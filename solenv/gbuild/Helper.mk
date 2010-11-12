@@ -163,4 +163,84 @@ define gb_Helper_deliver
 $(call gb_Helper__deliverprefix,$(2)) cp -f $(1) $(2) && touch -r $(1) $(2)
 endef
 
+define gb_Helper_register_repository
+gb_Helper_CURRENTREPOSITORY := $(1)
+
+endef
+
+define gb_Helper_add_repository
+gb_Helper_CURRENTREPOSITORY :=
+include $(1)/Repository.mk
+ifeq ($$(gb_Helper_CURRENTREPOSITORY),)
+$$(error no gb_Helper_register_repository in Repository.mk for repository $(1))
+endif
+$$(gb_Helper_CURRENTREPOSITORY) := $(1)
+
+endef
+
+define gb_Helper_add_repositories
+$(foreach repo,$(1),$(call gb_Helper_add_repository,$(repo)))
+
+endef
+
+define gb_Helper_init_registries
+gb_Executable_VALIDLAYERS := UREBIN SDK OOO BRAND NONE
+gb_Library_VALIDLAYERS := OOOLIBS PLAINLIBS_URE PLAINLIBS_OOO RTLIBS RTVERLIBS STLLIBS UNOLIBS_URE UNOLIBS_OOO UNOVERLIBS
+gb_StaticLibrary_VALIDLAYERS := PLAINLIBS
+gb_Library_NAMESCHEMES := OOO PLAIN RT RTVER STL UNO UNOVER
+gb_StaticLibrary_NAMESCHEMES := PLAIN
+
+$$(foreach layer,$$(gb_Executable_VALIDLAYERS),$$(eval gb_Executable_$$(layer) :=))
+$$(foreach layer,$$(gb_Library_VALIDLAYERS),$$(eval gb_Library_$$(layer) :=))
+$$(foreach layer,$$(gb_StaticLibrary_VALIDLAYERS),$$(eval gb_StaticLibrary_$$(layer) :=))
+
+endef
+
+define gb_Helper_collect_libtargets
+gb_Library_PLAINLIBS := \
+    $$(gb_Library_PLAINLIBS_URE) \
+    $$(gb_Library_PLAINLIBS_OOO) \
+
+gb_Library_UNOLIBS := \
+    $$(gb_Library_UNOLIBS_URE) \
+    $$(gb_Library_UNOLIBS_OOO) \
+
+gb_Library_TARGETS := $$(foreach namescheme,$$(gb_Library_NAMESCHEMES),$$(gb_Library_$$(namescheme)LIBS))
+gb_StaticLibrary_TARGETS := $$(foreach namescheme,$$(gb_StaticLibrary_NAMESCHEMES),$$(gb_StaticLibrary_$$(namescheme)LIBS))
+
+endef
+
+define gb_Helper_collect_knownlibs
+gb_Library_KNOWNLIBS := $$(foreach namescheme,$$(gb_Library_NAMESCHEMES),$$(gb_Library_$$(namescheme)LIBS))
+gb_StaticLibrary_KNOWNLIBS := $$(foreach namescheme,$$(gb_StaticLibrary_NAMESCHEMES),$$(gb_StaticLibrary_$$(namescheme)LIBS))
+
+endef
+
+define gb_Helper_register_executables
+ifeq ($$(filter $(1),$$(gb_Executable_VALIDLAYERS)),)
+$$(error $(1) is not a valid layer for executables. Valid layers are: $$(gb_Executable_VALIDLAYERS))
+endif
+
+gb_Executable_$(1) += $(2)
+
+endef
+
+define gb_Helper_register_libraries
+ifeq ($$(filter $(1),$$(gb_Library_VALIDLAYERS)),)
+$$(error $(1) is not a valid layer for layer. Valid layers are: $$(gb_Library_VALIDLAYERS))
+endif
+
+gb_Library_$(1) += $(2)
+
+endef
+
+define gb_Helper_register_static_libraries
+ifeq ($$(filter $(1),$$(gb_StaticLibrary_VALIDLAYERS)),)
+$$(error $(1) is not a valid layer for layer. Valid layers are: $$(gb_StaticLibrary_VALIDLAYERS))
+endif
+
+gb_StaticLibrary_$(1) += $(2)
+
+endef
+
 # vim: set noet sw=4 ts=4:

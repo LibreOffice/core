@@ -88,19 +88,10 @@ gb_FULLDEPS := $(true)
 endif
 
 include $(GBUILDDIR)/Helper.mk
-gb_Library_NAMESCHEMES := OOO PLAIN RT RTVER STL UNO UNOVER
-gb_StaticLibrary_NAMESCHEMES := PLAIN
-include $(foreach repo,$(gb_REPOS),$(repo)/Targetnames.mk)
-gb_Library_PLAINLIBS := \
-    $(gb_Library_PLAINLIBS_URE) \
-    $(gb_Library_PLAINLIBS_OOO) \
 
-gb_Library_UNOLIBS := \
-    $(gb_Library_UNOLIBS_URE) \
-    $(gb_Library_UNOLIBS_OOO) \
-
-gb_Library_TARGETS := $(foreach namescheme,$(gb_Library_NAMESCHEMES),$(gb_Library_$(namescheme)LIBS))
-gb_StaticLibrary_TARGETS := $(foreach namescheme,$(gb_StaticLibrary_NAMESCHEMES),$(gb_StaticLibrary_$(namescheme)LIBS))
+$(eval $(call gb_Helper_init_registries))
+$(eval $(call gb_Helper_add_repositories,$(gb_REPOS)))
+$(eval $(call gb_Helper_collect_libtargets))
 
 ifeq ($(OS),LINUX)
 include $(GBUILDDIR)/platform/linux.mk
@@ -120,21 +111,9 @@ endif
 endif
 endif
 
-include $(foreach repo,$(gb_REPOS),$(repo)/Platformfixes.mk)
-gb_Library_KNOWNLIBS := $(foreach namescheme,$(gb_Library_NAMESCHEMES),$(gb_Library_$(namescheme)LIBS))
-gb_StaticLibrary_KNOWNLIBS := $(foreach namescheme,$(gb_StaticLibrary_NAMESCHEMES),$(gb_StaticLibrary_$(namescheme)LIBS))
+include $(foreach repo,$(gb_REPOS),$(repo)/RepositoryFixes.mk)
 
-ifeq ($(USE_SYSTEM_STL),YES)
-gb_Library_TARGETS := $(filter-out stl,$(gb_Library_TARGETS))
-endif
-
-ifeq ($(SYSTEM_LIBXML),YES)
-gb_Library_TARGETS := $(filter-out xml2,$(gb_Library_TARGETS))
-endif
-
-ifeq ($(SYSTEM_ICU),YES)
-gb_Library_TARGETS := $(filter-out icuuc,$(gb_Library_TARGETS))
-endif
+$(eval $(call gb_Helper_collect_knownlibs))
 
 gb_GLOBALDEFS := \
     -D__DMAKE \

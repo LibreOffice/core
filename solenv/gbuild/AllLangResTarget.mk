@@ -39,12 +39,10 @@ $(call gb_Helper_abbreviate_dirs_native,\
     mkdir -p $(dir $(1)) && \
     $(gb_SrsPartMergeTarget_TRANSEXCOMMAND) \
         -p $(firstword $(subst /, ,$(2))) \
-        -r $(patsubst %$(2),%,$(3))$(firstword $(subst /, ,$(2))) \
         -i $(3) \
         -o $(1) \
         -m $(4) \
-        -l all \
-        -qq)
+        -l all)
 
 endef
 
@@ -241,6 +239,7 @@ $(call gb_ResTarget_get_imagelist_target,$(1)) : $(call gb_ResTarget_get_target,
 
 $(call gb_ResTarget_get_outdir_target,$(1)) : $(call gb_ResTarget_get_target,$(1)) 
 $(call gb_ResTarget_get_outdir_target,$(1)) : ILSTTARGET = $(call gb_ResTarget_get_outdir_imagelist_target,$(1))
+
 endef
 
 define gb_ResTarget_add_file
@@ -292,6 +291,7 @@ define gb_AllLangResTarget_AllLangResTarget
 $(foreach lang,$(gb_AllLangResTarget_LANGS),\
     $(call gb_ResTarget_ResTarget,$(1)$(lang),$(1),$(lang)))
 $(call gb_Module_register_target,$(call gb_AllLangResTarget_get_target,$(1)),$(call gb_AllLangResTarget_get_clean_target,$(1)))
+
 endef
 
 define gb_AllLangResTarget_add_one_srs
