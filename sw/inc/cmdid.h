@@ -477,15 +477,15 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_FORMAT_FOOTNOTE          (FN_FORMAT + 67)  /* Fussnoten */
 #define FN_FORMAT_FOOTNOTE_DLG      (FN_FORMAT + 68)  /* Fussnoten-Dialog */
 
-// schon im Svx definiert
-//#define FN_FORMAT_RESET           (FN_FORMAT + 69)  /* Format zuruecksetzen */
+// already defined in Svx
+//#define FN_FORMAT_RESET           (FN_FORMAT + 69)
 
-#define FN_FRAME_TO_TOP             (FN_FORMAT + 70)  /* Rahmen nach oben */
-#define FN_FRAME_TO_BOTTOM          (FN_FORMAT + 71)  /* Rahmen nach unten */
+#define FN_FRAME_TO_TOP             (FN_FORMAT + 70)
+#define FN_FRAME_TO_BOTTOM          (FN_FORMAT + 71)
 
-#define FN_FRAME_NOWRAP             (FN_FORMAT + 72)  /* Rahmen kein Umlauf */
-#define FN_FRAME_WRAP               (FN_FORMAT + 73)  /* Rahmen Umlauf */
-#define FN_FRAME_WRAPTHRU           (FN_FORMAT + 74)  /* Rahmen Durchlauf */
+#define FN_FRAME_NOWRAP             (FN_FORMAT + 72)
+#define FN_FRAME_WRAP               (FN_FORMAT + 73)
+#define FN_FRAME_WRAPTHRU           (FN_FORMAT + 74)
 
 #define FN_FRAME_ALIGN_HORZ_LEFT    (FN_FORMAT + 75)  /* Rahmen horz. links */
 #define FN_FRAME_ALIGN_HORZ_RIGHT   (FN_FORMAT + 76)  /* Rahmen horz. rechts */
