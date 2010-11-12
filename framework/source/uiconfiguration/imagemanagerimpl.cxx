@@ -442,8 +442,6 @@ static sal_Int16 implts_convertImageTypeToIndex( sal_Int16 nImageType )
     sal_Int16 nIndex( 0 );
     if ( nImageType & ::com::sun::star::ui::ImageType::SIZE_LARGE )
         nIndex += 1;
-    if ( nImageType & ::com::sun::star::ui::ImageType::COLOR_HIGHCONTRAST )
-        nIndex += 2;
     return nIndex;
 }
 
