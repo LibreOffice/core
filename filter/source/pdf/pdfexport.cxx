@@ -1010,8 +1010,15 @@ void PDFExport::showErrors( const std::set< PDFWriter::ErrorCode >& rErrors )
 
 sal_Bool PDFExport::ImplExportPage( PDFWriter& rWriter, PDFExtOutDevData& rPDFExtOutDevData, const GDIMetaFile& rMtf )
 {
-    vcl::PDFWriter::PlayMetafileContext aCtx;
+    const Size      aSizePDF( OutputDevice::LogicToLogic( rMtf.GetPrefSize(), rMtf.GetPrefMapMode(), MAP_POINT ) );
+    Point           aOrigin;
+    Rectangle       aPageRect( aOrigin, rMtf.GetPrefSize() );
+    sal_Bool        bRet = sal_True;
 
+    rWriter.NewPage( aSizePDF.Width(), aSizePDF.Height() );
+    rWriter.SetMapMode( rMtf.GetPrefMapMode() );
+
+    vcl::PDFWriter::PlayMetafileContext aCtx;
     GDIMetaFile aMtf;
     if( mbRemoveTransparencies )
     {
@@ -1027,14 +1034,6 @@ sal_Bool PDFExport::ImplExportPage( PDFWriter& rWriter, PDFExtOutDevData& rPDFEx
     aCtx.m_bOnlyLosslessCompression = mbUseLosslessCompression;
     aCtx.m_nJPEGQuality             = mnQuality;
 
-
-    const Size      aSizePDF( OutputDevice::LogicToLogic( rMtf.GetPrefSize(), rMtf.GetPrefMapMode(), MAP_POINT ) );
-    Point           aOrigin;
-    Rectangle       aPageRect( aOrigin, rMtf.GetPrefSize() );
-    sal_Bool        bRet = sal_True;
-
-    rWriter.NewPage( aSizePDF.Width(), aSizePDF.Height() );
-    rWriter.SetMapMode( rMtf.GetPrefMapMode() );
 
     basegfx::B2DRectangle aB2DRect( aPageRect.Left(), aPageRect.Top(), aPageRect.Right(), aPageRect.Bottom() );
     rWriter.SetClipRegion( basegfx::B2DPolyPolygon( basegfx::tools::createPolygonFromRect( aB2DRect ) ) );
