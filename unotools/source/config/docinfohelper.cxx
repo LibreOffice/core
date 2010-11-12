@@ -78,11 +78,11 @@ namespace utl
         aResult.append( (sal_Unicode)' ' );
     }
 
-    // second product: OpenOffice.org_project/<build_information>
+    // second product: LibreOffice_project/<build_information>
     // build_information has '(' and '[' encoded as '$', ')' and ']' ignored
     // and ':' replaced by '-'
     {
-        aResult.appendAscii( "OpenOffice.org_project/" );
+        aResult.appendAscii( "LibreOffice_project/" );
         ::rtl::OUString aDefault;
         ::rtl::OUString aBuildId( Bootstrap::getBuildIdData( aDefault ) );
         for( sal_Int32 i=0; i < aBuildId.getLength(); i++ )
