@@ -80,6 +80,7 @@ ScDPCacheTable::FilterItem::FilterItem() :
     mbHasValue(false)
 {
 }
+
 bool  ScDPCacheTable::FilterItem::match( const  ScDPItemData& rCellData ) const
 {
     if (rCellData.GetString()!= maString &&
@@ -87,6 +88,7 @@ bool  ScDPCacheTable::FilterItem::match( const  ScDPItemData& rCellData ) const
             return false;
     return true;
 }
+
 // ----------------------------------------------------------------------------
 
 ScDPCacheTable::SingleFilter::SingleFilter(String aString, double fValue, bool bHasValue)
@@ -187,9 +189,10 @@ sal_Int32 ScDPCacheTable::getColSize() const
 void ScDPCacheTable::fillTable(  const ScQueryParam& rQuery, BOOL* pSpecial,
                                bool bIgnoreEmptyRows, bool bRepeatIfEmpty )
 {
+    // check cache
     if ( mpCache == NULL )
         initNoneCache( NULL );
-//check cache
+
    const SCROW  nRowCount = getRowSize();
    const SCCOL  nColCount = (SCCOL) getColSize();
    if ( nRowCount <= 0 || nColCount <= 0)
@@ -242,9 +245,10 @@ void ScDPCacheTable::fillTable(  const ScQueryParam& rQuery, BOOL* pSpecial,
 
 void ScDPCacheTable::fillTable()
 {
+    // check cache
     if ( mpCache == NULL )
         initNoneCache( NULL );
-//check cache
+
    const SCROW  nRowCount = getRowSize();
    const SCCOL  nColCount = (SCCOL) getColSize();
    if ( nRowCount <= 0 || nColCount <= 0)
@@ -285,7 +289,6 @@ void ScDPCacheTable::fillTable()
             }
         }
     }
-        return;
 }
 
 bool ScDPCacheTable::isRowActive(sal_Int32 nRow) const
@@ -330,7 +333,7 @@ void  ScDPCacheTable::getValue( ScDPValueData& rVal, SCCOL nCol, SCROW nRow, boo
 }
 String ScDPCacheTable::getFieldName(SCCOL  nIndex) const
 {
-    return (getCache()->GetDimensionName( nIndex ));
+    return getCache()->GetDimensionName( nIndex );
 }
 
 sal_Int32 ScDPCacheTable::getFieldIndex(const String& rStr) const
@@ -340,13 +343,13 @@ sal_Int32 ScDPCacheTable::getFieldIndex(const String& rStr) const
 
 const ::std::vector<SCROW>&  ScDPCacheTable::getFieldEntries( sal_Int32 nColumn ) const
 {
-     if (nColumn < 0 || static_cast<size_t>(nColumn) >= maFieldEntries.size())
+    if (nColumn < 0 || static_cast<size_t>(nColumn) >= maFieldEntries.size())
     {
         // index out of bound.  Hopefully this code will never be reached.
         static const ::std::vector<SCROW> emptyEntries;
         return emptyEntries;
     }
-     return maFieldEntries[nColumn];
+    return maFieldEntries[nColumn];
 }
 
 void ScDPCacheTable::filterTable(const vector<Criterion>& rCriteria, Sequence< Sequence<Any> >& rTabData,
@@ -466,6 +469,5 @@ ScDPTableDataCache* ScDPCacheTable::getCache() const
         return mpCache;
     return mpNoneCache;
 }
-// End Comments
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
