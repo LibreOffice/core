@@ -639,7 +639,6 @@ void ScLCM();
 
 void ScMatValue();
 void MEMat(ScMatrix* mM, SCSIZE n);
-void MFastMult(ScMatrix* pA, ScMatrix* pB, ScMatrix* pR, SCSIZE n, SCSIZE m, SCSIZE l);
 void ScMatDet();
 void ScMatInv();
 void ScMatMult();
@@ -652,13 +651,6 @@ void ScSumX2MY2();
 void ScSumX2DY2();
 void ScSumXMY2();
 void ScGrowth();
-// multiple Regression: Varianzen der Koeffizienten
-BOOL RGetVariances( ScMatrix* pV, ScMatrix* pX, SCSIZE nC, SCSIZE nR,
-    BOOL bSwapColRow, BOOL bZeroConstant );
-void Calculate(ScMatrixRef& pResMat,ScMatrixRef& pE,ScMatrixRef& pQ,ScMatrixRef& pV,ScMatrixRef& pMatX,BOOL bConstant,SCSIZE N,SCSIZE M,BYTE nCase);
-ScMatrixRef Calculate2(const BOOL bConstant,const SCSIZE M ,const SCSIZE N,ScMatrixRef& pMatX,ScMatrixRef& pMatY,BYTE nCase);
-bool Calculate3(const SCSIZE M ,ScMatrixRef& pQ);
-bool Calculate4(BOOL _bExp,ScMatrixRef& pResMat,ScMatrixRef& pQ,BOOL bConstant,SCSIZE N,SCSIZE M);
 bool CalculateSkew(double& fSum,double& fCount,double& vSum,std::vector<double>& values);
 void CalculateSlopeIntercept(BOOL bSlope);
 void CalculateSmallLarge(BOOL bSmall);
@@ -670,12 +662,11 @@ bool CalculateTest( BOOL _bTemplin
 void CalculateLookup(BOOL HLookup);
 bool FillEntry(ScQueryEntry& rEntry);
 void CalculateAddSub(BOOL _bSub);
-void CalculateTrendGrowth(BOOL _bGrowth);
-void CalulateRGPRKP(BOOL _bRKP);
+void CalculateTrendGrowth(bool _bGrowth);
+void CalulateRGPRKP(bool _bRKP);
 void CalculateSumX2MY2SumX2DY2(BOOL _bSumX2DY2);
 void CalculateMatrixValue(const ScMatrix* pMat,SCSIZE nC,SCSIZE nR);
-bool CheckMatrix(BOOL _bLOG,BOOL _bTrendGrowth,BYTE& nCase,SCSIZE& nCX,SCSIZE& nCY,SCSIZE& nRX,SCSIZE& nRY,SCSIZE& M,SCSIZE& N,ScMatrixRef& pMatX,ScMatrixRef& pMatY);
-
+bool CheckMatrix(bool _bLOG,BYTE& nCase,SCSIZE& nCX,SCSIZE& nCY,SCSIZE& nRX,SCSIZE& nRY,SCSIZE& M,SCSIZE& N,ScMatrixRef& pMatX,ScMatrixRef& pMatY);
 void ScRGP();
 void ScRKP();
 void ScForecast();
