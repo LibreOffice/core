@@ -7063,12 +7063,12 @@ BOOL SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, Rect
         aFileName.Append( String::CreateFromInt32( nCount++ ) );
         switch( nInst &~ 1 )
         {
-            case 0x216 : aFileName.Append( String( RTL_CONSTASCII_STRINGPARAM( ".wmf" ) ) ); break;
-            case 0x3d4 : aFileName.Append( String( RTL_CONSTASCII_STRINGPARAM( ".emf" ) ) ); break;
-            case 0x542 : aFileName.Append( String( RTL_CONSTASCII_STRINGPARAM( ".pct" ) ) ); break;
-            case 0x46a : aFileName.Append( String( RTL_CONSTASCII_STRINGPARAM( ".jpg" ) ) ); break;
-            case 0x6e0 : aFileName.Append( String( RTL_CONSTASCII_STRINGPARAM( ".png" ) ) ); break;
-            case 0x7a8 : aFileName.Append( String( RTL_CONSTASCII_STRINGPARAM( ".bmp" ) ) ); break;
+            case 0x216 : aFileName.Append( String( RTL_CONSTASCII_USTRINGPARAM( ".wmf" ) ) ); break;
+            case 0x3d4 : aFileName.Append( String( RTL_CONSTASCII_USTRINGPARAM( ".emf" ) ) ); break;
+            case 0x542 : aFileName.Append( String( RTL_CONSTASCII_USTRINGPARAM( ".pct" ) ) ); break;
+            case 0x46a : aFileName.Append( String( RTL_CONSTASCII_USTRINGPARAM( ".jpg" ) ) ); break;
+            case 0x6e0 : aFileName.Append( String( RTL_CONSTASCII_USTRINGPARAM( ".png" ) ) ); break;
+            case 0x7a8 : aFileName.Append( String( RTL_CONSTASCII_USTRINGPARAM( ".bmp" ) ) ); break;
         }
 
         String aURLStr;
