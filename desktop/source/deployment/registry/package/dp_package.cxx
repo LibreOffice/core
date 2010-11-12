@@ -985,16 +985,20 @@ OUString BackendImpl::PackageImpl::getDescription()
     if (sRelativeURL.getLength())
     {
         OUString sURL = m_url_expanded + OUSTR("/") + sRelativeURL;
-        sDescription = getTextFromURL(
-            css::uno::Reference< css::ucb::XCommandEnvironment >(), sURL);
 
+        try
+        {
+            sDescription = getTextFromURL( css::uno::Reference< css::ucb::XCommandEnvironment >(), sURL );
+        }
+        catch ( css::deployment::DeploymentException& )
+        {
+            OSL_ENSURE( 0, ::rtl::OUStringToOString( ::comphelper::anyToString( ::cppu::getCaughtException() ), RTL_TEXTENCODING_UTF8 ).getStr() );
+        }
     }
+
     if (sDescription.getLength())
         return sDescription;
-    else if(m_oldDescription.getLength())
-        return m_oldDescription;
-    else
-        return OUString();
+    return m_oldDescription;
 }
 
 //______________________________________________________________________________

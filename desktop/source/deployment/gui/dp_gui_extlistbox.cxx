@@ -72,29 +72,34 @@ Entry_Impl::Entry_Impl( const uno::Reference< deployment::XPackage > &xPackage,
     m_pPublisher( NULL ),
     m_xPackage( xPackage )
 {
-    m_sTitle = xPackage->getDisplayName();
-    m_sVersion = xPackage->getVersion();
-    m_sDescription = xPackage->getDescription();
+    try
+    {
+        m_sTitle = xPackage->getDisplayName();
+        m_sVersion = xPackage->getVersion();
+        m_sDescription = xPackage->getDescription();
 
-    beans::StringPair aInfo( m_xPackage->getPublisherInfo() );
-    m_sPublisher = aInfo.First;
-    m_sPublisherURL = aInfo.Second;
+        beans::StringPair aInfo( m_xPackage->getPublisherInfo() );
+        m_sPublisher = aInfo.First;
+        m_sPublisherURL = aInfo.Second;
 
-    // get the icons for the package if there are any
-    uno::Reference< graphic::XGraphic > xGraphic = xPackage->getIcon( false );
-    if ( xGraphic.is() )
-        m_aIcon = Image( xGraphic );
+        // get the icons for the package if there are any
+        uno::Reference< graphic::XGraphic > xGraphic = xPackage->getIcon( false );
+        if ( xGraphic.is() )
+            m_aIcon = Image( xGraphic );
 
-    xGraphic = xPackage->getIcon( true );
-    if ( xGraphic.is() )
-        m_aIconHC = Image( xGraphic );
-    else
-        m_aIconHC = m_aIcon;
+        xGraphic = xPackage->getIcon( true );
+        if ( xGraphic.is() )
+            m_aIconHC = Image( xGraphic );
+        else
+            m_aIconHC = m_aIcon;
 
-    if ( eState == AMBIGUOUS )
-        m_sErrorText = DialogHelper::getResourceString( RID_STR_ERROR_UNKNOWN_STATUS );
-    else if ( eState == NOT_REGISTERED )
-        checkDependencies();
+        if ( eState == AMBIGUOUS )
+            m_sErrorText = DialogHelper::getResourceString( RID_STR_ERROR_UNKNOWN_STATUS );
+        else if ( eState == NOT_REGISTERED )
+            checkDependencies();
+    }
+    catch (deployment::ExtensionRemovedException &) {}
+    catch (uno::RuntimeException &) {}
 }
 
 //------------------------------------------------------------------------------
@@ -960,6 +965,11 @@ long ExtensionBox_Impl::addEntry( const uno::Reference< deployment::XPackage > &
     bool         bLocked = m_pManager->isReadOnly( xPackage );
 
     TEntry_Impl pEntry( new Entry_Impl( xPackage, eState, bLocked ) );
+
+    // Don't add empty entries
+    if ( ! pEntry->m_sTitle.Len() )
+        return 0;
+
     xPackage->addEventListener( uno::Reference< lang::XEventListener > ( m_xRemoveListener, uno::UNO_QUERY ) );
 
     ::osl::ClearableMutexGuard guard(m_entriesMutex);
