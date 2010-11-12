@@ -680,7 +680,7 @@ SwFrmPage::SwFrmPage ( Window *pParent, const SfxItemSet &rSet ) :
     pHMap( 0 ),
     m_bAllowVertPositioning( true ),
     m_bIsMathOLE( false ),
-    m_bIsMathBaselineAlignment( false )
+    m_bIsMathBaselineAlignment( true )
 {
     FreeResource();
     SetExchangeSupport();
@@ -785,11 +785,14 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
     SetMetric( aAtHorzPosED, aMetric );
     SetMetric( aAtVertPosED, aMetric );
 
+    const SfxPoolItem* pItem = NULL;
 
     const SwFmtAnchor& rAnchor = (const SwFmtAnchor&)rSet.Get(RES_ANCHOR);
 
-    m_bIsMathOLE                = ((const SfxBoolItem&)rSet.Get( FN_OLE_IS_MATH )).GetValue();
-    m_bIsMathBaselineAlignment  = ((const SfxBoolItem&)rSet.Get( FN_MATH_BASELINE_ALIGNMENT )).GetValue();
+    if (SFX_ITEM_SET == rSet.GetItemState(FN_OLE_IS_MATH, FALSE, &pItem))
+        m_bIsMathOLE = ((const SfxBoolItem*)pItem)->GetValue();
+    if (SFX_ITEM_SET == rSet.GetItemState(FN_MATH_BASELINE_ALIGNMENT, FALSE, &pItem))
+        m_bIsMathBaselineAlignment = ((const SfxBoolItem*)pItem)->GetValue();
     EnableVerticalPositioning( !(m_bIsMathOLE && m_bIsMathBaselineAlignment
             && FLY_AS_CHAR == rAnchor.GetAnchorId()) );
 
@@ -820,7 +823,6 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
     if ( nDlgType == DLG_FRM_GRF || nDlgType == DLG_FRM_OLE )
     {
         ASSERT(pSh , "shell not found");
-        const SfxPoolItem* pItem;
         //OS: nur fuer die Variante Einfuegen/Grafik/Eigenschaften
         if(SFX_ITEM_SET == rSet.GetItemState(FN_PARAM_GRF_REALSIZE, FALSE, &pItem))
             aGrfSize = ((const SvxSizeItem*)pItem)->GetSize();
