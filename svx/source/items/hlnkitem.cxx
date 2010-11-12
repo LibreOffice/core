@@ -45,10 +45,6 @@ TYPEINIT1_FACTORY(SvxHyperlinkItem, SfxPoolItem, new SvxHyperlinkItem(0));
 
 // class SvxHyperlinkItem ------------------------------------------------
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 #define HYPERLINKFF_MARKER  0x599401FE
 
 SvStream& SvxHyperlinkItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) const
@@ -130,10 +126,6 @@ SvStream& SvxHyperlinkItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ 
     return rStrm;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SfxPoolItem*    SvxHyperlinkItem::Create( SvStream &rStrm, sal_uInt16 /*nItemVersion*/ ) const
 {
     SvxHyperlinkItem* pNew = new SvxHyperlinkItem( Which() );
@@ -208,10 +200,6 @@ SfxPoolItem*    SvxHyperlinkItem::Create( SvStream &rStrm, sal_uInt16 /*nItemVer
     return pNew;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SvxHyperlinkItem::SvxHyperlinkItem( const SvxHyperlinkItem& rHyperlinkItem ):
             SfxPoolItem(rHyperlinkItem)
 {
@@ -228,10 +216,6 @@ SvxHyperlinkItem::SvxHyperlinkItem( const SvxHyperlinkItem& rHyperlinkItem ):
         pMacroTable=NULL;
 
 };
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 SvxHyperlinkItem::SvxHyperlinkItem( sal_uInt16 _nWhich, String& rName, String& rURL,
                                     String& rTarget, String& rIntName, SvxLinkInsertMode eTyp,
@@ -250,18 +234,10 @@ SvxHyperlinkItem::SvxHyperlinkItem( sal_uInt16 _nWhich, String& rName, String& r
         pMacroTable=NULL;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SfxPoolItem* SvxHyperlinkItem::Clone( SfxItemPool* ) const
 {
     return new SvxHyperlinkItem( *this );
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 int SvxHyperlinkItem::operator==( const SfxPoolItem& rAttr ) const
 {
@@ -305,11 +281,6 @@ int SvxHyperlinkItem::operator==( const SfxPoolItem& rAttr ) const
     return sal_True;
 }
 
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void SvxHyperlinkItem::SetMacro( sal_uInt16 nEvent, const SvxMacro& rMacro )
 {
     if( nEvent < EVENT_SFX_START )
@@ -340,10 +311,6 @@ void SvxHyperlinkItem::SetMacro( sal_uInt16 nEvent, const SvxMacro& rMacro )
     else
         pMacroTable->Insert( nEvent, new SvxMacro( rMacro ) );
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SvxHyperlinkItem::SetMacroTable( const SvxMacroTableDtor& rTbl )
 {

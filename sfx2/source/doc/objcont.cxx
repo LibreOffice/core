@@ -719,10 +719,6 @@ BOOL SfxObjectShell::Print
     USHORT          /*nIdx3*/,
     const String*   pObjectName
 )
-
-/*  [Beschreibung]
-*/
-
 {
     switch(nIdx1)
     {

@@ -90,10 +90,6 @@ static USHORT pRanges[] =
     0
 };
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 // gibt den Bereich der Which-Werte zurueck
 
 
@@ -711,10 +707,6 @@ void SvxHFPage::ResetBackground_Impl( const SfxItemSet& rSet )
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
 {
     const SfxPoolItem* pItem = GetItem( rSet, SID_ATTR_LRSPACE );
@@ -865,10 +857,6 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
     ResetBackground_Impl( rSet );
     RangeHdl( 0 );
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 int SvxHFPage::DeactivatePage( SfxItemSet* _pSet )
 {

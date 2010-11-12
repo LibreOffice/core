@@ -198,10 +198,6 @@ SvxHyperlinkDlg::SvxHyperlinkDlg( SfxBindings *_pBindings, Window* pParent) :
         HideItem( BTN_INET_SEARCH );
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SvxHyperlinkDlg::~SvxHyperlinkDlg()
 {
     SfxImageManager::GetImageManager( 0 )->ReleaseToolBox(this);
@@ -241,10 +237,6 @@ void SvxHyperlinkDlg::Resize()
         }
     }
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SvxHyperlinkDlg::Resizing(Size& rSize)
 {
@@ -334,10 +326,6 @@ void SvxHyperlinkDlg::StateChanged( USHORT nSID, SfxItemState eState,
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 IMPL_LINK( SvxHyperlinkDlg, TBClickHdl, ToolBox *, pBox )
 {
     switch (pBox->GetCurItemId())
@@ -358,10 +346,6 @@ IMPL_LINK( SvxHyperlinkDlg, TBClickHdl, ToolBox *, pBox )
 
     return TRUE;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 IMPL_LINK( SvxHyperlinkDlg, TBSelectHdl, ToolBox *, pBox )
 {
@@ -455,10 +439,6 @@ IMPL_LINK( SvxHyperlinkDlg, DropdownClick, ToolBox *, pBox )
     return TRUE;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void SvxHyperlinkDlg::TargetMenu(const String& rSelEntry, BOOL bExecute)
 {
     if (pTargetMenu && !bExecute)
@@ -520,10 +500,6 @@ void SvxHyperlinkDlg::TargetMenu(const String& rSelEntry, BOOL bExecute)
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 IMPL_LINK( SvxHyperlinkDlg, LinkPopupSelectHdl, Menu *, pMenu )
 {
     switch (pMenu->GetCurItemId())
@@ -538,10 +514,6 @@ IMPL_LINK( SvxHyperlinkDlg, LinkPopupSelectHdl, Menu *, pMenu )
 
     return TRUE;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 IMPL_LINK( SvxHyperlinkDlg, SearchPopupSelectHdl, Menu *, pMenu )
 {
@@ -618,10 +590,6 @@ IMPL_LINK( SvxHyperlinkDlg, SearchPopupSelectHdl, Menu *, pMenu )
 
     return TRUE;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 IMPL_LINK( SvxHyperlinkDlg, BookmarkFoundHdl, String *, pUrl )
 {
@@ -787,10 +755,6 @@ IMPL_LINK( SvxHyperlinkDlg, ComboSelectHdl, ComboBox *, pCombo )
     return TRUE;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 IMPL_LINK( SvxHyperlinkDlg, ComboModifyHdl, ComboBox *, pCombo )
 {
     BOOL bEnable = TRUE;
@@ -905,10 +869,6 @@ long HyperCombo::PreNotify( NotifyEvent& rNEvt )
     return nHandled;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 long HyperCombo::CalcResizeWidth( long nW )
 {
     long nNewWidth = Max(nMaxWidth - nW * GetRatio() / 100L, nMinWidth);
@@ -921,10 +881,6 @@ long HyperCombo::CalcResizeWidth( long nW )
     else
         return 0;   // Kein Resize notwendig
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void HyperCombo::DoResize( long nNewWidth )
 {
@@ -982,10 +938,6 @@ SvxHyperlinkDlgWrapper::SvxHyperlinkDlgWrapper( Window* _pParent, USHORT nId,
     pWindow = new SvxHyperlinkDlg( _pBindings, _pParent );
     eChildAlignment = SFX_ALIGN_TOP;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 SfxChildWinInfo SvxHyperlinkDlgWrapper::GetInfo() const
 {

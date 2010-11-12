@@ -108,18 +108,10 @@ SvxGridItem::SvxGridItem( const SvxGridItem& rItem )
 
 };
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SfxPoolItem*  SvxGridItem::Clone( SfxItemPool* ) const
 {
     return new SvxGridItem( *this );
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 int SvxGridItem::operator==( const SfxPoolItem& rAttr ) const
 {
@@ -138,10 +130,6 @@ int SvxGridItem::operator==( const SfxPoolItem& rAttr ) const
                 nFldSnapX    == rItem.nFldSnapX    &&
                 nFldSnapY    == rItem.nFldSnapY     );
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 SfxItemPresentation  SvxGridItem::GetPresentation
 (

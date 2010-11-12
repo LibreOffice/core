@@ -233,11 +233,6 @@ void SvMetaName::Save( SvPersistStream & rStm )
     if( nMask & 0x10 ) rStm << aDescription;
 }
 
-/*************************************************************************
-|*
-|*
-|*    Beschreibung
-*************************************************************************/
 BOOL SvMetaName::SetName( const ByteString & rName, SvIdlDataBase * )
 {
     aName = rName;

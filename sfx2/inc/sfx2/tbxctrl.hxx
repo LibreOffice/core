@@ -326,10 +326,6 @@ public:
 };
 
 class SfxDragToolBoxControl_Impl : public SfxToolBoxControl
-/*  [Beschreibung]
-
-*/
-
 {
 public:
                             SFX_DECL_TOOLBOX_CONTROL();

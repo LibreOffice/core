@@ -369,11 +369,6 @@ void SfxTabPage::FillUserData()
 // -----------------------------------------------------------------------
 
 BOOL SfxTabPage::IsReadOnly() const
-
-/*  [Description]
-
-*/
-
 {
     return FALSE;
 }
@@ -1054,11 +1049,6 @@ SfxTabPage* SfxTabDialog::GetTabPage( USHORT nPageId ) const
 // -----------------------------------------------------------------------
 
 BOOL SfxTabDialog::IsInOK() const
-
-/*  [Beschreibung]
-
-*/
-
 {
     return pImpl->bInOK;
 }
