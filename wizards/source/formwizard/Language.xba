@@ -112,8 +112,8 @@ Dim slblFields as String
 		.optAlign2.Label = GetResText(RID_FORM + 34)
 		.optAlign0.State = 1
 		
+                //FIXME: Remove this unused FNameAddOn through the file
 		FNameAddOn = &quot;&quot;
-		If isHighContrast(DlgFormDB.getPeer) Then FNameAddOn = &quot;_hc&quot;
 
 		IDArray = Array(36, 37, 40, 38, 39)
 		For i = 1 To 5

@@ -121,11 +121,11 @@ OGroupComp::OGroupComp(const OGroupComp& _rSource)
 
 //------------------------------------------------------------------
 OGroupComp::OGroupComp(const Reference<XPropertySet>& rxSet, sal_Int32 nInsertPos )
-    :m_xComponent( rxSet )
-    ,m_xControlModel(rxSet,UNO_QUERY)
-    ,m_nPos( nInsertPos )
-    ,m_nTabIndex(0)
-    ,m_aName( OGroupManager::GetGroupName( rxSet ) )
+    : m_aName( OGroupManager::GetGroupName( rxSet ) )
+    , m_xComponent( rxSet )
+    , m_xControlModel(rxSet,UNO_QUERY)
+    , m_nPos( nInsertPos )
+    , m_nTabIndex(0)
 {
     if (m_xComponent.is())
     {

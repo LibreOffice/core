@@ -412,7 +412,9 @@ namespace pcr
         return *rpButton;
     }
 
-    //------------------------------------------------------------------
+/**
+ * @param _out_rHCImage is unused now as there are no highcontrast variants
+ */
     void OBrowserLine::impl_getImagesFromURL_nothrow( const ::rtl::OUString& _rImageURL, Image& _out_rImage, Image& _out_rHCImage )
     {
         try
@@ -426,23 +428,6 @@ namespace pcr
 
             Reference< XGraphic > xGraphic( xGraphicProvider->queryGraphic( aMediaProperties ), UNO_QUERY_THROW );
             _out_rImage = _out_rHCImage = Image( xGraphic );
-
-            // see if we find an HC version beside the normal graphic
-            INetURLObject aURL( _rImageURL );
-            ::rtl::OUString sBaseName( aURL.getBase() );
-            aURL.setBase( sBaseName + ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_hc" ) ) );
-            ::rtl::OUString sHCImageURL( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
-
-            Reference< XGraphic > xHCGraphic;
-            try
-            {
-                aMediaProperties[0].Value <<= sHCImageURL;
-                xHCGraphic = xGraphicProvider->queryGraphic( aMediaProperties );
-            }
-            catch( const Exception& ) { }
-
-            if ( xHCGraphic.is() )
-                _out_rHCImage = Image( xHCGraphic );
         }
         catch( const Exception& )
         {
