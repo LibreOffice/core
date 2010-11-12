@@ -186,8 +186,8 @@ sal_Int32 ScDPCacheTable::getColSize() const
     return getCache()->GetColumnCount();
 }
 
-void ScDPCacheTable::fillTable(  const ScQueryParam& rQuery, BOOL* pSpecial,
-                               bool bIgnoreEmptyRows, bool bRepeatIfEmpty )
+void ScDPCacheTable::fillTable(
+    const ScQueryParam& rQuery, bool* pSpecial, bool bIgnoreEmptyRows, bool bRepeatIfEmpty)
 {
     // check cache
     if ( mpCache == NULL )

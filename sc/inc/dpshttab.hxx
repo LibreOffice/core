@@ -74,9 +74,9 @@ class SC_DLLPUBLIC ScSheetDPData : public ScDPTableData
 {
 private:
     ScQueryParam    aQuery;
-    BOOL*                pSpecial;
-    BOOL            bIgnoreEmptyRows;
-    BOOL            bRepeatIfEmpty;
+    bool*           pSpecial;
+    bool            bIgnoreEmptyRows;
+    bool            bRepeatIfEmpty;
 
        ScDPCacheTable  aCacheTable;
 
