@@ -2850,7 +2850,7 @@ ScaAnyConverter::ScaAnyConverter( const uno::Reference< lang::XMultiServiceFacto
     if( xServiceFact.is() )
     {
         uno::Reference< uno::XInterface > xInstance = xServiceFact->createInstance(
-            OUString::createFromAscii( "com.sun.star.util.NumberFormatter" ) );
+            OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.NumberFormatter" )) );
         xFormatter = uno::Reference< util::XNumberFormatter >( xInstance, uno::UNO_QUERY );
     }
 }
