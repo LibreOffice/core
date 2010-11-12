@@ -978,7 +978,7 @@ USHORT SfxUndoManager::ImplLeaveListAction( const bool i_merge )
 
     // If no undo action where added, delete the undo list action
     const USHORT nListActionElements = pArrayToLeave->nCurUndoAction;
-    if( nListActionElements == 0 )
+    if ( nListActionElements == 0 )
     {
         SfxUndoAction* pCurrentAction= m_pData->pActUndoArray->aUndoActions[ m_pData->pActUndoArray->nCurUndoAction-1 ];
         m_pData->pActUndoArray->aUndoActions.Remove( --m_pData->pActUndoArray->nCurUndoAction );
@@ -991,9 +991,9 @@ USHORT SfxUndoManager::ImplLeaveListAction( const bool i_merge )
 
     SfxUndoAction* pCurrentAction= m_pData->pActUndoArray->aUndoActions[ m_pData->pActUndoArray->nCurUndoAction-1 ];
     SfxListUndoAction* pListAction = dynamic_cast< SfxListUndoAction * >( pCurrentAction );
-    OSL_ENSURE( pListAction, "SfxUndoManager::ImplLeaveListAction: list action expected at this position!" );
+    ENSURE_OR_RETURN( pListAction, "SfxUndoManager::ImplLeaveListAction: list action expected at this position!", nListActionElements );
 
-    if ( pListAction && i_merge )
+    if ( i_merge )
     {
         // merge the list action with its predecessor on the same level
         OSL_ENSURE( m_pData->pActUndoArray->nCurUndoAction > 1,
@@ -1011,7 +1011,7 @@ USHORT SfxUndoManager::ImplLeaveListAction( const bool i_merge )
     }
 
     // if the undo array has no comment, try to get it from its children
-    if ( pListAction && pListAction->GetComment().Len() == 0 )
+    if ( pListAction->GetComment().Len() == 0 )
     {
         for( USHORT n = 0; n < pListAction->aUndoActions.Count(); n++ )
         {
@@ -1024,7 +1024,7 @@ USHORT SfxUndoManager::ImplLeaveListAction( const bool i_merge )
     }
 
     // notify listeners
-    aGuard.scheduleNotification( &SfxUndoListener::listActionLeft );
+    aGuard.scheduleNotification( &SfxUndoListener::listActionLeft, pListAction->GetComment() );
 
     // outta here
     return nListActionElements;
