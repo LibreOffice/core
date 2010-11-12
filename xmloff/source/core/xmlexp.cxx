@@ -116,8 +116,6 @@ using namespace ::xmloff::token;
 sal_Char __READONLY_DATA sXML_1_1[] = "1.1";
 sal_Char __READONLY_DATA sXML_1_2[] = "1.2";
 
-const sal_Char *sOpenOfficeOrgProject ="OpenOffice.org_project";
-
 const sal_Char s_grddl_xsl[] =
     "http://docs.oasis-open.org/office/1.2/xslt/odf2rdf.xsl";
 
