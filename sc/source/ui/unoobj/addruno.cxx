@@ -304,7 +304,7 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScAddressConversionObj )
 
 rtl::OUString SAL_CALL ScAddressConversionObj::getImplementationName() throw(uno::RuntimeException)
 {
-    return rtl::OUString::createFromAscii( "ScAddressConversionObj" );
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ScAddressConversionObj" ));
 }
 
 sal_Bool SAL_CALL ScAddressConversionObj::supportsService( const rtl::OUString& rServiceName )

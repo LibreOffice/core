@@ -840,7 +840,7 @@ ScCellFieldObj* ScCellFieldObj::getImplementation(
 
 rtl::OUString SAL_CALL ScCellFieldObj::getImplementationName() throw(uno::RuntimeException)
 {
-    return rtl::OUString::createFromAscii( "ScCellFieldObj" );
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ScCellFieldObj" ));
 }
 
 sal_Bool SAL_CALL ScCellFieldObj::supportsService( const rtl::OUString& rServiceName )
@@ -856,8 +856,8 @@ uno::Sequence<rtl::OUString> SAL_CALL ScCellFieldObj::getSupportedServiceNames()
 {
     uno::Sequence<rtl::OUString> aRet(2);
     rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = rtl::OUString::createFromAscii( SCTEXTFIELD_SERVICE );
-    pArray[1] = rtl::OUString::createFromAscii( SCTEXTCONTENT_SERVICE );
+    pArray[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCTEXTFIELD_SERVICE ));
+    pArray[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCTEXTCONTENT_SERVICE ));
     return aRet;
 }
 
@@ -1501,7 +1501,7 @@ ScHeaderFieldObj* ScHeaderFieldObj::getImplementation(
 
 rtl::OUString SAL_CALL ScHeaderFieldObj::getImplementationName() throw(uno::RuntimeException)
 {
-    return rtl::OUString::createFromAscii( "ScHeaderFieldObj" );
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ScHeaderFieldObj" ));
 }
 
 sal_Bool SAL_CALL ScHeaderFieldObj::supportsService( const rtl::OUString& rServiceName )
@@ -1517,8 +1517,8 @@ uno::Sequence<rtl::OUString> SAL_CALL ScHeaderFieldObj::getSupportedServiceNames
 {
     uno::Sequence<rtl::OUString> aRet(2);
     rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = rtl::OUString::createFromAscii( SCTEXTFIELD_SERVICE );
-    pArray[1] = rtl::OUString::createFromAscii( SCTEXTCONTENT_SERVICE );
+    pArray[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCTEXTFIELD_SERVICE ));
+    pArray[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCTEXTCONTENT_SERVICE ));
     return aRet;
 }
 
