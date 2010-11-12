@@ -41,30 +41,24 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
 
-class ScDPTableDataCache;
-class TypedStrData;
 struct ScQueryParam;
-
-// --------------------------------------------------------------------
-//
-//  base class ScDPTableData to allow implementation with tabular data
-//  by deriving only of this
-//
 
 class SC_DLLPUBLIC ScDPTableDataCache
 {
-    long    mnID;
     ScDocument* mpDoc;
 
-    long                         mnColumnCount;     // Column count
+    long    mnID;
+    long    mnColumnCount;
 
-    std::vector<ScDPItemData*>*      mpTableDataValues; //Data Pilot Table's index - value map
-    std::vector<SCROW>*          mpSourceData;      //Data Pilot Table's Source data
-    std::vector<SCROW>*          mpGlobalOrder;     //Sorted members index
-    std::vector<SCROW>*          mpIndexOrder;      //Index the sorted number
-    std::vector<ScDPItemData*>   mrLabelNames;      //Source Label data
-    std::vector<bool>            mbEmptyRow;        //If empty row?
-    mutable ScDPItemDataPool                 maAdditionalDatas;
+    std::vector<ScDPItemData*>* mpTableDataValues; //Data Pilot Table's index - value map
+    std::vector<SCROW>*         mpSourceData;      //Data Pilot Table's Source data
+    std::vector<SCROW>*         mpGlobalOrder;     //Sorted members index
+    std::vector<SCROW>*         mpIndexOrder;      //Index the sorted number
+    std::vector<ScDPItemData*>  mrLabelNames;      //Source Label data
+    std::vector<bool>           mbEmptyRow;        //If empty row?
+
+    mutable ScDPItemDataPool    maAdditionalDatas;
+
 public:
     SCROW GetOrder( long nDim, SCROW nIndex ) const;
     SCROW GetIdByItemData( long nDim,  String sItemData  ) const;
@@ -107,12 +101,11 @@ public:
     ScDPTableDataCache( ScDocument* pDoc );
     virtual ~ScDPTableDataCache();
 
-protected:
 private:
-    void        AddLabel( ScDPItemData* pData);
+    void    AddLabel( ScDPItemData* pData);
     bool    AddData( long nDim, ScDPItemData* itemData );
 };
 
-#endif //DPTABLECACHE_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

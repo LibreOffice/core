@@ -399,13 +399,13 @@ bool ScDPTableDataCache::operator== ( const ScDPTableDataCache& r ) const
 
 ScDPTableDataCache::ScDPTableDataCache(  ScDocument* pDoc  ) :
     mpDoc( pDoc ),
+    mnID(-1),
     mnColumnCount ( 0 ),
     mpTableDataValues ( NULL ),
     mpSourceData ( NULL ),
     mpGlobalOrder( NULL ),
     mpIndexOrder( NULL)
 {
-    mnID = -1;
 }
 
 ScDPTableDataCache::~ScDPTableDataCache()
