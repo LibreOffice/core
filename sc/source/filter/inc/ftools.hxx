@@ -139,11 +139,6 @@ void insert_value( Type& rnBitField, InsertType nValue, sal_uInt8 nStartBit, sal
 
 // ============================================================================
 
-/** Deriving from this class prevents construction in general. */
-class ScfNoInstance : private boost::noncopyable {};
-
-// ============================================================================
-
 /** Simple shared pointer (NOT thread-save, but faster than boost::shared_ptr). */
 template< typename Type >
 class ScfRef
@@ -258,7 +253,7 @@ class SotStorageStreamRef;
 class SvStream;
 
 /** Contains static methods used anywhere in the filters. */
-class ScfTools : ScfNoInstance
+class ScfTools : boost::noncopyable
 {
 public:
 
@@ -389,6 +384,10 @@ private:
     static const String& GetHTMLIndexPrefix();
     /** Returns the prefix for table names. */
     static const String& GetHTMLNamePrefix();
+    /** We don't want anybody to instantiate this class, since it is just a
+        collection of static items. To enforce this, the default constructor
+        is made private */
+    ScfTools();
 };
 
 // Containers =================================================================

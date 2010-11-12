@@ -40,7 +40,6 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/noncopyable.hpp>
 
-
 /* ============================================================================
 Classes to import the big Excel document contents (related to several cells or
 globals for the document).
@@ -86,7 +85,7 @@ private:
 // Hyperlinks =================================================================
 
 /** Provides importing hyperlinks and inserting them into a document. */
-class XclImpHyperlink : ScfNoInstance
+class XclImpHyperlink : private boost::noncopyable
 {
 public:
     /** Reads a HLINK record and inserts it into the document.
@@ -102,17 +101,29 @@ public:
     /** Convert the sheet name with invalid character(s) in URL when the URL is
         to a location within the same document (e.g. #'Sheet&Name'.A1). */
     static void         ConvertToValidTabName(String& rName);
+
+private:
+    /** We don't want anybody to instantiate this class, since it is just a
+        collection of static methods. To enforce this, the default constructor
+        is made private */
+    XclImpHyperlink();
 };
 
 // Label ranges ===============================================================
 
 /** Provides importing label ranges and inserting them into a document. */
-class XclImpLabelranges : ScfNoInstance
+class XclImpLabelranges : private  boost::noncopyable
 {
 public:
     /** Reads a LABELRANGES record and inserts the label ranges into the document.
         @descr  Import stream must be located at start of a LABELRANGES record. */
     static void         ReadLabelranges( XclImpStream& rStrm );
+
+private:
+    /** We don't want anybody to instantiate this class, since it is just a
+        collection of static methods. To enforce this, the default constructor
+        is made private */
+    XclImpLabelranges();
 };
 
 // Conditional formatting =====================================================
@@ -258,12 +269,18 @@ private:
 // Decryption =================================================================
 
 /** Provides static functions to import stream decryption settings. */
-class XclImpDecryptHelper : ScfNoInstance
+class XclImpDecryptHelper : private boost::noncopyable
 {
 public:
     /** Reads the FILEPASS record, queries a password and sets decryption algorihm.
         @return  Error code that may cause an error message after import. */
     static ErrCode      ReadFilepass( XclImpStream& rStrm );
+
+private:
+    /** We don't want anybody to instantiate this class, since it is just a
+        collection of static methods. To enforce this, the default constructor
+        is made private */
+    XclImpDecryptHelper();
 };
 
 // ============================================================================
@@ -323,7 +340,6 @@ private:
     typedef ::std::map<SCTAB, Sheet> ProtectedSheetMap;
     ProtectedSheetMap   maProtectedSheets;
 };
-
 
 // ============================================================================
 
