@@ -32,6 +32,7 @@
 #include <com/sun/star/animations/XTimeContainer.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/animations/XAnimate.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
 #include "../ppt/pptanimations.hxx"
 #include <pptexsoundcollection.hxx>
 #include <filter/msfilter/escherex.hxx>
@@ -81,7 +82,6 @@ class AnimationExporter
     void writeZString( SvStream& rStrm, const rtl::OUString& rVal );
     sal_Bool getColorAny( const ::com::sun::star::uno::Any& rAny, const sal_Int16 nColorSpace, sal_Int32& rMode, sal_Int32& rA, sal_Int32& rB, sal_Int32& rC ) const;
     sal_Bool exportAnimProperty( SvStream& rStrm, const sal_uInt16 nPropertyId, const ::com::sun::star::uno::Any& rAny, const TranslateMode eTranslateMode );
-    ::com::sun::star::uno::Any convertAnimateValue( const ::com::sun::star::uno::Any& rSource, const rtl::OUString& rAttributeName ) const;
     void exportAnimPropertyString( SvStream& rStrm, const sal_uInt16 nPropertyId, const rtl::OUString& rVal, const TranslateMode eTranslateMode );
     void exportAnimPropertyFloat( SvStream& rStrm, const sal_uInt16 nPropertyId, const double& rVal, const TranslateMode eTranslateMode );
     void exportAnimPropertyuInt32( SvStream& rStrm, const sal_uInt16 nPropertyId, const sal_uInt32 nVal, const TranslateMode eTranslateMode );
@@ -127,8 +127,19 @@ public:
     void doexport( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& xPage, SvStream& rStrm );
 
     sal_Int32 mnCurrentGroup;
-};
 
+        // helper methods also used in ooxml export
+    static ::com::sun::star::uno::Any convertAnimateValue( const ::com::sun::star::uno::Any& rSource, const rtl::OUString& rAttributeName );
+        static sal_Bool GetNodeType( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode, sal_Int16& nType );
+        static sal_Int16 GetFillMode( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode, const sal_Int16 nFillDefault );
+        static void GetUserData( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& rUserData, const ::com::sun::star::uno::Any ** pAny, sal_Size nLen );
+        static sal_uInt32 TranslatePresetSubType( const sal_uInt32 nPresetClass, const sal_uInt32 nPresetId, const rtl::OUString& rPresetSubType );
+        static sal_uInt32 GetPresetID( const rtl::OUString& rPreset, sal_uInt32 nAPIPresetClass, sal_Bool& bPresetId );
+        static sal_uInt32 GetValueTypeForAttributeName( const rtl::OUString& rAttributeName );
+
+    static const sal_Char* FindTransitionName( const sal_Int16 nType, const sal_Int16 nSubType, const sal_Bool bDirection );
+    static ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > getTargetElementShape( const ::com::sun::star::uno::Any& rAny, sal_Int32& rBegin, sal_Int32& rEnd, sal_Bool& rParagraphTarget );
+};
 } // namespace ppt
 
 #endif
