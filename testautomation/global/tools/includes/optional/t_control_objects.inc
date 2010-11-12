@@ -115,7 +115,7 @@ function lb_test( oControl as object, items as integer, preset as integer, issue
             endif
         endif
         
-        for con_iterator = 1 to items
+        for con_iterator = 1 to con_items
             oControl.select( con_iterator )
         next con_iterator
         

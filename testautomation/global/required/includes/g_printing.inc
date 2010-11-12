@@ -408,7 +408,7 @@ testcase tPrintLayout()
                 endif
             endif
             
-            lb_test( PrintOrder, 2, 1, "" )
+            lb_test( PrintOrder, 4, 1, "" )
             cb_test( BorderAroundPages, false, "" )
             
             select case( gApplication )

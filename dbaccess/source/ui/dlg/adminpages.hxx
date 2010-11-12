@@ -288,6 +288,10 @@ namespace dbaui
                             const ControlRelation _eRelation,
                             const long _nIndentAppFont
                         );
+        /** fits the button size to be large enough to contain the buttons text
+        */
+        static void fitSizeRightAligned( PushButton& io_button );
+            // why is CalcMinimumSize not a virtual method of ::Window?
     };
 
 //.........................................................................

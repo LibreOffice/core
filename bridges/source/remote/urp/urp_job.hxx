@@ -303,6 +303,7 @@ inline ClientJob::ClientJob(
     uno_Any **ppException )
     : Job(
         pEnvRemote, pContext, pBridgeImpl, ::bridges_remote::RTC_HOLDENVWEAK )
+    , m_bExceptionOccured( false )
     , m_ppArgs( ppArgs )
     , m_pReturn( pReturn )
     , m_pInterfaceType( pInterfaceType ) // weak

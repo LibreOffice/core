@@ -744,7 +744,7 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( Window* pParent, const SfxIt
     aModuleButton.SetClickHdl( LINK( this, SfxAcceleratorConfigPage, RadioHdl  ));
 
     // initialize Entriesbox
-    aEntriesBox.SetWindowBits(WB_HSCROLL|WB_CLIPCHILDREN);
+    aEntriesBox.SetStyle(aEntriesBox.GetStyle()|WB_HSCROLL|WB_CLIPCHILDREN);
     aEntriesBox.SetSelectionMode(SINGLE_SELECTION);
     aEntriesBox.SetTabs(&AccCfgTabs[0], MAP_APPFONT);
     aEntriesBox.Resize(); // OS: Hack for right selection
@@ -768,7 +768,7 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( Window* pParent, const SfxIt
     pGroupLBox->SetFunctionListBox(pFunctionBox);
 
     // initialize KeyBox
-    aKeyBox.SetWindowBits(WB_CLIPCHILDREN|WB_HSCROLL|WB_SORT);
+    aKeyBox.SetStyle(aKeyBox.GetStyle()|WB_CLIPCHILDREN|WB_HSCROLL|WB_SORT);
 }
 
 //-----------------------------------------------

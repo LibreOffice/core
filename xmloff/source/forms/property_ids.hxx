@@ -1,5 +1,4 @@
 /*************************************************************************
- *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
@@ -24,25 +23,34 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef DBU_EXTENSIONNOTPRESENT_HRC
-#define DBU_EXTENSIONNOTPRESENT_HRC
 
-#define FT_TEXT                     (1)
-#define FI_WARNING                  (2)
-#define PB_DOWNLOAD                 (10)
-#define PB_CANCEL                   (11)
+#ifndef XMLOFF_PROPERTY_IDS_HXX
+#define XMLOFF_PROPERTY_IDS_HXX
 
-#define FIXEDTEXT_HEIGHT     8
-#define CELL_PADDING         8
-#define BUTTON_HEIGHT       14
-#define BUTTON_WIDTH        55
-#define BROWSER_HEIGHT      75
-// #define PAGE_WIDTH           ( CELL_PADDING + BUTTON_WIDTH + CELL_PADDING + BUTTON_WIDTH + CELL_PADDING)
-#define LEFT_PADDING        32 /* size for the icon */
-#define RIGHT_PADDING       16
-#define DLG_WIDTH           ( 250 )
-#define ACTION_LINE_START   (CELL_PADDING + ( 3 * FIXEDTEXT_HEIGHT ) + 2 * CELL_PADDING + 1 )
-#define DLG_HEIGHT          (ACTION_LINE_START + BUTTON_HEIGHT + CELL_PADDING)
+//......................................................................................................................
+namespace xmloff
+{
+//......................................................................................................................
 
+    //==================================================================================================================
+    //= PropertyId
+    //==================================================================================================================
+    enum PropertyId
+    {
+        PID_DATE_MIN,
+        PID_DATE_MAX,
+        PID_DEFAULT_DATE,
+        PID_DATE,
+        PID_TIME_MIN,
+        PID_TIME_MAX,
+        PID_DEFAULT_TIME,
+        PID_TIME,
 
-#endif /* DBU_EXTENSIONNOTPRESENT_HRC */
+        PID_INVALID
+    };
+
+//......................................................................................................................
+} // namespace xmloff
+//......................................................................................................................
+
+#endif // XMLOFF_PROPERTY_IDS_HXX

@@ -1484,8 +1484,8 @@ public:
     */
 
     SAL_DLLPRIVATE sal_Bool impl_isDisposed() const ;
-    sal_Bool IsDisposed() const ;
     sal_Bool IsInitialized() const;
+    void MethodEntryCheck( const bool i_mustBeInitialized ) const;
 
     ::com::sun::star::uno::Reference < ::com::sun::star::container::XIndexAccess > SAL_CALL getViewData() throw (::com::sun::star::uno::RuntimeException);
     void SAL_CALL setViewData( const ::com::sun::star::uno::Reference < ::com::sun::star::container::XIndexAccess >& aData ) throw (::com::sun::star::uno::RuntimeException);
@@ -1573,10 +1573,7 @@ public:
     SfxModelGuard( SfxBaseModel& i_rModel, const AllowedModelState i_eState = E_FULLY_ALIVE )
         :m_aGuard( Application::GetSolarMutex() )
     {
-        if ( i_rModel.IsDisposed() )
-            throw ::com::sun::star::lang::DisposedException( ::rtl::OUString(), *&i_rModel );
-        if ( ( i_eState != E_INITIALIZING ) && !i_rModel.IsInitialized() )
-            throw ::com::sun::star::lang::NotInitializedException( ::rtl::OUString(), *&i_rModel );
+        i_rModel.MethodEntryCheck( i_eState != E_INITIALIZING );
     }
     ~SfxModelGuard()
     {

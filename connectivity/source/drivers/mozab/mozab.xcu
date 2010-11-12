@@ -62,7 +62,7 @@
         <value>com.sun.star.comp.sdbc.MozabDriver</value>
       </prop>
       <prop oor:name="DriverTypeDisplayName" oor:type="xs:string">
-        <value xml:lang="en-US">Mozilla Address Book</value>
+        <value xml:lang="en-US">SeaMonkey Address Book</value>
       </prop>
       <node oor:name="Features">
         <node oor:name="EscapeDateTime" oor:op="replace">

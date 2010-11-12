@@ -466,9 +466,21 @@ namespace sw
         }
         //SetLayer boilerplate end
 
-        void GetPoolItems(const SfxItemSet &rSet, PoolItems &rItems)
+        void GetPoolItems(const SfxItemSet &rSet, PoolItems &rItems, bool bExportParentItemSet )
         {
-            if (rSet.Count())
+            if( bExportParentItemSet )
+            {
+                USHORT nTotal = rSet.TotalCount();
+                for( USHORT nItem =0; nItem < nTotal; ++nItem )
+                {
+                    const SfxPoolItem* pItem = 0;
+                    if( SFX_ITEM_SET == rSet.GetItemState( rSet.GetWhichByPos( nItem ), true, &pItem ) )
+                    {
+                        rItems[pItem->Which()] = pItem;
+                    }
+                }
+            }
+            else if( rSet.Count())
             {
                 SfxItemIter aIter(rSet);
                 if (const SfxPoolItem *pItem = aIter.GetCurItem())

@@ -115,7 +115,7 @@ SwChangeDBDlg::SwChangeDBDlg(SwView& rVw) :
     aAddDBPB.SetClickHdl(LINK(this, SwChangeDBDlg, AddDBHdl));
 
     aUsedDBTLB.SetSelectionMode(MULTIPLE_SELECTION);
-    aUsedDBTLB.SetWindowBits(WB_HASLINES|WB_CLIPCHILDREN|WB_SORT|WB_HASBUTTONS|WB_HASBUTTONSATROOT|WB_HSCROLL);
+    aUsedDBTLB.SetStyle(aUsedDBTLB.GetStyle()|WB_HASLINES|WB_CLIPCHILDREN|WB_SORT|WB_HASBUTTONS|WB_HASBUTTONSATROOT|WB_HSCROLL);
     aUsedDBTLB.SetSpaceBetweenEntries(0);
 
     aUsedDBTLB.SetNodeBitmaps( aImageList.GetImage(IMG_COLLAPSE),

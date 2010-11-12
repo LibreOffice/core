@@ -401,7 +401,7 @@ Schattenfarbe sym:svx:ListBox:RID_SVXDLG_FONTWORK:CLB_SHADOW_COLOR
 FormName sym:sw:Edit:DLG_NUM_NAMES:ED_FORM
 FormListe sym:sw:ListBox:DLG_NUM_NAMES:LB_FORM
 
-*FormularNavigator .uno:ShowFmExplorer
+*FormularNavigator sym:SFXDOCKINGWINDOW_ShowFmExplorer
 Liste sym:SVX_HID_FORM_NAVIGATOR
 
 *FussnoteBearbeiten .uno:EditFootnote

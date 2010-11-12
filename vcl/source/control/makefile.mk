@@ -62,7 +62,8 @@ SLOFILES=	$(SLO)$/button.obj		\
             $(SLO)$/slider.obj		\
             $(SLO)$/spinfld.obj 	\
             $(SLO)$/spinbtn.obj 	\
-            $(SLO)$/tabctrl.obj
+            $(SLO)$/tabctrl.obj     \
+            $(SLO)$/quickselectionengine.obj
 
 EXCEPTIONSFILES=					\
             $(SLO)$/button.obj		\

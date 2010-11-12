@@ -372,7 +372,7 @@ namespace dbmm
                 break;
 
             case ERR_NEW_STYLE_REPORT:
-                pAsciiErrorDescription = "#doc# could not be processed, since you don't have the Sun Report Builder (TM) extension installed.";
+                pAsciiErrorDescription = "#doc# could not be processed, since you don't have the Oracle Report Builder (TM) extension installed.";
                 aAsciiParameterNames.push_back( "#doc#" );
                 break;
 

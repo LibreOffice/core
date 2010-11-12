@@ -300,7 +300,7 @@ ContentListBox_Impl::ContentListBox_Impl( Window* pParent, const ResId& rResId )
         aDocumentImage = Image( SfxResId( IMG_HELP_CONTENT_DOC_HC ) );
     }
 
-    SetWindowBits( WB_HIDESELECTION | WB_HSCROLL );
+    SetStyle( GetStyle() | WB_HIDESELECTION | WB_HSCROLL );
 
     SetEntryHeight( 16 );
     SetSelectionMode( SINGLE_SELECTION );

@@ -99,21 +99,7 @@ namespace comphelper
     NamedValueCollection::NamedValueCollection( const Any& _rElements )
         :m_pImpl( new NamedValueCollection_Impl )
     {
-        Sequence< NamedValue > aNamedValues;
-        Sequence< PropertyValue > aPropertyValues;
-        NamedValue aNamedValue;
-        PropertyValue aPropertyValue;
-
-        if ( _rElements >>= aNamedValues )
-            impl_assign( aNamedValues );
-        else if ( _rElements >>= aPropertyValues )
-            impl_assign( aPropertyValues );
-        else if ( _rElements >>= aNamedValue )
-            impl_assign( Sequence< NamedValue >( &aNamedValue, 1 ) );
-        else if ( _rElements >>= aPropertyValue )
-            impl_assign( Sequence< PropertyValue >( &aPropertyValue, 1 ) );
-        else
-            OSL_ENSURE( !_rElements.hasValue(), "NamedValueCollection::NamedValueCollection(Any): unsupported type!" );
+        impl_assign( _rElements );
     }
 
     //--------------------------------------------------------------------
@@ -167,6 +153,39 @@ namespace comphelper
     bool NamedValueCollection::empty() const
     {
         return m_pImpl->aValues.empty();
+    }
+
+    //--------------------------------------------------------------------
+    ::std::vector< ::rtl::OUString > NamedValueCollection::getNames() const
+    {
+        ::std::vector< ::rtl::OUString > aNames( m_pImpl->aValues.size() );
+        ::std::transform(
+            m_pImpl->aValues.begin(),
+            m_pImpl->aValues.end(),
+            aNames.begin(),
+            ::std::select1st< NamedValueRepository::value_type >()
+        );
+        return aNames;
+    }
+
+    //--------------------------------------------------------------------
+    void NamedValueCollection::impl_assign( const Any& i_rWrappedElements )
+    {
+        Sequence< NamedValue > aNamedValues;
+        Sequence< PropertyValue > aPropertyValues;
+        NamedValue aNamedValue;
+        PropertyValue aPropertyValue;
+
+        if ( i_rWrappedElements >>= aNamedValues )
+            impl_assign( aNamedValues );
+        else if ( i_rWrappedElements >>= aPropertyValues )
+            impl_assign( aPropertyValues );
+        else if ( i_rWrappedElements >>= aNamedValue )
+            impl_assign( Sequence< NamedValue >( &aNamedValue, 1 ) );
+        else if ( i_rWrappedElements >>= aPropertyValue )
+            impl_assign( Sequence< PropertyValue >( &aPropertyValue, 1 ) );
+        else
+            OSL_ENSURE( !i_rWrappedElements.hasValue(), "NamedValueCollection::impl_assign(Any): unsupported type!" );
     }
 
     //--------------------------------------------------------------------

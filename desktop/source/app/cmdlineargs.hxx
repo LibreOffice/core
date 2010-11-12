@@ -38,7 +38,7 @@ namespace desktop
 class CommandLineArgs
 {
     public:
-        enum BoolParam  // must be zero based!
+        enum BoolParam // must be zero based!
         {
             CMD_BOOLPARAM_MINIMIZED,
             CMD_BOOLPARAM_INVISIBLE,
@@ -71,7 +71,7 @@ class CommandLineArgs
             CMD_BOOLPARAM_HELPIMPRESS,
             CMD_BOOLPARAM_HELPBASE,
             CMD_BOOLPARAM_PSN,
-            CMD_BOOLPARAM_COUNT             // must be last element!
+            CMD_BOOLPARAM_COUNT // must be last element!
         };
 
         enum StringParam // must be zero based!
@@ -92,7 +92,7 @@ class CommandLineArgs
             CMD_STRINGPARAM_PRINTERNAME,
             CMD_STRINGPARAM_DISPLAY,
             CMD_STRINGPARAM_LANGUAGE,
-            CMD_STRINGPARAM_COUNT           // must be last element!
+            CMD_STRINGPARAM_COUNT // must be last element!
         };
 
         enum GroupParamId
@@ -101,7 +101,8 @@ class CommandLineArgs
             CMD_GRPID_COUNT
         };
 
-        struct Supplier {
+        struct Supplier
+        {
             // Thrown from constructors and next:
             class Exception {
             public:
@@ -122,86 +123,88 @@ class CommandLineArgs
         boost::optional< rtl::OUString > getCwdUrl() const { return m_cwdUrl; }
 
         // generic methods to access parameter
-        void                    SetBoolParam( BoolParam eParam, sal_Bool bNewValue );
+        void     SetBoolParam( BoolParam eParam, sal_Bool bNewValue );
 
         // Access to bool parameters
-        sal_Bool                IsMinimized() const;
-        sal_Bool                IsInvisible() const;
-        sal_Bool                IsNoRestore() const;
-        sal_Bool                IsNoDefault() const;
-        sal_Bool                IsBean() const;
-        sal_Bool                IsServer() const;
-        sal_Bool                IsHeadless() const;
-        sal_Bool                IsQuickstart() const;
-        sal_Bool                IsNoQuickstart() const;
-        sal_Bool                IsTerminateAfterInit() const;
-        sal_Bool                IsNoFirstStartWizard() const;
-        sal_Bool                IsNoLogo() const;
-        sal_Bool                IsNoLockcheck() const;
-        sal_Bool                IsHelp() const;
-        sal_Bool                IsHelpWriter() const;
-        sal_Bool                IsHelpCalc() const;
-        sal_Bool                IsHelpDraw() const;
-        sal_Bool                IsHelpImpress() const;
-        sal_Bool                IsHelpBase() const;
-        sal_Bool                IsHelpMath() const;
-        sal_Bool                IsHelpBasic() const;
-        sal_Bool                IsWriter() const;
-        sal_Bool                IsCalc() const;
-        sal_Bool                IsDraw() const;
-        sal_Bool                IsImpress() const;
-        sal_Bool                IsBase() const;
-        sal_Bool                IsGlobal() const;
-        sal_Bool                IsMath() const;
-        sal_Bool                IsWeb() const;
-        sal_Bool                HasModuleParam() const;
+        sal_Bool IsMinimized() const;
+        sal_Bool IsInvisible() const;
+        sal_Bool IsNoRestore() const;
+        sal_Bool IsNoDefault() const;
+        sal_Bool IsBean() const;
+        sal_Bool IsServer() const;
+        sal_Bool IsHeadless() const;
+        sal_Bool IsQuickstart() const;
+        sal_Bool IsNoQuickstart() const;
+        sal_Bool IsTerminateAfterInit() const;
+        sal_Bool IsNoFirstStartWizard() const;
+        sal_Bool IsNoLogo() const;
+        sal_Bool IsNoLockcheck() const;
+        sal_Bool IsHelp() const;
+        sal_Bool IsHelpWriter() const;
+        sal_Bool IsHelpCalc() const;
+        sal_Bool IsHelpDraw() const;
+        sal_Bool IsHelpImpress() const;
+        sal_Bool IsHelpBase() const;
+        sal_Bool IsHelpMath() const;
+        sal_Bool IsHelpBasic() const;
+        sal_Bool IsWriter() const;
+        sal_Bool IsCalc() const;
+        sal_Bool IsDraw() const;
+        sal_Bool IsImpress() const;
+        sal_Bool IsBase() const;
+        sal_Bool IsGlobal() const;
+        sal_Bool IsMath() const;
+        sal_Bool IsWeb() const;
+        sal_Bool HasModuleParam() const;
+        sal_Bool WantsToLoadDocument() const;
 
         // Access to string parameters
-        sal_Bool                GetPortalConnectString( ::rtl::OUString& rPara) const;
-        sal_Bool                GetAcceptString( ::rtl::OUString& rPara) const;
-        sal_Bool                GetUnAcceptString( ::rtl::OUString& rPara) const;
-        sal_Bool                GetOpenList( ::rtl::OUString& rPara) const;
-        sal_Bool                GetViewList( ::rtl::OUString& rPara) const;
-        sal_Bool                GetStartList( ::rtl::OUString& rPara) const;
-        sal_Bool                GetForceOpenList( ::rtl::OUString& rPara) const;
-        sal_Bool                GetForceNewList( ::rtl::OUString& rPara) const;
-        sal_Bool                GetPrintList( ::rtl::OUString& rPara) const;
-        sal_Bool                GetPrintToList( ::rtl::OUString& rPara ) const;
-        sal_Bool                GetPrinterName( ::rtl::OUString& rPara ) const;
-        sal_Bool                GetLanguage( ::rtl::OUString& rPara ) const;
+        sal_Bool GetPortalConnectString( ::rtl::OUString& rPara) const;
+        sal_Bool GetAcceptString( ::rtl::OUString& rPara) const;
+        sal_Bool GetUnAcceptString( ::rtl::OUString& rPara) const;
+        sal_Bool GetOpenList( ::rtl::OUString& rPara) const;
+        sal_Bool GetViewList( ::rtl::OUString& rPara) const;
+        sal_Bool GetStartList( ::rtl::OUString& rPara) const;
+        sal_Bool GetForceOpenList( ::rtl::OUString& rPara) const;
+        sal_Bool GetForceNewList( ::rtl::OUString& rPara) const;
+        sal_Bool GetPrintList( ::rtl::OUString& rPara) const;
+        sal_Bool GetPrintToList( ::rtl::OUString& rPara ) const;
+        sal_Bool GetPrinterName( ::rtl::OUString& rPara ) const;
+        sal_Bool GetLanguage( ::rtl::OUString& rPara ) const;
 
         // Special analyzed states (does not match directly to a command line parameter!)
-        sal_Bool                IsPrinting() const;
-        sal_Bool                IsEmpty() const;
-        sal_Bool                IsEmptyOrAcceptOnly() const;
+        sal_Bool IsPrinting() const;
+        sal_Bool IsEmpty() const;
+        sal_Bool IsEmptyOrAcceptOnly() const;
 
     private:
         enum Count { NONE, ONE, MANY };
 
         struct GroupDefinition
         {
-            sal_Int32   nCount;
-            BoolParam*  pGroupMembers;
+            sal_Int32  nCount;
+            BoolParam* pGroupMembers;
         };
 
         // no copy and operator=
         CommandLineArgs( const CommandLineArgs& );
         CommandLineArgs operator=( const CommandLineArgs& );
 
-        sal_Bool                InterpretCommandLineParameter( const ::rtl::OUString& );
-        void                    ParseCommandLine_Impl( Supplier& supplier );
-        void                    ResetParamValues();
-        sal_Bool                CheckGroupMembers( GroupParamId nGroup, BoolParam nExcludeMember ) const;
+        sal_Bool InterpretCommandLineParameter( const ::rtl::OUString& );
+        void     ParseCommandLine_Impl( Supplier& supplier );
+        void     ResetParamValues();
+        sal_Bool CheckGroupMembers( GroupParamId nGroup, BoolParam nExcludeMember ) const;
 
-        void                    AddStringListParam_Impl( StringParam eParam, const rtl::OUString& aParam );
-        void                    SetBoolParam_Impl( BoolParam eParam, sal_Bool bValue );
+        void     AddStringListParam_Impl( StringParam eParam, const rtl::OUString& aParam );
+        void     SetBoolParam_Impl( BoolParam eParam, sal_Bool bValue );
 
         boost::optional< rtl::OUString > m_cwdUrl;
-        sal_Bool                m_aBoolParams[ CMD_BOOLPARAM_COUNT ];       // Stores boolean parameters
-        rtl::OUString           m_aStrParams[ CMD_STRINGPARAM_COUNT ];      // Stores string parameters
-        sal_Bool                m_aStrSetParams[ CMD_STRINGPARAM_COUNT ];   // Stores if string parameters are provided on cmdline
-        Count                   m_eArgumentCount;                           // Number of Args
-        mutable ::osl::Mutex    m_aMutex;
+        sal_Bool                         m_aBoolParams[ CMD_BOOLPARAM_COUNT ];     // Stores boolean parameters
+        rtl::OUString                    m_aStrParams[ CMD_STRINGPARAM_COUNT ];    // Stores string parameters
+        sal_Bool                         m_aStrSetParams[ CMD_STRINGPARAM_COUNT ]; // Stores if string parameters are provided on cmdline
+        Count                            m_eArgumentCount;                         // Number of Args
+        bool                             m_bDocumentArgs;                          // A document creation/open/load arg is used
+        mutable ::osl::Mutex             m_aMutex;
 
         // static definition for groups where only one member can be true
         static GroupDefinition  m_pGroupDefinitions[ CMD_GRPID_COUNT ];

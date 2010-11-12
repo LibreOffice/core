@@ -36,6 +36,7 @@
 #include <vcl/lstbox.h>
 #include <vcl/timer.hxx>
 
+#include "vcl/quickselectionengine.hxx"
 
 class ScrollBar;
 class ScrollBarBox;
@@ -193,13 +194,11 @@ public:
 // - ImplListBoxWindow -
 // ---------------------
 
-class ImplListBoxWindow : public Control
+class ImplListBoxWindow : public Control, public ::vcl::ISearchableStringList
 {
 private:
     ImplEntryList*  mpEntryList;     // EntryListe
     Rectangle       maFocusRect;
-    String          maSearchStr;
-    Timer           maSearchTimeout;
 
     Size            maUserItemSize;
 
@@ -254,9 +253,10 @@ private:
     Link            maUserDrawHdl;
     Link            maMRUChangedHdl;
 
-protected:
-    DECL_LINK(      SearchStringTimeout, Timer* );
+    ::vcl::QuickSelectionEngine
+                    maQuickSelectionEngine;
 
+protected:
     virtual void    KeyInput( const KeyEvent& rKEvt );
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );
     virtual void    MouseMove( const MouseEvent& rMEvt );
@@ -379,6 +379,12 @@ public:
     // pb: #106948# explicit mirroring for calc
     inline void     EnableMirroring()       { mbMirroring = TRUE; }
     inline BOOL     IsMirroring() const { return mbMirroring; }
+
+protected:
+    // ISearchableStringList
+    virtual ::vcl::StringEntryIdentifier    CurrentEntry( String& _out_entryText ) const;
+    virtual ::vcl::StringEntryIdentifier    NextEntry( ::vcl::StringEntryIdentifier _currentEntry, String& _out_entryText ) const;
+    virtual void                            SelectEntry( ::vcl::StringEntryIdentifier _entry );
 };
 
 // ---------------

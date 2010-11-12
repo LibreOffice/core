@@ -140,6 +140,8 @@ void DBTreeListBox::init()
     SetNodeDefaultImages( );
 
     EnableContextMenuHandling();
+
+    SetStyle( GetStyle() | WB_QUICK_SEARCH );
 }
 //------------------------------------------------------------------------
 DBTreeListBox::~DBTreeListBox()

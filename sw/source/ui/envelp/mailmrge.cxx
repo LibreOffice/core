@@ -779,7 +779,7 @@ bool SwMailMergeDlg::ExecQryShell()
 
         m_aSelection.realloc(nEnd - nStart + 1);
         Any* pSelection = m_aSelection.getArray();
-        for (sal_Int32 i = nStart; i != nEnd; ++i, ++pSelection)
+        for (sal_Int32 i = nStart; i <= nEnd; ++i, ++pSelection)
             *pSelection <<= i;
     }
     else if (aAllRB.IsChecked() )

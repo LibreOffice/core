@@ -219,7 +219,7 @@ SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent) :
 
     m_aListLB.SetHelpId(HID_MM_ADDRESSLIST_TLB);
     static long nTabs[] = {2, 0, aSz.Width()/2 };
-    m_aListLB.SetWindowBits( WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP );
+    m_aListLB.SetStyle( m_aListLB.GetStyle() | WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP );
     m_aListLB.SetSelectionMode( SINGLE_SELECTION );
     m_aListLB.SetTabs(&nTabs[0], MAP_PIXEL);
     m_aOK.SetClickHdl( LINK( this, SwAddressListDialog, OKHdl_Impl));

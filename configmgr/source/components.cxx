@@ -214,7 +214,7 @@ void Components::WriteThread::run() {
     reference_->clear();
 }
 
-void Components::initSingleton(
+Components & Components::getSingleton(
     css::uno::Reference< css::uno::XComponentContext > const & context)
 {
     OSL_ASSERT(context.is());
@@ -223,10 +223,6 @@ void Components::initSingleton(
         static Components theSingleton(context);
         singleton = &theSingleton;
     }
-}
-
-Components & Components::getSingleton() {
-    OSL_ASSERT(singletonCreated);
     if (singleton == 0) {
         throw css::uno::RuntimeException(
             rtl::OUString(

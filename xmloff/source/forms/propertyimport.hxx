@@ -119,7 +119,7 @@ namespace xmloff
             @param _rValue
                 attribute value
         */
-        virtual void handleAttribute(sal_uInt16 _nNamespaceKey,
+        virtual bool handleAttribute(sal_uInt16 _nNamespaceKey,
             const ::rtl::OUString& _rLocalName,
             const ::rtl::OUString& _rValue);
 

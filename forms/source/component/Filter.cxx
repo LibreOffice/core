@@ -57,6 +57,7 @@
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
+#include <com/sun/star/awt/XItemList.hpp>
 /** === end UNO includes === **/
 
 #include <comphelper/numbers.hxx>
@@ -342,11 +343,28 @@ namespace frm
 
             case FormComponentType::LISTBOX:
             {
-                Sequence< ::rtl::OUString> aValueSelection;
-                Reference< XPropertySet > aPropertyPointer(getModel(), UNO_QUERY);
-                aPropertyPointer->getPropertyValue(PROPERTY_VALUE_SEQ) >>= aValueSelection;
-                if (rEvent.Selected <= aValueSelection.getLength())
-                    aText.append( aValueSelection[ rEvent.Selected ] );
+                try
+                {
+                    const Reference< XItemList > xItemList( getModel(), UNO_QUERY_THROW );
+                    ::rtl::OUString sItemText( xItemList->getItemText( rEvent.Selected ) );
+
+                    const MapString2String::const_iterator itemPos = m_aDisplayItemToValueItem.find( sItemText );
+                    if ( itemPos != m_aDisplayItemToValueItem.end() )
+                    {
+                        sItemText = itemPos->second;
+                        if ( sItemText.getLength() )
+                        {
+                            ::dbtools::OPredicateInputController aPredicateInput( m_aContext.getLegacyServiceFactory(), m_xConnection, getParseContext() );
+                            ::rtl::OUString sErrorMessage;
+                            OSL_VERIFY( aPredicateInput.normalizePredicateString( sItemText, m_xField, &sErrorMessage ) );
+                        }
+                    }
+                    aText.append( sItemText );
+                }
+                catch( const Exception& )
+                {
+                    DBG_UNHANDLED_EXCEPTION();
+                }
             }
             break;
 
@@ -614,6 +632,16 @@ namespace frm
                 {
                     m_aText = aText;
                     xListBox->selectItem(m_aText, sal_True);
+                    if ( xListBox->getSelectedItemPos() >= 0 )
+                    {
+                        const bool isQuoted =   ( aText.getLength() > 0 )
+                                            &&  ( aText[0] == '\'' )
+                                            &&  ( aText[aText.getLength() - 1] == '\'' );
+                        if ( isQuoted )
+                        {
+                            xListBox->selectItem( aText.copy( 1, aText.getLength() - 2 ), sal_True );
+                        }
+                    }
                 }
             } break;
             default:
@@ -804,6 +832,16 @@ namespace frm
                         case FormComponentType::LISTBOX:
                         case FormComponentType::COMBOBOX:
                             m_nControlClass = nClassId;
+                            if ( FormComponentType::LISTBOX == nClassId )
+                            {
+                                Sequence< ::rtl::OUString > aDisplayItems;
+                                OSL_VERIFY( xControlModel->getPropertyValue( PROPERTY_STRINGITEMLIST ) >>= aDisplayItems );
+                                Sequence< ::rtl::OUString > aValueItems;
+                                OSL_VERIFY( xControlModel->getPropertyValue( PROPERTY_VALUE_SEQ ) >>= aValueItems );
+                                OSL_ENSURE( aDisplayItems.getLength() == aValueItems.getLength(), "OFilterControl::initialize: inconsistent item lists!" );
+                                for ( sal_Int32 i=0; i < ::std::min( aDisplayItems.getLength(), aValueItems.getLength() ); ++i )
+                                    m_aDisplayItemToValueItem[ aDisplayItems[i] ] = aValueItems[i];
+                            }
                             break;
                         default:
                             m_bMultiLine = ::comphelper::hasProperty( PROPERTY_MULTILINE, xControlModel ) && ::comphelper::getBOOL( xControlModel->getPropertyValue( PROPERTY_MULTILINE ) );

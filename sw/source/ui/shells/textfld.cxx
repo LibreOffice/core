@@ -313,7 +313,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                 rReq.Ignore();
             }
             break;
-            case FN_DELETE_NOTE:
+            case FN_DELETE_COMMENT:
                 if ( GetView().GetPostItMgr() &&
                      GetView().GetPostItMgr()->HasActiveSidebarWin() )
                 {
@@ -622,7 +622,7 @@ void SwTextShell::StateField( SfxItemSet &rSet )
     {
         switch (nWhich)
         {
-            case FN_DELETE_NOTE:
+            case FN_DELETE_COMMENT:
             case FN_DELETE_NOTE_AUTHOR:
             case FN_DELETE_ALL_NOTES:
             case FN_HIDE_NOTE:
@@ -634,7 +634,7 @@ void SwTextShell::StateField( SfxItemSet &rSet )
                         rSet.InvalidateItem( nWhich );
                     else if ( !pPostItMgr->HasActiveSidebarWin() )
                     {
-                        rSet.InvalidateItem( FN_DELETE_NOTE );
+                        rSet.InvalidateItem( FN_DELETE_COMMENT );
                         rSet.InvalidateItem( FN_HIDE_NOTE );
                     }
                 }

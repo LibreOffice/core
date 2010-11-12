@@ -1147,6 +1147,23 @@ void SwDocShell::GetState(SfxItemSet& rSet)
             rSet.Put( SvxFontListItem( pFontList, SID_ATTR_CHAR_FONTLIST ) );
         }
         break;
+        case SID_MAIL_PREPAREEXPORT:
+        {
+            //check if linked content or possibly hidden content is available
+            //pDoc->UpdateFlds( NULL, false );
+            sfx2::LinkManager& rLnkMgr = pDoc->GetLinkManager();
+            const ::sfx2::SvBaseLinks& rLnks = rLnkMgr.GetLinks();
+            sal_Bool bRet = sal_False;
+            if( rLnks.Count() )
+                bRet = sal_True;
+            else
+            {
+                //sections with hidden flag, hidden character attribute, hidden paragraph/text or conditional text fields
+                bRet = pDoc->HasInvisibleContent();
+            }
+            rSet.Put( SfxBoolItem( nWhich, bRet ) );
+        }
+        break;
 
         default: DBG_ASSERT(!this,"Hier darfst Du nicht hinein!");
 

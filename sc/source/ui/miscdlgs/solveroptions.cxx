@@ -145,7 +145,7 @@ ScSolverOptionsDialog::ScSolverOptionsDialog( Window* pParent,
 
     maBtnEdit.SetClickHdl( LINK( this, ScSolverOptionsDialog, ButtonHdl ) );
 
-    maLbSettings.SetWindowBits( WB_CLIPCHILDREN|WB_FORCE_MAKEVISIBLE );
+    maLbSettings.SetStyle( maLbSettings.GetStyle()|WB_CLIPCHILDREN|WB_FORCE_MAKEVISIBLE );
     maLbSettings.SetHelpId( HID_SC_SOLVEROPTIONS_LB );
     maLbSettings.SetHighlightRange();
 

@@ -2599,11 +2599,6 @@ SfxObjectShell* SfxBaseModel::impl_getObjectShell() const
 //  public impl.
 //________________________________________________________________________________________________________
 
-sal_Bool SfxBaseModel::IsDisposed() const
-{
-    return ( m_pData == NULL ) ;
-}
-
 sal_Bool SfxBaseModel::IsInitialized() const
 {
     if ( !m_pData || !m_pData->m_pObjectShell )
@@ -2613,6 +2608,14 @@ sal_Bool SfxBaseModel::IsInitialized() const
     }
 
     return m_pData->m_pObjectShell->GetMedium() != NULL;
+}
+
+void SfxBaseModel::MethodEntryCheck( const bool i_mustBeInitialized ) const
+{
+    if ( impl_isDisposed() )
+        throw ::com::sun::star::lang::DisposedException( ::rtl::OUString(), *const_cast< SfxBaseModel* >( this ) );
+    if ( i_mustBeInitialized && !IsInitialized() )
+        throw ::com::sun::star::lang::NotInitializedException( ::rtl::OUString(), *const_cast< SfxBaseModel* >( this ) );
 }
 
 sal_Bool SfxBaseModel::impl_isDisposed() const

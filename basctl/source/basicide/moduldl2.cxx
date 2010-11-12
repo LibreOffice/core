@@ -521,7 +521,7 @@ LibPage::LibPage( Window * pParent )
 
     aLibBox.SetMode( LIBMODE_MANAGER );
     aLibBox.EnableInplaceEditing( TRUE );
-    aLibBox.SetWindowBits( WB_HSCROLL );
+    aLibBox.SetStyle( WB_HSCROLL | WB_BORDER | WB_TABSTOP );
     aCloseButton.GrabFocus();
 
     long aTabs[] = { 2, 30, 120 };

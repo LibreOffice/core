@@ -98,7 +98,7 @@ SvxFontSubstTabPage::SvxFontSubstTabPage( Window* pParent,
     aNewDelTBX.SetPosPixel( aNewPnt );
 
     aCheckLB.SetHelpId(HID_OFA_FONT_SUBST_CLB);
-    aCheckLB.SetWindowBits(aCheckLB.GetStyle()|WB_HSCROLL|WB_VSCROLL);
+    aCheckLB.SetStyle(aCheckLB.GetStyle()|WB_HSCROLL|WB_VSCROLL);
     aCheckLB.SetSelectionMode(MULTIPLE_SELECTION);
     aCheckLB.SortByCol(2);
 

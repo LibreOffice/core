@@ -984,37 +984,7 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
 {
     ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
     ::osl::MutexGuard aGuard( getMutex() );
-    if ( !getView() )
-    {
-        switch(_nId)
-        {
-            case SID_RULER:
-                OSL_ENSURE(aArgs.getLength() == 1,"Invalid length!");
-                aArgs[0].Value >>= m_bShowRuler;
-                break;
-            case SID_HELPLINES_MOVE:
-                OSL_ENSURE(aArgs.getLength() == 1,"Invalid length!");
-                aArgs[0].Value >>= m_bHelplinesMove;
-                break;
-            case SID_GRID_VISIBLE:
-                OSL_ENSURE(aArgs.getLength() == 1,"Invalid length!");
-                aArgs[0].Value >>= m_bGridVisible;
-                break;
-            case SID_SHOW_PROPERTYBROWSER:
-                OSL_ENSURE(aArgs.getLength() == 1,"Invalid length!");
-                aArgs[0].Value >>= m_bShowProperties;
-                break;
-            case SID_PROPERTYBROWSER_LAST_PAGE:
-                OSL_ENSURE(aArgs.getLength() == 1,"Invalid length!");
-                aArgs[0].Value >>= m_sLastActivePage;
-                break;
-            case SID_SPLIT_POSITION:
-                OSL_ENSURE(aArgs.getLength() == 1,"Invalid length!");
-                aArgs[0].Value >>= m_nSplitPos;
-                break;
-        }
-        return; // return without execution
-    }
+
     sal_Bool bForceBroadcast = sal_False;
     switch(_nId)
     {
@@ -1686,6 +1656,7 @@ short OReportController::saveModified()
 {
     return RET_NO;
 }
+
 // -----------------------------------------------------------------------------
 void OReportController::impl_initialize( )
 {
@@ -1783,7 +1754,7 @@ void OReportController::impl_initialize( )
     }
     catch(const SQLException&)
     {
-        OSL_ENSURE(sal_False, "OReportController::initialize: caught an exception!");
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 // -----------------------------------------------------------------------------
@@ -2745,35 +2716,38 @@ void OReportController::shrinkSection(USHORT _nUndoStrId, uno::Reference<report:
 uno::Any SAL_CALL OReportController::getViewData(void) throw( uno::RuntimeException )
 {
     ::osl::MutexGuard aGuard( getMutex() );
-    typedef ::std::pair< ::rtl::OUString,sal_uInt16> TStringIntPair;
-    const TStringIntPair pViewDataList[] =
+
+    sal_Int32 nCommandIDs[] =
     {
-         TStringIntPair(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GridVisible")),            SID_GRID_VISIBLE)
-        ,TStringIntPair(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GridUse")),                SID_GRID_USE)
-        ,TStringIntPair(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HelplinesMove")),          SID_HELPLINES_MOVE)
-        ,TStringIntPair(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ShowRuler")),              SID_RULER)
-        ,TStringIntPair(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ControlProperties")),      SID_SHOW_PROPERTYBROWSER)
-        ,TStringIntPair(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LastPropertyBrowserPage")),SID_PROPERTYBROWSER_LAST_PAGE)
-        ,TStringIntPair(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SplitPosition")),          SID_SPLIT_POSITION)
+        SID_GRID_VISIBLE,
+        SID_GRID_USE,
+        SID_HELPLINES_MOVE,
+        SID_RULER,
+        SID_SHOW_PROPERTYBROWSER,
+        SID_PROPERTYBROWSER_LAST_PAGE,
+        SID_SPLIT_POSITION
     };
 
-    uno::Sequence<beans::PropertyValue> aCommandProps(sizeof(pViewDataList)/sizeof(pViewDataList[0]));
-    beans::PropertyValue* pIter = aCommandProps.getArray();
-    beans::PropertyValue* pEnd = pIter + aCommandProps.getLength();
-    for (sal_Int32 i = 0; pIter != pEnd; ++pIter,++i)
+    ::comphelper::NamedValueCollection aCommandProperties;
+    for ( size_t i=0; i < sizeof( nCommandIDs ) / sizeof( nCommandIDs[0] ); ++i )
     {
-        FeatureState aFeatureState = GetState(pViewDataList[i].second);
-        pIter->Name = pViewDataList[i].first;
+        const FeatureState aFeatureState = GetState( nCommandIDs[i] );
+
+        ::rtl::OUString sCommandURL( getURLForId( nCommandIDs[i] ).Main );
+        OSL_ENSURE( sCommandURL.indexOfAsciiL( ".uno:", 5 ) == 0, "OReportController::getViewData: illegal command URL!" );
+        sCommandURL = sCommandURL.copy( 5 );
+
+        Any aCommandState;
         if ( !!aFeatureState.bChecked )
-            pIter->Value <<= (*aFeatureState.bChecked) ? sal_True : sal_False;
+            aCommandState <<= (*aFeatureState.bChecked) ? sal_True : sal_False;
         else if ( aFeatureState.aValue.hasValue() )
-            pIter->Value = aFeatureState.aValue;
+            aCommandState = aFeatureState.aValue;
 
-    } // for (; pIter != pEnd; ++pIter)
+        aCommandProperties.put( sCommandURL, aCommandState );
+    }
 
-    uno::Sequence<beans::PropertyValue> aProps(1);
-    aProps[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CommandProperties"));
-    aProps[0].Value <<= aCommandProps;
+    ::comphelper::NamedValueCollection aViewData;
+    aViewData.put( "CommandProperties", aCommandProperties.getPropertyValues() );
 
     if ( getDesignView() )
     {
@@ -2790,67 +2764,82 @@ uno::Any SAL_CALL OReportController::getViewData(void) throw( uno::RuntimeExcept
                 pCollapsedIter->Name = PROPERTY_SECTION + ::rtl::OUString::valueOf(i);
                 pCollapsedIter->Value <<= static_cast<sal_Int32>(*aIter);
             }
-            const sal_Int32 nCount = aProps.getLength();
-            aProps.realloc( nCount + 1 );
-            aProps[nCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CollapsedSections"));
-            aProps[nCount].Value <<= aCollapsedSections;
+
+            aViewData.put( "CollapsedSections", aCollapsedSections );
         }
 
         ::boost::shared_ptr<OSectionWindow> pSectionWindow = getDesignView()->getMarkedSection();
         if ( pSectionWindow.get() )
         {
-            const sal_Int32 nCount = aProps.getLength();
-            aProps.realloc( nCount + 1 );
-            aProps[nCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MarkedSection"));
-            aProps[nCount].Value <<= (sal_Int32)pSectionWindow->getReportSection().getPage()->GetPageNum();
+            aViewData.put( "MarkedSection", (sal_Int32)pSectionWindow->getReportSection().getPage()->GetPageNum() );
         } // if ( pSectionWindow.get() )
     } // if ( getDesignView() )
-    const sal_Int32 nCount = aProps.getLength();
-    aProps.realloc( nCount + 1 );
-    aProps[nCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ZoomFactor"));
-    aProps[nCount].Value <<= m_nZoomValue;
-    return uno::makeAny(aProps);
+
+    aViewData.put( "ZoomFactor", m_nZoomValue );
+    return uno::makeAny( aViewData.getPropertyValues() );
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OReportController::restoreViewData(const uno::Any& Data) throw( uno::RuntimeException )
+void SAL_CALL OReportController::restoreViewData(const uno::Any& i_data) throw( uno::RuntimeException )
 {
     ::osl::MutexGuard aGuard( getMutex() );
-    uno::Sequence<beans::PropertyValue> aProps;
-    if ( Data >>= aProps )
+
+    try
     {
-        const beans::PropertyValue* pPropsIter = aProps.getConstArray();
-        const beans::PropertyValue* pPropsEnd = pPropsIter + aProps.getLength();
-        for (sal_Int32 i = 0; pPropsIter != pPropsEnd; ++pPropsIter,++i)
+        const ::comphelper::NamedValueCollection aViewData( i_data );
+
+        m_aCollapsedSections = aViewData.getOrDefault( "CollapsedSections", m_aCollapsedSections );
+        m_nPageNum = aViewData.getOrDefault( "MarkedSection", m_nPageNum );
+        m_nZoomValue = aViewData.getOrDefault( "ZoomFactor", m_nZoomValue );
+        // TODO: setting those 3 members is not enough - in theory, restoreViewData can be called when the
+        // view is fully alive, so we need to reflect those 3 values in the view.
+        // (At the moment, the method is called only during construction phase)
+
+
+        ::comphelper::NamedValueCollection aCommandProperties( aViewData.get( "CommandProperties" ) );
+        const ::std::vector< ::rtl::OUString > aCommandNames( aCommandProperties.getNames() );
+
+        for (   ::std::vector< ::rtl::OUString >::const_iterator commandName = aCommandNames.begin();
+                commandName != aCommandNames.end();
+                ++commandName
+            )
         {
-            if ( pPropsIter->Name.equalsAscii("CommandProperties") )
+            const Any& rCommandValue = aCommandProperties.get( *commandName );
+            if ( !rCommandValue.hasValue() )
+                continue;
+
+            if ( getView() )
             {
                 util::URL aCommand;
-                uno::Sequence< beans::PropertyValue> aArgs(1);
-                beans::PropertyValue* pArg = aArgs.getArray();
-                pArg->Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Value"));
-                uno::Sequence< beans::PropertyValue> aCommandProps;
-                if ( pPropsIter->Value >>= aCommandProps )
-                {
-                    const beans::PropertyValue* pIter = aCommandProps.getConstArray();
-                    const beans::PropertyValue* pEnd = pIter + aCommandProps.getLength();
-                    for (; pIter != pEnd; ++pIter)
-                    {
-                        pArg->Value = pIter->Value;
-                        if ( pArg->Value.hasValue() )
-                        {
-                            aCommand.Complete = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:")) + pIter->Name;
-                            executeUnChecked(aCommand,aArgs);
-                        }
-                    }
-                }
+                aCommand.Complete = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:" ) ) + *commandName;
+
+                Sequence< PropertyValue > aCommandArgs(1);
+                aCommandArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Value" ) );
+                aCommandArgs[0].Value = rCommandValue;
+
+                executeUnChecked( aCommand, aCommandArgs );
             }
-            else if ( pPropsIter->Name.equalsAscii("CollapsedSections") )
-                pPropsIter->Value >>= m_aCollapsedSections;
-            else if ( pPropsIter->Name.equalsAscii("MarkedSection") )
-                pPropsIter->Value >>= m_nPageNum;
-            else if ( pPropsIter->Name.equalsAscii("ZoomFactor") )
-                pPropsIter->Value >>= m_nZoomValue;
+            else
+            {
+                if ( commandName->equalsAscii( "ShowRuler" ) )
+                    OSL_VERIFY( rCommandValue >>= m_bShowRuler );
+                else if ( commandName->equalsAscii( "HelplinesMove" ) )
+                    OSL_VERIFY( rCommandValue >>= m_bHelplinesMove );
+                else if ( commandName->equalsAscii( "GridVisible" ) )
+                    OSL_VERIFY( rCommandValue >>= m_bGridVisible );
+                else if ( commandName->equalsAscii( "GridUse" ) )
+                    OSL_VERIFY( rCommandValue >>= m_bGridUse );
+                else if ( commandName->equalsAscii( "ControlProperties" ) )
+                    OSL_VERIFY( rCommandValue >>= m_bShowProperties );
+                else if ( commandName->equalsAscii( "LastPropertyBrowserPage" ) )
+                    OSL_VERIFY( rCommandValue >>= m_sLastActivePage );
+                else if ( commandName->equalsAscii( "SplitPosition" ) )
+                    OSL_VERIFY( rCommandValue >>= m_nSplitPos );
+            }
         }
+    }
+    catch ( const IllegalArgumentException& e )
+    {
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 // -----------------------------------------------------------------------------

@@ -194,7 +194,14 @@ testcase tPickGraphic
 	Call wOpenContextMenu(true)
 
 	printlog "   Select 'ImageMap' in context menu"
-        Call hMenuSelectNr(9)
+	try
+            CALL hMenuFindSelect (".uno:ImageMapDialog", true, 11, true)   'Find "ImageMap" and call the slot.
+            wait 500
+	catch
+            Warnlog "Unable to open context menu"
+            Call hCloseDocument
+            goto endsub
+	endcatch
 	Printlog "   The graphic has to be selected and the context menu has to show graphics related commands"
 	Kontext "ImageMapEditor"
 	if Not ImageMapEditor.Exists(3) then
@@ -240,13 +247,13 @@ testcase tPickHyperlink
     printlog "   Empty clipboard"
 	SetClipBoard = ""
     printlog "   Insert a hyperlink in document"
-	Call wTypeKeys "www.sun.com"
+	Call wTypeKeys "www.oracle.com"
 	Call wTypeKeys " "
 	Call wTypeKeys "<HOME>"
     printlog "   Open context menu on hyperlink"
         Call wTypeKeys "<SHIFT F10>"
     printlog "   Last entry in menu has to be 'Open hyperlink' ...."
-        CALL hMenuFindSelect (10955, true, 17, true)   'Find "Hyperlink-dialog" and call the slot.
+        CALL hMenuFindSelect (10955, false, 17, true)   'Find "Hyperlink-dialog" and call the slot.
     kontext "TabHyperlinkInternet"
     if TabHyperlinkInternet.Exists(3) then
         Warnlog "Hyperlink-Dialog opened!"

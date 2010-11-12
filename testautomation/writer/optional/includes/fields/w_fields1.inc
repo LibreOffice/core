@@ -151,13 +151,23 @@ testcase tInsertFieldsTime
     if NOT Len(sTime2) > 7 then Warnlog "Time-format is wrong !"
     
     printlog "Stop for a while ..."
+
     '/// Stop for  a while , check if the time is still correct
     Sleep 2
+    ' update fields
+    Call wTypeKeys "<F9>"
+    ' read field content
     Call wTypeKeys "<MOD1 Home>"
     Call wTypeKeys "<Shift Right>"
     EditCopy
     if GetClipboard <> sTime1 then Warnlog "Fixed time is wrong !"
-    
+
+    '/// Stop for  a while , check if the time is still correct
+    Sleep 2
+    ' update fields
+    Call wTypeKeys "<F9>"
+    ' read field content
+    Call wTypeKeys "<MOD1 Home>"
     Call wTypeKeys "<Down><Home>"
     Call wTypeKeys "<Shift Right>"
     EditCopy

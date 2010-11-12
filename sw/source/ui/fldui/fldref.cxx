@@ -124,7 +124,7 @@ SwFldRefPage::SwFldRefPage(Window* pParent, const SfxItemSet& rCoreSet ) :
     // --> OD 2007-11-21 #i83479#
     aSelectionToolTipLB.SetSelectHdl( LINK(this, SwFldRefPage, SubTypeHdl) );
     aSelectionToolTipLB.SetDoubleClickHdl( LINK(this, SwFldRefPage, InsertHdl) );
-    aSelectionToolTipLB.SetWindowBits( aSelectionToolTipLB.GetWindowBits() | WB_HSCROLL );
+    aSelectionToolTipLB.SetStyle( aSelectionToolTipLB.GetStyle() | WB_HSCROLL );
     aSelectionToolTipLB.SetSpaceBetweenEntries(1);
     aSelectionToolTipLB.SetHighlightRange();
     // <--

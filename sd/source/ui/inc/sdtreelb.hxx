@@ -218,6 +218,7 @@ public:
     static BOOL             IsInDrag();
     using SvLBox::ExecuteDrop;
 
+    using SvTreeListBox::SelectEntry;
 private:
     /** This flag controls whether all shapes are shown as children of pages
         and group shapes or only the named shapes.

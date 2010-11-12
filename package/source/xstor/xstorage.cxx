@@ -49,6 +49,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <rtl/logfile.hxx>
+#include <rtl/instance.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/componentcontext.hxx>
@@ -2368,25 +2369,14 @@ uno::Sequence< uno::Type > SAL_CALL OStorage::getTypes()
     return m_pData->m_pTypeCollection->getTypes() ;
 }
 
+namespace { struct lcl_ImplId : public rtl::Static< ::cppu::OImplementationId, lcl_ImplId > {}; }
+
 //-----------------------------------------------
 uno::Sequence< sal_Int8 > SAL_CALL OStorage::getImplementationId()
         throw( uno::RuntimeException )
 {
-    static ::cppu::OImplementationId* pID = NULL ;
-
-    if ( pID == NULL )
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() ) ;
-
-        if ( pID == NULL )
-        {
-            static ::cppu::OImplementationId aID( sal_False ) ;
-            pID = &aID ;
-        }
-    }
-
-    return pID->getImplementationId() ;
-
+    ::cppu::OImplementationId &rID = lcl_ImplId::get();
+    return rID.getImplementationId();
 }
 
 //____________________________________________________________________________________________________

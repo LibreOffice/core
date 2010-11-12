@@ -1438,11 +1438,11 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
                 try
                 {
                     Reference< XViewDataSupplier > xViewDataSupplier( getModel(), UNO_QUERY_THROW );
-                    Reference< XIndexAccess > xViewData( xViewDataSupplier->getViewData(), UNO_SET_THROW );
+                    Reference< XIndexAccess > xViewData( xViewDataSupplier->getViewData() );
 
                     // find the view data item whose ViewId matches the ID of the view we're just connecting to
                     const SfxObjectFactory& rDocFactory( rDoc.GetFactory() );
-                    const sal_Int32 nCount = xViewData->getCount();
+                    const sal_Int32 nCount = xViewData.is() ? xViewData->getCount() : 0;
                     sal_Int32 nViewDataIndex = 0;
                     for ( sal_Int32 i=0; i<nCount; ++i )
                     {

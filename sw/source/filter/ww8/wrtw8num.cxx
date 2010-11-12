@@ -268,7 +268,7 @@ void WW8AttributeOutput::NumberingLevel( BYTE /*nLevel*/,
             m_rWW8Export.InsUInt16( nFontID );
         }
 
-        m_rWW8Export.OutputItemSet( *pOutSet, false, true, i18n::ScriptType::LATIN );
+        m_rWW8Export.OutputItemSet( *pOutSet, false, true, i18n::ScriptType::LATIN, m_rWW8Export.mbExportModeRTF );
 
         m_rWW8Export.pO = pOldpO;
     }
@@ -720,6 +720,9 @@ void MSWordExportBase::SubstituteBullet( String& rNumStr,
 {
     StarSymbolToMSMultiFont *pConvert = 0;
     FontFamily eFamily = FAMILY_DECORATIVE;
+
+    if (!bSubstituteBullets)
+        return;
 
     if (!pConvert)
     {

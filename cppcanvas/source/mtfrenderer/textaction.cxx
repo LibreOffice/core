@@ -2069,7 +2069,7 @@ namespace cppcanvas
                         rCanvas->getUNOCanvas()->getDevice(),
                         aResultingPolyPolygon ) );
 
-                if( rParms.maTextTransformation.isValid() )
+                if( rParms.maTextTransformation.is_initialized() )
                 {
                     return ActionSharedPtr(
                         new OutlineAction(
@@ -2085,7 +2085,7 @@ namespace cppcanvas
                             rVDev,
                             rCanvas,
                             rState,
-                            rParms.maTextTransformation.getValue() ) );
+                            *rParms.maTextTransformation ) );
                 }
                 else
                 {
@@ -2186,7 +2186,7 @@ namespace cppcanvas
                     rShadowColor == aEmptyColor )
                 {
                     // nope
-                    if( rParms.maTextTransformation.isValid() )
+                    if( rParms.maTextTransformation.is_initialized() )
                     {
                         return ActionSharedPtr( new TextAction(
                                                     aStartPoint,
@@ -2195,7 +2195,7 @@ namespace cppcanvas
                                                     nLen,
                                                     rCanvas,
                                                     rState,
-                                                    rParms.maTextTransformation.getValue() ) );
+                                                    *rParms.maTextTransformation ) );
                     }
                     else
                     {
@@ -2211,7 +2211,7 @@ namespace cppcanvas
                 else
                 {
                     // at least one of the effects requested
-                    if( rParms.maTextTransformation.isValid() )
+                    if( rParms.maTextTransformation.is_initialized() )
                         return ActionSharedPtr( new EffectTextAction(
                                                     aStartPoint,
                                                     aReliefOffset,
@@ -2224,7 +2224,7 @@ namespace cppcanvas
                                                     rVDev,
                                                     rCanvas,
                                                     rState,
-                                                    rParms.maTextTransformation.getValue() ) );
+                                                    *rParms.maTextTransformation ) );
                     else
                         return ActionSharedPtr( new EffectTextAction(
                                                     aStartPoint,
@@ -2250,7 +2250,7 @@ namespace cppcanvas
                     rShadowColor == aEmptyColor )
                 {
                     // nope
-                    if( rParms.maTextTransformation.isValid() )
+                    if( rParms.maTextTransformation.is_initialized() )
                         return ActionSharedPtr( new TextArrayAction(
                                                     aStartPoint,
                                                     rText,
@@ -2259,7 +2259,7 @@ namespace cppcanvas
                                                     aCharWidths,
                                                     rCanvas,
                                                     rState,
-                                                    rParms.maTextTransformation.getValue() ) );
+                                                    *rParms.maTextTransformation ) );
                     else
                         return ActionSharedPtr( new TextArrayAction(
                                                     aStartPoint,
@@ -2273,7 +2273,7 @@ namespace cppcanvas
                 else
                 {
                     // at least one of the effects requested
-                    if( rParms.maTextTransformation.isValid() )
+                    if( rParms.maTextTransformation.is_initialized() )
                         return ActionSharedPtr( new EffectTextArrayAction(
                                                     aStartPoint,
                                                     aReliefOffset,
@@ -2287,7 +2287,7 @@ namespace cppcanvas
                                                     rVDev,
                                                     rCanvas,
                                                     rState,
-                                                    rParms.maTextTransformation.getValue() ) );
+                                                    *rParms.maTextTransformation ) );
                     else
                         return ActionSharedPtr( new EffectTextArrayAction(
                                                     aStartPoint,

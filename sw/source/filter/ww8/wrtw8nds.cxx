@@ -540,7 +540,7 @@ void SwAttrIter::OutAttr( xub_StrLen nSwPos )
         ClearOverridesFromSet( *pCharFmtItem, aExportSet );
 
     sw::PoolItems aExportItems;
-    GetPoolItems( aExportSet, aExportItems );
+    GetPoolItems( aExportSet, aExportItems, false );
 
     sw::cPoolItemIter aEnd = aRangeItems.end();
     for ( sw::cPoolItemIter aI = aRangeItems.begin(); aI != aEnd; ++aI )
@@ -1646,14 +1646,136 @@ void WW8AttributeOutput::FormatDrop( const SwTxtNode& rNode, const SwFmtDrop &rS
     m_rWW8Export.pO->Remove( 0, m_rWW8Export.pO->Count() );
 }
 
-xub_StrLen MSWordExportBase::GetNextPos( SwAttrIter* aAttrIter, const SwTxtNode& /*rNode*/, xub_StrLen /*nAktPos*/  )
+xub_StrLen MSWordExportBase::GetNextPos( SwAttrIter* aAttrIter, const SwTxtNode& rNode, xub_StrLen nAktPos  )
 {
-   return aAttrIter->WhereNext();
+    // Get the bookmarks for the normal run
+    xub_StrLen nNextPos = aAttrIter->WhereNext();
+
+    GetSortedBookmarks( rNode, nAktPos, nNextPos - nAktPos );
+
+    xub_StrLen nNextBookmark = nNextPos;
+    NearestBookmark( nNextPos, nAktPos, false );
+
+    return std::min( nNextPos, nNextBookmark );
 }
 
-void MSWordExportBase::UpdatePosition( SwAttrIter* aAttrIter, xub_StrLen /*nAktPos*/, xub_StrLen /*nEnd*/ )
+void MSWordExportBase::UpdatePosition( SwAttrIter* aAttrIter, xub_StrLen nAktPos, xub_StrLen /*nEnd*/ )
 {
-    aAttrIter->NextPos();
+    xub_StrLen nNextPos;
+
+    // go to next attribute if no bookmark is found of if the bookmark is behind the next attribute position
+    bool bNextBookmark = NearestBookmark( nNextPos, nAktPos, true );
+    if( !bNextBookmark || nNextPos < aAttrIter->WhereNext() )
+        aAttrIter->NextPos();
+}
+
+bool MSWordExportBase::GetBookmarks( const SwTxtNode& rNd, xub_StrLen nStt,
+                    xub_StrLen nEnd, IMarkVector& rArr )
+{
+    IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
+    ULONG nNd = rNd.GetIndex( );
+
+    const sal_Int32 nMarks = pMarkAccess->getMarksCount();
+    for ( sal_Int32 i = 0; i < nMarks; i++ )
+    {
+        IMark* pMark = ( pMarkAccess->getMarksBegin() + i )->get();
+
+        // Only keep the bookmarks starting or ending in this node
+        if ( pMark->GetMarkStart().nNode == nNd ||
+             pMark->GetMarkEnd().nNode == nNd )
+        {
+            xub_StrLen nBStart = pMark->GetMarkStart().nContent.GetIndex();
+            xub_StrLen nBEnd = pMark->GetMarkEnd().nContent.GetIndex();
+
+            // Keep only the bookmars starting or ending in the snippet
+            bool bIsStartOk = ( nBStart >= nStt ) && ( nBStart <= nEnd );
+            bool bIsEndOk = ( nBEnd >= nStt ) && ( nBEnd <= nEnd );
+
+            if ( bIsStartOk || bIsEndOk )
+                rArr.push_back( pMark );
+        }
+    }
+    return ( rArr.size() > 0 );
+}
+
+class CompareMarksEnd : public std::binary_function < const IMark *, const IMark *, bool >
+{
+public:
+    inline bool operator() ( const IMark * pOneB, const IMark * pTwoB ) const
+    {
+        xub_StrLen nOEnd = pOneB->GetMarkEnd().nContent.GetIndex();
+        xub_StrLen nTEnd = pTwoB->GetMarkEnd().nContent.GetIndex();
+
+        return nOEnd < nTEnd;
+    }
+};
+
+bool MSWordExportBase::NearestBookmark( xub_StrLen& rNearest, const xub_StrLen nAktPos, bool bNextPositionOnly )
+{
+    bool bHasBookmark = false;
+
+    if ( m_rSortedMarksStart.size( ) > 0 )
+    {
+        IMark* pMarkStart = m_rSortedMarksStart.front();
+        xub_StrLen nNext = pMarkStart->GetMarkStart().nContent.GetIndex();
+        if( !bNextPositionOnly || (nNext > nAktPos ))
+        {
+            rNearest = nNext;
+            bHasBookmark = true;
+        }
+    }
+
+    if ( m_rSortedMarksEnd.size( ) > 0 )
+    {
+        IMark* pMarkEnd = m_rSortedMarksEnd[0];
+        xub_StrLen nNext = pMarkEnd->GetMarkEnd().nContent.GetIndex();
+        if( !bNextPositionOnly || nNext > nAktPos )
+        {
+            if ( !bHasBookmark )
+                rNearest = nNext;
+            else
+                rNearest = std::min( rNearest, nNext );
+            bHasBookmark = true;
+        }
+    }
+
+    return bHasBookmark;
+}
+
+void MSWordExportBase::GetSortedBookmarks( const SwTxtNode& rNode, xub_StrLen nAktPos, xub_StrLen nLen )
+{
+    IMarkVector aMarksStart;
+    if ( GetBookmarks( rNode, nAktPos, nAktPos + nLen, aMarksStart ) )
+    {
+        IMarkVector aSortedEnd;
+        IMarkVector aSortedStart;
+        for ( IMarkVector::const_iterator it = aMarksStart.begin(), end = aMarksStart.end();
+              it < end; ++it )
+        {
+            IMark* pMark = (*it);
+
+            // Remove the positions egals to the current pos
+            xub_StrLen nStart = pMark->GetMarkStart().nContent.GetIndex();
+            xub_StrLen nEnd = pMark->GetMarkEnd().nContent.GetIndex();
+
+            if ( nStart > nAktPos && ( pMark->GetMarkStart().nNode == rNode.GetIndex()) )
+                aSortedStart.push_back( pMark );
+
+            if ( nEnd > nAktPos && nEnd <= ( nAktPos + nLen ) && (pMark->GetMarkEnd().nNode == rNode.GetIndex()) )
+                aSortedEnd.push_back( pMark );
+        }
+
+        // Sort the bookmarks by end position
+        std::sort( aSortedEnd.begin(), aSortedEnd.end(), CompareMarksEnd() );
+
+        m_rSortedMarksStart.swap( aSortedStart );
+        m_rSortedMarksEnd.swap( aSortedEnd );
+    }
+    else
+    {
+        m_rSortedMarksStart.clear( );
+        m_rSortedMarksEnd.clear( );
+    }
 }
 
 void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
@@ -2188,7 +2310,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
             pOutFmtNode = &rNode;
 
             // Pap-Attrs, so script is not necessary
-            OutputItemSet( *pNewSet, true, false, i18n::ScriptType::LATIN);
+            OutputItemSet( *pNewSet, true, false, i18n::ScriptType::LATIN, false);
 
             pStyAttr = 0;
             pOutFmtNode = pOldMod;

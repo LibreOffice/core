@@ -65,6 +65,7 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage( Window* pParent, const SfxItem
 
     aNameFt     ( this, SfxResId( FT_NAME ) ),
     aNameEd     ( this, SfxResId( ED_NAME ) ),
+    aNameMLE    ( this, SfxResId( MLE_NAME ) ),
     aAutoCB     ( this, SfxResId( CB_AUTO ) ),
 
     aFollowFt   ( this, SfxResId( FT_NEXT ) ),
@@ -147,8 +148,17 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage( Window* pParent, const SfxItem
     }
     aNameEd.SetText(pStyle->GetName());
 
-    if ( !pStyle->IsUserDefined() )
+    // Set the field read-only if it is NOT an user-defined style
+    // but allow selecting and copying
+    if ( !pStyle->IsUserDefined() ) {
         aNameEd.SetReadOnly();
+        aNameEd.Hide();
+
+        aNameMLE.SetControlBackground( GetSettings().GetStyleSettings().GetDialogColor() );
+        aNameMLE.SetText( pStyle->GetName() );
+        aNameMLE.EnableCursor( FALSE );
+        aNameMLE.Show();
+    }
 
     if ( pStyle->HasFollowSupport() && pPool )
     {

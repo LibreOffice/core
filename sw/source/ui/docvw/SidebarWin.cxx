@@ -935,7 +935,6 @@ void SwSidebarWin::ExecuteCommand(USHORT nSlot)
             break;
         }
         case FN_DELETE_COMMENT:
-        case FN_DELETE_NOTE:
 
                 //Delete(); // do not kill the parent of our open popup menu
                 mnEventId = Application::PostUserEvent( LINK( this, SwSidebarWin, DeleteHdl), 0 );

@@ -55,7 +55,6 @@ class ZipPackageStream : public cppu::ImplInheritanceHelper2
     ::com::sun::star::packages::XDataSinkEncrSupport
 >
 {
-    static com::sun::star::uno::Sequence < sal_Int8 > aImplementationId;
 protected:
     com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xStream;
     const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > m_xFactory;
@@ -146,10 +145,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getRawData()
         throw(::com::sun::star::uno::RuntimeException);
 
-    static ::com::sun::star::uno::Sequence < sal_Int8 >& static_getImplementationId()
-    {
-        return aImplementationId;
-    }
+    static const ::com::sun::star::uno::Sequence < sal_Int8 >& static_getImplementationId();
 
     // XActiveDataSink
     virtual void SAL_CALL setInputStream( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& aStream )

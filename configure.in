@@ -3639,10 +3639,8 @@ if test -n "$with_system_cppunit" -o -n "$with_system_libs" && \
         test "$with_system_cppunit" != "no"; then
     AC_MSG_RESULT([external])
     SYSTEM_CPPUNIT=YES
-    # might work for earlier, too but go sure. We didn't have
-    # a system-cppunit before the first version using a proper cppunit
-    # (and that being 1.12.1) anyway
-    PKG_CHECK_MODULES( CPPUNIT, cppunit >= 1.12.1 )
+    # might work for earlier, too but go sure:
+    PKG_CHECK_MODULES( CPPUNIT, cppunit >= 1.12.0 )
 else
     AC_MSG_RESULT([internal])
     SYSTEM_CPPUNIT=NO

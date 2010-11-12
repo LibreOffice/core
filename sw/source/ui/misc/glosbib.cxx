@@ -107,7 +107,7 @@ SwGlossaryGroupDlg::SwGlossaryGroupDlg(Window * pParent,
 
     aGroupTLB.SetHelpId(HID_GLOS_GROUP_TREE);
     aGroupTLB.SetTabs( &nTabs[0], MAP_APPFONT );
-    aGroupTLB.SetWindowBits(WB_HSCROLL|WB_CLIPCHILDREN|WB_SORT);
+    aGroupTLB.SetStyle(aGroupTLB.GetStyle()|WB_HSCROLL|WB_CLIPCHILDREN|WB_SORT);
     aGroupTLB.SetSelectHdl(LINK(this, SwGlossaryGroupDlg, SelectHdl));
     aGroupTLB.GetModel()->SetSortMode(SortAscending);
     aNewPB.SetClickHdl(LINK(this, SwGlossaryGroupDlg, NewHdl));

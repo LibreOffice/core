@@ -50,7 +50,6 @@ SvIcnVwDataEntry::~SvIcnVwDataEntry()
 SvIconView::SvIconView( Window* pParent, WinBits nWinStyle ) :
     SvLBox( pParent, nWinStyle | WB_BORDER )
 {
-    nWinBits = nWinStyle;
     nIcnVwFlags = 0;
     pImp = new SvImpIconView( this, GetModel(), nWinStyle | WB_ICON );
     pImp->mpViewData = 0;
@@ -72,8 +71,6 @@ SvIconView::SvIconView( Window* pParent , const ResId& rResId ) :
     SetBackground( Wallpaper( rStyleSettings.GetFieldColor() ) );
     SetDefaultFont();
     pImp->SetSelectionMode( GetSelectionMode() );
-    pImp->SetWindowBits( nWindowStyle );
-    nWinBits = nWindowStyle;
 }
 
 SvIconView::~SvIconView()
@@ -403,10 +400,11 @@ SvLBoxEntry* SvIconView::GetEntryFromLogicPos( const Point& rDocPos ) const
 }
 
 
-void SvIconView::SetWindowBits( WinBits nWinStyle )
+void SvIconView::StateChanged( StateChangedType i_nStateChange )
 {
-    nWinBits = nWinStyle;
-    pImp->SetWindowBits( nWinStyle );
+    SvLBox::StateChanged( i_nStateChange );
+    if ( i_nStateChange == STATE_CHANGE_STYLE )
+        pImp->SetStyle( GetStyle() );
 }
 
 void SvIconView::PaintEntry( SvLBoxEntry* pEntry )
@@ -469,6 +467,7 @@ void SvIconView::SelectAll( BOOL bSelect, BOOL )
 void SvIconView::SetCurEntry( SvLBoxEntry* _pEntry )
 {
     pImp->SetCursor( _pEntry );
+    OnCurrentEntryChanged();
 }
 
 SvLBoxEntry* SvIconView::GetCurEntry() const

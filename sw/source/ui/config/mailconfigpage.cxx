@@ -330,7 +330,7 @@ SwTestAccountSettingsDialog::SwTestAccountSettingsDialog(SwMailConfigPage* pPare
 
     m_aStatusLB.SetHelpId(HID_MM_TESTACCOUNTSETTINGS_TLB);
     static long nTabs[] = {2, 0, aSz.Width()/2 };
-    m_aStatusLB.SetWindowBits( WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP );
+    m_aStatusLB.SetStyle( m_aStatusLB.GetStyle() | WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP );
     m_aStatusLB.SetSelectionMode( SINGLE_SELECTION );
     m_aStatusLB.SetTabs(&nTabs[0], MAP_PIXEL);
     short nEntryHeight = m_aStatusLB.GetEntryHeight();

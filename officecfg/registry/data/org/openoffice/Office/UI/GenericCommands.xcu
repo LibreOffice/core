@@ -5197,7 +5197,12 @@
           <value xml:lang="en-US">Delete All Comments by This Author</value>
         </prop>
       </node>
-      <node oor:name=".uno:DeleteNote" oor:op="replace">
+      <node oor:name=".uno:ReplyComment" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Reply Comment</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:DeleteComment" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Delete Comment</value>
         </prop>

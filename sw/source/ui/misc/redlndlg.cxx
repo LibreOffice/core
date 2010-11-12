@@ -273,7 +273,7 @@ SwRedlineAcceptDlg::SwRedlineAcceptDlg(Dialog *pParent, BOOL bAutoFmt) :
 
     pActLB->SelectEntryPos(0);
 
-    pTable->SetWindowBits(WB_HASLINES|WB_CLIPCHILDREN|WB_HASBUTTONS|WB_HASBUTTONSATROOT|WB_HSCROLL);
+    pTable->SetStyle(pTable->GetStyle()|WB_HASLINES|WB_CLIPCHILDREN|WB_HASBUTTONS|WB_HASBUTTONSATROOT|WB_HSCROLL);
     pTable->SetNodeDefaultImages();
     pTable->SetSelectionMode(MULTIPLE_SELECTION);
     pTable->SetHighlightRange(1);
