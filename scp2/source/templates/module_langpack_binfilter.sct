@@ -28,7 +28,7 @@
 Module gid_Module_Langpack_Binfilter_<LANGUAGE_>
     ParentID = gid_Module_Langpack_Root_<LANGUAGE_>;
     Sortkey = "900";
-    Default = NO;
+    Default = YES;
     Language = "<LANGUAGE>";
     Assigns = gid_Module_Langpack_Binfilter_Template;
     Name = "gid_Module_Langpack_Binfilter_<LANGUAGE_>";

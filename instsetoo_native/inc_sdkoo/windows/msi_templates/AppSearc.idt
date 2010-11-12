@@ -2,4 +2,6 @@ Property	Signature_
 s72	s72
 AppSearch	Property	Signature_
 INSTALLLOCATION	basisinstalluser
+INSTALLLOCATION	basisinstalluser_
 INSTALLLOCATION	basisinstallmachine
+INSTALLLOCATION	basisinstallmachine_
