@@ -209,14 +209,14 @@ uno::Reference<uno::XInterface> SAL_CALL ScAutoFormatsObj_CreateInstance(
 
 rtl::OUString ScAutoFormatsObj::getImplementationName_Static()
 {
-    return rtl::OUString::createFromAscii( "stardiv.StarCalc.ScAutoFormatsObj" );
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "stardiv.StarCalc.ScAutoFormatsObj" ));
 }
 
 uno::Sequence<rtl::OUString> ScAutoFormatsObj::getSupportedServiceNames_Static()
 {
     uno::Sequence<rtl::OUString> aRet(1);
     rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = rtl::OUString::createFromAscii( SCAUTOFORMATSOBJ_SERVICE );
+    pArray[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCAUTOFORMATSOBJ_SERVICE ));
     return aRet;
 }
 

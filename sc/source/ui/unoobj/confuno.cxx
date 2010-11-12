@@ -461,7 +461,7 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScDocumentConfiguration )
 
 rtl::OUString SAL_CALL ScDocumentConfiguration::getImplementationName() throw(uno::RuntimeException)
 {
-    return rtl::OUString::createFromAscii( "ScDocumentConfiguration" );
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ScDocumentConfiguration" ));
 }
 
 sal_Bool SAL_CALL ScDocumentConfiguration::supportsService( const rtl::OUString& rServiceName )
@@ -477,8 +477,8 @@ uno::Sequence<rtl::OUString> SAL_CALL ScDocumentConfiguration::getSupportedServi
 {
     uno::Sequence<rtl::OUString> aRet(2);
     rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = rtl::OUString::createFromAscii( SCCOMPSCPREADSHEETSETTINGS_SERVICE );
-    pArray[1] = rtl::OUString::createFromAscii( SCDOCUMENTSETTINGS_SERVICE );
+    pArray[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCCOMPSCPREADSHEETSETTINGS_SERVICE ));
+    pArray[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCDOCUMENTSETTINGS_SERVICE ));
     return aRet;
 }
 

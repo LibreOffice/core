@@ -272,16 +272,16 @@ void SAL_CALL ScChartsObj::addNewByName( const rtl::OUString& aName,
                 // set arguments
                 uno::Sequence< beans::PropertyValue > aArgs( 4 );
                 aArgs[0] = beans::PropertyValue(
-                    ::rtl::OUString::createFromAscii("CellRangeRepresentation"), -1,
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CellRangeRepresentation")), -1,
                     uno::makeAny( ::rtl::OUString( sRangeStr )), beans::PropertyState_DIRECT_VALUE );
                 aArgs[1] = beans::PropertyValue(
-                    ::rtl::OUString::createFromAscii("HasCategories"), -1,
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HasCategories")), -1,
                     uno::makeAny( bRowHeaders ), beans::PropertyState_DIRECT_VALUE );
                 aArgs[2] = beans::PropertyValue(
-                    ::rtl::OUString::createFromAscii("FirstCellAsLabel"), -1,
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FirstCellAsLabel")), -1,
                     uno::makeAny( bColumnHeaders ), beans::PropertyState_DIRECT_VALUE );
                 aArgs[3] = beans::PropertyValue(
-                    ::rtl::OUString::createFromAscii("DataRowSource"), -1,
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataRowSource")), -1,
                     uno::makeAny( chart::ChartDataRowSource_COLUMNS ), beans::PropertyState_DIRECT_VALUE );
                 xReceiver->setArguments( aArgs );
             }
@@ -466,7 +466,7 @@ ScChartObj::ScChartObj(ScDocShell* pDocSh, SCTAB nT, const String& rN)
     pDocShell->GetDocument()->AddUnoObject(*this);
 
     uno::Sequence< table::CellRangeAddress > aInitialPropValue;
-    registerPropertyNoMember( ::rtl::OUString::createFromAscii( "RelatedCellRanges" ),
+    registerPropertyNoMember( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "RelatedCellRanges" )),
         PROP_HANDLE_RELATED_CELLRANGES, beans::PropertyAttribute::MAYBEVOID,
         ::getCppuType( &aInitialPropValue ), &aInitialPropValue );
 }

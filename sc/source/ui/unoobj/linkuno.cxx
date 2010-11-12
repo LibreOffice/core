@@ -1687,8 +1687,8 @@ Reference< container::XEnumeration > SAL_CALL ScExternalDocLinkObj::createEnumer
 {
     SolarMutexGuard aGuard;
     Reference< container::XEnumeration > aRef(
-        new ScIndexEnumeration(this, OUString::createFromAscii(
-            "com.sun.star.sheet.ExternalDocLink")));
+        new ScIndexEnumeration(this, OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "com.sun.star.sheet.ExternalDocLink"))));
     return aRef;
 }
 
@@ -1801,8 +1801,8 @@ Reference< container::XEnumeration > SAL_CALL ScExternalDocLinksObj::createEnume
 {
     SolarMutexGuard aGuard;
     Reference< container::XEnumeration > aRef(
-        new ScIndexEnumeration(this, OUString::createFromAscii(
-            "com.sun.star.sheet.ExternalDocLinks")));
+        new ScIndexEnumeration(this, OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "com.sun.star.sheet.ExternalDocLinks"))));
     return aRef;
 }
 
