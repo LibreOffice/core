@@ -591,7 +591,7 @@ SfxTabPage* SwModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItemS
                 if ( fnCreatePage )
                     pRet = (*fnCreatePage)( pParent, rSet );
             }
-            if (pRet && nId == RID_SW_TP_OPTSHDWCRSR)
+            if (pRet && (nId == RID_SW_TP_OPTSHDWCRSR || nId == RID_SW_TP_HTML_OPTSHDWCRSR))
             {
                 SwView* pCurrView = GetView();
                 if(pCurrView)
