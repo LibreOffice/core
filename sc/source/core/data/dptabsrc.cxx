@@ -2866,7 +2866,7 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScDPMember )
 ScDPTableDataCache* ScDPSource::GetCache()
 {
     DBG_ASSERT( GetData() , "empty ScDPTableData pointer");
-    return ( GetData()!=NULL) ? GetData()->GetCacheTable().GetCache() : NULL ;
+    return ( GetData()!=NULL) ? GetData()->GetCacheTable().getCache() : NULL ;
 }
 
 const ScDPItemData& ScDPMember::GetItemData() const

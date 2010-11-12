@@ -194,6 +194,7 @@ static const sal_Char __FAR_DATA pFilterRtf[]       = "Rich Text Format (StarCal
 
 SFX_IMPL_INTERFACE(ScDocShell,SfxObjectShell, ScResId(SCSTR_DOCSHELL))
 {
+    fprintf(stdout, "SFX_IMPL_INTERFACE:   SID_HYPERLINK_INSERT = %d\n", SID_HYPERLINK_INSERT);
     SFX_CHILDWINDOW_REGISTRATION( SID_HYPERLINK_INSERT );
 }
 

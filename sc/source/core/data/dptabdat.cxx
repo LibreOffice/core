@@ -170,7 +170,7 @@ void ScDPTableData::FillRowDataFromCacheTable(sal_Int32 nRow, const ScDPCacheTab
     // page dimensions
     GetItemData(rCacheTable, nRow, rInfo.aPageDims, rData.aPageData);
 
-    long nCacheColumnCount = rCacheTable.GetCache()->GetColumnCount();
+    long nCacheColumnCount = rCacheTable.getCache()->GetColumnCount();
     sal_Int32 n = rInfo.aDataSrcCols.size();
     for (sal_Int32 i = 0; i < n; ++i)
     {
@@ -255,10 +255,10 @@ void ScDPTableData::GetItemData(const ScDPCacheTable& rCacheTable, sal_Int32 nRo
         }
 
         nDim = GetSourceDim( nDim );
-        if ( nDim >= rCacheTable.GetCache()->GetColumnCount() )
+        if ( nDim >= rCacheTable.getCache()->GetColumnCount() )
            continue;
 
-        SCROW nId= rCacheTable.GetCache()->GetItemDataId( static_cast<SCCOL>(nDim), static_cast<SCROW>(nRow), IsRepeatIfEmpty());
+        SCROW nId= rCacheTable.getCache()->GetItemDataId( static_cast<SCCOL>(nDim), static_cast<SCROW>(nRow), IsRepeatIfEmpty());
         rItemData.push_back( nId );
 
     }
@@ -287,18 +287,18 @@ const ScDPItemData* ScDPTableData::GetMemberByIndex( long nDim, long nIndex )
 
     const ::std::vector<SCROW>& nMembers = GetCacheTable().getFieldEntries( nDim );
 
-    return GetCacheTable().GetCache()->GetItemDataById( (SCCOL) nDim, (SCROW)nMembers[nIndex] );
+    return GetCacheTable().getCache()->GetItemDataById( (SCCOL) nDim, (SCROW)nMembers[nIndex] );
 }
 
 const ScDPItemData* ScDPTableData::GetMemberById( long nDim, long nId)
 {
 
-    return GetCacheTable().GetCache()->GetItemDataById( (SCCOL) nDim, (SCROW)nId);
+    return GetCacheTable().getCache()->GetItemDataById( (SCCOL) nDim, (SCROW)nId);
 }
 
 SCROW   ScDPTableData::GetIdOfItemData( long  nDim, const ScDPItemData& rData )
 {
-        return GetCacheTable().GetCache()->GetIdByItemData((SCCOL) nDim, rData );
+        return GetCacheTable().getCache()->GetIdByItemData((SCCOL) nDim, rData );
  }
 
 const std::vector< SCROW >& ScDPTableData::GetColumnEntries( long nColumn )
@@ -317,8 +317,8 @@ long ScDPTableData::GetSourceDim( long nDim )
     if ( getIsDataLayoutDimension(nDim) )
         return 0;
 
-    long n1 = GetCacheTable().GetCache()->GetOrder( nDim, nDataId1);
-    long n2 = GetCacheTable().GetCache()->GetOrder( nDim, nDataId2);
+    long n1 = GetCacheTable().getCache()->GetOrder( nDim, nDataId1);
+    long n2 = GetCacheTable().getCache()->GetOrder( nDim, nDataId2);
     if ( n1 > n2 )
         return 1;
     else if ( n1 == n2 )

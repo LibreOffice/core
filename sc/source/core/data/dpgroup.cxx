@@ -797,13 +797,13 @@ const std::vector< SCROW >&  ScDPGroupDimension::GetColumnEntries( const ScDPCac
     {
         if ( pDateHelper )
         {
-            pDateHelper->FillColumnEntries(  (SCCOL)GetSourceDim(), rCacheTable.GetCache(), maMemberEntries,  rOriginal  );
+            pDateHelper->FillColumnEntries(  (SCCOL)GetSourceDim(), rCacheTable.getCache(), maMemberEntries,  rOriginal  );
         }
         else
         {
             for (size_t  i =0; i < rOriginal.size( );  i ++)
             {
-                const  ScDPItemData* pItemData = rCacheTable.GetCache()->GetItemDataById( (SCCOL)GetSourceDim(), rOriginal[i] );
+                const  ScDPItemData* pItemData = rCacheTable.getCache()->GetItemDataById( (SCCOL)GetSourceDim(), rOriginal[i] );
                 if ( !pItemData || !GetGroupForData( *pItemData ) )
                 {
                     // not in any group -> add as its own group
@@ -814,8 +814,8 @@ const std::vector< SCROW >&  ScDPGroupDimension::GetColumnEntries( const ScDPCac
             long nCount = aItems.size();
             for (long i=0; i<nCount; i++)
             {
-                SCROW nNew = rCacheTable.GetCache()->GetAdditionalItemID(  aItems[i].GetName() );
-                lcl_Insert ( (SCCOL)GetSourceDim(), rCacheTable.GetCache(), maMemberEntries, nNew  );
+                SCROW nNew = rCacheTable.getCache()->GetAdditionalItemID(  aItems[i].GetName() );
+                lcl_Insert ( (SCCOL)GetSourceDim(), rCacheTable.getCache(), maMemberEntries, nNew  );
             }
         }
     }
@@ -1112,7 +1112,7 @@ const std::vector< SCROW >& ScDPGroupTableData::GetColumnEntries( long  nColumn 
     {
         // dimension number is unchanged for numerical groups
         const  std::vector< SCROW >& rOriginal = pSourceData->GetColumnEntries( nColumn );
-        return pNumGroups[nColumn].GetNumEntries( (SCCOL)nColumn,  GetCacheTable().GetCache(), rOriginal );
+        return pNumGroups[nColumn].GetNumEntries( (SCCOL)nColumn,  GetCacheTable().getCache(), rOriginal );
     }
 
     return pSourceData->GetColumnEntries( nColumn );
@@ -1359,7 +1359,7 @@ void ScDPGroupTableData::FillGroupValues( /*ScDPItemData* pItemData*/ SCROW* pIt
 {
     long nGroupedColumns = aGroups.size();
 
-    ScDPTableDataCache* pCache = GetCacheTable().GetCache();
+    ScDPTableDataCache* pCache = GetCacheTable().getCache();
     for (long nDim=0; nDim<nCount; nDim++)
     {
         const ScDPDateGroupHelper* pDateHelper = NULL;
@@ -1402,7 +1402,7 @@ void ScDPGroupTableData::FillGroupValues( /*ScDPItemData* pItemData*/ SCROW* pIt
 
         if ( pDateHelper )
         {
-            const ScDPItemData* pData  = GetCacheTable().GetCache()->GetItemDataById( (SCCOL)nSourceDim, pItemDataIndex[nDim]);
+            const ScDPItemData* pData  = GetCacheTable().getCache()->GetItemDataById( (SCCOL)nSourceDim, pItemDataIndex[nDim]);
               if ( pData ->IsValue() )
             {
                 sal_Int32 nPartValue = lcl_GetDatePartValue(
@@ -1412,7 +1412,7 @@ void ScDPGroupTableData::FillGroupValues( /*ScDPItemData* pItemData*/ SCROW* pIt
 // DataPilot Migration - Cache&&Performance
                 //String aName = lcl_GetDateGroupName( pDateHelper, nPartValue, pDoc->GetFormatTable() );
                 ScDPItemData  aItemData( pDateHelper->GetDatePart(), String(), nPartValue, ScDPItemData::MK_DATA|ScDPItemData::MK_VAL|ScDPItemData::MK_DATEPART );
-                pItemDataIndex[nDim] = GetCacheTable().GetCache()->GetAdditionalItemID( aItemData );
+                pItemDataIndex[nDim] = GetCacheTable().getCache()->GetAdditionalItemID( aItemData );
 // End Comments
             }
         }
