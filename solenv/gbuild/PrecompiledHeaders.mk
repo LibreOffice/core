@@ -57,14 +57,14 @@ $(call gb_NoexPrecompiledHeader_get_target,%) :
 
 .PHONY : $(call gb_PrecompiledHeader_get_clean_target,%) $(call gb_NoExPrecompiledHeader_get_clean_target,%)
 $(call gb_PrecompiledHeader_get_clean_target,%) :
-    $(call gb_Helper_announce,Cleaning up pch $* ...)
+    $(call gb_Output_announce,$*,$(true),PCH,1)
     -$(call gb_Helper_abbreviate_dirs,\
         rm -f $(call gb_PrecompiledHeader_get_target,$*) \
             $(call gb_PrecompiledHeader_get_dep_target,$*))
 
 
 $(call gb_NoexPrecompiledHeader_get_clean_target,%) :
-    $(call gb_Helper_announce,Cleaning up noex pch $* ...)
+    $(call gb_Output_announce,$*,$(true),PCH,1)
     -$(call gb_Helper_abbreviate_dirs,\
         rm -f $(call gb_NoexPrecompiledHeader_get_target,$*) \
             $(call gb_NoexPrecompiledHeader_get_dep_target,$*))

@@ -176,7 +176,7 @@ gb_LinkTarget_DEFAULTDEFS := $(gb_GLOBALDEFS)
 
 .PHONY : $(call gb_LinkTarget_get_clean_target,%)
 $(call gb_LinkTarget_get_clean_target,%) :
-    $(call gb_Helper_announce,Cleaning up link $* ...)
+    $(call gb_Output_announce,$*,$(false),LNK,4)
     -$(call gb_Helper_abbreviate_dirs,\
         rm -f \
             $(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
@@ -193,7 +193,7 @@ $(call gb_LinkTarget_get_clean_target,%) :
             $(AUXTARGETS))
 
 define gb_LinkTarget__command_dep
-$(call gb_Helper_announce,Collecting dependencies for link $(2) ...)
+$(call gb_Output_announce,LNK:$(2),$(true),DEP,1)
 $(call gb_Helper_abbreviate_dirs,\
     mkdir -p $(dir $(1)) && \
     cat $(gb_Helper_NULLFILE)\

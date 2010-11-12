@@ -34,7 +34,7 @@ gb_SrsPartMergeTarget_SDFLOCATION := $(SRCDIR)/l10n/$(INPATH)/misc/sdf/
 gb_SrsPartMergeTarget_REPOS := $(gb_REPOS)
 
 define gb_SrsPartMergeTarget__command
-$(call gb_Helper_announce,Processing $(3) ...)
+$(call gb_Output_announce,$(3),$(true),srs,1)
 $(call gb_Helper_abbreviate_dirs_native,\
     mkdir -p $(dir $(1)) && \
     $(gb_SrsPartMergeTarget_TRANSEXCOMMAND) \
@@ -117,7 +117,7 @@ gb_SrsTarget_DEFAULTDEFS := $(gb_GLOBALDEFS)
 
 .PHONY : $(call gb_SrsTarget_get_clean_target,%)
 $(call gb_SrsTarget_get_clean_target,%) :
-    $(call gb_Helper_announce,Cleaning up srs $* ...)
+    $(call gb_Output_announce,$*,$(false),SRS,1)
     -$(call gb_Helper_abbreviate_dirs,\
         rm -f $(call gb_SrsTarget_get_target,$*) \
             $(call gb_SrsTarget_get_dep_target,$*) \
@@ -127,7 +127,7 @@ $(call gb_SrsTarget_get_clean_target,%) :
 
 ifeq ($(gb_FULLDEPS),$(true))
 define gb_SrsTarget__command_dep
-$(call gb_Helper_announce,Collecting dependencies for srs $(2) ...)
+$(call gb_Output_announce,SRS:$(2),$(true),DEP,1)
 $(call gb_Helper_abbreviate_dirs,\
     mkdir -p $(dir $(1)) && \
     cat $(3) > $(1))
@@ -136,7 +136,7 @@ endif
 
 $(call gb_SrsTarget_get_target,%) :
     $(call gb_SrsTarget__command_dep,$(call gb_SrsTarget_get_dep_target,$*),$*,$(foreach part,$(PARTS),$(call gb_SrsPartTarget_get_dep_target,$(part))))
-    $(call gb_Helper_announce,Processing srs $* ...)
+    $(call gb_Output_announce,$*,$(true),SRS,1)
     $(call gb_Helper_abbreviate_dirs,\
         mkdir -p $(dir $@) && \
         cat $^ > $@)
@@ -197,12 +197,12 @@ gb_ResTarget_RSCCOMMAND := $(gb_SrsPartTarget_RSCCOMMAND)
 gb_ResTarget_DEFIMAGESLOCATION := $(SRCDIR)/default_images/
 
 $(call gb_ResTarget_get_clean_target,%) :
-    $(call gb_Helper_announce,Cleaning up resource $* ...)
+    $(call gb_Output_announce,$*,$(false),RES,2)
     $(call gb_Helper_abbreviate_dirs,\
         rm -f $(call gb_ResTarget_get_target,$*) $(call gb_ResTarget_get_imagelist_target,$*) $(call gb_ResTarget_get_outdir_target,$*) $(call gb_ResTarget_get_outdir_imagelist_target,$*))
 
 $(call gb_ResTarget_get_target,%) : $(gb_Helper_MISCDUMMY) | $(gb_ResTarget_RSCTARGET)
-    $(call gb_Helper_announce,Building resource $@ ...)
+    $(call gb_Output_announce,$*,$(true),RES,2)
     $(call gb_Helper_abbreviate_dirs_native,\
         mkdir -p $(dir $@) $(OUTDIR)/bin \
             $(dir $(call gb_ResTarget_get_imagelist_target,$(1))) && \
