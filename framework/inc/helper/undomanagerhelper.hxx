@@ -27,16 +27,14 @@
 #ifndef FRAMEWORK_UNDOMANAGERHELPER_HXX
 #define FRAMEWORK_UNDOMANAGERHELPER_HXX
 
+#include "framework/iguard.hxx"
+#include "framework/imutex.hxx"
+
 /** === begin UNO includes === **/
 #include <com/sun/star/document/XUndoManager.hpp>
 /** === end UNO includes === **/
 
-#include <boost/scoped_ptr.hpp>
-
-namespace osl
-{
-    class Mutex;
-}
+#include <rtl/ref.hxx>
 
 namespace svl
 {
@@ -49,17 +47,24 @@ namespace framework
 //......................................................................................................................
 
     //==================================================================================================================
+    //= IMutexGuard
+    //==================================================================================================================
+    class SAL_NO_VTABLE IMutexGuard : public IGuard
+    {
+    public:
+        /** returns the mutex guarded by the instance.
+
+            Even if the guard currently has not a lock on the mutex, this method must succeed.
+        */
+        virtual IMutex& getGuardedMutex() = 0;
+    };
+
+    //==================================================================================================================
     //= IUndoManagerImplementation
     //==================================================================================================================
     class SAL_NO_VTABLE IUndoManagerImplementation
     {
     public:
-        /** returns the mutex which is protecting the instance. Needed for listener administration synchronization.
-
-            Note that the mutex will <em>not</em> be used for multi-threading safety of the UndoManagerHelper.
-        */
-        virtual ::osl::Mutex&           getMutex() = 0;
-
         /** returns the IUndoManager interface to the actual Undo stack
 
             @throws com::sun::star::lang::DisposedException
@@ -77,29 +82,31 @@ namespace framework
     };
 
     //==================================================================================================================
-    //= IClearableInstanceLock
-    //==================================================================================================================
-    /** helper class for releasing a lock
-
-        Since clients of UndoManagerHelper are responsible for locking their instance, but the UndoManagerHelper
-        needs to notify its listeners, and this needs to happen without any instance lock, all affected methods
-        take an IClearableInstanceLock parameter, to be able to clear the owner's lock before doing any notifications.
-    */
-    class SAL_NO_VTABLE IClearableInstanceLock
-    {
-    public:
-        virtual void clear() = 0;
-    };
-
-    //==================================================================================================================
     //= UndoManagerHelper
     //==================================================================================================================
     class UndoManagerHelper_Impl;
     /** helper class for implementing an XUndoManager
 
-        The class defines the same methods as an XUndoManager does, but lacks certain aspects of a full-blown UNO
-        component. In particular, it is the responsibility of the owner of the instance to care for multi-threading
-        safety, and for disposal checks.
+        Several of the methods of the class take an IMutexGuard instance. It is assumed that this guard has a lock on
+        its mutext at the moment the method is entered. The lock will be released before any notifications to the
+        registered XUndoManagerListeners happen.
+
+        The following locking strategy is used for this mutex:
+        <ul><li>Any notifications to the registered XUndoManagerListeners are after the guard has been cleared. i.e.
+                without the mutex being locked.</p>
+            <li>Any calls into the <code>IUndoManager</code> implementation is made without the mutex being locked.
+                Note that this implies that the <code>IUndoManager</code> implementation must be thread-safe in itself
+                (which is true for the default implementation, SfxUndoManager).</li>
+            <li>An exception to the previous item are the <member>IUndoManager::Undo</member> and
+                <member>IUndoManager::Redo</member> methods: They're called with the given external mutex being
+                locked.</li>
+        </ul>
+
+        The reason for the exception for IUndoManager::Undo and IUndoManager::Redo is that those are expected to
+        modify the actual document which the UndoManager works for. And as long as our documents are not thread-safe,
+        and as long as we do not re-fit <strong>all</strong> existing SfxUndoImplementations to <em>not</em> expect
+        the dreaded SolarMutex being locked when they're called, the above behavior is a compromise between "how it should
+        be" and "how it can realistically be".
     */
     class UndoManagerHelper
     {
@@ -111,12 +118,12 @@ namespace framework
         void disposing();
 
         // XUndoManager equivalents
-        void            enterUndoContext( const ::rtl::OUString& i_title, IClearableInstanceLock& i_instanceLock );
-        void            enterHiddenUndoContext( IClearableInstanceLock& i_instanceLock );
-        void            leaveUndoContext( IClearableInstanceLock& i_instanceLock );
-        void            addUndoAction( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoAction >& i_action, IClearableInstanceLock& i_instanceLock );
-        void            undo( IClearableInstanceLock& i_instanceLock );
-        void            redo( IClearableInstanceLock& i_instanceLock );
+        void            enterUndoContext( const ::rtl::OUString& i_title, IMutexGuard& i_instanceLock );
+        void            enterHiddenUndoContext( IMutexGuard& i_instanceLock );
+        void            leaveUndoContext( IMutexGuard& i_instanceLock );
+        void            addUndoAction( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoAction >& i_action, IMutexGuard& i_instanceLock );
+        void            undo( IMutexGuard& i_instanceLock );
+        void            redo( IMutexGuard& i_instanceLock );
         ::sal_Bool      isUndoPossible() const;
         ::sal_Bool      isRedoPossible() const;
         ::rtl::OUString getCurrentUndoActionTitle() const;
@@ -125,9 +132,9 @@ namespace framework
                         getAllUndoActionTitles() const;
         ::com::sun::star::uno::Sequence< ::rtl::OUString >
                         getAllRedoActionTitles() const;
-        void            clear( IClearableInstanceLock& i_instanceLock );
-        void            clearRedo( IClearableInstanceLock& i_instanceLock );
-        void            reset( IClearableInstanceLock& i_instanceLock );
+        void            clear( IMutexGuard& i_instanceLock );
+        void            clearRedo( IMutexGuard& i_instanceLock );
+        void            reset( IMutexGuard& i_instanceLock );
         void            addUndoManagerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoManagerListener >& i_listener );
         void            removeUndoManagerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoManagerListener >& i_listener );
 
@@ -137,7 +144,7 @@ namespace framework
         ::sal_Bool      isLocked();
 
     private:
-        ::boost::scoped_ptr< UndoManagerHelper_Impl >   m_pImpl;
+        ::rtl::Reference< UndoManagerHelper_Impl >  m_pImpl;
     };
 
 //......................................................................................................................

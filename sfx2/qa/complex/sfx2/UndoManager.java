@@ -456,6 +456,7 @@ public class UndoManager
         public void leftHiddenContext( UndoManagerEvent i_event )
         {
             assertFalse( "|leftHiddenContext| called after document was disposed", m_isDisposed );
+            assertEquals( "|leftHiddenContext| is not expected to notify an action title", 0, i_event.UndoActionTitle.length() );
 
             m_activeUndoContexts.pop();
             assertEquals( "different opinions on the context nesting level (after leaving)",
@@ -467,6 +468,7 @@ public class UndoManager
         public void cancelledContext( UndoManagerEvent i_event )
         {
             assertFalse( "|cancelledContext| called after document was disposed", m_isDisposed );
+            assertEquals( "|cancelledContext| is not expected to notify an action title", 0, i_event.UndoActionTitle.length() );
 
             m_activeUndoContexts.pop();
             assertEquals( "different opinions on the context nesting level (after cancelling)",
@@ -590,6 +592,7 @@ public class UndoManager
 
         // close the document, ensure the Undo manager listener gets notified
         m_currentDocument.close();
+        m_currentDocument = null;
         assertTrue( "document is closed, but the UndoManagerListener has not been notified of the disposal", m_undoListener.isDisposed() );
     }
 

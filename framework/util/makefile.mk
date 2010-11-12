@@ -424,6 +424,7 @@ $(MISC)$/$(SHL2TARGET).flt: makefile.mk
     @echo m_pLoader>$@
     @echo _TI2>>$@
     @echo _TI3>>$@
+    @echo _TI8>>$@
     @echo LIBMAIN>>$@
     @echo LibMain>>$@
 

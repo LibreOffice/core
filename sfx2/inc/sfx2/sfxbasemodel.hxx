@@ -1616,13 +1616,18 @@ public:
     {
     }
 
+    void reset()
+    {
+        m_aGuard.reset();
+    }
+
     void clear()
     {
         m_aGuard.clear();
     }
 
 private:
-    ::vos::OClearableGuard  m_aGuard;
+    ::osl::ResettableGuard< ::vos::IMutex >  m_aGuard;
 };
 
 #undef css

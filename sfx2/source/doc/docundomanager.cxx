@@ -44,6 +44,7 @@
 #include <tools/diagnose_ex.h>
 #include <framework/undomanagerhelper.hxx>
 
+#include <boost/noncopyable.hpp>
 #include <stack>
 
 //......................................................................................................................
@@ -103,7 +104,6 @@ namespace sfx2
               SfxObjectShell* getObjectShell()       { return rAntiImpl.getBaseModel().GetObjectShell(); }
 
         // IUndoManagerImplementation
-        virtual ::osl::Mutex&               getMutex();
         virtual ::svl::IUndoManager&        getImplUndoManager();
         virtual Reference< XUndoManager >   getThis();
 
@@ -129,12 +129,6 @@ namespace sfx2
             return pUndoManager;
         }
     };
-
-    //------------------------------------------------------------------------------------------------------------------
-    ::osl::Mutex& DocumentUndoManager_Impl::getMutex()
-    {
-        return rAntiImpl.getMutex();
-    }
 
     //------------------------------------------------------------------------------------------------------------------
     ::svl::IUndoManager& DocumentUndoManager_Impl::getImplUndoManager()
@@ -193,14 +187,48 @@ namespace sfx2
     }
 
     //==================================================================================================================
-    //= SfxModelGuardFacade
+    //= SolarMutexFacade
     //==================================================================================================================
-    class SfxModelGuardFacade : public ::framework::IClearableInstanceLock
+    /** a facade for the SolarMutex, implementing ::framework::IMutex (as opposed to ::vos::IMutex)
+    */
+    class SolarMutexFacade : public ::framework::IMutex
     {
     public:
-        SfxModelGuardFacade( SfxModelGuard& i_guard )
-            :m_guard( i_guard )
+        SolarMutexFacade()
         {
+        }
+
+        virtual void acquire()
+        {
+            Application::GetSolarMutex().acquire();
+        }
+
+        virtual void release()
+        {
+            Application::GetSolarMutex().release();
+        }
+    };
+
+    //==================================================================================================================
+    //= UndoManagerGuard
+    //==================================================================================================================
+    class UndoManagerGuard  :public ::framework::IMutexGuard
+                            ,public ::boost::noncopyable
+    {
+    public:
+        UndoManagerGuard( DocumentUndoManager& i_undoManager )
+            :m_guard( i_undoManager )
+            ,m_solarMutexFacade()
+        {
+        }
+
+        ~UndoManagerGuard()
+        {
+        }
+
+        virtual void reset()
+        {
+            m_guard.reset();
         }
 
         virtual void clear()
@@ -208,8 +236,16 @@ namespace sfx2
             m_guard.clear();
         }
 
+        virtual ::framework::IMutex& getGuardedMutex()
+        {
+            // note that this means that we *know* that SfxModelGuard also locks the SolarMutex (nothing more, nothing less).
+            // If this ever changes, we need to adjust this code here, too.
+            return m_solarMutexFacade;
+        }
+
     private:
-        SfxModelGuard&  m_guard;
+        SfxModelGuard       m_guard;
+        SolarMutexFacade    m_solarMutexFacade;
     };
 
     //==================================================================================================================
@@ -248,16 +284,19 @@ namespace sfx2
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL DocumentUndoManager::enterUndoContext( const ::rtl::OUString& i_title ) throw (RuntimeException)
     {
-        SfxModelGuard aGuard( *this );
-        m_pImpl->aUndoHelper.enterUndoContext( i_title, SfxModelGuardFacade( aGuard ) );
+        // SYNCHRONIZED --->
+        UndoManagerGuard aGuard( *this );
+        m_pImpl->aUndoHelper.enterUndoContext( i_title, aGuard );
+        // <--- SYNCHRONIZED
+        m_pImpl->invalidateXDo_nolck();
     }
 
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL DocumentUndoManager::enterHiddenUndoContext(  ) throw (EmptyUndoStackException, RuntimeException)
     {
         // SYNCHRONIZED --->
-        SfxModelGuard aGuard( *this );
-        m_pImpl->aUndoHelper.enterHiddenUndoContext( SfxModelGuardFacade( aGuard ) );
+        UndoManagerGuard aGuard( *this );
+        m_pImpl->aUndoHelper.enterHiddenUndoContext( aGuard );
         // <--- SYNCHRONIZED
         m_pImpl->invalidateXDo_nolck();
     }
@@ -266,8 +305,8 @@ namespace sfx2
     void SAL_CALL DocumentUndoManager::leaveUndoContext(  ) throw (InvalidStateException, RuntimeException)
     {
         // SYNCHRONIZED --->
-        SfxModelGuard aGuard( *this );
-        m_pImpl->aUndoHelper.leaveUndoContext( SfxModelGuardFacade( aGuard ) );
+        UndoManagerGuard aGuard( *this );
+        m_pImpl->aUndoHelper.leaveUndoContext( aGuard );
         // <--- SYNCHRONIZED
         m_pImpl->invalidateXDo_nolck();
     }
@@ -276,8 +315,8 @@ namespace sfx2
     void SAL_CALL DocumentUndoManager::addUndoAction( const Reference< XUndoAction >& i_action ) throw (RuntimeException, IllegalArgumentException)
     {
         // SYNCHRONIZED --->
-        SfxModelGuard aGuard( *this );
-        m_pImpl->aUndoHelper.addUndoAction( i_action, SfxModelGuardFacade( aGuard ) );
+        UndoManagerGuard aGuard( *this );
+        m_pImpl->aUndoHelper.addUndoAction( i_action, aGuard );
         // <--- SYNCHRONIZED
         m_pImpl->invalidateXDo_nolck();
     }
@@ -286,9 +325,9 @@ namespace sfx2
     void SAL_CALL DocumentUndoManager::undo(  ) throw (EmptyUndoStackException, UndoContextNotClosedException, UndoFailedException, RuntimeException)
     {
         // SYNCHRONIZED --->
-        SfxModelGuard aGuard( *this );
+        UndoManagerGuard aGuard( *this );
         m_pImpl->enterViewStandardMode();
-        m_pImpl->aUndoHelper.undo( SfxModelGuardFacade( aGuard ) );
+        m_pImpl->aUndoHelper.undo( aGuard );
         // <--- SYNCHRONIZED
         m_pImpl->invalidateXDo_nolck();
     }
@@ -297,9 +336,9 @@ namespace sfx2
     void SAL_CALL DocumentUndoManager::redo(  ) throw (EmptyUndoStackException, UndoContextNotClosedException, UndoFailedException, RuntimeException)
     {
         // SYNCHRONIZED --->
-        SfxModelGuard aGuard( *this );
+        UndoManagerGuard aGuard( *this );
         m_pImpl->enterViewStandardMode();
-        m_pImpl->aUndoHelper.redo( SfxModelGuardFacade( aGuard ) );
+        m_pImpl->aUndoHelper.redo( aGuard );
         // <--- SYNCHRONIZED
         m_pImpl->invalidateXDo_nolck();
     }
@@ -307,42 +346,42 @@ namespace sfx2
     //------------------------------------------------------------------------------------------------------------------
     ::sal_Bool SAL_CALL DocumentUndoManager::isUndoPossible(  ) throw (RuntimeException)
     {
-        SfxModelGuard aGuard( *this );
+        UndoManagerGuard aGuard( *this );
         return m_pImpl->aUndoHelper.isUndoPossible();
     }
 
     //------------------------------------------------------------------------------------------------------------------
     ::sal_Bool SAL_CALL DocumentUndoManager::isRedoPossible(  ) throw (RuntimeException)
     {
-        SfxModelGuard aGuard( *this );
+        UndoManagerGuard aGuard( *this );
         return m_pImpl->aUndoHelper.isRedoPossible();
     }
 
     //------------------------------------------------------------------------------------------------------------------
     ::rtl::OUString SAL_CALL DocumentUndoManager::getCurrentUndoActionTitle(  ) throw (EmptyUndoStackException, RuntimeException)
     {
-        SfxModelGuard aGuard( *this );
+        UndoManagerGuard aGuard( *this );
         return m_pImpl->aUndoHelper.getCurrentUndoActionTitle();
     }
 
     //------------------------------------------------------------------------------------------------------------------
     ::rtl::OUString SAL_CALL DocumentUndoManager::getCurrentRedoActionTitle(  ) throw (EmptyUndoStackException, RuntimeException)
     {
-        SfxModelGuard aGuard( *this );
+        UndoManagerGuard aGuard( *this );
         return m_pImpl->aUndoHelper.getCurrentRedoActionTitle();
     }
 
     //------------------------------------------------------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL DocumentUndoManager::getAllUndoActionTitles(  ) throw (RuntimeException)
     {
-        SfxModelGuard aGuard( *this );
+        UndoManagerGuard aGuard( *this );
         return m_pImpl->aUndoHelper.getAllUndoActionTitles();
     }
 
     //------------------------------------------------------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL DocumentUndoManager::getAllRedoActionTitles(  ) throw (RuntimeException)
     {
-        SfxModelGuard aGuard( *this );
+        UndoManagerGuard aGuard( *this );
         return m_pImpl->aUndoHelper.getAllRedoActionTitles();
     }
 
@@ -350,8 +389,8 @@ namespace sfx2
     void SAL_CALL DocumentUndoManager::clear(  ) throw (UndoContextNotClosedException, RuntimeException)
     {
         // SYNCHRONIZED --->
-        SfxModelGuard aGuard( *this );
-        m_pImpl->aUndoHelper.clear( SfxModelGuardFacade( aGuard ) );
+        UndoManagerGuard aGuard( *this );
+        m_pImpl->aUndoHelper.clear( aGuard );
         // <--- SYNCHRONIZED
         m_pImpl->invalidateXDo_nolck();
     }
@@ -360,8 +399,8 @@ namespace sfx2
     void SAL_CALL DocumentUndoManager::clearRedo(  ) throw (UndoContextNotClosedException, RuntimeException)
     {
         // SYNCHRONIZED --->
-        SfxModelGuard aGuard( *this );
-        m_pImpl->aUndoHelper.clearRedo( SfxModelGuardFacade( aGuard ) );
+        UndoManagerGuard aGuard( *this );
+        m_pImpl->aUndoHelper.clearRedo( aGuard );
         // <--- SYNCHRONIZED
         m_pImpl->invalidateXDo_nolck();
     }
@@ -370,8 +409,8 @@ namespace sfx2
     void SAL_CALL DocumentUndoManager::reset() throw (RuntimeException)
     {
         // SYNCHRONIZED --->
-        SfxModelGuard aGuard( *this );
-        m_pImpl->aUndoHelper.reset( SfxModelGuardFacade( aGuard ) );
+        UndoManagerGuard aGuard( *this );
+        m_pImpl->aUndoHelper.reset( aGuard );
         // <--- SYNCHRONIZED
         m_pImpl->invalidateXDo_nolck();
     }
@@ -379,35 +418,35 @@ namespace sfx2
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL DocumentUndoManager::lock(  ) throw (RuntimeException)
     {
-        SfxModelGuard aGuard( *this );
+        UndoManagerGuard aGuard( *this );
         m_pImpl->aUndoHelper.lock();
     }
 
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL DocumentUndoManager::unlock(  ) throw (RuntimeException, NotLockedException)
     {
-        SfxModelGuard aGuard( *this );
+        UndoManagerGuard aGuard( *this );
         m_pImpl->aUndoHelper.unlock();
     }
 
     //------------------------------------------------------------------------------------------------------------------
     ::sal_Bool SAL_CALL DocumentUndoManager::isLocked(  ) throw (RuntimeException)
     {
-        SfxModelGuard aGuard( *this );
+        UndoManagerGuard aGuard( *this );
         return m_pImpl->aUndoHelper.isLocked();
     }
 
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL DocumentUndoManager::addUndoManagerListener( const Reference< XUndoManagerListener >& i_listener ) throw (RuntimeException)
     {
-        SfxModelGuard aGuard( *this );
+        UndoManagerGuard aGuard( *this );
         return m_pImpl->aUndoHelper.addUndoManagerListener( i_listener );
     }
 
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL DocumentUndoManager::removeUndoManagerListener( const Reference< XUndoManagerListener >& i_listener ) throw (RuntimeException)
     {
-        SfxModelGuard aGuard( *this );
+        UndoManagerGuard aGuard( *this );
         return m_pImpl->aUndoHelper.removeUndoManagerListener( i_listener );
     }
 
