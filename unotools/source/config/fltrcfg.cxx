@@ -66,9 +66,6 @@ using namespace com::sun::star::uno;
 
 static SvtFilterOptions* pOptions=0;
 
-/* -----------------------------22.01.01 10:23--------------------------------
-
- ---------------------------------------------------------------------------*/
 class SvtAppFilterOptions_Impl : public utl::ConfigItem
 {
     sal_Bool                bLoadVBA;
@@ -99,17 +96,12 @@ public:
                             }
 };
 
-/* -----------------------------22.01.01 11:08--------------------------------
-
- ---------------------------------------------------------------------------*/
 SvtAppFilterOptions_Impl::~SvtAppFilterOptions_Impl()
 {
     if(IsModified())
         Commit();
 }
-/* -----------------------------22.01.01 10:38--------------------------------
 
- ---------------------------------------------------------------------------*/
 void    SvtAppFilterOptions_Impl::Commit()
 {
     Sequence<OUString> aNames(2);
@@ -131,10 +123,6 @@ void SvtAppFilterOptions_Impl::Notify( const Sequence< rtl::OUString >&  )
     // no listeners supported yet
 }
 
-
-/* -----------------------------22.01.01 10:38--------------------------------
-
- ---------------------------------------------------------------------------*/
 void    SvtAppFilterOptions_Impl::Load()
 {
     Sequence<OUString> aNames(2);
@@ -243,9 +231,6 @@ void SvtCalcFilterOptions_Impl::Load()
         bLoadExecutable = *(sal_Bool*)pValues[0].getValue();
 }
 
-/* -----------------------------22.01.01 10:32--------------------------------
-
- ---------------------------------------------------------------------------*/
 struct SvtFilterOptions_Impl
 {
     ULONG nFlags;
@@ -285,9 +270,7 @@ struct SvtFilterOptions_Impl
         aImpressCfg.Load();
     }
 };
-/* -----------------------------22.01.01 10:34--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SvtFilterOptions_Impl::SetFlag( ULONG nFlag, BOOL bSet )
 {
     switch(nFlag)
@@ -307,9 +290,7 @@ void SvtFilterOptions_Impl::SetFlag( ULONG nFlag, BOOL bSet )
                 nFlags &= ~nFlag;
     }
 }
-/* -----------------------------22.01.01 10:35--------------------------------
 
- ---------------------------------------------------------------------------*/
 BOOL SvtFilterOptions_Impl::IsFlag( ULONG nFlag ) const
 {
     BOOL bRet;
@@ -344,9 +325,7 @@ SvtFilterOptions::~SvtFilterOptions()
 {
     delete pImp;
 }
-/* -----------------------------22.01.01 08:45--------------------------------
 
- ---------------------------------------------------------------------------*/
 const Sequence<OUString>& SvtFilterOptions::GetPropertyNames()
 {
     static Sequence<OUString> aNames;
@@ -398,16 +377,12 @@ static ULONG lcl_GetFlag(sal_Int32 nProp)
     }
     return nFlag;
 }
-/*-- 22.01.01 08:53:03---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SvtFilterOptions::Notify( const Sequence<OUString>& )
 {
     Load();
 }
-/*-- 22.01.01 08:53:04---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SvtFilterOptions::Commit()
 {
     const Sequence<OUString>& aNames = GetPropertyNames();
@@ -424,9 +399,7 @@ void SvtFilterOptions::Commit()
     }
     PutProperties(aNames, aValues);
 }
-/*-- 22.01.01 08:53:04---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SvtFilterOptions::Load()
 {
     pImp->Load();

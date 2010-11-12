@@ -646,9 +646,6 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
 
         return result;
 }
-/* -----------------------------21.02.01 15:57--------------------------------
-
- ---------------------------------------------------------------------------*/
 
 #define LANG_ALL        (1 << 0)
 #define LANG_CJK        (1 << 1)
@@ -715,9 +712,6 @@ static const Supported_NumberingType aSupportedTypes[] =
         {style::NumberingType::CHARS_PERSIAN,   NULL, LANG_CTL},
 };
 static const sal_Int32 nSupported_NumberingTypes = sizeof(aSupportedTypes) / sizeof(Supported_NumberingType);
-/* -----------------------------21.02.01 15:57--------------------------------
-
- ---------------------------------------------------------------------------*/
 
 OUString DefaultNumberingProvider::makeNumberingIdentifier(sal_Int16 index)
                                 throw(RuntimeException)
@@ -796,9 +790,7 @@ Sequence< sal_Int16 > DefaultNumberingProvider::getSupportedNumberingTypes(  )
         }
         return aRet;
 }
-/* -----------------------------21.02.01 15:57--------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Int16 DefaultNumberingProvider::getNumberingType( const OUString& rNumberingIdentifier )
                                 throw(RuntimeException)
 {
@@ -807,9 +799,7 @@ sal_Int16 DefaultNumberingProvider::getNumberingType( const OUString& rNumbering
                         return aSupportedTypes[i].nType;
         throw RuntimeException();
 }
-/* -----------------------------21.02.01 15:57--------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Bool DefaultNumberingProvider::hasNumberingType( const OUString& rNumberingIdentifier )
                                 throw(RuntimeException)
 {
@@ -818,9 +808,7 @@ sal_Bool DefaultNumberingProvider::hasNumberingType( const OUString& rNumberingI
                         return sal_True;
         return sal_False;
 }
-/* -----------------------------21.02.01 15:57--------------------------------
 
- ---------------------------------------------------------------------------*/
 OUString DefaultNumberingProvider::getNumberingIdentifier( sal_Int16 nNumberingType )
                                 throw(RuntimeException)
 {
@@ -829,26 +817,20 @@ OUString DefaultNumberingProvider::getNumberingIdentifier( sal_Int16 nNumberingT
                 return makeNumberingIdentifier(i);
         return OUString();
 }
-/* -----------------------------05.07.01 13:34--------------------------------
 
- ---------------------------------------------------------------------------*/
 const sal_Char cDefaultNumberingProvider[] = "com.sun.star.text.DefaultNumberingProvider";
 OUString DefaultNumberingProvider::getImplementationName(void)
                 throw( RuntimeException )
 {
     return OUString::createFromAscii(cDefaultNumberingProvider);
 }
-/* -----------------------------05.07.01 13:34--------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Bool DefaultNumberingProvider::supportsService(const rtl::OUString& rServiceName)
                 throw( RuntimeException )
 {
     return rServiceName.equalsAscii(cDefaultNumberingProvider);
 }
-/* -----------------------------05.07.01 13:34--------------------------------
 
- ---------------------------------------------------------------------------*/
 Sequence< OUString > DefaultNumberingProvider::getSupportedServiceNames(void)
                 throw( RuntimeException )
 {

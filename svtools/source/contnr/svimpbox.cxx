@@ -3073,9 +3073,8 @@ void SvImpLBox::PaintDDCursor( SvLBoxEntry* pInsertionPos )
     pView->SetLineColor( aOldLineColor );
     pView->SetRasterOp( eOldOp );
 }
-/* -----------------26.08.2003 12:52-----------------
-    Delete all sub menues of a PopupMenu, recursively
- --------------------------------------------------*/
+
+// Delete all submenus of a PopupMenu, recursively
 void lcl_DeleteSubPopups(PopupMenu* pPopup)
 {
     for(USHORT i = 0; i < pPopup->GetItemCount(); i++)

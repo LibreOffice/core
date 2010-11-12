@@ -3199,9 +3199,7 @@ void Ruler::DrawTab( OutputDevice* pDevice, const Point& rPos, USHORT nStyle )
     ImplDrawRulerTab( pDevice, aPos, nTabStyle, nStyle  );
     pDevice->Pop();
 }
-/* -----------------16.10.2002 15:17-----------------
- *
- * --------------------------------------------------*/
+
 void Ruler::SetTextRTL(BOOL bRTL)
 {
     if(mpData->bTextRTL != bRTL)

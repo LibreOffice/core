@@ -101,15 +101,11 @@ SvtTabAppearanceCfg::SvtTabAppearanceCfg()
         }
     }
 }
-/* -----------------------------22.05.01 11:53--------------------------------
 
- ---------------------------------------------------------------------------*/
 SvtTabAppearanceCfg::~SvtTabAppearanceCfg( )
 {
 }
-/* -----------------------------22.05.01 11:54--------------------------------
 
- ---------------------------------------------------------------------------*/
 const Sequence<OUString>& SvtTabAppearanceCfg::GetPropertyNames()
 {
     static Sequence<OUString> aNames;
@@ -140,9 +136,7 @@ const Sequence<OUString>& SvtTabAppearanceCfg::GetPropertyNames()
     }
     return aNames;
 }
-/* -----------------------------22.05.01 11:54--------------------------------
 
- ---------------------------------------------------------------------------*/
 void  SvtTabAppearanceCfg::Commit()
 {
     const Sequence<OUString>& rNames = GetPropertyNames();

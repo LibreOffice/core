@@ -37,9 +37,7 @@
 
 //-----------------------------------------------------------------------------
 namespace svtools{
-/* -----------------------------22.03.2002 15:36------------------------------
 
- ---------------------------------------------------------------------------*/
 class ExtendedColorConfig_Impl;
 class ExtendedColorConfigValue
 {
@@ -69,9 +67,7 @@ public:
     sal_Bool operator !=(const ExtendedColorConfigValue& rCmp) const
         { return m_nColor != rCmp.m_nColor;}
 };
-/* -----------------------------22.03.2002 15:36------------------------------
 
- ---------------------------------------------------------------------------*/
 class SVT_DLLPUBLIC ExtendedColorConfig : public SfxBroadcaster, public SfxListener
 {
     friend class ExtendedColorConfig_Impl;
@@ -91,9 +87,7 @@ public:
     sal_Int32                       GetComponentColorCount(const ::rtl::OUString& _sName) const;
     ExtendedColorConfigValue        GetComponentColorConfigValue(const ::rtl::OUString& _sComponentName,sal_uInt32 _nPos) const;
 };
-/* -----------------------------22.03.2002 15:31------------------------------
 
- ---------------------------------------------------------------------------*/
 class SVT_DLLPUBLIC EditableExtendedColorConfig
 {
     ExtendedColorConfig_Impl*   m_pImpl;

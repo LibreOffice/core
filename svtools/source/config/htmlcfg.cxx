@@ -57,9 +57,7 @@ static SvxHtmlOptions* pOptions = 0;
 DECLARE_LIST( LinkList, Link * )
 
 #define C2U(cChar) OUString::createFromAscii(cChar)
-/* -----------------------------23.11.00 11:39--------------------------------
 
- ---------------------------------------------------------------------------*/
 struct HtmlOptions_Impl
 {
     LinkList    aList;
@@ -85,9 +83,6 @@ struct HtmlOptions_Impl
     }
 };
 
-/* -----------------------------23.11.00 11:39--------------------------------
-
- ---------------------------------------------------------------------------*/
 const Sequence<OUString>& SvxHtmlOptions::GetPropertyNames()
 {
     static Sequence<OUString> aNames;
@@ -381,17 +376,11 @@ void SvxHtmlOptions::SetStarBasic(BOOL bSet)
     SetModified();
 }
 
-/*-----------------14.02.97 08.34-------------------
-
---------------------------------------------------*/
-
 BOOL SvxHtmlOptions::IsSaveGraphicsLocal() const
 {
     return 0 != (pImp->nFlags & HTMLCFG_LOCAL_GRF) ;
 }
-/*-----------------14.02.97 08.34-------------------
 
---------------------------------------------------*/
 void SvxHtmlOptions::SetSaveGraphicsLocal(BOOL bSet)
 {
     if(bSet)
@@ -431,17 +420,11 @@ void    SvxHtmlOptions::SetPrintLayoutExtension(BOOL bSet)
     SetModified();
 }
 
-/*-----------------10.07.98 10.02-------------------
-
---------------------------------------------------*/
-
 BOOL SvxHtmlOptions::IsIgnoreFontFamily() const
 {
     return 0 != (pImp->nFlags & HTMLCFG_IGNORE_FONT_FAMILY) ;
 }
-/*-----------------10.07.98 10.02-------------------
 
---------------------------------------------------*/
 void SvxHtmlOptions::SetIgnoreFontFamily(BOOL bSet)
 {
     if(bSet)
@@ -450,16 +433,12 @@ void SvxHtmlOptions::SetIgnoreFontFamily(BOOL bSet)
         pImp->nFlags &= ~HTMLCFG_IGNORE_FONT_FAMILY;
     SetModified();
 }
-/* -----------------05.02.99 09:03-------------------
- *
- * --------------------------------------------------*/
+
 BOOL SvxHtmlOptions::IsStarBasicWarning() const
 {
     return 0 != (pImp->nFlags & HTMLCFG_IS_BASIC_WARNING) ;
 }
-/* -----------------05.02.99 09:03-------------------
- *
- * --------------------------------------------------*/
+
 void SvxHtmlOptions::SetStarBasicWarning(BOOL bSet)
 {
     if(bSet)
@@ -469,9 +448,6 @@ void SvxHtmlOptions::SetStarBasicWarning(BOOL bSet)
     SetModified();
 }
 
-/*-----------------19.02.2001 18:40-----------------
- *
- * --------------------------------------------------*/
 rtl_TextEncoding SvxHtmlOptions::GetTextEncoding() const
 {
     rtl_TextEncoding eRet;
@@ -482,18 +458,13 @@ rtl_TextEncoding SvxHtmlOptions::GetTextEncoding() const
     return eRet;
 }
 
-/*-----------------19.02.2001 18:40-----------------
- *
- * --------------------------------------------------*/
 void SvxHtmlOptions::SetTextEncoding( rtl_TextEncoding eEnc )
 {
     pImp->eEncoding = eEnc;
     pImp->bIsEncodingDefault = sal_False;
     SetModified();
 }
-/* -----------------------------15.08.2001 12:01------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Bool SvxHtmlOptions::IsDefaultTextEncoding() const
 {
     return pImp->bIsEncodingDefault;

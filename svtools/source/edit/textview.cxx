@@ -156,9 +156,6 @@ sal_Bool TETextDataObject::isDataFlavorSupported( const datatransfer::DataFlavor
     return ( nT == SOT_FORMAT_STRING );
 }
 
-/*-- 24.06.2004 13:54:36---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 struct ImpTextView
 {
     TextEngine*         mpTextEngine;

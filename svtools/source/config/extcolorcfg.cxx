@@ -70,8 +70,6 @@ namespace
 
 ExtendedColorConfig_Impl*    ExtendedColorConfig::m_pImpl = NULL;
 
-/* -----------------------------16.01.01 15:36--------------------------------
- ---------------------------------------------------------------------------*/
 class ExtendedColorConfig_Impl : public utl::ConfigItem, public SfxBroadcaster
 {
     DECLARE_STL_USTRINGACCESS_MAP( ::rtl::OUString, TDisplayNames);
@@ -152,9 +150,6 @@ public:
     DECL_LINK( DataChangedEventListener, VclWindowEvent* );
 };
 
-/* -----------------------------16.01.01 15:36--------------------------------
-
- ---------------------------------------------------------------------------*/
 uno::Sequence< OUString> ExtendedColorConfig_Impl::GetPropertyNames(const rtl::OUString& rScheme)
 {
     uno::Sequence< OUString> aNames(GetNodeNames(rScheme));
@@ -213,10 +208,7 @@ ExtendedColorConfigValue ExtendedColorConfig_Impl::GetComponentColorConfigValue(
         sRet = m_aConfigValuesPos[_nPos]->first;
     return sRet;
 }
-// -----------------------------------------------------------------------------
-/* -----------------------------22.03.2002 14:37------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Bool ExtendedColorConfig_Impl::m_bLockBroadcast = sal_False;
 sal_Bool ExtendedColorConfig_Impl::m_bBroadcastWhenUnlocked = sal_False;
 ExtendedColorConfig_Impl::ExtendedColorConfig_Impl(sal_Bool bEditMode) :
@@ -236,9 +228,7 @@ ExtendedColorConfig_Impl::ExtendedColorConfig_Impl(sal_Bool bEditMode) :
     ::Application::AddEventListener( LINK(this, ExtendedColorConfig_Impl, DataChangedEventListener) );
 
 }
-/* -----------------------------25.03.2002 12:28------------------------------
 
- ---------------------------------------------------------------------------*/
 ExtendedColorConfig_Impl::~ExtendedColorConfig_Impl()
 {
     // #100822#
@@ -261,9 +251,7 @@ sal_Bool ExtendedColorConfig_Impl::IsEnableBroadcast()
 {
     return ExtendedColorConfig::m_pImpl ? ExtendedColorConfig::m_pImpl->m_bIsBroadcastEnabled : sal_False;
 }
-/* -----------------------------22.03.2002 14:38------------------------------
 
- ---------------------------------------------------------------------------*/
 void lcl_addString(uno::Sequence < ::rtl::OUString >& _rSeq,const ::rtl::OUString& _sAdd)
 {
     ::rtl::OUString* pIter = _rSeq.getArray();
@@ -425,9 +413,7 @@ void ExtendedColorConfig_Impl::FillComponentColors(uno::Sequence < ::rtl::OUStri
         }
     }
 }
-/* -----------------------------22.03.2002 14:38------------------------------
 
- ---------------------------------------------------------------------------*/
 void    ExtendedColorConfig_Impl::Notify( const uno::Sequence<OUString>& /*rPropertyNames*/)
 {
     //loading via notification always uses the default setting
@@ -442,9 +428,7 @@ void    ExtendedColorConfig_Impl::Notify( const uno::Sequence<OUString>& /*rProp
     else
         Broadcast(SfxSimpleHint(SFX_HINT_COLORS_CHANGED));
 }
-/* -----------------------------22.03.2002 14:38------------------------------
 
- ---------------------------------------------------------------------------*/
 void ExtendedColorConfig_Impl::Commit()
 {
     if ( !m_sLoadedScheme.getLength() )
@@ -491,9 +475,7 @@ void ExtendedColorConfig_Impl::Commit()
 
     CommitCurrentSchemeName();
 }
-/* -----------------11.12.2002 10:42-----------------
- *
- * --------------------------------------------------*/
+
 void ExtendedColorConfig_Impl::CommitCurrentSchemeName()
 {
     //save current scheme name
@@ -516,10 +498,7 @@ sal_Bool ExtendedColorConfig_Impl::ExistsScheme(const ::rtl::OUString& _sSchemeN
         ;
     return pCompIter != pCompEnd;
 }
-// -----------------------------------------------------------------------------
-/* -----------------------------25.03.2002 12:19------------------------------
 
- ---------------------------------------------------------------------------*/
 void ExtendedColorConfig_Impl::SetColorConfigValue(const ::rtl::OUString& _sName, const ExtendedColorConfigValue& rValue )
 {
     TComponents::iterator aFind = m_aConfigValues.find(_sName);
@@ -531,16 +510,12 @@ void ExtendedColorConfig_Impl::SetColorConfigValue(const ::rtl::OUString& _sName
         SetModified();
     }
 }
-/* -----------------------------25.03.2002 15:22------------------------------
 
- ---------------------------------------------------------------------------*/
 uno::Sequence< ::rtl::OUString> ExtendedColorConfig_Impl::GetSchemeNames()
 {
     return GetNodeNames(C2U("ExtendedColorScheme/ColorSchemes"));
 }
-/* -----------------------------09.04.2002 17:19------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Bool ExtendedColorConfig_Impl::AddScheme(const rtl::OUString& rScheme)
 {
     if(ConfigItem::AddNode(C2U("ExtendedColorScheme/ColorSchemes"), rScheme))
@@ -551,34 +526,26 @@ sal_Bool ExtendedColorConfig_Impl::AddScheme(const rtl::OUString& rScheme)
     }
     return sal_False;
 }
-/* -----------------------------09.04.2002 17:19------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Bool ExtendedColorConfig_Impl::RemoveScheme(const rtl::OUString& rScheme)
 {
     uno::Sequence< rtl::OUString > aElements(1);
     aElements.getArray()[0] = rScheme;
     return ClearNodeElements(C2U("ExtendedColorScheme/ColorSchemes"), aElements);
 }
-/* -----------------------------2002/06/20 13:03------------------------------
 
- ---------------------------------------------------------------------------*/
 void ExtendedColorConfig_Impl::SettingsChanged()
 {
     SolarMutexGuard aVclGuard;
 
     Broadcast( SfxSimpleHint( SFX_HINT_COLORS_CHANGED ) );
 }
-/* -----------------11.12.2002 09:21-----------------
- *
- * --------------------------------------------------*/
+
 void ExtendedColorConfig_Impl::LockBroadcast()
 {
     m_bLockBroadcast = sal_True;
 }
-/* -----------------11.12.2002 09:21-----------------
- *
- * --------------------------------------------------*/
+
 void ExtendedColorConfig_Impl::UnlockBroadcast()
 {
     if ( m_bBroadcastWhenUnlocked )
@@ -595,9 +562,7 @@ void ExtendedColorConfig_Impl::UnlockBroadcast()
     }
     m_bLockBroadcast = sal_False;
 }
-/* -----------------------------2002/08/16 12:07 -----------------------------
-   #100822#
- --------------------------------------------------------------------------- */
+
 IMPL_LINK( ExtendedColorConfig_Impl, DataChangedEventListener, VclWindowEvent*, pEvent )
 {
     if ( pEvent->GetId() == VCLEVENT_APPLICATION_DATACHANGED )
@@ -626,9 +591,7 @@ ExtendedColorConfig::ExtendedColorConfig()
     ++nExtendedColorRefCount_Impl;
     StartListening( *m_pImpl);
 }
-/* -----------------------------16.01.01 15:36--------------------------------
 
- ---------------------------------------------------------------------------*/
 ExtendedColorConfig::~ExtendedColorConfig()
 {
     ::osl::MutexGuard aGuard( ColorMutex_Impl::get() );
@@ -639,9 +602,7 @@ ExtendedColorConfig::~ExtendedColorConfig()
         m_pImpl = 0;
     }
 }
-/* -----------------------------11.04.2002 11:49------------------------------
 
- ---------------------------------------------------------------------------*/
 ExtendedColorConfigValue ExtendedColorConfig::GetColorValue(const ::rtl::OUString& _sComponentName,const ::rtl::OUString& _sName)const
 {
     return m_pImpl->GetColorConfigValue(_sComponentName,_sName);
@@ -671,28 +632,21 @@ ExtendedColorConfigValue ExtendedColorConfig::GetComponentColorConfigValue(const
 {
     return m_pImpl->GetComponentDisplayName(_sComponentName);
 }
-// -----------------------------------------------------------------------------
-/* -----------------------------12.04.2002 09:25------------------------------
 
- ---------------------------------------------------------------------------*/
 void ExtendedColorConfig::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
     SolarMutexGuard aVclGuard;
 
     Broadcast( rHint );
 }
-/* -----------------------------25.03.2002 12:01------------------------------
 
- ---------------------------------------------------------------------------*/
 EditableExtendedColorConfig::EditableExtendedColorConfig() :
     m_pImpl(new ExtendedColorConfig_Impl),
     m_bModified(sal_False)
 {
     m_pImpl->LockBroadcast();
 }
-/*-- 25.03.2002 12:03:08---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 EditableExtendedColorConfig::~EditableExtendedColorConfig()
 {
     m_pImpl->UnlockBroadcast();
@@ -703,30 +657,22 @@ EditableExtendedColorConfig::~EditableExtendedColorConfig()
     delete m_pImpl;
 }
 
-/*-- 25.03.2002 12:03:15---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Sequence< ::rtl::OUString >  EditableExtendedColorConfig::GetSchemeNames() const
 {
     return m_pImpl->GetSchemeNames();
 }
-/*-- 25.03.2002 12:03:16---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void EditableExtendedColorConfig::DeleteScheme(const ::rtl::OUString& rScheme )
 {
     m_pImpl->RemoveScheme(rScheme);
 }
-/*-- 25.03.2002 12:03:16---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void EditableExtendedColorConfig::AddScheme(const ::rtl::OUString& rScheme )
 {
     m_pImpl->AddScheme(rScheme);
 }
-/*-- 25.03.2002 12:03:16---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_Bool EditableExtendedColorConfig::LoadScheme(const ::rtl::OUString& rScheme )
 {
     if(m_bModified)
@@ -739,32 +685,25 @@ sal_Bool EditableExtendedColorConfig::LoadScheme(const ::rtl::OUString& rScheme 
     m_pImpl->CommitCurrentSchemeName();
     return sal_True;
 }
-/*-- 25.03.2002 12:03:16---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 const ::rtl::OUString& EditableExtendedColorConfig::GetCurrentSchemeName()const
 {
     return m_pImpl->GetLoadedScheme();
 }
-/* -----------------11.12.2002 10:56-----------------
- *  changes the name of the current scheme but doesn't load it!
- * --------------------------------------------------*/
+
+// Changes the name of the current scheme but doesn't load it!
 void EditableExtendedColorConfig::SetCurrentSchemeName(const ::rtl::OUString& rScheme)
 {
     m_pImpl->SetCurrentSchemeName(rScheme);
     m_pImpl->CommitCurrentSchemeName();
 }
-/*-- 25.03.2002 12:03:17---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 ExtendedColorConfigValue EditableExtendedColorConfig::GetColorValue(const ::rtl::OUString& _sComponentName,
     const ::rtl::OUString& _sName)const
 {
     return m_pImpl->GetColorConfigValue(_sComponentName,_sName);
 }
-/*-- 25.03.2002 12:03:17---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void EditableExtendedColorConfig::SetColorValue(
     const ::rtl::OUString& _sName, const ExtendedColorConfigValue& rValue)
 {
@@ -772,16 +711,12 @@ void EditableExtendedColorConfig::SetColorValue(
     m_pImpl->ClearModified();
     m_bModified = sal_True;
 }
-/* -----------------------------10.04.2002 13:22------------------------------
 
- ---------------------------------------------------------------------------*/
 void EditableExtendedColorConfig::SetModified()
 {
     m_bModified = sal_True;
 }
-/* -----------------15.10.2002 14:51-----------------
- *
- * --------------------------------------------------*/
+
 void EditableExtendedColorConfig::Commit()
 {
     if(m_bModified)

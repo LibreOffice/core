@@ -103,9 +103,7 @@ SfxMiscCfg::SfxMiscCfg() :
 
     Load();
 }
-/* -----------------------------02.03.01 15:31--------------------------------
 
- ---------------------------------------------------------------------------*/
 SfxMiscCfg::~SfxMiscCfg()
 {
 }
@@ -150,9 +148,7 @@ void SfxMiscCfg::SetYear2000( sal_Int32 nSet )
         SetModified();
     nYear2000 = nSet;
 }
-/* -----------------------------02.03.01 15:31--------------------------------
 
- ---------------------------------------------------------------------------*/
 const Sequence<OUString>& SfxMiscCfg::GetPropertyNames()
 {
     static Sequence<OUString> aNames;
@@ -173,9 +169,7 @@ const Sequence<OUString>& SfxMiscCfg::GetPropertyNames()
     }
     return aNames;
 }
-/* -----------------------------02.03.01 15:31--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SfxMiscCfg::Load()
 {
     const Sequence<OUString>& aNames = GetPropertyNames();
@@ -200,16 +194,12 @@ void SfxMiscCfg::Load()
         }
     }
 }
-/* -----------------------------02.03.01 15:31--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SfxMiscCfg::Notify( const com::sun::star::uno::Sequence<rtl::OUString>& )
 {
     Load();
 }
-/* -----------------------------02.03.01 15:31--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SfxMiscCfg::Commit()
 {
     const Sequence<OUString>& aNames = GetPropertyNames();

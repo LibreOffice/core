@@ -578,19 +578,12 @@ void SvtSysLocaleOptions::SetCurrencyConfigString( const OUString& rStr )
     pOptions->SetCurrencyString( rStr );
 }
 
-
-
-/*-- 11.02.2004 13:31:41---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 sal_Bool SvtSysLocaleOptions::IsDecimalSeparatorAsLocale() const
 {
     MutexGuard aGuard( GetMutex() );
     return pOptions->IsDecimalSeparatorAsLocale();
 }
-/*-- 11.02.2004 13:31:41---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SvtSysLocaleOptions::SetDecimalSeparatorAsLocale( sal_Bool bSet)
 {
     MutexGuard aGuard( GetMutex() );

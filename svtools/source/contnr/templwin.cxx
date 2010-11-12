@@ -582,9 +582,7 @@ void SvtIconWindow_Impl::UpdateIcons( sal_Bool _bHiContrast )
     aIconCtrl.GetEntry( ICON_POS_SAMPLES )->SetImage(
         Image( SvtResId( IMG_SVT_SAMPLES ) ) );
 }
-/* -----------------27.11.2002 16:58-----------------
- *
- * --------------------------------------------------*/
+
 void SvtIconWindow_Impl::SelectFolder(sal_Int32 nFolderPosition)
 {
     SvxIconChoiceCtrlEntry* pEntry = aIconCtrl.GetEntry( nFolderPosition );
@@ -1628,9 +1626,6 @@ void SvtTemplateWindow::WriteViewSettings()
     SvtViewOptions aViewSettings( E_DIALOG, VIEWSETTING_NEWFROMTEMPLATE );
     aViewSettings.SetUserData( aSettings );
 }
-/* -----------------27.11.2002 17:20-----------------
- *
- * --------------------------------------------------*/
 
 void SvtTemplateWindow::SelectFolder(sal_Int32 nFolderPosition)
 {
@@ -2013,9 +2008,6 @@ IMPL_LINK ( SvtDocumentTemplateDialog, OpenLinkHdl_Impl, svt::FixedHyperlink*, E
     return 0;
 }
 
-/* -----------------27.11.2002 16:54-----------------
- *
- * --------------------------------------------------*/
 void SvtDocumentTemplateDialog::SelectTemplateFolder()
 {
     pImpl->pWin->SelectFolder(ICON_POS_TEMPLATES);
