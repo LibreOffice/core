@@ -119,41 +119,31 @@ $(foreach repo,$(1),$(call gb_Helper_add_repository,$(repo)))
 endef
 
 define gb_Helper_init_registries
-gb_Executable_VALIDLAYERS := UREBIN SDK OOO BRAND NONE
-gb_Library_VALIDLAYERS := OOOLIBS PLAINLIBS_URE PLAINLIBS_OOO RTLIBS RTVERLIBS STLLIBS UNOLIBS_URE UNOLIBS_OOO UNOVERLIBS
-gb_StaticLibrary_VALIDLAYERS := PLAINLIBS
-gb_Library_NAMESCHEMES := OOO PLAIN RT RTVER STL UNO UNOVER
-gb_StaticLibrary_NAMESCHEMES := PLAIN
+gb_Executable_VALIDGROUPS := UREBIN SDK OOO BRAND NONE
+gb_Library_VALIDGROUPS := OOOLIBS PLAINLIBS_NONE PLAINLIBS_URE PLAINLIBS_OOO RTLIBS RTVERLIBS STLLIBS UNOLIBS_URE UNOLIBS_OOO UNOVERLIBS
+gb_StaticLibrary_VALIDGROUPS := PLAINLIBS
 
-$$(foreach layer,$$(gb_Executable_VALIDLAYERS),$$(eval gb_Executable_$$(layer) :=))
-$$(foreach layer,$$(gb_Library_VALIDLAYERS),$$(eval gb_Library_$$(layer) :=))
-$$(foreach layer,$$(gb_StaticLibrary_VALIDLAYERS),$$(eval gb_StaticLibrary_$$(layer) :=))
+$$(foreach group,$$(gb_Executable_VALIDGROUPS),$$(eval gb_Executable_$$(group) :=))
+$$(foreach group,$$(gb_Library_VALIDGROUPS),$$(eval gb_Library_$$(group) :=))
+$$(foreach group,$$(gb_StaticLibrary_VALIDGROUPS),$$(eval gb_StaticLibrary_$$(group) :=))
 
 endef
 
 define gb_Helper_collect_libtargets
-gb_Library_PLAINLIBS := \
-    $$(gb_Library_PLAINLIBS_URE) \
-    $$(gb_Library_PLAINLIBS_OOO) \
-
-gb_Library_UNOLIBS := \
-    $$(gb_Library_UNOLIBS_URE) \
-    $$(gb_Library_UNOLIBS_OOO) \
-
-gb_Library_TARGETS := $$(foreach namescheme,$$(gb_Library_NAMESCHEMES),$$(gb_Library_$$(namescheme)LIBS))
-gb_StaticLibrary_TARGETS := $$(foreach namescheme,$$(gb_StaticLibrary_NAMESCHEMES),$$(gb_StaticLibrary_$$(namescheme)LIBS))
+gb_Library_TARGETS := $$(foreach group,$$(gb_Library_VALIDGROUPS),$$(gb_Library_$$(group)))
+gb_StaticLibrary_TARGETS := $$(foreach group,$$(gb_StaticLibrary_VALIDGROUPS),$$(gb_StaticLibrary_$$(group)))
 
 endef
 
 define gb_Helper_collect_knownlibs
-gb_Library_KNOWNLIBS := $$(foreach namescheme,$$(gb_Library_NAMESCHEMES),$$(gb_Library_$$(namescheme)LIBS))
-gb_StaticLibrary_KNOWNLIBS := $$(foreach namescheme,$$(gb_StaticLibrary_NAMESCHEMES),$$(gb_StaticLibrary_$$(namescheme)LIBS))
+gb_Library_KNOWNLIBS := $$(foreach group,$$(gb_Library_VALIDGROUPS),$$(gb_Library_$$(group)))
+gb_StaticLibrary_KNOWNLIBS := $$(foreach group,$$(gb_StaticLibrary_VALIDGROUPS),$$(gb_StaticLibrary_$$(group)))
 
 endef
 
 define gb_Helper_register_executables
-ifeq ($$(filter $(1),$$(gb_Executable_VALIDLAYERS)),)
-$$(error $(1) is not a valid layer for executables. Valid layers are: $$(gb_Executable_VALIDLAYERS))
+ifeq ($$(filter $(1),$$(gb_Executable_VALIDGROUPS)),)
+$$(error $(1) is not a valid group for executables. Valid groups are: $$(gb_Executable_VALIDGROUPS))
 endif
 
 gb_Executable_$(1) += $(2)
@@ -161,8 +151,8 @@ gb_Executable_$(1) += $(2)
 endef
 
 define gb_Helper_register_libraries
-ifeq ($$(filter $(1),$$(gb_Library_VALIDLAYERS)),)
-$$(error $(1) is not a valid layer for layer. Valid layers are: $$(gb_Library_VALIDLAYERS))
+ifeq ($$(filter $(1),$$(gb_Library_VALIDGROUPS)),)
+$$(error $(1) is not a valid group for libraries. Valid groups are: $$(gb_Library_VALIDGROUPS))
 endif
 
 gb_Library_$(1) += $(2)
@@ -170,8 +160,8 @@ gb_Library_$(1) += $(2)
 endef
 
 define gb_Helper_register_static_libraries
-ifeq ($$(filter $(1),$$(gb_StaticLibrary_VALIDLAYERS)),)
-$$(error $(1) is not a valid layer for layer. Valid layers are: $$(gb_StaticLibrary_VALIDLAYERS))
+ifeq ($$(filter $(1),$$(gb_StaticLibrary_VALIDGROUPS)),)
+$$(error $(1) is not a valid group for static libraries. Valid groups are: $$(gb_StaticLibrary_VALIDGROUPS))
 endif
 
 gb_StaticLibrary_$(1) += $(2)
