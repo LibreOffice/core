@@ -30,6 +30,10 @@ define NEWLINE
 
 endef
 
+define WHITESPACE
+ 
+endef
+
 COMMA :=,
 
 gb_Helper_NULLFILE := /dev/null
@@ -59,8 +63,50 @@ define gb_Helper__format_target
 $(1)
 endef
 
+ifeq ($(TERM),xterm)
+ifeq ($(strip $(gb_NOCOLOR)),)
+gb_Helper_ESCAPE := $(shell echo -e '\033')
+gb_Helper_COLOR_RESET := $(gb_Helper_ESCAPE)[0m
+gb_Helper_COLOR_RESETANDESCAPE := $(gb_Helper_COLOR_RESET)$(gb_Helper_ESCAPE)
+gb_Helper_COLOR_OUTBUILD_LEVEL1 := $(gb_Helper_COLOR_RESETANDESCAPE)[37;40m
+gb_Helper_COLOR_OUTBUILD_LEVEL2 := $(gb_Helper_COLOR_RESETANDESCAPE)[37;40m
+gb_Helper_COLOR_OUTBUILD_LEVEL3 := $(gb_Helper_COLOR_RESETANDESCAPE)[37;40m
+gb_Helper_COLOR_OUTBUILD_LEVEL4 := $(gb_Helper_COLOR_RESETANDESCAPE)[37;40m
+gb_Helper_COLOR_OUTBUILD_LEVEL5 := $(gb_Helper_COLOR_RESETANDESCAPE)[37;1;46m
+gb_Helper_COLOR_OUTBUILD_LEVEL6 := $(gb_Helper_COLOR_RESETANDESCAPE)[37;1;44m
+
+gb_Helper_COLOR_INBUILD_LEVEL1 := $(gb_Helper_COLOR_RESETANDESCAPE)[36;40m
+gb_Helper_COLOR_INBUILD_LEVEL2 := $(gb_Helper_COLOR_RESETANDESCAPE)[36;1;40m
+gb_Helper_COLOR_INBUILD_LEVEL3 := $(gb_Helper_COLOR_RESETANDESCAPE)[32;40m
+gb_Helper_COLOR_INBUILD_LEVEL4 := $(gb_Helper_COLOR_RESETANDESCAPE)[32;1;40m
+gb_Helper_COLOR_INBUILD_LEVEL5 := $(gb_Helper_COLOR_RESETANDESCAPE)[37;1;46m
+gb_Helper_COLOR_INBUILD_LEVEL6 := $(gb_Helper_COLOR_RESETANDESCAPE)[37;1;44m
+
+gb_Helper_COLOR_OUTCLEAN_LEVEL1 := $(gb_Helper_COLOR_RESETANDESCAPE)[37;40m
+gb_Helper_COLOR_OUTCLEAN_LEVEL2 := $(gb_Helper_COLOR_RESETANDESCAPE)[37;40m
+gb_Helper_COLOR_OUTCLEAN_LEVEL3 := $(gb_Helper_COLOR_RESETANDESCAPE)[37;40m
+gb_Helper_COLOR_OUTCLEAN_LEVEL4 := $(gb_Helper_COLOR_RESETANDESCAPE)[37;40m
+gb_Helper_COLOR_OUTCLEAN_LEVEL5 := $(gb_Helper_COLOR_RESETANDESCAPE)[33;1;41m
+gb_Helper_COLOR_OUTCLEAN_LEVEL6 := $(gb_Helper_COLOR_RESETANDESCAPE)[37;1;41m
+
+gb_Helper_COLOR_INCLEAN_LEVEL1 := $(gb_Helper_COLOR_RESETANDESCAPE)[33;40m
+gb_Helper_COLOR_INCLEAN_LEVEL2 := $(gb_Helper_COLOR_RESETANDESCAPE)[33;1;40m
+gb_Helper_COLOR_INCLEAN_LEVEL3 := $(gb_Helper_COLOR_RESETANDESCAPE)[31;40m
+gb_Helper_COLOR_INCLEAN_LEVEL4 := $(gb_Helper_COLOR_RESETANDESCAPE)[31;1;40m
+gb_Helper_COLOR_INCLEAN_LEVEL5 := $(gb_Helper_COLOR_RESETANDESCAPE)[33;1;41m
+gb_Helper_COLOR_INCLEAN_LEVEL6 := $(gb_Helper_COLOR_RESETANDESCAPE)[37;1;41m
+
+define gb_Helper__format_type
+$(subst :, ,$(word 2,$(1) \
+    $(gb_Helper_COLOR_OUTBUILD_LEVEL$(3))[:$(gb_Helper_COLOR_INBUILD_LEVEL$(3))$(subst $(WHITESPACE),:,$(2)):>==>$(gb_Helper_COLOR_OUTBUILD_LEVEL$(3)):] \
+    $(gb_Helper_COLOR_OUTCLEAN_LEVEL$(3))[:$(gb_Helper_COLOR_INCLEAN_LEVEL$(3))$(subst $(WHITESPACE),:,$(2)):Oo._$(gb_Helper_COLOR_OUTCLEAN_LEVEL$(3)):]))$(gb_Helper_COLOR_RESET)
+endef
+
+endif
+endif
+
 define gb_Helper_announce
-$(info $(call gb_Helper__format_type,$(2),$(3)) $(call gb_Helper__format_target,$(1)))
+$(info $(call gb_Helper__format_type,$(2),$(3),$(4)) $(call gb_Helper__format_target,$(1)))
 endef
 
 define gb_Helper_abbreviate_dirs

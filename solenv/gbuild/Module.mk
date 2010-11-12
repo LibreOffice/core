@@ -41,23 +41,23 @@ endif
 
 .PHONY : $(call gb_Module_get_clean_target,%)
 $(call gb_Module_get_clean_target,%) :
-    $(call gb_Helper_announce,$*,$(false),MOD)
+    $(call gb_Helper_announce,$*,$(false),MOD,5)
     -$(call gb_Helper_abbreviate_dirs,\
         rm -f $(call gb_Module_get_target,$*))
 
 $(call gb_Module_get_target,%) :
-    $(call gb_Helper_announce,$*,$(true),MOD)
+    $(call gb_Helper_announce,$*,$(true),MOD,5)
     -$(call gb_Helper_abbreviate_dirs,\
         mkdir -p $(dir $@) && \
         touch $@)
 
 all : 
-    $(call gb_Helper_announce,top level modules: $(foreach module,$^,$(notdir $(module))),$(true),ALL)
-    $(call gb_Helper_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(true),ALL)
+    $(call gb_Helper_announce,top level modules: $(foreach module,$^,$(notdir $(module))),$(true),ALL,6)
+    $(call gb_Helper_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(true),ALL,6)
 
 clean : 
-    $(call gb_Helper_announce,top level modules: $(foreach module,$^,$(notdir $(module))),$(false),ALL)
-    $(call gb_Helper_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(false),ALL)
+    $(call gb_Helper_announce,top level modules: $(foreach module,$^,$(notdir $(module))),$(false),ALL,6)
+    $(call gb_Helper_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(false),ALL,6)
 
 .PHONY : all clean install uninstall
 .DEFAULT_GOAL := all

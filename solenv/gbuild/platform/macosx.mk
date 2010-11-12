@@ -138,7 +138,7 @@ gb_Helper_abbreviate_dirs_native = $(gb_Helper_abbreviate_dirs)
 # CObject class
 
 define gb_CObject__command
-$(call gb_Helper_announce,$(2),$(true),C  )
+$(call gb_Helper_announce,$(2),$(true),C  ,3)
 $(call gb_Helper_abbreviate_dirs,\
     mkdir -p $(dir $(1)) && \
     mkdir -p $(dir $(call gb_CObject_get_dep_target,$(2))) && \
@@ -157,7 +157,7 @@ endef
 
 # N.B: $(4) or $(5) may contain -x objective-c++, which must come before -c
 define gb_CxxObject__command
-$(call gb_Helper_announce,$(2),$(true),CXX)
+$(call gb_Helper_announce,$(2),$(true),CXX,3)
 $(call gb_Helper_abbreviate_dirs,\
     mkdir -p $(dir $(1)) && \
     mkdir -p $(dir $(call gb_CxxObject_get_dep_target,$(2))) && \
@@ -175,7 +175,7 @@ endef
 # ObjCxxObject class
 
 define gb_ObjCxxObject__command
-$(call gb_Helper_announce,$(2),$(true),OCX)
+$(call gb_Helper_announce,$(2),$(true),OCX,3)
 $(call gb_Helper_abbreviate_dirs,\
     mkdir -p $(dir $(1)) && \
     mkdir -p $(dir $(call gb_ObjCxxObject_get_dep_target,$(2))) && \
@@ -243,7 +243,7 @@ gb_LinkTarget_INCLUDE_STL := $(filter %/stl, $(subst -I. , ,$(SOLARINC)))
 # solver layout is different from installation layout
 # FIXME framework handling very hackish
 define gb_LinkTarget__command
-$(call gb_Helper_announce,$(2),$(true),LNK)
+$(call gb_Helper_announce,$(2),$(true),LNK,4)
 $(call gb_Helper_abbreviate_dirs,\
     mkdir -p $(dir $(1)) && \
     DYLIB_FILE=`$(gb_MKTEMP) $(dir $(1))` && \

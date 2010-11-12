@@ -35,7 +35,7 @@ gb_ComponentTarget_get_source = $(1)/$(2).component
 # gb_ComponentTarget_PREFIXBASISNATIVE is set by the platform
 
 define gb_ComponentTarget__command
-$(call gb_Helper_announce,$(3),$(true),CMP)
+$(call gb_Helper_announce,$(3),$(true),CMP,1)
 $(call gb_Helper_abbreviate_dirs_native,\
     mkdir -p $(dir $(1)) && \
     $(gb_ComponentTarget_XSLTPROCCOMMAND) --nonet --stringparam uri \
@@ -49,7 +49,7 @@ $$(call gb_ComponentTarget_get_target,%) : $$(call gb_ComponentTarget_get_source
     $$(call gb_ComponentTarget__command,$$@,$$<,$$*)
 
 $$(call gb_ComponentTarget_get_clean_target,%) :
-    $$(call gb_Helper_announce,$$*,$(false),CMP)
+    $$(call gb_Helper_announce,$$*,$(false),CMP,1)
     rm -f $$(call gb_ComponentTarget_get_outdir_target,$$*) $$(call gb_ComponentTarget_get_target,$$*)
 
 endef
