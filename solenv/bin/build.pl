@@ -229,6 +229,7 @@
     };
     $StandDir = get_stand_dir();   # This also sets $initial_module
     $source_config = SourceConfig -> new($StandDir);
+    check_partial_gnumake_build($initial_module);
 
     if ($html) {
         if (defined $html_path) {
@@ -3582,3 +3583,23 @@ sub fill_modules_queue {
         mp_success_exit();
     };
 };
+
+sub is_gnumake_module {
+    my $module = shift;
+    my $bridgemakefile = $source_config->get_module_path($module) . "/prj/makefile.mk";
+    return (-e $bridgemakefile);
+}
+
+sub check_partial_gnumake_build {
+    if(!$build_all_parents && is_gnumake_module(shift)) {
+        print "This module has been migrated to GNU make.\n";
+        print "You can only use build --all/--since here with build.pl.\n";
+        print "To do a build of only this module call:\n";
+        print "\tmake -sr\n";
+        print "in the module root.";
+        print "To do the equivalent of 'build && deliver' call:\n";
+        print "\tmake -sr install\n";
+        print "in the module root (THIS will modify the solver).";
+        exit 1;
+    }
+}

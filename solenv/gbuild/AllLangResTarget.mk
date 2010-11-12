@@ -152,7 +152,11 @@ $(call gb_SrsTarget_get_target,$(1)) : INCLUDE := $(SOLARINC)
 $(call gb_SrsTarget_get_clean_target,$(1)) : PARTS :=
 $(call gb_SrsTarget_get_target,$(1)) : PARTS :=
 ifeq ($(gb_FULLDEPS),$(true))
+ifneq ($(wildcard $(call gb_SrsTarget_get_dep_target,$(1))),)
 include $(call gb_SrsTarget_get_dep_target,$(1))
+else
+$(firstword $(MAKEFILE_LIST)) : $(call gb_SrsTarget_get_dep_target,$(1))
+endif
 endif
 
 endef

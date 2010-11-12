@@ -257,7 +257,11 @@ $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : PCH_NAME :=
 
 ifeq ($(gb_FULLDEPS),$(true))
+ifneq ($(wildcard $(call gb_LinkTarget_get_dep_target,$(1))),)
 include $(call gb_LinkTarget_get_dep_target,$(1))
+else
+$(firstword $(MAKEFILE_LIST)) : $(call gb_LinkTarget_get_dep_target,$(1))
+endif
 $(call gb_LinkTarget_get_dep_target,$(1)) : COBJECTS := 
 $(call gb_LinkTarget_get_dep_target,$(1)) : CXXOBJECTS := 
 $(call gb_LinkTarget_get_dep_target,$(1)) : OBJCXXOBJECTS :=
@@ -483,7 +487,7 @@ $(call gb_LinkTarget_get_target,$(1)) : DEFS := $$(DEFS) -DPRECOMPILED_HEADERS
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : PCH_DEFS = $$(DEFS)
 ifeq ($(gb_FULLDEPS),$(true))
-include \
+-include \
     $(call gb_PrecompiledHeader_get_dep_target,$(3)) \
     $(call gb_NoexPrecompiledHeader_get_dep_target,$(3))
 $(call gb_LinkTarget_get_dep_target,$(1)) : DEFS := $$(DEFS) -DPRECOMPILED_HEADERS
