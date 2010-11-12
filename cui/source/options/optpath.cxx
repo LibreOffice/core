@@ -406,11 +406,6 @@ void SvxPathTabPage::FillUserData()
 // -----------------------------------------------------------------------
 
 IMPL_LINK( SvxPathTabPage, PathSelect_Impl, svx::OptHeaderTabListBox *, EMPTYARG )
-
-/*  [Beschreibung]
-
-*/
-
 {
     USHORT nSelCount = 0;
     SvLBoxEntry* pEntry = pPathBox->FirstSelected();
