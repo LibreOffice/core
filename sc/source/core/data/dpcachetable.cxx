@@ -160,11 +160,11 @@ ScDPCacheTable::Criterion::Criterion() :
 
 // ----------------------------------------------------------------------------
 
-ScDPCacheTable::ScDPCacheTable( ScDocument* pDoc,long nId ) :
+ScDPCacheTable::ScDPCacheTable( ScDocument* pDoc, long nId ) :
     mpCache( NULL ),
     mpNoneCache( NULL )
 {
-     if ( nId >= 0 )
+    if ( nId >= 0 )
         mpCache = pDoc->GetDPObjectCache( nId );
     else
     { //create a temp cache object
@@ -200,7 +200,6 @@ void ScDPCacheTable::fillTable(  const ScQueryParam& rQuery, BOOL* pSpecial,
 
     maRowsVisible.clear();
     maRowsVisible.reserve(nRowCount);
-
 
     // Initialize field entries container.
     maFieldEntries.clear();
