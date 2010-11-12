@@ -74,11 +74,6 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
-
-/*------------------------------------------------------------------------
-        Beschreibung:
-------------------------------------------------------------------------*/
-
 void SwWrtShell::Insert(SwField &rFld)
 {
     ResetCursorStack();

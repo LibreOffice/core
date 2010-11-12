@@ -213,10 +213,6 @@ USHORT SwField::Which() const
 }
 #endif
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 USHORT SwField::GetTypeId() const
 {
 
@@ -538,10 +534,6 @@ String SwValueFieldType::ExpandValue( const double& rVal,
     return sExpand;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void SwValueFieldType::DoubleToString( String &rValue, const double &rVal,
                                         sal_uInt32 nFmt) const
 {
@@ -551,10 +543,6 @@ void SwValueFieldType::DoubleToString( String &rValue, const double &rVal,
     if (pEntry)
         DoubleToString(rValue, rVal, pEntry->GetLanguage());
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SwValueFieldType::DoubleToString( String &rValue, const double &rVal,
                                         USHORT nLng ) const
@@ -693,10 +681,6 @@ void SwValueField::SetLanguage( USHORT nLng )
     SwField::SetLanguage(nLng);
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 double SwValueField::GetValue() const
 {
     return fValue;
@@ -722,18 +706,10 @@ SwFormulaField::SwFormulaField( const SwFormulaField& rFld )
 {
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 String SwFormulaField::GetFormula() const
 {
     return sFormula;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SwFormulaField::SetFormula(const String& rStr)
 {
@@ -749,10 +725,6 @@ void SwFormulaField::SetFormula(const String& rStr)
             SwValueField::SetValue( fTmpValue );
     }
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SwFormulaField::SetExpandedFormula( const String& rStr )
 {
@@ -775,10 +747,6 @@ void SwFormulaField::SetExpandedFormula( const String& rStr )
     }
     sFormula = rStr;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 String SwFormulaField::GetExpandedFormula() const
 {

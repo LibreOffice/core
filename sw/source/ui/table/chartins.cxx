@@ -149,11 +149,6 @@ Point SwGetChartDialogPos( const Window *pParentWin, const Size& rDialogSize, co
     return aRet;
 }
 
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
-
-
 void SwInsertChart(Window* pParent, SfxBindings* pBindings )
 {
     (void) pParent;

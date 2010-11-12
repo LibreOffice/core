@@ -334,17 +334,9 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SwTemplateDlg::~SwTemplateDlg()
 {
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 short SwTemplateDlg::Ok()
 {
@@ -372,10 +364,6 @@ short SwTemplateDlg::Ok()
     return nRet;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 const SfxItemSet* SwTemplateDlg::GetRefreshedSet()
 {
     SfxItemSet* pInSet = GetInputSetImpl();
@@ -383,10 +371,6 @@ const SfxItemSet* SwTemplateDlg::GetRefreshedSet()
     pInSet->SetParent( &GetStyleSheet().GetItemSet() );
     return pInSet;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SwTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
 {

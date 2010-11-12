@@ -119,11 +119,6 @@ void __EXPORT SwInsFootNoteDlg::Apply()
     bFootnote = aFtnBtn.IsChecked();
 }
 
-
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
-
 IMPL_LINK_INLINE_START( SwInsFootNoteDlg, NumberCharHdl, Button *, EMPTYARG )
 {
     aNumberCharEdit.GrabFocus();
@@ -131,10 +126,6 @@ IMPL_LINK_INLINE_START( SwInsFootNoteDlg, NumberCharHdl, Button *, EMPTYARG )
     return 0;
 }
 IMPL_LINK_INLINE_END( SwInsFootNoteDlg, NumberCharHdl, Button *, EMPTYARG )
-
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
 
 IMPL_LINK_INLINE_START( SwInsFootNoteDlg, NumberEditHdl, void *, EMPTYARG )
 {
@@ -145,20 +136,12 @@ IMPL_LINK_INLINE_START( SwInsFootNoteDlg, NumberEditHdl, void *, EMPTYARG )
 }
 IMPL_LINK_INLINE_END( SwInsFootNoteDlg, NumberEditHdl, void *, EMPTYARG )
 
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
-
 IMPL_LINK_INLINE_START( SwInsFootNoteDlg, NumberAutoBtnHdl, Button *, EMPTYARG )
 {
     aOkBtn.Enable( TRUE );
     return 0;
 }
 IMPL_LINK_INLINE_END( SwInsFootNoteDlg, NumberAutoBtnHdl, Button *, EMPTYARG )
-
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
 
 IMPL_LINK( SwInsFootNoteDlg, NumberExtCharHdl, Button *, EMPTYARG )
 {
@@ -203,10 +186,6 @@ IMPL_LINK( SwInsFootNoteDlg, NumberExtCharHdl, Button *, EMPTYARG )
     return 0;
 }
 
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
-
 IMPL_LINK( SwInsFootNoteDlg, NextPrevHdl, Button *, pBtn )
 {
     Apply();
@@ -222,10 +201,6 @@ IMPL_LINK( SwInsFootNoteDlg, NextPrevHdl, Button *, pBtn )
 
     return 0;
 }
-
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
 
 SwInsFootNoteDlg::SwInsFootNoteDlg(Window *pParent, SwWrtShell &rShell, BOOL bEd) :
 
@@ -272,11 +247,6 @@ SwInsFootNoteDlg::SwInsFootNoteDlg(Window *pParent, SwWrtShell &rShell, BOOL bEd
     }
 }
 
-
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
-
 SwInsFootNoteDlg::~SwInsFootNoteDlg()
 {
     rSh.SetCareWin(0);
@@ -284,10 +254,6 @@ SwInsFootNoteDlg::~SwInsFootNoteDlg()
     if (bEdit)
         rSh.ResetSelect(0, FALSE);
 }
-
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
 
 void SwInsFootNoteDlg::Init()
 {

@@ -56,10 +56,6 @@
 
 SFX_IMPL_TOOLBOX_CONTROL(SwTbxAnchor, SfxUInt16Item);
 
-/******************************************************************************
- *  Beschreibung:
- ******************************************************************************/
-
 SwTbxAnchor::SwTbxAnchor( USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
     SfxToolBoxControl( nSlotId, nId, rTbx ),
     nActAnchorId(0)
@@ -67,17 +63,9 @@ SwTbxAnchor::SwTbxAnchor( USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
     rTbx.SetItemBits( nId, TIB_DROPDOWNONLY | rTbx.GetItemBits( nId ) );
 }
 
-/******************************************************************************
- *  Beschreibung:
- ******************************************************************************/
-
  SwTbxAnchor::~SwTbxAnchor()
 {
 }
-
-/******************************************************************************
- *  Beschreibung:
- ******************************************************************************/
 
 void  SwTbxAnchor::StateChanged( USHORT /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
 {
@@ -92,19 +80,11 @@ void  SwTbxAnchor::StateChanged( USHORT /*nSID*/, SfxItemState eState, const Sfx
 
 }
 
-/******************************************************************************
- *  Beschreibung:
- ******************************************************************************/
-
 SfxPopupWindow* SwTbxAnchor::CreatePopupWindow()
 {
     SwTbxAnchor::Click();
     return 0;
 }
-
-/******************************************************************************
- *  Beschreibung:
- ******************************************************************************/
 
 void  SwTbxAnchor::Click()
 {

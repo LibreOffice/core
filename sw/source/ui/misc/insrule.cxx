@@ -50,11 +50,6 @@
 #include "misc.hrc"
 #include "helpid.h"
 
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
-
-
 SwInsertGrfRulerDlg::SwInsertGrfRulerDlg( Window* pParent ) :
     SfxModalDialog(pParent, SW_RES(DLG_INSERT_RULER)),
     aSelectionFL(this, SW_RES(FL_SEL     )),

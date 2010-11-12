@@ -1458,31 +1458,17 @@ void lcl_processCompatibleSfxHint( const uno::Reference< document::XVbaEventsHel
 }
 #endif
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 long SwDocShell::DdeGetData( const String& rItem, const String& rMimeType,
                                 uno::Any & rValue )
 {
     return pDoc->GetData( rItem, rMimeType, rValue );
 }
 
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 long SwDocShell::DdeSetData( const String& rItem, const String& rMimeType,
                             const uno::Any & rValue )
 {
     return pDoc->SetData( rItem, rMimeType, rValue );
 }
-
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 ::sfx2::SvLinkSource* SwDocShell::DdeCreateLinkSource( const String& rItem )
 {

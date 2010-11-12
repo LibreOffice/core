@@ -312,10 +312,6 @@ void SwDBField::ChgValue( double d, BOOL bVal )
         aContent = ((SwValueFieldType*)GetTyp())->ExpandValue(d, GetFormat(), GetLanguage());
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SwFieldType* SwDBField::ChgTyp( SwFieldType* pNewType )
 {
     SwFieldType* pOld = SwValueField::ChgTyp( pNewType );
@@ -399,18 +395,10 @@ const String& SwDBField::GetPar1() const
     return ((SwDBFieldType*)GetTyp())->GetName();
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 USHORT SwDBField::GetSubType() const
 {
     return nSubType;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SwDBField::SetSubType(USHORT nType)
 {
@@ -739,9 +727,6 @@ bool SwDBNextSetField::PutValue( const uno::Any& rAny, USHORT nWhichId )
     return bRet;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 /*
 String SwDBNextSetField::GetPar2() const
 {

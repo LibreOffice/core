@@ -608,10 +608,6 @@ IMPL_LINK( SwEditWin, TimerHandler, Timer *, EMPTYARG )
     return 0;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void SwEditWin::JustifyAreaTimer()
 {
     const Rectangle &rVisArea = GetView().GetVisArea();
@@ -4573,18 +4569,10 @@ BOOL SwEditWin::EnterDrawMode(const MouseEvent& rMEvt, const Point& aDocPos)
     return FALSE;
 }
 
-/******************************************************************************
- *  Beschreibung:
- ******************************************************************************/
-
 BOOL SwEditWin::IsDrawSelMode()
 {
     return IsObjectSelect();
 }
-
-/******************************************************************************
- *  Beschreibung:
- ******************************************************************************/
 
 void SwEditWin::GetFocus()
 {
@@ -4600,10 +4588,6 @@ void SwEditWin::GetFocus()
     }
 }
 
-/******************************************************************************
- *  Beschreibung:
- ******************************************************************************/
-
 void SwEditWin::LoseFocus()
 {
     rView.GetWrtShell().InvalidateAccessibleFocus();
@@ -4612,10 +4596,6 @@ void SwEditWin::LoseFocus()
         pQuickHlpData->Stop( rView.GetWrtShell() );
     rView.LostFocus();
 }
-
-/******************************************************************************
- *  Beschreibung:
- ******************************************************************************/
 
 void SwEditWin::Command( const CommandEvent& rCEvt )
 {
