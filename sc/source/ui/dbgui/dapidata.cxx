@@ -91,7 +91,7 @@ ScDataPilotDatabaseDlg::ScDataPilotDatabaseDlg( Window* pParent ) :
 
         uno::Reference<container::XNameAccess> xContext(
                 comphelper::getProcessServiceFactory()->createInstance(
-                    rtl::OUString::createFromAscii( DP_SERVICE_DBCONTEXT ) ),
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( DP_SERVICE_DBCONTEXT )) ),
                 uno::UNO_QUERY);
         if (xContext.is())
         {
@@ -166,7 +166,7 @@ void ScDataPilotDatabaseDlg::FillObjects()
 
         uno::Reference<container::XNameAccess> xContext(
                 comphelper::getProcessServiceFactory()->createInstance(
-                    rtl::OUString::createFromAscii( DP_SERVICE_DBCONTEXT ) ),
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( DP_SERVICE_DBCONTEXT )) ),
                 uno::UNO_QUERY);
         if ( !xContext.is() ) return;
 
@@ -177,7 +177,7 @@ void ScDataPilotDatabaseDlg::FillObjects()
 
         uno::Reference<task::XInteractionHandler> xHandler(
                 comphelper::getProcessServiceFactory()->createInstance(
-                    rtl::OUString::createFromAscii( SC_SERVICE_INTHANDLER ) ),
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_SERVICE_INTHANDLER )) ),
                 uno::UNO_QUERY);
 
         uno::Reference<sdbc::XConnection> xConnection = xSource->connectWithCompletion( xHandler );

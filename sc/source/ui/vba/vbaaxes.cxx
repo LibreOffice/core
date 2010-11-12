@@ -73,7 +73,7 @@ ScVbaAxes::createAxis( const uno::Reference< excel::XChart >& xChart, const uno:
 {
     ScVbaChart* pChart = static_cast< ScVbaChart* >( xChart.get() );
     if ( !pChart )
-        throw uno::RuntimeException( rtl::OUString::createFromAscii( "Object failure, can't access chart implementation" ), uno::Reference< uno::XInterface >()  );
+        throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Object failure, can't access chart implementation" )), uno::Reference< uno::XInterface >()  );
 
     uno::Reference< beans::XPropertySet > xAxisPropertySet;
     if (((nType == xlCategory) || (nType == xlSeriesAxis) || (nType == xlValue)))
@@ -169,7 +169,7 @@ ScVbaAxes::Item( const css::uno::Any& _nType, const css::uno::Any& _oAxisGroup) 
     sal_Int32 nAxisGroup = xlPrimary;
     sal_Int32 nType = -1;
     if ( !_nType.hasValue() || ( ( _nType >>= nType ) == sal_False )  )
-        throw uno::RuntimeException( rtl::OUString::createFromAscii( "Axes::Item Failed to extract type" ), uno::Reference< uno::XInterface >()  );
+        throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Axes::Item Failed to extract type" )), uno::Reference< uno::XInterface >()  );
 
     if ( _oAxisGroup.hasValue() )
         _oAxisGroup >>= nAxisGroup ;

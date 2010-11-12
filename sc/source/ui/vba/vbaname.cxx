@@ -125,7 +125,7 @@ ScVbaName::getValue(const formula::FormulaGrammar::Grammar eGrammar) throw (css:
     }
     if ( sValue.indexOf('=') != 0 )
     {
-        sValue = rtl::OUString::createFromAscii("=") + sValue;
+        sValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("=")) + sValue;
     }
     return sValue;
 }

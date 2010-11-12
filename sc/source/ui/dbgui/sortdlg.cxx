@@ -55,9 +55,9 @@ ScSortDlg::ScSortDlg( Window*           pParent,
     AddTabPage( TP_FIELDS,  ScTabPageSortFields::Create,  0 );
     AddTabPage( TP_OPTIONS, ScTabPageSortOptions::Create, 0 );
 #else
-    String fields = rtl::OUString::createFromAscii ("fields");
+    String fields = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("fields"));
     AddTabPage( TP_FIELDS, fields, ScTabPageSortFields::Create, 0, FALSE, TAB_APPEND);
-    String options = rtl::OUString::createFromAscii ("options");
+    String options = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("options"));
     AddTabPage( TP_OPTIONS, options, ScTabPageSortOptions::Create, 0, FALSE, TAB_APPEND);
 #endif
     FreeResource();

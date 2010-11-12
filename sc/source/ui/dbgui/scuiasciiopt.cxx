@@ -127,17 +127,17 @@ static void load_Separators( OUString &sFieldSeparators, OUString &sTextSeparato
     const Any *pProperties;
     Sequence<OUString> aNames(9);
     OUString* pNames = aNames.getArray();
-    ScLinkConfigItem aItem( OUString::createFromAscii( SEP_PATH ) );
+    ScLinkConfigItem aItem( OUString(RTL_CONSTASCII_USTRINGPARAM( SEP_PATH )) );
 
-    pNames[0] = OUString::createFromAscii( MERGE_DELIMITERS );
-    pNames[1] = OUString::createFromAscii( SEPARATORS );
-    pNames[2] = OUString::createFromAscii( TEXT_SEPARATORS );
-    pNames[3] = OUString::createFromAscii( FIXED_WIDTH );
-    pNames[4] = OUString::createFromAscii( FROM_ROW );
-    pNames[5] = OUString::createFromAscii( CHAR_SET );
-    pNames[6] = OUString::createFromAscii( QUOTED_AS_TEXT );
-    pNames[7] = OUString::createFromAscii( DETECT_SPECIAL_NUM );
-    pNames[8] = OUString::createFromAscii( LANGUAGE );
+    pNames[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( MERGE_DELIMITERS ));
+    pNames[1] = OUString(RTL_CONSTASCII_USTRINGPARAM( SEPARATORS ));
+    pNames[2] = OUString(RTL_CONSTASCII_USTRINGPARAM( TEXT_SEPARATORS ));
+    pNames[3] = OUString(RTL_CONSTASCII_USTRINGPARAM( FIXED_WIDTH ));
+    pNames[4] = OUString(RTL_CONSTASCII_USTRINGPARAM( FROM_ROW ));
+    pNames[5] = OUString(RTL_CONSTASCII_USTRINGPARAM( CHAR_SET ));
+    pNames[6] = OUString(RTL_CONSTASCII_USTRINGPARAM( QUOTED_AS_TEXT ));
+    pNames[7] = OUString(RTL_CONSTASCII_USTRINGPARAM( DETECT_SPECIAL_NUM ));
+    pNames[8] = OUString(RTL_CONSTASCII_USTRINGPARAM( LANGUAGE ));
     aValues = aItem.GetProperties( aNames );
     pProperties = aValues.getConstArray();
     if( pProperties[1].hasValue() )
@@ -178,17 +178,17 @@ static void save_Separators(
     Any *pProperties;
     Sequence<OUString> aNames(9);
     OUString* pNames = aNames.getArray();
-    ScLinkConfigItem aItem( OUString::createFromAscii( SEP_PATH ) );
+    ScLinkConfigItem aItem( OUString(RTL_CONSTASCII_USTRINGPARAM( SEP_PATH )) );
 
-    pNames[0] = OUString::createFromAscii( MERGE_DELIMITERS );
-    pNames[1] = OUString::createFromAscii( SEPARATORS );
-    pNames[2] = OUString::createFromAscii( TEXT_SEPARATORS );
-    pNames[3] = OUString::createFromAscii( FIXED_WIDTH );
-    pNames[4] = OUString::createFromAscii( FROM_ROW );
-    pNames[5] = OUString::createFromAscii( CHAR_SET );
-    pNames[6] = OUString::createFromAscii( QUOTED_AS_TEXT );
-    pNames[7] = OUString::createFromAscii( DETECT_SPECIAL_NUM );
-    pNames[8] = OUString::createFromAscii( LANGUAGE );
+    pNames[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( MERGE_DELIMITERS ));
+    pNames[1] = OUString(RTL_CONSTASCII_USTRINGPARAM( SEPARATORS ));
+    pNames[2] = OUString(RTL_CONSTASCII_USTRINGPARAM( TEXT_SEPARATORS ));
+    pNames[3] = OUString(RTL_CONSTASCII_USTRINGPARAM( FIXED_WIDTH ));
+    pNames[4] = OUString(RTL_CONSTASCII_USTRINGPARAM( FROM_ROW ));
+    pNames[5] = OUString(RTL_CONSTASCII_USTRINGPARAM( CHAR_SET ));
+    pNames[6] = OUString(RTL_CONSTASCII_USTRINGPARAM( QUOTED_AS_TEXT ));
+    pNames[7] = OUString(RTL_CONSTASCII_USTRINGPARAM( DETECT_SPECIAL_NUM ));
+    pNames[8] = OUString(RTL_CONSTASCII_USTRINGPARAM( LANGUAGE ));
     aValues = aItem.GetProperties( aNames );
     pProperties = aValues.getArray();
     pProperties[1] <<= sFieldSeparators;

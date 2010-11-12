@@ -2678,7 +2678,7 @@ uno::Reference< frame::XModel > ScDocShell::LoadSharedDocument()
             xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ) ) ),
             uno::UNO_QUERY_THROW );
         uno::Sequence < beans::PropertyValue > aArgs( 1 );
-        aArgs[0].Name = ::rtl::OUString::createFromAscii( "Hidden" );
+        aArgs[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Hidden" ));
         aArgs[0].Value <<= sal_True;
 
         if ( GetMedium() )
@@ -2687,7 +2687,7 @@ uno::Reference< frame::XModel > ScDocShell::LoadSharedDocument()
             if ( pPasswordItem && pPasswordItem->GetValue().Len() )
             {
                 aArgs.realloc( 2 );
-                aArgs[1].Name = ::rtl::OUString::createFromAscii( "Password" );
+                aArgs[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Password" ));
                 aArgs[1].Value <<= ::rtl::OUString( pPasswordItem->GetValue() );
             }
         }

@@ -273,7 +273,7 @@ ScVbaWindow::ScrollWorkbookTabs( const uno::Any& /*Sheets*/, const uno::Any& /*P
 /*
     sal_Int32 nSheets = 0;
     sal_Int32 nPosition = 0;
-    throw uno::RuntimeException( rtl::OUString::createFromAscii("No Implemented" ), uno::Reference< uno::XInterface >() );
+    throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("No Implemented" )), uno::Reference< uno::XInterface >() );
     sal_Bool bSheets = ( Sheets >>= nSheets );
     sal_Bool bPosition = ( Position >>= nPosition );
     if ( bSheets || bPosition ) // at least one param specified
