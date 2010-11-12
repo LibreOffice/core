@@ -40,12 +40,12 @@ endef
 
 .PHONY : $(call gb_Package_get_clean_target,%)
 $(call gb_Package_get_clean_target,%) :
-    $(call gb_Helper_announce,$*,$(false),PKG,2)
+    $(call gb_Output_announce,$*,$(false),PKG,2)
     -$(call gb_Helper_abbreviate_dirs,\
         rm -f $(FILES))
 
 $(call gb_Package_get_target,%) :
-    $(call gb_Helper_announce,$*,$(true),PKG,2)
+    $(call gb_Output_announce,$*,$(true),PKG,2)
     mkdir -p $(dir $@) && touch $@
 
 define gb_Package_Package
