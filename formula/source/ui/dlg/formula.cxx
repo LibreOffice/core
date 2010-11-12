@@ -1665,7 +1665,7 @@ BOOL FormulaDlg_Impl::CheckMatrix(String& aFormula)
     aTabCtrl.SetCurPageId(TP_STRUCT);
     return bMatrix;
 }
-IMPL_LINK( FormulaDlg_Impl, StructSelHdl, StructPage*, pStruP )
+IMPL_LINK( FormulaDlg_Impl, StructSelHdl, StructPage*, EMPTYARG )
 {
     bStructUpdate=FALSE;
     if(pStructPage->IsVisible())    aBtnForward.Enable(FALSE); //@New
