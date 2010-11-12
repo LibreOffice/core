@@ -355,11 +355,6 @@ IMPL_LINK( SwEndNoteOptionPage, PosPageHdl, Button *, EMPTYARG )
     return 0;
 }
 
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
-
-
 IMPL_LINK( SwEndNoteOptionPage, NumCountHdl, ListBox*, EMPTYARG )
 {
     BOOL bEnable = TRUE;

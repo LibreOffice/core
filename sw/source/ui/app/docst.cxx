@@ -87,11 +87,6 @@
 
 using namespace ::com::sun::star;
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
 {
     SfxWhichIter aIter(rSet);

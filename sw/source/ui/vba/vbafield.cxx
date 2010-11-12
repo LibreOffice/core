@@ -508,7 +508,7 @@ uno::Reference< text::XTextField > SwVbaFields::Create_Field_DocProperty( const 
         if( aDocProperty.EqualsIgnoreCaseAscii( pTable->sDocPropertyName ) )
         {
             if( pTable->sFieldService != NULL )
-                sFieldService = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( pTable->sFieldService ) );
+                sFieldService = rtl::OUString::createFromAscii(pTable->sFieldService);
             bCustom = sal_False;
             break;
         }

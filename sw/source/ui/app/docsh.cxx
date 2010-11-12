@@ -984,12 +984,6 @@ sal_uInt16 SwDocShell::GetHiddenInformationState( sal_uInt16 nStates )
 }
 // <--
 
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 void SwDocShell::GetState(SfxItemSet& rSet)
 {
     SfxWhichIter aIter(rSet);

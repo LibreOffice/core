@@ -70,11 +70,6 @@ USHORT  nFldDlgFmtSel       = 0;
 #define USER_DATA_VERSION_1 "1"
 #define USER_DATA_VERSION USER_DATA_VERSION_1
 
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SwFldRefPage::SwFldRefPage(Window* pParent, const SfxItemSet& rCoreSet ) :
     SwFldPage( pParent, SW_RES( TP_FLD_REF ), rCoreSet ),
 
@@ -122,10 +117,6 @@ SwFldRefPage::SwFldRefPage(Window* pParent, const SfxItemSet& rCoreSet ) :
     aSelectionToolTipLB.SetHighlightRange();
     // <--
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 SwFldRefPage::~SwFldRefPage()
 {
@@ -178,10 +169,6 @@ sal_uInt16 SwFldRefPage::GetSavedSelectedPos() const
 }
 
 // <--
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SwFldRefPage::Reset(const SfxItemSet& )
 {
@@ -299,10 +286,6 @@ void SwFldRefPage::Reset(const SfxItemSet& )
         aValueED.SaveValue();
     }
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 IMPL_LINK( SwFldRefPage, TypeHdl, ListBox *, EMPTYARG )
 {
@@ -444,10 +427,6 @@ IMPL_LINK( SwFldRefPage, TypeHdl, ListBox *, EMPTYARG )
 
     return 0;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 IMPL_LINK( SwFldRefPage, SubTypeHdl, ListBox *, EMPTYARG )
 {
@@ -719,10 +698,6 @@ void SwFldRefPage::UpdateSubType()
     // <--
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 USHORT SwFldRefPage::FillFormatLB(USHORT nTypeId)
 {
     String sOldSel;
@@ -835,10 +810,6 @@ IMPL_LINK( SwFldRefPage, ModifyHdl, Edit *, EMPTYARG )
 
     return 0;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 BOOL SwFldRefPage::FillItemSet(SfxItemSet& )
 {
@@ -1028,19 +999,11 @@ BOOL SwFldRefPage::FillItemSet(SfxItemSet& )
     return FALSE;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SfxTabPage* SwFldRefPage::Create(   Window* pParent,
                         const SfxItemSet& rAttrSet )
 {
     return ( new SwFldRefPage( pParent, rAttrSet ) );
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 USHORT SwFldRefPage::GetGroup()
 {

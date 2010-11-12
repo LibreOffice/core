@@ -1804,9 +1804,6 @@ BOOL SwWrtShell::Pop( BOOL bOldCrsr )
     return bRet;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 BOOL SwWrtShell::CanInsert()
 {
     return (!(IsSelFrmMode() | IsObjSelected() | (GetView().GetDrawFuncPtr() != NULL) | (GetView().GetPostItMgr()->GetActiveSidebarWin()!= NULL)));

@@ -540,10 +540,6 @@ IMPL_LINK( SwNavigationPI, EditGetFocus, NumEditAction *, pEdit )
     return 0;
 }
 
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
-
 BOOL SwNavigationPI::Close()
 {
     SfxViewFrame* pVFrame = pCreateView->GetViewFrame();
@@ -586,10 +582,6 @@ void SwNavigationPI::MakeMark()
         nAutoMarkIdx = 0;
 }
 
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
-
 void SwNavigationPI::GotoPage()
 {
     if ( pContextWin->GetFloatingWindow() && pContextWin->GetFloatingWindow()->IsRollUp())
@@ -599,10 +591,6 @@ void SwNavigationPI::GotoPage()
     UsePage(0);
     GetPageEdit().GrabFocus();
 }
-
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
 
 void SwNavigationPI::_ZoomOut()
 {
@@ -634,10 +622,6 @@ void SwNavigationPI::_ZoomOut()
     }
 }
 
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
-
 void SwNavigationPI::_ZoomIn()
 {
     FloatingWindow* pFloat = pContextWin->GetFloatingWindow();
@@ -664,9 +648,6 @@ void SwNavigationPI::_ZoomIn()
         aContentToolBox.CheckItem(FN_SHOW_CONTENT_BOX, FALSE);
     }
 }
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
 
 void SwNavigationPI::Resize()
 {
@@ -715,11 +696,6 @@ void SwNavigationPI::Resize()
 
     }
 }
-
-
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
 
 SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
                                 SfxChildWindowContext* pCw,
@@ -899,10 +875,6 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
     aPageChgTimer.SetTimeout(PAGE_CHANGE_TIMEOUT);
 }
 
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
-
 SwNavigationPI::~SwNavigationPI()
 {
     if(IsGlobalDoc() && !IsGlobalMode())
@@ -933,20 +905,12 @@ SwNavigationPI::~SwNavigationPI()
         rBindings.Release(*this);
 }
 
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
-
 void SwNavigationPI::SetPopupWindow( SfxPopupWindow* pWindow )
 {
     pPopupWindow = pWindow;
     pPopupWindow->SetPopupModeEndHdl( LINK( this, SwNavigationPI, PopupModeEndHdl ));
     pPopupWindow->SetDeleteLink_Impl( LINK( this, SwNavigationPI, ClosePopupWindow ));
 }
-
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
 
 IMPL_LINK( SwNavigationPI, PopupModeEndHdl, void *, EMPTYARG )
 {
@@ -968,10 +932,6 @@ IMPL_LINK( SwNavigationPI, PopupModeEndHdl, void *, EMPTYARG )
     return 1;
 }
 
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
-
 IMPL_LINK( SwNavigationPI, ClosePopupWindow, SfxPopupWindow *, pWindow )
 {
     if ( pWindow == pFloatingWindow )
@@ -981,10 +941,6 @@ IMPL_LINK( SwNavigationPI, ClosePopupWindow, SfxPopupWindow *, pWindow )
 
     return 1;
 }
-
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
 
 void SwNavigationPI::StateChanged( USHORT nSID, SfxItemState /*eState*/,
                                             const SfxPoolItem* /*pState*/ )
@@ -1024,10 +980,6 @@ NumEditAction& SwNavigationPI::GetPageEdit()
 {
     return *(NumEditAction*)aContentToolBox.GetItemWindow(FN_PAGENUMBER);
 }
-
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
 
 SfxChildAlignment SwNavigationPI::CheckAlignment
     (
@@ -1113,10 +1065,6 @@ void SwNavigationPI::Notify( SfxBroadcaster& rBrdc, const SfxHint& rHint )
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 IMPL_LINK( SwNavigationPI, MenuSelectHdl, Menu *, pMenu )
 {
     USHORT nMenuId = pMenu->GetCurItemId();
@@ -1129,11 +1077,6 @@ IMPL_LINK( SwNavigationPI, MenuSelectHdl, Menu *, pMenu )
     }
     return 0;
 }
-
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SwNavigationPI::UpdateListBox()
 {
@@ -1205,10 +1148,6 @@ void SwNavigationPI::UpdateListBox()
     aDocListBox.SetUpdateMode(TRUE);
 }
 
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
-
 IMPL_LINK(SwNavigationPI, DoneLink, SfxPoolItem *, pItem)
 {
     const SfxViewFrameItem* pFrameItem = PTR_CAST(SfxViewFrameItem, pItem );
@@ -1262,10 +1201,6 @@ String SwNavigationPI::CreateDropFileName( TransferableDataHelper& rData )
     }
     return sFileName;
 }
-
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
 
 sal_Int8 SwNavigationPI::AcceptDrop( const AcceptDropEvent& /*rEvt*/ )
 {
@@ -1417,11 +1352,6 @@ SwView*  SwNavigationPI::GetCreateView() const
     }
     return pCreateView;
 }
-
-
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
 
 SwNavigationChild::SwNavigationChild( Window* pParent,
                         USHORT nId,

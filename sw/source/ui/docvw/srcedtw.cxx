@@ -211,11 +211,6 @@ static void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 SwSrcEditWindow::SwSrcEditWindow( Window* pParent, SwSrcView* pParentView ) :
     Window( pParent, WB_BORDER|WB_CLIPCHILDREN ),
 
@@ -238,9 +233,7 @@ SwSrcEditWindow::SwSrcEditWindow( Window* pParent, SwSrcView* pParentView ) :
     CreateTextEngine();
     pSourceViewConfig->AddListener(this);
 }
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
+
  SwSrcEditWindow::~SwSrcEditWindow()
 {
     pSourceViewConfig->RemoveListener(this);
@@ -259,10 +252,6 @@ SwSrcEditWindow::SwSrcEditWindow( Window* pParent, SwSrcView* pParentView ) :
     }
     delete pOutWin;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SwSrcEditWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
@@ -333,10 +322,6 @@ void  SwSrcEditWindow::Resize()
 
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void TextViewOutWin::DataChanged( const DataChangedEvent& rDCEvt )
 {
     Window::DataChanged( rDCEvt );
@@ -363,11 +348,6 @@ void  TextViewOutWin::MouseMove( const MouseEvent &rEvt )
         pTextView->MouseMove( rEvt );
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 void  TextViewOutWin::MouseButtonUp( const MouseEvent &rEvt )
 {
     if ( pTextView )
@@ -380,22 +360,12 @@ void  TextViewOutWin::MouseButtonUp( const MouseEvent &rEvt )
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 void  TextViewOutWin::MouseButtonDown( const MouseEvent &rEvt )
 {
     GrabFocus();
     if ( pTextView )
         pTextView->MouseButtonDown( rEvt );
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 void  TextViewOutWin::Command( const CommandEvent& rCEvt )
 {
@@ -424,12 +394,6 @@ void  TextViewOutWin::Command( const CommandEvent& rCEvt )
             Window::Command(rCEvt);
     }
 }
-
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 void  TextViewOutWin::KeyInput( const KeyEvent& rKEvt )
 {
@@ -469,20 +433,10 @@ void  TextViewOutWin::KeyInput( const KeyEvent& rKEvt )
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 void  TextViewOutWin::Paint( const Rectangle& rRect )
 {
     pTextView->Paint( rRect );
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 void SwSrcEditWindow::CreateTextEngine()
 {
@@ -535,15 +489,6 @@ void SwSrcEditWindow::CreateTextEngine()
     rBind.Invalidate( SID_TABLE_CELL );
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 void SwSrcEditWindow::SetScrollBarRanges()
 {
     // Extra-Methode, nicht InitScrollBars, da auch fuer TextEngine-Events.
@@ -551,11 +496,6 @@ void SwSrcEditWindow::SetScrollBarRanges()
     pHScrollbar->SetRange( Range( 0, nCurTextWidth-1 ) );
     pVScrollbar->SetRange( Range(0, pTextEngine->GetTextHeight()-1) );
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 void SwSrcEditWindow::InitScrollBars()
 {
@@ -572,11 +512,6 @@ void SwSrcEditWindow::InitScrollBars()
     pHScrollbar->SetThumbPos( pTextView->GetStartDocPos().X() );
 
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 IMPL_LINK(SwSrcEditWindow, ScrollHdl, ScrollBar*, pScroll)
 {

@@ -34,10 +34,6 @@
 
 #include <vcl/button.hxx>
 
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
-
 class SwSyncBtnDlg : public SfxFloatingWindow
 {
     PushButton              aSyncBtn;
@@ -49,10 +45,6 @@ public:
     ~SwSyncBtnDlg();
 };
 #endif
-
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
 
 class SwSyncChildWin : public SfxChildWindow
 {
