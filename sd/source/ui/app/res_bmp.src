@@ -264,91 +264,82 @@ Bitmap BMP_FOILN_01
 {
     File = "foiln01.bmp" ;
 };
+
 Bitmap BMP_FOILN_01_H
 {
     File = "foiln01_h.bmp" ;
 };
+
 Bitmap BMP_PAGE
 {
     File = "page.bmp" ;
 };
+
 Bitmap BMP_PAGE_H
 {
     File = "page_h.bmp" ;
 };
+
 Bitmap BMP_PAGE_EXCLUDED
 {
     File = "pageexcl.bmp" ;
 };
+
 Bitmap BMP_PAGEOBJS_EXCLUDED
 {
     File = "pagobjex.bmp" ;
 };
+
 Bitmap BMP_PAGEOBJS
 {
     File = "pageobjs.bmp" ;
 };
+
 Bitmap BMP_OBJECTS
 {
     File = "objects.bmp" ;
 };
+
 Bitmap BMP_OLE
 {
     File = "ole.bmp" ;
 };
+
 Bitmap BMP_GROUP
 {
     File = "group.bmp" ;
 };
+
 Bitmap BMP_DOC_OPEN
 {
     File = "docopen.bmp" ;
 };
+
 Bitmap BMP_DOC_CLOSED
 {
     File = "docclose.bmp" ;
 };
+
 Bitmap BMP_DOC_TEXT
 {
     File = "doctext.bmp" ;
 };
+
 Bitmap BMP_EXPAND
 {
     File = "plus.bmp" ;
 };
+
 Bitmap BMP_COLLAPSE
 {
     File = "minus.bmp" ;
 };
+
 Bitmap BMP_GRAPHIC
 {
     File = "graphic.bmp" ;
 };
-Image IMG_PIPETTE_H
-{
-    ImageBitmap = Bitmap { File = "pipette_h.bmp" ; };
-    MaskColor = IMAGE_MASK_STDCOLOR_HC ;
-};
-Image IMG_GET1OBJECT_H
-{
-    ImageBitmap = Bitmap { File = "get1obj_h.bmp" ; };
-    MaskColor = IMAGE_MASK_STDCOLOR_HC ;
-};
-Image IMG_GETALLOBJECT_H
-{
-    ImageBitmap = Bitmap { File = "getallob_h.bmp" ; };
-    MaskColor = IMAGE_MASK_STDCOLOR_HC ;
-};
-Image IMG_REMOVEBMP_H
-{
-    ImageBitmap = Bitmap { File = "del1bmp_h.bmp" ; };
-    MaskColor = IMAGE_MASK_STDCOLOR_HC ;
-};
-Image IMG_REMOVEALLBMP_H
-{
-    ImageBitmap = Bitmap { File = "delall_h.bmp" ; };
-    MaskColor = IMAGE_MASK_STDCOLOR_HC ;
-};
+
 #define SfxStyleFamiliesRes1\
     Text [ en-US ] = "Graphics Styles" ;\
 
@@ -406,22 +397,27 @@ Bitmap BMP_PRESOBJ_GRAPHIC
 {
     File = "image.bmp" ;
 };
+
 Bitmap BMP_PRESOBJ_OBJECT
 {
     File = "object.bmp" ;
 };
+
 Bitmap BMP_PRESOBJ_CHART
 {
     File = "chart.bmp" ;
 };
+
 Bitmap BMP_PRESOBJ_ORGCHART
 {
     File = "orgchart.bmp" ;
 };
+
 Bitmap BMP_PRESOBJ_TABLE
 {
     File = "table.bmp" ;
 };
+
 Bitmap BMP_WAIT_ICON
 {
     File = "waiticon.bmp";
@@ -433,14 +429,17 @@ Bitmap BMP_FADE_EFFECT_INDICATOR
 {
     File = "fade_effect_indicator.bmp";
 };
+
 Bitmap BMP_FADE_EFFECT_INDICATOR_H
 {
     File = "fade_effect_indicator_hc.bmp";
 };
+
 Bitmap BMP_COMMENTS_INDICATOR
 {
     File = "comments_indicator.bmp";
 };
+
 Bitmap BMP_COMMENTS_INDICATOR_H
 {
     File = "comments_indicator_hc.bmp";

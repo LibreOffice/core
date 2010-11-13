@@ -443,8 +443,8 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
         mpPage1OpenPB->SetText(sText);
         // Place icon left of text and both centered in the button.
         mpPage1OpenPB->SetModeImage(
-            GetUiIconForCommand(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Open"))),
-            BMP_COLOR_NORMAL);
+            GetUiIconForCommand(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Open")))
+        );
         mpPage1OpenPB->EnableImageDisplay(TRUE);
         mpPage1OpenPB->EnableTextDisplay(TRUE);
         mpPage1OpenPB->SetImageAlign(IMAGEALIGN_LEFT);
@@ -463,7 +463,6 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
     mpPage1OpenLB->SetSelectHdl(LINK(this,AssistentDlgImpl,SelectFileHdl));
     mpPage1OpenLB->SetDoubleClickHdl(rFinishLink);
     mpPage1OpenPB->SetClickHdl(LINK(this,AssistentDlgImpl,OpenButtonHdl));
-    //  mpPage1OpenLB->InsertEntry(String(SdResId(STR_WIZARD_POSITION)));
 
     // Seite 2
     maAssistentFunc.InsertControl(2, &maPreview );
@@ -529,7 +528,6 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
         mpPage3LogoCB = new CheckBox( pWindow, SdResId( CB_PAGE3_LOGO) ));
 
     mpPage3EffectLB->Fill();
-//  mpPage3EffectLB->SelectEffect( presentation::FadeEffect_NONE );
     mpPage3EffectLB->SetSelectHdl( LINK(this,AssistentDlgImpl,SelectEffectHdl ));
     mpPage3EffectLB->SetDropDownLineCount( 12 );
 

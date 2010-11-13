@@ -38,7 +38,3 @@
 #define RB_HORIZONTAL 11
 #define RB_VERTICAL 12
 #define RB_POINT 13
-
-#define BMP_POINT_H 1
-#define BMP_VERTICAL_H 2
-#define BMP_HORIZONTAL_H 3

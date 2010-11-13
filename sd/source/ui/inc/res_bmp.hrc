@@ -217,12 +217,6 @@
 
 // -----------------------------------------------------------------------------
 
-#define IMG_PIPETTE_H                       RID_APP_START+21
-#define IMG_GET1OBJECT_H                    RID_APP_START+22
-#define IMG_GETALLOBJECT_H                  RID_APP_START+23
-#define IMG_REMOVEBMP_H                     RID_APP_START+24
-#define IMG_REMOVEALLBMP_H                  RID_APP_START+25
-
 /*
  *  ResourceIDs fuer Popup-Menues brauchen keinen Dummy-String !!!
  */

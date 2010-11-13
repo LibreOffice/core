@@ -102,7 +102,6 @@ CopyDlg::CopyDlg(
     FreeResource();
 
     // Set up the view data button (image and accessible name).
-    maBtnSetViewData.SetModeImage( Image( SdResId( IMG_PIPETTE_H ) ), BMP_COLOR_HIGHCONTRAST );
     maBtnSetViewData.SetAccessibleName (maBtnSetViewData.GetQuickHelpText());
 
     // Farbtabellen
