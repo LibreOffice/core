@@ -294,7 +294,7 @@ sal_Bool IsDbg( const SwTxtFrm *pFrm )
     if( pFrm && pFrm->GetShell() )
         return pFrm->GetShell()->GetViewOptions()->IsTest4();
     else
-#else
+#endif
         return sal_False;
 }
 
