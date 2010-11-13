@@ -89,9 +89,6 @@ public:
 
 };
 
-/*--------------------------------------------------------------------
-     Beschreibung:
- --------------------------------------------------------------------*/
 SfxMiscCfg::SfxMiscCfg() :
     ConfigItem(C2U("Office.Common") ),
     bPaperSize(FALSE),
@@ -107,9 +104,6 @@ SfxMiscCfg::SfxMiscCfg() :
 SfxMiscCfg::~SfxMiscCfg()
 {
 }
-/*--------------------------------------------------------------------
-     Beschreibung:
- --------------------------------------------------------------------*/
 
 void SfxMiscCfg::SetNotFoundWarning( BOOL bSet)
 {
@@ -118,10 +112,6 @@ void SfxMiscCfg::SetNotFoundWarning( BOOL bSet)
     bNotFound = bSet;
 }
 
-/*--------------------------------------------------------------------
-     Beschreibung:
- --------------------------------------------------------------------*/
-
 void SfxMiscCfg::SetPaperSizeWarning( BOOL bSet)
 {
     if(bPaperSize != bSet)
@@ -129,18 +119,12 @@ void SfxMiscCfg::SetPaperSizeWarning( BOOL bSet)
     bPaperSize = bSet;
 }
 
-/*--------------------------------------------------------------------
-     Beschreibung:
- --------------------------------------------------------------------*/
 void SfxMiscCfg::SetPaperOrientationWarning( BOOL bSet)
 {
     if(bPaperOrientation != bSet)
         SetModified();
     bPaperOrientation = bSet;
 }
-/*--------------------------------------------------------------------
-     Beschreibung:
- --------------------------------------------------------------------*/
 
 void SfxMiscCfg::SetYear2000( sal_Int32 nSet )
 {
