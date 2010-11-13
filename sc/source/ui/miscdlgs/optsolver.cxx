@@ -291,12 +291,10 @@ void ScOptSolverDlg::Init(const ScAddress& rCursorPos)
     aSlotURL += rtl::OUString::valueOf( sal_Int32( SID_DEL_ROWS ) );
     uno::Reference<frame::XFrame> xFrame = GetBindings().GetActiveFrame();
     Image aDelNm = ::GetImage( xFrame, aSlotURL, FALSE, FALSE );
-    Image aDelHC = ::GetImage( xFrame, aSlotURL, FALSE, TRUE );     // high contrast
 
     for ( sal_uInt16 nRow = 0; nRow < EDIT_ROW_COUNT; ++nRow )
     {
-        mpDelButton[nRow]->SetModeImage( aDelNm, BMP_COLOR_NORMAL );
-        mpDelButton[nRow]->SetModeImage( aDelHC, BMP_COLOR_HIGHCONTRAST );
+        mpDelButton[nRow]->SetModeImage( aDelNm );
     }
 
     maBtnOpt.SetClickHdl( LINK( this, ScOptSolverDlg, BtnHdl ) );

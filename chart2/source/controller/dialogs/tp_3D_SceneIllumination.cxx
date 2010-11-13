@@ -64,8 +64,7 @@ LightButton::LightButton( Window* pParent, const ResId& rResId, sal_Int32 nLight
             : ImageButton( pParent, rResId )
             , m_bLightOn(false)
 {
-    SetModeImage( Image( SVX_RES(RID_SVXIMAGE_LIGHT_OFF)   ), BMP_COLOR_NORMAL );
-    SetModeImage( Image( SVX_RES(RID_SVXIMAGE_LIGHT_OFF_H) ), BMP_COLOR_HIGHCONTRAST );
+    SetModeImage( Image( SVX_RES(RID_SVXIMAGE_LIGHT_OFF)   ) );
 
     String aTipHelpStr( SchResId(STR_TIP_LIGHTSOURCE_X) );
     rtl::OUString aTipHelp( aTipHelpStr  );
@@ -78,9 +77,11 @@ LightButton::LightButton( Window* pParent, const ResId& rResId, sal_Int32 nLight
     }
     this->SetQuickHelpText( String( aTipHelp ) );
 }
+
 LightButton::~LightButton()
 {
 }
+
 void LightButton::switchLightOn(bool bOn)
 {
     if( m_bLightOn==bOn )
@@ -88,15 +89,14 @@ void LightButton::switchLightOn(bool bOn)
     m_bLightOn = bOn;
     if(m_bLightOn)
     {
-        SetModeImage( Image( SVX_RES(RID_SVXIMAGE_LIGHT_ON)   ), BMP_COLOR_NORMAL );
-        SetModeImage( Image( SVX_RES(RID_SVXIMAGE_LIGHT_ON_H) ), BMP_COLOR_HIGHCONTRAST );
+        SetModeImage( Image( SVX_RES(RID_SVXIMAGE_LIGHT_ON) ) );
     }
     else
     {
-        SetModeImage( Image( SVX_RES(RID_SVXIMAGE_LIGHT_OFF)   ), BMP_COLOR_NORMAL );
-        SetModeImage( Image( SVX_RES(RID_SVXIMAGE_LIGHT_OFF_H) ), BMP_COLOR_HIGHCONTRAST );
+        SetModeImage( Image( SVX_RES(RID_SVXIMAGE_LIGHT_OFF) ) );
     }
 }
+
 bool LightButton::isLightOn() const
 {
     return m_bLightOn;
@@ -107,11 +107,10 @@ bool LightButton::isLightOn() const
 ColorButton::ColorButton( Window* pParent, const ResId& rResId )
             : ImageButton( pParent, rResId )
 {
-    SetModeImage( Image( SVX_RES(RID_SVXIMAGE_COLORDLG)   ), BMP_COLOR_NORMAL );
-    SetModeImage( Image( SVX_RES(RID_SVXIMAGE_COLORDLG_H) ), BMP_COLOR_HIGHCONTRAST );
-
+    SetModeImage( Image( SVX_RES(RID_SVXIMAGE_COLORDLG) ) );
     this->SetQuickHelpText( String( SchResId(STR_TIP_CHOOSECOLOR) ) );
 }
+
 ColorButton::~ColorButton()
 {
 }
@@ -148,12 +147,14 @@ LightSourceInfo::LightSourceInfo()
     aLightSource.aDirection = drawing::Direction3D(1,1,1);
     aLightSource.bIsEnabled = sal_False;
 }
+
 void LightSourceInfo::initButtonFromSource()
 {
     if(!pButton)
         return;
-    pButton->SetModeImage( Image( SVX_RES( aLightSource.bIsEnabled ? RID_SVXIMAGE_LIGHT_ON : RID_SVXIMAGE_LIGHT_OFF )   ), BMP_COLOR_NORMAL );
-    pButton->SetModeImage( Image( SVX_RES( aLightSource.bIsEnabled ? RID_SVXIMAGE_LIGHT_ON_H : RID_SVXIMAGE_LIGHT_OFF_H ) ), BMP_COLOR_HIGHCONTRAST );
+    pButton->SetModeImage( Image( SVX_RES(
+        aLightSource.bIsEnabled ? RID_SVXIMAGE_LIGHT_ON : RID_SVXIMAGE_LIGHT_OFF
+    ) ) );
 }
 
 //-----------------------------------------------------------------------------

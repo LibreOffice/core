@@ -517,11 +517,7 @@ TabPage RID_HFBASE
             MaskColor = STD_MASKCOLOR ;
         };
     };
-    Image IMG_TEXT_H
-    {
-        ImageBitmap = Bitmap { File = "text_h.bmp" ; };
-        MaskColor = SC_HC_MASKCOLOR;
-    };
+
     ImageButton BTN_FILE
     {
         HelpId = HID_SC_HF_FILE ;
@@ -534,11 +530,6 @@ TabPage RID_HFBASE
             ImageBitmap = Bitmap { File = "file.bmp" ; };
             MaskColor = STD_MASKCOLOR ;
         };
-    };
-    Image IMG_FILE_H
-    {
-        ImageBitmap = Bitmap { File = "file_h.bmp" ; };
-        MaskColor = SC_HC_MASKCOLOR;
     };
 
     Menu RID_POPUP_FCOMMAND
@@ -581,11 +572,7 @@ TabPage RID_HFBASE
             MaskColor = STD_MASKCOLOR;
         };
     };
-    Image IMG_TABLE_H
-    {
-        ImageBitmap = Bitmap { File = "table_h.bmp" ; };
-        MaskColor = SC_HC_MASKCOLOR;
-    };
+
     ImageButton BTN_PAGE
     {
         HelpId = HID_SC_HF_PAGE ;
@@ -599,11 +586,7 @@ TabPage RID_HFBASE
             MaskColor = STD_MASKCOLOR ;
         };
     };
-    Image IMG_PAGE_H
-    {
-        ImageBitmap = Bitmap { File = "page_h.bmp" ; };
-        MaskColor = SC_HC_MASKCOLOR;
-    };
+
     ImageButton BTN_PAGES
     {
         HelpId = HID_SC_HF_PAGES ;
@@ -617,11 +600,7 @@ TabPage RID_HFBASE
             MaskColor = STD_MASKCOLOR ;
         };
     };
-    Image IMG_PAGES_H
-    {
-        ImageBitmap = Bitmap { File = "pages_h.bmp" ; };
-        MaskColor = SC_HC_MASKCOLOR;
-    };
+
     ImageButton BTN_DATE
     {
         HelpId = HID_SC_HF_DATE ;
@@ -635,11 +614,7 @@ TabPage RID_HFBASE
             MaskColor = STD_MASKCOLOR ;
         };
     };
-    Image IMG_DATE_H
-    {
-        ImageBitmap = Bitmap { File = "date_h.bmp" ; };
-        MaskColor = SC_HC_MASKCOLOR;
-    };
+
     ImageButton BTN_TIME
     {
         HelpId = HID_SC_HF_TIME ;
@@ -653,11 +628,7 @@ TabPage RID_HFBASE
             MaskColor = STD_MASKCOLOR ;
         };
     };
-    Image IMG_TIME_H
-    {
-        ImageBitmap = Bitmap { File = "time_h.bmp" ; };
-        MaskColor = SC_HC_MASKCOLOR;
-    };
+
     FixedText FT_INFO
     {
         Pos = MAP_APPFONT ( 12 , 155 ) ;

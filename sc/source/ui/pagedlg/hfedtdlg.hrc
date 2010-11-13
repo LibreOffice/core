@@ -52,13 +52,6 @@
 
 #define FL_INFO                 14
 
-#define IMG_TEXT_H              21
-#define IMG_PAGE_H              22
-#define IMG_PAGES_H             23
-#define IMG_DATE_H              24
-#define IMG_TIME_H              25
-#define IMG_FILE_H              26
-#define IMG_TABLE_H             27
 #define FT_HF_DEFINED           28
 #define LB_DEFINED              29
 #define FT_HF_CUSTOM            30

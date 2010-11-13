@@ -140,14 +140,6 @@ ScHFEditPage::ScHFEditPage( Window*             pParent,
     aBtnFile    .SetClickHdl( LINK( this, ScHFEditPage, ClickHdl ) );
     aBtnTable   .SetClickHdl( LINK( this, ScHFEditPage, ClickHdl ) );
 
-    aBtnText    .SetModeImage( Image( ScResId( IMG_TEXT_H  ) ), BMP_COLOR_HIGHCONTRAST );
-    aBtnFile    .SetModeImage( Image( ScResId( IMG_FILE_H  ) ), BMP_COLOR_HIGHCONTRAST );
-    aBtnTable   .SetModeImage( Image( ScResId( IMG_TABLE_H ) ), BMP_COLOR_HIGHCONTRAST );
-    aBtnPage    .SetModeImage( Image( ScResId( IMG_PAGE_H  ) ), BMP_COLOR_HIGHCONTRAST );
-    aBtnLastPage.SetModeImage( Image( ScResId( IMG_PAGES_H ) ), BMP_COLOR_HIGHCONTRAST );
-    aBtnDate    .SetModeImage( Image( ScResId( IMG_DATE_H  ) ), BMP_COLOR_HIGHCONTRAST );
-    aBtnTime    .SetModeImage( Image( ScResId( IMG_TIME_H  ) ), BMP_COLOR_HIGHCONTRAST );
-
     if(!bHeader)
     {
         maFtDefinedHF.SetText(ScGlobal::GetRscString( STR_FOOTER ));

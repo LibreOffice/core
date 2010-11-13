@@ -532,12 +532,3 @@ Image BMP_REGRESSION_POWER_HC
         File = "regpow_h.bmp" ;
     };
 };
-//---------------------
-Image IMG_SELECTRANGE_HC
-{
-    ImageBitmap = Bitmap
-    {
-        File = "selectrange.png";
-    };
-    MaskColor = SC_HC_MASKCOLOR;
-};
