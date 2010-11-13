@@ -823,12 +823,8 @@ BOOL ImplRemoteControl::QueCommands( ULONG nServiceId, SvStream *pIn )
 
         GetpApp()->PostUserEvent( LINK( this, ImplRemoteControl, CommandHdl ) );
     }
-#ifdef DEBUG
-    else
-        m_bInsideExecutionLoop = TRUE;
-#endif
     return TRUE;
-} // BOOL ImplRemoteControl::QueCommands( ULONG nServiceId, SvStream *pIn )
+}
 
 
 SvStream* ImplRemoteControl::GetReturnStream()
