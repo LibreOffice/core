@@ -113,18 +113,13 @@ USHORT SwEditShell::GetCurTOXMarks(SwTOXMarks& rMarks) const
     return GetDoc()->GetCurTOXMark( *GetCrsr()->Start(), rMarks );
 }
 
-/* -----------------01.09.99 16:05-------------------
-
- --------------------------------------------------*/
 BOOL SwEditShell::IsTOXBaseReadonly(const SwTOXBase& rTOXBase) const
 {
     ASSERT( rTOXBase.ISA( SwTOXBaseSection ), "no TOXBaseSection!" );
     const SwTOXBaseSection& rTOXSect = (const SwTOXBaseSection&)rTOXBase;
     return  rTOXSect.IsProtect();
 }
-/* -----------------18.10.99 15:53-------------------
 
- --------------------------------------------------*/
 void SwEditShell::SetTOXBaseReadonly(const SwTOXBase& rTOXBase, BOOL bReadonly)
 {
     ASSERT( rTOXBase.ISA( SwTOXBaseSection ), "no TOXBaseSection!" );
@@ -137,16 +132,11 @@ void SwEditShell::SetTOXBaseReadonly(const SwTOXBase& rTOXBase, BOOL bReadonly)
     UpdateSection( GetSectionFmtPos( *rTOXSect.GetFmt()  ), aSectionData, 0 );
 }
 
-/* -----------------02.09.99 07:47-------------------
-
- --------------------------------------------------*/
 const SwTOXBase*    SwEditShell::GetDefaultTOXBase( TOXTypes eTyp, BOOL bCreate )
 {
     return GetDoc()->GetDefaultTOXBase( eTyp, bCreate );
 }
-/* -----------------02.09.99 08:05-------------------
 
- --------------------------------------------------*/
 void    SwEditShell::SetDefaultTOXBase(const SwTOXBase& rBase)
 {
     GetDoc()->SetDefaultTOXBase(rBase);
@@ -310,23 +300,16 @@ BOOL SwEditShell::IsUpdateTOX() const
     return GetDoc()->IsUpdateTOX();
 }
 
-/* -----------------26.08.99 13:49-------------------
-
- --------------------------------------------------*/
 const String&   SwEditShell::GetTOIAutoMarkURL() const
 {
     return GetDoc()->GetTOIAutoMarkURL();
 }
-/* -----------------26.08.99 13:49-------------------
 
- --------------------------------------------------*/
 void SwEditShell::SetTOIAutoMarkURL(const String& rSet)
 {
     GetDoc()->SetTOIAutoMarkURL(rSet);
 }
-/* -----------------26.08.99 09:29-------------------
 
- --------------------------------------------------*/
 void SwEditShell::ApplyAutoMark()
 {
     StartAllAction();

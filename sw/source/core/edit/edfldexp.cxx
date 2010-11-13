@@ -45,9 +45,6 @@
 using namespace com::sun::star;
 using ::rtl::OUString;
 
-/* -----------------28.11.2002 17:53-----------------
- *
- * --------------------------------------------------*/
 BOOL SwEditShell::IsFieldDataSourceAvailable(String& rUsedDataSource) const
 {
     const SwFldTypes * pFldTypes = GetDoc()->GetFldTypes();

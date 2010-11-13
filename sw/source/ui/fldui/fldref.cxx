@@ -1010,9 +1010,6 @@ USHORT SwFldRefPage::GetGroup()
     return GRP_REF;
 }
 
-/* -----------------12.01.99 10:09-------------------
- *
- * --------------------------------------------------*/
 void    SwFldRefPage::FillUserData()
 {
     String sData( String::CreateFromAscii(

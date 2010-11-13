@@ -46,10 +46,6 @@ typedef ::cppu::WeakImplHelper2
 >
 SwSimpleEnumeration_Base;
 
-
-/* -----------------29.04.98 07:35-------------------
- *
- * --------------------------------------------------*/
 enum CursorType
 {
     CURSOR_INVALID,

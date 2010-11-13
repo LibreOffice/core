@@ -265,18 +265,14 @@ int SwNumRuleItem::operator==( const SfxPoolItem& rAttr ) const
     return GetValue() == ((SwNumRuleItem&)rAttr).GetValue();
     // <--
 }
-/* -----------------------------27.06.00 11:05--------------------------------
 
- ---------------------------------------------------------------------------*/
 bool    SwNumRuleItem::QueryValue( uno::Any& rVal, BYTE ) const
 {
     rtl::OUString sRet = SwStyleNameMapper::GetProgName(GetValue(), nsSwGetPoolIdFromName::GET_POOLID_NUMRULE );
     rVal <<= sRet;
     return true;
 }
-/* -----------------------------27.06.00 11:05--------------------------------
 
- ---------------------------------------------------------------------------*/
 bool    SwNumRuleItem::PutValue( const uno::Any& rVal, BYTE )
 {
     rtl::OUString uName;
@@ -284,9 +280,7 @@ bool    SwNumRuleItem::PutValue( const uno::Any& rVal, BYTE )
     SetValue(SwStyleNameMapper::GetUIName(uName, nsSwGetPoolIdFromName::GET_POOLID_NUMRULE));
     return true;
 }
-/* -----------------19.05.2003 10:44-----------------
 
- --------------------------------------------------*/
 SfxPoolItem* SwParaConnectBorderItem::Clone( SfxItemPool * ) const
 {
     return new SwParaConnectBorderItem( *this );

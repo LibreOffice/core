@@ -84,19 +84,12 @@ SwInsertGrfRulerDlg::SwInsertGrfRulerDlg( Window* pParent ) :
     pExampleVS->Show();
 
 }
-/*-----------------14.02.97 13.18-------------------
-
---------------------------------------------------*/
 
 SwInsertGrfRulerDlg::~SwInsertGrfRulerDlg()
 {
     GalleryExplorer::EndLocking(GALLERY_THEME_RULERS);
     delete pExampleVS;
 }
-
-/*-----------------14.02.97 13.17-------------------
-
---------------------------------------------------*/
 
 String SwInsertGrfRulerDlg::GetGraphicName()
 {
@@ -109,10 +102,6 @@ String SwInsertGrfRulerDlg::GetGraphicName()
     return sRet;
 }
 
-/*-----------------14.02.97 13.20-------------------
-
---------------------------------------------------*/
-
 IMPL_LINK(SwInsertGrfRulerDlg, SelectHdl, ValueSet*, pVS)
 {
     nSelPos = pVS->GetSelectItemId();
@@ -120,23 +109,16 @@ IMPL_LINK(SwInsertGrfRulerDlg, SelectHdl, ValueSet*, pVS)
     return 0;
 }
 
-/*-----------------14.02.97 14.17-------------------
-
---------------------------------------------------*/
 SwRulerValueSet::SwRulerValueSet(   Window* pParent, const ResId& rResId ) :
     SvxBmpNumValueSet(pParent, rResId)
 {
     SetStyle(  GetStyle() & ~WB_ITEMBORDER     );
 }
-/*-----------------14.02.97 14.17-------------------
 
---------------------------------------------------*/
 SwRulerValueSet::~SwRulerValueSet()
 {
 }
-/*-----------------14.02.97 13.42-------------------
 
---------------------------------------------------*/
 void __EXPORT SwRulerValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 {
     Rectangle aRect = rUDEvt.GetRect();
@@ -207,10 +189,6 @@ void __EXPORT SwRulerValueSet::UserDraw( const UserDrawEvent& rUDEvt )
         pDev->SetFont(aOldFont);
     }
 }
-
-/*-----------------15.02.97 10.03-------------------
-
---------------------------------------------------*/
 
 IMPL_LINK(SwInsertGrfRulerDlg, DoubleClickHdl, ValueSet*, EMPTYARG)
 {

@@ -71,11 +71,6 @@ void CollectFrameAtNode( SwClient& rClnt, const SwNodeIndex& rIdx,
                          FrameDependSortList_t & rFrames,
                          const bool _bAtCharAnchoredObjs );
 
-
-/* -----------------23.03.99 12:57-------------------
- *
- * --------------------------------------------------*/
-
 enum ParaFrameMode
 {
     PARAFRAME_PORTION_PARAGRAPH,

@@ -201,9 +201,7 @@ class SwHlpImageButton : public ImageButton
     virtual void    RequestHelp( const HelpEvent& rHEvt );
 
 };
-/* -----------------26.11.2002 09:25-----------------
- *
- * --------------------------------------------------*/
+
 class SwPreviewZoomControl : public SfxToolBoxControl
 {
 public:

@@ -39,9 +39,7 @@
 #include <splittbl.hrc>
 #include <table.hrc>
 #include <tblenum.hxx>
-/*-----------------17.03.98 10:56-------------------
 
---------------------------------------------------*/
 SwSplitTblDlg::SwSplitTblDlg( Window *pParent, SwWrtShell &rSh ) :
     SvxStandardDialog(pParent, SW_RES(DLG_SPLIT_TABLE)),
     aOKPB(                  this, SW_RES(PB_OK      )),
@@ -59,9 +57,6 @@ SwSplitTblDlg::SwSplitTblDlg( Window *pParent, SwWrtShell &rSh ) :
     aCntntCopyRB.Check();
 }
 
-/*-----------------17.03.98 10:56-------------------
-
---------------------------------------------------*/
 void SwSplitTblDlg::Apply()
 {
     m_nSplit = HEADLINE_CNTNTCOPY;

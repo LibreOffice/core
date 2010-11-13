@@ -31,9 +31,7 @@
 
 class SwRulerValueSet;
 class ValueSet;
-/*-----------------14.02.97 12.30-------------------
 
---------------------------------------------------*/
 class SwInsertGrfRulerDlg  : public SfxModalDialog
 {
     FixedLine       aSelectionFL;

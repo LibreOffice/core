@@ -88,10 +88,6 @@ class SwGlossDecideDlg : public ModalDialog
     ListBox&    GetListBox() {return aListLB;}
 };
 
-/*-----------------21.01.97 13.25-------------------
-
---------------------------------------------------*/
-
 SwGlossDecideDlg::SwGlossDecideDlg(Window* pParent) :
     ModalDialog(pParent, SW_RES(DLG_GLOSSARY_DECIDE_DLG)),
     aOk(this,       SW_RES(PB_OK)),
@@ -105,18 +101,11 @@ SwGlossDecideDlg::SwGlossDecideDlg(Window* pParent) :
     aListLB.SetSelectHdl(LINK(this, SwGlossDecideDlg, SelectHdl));
 }
 
-/*-----------------21.01.97 13.25-------------------
-
---------------------------------------------------*/
-
 IMPL_LINK(SwGlossDecideDlg, DoubleClickHdl, ListBox*, EMPTYARG)
 {
     EndDialog(RET_OK);
     return 0;
 }
-/*-----------------21.01.97 13.29-------------------
-
---------------------------------------------------*/
 
 IMPL_LINK(SwGlossDecideDlg, SelectHdl, ListBox*, EMPTYARG)
 {

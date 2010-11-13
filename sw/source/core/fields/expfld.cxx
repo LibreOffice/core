@@ -421,9 +421,6 @@ void SwGetExpField::SetLanguage(USHORT nLng)
         SwValueField::SetLanguage(nLng);
 }
 
-/*-----------------07.03.98 16:08-------------------
-
---------------------------------------------------*/
 bool SwGetExpField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch( nWhichId )
@@ -460,9 +457,7 @@ bool SwGetExpField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     }
     return true;
 }
-/*-----------------07.03.98 16:08-------------------
 
---------------------------------------------------*/
 bool SwGetExpField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     sal_Int32 nTmp = 0;
@@ -653,9 +648,6 @@ void SwSetExpFieldType::SetChapter( SwSetExpField& rFld, const SwNode& rNd )
     }
 }
 
-/* -----------------24.03.99 09:44-------------------
- *
- * --------------------------------------------------*/
 bool SwSetExpFieldType::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch( nWhichId )
@@ -1067,9 +1059,6 @@ String SwInputField::Expand() const
     return sRet;
 }
 
-/*-----------------06.03.98 11:12-------------------
-
---------------------------------------------------*/
 bool SwInputField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch( nWhichId )
@@ -1091,9 +1080,7 @@ bool SwInputField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     }
     return true;
 }
-/*-----------------06.03.98 11:12-------------------
 
---------------------------------------------------*/
 bool SwInputField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     switch( nWhichId )
@@ -1177,9 +1164,7 @@ void SwInputField::SetSubType(USHORT nSub)
 {
     nSubType = nSub;
 }
-/*-----------------05.03.98 17:22-------------------
 
---------------------------------------------------*/
 bool SwSetExpField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch( nWhichId )
@@ -1244,9 +1229,7 @@ bool SwSetExpField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     }
     return true;
 }
-/*-----------------05.03.98 17:22-------------------
 
---------------------------------------------------*/
 bool SwSetExpField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     sal_Int32 nTmp32 = 0;

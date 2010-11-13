@@ -65,9 +65,6 @@ using namespace ::comphelper;
 
 SwUnoPropertyMapProvider aSwMapProvider;
 
-/* -----------------24.06.98 18:12-------------------
- *
- * --------------------------------------------------*/
 SwUnoPropertyMapProvider::SwUnoPropertyMapProvider()
 {
     for( sal_uInt16 i = 0; i < PROPERTY_MAP_END; i++ )
@@ -77,9 +74,6 @@ SwUnoPropertyMapProvider::SwUnoPropertyMapProvider()
     }
 }
 
-/* -----------------19.02.99 08:31-------------------
- *
- * --------------------------------------------------*/
 SwUnoPropertyMapProvider::~SwUnoPropertyMapProvider()
 {
 }
@@ -132,9 +126,6 @@ SwUnoPropertyMapProvider::~SwUnoPropertyMapProvider()
     {SW_PROP_NMID(UNO_NAME_REDLINE_TEXT), 0, CPPU_E2T(CPPUTYPE_REFTEXT),                    PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},\
     {SW_PROP_NMID(UNO_NAME_MERGE_LAST_PARA), 0, CPPU_E2T(CPPUTYPE_BOOLEAN),                             PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, 0},
 
-/* -----------------24.06.98 18:12-------------------
- *
- * --------------------------------------------------*/
 #define COMMON_CRSR_PARA_PROPERTIES_FN_ONLY \
         { SW_PROP_NMID(UNO_NAME_PARA_STYLE_NAME), FN_UNO_PARA_STYLE,        CPPU_E2T(CPPUTYPE_OUSTRING),                PropertyAttribute::MAYBEVOID,     0},                                                       \
         { SW_PROP_NMID(UNO_NAME_PAGE_STYLE_NAME), FN_UNO_PAGE_STYLE,        CPPU_E2T(CPPUTYPE_OUSTRING),         PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},                       \
@@ -2513,9 +2504,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
     }
     return aMapEntriesArr[nPropertyId];
 }
-/*-- 17.02.2009 15:29:58---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 const SfxItemPropertySet*  SwUnoPropertyMapProvider::GetPropertySet( sal_uInt16 nPropertyId)
 {
     if( !aPropertySetArr[nPropertyId] )
@@ -3110,9 +3099,6 @@ const SfxItemPropertySet*  SwUnoPropertyMapProvider::GetPropertySet( sal_uInt16 
     return aPropertySetArr[nPropertyId];
 }
 
-/* -----------------04.07.98 11:42-------------------
- *
- * --------------------------------------------------*/
 sal_Bool SwItemPropertySet::FillItem(SfxItemSet& /*rSet*/, sal_uInt16 /*nWhich*/, sal_Bool /*bGetProperty*/) const
 {
     sal_Bool bRet = sal_False;

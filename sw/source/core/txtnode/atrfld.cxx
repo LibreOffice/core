@@ -387,9 +387,6 @@ void SwTxtFld::CopyFld( SwTxtFld *pDest ) const
     }
 }
 
-/* -----------------26.06.2003 13:54-----------------
-
- --------------------------------------------------*/
 void SwTxtFld::NotifyContentChange(SwFmtFld& rFmtFld)
 {
     //if not in undo section notify the change

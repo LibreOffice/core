@@ -80,9 +80,6 @@ SV_IMPL_PTRARR(SwTOXMarks, SwTOXMark*)
 
 TYPEINIT2( SwTOXMark, SfxPoolItem, SwClient );    // fuers rtti
 
-/* -----------------23.09.99 13:59-------------------
-
- --------------------------------------------------*/
 struct PatternIni
 {
     USHORT n1;
@@ -125,9 +122,7 @@ const PatternIni aPatternIni[] =
     {AUTH_FIELD_AUTHOR, AUTH_FIELD_TITLE, AUTH_FIELD_YEAR, USHRT_MAX, USHRT_MAX},     //AUTH_FIELD_CUSTOM5,
     {USHRT_MAX, USHRT_MAX, USHRT_MAX, USHRT_MAX, USHRT_MAX}
 };
-/* -----------------23.09.99 13:58-------------------
 
- --------------------------------------------------*/
 // -> #i21237#
 SwFormTokens lcl_GetAuthPattern(USHORT nTypeId)
 {

@@ -105,9 +105,6 @@ public:
 
 };
 
-/* -----------------26.05.98 15:55-------------------
- *
- * --------------------------------------------------*/
 class SwXAutoTextGroup : public cppu::WeakImplHelper6
 <
     ::com::sun::star::text::XAutoTextGroup,
@@ -176,9 +173,6 @@ public:
     void    Invalidate();
 };
 
-/* -----------------17.06.98 12:03-------------------
- *
- * --------------------------------------------------*/
 class SwXAutoTextEntry
         :public SfxListener
         ,public cppu::WeakImplHelper5

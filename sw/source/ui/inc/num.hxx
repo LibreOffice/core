@@ -45,30 +45,18 @@ class SwWrtShell;
 class SvxBrushItem;
 class SwOutlineTabDialog;
 
-
-/*-----------------13.02.97 14.02-------------------
-
---------------------------------------------------*/
-
 struct SwBmpItemInfo
 {
     SvxBrushItem*   pBrushItem;
     USHORT          nItemId;
 };
 
-
-/*-----------------07.02.97 15.37-------------------
-
---------------------------------------------------*/
 #define NUM_PAGETYPE_BULLET         0
 #define NUM_PAGETYPE_SINGLENUM      1
 #define NUM_PAGETYPE_NUM            2
 #define NUM_PAGETYPE_BMP            3
 #define PAGETYPE_USER_START         10
 
-/*-----------------03.12.97 10:18-------------------
-
---------------------------------------------------*/
 class SwNumPositionTabPage : public SfxTabPage
 {
     FixedLine       aPositionFL;

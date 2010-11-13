@@ -54,9 +54,6 @@ protected:
     InsCaptionOpt* Find(const SwCapObjType eType, const SvGlobalName *pOleId = 0) const;
 };
 
-/* -----------------------------10.10.00 16:14--------------------------------
-
- ---------------------------------------------------------------------------*/
 class SwRevisionConfig : public utl::ConfigItem
 {
     friend class SwModuleOptions;
@@ -80,9 +77,7 @@ class SwRevisionConfig : public utl::ConfigItem
     void                    Load();
     void                    SetModified(){ConfigItem::SetModified();}
 };
-/* -----------------------------11.10.00 09:00--------------------------------
 
- ---------------------------------------------------------------------------*/
 class SwInsertConfig : public utl::ConfigItem
 {
     friend class SwModuleOptions;
@@ -111,9 +106,7 @@ class SwInsertConfig : public utl::ConfigItem
     void                    Load();
     void                    SetModified(){ConfigItem::SetModified();}
 };
-/* -----------------------------11.10.00 09:00--------------------------------
 
- ---------------------------------------------------------------------------*/
 class SwTableConfig : public utl::ConfigItem
 {
     friend class SwModuleOptions;
@@ -138,9 +131,7 @@ class SwTableConfig : public utl::ConfigItem
     void                    Load();
     void                    SetModified(){ConfigItem::SetModified();}
 };
-/* -----------------------------18.01.01 16:57--------------------------------
 
- ---------------------------------------------------------------------------*/
 class SwMiscConfig : public utl::ConfigItem
 {
     friend class SwModuleOptions;

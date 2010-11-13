@@ -835,9 +835,6 @@ String SwTOXTable::GetURL() const
     }
     return aTxt;
 }
-/*-- 15.09.99 14:28:08---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 
 SwTOXAuthority::SwTOXAuthority( const SwCntntNode& rNd,
                 SwFmtFld& rField, const SwTOXInternational& rIntl ) :
@@ -864,9 +861,7 @@ USHORT SwTOXAuthority::GetLevel() const
         nRet = 1;
     return nRet;
 }
-/*-- 15.09.99 14:28:08---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwTOXAuthority::_GetText( String& rTxt, String& )
 {
     bool const isClipBoard(
@@ -874,9 +869,6 @@ void SwTOXAuthority::_GetText( String& rTxt, String& )
     rTxt = m_rField.GetFld()->ExpandField(isClipBoard);
 }
 
-/* -----------------21.09.99 12:50-------------------
-
- --------------------------------------------------*/
 void    SwTOXAuthority::FillText( SwTxtNode& rNd,
                         const SwIndex& rInsPos, USHORT nAuthField ) const
 {
@@ -903,18 +895,14 @@ void    SwTOXAuthority::FillText( SwTxtNode& rNd,
         sText = (pField->GetFieldText((ToxAuthorityField) nAuthField));
     rNd.InsertText( sText, rInsPos );
 }
-/* -----------------14.10.99 09:35-------------------
 
- --------------------------------------------------*/
 BOOL    SwTOXAuthority::operator==( const SwTOXSortTabBase& rCmp)
 {
     return nType == rCmp.nType &&
             ((SwAuthorityField*)m_rField.GetFld())->GetHandle() ==
                 ((SwAuthorityField*)((SwTOXAuthority&)rCmp).m_rField.GetFld())->GetHandle();
 }
-/* -----------------21.10.99 09:52-------------------
 
- --------------------------------------------------*/
 BOOL    SwTOXAuthority::operator<( const SwTOXSortTabBase& rBase)
 {
     BOOL bRet = FALSE;

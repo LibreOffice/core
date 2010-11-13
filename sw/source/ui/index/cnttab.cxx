@@ -1558,9 +1558,6 @@ IMPL_LINK(SwTOXSelectTabPage, TOXAreaHdl,   ListBox*, pBox)
 
 //#outline level, removed by zhaojianwei
 //It is no longer used!
-///* -----------------14.06.99 13:10-------------------
-//
-// --------------------------------------------------*/
 //IMPL_LINK(SwTOXSelectTabPage, ChapterHdl,     PushButton*, pButton)
 //{
 //  SwMultiTOXTabDialog* pTOXDlg = (SwMultiTOXTabDialog*)GetTabDialog();

@@ -63,9 +63,7 @@ class SwSectionFmt;
 class SwFmtRefMark;
 class SwXReferenceMark;
 class SwXBookmark;
-/*-----------------11.03.98 11:19-------------------
 
---------------------------------------------------*/
 class SwUnoCollection
 {
     SwDoc*      pDoc;
@@ -276,9 +274,7 @@ public:
     static ::com::sun::star::uno::Sequence<rtl::OUString>   GetAllServiceNames();
 
 };
-/*-----------------11.12.97 09:38-------------------
 
---------------------------------------------------*/
 typedef
 cppu::WeakImplHelper3
 <
@@ -361,9 +357,6 @@ public:
 
 };
 
-/*-----------------20.02.98 10:51-------------------
-
---------------------------------------------------*/
 class SwXTextFrames : public SwXFrames
 {
 protected:
@@ -381,9 +374,6 @@ public:
 
 };
 
-/*-----------------20.02.98 10:55-------------------
-
---------------------------------------------------*/
 class SwXTextGraphicObjects : public SwXFrames
 {
 protected:
@@ -401,9 +391,6 @@ public:
 
 };
 
-/*-----------------20.02.98 10:57-------------------
-
---------------------------------------------------*/
 class SwXTextEmbeddedObjects :  public SwXFrames
 {
 protected:
@@ -421,9 +408,6 @@ public:
 
 };
 
-/*-----------------12.02.98 07:58-------------------
-
---------------------------------------------------*/
 class SwXTextSections : public SwCollectionBaseClass,
                         public SwUnoCollection
 {
@@ -453,9 +437,7 @@ public:
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextSection> GetObject( SwSectionFmt& rFmt );
 };
-/*-----------------12.02.98 07:51-------------------
 
---------------------------------------------------*/
 class SwXBookmarks : public SwCollectionBaseClass,
     public SwUnoCollection
 {
@@ -506,10 +488,6 @@ public:
     virtual sal_Bool SAL_CALL hasElements(  ) throw(::com::sun::star::uno::RuntimeException);
 };
 
-/*-----------------12.02.98 08:01-------------------
-
---------------------------------------------------*/
-
 typedef
 cppu::WeakImplHelper2
 <
@@ -544,9 +522,6 @@ public:
     static ::com::sun::star::uno::Reference< ::com::sun::star::text::XFootnote> GetObject( SwDoc& rDoc, const SwFmtFtn& rFmt );
 };
 
-/* -----------------27.08.98 13:10-------------------
- *
- * --------------------------------------------------*/
 class SwXReferenceMarks : public SwCollectionBaseClass,
     public SwUnoCollection
 {

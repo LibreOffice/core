@@ -98,9 +98,6 @@ void SwScrollbar::ViewPortChgd( const Rectangle &rRect )
         AutoShow();
 }
 
-/*-----------------10/21/97 02:48pm-----------------
-
---------------------------------------------------*/
 void SwScrollbar::ExtendedShow( BOOL bSet )
 {
     bVisible = bSet;
@@ -108,9 +105,6 @@ void SwScrollbar::ExtendedShow( BOOL bSet )
         ScrollBar::Show(bSet);
 }
 
-/*-----------------10/21/97 03:23pm-----------------
-
---------------------------------------------------*/
 void SwScrollbar::SetPosSizePixel( const Point& rNewPos, const Size& rNewSize )
 {
     ScrollBar::SetPosSizePixel(rNewPos, rNewSize);
@@ -120,10 +114,6 @@ void SwScrollbar::SetPosSizePixel( const Point& rNewPos, const Size& rNewSize )
 
 }
 
-
-/*-----------------14.04.98 11:38-------------------
-
---------------------------------------------------*/
 void SwScrollbar::SetAuto(BOOL bSet)
 {
     if(bAuto != bSet)
@@ -137,9 +127,7 @@ void SwScrollbar::SetAuto(BOOL bSet)
             AutoShow(); // oder automatisch verstecken
     }
 }
-/*-----------------14.04.98 11:43-------------------
 
---------------------------------------------------*/
 void SwScrollbar::AutoShow()
 {
     long nVis = GetVisibleSize();

@@ -2799,9 +2799,7 @@ int SwFEShell::Chainable( SwRect &rRect, const SwFrmFmt &rSource,
     }
     return SW_CHAIN_NOT_FOUND;
 }
-/* -----------------------------09.08.2002 07:40------------------------------
 
- ---------------------------------------------------------------------------*/
 int SwFEShell::Chain( SwFrmFmt &rSource, const SwFrmFmt &rDest )
 {
     return GetDoc()->Chain(rSource, rDest);
@@ -2931,9 +2929,7 @@ long SwFEShell::GetSectionWidth( SwFmt& rFmt ) const
     }
     return 0;
 }
-/* -----------------------------2002/06/24 15:07------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwFEShell::CreateDefaultShape( UINT16 /*SdrObjKind ?*/ eSdrObjectKind, const Rectangle& rRect,
                 USHORT nSlotId)
 {
@@ -3220,9 +3216,7 @@ bool SwFEShell::IsShapeDefaultHoriTextDirR2L() const
 
     return bRet;
 }
-/* -----------------20.03.2003 14:35-----------------
 
- --------------------------------------------------*/
 Point SwFEShell::GetRelativePagePosition(const Point& rDocPos)
 {
     Point aRet(-1, -1);

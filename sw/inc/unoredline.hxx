@@ -34,10 +34,6 @@
 
 class SwRedline;
 
-/* -----------------------------19.12.00 11:35--------------------------------
-
- ---------------------------------------------------------------------------*/
-
 /**
  * SwXRedlineText provides an XText which may be used to write
  * directly into a redline node. It got implemented to enable XML
@@ -100,9 +96,7 @@ public:
     static ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > CreateRedlineProperties( const SwRedline& rRedline, sal_Bool bIsStart ) throw();
 
 };
-/* -----------------------------11.01.01 16:52--------------------------------
 
- ---------------------------------------------------------------------------*/
 typedef
 cppu::WeakImplHelper1
 <

@@ -1237,9 +1237,7 @@ Size SwFEShell::GetGraphicDefaultSize() const
     }
     return aRet;
 }
-/* -----------------------------12.08.2002 12:51------------------------------
 
- ---------------------------------------------------------------------------*/
 BOOL SwFEShell::IsFrmVertical(BOOL bEnvironment, BOOL& bRTL) const
 {
     BOOL bVert = FALSE;

@@ -99,12 +99,6 @@ inline Window* GetParentWindow( SvxSearchDialog* pSrchDlg )
     return pWin;
 }
 
-
-/*-----------------12.04.97 13:04-------------------
-
---------------------------------------------------*/
-
-
 void SwView::ExecSearch(SfxRequest& rReq, BOOL bNoMessage)
 {
     const SfxItemSet* pArgs = rReq.GetArgs();

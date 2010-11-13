@@ -61,10 +61,6 @@ typedef ::std::deque<
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > >
     TextRangeList_t;
 
-
-/* -----------------29.05.98 14:42-------------------
- *
- * --------------------------------------------------*/
 enum SwTextPortionType
 {
     PORTION_TEXT,

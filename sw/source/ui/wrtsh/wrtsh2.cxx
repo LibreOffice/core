@@ -168,9 +168,7 @@ BOOL SwWrtShell::StartInputFldDlg( SwField* pFld, BOOL bNextButton,
     GetWin()->Update();
     return bRet;
 }
-/* -----------------17.06.2003 10:18-----------------
 
- --------------------------------------------------*/
 BOOL SwWrtShell::StartDropDownFldDlg(SwField* pFld, BOOL bNextButton, ByteString* pWindowState)
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();

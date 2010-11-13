@@ -1703,10 +1703,6 @@ void SwWrtShell::AutoUpdatePara(SwTxtFmtColl* pColl, const SfxItemSet& rStyleSet
     EndAction();
 }
 
-/*-----------------12.03.97 12.24-------------------
-
---------------------------------------------------*/
-
 void SwWrtShell::AutoUpdateFrame( SwFrmFmt* pFmt, const SfxItemSet& rStyleSet )
 {
     StartAction();
