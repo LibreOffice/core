@@ -568,10 +568,7 @@ ULONG SvtIconWindow_Impl::GetRootPos( const String& rURL ) const
     return nPos;
 }
 
-/******
- * @param _bHiContrast: unused and noop. FIXME: remove me
- */
-void SvtIconWindow_Impl::UpdateIcons( sal_Bool _bHiContrast )
+void SvtIconWindow_Impl::UpdateIcons()
 {
     aIconCtrl.GetEntry( ICON_POS_NEWDOC )->SetImage(
         Image( SvtResId( IMG_SVT_NEWDOC ) ) );
@@ -1364,7 +1361,7 @@ void SvtTemplateWindow::InitToolBoxImages()
 
 void SvtTemplateWindow::UpdateIcons()
 {
-    pIconWin->UpdateIcons( aFileViewTB.GetSettings().GetStyleSettings().GetHighContrastMode() );
+    pIconWin->UpdateIcons();
 }
 
 // ------------------------------------------------------------------------
