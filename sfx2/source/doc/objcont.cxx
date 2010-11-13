@@ -401,24 +401,9 @@ BOOL   SfxObjectShell::CanHaveChilds(USHORT nIdx1,
 
 //--------------------------------------------------------------------
 
-void SfxObjectShell::GetContent(String &rText,
-                                Bitmap &rClosedBitmap,
-                                Bitmap &rOpenedBitmap,
-                                BOOL &bCanDel,
-                                USHORT i,
-                                USHORT nIdx1,
-                                USHORT nIdx2 )
-{
-    DBG_ERRORFILE( "Non high contrast method called. Please update calling code!" );
-    SfxObjectShell::GetContent( rText, rClosedBitmap, rOpenedBitmap, BMP_COLOR_NORMAL, bCanDel, i, nIdx1, nIdx2 );
-}
-
-//--------------------------------------------------------------------
-
 void   SfxObjectShell::GetContent(String &rText,
                                   Bitmap &rClosedBitmap,
                                   Bitmap &rOpenedBitmap,
-                                  BmpColorMode eColorMode,
                                   BOOL &bCanDel,
                                   USHORT i,
                                   USHORT nIdx1,

@@ -1165,20 +1165,10 @@ void SfxOrganizeListBox_Impl::RequestingChilds( SvLBoxEntry* pEntry )
 */
 
 {
-    // wenn keine Childs vorhanden sind, gfs. Childs
-    // einfuegen
-    BmpColorMode eColorMode = BMP_COLOR_NORMAL;
-
-    if ( GetSettings().GetStyleSettings().GetHighContrastMode() )
-        eColorMode = BMP_COLOR_HIGHCONTRAST;
-
-
     if ( !GetModel()->HasChilds( pEntry ) )
     {
         WaitObject aWaitCursor( this );
 
-        // Choose the correct mask color dependent from eColorMode. This must be adopted if
-        // we change the mask color for normal images, too!
         Color aMaskColor( COL_LIGHTMAGENTA );
 
         // hier sind alle initial eingefuegt
@@ -1208,7 +1198,7 @@ void SfxOrganizeListBox_Impl::RequestingChilds( SvLBoxEntry* pEntry )
                 {
                     BOOL bDeletable;
                     aRef->GetContent(
-                        aText, aClosedBmp, aOpenedBmp, eColorMode, bDeletable,
+                        aText, aClosedBmp, aOpenedBmp, bDeletable,
                         i, aPath[nDocLevel+1], aPath[nDocLevel+2]);
 
                     // Create image with the correct mask color

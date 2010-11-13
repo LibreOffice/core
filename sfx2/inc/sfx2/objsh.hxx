@@ -567,15 +567,6 @@ public:
                                         sal_uInt16 nIdx1,
                                         sal_uInt16 nIdx2 = INDEX_IGNORE );
 
-    virtual void                GetContent( String &,
-                                        Bitmap &rClosedBitmap,
-                                        Bitmap &rOpenedBitmap,
-                                        BmpColorMode eColorMode,
-                                        sal_Bool   &bCanDelete,
-                                        sal_uInt16 nPos,
-                                        sal_uInt16 nIdx1,
-                                        sal_uInt16 nIdx2 = INDEX_IGNORE );
-
     virtual void                TriggerHelpPI(
                                     sal_uInt16 nIdx1, sal_uInt16 nIdx2, sal_uInt16 nIdx3);
 
