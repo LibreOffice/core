@@ -88,13 +88,13 @@ namespace rptxml
     //---------------------------------------------------------------------
     ::rtl::OUString ORptExportHelper::getImplementationName_Static(  ) throw (RuntimeException)
     {
-        return ::rtl::OUString::createFromAscii("com.sun.star.comp.report.XMLSettingsExporter");
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.report.XMLSettingsExporter"));
     }
     //---------------------------------------------------------------------
     Sequence< ::rtl::OUString > ORptExportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
     {
         Sequence< ::rtl::OUString > aSupported(1);
-        aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.document.ExportFilter");
+        aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.ExportFilter"));
         return aSupported;
     }
     //---------------------------------------------------------------------
@@ -105,13 +105,13 @@ namespace rptxml
     //---------------------------------------------------------------------
     ::rtl::OUString ORptContentExportHelper::getImplementationName_Static(  ) throw (RuntimeException)
     {
-        return ::rtl::OUString::createFromAscii("com.sun.star.comp.report.XMLContentExporter");
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.report.XMLContentExporter"));
     }
     //---------------------------------------------------------------------
     Sequence< ::rtl::OUString > ORptContentExportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
     {
         Sequence< ::rtl::OUString > aSupported(1);
-        aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.document.ExportFilter");
+        aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.ExportFilter"));
         return aSupported;
     }
 
@@ -124,13 +124,13 @@ namespace rptxml
     //---------------------------------------------------------------------
     ::rtl::OUString ORptStylesExportHelper::getImplementationName_Static(  ) throw (RuntimeException)
     {
-        return ::rtl::OUString::createFromAscii("com.sun.star.comp.report.XMLStylesExporter");
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.report.XMLStylesExporter"));
     }
     //---------------------------------------------------------------------
     Sequence< ::rtl::OUString > ORptStylesExportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
     {
         Sequence< ::rtl::OUString > aSupported(1);
-        aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.document.ExportFilter");
+        aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.ExportFilter"));
         return aSupported;
     }
 
@@ -142,13 +142,13 @@ namespace rptxml
     //---------------------------------------------------------------------
     ::rtl::OUString ORptMetaExportHelper::getImplementationName_Static(  ) throw (RuntimeException)
     {
-        return ::rtl::OUString::createFromAscii("com.sun.star.comp.report.XMLMetaExporter");
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.report.XMLMetaExporter"));
     }
     //---------------------------------------------------------------------
     Sequence< ::rtl::OUString > ORptMetaExportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
     {
         Sequence< ::rtl::OUString > aSupported(1);
-        aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.document.ExportFilter");
+        aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.ExportFilter"));
         return aSupported;
     }
 
@@ -160,13 +160,13 @@ namespace rptxml
     //---------------------------------------------------------------------
     ::rtl::OUString ODBFullExportHelper::getImplementationName_Static(  ) throw (RuntimeException)
     {
-        return ::rtl::OUString::createFromAscii("com.sun.star.comp.report.XMLFullExporter");
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.report.XMLFullExporter"));
     }
     //---------------------------------------------------------------------
     Sequence< ::rtl::OUString > ODBFullExportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
     {
         Sequence< ::rtl::OUString > aSupported(1);
-        aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.document.ExportFilter");
+        aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.ExportFilter"));
         return aSupported;
     }
 

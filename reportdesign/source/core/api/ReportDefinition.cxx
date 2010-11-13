@@ -2283,7 +2283,7 @@ uno::Reference< uno::XInterface > SAL_CALL OReportDefinition::createInstance( co
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
     uno::Reference< drawing::XShape > xShape;
-    if ( aServiceSpecifier.indexOf( ::rtl::OUString::createFromAscii("com.sun.star.report.") ) == 0 )
+    if ( aServiceSpecifier.indexOf( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.report.")) ) == 0 )
     {
         if ( aServiceSpecifier == SERVICE_SHAPE )
             xShape.set(SvxUnoDrawMSFactory::createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.CustomShape")) ),uno::UNO_QUERY_THROW);
@@ -2295,7 +2295,7 @@ uno::Reference< uno::XInterface > SAL_CALL OReportDefinition::createInstance( co
         else
             xShape.set(SvxUnoDrawMSFactory::createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.OLE2Shape")) ),uno::UNO_QUERY_THROW);
     }
-    else if ( aServiceSpecifier.indexOf( ::rtl::OUString::createFromAscii("com.sun.star.form.component.") ) == 0 )
+    else if ( aServiceSpecifier.indexOf( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.")) ) == 0 )
     {
         xShape.set(m_aProps->m_xContext->getServiceManager()->createInstanceWithContext(aServiceSpecifier,m_aProps->m_xContext),uno::UNO_QUERY);
     }
@@ -2761,7 +2761,7 @@ uno::Reference< frame::XUntitledNumbers > OReportDefinition::impl_getUntitledHel
         m_pImpl->m_xNumberedControllers = uno::Reference< frame::XUntitledNumbers >(static_cast< ::cppu::OWeakObject* >(pHelper), uno::UNO_QUERY_THROW);
 
         pHelper->setOwner          (xThis);
-        pHelper->setUntitledPrefix (::rtl::OUString::createFromAscii(" : "));
+        pHelper->setUntitledPrefix (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" : ")));
     }
 
     return m_pImpl->m_xNumberedControllers;

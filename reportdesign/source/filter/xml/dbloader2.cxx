@@ -116,7 +116,7 @@ Sequence< ::rtl::OUString > SAL_CALL ORptTypeDetection::getSupportedServiceNames
 Sequence< ::rtl::OUString > ORptTypeDetection::getSupportedServiceNames_Static(void) throw( RuntimeException )
 {
     Sequence< ::rtl::OUString > aSNS( 1 );
-    aSNS.getArray()[0] = ::rtl::OUString::createFromAscii("com.sun.star.document.ExtendedTypeDetection");
+    aSNS.getArray()[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.ExtendedTypeDetection"));
     return aSNS;
 }
 // -----------------------------------------------------------------------------
