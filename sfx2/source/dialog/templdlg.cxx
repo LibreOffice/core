@@ -2205,32 +2205,6 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, FmtSelectHdl, SvTreeListBox *, pListBox
     // HilfePI antriggern, wenn von Call als Handler und Bereich erlaubt ist
     if( !pListBox || pListBox->IsSelected( pListBox->GetHdlEntry() ) )
     {
-#ifdef WIR_KOENNEN_WIEDER_HILFE_FUER_STYLESHEETS
-        SfxHelpPI* pHelpPI = SFX_APP()->GetHelpPI();
-        if ( pHelpPI && pListBox && IsInitialized() &&
-             GetSelectedEntry().Len() )
-        {
-            const SfxStyleFamilyItem *pItem = GetFamilyItem_Impl();
-            const SfxStyleFamily eFam = pItem->GetFamily();
-            DBG_ASSERT(pStyleSheetPool, "Kein Pool");
-            // SfxStyleSheetBase* pStyle = pStyleSheetPool
-            //      ? pStyleSheetPool->Find( GetSelectedEntry(), eFam ) : 0;
-            SfxStyleSheetBase *pStyle;
-            if ( pStyleSheetPool )
-                pStyle = pStyleSheetPool->Find ( GetSelectedEntry(), eFam );
-            else
-                pStyle = 0;
-
-            if ( pStyle )
-            {
-                String aHelpFile;
-                ULONG nHelpId=pStyle->GetHelpId(aHelpFile);
-                if ( nHelpId )
-                    pHelpPI->LoadTopic( nHelpId );
-            }
-        }
-#endif
-
         // nur, wenn Giesskanne an ist
         if ( IsInitialized() &&
              IsCheckedItem(SID_STYLE_WATERCAN) &&
