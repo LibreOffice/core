@@ -107,6 +107,11 @@ gb_Library_DLLFILENAMES := $(patsubst z:z%,z:zlib%,$(gb_Library_DLLFILENAMES))
 
 endif
 
+ifeq ($(OS),SOLARIS)
+gb_Library_FILENAMES := $(patsubst comphelper:libcomphelper%,comphelper:libcomphelp4%,$(gb_Library_FILENAMES))
+
+endif
+
 # we do not require a known rule for these, when using system libs
 
 ifeq ($(USE_SYSTEM_STL),YES)
