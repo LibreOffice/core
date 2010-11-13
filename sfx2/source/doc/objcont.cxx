@@ -329,11 +329,9 @@ void SfxObjectShell::SetOrganizerSearchMask(
 
 //--------------------------------------------------------------------
 
-USHORT SfxObjectShell::GetContentCount(
-    USHORT nIdx1,
-    USHORT /*nIdx2*/)
+sal_uInt16 SfxObjectShell::GetContentCount(sal_uInt16 nIdx)
 {
-    switch(nIdx1)
+    switch(nIdx)
     {
         case INDEX_IGNORE:
             return DEF_CONTENT_COUNT;
@@ -347,20 +345,14 @@ USHORT SfxObjectShell::GetContentCount(
         }
         case CONTENT_MACRO:
             break;
-/*
-        case CONTENT_CONFIG:
-            return ( GetConfigManager() ) ?
-                        GetConfigManager()->GetItemCount() : 0;
-            break;
- */
     }
     return 0;
 }
 
 
 //--------------------------------------------------------------------
-//TODO/CLEANUP: remove this method (it's virtual)
-void  SfxObjectShell::TriggerHelpPI(USHORT nIdx1, USHORT nIdx2, USHORT)
+//TODO/CLEANUP: remove this method
+void  SfxObjectShell::TriggerHelpPI(USHORT nIdx1, USHORT nIdx2)
 {
     if(nIdx1==CONTENT_STYLE && nIdx2 != INDEX_IGNORE) //StyleSheets
     {
@@ -369,38 +361,29 @@ void  SfxObjectShell::TriggerHelpPI(USHORT nIdx1, USHORT nIdx2, USHORT)
     }
 }
 
-BOOL   SfxObjectShell::CanHaveChilds(USHORT nIdx1,
-                                       USHORT nIdx2)
+bool SfxObjectShell::CanHaveChilds(sal_uInt16 nIdx1, sal_uInt16 nIdx2)
 {
-    switch(nIdx1) {
+    switch(nIdx1)
+    {
     case INDEX_IGNORE:
-        return TRUE;
+        return true;
     case CONTENT_STYLE:
-        return INDEX_IGNORE == nIdx2 || !GetStyleSheetPool()? FALSE: TRUE;
+        return INDEX_IGNORE == nIdx2 || !GetStyleSheetPool() ? false : true;
     case CONTENT_MACRO:
-//!!    return INDEX_IGNORE == nIdx2? FALSE: TRUE;
-        return FALSE;
-/*
-    case CONTENT_CONFIG:
-        return INDEX_IGNORE == nIdx2 ? FALSE : TRUE;
- */
+        return false;
     }
-    return FALSE;
+    return false;
 }
 
 //--------------------------------------------------------------------
 
-void   SfxObjectShell::GetContent(String &rText,
-                                  Bitmap &rClosedBitmap,
-                                  Bitmap &rOpenedBitmap,
-                                  BOOL &bCanDel,
-                                  USHORT i,
-                                  USHORT nIdx1,
-                                  USHORT /*nIdx2*/ )
+void SfxObjectShell::GetContent(String &rText,
+    Bitmap &rClosedBitmap, Bitmap &rOpenedBitmap,
+    bool &bCanDel, sal_uInt16 i, sal_uInt16 nIdx)
 {
-    bCanDel=TRUE;
+    bCanDel=true;
 
-    switch(nIdx1)
+    switch(nIdx)
     {
         case INDEX_IGNORE:
         {

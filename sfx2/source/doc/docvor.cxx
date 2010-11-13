@@ -531,7 +531,7 @@ BOOL SfxOrganizeListBox_Impl::Select( SvLBoxEntry* pEntry, BOOL bSelect )
 
     Path aPath(this, pEntry);
     GetObjectShell(aPath)->TriggerHelpPI(
-        aPath[nLevel+1], aPath[nLevel+2], aPath[nLevel+3]);
+        aPath[nLevel+1], aPath[nLevel+2]);
     return SvTreeListBox::Select(pEntry,bSelect);
 }
 
@@ -1187,19 +1187,18 @@ void SfxOrganizeListBox_Impl::RequestingChilds( SvLBoxEntry* pEntry )
             SfxObjectShellRef aRef = GetObjectShell(aPath);
             if(aRef.Is())
             {
-                const USHORT nCount = aRef->GetContentCount(
-                    aPath[nDocLevel+1], aPath[nDocLevel+2]);
+                const USHORT nCount = aRef->GetContentCount(aPath[nDocLevel+1]);
                 String aText;
                 Bitmap aClosedBmp, aOpenedBmp;
-                const BOOL bCanHaveChilds =
+                const bool bCanHaveChilds =
                     aRef->CanHaveChilds(aPath[nDocLevel+1],
                                         aPath[nDocLevel+2]);
                 for(USHORT i = 0; i < nCount; ++i)
                 {
-                    BOOL bDeletable;
+                    bool bDeletable;
                     aRef->GetContent(
                         aText, aClosedBmp, aOpenedBmp, bDeletable,
-                        i, aPath[nDocLevel+1], aPath[nDocLevel+2]);
+                        i, aPath[nDocLevel+1]);
 
                     // Create image with the correct mask color
                     Image aClosedImage( aClosedBmp, aMaskColor );
