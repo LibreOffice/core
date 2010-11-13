@@ -158,12 +158,6 @@
 #define ILIST_DB_DLG                (RC_UTLUI_BEGIN + 6)
 #define ILIST_DB_DLG_HC             (RC_UTLUI_BEGIN + 7)
 
-#define IMG_ONE_LEFT_HC             (RC_UTLUI_BEGIN + 8)
-#define IMG_ONE_RIGHT_HC            (RC_UTLUI_BEGIN + 9)
-#define IMG_ALL_LEFT_HC             (RC_UTLUI_BEGIN + 10)
-#define IMG_ALL_RIGHT_HC            (RC_UTLUI_BEGIN + 11)
-
-
 #define IMG_VIEWLAYOUT_AUTOMATIC                 (RC_UTLUI_BEGIN +  12)
 #define IMG_VIEWLAYOUT_AUTOMATIC_ACTIVE          (RC_UTLUI_BEGIN +  13)
 #define IMG_VIEWLAYOUT_BOOKMODE                  (RC_UTLUI_BEGIN +  14)

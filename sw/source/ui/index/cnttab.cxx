@@ -736,9 +736,6 @@ SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(Window* pParent,
 {
     FreeResource();
 
-    aLeftPB.SetModeImage( Image( SW_RES( IMG_ALL_LEFT_HC ) ), BMP_COLOR_HIGHCONTRAST );
-    aRightPB.SetModeImage( Image( SW_RES( IMG_ALL_RIGHT_HC ) ), BMP_COLOR_HIGHCONTRAST );
-
     aOk.SetClickHdl(LINK(this, SwAddStylesDlg_Impl, OkHdl));
     aLeftPB.SetClickHdl(LINK(this, SwAddStylesDlg_Impl, LeftRightHdl));
     aRightPB.SetClickHdl(LINK(this, SwAddStylesDlg_Impl, LeftRightHdl));
@@ -758,7 +755,6 @@ SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(Window* pParent,
 
     SwIndexTreeLB& rTLB = aHeaderTree.GetTreeListBox();
     rTLB.SetWindowBits(WB_CLIPCHILDREN|WB_SORT);
-    //aStylesTLB.SetSelectHdl(LINK(this, SwAddStylesDlg_Impl, SelectHdl));
     rTLB.GetModel()->SetSortMode(SortAscending);
     for(i = 0; i < MAXLEVEL; ++i)
     {
@@ -882,7 +878,6 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(Window* pParent, const SfxItemSet& rAttrS
 
     aCreateFromFL(      this, SW_RES(FL_CREATEFROM       )),
     aFromHeadingsCB(    this, SW_RES(CB_FROMHEADINGS     )),
-//   aChapterDlgPB(      this, SW_RES(PB_CHAPTERDLG      )),//#outline level,removed by zhaojianwei
     aAddStylesCB(       this, SW_RES(CB_ADDSTYLES       )),
     aAddStylesPB(       this, SW_RES(PB_ADDSTYLES       )),
 
@@ -959,7 +954,6 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(Window* pParent, const SfxItemSet& rAttrS
     aTypeLB.SetSelectHdl(LINK(this, SwTOXSelectTabPage, TOXTypeHdl));
 
     aAddStylesPB.SetClickHdl(LINK(this, SwTOXSelectTabPage, AddStylesHdl));
-    //aChapterDlgPB.SetClickHdl(LINK(this, SwTOXSelectTabPage, ChapterHdl));//#outline level,removed by zhaojianwei
 
     PopupMenu*  pMenu = aAutoMarkPB.GetPopupMenu();
     pMenu->SetActivateHdl(LINK(this, SwTOXSelectTabPage, MenuEnableHdl));
@@ -1123,7 +1117,6 @@ void    SwTOXSelectTabPage::ApplyTOXDescription()
     if(TOX_CONTENT == aCurType.eType)
     {
         aFromHeadingsCB.Check( 0 != (nCreateType & nsSwTOXElement::TOX_OUTLINELEVEL) );
-        //aChapterDlgPB.Enable(aFromHeadingsCB.IsChecked());//#outline level,removed by zhaojianwei
         aAddStylesCB.SetText(sAddStyleContent);
         aAddStylesPB.Enable(aAddStylesCB.IsChecked());
     }
@@ -1975,15 +1968,6 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(Window* pParent, const SfxItemSet& rAttrSet
     m_pCurrentForm(0),
     bInLevelHdl(sal_False)
 {
-    Image aSortUpHC(SW_RES(IMG_SORTUP_HC ));
-    aFirstSortUpRB.SetModeRadioImage(aSortUpHC,BMP_COLOR_HIGHCONTRAST);
-    aSecondSortUpRB.SetModeRadioImage(aSortUpHC,BMP_COLOR_HIGHCONTRAST);
-    aThirdSortUpRB.SetModeRadioImage(aSortUpHC,BMP_COLOR_HIGHCONTRAST);
-
-    Image aSortDownHC(SW_RES(IMG_SORTDOWN_HC ));
-    aFirstSortDownRB.SetModeRadioImage(aSortDownHC,BMP_COLOR_HIGHCONTRAST);
-    aSecondSortDownRB.SetModeRadioImage(aSortDownHC,BMP_COLOR_HIGHCONTRAST);
-    aThirdSortDownRB.SetModeRadioImage(aSortDownHC,BMP_COLOR_HIGHCONTRAST);
     FreeResource();
 
     sLevelStr = aLevelFT.GetText();
@@ -2052,7 +2036,7 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(Window* pParent, const SfxItemSet& rAttrSet
         (aRelToStyleIdxPos.Y() - aAlphaDelimCB.GetPosPixel().Y());
     aEditStylePB.Enable(sal_False);
 
-//get position for Numbering and other stuff
+    //get position for Numbering and other stuff
     aChapterEntryFTPosition = aChapterEntryFT.GetPosPixel();
     aEntryOutlineLevelFTPosition = aEntryOutlineLevelFT.GetPosPixel();
     nBiasToEntryPoint = aEntryOutlineLevelNF.GetPosPixel().X() -
@@ -3679,8 +3663,6 @@ SwTOXStylesTabPage::SwTOXStylesTabPage(Window* pParent, const SfxItemSet& rAttrS
     FreeResource();
     SetExchangeSupport( sal_True );
 
-    aAssignBT.SetModeImage( Image( SW_RES( IMG_ONE_LEFT_HC ) ), BMP_COLOR_HIGHCONTRAST );
-
     aEditStyleBT.SetClickHdl   (LINK(   this, SwTOXStylesTabPage, EditStyleHdl));
     aAssignBT.SetClickHdl      (LINK(   this, SwTOXStylesTabPage, AssignHdl));
     aStdBT.SetClickHdl         (LINK(   this, SwTOXStylesTabPage, StdHdl));
@@ -3789,13 +3771,12 @@ IMPL_LINK( SwTOXStylesTabPage, EditStyleHdl, Button *, pBtn )
     {
         SfxStringItem aStyle(SID_STYLE_EDIT, aParaLayLB.GetSelectEntry());
         SfxUInt16Item aFamily(SID_STYLE_FAMILY, SFX_STYLE_FAMILY_PARA);
-//      SwPtrItem aShell(FN_PARAM_WRTSHELL, pWrtShell);
         Window* pDefDlgParent = Application::GetDefDialogParent();
         Application::SetDefDialogParent( pBtn );
         SwWrtShell& rSh = ((SwMultiTOXTabDialog*)GetTabDialog())->GetWrtShell();
         rSh.GetView().GetViewFrame()->GetDispatcher()->Execute(
         SID_STYLE_EDIT, SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_MODAL,
-            &aStyle, &aFamily/*, &aShell*/, 0L);
+            &aStyle, &aFamily, 0L);
         Application::SetDefDialogParent( pDefDlgParent );
     }
     return 0;
@@ -3864,7 +3845,6 @@ IMPL_LINK_INLINE_END( SwTOXStylesTabPage, DoubleClickHdl, Button *, EMPTYARG )
  --------------------------------------------------------------------*/
 IMPL_LINK( SwTOXStylesTabPage, EnableSelectHdl, ListBox *, EMPTYARG )
 {
-    //UpdatePattern();
     aStdBT.Enable(aLevelLB.GetSelectEntryPos()  != LISTBOX_ENTRY_NOTFOUND);
 
     SwWrtShell& rSh = ((SwMultiTOXTabDialog*)GetTabDialog())->GetWrtShell();

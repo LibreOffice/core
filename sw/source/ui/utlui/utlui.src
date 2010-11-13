@@ -327,43 +327,6 @@ ImageList ILIST_DB_DLG_HC
     IMGLIST_IDS;
 };
 
-Image IMG_ONE_LEFT_HC
-{
-    ImageBitmap = Bitmap
-    {
-        File = "one_left_h.bmp" ;
-    };
-    MaskColor = IMAGE_MASK_COLOR ;
-};
-
-Image IMG_ONE_RIGHT_HC
-{
-    ImageBitmap = Bitmap
-    {
-        File = "one_right_h.bmp" ;
-    };
-    MaskColor = IMAGE_MASK_COLOR ;
-};
-
-Image IMG_ALL_LEFT_HC
-{
-    ImageBitmap = Bitmap
-    {
-        File = "all_left_h.bmp" ;
-    };
-    MaskColor = IMAGE_MASK_COLOR ;
-};
-
-Image IMG_ALL_RIGHT_HC
-{
-    ImageBitmap = Bitmap
-    {
-        File = "all_right_h.bmp" ;
-    };
-    MaskColor = IMAGE_MASK_COLOR ;
-};
-
-
 Image IMG_VIEWLAYOUT_AUTOMATIC
 {
     ImageBitmap = Bitmap
