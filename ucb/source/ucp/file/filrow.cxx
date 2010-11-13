@@ -56,7 +56,7 @@ sal_Bool convert( shell* pShell,
         {
             xConverter = uno::Reference< script::XTypeConverter >(
                 pShell->m_xMultiServiceFactory->createInstance(
-                    rtl::OUString::createFromAscii( "com.sun.star.script.Converter" ) ),uno::UNO_QUERY );
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.Converter")) ), uno::UNO_QUERY );
 
 /*          DBG_ASSERT( m_xTypeConverter.is(),
                         "PropertyValueSet::getTypeConverter() - "

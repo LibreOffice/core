@@ -151,8 +151,8 @@ XTYPEPROVIDER_IMPL_3( ContentProvider,
 // @@@ Adjust implementation name. Keep the prefix "com.sun.star.comp."!
 // @@@ Adjust service name.
 XSERVICEINFO_IMPL_1( ContentProvider,
-                     rtl::OUString::createFromAscii(
-                            "com.sun.star.comp.odma.ContentProvider" ),
+                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                            "com.sun.star.comp.odma.ContentProvider" )),
                      rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODMA_CONTENT_PROVIDER_SERVICE_NAME) ) );
 
 //=========================================================================

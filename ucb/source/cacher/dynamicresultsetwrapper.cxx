@@ -428,8 +428,8 @@ void SAL_CALL DynamicResultSetWrapper
         {
             xStubFactory = Reference< XCachedDynamicResultSetStubFactory >(
                 m_xSMgr->createInstance(
-                    OUString::createFromAscii(
-                        "com.sun.star.ucb.CachedDynamicResultSetStubFactory" ) ),
+                    OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        "com.sun.star.ucb.CachedDynamicResultSetStubFactory" )) ),
                 UNO_QUERY );
         }
         catch ( Exception const & )

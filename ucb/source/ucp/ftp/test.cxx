@@ -113,7 +113,7 @@
 
 //      Reference<XContentIdentifier> xIdent(
 //          new ftp::FTPContentIdentifier(
-//              rtl::OUString::createFromAscii("ftp://abi:psswd@abi-1/file"),
+//              rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ftp://abi:psswd@abi-1/file")),
 //              pProvider));
 
 //      Reference<XContent> xContent = xProvider->queryContent(xIdent);
@@ -132,7 +132,7 @@
 //                                        Sequence<NumberedSortingInfo>(0));
 //      Any aAny; aAny <<= aOpenCommand;
 
-//      Command aCommand(OUString::createFromAscii("open"),
+//      Command aCommand(OUString(RTL_CONSTASCII_USTRINGPARAM("open")),
 //                       -1,
 //                       aAny);
 
@@ -232,9 +232,9 @@ int main(int argc,char* argv[])
 
 //      rtl::OUString lib,tmp,testlib;
 //      std::vector<rtl::OUString> tests;
-//      sal_Int32 TEST = sce.indexOf(rtl::OUString::createFromAscii("TEST"));
-//      sal_Int32 WITH = sce.indexOf(rtl::OUString::createFromAscii("WITH"));
-//      sal_Int32 FROM = sce.indexOf(rtl::OUString::createFromAscii("FROM"));
+//      sal_Int32 TEST = sce.indexOf(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TEST")));
+//      sal_Int32 WITH = sce.indexOf(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WITH")));
+//      sal_Int32 FROM = sce.indexOf(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FROM")));
 //      lib = sce.copy(TEST+4,WITH-TEST-4).trim();
 
 //      tmp = sce.copy(WITH+4,FROM-WITH-4).trim();
@@ -263,9 +263,9 @@ int main(int argc,char* argv[])
 //      }
 
 //      osl::Module mathLib;
-//      mathLib.load(rtl::OUString::createFromAscii("libm.so"));
+//      mathLib.load(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("libm.so")));
 //      typedef double (*DF)(double);
-//      DF func = (DF)mathLib.getSymbol(rtl::OUString::createFromAscii("cos"));
+//      DF func = (DF)mathLib.getSymbol(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cos")));
 //      fprintf(stderr,"-------double %f ----------\n",(*func)(2.0));
 
 //      fprintf(stderr,"-------testing %s ----------\n",scefile);

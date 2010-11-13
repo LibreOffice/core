@@ -105,8 +105,8 @@ XTYPEPROVIDER_IMPL_3(FTPContentProvider,
 
 XSERVICEINFO_IMPL_1(
     FTPContentProvider,
-    rtl::OUString::createFromAscii("com.sun.star.comp.FTPContentProvider"),
-    rtl::OUString::createFromAscii(FTP_CONTENT_PROVIDER_SERVICE_NAME));
+    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.FTPContentProvider")),
+    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(FTP_CONTENT_PROVIDER_SERVICE_NAME)));
 
 //=========================================================================
 //
@@ -160,7 +160,7 @@ FTPContentProvider::queryContent(
                     this);
 
         if(!m_pProxyDecider->shouldUseProxy(
-            rtl::OUString::createFromAscii("ftp"),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ftp")),
             aURL.host(),
             aURL.port().toInt32()))
         {

@@ -86,10 +86,10 @@ XTYPEPROVIDER_IMPL_3( UcbContentProviderProxyFactory,
 //=========================================================================
 
 XSERVICEINFO_IMPL_1( UcbContentProviderProxyFactory,
-                     OUString::createFromAscii(
-                         "com.sun.star.comp.ucb.UcbContentProviderProxyFactory" ),
-                     OUString::createFromAscii(
-                         PROVIDER_FACTORY_SERVICE_NAME ) );
+                     OUString(RTL_CONSTASCII_USTRINGPARAM(
+                         "com.sun.star.comp.ucb.UcbContentProviderProxyFactory" )),
+                     OUString(RTL_CONSTASCII_USTRINGPARAM(
+                         PROVIDER_FACTORY_SERVICE_NAME )) );
 
 //=========================================================================
 //
@@ -214,10 +214,10 @@ Sequence< Type > SAL_CALL UcbContentProviderProxy::getTypes()                   
 //=========================================================================
 
 XSERVICEINFO_NOFACTORY_IMPL_1( UcbContentProviderProxy,
-                            OUString::createFromAscii(
-                                "com.sun.star.comp.ucb.UcbContentProviderProxy" ),
-                            OUString::createFromAscii(
-                             PROVIDER_PROXY_SERVICE_NAME ) );
+                            OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                "com.sun.star.comp.ucb.UcbContentProviderProxy" )),
+                            OUString(RTL_CONSTASCII_USTRINGPARAM(
+                             PROVIDER_PROXY_SERVICE_NAME )) );
 
 //=========================================================================
 //

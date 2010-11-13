@@ -462,7 +462,7 @@ ResultSetDataSupplier::assembleChildURL( const ::rtl::OUString& aName )
 
     sal_Int32 nUrlEnd = aURL.lastIndexOf( '/' );
     if ( nUrlEnd != aURL.getLength() - 1 )
-        aURL += rtl::OUString::createFromAscii( "/" );
+        aURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
 
     aURL += aName;
     return aURL;

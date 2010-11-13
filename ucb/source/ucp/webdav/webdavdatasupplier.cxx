@@ -163,12 +163,12 @@ rtl::OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
                             = *( m_pImpl->m_aResults[ nIndex ]->pData );
 
         if ( ( aId.lastIndexOf( '/' ) + 1 ) != aId.getLength() )
-            aId += rtl::OUString::createFromAscii( "/" );
+            aId += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
 
         aId += props.getEscapedTitle();
 
         if ( props.isTrailingSlash() )
-            aId += rtl::OUString::createFromAscii( "/" );
+            aId += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
 
         m_pImpl->m_aResults[ nIndex ]->aId = aId;
         return aId;

@@ -140,7 +140,7 @@ namespace ucb { namespace ucp { namespace ext
         throw( IllegalIdentifierException, RuntimeException )
     {
         // Check URL scheme...
-        const ::rtl::OUString sScheme( rtl::OUString::createFromAscii( "vnd.sun.star.extension" ) );
+        const ::rtl::OUString sScheme( RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.extension") );
         if ( !i_rIdentifier->getContentProviderScheme().equalsIgnoreAsciiCase( sScheme ) )
             throw IllegalIdentifierException();
 

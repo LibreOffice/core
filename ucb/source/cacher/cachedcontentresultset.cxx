@@ -444,10 +444,10 @@ public:
         throw( RuntimeException );
 };
 
-OUString    CCRS_PropertySetInfo::m_aPropertyNameForCount( OUString::createFromAscii( "RowCount" ) );
-OUString    CCRS_PropertySetInfo::m_aPropertyNameForFinalCount( OUString::createFromAscii( "IsRowCountFinal" ) );
-OUString    CCRS_PropertySetInfo::m_aPropertyNameForFetchSize( OUString::createFromAscii( "FetchSize" ) );
-OUString    CCRS_PropertySetInfo::m_aPropertyNameForFetchDirection( OUString::createFromAscii( "FetchDirection" ) );
+OUString    CCRS_PropertySetInfo::m_aPropertyNameForCount( RTL_CONSTASCII_USTRINGPARAM("RowCount") );
+OUString    CCRS_PropertySetInfo::m_aPropertyNameForFinalCount( RTL_CONSTASCII_USTRINGPARAM("IsRowCountFinal") );
+OUString    CCRS_PropertySetInfo::m_aPropertyNameForFetchSize( RTL_CONSTASCII_USTRINGPARAM("FetchSize") );
+OUString    CCRS_PropertySetInfo::m_aPropertyNameForFetchDirection( RTL_CONSTASCII_USTRINGPARAM("FetchDirection") );
 
 CCRS_PropertySetInfo::CCRS_PropertySetInfo(
         Reference< XPropertySetInfo > xInfo )
@@ -972,10 +972,10 @@ XTYPEPROVIDER_IMPL_11( CachedContentResultSet
 //--------------------------------------------------------------------------
 
 XSERVICEINFO_NOFACTORY_IMPL_1( CachedContentResultSet,
-                               OUString::createFromAscii(
-                            "com.sun.star.comp.ucb.CachedContentResultSet" ),
-                            OUString::createFromAscii(
-                            CACHED_CONTENT_RESULTSET_SERVICE_NAME ) );
+                               OUString(RTL_CONSTASCII_USTRINGPARAM(
+                            "com.sun.star.comp.ucb.CachedContentResultSet" )),
+                            OUString(RTL_CONSTASCII_USTRINGPARAM(
+                            CACHED_CONTENT_RESULTSET_SERVICE_NAME )) );
 
 //--------------------------------------------------------------------------
 // XPropertySet methods. ( inherited )
@@ -2151,8 +2151,8 @@ const Reference< XTypeConverter >& CachedContentResultSet::getTypeConverter()
         m_bTriedToGetTypeConverter = sal_True;
         m_xTypeConverter = Reference< XTypeConverter >(
                                 m_xSMgr->createInstance(
-                                    OUString::createFromAscii(
-                                        "com.sun.star.script.Converter" ) ),
+                                    OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                        "com.sun.star.script.Converter" )) ),
                                 UNO_QUERY );
 
         OSL_ENSURE( m_xTypeConverter.is(),
@@ -2201,10 +2201,10 @@ XTYPEPROVIDER_IMPL_3( CachedContentResultSetFactory,
 //--------------------------------------------------------------------------
 
 XSERVICEINFO_IMPL_1( CachedContentResultSetFactory,
-                     OUString::createFromAscii(
-                           "com.sun.star.comp.ucb.CachedContentResultSetFactory" ),
-                         OUString::createFromAscii(
-                         CACHED_CONTENT_RESULTSET_FACTORY_NAME ) );
+                     OUString(RTL_CONSTASCII_USTRINGPARAM(
+                           "com.sun.star.comp.ucb.CachedContentResultSetFactory" )),
+                         OUString(RTL_CONSTASCII_USTRINGPARAM(
+                         CACHED_CONTENT_RESULTSET_FACTORY_NAME )) );
 
 //--------------------------------------------------------------------------
 // Service factory implementation.

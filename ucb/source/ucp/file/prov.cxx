@@ -56,9 +56,9 @@ static sal_Bool writeInfo( void * pRegistryKey,
                            const rtl::OUString & rImplementationName,
                               Sequence< rtl::OUString > const & rServiceNames )
 {
-    rtl::OUString aKeyName( rtl::OUString::createFromAscii( "/" ) );
+    rtl::OUString aKeyName( RTL_CONSTASCII_USTRINGPARAM("/") );
     aKeyName += rImplementationName;
-    aKeyName += rtl::OUString::createFromAscii( "/UNO/SERVICES" );
+    aKeyName += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
 
     Reference< registry::XRegistryKey > xKey;
     try
@@ -263,7 +263,7 @@ FileProvider::supportsService(
                   const rtl::OUString& ServiceName )
   throw( RuntimeException )
 {
-  return ServiceName == rtl::OUString::createFromAscii( "com.sun.star.ucb.FileContentProvider" );
+  return ServiceName == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.FileContentProvider"));
 }
 
 
@@ -468,17 +468,17 @@ private:
 XPropertySetInfoImpl2::XPropertySetInfoImpl2()
     : m_seq( 3 )
 {
-    m_seq[0] = Property( rtl::OUString::createFromAscii( "HostName" ),
+    m_seq[0] = Property( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HostName")),
                          -1,
                          getCppuType( static_cast< rtl::OUString* >( 0 ) ),
                          PropertyAttribute::READONLY );
 
-    m_seq[1] = Property( rtl::OUString::createFromAscii( "HomeDirectory" ),
+    m_seq[1] = Property( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HomeDirectory")),
                          -1,
                          getCppuType( static_cast< rtl::OUString* >( 0 ) ),
                          PropertyAttribute::READONLY );
 
-    m_seq[2] = Property( rtl::OUString::createFromAscii( "FileSystemNotation" ),
+    m_seq[2] = Property( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FileSystemNotation")),
                          -1,
                          getCppuType( static_cast< sal_Int32* >( 0 ) ),
                          PropertyAttribute::READONLY );

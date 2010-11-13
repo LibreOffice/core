@@ -303,8 +303,8 @@ XStream_impl::closeStream(
 
         if( err != osl::FileBase::E_None ) {
             io::IOException ex;
-            ex.Message = rtl::OUString::createFromAscii(
-                "could not close file");
+            ex.Message = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "could not close file"));
             throw ex;
         }
 

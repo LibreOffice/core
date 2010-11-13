@@ -478,7 +478,7 @@ void DataSupplier::validate()
 
         sal_Int32 nPackageUrlEnd = aURL.lastIndexOf( '/' );
         if ( nPackageUrlEnd != aURL.getLength() - 1 )
-            aURL += rtl::OUString::createFromAscii( "/" );
+            aURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
 
         aURL += ::ucb_impl::urihelper::encodeSegment( aName );
         aURL += aContURL.copy( nParam );
@@ -489,7 +489,7 @@ void DataSupplier::validate()
 
         sal_Int32 nPackageUrlEnd = aURL.lastIndexOf( '/' );
         if ( nPackageUrlEnd != aURL.getLength() - 1 )
-            aURL += rtl::OUString::createFromAscii( "/" );
+            aURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
 
         aURL += ::ucb_impl::urihelper::encodeSegment( aName );
     }

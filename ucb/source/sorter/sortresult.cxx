@@ -248,10 +248,10 @@ XTYPEPROVIDER_IMPL_9( SortedResultSet,
 //--------------------------------------------------------------------------
 
 XSERVICEINFO_NOFACTORY_IMPL_1( SortedResultSet,
-                               OUString::createFromAscii(
-                                "com.sun.star.comp.ucb.SortedResultSet" ),
-                               OUString::createFromAscii(
-                                RESULTSET_SERVICE_NAME ) );
+                               OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                "com.sun.star.comp.ucb.SortedResultSet" )),
+                               OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                RESULTSET_SERVICE_NAME )) );
 
 //--------------------------------------------------------------------------
 // XComponent methods.
@@ -951,7 +951,7 @@ Any SAL_CALL SortedResultSet::getPropertyValue( const OUString& PropertyName )
         if ( bOrgFinal )
         {
             aOrgRet = Reference< XPropertySet >::query(mxOriginal)->
-                getPropertyValue( OUString::createFromAscii( "RowCount" ) );
+                getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("RowCount")) );
             aOrgRet >>= nOrgCount;
             if ( nOrgCount == maS2O.Count() )
                 aRet <<= (sal_Bool) sal_True;
@@ -1494,7 +1494,7 @@ void SortedResultSet::CheckProperties( long nOldCount, sal_Bool bWasFinal )
             sal_Bool bIsFinal = sal_False;
             PropertyChangeEvent aEvt;
 
-            aEvt.PropertyName = OUString::createFromAscii( "RowCount" );
+            aEvt.PropertyName = OUString(RTL_CONSTASCII_USTRINGPARAM("RowCount"));
             aEvt.Further = sal_False;
             aEvt.PropertyHandle = -1;
             aEvt.OldValue <<= nOldCount;
@@ -1502,7 +1502,7 @@ void SortedResultSet::CheckProperties( long nOldCount, sal_Bool bWasFinal )
 
             PropertyChanged( aEvt );
 
-            OUString aName = OUString::createFromAscii( "IsRowCountFinal" );
+            OUString aName = OUString(RTL_CONSTASCII_USTRINGPARAM("IsRowCountFinal"));
             Any aRet = getPropertyValue( aName );
             if ( (aRet >>= bIsFinal) && bIsFinal != bWasFinal )
             {
@@ -2003,12 +2003,12 @@ void SimpleList::Replace( void* pData, sal_uInt32 nPos )
 
 SRSPropertySetInfo::SRSPropertySetInfo()
 {
-    maProps[0].Name = OUString::createFromAscii( "RowCount" );
+    maProps[0].Name = OUString(RTL_CONSTASCII_USTRINGPARAM("RowCount"));
     maProps[0].Handle = -1;
     maProps[0].Type = ::getCppuType( (const OUString*) NULL );
     maProps[0].Attributes = -1;
 
-    maProps[1].Name = OUString::createFromAscii( "IsRowCountFinal" );
+    maProps[1].Name = OUString(RTL_CONSTASCII_USTRINGPARAM("IsRowCountFinal"));
     maProps[1].Handle = -1;
     maProps[1].Type = ::getBooleanCppuType();
     maProps[1].Attributes = -1;

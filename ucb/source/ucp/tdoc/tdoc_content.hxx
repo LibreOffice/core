@@ -72,12 +72,12 @@ public:
     ContentProperties( const ContentType & rType, const rtl::OUString & rTitle )
     : m_eType( rType ),
       m_aContentType( rType == STREAM
-        ? rtl::OUString::createFromAscii( TDOC_STREAM_CONTENT_TYPE )
+        ? rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( TDOC_STREAM_CONTENT_TYPE ))
         : rType == FOLDER
-            ? rtl::OUString::createFromAscii( TDOC_FOLDER_CONTENT_TYPE )
+            ? rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( TDOC_FOLDER_CONTENT_TYPE ))
             : rType == DOCUMENT
-                ? rtl::OUString::createFromAscii( TDOC_DOCUMENT_CONTENT_TYPE )
-                : rtl::OUString::createFromAscii( TDOC_ROOT_CONTENT_TYPE ) ),
+                ? rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( TDOC_DOCUMENT_CONTENT_TYPE ))
+                : rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( TDOC_ROOT_CONTENT_TYPE )) ),
       m_aTitle( rTitle )
     {}
 

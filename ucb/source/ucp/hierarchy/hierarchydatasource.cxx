@@ -268,14 +268,14 @@ XTYPEPROVIDER_IMPL_4( HierarchyDataSource,
 //=========================================================================
 
 XSERVICEINFO_IMPL_0( HierarchyDataSource,
-                     rtl::OUString::createFromAscii(
-                        "com.sun.star.comp.ucb.HierarchyDataSource" ) )
+                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        "com.sun.star.comp.ucb.HierarchyDataSource" )) )
 {
     uno::Sequence< rtl::OUString > aSNS( 2 );
-    aSNS[ 0 ] = rtl::OUString::createFromAscii(
-                    "com.sun.star.ucb.DefaultHierarchyDataSource" );
-    aSNS[ 1 ] = rtl::OUString::createFromAscii(
-                    "com.sun.star.ucb.HierarchyDataSource" );
+    aSNS[ 0 ] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "com.sun.star.ucb.DefaultHierarchyDataSource" ));
+    aSNS[ 1 ] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "com.sun.star.ucb.HierarchyDataSource" ));
     return aSNS;
 }
 

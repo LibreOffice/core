@@ -141,7 +141,7 @@ FTPContentIdentifier::getContentProviderScheme(
         com::sun::star::uno::RuntimeException
     )
 {
-    return rtl::OUString::createFromAscii("ftp");
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ftp"));
 }
 
 
