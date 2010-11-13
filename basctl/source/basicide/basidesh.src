@@ -343,17 +343,14 @@ ImageButton RID_IMGBTN_REMOVEWATCH
     };
     QuickHelpText [ en-US ] = "Remove Watch" ;
 };
-Image RID_IMG_REMOVEWATCH_HC
-{
-    ImageBitmap = Bitmap { File = "baswatr_h.bmp" ; };
-    MASKCOLOR
-};
+
 ImageButton RID_IMGBTN_GOTOCALL
 {
     HelpId = HID_BASICIDE_GOTOALL ;
     SmallStyle = TRUE ;
     ButtonImage = Image { ImageBitmap = Bitmap { File = "basgocl.bmp" ; }; } ;
 };
+
 String RID_STR_REMOVEWATCH
 {
     Text [ en-US ] = "Watch:" ;
@@ -704,39 +701,9 @@ String RID_STR_DLGIMP_MISMATCH_TEXT
 #define MN_PLHELP       31
 #define MN_PLTEMPLATES  11
 
-
 /*
 
 The application menu bar resource has become obsolete. You can now find the menu bar definition at:
 <project>/basicide/menubar/menubar.xml.
 
 */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

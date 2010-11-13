@@ -412,10 +412,8 @@ namespace pcr
         return *rpButton;
     }
 
-/**
- * @param _out_rHCImage is unused now as there are no highcontrast variants
- */
-    void OBrowserLine::impl_getImagesFromURL_nothrow( const ::rtl::OUString& _rImageURL, Image& _out_rImage, Image& _out_rHCImage )
+    //------------------------------------------------------------------
+    void OBrowserLine::impl_getImagesFromURL_nothrow( const ::rtl::OUString& _rImageURL, Image& _out_rImage )
     {
         try
         {
@@ -427,7 +425,7 @@ namespace pcr
             aMediaProperties[0].Value <<= _rImageURL;
 
             Reference< XGraphic > xGraphic( xGraphicProvider->queryGraphic( aMediaProperties ), UNO_QUERY_THROW );
-            _out_rImage = _out_rHCImage = Image( xGraphic );
+            _out_rImage = Image( xGraphic );
         }
         catch( const Exception& )
         {
@@ -441,12 +439,11 @@ namespace pcr
         PushButton& rButton( impl_ensureButton( _bPrimary ) );
 
         OSL_PRECOND( _rImageURL.getLength(), "OBrowserLine::ShowBrowseButton: use the other version if you don't have an image!" );
-        Image aImage, aHCImage;
-        impl_getImagesFromURL_nothrow( _rImageURL, aImage, aHCImage );
+        Image aImage;
+        impl_getImagesFromURL_nothrow( _rImageURL, aImage );
 
-        rButton.SetModeImage( aImage, BMP_COLOR_NORMAL );
-        rButton.SetModeImage( aHCImage, BMP_COLOR_HIGHCONTRAST );
-    }
+        rButton.SetModeImage( aImage );
+   }
 
     //------------------------------------------------------------------
     void OBrowserLine::ShowBrowseButton( const Image& _rImage, sal_Bool _bPrimary )

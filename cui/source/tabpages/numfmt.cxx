@@ -308,7 +308,6 @@ SvxNumberFormatTabPage::~SvxNumberFormatTabPage()
 void SvxNumberFormatTabPage::Init_Impl()
 {
     ImageList               aIconList( CUI_RES_PLAIN ( IL_ICON ) );
-    ImageList               aIconListHC( CUI_RES_PLAIN ( IL_ICON_HC ) );
 
     bNumItemFlag=TRUE;
     bOneAreaFlag=FALSE;
@@ -321,13 +320,8 @@ void SvxNumberFormatTabPage::Init_Impl()
     nStdFormatHeight=nCurFormatY-nStdFormatY+nCurFormatHeight;
 
     aIbAdd.     SetModeImage( aIconList.GetImage( IID_ADD ) );
-    aIbAdd.     SetModeImage( aIconListHC.GetImage( IID_ADD ), BMP_COLOR_HIGHCONTRAST );
-
     aIbRemove.  SetModeImage( aIconList.GetImage( IID_REMOVE ) );
-    aIbRemove.  SetModeImage( aIconListHC.GetImage( IID_REMOVE ), BMP_COLOR_HIGHCONTRAST );
-
     aIbInfo.    SetModeImage( aIconList.GetImage( IID_INFO ) );
-    aIbInfo.    SetModeImage( aIconListHC.GetImage( IID_INFO ), BMP_COLOR_HIGHCONTRAST );
 
     aIbAdd.Enable(FALSE );
     aIbRemove.Enable(FALSE );

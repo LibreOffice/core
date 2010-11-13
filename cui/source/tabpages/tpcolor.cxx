@@ -127,9 +127,6 @@ SvxColorTabPage::SvxColorTabPage
     eCM                 ( CM_RGB )
 
 {
-    aBtnLoad.SetModeImage( Image( CUI_RES( RID_SVXIMG_LOAD_H ) ), BMP_COLOR_HIGHCONTRAST );
-    aBtnSave.SetModeImage( Image( CUI_RES( RID_SVXIMG_SAVE_H ) ), BMP_COLOR_HIGHCONTRAST );
-
     FreeResource();
 
     // diese Page braucht ExchangeSupport

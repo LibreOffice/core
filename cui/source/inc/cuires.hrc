@@ -76,8 +76,6 @@
 #define RID_SVXSTR_PAGEDIR_RTL_VERT         (RID_SVX_START + 967)
 #define RID_SVXSTR_PAGEDIR_LTR_VERT         (RID_SVX_START + 968)
 #define RID_STR_EDIT_GRAPHIC                (RID_SVX_START + 509)
-#define RID_SVXIMG_LOAD_H                   (RID_SVX_START + 283)
-#define RID_SVXIMG_SAVE_H                   (RID_SVX_START + 284)
 
 #define RID_SVXSTR_DESC_GRADIENT            (RID_SVX_START + 163)
 #define RID_SVXSTR_ASK_DEL_GRADIENT         (RID_SVX_START + 165)

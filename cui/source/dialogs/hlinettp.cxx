@@ -71,10 +71,8 @@ SvxHyperlinkInternetTp::SvxHyperlinkInternetTp ( Window *pParent,
     maBtTarget              ( this, CUI_RES (BTN_TARGET) ),
     mbMarkWndOpen           ( FALSE )
 {
-    // Set HC bitmaps and display display of bitmap names.
-    maBtBrowse.SetModeImage( Image( CUI_RES( IMG_BROWSE_HC ) ), BMP_COLOR_HIGHCONTRAST );
+    // Disable display of bitmap names.
     maBtBrowse.EnableTextDisplay (FALSE);
-    maBtTarget.SetModeImage( Image( CUI_RES( IMG_TARGET_HC ) ), BMP_COLOR_HIGHCONTRAST );
     maBtTarget.EnableTextDisplay (FALSE);
 
     InitStdControls();

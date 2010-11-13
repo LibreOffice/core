@@ -40,8 +40,6 @@
 #define CBX_ANONYMOUS               11
 #define BTN_BROWSE                  12
 #define BTN_TARGET                  13
-#define IMG_BROWSE_HC               14
-#define IMG_TARGET_HC               15
 
 /* Tabpage : Hyperlink - Mail & News */
 
@@ -53,7 +51,6 @@
 #define FT_SUBJECT                  6
 #define ED_SUBJECT                  7
 #define BTN_ADRESSBOOK              8
-#define IMG_ADRESSBOOK_HC           9
 
 /* Tabpage : Hyperlink - Document */
 
@@ -66,7 +63,6 @@
 #define ED_TARGET_DOC               7
 #define FT_URL                      8
 #define FT_FULL_URL                 9
-#define IMG_FILEOPEN_HC             10
 
 /* Tabpage : Hyperlink - New document */
 
@@ -78,7 +74,6 @@
 #define FT_DOCUMENT_TYPES           6
 #define LB_DOCUMENT_TYPES           7
 #define BTN_CREATE                  8
-#define IMG_CREATE_HC               9
 
 /* Tabpage-section : Hyperlink - more justifications */
 
@@ -92,7 +87,6 @@
 #define FT_TEXT                     37
 #define ED_TEXT                     38
 #define BTN_SCRIPT                  39
-#define IMG_SCRIPT_HC               40
 
 #define COL_OLD     54
 #define COL_2       63

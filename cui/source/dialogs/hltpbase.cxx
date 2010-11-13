@@ -230,8 +230,6 @@ void SvxHyperlinkTabPageBase::InitStdControls ()
         mpBtScript    = new ImageButton         ( this, ResId (BTN_SCRIPT, *m_pResMgr) );
 
         mpBtScript->SetClickHdl ( LINK ( this, SvxHyperlinkTabPageBase, ClickScriptHdl_Impl ) );
-
-        mpBtScript->SetModeImage( Image( ResId( IMG_SCRIPT_HC, *m_pResMgr ) ), BMP_COLOR_HIGHCONTRAST );
         mpBtScript->EnableTextDisplay (FALSE);
     }
 

@@ -1223,8 +1223,6 @@ WatchWindow::WatchWindow( Window* pParent ) :
     aXEdit.GetAccelerator().InsertItem( 2, KeyCode( KEY_ESCAPE ) );
     aXEdit.Show();
 
-    aRemoveWatchButton.SetModeImage(Image(IDEResId(RID_IMG_REMOVEWATCH_HC)),
-                                    BMP_COLOR_HIGHCONTRAST);
     aRemoveWatchButton.SetClickHdl( LINK( this, WatchWindow, ButtonHdl ) );
     aRemoveWatchButton.SetPosPixel( Point( nTextLen + aXEdit.GetSizePixel().Width() + 4, 2 ) );
     Size aSz( aRemoveWatchButton.GetModeImage().GetSizePixel() );
@@ -1535,7 +1533,6 @@ StackWindow::StackWindow( Window* pParent ) :
     aSz.Width() += 6;
     aSz.Height() += 6;
     aGotoCallButton.SetSizePixel( aSz );
-//  aGotoCallButton.Show(); // wird vom Basic noch nicht unterstuetzt!
     aGotoCallButton.Hide();
 
     // make stack window keyboard accessible
@@ -1697,11 +1694,6 @@ void __EXPORT ComplexEditorWindow::Resize()
     aEdtWindow.SetPosSizePixel( Point( DWBORDER+aBrkSz.Width()-1, DWBORDER ), aEWSz );
 
     aEWVScrollBar.SetPosSizePixel( Point( aOutSz.Width()-DWBORDER-nSBWidth, DWBORDER ), Size( nSBWidth, aSz.Height() ) );
-
-    // Macht das EditorWindow, ausserdem hier falsch, da Pixel
-//  aEWVScrollBar.SetPageSize( aEWSz.Height() * 8 / 10 );
-//  aEWVScrollBar.SetVisibleSize( aSz.Height() );
-//  Invalidate();
 }
 
 IMPL_LINK( ComplexEditorWindow, ScrollHdl, ScrollBar *, pCurScrollBar )
@@ -1845,7 +1837,6 @@ void WatchTreeListBox::RequestingChilds( SvLBoxEntry * pParent )
             pChildItem->maName = aBaseName;
 
             String aIndexStr = String( RTL_CONSTASCII_USTRINGPARAM( "(" ) );
-            // pChildItem->mpArray = pItem->mpArray;
             pChildItem->mpArrayParentItem = pItem;
             pChildItem->nDimLevel = nThisLevel;
             pChildItem->nDimCount = pItem->nDimCount;
@@ -1911,14 +1902,10 @@ SbxBase* WatchTreeListBox::ImplGetSBXForEntry( SvLBoxEntry* pEntry, bool& rbArra
         }
         // Array?
         else if( (pArray = pItem->GetRootArray()) != NULL )
-        // else if( (pArray = pItem->mpArray) != NULL )
         {
             rbArrayElement = true;
             if( pParentItem->nDimLevel + 1 == pParentItem->nDimCount )
-            // if( pItem->nDimLevel == pItem->nDimCount )
                 pSBX = pArray->Get( pItem->pIndices );
-            // else
-                // pSBX = pArray;
         }
     }
     else

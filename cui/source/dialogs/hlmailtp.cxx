@@ -63,8 +63,7 @@ SvxHyperlinkMailTp::SvxHyperlinkMailTp ( Window *pParent, const SfxItemSet& rIte
     maFtSubject     ( this, CUI_RES (FT_SUBJECT) ),
     maEdSubject     ( this, CUI_RES (ED_SUBJECT) )
 {
-    // Set HC bitmaps and disable display of bitmap names.
-    maBtAdrBook.SetModeImage( Image( CUI_RES( IMG_ADRESSBOOK_HC ) ), BMP_COLOR_HIGHCONTRAST );
+    // Disable display of bitmap names.
     maBtAdrBook.EnableTextDisplay (FALSE);
 
     InitStdControls();

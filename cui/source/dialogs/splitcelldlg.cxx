@@ -52,8 +52,6 @@ SvxSplitTableDlg::SvxSplitTableDlg( Window *pParent, bool bIsTableVertical, long
 , mnMaxVertical( nMaxVertical )
 , mnMaxHorizontal( nMaxHorizontal )
 {
-    maVertBox.SetModeRadioImage(Image(CUI_RES(BMP_SPLIT_VERT)), BMP_COLOR_HIGHCONTRAST);
-    maHorzBox.SetModeRadioImage(Image(CUI_RES(BMP_SPLIT_HORZ)), BMP_COLOR_HIGHCONTRAST);
     FreeResource();
     maHorzBox.SetClickHdl( LINK( this, SvxSplitTableDlg, ClickHdl ));
     maPropCB.SetClickHdl( LINK( this, SvxSplitTableDlg, ClickHdl ));

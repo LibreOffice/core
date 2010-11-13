@@ -234,9 +234,9 @@ void DialogWindow::KeyInput( const KeyEvent& rKEvt )
 
 void DialogWindow::Command( const CommandEvent& rCEvt )
 {
-    if ( ( rCEvt.GetCommand() == COMMAND_WHEEL ) ||
-            ( rCEvt.GetCommand() == COMMAND_STARTAUTOSCROLL ) ||
-            ( rCEvt.GetCommand() == COMMAND_AUTOSCROLL ) )
+    if ( ( rCEvt.GetCommand() == COMMAND_WHEEL           ) ||
+         ( rCEvt.GetCommand() == COMMAND_STARTAUTOSCROLL ) ||
+         ( rCEvt.GetCommand() == COMMAND_AUTOSCROLL      ) )
     {
         HandleScrollCommand( rCEvt, GetHScrollBar(), GetVScrollBar() );
     }
@@ -910,8 +910,7 @@ NameClashQueryBox::NameClashQueryBox( Window* pParent,
     AddButton( String( IDEResId( RID_STR_DLGIMP_CLASH_REPLACE ) ), RET_NO, 0 );
     AddButton( BUTTON_CANCEL, RET_CANCEL, BUTTONDIALOG_CANCELBUTTON );
 
-    SetImage( GetSettings().GetStyleSettings().GetHighContrastMode() ?
-        QueryBox::GetStandardImageHC() : QueryBox::GetStandardImage() );
+    SetImage( QueryBox::GetStandardImage() );
 }
 
 
@@ -936,8 +935,7 @@ LanguageMismatchQueryBox::LanguageMismatchQueryBox( Window* pParent,
     AddButton( BUTTON_CANCEL, RET_CANCEL, BUTTONDIALOG_CANCELBUTTON );
     AddButton( BUTTON_HELP, BUTTONID_HELP, BUTTONDIALOG_HELPBUTTON, 4 );
 
-    SetImage( GetSettings().GetStyleSettings().GetHighContrastMode() ?
-        QueryBox::GetStandardImageHC() : QueryBox::GetStandardImage() );
+    SetImage( QueryBox::GetStandardImage() );
 }
 
 BOOL implImportDialog( Window* pWin, const String& rCurPath, const ScriptDocument& rDocument, const String& aLibName )
@@ -1032,7 +1030,7 @@ BOOL implImportDialog( Window* pWin, const String& rCurPath, const ScriptDocumen
             if( bDialogAlreadyExists )
             {
                 String aQueryBoxTitle( IDEResId( RID_STR_DLGIMP_CLASH_TITLE ) );
-                String aQueryBoxText( IDEResId( RID_STR_DLGIMP_CLASH_TEXT ) );
+                String aQueryBoxText(  IDEResId( RID_STR_DLGIMP_CLASH_TEXT  ) );
                 aQueryBoxText.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "$(ARG1)" ) ), aXmlDlgName );
 
                 NameClashQueryBox aQueryBox( pWin, aQueryBoxTitle, aQueryBoxText );
