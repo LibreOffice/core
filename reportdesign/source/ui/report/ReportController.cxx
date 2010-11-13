@@ -1710,7 +1710,7 @@ void OReportController::impl_initialize( )
                 throw Exception();
 
             ::comphelper::NamedValueCollection aArgs(getModel()->getArgs());
-            setMode(aArgs.getOrDefault("Mode", rtl::OUString::createFromAscii("normal")));
+            setMode(aArgs.getOrDefault("Mode", ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("normal"))));
 
             listen(true);
             setEditable( !m_aReportModel->IsReadOnly() );
@@ -1812,7 +1812,7 @@ void OReportController::doOpenHelpAgent()
 {
     if (getFrame().is())
     {
-        rtl::OUString suURL = rtl::OUString::createFromAscii("vnd.sun.star.help://shared/text/shared/explorer/database/rep_main.xhp?UseDB=no&DbPAR=swriter");
+        rtl::OUString suURL(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.help://shared/text/shared/explorer/database/rep_main.xhp?UseDB=no&DbPAR=swriter"));
         openHelpAgent(suURL);
         // openHelpAgent(68245 /* HID_REPORT_DESIGN... UNKNOWN */ );
         // HID_APP_REPORT_TREE
