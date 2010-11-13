@@ -75,15 +75,6 @@ FloatingWindow RID_BASICIDE_OBJCAT
             };
         };
     };
-    ImageList RID_IMGLST_TB_HC
-    {
-        Prefix = "imh";
-        MASKCOLOR
-        IdList =
-        {
-            TBITEM_SHOW ;
-        };
-    };
     FixedText RID_FT_MACRODESCR
     {
         WordBreak = TRUE ;

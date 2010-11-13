@@ -192,7 +192,6 @@ private:
     BreakPointList  aBreakPointList;
     ModulWindow*    pModulWindow;
     BOOL            bErrorMarker;
-    bool m_bHighContrastMode;
 
     virtual void DataChanged(DataChangedEvent const & rDCEvt);
 
@@ -467,7 +466,6 @@ private:
     svtools::ColorConfig m_aColorConfig;
 
     ImageList m_aImagesNormal;
-    ImageList m_aImagesHighContrast;
 
     virtual void DataChanged(DataChangedEvent const & rDCEvt);
 
@@ -496,7 +494,7 @@ public:
     WatchWindow&    GetWatchWindow()    { return aWatchWindow; }
     StackWindow&    GetStackWindow()    { return aStackWindow; }
 
-    Image getImage(USHORT nId, bool bHighContrastMode) const;
+    Image getImage(USHORT nId) const;
 
     inline Color const & getSyntaxColor(TokenTypes eType) const
     { return m_aSyntaxColors[eType]; }

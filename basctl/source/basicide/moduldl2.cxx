@@ -1687,11 +1687,9 @@ void createLibImpl( Window* pWin, const ScriptDocument& rDocument,
                     USHORT nMode = pBasicBox->GetMode();
                     bool bDlgMode = ( nMode & BROWSEMODE_DIALOGS ) && !( nMode & BROWSEMODE_MODULES );
                     USHORT nId = bDlgMode ? RID_IMG_DLGLIB : RID_IMG_MODLIB;
-                    USHORT nIdHC = bDlgMode ? RID_IMG_DLGLIB_HC : RID_IMG_MODLIB_HC;
                     SvLBoxEntry* pNewLibEntry = pBasicBox->AddEntry(
                         aLibName,
                         Image( IDEResId( nId ) ),
-                        Image( IDEResId( nIdHC ) ),
                         pRootEntry, false,
                         std::auto_ptr< BasicEntry >( new BasicEntry( OBJ_TYPE_LIBRARY ) ) );
                     DBG_ASSERT( pNewLibEntry, "InsertEntry fehlgeschlagen!" );
@@ -1701,7 +1699,6 @@ void createLibImpl( Window* pWin, const ScriptDocument& rDocument,
                         SvLBoxEntry* pEntry_ = pBasicBox->AddEntry(
                             aModName,
                             Image( IDEResId( RID_IMG_MODULE ) ),
-                            Image( IDEResId( RID_IMG_MODULE_HC ) ),
                             pNewLibEntry, false,
                             std::auto_ptr< BasicEntry >( new BasicEntry( OBJ_TYPE_MODULE ) ) );
                         DBG_ASSERT( pEntry_, "InsertEntry fehlgeschlagen!" );

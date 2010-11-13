@@ -937,7 +937,6 @@ BreakPointWindow::BreakPointWindow( Window* pParent ) :
     pModulWindow = 0;
     nCurYOffset = 0;
     setBackgroundColor(GetSettings().GetStyleSettings().GetFieldColor());
-    m_bHighContrastMode = GetSettings().GetStyleSettings().GetHighContrastMode();
     nMarkerPos = MARKER_NOMARKER;
 
     // nCurYOffset merken und nicht von EditEngine holen.
@@ -971,9 +970,9 @@ void __EXPORT BreakPointWindow::Paint( const Rectangle& )
     long nLineHeight = GetTextHeight();
 
     Image aBrk1(((ModulWindowLayout *) pModulWindow->GetLayoutWindow())->
-                getImage(IMGID_BRKENABLED, m_bHighContrastMode));
+                getImage(IMGID_BRKENABLED));
     Image aBrk0(((ModulWindowLayout *) pModulWindow->GetLayoutWindow())->
-                getImage(IMGID_BRKDISABLED, m_bHighContrastMode));
+                getImage(IMGID_BRKDISABLED));
     Size aBmpSz( aBrk1.GetSizePixel() );
     aBmpSz = PixelToLogic( aBmpSz );
     Point aBmpOff( 0, 0 );
@@ -1022,8 +1021,7 @@ void BreakPointWindow::ShowMarker( BOOL bShow )
 
     Image aMarker(((ModulWindowLayout*)pModulWindow->GetLayoutWindow())->
                   getImage(bErrorMarker
-                           ? IMGID_ERRORMARKER : IMGID_STEPMARKER,
-                           m_bHighContrastMode));
+                           ? IMGID_ERRORMARKER : IMGID_STEPMARKER));
 
     Size aMarkerSz( aMarker.GetSizePixel() );
     aMarkerSz = PixelToLogic( aMarkerSz );
@@ -1155,7 +1153,6 @@ void BreakPointWindow::DataChanged(DataChangedEvent const & rDCEvt)
             != rDCEvt.GetOldSettings()->GetStyleSettings().GetFieldColor())
         {
             setBackgroundColor(aColor);
-            m_bHighContrastMode = GetSettings().GetStyleSettings().GetHighContrastMode();
             Invalidate();
         }
     }

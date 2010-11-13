@@ -123,8 +123,7 @@ void __EXPORT BasicTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )
                 // exchange image
                 bool bDlgMode = ( nMode & BROWSEMODE_DIALOGS ) && !( nMode & BROWSEMODE_MODULES );
                 Image aImage( IDEResId( bDlgMode ? RID_IMG_DLGLIB : RID_IMG_MODLIB ) );
-                Image aImageHC( IDEResId( bDlgMode ? RID_IMG_DLGLIB_HC : RID_IMG_MODLIB_HC ) );
-                SetEntryBitmaps( pEntry, aImage, aImageHC );
+                SetEntryBitmaps( pEntry, aImage );
             }
             else
             {
