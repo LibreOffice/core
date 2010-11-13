@@ -49,6 +49,7 @@ gb_OSDEFS := \
 
 gb_COMPILERDEFS := \
     -D$(COM) \
+    -DCPPU_ENV=sunpro5 \
 #	-D$(CVER) \
 #	-DCVER=$(CVER) \
 
