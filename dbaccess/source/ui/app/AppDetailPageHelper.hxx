@@ -150,24 +150,20 @@ namespace dbaui
                 The newly created DBTreeListBox
             @param  _rImage
                 the resource id of the default icon
-            @param  _rImageHC
-                the resource id of the default icon (HC version)
             @return
                 The new tree.
         */
-        DBTreeListBox* createTree( DBTreeListBox* _pTreeView, const Image& _rImage, const Image& _rImageHC );
+        DBTreeListBox* createTree( DBTreeListBox* _pTreeView, const Image& _rImage );
 
         /** creates the tree and sets all HandleCallbacks
             @param  _nHelpId
                 The help id of the control
             @param  _nCollapsedBitmap
-                The image to use for tree entries.
-            @param  _rImageHC
                 The image to use in high contrast mode.
             @return
                 The new tree.
         */
-        DBTreeListBox* createSimpleTree( ULONG _nHelpId, const Image& _rImage, const Image& _rImageHC );
+        DBTreeListBox* createSimpleTree( ULONG _nHelpId, const Image& _rImage );
 
         DECL_LINK( OnEntryDoubleClick,          SvTreeListBox* );
         DECL_LINK( OnEntrySelChange,            void* );

@@ -623,8 +623,7 @@ void OAppDetailPageHelper::createTablesPage(const Reference< XConnection>& _xCon
 
         ImageProvider aImageProvider( _xConnection );
         createTree( pTreeView,
-            aImageProvider.getDefaultImage( DatabaseObject::TABLE, false ),
-            aImageProvider.getDefaultImage( DatabaseObject::TABLE, true )
+            aImageProvider.getDefaultImage( DatabaseObject::TABLE, false )
         );
 
         pTreeView->notifyHiContrastChanged();
@@ -670,23 +669,20 @@ void OAppDetailPageHelper::createPage(ElementType _eType,const Reference< XNameA
 
     USHORT nHelpId = 0, nImageId = 0, nImageIdH = 0;
     ImageProvider aImageProvider;
-    Image aFolderImage, aFolderImageHC;
+    Image aFolderImage;
     switch( _eType )
     {
         case E_FORM:
             nHelpId = HID_APP_FORM_TREE;
             aFolderImage = aImageProvider.getFolderImage( DatabaseObject::FORM, false );
-            aFolderImageHC = aImageProvider.getFolderImage( DatabaseObject::FORM, true );
             break;
         case E_REPORT:
             nHelpId = HID_APP_REPORT_TREE;
             aFolderImage = aImageProvider.getFolderImage( DatabaseObject::REPORT, false );
-            aFolderImageHC = aImageProvider.getFolderImage( DatabaseObject::REPORT, true );
             break;
         case E_QUERY:
             nHelpId = HID_APP_QUERY_TREE;
             aFolderImage = aImageProvider.getFolderImage( DatabaseObject::QUERY, false );
-            aFolderImageHC = aImageProvider.getFolderImage( DatabaseObject::QUERY, true );
             break;
         default:
             OSL_ENSURE(0,"Illegal call!");
@@ -695,7 +691,7 @@ void OAppDetailPageHelper::createPage(ElementType _eType,const Reference< XNameA
 
     if ( !m_pLists[_eType] )
     {
-        m_pLists[_eType] = createSimpleTree( nHelpId, aFolderImage, aFolderImageHC );
+        m_pLists[_eType] = createSimpleTree( nHelpId, aFolderImage );
     }
 
     if ( m_pLists[_eType] )
@@ -789,15 +785,15 @@ void OAppDetailPageHelper::fillNames( const Reference< XNameAccess >& _xContaine
     }
 }
 // -----------------------------------------------------------------------------
-DBTreeListBox* OAppDetailPageHelper::createSimpleTree( ULONG _nHelpId, const Image& _rImage, const Image& _rImageHC )
+DBTreeListBox* OAppDetailPageHelper::createSimpleTree( ULONG _nHelpId, const Image& _rImage )
 {
     DBTreeListBox* pTreeView = new DBTreeListBox(this,getBorderWin().getView()->getORB(),WB_HASLINES | WB_SORT | WB_HASBUTTONS | WB_HSCROLL |WB_HASBUTTONSATROOT | WB_TABSTOP);
     pTreeView->SetHelpId(_nHelpId);
-    return createTree( pTreeView, _rImage, _rImageHC );
+    return createTree( pTreeView, _rImage );
 }
 
 // -----------------------------------------------------------------------------
-DBTreeListBox* OAppDetailPageHelper::createTree( DBTreeListBox* _pTreeView, const Image& _rImage, const Image& _rImageHC )
+DBTreeListBox* OAppDetailPageHelper::createTree( DBTreeListBox* _pTreeView, const Image& _rImage )
 {
     WaitObject aWaitCursor(this);
 
