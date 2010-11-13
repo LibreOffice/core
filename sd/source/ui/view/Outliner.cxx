@@ -216,7 +216,7 @@ Outliner::Outliner( SdDrawDocument* pDoc, USHORT nMode )
             Any                     aAny;
 
             aAny = aLinguConfig.GetProperty(
-                rtl::OUString::createFromAscii( UPN_IS_SPELL_AUTO ) );
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UPN_IS_SPELL_AUTO )) );
             aAny >>= bOnlineSpell;
         }
         catch( ... )

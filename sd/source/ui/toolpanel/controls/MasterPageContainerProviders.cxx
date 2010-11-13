@@ -189,8 +189,8 @@ Image TemplatePreviewProvider::operator() (
                         {
                             uno::Reference<io::XStream> xThumbnailCopy (
                                 xStorage->cloneStreamElement(
-                                    ::rtl::OUString::createFromAscii(
-                                        "thumbnail.png")));
+                                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                        "thumbnail.png"))));
                             if (xThumbnailCopy.is())
                                 xIStream = xThumbnailCopy->getInputStream();
                         }
