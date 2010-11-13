@@ -2254,9 +2254,6 @@ void RadioButton::ImplInitSettings( BOOL bFont,
     }
 }
 
-//---------------------------------------------------------------------
-//--- 12.03.2003 18:46:14 ---------------------------------------------
-
 void RadioButton::DrawRadioButtonState( )
 {
     ImplDrawRadioButtonState( );

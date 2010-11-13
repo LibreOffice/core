@@ -363,9 +363,6 @@ namespace utl
         return bIsSet;
     }
 
-    //---------------------------------------------------------------------
-    //--- 20.08.01 19:03:20 -----------------------------------------------
-
     sal_Bool OConfigurationNode::hasByHierarchicalName( const ::rtl::OUString& _rName ) const throw()
     {
         OSL_ENSURE( m_xHierarchyAccess.is(), "OConfigurationNode::hasByHierarchicalName: no hierarchy access!" );

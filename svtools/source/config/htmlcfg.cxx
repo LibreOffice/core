@@ -390,10 +390,6 @@ void SvxHtmlOptions::SetSaveGraphicsLocal(BOOL bSet)
     SetModified();
 }
 
-/*-----------------10/21/97 08:34am-----------------
-
---------------------------------------------------*/
-
 BOOL    SvxHtmlOptions::IsPrintLayoutExtension() const
 {
     BOOL bRet = 0 != (pImp->nFlags & HTMLCFG_PRINT_LAYOUT_EXTENSION);
@@ -408,9 +404,7 @@ BOOL    SvxHtmlOptions::IsPrintLayoutExtension() const
     }
     return bRet;
 }
-/*-----------------10/21/97 08:34am-----------------
 
---------------------------------------------------*/
 void    SvxHtmlOptions::SetPrintLayoutExtension(BOOL bSet)
 {
     if(bSet)
@@ -477,15 +471,11 @@ SvxHtmlOptions* SvxHtmlOptions::Get()
     return pOptions;
 }
 
-
-/* ---------------------- 2006-06-07T21:02+0200 ---------------------- */
 BOOL SvxHtmlOptions::IsNumbersEnglishUS() const
 {
     return 0 != (pImp->nFlags & HTMLCFG_NUMBERS_ENGLISH_US) ;
 }
 
-
-/* ---------------------- 2006-06-07T21:02+0200 ---------------------- */
 void SvxHtmlOptions::SetNumbersEnglishUS(BOOL bSet)
 {
     if(bSet)
