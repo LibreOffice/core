@@ -282,8 +282,7 @@ void OTableWindow::impl_updateImage()
         return;
     }
 
-    m_aTypeImage.SetModeImage( aImage, BMP_COLOR_NORMAL );
-    m_aTypeImage.SetModeImage( aImageHC, BMP_COLOR_HIGHCONTRAST );
+    m_aTypeImage.SetModeImage( aImage );
     m_aTypeImage.Show();
 }
 

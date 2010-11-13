@@ -144,19 +144,9 @@ Image IMG_NAVIGATION_BTN_UP_SC
     ImageBitmap = Bitmap { File = "fp010"; };
     MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
 };
-Image IMG_NAVIGATION_BTN_UP_SCH
-{
-    ImageBitmap = Bitmap { File = "fph010"; };
-    MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
-};
 Image IMG_NAVIGATION_CREATEFOLDER_SC
 {
     ImageBitmap = Bitmap { File = "fp015"; };
-    MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
-};
-Image IMG_NAVIGATION_CREATEFOLDER_SCH
-{
-    ImageBitmap = Bitmap { File = "fph015"; };
     MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
 };
 
@@ -164,4 +154,3 @@ String STR_ALREADYEXISTOVERWRITE
 {
     Text [ en-US ] = "The file already exists. Overwrite?" ;
 };
-

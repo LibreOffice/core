@@ -259,9 +259,6 @@ Condition::Condition( Window* _pParent, IConditionalFormatAction& _rAction, ::rp
     ,m_nLastKnownWindowWidth( -1 )
     ,m_bInDestruction( false )
 {
-    m_aMoveUp.SetModeImage( ModuleRes( IMG_MOVE_UP_HC ), BMP_COLOR_HIGHCONTRAST );
-    m_aMoveDown.SetModeImage( ModuleRes( IMG_MOVE_DOWN_HC ), BMP_COLOR_HIGHCONTRAST );
-
     FreeResource();
     m_aActions.SetStyle(m_aActions.GetStyle()|WB_LINESPACING);
     m_aCondLHS.GrabFocus();

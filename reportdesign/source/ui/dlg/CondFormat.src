@@ -190,16 +190,6 @@ Control WIN_CONDITION
         Size = MAP_APPFONT( IMAGE_BUTTON_WIDTH, IMAGE_BUTTON_HEIGHT );
         Text = "-";
     };
-
-    Image IMG_MOVE_UP_HC
-    {
-        ImageBitmap = Bitmap { File = "arrow_move_up_hc" ; };
-    };
-
-    Image IMG_MOVE_DOWN_HC
-    {
-        ImageBitmap = Bitmap { File = "arrow_move_down_hc" ; };
-    };
 };
 
 ModalDialog RID_CONDFORMAT

@@ -94,12 +94,6 @@ ODbaseIndexDialog::ODbaseIndexDialog( Window * pParent, String aDataSrcName )
     Init();
     SetCtrls();
     FreeResource();
-
-    // set Hi contrast bitmaps
-    aIB_Add.SetModeImage(       ModuleRes(IMG_ONE_LEFT_H),BMP_COLOR_HIGHCONTRAST);
-    aIB_AddAll.SetModeImage(    ModuleRes(IMG_ALL_LEFT_H),BMP_COLOR_HIGHCONTRAST);
-    aIB_Remove.SetModeImage(    ModuleRes(IMG_ONE_RIGHT_H),BMP_COLOR_HIGHCONTRAST);
-    aIB_RemoveAll.SetModeImage( ModuleRes(IMG_ALL_RIGHT_H),BMP_COLOR_HIGHCONTRAST);
 }
 
 //-------------------------------------------------------------------------

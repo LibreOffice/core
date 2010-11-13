@@ -81,12 +81,6 @@ OWizNameMatching::OWizNameMatching( Window* pParent)
     m_sDestText     = m_FT_TABLE_RIGHT.GetText();
     m_sDestText.AppendAscii("\n");
 
-    // set hiContrast
-    m_ibColumn_up.SetModeImage(ModuleRes(IMG_SORTUP_H),BMP_COLOR_HIGHCONTRAST);
-    m_ibColumn_down.SetModeImage(ModuleRes(IMG_SORTDOWN_H),BMP_COLOR_HIGHCONTRAST);
-    m_ibColumn_up_right.SetModeImage(ModuleRes(IMG_SORTUP_H),BMP_COLOR_HIGHCONTRAST);
-    m_ibColumn_down_right.SetModeImage(ModuleRes(IMG_SORTDOWN_H),BMP_COLOR_HIGHCONTRAST);
-
     FreeResource();
 }
 // -----------------------------------------------------------------------
