@@ -553,22 +553,16 @@ public:
                                     SfxStyleSheetBasePool* ) const;
 
 
-    virtual sal_uInt16          GetContentCount(
-                                        sal_uInt16 nIdx1 = INDEX_IGNORE,
-                                        sal_uInt16 nIdx2 = INDEX_IGNORE );
-    virtual sal_Bool            CanHaveChilds(
-                                        sal_uInt16 nIdx1,
-                                            sal_uInt16 nIdx2 = INDEX_IGNORE );
-    virtual void                GetContent( String &,
+    sal_uInt16                  GetContentCount(sal_uInt16 nIdx);
+    bool                        CanHaveChilds( sal_uInt16 nIdx1, sal_uInt16 nIdx2 );
+    void                        GetContent( String &,
                                         Bitmap &rClosedBitmap,
                                         Bitmap &rOpenedBitmap,
-                                        sal_Bool   &bCanDelete,
+                                        bool &bCanDelete,
                                         sal_uInt16 nPos,
-                                        sal_uInt16 nIdx1,
-                                        sal_uInt16 nIdx2 = INDEX_IGNORE );
+                                        sal_uInt16 nIdx1 );
 
-    virtual void                TriggerHelpPI(
-                                    sal_uInt16 nIdx1, sal_uInt16 nIdx2, sal_uInt16 nIdx3);
+    void                TriggerHelpPI(sal_uInt16 nIdx1, sal_uInt16 nIdx2);
 
     virtual Bitmap              GetStyleFamilyBitmap(SfxStyleFamily eFamily);
 
