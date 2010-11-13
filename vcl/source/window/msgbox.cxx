@@ -54,14 +54,11 @@ static void ImplInitMsgBoxImageList()
     {
         ResMgr* pResMgr = ImplGetResMgr();
         pSVData->maWinData.mpMsgBoxImgList = new ImageList(4);
-        pSVData->maWinData.mpMsgBoxHCImgList = new ImageList(4);
         if( pResMgr )
         {
             Color aNonAlphaMask( 0xC0, 0xC0, 0xC0 );
             pSVData->maWinData.mpMsgBoxImgList->InsertFromHorizontalBitmap
                 ( ResId( SV_RESID_BITMAP_MSGBOX, *pResMgr ), 4, &aNonAlphaMask );
-            pSVData->maWinData.mpMsgBoxHCImgList->InsertFromHorizontalBitmap
-                ( ResId( SV_RESID_BITMAP_MSGBOX_HC, *pResMgr ), 4, &aNonAlphaMask );
         }
     }
 }
@@ -209,7 +206,7 @@ MessBox::MessBox( Window* pParent, const ResId& rResId ) :
 
 void MessBox::ImplLoadRes( const ResId& )
 {
-    SetText( ReadStringRes() );
+    SetText(     ReadStringRes() );
     SetMessText( ReadStringRes() );
     SetHelpText( ReadStringRes() );
 }
@@ -312,9 +309,6 @@ void MessBox::ImplPosControls()
                                               IMPL_DIALOG_OFFSET-2+IMPL_MSGBOX_OFFSET_EXTRA_Y ),
                                        aImageSize );
         mpFixedImage->SetImage( maImage );
-        // forward the HC image
-        if( !!maImageHC )
-            mpFixedImage->SetModeImage( maImageHC, BMP_COLOR_HIGHCONTRAST );
         mpFixedImage->Show();
         nMaxWidth -= aImageSize.Width()+IMPL_SEP_MSGBOX_IMAGE;
     }
@@ -465,28 +459,33 @@ void MessBox::SetDefaultCheckBoxText()
 
 // -----------------------------------------------------------------------
 
-BOOL MessBox::SetModeImage( const Image& rImage, BmpColorMode eMode )
+BOOL MessBox::SetModeImage( const Image& rImage )
 {
-    if( eMode == BMP_COLOR_NORMAL )
-        SetImage( rImage );
-    else if( eMode == BMP_COLOR_HIGHCONTRAST )
-        maImageHC = rImage;
-    else
-        return FALSE;
+    SetImage( rImage );
     return TRUE;
 }
 
 // -----------------------------------------------------------------------
 
-const Image& MessBox::GetModeImage( BmpColorMode eMode ) const
+const Image& MessBox::GetModeImage( ) const
 {
-    if( eMode == BMP_COLOR_HIGHCONTRAST )
-        return maImageHC;
-    else
-        return maImage;
+    return maImage;
 }
 
 // -----------------------------------------------------------------------
+
+Size MessBox::GetOptimalSize(WindowSizeType eType) const
+{
+    switch( eType ) {
+    case WINDOWSIZE_MINIMUM:
+        // FIXME: base me on the font size ?
+        return Size( 250, 100 );
+    default:
+        return Window::GetOptimalSize( eType );
+    }
+}
+
+// ============================================================================
 
 void InfoBox::ImplInitInfoBoxData()
 {
@@ -494,8 +493,7 @@ void InfoBox::ImplInitInfoBoxData()
     if ( !GetText().Len() )
         SetText( Application::GetDisplayName() );
 
-    SetImage( GetSettings().GetStyleSettings().GetHighContrastMode() ?
-                InfoBox::GetStandardImageHC() : InfoBox::GetStandardImage() );
+    SetImage( InfoBox::GetStandardImage() );
     mnSoundType = ((USHORT)SOUND_INFO)+1;
 }
 
@@ -523,15 +521,7 @@ Image InfoBox::GetStandardImage()
     return ImplGetSVData()->maWinData.mpMsgBoxImgList->GetImage( 4 );
 }
 
-// -----------------------------------------------------------------------
-
-Image InfoBox::GetStandardImageHC()
-{
-    ImplInitMsgBoxImageList();
-    return ImplGetSVData()->maWinData.mpMsgBoxHCImgList->GetImage( 4 );
-}
-
-// -----------------------------------------------------------------------
+// ============================================================================
 
 void WarningBox::ImplInitWarningBoxData()
 {
@@ -577,7 +567,7 @@ Image WarningBox::GetStandardImage()
     return ImplGetSVData()->maWinData.mpMsgBoxImgList->GetImage( 3 );
 }
 
-// -----------------------------------------------------------------------
+// ============================================================================
 
 void ErrorBox::ImplInitErrorBoxData()
 {
@@ -585,8 +575,7 @@ void ErrorBox::ImplInitErrorBoxData()
     if ( !GetText().Len() )
         SetText( Application::GetDisplayName() );
 
-    SetImage( GetSettings().GetStyleSettings().GetHighContrastMode() ?
-        ErrorBox::GetStandardImageHC() : ErrorBox::GetStandardImage() );
+    SetImage( ErrorBox::GetStandardImage() );
     mnSoundType = ((USHORT)SOUND_ERROR)+1;
 }
 
@@ -615,15 +604,7 @@ Image ErrorBox::GetStandardImage()
     return ImplGetSVData()->maWinData.mpMsgBoxImgList->GetImage( 1 );
 }
 
-// -----------------------------------------------------------------------
-
-Image ErrorBox::GetStandardImageHC()
-{
-    ImplInitMsgBoxImageList();
-    return ImplGetSVData()->maWinData.mpMsgBoxHCImgList->GetImage( 1 );
-}
-
-// -----------------------------------------------------------------------
+// ============================================================================
 
 void QueryBox::ImplInitQueryBoxData()
 {
@@ -631,8 +612,7 @@ void QueryBox::ImplInitQueryBoxData()
     if ( !GetText().Len() )
         SetText( Application::GetDisplayName() );
 
-    SetImage( GetSettings().GetStyleSettings().GetHighContrastMode() ?
-        QueryBox::GetStandardImageHC() : QueryBox::GetStandardImage() );
+    SetImage( QueryBox::GetStandardImage() );
     mnSoundType = ((USHORT)SOUND_QUERY)+1;
 }
 
@@ -667,27 +647,6 @@ Image QueryBox::GetStandardImage()
 {
     ImplInitMsgBoxImageList();
     return ImplGetSVData()->maWinData.mpMsgBoxImgList->GetImage( 2 );
-}
-
-// -----------------------------------------------------------------------
-
-Image QueryBox::GetStandardImageHC()
-{
-    ImplInitMsgBoxImageList();
-    return ImplGetSVData()->maWinData.mpMsgBoxHCImgList->GetImage( 2 );
-}
-
-// -----------------------------------------------------------------------
-
-Size MessBox::GetOptimalSize(WindowSizeType eType) const
-{
-    switch( eType ) {
-    case WINDOWSIZE_MINIMUM:
-        // FIXME: base me on the font size ?
-        return Size( 250, 100 );
-    default:
-        return Window::GetOptimalSize( eType );
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -10,11 +10,6 @@
             <idlist none="IID_INFO"/>
             <idcount none="3"/>
     </imagelist>
-    <imagelist prefix="nuh" id="IL_ICON_HC">
-            <maskcolor blue="0xFFFF" green="0x0000" red="0xFFFF" type="Color"/>
-            <idlist none="IID_INFO"/>
-            <idcount none="3"/>
-    </imagelist>
     !-->
     <vbox spacing="5" border="5">
     <string id="STR_EUROPE" _text="Europe"/>

@@ -43,7 +43,6 @@
 #define SV_RESID_BITMAP_RADIO               1010
 
 #define SV_RESID_BITMAP_MSGBOX              1020
-#define SV_RESID_BITMAP_MSGBOX_HC           1021
 
 #define SV_RESID_BITMAP_PIN                 1030
 

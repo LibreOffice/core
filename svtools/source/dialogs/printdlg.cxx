@@ -165,10 +165,8 @@ PrintDialog::~PrintDialog()
 
 void PrintDialog::ImplSetImages()
 {
-    maImgCollate.SetModeImage(Image( SvtResId( RID_IMG_PRNDLG_COLLATE ) ),
-                              BMP_COLOR_NORMAL );
-    maImgNotCollate.SetModeImage(Image( SvtResId( RID_IMG_PRNDLG_NOCOLLATE ) ),
-                                 BMP_COLOR_NORMAL );
+    maImgCollate.SetModeImage(   Image( SvtResId( RID_IMG_PRNDLG_COLLATE   ) ) );
+    maImgNotCollate.SetModeImage(Image( SvtResId( RID_IMG_PRNDLG_NOCOLLATE ) ) );
 }
 
 // -----------------------------------------------------------------------

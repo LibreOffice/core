@@ -166,9 +166,9 @@ bool Button::SetModeImage (Image const& image)
     return getImpl().SetModeImage (image.getImpl().mxGraphic);
 }
 
-bool Button::SetModeImage (::Image const& image, BmpColorMode mode)
+bool Button::SetModeImage (::Image const& image)
 {
-    return GetButton ()->SetModeImage (image, mode);
+    return GetButton ()->SetModeImage (image);
 }
 
 void Button::SetImageAlign( ImageAlign eAlign )
