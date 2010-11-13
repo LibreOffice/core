@@ -55,9 +55,7 @@
 
 // bitmap
 #define RID_BMP_REFBTN1                             (RID_BITMAP_START + 0)
-#define RID_BMP_REFBTN1_H                           (RID_BITMAP_START + 1)
 #define RID_BMP_REFBTN2                             (RID_BITMAP_START + 2)
-#define RID_BMP_REFBTN2_H                           (RID_BITMAP_START + 3)
 
 
 // pages
@@ -66,8 +64,6 @@
 #define RID_FORMULADLG_FORMULA                      (RID_PAGE_START + 2)
 #define RID_FORMULATAB_PARAMETER                    (RID_PAGE_START + 3)
 #define RID_FORMULADLG_FORMULA_MODAL                (RID_PAGE_START + 4)
-
-// misc
 
 // -----------------------------------------------------------------------
 

@@ -827,11 +827,7 @@ SvxTPFilter::SvxTPFilter( Window * pParent)
     aStrMyName  (       SVX_RES( STR_FILTER) ),
     bModified   (FALSE)
 {
-    Image aImgTimeHC( SVX_RES( IMG_TIME_H ) );
     FreeResource();
-
-    aIbClock.SetModeImage( aImgTimeHC, BMP_COLOR_HIGHCONTRAST );
-    aIbClock2.SetModeImage( aImgTimeHC, BMP_COLOR_HIGHCONTRAST );
 
     aDfDate.SetShowDateCentury( TRUE );
     aDfDate2.SetShowDateCentury( TRUE );

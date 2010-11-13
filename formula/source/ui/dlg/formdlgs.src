@@ -475,15 +475,6 @@ Image RID_BMP_REFBTN1
     MaskColor = STD_MASKCOLOR;
 };
 
-Image RID_BMP_REFBTN1_H
-{
-    ImageBitmap = Bitmap
-    {
-        File = "refinp1_h.bmp";
-    };
-    MaskColor = STD_MASKCOLOR;
-};
-
 Image RID_BMP_REFBTN2
 {
     ImageBitmap = Bitmap
@@ -492,35 +483,3 @@ Image RID_BMP_REFBTN2
     };
     MaskColor = STD_MASKCOLOR;
 };
-
-Image RID_BMP_REFBTN2_H
-{
-    ImageBitmap = Bitmap
-    {
-        File = "refinp2_h.bmp";
-    };
-    MaskColor = STD_MASKCOLOR;
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

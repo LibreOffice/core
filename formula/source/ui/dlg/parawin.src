@@ -161,29 +161,4 @@ TabPage RID_FORMULATAB_PARAMETER
     {
         Text [ en-US ] = "(required)" ;
     };
-
-    Image IMG_FX_H
-    {
-        ImageBitmap = Bitmap { File = "fx_h.bmp" ; };
-        MaskColor = STD_MASKCOLOR;
-    };
-
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

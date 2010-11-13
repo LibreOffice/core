@@ -733,7 +733,6 @@ void DbGridControl::NavigationBar::SetState(sal_uInt16 nWhich)
         // event (ImplGenerateMouseMove) even if nothing happened. This may lead to some unwanted effects, so we
         // do this check.
         // For further explanation see Bug 69900.
-        // FS - 18.11.99
         pWnd->Enable(bAvailable);
 }
 

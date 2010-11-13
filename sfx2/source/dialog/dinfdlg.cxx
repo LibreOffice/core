@@ -1769,7 +1769,7 @@ CustomPropertyLine::CustomPropertyLine( Window* pParent ) :
     m_aTimeField.SetExtFormat( EXTTIMEF_24H_LONG );
     m_aDateField.SetExtDateFormat( XTDATEF_SYSTEM_SHORT_YYYY );
 
-    m_aRemoveButton.SetModeImage( SfxResId( SFX_IMG_PROPERTY_REMOVE ), BMP_COLOR_NORMAL );
+    m_aRemoveButton.SetModeImage( SfxResId( SFX_IMG_PROPERTY_REMOVE ) );
 }
 
 void CustomPropertyLine::SetRemoved()

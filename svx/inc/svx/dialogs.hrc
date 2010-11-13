@@ -188,10 +188,7 @@
 
 #define RID_SVXIMAGE_LIGHT_ON               (RID_SVX_START + 210)
 #define RID_SVXIMAGE_LIGHT_OFF              (RID_SVX_START + 211)
-#define RID_SVXIMAGE_LIGHT_ON_H             (RID_SVX_START + 212)
-#define RID_SVXIMAGE_LIGHT_OFF_H            (RID_SVX_START + 213)
 #define RID_SVXIMAGE_COLORDLG               (RID_SVX_START + 214)
-#define RID_SVXIMAGE_COLORDLG_H             (RID_SVX_START + 215)
 
 #define RID_SVXFLOAT3D_FAVORITE             (RID_SVX_START + 73)
 #define RID_SVXFLOAT3D_FIX_X                (RID_SVX_START + 74)

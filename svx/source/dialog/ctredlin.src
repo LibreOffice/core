@@ -249,11 +249,6 @@ TabPage SID_REDLIN_FILTER_PAGE
         Size = MAP_APPFONT ( 178 , 12 ) ;
         TabStop = TRUE ;
     };
-    Image IMG_TIME_H
-    {
-        ImageBitmap = Bitmap { File = "time_h.bmp" ; };
-        MASKCOLOR
-    };
 };
 TabPage SID_REDLIN_VIEW_PAGE
 {

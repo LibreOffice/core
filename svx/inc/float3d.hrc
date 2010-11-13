@@ -26,8 +26,6 @@
  ************************************************************************/
 #include <svx/dialogs.hrc>
 
-//#define FLT_WIN_3D                827
-
 #define BTN_GEO                 2
 #define BTN_REPRESENTATION      3
 #define BTN_LIGHT               4
@@ -43,12 +41,12 @@
 #define CTL_PREVIEW             12
 #define CTL_LIGHT_PREVIEW       13
 
-// Geometrie
+// Geomerty
 #define FT_HORIZONTAL           24
 #define NUM_HORIZONTAL          25
 #define FT_VERTICAL             26
 #define NUM_VERTICAL            27
-#define FL_SEGMENTS                    28
+#define FL_SEGMENTS             28
 #define FT_PERCENT_DIAGONAL     29
 #define MTR_PERCENT_DIAGONAL    30
 #define FT_BACKSCALE            31
@@ -57,32 +55,32 @@
 #define MTR_END_ANGLE           34
 #define FT_DEPTH                35
 #define MTR_DEPTH               36
-#define FL_GEOMETRIE                   37
+#define FL_GEOMETRIE            37
 
 #define BTN_NORMALS_OBJ         38
 #define BTN_NORMALS_FLAT        39
 #define BTN_NORMALS_SPHERE      40
 #define BTN_TWO_SIDED_LIGHTING  41
 #define BTN_NORMALS_INVERT      42
-#define FL_NORMALS                             43
+#define FL_NORMALS              43
 
 #define BTN_DOUBLE_SIDED        44
 
-// Darstellung
+// Depiction/Appearance
 #define FT_SHADEMODE            45
 #define LB_SHADEMODE            46
 #define BTN_SHADOW_3D           47
 #define FT_SLANT                48
 #define MTR_SLANT               49
-#define FL_SHADOW              50
+#define FL_SHADOW               50
 #define FT_DISTANCE             51
 #define MTR_DISTANCE            52
 #define FT_FOCAL_LENGTH         53
 #define MTR_FOCAL_LENGTH        54
-#define FL_CAMERA              55
-#define FL_REPRESENTATION      56
+#define FL_CAMERA               55
+#define FL_REPRESENTATION       56
 
-// Beleuchtung
+// Lighting
 #define BTN_LIGHT_1             60
 #define BTN_LIGHT_2             61
 #define BTN_LIGHT_3             62
@@ -100,11 +98,11 @@
 #define LB_LIGHT_7              74
 #define LB_LIGHT_8              75
 #define BTN_LIGHT_COLOR         76
-#define FT_LIGHTSOURCE                 77
+#define FT_LIGHTSOURCE          77
 #define LB_AMBIENTLIGHT         78
 #define BTN_AMBIENT_COLOR       79
-#define FT_AMBIENTLIGHT                80
-#define FL_LIGHT                               81
+#define FT_AMBIENTLIGHT         80
+#define FL_LIGHT                81
 
 // Textures
 #define FT_TEX_KIND             90
@@ -124,11 +122,10 @@
 #define BTN_TEX_OBJECT_Y        104
 #define FT_TEX_FILTER           105
 #define BTN_TEX_FILTER          106
-#define FL_TEXTURE                             107
+#define FL_TEXTURE              107
 
 // Material
-//#define CTL_MATERIAL              110
-#define FL_MATERIAL                            111
+#define FL_MATERIAL             111
 
 #define FT_MAT_COLOR                112
 #define LB_MAT_COLOR                113
@@ -141,44 +138,6 @@
 #define BTN_SPECULAR_COLOR          120
 #define FT_MAT_SPECULAR_INTENSITY   121
 #define MTR_MAT_SPECULAR_INTENSITY  122
-#define FL_MAT_SPECULAR                        123
+#define FL_MAT_SPECULAR             123
 #define FT_MAT_FAVORITES            124
 #define LB_MAT_FAVORITES            125
-
-
-//#define BTN_MAT_FAVORITES         125
-//#define BTN_MAT_EDITOR            126
-
-
-// high contrast
-#define BMP_GEO_H                   130
-#define BMP_REPRESENTATION_H        131
-#define BMP_LIGHT_H                 132
-#define BMP_TEXTURE_H               133
-#define BMP_MATERIAL_H              134
-#define BMP_UPDATE_H                135
-#define BMP_ASSIGN_H                136
-#define BMP_CHANGE_TO_3D_H          137
-#define BMP_LATHE_OBJ_H             138
-#define BMP_PERSPECTIVE_H           139
-#define BMP_NORMALS_OBJ_H           142
-#define BMP_NORMALS_FLAT_H          143
-#define BMP_NORMALS_SPHERE_H        144
-#define BMP_NORMALS_INVERT_H        145
-#define BMP_TWO_SIDED_LIGHTING_H    146
-#define BMP_DOUBLE_SIDED_H          147
-#define BMP_SHADOW_3D_H             148
-#define BMP_3DLIGHT_H               149
-#define BMP_LIGHT_COLOR_H           150
-#define BMP_AMBIENT_COLOR_H         151
-#define BMP_TEX_LUMINANCE_H         152
-#define BMP_TEX_COLOR_H             153
-#define BMP_TEX_REPLACE_H           154
-#define BMP_TEX_MODULATE_H          155
-#define BMP_TEX_BLEND_H             156
-#define BMP_TEX_OBJECT_H            157
-#define BMP_TEX_PARALLEL_H          158
-#define BMP_TEX_CIRCLE_H            159
-#define BMP_TEX_FILTER_H            160
-#define BMP_COLORDLG_H              161
-

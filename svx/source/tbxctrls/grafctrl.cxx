@@ -321,15 +321,11 @@ ImplGrafControl::ImplGrafControl( Window* pParent, USHORT nSlotId, const rtl::OU
     ResId   aResId( ImplGetRID( rCmd, false ), DIALOG_MGR() ) ;
     Image   aImage( aResId );
 
-    ResId   aResIdHC( ImplGetRID( rCmd, true ), DIALOG_MGR() ) ;
-    Image   aImageHC( aResIdHC );
-
     Size    aImgSize( aImage.GetSizePixel() );
     Size    aFldSize( maField.GetSizePixel() );
     long    nFldY, nImgY;
 
     maImage.SetImage( aImage );
-    maImage.SetModeImage( aImageHC, BMP_COLOR_HIGHCONTRAST );
     maImage.SetSizePixel( aImgSize );
     // we want to see the backbround of the toolbox, not of the FixedImage or Control
     maImage.SetBackground( Wallpaper( COL_TRANSPARENT ) );
