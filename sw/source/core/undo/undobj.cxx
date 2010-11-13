@@ -1114,7 +1114,7 @@ void SwRedlineSaveData::RedlineToDoc( SwPaM& rPam )
     RedlineMode_t eOld = rDoc.GetRedlineMode();
     rDoc.SetRedlineMode_intern((RedlineMode_t)(eOld | nsRedlineMode_t::REDLINE_DONTCOMBINE_REDLINES));
     //#i92154# let UI know about a new redline with comment
-    if (rDoc.GetDocShell() && (pRedl->GetComment() != String(::rtl::OUString::createFromAscii(""))) )
+    if (rDoc.GetDocShell() && (pRedl->GetComment() != String()) )
         rDoc.GetDocShell()->Broadcast(SwRedlineHint(pRedl,SWREDLINE_INSERTED));
     //
 #if OSL_DEBUG_LEVEL > 0

@@ -790,12 +790,12 @@ namespace {
     {
         const IFieldmark::parameter_map_t* const pParameters = pBM->GetParameters();
         sal_Int32 nCurrentIdx = 0;
-        const IFieldmark::parameter_map_t::const_iterator pResult = pParameters->find(::rtl::OUString::createFromAscii(ODF_FORMDROPDOWN_RESULT));
+        const IFieldmark::parameter_map_t::const_iterator pResult = pParameters->find(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN_RESULT)));
         if(pResult != pParameters->end())
             pResult->second >>= nCurrentIdx;
         if(io_pCurrentText)
         {
-            const IFieldmark::parameter_map_t::const_iterator pListEntries = pParameters->find(::rtl::OUString::createFromAscii(ODF_FORMDROPDOWN_LISTENTRY));
+            const IFieldmark::parameter_map_t::const_iterator pListEntries = pParameters->find(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN_LISTENTRY)));
             if(pListEntries != pParameters->end())
             {
                 uno::Sequence< ::rtl::OUString > vListEntries;

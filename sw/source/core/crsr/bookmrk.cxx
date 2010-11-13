@@ -334,13 +334,13 @@ namespace sw { namespace mark
     }
     void CheckboxFieldmark::SetChecked(bool checked)
     {
-        (*GetParameters())[::rtl::OUString::createFromAscii(ODF_FORMCHECKBOX_RESULT)] = makeAny(checked);
+        (*GetParameters())[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMCHECKBOX_RESULT))] = makeAny(checked);
     }
 
     bool CheckboxFieldmark::IsChecked() const
     {
         bool bResult = false;
-        parameter_map_t::const_iterator pResult = GetParameters()->find(::rtl::OUString::createFromAscii(ODF_FORMCHECKBOX_RESULT));
+        parameter_map_t::const_iterator pResult = GetParameters()->find(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMCHECKBOX_RESULT)));
         if(pResult != GetParameters()->end())
             pResult->second >>= bResult;
         return bResult;
