@@ -33,6 +33,7 @@ WORKDIR := $(SOLARVERSION)/$(INPATH)/workdir
 
 $(info $(wildcard $(gb_LOCALBUILDDIR)/SetupLocal.mk))
 
+.PHONY : setuplocal removelocal
 ifneq ($(gb_LOCALBUILDDIR),)
 ifneq ($(wildcard $(gb_LOCALBUILDDIR)/SetupLocal.mk),)
 include $(gb_LOCALBUILDDIR)/SetupLocal.mk
@@ -41,13 +42,11 @@ $(eval $(call gb_Output_info,gb_REPOS:=$(gb_REPOS),ALL))
 $(eval $(call gb_Output_info,WORKDIR:=$(WORKDIR),ALL))
 $(eval $(call gb_Output_info,OUTDIR:=$(OUTDIR),ALL))
 
-.PHONY : setuplocal
 setuplocal :
     $(eval, $(call gb_Output_error,$(gb_LOCALBUILDDIR) exists already.))
 
 else
 
-.PHONY : setuplocal
 setuplocal :
     $(eval modulerepo := $(patsubst %/$(MODULE),%,$(foreach repo,$(gb_REPOS),$(wildcard $(repo)/$(MODULE)))))
     mkdir -p $(gb_LOCALBUILDDIR)/srcdir $(gb_LOCALBUILDDIR)/workdir $(gb_LOCALBUILDDIR)/outdir
@@ -65,6 +64,11 @@ setuplocal :
 endif
 
 endif
+
+removelocal :
+    $(eval, $(call gb_Output_warn,removing directory $(gb_LOCALBUILDDIR).))
+    sleep 10
+    rm -rf $(gb_LOCALBUILDDIR)
 
 ifeq ($(strip $(gb_REPOS)),)
 gb_REPOS := $(SOLARSRC)
