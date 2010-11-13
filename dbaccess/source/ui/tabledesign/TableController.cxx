@@ -145,13 +145,13 @@ namespace
 //------------------------------------------------------------------------------
 ::rtl::OUString OTableController::getImplementationName_Static() throw( RuntimeException )
 {
-    return ::rtl::OUString::createFromAscii("org.openoffice.comp.dbu.OTableDesign");
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.dbu.OTableDesign"));
 }
 //------------------------------------------------------------------------------
 Sequence< ::rtl::OUString> OTableController::getSupportedServiceNames_Static(void) throw( RuntimeException )
 {
     Sequence< ::rtl::OUString> aSupported(1);
-    aSupported.getArray()[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdb.TableDesign");
+    aSupported.getArray()[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.TableDesign"));
     return aSupported;
 }
 //-------------------------------------------------------------------------
@@ -1020,7 +1020,7 @@ sal_Bool OTableController::checkColumns(sal_Bool _bNew) throw(::com::sun::star::
             pActFieldDescr->SetAutoIncrement(sal_False); // #95927# pTypeInfo->bAutoIncrement
             pActFieldDescr->SetIsNullable(ColumnValue::NO_NULLS);
 
-            pActFieldDescr->SetName( createUniqueName(::rtl::OUString::createFromAscii("ID") ));
+            pActFieldDescr->SetName( createUniqueName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ID")) ));
             pActFieldDescr->SetPrimaryKey( sal_True );
             m_vRowList.insert(m_vRowList.begin(),pNewRow);
 
@@ -1279,7 +1279,7 @@ void OTableController::alterColumns()
 
                     SQLException aNewException;
                     aNewException.Message = sError;
-                    aNewException.SQLState = ::rtl::OUString::createFromAscii( "S1000" );
+                    aNewException.SQLState = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000"));
                     aNewException.NextException = ::cppu::getCaughtException();
 
                     throw aNewException;

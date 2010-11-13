@@ -87,7 +87,7 @@ Reference< XInterface > SAL_CALL OAdabasCreateDialog::Create(const Reference< XM
 //-------------------------------------------------------------------------
 ::rtl::OUString OAdabasCreateDialog::getImplementationName_Static() throw(RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii("org.openoffice.comp.adabasui.AdabasCreateDialog");
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.adabasui.AdabasCreateDialog"));
 }
 
 //-------------------------------------------------------------------------
@@ -100,7 +100,7 @@ Reference< XInterface > SAL_CALL OAdabasCreateDialog::Create(const Reference< XM
 ::comphelper::StringSequence OAdabasCreateDialog::getSupportedServiceNames_Static() throw(RuntimeException)
 {
     ::comphelper::StringSequence aSupported(1);
-    aSupported.getArray()[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdb.AdabasCreationDialog");
+    aSupported.getArray()[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.AdabasCreationDialog"));
     return aSupported;
 }
 

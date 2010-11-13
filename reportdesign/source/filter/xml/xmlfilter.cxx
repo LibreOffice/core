@@ -151,7 +151,7 @@ sal_Int32 ReadThroughComponent(
     // get parser
     uno::Reference< XParser > xParser(
         rFactory->createInstance(
-            ::rtl::OUString::createFromAscii("com.sun.star.xml.sax.Parser") ),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser"))),
         UNO_QUERY );
     DBG_ASSERT( xParser.is(), "Can't create parser" );
     if( !xParser.is() )
@@ -1109,8 +1109,8 @@ SvXMLImportContext* ORptFilter::CreateMetaContext(const ::rtl::OUString& rLocalN
     if ( (getImportFlags() & IMPORT_META) )
     {
         uno::Reference<xml::sax::XDocumentHandler> xDocBuilder(
-            getServiceFactory()->createInstance(::rtl::OUString::createFromAscii(
-                "com.sun.star.xml.dom.SAXDocumentBuilder")),
+            getServiceFactory()->createInstance(::rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.dom.SAXDocumentBuilder"))),
                 uno::UNO_QUERY_THROW);
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(GetModel(), uno::UNO_QUERY_THROW);
         pContext = new SvXMLMetaDocumentContext(*this,XML_NAMESPACE_OFFICE, rLocalName,xDPS->getDocumentProperties(), xDocBuilder);

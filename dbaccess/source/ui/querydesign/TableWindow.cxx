@@ -194,7 +194,7 @@ BOOL OTableWindow::FillListBox()
 
     if (GetData()->IsShowAll())
     {
-        SvLBoxEntry* pEntry = m_pListBox->InsertEntry( ::rtl::OUString::createFromAscii("*") );
+        SvLBoxEntry* pEntry = m_pListBox->InsertEntry( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*")) );
         pEntry->SetUserData( createUserData(NULL,false) );
     }
 

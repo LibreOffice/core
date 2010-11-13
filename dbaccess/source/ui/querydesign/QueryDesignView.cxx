@@ -83,8 +83,8 @@ using namespace ::com::sun::star::container;
 // please look at the book LargeScale C++ to know why
 namespace
 {
-    static const ::rtl::OUString C_AND = ::rtl::OUString::createFromAscii(" AND ");
-    static const ::rtl::OUString C_OR  = ::rtl::OUString::createFromAscii(" OR ");
+    static const ::rtl::OUString C_AND(RTL_CONSTASCII_USTRINGPARAM(" AND "));
+    static const ::rtl::OUString C_OR(RTL_CONSTASCII_USTRINGPARAM(" OR "));
 
     // forward declarations
     sal_Bool InsertJoin(    const OQueryDesignView* _pView,
@@ -389,9 +389,9 @@ namespace
                 ::rtl::OUString aQuote = xMetaData->getIdentifierQuoteString();
                 if ( _bForce || isAppendTableAliasEnabled( _xConnection ) || pEntryTab->GetAliasName() != aDBName )
                 {
-                    aTableListStr += ::rtl::OUString::createFromAscii(" ");
+                    aTableListStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "));
                     if ( generateAsBeforeTableAlias( _xConnection ) )
-                        aTableListStr += ::rtl::OUString::createFromAscii("AS ");
+                        aTableListStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AS "));
                     aTableListStr += ::dbtools::quoteName( aQuote, pEntryTab->GetAliasName() );
                 }
                 aDBName = aTableListStr;
@@ -975,7 +975,7 @@ namespace
                     eErrorCode = eStatementTooLong;
                 else
                 {
-                    _rsRet = ::rtl::OUString::createFromAscii(" ORDER BY ");
+                    _rsRet = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ORDER BY "));
                     _rsRet += aWorkStr;
                 }
             }
@@ -1210,7 +1210,7 @@ namespace
             if ( aGroupByStr.getLength() )
             {
                 aGroupByStr = aGroupByStr.replaceAt(aGroupByStr.getLength()-1,1, ::rtl::OUString(' ') );
-                ::rtl::OUString aGroupByStr2 = ::rtl::OUString::createFromAscii(" GROUP BY ");
+                ::rtl::OUString aGroupByStr2(RTL_CONSTASCII_USTRINGPARAM(" GROUP BY "));
                 aGroupByStr2 += aGroupByStr;
                 aGroupByStr = aGroupByStr2;
             }
@@ -1575,7 +1575,7 @@ namespace
                     for(;aIter != aTabEnd;++aIter)
                     {
                         OQueryTableWindow* pTabWin = static_cast<OQueryTableWindow*>(aIter->second);
-                        if (pTabWin->ExistsField( ::rtl::OUString::createFromAscii("*"), aDragLeft ))
+                        if (pTabWin->ExistsField( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*")), aDragLeft ))
                         {
                             aDragLeft->SetAlias(String());
                             aDragLeft->SetTable(String());
@@ -1689,22 +1689,22 @@ namespace
                     case SQL_NODE_LESS:
                         // take the opposite as we change the order
                         i--;
-                        aCondition = aCondition + ::rtl::OUString::createFromAscii(">");
+                        aCondition = aCondition + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(">"));
                         break;
                     case SQL_NODE_LESSEQ:
                         // take the opposite as we change the order
                         i--;
-                        aCondition = aCondition + ::rtl::OUString::createFromAscii(">=");
+                        aCondition = aCondition + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(">="));
                         break;
                     case SQL_NODE_GREAT:
                         // take the opposite as we change the order
                         i--;
-                        aCondition = aCondition + ::rtl::OUString::createFromAscii("<");
+                        aCondition = aCondition + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("<"));
                         break;
                     case SQL_NODE_GREATEQ:
                         // take the opposite as we change the order
                         i--;
-                        aCondition = aCondition + ::rtl::OUString::createFromAscii("<=");
+                        aCondition = aCondition + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("<="));
                         break;
                     default:
                         break;
@@ -2232,7 +2232,7 @@ namespace
                                 for(;aIter != aEnd;++aIter)
                                 {
                                     OQueryTableWindow* pTabWin = static_cast<OQueryTableWindow*>(aIter->second);
-                                    if (pTabWin->ExistsField( ::rtl::OUString::createFromAscii("*"), aInfo ))
+                                    if (pTabWin->ExistsField( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*")), aInfo ))
                                     {
                                         aInfo->SetAlias(String());
                                         aInfo->SetTable(String());
@@ -2903,9 +2903,9 @@ sal_Bool OQueryDesignView::checkStatement()
     GenerateInnerJoinCriterias(xConnection,aJoinCrit,pConnList);
     if(aJoinCrit.getLength())
     {
-        ::rtl::OUString aTmp = ::rtl::OUString::createFromAscii("( ");
+        ::rtl::OUString aTmp(RTL_CONSTASCII_USTRINGPARAM("( "));
         aTmp += aJoinCrit;
-        aTmp += ::rtl::OUString::createFromAscii(" )");
+        aTmp += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" )"));
         if(aCriteriaListStr.getLength())
         {
             aTmp += C_AND;
@@ -2914,16 +2914,16 @@ sal_Bool OQueryDesignView::checkStatement()
         aCriteriaListStr = aTmp;
     }
     // ----------------- Statement aufbauen ----------------------
-    ::rtl::OUStringBuffer aSqlCmd(::rtl::OUString::createFromAscii("SELECT "));
+    ::rtl::OUStringBuffer aSqlCmd(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SELECT ")));
     if(static_cast<OQueryController&>(getController()).isDistinct())
-        aSqlCmd.append(::rtl::OUString::createFromAscii(" DISTINCT "));
+        aSqlCmd.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" DISTINCT ")));
     aSqlCmd.append(aFieldListStr);
-    aSqlCmd.append(::rtl::OUString::createFromAscii(" FROM "));
+    aSqlCmd.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" FROM ")));
     aSqlCmd.append(aTableListStr);
 
     if (aCriteriaListStr.getLength())
     {
-        aSqlCmd.append(::rtl::OUString::createFromAscii(" WHERE "));
+        aSqlCmd.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" WHERE ")));
         aSqlCmd.append(aCriteriaListStr.makeStringAndClear());
     }
     // ----------------- GroupBy aufbauen und Anh"angen ------------
@@ -2938,7 +2938,7 @@ sal_Bool OQueryDesignView::checkStatement()
     // ----------------- having Anh"angen ------------
     if(aHavingStr.getLength())
     {
-        aSqlCmd.append(::rtl::OUString::createFromAscii(" HAVING "));
+        aSqlCmd.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" HAVING ")));
         aSqlCmd.append(aHavingStr.makeStringAndClear());
     }
     // ----------------- Sortierung aufbauen und Anh"angen ------------

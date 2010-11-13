@@ -573,7 +573,7 @@ public:
     inline void checkDisposed() const
     {
         if ( !m_pImpl.is() )
-            throw ::com::sun::star::lang::DisposedException( ::rtl::OUString::createFromAscii( "Component is already disposed." ), getThis() );
+            throw ::com::sun::star::lang::DisposedException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Component is already disposed.")), getThis() );
     }
 
     inline void lockModify()

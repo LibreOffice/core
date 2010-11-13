@@ -118,13 +118,13 @@ namespace dbaxml
     //---------------------------------------------------------------------
     ::rtl::OUString SAL_CALL ODBExportHelper::getImplementationName_Static(  ) throw (RuntimeException)
     {
-        return ::rtl::OUString::createFromAscii("com.sun.star.comp.sdb.XMLSettingsExporter");
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.sdb.XMLSettingsExporter"));
     }
     //---------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL ODBExportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
     {
         Sequence< ::rtl::OUString > aSupported(1);
-        aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.document.ExportFilter");
+        aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.ExportFilter"));
         return aSupported;
     }
 
@@ -137,13 +137,13 @@ namespace dbaxml
     //---------------------------------------------------------------------
     ::rtl::OUString SAL_CALL ODBFullExportHelper::getImplementationName_Static(  ) throw (RuntimeException)
     {
-        return ::rtl::OUString::createFromAscii("com.sun.star.comp.sdb.XMLFullExporter");
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.sdb.XMLFullExporter"));
     }
     //---------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL ODBFullExportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
     {
         Sequence< ::rtl::OUString > aSupported(1);
-        aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.document.ExportFilter");
+        aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.ExportFilter"));
         return aSupported;
     }
 

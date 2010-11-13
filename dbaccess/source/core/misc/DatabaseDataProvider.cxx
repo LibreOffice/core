@@ -119,7 +119,7 @@ uno::Any DatabaseDataProvider::queryInterface(uno::Type const & type) throw (uno
 //------------------------------------------------------------------------------
 rtl::OUString DatabaseDataProvider::getImplementationName_Static(  ) throw(uno::RuntimeException)
 {
-    return rtl::OUString::createFromAscii("com.sun.star.comp.chart2.data.DatabaseDataProvider");
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.chart2.data.DatabaseDataProvider"));
 }
 // -----------------------------------------------------------------------------
 // -------------------------------------------------------------------------

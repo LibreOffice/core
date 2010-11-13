@@ -348,8 +348,8 @@ void ODbaseIndexDialog::Init()
 
     Sequence< ::rtl::OUString> aFolderContent( ::utl::LocalFileHelper::GetFolderContents(m_aDSN,bFolder));
 
-    ::rtl::OUString aIndexExt = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ndx"));
-    ::rtl::OUString aTableExt = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("dbf"));
+    ::rtl::OUString aIndexExt(RTL_CONSTASCII_USTRINGPARAM("ndx"));
+    ::rtl::OUString aTableExt(RTL_CONSTASCII_USTRINGPARAM("dbf"));
 
     ::std::vector< String > aUsedIndexes;
 

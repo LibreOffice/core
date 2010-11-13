@@ -1223,7 +1223,7 @@ namespace dbmm
             const ::rtl::OUString& _rSourceLibName, const Reference< XNameAccess >& _rxTargetContainer )
         {
             // The new library name is composed from the prefix, the base name, and the old library name.
-            const ::rtl::OUString sPrefix( ::rtl::OUString::createFromAscii( _rDocument.eType == eForm ? "Form_" : "Report_" ) );
+            const ::rtl::OUString sPrefix = (_rDocument.eType == eForm)?rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Form_")): rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Report_"));
 
             ::rtl::OUString sBaseName( _rDocument.sHierarchicalName.copy(
                 _rDocument.sHierarchicalName.lastIndexOf( '/' ) + 1 ) );

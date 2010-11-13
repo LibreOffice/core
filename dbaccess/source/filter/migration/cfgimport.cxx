@@ -393,7 +393,7 @@ sal_Bool isDocumentReport(const Reference< XMultiServiceFactory >& _xORB,const :
                 aMedDescr[nPos++].Value <<= sal_False;
                 aMedDescr[nPos].Name = PROPERTY_URL;
                 aMedDescr[nPos++].Value <<= _sDocumentLocation;
-                aMedDescr[nPos].Name = ::rtl::OUString::createFromAscii( "ReadOnly" );
+                aMedDescr[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReadOnly"));
                 aMedDescr[nPos++].Value <<= sal_True;
                 Reference< XTypeDetection > xTypeDetection(_xORB->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.TypeDetection")) ),UNO_QUERY );
 
@@ -1108,8 +1108,8 @@ void SAL_CALL  OCfgImport::setPropertyValue(
                             if ( aInputSequence.getLength() )
                             {
                                 Reference< XInputStream>       xInStreamHelper = new SequenceInputStream(aInputSequence);;  // used for wrapping sequence to xinput
-                                Reference< XObjectInputStream> xInStream = Reference< XObjectInputStream >(m_xORB->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.ObjectInputStream")),UNO_QUERY);
-                                Reference< XInputStream> xMarkInStream = Reference< XInputStream >(m_xORB->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.MarkableInputStream")),UNO_QUERY);
+                                Reference< XObjectInputStream> xInStream = Reference< XObjectInputStream >(m_xORB->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.ObjectInputStream"))),UNO_QUERY);
+                                Reference< XInputStream> xMarkInStream = Reference< XInputStream >(m_xORB->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.MarkableInputStream"))),UNO_QUERY);
                                 Reference< XActiveDataSink >(xMarkInStream,UNO_QUERY)->setInputStream(xInStreamHelper);
                                 Reference< XActiveDataSink >   xInDataSource(xInStream, UNO_QUERY);
                                 OSL_ENSURE(xInDataSource.is(),"Couldn't create com.sun.star.io.ObjectInputStream!");
