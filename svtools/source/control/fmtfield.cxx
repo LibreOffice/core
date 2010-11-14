@@ -294,7 +294,7 @@ namespace validation
             return sal_True;
 
         // normalize the string
-        String sNormalized( RTL_CONSTASCII_STRINGPARAM( "_") );
+        String sNormalized( RTL_CONSTASCII_USTRINGPARAM("_") );
         sNormalized.Append( _rText );
         sNormalized.AppendAscii( "_" );
 

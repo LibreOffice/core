@@ -174,7 +174,7 @@ void lcl_insertDateTimeEntry(SvtExtendedMultiLineEdit_Impl* i_pEditWin,
             ::comphelper::getProcessServiceFactory(),
             Application::GetSettings().GetLocale() );
         String aDateStr = aLocaleWrapper.getDate( aToolsDT );
-        aDateStr += String( RTL_CONSTASCII_STRINGPARAM(", ") );
+        aDateStr += String( RTL_CONSTASCII_USTRINGPARAM(", ") );
         aDateStr += aLocaleWrapper.getTime( aToolsDT );
         i_pEditWin->InsertEntry( i_rName, aDateStr );
     }
@@ -947,7 +947,7 @@ void SvtFrameWindow_Impl::OpenFile( const String& rURL, sal_Bool bPreview, sal_B
         else
         {
             // can be removed if the database application change its URL
-            String sServiceScheme( RTL_CONSTASCII_STRINGPARAM( "service:" ) );
+            String sServiceScheme( RTL_CONSTASCII_USTRINGPARAM( "service:" ) );
             if ( rURL.Match( sServiceScheme ) != sServiceScheme.Len() )
                 // service URL has no default target
                 aTarget = ASCII_STR("_default");
@@ -1734,7 +1734,7 @@ void SvtDocumentTemplateDialog::InitImpl( )
     if ( !bHideLink )
          {
     aMoreTemplatesLink.SetURL( String(
-        RTL_CONSTASCII_STRINGPARAM( "http://templates.libreoffice.org/" ) ) );
+        RTL_CONSTASCII_USTRINGPARAM( "http://templates.libreoffice.org/" ) ) );
     aMoreTemplatesLink.SetClickHdl( LINK( this, SvtDocumentTemplateDialog, OpenLinkHdl_Impl ) );
     }
     else

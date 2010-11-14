@@ -409,7 +409,7 @@ static USHORT GetImageId_Impl( const INetURLObject& rObject, sal_Bool bDetectFol
     {
         String aURLPath = sURL.Copy( URL_PREFIX_PRIV_SOFFICE_LEN );
         String aType = aURLPath.GetToken( 0, INET_PATH_TOKEN );
-        if ( aType == String( RTL_CONSTASCII_STRINGPARAM("factory") ) )
+        if ( aType == String( RTL_CONSTASCII_USTRINGPARAM("factory") ) )
         {
             // detect an image id for our "private:factory" urls
             aExt = GetImageExtensionByFactory_Impl( sURL );
@@ -417,7 +417,7 @@ static USHORT GetImageId_Impl( const INetURLObject& rObject, sal_Bool bDetectFol
                 nImage = GetImageId_Impl( aExt );
             return nImage;
         }
-        else if ( aType == String( RTL_CONSTASCII_STRINGPARAM("image") ) )
+        else if ( aType == String( RTL_CONSTASCII_USTRINGPARAM("image") ) )
             nImage = (USHORT)aURLPath.GetToken( 1, INET_PATH_TOKEN ).ToInt32();
     }
     else
@@ -706,7 +706,7 @@ static Image GetImageFromList_Impl( USHORT nImageId, BOOL bBig, BOOL bHighContra
 
 void ReplaceStarOfficeVar( String& _rDescription )
 {
-    static String sVariable( RTL_CONSTASCII_STRINGPARAM( "%STAROFFICE" ) );
+    static String sVariable( RTL_CONSTASCII_USTRINGPARAM( "%STAROFFICE" ) );
     static String sProductName;
     if ( sProductName.Len() == 0 )
     {
@@ -737,7 +737,7 @@ String SvFileInformationManager::GetDescription_Impl( const INetURLObject& rObje
             {
                 String aURLPath = sURL.Copy( URL_PREFIX_PRIV_SOFFICE_LEN );
                 String aType = aURLPath.GetToken( 0, INET_PATH_TOKEN );
-                if ( aType == String( RTL_CONSTASCII_STRINGPARAM("factory") ) )
+                if ( aType == String( RTL_CONSTASCII_USTRINGPARAM("factory") ) )
                 {
                     sDescription = GetDescriptionByFactory_Impl( aURLPath.Copy( aURLPath.Search( INET_PATH_TOKEN ) + 1 ) );
                     bDetected = sal_True;
@@ -781,7 +781,7 @@ String SvFileInformationManager::GetDescription_Impl( const INetURLObject& rObje
 
     if ( bShowExt )
     {
-        sDescription += String( RTL_CONSTASCII_STRINGPARAM(" (") );
+        sDescription += String( RTL_CONSTASCII_USTRINGPARAM(" (") );
         sDescription += sExtension;
         sDescription += ')';
     }
