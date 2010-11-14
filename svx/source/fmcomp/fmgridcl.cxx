@@ -354,7 +354,7 @@ sal_Int8 FmGridHeader::ExecuteDrop( const ExecuteDropEvent& _rEvt )
                     // not interested in any results
 
                     Reference< XPropertySet > xStatProps(xStatement,UNO_QUERY);
-                    xStatProps->setPropertyValue(rtl::OUString::createFromAscii("MaxRows"), makeAny(sal_Int32(0)));
+                    xStatProps->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MaxRows")), makeAny(sal_Int32(0)));
 
                     xResultSet = xStatement->executeQuery();
                     Reference< XColumnsSupplier >  xSupplyCols(xResultSet, UNO_QUERY);
@@ -1173,7 +1173,7 @@ void FmGridControl::DeleteSelectedRows()
         // #100312# ------------
         Reference< ::com::sun::star::util::XURLTransformer > xTransformer(
             ::comphelper::getProcessServiceFactory()->createInstance(
-            ::rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer")), UNO_QUERY);
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))), UNO_QUERY);
         if( xTransformer.is() )
             xTransformer->parseStrict( aUrl );
 

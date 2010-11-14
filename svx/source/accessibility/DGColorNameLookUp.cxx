@@ -99,7 +99,7 @@ DGColorNameLookUp::DGColorNameLookUp (void)
         // Create color table in which to look up the given color.
         uno::Reference<container::XNameContainer> xColorTable (
             ::comphelper::getProcessServiceFactory()->createInstance(
-                OUString::createFromAscii("com.sun.star.drawing.ColorTable")),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.ColorTable")) ),
             uno::UNO_QUERY);
 
         // Get list of color names in order to iterate over the color table.
