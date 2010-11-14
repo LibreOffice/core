@@ -46,7 +46,9 @@ setuplocal :
 else
 
 setuplocal :
+    $(eval MODULE := $(firstword $(MODULE) $(lastword $(subst /, ,$(dir $(realpath $(firstword $(MAKEFILE_LIST))))))))
     $(eval modulerepo := $(patsubst %/$(MODULE),%,$(foreach repo,$(gb_REPOS),$(wildcard $(repo)/$(MODULE)))))
+    $(eval $(call gb_Output_announce,setting up local build directory (module: $(MODULE)).,$(true),SYC,5))
     mkdir -p $(gb_LOCALBUILDDIR)/srcdir $(gb_LOCALBUILDDIR)/workdir $(gb_LOCALBUILDDIR)/outdir
     rsync --archive --exclude 'workdir/**' $(SOLARVERSION)/$(INPATH)/ $(gb_LOCALBUILDDIR)/outdir
     cp $(modulerepo)/Repository.mk $(gb_LOCALBUILDDIR)/srcdir/Repository.mk
@@ -64,7 +66,7 @@ endif
 endif
 
 removelocal :
-    $(eval, $(call gb_Output_warn,removing directory $(gb_LOCALBUILDDIR).))
+    $(eval $(call gb_Output_warn,removing directory $(gb_LOCALBUILDDIR).,SYC))
     sleep 10
     rm -rf $(gb_LOCALBUILDDIR)
 

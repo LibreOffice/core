@@ -91,8 +91,8 @@ else
 gb_ENABLE_PCH := $(false)
 endif
 
-# for clean, uninstall and setuplocal goals we switch of dependencies
-ifneq ($(filter clean uninstall setuplocal,$(MAKECMDGOALS)),)
+# for clean, uninstall and setuplocal goals we switch off dependencies
+ifneq ($(filter clean uninstall setuplocal removelocal,$(MAKECMDGOALS)),)
 gb_FULLDEPS := $(false)
 else
 gb_FULLDEPS := $(true)
