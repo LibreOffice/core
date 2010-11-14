@@ -911,7 +911,7 @@ void OfaTreeOptionsDialog::ActivateLastSelection()
     SvLBoxEntry* pEntry = NULL;
     if ( pLastPageSaver )
     {
-        String sExpand( RTL_CONSTASCII_STRINGPARAM( EXPAND_PROTOCOL ) );
+        String sExpand( RTL_CONSTASCII_USTRINGPARAM( EXPAND_PROTOCOL ) );
         String sLastURL = bIsFromExtensionManager ? pLastPageSaver->m_sLastPageURL_ExtMgr
                                                   : pLastPageSaver->m_sLastPageURL_Tools;
         if ( sLastURL.Len() == 0 )

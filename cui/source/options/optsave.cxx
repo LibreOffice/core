@@ -73,7 +73,7 @@ using namespace comphelper;
 using rtl::OUString;
 
 #define C2U(cChar)                  OUString::createFromAscii(cChar)
-#define C2S(cChar)                  String( RTL_CONSTASCII_STRINGPARAM(cChar) )
+#define C2S(cChar)                  String( RTL_CONSTASCII_USTRINGPARAM(cChar) )
 #define CFG_PAGE_AND_GROUP          C2S("General"), C2S("LoadSave")
 // !! you have to update these index, if you changed the list of the child windows !!
 #define WININDEX_AUTOSAVE           ((USHORT)6)

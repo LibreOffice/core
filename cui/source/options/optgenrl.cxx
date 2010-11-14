@@ -356,7 +356,7 @@ IMPL_LINK( SvxGeneralTabPage, ModifyHdl_Impl, Edit *, pEdit )
         switch ( aShortStr.Len() )
         {
             case 0:
-                aShortStr = String( RTL_CONSTASCII_STRINGPARAM("  ") );
+                aShortStr = String( RTL_CONSTASCII_USTRINGPARAM("  ") );
                 break;
 
             case 1:

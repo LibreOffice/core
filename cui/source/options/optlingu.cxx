@@ -1156,7 +1156,7 @@ SvxLinguTabPage::SvxLinguTabPage( Window* pParent,
             != SvtExtendedSecurityOptions::OPEN_NEVER )
     {
         aMoreDictsLink.SetURL( String(
-            RTL_CONSTASCII_STRINGPARAM( "http://extensions.libreoffice.org/dictionary/" ) ) );
+            RTL_CONSTASCII_USTRINGPARAM( "http://extensions.libreoffice.org/dictionary/" ) ) );
         aMoreDictsLink.SetClickHdl( LINK( this, SvxLinguTabPage, OpenURLHdl_Impl ) );
     }
     else
@@ -2054,7 +2054,7 @@ SvxEditModulesDlg::SvxEditModulesDlg(Window* pParent, SvxLinguData_Impl& rData) 
             != SvtExtendedSecurityOptions::OPEN_NEVER )
     {
         aMoreDictsLink.SetURL( String(
-            RTL_CONSTASCII_STRINGPARAM( "http://extensions.libreoffice.org/dictionary/" ) ) );
+            RTL_CONSTASCII_USTRINGPARAM( "http://extensions.libreoffice.org/dictionary/" ) ) );
         aMoreDictsLink.SetClickHdl( LINK( this, SvxEditModulesDlg, OpenURLHdl_Impl ) );
     }
     else

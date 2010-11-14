@@ -370,7 +370,7 @@ namespace svx
         m_aValueSet.SetLineCount( LINE_CNT );
         m_aValueSet.SetStyle( m_aValueSet.GetStyle() | WB_ITEMBORDER | WB_FLATVALUESET | WB_VSCROLL );
         m_aValueSet.SetBorderStyle( WINDOW_BORDER_MONO );
-        String aOneCharacter(RTL_CONSTASCII_STRINGPARAM("AU"));
+        String aOneCharacter(RTL_CONSTASCII_USTRINGPARAM("AU"));
         long nItemWidth = 2*GetTextWidth( aOneCharacter );
         m_aValueSet.SetItemWidth( nItemWidth );
 
