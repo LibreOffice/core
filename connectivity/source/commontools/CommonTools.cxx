@@ -236,7 +236,7 @@ namespace connectivity
         try
         {
             Reference< starjava::XJavaVM > xVM(_rxFactory->createInstance(
-                rtl::OUString::createFromAscii("com.sun.star.java.JavaVirtualMachine")), UNO_QUERY);
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.java.JavaVirtualMachine"))), UNO_QUERY);
 
             OSL_ENSURE(_rxFactory.is(),"InitJava: I have no factory!");
             if (!xVM.is() || !_rxFactory.is())

@@ -233,7 +233,7 @@ Date DBTypeConversion::getNULLDate(const Reference< XNumberFormatsSupplier > &xS
         {
             // get the null date
             Date aDate;
-            xSupplier->getNumberFormatSettings()->getPropertyValue(::rtl::OUString::createFromAscii("NullDate")) >>= aDate;
+            xSupplier->getNumberFormatSettings()->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NullDate"))) >>= aDate;
             return aDate;
         }
         catch ( const Exception&  )

@@ -171,14 +171,14 @@ namespace dbtools
     ::rtl::OUString aDefault = ::comphelper::getString(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_DEFAULTVALUE)));
     if ( aDefault.getLength() )
     {
-        aSql.append(::rtl::OUString::createFromAscii(" DEFAULT "));
+        aSql.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" DEFAULT ")));
         aSql.append(sPreFix);
         aSql.append(aDefault);
         aSql.append(sPostFix);
     } // if ( aDefault.getLength() )
 
     if(::comphelper::getINT32(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_ISNULLABLE))) == ColumnValue::NO_NULLS)
-        aSql.append(::rtl::OUString::createFromAscii(" NOT NULL"));
+        aSql.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" NOT NULL")));
 
     if ( bIsAutoIncrement && sAutoIncrementValue.getLength())
     {
@@ -195,7 +195,7 @@ namespace dbtools
 
 ::rtl::OUString createStandardCreateStatement(const Reference< XPropertySet >& descriptor,const Reference< XConnection>& _xConnection,ISQLStatementHelper* _pHelper,const ::rtl::OUString& _sCreatePattern)
 {
-    ::rtl::OUStringBuffer aSql  = ::rtl::OUString::createFromAscii("CREATE TABLE ");
+    ::rtl::OUStringBuffer aSql(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CREATE TABLE ")));
     ::rtl::OUString sCatalog,sSchema,sTable,sComposedName;
 
     Reference<XDatabaseMetaData> xMetaData = _xConnection->getMetaData();
@@ -210,7 +210,7 @@ namespace dbtools
         ::dbtools::throwFunctionSequenceException(_xConnection);
 
     aSql.append(sComposedName);
-    aSql.append(::rtl::OUString::createFromAscii(" ("));
+    aSql.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" (")));
 
     // columns
     Reference<XColumnsSupplier> xColumnSup(descriptor,UNO_QUERY);
@@ -292,7 +292,7 @@ namespace
                         ::dbtools::throwFunctionSequenceException(_xConnection);
 
                     const ::rtl::OUString sQuote     = xMetaData->getIdentifierQuoteString();
-                    aSql.append(::rtl::OUString::createFromAscii(" PRIMARY KEY "));
+                    aSql.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" PRIMARY KEY ")));
                     aSql.append(generateColumnNames(xColumns,xMetaData));
                 }
                 else if(nKeyType == KeyType::UNIQUE)
@@ -303,7 +303,7 @@ namespace
                         ::dbtools::throwFunctionSequenceException(_xConnection);
 
                     const ::rtl::OUString sQuote     = xMetaData->getIdentifierQuoteString();
-                    aSql.append(::rtl::OUString::createFromAscii(" UNIQUE "));
+                    aSql.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" UNIQUE ")));
                     aSql.append(generateColumnNames(xColumns,xMetaData));
                 }
                 else if(nKeyType == KeyType::FOREIGN)
@@ -315,7 +315,7 @@ namespace
                     if(!xColumns.is() || !xColumns->getCount())
                         ::dbtools::throwFunctionSequenceException(_xConnection);
 
-                    aSql.append(::rtl::OUString::createFromAscii(" FOREIGN KEY "));
+                    aSql.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" FOREIGN KEY ")));
                     ::rtl::OUString sRefTable = getString(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_REFERENCEDTABLE)));
                     ::dbtools::qualifiedNameComponents(xMetaData,
                                                         sRefTable,
@@ -334,16 +334,16 @@ namespace
                     switch(nDeleteRule)
                     {
                         case KeyRule::CASCADE:
-                            aSql.append(::rtl::OUString::createFromAscii(" ON DELETE CASCADE "));
+                            aSql.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ON DELETE CASCADE ")));
                             break;
                         case KeyRule::RESTRICT:
-                            aSql.append(::rtl::OUString::createFromAscii(" ON DELETE RESTRICT "));
+                            aSql.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ON DELETE RESTRICT ")));
                             break;
                         case KeyRule::SET_NULL:
-                            aSql.append(::rtl::OUString::createFromAscii(" ON DELETE SET NULL "));
+                            aSql.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ON DELETE SET NULL ")));
                             break;
                         case KeyRule::SET_DEFAULT:
-                            aSql.append(::rtl::OUString::createFromAscii(" ON DELETE SET DEFAULT "));
+                            aSql.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ON DELETE SET DEFAULT ")));
                             break;
                         default:
                             ;
@@ -377,9 +377,9 @@ namespace
     else
     {
         if ( aSql.lastIndexOf(',') == (aSql.getLength()-1) )
-            aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString::createFromAscii(")"));
+            aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")")));
         else
-            aSql += ::rtl::OUString::createFromAscii(")");
+            aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")"));
     }
     return aSql;
 }
@@ -645,7 +645,7 @@ Reference< XTablesSupplier> getDataDefinitionByURLAndConnection(
     try
     {
         Reference< XDriverAccess> xManager(
-            _rxFactory->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.sdbc.DriverManager") ),
+            _rxFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.DriverManager")) ),
             UNO_QUERY_THROW );
         Reference< XDataDefinitionSupplier > xSupp( xManager->getDriverByURL( _rsUrl ), UNO_QUERY );
 

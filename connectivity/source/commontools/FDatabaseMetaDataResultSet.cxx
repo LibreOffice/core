@@ -677,55 +677,55 @@ ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::getBasicValue()
 // -----------------------------------------------------------------------------
 ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::getSelectValue()
 {
-    static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(::rtl::OUString::createFromAscii("SELECT"));
+    static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SELECT")));
     return aValueRef;
 }
 // -----------------------------------------------------------------------------
 ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::getInsertValue()
 {
-    static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(::rtl::OUString::createFromAscii("INSERT"));
+    static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("INSERT")));
     return aValueRef;
 }
 // -----------------------------------------------------------------------------
 ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::getDeleteValue()
 {
-    static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(::rtl::OUString::createFromAscii("DELETE"));
+    static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DELETE")));
     return aValueRef;
 }
 // -----------------------------------------------------------------------------
 ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::getUpdateValue()
 {
-    static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(::rtl::OUString::createFromAscii("UPDATE"));
+    static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UPDATE")));
     return aValueRef;
 }
 // -----------------------------------------------------------------------------
 ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::getCreateValue()
 {
-    static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(::rtl::OUString::createFromAscii("CREATE"));
+    static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CREATE")));
     return aValueRef;
 }
 // -----------------------------------------------------------------------------
 ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::getReadValue()
 {
-    static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(::rtl::OUString::createFromAscii("READ"));
+    static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("READ")));
     return aValueRef;
 }
 // -----------------------------------------------------------------------------
 ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::getAlterValue()
 {
-    static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(::rtl::OUString::createFromAscii("ALTER"));
+    static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ALTER")));
     return aValueRef;
 }
 // -----------------------------------------------------------------------------
 ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::getDropValue()
 {
-    static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(::rtl::OUString::createFromAscii("DROP"));
+    static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DROP")));
     return aValueRef;
 }
 // -----------------------------------------------------------------------------
 ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::getQuoteValue()
 {
-    static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(::rtl::OUString::createFromAscii("'"));
+    static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("'")));
     return aValueRef;
 }
 // -----------------------------------------------------------------------------
@@ -835,7 +835,7 @@ void SAL_CALL ODatabaseMetaDataResultSet::initialize( const Sequence< Any >& _aA
     Sequence< ::rtl::OUString > ODatabaseMetaDataResultSet::getSupportedServiceNames_Static(  ) throw (RuntimeException)
     {
         Sequence< ::rtl::OUString > aSNS( 1 );
-        aSNS[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbc.ResultSet");
+        aSNS[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.ResultSet"));
         return aSNS;
     }
     //------------------------------------------------------------------

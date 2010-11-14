@@ -145,10 +145,10 @@ sal_Int32 getDefaultNumberFormat(const Reference< XPropertySet >& _xColumn,
     try
     {
         // determine the datatype of the column
-        _xColumn->getPropertyValue(::rtl::OUString::createFromAscii("Type")) >>= nDataType;
+        _xColumn->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Type"))) >>= nDataType;
 
         if (DataType::NUMERIC == nDataType || DataType::DECIMAL == nDataType)
-            _xColumn->getPropertyValue(::rtl::OUString::createFromAscii("Scale")) >>= nScale;
+            _xColumn->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Scale"))) >>= nScale;
     }
     catch (Exception&)
     {
@@ -156,7 +156,7 @@ sal_Int32 getDefaultNumberFormat(const Reference< XPropertySet >& _xColumn,
     }
     return getDefaultNumberFormat(nDataType,
                     nScale,
-                    ::cppu::any2bool(_xColumn->getPropertyValue(::rtl::OUString::createFromAscii("IsCurrency"))),
+                    ::cppu::any2bool(_xColumn->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsCurrency")))),
                     _xTypes,
                     _rLocale);
 }
@@ -266,7 +266,7 @@ Reference< XDataSource> getDataSource_allowException(
 
     Reference< XNameAccess> xDatabaseContext(
         _rxFactory->createInstance(
-            ::rtl::OUString::createFromAscii( "com.sun.star.sdb.DatabaseContext" ) ),UNO_QUERY );
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.DatabaseContext" )) ),UNO_QUERY );
     OSL_ENSURE( xDatabaseContext.is(), "getDataSource_allowException: could not obtain the database context!" );
 
     return Reference< XDataSource >( xDatabaseContext->getByName( _rsTitleOrPath ), UNO_QUERY );
@@ -309,8 +309,8 @@ Reference< XConnection > getConnection_allowException(
             try
             {
                 xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PASSWORD)) >>= sPwd;
-                bPwdReq = ::cppu::any2bool(xProp->getPropertyValue(::rtl::OUString::createFromAscii("IsPasswordRequired")));
-                xProp->getPropertyValue(::rtl::OUString::createFromAscii("User")) >>= sUser;
+                bPwdReq = ::cppu::any2bool(xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsPasswordRequired"))));
+                xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("User"))) >>= sUser;
             }
             catch(Exception&)
             {
@@ -321,7 +321,7 @@ Reference< XConnection > getConnection_allowException(
                 Reference<XCompletedConnection> xConnectionCompletion(xProp, UNO_QUERY);
                 if (xConnectionCompletion.is())
                 {   // instantiate the default SDB interaction handler
-                    Reference< XInteractionHandler > xHandler(_rxFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.task.InteractionHandler")), UNO_QUERY);
+                    Reference< XInteractionHandler > xHandler(_rxFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.task.InteractionHandler"))), UNO_QUERY);
                     OSL_ENSURE(xHandler.is(), "dbtools::getConnection service com.sun.star.task.InteractionHandler not available!");
                     if (xHandler.is())
                     {
@@ -388,7 +388,7 @@ Reference< XConnection> getConnection(const Reference< XRowSet>& _rxRowSet) thro
     Reference< XConnection> xReturn;
     Reference< XPropertySet> xRowSetProps(_rxRowSet, UNO_QUERY);
     if (xRowSetProps.is())
-        xRowSetProps->getPropertyValue(::rtl::OUString::createFromAscii("ActiveConnection")) >>= xReturn;
+        xRowSetProps->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ActiveConnection"))) >>= xReturn;
     return xReturn;
 }
 
@@ -434,9 +434,9 @@ SharedConnection lcl_connectRowSet(const Reference< XRowSet>& _rxRowSet, const R
 
         const ::rtl::OUString sUserProp( RTL_CONSTASCII_USTRINGPARAM( "User" ));
         ::rtl::OUString sDataSourceName;
-        xRowSetProps->getPropertyValue(::rtl::OUString::createFromAscii("DataSourceName")) >>= sDataSourceName;
+        xRowSetProps->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataSourceName"))) >>= sDataSourceName;
         ::rtl::OUString sURL;
-        xRowSetProps->getPropertyValue(::rtl::OUString::createFromAscii("URL")) >>= sURL;
+        xRowSetProps->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL"))) >>= sURL;
 
         Reference< XConnection > xPureConnection;
         if (sDataSourceName.getLength())
@@ -455,7 +455,7 @@ SharedConnection lcl_connectRowSet(const Reference< XRowSet>& _rxRowSet, const R
         {   // the row set has no data source, but a connection url set
             // -> try to connection with that url
             Reference< XDriverManager > xDriverManager(
-                _rxFactory->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.sdbc.ConnectionPool")), UNO_QUERY);
+                _rxFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.ConnectionPool"))), UNO_QUERY);
             if (xDriverManager.is())
             {
                 ::rtl::OUString sUser, sPwd;
@@ -716,7 +716,7 @@ Reference< XNameAccess > getFieldsByCommandDescriptor( const Reference< XConnect
 
                                 // Now set the filter to a dummy restriction which will result in an empty
                                 // result set.
-                                xComposer->setFilter( ::rtl::OUString::createFromAscii( "0=1" ) );
+                                xComposer->setFilter( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "0=1" )) );
                                 sStatementToExecute = xComposer->getQuery( );
                             }
                         }
@@ -998,7 +998,7 @@ Reference< XNumberFormatsSupplier> getNumberFormats(
     }
     else if(_bAlloweDefault && _rxFactory.is())
     {
-        xReturn = Reference< XNumberFormatsSupplier>(_rxFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.util.NumberFormatsSupplier")),UNO_QUERY);
+        xReturn = Reference< XNumberFormatsSupplier>(_rxFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.NumberFormatsSupplier"))),UNO_QUERY);
     }
     return xReturn;
 }
@@ -1027,22 +1027,22 @@ try
     Property* pOldProps = aOldProperties.getArray();
     Property* pNewProps = aNewProperties.getArray();
 
-    ::rtl::OUString sPropDefaultControl(::rtl::OUString::createFromAscii("DefaultControl"));
-    ::rtl::OUString sPropLabelControl(::rtl::OUString::createFromAscii("LabelControl"));
-    ::rtl::OUString sPropFormatsSupplier(::rtl::OUString::createFromAscii("FormatsSupplier"));
-    ::rtl::OUString sPropCurrencySymbol(::rtl::OUString::createFromAscii("CurrencySymbol"));
-    ::rtl::OUString sPropDecimals(::rtl::OUString::createFromAscii("Decimals"));
-    ::rtl::OUString sPropEffectiveMin(::rtl::OUString::createFromAscii("EffectiveMin"));
-    ::rtl::OUString sPropEffectiveMax(::rtl::OUString::createFromAscii("EffectiveMax"));
-    ::rtl::OUString sPropEffectiveDefault(::rtl::OUString::createFromAscii("EffectiveDefault"));
-    ::rtl::OUString sPropDefaultText(::rtl::OUString::createFromAscii("DefaultText"));
-    ::rtl::OUString sPropDefaultDate(::rtl::OUString::createFromAscii("DefaultDate"));
-    ::rtl::OUString sPropDefaultTime(::rtl::OUString::createFromAscii("DefaultTime"));
-    ::rtl::OUString sPropValueMin(::rtl::OUString::createFromAscii("ValueMin"));
-    ::rtl::OUString sPropValueMax(::rtl::OUString::createFromAscii("ValueMax"));
-    ::rtl::OUString sPropDecimalAccuracy(::rtl::OUString::createFromAscii("DecimalAccuracy"));
-    ::rtl::OUString sPropClassId(::rtl::OUString::createFromAscii("ClassId"));
-    ::rtl::OUString sFormattedServiceName( ::rtl::OUString::createFromAscii( "com.sun.star.form.component.FormattedField" ) );
+    ::rtl::OUString sPropDefaultControl(RTL_CONSTASCII_USTRINGPARAM("DefaultControl"));
+    ::rtl::OUString sPropLabelControl(RTL_CONSTASCII_USTRINGPARAM("LabelControl"));
+    ::rtl::OUString sPropFormatsSupplier(RTL_CONSTASCII_USTRINGPARAM("FormatsSupplier"));
+    ::rtl::OUString sPropCurrencySymbol(RTL_CONSTASCII_USTRINGPARAM("CurrencySymbol"));
+    ::rtl::OUString sPropDecimals(RTL_CONSTASCII_USTRINGPARAM("Decimals"));
+    ::rtl::OUString sPropEffectiveMin(RTL_CONSTASCII_USTRINGPARAM("EffectiveMin"));
+    ::rtl::OUString sPropEffectiveMax(RTL_CONSTASCII_USTRINGPARAM("EffectiveMax"));
+    ::rtl::OUString sPropEffectiveDefault(RTL_CONSTASCII_USTRINGPARAM("EffectiveDefault"));
+    ::rtl::OUString sPropDefaultText(RTL_CONSTASCII_USTRINGPARAM("DefaultText"));
+    ::rtl::OUString sPropDefaultDate(RTL_CONSTASCII_USTRINGPARAM("DefaultDate"));
+    ::rtl::OUString sPropDefaultTime(RTL_CONSTASCII_USTRINGPARAM("DefaultTime"));
+    ::rtl::OUString sPropValueMin(RTL_CONSTASCII_USTRINGPARAM("ValueMin"));
+    ::rtl::OUString sPropValueMax(RTL_CONSTASCII_USTRINGPARAM("ValueMax"));
+    ::rtl::OUString sPropDecimalAccuracy(RTL_CONSTASCII_USTRINGPARAM("DecimalAccuracy"));
+    ::rtl::OUString sPropClassId(RTL_CONSTASCII_USTRINGPARAM("ClassId"));
+    ::rtl::OUString sFormattedServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.component.FormattedField" ) );
 
     for (sal_Int16 i=0; i<aOldProperties.getLength(); ++i)
     {
@@ -1065,9 +1065,9 @@ try
                 {
                     OSL_UNUSED( e );
 #ifdef DBG_UTIL
-                    ::rtl::OUString sMessage = ::rtl::OUString::createFromAscii("TransferFormComponentProperties : could not transfer the value for property \"");
+                    ::rtl::OUString sMessage(RTL_CONSTASCII_USTRINGPARAM("TransferFormComponentProperties : could not transfer the value for property \""));
                     sMessage += pResult->Name;
-                    sMessage += ::rtl::OUString::createFromAscii("\"");;
+                    sMessage += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\""));
                     OSL_ENSURE(sal_False, ::rtl::OUStringToOString(sMessage, RTL_TEXTENCODING_ASCII_US));
 #endif
                 }
@@ -1273,19 +1273,19 @@ catch(const Exception&)
 //------------------------------------------------------------------------------
 sal_Bool canInsert(const Reference< XPropertySet>& _rxCursorSet)
 {
-    return ((_rxCursorSet.is() && (getINT32(_rxCursorSet->getPropertyValue(::rtl::OUString::createFromAscii("Privileges"))) & Privilege::INSERT) != 0));
+    return ((_rxCursorSet.is() && (getINT32(_rxCursorSet->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Privileges")))) & Privilege::INSERT) != 0));
 }
 
 //------------------------------------------------------------------------------
 sal_Bool canUpdate(const Reference< XPropertySet>& _rxCursorSet)
 {
-    return ((_rxCursorSet.is() && (getINT32(_rxCursorSet->getPropertyValue(::rtl::OUString::createFromAscii("Privileges"))) & Privilege::UPDATE) != 0));
+    return ((_rxCursorSet.is() && (getINT32(_rxCursorSet->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Privileges")))) & Privilege::UPDATE) != 0));
 }
 
 //------------------------------------------------------------------------------
 sal_Bool canDelete(const Reference< XPropertySet>& _rxCursorSet)
 {
-    return ((_rxCursorSet.is() && (getINT32(_rxCursorSet->getPropertyValue(::rtl::OUString::createFromAscii("Privileges"))) & Privilege::DELETE) != 0));
+    return ((_rxCursorSet.is() && (getINT32(_rxCursorSet->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Privileges")))) & Privilege::DELETE) != 0));
 }
 // -----------------------------------------------------------------------------
 Reference< XDataSource> findDataSource(const Reference< XInterface >& _xParent)
@@ -1323,22 +1323,22 @@ Reference< XDataSource> findDataSource(const Reference< XInterface >& _xParent)
             ::rtl::OUString sCommand;
             sal_Bool bEscapeProcessing = sal_False;
 
-            OSL_VERIFY( _rxRowSet->getPropertyValue( ::rtl::OUString::createFromAscii( "CommandType" )      ) >>= nCommandType      );
-            OSL_VERIFY( _rxRowSet->getPropertyValue( ::rtl::OUString::createFromAscii( "Command" )          ) >>= sCommand          );
-            OSL_VERIFY( _rxRowSet->getPropertyValue( ::rtl::OUString::createFromAscii( "EscapeProcessing" ) ) >>= bEscapeProcessing );
+            OSL_VERIFY( _rxRowSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "CommandType" ))      ) >>= nCommandType      );
+            OSL_VERIFY( _rxRowSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Command" ))          ) >>= sCommand          );
+            OSL_VERIFY( _rxRowSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "EscapeProcessing" )) ) >>= bEscapeProcessing );
 
             StatementComposer aComposer( xConn, sCommand, nCommandType, bEscapeProcessing );
             // append sort
             if ( _bUseRowSetOrder )
-                aComposer.setOrder( getString( _rxRowSet->getPropertyValue( ::rtl::OUString::createFromAscii( "Order" ) ) ) );
+                aComposer.setOrder( getString( _rxRowSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Order" )) ) ) );
 
             // append filter
             if ( _bUseRowSetFilter )
             {
                 sal_Bool bApplyFilter = sal_True;
-                _rxRowSet->getPropertyValue( ::rtl::OUString::createFromAscii( "ApplyFilter" ) ) >>= bApplyFilter;
+                _rxRowSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ApplyFilter" )) ) >>= bApplyFilter;
                 if ( bApplyFilter )
-                    aComposer.setFilter( getString( _rxRowSet->getPropertyValue( ::rtl::OUString::createFromAscii( "Filter" ) ) ) );
+                    aComposer.setFilter( getString( _rxRowSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Filter" )) ) ) );
             }
 
             sStatement = aComposer.getQuery();
@@ -1541,8 +1541,8 @@ void showError(const SQLExceptionInfo& _rInfo,
         try
         {
             Sequence< Any > aArgs(2);
-            aArgs[0] <<= PropertyValue(::rtl::OUString::createFromAscii("SQLException"), 0, _rInfo.get(), PropertyState_DIRECT_VALUE);
-            aArgs[1] <<= PropertyValue(::rtl::OUString::createFromAscii("ParentWindow"), 0, makeAny(_xParent), PropertyState_DIRECT_VALUE);
+            aArgs[0] <<= PropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SQLException")), 0, _rInfo.get(), PropertyState_DIRECT_VALUE);
+            aArgs[1] <<= PropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParentWindow")), 0, makeAny(_xParent), PropertyState_DIRECT_VALUE);
 
             static ::rtl::OUString s_sDialogServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.ErrorMessageDialog" ));
             Reference< XExecutableDialog > xErrorDialog(
