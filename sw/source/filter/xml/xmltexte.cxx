@@ -227,7 +227,7 @@ void SwXMLTextParagraphExport::setTextEmbeddedGraphicURL(
     SwGrfNode *pGrfNd = GetNoTxtNode( rPropSet )->GetGrfNode();
     if( !pGrfNd->IsGrfLink() )
     {
-        String aNewURL( RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.Package:") );
+        String aNewURL( RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.Package:") );
         aNewURL += String(rURL);
         pGrfNd->SetNewStreamName( aNewURL );
 

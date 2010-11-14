@@ -861,7 +861,7 @@ void SwGrfNode::_GetStreamStorageNames( String& rStrmName,
         aUserData=aNewStrmName;
     }
 
-    String aProt( RTL_CONSTASCII_STRINGPARAM( "vnd.sun.star.Package:" ) );
+    String aProt( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.Package:" ) );
     if( 0 == aUserData.CompareTo( aProt, aProt.Len() ) )
     {
         // 6.0 (XML) Package
@@ -1212,7 +1212,7 @@ bool SwGrfNode::IsAsyncRetrieveInputStreamPossible() const
     {
         String sGrfNm;
         refLink->GetLinkManager()->GetDisplayNames( refLink, 0, &sGrfNm, 0, 0 );
-        String sProtocol( RTL_CONSTASCII_STRINGPARAM( "vnd.sun.star.pkg:" ) );
+        String sProtocol( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.pkg:" ) );
         if ( sGrfNm.CompareTo( sProtocol, sProtocol.Len() ) != 0 )
         {
             bRet = true;

@@ -63,7 +63,7 @@ void TextControlCombo::Arrange( FixedText& _rFTcomplete, BOOL /*bShow*/ )
         nYCtrl += aMetricVals.Height();
 
     // separate text parts
-    const String    aReplStr( RTL_CONSTASCII_STRINGPARAM( "%POSITION_OF_CONTROL" ) );
+    const String    aReplStr( RTL_CONSTASCII_USTRINGPARAM( "%POSITION_OF_CONTROL" ) );
     String          aTxtBefore( _rFTcomplete.GetText() );
     String          aTxtAfter;
     xub_StrLen      nReplPos = aTxtBefore.Search( aReplStr );

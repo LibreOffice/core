@@ -3017,7 +3017,7 @@ void SwRTFParser::ReadSectControls( int nToken )
                 }
                 if (!aNewSection.mpPageHdFt)
                 {
-                    String aName(RTL_CONSTASCII_STRINGPARAM("rtfHdFt"));
+                    String aName(RTL_CONSTASCII_USTRINGPARAM("rtfHdFt"));
                     aName += String::CreateFromInt32(maSegments.size());
                     sal_uInt16 nPageNo = pDoc->MakePageDesc(aName);
                     aNewSection.mpPageHdFt = &pDoc->_GetPageDesc(nPageNo);
@@ -3032,7 +3032,7 @@ void SwRTFParser::ReadSectControls( int nToken )
             case RTF_HEADERF:
                 if (!aNewSection.mpTitlePageHdFt)
                 {
-                    String aTitle(RTL_CONSTASCII_STRINGPARAM("rtfTitleHdFt"));
+                    String aTitle(RTL_CONSTASCII_USTRINGPARAM("rtfTitleHdFt"));
                     aTitle += String::CreateFromInt32(maSegments.size());
                     sal_uInt16 nPageNo = pDoc->MakePageDesc(aTitle);
                     aNewSection.mpTitlePageHdFt = &pDoc->_GetPageDesc(nPageNo);

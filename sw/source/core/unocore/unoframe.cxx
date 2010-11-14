@@ -1505,7 +1505,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
                 }
                 else
                 {
-                    String sPrefix( RTL_CONSTASCII_STRINGPARAM(sGraphicObjectProtocol) );
+                    String sPrefix( RTL_CONSTASCII_USTRINGPARAM(sGraphicObjectProtocol) );
                     String sId( pGrfNode->GetGrfObj().GetUniqueID(),
                                 RTL_TEXTENCODING_ASCII_US );
                     (sGrfName = sPrefix) += sId;

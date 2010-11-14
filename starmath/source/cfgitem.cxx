@@ -403,7 +403,7 @@ const String SmFontFormatList::GetNewFontFormatId() const
 
     String aRes;
 
-    String aPrefix( RTL_CONSTASCII_STRINGPARAM( "Id" ) );
+    String aPrefix( RTL_CONSTASCII_USTRINGPARAM( "Id" ) );
     INT32 nCnt = GetCount();
     for (INT32 i = 1;  i <= nCnt + 1  &&  0 == aRes.Len();  ++i)
     {
