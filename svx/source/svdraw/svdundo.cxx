@@ -160,8 +160,8 @@ void SdrUndoGroup::Redo()
 XubString SdrUndoGroup::GetComment() const
 {
     XubString aRet(aComment);
-    sal_Char aSearchText[] = "%1";
-    String aSearchString(aSearchText, sizeof(aSearchText-1));
+
+    String aSearchString(RTL_CONSTASCII_USTRINGPARAM("%1"));
 
     aRet.SearchAndReplace(aSearchString, aObjDescription);
 
@@ -218,8 +218,8 @@ void SdrUndoGroup::SdrRepeat(SdrView& rView)
 XubString SdrUndoGroup::GetSdrRepeatComment(SdrView& /*rView*/) const
 {
     XubString aRet(aComment);
-    sal_Char aSearchText[] = "%1";
-    String aSearchString(aSearchText, sizeof(aSearchText-1));
+
+    String aSearchString(RTL_CONSTASCII_USTRINGPARAM("%1"));
 
     aRet.SearchAndReplace(aSearchString, ImpGetResStr(STR_ObjNameSingulPlural));
 
@@ -249,8 +249,8 @@ SdrUndoObj::SdrUndoObj(SdrObject& rNewObj):
 void SdrUndoObj::GetDescriptionStringForObject( const SdrObject& _rForObject, USHORT nStrCacheID, String& rStr, bool bRepeat )
 {
     rStr = ImpGetResStr(nStrCacheID);
-    sal_Char aSearchText[] = "%1";
-    String aSearchString(aSearchText, sizeof(aSearchText-1));
+
+    String aSearchString(RTL_CONSTASCII_USTRINGPARAM("%1"));
 
     xub_StrLen nPos = rStr.Search(aSearchString);
 

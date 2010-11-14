@@ -708,7 +708,7 @@ namespace svxform
                         {
                             try
                             {
-                                String sDelim( RTL_CONSTASCII_STRINGPARAM( ": " ) );
+                                String sDelim( RTL_CONSTASCII_USTRINGPARAM( ": " ) );
                                 ::rtl::OUString sTemp;
                                 pNode->m_xPropSet->getPropertyValue( PN_BINDING_ID ) >>= sTemp;
                                 sNewName += String( sTemp );
@@ -1031,7 +1031,7 @@ namespace svxform
         {
             try
             {
-                String sDelim( RTL_CONSTASCII_STRINGPARAM( ": " ) );
+                String sDelim( RTL_CONSTASCII_USTRINGPARAM( ": " ) );
                 ::rtl::OUString sName;
                 _rEntry->getPropertyValue( PN_BINDING_ID ) >>= sTemp;
                 sName += String( sTemp );
@@ -1336,7 +1336,7 @@ namespace svxform
                         {
                             Image aImage1 = rImageList.GetImage( IID_ELEMENT );
                             Image aImage2 = rImageList.GetImage( IID_ELEMENT );
-                            String sDelim( RTL_CONSTASCII_STRINGPARAM( ": " ) );
+                            String sDelim( RTL_CONSTASCII_USTRINGPARAM( ": " ) );
                             while ( xNum->hasMoreElements() )
                             {
                                 Reference< XPropertySet > xPropSet;
@@ -3527,7 +3527,7 @@ namespace svxform
                     Reference < XEnumeration > xNum = xNumAccess->createEnumeration();
                     if ( xNum.is() && xNum->hasMoreElements() )
                     {
-                        String sDelim( RTL_CONSTASCII_STRINGPARAM( ": " ) );
+                        String sDelim( RTL_CONSTASCII_USTRINGPARAM( ": " ) );
                         while ( xNum->hasMoreElements() )
                         {
                             Reference< XPropertySet > xPropSet;

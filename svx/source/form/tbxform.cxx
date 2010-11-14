@@ -409,7 +409,7 @@ SvxFmTbxCtlRecTotal::~SvxFmTbxCtlRecTotal()
 Window* SvxFmTbxCtlRecTotal::CreateItemWindow( Window* pParent )
 {
     pFixedText = new FixedText( pParent );
-    String aSample( "123456", sizeof( "123456" ) - 1 );
+    String aSample(RTL_CONSTASCII_USTRINGPARAM("123456"));
     Size aSize( pFixedText->GetTextWidth( aSample ), pFixedText->GetTextHeight( ) );
     aSize.Width() += 12;
     pFixedText->SetSizePixel( aSize );
