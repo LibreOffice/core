@@ -95,22 +95,22 @@ using namespace com::sun::star;
 // definitions
 
 //-----------------------------------------------
-static ::rtl::OUString SERVICE_STORAGEFACTORY           = ::rtl::OUString::createFromAscii("com.sun.star.embed.StorageFactory"                          );
-static ::rtl::OUString SERVICE_UICONFIGMGR              = ::rtl::OUString::createFromAscii("com.sun.star.ui.UIConfigurationManager"              );
-static ::rtl::OUString SERVICE_DESKTOP                  = ::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop"                                 );
-static ::rtl::OUString SERVICE_MODULEMANAGER            = ::rtl::OUString::createFromAscii("com.sun.star.frame.ModuleManager"                    );
-static ::rtl::OUString SERVICE_GLOBALACCCFG             = ::rtl::OUString::createFromAscii("com.sun.star.ui.GlobalAcceleratorConfiguration"      );
-static ::rtl::OUString SERVICE_MODULEUICONFIGSUPPLIER   = ::rtl::OUString::createFromAscii("com.sun.star.ui.ModuleUIConfigurationManagerSupplier");
-static ::rtl::OUString SERVICE_UICMDDESCRIPTION         = ::rtl::OUString::createFromAscii("com.sun.star.frame.UICommandDescription"             );
+static ::rtl::OUString SERVICE_STORAGEFACTORY           (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.StorageFactory"                        ));
+static ::rtl::OUString SERVICE_UICONFIGMGR              (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.UIConfigurationManager"              ));
+static ::rtl::OUString SERVICE_DESKTOP                  (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"                               ));
+static ::rtl::OUString SERVICE_MODULEMANAGER            (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.ModuleManager"                  ));
+static ::rtl::OUString SERVICE_GLOBALACCCFG             (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.GlobalAcceleratorConfiguration"      ));
+static ::rtl::OUString SERVICE_MODULEUICONFIGSUPPLIER   (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.ModuleUIConfigurationManagerSupplier"));
+static ::rtl::OUString SERVICE_UICMDDESCRIPTION         (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.UICommandDescription"             ));
 
-static ::rtl::OUString MODULEPROP_SHORTNAME             = ::rtl::OUString::createFromAscii("ooSetupFactoryShortName"                                    );
-static ::rtl::OUString MODULEPROP_UINAME                = ::rtl::OUString::createFromAscii("ooSetupFactoryUIName"                                       );
-static ::rtl::OUString CMDPROP_UINAME                   = ::rtl::OUString::createFromAscii("Name"                                                       );
+static ::rtl::OUString MODULEPROP_SHORTNAME             (RTL_CONSTASCII_USTRINGPARAM("ooSetupFactoryShortName"                                  ));
+static ::rtl::OUString MODULEPROP_UINAME                (RTL_CONSTASCII_USTRINGPARAM("ooSetupFactoryUIName"                                     ));
+static ::rtl::OUString CMDPROP_UINAME                   (RTL_CONSTASCII_USTRINGPARAM("Name"                                                     ));
 
-static ::rtl::OUString FOLDERNAME_UICONFIG              = ::rtl::OUString::createFromAscii("Configurations2"                                            );
+static ::rtl::OUString FOLDERNAME_UICONFIG              (RTL_CONSTASCII_USTRINGPARAM("Configurations2"                                          ));
 
-static ::rtl::OUString MEDIATYPE_PROPNAME               = ::rtl::OUString::createFromAscii("MediaType"                                                  );
-static ::rtl::OUString MEDIATYPE_UICONFIG               = ::rtl::OUString::createFromAscii("application/vnd.sun.xml.ui.configuration"                   );
+static ::rtl::OUString MEDIATYPE_PROPNAME               (RTL_CONSTASCII_USTRINGPARAM("MediaType"                                                ));
+static ::rtl::OUString MEDIATYPE_UICONFIG               (RTL_CONSTASCII_USTRINGPARAM("application/vnd.sun.xml.ui.configuration"                 ));
 
 //-----------------------------------------------
 static USHORT __FAR_DATA KEYCODE_ARRAY[] =
@@ -1383,7 +1383,8 @@ IMPL_LINK( SfxAcceleratorConfigPage, SaveHdl, sfx2::FileDialogHelper*, EMPTYARG 
     {
         try
         {
-            uno::Reference< container::XNameAccess > xNameAccess( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString::createFromAscii("com.sun.star.frame.UICommandDescription") ), uno::UNO_QUERY );
+            uno::Reference< container::XNameAccess > xNameAccess( ::comphelper::getProcessServiceFactory()->createInstance(
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.UICommandDescription") ) ), uno::UNO_QUERY );
             if ( xNameAccess.is() )
             {
                 uno::Reference< container::XNameAccess > xUICommandLabels;
@@ -1425,75 +1426,75 @@ String SfxAcceleratorConfigPage::GetFunctionName(KeyFuncType eType) const
     switch(eType)
     {
         case KEYFUNC_NEW :
-            sName.append( RetrieveLabelFromCommand( ::rtl::OUString::createFromAscii(".uno:NewDoc") ) );
+            sName.append( RetrieveLabelFromCommand( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:NewDoc") ) ) );
             break;
 
         case KEYFUNC_OPEN :
-            sName.append( RetrieveLabelFromCommand( ::rtl::OUString::createFromAscii(".uno:Open") ) );
+            sName.append( RetrieveLabelFromCommand( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Open") ) ) );
             break;
 
         case KEYFUNC_SAVE :
-            sName.append( RetrieveLabelFromCommand( ::rtl::OUString::createFromAscii(".uno:Save") ) );
+            sName.append( RetrieveLabelFromCommand( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Save") ) ) );
             break;
 
         case KEYFUNC_SAVEAS :
-            sName.append( RetrieveLabelFromCommand( ::rtl::OUString::createFromAscii(".uno:SaveAs") ) );
+            sName.append( RetrieveLabelFromCommand( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:SaveAs") ) ) );
             break;
 
         case KEYFUNC_PRINT :
-            sName.append( RetrieveLabelFromCommand( ::rtl::OUString::createFromAscii(".uno:Print") ) );
+            sName.append( RetrieveLabelFromCommand( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Print") ) ) );
             break;
 
         case KEYFUNC_CLOSE :
-            sName.append( RetrieveLabelFromCommand( ::rtl::OUString::createFromAscii(".uno:Close") ) );
+            sName.append( RetrieveLabelFromCommand( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Close") ) ) );
             break;
 
         case KEYFUNC_QUIT :
-            sName.append( RetrieveLabelFromCommand( ::rtl::OUString::createFromAscii(".uno:Quit") ) );
+            sName.append( RetrieveLabelFromCommand( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Quit") ) ) );
             break;
 
         case KEYFUNC_CUT :
-            sName.append( RetrieveLabelFromCommand( ::rtl::OUString::createFromAscii(".uno:Cut") ) );
+            sName.append( RetrieveLabelFromCommand( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Cut") ) ) );
             break;
 
         case KEYFUNC_COPY :
-            sName.append( RetrieveLabelFromCommand( ::rtl::OUString::createFromAscii(".uno:Copy") ) );
+            sName.append( RetrieveLabelFromCommand( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Copy") ) ) );
             break;
 
         case KEYFUNC_PASTE :
-            sName.append( RetrieveLabelFromCommand( ::rtl::OUString::createFromAscii(".uno:Paste") ) );
+            sName.append( RetrieveLabelFromCommand( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Paste") ) ) );
             break;
 
         case KEYFUNC_UNDO :
-            sName.append( RetrieveLabelFromCommand( ::rtl::OUString::createFromAscii(".uno:Undo") ) );
+            sName.append( RetrieveLabelFromCommand( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Undo") ) ) );
             break;
 
         case KEYFUNC_REDO :
-            sName.append( RetrieveLabelFromCommand( ::rtl::OUString::createFromAscii(".uno:Redo") ) );
+            sName.append( RetrieveLabelFromCommand( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Redo") ) ) );
             break;
 
         case KEYFUNC_DELETE :
-            sName.append( RetrieveLabelFromCommand( ::rtl::OUString::createFromAscii(".uno:Delete") ) );
+            sName.append( RetrieveLabelFromCommand( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Delete") ) ) );
             break;
 
         case KEYFUNC_REPEAT :
-            sName.append( RetrieveLabelFromCommand( ::rtl::OUString::createFromAscii(".uno:Repeat") ) );
+            sName.append( RetrieveLabelFromCommand( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Repeat") ) ) );
             break;
 
         case KEYFUNC_FIND :
-            sName.append( RetrieveLabelFromCommand( ::rtl::OUString::createFromAscii(".uno:Search") ) );
+            sName.append( RetrieveLabelFromCommand( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Search") ) ) );
             break;
 
         case KEYFUNC_FINDBACKWARD :
-            sName.append( RetrieveLabelFromCommand( ::rtl::OUString::createFromAscii(".uno:SearchBackwards") ) );
+            sName.append( RetrieveLabelFromCommand( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:SearchBackwards") ) ) );
             break;
 
         case KEYFUNC_PROPERTIES :
-            sName.append( RetrieveLabelFromCommand( ::rtl::OUString::createFromAscii(".uno:Options") ) );
+            sName.append( RetrieveLabelFromCommand( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Options") ) ) );
             break;
 
         case KEYFUNC_FRONT :
-            sName.append( RetrieveLabelFromCommand( ::rtl::OUString::createFromAscii(".uno:ToFront") ) );
+            sName.append( RetrieveLabelFromCommand( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:ToFront") ) ) );
             break;
 
         default:

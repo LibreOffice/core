@@ -798,9 +798,9 @@ SfxTabPage *CreateSvxEventConfigPage( Window *pParent, const SfxItemSet& rSet )
 
 sal_Bool impl_showKeyConfigTabPage( const css::uno::Reference< css::frame::XFrame >& xFrame )
 {
-    static ::rtl::OUString SERVICENAME_MODULEMANAGER = ::rtl::OUString::createFromAscii("com.sun.star.frame.ModuleManager");
-    static ::rtl::OUString SERVICENAME_DESKTOP       = ::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop"             );
-    static ::rtl::OUString MODULEID_STARTMODULE      = ::rtl::OUString::createFromAscii("com.sun.star.frame.StartModule"         );
+    static ::rtl::OUString SERVICENAME_MODULEMANAGER (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.frame.ModuleManager") );
+    static ::rtl::OUString SERVICENAME_DESKTOP       (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.frame.Desktop"           ) );
+    static ::rtl::OUString MODULEID_STARTMODULE      (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.frame.StartModule"       ) );
 
     try
     {
@@ -5324,8 +5324,7 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
     {
         m_xGraphProvider = uno::Reference< graphic::XGraphicProvider >(
             xServiceManager->createInstance(
-                ::rtl::OUString::createFromAscii(
-                    "com.sun.star.graphic.GraphicProvider" ) ),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.graphic.GraphicProvider" ) ) ),
             uno::UNO_QUERY );
     }
 
@@ -5335,7 +5334,7 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
     }
 
     uno::Reference< beans::XPropertySet > xPropSet(
-        xServiceManager->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.util.PathSettings" ) ),
+        xServiceManager->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.PathSettings" ) ) ),
         uno::UNO_QUERY );
 
     uno::Any aAny = xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UserConfig" ) ) );
@@ -5363,7 +5362,7 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
 
     uno::Reference< lang::XSingleServiceFactory > xStorageFactory(
         xServiceManager->createInstance(
-        ::rtl::OUString::createFromAscii( "com.sun.star.embed.FileSystemStorageFactory" )),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.embed.FileSystemStorageFactory" ) ) ),
         uno::UNO_QUERY );
 
     uno::Sequence< uno::Any > aArgs( 2 );
@@ -5386,7 +5385,7 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
 
     m_xImportedImageManager = uno::Reference< com::sun::star::ui::XImageManager >(
         xServiceManager->createInstanceWithArguments(
-        ::rtl::OUString::createFromAscii( "com.sun.star.ui.ImageManager" ), aProp ),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.ImageManager" ) ), aProp ),
         uno::UNO_QUERY );
 
     ImageInfo mImageInfo;
@@ -5629,7 +5628,7 @@ bool SvxIconSelectorDialog::ReplaceGraphicItem(
 
     uno::Reference< graphic::XGraphic > xGraphic;
     uno::Sequence< beans::PropertyValue > aMediaProps( 1 );
-    aMediaProps[0].Name = ::rtl::OUString::createFromAscii("URL");
+    aMediaProps[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL") );
     aMediaProps[0].Value <<= aURL;
 
     com::sun::star::awt::Size aSize;
@@ -5708,7 +5707,7 @@ void SvxIconSelectorDialog::ImportGraphics(
     uno::Sequence< OUString > URLs(1);
     uno::Sequence< uno::Reference<graphic::XGraphic > > aImportGraph( 1 );
     uno::Sequence< beans::PropertyValue > aMediaProps( 1 );
-    aMediaProps[0].Name = ::rtl::OUString::createFromAscii("URL");
+    aMediaProps[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL") );
     uno::Reference< css::ui::XUIConfigurationPersistence >
         xConfigPer( m_xImportedImageManager, uno::UNO_QUERY );
 
@@ -5737,7 +5736,7 @@ void SvxIconSelectorDialog::ImportGraphics(
     {
         ::rtl::OUString aSourcePath( rPaths[0] );
         if ( rPaths[0].lastIndexOf( '/' ) != rPaths[0].getLength() -1 )
-            aSourcePath = rPaths[0] + ::rtl::OUString::createFromAscii( "/" );
+            aSourcePath = rPaths[0] + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/" ) );
 
         for ( sal_Int32 i = 1; i < rPaths.getLength(); i++ )
         {
@@ -5789,7 +5788,7 @@ void SvxIconSelectorDialog::ImportGraphics(
         OUString newLine = OUString::createFromAscii("\n");
         rtl::OUString fPath = OUString::createFromAscii("");
         if (rejectedCount > 1)
-              fPath = rPaths[0].copy(8) + ::rtl::OUString::createFromAscii( "/" );
+              fPath = rPaths[0].copy(8) + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/" ) );
         for ( sal_Int32 i = 0; i < rejectedCount; i++ )
         {
             message += fPath + rejected[i];
@@ -5809,7 +5808,7 @@ bool SvxIconSelectorDialog::ImportGraphic( const OUString& aURL )
     ++m_nNextId;
 
     uno::Sequence< beans::PropertyValue > aMediaProps( 1 );
-    aMediaProps[0].Name = ::rtl::OUString::createFromAscii("URL");
+    aMediaProps[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL") );
 
     uno::Reference< graphic::XGraphic > xGraphic;
     com::sun::star::awt::Size aSize;

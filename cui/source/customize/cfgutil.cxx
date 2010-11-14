@@ -81,8 +81,8 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::document;
 namespace css = ::com::sun::star;
 
-static ::rtl::OUString SERVICE_UICATEGORYDESCRIPTION = ::rtl::OUString::createFromAscii("com.sun.star.ui.UICategoryDescription"         );
-static ::rtl::OUString SERVICE_UICMDDESCRIPTION      = ::rtl::OUString::createFromAscii("com.sun.star.frame.UICommandDescription");
+static ::rtl::OUString SERVICE_UICATEGORYDESCRIPTION (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.UICategoryDescription") );
+static ::rtl::OUString SERVICE_UICMDDESCRIPTION      (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.UICommandDescription") );
 
 SfxStylesInfo_Impl::SfxStylesInfo_Impl()
 {}
@@ -92,20 +92,20 @@ void SfxStylesInfo_Impl::setModel(const ::com::sun::star::uno::Reference< ::com:
     m_xDoc = xModel;
 }
 
-static ::rtl::OUString FAMILY_CHARACTERSTYLE = ::rtl::OUString::createFromAscii("CharacterStyles");
-static ::rtl::OUString FAMILY_PARAGRAPHSTYLE = ::rtl::OUString::createFromAscii("ParagraphStyles");
-static ::rtl::OUString FAMILY_FRAMESTYLE     = ::rtl::OUString::createFromAscii("FrameStyles"    );
-static ::rtl::OUString FAMILY_PAGESTYLE      = ::rtl::OUString::createFromAscii("PageStyles"     );
-static ::rtl::OUString FAMILY_NUMBERINGSTYLE = ::rtl::OUString::createFromAscii("NumberingStyles");
+static ::rtl::OUString FAMILY_CHARACTERSTYLE (RTL_CONSTASCII_USTRINGPARAM("CharacterStyles") );
+static ::rtl::OUString FAMILY_PARAGRAPHSTYLE (RTL_CONSTASCII_USTRINGPARAM("ParagraphStyles") );
+static ::rtl::OUString FAMILY_FRAMESTYLE     (RTL_CONSTASCII_USTRINGPARAM("FrameStyles"    ) );
+static ::rtl::OUString FAMILY_PAGESTYLE      (RTL_CONSTASCII_USTRINGPARAM("PageStyles"     ) );
+static ::rtl::OUString FAMILY_NUMBERINGSTYLE (RTL_CONSTASCII_USTRINGPARAM("NumberingStyles") );
 
-static ::rtl::OUString CMDURL_SPART  = ::rtl::OUString::createFromAscii(".uno:StyleApply?Style:string=");
-static ::rtl::OUString CMDURL_FPART2 = ::rtl::OUString::createFromAscii("&FamilyName:string=");
+static ::rtl::OUString CMDURL_SPART  (RTL_CONSTASCII_USTRINGPARAM(".uno:StyleApply?Style:string=") );
+static ::rtl::OUString CMDURL_FPART2 (RTL_CONSTASCII_USTRINGPARAM("&FamilyName:string=") );
 
-static ::rtl::OUString CMDURL_STYLEPROT_ONLY = ::rtl::OUString::createFromAscii(".uno:StyleApply?");
-static ::rtl::OUString CMDURL_SPART_ONLY     = ::rtl::OUString::createFromAscii("Style:string=");
-static ::rtl::OUString CMDURL_FPART_ONLY     = ::rtl::OUString::createFromAscii("FamilyName:string=");
+static ::rtl::OUString CMDURL_STYLEPROT_ONLY (RTL_CONSTASCII_USTRINGPARAM(".uno:StyleApply?") );
+static ::rtl::OUString CMDURL_SPART_ONLY     (RTL_CONSTASCII_USTRINGPARAM("Style:string=") );
+static ::rtl::OUString CMDURL_FPART_ONLY     (RTL_CONSTASCII_USTRINGPARAM("FamilyName:string=") );
 
-static ::rtl::OUString STYLEPROP_UINAME = ::rtl::OUString::createFromAscii("DisplayName");
+static ::rtl::OUString STYLEPROP_UINAME (RTL_CONSTASCII_USTRINGPARAM("DisplayName") );
 
 ::rtl::OUString SfxStylesInfo_Impl::generateCommand(const ::rtl::OUString& sFamily, const ::rtl::OUString& sStyle)
 {
@@ -230,7 +230,7 @@ void SfxStylesInfo_Impl::getLabel4Style(SfxStyleInfo_Impl& aStyle)
 
 ::std::vector< SfxStyleInfo_Impl > SfxStylesInfo_Impl::getStyles(const ::rtl::OUString& sFamily)
 {
-    static ::rtl::OUString PROP_UINAME = ::rtl::OUString::createFromAscii("DisplayName");
+    static ::rtl::OUString PROP_UINAME (RTL_CONSTASCII_USTRINGPARAM("DisplayName") );
 
     css::uno::Sequence< ::rtl::OUString > lStyleNames;
     css::uno::Reference< css::style::XStyleFamiliesSupplier > xModel(m_xDoc, css::uno::UNO_QUERY_THROW);
@@ -505,8 +505,7 @@ SfxConfigGroupListBox_Impl::SfxConfigGroupListBox_Impl(
     sal_Bool tmp = false;
 
     value = ::utl::ConfigManager::GetConfigManager().GetLocalProperty(
-        ::rtl::OUString::createFromAscii(
-            "Office.Scripting/ScriptDisplaySettings/ShowBasic" ) );
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Office.Scripting/ScriptDisplaySettings/ShowBasic" ) ) );
 
     value >>= tmp;
 
@@ -518,8 +517,7 @@ SfxConfigGroupListBox_Impl::SfxConfigGroupListBox_Impl(
     }
 
     value = ::utl::ConfigManager::GetConfigManager().GetLocalProperty(
-        ::rtl::OUString::createFromAscii(
-            "Office.Scripting/ScriptDisplaySettings/ShowSF" ) );
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Scripting/ScriptDisplaySettings/ShowSF" ) ) );
 
     value >>= tmp;
 
@@ -826,7 +824,7 @@ void SfxConfigGroupListBox_Impl::Init(const css::uno::Reference< css::lang::XMul
                 ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
             xCtx.set( xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))), UNO_QUERY_THROW );
             Reference< browse::XBrowseNodeFactory > xFac( xCtx->getValueByName(
-                ::rtl::OUString::createFromAscii( "/singletons/com.sun.star.script.browse.theBrowseNodeFactory") ), UNO_QUERY_THROW );
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/singletons/com.sun.star.script.browse.theBrowseNodeFactory") ) ), UNO_QUERY_THROW );
             rootNode.set( xFac->createView( browse::BrowseNodeFactoryViewTypes::MACROSELECTOR ) );
         }
         catch( Exception& e )
@@ -866,9 +864,9 @@ void SfxConfigGroupListBox_Impl::Init(const css::uno::Reference< css::lang::XMul
                             rootNode->getChildNodes();
                         BOOL bIsRootNode = FALSE;
 
-                        ::rtl::OUString user = ::rtl::OUString::createFromAscii("user");
-                        ::rtl::OUString share = ::rtl::OUString::createFromAscii("share");
-                        if ( rootNode->getName().equals(::rtl::OUString::createFromAscii("Root") ))
+                        ::rtl::OUString user( RTL_CONSTASCII_USTRINGPARAM("user") );
+                        ::rtl::OUString share( RTL_CONSTASCII_USTRINGPARAM("share") );
+                        if ( rootNode->getName().equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Root") ) ) )
                         {
                             bIsRootNode = TRUE;
                         }
@@ -974,8 +972,8 @@ Image SfxConfigGroupListBox_Impl::GetImage( Reference< browse::XBrowseNode > nod
     Image aImage;
     if ( bIsRootNode )
     {
-        ::rtl::OUString user = ::rtl::OUString::createFromAscii("user");
-        ::rtl::OUString share = ::rtl::OUString::createFromAscii("share");
+        ::rtl::OUString user( RTL_CONSTASCII_USTRINGPARAM("user") );
+        ::rtl::OUString share( RTL_CONSTASCII_USTRINGPARAM("share") );
         if (node->getName().equals( user ) || node->getName().equals(share ) )
         {
             if( bHighContrast == BMP_COLOR_NORMAL )
@@ -994,8 +992,8 @@ Image SfxConfigGroupListBox_Impl::GetImage( Reference< browse::XBrowseNode > nod
                     xModuleManager(
                         xCtx->getServiceManager()
                             ->createInstanceWithContext(
-                                ::rtl::OUString::createFromAscii("" // xxx todo
-                                      "com.sun.star.frame.ModuleManager"),
+                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("" // xxx todo
+                                      "com.sun.star.frame.ModuleManager") ),
                                 xCtx ),
                             UNO_QUERY_THROW );
                 Reference<container::XNameAccess> xModuleConfig(
@@ -1007,7 +1005,7 @@ Image SfxConfigGroupListBox_Impl::GetImage( Reference< browse::XBrowseNode > nod
                 Any aAny = xModuleConfig->getByName(appModule);
                 if( sal_True != ( aAny >>= moduleDescr ) )
                 {
-                    throw RuntimeException(::rtl::OUString::createFromAscii("SFTreeListBox::Init: failed to get PropertyValue"), Reference< XInterface >());
+                    throw RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SFTreeListBox::Init: failed to get PropertyValue") ), Reference< XInterface >());
                 }
                 beans::PropertyValue const * pmoduleDescr =
                     moduleDescr.getConstArray();
@@ -1072,7 +1070,7 @@ SfxConfigGroupListBox_Impl::getDocumentModel( Reference< XComponentContext >& xC
             xCtx->getServiceManager();
     Reference< frame::XDesktop > desktop (
         mcf->createInstanceWithContext(
-            ::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop"),                 xCtx ),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop") ),                 xCtx ),
             UNO_QUERY );
 
     Reference< container::XEnumerationAccess > componentsAccess =
@@ -1102,7 +1100,7 @@ SfxConfigGroupListBox_Impl::getDocumentModel( Reference< XComponentContext >& xC
     // strip out the last leaf of location name
     // e.g. file://dir1/dir2/Blah.sxw - > Blah.sxw
     ::rtl::OUString temp = location;
-    sal_Int32 lastSlashIndex = temp.lastIndexOf( ::rtl::OUString::createFromAscii( "/" ) );
+    sal_Int32 lastSlashIndex = temp.lastIndexOf( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/" ) ) );
 
     if ( ( lastSlashIndex + 1 ) <  temp.getLength()  )
     {
@@ -1127,7 +1125,7 @@ SfxConfigGroupListBox_Impl::getDocumentModel( Reference< XComponentContext >& xC
         if (xModuleConf.is())
         {
             ::comphelper::SequenceAsHashMap lProps(xModuleConf->getByName(sCommand));
-            sUIName = lProps.getUnpackedValueOrDefault(::rtl::OUString::createFromAscii("Name"), ::rtl::OUString());
+            sUIName = lProps.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name") ), ::rtl::OUString());
         }
     }
     catch(const css::uno::RuntimeException& exRun)
@@ -1441,9 +1439,9 @@ void SfxConfigGroupListBox_Impl::RequestingChilds( SvLBoxEntry *pEntry )
                             rootNode->getChildNodes();
                         BOOL bIsRootNode = FALSE;
 
-                        ::rtl::OUString user = ::rtl::OUString::createFromAscii("user");
-                        ::rtl::OUString share = ::rtl::OUString::createFromAscii("share");
-                        if ( rootNode->getName().equals(::rtl::OUString::createFromAscii("Root") ))
+                        ::rtl::OUString user( RTL_CONSTASCII_USTRINGPARAM("user") );
+                        ::rtl::OUString share( RTL_CONSTASCII_USTRINGPARAM("share" ));
+                        if ( rootNode->getName().equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Root") ) ) )
                         {
                             bIsRootNode = TRUE;
                         }

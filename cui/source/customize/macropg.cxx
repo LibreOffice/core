@@ -60,10 +60,8 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-static ::rtl::OUString aVndSunStarUNO =
-    ::rtl::OUString::createFromAscii( "vnd.sun.star.UNO:" );
-static ::rtl::OUString aVndSunStarScript =
-    ::rtl::OUString::createFromAscii( "vnd.sun.star.script:" );
+static ::rtl::OUString aVndSunStarUNO( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.UNO:") );
+static ::rtl::OUString aVndSunStarScript( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.script:") );
 
 _SvxMacroTabPage_Impl::_SvxMacroTabPage_Impl( const SfxItemSet& rAttrSet ) :
     pAssignFT( NULL ),
@@ -665,7 +663,7 @@ long _SvxMacroTabPage::GenericHandler_Impl( _SvxMacroTabPage* pThis, PushButton*
     if( pBtn == pImpl->pDeletePB )
     {
         // delete pressed
-        sEventType = ::rtl::OUString::createFromAscii("Script");
+        sEventType = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Script") );
         sEventURL = ::rtl::OUString();
         if(!pThis->bAppEvents)
             pThis->bDocModified = true;
@@ -683,7 +681,7 @@ long _SvxMacroTabPage::GenericHandler_Impl( _SvxMacroTabPage* pThis, PushButton*
         short ret = pAssignDlg->Execute();
         if( ret )
         {
-            sEventType = ::rtl::OUString::createFromAscii("UNO");
+            sEventType = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UNO"));
             sEventURL = pAssignDlg->getURL();
             if(!pThis->bAppEvents)
                 pThis->bDocModified = true;
@@ -699,7 +697,7 @@ long _SvxMacroTabPage::GenericHandler_Impl( _SvxMacroTabPage* pThis, PushButton*
             short ret = pDlg->Execute();
             if ( ret )
             {
-                sEventType = ::rtl::OUString::createFromAscii("Script");
+                sEventType = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Script"));
                 sEventURL = pDlg->GetScriptURL();
                 if(!pThis->bAppEvents)
                     pThis->bDocModified = true;
