@@ -1266,18 +1266,18 @@ ScFunctionList::ScFunctionList() :
     USHORT nNextId = SC_OPCODE_LAST_OPCODE_ID + 1;      // FuncID for AddIn functions
 
     // Auswertung AddIn-Liste
-    String aDefArgNameValue(RTL_CONSTASCII_STRINGPARAM("value"));
-    String aDefArgNameString(RTL_CONSTASCII_STRINGPARAM("string"));
-    String aDefArgNameValues(RTL_CONSTASCII_STRINGPARAM("values"));
-    String aDefArgNameStrings(RTL_CONSTASCII_STRINGPARAM("strings"));
-    String aDefArgNameCells(RTL_CONSTASCII_STRINGPARAM("cells"));
-    String aDefArgNameNone(RTL_CONSTASCII_STRINGPARAM("none"));
-    String aDefArgDescValue(RTL_CONSTASCII_STRINGPARAM("a value"));
-    String aDefArgDescString(RTL_CONSTASCII_STRINGPARAM("a string"));
-    String aDefArgDescValues(RTL_CONSTASCII_STRINGPARAM("array of values"));
-    String aDefArgDescStrings(RTL_CONSTASCII_STRINGPARAM("array of strings"));
-    String aDefArgDescCells(RTL_CONSTASCII_STRINGPARAM("range of cells"));
-    String aDefArgDescNone(RTL_CONSTASCII_STRINGPARAM("none"));
+    String aDefArgNameValue(RTL_CONSTASCII_USTRINGPARAM("value"));
+    String aDefArgNameString(RTL_CONSTASCII_USTRINGPARAM("string"));
+    String aDefArgNameValues(RTL_CONSTASCII_USTRINGPARAM("values"));
+    String aDefArgNameStrings(RTL_CONSTASCII_USTRINGPARAM("strings"));
+    String aDefArgNameCells(RTL_CONSTASCII_USTRINGPARAM("cells"));
+    String aDefArgNameNone(RTL_CONSTASCII_USTRINGPARAM("none"));
+    String aDefArgDescValue(RTL_CONSTASCII_USTRINGPARAM("a value"));
+    String aDefArgDescString(RTL_CONSTASCII_USTRINGPARAM("a string"));
+    String aDefArgDescValues(RTL_CONSTASCII_USTRINGPARAM("array of values"));
+    String aDefArgDescStrings(RTL_CONSTASCII_USTRINGPARAM("array of strings"));
+    String aDefArgDescCells(RTL_CONSTASCII_USTRINGPARAM("range of cells"));
+    String aDefArgDescNone(RTL_CONSTASCII_USTRINGPARAM("none"));
     String aArgName, aArgDesc;
     pFuncColl = ScGlobal::GetFuncCollection();
     for (i = 0; i < pFuncColl->GetCount(); i++)

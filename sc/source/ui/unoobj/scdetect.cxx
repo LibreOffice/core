@@ -435,10 +435,10 @@ static BOOL lcl_MayBeDBase( SvStream& rStream )
                     {
                         // Excel-5: detect through contained streams
                         // there are some "excel" formats from 3rd party vendors that need to be distinguished
-                        String aStreamName(RTL_CONSTASCII_STRINGPARAM("Workbook"));
+                        String aStreamName(RTL_CONSTASCII_USTRINGPARAM("Workbook"));
                         BOOL bExcel97Stream = ( aStorage->IsStream( aStreamName ) );
 
-                        aStreamName = String(RTL_CONSTASCII_STRINGPARAM("Book"));
+                        aStreamName = String(RTL_CONSTASCII_USTRINGPARAM("Book"));
                         BOOL bExcel5Stream = ( aStorage->IsStream( aStreamName ) );
                         if ( bExcel97Stream || bExcel5Stream )
                         {
