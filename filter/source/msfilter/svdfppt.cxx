@@ -1730,7 +1730,7 @@ sal_Bool PPTConvertOCXControls::InsertControl(
         if( rServiceFactory.is() )
         {
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  xCreate = rServiceFactory
-                ->createInstance(String( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.ControlShape" ) ) );
+                ->createInstance(String( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.ControlShape" ) ) );
             if( xCreate.is() )
             {
                 xShape = ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >(xCreate, ::com::sun::star::uno::UNO_QUERY);

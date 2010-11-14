@@ -588,7 +588,7 @@ void XMLFilterTestDialog::onImportBrowse()
         if( i > 0 )
             aExtensions += ';';
 
-        aExtensions += String( RTL_CONSTASCII_STRINGPARAM("*.") );
+        aExtensions += String( RTL_CONSTASCII_USTRINGPARAM("*.") );
 
         if( nLastIndex == -1 )
         {
