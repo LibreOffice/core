@@ -109,7 +109,7 @@ define gb_Helper_add_repository
 gb_Helper_CURRENTREPOSITORY :=
 include $(1)/Repository.mk
 ifeq ($$(gb_Helper_CURRENTREPOSITORY),)
-$$(error no gb_Helper_register_repository in Repository.mk for repository $(1))
+$$(eval $$(call gb_Output_error,No call to gb_Helper_register_repository in Repository.mk for repository $(1)))
 endif
 $$(gb_Helper_CURRENTREPOSITORY) := $(1)
 
@@ -145,7 +145,7 @@ endef
 
 define gb_Helper_register_executables
 ifeq ($$(filter $(1),$$(gb_Executable_VALIDGROUPS)),)
-$$(error $(1) is not a valid group for executables. Valid groups are: $$(gb_Executable_VALIDGROUPS))
+$$(eval $$(call gb_Output_error,$(1) is not a valid group for executables. Valid groups are: $$(gb_Executable_VALIDGROUPS)))
 endif
 
 gb_Executable_$(1) += $(2)
@@ -154,7 +154,7 @@ endef
 
 define gb_Helper_register_libraries
 ifeq ($$(filter $(1),$$(gb_Library_VALIDGROUPS)),)
-$$(error $(1) is not a valid group for libraries. Valid groups are: $$(gb_Library_VALIDGROUPS))
+$$(eval $$(call gb_Output_error,$(1) is not a valid group for libraries. Valid groups are: $$(gb_Library_VALIDGROUPS)))
 endif
 
 gb_Library_$(1) += $(2)
@@ -163,7 +163,7 @@ endef
 
 define gb_Helper_register_static_libraries
 ifeq ($$(filter $(1),$$(gb_StaticLibrary_VALIDGROUPS)),)
-$$(error $(1) is not a valid group for static libraries. Valid groups are: $$(gb_StaticLibrary_VALIDGROUPS))
+$$(eval $$(call gb_Output_error,$(1) is not a valid group for static libraries. Valid groups are: $$(gb_StaticLibrary_VALIDGROUPS)))
 endif
 
 gb_StaticLibrary_$(1) += $(2)

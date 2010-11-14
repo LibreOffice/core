@@ -97,7 +97,7 @@ endef
 
 define gb_Module_make_global_targets
 ifneq ($$(gb_Module_TARGETSTACK),)
-$$(warn corrupted module target stack!)
+$$(eval $$(call gb_Output_error,Corrupted module target stack!))
 endif
 
 include $(1)
@@ -106,7 +106,7 @@ all : $$(firstword $$(gb_Module_TARGETSTACK))
 clean : $$(firstword $$(gb_Module_CLEANTARGETSTACK))
 
 ifneq ($$(words $$(gb_Module_TARGETSTACK)),1)
-$$(warn corrupted module target stack!)
+$$(eval $$(call gb_Output_error,Corrupted module target stack!))
 endif
 
 gb_Module_TARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_TARGETSTACK)),$$(gb_Module_TARGETSTACK))

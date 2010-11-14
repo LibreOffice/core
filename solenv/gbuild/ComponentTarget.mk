@@ -62,8 +62,7 @@ endef
 $(foreach repo,$(gb_ComponentTarget_REPOS),$(eval $(call gb_ComponentTarget__rules,$(repo))))
 
 $(call gb_ComponentTarget_get_target,%) :
-    $(error unable to find component file $(call gb_ComponentTarget_get_source,,$*) in the repositories: $(gb_ComponentTarget_REPOS).\
-        Or you are doing an old build.pl build and this module is not depending on libxslt (as it should for xsltproc))
+    $(eval $(call gb_Outpt_error,Unable to find component file $(call gb_ComponentTarget_get_source,,$*) in the repositories: $(gb_ComponentTarget_REPOS) or xlstproc is missing.))
 
 $(call gb_ComponentTarget_get_external_target,%) :
     $(call gb_Helper_deliver,$<,$@)

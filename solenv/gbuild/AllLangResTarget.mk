@@ -95,7 +95,7 @@ $(foreach repo,$(gb_SrsPartTarget_REPOS),$(eval $(call gb_SrsPartTarget__rules,$
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_SrsPartTarget_get_dep_target,%) :
-    $(error unable to find resource definition file $* in repositories: $(gb_SrsPartTarget_REPOS))
+    $(eval $(call gb_Output_error,Unable to find resource definition file $* in repositories: $(gb_SrsPartTarget_REPOS)))
 endif
 
 

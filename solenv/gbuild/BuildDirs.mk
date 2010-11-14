@@ -31,8 +31,6 @@ SOLARINC += $(JDKINCS)
 OUTDIR := $(SOLARVERSION)/$(INPATH)
 WORKDIR := $(SOLARVERSION)/$(INPATH)/workdir
 
-$(info $(wildcard $(gb_LOCALBUILDDIR)/SetupLocal.mk))
-
 .PHONY : setuplocal removelocal
 ifneq ($(gb_LOCALBUILDDIR),)
 ifneq ($(wildcard $(gb_LOCALBUILDDIR)/SetupLocal.mk),)
@@ -50,10 +48,10 @@ else
 setuplocal :
     $(eval modulerepo := $(patsubst %/$(MODULE),%,$(foreach repo,$(gb_REPOS),$(wildcard $(repo)/$(MODULE)))))
     mkdir -p $(gb_LOCALBUILDDIR)/srcdir $(gb_LOCALBUILDDIR)/workdir $(gb_LOCALBUILDDIR)/outdir
-    time rsync --archive --exclude 'workdir/**' $(SOLARVERSION)/$(INPATH)/ $(gb_LOCALBUILDDIR)/outdir
+    rsync --archive --exclude 'workdir/**' $(SOLARVERSION)/$(INPATH)/ $(gb_LOCALBUILDDIR)/outdir
     cp $(modulerepo)/Repository.mk $(gb_LOCALBUILDDIR)/srcdir/Repository.mk
     cp $(modulerepo)/RepositoryFixes.mk $(gb_LOCALBUILDDIR)/srcdir/RepositoryFixes.mk 
-    time rsync --archive $(modulerepo)/$(MODULE)/ $(gb_LOCALBUILDDIR)/srcdir/$(MODULE)
+    rsync --archive $(modulerepo)/$(MODULE)/ $(gb_LOCALBUILDDIR)/srcdir/$(MODULE)
     echo "gb_REPOS := $(gb_LOCALBUILDDIR)/srcdir $(filter-out $(patsubst %/$(MODULE),%,$(foreach repo,$(gb_REPOS),$(wildcard $(repo)/$(MODULE)))),$(gb_REPOS))" > $(gb_LOCALBUILDDIR)/SetupLocal.mk
     echo "#original gb_REPOS was $(gb_REPOS)" >> $(gb_LOCALBUILDDIR)/SetupLocal.mk
     echo "OUTDIR := $(gb_LOCALBUILDDIR)/outdir" >> $(gb_LOCALBUILDDIR)/SetupLocal.mk

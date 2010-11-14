@@ -100,6 +100,14 @@ $(subst :, ,$(word 2,$(1) \
     $(gb_Output_COLOR_OUTCLEAN_LEVEL$(3))[:$(gb_Output_COLOR_INCLEAN_LEVEL$(3))Xx.__:$(subst $(WHITESPACE),:,$(2))$(gb_Output_COLOR_OUTCLEAN_LEVEL$(3)):]))$(gb_Output_COLOR_RESET)
 endef
 
+define gb_Output_info
+$(info $(gb_Output_COLOR_OUTBUILD_LEVEL6)[ $(gb_Output_COLOR_INBUILD_LEVEL6)info  $(2)$(gb_Output_COLOR_OUTBUILD_LEVEL6) ]$(gb_Output_COLOR_RESET) $(1))
+endef
+
+define gb_Output_warn
+$(warning $(NEWLINE)$(gb_Output_COLOR_OUTCLEAN_LEVEL6)[ $(gb_Output_COLOR_INCLEAN_LEVEL6)WARN  $(2)$(gb_Output_COLOR_OUTCLEAN_LEVEL6) ]$(gb_Output_COLOR_RESET) !!!$(NEWLINE)$(gb_Output_COLOR_OUTCLEAN_LEVEL6)[ $(gb_Output_COLOR_INCLEAN_LEVEL6)WARN  $(2)$(gb_Output_COLOR_OUTCLEAN_LEVEL6) ]$(gb_Output_COLOR_RESET) !!! $(1)$(NEWLINE)$(gb_Output_COLOR_OUTCLEAN_LEVEL6)[ $(gb_Output_COLOR_INCLEAN_LEVEL6)WARN  $(2)$(gb_Output_COLOR_OUTCLEAN_LEVEL6) ]$(gb_Output_COLOR_RESET) !!!)
+endef
+
 define gb_Output_error
 $(error $(gb_Output_COLOR_ERROR)$(1)$(gb_Output_COLOR_RESET))
 endef

@@ -116,7 +116,7 @@ else
 ifeq ($(OS),MACOSX)
 include $(GBUILDDIR)/platform/macosx.mk
 else
-$(error unsupported OS: $(OS))
+$(eval $(call gb_Output_error,Unsupported OS: $(OS)))
 endif
 endif
 endif

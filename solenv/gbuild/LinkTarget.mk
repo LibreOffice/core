@@ -58,7 +58,7 @@ endef
 $(foreach repo,$(gb_CObject_REPOS),$(eval $(call gb_CObject__rules,$(repo))))
 
 $(call gb_CObject_get_dep_target,%) :
-    $(error unable to find plain C file $(call gb_CObject_get_source,,$*) in the repositories: $(gb_CObject_REPOS))
+    $(eval $(call gb_Output_error,Unable to find plain C file $(call gb_CObject_get_source,,$*) in the repositories: $(gb_CObject_REPOS)))
 
 gb_CObject_CObject =
 
@@ -118,7 +118,7 @@ $(foreach repo,$(gb_CxxObject_REPOS),$(eval $(call gb_CxxObject__rules,$(repo)))
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_CxxObject_get_dep_target,%) :
-    $(error unable to find C++ file $(call gb_CxxObject_get_source,,$*) in repositories: $(gb_CxxObject_REPOS))
+    $(eval $(call gb_Output_error,Unable to find C++ file $(call gb_CxxObject_get_source,,$*) in repositories: $(gb_CxxObject_REPOS)))
 
 endif
 
@@ -158,7 +158,7 @@ $(foreach repo,$(gb_ObjCxxObject_REPOS),$(eval $(call gb_ObjCxxObject__rules,$(r
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_ObjCxxObject_get_dep_target,%) :
-    $(error unable to find Objective C++ file $(call gb_ObjCxxObject_get_source,,$*) in repositories: $(gb_ObjCxxObject_REPOS))
+    $(eval $(call gb_Output_error,Unable to find Objective C++ file $(call gb_ObjCxxObject_get_source,,$*) in repositories: $(gb_ObjCxxObject_REPOS)))
 endif
 
 gb_ObjCxxObject_ObjCxxObject =
@@ -343,8 +343,8 @@ endef
 
 define gb_LinkTarget_add_linked_libs
 ifneq (,$$(filter-out $(gb_Library_KNOWNLIBS),$(2)))
-$$(info currently known libraries are: $(sort $(gb_Library_KNOWNLIBS)))
-$$(error Cannot link against library/libraries $$(filter-out $(gb_Library_KNOWNLIBS),$(2)). These must be registered in Repository.mk)
+$$(eval $$(call gb_Output_info,currently known libraries are: $(sort $(gb_Library_KNOWNLIBS)),ALL))
+$$(eval $$(call gb_Output_error,Cannot link against library/libraries $$(filter-out $(gb_Library_KNOWNLIBS),$(2)). Libraries must be registered in Repository.mk))
 endif
 
 $(call gb_LinkTarget_get_target,$(1)) : LINKED_LIBS += $(2)
@@ -357,8 +357,8 @@ endef
 
 define gb_LinkTarget_add_linked_static_libs
 ifneq (,$$(filter-out $(gb_StaticLibrary_KNOWNLIBS),$(2)))
-$$(info currently known static libraries are: $(sort $(gb_StaticLibrary_KNOWNLIBS)))
-$$(error Cannot link against static library/libraries $$(filter-out $(gb_StaticLibrary_KNOWNLIBS),$(2)). These must be registered in Repository.mk)
+$$(eval $$(call gb_Output_info, currently known static libraries are: $(sort $(gb_StaticLibrary_KNOWNLIBS)),ALL))
+$$(eval $$(call gb_Output_error,Cannot link against static library/libraries $$(filter-out $(gb_StaticLibrary_KNOWNLIBS),$(2)). Static libraries must be registered in Repository.mk))
 endif
 
 $(call gb_LinkTarget_get_target,$(1)) : LINKED_STATIC_LIBS += $(2)
