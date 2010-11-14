@@ -438,8 +438,8 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
         String sText (GetUiTextForCommand(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Open"))));
         // Remove the mnemonic and add a leading space so that icon and text
         // are not too close together.
-        sText.SearchAndReplaceAll(String(RTL_CONSTASCII_STRINGPARAM("~")),String());
-        sText.Insert(String(RTL_CONSTASCII_STRINGPARAM(" ")),0);
+        sText.SearchAndReplaceAll(String(RTL_CONSTASCII_USTRINGPARAM("~")),String());
+        sText.Insert(String(RTL_CONSTASCII_USTRINGPARAM(" ")),0);
         mpPage1OpenPB->SetText(sText);
         // Place icon left of text and both centered in the button.
         mpPage1OpenPB->SetModeImage(
