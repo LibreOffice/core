@@ -280,7 +280,8 @@ void RtfAttributeOutput::StartParagraph( ww8::WW8TableNodeInfo::Pointer_t pTextN
         if ( m_nTableDepth > 0 && !m_bTableCellOpen )
         {
             ww8::WW8TableNodeInfoInner::Pointer_t pDeepInner( pTextNodeInfo->getInnerForDepth( m_nTableDepth ) );
-            if ( pDeepInner->getCell() == 0 )
+            OSL_ENSURE( pDeepInner, "TableNodeInfoInner not found");
+            if ( pDeepInner && pDeepInner->getCell() == 0 )
                 StartTableRow( pDeepInner );
 
             StartTableCell( pDeepInner );
@@ -1393,7 +1394,7 @@ void RtfAttributeOutput::NumberingLevel( BYTE nLevel,
             m_rExport.Strm() << OOO_STRING_SVTOOLS_RTF_F;
             m_rExport.OutULong(m_rExport.maFontHelper.GetId(*pFont));
         }
-        m_rExport.OutputItemSet( *pOutSet, false, true, i18n::ScriptType::LATIN );
+        m_rExport.OutputItemSet( *pOutSet, false, true, i18n::ScriptType::LATIN, m_rExport.mbExportModeRTF );
         m_rExport.Strm() << m_aStyles.makeStringAndClear();
     }
 
@@ -1523,7 +1524,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFrame, const Poi
             }
 
             if ( pGrfNode )
-                FlyFrameGraphic( *pGrfNode, rFrame.GetLayoutSize() );
+                FlyFrameGraphic( dynamic_cast<const SwFlyFrmFmt*>( &rFrame.GetFrmFmt() ), *pGrfNode, rFrame.GetLayoutSize() );
             break;
         case sw::Frame::eDrawing:
             {
@@ -1689,16 +1690,23 @@ void RtfAttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFrame, const Poi
                             m_aRun.append(OUStringToOString(OUString(FieldString(ww::eFORMDROPDOWN)), m_rExport.eCurrentEncoding));
                             m_aRun.append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FORMFIELD "{");
                             m_aRun.append(OOO_STRING_SVTOOLS_RTF_FFTYPE "2"); // 2 = list
+                            m_aRun.append(OOO_STRING_SVTOOLS_RTF_FFHASLISTBOX);
 
                             xPropSet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultSelection"))) >>= aIntSeq;
-                            m_aRun.append(OOO_STRING_SVTOOLS_RTF_FFDEFRES);
-                            // a dropdown list can have only one 'selected item by default'
-                            m_aRun.append((sal_Int32)aIntSeq[0]);
+                            if( aIntSeq.getLength() )
+                            {
+                                m_aRun.append(OOO_STRING_SVTOOLS_RTF_FFDEFRES);
+                                // a dropdown list can have only one 'selected item by default'
+                                m_aRun.append((sal_Int32)aIntSeq[0]);
+                            }
 
                             xPropSet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SelectedItems"))) >>= aIntSeq;
-                            m_aRun.append(OOO_STRING_SVTOOLS_RTF_FFRES);
-                            // a dropdown list can have only one 'currently selected item'
-                            m_aRun.append((sal_Int32)aIntSeq[0]);
+                            if( aIntSeq.getLength() )
+                            {
+                                m_aRun.append(OOO_STRING_SVTOOLS_RTF_FFRES);
+                                // a dropdown list can have only one 'currently selected item'
+                                m_aRun.append((sal_Int32)aIntSeq[0]);
+                            }
 
                             sName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name"));
                             if (xPropSetInfo->hasPropertyByName(sName))
@@ -1729,7 +1737,6 @@ void RtfAttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFrame, const Poi
                                 m_aRun.append('}');
                             }
 
-                            m_aRun.append(OOO_STRING_SVTOOLS_RTF_FFHASLISTBOX);
 
                             xPropSet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StringItemList"))) >>= aStrSeq;
                             sal_uInt32 nListItems = aStrSeq.getLength();
@@ -1760,7 +1767,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFrame, const Poi
                 {
                     SwNodeIndex aIdx(*rFrmFmt.GetCntnt().GetCntntIdx(), 1);
                     SwOLENode& rOLENd = *aIdx.GetNode().GetOLENode();
-                    FlyFrameOLE(rOLENd, rFrame.GetLayoutSize());
+                    FlyFrameOLE(dynamic_cast<const SwFlyFrmFmt*>( &rFrmFmt ), rOLENd, rFrame.GetLayoutSize());
                 }
             }
             break;
@@ -2665,15 +2672,33 @@ void RtfAttributeOutput::FormatULSpace( const SvxULSpaceItem& rULSpace )
     {
         if( m_rExport.bOutPageDescs )
         {
-            if( rULSpace.GetUpper() )
+
+            ASSERT( m_rExport.GetCurItemSet(), "Impossible" );
+            if ( !m_rExport.GetCurItemSet() )
+                return;
+
+            HdFtDistanceGlue aDistances( *m_rExport.GetCurItemSet() );
+
+            if ( aDistances.HasHeader() )
             {
-                m_aSectionBreaks.append(OOO_STRING_SVTOOLS_RTF_MARGTSXN);
-                m_aSectionBreaks.append((sal_Int32)rULSpace.GetUpper());
+                if( aDistances.dyaTop )
+                {
+                    m_aSectionBreaks.append(OOO_STRING_SVTOOLS_RTF_MARGTSXN);
+                    m_aSectionBreaks.append((sal_Int32)aDistances.dyaTop);
+                }
+                m_aSectionBreaks.append(OOO_STRING_SVTOOLS_RTF_HEADERY);
+                m_aSectionBreaks.append((sal_Int32)aDistances.dyaHdrTop);
             }
-            if( rULSpace.GetLower() )
+
+            if( aDistances.HasFooter() )
             {
-                m_aSectionBreaks.append(OOO_STRING_SVTOOLS_RTF_MARGBSXN);
-                m_aSectionBreaks.append((sal_Int32)rULSpace.GetLower());
+                if( aDistances.dyaBottom )
+                {
+                    m_aSectionBreaks.append(OOO_STRING_SVTOOLS_RTF_MARGBSXN);
+                    m_aSectionBreaks.append((sal_Int32)aDistances.dyaBottom);
+                }
+                m_aSectionBreaks.append(OOO_STRING_SVTOOLS_RTF_FOOTERY);
+                m_aSectionBreaks.append((sal_Int32)aDistances.dyaHdrBottom);
             }
             if (!m_bBufferSectionBreaks)
                 m_rExport.Strm() << m_aSectionBreaks.makeStringAndClear();
@@ -2814,7 +2839,7 @@ void RtfAttributeOutput::FormatBackground( const SvxBrushItem& rBrush )
 
     if( !rBrush.GetColor().GetTransparency() )
     {
-        m_aStyles.append(OOO_STRING_SVTOOLS_RTF_CHCBPAT);
+        m_aStyles.append(OOO_STRING_SVTOOLS_RTF_CBPAT);
         m_aStyles.append((sal_Int32)m_rExport.GetColor(rBrush.GetColor()));
     }
 }
@@ -3175,15 +3200,41 @@ static OString WriteHex(OString sString)
     return aRet.makeStringAndClear();
 }
 
-static OString ExportPICT(const Size &rOrig, const Size &rRendered, const Size &rMapped,
+void lcl_AppendSP( OStringBuffer& rBuffer,
+    const char cName[],
+    const ::rtl::OUString& rValue,
+    const RtfExport& rExport )
+{
+    rBuffer.append( "{" OOO_STRING_SVTOOLS_RTF_SP "{" ); // "{\sp{"
+    rBuffer.append( OOO_STRING_SVTOOLS_RTF_SN " " );//" \sn "
+    rBuffer.append( cName ); //"PropName"
+    rBuffer.append( "}{" OOO_STRING_SVTOOLS_RTF_SV " " );
+// "}{ \sv "
+    rBuffer.append( rExport.OutString( rValue, rExport.eCurrentEncoding ) );
+    rBuffer.append( "}}" );
+}
+
+static OString ExportPICT( const SwFlyFrmFmt* pFlyFrmFmt, const Size &rOrig, const Size &rRendered, const Size &rMapped,
     const SwCropGrf &rCr, const char *pBLIPType, const sal_uInt8 *pGraphicAry,
-    unsigned long nSize)
+    unsigned long nSize, const RtfExport& rExport )
 {
     OStringBuffer aRet;
     bool bIsWMF = (const char *)pBLIPType == (const char *)OOO_STRING_SVTOOLS_RTF_WMETAFILE ? true : false;
     if (pBLIPType && nSize && pGraphicAry)
     {
         aRet.append("{" OOO_STRING_SVTOOLS_RTF_PICT);
+
+        if( pFlyFrmFmt )
+        {
+            String sDescription = pFlyFrmFmt->GetObjDescription();
+            //write picture properties - wzDescription at first
+            //looks like: "{\*\picprop{\sp{\sn PropertyName}{\sv PropertyValue}}}"
+            aRet.append( "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_PICPROP );//"{\*\picprop
+            lcl_AppendSP( aRet, "wzDescription", sDescription, rExport );
+            String sName = pFlyFrmFmt->GetObjTitle();
+            lcl_AppendSP( aRet, "wzName", sName, rExport );
+            aRet.append( "}" ); //"}"
+        }
 
         long nXCroppedSize = rOrig.Width()-(rCr.GetLeft() + rCr.GetRight());
         long nYCroppedSize = rOrig.Height()-(rCr.GetTop() + rCr.GetBottom());
@@ -3277,7 +3328,7 @@ void RtfAttributeOutput::FlyFrameOLEData( SwOLENode& rOLENode )
     }
 }
 
-void RtfAttributeOutput::FlyFrameOLE( SwOLENode& rOLENode, const Size& rSize )
+void RtfAttributeOutput::FlyFrameOLE( const SwFlyFrmFmt* pFlyFrmFmt, SwOLENode& rOLENode, const Size& rSize )
 {
     OSL_TRACE("%s", OSL_THIS_FUNC);
 
@@ -3313,11 +3364,11 @@ void RtfAttributeOutput::FlyFrameOLE( SwOLENode& rOLENode, const Size& rSize )
     nHeight-=nFontHeight/20;
     m_aRunText.append("{" OOO_STRING_SVTOOLS_RTF_DN).append(nHeight);
     m_aRunText.append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_SHPPICT);
-    m_aRunText.append(ExportPICT(aSize, aRendered, aMapped, rCr, pBLIPType, pGraphicAry, nSize));
+    m_aRunText.append(ExportPICT( pFlyFrmFmt, aSize, aRendered, aMapped, rCr, pBLIPType, pGraphicAry, nSize, m_rExport ));
     m_aRunText.append("}}}}");
 }
 
-void RtfAttributeOutput::FlyFrameGraphic( const SwGrfNode& rGrfNode, const Size& rSize )
+void RtfAttributeOutput::FlyFrameGraphic( const SwFlyFrmFmt* pFlyFrmFmt, const SwGrfNode& rGrfNode, const Size& rSize )
 {
     OSL_TRACE("%s", OSL_THIS_FUNC);
 
@@ -3390,7 +3441,7 @@ void RtfAttributeOutput::FlyFrameGraphic( const SwGrfNode& rGrfNode, const Size&
         m_aRunText.append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_SHPPICT);
 
     if (pBLIPType)
-        m_aRunText.append(ExportPICT(aSize, aRendered, aMapped, rCr, pBLIPType, pGraphicAry, nSize));
+        m_aRunText.append(ExportPICT( pFlyFrmFmt, aSize, aRendered, aMapped, rCr, pBLIPType, pGraphicAry, nSize, m_rExport));
     else
     {
         aStream.Seek(0);
@@ -3400,7 +3451,7 @@ void RtfAttributeOutput::FlyFrameGraphic( const SwGrfNode& rGrfNode, const Size&
         nSize = aStream.Tell();
         pGraphicAry = (sal_uInt8*)aStream.GetData();
 
-        m_aRunText.append(ExportPICT(aSize, aRendered, aMapped, rCr, pBLIPType, pGraphicAry, nSize));
+        m_aRunText.append(ExportPICT(pFlyFrmFmt, aSize, aRendered, aMapped, rCr, pBLIPType, pGraphicAry, nSize, m_rExport ));
     }
 
     if (!bIsWMF)
@@ -3414,7 +3465,7 @@ void RtfAttributeOutput::FlyFrameGraphic( const SwGrfNode& rGrfNode, const Size&
         nSize = aStream.Tell();
         pGraphicAry = (sal_uInt8*)aStream.GetData();
 
-        m_aRunText.append(ExportPICT(aSize, aRendered, aMapped, rCr, pBLIPType, pGraphicAry, nSize));
+        m_aRunText.append(ExportPICT(pFlyFrmFmt, aSize, aRendered, aMapped, rCr, pBLIPType, pGraphicAry, nSize, m_rExport ));
 
         m_aRunText.append('}');
     }
