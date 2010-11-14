@@ -255,12 +255,12 @@ IMPL_LINK( DlgQryJoin, LBChangeHdl, ListBox*, /*pListBox*/ )
     String sHelpText = String( ModuleRes( nResId ) );
     if( nPos )
     {
-        sHelpText.SearchAndReplace( String( RTL_CONSTASCII_STRINGPARAM( "%1" ) ), sFirstWinName );
-        sHelpText.SearchAndReplace( String( RTL_CONSTASCII_STRINGPARAM( "%2" ) ), sSecondWinName );
+        sHelpText.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%1" ) ), sFirstWinName );
+        sHelpText.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%2" ) ), sSecondWinName );
     }
     if ( bAddHint )
     {
-        sHelpText += String( RTL_CONSTASCII_STRINGPARAM( "\n" ) );
+        sHelpText += String( RTL_CONSTASCII_USTRINGPARAM( "\n" ) );
         sHelpText += String( ModuleRes( STR_JOIN_TYPE_HINT ) );
     }
 
