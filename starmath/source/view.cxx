@@ -115,6 +115,8 @@ SmGraphicWindow::SmGraphicWindow(SmViewShell* pShell):
 
     SetHelpId(HID_SMA_WIN_DOCUMENT);
     SetUniqueId(HID_SMA_WIN_DOCUMENT);
+
+    CaretBlinkInit();
 }
 
 SmGraphicWindow::~SmGraphicWindow()
@@ -123,6 +125,7 @@ SmGraphicWindow::~SmGraphicWindow()
         pAccessible->ClearWin();    // make Accessible defunctional
     // Note: memory for pAccessible will be freed when the reference
     // xAccessible is released.
+    CaretBlinkStop();
 }
 
 void SmGraphicWindow::StateChanged( StateChangedType eType )
@@ -221,6 +224,7 @@ void SmGraphicWindow::GetFocus()
     //Let view shell know what insertions should be done in visual editor
     pViewShell->SetInsertIntoEditWindow(false);
     SetIsCursorVisible(true);
+    CaretBlinkStart();
     RepaintViewShellDoc();
 }
 
@@ -237,7 +241,8 @@ void SmGraphicWindow::LoseFocus()
     }
     if (!IsInlineEditEnabled())
         return;
-    SetIsCursorVisible(FALSE);
+    SetIsCursorVisible(false);
+    CaretBlinkStop();
     RepaintViewShellDoc();
 }
 
@@ -245,6 +250,39 @@ void SmGraphicWindow::RepaintViewShellDoc()
 {
     SmDocShell &rDoc = *pViewShell->GetDoc();
     rDoc.Repaint();
+}
+
+IMPL_LINK( SmGraphicWindow, CaretBlinkTimerHdl, AutoTimer *, EMPTYARG )
+{
+    if (IsCursorVisible())
+        SetIsCursorVisible(false);
+    else
+        SetIsCursorVisible(true);
+
+    RepaintViewShellDoc();
+
+    return 0;
+}
+
+void SmGraphicWindow::CaretBlinkInit()
+{
+    aCaretBlinkTimer.SetTimeoutHdl(LINK(this, SmGraphicWindow, CaretBlinkTimerHdl));
+    aCaretBlinkTimer.SetTimeout( ScrollableWindow::GetSettings().GetStyleSettings().GetCursorBlinkTime() );
+}
+
+void SmGraphicWindow::CaretBlinkStart()
+{
+    if (!IsInlineEditEnabled())
+        return;
+    if ( aCaretBlinkTimer.GetTimeout() != STYLE_CURSOR_NOBLINKTIME )
+        aCaretBlinkTimer.Start();
+}
+
+void SmGraphicWindow::CaretBlinkStop()
+{
+    if (!IsInlineEditEnabled())
+        return;
+    aCaretBlinkTimer.Stop();
 }
 
 void SmGraphicWindow::ShowCursor(bool bShow)
@@ -475,6 +513,10 @@ void SmGraphicWindow::KeyInput(const KeyEvent& rKEvt)
             }
         }
     }
+    CaretBlinkStop();
+    CaretBlinkStart();
+    SetIsCursorVisible(true);
+    RepaintViewShellDoc();
 }
 
 

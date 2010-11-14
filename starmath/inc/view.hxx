@@ -35,6 +35,7 @@
 #include <sfx2/shell.hxx>
 #include <sfx2/viewfac.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <vcl/timer.hxx>
 #include <svtools/colorcfg.hxx>
 #include "edit.hxx"
 #include "node.hxx"
@@ -56,6 +57,8 @@ class SmGraphicWindow : public ScrollableWindow
     // old style editing pieces
     Rectangle aCursorRect;
     bool      bIsCursorVisible;
+
+    AutoTimer     aCaretBlinkTimer;
 public:
     bool IsCursorVisible() const { return bIsCursorVisible; }
     void ShowCursor(bool bShow);
@@ -88,7 +91,10 @@ protected:
 
 private:
     void RepaintViewShellDoc();
-
+    DECL_LINK(CaretBlinkTimerHdl, AutoTimer *);
+    void CaretBlinkInit();
+    void CaretBlinkStart();
+    void CaretBlinkStop();
 public:
     SmGraphicWindow(SmViewShell* pShell);
     ~SmGraphicWindow();
