@@ -62,7 +62,7 @@ void fillNetscapePluginFilters( Sequence< rtl::OUString >& rPluginNames, Sequenc
 {
     Reference< XMultiServiceFactory > xMan( ::utl::getProcessServiceFactory() );
     Reference< XPluginManager > xPMgr( xMan->createInstance(
-        rtl::OUString::createFromAscii("com.sun.star.plugin.PluginManager") ), UNO_QUERY );
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.plugin.PluginManager") ) ), UNO_QUERY );
 
     if ( xPMgr.is() )
     {

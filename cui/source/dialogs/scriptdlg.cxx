@@ -172,11 +172,10 @@ void SFTreeListBox::Init( const ::rtl::OUString& language  )
 
     Sequence< Reference< browse::XBrowseNode > > children;
 
-    ::rtl::OUString userStr = ::rtl::OUString::createFromAscii("user");
-    ::rtl::OUString shareStr = ::rtl::OUString::createFromAscii("share");
+    ::rtl::OUString userStr( RTL_CONSTASCII_USTRINGPARAM("user") );
+    ::rtl::OUString shareStr( RTL_CONSTASCII_USTRINGPARAM("share") );
 
-    ::rtl::OUString singleton = ::rtl::OUString::createFromAscii(
-        "/singletons/com.sun.star.script.browse.theBrowseNodeFactory" );
+    ::rtl::OUString singleton( RTL_CONSTASCII_USTRINGPARAM("/singletons/com.sun.star.script.browse.theBrowseNodeFactory" ) );
 
     try
     {
@@ -231,7 +230,7 @@ void SFTreeListBox::Init( const ::rtl::OUString& language  )
             {
                 Reference< ::com::sun::star::frame::XModuleManager >
                     xModuleManager( xCtx->getServiceManager()->createInstanceWithContext(
-                        ::rtl::OUString::createFromAscii("com.sun.star.frame.ModuleManager"), xCtx ),
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.ModuleManager") ), xCtx ),
                                     UNO_QUERY_THROW );
 
                 Reference<container::XNameAccess> xModuleConfig(
@@ -278,7 +277,7 @@ SFTreeListBox::getDocumentModel( Reference< XComponentContext >& xCtx, ::rtl::OU
             xCtx->getServiceManager();
     Reference< frame::XDesktop > desktop (
         mcf->createInstanceWithContext(
-            ::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop"),                 xCtx ),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop") ),                 xCtx ),
             UNO_QUERY );
 
     Reference< container::XEnumerationAccess > componentsAccess =
@@ -837,7 +836,7 @@ IMPL_LINK( SvxScriptOrgDialog, ButtonHdl, Button *, pButton )
                         try
                         {
                             // ISSUE need code to run script here
-                            xInv->invoke( ::rtl::OUString::createFromAscii( "Editable" ), args, outIndex, outArgs );
+                            xInv->invoke( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Editable" ) ), args, outIndex, outArgs );
                         }
                         catch( Exception& e )
                         {
@@ -902,7 +901,7 @@ SvxScriptOrgDialog::getDocumentModel( Reference< XComponentContext >& xCtx, ::rt
             xCtx->getServiceManager();
     Reference< frame::XDesktop > desktop (
         mcf->createInstanceWithContext(
-            ::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop"), xCtx ),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop") ), xCtx ),
             UNO_QUERY );
 
     Reference< container::XEnumerationAccess > componentsAccess =
@@ -940,11 +939,11 @@ void SvxScriptOrgDialog::createEntry( SvLBoxEntry* pEntry )
         USHORT nMode = INPUTMODE_NEWLIB;
         if( aScriptsBox.GetModel()->GetDepth( pEntry ) == 0 )
         {
-            aNewStdName = ::rtl::OUString::createFromAscii( "Library" ) ;
+            aNewStdName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Library") ) ;
         }
         else
         {
-            aNewStdName = ::rtl::OUString::createFromAscii( "Macro" ) ;
+            aNewStdName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Macro") ) ;
             nMode = INPUTMODE_NEWMACRO;
         }
         //do we need L10N for this? ie somethng like:
@@ -1048,7 +1047,7 @@ void SvxScriptOrgDialog::createEntry( SvLBoxEntry* pEntry )
         try
         {
             Any aResult;
-            aResult = xInv->invoke( ::rtl::OUString::createFromAscii( "Creatable" ), args, outIndex, outArgs );
+            aResult = xInv->invoke( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Creatable") ), args, outIndex, outArgs );
             Reference< browse::XBrowseNode > newNode( aResult, UNO_QUERY );
             aChildNode = newNode;
 
@@ -1156,7 +1155,7 @@ void SvxScriptOrgDialog::renameEntry( SvLBoxEntry* pEntry )
         try
         {
             Any aResult;
-            aResult = xInv->invoke( ::rtl::OUString::createFromAscii( "Renamable" ), args, outIndex, outArgs );
+            aResult = xInv->invoke( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Renamable") ), args, outIndex, outArgs );
             Reference< browse::XBrowseNode > newNode( aResult, UNO_QUERY );
             aChildNode = newNode;
 
@@ -1207,7 +1206,7 @@ void SvxScriptOrgDialog::deleteEntry( SvLBoxEntry* pEntry )
         try
         {
             Any aResult;
-            aResult = xInv->invoke( ::rtl::OUString::createFromAscii( "Deletable" ), args, outIndex, outArgs );
+            aResult = xInv->invoke( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Deletable") ), args, outIndex, outArgs );
             aResult >>= result; // or do we just assume true if no exception ?
         }
         catch( Exception& e )
@@ -1332,8 +1331,8 @@ void SvxScriptOrgDialog::RestorePreviousSelection()
 BOOL SFTreeListBox::dialogSort1( Reference< browse::XBrowseNode > node1,
     Reference< browse::XBrowseNode > node2 )
 {
-    ::rtl::OUString userStr = ::rtl::OUString::createFromAscii("user");
-    ::rtl::OUString shareStr = ::rtl::OUString::createFromAscii("share");
+    ::rtl::OUString userStr( RTL_CONSTASCII_USTRINGPARAM("user") );
+    ::rtl::OUString shareStr( RTL_CONSTASCII_USTRINGPARAM("share") );
     if( node1->getName().equals( userStr ) )
         return true;
     if( node2->getName().equals( userStr ) )
@@ -1379,25 +1378,25 @@ BOOL SFTreeListBox::dialogSort2( Reference< browse::XBrowseNode > node1,
     ::rtl::OUString result = unformatted.copy( 0 );
 
     result = ReplaceString(
-        result, ::rtl::OUString::createFromAscii( "%LANGUAGENAME" ), language );
+        result, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%LANGUAGENAME") ), language );
     result = ReplaceString(
-        result, ::rtl::OUString::createFromAscii( "%SCRIPTNAME" ), script );
+        result, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%SCRIPTNAME") ), script );
     result = ReplaceString(
-        result, ::rtl::OUString::createFromAscii( "%LINENUMBER" ), line );
+        result, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%LINENUMBER") ), line );
 
     if ( type.getLength() != 0 )
     {
-        result += ::rtl::OUString::createFromAscii( "\n\n" );
+        result += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\n\n") );
         result += ::rtl::OUString(String(CUI_RES(RID_SVXSTR_ERROR_TYPE_LABEL)));
-        result += ::rtl::OUString::createFromAscii( " " );
+        result += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ") );
         result += type;
     }
 
     if ( message.getLength() != 0 )
     {
-        result += ::rtl::OUString::createFromAscii( "\n\n" );
+        result += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\n\n") );
         result += ::rtl::OUString(String(CUI_RES(RID_SVXSTR_ERROR_MESSAGE_LABEL)));
-        result += ::rtl::OUString::createFromAscii( " " );
+        result += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ") );
         result += message;
     }
 
@@ -1409,7 +1408,7 @@ BOOL SFTreeListBox::dialogSort2( Reference< browse::XBrowseNode > node1,
 {
     ::rtl::OUString unformatted = String( CUI_RES( RID_SVXSTR_ERROR_AT_LINE ) );
 
-    ::rtl::OUString unknown = ::rtl::OUString::createFromAscii( "UNKNOWN" );
+    ::rtl::OUString unknown( RTL_CONSTASCII_USTRINGPARAM("UNKNOWN") );
     ::rtl::OUString language = unknown;
     ::rtl::OUString script = unknown;
     ::rtl::OUString line = unknown;
@@ -1452,7 +1451,7 @@ BOOL SFTreeListBox::dialogSort2( Reference< browse::XBrowseNode > node1,
     ::rtl::OUString unformatted =
           String( CUI_RES( RID_SVXSTR_EXCEPTION_AT_LINE ) );
 
-    ::rtl::OUString unknown = ::rtl::OUString::createFromAscii( "UNKNOWN" );
+    ::rtl::OUString unknown( RTL_CONSTASCII_USTRINGPARAM("UNKNOWN") );
     ::rtl::OUString language = unknown;
     ::rtl::OUString script = unknown;
     ::rtl::OUString line = unknown;
@@ -1500,11 +1499,9 @@ BOOL SFTreeListBox::dialogSort2( Reference< browse::XBrowseNode > node1,
     ::rtl::OUString unformatted = String(
         CUI_RES( RID_SVXSTR_FRAMEWORK_ERROR_RUNNING ) );
 
-    ::rtl::OUString language =
-        ::rtl::OUString::createFromAscii( "UNKNOWN" );
+    ::rtl::OUString language( RTL_CONSTASCII_USTRINGPARAM("UNKNOWN") );
 
-    ::rtl::OUString script =
-        ::rtl::OUString::createFromAscii( "UNKNOWN" );
+    ::rtl::OUString script( RTL_CONSTASCII_USTRINGPARAM("UNKNOWN") );
 
     ::rtl::OUString message;
 
@@ -1521,7 +1518,7 @@ BOOL SFTreeListBox::dialogSort2( Reference< browse::XBrowseNode > node1,
         message = String(
             CUI_RES(  RID_SVXSTR_ERROR_LANG_NOT_SUPPORTED ) );
         message =  ReplaceString(
-            message, ::rtl::OUString::createFromAscii( "%LANGUAGENAME" ), language );
+            message, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%LANGUAGENAME") ), language );
 
     }
     else

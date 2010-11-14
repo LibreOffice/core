@@ -530,7 +530,7 @@ BOOL SvxHyperlinkTabPageBase::FileExists( const INetURLObject& rURL )
             Content     aCnt( rURL.GetMainURL( INetURLObject::NO_DECODE ), ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
             ::rtl::OUString aTitle;
 
-            aCnt.getPropertyValue( ::rtl::OUString::createFromAscii( "Title" ) ) >>= aTitle;
+            aCnt.getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Title" ) ) ) >>= aTitle;
             bRet = ( aTitle.getLength() > 0 );
         }
         catch( ... )

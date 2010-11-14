@@ -512,7 +512,7 @@ IMPL_LINK( SvxHyphenWordDialog_Impl, HyphenateAllHdl_Impl, Button *, EMPTYARG /*
         try
         {
             uno::Reference< beans::XPropertySet >  xProp( SvxGetLinguPropertySet() );
-            const rtl::OUString aName( rtl::OUString::createFromAscii( "IsHyphAuto" ) );
+            const rtl::OUString aName( RTL_CONSTASCII_USTRINGPARAM( "IsHyphAuto" ) );
             uno::Any aAny;
 
             aAny <<= sal_True;
