@@ -35,6 +35,7 @@
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/document/XUndoManagerSupplier.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -62,12 +63,13 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 
-#if ! defined(INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_20)
-#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_20
-#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 20
+#if ! defined(INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_21)
+#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_21
+#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 21
 #include "comphelper/implbase_var.hxx"
 #endif
 #include <osl/mutex.hxx>
+#include <rtl/ref.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <svtools/grfmgr.hxx>
 
@@ -75,8 +77,6 @@
 #include <memory>
 
 //=============================================================================
-/** this is an example implementation for the service ::com::sun::star::document::OfficeDocument
-*/
 
 namespace chart
 {
@@ -85,7 +85,7 @@ namespace impl
 {
 
 // Note: needed for queryInterface (if it calls the base-class implementation)
-typedef ::comphelper::WeakImplHelper20<
+typedef ::comphelper::WeakImplHelper21<
 //       ::com::sun::star::frame::XModel        //comprehends XComponent (required interface), base of XChartDocument
          ::com::sun::star::util::XCloseable     //comprehends XCloseBroadcaster
         ,::com::sun::star::frame::XStorable2    //(extension of XStorable)
@@ -111,9 +111,12 @@ typedef ::comphelper::WeakImplHelper20<
         ,::com::sun::star::chart2::XDocumentActions
         ,::com::sun::star::document::XDocumentPropertiesSupplier
         ,::com::sun::star::chart2::data::XDataSource
+        ,::com::sun::star::document::XUndoManagerSupplier
         >
     ChartModel_Base;
 }
+
+class UndoManager;
 
 class ChartModel : public impl::ChartModel_Base
 {
@@ -130,6 +133,7 @@ private:
     ::rtl::OUString                                                             m_aResource;
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >   m_aMediaDescriptor;
     ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentProperties > m_xDocumentProperties;
+    ::rtl::Reference< UndoManager >                                             m_pUndoManager;
 
     ::cppu::OInterfaceContainerHelper                                           m_aControllers;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >    m_xCurrentController;
@@ -426,6 +430,10 @@ public:
     // ____ document::XDocumentPropertiesSupplier ____
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentProperties > SAL_CALL
         getDocumentProperties(  ) throw (::com::sun::star::uno::RuntimeException);
+
+    // ____ document::XUndoManagerSupplier ____
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoManager > SAL_CALL
+        getUndoManager(  ) throw (::com::sun::star::uno::RuntimeException);
 
     //-----------------------------------------------------------------
     // ::com::sun::star::chart2::XChartDocument

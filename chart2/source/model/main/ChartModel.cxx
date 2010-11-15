@@ -42,6 +42,7 @@
 #include "PageBackground.hxx"
 #include "CloneHelper.hxx"
 #include "NameContainer.hxx"
+#include "UndoManager.hxx"
 
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 
@@ -104,6 +105,7 @@ ChartModel::ChartModel(uno::Reference<uno::XComponentContext > const & xContext)
     , m_bModified( sal_False )
     , m_nInLoad(0)
     , m_bUpdateNotificationsPending(false)
+    , m_pUndoManager( NULL )
     , m_aControllers( m_aModelMutex )
     , m_nControllerLockCount(0)
     , m_xContext( xContext )
@@ -523,6 +525,8 @@ uno::Reference< uno::XInterface > SAL_CALL ChartModel::getCurrentSelection() thr
 //-----------------------------------------------------------------
 void SAL_CALL ChartModel::dispose() throw(uno::RuntimeException)
 {
+    Reference< XInterface > xKeepAlive( *this );
+
     //This object should release all resources and references in the
     //easiest possible manner
     //This object must notify all registered listeners using the method
@@ -547,6 +551,11 @@ void SAL_CALL ChartModel::dispose() throw(uno::RuntimeException)
 
     m_xStorage.clear();
         // just clear, don't dispose - we're not the owner
+
+    if ( m_pUndoManager.is() )
+        m_pUndoManager->disposing();
+    m_pUndoManager.clear();
+        // that's important, since the UndoManager implementation delegates its ref counting to ourself.
 
     m_aControllers.disposeAndClear( lang::EventObject( static_cast< cppu::OWeakObject * >( this )));
     m_xCurrentController.clear();
@@ -680,6 +689,7 @@ uno::Sequence< uno::Type > SAL_CALL ChartModel::getTypes()
 uno::Reference< document::XDocumentProperties > SAL_CALL
         ChartModel::getDocumentProperties() throw (uno::RuntimeException)
 {
+    ::osl::MutexGuard aGuard( m_aModelMutex );
     if ( !m_xDocumentProperties.is() )
     {
         uno::Reference< document::XDocumentProperties > xDocProps(
@@ -688,6 +698,17 @@ uno::Reference< document::XDocumentProperties > SAL_CALL
         m_xDocumentProperties.set(xDocProps);
     }
     return m_xDocumentProperties;
+}
+
+//-----------------------------------------------------------------
+// document::XDocumentPropertiesSupplier
+//-----------------------------------------------------------------
+Reference< document::XUndoManager > SAL_CALL ChartModel::getUndoManager(  ) throw (RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aModelMutex );
+    if ( !m_pUndoManager.is() )
+        m_pUndoManager.set( new UndoManager( *this, m_aModelMutex ) );
+    return m_pUndoManager.get();
 }
 
 //-----------------------------------------------------------------
