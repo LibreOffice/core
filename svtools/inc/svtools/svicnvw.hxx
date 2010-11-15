@@ -89,7 +89,6 @@ class SvIconView : public SvLBox
     SvImpIconView*  pImp;
     Image           aCollapsedEntryBmp;
     Image           aExpandedEntryBmp;
-    WinBits         nWinBits;
     USHORT          nIcnVwFlags;
     void            SetModel( SvLBoxTreeList* );
 
@@ -111,6 +110,7 @@ protected:
     virtual void    ReadDragServerInfo( const Point&, SvLBoxDDInfo* );
     virtual void    Command( const CommandEvent& rCEvt );
     virtual void    PreparePaint( SvLBoxEntry* );
+    virtual void    StateChanged( StateChangedType nStateChange );
 
 public:
 
@@ -203,7 +203,6 @@ public:
 
     SvLBoxEntry*    GetEntryFromLogicPos( const Point& rDocPos ) const;
 
-    void            SetWindowBits( WinBits nWinStyle );
     virtual void    PaintEntry( SvLBoxEntry* );
     virtual void    PaintEntry( SvLBoxEntry*, const Point& rDocPos );
     Rectangle       GetFocusRect( SvLBoxEntry* );

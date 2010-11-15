@@ -89,7 +89,7 @@ struct ImplStatusItem
     XubString           maText;
     XubString           maHelpText;
     XubString           maQuickHelpText;
-    ULONG               mnHelpId;
+    rtl::OString        maHelpId;
     void*               mpUserData;
     BOOL                mbVisible;
     XubString           maAccessibleName;
@@ -906,9 +906,9 @@ void StatusBar::RequestHelp( const HelpEvent& rHEvt )
         else if ( rHEvt.GetMode() & HELPMODE_EXTENDED )
         {
             String aCommand = GetItemCommand( nItemId );
-            ULONG nHelpId = GetHelpId( nItemId );
+            rtl::OString aHelpId( GetHelpId( nItemId ) );
 
-            if ( aCommand.Len() || nHelpId )
+            if ( aCommand.Len() || aHelpId.getLength() )
             {
                 // Wenn eine Hilfe existiert, dann ausloesen
                 Help* pHelp = Application::GetHelp();
@@ -916,8 +916,8 @@ void StatusBar::RequestHelp( const HelpEvent& rHEvt )
                 {
                     if ( aCommand.Len() )
                         pHelp->Start( aCommand, this );
-                    else if ( nHelpId )
-                        pHelp->Start( nHelpId, this );
+                    else if ( aHelpId.getLength() )
+                        pHelp->Start( rtl::OStringToOUString( aHelpId, RTL_TEXTENCODING_UTF8 ), this );
                 }
                 return;
             }
@@ -1033,7 +1033,6 @@ void StatusBar::InsertItem( USHORT nItemId, ULONG nWidth,
     pItem->mnBits           = nBits;
     pItem->mnWidth          = (long)nWidth+nFudge+STATUSBAR_OFFSET;
     pItem->mnOffset         = nOffset;
-    pItem->mnHelpId         = 0;
     pItem->mpUserData       = 0;
     pItem->mbVisible        = TRUE;
 
@@ -1475,15 +1474,15 @@ const XubString& StatusBar::GetHelpText( USHORT nItemId ) const
     if ( nPos != STATUSBAR_ITEM_NOTFOUND )
     {
         ImplStatusItem* pItem = mpItemList->GetObject( nPos );
-        if ( !pItem->maHelpText.Len() && ( pItem->mnHelpId || pItem->maCommand.Len() ))
+        if ( !pItem->maHelpText.Len() && ( pItem->maHelpId.getLength() || pItem->maCommand.Len() ))
         {
             Help* pHelp = Application::GetHelp();
             if ( pHelp )
             {
                 if ( pItem->maCommand.Len() )
                     pItem->maHelpText = pHelp->GetHelpText( pItem->maCommand, this );
-                if ( !pItem->maHelpText.Len() && pItem->mnHelpId )
-                    pItem->maHelpText = pHelp->GetHelpText( pItem->mnHelpId, this );
+                if ( !pItem->maHelpText.Len() && pItem->maHelpId.getLength() )
+                    pItem->maHelpText = pHelp->GetHelpText( rtl::OStringToOUString( pItem->maHelpId, RTL_TEXTENCODING_UTF8 ), this );
             }
         }
 
@@ -1520,24 +1519,31 @@ const XubString& StatusBar::GetQuickHelpText( USHORT nItemId ) const
 
 // -----------------------------------------------------------------------
 
-void StatusBar::SetHelpId( USHORT nItemId, ULONG nHelpId )
+void StatusBar::SetHelpId( USHORT nItemId, const rtl::OString& rHelpId )
 {
     USHORT nPos = GetItemPos( nItemId );
 
     if ( nPos != STATUSBAR_ITEM_NOTFOUND )
-        mpItemList->GetObject( nPos )->mnHelpId = nHelpId;
+        mpItemList->GetObject( nPos )->maHelpId = rHelpId;
 }
 
 // -----------------------------------------------------------------------
 
-ULONG StatusBar::GetHelpId( USHORT nItemId ) const
+rtl::OString StatusBar::GetHelpId( USHORT nItemId ) const
 {
     USHORT nPos = GetItemPos( nItemId );
 
+    rtl::OString aRet;
     if ( nPos != STATUSBAR_ITEM_NOTFOUND )
-        return mpItemList->GetObject( nPos )->mnHelpId;
-    else
-        return 0;
+    {
+        ImplStatusItem* pItem = mpItemList->GetObject( nPos );
+        if ( pItem->maHelpId.getLength() )
+            aRet = pItem->maHelpId;
+        else
+            aRet = ::rtl::OUStringToOString( pItem->maCommand, RTL_TEXTENCODING_UTF8 );
+    }
+
+    return aRet;
 }
 
 // -----------------------------------------------------------------------
