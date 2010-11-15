@@ -46,7 +46,7 @@ class SwCharFmt : public SwFmt
 
 
 public:
-    TYPEINFO();    //Bereits in Basisklasse Client drin.
+    TYPEINFO();    // already in base class Client
 };
 
 namespace CharFmt

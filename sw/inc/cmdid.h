@@ -86,7 +86,7 @@ included in c-context files, so c++ style stuff will cause problems.
     Region: File
  --------------------------------------------------------------------*/
 #define FN_CLOSE_FILE           (FN_FILE + 1 )    /* Close */
-#define FN_LAUNCH_REGISTRY      (FN_FILE + 2 )    /* Ablage */
+#define FN_LAUNCH_REGISTRY      (FN_FILE + 2 )    /* Registry */
 
 #define FN_NEW_GLOBAL_DOC       (FN_FILE + 4 )    /* Create Global Document */
 #define FN_NEW_FILE             (FN_FILE + 5 )    /* New */
@@ -167,8 +167,8 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_NUM_BULLET_OFF       (FN_EDIT + 37)  /* turn off numbering */
 #endif
 
-#define FN_NUM_BULLET_OUTLINE_DOWN      (FN_EDIT + 39)  /* Runterstufen mit Unterpunkten */
-#define FN_NUM_BULLET_OUTLINE_UP        (FN_EDIT + 40)  /* Raufstufen mit Unterpunkten */
+#define FN_NUM_BULLET_OUTLINE_DOWN      (FN_EDIT + 39)  /* reduce in rank with sub points */
+#define FN_NUM_BULLET_OUTLINE_UP        (FN_EDIT + 40)  /* increase in rank with sub-items */
 #define FN_NUM_BULLET_OUTLINE_MOVEUP    (FN_EDIT + 41)  /* Push up with sub-items */
 #define FN_NUM_BULLET_OUTLINE_MOVEDOWN  (FN_EDIT + 42)  /* Push down with sub-items */
 #define FN_UPDATE_INPUTFIELDS           (FN_EDIT + 43)  /* Update input fields */
@@ -190,7 +190,7 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_EDIT_FOOTNOTE        (FN_EDIT + 62)  /* Edit footnote */
 
 #define FN_EDIT_REGION          (FN_EDIT + 65)  /* Edit region */
-#define FN_GOTO_REFERENCE       (FN_EDIT + 66)  /* Von der Refmark zur Referenz */
+#define FN_GOTO_REFERENCE       (FN_EDIT + 66)  /* From Refmark to the reference */
 
 // already defined in SVX
 #define FN_NEXT_BOOKMARK        (FN_EDIT + 68)  /*  */
@@ -270,11 +270,11 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_VIEW_FIELDNAME       (FN_VIEW + 26)  /* View field names */
 #define FN_VIEW_TABLEGRID       (FN_VIEW + 27)  /* View tablegrid */
 
-#define FN_SET_PAGE             (FN_VIEW + 29)  /* Seitenvorlage am Absatz setzen */
+#define FN_SET_PAGE             (FN_VIEW + 29)  /* Set page template to paragraph */
 
 #define FN_TOOLBOX_SWITCH       (FN_VIEW + 30)  /* Shell switch to text */
 
-//noch mehr Navigator
+// more Navigator
 #define FN_CONTENT_LB           (FN_VIEW + 32)  /**/
 #define FN_SHOW_CONTENT_BOX     (FN_VIEW + 33)  /**/
 #define FN_SHOW_ROOT            (FN_VIEW + 34)  /**/
@@ -287,7 +287,7 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_DROP_REGION_COPY     (FN_VIEW + 39)  /**/
 
 #define FN_SCROLL_NAVIGATION    (FN_VIEW + 40)  /* Navigation Controller in the scrollbar */
-#define FN_SCROLL_NEXT_PREV     (FN_VIEW + 41)  /* arbeitet den MoveType ab */
+#define FN_SCROLL_NEXT_PREV     (FN_VIEW + 41)  /* processes MoveType */
 
 #define FN_VIEW_HIDDEN_PARA     (FN_VIEW + 42)  /* View hidden paragraphs */
 #define FN_VIEW_SMOOTH_SCROLL   (FN_VIEW + 43)
@@ -296,9 +296,9 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_GLOBAL_EDIT          (FN_VIEW + 45)  /* edit */
 #define FN_GLOBAL_UPDATE        (FN_VIEW + 46)  /* update */
 #define FN_GLOBAL_OPEN          (FN_VIEW + 47)  /* open */
-#define FN_GLOBAL_SAVE_CONTENT  (FN_VIEW + 48)  /* Inhalt der Verknuepfung mitspeichern */
-#define FN_CREATE_NAVIGATION    (FN_VIEW + 49)  /* Navigations-Controller erzeugen */
-#define FN_PREVIEW_ZOOM          (FN_VIEW + 51)  /* der Tabellencontroller fuer den Zoom */
+#define FN_GLOBAL_SAVE_CONTENT  (FN_VIEW + 48)  /* save content of link */
+#define FN_CREATE_NAVIGATION    (FN_VIEW + 49)  /* create Navigations-Controller */
+#define FN_PREVIEW_ZOOM          (FN_VIEW + 51)  /* create table controller for zoom */
 
 #define FN_SET_MODOPT_TBLNUMFMT  (FN_VIEW + 52) /* Number recognition in tables */
 #define FN_HSCROLL_METRIC        (FN_VIEW + 53) /* Metric horizontal scrollbar */
@@ -325,64 +325,64 @@ included in c-context files, so c++ style stuff will cause problems.
 
 #define FN_INSERT_HYPERLINK     (FN_INSERT + 14)  /* Character dialogue / hyperlink page */
 
-#define FN_INSERT_INDEX         (FN_INSERT + 16)  /* Stichworteintrag */
-#define FN_INSERT_INDEX_DLG     (FN_INSERT + 17)    /* Stichworteintrag */
+#define FN_INSERT_INDEX         (FN_INSERT + 16)  /* Index entry */
+#define FN_INSERT_INDEX_DLG     (FN_INSERT + 17)    /* Index entry */
 #define FN_INSERT_LINEBREAK     (FN_INSERT + 18)    /* Newline */
-#define FN_INSERT_FIELD_DATA_ONLY (FN_INSERT + 19)  /* field dialog for mail merge*/
+#define FN_INSERT_FIELD_DATA_ONLY (FN_INSERT + 19)  /* Field dialog for mail merge*/
 #define FN_INSERT_OBJECT        (FN_INSERT + 21)    /* Object */
 #define FN_INSERT_OBJECT_DLG    (FN_INSERT + 22)    /* Object */
-#define FN_INSERT_PAGEBREAK     (FN_INSERT + 23)    /* Seitenumbruch */
+#define FN_INSERT_PAGEBREAK     (FN_INSERT + 23)    /* Page break*/
 #define FN_INSERT_PAGENO        (FN_INSERT + 24)    /* Page Number */
 #define FN_INSERT_PARAGRAPH     (FN_INSERT + 25)    /* Paragraph */
-#define FN_INSERT_RECORD        (FN_INSERT + 26)    /* Datensatz einfuegen */
-#define FN_MERGE_RECORD         (FN_INSERT + 27)    /* Datensatz mischen */
+#define FN_INSERT_RECORD        (FN_INSERT + 26)    /* Insert record */
+#define FN_MERGE_RECORD         (FN_INSERT + 27)    /* Merge record */
 #define FN_INSERT_SYMBOL        (FN_INSERT + 28)    /* Special characters */
-#define FN_POSTIT               (FN_INSERT + 29)    /* PostIt einfuegen/bearbeiten */
+#define FN_POSTIT               (FN_INSERT + 29)    /* Insert/edit PostIt */
 #define FN_INSERT_TABLE         (FN_INSERT + 30)    /* Insert Table */
 #define FN_INSERT_STRING        (FN_INSERT+31)
 #define FN_INSERT_COLS          (FN_INSERT + 32)    /* Insert Columns */
 #define FN_INSERT_FRAME_INTERACT (FN_INSERT + 33)   /* Insert interactive frame */
 #define FN_INSERT_FRAME         (FN_INSERT + 34)    /* Insert Frame */
 
-#define FN_INSERT_IDX_ENTRY_DLG (FN_INSERT + 35)    /* Verzeichniseintrag einfuegen */
+#define FN_INSERT_IDX_ENTRY_DLG (FN_INSERT + 35)    /* insert index entry */
 #define FN_INSERT_FRAME_INTERACT_NOCOL (FN_INSERT + 36) /*insert interactive non column frame*/
 
 #define FN_TOOL_GROUP           (FN_INSERT + 47)    /* Group objects */
 #define FN_TOOL_UNGROUP         (FN_INSERT + 48)    /* Remove Grouping */
 
 #define FN_TOOL_ANKER           (FN_INSERT + 49)    /* Draw Anchor for object */
-#define FN_TOOL_ANKER_PAGE      (FN_INSERT + 50)    /* Draw-Objekt an Seite verankern */
-#define FN_TOOL_ANKER_PARAGRAPH (FN_INSERT + 51)    /* Draw-Objekt am Absatz verankern */
-#define FN_TOOL_HIERARCHIE      (FN_INSERT + 52)    /* Hierarchie aendern */
+#define FN_TOOL_ANKER_PAGE      (FN_INSERT + 50)    /* anchor Draw object to page */
+#define FN_TOOL_ANKER_PARAGRAPH (FN_INSERT + 51)    /* anchor Draw object to paragraph */
+#define FN_TOOL_HIERARCHIE      (FN_INSERT + 52)    /* change hierarchy */
 
 #define FN_MAILMERGE_WIZARD     (FN_INSERT + 64)    /* mail merge wizard */
-#define FN_QRY_OPEN_TABLE       (FN_INSERT + 65)    /* Datenbank oeffnen (Basic) */
-#define FN_TOOL_ANKER_FRAME     (FN_INSERT + 66)    /* Draw-Objekt am Rahmen verankern */
-#define FN_QRY_MERGE            (FN_INSERT + 67)    /* Datensatz einfuegen (Serienbrief) */
+#define FN_QRY_OPEN_TABLE       (FN_INSERT + 65)    /* open database (Basic) */
+#define FN_TOOL_ANKER_FRAME     (FN_INSERT + 66)    /* anchor Draw-Object to frame*/
+#define FN_QRY_MERGE            (FN_INSERT + 67)    /* insert record (serial letter) */
 #define FN_MAILMERGE_CHILDWINDOW (FN_INSERT + 68)    /* back-to-mail-merge-wizard child window*/
-#define FN_INSERT_SMA           (FN_INSERT + 69)    /* Einfuegen StarMath  */
+#define FN_INSERT_SMA           (FN_INSERT + 69)    /* insert StarMath  */
 
-#define FN_QRY_GET_COLUMN_NAME  (FN_INSERT + 70)    /* Anzahl der Spalten (Basic) */
-#define FN_QRY_GET_COLUMN_TYPE  (FN_INSERT + 71)    /* Type des Datenbankfeldes ermitteln (Basic) */
-#define FN_QRY_GET_COLUMN_TEXT  (FN_INSERT + 72)    /* Inhalt des aktuellen Datensatzes (Basic) */
-#define FN_QRY_DEL_DEFINED_DB   (FN_INSERT + 75)    /* Datenbankdefinition loeschen (Basic) */
+#define FN_QRY_GET_COLUMN_NAME  (FN_INSERT + 70)    /* number of columns (Basic) */
+#define FN_QRY_GET_COLUMN_TYPE  (FN_INSERT + 71)    /* retrieve type of database field (Basic) */
+#define FN_QRY_GET_COLUMN_TEXT  (FN_INSERT + 72)    /* content of current record (Basic) */
+#define FN_QRY_DEL_DEFINED_DB   (FN_INSERT + 75)    /* delete database definition */
 
-#define FN_DRAWTEXT_ATTR_DLG    (FN_INSERT + 76)    /* DrawText positionieren */
+#define FN_DRAWTEXT_ATTR_DLG    (FN_INSERT + 76)    /* position DrawText */
 
-#define FN_QRY_APPEND_RECORD    (FN_INSERT + 77)    /* Neuen Datensatz anhaengen */
-#define FN_QRY_UPDATE_RECORD    (FN_INSERT + 78)    /* Datensatzspalte aendern */
-#define FN_QRY_DELETE_RECORD    (FN_INSERT + 79)    /* Datensatz loeschen */
-#define FN_QRY_GET_PHYS_RECORD_ID (FN_INSERT + 80)  /* Physikalische (absolute) Datensatznummer erfragen (Basic) */
+#define FN_QRY_APPEND_RECORD    (FN_INSERT + 77)    /* append new record */
+#define FN_QRY_UPDATE_RECORD    (FN_INSERT + 78)    /* change record row */
+#define FN_QRY_DELETE_RECORD    (FN_INSERT + 79)    /* delete record */
+#define FN_QRY_GET_PHYS_RECORD_ID (FN_INSERT + 80)  /* get physical (absolute) record number (Basic) */
 
-#define FN_TOOL_ANKER_CHAR       (FN_INSERT + 84)   /* DrawObject zeichengebunden */
+#define FN_TOOL_ANKER_CHAR       (FN_INSERT + 84)   /* anchor Draw object to charater */
 
-#define FN_QRY_INSERT           (FN_INSERT + 86)    /* Datensatz-Selektion in Text einfuegen */
-#define FN_QRY_MERGE_FIELD      (FN_INSERT + 87)    /* Datensatz-Selektion in Felder einfuegen */
-#define FN_QRY_INSERT_FIELD     (FN_INSERT + 88)    /* Datenbankfeld einfuegen */
+#define FN_QRY_INSERT           (FN_INSERT + 86)    /* insert record selection in to text */
+#define FN_QRY_MERGE_FIELD      (FN_INSERT + 87)    /* insert record selection into fields */
+#define FN_QRY_INSERT_FIELD     (FN_INSERT + 88)    /* insert database field */
 
-#define FN_INSERT_CTRL          (FN_INSERT + 89)    /* Werkzeugleistencontroller Einfuegen*/
-#define FN_INSERT_OBJ_CTRL      (FN_INSERT + 90)    /* Werkzeugleistencontroller Einfuegen/Objekt*/
-#define FN_INSERT_FIELD_CTRL    (FN_INSERT + 91)    /* Werkzeugleistencontroller Einfuegen/Feldbefehle*/
+#define FN_INSERT_CTRL          (FN_INSERT + 89)    /* toolbar controller insert*/
+#define FN_INSERT_OBJ_CTRL      (FN_INSERT + 90)    /* toolbar controller (insert/object) */
+#define FN_INSERT_FIELD_CTRL    (FN_INSERT + 91)    /* toolbar controller insert/field commands */
 
 #define FN_INSERT_FLD_DATE      (FN_INSERT + 92)
 #define FN_INSERT_FLD_TIME      (FN_INSERT + 93)
@@ -397,23 +397,23 @@ included in c-context files, so c++ style stuff will cause problems.
     Region: Paste (Part 2)
  --------------------------------------------------------------------*/
 
-#define FN_QRY_GET_ALL_DBNAME   (FN_INSERT2 + 1)    /* Alle konfigurierten Datenabanknamen ermitteln */
-#define FN_QRY_GET_DBNAME_COUNT (FN_INSERT2 + 2)    /* Anzahl aller konfigurierten Datenabanknamen */
-#define FN_QRY_GET_TABLE_NAME   (FN_INSERT2 + 3)    /* Tabellenname einer Datenbank ermitteln */
-#define FN_QRY_GET_TABLE_COUNT  (FN_INSERT2 + 4)    /* Anzahl aller Tabellen einer Datenbank ermitteln */
+#define FN_QRY_GET_ALL_DBNAME   (FN_INSERT2 + 1)    /* retrieve all configured database names */
+#define FN_QRY_GET_DBNAME_COUNT (FN_INSERT2 + 2)    /* retrieve number of all configured database names */
+#define FN_QRY_GET_TABLE_NAME   (FN_INSERT2 + 3)    /* retrieve table name of a database */
+#define FN_QRY_GET_TABLE_COUNT  (FN_INSERT2 + 4)    /* retrieve number of tables of a database */
 #define FN_MAILMERGE_SENDMAIL_CHILDWINDOW (FN_INSERT2 + 5)  /* child window provided by mailmerge */
 
-#define FN_SBA_BRW_UPDATE       (FN_INSERT2 + 7)    /* Datensaetze in Felder einfuegen */
-#define FN_SBA_BRW_INSERT       (FN_INSERT2 + 8)    /* Datensaetze in Text einfuegen */
-#define FN_SBA_BRW_MERGE        (FN_INSERT2 + 9)    /* Serienbriefdruck */
-#define FN_JAVAEDIT             (FN_INSERT2 + 10)   /* Scriptfeld bearbeiten */
-#define FN_INSERT_HRULER        (FN_INSERT2 + 11)   /* horiz. Grafiklinie einfuegen */
-#define FN_TOOL_ANKER_AT_CHAR   (FN_INSERT2 + 12)   /* Object zeichengebunden */
+#define FN_SBA_BRW_UPDATE       (FN_INSERT2 + 7)    /* insert records into fields */
+#define FN_SBA_BRW_INSERT       (FN_INSERT2 + 8)    /* insert records into text */
+#define FN_SBA_BRW_MERGE        (FN_INSERT2 + 9)    /* serial letter print */
+#define FN_JAVAEDIT             (FN_INSERT2 + 10)   /* edit script field */
+#define FN_INSERT_HRULER        (FN_INSERT2 + 11)   /* insert horizontal ruler */
+#define FN_TOOL_ANKER_AT_CHAR   (FN_INSERT2 + 12)   /* anchor object to character*/
 
-#define FN_INSERT_PAGEHEADER    (FN_INSERT2 + 13)   /* Standard Kopfzeile einfuegen */
-#define FN_INSERT_PAGEFOOTER    (FN_INSERT2 + 14)   /* Standard Fusszeile einfuegen */
+#define FN_INSERT_PAGEHEADER    (FN_INSERT2 + 13)   /* insert default header */
+#define FN_INSERT_PAGEFOOTER    (FN_INSERT2 + 14)   /* insert default footer */
 
-#define FN_INSERT_ENDNOTE           (FN_INSERT2 + 18)   /* Endnote einfuegen*/
+#define FN_INSERT_ENDNOTE           (FN_INSERT2 + 18)   /* insert endnote*/
 #define FN_INSERT_REGION            (FN_INSERT2 + 19)   /* Insert section */
 
 #define FN_INSERT_MULTI_TOX         (FN_INSERT2 + 20)   /* insert any TOX */
@@ -423,59 +423,59 @@ included in c-context files, so c++ style stuff will cause problems.
     Region: Format
  --------------------------------------------------------------------*/
 
-#define FN_AUTOFORMAT_APPLY     (FN_FORMAT + 1 ) /* Autoformat-Optionen anwenden */
-#define FN_AUTOFORMAT_AUTO      (FN_FORMAT + 2 ) /* Autoformat waehrend der Eingabe */
-#define FN_GROW_FONT_SIZE       (FN_FORMAT + 3 ) /* Groesse */
-#define FN_SHRINK_FONT_SIZE     (FN_FORMAT + 4 ) /* Groesse */
-#define FN_UNDERLINE_DOUBLE     (FN_FORMAT + 5 ) /* Doppelt unterstreichen */
-#define FN_AUTOFORMAT_REDLINE_APPLY (FN_FORMAT + 6 ) /* Autoformat mit Redlining anwenden */
-#define FN_SET_SUPER_SCRIPT     (FN_FORMAT + 11) /* Hochstellung */
-#define FN_SET_SUB_SCRIPT       (FN_FORMAT + 12) /* Tiefstellung */
+#define FN_AUTOFORMAT_APPLY     (FN_FORMAT + 1 ) /* apply autoformat options */
+#define FN_AUTOFORMAT_AUTO      (FN_FORMAT + 2 ) /* apply autoformat during user input */
+#define FN_GROW_FONT_SIZE       (FN_FORMAT + 3 ) /* size */
+#define FN_SHRINK_FONT_SIZE     (FN_FORMAT + 4 ) /* size */
+#define FN_UNDERLINE_DOUBLE     (FN_FORMAT + 5 ) /* double underline */
+#define FN_AUTOFORMAT_REDLINE_APPLY (FN_FORMAT + 6 ) /* apply autoformat with Redlining */
+#define FN_SET_SUPER_SCRIPT     (FN_FORMAT + 11) /* superscript */
+#define FN_SET_SUB_SCRIPT       (FN_FORMAT + 12) /* subscript */
 
 #define FN_SET_CASEMAP          (FN_FORMAT + 14) /* CaseMap */
-#define FN_SET_LANGUAGE         (FN_FORMAT + 15) /* Sprache */
+#define FN_SET_LANGUAGE         (FN_FORMAT + 15) /* language */
 #define FN_SET_KERNING          (FN_FORMAT + 16) /* Kerning */
 
-#define FN_INDENT_TO_TABSTOP    (FN_FORMAT + 17) /* Einrueckung auf die naechste Tabpostion */
-#define FN_FLIP_HORZ_GRAFIC     (FN_FORMAT + 25) /* Spiegeln horizontal */
-#define FN_FLIP_VERT_GRAFIC     (FN_FORMAT + 26) /* Spiegeln vertikal */
-#define FN_SET_LINE_SPACE       (FN_FORMAT + 27) /* Zeilenabstand parametrisiert */
-#define FN_SET_ADJUST           (FN_FORMAT + 28) /* Ausrichtung parametrisiert */
-#define FN_SET_LRMARGIN         (FN_FORMAT + 29) /* linker/rechter Rand */
-#define FN_SET_ULMARGIN         (FN_FORMAT + 30) /* oberer/unterer Rand */
-#define FN_UNINDENT_TO_TABSTOP  (FN_FORMAT + 31) /* Einrueckung auf die vorgige Tabpostion */
+#define FN_INDENT_TO_TABSTOP    (FN_FORMAT + 17) /* indent to tabstop */
+#define FN_FLIP_HORZ_GRAFIC     (FN_FORMAT + 25) /* mirror horizontally */
+#define FN_FLIP_VERT_GRAFIC     (FN_FORMAT + 26) /* mirror vertically */
+#define FN_SET_LINE_SPACE       (FN_FORMAT + 27) /* parametrized line distance */
+#define FN_SET_ADJUST           (FN_FORMAT + 28) /* parametrized alignemnt */
+#define FN_SET_LRMARGIN         (FN_FORMAT + 29) /* left/right margin */
+#define FN_SET_ULMARGIN         (FN_FORMAT + 30) /* upper/lower margin */
+#define FN_UNINDENT_TO_TABSTOP  (FN_FORMAT + 31) /* indent to previous tabstop */
 
-#define FN_SET_HYPHEN_ZONE      (FN_FORMAT + 32) /* Silbentrennung */
-#define FN_SET_KEEP_TOGETHER    (FN_FORMAT + 34) /* nicht trennen */
-#define FN_SET_KEEP_WITH_NEXT   (FN_FORMAT + 35) /* mit folgendem zus. */
+#define FN_SET_HYPHEN_ZONE      (FN_FORMAT + 32) /* hyphenation */
+#define FN_SET_KEEP_TOGETHER    (FN_FORMAT + 34) /* no hyphenation */
+#define FN_SET_KEEP_WITH_NEXT   (FN_FORMAT + 35) /* keep together with following */
 #define FN_SET_WIDOW            (FN_FORMAT + 36) /* Widows */
 #define FN_SET_ORPHAN           (FN_FORMAT + 37) /* Orphans */
 
 #define FN_REGISTER_COLLECTION  (FN_FORMAT + 43)  /* Referenzvorlage an der Seite */
-#define FN_REGISTER_MODE        (FN_FORMAT + 44)  /* Registermodus an/aus */
-#define FN_NUM_FORMAT_TABLE_DLG     (FN_FORMAT + 45)  /* Zahlenformat in Tabelle */
-#define FN_FORMAT_BORDER_DLG        (FN_FORMAT + 48)  /* Umrandung */
-#define FN_FORMAT_PAGE_COLUMN_DLG   (FN_FORMAT + 49)  /* Spalten pro Seite */
-#define FN_FORMAT_BACKGROUND_DLG    (FN_FORMAT + 50)  /* Hintergrund */
-#define FN_FORMAT_PAGE              (FN_FORMAT + 51)  /* Seite */
-#define FN_FORMAT_PAGE_DLG          (FN_FORMAT + 52)  /* Seite */
-#define FN_FORMAT_COLUMN            (FN_FORMAT + 53)  /* Spalten */
-#define FN_FORMAT_DROPCAPS          (FN_FORMAT + 54)  /* Initialien */
-#define FN_FORMAT_FRAME             (FN_FORMAT + 55)  /* Rahmen */
-#define FN_FORMAT_FRAME_DLG         (FN_FORMAT + 56)  /* Rahmen */
-#define FN_FORMAT_GRAFIC            (FN_FORMAT + 57)  /* Grafik */
-#define FN_FORMAT_GRAFIC_DLG        (FN_FORMAT + 58)  /* Grafik */
-#define FN_FORMAT_TABLE             (FN_FORMAT + 59)  /* Tabelle */
-#define FN_FORMAT_TABLE_DLG         (FN_FORMAT + 60)  /* Tabelle */
-#define FN_FORMAT_OLE_DLG           (FN_FORMAT + 61)  /* OLE bearbeiten */
+#define FN_REGISTER_MODE        (FN_FORMAT + 44)  /* Register mode on/off */
+#define FN_NUM_FORMAT_TABLE_DLG     (FN_FORMAT + 45)  /* number format in table */
+#define FN_FORMAT_BORDER_DLG        (FN_FORMAT + 48)  /* */
+#define FN_FORMAT_PAGE_COLUMN_DLG   (FN_FORMAT + 49)  /* columns per page */
+#define FN_FORMAT_BACKGROUND_DLG    (FN_FORMAT + 50)  /* background */
+#define FN_FORMAT_PAGE              (FN_FORMAT + 51)  /* page */
+#define FN_FORMAT_PAGE_DLG          (FN_FORMAT + 52)  /* page */
+#define FN_FORMAT_COLUMN            (FN_FORMAT + 53)  /* columns */
+#define FN_FORMAT_DROPCAPS          (FN_FORMAT + 54)  /* initials */
+#define FN_FORMAT_FRAME             (FN_FORMAT + 55)  /* frame */
+#define FN_FORMAT_FRAME_DLG         (FN_FORMAT + 56)  /* frame */
+#define FN_FORMAT_GRAFIC            (FN_FORMAT + 57)  /* graphic */
+#define FN_FORMAT_GRAFIC_DLG        (FN_FORMAT + 58)  /* graphic */
+#define FN_FORMAT_TABLE             (FN_FORMAT + 59)  /* table */
+#define FN_FORMAT_TABLE_DLG         (FN_FORMAT + 60)  /* table */
+#define FN_FORMAT_OLE_DLG           (FN_FORMAT + 61)  /* edit OLE */
 
-#define FN_NEW_STYLE_BY_EXAMPLE     (FN_FORMAT + 62)  /* Vorlage erzeugen by Example */
-#define FN_UPDATE_STYLE_BY_EXAMPLE  (FN_FORMAT + 63)  /* Vorlage aktualisieren */
-#define FN_STYLE_SHEET_FRAME_DLG    (FN_FORMAT + 64)  /* Rahmenvorlage */
-#define FN_STYLE_SHEET_DOC_DLG      (FN_FORMAT + 65)  /* Dokumentvorlage */
-#define FN_STYLE_SHEET_GRAFIK_DLG   (FN_FORMAT + 66)  /* Dokumentvorlage */
-#define FN_FORMAT_FOOTNOTE          (FN_FORMAT + 67)  /* Fussnoten */
-#define FN_FORMAT_FOOTNOTE_DLG      (FN_FORMAT + 68)  /* Fussnoten-Dialog */
+#define FN_NEW_STYLE_BY_EXAMPLE     (FN_FORMAT + 62)  /* create style by example */
+#define FN_UPDATE_STYLE_BY_EXAMPLE  (FN_FORMAT + 63)  /* update style */
+#define FN_STYLE_SHEET_FRAME_DLG    (FN_FORMAT + 64)  /* frame style */
+#define FN_STYLE_SHEET_DOC_DLG      (FN_FORMAT + 65)  /* document style */
+#define FN_STYLE_SHEET_GRAFIK_DLG   (FN_FORMAT + 66)  /* document style */
+#define FN_FORMAT_FOOTNOTE          (FN_FORMAT + 67)  /* footnotes */
+#define FN_FORMAT_FOOTNOTE_DLG      (FN_FORMAT + 68)  /* footnote dialog */
 
 // already defined in Svx
 //#define FN_FORMAT_RESET           (FN_FORMAT + 69)
@@ -487,52 +487,52 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_FRAME_WRAP               (FN_FORMAT + 73)
 #define FN_FRAME_WRAPTHRU           (FN_FORMAT + 74)
 
-#define FN_FRAME_ALIGN_HORZ_LEFT    (FN_FORMAT + 75)  /* Rahmen horz. links */
-#define FN_FRAME_ALIGN_HORZ_RIGHT   (FN_FORMAT + 76)  /* Rahmen horz. rechts */
-#define FN_FRAME_ALIGN_HORZ_CENTER  (FN_FORMAT + 77)  /* Rahmen horz. zentriert */
-#define FN_FRAME_ALIGN_VERT_TOP     (FN_FORMAT + 78)  /* Rahmen vert. oben */
-#define FN_FRAME_ALIGN_VERT_BOTTOM  (FN_FORMAT + 79)  /* Rahmen vert. unten */
-#define FN_FRAME_ALIGN_VERT_CENTER  (FN_FORMAT + 80)  /* Rahmen vert. zentriert */
+#define FN_FRAME_ALIGN_HORZ_LEFT    (FN_FORMAT + 75)
+#define FN_FRAME_ALIGN_HORZ_RIGHT   (FN_FORMAT + 76)
+#define FN_FRAME_ALIGN_HORZ_CENTER  (FN_FORMAT + 77)
+#define FN_FRAME_ALIGN_VERT_TOP     (FN_FORMAT + 78)
+#define FN_FRAME_ALIGN_VERT_BOTTOM  (FN_FORMAT + 79)
+#define FN_FRAME_ALIGN_VERT_CENTER  (FN_FORMAT + 80)
 
-#define FN_SET_FRM_POSITION         (FN_FORMAT + 82)/* Rahmenposition -- " -- */
-#define FN_SET_FRM_OPTIONS          (FN_FORMAT + 86)/* Rahmenoptionen -- " -- */
+#define FN_SET_FRM_POSITION         (FN_FORMAT + 82)/* frame position -- " -- */
+#define FN_SET_FRM_OPTIONS          (FN_FORMAT + 86)/* frame position -- " -- */
 
-#define FN_SET_PAGE_STYLE           (FN_FORMAT + 93)  /* Anwenden Seitenv. */
+#define FN_SET_PAGE_STYLE           (FN_FORMAT + 93)  /* apply page style */
 
 #define FN_FORMAT_TITLEPAGE_DLG     (FN_FORMAT + 98)  /* Title Page */
 
 #define FN_TABLE_REP                (FN_FORMAT + 99)  /* TableRepresentation */
-#define FN_CONVERT_TEXT_TABLE       (FN_FORMAT + 100)  /* Konvertierung Text <-> Tabelle */
-#define FN_TABLE_INSERT_ROW         (FN_FORMAT + 101)  /* Tabelle: Zeile einfuegen */
-#define FN_TABLE_INSERT_COL         (FN_FORMAT + 102)  /* Tabelle: Spalte einfuegen */
-#define FN_TABLE_DELETE_ROW         (FN_FORMAT + 103)  /* Tabelle: Zeile loeschen */
-#define FN_TABLE_DELETE_COL         (FN_FORMAT + 104)  /* Tabelle: Spalte loeschen */
-#define FN_TABLE_SPLIT_CELLS        (FN_FORMAT + 105)  /* Tabelle: Zellen teilen */
-#define FN_TABLE_MERGE_CELLS        (FN_FORMAT + 106)  /* Tabelle: Zellen verbinden */
-#define FN_TABLE_SET_ROW_HEIGHT     (FN_FORMAT + 107)  /* Tabelle: Zeilenhoehe setzen */
-#define FN_TABLE_SET_COL_WIDTH      (FN_FORMAT + 108)  /* Tabelle: Spaltenbreite setzen */
-#define FN_TABLE_SET_ULSPACE        (FN_FORMAT + 109)  /* Tabelle: oberen / unteren Abstand einstellen */
-#define FN_OPTIMIZE_TABLE           (FN_FORMAT + 110)  /* ToolBoxItem fuer Optimierung in Tabellen  */
-#define FN_TABLE_SET_SHADOW         (FN_FORMAT + 111)  /* Tabelle: Schatten einstellen */
-#define FN_TABLE_GOTO_CELL          (FN_FORMAT + 112)  /* Tabelle: Zelle anspringen */
-#define FN_TABLE_SELECT_ROW         (FN_FORMAT + 113)  /* Tabelle: Zeile selektieren */
-#define FN_TABLE_SELECT_COL         (FN_FORMAT + 114)  /* Tabelle: Spalte selektieren */
-#define FN_TABLE_SELECT_ALL         (FN_FORMAT + 115)  /* Tabelle: Tabelle selektieren */
-#define FN_TABLE_SET_READ_ONLY      (FN_FORMAT + 116)  /* Tabelle: Tabelle schuetzen */
-#define FN_TABLE_SET_READ_ONLY_CELLS (FN_FORMAT + 117)  /* Tabelle: Tabellezellen schuetzen */
-#define FN_TABLE_UNSET_READ_ONLY_CELLS  (FN_FORMAT + 119)  /* Tabelle: Tabellezellen schuetzen aufheben */
+#define FN_CONVERT_TEXT_TABLE       (FN_FORMAT + 100)  /* convert text <-> table */
+#define FN_TABLE_INSERT_ROW         (FN_FORMAT + 101)  /* */
+#define FN_TABLE_INSERT_COL         (FN_FORMAT + 102)  /* */
+#define FN_TABLE_DELETE_ROW         (FN_FORMAT + 103)  /* */
+#define FN_TABLE_DELETE_COL         (FN_FORMAT + 104)  /* */
+#define FN_TABLE_SPLIT_CELLS        (FN_FORMAT + 105)  /* */
+#define FN_TABLE_MERGE_CELLS        (FN_FORMAT + 106)  /* */
+#define FN_TABLE_SET_ROW_HEIGHT     (FN_FORMAT + 107)  /* */
+#define FN_TABLE_SET_COL_WIDTH      (FN_FORMAT + 108)  /* */
+#define FN_TABLE_SET_ULSPACE        (FN_FORMAT + 109)  /* table: set upper / lower offset */
+#define FN_OPTIMIZE_TABLE           (FN_FORMAT + 110)  /* ToolBoxItem for optimizing tables */
+#define FN_TABLE_SET_SHADOW         (FN_FORMAT + 111)  /* */
+#define FN_TABLE_GOTO_CELL          (FN_FORMAT + 112)  /* */
+#define FN_TABLE_SELECT_ROW         (FN_FORMAT + 113)  /* */
+#define FN_TABLE_SELECT_COL         (FN_FORMAT + 114)  /* */
+#define FN_TABLE_SELECT_ALL         (FN_FORMAT + 115)  /* */
+#define FN_TABLE_SET_READ_ONLY      (FN_FORMAT + 116)  /* protect table */
+#define FN_TABLE_SET_READ_ONLY_CELLS (FN_FORMAT + 117)  /* protect table cells */
+#define FN_TABLE_UNSET_READ_ONLY_CELLS  (FN_FORMAT + 119)  /* undo table cell protection */
 #define FN_TABLE_HEADLINE_REPEAT    (FN_FORMAT + 120)   /* also used in SwXTextTable*/
-#define FN_TABLE_ADJUST_CELLS       (FN_FORMAT + 121)  /* Tabelle: Zellen anpassen */
+#define FN_TABLE_ADJUST_CELLS       (FN_FORMAT + 121)  /* */
 
-#define FN_FRAME_UP                 (FN_FORMAT + 122)  /* Rahmen um eine Ebene nach oben */
-#define FN_FRAME_DOWN               (FN_FORMAT + 123)  /* Rahmen um eine Ebene nach unten */
+#define FN_FRAME_UP                 (FN_FORMAT + 122)  /* frame by one level up */
+#define FN_FRAME_DOWN               (FN_FORMAT + 123)  /* frame by one level down */
 
 #define FN_TABLE_INSERT_CHART       (FN_FORMAT + 124)
 
-#define FN_SET_FRM_LRSPACE          (FN_FORMAT + 125)  /* Rahmen Seitenabstand           */
-#define FN_SET_FRM_ULSPACE          (FN_FORMAT + 126)  /* Rahmen Kopf-/Fussabstand      */
+#define FN_SET_FRM_LRSPACE          (FN_FORMAT + 125)  /* frame page offset */
+#define FN_SET_FRM_ULSPACE          (FN_FORMAT + 126)  /* frame head-/foot offset */
 #define FN_TABLE_SET_LRSPACE        (FN_FORMAT + 127)  /* Tabelle: linker / rechter Abstand einstellen */
-#define FN_TABLE_OPTIMAL_HEIGHT     (FN_FORMAT + 128)  /* Zellenhoehe optimal*/
+#define FN_TABLE_OPTIMAL_HEIGHT     (FN_FORMAT + 128)  /* optimal cell height */
 #define FN_TABLE_DELETE_TABLE       (FN_FORMAT + 129)  /* remove current table*/
 #define FN_TABLE_SELECT_CELL        (FN_FORMAT + 130)  /* selects the current table cell */
 #define FN_CONVERT_TEXT_TO_TABLE    (FN_FORMAT + 131)  /* convert selected text to table */
@@ -542,19 +542,19 @@ included in c-context files, so c++ style stuff will cause problems.
 /*--------------------------------------------------------------------
     Region: Page Template
  --------------------------------------------------------------------*/
-#define FN_NEW_PAGE_STYLE           (FN_FORMAT + 129) /* Anlegen Seitenvorlage */
-#define FN_PAGE_STYLE_SET_LR_MARGIN (FN_FORMAT + 130) /* linker / rechter Rand */
-#define FN_PAGE_STYLE_SET_UL_MARGIN (FN_FORMAT + 131) /* oberer / unterer Rand */
-#define FN_PAGE_STYLE_SET_PAGE      (FN_FORMAT + 134) /* linke, rechte...  */
-#define FN_PAGE_STYLE_SET_PAPER_SIZE (FN_FORMAT + 135) /* Papiergroesse */
-#define FN_PAGE_STYLE_SET_PAPER_BIN (FN_FORMAT + 136) /* Druckerschacht */
-#define FN_PAGE_STYLE_SET_NUMBER_FORMAT (FN_FORMAT + 137) /* Numerierungsart */
-#define FN_PAGE_STYLE_SET_COLS      (FN_FORMAT + 138) /* Spaltenanzahl */
+#define FN_NEW_PAGE_STYLE           (FN_FORMAT + 129) /* create page style */
+#define FN_PAGE_STYLE_SET_LR_MARGIN (FN_FORMAT + 130) /* left / right margin */
+#define FN_PAGE_STYLE_SET_UL_MARGIN (FN_FORMAT + 131) /* upper / lower margin */
+#define FN_PAGE_STYLE_SET_PAGE      (FN_FORMAT + 134) /* */
+#define FN_PAGE_STYLE_SET_PAPER_SIZE (FN_FORMAT + 135) /* */
+#define FN_PAGE_STYLE_SET_PAPER_BIN (FN_FORMAT + 136) /* paper tray */
+#define FN_PAGE_STYLE_SET_NUMBER_FORMAT (FN_FORMAT + 137) /* */
+#define FN_PAGE_STYLE_SET_COLS      (FN_FORMAT + 138) /* number of columns */
 
-/* OS: Diese Ids werden nur noch fuer die Hilfe benoetigt und sind fuer den
- Dialog durch die Ids ohne _DLG ersetzt*/
-#define FN_TABLE_INSERT_COL_DLG     (FN_FORMAT + 142)  /* Tabelle: Dlg. Spalte einfuegen */
-#define FN_TABLE_INSERT_ROW_DLG     (FN_FORMAT + 143)  /* Tabelle: Dlg. Zeile einfuegen */
+/* these Ids are only required by Help and are replaced by the Ids without _DLG
+ * for the dialog */
+#define FN_TABLE_INSERT_COL_DLG     (FN_FORMAT + 142)  /* */
+#define FN_TABLE_INSERT_ROW_DLG     (FN_FORMAT + 143)  /* */
 
 #define FN_GOTO_NEXT_CELL           (FN_FORMAT + 145)  /* Table: go to next cell */
 #define FN_GOTO_PREV_CELL           (FN_FORMAT + 146)  /* Table: go to previous cell */
@@ -565,72 +565,72 @@ included in c-context files, so c++ style stuff will cause problems.
     Region: Ribbon
  --------------------------------------------------------------------*/
 
-#define FN_SET_BACKGROUND_COLOR     (FN_FORMAT + 150)  /* Hintergrundfarbe */
+#define FN_SET_BACKGROUND_COLOR     (FN_FORMAT + 150)  /* */
 
-#define FN_SET_BORDER_POS           (FN_FORMAT + 152)  /* Position Umrandung */
-#define FN_SET_BORDER_LINES         (FN_FORMAT + 153)  /* Linienart Umrandung */
-#define FN_SET_BORDER_COLOR         (FN_FORMAT + 154)  /* Farbe Umrandung */
+#define FN_SET_BORDER_POS           (FN_FORMAT + 152)  /* */
+#define FN_SET_BORDER_LINES         (FN_FORMAT + 153)  /* */
+#define FN_SET_BORDER_COLOR         (FN_FORMAT + 154)  /* */
 
-#define FN_FORMULA_CALC             (FN_FORMAT + 156)  /* Formelauswahl */
-#define FN_FORMULA_CANCEL           (FN_FORMAT + 157)  /* Formel nicht uebernehmen */
-#define FN_FORMULA_APPLY            (FN_FORMAT + 158)  /* Formel uebernehmen */
+#define FN_FORMULA_CALC             (FN_FORMAT + 156)  /* select formula */
+#define FN_FORMULA_CANCEL           (FN_FORMAT + 157)  /* don't apply formula */
+#define FN_FORMULA_APPLY            (FN_FORMAT + 158)  /* apply formula */
 
-#define FN_TABLE_UNSET_READ_ONLY    (FN_FORMAT + 159)  /* Zellenschutz fuer Tab. aufheben */
+#define FN_TABLE_UNSET_READ_ONLY    (FN_FORMAT + 159)  /* undo cell protection for table */
 
-#define FN_FORMULA_POSITION         (FN_FORMAT + 160)  /* Positionsanzeige */
-#define FN_FORMULA_EDIT             (FN_FORMAT + 161)  /* Editfeld */
+#define FN_FORMULA_POSITION         (FN_FORMAT + 160)  /* position display*/
+#define FN_FORMULA_EDIT             (FN_FORMAT + 161)  /* edit-field */
 
-#define FN_FRAME_WRAP_IDEAL         (FN_FORMAT + 163)  /* Rahmen Idealer Umlauf */
-#define FN_FRAME_WRAPTHRU_TRANSP    (FN_FORMAT + 164)  /* Rahmen Transparenter Durchlauf */
+#define FN_FRAME_WRAP_IDEAL         (FN_FORMAT + 163)  /* frame ideal wrapping */
+#define FN_FRAME_WRAPTHRU_TRANSP    (FN_FORMAT + 164)  /* frame transparent wrapping */
 
-#define FN_FRAME_ALIGN_VERT_ROW_TOP     (FN_FORMAT + 165)  /* Rahmen vert. Zeile oben */
-#define FN_FRAME_ALIGN_VERT_ROW_BOTTOM  (FN_FORMAT + 166)  /* Rahmen vert. Zeile unten */
-#define FN_FRAME_ALIGN_VERT_ROW_CENTER  (FN_FORMAT + 167)  /* Rahmen vert. Zeile zentriert */
+#define FN_FRAME_ALIGN_VERT_ROW_TOP     (FN_FORMAT + 165)  /* */
+#define FN_FRAME_ALIGN_VERT_ROW_BOTTOM  (FN_FORMAT + 166)  /* */
+#define FN_FRAME_ALIGN_VERT_ROW_CENTER  (FN_FORMAT + 167)  /* */
 
-#define FN_FRAME_ALIGN_VERT_CHAR_TOP    (FN_FORMAT + 168)  /* Rahmen vert. Zeichen oben */
-#define FN_FRAME_ALIGN_VERT_CHAR_BOTTOM (FN_FORMAT + 169)  /* Rahmen vert. Zeichen unten */
-#define FN_FRAME_ALIGN_VERT_CHAR_CENTER (FN_FORMAT + 170)  /* Rahmen vert. Zeichen zentriert */
+#define FN_FRAME_ALIGN_VERT_CHAR_TOP    (FN_FORMAT + 168)  /* */
+#define FN_FRAME_ALIGN_VERT_CHAR_BOTTOM (FN_FORMAT + 169)  /* */
+#define FN_FRAME_ALIGN_VERT_CHAR_CENTER (FN_FORMAT + 170)  /* */
 
-#define FN_TABLE_SET_DEF_BORDER         (FN_FORMAT + 171)  /* vordefinierte Umrandungen setzen */
+#define FN_TABLE_SET_DEF_BORDER         (FN_FORMAT + 171)  /* set predefined border */
 
-#define FN_FRAME_WRAP_LEFT              (FN_FORMAT + 172)  /* Rahmen Umlauf links */
-#define FN_FRAME_WRAP_RIGHT             (FN_FORMAT + 173)  /* Rahmen Umlauf links */
+#define FN_FRAME_WRAP_LEFT              (FN_FORMAT + 172)  /* */
+#define FN_FRAME_WRAP_RIGHT             (FN_FORMAT + 173)  /* */
 
-#define FN_TABLE_SET_ROW_AUTOHEIGHT (FN_FORMAT + 174)  /* Tabelle: Minimale automatische Zeilenhoehe setzen */
+#define FN_TABLE_SET_ROW_AUTOHEIGHT (FN_FORMAT + 174)  /* table: set minimal automatic row height */
 
-#define FN_WRAP_ANCHOR_ONLY         (FN_FORMAT + 181)  /* Umlauf nur fuer ersten Absatz */
+#define FN_WRAP_ANCHOR_ONLY         (FN_FORMAT + 181)  /* wrap only for first paragraph */
 
-#define FN_TABLE_BALANCE_CELLS      (FN_FORMAT + 182)  /* Spalten gleichmaessig verteilen */
-#define FN_TABLE_BALANCE_ROWS       (FN_FORMAT + 183)  /* Zeilen gleichmaessig verteilen */
+#define FN_TABLE_BALANCE_CELLS      (FN_FORMAT + 182)  /* evenly distribute columns */
+#define FN_TABLE_BALANCE_ROWS       (FN_FORMAT + 183)  /* evenly distribute rows */
 
-#define FN_FRAME_WRAP_CONTOUR       (FN_FORMAT + 184)  /* Rahmen Kunturumlauf */
+#define FN_FRAME_WRAP_CONTOUR       (FN_FORMAT + 184)  /* */
 
-#define FN_TABLE_VERT_NONE          (FN_FORMAT + 185)  /* vertikale Ausrichtung in Tabellenzellen */
-#define FN_TABLE_VERT_CENTER        (FN_FORMAT + 186)  /*   -"-  */
+#define FN_TABLE_VERT_NONE          (FN_FORMAT + 185)  /* vertical alignment in table cells */
+#define FN_TABLE_VERT_CENTER        (FN_FORMAT + 186)  /*  -"-  */
 #define FN_TABLE_VERT_BOTTOM        (FN_FORMAT + 187)  /*  -"-  */
 #define FN_TABLE_SET_VERT_ALIGN     (FN_FORMAT + 188)  /*  -"-  */
-#define FN_TABLE_MODE_FIX           (FN_FORMAT + 189)  /* Tabellenmodus */
+#define FN_TABLE_MODE_FIX           (FN_FORMAT + 189)  /* table mode */
 #define FN_TABLE_MODE_FIX_PROP      (FN_FORMAT + 190)  /*  -"-  */
 #define FN_TABLE_MODE_VARIABLE      (FN_FORMAT + 191)  /*  -"-  */
 #define FN_TABLE_BOX_TEXTDIRECTION  (FN_FORMAT + 192)  /*  text direction of table cells */
 
-#define FN_TABLE_AUTOSUM            (FN_FORMAT + 195)  /* Autosumme*/
-#define FN_SET_CONTROL_HANDLER      (FN_FORMAT + 199)  /* Macro setzen */
+#define FN_TABLE_AUTOSUM            (FN_FORMAT + 195)  /* */
+#define FN_SET_CONTROL_HANDLER      (FN_FORMAT + 199)  /* set macro */
 
-#define FN_IS_IMAGE                  (FN_FORMAT2 + 6)   /* Numerierung : mit Grafik?*/
+#define FN_IS_IMAGE                  (FN_FORMAT2 + 6)   /* numbering: with graphic? */
 
-#define FN_GOTO_NEXT_REGION          (FN_FORMAT2 + 9)   /* Naechsten Bereich anspringen */
-#define FN_GOTO_PREV_REGION          (FN_FORMAT2 + 10)  /* Vorherigen " */
+#define FN_GOTO_NEXT_REGION          (FN_FORMAT2 + 9)   /* */
+#define FN_GOTO_PREV_REGION          (FN_FORMAT2 + 10)  /* */
 
-#define FN_GET_SBXCONTROL            (FN_FORMAT2 + 11)  /* SbxObject rausreichen */
-#define FN_ABSTRACT_NEWDOC           (FN_FORMAT2 + 12)  /* Abstract in neuem Doc */
-#define FN_ABSTRACT_STARIMPRESS      (FN_FORMAT2 + 13)  /* Abstract an StarImpress */
+#define FN_GET_SBXCONTROL            (FN_FORMAT2 + 11)  /* */
+#define FN_ABSTRACT_NEWDOC           (FN_FORMAT2 + 12)  /* abstract in new document */
+#define FN_ABSTRACT_STARIMPRESS      (FN_FORMAT2 + 13)  /* abstract to StarImpress */
 
 #define FN_NAME_SHAPE                (FN_FORMAT2 + 14)  /* Name shapes */
 
 #define FN_TITLE_DESCRIPTION_SHAPE   (FN_FORMAT2 + 15)  /* shape title and description */
 
-#define FN_NUMBER_FORMAT                    (FN_FORMAT2 + 120) /* Boxen/NumberFormatter eistellen */
+#define FN_NUMBER_FORMAT                    (FN_FORMAT2 + 120) /* set Boxen/NumberFormatter */
 #define FN_NUMBER_STANDARD                  (FN_FORMAT2 + 121)
 #define FN_NUMBER_TWODEC                    (FN_FORMAT2 + 123)
 #define FN_NUMBER_SCIENTIFIC                (FN_FORMAT2 + 124)
@@ -653,9 +653,9 @@ included in c-context files, so c++ style stuff will cause problems.
 
 #define FN_FORMAT_LINENUMBER                (FN_FORMAT2 + 144)
 
-#define FN_TABLE_RELATIVE_WIDTH             (FN_FORMAT2 + 147)  /* Tabelle: relative Breite - UNO */
-#define FN_TABLE_WIDTH                      (FN_FORMAT2 + 148)  /* Tabelle: Breite - UNO */
-#define FN_TABLE_IS_RELATIVE_WIDTH          (FN_FORMAT2 + 149)  /* Tabelle: ist Breite relativ?- UNO */
+#define FN_TABLE_RELATIVE_WIDTH             (FN_FORMAT2 + 147)  /* UNO */
+#define FN_TABLE_WIDTH                      (FN_FORMAT2 + 148)  /* UNO */
+#define FN_TABLE_IS_RELATIVE_WIDTH          (FN_FORMAT2 + 149)  /* UNO */
 
 #define FN_INC_INDENT_OFFSET                (FN_FORMAT2 + 150)
 #define FN_DEC_INDENT_OFFSET                (FN_FORMAT2 + 151)
@@ -676,72 +676,72 @@ included in c-context files, so c++ style stuff will cause problems.
     Region: Extras
  --------------------------------------------------------------------*/
 
-#define FN_LINE_NUMBERING_DLG       (FN_EXTRA + 2 )   /* Zeilennumerierung */
-#define FN_HYPHENATE_OPT_DLG        (FN_EXTRA + 5 )   /* Silbentrennung */
-#define FN_ADD_UNKNOWN              (FN_EXTRA + 6 )   /* Woerter lernen */
-#define FN_DICTIONARY_DLG           (FN_EXTRA + 8 )   /* Woerterbuecher */
-#define FN_NUMBERING                (FN_EXTRA + 9 )   /* Nummerierung/Bullets */
-#define FN_NUMBERING_DLG            (FN_EXTRA + 10)   /* Nummerierung/Bullets */
-#define FN_NUMBERING_OUTLINE        (FN_EXTRA + 11)   /* Gliederungsnumerierung */
-#define FN_NUMBERING_OUTLINE_DLG    (FN_EXTRA + 12)   /* Gliederungsnumerierung */
-#define FN_SORTING_DLG              (FN_EXTRA + 14)   /* Sortieren */
-#define FN_CALCULATE                (FN_EXTRA + 15)   /* Berechnen */
-#define FN_GENERATE_TOC_DLG         (FN_EXTRA + 16)   /* Inhaltsverzeichnis */
-#define FN_GENERATE_INDEX_DLG       (FN_EXTRA + 17)   /* Stichwortverzeichnis */
-#define FN_GENERATE_DIR_DLG         (FN_EXTRA + 18)   /* Verzeichnis */
-#define FN_GLOSSARY_DLG             (FN_EXTRA + 20)   /* Textbausteine */
-#define FN_MACRO_CHOOSER            (FN_EXTRA + 21)   /* Makro aufnehmen */
+#define FN_LINE_NUMBERING_DLG       (FN_EXTRA + 2 )   /* */
+#define FN_HYPHENATE_OPT_DLG        (FN_EXTRA + 5 )   /* */
+#define FN_ADD_UNKNOWN              (FN_EXTRA + 6 )   /* learn words */
+#define FN_DICTIONARY_DLG           (FN_EXTRA + 8 )   /* dictionaries */
+#define FN_NUMBERING                (FN_EXTRA + 9 )   /* numbering/bullets*/
+#define FN_NUMBERING_DLG            (FN_EXTRA + 10)   /* numbering/bullets */
+#define FN_NUMBERING_OUTLINE        (FN_EXTRA + 11)   /* */
+#define FN_NUMBERING_OUTLINE_DLG    (FN_EXTRA + 12)   /* */
+#define FN_SORTING_DLG              (FN_EXTRA + 14)   /* */
+#define FN_CALCULATE                (FN_EXTRA + 15)   /* */
+#define FN_GENERATE_TOC_DLG         (FN_EXTRA + 16)   /* table of contents */
+#define FN_GENERATE_INDEX_DLG       (FN_EXTRA + 17)   /* index */
+#define FN_GENERATE_DIR_DLG         (FN_EXTRA + 18)   /* */
+#define FN_GLOSSARY_DLG             (FN_EXTRA + 20)   /* text building blocks */
+#define FN_MACRO_CHOOSER            (FN_EXTRA + 21)   /* record macro */
 
-#define FN_PLAY_MACRO               (FN_EXTRA + 23)   /* Makro abspielen */
-#define FN_LAUNCH_BASIC             (FN_EXTRA + 25)   /* Makro abspielen */
-#define FN_EXPAND_GLOSSARY          (FN_EXTRA + 28)   /* Textbausteine expandieren */
-#define FN_CONFIG_TOOLBOX           (FN_EXTRA + 29)   /* Konfiguration Toolbox */
-#define FN_CONFIG_MENU              (FN_EXTRA + 30)   /* Konfiguration Menu */
-#define FN_CONFIG_KEY               (FN_EXTRA + 31)   /* Konfiguration Tastatur */
-#define FN_CHANGE_PAGENUM           (FN_EXTRA + 34)   /* Seitennummer aendern */
+#define FN_PLAY_MACRO               (FN_EXTRA + 23)   /* run macro */
+#define FN_LAUNCH_BASIC             (FN_EXTRA + 25)   /* run macro */
+#define FN_EXPAND_GLOSSARY          (FN_EXTRA + 28)   /* expand text building blocks */
+#define FN_CONFIG_TOOLBOX           (FN_EXTRA + 29)   /* configure toolbox*/
+#define FN_CONFIG_MENU              (FN_EXTRA + 30)   /* configure menu */
+#define FN_CONFIG_KEY               (FN_EXTRA + 31)   /* configure keyboard */
+#define FN_CHANGE_PAGENUM           (FN_EXTRA + 34)   /* change page numbers*/
 
-#define FN_MACRO_POPUP              (FN_EXTRA + 37)   /* Alle Macrofunktionen */
-#define FN_BULLET                   (FN_EXTRA + 38)   /* Bullet-Liste */
+#define FN_MACRO_POPUP              (FN_EXTRA + 37)   /* all macro functions*/
+#define FN_BULLET                   (FN_EXTRA + 38)   /* bullet list */
 
 //  Region: Glossary
 
 #define FN_AUTO_CORRECT             (FN_EXTRA + 49 )  /* Autocorrect from Basic */
 
-#define FN_UPDATE_TOX               (FN_EXTRA + 53)   /* alle Verzeichnisse aktualisieren */
-#define FN_UPDATE_CUR_TOX           (FN_EXTRA + 54)   /* aktuelles Verzeichnisse aktualisieren */
+#define FN_UPDATE_TOX               (FN_EXTRA + 53)   /* update all indices */
+#define FN_UPDATE_CUR_TOX           (FN_EXTRA + 54)   /* update current index */
 #define FN_REMOVE_CUR_TOX           (FN_EXTRA + 55)  /* remove the current TOX*/
 
-#define FN_NAVIGATION_PI_GOTO_PAGE  (FN_EXTRA + 59 )  /* Seitenanwahl aus Navi-PI */
+#define FN_NAVIGATION_PI_GOTO_PAGE  (FN_EXTRA + 59 )  /* goto page from navigation-PI */
 
 #define FN_LETTER_WIZZARD           (FN_EXTRA + 60 )
 #define FN_FAX_WIZZARD              (FN_EXTRA + 61 )
 #define FN_MEMO_WIZZARD             (FN_EXTRA + 62 )
 #define FN_AGENDA_WIZZARD           (FN_EXTRA + 63 )
 
-#define FN_SET_BASIC_METRIC         (FN_EXTRA + 80) /* Defaultmetrik Basic setzen */
+#define FN_SET_BASIC_METRIC         (FN_EXTRA + 80) /* set default metric Basic */
 
-#define FN_RESERVED_9               (FN_EXTRA + 86)   /* Platzhalter */
-#define FN_RESERVED_8               (FN_EXTRA + 87)   /* Platzhalter */
-#define FN_RESERVED_7               (FN_EXTRA + 88)   /* Platzhalter */
-#define FN_RESERVED_6               (FN_EXTRA + 89)   /* Platzhalter */
-#define FN_RESERVED_5               (FN_EXTRA + 90)   /* Platzhalter */
-#define FN_RESERVED_4               (FN_EXTRA + 91)   /* Platzhalter */
-#define FN_RESERVED_3               (FN_EXTRA + 92)   /* Platzhalter */
-#define FN_RESERVED_2               (FN_EXTRA + 93)   /* Platzhalter */
-#define FN_RESERVED_1               (FN_EXTRA + 94)   /* Platzhalter */
+#define FN_RESERVED_9               (FN_EXTRA + 86)   /* place holder */
+#define FN_RESERVED_8               (FN_EXTRA + 87)   /* place holder */
+#define FN_RESERVED_7               (FN_EXTRA + 88)   /* place holder */
+#define FN_RESERVED_6               (FN_EXTRA + 89)   /* place holder */
+#define FN_RESERVED_5               (FN_EXTRA + 90)   /* place holder */
+#define FN_RESERVED_4               (FN_EXTRA + 91)   /* place holder */
+#define FN_RESERVED_3               (FN_EXTRA + 92)   /* place holder */
+#define FN_RESERVED_2               (FN_EXTRA + 93)   /* place holder */
+#define FN_RESERVED_1               (FN_EXTRA + 94)   /* place holder */
 
 #define FN_COLLECTION_GROUP_CNT     (FN_EXTRA + 96)
 #define FN_COLLECTION_GROUP_IDX     (FN_EXTRA + 97)
-#define FN_COLL_TYPE                (FN_EXTRA + 98)   /* Typ fuer GlobalDoc-Collection*/
+#define FN_COLL_TYPE                (FN_EXTRA + 98)   /* type for GlobalDoc-Collection*/
 #define FN_COLL_ADD                 (FN_EXTRA + 99)
 
-#define FN_COLL_TITLE               (FN_EXTRA2 + 1)  /*  Bereichsname oder Index-Title */
-#define FN_SHADOWCURSOR             (FN_EXTRA2 + 4)  /* Shadow Cursor ein/ausschalten */
+#define FN_COLL_TITLE               (FN_EXTRA2 + 1)  /*  area name or index title */
+#define FN_SHADOWCURSOR             (FN_EXTRA2 + 4)  /* enable/disable Shadow Cursor */
 
-#define FN_VIEW_IN_FRAME            (FN_EXTRA2 + 8)  /* die View befindet sich in einem FrameDoc*/
+#define FN_VIEW_IN_FRAME            (FN_EXTRA2 + 8)  /* the view is in a FrameDoc */
 
-#define FN_UNO_PARA_STYLE           (FN_EXTRA2 + 9)  // jetzt kommen diverse UNO-Ids fuer die
-#define FN_UNO_PAGE_STYLE           (FN_EXTRA2 + 10)  // PropertyMap
+#define FN_UNO_PARA_STYLE           (FN_EXTRA2 + 9)  // starting here are UNI-Ids for the PropertyMap listed
+#define FN_UNO_PAGE_STYLE           (FN_EXTRA2 + 10)
 
 #define FN_UNO_FRAME_STYLE_NAME     (FN_EXTRA2 + 12)
 #define FN_UNO_NUM_START_VALUE      (FN_EXTRA2 + 13)
@@ -895,13 +895,13 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_DELETE_PARA              (FN_SELECTION + 33) /* DeleteToEndOfPara */
 #define FN_DELETE_BACK_PARA         (FN_SELECTION + 34) /* DeleteToStartOfPara */
 #define FN_DELETE_WHOLE_LINE        (FN_SELECTION + 35) /* DeleteLine ??? */
-#define FN_SET_INS_MODE             (FN_SELECTION + 36) /* Einfuegemodus / Overwrite */
+#define FN_SET_INS_MODE             (FN_SELECTION + 36) /* Insertmode / Overwrite */
 #define FN_PAGEUP                   (FN_SELECTION + 37) /* PageUpWithCursor */
 #define FN_PAGEDOWN                 (FN_SELECTION + 38) /* PageDownWithCursor */
 #define FN_SET_ADD_MODE             (FN_SELECTION + 39) /* Selektionsmodus */
 #define FN_SET_EXT_MODE             (FN_SELECTION + 40) /* Selektionsmodus */
 #define FN_ESCAPE                   (FN_SELECTION + 41) /* Normal */
-#define FN_SHIFT_BACKSPACE          (FN_SELECTION + 42) /* wie Backspace */
+#define FN_SHIFT_BACKSPACE          (FN_SELECTION + 42) /* like Backspace */
 #define FN_SELECT_WORD              (FN_SELECTION + 43) /* select word*/
 
 #define FN_GOTO_NEXT_OBJ            (FN_SELECTION + 44)   /* Goto next object */
@@ -912,22 +912,22 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_NEXT_TABLE               (FN_SELECTION + 49) /* to the next table */
 #define FN_PREV_TABLE               (FN_SELECTION + 50) /* to the previous table */
 
-#define FN_START_OF_NEXT_COLUMN     (FN_SELECTION + 51) /* zum Anfang der naechsten Spalte */
-#define FN_END_OF_NEXT_COLUMN       (FN_SELECTION + 52) /* zum Ende der naechsten Spalte */
-#define FN_START_OF_PREV_COLUMN     (FN_SELECTION + 53) /* zum Anfang der vorhergehenden Spalte */
-#define FN_END_OF_PREV_COLUMN       (FN_SELECTION + 54) /* zum Ende der vorhergehenden Spalte */
+#define FN_START_OF_NEXT_COLUMN     (FN_SELECTION + 51) /* to the start of the next column */
+#define FN_END_OF_NEXT_COLUMN       (FN_SELECTION + 52) /* to the end of the next column */
+#define FN_START_OF_PREV_COLUMN     (FN_SELECTION + 53) /* to the start of the previous column */
+#define FN_END_OF_PREV_COLUMN       (FN_SELECTION + 54) /* to the end of the previous column */
 
-#define FN_FOOTNOTE_TO_ANCHOR       (FN_SELECTION + 55) /* aus der Fussnote zum Anchor */
-#define FN_NEXT_FOOTNOTE            (FN_SELECTION + 56) /* zur naechsten Fussnote */
-#define FN_PREV_FOOTNOTE            (FN_SELECTION + 57) /* zur vorhergehenden Fussnote */
+#define FN_FOOTNOTE_TO_ANCHOR       (FN_SELECTION + 55) /* from the footnote to the anchor */
+#define FN_NEXT_FOOTNOTE            (FN_SELECTION + 56) /* to the next footnote */
+#define FN_PREV_FOOTNOTE            (FN_SELECTION + 57) /* to the previous footnote */
 
-#define FN_CNTNT_TO_NEXT_FRAME      (FN_SELECTION + 58) /* aus dem Inhalt zum naechsten Rahmen */
-#define FN_FRAME_TO_ANCHOR          (FN_SELECTION + 59) /* vom Rahmen zum Anker */
+#define FN_CNTNT_TO_NEXT_FRAME      (FN_SELECTION + 58) /* from content to the next frame */
+#define FN_FRAME_TO_ANCHOR          (FN_SELECTION + 59) /* from frame to the anchor */
 
-#define FN_TO_HEADER                (FN_SELECTION + 60) /* Toggle zwischen Content und Kopfzeile */
-#define FN_TO_FOOTER                (FN_SELECTION + 61) /* Toggle zwischen Content und Fusszeile */
+#define FN_TO_HEADER                (FN_SELECTION + 60) /* toggle between content and header */
+#define FN_TO_FOOTER                (FN_SELECTION + 61) /* toggle between content and footer */
 
-#define FN_IDX_MARK_TO_IDX          (FN_SELECTION + 62) /* von der Verzeichnismarkierung zum Verzeichnis */
+#define FN_IDX_MARK_TO_IDX          (FN_SELECTION + 62) /* from the index mark to the index */
 
 #define FN_TO_FOOTNOTE_AREA         (FN_SELECTION + 63) /* jump into the appropriate footnote area */
 
@@ -939,12 +939,12 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_GOTO_NEXT_MARK           (FN_SELECTION + 76)   /* Go to next marker */
 #define FN_GOTO_PREV_MARK           (FN_SELECTION + 77)   /* Go to previous marker */
 
-#define FN_NEXT_TOXMARK             (FN_SELECTION + 83)   /* zur naechsten Verz. Markierung */
-#define FN_PREV_TOXMARK             (FN_SELECTION + 84)   /* zur vorherigen Verz. Markierung */
-#define FN_NEXT_TBLFML              (FN_SELECTION + 85)   /* zur naechsten Tabellenformel */
-#define FN_PREV_TBLFML              (FN_SELECTION + 86)   /* zur vorherigen Tabellenformel */
-#define FN_NEXT_TBLFML_ERR          (FN_SELECTION + 87)   /* zur naechsten fehl. Tabellenformel */
-#define FN_PREV_TBLFML_ERR          (FN_SELECTION + 88)   /* zur vorherigen fehl. Tabellenformel */
+#define FN_NEXT_TOXMARK             (FN_SELECTION + 83)   /* to the next index mark */
+#define FN_PREV_TOXMARK             (FN_SELECTION + 84)   /* to the previous index mark */
+#define FN_NEXT_TBLFML              (FN_SELECTION + 85)   /* to the next table formula */
+#define FN_PREV_TBLFML              (FN_SELECTION + 86)   /* to the previous table formula */
+#define FN_NEXT_TBLFML_ERR          (FN_SELECTION + 87)   /* to the next broken table formula */
+#define FN_PREV_TBLFML_ERR          (FN_SELECTION + 88)   /* to the previous broken table formula */
 
 #define FN_READONLY_SELECTION_MODE  (FN_SELECTION + 89)   /* switches text selection mode in readonly documents*/
 #define FN_SELECTION_MODE_DEFAULT   (FN_SELECTION + 90)   /* use default selection mode - not block mode */
@@ -955,19 +955,18 @@ included in c-context files, so c++ style stuff will cause problems.
  --------------------------------------------------------------------*/
 
 #define FN_IS_MODIFIED              (FN_QUERY +16)      /* Was the document modified? */
-#define FN_RESET_MODIFIED           (FN_QUERY +17)      /* Geaendert-Flag zuruecksetzen */
+#define FN_RESET_MODIFIED           (FN_QUERY +17)      /* Reset modified flag */
 
 #define FN_GET_DOC_INFO             (FN_QUERY +22)      /* Wert Dokumentinfo erfragen */
 #define FN_GET_ERRNO                (FN_QUERY +26)      /* Get error number */
-#define FN_GET_DOCMAN_PATH          (FN_QUERY +27)      /* Pfad zu einer Gruppe im Docmgr erfragen */
+#define FN_GET_DOCMAN_PATH          (FN_QUERY +27)      /* Get path to a group in Docmgr */
 
 #define FN_TXTATR_INET              (FN_QUERY +29)      /* INet-Attribut */
 #define FN_EXECUTE_DRAG             (FN_QUERY +30)      /* Start drag and drop */
 
-#define FN_GET_PRINT_AREA           (FN_QUERY +32)      /* Attribut fuer druckbaren Seitenbereich besorgen */
+#define FN_GET_PRINT_AREA           (FN_QUERY +32)      /* Get attribute for printable area of page */
 
-#define FN_GET_PARAGRAPH            (FN_QUERY +48)      /*  Paragraph-Object von der Textshell
-                                                            an die View weiterreichen*/
+#define FN_GET_PARAGRAPH            (FN_QUERY +48)      /* Get Paragraph-Object from the text shell to the view */
 
 #define FN_DB_FORM_LETTER               (FN_QUERY2 + 0)     /* form letter */
 #define FN_DB_INSERT_CONTENT            (FN_QUERY2 + 1)     /* merge data into fields*/
@@ -1069,34 +1068,34 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_PARAM_GRF_CLIENTMAP          (FN_PARAM+74) /* ClientMap */
 #define FN_PARAM_GRF_SERVERMAP          (FN_PARAM+75) /* ServerMap */
 #define FN_PARAM_GRF_TARGETFRAME        (FN_PARAM+76) /* TargetFrame */
-#define FN_INET_FIELD_MACRO             (FN_PARAM+77) /* Id fuer URL-Feld-Macros*/
+#define FN_INET_FIELD_MACRO             (FN_PARAM+77) /* Id for URL-Field-Macros*/
 
 #define FN_PARAM_PRINTER                (FN_PARAM+78) /* Printer */
 #define FN_PARAM_STDFONTS               (FN_PARAM+79) /* ConfigItem Standardfonts */
 
 #define FN_PARAM_WRTSHELL               (FN_PARAM2) /* SwWrtShell */
 
-#define FN_COND_COLL                    (FN_PARAM2+1) /* Item fuer bed. Vorlagen */
-#define FN_PARAM_SELECTION              (FN_PARAM2+2) /* selektiertes Wort fuer Format/Zeichen/Hyperlink */
+#define FN_COND_COLL                    (FN_PARAM2+1) /* Item for conditional templates */
+#define FN_PARAM_SELECTION              (FN_PARAM2+2) /* selected word for format/character/hyperlink */
 
 #define FN_PARAM_ACT_NUMBER             (FN_PARAM2+3) /* PointerItem die aktuelle NumRule */
-#define FN_PARAM_CHILD_LEVELS           (FN_PARAM2+4) /* Werden Child-Levels benutzt ?*/
+#define FN_PARAM_CHILD_LEVELS           (FN_PARAM2+4) /* are child levels used? */
 
-#define FN_PARAM_NUM_PRESET             (FN_PARAM2+5) /* vorgewaehlte Numerierung*/
+#define FN_PARAM_NUM_PRESET             (FN_PARAM2+5) /* predefined numbering */
 
 #define FN_PARAM_HEIGHT                 (FN_PARAM2+6) /* Param for height */
-#define FN_PARAM_DIST                   (FN_PARAM2+7) /* und Breite, wg. metrischer Umwandlung */
+#define FN_PARAM_DIST                   (FN_PARAM2+7) /* and width, for metric transformation */
 
-#define FN_PARAM_SHADOWCURSOR           (FN_PARAM2+8) /* Fuer ShadowCursor Optionen */
+#define FN_PARAM_SHADOWCURSOR           (FN_PARAM2+8) /* for ShadowCursor options */
 
-#define FN_PARAM_ACT_NUMLEVEL           (FN_PARAM2+9) /* BYTE-Item mit aktuellen NumLevel */
+#define FN_PARAM_ACT_NUMLEVEL           (FN_PARAM2+9) /* BYTE-Item with current NumLevel */
 
 #define FN_PARAM_9                      (FN_PARAM2+10)
 #define FN_PARAM_10                     (FN_PARAM2+11)
 
 #define FN_TEXT_RANGE                   (FN_PARAM2+12) /* TextRange Property*/
 
-#define FN_PARAM_CRSR_IN_PROTECTED      (FN_PARAM2+13) /* Cursor in geschuetzten Bereichen*/
+#define FN_PARAM_CRSR_IN_PROTECTED      (FN_PARAM2+13) /* Cursor in protected areas */
 #define FN_PARAM_TOX_TYPE               (FN_PARAM2+14) /* TOX type in tox dialog*/
 #define FN_PARAM_LINK_DISPLAY_NAME      (FN_PARAM2+15) /* LinkDisplayName property*/
 #define FN_PARAM_NUM_LEVEL              (FN_PARAM2+16) /* rtf filter*/
@@ -1209,7 +1208,7 @@ included in c-context files, so c++ style stuff will cause problems.
 #define SID_SW_DOCMAN_PATH                              (SID_OFASLOTS_START +   6)
 #endif
 
-// defines for Event-Zuweisung per Macro
+// defines for Event-assignments per Macro
 #define MAC_EVENT_MOUSEOVER         0x01            //
 #define MAC_EVENT_MOUSECLICK        0x02            //
 #define MAC_EVENT_MOUSEOUT          0x03            //

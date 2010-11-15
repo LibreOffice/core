@@ -41,7 +41,7 @@ class LocaleDataWrapper;
 class SwFieldType;
 class SwDoc;
 
-#define TBLSZ 47                // sollte Primzahl sein, wegen HashTable
+#define TBLSZ 47                // should be a prime, because of hash table
 
 const sal_Unicode cListDelim    = '|';
 
@@ -107,22 +107,20 @@ extern const sal_Char __FAR_DATA sCalc_Date[];
 enum SwCalcError
 {
     CALC_NOERR=0,
-    CALC_SYNTAX,        //  Syntax Fehler
-    CALC_ZERODIV,       //  Division durch Null
-    CALC_BRACK,         //  Fehlerhafte Klammerung
-    CALC_POWERR,        //  Ueberlauf in Quadratfunktion
-    CALC_VARNFND,       //  Variable wurde nicht gefunden
-    CALC_OVERFLOW,      //  Ueberlauf
-    CALC_WRONGTIME      //  falsches Zeitformat
+    CALC_SYNTAX,        //  syntax error
+    CALC_ZERODIV,       //  division by zero
+    CALC_BRACK,         //  faulty brackets
+    CALC_POWERR,        //  overflow in power function
+    CALC_VARNFND,       //  variable was not found
+    CALC_OVERFLOW,      //  overflow
+    CALC_WRONGTIME      //  wrong time format
 };
 
 class SwSbxValue : public SbxValue
 {
     bool bVoid;
 public:
-    // immer auf eine Zahl defaulten, damit auch gerechnet wird.
-    // Ansonsten wird daraus ein SbxEMPTY und damit ist nichts
-    // anzufangen.
+    // always default to a number. otherwise it will become a SbxEMPTY
     SwSbxValue( long n = 0 ) : bVoid(false)  { PutLong( n ); }
     SwSbxValue( const double& rD ) : bVoid(false) { PutDouble( rD ); }
     SwSbxValue( const SwSbxValue& rVal ) :
@@ -133,9 +131,7 @@ public:
     virtual ~SwSbxValue();
 
 
-    // Strings sonderbehandeln
     BOOL GetBool() const;
-    // Strings sonderbehandeln BOOLs sonderbehandeln
     double GetDouble() const;
     SwSbxValue& MakeDouble();
 
@@ -144,7 +140,7 @@ public:
 };
 
 /******************************************************************************
- *          Calculate HashTables fuer VarTable und Operations
+ *          Calculate HashTables for VarTable und Operations
  ******************************************************************************/
 struct SwHash
 {
@@ -168,7 +164,7 @@ SwHash* Find( const String& rSrch, SwHash** ppTable,
 
 void DeleteHashTable( SwHash** ppTable, USHORT nTblSize );
 
-// falls _CalcOp != 0, dann ist das ein gueltiger Operator
+// if _CalcOp != 0, this is a valid operator
 struct _CalcOp;
 _CalcOp* FindOperator( const String& rSearch );
 

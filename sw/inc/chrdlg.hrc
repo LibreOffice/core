@@ -51,7 +51,7 @@
 #define CHRDLG_ACT_END  DLG_DRAWPARA
 
 #if CHRDLG_ACT_END > RC_CHRDLG_END
-#error Resource-Id Ueberlauf in #file, #line
+#error Resource-Id overflow in #file, #line
 #endif
 
 #define DLG_SWDROPCAPS            (RC_CHRDLG_BEGIN + 11)

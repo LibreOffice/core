@@ -178,7 +178,7 @@ public:
     virtual String GetDescription() const;
 };
 
-// inlines
+// --- inlines -----------------------------------------------------------
 inline const String&    SwAuthEntry::GetAuthorField(ToxAuthorityField ePos)const
 {
     DBG_ASSERT(AUTH_FIELD_END > ePos, "wrong index");

@@ -27,23 +27,19 @@
  ************************************************************************/
 
 /*************************************************************
-#* Service-Klassen
+#* service classes
  *************************************************************/
 
 /*
-#* Aendert sich ein Attribut in einem Format, so muss diese
-#* Aenderung an alle abhaengigen Formate und ueber sie an
-#* alle betroffenen Nodes propagiert werden. Dabei muss
-#* festgestellt werden, ob die Aenderung einen Effekt haben
-#* kann, oder ob das geaenderte Attribut von dem abhaengigen
-#* Format ueberdefiniert wird (so dass ohnehin der
-#* Attributwert des abhaengigen Formates den geaenderten
-#* Wert verdeckt). Weiterhin kann der betroffene Node
-#* feststellen, ob er von dem geaenderten Attribut Gebrauch
-#* macht (Beispiel: Linienabstand fuer Unterstreichung wurde
-#* geaendert, das Attribut Unterstreichung wurde aber nicht
-#* verwendet). So wird bei Aenderungen der minimale Aufwand
-#* zum Reformatieren erkannt.
+ * When an attribute in a format is changed, this change has to be propagated
+ * to all dependent formats and over them to all concerned nodes.
+ * In doing so it has to be decided whether the change can have an effect or
+ * whether the dependent format redefines the changed attribute (such that the
+ * attribute value of the dependent format occludes the changed value).
+ * Furthermore, the concerned node can decide whether it makes use of the
+ * changed attribute (for example: line distance for underlining was changed,
+ * but the underlining attribute was not used). This way, the minimal effort
+ * for reformatting is identified.
  */
 #ifndef _CALBCK_HXX
 #define _CALBCK_HXX
@@ -65,15 +61,17 @@ class SW_DLLPUBLIC SwClient
     friend class SwModify;
     friend class SwClientIter;
 
-    SwClient *pLeft, *pRight;           // for the AVL-Sorting
-    BOOL bModifyLocked : 1;             // wird in SwModify::Modify benutzt,
-                                        // eigentlich ein Member des SwModify
-                                        // aber aus Platzgruenden hier.
-    BOOL bInModify  : 1;                // ist in einem Modify. (Debug!!!)
-    BOOL bInDocDTOR : 1;                // Doc wird zerstoert, nicht "abmelden"
-    BOOL bInCache   : 1;                // Ist im BorderAttrCache des Layout,
-                                        // Traegt sich dann im Modify aus!
-    BOOL bInSwFntCache : 1;             // Ist im SwFont-Cache der Formatierung
+    SwClient *pLeft, *pRight;           // for AVL sorting
+    BOOL bModifyLocked : 1;             // used in SwModify::Modify,
+                                        // is really a member of SwModify
+                                        // but here for lack of space
+
+    BOOL bInModify  : 1;                // is in a modify. (Debug!!!)
+    BOOL bInDocDTOR : 1;                // Doc gets destroyed,
+                                        // do not "unsubscribe"
+    BOOL bInCache   : 1;                // is in BorderAttrCache of the layout,
+                                        // unsubscribes itself then in Modify!
+    BOOL bInSwFntCache : 1;             // is in SwFont cache of the formatting
 
 protected:
     SwModify *pRegisteredIn;
@@ -88,9 +86,8 @@ public:
     virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
     const SwModify* GetRegisteredIn() const { return pRegisteredIn; }
 
-    //rtti, abgeleitete moegens gleichtun oder nicht. Wenn sie es gleichtun
-    //kann ueber die Abhaengigkeitsliste eines Modify typsicher gecastet
-    //werden.
+    //rtti, derived classes may do likewise or not. When they do, it can be
+    //casted typesafely via the dependency list of a Modify
     TYPEINFO();
 
     void LockModify()                   { bModifyLocked = TRUE;  }
@@ -119,7 +116,7 @@ inline SwClient::SwClient() :
 // SwModify
 // ----------
 
-// Klasse hat eine doppelt Verkette Liste fuer die Abhaengigen.
+// class has a doubly linked list for dependencies
 
 class SW_DLLPUBLIC SwModify: public SwClient
 {
@@ -170,9 +167,9 @@ protected:
 // ----------
 
 /*
- * Sehr sinnvolle Klasse, wenn ein Objekt von mehreren Objekten
- * abhaengig ist. Diese sollte fuer jede Abhaengigkeit ein Objekt
- * der Klasse SwDepend als Member haben.
+ * Very useful class when an object depends on multiple objects.
+ * This should have an object of the class SwDepend as member for each
+ * dependency.
  */
 class SW_DLLPUBLIC SwDepend: public SwClient
 {
@@ -197,18 +194,18 @@ private:
 
 class SwClientIter
 {
-    friend SwClient* SwModify::_Remove(SwClient *); // fuer Ptr-Korrektur
-    friend void SwModify::Add(SwClient *);          // nur fuer ASSERT !
+    friend SwClient* SwModify::_Remove(SwClient *); // for ptr correction
+    friend void SwModify::Add(SwClient *);          // only for ASSERT !
 
     SwModify const& rRoot;
     SwClient *pAkt, *pDelNext;
-    // fuers Updaten der aller Iteratoren beim Einfuegen/Loeschen von
-    // Clients, wenn der Iterator gerade draufsteht.
+    // for updating of all iterators when inserting/deleting clients, while the
+    // iterator points on it
     SwClientIter *pNxtIter;
 
     SwClient* mpWatchClient;    // if set, SwModify::_Remove checks if this client is removed
 
-    TypeId aSrchId;             // fuer First/Next - suche diesen Type
+    TypeId aSrchId;             // for First/Next - look for this type
 
 public:
     SW_DLLPUBLIC SwClientIter( SwModify const& );
@@ -217,16 +214,16 @@ public:
     const SwModify& GetModify() const       { return rRoot; }
 
 #ifndef CFRONT
-    SwClient* operator++(int);  // zum Naechsten
-    SwClient* operator--(int);  // zum Vorherigen
+    SwClient* operator++(int);
+    SwClient* operator--(int);
 #endif
-    SwClient* operator++();     // zum Naechsten
-    SwClient* operator--();     // zum Vorherigen
+    SwClient* operator++();
+    SwClient* operator--();
 
-    SwClient* GoStart();        // zum Anfang
-    SwClient* GoEnd();          // zum Ende
+    SwClient* GoStart();
+    SwClient* GoEnd();
 
-    inline SwClient* GoRoot();      // wieder ab Root (==Start) anfangen
+    inline SwClient* GoRoot();      // restart from root
 
     SwClient* operator()() const
         { return pDelNext == pAkt ? pAkt : pDelNext; }
@@ -240,7 +237,7 @@ public:
     void SetWatchClient( SwClient* pWatch ) { mpWatchClient = pWatch; }
 };
 
-inline SwClient* SwClientIter::GoRoot()     // wieder ab Root anfangen
+inline SwClient* SwClientIter::GoRoot()
 {
     pAkt = rRoot.pRoot;
     return (pDelNext = pAkt);

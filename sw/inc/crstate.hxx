@@ -36,21 +36,21 @@
 
 enum SwFillMode
 {
-    FILL_TAB,       // default, Auffuellen mit Tabulatoren
-    FILL_SPACE,     // ... mit Tabulatoren und Spaces
-    FILL_MARGIN,    // nur links, zentriert, rechts Ausrichten
-    FILL_INDENT     // durch linken Absatzeinzug
+    FILL_TAB,       // default, fill with tabs
+    FILL_SPACE,     // fill with spaces and tabs
+    FILL_MARGIN,    // only align left, center, right
+    FILL_INDENT     // by left paragraph indention
 };
 
 struct SwFillCrsrPos
 {
-    SwRect aCrsr;           // Position und Groesse des Shadowcursors
-    USHORT nParaCnt;        // Anzahl der einzufuegenden Absaetze
-    USHORT nTabCnt;         // Anzahl der Tabs bzw. Groesse des Einzugs
-    USHORT nSpaceCnt;       // Anzahl der einzufuegenden Leerzeichen
-    USHORT nColumnCnt;      // Anzahl der notwendigen Spaltenumbrueche
-    sal_Int16 eOrient;      // Absatzausrichtung
-    SwFillMode eMode;       // Gewuenschte Auffuellregel
+    SwRect aCrsr;           // position and size of the ShadowCursor
+    USHORT nParaCnt;        // number of paragraphs to insert
+    USHORT nTabCnt;         // number of tabs respectively size of indentation
+    USHORT nSpaceCnt;       // number of spaces to insert
+    USHORT nColumnCnt;      // number of necessary column breaks
+    sal_Int16 eOrient;      // paragraph alignment
+    SwFillMode eMode;       // desired fill-up rule
     SwFillCrsrPos( SwFillMode eMd = FILL_TAB ) :
         nParaCnt( 0 ), nTabCnt( 0 ), nSpaceCnt( 0 ), nColumnCnt( 0 ),
         eOrient( com::sun::star::text::HoriOrientation::NONE ), eMode( eMd )
@@ -120,36 +120,35 @@ struct SwSpecialPos
     {}
 };
 
-// CrsrTravelling-Staties (fuer GetCrsrOfst)
+// CrsrTravelling-States (for GetCrsrOfst)
 enum CrsrMoveState
 {
     MV_NONE,            // default
     MV_UPDOWN,          // Crsr Up/Down
-    MV_RIGHTMARGIN,     // an rechten Rand
-    MV_LEFTMARGIN,      // an linken Rand
-    MV_SETONLYTEXT,     // mit dem Cursr nur im Text bleiben
-    MV_TBLSEL           // nicht in wiederholte Headlines
+    MV_RIGHTMARGIN,     // at right margin
+    MV_LEFTMARGIN,      // at left margin
+    MV_SETONLYTEXT,     // stay with the cursor inside text
+    MV_TBLSEL           // not in repeated headlines
 };
 
-// struct fuer spaetere Erweiterungen
+// struct for later extensions
 struct SwCrsrMoveState
 {
-    SwFillCrsrPos   *pFill;     // fuer das automatische Auffuellen mit Tabs etc.
+    SwFillCrsrPos   *pFill;     // for automatic filling with tabs etc
     Sw2LinesPos     *p2Lines;   // for selections inside/around 2line portions
     SwSpecialPos*   pSpecialPos; // for positions inside fields
-    Point aRealHeight;          // enthaelt dann die Position/Hoehe des Cursors
+    Point aRealHeight;          // contains then the position/height of the cursor
     CrsrMoveState eState;
     BYTE            nCursorBidiLevel;
     BOOL bStop          :1;
-    BOOL bRealHeight    :1;     // Soll die reale Hoehe berechnet werden?
-    BOOL bFieldInfo     :1;     // Sollen Felder erkannt werden?
-    BOOL bPosCorr       :1;     // Point musste korrigiert werden
-    BOOL bFtnNoInfo     :1;     // Fussnotennumerierung erkannt
-    BOOL bExactOnly     :1;     // GetCrsrOfst nur nach Exakten Treffern
-                                // suchen lassen, sprich niemals in das
-                                // GetCntntPos laufen.
-    BOOL bFillRet       :1;     // wird nur im FillModus temp. genutzt
-    BOOL bSetInReadOnly :1;     // ReadOnlyBereiche duerfen betreten werden
+    BOOL bRealHeight    :1;     // should the real height be calculated?
+    BOOL bFieldInfo     :1;     // should be fields recognized?
+    BOOL bPosCorr       :1;     // Point had to be corrected
+    BOOL bFtnNoInfo     :1;     // recognized footnote numbering
+    BOOL bExactOnly     :1;     // let GetCrsrOfst look for exact matches only,
+                                // i.e. never let it run into GetCntntPos
+    BOOL bFillRet       :1;     // only used temporary in FillMode
+    BOOL bSetInReadOnly :1;     // ReadOnly areas may be entered
     BOOL bRealWidth     :1;     // Calculation of the width required
     BOOL b2Lines        :1;     // Check 2line portions and fill p2Lines
     BOOL bNoScroll      :1;     // No scrolling of undersized textframes
