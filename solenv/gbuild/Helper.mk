@@ -97,7 +97,7 @@ gb_Helper__deliverprefix += rm -rf $(1) &&
 endif
 
 define gb_Helper_deliver
-$(call gb_Helper__deliverprefix,$(2)) $(gb_Helper_GNUCOPY) -f $(1) $(2) && touch -r $(1) $(2)
+$(call gb_Helper__deliverprefix,$(2)) $(gb_Helper_GNUCOPY) -f $(1) $(2)
 endef
 
 define gb_Helper_register_repository
