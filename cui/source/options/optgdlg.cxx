@@ -136,7 +136,7 @@ namespace
             if ( rDesktopEnvironment.equalsIgnoreAsciiCaseAscii( "gnome" ) )
             {
                 #ifdef ENABLE_GTK
-                return ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.GtkFilePicker" );
+                return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.dialogs.GtkFilePicker") );
                 #else
                 return rtl::OUString();
                 #endif
@@ -144,7 +144,7 @@ namespace
             else if ( rDesktopEnvironment.equalsIgnoreAsciiCaseAscii( "kde4" ) )
             {
                 #ifdef ENABLE_KDE4
-                return ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.KDE4FilePicker" );
+                return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.dialogs.KDE4FilePicker") );
                 #else
                 return rtl::OUString();
                 #endif
@@ -152,15 +152,15 @@ namespace
             else if ( rDesktopEnvironment.equalsIgnoreAsciiCaseAscii( "kde" ) )
             {
                 #ifdef ENABLE_KDE
-                return ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.KDEFilePicker" );
+                return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.dialogs.KDEFilePicker") );
                 #else
                 return rtl::OUString();
                 #endif
             }
             #if defined WNT
-            return ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.SystemFilePicker" );
+            return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.dialogs.SystemFilePicker") );
             #elif (defined MACOSX && defined QUARTZ)
-            return ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.AquaFilePicker" );
+            return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.dialogs.AquaFilePicker") );
             #else
             return rtl::OUString();
             #endif
@@ -843,14 +843,14 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet ) :
     {
         ::rtl::OUString aAutoStr( aIconStyleLB.GetEntry( 0 ) );
 
-        aAutoStr += ::rtl::OUString::createFromAscii( " (" );
+        aAutoStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" (") );
 
         ULONG nAutoStyle = aStyleSettings.GetAutoSymbolsStyle();
         if ( aIconStyleItemId[nAutoStyle] )
             aAutoStr += aIconStyleLB.GetEntry( aIconStyleItemId[nAutoStyle] );
 
         aIconStyleLB.RemoveEntry( 0 );
-        aIconStyleLB.InsertEntry( aAutoStr += ::rtl::OUString::createFromAscii( ")" ), 0 );
+        aIconStyleLB.InsertEntry( aAutoStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")") ), 0 );
         // separate auto and other icon themes
         aIconStyleLB.SetSeparatorPos( 0 );
     }

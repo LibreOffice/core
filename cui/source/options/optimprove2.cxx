@@ -144,11 +144,11 @@ IMPL_LINK( SvxImprovementOptionsPage, HandleShowData, PushButton*, EMPTYARG )
         ::rtl::OUString sLogFile( m_sLogPath );
         sLogFile += C2S("/Current.csv");
         uno::Sequence< beans::PropertyValue > aArgs(3);
-        aArgs[0].Name = ::rtl::OUString::createFromAscii("FilterName");
-        aArgs[0].Value = uno::makeAny(::rtl::OUString::createFromAscii("Text - txt - csv (StarCalc)"));
-        aArgs[1].Name = ::rtl::OUString::createFromAscii("FilterOptions");
-        aArgs[1].Value = uno::makeAny(::rtl::OUString::createFromAscii("44,34,12,1,"));
-        aArgs[2].Name = ::rtl::OUString::createFromAscii("ReadOnly");
+        aArgs[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FilterName") );
+        aArgs[0].Value = uno::makeAny(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Text - txt - csv (StarCalc)") ) );
+        aArgs[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FilterOptions") );
+        aArgs[1].Value = uno::makeAny(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("44,34,12,1,") ) );
+        aArgs[2].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReadOnly") );
         aArgs[2].Value = uno::makeAny(true);
 
         uno::Reference< lang::XComponent > xDoc = ::comphelper::SynchronousDispatch::dispatch(

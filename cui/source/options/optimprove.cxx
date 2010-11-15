@@ -173,22 +173,22 @@ IMPL_LINK( SvxImprovementDialog, HandleOK, OKButton*, EMPTYARG )
 {
     uno::Reference< lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
     uno::Reference< com::sun::star::oooimprovement::XCoreController > core_c(
-            xSMGR->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.oooimprovement.CoreController")),
+            xSMGR->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.oooimprovement.CoreController") ) ),
             uno::UNO_QUERY);
     if(core_c.is())
     {
         ::comphelper::ConfigurationHelper::writeDirectKey(
             xSMGR,
-            ::rtl::OUString::createFromAscii("/org.openoffice.Office.OOoImprovement.Settings"),
-            ::rtl::OUString::createFromAscii("Participation"),
-            ::rtl::OUString::createFromAscii("ShowedInvitation"),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.OOoImprovement.Settings") ),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Participation") ),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ShowedInvitation") ),
             uno::makeAny( true ),
             ::comphelper::ConfigurationHelper::E_STANDARD );
         ::comphelper::ConfigurationHelper::writeDirectKey(
             xSMGR,
-            ::rtl::OUString::createFromAscii("/org.openoffice.Office.OOoImprovement.Settings"),
-            ::rtl::OUString::createFromAscii("Participation"),
-            ::rtl::OUString::createFromAscii("InvitationAccepted"),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.OOoImprovement.Settings") ),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Participation") ),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("InvitationAccepted") ),
             uno::makeAny( m_pPage->IsYesChecked() ),
             ::comphelper::ConfigurationHelper::E_STANDARD );
         // TODO: refactor

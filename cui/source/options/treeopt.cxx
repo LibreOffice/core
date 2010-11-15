@@ -1427,26 +1427,26 @@ BOOL EnableSSO( void )
     ::rtl::Bootstrap theBootstrap( theIniFile );
 
     rtl::OUString theOfflineValue;
-    rtl::OUString theDefaultOfflineValue = rtl::OUString::createFromAscii( "false" );
-    theBootstrap.getFrom( rtl::OUString::createFromAscii( "CFG_Offline" ),
+    rtl::OUString theDefaultOfflineValue (RTL_CONSTASCII_USTRINGPARAM("false") );
+    theBootstrap.getFrom( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CFG_Offline") ),
                           theOfflineValue,
                           theDefaultOfflineValue );
 
     rtl::OUString theServerTypeValue;
-    theBootstrap.getFrom( rtl::OUString::createFromAscii( "CFG_ServerType" ),
+    theBootstrap.getFrom( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CFG_ServerType") ),
                           theServerTypeValue );
 
     rtl::OUString theBackendServiceTypeValue;
-    theBootstrap.getFrom( rtl::OUString::createFromAscii( "CFG_BackendService" ),
+    theBootstrap.getFrom( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CFG_BackendService") ),
                           theBackendServiceTypeValue );
 
     BOOL bSSOEnabled =
         ( theOfflineValue == theDefaultOfflineValue                     &&
           ( theServerTypeValue.getLength() == 0 ||
-          theServerTypeValue == rtl::OUString::createFromAscii( "uno" ) ) &&
+          theServerTypeValue == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("uno") ) ) &&
           theBackendServiceTypeValue ==
-            rtl::OUString::createFromAscii(
-                "com.sun.star.comp.configuration.backend.LdapSingleBackend" ) );
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "com.sun.star.comp.configuration.backend.LdapSingleBackend") ) );
     if ( bSSOEnabled && GetSSOCreator() == 0 )
     {
         bSSOEnabled = FALSE;
@@ -1466,7 +1466,7 @@ CreateTabPage GetSSOCreator( void )
         if( aModule.loadRelative(
                 &thisModule, theModuleName, SAL_LOADMODULE_DEFAULT ) )
         {
-            rtl::OUString theSymbolName( rtl::OUString::createFromAscii( "CreateSSOTabPage" ) );
+            rtl::OUString theSymbolName( RTL_CONSTASCII_USTRINGPARAM("CreateSSOTabPage" ) );
             theSymbol = reinterpret_cast<CreateTabPage>(aModule.getFunctionSymbol( theSymbolName ));
         }
     }
@@ -1713,8 +1713,8 @@ void OfaTreeOptionsDialog::ApplyLanguageOptions(const SfxItemSet& rSet)
     }
     Reference< XMultiServiceFactory >  xMgr( ::comphelper::getProcessServiceFactory() );
     Reference< XPropertySet >  xProp(
-            xMgr->createInstance( ::rtl::OUString::createFromAscii(
-                    "com.sun.star.linguistic2.LinguProperties") ),
+            xMgr->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "com.sun.star.linguistic2.LinguProperties") ) ),
             UNO_QUERY );
     if ( SFX_ITEM_SET == rSet.GetItemState(SID_ATTR_HYPHENREGION, sal_False, &pItem ) )
     {
