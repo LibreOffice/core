@@ -41,7 +41,8 @@
 ScCbWarningBox::ScCbWarningBox( Window* pParent, const String& rMsgStr, bool bDefYes ) :
     WarningBox( pParent, WB_YES_NO | (bDefYes ? WB_DEF_YES : WB_DEF_NO), rMsgStr )
 {
-    SetDefaultCheckBoxText();
+    SetCheckBoxState(true);
+    SetCheckBoxText(rtl::OUString::createFromAscii("Warn me every time."));
 }
 
 sal_Int16 ScCbWarningBox::Execute()
@@ -50,7 +51,7 @@ sal_Int16 ScCbWarningBox::Execute()
     if( IsDialogEnabled() )
     {
         nRet = WarningBox::Execute();
-        if( GetCheckBoxState() )
+        if (!GetCheckBoxState())
             DisableDialog();
     }
     return nRet;
