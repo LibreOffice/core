@@ -201,6 +201,11 @@ public:
     void exportAxes( const com::sun::star::uno::Reference< com::sun::star::chart::XDiagram > & xDiagram,
                                     const com::sun::star::uno::Reference< com::sun::star::chart2::XDiagram > & xNewDiagram,
                                     sal_Bool bExportContent );
+    void exportAxis( enum XMLTokenEnum eDimension, enum XMLTokenEnum eAxisName,
+                    const Reference< beans::XPropertySet > xAxisProps, const Reference< beans::XPropertySet > xTitleProps, const OUString& rCategoriesRanges,
+                    const Reference< beans::XPropertySet > xMajorGridProps, const Reference< beans::XPropertySet > xMinorGridProps, bool bExportContent );
+    void exportGrid( const Reference< beans::XPropertySet > xGridProperties, bool bMajor, bool bExportContent );
+    void exportAxisTitle( const Reference< beans::XPropertySet > xTitleProps, bool bExportContent );
 
     void exportSeries(
         const com::sun::star::uno::Reference< com::sun::star::chart2::XDiagram > & xNewDiagram,
@@ -1760,6 +1765,55 @@ void SchXMLExportHelper_Impl::exportTable()
     OSL_ASSERT( bHasOwnData || (aRowDescriptions_RangeIter == aRowDescriptions_RangeEnd) );
 }
 
+namespace
+{
+
+Reference< chart2::XCoordinateSystem > lcl_getCooSys( const Reference< chart2::XDiagram > & xNewDiagram )
+{
+    Reference< chart2::XCoordinateSystem > xCooSys;
+    Reference< chart2::XCoordinateSystemContainer > xCooSysCnt( xNewDiagram, uno::UNO_QUERY );
+    if(xCooSysCnt.is())
+    {
+        Sequence< Reference< chart2::XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems() );
+        if(aCooSysSeq.getLength()>0)
+            xCooSys = aCooSysSeq[0];
+    }
+    return xCooSys;
+}
+
+Reference< chart2::XAxis > lcl_getAxis( const Reference< chart2::XCoordinateSystem >& xCooSys,
+        enum XMLTokenEnum eDimension, bool bPrimary=true )
+{
+    Reference< chart2::XAxis > xNewAxis;
+    try
+    {
+        if( xCooSys.is() )
+        {
+            sal_Int32 nDimensionIndex=0;
+            switch( eDimension )
+            {
+            case XML_X:
+                nDimensionIndex=0;
+                break;
+            case XML_Y:
+                nDimensionIndex=1;
+                break;
+            case XML_Z:
+                nDimensionIndex=2;
+                break;
+            }
+
+            xNewAxis = xCooSys->getAxisByDimension( nDimensionIndex, bPrimary ? 0 : 1 );
+        }
+    }
+    catch( const uno::Exception & )
+    {
+    }
+    return xNewAxis;
+}
+
+}
+
 void SchXMLExportHelper_Impl::exportPlotArea(
     Reference< chart::XDiagram > xDiagram,
     Reference< chart2::XDiagram > xNewDiagram,
@@ -1775,8 +1829,6 @@ void SchXMLExportHelper_Impl::exportPlotArea(
     Reference< beans::XPropertySet > xPropSet;
     std::vector< XMLPropertyState > aPropertyStates;
 
-    OUString aASName;
-    sal_Bool bHasTwoYAxes = sal_False;
     sal_Bool bIs3DChart = sal_False;
     drawing::HomogenMatrix aTransMatrix;
 
@@ -1884,16 +1936,6 @@ void SchXMLExportHelper_Impl::exportPlotArea(
         if( xPropSet.is())
         {
             Any aAny;
-            try
-            {
-                aAny = xPropSet->getPropertyValue(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM( "HasSecondaryYAxis" )));
-                aAny >>= bHasTwoYAxes;
-            }
-            catch( beans::UnknownPropertyException & )
-            {
-                DBG_ERROR( "Property HasSecondaryYAxis not found in Diagram" );
-            }
 
             // 3d attributes
             try
@@ -1944,7 +1986,8 @@ void SchXMLExportHelper_Impl::exportPlotArea(
 
     // series elements
     // ---------------
-    exportSeries( xNewDiagram, rPageSize, bExportContent, bHasTwoYAxes );
+    Reference< chart2::XAxis > xSecondYAxis = lcl_getAxis( lcl_getCooSys( xNewDiagram ), XML_Y, false );
+    exportSeries( xNewDiagram, rPageSize, bExportContent, xSecondYAxis.is() );
 
     // stock-chart elements
     OUString sChartType ( xDiagram->getDiagramType());
@@ -2106,6 +2149,110 @@ void SchXMLExportHelper_Impl::exportCoordinateRegion( const uno::Reference< char
     SvXMLElementExport aCoordinateRegion( mrExport, XML_NAMESPACE_CHART_EXT, XML_COORDINATE_REGION, sal_True, sal_True );//#i100778# todo: change to chart namespace in future - dependent on fileformat
 }
 
+void SchXMLExportHelper_Impl::exportAxisTitle( const Reference< beans::XPropertySet > xTitleProps, bool bExportContent )
+{
+    if( !xTitleProps.is() )
+        return;
+    std::vector< XMLPropertyState > aPropertyStates = mxExpPropMapper->Filter( xTitleProps );
+    if( bExportContent )
+    {
+        OUString aText;
+        Any aAny( xTitleProps->getPropertyValue(
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "String" ))));
+        aAny >>= aText;
+
+        Reference< drawing::XShape > xShape( xTitleProps, uno::UNO_QUERY );
+        if( xShape.is())
+            addPosition( xShape );
+
+        AddAutoStyleAttribute( aPropertyStates );
+        SvXMLElementExport aTitle( mrExport, XML_NAMESPACE_CHART, XML_TITLE, sal_True, sal_True );
+
+        // paragraph containing title
+        exportText( aText );
+    }
+    else
+    {
+        CollectAutoStyle( aPropertyStates );
+    }
+    aPropertyStates.clear();
+}
+
+void SchXMLExportHelper_Impl::exportGrid( const Reference< beans::XPropertySet > xGridProperties, bool bMajor, bool bExportContent )
+{
+    if( !xGridProperties.is() )
+        return;
+    std::vector< XMLPropertyState > aPropertyStates = mxExpPropMapper->Filter( xGridProperties );
+    if( bExportContent )
+    {
+        AddAutoStyleAttribute( aPropertyStates );
+        mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_CLASS, bMajor ? XML_MAJOR : XML_MINOR );
+        SvXMLElementExport aGrid( mrExport, XML_NAMESPACE_CHART, XML_GRID, sal_True, sal_True );
+    }
+    else
+    {
+        CollectAutoStyle( aPropertyStates );
+    }
+    aPropertyStates.clear();
+}
+
+void SchXMLExportHelper_Impl::exportAxis(
+    enum XMLTokenEnum eDimension,
+    enum XMLTokenEnum eAxisName,
+    const Reference< beans::XPropertySet > xAxisProps,
+    const Reference< beans::XPropertySet > xTitleProps,
+    const OUString& rCategoriesRange,
+    const Reference< beans::XPropertySet > xMajorGridProps,
+    const Reference< beans::XPropertySet > xMinorGridProps,
+    bool bExportContent )
+{
+    static const OUString sNumFormat( OUString::createFromAscii( "NumberFormat" ));
+    std::vector< XMLPropertyState > aPropertyStates;
+    SvXMLElementExport* pAxis = NULL;
+
+    // get property states for autostyles
+    if( xAxisProps.is() && mxExpPropMapper.is() )
+    {
+        lcl_exportNumberFormat( sNumFormat, xAxisProps, mrExport );
+        aPropertyStates = mxExpPropMapper->Filter( xAxisProps );
+    }
+
+    if( bExportContent )
+    {
+        mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_DIMENSION, eDimension );
+        mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_NAME, eAxisName );
+        AddAutoStyleAttribute( aPropertyStates ); // write style name
+        // open axis element
+        pAxis = new SvXMLElementExport( mrExport, XML_NAMESPACE_CHART, XML_AXIS, sal_True, sal_True );
+    }
+    else
+    {
+        CollectAutoStyle( aPropertyStates );
+    }
+    aPropertyStates.clear();
+
+    // axis-title
+    exportAxisTitle( xTitleProps , bExportContent );
+
+    // categories if we have a categories chart
+    if( bExportContent && rCategoriesRange.getLength() )
+    {
+        mrExport.AddAttribute( XML_NAMESPACE_TABLE, XML_CELL_RANGE_ADDRESS, rCategoriesRange );
+        SvXMLElementExport aCategories( mrExport, XML_NAMESPACE_CHART, XML_CATEGORIES, sal_True, sal_True );
+    }
+
+    // grid
+    exportGrid( xMajorGridProps, true, bExportContent );
+    exportGrid( xMinorGridProps, false, bExportContent );
+
+    if( pAxis )
+    {
+        //close axis element
+        delete pAxis;
+        pAxis = NULL;
+    }
+}
+
 void SchXMLExportHelper_Impl::exportAxes(
     const Reference< chart::XDiagram > & xDiagram,
     const Reference< chart2::XDiagram > & xNewDiagram,
@@ -2114,13 +2261,6 @@ void SchXMLExportHelper_Impl::exportAxes(
     DBG_ASSERT( xDiagram.is(), "Invalid XDiagram as parameter" );
     if( ! xDiagram.is())
         return;
-
-    // variables for autostyles
-    const OUString sNumFormat( OUString::createFromAscii( "NumberFormat" ));
-    Reference< beans::XPropertySet > xPropSet;
-    std::vector< XMLPropertyState > aPropertyStates;
-
-    OUString aASName;
 
     // get some properties from document first
     sal_Bool bHasXAxis = sal_False,
@@ -2139,7 +2279,6 @@ void SchXMLExportHelper_Impl::exportAxes(
         bHasYAxisMinorGrid = sal_False,
         bHasZAxisMajorGrid = sal_False,
         bHasZAxisMinorGrid = sal_False;
-    sal_Bool bIs3DChart = sal_False;
 
     // get multiple properties using XMultiPropertySet
     MultiPropertySetHandler aDiagramProperties (xDiagram);
@@ -2205,506 +2344,98 @@ void SchXMLExportHelper_Impl::exportAxes(
     aDiagramProperties.Add (
         OUString (RTL_CONSTASCII_USTRINGPARAM ("HasZAxisHelpGrid")), bHasZAxisMinorGrid);
 
-    aDiagramProperties.Add(
-        OUString (RTL_CONSTASCII_USTRINGPARAM ("Dim3D")), bIs3DChart);
-
     if ( ! aDiagramProperties.GetProperties ())
     {
         DBG_WARNING ("Required properties not found in Chart diagram");
     }
 
-    SvXMLElementExport* pAxis = NULL;
+    Reference< chart2::XCoordinateSystem > xCooSys( lcl_getCooSys(xNewDiagram) );
+
+    // write an axis element also if the axis itself is not visible, but a grid or a title
+
+    Reference< beans::XPropertySet > xAxisProps;
+    Reference< beans::XPropertySet > xTitleProps;
+    OUString aCategoriesRange;
+    Reference< beans::XPropertySet > xMajorGridProps;
+    Reference< beans::XPropertySet > xMinorGridProps;
 
     // x axis
     // -------
-
-    // write axis element also if the axis itself is not visible, but a grid or
-    // title
-    Reference< chart::XAxisXSupplier > xAxisXSupp( xDiagram, uno::UNO_QUERY );
-    if( xAxisXSupp.is())
+    Reference< ::com::sun::star::chart2::XAxis > xNewAxis = lcl_getAxis( xCooSys, XML_X );
+    if( xNewAxis.is() )
     {
-        bool bHasAxisProperties = false;
-        // get property states for autostyles
-        if( mxExpPropMapper.is())
+        Reference< chart::XAxisXSupplier > xAxisXSupp( xDiagram, uno::UNO_QUERY );
+        xAxisProps = xAxisXSupp.is() ? xAxisXSupp->getXAxis() : 0;
+        xTitleProps = (bHasXAxisTitle && xAxisXSupp.is()) ? Reference< beans::XPropertySet >( xAxisXSupp->getXAxisTitle(), uno::UNO_QUERY ) : 0;
+        xMajorGridProps = (bHasXAxisMajorGrid && xAxisXSupp.is()) ? Reference< beans::XPropertySet >( xAxisXSupp->getXMainGrid(), uno::UNO_QUERY ) : 0;
+        xMinorGridProps = (bHasXAxisMinorGrid && xAxisXSupp.is()) ? Reference< beans::XPropertySet >( xAxisXSupp->getXHelpGrid(), uno::UNO_QUERY ) : 0;
+        if( mbHasCategoryLabels && bExportContent )
         {
-            xPropSet = xAxisXSupp->getXAxis();
-            if( xPropSet.is())
+            Reference< chart2::data::XLabeledDataSequence > xCategories( lcl_getCategories( xNewDiagram ) );
+            if( xCategories.is() )
             {
-                bHasAxisProperties = true;
-                lcl_exportNumberFormat( sNumFormat, xPropSet, mrExport );
-                aPropertyStates = mxExpPropMapper->Filter( xPropSet );
+                Reference< chart2::data::XDataSequence > xValues( xCategories->getValues() );
+                if( xValues.is() )
+                {
+                    Reference< chart2::XChartDocument > xNewDoc( mrExport.GetModel(), uno::UNO_QUERY );
+                    maCategoriesRange = xValues->getSourceRangeRepresentation();
+                    aCategoriesRange = lcl_ConvertRange( maCategoriesRange, xNewDoc );
+                }
             }
         }
-
-        if( bHasXAxis ||
-            bHasXAxisTitle || bHasXAxisMajorGrid || bHasXAxisMinorGrid ||
-            mbHasCategoryLabels || bHasAxisProperties )
-        {
-            if( bExportContent )
-            {
-                mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_DIMENSION, XML_X );
-                mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_NAME, XML_PRIMARY_X );
-
-                // write style name
-                AddAutoStyleAttribute( aPropertyStates );
-
-                // element
-                pAxis = new SvXMLElementExport( mrExport, XML_NAMESPACE_CHART, XML_AXIS, sal_True, sal_True );
-            }
-            else    // autostyles
-            {
-                CollectAutoStyle( aPropertyStates );
-            }
-            aPropertyStates.clear();
-
-            // axis-title
-            if( bHasXAxisTitle )
-            {
-                Reference< beans::XPropertySet > xTitleProp( xAxisXSupp->getXAxisTitle(), uno::UNO_QUERY );
-                if( xTitleProp.is())
-                {
-                    aPropertyStates = mxExpPropMapper->Filter( xTitleProp );
-                    if( bExportContent )
-                    {
-                        OUString aText;
-                        Any aAny( xTitleProp->getPropertyValue(
-                            OUString( RTL_CONSTASCII_USTRINGPARAM( "String" ))));
-                        aAny >>= aText;
-
-                        Reference< drawing::XShape > xShape( xTitleProp, uno::UNO_QUERY );
-                        if( xShape.is())
-                            addPosition( xShape );
-
-                        AddAutoStyleAttribute( aPropertyStates );
-                        SvXMLElementExport aTitle( mrExport, XML_NAMESPACE_CHART, XML_TITLE, sal_True, sal_True );
-
-                        // paragraph containing title
-                        exportText( aText );
-                    }
-                    else
-                    {
-                        CollectAutoStyle( aPropertyStates );
-                    }
-                    aPropertyStates.clear();
-                }
-            }
-
-            // categories if we have a categories chart
-            if( bExportContent &&
-                mbHasCategoryLabels )
-            {
-                OUString aCategoriesRange;
-                // fill msString with cell-range-address of categories
-                // export own table references
-                if( xNewDiagram.is())
-                {
-                    Reference< chart2::data::XLabeledDataSequence > xCategories( lcl_getCategories( xNewDiagram ) );
-                    if( xCategories.is() )
-                    {
-                        Reference< chart2::data::XDataSequence > xValues( xCategories->getValues() );
-                        if( xValues.is())
-                        {
-                            Reference< chart2::XChartDocument > xNewDoc( mrExport.GetModel(), uno::UNO_QUERY );
-                            maCategoriesRange = xValues->getSourceRangeRepresentation();
-                            aCategoriesRange = lcl_ConvertRange( maCategoriesRange, xNewDoc );
-                        }
-                    }
-                }
-
-                if( aCategoriesRange.getLength())
-                    mrExport.AddAttribute( XML_NAMESPACE_TABLE, XML_CELL_RANGE_ADDRESS, aCategoriesRange );
-                SvXMLElementExport aCategories( mrExport, XML_NAMESPACE_CHART, XML_CATEGORIES, sal_True, sal_True );
-            }
-
-            // grid
-            Reference< beans::XPropertySet > xMajorGrid( xAxisXSupp->getXMainGrid(), uno::UNO_QUERY );
-            if( bHasXAxisMajorGrid && xMajorGrid.is())
-            {
-                aPropertyStates = mxExpPropMapper->Filter( xMajorGrid );
-                if( bExportContent )
-                {
-                    AddAutoStyleAttribute( aPropertyStates );
-                    mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_CLASS, XML_MAJOR );
-                    SvXMLElementExport aGrid( mrExport, XML_NAMESPACE_CHART, XML_GRID, sal_True, sal_True );
-                }
-                else
-                {
-                    CollectAutoStyle( aPropertyStates );
-                }
-                aPropertyStates.clear();
-            }
-            Reference< beans::XPropertySet > xMinorGrid( xAxisXSupp->getXHelpGrid(), uno::UNO_QUERY );
-            if( bHasXAxisMinorGrid && xMinorGrid.is())
-            {
-                aPropertyStates = mxExpPropMapper->Filter( xMinorGrid );
-                if( bExportContent )
-                {
-                    AddAutoStyleAttribute( aPropertyStates );
-                    mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_CLASS, XML_MINOR );
-                    SvXMLElementExport aGrid( mrExport, XML_NAMESPACE_CHART, XML_GRID, sal_True, sal_True );
-                }
-                else
-                {
-                    CollectAutoStyle( aPropertyStates );
-                }
-                aPropertyStates.clear();
-            }
-            if( pAxis )
-            {
-                delete pAxis;
-                pAxis = NULL;
-            }
-        }
+        exportAxis( XML_X, XML_PRIMARY_X, xAxisProps, xTitleProps, aCategoriesRange, xMajorGridProps, xMinorGridProps, bExportContent );
+        aCategoriesRange = OUString();
     }
 
     // secondary x axis
-    if( bHasSecondaryXAxis || bHasSecondaryXAxisTitle )
+    // -------
+    Reference< chart::XSecondAxisTitleSupplier > xSecondTitleSupp( xDiagram, uno::UNO_QUERY );
+    xNewAxis = lcl_getAxis( xCooSys, XML_X, false );
+    if( xNewAxis.is() )
     {
         Reference< chart::XTwoAxisXSupplier > xAxisTwoXSupp( xDiagram, uno::UNO_QUERY );
-        if( xAxisTwoXSupp.is())
-        {
-            // get property states for autostyles
-            if( mxExpPropMapper.is())
-            {
-                xPropSet = xAxisTwoXSupp->getSecondaryXAxis();
-                lcl_exportNumberFormat( sNumFormat, xPropSet, mrExport );
-                if( xPropSet.is())
-                    aPropertyStates = mxExpPropMapper->Filter( xPropSet );
-            }
-            if( bExportContent )
-            {
-                mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_DIMENSION, XML_X );
-                mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_NAME, XML_SECONDARY_X );
-                AddAutoStyleAttribute( aPropertyStates );
-                pAxis = new SvXMLElementExport( mrExport, XML_NAMESPACE_CHART, XML_AXIS, sal_True, sal_True );
-            }
-            else    // autostyles
-            {
-                CollectAutoStyle( aPropertyStates );
-            }
-            aPropertyStates.clear();
-
-            if( bHasSecondaryXAxisTitle )
-            {
-                Reference< chart::XSecondAxisTitleSupplier > xAxisSupp( xDiagram, uno::UNO_QUERY );
-                Reference< beans::XPropertySet > xTitleProp( xAxisSupp->getSecondXAxisTitle(), uno::UNO_QUERY );
-                if( xTitleProp.is())
-                {
-                    aPropertyStates = mxExpPropMapper->Filter( xTitleProp );
-                    if( bExportContent )
-                    {
-                        OUString aText;
-                        Any aAny( xTitleProp->getPropertyValue(
-                            OUString( RTL_CONSTASCII_USTRINGPARAM( "String" ))));
-                        aAny >>= aText;
-
-                        Reference< drawing::XShape > xShape( xTitleProp, uno::UNO_QUERY );
-                        if( xShape.is())
-                            addPosition( xShape );
-
-                        AddAutoStyleAttribute( aPropertyStates );
-                        SvXMLElementExport aTitle( mrExport, XML_NAMESPACE_CHART, XML_TITLE, sal_True, sal_True );
-
-                        exportText( aText );
-                    }
-                    else
-                    {
-                        CollectAutoStyle( aPropertyStates );
-                    }
-                    aPropertyStates.clear();
-                }
-            }
-
-            if( pAxis )
-            {
-                delete pAxis;
-                pAxis = NULL;
-            }
-        }
+        xAxisProps = xAxisTwoXSupp.is() ? xAxisTwoXSupp->getSecondaryXAxis() : 0;
+        xTitleProps = ( bHasSecondaryXAxisTitle && xSecondTitleSupp.is() ) ? Reference< beans::XPropertySet >( xSecondTitleSupp->getSecondXAxisTitle(), uno::UNO_QUERY ) : 0;
+        xMajorGridProps = xMinorGridProps = 0;
+        exportAxis( XML_X, XML_SECONDARY_X, xAxisProps, xTitleProps, aCategoriesRange, xMajorGridProps, xMinorGridProps, bExportContent );
     }
 
     // y axis
     // -------
-
-    // write axis element also if the axis itself is not visible, but a grid or
-    // title
-    Reference< chart::XAxisYSupplier > xAxisYSupp( xDiagram, uno::UNO_QUERY );
-    if( xAxisYSupp.is())
+    xNewAxis = lcl_getAxis( xCooSys, XML_Y );
+    if( xNewAxis.is() )
     {
-        bool bHasAxisProperties = false;
-        // get property states for autostyles
-        if( mxExpPropMapper.is())
-        {
-            xPropSet = xAxisYSupp->getYAxis();
-            if( xPropSet.is())
-            {
-                bHasAxisProperties = true;
-                lcl_exportNumberFormat( sNumFormat, xPropSet, mrExport );
-                aPropertyStates = mxExpPropMapper->Filter( xPropSet );
-            }
-        }
-
-        if( bHasYAxis ||
-            bHasYAxisTitle || bHasYAxisMajorGrid || bHasYAxisMinorGrid || bHasAxisProperties )
-        {
-            if( bExportContent )
-            {
-                mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_DIMENSION, XML_Y );
-                mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_NAME, XML_PRIMARY_Y );
-                AddAutoStyleAttribute( aPropertyStates );
-                pAxis = new SvXMLElementExport( mrExport, XML_NAMESPACE_CHART, XML_AXIS, sal_True, sal_True );
-            }
-            else
-            {
-                CollectAutoStyle( aPropertyStates );
-            }
-            aPropertyStates.clear();
-
-            // axis-title
-            if( bHasYAxisTitle )
-            {
-                Reference< beans::XPropertySet > xTitleProp( xAxisYSupp->getYAxisTitle(), uno::UNO_QUERY );
-                if( xTitleProp.is())
-                {
-                    aPropertyStates = mxExpPropMapper->Filter( xTitleProp );
-                    if( bExportContent )
-                    {
-                        OUString aText;
-                        Any aAny( xTitleProp->getPropertyValue(
-                            OUString( RTL_CONSTASCII_USTRINGPARAM( "String" ))));
-                        aAny >>= aText;
-
-                        Reference< drawing::XShape > xShape( xTitleProp, uno::UNO_QUERY );
-                        if( xShape.is())
-                            addPosition( xShape );
-
-                        AddAutoStyleAttribute( aPropertyStates );
-                        SvXMLElementExport aTitle( mrExport, XML_NAMESPACE_CHART, XML_TITLE, sal_True, sal_True );
-
-                        // paragraph containing title
-                        exportText( aText );
-                    }
-                    else
-                    {
-                        CollectAutoStyle( aPropertyStates );
-                    }
-                    aPropertyStates.clear();
-                }
-            }
-
-            // grid
-            Reference< beans::XPropertySet > xMajorGrid( xAxisYSupp->getYMainGrid(), uno::UNO_QUERY );
-            if( bHasYAxisMajorGrid && xMajorGrid.is())
-            {
-                aPropertyStates = mxExpPropMapper->Filter( xMajorGrid );
-
-                if( bExportContent )
-                {
-                    AddAutoStyleAttribute( aPropertyStates );
-                    mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_CLASS, XML_MAJOR );
-                    SvXMLElementExport aGrid( mrExport, XML_NAMESPACE_CHART, XML_GRID, sal_True, sal_True );
-                }
-                else
-                {
-                    CollectAutoStyle( aPropertyStates );
-                }
-                aPropertyStates.clear();
-            }
-            // minor grid
-            Reference< beans::XPropertySet > xMinorGrid( xAxisYSupp->getYHelpGrid(), uno::UNO_QUERY );
-            if( bHasYAxisMinorGrid && xMinorGrid.is())
-            {
-                aPropertyStates = mxExpPropMapper->Filter( xMinorGrid );
-
-                if( bExportContent )
-                {
-                    AddAutoStyleAttribute( aPropertyStates );
-                    mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_CLASS, XML_MINOR );
-                    SvXMLElementExport aGrid( mrExport, XML_NAMESPACE_CHART, XML_GRID, sal_True, sal_True );
-                }
-                else
-                {
-                    CollectAutoStyle( aPropertyStates );
-                }
-                aPropertyStates.clear();
-            }
-            if( pAxis )
-            {
-                delete pAxis;
-                pAxis = NULL;
-            }
-        }
+        Reference< chart::XAxisYSupplier > xAxisYSupp( xDiagram, uno::UNO_QUERY );
+        xAxisProps = xAxisYSupp.is() ? xAxisYSupp->getYAxis() : 0;
+        xTitleProps = (bHasYAxisTitle && xAxisYSupp.is()) ? Reference< beans::XPropertySet >( xAxisYSupp->getYAxisTitle(), uno::UNO_QUERY ) : 0;
+        xMajorGridProps = (bHasYAxisMajorGrid && xAxisYSupp.is()) ? Reference< beans::XPropertySet >( xAxisYSupp->getYMainGrid(), uno::UNO_QUERY ) : 0;
+        xMinorGridProps = (bHasYAxisMinorGrid && xAxisYSupp.is()) ? Reference< beans::XPropertySet >( xAxisYSupp->getYHelpGrid(), uno::UNO_QUERY ) : 0;
+        exportAxis( XML_Y, XML_PRIMARY_Y, xAxisProps, xTitleProps, aCategoriesRange, xMajorGridProps, xMinorGridProps, bExportContent );
     }
 
-    if( bHasSecondaryYAxis || bHasSecondaryYAxisTitle )
+    // secondary y axis
+    // -------
+    xNewAxis = lcl_getAxis( xCooSys, XML_Y, false );
+    if( xNewAxis.is() )
     {
         Reference< chart::XTwoAxisYSupplier > xAxisTwoYSupp( xDiagram, uno::UNO_QUERY );
-        if( xAxisTwoYSupp.is())
-        {
-            // get property states for autostyles
-            if( mxExpPropMapper.is())
-            {
-                xPropSet = xAxisTwoYSupp->getSecondaryYAxis();
-                lcl_exportNumberFormat( sNumFormat, xPropSet, mrExport );
-                if( xPropSet.is())
-                    aPropertyStates = mxExpPropMapper->Filter( xPropSet );
-            }
-            if( bExportContent )
-            {
-                mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_DIMENSION, XML_Y );
-                mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_NAME, XML_SECONDARY_Y );
-                AddAutoStyleAttribute( aPropertyStates );
-                pAxis = new SvXMLElementExport( mrExport, XML_NAMESPACE_CHART, XML_AXIS, sal_True, sal_True );
-            }
-            else    // autostyles
-            {
-                CollectAutoStyle( aPropertyStates );
-            }
-            aPropertyStates.clear();
-            if( bHasSecondaryYAxisTitle )
-            {
-                Reference< chart::XSecondAxisTitleSupplier > xAxisSupp( xDiagram, uno::UNO_QUERY );
-                Reference< beans::XPropertySet > xTitleProp( xAxisSupp->getSecondYAxisTitle(), uno::UNO_QUERY );
-                if( xTitleProp.is())
-                {
-                    aPropertyStates = mxExpPropMapper->Filter( xTitleProp );
-                    if( bExportContent )
-                    {
-                        OUString aText;
-                        Any aAny( xTitleProp->getPropertyValue(
-                            OUString( RTL_CONSTASCII_USTRINGPARAM( "String" ))));
-                        aAny >>= aText;
-
-                        Reference< drawing::XShape > xShape( xTitleProp, uno::UNO_QUERY );
-                        if( xShape.is())
-                            addPosition( xShape );
-
-                        AddAutoStyleAttribute( aPropertyStates );
-                        SvXMLElementExport aTitle( mrExport, XML_NAMESPACE_CHART, XML_TITLE, sal_True, sal_True );
-
-                        exportText( aText );
-                    }
-                    else
-                    {
-                        CollectAutoStyle( aPropertyStates );
-                    }
-                    aPropertyStates.clear();
-                }
-            }
-
-            if( pAxis )
-            {
-                delete pAxis;
-                pAxis = NULL;
-            }
-        }
+        xAxisProps = xAxisTwoYSupp.is() ? xAxisTwoYSupp->getSecondaryYAxis() : 0;
+        xTitleProps = ( bHasSecondaryYAxisTitle && xSecondTitleSupp.is() ) ? Reference< beans::XPropertySet >( xSecondTitleSupp->getSecondYAxisTitle(), uno::UNO_QUERY ) : 0;
+        xMajorGridProps = xMinorGridProps = 0;
+        exportAxis( XML_Y, XML_SECONDARY_Y, xAxisProps, xTitleProps, aCategoriesRange, xMajorGridProps, xMinorGridProps, bExportContent );
     }
 
     // z axis
     // -------
-
-    if( bHasZAxis &&
-        bIs3DChart )
+    xNewAxis = lcl_getAxis( xCooSys, XML_Z );
+    if( xNewAxis.is() )
     {
         Reference< chart::XAxisZSupplier > xAxisZSupp( xDiagram, uno::UNO_QUERY );
-        if( xAxisZSupp.is())
-        {
-            // get property states for autostyles
-            if( mxExpPropMapper.is())
-            {
-                xPropSet = xAxisZSupp->getZAxis();
-                lcl_exportNumberFormat( sNumFormat, xPropSet, mrExport );
-                if( xPropSet.is())
-                    aPropertyStates = mxExpPropMapper->Filter( xPropSet );
-            }
-            if( bExportContent )
-            {
-                mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_DIMENSION, XML_Z );
-                mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_NAME, XML_PRIMARY_Z );
-
-                AddAutoStyleAttribute( aPropertyStates );
-                pAxis = new SvXMLElementExport( mrExport, XML_NAMESPACE_CHART, XML_AXIS, sal_True, sal_True );
-            }
-            else
-            {
-                CollectAutoStyle( aPropertyStates );
-            }
-            aPropertyStates.clear();
-
-            // axis-title
-            if( bHasZAxisTitle )
-            {
-                Reference< beans::XPropertySet > xTitleProp( xAxisZSupp->getZAxisTitle(), uno::UNO_QUERY );
-                if( xTitleProp.is())
-                {
-                    aPropertyStates = mxExpPropMapper->Filter( xTitleProp );
-                    if( bExportContent )
-                    {
-                        OUString aText;
-                        Any aAny( xTitleProp->getPropertyValue(
-                            OUString( RTL_CONSTASCII_USTRINGPARAM( "String" ))));
-                        aAny >>= aText;
-
-                        Reference< drawing::XShape > xShape( xTitleProp, uno::UNO_QUERY );
-                        if( xShape.is())
-                            addPosition( xShape );
-
-                        AddAutoStyleAttribute( aPropertyStates );
-                        SvXMLElementExport aTitle( mrExport, XML_NAMESPACE_CHART, XML_TITLE, sal_True, sal_True );
-
-                        // paragraph containing title
-                        exportText( aText );
-                    }
-                    else
-                    {
-                        CollectAutoStyle( aPropertyStates );
-                    }
-                    aPropertyStates.clear();
-                }
-            }
-
-            // grid
-            Reference< beans::XPropertySet > xMajorGrid( xAxisZSupp->getZMainGrid(), uno::UNO_QUERY );
-            if( bHasZAxisMajorGrid && xMajorGrid.is())
-            {
-                aPropertyStates = mxExpPropMapper->Filter( xMajorGrid );
-
-                if( bExportContent )
-                {
-                    AddAutoStyleAttribute( aPropertyStates );
-                    mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_CLASS, XML_MAJOR );
-                    SvXMLElementExport aGrid( mrExport, XML_NAMESPACE_CHART, XML_GRID, sal_True, sal_True );
-                }
-                else
-                {
-                    CollectAutoStyle( aPropertyStates );
-                }
-                aPropertyStates.clear();
-            }
-            // minor grid
-            Reference< beans::XPropertySet > xMinorGrid( xAxisZSupp->getZHelpGrid(), uno::UNO_QUERY );
-            if( bHasZAxisMinorGrid && xMinorGrid.is())
-            {
-                aPropertyStates = mxExpPropMapper->Filter( xMinorGrid );
-
-                if( bExportContent )
-                {
-                    AddAutoStyleAttribute( aPropertyStates );
-                    mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_CLASS, XML_MINOR );
-                    SvXMLElementExport aGrid( mrExport, XML_NAMESPACE_CHART, XML_GRID, sal_True, sal_True );
-                }
-                else
-                {
-                    CollectAutoStyle( aPropertyStates );
-                }
-                aPropertyStates.clear();
-            }
-        }
-        if( pAxis )
-        {
-            delete pAxis;
-            pAxis = NULL;
-        }
+        xAxisProps = xAxisZSupp.is() ? xAxisZSupp->getZAxis() : 0;
+        xTitleProps = (bHasZAxisTitle && xAxisZSupp.is()) ? Reference< beans::XPropertySet >( xAxisZSupp->getZAxisTitle(), uno::UNO_QUERY ) : 0;
+        xMajorGridProps = (bHasZAxisMajorGrid && xAxisZSupp.is()) ? Reference< beans::XPropertySet >( xAxisZSupp->getZMainGrid(), uno::UNO_QUERY ) : 0;
+        xMinorGridProps = (bHasZAxisMinorGrid && xAxisZSupp.is()) ? Reference< beans::XPropertySet >( xAxisZSupp->getZHelpGrid(), uno::UNO_QUERY ) : 0;
+        exportAxis( XML_Z, XML_PRIMARY_Z, xAxisProps, xTitleProps, aCategoriesRange, xMajorGridProps, xMinorGridProps, bExportContent );
     }
 }
 
