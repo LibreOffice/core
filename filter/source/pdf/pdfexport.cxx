@@ -282,14 +282,14 @@ void PDFExportStreamDoc::write( const Reference< XOutputStream >& xStream )
     Reference< com::sun::star::frame::XStorable > xStore( m_xSrcDoc, UNO_QUERY );
     if( xStore.is() )
     {
-        Sequence< beans::PropertyValue > aArgs( 2 + m_aPreparedPassword.getLength() );
+        Sequence< beans::PropertyValue > aArgs( 2 + ((m_aPreparedPassword.getLength() > 0) ? 1 : 0) );
         aArgs.getArray()[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ) );
         aArgs.getArray()[1].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "OutputStream" ) );
         aArgs.getArray()[1].Value <<= xStream;
-        for( sal_Int32 i = 0; i < m_aPreparedPassword.getLength(); ++i )
+        if( m_aPreparedPassword.getLength() )
         {
-            aArgs.getArray()[i+2].Name  = m_aPreparedPassword[i].Name;
-            aArgs.getArray()[i+2].Value = m_aPreparedPassword[i].Value;
+            aArgs.getArray()[2].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "EncryptionData" ) );
+            aArgs.getArray()[2].Value <<= m_aPreparedPassword;
         }
 
         try
