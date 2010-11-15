@@ -34,6 +34,10 @@
 #include <rtl/string.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 
+//!! WARNING: be aware of cui/source/tabpages/page.h where someone had the broken idea
+//!! of duplicating the values of this enum in order to use those defines within
+//!! src files.
+//!! Thus don't reorder the enum values here without changing the code there as well.
 enum Paper
 {
     PAPER_A0,
@@ -115,6 +119,9 @@ enum Paper
     PAPER_ARCHD,
     PAPER_ARCHE
 };
+
+// defined for 'equal size' test with the implementation array
+#define NUM_PAPER_ENTRIES   (PAPER_ARCHE - PAPER_A0 + 1)
 
 // ---------
 // - Paper -
