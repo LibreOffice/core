@@ -408,7 +408,7 @@ gb_Library_TARGETTYPEFLAGS := -DLL
 gb_Library_SYSPRE := i
 gb_Library_PLAINEXT := .lib
 
-gb_Library_PLAINLIBS += \
+gb_Library_PLAINLIBS_NONE += \
     advapi32 \
     gdi32 \
     gnu_getopt \
@@ -427,6 +427,7 @@ gb_Library_PLAINLIBS += \
 
 gb_LinkTarget_LAYER := \
     $(foreach lib,$(gb_Library_OOOLIBS),$(lib):OOOLIB) \
+    $(foreach lib,$(gb_Library_PLAINLIBS_NONE),$(lib):OOOLIB) \
     $(foreach lib,$(gb_Library_PLAINLIBS_URE),$(lib):OOOLIB) \
     $(foreach lib,$(gb_Library_PLAINLIBS_OOO),$(lib):OOOLIB) \
     $(foreach lib,$(gb_Library_RTLIBS),$(lib):OOOLIB) \
