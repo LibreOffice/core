@@ -120,7 +120,7 @@ class AbstractSdInsertLayerDlg : public VclAbstractDialog  //add for SdInsertLay
 public:
     virtual void    GetAttr( SfxItemSet& rOutAttrs ) = 0;
     //from class ::Window
-    virtual void    SetHelpId( ULONG nHelpId ) = 0;
+    virtual void    SetHelpId( const rtl::OString& rHelpId ) = 0;
 };
 
 class AbstractSdInsertPasteDlg : public VclAbstractDialog  //add for SdInsertPasteDlg

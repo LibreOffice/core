@@ -96,10 +96,6 @@ public:
     /// inherited from sd::ViewShell
     virtual SdPage* getCurrentPage() const;
 
-    /** Return a string that describes the currently selected pages.
-    */
-    String GetPageRangeString (void);
-
     void ExecCtrl(SfxRequest &rReq);
     void GetCtrlState(SfxItemSet &rSet);
     void GetMenuState(SfxItemSet &rSet);

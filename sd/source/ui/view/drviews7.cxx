@@ -971,11 +971,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem( SID_INSERT_PLUGIN );
         rSet.DisableItem( SID_INSERT_SOUND );
         rSet.DisableItem( SID_INSERT_VIDEO );
-        rSet.DisableItem( SID_INSERT_APPLET );
         rSet.DisableItem( SID_INSERT_FLOATINGFRAME );
-#ifdef STARIMAGE_AVAILABLE
-        rSet.DisableItem( SID_INSERT_IMAGE );
-#endif
         rSet.DisableItem( SID_INSERT_MATH );
         rSet.DisableItem( SID_INSERT_DIAGRAM );
         rSet.DisableItem( SID_ATTR_TABLE );
@@ -984,7 +980,6 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem( SID_SIZE_ALL );
         rSet.DisableItem( SID_SIZE_PAGE_WIDTH );
         rSet.DisableItem( SID_SIZE_PAGE );
-//      rSet.DisableItem( SID_INSERTPAGE );
         rSet.DisableItem( SID_DUPLICATE_PAGE );
         rSet.DisableItem( SID_ZOOM_TOOLBOX );
     }
@@ -1075,12 +1070,8 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem( SID_INSERT_PLUGIN );
         rSet.DisableItem( SID_INSERT_SOUND );
         rSet.DisableItem( SID_INSERT_VIDEO );
-        rSet.DisableItem( SID_INSERT_APPLET );
         rSet.DisableItem( SID_INSERT_FLOATINGFRAME );
 
-#ifdef STARIMAGE_AVAILABLE
-        rSet.DisableItem( SID_INSERT_IMAGE );
-#endif
         rSet.DisableItem( SID_INSERT_MATH );
         rSet.DisableItem( SID_INSERT_FRAME );
         rSet.DisableItem( SID_INSERTFILE );
@@ -1585,11 +1576,6 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem( SID_TWAIN_SELECT );
         rSet.DisableItem( SID_TWAIN_TRANSFER );
     }
-#endif
-
-// Fuer Win16
-#ifndef SOLAR_JAVA
-    rSet.DisableItem( SID_INSERT_APPLET );
 #endif
 
     // Set the state of two entries in the 'Slide' context sub-menu

@@ -218,14 +218,6 @@ sal_uInt32 ControlContainer::GetControlIndex (TreeNode* pControlToExpand) const
 
 
 
-sal_uInt32 ControlContainer::GetActiveControlIndex (void) const
-{
-    return mnActiveControlIndex;
-}
-
-
-
-
 void ControlContainer::ListHasChanged (void)
 {
 }
@@ -370,53 +362,6 @@ sal_uInt32 ControlContainer::GetNextIndex (
     }
 
     return nCandidate;
-}
-
-
-
-
-sal_uInt32 ControlContainer::GetFirstIndex (bool bIncludeHidden)
-{
-    sal_uInt32 nIndex = 0;
-
-    if (maControlList.size() == 0)
-    {
-        // The list is empty so there is no first element.
-        nIndex = maControlList.size();
-    }
-    else if ( ! bIncludeHidden
-        && ! maControlList[nIndex]->GetWindow()->IsVisible())
-    {
-        // The first element is not visible.  Go the next visible one.
-        nIndex = GetNextIndex (nIndex, bIncludeHidden, false);
-    }
-
-    return nIndex;
-}
-
-
-
-
-sal_uInt32 ControlContainer::GetLastIndex (bool bIncludeHidden)
-{
-    sal_uInt32 nIndex;
-
-    if (maControlList.size() == 0)
-    {
-        // The list is empty so there is no last element.
-        nIndex = maControlList.size();
-    }
-    else
-    {
-        nIndex = maControlList.size() - 1;
-        if ( ! bIncludeHidden
-            && ! maControlList[nIndex]->GetWindow()->IsVisible())
-        {
-            // The last element is not visible.  Go the previous visible one.
-            nIndex = GetPreviousIndex (nIndex, bIncludeHidden, false);
-        }
-    }
-    return nIndex;
 }
 
 
