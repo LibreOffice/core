@@ -508,7 +508,7 @@ SalFrame* ImplSalCreateFrame( WinSalInstance* pInst,
     }
 
     // create frame
-    if ( aSalShlData.mbWNT )
+    if( true/*aSalShlData.mbWNT*/ )
     {
         LPCWSTR pClassName;
         if ( bSubFrame )
@@ -535,17 +535,6 @@ SalFrame* ImplSalCreateFrame( WinSalInstance* pInst,
         if( bLayeredAPI == 1 && GetWindowExStyle( hWnd ) & WS_EX_LAYERED )
             lpfnSetLayeredWindowAttributes( hWnd, 0, 230, 0x00000002 /*LWA_ALPHA*/ );
 #endif
-    }
-    else
-    {
-        LPCSTR pClassName;
-        if ( bSubFrame )
-            pClassName = SAL_SUBFRAME_CLASSNAMEA;
-        else
-            pClassName = SAL_FRAME_CLASSNAMEA;
-        hWnd = CreateWindowExA( nExSysStyle, pClassName, "", nSysStyle,
-                                CW_USEDEFAULT, 0, CW_USEDEFAULT, 0,
-                                hWndParent, 0, pInst->mhInst, (void*)pFrame );
     }
     if ( !hWnd )
     {
@@ -617,21 +606,10 @@ HWND ImplSalReCreateHWND( HWND hWndParent, HWND oldhWnd, BOOL bAsChild )
         nExSysStyle = 0;
     }
 
-    HWND hWnd = NULL;
-    if ( aSalShlData.mbWNT )
-    {
-        LPCWSTR pClassName = SAL_SUBFRAME_CLASSNAMEW;
-        hWnd = CreateWindowExW( nExSysStyle, pClassName, L"", nSysStyle,
+    LPCWSTR pClassName = SAL_SUBFRAME_CLASSNAMEW;
+    HWND hWnd = CreateWindowExW( nExSysStyle, pClassName, L"", nSysStyle,
                                 CW_USEDEFAULT, 0, CW_USEDEFAULT, 0,
                                 hWndParent, 0, hInstance, (void*)GetWindowPtr( oldhWnd ) );
-    }
-    else
-    {
-        LPCSTR pClassName = SAL_SUBFRAME_CLASSNAMEA;
-        hWnd = CreateWindowExA( nExSysStyle, pClassName, "", nSysStyle,
-                                CW_USEDEFAULT, 0, CW_USEDEFAULT, 0,
-                                hWndParent, 0, hInstance, (void*)GetWindowPtr( oldhWnd ) );
-    }
     return hWnd;
 }
 
@@ -2531,7 +2509,7 @@ static void ImplGetKeyNameText( LONG lParam, sal_Unicode* pBuf,
     int nKeyLen = 0;
     if ( lParam )
     {
-        if ( aSalShlData.mbWNT )
+        if ( true/*aSalShlData.mbWNT*/ )
         {
             nKeyLen = GetKeyNameTextW( lParam, aKeyBuf, nMaxKeyLen );
             // #i12401# the current unicows.dll has a bug in CharUpperBuffW, which corrupts the stack
@@ -2551,32 +2529,6 @@ static void ImplGetKeyNameText( LONG lParam, sal_Unicode* pBuf,
                         CharUpperBuffW( pW, 1 );
                     bUpper = (*pW=='+') || (*pW=='-') || (*pW==' ') || (*pW=='.');
                 }
-            }
-        }
-        else // !mbWnt
-        {
-            sal_Char aAnsiKeyBuf[ nMaxKeyLen ];
-            int nAnsiKeyLen = GetKeyNameTextA( lParam, aAnsiKeyBuf, nMaxKeyLen );
-            DBG_ASSERT( nAnsiKeyLen <= nMaxKeyLen, "Invalid key name length!" );
-            if( nAnsiKeyLen > nMaxKeyLen )
-                nAnsiKeyLen = 0;
-            else if( nAnsiKeyLen > 0 )
-            {
-                // Capitalize just the first letter of key names
-                // TODO: check MCBS key names
-                CharLowerBuffA( aAnsiKeyBuf, nAnsiKeyLen );
-
-                bool bUpper = true;
-                for( sal_Char *pA=aAnsiKeyBuf, *pE=pA+nAnsiKeyLen; pA < pE; ++pA )
-                {
-                    if( bUpper )
-                        CharUpperBuffA( pA, 1 );
-                    bUpper = (*pA=='+') || (*pA=='-') || (*pA==' ') || (*pA=='.');
-                }
-
-                // Convert to Unicode and copy the data in the Unicode Buffer
-                nKeyLen = MultiByteToWideChar( CP_ACP, MB_PRECOMPOSED,
-                    aAnsiKeyBuf, nAnsiKeyLen, aKeyBuf, nMaxKeyLen );
             }
         }
     }
@@ -3027,7 +2979,7 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     Font    aAppFont = aStyleSettings.GetAppFont();
     Font    aIconFont = aStyleSettings.GetIconFont();
     HDC     hDC = GetDC( 0 );
-    if ( aSalShlData.mbWNT )
+    if( true/*aSalShlData.mbWNT*/ )
     {
         NONCLIENTMETRICSW aNonClientMetrics;
         aNonClientMetrics.cbSize = sizeof( aNonClientMetrics );
@@ -3042,23 +2994,6 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
             LOGFONTW aLogFont;
             if ( SystemParametersInfoW( SPI_GETICONTITLELOGFONT, 0, &aLogFont, 0 ) )
                 ImplSalUpdateStyleFontW( hDC, aLogFont, aIconFont );
-        }
-    }
-    else
-    {
-        NONCLIENTMETRICSA aNonClientMetrics;
-        aNonClientMetrics.cbSize = sizeof( aNonClientMetrics );
-        if ( SystemParametersInfoA( SPI_GETNONCLIENTMETRICS, sizeof( aNonClientMetrics ), &aNonClientMetrics, 0 ) )
-        {
-            ImplSalUpdateStyleFontA( hDC, aNonClientMetrics.lfMenuFont, aMenuFont );
-            ImplSalUpdateStyleFontA( hDC, aNonClientMetrics.lfCaptionFont, aTitleFont );
-            ImplSalUpdateStyleFontA( hDC, aNonClientMetrics.lfSmCaptionFont, aFloatTitleFont );
-            ImplSalUpdateStyleFontA( hDC, aNonClientMetrics.lfStatusFont, aHelpFont );
-            ImplSalUpdateStyleFontA( hDC, aNonClientMetrics.lfMessageFont, aAppFont );
-
-            LOGFONTA aLogFont;
-            if ( SystemParametersInfoA( SPI_GETICONTITLELOGFONT, 0, &aLogFont, 0 ) )
-                ImplSalUpdateStyleFontA( hDC, aLogFont, aIconFont );
         }
     }
 
@@ -3649,27 +3584,7 @@ static void ImplUpdateInputLang( WinSalFrame* pFrame )
     // If we are on Windows NT we use Unicode FrameProcs and so we
     // get Unicode charcodes directly from Windows
     // no need to set up a code page
-    if ( aSalShlData.mbWNT )
-        return;
-
-    if ( !nLang )
-    {
-        pFrame->mnInputLang     = 0;
-        pFrame->mnInputCodePage = GetACP();
-    }
-    else if ( bLanguageChange )
-    {
-        sal_Char aBuf[10];
-        if ( GetLocaleInfoA( MAKELCID( nLang, SORT_DEFAULT ), LOCALE_IDEFAULTANSICODEPAGE,
-                             aBuf, sizeof(aBuf) ) > 0 )
-        {
-            pFrame->mnInputCodePage = ImplStrToNum( aBuf );
-            if ( !pFrame->mnInputCodePage )
-                pFrame->mnInputCodePage = GetACP();
-        }
-        else
-            pFrame->mnInputCodePage = GetACP();
-    }
+    return;
 }
 
 
@@ -3679,29 +3594,7 @@ static sal_Unicode ImplGetCharCode( WinSalFrame* pFrame, WPARAM nCharCode )
 
     // If we are on Windows NT we use Unicode FrameProcs and so we
     // get Unicode charcodes directly from Windows
-    if ( aSalShlData.mbWNT )
-        return (sal_Unicode)nCharCode;
-
-    sal_Char    aCharBuf[2];
-    int         nCharLen;
-    WCHAR       c;
-    if ( nCharCode > 0xFF )
-    {
-        aCharBuf[0] = (sal_Char)(nCharCode>>8);
-        aCharBuf[1] = (sal_Char)nCharCode;
-        nCharLen = 2;
-    }
-    else
-    {
-        aCharBuf[0] = (sal_Char)nCharCode;
-        nCharLen = 1;
-    }
-    if ( ::MultiByteToWideChar( pFrame->mnInputCodePage,
-                                MB_PRECOMPOSED,
-                                aCharBuf, nCharLen, &c, 1 ) )
-        return (sal_Unicode)c;
-    else
-        return (sal_Unicode)nCharCode;
+    return (sal_Unicode)nCharCode;
 }
 
 // -----------------------------------------------------------------------
@@ -4507,16 +4400,8 @@ static void ImplHandleSettingsChangeMsg( HWND hWnd, UINT nMsg,
     {
         if ( lParam )
         {
-            if ( aSalShlData.mbWNT )
-            {
                 if ( ImplSalWICompareAscii( (const wchar_t*)lParam, "devices" ) == 0 )
                     nSalEvent = SALEVENT_PRINTERCHANGED;
-            }
-            else
-            {
-                if ( stricmp( (const char*)lParam, "devices" ) == 0 )
-                    nSalEvent = SALEVENT_PRINTERCHANGED;
-            }
         }
     }
 

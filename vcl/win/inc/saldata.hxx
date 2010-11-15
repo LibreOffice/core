@@ -154,7 +154,6 @@ struct SalShlData
     UINT                    mnWheelScrollChars;     // WheelScrollChars
     UINT                    mnWheelMsgId;           // Wheel-Message-Id fuer W95
     WORD                    mnVersion;              // System-Version (311 == 3.11)
-    WIN_BOOL                mbWNT;                  // kein W16/W95/W98 sondern ein NT
     WIN_BOOL                mbW40;                  // Is System-Version >= 4.0
     WIN_BOOL                mbWXP;                  // Windows XP
     WIN_BOOL                mbWPrinter;             // true: use unicode printer functions

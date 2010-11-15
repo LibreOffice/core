@@ -493,20 +493,10 @@ SalObject* ImplSalCreateObject( WinSalInstance* pInst, WinSalFrame* pParent )
     // Hook installieren, wenn es das erste SalObject ist
     if ( !pSalData->mpFirstObject )
     {
-        if ( aSalShlData.mbWNT )
-        {
-            pSalData->mhSalObjMsgHook = SetWindowsHookExW( WH_CALLWNDPROC,
+        pSalData->mhSalObjMsgHook = SetWindowsHookExW( WH_CALLWNDPROC,
                                                            SalSysMsgProc,
                                                            pSalData->mhInst,
                                                            pSalData->mnAppThreadId );
-        }
-        else
-        {
-            pSalData->mhSalObjMsgHook = SetWindowsHookExA( WH_CALLWNDPROC,
-                                                           SalSysMsgProc,
-                                                           pSalData->mhInst,
-                                                           pSalData->mnAppThreadId );
-        }
     }
 
     if ( !pSalData->mbObjClassInit )

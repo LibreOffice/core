@@ -1366,10 +1366,6 @@ int CALLBACK SalEnumQueryFontProcExA( const ENUMLOGFONTEXA*,
 
 bool ImplIsFontAvailable( HDC hDC, const UniString& rName )
 {
-    bool bAvailable = false;
-
-    if ( aSalShlData.mbWNT )
-    {
         // Test, if Font available
         LOGFONTW aLogFont;
         memset( &aLogFont, 0, sizeof( aLogFont ) );
@@ -1381,27 +1377,9 @@ bool ImplIsFontAvailable( HDC hDC, const UniString& rName )
         memcpy( aLogFont.lfFaceName, rName.GetBuffer(), nNameLen*sizeof( wchar_t ) );
         aLogFont.lfFaceName[nNameLen] = 0;
 
-        EnumFontFamiliesExW( hDC, &aLogFont, (FONTENUMPROCW)SalEnumQueryFontProcExW,
+    bool bAvailable = false;
+    EnumFontFamiliesExW( hDC, &aLogFont, (FONTENUMPROCW)SalEnumQueryFontProcExW,
                              (LPARAM)(void*)&bAvailable, 0 );
-    }
-    else
-    {
-        ByteString aTemp = ImplSalGetWinAnsiString( rName );
-
-        // Test, if Font available
-        LOGFONTA aLogFont;
-        memset( &aLogFont, 0, sizeof( aLogFont ) );
-        aLogFont.lfCharSet = DEFAULT_CHARSET;
-
-        UINT nNameLen = aTemp.Len();
-        if ( nNameLen > sizeof( aLogFont.lfFaceName )-1 )
-            nNameLen = sizeof( aLogFont.lfFaceName )-1;
-        memcpy( aLogFont.lfFaceName, aTemp.GetBuffer(), nNameLen );
-        aLogFont.lfFaceName[nNameLen] = 0;
-
-        EnumFontFamiliesExA( hDC, &aLogFont, (FONTENUMPROCA)SalEnumQueryFontProcExA,
-                             (LPARAM)(void*)&bAvailable, 0 );
-    }
 
     return bAvailable;
 }
@@ -1564,7 +1542,7 @@ HFONT WinSalGraphics::ImplDoSetFont( ImplFontSelectData* i_pFont, float& o_rFont
         // only required for virtual devices, see below for details
         hdcScreen = GetDC(0);
 
-    if( aSalShlData.mbWNT )
+    if( true/*aSalShlData.mbWNT*/ )
     {
         LOGFONTW aLogFont;
         ImplGetLogFontFromFontSelect( mhDC, i_pFont, aLogFont, true );
@@ -1621,63 +1599,6 @@ HFONT WinSalGraphics::ImplDoSetFont( ImplFontSelectData* i_pFont, float& o_rFont
             HFONT hNewFont2 = CreateFontIndirectW( &aLogFont );
             SelectFont( mhDC, hNewFont2 );
             DeleteFont( hNewFont );
-            hNewFont = hNewFont2;
-        }
-    }
-    else
-    {
-        if( !mpLogFont )
-             // mpLogFont is needed for getting the kerning pairs
-             // TODO: get them from somewhere else
-            mpLogFont = new LOGFONTA;
-        LOGFONTA& aLogFont = *mpLogFont;
-        ImplGetLogFontFromFontSelect( mhDC, i_pFont, aLogFont, true );
-
-        // on the display we prefer Courier New when Courier is a
-        // bitmap only font and we need to stretch or rotate it
-        if( mbScreen
-        &&  (i_pFont->mnWidth != 0
-          || i_pFont->mnOrientation != 0
-          || i_pFont->mpFontData == NULL
-          || (i_pFont->mpFontData->GetHeight() != i_pFont->mnHeight))
-        && !bImplSalCourierScalable
-        && bImplSalCourierNew
-        && (stricmp( aLogFont.lfFaceName, "Courier" ) == 0) )
-            strncpy( aLogFont.lfFaceName, "Courier New", 11 );
-
-        // limit font requests to MAXFONTHEIGHT to work around driver problems
-        // TODO: share MAXFONTHEIGHT font instance
-        if( -aLogFont.lfHeight <= MAXFONTHEIGHT )
-            o_rFontScale = 1.0;
-        else
-        {
-            o_rFontScale = -aLogFont.lfHeight / (float)MAXFONTHEIGHT;
-            aLogFont.lfHeight = -MAXFONTHEIGHT;
-            aLogFont.lfWidth = static_cast<LONG>( aLogFont.lfWidth / o_rFontScale );
-        }
-
-        hNewFont = ::CreateFontIndirectA( &aLogFont );
-        if( hdcScreen )
-        {
-            // select font into screen hdc first to get an antialiased font
-            // see knowledge base article 305290:
-            // "PRB: Fonts Not Drawn Antialiased on Device Context for DirectDraw Surface"
-            ::SelectFont( hdcScreen, ::SelectFont( hdcScreen , hNewFont ) );
-        }
-        o_rOldFont = ::SelectFont( mhDC, hNewFont );
-
-        TEXTMETRICA aTextMetricA;
-        // when the font doesn't work try a replacement
-        if ( !::GetTextMetricsA( mhDC, &aTextMetricA ) )
-        {
-            // the selected font doesn't work => try a replacement
-            // TODO: use its font fallback instead
-            LOGFONTA aTempLogFont = aLogFont;
-            strncpy( aTempLogFont.lfFaceName, "Courier New", 11 );
-            aTempLogFont.lfPitchAndFamily = FIXED_PITCH;
-            HFONT hNewFont2 = CreateFontIndirectA( &aTempLogFont );
-            ::SelectFont( mhDC, hNewFont2 );
-            ::DeleteFont( hNewFont );
             hNewFont = hNewFont2;
         }
     }
@@ -1767,18 +1688,9 @@ void WinSalGraphics::GetFontMetric( ImplFontMetricData* pMetric, int nFallbackLe
     // temporarily change the HDC to the font in the fallback level
     HFONT hOldFont = SelectFont( mhDC, mhFonts[nFallbackLevel] );
 
-    if ( aSalShlData.mbWNT )
-    {
         wchar_t aFaceName[LF_FACESIZE+60];
         if( ::GetTextFaceW( mhDC, sizeof(aFaceName)/sizeof(wchar_t), aFaceName ) )
             pMetric->maName = reinterpret_cast<const sal_Unicode*>(aFaceName);
-    }
-    else
-    {
-        char aFaceName[LF_FACESIZE+60];
-        if( ::GetTextFaceA( mhDC, sizeof(aFaceName), aFaceName ) )
-            pMetric->maName = ImplSalGetUniString( aFaceName );
-    }
 
     // get the font metric
     TEXTMETRICA aWinMetric;
@@ -1842,11 +1754,6 @@ void WinSalGraphics::GetFontMetric( ImplFontMetricData* pMetric, int nFallbackLe
 
         pMetric->mnAscent   += nHalfTmpExtLeading;
         pMetric->mnDescent  += nOtherHalfTmpExtLeading;
-
-        // #109280# HACK korean only: increase descent for wavelines and impr
-        if( !aSalShlData.mbWNT )
-            if( mpWinFontData[nFallbackLevel]->SupportsKorean() )
-                pMetric->mnDescent += pMetric->mnExtLeading;
     }
 
     pMetric->mnMinKashida = GetMinKashidaWidth();
@@ -2000,8 +1907,6 @@ ULONG WinSalGraphics::GetKernPairs( ULONG nPairs, ImplKernPairData* pKernPairs )
         }
         mnFontKernPairCount = 0;
 
-        if ( aSalShlData.mbWNT )
-        {
             KERNINGPAIR* pPairs = NULL;
             int nCount = ::GetKerningPairsW( mhDC, 0, NULL );
             if( nCount )
@@ -2017,27 +1922,6 @@ ULONG WinSalGraphics::GetKernPairs( ULONG nPairs, ImplKernPairData* pKernPairs )
                 ::GetKerningPairsW( mhDC, nCount, pPairs );
                 return nCount;
 #endif // GCP_KERN_HACK
-            }
-        }
-        else
-        {
-            if ( !mnFontCharSetCount )
-                ImplGetAllFontCharSets( this );
-
-            if ( mnFontCharSetCount <= 1 )
-                ImplAddKerningPairs( this );
-            else
-            {
-                // Query All Kerning Pairs from all possible CharSets
-                for ( BYTE i = 0; i < mnFontCharSetCount; i++ )
-                {
-                    mpLogFont->lfCharSet = mpFontCharSets[i];
-                    HFONT hNewFont = CreateFontIndirectA( mpLogFont );
-                    HFONT hOldFont = SelectFont( mhDC, hNewFont );
-                    ImplAddKerningPairs( this );
-                    SelectFont( mhDC, hOldFont );
-                    DeleteFont( hNewFont );
-                }
             }
         }
 
@@ -2270,19 +2154,7 @@ void ImplReleaseTempFonts( SalData& rSalData )
         }
         else
         {
-            if( aSalShlData.mbWNT )
-                ::RemoveFontResourceW( reinterpret_cast<LPCWSTR>(p->maFontFilePath.getStr()) );
-            else
-            {
-                // poor man's string conversion because converter is gone
-                int nLen = p->maFontFilePath.getLength();
-                char* pNameA = new char[ nLen + 1 ];
-                for( int i = 0; i < nLen; ++i )
-                    pNameA[i] = (char)(p->maFontFilePath.getStr())[i];
-                pNameA[ nLen ] = 0;
-                ::RemoveFontResourceA( pNameA );
-                delete[] pNameA;
-            }
+            ::RemoveFontResourceW( reinterpret_cast<LPCWSTR>(p->maFontFilePath.getStr()) );
         }
 
         rSalData.mpTempFontItem = p->mpNextItem;
@@ -2424,14 +2296,6 @@ bool WinSalGraphics::AddTempDevFont( ImplDevFontList* pFontList,
         return false;
 
     UINT nPreferedCharSet = DEFAULT_CHARSET;
-    if ( !aSalShlData.mbWNT )
-    {
-        // for W98 guess charset preference from active codepage
-        CHARSETINFO aCharSetInfo;
-        DWORD nCP = GetACP();
-        if ( TranslateCharsetInfo( (DWORD*)nCP, &aCharSetInfo, TCI_SRCCODEPAGE ) )
-            nPreferedCharSet = aCharSetInfo.ciCharset;
-    }
 
     // create matching FontData struct
     aDFA.mbSymbolFlag = false; // TODO: how to know it without accessing the font?
@@ -2536,24 +2400,12 @@ void WinSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
     if ( TranslateCharsetInfo( (DWORD*)nCP, &aCharSetInfo, TCI_SRCCODEPAGE ) )
         aInfo.mnPreferedCharSet = aCharSetInfo.ciCharset;
 
-    if ( aSalShlData.mbWNT )
-    {
-        LOGFONTW aLogFont;
-        memset( &aLogFont, 0, sizeof( aLogFont ) );
-        aLogFont.lfCharSet = DEFAULT_CHARSET;
-        aInfo.mpLogFontW = &aLogFont;
-        EnumFontFamiliesExW( mhDC, &aLogFont,
+    LOGFONTW aLogFont;
+    memset( &aLogFont, 0, sizeof( aLogFont ) );
+    aLogFont.lfCharSet = DEFAULT_CHARSET;
+    aInfo.mpLogFontW = &aLogFont;
+    EnumFontFamiliesExW( mhDC, &aLogFont,
             (FONTENUMPROCW)SalEnumFontsProcExW, (LPARAM)(void*)&aInfo, 0 );
-    }
-    else
-    {
-        LOGFONTA aLogFont;
-        memset( &aLogFont, 0, sizeof( aLogFont ) );
-        aLogFont.lfCharSet = DEFAULT_CHARSET;
-        aInfo.mpLogFontA = &aLogFont;
-        EnumFontFamiliesExA( mhDC, &aLogFont,
-            (FONTENUMPROCA)SalEnumFontsProcExA, (LPARAM)(void*)&aInfo, 0 );
-    }
 
     // Feststellen, was es fuer Courier-Schriften auf dem Bildschirm gibt,
     // um in SetFont() evt. Courier auf Courier New zu mappen
@@ -2592,12 +2444,7 @@ BOOL WinSalGraphics::GetGlyphBoundRect( long nIndex, Rectangle& rRect )
     GLYPHMETRICS aGM;
     aGM.gmptGlyphOrigin.x = aGM.gmptGlyphOrigin.y = 0;
     aGM.gmBlackBoxX = aGM.gmBlackBoxY = 0;
-    DWORD nSize = GDI_ERROR;
-    if ( aSalShlData.mbWNT )
-        nSize = ::GetGlyphOutlineW( hDC, nIndex, nGGOFlags, &aGM, 0, NULL, &aMat );
-    else if( (nGGOFlags & GGO_GLYPH_INDEX) || (nIndex <= 255) )
-        nSize = ::GetGlyphOutlineA( hDC, nIndex, nGGOFlags, &aGM, 0, NULL, &aMat );
-
+    DWORD nSize = ::GetGlyphOutlineW( hDC, nIndex, nGGOFlags, &aGM, 0, NULL, &aMat );
     if( nSize == GDI_ERROR )
         return false;
 
@@ -2617,7 +2464,6 @@ BOOL WinSalGraphics::GetGlyphOutline( long nIndex,
 {
     rB2DPolyPoly.clear();
 
-    BOOL bRet = FALSE;
     HDC  hDC = mhDC;
 
     // use unity matrix
@@ -2631,29 +2477,20 @@ BOOL WinSalGraphics::GetGlyphOutline( long nIndex,
     nIndex &= GF_IDXMASK;
 
     GLYPHMETRICS aGlyphMetrics;
-    DWORD nSize1 = GDI_ERROR;
-    if ( aSalShlData.mbWNT )
-        nSize1 = ::GetGlyphOutlineW( hDC, nIndex, nGGOFlags, &aGlyphMetrics, 0, NULL, &aMat );
-    else if( (nGGOFlags & GGO_GLYPH_INDEX) || (nIndex <= 255) )
-        nSize1 = ::GetGlyphOutlineA( hDC, nIndex, nGGOFlags, &aGlyphMetrics, 0, NULL, &aMat );
-
+    const DWORD nSize1 = ::GetGlyphOutlineW( hDC, nIndex, nGGOFlags, &aGlyphMetrics, 0, NULL, &aMat );
     if( !nSize1 )       // blank glyphs are ok
-        bRet = TRUE;
-    else if( nSize1 != GDI_ERROR )
-    {
-        BYTE*   pData = new BYTE[ nSize1 ];
-        DWORD   nSize2;
-        if ( aSalShlData.mbWNT )
-            nSize2 = ::GetGlyphOutlineW( hDC, nIndex, nGGOFlags,
-                &aGlyphMetrics, nSize1, pData, &aMat );
-        else
-            nSize2 = ::GetGlyphOutlineA( hDC, nIndex, nGGOFlags,
-                &aGlyphMetrics, nSize1, pData, &aMat );
+        return TRUE;
+    else if( nSize1 == GDI_ERROR )
+        return FALSE;
 
-        if( nSize1 == nSize2 )
-        {
-            bRet = TRUE;
+    BYTE*   pData = new BYTE[ nSize1 ];
+    const DWORD nSize2 = ::GetGlyphOutlineW( hDC, nIndex, nGGOFlags,
+              &aGlyphMetrics, nSize1, pData, &aMat );
 
+    if( nSize1 != nSize2 )
+        return FALSE;
+
+    // TODO: avoid tools polygon by creating B2DPolygon directly
             int     nPtSize = 512;
             Point*  pPoints = new Point[ nPtSize ];
             BYTE*   pFlags = new BYTE[ nPtSize ];
@@ -2791,7 +2628,6 @@ BOOL WinSalGraphics::GetGlyphOutline( long nIndex,
 
             delete[] pPoints;
             delete[] pFlags;
-        }
 
         delete[] pData;
     }
@@ -2803,7 +2639,7 @@ BOOL WinSalGraphics::GetGlyphOutline( long nIndex,
         rB2DPolyPoly.transform(basegfx::tools::createScaleB2DHomMatrix(fFactor, fFactor));
     }
 
-    return bRet;
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------
