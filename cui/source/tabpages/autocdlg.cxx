@@ -493,7 +493,7 @@ OfaSwAutoFmtOptionsPage::OfaSwAutoFmtOptionsPage( Window* pParent,
     SvtSysLocale aSysLcl;
 
     aCheckLB.SetHelpId(HID_OFAPAGE_AUTOFORMAT_CLB);
-    aCheckLB.SetWindowBits(WB_HSCROLL| WB_VSCROLL);
+    aCheckLB.SetStyle(aCheckLB.GetStyle()|WB_HSCROLL| WB_VSCROLL);
 
     aCheckLB.SetSelectHdl(LINK(this, OfaSwAutoFmtOptionsPage, SelectHdl));
     aCheckLB.SetDoubleClickHdl(LINK(this, OfaSwAutoFmtOptionsPage, EditHdl));
@@ -1022,7 +1022,7 @@ OfaAutocorrReplacePage::OfaAutocorrReplacePage( Window* pParent,
     static long nTabs[] = { 2 /* Tab-Count */, 1, 61 };
     aReplaceTLB.SetTabs( &nTabs[0], MAP_APPFONT );
 
-    aReplaceTLB.SetWindowBits(WB_HSCROLL|WB_CLIPCHILDREN);
+    aReplaceTLB.SetStyle(aReplaceTLB.GetStyle()|WB_HSCROLL|WB_CLIPCHILDREN);
     aReplaceTLB.SetSelectHdl(LINK(this, OfaAutocorrReplacePage, SelectHdl));
     aNewReplacePB.SetClickHdl( LINK(this, OfaAutocorrReplacePage, NewDelHdl));
     aDeleteReplacePB.SetClickHdl(LINK(this, OfaAutocorrReplacePage, NewDelHdl));
@@ -2076,7 +2076,7 @@ OfaQuoteTabPage::OfaQuoteTabPage( Window* pParent, const SfxItemSet& rSet ) :
             3, 0, 20, 40
         };
 
-        aSwCheckLB.SetWindowBits(WB_HSCROLL| WB_VSCROLL);
+        aSwCheckLB.SetStyle(aSwCheckLB.GetStyle() | WB_HSCROLL| WB_VSCROLL);
 
         aSwCheckLB.SvxSimpleTable::SetTabs(aStaticTabs);
         String sHeader( sHeader1 );
@@ -2647,7 +2647,7 @@ OfaSmartTagOptionsTabPage::OfaSmartTagOptionsTabPage( Window* pParent,
     FreeResource();
 
     // some options for the list box:
-    m_aSmartTagTypesLB.SetWindowBits( m_aSmartTagTypesLB.GetStyle() | WB_HSCROLL | WB_HIDESELECTION );
+    m_aSmartTagTypesLB.SetStyle( m_aSmartTagTypesLB.GetStyle() | WB_HSCROLL | WB_HIDESELECTION );
     m_aSmartTagTypesLB.SetHighlightRange();
 
     // set the handlers:
