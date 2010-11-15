@@ -360,15 +360,15 @@ public:
 
     void                SetHelpText( USHORT nItemId, const XubString& rText );
     XubString           GetHelpText( USHORT nItemId ) const;
-    void                SetHelpId( USHORT nItemId, ULONG nHelpId );
-    ULONG               GetHelpId( USHORT nItemId ) const;
+    void                SetHelpId( USHORT nItemId, const rtl::OString& nHelpId );
+    rtl::OString        GetHelpId( USHORT nItemId ) const;
 
     Size                CalcWindowSizePixel() const;
 
     inline void             SetHelpText( const String& rText )      { Window::SetHelpText( rText ); }
     inline const String&    GetHelpText() const                     { return Window::GetHelpText(); }
-    inline void             SetHelpId( ULONG nId )                  { Window::SetHelpId( nId ); }
-    inline ULONG            GetHelpId() const                       { return Window::GetHelpId(); }
+    inline void             SetHelpId( const rtl::OString& rId )    { Window::SetHelpId( rId ); }
+    inline const rtl::OString& GetHelpId() const                    { return Window::GetHelpId(); }
 
     inline void         SetStartDragHdl( const Link& rLink )        { maStartDragHdl = rLink; }
     inline const Link&  GetStartDragHdl() const                     { return maStartDragHdl; }

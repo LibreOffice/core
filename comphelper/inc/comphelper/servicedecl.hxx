@@ -67,7 +67,7 @@ typedef ::boost::function3<
     The declaration can be done in various ways, the (simplest) form is
 
     <pre>
-    class MyClass : cppu::WeakImplHelper2<XInterface1, XInterface2> {
+    class MyClass : public cppu::WeakImplHelper2<XInterface1, XInterface2> {
     public:
         MyClass( uno::Reference<uno::XComponentContext> const& xContext )
         [...]
@@ -85,7 +85,7 @@ typedef ::boost::function3<
     context:
 
     <pre>
-    class MyClass : cppu::WeakImplHelper2<XInterface1, XInterface2> {
+    class MyClass : public cppu::WeakImplHelper2<XInterface1, XInterface2> {
     public:
         MyClass( uno::Sequence<uno::Any> const& args,
                  uno::Reference<uno:XComponentContext> const& xContext )
@@ -134,8 +134,6 @@ public:
           m_pServiceNames(pSupportedServiceNames),
           m_cDelim(cDelim) {}
 
-    /// @internal gets called by component_writeInfoHelper()
-    bool writeInfo( ::com::sun::star::registry::XRegistryKey * xKey ) const;
     /// @internal gets called by component_getFactoryHelper()
     void * getFactory( sal_Char const* pImplName ) const;
 
@@ -323,9 +321,6 @@ struct class_ : public serviceimpl_base< detail::ServiceImpl<ImplT_>, WithArgsT 
 // component_... helpers with arbitrary service declarations:
 //
 
-#define COMPHELPER_SERVICEDECL_writeInfo(z_, n_, unused_) \
-    bRet &= BOOST_PP_CAT(s, n_).writeInfo( xRegistryKey );
-
 #define COMPHELPER_SERVICEDECL_getFactory(z_, n_, unused_) \
     if (pRet == 0) \
         pRet = BOOST_PP_CAT(s, n_).getFactory(pImplName);
@@ -333,11 +328,6 @@ struct class_ : public serviceimpl_base< detail::ServiceImpl<ImplT_>, WithArgsT 
 /** The following preprocessor repetitions generate functions like
 
     <pre>
-        inline sal_Bool component_writeInfoHelper(
-            ::com::sun::star::lang::XMultiServiceFactory *,
-            ::com::sun::star::registry::XRegistryKey * xRegistryKey,
-            ServiceDecl const& s0, ServiceDecl const& s1, ... );
-
         inline void * component_getFactoryHelper(
             sal_Char const* pImplName,
             ::com::sun::star::lang::XMultiServiceFactory *,
@@ -351,15 +341,6 @@ struct class_ : public serviceimpl_base< detail::ServiceImpl<ImplT_>, WithArgsT 
     COMPHELPER_SERVICEDECL_COMPONENT_HELPER_MAX_ARGS; its default is 8.
 */
 #define COMPHELPER_SERVICEDECL_make(z_, n_, unused_) \
-inline sal_Bool component_writeInfoHelper( \
-    ::com::sun::star::lang::XMultiServiceFactory *, \
-    ::com::sun::star::registry::XRegistryKey * xRegistryKey, \
-    BOOST_PP_ENUM_PARAMS(n_, ServiceDecl const& s) ) \
-{ \
-    bool bRet = true; \
-    BOOST_PP_REPEAT(n_, COMPHELPER_SERVICEDECL_writeInfo, ~) \
-    return bRet; \
-} \
 inline void * component_getFactoryHelper( \
     sal_Char const* pImplName, \
     ::com::sun::star::lang::XMultiServiceFactory *, \
@@ -381,7 +362,6 @@ BOOST_PP_REPEAT_FROM_TO(1, COMPHELPER_SERVICEDECL_COMPONENT_HELPER_MAX_ARGS,
 #undef COMPHELPER_SERVICEDECL_COMPONENT_HELPER_MAX_ARGS
 #undef COMPHELPER_SERVICEDECL_make
 #undef COMPHELPER_SERVICEDECL_getFactory
-#undef COMPHELPER_SERVICEDECL_writeInfo
 
 } // namespace service_decl
 } // namespace comphelper
@@ -419,13 +399,6 @@ extern "C" \
                                                           uno_Environment** /*ppEnv*/ ) \
     { \
         *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME; \
-    } \
- \
-    SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo( ::com::sun::star::lang::XMultiServiceFactory*    pServiceManager, \
-                                           ::com::sun::star::registry::XRegistryKey*        pRegistryKey ) \
-    { \
-        return component_writeInfoHelper( pServiceManager, pRegistryKey, \
-                                          BOOST_PP_SEQ_ENUM(varargs_) ); \
     } \
  \
     SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( sal_Char const*                                pImplName, \

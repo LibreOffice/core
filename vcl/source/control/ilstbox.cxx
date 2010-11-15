@@ -529,7 +529,8 @@ USHORT ImplEntryList::FindFirstSelectable( USHORT nPos, bool bForward /* = true 
 // =======================================================================
 
 ImplListBoxWindow::ImplListBoxWindow( Window* pParent, WinBits nWinStyle ) :
-    Control( pParent, 0 )
+    Control( pParent, 0 ),
+    maQuickSelectionEngine( *this )
 {
     mpEntryList         = new ImplEntryList( this );
 
@@ -568,9 +569,6 @@ ImplListBoxWindow::ImplListBoxWindow( Window* pParent, WinBits nWinStyle ) :
     SetTextFillColor();
     SetBackground( Wallpaper( GetSettings().GetStyleSettings().GetFieldColor() ) );
 
-    maSearchTimeout.SetTimeout( 2500 );
-    maSearchTimeout.SetTimeoutHdl( LINK( this, ImplListBoxWindow, SearchStringTimeout ) );
-
     ImplInitSettings( TRUE, TRUE, TRUE );
     ImplCalcMetrics();
 }
@@ -579,7 +577,6 @@ ImplListBoxWindow::ImplListBoxWindow( Window* pParent, WinBits nWinStyle ) :
 
 ImplListBoxWindow::~ImplListBoxWindow()
 {
-    maSearchTimeout.Stop();
     delete mpEntryList;
 }
 
@@ -624,14 +621,6 @@ void ImplListBoxWindow::ImplCalcMetrics()
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( ImplListBoxWindow, SearchStringTimeout, Timer*, EMPTYARG )
-{
-    maSearchStr.Erase();
-    return 1;
-}
-
-// -----------------------------------------------------------------------
-
 void ImplListBoxWindow::Clear()
 {
     mpEntryList->Clear();
@@ -648,6 +637,7 @@ void ImplListBoxWindow::Clear()
     ImplClearLayoutData();
 
     mnCurrentPos = LISTBOX_ENTRY_NOTFOUND;
+    maQuickSelectionEngine.Reset();
 
     Invalidate();
 }
@@ -918,7 +908,7 @@ USHORT ImplListBoxWindow::GetLastVisibleEntry() const
 void ImplListBoxWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
     mbMouseMoveSelect = FALSE;  // Nur bis zum ersten MouseButtonDown
-    maSearchStr.Erase();
+    maQuickSelectionEngine.Reset();
 
     if ( !IsReadOnly() )
     {
@@ -1465,7 +1455,7 @@ BOOL ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
 
                 bDone = TRUE;
             }
-            maSearchStr.Erase();
+            maQuickSelectionEngine.Reset();
         }
         break;
 
@@ -1492,7 +1482,7 @@ BOOL ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
 
                 bDone = TRUE;
             }
-            maSearchStr.Erase();
+            maQuickSelectionEngine.Reset();
         }
         break;
 
@@ -1523,7 +1513,7 @@ BOOL ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
                 }
                 bDone = TRUE;
             }
-            maSearchStr.Erase();
+            maQuickSelectionEngine.Reset();
         }
         break;
 
@@ -1557,7 +1547,7 @@ BOOL ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
                 }
                 bDone = TRUE;
             }
-            maSearchStr.Erase();
+            maQuickSelectionEngine.Reset();
         }
         break;
 
@@ -1578,7 +1568,7 @@ BOOL ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
                     bDone = TRUE;
                 }
             }
-            maSearchStr.Erase();
+            maQuickSelectionEngine.Reset();
         }
         break;
 
@@ -1604,7 +1594,7 @@ BOOL ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
                 }
                 bDone = TRUE;
             }
-            maSearchStr.Erase();
+            maQuickSelectionEngine.Reset();
         }
         break;
 
@@ -1615,7 +1605,7 @@ BOOL ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
                 ScrollHorz( -HORZ_SCROLL );
                 bDone = TRUE;
             }
-            maSearchStr.Erase();
+            maQuickSelectionEngine.Reset();
         }
         break;
 
@@ -1626,7 +1616,7 @@ BOOL ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
                 ScrollHorz( HORZ_SCROLL );
                 bDone = TRUE;
             }
-            maSearchStr.Erase();
+            maQuickSelectionEngine.Reset();
         }
         break;
 
@@ -1638,7 +1628,7 @@ BOOL ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
                 ImplCallSelect();
                 bDone = FALSE;  // RETURN nicht abfangen.
             }
-            maSearchStr.Erase();
+            maQuickSelectionEngine.Reset();
         }
         break;
 
@@ -1653,7 +1643,7 @@ BOOL ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
                 }
                 bDone = TRUE;
             }
-            maSearchStr.Erase();
+            maQuickSelectionEngine.Reset();
         }
         break;
 
@@ -1673,7 +1663,7 @@ BOOL ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
                 SetUpdateMode( bUpdates );
                 Invalidate();
 
-                maSearchStr.Erase();
+                maQuickSelectionEngine.Reset();
 
                 bDone = TRUE;
                 break;
@@ -1682,43 +1672,12 @@ BOOL ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
         // fall through intentional
         default:
         {
-            xub_Unicode c = rKEvt.GetCharCode();
-
-            if ( !IsReadOnly() && (c >= 32) && (c != 127) && !rKEvt.GetKeyCode().IsMod2() )
+            if ( !IsReadOnly() )
             {
-                maSearchStr += c;
-                XubString aTmpSearch( maSearchStr );
-
-                nSelect = mpEntryList->FindMatchingEntry( aTmpSearch, mnCurrentPos );
-                if ( (nSelect == LISTBOX_ENTRY_NOTFOUND) && (aTmpSearch.Len() > 1) )
-                {
-                    // Wenn alles die gleichen Buchstaben, dann anderer Such-Modus
-                    BOOL bAllEqual = TRUE;
-                    for ( USHORT n = aTmpSearch.Len(); n && bAllEqual; )
-                        bAllEqual = aTmpSearch.GetChar( --n ) == c;
-                    if ( bAllEqual )
-                    {
-                        aTmpSearch = c;
-                        nSelect = mpEntryList->FindMatchingEntry( aTmpSearch, mnCurrentPos+1 );
-                    }
-                }
-                if ( nSelect == LISTBOX_ENTRY_NOTFOUND )
-                    nSelect = mpEntryList->FindMatchingEntry( aTmpSearch, 0 );
-
-                if ( nSelect != LISTBOX_ENTRY_NOTFOUND )
-                {
-                    ShowProminentEntry( nSelect );
-
-                    if ( mpEntryList->IsEntryPosSelected( nSelect ) )
-                        nSelect = LISTBOX_ENTRY_NOTFOUND;
-
-                    maSearchTimeout.Start();
-                }
-                else
-                    maSearchStr.Erase();
-                bDone = TRUE;
+                bDone = maQuickSelectionEngine.HandleKeyEvent( rKEvt );
             }
-        }
+          }
+        break;
     }
 
     if  (   ( nSelect != LISTBOX_ENTRY_NOTFOUND )
@@ -1741,6 +1700,72 @@ BOOL ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
     }
 
     return bDone;
+}
+
+// -----------------------------------------------------------------------
+namespace
+{
+    static ::vcl::StringEntryIdentifier lcl_getEntry( const ImplEntryList& _rList, USHORT _nPos, String& _out_entryText )
+    {
+        OSL_PRECOND( ( _nPos != LISTBOX_ENTRY_NOTFOUND ), "lcl_getEntry: invalid position!" );
+        USHORT nEntryCount( _rList.GetEntryCount() );
+        if ( _nPos >= nEntryCount )
+            _nPos = 0;
+        _out_entryText = _rList.GetEntryText( _nPos );
+
+        // ::vcl::StringEntryIdentifier does not allow for 0 values, but our position is 0-based
+        // => normalize
+        return reinterpret_cast< ::vcl::StringEntryIdentifier >( _nPos + 1 );
+    }
+
+    static USHORT lcl_getEntryPos( ::vcl::StringEntryIdentifier _entry )
+    {
+        // our pos is 0-based, but StringEntryIdentifier does not allow for a NULL
+        return static_cast< USHORT >( reinterpret_cast< sal_Int64 >( _entry ) ) - 1;
+    }
+}
+
+// -----------------------------------------------------------------------
+::vcl::StringEntryIdentifier ImplListBoxWindow::CurrentEntry( String& _out_entryText ) const
+{
+    return lcl_getEntry( *GetEntryList(), ( mnCurrentPos == LISTBOX_ENTRY_NOTFOUND ) ? 0 : mnCurrentPos + 1, _out_entryText );
+}
+
+// -----------------------------------------------------------------------
+::vcl::StringEntryIdentifier ImplListBoxWindow::NextEntry( ::vcl::StringEntryIdentifier _currentEntry, String& _out_entryText ) const
+{
+    USHORT nNextPos = lcl_getEntryPos( _currentEntry ) + 1;
+    return lcl_getEntry( *GetEntryList(), nNextPos, _out_entryText );
+}
+
+// -----------------------------------------------------------------------
+void ImplListBoxWindow::SelectEntry( ::vcl::StringEntryIdentifier _entry )
+{
+    USHORT nSelect = lcl_getEntryPos( _entry );
+    if ( mpEntryList->IsEntryPosSelected( nSelect ) )
+    {
+        // ignore that. This method is a callback from the QuickSelectionEngine, which means the user attempted
+        // to select the given entry by typing its starting letters. No need to act.
+        return;
+    }
+
+    // normalize
+    OSL_ENSURE( nSelect < mpEntryList->GetEntryCount(), "ImplListBoxWindow::SelectEntry: how that?" );
+    if( nSelect >= mpEntryList->GetEntryCount() )
+        nSelect = mpEntryList->GetEntryCount()-1;
+
+    // make visible
+    ShowProminentEntry( nSelect );
+
+    // actually select
+    mnCurrentPos = nSelect;
+    if ( SelectEntries( nSelect, LET_KEYMOVE, FALSE, FALSE ) )
+    {
+        mbTravelSelect = TRUE;
+        mnSelectModifier = 0;
+        ImplCallSelect();
+        mbTravelSelect = FALSE;
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -2356,7 +2381,11 @@ IMPL_LINK( ImplListBox, MRUChanged, void*, EMPTYARG )
 
 IMPL_LINK( ImplListBox, LBWindowScrolled, void*, EMPTYARG )
 {
+    long nSet = GetTopEntry();
+    if( nSet > mpVScrollBar->GetRangeMax() )
+        mpVScrollBar->SetRangeMax( GetEntryList()->GetEntryCount() );
     mpVScrollBar->SetThumbPos( GetTopEntry() );
+
     mpHScrollBar->SetThumbPos( GetLeftIndent() );
 
     maScrollHdl.Call( this );
@@ -2395,7 +2424,11 @@ void ImplListBox::ImplCheckScrollBars()
         mbVScroll = TRUE;
 
         // Ueberpruefung des rausgescrollten Bereichs
-        SetTopEntry( GetTopEntry() );   // MaxTop wird geprueft...
+        if( GetEntryList()->GetSelectEntryCount() == 1 &&
+            GetEntryList()->GetSelectEntryPos( 0 ) != LISTBOX_ENTRY_NOTFOUND )
+            ShowProminentEntry( GetEntryList()->GetSelectEntryPos( 0 ) );
+        else
+            SetTopEntry( GetTopEntry() );   // MaxTop wird geprueft...
     }
     else
     {
@@ -2428,7 +2461,11 @@ void ImplListBox::ImplCheckScrollBars()
                     mbVScroll = TRUE;
 
                     // Ueberpruefung des rausgescrollten Bereichs
-                    SetTopEntry( GetTopEntry() );   // MaxTop wird geprueft...
+                    if( GetEntryList()->GetSelectEntryCount() == 1 &&
+                        GetEntryList()->GetSelectEntryPos( 0 ) != LISTBOX_ENTRY_NOTFOUND )
+                        ShowProminentEntry( GetEntryList()->GetSelectEntryPos( 0 ) );
+                    else
+                        SetTopEntry( GetTopEntry() );   // MaxTop wird geprueft...
                 }
             }
 

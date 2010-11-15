@@ -27,18 +27,14 @@
 
 package complex.toolkit;
 
-import complexlib.ComplexTestCase;
-import util.SOfficeFactory;
-import complexlib.ComplexTestCase;
+// import complexlib.ComplexTestCase;
+import lib.TestParameters;
+// import util.SOfficeFactory;
+// import complexlib.ComplexTestCase;
 import util.SOfficeFactory;
 import util.AccessibilityTools;
-import complex.toolkit.interface_tests._XAccessibleComponent;
-import complex.toolkit.interface_tests._XAccessibleContext;
-import complex.toolkit.interface_tests._XAccessibleEventBroadcaster;
-import complex.toolkit.interface_tests._XAccessibleExtendedComponent;
-import complex.toolkit.interface_tests._XAccessibleText;
 import com.sun.star.awt.XWindow;
-import com.sun.star.chart.XChartDocument;
+// import com.sun.star.chart.XChartDocument;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XServiceInfo;
@@ -51,21 +47,35 @@ import com.sun.star.accessibility.AccessibleRole;
 import com.sun.star.accessibility.XAccessible;
 import com.sun.star.accessibility.XAccessibleContext;
 import com.sun.star.awt.XExtendedToolkit;
-import java.io.PrintWriter;
+// import java.io.PrintWriter;
+
+
+// import org.junit.After;
+import org.junit.AfterClass;
+// import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.openoffice.test.OfficeConnection;
+import static org.junit.Assert.*;
+
 /**
  *
  */
-public class CheckAccessibleStatusBarItem extends ComplexTestCase {
+public class CheckAccessibleStatusBarItem {
 
     XMultiServiceFactory xMSF = null;
     XAccessibleContext testObject = null;
     XWindow xWindow = null;
 
+   /**
+     * The test parameters
+     */
+    private static TestParameters param = null;
 
-    public String[] getTestMethodNames() {
-        return new String[]{"checkDocs"};//{"checkWriterDoc", "checkDrawDoc",
-//                    "checkMathDoc", "checkImpressDoc", "checkCalcDoc"};
-    }
+//    public String[] getTestMethodNames() {
+//        return new String[]{"checkDocs"};//{"checkWriterDoc", "checkDrawDoc",
+////                    "checkMathDoc", "checkImpressDoc", "checkCalcDoc"};
+//    }
 
     /**
     * Sleeps for 0.5 sec. to allow StarOffice to react on <code>
@@ -83,45 +93,67 @@ public class CheckAccessibleStatusBarItem extends ComplexTestCase {
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {
-            log.println("While waiting :" + e) ;
+            System.out.println("While waiting :" + e) ;
         }
     }
 
     /**
      * Check document types
      */
-    public void checkDocs() {
+    @Test public void checkDocs()
+    {
+        param = new TestParameters();
         Object doc = param.get("DocType");
         String testDocType;
         if (doc == null)
+        {
             testDocType = "all";
+        }
         else
+        {
             testDocType = (String)doc;
+        }
 
         System.out.println("Param was " + doc);
         System.out.println("DocType " + testDocType);
         if (testDocType.equalsIgnoreCase("writer") || testDocType.equalsIgnoreCase("all"))
+        {
             checkWriterDoc();
+        }
         if (testDocType.equalsIgnoreCase("math") || testDocType.equalsIgnoreCase("all"))
+        {
             checkMathDoc();
+        }
         if (testDocType.equalsIgnoreCase("draw") || testDocType.equalsIgnoreCase("all"))
+        {
             checkDrawDoc();
+        }
         if (testDocType.equalsIgnoreCase("impress") || testDocType.equalsIgnoreCase("all"))
+        {
             checkImpressDoc();
+        }
         if (testDocType.equalsIgnoreCase("calc") || testDocType.equalsIgnoreCase("all"))
+        {
             checkCalcDoc();
+        }
 
+    }
+
+    private XMultiServiceFactory getMSF()
+    {
+        final XMultiServiceFactory xMSF1 = UnoRuntime.queryInterface(XMultiServiceFactory.class, connection.getComponentContext().getServiceManager());
+        return xMSF1;
     }
 
     /**
      * Test the interfaces on a writer document
      */
-    public void checkWriterDoc() {
-        xMSF = (XMultiServiceFactory)param.getMSF();
+    private void checkWriterDoc() {
+        xMSF = getMSF();
         SOfficeFactory xSOF = SOfficeFactory.getFactory(xMSF);
         XTextDocument xTextDoc = null;
         try {
-            log.println("****** Open a new writer document");
+            System.out.println("****** Open a new writer document");
             xTextDoc = xSOF.createTextDoc("_blank");
             getTestObject();
         }
@@ -131,7 +163,7 @@ public class CheckAccessibleStatusBarItem extends ComplexTestCase {
         runAllInterfaceTests();
 
         if (xTextDoc != null) {
-            XCloseable xClose = (XCloseable)UnoRuntime.queryInterface(XCloseable.class, xTextDoc);
+            XCloseable xClose = UnoRuntime.queryInterface(XCloseable.class, xTextDoc);
             try {
                 xClose.close(false);
             }
@@ -145,11 +177,11 @@ public class CheckAccessibleStatusBarItem extends ComplexTestCase {
      * Test the interfaces on a math document
      */
     public void checkMathDoc() {
-        xMSF = (XMultiServiceFactory)param.getMSF();
+        xMSF = getMSF();
         SOfficeFactory xSOF = SOfficeFactory.getFactory(xMSF);
         XComponent xMathDoc = null;
         try {
-            log.println("****** Open a new math document");
+            System.out.println("****** Open a new math document");
             xMathDoc = xSOF.createMathDoc("_blank");
             getTestObject();
         }
@@ -159,7 +191,7 @@ public class CheckAccessibleStatusBarItem extends ComplexTestCase {
         runAllInterfaceTests();
 
         if (xMathDoc != null) {
-            XCloseable xClose = (XCloseable)UnoRuntime.queryInterface(XCloseable.class, xMathDoc);
+            XCloseable xClose = UnoRuntime.queryInterface(XCloseable.class, xMathDoc);
             try {
                 xClose.close(false);
             }
@@ -173,11 +205,11 @@ public class CheckAccessibleStatusBarItem extends ComplexTestCase {
      * Test the interfaces on a draw document
      */
     public void checkDrawDoc() {
-        xMSF = (XMultiServiceFactory)param.getMSF();
+        xMSF = getMSF();
         SOfficeFactory xSOF = SOfficeFactory.getFactory(xMSF);
         XComponent xDrawDoc = null;
         try {
-            log.println("****** Open a new draw document");
+            System.out.println("****** Open a new draw document");
             xDrawDoc = xSOF.createDrawDoc("_blank");
             getTestObject();
         }
@@ -187,7 +219,7 @@ public class CheckAccessibleStatusBarItem extends ComplexTestCase {
         runAllInterfaceTests();
 
         if (xDrawDoc != null) {
-            XCloseable xClose = (XCloseable)UnoRuntime.queryInterface(XCloseable.class, xDrawDoc);
+            XCloseable xClose = UnoRuntime.queryInterface(XCloseable.class, xDrawDoc);
             try {
                 xClose.close(false);
             }
@@ -201,11 +233,11 @@ public class CheckAccessibleStatusBarItem extends ComplexTestCase {
      * Test the interfaces on an impress document
      */
     public void checkImpressDoc() {
-        xMSF = (XMultiServiceFactory)param.getMSF();
+        xMSF = getMSF();
         SOfficeFactory xSOF = SOfficeFactory.getFactory(xMSF);
         XComponent xImpressDoc = null;
         try {
-            log.println("****** Open a new impress document");
+            System.out.println("****** Open a new impress document");
             xImpressDoc = xSOF.createImpressDoc("_blank");
             getTestObject();
         }
@@ -215,7 +247,7 @@ public class CheckAccessibleStatusBarItem extends ComplexTestCase {
         runAllInterfaceTests();
 
         if (xImpressDoc != null) {
-            XCloseable xClose = (XCloseable)UnoRuntime.queryInterface(XCloseable.class, xImpressDoc);
+            XCloseable xClose = UnoRuntime.queryInterface(XCloseable.class, xImpressDoc);
             try {
                 xClose.close(false);
             }
@@ -228,11 +260,11 @@ public class CheckAccessibleStatusBarItem extends ComplexTestCase {
      * Test the interfaces on an calc document
      */
     public void checkCalcDoc() {
-        xMSF = (XMultiServiceFactory)param.getMSF();
+        xMSF = getMSF();
         SOfficeFactory xSOF = SOfficeFactory.getFactory(xMSF);
         XSpreadsheetDocument xSpreadsheetDoc = null;
         try {
-            log.println("****** Open a new calc document");
+            System.out.println("****** Open a new calc document");
             xSpreadsheetDoc = xSOF.createCalcDoc("_blank");
             shortWait();
             getTestObject();
@@ -243,7 +275,7 @@ public class CheckAccessibleStatusBarItem extends ComplexTestCase {
         runAllInterfaceTests();
 
         if (xSpreadsheetDoc != null) {
-            XCloseable xClose = (XCloseable)UnoRuntime.queryInterface(XCloseable.class, xSpreadsheetDoc);
+            XCloseable xClose = UnoRuntime.queryInterface(XCloseable.class, xSpreadsheetDoc);
             try {
                 xClose.close(false);
             }
@@ -257,11 +289,11 @@ public class CheckAccessibleStatusBarItem extends ComplexTestCase {
         try {
             XInterface xIfc = (XInterface) xMSF.createInstance(
                                             "com.sun.star.awt.Toolkit") ;
-            XExtendedToolkit tk = (XExtendedToolkit)
+            XExtendedToolkit tk =
                         UnoRuntime.queryInterface(XExtendedToolkit.class,xIfc);
 
             shortWait();
-            xWindow = (XWindow)UnoRuntime.queryInterface(
+            xWindow = UnoRuntime.queryInterface(
                                     XWindow.class,tk.getActiveTopWindow());
 
             shortWait();
@@ -269,20 +301,22 @@ public class CheckAccessibleStatusBarItem extends ComplexTestCase {
             XAccessible xRoot = at.getAccessibleObject(xWindow);
             XAccessibleContext parentContext = null;
 
-            log.println("Get the accessible status bar.");
+            System.out.println("Get the accessible status bar.");
             parentContext = at.getAccessibleObjectForRole(
                                         xRoot, AccessibleRole.STATUS_BAR, "");
             shortWait();
             if ( parentContext == null ) {
-                log.println("Could not get the test object: set the correct focus in the next 30 seconds.");
+                System.out.println("Could not get the test object: set the correct focus in the next 30 seconds.");
                 shortWait(30000);
                 parentContext = at.getAccessibleObjectForRole(
                                         xRoot, AccessibleRole.STATUS_BAR, "");
 
                 if ( parentContext == null )
-                    failed("Could not create a test object.");
+                {
+                    fail("Could not create a test object.");
+                }
             }
-            log.println("...OK.");
+            System.out.println("...OK.");
 
             testObject=parentContext;
         }
@@ -297,10 +331,10 @@ public class CheckAccessibleStatusBarItem extends ComplexTestCase {
 
     public void runAllInterfaceTests() {
         int count = testObject.getAccessibleChildCount();
-        log.println("*****");
-        log.println("**** Found items to test: " + count);
+        System.out.println("*****");
+        System.out.println("**** Found items to test: " + count);
         for (int i=0;i<count;i++){
-            log.println("**** Now testing StatusBarItem " + i + ".");
+            System.out.println("**** Now testing StatusBarItem " + i + ".");
             XAccessible object = null;
             try {
                 object = testObject.getAccessibleChild(i);
@@ -309,77 +343,97 @@ public class CheckAccessibleStatusBarItem extends ComplexTestCase {
                 System.out.println("* Cannot get item Nr: " + i);
                 continue;
             }
-            XServiceInfo xSI = (XServiceInfo)UnoRuntime.queryInterface(
+            XServiceInfo xSI = UnoRuntime.queryInterface(
                                         XServiceInfo.class,object);
             String[] services = xSI.getSupportedServiceNames();
-            log.println("* Implementation Name: " + xSI.getImplementationName());
+            System.out.println("* Implementation Name: " + xSI.getImplementationName());
             String accName = object.getAccessibleContext().getAccessibleName();
-            log.println("* Accessible Name: " + accName);
+            System.out.println("* Accessible Name: " + accName);
             for (int j=0; i<services.length; i++)
-                log.println("* ServiceName "+i+": "+ services[j]);
-            log.println("*****");
+            {
+                System.out.println("* ServiceName "+i+": "+ services[j]);
+            }
+            System.out.println("*****");
 
-            log.println("*** Now testing XAccessibleComponent ***");
+            System.out.println("*** Now testing XAccessibleComponent ***");
             _XAccessibleComponent _xAccCompTest =
-                                    new _XAccessibleComponent(object, log);
-            assure("failed: "+accName+" - XAccessibleComponent::getBounds", _xAccCompTest._getBounds(), true);
-            assure("failed: "+accName+" - XAccessibleComponent::contains", _xAccCompTest._containsPoint(), true);
-            assure("failed: "+accName+" - XAccessibleComponent::getAccessibleAt", _xAccCompTest._getAccessibleAtPoint(), true);
-            assure("failed: "+accName+" - XAccessibleComponent::getBackground", _xAccCompTest._getBackground(), true);
-            assure("failed: "+accName+" - XAccessibleComponent::getForeground", _xAccCompTest._getForeground(), true);
-            assure("failed: "+accName+" - XAccessibleComponent::getLocation", _xAccCompTest._getLocation(), true);
-            assure("failed: "+accName+" - XAccessibleComponent::getLocationOnScreen", _xAccCompTest._getLocationOnScreen(), true);
-            assure("failed: "+accName+" - XAccessibleComponent::getSize", _xAccCompTest._getSize(), true);
-            assure("failed: "+accName+" - XAccessibleComponent::grabFocus", _xAccCompTest._grabFocus(), true);
+                                    new _XAccessibleComponent(object);
+            assertTrue("failed: "+accName+" - XAccessibleComponent::getBounds", _xAccCompTest._getBounds());
+            assertTrue("failed: "+accName+" - XAccessibleComponent::contains", _xAccCompTest._containsPoint());
+            assertTrue("failed: "+accName+" - XAccessibleComponent::getAccessibleAt", _xAccCompTest._getAccessibleAtPoint());
+            assertTrue("failed: "+accName+" - XAccessibleComponent::getBackground", _xAccCompTest._getBackground());
+            assertTrue("failed: "+accName+" - XAccessibleComponent::getForeground", _xAccCompTest._getForeground());
+            assertTrue("failed: "+accName+" - XAccessibleComponent::getLocation", _xAccCompTest._getLocation());
+            assertTrue("failed: "+accName+" - XAccessibleComponent::getLocationOnScreen", _xAccCompTest._getLocationOnScreen());
+            assertTrue("failed: "+accName+" - XAccessibleComponent::getSize", _xAccCompTest._getSize());
+            assertTrue("failed: "+accName+" - XAccessibleComponent::grabFocus", _xAccCompTest._grabFocus());
 
-            log.println("*** Now testing XAccessibleContext ***");
+            System.out.println("*** Now testing XAccessibleContext ***");
             _XAccessibleContext _xAccContext =
-                                    new _XAccessibleContext(object, log);
-            assure("failed: "+accName+" - XAccessibleContext::getAccessibleChildCount", _xAccContext._getAccessibleChildCount(), true);
-            assure("failed: "+accName+" - XAccessibleContext::getAccessibleChild", _xAccContext._getAccessibleChild(), true);
-            assure("failed: "+accName+" - XAccessibleContext::getAccessibleDescription", _xAccContext._getAccessibleDescription(), true);
-            assure("failed: "+accName+" - XAccessibleContext::getAccessibleName", _xAccContext._getAccessibleName(), true);
-            assure("failed: "+accName+" - XAccessibleContext::getAccessibleParent", _xAccContext._getAccessibleParent(), true);
-            assure("failed: "+accName+" - XAccessibleContext::getAccessibleIndexInParent", _xAccContext._getAccessibleIndexInParent(), true);
-            assure("failed: "+accName+" - XAccessibleContext::getAccessibleRelationSet", _xAccContext._getAccessibleRelationSet(), true);
-            assure("failed: "+accName+" - XAccessibleContext::getAccessibleRole", _xAccContext._getAccessibleRole(), true);
-            assure("failed: "+accName+" - XAccessibleContext::getAccessibleStateSet", _xAccContext._getAccessibleStateSet(), true);
-            assure("failed: "+accName+" - XAccessibleContext::getLocale", _xAccContext._getLocale(), true);
+                                    new _XAccessibleContext(object);
+            assertTrue("failed: "+accName+" - XAccessibleContext::getAccessibleChildCount", _xAccContext._getAccessibleChildCount());
+            assertTrue("failed: "+accName+" - XAccessibleContext::getAccessibleChild", _xAccContext._getAccessibleChild());
+            assertTrue("failed: "+accName+" - XAccessibleContext::getAccessibleDescription", _xAccContext._getAccessibleDescription());
+            assertTrue("failed: "+accName+" - XAccessibleContext::getAccessibleName", _xAccContext._getAccessibleName());
+            assertTrue("failed: "+accName+" - XAccessibleContext::getAccessibleParent", _xAccContext._getAccessibleParent());
+            assertTrue("failed: "+accName+" - XAccessibleContext::getAccessibleIndexInParent", _xAccContext._getAccessibleIndexInParent());
+            assertTrue("failed: "+accName+" - XAccessibleContext::getAccessibleRelationSet", _xAccContext._getAccessibleRelationSet());
+            assertTrue("failed: "+accName+" - XAccessibleContext::getAccessibleRole", _xAccContext._getAccessibleRole());
+            assertTrue("failed: "+accName+" - XAccessibleContext::getAccessibleStateSet", _xAccContext._getAccessibleStateSet());
+            assertTrue("failed: "+accName+" - XAccessibleContext::getLocale", _xAccContext._getLocale());
 
-            log.println("*** Now testing XAccessibleExtendedComponent ***");
+            System.out.println("*** Now testing XAccessibleExtendedComponent ***");
             _XAccessibleExtendedComponent _xAccExtComp =
-                                    new _XAccessibleExtendedComponent(object, log);
-            assure("failed: "+accName+" - XAccessibleExtendedComponent::getFont", _xAccExtComp._getFont(), true);
-            assure("failed: "+accName+" - XAccessibleExtendedComponent::getTitledBorderText", _xAccExtComp._getTitledBorderText(), true);
-            assure("failed: "+accName+" - XAccessibleExtendedComponent::getToolTipText", _xAccExtComp._getToolTipText(), true);
+                                    new _XAccessibleExtendedComponent(object);
+            assertTrue("failed: "+accName+" - XAccessibleExtendedComponent::getFont", _xAccExtComp._getFont());
+            assertTrue("failed: "+accName+" - XAccessibleExtendedComponent::getTitledBorderText", _xAccExtComp._getTitledBorderText());
+            assertTrue("failed: "+accName+" - XAccessibleExtendedComponent::getToolTipText", _xAccExtComp._getToolTipText());
 
-            log.println("*** Now testing XAccessibleEventBroadcaster ***");
+            System.out.println("*** Now testing XAccessibleEventBroadcaster ***");
             _XAccessibleEventBroadcaster _xAccEvBcast =
-                                    new _XAccessibleEventBroadcaster(object, log, "Pfff", xWindow);
-            assure("failed: "+accName+" - XAccessibleEventBroadcaster::addEventListener", _xAccEvBcast._addEventListener(), true);
-            assure("failed: "+accName+" - XAccessibleEventBroadcaster::removeEventListener", _xAccEvBcast._removeEventListener(), true);
+                                    new _XAccessibleEventBroadcaster(object, "Pfff", xWindow);
+            assertTrue("failed: "+accName+" - XAccessibleEventBroadcaster::addEventListener", _xAccEvBcast._addEventListener());
+            assertTrue("failed: "+accName+" - XAccessibleEventBroadcaster::removeEventListener", _xAccEvBcast._removeEventListener());
 
-            log.println("*** Now testing XAccessibleText ***");
+            System.out.println("*** Now testing XAccessibleText ***");
             _XAccessibleText _xAccText =
-                                    new _XAccessibleText(object, log, xMSF, "true");
-            assure("failed: "+accName+" - XAccessibleText::getText", _xAccText._getText(), true);
-            assure("failed: "+accName+" - XAccessibleText::getCharacterCount", _xAccText._getCharacterCount(), true);
-            assure("failed: "+accName+" - XAccessibleText::getCharacterBounds", _xAccText._getCharacterBounds(), true);
-            assure("failed: "+accName+" - XAccessibleText::setSelection", _xAccText._setSelection(), true);
-            assure("failed: "+accName+" - XAccessibleText::copyText", _xAccText._copyText(), true);
-            assure("failed: "+accName+" - XAccessibleText::getCharacter", _xAccText._getCharacter(), true);
-            assure("failed: "+accName+" - XAccessibleText::getCharacterAttributes", _xAccText._getCharacterAttributes(), true);
-            assure("failed: "+accName+" - XAccessibleText::getIndexAtPoint", _xAccText._getIndexAtPoint(), true);
-            assure("failed: "+accName+" - XAccessibleText::getSelectedText", _xAccText._getSelectedText(), true);
-            assure("failed: "+accName+" - XAccessibleText::getSelectionEnd", _xAccText._getSelectionEnd(), true);
-            assure("failed: "+accName+" - XAccessibleText::getSelectionStart", _xAccText._getSelectionStart(), true);
-            assure("failed: "+accName+" - XAccessibleText::getTextAtIndex", _xAccText._getTextAtIndex(), true);
-            assure("failed: "+accName+" - XAccessibleText::getTextBeforeIndex", _xAccText._getTextBeforeIndex(), true);
-            assure("failed: "+accName+" - XAccessibleText::getBehindIndex", _xAccText._getTextBehindIndex(), true);
-            assure("failed: "+accName+" - XAccessibleText::getTextRange", _xAccText._getTextRange(), true);
-            assure("failed: "+accName+" - XAccessibleText::setCaretPosition", _xAccText._setCaretPosition(), true);
-            assure("failed: "+accName+" - XAccessibleText::getCaretPosition", _xAccText._getCaretPosition(), true);
+                                    new _XAccessibleText(object, xMSF, "true");
+            assertTrue("failed: "+accName+" - XAccessibleText::getText", _xAccText._getText());
+            assertTrue("failed: "+accName+" - XAccessibleText::getCharacterCount", _xAccText._getCharacterCount());
+            assertTrue("failed: "+accName+" - XAccessibleText::getCharacterBounds", _xAccText._getCharacterBounds());
+            assertTrue("failed: "+accName+" - XAccessibleText::setSelection", _xAccText._setSelection());
+            assertTrue("failed: "+accName+" - XAccessibleText::copyText", _xAccText._copyText());
+            assertTrue("failed: "+accName+" - XAccessibleText::getCharacter", _xAccText._getCharacter());
+            assertTrue("failed: "+accName+" - XAccessibleText::getCharacterAttributes", _xAccText._getCharacterAttributes());
+            assertTrue("failed: "+accName+" - XAccessibleText::getIndexAtPoint", _xAccText._getIndexAtPoint());
+            assertTrue("failed: "+accName+" - XAccessibleText::getSelectedText", _xAccText._getSelectedText());
+            assertTrue("failed: "+accName+" - XAccessibleText::getSelectionEnd", _xAccText._getSelectionEnd());
+            assertTrue("failed: "+accName+" - XAccessibleText::getSelectionStart", _xAccText._getSelectionStart());
+            assertTrue("failed: "+accName+" - XAccessibleText::getTextAtIndex", _xAccText._getTextAtIndex());
+            assertTrue("failed: "+accName+" - XAccessibleText::getTextBeforeIndex", _xAccText._getTextBeforeIndex());
+            assertTrue("failed: "+accName+" - XAccessibleText::getBehindIndex", _xAccText._getTextBehindIndex());
+            assertTrue("failed: "+accName+" - XAccessibleText::getTextRange", _xAccText._getTextRange());
+            assertTrue("failed: "+accName+" - XAccessibleText::setCaretPosition", _xAccText._setCaretPosition());
+            assertTrue("failed: "+accName+" - XAccessibleText::getCaretPosition", _xAccText._getCaretPosition());
         }
     }
+
+
+
+
+    @BeforeClass public static void setUpConnection() throws Exception {
+        System.out.println("setUpConnection()");
+        connection.setUp();
+    }
+
+    @AfterClass public static void tearDownConnection()
+        throws InterruptedException, com.sun.star.uno.Exception
+    {
+        System.out.println("tearDownConnection()");
+        connection.tearDown();
+    }
+
+    private static final OfficeConnection connection = new OfficeConnection();
+
 
 }
