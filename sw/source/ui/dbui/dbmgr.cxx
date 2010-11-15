@@ -134,6 +134,7 @@
 #include <memory>
 #include <vector>
 #include <unomid.h>
+#include <section.hxx>
 
 using namespace ::osl;
 using namespace ::svx;
@@ -842,6 +843,23 @@ void lcl_CopyFollowPageDesc(
     }
 }
 
+void lcl_RemoveSectionLinks( SwWrtShell& rWorkShell )
+{
+    //reset all links of the sections of synchronized labels
+    USHORT nSections = rWorkShell.GetSectionFmtCount();
+    for( USHORT nSection = 0; nSection < nSections; ++nSection )
+    {
+        SwSectionData aSectionData( *rWorkShell.GetSectionFmt( nSection ).GetSection() );
+        if( aSectionData.GetType() == FILE_LINK_SECTION )
+        {
+            aSectionData.SetType( CONTENT_SECTION );
+            aSectionData.SetLinkFileName( String() );
+            rWorkShell.UpdateSection( nSection, aSectionData );
+        }
+    }
+    rWorkShell.SetLabelDoc( sal_False );
+}
+
 BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
         const SwMergeDescriptor& rMergeDescriptor)
 {
@@ -1082,6 +1100,10 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                                 // copy created file into the target document
                                 rWorkShell.ConvertFieldsToText();
                                 rWorkShell.SetNumberingRestart();
+                                if( bSynchronizedDoc )
+                                {
+                                    lcl_RemoveSectionLinks( rWorkShell );
+                                }
 
                                 // insert the document into the target document
                                 rWorkShell.SttEndDoc(FALSE);
@@ -2931,7 +2953,10 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
             rWorkShell.RemoveInvisibleContent();
             rWorkShell.ConvertFieldsToText();
             rWorkShell.SetNumberingRestart();
-
+            if( bSynchronizedDoc )
+            {
+                lcl_RemoveSectionLinks( rWorkShell );
+            }
 
             // insert the document into the target document
             rWorkShell.SttEndDoc(FALSE);

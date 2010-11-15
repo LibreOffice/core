@@ -48,17 +48,15 @@ EXCEPTIONSFILES=	\
         $(SLO)$/rtfnum.obj \
         $(SLO)$/rtftbl.obj \
         $(SLO)$/swparrtf.obj \
-        $(SLO)$/wrtrtf.obj
+        $(SLO)$/rtffld.obj
 
 
 SLOFILES =	\
-        $(SLO)$/rtfatr.obj \
         $(SLO)$/rtffld.obj \
         $(SLO)$/rtffly.obj \
         $(SLO)$/rtfnum.obj \
         $(SLO)$/rtftbl.obj \
-        $(SLO)$/swparrtf.obj \
-        $(SLO)$/wrtrtf.obj
+        $(SLO)$/swparrtf.obj
 
 # --- Tagets -------------------------------------------------------
 
