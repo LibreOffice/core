@@ -1435,7 +1435,7 @@ void SAL_CALL ZipPackage::commitChanges()
             {
                 // write directly in case of local file
                 uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess > xSimpleAccess(
-                    m_xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ),
+                    m_xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess") ) ),
                     uno::UNO_QUERY );
                 OSL_ENSURE( xSimpleAccess.is(), "Can't instatiate SimpleFileAccess service!\n" );
                 uno::Reference< io::XTruncate > xOrigTruncate;
@@ -1531,9 +1531,9 @@ void ZipPackage::DisconnectFromTargetAndThrowException_Impl( const uno::Referenc
     ::rtl::OUString aTempURL;
     try {
         uno::Reference< beans::XPropertySet > xTempFile( xTempStream, uno::UNO_QUERY_THROW );
-        uno::Any aUrl = xTempFile->getPropertyValue( ::rtl::OUString::createFromAscii( "Uri" ) );
+        uno::Any aUrl = xTempFile->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Uri") ) );
         aUrl >>= aTempURL;
-        xTempFile->setPropertyValue( ::rtl::OUString::createFromAscii( "RemoveFile" ),
+        xTempFile->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RemoveFile") ),
                                      uno::makeAny( sal_False ) );
     }
     catch ( uno::Exception& )

@@ -444,15 +444,15 @@ void SAL_CALL OZipFileAccess::removeEventListener( const uno::Reference< lang::X
 uno::Sequence< ::rtl::OUString > SAL_CALL OZipFileAccess::impl_staticGetSupportedServiceNames()
 {
     uno::Sequence< ::rtl::OUString > aRet(2);
-    aRet[0] = ::rtl::OUString::createFromAscii("com.sun.star.packages.zip.ZipFileAccess");
-    aRet[1] = ::rtl::OUString::createFromAscii("com.sun.star.comp.packages.zip.ZipFileAccess");
+    aRet[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.packages.zip.ZipFileAccess") );
+    aRet[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.packages.zip.ZipFileAccess") );
     return aRet;
 }
 
 //-------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OZipFileAccess::impl_staticGetImplementationName()
 {
-    return ::rtl::OUString::createFromAscii("com.sun.star.comp.package.zip.ZipFileAccess");
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.package.zip.ZipFileAccess") );
 }
 
 //-------------------------------------------------------------------------
