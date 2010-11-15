@@ -58,9 +58,6 @@ class SwTable;
 class SwXText;
 
 
-/*-----------------07.04.98 08:15-------------------
-
---------------------------------------------------*/
 typedef ::cppu::ImplInheritanceHelper10
 <   ::sfx2::MetadatableMixin
 ,   ::com::sun::star::lang::XUnoTunnel
@@ -317,9 +314,6 @@ public:
 };
 
 
-/*-----------------07.04.98 08:10-------------------
-
---------------------------------------------------*/
 class SwXParagraphEnumeration
     : public SwSimpleEnumeration_Base
 {

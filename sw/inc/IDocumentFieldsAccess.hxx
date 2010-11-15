@@ -82,7 +82,6 @@ namespace com { namespace sun { namespace star { namespace uno { class Any; } } 
     */
     virtual void InsDeletedFldType(SwFieldType &) = 0;
 
-    // #111840#
     /**
        Puts a value into a field at a certain position.
 
@@ -99,7 +98,6 @@ namespace com { namespace sun { namespace star { namespace uno { class Any; } } 
 
     // rufe das Update der Expression Felder auf; alle Ausdruecke werden
     // neu berechnet.
-    // #111840#
 
     /** Updates a field.
 

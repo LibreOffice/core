@@ -20,8 +20,6 @@ struct PrevwPage;
 // =============================================================================
 /** page preview functionality in the writer
 
-    OD 11.12.2002 #103492# - class <SwPagePreviewLayout>
-
     @author OD
 */
 class SwPagePreviewLayout
@@ -55,8 +53,7 @@ private:
     sal_uInt16  mnCols;
     sal_uInt16  mnRows;
     sal_uInt16  mnPages;
-    // OD 19.02.2003 #107369# - new flag for leaving blank left-top-corner
-    // OD 2004-03-05 #i18143# - the book preview is controlled by this flag
+    // #i18143# - the book preview is controlled by this flag
     bool        mbBookPreview;
     bool        mbBookPreviewModeToggled;
 
@@ -81,7 +78,7 @@ private:
 
     std::vector<PrevwPage*> maPrevwPages;
 
-    // OD 07.11.2003 #i22014# - internal booleans to indicate, that a new print
+    // #i22014# - internal booleans to indicate, that a new print
     // preview layout has been created during a paint.
     mutable bool mbInPaint;
     mutable bool mbNewLayoutDuringPaint;
@@ -90,15 +87,11 @@ private:
 
     /** clear internal data about current page preview
 
-        OD 11.12.2002 #103492#
-
         @author OD
     */
     void _Clear();
 
     /** helper method to clear preview page layout sizes
-
-        OD 18.12.2002 #103492#
 
         @author OD
     */
@@ -106,23 +99,17 @@ private:
 
     /** helper method to clear data in preview page vectors
 
-        OD 13.12.2002 #103492#
-
         @author OD
     */
     void _ClearPrevwPageData();
 
     /** calculate page preview layout sizes
 
-        OD 18.12.2002 #103492#
-
         @author OD
     */
     void _CalcPrevwLayoutSizes();
 
     /** apply new zoom at given view shell
-
-        OD 11.12.2002 #103492#
 
         @author OD
 
@@ -133,7 +120,6 @@ private:
 
     /** calculate additional paint offset
 
-        OD 12.12.2002 #103492#
         helper method called by <Prepare> in order to calculate an additional
         paint offset to center output in given window size.
         The booleans <mbDoesLayoutRowsFitIntoWindow> and <mbDoesLayoutColsFitIntoWindow>
@@ -150,7 +136,6 @@ private:
 
     /** calculate painted preview document rectangle
 
-        OD 12.12.2002 #103492#
         helper method called by <Prepare> in order to calculate the rectangle,
         which will be painted for the document arranged by the given preview
         layout.
@@ -165,7 +150,6 @@ private:
 
     /** determines preview data for a given page and a given preview offset
 
-        OD 13.12.2002 #103492#
 
         @author OD
 
@@ -189,7 +173,6 @@ private:
 
     /** calculate preview pages
 
-        OD 12.12.2002 #103492#
         helper method called by <Prepare> in order to determine which pages
         will be visible in the current preview and calculate the data needed
         to paint these pages. Also the accessible pages with its needed data
@@ -200,8 +183,6 @@ private:
     void _CalcPreviewPages();
 
     /** get preview page by physical page number
-
-        OD 17.12.2002 #103492#
 
         @author OD
 
@@ -216,16 +197,12 @@ private:
 
     /** paint selection mark at page
 
-        OD 17.12.2002 #103492#
-
         @author OD
     */
     void _PaintSelectMarkAtPage( const PrevwPage* _aSelectedPrevwPage ) const;
 
 public:
     /** constructor of <SwPagePreviewLayout>
-
-        OD 11.12.2002 #103492#
 
         @author OD
 
@@ -247,8 +224,6 @@ public:
 
     /** destructor of <SwPagePreviewLayout>
 
-        OD 17.12.2002 #103492#
-
         @author
     */
     inline ~SwPagePreviewLayout()
@@ -258,7 +233,6 @@ public:
 
     /** init page preview layout
 
-        OD 11.12.2002 #103492#
         initialize the page preview settings for a given layout.
         side effects:
         (1) If parameter <_bCalcScale> is true, mapping mode with calculated
@@ -292,8 +266,6 @@ public:
 
     /** method to adjust page preview layout to document changes
 
-        OD 18.12.2002 #103492#
-
         @author OD
 
         @return boolean, indicating, if preview layout is successful initialized.
@@ -302,7 +274,6 @@ public:
 
     /** prepare paint of page preview
 
-        OD 12.12.2002 #103492#
         With the valid preview layout settings - calculated and set by method
         <Init(..)> - the paint of a specific part of the virtual preview
         document is prepared. The corresponding part is given by either
@@ -310,7 +281,6 @@ public:
         (parameter <_aProposedStartPoint>).
         The accessibility preview will also be updated via a corresponding
         method call.
-        OD 21.03.2003 #108282# - delete parameter _onStartPageVirtNum
 
         @author OD
 
@@ -351,8 +321,6 @@ public:
 
     /** get selected page number
 
-        OD 13.12.2002 #103492#
-
         @author OD
     */
     inline sal_uInt16 SelectedPage()
@@ -362,8 +330,6 @@ public:
 
     /** set selected page number
 
-        OD 14.01.2003 #103492#
-
         @author OD
     */
     inline void SetSelectedPage( sal_uInt16 _nSelectedPageNum )
@@ -372,8 +338,6 @@ public:
     }
 
     /** paint prepared preview
-
-        OD 12.12.2002 #103492#
 
         @author OD
 
@@ -386,7 +350,6 @@ public:
 
     /** repaint pages on page preview
 
-        OD 18.12.2002 #103492#
         method to invalidate visible pages due to changes in a different
         view shell.
 
@@ -396,7 +359,6 @@ public:
 
     /** paint to mark new selected page
 
-        OD 17.12.2002 #103492#
         Perform paint for current selected page in order to unmark it.
         Set new selected page and perform paint to mark this page.
 
@@ -409,7 +371,6 @@ public:
 
     /** calculate start position for new scale
 
-        OD 12.12.2002 #103492#
         calculate new start position for a new scale. Calculation bases on the
         current visible part of the document arranged in the given preview layout.
         preconditions:
@@ -425,8 +386,6 @@ public:
 
     /** determines, if page with given page number is visible in preview
 
-        OD 12.12.2002 #103492#
-
         @author OD
 
         @param _nPageNum
@@ -439,8 +398,6 @@ public:
     bool IsPageVisible( const sal_uInt16 _nPageNum ) const;
 
     /** calculate data to bring new selected page into view.
-
-        OD 12.12.2002 #103492#
 
         @author OD
 
@@ -470,8 +427,6 @@ public:
                                              Point&           _orNewStartPos ) const;
 
     /** checks, if given position is inside a shown document page
-
-        OD 17.12.2002 #103492#
 
         @author OD
 
@@ -517,8 +472,6 @@ public:
 
     /** determine preview window page scroll amount
 
-        OD 17.12.2002 #103492#
-
         @author OD
 
         @param _nWinPagesToScroll
@@ -532,8 +485,6 @@ public:
 
     /** determine row the page with the given number is in
 
-        OD 17.01.2003 #103492#
-
         @author OD
 
         @param _nPageNum
@@ -546,8 +497,6 @@ public:
 
     /** determine column the page with the given number is in
 
-        OD 17.01.2003 #103492#
-
         @author OD
 
         @param _nPageNum
@@ -558,12 +507,9 @@ public:
     */
     sal_uInt16 GetColOfPage( sal_uInt16 _nPageNum ) const;
 
-    // OD 18.12.2002 #103492#
     Size GetPrevwDocSize() const;
 
     /** get size of a preview page by its physical page number
-
-        OD 15.01.2003 #103492#
 
         @author OD
 
@@ -577,8 +523,6 @@ public:
 
     /** get virtual page number by its physical page number
 
-        OD 21.03.2003 #108282#
-
         @author OD
 
         @param _nPageNum
@@ -591,8 +535,6 @@ public:
     sal_uInt16 GetVirtPageNumByPageNum( sal_uInt16 _nPageNum ) const;
 
     /** enable/disable book preview
-
-        OD 2004-03-04 #i18143#
 
         @author OD
     */

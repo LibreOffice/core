@@ -189,7 +189,6 @@
 #define WID_LEVEL_FORMAT                        1021
 #define WID_LEVEL_PARAGRAPH_STYLES              1022
 #define WID_RECALC_TAB_STOPS                    1023
-//#define WID_???                               1024
 #define WID_MAIN_ENTRY_CHARACTER_STYLE_NAME     1025
 #define WID_CREATE_FROM_TABLES                  1026
 #define WID_CREATE_FROM_TEXT_FRAMES             1027
@@ -316,9 +315,6 @@
 #define WID_TXTCOL_IS_AUTOMATIC         5
 #define WID_TXTCOL_AUTO_DISTANCE        6
 
-/* -----------------04.07.98 11:41-------------------
- *
- * --------------------------------------------------*/
 class SwItemPropertySet : public SfxItemPropertySet
 {
 protected:
@@ -327,9 +323,6 @@ public:
     SwItemPropertySet( const SfxItemPropertyMapEntry *pMap ) :
         SfxItemPropertySet( pMap ){}
 };
-/* -----------------04.07.98 11:41-------------------
- *
- * --------------------------------------------------*/
 class SwUnoPropertyMapProvider
 {
     SfxItemPropertyMapEntry*        aMapEntriesArr[PROPERTY_MAP_END];

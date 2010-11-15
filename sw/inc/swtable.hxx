@@ -249,19 +249,17 @@ public:
 
         // lese die 1. Nummer und loesche sie aus dem String
         // (wird von GetTblBox und SwTblFld benutzt)
-    // --> OD 2007-08-03 #i80314#
+    // #i80314#
     // add 3rd parameter in order to control validation check on <rStr>
     static USHORT _GetBoxNum( String& rStr,
                               BOOL bFirst = FALSE,
                               const bool bPerformValidCheck = false );
-    // <--
         // suche die Inhaltstragende Box mit dem Namen
-    // --> OD 2007-08-03 #i80314#
+    // #i80314#
     // add 2nd parameter in order to control validation check in called method
     // <_GetBoxNum(..)>
     const SwTableBox* GetTblBox( const String& rName,
                                  const bool bPerformValidCheck = false ) const;
-    // <--
         // kopiere die selektierten Boxen in ein anderes Dokument.
     BOOL MakeCopy( SwDoc*, const SwPosition&, const SwSelBoxes&,
                     BOOL bCpyNds = TRUE, BOOL bCpyName = FALSE ) const;

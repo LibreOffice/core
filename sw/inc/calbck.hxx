@@ -65,7 +65,7 @@ class SW_DLLPUBLIC SwClient
     friend class SwModify;
     friend class SwClientIter;
 
-    SwClient *pLeft, *pRight;           // fuer die AVL-Sortierung
+    SwClient *pLeft, *pRight;           // for the AVL-Sorting
     BOOL bModifyLocked : 1;             // wird in SwModify::Modify benutzt,
                                         // eigentlich ein Member des SwModify
                                         // aber aus Platzgruenden hier.
@@ -102,7 +102,7 @@ public:
     BOOL IsInCache()      const         { return bInCache;       }
     BOOL IsInSwFntCache()  const        { return bInSwFntCache;  }
 
-        // erfrage vom Client Informationen
+    // get client Information
     virtual BOOL GetInfo( SfxPoolItem& ) const;
 
 private:
@@ -144,7 +144,7 @@ public:
 
     const SwClient* GetDepends() const  { return pRoot; }
 
-        // erfrage vom Client Informationen
+    // get client information
     virtual BOOL GetInfo( SfxPoolItem& ) const;
 
     void SetInDocDTOR() { bInDocDTOR = TRUE; }
@@ -185,7 +185,7 @@ public:
     SwClient* GetToTell() { return pToTell; }
     virtual void Modify( SfxPoolItem *pOldValue, SfxPoolItem *pNewValue );
 
-        // erfrage vom Client Informationen
+    // get Client information
     virtual BOOL GetInfo( SfxPoolItem & ) const;
 
 private:

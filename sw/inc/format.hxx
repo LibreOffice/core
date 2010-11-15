@@ -298,7 +298,7 @@ public:
     inline  const SwTblBoxFormula       &GetTblBoxFormula( BOOL = TRUE ) const;
     inline  const SwTblBoxValue         &GetTblBoxValue( BOOL = TRUE ) const;
 
-    /** SwFmt::IsBackgroundTransparent - for feature #99657#
+    /** SwFmt::IsBackgroundTransparent
 
         Virtual method to determine, if background of format is transparent.
         Default implementation returns false. Thus, subclasses have to overload
@@ -310,7 +310,7 @@ public:
     */
     virtual sal_Bool IsBackgroundTransparent() const;
 
-    /** SwFmt::IsShadowTransparent - for feature #99657#
+    /** SwFmt::IsShadowTransparent
 
         Virtual method to determine, if shadow of format is transparent.
         Default implementation returns false. Thus, subclasses have to overload

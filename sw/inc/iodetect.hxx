@@ -118,7 +118,6 @@ public:
 
     static bool IsDetectableText( const sal_Char* pBuf, ULONG &rLen,
             CharSet *pCharSet=0, bool *pSwap=0, LineEnd *pLineEnd=0, bool bEncodedFilter = false );
-    //    static bool IsDetectableW4W(const String& rFileName, const String& rUserData);
 
     static const SfxFilter* GetTextFilter( const sal_Char* pBuf, ULONG nLen );
 

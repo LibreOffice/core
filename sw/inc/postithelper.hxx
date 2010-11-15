@@ -112,27 +112,6 @@ public:
                                                                 SwPostItMgr& aMgr,
                                                                 SwPostItBits aBits) = 0;
 };
-/*
-class SwRedCommentItem: public SwSidebarItem
-{
-private:
-    SwRedline* pRedline;
-public:
-
-    SwRedCommentItem( SwRedline* pRed, bool aShow, bool aFocus)
-        : SwSidebarItem(aShow,aFocus),
-        pRedline(pRed) {}
-    virtual ~SwRedCommentItem() {}
-    virtual SwPosition GetAnchorPosition() const;
-    virtual bool UseElement();
-    virtual SwFmtFld* GetFmtFld() const {return 0; }
-    virtual SfxBroadcaster* GetBroadCaster() const { return dynamic_cast<SfxBroadcaster *> (pRedline); }
-    virtual sw::sidebarwindows::SwSidebarWin* GetSidebarWindow( SwEditWin& rEditWin,
-                                                                WinBits nBits,
-                                                                SwPostItMgr& aMgr,
-                                                                SwPostItBits aBits);
-};
-*/
 
 class SwAnnotationItem: public SwSidebarItem
 {

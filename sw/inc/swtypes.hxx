@@ -41,8 +41,6 @@
 #include <com/sun/star/uno/Reference.h>
 #include "swdllapi.h"
 #include <i18npool/lang.h>
-// wenn das hier geaendert wird, dann auch im globals.hrc aendern!!!
-//#define SW_FILEFORMAT_40 SOFFICE_FILEFORMAT_40
 
 namespace com { namespace sun { namespace star {
     namespace linguistic2{

@@ -186,7 +186,7 @@ public:
     void SetObjDescription( const String& rDescription,
                             bool bBroadcast = false );
 
-    /** SwFlyFrmFmt::IsBackgroundTransparent - for #99657#
+    /** SwFlyFrmFmt::IsBackgroundTransparent
 
         overloading virtual method and its default implementation,
         because format of fly frame provides transparent backgrounds.
@@ -199,7 +199,7 @@ public:
     */
     virtual sal_Bool IsBackgroundTransparent() const;
 
-    /** SwFlyFrmFmt::IsBackgroundBrushInherited - for #103898#
+    /** SwFlyFrmFmt::IsBackgroundBrushInherited
 
         method to determine, if the brush for drawing the
         background is "inherited" from its parent/grandparent.

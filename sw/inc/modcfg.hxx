@@ -41,7 +41,6 @@
 #include <tools/globname.hxx>
 class SwModuleOptions;
 
-//-----------------------------------------------------------------------------
 class InsCaptionOpt;
 typedef InsCaptionOpt* InsCaptionOptPtr;
 SV_DECL_PTRARR_SORT_DEL(InsCapOptArr, InsCaptionOptPtr, 0, 5)
@@ -89,10 +88,7 @@ class SwInsertConfig : public utl::ConfigItem
 
     sal_Bool            bInsWithCaption;       //Insert/Caption/Automatic   // Objekte beschriftet einfuegen
     sal_Bool            bCaptionOrderNumberingFirst; //#i61007# caption order starting with numbering
-//  sal_uInt16          nInsTblFlags;           //Insert/Table/Header       // Flags fuer Tabellen einfuegen
-                                                //Insert/Table/RepeatHeader
-                                                //Insert/Table/Split
-                                                //Insert/Table/Border
+
     SwInsertTableOptions    aInsTblOpts;
     sal_Bool            bIsWeb;
 
@@ -160,9 +156,6 @@ class SwMiscConfig : public utl::ConfigItem
     void                    SetModified(){ConfigItem::SetModified();}
 };
 
-/* ---------------------------------------------------------------------------
-
- ---------------------------------------------------------------------------*/
 class SW_DLLPUBLIC SwModuleOptions
 {
     SwRevisionConfig                aRevisionConfig;

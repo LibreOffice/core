@@ -98,7 +98,7 @@ class SW_DLLPUBLIC SwAnchoredDrawObject : public SwAnchoredObject
             instance has to be set.
             Note: This adjustment is not be done for as-character anchored
             drawing object - the positioning code takes care of this.
-            OD 2004-07-29 #i31698# - API for drawing objects in Writer has
+            #i31698# - API for drawing objects in Writer has
             been adjusted. Thus, this method will only set the internal anchor
             position of the <SdrObject> instance to the anchor position given
             by its anchor frame.

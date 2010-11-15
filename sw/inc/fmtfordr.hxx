@@ -50,7 +50,7 @@ public:
     SwFmtFillOrder( SwFillOrder = ATT_TOP_DOWN );
     inline SwFmtFillOrder &operator=( const SwFmtFillOrder &rCpy );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual methods" of SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual USHORT          GetValueCount() const;
 

@@ -114,7 +114,7 @@ inline const SvxCharHiddenItem  &SwAttrSet::GetCharHidden( BOOL bInP ) const
 
 /******************************************************************************
  *  Implementierung der Charakter-Attribut Methoden vom SwFmt
- *  AMA: 12.10.94: Umstellung auf SvxItems.
+ *  Umstellung auf SvxItems.
  ******************************************************************************/
 
 inline const SvxPostureItem          &SwFmt::GetPosture(BOOL bInP) const

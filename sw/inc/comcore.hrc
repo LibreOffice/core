@@ -30,7 +30,7 @@
 #include "rcid.hrc"
 
 // ---------------
-// die Strings
+// Strings
 // ---------------
 
 #define STR_COMCORE_READERROR               (RC_COMCORE_BEGIN + 0)
@@ -87,7 +87,7 @@
 #define RID_GRAPHIC_REPLACEBMP_HC           (RC_COMCORE_BEGIN + 48)
 #define RID_GRAPHIC_ERRORBMP_HC             (RC_COMCORE_BEGIN + 49)
 
-// defines fuer die Autoformat Redline Kommentare
+// defines for the Autoformat Redline Comments
 #define STR_AUTOFMTREDL_DEL_EMPTY_PARA          0
 #define STR_AUTOFMTREDL_USE_REPLACE             1
 #define STR_AUTOFMTREDL_CPTL_STT_WORD           2
@@ -110,7 +110,7 @@
 #define STR_AUTOFMTREDL_SET_NUMBULET            19
 #define STR_AUTOFMTREDL_DEL_MORELINES           20
 #define STR_AUTOFMTREDL_NON_BREAK_SPACE         21
-// !!!!!!!!!!!!!!!!!!!!!!!!!!  das Ende immer richtig setzen !!!!!!!!!!!!
+// !!!!!!!!!!!!!!!!!!!!!!!!!!  alwats set the correct end !!!!!!!!!!!!
 #define STR_AUTOFMTREDL_END                     22
 
 

@@ -40,12 +40,12 @@ class SwTxtFtn;
 class SW_DLLPUBLIC SwFmtFtn: public SfxPoolItem
 {
     friend class SwTxtFtn;
-    SwTxtFtn* pTxtAttr;     //mein TextAttribut
-    String  aNumber;        //Benutzerdefinierte 'Nummer'
-    USHORT  nNumber;        //Automatische Nummerierung
+    SwTxtFtn* pTxtAttr;     //my TextAttribute
+    String  aNumber;        //user-defined 'Number'
+    USHORT  nNumber;        //automatic numbering
     bool    m_bEndNote;     // is it an End note?
 
-    // geschuetzter CopyCtor
+    // protected CopyCtor
     SwFmtFtn& operator=(const SwFmtFtn& rFtn);
     SwFmtFtn( const SwFmtFtn& );
 
@@ -53,7 +53,7 @@ public:
     SwFmtFtn( bool bEndNote = false );
     virtual ~SwFmtFtn();
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual methods" of SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
 

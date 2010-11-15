@@ -432,12 +432,10 @@ public:
 
     // setzt, wenn noch keine Numerierung, sonst wird geaendert
     // arbeitet mit alten und neuen Regeln, nur Differenzen aktualisieren
-    // --> OD 2008-02-08 #newlistlevelattrs#
     // Add optional parameter <bResetIndentAttrs> (default value FALSE).
     // If <bResetIndentAttrs> equals true, the indent attributes "before text"
     // and "first line indent" are additionally reset at the current selection,
     // if the list style makes use of the new list level attributes.
-    // --> OD 2008-03-17 #refactorlists#
     // introduce parameters <bCreateNewList> and <sContinuedListId>
     // <bCreateNewList> indicates, if a new list is created by applying the
     // given list style.
@@ -447,7 +445,6 @@ public:
                         const bool bCreateNewList /*= false*/,
                         const String sContinuedListId = String(),
                         const bool bResetIndentAttrs = false );
-    // <--
     // Absaetze ohne Numerierung, aber mit Einzuegen
     BOOL NoNum();
     // Loeschen, Splitten der Aufzaehlungsliste
@@ -457,28 +454,25 @@ public:
     // Hoch-/Runtermoven sowohl innerhalb als auch ausserhalb von Numerierungen
     BOOL MoveParagraph( long nOffset = 1);
     BOOL MoveNumParas( BOOL bUpperLower, BOOL bUpperLeft );
-    // No-/Numerierung ueber Delete/Backspace ein/abschalten #115901#
+    // No-/Numerierung ueber Delete/Backspace ein/abschalten
     BOOL NumOrNoNum( BOOL bDelete = FALSE, BOOL bChkStart = TRUE);
-    // -> #i23726#
-    // --> OD 2008-06-09 #i90078#
+    // #i23726#
+    // #i90078#
     // Remove unused default parameter <nLevel> and <bRelative>.
     // Adjust method name and parameter name
     void ChangeIndentOfAllListLevels( short nDiff );
     // Adjust method name
     void SetIndent(short nIndent, const SwPosition & rPos);
-    // <--
     BOOL IsFirstOfNumRule() const;
     BOOL IsFirstOfNumRule(const SwPaM & rPaM) const;
-    // <- #i23726#
 
     BOOL IsNoNum( BOOL bChkStart = TRUE ) const;
     // returne den Num-Level des Nodes, in dem sich der Point vom
     // Cursor befindet. Return kann sein :
     // - NO_NUMBERING, 0..MAXLEVEL-1, NO_NUMLEVEL .. NO_NUMLEVEL|MAXLEVEL-1
-    // --> OD 2008-02-29 #refactorlists# - removed <pHasChilds>
-//    BYTE GetNumLevel( BOOL* pHasChilds = 0 ) const;
+
     BYTE GetNumLevel() const;
-    // <--
+
     // detect highest and lowest level to check moving of outline levels
     void GetCurrentOutlineLevels( sal_uInt8& rUpper, sal_uInt8& rLower );
 
@@ -486,10 +480,9 @@ public:
     // get Outline level of current paragraph
     int GetCurrentParaOutlineLevel( ) const;// #outlinelevel add by zhaojianwei
 
-    // -> i29560
+    // i29560
     BOOL HasNumber() const;
     BOOL HasBullet() const;
-    // <- i29560
 
     String GetUniqueNumRuleName( const String* pChkStr = 0, BOOL bAutoNum = TRUE ) const;
     void ChgNumRuleFmts( const SwNumRule& rRule );
@@ -498,12 +491,11 @@ public:
     void SetNumRuleStart( BOOL bFlag = TRUE );
     BOOL IsNumRuleStart() const;
     void SetNodeNumStart( USHORT nStt );
-    // --> OD 2008-02-29 #refactorlists#
+
     USHORT GetNodeNumStart() const;
-    // <--
+
     BOOL ReplaceNumRule( const String& rOldRule, const String& rNewRule );
     // Searches for a text node with a numbering rule.
-    // --> OD 2008-03-18 #refactorlists# - add output parameter <sListId>
     // in case a list style is found, <sListId> holds the list id, to which the
     // text node belongs, which applies the found list style.
     const SwNumRule * SearchNumRule(const bool bForward,
@@ -511,7 +503,6 @@ public:
                                     const bool bOutline,
                                     int nNonEmptyAllowed,
                                     String& sListId );
-    // <--
 
     // Undo
     // UndoHistory am Dokument pflegen
@@ -582,10 +573,10 @@ public:
      * SwGrfNode zeigt (und Mark nicht gesetzt ist oder auf die
      * gleiche Graphic zeigt), sonst gibt's was auf die Finger
      */
-    // --> OD 2005-02-09 #119353# - robust
+
     const Graphic* GetGraphic( BOOL bWait = TRUE ) const;
     const GraphicObject* GetGraphicObj() const;
-    // <--
+
     BOOL IsGrfSwapOut( BOOL bOnlyLinked = FALSE ) const;
     USHORT GetGraphicType() const;
 
@@ -616,16 +607,12 @@ public:
                   const Graphic* pGraphic = 0,
                   const GraphicObject* pGrafObj = 0 );
 
-//    // alternativen Text einer Grafik/OLe-Objectes abfragen/setzen
-//    const String& GetAlternateText() const;
-//    void SetAlternateText( const String& rTxt );
-
     //eindeutige Identifikation des Objektes (fuer ImageMapDlg)
     void    *GetIMapInventor() const;
-    // --> OD 2007-03-01 #i73788#
+    // #i73788#
     // remove default parameter, because method always called this default value
     Graphic GetIMapGraphic() const; //liefert eine Graphic fuer alle Flys!
-    // <--
+
     const SwFlyFrmFmt* FindFlyByName( const String& rName, BYTE nNdTyp = 0 ) const;
 
     //liefert ein ClientObject, wenn CurCrsr->Point() auf einen
@@ -921,7 +908,6 @@ public:
     // von japanischen/chinesischen Zeichen)
     SwExtTextInput* CreateExtTextInput(LanguageType eInputLanguage);
     String DeleteExtTextInput( SwExtTextInput* pDel = 0, BOOL bInsText = TRUE);
-//  SwExtTextInput* GetExtTextInput() const;
     void SetExtTextInputData( const CommandExtTextInputData& );
 
     // Schnistelle fuer den Zugriff auf die AutoComplete-Liste

@@ -77,9 +77,8 @@ namespace com { namespace sun { namespace star { namespace i18n { struct Forbidd
          USE_OLD_PRINTER_METRICS,
          TABS_RELATIVE_TO_INDENT,
          PROTECT_FORM,
-         // --> OD 2008-06-05 #i89181#
+         // #i89181#
          TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST,
-         // <--
      INVERT_BORDER_SPACING,
          COLLAPSE_EMPTY_CELL_PARA,
          // COMPATIBILITY FLAGS END

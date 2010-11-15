@@ -56,7 +56,7 @@ enum REFERENCEMARK
     REF_ONLYNUMBER,
     REF_ONLYCAPTION,
     REF_ONLYSEQNO,
-    // --> OD 2007-08-24 #i81002#
+    // --> #i81002#
     // new reference format types for referencing bookmarks and set references
     REF_NUMBER,
     REF_NUMBER_NO_CONTEXT,
@@ -100,11 +100,11 @@ private:
     USHORT nSubType;
     USHORT nSeqNo;
 
-    // --> OD 2007-08-24 #i81002#
+    // #i81002#
     String MakeRefNumStr( const SwTxtNode& rTxtNodeOfField,
                           const SwTxtNode& rTxtNodeOfReferencedItem,
                           const sal_uInt32 nRefNumFormat ) const;
-    // <--
+
 public:
     SwGetRefField( SwGetRefFieldType*, const String& rSetRef,
                     USHORT nSubType, USHORT nSeqNo, ULONG nFmt );
@@ -117,7 +117,7 @@ public:
 
     const String&       GetSetRefName() const { return sSetRefName; }
 
-    // --> OD 2007-09-06 #i81002#
+    // #i81002#
     // The <SwTxtFld> instance, which represents the text attribute for the
     // <SwGetRefField> instance, has to be passed to the method.
     // This <SwTxtFld> instance is needed for the reference format type REF_UPDOWN
@@ -125,21 +125,21 @@ public:
     // Note: This instance may be NULL (field in Undo/Redo). This will cause
     // no update for these reference format types.
     void                UpdateField( const SwTxtFld* pFldTxtAttr );
-    // <--
+
     void                SetExpand( const String& rStr ) { sTxt = rStr; }
 
     // SubType erfragen/setzen
     virtual USHORT      GetSubType() const;
     virtual void        SetSubType( USHORT n );
 
-    // --> OD 2007-11-09 #i81002#
+    // --> #i81002#
     bool IsRefToHeadingCrossRefBookmark() const;
     bool IsRefToNumItemCrossRefBookmark() const;
     const SwTxtNode* GetReferencedTxtNode() const;
     // <--
-    // --> OD 2008-01-09 #i85090#
+    // #i85090#
     String GetExpandedTxtOfReferencedTxtNode() const;
-    // <--
+
 
     // SequenceNo erfragen/setzen (nur fuer REF_SEQUENCEFLD interressant)
     USHORT              GetSeqNo() const        { return nSeqNo; }

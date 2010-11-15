@@ -53,7 +53,7 @@ public:
                      sal_Int16 eRel = com::sun::star::text::RelOrientation::PRINT_AREA );
     inline SwFmtVertOrient &operator=( const SwFmtVertOrient &rCpy );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual methods" of SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -73,7 +73,7 @@ public:
     void    SetPos( SwTwips nNew ) { nYPos = nNew; }
 };
 
-//SwFmtHoriOrient, wie und woran orientiert --
+//  SwFmtHoriOrient, wie und woran orientiert --
 //  sich der FlyFrm in der Hoizontalen ----------
 
 #define IVER_HORIORIENT_TOGGLE ((USHORT)0x0001)
@@ -91,7 +91,7 @@ public:
         sal_Int16 eRel = com::sun::star::text::RelOrientation::PRINT_AREA, BOOL bPos = FALSE );
     inline SwFmtHoriOrient &operator=( const SwFmtHoriOrient &rCpy );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual methods" of SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,

@@ -494,7 +494,7 @@ public:
     BOOL IsDrawCreate() const;
     void CreateDefaultShape( UINT16 /*SdrObjKind ?*/ eSdrObjectKind, const Rectangle& rRect, USHORT nSlotId);
 
-    // Funktionen f�r Rubberbox, um Draw-Objekte zu selektieren
+    // Functions for Rubberbox, ti select Draw-Objects
     BOOL BeginMark( const Point &rPos );
     void MoveMark ( const Point &rPos );
     BOOL EndMark  ();
@@ -506,7 +506,6 @@ public:
     void UnGroupSelection();    //Die Einzelobjekte sind Selektiert
                                 //Es koennen noch immer Gruppen dabei sein.
 
-    // OD 27.06.2003 #108784# - change return type.
     bool IsGroupAllowed() const;
 
     void MirrorSelection( BOOL bHorizontal );   //Bei FALSE Vertikal

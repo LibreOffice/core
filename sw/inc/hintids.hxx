@@ -28,7 +28,7 @@
 #ifndef _HINTIDS_HXX
 #define _HINTIDS_HXX
 
-#include <tools/solar.h>        // fuer __FAR_DATA
+#include <tools/solar.h>        // for __FAR_DATA
 #include <sal/types.h>          // for sal_Unicode
 #include "swdllapi.h"
 
@@ -45,7 +45,7 @@
 #define CH_TXT_ATR_FORMELEMENT ((sal_Unicode)0x06)
 
 /*
- * Hier kommen erst mal die enums fuer die Hints
+ * Enums for the hints
  */
 
 #define HINT_BEGIN  1
@@ -101,7 +101,7 @@ RES_CHRATR_BEGIN = HINT_BEGIN,
 RES_CHRATR_END
 };
 
-// diese Attribute stehen nur im SwpAttr-Array vom TextNode
+// this Attribute used only in a TextNodes SwpAttr-Array
 enum RES_TXTATR
 {
 RES_TXTATR_BEGIN = RES_CHRATR_END,
@@ -135,7 +135,7 @@ RES_TXTATR_WITHEND_BEGIN = RES_TXTATR_BEGIN ,
     RES_TXTATR_DUMMY5,                              // 50
 RES_TXTATR_WITHEND_END,
 
-// alle TextAttribute ohne ein Ende
+// all TextAttributes without an end
 RES_TXTATR_NOEND_BEGIN = RES_TXTATR_WITHEND_END,
     RES_TXTATR_FIELD = RES_TXTATR_NOEND_BEGIN,      // 51
     RES_TXTATR_FLYCNT,                              // 52
@@ -274,7 +274,7 @@ RES_UNKNOWNATR_END
 
 
 
-// ID-s fuer die Formate
+// Format IDs
 enum RES_FMT
 {
 RES_FMT_BEGIN = RES_UNKNOWNATR_END,
@@ -288,7 +288,7 @@ RES_FMT_BEGIN = RES_UNKNOWNATR_END,
 RES_FMT_END
 };
 
-// die ID's fuer Messages in den Formaten
+// ID's for Messages in the Formats
 enum RES_MSG
 {
 RES_MSG_BEGIN = RES_FMT_END,
@@ -438,38 +438,38 @@ SW_DLLPUBLIC const SfxPoolItem* GetDfltAttr( USHORT nWhich );
 
 SW_DLLPUBLIC USHORT GetWhichOfScript( USHORT nWhich, USHORT nScript );
 
-// return for the given TextAttribut without an end the correct character.
+// return for the given TextAttribute without an end the correct character.
 // This function returns
-//      CH_TXTATR_BREAKWORD for Textattribut which breaks a word (default)
-//      CH_TXTATR_INWORD    for Textattribut which dont breaks a word
+//      CH_TXTATR_BREAKWORD for Textattribute which breaks a word (default)
+//      CH_TXTATR_INWORD    for Textattribute which dont breaks a word
 class SwTxtAttr;
 sal_Unicode GetCharOfTxtAttr( const SwTxtAttr& rAttr );
 
-// alle Sets stehen im init.cxx
+// all Sets defined in init.cxx
 
-// AttrSet-Range fuer die 3 Break-Attribute
+// AttrSet-Range for the 3 Break-Attribute
 extern USHORT __FAR_DATA aBreakSetRange[];
-// AttrSet-Range fuer die TxtFmtColl
+// AttrSet-Range for TxtFmtColl
 extern USHORT __FAR_DATA aTxtFmtCollSetRange[];
-// AttrSet-Range fuer die GrfFmtColl
+// AttrSet-Range for GrfFmtColl
 extern USHORT __FAR_DATA aGrfFmtCollSetRange[];
-// AttrSet-Range fuer die TextNode
+// AttrSet-Range for TextNode
 SW_DLLPUBLIC extern USHORT __FAR_DATA aTxtNodeSetRange[];
-// AttrSet-Range fuer die NoTxtNode
+// AttrSet-Range for NoTxtNode
 extern USHORT __FAR_DATA aNoTxtNodeSetRange[];
-// AttrSet-Range fuer die SwTable
+// AttrSet-Range for SwTable
 extern USHORT __FAR_DATA aTableSetRange[];
-// AttrSet-Range fuer die SwTableLine
+// AttrSet-Range for SwTableLine
 extern USHORT __FAR_DATA aTableLineSetRange[];
-// AttrSet-Range fuer die SwTableBox
+// AttrSet-Range for SwTableBox
 extern USHORT __FAR_DATA aTableBoxSetRange[];
-// AttrSet-Range fuer die SwFrmFmt
+// AttrSet-Range for SwFrmFmt
 SW_DLLPUBLIC extern USHORT __FAR_DATA aFrmFmtSetRange[];
-// AttrSet-Range fuer die SwCharFmt
+// AttrSet-Range for SwCharFmt
 extern USHORT __FAR_DATA aCharFmtSetRange[];
-// AttrSet-Range fuer die character autostyles
+// AttrSet-Range for the autostyles
 extern USHORT __FAR_DATA aCharAutoFmtSetRange[];
-// AttrSet-Range fuer die SwPageDescFmt
+// AttrSet-Range for SwPageDescFmt
 extern USHORT __FAR_DATA aPgFrmFmtSetRange[];
 
 // check if ID is InRange of AttrSet-Ids

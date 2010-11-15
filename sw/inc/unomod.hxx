@@ -174,32 +174,6 @@ public:
     void    Invalidate() {bObjectValid = sal_False;}
 };
 
-/*class SwXTerminateListener : public ::com::sun::star::frame::XTerminateListener,
-                                public UsrObject
-{
-public:
-    SwXTerminateListener();
-    virtual ~SwXTerminateListener();
-
-    SMART_UNO_DECLARATION( SwXTerminateListener, UsrObject );
-
-    virtual UString                 getClassName();
-// automatisch auskommentiert - [getIdlClass or queryInterface] - Bitte XTypeProvider benutzen!
-//  virtual ::com::sun::star::uno::XInterface *         queryInterface( ::com::sun::star::uno::Uik aUik);
-
-// automatisch auskommentiert - [getIdlClass or queryInterface] - Bitte XTypeProvider benutzen!
-//  virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass > >  getIdlClasses(void);
-
-
-    //XTerminateListener
-    virtual void queryTermination(const ::com::sun::star::lang::EventObject& aEvent);
-    virtual void notifyTermination(const ::com::sun::star::lang::EventObject& aEvent);
-
-    //XEventListener
-    virtual void disposing(const ::com::sun::star::lang::EventObject& Source);
-};
-
-*/
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

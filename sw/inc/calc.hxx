@@ -120,9 +120,9 @@ class SwSbxValue : public SbxValue
 {
     bool bVoid;
 public:
-    //JP 03.02.99: immer auf eine Zahl defaulten, damit auch gerechnet wird.
-    //              Ansonsten wird daraus ein SbxEMPTY und damit ist nichts
-    //              anzufangen.
+    // immer auf eine Zahl defaulten, damit auch gerechnet wird.
+    // Ansonsten wird daraus ein SbxEMPTY und damit ist nichts
+    // anzufangen.
     SwSbxValue( long n = 0 ) : bVoid(false)  { PutLong( n ); }
     SwSbxValue( const double& rD ) : bVoid(false) { PutDouble( rD ); }
     SwSbxValue( const SwSbxValue& rVal ) :

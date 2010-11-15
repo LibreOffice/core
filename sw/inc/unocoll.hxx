@@ -81,9 +81,6 @@ class SwUnoCollection
     SwDoc*          GetDoc() const {return pDoc;}
 };
 
-/******************************************************************************
- *
- ******************************************************************************/
 #define SW_SERVICE_TYPE_TEXTTABLE                       0
 #define SW_SERVICE_TYPE_TEXTFRAME                       1
 #define SW_SERVICE_TYPE_GRAPHIC                         2
@@ -365,8 +362,6 @@ public:
     SwXTextFrames(SwDoc* pDoc);
 
 
-//  SMART_UNO_DECLARATION( SwXTextFrames, UsrObject );
-
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
     virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
@@ -380,9 +375,6 @@ protected:
     virtual ~SwXTextGraphicObjects();
 public:
         SwXTextGraphicObjects(SwDoc* pDoc);
-
-
-//  SMART_UNO_DECLARATION( SwXTextGraphicObjects, UsrObject );
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
@@ -398,8 +390,6 @@ protected:
 public:
     SwXTextEmbeddedObjects(SwDoc* pDoc);
 
-
-//  SMART_UNO_DECLARATION( SwXTextEmbeddedObjects, UsrObject );
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );

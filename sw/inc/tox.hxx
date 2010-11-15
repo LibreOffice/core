@@ -250,16 +250,6 @@ struct SW_DLLPUBLIC SwFormToken
     String GetString() const;
 };
 
-// -> #i21237#
-/**
-    Functor that is true when a given token has a certain token type.
-
-    @param _eType  the type to check for
-    @param rToken  the token to check
-
-    @retval TRUE   the token has the given type
-    @retval FALSE  else
-*/
 struct SwFormTokenEqualToFormTokenType
 {
     FormTokenType eType;
@@ -354,7 +344,6 @@ public:
     */
     const SwFormTokens & GetTokens() const { return aTokens; }
 };
-// <- #i21237#
 
 class SW_DLLPUBLIC SwForm
 {
@@ -467,7 +456,7 @@ namespace nsSwTOOElements
     const SwTOOElements TOO_OTHER           = 0x80;
 }
 
-#define TOX_STYLE_DELIMITER ((sal_Unicode)0x01)     //JP 19.07.00: use a control char
+#define TOX_STYLE_DELIMITER ((sal_Unicode)0x01)
 
 /*--------------------------------------------------------------------
      Description:  Class for all indexes

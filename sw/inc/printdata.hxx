@@ -71,9 +71,9 @@ public:
              bPrintLeftPages, bPrintRightPages, bPrintReverse, bPrintProspect,
              bPrintProspectRTL,
              bPrintSingleJobs, bPaperFromSetup,
-             // --> FME 2005-12-13 #b6354161# Print empty pages
+             // #b6354161# Print empty pages
              bPrintEmptyPages,
-             // <--
+
              // #i56195# no field update while printing mail merge documents
              bUpdateFieldsInPrinting,
              bModified;
@@ -207,7 +207,7 @@ public:
     bool IsPrintWithBlackTextColor() const      { return getBoolValue( "PrintBlackFonts",      m_rDefaultPrintData.bPrintBlackFont ); }
     sal_Int16 GetPrintPostItsType() const       { return static_cast< sal_Int16 >(getIntValue( "PrintAnnotationMode", m_rDefaultPrintData.nPrintPostIts )); }
     bool IsPaperFromSetup() const               { return getBoolValue( "PrintPaperFromSetup",  m_rDefaultPrintData.bPaperFromSetup ); }
-    bool IsPrintReverse() const                 { return false; /*handled by print dialog now*/ /*getBoolValue( "PrintReversed",        m_rDefaultPrintData.bPrintReverse );*/ }
+    bool IsPrintReverse() const                 { return false; /*handled by print dialog now*/ }
 
     bool IsPrintLeftPages() const;
     bool IsPrintRightPages() const;

@@ -40,7 +40,7 @@ public:
     SwFmtNoBalancedColumns( BOOL bFlag = FALSE )
         : SfxBoolItem( RES_COLUMNBALANCE, bFlag ) {}
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual methods" of SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
 };
 

@@ -37,8 +37,8 @@ class SwFrmFmt;
 class IntlWrapper;
 
 
-//Kopfzeile, fuer Seitenformate
-//Client von FrmFmt das den Header beschreibt.
+//Header, for PageFormats
+//Client of FrmFmt discribing the header.
 
 class SW_DLLPUBLIC SwFmtHeader: public SfxPoolItem, public SwClient
 {
@@ -53,7 +53,7 @@ public:
 
     TYPEINFO();
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual methods" of SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -69,8 +69,8 @@ public:
     void SetActive( BOOL bNew = TRUE ) { bActive = bNew; }
 };
 
-//Fusszeile, fuer Seitenformate
-//Client von FrmFmt das den Footer beschreibt.
+//Footer, for pageformats
+//Client of FrmFmt describing the footer
 
 class SW_DLLPUBLIC SwFmtFooter: public SfxPoolItem, public SwClient
 {
@@ -85,7 +85,7 @@ public:
 
     TYPEINFO();
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual methods" of SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,

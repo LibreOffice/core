@@ -40,7 +40,7 @@
 #define DLG_DRAWCHAR            (RC_CHRDLG_BEGIN +  9)
 #define DLG_DRAWPARA            (RC_CHRDLG_BEGIN + 10)
 
-// Tabpages -> jetzt in globals.hrc
+// Tabpages -> now in globals.hrc
 
 #define STR_TEXTCOLL_HEADER     (RC_CHRDLG_BEGIN +  2)
 #define STR_PAGEFMT_HEADER      (RC_CHRDLG_BEGIN +  4)

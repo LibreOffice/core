@@ -43,13 +43,13 @@ class SW_DLLPUBLIC SwFmtINetFmt: public SfxPoolItem
 {
     friend class SwTxtINetFmt;
 
-    String aURL;                    // die URL
+    String aURL;                    // URL
     String aTargetFrame;            // in diesen Frame soll die URL
     String aINetFmt;
     String aVisitedFmt;
-    String aName;                   // Name des Links
+    String aName;                   // name of the link
     SvxMacroTableDtor* pMacroTbl;
-    SwTxtINetFmt* pTxtAttr;         // mein TextAttribut
+    SwTxtINetFmt* pTxtAttr;         // my TextAttribute
     USHORT nINetId;
     USHORT nVisitedId;
 public:
@@ -60,7 +60,7 @@ public:
 
     TYPEINFO();
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual methods" of SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -97,11 +97,11 @@ public:
     USHORT GetVisitedFmtId() const          { return nVisitedId; }
     void SetVisitedFmtId( USHORT nNew )     { nVisitedId = nNew; }
 
-    // setze eine neue oder loesche die akt. MakroTabelle
+    // set a new MacroTable or clear the current one
     void SetMacroTbl( const SvxMacroTableDtor* pTbl = 0 );
     const SvxMacroTableDtor* GetMacroTbl() const    { return pMacroTbl; }
 
-    // setze / erfrage ein Makro
+    // Macro getter and setter
     void SetMacro( USHORT nEvent, const SvxMacro& rMacro );
     const SvxMacro* GetMacro( USHORT nEvent ) const;
 };

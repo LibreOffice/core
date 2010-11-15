@@ -31,7 +31,7 @@
 /** Helper class to pause starting of threads during existence of an instance
     of this class
 
-    OD 2007-03-16 #i73788#
+    #i73788#
 
     @author OD
 */

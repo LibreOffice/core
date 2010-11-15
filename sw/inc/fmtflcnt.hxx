@@ -40,12 +40,12 @@ class SwFmtFlyCnt : public SfxPoolItem
     friend class SwTxtFlyCnt;
     SwTxtFlyCnt* pTxtAttr;      // mein TextAttribut
     SwFrmFmt* pFmt;             // mein Fly/DrawFrame-Format
-    // geschuetzter CopyCtor
+    // protected CopyCtor
     SwFmtFlyCnt& operator=(const SwFmtFlyCnt& rFlyCnt);
 
 public:
     SwFmtFlyCnt( SwFrmFmt *pFrmFmt );
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual methods" of SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
 
@@ -57,7 +57,6 @@ public:
     const SwTxtFlyCnt *GetTxtFlyCnt() const { return pTxtAttr; }
           SwTxtFlyCnt *GetTxtFlyCnt()       { return pTxtAttr; }
 
-    // OD 27.06.2003 #108784#
     bool Sw3ioExportAllowed() const;
 };
 

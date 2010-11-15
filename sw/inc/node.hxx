@@ -98,7 +98,6 @@ class SW_DLLPUBLIC SwNode : private /* public*/ BigPtrEntry
 
     BYTE nNodeType;
 
-    // JP 28.03.96
     // fuer Textnodes: Stufungslevel der Autoformatierung. Ist erstmal hier
     //                  gelandet, weil noch Bits frei sind
     BYTE nAFmtNumLvl : 3;
@@ -369,9 +368,6 @@ private:
 // --------------------
 class SW_DLLPUBLIC SwCntntNode: public SwModify, public SwNode, public SwIndexReg
 {
-    // Der Reader darf NewAttrSet() aufrufen!
-//  friend class SwSwgReader;
-//  friend class Sw3IoImp;
 
 //FEATURE::CONDCOLL
     SwDepend* pCondColl;
@@ -447,7 +443,7 @@ public:
     virtual xub_StrLen Len() const;
 
     virtual SwCntntNode* MakeCopy( SwDoc*, const SwNodeIndex& ) const = 0;
-        // erfrage vom Client Informationen
+    // erfrage vom Client Informationen
     virtual BOOL GetInfo( SfxPoolItem& ) const;
 
     // SS fuer die PoolItems: (Harte-(Fmt)Attrbutierung)
@@ -461,7 +457,6 @@ public:
     virtual BOOL ResetAttr( USHORT nWhich1, USHORT nWhich2 = 0 );
     virtual BOOL ResetAttr( const SvUShorts& rWhichArr );
     virtual USHORT ResetAllAttr();
-    // <--
 
     // liefert das Attribut, das nicht ueber die bedingte Vorlage kommt!
     const SfxPoolItem* GetNoCondAttr( USHORT nWhich, BOOL bInParents ) const;
@@ -492,7 +487,6 @@ public:
     // position. Return -1, if text direction could *not* be determined.
     short GetTextDirection( const SwPosition& rPos,
                             const Point* pPt ) const;
-    // <--
 
     inline void SetModifyAtAttr( bool bSetModifyAtAttr ) const { mbSetModifyAtAttr = bSetModifyAtAttr; }
     inline bool GetModifyAtAttr() const { return mbSetModifyAtAttr; }

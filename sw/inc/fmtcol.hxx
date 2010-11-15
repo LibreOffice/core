@@ -65,8 +65,8 @@ class SW_DLLPUBLIC SwTxtFmtColl: public SwFmtColl
     bool mbStayAssignedToListLevelOfOutlineStyle;
 
 protected:
-    //BYTE nOutlineLevel;        //<-#outline level, removed by zhaojianwei
-    bool mbAssignedToOutlineStyle;//<-#outline level added by zhaojianwei
+
+    bool mbAssignedToOutlineStyle;
 
     SwTxtFmtColl *pNextTxtFmtColl;
 

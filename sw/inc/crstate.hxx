@@ -184,7 +184,7 @@ struct SwCrsrMoveState
         b2Lines( FALSE ),
         bNoScroll( FALSE ),
         bPosMatchesBounds( FALSE ),
-        bCntntCheck( FALSE ), // --> FME 2005-05-13 #i43742# <--
+        bCntntCheck( FALSE ), // #i43742#
         bInFrontOfLabel( FALSE ), // #i27615#
         bInNumPortion(FALSE), // #i26726#
         nInNumPostionOffset(0) // #i26726#
@@ -205,7 +205,7 @@ struct SwCrsrMoveState
         b2Lines( FALSE ),
         bNoScroll( FALSE ),
         bPosMatchesBounds( FALSE ),
-        bCntntCheck( FALSE ), // --> FME 2005-05-13 #i43742# <--
+        bCntntCheck( FALSE ), // #i43742#
         bInFrontOfLabel( FALSE ), // #i27615#
         bInNumPortion(FALSE), // #i23726#
         nInNumPostionOffset(0) // #i23726#

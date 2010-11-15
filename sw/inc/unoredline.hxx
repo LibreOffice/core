@@ -68,9 +68,7 @@ public:
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL hasElements(  ) throw(::com::sun::star::uno::RuntimeException);
 };
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 class SwXRedlinePortion : public SwXTextPortion
 {
     const SwRedline*    pRedline;

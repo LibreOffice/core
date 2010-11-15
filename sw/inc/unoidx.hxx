@@ -47,10 +47,6 @@ class SwTOXBaseSection;
 class SwTOXMark;
 class SwTOXType;
 
-/* -----------------07.12.98 10:08-------------------
- *
- * --------------------------------------------------*/
-
 typedef ::cppu::ImplInheritanceHelper5
 <   ::sfx2::MetadatableMixin
 ,   ::com::sun::star::lang::XUnoTunnel
@@ -191,9 +187,6 @@ public:
 
 };
 
-/* -----------------07.12.98 10:08-------------------
- *
- * --------------------------------------------------*/
 typedef ::cppu::WeakImplHelper4
 <   ::com::sun::star::lang::XUnoTunnel
 ,   ::com::sun::star::lang::XServiceInfo
@@ -319,9 +312,6 @@ public:
 
 };
 
-/* -----------------05.05.99 12:27-------------------
- *
- * --------------------------------------------------*/
 class SwXDocumentIndexes
     : public SwCollectionBaseClass
     , public SwUnoCollection

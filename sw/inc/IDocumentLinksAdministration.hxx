@@ -56,7 +56,7 @@ namespace sfx2 { class SvLinkSource;  class LinkManager; }
     */
     virtual const sfx2::LinkManager& GetLinkManager() const = 0;
 
-    /** FME 2005-02-25 #i42634# Moved common code of SwReader::Read() and
+    /** #i42634# Moved common code of SwReader::Read() and
         SwDocShell::UpdateLinks() to new SwDoc::UpdateLinks():
     */
     virtual void UpdateLinks(BOOL bUI) = 0;

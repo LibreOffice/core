@@ -54,7 +54,7 @@ typedef BigPtrEntry* ElementPtr;
 
 typedef BOOL (*FnForEach)( const ElementPtr&, void* pArgs );
 
-// 1000 Eintr„ge pro Block = etwas weniger als 4K
+// 1000 entries per Block = a bit less then 4K
 #define MAXENTRY 1000
 
 

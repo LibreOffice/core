@@ -44,7 +44,7 @@ class Time;
 enum SwDateFormat
 {
     DF_BEGIN,
-    //neue Formate:
+    // new formats
     DFF_SSYS = DF_BEGIN,
     DFF_LSYS ,
     DFF_DMY ,
@@ -63,7 +63,7 @@ enum SwDateFormat
     DFF_YMD ,
     DFF_YYMD ,
     DF_END ,
-//  Kompatibilitaet:
+    // Compatibility
     DF_SSYS     = DFF_SSYS,
     DF_LSYS     = DFF_LSYS,
     DF_SHORT    = DFF_DMY,
@@ -114,7 +114,7 @@ public:
 class SW_DLLPUBLIC SwDateTimeField : public SwValueField
 {
         USHORT              nSubType;
-        long                nOffset;    // Offset in Minuten
+        long                nOffset;    // Offset in Minutes
 
 public:
         SwDateTimeField(SwDateTimeFieldType* pType, USHORT nSubType = DATEFLD,

@@ -284,7 +284,6 @@ class SW_DLLPUBLIC SwDoc :
     //---------------- private Member --------------------------------
 
     // -------------------------------------------------------------------
-    // die Objecte
     SwNodes     aNodes;                 // document content
     SwNodes     aUndoNodes;             // content for undo
     SwAttrPool* mpAttrPool;             // attribute pool
@@ -417,7 +416,7 @@ private:
 
     // -------------------------------------------------------------------
     // other
-    sal_uInt16  nUndoPos;           // akt. Undo-InsertPosition (fuers Redo!)
+    sal_uInt16  nUndoPos;           // akt. Undo-InsertPosition (for Redo!)
     sal_uInt16  nUndoSavePos;       // Position im Undo-Array, ab der das Doc
                                     // nicht als modifiziert gilt
     sal_uInt16  nUndoCnt;           // Anzahl von Undo Aktionen
@@ -683,7 +682,7 @@ private:
     // falls keine angegeben ist, nehme die Kapitelvorlage der 1. Ebene
     sal_Bool SplitDoc( sal_uInt16 eDocType, const String& rPath,
                         const SwTxtFmtColl* pSplitColl );
-    sal_Bool SplitDoc( sal_uInt16 eDocType, const String& rPath, int nOutlineLevel = 0 ); //#outline level,add by zhaijianwei.
+    sal_Bool SplitDoc( sal_uInt16 eDocType, const String& rPath, int nOutlineLevel = 0 );
 
     // Charts der angegebenen Tabelle updaten
     void _UpdateCharts( const SwTable& rTbl, ViewShell& rVSh ) const;
@@ -1048,7 +1047,7 @@ public:
     */
     bool IsOLEPrtNotifyPending() const  { return mbOLEPrtNotifyPending; }
     inline void SetOLEPrtNotifyPending( bool bSet = true );
-    void PrtOLENotify( sal_Bool bAll ); //Alle oder nur Markierte
+    void PrtOLENotify( sal_Bool bAll ); //All or only marked
 
 #ifdef DBG_UTIL
     bool InXMLExport() const            { return mbXMLExport; }
@@ -1584,7 +1583,7 @@ public:
         // Bewegt selektierte Absaetze (nicht nur Numerierungen)
         // entsprechend des Offsets. (negativ: zum Doc-Anf.)
     sal_Bool MoveParagraph( const SwPaM&, long nOffset = 1, sal_Bool bIsOutlMv = sal_False );
-        // No-/Numerierung ueber Delete/Backspace ein/abschalten #115901#
+        // No-/Numerierung ueber Delete/Backspace ein/abschalten
     sal_Bool NumOrNoNum( const SwNodeIndex& rIdx, sal_Bool bDel = sal_False);
         // Animation der Grafiken stoppen
     void StopNumRuleAnimations( OutputDevice* );
@@ -1841,10 +1840,10 @@ public:
     // falls keine angegeben ist, nehme die Kapitelvorlage der 1. Ebene
     sal_Bool GenerateGlobalDoc( const String& rPath,
                                 const SwTxtFmtColl* pSplitColl = 0 );
-    sal_Bool GenerateGlobalDoc( const String& rPath, int nOutlineLevel = 0 );   //#outline level,add by zhaojianwei
+    sal_Bool GenerateGlobalDoc( const String& rPath, int nOutlineLevel = 0 );
     sal_Bool GenerateHTMLDoc( const String& rPath,
                                 const SwTxtFmtColl* pSplitColl = 0 );
-    sal_Bool GenerateHTMLDoc( const String& rPath, int nOutlineLevel = 0 ); //#outline level,add by zhaojianwei
+    sal_Bool GenerateHTMLDoc( const String& rPath, int nOutlineLevel = 0 );
 
     //  vergleiche zwei Dokument miteinander
     long CompareDoc( const SwDoc& rDoc );

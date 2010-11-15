@@ -50,7 +50,7 @@ class SW_DLLPUBLIC SwFmtFld : public SfxPoolItem, public SwClient, public SfxBro
 
     SwFmtFld();             // das default-Attibut
 
-    // geschuetzter CopyCtor
+    // protected CopyCtor
     // @@@ copy construction allowed, but copy assignment is not? @@@
     SwFmtFld& operator=(const SwFmtFld& rFld);
 
@@ -65,7 +65,7 @@ public:
 
     virtual ~SwFmtFld();
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual methods" of SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
 
@@ -75,7 +75,6 @@ public:
     const SwField *GetFld() const   { return pField; }
     SwField *GetFld()               { return pField; }
 
-    // #111840#
     /**
        Sets current field.
 

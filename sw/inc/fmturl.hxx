@@ -41,8 +41,8 @@ class IntlWrapper;
 class SW_DLLPUBLIC SwFmtURL: public SfxPoolItem
 {
     String    sTargetFrameName; // in diesen Frame soll die URL
-    String    sURL;             //Einfache URL
-    String    sName;            // Name des Anchors
+    String    sURL;             // simple URL
+    String    sName;            // Name of the anchor
     ImageMap *pMap;             //ClientSide Images
 
     BOOL      bIsServerMap;     //mit der URL eine ServerSideImageMap
@@ -57,7 +57,7 @@ public:
 
     virtual ~SwFmtURL();
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual methods" of SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -70,7 +70,7 @@ public:
 
     void SetTargetFrameName( const String& rStr ) { sTargetFrameName = rStr; }
     void SetURL( const String &rURL, BOOL bServerMap );
-    void SetMap( const ImageMap *pM );  //Pointer wird kopiert!
+    void SetMap( const ImageMap *pM );  //Pointer will be copied
 
     const String   &GetTargetFrameName()const { return sTargetFrameName; }
     const String   &GetURL()            const { return sURL; }

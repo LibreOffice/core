@@ -93,7 +93,7 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTxtNode
     // embedded graphic stream couldn't be inside a 3.1 - 5.2 storage any more.
     // Thus, return value isn't needed any more.
     void _GetStreamStorageNames( String& rStrmName, String& rStgName ) const;
-    // <--
+
     void DelStreamName();
     DECL_LINK( SwapGraphic, GraphicObject* );
 

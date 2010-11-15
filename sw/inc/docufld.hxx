@@ -184,7 +184,6 @@ public:
     virtual void        SetPar2(const String& rStr);
 
     virtual USHORT      GetSubType() const;
-    // virtual void        SetSubType(USHORT nSub); // OM: entfernt, da unbenoetigt und gefaehrlich
     virtual bool        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
     virtual bool        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
 
@@ -398,7 +397,7 @@ public:
 
 
     virtual USHORT      GetSubType() const;
-    // virtual void        SetSubType(USHORT nSub); // OM: entfernt, da unbenoetigt und gefaehrlich
+
     virtual bool        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
     virtual bool        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
 };

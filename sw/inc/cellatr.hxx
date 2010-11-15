@@ -42,7 +42,7 @@ public:
     SwTblBoxNumFormat( UINT32 nFormat = NUMBERFORMAT_TEXT,
                         BOOL bAuto = FALSE );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual methods" of SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
 
@@ -65,7 +65,7 @@ class SwTblBoxFormula : public SfxPoolItem, public SwTableFormula
 public:
     SwTblBoxFormula( const String& rFormula );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual methods" of SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
 
@@ -94,7 +94,7 @@ public:
     SwTblBoxValue();
     SwTblBoxValue( const double aVal );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual methods" of SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
 

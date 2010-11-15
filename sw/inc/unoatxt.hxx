@@ -124,7 +124,7 @@ protected:
     virtual ~SwXAutoTextGroup();    // ref-counted objects are not to be deleted from outside -> protected dtor
 
 public:
-        SwXAutoTextGroup(const rtl::OUString& rName, SwGlossaries*  pGloss/*SwTextBlocks* pGroup*/);
+        SwXAutoTextGroup(const rtl::OUString& rName, SwGlossaries* pGloss);
 
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
