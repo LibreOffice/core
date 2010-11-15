@@ -1368,17 +1368,17 @@
 
 // --------------------------------------------------
 
-#define SCSTR_HUMAN_SCDOC_NAME      (STR_START + 210)
-#define SCSTR_SHORT_SCDOC_NAME      (STR_START + 211)
-#define SCSTR_LONG_SCDOC_NAME       (STR_START + 212)
+#define SCSTR_HUMAN_SCDOC_NAME          (STR_START + 210)
+#define SCSTR_SHORT_SCDOC_NAME          (STR_START + 211)
+#define SCSTR_LONG_SCDOC_NAME           (STR_START + 212)
 
-#define SCSTR_CLPBRD_CLEAR          (STR_START + 213)
+#define SCSTR_CLPBRD_CLEAR              (STR_START + 213)
 
 #define SCSTR_FORMULA_AUTOCORRECTION    (STR_START + 214)
 
-#define SCSTR_RENAMEOBJECT          (STR_START + 215)
-
-#define SCSTR_PRINT_OPTIONS     (STR_START+216)
+#define SCSTR_RENAMEOBJECT              (STR_START + 215)
+#define SCSTR_PRINT_OPTIONS             (STR_START + 216)
+#define SCSTR_WARN_ME_IN_FUTURE_CHECK   (STR_START + 217)
 
 // Navigator - in der Reihenfolge wie SC_CONTENT_...
 #define SCSTR_CONTENT_ROOT      (STR_START + 250)

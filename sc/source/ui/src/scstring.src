@@ -769,3 +769,8 @@ StringArray SCSTR_PRINT_OPTIONS
     };
 };
 
+String SCSTR_WARN_ME_IN_FUTURE_CHECK
+{
+    Text [ en-US ] = "Warn me about this in the future.";
+};
+

@@ -41,8 +41,10 @@
 ScCbWarningBox::ScCbWarningBox( Window* pParent, const String& rMsgStr, bool bDefYes ) :
     WarningBox( pParent, WB_YES_NO | (bDefYes ? WB_DEF_YES : WB_DEF_NO), rMsgStr )
 {
+    // By default, the check box is ON, and the user needs to un-check it to
+    // disable all future warnings.
     SetCheckBoxState(true);
-    SetCheckBoxText(rtl::OUString::createFromAscii("Warn me every time."));
+    SetCheckBoxText(String(ScResId(SCSTR_WARN_ME_IN_FUTURE_CHECK)));
 }
 
 sal_Int16 ScCbWarningBox::Execute()
