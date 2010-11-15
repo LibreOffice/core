@@ -501,7 +501,7 @@ namespace framework
         m_bProcessingEvents = true;
         do
         {
-            ::rtl::Reference< UndoManagerRequest > pRequest;
+            pRequest.clear();
             {
                 ::osl::MutexGuard aQueueGuard( m_aQueueMutex );
                 if ( m_aEventQueue.empty() )
