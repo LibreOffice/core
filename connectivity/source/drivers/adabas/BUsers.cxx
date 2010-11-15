@@ -76,9 +76,9 @@ sdbcx::ObjectType OUsers::appendObject( const ::rtl::OUString& _rForName, const 
     sUserName = sUserName.toAsciiUpperCase();
     descriptor->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME),makeAny(sUserName));
     aSql += ::dbtools::quoteName(aQuote,sUserName)
-                + ::rtl::OUString::createFromAscii(" PASSWORD ")
+                + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" PASSWORD "))
                 + getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PASSWORD)));
-    aSql += ::rtl::OUString::createFromAscii(" RESOURCE NOT EXCLUSIVE");
+    aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" RESOURCE NOT EXCLUSIVE"));
 
     Reference< XStatement > xStmt = m_pConnection->createStatement(  );
     if(xStmt.is())
@@ -95,7 +95,7 @@ void OUsers::dropObject(sal_Int32 /*_nPos*/,const ::rtl::OUString _sElementName)
         // first we have to check if this user is live relevaant for the database
         // which means with out these users the database will miss more than one important system table
         ::rtl::OUString sUsers( RTL_CONSTASCII_USTRINGPARAM( "SELECT USERMODE,USERNAME FROM DOMAIN.USERS WHERE USERNAME = '" ));
-        sUsers += _sElementName + ::rtl::OUString::createFromAscii("'");
+        sUsers += _sElementName + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("'"));
         Reference< XStatement > xStmt = m_pConnection->createStatement();
         if(xStmt.is())
         {

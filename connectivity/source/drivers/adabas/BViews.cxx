@@ -69,13 +69,13 @@ sdbcx::ObjectType OViews::createObject(const ::rtl::OUString& _rName)
     ::rtl::OUString sStmt( RTL_CONSTASCII_USTRINGPARAM( "SELECT DISTINCT * FROM DOMAIN.SHOW_VIEW WHERE " ));
     if(aSchema.getLength())
     {
-        sStmt += ::rtl::OUString::createFromAscii("OWNER = '");
+        sStmt += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OWNER = '"));
         sStmt += aSchema;
-        sStmt += ::rtl::OUString::createFromAscii("' AND ");
+        sStmt += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("' AND "));
     }
-    sStmt += ::rtl::OUString::createFromAscii("VIEWNAME = '");
+    sStmt += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VIEWNAME = '"));
     sStmt += aName;
-    sStmt += ::rtl::OUString::createFromAscii("'");
+    sStmt += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("'"));
     Reference<XConnection> xConnection = static_cast<OAdabasCatalog&>(m_rParent).getConnection();
     Reference< XStatement > xStmt = xConnection->createStatement(  );
     Reference< XResultSet > xResult = xStmt->executeQuery(sStmt);
@@ -174,7 +174,7 @@ void OViews::createView( const Reference< XPropertySet >& descriptor )
         descriptor->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCHEMANAME),makeAny(sSchema = static_cast<OAdabasCatalog&>(m_rParent).getConnection()->getMetaData()->getUserName()));
 
     aSql += ::dbtools::quoteName(aQuote, getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))))
-                + ::rtl::OUString::createFromAscii(" AS ");
+                + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" AS "));
     descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_COMMAND)) >>= sCommand;
     aSql += sCommand;
 

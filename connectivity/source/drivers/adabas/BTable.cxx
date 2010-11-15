@@ -196,7 +196,7 @@ void SAL_CALL OAdabasTable::alterColumnByName( const ::rtl::OUString& colName, c
                 ::rtl::OUString sSql( RTL_CONSTASCII_USTRINGPARAM( "RENAME COLUMN " )) ;
                 sSql += ::dbtools::quoteName(sQuote,m_SchemaName) + sDot + ::dbtools::quoteName(sQuote,m_Name);
                 sSql += sDot + ::dbtools::quoteName(sQuote,colName);
-                sSql += ::rtl::OUString::createFromAscii(" TO ");
+                sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" TO "));
                 sSql += ::dbtools::quoteName(sQuote,sNewColumnName);
 
                 Reference< XStatement > xStmt = m_pConnection->createStatement(  );
@@ -241,7 +241,7 @@ void SAL_CALL OAdabasTable::alterColumnByName( const ::rtl::OUString& colName, c
 void OAdabasTable::alterColumnType(const ::rtl::OUString& _rColName, const Reference<XPropertySet>& _xDescriptor)
 {
     ::rtl::OUString sSql = getAlterTableColumnPart(_rColName);
-    sSql += ::rtl::OUString::createFromAscii(" ");
+    sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "));
     sSql += OTables::getColumnSqlType(_xDescriptor);
 
     Reference< XStatement > xStmt = m_pConnection->createStatement(  );
@@ -258,11 +258,11 @@ void OAdabasTable::alterNotNullValue(sal_Int32 _nNewNullable,const ::rtl::OUStri
 
     if(_nNewNullable == ColumnValue::NO_NULLS)
     {
-        sSql += ::rtl::OUString::createFromAscii(" NOT NULL");
+        sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" NOT NULL"));
     }
     else
     {
-        sSql += ::rtl::OUString::createFromAscii(" DEFAULT NULL");
+        sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" DEFAULT NULL"));
     }
 
     Reference< XStatement > xStmt = m_pConnection->createStatement();
@@ -276,7 +276,7 @@ void OAdabasTable::alterNotNullValue(sal_Int32 _nNewNullable,const ::rtl::OUStri
 void OAdabasTable::alterDefaultValue(const ::rtl::OUString& _sNewDefault,const ::rtl::OUString& _rColName)
 {
     ::rtl::OUString sSql = getAlterTableColumnPart(_rColName);
-    sSql += ::rtl::OUString::createFromAscii(" ALTER ") + _sNewDefault;
+    sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ALTER ")) + _sNewDefault;
 
     Reference< XStatement > xStmt = m_pConnection->createStatement();
     if(xStmt.is())
@@ -289,7 +289,7 @@ void OAdabasTable::alterDefaultValue(const ::rtl::OUString& _sNewDefault,const :
 void OAdabasTable::dropDefaultValue(const ::rtl::OUString& _rColName)
 {
     ::rtl::OUString sSql = getAlterTableColumnPart(_rColName);
-    sSql += ::rtl::OUString::createFromAscii(" DROP DEFAULT");
+    sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" DROP DEFAULT"));
 
     Reference< XStatement > xStmt = m_pConnection->createStatement();
     if(xStmt.is())
@@ -302,7 +302,7 @@ void OAdabasTable::dropDefaultValue(const ::rtl::OUString& _rColName)
 void OAdabasTable::addDefaultValue(const ::rtl::OUString& _sNewDefault,const ::rtl::OUString& _rColName)
 {
     ::rtl::OUString sSql = getAlterTableColumnPart(_rColName);
-    sSql += ::rtl::OUString::createFromAscii(" ADD ") + _sNewDefault;
+    sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ADD ")) + _sNewDefault;
 
     Reference< XStatement > xStmt = m_pConnection->createStatement();
     if(xStmt.is())
@@ -319,7 +319,7 @@ void OAdabasTable::beginTransAction()
         Reference< XStatement > xStmt = m_pConnection->createStatement();
         if(xStmt.is())
         {
-            xStmt->execute(::rtl::OUString::createFromAscii("SUBTRANS BEGIN") );
+            xStmt->execute(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SUBTRANS BEGIN")) );
             ::comphelper::disposeComponent(xStmt);
         }
     }
@@ -335,7 +335,7 @@ void OAdabasTable::endTransAction()
         Reference< XStatement > xStmt = m_pConnection->createStatement();
         if(xStmt.is())
         {
-            xStmt->execute(::rtl::OUString::createFromAscii("SUBTRANS END") );
+            xStmt->execute(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SUBTRANS END")) );
             ::comphelper::disposeComponent(xStmt);
         }
     }
@@ -351,7 +351,7 @@ void OAdabasTable::rollbackTransAction()
         Reference< XStatement > xStmt = m_pConnection->createStatement();
         if(xStmt.is())
         {
-            xStmt->execute(::rtl::OUString::createFromAscii("SUBTRANS ROLLBACK") );
+            xStmt->execute(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SUBTRANS ROLLBACK")) );
             ::comphelper::disposeComponent(xStmt);
         }
     }
@@ -367,7 +367,7 @@ void OAdabasTable::rollbackTransAction()
     const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
 
     sSql += ::dbtools::quoteName(sQuote,m_SchemaName) + sDot + ::dbtools::quoteName(sQuote,m_Name)
-         + ::rtl::OUString::createFromAscii(" COLUMN ")
+         + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" COLUMN "))
          + ::dbtools::quoteName(sQuote,_rsColumnName);
     return sSql;
 }

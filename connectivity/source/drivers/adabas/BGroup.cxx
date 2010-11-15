@@ -72,7 +72,7 @@ void OAdabasGroup::refreshUsers()
 
     ::rtl::OUString aSql( RTL_CONSTASCII_USTRINGPARAM( "SELECT DISTINCT USERNAME FROM DOMAIN.USERS WHERE USERNAME IS NOT NULL AND USERNAME <> ' ' AND USERNAME <> 'CONTROL' AND GROUPNAME = '" ));
     aSql += getName( );
-    aSql += ::rtl::OUString::createFromAscii("'");
+    aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("'"));
 
     Reference< XResultSet >  xResult = xStmt->executeQuery(aSql);
     if(xResult.is())
