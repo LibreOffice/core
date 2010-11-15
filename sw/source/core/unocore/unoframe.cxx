@@ -1656,7 +1656,8 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
             }
         }
         else if(FN_UNO_CLSID == pEntry->nWID || FN_UNO_MODEL == pEntry->nWID||
-                FN_UNO_COMPONENT == pEntry->nWID ||FN_UNO_STREAM_NAME == pEntry->nWID)
+                FN_UNO_COMPONENT == pEntry->nWID ||FN_UNO_STREAM_NAME == pEntry->nWID||
+                FN_EMBEDDED_OBJECT == pEntry->nWID)
         {
             SwDoc* pDoc = pFmt->GetDoc();
             const SwFmtCntnt* pCnt = &pFmt->GetCntnt();
@@ -1677,7 +1678,9 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
                     {
                         uno::Reference < lang::XComponent > xComp( xIP->getComponent(), uno::UNO_QUERY );
                         uno::Reference < frame::XModel > xModel( xComp, uno::UNO_QUERY );
-                        if ( xModel.is() )
+                        if ( FN_EMBEDDED_OBJECT == pEntry->nWID )
+                            aAny <<= xIP;
+                        else if ( xModel.is() )
                             aAny <<= xModel;
                         else if ( FN_UNO_COMPONENT == pEntry->nWID )
                             aAny <<= xComp;

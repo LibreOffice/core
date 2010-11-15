@@ -908,6 +908,8 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_UNO_META                         (FN_EXTRA2 + 112)
 #define FN_UNO_NESTED_TEXT_CONTENT          (FN_EXTRA2 + 113)
 
+#define FN_EMBEDDED_OBJECT                  (FN_EXTRA2 + 114)
+
 /*--------------------------------------------------------------------
     Bereich: Hilfe
  --------------------------------------------------------------------*/
