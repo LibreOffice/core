@@ -118,8 +118,6 @@ Any SAL_CALL ODriverEnumeration::nextElement(  ) throw(NoSuchElementException, W
     //=====================================================================
     //= helper
     //=====================================================================
-    //---------------------------------------------------------------------
-    //--- 24.08.01 11:27:59 -----------------------------------------------
 
     /// an STL functor which ensures that a SdbcDriver described by a DriverAccess is loaded
     struct EnsureDriver : public ::std::unary_function< DriverAccess, DriverAccess >
@@ -135,9 +133,6 @@ Any SAL_CALL ODriverEnumeration::nextElement(  ) throw(NoSuchElementException, W
         }
     };
 
-    //---------------------------------------------------------------------
-    //--- 24.08.01 11:28:04 -----------------------------------------------
-
     /// an STL functor which extracts a SdbcDriver from a DriverAccess
     struct ExtractDriverFromAccess : public ::std::unary_function< DriverAccess, SdbcDriver >
     {
@@ -147,18 +142,12 @@ Any SAL_CALL ODriverEnumeration::nextElement(  ) throw(NoSuchElementException, W
         }
     };
 
-    //---------------------------------------------------------------------
-    //--- 24.08.01 12:37:50 -----------------------------------------------
-
     typedef ::std::unary_compose< ExtractDriverFromAccess, EnsureDriver > ExtractAfterLoad_BASE;
     /// an STL functor which loads a driver described by a DriverAccess, and extracts the SdbcDriver
     struct ExtractAfterLoad : public ExtractAfterLoad_BASE
     {
         ExtractAfterLoad() : ExtractAfterLoad_BASE( ExtractDriverFromAccess(), EnsureDriver() ) { }
     };
-
-    //---------------------------------------------------------------------
-    //--- 24.08.01 11:42:36 -----------------------------------------------
 
     struct ExtractDriverFromCollectionElement : public ::std::unary_function< DriverCollection::value_type, SdbcDriver >
     {
@@ -167,9 +156,6 @@ Any SAL_CALL ODriverEnumeration::nextElement(  ) throw(NoSuchElementException, W
             return _rElement.second;
         }
     };
-
-    //---------------------------------------------------------------------
-    //--- 24.08.01 11:51:03 -----------------------------------------------
 
     // predicate for checking whether or not a driver accepts a given URL
     class AcceptsURL : public ::std::unary_function< SdbcDriver, bool >
@@ -192,9 +178,6 @@ Any SAL_CALL ODriverEnumeration::nextElement(  ) throw(NoSuchElementException, W
             return false;
         }
     };
-
-    //---------------------------------------------------------------------
-    //--- 24.08.01 12:51:54 -----------------------------------------------
 
     static sal_Int32 lcl_getDriverPrecedence( const ::comphelper::ComponentContext& _rContext, Sequence< ::rtl::OUString >& _rPrecedence )
     {
@@ -240,9 +223,6 @@ Any SAL_CALL ODriverEnumeration::nextElement(  ) throw(NoSuchElementException, W
         return _rPrecedence.getLength();
     }
 
-    //---------------------------------------------------------------------
-    //--- 24.08.01 13:01:56 -----------------------------------------------
-
     /// an STL argorithm compatible predicate comparing two DriverAccess instances by their implementation names
     struct CompareDriverAccessByName : public ::std::binary_function< DriverAccess, DriverAccess, bool >
     {
@@ -252,9 +232,6 @@ Any SAL_CALL ODriverEnumeration::nextElement(  ) throw(NoSuchElementException, W
             return lhs.sImplementationName < rhs.sImplementationName ? true : false;
         }
     };
-
-    //---------------------------------------------------------------------
-    //--- 24.08.01 13:08:17 -----------------------------------------------
 
     /// and STL argorithm compatible predicate comparing a DriverAccess' impl name to a string
     struct CompareDriverAccessToName : public ::std::binary_function< DriverAccess, ::rtl::OUString, bool >
@@ -304,9 +281,6 @@ OSDBCDriverManager::OSDBCDriverManager( const Reference< XComponentContext >& _r
 OSDBCDriverManager::~OSDBCDriverManager()
 {
 }
-
-//---------------------------------------------------------------------
-//--- 24.08.01 11:15:32 -----------------------------------------------
 
 void OSDBCDriverManager::bootstrapDrivers()
 {

@@ -41,8 +41,6 @@
 SFX_IMPL_TOOLBOX_CONTROL(SvxCTLTextTbxCtrl, SfxBoolItem);
 SFX_IMPL_TOOLBOX_CONTROL(SvxVertTextTbxCtrl, SfxBoolItem);
 
-// -----------------------------27.04.01 15:50--------------------------------
-
 SvxCTLTextTbxCtrl::SvxCTLTextTbxCtrl(USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
     SvxVertCTLTextTbxCtrl( nSlotId, nId, rTbx )
 {

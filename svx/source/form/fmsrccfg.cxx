@@ -46,9 +46,6 @@ namespace svxform
     // = struct FmSearchParams - Parameter einer Suche
     // ====================================================================
 
-    //---------------------------------------------------------------------
-    //--- 20.08.01 18:17:34 -----------------------------------------------
-
     FmSearchParams::FmSearchParams()
         :nTransliterationFlags( 0 )
         ,nSearchForType     ( 0 )
@@ -73,16 +70,10 @@ namespace svxform
             |   TransliterationModules_IGNORE_CASE;
     }
 
-    //---------------------------------------------------------------------
-    //--- 21.08.01 13:31:48 -----------------------------------------------
-
     sal_Bool FmSearchParams::isIgnoreWidthCJK( ) const
     {
         return 0 != (nTransliterationFlags & TransliterationModules_IGNORE_WIDTH);
     }
-
-    //---------------------------------------------------------------------
-    //--- 21.08.01 13:32:03 -----------------------------------------------
 
     void FmSearchParams::setIgnoreWidthCJK( sal_Bool _bIgnore )
     {
@@ -92,16 +83,10 @@ namespace svxform
             nTransliterationFlags &= ~TransliterationModules_IGNORE_WIDTH;
     }
 
-    //---------------------------------------------------------------------
-    //--- 21.08.01 13:47:52 -----------------------------------------------
-
     sal_Bool FmSearchParams::isCaseSensitive( ) const
     {
         return 0 == (nTransliterationFlags & TransliterationModules_IGNORE_CASE);
     }
-
-    //---------------------------------------------------------------------
-    //--- 21.08.01 13:48:00 -----------------------------------------------
 
     void FmSearchParams::setCaseSensitive( sal_Bool _bCase )
     {
@@ -121,9 +106,6 @@ namespace svxform
         sal_Int16       nValue;
     };
 
-    //---------------------------------------------------------------------
-    //--- 20.08.01 18:28:38 -----------------------------------------------
-
     static const Ascii2Int16* lcl_getSearchForTypeValueMap()
     {
         static const Ascii2Int16 s_aSearchForTypeMap[] =
@@ -135,9 +117,6 @@ namespace svxform
         };
         return s_aSearchForTypeMap;
     }
-
-    //---------------------------------------------------------------------
-    //--- 20.08.01 18:28:38 -----------------------------------------------
 
     static const Ascii2Int16* lcl_getSearchPositionValueMap()
     {
@@ -151,9 +130,6 @@ namespace svxform
         };
         return s_aSearchPositionMap;
     }
-
-    //---------------------------------------------------------------------
-    //--- 20.08.01 18:30:15 -----------------------------------------------
 
     static sal_Int16 lcl_implMapAsciiValue( const ::rtl::OUString& _rAsciiValue, const Ascii2Int16* _pMap )
     {
@@ -175,9 +151,6 @@ namespace svxform
         );
         return -1;
     }
-
-    //---------------------------------------------------------------------
-    //--- 20.08.01 18:33:06 -----------------------------------------------
 
     static const sal_Char* lcl_implMapIntValue( const sal_Int16 _nValue, const Ascii2Int16* _pMap )
     {
@@ -207,9 +180,6 @@ namespace svxform
     // ====================================================================
 
 #define TA( c )     &c, getCppuType( &c )
-
-    //---------------------------------------------------------------------
-    //--- 20.08.01 18:19:59 -----------------------------------------------
 
     FmSearchConfigItem::FmSearchConfigItem()
         :OConfigurationValueContainer( ::comphelper::getProcessServiceFactory(), m_aMutex, "/org.openoffice.Office.DataAccess/FormSearchOptions", CVC_UPDATE_ACCESS | CVC_LAZY_UPDATE, 2 )
@@ -256,16 +226,10 @@ namespace svxform
         read( );
     }
 
-    //---------------------------------------------------------------------
-    //--- 20.08.01 18:19:57 -----------------------------------------------
-
     FmSearchConfigItem::~FmSearchConfigItem()
     {
         commit( );
     }
-
-    //---------------------------------------------------------------------
-    //--- 20.08.01 18:20:48 -----------------------------------------------
 
     void FmSearchConfigItem::implTranslateFromConfig( )
     {
@@ -300,9 +264,6 @@ namespace svxform
         if ( m_bIsIgnoreMiddleDot           )   nTransliterationFlags |= TransliterationModules_ignoreMiddleDot_ja_JP;
     }
 
-    //---------------------------------------------------------------------
-    //--- 20.08.01 18:42:23 -----------------------------------------------
-
     void FmSearchConfigItem::implTranslateToConfig( )
     {
         // the search-for string
@@ -335,9 +296,6 @@ namespace svxform
         m_bIsIgnoreMiddleDot            = ( 0 != ( nTransliterationFlags & TransliterationModules_ignoreMiddleDot_ja_JP ) );
     }
 
-    //---------------------------------------------------------------------
-    //--- 20.08.01 18:20:01 -----------------------------------------------
-
     const FmSearchParams& FmSearchConfigItem::getParams() const
     {
         // ensure that the properties which are not stored directly are up-to-date
@@ -346,9 +304,6 @@ namespace svxform
         // and return our FmSearchParams part
         return *this;
     }
-
-    //---------------------------------------------------------------------
-    //--- 20.08.01 18:41:57 -----------------------------------------------
 
     void FmSearchConfigItem::setParams( const FmSearchParams& _rParams )
     {
