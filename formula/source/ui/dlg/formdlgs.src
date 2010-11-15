@@ -121,19 +121,9 @@ TabPage RID_FORMULATAB_STRUCT
         ImageBitmap = Bitmap { File = "fapok.bmp"; };
         MaskColor = STD_MASKCOLOR;
     };
-    Image BMP_STR_END_H
-    {
-        ImageBitmap = Bitmap { File = "fapok_h.bmp"; };
-        MaskColor = STD_MASKCOLOR;
-    };
     Image BMP_STR_ERROR
     {
         ImageBitmap = Bitmap { File = "faperror.bmp"; };
-        MaskColor = STD_MASKCOLOR;
-    };
-    Image BMP_STR_ERROR_H
-    {
-        ImageBitmap = Bitmap { File = "faperror_h.bmp"; };
         MaskColor = STD_MASKCOLOR;
     };
     String STR_STRUCT_ERR1

@@ -68,8 +68,6 @@
 #define BMP_STR_OPEN        2
 #define BMP_STR_END         3
 #define BMP_STR_ERROR       4
-#define BMP_STR_END_H       13
-#define BMP_STR_ERROR_H     14
 
 // Texte
 #define STR_STRUCT_ERR1     1
