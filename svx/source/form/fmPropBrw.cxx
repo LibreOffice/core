@@ -231,7 +231,7 @@ FmPropBrw::FmPropBrw( const Reference< XMultiServiceFactory >& _xORB, SfxBinding
     try
     {
         // create a frame wrapper for myself
-        m_xMeAsFrame = Reference< XFrame >(m_xORB->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.Frame")), UNO_QUERY);
+        m_xMeAsFrame = Reference< XFrame >(m_xORB->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Frame")) ), UNO_QUERY);
         if (m_xMeAsFrame.is())
         {
             // create an intermediate window, which is to be the container window of the frame
@@ -244,7 +244,7 @@ FmPropBrw::FmPropBrw( const Reference< XMultiServiceFactory >& _xORB, SfxBinding
             m_xFrameContainerWindow = VCLUnoHelper::GetInterface ( pContainerWindow );
 
             m_xMeAsFrame->initialize( m_xFrameContainerWindow );
-            m_xMeAsFrame->setName(::rtl::OUString::createFromAscii("form property browser"));
+            m_xMeAsFrame->setName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("form property browser")) );
             if ( _pBindings->GetDispatcher() )
             {
                 ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFramesSupplier >

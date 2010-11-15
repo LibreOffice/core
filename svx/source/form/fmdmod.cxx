@@ -42,11 +42,11 @@ using namespace ::svxform;
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SAL_CALL SvxFmMSFactory::createInstance(const ::rtl::OUString& ServiceSpecifier) throw( ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException )
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  xRet;
-    if ( ServiceSpecifier.indexOf( ::rtl::OUString::createFromAscii("com.sun.star.form.component.") ) == 0 )
+    if ( ServiceSpecifier.indexOf( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.")) ) == 0 )
     {
         xRet = ::comphelper::getProcessServiceFactory()->createInstance(ServiceSpecifier);
     }
-    else if ( ServiceSpecifier == ::rtl::OUString( ::rtl::OUString::createFromAscii("com.sun.star.drawing.ControlShape") ) )
+    else if ( ServiceSpecifier == ::rtl::OUString( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.ControlShape")) ) )
     {
         SdrObject* pObj = new FmFormObj(OBJ_FM_CONTROL);
         xRet = *new SvxShapeControl(pObj);
@@ -107,19 +107,19 @@ using namespace ::svxform;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  xRet;
     sal_uInt16 nTokenCount = ServiceName.getTokenCount('.');
     if (nTokenCount == 5 &&
-        ServiceName.getToken( 0, '.' ) == ::rtl::OUString::createFromAscii("stardiv") &&
-        ServiceName.getToken( 1, '.' ) == ::rtl::OUString::createFromAscii("one") &&
-        ServiceName.getToken( 2, '.' ) == ::rtl::OUString::createFromAscii("form") &&
-        ServiceName.getToken( 3, '.' ) == ::rtl::OUString::createFromAscii("component"))
+        ServiceName.getToken( 0, '.' ) == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("stardiv")) &&
+        ServiceName.getToken( 1, '.' ) == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("one")) &&
+        ServiceName.getToken( 2, '.' ) == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("form")) &&
+        ServiceName.getToken( 3, '.' ) == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("component")) )
     {
         xRet = ::comphelper::getProcessServiceFactory()->createInstance(ServiceName);
     }
     else
     if (nTokenCount == 4 &&
-        ServiceName.getToken( 0, '.' ) == ::rtl::OUString::createFromAscii("stardiv") &&
-        ServiceName.getToken( 1, '.' ) == ::rtl::OUString::createFromAscii("one") &&
-        ServiceName.getToken( 2, '.' ) == ::rtl::OUString::createFromAscii("drawing") &&
-        ServiceName.getToken( 3, '.' ) == ::rtl::OUString::createFromAscii("ControlShape"))
+        ServiceName.getToken( 0, '.' ) == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("stardiv")) &&
+        ServiceName.getToken( 1, '.' ) == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("one")) &&
+        ServiceName.getToken( 2, '.' ) == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("drawing")) &&
+        ServiceName.getToken( 3, '.' ) == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ControlShape")) )
     {
         SdrObject* pObj = new FmFormObj();
         xRet = *new SvxShapeControl(pObj);

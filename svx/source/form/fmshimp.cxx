@@ -390,8 +390,8 @@ namespace
         Sequence< Type> aModelListeners;
         Sequence< Type> aControlListeners;
 
-        Reference< XIntrospection> xModelIntrospection(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.beans.Introspection")), UNO_QUERY);
-        Reference< XIntrospection> xControlIntrospection(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.beans.Introspection")), UNO_QUERY);
+        Reference< XIntrospection> xModelIntrospection(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.beans.Introspection"))), UNO_QUERY);
+        Reference< XIntrospection> xControlIntrospection(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.beans.Introspection"))), UNO_QUERY);
 
         if (xModelIntrospection.is() && xModel.is())
         {
@@ -526,8 +526,8 @@ sal_Bool IsSearchableControl( const ::com::sun::star::uno::Reference< ::com::sun
         {
             switch ( (TriState)xCheckBox->getState() )
             {
-                case STATE_NOCHECK: *_pCurrentText = ::rtl::OUString::createFromAscii( "0" ); break;
-                case STATE_CHECK: *_pCurrentText = ::rtl::OUString::createFromAscii( "1" ); break;
+                case STATE_NOCHECK: *_pCurrentText = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "0" )); break;
+                case STATE_CHECK: *_pCurrentText = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "1" )); break;
                 default: *_pCurrentText = ::rtl::OUString(); break;
             }
         }
@@ -656,7 +656,7 @@ DBG_NAME(FmXFormShell);
 //------------------------------------------------------------------------
 FmXFormShell::FmXFormShell( FmFormShell& _rShell, SfxViewFrame* _pViewFrame )
         :FmXFormShell_BASE(m_aMutex)
-        ,FmXFormShell_CFGBASE(::rtl::OUString::createFromAscii("Office.Common/Misc"), CONFIG_MODE_DELAYED_UPDATE)
+        ,FmXFormShell_CFGBASE(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/Misc")), CONFIG_MODE_DELAYED_UPDATE)
         ,m_eNavigate( NavigationBarMode_NONE )
         ,m_nInvalidationEvent( 0 )
         ,m_nActivationEvent( 0 )
@@ -695,7 +695,7 @@ FmXFormShell::FmXFormShell( FmFormShell& _rShell, SfxViewFrame* _pViewFrame )
     implAdjustConfigCache();
     // and register for changes on this settings
     Sequence< ::rtl::OUString > aNames(1);
-    aNames[0] = ::rtl::OUString::createFromAscii("FormControlPilotsEnabled");
+    aNames[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FormControlPilotsEnabled"));
     EnableNotification(aNames);
 }
 
@@ -1735,7 +1735,7 @@ sal_Bool FmXFormShell::GetY2KState(sal_uInt16& n)
         {
             try
             {
-                Any aVal( xSet->getPropertyValue(::rtl::OUString::createFromAscii("TwoDigitDateStart")) );
+                Any aVal( xSet->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TwoDigitDateStart"))) );
                 aVal >>= n;
                 return sal_True;
             }
@@ -1769,7 +1769,7 @@ void FmXFormShell::SetY2KState(sal_uInt16 n)
                 {
                     Any aVal;
                     aVal <<= n;
-                    xSet->setPropertyValue(::rtl::OUString::createFromAscii("TwoDigitDateStart"), aVal);
+                    xSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TwoDigitDateStart")), aVal);
                 }
                 catch(Exception&)
                 {
@@ -1810,7 +1810,7 @@ void FmXFormShell::SetY2KState(sal_uInt16 n)
                 {
                     Any aVal;
                     aVal <<= n;
-                    xSet->setPropertyValue(::rtl::OUString::createFromAscii("TwoDigitDateStart"), aVal);
+                    xSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TwoDigitDateStart")), aVal);
                 }
                 catch(Exception&)
                 {
@@ -3340,7 +3340,7 @@ void FmXFormShell::CreateExternalView()
     // the frame the external view is displayed in
     sal_Bool bAlreadyExistent = m_xExternalViewController.is();
     Reference< ::com::sun::star::frame::XFrame> xExternalViewFrame;
-    ::rtl::OUString sFrameName = ::rtl::OUString::createFromAscii("_beamer");
+    ::rtl::OUString sFrameName(RTL_CONSTASCII_USTRINGPARAM("_beamer"));
     sal_Int32 nSearchFlags = ::com::sun::star::frame::FrameSearchFlag::CHILDREN | ::com::sun::star::frame::FrameSearchFlag::CREATE;
 
     Reference< runtime::XFormController > xCurrentNavController( getNavController());
@@ -3424,7 +3424,7 @@ void FmXFormShell::CreateExternalView()
         URL aClearURL;
         aClearURL.Complete = FMURL_GRIDVIEW_CLEARVIEW;
 
-        Reference< ::com::sun::star::frame::XDispatch> xClear( xCommLink->queryDispatch(aClearURL, ::rtl::OUString::createFromAscii(""), 0));
+        Reference< ::com::sun::star::frame::XDispatch> xClear( xCommLink->queryDispatch(aClearURL, ::rtl::OUString(), 0));
         if (xClear.is())
             xClear->dispatch(aClearURL, Sequence< PropertyValue>());
     }
@@ -3441,10 +3441,10 @@ void FmXFormShell::CreateExternalView()
         // collect the dispatchers we will need
         URL aAddColumnURL;
         aAddColumnURL.Complete = FMURL_GRIDVIEW_ADDCOLUMN;
-        Reference< ::com::sun::star::frame::XDispatch> xAddColumnDispatch( xCommLink->queryDispatch(aAddColumnURL, ::rtl::OUString::createFromAscii(""), 0));
+        Reference< ::com::sun::star::frame::XDispatch> xAddColumnDispatch( xCommLink->queryDispatch(aAddColumnURL, ::rtl::OUString(), 0));
         URL aAttachURL;
         aAttachURL.Complete = FMURL_GRIDVIEW_ATTACHTOFORM;
-        Reference< ::com::sun::star::frame::XDispatch> xAttachDispatch( xCommLink->queryDispatch(aAttachURL, ::rtl::OUString::createFromAscii(""), 0));
+        Reference< ::com::sun::star::frame::XDispatch> xAttachDispatch( xCommLink->queryDispatch(aAttachURL, ::rtl::OUString(), 0));
 
         if (xAddColumnDispatch.is() && xAttachDispatch.is())
         {
@@ -3749,7 +3749,7 @@ void FmXFormShell::implAdjustConfigCache()
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::implAdjustConfigCache" );
     // get (cache) the wizard usage flag
     Sequence< ::rtl::OUString > aNames(1);
-    aNames[0] = ::rtl::OUString::createFromAscii("FormControlPilotsEnabled");
+    aNames[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FormControlPilotsEnabled"));
     Sequence< Any > aFlags = GetProperties(aNames);
     if (1 == aFlags.getLength())
         m_bUseWizards = ::cppu::any2bool(aFlags[0]);
@@ -3783,7 +3783,7 @@ void FmXFormShell::SetWizardUsing(sal_Bool _bUseThem)
     m_bUseWizards = _bUseThem;
 
     Sequence< ::rtl::OUString > aNames(1);
-    aNames[0] = ::rtl::OUString::createFromAscii("FormControlPilotsEnabled");
+    aNames[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FormControlPilotsEnabled"));
     Sequence< Any > aValues(1);
     aValues[0] = ::cppu::bool2any(m_bUseWizards);
     PutProperties(aNames, aValues);

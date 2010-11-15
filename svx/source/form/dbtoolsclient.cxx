@@ -122,7 +122,7 @@ namespace svxform
             if (NULL != s_hDbtoolsModule)
             {
                 // get the symbol for the method creating the factory
-                const ::rtl::OUString sFactoryCreationFunc = ::rtl::OUString::createFromAscii("createDataAccessToolsFactory");
+                const ::rtl::OUString sFactoryCreationFunc( RTL_CONSTASCII_USTRINGPARAM("createDataAccessToolsFactory") );
                 //  reinterpret_cast<createDataAccessToolsFactoryFunction>
                 s_pFactoryCreationFunc = (createDataAccessToolsFactoryFunction)(
                     osl_getFunctionSymbol(s_hDbtoolsModule, sFactoryCreationFunc.pData));
