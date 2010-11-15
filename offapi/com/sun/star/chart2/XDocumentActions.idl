@@ -29,6 +29,7 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/beans/PropertyValue.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
 
 module com
 {
@@ -50,7 +51,8 @@ interface XDocumentActions : ::com::sun::star::uno::XInterface
     /** call this before you change the model which the undo manager belongs to. You can pass
         parameters to refine the undo action.
      */
-    void preActionWithArguments( [in] sequence< ::com::sun::star::beans::PropertyValue > aArguments );
+    void preActionWithArguments( [in] sequence< ::com::sun::star::beans::PropertyValue > aArguments )
+        raises ( ::com::sun::star::lang::IllegalArgumentException );
 
     /** call this after you successfully did changes to your current model
      */
