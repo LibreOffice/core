@@ -104,7 +104,7 @@ namespace frm
     // old macro for quickly implementing XServiceInfo::getImplementationName
     #define IMPLEMENTATION_NAME(ImplName)                                       \
     virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException) \
-        { return ::rtl::OUString::createFromAscii("com.sun.star.comp.forms.") + ::rtl::OUString::createFromAscii(#ImplName); }
+        { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.forms.") ) + ::rtl::OUString::createFromAscii(#ImplName); }
 
     class OControlModel;
 
