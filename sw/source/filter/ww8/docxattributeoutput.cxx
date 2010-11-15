@@ -97,6 +97,7 @@
 #include <docufld.hxx>
 #include <flddropdown.hxx>
 #include <format.hxx>
+#include <fmtanchr.hxx>
 #include <fmtclds.hxx>
 #include <fmtinfmt.hxx>
 #include <fmtfld.hxx>
@@ -1677,7 +1678,8 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode& rGrfNode, const Size
 
     m_pSerializer->startElementNS( XML_w, XML_drawing,
             FSEND );
-    m_pSerializer->startElementNS( XML_wp, XML_inline,
+    sal_Int32 anchorOrInline = rGrfNode.GetFlyFmt()->GetAnchor().GetAnchorId() == FLY_AS_CHAR ? XML_inline : XML_anchor;
+    m_pSerializer->startElementNS( XML_wp, anchorOrInline,
             XML_distT, "0", XML_distB, "0", XML_distL, "0", XML_distR, "0",
             FSEND );
 
@@ -1806,7 +1808,7 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode& rGrfNode, const Size
 
     m_pSerializer->endElementNS( XML_a, XML_graphicData );
     m_pSerializer->endElementNS( XML_a, XML_graphic );
-    m_pSerializer->endElementNS( XML_wp, XML_inline );
+    m_pSerializer->endElementNS( XML_wp, anchorOrInline );
 
     m_pSerializer->endElementNS( XML_w, XML_drawing );
 }
