@@ -134,7 +134,7 @@ void registerClassInfo(
 //.......................................................................................
 #define REGISTER_CLASS_CORE(classImplName) \
     registerClassInfo( \
-        ::rtl::OUString::createFromAscii("com.sun.star.form.") + ::rtl::OUString::createFromAscii(#classImplName), \
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.") ) + ::rtl::OUString::createFromAscii(#classImplName), \
         aServices, \
         frm::classImplName##_CreateInstance)
 
@@ -229,7 +229,7 @@ void ensureClassInfos()
     aServices.getArray()[2] = frm::FRM_SUN_COMPONENT_DATABASE_FORMATTEDFIELD;
     aServices.getArray()[3] = frm::BINDABLE_DATABASE_FORMATTED_FIELD;
 
-    registerClassInfo(::rtl::OUString::createFromAscii("com.sun.star.comp.forms.OFormattedFieldWrapper_ForcedFormatted"),
+    registerClassInfo(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.forms.OFormattedFieldWrapper_ForcedFormatted") ),
         aServices,
         frm::OFormattedFieldWrapper_CreateInstance_ForceFormatted);
 
@@ -287,9 +287,9 @@ void ensureClassInfos()
 //---------------------------------------------------------------------------------------
 void registerServiceProvider(const ::rtl::OUString& _rServiceImplName, const Sequence< ::rtl::OUString >& _rServices, XRegistryKey* _pKey)
 {
-    ::rtl::OUString sMainKeyName = ::rtl::OUString::createFromAscii("/");
+    ::rtl::OUString sMainKeyName (RTL_CONSTASCII_USTRINGPARAM("/") );
     sMainKeyName += _rServiceImplName;
-    sMainKeyName += ::rtl::OUString::createFromAscii("/UNO/SERVICES");
+    sMainKeyName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES") );
     Reference< XRegistryKey > xNewKey = _pKey->createKey(sMainKeyName);
     OSL_ENSURE(xNewKey.is(), "forms::registerProvider : could not create a registry key !");
     if (!xNewKey.is())
