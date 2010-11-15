@@ -557,6 +557,8 @@ void SAL_CALL ChartModel::dispose() throw(uno::RuntimeException)
     m_pUndoManager.clear();
         // that's important, since the UndoManager implementation delegates its ref counting to ourself.
 
+    m_xDocumentActions.clear();
+
     m_aControllers.disposeAndClear( lang::EventObject( static_cast< cppu::OWeakObject * >( this )));
     m_xCurrentController.clear();
 

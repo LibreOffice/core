@@ -43,462 +43,344 @@
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
+#include <com/sun/star/lang/DisposedException.hpp>
+
+#include <tools/diagnose_ex.h>
+#include <svx/svdundo.hxx>
 
 #include <boost/bind.hpp>
 #include <algorithm>
 
 using namespace ::com::sun::star;
 
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
 using ::rtl::OUString;
-using ::com::sun::star::chart::XComplexDescriptionAccess;
 
 namespace chart
 {
 namespace impl
 {
 
-void ImplApplyDataToModel(
-    const Reference< frame::XModel > & xModel,
-    const Reference< chart2::XInternalDataProvider > & xData )
-{
-    Reference< chart2::XChartDocument > xDoc( xModel, uno::UNO_QUERY );
-    OSL_ASSERT( xDoc.is() && xDoc->hasInternalDataProvider());
+    /** === begin UNO using === **/
+    using ::com::sun::star::uno::Reference;
+    using ::com::sun::star::uno::XInterface;
+    using ::com::sun::star::uno::UNO_QUERY;
+    using ::com::sun::star::uno::UNO_QUERY_THROW;
+    using ::com::sun::star::uno::UNO_SET_THROW;
+    using ::com::sun::star::uno::Exception;
+    using ::com::sun::star::uno::RuntimeException;
+    using ::com::sun::star::uno::Any;
+    using ::com::sun::star::uno::makeAny;
+    using ::com::sun::star::uno::Sequence;
+    using ::com::sun::star::uno::Type;
+    using ::com::sun::star::frame::XModel;
+    using ::com::sun::star::util::XCloneable;
+    using ::com::sun::star::lang::XComponent;
+    using ::com::sun::star::lang::DisposedException;
+    using ::com::sun::star::view::XSelectionSupplier;
+    using ::com::sun::star::chart2::XChartDocument;
+    using ::com::sun::star::chart::XComplexDescriptionAccess;
+    using ::com::sun::star::chart2::XTitled;
+    using ::com::sun::star::chart2::XInternalDataProvider;
+    using ::com::sun::star::util::XModifiable;
+    using ::com::sun::star::document::UndoFailedException;
+    /** === end UNO using === **/
 
-    // copy data from stored internal data provider
-    if( xDoc.is() && xDoc->hasInternalDataProvider())
+// =====================================================================================================================
+// = helper
+// =====================================================================================================================
+namespace
+{
+    Reference< XModel > lcl_cloneModel( const Reference< XModel > & xModel )
     {
-        Reference< XComplexDescriptionAccess > xCurrentData( xDoc->getDataProvider(), uno::UNO_QUERY );
-        Reference< XComplexDescriptionAccess > xSavedData( xData, uno::UNO_QUERY );
-        if( xCurrentData.is() && xSavedData.is())
-        {
-            xCurrentData->setData( xSavedData->getData());
-            xCurrentData->setComplexRowDescriptions( xSavedData->getComplexRowDescriptions());
-            xCurrentData->setComplexColumnDescriptions( xSavedData->getComplexColumnDescriptions());
-        }
-    }
-}
-
-// ----------------------------------------
-
-UndoElement::UndoElement(
-    const OUString & rActionString,
-    const Reference< frame::XModel > & xModel ) :
-        m_aActionString( rActionString )
-{
-    initialize( xModel );
-}
-
-UndoElement::UndoElement(
-    const Reference< frame::XModel > & xModel )
-{
-    initialize( xModel );
-}
-
-UndoElement::UndoElement( const UndoElement & rOther ) :
-        m_aActionString( rOther.m_aActionString )
-{
-    initialize( rOther.m_xModel );
-}
-
-UndoElement::~UndoElement()
-{}
-
-void UndoElement::initialize( const Reference< frame::XModel > & xModel )
-{
-    if ( xModel.is() )
-    {
-        m_xModel.set( UndoElement::cloneModel( xModel ) );
-    }
-}
-
-void UndoElement::dispose()
-{
-    Reference< lang::XComponent > xComp( m_xModel, uno::UNO_QUERY );
-    if( xComp.is())
-        xComp->dispose();
-    m_xModel.set( 0 );
-}
-
-void UndoElement::applyToModel(
-    const Reference< frame::XModel > & xModel )
-{
-    UndoElement::applyModelContentToModel( xModel, m_xModel );
-}
-
-UndoElement * UndoElement::createFromModel(
-    const Reference< frame::XModel > & xModel )
-{
-    return new UndoElement( getActionString(), xModel );
-}
-
-void UndoElement::setActionString( const ::rtl::OUString & rActionString )
-{
-    m_aActionString = rActionString;
-}
-
-OUString UndoElement::getActionString() const
-{
-    return m_aActionString;
-}
-
-// static
-Reference< frame::XModel > UndoElement::cloneModel( const Reference< frame::XModel > & xModel )
-{
-    Reference< frame::XModel > xResult;
-    uno::Reference< util::XCloneable > xCloneable( xModel, uno::UNO_QUERY );
-    OSL_ENSURE( xCloneable.is(), "Cannot clone model" );
-    if( xCloneable.is())
-        xResult.set( xCloneable->createClone(), uno::UNO_QUERY );
-
-    return xResult;
-}
-
-// static
-void UndoElement::applyModelContentToModel(
-    const Reference< frame::XModel > & xModel,
-    const Reference< frame::XModel > & xModelToCopyFrom,
-    const Reference< chart2::XInternalDataProvider > & xData /* = 0 */ )
-{
-
-    if( xModelToCopyFrom.is() && xModel.is())
-    {
+        Reference< XModel > xResult;
         try
         {
-            // /-- loccked controllers of destination
-            ControllerLockGuard aLockedControllers( xModel );
-            Reference< chart2::XChartDocument > xSource( xModelToCopyFrom, uno::UNO_QUERY_THROW );
-            Reference< chart2::XChartDocument > xDestination( xModel, uno::UNO_QUERY_THROW );
-
-            // propagate the correct flag for plotting of hidden values to the data provider and all used sequences
-            ChartModelHelper::setIncludeHiddenCells( ChartModelHelper::isIncludeHiddenCells( xModelToCopyFrom ) , xModel );
-
-            // diagram
-            xDestination->setFirstDiagram( xSource->getFirstDiagram());
-
-            // main title
-            Reference< chart2::XTitled > xDestinationTitled( xDestination, uno::UNO_QUERY_THROW );
-            Reference< chart2::XTitled > xSourceTitled( xSource, uno::UNO_QUERY_THROW );
-            xDestinationTitled->setTitleObject( xSourceTitled->getTitleObject());
-
-            // page background
-            comphelper::copyProperties(
-                xSource->getPageBackground(),
-                xDestination->getPageBackground() );
-
-            // apply data (not applied in standard Undo)
-            if( xData.is())
-                ImplApplyDataToModel( xModel, xData );
-
-            // register all sequences at the internal data provider to get adapted
-            // indexes when columns are added/removed
-            if( xDestination->hasInternalDataProvider())
-            {
-                Reference< chart2::XInternalDataProvider > xNewDataProvider( xDestination->getDataProvider(), uno::UNO_QUERY );
-                Reference< chart2::data::XDataSource > xUsedData( DataSourceHelper::getUsedData( xModel ));
-                if( xUsedData.is() && xNewDataProvider.is())
-                {
-                    Sequence< Reference< chart2::data::XLabeledDataSequence > > aData( xUsedData->getDataSequences());
-                    for( sal_Int32 i=0; i<aData.getLength(); ++i )
-                    {
-                        xNewDataProvider->registerDataSequenceForChanges( aData[i]->getValues());
-                        xNewDataProvider->registerDataSequenceForChanges( aData[i]->getLabel());
-                    }
-                }
-            }
-
-            // restore modify status
-            Reference< util::XModifiable > xSourceMod( xSource, uno::UNO_QUERY );
-            Reference< util::XModifiable > xDestMod( xDestination, uno::UNO_QUERY );
-            if( xSourceMod.is() && xDestMod.is() &&
-                ! xSourceMod->isModified() )
-            {
-                xDestMod->setModified( sal_False );
-            }
-            // \-- loccked controllers of destination
+            const Reference< XCloneable > xCloneable( xModel, UNO_QUERY_THROW );
+            xResult.set( xCloneable->createClone(), UNO_QUERY_THROW );
         }
-        catch( uno::Exception & )
+        catch( const Exception& )
         {
+            DBG_UNHANDLED_EXCEPTION();
         }
+        return xResult;
     }
+
 }
 
-// ----------------------------------------
+// =====================================================================================================================
+// = ChartModelClone
+// =====================================================================================================================
 
-UndoElementWithData::UndoElementWithData(
-    const OUString & rActionString,
-    const Reference< frame::XModel > & xModel ) :
-        UndoElement( rActionString, xModel )
+// ---------------------------------------------------------------------------------------------------------------------
+ChartModelClone::ChartModelClone( const Reference< XModel >& i_model, const ModelFacet i_facet )
 {
-    initializeData();
-}
+    m_xModelClone.set( lcl_cloneModel( i_model ) );
 
-UndoElementWithData::UndoElementWithData(
-    const Reference< frame::XModel > & xModel ) :
-        UndoElement( xModel )
-{
-    initializeData();
-}
-
-
-UndoElementWithData::UndoElementWithData(
-    const UndoElementWithData & rOther ) :
-        UndoElement( rOther )
-{
-    initializeData();
-}
-
-UndoElementWithData::~UndoElementWithData()
-{}
-
-void UndoElementWithData::initializeData()
-{
     try
     {
-        Reference< chart2::XChartDocument > xChartDoc( m_xModel, uno::UNO_QUERY_THROW );
-        OSL_ASSERT( xChartDoc->hasInternalDataProvider());
-        if( xChartDoc->hasInternalDataProvider())
+        if ( i_facet == E_MODEL_WITH_DATA )
         {
-            Reference< util::XCloneable > xCloneable( xChartDoc->getDataProvider(), uno::UNO_QUERY );
-            OSL_ENSURE( xCloneable.is(), "Cannot clone data" );
-            if( xCloneable.is())
-                m_xData.set( xCloneable->createClone(), uno::UNO_QUERY );
+            const Reference< XChartDocument > xChartDoc( m_xModelClone, UNO_QUERY_THROW );
+            ENSURE_OR_THROW( xChartDoc->hasInternalDataProvider(), "invalid chart model" );
+
+            const Reference< XCloneable > xCloneable( xChartDoc->getDataProvider(), UNO_QUERY_THROW );
+            m_xDataClone.set( xCloneable->createClone(), UNO_QUERY_THROW );
         }
-    }
-    catch( uno::Exception & )
-    {
-    }
-}
 
-void UndoElementWithData::dispose()
-{
-    UndoElement::dispose();
-    m_xData.set( 0 );
-}
-
-void UndoElementWithData::applyToModel(
-    const Reference< frame::XModel > & xModel )
-{
-    UndoElement::applyModelContentToModel( xModel, m_xModel, m_xData );
-}
-
-UndoElement * UndoElementWithData::createFromModel(
-    const Reference< frame::XModel > & xModel )
-{
-    return new UndoElementWithData( getActionString(), xModel );
-}
-
-// ========================================
-
-// ----------------------------------------
-
-UndoElementWithSelection::UndoElementWithSelection(
-    const OUString & rActionString,
-    const Reference< frame::XModel > & xModel ) :
-        UndoElement( rActionString, xModel )
-{
-    initialize( xModel );
-}
-
-UndoElementWithSelection::UndoElementWithSelection(
-    const Reference< frame::XModel > & xModel ) :
-        UndoElement( xModel )
-{
-    initialize( xModel );
-}
-
-UndoElementWithSelection::UndoElementWithSelection(
-    const UndoElementWithSelection & rOther ) :
-        UndoElement( rOther )
-{
-    initialize( rOther.m_xModel );
-}
-
-UndoElementWithSelection::~UndoElementWithSelection()
-{}
-
-void UndoElementWithSelection::initialize( const Reference< frame::XModel > & xModel )
-{
-    try
-    {
-        uno::Reference< view::XSelectionSupplier > xSelSupp( xModel->getCurrentController(), uno::UNO_QUERY );
-        OSL_ASSERT( xSelSupp.is() );
-
-        if( xSelSupp.is() )
+        if ( i_facet == E_MODEL_WITH_SELECTION )
+        {
+            const Reference< XSelectionSupplier > xSelSupp( m_xModelClone->getCurrentController(), UNO_QUERY_THROW );
             m_aSelection = xSelSupp->getSelection();
+        }
     }
-    catch( const uno::Exception & )
+    catch( const Exception& )
     {
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 
-void UndoElementWithSelection::dispose()
+
+// ---------------------------------------------------------------------------------------------------------------------
+ChartModelClone::~ChartModelClone()
 {
-    UndoElement::dispose();
+    if ( !impl_isDisposed() )
+        dispose();
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+void ChartModelClone::dispose()
+{
+    if ( impl_isDisposed() )
+        return;
+
+    try
+    {
+        Reference< XComponent > xComp( m_xModelClone, UNO_QUERY_THROW );
+        xComp->dispose();
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+    m_xModelClone.clear();
+    m_xDataClone.clear();
     m_aSelection.clear();
 }
 
-void UndoElementWithSelection::applyToModel(
-    const Reference< frame::XModel > & xModel )
+// ---------------------------------------------------------------------------------------------------------------------
+ModelFacet ChartModelClone::getFacet() const
 {
-    UndoElement::applyModelContentToModel( xModel, m_xModel );
-    Reference< view::XSelectionSupplier > xCurrentSelectionSuppl( xModel->getCurrentController(), uno::UNO_QUERY );
-    OSL_ASSERT( xCurrentSelectionSuppl.is() );
-
-    if( xCurrentSelectionSuppl.is())
-        xCurrentSelectionSuppl->select( m_aSelection );
+    if ( m_aSelection.hasValue() )
+        return E_MODEL_WITH_SELECTION;
+    if ( m_xDataClone.is() )
+        return E_MODEL_WITH_DATA;
+    return E_MODEL;
 }
 
-UndoElement * UndoElementWithSelection::createFromModel(
-        const Reference< frame::XModel > & xModel )
+// ---------------------------------------------------------------------------------------------------------------------
+void ChartModelClone::applyToModel( const Reference< XModel >& i_model ) const
 {
-    return new UndoElementWithSelection( getActionString(), xModel );
+    applyModelContentToModel( i_model, m_xModelClone, m_xDataClone );
+
+    if ( m_aSelection.hasValue() )
+    {
+        try
+        {
+            Reference< XSelectionSupplier > xCurrentSelectionSuppl( i_model->getCurrentController(), UNO_QUERY_THROW );
+            xCurrentSelectionSuppl->select( m_aSelection );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+    }
 }
 
-// ----------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------
+namespace
+{
+    void ImplApplyDataToModel( const Reference< XModel >& i_model, const Reference< XInternalDataProvider > & i_data )
+    {
+        Reference< XChartDocument > xDoc( i_model, UNO_QUERY );
+        OSL_ASSERT( xDoc.is() && xDoc->hasInternalDataProvider() );
 
-ShapeUndoElement::ShapeUndoElement( const OUString& rActionString, SdrUndoAction* pAction )
-    :UndoElement( rActionString, Reference< frame::XModel >() )
-    ,m_pAction( pAction )
+        // copy data from stored internal data provider
+        if( xDoc.is() && xDoc->hasInternalDataProvider())
+        {
+            Reference< XComplexDescriptionAccess > xCurrentData( xDoc->getDataProvider(), UNO_QUERY );
+            Reference< XComplexDescriptionAccess > xSavedData( i_data, UNO_QUERY );
+            if ( xCurrentData.is() && xSavedData.is() )
+            {
+                xCurrentData->setData( xSavedData->getData() );
+                xCurrentData->setComplexRowDescriptions( xSavedData->getComplexRowDescriptions() );
+                xCurrentData->setComplexColumnDescriptions( xSavedData->getComplexColumnDescriptions() );
+            }
+        }
+    }
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+void ChartModelClone::applyModelContentToModel( const Reference< XModel >& i_model,
+    const Reference< XModel >& i_modelToCopyFrom, const Reference< XInternalDataProvider >& i_data )
+{
+    ENSURE_OR_RETURN_VOID( i_model.is(), "ChartModelElement::applyModelContentToModel: invalid source model!" );
+    ENSURE_OR_RETURN_VOID( i_modelToCopyFrom.is(), "ChartModelElement::applyModelContentToModel: invalid source model!" );
+    try
+    {
+        // /-- loccked controllers of destination
+        ControllerLockGuard aLockedControllers( i_model );
+        Reference< XChartDocument > xSource( i_modelToCopyFrom, UNO_QUERY_THROW );
+        Reference< XChartDocument > xDestination( i_model, UNO_QUERY_THROW );
+
+        // propagate the correct flag for plotting of hidden values to the data provider and all used sequences
+        ChartModelHelper::setIncludeHiddenCells( ChartModelHelper::isIncludeHiddenCells( i_modelToCopyFrom ) , i_model );
+
+        // diagram
+        xDestination->setFirstDiagram( xSource->getFirstDiagram() );
+
+        // main title
+        Reference< XTitled > xDestinationTitled( xDestination, UNO_QUERY_THROW );
+        Reference< XTitled > xSourceTitled( xSource, UNO_QUERY_THROW );
+        xDestinationTitled->setTitleObject( xSourceTitled->getTitleObject() );
+
+        // page background
+        ::comphelper::copyProperties(
+            xSource->getPageBackground(),
+            xDestination->getPageBackground() );
+
+        // apply data (not applied in standard Undo)
+        if ( i_data.is() )
+            ImplApplyDataToModel( i_model, i_data );
+
+        // register all sequences at the internal data provider to get adapted
+        // indexes when columns are added/removed
+        if ( xDestination->hasInternalDataProvider() )
+        {
+            Reference< XInternalDataProvider > xNewDataProvider( xDestination->getDataProvider(), UNO_QUERY );
+            Reference< chart2::data::XDataSource > xUsedData( DataSourceHelper::getUsedData( i_model ) );
+            if ( xUsedData.is() && xNewDataProvider.is() )
+            {
+                Sequence< Reference< chart2::data::XLabeledDataSequence > > aData( xUsedData->getDataSequences() );
+                for( sal_Int32 i=0; i<aData.getLength(); ++i )
+                {
+                    xNewDataProvider->registerDataSequenceForChanges( aData[i]->getValues() );
+                    xNewDataProvider->registerDataSequenceForChanges( aData[i]->getLabel() );
+                }
+            }
+        }
+
+        // restore modify status
+        Reference< XModifiable > xSourceMod( xSource, UNO_QUERY );
+        Reference< XModifiable > xDestMod( xDestination, UNO_QUERY );
+        if ( xSourceMod.is() && xDestMod.is() && !xSourceMod->isModified() )
+        {
+            xDestMod->setModified( sal_False );
+        }
+        // \-- loccked controllers of destination
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+UndoElement::UndoElement( const OUString& i_actionString, const Reference< XModel >& i_documentModel, const ::boost::shared_ptr< ChartModelClone >& i_modelClone )
+    :UndoElement_MBase()
+    ,UndoElement_TBase( m_aMutex )
+    ,m_sActionString( i_actionString )
+    ,m_xDocumentModel( i_documentModel )
+    ,m_pModelClone( i_modelClone )
 {
 }
 
-ShapeUndoElement::ShapeUndoElement( const ShapeUndoElement& rOther )
-    :UndoElement( rOther )
-    ,m_pAction( rOther.m_pAction )
+// ---------------------------------------------------------------------------------------------------------------------
+UndoElement::~UndoElement()
 {
 }
 
+// ---------------------------------------------------------------------------------------------------------------------
+void SAL_CALL UndoElement::disposing()
+{
+    if ( !!m_pModelClone )
+        m_pModelClone->dispose();
+    m_pModelClone.reset();
+    m_xDocumentModel.clear();
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+::rtl::OUString SAL_CALL UndoElement::getTitle() throw (RuntimeException)
+{
+    return m_sActionString;
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+void UndoElement::impl_toggleModelState()
+{
+    // get a snapshot of the current state of our model
+    ::boost::shared_ptr< ChartModelClone > pNewClone( new ChartModelClone( m_xDocumentModel, m_pModelClone->getFacet() ) );
+    // apply the previous snapshot to our model
+    m_pModelClone->applyToModel( m_xDocumentModel );
+    // remember the new snapshot, for the next toggle
+    m_pModelClone = pNewClone;
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+void SAL_CALL UndoElement::undo(  ) throw (UndoFailedException, RuntimeException)
+{
+    impl_toggleModelState();
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+void SAL_CALL UndoElement::redo(  ) throw (UndoFailedException, RuntimeException)
+{
+    impl_toggleModelState();
+}
+
+// =====================================================================================================================
+// = ShapeUndoElement
+// =====================================================================================================================
+
+// ---------------------------------------------------------------------------------------------------------------------
+ShapeUndoElement::ShapeUndoElement( SdrUndoAction& i_sdrUndoAction )
+    :ShapeUndoElement_MBase()
+    ,ShapeUndoElement_TBase( m_aMutex )
+    ,m_pAction( &i_sdrUndoAction )
+{
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
 ShapeUndoElement::~ShapeUndoElement()
 {
 }
 
-SdrUndoAction* ShapeUndoElement::getSdrUndoAction()
+// ---------------------------------------------------------------------------------------------------------------------
+::rtl::OUString SAL_CALL ShapeUndoElement::getTitle() throw (RuntimeException)
 {
-    return m_pAction;
+    if ( !m_pAction )
+        throw DisposedException( ::rtl::OUString(), *this );
+    return m_pAction->GetComment();
 }
 
-// ========================================
-
-UndoStack::UndoStack() :
-        m_nSizeLimit( 1000 )
+// ---------------------------------------------------------------------------------------------------------------------
+void SAL_CALL ShapeUndoElement::undo(  ) throw (UndoFailedException, RuntimeException)
 {
+    if ( !m_pAction )
+        throw DisposedException( ::rtl::OUString(), *this );
+    m_pAction->Undo();
 }
 
-UndoStack::~UndoStack()
+// ---------------------------------------------------------------------------------------------------------------------
+void SAL_CALL ShapeUndoElement::redo(  ) throw (UndoFailedException, RuntimeException)
 {
-    disposeAndClear();
+    if ( !m_pAction )
+        throw DisposedException( ::rtl::OUString(), *this );
+    m_pAction->Redo();
 }
 
-void UndoStack::pop()
+// ---------------------------------------------------------------------------------------------------------------------
+void SAL_CALL ShapeUndoElement::disposing()
 {
-    if( ! empty())
-    {
-        top()->dispose();
-        delete top();
-        m_aStack.pop_back();
-    }
-}
-
-void UndoStack::push( UndoElement * pElement )
-{
-    m_aStack.push_back( pElement );
-    applyLimitation();
-}
-
-UndoElement * UndoStack::top() const
-{
-    return m_aStack.back();
-}
-
-OUString UndoStack::topUndoString() const
-{
-    if( ! empty())
-        return top()->getActionString();
-    return OUString();
-}
-
-Sequence< OUString > UndoStack::getUndoStrings() const
-{
-    sal_Int32 nSize( static_cast< sal_Int32 >( m_aStack.size()));
-    Sequence< OUString > aResult( nSize );
-    for( sal_Int32 i=0; i<nSize; ++i )
-        aResult[i] = m_aStack[i]->getActionString();
-    return aResult;
-}
-
-bool UndoStack::empty() const
-{
-    return m_aStack.empty();
-}
-
-void UndoStack::disposeAndClear()
-{
-    ::std::for_each( m_aStack.begin(), m_aStack.end(), ::boost::mem_fn( & UndoElement::dispose ));
-    ::std::for_each( m_aStack.begin(), m_aStack.end(), CommonFunctors::DeletePtr< UndoElement >() );
-    m_aStack.clear();
-}
-
-void UndoStack::limitSize( sal_Int32 nMaxSize )
-{
-    m_nSizeLimit = nMaxSize;
-    applyLimitation();
-}
-
-void UndoStack::applyLimitation()
-{
-    if( m_aStack.size() > static_cast< sal_uInt32 >( m_nSizeLimit ))
-    {
-        tUndoStackType::iterator aBegin( m_aStack.begin());
-        tUndoStackType::iterator aEnd( aBegin + (m_aStack.size() - m_nSizeLimit));
-        // dispose and remove all undo elements that are over the limit
-        ::std::for_each( aBegin, aEnd, ::boost::mem_fn( & UndoElement::dispose ));
-        ::std::for_each( aBegin, aEnd, CommonFunctors::DeletePtr< UndoElement >() );
-        m_aStack.erase( aBegin, aEnd );
-    }
-}
-
-// ================================================================================
-
-namespace
-{
-static const OUString aUndoStepsPropName( RTL_CONSTASCII_USTRINGPARAM("Steps"));
-} // anonymous namespace
-
-UndoStepsConfigItem::UndoStepsConfigItem( ConfigItemListener & rListener ) :
-        ::utl::ConfigItem( OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/Undo"))),
-    m_rListener( rListener )
-{
-    EnableNotification( Sequence< OUString >( & aUndoStepsPropName, 1 ));
-}
-
-UndoStepsConfigItem::~UndoStepsConfigItem()
-{
-}
-
-void UndoStepsConfigItem::Notify( const Sequence< OUString > & aPropertyNames )
-{
-    for( sal_Int32 nIdx=0; nIdx<aPropertyNames.getLength(); ++nIdx )
-    {
-        if( aPropertyNames[nIdx].equals( aUndoStepsPropName ))
-            m_rListener.notify( aPropertyNames[nIdx] );
-    }
-}
-
-void UndoStepsConfigItem::Commit()
-{
-}
-
-// mtehod is not const, because GetProperties is not const
-sal_Int32 UndoStepsConfigItem::getUndoSteps()
-{
-    sal_Int32 nSteps = -1;
-    Sequence< uno::Any > aValues(
-        GetProperties( Sequence< OUString >( & aUndoStepsPropName, 1 )));
-    if( aValues.getLength())
-        aValues[0] >>= nSteps;
-    return nSteps;
 }
 
 } // namespace impl

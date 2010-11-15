@@ -37,11 +37,13 @@
 
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/document/XUndoManagerSupplier.hpp>
 
 #include <unotools/configitem.hxx>
+#include <tools/diagnose_ex.h>
 #include <cppuhelper/compbase1.hxx>
+#include <comphelper/namedvaluecollection.hxx>
 #include <rtl/uuid.h>
-#include <svx/svdundo.hxx>
 
 #include <functional>
 
@@ -49,7 +51,14 @@ using namespace ::com::sun::star;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::uno::UNO_QUERY;
+using ::com::sun::star::uno::UNO_QUERY_THROW;
+using ::com::sun::star::uno::UNO_SET_THROW;
+using ::com::sun::star::uno::Exception;
+using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::frame::XModel;
+using ::com::sun::star::document::XUndoManagerSupplier;
+using ::com::sun::star::document::XUndoAction;
 using ::rtl::OUString;
 
 
@@ -73,7 +82,7 @@ public:
 
     void fireEvent();
 
-protected:
+public:
     // ____ XModifyBroadcaster ____
     virtual void SAL_CALL addModifyListener( const Reference< util::XModifyListener >& xListener )
         throw (uno::RuntimeException);
@@ -118,44 +127,33 @@ void ModifyBroadcaster::fireEvent()
 
 } // namespace impl
 
-DocumentActions::DocumentActions( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rModel ) :
-        impl::DocumentActions_Base( m_aMutex ),
-    m_apUndoStack( new impl::UndoStack()),
-    m_apRedoStack( new impl::UndoStack()),
-    m_pLastRemeberedUndoElement( 0 ),
-    m_nMaxNumberOfUndos( 100 ),
-    m_pModifyBroadcaster( 0 ),
-    m_aModel( rModel )
-{}
+DocumentActions::DocumentActions( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rModel )
+    :impl::DocumentActions_Base( m_aMutex )
+    ,m_pDocumentSnapshot()
+    ,m_pModifyBroadcaster( NULL )
+    ,m_aModel( rModel )
+    ,m_xUndoManager()
+{
+    Reference< XUndoManagerSupplier > xSuppUndo( rModel, UNO_QUERY_THROW );
+    m_xUndoManager.set( xSuppUndo->getUndoManager(), UNO_SET_THROW );
+}
 
 DocumentActions::~DocumentActions()
 {
-    DisposeHelper::Dispose( m_xModifyBroadcaster );
-    m_apUndoStack->disposeAndClear();
-    m_apRedoStack->disposeAndClear();
-
-    delete m_pLastRemeberedUndoElement;
-    m_pLastRemeberedUndoElement = 0;
+    if ( m_pModifyBroadcaster.is() )
+    {
+        m_pModifyBroadcaster->dispose();
+        m_pModifyBroadcaster.clear();
+    }
 }
 
 void DocumentActions::addShapeUndoAction( SdrUndoAction* pAction )
 {
     if ( !pAction )
-    {
         return;
-    }
-
-    impl::ShapeUndoElement* pShapeUndoElement = new impl::ShapeUndoElement( pAction->GetComment(), pAction );
-    if ( pShapeUndoElement )
-    {
-        m_apUndoStack->push( pShapeUndoElement );
-        m_apRedoStack->disposeAndClear();
-        if ( !m_apUndoStepsConfigItem.get() )
-        {
-            retrieveConfigUndoSteps();
-        }
-        fireModifyEvent();
-    }
+    const Reference< XUndoAction > xAction( new impl::ShapeUndoElement( *pAction ) );
+    m_xUndoManager->addUndoAction( xAction );
+    impl_fireModifyEvent();
 }
 
 Reference< XModel > DocumentActions::impl_getModel() const
@@ -164,228 +162,191 @@ Reference< XModel > DocumentActions::impl_getModel() const
     return xModel;
 }
 
-void DocumentActions::impl_undoRedo(
-    impl::UndoStack * pStackToRemoveFrom,
-    impl::UndoStack * pStackToAddTo,
-    bool bUndo )
+void DocumentActions::impl_fireModifyEvent()
 {
-    if( pStackToRemoveFrom && ! pStackToRemoveFrom->empty() )
-    {
-        // get model from undo/redo
-        impl::UndoElement * pTop( pStackToRemoveFrom->top());
-        if( pTop )
-        {
-            Reference< XModel > xModel( impl_getModel() );
-            impl::ShapeUndoElement* pShapeUndoElement = dynamic_cast< impl::ShapeUndoElement* >( pTop );
-            if ( pShapeUndoElement )
-            {
-                impl::ShapeUndoElement* pNewShapeUndoElement = new impl::ShapeUndoElement( *pShapeUndoElement );
-                pStackToAddTo->push( pNewShapeUndoElement );
-                SdrUndoAction* pAction = pNewShapeUndoElement->getSdrUndoAction();
-                if ( pAction )
-                {
-                    if ( bUndo )
-                    {
-                        pAction->Undo();
-                    }
-                    else
-                    {
-                        pAction->Redo();
-                    }
-                }
-            }
-            else
-            {
-                // put a clone of current model into redo/undo stack with the same
-                // action string as the undo/redo
-                pStackToAddTo->push( pTop->createFromModel( xModel ));
-                // change current model by properties of the model from undo
-                pTop->applyToModel( xModel );
-            }
-            // remove the top undo element
-            pStackToRemoveFrom->pop(), pTop = 0;
-            ChartViewHelper::setViewToDirtyState( xModel );
-            fireModifyEvent();
-        }
-    }
-    else
-    {
-        OSL_ENSURE( false, "Can't Undo/Redo" );
-    }
-}
-
-void DocumentActions::fireModifyEvent()
-{
-    if( m_xModifyBroadcaster.is())
+    if ( m_pModifyBroadcaster.is() )
         m_pModifyBroadcaster->fireEvent();
 }
 
-
-// ____ ConfigItemListener ____
-void DocumentActions::notify( const ::rtl::OUString & rPropertyName )
-{
-    OSL_ENSURE( rPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Steps" )),
-                "Unwanted config property change Notified" );
-    if( rPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Steps" )))
-        retrieveConfigUndoSteps();
-}
-
-void DocumentActions::retrieveConfigUndoSteps()
-{
-    if( ! m_apUndoStepsConfigItem.get())
-        m_apUndoStepsConfigItem.reset( new impl::UndoStepsConfigItem( *this ));
-    m_nMaxNumberOfUndos = m_apUndoStepsConfigItem->getUndoSteps();
-    m_apUndoStack->limitSize( m_nMaxNumberOfUndos );
-    m_apRedoStack->limitSize( m_nMaxNumberOfUndos );
-
-    // a list of available undo steps could shrink here
-    fireModifyEvent();
-}
 
 // ____ XModifyBroadcaster ____
 void SAL_CALL DocumentActions::addModifyListener( const Reference< util::XModifyListener >& aListener )
     throw (uno::RuntimeException)
 {
-    if( ! m_xModifyBroadcaster.is())
-    {
-        m_pModifyBroadcaster = new impl::ModifyBroadcaster();
-        m_xModifyBroadcaster.set( static_cast< cppu::OWeakObject* >( m_pModifyBroadcaster ), uno::UNO_QUERY );
-    }
-    m_xModifyBroadcaster->addModifyListener( aListener );
+    if ( !m_pModifyBroadcaster.is() )
+        m_pModifyBroadcaster.set( new impl::ModifyBroadcaster() );
+
+    m_pModifyBroadcaster->addModifyListener( aListener );
 }
 
 void SAL_CALL DocumentActions::removeModifyListener( const Reference< util::XModifyListener >& aListener )
     throw (uno::RuntimeException)
 {
-    if( ! m_xModifyBroadcaster.is())
-    {
-        m_pModifyBroadcaster = new impl::ModifyBroadcaster();
-        m_xModifyBroadcaster.set( static_cast< cppu::OWeakObject* >( m_pModifyBroadcaster ), uno::UNO_QUERY );
-    }
-    m_xModifyBroadcaster->removeModifyListener( aListener );
+    if ( m_pModifyBroadcaster.is() )
+        m_pModifyBroadcaster->removeModifyListener( aListener );
 }
 
 // ____ chart2::XDocumentActions ____
 void SAL_CALL DocumentActions::preAction(  )
     throw (uno::RuntimeException)
 {
-    OSL_ENSURE( ! m_pLastRemeberedUndoElement, "Looks like postAction or cancelAction call was missing" );
-    m_pLastRemeberedUndoElement = new impl::UndoElement( impl_getModel() );
+    ENSURE_OR_THROW( !m_pDocumentSnapshot, "DocumentActions::preAction: already started an action!" );
+    m_pDocumentSnapshot.reset( new impl::ChartModelClone( impl_getModel(), impl::E_MODEL ) );
 }
 
-void SAL_CALL DocumentActions::preActionWithArguments(
-    const Sequence< beans::PropertyValue >& aArguments )
-    throw (uno::RuntimeException)
+void SAL_CALL DocumentActions::preActionWithArguments( const Sequence< beans::PropertyValue >& aArguments ) throw (uno::RuntimeException, lang::IllegalArgumentException)
 {
-    Reference< XModel > xModel( impl_getModel() );
-    bool bActionHandled( false );
-    OSL_ENSURE( ! m_pLastRemeberedUndoElement, "Looks like postAction or cancelAction call was missing" );
-    if( aArguments.getLength() > 0 )
-    {
-        OSL_ENSURE( aArguments.getLength() == 1, "More than one argument is not supported yet" );
-        if( aArguments[0].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("WithData")))
-        {
-            m_pLastRemeberedUndoElement = new impl::UndoElementWithData( xModel );
-            bActionHandled = true;
-        }
-        else if( aArguments[0].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("WithSelection")))
-        {
-            m_pLastRemeberedUndoElement = new impl::UndoElementWithSelection( xModel );
-            bActionHandled = true;
-        }
-    }
+    ENSURE_OR_THROW( !m_pDocumentSnapshot, "DocumentActions::preAction: already started an action!" );
 
-    if( !bActionHandled )
-        preAction();
+    impl::ModelFacet eModelFacet( impl::E_MODEL );
+    ::comphelper::NamedValueCollection aArgs( aArguments );
+
+    const sal_Bool bWithData = aArgs.getOrDefault( "WithData", sal_False );
+    if ( bWithData )
+        eModelFacet = impl::E_MODEL_WITH_DATA;
+
+    const sal_Bool bWithSelection = aArgs.getOrDefault( "WithSelection", sal_False );
+    if ( bWithSelection )
+        eModelFacet = impl::E_MODEL_WITH_SELECTION;
+
+    const Reference< XModel > xModel( impl_getModel() );
+    m_pDocumentSnapshot.reset( new impl::ChartModelClone( xModel, eModelFacet ) );
 }
 
 void SAL_CALL DocumentActions::postAction( const OUString& aUndoText )
     throw (uno::RuntimeException)
 {
-    OSL_ENSURE( m_pLastRemeberedUndoElement, "Looks like preAction call was missing" );
-    if( m_pLastRemeberedUndoElement )
-    {
-        m_pLastRemeberedUndoElement->setActionString( aUndoText );
-        m_apUndoStack->push( m_pLastRemeberedUndoElement );
-        m_pLastRemeberedUndoElement = 0;
+    ENSURE_OR_THROW( !!m_pDocumentSnapshot.get(), "no current action" );
 
-        // redo no longer possible
-        m_apRedoStack->disposeAndClear();
+    const Reference< XUndoAction > xAction( new impl::UndoElement( aUndoText, impl_getModel(), m_pDocumentSnapshot ) );
+    m_pDocumentSnapshot.reset();
 
-        // it suffices to get the number of undo steps from config after the
-        // first time postAction has been called
-        if( ! m_apUndoStepsConfigItem.get())
-            retrieveConfigUndoSteps();
+    m_xUndoManager->addUndoAction( xAction );
 
-        fireModifyEvent();
-    }
+    impl_fireModifyEvent();
 }
 
 void SAL_CALL DocumentActions::cancelAction()
     throw (uno::RuntimeException)
 {
-    delete m_pLastRemeberedUndoElement;
-    m_pLastRemeberedUndoElement = 0;
+    ENSURE_OR_THROW( !!m_pDocumentSnapshot.get(), "no current action" );
+
+    m_pDocumentSnapshot->dispose();
+    m_pDocumentSnapshot.reset();
 }
 
 void SAL_CALL DocumentActions::cancelActionWithUndo(  )
     throw (uno::RuntimeException)
 {
-    if( m_pLastRemeberedUndoElement )
-    {
-        m_pLastRemeberedUndoElement->applyToModel( impl_getModel() );
-        cancelAction();
-    }
+    ENSURE_OR_THROW( !!m_pDocumentSnapshot.get(), "no current action" );
+
+    m_pDocumentSnapshot->applyToModel( impl_getModel() );
+    m_pDocumentSnapshot->dispose();
+    m_pDocumentSnapshot.reset();
 }
 
 void SAL_CALL DocumentActions::undo(  )
     throw (uno::RuntimeException)
 {
-    OSL_ASSERT( m_apUndoStack.get() && m_apRedoStack.get());
-    impl_undoRedo( m_apUndoStack.get(), m_apRedoStack.get(), true );
+    try
+    {
+        m_xUndoManager->undo();
+    }
+    catch ( const RuntimeException& ) { throw; }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
 }
 
 void SAL_CALL DocumentActions::redo(  )
     throw (uno::RuntimeException)
 {
-    OSL_ASSERT( m_apUndoStack.get() && m_apRedoStack.get());
-    impl_undoRedo( m_apRedoStack.get(), m_apUndoStack.get(), false );
+    try
+    {
+        m_xUndoManager->redo();
+    }
+    catch ( const RuntimeException& ) { throw; }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
 }
 
 ::sal_Bool SAL_CALL DocumentActions::undoPossible()
     throw (uno::RuntimeException)
 {
-    return ! m_apUndoStack->empty();
+    return m_xUndoManager->isUndoPossible();
 }
 
 ::sal_Bool SAL_CALL DocumentActions::redoPossible()
     throw (uno::RuntimeException)
 {
-    return ! m_apRedoStack->empty();
+    return m_xUndoManager->isRedoPossible();
 }
 
 OUString SAL_CALL DocumentActions::getCurrentUndoString()
     throw (uno::RuntimeException)
 {
-    return m_apUndoStack->topUndoString();
+    OUString sTitle;
+    try
+    {
+        sTitle = m_xUndoManager->getCurrentUndoActionTitle();
+    }
+    catch ( const RuntimeException& ) { throw; }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+    return sTitle;
 }
 
 OUString SAL_CALL DocumentActions::getCurrentRedoString()
     throw (uno::RuntimeException)
 {
-    return m_apRedoStack->topUndoString();
+    OUString sTitle;
+    try
+    {
+        sTitle = m_xUndoManager->getCurrentRedoActionTitle();
+    }
+    catch ( const RuntimeException& ) { throw; }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+    return sTitle;
 }
 
 Sequence< OUString > SAL_CALL DocumentActions::getAllUndoStrings()
     throw (uno::RuntimeException)
 {
-    return m_apUndoStack->getUndoStrings();
+    Sequence< OUString > aStrings;
+    try
+    {
+        aStrings = m_xUndoManager->getAllUndoActionTitles();
+    }
+    catch ( const RuntimeException& ) { throw; }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+    return aStrings;
 }
 
 Sequence< OUString > SAL_CALL DocumentActions::getAllRedoStrings()
     throw (uno::RuntimeException)
 {
-    return m_apRedoStack->getUndoStrings();
+    Sequence< ::rtl::OUString > aStrings;
+    try
+    {
+        aStrings = m_xUndoManager->getAllRedoActionTitles();
+    }
+    catch ( const RuntimeException& ) { throw; }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+    return aStrings;
 }
 
 // ____ XUnoTunnel ____

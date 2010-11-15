@@ -27,7 +27,6 @@
 #ifndef CHART2_UNDOMANAGER_HXX
 #define CHART2_UNDOMANAGER_HXX
 
-#include "ConfigItemListener.hxx"
 #include "MutexContainer.hxx"
 
 #include <com/sun/star/uno/Reference.hxx>
@@ -37,14 +36,18 @@
 #include <com/sun/star/chart2/XDocumentActions.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/document/XUndoManager.hpp>
 
 #include <cppuhelper/compbase3.hxx>
 #include <rtl/ustring.hxx>
+#include <rtl/ref.hxx>
 
 // for pair
 #include <utility>
 // for auto_ptr
 #include <memory>
+
+#include <boost/shared_ptr.hpp>
 
 class SdrUndoAction;
 
@@ -60,10 +63,11 @@ namespace chart
 namespace impl
 {
 
-class  UndoStepsConfigItem;
+class UndoStepsConfigItem;
 class UndoElement;
-class  UndoStack;
-class  ModifyBroadcaster;
+class UndoStack;
+class ChartModelClone;
+class ModifyBroadcaster;
 
 typedef ::cppu::WeakComponentImplHelper3<
             ::com::sun::star::util::XModifyBroadcaster,
@@ -83,7 +87,6 @@ typedef ::cppu::WeakComponentImplHelper3<
  */
 class DocumentActions :
         public MutexContainer,
-        public ConfigItemListener,
         public impl::DocumentActions_Base
 {
 public:
@@ -100,9 +103,6 @@ public:
     static DocumentActions* getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> xObj );
 
 protected:
-    // ____ ConfigItemListener ____
-    virtual void notify( const ::rtl::OUString & rPropertyName );
-
     // ____ util::XModifyBroadcaster ____
     virtual void SAL_CALL addModifyListener(
         const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener )
@@ -127,28 +127,13 @@ protected:
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getAllRedoStrings(  ) throw (::com::sun::star::uno::RuntimeException);
 
 private:
-    void retrieveConfigUndoSteps();
-    void fireModifyEvent();
-    void impl_undoRedo(
-        impl::UndoStack * pStackToRemoveFrom,
-        impl::UndoStack * pStackToAddTo,
-        bool bUndo = true );
+    void                                                                impl_fireModifyEvent();
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > impl_getModel() const;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
-        impl_getModel() const;
-
-    ::std::auto_ptr< impl::UndoStack > m_apUndoStack;
-    ::std::auto_ptr< impl::UndoStack > m_apRedoStack;
-
-    impl::UndoElement *  m_pLastRemeberedUndoElement;
-
-    ::std::auto_ptr< impl::UndoStepsConfigItem > m_apUndoStepsConfigItem;
-    sal_Int32   m_nMaxNumberOfUndos;
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::util::XModifyBroadcaster > m_xModifyBroadcaster;
-    // pointer is valid as long as m_xModifyBroadcaster.is()
-    impl::ModifyBroadcaster * m_pModifyBroadcaster;
-    ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XModel > m_aModel;
+    ::boost::shared_ptr< impl::ChartModelClone >                                    m_pDocumentSnapshot;
+    ::rtl::Reference< impl::ModifyBroadcaster >                                     m_pModifyBroadcaster;
+    ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XModel >         m_aModel;
+    ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoManager >    m_xUndoManager;
 };
 
 } //  namespace chart

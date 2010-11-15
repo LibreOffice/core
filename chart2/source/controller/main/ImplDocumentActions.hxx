@@ -30,14 +30,19 @@
 #include "ConfigItemListener.hxx"
 
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/document/XUndoAction.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <rtl/ustring.hxx>
 #include <unotools/configitem.hxx>
+#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/basemutex.hxx>
 
 #include <utility>
 #include <deque>
 
+#include <boost/noncopyable.hpp>
+#include <boost/shared_ptr.hpp>
 
 class SdrUndoAction;
 
@@ -53,172 +58,109 @@ namespace chart
 namespace impl
 {
 
-class UndoElement
+enum ModelFacet
+{
+    E_MODEL,
+    E_MODEL_WITH_DATA,
+    E_MODEL_WITH_SELECTION
+};
+
+class ChartModelClone : public ::boost::noncopyable
 {
 public:
-    UndoElement( const ::rtl::OUString & rActionString,
-                 const ::com::sun::star::uno::Reference<
-                     ::com::sun::star::frame::XModel > & xModel );
-    UndoElement( const ::com::sun::star::uno::Reference<
-                     ::com::sun::star::frame::XModel > & xModel );
-    UndoElement( const UndoElement & rOther );
-    virtual ~UndoElement();
+    ChartModelClone(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& i_model,
+        const ModelFacet i_facet
+    );
 
-    virtual void dispose();
-    virtual UndoElement * createFromModel(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XModel > & xModel );
+    ~ChartModelClone();
 
-    virtual void applyToModel(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XModel > & xModel );
+    ModelFacet getFacet() const;
 
-    void setActionString( const ::rtl::OUString & rActionString );
-    ::rtl::OUString getActionString() const;
-
-    static ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > cloneModel(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & xModel );
+    void applyToModel( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& i_model ) const;
 
     static void applyModelContentToModel(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & xModel,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & xModelToCopyFrom,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XInternalDataProvider > & xData = 0 );
+        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & i_model,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & i_modelToCopyFrom,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XInternalDataProvider > & i_data );
+
+    void dispose();
+
+private:
+    bool    impl_isDisposed() const { return !m_xModelClone.is(); }
+
+private:
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >                 m_xModelClone;
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XInternalDataProvider > m_xDataClone;
+    ::com::sun::star::uno::Any                                                          m_aSelection;
+};
+
+typedef ::cppu::BaseMutex                                                           UndoElement_MBase;
+typedef ::cppu::WeakComponentImplHelper1< ::com::sun::star::document::XUndoAction > UndoElement_TBase;
+
+class UndoElement   :public UndoElement_MBase
+                    ,public UndoElement_TBase
+                    ,public ::boost::noncopyable
+{
+public:
+    /** creates a new undo action
+
+        @param i_actionString
+            is the title of the Undo action
+        @param i_documentModel
+            is the actual document model which the undo actions operates on
+        @param i_modelClone
+            is the cloned model from before the changes, which the Undo action represents, have been applied.
+            Upon <member>invoking</member>, the clone model is applied to the document model.
+    */
+    UndoElement( const ::rtl::OUString & i_actionString,
+                 const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& i_documentModel,
+                 const ::boost::shared_ptr< ChartModelClone >& i_modelClone
+               );
+
+    // XUndoAction
+    virtual ::rtl::OUString SAL_CALL getTitle() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL undo(  ) throw (::com::sun::star::document::UndoFailedException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL redo(  ) throw (::com::sun::star::document::UndoFailedException, ::com::sun::star::uno::RuntimeException);
+
+    // OComponentHelper
+    virtual void SAL_CALL disposing();
 
 protected:
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XModel > m_xModel;
+    virtual ~UndoElement();
 
 private:
-    void initialize( const ::com::sun::star::uno::Reference<
-                         ::com::sun::star::frame::XModel > & xModel );
-
-    ::rtl::OUString                           m_aActionString;
-};
-
-class UndoElementWithData : public UndoElement
-{
-public:
-    UndoElementWithData( const ::rtl::OUString & rActionString,
-                         const ::com::sun::star::uno::Reference<
-                             ::com::sun::star::frame::XModel > & xModel );
-    UndoElementWithData( const ::com::sun::star::uno::Reference<
-                             ::com::sun::star::frame::XModel > & xModel );
-    UndoElementWithData( const UndoElementWithData & rOther );
-    virtual ~UndoElementWithData();
-
-    virtual void dispose();
-    virtual UndoElement * createFromModel(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XModel > & xModel );
-
-    virtual void applyToModel(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XModel > & xModel );
+    void    impl_toggleModelState();
 
 private:
-    void initializeData();
-
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XInternalDataProvider > m_xData;
+    ::rtl::OUString                                                     m_sActionString;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > m_xDocumentModel;
+    ::boost::shared_ptr< ChartModelClone >                              m_pModelClone;
 };
 
-class UndoElementWithSelection : public UndoElement
+
+typedef ::cppu::BaseMutex                                                           ShapeUndoElement_MBase;
+typedef ::cppu::WeakComponentImplHelper1< ::com::sun::star::document::XUndoAction > ShapeUndoElement_TBase;
+class ShapeUndoElement  :public ShapeUndoElement_MBase
+                        ,public ShapeUndoElement_TBase
 {
 public:
-    UndoElementWithSelection( const ::rtl::OUString & rActionString,
-                              const ::com::sun::star::uno::Reference<
-                                  ::com::sun::star::frame::XModel > & xModel );
-    UndoElementWithSelection( const ::com::sun::star::uno::Reference<
-                                  ::com::sun::star::frame::XModel > & xModel );
-    UndoElementWithSelection( const UndoElementWithSelection & rOther );
-    virtual ~UndoElementWithSelection();
+    ShapeUndoElement( SdrUndoAction& i_sdrUndoAction );
 
-    virtual void dispose();
-    virtual UndoElement * createFromModel(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XModel > & xModel );
+    // XUndoAction
+    virtual ::rtl::OUString SAL_CALL getTitle() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL undo(  ) throw (::com::sun::star::document::UndoFailedException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL redo(  ) throw (::com::sun::star::document::UndoFailedException, ::com::sun::star::uno::RuntimeException);
 
-    virtual void applyToModel(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XModel > & xModel );
+    // OComponentHelper
+    virtual void SAL_CALL disposing();
 
-private:
-    void initialize( const ::com::sun::star::uno::Reference<
-                         ::com::sun::star::frame::XModel > & xModel );
-
-    ::com::sun::star::uno::Any m_aSelection;
-};
-
-class ShapeUndoElement : public UndoElement
-{
-public:
-    ShapeUndoElement( const ::rtl::OUString& rActionString, SdrUndoAction* pAction );
-    ShapeUndoElement( const ShapeUndoElement& rOther );
+protected:
     virtual ~ShapeUndoElement();
 
-    SdrUndoAction* getSdrUndoAction();
-
 private:
-    SdrUndoAction* m_pAction;
+    SdrUndoAction*  m_pAction;
 };
-
-/** Note that all models that are put into this container are at some point
-    disposed of inside this class.  (At least in the destructor).  That means
-    the models retrieved here should never be used, but instead their content
-    should be copied to a living model.
- */
-class UndoStack
-{
-public:
-    UndoStack();
-    // disposes of all models left in the stack
-    ~UndoStack();
-
-    // removes he last undo action and disposes of the model
-    void pop();
-    void push( UndoElement * rElement );
-
-    // precondition: !empty()
-    UndoElement * top() const;
-    ::rtl::OUString topUndoString() const;
-
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > getUndoStrings() const;
-
-    bool empty() const;
-    void disposeAndClear();
-
-    // removes all actions that have been inserted more than nMaxSize steps ago.
-    // The models of those actions are disposed of
-    void limitSize( sal_Int32 nMaxSize );
-
-private:
-    void applyLimitation();
-
-    typedef ::std::deque< UndoElement * > tUndoStackType;
-
-    tUndoStackType  m_aStack;
-    sal_Int32       m_nSizeLimit;
-};
-
-// ----------------------------------------
-
-class UndoStepsConfigItem : public ::utl::ConfigItem
-{
-public:
-    explicit UndoStepsConfigItem( ConfigItemListener & rListener );
-    virtual ~UndoStepsConfigItem();
-
-    sal_Int32 getUndoSteps();
-
-protected:
-    // ____ ::utl::ConfigItem ____
-    virtual void Notify( const ::com::sun::star::uno::Sequence< ::rtl::OUString > & aPropertyNames );
-    virtual void Commit();
-
-private:
-    ConfigItemListener &    m_rListener;
-};
-
 
 } // namespace impl
 } //  namespace chart
