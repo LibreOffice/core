@@ -93,6 +93,8 @@
 #define SID_MAIL_PRIORITY                   (SID_SFX_START + 337)
 
 #define SID_MAIL_ATTACH_FILE                (SID_SFX_START + 375)
+#define SID_MAIL_PREPAREEXPORT              (SID_SFX_START + 385)
+#define SID_MAIL_NEEDS_PREPAREEXPORT        (SID_SFX_START + 386)
 
 #define SID_MAIL_EXPORT_FINISHED            (SID_SFX_START + 388)
 #define SID_WEBHTML                         (SID_SFX_START + 393)
@@ -421,7 +423,6 @@
 #define SID_INSERT_PLUGIN                   (SID_SFX_START + 672)
 #define SID_INSERT_SOUND                    (SID_SFX_START + 676)
 #define SID_INSERT_VIDEO                    (SID_SFX_START + 677)
-#define SID_INSERT_APPLET                   (SID_SFX_START + 673)
 
 #define SID_HYPERLINK_DIALOG                (SID_SFX_START + 678)
 
