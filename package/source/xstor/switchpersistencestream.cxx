@@ -185,7 +185,7 @@ void SwitchablePersistenceStream::CopyAndSwitchPersistenceTo( const uno::Referen
     if ( !xTargetStream.is() )
     {
         xTargetStream = uno::Reference < io::XStream >(
-            m_xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.io.TempFile" ) ),
+            m_xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.TempFile") ) ),
             uno::UNO_QUERY_THROW );
 
         xTargetSeek = uno::Reference< io::XSeekable >( xTargetStream, uno::UNO_QUERY_THROW );

@@ -48,7 +48,7 @@ OSelfTerminateFileStream::OSelfTerminateFileStream( const uno::Reference< lang::
     // otherwise an exception is thrown in constructor
 
     m_xFileAccess.set( xOwnFactory->createInstance (
-                            ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ),
+                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess") ) ),
                        uno::UNO_QUERY_THROW );
 
     m_xInputStream.set( m_xFileAccess->openFileRead( aURL ), uno::UNO_SET_THROW );
