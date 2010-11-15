@@ -5087,15 +5087,15 @@ if test -n "$with_system_icu" -o -n "$with_system_libs" && \
    AC_LANG_PUSH([C++])
    AC_MSG_CHECKING([for unicode/rbbi.h])
    AC_TRY_CPP(unicode/rbbi.h, AC_MSG_RESULT([checked.]), AC_MSG_ERROR([icu headers not found.]))
-   AC_PATH_PROG(SYSTEM_GENBRK, genbrk, [], [$PATH:/usr/sbin:/sbin])
+   AC_PATH_PROG(SYSTEM_GENBRK, genbrk, [], [$PATH:/usr/sbin:/sbin:/usr/local/bin])
    if test -z "$SYSTEM_GENBRK"; then
       AC_MSG_ERROR([\"genbrk\" not found in \$PATH, install the icu development tool \"genbrk"\])
    fi
-   AC_PATH_PROG(SYSTEM_GENCCODE, genccode, [], [$PATH:/usr/sbin:/sbin])
+   AC_PATH_PROG(SYSTEM_GENCCODE, genccode, [], [$PATH:/usr/sbin:/sbin:/usr/local/sbin])
    if test -z "$SYSTEM_GENCCODE"; then
       AC_MSG_ERROR([\"genccode\" not found in \$PATH, install the icu development tool \"genccode"\])
    fi
-   AC_PATH_PROG(SYSTEM_GENCMN, gencmn, [], [$PATH:/usr/sbin:/sbin])
+   AC_PATH_PROG(SYSTEM_GENCMN, gencmn, [], [$PATH:/usr/sbin:/sbin:/usr/local/sbin])
    if test -z "$SYSTEM_GENCMN"; then
       AC_MSG_ERROR([\"gencmn\" not found in \$PATH, install the icu development tool \"gencmn"\])
    fi
@@ -6637,15 +6637,17 @@ dnl ===================================================================
 
 KDE_CFLAGS=""
 KDE_LIBS=""
-MOC="moc"
+if test "$_os" != "OpenBSD"; then
+    MOC="moc"
+fi
 if test "$test_kde" = "yes" -a "$ENABLE_KDE" = "TRUE" ; then
     dnl Search paths for Qt3 and KDE3
     if test "$build_cpu" != "x86_64" ; then
-        qt_incdirs="$QTINC /usr/local/qt/include /usr/include/qt /usr/include /usr/X11R6/include/X11/qt /usr/X11R6/include/qt /usr/lib/qt3/include /usr/lib/qt/include /usr/share/qt3/include $x_includes"
-        qt_libdirs="$QTLIB /usr/local/qt/lib /usr/lib/qt /usr/lib /usr/X11R6/lib/X11/qt /usr/X11R6/lib/qt /usr/lib/qt3/lib /usr/lib/qt/lib /usr/share/qt3/lib $x_libraries"
+        qt_incdirs="$QTINC /usr/local/qt/include /usr/include/qt /usr/include /usr/X11R6/include/X11/qt /usr/X11R6/include/qt /usr/lib/qt3/include /usr/lib/qt/include /usr/share/qt3/include /usr/local/include/X11/qt3 $x_includes"
+        qt_libdirs="$QTLIB /usr/local/qt/lib /usr/lib/qt /usr/lib /usr/X11R6/lib/X11/qt /usr/X11R6/lib/qt /usr/lib/qt3/lib /usr/lib/qt/lib /usr/share/qt3/lib /usr/local/lib/qt3 $x_libraries"
     else
-        qt_incdirs="$QTINC /usr/local/qt/include /usr/include/qt /usr/include /usr/X11R6/include/X11/qt /usr/X11R6/include/qt /usr/lib64/qt3/include /usr/lib64/qt/include /usr/share/qt3/include /usr/lib/qt3/include /usr/lib/qt/include $x_includes"
-        qt_libdirs="$QTLIB /usr/local/qt/lib64 /usr/lib64/qt /usr/lib64 /usr/X11R6/lib64/X11/qt /usr/X11R6/lib64/qt /usr/lib64/qt3/lib64 /usr/lib64/qt/lib64 /usr/share/qt3/lib64 /usr/local/qt/lib /usr/lib/qt /usr/lib /usr/X11R6/lib/X11/qt /usr/X11R6/lib/qt /usr/lib/qt3/lib /usr/lib/qt/lib /usr/share/qt3/lib $x_libraries"
+        qt_incdirs="$QTINC /usr/local/qt/include /usr/include/qt /usr/include /usr/X11R6/include/X11/qt /usr/X11R6/include/qt /usr/lib64/qt3/include /usr/lib64/qt/include /usr/share/qt3/include /usr/lib/qt3/include /usr/lib/qt/include /usr/local/include/X11/qt3 $x_includes"
+        qt_libdirs="$QTLIB /usr/local/qt/lib64 /usr/lib64/qt /usr/lib64 /usr/X11R6/lib64/X11/qt /usr/X11R6/lib64/qt /usr/lib64/qt3/lib64 /usr/lib64/qt/lib64 /usr/share/qt3/lib64 /usr/local/qt/lib /usr/lib/qt /usr/lib /usr/X11R6/lib/X11/qt /usr/X11R6/lib/qt /usr/lib/qt3/lib /usr/lib/qt/lib /usr/share/qt3/lib /usr/local/lib/qt3 $x_libraries"
     fi
     if test -n "$QTDIR" ; then
         qt_incdirs="$QTDIR/include $qt_incdirs"
@@ -6673,9 +6675,9 @@ if test "$test_kde" = "yes" -a "$ENABLE_KDE" = "TRUE" ; then
 
     dnl What to test
     qt_test_include="qstyle.h"
-    qt_test_library="libqt-mt.so"
+    qt_test_library="libqt-mt.so*"
     kde_test_include="kapp.h"
-    kde_test_library="libDCOP.so"
+    kde_test_library="libDCOP.so*"
 
     dnl Check for Qt3 headers
     AC_MSG_CHECKING([for Qt3 headers])
@@ -6696,7 +6698,7 @@ your Qt3 installation by exporting QTDIR before running "configure".])
     AC_MSG_CHECKING([for Qt3 libraries])
     qt_libdir="no"
     for qt_check in $qt_libdirs ; do
-        if test -r "$qt_check/$qt_test_library" ; then
+        if test -r "`ls $qt_check/$qt_test_library 2>/dev/null | head -1`" ; then
             qt_libdir="$qt_check"
             break
         fi
@@ -6733,7 +6735,7 @@ your KDE3 installation by exporting KDEDIR before running "configure".])
     AC_MSG_CHECKING([for KDE3 libraries])
     kde_libdir="no"
     for kde_check in $kde_libdirs ; do
-        if test -r "$kde_check/$kde_test_library" ; then
+        if test -r "`ls $kde_check/$kde_test_library 2>/dev/null | head -1`" ; then
             kde_libdir="$kde_check"
             break
         fi
