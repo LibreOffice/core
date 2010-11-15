@@ -269,7 +269,7 @@ Sequence< Reference<XControlModel>  > OGroup::GetControlModels() const
 DBG_NAME(OGroupManager);
 //------------------------------------------------------------------
 OGroupManager::OGroupManager(const Reference< XContainer >& _rxContainer)
-    :m_pCompGroup( new OGroup( ::rtl::OUString::createFromAscii( "AllComponentGroup" ) ) )
+    :m_pCompGroup( new OGroup( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AllComponentGroup") ) ) )
     ,m_xContainer(_rxContainer)
 {
     DBG_CTOR(OGroupManager,NULL);

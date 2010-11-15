@@ -744,17 +744,17 @@ namespace frm
 
                     Reference<XDatabaseMetaData> xMeta = xConnection->getMetaData();
                     ::rtl::OUString aQuote = xMeta->getIdentifierQuoteString();
-                    ::rtl::OUString aStatement = ::rtl::OUString::createFromAscii("SELECT ");
+                    ::rtl::OUString aStatement(RTL_CONSTASCII_USTRINGPARAM("SELECT "));
                     if (!aBoundFieldName.getLength())   // act like a combobox
-                        aStatement += ::rtl::OUString::createFromAscii("DISTINCT ");
+                        aStatement += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DISTINCT ") );
 
                     aStatement += quoteName(aQuote,aFieldName);
                     if (aBoundFieldName.getLength())
                     {
-                        aStatement += ::rtl::OUString::createFromAscii(", ");
+                        aStatement += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(", ") );
                         aStatement += quoteName(aQuote, aBoundFieldName);
                     }
-                    aStatement += ::rtl::OUString::createFromAscii(" FROM ");
+                    aStatement += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" FROM ") );
 
                     ::rtl::OUString sCatalog, sSchema, sTable;
                     qualifiedNameComponents( xMeta, sListSource, sCatalog, sSchema, sTable, eInDataManipulation );
@@ -846,7 +846,7 @@ namespace frm
                         try
                         {
                             Reference< XPropertySet > xBoundField( xColumns->getByIndex( nBoundColumn ), UNO_QUERY_THROW );
-                            OSL_VERIFY( xBoundField->getPropertyValue( ::rtl::OUString::createFromAscii( "Type" ) ) >>= m_nBoundColumnType );
+                            OSL_VERIFY( xBoundField->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Type") ) ) >>= m_nBoundColumnType );
                         }
                         catch( const Exception& )
                         {

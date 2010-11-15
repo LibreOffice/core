@@ -168,22 +168,22 @@ namespace frm
         switch (m_nControlClass)
         {
             case FormComponentType::RADIOBUTTON:
-                aServiceName = ::rtl::OUString::createFromAscii("radiobutton");
+                aServiceName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("radiobutton") );
                 break;
             case FormComponentType::CHECKBOX:
-                aServiceName = ::rtl::OUString::createFromAscii("checkbox");
+                aServiceName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("checkbox") );
                 break;
             case FormComponentType::COMBOBOX:
-                aServiceName = ::rtl::OUString::createFromAscii("combobox");
+                aServiceName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("combobox") );
                 break;
             case FormComponentType::LISTBOX:
-                aServiceName = ::rtl::OUString::createFromAscii("listbox");
+                aServiceName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("listbox") );
                 break;
             default:
                 if (m_bMultiLine)
-                    aServiceName = ::rtl::OUString::createFromAscii("MultiLineEdit");
+                    aServiceName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MultiLineEdit") );
                 else
-                    aServiceName = ::rtl::OUString::createFromAscii("Edit");
+                    aServiceName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Edit") );
         }
         return aServiceName;
     }
@@ -711,10 +711,10 @@ namespace frm
         try
         {
             Sequence< Any > aArgs(2);
-            aArgs[0] <<= PropertyValue(::rtl::OUString::createFromAscii("SQLException"), 0, makeAny( _rExcept ), PropertyState_DIRECT_VALUE);
-            aArgs[1] <<= PropertyValue(::rtl::OUString::createFromAscii("ParentWindow"), 0, makeAny( m_xMessageParent ), PropertyState_DIRECT_VALUE);
+            aArgs[0] <<= PropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SQLException") ), 0, makeAny( _rExcept ), PropertyState_DIRECT_VALUE);
+            aArgs[1] <<= PropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParentWindow") ), 0, makeAny( m_xMessageParent ), PropertyState_DIRECT_VALUE);
 
-            static ::rtl::OUString s_sDialogServiceName = ::rtl::OUString::createFromAscii( "com.sun.star.sdb.ErrorMessageDialog" );
+            static ::rtl::OUString s_sDialogServiceName (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.ErrorMessageDialog") );
 
             Reference< XExecutableDialog > xErrorDialog( m_aContext.createComponentWithArguments( s_sDialogServiceName, aArgs ), UNO_QUERY );
             if ( xErrorDialog.is() )

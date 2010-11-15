@@ -629,7 +629,7 @@ void OEditModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm )
             if ( !m_bMaxTextLenModified )
             {
                 sal_Int32 nFieldLen = 0;
-                xField->getPropertyValue(::rtl::OUString::createFromAscii("Precision")) >>= nFieldLen;
+                xField->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Precision") ) ) >>= nFieldLen;
 
                 if (nFieldLen && nFieldLen <= USHRT_MAX)
                 {
