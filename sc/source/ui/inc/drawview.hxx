@@ -50,7 +50,6 @@ class ScDrawView: public FmFormView
     SdrDropMarkerOverlay*   pDropMarker;
     SdrObject*              pDropMarkObj;
     BOOL                    bInConstruct;
-    //HMHBOOL                   bDisableHdl;
 
     void            Construct();
     void            UpdateBrowser();
@@ -76,11 +75,7 @@ public:
 
     virtual void    DeleteMarked();
 
-    void            DrawMarks( OutputDevice* pOut ) const;
-
     void            MarkDropObj( SdrObject* pObj );
-
-    //HMHBOOL           IsDisableHdl() const    { return bDisableHdl; }
 
     void            SetMarkedToLayer( BYTE nLayerNo );
 
