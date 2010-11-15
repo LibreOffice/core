@@ -67,19 +67,18 @@ CSubmission::SubmissionResult CSubmission::replace(const ::rtl::OUString& aRepla
 
             if (!xLoader.is())
                 xLoader = Reference< XComponentLoader >(xFactory->createInstance(
-                    ::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop")), UNO_QUERY_THROW);
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop") ) ), UNO_QUERY_THROW);
 
             // open the stream from the result...
             // build media descriptor
             Sequence< PropertyValue > descriptor(2);
-            descriptor[0] = PropertyValue(::rtl::OUString::createFromAscii(
-                "InputStream"), -1, makeAny(m_aResultStream), PropertyState_DIRECT_VALUE);
-            descriptor[1] = PropertyValue(::rtl::OUString::createFromAscii(
-                "ReadOnly"), -1, makeAny(sal_True), PropertyState_DIRECT_VALUE);
+            descriptor[0] = PropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("InputStream") ),
+                -1, makeAny(m_aResultStream), PropertyState_DIRECT_VALUE);
+            descriptor[1] = PropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReadOnly") ),
+                -1, makeAny(sal_True), PropertyState_DIRECT_VALUE);
 
-            //::rtl::OUString aURL = ::rtl::OUString::createFromAscii("private:stream");
             ::rtl::OUString aURL = m_aURLObj.GetMainURL(INetURLObject::NO_DECODE);
-            ::rtl::OUString aTarget = ::rtl::OUString::createFromAscii("_default");
+            ::rtl::OUString aTarget = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_default") );
             xLoader->loadComponentFromURL(aURL, aTarget, FrameSearchFlag::ALL, descriptor);
 
             return CSubmission::SUCCESS;
@@ -88,7 +87,7 @@ CSubmission::SubmissionResult CSubmission::replace(const ::rtl::OUString& aRepla
             if (aDocument.is()) {
                 // parse the result stream into a new document
                 Reference< XDocumentBuilder > xBuilder(xFactory->createInstance(
-                    ::rtl::OUString::createFromAscii("com.sun.star.xml.dom.DocumentBuilder")), UNO_QUERY_THROW);
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.dom.DocumentBuilder") ) ), UNO_QUERY_THROW);
                 Reference< XDocument > aNewDocument = xBuilder->parse(m_aResultStream);
 
                 if (aNewDocument.is()) {
@@ -96,7 +95,6 @@ CSubmission::SubmissionResult CSubmission::replace(const ::rtl::OUString& aRepla
                     Reference< XElement > oldRoot = aDocument->getDocumentElement();
                     Reference< XElement > newRoot = aNewDocument->getDocumentElement();
 
-                    // aDocument->removeChild(Reference< XNode >(oldRoot, UNO_QUERY_THROW));
                     Reference< XNode > aImportedNode = aDocument->importNode(Reference< XNode >(newRoot, UNO_QUERY_THROW), sal_True);
                     Reference< XNode >(aDocument, UNO_QUERY_THROW)->replaceChild(aImportedNode, Reference< XNode >(oldRoot, UNO_QUERY_THROW));
                     return CSubmission::SUCCESS;
@@ -131,7 +129,7 @@ CSubmission::SubmissionResult CSubmission::replace(const ::rtl::OUString& aRepla
         pHelper->m_aInteractionHandler = _xHandler;
     else
         pHelper->m_aInteractionHandler = CSS::uno::Reference< XInteractionHandler >(m_aFactory->createInstance(
-        ::rtl::OUString::createFromAscii("com.sun.star.task.InteractionHandler")), UNO_QUERY);
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.task.InteractionHandler") ) ), UNO_QUERY);
     OSL_ENSURE(pHelper->m_aInteractionHandler.is(), "failed to create IntreractionHandler");
 
     CProgressHandlerHelper *pProgressHelper = new CProgressHandlerHelper;

@@ -45,7 +45,7 @@
 CSerializationAppXML::CSerializationAppXML()
     : m_aFactory(utl::getProcessServiceFactory())
     , m_aPipe(CSS::uno::Reference< CSS::io::XOutputStream > (m_aFactory->createInstance(
-        rtl::OUString::createFromAscii("com.sun.star.io.Pipe")), CSS::uno::UNO_QUERY))
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.Pipe") ) ), CSS::uno::UNO_QUERY))
 {
     OSL_ENSURE(m_aPipe.is(), "cannot create Pipe");
 }

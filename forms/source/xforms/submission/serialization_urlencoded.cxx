@@ -52,7 +52,7 @@ using namespace CSS::xml::dom;
 CSerializationURLEncoded::CSerializationURLEncoded()
     : m_aFactory(getProcessServiceFactory())
     , m_aPipe(Reference< XOutputStream > (m_aFactory->createInstance(
-        ::rtl::OUString::createFromAscii("com.sun.star.io.Pipe")), UNO_QUERY))
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.Pipe") ) ), UNO_QUERY))
 {
 }
 
