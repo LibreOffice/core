@@ -760,7 +760,7 @@ void ExcDocument::Write( SvStream& rSvStrm )
 
         aHeader.Write( aXclStrm );
 
-        DBG_ASSERT( maTableList.GetSize() == maBoundsheetList.GetSize(),
+        OSL_ENSURE( maTableList.GetSize() == maBoundsheetList.GetSize(),
             "ExcDocument::Write - different number of sheets and BOUNDSHEET records" );
 
         for( size_t nTab = 0, nTabCount = maTableList.GetSize(); nTab < nTabCount; ++nTab )

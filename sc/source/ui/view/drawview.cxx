@@ -114,7 +114,7 @@ void ScDrawView::Construct()
         if (pLayer)
         {
             SetLayerLocked( pLayer->GetName(), bProt );
-            SetActiveLayer( pLayer->GetName() );        // FRONT als aktiven Layer setzen
+            SetActiveLayer( pLayer->GetName() );        // set active layer to FRONT
         }
         pLayer = rAdmin.GetLayerPerID(SC_LAYER_CONTROLS);
         if (pLayer)
@@ -205,7 +205,7 @@ void ScDrawView::InvalidateAttribs()
     if (!pViewData) return;
     SfxBindings& rBindings = pViewData->GetBindings();
 
-        // echte Statuswerte:
+        // true status values:
     rBindings.InvalidateAll( TRUE );
 }
 

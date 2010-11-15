@@ -42,10 +42,10 @@ class ScDrawObjData;
 class ScDrawView: public FmFormView
 {
     ScViewData*             pViewData;
-    OutputDevice*           pDev;                   //! noetig ?
+    OutputDevice*           pDev;                   //! needed ?
     ScDocument*             pDoc;
     SCTAB                   nTab;
-    Fraction                aScaleX;                // Faktor fuer Drawing-MapMode
+    Fraction                aScaleX;                // Factor for Drawing-MapMode
     Fraction                aScaleY;
     SdrDropMarkerOverlay*   pDropMarker;
     SdrObject*              pDropMarkObj;
@@ -139,7 +139,7 @@ public:
     /** Unlocks the internal layer that contains caption objects of cell notes. */
     inline void     UnlockInternalLayer() { LockInternalLayer( false ); }
 
-    SdrEndTextEditKind  ScEndTextEdit();    // ruft SetDrawTextUndo(0)
+    SdrEndTextEditKind  ScEndTextEdit();    // calls SetDrawTextUndo(0)
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > CopyToTransferable();
 };
 
