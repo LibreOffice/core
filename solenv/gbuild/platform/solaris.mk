@@ -162,16 +162,16 @@ define gb_LinkTarget__get_rpath_for_layer
 $(patsubst $(1):%,%,$(filter $(1):%,$(gb_LinkTarget__RPATHS)))
 endef
 define gb_LinkTarget_get_rpath
--R\'$(call gb_LinkTarget__get_rpath_for_layer,$(call gb_LinkTarget_get_layer,$(2)))\'
+'-R$(call gb_LinkTarget__get_rpath_for_layer,$(call gb_LinkTarget_get_layer,$(2)))'
 endef
 
 gb_LinkTarget__RPATHS := \
-    URELIB:'$$$$ORIGIN' \
-    UREBIN:'$$$$ORIGIN/../lib:$$$$ORIGIN' \
-    OOOLIB:'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib' \
-    BRAND:'$$$$ORIGIN:$$$$ORIGIN/../basis-link/program:$$$$ORIGIN/../basis-link/ure-link/lib' \
-    SDKBIN:'$$$$ORIGIN/../../ure-link/lib' \
-    NONEBIN:'$$$$ORIGIN/../lib:$$$$ORIGIN' \
+    URELIB:$$$$ORIGIN \
+    UREBIN:$$$$ORIGIN/../lib:$$$$ORIGIN \
+    OOOLIB:$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib \
+    BRAND:$$$$ORIGIN:$$$$ORIGIN/../basis-link/program:$$$$ORIGIN/../basis-link/ure-link/lib \
+    SDKBIN:$$$$ORIGIN/../../ure-link/lib \
+    NONEBIN:$$$$ORIGIN/../lib:$$$$ORIGIN \
 
 gb_LinkTarget_LAYER := \
     $(foreach lib,$(gb_Library_OOOLIBS),$(lib):OOOLIB) \
