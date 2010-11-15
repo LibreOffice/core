@@ -60,3 +60,11 @@ SHL1STDLIBS=	$(COMPHELPERLIB) \
 
 .INCLUDE :			target.mk
 
+
+ALLTAR : $(MISC)/xmlfa.component
+
+$(MISC)/xmlfa.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        xmlfa.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt xmlfa.component

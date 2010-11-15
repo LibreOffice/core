@@ -25,35 +25,35 @@
 #
 #***********************************************************************/
 
-PRJ = ..$/..
-TARGET  = unoxml_test
-PRJNAME = $(TARGET)
-PACKAGE = complex$/unoxml
+.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
+nothing .PHONY:
+.ELSE
 
-# --- Settings -----------------------------------------------------
+PRJ = ../../..
+PRJNAME = unoxml
+TARGET = qa_complex_unoxml
+
+.IF "$(OOO_JUNIT_JAR)" != ""
+PACKAGE = complex/unoxml
+JAVATESTFILES = \
+    RDFRepositoryTest.java
+
+JAVAFILES = $(JAVATESTFILES) \
+    TestDocument.java
+
+JARFILES = OOoRunner.jar ridl.jar test.jar unoil.jar jurt.jar
+EXTRAJARFILES = $(OOO_JUNIT_JAR)
+
+# Sample how to debug
+# JAVAIFLAGS=-Xdebug  -Xrunjdwp:transport=dt_socket,server=y,address=9003,suspend=y
+.END
+
 .INCLUDE: settings.mk
+.INCLUDE: target.mk
+.INCLUDE: installationtest.mk
 
+ALLTAR : javatest
 
-#----- compile .java files -----------------------------------------
+.END
 
-JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar
-JAVAFILES       = RDFRepositoryTest.java \
-
-JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
-
-#----- make a jar from compiled files ------------------------------
-
-MAXLINELENGTH = 100000
-
-JARCLASSDIRS    = $(PACKAGE)
-JARTARGET       = $(TARGET).jar
-JARCOMPRESS 	= TRUE
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :  target.mk
-
-
-run:
-    +java -cp $(CLASSPATH) org.openoffice.Runner -TestBase java_complex -sce tests.sce -tdoc $(PWD)$/testdocuments
 
