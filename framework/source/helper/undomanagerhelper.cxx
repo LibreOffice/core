@@ -41,6 +41,7 @@
 #include <osl/conditn.hxx>
 
 #include <stack>
+#include <queue>
 #include <boost/function.hpp>
 
 //......................................................................................................................
@@ -185,6 +186,15 @@ namespace framework
                 ::cppu::throwException( m_caughtException );
         }
 
+        void cancel( const Reference< XInterface >& i_context )
+        {
+            m_caughtException <<= RuntimeException(
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Concurrency error: an ealier operation on the stack failed." ) ),
+                i_context
+            );
+            m_finishCondition.set();
+        }
+
     protected:
         ~UndoManagerRequest()
         {
@@ -201,16 +211,14 @@ namespace framework
     //==================================================================================================================
     //= UndoManagerHelper_Impl
     //==================================================================================================================
-    class UndoManagerHelper_Impl    :public SfxUndoListener
-                                    ,public ::comphelper::IEventProcessor
+    class UndoManagerHelper_Impl : public SfxUndoListener
     {
     private:
         ::osl::Mutex                        m_aMutex;
-        oslInterlockedCount                 m_refCount;
-        ::rtl::Reference< ::comphelper::AsyncEventNotifier >
-                                            m_pRequestProcessor;
+        ::osl::Mutex                        m_aQueueMutex;
         bool                                m_disposed;
         bool                                m_bAPIActionRunning;
+        bool                                m_bProcessingEvents;
         ::cppu::OInterfaceContainerHelper   m_aUndoListeners;
         IUndoManagerImplementation&         m_rUndoManagerImplementation;
         UndoManagerHelper&                  m_rAntiImpl;
@@ -218,6 +226,8 @@ namespace framework
 #if OSL_DEBUG_LEVEL > 0
         ::std::stack< bool >                m_aContextAPIFlags;
 #endif
+        ::std::queue< ::rtl::Reference< UndoManagerRequest > >
+                                            m_aEventQueue;
 
     public:
         ::osl::Mutex&   getMutex() { return m_aMutex; }
@@ -225,15 +235,19 @@ namespace framework
     public:
         UndoManagerHelper_Impl( UndoManagerHelper& i_antiImpl, IUndoManagerImplementation& i_undoManagerImpl )
             :m_aMutex()
-            ,m_refCount( 0 )
-            ,m_pRequestProcessor()
+            ,m_aQueueMutex()
             ,m_disposed( false )
             ,m_bAPIActionRunning( false )
+            ,m_bProcessingEvents( false )
             ,m_aUndoListeners( m_aMutex )
             ,m_rUndoManagerImplementation( i_undoManagerImpl )
             ,m_rAntiImpl( i_antiImpl )
         {
             getUndoManager().AddUndoListener( *this );
+        }
+
+        virtual ~UndoManagerHelper_Impl()
+        {
         }
 
         //..............................................................................................................
@@ -247,12 +261,6 @@ namespace framework
         {
             return m_rUndoManagerImplementation.getThis();
         }
-
-        //..............................................................................................................
-        // ::comphelper::IEventProcessor
-        virtual void SAL_CALL acquire();
-        virtual void SAL_CALL release();
-        virtual void processEvent( const ::comphelper::AnyEvent& _rEvent );
 
         // SfxUndoListener
         virtual void actionUndone( const String& i_actionComment );
@@ -302,14 +310,10 @@ namespace framework
         void notify( void ( SAL_CALL XUndoManagerListener::*i_notificationMethod )( const EventObject& ) );
 
     private:
-        virtual ~UndoManagerHelper_Impl()
-        {
-        }
-
         /// adds a function to be called to the request processor's queue
         void impl_processRequest( ::boost::function0< void > const& i_request, IMutexGuard& i_instanceLock );
 
-        /// impl-versions of the XUndoManager API. Those methods are executed in the dedicated thread defined by m_pRequestProcessor
+        /// impl-versions of the XUndoManager API.
         void impl_enterUndoContext( const ::rtl::OUString& i_title, const bool i_hidden );
         void impl_leaveUndoContext();
         void impl_addUndoAction( const Reference< XUndoAction >& i_action );
@@ -318,19 +322,6 @@ namespace framework
         void impl_clearRedo();
         void impl_reset();
     };
-
-    //------------------------------------------------------------------------------------------------------------------
-    void UndoManagerHelper_Impl::acquire()
-    {
-        osl_incrementInterlockedCount( &m_refCount );
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    void UndoManagerHelper_Impl::release()
-    {
-        if ( 0 == osl_decrementInterlockedCount( &m_refCount ) )
-            delete this;
-    }
 
     //------------------------------------------------------------------------------------------------------------------
     void UndoManagerHelper_Impl::disposing()
@@ -342,14 +333,6 @@ namespace framework
         ::osl::MutexGuard aGuard( m_aMutex );
 
         getUndoManager().RemoveUndoListener( *this );
-
-        if ( m_pRequestProcessor.is() )
-        {
-            m_pRequestProcessor->removeEventsForProcessor( this );
-            m_pRequestProcessor->terminate();
-            m_pRequestProcessor->join();
-            m_pRequestProcessor.clear();
-        }
 
         m_disposed = true;
     }
@@ -474,22 +457,67 @@ namespace framework
     //------------------------------------------------------------------------------------------------------------------
     void UndoManagerHelper_Impl::impl_processRequest( ::boost::function0< void > const& i_request, IMutexGuard& i_instanceLock )
     {
-        // SYNCHRONIZED --->
-        ::osl::ClearableMutexGuard aGuard( m_aMutex );
-        if ( !m_pRequestProcessor.is() )
+        // create the request, and add it to our queue
+        ::rtl::Reference< UndoManagerRequest > pRequest( new UndoManagerRequest( i_request ) );
         {
-            m_pRequestProcessor.set( new ::comphelper::AsyncEventNotifier );
-            m_pRequestProcessor->create();
+            ::osl::MutexGuard aQueueGuard( m_aQueueMutex );
+            m_aEventQueue.push( pRequest );
         }
 
-        ::rtl::Reference< UndoManagerRequest > pRequest( new UndoManagerRequest( i_request ) );
-        m_pRequestProcessor->addEvent( pRequest.get(), this );
-
-        aGuard.clear();
         i_instanceLock.clear();
-        // <--- SYNCHRONIZED
 
-        pRequest->wait();
+        if ( m_bProcessingEvents )
+        {
+            // another thread is processing the event queue currently => it will also process the event which we just added
+            pRequest->wait();
+            return;
+        }
+
+        m_bProcessingEvents = true;
+        do
+        {
+            ::rtl::Reference< UndoManagerRequest > pRequest;
+            {
+                ::osl::MutexGuard aQueueGuard( m_aQueueMutex );
+                if ( m_aEventQueue.empty() )
+                {
+                    // reset the flag before releasing the queue mutex, otherwise it's possible that another thread
+                    // could add an event after we release the mutex, but before we reset the flag. If then this other
+                    // thread checks the flag before be reset it, this thread's event would starve.
+                    m_bProcessingEvents = false;
+                    return;
+                }
+                pRequest = m_aEventQueue.front();
+                m_aEventQueue.pop();
+            }
+            try
+            {
+                pRequest->execute();
+                pRequest->wait();
+            }
+            catch( ... )
+            {
+                {
+                    // no chance to process further requests, if the current one failed
+                    // => discard them
+                    ::osl::MutexGuard aQueueGuard( m_aQueueMutex );
+                    while ( !m_aEventQueue.empty() )
+                    {
+                        pRequest = m_aEventQueue.front();
+                        m_aEventQueue.pop();
+                        pRequest->cancel( getXUndoManager() );
+                    }
+                    m_bProcessingEvents = false;
+                }
+                // re-throw the error
+                throw;
+            }
+        }
+        while ( true );
+
+        OSL_ENSURE( false, "UndoManagerHelper_Impl::impl_processRequest: unreachable!" );
+            // there's only two exits from the above loop: a direct return, and a throw ...
+        m_bProcessingEvents = false;
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -497,9 +525,6 @@ namespace framework
     {
         // SYNCHRONIZED --->
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
-
-        OSL_PRECOND( ::osl::Thread::getCurrentIdentifier() == m_pRequestProcessor->getIdentifier(),
-            "UndoManagerHelper_Impl::impl_enterUndoContext: expected to be executed serialized, in a dedicated thread!" );
 
         IUndoManager& rUndoManager = getUndoManager();
         if ( !rUndoManager.IsUndoEnabled() )
@@ -531,9 +556,6 @@ namespace framework
     {
         // SYNCHRONIZED --->
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
-
-        OSL_PRECOND( ::osl::Thread::getCurrentIdentifier() == m_pRequestProcessor->getIdentifier(),
-            "UndoManagerHelper_Impl::impl_leaveUndoContext: expected to be executed serialized, in a dedicated thread!" );
 
         IUndoManager& rUndoManager = getUndoManager();
         if ( !rUndoManager.IsUndoEnabled() )
@@ -593,9 +615,6 @@ namespace framework
         // SYNCHRONIZED --->
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
-        OSL_PRECOND( ::osl::Thread::getCurrentIdentifier() == m_pRequestProcessor->getIdentifier(),
-            "UndoManagerHelper_Impl::impl_doUndoRedo: expected to be executed serialized, in a dedicated thread!" );
-
         IUndoManager& rUndoManager = getUndoManager();
         if ( rUndoManager.IsInListAction() )
             throw UndoContextNotClosedException( ::rtl::OUString(), getXUndoManager() );
@@ -640,9 +659,6 @@ namespace framework
         // SYNCHRONIZED --->
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
-        OSL_PRECOND( ::osl::Thread::getCurrentIdentifier() == m_pRequestProcessor->getIdentifier(),
-            "UndoManagerHelper_Impl::impl_addUndoAction: expected to be executed serialized, in a dedicated thread!" );
-
         IUndoManager& rUndoManager = getUndoManager();
         if ( !rUndoManager.IsUndoEnabled() )
             // ignore the request if the manager is locked
@@ -672,9 +688,6 @@ namespace framework
         // SYNCHRONIZED --->
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
-        OSL_PRECOND( ::osl::Thread::getCurrentIdentifier() == m_pRequestProcessor->getIdentifier(),
-            "UndoManagerHelper_Impl::impl_clear: expected to be executed serialized, in a dedicated thread!" );
-
         IUndoManager& rUndoManager = getUndoManager();
         if ( rUndoManager.IsInListAction() )
             throw UndoContextNotClosedException( ::rtl::OUString(), getXUndoManager() );
@@ -696,9 +709,6 @@ namespace framework
     {
         // SYNCHRONIZED --->
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
-
-        OSL_PRECOND( ::osl::Thread::getCurrentIdentifier() == m_pRequestProcessor->getIdentifier(),
-            "UndoManagerHelper_Impl::impl_clearRedo: expected to be executed serialized, in a dedicated thread!" );
 
         IUndoManager& rUndoManager = getUndoManager();
         if ( rUndoManager.IsInListAction() )
@@ -722,9 +732,6 @@ namespace framework
         // SYNCHRONIZED --->
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
-        OSL_PRECOND( ::osl::Thread::getCurrentIdentifier() == m_pRequestProcessor->getIdentifier(),
-            "UndoManagerHelper_Impl::impl_reset: expected to be executed serialized, in a dedicated thread!" );
-
         IUndoManager& rUndoManager = getUndoManager();
         {
             ::comphelper::FlagGuard aNotificationGuard( m_bAPIActionRunning );
@@ -738,13 +745,6 @@ namespace framework
         // <--- SYNCHRONIZED
 
         m_aUndoListeners.notifyEach( &XUndoManagerListener::resetAll, aEvent );
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    void UndoManagerHelper_Impl::processEvent( const ::comphelper::AnyEvent& i_event )
-    {
-        UndoManagerRequest& rRequest( dynamic_cast< UndoManagerRequest& >( const_cast< ::comphelper::AnyEvent& >( i_event ) ) );
-        rRequest.execute();
     }
 
     //------------------------------------------------------------------------------------------------------------------

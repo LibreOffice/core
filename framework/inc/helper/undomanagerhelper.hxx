@@ -34,7 +34,7 @@
 #include <com/sun/star/document/XUndoManager.hpp>
 /** === end UNO includes === **/
 
-#include <rtl/ref.hxx>
+#include <boost/scoped_ptr.hpp>
 
 namespace svl
 {
@@ -144,7 +144,7 @@ namespace framework
         ::sal_Bool      isLocked();
 
     private:
-        ::rtl::Reference< UndoManagerHelper_Impl >  m_pImpl;
+        ::boost::scoped_ptr< UndoManagerHelper_Impl >   m_pImpl;
     };
 
 //......................................................................................................................
