@@ -2441,7 +2441,7 @@ void DocxAttributeOutput::NumberingLevel( BYTE nLevel,
         const SfxItemSet *pOutSet,
         sal_Int16 nIndentAt,
         sal_Int16 nFirstLineIndex,
-        sal_Int16 /*nListTabPos*/,
+        sal_Int16 nListTabPos,
         const String &rNumberingString )
 {
     m_pSerializer->startElementNS( XML_w, XML_lvl,
@@ -2516,6 +2516,15 @@ void DocxAttributeOutput::NumberingLevel( BYTE nLevel,
 
     // indentation
     m_pSerializer->startElementNS( XML_w, XML_pPr, FSEND );
+    if( nListTabPos != 0 )
+    {
+        m_pSerializer->startElementNS( XML_w, XML_tabs, FSEND );
+        m_pSerializer->singleElementNS( XML_w, XML_tab,
+                FSNS( XML_w, XML_val ), "num",
+                FSNS( XML_w, XML_pos ), OString::valueOf( nListTabPos ).getStr(),
+                FSEND );
+        m_pSerializer->endElementNS( XML_w, XML_tabs );
+    }
     m_pSerializer->singleElementNS( XML_w, XML_ind,
             FSNS( XML_w, XML_left ), OString::valueOf( sal_Int32( nIndentAt ) ).getStr(),
             FSNS( XML_w, XML_hanging ), OString::valueOf( sal_Int32( -nFirstLineIndex ) ).getStr(),
