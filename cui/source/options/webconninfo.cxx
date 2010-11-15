@@ -52,7 +52,7 @@ namespace svx
 PasswordTable::PasswordTable( Window* pParent, const ResId& rResId ) :
     SvxSimpleTable( pParent, rResId )
 {
-    SetWindowBits( GetStyle() | WB_NOINITIALSELECTION );
+    SetStyle( GetStyle() | WB_NOINITIALSELECTION );
 }
 
 void PasswordTable::InsertHeaderItem( USHORT nColumn, const String& rText, HeaderBarItemBits nBits )

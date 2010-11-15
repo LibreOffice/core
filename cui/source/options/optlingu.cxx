@@ -1140,7 +1140,7 @@ SvxLinguTabPage::SvxLinguTabPage( Window* pParent,
 {
     pCheckButtonData = NULL;
 
-    aLinguModulesCLB.SetWindowBits( WB_CLIPCHILDREN|WB_HSCROLL|WB_FORCE_MAKEVISIBLE );
+    aLinguModulesCLB.SetStyle( aLinguModulesCLB.GetStyle()|WB_CLIPCHILDREN|WB_HSCROLL|WB_FORCE_MAKEVISIBLE );
     aLinguModulesCLB.SetHelpId(HID_CLB_LINGU_MODULES );
     aLinguModulesCLB.SetHighlightRange();
     aLinguModulesCLB.SetSelectHdl( LINK( this, SvxLinguTabPage, SelectHdl_Impl ));
@@ -1150,7 +1150,7 @@ SvxLinguTabPage::SvxLinguTabPage( Window* pParent,
     aLinguModulesEditPB.SetClickHdl( LINK( this, SvxLinguTabPage, ClickHdl_Impl ));
     aLinguOptionsEditPB.SetClickHdl( LINK( this, SvxLinguTabPage, ClickHdl_Impl ));
 
-    aLinguDicsCLB.SetWindowBits( WB_CLIPCHILDREN|WB_HSCROLL|WB_FORCE_MAKEVISIBLE );
+    aLinguDicsCLB.SetStyle( aLinguDicsCLB.GetStyle()|WB_CLIPCHILDREN|WB_HSCROLL|WB_FORCE_MAKEVISIBLE );
     aLinguDicsCLB.SetHelpId(HID_CLB_EDIT_MODULES_DICS );
     aLinguDicsCLB.SetHighlightRange();
     aLinguDicsCLB.SetSelectHdl( LINK( this, SvxLinguTabPage, SelectHdl_Impl ));
@@ -1160,7 +1160,7 @@ SvxLinguTabPage::SvxLinguTabPage( Window* pParent,
     aLinguDicsEditPB.SetClickHdl( LINK( this, SvxLinguTabPage, ClickHdl_Impl ));
     aLinguDicsDelPB.SetClickHdl( LINK( this, SvxLinguTabPage, ClickHdl_Impl ));
 
-    aLinguOptionsCLB.SetWindowBits( WB_CLIPCHILDREN|WB_HSCROLL|WB_FORCE_MAKEVISIBLE );
+    aLinguOptionsCLB.SetStyle( aLinguOptionsCLB.GetStyle()|WB_CLIPCHILDREN|WB_HSCROLL|WB_FORCE_MAKEVISIBLE );
     aLinguOptionsCLB.SetHelpId(HID_CLB_LINGU_OPTIONS );
     aLinguOptionsCLB.SetHighlightRange();
     aLinguOptionsCLB.SetSelectHdl( LINK( this, SvxLinguTabPage, SelectHdl_Impl ));
@@ -2050,7 +2050,7 @@ SvxEditModulesDlg::SvxEditModulesDlg(Window* pParent, SvxLinguData_Impl& rData) 
 
     pDefaultLinguData = new SvxLinguData_Impl( rLinguData );
 
-    aModulesCLB.SetWindowBits( WB_CLIPCHILDREN|WB_HSCROLL|WB_FORCE_MAKEVISIBLE );
+    aModulesCLB.SetStyle( aModulesCLB.GetStyle()|WB_CLIPCHILDREN|WB_HSCROLL|WB_FORCE_MAKEVISIBLE );
     aModulesCLB.SetHighlightRange();
     aModulesCLB.SetHelpId(HID_CLB_EDIT_MODULES_MODULES );
     aModulesCLB.SetSelectHdl( LINK( this, SvxEditModulesDlg, SelectHdl_Impl ));

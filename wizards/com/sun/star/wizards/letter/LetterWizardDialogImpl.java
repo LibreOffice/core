@@ -1435,7 +1435,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
     public void insertPathSelectionControl()
     {
         myPathSelection = new PathSelection(xMSF, this, PathSelection.TransferMode.SAVE, PathSelection.DialogTypes.FILE);
-        myPathSelection.insert(6, 97, 70, 205, (short) 45, resources.reslblTemplatePath_value, true, "HID:" + (HID + 47), "HID:" + (HID + 48));
+        myPathSelection.insert(6, 97, 70, 205, (short) 45, resources.reslblTemplatePath_value, true, HelpIds.getHelpIdString(HID + 47), HelpIds.getHelpIdString(HID + 48));
         myPathSelection.sDefaultDirectory = sUserTemplatePath;
         myPathSelection.sDefaultName = "myLetterTemplate.ott";
         myPathSelection.sDefaultFilter = "writer8_template";

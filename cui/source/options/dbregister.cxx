@@ -159,7 +159,7 @@ DbRegistrationOptionsPage::DbRegistrationOptionsPage( Window* pParent, const Sfx
     Size aHeadSize = pHeaderBar->GetSizePixel();
 
     aPathCtrl.SetFocusControl( pPathBox );
-    pPathBox->SetWindowBits( nBits );
+    pPathBox->SetStyle( pPathBox->GetStyle()|nBits );
     pPathBox->SetDoubleClickHdl( LINK( this, DbRegistrationOptionsPage, EditHdl ) );
     pPathBox->SetSelectHdl( LINK( this, DbRegistrationOptionsPage, PathSelect_Impl ) );
     pPathBox->SetSelectionMode( SINGLE_SELECTION );
