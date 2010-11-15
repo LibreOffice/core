@@ -226,6 +226,59 @@ public class UndoManager
     }
 
     // -----------------------------------------------------------------------------------------------------------------
+    @Test
+    public void checkSerialization() throws com.sun.star.uno.Exception, InterruptedException
+    {
+        System.out.println( "testing: request serialization" );
+
+        m_currentDocument = OfficeDocument.blankDocument( getORB(), DocumentType.CALC );
+        final XUndoManager undoManager = getUndoManager();
+
+        final int threadCount = 10;
+        final int actionsPerThread = 10;
+        final int actionCount = threadCount * actionsPerThread;
+
+        // add some actions to the UndoManager, each knowing its position on the stack
+        final Object lock = new Object();
+        final Integer actionsUndone[] = new Integer[] { 0 };
+        for ( int i=actionCount; i>0; )
+            undoManager.addUndoAction( new CountingUndoAction( --i, lock, actionsUndone ) );
+
+        // some concurrent threads which undo the actions
+        Thread[] threads = new Thread[threadCount];
+        for ( int i=0; i<threadCount; ++i )
+        {
+            threads[i] = new Thread()
+            {
+                @Override
+                public void run()
+                {
+                    for ( int j=0; j<actionsPerThread; ++j )
+                    {
+                        try { undoManager.undo(); }
+                        catch ( final Exception e )
+                        {
+                            fail( "Those dummy actions are not expected to fail." );
+                            return;
+                        }
+                    }
+                }
+            };
+        }
+
+        // start the threads
+        for ( int i=0; i<threadCount; ++i )
+            threads[i].start();
+
+        // wait for them to be finished
+        for ( int i=0; i<threadCount; ++i )
+            threads[i].join();
+
+        // ensure all actions have been undone
+        assertEquals( "not all actions have been undone", actionCount, actionsUndone[0].intValue() );
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
     @After
     public void afterTest()
     {
@@ -1246,6 +1299,39 @@ public class UndoManager
         }
 
         private final short m_failWhich;
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    private static class CountingUndoAction implements XUndoAction
+    {
+        CountingUndoAction( final int i_expectedOrder, final Object i_lock, final Integer[] i_actionsUndoneCounter )
+        {
+            m_expectedOrder = i_expectedOrder;
+            m_lock = i_lock;
+            m_actionsUndoneCounter = i_actionsUndoneCounter;
+        }
+
+        public String getTitle()
+        {
+            return "Counting Undo Action";
+        }
+
+        public void undo() throws UndoFailedException
+        {
+            synchronized( m_lock )
+            {
+                assertEquals( "Undo action called out of order", m_expectedOrder, m_actionsUndoneCounter[0].intValue() );
+                ++m_actionsUndoneCounter[0];
+            }
+        }
+
+        public void redo() throws UndoFailedException
+        {
+            fail( "CountingUndoAction.redo is not expected to be called in this test." );
+        }
+        private final int       m_expectedOrder;
+        private final Object    m_lock;
+        private Integer[]       m_actionsUndoneCounter;
     }
 
     // -----------------------------------------------------------------------------------------------------------------
