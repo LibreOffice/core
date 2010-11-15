@@ -57,3 +57,4 @@ mkdir: %_DEST%\inc%_EXT%\basic
 
 ..\inc\basic\basicmanagerrepository.hxx %_DEST%\inc%_EXT%\basic\basicmanagerrepository.hxx
 ..\inc\modsizeexceeded.hxx %_DEST%\inc%_EXT%\basic\modsizeexceeded.hxx
+..\%__SRC%\misc\sb.component %_DEST%\xml%_EXT%\sb.component
