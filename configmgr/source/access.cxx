@@ -2089,7 +2089,8 @@ css::beans::Property Access::asProperty() {
     default:
         type = cppu::UnoType< css::uno::XInterface >::get(); //TODO: correct?
         nillable = false;
-        removable = getParentNode()->kind() == Node::KIND_SET;
+        rtl::Reference< Node > parent(getParentNode());
+        removable = parent.is() && parent->kind() == Node::KIND_SET;
         break;
     }
     return css::beans::Property(

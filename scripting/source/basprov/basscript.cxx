@@ -80,11 +80,33 @@ namespace basprov
         ,m_documentBasicManager( &documentBasicManager )
         ,m_xDocumentScriptContext( documentScriptContext )
     {
+        StartListening( *m_documentBasicManager );
     }
 
     // -----------------------------------------------------------------------------
     BasicScriptImpl::~BasicScriptImpl()
     {
+        if ( m_documentBasicManager )
+            EndListening( *m_documentBasicManager );
+    }
+
+    // -----------------------------------------------------------------------------
+    // SfxListener
+    // -----------------------------------------------------------------------------
+    void BasicScriptImpl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+    {
+        if ( &rBC != m_documentBasicManager )
+        {
+            OSL_ENSURE( false, "BasicScriptImpl::Notify: where does this come from?" );
+            // not interested in
+            return;
+        }
+        const SfxSimpleHint* pSimpleHint = PTR_CAST( SfxSimpleHint, &rHint );
+        if ( pSimpleHint && ( pSimpleHint->GetId() == SFX_HINT_DYING ) )
+        {
+            m_documentBasicManager = NULL;
+            EndListening( rBC );    // prevent multiple notifications
+        }
     }
 
     // -----------------------------------------------------------------------------
