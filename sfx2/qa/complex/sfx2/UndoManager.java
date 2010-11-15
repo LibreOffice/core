@@ -51,11 +51,9 @@ import com.sun.star.document.XUndoAction;
 import com.sun.star.lang.EventObject;
 import com.sun.star.lang.IndexOutOfBoundsException;
 import com.sun.star.lang.XEventListener;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import org.openoffice.test.tools.OfficeDocument;
 import com.sun.star.document.XUndoManagerSupplier;
-import complex.sfx2.undo.CalcDocumentTest;
 import com.sun.star.document.XUndoManager;
 import com.sun.star.document.XUndoManagerListener;
 import com.sun.star.drawing.XControlShape;
@@ -77,6 +75,8 @@ import com.sun.star.uno.XComponentContext;
 import com.sun.star.util.InvalidStateException;
 import com.sun.star.util.NotLockedException;
 import com.sun.star.view.XControlAccess;
+import complex.sfx2.undo.CalcDocumentTest;
+import complex.sfx2.undo.ChartDocumentTest;
 import complex.sfx2.undo.DocumentTest;
 import complex.sfx2.undo.DrawDocumentTest;
 import complex.sfx2.undo.ImpressDocumentTest;
@@ -106,6 +106,7 @@ public class UndoManager
     @Before
     public void beforeTest() throws com.sun.star.uno.Exception
     {
+        m_currentTestCase = null;
         m_currentDocument = null;
         m_undoListener = null;
 
@@ -118,35 +119,47 @@ public class UndoManager
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    @Test
+//    @Test
     public void checkWriterUndo() throws Exception
     {
-        impl_checkUndo( WriterDocumentTest.class, true );
+        m_currentTestCase = new WriterDocumentTest( getORB() );
+        impl_checkUndo( true );
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    @Test
+//    @Test
     public void checkCalcUndo() throws Exception
     {
-        impl_checkUndo( CalcDocumentTest.class, false );
+        m_currentTestCase = new CalcDocumentTest( getORB() );
+        impl_checkUndo( false );
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    @Test
+//    @Test
     public void checkDrawUndo() throws Exception
     {
-        impl_checkUndo( DrawDocumentTest.class, false );
+        m_currentTestCase = new DrawDocumentTest( getORB() );
+        impl_checkUndo( false );
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    @Test
+//    @Test
     public void checkImpressUndo() throws Exception
     {
-        impl_checkUndo( ImpressDocumentTest.class, false );
+        m_currentTestCase = new ImpressDocumentTest( getORB() );
+        impl_checkUndo( false );
     }
 
     // -----------------------------------------------------------------------------------------------------------------
     @Test
+    public void checkChartUndo() throws Exception
+    {
+        m_currentTestCase = new ChartDocumentTest( getORB() );
+        impl_checkUndo( false );
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+//    @Test
     public void checkBrokenScripts() throws com.sun.star.uno.Exception, InterruptedException
     {
         System.out.println( "testing: broken scripts" );
@@ -226,7 +239,7 @@ public class UndoManager
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    @Test
+//    @Test
     public void checkSerialization() throws com.sun.star.uno.Exception, InterruptedException
     {
         System.out.println( "testing: request serialization" );
@@ -282,7 +295,9 @@ public class UndoManager
     @After
     public void afterTest()
     {
-        if ( m_currentDocument != null )
+        if ( m_currentTestCase != null )
+            m_currentTestCase.closeDocument();
+        else if ( m_currentDocument != null )
             m_currentDocument.close();
         m_callbackFactory.dispose();
     }
@@ -598,29 +613,27 @@ public class UndoManager
     };
 
     // -----------------------------------------------------------------------------------------------------------------
-    private void impl_checkUndo( final Class i_testClass, final boolean i_fakeTestForNow ) throws Exception
+    private void impl_checkUndo( final boolean i_fakeTestForNow ) throws Exception
     {
-        final Constructor ctor = i_testClass.getConstructor( XMultiServiceFactory.class );
-        final DocumentTest test = (DocumentTest)ctor.newInstance( getORB() );
-        System.out.println( "testing: " + test.getDocumentDescription() );
-        m_currentDocument = test.getDocument();
-        test.initializeDocument();
-        test.verifyInitialDocumentState();
+        System.out.println( "testing: " + m_currentTestCase.getDocumentDescription() );
+        m_currentDocument = m_currentTestCase.getDocument();
+        m_currentTestCase.initializeDocument();
+        m_currentTestCase.verifyInitialDocumentState();
 
         if ( i_fakeTestForNow )
         {
             // Writer does not yet have an UndoManager in the current phase of the implementation. Once it has, we
             // this complete branch, which barely tests anything (except perhaps the DocumentTest implementation),
             // can vanish.
-            test.doSingleModification();
-            test.verifySingleModificationDocumentState();
-            test.getDocument().getCurrentView().dispatch( ".uno:Undo" );
-            test.verifyInitialDocumentState();
-            final int expectedUndoSteps = test.doMultipleModifications();
+            m_currentTestCase.doSingleModification();
+            m_currentTestCase.verifySingleModificationDocumentState();
+            m_currentTestCase.getDocument().getCurrentView().dispatch( ".uno:Undo" );
+            m_currentTestCase.verifyInitialDocumentState();
+            final int expectedUndoSteps = m_currentTestCase.doMultipleModifications();
             for ( int i=0; i<expectedUndoSteps; ++i )
-                test.getDocument().getCurrentView().dispatch( ".uno:Undo" );
-            test.verifyInitialDocumentState();
-            test.getDocument().close();
+                m_currentTestCase.getDocument().getCurrentView().dispatch( ".uno:Undo" );
+            m_currentTestCase.verifyInitialDocumentState();
+            m_currentTestCase.getDocument().close();
             return;
         }
 
@@ -632,12 +645,12 @@ public class UndoManager
         m_undoListener = new UndoListener();
         undoManager.addUndoManagerListener( m_undoListener );
 
-        impl_testSingleModification( test, undoManager );
-        impl_testMultipleModifications( test, undoManager );
-        impl_testCustomUndoActions( test, undoManager );
-        impl_testLocking( test, undoManager );
+        impl_testSingleModification( m_currentTestCase, undoManager );
+        impl_testMultipleModifications( m_currentTestCase, undoManager );
+        impl_testCustomUndoActions( m_currentTestCase, undoManager );
+        impl_testLocking( m_currentTestCase, undoManager );
         impl_testNestedContexts( undoManager );
-        impl_testErrorHandling( test, undoManager );
+        impl_testErrorHandling( m_currentTestCase, undoManager );
         impl_testContextHandling( undoManager );
         impl_testStackHandling( undoManager );
         impl_testClearance( undoManager );
@@ -1442,6 +1455,7 @@ public class UndoManager
     }
 
     private static final OfficeConnection   m_connection = new OfficeConnection();
+    private DocumentTest                    m_currentTestCase;
     private OfficeDocument                  m_currentDocument;
     private UndoListener                    m_undoListener;
     private CallbackComponentFactory        m_callbackFactory = null;

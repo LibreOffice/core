@@ -20,5 +20,10 @@ abstract class DocumentTestBase implements DocumentTest
         return m_document;
     }
 
+    public void closeDocument()
+    {
+        m_document.close();
+    }
+
     protected final OfficeDocument  m_document;
 }

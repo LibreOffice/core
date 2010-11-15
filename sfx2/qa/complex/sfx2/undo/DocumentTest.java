@@ -21,6 +21,11 @@ public interface DocumentTest
     public void initializeDocument() throws com.sun.star.uno.Exception;
 
     /**
+     * closes the document which the test is based on
+     */
+    public void closeDocument();
+
+    /**
      * does a simple modification to the document, which results in one Undo action being auto-generated
      * by the OOo implementation
      */
