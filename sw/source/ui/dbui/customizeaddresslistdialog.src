@@ -29,9 +29,6 @@
 #include <dbui.hrc>
 #include <helpid.h>
 
-/*-- 13.04.2004 13:58:13---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 ModalDialog DLG_MM_CUSTOMIZE_ADDRESS_LIST
 {
     OutputSize = TRUE ;
@@ -108,9 +105,7 @@ ModalDialog DLG_MM_CUSTOMIZE_ADDRESS_LIST
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
 };
-/*-- 13.04.2004 13:58:13---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 ModalDialog DLG_MM_ADD_RENAME_ENTRY
 {
     OutputSize = TRUE ;

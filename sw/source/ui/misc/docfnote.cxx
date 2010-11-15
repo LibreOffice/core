@@ -315,9 +315,6 @@ int SwEndNoteOptionPage::GetNumbering() const
     return (int) bPosDoc? nPos + 1: nPos;
 }
 
-/*-----------------09.02.98 11:17-------------------
-
---------------------------------------------------*/
 void SwEndNoteOptionPage::SetShell( SwWrtShell &rShell )
 {
     pSh = &rShell;

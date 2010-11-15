@@ -601,9 +601,6 @@ String SwDoc::GetUndoIdsStr( String* pStr, SwUndoIds *pUndoIds) const
     return aTmpStr;
 }
 
-/*-- 24.11.2004 16:11:21---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 sal_Bool SwDoc::RestoreInvisibleContent()
 {
     sal_Bool bRet = sal_False;

@@ -819,9 +819,6 @@ USHORT SwEditShell::GetNodeNumStart() const
     // <--
 }
 
-/*-- 26.08.2005 14:47:17---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 // --> OD 2008-03-18 #refactorlists#
 const SwNumRule * SwEditShell::SearchNumRule( const bool bForward,
                                               const bool bNum,

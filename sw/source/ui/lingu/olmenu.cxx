@@ -722,9 +722,7 @@ sal_uInt16  SwSpellPopup::Execute( const Rectangle& rWordPos, Window* pWin )
     Execute( nRet );
     return nRet;
 }
-/*-- 19.01.2006 08:15:48---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwSpellPopup::Execute( USHORT nId )
 {
     if (nId == USHRT_MAX)

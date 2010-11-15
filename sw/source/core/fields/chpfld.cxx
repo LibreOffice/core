@@ -225,9 +225,6 @@ void SwChapterField::ChangeExpansion(const SwTxtNode &rTxtNd, sal_Bool bSrchNum)
     }
 }
 
-/*-----------------05.03.98 16:19-------------------
-
---------------------------------------------------*/
 bool SwChapterField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch( nWhichId )
@@ -261,9 +258,7 @@ bool SwChapterField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     }
     return true;
 }
-/*-----------------05.03.98 16:19-------------------
 
---------------------------------------------------*/
 bool SwChapterField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     BOOL bRet = TRUE;

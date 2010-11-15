@@ -1256,9 +1256,6 @@ bool SwEditShell::GetGrammarCorrection(
     return bRes;
 }
 
-/*-- 18.09.2003 15:08:18---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 bool SwEditShell::SpellSentence(::svx::SpellPortions& rPortions, bool bIsGrammarCheck)
 {
     ASSERT(  pSpellIter, "SpellIter missing" );
@@ -1282,9 +1279,7 @@ void SwEditShell::PutSpellingToSentenceStart()
         return;
     pSpellIter->ToSentenceStart();
 }
-/*-- 02.02.2005 14:34:41---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_uInt32 lcl_CountRedlines(
                             const ::svx::SpellPortions& rLastPortions)
 {
@@ -1297,9 +1292,6 @@ sal_uInt32 lcl_CountRedlines(
     }
     return nRet;
 }
-/*-- 18.09.2003 15:08:20---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 
 void SwEditShell::MoveContinuationPosToEndOfCheckedSentence()
 {
@@ -1521,9 +1513,7 @@ void lcl_CutRedlines( SpellContentPositions& aDeletedRedlines, SwEditShell* pSh 
         }
     }
 }
-/*-- 02.02.2005 11:43:00---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SpellContentPosition  lcl_FindNextDeletedRedline(
         const SpellContentPositions& rDeletedRedlines,
         xub_StrLen nSearchFrom )
@@ -1543,9 +1533,7 @@ SpellContentPosition  lcl_FindNextDeletedRedline(
     }
     return aRet;
 }
-/*-- 18.09.2003 15:08:20---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 bool SwSpellIter::SpellSentence(::svx::SpellPortions& rPortions, bool bIsGrammarCheck)
 {
     bool bRet = false;
@@ -1748,16 +1736,11 @@ bool SwSpellIter::SpellSentence(::svx::SpellPortions& rPortions, bool bIsGrammar
     return bRet;
 }
 
-/*-- 08.09.2008 09:37:15---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 void SwSpellIter::ToSentenceStart()
 {
     bBackToStartOfSentence = true;
 }
-/*-- 08.10.2003 08:49:56---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 LanguageType lcl_GetLanguage(SwEditShell& rSh)
 {
     USHORT nScriptType = rSh.GetScriptType();
@@ -1822,9 +1805,7 @@ void SwSpellIter::CreatePortion(uno::Reference< XSpellAlternatives > xAlt,
         aLastPositions.push_back(aPosition);
     }
 }
-/*-- 19.09.2003 13:05:43---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void    SwSpellIter::AddPortion(uno::Reference< XSpellAlternatives > xAlt,
                                 linguistic2::ProofreadingResult* pGrammarResult,
                                 const SpellContentPositions& rDeletedRedlines)
@@ -1943,9 +1924,7 @@ void    SwSpellIter::AddPortion(uno::Reference< XSpellAlternatives > xAlt,
         }
     }
 }
-/*-- 07.08.2008 15:01:25---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwEditShell::IgnoreGrammarErrorAt( SwPaM& rErrorPosition )
 {
     SwTxtNode *pNode;

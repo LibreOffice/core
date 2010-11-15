@@ -1149,9 +1149,7 @@ sal_Bool SwFEShell::SetFlyFrmAttr( SfxItemSet& rSet )
     }
     return bRet;
 }
-/*-- 30.03.2004 15:05:07---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_Bool SwFEShell::SetDrawingAttr( SfxItemSet& rSet )
 {
     sal_Bool bRet = sal_False;

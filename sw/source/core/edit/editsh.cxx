@@ -221,9 +221,6 @@ long SwEditShell::SplitNode( BOOL bAutoFormat, BOOL bCheckTableStart )
     return(1L);
 }
 
-/*-- 11.05.2004 09:41:20---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 sal_Bool SwEditShell::AppendTxtNode()
 {
     sal_Bool bRet = sal_False;

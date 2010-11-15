@@ -1120,9 +1120,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
     // das wars doch wohl ??
     return pTblNd;
 }
-/*-- 18.05.2006 10:30:29---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >& rTableNodes )
 {
     /* #106283# Save first node in the selection if it is a content node. */
@@ -1333,9 +1331,6 @@ SwNodeRange * SwNodes::ExpandRangeForTableBox(const SwNodeRange & rRange)
     return pResult;
 }
 
-/*-- 18.05.2006 08:23:28---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SwTableNode* SwNodes::TextToTable( const SwNodes::TableRanges_t & rTableNodes,
                                     SwTableFmt* pTblFmt,
                                     SwTableLineFmt* pLineFmt,

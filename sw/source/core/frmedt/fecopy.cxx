@@ -1131,9 +1131,6 @@ BOOL SwFEShell::Paste( SwDoc* pClpDoc, BOOL bIncludingPageFrames )
     return bRet;
 }
 
-/*-- 14.06.2004 13:31:17---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 BOOL SwFEShell::PastePages( SwFEShell& rToFill, USHORT nStartPage, USHORT nEndPage)
 {
     Push();
