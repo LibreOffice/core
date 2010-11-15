@@ -76,14 +76,14 @@ ScReplaceWarnBox::ScReplaceWarnBox( Window* pParent ) :
 
 bool ScReplaceWarnBox::IsDialogEnabled()
 {
-    return SC_MOD()->GetInputOptions().GetReplaceCellsWarn() == TRUE;
+    return SC_MOD()->GetInputOptions().GetReplaceCellsWarn() == true;
 }
 
 void ScReplaceWarnBox::DisableDialog()
 {
     ScModule* pScMod = SC_MOD();
     ScInputOptions aInputOpt( pScMod->GetInputOptions() );
-    aInputOpt.SetReplaceCellsWarn( FALSE );
+    aInputOpt.SetReplaceCellsWarn( false );
     pScMod->SetInputOptions( aInputOpt );
 }
 
