@@ -62,8 +62,8 @@ ScTableProtectionDlg::ScTableProtectionDlg(Window* pParent) :
     maBtnCancel (this, ScResId(BTN_CANCEL)),
     maBtnHelp   (this, ScResId(BTN_HELP)),
 
-    maSelectLockedCells(ScResId(ST_SELECT_LOCKED_CELLS)),
-    maSelectUnlockedCells(ScResId(ST_SELECT_UNLOCKED_CELLS))
+    maSelectLockedCells(ScResId(ST_SELECT_PROTECTED_CELLS)),
+    maSelectUnlockedCells(ScResId(ST_SELECT_UNPROTECTED_CELLS))
 {
     Init();
     FreeResource();
