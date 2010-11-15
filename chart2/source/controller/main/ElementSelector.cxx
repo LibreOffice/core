@@ -156,7 +156,7 @@ void SelectorListBox::UpdateChartElementsListAndSelection()
                 ListBoxEntryData aEntry;
                 SdrObject* pSelectedObj = DrawViewWrapper::getSdrObject( aSelectedOID.getAdditionalShape() );
                 ::rtl::OUString aName( pSelectedObj ? pSelectedObj->GetName() : String() );
-                aEntry.UIName = ( aName.getLength() > 0 ? aName : String( SchResId( STR_OBJECT_SHAPE ) ) );
+                aEntry.UIName = ( aName.getLength() > 0 ? aName : ::rtl::OUString( String( SchResId( STR_OBJECT_SHAPE ) ) ) );
                 aEntry.OID = aSelectedOID;
                 m_aEntries.push_back( aEntry );
             }
