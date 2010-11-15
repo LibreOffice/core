@@ -37,6 +37,7 @@ $(eval $(call gb_Executable_set_include,g2g,\
 ))
 
 $(eval $(call gb_Executable_add_linked_libs,g2g,\
+    jvmfwk \
     stl \
     vcl \
     tl \
