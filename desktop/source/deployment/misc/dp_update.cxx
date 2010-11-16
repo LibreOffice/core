@@ -187,11 +187,9 @@ void getDefaultUpdateInfos(
 bool containsBundledOnly(Sequence<Reference<deployment::XPackage> > const & sameIdExtensions)
 {
     OSL_ASSERT(sameIdExtensions.getLength() == 3);
-    if (!sameIdExtensions[0].is() && !sameIdExtensions[1].is() && sameIdExtensions[2].is())
-        return true;
-    else
-        return false;
+    return !sameIdExtensions[0].is() && !sameIdExtensions[1].is() && sameIdExtensions[2].is();
 }
+
 /** Returns true if the list of extensions are bundled extensions and there are no
     other extensions with the same identifier in the shared or user repository.
     If extensionList is NULL, then it is checked if there are only bundled extensions.
