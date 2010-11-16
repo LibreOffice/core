@@ -180,8 +180,8 @@ void SmCursor::AnnotateSelection(){
     SmSetSelectionVisitor(anchor->CaretPos, position->CaretPos, pTree);
 }
 
-void SmCursor::Draw(OutputDevice& pDev, Point Offset){
-    SmCaretDrawingVisitor(pDev, GetPosition(), Offset);
+void SmCursor::Draw(OutputDevice& pDev, Point Offset, bool isCaretVisible){
+    SmCaretDrawingVisitor(pDev, GetPosition(), Offset, isCaretVisible);
 }
 
 void SmCursor::Delete(){

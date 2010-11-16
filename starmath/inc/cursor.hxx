@@ -226,7 +226,7 @@ public:
     static SmNode* FindTopMostNodeInLine(SmNode* pSNode, bool MoveUpIfSelected = false);
 
     /** Draw the caret */
-    void Draw(OutputDevice& pDev, Point Offset);
+    void Draw(OutputDevice& pDev, Point Offset, bool isCaretVisible);
 
 private:
     friend class SmDocShell;

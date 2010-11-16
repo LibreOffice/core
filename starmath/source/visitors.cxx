@@ -339,11 +339,13 @@ void SmDefaultingVisitor::Visit( SmVerticalBraceNode* pNode )
 
 SmCaretDrawingVisitor::SmCaretDrawingVisitor( OutputDevice& rDevice,
                                              SmCaretPos position,
-                                             Point offset )
+                                             Point offset,
+                                             bool caretVisible )
  : rDev( rDevice )
 {
     pos = position;
     Offset = offset;
+    isCaretVisible = caretVisible;
     j_assert( position.IsValid( ), "Cannot draw invalid position!" );
     if( !position.IsValid( ) )
         return;
@@ -369,14 +371,23 @@ void SmCaretDrawingVisitor::Visit( SmTextNode* pNode )
     long left = pNode->GetLeft( ) + rDev.GetTextWidth( pNode->GetText( ), 0, i ) + Offset.X( );
     long top = pLine->GetTop( ) + Offset.Y( );
     long height = pLine->GetHeight( );
+    long left_line = pLine->GetLeft( ) + Offset.X( );
+    long right_line = pLine->GetRight( ) + Offset.X( );
 
     //Set color
     rDev.SetLineColor( Color( COL_BLACK ) );
 
-    //Draw vertical line
-    Point p1( left, top );
-    Point p2( left, top + height );
-    rDev.DrawLine( p1, p2 );
+    if ( isCaretVisible ) {
+        //Draw vertical line
+        Point p1( left, top );
+        Point p2( left, top + height );
+        rDev.DrawLine( p1, p2 );
+    }
+
+    //Underline the line
+    Point pLeft( left_line, top + height );
+    Point pRight( right_line, top + height );
+    rDev.DrawLine( pLeft, pRight );
 }
 
 void SmCaretDrawingVisitor::DefaultVisit( SmNode* pNode )
@@ -390,14 +401,23 @@ void SmCaretDrawingVisitor::DefaultVisit( SmNode* pNode )
     long left = pNode->GetLeft( ) + Offset.X( ) + ( pos.Index == 1 ? pNode->GetWidth( ) : 0 );
     long top = pLine->GetTop( ) + Offset.Y( );
     long height = pLine->GetHeight( );
+    long left_line = pLine->GetLeft( ) + Offset.X( );
+    long right_line = pLine->GetRight( ) + Offset.X( );
 
     //Set color
     rDev.SetLineColor( Color( COL_BLACK ) );
 
-    //Draw vertical line
-    Point p1( left, top );
-    Point p2( left, top + height );
-    rDev.DrawLine( p1, p2 );
+    if ( isCaretVisible ) {
+        //Draw vertical line
+        Point p1( left, top );
+        Point p2( left, top + height );
+        rDev.DrawLine( p1, p2 );
+    }
+
+    //Underline the line
+    Point pLeft( left_line, top + height );
+    Point pRight( right_line, top + height );
+    rDev.DrawLine( pLeft, pRight );
 }
 
 /////////////////////////////// SmCaretPos2LineVisitor ////////////////////////////////

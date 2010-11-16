@@ -116,6 +116,7 @@ SmGraphicWindow::SmGraphicWindow(SmViewShell* pShell):
     SetHelpId(HID_SMA_WIN_DOCUMENT);
     SetUniqueId(HID_SMA_WIN_DOCUMENT);
 
+    ShowLine(false);
     CaretBlinkInit();
 }
 
@@ -224,6 +225,7 @@ void SmGraphicWindow::GetFocus()
     //Let view shell know what insertions should be done in visual editor
     pViewShell->SetInsertIntoEditWindow(false);
     SetIsCursorVisible(true);
+    ShowLine(true);
     CaretBlinkStart();
     RepaintViewShellDoc();
 }
@@ -242,6 +244,7 @@ void SmGraphicWindow::LoseFocus()
     if (!IsInlineEditEnabled())
         return;
     SetIsCursorVisible(false);
+    ShowLine(false);
     CaretBlinkStop();
     RepaintViewShellDoc();
 }
@@ -299,6 +302,13 @@ void SmGraphicWindow::ShowCursor(bool bShow)
     SetIsCursorVisible(bShow);
 }
 
+void SmGraphicWindow::ShowLine(bool bShow)
+{
+    if (!IsInlineEditEnabled())
+        return;
+
+    bIsLineVisible = bShow;
+}
 
 void SmGraphicWindow::SetCursor(const SmNode *pNode)
 {
@@ -371,8 +381,8 @@ void SmGraphicWindow::Paint(const Rectangle&)
     SetFormulaDrawPos(aPoint);
     if(IsInlineEditEnabled()) {
         //Draw cursor if any...
-        if(pViewShell->GetDoc()->HasCursor() && IsCursorVisible())
-            pViewShell->GetDoc()->GetCursor().Draw(*this, aPoint);
+        if(pViewShell->GetDoc()->HasCursor() && IsLineVisible())
+            pViewShell->GetDoc()->GetCursor().Draw(*this, aPoint, IsCursorVisible());
     } else {
     SetIsCursorVisible(false);  // (old) cursor must be drawn again
 

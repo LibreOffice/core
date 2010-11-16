@@ -152,13 +152,14 @@ class SmCaretDrawingVisitor : public SmDefaultingVisitor
 {
 public:
     /** Given position and device this constructor will draw the caret */
-    SmCaretDrawingVisitor( OutputDevice& rDevice, SmCaretPos position, Point offset );
+    SmCaretDrawingVisitor( OutputDevice& rDevice, SmCaretPos position, Point offset, bool caretVisible );
     void Visit( SmTextNode* pNode );
 private:
     OutputDevice &rDev;
     SmCaretPos pos;
     /** Offset to draw from */
     Point Offset;
+    bool isCaretVisible;
 protected:
     /** Default method for drawing pNodes */
     void DefaultVisit( SmNode* pNode );

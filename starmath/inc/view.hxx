@@ -57,11 +57,13 @@ class SmGraphicWindow : public ScrollableWindow
     // old style editing pieces
     Rectangle aCursorRect;
     bool      bIsCursorVisible;
-
-    AutoTimer     aCaretBlinkTimer;
+    bool      bIsLineVisible;
+    AutoTimer aCaretBlinkTimer;
 public:
     bool IsCursorVisible() const { return bIsCursorVisible; }
     void ShowCursor(bool bShow);
+    bool IsLineVisible() const { return bIsLineVisible; }
+    void ShowLine(bool bShow);
     const SmNode * SetCursorPos(USHORT nRow, USHORT nCol);
 protected:
     void        SetIsCursorVisible(bool bVis) { bIsCursorVisible = bVis; }
