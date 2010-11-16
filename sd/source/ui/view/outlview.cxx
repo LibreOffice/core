@@ -182,7 +182,7 @@ OutlineView::OutlineView( DrawDocShell* pDocSh, ::Window* pWindow, OutlineViewSh
     Reference<XFrame> xFrame (mpOutlineViewShell->GetViewShellBase().GetFrame()->GetTopFrame().GetFrameInterface(), UNO_QUERY);
 
     const OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( ".uno:ShowSlide" ));
-    maSlideImage = GetImage( xFrame, aSlotURL, true, false /* todo, hc mode */ );
+    maSlideImage = GetImage( xFrame, aSlotURL, true );
 
     // Tell undo manager of the document about the undo manager of the
     // outliner, so that the former can synchronize with the later.

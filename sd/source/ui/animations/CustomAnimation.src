@@ -397,19 +397,9 @@ Image IMG_CUSTOMANIMATION_ON_CLICK
     ImageBitmap = Bitmap { File = "click_16.png" ; };
 };
 
-Image IMG_CUSTOMANIMATION_ON_CLICK_H
-{
-    ImageBitmap = Bitmap { File = "click_16_h.png" ; };
-};
-
 Image IMG_CUSTOMANIMATION_AFTER_PREVIOUS
 {
     ImageBitmap = Bitmap { File = "time_16.png" ; };
-};
-
-Image IMG_CUSTOMANIMATION_AFTER_PREVIOUS_H
-{
-    ImageBitmap = Bitmap { File = "time_16_h.png" ; };
 };
 
 Image IMG_CUSTOMANIMATION_ENTRANCE_EFFECT
@@ -417,19 +407,9 @@ Image IMG_CUSTOMANIMATION_ENTRANCE_EFFECT
     ImageBitmap = Bitmap { File = "effect_16.png" ; };
 };
 
-Image IMG_CUSTOMANIMATION_ENTRANCE_EFFECT_H
-{
-    ImageBitmap = Bitmap { File = "effect_16_h.png" ; };
-};
-
 Image IMG_CUSTOMANIMATION_EMPHASIS_EFFECT
 {
     ImageBitmap = Bitmap { File = "effectshape_16.png" ; };
-};
-
-Image IMG_CUSTOMANIMATION_EMPHASIS_EFFECT_H
-{
-    ImageBitmap = Bitmap { File = "effectshape_16_h.png" ; };
 };
 
 Image IMG_CUSTOMANIMATION_EXIT_EFFECT
@@ -437,19 +417,9 @@ Image IMG_CUSTOMANIMATION_EXIT_EFFECT
     ImageBitmap = Bitmap { File = "effectfade_16.png" ; };
 };
 
-Image IMG_CUSTOMANIMATION_EXIT_EFFECT_H
-{
-    ImageBitmap = Bitmap { File = "effectfade_16_h.png" ; };
-};
-
 Image IMG_CUSTOMANIMATION_MOTION_PATH
 {
     ImageBitmap = Bitmap { File = "effectpath_16.png" ; };
-};
-
-Image IMG_CUSTOMANIMATION_MOTION_PATH_H
-{
-    ImageBitmap = Bitmap { File = "effectpath_16_h.png" ; };
 };
 
 Image IMG_CUSTOMANIMATION_OLE
@@ -457,19 +427,9 @@ Image IMG_CUSTOMANIMATION_OLE
     ImageBitmap = Bitmap { File = "effectole_16.png"; } ;
 };
 
-Image IMG_CUSTOMANIMATION_OLE_H
-{
-    ImageBitmap = Bitmap { File = "effectole_16_h.png"; } ;
-};
-
 Image IMG_CUSTOMANIMATION_MEDIA_PLAY
 {
     ImageBitmap = Bitmap { File = "playblue_16.png"; } ;
-};
-
-Image IMG_CUSTOMANIMATION_MEDIA_PLAY_H
-{
-    ImageBitmap = Bitmap { File = "playblue_16_h.png"; } ;
 };
 
 Image IMG_CUSTOMANIMATION_MEDIA_PAUSE
@@ -477,19 +437,7 @@ Image IMG_CUSTOMANIMATION_MEDIA_PAUSE
     ImageBitmap = Bitmap { File = "breakplayingblue_16.png"; } ;
 };
 
-Image IMG_CUSTOMANIMATION_MEDIA_PAUSE_H
-{
-    ImageBitmap = Bitmap { File = "breakplayingblue_16_h.png"; } ;
-};
-
 Image IMG_CUSTOMANIMATION_MEDIA_STOP
 {
     ImageBitmap = Bitmap { File = "stopplayingblue_16.png"; } ;
 };
-
-Image IMG_CUSTOMANIMATION_MEDIA_STOP_H
-{
-    ImageBitmap = Bitmap { File = "stopplayingblue_16_h.png"; } ;
-};
-
-

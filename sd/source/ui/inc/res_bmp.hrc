@@ -138,61 +138,36 @@
 #define BMP_EFFECT_UNCOVER_TO_B             RID_APP_START+171
 #define BMP_EFFECT_UNCOVER_TO_LL            RID_APP_START+172
 
-#define BMP_PAGE_H                          RID_SD_START+213
-
 #define BMP_FOIL_NONE_H                     RID_SD_START+225
 #define BMP_WAIT_ICON_H                     RID_SD_START+229
 
 #define BMP_FADE_EFFECT_INDICATOR           RID_SD_START+331
-#define BMP_FADE_EFFECT_INDICATOR_H         RID_SD_START+332
 
 #define BMP_COMMENTS_INDICATOR              RID_SD_START+338
-#define BMP_COMMENTS_INDICATOR_H            RID_SD_START+339
 
 #define BMP_LAYOUT_EMPTY                    RID_SD_START+340
-#define BMP_LAYOUT_EMPTY_H                  RID_SD_START+341
 #define BMP_LAYOUT_HEAD01                   RID_SD_START+342
-#define BMP_LAYOUT_HEAD01_H                 RID_SD_START+343
 #define BMP_LAYOUT_HEAD02                   RID_SD_START+344
-#define BMP_LAYOUT_HEAD02_H                 RID_SD_START+345
 #define BMP_LAYOUT_HEAD02A                  RID_SD_START+346
-#define BMP_LAYOUT_HEAD02A_H                RID_SD_START+347
 #define BMP_LAYOUT_HEAD02B                  RID_SD_START+348
-#define BMP_LAYOUT_HEAD02B_H                RID_SD_START+349
 #define BMP_LAYOUT_HEAD03                   RID_SD_START+350
-#define BMP_LAYOUT_HEAD03_H                 RID_SD_START+351
 #define BMP_LAYOUT_HEAD03A                  RID_SD_START+352
-#define BMP_LAYOUT_HEAD03A_H                RID_SD_START+353
 #define BMP_LAYOUT_HEAD03B                  RID_SD_START+354
-#define BMP_LAYOUT_HEAD03B_H                RID_SD_START+355
 #define BMP_LAYOUT_HEAD03C                  RID_SD_START+356
-#define BMP_LAYOUT_HEAD03C_H                RID_SD_START+357
 #define BMP_LAYOUT_HEAD04                   RID_SD_START+358
-#define BMP_LAYOUT_HEAD04_H                 RID_SD_START+359
 #define BMP_LAYOUT_HEAD06                   RID_SD_START+360
-#define BMP_LAYOUT_HEAD06_H                 RID_SD_START+361
 #define BMP_LAYOUT_TEXTONLY                 RID_SD_START+362
-#define BMP_LAYOUT_TEXTONLY_H               RID_SD_START+363
 #define BMP_LAYOUT_VERTICAL01               RID_SD_START+364
-#define BMP_LAYOUT_VERTICAL01_H             RID_SD_START+365
 #define BMP_LAYOUT_VERTICAL02               RID_SD_START+366
-#define BMP_LAYOUT_VERTICAL02_H             RID_SD_START+367
 
 #define BMP_FOILH_01                        RID_SD_START+388
-#define BMP_FOILH_01_H                      RID_SD_START+389
 #define BMP_FOILH_02                        RID_SD_START+390
-#define BMP_FOILH_02_H                      RID_SD_START+391
 #define BMP_FOILH_03                        RID_SD_START+392
-#define BMP_FOILH_03_H                      RID_SD_START+393
 #define BMP_FOILH_04                        RID_SD_START+394
-#define BMP_FOILH_04_H                      RID_SD_START+395
 #define BMP_FOILH_06                        RID_SD_START+396
-#define BMP_FOILH_06_H                      RID_SD_START+397
 #define BMP_FOILH_09                        RID_SD_START+398
-#define BMP_FOILH_09_H                      RID_SD_START+399
 
 #define BMP_FOILN_01                        RID_SD_START+400
-#define BMP_FOILN_01_H                      RID_SD_START+401
 
 #define BMP_PLACEHOLDER_SMALL_START         (RID_SD_START+402)      // these ids must stay in order!
 #define BMP_PLACEHOLDER_TABLE_SMALL         (RID_SD_START+402)

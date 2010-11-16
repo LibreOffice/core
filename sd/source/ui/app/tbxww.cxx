@@ -306,8 +306,7 @@ void SdTbxControl::StateChanged( USHORT nSId,
                 aSlotURL += rtl::OUString::valueOf( sal_Int32( nImage ));
                 Image aImage = GetImage( m_xFrame,
                                          aSlotURL,
-                                         hasBigImages(),
-                                         GetToolBox().GetSettings().GetStyleSettings().GetHighContrastMode() );
+                                         hasBigImages() );
 
                 // !-Operator prueft, ob Image nicht vorhanden ist
                 if( !!aImage )

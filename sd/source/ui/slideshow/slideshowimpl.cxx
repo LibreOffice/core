@@ -2224,13 +2224,13 @@ IMPL_LINK( SlideshowImpl, ContextMenuHdl, void*, EMPTYARG )
         Reference< ::com::sun::star::frame::XFrame > xFrame( pViewFrame->GetFrame().GetFrameInterface() );
         if( xFrame.is() )
         {
-            pMenu->SetItemImage( CM_NEXT_SLIDE, GetImage( xFrame, OUString( RTL_CONSTASCII_USTRINGPARAM( "slot:10617") ), FALSE, FALSE ) );
-            pMenu->SetItemImage( CM_PREV_SLIDE, GetImage( xFrame, OUString( RTL_CONSTASCII_USTRINGPARAM( "slot:10618") ), FALSE, FALSE ) );
+            pMenu->SetItemImage( CM_NEXT_SLIDE, GetImage( xFrame, OUString( RTL_CONSTASCII_USTRINGPARAM( "slot:10617") ), FALSE ) );
+            pMenu->SetItemImage( CM_PREV_SLIDE, GetImage( xFrame, OUString( RTL_CONSTASCII_USTRINGPARAM( "slot:10618") ), FALSE ) );
 
             if( pPageMenu )
             {
-                pPageMenu->SetItemImage( CM_FIRST_SLIDE, GetImage( xFrame, OUString( RTL_CONSTASCII_USTRINGPARAM( "slot:10616") ), FALSE, FALSE ) );
-                pPageMenu->SetItemImage( CM_LAST_SLIDE, GetImage( xFrame, OUString( RTL_CONSTASCII_USTRINGPARAM( "slot:10619") ), FALSE, FALSE ) );
+                pPageMenu->SetItemImage( CM_FIRST_SLIDE, GetImage( xFrame, OUString( RTL_CONSTASCII_USTRINGPARAM( "slot:10616") ), FALSE ) );
+                pPageMenu->SetItemImage( CM_LAST_SLIDE, GetImage( xFrame, OUString( RTL_CONSTASCII_USTRINGPARAM( "slot:10619") ), FALSE ) );
             }
         }
     }

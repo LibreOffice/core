@@ -1053,7 +1053,6 @@ void AnnotationManagerImpl::ExecuteAnnotationContextMenu( Reference< XAnnotation
     Reference< ::com::sun::star::frame::XFrame > xFrame( mrBase.GetMainViewShell()->GetViewFrame()->GetFrame().GetFrameInterface() );
     if( xFrame.is() )
     {
-        const bool bHighContrast = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
         for( USHORT nPos = 0; nPos < pMenu->GetItemCount(); nPos++ )
         {
             nId = pMenu->GetItemId( nPos );
@@ -1062,7 +1061,7 @@ void AnnotationManagerImpl::ExecuteAnnotationContextMenu( Reference< XAnnotation
                 OUString sSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
                 sSlotURL += OUString::valueOf( sal_Int32( nId ));
 
-                Image aImage( GetImage( xFrame, sSlotURL, false, bHighContrast ) );
+                Image aImage( GetImage( xFrame, sSlotURL, false ) );
                 if( !!aImage )
                     pMenu->SetItemImage( nId, aImage );
             }

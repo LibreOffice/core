@@ -96,7 +96,7 @@ public:
 
     virtual void notify_change();
 
-    const Image& getImage( USHORT nId, bool bHighContrast );
+    const Image& getImage( USHORT nId );
 
     bool isExpanded( const CustomAnimationEffectPtr& pEffect ) const;
 
@@ -115,7 +115,7 @@ private:
 
     Image maImgEmpty;
 
-    Image maImages[ IMG_CUSTOMANIMATION_MEDIA_STOP_H - IMG_CUSTOMANIMATION_ON_CLICK + 1];
+    Image maImages[ IMG_CUSTOMANIMATION_MEDIA_STOP - IMG_CUSTOMANIMATION_ON_CLICK + 1];
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > mxLastTargetShape;
     sal_Int32 mnLastGroupId;

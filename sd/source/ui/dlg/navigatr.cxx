@@ -87,7 +87,6 @@ SdNavigatorWin::SdNavigatorWin(
 ,   meDragType      ( NAVIGATOR_DRAGTYPE_EMBEDDED )
 ,   mpBindings      ( pInBindings )
 ,   maImageList     ( SdResId( IL_NAVIGATR ) )
-,   maImageListH    ( SdResId( ILH_NAVIGATR ) )
 {
     maTlbObjects.SetViewFrame( mpBindings->GetDispatcher()->GetFrame() );
 
@@ -860,9 +859,8 @@ void SdNavigatorWin::SetDragImage()
 
 void SdNavigatorWin::ApplyImageList()
 {
-    const bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
 
-    maToolbox.SetImageList( bHighContrast ? maImageListH : maImageList );
+    maToolbox.SetImageList( maImageList );
     maToolbox.SetItemImage( TBI_SHAPE_FILTER, BitmapEx( SdResId( BMP_GRAPHIC ) ) );
 
     SetDragImage();
