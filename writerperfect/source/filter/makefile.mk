@@ -10,6 +10,10 @@ ENABLE_EXCEPTIONS=true
 INCPRE+=$(LIBWPD_CFLAGS)
 .ENDIF
 
+.IF "$(SYSTEM_LIBWPG)" == "YES"
+INCPRE+=$(LIBWPG_CFLAGS)
+.ENDIF
+
 .IF "$(SYSTEM_LIBWPS)" == "YES"
 INCPRE+=$(LIBWPS_CFLAGS)
 .ENDIF
@@ -18,14 +22,17 @@ INCPRE+=$(LIBWPS_CFLAGS)
 INCPRE+= -I..
 
 SLOFILES= \
+    $(SLO)$/DocumentCollector.obj \
     $(SLO)$/DocumentElement.obj		\
+    $(SLO)$/DocumentHandler.obj \
     $(SLO)$/FontStyle.obj			\
+    $(SLO)$/GraphicsStyle.obj \
+    $(SLO)$/InternalHandler.obj \
     $(SLO)$/ListStyle.obj			\
-    $(SLO)$/DocumentHandler.obj		\
+    $(SLO)$/OdgExporter.obj \
     $(SLO)$/PageSpan.obj			\
     $(SLO)$/SectionStyle.obj		\
     $(SLO)$/TableStyle.obj			\
-    $(SLO)$/TextRunStyle.obj 		\
-    $(SLO)$/DocumentCollector.obj
+    $(SLO)$/TextRunStyle.obj
 
 .INCLUDE :  target.mk

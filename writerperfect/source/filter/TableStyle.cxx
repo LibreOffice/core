@@ -28,7 +28,6 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 #include <math.h>
-#include <string.h>
 #include "FilterInternal.hxx"
 #include "TableStyle.hxx"
 #include "DocumentElement.hxx"
@@ -37,13 +36,15 @@
 #include <minmax.h>
 #endif
 
+#include <string.h>
+
 TableCellStyle::TableCellStyle(const WPXPropertyList &xPropList, const char *psName) :
     Style(psName),
         mPropList(xPropList)
 {
 }
 
-void TableCellStyle::write(DocumentHandler *pHandler) const
+void TableCellStyle::write(DocumentHandlerInterface *pHandler) const
 {
     TagOpenElement styleOpen("style:style");
     styleOpen.addAttribute("style:name", getName());
@@ -59,9 +60,9 @@ void TableCellStyle::write(DocumentHandler *pHandler) const
                 if (strlen(i.key()) > 2 && strncmp(i.key(), "fo", 2) == 0)
                         stylePropList.insert(i.key(), i()->clone());
         }
-        stylePropList.insert("fo:padding", "0.0382inch");
-        pHandler->startElement("style:properties", stylePropList);
-    pHandler->endElement("style:properties");
+        stylePropList.insert("fo:padding", "0.0382in");
+        pHandler->startElement("style:table-cell-properties", stylePropList);
+    pHandler->endElement("style:table-cell-properties");
 
     pHandler->endElement("style:style");
 }
@@ -72,20 +73,21 @@ TableRowStyle::TableRowStyle(const WPXPropertyList &propList, const char *psName
 {
 }
 
-void TableRowStyle::write(DocumentHandler *pHandler) const
+void TableRowStyle::write(DocumentHandlerInterface *pHandler) const
 {
     TagOpenElement styleOpen("style:style");
     styleOpen.addAttribute("style:name", getName());
     styleOpen.addAttribute("style:family", "table-row");
     styleOpen.write(pHandler);
 
-        TagOpenElement stylePropertiesOpen("style:properties");
+        TagOpenElement stylePropertiesOpen("style:table-row-properties");
         if (mPropList["style:min-row-height"])
                 stylePropertiesOpen.addAttribute("style:min-row-height", mPropList["style:min-row-height"]->getStr());
         else if (mPropList["style:row-height"])
                 stylePropertiesOpen.addAttribute("style:row-height", mPropList["style:row-height"]->getStr());
+    stylePropertiesOpen.addAttribute("fo:keep-together", "auto");
         stylePropertiesOpen.write(pHandler);
-        pHandler->endElement("style:properties");
+        pHandler->endElement("style:table-row-properties");
 
     pHandler->endElement("style:style");
 }
@@ -106,10 +108,9 @@ TableStyle::~TableStyle()
         delete(*iterTableCellStyles);
     for (TRSVIter iterTableRowStyles = mTableRowStyles.begin() ; iterTableRowStyles != mTableRowStyles.end(); iterTableRowStyles++)
         delete(*iterTableRowStyles);
-
 }
 
-void TableStyle::write(DocumentHandler *pHandler) const
+void TableStyle::write(DocumentHandlerInterface *pHandler) const
 {
     TagOpenElement styleOpen("style:style");
     styleOpen.addAttribute("style:name", getName());
@@ -118,7 +119,7 @@ void TableStyle::write(DocumentHandler *pHandler) const
         styleOpen.addAttribute("style:master-page-name", getMasterPageName()->cstr());
     styleOpen.write(pHandler);
 
-    TagOpenElement stylePropertiesOpen("style:properties");
+    TagOpenElement stylePropertiesOpen("style:table-properties");
         if (mPropList["table:align"])
                 stylePropertiesOpen.addAttribute("table:align", mPropList["table:align"]->getStr());
     if (mPropList["fo:margin-left"])
@@ -131,7 +132,7 @@ void TableStyle::write(DocumentHandler *pHandler) const
         stylePropertiesOpen.addAttribute("fo:break-before", mPropList["fo:break-before"]->getStr());
     stylePropertiesOpen.write(pHandler);
 
-    pHandler->endElement("style:properties");
+    pHandler->endElement("style:table-properties");
 
     pHandler->endElement("style:style");
 
@@ -139,15 +140,15 @@ void TableStyle::write(DocumentHandler *pHandler) const
         WPXPropertyListVector::Iter j(mColumns);
     for (j.rewind(); j.next();)
     {
-        TagOpenElement styleNestedOpen("style:style");
+        TagOpenElement styleOpen2("style:style");
         WPXString sColumnName;
         sColumnName.sprintf("%s.Column%i", getName().cstr(), i);
-        styleNestedOpen.addAttribute("style:name", sColumnName);
-        styleNestedOpen.addAttribute("style:family", "table-column");
-        styleNestedOpen.write(pHandler);
+        styleOpen2.addAttribute("style:name", sColumnName);
+        styleOpen2.addAttribute("style:family", "table-column");
+        styleOpen2.write(pHandler);
 
-                pHandler->startElement("style:properties", j());
-        pHandler->endElement("style:properties");
+        pHandler->startElement("style:table-column-properties", j());
+        pHandler->endElement("style:table-column-properties");
 
         pHandler->endElement("style:style");
 

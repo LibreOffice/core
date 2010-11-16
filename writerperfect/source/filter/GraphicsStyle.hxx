@@ -1,8 +1,6 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/* WriterProperties: A grab bag of writer-specific properties which we use
- * define here for later use.
+/* GraphicsStyle:
  *
- * Copyright (C) 2002-2003 William Lachance (william.lachance@sympatico.ca)
+ * Copyright (C) 2007 Fridrich Strba .strba@bluewin.ch)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -25,14 +23,18 @@
 /* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
-#ifndef _WRITER_PROPERTIES_H
-#define _WRITER_PROPERTIES_H
+#ifndef _GRAPHICSSTYLE_H
+#define _GRAPHICSSTYLE_H
 
-#define IMP_DEFAULT_SUPER_SUB_SCRIPT "58%"
-#define IMP_NUM_CENTIMETERES_PER_INCH 2.54f
-#define IMP_DEFAULT_FONT_NAME "Times New Roman"
-#define IMP_DEFAULT_FONT_SIZE 12.0f
-#define IMP_DEFAULT_FONT_PITCH "variable"
+#include "Style.hxx"
+#include "WriterProperties.hxx"
+#include "DocumentHandlerInterface.hxx"
+
+class GraphicsStyle : public Style
+{
+public:
+    GraphicsStyle(const char *psName);
+    ~GraphicsStyle();
+    virtual void write(DocumentHandlerInterface *pHandler) const;
+};
 #endif
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

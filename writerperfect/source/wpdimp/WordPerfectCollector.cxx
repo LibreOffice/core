@@ -36,8 +36,9 @@
 #pragma warning( pop )
 #endif
 
-WordPerfectCollector::WordPerfectCollector(WPSInputStream *pInput, DocumentHandler *pHandler) :
-    DocumentCollector(pInput, pHandler)
+WordPerfectCollector::WordPerfectCollector(WPXInputStream *pInput, DocumentHandlerInterface *pHandler, const rtl::OString& password) :
+    DocumentCollector(pInput, pHandler),
+    maUtf8Password(password)
 {
 }
 
@@ -45,9 +46,13 @@ WordPerfectCollector::~WordPerfectCollector()
 {
 }
 
-bool WordPerfectCollector::parseSourceDocument(WPSInputStream &input)
+bool WordPerfectCollector::parseSourceDocument(WPXInputStream &input)
 {
-        WPDResult result = WPDocument::parse(&input, static_cast<WPXHLListenerImpl *>(this));
+        WPDResult result;
+        if (maUtf8Password.getLength())
+            result = WPDocument::parse(&input, static_cast<WPXDocumentInterface *>(this), maUtf8Password.getStr());
+        else
+            result = WPDocument::parse(&input, static_cast<WPXDocumentInterface *>(this), NULL);
         if (result != WPD_OK)
                 return false;
 

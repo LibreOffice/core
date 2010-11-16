@@ -12,12 +12,6 @@ INCPRE+=$(LIBWPD_CFLAGS)
 INCPRE+=$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc$/libwpd
 .ENDIF
 
-.IF "$(SYSTEM_LIBWPS)" == "YES"
-INCPRE+=$(LIBWPS_CFLAGS)
-.ELSE
-INCPRE+=$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc$/libwps
-.ENDIF
-
 .IF "$(SYSTEM_LIBWPG)" == "YES"
 INCPRE+=$(LIBWPG_CFLAGS)
 .ELSE
@@ -28,7 +22,6 @@ INCPRE+=$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc$/libwpg
 INCPRE+= -I..
 
 SLOFILES= \
-    $(SLO)$/OdgExporter.obj  \
     $(SLO)$/WPGImportFilter.obj \
     $(SLO)$/wpgimport_genericfilter.obj
 

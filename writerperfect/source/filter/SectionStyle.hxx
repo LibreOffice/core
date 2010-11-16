@@ -27,14 +27,8 @@
  */
 #ifndef _SECTIONSTYLE_H
 #define _SECTIONSTYLE_H
-#if defined _MSC_VER
-#pragma warning( push, 1 )
-#endif
 #include <libwpd/libwpd.h>
 #include <libwpd/WPXPropertyListVector.h>
-#if defined _MSC_VER
-#pragma warning( pop )
-#endif
 
 #include "Style.hxx"
 #include "WriterProperties.hxx"
@@ -44,7 +38,7 @@ class SectionStyle : public Style
 {
 public:
     SectionStyle(const WPXPropertyList &xPropList, const WPXPropertyListVector &xColumns, const char *psName);
-    virtual void write(DocumentHandler *pHandler) const;
+    virtual void write(DocumentHandlerInterface *pHandler) const;
 
 private:
         WPXPropertyList mPropList;

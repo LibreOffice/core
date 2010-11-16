@@ -102,7 +102,7 @@ sal_Bool SAL_CALL MSWorksImportFilter::importImpl( const Sequence< ::com::sun::s
     sFileName = OUStringToOString(sURL, RTL_TEXTENCODING_INFO_ASCII);
 
     // An XML import service: what we push sax messages to..
-    OUString sXMLImportService ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Writer.XMLImporter" ) );
+    OUString sXMLImportService ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Writer.XMLOasisImporter" ) );
     Reference < XDocumentHandler > xInternalHandler( mxMSF->createInstance( sXMLImportService ), UNO_QUERY );
 
     // The XImporter sets up an empty target document for XDocumentHandler to write to..
@@ -187,7 +187,7 @@ OUString SAL_CALL MSWorksImportFilter::detect( com::sun::star::uno::Sequence< Pr
     if (input.atEOS())
         return ::rtl::OUString();
 
-    confidence = WPSDocument::isFileFormatSupported(&input, false);
+    confidence = WPSDocument::isFileFormatSupported(&input);
 
     if ((confidence == WPS_CONFIDENCE_EXCELLENT) || (confidence == WPS_CONFIDENCE_GOOD))
         sTypeName = OUString( RTL_CONSTASCII_USTRINGPARAM ( "writer_MS_Works_Document" ) );

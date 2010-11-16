@@ -29,6 +29,8 @@
 
 #include <xmloff/attrlist.hxx>
 
+// #define DEBUG_XML 1
+
 using namespace ::rtl;
 using rtl::OUString;
 
@@ -41,19 +43,19 @@ DocumentHandler::DocumentHandler(Reference < XDocumentHandler > &xHandler) :
 
 void DocumentHandler::startDocument()
 {
-    WRITER_DEBUG_MSG(("DocumentHandler::startDocument\n"));
     mxHandler->startDocument();
 }
 
 void DocumentHandler::endDocument()
 {
-    WRITER_DEBUG_MSG(("DocumentHandler::endDocument\n"));
     mxHandler->endDocument();
 }
 
 void DocumentHandler::startElement(const char *psName, const WPXPropertyList &xPropList)
 {
-    WRITER_DEBUG_MSG(("DocumentHandler::startElement\n"));
+#ifdef DEBUG_XML
+    printf("<%s", psName);
+#endif
         SvXMLAttributeList *pAttrList = new SvXMLAttributeList();
     Reference < XAttributeList > xAttrList(pAttrList);
     WPXPropertyList::Iter i(xPropList);
@@ -61,23 +63,36 @@ void DocumentHandler::startElement(const char *psName, const WPXPropertyList &xP
     {
                 // filter out libwpd elements
                 if (strncmp(i.key(), "libwpd", 6) != 0)
+        {
                         pAttrList->AddAttribute(OUString::createFromAscii(i.key()),
                                                 OUString::createFromAscii(i()->getStr().cstr()));
+#ifdef DEBUG_XML
+            printf(" %s=\"%s\"", i.key(), i()->getStr().cstr());
+#endif
         }
+        }
+#ifdef DEBUG_XML
+    printf(">");
+#endif
 
         mxHandler->startElement(OUString::createFromAscii(psName), xAttrList);
 }
 
 void DocumentHandler::endElement(const char *psName)
 {
-    WRITER_DEBUG_MSG(("DocumentHandler::endElement\n"));
+#ifdef DEBUG_XML
+    printf("</%s>", psName);
+#endif
         mxHandler->endElement(OUString::createFromAscii(psName));
 }
 
 void DocumentHandler::characters(const WPXString &sCharacters)
 {
-    WRITER_DEBUG_MSG(("DocumentHandler::characters\n"));
         OUString sCharU16(sCharacters.cstr(), strlen(sCharacters.cstr()), RTL_TEXTENCODING_UTF8);
+#ifdef DEBUG_XML
+    WPXString sEscapedCharacters(sCharacters, true);
+    printf("%s", sEscapedCharacters.cstr());
+#endif
         mxHandler->characters(sCharU16);
 }
 
