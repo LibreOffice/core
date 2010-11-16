@@ -2213,7 +2213,7 @@ SwGrfExtPage::SwGrfExtPage(Window *pParent, const SfxItemSet &rSet) :
     aAllPagesRB     (this, SW_RES( RB_MIRROR_ALL_PAGES )),
     aLeftPagesRB    (this, SW_RES( RB_MIRROR_LEFT_PAGES )),
     aRightPagesRB   (this, SW_RES( RB_MIRROR_RIGHT_PAGES )),
-    aBmpWin         (this, WN_BMP, Graphic(), BitmapEx(SW_RES(BMP_EXAMPLE)), BitmapEx(SW_RES(BMP_EXAMPLE_HC)) ),
+    aBmpWin         (this, WN_BMP, Graphic(), BitmapEx(SW_RES(BMP_EXAMPLE))),
     aConnectFL      (this, SW_RES( FL_CONNECT )),
     aConnectFT      (this, SW_RES( FT_CONNECT )),
     aConnectED      (this, SW_RES( ED_CONNECT )),
@@ -2455,11 +2455,10 @@ IMPL_LINK( SwGrfExtPage, MirrorHdl, CheckBox *, EMPTYARG )
     Beschreibung: BeispielWindow
  --------------------------------------------------------------------*/
 BmpWindow::BmpWindow( Window* pPar, USHORT nId,
-                        const Graphic& rGraphic, const BitmapEx& rBmp, const BitmapEx& rBmpHC ) :
+                        const Graphic& rGraphic, const BitmapEx& rBmp ) :
     Window(pPar, SW_RES(nId)),
     aGraphic(rGraphic),
     aBmp(rBmp),
-    aBmpHC(rBmpHC),
     bHorz(FALSE),
     bVert(FALSE),
     bGraphic(FALSE),
@@ -2506,8 +2505,7 @@ void BmpWindow::Paint( const Rectangle& )
         aGraphic.Draw( this, aPntPos, aPntSz );
     else
     {
-        bool bHC = GetSettings().GetStyleSettings().GetHighContrastMode();
-        DrawBitmapEx( aPntPos, aPntSz, bHC ? aBmpHC : aBmp );
+        DrawBitmapEx( aPntPos, aPntSz, aBmp );
     }
 }
 
