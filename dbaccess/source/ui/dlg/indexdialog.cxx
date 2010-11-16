@@ -316,8 +316,7 @@ DBG_NAME(DbaIndexDialog)
     //------------------------------------------------------------------
     void DbaIndexDialog::fillIndexList()
     {
-        sal_Bool bHiContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
-        Image aPKeyIcon(ModuleRes( bHiContrast ? IMG_PKEYICON_SCH : IMG_PKEYICON));
+        Image aPKeyIcon(ModuleRes( IMG_PKEYICON ));
         // fill the list with the index names
         m_aIndexes.Clear();
         Indexes::iterator aIndexLoop = m_pIndexes->begin();

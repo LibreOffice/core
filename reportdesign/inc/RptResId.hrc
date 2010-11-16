@@ -262,16 +262,16 @@
 
 // image lists -----------------------------------------------------------------------
 #define IMG_CONDFORMAT_DLG_SC               (RID_IMAGELIST_START + 0)
-#define IMG_CONDFORMAT_DLG_SCH              (RID_IMAGELIST_START + 1)
+// free
 #define IMG_CONDFORMAT_DLG_LC               (RID_IMAGELIST_START + 2)
-#define IMG_CONDFORMAT_DLG_LCH              (RID_IMAGELIST_START + 3)
+// free
 #define RID_SVXIMGLIST_RPTEXPL              (RID_IMAGELIST_START + 4)
 #define IMGLST_GROUPSORT_DLG_SC             (RID_IMAGELIST_START + 6)
-#define IMGLST_GROUPSORT_DLG_SCH            (RID_IMAGELIST_START + 7)
+// free
 #define IMG_ADDFIELD_DLG_SC                 (RID_IMAGELIST_START + 8)
-#define IMG_ADDFIELD_DLG_SCH                (RID_IMAGELIST_START + 9)
+// free
 #define IMG_ADDFIELD_DLG_LC                 (RID_IMAGELIST_START + 10)
-#define IMG_ADDFIELD_DLG_LCH                (RID_IMAGELIST_START + 11)
+// free
 
 #define ADDFIELD_FL_HELP_SEPARATOR          (RID_IMAGELIST_START +  12)
 #define ADDFIELD_HELP_FIELD                 (RID_IMAGELIST_START +  13)

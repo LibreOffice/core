@@ -1467,16 +1467,17 @@ void OGroupsSortingDialog::checkButtons(sal_Int32 _nRow)
     }
 }
 
-ImageList OGroupsSortingDialog::getImageList(sal_Int16 _eBitmapSet,sal_Bool _bHiContast) const
+/**
+ * @param _bHiContast (sic) unused noop. FIXME: please remove carefully
+ */
+ImageList OGroupsSortingDialog::getImageList(sal_Int16 _eBitmapSet,sal_Bool /*_bHiContast*/) const
 {
     sal_Int16 nN = IMG_CONDFORMAT_DLG_SC;
-    sal_Int16 nH = IMG_CONDFORMAT_DLG_SCH;
     if ( _eBitmapSet == SFX_SYMBOLS_SIZE_LARGE )
     {
         nN = IMG_CONDFORMAT_DLG_LC;
-        nH = IMG_CONDFORMAT_DLG_LCH;
     }
-    return ImageList(ModuleRes( _bHiContast ? nH : nN ));
+    return ImageList(ModuleRes( nN ));
 }
 
 //------------------------------------------------------------------
