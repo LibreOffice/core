@@ -144,6 +144,7 @@ public:
     virtual void undoActionAdded( const String& i_actionComment ) = 0;
     virtual void cleared() = 0;
     virtual void clearedRedo() = 0;
+    virtual void resetAll() = 0;
     virtual void listActionEntered( const String& i_comment ) = 0;
     virtual void listActionLeft( const String& i_comment ) = 0;
     virtual void listActionLeftAndMerged() = 0;
@@ -182,8 +183,26 @@ namespace svl
         virtual BOOL            Undo() = 0;
         virtual BOOL            Redo() = 0;
 
+        /** clears both the Redo and the Undo stack.
+
+            Will assert and bail out when called while within a list action (<member>IsInListAction</member>).
+        */
         virtual void            Clear() = 0;
+
+        /** clears the Redo stack.
+
+            Will assert and bail out when called while within a list action (<member>IsInListAction</member>).
+        */
         virtual void            ClearRedo() = 0;
+
+        /** leaves any possible open list action (<member>IsInListAction</member>), and clears both the Undo and the
+            Redo stack.
+
+            Effectively, calling this method is equivalent to <code>while ( IsInListAction() ) LeaveListAction();</code>,
+            followed by <code>Clear()</code>. The only difference to this calling sequence is that Reset is an
+            atomar operation, also resulting in only one notification.
+        */
+        virtual void            Reset() = 0;
 
         /** determines whether an Undo or Redo is currently running
         */
@@ -277,6 +296,7 @@ public:
     virtual BOOL            Redo();
     virtual void            Clear();
     virtual void            ClearRedo();
+    virtual void            Reset();
     virtual bool            IsDoing() const;
     virtual USHORT          GetRepeatActionCount() const;
     virtual UniString       GetRepeatActionComment( SfxRepeatTarget &rTarget) const;
@@ -294,10 +314,11 @@ public:
     virtual void            RemoveUndoListener( SfxUndoListener& i_listener );
 
 private:
-    USHORT  ImplLeaveListAction( const bool i_merge );
+    USHORT  ImplLeaveListAction( const bool i_merge, ::svl::undo::impl::UndoManagerGuard& i_guard );
     bool    ImplAddUndoAction_NoNotify( SfxUndoAction* pAction, BOOL bTryMerge, ::svl::undo::impl::UndoManagerGuard& i_guard );
     void    ImplClearRedo( ::svl::undo::impl::UndoManagerGuard& i_guard );
     void    ImplClearUndo( ::svl::undo::impl::UndoManagerGuard& i_guard );
+    void    ImplClear( ::svl::undo::impl::UndoManagerGuard& i_guard );
     USHORT  ImplGetRedoActionCount_Lock( bool const i_currentLevel = CurrentLevel ) const;
     bool    ImplIsUndoEnabled_Lock() const;
     bool    ImplIsInListAction_Lock() const;

@@ -284,6 +284,11 @@ namespace svl { namespace undo { namespace impl
             m_aGuard.reset();
         }
 
+        void cancelNotifications()
+        {
+            m_notifiers.clear();
+        }
+
         /** marks the given Undo action for deletion
 
             The Undo action will be put into a list, whose members will be deleted from within the destructor of the
@@ -470,21 +475,28 @@ USHORT SfxUndoManager::GetMaxUndoActionCount() const
 
 //------------------------------------------------------------------------
 
-void SfxUndoManager::Clear()
+void SfxUndoManager::ImplClear( UndoManagerGuard& i_guard )
 {
-    UndoManagerGuard aGuard( *m_pData );
-
     // clear array
     while ( m_pData->pActUndoArray->aUndoActions.Count() )
     {
-        aGuard.markForDeletion( m_pData->pActUndoArray->aUndoActions[ m_pData->pActUndoArray->aUndoActions.Count() - 1 ] );
+        i_guard.markForDeletion( m_pData->pActUndoArray->aUndoActions[ m_pData->pActUndoArray->aUndoActions.Count() - 1 ] );
         m_pData->pActUndoArray->aUndoActions.Remove( m_pData->pActUndoArray->aUndoActions.Count() - 1 );
     }
 
     m_pData->pActUndoArray->nCurUndoAction = 0;
 
     // notify listeners
-    aGuard.scheduleNotification( &SfxUndoListener::cleared );
+    i_guard.scheduleNotification( &SfxUndoListener::cleared );
+}
+
+//------------------------------------------------------------------------
+
+void SfxUndoManager::Clear()
+{
+    UndoManagerGuard aGuard( *m_pData );
+    ENSURE_OR_RETURN_VOID( !IsInListAction(), "SfxUndoManager::Clear: not allowed when within a list action!" );
+    ImplClear( aGuard );
 }
 
 //------------------------------------------------------------------------
@@ -492,7 +504,33 @@ void SfxUndoManager::Clear()
 void SfxUndoManager::ClearRedo()
 {
     UndoManagerGuard aGuard( *m_pData );
+    ENSURE_OR_RETURN_VOID( !IsInListAction(), "SfxUndoManager::ClearRedo: not allowed when within a list action!" );
     ImplClearRedo( aGuard );
+}
+
+//------------------------------------------------------------------------
+
+void SfxUndoManager::Reset()
+{
+    UndoManagerGuard aGuard( *m_pData );
+
+    // clear all locks
+    while ( ImplIsUndoEnabled_Lock() )
+        ImplEnableUndo_Lock( false );
+
+    // cancel all list actions
+    while ( IsInListAction() )
+        ImplLeaveListAction( false, aGuard );
+
+    // clear both stacks
+    ImplClear( aGuard );
+
+    // cancel the notifications scheduled by ImplLeaveListAction resp. ImplClear,
+    // as we want to do an own, dedicated notification
+    aGuard.cancelNotifications();
+
+    // schedule notification
+    aGuard.scheduleNotification( &SfxUndoListener::resetAll );
 }
 
 //------------------------------------------------------------------------
@@ -941,22 +979,22 @@ USHORT SfxUndoManager::GetListActionDepth() const
 
 USHORT SfxUndoManager::LeaveListAction()
 {
-    return ImplLeaveListAction( false );
+    UndoManagerGuard aGuard( *m_pData );
+    return ImplLeaveListAction( false, aGuard );
 }
 
 //------------------------------------------------------------------------
 
 USHORT SfxUndoManager::LeaveAndMergeListAction()
 {
-    return ImplLeaveListAction( true );
+    UndoManagerGuard aGuard( *m_pData );
+    return ImplLeaveListAction( true, aGuard );
 }
 
 //------------------------------------------------------------------------
 
-USHORT SfxUndoManager::ImplLeaveListAction( const bool i_merge )
+USHORT SfxUndoManager::ImplLeaveListAction( const bool i_merge, UndoManagerGuard& i_guard )
 {
-    UndoManagerGuard aGuard( *m_pData );
-
     if ( !ImplIsUndoEnabled_Lock() )
         return 0;
 
@@ -982,9 +1020,9 @@ USHORT SfxUndoManager::ImplLeaveListAction( const bool i_merge )
     {
         SfxUndoAction* pCurrentAction= m_pData->pActUndoArray->aUndoActions[ m_pData->pActUndoArray->nCurUndoAction-1 ];
         m_pData->pActUndoArray->aUndoActions.Remove( --m_pData->pActUndoArray->nCurUndoAction );
-        aGuard.markForDeletion( pCurrentAction );
+        i_guard.markForDeletion( pCurrentAction );
 
-        aGuard.scheduleNotification( &SfxUndoListener::listActionCancelled );
+        i_guard.scheduleNotification( &SfxUndoListener::listActionCancelled );
         return 0;
     }
 
@@ -1024,7 +1062,7 @@ USHORT SfxUndoManager::ImplLeaveListAction( const bool i_merge )
     }
 
     // notify listeners
-    aGuard.scheduleNotification( &SfxUndoListener::listActionLeft, pListAction->GetComment() );
+    i_guard.scheduleNotification( &SfxUndoListener::listActionLeft, pListAction->GetComment() );
 
     // outta here
     return nListActionElements;
