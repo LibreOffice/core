@@ -623,7 +623,7 @@ void OAppDetailPageHelper::createTablesPage(const Reference< XConnection>& _xCon
 
         ImageProvider aImageProvider( _xConnection );
         createTree( pTreeView,
-            aImageProvider.getDefaultImage( DatabaseObject::TABLE, false )
+            aImageProvider.getDefaultImage( DatabaseObject::TABLE )
         );
 
         pTreeView->notifyHiContrastChanged();
@@ -643,10 +643,10 @@ void OAppDetailPageHelper::createTablesPage(const Reference< XConnection>& _xCon
 }
 
 // -----------------------------------------------------------------------------
-void OAppDetailPageHelper::getElementIcons( ElementType _eType, USHORT& _rImageId, USHORT& _rHighContrastImageId )
+void OAppDetailPageHelper::getElementIcons( ElementType _eType, USHORT& _rImageId )
 {
     ImageProvider aImageProvider;
-    _rImageId = _rHighContrastImageId = 0;
+    _rImageId = 0;
 
     sal_Int32 nDatabaseObjectType( 0 );
     switch(_eType )
@@ -658,8 +658,7 @@ void OAppDetailPageHelper::getElementIcons( ElementType _eType, USHORT& _rImageI
             OSL_ENSURE( sal_False, "OAppDetailPageHelper::GetElementIcons: invalid element type!" );
             return;
     }
-    _rImageId = aImageProvider.getDefaultImageResourceID( nDatabaseObjectType, false );
-    _rHighContrastImageId = aImageProvider.getDefaultImageResourceID( nDatabaseObjectType, true );
+    _rImageId = aImageProvider.getDefaultImageResourceID( nDatabaseObjectType );
 }
 
 // -----------------------------------------------------------------------------
@@ -667,27 +666,27 @@ void OAppDetailPageHelper::createPage(ElementType _eType,const Reference< XNameA
 {
     OSL_ENSURE(E_TABLE != _eType,"E_TABLE isn't allowed.");
 
-    USHORT nHelpId = 0, nImageId = 0, nImageIdH = 0;
+    USHORT nHelpId = 0, nImageId = 0;
     ImageProvider aImageProvider;
     Image aFolderImage;
     switch( _eType )
     {
         case E_FORM:
             nHelpId = HID_APP_FORM_TREE;
-            aFolderImage = aImageProvider.getFolderImage( DatabaseObject::FORM, false );
+            aFolderImage = aImageProvider.getFolderImage( DatabaseObject::FORM );
             break;
         case E_REPORT:
             nHelpId = HID_APP_REPORT_TREE;
-            aFolderImage = aImageProvider.getFolderImage( DatabaseObject::REPORT, false );
+            aFolderImage = aImageProvider.getFolderImage( DatabaseObject::REPORT );
             break;
         case E_QUERY:
             nHelpId = HID_APP_QUERY_TREE;
-            aFolderImage = aImageProvider.getFolderImage( DatabaseObject::QUERY, false );
+            aFolderImage = aImageProvider.getFolderImage( DatabaseObject::QUERY );
             break;
         default:
             OSL_ENSURE(0,"Illegal call!");
     }
-    getElementIcons( _eType, nImageId, nImageIdH );
+    getElementIcons( _eType, nImageId );
 
     if ( !m_pLists[_eType] )
     {
@@ -698,7 +697,7 @@ void OAppDetailPageHelper::createPage(ElementType _eType,const Reference< XNameA
     {
         if ( !m_pLists[_eType]->GetEntryCount() && _xContainer.is() )
         {
-            fillNames( _xContainer, _eType, nImageId, nImageIdH, NULL );
+            fillNames( _xContainer, _eType, nImageId, NULL );
 
             m_pLists[_eType]->SelectAll(FALSE);
         }
@@ -746,7 +745,7 @@ namespace
 
 // -----------------------------------------------------------------------------
 void OAppDetailPageHelper::fillNames( const Reference< XNameAccess >& _xContainer, const ElementType _eType,
-                                      const USHORT _nImageId, const USHORT _nHighContrastImageId, SvLBoxEntry* _pParent )
+                                      const USHORT _nImageId, SvLBoxEntry* _pParent )
 {
     OSL_ENSURE(_xContainer.is(),"Data source is NULL! -> GPF");
     OSL_ENSURE( ( _eType >= E_TABLE ) && ( _eType < E_ELEMENT_TYPE_COUNT ), "OAppDetailPageHelper::fillNames: invalid type!" );
@@ -771,7 +770,7 @@ void OAppDetailPageHelper::fillNames( const Reference< XNameAccess >& _xContaine
             {
                 pEntry = pList->InsertEntry( *pIter, _pParent, FALSE, LIST_APPEND, reinterpret_cast< void* >( nFolderIndicator ) );
                 getBorderWin().getView()->getAppController().containerFound( Reference< XContainer >( xSubElements, UNO_QUERY ) );
-                fillNames( xSubElements, _eType, _nImageId, _nHighContrastImageId, pEntry );
+                fillNames( xSubElements, _eType, _nImageId, pEntry );
             }
             else
             {
@@ -895,14 +894,14 @@ SvLBoxEntry* OAppDetailPageHelper::elementAdded(ElementType _eType,const ::rtl::
             }
         }
 
-        USHORT nImageId = 0, nImageIdH = 0;
-        getElementIcons( _eType, nImageId, nImageIdH );
+        USHORT nImageId = 0;
+        getElementIcons( _eType, nImageId );
         Reference<XNameAccess> xContainer(_rObject,UNO_QUERY);
         if ( xContainer.is() )
         {
             const sal_Int32 nFolderIndicator = lcl_getFolderIndicatorForType( _eType );
             pRet = pTreeView->InsertEntry( _rName, pEntry, FALSE, LIST_APPEND, reinterpret_cast< void* >( nFolderIndicator ) );
-            fillNames( xContainer, _eType, nImageId, nImageIdH, pRet );
+            fillNames( xContainer, _eType, nImageId, pRet );
         }
         else
         {

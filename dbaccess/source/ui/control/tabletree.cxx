@@ -105,8 +105,8 @@ OTableTreeListBox::~OTableTreeListBox()
 void OTableTreeListBox::implSetDefaultImages()
 {
     ImageProvider aImageProvider;
-    SetDefaultExpandedEntryBmp(  aImageProvider.getFolderImage( DatabaseObject::TABLE, false ) );
-    SetDefaultCollapsedEntryBmp( aImageProvider.getFolderImage( DatabaseObject::TABLE, false ) );
+    SetDefaultExpandedEntryBmp(  aImageProvider.getFolderImage( DatabaseObject::TABLE ) );
+    SetDefaultCollapsedEntryBmp( aImageProvider.getFolderImage( DatabaseObject::TABLE ) );
 }
 
 // -----------------------------------------------------------------------------
@@ -137,16 +137,15 @@ void OTableTreeListBox::notifyHiContrastChanged()
             {
                 SvLBoxContextBmp* pContextBitmapItem = static_cast< SvLBoxContextBmp* >( pItem );
 
-                Image aImage, aImageHC;
+                Image aImage;
                 if ( isFolderEntry( pEntryLoop ) )
                 {
-                    aImage = m_pImageProvider->getFolderImage( DatabaseObject::TABLE, false );
-                    aImageHC = m_pImageProvider->getFolderImage( DatabaseObject::TABLE, true );
+                    aImage = m_pImageProvider->getFolderImage( DatabaseObject::TABLE );
                 }
                 else
                 {
                     String sCompleteName( getQualifiedTableName( pEntryLoop ) );
-                    m_pImageProvider->getImages( sCompleteName, DatabaseObject::TABLE, aImage, aImageHC );
+                    m_pImageProvider->getImages( sCompleteName, DatabaseObject::TABLE, aImage );
                 }
 
                 pContextBitmapItem->SetBitmap1( aImage );
@@ -500,8 +499,8 @@ SvLBoxEntry* OTableTreeListBox::implAddEntry(
     {
         pRet = InsertEntry( sName, pParentEntry, FALSE, LIST_APPEND );
 
-        Image aImage, aImageHC;
-        m_pImageProvider->getImages( _rTableName, DatabaseObject::TABLE, aImage, aImageHC );
+        Image aImage;
+        m_pImageProvider->getImages( _rTableName, DatabaseObject::TABLE, aImage );
 
         SetExpandedEntryBmp( pRet, aImage );
         SetCollapsedEntryBmp( pRet, aImage );

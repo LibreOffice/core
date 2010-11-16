@@ -1150,22 +1150,6 @@ void adjustToolBoxSize(ToolBox* _pToolBox)
     }
 }
 // -----------------------------------------------------------------------------
-sal_Bool isHiContrast(Window* _pWindow)
-{
-    OSL_ENSURE(_pWindow,"Window must be not null!");
-    Window* pIter = _pWindow;
-    //  while( pIter &&  pIter->GetBackground().GetColor().GetColor() == COL_TRANSPARENT )
-    while( pIter )
-    {
-        if ( pIter->GetBackground().GetColor().GetColor() == COL_TRANSPARENT )
-            pIter = pIter->GetParent();
-        else
-            break;
-    }
-    return pIter && pIter->GetSettings().GetStyleSettings().GetHighContrastMode();
-}
-
-// -----------------------------------------------------------------------------
 void adjustBrowseBoxColumnWidth( ::svt::EditBrowseBox* _pBox, sal_uInt16 _nColId )
 {
     sal_Int32 nColSize = -1;

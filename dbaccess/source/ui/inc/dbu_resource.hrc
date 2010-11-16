@@ -256,7 +256,6 @@
 //  ...
 // free
 #define REPORTFOLDER_TREE_ICON          RID_IMAGE_START + 24
-#define IMG_JOINS_H             RID_IMAGE_START + 32
 #define IMG_FORMFOLDER_TREE_L           RID_IMAGE_START + 39
 #define IMG_REPORTFOLDER_TREE_L         RID_IMAGE_START + 40
 #define IMG_QUERYFOLDER_TREE_L          RID_IMAGE_START + 41
