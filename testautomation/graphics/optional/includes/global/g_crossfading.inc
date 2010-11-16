@@ -259,7 +259,7 @@ Call hRechteckErstellen ( 5, 5, 20, 30 )
     EditCrossFading                                     
     Kontext "Ueberblenden"
     if GleicheOrientierung.IsChecked = TRUE then qaerrorlog "GleicheOrientierung /    was NOT checked again."    
-    printlog "Check "same orientation""   -????
+    printlog "Check same orientation"
     GleicheOrientierung.Check
     printlog "Close CrossFading-window with OK"
     Ueberblenden.OK									  

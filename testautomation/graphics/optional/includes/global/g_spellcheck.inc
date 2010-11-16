@@ -85,50 +85,19 @@ testcase tiToolsSpellcheckCheck_AlwaysIgnore
     end if
     sleep 2
 
-    PrintLog "- Spellcheck with correct text"
-    select case iSprache
-    case 01   : hTextrahmenErstellen ("This is a text without any error.<Return>",10,10,50,20)
-    case 33   : hTextrahmenErstellen ("Il nous faut donc un de temps pour examiner avec soin tous les dossiers.<Return>",10,10,70,20)
-    case 34   : hTextrahmenErstellen ("Este es un chico muy importante.",10,10,50,20)
-    case 36   : hTextrahmenErstellen ("akit a b�r�s�g vagy a szab�lys�rt�si hat�s�g a eltiltott",10,10,70,20)
-    case 39   : hTextrahmenErstellen ("La ringraziamo per l'interesse mostrato a collaborare con la firma.<Return>",10,10,70,20)
-    case 46   : hTextrahmenErstellen ("Det varierar vad som behandlas och ur vilket perspektiv.<Return>",10,10,50,20)
-    case 49   : hTextrahmenErstellen ("Dies ist ein Text ohne Fehler.<Return>",10,10,50,20)
-    case 50   : hTextrahmenErstellen ("To je besedilo brez napake.<Return>",10,10,50,20)
-    case 55   : hTextrahmenErstellen ("Esta poderia ser a resposta para suas preces?<Return>",10,10,50,20)
-    case else :
-        if bAsianLan then
-            printlog "For the language  " + iSprache +" nothing is prepared yet, but is AsianLan, so OK :-) will use english instaed"
-            ' there was smth wrong, try to find out :
-            kontext
-            if active.exists then
-                printlog "ERROR: active: '"+active.gettext+"'"
-                active.ok
-            end if
-            hTextrahmenErstellen ("This is a text without any error.<Return>",10,10,50,20)
-        else
-            Warnlog "For the language  " + iSprache +" nothing is prepared yet: insert text here"
-            hTextrahmenErstellen ("This is a text without any error.<Return>",10,10,50,20)
-        end if
-    end select
-    ToolsSpellcheck
-    WaitSlot (2000)
-    Kontext "Active"
-    if active.exists(5) then
-        printlog "Message: spellchecking has finished?: '" + active.gettext + "'"
-        Active.OK
-    else
-        errorLog "Spellcheck started :"
-        Kontext "Spellcheck"
-        if Spellcheck.exists then
-            errorlog " - spellcheck came up and will be closed now"
-            Spellcheck.Close
-        else
-            printlog "spellcheck didn't come up"
-        end if
-    end if
-    WaitSlot (2000)
+    printlog "Close dialog 'Edit Custom Dictionary'."
+    BenutzerwoerterbuchBearbeiten.Close
+    Kontext "ExtrasOptionenDlg"
+    printlog "Close the Option dialog."
+    ExtrasOptionenDlg.OK
+
+    printlog "Close document"
     Call hCloseDocument
+
+    ' remove the word again from the dictionary
+    delete_word_from_dictionary(sWrongWord,"IgnoreAllList")
+
+    kill (convertPath(gOfficePath+"user/work/"+"recht_"+iSprache+sExt))
 endcase 'tiToolsSpellcheckCorrect
 
 '------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

@@ -279,13 +279,13 @@ testcase tDialogCharacter
     next y
 
     Kontext
-    printlog "Changes the active tab to "Position"
+    printlog "Changes the active tab to Position"
     Active.SetPage TabFontPosition        
     Kontext "TabFontPosition"
     printlog "TabFontPosition"
     SuperScript.Check
     Super.Check
-    printlog "Testing the "Relative Font Size"-Listbox
+    printlog "Testing the Relative Font Size-Listbox"
     RelativeFontSize.ToMin         
     ThisIsMyTextFromControl = RelativeFontSize.GetText
 '    printlog "The Relative Font Size minimum is: " & ThisIsMyTextFromControl
@@ -296,7 +296,7 @@ testcase tDialogCharacter
     next y
 
     Automatic.Check
-    printlog "Testing the "Scale With"-Listbox
+    printlog "Testing the Scale With-Listbox"
     ScaleWith.ToMin          
     ThisIsMyTextFromControl = ScaleWith.GetText
     printlog "ScaleWith minimum is:" & ThisIsMyTextFromControl
@@ -312,7 +312,7 @@ testcase tDialogCharacter
 
     printlog "Testing the Reliative Font Size-Listbox again but this time"
     RelativeFontSize.ToMin
-    printlog "with Subscript and Normal Checked
+    printlog "with Subscript and Normal Checked"
     ThisIsMyTextFromControl = RelativeFontSize.GetText      
     printlog "The Relative Font Size minimum is: " & ThisIsMyTextFromControl
     for y = 1 to 99
@@ -323,7 +323,7 @@ testcase tDialogCharacter
 
     Automatic.Check
 
-    printlog "Testing the "ScaleWith"-Listbox
+    printlog "Testing the ScaleWith-Listbox"
     ScaleWith.ToMin          
     ThisIsMyTextFromControl = ScaleWith.GetText
     printlog "The ScaleWith Size is: " & ThisIsMyTextFromControl
@@ -333,14 +333,14 @@ testcase tDialogCharacter
 '        printlog "The ScaleWith Size is: " & ThisIsMyTextFromControl
     next y
 
-    printlog "Testing the "Spacing"-ListBox
+    printlog "Testing the Spacing-ListBox"
     ThisIsMyTextFromControl = Spacing.GetSelText      
     printlog "The Spacing is first: " & ThisIsMyTextFromControl
     for y = 2 to 3
         Spacing.Select y
         ThisIsMyTextFromControl = Spacing.GetSelText
         printlog "The Spacing is: " & ThisIsMyTextFromControl
-        printlog "Testing the "Spacing By"-Scrollbox
+        printlog "Testing the Spacing By-Scrollbox"
         ThisIsMyTextFromControl = SpacingBy.GetText      
 '        printlog "The SpacingBy Size minimum is: " & ThisIsMyTextFromControl
         SpacingBy.ToMin

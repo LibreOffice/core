@@ -200,7 +200,6 @@ testcase t_Introduction
     Sleep 1
     TransitionSound.Select 4
 
-    printlog "Close the document
     Printlog "Close the document"
     Call hCloseDocument
     
@@ -278,7 +277,7 @@ testcase t_Interoperability
      Printlog "    Verify that the slide was moved correctly"
      Kontext "Slides"
      sleep (5)
-     SlidesControl.TypeKeys "<PAGEUP>"
+   
      SlidesControl.TypeKeys "<SHIFT F10>"
      if hMenuFindSelect(27268, true, 3) = false then
         Warnlog "Context-Menu-entry `Rename` was not found. Therefore the test ends."

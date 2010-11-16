@@ -186,7 +186,7 @@ testcase tiSlideCopyNewPresentation
     Call hCloseDocument
     printlog "Open a new presentation"
     Call  hNewDocument
-    printlog "Paste the slide from the clipboard!
+    printlog "Paste the slide from the clipboard!"
     kontext "Slides"
     hUseAsyncSlot( "EditPaste" )
     printlog "Delete the first slide"
@@ -923,7 +923,7 @@ testcase tiSlideCopyInSlideSorter
     endif
     sleep 1
 
-    printlog "Choose "After" as specification for where"
+    printlog "Choose After as specification for where"
     Kontext "InsertPaste"
     if InsertPaste.Exists(3) then
         After.Check

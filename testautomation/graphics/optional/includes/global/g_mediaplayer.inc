@@ -250,7 +250,7 @@ testcase g_mediaplayer
         endif
         sleep 2
         printlog "close document"
-        Call  hCloseDocument	printlog "close document"
+        Call  hCloseDocument	
     else
         qaerrorLog "#74350# - Different strings in g_mediaplayer under Italian."
     endif

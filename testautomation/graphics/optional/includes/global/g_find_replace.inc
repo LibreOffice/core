@@ -48,7 +48,7 @@ testcase tiEditSearchAndReplace
         case "IMPRESS"   : sExt = ".odp"
     end select
 
-    printlog "First we need some errornes words to replace. (sExpression)
+    printlog "First we need some errornes words to replace. (sExpression)"
     printlog "sExpression(1) has to be 3 times in the document"
     select case iSprache
          case 01 : sExpression(1) = "Alle" : sExpression(2) = "Allz"

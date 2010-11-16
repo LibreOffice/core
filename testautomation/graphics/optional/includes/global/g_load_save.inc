@@ -83,9 +83,9 @@ testcase tFileOpenSaveEtc
     Sleep 10
     printlog "load document 'test1'"
     hFileOpen (Dokument$ + "." + ExtensionString)
-    printlog "check if the document is writable
+    printlog "check if the document is writable"
     if fIsDocumentWritable = false then
-        printlog "make the document writable and check if it's succesfull
+        printlog "make the document writable and check if it's succesfull"
         if fMakeDocumentWritable = false then
             warnlog "The document can't be make writeable. Test stopped."
             goto endsub
@@ -345,7 +345,6 @@ testcase tTestDXF255CharBug
     sleep 1
     Kontext "GrafikEinfuegenDlg"
     sleep 2
-    printlog " Dateiname.SetText (ConvertPath (gTesttoolpath + "graphics\required\input\255chars.dxf"))"
     Dateiname.SetText (ConvertPath (gTesttoolpath + "graphics\required\input\255chars.dxf"))
     Oeffnen.Click
     Sleep 2

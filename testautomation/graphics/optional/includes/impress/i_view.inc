@@ -123,7 +123,7 @@ testcase tViewWorkspaceOutlineView
    fGetPresentationStyle ("9")
 
    Kontext "DocumentImpressOutlineView"
-   printlog "Edit - "Select All" to go select the whole text"
+   printlog "Edit - Select All to go select the whole text"
    EditSelectAll
    printlog "type keys [shift]+[tab] eight times, to get all lines to the highest, except the one with the 'I'"
    DocumentImpressOutlineView.TypeKeys ("<Shift Tab>", 8)
@@ -132,7 +132,7 @@ hPrepareSearchBUG
     hTypeKeys "<STRG HOME>"
     EditSelectAll
     hFindeImDokument ("I")
-    printlog "expected level/style: 'Outline 1
+    printlog "expected level/style: 'Outline 1"
     fGetPresentationStyle ("1")
     
     printlog "type keys [shift]+[tab] to get the last line to the highest level, too"
@@ -300,8 +300,8 @@ testcase tViewWorkspaceDrawingView
     catch
         Warnlog "  Rectangle could not be created"
     endcatch
-    rintlog "close document"
-    Call hCloseDocument						p
+    printlog "close document"
+    Call hCloseDocument		
 endcase 'tViewWorkspaceDrawingView
 
 '-------------------------------------------------------------------------------

@@ -38,7 +38,14 @@ testcase tiDatei_Fuer_Anordnen_Erstellen
     '/// This function creates the document, that will be used as reference and working object inthe following cases :-) ///'
     '///'Dim Datei ' somewhere global :-) defined in calling sub! :sub im_107c_ ///
     call hNewDocument
-    DocumentImpress.UseMenu
+    if gApplication = "DRAW" then
+        kontext "DocumentDraw"
+        DocumentDraw.UseMenu
+    else
+        kontext "DocumentImpress"
+        DocumentImpress.UseMenu
+    end if
+    
     hMenuSelectNr(4)
     hMenuSelectNr(13)
     call sSelectEmptyLayout								'/// new document  ///'

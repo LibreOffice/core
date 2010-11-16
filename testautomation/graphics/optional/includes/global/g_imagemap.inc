@@ -115,7 +115,8 @@ testcase tEditImageMapProperties
     Objectname.SetText "This is a strange name: Huckillerry Bohaahw"
     Alternativetext.SetText "Alternative, the only way to fly..."
     Description.SetText "Just a Foney-text... or whatever it's called."
-    ImageMapHyperlink.Ok        printlog "Close the Properties-Dialogue with Ok"
+    printlog "Close the Properties-Dialogue with Ok"
+    ImageMapHyperlink.Ok
     kontext "ImageMapEditor"
     Zuweisen.Click
     sleep (1)

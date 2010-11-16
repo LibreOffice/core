@@ -92,7 +92,7 @@ testcase tiShaddow
       ImageWidth = Width.GetText
       ImageHeight = Height.GetText
       printlog "Got values from position and size"
-   printlog "Check the "Protect Size"-button. And close dialogue. "
+   printlog "Check the Protect Size-button. And close dialogue. "
       ProtectSize.Check
       TabPositionAndSize.Ok
 
@@ -120,7 +120,7 @@ testcase tiShaddow
     printlog " Select Contextmenu entry Area "
     sleep(2)
    kontext "TabArea"
-   printlog "Switch to Shaddow-tabpage, do some changes, save them, close dialogue
+   printlog "Switch to Shaddow-tabpage, do some changes, save them, close dialogue"
    Kontext
    active.SetPage TabSchatten
    kontext "TabSchatten"
@@ -217,7 +217,7 @@ testcase tiShaddow
 
    printlog "Save the file. Then close the office and reload the file "
    sFileName = ( ConvertPath(gOfficePath + "user\work\shaddow-test"))
-   printlog "File-Save As with filter as: "user\temp\shaddow-test" "
+   printlog "File-Save As with filter as: user\temp\shaddow-test "
    try
       FileSaveAs
          Kontext "SpeichernDlg"

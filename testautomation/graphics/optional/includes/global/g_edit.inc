@@ -69,9 +69,8 @@ testcase tEditDuplicate
         Kontext "Duplizieren"
         printlog " Number of copies = 30"
         AnzahlAnKopien.SetText "30"
-
-        Select Case Zaehler
         printlog " Setting values for axis and angles"
+        Select Case Zaehler
             Case 1:	XAchse.SetText "0,0"
             YAchse.SetText "0,45"
             Hoehe.SetText  "-0,1"
@@ -294,11 +293,12 @@ testcase tEditObjectEdit
     if Schrieb = "" then
         warnlog " the OLE is not defined :-((( gOLEWriter: " + iSprache
     else
-
+        printlog " new document"
         Call hNewDocument
         call sSelectEmptyLayout
-        sleep 1               printlog " new document"
-        InsertObjectOLEObject             printlog " insert writer ole object"
+        sleep 1
+        printlog " insert writer ole object"
+        InsertObjectOLEObject             
         Kontext "OLEObjektEinfuegen"
         sleep 3
         if ObjektTyp.GetItemCount = 0 Then

@@ -324,7 +324,6 @@ testcase tiToolsHyphenation1
 '   Kontext "DocumentImpress"
    printlog "   - Hyphenation with text, but without any possibility to break words"
    select case iSprache
-        printlog "Create text without a pssibility to split words"
        case 01 : hTextrahmenErstellen ("This ist a text with no split words",10,10,40,40)	
        case 03 : hTextrahmenErstellen ("Compare a tradu" + Chr(231) + Chr(227) + "o com o original",10,10,40,40)
        case 07 : qaerrorlog "- No Hypenation for Russian available"
@@ -436,25 +435,8 @@ printlog "Press CTRL + A to select all"
    hTypeKeys "<MOD1 END><HOME><MOD1 SHIFT RIGHT>"		
    sleep 3
    EditCopy
-printlog GetClipboardText
-=======
-    sleep 1
-    ' WA for draw, or smth else: get text part before hyphenation:
-    if iSprache = "1" OR bAsianLan = TRUE then
-        hTypeKeys "<MOD1 END><HOME><MOD1 SHIFT RIGHT RIGHT>"      '/// Select part of text and compare it with original text at this place ///'
-    else
-        hTypeKeys "<MOD1 END><HOME><MOD1 SHIFT RIGHT>"
-    endif
-    EditCopy
-    sDraw = GetClipboardText()
-    EditSelectAll						'/// Select whole text ///'
-    ToolsLanguageHyphenationDraw					'/// Run Hyphenation ///'
-    gMouseClick 50,50
-    hTypeKeys "<MOD1 END><HOME><MOD1 SHIFT RIGHT>"		'/// Select part of text and compare it with original text at this place ///'
-    sleep 3
-    EditCopy
+
     printlog GetClipboardText
->>>>>>> other
     select case GetClipboardText
     case DasWort  : printlog "  - Hyphenation worked"
     case DasWort2 : printlog "  - Hyphenation worked"
@@ -489,7 +471,7 @@ testcase tToolsMacro
 
     printlog "to get the count of all macros, the list needs to get elapsed-all"
     for j = 1 to 2
-        Zaehler=MakroAus.GetItemCoun4t
+        Zaehler=MakroAus.GetItemCount
         MakroAus.typeKeys "<end>"
         for i = 1 to Zaehler
             MakroAus.typeKeys "<+><up>"

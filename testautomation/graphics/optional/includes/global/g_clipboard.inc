@@ -70,6 +70,7 @@ testcase tiEditUndo
     Kontext "TabPositionAndSize"
     printlog "defining variable for original position of object"
     Ueber_Text_1=PositionX.GetText
+    printlog "Position X is: " & Ueber_Text_1
     printlog "Canceling dialog."
     TabPositionAndSize.Cancel
     sleep 2
@@ -95,7 +96,8 @@ testcase tiEditUndo
     Kontext
     Messagebox.SetPage TabPositionAndSize
     Kontext "TabPositionAndSize"
-    if PositionX=0 Then Warnlog "Command was not completely executed, and it could not be undone."
+    printlog "Position X is: " & PositionX.GetText
+    if (PositionX.GetText)=0 Then Warnlog "Command was not completely executed, and it could not be undone."
     TabPositionAndSize.Cancel
     sleep 2
     gMouseClick 60,60
@@ -517,14 +519,14 @@ testcase tiEditPasteSpecial
 
     Printlog " insert every possibility"
     for i = 1 to x
-    Printlog " - processing number: "+i
-    EditPasteSpecial
-    sleep 1
-    Kontext "InhaltEinfuegen"
-    Auswahl.Select i
-    sleep 1
-    InhaltEinfuegen.OK
-    sleep 1
+        Printlog " - processing number: "+i
+        EditPasteSpecial
+        sleep 1
+        Kontext "InhaltEinfuegen"
+        Auswahl.Select i
+        sleep 1
+        InhaltEinfuegen.OK
+        sleep 1
     next i
     printlog "close document"
     Call hCloseDocument
