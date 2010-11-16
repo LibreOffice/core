@@ -71,10 +71,6 @@ images_% : $(RES)$/img$/commandimagelist.ilst
 $(COMMONBIN)$/images_brand.zip:
     @$(TOUCH) $@
 
-# generate the HiContrast icon set
-$(MISC)$/hicontrast.flag .PHONY :
-    $(PERL) $(SOLARENV)$/bin$/hicontrast-to-theme.pl $(SOLARSRC)$/default_images $(MISC)$/hicontrast && $(TOUCH) $@
-
 # unpack the Crystal icon set
 $(MISC)$/crystal.flag : $(CRYSTAL_TARBALL)
     cd $(MISC) && gzip -d -c $(CRYSTAL_TARBALL) | ( tar -xf - ) && $(TOUCH) $(@:f)
@@ -100,11 +96,8 @@ $(MISC)$/classic.flag : $(CLASSIC_TARBALL)
     @$(TYPE) $@ || echo "ERROR: unpacking $(CLASSIC_TARBALL) failed"
 
 # dependencies
-images_hicontrast : $(MISC)$/hicontrast.flag $(RES)$/img$/commandimagelist.ilst
-
 images_crystal : $(MISC)$/crystal.flag $(RES)$/img$/commandimagelist.ilst
 
 images_oxygen : $(MISC)$/oxygen.flag $(RES)$/img$/commandimagelist.ilst
 
 images_classic : $(MISC)$/classic.flag $(RES)$/img$/commandimagelist.ilst
-
