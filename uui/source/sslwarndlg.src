@@ -41,7 +41,6 @@ ModalDialog DLG_UUI_SSLWARN
     Moveable = TRUE ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Pos = MAP_APPFONT( 221, 158 );
     Size = MAP_APPFONT( DLG_WIDTH, DLG_HEIGHT );
 
     Text [ en-US ] = "Security Warning: ";
