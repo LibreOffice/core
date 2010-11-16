@@ -38,8 +38,9 @@ class   SalFontCacheItem;
 #include "vcl/salgtype.hxx"
 #include "tools/fract.hxx"
 #include "vcl/dllapi.h"
+#include <vcl/vclenum.hxx>
+#include <vcl/sallayout.hxx>
 #include <deque>
-#include "xfont.hxx"
 
 // -=-= forwards -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 struct  ImplFontMetricData;
@@ -100,7 +101,6 @@ protected:
     Pixel           nPenPixel_;
 
     GC              pFontGC_;       // Font attributes
-    ExtendedFontStructRef   mXFont[ MAX_FALLBACK ];
     ServerFont*             mpServerFont[ MAX_FALLBACK ];
 
     SalColor        nTextColor_;
@@ -185,7 +185,7 @@ protected:
                                 const SalBitmap  &rTransparentBitmap,
                                 SalColor          nTransparentColor );
 
-    GC                      SelectFont();
+    GC                      GetFontGC();
     bool                    setFont( const ImplFontSelectData* pEntry, int nFallbackLevel );
 
     void                    drawMaskedBitmap( const SalTwoRect* pPosAry,
@@ -193,9 +193,6 @@ protected:
                                               const SalBitmap& rTransparentBitmap );
 
 protected:
-    void                    DrawStringUCS2MB( ExtendedFontStruct& rFont, const Point&,
-                                const sal_Unicode* pStr, int nLength );
-
     void                    DrawPrinterString( const SalLayout& );
 
     void                    DrawServerFontString( const ServerFontLayout& );

@@ -508,7 +508,6 @@ BOOL SalDisplay::BestVisual( Display     *pDisplay,
 
 SalDisplay::SalDisplay( Display *display ) :
         mpInputMethod( NULL ),
-        mpFallbackFactory ( NULL ),
         pDisp_( display ),
         m_pWMAdaptor( NULL ),
         m_pDtIntegrator( NULL ),
@@ -557,7 +556,6 @@ void SalDisplay::doDestruct()
     m_pDtIntegrator = NULL;
     X11SalBitmap::ImplDestroyCache();
     X11SalGraphics::releaseGlyphPeer();
-    DestroyFontCache();
 
     if( IsDisplay() )
     {
@@ -814,8 +812,6 @@ void SalDisplay::Init()
     eWindowManager_     = otherwm;
     nProperties_        = PROPERTY_DEFAULT;
     hEventGuard_        = NULL;
-    m_pFontCache        = NULL;
-    mpFontList          = (XlfdStorage*)NULL;
     mpFactory           = (AttributeProvider*)NULL;
     m_pCapture          = NULL;
     m_bXinerama         = false;
