@@ -77,11 +77,9 @@ debc62758716a169df9f62e6ab2bc634-zlib-1.2.3.tar.gz
 e3738abd0d3ce1870dc1fd1f22bba5b1-icu4c-4_2_1-src.tgz
 0f63ee487fda8f21fafa767b3c447ac9-ixion-0.2.0.tar.gz
 71474203939fafbe271e1263e61d083e-nss-3.12.8-with-nspr-4.8.6.tar.gz
-http://download.go-oo.org/SRC680
-799fc3b835a79adce8c88a3fee0150c1-libwps-0.1.2.tar.gz
-db556b750bf3eac8481a4cc5e29e5af1-libwpg-0.1.3.tar.gz
-http://download.go-oo.org/libwpd
-64d66018897d759358f454010b6e75d2-libwpd-0.8.14.tar.gz
+5ba6a61a2f66dfd5fee8cdd4cd262a37-libwpg-0.2.0.tar.bz2
+86e390f015e505dd71a66f0123c62f09-libwpd-0.9.0.tar.bz2
+9e436bff44c60dc8b97cba0c7fc11a5c-libwps-0.2.0.tar.bz2
 http://download.go-oo.org/extern
 185d60944ea767075d27247c3162b3bc-unowinreg.dll
 http://www.numbertext.org/linux
