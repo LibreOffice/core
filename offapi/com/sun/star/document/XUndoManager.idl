@@ -32,6 +32,7 @@
 #include <com/sun/star/document/UndoFailedException.idl>
 #include <com/sun/star/util/InvalidStateException.idl>
 #include <com/sun/star/util/XLockable.idl>
+#include <com/sun/star/container/XChild.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #include <com/sun/star/lang/WrappedTargetException.idl>
 
@@ -80,6 +81,13 @@ interface XUndoManager
     /** allows <a href="#locking">locking</a> the undo manager.
     */
     interface ::com::sun::star::util::XLockable;
+
+    /** allows accessing the component, usually a document, which the undo manager works for.
+
+        <p><member scope="com::sun::star::container">XChild::setParent</member> is not supported, and will throw
+        an <type scope="com::sun::star::lang">NoSupportException</type>.</p>
+    */
+    interface ::com::sun::star::container::XChild;
 
     /** enters a new undo context.
 
