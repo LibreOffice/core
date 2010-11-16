@@ -53,23 +53,6 @@ Image BMP_EXCEPTION_INFO
     ImageBitmap = Bitmap { File = "exinfo.bmp"; };
     MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
 };
-Image BMP_EXCEPTION_ERROR_SCH
-{
-    ImageBitmap = Bitmap { File = "exerror_sch.bmp"; };
-    MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
-};
-
-Image BMP_EXCEPTION_WARNING_SCH
-{
-    ImageBitmap = Bitmap { File = "exwarning_sch.bmp"; };
-    MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
-};
-
-Image BMP_EXCEPTION_INFO_SCH
-{
-    ImageBitmap = Bitmap { File = "exinfo_sch.bmp"; };
-    MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
-};
 
 ModalDialog DLG_SQLEXCEPTIONCHAIN
 {

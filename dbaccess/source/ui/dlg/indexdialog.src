@@ -199,11 +199,6 @@ Image IMG_PKEYICON
     ImageBitmap = Bitmap { File = "pkey.bmp"; };
     MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
 };
-Image IMG_PKEYICON_SCH
-{
-    ImageBitmap = Bitmap { File = "pkey_sch.bmp"; };
-    MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
-};
 
 ErrorBox ERR_NEED_INDEX_FIELDS
 {

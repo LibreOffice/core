@@ -153,20 +153,17 @@ namespace
         {
             ::boost::shared_ptr< IImageProvider >* ppProvider( &m_pErrorImage );
             USHORT nNormalImageID( BMP_EXCEPTION_ERROR );
-            USHORT nHCImageID( BMP_EXCEPTION_ERROR_SCH );
 
             switch ( _eType )
             {
             case SQLExceptionInfo::SQL_WARNING:
                 ppProvider = &m_pWarningsImage;
                 nNormalImageID = BMP_EXCEPTION_WARNING;
-                nHCImageID = BMP_EXCEPTION_WARNING_SCH;
                 break;
 
             case SQLExceptionInfo::SQL_CONTEXT:
                 ppProvider = &m_pInfoImage;
                 nNormalImageID = BMP_EXCEPTION_INFO;
-                nHCImageID = BMP_EXCEPTION_INFO_SCH;
                 break;
 
             default:
@@ -174,7 +171,9 @@ namespace
             }
 
             if ( !ppProvider->get() )
-                ppProvider->reset( new ImageProvider( nNormalImageID, nHCImageID ) );
+                // FIXME: remove second arg from ImageProvider.
+                // FIXME: It used to be high contrast
+                ppProvider->reset( new ImageProvider( nNormalImageID, nNormalImageID ) );
             return *ppProvider;
         }
 
