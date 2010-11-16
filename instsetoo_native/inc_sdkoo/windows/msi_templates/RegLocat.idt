@@ -1,5 +1,7 @@
 Signature_	Root	Key	Name	Type
 s72	i2	s255	S255	I2
 RegLocator	Signature_
-basisinstalluser	1	Software\LibreOffice\LAYERNAMETEMPLATE\Basis\[OOOBASEVERSION]	BASISINSTALLLOCATION	2
-basisinstallmachine	2	Software\LibreOffice\LAYERNAMETEMPLATE\Basis\[OOOBASEVERSION]	BASISINSTALLLOCATION	2
+basisinstalluser	1	Software\LibreOffice\Layers\Basis\[OOOBASEVERSION]	BASISINSTALLLOCATION	2
+basisinstalluser_	1	Software\LibreOffice\Layers_\Basis\[OOOBASEVERSION]	BASISINSTALLLOCATION	2
+basisinstallmachine	2	Software\LibreOffice\Layers\Basis\[OOOBASEVERSION]	BASISINSTALLLOCATION	2
+basisinstallmachine_	2	Software\LibreOffice\Layers_\Basis\[OOOBASEVERSION]	BASISINSTALLLOCATION	2
