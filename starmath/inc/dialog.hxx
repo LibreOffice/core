@@ -202,11 +202,9 @@ class SmCategoryDesc : public Resource
     XubString       Name;
     XubString      *Strings[4];
     Bitmap         *Graphics[4];    /* regular bitmaps */
-    Bitmap         *GraphicsH[4];   /* high contrast bitmaps */
     USHORT          Minimum[4];
     USHORT          Maximum[4];
     USHORT          Value[4];
-    bool            bIsHighContrast;
 
 public:
     SmCategoryDesc(const ResId &rResId, USHORT nCategoryIdx);
@@ -219,10 +217,9 @@ public:
     USHORT          GetValue(USHORT Index) const    { return Value[Index]; }
     void            SetValue(USHORT Index, USHORT nVal) { Value[Index] = nVal;}
 
-    void            SetHighContrast( bool bVal )    { bIsHighContrast = bVal; }
     const Bitmap *  GetGraphic(USHORT Index) const
     {
-        return bIsHighContrast ? GraphicsH[Index] : Graphics[Index];
+        return Graphics[Index];
     }
 };
 
@@ -257,8 +254,6 @@ class SmDistanceDialog : public ModalDialog
     using   Window::SetHelpId;
     void    SetHelpId(MetricField &rField, ULONG nHelpId);
     void    SetCategory(USHORT Category);
-
-    void    ApplyImages();
 
 public:
     SmDistanceDialog(Window *pParent, bool bFreeRes = true);
@@ -437,7 +432,6 @@ class SmSymDefineDialog : public ModalDialog
     PushButton      aDeleteBtn;
     FixedImage      aRightArrow;
     Image           aRigthArrow_Im;
-    Image           aRigthArrow_Im_HC;     // hi-contrast version
 
     SmSymbolManager     aSymbolMgrCopy,
                        &rSymbolMgr;

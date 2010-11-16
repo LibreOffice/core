@@ -654,8 +654,7 @@ static const FieldMinMax pMinMaxData[10][4] =
 };
 
 SmCategoryDesc::SmCategoryDesc(const ResId& rResId, USHORT nCategoryIdx) :
-    Resource(rResId),
-    bIsHighContrast(false)
+    Resource(rResId)
 {
     if (IsAvailableRes(ResId(1,*rResId.GetResMgr()).SetRT(RSC_STRING)))
     {
@@ -670,13 +669,11 @@ SmCategoryDesc::SmCategoryDesc(const ResId& rResId, USHORT nCategoryIdx) :
             {
                 Strings  [i] = new XubString(ResId(nI2,*rResId.GetResMgr()));
                 Graphics [i] = new Bitmap(ResId(10*nI2,*rResId.GetResMgr()));
-                GraphicsH[i] = new Bitmap(ResId(10*nI2+1,*rResId.GetResMgr()));
             }
             else
             {
                 Strings  [i] = 0;
                 Graphics [i] = 0;
-                GraphicsH[i] = 0;
             }
         }
 
@@ -698,7 +695,6 @@ SmCategoryDesc::~SmCategoryDesc()
     {
         delete Strings  [i];
         delete Graphics [i];
-        delete GraphicsH[i];
     }
 }
 
@@ -937,8 +933,6 @@ SmDistanceDialog::SmDistanceDialog(Window *pParent, bool bFreeRes)
     if (bFreeRes)
         FreeResource();
 
-    ApplyImages();
-
     // preview like controls should have a 2D look
     aBitmap.SetBorderStyle( WINDOW_BORDER_MONO );
 
@@ -960,22 +954,8 @@ SmDistanceDialog::~SmDistanceDialog()
         DELETEZ(Categories[i]);
 }
 
-void SmDistanceDialog::ApplyImages()
-{
-    bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
-    for (int i = 0;  i < NOCATEGORIES;  ++i)
-    {
-        SmCategoryDesc *pCat = Categories[i];
-        if (pCat)
-            pCat->SetHighContrast( bHighContrast );
-    }
-}
-
 void SmDistanceDialog::DataChanged( const DataChangedEvent &rEvt )
 {
-    if ( (rEvt.GetType() == DATACHANGED_SETTINGS) && (rEvt.GetFlags() & SETTINGS_STYLE) )
-            ApplyImages();
-
     ModalDialog::DataChanged( rEvt );
 }
 
@@ -2059,7 +2039,6 @@ SmSymDefineDialog::SmSymDefineDialog(Window * pParent,
     aDeleteBtn          (this, SmResId(3)),
     aRightArrow         (this, SmResId(1)),
     aRigthArrow_Im      (SmResId(1)),
-    aRigthArrow_Im_HC   (SmResId(2)),   // hi-contrast version
     rSymbolMgr          (rMgr),
     pSubsetMap          (NULL),
     pFontList           (NULL)
@@ -2136,7 +2115,7 @@ void SmSymDefineDialog::InitColor_Impl()
     aSymbolDisplay   .SetBackground( aWall );
     aSymbolDisplay   .SetTextColor( aTxtColor );
 
-    const Image &rArrowRight = bHighContrast ? aRigthArrow_Im_HC : aRigthArrow_Im;
+    const Image &rArrowRight = aRigthArrow_Im;
     aRightArrow.SetImage( rArrowRight );
 }
 

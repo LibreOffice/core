@@ -46,7 +46,7 @@
 
 ////////////////////////////////////////////////////////////
 
-static USHORT  GetImageListRID( USHORT nCategoryRID, bool bHighContrast )
+static USHORT  GetImageListRID( USHORT nCategoryRID )
 {
     USHORT nRes = 0xFFFF;
     switch (nCategoryRID)
@@ -63,8 +63,6 @@ static USHORT  GetImageListRID( USHORT nCategoryRID, bool bHighContrast )
         default :
             DBG_ERROR( "unkown category" );
     }
-    if (nRes != 0xFFFF && bHighContrast)
-        ++nRes;     //! the resource ID for the high contrast image list is just +1 compared to the regular ones
     return nRes;
 }
 
@@ -145,10 +143,7 @@ SmToolBoxWindow::SmToolBoxWindow(SfxBindings *pTmpBindings,
     pToolBoxCmd = vToolBoxCategories[0];
 
     for (i = 0;  i <= NUM_TBX_CATEGORIES; ++i)
-    {
         aImageLists [i] = 0;
-        aImageListsH[i] = 0;
-    }
 
     FreeResource();
 
@@ -165,10 +160,7 @@ SmToolBoxWindow::~SmToolBoxWindow()
         delete pBox;
     }
     for (i = 0;  i < NUM_TBX_CATEGORIES + 1;  ++i)
-    {
         delete aImageLists[i];
-        delete aImageListsH[i];
-    }
 }
 
 
@@ -179,7 +171,7 @@ SmViewShell * SmToolBoxWindow::GetView()
 }
 
 
-const ImageList * SmToolBoxWindow::GetImageList( USHORT nResId, bool bHighContrast )
+const ImageList * SmToolBoxWindow::GetImageList( USHORT nResId )
 {
     // creates the image list via its resource id and stores that
     // list for later use in the respective array.
@@ -194,7 +186,7 @@ const ImageList * SmToolBoxWindow::GetImageList( USHORT nResId, bool bHighContra
 
     if (nIndex >= 0)
     {
-        ImageList **pImgList = bHighContrast ? aImageListsH : aImageLists;
+        ImageList **pImgList = aImageLists;
         if (!pImgList[ nIndex ])
             pImgList[ nIndex ] = new ImageList( SmResId(nResId) );
         pIL = pImgList[ nIndex ];
@@ -207,18 +199,16 @@ const ImageList * SmToolBoxWindow::GetImageList( USHORT nResId, bool bHighContra
 
 void SmToolBoxWindow::ApplyImageLists( USHORT nCategoryRID )
 {
-    bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
-
     // set image list for toolbox 'catalog'
-    const ImageList *pImageList = GetImageList( RID_IL_CATALOG, bHighContrast );
+    const ImageList *pImageList = GetImageList( RID_IL_CATALOG );
     OSL_ENSURE( pImageList, "image list missing" );
     if (pImageList)
         aToolBoxCat.SetImageList( *pImageList );
 
     // set image list for active (visible) category of 'catalog'
     sal_Int16 nIdx = GetToolBoxCategoriesIndex( nCategoryRID );
-    USHORT nResId = GetImageListRID( nCategoryRID, bHighContrast );
-    pImageList = GetImageList( nResId, bHighContrast );
+    USHORT nResId = GetImageListRID( nCategoryRID );
+    pImageList = GetImageList( nResId );
     OSL_ENSURE( pImageList && nIdx >= 0, "image list or index missing" );
     if (pImageList && nIdx >= 0)
         vToolBoxCategories[ nIdx ]->SetImageList( *pImageList );
