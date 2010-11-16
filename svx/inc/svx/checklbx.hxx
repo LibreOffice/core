@@ -61,8 +61,7 @@ public:
     SvxCheckListBox( Window* pParent, WinBits nWinStyle = 0 );
     SvxCheckListBox( Window* pParent, const ResId& rResId );
     SvxCheckListBox( Window* pParent, const ResId& rResId,
-                     const Image& rNormalStaticImage,
-                     const Image& rHighContrastStaticImage );
+                     const Image& rNormalStaticImage );
     ~SvxCheckListBox();
 
     void            InsertEntry         ( const String& rStr,
