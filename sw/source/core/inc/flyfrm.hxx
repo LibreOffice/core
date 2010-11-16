@@ -28,9 +28,9 @@
 #define SW_FLYFRM_HXX
 
 #include "layfrm.hxx"
+#include "frmfmt.hxx"
 
 class SwPageFrm;
-class SwFlyFrmFmt;
 class SwFmtFrmSize;
 struct SwCrsrMoveState;
 class SwBorderAttrs;
@@ -284,5 +284,11 @@ public:
         @author OD
     */
     virtual bool IsFormatPossible() const;
+
+    // overwriting "SwFrmFmt *SwLayoutFrm::GetFmt" to provide the correct derived return type.
+    // (This is in order to skip on the otherwise necessary casting of the result to
+    // 'SwFlyFrmFmt *' after calls to this function. The casting is now done in this function.)
+    virtual const SwFlyFrmFmt *GetFmt() const;
+    virtual       SwFlyFrmFmt *GetFmt();
 };
 #endif
