@@ -190,13 +190,13 @@
 #define RID_TXT_FONT_REGULAR                     1095
 
 #define RID_BMP_SMALL_PRINTER                    1096
-#define RID_BMP_SMALL_PRINTER_HC                 1097
+// free
 #define RID_BMP_SMALL_FAX                        1098
-#define RID_BMP_SMALL_FAX_HC                     1099
+// free
 #define RID_BMP_SMALL_PDF                        1100
-#define RID_BMP_SMALL_PDF_HC                     1101
+// free
 #define RID_BMP_PRINTER                          1102
-#define RID_BMP_PRINTER_HC                       1103
+// free
 
 #define RID_AFMERROR_OK                         1300
 #define RID_AFMERROR_NO_FONT_NAME               1301

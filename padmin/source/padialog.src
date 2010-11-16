@@ -476,27 +476,6 @@ Bitmap RID_BMP_PRINTER
     File = "printer_large.png";
 };
 
-Bitmap RID_BMP_SMALL_PRINTER_HC
-{
-    File = "printer_16_h.png";
-};
-
-Bitmap RID_BMP_SMALL_FAX_HC
-{
-    File = "fax_16_h.png";
-};
-
-Bitmap RID_BMP_SMALL_PDF_HC
-{
-    File = "printpdf_16_h.png";
-};
-
-Bitmap RID_BMP_PRINTER_HC
-{
-    File = "printer_40x48_h.png";
-};
-
-
 String RID_AFMERROR_OK
 {
     Text [ en-US ] = "No error";
