@@ -110,6 +110,20 @@ ImageList IMG_JOINS
     };
     IdCount = { 2; };
 };
+ImageList IMG_JOINS_H
+{
+    Prefix = "joh";
+    MaskColor   = Color {
+            Red   = 0xffff;
+            Green = 0x0000;
+            Blue  = 0xffff;
+    };
+    IdList = {
+        IMG_PRIMARY_KEY; IMG_FOREIGN_KEY;
+    };
+    IdCount = { 2; };
+};
+
 String STR_QUERY_UNDO_TABWINSHOW
 {
     Text [ en-US ] = "Add Table Window" ;

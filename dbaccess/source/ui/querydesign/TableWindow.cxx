@@ -188,7 +188,7 @@ BOOL OTableWindow::FillListBox()
             m_pContainerListener = new ::comphelper::OContainerListenerAdapter(this,xContainer);
     }
     // mark all primary keys with special image
-    ModuleRes TmpRes(IMG_JOINS);
+    ModuleRes TmpRes(isHiContrast(m_pListBox) ? IMG_JOINS_H : IMG_JOINS);
     ImageList aImageList(TmpRes);
     Image aPrimKeyImage = aImageList.GetImage(IMG_PRIMARY_KEY);
 
@@ -273,10 +273,10 @@ void OTableWindow::impl_updateImage()
 {
     ImageProvider aImageProvider( getDesignView()->getController().getConnection() );
 
-    Image aImage;
-    aImageProvider.getImages( GetComposedName(), m_pData->isQuery() ? DatabaseObject::QUERY : DatabaseObject::TABLE, aImage );
+    Image aImage, aImageHC;
+    aImageProvider.getImages( GetComposedName(), m_pData->isQuery() ? DatabaseObject::QUERY : DatabaseObject::TABLE, aImage, aImageHC );
 
-    if ( !aImage )
+    if ( !aImage || !aImageHC )
     {
         OSL_ENSURE( false, "OTableWindow::impl_updateImage: no images!" );
         return;

@@ -888,14 +888,14 @@ DBG_NAME(DbaIndexDialog)
         }
     }
     //------------------------------------------------------------------
-    ImageList DbaIndexDialog::getImageList(sal_Int16 _eBitmapSet) const
+    ImageList DbaIndexDialog::getImageList(sal_Int16 _eBitmapSet,sal_Bool /*_bHiContast*/) const
     {
         sal_Int16 nN = IMG_INDEX_DLG_SC;
         if ( _eBitmapSet == SFX_SYMBOLS_SIZE_LARGE )
         {
             nN = IMG_INDEX_DLG_LC;
-        } // if ( _eBitmapSet == SFX_SYMBOLS_LARGE )
-        return ImageList(ModuleRes( nN ));
+        }
+        return ImageList( nN );
     }
     //------------------------------------------------------------------
     void DbaIndexDialog::resizeControls(const Size& _rDiff)

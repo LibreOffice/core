@@ -70,7 +70,7 @@ namespace
     class IImageProvider
     {
     public:
-        virtual Image   getImage() const = 0;
+        virtual Image   getImage( bool _highContrast ) const = 0;
 
         virtual ~IImageProvider() { }
     };
@@ -89,17 +89,27 @@ namespace
     {
     private:
         USHORT  m_defaultImageID;
+        USHORT  m_highContrastImageID;
 
         mutable Image   m_defaultImage;
+        mutable Image   m_highContrastImage;
 
     public:
-        ImageProvider( USHORT _defaultImageID )
+        ImageProvider( USHORT _defaultImageID, USHORT _highContrastImageID )
             :m_defaultImageID( _defaultImageID )
+            ,m_highContrastImageID( _highContrastImageID )
         {
         }
 
-        virtual Image getImage() const
+        virtual Image getImage( bool _highContrast ) const
         {
+            if ( _highContrast )
+            {
+                if ( !m_highContrastImage )
+                    m_highContrastImage = Image( ModuleRes( m_highContrastImageID ) );
+                return m_highContrastImage;
+            }
+
             if ( !m_defaultImage )
                 m_defaultImage = Image( ModuleRes( m_defaultImageID ) );
             return m_defaultImage;
@@ -161,7 +171,9 @@ namespace
             }
 
             if ( !ppProvider->get() )
-                ppProvider->reset( new ImageProvider( nNormalImageID ) );
+                // FIXME: remove second arg from ImageProvider.
+                // FIXME: It used to be high contrast
+                ppProvider->reset( new ImageProvider( nNormalImageID, nNormalImageID ) );
             return *ppProvider;
         }
 
@@ -301,9 +313,9 @@ namespace
     }
 
     //------------------------------------------------------------------------------
-    void lcl_insertExceptionEntry( SvTreeListBox& _rList, size_t _nElementPos, const ExceptionDisplayInfo& _rEntry )
+    void lcl_insertExceptionEntry( SvTreeListBox& _rList, bool _bHiContrast, size_t _nElementPos, const ExceptionDisplayInfo& _rEntry )
     {
-        Image aEntryImage( _rEntry.pImageProvider->getImage() );
+        Image aEntryImage( _rEntry.pImageProvider->getImage( _bHiContrast ) );
         SvLBoxEntry* pListEntry =
             _rList.InsertEntry( _rEntry.pLabelProvider->getLabel(), aEntryImage, aEntryImage );
         pListEntry->SetUserData( reinterpret_cast< void* >( _nElementPos ) );
@@ -362,6 +374,7 @@ OExceptionChainDialog::OExceptionChainDialog( Window* pParent, const ExceptionDi
     m_aExceptionText.SetReadOnly(sal_True);
 
     bool bHave22018 = false;
+    bool bHiContrast = isHiContrast( this );
     size_t elementPos = 0;
 
     for (   ExceptionDisplayChain::const_iterator loop = m_aExceptions.begin();
@@ -369,7 +382,7 @@ OExceptionChainDialog::OExceptionChainDialog( Window* pParent, const ExceptionDi
             ++loop, ++elementPos
         )
     {
-        lcl_insertExceptionEntry( m_aExceptionList, elementPos, *loop );
+        lcl_insertExceptionEntry( m_aExceptionList, bHiContrast, elementPos, *loop );
         bHave22018 = loop->sSQLState.EqualsAscii( "22018" );
     }
 
@@ -385,7 +398,7 @@ OExceptionChainDialog::OExceptionChainDialog( Window* pParent, const ExceptionDi
         aInfo22018.pImageProvider = aProviderFactory.getImageProvider( SQLExceptionInfo::SQL_CONTEXT );
         m_aExceptions.push_back( aInfo22018 );
 
-        lcl_insertExceptionEntry( m_aExceptionList, m_aExceptions.size() - 1, aInfo22018 );
+        lcl_insertExceptionEntry( m_aExceptionList, bHiContrast, m_aExceptions.size() - 1, aInfo22018 );
     }
 }
 

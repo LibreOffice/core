@@ -40,7 +40,8 @@ namespace dbaui
 {
     DBG_NAME(OToolBoxHelper)
     OToolBoxHelper::OToolBoxHelper()
-        :m_nSymbolsSize(-1 )
+        : m_bIsHiContrast(sal_False)
+        ,m_nSymbolsSize(-1 )
         ,m_pToolBox(NULL)
     {
         DBG_CTOR(OToolBoxHelper,NULL);
@@ -63,11 +64,14 @@ namespace dbaui
         if ( m_pToolBox )
         {
             sal_Int16 nCurSymbolsSize = SvtMiscOptions().GetCurrentSymbolsSize();
-            if ( nCurSymbolsSize != m_nSymbolsSize )
+            if ( nCurSymbolsSize != m_nSymbolsSize ||
+                m_bIsHiContrast != m_pToolBox->GetSettings().GetStyleSettings().GetHighContrastMode() )
             {
                 m_nSymbolsSize  = nCurSymbolsSize;
+                m_bIsHiContrast = m_pToolBox->GetSettings().GetStyleSettings().GetHighContrastMode();
 
-                m_pToolBox->SetImageList( getImageList(m_nSymbolsSize) );
+
+                m_pToolBox->SetImageList( getImageList(m_nSymbolsSize,m_bIsHiContrast) );
                 Size aTbOldSize = m_pToolBox->GetSizePixel();
                 adjustToolBoxSize(m_pToolBox);
                 Size aTbNewSize = m_pToolBox->GetSizePixel();
@@ -113,6 +117,7 @@ namespace dbaui
         m_pToolBox = _pTB;
         if ( m_pToolBox )
         {
+            //  m_bIsHiContrast = m_pToolBox->GetSettings().GetStyleSettings().GetHighContrastMode();
             ConfigOptionsChanged(NULL);
             if ( bFirstTime )
                 adjustToolBoxSize(m_pToolBox);
