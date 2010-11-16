@@ -122,18 +122,6 @@ Image RID_IMG_TREENODE_EXPANDED
     MaskColor = Color { Red = 0xFF00; Green = 0x0000; Blue = 0xFF00; };
 };
 
-Image RID_IMG_TREENODE_COLLAPSED_HC
-{
-    ImageBitmap = Bitmap { File = "plus_sch.bmp"; } ;
-    MaskColor = Color { Red = 0xFF00; Green = 0x0000; Blue = 0xFF00; };
-};
-
-Image RID_IMG_TREENODE_EXPANDED_HC
-{
-    ImageBitmap = Bitmap { File = "minus_sch.bmp"; } ;
-    MaskColor = Color { Red = 0xFF00; Green = 0x0000; Blue = 0xFF00; };
-};
-
 String STR_SHOW_RULER
 {
     Text [ en-US ] = "Show ruler";

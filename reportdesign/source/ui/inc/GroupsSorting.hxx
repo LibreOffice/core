@@ -188,10 +188,8 @@ public:
         /** will be called when the image list is needed.
             @param  _eSymbolsSize
                 <svtools/imgdef.hxx>
-            @param  _bHiContast
-                <TRUE/> when in high contrast mode.
         */
-    virtual ImageList getImageList(sal_Int16 _eSymbolsSize,sal_Bool _bHiContast) const;
+    virtual ImageList getImageList(sal_Int16 _eSymbolsSize) const;
 
     // ImageListProvider interface
     virtual ImageList getImageList(vcl::ImageListType) SAL_THROW ((com::sun::star::lang::IllegalArgumentException ));

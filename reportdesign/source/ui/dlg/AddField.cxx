@@ -512,16 +512,12 @@ IMPL_LINK( OAddFieldWindow, OnDoubleClickHdl, void* ,/*_pAddFieldDlg*/)
     return 0L;
 }
 //------------------------------------------------------------------------------
-ImageList OAddFieldWindow::getImageList(sal_Int16 _eBitmapSet,sal_Bool _bHiContast) const
+ImageList OAddFieldWindow::getImageList(sal_Int16 _eBitmapSet) const
 {
     sal_Int16 nN = IMG_ADDFIELD_DLG_SC;
-    sal_Int16 nH = IMG_ADDFIELD_DLG_SCH;
     if ( _eBitmapSet == SFX_SYMBOLS_SIZE_LARGE )
-    {
         nN = IMG_ADDFIELD_DLG_LC;
-        nH = IMG_ADDFIELD_DLG_LCH;
-    }
-    return ImageList(ModuleRes( _bHiContast ? nH : nN ));
+    return ImageList(ModuleRes(nN));
 }
 //------------------------------------------------------------------
 void OAddFieldWindow::resizeControls(const Size& _rDiff)

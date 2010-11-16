@@ -386,16 +386,12 @@ void Condition::ApplyCommand( USHORT _nCommandId, const ::Color& _rColor)
     m_rAction.applyCommand( m_nCondIndex, _nCommandId, _rColor );
 }
 //------------------------------------------------------------------------------
-ImageList Condition::getImageList(sal_Int16 _eBitmapSet,sal_Bool _bHiContast) const
+ImageList Condition::getImageList(sal_Int16 _eBitmapSet) const
 {
     sal_Int16 nN = IMG_CONDFORMAT_DLG_SC;
-    sal_Int16 nH = IMG_CONDFORMAT_DLG_SCH;
     if ( _eBitmapSet == SFX_SYMBOLS_SIZE_LARGE )
-    {
         nN = IMG_CONDFORMAT_DLG_LC;
-        nH = IMG_CONDFORMAT_DLG_LCH;
-    }
-    return ImageList(ModuleRes( _bHiContast ? nH : nN ));
+    return ImageList(ModuleRes(nN));
 }
 //------------------------------------------------------------------
 void Condition::resizeControls(const Size& _rDiff)

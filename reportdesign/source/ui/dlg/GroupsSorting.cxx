@@ -1467,16 +1467,11 @@ void OGroupsSortingDialog::checkButtons(sal_Int32 _nRow)
     }
 }
 
-/**
- * @param _bHiContast (sic) unused noop. FIXME: please remove carefully
- */
-ImageList OGroupsSortingDialog::getImageList(sal_Int16 _eBitmapSet,sal_Bool /*_bHiContast*/) const
+ImageList OGroupsSortingDialog::getImageList(sal_Int16 _eBitmapSet) const
 {
     sal_Int16 nN = IMG_CONDFORMAT_DLG_SC;
     if ( _eBitmapSet == SFX_SYMBOLS_SIZE_LARGE )
-    {
         nN = IMG_CONDFORMAT_DLG_LC;
-    }
     return ImageList(ModuleRes( nN ));
 }
 
@@ -1493,20 +1488,9 @@ void OGroupsSortingDialog::resizeControls(const Size& _rDiff)
 
 //------------------------------------------------------------------
 // load the images
-ImageList OGroupsSortingDialog::getImageList(vcl::ImageListType _eType) SAL_THROW (( com::sun::star::lang::IllegalArgumentException ))
+ImageList OGroupsSortingDialog::getImageList(vcl::ImageListType) SAL_THROW (( com::sun::star::lang::IllegalArgumentException ))
 {
-    if (_eType == vcl::HIGHCONTRAST_NO)
-    {
-        return ImageList(ModuleRes(IMGLST_GROUPSORT_DLG_SC));
-    }
-    else if (_eType == vcl::HIGHCONTRAST_YES)
-    {
-        return ImageList(ModuleRes(IMGLST_GROUPSORT_DLG_SCH));
-    }
-    else
-    {
-        throw com::sun::star::lang::IllegalArgumentException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("High contrast parameter is wrong.")), NULL, 0);
-    }
+    return ImageList(ModuleRes(IMGLST_GROUPSORT_DLG_SC));
 }
 
 // =============================================================================

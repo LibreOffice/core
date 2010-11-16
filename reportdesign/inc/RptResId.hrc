@@ -251,8 +251,6 @@
 // -----------------------------------------------------------------------
 #define RID_IMG_TREENODE_COLLAPSED          ( RID_IMAGE_START +   1 )
 #define RID_IMG_TREENODE_EXPANDED           ( RID_IMAGE_START +   2 )
-#define RID_IMG_TREENODE_COLLAPSED_HC       ( RID_IMAGE_START +   3 )
-#define RID_IMG_TREENODE_EXPANDED_HC        ( RID_IMAGE_START +   4 )
 #define REPORT_TREE_ICON                    ( RID_IMAGE_START +   5 )
 // menu -----------------------------------------------------------------------
 #define RID_MENU_REPORT                     ( RID_MENU_START + 0 )

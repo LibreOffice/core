@@ -285,19 +285,6 @@ ImageList IMG_CONDFORMAT_DLG_SC
     };
 };
 
-ImageList IMG_CONDFORMAT_DLG_SCH
-{
-    MASKCOLOR;
-    FileList =
-    {
-        < "res/commandimagelist/sch_bold.png" ; SID_ATTR_CHAR_WEIGHT ; > ;
-        < "res/commandimagelist/sch_italic.png" ; SID_ATTR_CHAR_POSTURE ; > ;
-        < "res/commandimagelist/sch_underline.png" ; SID_ATTR_CHAR_UNDERLINE ; > ;
-        < "res/commandimagelist/sch_backgroundcolor.png" ; SID_BACKGROUND_COLOR ; > ;
-        < "res/commandimagelist/sch_fontcolor.png" ; SID_ATTR_CHAR_COLOR2 ; > ;
-        < "res/commandimagelist/sch_fontdialog.png" ; SID_CHAR_DLG ; > ;
-    };
-};
 ImageList IMG_CONDFORMAT_DLG_LC
 {
     MASKCOLOR;
@@ -311,21 +298,6 @@ ImageList IMG_CONDFORMAT_DLG_LC
         < "res/commandimagelist/lc_fontdialog.png" ; SID_CHAR_DLG ; > ;
     };
 };
-ImageList IMG_CONDFORMAT_DLG_LCH
-{
-    MASKCOLOR;
-    FileList =
-    {
-        < "res/commandimagelist/lch_bold.png" ; SID_ATTR_CHAR_WEIGHT ; > ;
-        < "res/commandimagelist/lch_italic.png" ; SID_ATTR_CHAR_POSTURE ; > ;
-        < "res/commandimagelist/lch_underline.png" ; SID_ATTR_CHAR_UNDERLINE ; > ;
-        < "res/commandimagelist/lch_backgroundcolor.png" ; SID_BACKGROUND_COLOR ; > ;
-        < "res/commandimagelist/lch_fontcolor.png" ; SID_ATTR_CHAR_COLOR2 ; > ;
-        < "res/commandimagelist/lch_fontdialog.png" ; SID_CHAR_DLG ; > ;
-    };
-};
-
-
 
 ImageList 31000
 {
@@ -384,17 +356,6 @@ ImageList IMG_ADDFIELD_DLG_SC
     };
 };
 
-ImageList IMG_ADDFIELD_DLG_SCH
-{
-    MASKCOLOR;
-    FileList =
-    {
-        < "res/commandimagelist/sch_sortup.png" ; SID_FM_SORTUP ; > ;
-        < "res/commandimagelist/sch_sortdown.png" ; SID_FM_SORTDOWN ; > ;
-        < "res/commandimagelist/sch_removefiltersort.png" ; SID_FM_REMOVE_FILTER_SORT ; > ;
-    };
-};
-
 ImageList IMG_ADDFIELD_DLG_LC
 {
     MASKCOLOR;
@@ -403,17 +364,6 @@ ImageList IMG_ADDFIELD_DLG_LC
         < "res/commandimagelist/lc_sortup.png" ; SID_FM_SORTUP ; > ;
         < "res/commandimagelist/lc_sortdown.png" ; SID_FM_SORTDOWN ; > ;
         < "res/commandimagelist/lc_removefiltersort.png" ; SID_FM_REMOVE_FILTER_SORT ; > ;
-    };
-};
-
-ImageList IMG_ADDFIELD_DLG_LCH
-{
-    MASKCOLOR;
-    FileList =
-    {
-        < "res/commandimagelist/lch_sortup.png" ; SID_FM_SORTUP ; > ;
-        < "res/commandimagelist/lch_sortdown.png" ; SID_FM_SORTDOWN ; > ;
-        < "res/commandimagelist/lch_removefiltersort.png" ; SID_FM_REMOVE_FILTER_SORT ; > ;
     };
 };
 

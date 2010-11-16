@@ -51,8 +51,6 @@ namespace rptui
 
 Image*  OStartMarker::s_pDefCollapsed       = NULL;
 Image*  OStartMarker::s_pDefExpanded        = NULL;
-Image*  OStartMarker::s_pDefCollapsedHC = NULL;
-Image*  OStartMarker::s_pDefExpandedHC  = NULL;
 oslInterlockedCount OStartMarker::s_nImageRefCount  = 0;
 
 DBG_NAME( rpt_OStartMarker )
@@ -94,8 +92,6 @@ OStartMarker::~OStartMarker()
     {
         DELETEZ(s_pDefCollapsed);
         DELETEZ(s_pDefExpanded);
-        DELETEZ(s_pDefCollapsedHC);
-        DELETEZ(s_pDefExpandedHC);
     } // if ( osl_decrementInterlockedCount(&s_nImageRefCount) == 0 )
 }
 // -----------------------------------------------------------------------------
@@ -191,11 +187,7 @@ void OStartMarker::MouseButtonUp( const MouseEvent& rMEvt )
 // -----------------------------------------------------------------------------
 void OStartMarker::changeImage()
 {
-    Image* pImage = NULL;
-    if ( GetSettings().GetStyleSettings().GetHighContrastMode() )
-        pImage = m_bCollapsed ? s_pDefCollapsedHC : s_pDefExpandedHC;
-    else
-        pImage = m_bCollapsed ? s_pDefCollapsed : s_pDefExpanded;
+    Image* pImage = m_bCollapsed ? s_pDefCollapsed : s_pDefExpanded;
     m_aImage.SetImage(*pImage);
 }
 // -----------------------------------------------------------------------
@@ -204,20 +196,10 @@ void OStartMarker::initDefaultNodeImages()
     if ( !s_pDefCollapsed )
     {
         s_pDefCollapsed     = new Image( ModuleRes( RID_IMG_TREENODE_COLLAPSED      ) );
-        s_pDefCollapsedHC   = new Image( ModuleRes( RID_IMG_TREENODE_COLLAPSED_HC   ) );
         s_pDefExpanded      = new Image( ModuleRes( RID_IMG_TREENODE_EXPANDED       ) );
-        s_pDefExpandedHC    = new Image( ModuleRes( RID_IMG_TREENODE_EXPANDED_HC    ) );
     }
 
-    Image* pImage = NULL;
-    if ( GetSettings().GetStyleSettings().GetHighContrastMode() )
-    {
-        pImage = m_bCollapsed ? s_pDefCollapsedHC : s_pDefExpandedHC;
-    }
-    else
-    {
-        pImage = m_bCollapsed ? s_pDefCollapsed : s_pDefExpanded;
-    }
+    Image* pImage = m_bCollapsed ? s_pDefCollapsed : s_pDefExpanded;
     m_aImage.SetImage(*pImage);
     m_aImage.SetMouseTransparent(TRUE);
     m_aImage.SetBackground();
