@@ -220,14 +220,6 @@ void XSecController::setDate( rtl::OUString& ouDate )
     isi.signatureInfor.ouDateTime = ouDate;
 }
 
-/*
-void XSecController::setTime( rtl::OUString& ouTime )
-{
-    InternalSignatureInformation &isi = m_vInternalSignatureInformations[m_vInternalSignatureInformations.size()-1];
-    isi.signatureInfor.ouTime = ouTime;
-}
-*/
-
 void XSecController::setId( rtl::OUString& ouId )
 {
     InternalSignatureInformation &isi = m_vInternalSignatureInformations[m_vInternalSignatureInformations.size()-1];

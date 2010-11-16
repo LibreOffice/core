@@ -1365,46 +1365,6 @@ SignatureInformations XSecController::getSignatureInformations() const
 /*
  * XFastPropertySet
  */
-/*
-void SAL_CALL XSecController::setFastPropertyValue(
-    sal_Int32 nHandle,
-    const cssu::Any& aValue )
-    throw ( cssb::UnknownPropertyException,
-        cssb::PropertyVetoException,
-        cssl::IllegalArgumentException,
-        cssl::WrappedTargetException,
-        cssu::RuntimeException)
-{
-    sal_Int32 nIndex = getFastPropertyIndex(nHandle);
-    if (nIndex == -1)
-    {
-        m_vFastPropertyIndexs.push_back( nHandle );
-        m_vFastPropertyValues.push_back( aValue );
-    }
-    else
-    {
-        m_vFastPropertyValues[nIndex] = aValue;
-    }
-}
-
-cssu::Any SAL_CALL XSecController::getFastPropertyValue(
-    sal_Int32 nHandle )
-    throw (
-        cssb::UnknownPropertyException,
-        cssl::WrappedTargetException,
-        cssu::RuntimeException)
-{
-    cssu::Any aValue;
-
-    sal_Int32 nIndex = getFastPropertyIndex(nHandle);
-    if (nIndex != -1)
-    {
-        aValue = m_vFastPropertyValues[nIndex];
-    }
-
-    return aValue;
-}
-*/
 
 /*
  * XSAXEventKeeperStatusChangeListener
@@ -1413,13 +1373,6 @@ cssu::Any SAL_CALL XSecController::getFastPropertyValue(
 void SAL_CALL XSecController::blockingStatusChanged( sal_Bool isBlocking )
     throw (cssu::RuntimeException)
 {
-    /*
-    showMessageBox( rtl::OUString::createFromAscii((isBlocking?
-                        "Blocking Status => TRUE":
-                        "Blocking Status => FALSE")),
-            rtl::OUString::createFromAscii("SAXEventKeeper Status"));
-    */
-
     this->m_bIsBlocking = isBlocking;
     checkChainingStatus();
 }
@@ -1428,13 +1381,6 @@ void SAL_CALL XSecController::collectionStatusChanged(
     sal_Bool isInsideCollectedElement )
     throw (cssu::RuntimeException)
 {
-    /*
-    showMessageBox( rtl::OUString::createFromAscii((isInsideCollectedElement?
-                        "Collection Status => TRUE":
-                        "Collection Status => FALSE")),
-            rtl::OUString::createFromAscii("SAXEventKeeper Status"));
-    */
-
     this->m_bIsCollectingElement = isInsideCollectedElement;
     checkChainingStatus();
 }
@@ -1442,12 +1388,7 @@ void SAL_CALL XSecController::collectionStatusChanged(
 void SAL_CALL XSecController::bufferStatusChanged( sal_Bool /*isBufferEmpty*/)
     throw (cssu::RuntimeException)
 {
-    /*
-    showMessageBox( rtl::OUString::createFromAscii((isBufferEmpty?
-                        "Buffer Empty => TRUE":
-                        "Buffer Empty => FALSE")),
-            rtl::OUString::createFromAscii("SAXEventKeeper Status"));
-    */
+
 }
 
 /*
@@ -1461,16 +1402,6 @@ void SAL_CALL XSecController::signatureCreated( sal_Int32 securityId, com::sun::
 
     SignatureInformation& signatureInfor = m_vInternalSignatureInformations[index].signatureInfor;
 
-    /*
-    if (nResult == cssxc::sax::SignatureCreationResult_CREATIONSUCCEED)
-    {
-        signatureInfor.nStatus = STATUS_CREATION_SUCCEED;
-    }
-    else
-    {
-        signatureInfor.nStatus = STATUS_CREATION_FAIL;
-    }
-    */
     signatureInfor.nStatus = nResult;
 }
 
@@ -1485,16 +1416,6 @@ void SAL_CALL XSecController::signatureVerified( sal_Int32 securityId, com::sun:
 
     SignatureInformation& signatureInfor = m_vInternalSignatureInformations[index].signatureInfor;
 
-    /*
-    if (nResult == cssxc::sax::SignatureVerifyResult_VERIFYSUCCEED)
-    {
-        signatureInfor.nStatus = STATUS_VERIFY_SUCCEED;
-    }
-    else
-    {
-        signatureInfor.nStatus = STATUS_VERIFY_FAIL;
-    }
-    */
     signatureInfor.nStatus = nResult;
 }
 

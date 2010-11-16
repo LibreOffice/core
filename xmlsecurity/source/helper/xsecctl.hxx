@@ -532,23 +532,6 @@ public:
     /*
      * XFastPropertySet
      */
-    /*
-    virtual void SAL_CALL setFastPropertyValue(
-        sal_Int32 nHandle,
-        const com::sun::star::uno::Any& aValue )
-        throw (
-            com::sun::star::beans::UnknownPropertyException,
-            com::sun::star::beans::PropertyVetoException,
-            com::sun::star::lang::IllegalArgumentException,
-            com::sun::star::lang::WrappedTargetException,
-            com::sun::star::uno::RuntimeException);
-    virtual com::sun::star::uno::Any SAL_CALL getFastPropertyValue(
-        sal_Int32 nHandle )
-        throw (
-            com::sun::star::beans::UnknownPropertyException,
-            com::sun::star::lang::WrappedTargetException,
-            com::sun::star::uno::RuntimeException);
-    */
 
     /*
      * XSAXEventKeeperStatusChangeListener
