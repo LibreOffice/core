@@ -127,7 +127,7 @@ public class UndoManager
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-//    @Test
+    @Test
     public void checkCalcUndo() throws Exception
     {
         m_currentTestCase = new CalcDocumentTest( getORB() );
@@ -135,7 +135,7 @@ public class UndoManager
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-//    @Test
+    @Test
     public void checkDrawUndo() throws Exception
     {
         m_currentTestCase = new DrawDocumentTest( getORB() );
@@ -143,7 +143,7 @@ public class UndoManager
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-//    @Test
+    @Test
     public void checkImpressUndo() throws Exception
     {
         m_currentTestCase = new ImpressDocumentTest( getORB() );
@@ -151,7 +151,7 @@ public class UndoManager
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    @Test
+//    @Test
     public void checkChartUndo() throws Exception
     {
         m_currentTestCase = new ChartDocumentTest( getORB() );
@@ -159,7 +159,7 @@ public class UndoManager
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-//    @Test
+    @Test
     public void checkBrokenScripts() throws com.sun.star.uno.Exception, InterruptedException
     {
         System.out.println( "testing: broken scripts" );
@@ -309,8 +309,10 @@ public class UndoManager
      */
     private XUndoManager getUndoManager()
     {
-        XUndoManagerSupplier suppUndo = UnoRuntime.queryInterface( XUndoManagerSupplier.class, m_currentDocument.getDocument() );
-        return suppUndo.getUndoManager();
+        final XUndoManagerSupplier suppUndo = UnoRuntime.queryInterface( XUndoManagerSupplier.class, m_currentDocument.getDocument() );
+        final XUndoManager undoManager = suppUndo.getUndoManager();
+        assertTrue( UnoRuntime.areSame( undoManager.getParent(), m_currentDocument.getDocument() ) );
+        return undoManager;
     }
 
     // -----------------------------------------------------------------------------------------------------------------

@@ -78,6 +78,8 @@ namespace sfx2
     using ::com::sun::star::document::XUndoManagerListener;
     using ::com::sun::star::document::UndoFailedException;
     using ::com::sun::star::document::XUndoManager;
+    using ::com::sun::star::lang::NoSupportException;
+    using ::com::sun::star::frame::XModel;
     /** === end UNO using === **/
 
     using ::svl::IUndoManager;
@@ -448,6 +450,20 @@ namespace sfx2
     {
         UndoManagerGuard aGuard( *this );
         return m_pImpl->aUndoHelper.removeUndoManagerListener( i_listener );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    Reference< XInterface > SAL_CALL DocumentUndoManager::getParent(  ) throw (RuntimeException)
+    {
+        UndoManagerGuard aGuard( *this );
+        return static_cast< XModel* >( &getBaseModel() );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void SAL_CALL DocumentUndoManager::setParent( const Reference< XInterface >& i_parent ) throw (NoSupportException, RuntimeException)
+    {
+        (void)i_parent;
+        throw NoSupportException( ::rtl::OUString(), m_pImpl->getThis() );
     }
 
 //......................................................................................................................
