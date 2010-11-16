@@ -461,7 +461,7 @@ void OReportSection::SelectAll(const sal_uInt16 _nObjectType)
         }
     }
 }
-void lcl_insertMenuItemImages(PopupMenu& rContextMenu,OReportController& rController,const uno::Reference< report::XReportDefinition>& _xReportDefinition,uno::Reference<frame::XFrame>& _rFrame,BOOL _bHiContrast)
+void lcl_insertMenuItemImages(PopupMenu& rContextMenu,OReportController& rController,const uno::Reference< report::XReportDefinition>& _xReportDefinition,uno::Reference<frame::XFrame>& _rFrame)
 {
     const USHORT nCount = rContextMenu.GetItemCount();
     for (USHORT i = 0; i < nCount; ++i)
@@ -472,12 +472,12 @@ void lcl_insertMenuItemImages(PopupMenu& rContextMenu,OReportController& rContro
             PopupMenu* pPopupMenu = rContextMenu.GetPopupMenu( nId );
             if ( pPopupMenu )
             {
-                lcl_insertMenuItemImages(*pPopupMenu,rController,_xReportDefinition,_rFrame,_bHiContrast);
+                lcl_insertMenuItemImages(*pPopupMenu,rController,_xReportDefinition,_rFrame);
             }
             else
             {
                 const ::rtl::OUString sCommand = rContextMenu.GetItemCommand(nId);
-                rContextMenu.SetItemImage(nId,framework::GetImageFromURL(_rFrame,sCommand,FALSE,_bHiContrast));
+                rContextMenu.SetItemImage(nId,framework::GetImageFromURL(_rFrame,sCommand,FALSE));
                 if ( nId == SID_PAGEHEADERFOOTER )
                 {
                     String sText = String(ModuleRes((_xReportDefinition.is() && _xReportDefinition->getPageHeaderOn()) ? RID_STR_PAGEHEADERFOOTER_DELETE : RID_STR_PAGEHEADERFOOTER_INSERT));
@@ -502,14 +502,12 @@ void OReportSection::Command( const CommandEvent& _rCEvt )
     {
         case COMMAND_CONTEXTMENU:
         {
-            const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-            BOOL bHiContrast = rSettings.GetHighContrastMode();
             OReportController& rController = m_pParent->getViewsWindow()->getView()->getReportView()->getController();
             uno::Reference<frame::XFrame> xFrame = rController.getFrame();
             PopupMenu aContextMenu( ModuleRes( RID_MENU_REPORT ) );
             uno::Reference< report::XReportDefinition> xReportDefinition = getSection()->getReportDefinition();
 
-            lcl_insertMenuItemImages(aContextMenu,rController,xReportDefinition,xFrame,bHiContrast);
+            lcl_insertMenuItemImages(aContextMenu,rController,xReportDefinition,xFrame);
 
             Point aPos = _rCEvt.GetMousePosPixel();
             m_pView->EndAction();
