@@ -29,6 +29,7 @@
 #include "precompiled_chart2.hxx"
 
 #include "UndoGuard.hxx"
+#include "ChartModelClone.hxx"
 #include "ImplDocumentActions.hxx"
 
 #include <com/sun/star/container/XChild.hpp>
@@ -46,17 +47,20 @@ namespace chart
 
 //-----------------------------------------------------------------------------
 
-UndoGuard_Base::UndoGuard_Base( const OUString& i_undoString, const uno::Reference< document::XUndoManager > & i_undoManager )
+UndoGuard::UndoGuard( const OUString& i_undoString, const uno::Reference< document::XUndoManager > & i_undoManager,
+                               const ModelFacet i_facet )
     :m_xChartModel( i_undoManager->getParent(), uno::UNO_QUERY_THROW )
     ,m_xUndoManager( i_undoManager )
+    ,m_pDocumentSnapshot()
     ,m_aUndoString( i_undoString )
     ,m_bActionPosted( false )
 {
+    m_pDocumentSnapshot.reset( new ChartModelClone( m_xChartModel, i_facet ) );
 }
 
 //-----------------------------------------------------------------------------
 
-UndoGuard_Base::~UndoGuard_Base()
+UndoGuard::~UndoGuard()
 {
     if ( !!m_pDocumentSnapshot )
         discardSnapshot();
@@ -64,7 +68,7 @@ UndoGuard_Base::~UndoGuard_Base()
 
 //-----------------------------------------------------------------------------
 
-void UndoGuard_Base::commit()
+void UndoGuard::commit()
 {
     if ( !m_bActionPosted && !!m_pDocumentSnapshot && m_xUndoManager.is() )
     {
@@ -77,7 +81,7 @@ void UndoGuard_Base::commit()
 
 //-----------------------------------------------------------------------------
 
-void UndoGuard_Base::rollback()
+void UndoGuard::rollback()
 {
     ENSURE_OR_RETURN_VOID( !!m_pDocumentSnapshot, "no snapshot!" );
     m_pDocumentSnapshot->applyToModel( m_xChartModel );
@@ -85,19 +89,7 @@ void UndoGuard_Base::rollback()
 }
 
 //-----------------------------------------------------------------------------
-
-void UndoGuard_Base::takeSnapshot( bool i_withData, bool i_withSelection )
-{
-    impl::ModelFacet eModelFacet( impl::E_MODEL );
-    if ( i_withData )
-        eModelFacet = impl::E_MODEL_WITH_DATA;
-    else if ( i_withSelection )
-        eModelFacet = impl::E_MODEL_WITH_SELECTION;
-    m_pDocumentSnapshot.reset( new impl::ChartModelClone( m_xChartModel, eModelFacet ) );
-}
-
-//-----------------------------------------------------------------------------
-void UndoGuard_Base::discardSnapshot()
+void UndoGuard::discardSnapshot()
 {
     ENSURE_OR_RETURN_VOID( !!m_pDocumentSnapshot, "no snapshot!" );
     m_pDocumentSnapshot->dispose();
@@ -106,23 +98,9 @@ void UndoGuard_Base::discardSnapshot()
 
 //-----------------------------------------------------------------------------
 
-UndoGuard::UndoGuard( const OUString& i_undoString, const uno::Reference< document::XUndoManager >& i_undoManager )
-    :UndoGuard_Base( i_undoString, i_undoManager )
-{
-    takeSnapshot( false, false );
-}
-
-UndoGuard::~UndoGuard()
-{
-    // nothing to do ... TODO: can this class be removed?
-}
-
-//-----------------------------------------------------------------------------
-
 UndoLiveUpdateGuard::UndoLiveUpdateGuard( const OUString& i_undoString, const uno::Reference< document::XUndoManager >& i_undoManager )
-    :UndoGuard_Base( i_undoString, i_undoManager )
+    :UndoGuard( i_undoString, i_undoManager, E_MODEL )
 {
-    takeSnapshot( false, false );
 }
 
 UndoLiveUpdateGuard::~UndoLiveUpdateGuard()
@@ -135,9 +113,8 @@ UndoLiveUpdateGuard::~UndoLiveUpdateGuard()
 
 UndoLiveUpdateGuardWithData::UndoLiveUpdateGuardWithData(
         const OUString& i_undoString, const uno::Reference< document::XUndoManager >& i_undoManager )
-    :UndoGuard_Base( i_undoString, i_undoManager )
+    :UndoGuard( i_undoString, i_undoManager, E_MODEL_WITH_DATA )
 {
-    takeSnapshot( true, false );
 }
 
 UndoLiveUpdateGuardWithData::~UndoLiveUpdateGuardWithData()
@@ -150,9 +127,8 @@ UndoLiveUpdateGuardWithData::~UndoLiveUpdateGuardWithData()
 
 UndoGuardWithSelection::UndoGuardWithSelection(
         const OUString& i_undoString, const uno::Reference< document::XUndoManager >& i_undoManager )
-    :UndoGuard_Base( i_undoString, i_undoManager )
+    :UndoGuard( i_undoString, i_undoManager, E_MODEL_WITH_SELECTION )
 {
-    takeSnapshot( false, true );
 }
 
 UndoGuardWithSelection::~UndoGuardWithSelection()

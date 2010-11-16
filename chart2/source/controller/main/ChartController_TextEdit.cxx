@@ -29,6 +29,7 @@
 #include "precompiled_chart2.hxx"
 #include "ChartController.hxx"
 
+#include "ResId.hxx"
 #include "UndoGuard.hxx"
 #include "DrawViewWrapper.hxx"
 #include "ChartWindow.hxx"
@@ -37,6 +38,7 @@
 #include "macros.hxx"
 #include "ControllerLockGuard.hxx"
 #include "AccessibleTextHelper.hxx"
+#include "Strings.hrc"
 #include "chartview/DrawModelWrapper.hxx"
 
 #include <svx/svdotext.hxx>
@@ -82,7 +84,8 @@ void ChartController::StartTextEdit( const Point* pMousePixel )
         return;
 
     OSL_PRECOND( !m_pTextActionUndoGuard.get(), "ChartController::StartTextEdit: already have a TextUndoGuard!?" );
-    m_pTextActionUndoGuard.reset( new UndoGuard( C2U( "Text Edit" ), m_xUndoManager ) );
+    m_pTextActionUndoGuard.reset( new UndoGuard(
+        String( SchResId( STR_ACTION_EDIT_TEXT ) ), m_xUndoManager ) );
     SdrOutliner* pOutliner = m_pDrawViewWrapper->getOutliner();
     //pOutliner->SetRefDevice(m_pChartWindow);
     //pOutliner->SetStyleSheetPool((SfxStyleSheetPool*)pStyleSheetPool);

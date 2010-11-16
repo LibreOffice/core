@@ -616,7 +616,7 @@ void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent 
         m_pChartWindow->Invalidate();
 
     uno::Reference< document::XUndoManagerSupplier > xSuppUndo( getModel(), uno::UNO_QUERY_THROW );
-    m_xUndoManager.set( xSuppUndo->getUndoManager(), uno::UNO_SET_THROW );
+    m_xUndoManager.set( xSuppUndo->getUndoManager(), uno::UNO_QUERY_THROW );
 
     return sal_True;
 }

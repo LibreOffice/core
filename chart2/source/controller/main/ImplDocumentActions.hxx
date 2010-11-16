@@ -55,45 +55,10 @@ namespace chart2 {
 
 namespace chart
 {
+class ChartModelClone;
+
 namespace impl
 {
-
-enum ModelFacet
-{
-    E_MODEL,
-    E_MODEL_WITH_DATA,
-    E_MODEL_WITH_SELECTION
-};
-
-class ChartModelClone : public ::boost::noncopyable
-{
-public:
-    ChartModelClone(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& i_model,
-        const ModelFacet i_facet
-    );
-
-    ~ChartModelClone();
-
-    ModelFacet getFacet() const;
-
-    void applyToModel( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& i_model ) const;
-
-    static void applyModelContentToModel(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & i_model,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & i_modelToCopyFrom,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XInternalDataProvider > & i_data );
-
-    void dispose();
-
-private:
-    bool    impl_isDisposed() const { return !m_xModelClone.is(); }
-
-private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >                 m_xModelClone;
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XInternalDataProvider > m_xDataClone;
-    ::com::sun::star::uno::Any                                                          m_aSelection;
-};
 
 typedef ::cppu::BaseMutex                                                           UndoElement_MBase;
 typedef ::cppu::WeakComponentImplHelper1< ::com::sun::star::document::XUndoAction > UndoElement_TBase;

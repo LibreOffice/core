@@ -27,10 +27,11 @@
 #ifndef CHART2_UNDOGUARD_HXX
 #define CHART2_UNDOGUARD_HXX
 
+#include "ChartModelClone.hxx"
+
 #include <com/sun/star/document/XUndoManager.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 
-// header for class OUString
 #include <rtl/ustring.hxx>
 
 #include <boost/shared_ptr.hpp>
@@ -38,28 +39,23 @@
 namespace chart
 {
 
-namespace impl
-{
-    class ChartModelClone;
-}
-
-/** Base Class for UndoGuard and UndoLiveUpdateGuard
-*/
-class UndoGuard_Base
+/** A guard which which does nothing, unless you explicitly call commitAction. In particular, in its destructor, it
+    does neither auto-commit nor auto-rollback the model changes.
+ */
+class UndoGuard
 {
 public:
-    explicit UndoGuard_Base(
+    explicit UndoGuard(
         const ::rtl::OUString& i_undoMessage,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoManager > & i_undoManager
+        const ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoManager > & i_undoManager,
+        const ModelFacet i_facet = E_MODEL
     );
-    ~UndoGuard_Base();
+    ~UndoGuard();
 
     void    commit();
     void    rollback();
 
 protected:
-    void    takeSnapshot( bool i_withData, bool i_withSelection );
-
     bool    isActionPosted() const { return m_bActionPosted; }
 
 private:
@@ -69,28 +65,15 @@ private:
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >           m_xChartModel;
     const ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoManager >  m_xUndoManager;
 
-    ::boost::shared_ptr< impl::ChartModelClone >    m_pDocumentSnapshot;
-    rtl::OUString                                   m_aUndoString;
-    bool                                            m_bActionPosted;
-};
-
-/** A guard which which does nothing, unless you explicitly call commitAction. In particular, in its destructor, it
-    does neither auto-commit nor auto-rollback the model changes.
- */
-class UndoGuard : public UndoGuard_Base
-{
-public:
-    explicit UndoGuard(
-        const ::rtl::OUString& i_undoMessage,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoManager > & i_undoManager
-    );
-    ~UndoGuard();
+    ::boost::shared_ptr< ChartModelClone >  m_pDocumentSnapshot;
+    rtl::OUString                           m_aUndoString;
+    bool                                    m_bActionPosted;
 };
 
 /** A guard which, in its destructor, restores the model state it found in the constructor. If
     <member>commitAction</member> is called inbetween, the restouration is not performed.
  */
-class UndoLiveUpdateGuard : public UndoGuard_Base
+class UndoLiveUpdateGuard : public UndoGuard
 {
 public:
     explicit UndoLiveUpdateGuard(
@@ -104,7 +87,7 @@ public:
     Only use this if the data has internal data.
  */
 class UndoLiveUpdateGuardWithData :
-        public UndoGuard_Base
+        public UndoGuard
 {
 public:
     explicit UndoLiveUpdateGuardWithData(
@@ -114,7 +97,7 @@ public:
     ~UndoLiveUpdateGuardWithData();
 };
 
-class UndoGuardWithSelection : public UndoGuard_Base
+class UndoGuardWithSelection : public UndoGuard
 {
 public:
     explicit UndoGuardWithSelection(
