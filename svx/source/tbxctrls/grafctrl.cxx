@@ -253,20 +253,19 @@ struct CommandToRID
 {
     const char* pCommand;
     USHORT      nResId;
-    USHORT      nHCResId;
 };
 
 static USHORT ImplGetRID( const OUString& aCommand, bool bHighContrast )
 {
     static const CommandToRID aImplCommandToResMap[] =
     {
-        { ".uno:GrafRed", RID_SVXIMG_GRAF_RED, RID_SVXIMG_GRAF_RED_H },
-        { ".uno:GrafGreen", RID_SVXIMG_GRAF_GREEN, RID_SVXIMG_GRAF_GREEN_H },
-        { ".uno:GrafBlue", RID_SVXIMG_GRAF_BLUE, RID_SVXIMG_GRAF_BLUE_H },
-        { ".uno:GrafLuminance", RID_SVXIMG_GRAF_LUMINANCE, RID_SVXIMG_GRAF_LUMINANCE_H },
-        { ".uno:GrafContrast", RID_SVXIMG_GRAF_CONTRAST, RID_SVXIMG_GRAF_CONTRAST_H },
-        { ".uno:GrafGamma", RID_SVXIMG_GRAF_GAMMA, RID_SVXIMG_GRAF_GAMMA_H },
-        { ".uno:GrafTransparence", RID_SVXIMG_GRAF_TRANSPARENCE, RID_SVXIMG_GRAF_TRANSPARENCE_H },
+        { ".uno:GrafRed", RID_SVXIMG_GRAF_RED },
+        { ".uno:GrafGreen", RID_SVXIMG_GRAF_GREEN },
+        { ".uno:GrafBlue", RID_SVXIMG_GRAF_BLUE },
+        { ".uno:GrafLuminance", RID_SVXIMG_GRAF_LUMINANCE },
+        { ".uno:GrafContrast", RID_SVXIMG_GRAF_CONTRAST },
+        { ".uno:GrafGamma", RID_SVXIMG_GRAF_GAMMA },
+        { ".uno:GrafTransparence", RID_SVXIMG_GRAF_TRANSPARENCE },
         { 0, 0, 0 }
     };
 
@@ -277,10 +276,7 @@ static USHORT ImplGetRID( const OUString& aCommand, bool bHighContrast )
     {
         if ( aCommand.equalsAscii( aImplCommandToResMap[ i ].pCommand ))
         {
-            if ( bHighContrast )
-                nRID = aImplCommandToResMap[ i ].nHCResId;
-            else
-                nRID = aImplCommandToResMap[ i ].nResId;
+            nRID = aImplCommandToResMap[ i ].nResId;
             break;
         }
         ++i;

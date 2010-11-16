@@ -134,41 +134,6 @@ Image RID_SVXIMG_GRAF_TRANSPARENCE
     ImageBitmap = Bitmap { File = "sc10869.bmp" ; };
     MASKCOLOR
 };
-Image RID_SVXIMG_GRAF_RED_H
-{
-    ImageBitmap = Bitmap { File = "sch10865.bmp" ; };
-    MASKCOLOR
-};
-Image RID_SVXIMG_GRAF_GREEN_H
-{
-    ImageBitmap = Bitmap { File = "sch10866.bmp" ; };
-    MASKCOLOR
-};
-Image RID_SVXIMG_GRAF_BLUE_H
-{
-    ImageBitmap = Bitmap { File = "sch10867.bmp" ; };
-    MASKCOLOR
-};
-Image RID_SVXIMG_GRAF_LUMINANCE_H
-{
-    ImageBitmap = Bitmap { File = "sch10863.bmp" ; };
-    MASKCOLOR
-};
-Image RID_SVXIMG_GRAF_CONTRAST_H
-{
-    ImageBitmap = Bitmap { File = "sch10864.bmp" ; };
-    MASKCOLOR
-};
-Image RID_SVXIMG_GRAF_GAMMA_H
-{
-    ImageBitmap = Bitmap { File = "sch10868.bmp" ; };
-    MASKCOLOR
-};
-Image RID_SVXIMG_GRAF_TRANSPARENCE_H
-{
-    ImageBitmap = Bitmap { File = "sch10869.bmp" ; };
-    MASKCOLOR
-};
 String RID_SVXSTR_CLEARFORM
 {
     Text [ en-US ] = "Clear formatting";
