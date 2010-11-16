@@ -181,9 +181,6 @@ struct TURLInfo
     /// standard icon
     Image StandardImage;
 
-    /// high contrast icon
-    Image HCImage;
-
     public:
 
     TURLInfo()

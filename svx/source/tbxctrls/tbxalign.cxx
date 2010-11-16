@@ -118,7 +118,7 @@ void SAL_CALL SvxTbxCtlAlign::functionSelected( const ::rtl::OUString& aCommand 
         if ( aCommand.getLength() > 0 )
         {
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame( getFrameInterface());
-            Image aImage = GetImage( xFrame, aCommand, hasBigImages(), isHighContrast() );
+            Image aImage = GetImage( xFrame, aCommand, hasBigImages() );
             if ( !!aImage )
                 GetToolBox().SetItemImage( GetId(), aImage );
         }
@@ -133,7 +133,7 @@ void SAL_CALL SvxTbxCtlAlign::updateImage() throw (::com::sun::star::uno::Runtim
     if ( m_aCommand.getLength() > 0 )
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame( getFrameInterface());
-        Image aImage = GetImage( xFrame, m_aCommand, hasBigImages(), isHighContrast() );
+        Image aImage = GetImage( xFrame, m_aCommand, hasBigImages() );
         if ( !!aImage )
             GetToolBox().SetItemImage( GetId(), aImage );
     }

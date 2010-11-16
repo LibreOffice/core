@@ -157,7 +157,6 @@ private:
 
 protected:
     Image               m_aNormalImage;
-    Image               m_aHCImage;
     ::rtl::OUString     aText;
 
     FmEntryDataList*    pChildList;
@@ -178,7 +177,6 @@ public:
     void    SetParent( FmEntryData* pParentData ){ pParent = pParentData; }
 
     const Image&    GetNormalImage() const { return m_aNormalImage; }
-    const Image&    GetHCImage() const { return m_aHCImage; }
 
     ::rtl::OUString          GetText() const { return aText; }
     FmEntryData*    GetParent() const { return pParent; }
