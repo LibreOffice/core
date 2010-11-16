@@ -30,7 +30,7 @@
 
 #include "UndoGuard.hxx"
 #include "ChartModelClone.hxx"
-#include "ImplDocumentActions.hxx"
+#include "UndoActions.hxx"
 
 #include <com/sun/star/container/XChild.hpp>
 

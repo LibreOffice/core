@@ -52,7 +52,7 @@
 #include "AccessibleChartView.hxx"
 #include "DrawCommandDispatch.hxx"
 #include "ShapeController.hxx"
-#include "ImplDocumentActions.hxx"
+#include "UndoActions.hxx"
 
 #include <comphelper/InlineContainer.hxx>
 

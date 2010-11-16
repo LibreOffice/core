@@ -28,7 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_chart2.hxx"
 
-#include "ImplDocumentActions.hxx"
+#include "UndoActions.hxx"
 #include "DisposeHelper.hxx"
 #include "CommonFunctors.hxx"
 #include "PropertyHelper.hxx"
