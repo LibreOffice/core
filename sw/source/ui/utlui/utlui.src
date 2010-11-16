@@ -319,14 +319,6 @@ ImageList ILIST_DB_DLG
     MaskColor = IMAGE_MASK_COLOR;
     IMGLIST_IDS;
 };
-
-ImageList ILIST_DB_DLG_HC
-{
-    Prefix = "sxh";
-    MaskColor = IMAGE_MASK_COLOR ;
-    IMGLIST_IDS;
-};
-
 Image IMG_VIEWLAYOUT_AUTOMATIC
 {
     ImageBitmap = Bitmap
@@ -377,59 +369,6 @@ Image IMG_VIEWLAYOUT_SINGLECOLUMN_ACTIVE
     };
     MaskColor = IMAGE_MASK_COLOR;
 };
-
-Image IMG_VIEWLAYOUT_AUTOMATIC_HC
-{
-    ImageBitmap = Bitmap
-    {
-        File = "twopages_11x25_h.png" ;
-    };
-    MaskColor = IMAGE_MASK_COLOR;
-};
-Image IMG_VIEWLAYOUT_AUTOMATIC_ACTIVE_HC
-{
-    ImageBitmap = Bitmap
-    {
-        File = "twopages_a_11x25_h.png" ;
-    };
-    MaskColor = IMAGE_MASK_COLOR;
-};
-
-Image IMG_VIEWLAYOUT_BOOKMODE_HC
-{
-    ImageBitmap = Bitmap
-    {
-        File = "doublepage_11x23_h.png" ;
-    };
-    MaskColor = IMAGE_MASK_COLOR;
-};
-Image IMG_VIEWLAYOUT_BOOKMODE_ACTIVE_HC
-{
-    ImageBitmap = Bitmap
-    {
-        File = "doublepage_a_11x23_h.png" ;
-    };
-    MaskColor = IMAGE_MASK_COLOR;
-};
-Image IMG_VIEWLAYOUT_SINGLECOLUMN_HC
-{
-    ImageBitmap = Bitmap
-    {
-        File = "emptypage_11x15_h.png" ;
-    };
-    MaskColor = IMAGE_MASK_COLOR;
-};
-Image IMG_VIEWLAYOUT_SINGLECOLUMN_ACTIVE_HC
-{
-    ImageBitmap = Bitmap
-    {
-        File = "emptypage_a_11x15_h.png" ;
-    };
-    MaskColor = IMAGE_MASK_COLOR;
-};
-
-
-
 String STR_HYPERCTRL_SEL
 {
     Text [ en-US ] = "SEL";
@@ -438,4 +377,3 @@ String STR_HYPERCTRL_HYP
 {
     Text [ en-US ] = "HYP";
 };
-

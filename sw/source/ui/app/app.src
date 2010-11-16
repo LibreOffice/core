@@ -165,13 +165,6 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         Prefix = "sf";
         STYLE_IMAGE_LISTEF
     };
-
-    ImageList 2 // == BMP_COLOR_HIGHCONTRAST + 1
-    {
-        Prefix = "sfh";
-        STYLE_IMAGE_LISTEF
-    };
-
 };
 
 
@@ -383,16 +376,6 @@ Bitmap RID_GRAPHIC_REPLACEBMP
 Bitmap RID_GRAPHIC_ERRORBMP
 {
     File = "grafikde.bmp" ;
-};
-
-Bitmap RID_GRAPHIC_REPLACEBMP_HC
-{
-    File = "grafikei_h.bmp" ;
-};
-
-Bitmap RID_GRAPHIC_ERRORBMP_HC
-{
-    File = "grafikde_h.bmp" ;
 };
 
 String STR_TABLE_DEFNAME
