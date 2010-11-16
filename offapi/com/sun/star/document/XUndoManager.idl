@@ -303,7 +303,8 @@ interface XUndoManager
     /** resets the Undo manager
 
         <p>In particular, this method will
-            <ul><li>close all open undo contexts</li>
+            <ul><li>remove all locks from the undo manager</li>
+                <li>close all open undo contexts</li>
                 <li>clear the undo stack</li>
                 <li>clear the redo stack</li>
             </ul></p>
