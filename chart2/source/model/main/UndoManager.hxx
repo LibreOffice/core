@@ -29,10 +29,11 @@
 
 /** === begin UNO includes === **/
 #include <com/sun/star/document/XUndoManager.hpp>
+#include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/container/XChild.hpp>
 /** === end UNO includes === **/
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase2.hxx>
 
 #include <boost/scoped_ptr.hpp>
 
@@ -44,7 +45,8 @@ namespace chart
     namespace impl
     {
         class UndoManager_Impl;
-        typedef ::cppu::ImplHelper1 <   ::com::sun::star::document::XUndoManager
+        typedef ::cppu::ImplHelper2 <   ::com::sun::star::document::XUndoManager
+                                    ,   ::com::sun::star::util::XModifyBroadcaster
                                     >   UndoManager_Base;
     }
 
@@ -91,6 +93,10 @@ namespace chart
         // XChild (base of XUndoManager)
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getParent(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL setParent( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& Parent ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
+
+        // XModifyBroadcaster
+        virtual void SAL_CALL addModifyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL removeModifyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
 
     private:
         ::boost::scoped_ptr< impl::UndoManager_Impl >   m_pImpl;

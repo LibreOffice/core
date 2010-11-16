@@ -538,6 +538,9 @@ void SAL_CALL ChartModel::dispose() throw(uno::RuntimeException)
     //--release all resources and references
     //// @todo
 
+    if ( m_xDiagram.is() )
+        ModifyListenerHelper::removeListener( m_xDiagram, this );
+
     m_xDataProvider.clear();
     m_xInternalDataProvider.clear();
     m_xNumberFormatsSupplier.clear();

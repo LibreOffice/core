@@ -63,6 +63,7 @@ namespace chart
     using ::com::sun::star::document::XUndoManagerListener;
     using ::com::sun::star::util::NotLockedException;
     using ::com::sun::star::lang::NoSupportException;
+    using ::com::sun::star::util::XModifyListener;
     /** === end UNO using === **/
 
     namespace impl
@@ -108,13 +109,13 @@ namespace chart
             void    checkDisposed_lck();
 
         private:
-            UndoManager&                    m_rAntiImpl;
-            ::cppu::OWeakObject&            m_rParent;
-            ::osl::Mutex&                   m_rMutex;
-            bool                            m_bDisposed;
+            UndoManager&                        m_rAntiImpl;
+            ::cppu::OWeakObject&                m_rParent;
+            ::osl::Mutex&                       m_rMutex;
+            bool                                m_bDisposed;
 
-            SfxUndoManager                  m_aUndoManager;
-            ::framework::UndoManagerHelper  m_aUndoHelper;
+            SfxUndoManager                      m_aUndoManager;
+            ::framework::UndoManagerHelper      m_aUndoHelper;
         };
 
         //--------------------------------------------------------------------------------------------------------------
@@ -395,6 +396,20 @@ namespace chart
         UndoManagerMethodGuard aGuard( *m_pImpl );
         (void)i_parent;
         throw NoSupportException( ::rtl::OUString(), m_pImpl->getThis() );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void SAL_CALL UndoManager::addModifyListener( const Reference< XModifyListener >& i_listener ) throw (RuntimeException)
+    {
+        UndoManagerMethodGuard aGuard( *m_pImpl );
+        m_pImpl->getUndoHelper().addModifyListener( i_listener );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void SAL_CALL UndoManager::removeModifyListener( const Reference< XModifyListener >& i_listener ) throw (RuntimeException)
+    {
+        UndoManagerMethodGuard aGuard( *m_pImpl );
+        m_pImpl->getUndoHelper().removeModifyListener( i_listener );
     }
 
 //......................................................................................................................
