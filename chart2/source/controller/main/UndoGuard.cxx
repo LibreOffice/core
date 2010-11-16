@@ -45,22 +45,12 @@ namespace chart
 {
 
 //-----------------------------------------------------------------------------
-namespace
-{
-    uno::Reference< uno::XInterface > lcl_getParent( const uno::Reference< uno::XInterface >& i_component )
-    {
-        const uno::Reference< container::XChild > xAsChild( i_component, uno::UNO_QUERY_THROW );
-        return xAsChild->getParent();
-    }
-}
-
-//-----------------------------------------------------------------------------
 
 UndoGuard_Base::UndoGuard_Base( const OUString& i_undoString, const uno::Reference< document::XUndoManager > & i_undoManager )
-        :m_xChartModel( lcl_getParent( i_undoManager ), uno::UNO_QUERY_THROW )
-        ,m_xUndoManager( i_undoManager )
-        ,m_aUndoString( i_undoString )
-        ,m_bActionPosted( false )
+    :m_xChartModel( i_undoManager->getParent(), uno::UNO_QUERY_THROW )
+    ,m_xUndoManager( i_undoManager )
+    ,m_aUndoString( i_undoString )
+    ,m_bActionPosted( false )
 {
 }
 
