@@ -59,7 +59,7 @@ UndoCommandDispatch::UndoCommandDispatch(
         m_xModel( xModel )
 {
     uno::Reference< document::XUndoManagerSupplier > xSuppUndo( m_xModel, uno::UNO_QUERY_THROW );
-    m_xUndoManager.set( xSuppUndo->getUndoManager(), uno::UNO_SET_THROW );
+    m_xUndoManager.set( xSuppUndo->getUndoManager(), uno::UNO_QUERY_THROW );
 }
 
 UndoCommandDispatch::~UndoCommandDispatch()
@@ -117,6 +117,10 @@ void SAL_CALL UndoCommandDispatch::dispatch(
                 m_xUndoManager->undo();
             else
                 m_xUndoManager->redo();
+        }
+        catch( const document::UndoFailedException& )
+        {
+            // silently ignore
         }
         catch( const uno::Exception& )
         {
