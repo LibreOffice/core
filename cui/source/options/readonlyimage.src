@@ -25,8 +25,6 @@
  *
  ************************************************************************/
 
- // include ---------------------------------------------------------------
-
 #include <cuires.hrc>
 
 String RID_SVXSTR_READONLY_CONFIG_TIP
@@ -38,14 +36,6 @@ Image RID_SVXBMP_LOCK
     ImageBitmap = Bitmap
     {
         File = "lock.bmp";
-    };
-    MaskColor = Color { Red=0xffff; Green=0x0000; Blue=0xffff; };
-};
-Image RID_SVXBMP_LOCK_HC
-{
-    ImageBitmap = Bitmap
-    {
-        File = "lock_hc.bmp";
     };
     MaskColor = Color { Red=0xffff; Green=0x0000; Blue=0xffff; };
 };

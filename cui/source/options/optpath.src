@@ -86,11 +86,6 @@ TabPage RID_SFXPAGE_PATH
         ImageBitmap = Bitmap { File = "lock.bmp"; };
         MaskColor = STD_MASKCOLOR;
     };
-    Image IMG_LOCK_HC
-    {
-        ImageBitmap = Bitmap { File = "lock_hc.bmp"; };
-        MaskColor = STD_MASKCOLOR;
-    };
     String STR_MULTIPATHDLG
     {
         Text [ en-US ] = "Edit Paths: %1" ;
