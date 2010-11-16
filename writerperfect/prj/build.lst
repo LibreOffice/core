@@ -1,4 +1,4 @@
-wp      writerperfect : LIBWPG:libwpg LIBWPS:libwps LIBWPD:libwpd sot comphelper xmloff svtools NULL
+wp      writerperfect : LIBWPG:libwpg LIBWPS:libwps LIBWPD:libwpd sot comphelper xmloff svtools sfx2 NULL
 wp	writerperfect			usr1	-	all	wp_mkout NULL
 wp	writerperfect\source\stream	nmake	-	all	wp_stream NULL
 wp	writerperfect\source\filter	nmake	-	all	wp_filter NULL

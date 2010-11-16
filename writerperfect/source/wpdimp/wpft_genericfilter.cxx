@@ -63,7 +63,15 @@ sal_Bool SAL_CALL component_writeInfo(
             const OUString * pArray = rSNL.getConstArray();
             for ( nPos = rSNL.getLength(); nPos--; )
                 xNewKey->createKey( pArray[nPos] );
+#if 0
+            xNewKey = reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( WordPerfectImportFilterDialog_getImplementationName() );
+            xNewKey = xNewKey->createKey( OUString::createFromAscii( "/UNO/SERVICES" ) );
 
+            const Sequence< OUString > & rSNL2 = WordPerfectImportFilterDialog_getSupportedServiceNames();
+            pArray = rSNL2.getConstArray();
+            for ( nPos = rSNL2.getLength(); nPos--; )
+                xNewKey->createKey( pArray[nPos] );
+#endif
             return sal_True;
         }
         catch (InvalidRegistryException &)
@@ -93,6 +101,21 @@ void * SAL_CALL component_getFactory(
             pRet = xFactory.get();
         }
     }
+#if 0
+    else if ( pServiceManager && implName.equals(WordPerfectImportFilterDialog_getImplementationName()) )
+    {
+        Reference< XSingleServiceFactory > xFactory( createSingleFactory(
+            reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
+            OUString::createFromAscii( pImplName ),
+            WordPerfectImportFilterDialog_createInstance, WordPerfectImportFilterDialog_getSupportedServiceNames() ) );
+
+        if (xFactory.is())
+        {
+            xFactory->acquire();
+            pRet = xFactory.get();
+        }
+    }
+#endif
 
     return pRet;
 }

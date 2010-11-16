@@ -47,7 +47,7 @@
 #include <xmloff/attrlist.hxx>
 
 #include "filter/DocumentHandler.hxx"
-#include "OdgExporter.hxx"
+#include "filter/OdgExporter.hxx"
 #include "WPGImportFilter.hxx"
 #include "stream/WPXSvStream.h"
 
@@ -120,16 +120,6 @@ sal_Bool SAL_CALL WPGImportFilter::filter( const Sequence< ::com::sun::star::bea
 
     WPXInputStream* input = new WPXSvInputStream( xInputStream );
 
-    if (input->isOLEStream())
-    {
-        WPXInputStream* olestream = input->getDocumentOLEStream();
-        if (olestream)
-        {
-            delete input;
-            input = olestream;
-        }
-    }
-
     OdgExporter exporter(&xHandler);
     bool tmpParseResult = libwpg::WPGraphics::parse(input, &exporter);
     if (input)
@@ -178,16 +168,6 @@ OUString SAL_CALL WPGImportFilter::detect( com::sun::star::uno::Sequence< Proper
     }
 
     WPXInputStream* input = new WPXSvInputStream( xInputStream );
-
-    if (input->isOLEStream())
-    {
-        WPXInputStream* olestream = input->getDocumentOLEStream();
-        if (olestream)
-        {
-            delete input;
-            input = olestream;
-        }
-    }
 
     if (libwpg::WPGraphics::isSupported(input))
         sTypeName = OUString( RTL_CONSTASCII_USTRINGPARAM ( "draw_WordPerfect_Graphics" ) );

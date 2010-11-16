@@ -1,7 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/* WordPerfectImportFilter: Sets up the filter, and calls DocumentCollector
- * to do the actual filtering
- *
+/*
  * Copyright (C) 2000 by Sun Microsystems, Inc.
  * Copyright (C) 2002-2004 William Lachance (wlach@interlog.com)
  * Copyright (C) 2004 Net Integration Technologies (http://www.net-itech.com)
@@ -32,16 +30,16 @@
 #include <osl/diagnose.h>
 #include <rtl/tencinfo.h>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/XParser.hpp>
-
+#include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 
 #include <xmloff/attrlist.hxx>
 #include <ucbhelper/content.hxx>
+#include <sfx2/passwd.hxx>
 
 #include "filter/FilterInternal.hxx"
 #include "filter/DocumentHandler.hxx"
@@ -107,11 +105,38 @@ sal_Bool SAL_CALL WordPerfectImportFilter::importImpl( const Sequence< ::com::su
         OSL_ASSERT( 0 );
         return sal_False;
     }
-    OString sFileName;
-    sFileName = OUStringToOString(sURL, RTL_TEXTENCODING_INFO_ASCII);
+
+    WPXSvInputStream input( xInputStream );
+
+    OString aUtf8Passwd;
+
+#if 1
+    WPDConfidence confidence = WPDocument::isFileFormatSupported(&input);
+
+    if (WPD_CONFIDENCE_SUPPORTED_ENCRYPTION == confidence)
+    {
+        int unsuccessfulAttempts = 0;
+        while (true )
+        {
+            SfxPasswordDialog aPasswdDlg( 0 );
+            aPasswdDlg.SetMinLen(0);
+            if(!aPasswdDlg.Execute())
+                return sal_False;
+            String aPasswd = aPasswdDlg.GetPassword();
+            OUString aUniPasswd(aPasswd.GetBuffer() /*, aPasswd.Len(), RTL_TEXTENCODING_UCS2 */);
+            aUtf8Passwd = OUStringToOString(aUniPasswd, RTL_TEXTENCODING_UTF8);
+            if (WPD_PASSWORD_MATCH_OK == WPDocument::verifyPassword(&input, aUtf8Passwd.getStr()))
+                break;
+            else
+                unsuccessfulAttempts++;
+            if (unsuccessfulAttempts == 3) // timeout after 3 password atempts
+                return sal_False;
+        }
+    }
+#endif
 
     // An XML import service: what we push sax messages to..
-    OUString sXMLImportService ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Writer.XMLImporter" ) );
+    OUString sXMLImportService ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Writer.XMLOasisImporter" ) );
     uno::Reference < XDocumentHandler > xInternalHandler( mxMSF->createInstance( sXMLImportService ), UNO_QUERY );
 
     // The XImporter sets up an empty target document for XDocumentHandler to write to..
@@ -122,9 +147,7 @@ sal_Bool SAL_CALL WordPerfectImportFilter::importImpl( const Sequence< ::com::su
         // writes to in-memory target doc
         DocumentHandler xHandler(xInternalHandler);
 
-    WPXSvInputStream input( xInputStream );
-
-    WordPerfectCollector collector(&input, &xHandler);
+    WordPerfectCollector collector(&input, &xHandler, aUtf8Passwd);
     collector.filter();
 
     return true;
@@ -196,9 +219,9 @@ OUString SAL_CALL WordPerfectImportFilter::detect( com::sun::star::uno::Sequence
     if (input.atEOS())
         return ::rtl::OUString();
 
-    confidence = WPDocument::isFileFormatSupported(&input, false);
+    confidence = WPDocument::isFileFormatSupported(&input);
 
-    if (confidence == WPD_CONFIDENCE_EXCELLENT)
+    if (confidence == WPD_CONFIDENCE_EXCELLENT || confidence == WPD_CONFIDENCE_SUPPORTED_ENCRYPTION)
         sTypeName = OUString( RTL_CONSTASCII_USTRINGPARAM ( "writer_WordPerfect_Document" ) );
 
     if (sTypeName.getLength())
@@ -255,7 +278,6 @@ Sequence< OUString > SAL_CALL WordPerfectImportFilter_getSupportedServiceNames( 
     throw (RuntimeException)
 {
     Sequence < OUString > aRet(2);
-//  Sequence < OUString > aRet(1);
         OUString* pArray = aRet.getArray();
         pArray[0] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME1 ) );
     pArray[1] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME2 ) );
@@ -285,6 +307,128 @@ Sequence< OUString > SAL_CALL WordPerfectImportFilter::getSupportedServiceNames(
     throw (RuntimeException)
 {
     return WordPerfectImportFilter_getSupportedServiceNames();
+}
+
+
+WordPerfectImportFilterDialog::WordPerfectImportFilterDialog(const ::com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory > &r ) :
+    mxMSF( r ) {}
+
+WordPerfectImportFilterDialog::~WordPerfectImportFilterDialog()
+{
+}
+
+void SAL_CALL WordPerfectImportFilterDialog::setTitle( const ::rtl::OUString& )
+            throw (::com::sun::star::uno::RuntimeException)
+{
+}
+
+sal_Int16 SAL_CALL WordPerfectImportFilterDialog::execute()
+            throw (::com::sun::star::uno::RuntimeException)
+{
+    WPXSvInputStream input( mxInputStream );
+
+    OString aUtf8Passwd;
+
+    WPDConfidence confidence = WPDocument::isFileFormatSupported(&input);
+
+    if (WPD_CONFIDENCE_SUPPORTED_ENCRYPTION == confidence)
+    {
+        int unsuccessfulAttempts = 0;
+        while (true )
+        {
+            SfxPasswordDialog aPasswdDlg(0);
+            aPasswdDlg.SetMinLen(0);
+            if(!aPasswdDlg.Execute())
+                return com::sun::star::ui::dialogs::ExecutableDialogResults::CANCEL;
+            msPassword = ::rtl::OUString(aPasswdDlg.GetPassword().GetBuffer());
+            aUtf8Passwd = OUStringToOString(msPassword, RTL_TEXTENCODING_UTF8);
+            if (WPD_PASSWORD_MATCH_OK == WPDocument::verifyPassword(&input, aUtf8Passwd.getStr()))
+                break;
+            else
+                unsuccessfulAttempts++;
+            if (unsuccessfulAttempts == 3) // timeout after 3 password atempts
+                return com::sun::star::ui::dialogs::ExecutableDialogResults::CANCEL;
+        }
+    }
+    return com::sun::star::ui::dialogs::ExecutableDialogResults::OK;
+}
+
+uno::Sequence<beans::PropertyValue> SAL_CALL WordPerfectImportFilterDialog::getPropertyValues() throw(uno::RuntimeException)
+{
+    uno::Sequence<beans::PropertyValue> aRet(1);
+    beans::PropertyValue* pArray = aRet.getArray();
+
+    pArray[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Password") );
+    pArray[0].Value <<= msPassword;
+
+    return aRet;
+}
+
+void SAL_CALL WordPerfectImportFilterDialog::setPropertyValues( const uno::Sequence<beans::PropertyValue>& aProps)
+                    throw(beans::UnknownPropertyException, beans::PropertyVetoException,
+                            lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    const beans::PropertyValue* pPropArray = aProps.getConstArray();
+    long nPropCount = aProps.getLength();
+    for (long i = 0; i < nPropCount; i++)
+    {
+        const beans::PropertyValue& rProp = pPropArray[i];
+        ::rtl::OUString aPropName = rProp.Name;
+
+        if ( aPropName == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Password")) )
+            rProp.Value >>= msPassword;
+        else if ( aPropName.equalsAscii( "InputStream" ) )
+            rProp.Value >>= mxInputStream;
+    }
+}
+
+
+// XServiceInfo
+OUString SAL_CALL WordPerfectImportFilterDialog::getImplementationName(  )
+    throw (RuntimeException)
+{
+    return WordPerfectImportFilterDialog_getImplementationName();
+}
+
+sal_Bool SAL_CALL WordPerfectImportFilterDialog::supportsService( const OUString& rServiceName )
+    throw (RuntimeException)
+{
+    return WordPerfectImportFilterDialog_supportsService( rServiceName );
+}
+
+Sequence< OUString > SAL_CALL WordPerfectImportFilterDialog::getSupportedServiceNames(  )
+    throw (RuntimeException)
+{
+    return WordPerfectImportFilterDialog_getSupportedServiceNames();
+}
+
+OUString WordPerfectImportFilterDialog_getImplementationName ()
+    throw (RuntimeException)
+{
+    return OUString ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Writer.WordPerfectImportFilterDialog" ) );
+}
+
+#define SERVICE_NAME "com.sun.star.ui.dialogs.FilterOptionsDialog"
+sal_Bool SAL_CALL WordPerfectImportFilterDialog_supportsService( const OUString& ServiceName )
+    throw (RuntimeException)
+{
+    return ( ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SERVICE_NAME ) ) );
+}
+
+Sequence< OUString > SAL_CALL WordPerfectImportFilterDialog_getSupportedServiceNames(  )
+    throw (RuntimeException)
+{
+    Sequence < OUString > aRet(1);
+    OUString* pArray = aRet.getArray();
+    pArray[0] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME ) );
+    return aRet;
+}
+#undef SERVICE_NAME
+
+uno::Reference< XInterface > SAL_CALL WordPerfectImportFilterDialog_createInstance( const uno::Reference< XMultiServiceFactory > & rSMgr)
+    throw( Exception )
+{
+    return (cppu::OWeakObject*) new WordPerfectImportFilterDialog( rSMgr );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

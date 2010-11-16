@@ -34,7 +34,7 @@
 
 #ifdef _MSC_VER
 double rint(double x);
-#endif /* _MSC_VER */
+#endif /* _WIN32 */
 
 SectionStyle::SectionStyle(const WPXPropertyList &xPropList,
                            const WPXPropertyListVector &xColumns,
@@ -45,7 +45,7 @@ SectionStyle::SectionStyle(const WPXPropertyList &xPropList,
 {
 }
 
-void SectionStyle::write(DocumentHandler *pHandler) const
+void SectionStyle::write(DocumentHandlerInterface *pHandler) const
 {
     TagOpenElement styleOpen("style:style");
     styleOpen.addAttribute("style:name", getName());
@@ -54,7 +54,7 @@ void SectionStyle::write(DocumentHandler *pHandler) const
 
     // if the number of columns is <= 1, we will never come here. This is only an additional check
     // style properties
-    pHandler->startElement("style:properties", mPropList);
+    pHandler->startElement("style:section-properties", mPropList);
 
     // column properties
     WPXPropertyList columnProps;
@@ -81,7 +81,7 @@ void SectionStyle::write(DocumentHandler *pHandler) const
     pHandler->endElement("style:columns");
 
 
-    pHandler->endElement("style:properties");
+    pHandler->endElement("style:section-properties");
 
     pHandler->endElement("style:style");
 }

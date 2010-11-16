@@ -27,35 +27,30 @@
  */
 #ifndef _PAGESPAN_H
 #define _PAGESPAN_H
-#if defined _MSC_VER
-#pragma warning( push, 1 )
-#endif
 #include <libwpd/libwpd.h>
-#if defined _MSC_VER
-#pragma warning( pop )
-#endif
 #include <vector>
 
 class DocumentElement;
-class DocumentHandler;
+class DocumentHandlerInterface;
 
 class PageSpan
 {
 public:
     PageSpan(const WPXPropertyList &xPropList);
     virtual ~PageSpan();
-    void writePageMaster(const int iNum, DocumentHandler *pHandler) const;
-    void writeMasterPages(const int iStartingNum, const int iPageMasterNum, const bool bLastPageSpan, DocumentHandler *pHandler) const;
+    void writePageLayout(const int iNum, DocumentHandlerInterface *pHandler) const;
+    void writeMasterPages(const int iStartingNum, const int iPageLayoutNum, const bool bLastPageSpan, DocumentHandlerInterface *pHandler) const;
     int getSpan() const;
+    double getMarginLeft() const;
+    double getMarginRight() const;
 
-    const std::vector<DocumentElement *> * getHeaderContent() const { return mpHeaderContent; }
-    void setHeaderContent(std::vector<DocumentElement *> * pHeaderContent) { mpHeaderContent = pHeaderContent; }
-    void setFooterContent(std::vector<DocumentElement *> * pFooterContent) { mpFooterContent = pFooterContent; }
-    void setHeaderLeftContent(std::vector<DocumentElement *> * pHeaderContent) { mpHeaderLeftContent = pHeaderContent; }
-    void setFooterLeftContent(std::vector<DocumentElement *> * pFooterContent) { mpFooterLeftContent = pFooterContent; }
+    void setHeaderContent(std::vector<DocumentElement *> * pHeaderContent);
+    void setFooterContent(std::vector<DocumentElement *> * pFooterContent);
+    void setHeaderLeftContent(std::vector<DocumentElement *> * pHeaderContent);
+    void setFooterLeftContent(std::vector<DocumentElement *> * pFooterContent);
 protected:
     void _writeHeaderFooter(const char *headerFooterTagName, const std::vector<DocumentElement *> & headerFooterContent,
-                DocumentHandler *pHandler) const;
+                DocumentHandlerInterface *pHandler) const;
 private:
         WPXPropertyList mxPropList;
     std::vector<DocumentElement *> * mpHeaderContent;
