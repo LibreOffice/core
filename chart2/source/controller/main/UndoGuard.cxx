@@ -70,11 +70,18 @@ UndoGuard::~UndoGuard()
 
 void UndoGuard::commit()
 {
-    if ( !m_bActionPosted && !!m_pDocumentSnapshot && m_xUndoManager.is() )
+    if ( !m_bActionPosted && !!m_pDocumentSnapshot )
     {
-        const Reference< document::XUndoAction > xAction( new impl::UndoElement( m_aUndoString, m_xChartModel, m_pDocumentSnapshot ) );
-        m_pDocumentSnapshot.reset();    // don't dispose, it's data went over to the UndoElement
-        m_xUndoManager->addUndoAction( xAction );
+        try
+        {
+            const Reference< document::XUndoAction > xAction( new impl::UndoElement( m_aUndoString, m_xChartModel, m_pDocumentSnapshot ) );
+            m_pDocumentSnapshot.reset();    // don't dispose, it's data went over to the UndoElement
+            m_xUndoManager->addUndoAction( xAction );
+        }
+        catch( const uno::Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
     }
     m_bActionPosted = true;
 }
