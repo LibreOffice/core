@@ -380,7 +380,7 @@ public:
         { return ( pKanaComp && nKanaIdx < pKanaComp->Count() )
                    ? (*pKanaComp)[nKanaIdx] : 0; }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     sal_Bool IsOptCalm() const;
     sal_Bool IsOptLow() const;
     sal_Bool IsOptDbg() const;

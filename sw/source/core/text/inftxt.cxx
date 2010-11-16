@@ -112,7 +112,7 @@ namespace numfunc
 }
 // <--
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 // Test2: WYSIWYG++
 // Test4: WYSIWYG debug
 static sal_Bool bDbgLow = sal_False;
