@@ -144,13 +144,6 @@ namespace
 
 // -----------------------------------------------------------------------
 
-static sal_Bool isHighContrast( const Window* _pView )
-{
-    return _pView->GetSettings().GetStyleSettings().GetHighContrastMode();
-}
-
-// -----------------------------------------------------------------------
-
 void FilterMatch::createWildCardFilterList(const String& _rFilterList,::std::vector< WildCard >& _rFilters)
 {
     if( _rFilterList.Len() )
@@ -1323,7 +1316,7 @@ void SvtFileView::OpenFolder( const Sequence< OUString >& aContents )
         // detect image
         sal_Bool bDoInsert = sal_True;
         INetURLObject aObj( aImageURL.Len() > 0 ? aImageURL : aURL );
-        Image aImage = SvFileInformationManager::GetImage( aObj, FALSE, isHighContrast( this ) );
+        Image aImage = SvFileInformationManager::GetImage( aObj, FALSE );
 
         if ( bDoInsert )
         {
@@ -2341,10 +2334,10 @@ void SvtFileView_Impl::CreateDisplayText_Impl()
             ::svtools::VolumeInfo aVolInfo( (*aIt)->mbIsVolume, (*aIt)->mbIsRemote,
                                             (*aIt)->mbIsRemoveable, (*aIt)->mbIsFloppy,
                                             (*aIt)->mbIsCompactDisc );
-            (*aIt)->maImage = SvFileInformationManager::GetFolderImage( aVolInfo, FALSE, isHighContrast( mpView ) );
+            (*aIt)->maImage = SvFileInformationManager::GetFolderImage( aVolInfo, FALSE );
         }
         else
-            (*aIt)->maImage = SvFileInformationManager::GetFileImage( INetURLObject( (*aIt)->maTargetURL ), FALSE, isHighContrast( mpView ));
+            (*aIt)->maImage = SvFileInformationManager::GetFileImage( INetURLObject( (*aIt)->maTargetURL ), FALSE );
     }
 }
 
@@ -2429,7 +2422,7 @@ void SvtFileView_Impl::CreateVector_Impl( const Sequence < OUString > &rList )
 
         // detect the image
         INetURLObject aObj( pEntry->maImageURL.getLength() ? pEntry->maImageURL : pEntry->maTargetURL );
-        pEntry->maImage = SvFileInformationManager::GetImage( aObj, FALSE, isHighContrast( mpView ) );
+        pEntry->maImage = SvFileInformationManager::GetImage( aObj, FALSE );
 
         maContent.push_back( pEntry );
     }
@@ -2639,7 +2632,7 @@ String SvtFileView_Impl::FolderInserted( const OUString& rURL, const OUString& r
 
     ::svtools::VolumeInfo aVolInfo;
     pData->maType = SvFileInformationManager::GetFolderDescription( aVolInfo );
-    pData->maImage = SvFileInformationManager::GetFolderImage( aVolInfo, FALSE, isHighContrast( mpView ) );
+    pData->maImage = SvFileInformationManager::GetFolderImage( aVolInfo, FALSE );
 
     OUString aValue;
     OUString aTab     = OUString::createFromAscii( "\t" );

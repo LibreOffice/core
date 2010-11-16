@@ -566,17 +566,12 @@ static ImageList* CreateImageList_Impl( USHORT nResId )
     return pList;
 }
 
-/**
- * @param bHighContrast: is an unused noop now. FIXME remove me carefully
- */
-static Image GetOfficeImageFromList_Impl( USHORT nImageId, BOOL bBig, BOOL /*bHighContrast*/ )
+static Image GetOfficeImageFromList_Impl( USHORT nImageId, BOOL bBig )
 {
     ImageList* pList = NULL;
 
     static ImageList* _pSmallOfficeImgList = NULL;
     static ImageList* _pBigOfficeImgList = NULL;
-    static ImageList* _pSmallHCOfficeImgList = NULL;
-    static ImageList* _pBigHCOfficeImgList = NULL;
     static ULONG nStyle = Application::GetSettings().GetStyleSettings().GetSymbolsStyle();
 
     // If the style has been changed, throw away our cache of the older images
@@ -584,8 +579,6 @@ static Image GetOfficeImageFromList_Impl( USHORT nImageId, BOOL bBig, BOOL /*bHi
     {
         delete _pSmallOfficeImgList, _pSmallOfficeImgList = NULL;
         delete _pBigOfficeImgList, _pBigOfficeImgList = NULL;
-        delete _pSmallHCOfficeImgList, _pSmallHCOfficeImgList = NULL;
-        delete _pBigHCOfficeImgList, _pBigHCOfficeImgList = NULL;
         nStyle = Application::GetSettings().GetStyleSettings().GetSymbolsStyle();
     }
 
@@ -607,12 +600,9 @@ static Image GetOfficeImageFromList_Impl( USHORT nImageId, BOOL bBig, BOOL /*bHi
     return aImage;
 }
 
-/**
- * @param bHighContrast: is an unused noop now. FIXME remove me carefully
- */
-static Image GetImageFromList_Impl( USHORT nImageId, BOOL bBig, BOOL /*bHighContrast*/ )
+static Image GetImageFromList_Impl( USHORT nImageId, BOOL bBig )
 {
-    if ( !bBig && IMG_FOLDER == nImageId)
+    if ( !bBig && IMG_FOLDER == nImageId )
         // return our new small folder image (256 colors)
         return Image( SvtResId( IMG_SVT_FOLDER ) );
 
@@ -646,7 +636,7 @@ static Image GetImageFromList_Impl( USHORT nImageId, BOOL bBig, BOOL /*bHighCont
     if ( pList->HasImageAtPos( nImageId ) )
         return pList->GetImage( nImageId );
     else
-        return GetOfficeImageFromList_Impl( nImageId, bBig, false );
+        return GetOfficeImageFromList_Impl( nImageId, bBig );
 }
 
 //****************************************************************************
@@ -739,39 +729,19 @@ String SvFileInformationManager::GetDescription_Impl( const INetURLObject& rObje
 
 Image SvFileInformationManager::GetImage( const INetURLObject& rObject, sal_Bool bBig )
 {
-    return GetImage( rObject, bBig, FALSE );
+    USHORT nImage = GetImageId_Impl( rObject, sal_True );
+    DBG_ASSERT( nImage, "invalid ImageId" );
+    return GetImageFromList_Impl( nImage, bBig );
 }
 
 Image SvFileInformationManager::GetFileImage( const INetURLObject& rObject, sal_Bool bBig )
 {
-    return GetFileImage( rObject, bBig, FALSE );
+    USHORT nImage = GetImageId_Impl( rObject, sal_False );
+    DBG_ASSERT( nImage, "invalid ImageId" );
+    return GetImageFromList_Impl( nImage, bBig );
 }
 
 Image SvFileInformationManager::GetImageNoDefault( const INetURLObject& rObject, sal_Bool bBig )
-{
-    return GetImageNoDefault( rObject, bBig, FALSE );
-}
-
-Image SvFileInformationManager::GetFolderImage( const svtools::VolumeInfo& rInfo, sal_Bool bBig )
-{
-    return GetFolderImage( rInfo, bBig, FALSE );
-}
-
-Image SvFileInformationManager::GetImage( const INetURLObject& rObject, sal_Bool bBig, sal_Bool bHighContrast )
-{
-    USHORT nImage = GetImageId_Impl( rObject, sal_True );
-    DBG_ASSERT( nImage, "invalid ImageId" );
-    return GetImageFromList_Impl( nImage, bBig, bHighContrast );
-}
-
-Image SvFileInformationManager::GetFileImage( const INetURLObject& rObject, sal_Bool bBig, sal_Bool bHighContrast )
-{
-    USHORT nImage = GetImageId_Impl( rObject, sal_False );
-    DBG_ASSERT( nImage, "invalid ImageId" );
-    return GetImageFromList_Impl( nImage, bBig, bHighContrast );
-}
-
-Image SvFileInformationManager::GetImageNoDefault( const INetURLObject& rObject, sal_Bool bBig, sal_Bool bHighContrast )
 {
     USHORT nImage = GetImageId_Impl( rObject, sal_True );
     DBG_ASSERT( nImage, "invalid ImageId" );
@@ -779,10 +749,10 @@ Image SvFileInformationManager::GetImageNoDefault( const INetURLObject& rObject,
     if ( nImage == IMG_FILE )
         return Image();
 
-    return GetImageFromList_Impl( nImage, bBig, bHighContrast );
+    return GetImageFromList_Impl( nImage, bBig );
 }
 
-Image SvFileInformationManager::GetFolderImage( const svtools::VolumeInfo& rInfo, sal_Bool bBig, sal_Bool bHighContrast )
+Image SvFileInformationManager::GetFolderImage( const svtools::VolumeInfo& rInfo, sal_Bool bBig )
 {
     USHORT nImage = IMG_FOLDER;
     DBG_ASSERT( nImage, "invalid ImageId" );
@@ -796,7 +766,7 @@ Image SvFileInformationManager::GetFolderImage( const svtools::VolumeInfo& rInfo
     else if ( rInfo.m_bIsVolume )
         nImage = IMG_FIXEDDEV;
 
-    return GetImageFromList_Impl( nImage, bBig, bHighContrast );
+    return GetImageFromList_Impl( nImage, bBig );
 }
 
 String SvFileInformationManager::GetDescription( const INetURLObject& rObject )
