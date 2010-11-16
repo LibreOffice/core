@@ -16,7 +16,6 @@
   </publisher>
   <icon>
     <default xlink:href="images/extension_32.png" />
-    <high-contrast xlink:href="images/extension_32_h.png" />
   </icon>
   <extension-description>
     <src xlink:href="help/component.txt" lang="en" />
