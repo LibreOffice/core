@@ -770,8 +770,7 @@ void BasicTreeListBox::GetRootEntryBitmaps( const ScriptDocument& rDocument, Ima
         if ( sFactoryURL.getLength() )
         {
             rImage = SvFileInformationManager::GetFileImage( INetURLObject( sFactoryURL ),
-                FALSE /* small */,
-                FALSE /* normal */ );
+                FALSE /* small */ );
         }
         else
         {

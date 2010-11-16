@@ -993,7 +993,7 @@ IMPL_LINK( SvxJavaClassPathDlg, AddArchiveHdl_Impl, PushButton *, EMPTYARG )
         String sFile = aURL.getFSysPath( INetURLObject::FSYS_DETECT );
         if ( !IsPathDuplicate( sURL ) )
         {
-            USHORT nPos = m_aPathList.InsertEntry( sFile, SvFileInformationManager::GetImage( aURL ) );
+            USHORT nPos = m_aPathList.InsertEntry( sFile, SvFileInformationManager::GetImage( aURL, false ) );
             m_aPathList.SelectEntryPos( nPos );
         }
         else
@@ -1031,7 +1031,7 @@ IMPL_LINK( SvxJavaClassPathDlg, AddPathHdl_Impl, PushButton *, EMPTYARG )
         String sNewFolder = aURL.getFSysPath( INetURLObject::FSYS_DETECT );
         if ( !IsPathDuplicate( sFolderURL ) )
         {
-            USHORT nPos = m_aPathList.InsertEntry( sNewFolder, SvFileInformationManager::GetImage( aURL ) );
+            USHORT nPos = m_aPathList.InsertEntry( sNewFolder, SvFileInformationManager::GetImage( aURL, false ) );
             m_aPathList.SelectEntryPos( nPos );
         }
         else
@@ -1127,7 +1127,7 @@ void SvxJavaClassPathDlg::SetClassPath( const String& _rPath )
         String sToken = _rPath.GetToken( 0, CLASSPATH_DELIMITER, nIdx );
         INetURLObject aURL( sToken, INetURLObject::FSYS_DETECT );
         String sPath = aURL.getFSysPath( INetURLObject::FSYS_DETECT );
-        m_aPathList.InsertEntry( sPath, SvFileInformationManager::GetImage( aURL ) );
+        m_aPathList.InsertEntry( sPath, SvFileInformationManager::GetImage( aURL, false ) );
     }
     // select first entry
     m_aPathList.SelectEntryPos(0);

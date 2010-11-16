@@ -246,13 +246,9 @@ SvxConfigGroupListBox_Impl::SvxConfigGroupListBox_Impl(
         : SvTreeListBox( pParent, rResId )
         , m_bShowSlots( _bShowSlots ),
     m_hdImage(ResId(IMG_HARDDISK,*rResId.GetResMgr())),
-    m_hdImage_hc(ResId(IMG_HARDDISK_HC,*rResId.GetResMgr())),
     m_libImage(ResId(IMG_LIB,*rResId.GetResMgr())),
-    m_libImage_hc(ResId(IMG_LIB_HC,*rResId.GetResMgr())),
     m_macImage(ResId(IMG_MACRO,*rResId.GetResMgr())),
-    m_macImage_hc(ResId(IMG_MACRO_HC,*rResId.GetResMgr())),
     m_docImage(ResId(IMG_DOC,*rResId.GetResMgr())),
-    m_docImage_hc(ResId(IMG_DOC_HC,*rResId.GetResMgr())),
     m_sMyMacros(String(ResId(STR_MYMACROS,*rResId.GetResMgr()))),
     m_sProdMacros(String(ResId(STR_PRODMACROS,*rResId.GetResMgr())))
 {
@@ -414,7 +410,7 @@ void SvxConfigGroupListBox_Impl::fillScriptList( const Reference< browse::XBrows
                 SvLBoxEntry* pNewEntry = InsertEntry( sUIName, _pParentEntry );
 
                 ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
-                Image aImage = GetImage( theChild, aContext.getUNOContext(), bIsRootNode, BMP_COLOR_NORMAL );
+                Image aImage = GetImage( theChild, aContext.getUNOContext(), bIsRootNode );
                 SetExpandedEntryBmp( pNewEntry, aImage );
                 SetCollapsedEntryBmp( pNewEntry, aImage );
 
@@ -621,17 +617,14 @@ void SvxConfigGroupListBox_Impl::Init()
     SetUpdateMode( TRUE );
 }
 
-Image SvxConfigGroupListBox_Impl::GetImage( Reference< browse::XBrowseNode > node, Reference< XComponentContext > xCtx, bool bIsRootNode, bool bHighContrast )
+Image SvxConfigGroupListBox_Impl::GetImage( Reference< browse::XBrowseNode > node, Reference< XComponentContext > xCtx, bool bIsRootNode )
 {
     Image aImage;
     if ( bIsRootNode )
     {
         if ( node->getName().equalsAscii( "user" ) || node->getName().equalsAscii( "share" ) )
         {
-            if( bHighContrast == BMP_COLOR_NORMAL )
-                aImage = m_hdImage;
-            else
-                aImage = m_hdImage_hc;
+            aImage = m_hdImage;
         }
         else
         {
@@ -673,40 +666,21 @@ Image SvxConfigGroupListBox_Impl::GetImage( Reference< browse::XBrowseNode > nod
             }
             if( factoryURL.getLength() > 0 )
             {
-                if( bHighContrast == BMP_COLOR_NORMAL )
-                    aImage = SvFileInformationManager::GetFileImage(
-                        INetURLObject(factoryURL), false,
-                        BMP_COLOR_NORMAL );
-                else
-                    aImage = SvFileInformationManager::GetFileImage(
-                        INetURLObject(factoryURL), false,
-                        BMP_COLOR_HIGHCONTRAST );
+                aImage = SvFileInformationManager::GetFileImage(
+                    INetURLObject(factoryURL), false);
             }
             else
             {
-                if( bHighContrast == BMP_COLOR_NORMAL )
-                    aImage = m_docImage;
-                else
-                    aImage = m_docImage_hc;
+                aImage = m_docImage;
             }
         }
     }
     else
     {
         if( node->getType() == browse::BrowseNodeTypes::SCRIPT )
-        {
-            if( bHighContrast == BMP_COLOR_NORMAL )
-                aImage = m_macImage;
-            else
-                aImage = m_macImage_hc;
-        }
+            aImage = m_macImage;
         else
-        {
-            if( bHighContrast == BMP_COLOR_NORMAL )
-                aImage = m_libImage;
-            else
-                aImage = m_libImage_hc;
-        }
+            aImage = m_libImage;
     }
     return aImage;
 }
@@ -890,7 +864,7 @@ void SvxConfigGroupListBox_Impl::GroupSelected()
                                 new SvxGroupInfo_Impl(
                                     SVX_CFGFUNCTION_SCRIPT, 123, uri, description );
 
-                            Image aImage = GetImage( children[n], Reference< XComponentContext >(), sal_False, BMP_COLOR_NORMAL );
+                            Image aImage = GetImage( children[n], Reference< XComponentContext >(), sal_False );
                             SvLBoxEntry* pNewEntry =
                                 pFunctionListBox->InsertEntry( children[n]->getName(), NULL );
                             pFunctionListBox->SetExpandedEntryBmp( pNewEntry, aImage );

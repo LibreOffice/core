@@ -70,8 +70,6 @@ _SvxMacroTabPage_Impl::_SvxMacroTabPage_Impl( const SfxItemSet& rAttrSet ) :
     pDeletePB( NULL ),
     pMacroImg( NULL ),
     pComponentImg( NULL ),
-    pMacroImg_h( NULL ),
-    pComponentImg_h( NULL ),
     pStrEvent( NULL ),
     pAssignedMacro( NULL ),
     pEventLB( NULL ),
@@ -91,8 +89,6 @@ _SvxMacroTabPage_Impl::~_SvxMacroTabPage_Impl()
     delete pDeletePB;
     delete pMacroImg;
     delete pComponentImg;
-    delete pMacroImg_h;
-    delete pComponentImg_h;
     delete pStrEvent;
     delete pAssignedMacro;
     delete pEventLB;
@@ -449,25 +445,20 @@ class IconLBoxString : public SvLBoxString
 {
     Image* m_pMacroImg;
     Image* m_pComponentImg;
-    Image* m_pMacroImg_h;
-    Image* m_pComponentImg_h;
     int m_nxImageOffset;
 
     public:
         IconLBoxString( SvLBoxEntry* pEntry, USHORT nFlags, const String& sText,
-            Image* pMacroImg, Image* pComponentImg,
-            Image* pMacroImg_h, Image* pComponentImg_h );
+            Image* pMacroImg, Image* pComponentImg );
         virtual void Paint(const Point& aPos, SvLBox& aDevice, USHORT nFlags, SvLBoxEntry* pEntry );
 };
 
 
 IconLBoxString::IconLBoxString( SvLBoxEntry* pEntry, USHORT nFlags, const String& sText,
-    Image* pMacroImg, Image* pComponentImg, Image* pMacroImg_h, Image* pComponentImg_h )
+    Image* pMacroImg, Image* pComponentImg )
         : SvLBoxString( pEntry, nFlags, sText )
         , m_pMacroImg( pMacroImg )
         , m_pComponentImg( pComponentImg )
-        , m_pMacroImg_h( pMacroImg_h )
-        , m_pComponentImg_h( pComponentImg_h )
 {
     m_nxImageOffset = 20;
 }
@@ -483,12 +474,7 @@ void IconLBoxString::Paint( const Point& aPos, SvLBox& aDevice,
         sal_Int32 nIndex = aURL.indexOf( aVndSunStarUNO );
         bool bUNO = nIndex == 0;
 
-        BOOL bHC = aDevice.GetSettings().GetStyleSettings().GetHighContrastMode();
-        const Image* pImg;
-        if( bHC )
-            pImg = bUNO ? m_pComponentImg_h : m_pMacroImg_h;
-        else
-            pImg = bUNO ? m_pComponentImg : m_pMacroImg;
+        const Image* pImg = bUNO ? m_pComponentImg : m_pMacroImg;
         aDevice.DrawImage( aPos, *pImg );
 
         ::rtl::OUString aPureMethod;
@@ -572,8 +558,7 @@ void _SvxMacroTabPage::DisplayAppEvents( bool appEvents)
         _pE->SetUserData( (void*)pEventName );
         String sNew( eventURL );
         _pE->ReplaceItem( new IconLBoxString( _pE, 0, sNew,
-            mpImpl->pMacroImg, mpImpl->pComponentImg,
-            mpImpl->pMacroImg_h, mpImpl->pComponentImg_h ), LB_MACROS_ITEMPOS );
+            mpImpl->pMacroImg, mpImpl->pComponentImg ), LB_MACROS_ITEMPOS );
         rListBox.GetModel()->InvalidateEntry( _pE );
         rListBox.Select( _pE );
         rListBox.MakeVisible( _pE );
@@ -722,8 +707,7 @@ long _SvxMacroTabPage::GenericHandler_Impl( _SvxMacroTabPage* pThis, PushButton*
     // update the listbox entry
     pImpl->pEventLB->SetUpdateMode( FALSE );
     pE->ReplaceItem( new IconLBoxString( pE, 0, sEventURL,
-            pImpl->pMacroImg, pImpl->pComponentImg,
-            pImpl->pMacroImg_h, pImpl->pComponentImg_h ), LB_MACROS_ITEMPOS );
+            pImpl->pMacroImg, pImpl->pComponentImg ), LB_MACROS_ITEMPOS );
 
     rListBox.GetModel()->InvalidateEntry( pE );
     rListBox.Select( pE );
@@ -846,8 +830,6 @@ SvxMacroTabPage::SvxMacroTabPage( Window* pParent, const Reference< frame::XFram
     mpImpl->pAssignComponentPB  = new PushButton( this,         CUI_RES( PB_ASSIGN_COMPONENT ) );
     mpImpl->pMacroImg           = new Image(                        CUI_RES(IMG_MACRO) );
     mpImpl->pComponentImg       = new Image(                        CUI_RES(IMG_COMPONENT) );
-    mpImpl->pMacroImg_h         = new Image(                        CUI_RES(IMG_MACRO_H) );
-    mpImpl->pComponentImg_h     = new Image(                        CUI_RES(IMG_COMPONENT_H) );
 
     FreeResource();
 

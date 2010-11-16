@@ -188,7 +188,6 @@ private:
     FixedImage      aHelpImg;
 
     ImageList       aPageImages;
-    ImageList       aPageImagesHC;
 
     ResStringArray  aHelpTextsArr;
 

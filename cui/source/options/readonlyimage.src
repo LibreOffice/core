@@ -39,4 +39,3 @@ Image RID_SVXBMP_LOCK
     };
     MaskColor = Color { Red=0xffff; Green=0x0000; Blue=0xffff; };
 };
-

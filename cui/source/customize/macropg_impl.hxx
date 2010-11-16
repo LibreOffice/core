@@ -41,8 +41,6 @@ public:
     PushButton*                     pDeletePB;
     Image*                          pMacroImg;
     Image*                          pComponentImg;
-    Image*                          pMacroImg_h;
-    Image*                          pComponentImg_h;
     String*                         pStrEvent;
     String*                         pAssignedMacro;
     _HeaderTabListBox*              pEventLB;

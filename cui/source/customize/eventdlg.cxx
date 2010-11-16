@@ -82,8 +82,6 @@ SvxEventConfigPage::SvxEventConfigPage( Window *pParent, const SfxItemSet& rSet,
     mpImpl->pDeletePB           = new PushButton( this, CUI_RES( PB_DELETE ));
     mpImpl->pMacroImg           = new Image( CUI_RES( IMG_MACRO) );
     mpImpl->pComponentImg       = new Image( CUI_RES( IMG_COMPONENT) );
-    mpImpl->pMacroImg_h         = new Image( CUI_RES( IMG_MACRO_H) );
-    mpImpl->pComponentImg_h     = new Image( CUI_RES( IMG_COMPONENT_H) );
 
     FreeResource();
 

@@ -853,10 +853,6 @@ void OfaTreeOptionsDialog::InitTreeAndHandler()
     aImgLstRes.SetRT( RSC_IMAGELIST );
     if ( pIsoRes->IsAvailable( aImgLstRes ) )
         aPageImages = ImageList( ResId( RID_IMGLIST_TREEOPT, *pIsoRes ) );
-    ResId aImgLstHCRes( RID_IMGLIST_TREEOPT_HC, *pIsoRes );
-    aImgLstHCRes.SetRT( RSC_IMAGELIST );
-    if ( pIsoRes->IsAvailable( aImgLstHCRes ) )
-        aPageImagesHC = ImageList( ResId( RID_IMGLIST_TREEOPT_HC, *pIsoRes ) );
     delete pIsoRes;
 
     aTreeLB.SetHelpId( HID_OFADLG_TREELISTBOX );
@@ -1032,8 +1028,7 @@ void OfaTreeOptionsDialog::DataChanged( const DataChangedEvent& rDCEvt )
         !aTreeLB.GetParent(pEntry))
     {
         OptionsGroupInfo* pInfo = static_cast<OptionsGroupInfo*>(pEntry->GetUserData());
-        bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
-        ImageList* pImgLst = bHighContrast ? &aPageImagesHC : &aPageImages;
+        ImageList* pImgLst = &aPageImages;
         for ( sal_uInt16 i = 0; i < aHelpTextsArr.Count(); ++i )
         {
             if ( aHelpTextsArr.GetValue(i) == pInfo->m_nDialogId )
@@ -1290,8 +1285,7 @@ IMPL_LINK( OfaTreeOptionsDialog, SelectHdl_Impl, Timer*, EMPTYARG )
         OptionsGroupInfo* pTGInfo = (OptionsGroupInfo *)pEntry->GetUserData();
         if ( pTGInfo->m_sPageURL.getLength() == 0 )
         {
-            bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
-            ImageList* pImgLst = bHighContrast ? &aPageImagesHC : &aPageImages;
+            ImageList* pImgLst = &aPageImages;
             //hier den Hilfetext anzeigen
             for ( sal_uInt16 i = 0; i < aHelpTextsArr.Count(); ++i )
             {

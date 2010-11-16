@@ -112,29 +112,24 @@ SvxHpLinkDlg::SvxHpLinkDlg (Window* pParent, SfxBindings* pBindings)
     mbGrabFocus = sal_True;
     // insert pages
     Image aImage;
-    Image aImageHC;
     String aStrTitle;
     SvxIconChoiceCtrlEntry* pEntry = NULL;
 
     aStrTitle = CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLINETTP );
     aImage = Image( CUI_RES ( RID_SVXBMP_HLINETTP ) );
-    aImageHC = Image( CUI_RES ( RID_SVXBMP_HLINETTP_H ) );
-    pEntry = AddTabPage ( RID_SVXPAGE_HYPERLINK_INTERNET, aStrTitle, aImage, aImageHC, SvxHyperlinkInternetTp::Create );
+    pEntry = AddTabPage ( RID_SVXPAGE_HYPERLINK_INTERNET, aStrTitle, aImage, SvxHyperlinkInternetTp::Create );
     pEntry->SetQuickHelpText( CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLINETTP_HELP ) );
     aStrTitle = CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLMAILTP );
     aImage = Image( CUI_RES ( RID_SVXBMP_HLMAILTP ) );
-    aImageHC = Image( CUI_RES ( RID_SVXBMP_HLMAILTP_H ) );
-    pEntry = AddTabPage ( RID_SVXPAGE_HYPERLINK_MAIL, aStrTitle, aImage, aImageHC, SvxHyperlinkMailTp::Create );
+    pEntry = AddTabPage ( RID_SVXPAGE_HYPERLINK_MAIL, aStrTitle, aImage, SvxHyperlinkMailTp::Create );
     pEntry->SetQuickHelpText( CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLMAILTP_HELP ) );
     aStrTitle = CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLDOCTP );
     aImage = Image( CUI_RES ( RID_SVXBMP_HLDOCTP ) );
-    aImageHC = Image( CUI_RES ( RID_SVXBMP_HLDOCTP_H ) );
-    pEntry = AddTabPage ( RID_SVXPAGE_HYPERLINK_DOCUMENT, aStrTitle, aImage, aImageHC, SvxHyperlinkDocTp::Create );
+    pEntry = AddTabPage ( RID_SVXPAGE_HYPERLINK_DOCUMENT, aStrTitle, aImage, SvxHyperlinkDocTp::Create );
     pEntry->SetQuickHelpText( CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLDOCTP_HELP ) );
     aStrTitle = CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLDOCNTP );
     aImage = Image( CUI_RES ( RID_SVXBMP_HLDOCNTP ) );
-    aImageHC = Image( CUI_RES ( RID_SVXBMP_HLDOCNTP_H ) );
-    pEntry = AddTabPage ( RID_SVXPAGE_HYPERLINK_NEWDOCUMENT, aStrTitle, aImage, aImageHC, SvxHyperlinkNewDocTp::Create );
+    pEntry = AddTabPage ( RID_SVXPAGE_HYPERLINK_NEWDOCUMENT, aStrTitle, aImage, SvxHyperlinkNewDocTp::Create );
     pEntry->SetQuickHelpText( CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLDOCNTP_HELP ) );
 
     // all tab pages set -> create mnemonics

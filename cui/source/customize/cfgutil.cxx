@@ -448,13 +448,9 @@ void SfxConfigFunctionListBox_Impl::SetStylesInfo(SfxStylesInfo_Impl* pStyles)
 struct SvxConfigGroupBoxResource_Impl : public Resource
 {
     Image m_hdImage;
-    Image m_hdImage_hc;
     Image m_libImage;
-    Image m_libImage_hc;
     Image m_macImage;
-    Image m_macImage_hc;
     Image m_docImage;
-    Image m_docImage_hc;
     ::rtl::OUString m_sMyMacros;
     ::rtl::OUString m_sProdMacros;
     String m_sMacros;
@@ -471,13 +467,9 @@ struct SvxConfigGroupBoxResource_Impl : public Resource
 SvxConfigGroupBoxResource_Impl::SvxConfigGroupBoxResource_Impl() :
     Resource(CUI_RES(RID_SVXPAGE_CONFIGGROUPBOX)),
     m_hdImage(CUI_RES(IMG_HARDDISK)),
-    m_hdImage_hc(CUI_RES(IMG_HARDDISK_HC)),
     m_libImage(CUI_RES(IMG_LIB)),
-    m_libImage_hc(CUI_RES(IMG_LIB_HC)),
     m_macImage(CUI_RES(IMG_MACRO)),
-    m_macImage_hc(CUI_RES(IMG_MACRO_HC)),
     m_docImage(CUI_RES(IMG_DOC)),
-    m_docImage_hc(CUI_RES(IMG_DOC_HC)),
     m_sMyMacros(String(CUI_RES(STR_MYMACROS))),
     m_sProdMacros(String(CUI_RES(STR_PRODMACROS))),
     m_sMacros(String(CUI_RES(STR_BASICMACROS))),
@@ -919,7 +911,7 @@ void SfxConfigGroupListBox_Impl::Init(const css::uno::Reference< css::lang::XMul
                                     new SfxGroupInfo_Impl(SFX_CFGGROUP_SCRIPTCONTAINER,
                                         0, static_cast<void *>( theChild.get()));
 
-                                Image aImage = GetImage( theChild, xCtx, bIsRootNode,BMP_COLOR_NORMAL );
+                                Image aImage = GetImage( theChild, xCtx, bIsRootNode );
                                 SvLBoxEntry* pNewEntry =
                                     InsertEntry( uiName, NULL);
                                 SetExpandedEntryBmp(  pNewEntry, aImage );
@@ -967,7 +959,7 @@ void SfxConfigGroupListBox_Impl::Init(const css::uno::Reference< css::lang::XMul
     MakeVisible( GetEntry( 0,0 ) );
     SetUpdateMode( TRUE );
 }
-Image SfxConfigGroupListBox_Impl::GetImage( Reference< browse::XBrowseNode > node, Reference< XComponentContext > xCtx, bool bIsRootNode, bool bHighContrast )
+Image SfxConfigGroupListBox_Impl::GetImage( Reference< browse::XBrowseNode > node, Reference< XComponentContext > xCtx, bool bIsRootNode )
 {
     Image aImage;
     if ( bIsRootNode )
@@ -976,10 +968,7 @@ Image SfxConfigGroupListBox_Impl::GetImage( Reference< browse::XBrowseNode > nod
         ::rtl::OUString share( RTL_CONSTASCII_USTRINGPARAM("share") );
         if (node->getName().equals( user ) || node->getName().equals(share ) )
         {
-            if( bHighContrast == BMP_COLOR_NORMAL )
-                aImage = pImp->m_hdImage;
-            else
-                aImage = pImp->m_hdImage_hc;
+            aImage = pImp->m_hdImage;
         }
         else
         {
@@ -1024,40 +1013,21 @@ Image SfxConfigGroupListBox_Impl::GetImage( Reference< browse::XBrowseNode > nod
             }
             if( factoryURL.getLength() > 0 )
             {
-                if( bHighContrast == BMP_COLOR_NORMAL )
-                    aImage = SvFileInformationManager::GetFileImage(
-                        INetURLObject(factoryURL), false,
-                        BMP_COLOR_NORMAL );
-                else
-                    aImage = SvFileInformationManager::GetFileImage(
-                        INetURLObject(factoryURL), false,
-                        BMP_COLOR_HIGHCONTRAST );
+                aImage = SvFileInformationManager::GetFileImage(
+                    INetURLObject(factoryURL), false );
             }
             else
             {
-                if( bHighContrast == BMP_COLOR_NORMAL )
-                    aImage = pImp->m_docImage;
-                else
-                    aImage = pImp->m_docImage_hc;
+                aImage = pImp->m_docImage;
             }
         }
     }
     else
     {
         if( node->getType() == browse::BrowseNodeTypes::SCRIPT )
-        {
-            if( bHighContrast == BMP_COLOR_NORMAL )
-                aImage = pImp->m_macImage;
-            else
-                aImage = pImp->m_macImage_hc;
-        }
+            aImage = pImp->m_macImage;
         else
-        {
-            if( bHighContrast == BMP_COLOR_NORMAL )
-                aImage = pImp->m_libImage;
-            else
-                aImage = pImp->m_libImage_hc;
-        }
+            aImage = pImp->m_libImage;
     }
     return aImage;
 }
@@ -1262,7 +1232,7 @@ void SfxConfigGroupListBox_Impl::GroupSelected()
                                     new SfxGroupInfo_Impl(SFX_CFGFUNCTION_SCRIPT,
                                         aInfo->GetSlotId(), aInfo);
 
-                                Image aImage = GetImage( children[n], Reference< XComponentContext >(), sal_False, BMP_COLOR_NORMAL );
+                                Image aImage = GetImage( children[n], Reference< XComponentContext >(), sal_False );
                                 SvLBoxEntry* pNewEntry =
                                     pFunctionListBox->InsertEntry( children[n]->getName(), NULL );
                                 pFunctionListBox->SetExpandedEntryBmp( pNewEntry, aImage );
@@ -1483,7 +1453,7 @@ void SfxConfigGroupListBox_Impl::RequestingChilds( SvLBoxEntry *pEntry )
                                     new SfxGroupInfo_Impl(SFX_CFGGROUP_SCRIPTCONTAINER,
                                         0, static_cast<void *>( theChild.get()));
 
-                                Image aImage = GetImage( theChild, Reference< XComponentContext >(), sal_False, BMP_COLOR_NORMAL );
+                                Image aImage = GetImage( theChild, Reference< XComponentContext >(), sal_False );
                                 SvLBoxEntry* pNewEntry =
                                     InsertEntry( theChild->getName(), pEntry );
                                 SetExpandedEntryBmp( pNewEntry, aImage );

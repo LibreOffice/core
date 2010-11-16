@@ -170,7 +170,7 @@ class SfxConfigGroupListBox_Impl : public SvTreeListBox
     css::uno::Reference< css::container::XNameAccess > m_xModuleCategoryInfo;
     css::uno::Reference< css::container::XNameAccess > m_xUICmdDescription;
 
-    Image GetImage( ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode > node, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xCtx, bool bIsRootNode, bool bHighContrast );
+    Image GetImage( ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode > node, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xCtx, bool bIsRootNode );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface  > getDocumentModel( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xCtx, ::rtl::OUString& docName );
     ::rtl::OUString parseLocationName( const ::rtl::OUString& location );

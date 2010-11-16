@@ -61,7 +61,6 @@ private:
     CheckBox        aCB_LAENGE;
 
     Image*          mpBmpCapTypes[CAPTYPE_BITMAPS_COUNT];
-    Image*          mpBmpCapTypesH[CAPTYPE_BITMAPS_COUNT];
 
     String          aStrHorzList;
     String          aStrVertList;
