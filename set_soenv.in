@@ -54,7 +54,7 @@ my ( $CALL_CDECL, $COMMON_OUTDIR, $BMP_WRITES_FLAG,
      $SOLAR_PLUGIN, $UPDATER, $BUILD_DELIVER, $VCL,
      $CC, $CXX,
      $BUILD_SOSL, $ENABLEUNICODE, $NEW_JAR_PACK, $NO_BSYMBOLIC,
-     $BUILD_SOSL_RELEASE, $RSC_ONCE );
+     $BUILD_SOSL_RELEASE);
 #
 # Platform dependent constant values.
 my ( $BIG_SVX, $COM, $ARCH, $CPU, $CPUNAME, $CVER, $GLIBC, $GUI, $GUIBASE,
@@ -177,7 +177,6 @@ chomp( $oldPATH );                  # cut off new line
 # NB: Language options now set at 'ToFile' stage.
 $BMP_WRITES_FLAG      = "TRUE";
 $BUILD_SOSL_RELEASE   = "TRUE";
-$RSC_ONCE             = "TRUE";
 $CALL_CDECL           = "TRUE";
 $COMMON_OUTDIR        = "";
 $common_build         = "";
