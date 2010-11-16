@@ -63,7 +63,7 @@
 #include <htmlnum.hxx>
 #include <wrthtml.hxx>
 #include <wrtswtbl.hxx>
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 #include <viewsh.hxx>
 #include <viewopt.hxx>
 #endif

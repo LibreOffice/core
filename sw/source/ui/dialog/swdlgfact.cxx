@@ -583,7 +583,7 @@ long AbstractMailMergeWizard_Impl::GetResult()
     return pDlg->GetResult();
 }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 IMPL_LINK( AbstractMailMergeWizard_Impl, EndDialogHdl, SwMailMergeWizard*, pDialog )
 #else
 IMPL_LINK( AbstractMailMergeWizard_Impl, EndDialogHdl, SwMailMergeWizard*, EMPTYARG )
