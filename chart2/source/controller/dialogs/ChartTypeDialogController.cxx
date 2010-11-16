@@ -135,7 +135,7 @@ ChartTypeDialogController::ChartTypeDialogController()
 ChartTypeDialogController::~ChartTypeDialogController()
 {
 }
-Image ChartTypeDialogController::getImage( bool /*bIsHighContrast*/ )
+Image ChartTypeDialogController::getImage()
 {
     return Image();
 }
@@ -361,7 +361,7 @@ bool ChartTypeDialogController::commitToModel( const ChartTypeParameter& rParame
     }
     return false;
 }
-void ChartTypeDialogController::fillSubTypeList( ValueSet& rSubTypeList, bool /*bIsHighContrast*/, const ChartTypeParameter& /*rParameter*/ )
+void ChartTypeDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& /*rParameter*/ )
 {
     rSubTypeList.Clear();
 }
@@ -443,10 +443,7 @@ String ColumnChartDialogController::getName()
 {
     return String( SchResId( STR_TYPE_COLUMN ));
 }
-/*
- * @param bIsHighContrast, this is now an unused noop. FIXME, remove carefully.
- */
-Image ColumnChartDialogController::getImage( bool bIsHighContrast )
+Image ColumnChartDialogController::getImage()
 {
     return Image( SchResId( IMG_TYPE_COLUMN ));
 }
@@ -464,7 +461,7 @@ const tTemplateServiceChartTypeParameterMap& ColumnChartDialogController::getTem
         ;
     return m_aTemplateMap;
 }
-void ColumnChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, bool bIsHighContrast, const ChartTypeParameter& rParameter )
+void ColumnChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
 {
     rSubTypeList.Clear();
 
@@ -523,10 +520,7 @@ String BarChartDialogController::getName()
 {
     return String( SchResId( STR_TYPE_BAR ));
 }
-/**
- * @param bIsHighContrast This is now an unused Noop. FIXME: remove carefully
- */
-Image BarChartDialogController::getImage( bool bIsHighContrast )
+Image BarChartDialogController::getImage()
 {
     return Image( SchResId( IMG_TYPE_BAR ));
 }
@@ -544,7 +538,7 @@ const tTemplateServiceChartTypeParameterMap& BarChartDialogController::getTempla
         ;
     return m_aTemplateMap;
 }
-void BarChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, bool bIsHighContrast, const ChartTypeParameter& rParameter )
+void BarChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
 {
     rSubTypeList.Clear();
 
@@ -602,10 +596,7 @@ String PieChartDialogController::getName()
 {
     return String( SchResId( STR_TYPE_PIE ));
 }
-/**
- * @param bIsHighContrast: This is now an unused Noop. FIXME, remove carefully.
- */
-Image PieChartDialogController::getImage( bool bIsHighContrast )
+Image PieChartDialogController::getImage()
 {
     return Image( SchResId( IMG_TYPE_PIE ));
 }
@@ -624,7 +615,7 @@ const tTemplateServiceChartTypeParameterMap& PieChartDialogController::getTempla
     ;
     return m_aTemplateMap;
 }
-void PieChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, bool bIsHighContrast, const ChartTypeParameter& rParameter )
+void PieChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
 {
     rSubTypeList.Clear();
 
@@ -667,10 +658,7 @@ String LineChartDialogController::getName()
 {
     return String( SchResId( STR_TYPE_LINE ));
 }
-/**
- * @param bIsHighContrast: This is now an noop. FIXME: please remove carefully.
- */
-Image LineChartDialogController::getImage( bool bIsHighContrast )
+Image LineChartDialogController::getImage()
 {
     return Image( SchResId( IMG_TYPE_LINE ));
 }
@@ -697,7 +685,7 @@ const tTemplateServiceChartTypeParameterMap& LineChartDialogController::getTempl
     ;
     return m_aTemplateMap;
 }
-void LineChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, bool bIsHighContrast, const ChartTypeParameter& rParameter )
+void LineChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
 {
     rSubTypeList.Clear();
 
@@ -803,7 +791,7 @@ String XYChartDialogController::getName()
 {
     return String( SchResId( STR_TYPE_XY ));
 }
-Image XYChartDialogController::getImage( bool bIsHighContrast )
+Image XYChartDialogController::getImage()
 {
     return Image( SchResId( IMG_TYPE_XY ));
 }
@@ -819,7 +807,7 @@ const tTemplateServiceChartTypeParameterMap& XYChartDialogController::getTemplat
     ;
     return m_aTemplateMap;
 }
-void XYChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, bool bIsHighContrast, const ChartTypeParameter& rParameter )
+void XYChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
 {
     rSubTypeList.Clear();
 
@@ -890,10 +878,7 @@ String AreaChartDialogController::getName()
 {
     return String( SchResId( STR_TYPE_AREA ));
 }
-/**
- * @param: bIsHighContrast: This is now an unused noop. FIXME, please remove carefully.
- */
-Image AreaChartDialogController::getImage( bool bIsHighContrast )
+Image AreaChartDialogController::getImage()
 {
     return Image( SchResId( IMG_TYPE_AREA ));
 }
@@ -914,15 +899,15 @@ const tTemplateServiceChartTypeParameterMap& AreaChartDialogController::getTempl
     ;
     return m_aTemplateMap;
 }
-void AreaChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, bool bIsHighContrast, const ChartTypeParameter& rParameter )
+void AreaChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
 {
     rSubTypeList.Clear();
 
     if( rParameter.b3DLook )
     {
-        rSubTypeList.InsertItem( 1, Bitmap( SchResId( BMP_AREAS_3D ) );
-        rSubTypeList.InsertItem( 2, Bitmap( SchResId( BMP_AREAS_3D_1 ) );
-        rSubTypeList.InsertItem( 3, Bitmap( SchResId( BMP_AREAS_3D_2 ) );
+        rSubTypeList.InsertItem( 1, Bitmap( SchResId( BMP_AREAS_3D )));
+        rSubTypeList.InsertItem( 2, Bitmap( SchResId( BMP_AREAS_3D_1 )));
+        rSubTypeList.InsertItem( 3, Bitmap( SchResId( BMP_AREAS_3D_2 )));
     }
     else
     {
@@ -976,10 +961,7 @@ String NetChartDialogController::getName()
 {
     return String( SchResId( STR_TYPE_NET ));
 }
-/**
- * @param bIsHighContrast this is now an unused noop. Please remove carefully.
- */
-Image NetChartDialogController::getImage( bool bIsHighContrast )
+Image NetChartDialogController::getImage()
 {
     return Image( SchResId( IMG_TYPE_NET ));
 }
@@ -1010,7 +992,7 @@ const tTemplateServiceChartTypeParameterMap& NetChartDialogController::getTempla
     ;
     return m_aTemplateMap;
 }
-void NetChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, bool bIsHighContrast, const ChartTypeParameter& rParameter )
+void NetChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
 {
     rSubTypeList.Clear();
 
@@ -1072,10 +1054,7 @@ String StockChartDialogController::getName()
 {
     return String( SchResId( STR_TYPE_STOCK ));
 }
-/**
- * @param bIsHighContrast this is now an unused noop. FIXME, please remove carefully.
- */
-Image StockChartDialogController::getImage( bool bIsHighContrast )
+Image StockChartDialogController::getImage()
 {
     return Image( SchResId( IMG_TYPE_STOCK ));
 }
@@ -1090,7 +1069,7 @@ const tTemplateServiceChartTypeParameterMap& StockChartDialogController::getTemp
     ;
     return m_aTemplateMap;
 }
-void StockChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, bool bIsHighContrast, const ChartTypeParameter& /*rParameter*/ )
+void StockChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& /*rParameter*/ )
 {
     rSubTypeList.Clear();
     rSubTypeList.InsertItem( 1, Bitmap( SchResId( BMP_STOCK_1 )));
@@ -1126,10 +1105,7 @@ String CombiColumnLineChartDialogController::getName()
 {
     return String( SchResId( STR_TYPE_COMBI_COLUMN_LINE ));
 }
-/**
- * @param bIsHighContrast this is now an unused noop. FIXME, please remove carefully
- */
-Image CombiColumnLineChartDialogController::getImage( bool bIsHighContrast )
+Image CombiColumnLineChartDialogController::getImage()
 {
     return Image( SchResId( IMG_TYPE_COLUMN_LINE ));
 }
@@ -1142,7 +1118,7 @@ const tTemplateServiceChartTypeParameterMap& CombiColumnLineChartDialogControlle
     ;
     return m_aTemplateMap;
 }
-void CombiColumnLineChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, bool bIsHighContrast, const ChartTypeParameter& /*rParameter*/ )
+void CombiColumnLineChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& /*rParameter*/ )
 {
     rSubTypeList.Clear();
     rSubTypeList.InsertItem( 1, Bitmap( SchResId( BMP_COLUMN_LINE )));
@@ -1269,10 +1245,7 @@ String BubbleChartDialogController::getName()
 {
     return String( SchResId( STR_TYPE_BUBBLE ));
 }
-/**
- * @param bIsHighContrast this is now a noop. FIXME, please remove carefully
- */
-Image BubbleChartDialogController::getImage( bool bIsHighContrast )
+Image BubbleChartDialogController::getImage()
 {
     return Image( SchResId( IMG_TYPE_BUBBLE ));
 }
@@ -1283,7 +1256,7 @@ const tTemplateServiceChartTypeParameterMap& BubbleChartDialogController::getTem
         ( C2U( "com.sun.star.chart2.template.Bubble" ),          ChartTypeParameter(1,true) ) ;
     return m_aTemplateMap;
 }
-void BubbleChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, bool bIsHighContrast, const ChartTypeParameter& /*rParameter*/ )
+void BubbleChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& /*rParameter*/ )
 {
     rSubTypeList.Clear();
     rSubTypeList.InsertItem( 1, Bitmap( SchResId( BMP_BUBBLE_1 )));

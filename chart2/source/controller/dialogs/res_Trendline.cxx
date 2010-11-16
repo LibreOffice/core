@@ -256,11 +256,11 @@ BOOL TrendlineResources::FillItemSet(SfxItemSet& rOutAttrs) const
 void TrendlineResources::FillValueSets()
 {
     if( m_bNoneAvailable )
-        m_aFINone.SetImage( Image( SchResId( BMP_REGRESSION_NONE ));
-    m_aFILinear.SetImage( Image( SchResId( BMP_REGRESSION_LINEAR ));
-    m_aFILogarithmic.SetImage( Image( SchResId( BMP_REGRESSION_LOG ));
-    m_aFIExponential.SetImage( Image( SchResId( BMP_REGRESSION_EXP ));
-    m_aFIPower.SetImage( Image( SchResId( BMP_REGRESSION_POWER ));
+        m_aFINone.SetImage( Image( SchResId( BMP_REGRESSION_NONE )) );
+    m_aFILinear.SetImage( Image( SchResId( BMP_REGRESSION_LINEAR )) );
+    m_aFILogarithmic.SetImage( Image( SchResId( BMP_REGRESSION_LOG )) );
+    m_aFIExponential.SetImage( Image( SchResId( BMP_REGRESSION_EXP )) );
+    m_aFIPower.SetImage( Image( SchResId( BMP_REGRESSION_POWER )) );
 }
 
 void TrendlineResources::UpdateControlStates()

@@ -176,8 +176,7 @@ public:
     void SetPos( const Point & rPos );
     void SetWidth( sal_Int32 nWidth );
     void SetChartType( const Reference< chart2::XChartType > & xChartType,
-                       bool bSwapXAndYAxis,
-                       bool bIsHighContrast );
+                       bool bSwapXAndYAxis );
     void SetSeriesName( const String & rName );
     void SetRange( sal_Int32 nStartCol, sal_Int32 nEndCol );
 
@@ -213,11 +212,9 @@ private:
     DECL_LINK( SeriesNameChanged, void * );
     DECL_LINK( SeriesNameEdited, void * );
 
-    /// @param bHC </TRUE> for hight-contrast image
     static Image GetChartTypeImage(
         const Reference< chart2::XChartType > & xChartType,
-        bool bSwapXAndYAxis,
-        bool bHC );
+        bool bSwapXAndYAxis);
 
     sal_Int32 m_nStartCol, m_nEndCol;
     sal_Int32 m_nWidth;
@@ -323,10 +320,9 @@ void SeriesHeader::SetPixelWidth( sal_Int32 nWidth )
 
 void SeriesHeader::SetChartType(
     const Reference< chart2::XChartType > & xChartType,
-    bool bSwapXAndYAxis,
-    bool bIsHighContrast )
+    bool bSwapXAndYAxis )
 {
-    m_spSymbol->SetImage( GetChartTypeImage( xChartType, bSwapXAndYAxis, bIsHighContrast ));
+    m_spSymbol->SetImage(GetChartTypeImage(xChartType, bSwapXAndYAxis));
 }
 
 void SeriesHeader::SetSeriesName( const String & rName )
@@ -385,13 +381,9 @@ bool SeriesHeader::HasFocus() const
     return m_spSeriesName->HasFocus();
 }
 
-/**
- * @param bHC is a noop. FIXME, remove carefully
- */
 Image SeriesHeader::GetChartTypeImage(
     const Reference< chart2::XChartType > & xChartType,
-    bool bSwapXAndYAxis,
-    bool bHC )
+    bool bSwapXAndYAxis)
 {
     Image aResult;
     if( !xChartType.is())
@@ -626,7 +618,6 @@ void DataBrowser::RenewTable()
     const DataBrowserModel::tDataHeaderVector& aHeaders( m_apDataBrowserModel->getDataHeaders());
     Link aFocusLink( LINK( this, DataBrowser, SeriesHeaderGotFocus ));
     Link aSeriesHeaderChangedLink( LINK( this, DataBrowser, SeriesHeaderChanged ));
-    bool bIsHighContrast = pWin ? (pWin->GetSettings().GetStyleSettings().GetHighContrastMode()) : false;
 
     for( DataBrowserModel::tDataHeaderVector::const_iterator aIt( aHeaders.begin());
          aIt != aHeaders.end(); ++aIt )
@@ -638,7 +629,7 @@ void DataBrowser::RenewTable()
         if( xSeriesProp.is() &&
             ( xSeriesProp->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("Color"))) >>= nColor ))
             spHeader->SetColor( Color( nColor ));
-        spHeader->SetChartType( aIt->m_xChartType, aIt->m_bSwapXAndYAxis, bIsHighContrast );
+        spHeader->SetChartType( aIt->m_xChartType, aIt->m_bSwapXAndYAxis );
         spHeader->SetSeriesName(
             String( DataSeriesHelper::getDataSeriesLabel(
                         aIt->m_xDataSeries,
@@ -1244,7 +1235,6 @@ void DataBrowser::RenewSeriesHeaders()
     DataBrowserModel::tDataHeaderVector aHeaders( m_apDataBrowserModel->getDataHeaders());
     Link aFocusLink( LINK( this, DataBrowser, SeriesHeaderGotFocus ));
     Link aSeriesHeaderChangedLink( LINK( this, DataBrowser, SeriesHeaderChanged ));
-    bool bIsHighContrast = pWin ? (pWin->GetSettings().GetStyleSettings().GetHighContrastMode()) : false;
 
     for( DataBrowserModel::tDataHeaderVector::const_iterator aIt( aHeaders.begin());
          aIt != aHeaders.end(); ++aIt )
@@ -1255,7 +1245,7 @@ void DataBrowser::RenewSeriesHeaders()
         if( xSeriesProp.is() &&
             ( xSeriesProp->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("Color"))) >>= nColor ))
             spHeader->SetColor( Color( nColor ));
-        spHeader->SetChartType( aIt->m_xChartType, aIt->m_bSwapXAndYAxis, bIsHighContrast );
+        spHeader->SetChartType( aIt->m_xChartType, aIt->m_bSwapXAndYAxis );
         spHeader->SetSeriesName(
             String( DataSeriesHelper::getDataSeriesLabel(
                         aIt->m_xDataSeries,

@@ -69,7 +69,7 @@ DataEditor::DataEditor(
         m_aTbxData( this, SchResId( TBX_DATA )),
         m_xChartDoc( xChartDoc ),
         m_xContext( xContext ),
-        m_aToolboxImageList( SchResId( IL_DIAGRAM_DATA )),
+        m_aToolboxImageList( SchResId( IL_DIAGRAM_DATA ))
 {
     FreeResource();
 
