@@ -204,9 +204,7 @@ SV_IMPL_PTRARR( BibToolBarListenerArr, BibToolBarListenerPtr);
 BibToolBar::BibToolBar(Window* pParent, Link aLink, WinBits nStyle):
     ToolBox(pParent,BibResId(RID_BIB_TOOLBAR)),
     aImgLst(BibResId(  RID_TOOLBAR_IMGLIST     )),
-    aImgLstHC(BibResId(RID_TOOLBAR_IMGLIST_HC  )),
     aBigImgLst(BibResId( RID_TOOLBAR_BIGIMGLIST )),
-    aBigImgLstHC(BibResId( RID_TOOLBAR_BIGIMGLIST_HC )),
     aFtSource(this,WB_VCENTER),
     aLBSource(this,WB_DROPDOWN),
     aFtQuery(this,WB_VCENTER),
@@ -610,8 +608,8 @@ void BibToolBar::RebuildToolbar()
 void BibToolBar::ApplyImageList()
 {
     ImageList& rList = ( nSymbolsSize == SFX_SYMBOLS_SIZE_SMALL ) ?
-                       ( GetSettings().GetStyleSettings().GetHighContrastMode() ? aImgLstHC : aImgLst ) :
-                       ( GetSettings().GetStyleSettings().GetHighContrastMode() ? aBigImgLstHC : aBigImgLst );
+                       ( aImgLst ) :
+                       ( aBigImgLst );
 
     SetItemImage(TBC_BT_AUTOFILTER  , rList.GetImage(SID_FM_AUTOFILTER));
     SetItemImage(TBC_BT_FILTERCRIT  , rList.GetImage(SID_FM_FILTERCRIT));
