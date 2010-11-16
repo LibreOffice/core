@@ -82,7 +82,7 @@
 #include <svx/svdoedge.hxx>
 #include "doc.hxx"
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 #include "viewopt.hxx"  // SwViewOptions, nur zum Testen (Test2)
 #endif
 
