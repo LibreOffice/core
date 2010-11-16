@@ -707,15 +707,31 @@ void VLegend::createShapes(
             tPropertyValues aLineFillProperties;
             tPropertyValues aTextProperties;
 
+            bool bIsCustomSized = false;
+
             // limit the width of texts to 30% of the total available width
             // #i109336# Improve auto positioning in chart
             sal_Int32 nMaxLabelWidth = rAvailableSpace.Width * 3 / 10;
             Reference< beans::XPropertySet > xLegendProp( m_xLegend, uno::UNO_QUERY );
             LegendExpansion eExpansion = LegendExpansion_HIGH;
+            awt::Size aCustomSize;
+
             if( xLegendProp.is())
             {
                 // get Expansion property
                 xLegendProp->getPropertyValue( C2U( "Expansion" )) >>= eExpansion;
+                bIsCustomSized = (eExpansion == LegendExpansion_CUSTOM);
+                RelativeSize aRelativeSize;
+                if ((xLegendProp->getPropertyValue( C2U( "RelativeSize" )) >>= aRelativeSize))
+                {
+                    aCustomSize.Width = aRelativeSize.Primary * rPageSize.Width;
+                    aCustomSize.Height = aRelativeSize.Secondary * rPageSize.Height;
+                }
+                else
+                {
+                    bIsCustomSized =false;
+                    eExpansion = LegendExpansion_HIGH;
+                }
                 if( eExpansion == LegendExpansion_WIDE )
                 {
                     //#i80377#
@@ -765,8 +781,15 @@ void VLegend::createShapes(
                 , xLegendContainer, m_xShapeFactory, m_xContext
                 , rAvailableSpace, rPageSize, aLegendSize );
 
-            if( xBorder.is())
-                xBorder->setSize( aLegendSize );
+            if( xBorder.is() )
+            {
+                if( bIsCustomSized )
+                {
+                    xBorder->setSize( aCustomSize );
+                }
+                else
+                    xBorder->setSize( aLegendSize );
+            }
         }
     }
     catch( uno::Exception & ex )
