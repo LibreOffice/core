@@ -306,7 +306,7 @@ namespace svt
         if ( !m_aStatusImages.GetImageCount() || (bHiContrast != m_aImpl->m_bHiContrast) )
         {
             m_aImpl->m_bHiContrast = bHiContrast;
-            const_cast<EditBrowseBox*>(this)->m_aStatusImages = ImageList(SvtResId(bHiContrast ? RID_SVTOOLS_IMAGELIST_EDITBWSEBOX_H : RID_SVTOOLS_IMAGELIST_EDITBROWSEBOX));
+            const_cast<EditBrowseBox*>(this)->m_aStatusImages = ImageList(SvtResId( RID_SVTOOLS_IMAGELIST_EDITBROWSEBOX ));
         }
 
         Image aImage;
