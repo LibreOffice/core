@@ -1867,7 +1867,16 @@ void FileDialogHelper_Impl::addFilters( sal_Int64 nFlags,
     sQuery.appendAscii(":eflags="                                       );
     sQuery.append     (::rtl::OUString::valueOf((sal_Int32)m_nDontFlags));
 
-    uno::Reference< XEnumeration > xResult = xFilterCont->createSubSetEnumerationByQuery(sQuery.makeStringAndClear());
+    uno::Reference< XEnumeration > xResult;
+    try
+    {
+        xResult = xFilterCont->createSubSetEnumerationByQuery(sQuery.makeStringAndClear());
+    }
+    catch( uno::Exception& )
+    {
+        DBG_ERRORFILE( "Could not get filters from the configuration!" );
+    }
+
     TSortedFilterList         aIter   (xResult);
 
     // no matcher any longer used ...
