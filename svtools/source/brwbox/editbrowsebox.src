@@ -48,19 +48,3 @@ ImageList RID_SVTOOLS_IMAGELIST_EDITBROWSEBOX
     };
     IdCount = { 9; };
 };
-
-ImageList RID_SVTOOLS_IMAGELIST_EDITBWSEBOX_H
-{
-    Prefix = "edh";
-    MaskColor   = Color {
-            Red   = 0xFFFF;
-            Green = 0x0000;
-            Blue  = 0xFFFF;
-    };
-    IdList = {
-        IMG_EBB_CURRENT; IMG_EBB_MODIFIED;
-        IMG_EBB_NEW;IMG_EBB_DELETED;IMG_EBB_CURRENTNEW;
-        IMG_EBB_PRIMARYKEY; IMG_EBB_CURRENT_PRIMARYKEY; IMG_EBB_FILTER;IMG_EBB_HEADERFOOTER;
-    };
-    IdCount = { 9; };
-};
