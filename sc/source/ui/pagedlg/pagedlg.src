@@ -240,20 +240,10 @@ TabPage RID_SCPAGE_TABLE
         ImageBitmap = Bitmap { File = "lftrgt.bmp" ; };
         MaskColor = STD_MASKCOLOR;
     };
-    Image IMG_LEFTRIGHT_H
-    {
-        ImageBitmap = Bitmap { File = "lftrgt_h.bmp" ; };
-        MaskColor = SC_HC_MASKCOLOR;
-    };
     Image IMG_TOPDOWN
     {
         ImageBitmap = Bitmap { File = "topdown.bmp" ; };
         MaskColor = STD_MASKCOLOR;
-    };
-    Image IMG_TOPDOWN_H
-    {
-        ImageBitmap = Bitmap { File = "topdown_h.bmp" ; };
-        MaskColor = SC_HC_MASKCOLOR;
     };
     CheckBox BTN_PAGENO
     {

@@ -41,11 +41,3 @@ ImageList RID_OUTLINEBITMAPS
     MaskColor = STD_MASKCOLOR;
     OUTLINE_ID_LIST
 };
-
-ImageList RID_OUTLINEBITMAPS_H
-{
-    Prefix = "ouh";
-    MaskColor = SC_HC_MASKCOLOR;
-    OUTLINE_ID_LIST
-};
-

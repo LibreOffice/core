@@ -60,11 +60,5 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         Prefix = "sf";
         MaskColor = STD_MASKCOLOR ;
         IdList = { 1; 2; };
-};
-    ImageList 2 // == BMP_COLOR_HIGHCONTRAST + 1
-    {
-        Prefix = "sfh";
-        MaskColor = SC_HC_MASKCOLOR ;
-        IdList = { 1; 2; };
-};
+    };
 };

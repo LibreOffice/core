@@ -141,12 +141,6 @@ Window RID_SCDLG_NAVIGATOR
         MaskColor = STD_MASKCOLOR ;
         SC_NAVI_CMD_IDLIST
     };
-    ImageList ILH_CMD
-    {
-        Prefix = "nah";
-        MaskColor = SC_HC_MASKCOLOR ;
-        SC_NAVI_CMD_IDLIST
-    };
     ToolBox TBX_CMD
     {
         Pos = MAP_APPFONT ( 66 , 3 ) ;
@@ -251,13 +245,6 @@ ImageList RID_IMAGELIST_NAVCONT
     MaskColor = STD_MASKCOLOR ;
     SC_NAVI_CONT_IDLIST
 };
-ImageList RID_IMAGELIST_H_NAVCONT
-{
-    Prefix = "nch";
-    MaskColor = SC_HC_MASKCOLOR ;
-    SC_NAVI_CONT_IDLIST
-};
-
 Image RID_IMG_DROP_URL
 {
     ImageBitmap = Bitmap { File = "dropurl.bmp" ; };
@@ -272,21 +259,6 @@ Image RID_IMG_DROP_COPY
 {
     ImageBitmap = Bitmap { File = "dropcopy.bmp" ; };
     MaskColor = STD_MASKCOLOR ;
-};
-Image RID_IMG_H_DROP_URL
-{
-    ImageBitmap = Bitmap { File = "dropurl_h.bmp" ; };
-    MaskColor = SC_HC_MASKCOLOR ;
-};
-Image RID_IMG_H_DROP_LINK
-{
-    ImageBitmap = Bitmap { File = "droplink_h.bmp" ; };
-    MaskColor = SC_HC_MASKCOLOR ;
-};
-Image RID_IMG_H_DROP_COPY
-{
-    ImageBitmap = Bitmap { File = "dropcopy_h.bmp" ; };
-    MaskColor = SC_HC_MASKCOLOR ;
 };
 
 //  content description strings are also used in ScLinkTargetsObj
