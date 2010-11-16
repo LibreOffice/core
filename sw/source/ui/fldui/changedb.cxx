@@ -86,8 +86,6 @@ SwChangeDBDlg::SwChangeDBDlg(SwView& rVw) :
     aCancelBT   (this, SW_RES(BT_CANCEL     )),
     aHelpBT     (this, SW_RES(BT_HELP       )),
     aImageList      (SW_RES(ILIST_DB_DLG    )),
-    aImageListHC    (SW_RES(ILIST_DB_DLG_HC )),
-
     pSh(rVw.GetWrtShellPtr()),
     pMgr( new SwFldMgr() )
 {

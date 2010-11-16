@@ -268,7 +268,7 @@ SwTestAccountSettingsDialog::SwTestAccountSettingsDialog(SwMailConfigPage* pPare
 #ifdef MSC
 #pragma warning (default : 4355)
 #endif
-    m_aImageList( SW_RES( GetSettings().GetStyleSettings().GetHighContrastMode() ? ILIST_HC : ILIST) ),
+    m_aImageList( SW_RES(ILIST) ),
     m_sTask( SW_RES(        ST_TASK          )),
     m_sStatus( SW_RES(      ST_STATUS        )),
     m_sEstablish( SW_RES(   ST_ESTABLISH     )),

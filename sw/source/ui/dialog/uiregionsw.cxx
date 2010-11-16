@@ -387,7 +387,6 @@ SwEditRegionDlg::SwEditRegionDlg( Window* pParent, SwWrtShell& rWrtSh )
     aHelp               ( this, SW_RES( PB_HELP ) ),
 
     aImageIL            (       SW_RES(IL_BITMAPS)),
-    aImageILH           (       SW_RES(ILH_BITMAPS)),
 
     rSh( rWrtSh ),
     pAktEntry( 0 ),
@@ -515,7 +514,7 @@ void SwEditRegionDlg::RecurseList( const SwSectionFmt* pFmt, SvLBoxEntry* pEntry
             {
                 SectRepr* pSectRepr = new SectRepr( n,
                                             *(pSect=pFmt->GetSection()) );
-                Image aImg = BuildBitmap( pSect->IsProtect(),pSect->IsHidden(), FALSE);
+                Image aImg = BuildBitmap( pSect->IsProtect(),pSect->IsHidden());
                 pEntry = aTree.InsertEntry(pSect->GetSectionName(), aImg, aImg);
                 pEntry->SetUserData(pSectRepr);
                 RecurseList( pFmt, pEntry );
@@ -545,7 +544,7 @@ void SwEditRegionDlg::RecurseList( const SwSectionFmt* pFmt, SvLBoxEntry* pEntry
                     SectRepr* pSectRepr=new SectRepr(
                                     FindArrPos( pSect->GetFmt() ), *pSect );
                     Image aImage = BuildBitmap( pSect->IsProtect(),
-                                            pSect->IsHidden(), FALSE);
+                                            pSect->IsHidden());
                     pNEntry = aTree.InsertEntry(
                         pSect->GetSectionName(), aImage, aImage, pEntry);
                     pNEntry->SetUserData(pSectRepr);
@@ -912,7 +911,7 @@ IMPL_LINK( SwEditRegionDlg, ChangeProtectHdl, TriStateBox *, pBox )
         SectReprPtr pRepr = (SectReprPtr) pEntry->GetUserData();
         pRepr->GetSectionData().SetProtectFlag(bCheck);
         Image aImage = BuildBitmap( bCheck,
-                                    STATE_CHECK == aHideCB.GetState(), FALSE);
+                                    STATE_CHECK == aHideCB.GetState());
         aTree.SetExpandedEntryBmp(  pEntry, aImage );
         aTree.SetCollapsedEntryBmp( pEntry, aImage );
         pEntry = aTree.NextSelected(pEntry);
@@ -938,7 +937,7 @@ IMPL_LINK( SwEditRegionDlg, ChangeHideHdl, TriStateBox *, pBox )
         pRepr->GetSectionData().SetHidden(STATE_CHECK == pBox->GetState());
 
         Image aImage = BuildBitmap(STATE_CHECK == aProtectCB.GetState(),
-                                    STATE_CHECK == pBox->GetState(), FALSE);
+                                    STATE_CHECK == pBox->GetState());
         aTree.SetExpandedEntryBmp(  pEntry, aImage );
         aTree.SetCollapsedEntryBmp( pEntry, aImage );
 
@@ -1482,9 +1481,9 @@ IMPL_LINK( SwEditRegionDlg, SubRegionEventHdl, VclWindowEvent *, pEvent )
     return 0;
 }
 
-Image SwEditRegionDlg::BuildBitmap(BOOL bProtect,BOOL bHidden, BOOL bHighContrast)
+Image SwEditRegionDlg::BuildBitmap(BOOL bProtect,BOOL bHidden)
 {
-    ImageList& rImgLst = bHighContrast ? aImageILH : aImageIL;
+    ImageList& rImgLst = aImageIL;
     return rImgLst.GetImage((!bHidden+(bProtect<<1)) + 1);
 }
 

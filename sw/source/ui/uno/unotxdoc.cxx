@@ -3590,8 +3590,7 @@ Any lcl_GetDisplayBitmap(String sLinkSuffix)
     if(USHRT_MAX != nImgId)
     {
         nImgId += 20000;
-        BOOL bHighContrast = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
-        ImageList aEntryImages( SW_RES(bHighContrast ? IMG_NAVI_ENTRYBMPH : IMG_NAVI_ENTRYBMP) );
+        ImageList aEntryImages( SW_RES(IMG_NAVI_ENTRYBMP) );
         const Image& rImage = aEntryImages.GetImage( nImgId );
         Bitmap aBitmap( rImage.GetBitmapEx().GetBitmap() );
         Reference<awt::XBitmap> xBmp = VCLUnoHelper::CreateBitmap( aBitmap );

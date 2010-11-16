@@ -92,8 +92,7 @@ SwMailMergeChildWin::SwMailMergeChildWin( SfxBindings* _pBindings,
     m_aBackTB(this, SW_RES( TB_BACK ))
 {
     m_aBackTB.SetSelectHdl(LINK(this, SwMailMergeChildWin, BackHdl));
-    sal_uInt16 nIResId =  GetSettings().GetStyleSettings().GetHighContrastMode() ?
-        ILIST_TBX_HC : ILIST_TBX;
+    sal_uInt16 nIResId = ILIST_TBX;
     ResId aResId( nIResId, *pSwResMgr );
     ImageList aIList(aResId);
     FreeResource();
@@ -325,7 +324,6 @@ SwSendMailDialog::SwSendMailDialog(Window *pParent, SwMailMergeConfigItem& rConf
     m_bCancel(false),
     m_bDesctructionEnabled(false),
     m_aImageList( SW_RES( ILIST ) ),
-    m_aImageListHC( SW_RES( ILIST_HC ) ),
     m_pImpl(new SwSendMailDialog_Impl),
     m_pConfigItem(&rConfigItem),
     m_nSendCount(0),
@@ -562,9 +560,7 @@ void  SwSendMailDialog::IterateMails()
     {
         if(!SwMailMergeHelper::CheckMailAddress( pCurrentMailDescriptor->sEMail ))
         {
-            ImageList& rImgLst = GetSettings().GetStyleSettings().GetHighContrastMode() ?
-                                        m_aImageListHC : m_aImageList;
-            Image aInsertImg =   rImgLst.GetImage( FN_FORMULA_CANCEL );
+            Image aInsertImg = m_aImageList.GetImage( FN_FORMULA_CANCEL );
 
             String sMessage = m_sSendingTo;
             String sTmp(pCurrentMailDescriptor->sEMail);
@@ -663,9 +659,7 @@ void SwSendMailDialog::DocumentSent( uno::Reference< mail::XMailMessage> xMessag
         Application::PostUserEvent( STATIC_LINK( this, SwSendMailDialog,
                                                     StopSendMails ), this );
     }
-    ImageList& rImgLst = GetSettings().GetStyleSettings().GetHighContrastMode() ?
-                                m_aImageListHC : m_aImageList;
-    Image aInsertImg =   rImgLst.GetImage( bResult ? FN_FORMULA_APPLY : FN_FORMULA_CANCEL );
+    Image aInsertImg = m_aImageList.GetImage( bResult ? FN_FORMULA_APPLY : FN_FORMULA_CANCEL );
 
     String sMessage = m_sSendingTo;
     String sTmp(xMessage->getRecipients()[0]);

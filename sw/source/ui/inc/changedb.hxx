@@ -60,10 +60,8 @@ class SwChangeDBDlg: public SvxStandardDialog
     OKButton        aOKBT;
     CancelButton    aCancelBT;
     HelpButton      aHelpBT;
-//  PushButton      aChangeBT;
 
     ImageList       aImageList;
-    ImageList       aImageListHC;
 
     SwWrtShell      *pSh;
     SwFldMgr        *pMgr;

@@ -570,8 +570,8 @@ bGrammarResults(false)
 */
     uno::Reference< frame::XFrame > xFrame = pWrtSh->GetView().GetViewFrame()->GetFrame().GetFrameInterface();
     Image rImg = ::GetImage( xFrame,
-            OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:SpellingAndGrammarDialog")), sal_False,
-            Application::GetSettings().GetStyleSettings().GetHighContrastMode() );
+            OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:SpellingAndGrammarDialog")), sal_False );
+
     SetItemImage( MN_SPELLING_DLG, rImg );
 
     //////////////////////////////////////////////////////////////////////////////////
@@ -703,8 +703,8 @@ aInfo16( SW_RES(IMG_INFO_16) )
 */
     uno::Reference< frame::XFrame > xFrame = pWrtSh->GetView().GetViewFrame()->GetFrame().GetFrameInterface();
     Image rImg = ::GetImage( xFrame,
-            OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:SpellingAndGrammarDialog")), sal_False,
-            Application::GetSettings().GetStyleSettings().GetHighContrastMode() );
+            OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:SpellingAndGrammarDialog")), sal_False );
+
     SetItemImage( MN_SPELLING_DLG, rImg );
 
     //////////////////////////////////////////////////////////////////////////////////

@@ -643,8 +643,7 @@ void    SwGlobalTree::Display(BOOL bOnlyUpdateUserData)
 {
     if(!bIsImageListInitialized)
     {
-        USHORT nResId = GetSettings().GetStyleSettings().GetHighContrastMode() ? IMG_NAVI_ENTRYBMPH : IMG_NAVI_ENTRYBMP;
-        aEntryImages = ImageList(SW_RES(nResId));
+        aEntryImages = ImageList(SW_RES(IMG_NAVI_ENTRYBMP));
         bIsImageListInitialized = TRUE;
     }
     USHORT nCount = pSwGlblDocContents->Count();
@@ -1274,8 +1273,7 @@ void    SwGlobalTree::DataChanged( const DataChangedEvent& rDCEvt )
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
          (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
-        USHORT nResId = GetSettings().GetStyleSettings().GetHighContrastMode() ? IMG_NAVI_ENTRYBMPH : IMG_NAVI_ENTRYBMP;
-        aEntryImages = ImageList(SW_RES(nResId));
+        aEntryImages = ImageList(SW_RES(IMG_NAVI_ENTRYBMP));
         Update(sal_True);
     }
     SvTreeListBox::DataChanged( rDCEvt );

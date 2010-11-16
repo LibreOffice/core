@@ -94,8 +94,7 @@ void SAL_CALL SwTbxInsertCtrl::update() throw (uno::RuntimeException)
     aSlotURL += rtl::OUString::valueOf( sal_Int32( nLastSlotId ));
     Image aImage = GetImage( m_xFrame,
                              aSlotURL,
-                             hasBigImages(),
-                             rTbx.GetSettings().GetStyleSettings().GetHighContrastMode() );
+                             hasBigImages() );
 
     rTbx.SetItemImage(GetId(), aImage);
     rTbx.Invalidate();
@@ -124,8 +123,7 @@ void SwTbxInsertCtrl::StateChanged( USHORT /*nSID*/,
             ToolBox& rBox = GetToolBox();
             Image aImage = GetImage( m_xFrame,
                                      aSlotURL,
-                                     hasBigImages(),
-                                     rBox.GetSettings().GetStyleSettings().GetHighContrastMode() );
+                                     hasBigImages() );
             rBox.SetItemImage(GetId(), aImage);
             rBox.SetItemImageMirrorMode( GetId(), FALSE );
             rBox.SetItemImageAngle( GetId(), pItem->GetRotation() );
