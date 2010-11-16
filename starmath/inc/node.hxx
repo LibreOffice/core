@@ -52,7 +52,7 @@
 #endif
 
 // Comment out below to disable dumpasdot
-#define DEBUG_ENABLE_DUMPASDOT
+//#define DEBUG_ENABLE_DUMPASDOT
 
 #include "parse.hxx"
 #include "types.hxx"
