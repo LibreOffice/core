@@ -255,7 +255,7 @@ struct CommandToRID
     USHORT      nResId;
 };
 
-static USHORT ImplGetRID( const OUString& aCommand, bool bHighContrast )
+static USHORT ImplGetRID( const OUString& aCommand )
 {
     static const CommandToRID aImplCommandToResMap[] =
     {
@@ -266,7 +266,7 @@ static USHORT ImplGetRID( const OUString& aCommand, bool bHighContrast )
         { ".uno:GrafContrast", RID_SVXIMG_GRAF_CONTRAST },
         { ".uno:GrafGamma", RID_SVXIMG_GRAF_GAMMA },
         { ".uno:GrafTransparence", RID_SVXIMG_GRAF_TRANSPARENCE },
-        { 0, 0, 0 }
+        { 0, 0 }
     };
 
     USHORT nRID = 0;
@@ -314,7 +314,7 @@ ImplGrafControl::ImplGrafControl( Window* pParent, USHORT nSlotId, const rtl::OU
     maImage     ( this ),
     maField     ( this, rCmd, rFrame )
 {
-    ResId   aResId( ImplGetRID( rCmd, false ), DIALOG_MGR() ) ;
+    ResId   aResId( ImplGetRID( rCmd ), DIALOG_MGR() ) ;
     Image   aImage( aResId );
 
     Size    aImgSize( aImage.GetSizePixel() );
