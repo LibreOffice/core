@@ -323,14 +323,17 @@ void AquaClipboard::fireLostClipboardOwnershipEvent(Reference<XClipboardOwner> o
 
 void AquaClipboard::provideDataForType(NSPasteboard* sender, NSString* type)
 {
-  DataProviderPtr_t dp = mpDataFlavorMapper->getDataProvider(type, mXClipboardContent);
-  NSData* pBoardData = NULL;
+    if( mXClipboardContent.is() )
+    {
+        DataProviderPtr_t dp = mpDataFlavorMapper->getDataProvider(type, mXClipboardContent);
+        NSData* pBoardData = NULL;
 
-  if (dp.get() != NULL)
-  {
-      pBoardData = (NSData*)dp->getSystemData();
-      [sender setData: pBoardData forType: type];
-  }
+        if (dp.get() != NULL)
+        {
+            pBoardData = (NSData*)dp->getSystemData();
+            [sender setData: pBoardData forType: type];
+        }
+    }
 }
 
 
@@ -341,20 +344,21 @@ void AquaClipboard::provideDataForType(NSPasteboard* sender, NSString* type)
 void SAL_CALL AquaClipboard::flushClipboard()
   throw(RuntimeException)
 {
-  if (mXClipboardContent.is())
+    if (mXClipboardContent.is())
     {
           Sequence<DataFlavor> flavorList = mXClipboardContent->getTransferDataFlavors();
         sal_uInt32 nFlavors = flavorList.getLength();
 
         for (sal_uInt32 i = 0; i < nFlavors; i++)
-          {
+        {
             NSString* sysType = mpDataFlavorMapper->openOfficeToSystemFlavor(flavorList[i]);
 
             if (sysType != NULL)
-              {
+            {
                 provideDataForType(mPasteboard, sysType);
-              }
-          }
+            }
+        }
+        mXClipboardContent.clear();
     }
 }
 
