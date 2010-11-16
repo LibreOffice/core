@@ -46,7 +46,6 @@ namespace framework
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
-    using ::com::sun::star::uno::UNO_SET_THROW;
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::uno::Any;
@@ -69,7 +68,7 @@ namespace framework
     {
     public:
         UndoManagerContextListener( const Reference< XUndoManager >& i_undoManager )
-            :m_xUndoManager( i_undoManager, UNO_SET_THROW )
+            :m_xUndoManager( i_undoManager, UNO_QUERY_THROW )
             ,m_nRelativeContextDepth( 0 )
             ,m_documentDisposed( false )
         {
@@ -225,7 +224,7 @@ namespace framework
             {
                 Reference< XUndoManagerSupplier > xUndoSupplier( i_undoSupplierComponent, UNO_QUERY );
                 if ( xUndoSupplier.is() )
-                    i_data.xUndoManager.set( xUndoSupplier->getUndoManager(), UNO_SET_THROW );
+                    i_data.xUndoManager.set( xUndoSupplier->getUndoManager(), UNO_QUERY_THROW );
 
                 if ( i_data.xUndoManager.is() )
                     i_data.pContextListener.set( new UndoManagerContextListener( i_data.xUndoManager ) );
