@@ -137,7 +137,7 @@
 #include <comphelper/processfactory.hxx>
 #include "uiitems.hxx"
 #include "cellsuno.hxx"
-
+#include "dpobject.hxx"
 
 #include <vector>
 #include <boost/shared_ptr.hpp>

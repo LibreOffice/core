@@ -35,6 +35,7 @@
 
 #include "dpglobal.hxx"
 #include "document.hxx"
+#include "dpobject.hxx"
 
 #include <stdio.h>
 

@@ -41,6 +41,7 @@
 #include <rtl/math.hxx>
 #include "queryparam.hxx"
 #include "dpglobal.hxx"
+#include "dptabdat.hxx"
 
 #include "docoptio.hxx"
 #include <unotools/textsearch.hxx>

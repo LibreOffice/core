@@ -46,13 +46,7 @@
 #include <memory>
 #include <map>
 #include <set>
-
-// Wang Xu Ming -- 2009-8-17
-// DataPilot Migration - Cache&&Performance
 #include <list>
-#include "dpobject.hxx"
-#include "dptabdat.hxx"
-// End Comments
 
 class KeyEvent;
 class OutputDevice;
@@ -152,6 +146,7 @@ class ScRowBreakIterator;
 struct ScSetStringParam;
 class ScDocRowHeightUpdater;
 struct ScColWidthParam;
+class ScDPTableDataCache;
 
 namespace com { namespace sun { namespace star {
     namespace lang {
@@ -215,15 +210,6 @@ struct ScCopyBlockFromClipParams
     BOOL        bSkipAttrForEmpty;
 };
 
-
-// for loading of binary file format symbol string cells which need font conversion
-struct ScSymbolStringCellEntry
-{
-    ScStringCell*   pCell;
-    SCROW           nRow;
-};
-
-
 // -----------------------------------------------------------------------
 
 // DDE link modes
@@ -231,7 +217,6 @@ const BYTE SC_DDE_DEFAULT       = 0;
 const BYTE SC_DDE_ENGLISH       = 1;
 const BYTE SC_DDE_TEXT          = 2;
 const BYTE SC_DDE_IGNOREMODE    = 255;       /// For usage in FindDdeLink() only!
-
 
 // -----------------------------------------------------------------------
 
