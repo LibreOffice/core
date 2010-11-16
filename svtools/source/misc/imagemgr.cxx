@@ -566,7 +566,10 @@ static ImageList* CreateImageList_Impl( USHORT nResId )
     return pList;
 }
 
-static Image GetOfficeImageFromList_Impl( USHORT nImageId, BOOL bBig, BOOL bHighContrast )
+/**
+ * @param bHighContrast: is an unused noop now. FIXME remove me carefully
+ */
+static Image GetOfficeImageFromList_Impl( USHORT nImageId, BOOL bBig, BOOL /*bHighContrast*/ )
 {
     ImageList* pList = NULL;
 
@@ -586,64 +589,30 @@ static Image GetOfficeImageFromList_Impl( USHORT nImageId, BOOL bBig, BOOL bHigh
         nStyle = Application::GetSettings().GetStyleSettings().GetSymbolsStyle();
     }
 
-    // #i21242# MT: For B&W we need the HC Image and must transform.
-    // bHiContrast is TRUE for all dark backgrounds, but we need HC Images for HC White also,
-    // so we can't rely on bHighContrast.
-    BOOL bBlackAndWhite = Application::GetSettings().GetStyleSettings().IsHighContrastBlackAndWhite();
-    if ( bBlackAndWhite )
-        bHighContrast = TRUE;
-
-
     if ( bBig )
     {
-        if ( bHighContrast )
-        {
-            if ( !_pBigHCOfficeImgList )
-                _pBigHCOfficeImgList = CreateImageList_Impl( RID_SVTOOLS_IMAGELIST_BIG_HIGHCONTRAST );
-            pList = _pBigHCOfficeImgList;
-        }
-        else
-        {
-            if ( !_pBigOfficeImgList )
-                _pBigOfficeImgList = CreateImageList_Impl( RID_SVTOOLS_IMAGELIST_BIG );
-            pList = _pBigOfficeImgList;
-        }
+        if ( !_pBigOfficeImgList )
+            _pBigOfficeImgList = CreateImageList_Impl( RID_SVTOOLS_IMAGELIST_BIG );
+        pList = _pBigOfficeImgList;
     }
     else
     {
-        if ( bHighContrast )
-        {
-            if ( !_pSmallHCOfficeImgList )
-                _pSmallHCOfficeImgList = CreateImageList_Impl( RID_SVTOOLS_IMAGELIST_SMALL_HIGHCONTRAST );
-            pList = _pSmallHCOfficeImgList;
-        }
-        else
-        {
-            if ( !_pSmallOfficeImgList )
-                _pSmallOfficeImgList = CreateImageList_Impl( RID_SVTOOLS_IMAGELIST_SMALL );
-            pList = _pSmallOfficeImgList;
-        }
+        if ( !_pSmallOfficeImgList )
+            _pSmallOfficeImgList = CreateImageList_Impl( RID_SVTOOLS_IMAGELIST_SMALL );
+        pList = _pSmallOfficeImgList;
     }
 
     Image aImage = pList->GetImage( nImageId );
 
-    if ( bBlackAndWhite )
-    {
-        // First invert the Image, because it's designed for black background, structures are bright
-        aImage.Invert();
-        // Now make monochrome...
-        ImageColorTransform eTrans = IMAGECOLORTRANSFORM_MONOCHROME_WHITE;
-        if ( Application::GetSettings().GetStyleSettings().GetFaceColor().GetColor() == COL_WHITE )
-            eTrans = IMAGECOLORTRANSFORM_MONOCHROME_BLACK;
-        aImage = aImage.GetColorTransformedImage( eTrans );
-    }
-
     return aImage;
 }
 
-static Image GetImageFromList_Impl( USHORT nImageId, BOOL bBig, BOOL bHighContrast )
+/**
+ * @param bHighContrast: is an unused noop now. FIXME remove me carefully
+ */
+static Image GetImageFromList_Impl( USHORT nImageId, BOOL bBig, BOOL /*bHighContrast*/ )
 {
-    if ( !bBig && IMG_FOLDER == nImageId && !bHighContrast )
+    if ( !bBig && IMG_FOLDER == nImageId)
         // return our new small folder image (256 colors)
         return Image( SvtResId( IMG_SVT_FOLDER ) );
 
@@ -651,8 +620,6 @@ static Image GetImageFromList_Impl( USHORT nImageId, BOOL bBig, BOOL bHighContra
 
     static ImageList* _pSmallImageList = NULL;
     static ImageList* _pBigImageList = NULL;
-    static ImageList* _pSmallHCImageList = NULL;
-    static ImageList* _pBigHCImageList = NULL;
     static ULONG nStyle = Application::GetSettings().GetStyleSettings().GetSymbolsStyle();
 
     // If the style has been changed, throw away our cache of the older images
@@ -660,46 +627,26 @@ static Image GetImageFromList_Impl( USHORT nImageId, BOOL bBig, BOOL bHighContra
     {
         delete _pSmallImageList, _pSmallImageList = NULL;
         delete _pBigImageList, _pBigImageList = NULL;
-        delete _pSmallHCImageList, _pSmallHCImageList = NULL;
-        delete _pBigHCImageList, _pBigHCImageList = NULL;
         nStyle = Application::GetSettings().GetStyleSettings().GetSymbolsStyle();
     }
 
     if ( bBig )
     {
-        if ( bHighContrast )
-        {
-            if ( !_pBigHCImageList )
-                _pBigHCImageList = new ImageList( SvtResId( RID_SVTOOLS_IMAGELIST_BIG_HIGHCONTRAST ) );
-            pList = _pBigHCImageList;
-        }
-        else
-        {
-            if ( !_pBigImageList )
-                _pBigImageList = new ImageList( SvtResId( RID_SVTOOLS_IMAGELIST_BIG ) );
-            pList = _pBigImageList;
-        }
+        if ( !_pBigImageList )
+            _pBigImageList = new ImageList( SvtResId( RID_SVTOOLS_IMAGELIST_BIG ) );
+        pList = _pBigImageList;
     }
     else
     {
-        if ( bHighContrast )
-        {
-            if ( !_pSmallHCImageList )
-                _pSmallHCImageList = new ImageList( SvtResId( RID_SVTOOLS_IMAGELIST_SMALL_HIGHCONTRAST ) );
-            pList = _pSmallHCImageList;
-        }
-        else
-        {
-            if ( !_pSmallImageList )
-                _pSmallImageList = new ImageList( SvtResId( RID_SVTOOLS_IMAGELIST_SMALL ) );
-            pList = _pSmallImageList;
-        }
+        if ( !_pSmallImageList )
+            _pSmallImageList = new ImageList( SvtResId( RID_SVTOOLS_IMAGELIST_SMALL ) );
+        pList = _pSmallImageList;
     }
 
     if ( pList->HasImageAtPos( nImageId ) )
         return pList->GetImage( nImageId );
     else
-        return GetOfficeImageFromList_Impl( nImageId, bBig, bHighContrast );
+        return GetOfficeImageFromList_Impl( nImageId, bBig, false );
 }
 
 //****************************************************************************
