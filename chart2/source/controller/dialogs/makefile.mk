@@ -108,10 +108,6 @@ SLOFILES=   	\
 
 # --- Resources ---------------------------------------------------------------
 
-#               Bitmaps.src
-#               Bitmaps_HC.src
-
-
 SRC1FILES=		\
                 res_TextSeparator.src \
                 res_BarGeometry.src \
@@ -141,7 +137,6 @@ SRC1FILES=		\
                 Strings_AdditionalControls.src \
                 Strings.src \
                 Bitmaps.src \
-                Bitmaps_HC.src \
                 dlg_DataEditor.src \
                 dlg_DataSource.src \
                 dlg_View3D.src \
@@ -172,7 +167,6 @@ $(SRS)$/chcdialogs.srs: $(INCCOM)$/res_SecondaryAxisCheckBoxes.hrc
 
 $(SRS)$/chcdialogs.srs: \
         Bitmaps.hrc \
-        Bitmaps_HC.hrc \
         CommonResources.hrc \
         ResourceIds.hrc \
         ..$/..$/inc$/Strings.hrc \

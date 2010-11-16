@@ -52,7 +52,6 @@
 #include "servicenames_charttypes.hxx"
 #include "ResId.hxx"
 #include "Bitmaps.hrc"
-#include "Bitmaps_HC.hrc"
 #include "HelpIds.hrc"
 
 #include <vcl/fixed.hxx>
@@ -68,8 +67,6 @@
 
 #include <algorithm>
 #include <functional>
-
-#define SELECT_IMAGE(name,hc) Image( SchResId( hc ? name ## _HC : name ))
 
 /*  BROWSER_COLUMNSELECTION :  single cells may be selected rather than only
                                entire rows
@@ -388,7 +385,9 @@ bool SeriesHeader::HasFocus() const
     return m_spSeriesName->HasFocus();
 }
 
-// static
+/**
+ * @param bHC is a noop. FIXME, remove carefully
+ */
 Image SeriesHeader::GetChartTypeImage(
     const Reference< chart2::XChartType > & xChartType,
     bool bSwapXAndYAxis,
@@ -401,40 +400,40 @@ Image SeriesHeader::GetChartTypeImage(
 
     if( aChartTypeName.equals( CHART2_SERVICE_NAME_CHARTTYPE_AREA ))
     {
-        aResult = SELECT_IMAGE( IMG_TYPE_AREA, bHC );
+        aResult = Image( SchResId( IMG_TYPE_AREA ));
     }
     else if( aChartTypeName.equals( CHART2_SERVICE_NAME_CHARTTYPE_COLUMN ))
     {
         if( bSwapXAndYAxis )
-            aResult = SELECT_IMAGE( IMG_TYPE_BAR, bHC );
+            aResult = Image( SchResId( IMG_TYPE_BAR ));
         else
-            aResult = SELECT_IMAGE( IMG_TYPE_COLUMN, bHC );
+            aResult = Image( SchResId( IMG_TYPE_COLUMN ));
     }
     else if( aChartTypeName.equals( CHART2_SERVICE_NAME_CHARTTYPE_LINE ))
     {
-        aResult = SELECT_IMAGE( IMG_TYPE_LINE, bHC );
+        aResult = Image( SchResId( IMG_TYPE_LINE ));
     }
     else if( aChartTypeName.equals( CHART2_SERVICE_NAME_CHARTTYPE_SCATTER ))
     {
-        aResult = SELECT_IMAGE( IMG_TYPE_XY, bHC );
+        aResult = Image( SchResId( IMG_TYPE_XY ));
     }
     else if( aChartTypeName.equals( CHART2_SERVICE_NAME_CHARTTYPE_PIE ))
     {
-        aResult = SELECT_IMAGE( IMG_TYPE_PIE, bHC );
+        aResult = Image( SchResId( IMG_TYPE_PIE ));
     }
     else if( aChartTypeName.equals( CHART2_SERVICE_NAME_CHARTTYPE_NET )
           || aChartTypeName.equals( CHART2_SERVICE_NAME_CHARTTYPE_FILLED_NET ) )
     {
-        aResult = SELECT_IMAGE( IMG_TYPE_NET, bHC );
+        aResult = Image( SchResId( IMG_TYPE_NET ));
     }
     else if( aChartTypeName.equals( CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK ))
     {
         // @todo: correct image for candle-stick type
-        aResult = SELECT_IMAGE( IMG_TYPE_STOCK, bHC );
+        aResult = Image( SchResId( IMG_TYPE_STOCK ));
     }
     else if( aChartTypeName.equals( CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE ))
     {
-        aResult = SELECT_IMAGE( IMG_TYPE_BUBBLE, bHC );
+        aResult = Image( SchResId( IMG_TYPE_BUBBLE ));
     }
 
     return aResult;

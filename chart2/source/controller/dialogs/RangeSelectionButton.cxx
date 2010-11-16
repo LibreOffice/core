@@ -31,7 +31,6 @@
 
 #include "RangeSelectionButton.hxx"
 #include "Bitmaps.hrc"
-#include "Bitmaps_HC.hrc"
 #include "Strings.hrc"
 #include "ResId.hxx"
 

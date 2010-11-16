@@ -138,11 +138,4 @@ ModalDialog DLG_DIAGRAM_DATA
         MaskColor = IMAGE_BUTTON_STD_MASK_COLOR;
         IMAGE_ID_LIST;
     };
-
-    ImageList IL_HC_DIAGRAM_DATA
-    {
-        Prefix = "dataeditor_icon_h";
-        MaskColor = IMAGE_BUTTON_HC_MASK_COLOR;
-        IMAGE_ID_LIST;
-    };
 };

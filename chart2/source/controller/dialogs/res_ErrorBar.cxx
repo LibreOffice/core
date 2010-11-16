@@ -34,7 +34,6 @@
 #include "ResId.hxx"
 #include "Strings.hrc"
 #include "Bitmaps.hrc"
-#include "Bitmaps_HC.hrc"
 #include "RangeSelectionHelper.hxx"
 // for RANGE_SELECTION_INVALID_RANGE_BACKGROUND_COLOR
 #include "TabPageNotifiable.hxx"
@@ -91,10 +90,6 @@ sal_uInt16 lcl_getLbEntryPosByErrorKind( SvxChartKindError eErrorKind )
 namespace chart
 {
 //.............................................................................
-
-// macro for selecting a normal or high contrast bitmap the stack variable
-// bIsHighContrast must exist and reflect the correct state
-#define SELECT_IMAGE(name) Image( SchResId( bIsHighContrast ? name ## _HC : name ))
 
 enum StatIndicator
 {
@@ -697,24 +692,17 @@ BOOL ErrorBarResources::FillItemSet(SfxItemSet& rOutAttrs) const
 
 void ErrorBarResources::FillValueSets()
 {
-    bool bIsHighContrast = ( true && m_aRbConst.GetSettings().GetStyleSettings().GetHighContrastMode() );
-
-    // do not scale images, show then centered
-//     m_aFiPositive.SetStyle( (m_aFiPositive.GetStyle() & (~WB_SCALE)) | WB_CENTER );
-//     m_aFiNegative.SetStyle( (m_aFiNegative.GetStyle() & (~WB_SCALE)) | WB_CENTER );
-//     m_aFiBoth.SetStyle( (m_aFiBoth.GetStyle() & (~WB_SCALE)) | WB_CENTER );
-
     if( m_eErrorBarType == ERROR_BAR_Y )
     {
-        m_aFiNegative.SetImage( SELECT_IMAGE( BMP_INDICATE_DOWN ));
-        m_aFiPositive.SetImage( SELECT_IMAGE( BMP_INDICATE_UP ));
-        m_aFiBoth.SetImage( SELECT_IMAGE( BMP_INDICATE_BOTH_VERTI ));
+        m_aFiNegative.SetImage( Image( SchResId( BMP_INDICATE_DOWN )));
+        m_aFiPositive.SetImage( Image( SchResId( BMP_INDICATE_UP )));
+        m_aFiBoth.SetImage( Image( SchResId( BMP_INDICATE_BOTH_VERTI )));
     }
     else if( m_eErrorBarType == ERROR_BAR_X )
     {
-        m_aFiNegative.SetImage( SELECT_IMAGE( BMP_INDICATE_LEFT ));
-        m_aFiPositive.SetImage( SELECT_IMAGE( BMP_INDICATE_RIGHT ));
-        m_aFiBoth.SetImage( SELECT_IMAGE( BMP_INDICATE_BOTH_HORI ));
+        m_aFiNegative.SetImage( Image( SchResId( BMP_INDICATE_LEFT )));
+        m_aFiPositive.SetImage( Image( SchResId( BMP_INDICATE_RIGHT )));
+        m_aFiBoth.SetImage( Image( SchResId( BMP_INDICATE_BOTH_HORI )));
     }
 }
 

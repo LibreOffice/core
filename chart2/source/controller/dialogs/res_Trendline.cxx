@@ -35,15 +35,10 @@
 #include "ResId.hxx"
 #include "Strings.hrc"
 #include "Bitmaps.hrc"
-#include "Bitmaps_HC.hrc"
 #include "chartview/ChartSfxItemIds.hxx"
 
 #include <vector>
 #include <algorithm>
-
-// macro for selecting a normal or high contrast bitmap the stack variable
-// bIsHighContrast must exist and reflect the correct state
-#define SELECT_IMAGE(name) Image( SchResId( bIsHighContrast ? name ## _HC : name ))
 
 namespace
 {
@@ -260,14 +255,12 @@ BOOL TrendlineResources::FillItemSet(SfxItemSet& rOutAttrs) const
 
 void TrendlineResources::FillValueSets()
 {
-    bool bIsHighContrast = ( true && m_aFLType.GetSettings().GetStyleSettings().GetHighContrastMode() );
-
     if( m_bNoneAvailable )
-        m_aFINone.SetImage( SELECT_IMAGE( BMP_REGRESSION_NONE ));
-    m_aFILinear.SetImage( SELECT_IMAGE( BMP_REGRESSION_LINEAR ));
-    m_aFILogarithmic.SetImage( SELECT_IMAGE( BMP_REGRESSION_LOG ));
-    m_aFIExponential.SetImage( SELECT_IMAGE( BMP_REGRESSION_EXP ));
-    m_aFIPower.SetImage( SELECT_IMAGE( BMP_REGRESSION_POWER ));
+        m_aFINone.SetImage( Image( SchResId( BMP_REGRESSION_NONE ));
+    m_aFILinear.SetImage( Image( SchResId( BMP_REGRESSION_LINEAR ));
+    m_aFILogarithmic.SetImage( Image( SchResId( BMP_REGRESSION_LOG ));
+    m_aFIExponential.SetImage( Image( SchResId( BMP_REGRESSION_EXP ));
+    m_aFIPower.SetImage( Image( SchResId( BMP_REGRESSION_POWER ));
 }
 
 void TrendlineResources::UpdateControlStates()

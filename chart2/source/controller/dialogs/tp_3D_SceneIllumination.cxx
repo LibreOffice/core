@@ -34,7 +34,6 @@
 #include "ResId.hxx"
 #include "Strings.hrc"
 #include "Bitmaps.hrc"
-#include "Bitmaps_HC.hrc"
 #include "CommonConverters.hxx"
 #include "NoWarningThisInCTOR.hxx"
 

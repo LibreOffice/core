@@ -56,15 +56,6 @@ namespace chart
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
-// macro for selecting a normal or high contrast bitmap the stack variable
-// bIsHighContrast must exist and reflect the correct state
-#define SELECT_BITMAP(name) Bitmap( SchResId( bIsHighContrast ? name ## _HC : name ))
-#define SELECT_IMAGE(name) Image( SchResId( bIsHighContrast ? name ## _HC : name ))
-
-//--------------------------------------------------------------------------
-//--------------------------------------------------------------------------
-//--------------------------------------------------------------------------
-
 namespace
 {
     long lcl_getDistance()

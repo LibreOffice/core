@@ -70,7 +70,6 @@ DataEditor::DataEditor(
         m_xChartDoc( xChartDoc ),
         m_xContext( xContext ),
         m_aToolboxImageList( SchResId( IL_DIAGRAM_DATA )),
-        m_aToolboxImageListHighContrast( SchResId( IL_HC_DIAGRAM_DATA ))
 {
     FreeResource();
 
@@ -324,16 +323,14 @@ bool DataEditor::ApplyChangesToModel()
     return m_apBrwData->EndEditing();
 }
 
-// sets the correct toolbar icons depending on the current mode (e.g. high contrast)
+/**
+ * sets the correct toolbar icons depending on the current mode (e.g. high contrast)
+ * FIXME: does not serve any purpose anymore, as the high contrast theme has been removed
+ * FIXME: check callers and see if we can do away with it
+ */
 void DataEditor::ApplyImageList()
 {
-    bool bIsHighContrast = ( true && GetSettings().GetStyleSettings().GetHighContrastMode() );
-
-    ImageList& rImgLst = bIsHighContrast
-        ? m_aToolboxImageListHighContrast
-        : m_aToolboxImageList;
-
-    m_aTbxData.SetImageList( rImgLst );
+    m_aTbxData.SetImageList( m_aToolboxImageList );
 }
 
 // add/remove a window (the toolbar) to/from the global list, so that F6
