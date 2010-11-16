@@ -32,7 +32,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-// INCLUDE ---------------------------------------------------------------
 #include "dptablecache.hxx"
 #include "document.hxx"
 #include "cell.hxx"
@@ -51,6 +50,7 @@
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
+
 const double D_TIMEFACTOR = 86400.0;
 
 using namespace ::com::sun::star;
@@ -191,7 +191,10 @@ ScDPItemData::ScDPItemData( ScDocument* pDoc, SCROW nRow, USHORT nCol, USHORT nD
     ScBaseCell* pCell = pDoc->GetCell( aPos );
 
     if ( pCell && pCell->GetCellType() == CELLTYPE_FORMULA && ((ScFormulaCell*)pCell)->GetErrCode() )
+    {
         SetString ( aDocStr );
+        mbFlag |= MK_ERR;
+    }
     else if ( pDoc->HasValueData( nCol, nRow, nDocTab ) )
     {
         double fVal = pDoc->GetValue(ScAddress(nCol, nRow, nDocTab));
@@ -616,7 +619,7 @@ bool ScDPTableDataCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam, boo
 { //Copied and modified from ScTable::ValidQuery
     if (!rParam.GetEntry(0).bDoQuery)
         return true;
-    bool    bMatchWholeCell = mpDoc->GetDocOptions().IsMatchWholeCell();
+    bool bMatchWholeCell = mpDoc->GetDocOptions().IsMatchWholeCell();
 
     //---------------------------------------------------------------
 
@@ -638,8 +641,15 @@ bool ScDPTableDataCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam, boo
     {
         ScQueryEntry& rEntry = rParam.GetEntry(i);
         // we can only handle one single direct query
-        SCROW nId = GetItemDataId( (SCCOL)rEntry.nField, nRow, false );
-        const ScDPItemData* pCellData = GetItemDataById(  (SCCOL)rEntry.nField, nId);
+        // #i115431# nField in QueryParam is the sheet column, not the field within the source range
+        SCCOL nQueryCol = (SCCOL)rEntry.nField;
+        if ( nQueryCol < rParam.nCol1 )
+            nQueryCol = rParam.nCol1;
+        if ( nQueryCol > rParam.nCol2 )
+            nQueryCol = rParam.nCol2;
+        SCCOL nSourceField = nQueryCol - rParam.nCol1;
+        SCROW nId = GetItemDataId( nSourceField, nRow, FALSE );
+        const ScDPItemData* pCellData = GetItemDataById( nSourceField, nId );
 
         bool bOk = false;
         bool bTestEqual = false;

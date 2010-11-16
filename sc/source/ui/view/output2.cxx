@@ -558,9 +558,18 @@ void ScDrawStringsVars::SetTextToWidthOrHash( ScBaseCell* pCell, long nWidth )
         // must be a value or formula cell.
         return;
 
-    if (eType == CELLTYPE_FORMULA && !static_cast<ScFormulaCell*>(pCell)->IsValue())
+    if (eType == CELLTYPE_FORMULA)
+    {
+        ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pCell);
+        if (pFCell->GetErrCode() != 0)
+        {
+            SetHashText();      // If the error string doesn't fit, always use "###"
+            return;
+        }
         // If it's formula, the result must be a value.
-        return;
+        if (!pFCell->IsValue())
+            return;
+    }
 
     ULONG nFormat = GetValueFormat();
     if ((nFormat % SV_COUNTRY_LANGUAGE_OFFSET) != 0)
