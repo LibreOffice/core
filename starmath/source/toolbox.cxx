@@ -95,26 +95,17 @@ static USHORT  GetCategoryRID( USHORT nResId )
     USHORT nRes = 0xFFFF;
     switch (nResId)
     {
-        case RID_IL_UNBINOPS        :
-        case RID_ILH_UNBINOPS       : nRes = RID_UNBINOPS_CAT; break;
-        case RID_IL_RELATIONS       :
-        case RID_ILH_RELATIONS      : nRes = RID_RELATIONS_CAT; break;
-        case RID_IL_SETOPERATIONS   :
-        case RID_ILH_SETOPERATIONS  : nRes = RID_SETOPERATIONS_CAT; break;
-        case RID_IL_FUNCTIONS       :
-        case RID_ILH_FUNCTIONS      : nRes = RID_FUNCTIONS_CAT; break;
-        case RID_IL_OPERATORS       :
-        case RID_ILH_OPERATORS      : nRes = RID_OPERATORS_CAT; break;
-        case RID_IL_ATTRIBUTES      :
-        case RID_ILH_ATTRIBUTES     : nRes = RID_ATTRIBUTES_CAT; break;
-        case RID_IL_BRACKETS        :
-        case RID_ILH_BRACKETS       : nRes = RID_BRACKETS_CAT; break;
-        case RID_IL_FORMAT          :
-        case RID_ILH_FORMAT         : nRes = RID_FORMAT_CAT; break;
-        case RID_IL_MISC            :
-        case RID_ILH_MISC           : nRes = RID_MISC_CAT; break;
+        case RID_IL_UNBINOPS       : nRes = RID_UNBINOPS_CAT; break;
+        case RID_IL_RELATIONS      : nRes = RID_RELATIONS_CAT; break;
+        case RID_IL_SETOPERATIONS  : nRes = RID_SETOPERATIONS_CAT; break;
+        case RID_IL_FUNCTIONS      : nRes = RID_FUNCTIONS_CAT; break;
+        case RID_IL_OPERATORS      : nRes = RID_OPERATORS_CAT; break;
+        case RID_IL_ATTRIBUTES     : nRes = RID_ATTRIBUTES_CAT; break;
+        case RID_IL_BRACKETS       : nRes = RID_BRACKETS_CAT; break;
+        case RID_IL_FORMAT         : nRes = RID_FORMAT_CAT; break;
+        case RID_IL_MISC           : nRes = RID_MISC_CAT; break;
         default :
-            if (nResId != RID_IL_CATALOG  &&  nResId != RID_ILH_CATALOG)
+            if (nResId != RID_IL_CATALOG)
             {
 #if OSL_DEBUG_LEVEL > 1
                 DBG_ERROR( "unkown category" );
@@ -198,7 +189,7 @@ const ImageList * SmToolBoxWindow::GetImageList( USHORT nResId, bool bHighContra
     // get index to use
     USHORT nCategoryRID = GetCategoryRID( nResId );
     sal_Int16 nIndex = GetToolBoxCategoriesIndex( nCategoryRID );
-    if (nIndex == -1 && (nResId == RID_IL_CATALOG || nResId == RID_ILH_CATALOG))
+    if (nIndex == -1 && (nResId == RID_IL_CATALOG))
         nIndex = NUM_TBX_CATEGORIES;
 
     if (nIndex >= 0)
@@ -219,7 +210,7 @@ void SmToolBoxWindow::ApplyImageLists( USHORT nCategoryRID )
     bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
 
     // set image list for toolbox 'catalog'
-    const ImageList *pImageList = GetImageList( bHighContrast ? RID_ILH_CATALOG : RID_IL_CATALOG, bHighContrast );
+    const ImageList *pImageList = GetImageList( RID_IL_CATALOG, bHighContrast );
     OSL_ENSURE( pImageList, "image list missing" );
     if (pImageList)
         aToolBoxCat.SetImageList( *pImageList );
