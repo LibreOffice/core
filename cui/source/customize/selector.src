@@ -128,19 +128,9 @@ ModelessDialog RID_DLG_SCRIPTSELECTOR
         ImageBitmap = Bitmap { File = "harddisk_16.bmp" ; };
         MASKCOLOR
     };
-    Image IMG_HARDDISK_HC
-    {
-        ImageBitmap = Bitmap { File = "harddisk_16_h.bmp" ; };
-        MASKCOLOR
-    };
     Image IMG_LIB
     {
         ImageBitmap = Bitmap { File = "im30820.png"; };
-        MASKCOLOR
-    };
-    Image IMG_LIB_HC
-    {
-        ImageBitmap = Bitmap { File = "imh30820.png"; };
         MASKCOLOR
     };
     Image IMG_MACRO
@@ -148,19 +138,9 @@ ModelessDialog RID_DLG_SCRIPTSELECTOR
         ImageBitmap = Bitmap { File = "im30821.png"; };
         MASKCOLOR
     };
-    Image IMG_MACRO_HC
-    {
-        ImageBitmap = Bitmap { File = "imh30821.png"; };
-        MASKCOLOR
-    };
     Image IMG_DOC
     {
         ImageBitmap = Bitmap { File = "im30826.png"; };
-        MASKCOLOR
-    };
-    Image IMG_DOC_HC
-    {
-        ImageBitmap = Bitmap { File = "imh30826.png"; };
         MASKCOLOR
     };
   };

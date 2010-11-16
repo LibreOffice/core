@@ -128,7 +128,6 @@ SvxCaptionTabPage::SvxCaptionTabPage(Window* pParent, const SfxItemSet& rInAttrs
     for( nBitmap = 0; nBitmap < CAPTYPE_BITMAPS_COUNT; nBitmap++ )
     {
         mpBmpCapTypes[nBitmap]  = new Image(Bitmap(CUI_RES(BMP_CAPTTYPE_1   + nBitmap)), COL_LIGHTMAGENTA );
-        mpBmpCapTypesH[nBitmap] = new Image(Bitmap(CUI_RES(BMP_CAPTTYPE_1_H + nBitmap)), COL_LIGHTMAGENTA );
     }
 
     //------------ValueSet installieren--------------------------

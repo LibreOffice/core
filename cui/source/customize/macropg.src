@@ -97,16 +97,6 @@ TabPage RID_SVXPAGE_MACROASSIGN
         ImageBitmap = Bitmap { File = "component_16.png"; };
         MASKCOLOR
     };
-    Image IMG_MACRO_H
-    {
-        ImageBitmap = Bitmap { File = "idh018.png"; };
-        MASKCOLOR
-    };
-    Image IMG_COMPONENT_H
-    {
-        ImageBitmap = Bitmap { File = "component_16_h.png"; };
-        MASKCOLOR
-    };
 };
 
 ModalDialog RID_SVXDLG_ASSIGNCOMPONENT
