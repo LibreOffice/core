@@ -27,8 +27,7 @@
 #*************************************************************************
 
 if [ -z "$TARFILE_LOCATION" ]; then
-    echo "Error: No destination defined, you probably forgot to source the environment?"
-    exit 1
+    . ./*.Set.sh
 fi
 
 if [ ! -d "$TARFILE_LOCATION" ]; then

@@ -1018,7 +1018,7 @@ $SOURCE_ROOT_DIR      = join("/", @splitlist);
 
 # default TARFILE_LOCATION
 if ('@TARFILE_LOCATION@' eq "DEFAULT")
-{	$TARFILE_LOCATION="$SOURCE_ROOT_DIR/src";
+{	$TARFILE_LOCATION="$SRC_ROOT/src";
 }
 
 #
@@ -2150,7 +2150,7 @@ if (rename( $outfile, $tmp ) ne 1)
 print "$newline";
 print "*********************************************************".
       "*******************$newline*$newline";
-print "* LibreOffice $UPD configuration finished. $newline*$newline";
+print "* LibreOffice configuration finished. $newline*$newline";
 
 if ( $Warning ne "" )
 {  print "$Warning*$newline";
@@ -2159,7 +2159,8 @@ if ( $Warning ne "" )
 print "*********************************************************".
       "******************* $newline";
 
-print "\nTo build, issue:\nmake\n\n";
+print "\nTo download the build dependencies, issue:\n./g clone\n./download\n\n";
+print "To build, issue:\nmake\n\n";
 print "For the developer installation, issue:\nmake dev-install\n\n";
 
 $bootfile = "bootstrap";
