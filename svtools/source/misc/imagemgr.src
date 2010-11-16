@@ -129,34 +129,6 @@ ImageList RID_SVTOOLS_IMAGELIST_SMALL
     };
 };
 
-ImageList RID_SVTOOLS_IMAGELIST_BIG_HIGHCONTRAST
-{
-    Prefix = "lxh";
-    MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
-    IdList =
-    {
-        X_IMAGE_LIST
-    };
-    IdCount =
-    {
-        68 ;
-    };
-};
-
-ImageList RID_SVTOOLS_IMAGELIST_SMALL_HIGHCONTRAST
-{
-    Prefix = "sxh";
-    MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
-    IdList =
-    {
-        X_IMAGE_LIST
-    };
-    IdCount =
-    {
-        68;
-    };
-};
-
 Bitmap BMP_PLUGIN
 {
     File = "plugin.png" ;
