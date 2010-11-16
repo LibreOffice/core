@@ -2575,6 +2575,7 @@ void SalDisplay::PrintInfo() const
             fprintf( stderr, "\tProperties        \t0x%lX\n", GetProperties() );
         if( eWindowManager_ != otherwm )
             fprintf( stderr, "\tWindowmanager     \t%d\n", eWindowManager_ );
+        fprintf( stderr, "\tWMName            \t%s\n", rtl::OUStringToOString( getWMAdaptor()->getWindowManagerName(), osl_getThreadTextEncoding() ).getStr() );
     }
     fprintf( stderr, "Screen\n" );
     fprintf( stderr, "\tResolution/Size   \t%ld*%ld %ld*%ld %.1lf\"\n",
