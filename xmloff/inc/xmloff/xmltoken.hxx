@@ -3113,6 +3113,11 @@ namespace xmloff { namespace token {
         XML_OUTSIDE_MINIMUM,//#i114142#
         XML_OUTSIDE_MAXIMUM,//#i114142#
 
+        XML_LEGEND_EXPANSION, //#i28760#
+        XML_BALANCED, //#i28760#
+        XML_HIGH, //#i28760#
+        XML_WIDE, //#i28760#
+
         XML_MIN_VALUE,
         XML_MAX_VALUE,
 

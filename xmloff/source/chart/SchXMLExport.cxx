@@ -66,6 +66,7 @@
 
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/chart/ChartLegendPosition.hpp>
+#include <com/sun/star/chart2/LegendExpansion.hpp>
 #include <com/sun/star/chart/XTwoAxisXSupplier.hpp>
 #include <com/sun/star/chart/XTwoAxisYSupplier.hpp>
 #include <com/sun/star/chart/XAxisZSupplier.hpp>
@@ -234,8 +235,8 @@ public:
     void addPosition( const ::com::sun::star::awt::Point & rPosition );
     void addPosition( com::sun::star::uno::Reference< com::sun::star::drawing::XShape > xShape );
     /// add svg size as attribute for current element
-    void addSize( const ::com::sun::star::awt::Size & rSize );
-    void addSize( com::sun::star::uno::Reference< com::sun::star::drawing::XShape > xShape );
+    void addSize( const ::com::sun::star::awt::Size & rSize, bool bIsOOoNamespace = false );
+    void addSize( com::sun::star::uno::Reference< com::sun::star::drawing::XShape > xShape, bool bIsOOoNamespace = false  );
     /// fills the member msString with the appropriate String (i.e. "A3")
     void getCellAddress( sal_Int32 nCol, sal_Int32 nRow );
     /// exports a string as a paragraph element
@@ -1460,6 +1461,24 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
                 Reference< drawing::XShape > xShape( xProp, uno::UNO_QUERY );
                 if( xShape.is())
                     addPosition( xShape );
+
+                // export size
+                chart2::LegendExpansion aLegendExpansion = chart2::LegendExpansion_HIGH;
+                try
+                {
+                    Any aAny( xProp->getPropertyValue(
+                        OUString( RTL_CONSTASCII_USTRINGPARAM( "Expansion" ))));
+                    bool bHasExpansion = (aAny >>= aLegendExpansion);
+                    //todo
+                    //if (bHasExpansion)
+                    //   mrExport.AddAttribute( XML_NAMESPACE_STYLE, XML_LEGEND_EXPANSION,  );
+                }
+                catch( beans::UnknownPropertyException & )
+                {
+                    DBG_WARNING( "Property Expansion not found in ChartLegend" );
+                }
+
+
             }
 
             // write style name
@@ -3591,21 +3610,22 @@ void SchXMLExportHelper_Impl::addPosition( Reference< drawing::XShape > xShape )
         addPosition( xShape->getPosition());
 }
 
-void SchXMLExportHelper_Impl::addSize( const awt::Size & rSize )
+void SchXMLExportHelper_Impl::addSize( const awt::Size & rSize, bool bIsOOoNamespace)
 {
     mrExport.GetMM100UnitConverter().convertMeasure( msStringBuffer, rSize.Width );
     msString = msStringBuffer.makeStringAndClear();
-    mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_WIDTH,  msString );
+    mrExport.AddAttribute( bIsOOoNamespace ? XML_NAMESPACE_CHART_EXT : XML_NAMESPACE_SVG , XML_WIDTH,  msString );
 
-    mrExport.GetMM100UnitConverter().convertMeasure( msStringBuffer, rSize.Height );
+
+    mrExport.GetMM100UnitConverter().convertMeasure( msStringBuffer, rSize.Height);
     msString = msStringBuffer.makeStringAndClear();
-    mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_HEIGHT, msString );
+    mrExport.AddAttribute( bIsOOoNamespace ? XML_NAMESPACE_CHART_EXT : XML_NAMESPACE_SVG, XML_HEIGHT, msString );
 }
 
-void SchXMLExportHelper_Impl::addSize( Reference< drawing::XShape > xShape )
+void SchXMLExportHelper_Impl::addSize( Reference< drawing::XShape > xShape, bool bIsOOoNamespace )
 {
     if( xShape.is())
-        addSize( xShape->getSize() );
+        addSize( xShape->getSize(), bIsOOoNamespace );
 }
 
 awt::Size SchXMLExportHelper_Impl::getPageSize( const Reference< chart2::XChartDocument > & xChartDoc ) const
