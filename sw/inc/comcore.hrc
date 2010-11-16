@@ -84,9 +84,6 @@
 #define STR_TABLE_NAME                      (RC_COMCORE_BEGIN + 46)
 #define STR_PARAGRAPH_UNDO                  (RC_COMCORE_BEGIN + 47)
 
-#define RID_GRAPHIC_REPLACEBMP_HC           (RC_COMCORE_BEGIN + 48)
-#define RID_GRAPHIC_ERRORBMP_HC             (RC_COMCORE_BEGIN + 49)
-
 // defines for the Autoformat Redline Comments
 #define STR_AUTOFMTREDL_DEL_EMPTY_PARA          0
 #define STR_AUTOFMTREDL_USE_REPLACE             1

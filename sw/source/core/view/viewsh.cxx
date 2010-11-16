@@ -2294,26 +2294,21 @@ sal_Int32 ViewShell::GetPageNumAndSetOffsetForPDF( OutputDevice& rOut, const SwR
 const BitmapEx& ViewShell::GetReplacementBitmap( bool bIsErrorState )
 {
     BitmapEx** ppRet;
-    USHORT nResId = 0, nHCResId = 0;
+    USHORT nResId = 0;
     if( bIsErrorState )
     {
         ppRet = &pErrorBmp;
         nResId = RID_GRAPHIC_ERRORBMP;
-        nHCResId = RID_GRAPHIC_ERRORBMP_HC;
     }
     else
     {
         ppRet = &pReplaceBmp;
         nResId = RID_GRAPHIC_REPLACEBMP;
-        nHCResId = RID_GRAPHIC_REPLACEBMP_HC;
     }
 
     if( !*ppRet )
     {
-        USHORT nBmpResId =
-            Application::GetSettings().GetStyleSettings().GetHighContrastMode()
-                ? nHCResId : nResId;
-        *ppRet = new BitmapEx( SW_RES( nBmpResId ) );
+        *ppRet = new BitmapEx( SW_RES( nResId ) );
     }
     return **ppRet;
 }
