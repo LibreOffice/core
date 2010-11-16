@@ -56,7 +56,6 @@
 #include "WrappedAddInProperty.hxx"
 #include "WrappedIgnoreProperty.hxx"
 #include "ChartRenderer.hxx"
-#include "DocumentActions.hxx"
 #include <com/sun/star/chart2/XTitled.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
@@ -1410,13 +1409,6 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
             }
         }
         xResult.set( m_xChartView );
-        bServiceFound = true;
-    }
-    else if ( aServiceSpecifier.equals( CHART_DOCUMENT_ACTIONS_SERVICE_NAME ) )
-    {
-        Reference< XModel > xModel( queryInterface( XModel::static_type() ), UNO_QUERY_THROW );
-        Reference< chart2::XDocumentActions > xDocumentActions( new DocumentActions( xModel ) );
-        xResult.set( xDocumentActions );
         bServiceFound = true;
     }
     else

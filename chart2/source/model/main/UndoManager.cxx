@@ -62,6 +62,7 @@ namespace chart
     using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::document::XUndoManagerListener;
     using ::com::sun::star::util::NotLockedException;
+    using ::com::sun::star::lang::NoSupportException;
     /** === end UNO using === **/
 
     namespace impl
@@ -381,6 +382,20 @@ namespace chart
         return m_pImpl->getUndoHelper().isLocked();
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+    Reference< XInterface > SAL_CALL UndoManager::getParent(  ) throw (RuntimeException)
+    {
+        UndoManagerMethodGuard aGuard( *m_pImpl );
+        return *&m_pImpl->getParent();
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void SAL_CALL UndoManager::setParent( const Reference< XInterface >& i_parent ) throw (NoSupportException, RuntimeException)
+    {
+        UndoManagerMethodGuard aGuard( *m_pImpl );
+        (void)i_parent;
+        throw NoSupportException( ::rtl::OUString(), m_pImpl->getThis() );
+    }
 
 //......................................................................................................................
 } // namespace chart

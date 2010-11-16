@@ -27,57 +27,77 @@
 #ifndef CHART2_UNDOGUARD_HXX
 #define CHART2_UNDOGUARD_HXX
 
-#include <com/sun/star/chart2/XDocumentActions.hpp>
+#include <com/sun/star/document/XUndoManager.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 
 // header for class OUString
 #include <rtl/ustring.hxx>
 
+#include <boost/shared_ptr.hpp>
+
 namespace chart
 {
+
+namespace impl
+{
+    class ChartModelClone;
+}
+
 /** Base Class for UndoGuard and UndoLiveUpdateGuard
 */
 class UndoGuard_Base
 {
 public:
-    explicit UndoGuard_Base( const rtl::OUString & rUndoMessage
-        , const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDocumentActions > & xDocumentActions );
-    virtual ~UndoGuard_Base();
+    explicit UndoGuard_Base(
+        const ::rtl::OUString& i_undoMessage,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoManager > & i_undoManager
+    );
+    ~UndoGuard_Base();
 
-    void commitAction();
+    void    commit();
+    void    rollback();
 
 protected:
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDocumentActions > m_xDocumentActions;
+    void    takeSnapshot( bool i_withData, bool i_withSelection );
 
-    rtl::OUString   m_aUndoString;
-    bool            m_bActionPosted;
+    bool    isActionPosted() const { return m_bActionPosted; }
+
+private:
+    void    discardSnapshot();
+
+private:
+    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >           m_xChartModel;
+    const ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoManager >  m_xUndoManager;
+
+    ::boost::shared_ptr< impl::ChartModelClone >    m_pDocumentSnapshot;
+    rtl::OUString                                   m_aUndoString;
+    bool                                            m_bActionPosted;
 };
 
-/** This guard calls preAction at the given Model in the CTOR and
-    cancelAction in the DTOR if no other method is called.
-    If commitAction is called the destructor does nothin anymore.
+/** A guard which which does nothing, unless you explicitly call commitAction. In particular, in its destructor, it
+    does neither auto-commit nor auto-rollback the model changes.
  */
 class UndoGuard : public UndoGuard_Base
 {
 public:
-    explicit UndoGuard( const rtl::OUString& rUndoMessage
-        , const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDocumentActions > & xDocumentActions );
-    virtual ~UndoGuard();
+    explicit UndoGuard(
+        const ::rtl::OUString& i_undoMessage,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoManager > & i_undoManager
+    );
+    ~UndoGuard();
 };
 
-/** This guard calls preAction at the given Model in the CTOR and
-    cancelActionUndo in the DTOR if no other method is called.
-    If commitAction is called the destructor does nothin anymore.
+/** A guard which, in its destructor, restores the model state it found in the constructor. If
+    <member>commitAction</member> is called inbetween, the restouration is not performed.
  */
 class UndoLiveUpdateGuard : public UndoGuard_Base
 {
 public:
-    explicit UndoLiveUpdateGuard( const rtl::OUString& rUndoMessage
-        , const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDocumentActions > & xDocumentActions );
-    virtual ~UndoLiveUpdateGuard();
+    explicit UndoLiveUpdateGuard(
+        const ::rtl::OUString& i_undoMessage,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoManager > & i_undoManager
+    );
+    ~UndoLiveUpdateGuard();
 };
 
 /** Same as UndoLiveUpdateGuard but with additional storage of the chart's data.
@@ -87,18 +107,20 @@ class UndoLiveUpdateGuardWithData :
         public UndoGuard_Base
 {
 public:
-    explicit UndoLiveUpdateGuardWithData( const rtl::OUString& rUndoMessage
-        , const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDocumentActions > & xDocumentActions );
-    virtual ~UndoLiveUpdateGuardWithData();
+    explicit UndoLiveUpdateGuardWithData(
+        const ::rtl::OUString& i_undoMessage,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoManager > & i_undoManager
+    );
+    ~UndoLiveUpdateGuardWithData();
 };
 
 class UndoGuardWithSelection : public UndoGuard_Base
 {
 public:
-    explicit UndoGuardWithSelection( const rtl::OUString& rUndoMessage
-        , const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDocumentActions > & xDocumentActions );
+    explicit UndoGuardWithSelection(
+        const ::rtl::OUString& i_undoMessage,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoManager > & i_undoManager
+    );
     virtual ~UndoGuardWithSelection();
 };
 

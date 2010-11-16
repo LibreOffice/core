@@ -46,7 +46,6 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/container/XChild.hpp>
-#include <com/sun/star/chart2/XDocumentActions.hpp>
 #include <com/sun/star/chart2/data/XDataSource.hpp>
 #include <com/sun/star/chart2/XChartTypeTemplate.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -63,9 +62,9 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 
-#if ! defined(INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_21)
-#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_21
-#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 21
+#if ! defined(INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_20)
+#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_20
+#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 20
 #include "comphelper/implbase_var.hxx"
 #endif
 #include <osl/mutex.hxx>
@@ -85,7 +84,7 @@ namespace impl
 {
 
 // Note: needed for queryInterface (if it calls the base-class implementation)
-typedef ::comphelper::WeakImplHelper21<
+typedef ::comphelper::WeakImplHelper20<
 //       ::com::sun::star::frame::XModel        //comprehends XComponent (required interface), base of XChartDocument
          ::com::sun::star::util::XCloseable     //comprehends XCloseBroadcaster
         ,::com::sun::star::frame::XStorable2    //(extension of XStorable)
@@ -108,7 +107,6 @@ typedef ::comphelper::WeakImplHelper21<
         ,::com::sun::star::container::XChild
         ,::com::sun::star::util::XModifyListener
         ,::com::sun::star::datatransfer::XTransferable
-        ,::com::sun::star::chart2::XDocumentActions
         ,::com::sun::star::document::XDocumentPropertiesSupplier
         ,::com::sun::star::chart2::data::XDataSource
         ,::com::sun::star::document::XUndoManagerSupplier
@@ -175,8 +173,6 @@ private:
     bool                                  m_bIsDisposed;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                                           m_xPageBackground;
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDocumentActions >
-                                          m_xDocumentActions;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>     m_xXMLNamespaceMap;
 
@@ -602,41 +598,9 @@ public:
         throw (::com::sun::star::lang::NoSupportException,
                ::com::sun::star::uno::RuntimeException);
 
-    // ____ XDocumentActions ____
-    virtual void SAL_CALL preAction(  )
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL preActionWithArguments(
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArguments )
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL postAction( const ::rtl::OUString& aUndoText )
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL cancelAction(  )
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL cancelActionWithUndo(  )
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL undo(  )
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL redo(  )
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual ::sal_Bool SAL_CALL undoPossible(  )
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual ::sal_Bool SAL_CALL redoPossible(  )
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getCurrentUndoString(  )
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getCurrentRedoString(  )
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getAllUndoStrings(  )
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getAllRedoStrings(  )
-        throw (::com::sun::star::uno::RuntimeException);
-
     // ____ XDataSource ____ allows access to the curently used data and data ranges
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XLabeledDataSequence > > SAL_CALL getDataSequences()
         throw (::com::sun::star::uno::RuntimeException);
-
-private:
-    bool impl_getDocumentActions_lck();
 };
 
 }  // namespace chart

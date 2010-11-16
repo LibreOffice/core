@@ -28,7 +28,6 @@
 #define CHART2_COMMANDDISPATCHCONTAINER_HXX
 
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/chart2/XDocumentActions.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/DispatchDescriptor.hpp>
@@ -139,7 +138,6 @@ private:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >    m_xContext;
     ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XModel >         m_xModel;
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDocumentActions >  m_xDocumentActions;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > m_xChartDispatcher;
     ::std::set< ::rtl::OUString >                                          m_aChartCommands;

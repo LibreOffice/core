@@ -49,11 +49,10 @@
 #include "macros.hxx"
 #include "dlg_CreationWizard.hxx"
 #include "dlg_ChartType.hxx"
-//#include "svx/ActionDescriptionProvider.hxx"
 #include "AccessibleChartView.hxx"
 #include "DrawCommandDispatch.hxx"
 #include "ShapeController.hxx"
-#include "DocumentActions.hxx"
+#include "ImplDocumentActions.hxx"
 
 #include <comphelper/InlineContainer.hxx>
 
@@ -66,6 +65,8 @@
 #include <com/sun/star/util/XModeChangeBroadcaster.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/frame/LayoutManagerEvents.hpp>
+#include <com/sun/star/document/XUndoManagerSupplier.hpp>
+#include <com/sun/star/document/XUndoAction.hpp>
 
 //-------
 // header for define RET_OK
@@ -85,6 +86,7 @@
 // object in the DTOR
 #include <svtools/acceleratorexecute.hxx>
 #include <svx/ActionDescriptionProvider.hxx>
+#include <tools/diagnose_ex.h>
 
 // enable the following define to let the controller listen to model changes and
 // react on this by rebuilding the view
@@ -127,7 +129,7 @@ ChartController::ChartController(uno::Reference<uno::XComponentContext> const & 
     , m_bWaitingForDoubleClick(false)
     , m_bWaitingForMouseUp(false)
     , m_bConnectingToView(false)
-    , m_xDocumentActions( 0 )
+    , m_xUndoManager( 0 )
     , m_aDispatchContainer( m_xCC, this )
     , m_eDrawMode( CHARTDRAW_SELECT )
 {
@@ -613,7 +615,8 @@ void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent 
     if( m_pChartWindow )
         m_pChartWindow->Invalidate();
 
-    m_xDocumentActions.set( getModel(), uno::UNO_QUERY );
+    uno::Reference< document::XUndoManagerSupplier > xSuppUndo( getModel(), uno::UNO_QUERY_THROW );
+    m_xUndoManager.set( xSuppUndo->getUndoManager(), uno::UNO_SET_THROW );
 
     return sal_True;
 }
@@ -814,7 +817,7 @@ void ChartController::impl_deleteDrawViewController()
         }
 
         m_xFrame.clear();
-        m_xDocumentActions.clear();
+        m_xUndoManager.clear();
 
         TheModelRef aModelRef( m_aModel, m_aModelMutex);
         m_aModel = NULL;
@@ -951,7 +954,7 @@ bool ChartController::impl_releaseThisModel( const uno::Reference< uno::XInterfa
         if( m_aModel.is() && m_aModel->getModel() == xModel )
         {
             m_aModel = NULL;
-            m_xDocumentActions.clear();
+            m_xUndoManager.clear();
             bReleaseModel = true;
         }
     }
@@ -1323,7 +1326,7 @@ void SAL_CALL ChartController::executeDispatch_ChartType()
 {
     // using assignment for broken gcc 3.3
     UndoLiveUpdateGuard aUndoGuard = UndoLiveUpdateGuard(
-        String( SchResId( STR_ACTION_EDIT_CHARTTYPE )), m_xDocumentActions );
+        String( SchResId( STR_ACTION_EDIT_CHARTTYPE )), m_xUndoManager );
 
     // /--
     ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
@@ -1332,7 +1335,7 @@ void SAL_CALL ChartController::executeDispatch_ChartType()
     if( aDlg.Execute() == RET_OK )
     {
         impl_adaptDataSeriesAutoResize();
-        aUndoGuard.commitAction();
+        aUndoGuard.commit();
     }
     // \--
 }
@@ -1348,7 +1351,7 @@ void SAL_CALL ChartController::executeDispatch_SourceData()
 
     // using assignment for broken gcc 3.3
     UndoLiveUpdateGuard aUndoGuard = UndoLiveUpdateGuard(
-        String( SchResId( STR_ACTION_EDIT_DATA_RANGES )), m_xDocumentActions );
+        String( SchResId( STR_ACTION_EDIT_DATA_RANGES )), m_xUndoManager );
     if( xChartDoc.is())
     {
         // /--
@@ -1357,7 +1360,7 @@ void SAL_CALL ChartController::executeDispatch_SourceData()
         if( aDlg.Execute() == RET_OK )
         {
             impl_adaptDataSeriesAutoResize();
-            aUndoGuard.commitAction();
+            aUndoGuard.commit();
         }
         // \--
     }
@@ -1376,13 +1379,13 @@ void SAL_CALL ChartController::executeDispatch_MoveSeries( sal_Bool bForward )
         ActionDescriptionProvider::createDescription(
             (bForward ? ActionDescriptionProvider::MOVE_TOTOP : ActionDescriptionProvider::MOVE_TOBOTTOM),
             String( SchResId( STR_OBJECT_DATASERIES ))),
-        m_xDocumentActions );
+        m_xUndoManager );
 
     bool bChanged = DiagramHelper::moveSeries( ChartModelHelper::findDiagram( getModel() ), xGivenDataSeries, bForward );
     if( bChanged )
     {
         m_aSelection.setSelection( ObjectIdentifier::getMovedSeriesCID( aObjectCID, bForward ) );
-        aUndoGuard.commitAction();
+        aUndoGuard.commit();
     }
 }
 
@@ -1442,13 +1445,20 @@ void SAL_CALL ChartController::modified( const lang::EventObject& /* aEvent */ )
 
 IMPL_LINK( ChartController, NotifyUndoActionHdl, SdrUndoAction*, pUndoAction )
 {
+    ENSURE_OR_RETURN( pUndoAction, "invalid Undo action", 1L );
+
     ::rtl::OUString aObjectCID = m_aSelection.getSelectedCID();
     if ( aObjectCID.getLength() == 0 )
     {
-        DocumentActions* pDocumentActions = DocumentActions::getImplementation( m_xDocumentActions );
-        if ( pDocumentActions )
+        try
         {
-            pDocumentActions->addShapeUndoAction( pUndoAction );
+            const Reference< document::XUndoManager > xUndoManager( getModel(), uno::UNO_QUERY_THROW );
+            const Reference< document::XUndoAction > xAction( new impl::ShapeUndoElement( *pUndoAction ) );
+            xUndoManager->addUndoAction( xAction );
+        }
+        catch( const uno::Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
     return 0L;

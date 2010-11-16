@@ -73,7 +73,6 @@ SLOFILES =  \
             $(SLO)$/ShapeController.obj \
             $(SLO)$/ShapeToolbarController.obj \
             $(SLO)$/ImplDocumentActions.obj \
-            $(SLO)$/DocumentActions.obj \
             $(SLO)$/UndoGuard.obj
 
 #			$(SLO)$/CommonConverters.obj \
