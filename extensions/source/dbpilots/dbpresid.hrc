@@ -210,9 +210,7 @@
 // Image
 
 #define IMG_TABLE                   1
-#define IMG_TABLE_HC                2
 #define IMG_QUERY                   3
-#define IMG_QUERY_HC                4
 
 //========================================================================
 // defines

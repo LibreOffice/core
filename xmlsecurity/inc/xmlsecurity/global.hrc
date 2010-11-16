@@ -42,7 +42,6 @@
 #define RID_XMLSECTP_MACROWARN              1009
 #define RID_XMLSECTP_READONLY_CONFIG_TIP    1010
 #define RID_XMLSECTP_LOCK                   1011
-#define RID_XMLSECTP_LOCK_HC                1012
 #define RID_XMLSECWB_NO_MOZILLA_PROFILE     1013
 
 #endif

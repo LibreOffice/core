@@ -96,24 +96,11 @@ TabPage RID_PAGE_TABLESELECTION
         MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
     };
 
-    Image IMG_TABLE_HC
-    {
-        ImageBitmap = Bitmap { File = "sxh03188.bmp"; };
-        MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
-    };
-
     Image IMG_QUERY
     {
         ImageBitmap = Bitmap { File = "sx03202.bmp"; };
         MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
     };
-
-    Image IMG_QUERY_HC
-    {
-        ImageBitmap = Bitmap { File = "sxh03202.bmp"; };
-        MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
-    };
-
 };
 
 TabPage RID_PAGE_OPTION_DBFIELD

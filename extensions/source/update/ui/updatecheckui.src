@@ -39,13 +39,3 @@
         ImageBitmap = Bitmap{ file = "onlineupdate_26.png"; };
         STD_MASK_COLOR
     };
-    Image RID_UPDATE_AVAILABLE_16_HC
-    {
-        ImageBitmap = Bitmap{ file = "onlineupdate_16_h.png"; };
-        STD_MASK_COLOR
-    };
-    Image RID_UPDATE_AVAILABLE_26_HC
-    {
-        ImageBitmap = Bitmap{ file = "onlineupdate_26_h.png"; };
-        STD_MASK_COLOR
-    };

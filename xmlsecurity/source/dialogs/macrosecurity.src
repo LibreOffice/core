@@ -229,12 +229,3 @@ Image RID_XMLSECTP_LOCK
     };
     MaskColor = Color { Red=0xffff; Green=0x0000; Blue=0xffff; };
 };
-Image RID_XMLSECTP_LOCK_HC
-{
-    ImageBitmap = Bitmap
-    {
-        File = "lock_hc.bmp";
-    };
-    MaskColor = Color { Red=0xffff; Green=0x0000; Blue=0xffff; };
-};
-

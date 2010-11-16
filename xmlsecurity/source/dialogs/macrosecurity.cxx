@@ -423,8 +423,7 @@ void MacroSecurityTrustedSourcesTP::ClosePage( void )
 ReadOnlyImage::ReadOnlyImage(Window* pParent, const ResId rResId) :
             FixedImage(pParent, rResId)
 {
-    sal_Bool bHighContrast = pParent->GetSettings().GetStyleSettings().GetHighContrastMode();
-    SetImage( Image(XMLSEC_RES( bHighContrast ? RID_XMLSECTP_LOCK_HC : RID_XMLSECTP_LOCK )));
+    SetImage( Image(XMLSEC_RES( RID_XMLSECTP_LOCK )));
 }
 
 ReadOnlyImage::~ReadOnlyImage()

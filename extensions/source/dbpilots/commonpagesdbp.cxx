@@ -370,9 +370,8 @@ namespace dbp
         {
             ::svt::OLocalResourceAccess aLocalResAccess( ModuleRes( RID_PAGE_TABLESELECTION ), RSC_TABPAGE );
 
-            bool bIsHiContrast = m_aTable.GetSettings().GetStyleSettings().GetHighContrastMode();
-            aTableImage = Image( ModuleRes( bIsHiContrast ? IMG_TABLE_HC : IMG_TABLE ) );
-            aQueryImage = Image( ModuleRes( bIsHiContrast ? IMG_QUERY_HC : IMG_QUERY ) );
+            aTableImage = Image( ModuleRes( IMG_TABLE ) );
+            aQueryImage = Image( ModuleRes( IMG_QUERY ) );
         }
         lcl_fillEntries( m_aTable, aTableNames, aTableImage, CommandType::TABLE );
         lcl_fillEntries( m_aTable, aQueryNames, aQueryImage, CommandType::QUERY );

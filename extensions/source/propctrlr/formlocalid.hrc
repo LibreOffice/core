@@ -33,7 +33,5 @@
 
 #define IMG_PLUS        1
 #define IMG_MINUS       2
-#define IMG_PLUS_HC     3
-#define IMG_MINUS_HC    4
 
 #endif // _EXTENSIONS_PROPCTRLR_FORMLOCALID_HRC_

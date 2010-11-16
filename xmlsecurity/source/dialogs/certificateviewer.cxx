@@ -120,24 +120,18 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP( Window* _pParent, Certif
     ,maKeyImg               ( this, XMLSEC_RES( IMG_KEY ) )
     ,maHintCorrespPrivKeyFI ( this, XMLSEC_RES( FI_CORRPRIVKEY ) )
 {
-    if ( GetSettings().GetStyleSettings().GetHighContrastMode() )
-        maKeyImg.SetImage( Image( XMLSEC_RES( IMG_KEY_HC ) ) );
-
     //Verify the certificate
     sal_Int32 certStatus = mpDlg->mxSecurityEnvironment->verifyCertificate(mpDlg->mxCert,
          Sequence<Reference<css::security::XCertificate> >());
 
     bool bCertValid = certStatus == css::security::CertificateValidity::VALID ?  true : false;
 
-    bool bHC = GetSettings().GetStyleSettings().GetHighContrastMode();
     if ( !bCertValid )
     {
         maCertImg.SetImage(
-            Image( XMLSEC_RES( bHC ? IMG_STATE_NOT_VALIDATED_HC : IMG_STATE_NOT_VALIDATED ) ) );
+            Image( XMLSEC_RES( IMG_STATE_NOT_VALIDATED ) ) );
         maHintNotTrustedFI.SetText( String( XMLSEC_RES( STR_CERTIFICATE_NOT_VALIDATED ) ) );
     }
-    else if ( bHC )
-        maCertImg.SetImage( Image( XMLSEC_RES( IMG_STATE_CERIFICATED_HC ) ) );
 
     FreeResource();
 
@@ -419,12 +413,6 @@ CertificateViewerCertPathTP::CertificateViewerCertPathTP( Window* _pParent, Cert
     ,msCertNotValidated     ( XMLSEC_RES( STR_PATH_CERT_NOT_VALIDATED ) )
 
 {
-    if ( GetSettings().GetStyleSettings().GetHighContrastMode() )
-    {
-        maCertImage = Image( XMLSEC_RES( IMG_CERT_SMALL_HC ) );
-        maCertNotValidatedImage = Image( XMLSEC_RES( IMG_CERT_NOTVALIDATED_SMALL_HC ) );
-    }
-
     FreeResource();
 
     maCertPathLB.SetNodeDefaultImages();

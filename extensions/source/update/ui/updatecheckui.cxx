@@ -311,17 +311,10 @@ Image UpdateCheckUI::GetMenuBarIcon( MenuBar* pMBar )
     if ( pMBarWin )
         nMBarHeight = pMBarWin->GetOutputSizePixel().getHeight();
 
-    if ( Application::GetSettings().GetStyleSettings().GetHighContrastMode() ) {
-        if ( nMBarHeight >= 35 )
-            nResID = RID_UPDATE_AVAILABLE_26_HC;
-        else
-            nResID = RID_UPDATE_AVAILABLE_16_HC;
-    } else {
-        if ( nMBarHeight >= 35 )
-            nResID = RID_UPDATE_AVAILABLE_26;
-        else
-            nResID = RID_UPDATE_AVAILABLE_16;
-    }
+    if ( nMBarHeight >= 35 )
+        nResID = RID_UPDATE_AVAILABLE_26;
+    else
+        nResID = RID_UPDATE_AVAILABLE_16;
 
     return Image( ResId( nResID, *mpUpdResMgr ) );
 }
