@@ -2111,7 +2111,7 @@ IMPL_LINK( SfxOrganizeDlg_Impl, MenuActivate_Impl, Menu *, pMenu )
             String aTitle = SvFileInformationManager::GetDescription(
                 INetURLObject(aObjFacURL) );
             pSubMenu->InsertItem( nItemId, aTitle,
-                SvFileInformationManager::GetImage(INetURLObject(aObjFacURL)) );
+                SvFileInformationManager::GetImage(INetURLObject(aObjFacURL), false) );
             pSubMenu->SetItemCommand( nItemId++, aObjFacURL );
             DBG_ASSERT( nItemId <= ID_RESET_DEFAULT_TEMPLATE_END, "menu item id overflow" );
         }

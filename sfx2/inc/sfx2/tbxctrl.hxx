@@ -373,7 +373,6 @@ private:
     BOOL                    bBigImages;
     PopupMenu*              pMenu;
     ULONG                   m_nSymbolsStyle;
-    BOOL                    m_bWasHiContrastMode;
     BOOL                    m_bShowMenuImages;
 };
 
@@ -417,7 +416,6 @@ class SfxAddonsToolBoxControl_Impl : public SfxToolBoxControl
 {
     BOOL        bBigImages;
     PopupMenu*  pMenu;
-    BOOL        m_bWasHiContrastMode;
     BOOL        m_bShowMenuImages;
 
 protected:

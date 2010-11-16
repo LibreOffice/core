@@ -159,7 +159,6 @@ class SfxAppMenuControl_Impl : public SfxMenuControl
 {
     PopupMenu*  pMenu;
     ULONG       m_nSymbolsStyle;
-    BOOL        m_bWasHiContrastMode;
     BOOL        m_bShowMenuImages;
 
 protected:

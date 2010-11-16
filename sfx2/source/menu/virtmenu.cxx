@@ -134,21 +134,20 @@ void SfxMenuImageControl_Impl::Update()
 static Image RetrieveAddOnImage( Reference< com::sun::star::frame::XFrame >& rFrame,
                                  const rtl::OUString& aImageId,
                                  const rtl::OUString& aURL,
-                                 BOOL bBigImage,
-                                 BOOL bHiContrast )
+                                 BOOL bBigImage )
 {
     Image aImage;
 
     if ( aImageId.getLength() > 0 )
     {
-        aImage = GetImage( rFrame, aImageId, bBigImage, bHiContrast );
+        aImage = GetImage( rFrame, aImageId, bBigImage );
         if ( !!aImage )
             return aImage;
     }
 
-    aImage = GetImage( rFrame, aURL, bBigImage, bHiContrast );
+    aImage = GetImage( rFrame, aURL, bBigImage );
     if ( !aImage )
-        aImage = framework::AddonsOptions().GetImageFromURL( aURL, bBigImage, bHiContrast );
+        aImage = framework::AddonsOptions().GetImageFromURL( aURL, bBigImage );
 
     return aImage;
 }
@@ -201,7 +200,6 @@ SfxVirtualMenu::SfxVirtualMenu( USHORT nOwnId,
     pAutoDeactivate(0),
     nLocks(0),
     bHelpInitialized( bWithHelp ),
-    bWasHighContrast( FALSE ),
     bIsAddonPopupMenu( bIsAddonMenu )
 {
     DBG_MEMTEST();
@@ -237,7 +235,6 @@ SfxVirtualMenu::SfxVirtualMenu( Menu *pStarViewMenu, BOOL bWithHelp,
     pAutoDeactivate(0),
     nLocks(0),
     bHelpInitialized( bWithHelp ),
-    bWasHighContrast( FALSE ),
     bIsAddonPopupMenu( bIsAddonMenu )
 {
     DBG_MEMTEST();
@@ -393,9 +390,6 @@ void SfxVirtualMenu::CreateFromSVMenu()
     pBindings->ENTERREGISTRATIONS(); ++nLocks;
     pImageControl = new SfxMenuImageControl_Impl( SID_IMAGE_ORIENTATION, *pBindings, this );
 
-    // Update high contrast state
-    bWasHighContrast = IsHiContrastMode();
-
     USHORT nSVPos = 0;
     for ( USHORT nPos=0; nPos<nCount; ++nPos, ++nSVPos )
     {
@@ -436,7 +430,7 @@ void SfxVirtualMenu::CreateFromSVMenu()
                 {
                     rtl::OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
                     aSlotURL += rtl::OUString::valueOf( sal_Int32( nSlotId ));
-                    Image aImage = GetImage( xFrame, aSlotURL, FALSE, bWasHighContrast );
+                    Image aImage = GetImage( xFrame, aSlotURL, FALSE );
                     pSVMenu->SetItemImage( nSlotId, aImage );
                 }
             }
@@ -542,13 +536,13 @@ void SfxVirtualMenu::CreateFromSVMenu()
                             if ( pMenuAttributes )
                                 aImageId = pMenuAttributes->aImageId; // Retrieve image id from menu attributes
 
-                            aImage = RetrieveAddOnImage( xFrame, aImageId, aCmd, FALSE, bWasHighContrast );
+                            aImage = RetrieveAddOnImage( xFrame, aImageId, aCmd, FALSE );
                         }
                         else
                         {
                             rtl::OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
                             aSlotURL += rtl::OUString::valueOf( sal_Int32( nSlotId ));
-                            aImage = GetImage( xFrame, aSlotURL, FALSE, bWasHighContrast );
+                            aImage = GetImage( xFrame, aSlotURL, FALSE );
                         }
 
                         if ( !!aImage )
@@ -603,7 +597,6 @@ IMPL_LINK( SfxVirtualMenu, SettingsChanged, void*, EMPTYARG )
     USHORT nItemCount = pSVMenu->GetItemCount();
     SfxViewFrame *pViewFrame = pBindings->GetDispatcher()->GetFrame();
     BOOL bIcons = Application::GetSettings().GetStyleSettings().GetUseImagesInMenus();
-    BOOL bIsHiContrastMode = IsHiContrastMode();
     Reference<com::sun::star::frame::XFrame> xFrame( pViewFrame->GetFrame().GetFrameInterface() );
 
     if ( !bIsAddonPopupMenu )
@@ -626,13 +619,13 @@ IMPL_LINK( SfxVirtualMenu, SettingsChanged, void*, EMPTYARG )
                     if ( pMenuAttributes )
                         aImageId = pMenuAttributes->aImageId; // Retrieve image id from menu attributes
 
-                    pSVMenu->SetItemImage( nSlotId, RetrieveAddOnImage( xFrame, aImageId, aCmd, FALSE, bIsHiContrastMode ));
+                    pSVMenu->SetItemImage( nSlotId, RetrieveAddOnImage( xFrame, aImageId, aCmd, FALSE ));
                 }
                 else
                 {
                     rtl::OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
                     aSlotURL += rtl::OUString::valueOf( sal_Int32( nSlotId ));
-                    pSVMenu->SetItemImage( nSlotId, GetImage( xFrame, aSlotURL, FALSE, bWasHighContrast ));
+                    pSVMenu->SetItemImage( nSlotId, GetImage( xFrame, aSlotURL, FALSE ));
                 }
             }
             else if( nType == MENUITEM_STRINGIMAGE && !bIcons )
@@ -673,7 +666,6 @@ void SfxVirtualMenu::UpdateImages()
 
     if ( bIcons )
     {
-        BOOL            bIsHiContrastMode   = IsHiContrastMode();
         USHORT          nItemCount          = pSVMenu->GetItemCount();
         SfxViewFrame *  pViewFrame          = pBindings->GetDispatcher()->GetFrame();
         Reference<com::sun::star::frame::XFrame> xFrame( pViewFrame->GetFrame().GetFrameInterface() );
@@ -695,13 +687,13 @@ void SfxVirtualMenu::UpdateImages()
                     if ( pMenuAttributes )
                         aImageId = pMenuAttributes->aImageId; // Retrieve image id from menu attributes
 
-                    pSVMenu->SetItemImage( nSlotId, RetrieveAddOnImage( xFrame, aImageId, aCmd, FALSE, bIsHiContrastMode ));
+                    pSVMenu->SetItemImage( nSlotId, RetrieveAddOnImage( xFrame, aImageId, aCmd, FALSE ));
                 }
                 else
                 {
                     rtl::OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
                     aSlotURL += rtl::OUString::valueOf( sal_Int32( nSlotId ));
-                    pSVMenu->SetItemImage( nSlotId, GetImage( xFrame, aSlotURL, FALSE, bWasHighContrast ));
+                    pSVMenu->SetItemImage( nSlotId, GetImage( xFrame, aSlotURL, FALSE ));
                 }
             }
         }
@@ -723,7 +715,6 @@ void SfxVirtualMenu::UpdateImages( Menu* pMenu )
     BOOL bIcons = Application::GetSettings().GetStyleSettings().GetUseImagesInMenus();
     if ( bIcons )
     {
-        BOOL            bIsHiContrastMode   = IsHiContrastMode();
         USHORT          nItemCount          = pMenu->GetItemCount();
         Reference<com::sun::star::frame::XFrame> aXFrame( pBindings->GetDispatcher_Impl()->GetFrame()->GetFrame().GetFrameInterface() );
 
@@ -741,7 +732,7 @@ void SfxVirtualMenu::UpdateImages( Menu* pMenu )
                 if ( pMenuAttributes )
                     aImageId = pMenuAttributes->aImageId; // Retrieve image id from menu attributes
 
-                pMenu->SetItemImage( nSlotId, RetrieveAddOnImage( aXFrame, aImageId, pMenu->GetItemCommand( nSlotId ), FALSE, bIsHiContrastMode ));
+                pMenu->SetItemImage( nSlotId, RetrieveAddOnImage( aXFrame, aImageId, pMenu->GetItemCommand( nSlotId ), FALSE ));
             }
 
             if ( pPopup )
@@ -919,7 +910,7 @@ void SfxVirtualMenu::InsertAddOnsMenuItem( Menu* pMenu )
         {
                rtl::OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
                aSlotURL += rtl::OUString::valueOf( sal_Int32( SID_ADDONS ));
-         pMenu->SetItemImage( SID_ADDONS, GetImage( xFrame, aSlotURL, FALSE, bWasHighContrast ));
+         pMenu->SetItemImage( SID_ADDONS, GetImage( xFrame, aSlotURL, FALSE ));
         }
     }
     else
@@ -1065,16 +1056,6 @@ IMPL_LINK( SfxVirtualMenu, Activate, Menu *, pMenu )
 
         if ( pAutoDeactivate ) // QAP-Hack
             pAutoDeactivate->Start();
-
-        if ( IsHiContrastMode() != bWasHighContrast )
-        {
-            // Refresh images as our background color changed and remember it!!
-            bWasHighContrast = IsHiContrastMode();
-            if ( bIsAddonPopupMenu )
-                UpdateImages( pSVMenu );
-            else
-                UpdateImages();
-        }
 
         // erledigt
         return TRUE;

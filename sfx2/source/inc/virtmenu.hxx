@@ -64,7 +64,6 @@ private:
     BOOL            bHelpInitialized : 1;
     BOOL            bIsActive : 1;
     BOOL            bControllersUnBound : 1;
-    BOOL            bWasHighContrast : 1;
     BOOL            bIsAddonPopupMenu : 1;
 
 private:

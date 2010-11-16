@@ -37,7 +37,7 @@
 SFX2_DLLPUBLIC Image SAL_CALL GetImage(
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
     const ::rtl::OUString& aURL,
-    BOOL bBig, BOOL bHiContrast
+    BOOL bBig
 );
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
