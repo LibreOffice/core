@@ -111,18 +111,24 @@ while shift ; do
 done
 
 # do it!
-cd "$CLONEDIR"
-DIRS=". `ls`"
+DIRS="bootstrap `(cd $CLONEDIR ; ls)`"
 if [ "$COMMAND" = "clone" ] ; then
     DIRS="artwork base calc components extensions extras filters
           help impress libs-core libs-extern libs-extern-sys libs-gui
           postprocess sdk testing ure writer"
 fi
-for DIR in $DIRS ; do
+for D in $DIRS ; do
+    DIR="$CLONEDIR/$D"
+    NAME="$D"
+    if [ "$D" = "bootstrap" ] ; then
+        DIR="$RAWBUILDDIR"
+        NAME="main repo"
+    fi
+
     if [ \( -d "$DIR" -a -d "$DIR"/.git \) -o \( "$COMMAND" = "clone" \) ] ; then
         (
             # executed in a subshell
-            [ "$COMMAND" != "clone" ] && cd $DIR
+            [ "$COMMAND" != "clone" ] && cd "$DIR"
 
             # relativize the absolutized params again if we want to operate
             # only on the files belonging to this exact repo
@@ -183,7 +189,7 @@ for DIR in $DIRS ; do
                     ;;
             esac
 
-            [ "$REPORT_REPOS" = "1" ] && echo "===== $DIR ====="
+            [ "$REPORT_REPOS" = "1" ] && echo "===== $NAME ====="
 
             # check for changes
             HEADREF=`git show-ref --head HEAD`
