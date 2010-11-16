@@ -91,8 +91,7 @@ void __EXPORT ScTbxInsertCtrl::StateChanged( USHORT /* nSID */, SfxItemState eSt
             aSlotURL += rtl::OUString::valueOf( sal_Int32( nImageId ));
             Image aImage = GetImage( m_xFrame,
                                      aSlotURL,
-                                     hasBigImages(),
-                                     GetToolBox().GetSettings().GetStyleSettings().GetHighContrastMode() );
+                                     hasBigImages() );
             GetToolBox().SetItemImage(GetId(), aImage);
         }
     }
