@@ -132,7 +132,7 @@ Resource RID_ERRHDLSC
     };
     String SCWARN_IMPORT_SHEET_OVERFLOW & ERRCODE_RES_MASK
     {
-        Text [ en-US ] = "Some sheets could not be loaded because the maximum number of sheets was exceeded." ;
+        Text [ en-US ] = "Not all sheets have been loaded because the maximum number of sheets was exceeded.\n\nPlease be warned that re-saving this document will permanently delete those sheets that have not been loaded!" ;
     };
     String SCWARN_IMPORT_OPEN_FM3 & ERRCODE_RES_MASK
     {
