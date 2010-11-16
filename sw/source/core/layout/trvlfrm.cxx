@@ -2030,19 +2030,6 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
           ( !pEndPos->nNode.GetNode().IsCntntNode() ||
             !pEndPos->nNode.GetNode().GetCntntNode()->GetFrm() ) ) )
     {
-        /* For SelectAll we will need something like this later on...
-        const SwFrm* pPageFrm = GetLower();
-        while( pPageFrm )
-        {
-            SwRect aTmp( pPageFrm->Prt() );
-            aTmp.Pos() += pPageFrm->Frm().Pos();
-            Sub( aRegion, aTmp );
-            pPageFrm = pPageFrm->GetNext();
-        }
-        aRegion.Invert();
-        rCrsr.Remove( 0, rCrsr.Count() );
-        rCrsr.Insert( &aRegion, 0 );
-        */
         return;
     }
 

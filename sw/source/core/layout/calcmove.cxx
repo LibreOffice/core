@@ -1472,27 +1472,6 @@ void SwCntntFrm::MakeAll()
             // <--
         }
 
-        // FME 16.07.2003 #i16930# - removed this code because it did not work
-
-        // OD 04.04.2003 #108446# - react on the situation detected in the text
-        // formatting - see <SwTxtFrm::FormatAdjust(..)>:
-        // text frame has to move forward, because its text formatting stopped,
-        // created a follow and detected, that it contains no content.
-/*        if ( IsTxtFrm() && bValidPos && bValidSize && bValidPrtArea &&
-             (Frm().*fnRect->fnGetHeight)() == 0 &&
-             HasFollow()
-           )
-        {
-            SwFrm* pOldUpper = GetUpper();
-            MoveFwd( TRUE, FALSE );
-            if ( GetUpper() != pOldUpper )
-            {
-                bMovedFwd = TRUE;
-                SWREFRESHFN( this )
-                continue;
-            }
-        } */
-
         //Wenn ich der erste einer Kette bin koennte ich mal sehen ob
         //ich zurueckfliessen kann (wenn ich mich ueberhaupt bewegen soll).
         //Damit es keine Oszillation gibt, darf ich nicht gerade vorwaerts

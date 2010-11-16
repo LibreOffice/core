@@ -1025,59 +1025,6 @@ void SwLayHelper::_CheckFlyCache( SwPageFrm* pPage )
         SwSortedObjs &rObjs = *pPage->GetSortedObjs();
         USHORT nPgNum = pPage->GetPhyPageNum();
 
-/*
-
-        //
-        // NOTE: This code assumes that all objects have already been
-        // inserted into the drawing layout, so that the cached objects
-        // can be identified by their ordnum. Unfortunately this function
-        // is called with page n if page n+1 has been inserted. Thus
-        // not all the objects have been inserted and the ordnums cannot
-        // be used to identify the objects.
-        //
-
-        for ( USHORT i = 0; i < rObjs.Count(); ++i )  // check objects
-        {
-            SdrObject *pO = rObjs[i];
-            if ( pO->ISA(SwVirtFlyDrawObj) )  // a text frame?
-            {
-                SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
-                if( pFly->Frm().Left() == WEIT_WECH && pFly->GetAnchor() &&
-                    !pFly->GetAnchor()->FindFooterOrHeader() )
-                {   // Only frame with default position and not in header/footer
-                    const SwContact *pC = (SwContact*)GetUserCall(pO);
-                    if( pC )
-                    {
-                        ULONG nOrdNum = pO->GetOrdNum(); // the Id
-                        SwFlyCache* pFlyC;
-                        while( nFlyIdx < nFlyCount && ( pFlyC = pImpl->
-                               GetFlyCache(nFlyIdx) )->nPageNum < nPgNum)
-                            ++nFlyIdx;
-                        if( nFlyIdx < nFlyCount &&
-                            pFlyC->nPageNum == nPgNum )
-                        {
-                            USHORT nIdx = nFlyIdx;
-                            while( nIdx < nFlyCount && ( pFlyC = pImpl->
-                                   GetFlyCache( nIdx ) )->nPageNum == nPgNum &&
-                                   pFlyC->nOrdNum != nOrdNum )
-                                ++nIdx;
-                            if( nIdx < nFlyCount && pFlyC->nPageNum == nPgNum &&
-                                pFlyC->nOrdNum == nOrdNum )
-                            {   // we get the stored information
-                                pFly->Frm().Pos().X() = pFlyC->Left() +
-                                                        pPage->Frm().Left();
-                                pFly->Frm().Pos().Y() = pFlyC->Top() +
-                                                        pPage->Frm().Top();
-                                pFly->Frm().Width( pFlyC->Width() );
-                                pFly->Frm().Height( pFlyC->Height() );
-                            }
-                        }
-                    }
-                }
-            }
-        }
- */
-
         //
         // NOTE: Here we do not use the absolute ordnums but
         // relative ordnums for the objects on this page.

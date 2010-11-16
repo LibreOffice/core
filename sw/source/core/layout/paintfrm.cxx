@@ -2894,20 +2894,6 @@ void SwRootFrm::Paint( const SwRect& rRect, const SwPrtOptions *pPrintData ) con
 
                 aPaintRect._Intersection( aRect );
 
-                // --> OD 2007-11-14 #i82616#
-                // Invalidate area for extra data (line numbers or change tracking
-                // marks), if painting on a window and the paint is trigger by an
-                // end action. The inefficient and simple enlargement of the
-                // paint area is replaced by this invalidation.
-    //            if ( bExtraData )
-    //            {
-    //                //Ja, das ist grob, aber wie macht man es besser?
-    //                SWRECTFN( pPage )
-    //                (aPaintRect.*fnRect->fnSetLeftAndWidth)(
-    //                    (pPage->Frm().*fnRect->fnGetLeft)(),
-    //                    (pPage->Frm().*fnRect->fnGetWidth)() );
-    //                aPaintRect._Intersection( pSh->VisArea() );
-    //            }
                 if ( bExtraData &&
                      pSh->GetWin() && pSh->IsInEndAction() )
                 {

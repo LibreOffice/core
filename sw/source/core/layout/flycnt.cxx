@@ -1429,64 +1429,6 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
                              FALSE );
 }
 
-// OD 2004-08-12 #i32795# - Note: method no longer used in <flyincnt.cxx>
-//void DeepCalc( const SwFrm *pFrm )
-//{
-//    if( pFrm->IsSctFrm() ||
-//        ( pFrm->IsFlyFrm() && ((SwFlyFrm*)pFrm)->IsFlyInCntFrm() ) )
-//      return;
-//    const SwFlowFrm *pFlow = SwFlowFrm::CastFlowFrm( pFrm );
-//    if( pFlow && pFlow->IsAnyJoinLocked() )
-//        return;
-
-//    USHORT nCnt = 0;
-
-//  BOOL bContinue = FALSE;
-//  do
-//    {
-//        if ( ++nCnt == 10 )
-//      {
-//          ASSERT( !nCnt, "DeepCalc: Loop detected1?" );
-//          break;
-//      }
-
-//      const BOOL bSetComplete = !pFrm->IsValid();
-//      const SwRect aOldFrm( pFrm->Frm() );
-//      const SwRect aOldPrt( pFrm->Prt() );
-
-//      const SwFrm *pUp = pFrm->GetUpper();
-//      if ( pUp )
-//      {
-//          //Nicht weiter wenn der Up ein Fly mit Spalten ist.
-//          if( ( !pUp->IsFlyFrm() || !((SwLayoutFrm*)pUp)->Lower() ||
-//               !((SwLayoutFrm*)pUp)->Lower()->IsColumnFrm() ) &&
-//               !pUp->IsSctFrm() )
-//          {
-//                SWRECTFN( pUp )
-//                const Point aPt( (pUp->Frm().*fnRect->fnGetPos)() );
-//              ::DeepCalc( pUp );
-//                bContinue = aPt != (pUp->Frm().*fnRect->fnGetPos)();
-//          }
-//      }
-//      else
-//          pUp = pFrm;
-
-//      pFrm->Calc();
-//      if ( bSetComplete && (aOldFrm != pFrm->Frm() || aOldPrt != pFrm->Prt()))
-//          pFrm->SetCompletePaint();
-
-//      if ( pUp->IsFlyFrm() )
-//      {
-//          if ( ((SwFlyFrm*)pUp)->IsLocked() ||
-//               (((SwFlyFrm*)pUp)->IsFlyAtCntFrm() &&
-//                SwOszControl::IsInProgress( (const SwFlyFrm*)pUp )) )
-//          {
-//              bContinue = FALSE;
-//          }
-//      }
-//  } while ( bContinue );
-//}
-
 /** method to assure that anchored object is registered at the correct
     page frame
 

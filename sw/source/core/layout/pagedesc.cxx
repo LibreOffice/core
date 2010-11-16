@@ -177,14 +177,9 @@ void SwPageDesc::ResetAllAttr( sal_Bool bLeft )
     // erfrage vom Modify Informationen
 BOOL SwPageDesc::GetInfo( SfxPoolItem & rInfo ) const
 {
-//    if( RES_AUTOFMT_DOCNODE == rInfo.Which() )
-//    {
-        // dann weiter zum Format
-        if( !aMaster.GetInfo( rInfo ) )
-            return FALSE;       // gefunden
-        return aLeft.GetInfo( rInfo );
-//    }
-//    return TRUE;        // weiter suchen
+    if( !aMaster.GetInfo( rInfo ) )
+        return FALSE;       // gefunden
+    return aLeft.GetInfo( rInfo );
 }
 
 /*************************************************************************

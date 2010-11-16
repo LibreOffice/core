@@ -734,32 +734,6 @@ bool lcl_RecalcSplitLine( SwRowFrm& rLastLine, SwRowFrm& rFollowLine,
     }
 
     //
-    // TODO: e.g., for i71806: What shall we do if the table already
-    // exceeds its upper? I think we have to adjust the heights of the
-    // table, rLastRow and all cells in rLastRow
-    //
-    /*SwTwips nDistanceToUpperPrtBottom =
-            (rTab.Frm().*fnRect->fnBottomDist)( (rTab.GetUpper()->*fnRect->fnGetPrtBottom)());
-
-    if ( nDistanceToUpperPrtBottom < 0 )
-    {
-        (rTab.Frm().*fnRect->fnAddBottom)( nDistanceToUpperPrtBottom );
-        (rTab.Prt().*fnRect->fnAddBottom)( nDistanceToUpperPrtBottom );
-
-        (rLastLine.Frm().*fnRect->fnAddBottom)( nDistanceToUpperPrtBottom );
-        (rLastLine.Prt().*fnRect->fnAddBottom)( nDistanceToUpperPrtBottom );
-
-        SwFrm* pTmpCell = rLastLine.Lower();
-        while ( pTmpCell )
-        {
-            (pTmpCell->Frm().*fnRect->fnAddBottom)( nDistanceToUpperPrtBottom );
-            (pTmpCell->Prt().*fnRect->fnAddBottom)( nDistanceToUpperPrtBottom );
-
-            pTmpCell = pTmpCell->GetNext();
-        }
-    }*/
-
-    //
     // Do the recalculation
     //
     lcl_RecalcRow( rLastLine, LONG_MAX );
@@ -1053,9 +1027,6 @@ bool SwTabFrm::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowKee
     bool bRet = true;
 
     SWRECTFN( this )
-    //ASSERT( bVert ? nCutPos >= Frm().Left() &&
-    //                nCutPos <= Frm().Left() + Frm().Width() :
-    //                nCutPos >= Frm().Top() && nCutPos <= Frm().Bottom(), "SplitLine out of table." );
 
     // --> OD 2004-10-14 #i26745# - format row and cell frames of table
     {

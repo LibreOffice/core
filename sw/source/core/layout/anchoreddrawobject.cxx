@@ -852,13 +852,7 @@ void SwAnchoredDrawObject::_SetPositioningAttr()
         GetFrmFmt().SetFmtAttr( aHori );
 
         SwFmtVertOrient aVert( GetFrmFmt().GetVertOrient() );
-        // --> OD 2007-01-03 #i73079# - vertical position already correct
-//        if ( aVert.GetRelationOrient() == text::RelOrientation::CHAR ||
-//             aVert.GetRelationOrient() == text::RelOrientation::TEXT_LINE )
-//        {
-//            nVertPos = -nVertPos;
-//        }
-        // <--
+
         aVert.SetPos( nVertPos );
         GetFrmFmt().SetFmtAttr( aVert );
         // <--

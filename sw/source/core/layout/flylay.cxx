@@ -210,21 +210,6 @@ void SwFlyFreeFrm::MakeAll()
             if ( !bValidSize )
             {
                 bValidPrtArea = FALSE;
-/*
-                // This is also done in the Format function, so I think
-                // this code is not necessary anymore:
-                const Size aRelSize( CalcRel( *pSz ) );
-                const SwTwips nMin = MINFLY + rAttrs.CalcLeftLine()+rAttrs.CalcRightLine();
-                long nDiff = bVert ? aRelSize.Height() : aRelSize.Width();
-                if( nDiff < nMin )
-                    nDiff = nMin;
-                nDiff -= (aFrm.*fnRect->fnGetWidth)();
-                if( nDiff )
-                {
-                    (aFrm.*fnRect->fnAddRight)( nDiff );
-                    bValidPos = FALSE;
-                }
-*/
             }
 
             if ( !bValidPrtArea )
