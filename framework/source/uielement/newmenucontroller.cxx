@@ -94,7 +94,7 @@ DEFINE_XSERVICEINFO_MULTISERVICE        (   NewMenuController                   
 
 DEFINE_INIT_SERVICE                     (   NewMenuController, {} )
 
-void NewMenuController::setMenuImages( PopupMenu* pPopupMenu, sal_Bool bSetImages, sal_Bool bHiContrast )
+void NewMenuController::setMenuImages( PopupMenu* pPopupMenu, sal_Bool bSetImages )
 {
     USHORT nItemCount = pPopupMenu->GetItemCount();
     Image               aImage;
@@ -116,7 +116,7 @@ void NewMenuController::setMenuImages( PopupMenu* pPopupMenu, sal_Bool bSetImage
 
                 if ( aImageId.getLength() > 0 )
                 {
-                    aImage = GetImageFromURL( xFrame, aImageId, FALSE, bHiContrast );
+                    aImage = GetImageFromURL( xFrame, aImageId, FALSE );
                     if ( !!aImage )
                     {
                         bImageSet = sal_True;
@@ -128,7 +128,7 @@ void NewMenuController::setMenuImages( PopupMenu* pPopupMenu, sal_Bool bSetImage
                 {
                     String aCmd( pPopupMenu->GetItemCommand( nItemId ) );
                     if ( aCmd.Len() )
-                        aImage = GetImageFromURL( xFrame, aCmd, FALSE, bHiContrast );
+                        aImage = GetImageFromURL( xFrame, aCmd, FALSE );
 
                     if ( !!aImage )
                         pPopupMenu->SetItemImage( nItemId, aImage );
@@ -328,7 +328,6 @@ void NewMenuController::retrieveShortcutsFromConfiguration(
 NewMenuController::NewMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager ) :
     svt::PopupMenuControllerBase( xServiceManager ),
     m_bShowImages( sal_True ),
-    m_bHiContrast( sal_False ),
     m_bNewMenu( sal_False ),
     m_bModuleIdentified( sal_False ),
     m_bAcceleratorCfg( sal_False ),
@@ -388,7 +387,7 @@ void NewMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopup
         }
 
         if ( m_bShowImages )
-            setMenuImages( pVCLPopupMenu, m_bShowImages, m_bHiContrast );
+            setMenuImages( pVCLPopupMenu, m_bShowImages );
 
         delete pSubMenu;
     }
@@ -483,17 +482,14 @@ void SAL_CALL NewMenuController::activate( const css::awt::MenuEvent& ) throw (R
         {
             const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
             sal_Bool bShowImages( rSettings.GetUseImagesInMenus() );
-            sal_Bool bHiContrast( rSettings.GetHighContrastMode() );
 
             PopupMenu* pVCLPopupMenu = (PopupMenu *)pPopupMenu->GetMenu();
 
-            if (( m_bShowImages != bShowImages ) ||
-                ( m_bHiContrast != bHiContrast ))
+            if ( m_bShowImages != bShowImages )
             {
                 m_bShowImages = bShowImages;
-                m_bHiContrast = bHiContrast;
 
-                setMenuImages( pVCLPopupMenu, m_bShowImages, m_bHiContrast );
+                setMenuImages( pVCLPopupMenu, m_bShowImages );
             }
 
             setAccelerators( pVCLPopupMenu );
@@ -560,7 +556,6 @@ void SAL_CALL NewMenuController::initialize( const Sequence< Any >& aArguments )
             const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
 
             m_bShowImages   = rSettings.GetUseImagesInMenus();
-            m_bHiContrast   = rSettings.GetHighContrastMode();
 
             m_bNewMenu      = m_aCommandURL.equalsAscii( ".uno:AddDirect" );
         }

@@ -171,8 +171,6 @@ void BmkMenu::Initialize()
     ::rtl::OUString aTargetFrame;
     ::rtl::OUString aImageId;
 
-    BOOL bIsHiContrastMode = rSettings.GetHighContrastMode();
-
     UINT32 i, nCount = aDynamicMenuEntries.getLength();
     for ( i = 0; i < nCount; ++i )
     {
@@ -192,7 +190,7 @@ void BmkMenu::Initialize()
             {
                 if ( aImageId.getLength() > 0 )
                 {
-                    Image aImage = GetImageFromURL( m_xFrame, aImageId, FALSE, bIsHiContrastMode );
+                    Image aImage = GetImageFromURL( m_xFrame, aImageId, FALSE );
                     if ( !!aImage )
                     {
                         bImageSet = sal_True;
@@ -202,7 +200,7 @@ void BmkMenu::Initialize()
 
                 if ( !bImageSet )
                 {
-                    Image aImage = GetImageFromURL( m_xFrame, aURL, FALSE, bIsHiContrastMode );
+                    Image aImage = GetImageFromURL( m_xFrame, aURL, FALSE );
                     if ( !aImage )
                         InsertItem( nId, aTitle );
                     else

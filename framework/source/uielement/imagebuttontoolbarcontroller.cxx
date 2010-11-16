@@ -136,9 +136,8 @@ ImageButtonToolbarController::ImageButtonToolbarController(
     ComplexToolbarController( rServiceManager, rFrame, pToolbar, nID, aCommand )
 {
     sal_Bool bBigImages( SvtMiscOptions().AreCurrentSymbolsLarge() );
-    sal_Bool bHiContrast( pToolbar->GetSettings().GetStyleSettings().GetHighContrastMode() );
 
-    Image aImage = AddonsOptions().GetImageFromURL( aCommand, bBigImages, bHiContrast, sal_True );
+    Image aImage = AddonsOptions().GetImageFromURL( aCommand, bBigImages, sal_True );
 
     // Height will be controlled by scaling according to button height
     m_pToolbar->SetItemImage( m_nID, aImage );

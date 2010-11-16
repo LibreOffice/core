@@ -142,25 +142,24 @@ static sal_Bool IsCorrectContext( const ::rtl::OUString& rModuleIdentifier, cons
 static Image RetrieveImage( Reference< com::sun::star::frame::XFrame >& rFrame,
                             const rtl::OUString& aImageId,
                             const rtl::OUString& aURL,
-                            BOOL bBigImage,
-                            BOOL bHiContrast )
+                            BOOL bBigImage )
 {
     Image aImage;
 
     if ( aImageId.getLength() > 0 )
     {
-        aImage = framework::AddonsOptions().GetImageFromURL( aImageId, bBigImage, bHiContrast );
+        aImage = framework::AddonsOptions().GetImageFromURL( aImageId, bBigImage );
         if ( !!aImage )
             return aImage;
         else
-            aImage = GetImageFromURL( rFrame, aImageId, bBigImage, bHiContrast );
+            aImage = GetImageFromURL( rFrame, aImageId, bBigImage );
         if ( !!aImage )
             return aImage;
     }
 
-    aImage = framework::AddonsOptions().GetImageFromURL( aURL, bBigImage, bHiContrast );
+    aImage = framework::AddonsOptions().GetImageFromURL( aURL, bBigImage );
     if ( !aImage )
-        aImage = GetImageFromURL( rFrame, aImageId, bBigImage, bHiContrast );
+        aImage = GetImageFromURL( rFrame, aImageId, bBigImage );
 
     return aImage;
 }
@@ -218,8 +217,7 @@ void AddonsToolBarManager::RefreshImages()
             m_pToolBar->SetItemImage( nId, RetrieveImage( m_xFrame,
                                                           aImageId,
                                                           aCommandURL,
-                                                          bBigImages,
-                                                          m_bIsHiContrast ));
+                                                          bBigImages ));
         }
     }
 }
@@ -298,7 +296,7 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
 
                 m_pToolBar->InsertItem( nId, aTitle );
 
-                Image aImage = RetrieveImage( m_xFrame, aImageId, aURL, !m_bSmallSymbols, m_bIsHiContrast );
+                Image aImage = RetrieveImage( m_xFrame, aImageId, aURL, !m_bSmallSymbols );
                 if ( !!aImage )
                     m_pToolBar->SetItemImage( nId, aImage );
 

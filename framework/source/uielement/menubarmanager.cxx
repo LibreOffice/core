@@ -188,13 +188,11 @@ const ::rtl::OUString aSpecialWindowCommand( RTL_CONSTASCII_USTRINGPARAM( ".uno:
 
 const ::rtl::OUString UNO_COMMAND( RTL_CONSTASCII_USTRINGPARAM( ".uno:" ));
 
-static sal_Int16 getImageTypeFromBools( sal_Bool bBig, sal_Bool bHighContrast )
+static sal_Int16 getImageTypeFromBools( sal_Bool bBig )
 {
     sal_Int16 n( 0 );
     if ( bBig )
         n |= ::com::sun::star::ui::ImageType::SIZE_LARGE;
-    if ( bHighContrast )
-        n |= ::com::sun::star::ui::ImageType::COLOR_HIGHCONTRAST;
     return n;
 }
 
@@ -458,7 +456,7 @@ throw (RuntimeException)
         return;
 
     sal_Int16 nImageType = sal_Int16();
-    sal_Int16 nCurrentImageType = getImageTypeFromBools( sal_False, m_bWasHiContrast );
+    sal_Int16 nCurrentImageType = getImageTypeFromBools( sal_False );
     if (( Event.aInfo >>= nImageType ) &&
         ( nImageType == nCurrentImageType ))
         RequestImages();
@@ -869,20 +867,16 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
              MenuManager::UpdateSpecialWindowMenu( pMenu,getServiceFactory(),m_aLock );
 
         // Check if some modes have changed so we have to update our menu images
-        sal_Bool bIsHiContrast = rSettings.GetHighContrastMode();
         sal_Int16 nSymbolsStyle = SvtMiscOptions().GetCurrentSymbolsStyle();
 
         if ( m_bRetrieveImages ||
-             m_bWasHiContrast != bIsHiContrast ||
              bShowMenuImages != m_bShowMenuImages ||
              nSymbolsStyle != m_nSymbolsStyle )
         {
-            // The mode changed so we have to replace all images
-            m_bWasHiContrast    = bIsHiContrast;
             m_bShowMenuImages   = bShowMenuImages;
             m_bRetrieveImages   = sal_False;
             m_nSymbolsStyle     = nSymbolsStyle;
-            MenuManager::FillMenuImages(m_xFrame,pMenu,bIsHiContrast,bShowMenuImages);
+            MenuManager::FillMenuImages(m_xFrame,pMenu,bShowMenuImages);
         }
 
         // Try to map commands to labels
@@ -1266,7 +1260,6 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
     m_xDispatchProvider = rDispatchProvider;
 
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-    m_bWasHiContrast    = rSettings.GetHighContrastMode();
     m_bShowMenuImages   = rSettings.GetUseImagesInMenus();
     m_bRetrieveImages   = sal_False;
 
@@ -1431,7 +1424,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                         if ( bItemShowMenuImages && !pPopup->GetItemImage( ITEMID_ADDONLIST ))
                         {
                             Reference< XFrame > xTemp( rFrame );
-                            Image aImage = GetImageFromURL( xTemp, aItemCommand, FALSE, m_bWasHiContrast );
+                            Image aImage = GetImageFromURL( xTemp, aItemCommand, FALSE );
                             if ( !!aImage )
                                    pPopup->SetItemImage( ITEMID_ADDONLIST, aImage );
                         }
@@ -1461,14 +1454,14 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                     if ( pMenuAttributes && pMenuAttributes->aImageId.getLength() > 0 )
                     {
                         // Retrieve image id from menu attributes
-                        aImage = GetImageFromURL( m_xFrame, aImageId, FALSE, m_bWasHiContrast );
+                        aImage = GetImageFromURL( m_xFrame, aImageId, FALSE );
                     }
 
                     if ( !aImage )
                     {
-                        aImage = GetImageFromURL( m_xFrame, aItemCommand, FALSE, m_bWasHiContrast );
+                        aImage = GetImageFromURL( m_xFrame, aItemCommand, FALSE );
                         if ( !aImage )
-                            aImage = AddonsOptions().GetImageFromURL( aItemCommand, FALSE, m_bWasHiContrast );
+                            aImage = AddonsOptions().GetImageFromURL( aItemCommand, FALSE );
                     }
 
                     if ( !!aImage )
@@ -2065,9 +2058,6 @@ void MenuBarManager::Init(const Reference< XFrame >& rFrame,AddonMenu* pAddonMen
     m_xPopupMenuControllerRegistration = Reference< ::com::sun::star::frame::XUIControllerRegistration >(
         getServiceFactory()->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.PopupMenuControllerFactory" ))),
         UNO_QUERY );
-
-    const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-    m_bWasHiContrast    = rSettings.GetHighContrastMode();
 
     Reference< XStatusListener > xStatusListener;
     Reference< XDispatch > xDispatch;

@@ -102,7 +102,7 @@ class MenuManager : public ThreadHelpBase           ,
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& getServiceFactory();
 
         static void UpdateSpecialWindowMenu( Menu* pMenu ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,IMutex& _rMutex);
-        static void FillMenuImages(::com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& xFrame,Menu* _pMenu,sal_Bool bIsHiContrast,sal_Bool bShowMenuImages);
+        static void FillMenuImages(::com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& xFrame,Menu* _pMenu,sal_Bool bShowMenuImages);
 
     protected:
         DECL_LINK( Highlight, Menu * );
@@ -144,7 +144,6 @@ class MenuManager : public ThreadHelpBase           ,
         sal_Bool                            m_bDeleteChildren;
         sal_Bool                            m_bActive;
         sal_Bool                            m_bIsBookmarkMenu;
-        sal_Bool                            m_bWasHiContrast;
         sal_Bool                            m_bShowMenuImages;
         ::rtl::OUString                     m_aMenuItemCommand;
         Menu*                               m_pVCLMenu;

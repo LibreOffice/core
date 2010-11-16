@@ -106,8 +106,7 @@ namespace framework
             void updateImagesPopupMenu( PopupMenu* pPopupMenu );
             void fillPopupMenu( com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >& rPopupMenu );
 
-            sal_Bool            m_bWasHiContrast : 1,
-                                m_bShowMenuImages : 1;
+            sal_Bool            m_bShowMenuImages : 1;
             PopupMenu*          m_pResPopupMenu;
             UrlToDispatchMap    m_aURLToDispatchMap;
     };

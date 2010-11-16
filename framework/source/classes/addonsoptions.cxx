@@ -269,7 +269,7 @@ class AddonsOptions_Impl : public ConfigItem
         const Sequence< Sequence< PropertyValue > >&    GetAddonsToolBarPart ( sal_uInt32 nIndex ) const ;
         const ::rtl::OUString                           GetAddonsToolbarResourceName( sal_uInt32 nIndex ) const;
         const Sequence< Sequence< PropertyValue > >&    GetAddonsHelpMenu    () const ;
-        Image                                           GetImageFromURL( const rtl::OUString& aURL, sal_Bool bBig, sal_Bool bHiContrast, sal_Bool bNoScale ) const;
+        Image                                           GetImageFromURL( const rtl::OUString& aURL, sal_Bool bBig, sal_Bool bNoScale ) const;
         const MergeMenuInstructionContainer&            GetMergeMenuInstructions() const;
         bool                                            GetMergeToolbarInstructions( const ::rtl::OUString& rToolbarName, MergeToolbarInstructionContainer& rToolbarInstructions ) const;
 
@@ -292,13 +292,9 @@ class AddonsOptions_Impl : public ConfigItem
         {
             Image   aImageSmall;
             Image   aImageBig;
-            Image   aImageSmallHC;
-            Image   aImageBigHC;
 
             Image   aImageSmallNoScale;
             Image   aImageBigNoScale;
-            Image   aImageSmallHCNoScale;
-            Image   aImageBigHCNoScale;
         };
 
         typedef std::hash_map< ::rtl::OUString, ImageEntry, OUStringHashCode, ::std::equal_to< ::rtl::OUString > > ImageManager;
@@ -607,27 +603,17 @@ bool AddonsOptions_Impl::GetMergeToolbarInstructions(
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-Image AddonsOptions_Impl::GetImageFromURL( const rtl::OUString& aURL, sal_Bool bBig, sal_Bool bHiContrast, sal_Bool bNoScale ) const
+Image AddonsOptions_Impl::GetImageFromURL( const rtl::OUString& aURL, sal_Bool bBig, sal_Bool bNoScale ) const
 {
     Image aImage;
 
     ImageManager::const_iterator pIter = m_aImageManager.find( aURL );
     if ( pIter != m_aImageManager.end() )
     {
-        if ( !bHiContrast  )
-        {
-            if ( bNoScale )
-                aImage = ( bBig ? pIter->second.aImageBigNoScale : pIter->second.aImageSmallNoScale );
-            if ( !aImage )
-                aImage = ( bBig ? pIter->second.aImageBig : pIter->second.aImageSmall );
-        }
-        else
-        {
-            if ( bNoScale )
-                aImage = ( bBig ? pIter->second.aImageBigHCNoScale : pIter->second.aImageSmallHCNoScale );
-            if ( !aImage )
-                aImage = ( bBig ? pIter->second.aImageBigHC : pIter->second.aImageSmallHC );
-        }
+        if ( bNoScale )
+            aImage = ( bBig ? pIter->second.aImageBigNoScale : pIter->second.aImageSmallNoScale );
+        if ( !aImage )
+            aImage = ( bBig ? pIter->second.aImageBig : pIter->second.aImageSmall );
     }
 
     return aImage;
@@ -1406,8 +1392,8 @@ void AddonsOptions_Impl::ReadImageFromURL( ImageSize nImageSize, const ::rtl::OU
 //*****************************************************************************************************************
 void AddonsOptions_Impl::ReadAndAssociateImages( const ::rtl::OUString& aURL, const ::rtl::OUString& aImageId )
 {
-    const int   MAX_NUM_IMAGES = 4;
-    const char* aExtArray[MAX_NUM_IMAGES] = { "_16", "_26", "_16h", "_26h" };
+    const int   MAX_NUM_IMAGES = 2;
+    const char* aExtArray[MAX_NUM_IMAGES] = { "_16", "_26" };
     const char* pBmpExt = ".bmp";
 
     if ( aImageId.getLength() == 0 )
@@ -1442,14 +1428,6 @@ void AddonsOptions_Impl::ReadAndAssociateImages( const ::rtl::OUString& aURL, co
                     aImageEntry.aImageBig            = aImage;
                     aImageEntry.aImageBigNoScale     = aImageNoScale;
                     break;
-                case 2:
-                    aImageEntry.aImageSmallHC        = aImage;
-                    aImageEntry.aImageSmallHCNoScale = aImageNoScale;
-                    break;
-                case 3:
-                    aImageEntry.aImageBigHC          = aImage;
-                    aImageEntry.aImageBigHCNoScale   = aImageNoScale;
-                    break;
             }
         }
     }
@@ -1482,8 +1460,7 @@ AddonsOptions_Impl::ImageEntry* AddonsOptions_Impl::ReadImageData( const ::rtl::
             if (( aPropertyData[i] >>= aImageDataSeq ) &&
                 aImageDataSeq.getLength() > 0 &&
                 ( CreateImageFromSequence( aImage,
-                                        (( i == OFFSET_IMAGES_BIG ) ||
-                                        ( i == OFFSET_IMAGES_BIGHC )),
+                                        ( i == OFFSET_IMAGES_BIG ),
                                         aImageDataSeq )) )
             {
                 if ( !pEntry )
@@ -1493,10 +1470,6 @@ AddonsOptions_Impl::ImageEntry* AddonsOptions_Impl::ReadImageData( const ::rtl::
                     pEntry->aImageSmall = aImage;
                 else if ( i == OFFSET_IMAGES_BIG )
                     pEntry->aImageBig = aImage;
-                else if ( i == OFFSET_IMAGES_SMALLHC )
-                    pEntry->aImageSmallHC = aImage;
-                else
-                    pEntry->aImageBigHC = aImage;
             }
         }
         else
@@ -1523,20 +1496,10 @@ AddonsOptions_Impl::ImageEntry* AddonsOptions_Impl::ReadImageData( const ::rtl::
                         pEntry->aImageSmall = aImage;
                         pEntry->aImageSmallNoScale = aImageNoScale;
                     }
-                    else if ( i == OFFSET_IMAGES_BIG_URL && !pEntry->aImageBig )
+                    else if ( !pEntry->aImageBig )
                     {
                         pEntry->aImageBig = aImage;
                         pEntry->aImageBigNoScale = aImageNoScale;
-                    }
-                    else if ( i == OFFSET_IMAGES_SMALLHC_URL && !pEntry->aImageSmallHC )
-                    {
-                        pEntry->aImageSmallHC = aImage;
-                        pEntry->aImageSmallHCNoScale = aImageNoScale;
-                    }
-                    else if ( !pEntry->aImageBigHC )
-                    {
-                        pEntry->aImageBigHC = aImage;
-                        pEntry->aImageBigHCNoScale = aImageNoScale;
                     }
                 }
             }
@@ -1806,18 +1769,18 @@ bool AddonsOptions::GetMergeToolbarInstructions(
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-Image AddonsOptions::GetImageFromURL( const rtl::OUString& aURL, sal_Bool bBig, sal_Bool bHiContrast, sal_Bool bNoScale ) const
+Image AddonsOptions::GetImageFromURL( const rtl::OUString& aURL, sal_Bool bBig, sal_Bool bNoScale ) const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->GetImageFromURL( aURL, bBig, bHiContrast, bNoScale );
+    return m_pDataContainer->GetImageFromURL( aURL, bBig, bNoScale );
 }
 
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-Image AddonsOptions::GetImageFromURL( const rtl::OUString& aURL, sal_Bool bBig, sal_Bool bHiContrast ) const
+Image AddonsOptions::GetImageFromURL( const rtl::OUString& aURL, sal_Bool bBig  ) const
 {
-    return GetImageFromURL( aURL, bBig, bHiContrast, sal_False );
+    return GetImageFromURL( aURL, bBig, sal_False );
 }
 
 //*****************************************************************************************************************
