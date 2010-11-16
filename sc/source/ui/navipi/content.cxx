@@ -128,7 +128,6 @@ ScDocShell* ScContentTree::GetManualOrCurrent()
 ScContentTree::ScContentTree( Window* pParent, const ResId& rResId ) :
     SvTreeListBox   ( pParent, rResId ),
     aEntryImages    ( ScResId( RID_IMAGELIST_NAVCONT ) ),
-    aHCEntryImages  ( ScResId( RID_IMAGELIST_H_NAVCONT ) ),
     nRootType       ( SC_CONTENT_ROOT ),
     bHiddenDoc      ( FALSE ),
     pHiddenDocument ( NULL )

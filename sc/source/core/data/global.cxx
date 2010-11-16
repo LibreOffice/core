@@ -125,7 +125,6 @@ SvxBrushItem*   ScGlobal::pEmbeddedBrushItem = NULL;
 SvxBrushItem*   ScGlobal::pProtectedBrushItem = NULL;
 
 ImageList*      ScGlobal::pOutlineBitmaps = NULL;
-ImageList*      ScGlobal::pOutlineBitmapsHC = NULL;
 
 ScFunctionList* ScGlobal::pStarCalcFunctionList = NULL;
 ScFunctionMgr*  ScGlobal::pStarCalcFunctionMgr  = NULL;
@@ -523,11 +522,11 @@ const String& ScGlobal::GetEmptyString()
     return *pEmptyString;
 }
 
-ImageList* ScGlobal::GetOutlineSymbols( bool bHC )
+ImageList* ScGlobal::GetOutlineSymbols()
 {
-    ImageList*& rpImageList = bHC ? pOutlineBitmapsHC : pOutlineBitmaps;
+    ImageList*& rpImageList = pOutlineBitmaps;
     if( !rpImageList )
-        rpImageList = new ImageList( ScResId( bHC ? RID_OUTLINEBITMAPS_H : RID_OUTLINEBITMAPS ) );
+        rpImageList = new ImageList( ScResId( RID_OUTLINEBITMAPS ) );
     return rpImageList;
 }
 
@@ -659,7 +658,6 @@ void ScGlobal::Clear()
     DELETEZ(pEmbeddedBrushItem);
     DELETEZ(pProtectedBrushItem);
     DELETEZ(pOutlineBitmaps);
-    DELETEZ(pOutlineBitmapsHC);
 //  DELETEZ(pAnchorBitmap);
 //  DELETEZ(pGrayAnchorBitmap);
     DELETEZ(pEnglishFormatter);

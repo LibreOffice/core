@@ -45,9 +45,6 @@
 #define STR_QHLP_SCEN_LISTBOX   15
 #define STR_QHLP_SCEN_COMMENT   16
 #define IL_CMD                  17
-#define ILH_CMD                 18
-
-
 
 #define IID_AREAS       1
 #define IID_DBAREAS     2

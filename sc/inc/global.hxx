@@ -549,7 +549,6 @@ class ScGlobal
     static SvxBrushItem*    pProtectedBrushItem;
 
     static ImageList*       pOutlineBitmaps;
-    static ImageList*       pOutlineBitmapsHC;
 
     static ScFunctionList*  pStarCalcFunctionList;
     static ScFunctionMgr*   pStarCalcFunctionMgr;
@@ -633,9 +632,8 @@ public:
     SC_DLLPUBLIC    static const String&    GetEmptyString();
     static const String&    GetScDocString();
 
-    /** Returns the specified image list with outline symbols.
-        @param bHC  false = standard symbols; true = high contrast symbols. */
-    static ImageList*       GetOutlineSymbols( bool bHC );
+    /** Returns the specified image list with outline symbols. */
+    static ImageList*       GetOutlineSymbols();
 
     static bool             HasStarCalcFunctionList();
     static ScFunctionList*  GetStarCalcFunctionList();

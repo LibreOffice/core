@@ -71,9 +71,6 @@
 #define FT_SCALEPAGEHEIGHT  53
 #define FT_SCALEPAGENUM     54
 
-#define IMG_LEFTRIGHT_H     41
-#define IMG_TOPDOWN_H       42
-
 // List box entries "Scaling mode"
 #define SC_TPTABLE_SCALE_PERCENT    0
 #define SC_TPTABLE_SCALE_TO         1

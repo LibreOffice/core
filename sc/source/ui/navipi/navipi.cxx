@@ -515,23 +515,19 @@ void CommandToolBox::UpdateButtons()
         CheckItem( IID_CHANGEROOT, bRootSet );
     }
 
-    BOOL bHC = GetSettings().GetStyleSettings().GetHighContrastMode();
-
     USHORT nImageId = 0;
     switch ( rDlg.nDropMode )
     {
-        case SC_DROPMODE_URL:   nImageId = bHC ? RID_IMG_H_DROP_URL  : RID_IMG_DROP_URL;  break;
-        case SC_DROPMODE_LINK:  nImageId = bHC ? RID_IMG_H_DROP_LINK : RID_IMG_DROP_LINK; break;
-        case SC_DROPMODE_COPY:  nImageId = bHC ? RID_IMG_H_DROP_COPY : RID_IMG_DROP_COPY; break;
+        case SC_DROPMODE_URL:   nImageId = RID_IMG_DROP_URL;  break;
+        case SC_DROPMODE_LINK:  nImageId = RID_IMG_DROP_LINK; break;
+        case SC_DROPMODE_COPY:  nImageId = RID_IMG_DROP_COPY; break;
     }
     SetItemImage( IID_DROPMODE, Image(ScResId(nImageId)) );
 }
 
 void CommandToolBox::InitImageList()
 {
-    BOOL bHC = GetSettings().GetStyleSettings().GetHighContrastMode();
-
-    ImageList& rImgLst = bHC ? rDlg.aCmdImageListH : rDlg.aCmdImageList;
+    ImageList& rImgLst = rDlg.aCmdImageList;
 
     USHORT nCount = GetItemCount();
     for (USHORT i = 0; i < nCount; i++)
@@ -660,7 +656,6 @@ ScNavigatorDlg::ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, Win
         Window( pParent, ScResId(RID_SCDLG_NAVIGATOR) ),
         rBindings   ( *pB ),                                // is used in CommandToolBox ctor
         aCmdImageList( ScResId( IL_CMD ) ),
-        aCmdImageListH( ScResId( ILH_CMD ) ),
         aFtCol      ( this, ScResId( FT_COL ) ),
         aEdCol      ( this, ScResId( ED_COL ) ),
         aFtRow      ( this, ScResId( FT_ROW ) ),
