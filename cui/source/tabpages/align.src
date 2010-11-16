@@ -222,18 +222,6 @@ TabPage RID_SVXPAGE_ALIGNMENT
         };
         IdCount = { 3 ; };
     };
-    ImageList IL_LOCK_BMPS_HC
-    {
-        Prefix = "loh";
-        MaskColor = IL_LOCK_MCOL ;
-        IdList =
-        {
-            IID_BOTTOMLOCK ;
-            IID_TOPLOCK ;
-            IID_CELLLOCK ;
-        };
-        IdCount = { 3 ; };
-    };
     String STR_BOTTOMLOCK
     {
         Text [ en-US ] = "Text Extension From Lower Cell Border" ;

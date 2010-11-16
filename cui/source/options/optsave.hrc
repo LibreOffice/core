@@ -59,7 +59,6 @@
 #define FI_ODF_WARNING          50
 
 #define IMG_ODF_WARNING         1
-#define IMG_ODF_WARNING_HC      2
 
 #define APP_WRITER              0
 #define APP_WRITER_WEB          1

@@ -227,9 +227,7 @@ SfxSaveTabPage::SfxSaveTabPage( Window* pParent, const SfxItemSet& rCoreSet ) :
     pImpl               ( new SvxSaveTabPage_Impl )
 
 {
-    sal_Bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
-    aODFWarningFI.SetImage(
-        Image( CUI_RES( bHighContrast ? IMG_ODF_WARNING_HC : IMG_ODF_WARNING ) ) );
+    aODFWarningFI.SetImage( Image( CUI_RES( IMG_ODF_WARNING )));
 
     FreeResource();
 

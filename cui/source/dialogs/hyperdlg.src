@@ -811,27 +811,3 @@ Image RID_SVXBMP_HLDOCNTP
     ImageBitmap = Bitmap { File = "hldocntp.bmp" ; };
     MASKCOLOR
 };
-
-Image RID_SVXBMP_HLINETTP_H
-{
-    ImageBitmap = Bitmap { File = "hlinettp_h.bmp" ; };
-    MASKCOLOR
-};
-
-Image RID_SVXBMP_HLMAILTP_H
-{
-    ImageBitmap = Bitmap { File = "hlmailtp_h.bmp" ; };
-    MASKCOLOR
-};
-
-Image RID_SVXBMP_HLDOCTP_H
-{
-    ImageBitmap = Bitmap { File = "hldoctp_h.bmp" ; };
-    MASKCOLOR
-};
-
-Image RID_SVXBMP_HLDOCNTP_H
-{
-    ImageBitmap = Bitmap { File = "hldocntp_h.bmp" ; };
-    MASKCOLOR
-};
