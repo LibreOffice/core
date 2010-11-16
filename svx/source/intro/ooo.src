@@ -162,20 +162,6 @@ ImageList RID_SVTOOLS_IMAGELIST_SMALL
     X_IMAGE_LIST
 };
 
-ImageList RID_SVTOOLS_IMAGELIST_BIG_HIGHCONTRAST
-{
-    Prefix = "lxh";
-    MASK_COL2
-    X_IMAGE_LIST
-};
-
-ImageList RID_SVTOOLS_IMAGELIST_SMALL_HIGHCONTRAST
-{
-    Prefix = "sxh";
-    MASK_COL2
-    X_IMAGE_LIST
-};
-
 #define MASK_COL    MaskColor = Color { Red = 0xFF00; Green = 0x0000; Blue = 0xFF00; } ;
 #define IMGLST_IDLST \
     IdList = {                      \
