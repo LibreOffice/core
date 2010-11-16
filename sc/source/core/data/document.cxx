@@ -105,6 +105,18 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::sheet::TablePageBreakData;
 using ::std::set;
 
+// The constant parameters to CopyBlockFromClip
+struct ScCopyBlockFromClipParams
+{
+    ScDocument* pRefUndoDoc;
+    ScDocument* pClipDoc;
+    USHORT      nInsFlag;
+    SCTAB       nTabStart;
+    SCTAB       nTabEnd;
+    BOOL        bAsLink;
+    BOOL        bSkipAttrForEmpty;
+};
+
 struct ScDefaultAttr
 {
     const ScPatternAttr*    pAttr;
@@ -1983,7 +1995,6 @@ void ScDocument::BroadcastFromClip( SCCOL nCol1, SCROW nRow1,
                     pTab[i]->BroadcastInArea( nCol1, nRow1, nCol2, nRow2 );
     }
 }
-
 
 void ScDocument::CopyBlockFromClip( SCCOL nCol1, SCROW nRow1,
                                     SCCOL nCol2, SCROW nRow2,

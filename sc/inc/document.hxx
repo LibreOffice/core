@@ -147,6 +147,7 @@ struct ScSetStringParam;
 class ScDocRowHeightUpdater;
 struct ScColWidthParam;
 class ScDPTableDataCache;
+struct ScCopyBlockFromClipParams;
 
 namespace com { namespace sun { namespace star {
     namespace lang {
@@ -196,18 +197,6 @@ struct ScDocStat
     SCTAB   nTableCount;
     ULONG   nCellCount;
     USHORT  nPageCount;
-};
-
-// The constant parameters to CopyBlockFromClip
-struct ScCopyBlockFromClipParams
-{
-    ScDocument* pRefUndoDoc;
-    ScDocument* pClipDoc;
-    USHORT      nInsFlag;
-    SCTAB       nTabStart;
-    SCTAB       nTabEnd;
-    BOOL        bAsLink;
-    BOOL        bSkipAttrForEmpty;
 };
 
 // -----------------------------------------------------------------------
