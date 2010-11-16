@@ -650,7 +650,7 @@ void SfxSplitWindow::InsertWindow( SfxDockingWindow* pDockWin, const Size& rSize
             }
         }
     }
-    if (nInsertPos == nCount && nLastWindowIdx != nCount - 1)
+    if (nCount != 0 && nInsertPos == nCount && nLastWindowIdx != nCount - 1)
     {
         nInsertPos = nLastWindowIdx + 1;    // ignore all non-windows after the last window
     }
