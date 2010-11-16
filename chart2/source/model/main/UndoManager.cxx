@@ -27,6 +27,7 @@
 #include "precompiled_chart2.hxx"
 
 #include "UndoManager.hxx"
+#include "ChartViewHelper.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -64,6 +65,7 @@ namespace chart
     using ::com::sun::star::util::NotLockedException;
     using ::com::sun::star::lang::NoSupportException;
     using ::com::sun::star::util::XModifyListener;
+    using ::com::sun::star::frame::XModel;
     /** === end UNO using === **/
 
     namespace impl
@@ -276,6 +278,8 @@ namespace chart
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         m_pImpl->getUndoHelper().undo( aGuard );
+
+        ChartViewHelper::setViewToDirtyState( Reference< XModel >( getParent(), UNO_QUERY ) );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -283,6 +287,8 @@ namespace chart
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         m_pImpl->getUndoHelper().redo( aGuard );
+
+        ChartViewHelper::setViewToDirtyState( Reference< XModel >( getParent(), UNO_QUERY ) );
     }
 
     //------------------------------------------------------------------------------------------------------------------
