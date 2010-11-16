@@ -243,6 +243,7 @@ BEGIN
     @logfileinfo = ();
     @errorlogfileinfo = ();
     @globallogfileinfo = ();
+    $ignore_error_in_logfile = 0;
     $exitlog = "";
     $globalinfo_copied = 0;
     $quiet = 0;

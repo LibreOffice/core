@@ -128,6 +128,7 @@ sub set_global_environment_variables
     if ( $ENV{'SOLAR_JAVA'} ) { $installer::globals::solarjavaset = 1; }
     if ( $ENV{'RPM'} ) { $installer::globals::rpm = $ENV{'RPM'}; }
     if ( $ENV{'DONTCOMPRESS'} ) { $installer::globals::solarisdontcompress = 1; }
+    if ( $ENV{'IGNORE_ERROR_IN_LOGFILE'} ) { $installer::globals::ignore_error_in_logfile = 1; }
     if (( $ENV{'DISABLE_STRIP'} ) && ( $ENV{'DISABLE_STRIP'} ne '' )) { $installer::globals::strip = 0; }
 
     if ( $installer::globals::localinstalldir ) { $installer::globals::localinstalldirset = 1; }
