@@ -26,6 +26,9 @@
 
 package complex.sfx2.undo;
 
+import com.sun.star.chart2.XAxis;
+import com.sun.star.chart2.XCoordinateSystem;
+import com.sun.star.chart2.XCoordinateSystemContainer;
 import com.sun.star.awt.Size;
 import com.sun.star.beans.NamedValue;
 import com.sun.star.beans.XPropertySet;
@@ -127,7 +130,9 @@ public class ChartDocumentTest implements DocumentTest
 
     public void initializeDocument() throws com.sun.star.uno.Exception
     {
-        // TODO?
+        final XPropertySet wallProperties = impl_getWallProperties();
+        wallProperties.setPropertyValue( "FillStyle", com.sun.star.drawing.FillStyle.SOLID );
+        wallProperties.setPropertyValue( "FillColor", 0x00FFFFFF );
     }
 
     public void closeDocument()
@@ -135,32 +140,72 @@ public class ChartDocumentTest implements DocumentTest
         m_textDocument.close();
     }
 
-    public void doSingleModification() throws com.sun.star.uno.Exception
+    private XPropertySet impl_getWallProperties()
     {
         final XChartDocument chartDoc = UnoRuntime.queryInterface( XChartDocument.class, m_chartDocument.getDocument() );
         final XDiagram diagram = chartDoc.getFirstDiagram();
         final XPropertySet wallProperties = diagram.getWall();
+        return wallProperties;
+    }
 
-        // simulate an Undo action, as long as the chart implementation doesn't add Undo actions itself
+    private XPropertySet impl_getYAxisProperties()
+    {
+        XPropertySet axisProperties = null;
+        try
+        {
+            final XChartDocument chartDoc = UnoRuntime.queryInterface( XChartDocument.class, m_chartDocument.getDocument() );
+            final XDiagram diagram = chartDoc.getFirstDiagram();
+            final XCoordinateSystemContainer coordContainer = UnoRuntime.queryInterface( XCoordinateSystemContainer.class, diagram );
+            final XCoordinateSystem[] coordSystems = coordContainer.getCoordinateSystems();
+            final XCoordinateSystem coordSystem = coordSystems[0];
+            final XAxis primaryYAxis = coordSystem.getAxisByDimension( 1, 0 );
+            axisProperties = UnoRuntime.queryInterface( XPropertySet.class, primaryYAxis );
+        }
+        catch ( Exception ex )
+        {
+            fail( "internal error: could not retrieve primary Y axis properties" );
+        }
+        return axisProperties;
+    }
+
+    private XUndoManager impl_getUndoManager()
+    {
         final XUndoManagerSupplier undoManagerSupp = UnoRuntime.queryInterface( XUndoManagerSupplier.class, m_chartDocument.getDocument() );
         final XUndoManager undoManager = undoManagerSupp.getUndoManager();
+        return undoManager;
+    }
+
+    public void doSingleModification() throws com.sun.star.uno.Exception
+    {
+        final XPropertySet wallProperties = impl_getWallProperties();
+
+        // simulate an Undo action, as long as the chart implementation doesn't add Undo actions itself
+        final XUndoManager undoManager = impl_getUndoManager();
         undoManager.addUndoAction( new PropertyUndoAction( wallProperties, "FillColor", 0xCCFF44 ) );
+            // (the UndoAction will actually set the property value)
     }
 
     public void verifyInitialDocumentState() throws com.sun.star.uno.Exception
     {
-        // TODO
+        final XPropertySet wallProperties = impl_getWallProperties();
+        assertEquals( 0x00FFFFFF, ((Integer)wallProperties.getPropertyValue( "FillColor" )).intValue() );
     }
 
     public void verifySingleModificationDocumentState() throws com.sun.star.uno.Exception
     {
-        // TODO
+        final XPropertySet wallProperties = impl_getWallProperties();
+        assertEquals( 0xCCFF44, ((Integer)wallProperties.getPropertyValue( "FillColor" )).intValue() );
     }
 
     public int doMultipleModifications() throws com.sun.star.uno.Exception
     {
-        // TODO
-        return 0;
+        final XPropertySet axisProperties = impl_getYAxisProperties();
+
+        final XUndoManager undoManager = impl_getUndoManager();
+        undoManager.addUndoAction( new PropertyUndoAction( axisProperties, "LineWidth", 300 ) );
+        undoManager.addUndoAction( new PropertyUndoAction( axisProperties, "LineColor", 0x000000 ) );
+
+        return 2;
     }
 
     public OfficeDocument getDocument()

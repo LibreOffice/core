@@ -119,7 +119,7 @@ public class UndoManager
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-//    @Test
+    @Test
     public void checkWriterUndo() throws Exception
     {
         m_currentTestCase = new WriterDocumentTest( getORB() );
@@ -151,7 +151,7 @@ public class UndoManager
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-//    @Test
+    @Test
     public void checkChartUndo() throws Exception
     {
         m_currentTestCase = new ChartDocumentTest( getORB() );
@@ -239,7 +239,7 @@ public class UndoManager
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-//    @Test
+    @Test
     public void checkSerialization() throws com.sun.star.uno.Exception, InterruptedException
     {
         System.out.println( "testing: request serialization" );
@@ -299,6 +299,8 @@ public class UndoManager
             m_currentTestCase.closeDocument();
         else if ( m_currentDocument != null )
             m_currentDocument.close();
+        m_currentTestCase = null;
+        m_currentDocument = null;
         m_callbackFactory.dispose();
     }
 
@@ -647,28 +649,29 @@ public class UndoManager
         m_undoListener = new UndoListener();
         undoManager.addUndoManagerListener( m_undoListener );
 
-        impl_testSingleModification( m_currentTestCase, undoManager );
-        impl_testMultipleModifications( m_currentTestCase, undoManager );
-        impl_testCustomUndoActions( m_currentTestCase, undoManager );
-        impl_testLocking( m_currentTestCase, undoManager );
+        impl_testSingleModification( undoManager );
+        impl_testMultipleModifications( undoManager );
+        impl_testCustomUndoActions( undoManager );
+        impl_testLocking( undoManager );
         impl_testNestedContexts( undoManager );
-        impl_testErrorHandling( m_currentTestCase, undoManager );
+        impl_testErrorHandling( undoManager );
         impl_testContextHandling( undoManager );
         impl_testStackHandling( undoManager );
         impl_testClearance( undoManager );
         impl_testHiddenContexts( undoManager );
 
         // close the document, ensure the Undo manager listener gets notified
-        m_currentDocument.close();
+        m_currentTestCase.closeDocument();
+        m_currentTestCase = null;
         m_currentDocument = null;
         assertTrue( "document is closed, but the UndoManagerListener has not been notified of the disposal", m_undoListener.isDisposed() );
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    private void impl_testSingleModification( final DocumentTest i_test, final XUndoManager i_undoManager ) throws com.sun.star.uno.Exception
+    private void impl_testSingleModification( final XUndoManager i_undoManager ) throws com.sun.star.uno.Exception
     {
-        i_test.doSingleModification();
-        i_test.verifySingleModificationDocumentState();
+        m_currentTestCase.doSingleModification();
+        m_currentTestCase.verifySingleModificationDocumentState();
 
         // undo the modification, ensure the listener got the proper notifications
         assertEquals( "We did not yet do a undo!", 0, m_undoListener.getUndoActionCount() );
@@ -677,24 +680,24 @@ public class UndoManager
             1, m_undoListener.getUndoActionCount() );
 
         // verify the document is in its initial state, again
-        i_test.verifyInitialDocumentState();
+        m_currentTestCase.verifyInitialDocumentState();
 
         // redo the modification, ensure the listener got the proper notifications
         assertEquals( "did not yet do a redo!", 0, m_undoListener.getRedoActionCount() );
         i_undoManager.redo();
         assertEquals( "did a redo, but got no notification of it!", 1, m_undoListener.getRedoActionCount() );
         // ensure the document is in the proper state, again
-        i_test.verifySingleModificationDocumentState();
+        m_currentTestCase.verifySingleModificationDocumentState();
 
         // now do an Undo via the UI (aka the dispatch API), and see if this works, and notifies the listener as
         // expected
-        i_test.getDocument().getCurrentView().dispatch( ".uno:Undo" );
-        i_test.verifyInitialDocumentState();
+        m_currentTestCase.getDocument().getCurrentView().dispatch( ".uno:Undo" );
+        m_currentTestCase.verifyInitialDocumentState();
         assertEquals( "UI-Undo does not notify the listener", 2, m_undoListener.getUndoActionCount() );
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    private void impl_testMultipleModifications( final DocumentTest i_test, final XUndoManager i_undoManager ) throws com.sun.star.uno.Exception
+    private void impl_testMultipleModifications( final XUndoManager i_undoManager ) throws com.sun.star.uno.Exception
     {
         m_undoListener.reset();
         assertEquals( "unexpected initial undo context depth", 0, m_undoListener.getCurrentUndoContextDepth() );
@@ -704,7 +707,7 @@ public class UndoManager
         assertEquals( "entering an Undo context has not been notified properly",
             "Batch Changes", m_undoListener.getCurrentUndoContextTitle() );
 
-        final int modifications = i_test.doMultipleModifications();
+        final int modifications = m_currentTestCase.doMultipleModifications();
         assertEquals( "unexpected number of undo actions while doing batch changes to the document",
             modifications, m_undoListener.getUndoActionsAdded() );
         assertEquals( "seems the document operations touched the undo context depth",
@@ -718,11 +721,11 @@ public class UndoManager
 
         i_undoManager.undo();
         assertEquals( "Just did an undo - the listener should have been notified", 1, m_undoListener.getUndoActionCount() );
-        i_test.verifyInitialDocumentState();
+        m_currentTestCase.verifyInitialDocumentState();
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    private void impl_testCustomUndoActions( final DocumentTest i_test, final XUndoManager i_undoManager ) throws com.sun.star.uno.Exception
+    private void impl_testCustomUndoActions( final XUndoManager i_undoManager ) throws com.sun.star.uno.Exception
     {
         i_undoManager.clear();
         m_undoListener.reset();
@@ -767,7 +770,7 @@ public class UndoManager
             new String[]{action1.getTitle()}, i_undoManager.getAllUndoActionTitles() );
 
         // undo the second action, via UI dispatches
-        i_test.getDocument().getCurrentView().dispatch( ".uno:Undo" );
+        m_currentTestCase.getDocument().getCurrentView().dispatch( ".uno:Undo" );
         assertEquals( "improper action title notified during UI Undo", action1.getTitle(), m_undoListener.getMostRecentlyUndoneTitle() );
         assertTrue( "nested custom undo action has not been undone as expected", action1.undoCalled() );
         assertArrayEquals( "unexpected Redo descriptions after undoing the second custom action",
@@ -781,7 +784,7 @@ public class UndoManager
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    private void impl_testLocking( final DocumentTest i_test, final XUndoManager i_undoManager ) throws com.sun.star.uno.Exception
+    private void impl_testLocking( final XUndoManager i_undoManager ) throws com.sun.star.uno.Exception
     {
         i_undoManager.reset();
         m_undoListener.reset();
@@ -790,7 +793,7 @@ public class UndoManager
         assertFalse( "unexpected initial locking state", i_undoManager.isLocked() );
         i_undoManager.lock();
         assertTrue( "just locked the manager, why does it lie?", i_undoManager.isLocked() );
-        i_test.doSingleModification();
+        m_currentTestCase.doSingleModification();
         assertEquals( "when the Undo manager is locked, no implicit additions should happen",
             0, m_undoListener.getUndoActionsAdded() );
         i_undoManager.unlock();
@@ -909,7 +912,7 @@ public class UndoManager
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    private void impl_testErrorHandling( final DocumentTest i_test, final XUndoManager i_undoManager ) throws com.sun.star.uno.Exception
+    private void impl_testErrorHandling( final XUndoManager i_undoManager ) throws com.sun.star.uno.Exception
     {
         i_undoManager.reset();
         m_undoListener.reset();
@@ -994,12 +997,12 @@ public class UndoManager
                     if ( doByAPI )
                         i_undoManager.undo();
                     else
-                        i_test.getDocument().getCurrentView().dispatch( ".uno:Undo" );
+                        m_currentTestCase.getDocument().getCurrentView().dispatch( ".uno:Undo" );
                 else
                     if ( doByAPI )
                         i_undoManager.redo();
                     else
-                        i_test.getDocument().getCurrentView().dispatch( ".uno:Redo" );
+                        m_currentTestCase.getDocument().getCurrentView().dispatch( ".uno:Redo" );
             }
             catch ( UndoFailedException e )
             {
