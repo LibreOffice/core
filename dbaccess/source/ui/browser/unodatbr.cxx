@@ -1980,12 +1980,12 @@ void SbaTableQueryBrowser::implAddDatasource(const String& _rDbName, Image& _rDb
 
     ImageProvider aImageProvider;
     if (!_rQueryImage)
-        _rQueryImage = aImageProvider.getFolderImage( DatabaseObject::QUERY, isHiContrast() );
+        _rQueryImage = aImageProvider.getFolderImage( DatabaseObject::QUERY );
     if (!_rTableImage)
-        _rTableImage = aImageProvider.getFolderImage( DatabaseObject::TABLE, isHiContrast() );
+        _rTableImage = aImageProvider.getFolderImage( DatabaseObject::TABLE );
 
     if (!_rDbImage)
-        _rDbImage = aImageProvider.getDatabaseImage( isHiContrast() );
+        _rDbImage = aImageProvider.getDatabaseImage();
 
     // add the entry for the data source
     // special handling for data sources denoted by URLs - we do not want to display this ugly URL, do we?
@@ -2077,8 +2077,8 @@ SvLBoxEntry* SbaTableQueryBrowser::implAppendEntry( SvLBoxEntry* _pParent, const
 {
     ::std::auto_ptr< ImageProvider > pImageProvider( getImageProviderFor( _pParent ) );
 
-    Image aImage, aImageHC;
-    pImageProvider->getImages( _rName, getDatabaseObjectType( _eEntryType ), aImage, aImageHC );
+    Image aImage;
+    pImageProvider->getImages( _rName, getDatabaseObjectType( _eEntryType ), aImage );
 
     SvLBoxEntry* pNewEntry = m_pTreeView->getListBox().InsertEntry( _rName, _pParent, _eEntryType == etQueryContainer , LIST_APPEND, _pUserData );
 
@@ -3566,14 +3566,6 @@ void SbaTableQueryBrowser::clearGridColumns(const Reference< XNameContainer >& _
         _xColContainer->removeByName(*pIter);
         ::comphelper::disposeComponent(xColumn);
     }
-}
-// -----------------------------------------------------------------------------
-sal_Bool SbaTableQueryBrowser::isHiContrast() const
-{
-    sal_Bool bRet = sal_False;
-    if ( m_pTreeView )
-        bRet = m_pTreeView->getListBox().GetSettings().GetStyleSettings().GetHighContrastMode();
-    return bRet;
 }
 // -----------------------------------------------------------------------------
 void SbaTableQueryBrowser::loadMenu(const Reference< XFrame >& _xFrame)

@@ -246,7 +246,7 @@ OWizTypeSelect::OWizTypeSelect( Window* pParent, SvStream* _pStream )
     DBG_CTOR(OWizTypeSelect,NULL);
     m_lbColumnNames.SetSelectHdl(LINK(this,OWizTypeSelect,ColumnSelectHdl));
 
-    ModuleRes aModuleRes(isHiContrast(&m_lbColumnNames) ? IMG_JOINS_H : IMG_JOINS);
+    ModuleRes aModuleRes(IMG_JOINS);
     ImageList aImageList(aModuleRes);
     m_imgPKey = aImageList.GetImage(IMG_PRIMARY_KEY);
 

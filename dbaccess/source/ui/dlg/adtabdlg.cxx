@@ -298,7 +298,7 @@ void QueryListFacade::updateTableObjectList( bool /*_bAllowViews*/ )
     try
     {
         ImageProvider aImageProvider( m_xConnection );
-        Image aQueryImage( aImageProvider.getDefaultImage( DatabaseObject::QUERY, false ) );
+        Image aQueryImage( aImageProvider.getDefaultImage( DatabaseObject::QUERY ) );
 
         m_rQueryList.SetDefaultExpandedEntryBmp( aQueryImage );
         m_rQueryList.SetDefaultCollapsedEntryBmp( aQueryImage );

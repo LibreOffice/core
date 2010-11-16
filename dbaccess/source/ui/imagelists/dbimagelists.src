@@ -63,13 +63,6 @@ ImageList IMG_INDEX_DLG_LC
     IL_TOOL_2 ;
 };
 
-ImageList IMG_INDEX_DLG_LCH
-{
-    MASKCOLOR;
-    prefix = "lch";
-    IL_TOOL_2 ;
-};
-
 Image IMG_FORMFOLDER_TREE_L
 {
     ImageBitmap = Bitmap { File = "forms_32"; };

@@ -224,25 +224,21 @@ void SbaTableQueryBrowser::notifyHiContrastChanged()
             ::std::auto_ptr< ImageProvider > pImageProvider( getImageProviderFor( pEntryLoop ) );
 
             // the images for this entry
-            Image aImage, aImageHC;
+            Image aImage;
             if ( pData->eType == etDatasource )
-            {
-                aImage = pImageProvider->getDatabaseImage( false );
-                aImageHC = pImageProvider->getDatabaseImage( true );
-            }
+                aImage = pImageProvider->getDatabaseImage();
             else
             {
                 bool bIsFolder = !isObject( pData->eType );
                 if ( bIsFolder )
                 {
                     sal_Int32 nObjectType( getDatabaseObjectType( pData->eType ) );
-                    aImage = pImageProvider->getFolderImage( nObjectType, false );
-                    aImageHC = pImageProvider->getFolderImage( nObjectType, true );
+                    aImage = pImageProvider->getFolderImage( nObjectType );
                 }
                 else
                 {
                     sal_Int32 nObjectType( getDatabaseObjectType( pData->eType ) );
-                    pImageProvider->getImages( GetEntryText( pEntryLoop ), nObjectType, aImage, aImageHC );
+                    pImageProvider->getImages( GetEntryText( pEntryLoop ), nObjectType, aImage );
                 }
             }
 
