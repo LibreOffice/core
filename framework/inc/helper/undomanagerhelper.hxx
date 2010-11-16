@@ -32,6 +32,7 @@
 
 /** === begin UNO includes === **/
 #include <com/sun/star/document/XUndoManager.hpp>
+#include <com/sun/star/util/XModifyListener.hpp>
 /** === end UNO includes === **/
 
 #include <boost/scoped_ptr.hpp>
@@ -142,6 +143,10 @@ namespace framework
         void            lock();
         void            unlock();
         ::sal_Bool      isLocked();
+
+        // XModifyBroadcaster equivalents
+        void            addModifyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& i_listener );
+        void            removeModifyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& i_listener );
 
     private:
         ::boost::scoped_ptr< UndoManagerHelper_Impl >   m_pImpl;

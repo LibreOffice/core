@@ -73,6 +73,7 @@ namespace framework
     using ::com::sun::star::document::XUndoManager;
     using ::com::sun::star::util::InvalidStateException;
     using ::com::sun::star::lang::IllegalArgumentException;
+    using ::com::sun::star::util::XModifyListener;
     /** === end UNO using === **/
     using ::svl::IUndoManager;
 
@@ -220,6 +221,7 @@ namespace framework
         bool                                m_bAPIActionRunning;
         bool                                m_bProcessingEvents;
         ::cppu::OInterfaceContainerHelper   m_aUndoListeners;
+        ::cppu::OInterfaceContainerHelper   m_aModifyListeners;
         IUndoManagerImplementation&         m_rUndoManagerImplementation;
         UndoManagerHelper&                  m_rAntiImpl;
         ::std::stack< bool >                m_aContextVisibilities;
@@ -240,6 +242,7 @@ namespace framework
             ,m_bAPIActionRunning( false )
             ,m_bProcessingEvents( false )
             ,m_aUndoListeners( m_aMutex )
+            ,m_aModifyListeners( m_aMutex )
             ,m_rUndoManagerImplementation( i_undoManagerImpl )
             ,m_rAntiImpl( i_antiImpl )
         {
@@ -296,9 +299,20 @@ namespace framework
             m_aUndoListeners.removeInterface( i_listener );
         }
 
+        void addModifyListener( const Reference< XModifyListener >& i_listener )
+        {
+            m_aModifyListeners.addInterface( i_listener );
+        }
+
+        void removeModifyListener( const Reference< XModifyListener >& i_listener )
+        {
+            m_aModifyListeners.removeInterface( i_listener );
+        }
+
         UndoManagerEvent
             buildEvent( ::rtl::OUString const& i_title ) const;
 
+        void impl_notifyModified();
         void notify(    ::rtl::OUString const& i_title,
                         void ( SAL_CALL XUndoManagerListener::*i_notificationMethod )( const UndoManagerEvent& )
                     );
@@ -329,6 +343,7 @@ namespace framework
         EventObject aEvent;
         aEvent.Source = getXUndoManager();
         m_aUndoListeners.disposeAndClear( aEvent );
+        m_aModifyListeners.disposeAndClear( aEvent );
 
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -348,6 +363,13 @@ namespace framework
     }
 
     //------------------------------------------------------------------------------------------------------------------
+    void UndoManagerHelper_Impl::impl_notifyModified()
+    {
+        const EventObject aEvent( getXUndoManager() );
+        m_aModifyListeners.notifyEach( &XModifyListener::modified, aEvent );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
     void UndoManagerHelper_Impl::notify( ::rtl::OUString const& i_title,
         void ( SAL_CALL XUndoManagerListener::*i_notificationMethod )( const UndoManagerEvent& ) )
     {
@@ -360,6 +382,7 @@ namespace framework
         // to problems of its own, since clients might expect synchronous notifications.
 
         m_aUndoListeners.notifyEach( i_notificationMethod, aEvent );
+        impl_notifyModified();
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -370,6 +393,7 @@ namespace framework
         // TODO: the same comment as in the other notify, regarding SM locking applies here ...
 
         m_aUndoListeners.notifyEach( i_notificationMethod, aEvent );
+        impl_notifyModified();
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -549,6 +573,7 @@ namespace framework
         // <--- SYNCHRONIZED
 
         m_aUndoListeners.notifyEach( i_hidden ? &XUndoManagerListener::enteredHiddenContext : &XUndoManagerListener::enteredContext, aEvent );
+        impl_notifyModified();
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -603,6 +628,7 @@ namespace framework
         // <--- SYNCHRONIZED
 
         m_aUndoListeners.notifyEach( notificationMethod, aEvent );
+        impl_notifyModified();
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -680,6 +706,7 @@ namespace framework
         m_aUndoListeners.notifyEach( &XUndoManagerListener::undoActionAdded, aEventAdd );
         if ( bHadRedoActions && !bHasRedoActions )
             m_aUndoListeners.notifyEach( &XUndoManagerListener::redoActionsCleared , aEventClear );
+        impl_notifyModified();
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -702,6 +729,7 @@ namespace framework
         // <--- SYNCHRONIZED
 
         m_aUndoListeners.notifyEach( &XUndoManagerListener::allActionsCleared, aEvent );
+        impl_notifyModified();
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -724,6 +752,7 @@ namespace framework
         // <--- SYNCHRONIZED
 
         m_aUndoListeners.notifyEach( &XUndoManagerListener::redoActionsCleared, aEvent );
+        impl_notifyModified();
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -745,6 +774,7 @@ namespace framework
         // <--- SYNCHRONIZED
 
         m_aUndoListeners.notifyEach( &XUndoManagerListener::resetAll, aEvent );
+        impl_notifyModified();
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -755,6 +785,7 @@ namespace framework
         aEvent.UndoActionTitle = i_actionComment;
         aEvent.UndoContextDepth = 0;    // Undo can happen on level 0 only
         m_aUndoListeners.notifyEach( &XUndoManagerListener::actionUndone, aEvent );
+        impl_notifyModified();
     }
 
      //------------------------------------------------------------------------------------------------------------------
@@ -765,6 +796,7 @@ namespace framework
         aEvent.UndoActionTitle = i_actionComment;
         aEvent.UndoContextDepth = 0;    // Redo can happen on level 0 only
         m_aUndoListeners.notifyEach( &XUndoManagerListener::actionRedone, aEvent );
+        impl_notifyModified();
     }
 
      //------------------------------------------------------------------------------------------------------------------
@@ -1103,6 +1135,20 @@ namespace framework
     {
         if ( i_listener.is() )
             m_pImpl->removeUndoManagerListener( i_listener );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void UndoManagerHelper::addModifyListener( const Reference< XModifyListener >& i_listener )
+    {
+        if ( i_listener.is() )
+            m_pImpl->addModifyListener( i_listener );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void UndoManagerHelper::removeModifyListener( const Reference< XModifyListener >& i_listener )
+    {
+        if ( i_listener.is() )
+            m_pImpl->removeModifyListener( i_listener );
     }
 
 //......................................................................................................................
