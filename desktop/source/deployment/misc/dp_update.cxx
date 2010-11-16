@@ -203,17 +203,12 @@ bool onlyBundledExtensions(
     if (extensionList)
     {
         typedef std::vector<Reference<deployment::XPackage > >::const_iterator CIT;
-        for (CIT i = extensionList->begin(); i != extensionList->end(); i++)
+        for (CIT i(extensionList->begin()), aEnd(extensionList->end()); onlyBundled && i != aEnd; ++i)
         {
             Sequence<Reference<deployment::XPackage> > seqExt = xExtMgr->getExtensionsWithSameIdentifier(
                 dp_misc::getIdentifier(*i), (*i)->getName(), Reference<ucb::XCommandEnvironment>());
 
-            if (!containsBundledOnly(seqExt))
-            {
-                onlyBundled = false;
-                break;
-            }
-
+            onlyBundled = containsBundledOnly(seqExt);
         }
     }
     else
@@ -221,13 +216,9 @@ bool onlyBundledExtensions(
         const uno::Sequence< uno::Sequence< Reference<deployment::XPackage > > > seqAllExt =
             xExtMgr->getAllExtensions(Reference<task::XAbortChannel>(), Reference<ucb::XCommandEnvironment>());
 
-        for (int pos = seqAllExt.getLength(); pos --; )
+        for (int pos(0), nLen(seqAllExt.getLength()); onlyBundled && pos != nLen; ++pos)
         {
-            if (!containsBundledOnly(seqAllExt[pos]))
-            {
-                onlyBundled = false;
-                break;
-            }
+            onlyBundled = containsBundledOnly(seqAllExt[pos]);
         }
     }
     return onlyBundled;
