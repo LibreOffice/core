@@ -271,6 +271,7 @@ namespace framework
         virtual void undoActionAdded( const String& i_actionComment );
         virtual void cleared();
         virtual void clearedRedo();
+        virtual void resetAll();
         virtual void listActionEntered( const String& i_comment );
         virtual void listActionLeft( const String& i_comment );
         virtual void listActionLeftAndMerged();
@@ -764,9 +765,7 @@ namespace framework
         IUndoManager& rUndoManager = getUndoManager();
         {
             ::comphelper::FlagGuard aNotificationGuard( m_bAPIActionRunning );
-            while ( rUndoManager.IsInListAction() )
-                rUndoManager.LeaveListAction();
-            rUndoManager.Clear();
+            rUndoManager.Reset();
         }
 
         const EventObject aEvent( getXUndoManager() );
@@ -824,6 +823,15 @@ namespace framework
             return;
 
         notify( &XUndoManagerListener::redoActionsCleared );
+    }
+
+     //------------------------------------------------------------------------------------------------------------------
+    void UndoManagerHelper_Impl::resetAll()
+    {
+        if ( m_bAPIActionRunning )
+            return;
+
+        notify( &XUndoManagerListener::resetAll );
     }
 
      //------------------------------------------------------------------------------------------------------------------
