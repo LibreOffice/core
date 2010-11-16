@@ -35,6 +35,7 @@
 
 #include <framework/undomanagerhelper.hxx>
 #include <svl/undo.hxx>
+#include <unotools/undoopt.hxx>
 
 //......................................................................................................................
 namespace chart
@@ -84,6 +85,7 @@ namespace chart
                 ,m_aUndoManager()
                 ,m_aUndoHelper( *this )
             {
+                m_aUndoManager.SetMaxUndoActionCount( (USHORT)SvtUndoOptions().GetUndoCount() );
             }
 
             virtual ~UndoManager_Impl()
