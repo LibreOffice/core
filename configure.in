@@ -4283,7 +4283,7 @@ if test -n "$with_system_libwpd" -o -n "$with_system_libs" && \
         test "$with_system_libwpd" != "no"; then
     AC_MSG_RESULT([external])
     SYSTEM_LIBWPD=YES
-    PKG_CHECK_MODULES( LIBWPD, libwpd-0.8 )
+    PKG_CHECK_MODULES( LIBWPD, libwpd-0.9 libwpd-stream-0.9 )
 else
     AC_MSG_RESULT([internal])
     SYSTEM_LIBWPD=NO
@@ -4330,7 +4330,7 @@ if test -n "$with_system_libwps" -o -n "$with_system_libs" && \
         test "$with_system_libwps" != "no"; then
     AC_MSG_RESULT([external])
     SYSTEM_LIBWPS=YES
-    PKG_CHECK_MODULES( LIBWPS, libwps-0.1 )
+    PKG_CHECK_MODULES( LIBWPS, libwps-0.2 )
 else
     AC_MSG_RESULT([internal])
     SYSTEM_LIBWPS=NO
@@ -4348,7 +4348,7 @@ if test -n "$with_system_libwpg" -o -n "$with_system_libs" && \
         test "$with_system_libwpg" != "no"; then
     AC_MSG_RESULT([external])
     SYSTEM_LIBWPG=YES
-    PKG_CHECK_MODULES( LIBWPG, libwpg-0.1 )
+    PKG_CHECK_MODULES( LIBWPG, libwpg-0.2 )
 else
     AC_MSG_RESULT([internal])
     SYSTEM_LIBWPG=NO
