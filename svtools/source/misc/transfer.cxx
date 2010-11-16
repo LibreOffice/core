@@ -951,7 +951,7 @@ sal_Bool TransferableHelper::SetINetBookmark( const INetBookmark& rBmk,
 
         case SOT_FORMATSTR_ID_FILECONTENT:
         {
-            String aStr( RTL_CONSTASCII_STRINGPARAM( "[InternetShortcut]\x0aURL=" ) );
+            String aStr( RTL_CONSTASCII_USTRINGPARAM( "[InternetShortcut]\x0aURL=" ) );
             maAny <<= ::rtl::OUString( aStr += rBmk.GetURL() );
         }
         break;
