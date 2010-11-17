@@ -62,7 +62,7 @@ namespace dbaui
             @param  _bHiContast
                 <TRUE/> when in high contrast mode.
         */
-        virtual ImageList getImageList(sal_Int16 _eSymbolsSize,sal_Bool _bHiContast) const = 0;
+        virtual ImageList getImageList(sal_Int16 _eSymbolsSize) const = 0;
 
         /** only the member will be set, derived classes can overload this function and do what need to be done.
             @param  _pTB

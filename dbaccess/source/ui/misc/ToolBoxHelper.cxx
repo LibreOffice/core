@@ -71,7 +71,7 @@ namespace dbaui
                 m_bIsHiContrast = m_pToolBox->GetSettings().GetStyleSettings().GetHighContrastMode();
 
 
-                m_pToolBox->SetImageList( getImageList(m_nSymbolsSize,m_bIsHiContrast) );
+                m_pToolBox->SetImageList( getImageList(m_nSymbolsSize) );
                 Size aTbOldSize = m_pToolBox->GetSizePixel();
                 adjustToolBoxSize(m_pToolBox);
                 Size aTbNewSize = m_pToolBox->GetSizePixel();

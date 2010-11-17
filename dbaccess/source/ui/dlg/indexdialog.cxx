@@ -888,7 +888,7 @@ DBG_NAME(DbaIndexDialog)
         }
     }
     //------------------------------------------------------------------
-    ImageList DbaIndexDialog::getImageList(sal_Int16 _eBitmapSet,sal_Bool /*_bHiContast*/) const
+    ImageList DbaIndexDialog::getImageList(sal_Int16 _eBitmapSet) const
     {
         sal_Int16 nN = IMG_INDEX_DLG_SC;
         if ( _eBitmapSet == SFX_SYMBOLS_SIZE_LARGE )
