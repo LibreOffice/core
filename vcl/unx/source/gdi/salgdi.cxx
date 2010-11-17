@@ -111,6 +111,7 @@ X11SalGraphics::X11SalGraphics()
     nPenPixel_          = 0;
     nPenColor_          = MAKE_SALCOLOR( 0x00, 0x00, 0x00 ); // Black
 
+    pFontGC_            = NULL;
     for( int i = 0; i < MAX_FALLBACK; ++i )
         mpServerFont[i] = NULL;
 
@@ -140,6 +141,7 @@ X11SalGraphics::X11SalGraphics()
     bPrinter_           = FALSE;
     bVirDev_            = FALSE;
     bPenGC_         = FALSE;
+    bFontGC_            = FALSE;
     bBrushGC_           = FALSE;
     bMonoGC_            = FALSE;
     bCopyGC_            = FALSE;
@@ -169,6 +171,7 @@ void X11SalGraphics::freeResources()
 
     if( hBrush_ )       XFreePixmap( pDisplay, hBrush_ ), hBrush_ = None;
     if( pPenGC_ )       XFreeGC( pDisplay, pPenGC_ ), pPenGC_ = None;
+    if( pFontGC_ )      XFreeGC( pDisplay, pFontGC_ ), pFontGC_ = None;
     if( pBrushGC_ )     XFreeGC( pDisplay, pBrushGC_ ), pBrushGC_ = None;
     if( pMonoGC_ )      XFreeGC( pDisplay, pMonoGC_ ), pMonoGC_ = None;
     if( pCopyGC_ )      XFreeGC( pDisplay, pCopyGC_ ), pCopyGC_ = None;
@@ -183,7 +186,7 @@ void X11SalGraphics::freeResources()
     if( m_aRenderPicture )
         XRenderPeer::GetInstance().FreePicture( m_aRenderPicture ), m_aRenderPicture = 0;
 
-    bPenGC_ = bBrushGC_ = bMonoGC_ = bCopyGC_ = bInvertGC_ = bInvert50GC_ = bStippleGC_ = bTrackingGC_ = false;
+    bPenGC_ = bFontGC_ = bBrushGC_ = bMonoGC_ = bCopyGC_ = bInvertGC_ = bInvert50GC_ = bStippleGC_ = bTrackingGC_ = false;
 }
 
 void X11SalGraphics::SetDrawable( Drawable aDrawable, int nScreen )
@@ -576,6 +579,7 @@ void X11SalGraphics::ResetClipRegion()
     if( pClipRegion_ )
     {
         bPenGC_         = FALSE;
+        bFontGC_        = FALSE;
         bBrushGC_       = FALSE;
         bMonoGC_        = FALSE;
         bCopyGC_        = FALSE;
@@ -625,6 +629,7 @@ bool X11SalGraphics::unionClipRegion( const ::basegfx::B2DPolyPolygon& )
 void X11SalGraphics::EndSetClipRegion()
 {
     bPenGC_         = FALSE;
+    bFontGC_        = FALSE;
     bBrushGC_       = FALSE;
     bMonoGC_        = FALSE;
     bCopyGC_        = FALSE;
@@ -749,6 +754,7 @@ void X11SalGraphics::SetXORMode( bool bSet, bool )
     {
         bXORMode_   = bSet;
         bPenGC_     = FALSE;
+        bFontGC_    = FALSE;
         bBrushGC_   = FALSE;
         bMonoGC_        = FALSE;
         bCopyGC_        = FALSE;

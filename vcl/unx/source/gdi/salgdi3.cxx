@@ -993,6 +993,7 @@ X11SalGraphics::SetTextColor( SalColor nSalColor )
     {
         nTextColor_     = nSalColor;
         nTextPixel_     = GetPixel( nSalColor );
+        bFontGC_        = FALSE;
     }
 }
 
