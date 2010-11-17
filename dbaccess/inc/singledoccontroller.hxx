@@ -102,7 +102,7 @@ namespace dbaui
         void            setEditable(sal_Bool _bEditable);
 
         // need for undo's and redo's
-        SfxUndoManager* getUndoMgr();
+        SfxUndoManager& GetUndoManager();
 
         /** addUndoActionAndInvalidate adds an undo action to the undoManager,
             additionally invalidates the UNDO and REDO slot

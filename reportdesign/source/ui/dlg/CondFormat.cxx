@@ -466,7 +466,7 @@ namespace rptui
         if ( nRet == RET_OK )
         {
             String sUndoAction( ModuleRes( RID_STR_UNDO_CONDITIONAL_FORMATTING ) );
-            UndoManagerListAction aListAction(*m_rController.getUndoMgr(),sUndoAction);
+            UndoManagerListAction aListAction(m_rController.GetUndoManager(),sUndoAction);
             try
             {
                 sal_Int32 j(0), i(0);;

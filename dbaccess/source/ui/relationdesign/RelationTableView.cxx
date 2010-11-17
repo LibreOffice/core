@@ -375,7 +375,7 @@ void ORelationTableView::RemoveTabWin( OTableWindow* pTabWin )
     OSQLWarningBox aDlg( this, ModuleRes( STR_QUERY_REL_DELETE_WINDOW ), WB_YES_NO | WB_DEF_YES );
     if ( m_bInRemove || aDlg.Execute() == RET_YES )
     {
-        m_pView->getController().getUndoMgr()->Clear();
+        m_pView->getController().GetUndoManager().Clear();
         OJoinTableView::RemoveTabWin( pTabWin );
 
         m_pView->getController().InvalidateFeature(SID_RELATION_ADD_RELATION);
@@ -469,7 +469,7 @@ void ORelationTableView::_elementRemoved( const container::ContainerEvent& _rEve
         OTableWindow* pTableWindow = GetTabWindow(sName);
         if ( pTableWindow )
         {
-            m_pView->getController().getUndoMgr()->Clear();
+            m_pView->getController().GetUndoManager().Clear();
             OJoinTableView::RemoveTabWin( pTableWindow );
 
             m_pView->getController().InvalidateFeature(SID_RELATION_ADD_RELATION);

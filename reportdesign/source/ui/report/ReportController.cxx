@@ -372,7 +372,7 @@ void OReportController::disposing()
                 pSectionWindow = getDesignView()->getMarkedSection();
             if ( pSectionWindow )
                 pSectionWindow->getReportSection().deactivateOle();
-            getUndoMgr()->Clear();      // clear all undo redo things
+            GetUndoManager().Clear();       // clear all undo redo things
             if ( m_aReportModel )
                 listen(false);
             m_pReportControllerObserver->Clear();
@@ -1703,7 +1703,7 @@ void OReportController::impl_initialize( )
         {
             //m_sName = m_xReportDefinition->getName();
             getView()->initialize();    // show the windows and fill with our informations
-            getUndoMgr()->Clear();      // clear all undo redo things
+            GetUndoManager().Clear();       // clear all undo redo things
             getSdrModel();
             if ( !m_aReportModel )
                 throw Exception();
@@ -2119,11 +2119,6 @@ void OReportController::describeSupportedFeatures()
     implDescribeSupportedFeature( ".uno:SelectAllEdits",                SID_SELECT_ALL_EDITS);
     implDescribeSupportedFeature( ".uno:CollapseSection",           SID_COLLAPSE_SECTION);
     implDescribeSupportedFeature( ".uno:ExpandSection",             SID_EXPAND_SECTION);
-}
-// -----------------------------------------------------------------------------
-SfxUndoManager* OReportController::getUndoMgr()
-{
-    return &m_aUndoManager;
 }
 // -----------------------------------------------------------------------------
 void OReportController::impl_onModifyChanged()
@@ -3348,7 +3343,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
     }
 
     uno::Reference<report::XSection> xCurrentSection = getDesignView()->getCurrentSection();
-    UndoManagerListAction aUndo( *getUndoMgr(), String( ModuleRes( RID_STR_UNDO_INSERT_CONTROL ) ) );
+    UndoManagerListAction aUndo( GetUndoManager(), String( ModuleRes( RID_STR_UNDO_INSERT_CONTROL ) ) );
 
     try
     {
@@ -3819,7 +3814,7 @@ void OReportController::switchReportSection(const sal_Int16 _nId)
         if ( SID_REPORTHEADERFOOTER == _nId )
         {
             const String sUndoAction(ModuleRes(bSwitchOn ? RID_STR_UNDO_ADD_REPORTHEADERFOOTER : RID_STR_UNDO_REMOVE_REPORTHEADERFOOTER));
-            getUndoMgr()->EnterListAction( sUndoAction, String() );
+            GetUndoManager().EnterListAction( sUndoAction, String() );
 
             addUndoActionAndInvalidate(new OReportSectionUndo(*(m_aReportModel),SID_REPORTHEADER_WITHOUT_UNDO
                                                             ,::std::mem_fun(&OReportHelper::getReportHeader)
@@ -3851,7 +3846,7 @@ void OReportController::switchReportSection(const sal_Int16 _nId)
         }
 
         if ( SID_REPORTHEADERFOOTER == _nId )
-            getUndoMgr()->LeaveListAction();
+            GetUndoManager().LeaveListAction();
         getView()->Resize();
     }
 }
@@ -3867,7 +3862,7 @@ void OReportController::switchPageSection(const sal_Int16 _nId)
         if ( SID_PAGEHEADERFOOTER == _nId )
         {
             const String sUndoAction(ModuleRes(bSwitchOn ? RID_STR_UNDO_ADD_REPORTHEADERFOOTER : RID_STR_UNDO_REMOVE_REPORTHEADERFOOTER));
-            getUndoMgr()->EnterListAction( sUndoAction, String() );
+            GetUndoManager().EnterListAction( sUndoAction, String() );
 
             addUndoActionAndInvalidate(new OReportSectionUndo(*m_aReportModel
                                                             ,SID_PAGEHEADER_WITHOUT_UNDO
@@ -3899,7 +3894,7 @@ void OReportController::switchPageSection(const sal_Int16 _nId)
                 break;
         }
         if ( SID_PAGEHEADERFOOTER == _nId )
-            getUndoMgr()->LeaveListAction();
+            GetUndoManager().LeaveListAction();
         getView()->Resize();
     }
 }

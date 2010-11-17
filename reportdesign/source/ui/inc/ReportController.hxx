@@ -354,10 +354,6 @@ namespace rptui
 
         virtual void impl_onModifyChanged();
 
-        //  const ::connectivity::OSQLParseNode* getParseTree() const { return m_aSqlIterator.getParseTree();}
-        // need for undo's and redo's
-        SfxUndoManager* getUndoMgr();
-
         /** returns <TRUE/> when the command is enbaled
             @param  _nCommand   the command id
             @param  _xControlFormat the report control format

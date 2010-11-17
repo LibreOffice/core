@@ -530,9 +530,9 @@ namespace dbaui
         InvalidateFeature(_nId);
     }
     // -----------------------------------------------------------------------------
-    SfxUndoManager* OSingleDocumentController::getUndoMgr()
+    SfxUndoManager& OSingleDocumentController::GetUndoManager()
     {
-        return &m_aUndoManager;
+        return m_aUndoManager;
     }
     // -----------------------------------------------------------------------------
     void OSingleDocumentController::addUndoActionAndInvalidate(SfxUndoAction *_pAction)

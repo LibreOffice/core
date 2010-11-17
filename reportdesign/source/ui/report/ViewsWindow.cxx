@@ -1329,7 +1329,7 @@ void OViewsWindow::EndDragObj_removeInvisibleObjects()
 void OViewsWindow::EndDragObj(BOOL _bControlKeyPressed, const OSectionView* _pSection,const Point& _aPnt)
 {
     const String sUndoAction = String((ModuleRes(RID_STR_UNDO_CHANGEPOSITION)));
-    UndoManagerListAction aListAction(*getView()->getReportView()->getController().getUndoMgr(),sUndoAction);
+    UndoManagerListAction aListAction(getView()->getReportView()->getController().GetUndoManager(),sUndoAction);
 
     Point aNewPos = _aPnt;
     OSectionView* pInSection = getSectionRelativeToPosition(_pSection, aNewPos);
