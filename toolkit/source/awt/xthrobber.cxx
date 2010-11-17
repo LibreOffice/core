@@ -140,9 +140,6 @@ namespace toolkit
         uno::Sequence< uno::Reference< graphic::XGraphic > > aImageList(12);
         sal_uInt16 nIconIdStart = RID_TK_ICON_THROBBER_START;
 
-        if ( mpThrobber->isHCMode() )
-            nIconIdStart = RID_TK_HC_ICON_THROBBER_START;
-
         for ( sal_uInt16 i=0; i<12; i++ )
         {
             Image aImage = TK_RES_IMAGE( nIconIdStart + i );
