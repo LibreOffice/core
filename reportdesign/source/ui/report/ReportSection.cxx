@@ -461,7 +461,11 @@ void OReportSection::SelectAll(const sal_uInt16 _nObjectType)
         }
     }
 }
-void lcl_insertMenuItemImages(PopupMenu& rContextMenu,OReportController& rController,const uno::Reference< report::XReportDefinition>& _xReportDefinition,uno::Reference<frame::XFrame>& _rFrame)
+void lcl_insertMenuItemImages(
+    PopupMenu& rContextMenu,
+    OReportController& rController,
+    const uno::Reference< report::XReportDefinition>& _xReportDefinition,uno::Reference<frame::XFrame>& _rFrame
+)
 {
     const USHORT nCount = rContextMenu.GetItemCount();
     for (USHORT i = 0; i < nCount; ++i)
