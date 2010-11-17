@@ -58,9 +58,7 @@
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakref.hxx>
 
-#ifndef __SGI_STL_DEQUE
 #include <deque>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  namespace
