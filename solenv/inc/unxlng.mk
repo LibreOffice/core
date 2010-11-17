@@ -26,6 +26,7 @@
 #*************************************************************************
 
 CDEFS+=-DGLIBC=2
+PTHREAD_LIBS=-lpthread
 DL_LIB=-ldl
 
 .INCLUDE : unxgcc.mk
