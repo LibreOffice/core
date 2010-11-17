@@ -39,9 +39,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 
-#ifndef __SGI_STL_VECTOR
 #include <vector>
-#endif
 
 using namespace com::sun::star;
 
