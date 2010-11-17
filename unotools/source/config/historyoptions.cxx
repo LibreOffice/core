@@ -37,13 +37,8 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
-#ifndef __SGI_STL_DEQUE
 #include <deque>
-#endif
-
-#ifndef __SGI_STL_ALGORITHM
 #include <algorithm>
-#endif
 
 #include <rtl/logfile.hxx>
 #include "itemholder1.hxx"

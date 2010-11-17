@@ -41,9 +41,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
-#ifndef __SGI_STL_VECTOR
 #include <vector>
-#endif
 
 #include <itemholder1.hxx>
 
