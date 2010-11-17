@@ -157,7 +157,6 @@ class SVT_DLLPUBLIC ToolboxController : public ::com::sun::star::frame::XStatusL
         void unbindListener();
         sal_Bool isBound() const;
         sal_Bool hasBigImages() const;
-        sal_Bool isHighContrast() const;
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer > getURLTransformer() const;
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > getParent() const;
 

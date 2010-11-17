@@ -478,17 +478,12 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
         case SPELL :
         case DRAWDRAWING :
         case SMARTTAGS :
-        {
-            const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-                aRet = rStyleSettings.GetHighContrastMode() ?
-                    rStyleSettings.GetDialogTextColor().GetColor() : aAutoColors[eEntry];
-        }
-        break;
+            aRet = aAutoColors[eEntry];
+            break;
 
         case DRAWFILL            :
-                aRet = /*rStyleSettings.GetHighContrastMode() ?
-                    rStyleSettings.OutlineMode??? : */  aAutoColors[eEntry];
-        break;
+            aRet = aAutoColors[eEntry];
+            break;
 
         case FONTCOLOR :
             aRet = Application::GetSettings().GetStyleSettings().GetWindowTextColor();

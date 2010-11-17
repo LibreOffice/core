@@ -296,7 +296,7 @@ namespace svt
     {
         if ( !m_aStatusImages.GetImageCount() )
         {
-            const_cast<EditBrowseBox*>(this)->m_aStatusImages = ImageList(SvtResId(RID_SVTOOLS_IMAGELIST_EDITBROWSEBOX));
+            const_cast<EditBrowseBox*>(this)->m_aStatusImages = ImageList( SvtResId( RID_SVTOOLS_IMAGELIST_EDITBROWSEBOX ) );
         }
 
         Image aImage;

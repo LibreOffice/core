@@ -317,9 +317,6 @@
 #define RID_SVTOOLS_IMAGELIST_BIG                   (RID_SVTOOLS_IMAGELIST_START +  1)
 #define RID_SVTOOLS_IMAGELIST_SMALL                 (RID_SVTOOLS_IMAGELIST_START +  2)
 #define RID_SVTOOLS_IMAGELIST_EDITBROWSEBOX         (RID_SVTOOLS_IMAGELIST_START +  3)
-/// free
-/// free
-/// free
 #define RID_FILEPICKER_IMAGES                       (RID_SVTOOLS_IMAGELIST_START +  7)
 
 //.............................................................................

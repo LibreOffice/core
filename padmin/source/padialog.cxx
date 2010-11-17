@@ -110,8 +110,8 @@ PADialog::PADialog( Window* pParent, BOOL /*bAdmin*/ ) :
 void PADialog::updateSettings()
 {
     m_aPrinterImg = Image( BitmapEx( PaResId( RID_BMP_SMALL_PRINTER ) ) );
-    m_aFaxImg = Image( BitmapEx( PaResId( RID_BMP_SMALL_FAX ) ) );
-    m_aPdfImg = Image( BitmapEx( PaResId( RID_BMP_SMALL_PDF ) ) );
+    m_aFaxImg     = Image( BitmapEx( PaResId( RID_BMP_SMALL_FAX     ) ) );
+    m_aPdfImg     = Image( BitmapEx( PaResId( RID_BMP_SMALL_PDF     ) ) );
 }
 
 void PADialog::Init()

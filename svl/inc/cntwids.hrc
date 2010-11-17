@@ -77,7 +77,6 @@
 #define WID_TO                              (WID_CHAOS_START + 24)
 #define WID_FROM                            (WID_CHAOS_START + 25)
 #define WID_TITLE                           (WID_CHAOS_START + 26)
-#define WID_SUBJECT WID_TITLE // only here to prevent panic, should be removed
 #define WID_MESSAGEBODY                     (WID_CHAOS_START + 27)
 
 #define WID_REFERENCES                      (WID_CHAOS_START + 28)
@@ -137,8 +136,6 @@
 //PROP FOLDER VIEW
 #define WID_DUMMY_PROPFOLDERVIEW1           (WID_CHAOS_START + 65)
 #define WID_THREADING                       (WID_CHAOS_START + 66)
-#define WID_MSG_COLUMN_INFO  /* obsolete */ (WID_CHAOS_START + 67)
-#define WID_FLD_COLUMN_INFO  /* obsolete */ (WID_CHAOS_START + 68)
 #define WID_FOLDERVIEW_MODE                 (WID_CHAOS_START + 69)
 #define WID_MESSAGEVIEW_MODE                (WID_CHAOS_START + 70)
 #define WID_SENTMESSAGEVIEW_MODE            (WID_CHAOS_START + 71)
@@ -153,8 +150,6 @@
 //PROP FOLDER DIR
 #define WID_DUMMY_FOLDERDIR1                (WID_CHAOS_START + 79)
 #define WID_TOTALCONTENTCOUNT               (WID_CHAOS_START + 80)
-#define WID_NEWSGROUPCOUNT  /* ??? */       (WID_CHAOS_START + 81)
-#define WID_ARTICLECOUNT    /* ??? */       (WID_CHAOS_START + 82)
 #define WID_KNOWN_RANGES                    (WID_CHAOS_START + 83)
 #define WID_IMAPFOLDERINFO                  (WID_CHAOS_START + 84)
 
@@ -176,23 +171,9 @@
 #define WID_PASSWORD                        (WID_CHAOS_START + 92)
 #define WID_SERVERNAME                      (WID_CHAOS_START + 93)
 #define WID_SERVERPORT                      (WID_CHAOS_START + 94)
-// obsolete
-#define WID_MAILSEND_USERNAME               (WID_CHAOS_START + 95)
-#define WID_MAILSEND_PASSWORD               (WID_CHAOS_START + 96)
-#define WID_MAILSEND_SERVERNAME             (WID_CHAOS_START + 97)
-#define WID_NEWSSEND_USERNAME               (WID_CHAOS_START + 98)
-#define WID_NEWSSEND_PASSWORD               (WID_CHAOS_START + 99)
-#define WID_NEWSSEND_SERVERNAME             (WID_CHAOS_START + 100)
-// end obsolete
 #define WID_SERVERBASE                      (WID_CHAOS_START + 101)
-// not used
-#define WID_SMTP_GATEWAY                    (WID_CHAOS_START + 102)
 
 // -> ..._DEFAULT
-// obsolete
-#define WID_FROM_DEFAULT                    (WID_CHAOS_START + 103)
-// obsolete
-#define WID_REPLY_TO_DEFAULT                (WID_CHAOS_START + 104)
 
 #define WID_AUTOUPDATE_INTERVAL             (WID_CHAOS_START + 105)
 #define WID_UPDATE_ENABLED                  (WID_CHAOS_START + 106)
@@ -243,13 +224,6 @@
 #define WID_STORE_MSGS_TIMELIMIT            (WID_CHAOS_START + 124)
 
 // PROP BOX
-#define WID_MSG_COLUMN_WIDTHS /* obsolete */(WID_CHAOS_START + 125)
-
-#ifdef OLD_CHAOS
-
-#define WID_CHAOS_END                       (WID_CHAOS_START + 125)
-
-#else
 
 //////////////////////////////////////////////////////////////////////////
 // WID's added after SO 4.0 release ( SUPD > 364 )
@@ -500,7 +474,5 @@
 
 // END
 #define WID_CHAOS_END                       (WID_CHAOS_START + 253)
-
-#endif /* OLD_CHAOS */
 
 #endif /* !_CNTWIDS_HRC */

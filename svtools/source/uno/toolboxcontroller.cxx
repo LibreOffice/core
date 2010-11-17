@@ -673,22 +673,6 @@ sal_Bool ToolboxController::hasBigImages() const
     return SvtMiscOptions().AreCurrentSymbolsLarge();
 }
 
-sal_Bool ToolboxController::isHighContrast() const
-{
-    sal_Bool bHighContrast( sal_False );
-
-    Reference< XWindow > xWindow = m_pImpl->m_xParentWindow;
-    if ( xWindow.is() )
-    {
-        SolarMutexGuard aSolarMutexGuard;
-        Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
-        if ( pWindow )
-            bHighContrast = ( ((ToolBox *)pWindow)->GetSettings().GetStyleSettings().GetHighContrastMode() );
-    }
-
-    return bHighContrast;
-}
-
 void ToolboxController::updateStatus()
 {
     bindListener();

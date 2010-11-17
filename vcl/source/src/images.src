@@ -120,11 +120,6 @@ Bitmap SV_RESID_BITMAP_CLOSEDOC
     File = "closedoc.bmp";
 };
 
-Bitmap SV_RESID_BITMAP_CLOSEDOCHC
-{
-    File = "closedochc.bmp";
-};
-
 Bitmap SV_RESID_BITMAP_SPLITHPIN
 {
     File = "splhpin.bmp";

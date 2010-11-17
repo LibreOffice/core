@@ -437,10 +437,12 @@ ModalDialog RID_FONTNAMEDIALOG
     };
     Text [ en-US ] = "Fonts";
 };
+
 String RID_BXT_TESTPAGE
 {
     Text [ en-US ] = "Test page";
 };
+
 String RID_BXT_ENVIRONMENT
 {
     Text [ en-US ] = "Wrong environment";
@@ -480,34 +482,42 @@ String RID_AFMERROR_OK
 {
     Text [ en-US ] = "No error";
 };
+
 String RID_AFMERROR_NO_FONT_NAME
 {
     Text [ en-US ] = "The metric does not contain a 'FontName' entry.";
 };
+
 String RID_AFMERROR_NO_FULL_NAME
 {
     Text [ en-US ] = "The metric does not contain a 'FullName' entry.";
 };
+
 String RID_AFMERROR_NO_FAMILY_NAME
 {
     Text [ en-US ] = "The metric does not contain a 'FamilyName' entry.";
 };
+
 String RID_AFMERROR_MOVETO_FAILED
 {
     Text [ en-US ] = "The converted metric could not be written.";
 };
+
 String RID_AFMERROR_STREAM_READ_FAILED
 {
     Text [ en-US ] = "The metric could not be read.";
 };
+
 String RID_AFMERROR_STREAM_WRITE_FAILED
 {
     Text [ en-US ] = "A temporary file could not be created.";
 };
+
 STRING RID_AFMERROR_NOT_A_METRIC
 {
     Text [ en-US ] = "The file does not contain a metric.";
 };
+
 String RID_AFMERROR_BOX_TXT
 {
     Text [ en-US ] = "The metric\n\n%s\n\ncould not be converted for the following reason:\n\n";

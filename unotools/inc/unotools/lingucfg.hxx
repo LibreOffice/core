@@ -228,11 +228,11 @@ public:
     std::vector< SvtLinguConfigDictionaryEntry > GetActiveDictionariesByFormat( const rtl::OUString &rFormatName );
 
     // functions returning file URLs to the respective images (if found) and empty string otherwise
-    ::rtl::OUString     GetSpellAndGrammarDialogImage( const ::rtl::OUString &rServiceImplName, bool bHighContrast = false ) const;
-    ::rtl::OUString     GetSpellAndGrammarContextSuggestionImage( const ::rtl::OUString &rServiceImplName, bool bHighContrast = false ) const;
-    ::rtl::OUString     GetSpellAndGrammarContextDictionaryImage( const ::rtl::OUString &rServiceImplName, bool bHighContrast = false ) const;
-    ::rtl::OUString     GetThesaurusDialogImage( const ::rtl::OUString &rServiceImplName, bool bHighContrast = false ) const;
-    ::rtl::OUString     GetSynonymsContextImage( const ::rtl::OUString &rServiceImplName, bool bHighContrast = false ) const;
+    ::rtl::OUString     GetSpellAndGrammarDialogImage( const ::rtl::OUString &rServiceImplName ) const;
+    ::rtl::OUString     GetSpellAndGrammarContextSuggestionImage( const ::rtl::OUString &rServiceImplName ) const;
+    ::rtl::OUString     GetSpellAndGrammarContextDictionaryImage( const ::rtl::OUString &rServiceImplName ) const;
+    ::rtl::OUString     GetThesaurusDialogImage( const ::rtl::OUString &rServiceImplName ) const;
+    ::rtl::OUString     GetSynonymsContextImage( const ::rtl::OUString &rServiceImplName ) const;
 
     bool                HasVendorImages( const char *pImageName ) const;
     bool                HasGrammarChecker() const;
