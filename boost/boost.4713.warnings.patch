@@ -106,3 +106,24 @@
                  m_min,
                  m_max);
         }
+--- misc/build/boost_1_39_0/boost/spirit/home/classic/symbols/symbols.hpp
++++ misc/build/boost_1_39_0/boost/spirit/home/classic/symbols/symbols.hpp
+@@ -102,13 +102,13 @@
+     {
+         typedef typename ScannerT::iterator_t iterator_t;
+         iterator_t first = scan.first;
+-        typename SetT::search_info result = SetT::find(scan);
++        typename SetT::search_info result_ = SetT::find(scan);
+ 
+-        if (result.data)
++        if (result_.data)
+             return scan.
+                 create_match(
+-                    result.length,
+-                    symbol_ref_t(*result.data),
++                    result_.length,
++                    symbol_ref_t(*result_.data),
+                     first,
+                     scan.first);
+         else
+
