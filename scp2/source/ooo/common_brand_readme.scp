@@ -65,18 +65,6 @@ File gid_Brand_File_Txt_Readme
     Styles = (PACKED, SCPZIP_REPLACE);
 End
 
-File gid_Brand_File_Txt_Readme_Html
-    TXT_FILE_BODY;
-    Dir = gid_Brand_Dir_Share_Readme;
-  #ifdef UNX
-    README_TXT_ALL_LANG(Name, README, html);
-  #endif
-  #ifdef WNT
-    README_TXT_ALL_LANG(Name, readme, html);
-  #endif
-    Styles = (PACKED, SCPZIP_REPLACE);
-End
-
 File gid_Brand_File_Readme_Readme
     TXT_FILE_BODY;
     Dir = gid_Brand_Dir_Readme;
@@ -85,18 +73,6 @@ File gid_Brand_File_Readme_Readme
   #endif
   #ifdef WNT
     README_TXT_ALL_LANG(Name, readme, txt);
-  #endif
-    Styles = (PACKED, SCPZIP_REPLACE);
-End
-
-File gid_Brand_File_Readme_Readme_Html
-    TXT_FILE_BODY;
-    Dir = gid_Brand_Dir_Readme;
-  #ifdef UNX
-    README_TXT_ALL_LANG(Name, README, html);
-  #endif
-  #ifdef WNT
-    README_TXT_ALL_LANG(Name, readme, html);
   #endif
     Styles = (PACKED, SCPZIP_REPLACE);
 End
