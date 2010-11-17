@@ -153,24 +153,3 @@ $(PAR)/%.par :
 #    $(COMMAND_ECHO)$(SCPCOMP) -l $(@:b).$(LANGFILEEXT) -s $(MISC)/{$(subst,$(@:d:d:d), $(@:d:d))}/$(*:b).pre -o $@
 
 .ENDIF			# "$(PARFILES)"!=""
-
-.IF "$(TESTDIR)"!=""
-
-# workaround for strange dmake bug:
-# if the previous block was a rule or a target, "\#" isn't recognized
-# as an escaped "#". if it was an assignment, escaping works...
-some_unique_variable_name:=1
-
-.IF "$(OS)" == "WNT"
-REGEXP:="s/^[\#].*//"
-.ELSE
-REGEXP:='s/^[\#].*//'
-.ENDIF
-
-$(MISC)/%.exp : sce/%.sce
-    @@-$(RM) $@
-    @@-$(RM) $(@:d)$(@:b).tst
-    $(COMMAND_ECHO)$(TYPE) $< | sed $(REGEXP) | sed "s/^/test_/" > $(@:d)$(@:b).tst
-    $(COMMAND_ECHO)$(TYPE) $(@:d)$(@:b).tst | sed "/test_./ w $@"
-
-.ENDIF			# "$(TESTDIR)"!=""

@@ -567,16 +567,6 @@ $(SHL$(TNR)TARGETN) : \
 
 .ENDIF			# "$(GUI)" == "OS2"
 
-
-.IF "$(TESTDIR)"!=""
-.IF "$(NO_TESTS)"==""
-
-ALLTAR : runtest_$(SHL$(TNR)TARGET)
-
-runtest_$(SHL$(TNR)TARGET) : $(SHL$(TNR)TARGETN)
-    testshl $(SHL$(TNR)TARGETN) sce/$(SHL$(TNR)TARGET).sce -msg -skip
-.ENDIF			# "$(NO_TESTS)"==""
-.ENDIF			# "$(TESTDIR)"!=""
 .ENDIF			# "$(SHL$(TNR)TARGETN)"!=""
 
 # unroll end
