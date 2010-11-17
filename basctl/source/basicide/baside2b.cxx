@@ -67,12 +67,11 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 
-long nVirtToolBoxHeight;    // wird im WatchWindow init., im Stackwindow verw.
+long nVirtToolBoxHeight;    // inited in WatchWindow, used in Stackwindow
 long nHeaderBarHeight;
 
 #define SCROLL_LINE     12
 #define SCROLL_PAGE     60
-
 #define DWBORDER        3
 
 static const char cSuffixes[] = "%&!#@$";
@@ -80,9 +79,12 @@ static const char cSuffixes[] = "%&!#@$";
 MapUnit eEditMapUnit = MAP_100TH_MM;
 
 
-// #108672 Helper functions to get/set text in TextEngine
-// using the stream interface (get/setText() only supports
-// tools Strings limited to 64K).
+/**
+ * Helper functions to get/set text in TextEngine using
+ * the stream interface.
+ *
+ * get/setText() only supports tools Strings limited to 64K).
+ */
 ::rtl::OUString getTextEngineText( ExtTextEngine* pEngine )
 {
     SvMemoryStream aMemStream;
@@ -108,20 +110,19 @@ void setTextEngineText( ExtTextEngine* pEngine, const ::rtl::OUString aStr )
 
 void lcl_DrawIDEWindowFrame( DockingWindow* pWin )
 {
-    // The result of using explicit colors here appears to be harmless when
-    // switching to high contrast mode:
-    if ( !pWin->IsFloatingMode() )
-    {
-        Size aSz = pWin->GetOutputSizePixel();
-        const Color aOldLineColor( pWin->GetLineColor() );
-        pWin->SetLineColor( Color( COL_WHITE ) );
-        // oben eine weisse..
-        pWin->DrawLine( Point( 0, 0 ), Point( aSz.Width(), 0 ) );
-        // unten eine schwarze...
-        pWin->SetLineColor( Color( COL_BLACK ) );
-        pWin->DrawLine( Point( 0, aSz.Height() - 1 ), Point( aSz.Width(), aSz.Height() - 1 ) );
-        pWin->SetLineColor( aOldLineColor );
-    }
+    if ( pWin->IsFloatingMode() )
+        return;
+
+    Size aSz = pWin->GetOutputSizePixel();
+    const Color aOldLineColor( pWin->GetLineColor() );
+    pWin->SetLineColor( Color( COL_WHITE ) );
+    // White line on top
+    pWin->DrawLine( Point( 0, 0 ), Point( aSz.Width(), 0 ) );
+    // Black line at bottom
+    pWin->SetLineColor( Color( COL_BLACK ) );
+    pWin->DrawLine( Point( 0, aSz.Height() - 1 ),
+                    Point( aSz.Width(), aSz.Height() - 1 ) );
+    pWin->SetLineColor( aOldLineColor );
 }
 
 void lcl_SeparateNameAndIndex( const String& rVName, String& rVar, String& rIndex )
@@ -190,7 +191,6 @@ __EXPORT EditorWindow::~EditorWindow()
     {
         EndListening( *pEditEngine );
         pEditEngine->RemoveView( pEditView );
-//      pEditEngine->SetViewWin( 0 );
         delete pEditView;
         delete pEditEngine;
     }
@@ -230,12 +230,12 @@ String EditorWindow::GetWordAtCursor()
                 nEnd = nLength;
             }
 
-            // Nicht den Selektierten Bereich, sondern an der CursorPosition,
-            // falls Teil eines Worts markiert.
+            // Not the selected range, but at the CursorPosition,
+            // if a word is partially selected.
             if ( !aWord.Len() )
                 aWord = pTextEngine->GetWord( rSelEnd );
 
-            // Kann leer sein, wenn komplettes Word markiert, da Cursor dahinter.
+            // Can be empty when full word selected, as Cursor behing it
             if ( !aWord.Len() && pEditView->HasSelection() )
                 aWord = pTextEngine->GetWord( rSelStart );
         }
@@ -248,7 +248,7 @@ void __EXPORT EditorWindow::RequestHelp( const HelpEvent& rHEvt )
 {
     BOOL bDone = FALSE;
 
-    // Sollte eigentlich mal aktiviert werden...
+    // Should have been activated at some point
     if ( pEditEngine )
     {
         if ( rHEvt.GetMode() & HELPMODE_CONTEXT )
@@ -316,11 +316,11 @@ void __EXPORT EditorWindow::RequestHelp( const HelpEvent& rHEvt )
 
 void __EXPORT EditorWindow::Resize()
 {
-    // ScrollBars, etc. passiert in Adjust...
+    // ScrollBars, etc. happens in Adjust...
     if ( pEditView )
     {
         long nVisY = pEditView->GetStartDocPos().Y();
-//      pEditView->SetOutputArea( Rectangle( Point( 0, 0 ), GetOutputSize() ) );
+
         pEditView->ShowCursor();
         Size aOutSz( GetOutputSizePixel() );
         long nMaxVisAreaStart = pEditView->GetTextEngine()->GetTextHeight() - aOutSz.Height();
@@ -341,13 +341,11 @@ void __EXPORT EditorWindow::Resize()
 }
 
 
-
 void __EXPORT EditorWindow::MouseMove( const MouseEvent &rEvt )
 {
     if ( pEditView )
         pEditView->MouseMove( rEvt );
 }
-
 
 
 void __EXPORT EditorWindow::MouseButtonUp( const MouseEvent &rEvt )
@@ -389,10 +387,8 @@ BOOL EditorWindow::ImpCanModify()
     BOOL bCanModify = TRUE;
     if ( StarBASIC::IsRunning() )
     {
-        // Wenn im Trace-Mode, entweder Trace abbrechen oder
-        // Eingabe verweigern
-        // Im Notify bei Basic::Stoped die Markierungen in den Modulen
-        // entfernen!
+        // If in Trace-mode, abort the trace or refuse input
+        // Remove markers in the modules in Notify at Basic::Stoped
         if ( QueryBox( 0, WB_OK_CANCEL, String( IDEResId( RID_STR_WILLSTOPPRG ) ) ).Execute() == RET_OK )
         {
             pModulWindow->GetBasicStatus().bIsRunning = FALSE;
@@ -406,7 +402,7 @@ BOOL EditorWindow::ImpCanModify()
 
 void __EXPORT EditorWindow::KeyInput( const KeyEvent& rKEvt )
 {
-    if ( !pEditView )   // Passiert unter W95 bei letzte Version, Ctrl-Tab
+    if ( !pEditView )   // Happens in Win95
         return;
 
 #if OSL_DEBUG_LEVEL > 1
@@ -471,7 +467,7 @@ void __EXPORT EditorWindow::KeyInput( const KeyEvent& rKEvt )
 
 void __EXPORT EditorWindow::Paint( const Rectangle& rRect )
 {
-    if ( !pEditEngine )     // spaetestens jetzt brauche ich sie...
+    if ( !pEditEngine )     // We need it now at latest
         CreateEditEngine();
 
     pEditView->Paint( rRect );
@@ -489,10 +485,10 @@ BOOL EditorWindow::SetSourceInBasic( BOOL bQuiet )
 
     BOOL bChanged = FALSE;
     if ( pEditEngine && pEditEngine->IsModified()
-        && !GetEditView()->IsReadOnly() )   // Added because of #i60626, otherwise
+        && !GetEditView()->IsReadOnly() )   // Added for #i60626, otherwise
             // any read only bug in the text engine could lead to a crash later
     {
-        if ( !StarBASIC::IsRunning() ) // Nicht zur Laufzeit!
+        if ( !StarBASIC::IsRunning() ) // Not at runtime!
         {
             ::rtl::OUString aModule = getTextEngineText( pEditEngine );
 
@@ -1708,7 +1704,6 @@ IMPL_LINK( ComplexEditorWindow, ScrollHdl, ScrollBar *, pCurScrollBar )
     return 0;
 }
 
-// virtual
 void ComplexEditorWindow::DataChanged(DataChangedEvent const & rDCEvt)
 {
     Window::DataChanged(rDCEvt);
@@ -1725,7 +1720,6 @@ void ComplexEditorWindow::DataChanged(DataChangedEvent const & rDCEvt)
     }
 }
 
-// virtual
 uno::Reference< awt::XWindowPeer >
 EditorWindow::GetComponentInterface(BOOL bCreate)
 {
@@ -1749,7 +1743,7 @@ WatchTreeListBox::WatchTreeListBox( Window* pParent, WinBits nWinBits )
 
 WatchTreeListBox::~WatchTreeListBox()
 {
-    // User-Daten zerstoeren...
+    // Destroy user data
     SvLBoxEntry* pEntry = First();
     while ( pEntry )
     {
@@ -2026,8 +2020,8 @@ BOOL WatchTreeListBox::ImplBasicEntryEdited( SvLBoxEntry* pEntry, const String& 
 
     UpdateWatches();
 
-    // Der Text soll niemals 1-zu-1 uebernommen werden, weil dann das
-    // UpdateWatches verlorengeht.
+    // The text should never be taken/copied 1:1,
+    // as the UpdateWatches will be lost
     return FALSE;
 }
 
@@ -2080,7 +2074,6 @@ static String implCreateTypeStringForDimArray( WatchItem* pItem, SbxDataType eTy
 
 
 void implEnableChildren( SvLBoxEntry* pEntry, bool bEnable )
-// inline void implEnableChildren( SvLBoxEntry* pEntry, bool bEnable )
 {
     if( bEnable )
     {
@@ -2108,7 +2101,7 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
     {
         WatchItem* pItem = (WatchItem*)pEntry->GetUserData();
         String aVName( pItem->maName );
-        DBG_ASSERT( aVName.Len(), "Var? - Darf nicht leer sein!" );
+        DBG_ASSERT( aVName.Len(), "Var? - Must not be empty!" );
         String aWatchStr;
         String aTypeStr;
         if ( pCurMethod )
@@ -2121,7 +2114,6 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
             {
                 SbxDimArray* pRootArray = pItem->GetRootArray();
                 SbxDataType eType = pRootArray->GetType();
-                // SbxDataType eType = pItem->mpArray->GetType();
                 aTypeStr = implCreateTypeStringForDimArray( pItem, eType );
                 implEnableChildren( pEntry, true );
             }
@@ -2130,7 +2122,7 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
             if ( pSBX && pSBX->ISA( SbxVariable ) && !pSBX->ISA( SbxMethod ) )
             {
                 SbxVariable* pVar = (SbxVariable*)pSBX;
-                // Sonderbehandlung fuer Arrays:
+                // extra treatment of arrays
                 SbxDataType eType = pVar->GetType();
                 if ( eType & SbxARRAY )
                 {
