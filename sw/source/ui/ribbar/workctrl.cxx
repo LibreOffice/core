@@ -30,7 +30,6 @@
 #include "precompiled_sw.hxx"
 
 
-
 #include <string> // HACK: prevent conflict between STLPORT and Workshop headers
 #include <svl/eitem.hxx>
 #include <svx/htmlmode.hxx>
@@ -92,9 +91,7 @@ void SAL_CALL SwTbxInsertCtrl::update() throw (uno::RuntimeException)
     ToolBox& rTbx = GetToolBox();
     rtl::OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
     aSlotURL += rtl::OUString::valueOf( sal_Int32( nLastSlotId ));
-    Image aImage = GetImage( m_xFrame,
-                             aSlotURL,
-                             hasBigImages() );
+    Image aImage = GetImage( m_xFrame, aSlotURL, hasBigImages() );
 
     rTbx.SetItemImage(GetId(), aImage);
     rTbx.Invalidate();
@@ -121,9 +118,7 @@ void SwTbxInsertCtrl::StateChanged( USHORT /*nSID*/,
             rtl::OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
             aSlotURL += rtl::OUString::valueOf( sal_Int32( nId ));
             ToolBox& rBox = GetToolBox();
-            Image aImage = GetImage( m_xFrame,
-                                     aSlotURL,
-                                     hasBigImages() );
+            Image aImage = GetImage( m_xFrame, aSlotURL, hasBigImages() );
             rBox.SetItemImage(GetId(), aImage);
             rBox.SetItemImageMirrorMode( GetId(), FALSE );
             rBox.SetItemImageAngle( GetId(), pItem->GetRotation() );
@@ -413,7 +408,6 @@ SwScrollNaviPopup::SwScrollNaviPopup( USHORT nId, const Reference< XFrame >& rFr
     aSeparator(this, SW_RES(FL_SEP)),
     aInfoField(this, SW_RES(FI_INFO)),
     aIList(SW_RES(IL_VALUES)),
-    aIListH(SW_RES(ILH_VALUES)),
     nFwdId(FN_START_OF_NEXT_PAGE),
     nBackId(FN_START_OF_PREV_PAGE)
 {
@@ -488,8 +482,7 @@ void SwScrollNaviPopup::DataChanged( const DataChangedEvent& rDCEvt )
 
 void SwScrollNaviPopup::ApplyImageList()
 {
-    ImageList& rImgLst = aToolBox.GetSettings().GetStyleSettings().GetHighContrastMode() ?
-        aIListH : aIList;
+    ImageList& rImgLst = aIList;
     for(USHORT i = 0; i < NID_COUNT; i++)
     {
         USHORT nNaviId = aNavigationInsertIds[i];
@@ -624,7 +617,6 @@ SwNaviImageButton::SwNaviImageButton(
     ImageButton(pParent, SW_RES(BTN_NAVI)),
         pPopup(0),
         aImage(SW_RES(IMG_BTN)),
-        aImageH(SW_RES(IMG_BTN_H)),
         sQuickText(SW_RES(ST_QUICK)),
         pPopupWindow(0),
         pFloatingWindow(0),
@@ -633,14 +625,14 @@ SwNaviImageButton::SwNaviImageButton(
     FreeResource();
     SetStyle(GetStyle()|WB_NOPOINTERFOCUS);
     SetQuickHelpText(sQuickText);
-    SetModeImage( GetSettings().GetStyleSettings().GetHighContrastMode() ? aImageH : aImage);
+    SetModeImage( aImage );
 }
 
 void SwNaviImageButton::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
          (rDCEvt.GetFlags() & SETTINGS_STYLE) )
-            SetModeImage( GetSettings().GetStyleSettings().GetHighContrastMode() ? aImageH : aImage);
+            SetModeImage( aImage );
 
     Window::DataChanged( rDCEvt );
 }

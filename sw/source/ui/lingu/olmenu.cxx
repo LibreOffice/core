@@ -392,11 +392,11 @@ OUString RetrieveLabelFromCommand( const OUString& aCmdURL )
 SwSpellPopup::SwSpellPopup(
         SwWrtShell* pWrtSh,
         const uno::Reference< linguistic2::XSpellAlternatives >  &xAlt,
-        const String &rParaText ) :
-PopupMenu( SW_RES(MN_SPELL_POPUP) ),
-pSh( pWrtSh ),
-xSpellAlt(xAlt),
-bGrammarResults(false)
+        const String &rParaText
+)   : PopupMenu( SW_RES(MN_SPELL_POPUP) )
+    , pSh( pWrtSh )
+    , xSpellAlt(xAlt)
+    , bGrammarResults(false)
 {
     OSL_ENSURE(xSpellAlt.is(), "no spelling alternatives available");
 
@@ -412,7 +412,6 @@ bGrammarResults(false)
     sal_Int16 nStringCount = static_cast< sal_Int16 >( aSuggestions.getLength() );
 
     SvtLinguConfig aCfg;
-    const bool bHC = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
 
     PopupMenu *pMenu = GetPopupMenu(MN_AUTOCORR);
     pMenu->SetMenuFlags(MENU_FLAG_NOAUTOMNEMONICS);
@@ -424,7 +423,7 @@ bGrammarResults(false)
         uno::Reference< container::XNamed > xNamed( xSpellAlt, uno::UNO_QUERY );
         if (xNamed.is())
         {
-            aSuggestionImageUrl = aCfg.GetSpellAndGrammarContextSuggestionImage( xNamed->getName(), bHC );
+            aSuggestionImageUrl = aCfg.GetSpellAndGrammarContextSuggestionImage( xNamed->getName() );
             aImage = Image( lcl_GetImageFromPngUrl( aSuggestionImageUrl ) );
         }
 
@@ -515,7 +514,7 @@ bGrammarResults(false)
                 if (xSvcInfo.is())
                 {
                     OUString aDictionaryImageUrl( aCfg.GetSpellAndGrammarContextDictionaryImage(
-                            xSvcInfo->getImplementationName(), bHC) );
+                            xSvcInfo->getImplementationName() ) );
                     if (aDictionaryImageUrl.getLength() > 0)
                     {
                         Image aImage( lcl_GetImageFromPngUrl( aDictionaryImageUrl ) );
@@ -571,7 +570,6 @@ bGrammarResults(false)
     uno::Reference< frame::XFrame > xFrame = pWrtSh->GetView().GetViewFrame()->GetFrame().GetFrameInterface();
     Image rImg = ::GetImage( xFrame,
             OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:SpellingAndGrammarDialog")), sal_False );
-
     SetItemImage( MN_SPELLING_DLG, rImg );
 
     //////////////////////////////////////////////////////////////////////////////////
@@ -704,7 +702,6 @@ aInfo16( SW_RES(IMG_INFO_16) )
     uno::Reference< frame::XFrame > xFrame = pWrtSh->GetView().GetViewFrame()->GetFrame().GetFrameInterface();
     Image rImg = ::GetImage( xFrame,
             OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:SpellingAndGrammarDialog")), sal_False );
-
     SetItemImage( MN_SPELLING_DLG, rImg );
 
     //////////////////////////////////////////////////////////////////////////////////
