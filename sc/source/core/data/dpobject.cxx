@@ -1756,13 +1756,16 @@ SCSIZE lcl_FillOldFields( PivotField* pFields,
             else
                 nMask = lcl_FirstSubTotal( xDimProp );      // from first hierarchy
 
-            BOOL bDataLayout = ScUnoHelpFunctions::GetBoolProperty( xDimProp,
-                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(DP_PROP_ISDATALAYOUT)) );
+            // is this data layout dimension?
+            bool bDataLayout = ScUnoHelpFunctions::GetBoolProperty(
+                xDimProp, OUString(RTL_CONSTASCII_USTRINGPARAM(DP_PROP_ISDATALAYOUT)));
+
+            // is this dimension cloned?
             uno::Any aOrigAny;
             try
             {
                 aOrigAny = xDimProp->getPropertyValue(
-                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(DP_PROP_ORIGINAL)) );
+                    OUString(RTL_CONSTASCII_USTRINGPARAM(DP_PROP_ORIGINAL)));
             }
             catch(uno::Exception&)
             {
