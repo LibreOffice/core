@@ -143,8 +143,10 @@ namespace chart
         //--------------------------------------------------------------------------------------------------------------
         void UndoManager_Impl::disposing()
         {
-            ::osl::MutexGuard aGuard( m_rMutex );
-            m_bDisposed = true;
+            {
+                ::osl::MutexGuard aGuard( m_rMutex );
+                m_bDisposed = true;
+            }
             m_aUndoHelper.disposing();
         }
 
