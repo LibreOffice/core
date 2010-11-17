@@ -307,7 +307,6 @@ SvxThesaurusDialog_Impl::SvxThesaurusDialog_Impl( SvxThesaurusDialog * pDialog )
     aCancelBtn      ( pDialog, CUI_RES( BTN_THES_CANCEL ) ),
     aErrStr                 ( CUI_RES( STR_ERR_TEXTNOTFOUND ) ),
     aVendorDefaultImage     ( CUI_RES( IMG_DEFAULT_VENDOR ) ),
-    aVendorDefaultImageHC   ( CUI_RES( IMG_DEFAULT_VENDOR_HC ) ),
     xThesaurus      ( NULL ),
     aLookUpText     (),
     nLookUpLanguage ( LANGUAGE_NONE ),
@@ -567,15 +566,13 @@ void SvxThesaurusDialog_Impl::UpdateVendorImage()
     SvtLinguConfig aCfg;
     if (aCfg.HasVendorImages( "ThesaurusDialogImage" ))
     {
-        const bool bHC = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
-
         Image aImage;
         String sThesImplName( lcl_GetThesImplName( SvxCreateLocale( nLookUpLanguage ) ) );
-        OUString aThesDialogImageUrl( aCfg.GetThesaurusDialogImage( sThesImplName, bHC ) );
+        OUString aThesDialogImageUrl( aCfg.GetThesaurusDialogImage( sThesImplName ) );
         if (sThesImplName.Len() > 0 && aThesDialogImageUrl.getLength() > 0)
             aImage = Image( lcl_GetImageFromPngUrl( aThesDialogImageUrl ) );
         else
-            aImage = bHC ? aVendorDefaultImageHC : aVendorDefaultImage;
+            aImage = aVendorDefaultImage;
         aVendorImageFI.SetImage( aImage );
     }
 
@@ -589,8 +586,7 @@ IMPL_STATIC_LINK( SvxThesaurusDialog_Impl, VendorImageInitHdl, SvxThesaurusDialo
     SvtLinguConfig aCfg;
     if (aCfg.HasVendorImages( "ThesaurusDialogImage" ))
     {
-        const bool bHC = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
-        Image aImage( bHC ? pThis->aVendorDefaultImageHC : pThis->aVendorDefaultImage );
+        Image aImage( pThis->aVendorDefaultImage );
         pThis->aVendorImageFI.SetImage( aImage );
         pThis->aVendorImageFI.Show();
 

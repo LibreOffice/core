@@ -226,7 +226,6 @@ SpellDialog::SpellDialog(
     aBackgroundGB   ( this, CUI_RES( GB_BACKGROUND ) ),
 
     aVendorImage    ( CUI_RES( IMG_DEFAULT_VENDOR ) ),
-    aVendorImageHC  ( CUI_RES( IMG_DEFAULT_VENDOR_HC ) ),
 
     aResumeST       ( CUI_RES(ST_RESUME )),
     aIgnoreOnceST   ( aIgnorePB.GetText()),
@@ -879,9 +878,8 @@ void SpellDialog::SetTitle_Impl(LanguageType nLang)
         const SpellErrorDescription* pSpellErrorDescription = aSentenceED.GetAlternatives();
         if( pSpellErrorDescription && pSpellErrorDescription->sServiceName.getLength() )
         {
-            bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
             ::rtl::OUString sSuggestionImageUrl =
-                SvtLinguConfig().GetSpellAndGrammarDialogImage( pSpellErrorDescription->sServiceName, bHighContrast );
+                SvtLinguConfig().GetSpellAndGrammarDialogImage( pSpellErrorDescription->sServiceName );
             aVendorImageFI.SetImage( lcl_GetImageFromPngUrl( sSuggestionImageUrl ) );
             uno::Reference< lang::XServiceDisplayName > xDisplayName( pSpellErrorDescription->xGrammarChecker, uno::UNO_QUERY );
             if( xDisplayName.is() )
@@ -889,8 +887,7 @@ void SpellDialog::SetTitle_Impl(LanguageType nLang)
         }
         else
         {
-            bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
-            aVendorImageFI.SetImage( bHighContrast ? aVendorImageHC : aVendorImage );
+            aVendorImageFI.SetImage( aVendorImage );
         }
 
         if( sVendor.Len() )

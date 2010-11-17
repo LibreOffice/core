@@ -387,8 +387,7 @@ SvLBoxEntry * SFTreeListBox::insertEntry(
     SvLBoxEntry * p;
     if( nBitmap == IMG_DOCUMENT && factoryURL.getLength() > 0 )
     {
-        Image aImage = SvFileInformationManager::GetFileImage(
-            INetURLObject(factoryURL), false );
+        Image aImage = SvFileInformationManager::GetFileImage( INetURLObject(factoryURL), false );
         p = InsertEntry(
             rText, aImage, aImage, pParent, bChildrenOnDemand, LIST_APPEND,
             aUserData.release()); // XXX possible leak

@@ -697,8 +697,12 @@ BOOL BasicTreeListBox::IsEntryProtected( SvLBoxEntry* pEntry )
 }
 
 SvLBoxEntry* BasicTreeListBox::AddEntry(
-    const String& rText, const Image& rImage,
-    SvLBoxEntry* pParent, bool bChildrenOnDemand, std::auto_ptr< BasicEntry > aUserData )
+    const String& rText,
+    const Image& rImage,
+    SvLBoxEntry* pParent,
+    bool bChildrenOnDemand,
+    std::auto_ptr< BasicEntry > aUserData
+)
 {
     SvLBoxEntry* p = InsertEntry(
         rText, rImage, rImage, pParent, bChildrenOnDemand, LIST_APPEND,
@@ -769,8 +773,7 @@ void BasicTreeListBox::GetRootEntryBitmaps( const ScriptDocument& rDocument, Ima
 
         if ( sFactoryURL.getLength() )
         {
-            rImage = SvFileInformationManager::GetFileImage( INetURLObject( sFactoryURL ),
-                FALSE /* small */ );
+            rImage = SvFileInformationManager::GetFileImage( INetURLObject( sFactoryURL ), FALSE );
         }
         else
         {

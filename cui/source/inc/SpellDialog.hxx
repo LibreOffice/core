@@ -184,7 +184,6 @@ private:
     GroupBox        aBackgroundGB;
 
     Image           aVendorImage;
-    Image           aVendorImageHC;
 
     String          aResumeST;
     String          aIgnoreOnceST;

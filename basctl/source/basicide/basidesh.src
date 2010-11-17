@@ -354,34 +354,42 @@ String RID_STR_REMOVEWATCH
 {
     Text [ en-US ] = "Watch:" ;
 };
+
 String RID_STR_STACK
 {
     Text [ en-US ] = "Calls: " ;
 };
+
 String RID_STR_USERMACROS
 {
     Text [ en-US ] = "My Macros" ;
 };
+
 String RID_STR_USERDIALOGS
 {
     Text [ en-US ] = "My Dialogs" ;
 };
+
 String RID_STR_USERMACROSDIALOGS
 {
     Text [ en-US ] = "My Macros & Dialogs" ;
 };
+
 String RID_STR_SHAREMACROS
 {
     Text [ en-US ] = "%PRODUCTNAME Macros" ;
 };
+
 String RID_STR_SHAREDIALOGS
 {
     Text [ en-US ] = "%PRODUCTNAME Dialogs" ;
 };
+
 String RID_STR_SHAREMACROSDIALOGS
 {
     Text [ en-US ] = "%PRODUCTNAME Macros & Dialogs" ;
 };
+
 Menu RID_POPUP_BRKPROPS
 {
     Text [ en-US ] = "Properties" ;
@@ -407,6 +415,7 @@ Menu RID_POPUP_BRKPROPS
         };
     };
 };
+
 Menu RID_POPUP_BRKDLG
 {
     Text [ en-US ] = "Manage Breakpoints" ;
@@ -421,6 +430,7 @@ Menu RID_POPUP_BRKDLG
         };
     };
 };
+
 Menu RID_POPUP_TABBAR
 {
     DefaultItemId = SID_BASICIDE_HIDECURPAGE ;
@@ -483,6 +493,7 @@ Menu RID_POPUP_TABBAR
         };
     };
 };
+
 Menu RID_POPUP_DLGED
 {
     DefaultItemId = SID_SHOW_PROPERTYBROWSER ;
@@ -496,6 +507,7 @@ Menu RID_POPUP_DLGED
         };
     };
 };
+
 ImageList RID_IMGLST_LAYOUT
 {
     Prefix = "im";
@@ -513,6 +525,7 @@ Image RID_IMG_LOCKED
     ImageBitmap = Bitmap { File = "locked.bmp" ; };
     MASKCOLOR
 };
+
 Image RID_IMG_INSTALLATION
 {
     ImageBitmap = Bitmap { File = "harddisk_16.png"; };
@@ -562,31 +575,36 @@ String RID_STR_QUERYREPLACEMACRO
 {
     Text [ en-US ] = "Do you want to overwrite the XX macro?" ;
 };
+
 String RID_STR_TRANSLATION_NOTLOCALIZED
 {
     Text [ en-US ] = "<Not localized>" ;
 };
+
 String RID_STR_TRANSLATION_DEFAULT
 {
     Text [ en-US ] = "[Default Language]" ;
 };
+
 String RID_STR_DOCUMENT_OBJECTS
 {
     Text [ en-US ] = "Document Objects" ;
 };
+
 String RID_STR_USERFORMS
 {
     Text [ en-US ] = "Forms" ;
 };
+
 String RID_STR_NORMAL_MODULES
 {
     Text [ en-US ] = "Modules" ;
 };
+
 String RID_STR_CLASS_MODULES
 {
     Text [ en-US ] = "Class Modules" ;
 };
-
 
 String RID_STR_DLGIMP_CLASH_RENAME
 {

@@ -380,11 +380,15 @@ IconChoiceDialog ::~IconChoiceDialog ()
 |
 \**********************************************************************/
 
-SvxIconChoiceCtrlEntry* IconChoiceDialog::AddTabPage( USHORT nId, const String& rIconText,
-                                   const Image& rChoiceIcon,
-                                   CreatePage pCreateFunc /* != 0 */,
-                                   GetPageRanges pRangesFunc /* darf 0 sein */,
-                                   BOOL bItemsOnDemand, ULONG /*nPos*/ )
+SvxIconChoiceCtrlEntry* IconChoiceDialog::AddTabPage(
+    USHORT          nId,
+    const String&   rIconText,
+    const Image&    rChoiceIcon,
+    CreatePage      pCreateFunc /* != 0 */,
+    GetPageRanges   pRangesFunc /* darf 0 sein */,
+    BOOL            bItemsOnDemand,
+    ULONG           /*nPos*/
+)
 {
     IconChoicePageData* pData = new IconChoicePageData ( nId, pCreateFunc,
                                                          pRangesFunc,
@@ -396,27 +400,6 @@ SvxIconChoiceCtrlEntry* IconChoiceDialog::AddTabPage( USHORT nId, const String& 
 
     USHORT *pId = new USHORT ( nId );
     SvxIconChoiceCtrlEntry* pEntry = maIconCtrl.InsertEntry( rIconText, rChoiceIcon );
-    pEntry->SetUserData ( (void*) pId );
-    return pEntry;
-}
-
-SvxIconChoiceCtrlEntry* IconChoiceDialog::AddTabPage( USHORT nId, const String& rIconText,
-                                   const Image& rChoiceIcon,
-                                   const Image& rChoiceIconHC,
-                                   CreatePage pCreateFunc /* != 0 */,
-                                   GetPageRanges pRangesFunc /* darf 0 sein */,
-                                   BOOL bItemsOnDemand, ULONG /*nPos*/ )
-{
-    IconChoicePageData* pData = new IconChoicePageData ( nId, pCreateFunc,
-                                                         pRangesFunc,
-                                                         bItemsOnDemand );
-    maPageList.Insert ( pData, LIST_APPEND );
-
-    pData->fnGetRanges = pRangesFunc;
-    pData->bOnDemand = bItemsOnDemand;
-
-    USHORT *pId = new USHORT ( nId );
-    SvxIconChoiceCtrlEntry* pEntry = maIconCtrl.InsertEntry( rIconText, rChoiceIcon, rChoiceIconHC );
     pEntry->SetUserData ( (void*) pId );
     return pEntry;
 }

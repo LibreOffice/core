@@ -245,11 +245,6 @@ public :
         CreatePage pCreateFunc /* != NULL */, GetPageRanges pRangesFunc = NULL /* NULL allowed*/,
         BOOL bItemsOnDemand = FALSE, ULONG nPos = LIST_APPEND );
 
-    SvxIconChoiceCtrlEntry* AddTabPage(
-        USHORT nId, const String& rIconText, const Image& rChoiceIcon, const Image& rChoiceIconHC,
-        CreatePage pCreateFunc /* != NULL */, GetPageRanges pRangesFunc = NULL /* NULL allowed*/,
-        BOOL bItemsOnDemand = FALSE, ULONG nPos = LIST_APPEND );
-
     void                RemoveTabPage( USHORT nId );
 
     void                SetCurPageId( USHORT nId ) { mnCurrentPageId = nId; FocusOnIcon( nId ); }

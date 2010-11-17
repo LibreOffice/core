@@ -35,6 +35,7 @@
 #define BTN_SELECTOR_HELP 8
 #define GRP_SELECTOR_DESCRIPTION 9
 #define TXT_SELECTOR_DESCRIPTION 10
+
 #define IMG_HARDDISK                   1
 #define IMG_LIB                        3
 #define IMG_MACRO                      5

@@ -617,7 +617,11 @@ void SvxConfigGroupListBox_Impl::Init()
     SetUpdateMode( TRUE );
 }
 
-Image SvxConfigGroupListBox_Impl::GetImage( Reference< browse::XBrowseNode > node, Reference< XComponentContext > xCtx, bool bIsRootNode )
+Image SvxConfigGroupListBox_Impl::GetImage(
+    Reference< browse::XBrowseNode > node,
+    Reference< XComponentContext > xCtx,
+    bool bIsRootNode
+)
 {
     Image aImage;
     if ( bIsRootNode )
@@ -666,8 +670,7 @@ Image SvxConfigGroupListBox_Impl::GetImage( Reference< browse::XBrowseNode > nod
             }
             if( factoryURL.getLength() > 0 )
             {
-                aImage = SvFileInformationManager::GetFileImage(
-                    INetURLObject(factoryURL), false);
+                aImage = SvFileInformationManager::GetFileImage( INetURLObject(factoryURL), false );
             }
             else
             {

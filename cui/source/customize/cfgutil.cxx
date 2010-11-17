@@ -902,9 +902,8 @@ void SfxConfigGroupListBox_Impl::Init(const css::uno::Reference< css::lang::XMul
                             }
                             if (children[n]->getType() != browse::BrowseNodeTypes::SCRIPT  && bDisplay )
                             {
-
-//                                  We call acquire on the XBrowseNode so that it does not
-//                                  get autodestructed and become invalid when accessed later.
+//                              We call acquire on the XBrowseNode so that it does not
+//                              get autodestructed and become invalid when accessed later.
                                 theChild->acquire();
 
                                 SfxGroupInfo_Impl* pInfo =
@@ -959,7 +958,11 @@ void SfxConfigGroupListBox_Impl::Init(const css::uno::Reference< css::lang::XMul
     MakeVisible( GetEntry( 0,0 ) );
     SetUpdateMode( TRUE );
 }
-Image SfxConfigGroupListBox_Impl::GetImage( Reference< browse::XBrowseNode > node, Reference< XComponentContext > xCtx, bool bIsRootNode )
+Image SfxConfigGroupListBox_Impl::GetImage(
+    Reference< browse::XBrowseNode > node,
+    Reference< XComponentContext > xCtx,
+    bool bIsRootNode
+)
 {
     Image aImage;
     if ( bIsRootNode )
@@ -1013,8 +1016,7 @@ Image SfxConfigGroupListBox_Impl::GetImage( Reference< browse::XBrowseNode > nod
             }
             if( factoryURL.getLength() > 0 )
             {
-                aImage = SvFileInformationManager::GetFileImage(
-                    INetURLObject(factoryURL), false );
+                aImage = SvFileInformationManager::GetFileImage( INetURLObject(factoryURL), false );
             }
             else
             {

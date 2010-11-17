@@ -191,7 +191,6 @@ struct SvxThesaurusDialog_Impl
 
     String          aErrStr;
     Image           aVendorDefaultImage;
-    Image           aVendorDefaultImageHC;
 
     uno::Reference< linguistic2::XThesaurus >   xThesaurus;
     OUString                aLookUpText;

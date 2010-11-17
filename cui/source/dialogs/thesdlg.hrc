@@ -43,7 +43,6 @@
 #define CT_THES_ALTERNATIVES    25
 #define IMG_VENDOR              26
 #define IMG_DEFAULT_VENDOR      27
-#define IMG_DEFAULT_VENDOR_HC   28
 
 #define STR_ERR_TEXTNOTFOUND    101
 
