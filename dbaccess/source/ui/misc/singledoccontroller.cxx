@@ -35,9 +35,10 @@
 #include "dbustrings.hrc"
 #include "moduledbu.hxx"
 #include "singledoccontroller.hxx"
-#include <com/sun/star/frame/XUntitledNumbers.hpp>
+#include "dbaundomanager.hxx"
 
 /** === begin UNO includes === **/
+#include <com/sun/star/frame/XUntitledNumbers.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -95,6 +96,7 @@ namespace dbaui
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::frame::XUntitledNumbers;
     using ::com::sun::star::beans::PropertyVetoException;
+    using ::com::sun::star::document::XUndoManager;
     /** === end UNO using === **/
 
     class DataSourceHolder
@@ -148,6 +150,8 @@ namespace dbaui
         SharedConnection                m_xConnection;
         ::dbtools::DatabaseMetaData     m_aSdbMetaData;
         // </properties>
+        ::boost::scoped_ptr< UndoManager >
+                                        m_pUndoManager;
         ::rtl::OUString                 m_sDataSourceName;      // the data source we're working for
         DataSourceHolder                m_aDataSource;
         Reference< XModel >             m_xDocument;
@@ -158,9 +162,10 @@ namespace dbaui
         sal_Bool                        m_bModified;    // is the data modified
         bool                            m_bNotAttached;
 
-        OSingleDocumentControllerImpl( ::osl::Mutex& i_rMutex )
+        OSingleDocumentControllerImpl( OSingleDocumentController& i_antiImpl, ::osl::Mutex& i_rMutex )
             :m_aDocScriptSupport()
             ,m_aModifyListeners( i_rMutex )
+            ,m_pUndoManager( new UndoManager( i_antiImpl, i_rMutex ) )
             ,m_nDocStartNumber(0)
             ,m_bSuspended( sal_False )
             ,m_bEditable(sal_True)
@@ -190,7 +195,7 @@ namespace dbaui
     //--------------------------------------------------------------------
     OSingleDocumentController::OSingleDocumentController(const Reference< XMultiServiceFactory >& _rxORB)
         :OSingleDocumentController_Base( _rxORB )
-        ,m_pImpl( new OSingleDocumentControllerImpl( getMutex() ) )
+        ,m_pImpl( new OSingleDocumentControllerImpl( *this, getMutex() ) )
     {
     }
 
@@ -368,12 +373,13 @@ namespace dbaui
     void SAL_CALL OSingleDocumentController::disposing()
     {
         OSingleDocumentController_Base::disposing();
-        m_aUndoManager.Clear();
+        GetUndoManager().Clear();
 
         disconnect();
 
         attachFrame( Reference < XFrame >() );
 
+        m_pImpl->m_pUndoManager->disposing();
         m_pImpl->m_aDataSource.clear();
     }
 
@@ -483,22 +489,22 @@ namespace dbaui
         switch (_nId)
         {
             case ID_BROWSER_UNDO:
-                aReturn.bEnabled = m_pImpl->m_bEditable && m_aUndoManager.GetUndoActionCount() != 0;
+                aReturn.bEnabled = m_pImpl->m_bEditable && GetUndoManager().GetUndoActionCount() != 0;
                 if ( aReturn.bEnabled )
                 {
                     String sUndo(ModuleRes(STR_UNDO_COLON));
                     sUndo += String(RTL_CONSTASCII_USTRINGPARAM(" "));
-                    sUndo += m_aUndoManager.GetUndoActionComment();
+                    sUndo += GetUndoManager().GetUndoActionComment();
                     aReturn.sTitle = sUndo;
                 }
                 break;
             case ID_BROWSER_REDO:
-                aReturn.bEnabled = m_pImpl->m_bEditable && m_aUndoManager.GetRedoActionCount() != 0;
+                aReturn.bEnabled = m_pImpl->m_bEditable && GetUndoManager().GetRedoActionCount() != 0;
                 if ( aReturn.bEnabled )
                 {
                     String sRedo(ModuleRes(STR_REDO_COLON));
                     sRedo += String(RTL_CONSTASCII_USTRINGPARAM(" "));
-                    sRedo += m_aUndoManager.GetRedoActionComment();
+                    sRedo += GetUndoManager().GetRedoActionComment();
                     aReturn.sTitle = sRedo;
                 }
                 break;
@@ -516,11 +522,11 @@ namespace dbaui
                 closeTask();
                 return;
             case ID_BROWSER_UNDO:
-                m_aUndoManager.Undo();
+                GetUndoManager().Undo();
                 InvalidateFeature(ID_BROWSER_REDO);
                 break;
             case ID_BROWSER_REDO:
-                m_aUndoManager.Redo();
+                GetUndoManager().Redo();
                 InvalidateFeature(ID_BROWSER_UNDO);
                 break;
             default:
@@ -530,15 +536,15 @@ namespace dbaui
         InvalidateFeature(_nId);
     }
     // -----------------------------------------------------------------------------
-    SfxUndoManager& OSingleDocumentController::GetUndoManager()
+    SfxUndoManager& OSingleDocumentController::GetUndoManager() const
     {
-        return m_aUndoManager;
+        return m_pImpl->m_pUndoManager->GetSfxUndoManager();
     }
     // -----------------------------------------------------------------------------
     void OSingleDocumentController::addUndoActionAndInvalidate(SfxUndoAction *_pAction)
     {
         // add undo action
-        m_aUndoManager.AddUndoAction(_pAction);
+        GetUndoManager().AddUndoAction(_pAction);
         // when we add an undo action the controller was modified
         setModified(sal_True);
         // now inform me that or states changed
@@ -676,6 +682,13 @@ namespace dbaui
 
         return sTitle.makeStringAndClear();
     }
+
+    // -----------------------------------------------------------------------------
+    Reference< XUndoManager > SAL_CALL OSingleDocumentController::getUndoManager(  ) throw (RuntimeException)
+    {
+        return m_pImpl->m_pUndoManager.get();
+    }
+
     // -----------------------------------------------------------------------------
     sal_Int32 OSingleDocumentController::getCurrentStartNumber() const
     {

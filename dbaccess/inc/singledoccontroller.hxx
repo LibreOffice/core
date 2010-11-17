@@ -38,13 +38,14 @@
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #include <com/sun/star/util/XNumberFormatter.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
+#include <com/sun/star/document/XUndoManagerSupplier.hpp>
 /** === end UNO includes === **/
 
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/propertycontainer.hxx>
 #include <connectivity/dbmetadata.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase3.hxx>
 #include <svl/undo.hxx>
 
 #include <memory>
@@ -59,9 +60,10 @@ namespace dbaui
     //====================================================================
     class OSingleDocumentController;
 
-    typedef ::cppu::ImplInheritanceHelper2  <   OGenericUnoController
+    typedef ::cppu::ImplInheritanceHelper3  <   OGenericUnoController
                                             ,   ::com::sun::star::document::XScriptInvocationContext
                                             ,   ::com::sun::star::util::XModifiable
+                                            ,   ::com::sun::star::document::XUndoManagerSupplier
                                             >   OSingleDocumentController_Base;
 
     struct OSingleDocumentControllerImpl;
@@ -71,9 +73,6 @@ namespace dbaui
     {
     private:
         ::std::auto_ptr<OSingleDocumentControllerImpl> m_pImpl;
-
-    protected:
-        SfxUndoManager  m_aUndoManager;
 
     private:
         /** forces usage of a connection which we do not own
@@ -102,7 +101,7 @@ namespace dbaui
         void            setEditable(sal_Bool _bEditable);
 
         // need for undo's and redo's
-        SfxUndoManager& GetUndoManager();
+        SfxUndoManager& GetUndoManager() const;
 
         /** addUndoActionAndInvalidate adds an undo action to the undoManager,
             additionally invalidates the UNDO and REDO slot
@@ -189,6 +188,9 @@ namespace dbaui
 
         // XTitle
         virtual ::rtl::OUString SAL_CALL getTitle(  ) throw (::com::sun::star::uno::RuntimeException);
+
+        // XUndoManagerSupplier
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoManager > SAL_CALL getUndoManager(  ) throw (::com::sun::star::uno::RuntimeException);
 
     protected:
         OSingleDocumentController(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxORB);
