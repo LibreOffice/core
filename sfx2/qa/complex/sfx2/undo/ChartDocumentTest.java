@@ -113,7 +113,12 @@ public class ChartDocumentTest implements DocumentTest
                 canActivate = true;
         assertTrue( "cannot activate OLE object", canActivate );
 
-        // actually
+        // actually activate the object
+        //embeddedChart.doVerb( EmbedVerbs.MS_OLEVERB_SHOW );
+            // if we could use XEmbeddedObject.setVerb, then we would not need the "select" thingie above, and also
+            // the asynchronous dispatch below would not be necessary.
+            // Sadly, doVerb at the moment reliably deadlocks ... :(
+
         m_textDocument.getCurrentView().dispatch( ".uno:ObjectMenue", new NamedValue[] { new NamedValue( "VerbID", EmbedVerbs.MS_OLEVERB_SHOW ) } );
 
         // the dispatch happens asynchronously, so wait a little (at most 1 seconds) until the chart really has been activated
