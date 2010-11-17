@@ -2521,7 +2521,7 @@ void DocxAttributeOutput::NumberingLevel( BYTE nLevel,
         m_pSerializer->startElementNS( XML_w, XML_tabs, FSEND );
         m_pSerializer->singleElementNS( XML_w, XML_tab,
                 FSNS( XML_w, XML_val ), "num",
-                FSNS( XML_w, XML_pos ), OString::valueOf( nListTabPos ).getStr(),
+                FSNS( XML_w, XML_pos ), OString::valueOf( static_cast<sal_Int32>(nListTabPos) ).getStr(),
                 FSEND );
         m_pSerializer->endElementNS( XML_w, XML_tabs );
     }
