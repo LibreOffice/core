@@ -29,12 +29,8 @@
 #ifndef _SOT_EXCHANGE_HXX
 #define _SOT_EXCHANGE_HXX
 
-#ifndef __SGI_STL_LIST
 #include <list>
-#endif
-#ifndef __SGI_STL_VECTOR
 #include <vector>
-#endif
 #include <tools/string.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
