@@ -1114,13 +1114,6 @@ void GtkSalFrame::SetIcon( USHORT nIcon )
     USHORT nOffsets[2] = { SV_ICON_SMALL_START, SV_ICON_LARGE_START };
     USHORT nIndex;
 
-    // Use high contrast icons where appropriate
-    if( Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
-    {
-        nOffsets[0] = SV_ICON_LARGE_HC_START;
-        nOffsets[1] = SV_ICON_SMALL_HC_START;
-    }
-
     for( nIndex = 0; nIndex < sizeof(nOffsets)/ sizeof(USHORT); nIndex++ )
     {
         // #i44723# workaround gcc temporary problem
