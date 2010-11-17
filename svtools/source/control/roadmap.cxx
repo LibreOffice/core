@@ -34,9 +34,7 @@
 #define _STRING_HXX
 #endif
 
-#ifndef __SGI_STL_VECTOR
 #include <vector>
-#endif
 
 #include <algorithm>
 #include <vcl/bitmap.hxx>
