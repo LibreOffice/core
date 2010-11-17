@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ GEN_HID_OTHER=TRUE
 
 # i26518 the gcc-3.0.4 requires to enhance the template-depth
 # this seems to be a compiler issue, so we recommend not to use 3.0.x anymore
-.IF "$(COM)"=="GCC" 
+.IF "$(COM)"=="GCC"
     CFLAGS+=-ftemplate-depth-128
 .ENDIF
 
@@ -154,7 +154,7 @@ SRC1FILES=		\
 SRS1NAME=$(TARGET)
 
 # --- Targets -----------------------------------------------------------------
-LOCALIZE_ME=res_DataLabel_tmpl.hrc res_LegendPosition_tmpl.hrc res_Trendline_tmpl.hrc res_ErrorBar_tmpl.hrc res_Titlesx_tmpl.hrc res_SecondaryAxisCheckBoxes_tmpl.hrc 
+LOCALIZE_ME=res_DataLabel_tmpl.hrc res_LegendPosition_tmpl.hrc res_Trendline_tmpl.hrc res_ErrorBar_tmpl.hrc res_Titlesx_tmpl.hrc res_SecondaryAxisCheckBoxes_tmpl.hrc
 .INCLUDE: target.mk
 $(SRS)$/chcdialogs.srs: $(INCCOM)$/res_DataLabel.hrc
 $(SRS)$/chcdialogs.srs: $(INCCOM)$/res_LegendPosition.hrc
@@ -190,10 +190,6 @@ $(SRS)$/chcdialogs.srs: \
         tp_Location.hrc \
         tp_RangeChooser.hrc \
         tp_Wizard_TitlesAndObjects.hrc
-
-#        res_DataLabel.hrc \
-#        res_LegendPosition.hrc \
-#        res_Statistic.hrc \
 
 #$(SRS)$/chcdialogs.srs: $(SOLARINCDIR)$/svx$/globlmn.hrc
 

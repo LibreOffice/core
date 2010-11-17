@@ -238,7 +238,6 @@ Window RID_SCDLG_NAVIGATOR
 
 };
 
-
 ImageList RID_IMAGELIST_NAVCONT
 {
     Prefix = "nc";
@@ -250,11 +249,13 @@ Image RID_IMG_DROP_URL
     ImageBitmap = Bitmap { File = "dropurl.bmp" ; };
     MaskColor = STD_MASKCOLOR ;
 };
+
 Image RID_IMG_DROP_LINK
 {
     ImageBitmap = Bitmap { File = "droplink.bmp" ; };
     MaskColor = STD_MASKCOLOR ;
 };
+
 Image RID_IMG_DROP_COPY
 {
     ImageBitmap = Bitmap { File = "dropcopy.bmp" ; };
@@ -267,38 +268,47 @@ String SCSTR_CONTENT_ROOT
 {
     Text [ en-US ] = "Contents" ;
 };
+
 String SCSTR_CONTENT_TABLE
 {
     Text [ en-US ] = "Sheets" ;
 };
+
 String SCSTR_CONTENT_RANGENAME
 {
     Text [ en-US ] = "Range names" ;
 };
+
 String SCSTR_CONTENT_DBAREA
 {
     Text [ en-US ] = "Database Ranges" ;
 };
+
 String SCSTR_CONTENT_GRAPHIC
 {
     Text [ en-US ] = "Graphics" ;
 };
+
 String SCSTR_CONTENT_OLEOBJECT
 {
     Text [ en-US ] = "OLE objects" ;
 };
+
 String SCSTR_CONTENT_NOTE
 {
     Text [ en-US ] = "Comments" ;
 };
+
 String SCSTR_CONTENT_AREALINK
 {
     Text [ en-US ] = "Linked areas" ;
 };
+
 String SCSTR_CONTENT_DRAWING
 {
     Text [ en-US ] = "Drawing objects";
 };
+
  // PopupMenu -------------------------------------------------------------
 Menu RID_POPUP_DROPMODE
 {
@@ -324,6 +334,7 @@ Menu RID_POPUP_DROPMODE
         };
     };
 };
+
 Menu RID_POPUP_NAVIPI_SCENARIO
 {
     ItemList =
@@ -342,45 +353,3 @@ Menu RID_POPUP_NAVIPI_SCENARIO
         };
     };
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

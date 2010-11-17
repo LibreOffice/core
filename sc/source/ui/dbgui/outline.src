@@ -27,7 +27,6 @@
 
 #include "sc.hrc"
 
-
 // Imageliste hier, damit sie nicht in ui.src beim Zusammenbauen der
 // "echten" Imagelisten stoert
 

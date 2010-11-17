@@ -1170,9 +1170,6 @@ Sequence< datatransfer::DataFlavor > SAL_CALL ChartModel::getTransferDataFlavors
 {
     uno::Sequence< datatransfer::DataFlavor > aRet(1);
 
-//     aRet[0] = datatransfer::DataFlavor( lcl_aGDIMetaFileMIMEType,
-//         C2U( "GDIMetaFile" ),
-//      ::getCppuType( (const uno::Sequence< sal_Int8 >*) NULL ) );
     aRet[0] = datatransfer::DataFlavor( lcl_aGDIMetaFileMIMETypeHighContrast,
         C2U( "GDIMetaFile" ),
         ::getCppuType( (const uno::Sequence< sal_Int8 >*) NULL ) );
@@ -1183,8 +1180,6 @@ Sequence< datatransfer::DataFlavor > SAL_CALL ChartModel::getTransferDataFlavors
 ::sal_Bool SAL_CALL ChartModel::isDataFlavorSupported( const datatransfer::DataFlavor& aFlavor )
     throw (uno::RuntimeException)
 {
-//     return ( aFlavor.MimeType.equals(lcl_aGDIMetaFileMIMEType) ||
-//              aFlavor.MimeType.equals(lcl_aGDIMetaFileMIMETypeHighContrast) );
     return aFlavor.MimeType.equals(lcl_aGDIMetaFileMIMETypeHighContrast);
 }
 

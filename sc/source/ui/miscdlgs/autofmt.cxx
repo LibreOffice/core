@@ -529,9 +529,6 @@ void ScAutoFmtPreview::NotifyChange( ScAutoFormatData* pNewData )
 void ScAutoFmtPreview::DoPaint( const Rectangle& /* rRect */ )
 {
     sal_uInt32 nOldDrawMode = aVD.GetDrawMode();
-    //  #105733# SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
-    if( GetSettings().GetStyleSettings().GetHighContrastMode() )
-        aVD.SetDrawMode( DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT );
 
     Size aWndSize( GetSizePixel() );
     Font aFont( aVD.GetFont() );

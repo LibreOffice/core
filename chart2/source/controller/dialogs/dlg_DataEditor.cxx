@@ -115,8 +115,6 @@ DataEditor::DataEditor(
     SetOutputSizePixel( aWinSize );
     AdaptBrowseBoxSize();
 
-//     ImplAdjustHeaderControls( false /* bRefreshFromModel */ );
-
     // allow travelling to toolbar with F6
     notifySystemWindow( this, & m_aTbxData, ::comphelper::mem_fun( & TaskPaneList::AddWindow ));
 }
@@ -215,82 +213,10 @@ IMPL_LINK( DataEditor, CellModified, void*, EMPTYARG )
     return 0;
 }
 
-// IMPL_LINK( DataEditor, BrowserColumnResized, void*, EMPTYARG )
-// {
-//     ImplAdjustHeaderControls( false /* bRefreshFromModel */ );
-//     return 0;
-// }
-
-// IMPL_LINK( DataEditor, BrowserContentScrolled, void*, EMPTYARG )
-// {
-//     ImplAdjustHeaderControls( false /* bRefreshFromModel */ );
-//     return 0;
-// }
-
 void DataEditor::UpdateData()
 {
     m_apBrwData->SetDataFromModel( m_xChartDoc, m_xContext );
 }
-
-// react on the change of the underlying document by displaying the new data
-// void DataEditor::SFX_NOTIFY(
-//     SfxBroadcaster& rBC,
-//     const TypeId& rBCType,
-//     const SfxHint& rHint,
-//     const TypeId& rHintType )
-// {
-//     if( rHint.Type() == TYPE(SfxSimpleHint) )
-//     {
-//         // note: if dynamic_cast works this should be changed
-//         switch( static_cast< const SfxSimpleHint & >( rHint ).GetId())
-//         {
-//             case SFX_HINT_DOCCHANGED:
-//                 UpdateData();
-//                 break;
-
-//             case SFX_HINT_DYING:
-//                 break;
-//         }
-//     }
-// }
-
-// {
-//     BOOL bRet = TRUE;
-
-//     // confirm changes currently made and not saved
-//     m_apBrwData->EndEditing();
-
-//     if( m_apBrwData->IsDirty() )
-//     {
-//         QueryBox aSafetyQuery( this, WB_YES_NO_CANCEL | WB_DEF_YES,
-//                                String( SchResId( STR_DIAGRAM_DATA_SAFETY_QUERY )));
-//         long nQueryResult = aSafetyQuery.Execute();
-
-//         bRet = ( nQueryResult != RET_CANCEL );
-
-//         if( nQueryResult == RET_YES )
-//         {
-//             // save changes
-//             ApplyChangesToModel();
-//         }
-//     }
-
-//     if( bRet )
-//     {
-//         // close child window
-//         SfxBoolItem aItem( SID_DIAGRAM_DATA, FALSE );
-//         if( m_pBindings )
-//         {
-//             SfxDispatcher* pDisp = m_pBindings->GetDispatcher();
-//             if( pDisp )
-//                 pDisp->Execute( SID_DIAGRAM_DATA, SFX_CALLMODE_ASYNCHRON, &aItem, 0L);
-//             else
-//                 DBG_ERROR( "Couldn't dispatch command" );
-//         }
-//     }
-
-//     return ( bRet? SfxFloatingWindow::Close(): FALSE );
-// }
 
 void DataEditor::AdaptBrowseBoxSize()
 {
@@ -307,7 +233,6 @@ void DataEditor::Resize()
 {
     Dialog::Resize();
     AdaptBrowseBoxSize();
-//     ImplAdjustHeaderControls( false /* bRefreshFromModel */ );
 }
 
 BOOL DataEditor::Close()
@@ -323,11 +248,7 @@ bool DataEditor::ApplyChangesToModel()
     return m_apBrwData->EndEditing();
 }
 
-/**
- * sets the correct toolbar icons depending on the current mode (e.g. high contrast)
- * FIXME: does not serve any purpose anymore, as the high contrast theme has been removed
- * FIXME: check callers and see if we can do away with it
- */
+// sets the correct toolbar icons depending on the current mode (e.g. high contrast)
 void DataEditor::ApplyImageList()
 {
     m_aTbxData.SetImageList( m_aToolboxImageList );

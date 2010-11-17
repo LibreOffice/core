@@ -1331,8 +1331,7 @@ void ScPrintFunc::DrawBorder( long nScrX, long nScrY, long nScrW, long nScrH,
         return;                                         // leer
 
     //  #105733# SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
-    BOOL bCellContrast = bUseStyleColor &&
-            Application::GetSettings().GetStyleSettings().GetHighContrastMode();
+    BOOL bCellContrast = bUseStyleColor;
 
     if ( pBackground && !bCellContrast )
     {

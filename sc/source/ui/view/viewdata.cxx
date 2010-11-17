@@ -1086,8 +1086,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
     Color aBackCol = ((const SvxBrushItem&)pPattern->GetItem(ATTR_BACKGROUND)).GetColor();
 
     ScModule* pScMod = SC_MOD();
-    if ( aBackCol.GetTransparency() > 0 ||
-            Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
+    if ( aBackCol.GetTransparency() > 0 )
     {
         aBackCol.SetColor( pScMod->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor );
     }

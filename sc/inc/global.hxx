@@ -132,14 +132,6 @@ const SCSIZE PIVOT_MAXPAGEFIELD = 10;
                                         // Oberhalb dieser Grenze liegen
                                         // die Indizes fuer DBBereiche
 
-/*
-#ifdef OS2
-#define PIXEL_PER_INCH      72.0
-#else
-#define PIXEL_PER_INCH      96.0
-#endif
-*/
-
 #define PIXEL_PER_INCH      96.0
 
 #define CM_PER_INCH         2.54

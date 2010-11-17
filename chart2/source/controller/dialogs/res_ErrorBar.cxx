@@ -694,15 +694,15 @@ void ErrorBarResources::FillValueSets()
 {
     if( m_eErrorBarType == ERROR_BAR_Y )
     {
-        m_aFiNegative.SetImage( Image( SchResId( BMP_INDICATE_DOWN )));
-        m_aFiPositive.SetImage( Image( SchResId( BMP_INDICATE_UP )));
-        m_aFiBoth.SetImage( Image( SchResId( BMP_INDICATE_BOTH_VERTI )));
+        m_aFiNegative.SetImage( Image( SchResId( BMP_INDICATE_DOWN       ) ) );
+        m_aFiPositive.SetImage( Image( SchResId( BMP_INDICATE_UP         ) ) );
+        m_aFiBoth.SetImage(     Image( SchResId( BMP_INDICATE_BOTH_VERTI ) ) );
     }
     else if( m_eErrorBarType == ERROR_BAR_X )
     {
-        m_aFiNegative.SetImage( Image( SchResId( BMP_INDICATE_LEFT )));
-        m_aFiPositive.SetImage( Image( SchResId( BMP_INDICATE_RIGHT )));
-        m_aFiBoth.SetImage( Image( SchResId( BMP_INDICATE_BOTH_HORI )));
+        m_aFiNegative.SetImage( Image( SchResId( BMP_INDICATE_LEFT      ) ) );
+        m_aFiPositive.SetImage( Image( SchResId( BMP_INDICATE_RIGHT     ) ) );
+        m_aFiBoth.SetImage(     Image( SchResId( BMP_INDICATE_BOTH_HORI ) ) );
     }
 }
 

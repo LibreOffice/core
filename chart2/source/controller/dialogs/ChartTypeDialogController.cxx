@@ -633,11 +633,12 @@ void PieChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const Ch
         rSubTypeList.InsertItem( 3, Bitmap( SchResId( BMP_DONUT_2D )));
         rSubTypeList.InsertItem( 4, Bitmap( SchResId( BMP_DONUT_2D_EXPLODED )));
     }
-    rSubTypeList.SetItemText( 1, String( SchResId( STR_NORMAL )) );
-    rSubTypeList.SetItemText( 2, String( SchResId( STR_PIE_EXPLODED )) );
-    rSubTypeList.SetItemText( 3, String( SchResId( STR_DONUT )) );
-    rSubTypeList.SetItemText( 4, String( SchResId( STR_DONUT_EXPLODED )) );
+    rSubTypeList.SetItemText( 1, String( SchResId( STR_NORMAL         ) ) );
+    rSubTypeList.SetItemText( 2, String( SchResId( STR_PIE_EXPLODED   ) ) );
+    rSubTypeList.SetItemText( 3, String( SchResId( STR_DONUT          ) ) );
+    rSubTypeList.SetItemText( 4, String( SchResId( STR_DONUT_EXPLODED ) ) );
 }
+
 bool PieChartDialogController::shouldShow_3DLookControl() const
 {
     return true;
@@ -1047,9 +1048,11 @@ StockChartDialogController::StockChartDialogController()
 {
     bSupports3D = false;
 }
+
 StockChartDialogController::~StockChartDialogController()
 {
 }
+
 String StockChartDialogController::getName()
 {
     return String( SchResId( STR_TYPE_STOCK ));
@@ -1058,6 +1061,7 @@ Image StockChartDialogController::getImage()
 {
     return Image( SchResId( IMG_TYPE_STOCK ));
 }
+
 const tTemplateServiceChartTypeParameterMap& StockChartDialogController::getTemplateMap() const
 {
     static tTemplateServiceChartTypeParameterMap m_aTemplateMap =
@@ -1094,6 +1098,7 @@ CombiColumnLineChartDialogController::CombiColumnLineChartDialogController()
 {
     bSupports3D = false;
 }
+
 CombiColumnLineChartDialogController::~CombiColumnLineChartDialogController()
 {
     if(m_pFT_NumberOfLines)
@@ -1101,14 +1106,17 @@ CombiColumnLineChartDialogController::~CombiColumnLineChartDialogController()
     if(m_pMF_NumberOfLines)
         delete m_pMF_NumberOfLines;
 }
+
 String CombiColumnLineChartDialogController::getName()
 {
     return String( SchResId( STR_TYPE_COMBI_COLUMN_LINE ));
 }
-Image CombiColumnLineChartDialogController::getImage()
+
+Image CombiColumnLineChartDialogController::getImage( )
 {
-    return Image( SchResId( IMG_TYPE_COLUMN_LINE ));
+    return Image( SchResId( IMG_TYPE_COLUMN_LINE ) );
 }
+
 const tTemplateServiceChartTypeParameterMap& CombiColumnLineChartDialogController::getTemplateMap() const
 {
     static tTemplateServiceChartTypeParameterMap m_aTemplateMap =

@@ -658,8 +658,6 @@ void ScGlobal::Clear()
     DELETEZ(pEmbeddedBrushItem);
     DELETEZ(pProtectedBrushItem);
     DELETEZ(pOutlineBitmaps);
-//  DELETEZ(pAnchorBitmap);
-//  DELETEZ(pGrayAnchorBitmap);
     DELETEZ(pEnglishFormatter);
     DELETEZ(pCaseTransliteration);
     DELETEZ(pTransliteration);
@@ -705,7 +703,6 @@ CharSet ScGlobal::GetCharsetValue( const String& rCharSet )
     else if (rCharSet.EqualsIgnoreCaseAscii("IBMPC_861")) return RTL_TEXTENCODING_IBM_861;
     else if (rCharSet.EqualsIgnoreCaseAscii("IBMPC_863")) return RTL_TEXTENCODING_IBM_863;
     else if (rCharSet.EqualsIgnoreCaseAscii("IBMPC_865")) return RTL_TEXTENCODING_IBM_865;
-//  else if (rCharSet.EqualsIgnoreCaseAscii("SYSTEM")   ) return gsl_getSystemTextEncoding();
     else return gsl_getSystemTextEncoding();
 }
 
@@ -1358,7 +1355,6 @@ ScFunctionList::ScFunctionList() :
                 }
             }
         }
-//      pDesc->nHelpId    = 0;
 
         aFunctionList.Insert(pDesc, LIST_APPEND);
         nStrLen = (*(pDesc->pFuncName)).Len();
@@ -1856,7 +1852,7 @@ String ScFunctionMgr::GetCategoryName(sal_uInt32 _nCategoryNumber )
     {
         DBG_ERROR("Invalid category number!");
         return String();
-    } // if ( _nCategoryNumber >= SC_FUNCGROUP_COUNT )
+    }
 
     ::std::auto_ptr<ScResourcePublisher> pCategories( new ScResourcePublisher( ScResId( RID_FUNCTION_CATEGORIES ) ) );
     return String(ScResId((USHORT)_nCategoryNumber));
@@ -1875,7 +1871,7 @@ sal_Unicode ScFunctionMgr::getSingleToken(const formula::IFunctionManager::EToke
             return ScCompiler::GetNativeSymbol(ocArrayOpen).GetChar(0);
         case eArrayClose:
             return ScCompiler::GetNativeSymbol(ocArrayClose).GetChar(0);
-    } // switch(_eToken)
+    }
     return 0;
 }
 // -----------------------------------------------------------------------------
@@ -1950,7 +1946,7 @@ CollatorWrapper*        ScGlobal::GetCollator()
     {
         pCollator = new CollatorWrapper( ::comphelper::getProcessServiceFactory() );
         pCollator->loadDefaultCollator( *GetLocale(), SC_COLLATOR_IGNORES );
-    } // if ( !pCollator )
+    }
     return pCollator;
 }
 CollatorWrapper*        ScGlobal::GetCaseCollator()
@@ -1959,7 +1955,7 @@ CollatorWrapper*        ScGlobal::GetCaseCollator()
     {
         pCaseCollator = new CollatorWrapper( ::comphelper::getProcessServiceFactory() );
         pCaseCollator->loadDefaultCollator( *GetLocale(), 0 );
-    } // if ( !pCaseCollator )
+    }
     return pCaseCollator;
 }
 ::utl::TransliterationWrapper* ScGlobal::GetCaseTransliteration()
@@ -1969,7 +1965,7 @@ CollatorWrapper*        ScGlobal::GetCaseCollator()
         const LanguageType eOfficeLanguage = Application::GetSettings().GetLanguage();
         pCaseTransliteration = new ::utl::TransliterationWrapper(::comphelper::getProcessServiceFactory(), SC_TRANSLITERATION_CASESENSE );
         pCaseTransliteration->loadModuleIfNeeded( eOfficeLanguage );
-    } // if ( !pCaseTransliteration )
+    }
     return pCaseTransliteration;
 }
 IntlWrapper*         ScGlobal::GetScIntlWrapper()

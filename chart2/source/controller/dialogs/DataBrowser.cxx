@@ -88,7 +88,6 @@
 // with shift up/down, and entering non-editable cells would be problematic,
 // e.g.  the first cell, or when being in read-only mode
 
-
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
@@ -140,6 +139,7 @@ SeriesHeaderEdit::SeriesHeaderEdit( Window * pParent ) :
         m_nStartColumn( 0 ),
         m_bShowWarningBox( false )
 {}
+
 SeriesHeaderEdit::~SeriesHeaderEdit()
 {}
 
@@ -214,7 +214,8 @@ private:
 
     static Image GetChartTypeImage(
         const Reference< chart2::XChartType > & xChartType,
-        bool bSwapXAndYAxis);
+        bool bSwapXAndYAxis
+        );
 
     sal_Int32 m_nStartCol, m_nEndCol;
     sal_Int32 m_nWidth;
@@ -305,7 +306,6 @@ void SeriesHeader::SetWidth( sal_Int32 nWidth )
     SetPos( m_aPos );
 }
 
-
 void SeriesHeader::SetPixelPosX( sal_Int32 nPos )
 {
     Point aPos( m_pDevice->LogicToPixel( m_aPos, MAP_APPFONT ));
@@ -320,9 +320,10 @@ void SeriesHeader::SetPixelWidth( sal_Int32 nWidth )
 
 void SeriesHeader::SetChartType(
     const Reference< chart2::XChartType > & xChartType,
-    bool bSwapXAndYAxis )
+    bool bSwapXAndYAxis
+)
 {
-    m_spSymbol->SetImage(GetChartTypeImage(xChartType, bSwapXAndYAxis));
+    m_spSymbol->SetImage( GetChartTypeImage( xChartType, bSwapXAndYAxis ) );
 }
 
 void SeriesHeader::SetSeriesName( const String & rName )
@@ -383,7 +384,8 @@ bool SeriesHeader::HasFocus() const
 
 Image SeriesHeader::GetChartTypeImage(
     const Reference< chart2::XChartType > & xChartType,
-    bool bSwapXAndYAxis)
+    bool bSwapXAndYAxis
+)
 {
     Image aResult;
     if( !xChartType.is())
@@ -392,40 +394,40 @@ Image SeriesHeader::GetChartTypeImage(
 
     if( aChartTypeName.equals( CHART2_SERVICE_NAME_CHARTTYPE_AREA ))
     {
-        aResult = Image( SchResId( IMG_TYPE_AREA ));
+        aResult = Image( SchResId( IMG_TYPE_AREA ) );
     }
     else if( aChartTypeName.equals( CHART2_SERVICE_NAME_CHARTTYPE_COLUMN ))
     {
         if( bSwapXAndYAxis )
-            aResult = Image( SchResId( IMG_TYPE_BAR ));
+            aResult = Image( SchResId( IMG_TYPE_BAR ) );
         else
-            aResult = Image( SchResId( IMG_TYPE_COLUMN ));
+            aResult = Image( SchResId( IMG_TYPE_COLUMN ) );
     }
     else if( aChartTypeName.equals( CHART2_SERVICE_NAME_CHARTTYPE_LINE ))
     {
-        aResult = Image( SchResId( IMG_TYPE_LINE ));
+        aResult = Image( SchResId( IMG_TYPE_LINE ) );
     }
     else if( aChartTypeName.equals( CHART2_SERVICE_NAME_CHARTTYPE_SCATTER ))
     {
-        aResult = Image( SchResId( IMG_TYPE_XY ));
+        aResult = Image( SchResId( IMG_TYPE_XY ) );
     }
     else if( aChartTypeName.equals( CHART2_SERVICE_NAME_CHARTTYPE_PIE ))
     {
-        aResult = Image( SchResId( IMG_TYPE_PIE ));
+        aResult = Image( SchResId( IMG_TYPE_PIE ) );
     }
     else if( aChartTypeName.equals( CHART2_SERVICE_NAME_CHARTTYPE_NET )
           || aChartTypeName.equals( CHART2_SERVICE_NAME_CHARTTYPE_FILLED_NET ) )
     {
-        aResult = Image( SchResId( IMG_TYPE_NET ));
+        aResult = Image( SchResId( IMG_TYPE_NET ) );
     }
     else if( aChartTypeName.equals( CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK ))
     {
         // @todo: correct image for candle-stick type
-        aResult = Image( SchResId( IMG_TYPE_STOCK ));
+        aResult = Image( SchResId( IMG_TYPE_STOCK ) );
     }
     else if( aChartTypeName.equals( CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE ))
     {
-        aResult = Image( SchResId( IMG_TYPE_BUBBLE ));
+        aResult = Image( SchResId( IMG_TYPE_BUBBLE ) );
     }
 
     return aResult;

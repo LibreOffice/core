@@ -1437,15 +1437,9 @@
 #define BMP_START               (STR_END)
 
 // Navigator
-// not used anymore: RID_BMP_EXPAND, RID_BMP_COLLAPSE
-//#define    RID_BMP_EXPAND          (BMP_START)
-//#define    RID_BMP_COLLAPSE        (BMP_START + 1)
 #define RID_IMG_DROP_URL        (BMP_START + 2)
 #define RID_IMG_DROP_LINK       (BMP_START + 3)
 #define RID_IMG_DROP_COPY       (BMP_START + 4)
-// free
-// free
-// free
 #define RID_IMG_SELECT_CURRENT   (BMP_START + 8)
 #define RID_IMG_UNSELECT_CURRENT (BMP_START + 9)
 

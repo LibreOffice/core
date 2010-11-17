@@ -397,8 +397,6 @@ CommandToolBox::CommandToolBox( ScNavigatorDlg* pParent, const ResId& rResId )
     SetSizePixel( CalcWindowSizePixel() );
     SetDropdownClickHdl( LINK(this, CommandToolBox, ToolBoxDropdownClickHdl) );
     SetItemBits( IID_DROPMODE, GetItemBits( IID_DROPMODE ) | TIB_DROPDOWNONLY );
-//  EnableItem( IID_UP, FALSE );
-//  EnableItem( IID_DOWN, FALSE );
 }
 
 //------------------------------------------------------------------------
@@ -447,7 +445,6 @@ void CommandToolBox::Select( USHORT nSelId )
             case IID_DOWN:
                 rDlg.EndOfDataArea();
                 break;
-            // IID_DROPMODE ist in Click
             case IID_CHANGEROOT:
                 rDlg.aLbEntries.ToggleRoot();
                 UpdateButtons();

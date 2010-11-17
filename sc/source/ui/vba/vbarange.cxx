@@ -5271,8 +5271,7 @@ throw (::com::sun::star::script::BasicErrorException, ::com::sun::star::uno::Run
     sal_Int32  nCol;
     sal_Int32 nMaxRows = 0;
     sal_Int32 nMaxColumns = 0;
-    sal_Bool bEof;
-//  sal_Bool bColName = sal_True;
+    sal_Bool bEof = sal_False;
     long lColCnt = 0;
     if (MaxColumns.hasValue())
     {
@@ -5409,11 +5408,6 @@ ScVbaRange::AutoFill(  const uno::Reference< excel::XRange >& Destination, const
 
     ScUnoConversion::FillScRange( destRange, destAddress );
     ScUnoConversion::FillScRange( sourceRange, thisAddress );
-
-
-    // source is valid
-//  if (  !sourceRange.In( destRange ) )
-//      throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "source not in destination" ) ), uno::Reference< uno::XInterface >() );
 
     FillDir eDir = FILL_TO_BOTTOM;
     double fStep = 1.0;
@@ -5667,8 +5661,8 @@ ScVbaRange::Merge( const uno::Any& Across ) throw (script::BasicErrorException, 
         // #TODO #FIXME this seems incredibly lame, this can't be right
         for (sal_Int32 i=1; i <= oRangeRowsImpl->getCount();i++)
         {
-                       oRangeRowsImpl->Cells( uno::makeAny( i ), uno::Any() )->Merge( uno::makeAny( sal_False ) );
-               }
+            oRangeRowsImpl->Cells( uno::makeAny( i ), uno::Any() )->Merge( uno::makeAny( sal_False ) );
+        }
     }
 }
 
