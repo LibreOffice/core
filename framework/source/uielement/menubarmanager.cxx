@@ -876,7 +876,7 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
             m_bShowMenuImages   = bShowMenuImages;
             m_bRetrieveImages   = sal_False;
             m_nSymbolsStyle     = nSymbolsStyle;
-            MenuManager::FillMenuImages(m_xFrame,pMenu,bShowMenuImages);
+            MenuManager::FillMenuImages( m_xFrame, pMenu, bShowMenuImages );
         }
 
         // Try to map commands to labels

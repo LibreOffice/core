@@ -259,13 +259,13 @@ static USHORT ImplGetRID( const OUString& aCommand )
 {
     static const CommandToRID aImplCommandToResMap[] =
     {
-        { ".uno:GrafRed", RID_SVXIMG_GRAF_RED },
-        { ".uno:GrafGreen", RID_SVXIMG_GRAF_GREEN },
-        { ".uno:GrafBlue", RID_SVXIMG_GRAF_BLUE },
-        { ".uno:GrafLuminance", RID_SVXIMG_GRAF_LUMINANCE },
-        { ".uno:GrafContrast", RID_SVXIMG_GRAF_CONTRAST },
-        { ".uno:GrafGamma", RID_SVXIMG_GRAF_GAMMA },
-        { ".uno:GrafTransparence", RID_SVXIMG_GRAF_TRANSPARENCE },
+        { ".uno:GrafRed",           RID_SVXIMG_GRAF_RED             },
+        { ".uno:GrafGreen",         RID_SVXIMG_GRAF_GREEN           },
+        { ".uno:GrafBlue",          RID_SVXIMG_GRAF_BLUE            },
+        { ".uno:GrafLuminance",     RID_SVXIMG_GRAF_LUMINANCE       },
+        { ".uno:GrafContrast",      RID_SVXIMG_GRAF_CONTRAST        },
+        { ".uno:GrafGamma",         RID_SVXIMG_GRAF_GAMMA           },
+        { ".uno:GrafTransparence",  RID_SVXIMG_GRAF_TRANSPARENCE    },
         { 0, 0 }
     };
 
@@ -309,10 +309,14 @@ public:
 
 // -----------------------------------------------------------------------------
 
-ImplGrafControl::ImplGrafControl( Window* pParent, USHORT nSlotId, const rtl::OUString& rCmd, const Reference< XFrame >& rFrame ) :
-    Control( pParent, WB_TABSTOP ),
-    maImage     ( this ),
-    maField     ( this, rCmd, rFrame )
+ImplGrafControl::ImplGrafControl(
+    Window* pParent,
+    USHORT nSlotId,
+    const rtl::OUString& rCmd,
+    const Reference< XFrame >& rFrame
+)   : Control( pParent, WB_TABSTOP )
+    , maImage( this )
+    , maField( this, rCmd, rFrame )
 {
     ResId   aResId( ImplGetRID( rCmd ), DIALOG_MGR() ) ;
     Image   aImage( aResId );
@@ -393,9 +397,9 @@ ImplGrafModeControl::ImplGrafModeControl( Window* pParent, const Reference< XFra
 {
     SetSizePixel( Size( 100, 260 ) );
 
-    InsertEntry( SVX_RESSTR( RID_SVXSTR_GRAFMODE_STANDARD ) );
-    InsertEntry( SVX_RESSTR( RID_SVXSTR_GRAFMODE_GREYS ) );
-    InsertEntry( SVX_RESSTR( RID_SVXSTR_GRAFMODE_MONO ) );
+    InsertEntry( SVX_RESSTR( RID_SVXSTR_GRAFMODE_STANDARD  ) );
+    InsertEntry( SVX_RESSTR( RID_SVXSTR_GRAFMODE_GREYS     ) );
+    InsertEntry( SVX_RESSTR( RID_SVXSTR_GRAFMODE_MONO      ) );
     InsertEntry( SVX_RESSTR( RID_SVXSTR_GRAFMODE_WATERMARK ) );
 
     Show();

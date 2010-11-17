@@ -309,7 +309,6 @@ MenuManager::MenuManager(
         }
     }
 
-
     // retrieve label information for all menu items without item text
 
     SetHdl();
@@ -823,10 +822,12 @@ IMPL_LINK( MenuManager, Activate, Menu *, pMenu )
                   aCommand == aSpecialWindowCommand )
                   UpdateSpecialWindowMenu( pMenu,getServiceFactory(),m_aLock );
 
+        // Check if some modes have changed so we have to update our menu images
         if ( bShowMenuImages != m_bShowMenuImages )
         {
+            // The mode changed so we have to replace all images
             m_bShowMenuImages   = bShowMenuImages;
-            FillMenuImages(m_xFrame,pMenu,bShowMenuImages);
+            FillMenuImages( m_xFrame, pMenu, bShowMenuImages );
         }
 
         if ( m_bInitialized )

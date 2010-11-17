@@ -162,7 +162,7 @@ class SfxAppMenuControl_Impl : public SfxMenuControl
     BOOL        m_bShowMenuImages;
 
 protected:
-    DECL_LINK( Activate, Menu * ); // Needed to support high contrast images
+    DECL_LINK( Activate, Menu * );
 
 public:
     SFX_DECL_MENU_CONTROL();

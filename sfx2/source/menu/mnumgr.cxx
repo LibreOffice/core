@@ -228,11 +228,10 @@ PopupMenu* InsertThesaurusSubmenu_Impl( SfxBindings* pBindings, Menu* pSVMenu )
         if (nNumSynonyms > 0)
         {
             SvtLinguConfig aCfg;
-            const bool bHC = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
 
             Image aImage;
             String sThesImplName( aHelper.GetThesImplName( aLocale ) );
-            ::rtl::OUString aSynonymsImageUrl( aCfg.GetSynonymsContextImage( sThesImplName, bHC ) );
+            ::rtl::OUString aSynonymsImageUrl( aCfg.GetSynonymsContextImage( sThesImplName ) );
             if (sThesImplName.Len() > 0 && aSynonymsImageUrl.getLength() > 0)
                 aImage = Image( lcl_GetImageFromPngUrl( aSynonymsImageUrl ) );
 

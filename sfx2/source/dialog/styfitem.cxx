@@ -128,7 +128,7 @@ SfxStyleFamilies::SfxStyleFamilies( const ResId& rResId ) :
 
     FreeResource();
 
-    updateImages( rResId, BMP_COLOR_NORMAL );
+    updateImages( rResId );
 }
 
 // -----------------------------------------------------------------------
@@ -149,7 +149,7 @@ SfxStyleFamilies::~SfxStyleFamilies()
 
 // -----------------------------------------------------------------------
 
-sal_Bool SfxStyleFamilies::updateImages( const ResId& _rId, const BmpColorMode _eMode )
+sal_Bool SfxStyleFamilies::updateImages( const ResId& _rId )
 {
     sal_Bool bSuccess = sal_False;
 
@@ -157,7 +157,7 @@ sal_Bool SfxStyleFamilies::updateImages( const ResId& _rId, const BmpColorMode _
         ::svt::OLocalResourceAccess aLocalRes( _rId );
 
         // check if the image list is present
-        ResId aImageListId( (sal_uInt16)_eMode + 1, *_rId.GetResMgr() );
+        ResId aImageListId( (sal_uInt16) 1, *_rId.GetResMgr() );
         aImageListId.SetRT( RSC_IMAGELIST );
 
         if ( aLocalRes.IsAvailableRes( aImageListId ) )

@@ -1778,7 +1778,7 @@ Image AddonsOptions::GetImageFromURL( const rtl::OUString& aURL, sal_Bool bBig, 
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-Image AddonsOptions::GetImageFromURL( const rtl::OUString& aURL, sal_Bool bBig  ) const
+Image AddonsOptions::GetImageFromURL( const rtl::OUString& aURL, sal_Bool bBig ) const
 {
     return GetImageFromURL( aURL, bBig, sal_False );
 }

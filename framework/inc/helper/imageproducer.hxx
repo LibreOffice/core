@@ -56,6 +56,6 @@ Image SAL_CALL GetImageFromURL(
 
 }
 
-#endif // __FRAMEWORK_HELPER_IMAGEPRODUCER_HXX_
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

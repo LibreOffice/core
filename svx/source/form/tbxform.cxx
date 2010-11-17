@@ -208,10 +208,7 @@ void SvxFmTbxCtlConfig::StateChanged(USHORT nSID, SfxItemState eState, const Sfx
             {   // set a new image, matching to this slot
                 rtl::OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
                 aSlotURL += rtl::OUString::valueOf( sal_Int32( nSlot ));
-                Image aImage = GetImage( m_xFrame,
-                                        aSlotURL,
-                                        hasBigImages() );
-
+                Image aImage = GetImage( m_xFrame, aSlotURL, hasBigImages() );
                 GetToolBox().SetItemImage( GetId(), aImage );
                 nLastSlot = nSlot;
             }

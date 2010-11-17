@@ -40,11 +40,13 @@ Image RID_SVX_RELOAD_NORMAL
     ImageBitmap = Bitmap { File = "reload.bmp" ; };
     MASKCOLOR
 };
+
 Image RID_SVX_RELOAD_SPECIAL
 {
     ImageBitmap = Bitmap { File = "reloads.bmp" ; };
     MASKCOLOR
 };
+
 ImageList RID_SVXIL_FRAME
 {
     Prefix = "fr";
@@ -52,26 +54,32 @@ ImageList RID_SVXIL_FRAME
     IdCount = { 12 ; };
     MASKCOLOR
 };
+
 String RID_SVXSTR_TRANSPARENT
 {
     Text [ en-US ] = "No Fill" ;
 };
 String RID_SVXSTR_FILLPATTERN
+
 {
     Text [ en-US ] = "Pattern" ;
 };
+
 String RID_SVXSTR_FRAME
 {
     Text [ en-US ] = "Borders" ;
 };
+
 String RID_SVXSTR_FRAME_STYLE
 {
     Text [ en-US ] = "Border Style" ;
 };
+
 String RID_SVXSTR_FRAME_COLOR
 {
     Text [ en-US ] = "Border Color" ;
 };
+
 ComboBox RID_SVXTBX_STYLE
 {
     HelpId = HID_STYLE_LISTBOX ;
@@ -83,22 +91,27 @@ ComboBox RID_SVXTBX_STYLE
     Border = TRUE ;
     Hide = TRUE ;
 };
+
 String RID_SVXSTR_EXTRAS_CHARBACKGROUND
 {
     Text [ en-US ] = "Highlighting" ;
 };
+
 String RID_SVXSTR_BACKGROUND
 {
     Text [ en-US ] = "Background";
 };
+
 String RID_SVXSTR_AUTOMATIC
 {
     Text [ en-US ] = "Automatic";
 };
+
 String RID_SVXSTR_PAGES
 {
     Text [ en-US ] = "Pages";
 };
+
 Image RID_SVXIMG_GRAF_RED
 {
     ImageBitmap = Bitmap { File = "sc10865.bmp" ; };
@@ -134,10 +147,12 @@ Image RID_SVXIMG_GRAF_TRANSPARENCE
     ImageBitmap = Bitmap { File = "sc10869.bmp" ; };
     MASKCOLOR
 };
+
 String RID_SVXSTR_CLEARFORM
 {
     Text [ en-US ] = "Clear formatting";
 };
+
 String RID_SVXSTR_MORE
 {
     Text [ en-US ] = "More...";

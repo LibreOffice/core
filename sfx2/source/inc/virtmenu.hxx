@@ -124,7 +124,6 @@ public:
     void            SetResMgr(ResMgr* pMgr)  {pResMgr = pMgr; }
     ResMgr*         GetResMgr() { return pResMgr; }
     void            SetHelpIds( ResMgr* );
-    BOOL            IsHiContrastMode() const;
     void            UpdateImages();
 
     DECL_LINK( Select, Menu * );

@@ -488,7 +488,6 @@ void SAL_CALL NewMenuController::activate( const css::awt::MenuEvent& ) throw (R
             if ( m_bShowImages != bShowImages )
             {
                 m_bShowImages = bShowImages;
-
                 setMenuImages( pVCLPopupMenu, m_bShowImages );
             }
 
@@ -556,7 +555,6 @@ void SAL_CALL NewMenuController::initialize( const Sequence< Any >& aArguments )
             const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
 
             m_bShowImages   = rSettings.GetUseImagesInMenus();
-
             m_bNewMenu      = m_aCommandURL.equalsAscii( ".uno:AddDirect" );
         }
     }

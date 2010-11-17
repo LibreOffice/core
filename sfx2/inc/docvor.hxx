@@ -57,11 +57,6 @@ friend class SfxOrganizeDlg_Impl;
     Image                   aOpenedDocBmp;
     Image                   aClosedDocBmp;
 
-    Image                   aOpenedFolderBmpHC;
-    Image                   aClosedFolderBmpHC;
-    Image                   aOpenedDocBmpHC;
-    Image                   aClosedDocBmpHC;
-
     SfxOrganizeMgr*         pMgr;
     SfxOrganizeDlg_Impl*    pDlg;
 

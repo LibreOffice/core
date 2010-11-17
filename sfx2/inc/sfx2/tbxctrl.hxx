@@ -56,7 +56,6 @@ class SfxUnoControllerItem;
 
 svt::ToolboxController* SAL_CALL SfxToolBoxControllerFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, ToolBox* pToolbox, unsigned short nID, const ::rtl::OUString& aCommandURL );
 
-//typedef SfxToolBoxControl* (*SfxToolBoxControlCtor)( USHORT nId, ToolBox &rTbx, SfxBindings & );
 typedef SfxToolBoxControl* (*SfxToolBoxControlCtor)( USHORT nSlotId, USHORT nId, ToolBox& rBox );
 
 struct SfxTbxCtrlFactory
@@ -367,7 +366,7 @@ protected:
     virtual void            Select( BOOL );
     virtual void            StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
     virtual SfxPopupWindow* CreatePopupWindow();
-                            DECL_LINK( Activate, Menu * ); // Needed to support high contrast images
+                            DECL_LINK( Activate, Menu * );
 private:
     String                  aLastURL;
     BOOL                    bBigImages;
@@ -423,7 +422,7 @@ protected:
     using SfxToolBoxControl::Select;
     virtual void            Select( BOOL );
     virtual void            StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
-                            DECL_LINK( Activate, Menu * ); // Needed to support high contrast images
+                            DECL_LINK( Activate, Menu * );
 public:
                             SFX_DECL_TOOLBOX_CONTROL();
                             SfxAddonsToolBoxControl_Impl( USHORT nSlotId, USHORT nId, ToolBox& rBox );

@@ -68,7 +68,11 @@ typedef std::hash_map< ::rtl::OUString,
                        ::std::equal_to< ::rtl::OUString > > ModuleIdToImagegMgr;
 
 
-Image SAL_CALL GetImage( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const ::rtl::OUString& aURL, BOOL bBig )
+Image SAL_CALL GetImage(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+    const ::rtl::OUString& aURL,
+    BOOL bBig
+)
 {
     // TODO/LATeR: shouldn't this become a method at SfxViewFrame?! That would save the UnoTunnel
     if ( !rFrame.is() )

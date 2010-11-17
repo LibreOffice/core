@@ -142,7 +142,8 @@ static sal_Bool IsCorrectContext( const ::rtl::OUString& rModuleIdentifier, cons
 static Image RetrieveImage( Reference< com::sun::star::frame::XFrame >& rFrame,
                             const rtl::OUString& aImageId,
                             const rtl::OUString& aURL,
-                            BOOL bBigImage )
+                            BOOL bBigImage
+)
 {
     Image aImage;
 
@@ -214,10 +215,10 @@ void AddonsToolBarManager::RefreshImages()
             if ( pRuntimeItemData )
                 aImageId  = pRuntimeItemData->aImageId;
 
-            m_pToolBar->SetItemImage( nId, RetrieveImage( m_xFrame,
-                                                          aImageId,
-                                                          aCommandURL,
-                                                          bBigImages ));
+            m_pToolBar->SetItemImage(
+                nId,
+                RetrieveImage( m_xFrame, aImageId, aCommandURL, bBigImages )
+            );
         }
     }
 }
@@ -506,7 +507,6 @@ IMPL_LINK( AddonsToolBarManager, StateChanged, StateChangedType*, pStateChangedT
 {
     if ( *pStateChangedType == STATE_CHANGE_CONTROLBACKGROUND )
     {
-        // Check if we need to get new images for normal/high contrast mode
         CheckAndUpdateImages();
     }
     return 1;
@@ -518,7 +518,6 @@ IMPL_LINK( AddonsToolBarManager, DataChanged, DataChangedEvent*, pDataChangedEve
         (  pDataChangedEvent->GetType() == DATACHANGED_DISPLAY  ))  &&
         ( pDataChangedEvent->GetFlags() & SETTINGS_STYLE        ))
     {
-        // Check if we need to get new images for normal/high contrast mode
         CheckAndUpdateImages();
     }
 

@@ -746,7 +746,8 @@ void ToolBarManager::impl_elementChanged(bool _bRemove,const ::com::sun::star::u
     Reference< XNameAccess > xNameAccess;
     sal_Int16                nImageType = sal_Int16();
     sal_Int16                nCurrentImageType = getImageTypeFromBools(
-                                                    SvtMiscOptions().AreCurrentSymbolsLarge());
+                                                    SvtMiscOptions().AreCurrentSymbolsLarge()
+                                                    );
 
     if (( Event.aInfo >>= nImageType ) &&
         ( nImageType == nCurrentImageType ) &&
@@ -1816,9 +1817,8 @@ PopupMenu * ToolBarManager::GetToolBarCustomMeun(ToolBox* pToolBar)
                 pItemMenu->CheckItem( STARTID_CUSTOMIZE_POPUPMENU+nPos, m_pToolBar->IsItemVisible( nId ) );
                 pItemMenu->SetItemCommand( STARTID_CUSTOMIZE_POPUPMENU+nPos, aCommandURL );
                 pItemMenu->SetItemImage( STARTID_CUSTOMIZE_POPUPMENU+nPos,
-                                         GetImageFromURL( m_xFrame,
-                                                          aCommandURL,
-                                                          sal_False ));
+                                         GetImageFromURL( m_xFrame, aCommandURL, sal_False )
+                                       );
             }
             else
             {
@@ -2114,7 +2114,6 @@ IMPL_LINK( ToolBarManager, StateChanged, StateChangedType*, pStateChangedType )
 
     if ( *pStateChangedType == STATE_CHANGE_CONTROLBACKGROUND )
     {
-        // Check if we need to get new images for normal/high contrast mode
         CheckAndUpdateImages();
     }
     else if ( *pStateChangedType == STATE_CHANGE_VISIBLE )
@@ -2135,7 +2134,6 @@ IMPL_LINK( ToolBarManager, DataChanged, DataChangedEvent*, pDataChangedEvent  )
         (  pDataChangedEvent->GetType() == DATACHANGED_DISPLAY  ))  &&
         ( pDataChangedEvent->GetFlags() & SETTINGS_STYLE        ))
     {
-        // Check if we need to get new images for normal/high contrast mode
         CheckAndUpdateImages();
     }
 

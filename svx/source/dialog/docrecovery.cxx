@@ -773,7 +773,6 @@ SaveDialog::SaveDialog(Window*       pParent,
     m_aTitleFT.SetFont(aFont);
 
     m_aOkBtn.SetClickHdl( LINK( this, SaveDialog, OKButtonHdl ) );
-//    m_aFileListLB.EnableInput( sal_False );
     m_aFileListLB.SetControlBackground( rStyleSettings.GetDialogColor() );
 
     // fill listbox with current open documents
@@ -846,7 +845,6 @@ SaveProgressDialog::SaveProgressDialog(Window*       pParent,
     FreeResource();
     PluginProgress* pProgress   = new PluginProgress( &m_aProgrParent, pCore->getSMGR() );
                     m_xProgress = css::uno::Reference< css::task::XStatusIndicator >(static_cast< css::task::XStatusIndicator* >(pProgress), css::uno::UNO_QUERY_THROW);
-//  m_aProgrBaseTxt = m_aProgrFT.GetText();
 }
 
 //===============================================

@@ -102,7 +102,11 @@ class MenuManager : public ThreadHelpBase           ,
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& getServiceFactory();
 
         static void UpdateSpecialWindowMenu( Menu* pMenu ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,IMutex& _rMutex);
-        static void FillMenuImages(::com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& xFrame,Menu* _pMenu,sal_Bool bShowMenuImages);
+        static void FillMenuImages(
+            ::com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& xFrame,
+            Menu* _pMenu,
+            sal_Bool bShowMenuImages
+        );
 
     protected:
         DECL_LINK( Highlight, Menu * );

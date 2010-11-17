@@ -168,7 +168,6 @@ class ExtensionBox_Impl : public ::svt::IExtensionListBox
     bool            HandleTabKey( bool bReverse );
     bool            HandleCursorKey( USHORT nKeyCode );
     bool            FindEntryPos( const TEntry_Impl pEntry, long nStart, long nEnd, long &nFound );
-    bool            isHCMode();
     void            DeleteRemoved();
 
     //-----------------

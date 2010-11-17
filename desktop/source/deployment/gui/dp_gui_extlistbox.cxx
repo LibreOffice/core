@@ -529,7 +529,7 @@ void ExtensionBox_Impl::DrawRow( const Rectangle& rRect, const TEntry_Impl pEntr
     if ( ! pEntry->m_aIcon )
         aImage = m_aDefaultImage;
     else
-        aImage = isHCMode() ? pEntry->m_aIconHC : pEntry->m_aIcon;
+        aImage = pEntry->m_aIcon;
     Size aImageSize = aImage.GetSizePixel();
     if ( ( aImageSize.Width() <= ICON_WIDTH ) && ( aImageSize.Height() <= ICON_HEIGHT ) )
         DrawImage( Point( aPos.X()+((ICON_WIDTH-aImageSize.Width())/2), aPos.Y()+((ICON_HEIGHT-aImageSize.Height())/2) ), aImage );
@@ -1179,11 +1179,6 @@ void ExtensionBox_Impl::checkEntries()
         if ( IsReallyVisible() )
             Invalidate();
     }
-}
-//------------------------------------------------------------------------------
-bool ExtensionBox_Impl::isHCMode()
-{
-    return (bool)GetSettings().GetStyleSettings().GetHighContrastMode();
 }
 
 //------------------------------------------------------------------------------

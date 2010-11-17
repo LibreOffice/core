@@ -134,7 +134,8 @@ void SfxMenuImageControl_Impl::Update()
 static Image RetrieveAddOnImage( Reference< com::sun::star::frame::XFrame >& rFrame,
                                  const rtl::OUString& aImageId,
                                  const rtl::OUString& aURL,
-                                 BOOL bBigImage )
+                                 BOOL bBigImage
+)
 {
     Image aImage;
 
@@ -194,7 +195,7 @@ SfxVirtualMenu::SfxVirtualMenu( USHORT nOwnId,
                 SfxVirtualMenu* pOwnParent, Menu& rMenu, BOOL bWithHelp,
                 SfxBindings &rBindings, BOOL bOLEServer, BOOL bRes, BOOL bIsAddonMenu ):
     pItems(0),
-       pImageControl(0),
+    pImageControl(0),
     pBindings(&rBindings),
     pResMgr(0),
     pAutoDeactivate(0),
@@ -319,14 +320,6 @@ SfxVirtualMenu::~SfxVirtualMenu()
     DBG_OUTF( ("SfxVirtualMenu %lx destroyed", this) );
     DBG_ASSERT( !nLocks, "destroying active menu" );
 }
-//--------------------------------------------------------------------
-
-BOOL SfxVirtualMenu::IsHiContrastMode() const
-{
-    const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-    return rSettings.GetHighContrastMode();
-}
-
 //--------------------------------------------------------------------
 // internal: creates the virtual menu from the pSVMenu
 

@@ -105,7 +105,6 @@ public:
     SAL_DLLPRIVATE SfxMenuCtrlFactArr_Impl* GetMenuCtrlFactories_Impl() const;
     SAL_DLLPRIVATE SfxChildWinFactArr_Impl* GetChildWinFactories_Impl() const;
     SAL_DLLPRIVATE ImageList* GetImageList_Impl( BOOL bBig );
-    SAL_DLLPRIVATE ImageList* GetImageList_Impl( BOOL bBig, BOOL bHiContrast );
 };
 
 #endif

@@ -2375,8 +2375,7 @@ void SfxTemplateDialog_Impl::updateFamilyImages()
         return;
 
     // let the families collection update the images
-    sal_Bool bIsHighContrast = m_pFloat->GetSettings().GetStyleSettings().GetHighContrastMode();
-    pStyleFamilies->updateImages( *m_pStyleFamiliesId, bIsHighContrast ? BMP_COLOR_HIGHCONTRAST : BMP_COLOR_NORMAL );
+    pStyleFamilies->updateImages( *m_pStyleFamiliesId );
 
     // and set the new images on our toolbox
     USHORT nLoop = pStyleFamilies->Count();
@@ -2421,14 +2420,6 @@ void SfxCommonTemplateDialog_Impl::InvalidateBindings()
 
 SfxTemplateDialog_Impl::~SfxTemplateDialog_Impl()
 {
-/*
-    SfxImageManager* pImgMgr = pBindings->GetImageManager();
-    if ( pImgMgr )
-    {
-        pImgMgr->ReleaseToolBox( &m_aActionTbL );
-        pImgMgr->ReleaseToolBox( &m_aActionTbR );
-    }
-*/
 }
 
 //-------------------------------------------------------------------------
@@ -2448,10 +2439,6 @@ void SfxTemplateDialog_Impl::Resize()
     FloatingWindow *pF = m_pFloat->GetFloatingWindow();
     if ( pF )
     {
-//      if(pF->IsZoomedIn() && m_bZoomIn==FALSE)
-//          pF->SetText(String(SfxResId( DLG_STYLE_DESIGNER )));
-//      if(!pF->IsZoomedIn() && m_bZoomIn==TRUE && GetFamilyItem_Impl())
-//          UpdateStyles_Impl(UPDATE_FAMILY); //Bereich wieder in Titel schreiben
         m_bZoomIn = pF->IsRollUp();
         if ( m_bZoomIn )
             return;
@@ -2841,13 +2828,6 @@ void SfxTemplateCatalog_Impl::EnableItem( USHORT nMesId, BOOL bCheck )
         aOkBtn.Enable( bCheck );
     if ( nMesId > SFX_STYLE_FAMILY_PSEUDO || nMesId < SFX_STYLE_FAMILY_CHAR )
         return;
-
-/*      for(USHORT i=0;i<aFamIds.Count&&aFamIds[i]!=nMesId;i++);
-    if(i!=aFamIds.Count())
-        aFamList.SelectEntry(aFamIds[i]);
-    else
-        DBG_ERROR("Entry nicht gefunden");*/
-
 }
 
 //-------------------------------------------------------------------------

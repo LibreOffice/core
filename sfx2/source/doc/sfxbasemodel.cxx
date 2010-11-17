@@ -1996,7 +1996,7 @@ uno::Any SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
             if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
             {
                 ::boost::shared_ptr<GDIMetaFile> pMetaFile =
-                    m_pData->m_pObjectShell->CreatePreviewMetaFile_Impl( sal_True, sal_True );
+                    m_pData->m_pObjectShell->CreatePreviewMetaFile_Impl( sal_True );
 
                 if ( pMetaFile )
                 {

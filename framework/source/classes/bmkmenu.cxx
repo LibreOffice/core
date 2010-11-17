@@ -210,8 +210,6 @@ void BmkMenu::Initialize()
             else
                 InsertItem( nId, aTitle );
 
-            // Store values from configuration to the New and Wizard menu entries to enable
-            // sfx2 based code to support high contrast mode correctly!
             MenuConfiguration::Attributes* pUserAttributes = new MenuConfiguration::Attributes( aTargetFrame, aImageId );
             SetUserValue( nId, (ULONG)pUserAttributes );
 

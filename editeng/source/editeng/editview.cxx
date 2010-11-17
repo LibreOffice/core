@@ -1145,7 +1145,6 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
             aPopupMenu.RemoveItem( MN_AUTOCORR );   // Loeschen?
 
         SvtLinguConfig aCfg;
-        const bool bHC = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
 
         Reference< XDictionaryList >  xDicList( SvxGetDictionaryList() );
         Sequence< Reference< XDictionary >  > aDics;
@@ -1185,7 +1184,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
                     if (xSvcInfo.is())
                     {
                         OUString aDictionaryImageUrl( aCfg.GetSpellAndGrammarContextDictionaryImage(
-                                xSvcInfo->getImplementationName(), bHC) );
+                                xSvcInfo->getImplementationName()) );
                         if (aDictionaryImageUrl.getLength() > 0)
                         {
                             Image aImage( lcl_GetImageFromPngUrl( aDictionaryImageUrl ) );

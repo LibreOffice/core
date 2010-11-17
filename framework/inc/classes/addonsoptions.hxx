@@ -314,8 +314,8 @@ class AddonsOptions
         *//*-*****************************************************************************************************/
 
         Image GetImageFromURL( const rtl::OUString& aURL, sal_Bool bBig, sal_Bool bNoScale ) const;
-
         Image GetImageFromURL( const rtl::OUString& aURL, sal_Bool bBig ) const;
+
     //-------------------------------------------------------------------------------------------------------------
     //  private methods
     //-------------------------------------------------------------------------------------------------------------

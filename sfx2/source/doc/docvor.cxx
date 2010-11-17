@@ -1193,9 +1193,9 @@ void SfxOrganizeListBox_Impl::RequestingChilds( SvLBoxEntry* pEntry )
                 const bool bCanHaveChilds =
                     aRef->CanHaveChilds(aPath[nDocLevel+1],
                                         aPath[nDocLevel+2]);
-                for(USHORT i = 0; i < nCount; ++i)
+                for(sal_uInt16 i = 0; i < nCount; ++i)
                 {
-                    bool bDeletable;
+                    sal_Bool bDeletable;
                     aRef->GetContent(
                         aText, aClosedBmp, aOpenedBmp, bDeletable,
                         i, aPath[nDocLevel+1]);
@@ -1483,17 +1483,16 @@ const Image &SfxOrganizeListBox_Impl::GetOpenedBmp(USHORT nLevel) const
 */
 
 {
-    BOOL         bHC = GetSettings().GetStyleSettings().GetHighContrastMode();
     const Image* pRet = NULL;
 
     switch( nLevel )
     {
         case 0:
-           pRet = bHC ? &aOpenedFolderBmpHC : &aOpenedFolderBmp; break;
+            pRet = &aOpenedFolderBmp; break;
         case 1:
-           pRet = bHC ? &aOpenedDocBmpHC : &aOpenedDocBmp; break;
+            pRet = &aOpenedDocBmp; break;
         default:
-            pRet = bHC ? &aClosedFolderBmpHC : &aClosedFolderBmp; break;
+            pRet = &aClosedFolderBmp; break;
     }
 
     return *pRet;

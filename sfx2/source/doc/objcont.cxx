@@ -119,16 +119,14 @@ bool operator> (const util::DateTime& i_rLeft, const util::DateTime& i_rRight)
     return sal_False;
 }
 
-
 ::boost::shared_ptr<GDIMetaFile>
 SfxObjectShell::GetPreviewMetaFile( sal_Bool bFullContent ) const
 {
-    return CreatePreviewMetaFile_Impl( bFullContent, sal_False );
+    return CreatePreviewMetaFile_Impl( bFullContent );
 }
 
-
 ::boost::shared_ptr<GDIMetaFile>
-SfxObjectShell::CreatePreviewMetaFile_Impl( sal_Bool bFullContent, sal_Bool bHighContrast ) const
+SfxObjectShell::CreatePreviewMetaFile_Impl( sal_Bool bFullContent ) const
 {
     // Nur wenn gerade nicht gedruckt wird, darf DoDraw aufgerufen
     // werden, sonst wird u.U. der Printer abgeschossen !
@@ -142,10 +140,6 @@ SfxObjectShell::CreatePreviewMetaFile_Impl( sal_Bool bFullContent, sal_Bool bHig
 
     VirtualDevice aDevice;
     aDevice.EnableOutput( FALSE );
-
-    // adjust the output device if HC-metafile is requested
-    if ( bHighContrast )
-        aDevice.SetDrawMode( aDevice.GetDrawMode() | DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT );
 
     MapMode aMode( ((SfxObjectShell*)this)->GetMapUnit() );
     aDevice.SetMapMode( aMode );
@@ -361,7 +355,7 @@ void  SfxObjectShell::TriggerHelpPI(USHORT nIdx1, USHORT nIdx2)
     }
 }
 
-bool SfxObjectShell::CanHaveChilds(sal_uInt16 nIdx1, sal_uInt16 nIdx2)
+sal_Bool SfxObjectShell::CanHaveChilds(sal_uInt16 nIdx1, sal_uInt16 nIdx2)
 {
     switch(nIdx1)
     {
@@ -378,8 +372,12 @@ bool SfxObjectShell::CanHaveChilds(sal_uInt16 nIdx1, sal_uInt16 nIdx2)
 //--------------------------------------------------------------------
 
 void SfxObjectShell::GetContent(String &rText,
-    Bitmap &rClosedBitmap, Bitmap &rOpenedBitmap,
-    bool &bCanDel, sal_uInt16 i, sal_uInt16 nIdx)
+                                Bitmap &rClosedBitmap,
+                                Bitmap &rOpenedBitmap,
+                                sal_Bool &bCanDel,
+                                sal_uInt16 i,
+                                sal_uInt16 nIdx
+)
 {
     bCanDel=true;
 
