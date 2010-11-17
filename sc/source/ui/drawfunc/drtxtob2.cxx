@@ -83,8 +83,7 @@ void __EXPORT ScDrawTextObjectBar::ExecuteGlobal( SfxRequest &rReq )
 
         case SID_CUT:
             pView->DoCut();
-            if (!pTabView->IsDrawSelMode())
-                pViewData->GetViewShell()->SetDrawShell( FALSE );
+            pViewData->GetViewShell()->UpdateDrawShell();
             break;
 
         case SID_PASTE:

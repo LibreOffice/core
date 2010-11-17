@@ -309,7 +309,7 @@ public:
     void            ExecDrawOpt(SfxRequest& rReq);
     void            GetDrawOptState(SfxItemSet &rSet);
 
-
+    void            UpdateDrawShell();
     void            SetDrawShell( BOOL bActive );
     void            SetDrawTextShell( BOOL bActive );
 
