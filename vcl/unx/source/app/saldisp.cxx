@@ -375,11 +375,6 @@ sal_GetServerVendor( Display *p_display )
         { vendor_none,        NULL,                               0 },
     };
 
-#ifdef _USE_PRINT_EXTENSION_
-    if ( ! XSalIsDisplay( p_display ) )
-        return vendor_xprinter;
-#endif
-
     // handle regular server vendors
     char     *p_name   = ServerVendor( p_display );
     vendor_t *p_vendor;

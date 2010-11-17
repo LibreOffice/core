@@ -335,13 +335,8 @@ GC X11SalGraphics::SelectBrush()
         {
             XSetFillStyle ( pDisplay, pBrushGC_, FillSolid );
             XSetForeground( pDisplay, pBrushGC_, nBrushPixel_ );
-                        #if defined(_USE_PRINT_EXTENSION_)
-                        XSetBackground( pDisplay, pBrushGC_,
-                                        WhitePixel(pDisplay, DefaultScreen(pDisplay)) );
-                        #else
             if( bPrinter_ )
                 XSetTile( pDisplay, pBrushGC_, None );
-            #endif
         }
         else
         {

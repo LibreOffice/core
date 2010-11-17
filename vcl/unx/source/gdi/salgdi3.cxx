@@ -160,18 +160,10 @@ X11SalGraphics::GetFontGC()
         values.fill_rule            = EvenOddRule;      // Pict import/ Gradient
         values.graphics_exposures   = False;
         values.foreground           = nTextPixel_;
-#ifdef _USE_PRINT_EXTENSION_
-        values.background = xColormap_->GetWhitePixel();
-        pFontGC_ = XCreateGC( pDisplay, hDrawable_,
-                              GCSubwindowMode | GCFillRule
-                              | GCGraphicsExposures | GCBackground | GCForeground,
-                              &values );
-#else
         pFontGC_ = XCreateGC( pDisplay, hDrawable_,
                               GCSubwindowMode | GCFillRule
                               | GCGraphicsExposures | GCForeground,
                               &values );
-#endif
     }
     if( !bFontGC_ )
     {
@@ -1372,7 +1364,6 @@ BOOL X11SalGraphics::CreateFontSubset(
 
 const void* X11SalGraphics::GetEmbedFontData( const ImplFontData* pFont, const sal_Ucs* pUnicodes, sal_Int32* pWidths, FontSubsetInfo& rInfo, long* pDataLen )
 {
-#ifndef _USE_PRINT_EXTENSION_
     // in this context the pFont->GetFontId() is a valid PSP
     // font since they are the only ones left after the PDF
     // export has filtered its list of subsettable fonts (for
@@ -1380,25 +1371,19 @@ const void* X11SalGraphics::GetEmbedFontData( const ImplFontData* pFont, const s
     // be to have the GlyphCache search for the ImplFontData pFont
     psp::fontID aFont = pFont->GetFontId();
     return PspGraphics::DoGetEmbedFontData( aFont, pUnicodes, pWidths, rInfo, pDataLen );
-#else
-    return NULL;
-#endif
 }
 
 //--------------------------------------------------------------------------
 
 void X11SalGraphics::FreeEmbedFontData( const void* pData, long nLen )
 {
-#ifndef _USE_PRINT_EXTENSION_
     PspGraphics::DoFreeEmbedFontData( pData, nLen );
-#endif
 }
 
 //--------------------------------------------------------------------------
 
 const Ucs2SIntMap* X11SalGraphics::GetFontEncodingVector( const ImplFontData* pFont, const Ucs2OStrMap** pNonEncoded )
 {
-#ifndef _USE_PRINT_EXTENSION_
     // in this context the pFont->GetFontId() is a valid PSP
     // font since they are the only ones left after the PDF
     // export has filtered its list of subsettable fonts (for
@@ -1406,9 +1391,6 @@ const Ucs2SIntMap* X11SalGraphics::GetFontEncodingVector( const ImplFontData* pF
     // be to have the GlyphCache search for the ImplFontData pFont
     psp::fontID aFont = pFont->GetFontId();
     return PspGraphics::DoGetFontEncodingVector( aFont, pNonEncoded );
-#else
-    return NULL;
-#endif
 }
 
 //--------------------------------------------------------------------------

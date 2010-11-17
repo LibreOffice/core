@@ -64,13 +64,8 @@ EXCEPTIONSFILES=\
         $(SLO)$/salgdi3.obj		\
         $(SLO)$/salcvt.obj
 
-.IF "$(USE_XPRINT)" == "TRUE"
-CFLAGS+=-D_USE_PRINT_EXTENSION_=1
-SLOFILES+=$(SLO)$/xprintext.obj
-.ELSE
 SLOFILES+=$(SLO)$/salprnpsp.obj
 EXCEPTIONSFILES+=$(SLO)$/salprnpsp.obj
-.ENDIF
 
 .IF "$(OS)"=="SOLARIS"
 SLOFILES+=$(SLO)$/cdeint.obj
