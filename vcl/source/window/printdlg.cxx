@@ -73,78 +73,11 @@ PrintDialog::PrintPreviewWindow::PrintPreviewWindow( Window* i_pParent, const Re
 {
     SetPaintTransparent( TRUE );
     SetBackground();
-    if( useHCColorReplacement() )
-        maPageVDev.SetBackground( GetSettings().GetStyleSettings().GetWindowColor() );
-    else
-        maPageVDev.SetBackground( Color( COL_WHITE ) );
+    maPageVDev.SetBackground( Color( COL_WHITE ) );
 }
 
 PrintDialog::PrintPreviewWindow::~PrintPreviewWindow()
 {
-}
-
-bool PrintDialog::PrintPreviewWindow::useHCColorReplacement() const
-{
-    bool bRet = false;
-    if( GetSettings().GetStyleSettings().GetHighContrastMode() )
-    {
-        try
-        {
-            // get service provider
-            Reference< XMultiServiceFactory > xSMgr( unohelper::GetMultiServiceFactory() );
-            // create configuration hierachical access name
-            if( xSMgr.is() )
-            {
-                try
-                {
-                    Reference< XMultiServiceFactory > xConfigProvider(
-                        Reference< XMultiServiceFactory >(
-                            xSMgr->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                            "com.sun.star.configuration.ConfigurationProvider" ))),
-                            UNO_QUERY )
-                        );
-                    if( xConfigProvider.is() )
-                    {
-                        Sequence< Any > aArgs(1);
-                        PropertyValue aVal;
-                        aVal.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ) );
-                        aVal.Value <<= rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Common/Accessibility" ) );
-                        aArgs.getArray()[0] <<= aVal;
-                        Reference< XNameAccess > xConfigAccess(
-                            Reference< XNameAccess >(
-                                xConfigProvider->createInstanceWithArguments( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                                    "com.sun.star.configuration.ConfigurationAccess" )),
-                                                                                aArgs ),
-                                UNO_QUERY )
-                            );
-                        if( xConfigAccess.is() )
-                        {
-                            try
-                            {
-                                sal_Bool bValue = sal_False;
-                                Any aAny = xConfigAccess->getByName( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsForPagePreviews" ) ) );
-                                if( aAny >>= bValue )
-                                    bRet = bool(bValue);
-                            }
-                            catch( NoSuchElementException& )
-                            {
-                            }
-                            catch( WrappedTargetException& )
-                            {
-                            }
-                        }
-                    }
-                }
-                catch( Exception& )
-                {
-                }
-            }
-        }
-        catch( WrappedTargetException& )
-        {
-        }
-    }
-    return bRet;
 }
 
 void PrintDialog::PrintPreviewWindow::DataChanged( const DataChangedEvent& i_rDCEvt )
@@ -152,10 +85,7 @@ void PrintDialog::PrintPreviewWindow::DataChanged( const DataChangedEvent& i_rDC
     // react on settings changed
     if( i_rDCEvt.GetType() == DATACHANGED_SETTINGS )
     {
-        if( useHCColorReplacement() )
-            maPageVDev.SetBackground( GetSettings().GetStyleSettings().GetWindowColor() );
-        else
-            maPageVDev.SetBackground( Color( COL_WHITE ) );
+        maPageVDev.SetBackground( Color( COL_WHITE ) );
     }
     Window::DataChanged( i_rDCEvt );
 }
@@ -304,10 +234,6 @@ void PrintDialog::PrintPreviewWindow::setPreview( const GDIMetaFile& i_rNewPrevi
     #endif
     SetQuickHelpText( aBuf.makeStringAndClear() );
     maMtf = i_rNewPreview;
-    if( useHCColorReplacement() )
-    {
-        maMtf.ReplaceColors( Color( COL_BLACK ), Color( COL_WHITE ), 30 );
-    }
 
     maOrigSize = i_rOrigSize;
     maReplacementString = i_rReplacement;
@@ -598,9 +524,7 @@ PrintDialog::JobTabPage::JobTabPage( Window* i_pParent, const ResId& rResId )
     , maCollateBox( this, VclResId( SV_PRINT_COLLATE ) )
     , maCollateImage( this, VclResId( SV_PRINT_COLLATE_IMAGE ) )
     , maCollateImg( VclResId( SV_PRINT_COLLATE_IMG ) )
-    , maCollateHCImg( VclResId( SV_PRINT_COLLATE_HC_IMG ) )
     , maNoCollateImg( VclResId( SV_PRINT_NOCOLLATE_IMG ) )
-    , maNoCollateHCImg( VclResId( SV_PRINT_NOCOLLATE_HC_IMG ) )
     , mnCollateUIMode( 0 )
     , maLayout( NULL, true )
 {
@@ -1730,20 +1654,12 @@ void PrintDialog::checkControlDependencies()
         maJobPage.maCollateBox.Enable( FALSE );
 
     Image aImg( maJobPage.maCollateBox.IsChecked() ? maJobPage.maCollateImg : maJobPage.maNoCollateImg );
-    Image aHCImg( maJobPage.maCollateBox.IsChecked() ? maJobPage.maCollateHCImg : maJobPage.maNoCollateHCImg );
-    bool bHC = GetSettings().GetStyleSettings().GetHighContrastMode();
 
     Size aImgSize( aImg.GetSizePixel() );
-    Size aHCImgSize( aHCImg.GetSizePixel() );
-
-    if( aHCImgSize.Width() > aImgSize.Width() )
-        aImgSize.Width() = aHCImgSize.Width();
-    if( aHCImgSize.Height() > aImgSize.Height() )
-        aImgSize.Height() = aHCImgSize.Height();
 
     // adjust size of image
     maJobPage.maCollateImage.SetSizePixel( aImgSize );
-    maJobPage.maCollateImage.SetImage( bHC ? aHCImg : aImg );
+    maJobPage.maCollateImage.SetImage( aImg );
     maJobPage.maLayout.resize();
 
     // enable setup button only for printers that can be setup

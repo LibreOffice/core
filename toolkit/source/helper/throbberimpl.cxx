@@ -101,17 +101,6 @@ namespace toolkit
             pImage->SetImage( maImageList[ 0 ] );
     }
 
-    //--------------------------------------------------------------------
-    sal_Bool Throbber_Impl::isHCMode()
-        throw ( uno::RuntimeException )
-    {
-        FixedImage* pImage = static_cast< FixedImage* >( mxParent->GetWindow() );
-        if ( pImage )
-            return pImage->GetSettings().GetStyleSettings().GetHighContrastMode();
-        else
-            return Application::GetSettings().GetStyleSettings().GetHighContrastMode();
-    }
-
     // -----------------------------------------------------------------------
     IMPL_LINK( Throbber_Impl, TimeOutHdl, Throbber_Impl*, EMPTYARG )
     {

@@ -29,13 +29,13 @@
 
 Image RID_IMG_TREENODE_COLLAPSED
 {
-    ImageBitmap = Bitmap { File = "plus.bmp"; } ;
+    ImageBitmap = Bitmap { File = "plus.png"; } ;
     MaskColor = Color { Red = 0xFF00; Green = 0x0000; Blue = 0xFF00; };
 };
 
 Image RID_IMG_TREENODE_EXPANDED
 {
-    ImageBitmap = Bitmap { File = "minus.bmp"; } ;
+    ImageBitmap = Bitmap { File = "minus.png"; } ;
     MaskColor = Color { Red = 0xFF00; Green = 0x0000; Blue = 0xFF00; };
 };
 

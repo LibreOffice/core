@@ -40,16 +40,9 @@ ToolBox DisplayHidToolBox {
     ToolBoxItem  {
             Type = TOOLBOXITEM_BUTTON;
             _ToolBoxItemFlags = TIB_AUTOCHECK ;
-
-/*
-class FlagToolBoxState
-{
-    TIB_CHECKABLE, TIB_AUTOCHECK, TIB_RADIOCHECK, TIB_LEFT,
-    TIB_AUTOSIZE, TIB_DROPDOWN,
-};*/
             Identifier = TT_SHOW;
             ItemBitmap = Bitmap  {
-                File = "ttshow.bmp";
+                File = "ttshow.png";
             };
             Text[ en-US ] = "Display IDs";
         };
@@ -67,7 +60,7 @@ class FlagToolBoxState
     ToolBoxItem  {
             Identifier = TT_SEND_DATA;
             ItemBitmap = Bitmap  {
-                File = "ttremote.bmp";
+                File = "ttremote.png";
             };
             Text[ en-US ] = "Transfer to TestTool";
         };
@@ -77,21 +70,21 @@ class FlagToolBoxState
     ToolBoxItem  {
             Identifier = TT_ALLWIN;
             ItemBitmap = Bitmap  {
-                File = "ttall.bmp";
+                File = "ttall.png";
             };
             Text[ en-US ] = "Show all windows";
         };
     ToolBoxItem  {
             Identifier = TT_KURZNAME;
             ItemBitmap = Bitmap  {
-                File = "ttdef.bmp";
+                File = "ttdef.png";
             };
             Text[ en-US ] = "Show short names (if available)";
         };
     ToolBoxItem  {
             Identifier = TT_LANGNAME;
             ItemBitmap = Bitmap  {
-                File = "tthid.bmp";
+                File = "tthid.png";
             };
             Text[ en-US ] = "Always show long-name";
         };
@@ -100,7 +93,7 @@ class FlagToolBoxState
 };
 
 Bitmap TT_SHOW2 {
-    File = "ttshow2.bmp";
+    File = "ttshow2.png";
 };
 
 WorkWindow TT_INLINE_TRANSLATION {
@@ -111,60 +104,60 @@ WorkWindow TT_INLINE_TRANSLATION {
     Closeable = TRUE;
     Border = TRUE;
     GroupBox TT_GB_TRANSLATION {
-            Pos = MAP_APPFONT( 2, 3 );
-            Size = MAP_APPFONT( 173, 44 );
+        Pos = MAP_APPFONT( 2, 3 );
+        Size = MAP_APPFONT( 173, 44 );
         Text[ en-US ] = "Translation";
     };
     Edit TT_E_NEW {
-            Disable = TRUE;
-            Border = TRUE;
-            Pos = MAP_APPFONT( 7, 16 );
-            Size = MAP_APPFONT( 162, 12 );
-            TabStop = TRUE;
+        Disable = TRUE;
+        Border = TRUE;
+        Pos = MAP_APPFONT( 7, 16 );
+        Size = MAP_APPFONT( 162, 12 );
+        TabStop = TRUE;
         Text[ en-US ] = "~Edit";
     };
     FixedText TT_FT_OLD {
-            Pos = MAP_APPFONT( 7, 33 );
-            Size = MAP_APPFONT( 162, 10 );
+        Pos = MAP_APPFONT( 7, 33 );
+        Size = MAP_APPFONT( 162, 10 );
         Text[ en-US ] = "Original Text";
     };
     GroupBox TT_GB_COMMENT {
-            Pos = MAP_APPFONT( 2, 52 );
-            Size = MAP_APPFONT( 173, 32 );
+        Pos = MAP_APPFONT( 2, 52 );
+        Size = MAP_APPFONT( 173, 32 );
         Text[ en-US ] = "Comment";
     };
     Edit TT_E_COMMENT {
-            Disable = TRUE;
-            Border = TRUE;
-            Pos = MAP_APPFONT( 7, 64 );
-            Size = MAP_APPFONT( 162, 12 );
-            TabStop = TRUE;
+        Disable = TRUE;
+        Border = TRUE;
+        Pos = MAP_APPFONT( 7, 64 );
+        Size = MAP_APPFONT( 162, 12 );
+        TabStop = TRUE;
         Text[ en-US ] = "~Comment";
     };
     PushButton TT_PB_SELECT {
-            Pos = MAP_APPFONT( Control_Border, 89 );
-            Size = MAP_APPFONT( ButtonWidth, 12 );
-            TabStop = TRUE;
+        Pos = MAP_APPFONT( Control_Border, 89 );
+        Size = MAP_APPFONT( ButtonWidth, 12 );
+        TabStop = TRUE;
         Text[ en-US ] = "~Select";
     };
     PushButton TT_PB_RESTORE {
-            Disable = TRUE;
-            Pos = MAP_APPFONT( Control_Border + ButtonWidth + Button_Button, 89 );
-            Size = MAP_APPFONT( ButtonWidth, 12 );
-            TabStop = TRUE;
+        Disable = TRUE;
+        Pos = MAP_APPFONT( Control_Border + ButtonWidth + Button_Button, 89 );
+        Size = MAP_APPFONT( ButtonWidth, 12 );
+        TabStop = TRUE;
         Text[ en-US ] = "~Restore";
     };
     PushButton TT_PB_ACCEPT {
-            Disable = TRUE;
-            Pos = MAP_APPFONT( Control_Border + 2*(ButtonWidth + Button_Button), 89 );
-            Size = MAP_APPFONT( ButtonWidth, 12 );
-            TabStop = TRUE;
+        Disable = TRUE;
+        Pos = MAP_APPFONT( Control_Border + 2*(ButtonWidth + Button_Button), 89 );
+        Size = MAP_APPFONT( ButtonWidth, 12 );
+        TabStop = TRUE;
         Text[ en-US ] = "~Accept";
     };
     PushButton TT_PB_NEXT {
-            Pos = MAP_APPFONT( Control_Border + 3*(ButtonWidth + Button_Button), 89 );
-            Size = MAP_APPFONT( ButtonWidth, 12 );
-            TabStop = TRUE;
+        Pos = MAP_APPFONT( Control_Border + 3*(ButtonWidth + Button_Button), 89 );
+        Size = MAP_APPFONT( ButtonWidth, 12 );
+        TabStop = TRUE;
         Text[ en-US ] = "~Next";
     };
     Text[ en-US ] = "Inplace Translation";

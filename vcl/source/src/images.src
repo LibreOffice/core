@@ -35,27 +35,27 @@
 
 Bitmap (SV_RESID_BITMAP_CHECK + SV_RESID_STDOFFSET)
 {
-    File = "check.bmp";
+    File = "check.png";
 };
 
 Bitmap (SV_RESID_BITMAP_CHECK + SV_RESID_WINOFFSET)
 {
-    File = "checkwin.bmp";
+    File = "checkwin.png";
 };
 
 Bitmap (SV_RESID_BITMAP_CHECK + SV_RESID_OS2OFFSET)
 {
-    File = "checkos2.bmp";
+    File = "checkos2.png";
 };
 
 Bitmap (SV_RESID_BITMAP_CHECK + SV_RESID_MACOFFSET)
 {
-    File = "checkmac.bmp";
+    File = "checkmac.png";
 };
 
 Bitmap (SV_RESID_BITMAP_CHECK + SV_RESID_UNIXOFFSET)
 {
-    File = "checkunx.bmp";
+    File = "checkunx.png";
 };
 
 Bitmap (SV_RESID_BITMAP_CHECK + SV_RESID_MONOOFFSET)
@@ -65,39 +65,39 @@ Bitmap (SV_RESID_BITMAP_CHECK + SV_RESID_MONOOFFSET)
 
 Bitmap (SV_RESID_BITMAP_SCROLLBMP)
 {
-    File = "scrbmp.bmp";
+    File = "scrbmp.png";
 };
 
 Bitmap (SV_RESID_BITMAP_SCROLLMSK)
 {
-    File = "scrmsk.bmp";
+    File = "scrmsk.png";
 };
 
 // -----------------------------------------------------------------------
 
 Bitmap (SV_RESID_BITMAP_RADIO + SV_RESID_STDOFFSET)
 {
-    File = "radio.bmp";
+    File = "radio.png";
 };
 
 Bitmap (SV_RESID_BITMAP_RADIO + SV_RESID_WINOFFSET)
 {
-    File = "radiowin.bmp";
+    File = "radiowin.png";
 };
 
 Bitmap (SV_RESID_BITMAP_RADIO + SV_RESID_OS2OFFSET)
 {
-    File = "radioos2.bmp";
+    File = "radioos2.png";
 };
 
 Bitmap (SV_RESID_BITMAP_RADIO + SV_RESID_MACOFFSET)
 {
-    File = "radiomac.bmp";
+    File = "radiomac.png";
 };
 
 Bitmap (SV_RESID_BITMAP_RADIO + SV_RESID_UNIXOFFSET)
 {
-    File = "radiounx.bmp";
+    File = "radiounx.png";
 };
 
 Bitmap (SV_RESID_BITMAP_RADIO + SV_RESID_MONOOFFSET)
@@ -112,32 +112,32 @@ Bitmap SV_RESID_BITMAP_MSGBOX
 
 Bitmap SV_RESID_BITMAP_PIN
 {
-    File = "pin.bmp";
+    File = "pin.png";
 };
 
 Bitmap SV_RESID_BITMAP_CLOSEDOC
 {
-    File = "closedoc.bmp";
+    File = "closedoc.png";
 };
 
 Bitmap SV_RESID_BITMAP_SPLITHPIN
 {
-    File = "splhpin.bmp";
+    File = "splhpin.png";
 };
 
 Bitmap SV_RESID_BITMAP_SPLITVPIN
 {
-    File = "splvpin.bmp";
+    File = "splvpin.png";
 };
 
 Bitmap SV_RESID_BITMAP_SPLITHARW
 {
-    File = "splharw.bmp";
+    File = "splharw.png";
 };
 
 Bitmap SV_RESID_BITMAP_SPLITVARW
 {
-    File = "splvarw.bmp";
+    File = "splvarw.png";
 };
 
 Bitmap (SV_ICON_SIZE48_START)

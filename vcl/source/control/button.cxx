@@ -4382,18 +4382,11 @@ void DisclosureButton::ImplDrawCheckBoxState()
         ImplSVCtrlData& rCtrlData( ImplGetSVData()->maCtrlData );
         if( ! rCtrlData.mpDisclosurePlus )
             rCtrlData.mpDisclosurePlus = new Image( BitmapEx( VclResId( SV_DISCLOSURE_PLUS ) ) );
-        if( ! rCtrlData.mpDisclosurePlusHC )
-            rCtrlData.mpDisclosurePlusHC = new Image( BitmapEx( VclResId( SV_DISCLOSURE_PLUS_HC ) ) );
         if( ! rCtrlData.mpDisclosureMinus )
             rCtrlData.mpDisclosureMinus = new Image( BitmapEx( VclResId( SV_DISCLOSURE_MINUS ) ) );
-        if( ! rCtrlData.mpDisclosureMinusHC )
-            rCtrlData.mpDisclosureMinusHC = new Image( BitmapEx( VclResId( SV_DISCLOSURE_MINUS_HC ) ) );
 
         Image* pImg = NULL;
-        if( GetSettings().GetStyleSettings().GetHighContrastMode() )
-            pImg = IsChecked() ? rCtrlData.mpDisclosureMinusHC : rCtrlData.mpDisclosurePlusHC;
-        else
-            pImg = IsChecked() ? rCtrlData.mpDisclosureMinus : rCtrlData.mpDisclosurePlus;
+        pImg = IsChecked() ? rCtrlData.mpDisclosureMinus : rCtrlData.mpDisclosurePlus;
 
         DBG_ASSERT( pImg, "no disclosure image" );
         if( ! pImg )
@@ -4428,6 +4421,5 @@ void DisclosureButton::KeyInput( const KeyEvent& rKEvt )
     else
         Button::KeyInput( rKEvt );
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

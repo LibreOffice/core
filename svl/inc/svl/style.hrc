@@ -35,5 +35,3 @@
 #define SFXSTYLEBIT_ALL      0xFFFF // alle Vorlagen
 
 #endif
-
-

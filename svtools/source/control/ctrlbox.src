@@ -33,19 +33,19 @@
 
 IMAGE RID_IMG_SCALABLEFONT
 {
-    ImageBitmap = Bitmap { File = "scalfont.bmp" ; };
+    ImageBitmap = Bitmap { File = "scalfont.png" ; };
     MaskColor = IMAGE_STDBTN_COLOR ;
 };
 
 IMAGE RID_IMG_PRINTERFONT
 {
-    ImageBitmap = Bitmap { File = "prnfont.bmp" ; };
+    ImageBitmap = Bitmap { File = "prnfont.png" ; };
     MaskColor = IMAGE_STDBTN_COLOR ;
 };
 
 IMAGE RID_IMG_BITMAPFONT
 {
-    ImageBitmap = Bitmap { File = "bmpfont.bmp" ; };
+    ImageBitmap = Bitmap { File = "bmpfont.png" ; };
     MaskColor = IMAGE_STDBTN_COLOR ;
 };
 
@@ -183,32 +183,3 @@ String STR_SVT_INDEXENTRY_PHONETIC_LC
 {
     Text [ en-US ] = "Phonetic (alphanumeric last, grouped by consonants)";
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

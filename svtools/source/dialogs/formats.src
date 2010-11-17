@@ -291,4 +291,3 @@ String STR_FORMAT_ID_HTML_NO_COMMENT
 {
     Text [ en-US ] = "HTML format without comments";
 };
-

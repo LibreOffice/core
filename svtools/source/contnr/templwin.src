@@ -48,7 +48,7 @@ String STR_SVT_NEWDOC
 
 Image IMG_SVT_NEWDOC
 {
-    ImageBitmap = Bitmap { File = "new_doc.bmp" ; };
+    ImageBitmap = Bitmap { File = "new_doc.png" ; };
     MaskColor = MASK_COL_MAGENTA
 };
 
@@ -59,7 +59,7 @@ String STR_SVT_MYDOCS
 
 Image IMG_SVT_MYDOCS
 {
-    ImageBitmap = Bitmap { File = "my_docs.bmp" ; };
+    ImageBitmap = Bitmap { File = "my_docs.png" ; };
     MaskColor = MASK_COL_MAGENTA
 };
 
@@ -70,7 +70,7 @@ String STR_SVT_TEMPLATES
 
 Image IMG_SVT_TEMPLATES
 {
-    ImageBitmap = Bitmap { File = "template.bmp" ; };
+    ImageBitmap = Bitmap { File = "template.png" ; };
     MaskColor = MASK_COL_MAGENTA
 };
 
@@ -81,7 +81,7 @@ String STR_SVT_SAMPLES
 
 Image IMG_SVT_SAMPLES
 {
-    ImageBitmap = Bitmap { File = "samples.bmp" ; };
+    ImageBitmap = Bitmap { File = "samples.png" ; };
     MaskColor = MASK_COL_MAGENTA
 };
 
@@ -118,32 +118,32 @@ ToolBox TB_SVT_FILEVIEW
 
 Image IMG_SVT_DOCTEMPLATE_BACK_SMALL
 {
-    ImageBitmap = Bitmap { File = "back_small.bmp" ; };
+    ImageBitmap = Bitmap { File = "back_small.png" ; };
     MaskColor = MASK_COL_MAGENTA
 };
 Image IMG_SVT_DOCTEMPLATE_BACK_LARGE
 {
-    ImageBitmap = Bitmap { File = "back_large.bmp" ; };
+    ImageBitmap = Bitmap { File = "back_large.png" ; };
     MaskColor = MASK_COL_MAGENTA
 };
 Image IMG_SVT_DOCTEMPLATE_PREV_SMALL
 {
-    ImageBitmap = Bitmap { File = "up_small.bmp" ; };
+    ImageBitmap = Bitmap { File = "up_small.png" ; };
     MaskColor = MASK_COL_MAGENTA
 };
 Image IMG_SVT_DOCTEMPLATE_PREV_LARGE
 {
-    ImageBitmap = Bitmap { File = "up_large.bmp" ; };
+    ImageBitmap = Bitmap { File = "up_large.png" ; };
     MaskColor = MASK_COL_MAGENTA
 };
 Image IMG_SVT_DOCTEMPLATE_PRINT_SMALL
 {
-    ImageBitmap = Bitmap { File = "sc05509.bmp" ; };
+    ImageBitmap = Bitmap { File = "sc05509.png" ; };
     MaskColor = MASK_COL_MAGENTA
 };
 Image IMG_SVT_DOCTEMPLATE_PRINT_LARGE
 {
-    ImageBitmap = Bitmap { File = "lc05509.bmp" ; };
+    ImageBitmap = Bitmap { File = "lc05509.png" ; };
     MaskColor = MASK_COL_MAGENTA
 };
 
@@ -174,22 +174,22 @@ ToolBox TB_SVT_FRAMEWIN
 
 Image IMG_SVT_DOCTEMPLATE_DOCINFO_SMALL
 {
-    ImageBitmap = Bitmap { File = "info_small.bmp" ; };
+    ImageBitmap = Bitmap { File = "info_small.png" ; };
     MaskColor = MASK_COL_MAGENTA
 };
 Image IMG_SVT_DOCTEMPLATE_DOCINFO_LARGE
 {
-    ImageBitmap = Bitmap { File = "info_large.bmp" ; };
+    ImageBitmap = Bitmap { File = "info_large.png" ; };
     MaskColor = MASK_COL_MAGENTA
 };
 Image IMG_SVT_DOCTEMPLATE_PREVIEW_SMALL
 {
-    ImageBitmap = Bitmap { File = "preview_small.bmp" ; };
+    ImageBitmap = Bitmap { File = "preview_small.png" ; };
     MaskColor = MASK_COL_MAGENTA
 };
 Image IMG_SVT_DOCTEMPLATE_PREVIEW_LARGE
 {
-    ImageBitmap = Bitmap { File = "preview_large.bmp" ; };
+    ImageBitmap = Bitmap { File = "preview_large.png" ; };
     MaskColor = MASK_COL_MAGENTA
 };
 
@@ -279,24 +279,3 @@ String STR_SVT_SAMPLES_HELP
 {
     Text [ en-US ] = "Contains a selection of sample letters, reports and other documents";
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

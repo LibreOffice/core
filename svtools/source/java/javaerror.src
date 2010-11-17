@@ -89,5 +89,3 @@ String STR_ERROR_JVMCREATIONFAILED
 {
     Text[ en-US ] = "JRE is Defective" ;
 };
-
-

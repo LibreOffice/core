@@ -25,15 +25,9 @@
  *
  ************************************************************************/
 
-#ifndef SVTOOLS_REGISTRATIONDLG_HRC
 #include "registrationdlg.hrc"
-#endif
-#ifndef _SVTOOLS_HRC
 #include <svtools/svtools.hrc>
-#endif
-#ifndef _SVT_HELPID_HRC
 #include <svtools/helpid.hrc>
-#endif
 
 ModalDialog DLG_REGISTRATION_REQUEST
 {
@@ -52,7 +46,7 @@ ModalDialog DLG_REGISTRATION_REQUEST
         {
             ImageBitmap = Bitmap
             {
-                File = "regkey.bmp" ;
+                File = "regkey.png" ;
             };
             MaskColor = Color { Red = 0x0000 ; Green = 0x0000 ; Blue = 0xFFFF ; };
         };

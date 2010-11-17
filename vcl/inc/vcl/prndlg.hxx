@@ -61,7 +61,6 @@ namespace vcl
             rtl::OUString       maReplacementString;
             rtl::OUString       maToolTipString;
 
-            bool useHCColorReplacement() const;
         public:
             PrintPreviewWindow( Window* pParent, const ResId& );
             virtual ~PrintPreviewWindow();
@@ -169,9 +168,7 @@ namespace vcl
             FixedImage                              maCollateImage;
 
             Image                                   maCollateImg;
-            Image                                   maCollateHCImg;
             Image                                   maNoCollateImg;
-            Image                                   maNoCollateHCImg;
 
             long                                    mnCollateUIMode;
 

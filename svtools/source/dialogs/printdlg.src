@@ -278,12 +278,12 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
 
 Image RID_IMG_PRNDLG_COLLATE
 {
-    ImageBitmap = Bitmap { File = "collate.bmp" ; };
+    ImageBitmap = Bitmap { File = "collate.png" ; };
     MaskColor = IMAGE_MAGENTA_MASK ;
 };
 
 Image RID_IMG_PRNDLG_NOCOLLATE
 {
-    ImageBitmap = Bitmap { File = "ncollate.bmp" ; };
+    ImageBitmap = Bitmap { File = "ncollate.png" ; };
     MaskColor = IMAGE_MAGENTA_MASK ;
 };

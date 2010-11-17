@@ -231,7 +231,6 @@ struct ImplSVWinData
     Window*                 mpTrackWin;         // window, that is in tracking mode
     AutoTimer*              mpTrackTimer;       // tracking timer
     ImageList*              mpMsgBoxImgList;    // ImageList for MessageBox
-    ImageList*              mpMsgBoxHCImgList;  // ImageList for MessageBox (high contrast mode)
     Window*                 mpAutoScrollWin;    // window, that is in AutoScrollMode mode
     USHORT                  mnTrackFlags;       // tracking flags
     USHORT                  mnAutoScrollFlags;  // auto scroll flags
@@ -255,9 +254,7 @@ struct ImplSVCtrlData
     ImageList*              mpSplitHArwImgList; // ImageList for Horizontale SplitWindows (Arrows)
     ImageList*              mpSplitVArwImgList; // ImageList for Vertikale SplitWindows (Arrows)
     Image*                  mpDisclosurePlus;
-    Image*                  mpDisclosurePlusHC;
     Image*                  mpDisclosureMinus;
-    Image*                  mpDisclosureMinusHC;
     ImplTBDragMgr*          mpTBDragMgr;        // DragMgr for ToolBox
     USHORT                  mnCheckStyle;       // CheckBox-Style for ImageList-Update
     USHORT                  mnRadioStyle;       // Radio-Style for ImageList-Update

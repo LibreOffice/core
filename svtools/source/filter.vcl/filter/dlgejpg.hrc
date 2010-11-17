@@ -35,5 +35,3 @@
 #define GRP_COLORS 2
 #define RB_GRAY 1
 #define RB_RGB 2
-
-

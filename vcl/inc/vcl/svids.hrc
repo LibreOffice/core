@@ -57,8 +57,6 @@
 
 #define SV_DISCLOSURE_PLUS                  1060
 #define SV_DISCLOSURE_MINUS                 1061
-#define SV_DISCLOSURE_PLUS_HC               1062
-#define SV_DISCLOSURE_MINUS_HC              1063
 
 #define SV_RESID_MENU_EDIT                  2000
 #define SV_MENU_EDIT_UNDO                   1
@@ -140,8 +138,6 @@
 #define SV_PRINT_BUTTONLINE                 14
 #define SV_PRINT_COLLATE_IMG                15
 #define SV_PRINT_NOCOLLATE_IMG              16
-#define SV_PRINT_COLLATE_HC_IMG             17
-#define SV_PRINT_NOCOLLATE_HC_IMG           18
 #define SV_PRINT_NOPAGES                    19
 #define SV_PRINT_STATUS_TXT                 20
 #define SV_PRINT_LOCATION_TXT               21
@@ -232,8 +228,6 @@
 
 #define SV_ICON_LARGE_START                 24000
 #define SV_ICON_SMALL_START                 25000
-#define SV_ICON_LARGE_HC_START              26000
-#define SV_ICON_SMALL_HC_START              27000
 
 #define SV_ICON_ID_OFFICE                       1
 #define SV_ICON_ID_TEXT                         2
