@@ -41,6 +41,18 @@ import com.sun.star.report.pentaho.model.OfficeStyles;
 import com.sun.star.report.pentaho.model.OfficeStylesCollection;
 import com.sun.star.report.pentaho.styles.LengthCalculator;
 import com.sun.star.report.pentaho.styles.StyleMapper;
+import com.sun.org.apache.xerces.internal.parsers.DOMParser;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 
 import java.awt.Image;
 
@@ -54,6 +66,7 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.io.InputStream;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -137,7 +150,6 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
     public static final String FAILED = "Failed";
     public static final String VERTICAL_POS = "vertical-pos";
     private static final String ZERO_CM = "0cm";
-
     /** the verison of the ODF specification to which generated documents
      *  shall conform. */
     public static final String ODF_VERSION = "1.2";
@@ -381,7 +393,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
             rootAttributes.addNamespaceDeclaration("xsi", OfficeNamespaces.XSI_NS);
             rootAttributes.addNamespaceDeclaration("grddl", OfficeNamespaces.GRDDL_NS);
             rootAttributes.setAttribute(OfficeNamespaces.OFFICE_NS, "version",
-                   ODF_VERSION);
+                    ODF_VERSION);
 
             this.rootXmlWriter.writeXmlDeclaration("UTF-8");
             this.rootXmlWriter.writeTag(OfficeNamespaces.OFFICE_NS, "document-content", rootAttributes, XmlWriterSupport.OPEN);
@@ -1035,6 +1047,53 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
             throws IOException, DataSourceException, ReportProcessingException
     {
         getXmlWriter().writeCloseTag();
+    }
+
+    public void copyMeta()
+    {
+        // now copy the meta.xml
+        if (getInputRepository().isReadable("meta.xml"))
+        {
+            InputStream inputStream = null;
+            try
+            {
+                inputStream = getInputRepository().createInputStream("meta.xml");
+                DOMParser dOMParser = new DOMParser();
+                dOMParser.parse(new InputSource(inputStream));
+                Document document = dOMParser.getDocument();
+                NodeList nl = document.getElementsByTagName("document-meta/meta/generator");
+                Node node = document.getFirstChild().getFirstChild().getFirstChild().getFirstChild();
+                String creator = node.getNodeValue();
+                node.setNodeValue(creator + "/report_builder");
+                Transformer transformer = TransformerFactory.newInstance().newTransformer();
+                transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+
+                final OutputStream outputMetaStream = getOutputRepository().createOutputStream("meta.xml", "text/xml");
+                StreamResult result = new StreamResult(outputMetaStream);
+                DOMSource source = new DOMSource(document);
+                transformer.transform(source, result);
+
+                //IOUtils.getInstance().copyStreams(inputStream, outputMetaStream);
+                outputMetaStream.flush();
+                outputMetaStream.close();
+            }
+            catch (java.lang.Exception ex)
+            {
+            } finally
+            {
+                if (inputStream != null)
+                {
+                    try
+                    {
+                        inputStream.close();
+                    }
+                    catch (IOException ex)
+                    {
+                        Logger.getLogger(OfficeDocumentReportTarget.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        }
     }
 
     public void endReport(final ReportStructureRoot report)
