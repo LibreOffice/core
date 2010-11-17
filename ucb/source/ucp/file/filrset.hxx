@@ -28,9 +28,7 @@
 #ifndef _FILRSET_HXX_
 #define _FILRSET_HXX_
 
-#ifndef __SGI_STL_VECTOR
 #include <vector>
-#endif
 #include <ucbhelper/macros.hxx>
 #include <osl/file.hxx>
 
