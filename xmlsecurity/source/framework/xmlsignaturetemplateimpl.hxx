@@ -43,9 +43,7 @@
 #include <com/sun/star/xml/crypto/XXMLSignatureTemplate.hpp>
 #include <com/sun/star/xml/wrapper/XXMLElementWrapper.hpp>
 
-#ifndef __SGI_STL_VECTOR
 #include <vector>
-#endif
 
 class XMLSignatureTemplateImpl : public ::cppu::WeakImplHelper3<
     ::com::sun::star::xml::crypto::XXMLSignatureTemplate ,
