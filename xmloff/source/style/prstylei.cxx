@@ -31,9 +31,7 @@
 
 
 #include <tools/debug.hxx>
-#ifndef __SGI_STL_SET
 #include <set>
-#endif
 #include "xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlprcon.hxx>

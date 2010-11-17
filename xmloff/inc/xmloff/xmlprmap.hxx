@@ -35,9 +35,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-#ifndef __SGI_STL_VECTOR
 #include <vector>
-#endif
 #include <xmloff/uniref.hxx>
 #include <xmloff/maptype.hxx>
 #include <xmloff/xmltypes.hxx>

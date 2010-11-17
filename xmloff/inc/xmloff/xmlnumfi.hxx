@@ -37,9 +37,7 @@
 #include <xmloff/xmlstyle.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <i18npool/lang.h>
-#ifndef __SGI_STL_VECTOR
 #include <vector>
-#endif
 #include <unotools/localedatawrapper.hxx>
 
 #define XML_NUMBERSTYLES "NumberStyles"

@@ -35,9 +35,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 
-#ifndef __SGI_STL_SET
 #include <set>
-#endif
 
 class SvXMLExport;
 namespace rtl

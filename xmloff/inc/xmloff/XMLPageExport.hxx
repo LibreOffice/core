@@ -33,9 +33,7 @@
 #include "xmloff/dllapi.h"
 #include "sal/types.h"
 #include <rtl/ustring.hxx>
-#ifndef __SGI_STL_VECTOR
 #include <vector>
-#endif
 #include <xmloff/attrlist.hxx>
 #include <xmloff/uniref.hxx>
 #include <com/sun/star/container/XIndexAccess.hpp>

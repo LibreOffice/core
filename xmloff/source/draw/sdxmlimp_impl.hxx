@@ -35,9 +35,7 @@
 #include <xmloff/xmltkmap.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 
-#ifndef __SGI_STL_VECTOR
 #include <vector>
-#endif
 #include <xmloff/xmlimp.hxx>
 
 //////////////////////////////////////////////////////////////////////////////

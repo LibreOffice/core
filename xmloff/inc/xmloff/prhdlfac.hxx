@@ -33,9 +33,7 @@
 #include "xmloff/dllapi.h"
 #include "sal/types.h"
 
-#ifndef __SGI_STL_MAP
 #include <map>
-#endif
 #include <xmloff/uniref.hxx>
 #include <xmloff/xmlprhdl.hxx>
 

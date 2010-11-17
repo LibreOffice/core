@@ -32,9 +32,7 @@
 #include "xmloff/dllapi.h"
 #include "sal/types.h"
 #include <com/sun/star/style/XStyle.hpp>
-#ifndef __SGI_STL_VECTOR
 #include <vector>
-#endif
 #include <xmloff/xmlstyle.hxx>
 
 struct XMLPropertyState;
