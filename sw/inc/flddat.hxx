@@ -25,8 +25,8 @@
  *
  ************************************************************************/
 
-#ifndef _FLDDAT_HXX
-#define _FLDDAT_HXX
+#ifndef SW_FLDDAT_HXX
+#define SW_FLDDAT_HXX
 
 #include <tools/string.hxx>
 
@@ -115,6 +115,9 @@ class SW_DLLPUBLIC SwDateTimeField : public SwValueField
         USHORT              nSubType;
         long                nOffset;    // Offset in Minuten
 
+        virtual String      Expand() const;
+        virtual SwField*    Copy() const;
+
 public:
         SwDateTimeField(SwDateTimeFieldType* pType, USHORT nSubType = DATEFLD,
                     ULONG nFmt = 0, USHORT nLng = 0);
@@ -138,11 +141,8 @@ public:
         void                    SetDateTime(const DateTime& rDT);
         static double           GetDateTime(SwDoc* pDoc, const DateTime& rDT);
 
-        virtual String          Expand() const;
-        virtual SwField*        Copy() const;
-
     virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nMId ) const;
     virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nMId );
 };
 
-#endif // _FLDDAT_HXX
+#endif // SW_FLDDAT_HXX

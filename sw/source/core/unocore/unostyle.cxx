@@ -3993,11 +3993,11 @@ SwAutoStylesEnumImpl::SwAutoStylesEnumImpl( SwDoc* pInitDoc, IStyleAccess::SwAut
     {
         std::set< std::pair< USHORT, USHORT > > aRubyMap;
         SwAttrPool& rAttrPool = pDoc->GetAttrPool();
-        USHORT nCount = rAttrPool.GetItemCount( RES_TXTATR_CJK_RUBY );
+        sal_uInt32 nCount = rAttrPool.GetItemCount2( RES_TXTATR_CJK_RUBY );
 
-        for ( USHORT nI = 0; nI < nCount; ++nI )
+        for ( sal_uInt32 nI = 0; nI < nCount; ++nI )
         {
-            const SwFmtRuby* pItem = static_cast<const SwFmtRuby*>(rAttrPool.GetItem( RES_TXTATR_CJK_RUBY, nI ));
+            const SwFmtRuby* pItem = static_cast<const SwFmtRuby*>(rAttrPool.GetItem2( RES_TXTATR_CJK_RUBY, nI ));
             if ( pItem && pItem->GetTxtRuby() )
             {
                 std::pair< USHORT, USHORT > aPair( pItem->GetPosition(), pItem->GetAdjustment() );

@@ -1827,10 +1827,11 @@ void SwRootFrm::ImplCalcBrowseWidth()
                 SwAnchoredObject* pAnchoredObj = (*pFrm->GetDrawObjs())[i];
                 const SwFrmFmt& rFmt = pAnchoredObj->GetFrmFmt();
                 const BOOL bFly = pAnchoredObj->ISA(SwFlyFrm);
-                if ( ( bFly &&
-                       WEIT_WECH == pAnchoredObj->GetObjRect().Width() ) ||
-                     rFmt.GetFrmSize().GetWidthPercent() )
+                if ((bFly && (WEIT_WECH == pAnchoredObj->GetObjRect().Width()))
+                    || rFmt.GetFrmSize().GetWidthPercent())
+                {
                     continue;
+                }
 
                 long nWidth = 0;
                 switch ( rFmt.GetAnchor().GetAnchorId() )

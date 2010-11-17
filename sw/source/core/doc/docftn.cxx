@@ -333,10 +333,15 @@ void SwDoc::SetEndNoteInfo(const SwEndNoteInfo& rInfo)
         }
 
         BOOL bNumChg  = rInfo.nFtnOffset != GetEndNoteInfo().nFtnOffset;
-        BOOL bExtra   = (!bNumChg && rInfo.aFmt.GetNumberingType() != GetEndNoteInfo().aFmt.GetNumberingType() )
-                                                                              ||
-                            rInfo.GetPrefix() != GetEndNoteInfo().GetPrefix() ||
-                            rInfo.GetSuffix() != GetEndNoteInfo().GetSuffix();
+        // this seems to be an optimization: UpdateAllFtn() is only called
+        // if the offset changes; if the offset is the same,
+        // but type/prefix/suffix changes, just set new numbers.
+        bool const bExtra = !bNumChg &&
+                (   (rInfo.aFmt.GetNumberingType() !=
+                        GetEndNoteInfo().aFmt.GetNumberingType())
+                ||  (rInfo.GetPrefix() != GetEndNoteInfo().GetPrefix())
+                ||  (rInfo.GetSuffix() != GetEndNoteInfo().GetSuffix())
+                );
         BOOL bFtnDesc = rInfo.GetPageDesc( *this ) !=
                             GetEndNoteInfo().GetPageDesc( *this );
         SwCharFmt *pOldChrFmt = GetEndNoteInfo().GetCharFmt( *this ),

@@ -125,7 +125,7 @@ BOOL SwASC_AttrIter::OutAttr( xub_StrLen nSwPos )
                 {
                 case RES_TXTATR_FIELD:
                     sOut = static_cast<SwTxtFld const*>(pHt)->GetFld().GetFld()
-                            ->ExpandField(rWrt.pDoc->IsClipBoard());
+                            ->ExpandField(true);
                     break;
 
                 case RES_TXTATR_FTN:

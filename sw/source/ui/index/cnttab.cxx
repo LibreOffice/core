@@ -828,7 +828,7 @@ SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(Window* pParent,
     rHB.Show();
 
     SwIndexTreeLB& rTLB = aHeaderTree.GetTreeListBox();
-    rTLB.SetWindowBits(WB_CLIPCHILDREN|WB_SORT);
+    rTLB.SetStyle(rTLB.GetStyle()|WB_CLIPCHILDREN|WB_SORT);
     //aStylesTLB.SetSelectHdl(LINK(this, SwAddStylesDlg_Impl, SelectHdl));
     rTLB.GetModel()->SetSortMode(SortAscending);
     for(i = 0; i < MAXLEVEL; ++i)
@@ -1523,6 +1523,18 @@ IMPL_LINK(SwTOXSelectTabPage, TOXTypeHdl,   ListBox*, pBox)
         //aAddStylesPB.SetPosPixel(aPos);
     //}
     //else if( nType & TO_ILLUSTRATION )//<-removed end.
+        // initialize button positions
+
+    //#i111993# add styles button has two different positions
+    if( !aAddStylesPosDef.X() )
+    {
+        aAddStylesPosDef = ( aAddStylesPB.GetPosPixel() );
+        // move left!
+        Point aPos(aAddStylesPosDef);
+        aPos.X() -= 2 * aAddStylesPB.GetSizePixel().Width();
+        aAddStylesPosUser = aPos;
+    }
+
     if( nType & TO_ILLUSTRATION )       //add by zhaojianwei
         aCaptionSequenceLB.SelectEntry( SwStyleNameMapper::GetUIName(
                                     RES_POOLCOLL_LABEL_ABB, aEmptyStr ));
@@ -1532,11 +1544,11 @@ IMPL_LINK(SwTOXSelectTabPage, TOXTypeHdl,   ListBox*, pBox)
     else if( nType & TO_USER )
     {
         aAddStylesCB.SetText(sAddStyleUser);
-        // move left!
-         Point aPos(aAddStylesPB.GetPosPixel());
-    //  aPos.X() = aChapterDlgPB.GetPosPixel().X();
-        aPos.X() -= 2 * aAddStylesPB.GetSizePixel().Width();
-        aAddStylesPB.SetPosPixel(aPos);
+        aAddStylesPB.SetPosPixel(aAddStylesPosUser);
+    }
+    else if( nType & TO_CONTENT )
+    {
+        aAddStylesPB.SetPosPixel(aAddStylesPosDef);
     }
 
     aCollectSameCB.Show( 0 != (nType & TO_INDEX) );
@@ -2124,7 +2136,7 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(Window* pParent, const SfxItemSet& rAttrSet
     FreeResource();
 
     sLevelStr = aLevelFT.GetText();
-    aLevelLB.SetWindowBits( WB_HSCROLL );
+    aLevelLB.SetStyle( aLevelLB.GetStyle() | WB_HSCROLL );
     aLevelLB.SetSpaceBetweenEntries(0);
     aLevelLB.SetSelectionMode( SINGLE_SELECTION );
     aLevelLB.SetHighlightRange();   // select full width
