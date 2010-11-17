@@ -3793,11 +3793,18 @@ uno::Reference<accessibility::XAccessibleEditableText> lcl_GetxText()
     uno::Reference<accessibility::XAccessibleEditableText> xText;
     Window* pFocusWin = ImplGetSVData()->maWinData.mpFocusWin;
     if (!pFocusWin)
-    return xText;
+        return xText;
 
-    uno::Reference< accessibility::XAccessible > xAccessible( pFocusWin->GetAccessible( true ) );
-    if (xAccessible.is())
-        xText = FindFocus(xAccessible->getAccessibleContext());
+    try
+    {
+        uno::Reference< accessibility::XAccessible > xAccessible( pFocusWin->GetAccessible( true ) );
+        if (xAccessible.is())
+            xText = FindFocus(xAccessible->getAccessibleContext());
+    }
+    catch(const uno::Exception& e)
+    {
+        g_warning( "Exception in getting input method surrounding text" );
+    }
     return xText;
 }
 
