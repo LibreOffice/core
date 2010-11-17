@@ -202,11 +202,6 @@ private:
 
     SfxProgress*        mpProgress;
 
-    /** stores the last used high contrast mode.
-        this is changed in onUpdateStyleSettings()
-    */
-    bool mbHighContrastMode;
-
     /** stores the last used document color.
         this is changed in onUpdateStyleSettings()
     */

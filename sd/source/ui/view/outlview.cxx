@@ -120,7 +120,6 @@ OutlineView::OutlineView( DrawDocShell* pDocSh, ::Window* pWindow, OutlineViewSh
 , mnPagesProcessed(0)
 , mbFirstPaint(TRUE)
 , mpProgress(NULL)
-, mbHighContrastMode( false )
 , maDocColor( COL_WHITE )
 , mnPageNumberWidthPixel( 0 )
 , maLRSpaceItem( 0, 0, 2000, 0, EE_PARA_OUTLLRSPACE )
@@ -1609,17 +1608,6 @@ sal_uInt16 OutlineView::GetScriptType() const
 
 void OutlineView::onUpdateStyleSettings( bool bForceUpdate /* = false */ )
 {
-    const bool bHighContrastMode = Application::GetSettings().GetStyleSettings().GetHighContrastMode() != 0;
-    if( bForceUpdate || (mbHighContrastMode != bHighContrastMode) )
-    {
-        if( mpOutliner )
-        {
-            mpOutliner->ForceAutoColor( bHighContrastMode );
-        }
-        mbHighContrastMode = bHighContrastMode;
-
-    }
-
     svtools::ColorConfig aColorConfig;
     const Color aDocColor( aColorConfig.GetColorValue( svtools::DOCCOLOR ).nColor );
     if( bForceUpdate || (maDocColor != aDocColor) )
