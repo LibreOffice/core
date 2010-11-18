@@ -1939,7 +1939,6 @@ void SwTxtNode::CountWords( SwDocStat& rStat,
     }
 
     nTmpChars = nExpandEnd - nExpandBegin - nNumOfMaskedChars;
-    OSL_ENSURE( nTmpChars >= 0, "Less than zero total characters found!" );
 
     // no nTmpCharsExcludingSpaces adjust needed neither for blanked out MaskedChars
     // nor for mid-word selection - set scanner bClip = true at creation
