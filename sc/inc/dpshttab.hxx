@@ -71,7 +71,7 @@ private:
     bool            bIgnoreEmptyRows;
     bool            bRepeatIfEmpty;
 
-       ScDPCacheTable  aCacheTable;
+    ScDPCacheTable  aCacheTable;
 
 public:
     ScSheetDPData( ScDocument* pD, const ScSheetSourceDesc& rDesc, long nCacheId = -1 );
