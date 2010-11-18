@@ -611,8 +611,8 @@ sal_Bool OFlatTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols,sal
                         sal_Unicode* pData = aStrConverted.AllocBuffer(aStr.Len());
                         const sal_Unicode* pStart = pData;
 
-                        OSL_ENSURE(cDecimalDelimiter && nType != DataType::INTEGER ||
-                                   !cDecimalDelimiter && nType == DataType::INTEGER,
+                        OSL_ENSURE((cDecimalDelimiter && nType != DataType::INTEGER) ||
+                                   (!cDecimalDelimiter && nType == DataType::INTEGER),
                                    "FalscherTyp");
 
                         // In Standard-Notation (DezimalPUNKT ohne Tausender-Komma) umwandeln:
