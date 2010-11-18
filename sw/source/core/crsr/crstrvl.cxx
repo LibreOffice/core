@@ -1360,7 +1360,7 @@ BOOL SwCrsrShell::GetContentAtPos( const Point& rPt,
 
             if( !bRet && (
                 SwContentAtPos::SW_TABLEBOXFML & rCntntAtPos.eCntntAtPos
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
                 || SwContentAtPos::SW_TABLEBOXVALUE & rCntntAtPos.eCntntAtPos
 #endif
                 ))
@@ -1406,7 +1406,7 @@ BOOL SwCrsrShell::GetContentAtPos( const Point& rPt,
                         // erzeuge aus der internen (fuer CORE)
                         // die externe (fuer UI) Formel
                         rCntntAtPos.eCntntAtPos = SwContentAtPos::SW_TABLEBOXFML;
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
                         if( RES_BOXATR_VALUE == pItem->Which() )
                             rCntntAtPos.eCntntAtPos = SwContentAtPos::SW_TABLEBOXVALUE;
                         else
@@ -1440,7 +1440,7 @@ BOOL SwCrsrShell::GetContentAtPos( const Point& rPt,
                 }
             }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
             if( !bRet && SwContentAtPos::SW_CURR_ATTRS & rCntntAtPos.eCntntAtPos )
             {
                 xub_StrLen n = aPos.nContent.GetIndex();
