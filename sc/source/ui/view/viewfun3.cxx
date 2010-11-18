@@ -680,6 +680,10 @@ void ScViewFunc::PasteFromSystem()
             {
                 //  If it's a Writer object, insert RTF instead of OLE
 
+                //  Else, if the class id is all-zero, and SYLK is available,
+                //  it probably is spreadsheet cells that have been put
+                //  on the clipboard by OOo, so use the SYLK. (fdo#31077)
+
                 BOOL bDoRtf = FALSE;
                 TransferableObjectDescriptor aObjDesc;
                 if( aDataHelper.GetTransferableObjectDescriptor( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR, aObjDesc ) )
@@ -690,6 +694,9 @@ void ScViewFunc::PasteFromSystem()
                 }
                 if ( bDoRtf )
                     PasteFromSystem( FORMAT_RTF );
+                else if ( aObjDesc.maClassName == SvGlobalName( 0,0,0,0,0,0,0,0,0,0,0 )
+                          && aDataHelper.HasFormat( SOT_FORMATSTR_ID_SYLK ))
+                    PasteFromSystem( SOT_FORMATSTR_ID_SYLK );
                 else
                     PasteFromSystem( SOT_FORMATSTR_ID_EMBED_SOURCE );
             }
