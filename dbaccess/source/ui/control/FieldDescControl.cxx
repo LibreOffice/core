@@ -410,7 +410,6 @@ void OFieldDescControl::CheckScrollBars()
     {
         m_pVertScroll->Show();
         m_pVertScroll->SetRangeMax(nActive - nLastVisible);
-//      m_pVertScroll->SetThumbPos(0);
 
         m_pVertScroll->SetPosSizePixel( Point(nNewHWidth, 0), Size(nVScrollWidth, szOverallSize.Height()) );
     }
@@ -425,7 +424,6 @@ void OFieldDescControl::CheckScrollBars()
     {
         m_pHorzScroll->Show();
         m_pHorzScroll->SetRangeMax((lMaxXPosition - lMaxXAvailable + HSCROLL_STEP - 1 )/HSCROLL_STEP);
-//      m_pHorzScroll->SetThumbPos(0);
 
         m_pHorzScroll->SetPosSizePixel( Point(0, nNewVHeight), Size(bNeedVScrollBar ? nNewHWidth : szOverallSize.Width(), nHScrollHeight) );
     }
@@ -516,7 +514,7 @@ sal_Int32 OFieldDescControl::GetMaxControlHeight() const
             const Size aTemp( ppAggregates[i]->GetOptimalSize(WINDOWSIZE_PREFERRED) );
             if ( aTemp.Height() > aHeight.Height() )
                 aHeight.Height() = aTemp.Height();
-        } // if ( ppAggregates[i] )
+        }
     }
 
     return aHeight.Height();
@@ -1194,7 +1192,7 @@ void OFieldDescControl::SetPosSize( Control** ppControl, long nRow, sal_uInt16 n
         case 4:
             aSize.Width()  = CONTROL_WIDTH_4;
             break;
-        } // switch( nCol )
+        }
     }
 
 
@@ -1710,7 +1708,7 @@ void OFieldDescControl::SaveData( OFieldDescription* pFieldDescr )
         catch(const Exception&)
         {
         }
-    } // if ( sDefault.getLength() )
+    }
     else
         pFieldDescr->SetControlDefault(Any());
 

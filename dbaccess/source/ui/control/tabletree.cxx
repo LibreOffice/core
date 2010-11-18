@@ -384,8 +384,8 @@ void OTableTreeListBox::checkedButton_noBroadcast(SvLBoxEntry* _pEntry)
 {
     OMarkableTreeListBox::checkedButton_noBroadcast(_pEntry);
 
-    // if an entry has children, it makes a difference if the entry is checked because alls children are checked
-    // or if the user checked it explicitly.
+    // if an entry has children, it makes a difference if the entry is checked
+    // because all children are checked or if the user checked it explicitly.
     // So we track explicit (un)checking
 
     SvButtonState eState = GetCheckButtonState(_pEntry);
