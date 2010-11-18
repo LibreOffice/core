@@ -121,6 +121,7 @@
 #include "optsolver.hxx"
 #include "sheetdata.hxx"
 #include "tabprotection.hxx"
+#include "dpobject.hxx"
 
 #include "docsh.hxx"
 #include "docshimp.hxx"

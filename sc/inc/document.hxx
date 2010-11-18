@@ -49,8 +49,7 @@
 // Wang Xu Ming -- 2009-8-17
 // DataPilot Migration - Cache&&Performance
 #include <list>
-#include "dpobject.hxx"
-#include "dptabdat.hxx"
+class ScDPTableDataCache;
 // End Comments
 
 class KeyEvent;
@@ -273,7 +272,6 @@ private:
     ScDPCollection*     pDPCollection;
     // Wang Xu Ming -- 2009-8-17
     // DataPilot Migration - Cache&&Performance
-    std::list<ScDPObject>        m_listDPObjectsInClip;
     std::list<ScDPTableDataCache*>   m_listDPObjectsCaches;
     // End Comments
     ScChartCollection*  pChartCollection;
