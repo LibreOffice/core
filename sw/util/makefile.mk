@@ -398,5 +398,5 @@ $(MISC)/vbaswobj.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
 $(MISC)/msword.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
         msword.component
     $(XSLTPROC) --nonet --stringparam uri \
-        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL5TARGETN:f)' -o $@ \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL4TARGETN:f)' -o $@ \
         $(SOLARENV)/bin/createcomponent.xslt msword.component
