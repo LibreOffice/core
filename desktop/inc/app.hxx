@@ -65,6 +65,8 @@ class Desktop : public Application
 {
     friend class UserInstall;
 
+    void doShutdown();
+
     public:
         enum BootstrapError
         {
