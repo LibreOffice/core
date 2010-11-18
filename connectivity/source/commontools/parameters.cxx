@@ -443,6 +443,7 @@ namespace dbtools
         {
 #if OSL_DEBUG_LEVEL > 0
             if ( aParam->second.aInnerIndexes.size() )
+            {
                 if ( aParam->second.eType == eLinkedByColumnName )
                 {
                     if ( nSmallestIndexLinkedByColumnName == -1 )
@@ -452,6 +453,7 @@ namespace dbtools
                 {
                     nLargestIndexNotLinkedByColumnName = aParam->second.aInnerIndexes[ aParam->second.aInnerIndexes.size() - 1 ];
                 }
+            }
 #endif
             if ( aParam->second.eType != eFilledExternally )
                 continue;
