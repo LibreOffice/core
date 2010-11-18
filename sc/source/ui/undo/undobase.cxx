@@ -66,6 +66,19 @@ __EXPORT ScSimpleUndo::~ScSimpleUndo()
     delete pDetectiveUndo;
 }
 
+bool ScSimpleUndo::SetViewMarkData( const ScMarkData& rMarkData )
+{
+    if ( IsPaintLocked() )
+        return false;
+
+    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
+    if ( !pViewShell )
+        return false;
+
+    pViewShell->SetMarkData( rMarkData );
+    return true;
+}
+
 BOOL __EXPORT ScSimpleUndo::Merge( SfxUndoAction *pNextAction )
 {
     //  Zu jeder Undo-Action kann eine SdrUndoGroup fuer das Aktualisieren
@@ -253,6 +266,9 @@ BOOL ScBlockUndo::AdjustHeight()
 
 void ScBlockUndo::ShowBlock()
 {
+    if ( IsPaintLocked() )
+        return;
+
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
     {

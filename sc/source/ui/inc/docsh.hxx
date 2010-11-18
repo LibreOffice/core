@@ -334,6 +334,8 @@ public:
     void            PostPaintGridAll();
     void            PostPaintExtras();
 
+    bool            IsPaintLocked() const { return pPaintLockData != NULL; }
+
     void            PostDataChanged();
 
     void            UpdatePaintExt( USHORT& rExtFlags, SCCOL nStartCol, SCROW nStartRow, SCTAB nStartTab,
