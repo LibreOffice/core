@@ -1181,7 +1181,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                     }
                 }
                 catch(Exception&
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
                             aExcept
 #endif
                 )
