@@ -1452,7 +1452,8 @@ IMPL_LINK( ChartController, NotifyUndoActionHdl, SdrUndoAction*, pUndoAction )
     {
         try
         {
-            const Reference< document::XUndoManager > xUndoManager( getModel(), uno::UNO_QUERY_THROW );
+            const Reference< document::XUndoManagerSupplier > xSuppUndo( getModel(), uno::UNO_QUERY_THROW );
+            const Reference< document::XUndoManager > xUndoManager( xSuppUndo->getUndoManager(), uno::UNO_QUERY_THROW );
             const Reference< document::XUndoAction > xAction( new impl::ShapeUndoElement( *pUndoAction ) );
             xUndoManager->addUndoAction( xAction );
         }
