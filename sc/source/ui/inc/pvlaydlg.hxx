@@ -97,7 +97,6 @@ public:
     void                    NotifyFieldFocus     ( ScDPFieldType eType, BOOL bGotFocus );
     void                    NotifyMoveFieldToEnd      ( ScDPFieldType eToType );
     void                    NotifyRemoveField    ( ScDPFieldType eType, size_t nFieldIndex );
-    BOOL                    NotifyMoveSlider     ( USHORT nKeyCode );   // return TRUE, if position changed
 
 protected:
     virtual void            Deactivate();
@@ -117,7 +116,6 @@ private:
     FixedText               aFtData;
     ScDPDataFieldControl    aWndData;
     ScDPSelectFieldControl  aWndSelect;
-    ScrollBar               aSlider;
     FixedInfo               aFtInfo;
 
     FixedLine               aFlAreas;
@@ -235,7 +233,6 @@ private:
 
     // Handler
     DECL_LINK( ClickHdl, PushButton * );
-    DECL_LINK( ScrollHdl, ScrollBar * );
     DECL_LINK( SelAreaHdl, ListBox * );
     DECL_LINK( MoreClickHdl, MoreButton * );
     DECL_LINK( EdModifyHdl, Edit * );

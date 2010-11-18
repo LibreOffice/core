@@ -36,7 +36,7 @@
 #define ROW_FIELD_BTN_GAP    2     // must be an even number
 #define FIELD_BTN_WIDTH     81
 #define FIELD_BTN_HEIGHT    23
-#define SELECT_FIELD_BTN_SPACE   5
+#define SELECT_FIELD_BTN_SPACE   2
 #define FIELD_AREA_GAP       3   // gap between row/column/data/page areas
 
 #endif

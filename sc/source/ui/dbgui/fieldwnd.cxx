@@ -663,8 +663,6 @@ void ScDPFieldControlBase::SetSelectionHome()
     const FieldNames& rFields = GetFieldNames();
     if( !rFields.empty() )
     {
-        if( GetFieldType() == TYPE_SELECT )
-            mpDlg->NotifyMoveSlider( KEY_HOME );
         SetSelection( 0 );
     }
 }
@@ -674,8 +672,6 @@ void ScDPFieldControlBase::SetSelectionEnd()
     const FieldNames& rFields = GetFieldNames();
     if( !rFields.empty() )
     {
-        if( GetFieldType() == TYPE_SELECT )
-            mpDlg->NotifyMoveSlider( KEY_END );
         SetSelection( rFields.size() - 1 );
     }
 }
@@ -683,17 +679,6 @@ void ScDPFieldControlBase::SetSelectionEnd()
 void ScDPFieldControlBase::MoveSelection( USHORT nKeyCode, SCsCOL nDX, SCsROW nDY )
 {
     size_t nNewIndex = CalcNewFieldIndex( nDX, nDY );
-    if( (GetFieldType() == TYPE_SELECT) && (nNewIndex == GetSelectedField()) )
-    {
-        if( mpDlg->NotifyMoveSlider( nKeyCode ) )
-        {
-            switch( nKeyCode )
-            {
-                case KEY_UP:    nNewIndex += (LINE_SIZE - 1);   break;
-                case KEY_DOWN:  nNewIndex -= (LINE_SIZE - 1);   break;
-            }
-        }
-    }
     SetSelection( nNewIndex );
 }
 

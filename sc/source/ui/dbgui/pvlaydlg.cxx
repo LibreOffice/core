@@ -147,7 +147,6 @@ ScDPLayoutDlg::ScDPLayoutDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pPar
         aFtData         ( this, ScResId( FT_DATA ) ),
         aWndData        ( this, ScResId( WND_DATA ), &aFtData ),
         aWndSelect      ( this, ScResId( WND_SELECT ), NULL ),
-        aSlider         ( this, ScResId( WND_HSCROLL ) ),
         aFtInfo         ( this, ScResId( FT_INFO ) ),
 
         aFlAreas        ( this, ScResId( FL_OUTPUT ) ),
@@ -242,8 +241,6 @@ void ScDPLayoutDlg::Init(bool bNewOutput)
     aBtnMore.SetClickHdl( LINK( this, ScDPLayoutDlg, MoreClickHdl ) );
 
     CalcWndSizes();
-
-    aSelectArr.resize( PAGE_SIZE );
 
     ScRange inRange;
     String inString;
@@ -387,22 +384,21 @@ void ScDPLayoutDlg::StateChanged( StateChangedType nStateChange )
 
 void ScDPLayoutDlg::InitWndSelect( const vector<ScDPLabelDataRef>& rLabels )
 {
+    StackPrinter __stack_printer__("ScDPLayoutDlg::InitWndSelect");
     size_t nLabelCount = rLabels.size();
     if (nLabelCount > MAX_LABELS)
         nLabelCount = MAX_LABELS;
-    size_t nLast = (nLabelCount > PAGE_SIZE) ? (PAGE_SIZE - 1) : (nLabelCount - 1);
 
     aLabelDataArr.clear();
     aLabelDataArr.reserve( nLabelCount );
     for ( size_t i=0; i < nLabelCount; i++ )
     {
+        fprintf(stdout, "ScDPLayoutDlg::InitWndSelect:   label data = %s\n",
+                rtl::OUStringToOString(rLabels[i]->getDisplayName(), RTL_TEXTENCODING_UTF8).getStr());
         aLabelDataArr.push_back(*rLabels[i]);
-
-        if ( i <= nLast )
-        {
-            aWndSelect.AddField(aLabelDataArr[i].getDisplayName(), i);
-            aSelectArr[i].reset( new ScDPFuncData( aLabelDataArr[i].mnCol, aLabelDataArr[i].mnFuncMask ) );
-        }
+        aWndSelect.AddField(aLabelDataArr[i].getDisplayName(), i);
+        ScDPFuncDataRef p(new ScDPFuncData(aLabelDataArr[i].mnCol, aLabelDataArr[i].mnFuncMask));
+        aSelectArr.push_back(p);
     }
 }
 
@@ -473,20 +469,6 @@ void ScDPLayoutDlg::InitFields()
     InitFieldWindow(thePivotData.maColFields, TYPE_COL);
     InitFieldWindow(thePivotData.maRowFields, TYPE_ROW);
     InitFieldWindow(thePivotData.maDataFields, TYPE_DATA);
-
-    size_t nLabels = thePivotData.maLabelArray.size();
-    aSlider.SetPageSize( PAGE_SIZE );
-    aSlider.SetVisibleSize( PAGE_SIZE );
-    aSlider.SetLineSize( LINE_SIZE );
-    aSlider.SetRange( Range( 0, static_cast<long>(((nLabels+LINE_SIZE-1)/LINE_SIZE)*LINE_SIZE) ) );
-
-    if ( nLabels > PAGE_SIZE )
-    {
-        aSlider.SetEndScrollHdl( LINK( this, ScDPLayoutDlg, ScrollHdl ) );
-        aSlider.Show();
-    }
-    else
-        aSlider.Hide();
 }
 
 //----------------------------------------------------------------------------
@@ -1189,25 +1171,6 @@ void ScDPLayoutDlg::NotifyRemoveField( ScDPFieldType eType, size_t nFieldIndex )
         RemoveField( eType, nFieldIndex );
 }
 
-//----------------------------------------------------------------------------
-
-BOOL ScDPLayoutDlg::NotifyMoveSlider( USHORT nKeyCode )
-{
-    long nOldPos = aSlider.GetThumbPos();
-    switch( nKeyCode )
-    {
-        case KEY_HOME:  aSlider.DoScroll( 0 );                      break;
-        case KEY_END:   aSlider.DoScroll( aSlider.GetRangeMax() );  break;
-        case KEY_UP:
-        case KEY_LEFT:  aSlider.DoScrollAction( SCROLL_LINEUP );    break;
-        case KEY_DOWN:
-        case KEY_RIGHT: aSlider.DoScrollAction( SCROLL_LINEDOWN );  break;
-    }
-    return nOldPos != aSlider.GetThumbPos();
-}
-
-//----------------------------------------------------------------------------
-
 void ScDPLayoutDlg::Deactivate()
 {
     /*  #107616# If the dialog has been deactivated (click into document), the LoseFocus
@@ -1388,15 +1351,8 @@ void ScDPLayoutDlg::CalcWndSizes()
 
     // selection area
     aWndSelect.SetSizePixel(
-        Size(2 * nFldW + SELECT_FIELD_BTN_SPACE,
-             LINE_SIZE * nFldH + (LINE_SIZE - 1) * SELECT_FIELD_BTN_SPACE));
-
-    // scroll bar
-    Point aSliderPos( aWndSelect.GetPosPixel() );
-    Size aSliderSize( aWndSelect.GetSizePixel() );
-    aSliderPos.Y() += aSliderSize.Height() + SELECT_FIELD_BTN_SPACE;
-    aSliderSize.Height() = GetSettings().GetStyleSettings().GetScrollBarSize();
-    aSlider.SetPosSizePixel( aSliderPos, aSliderSize );
+        Size(2 * nFldW + ROW_FIELD_BTN_GAP,
+             LINE_SIZE * nFldH + (LINE_SIZE - 1) * ROW_FIELD_BTN_GAP));
 
     aRectPage   = Rectangle( aWndPage.GetPosPixel(),    aWndPage.GetSizePixel() );
     aRectRow    = Rectangle( aWndRow.GetPosPixel(),     aWndRow.GetSizePixel() );
@@ -1921,34 +1877,6 @@ IMPL_LINK( ScDPLayoutDlg, SelAreaHdl, ListBox *, EMPTYARG )
     aEdOutPos.SetText( aString );
     return 0;
 }
-
-//----------------------------------------------------------------------------
-
-IMPL_LINK( ScDPLayoutDlg, ScrollHdl, ScrollBar *, EMPTYARG )
-{
-    long nNewOffset = aSlider.GetThumbPos();
-    long nOffsetDiff = nNewOffset - nOffset;
-    nOffset = nNewOffset;
-
-    size_t nFields = std::min< size_t >( aLabelDataArr.size() - nOffset, PAGE_SIZE );
-
-    aWndSelect.ClearFields();
-
-    size_t i=0;
-    for ( i=0; i<nFields; i++ )
-    {
-        const ScDPLabelData& rData = aLabelDataArr[nOffset+i];
-        aWndSelect.AddField(rData.getDisplayName(), i);
-        aSelectArr[i].reset( new ScDPFuncData( rData.mnCol, rData.mnFuncMask ) );
-    }
-    for ( ; i<aSelectArr.size(); i++ )
-        aSelectArr[i].reset();
-
-    aWndSelect.ModifySelectionOffset( nOffsetDiff );    // adjusts selection & redraws
-    return 0;
-}
-
-//----------------------------------------------------------------------------
 
 IMPL_LINK( ScDPLayoutDlg, GetFocusHdl, Control*, pCtrl )
 {
