@@ -25,7 +25,7 @@
 #
 #*************************************************************************
 
-UDK_3_0_0 {
+UDK_3.1 {
     global:
         # jvmaccess/virtualmachine.hxx:
         __1cJjvmaccessOVirtualMachineLAttachGuardRCreationException2t6M_v_; # jvmaccess::VirtualMachine::AttachGuard::CreationException::CreationException()
@@ -52,7 +52,7 @@ UDK_3.2 {
         __1cJjvmaccesscQ__RTTI__1CpnJjvmaccessOVirtualMachineLAttachGuardRCreationException__; # RTTI for jvmaccess::VirtualMachine::AttachGuard::CreationException *
         __1cJjvmaccesscR__RTTI__1CpknJjvmaccessOVirtualMachineLAttachGuardRCreationException__; # RTTI for jvmaccess::VirtualMachine::AttachGuard::CreationException const *
         __1cJjvmaccessOVirtualMachine2t5B6MpnHJavaVM__ibpnHJNIEnv___v_; # jvmaccess::VirtualMachine::VirtualMachine(JavaVM *, int, bool, JNIEnv *) #Nvariant 1
-} UDK_3_0_0;
+} UDK_3.1;
 
 UDK_3.3 {
     global:
