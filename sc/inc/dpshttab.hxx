@@ -44,11 +44,6 @@ namespace com { namespace sun { namespace star { namespace sheet {
 class ScDPDimension;
 class ScDPItemData;
 
-// --------------------------------------------------------------------
-//
-//  implementation of ScDPTableData with sheet data
-//
-
 struct ScSheetSourceDesc
 {
     ScRange         aSourceRange;
@@ -64,6 +59,10 @@ struct ScSheetSourceDesc
     long    GetCacheId( ScDocument* pDoc, long nID ) const;
 };
 
+// --------------------------------------------------------------------
+//
+//  implementation of ScDPTableData with sheet data
+//
 class SC_DLLPUBLIC ScSheetDPData : public ScDPTableData
 {
 private:
