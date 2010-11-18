@@ -117,7 +117,11 @@ void XMLGraphicsDefaultStyle::SetDefaults()
         ((nUPD > 300) && (nUPD <= 330))
     ) )
         bWordWrapDefault = sal_False;
-    xDefaults->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TextWordWrap" ) ), Any( bWordWrapDefault ) );
+
+    const OUString sTextWordWrap( RTL_CONSTASCII_USTRINGPARAM( "TextWordWrap" ) );
+    Reference< XPropertySetInfo > xInfo( xDefaults->getPropertySetInfo() );
+    if ( xInfo->hasPropertyByName( sTextWordWrap ) )
+        xDefaults->setPropertyValue( sTextWordWrap, Any( bWordWrapDefault ) );
 
     FillPropertySet( xDefaults );
 }
