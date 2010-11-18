@@ -395,10 +395,10 @@ sub create_directories
 
         if ( $$languagesref ) { $locallanguagesref = $$languagesref; }
 
-        if ($newdirectory eq "install" )
+        if ($newdirectory eq "install" && $installer::globals::ooodownloadfilename ne "" )
         {
-            # put packages into versioned path (fdo#30837)
-            $path = $path . "$installer::globals::ooodownloadfilename";
+            # put packages into versioned path; needed only on linux (fdo#30837)
+            $path = $path . "$installer::globals::ooodownloadfilename" . $installer::globals::separator;
             create_directory($path);
         }
         else
@@ -417,7 +417,7 @@ sub create_directories
                     $languagestring = "lang_" . $number_of_languages . "_id_" . $id;
                 }
 
-                $path = $path . $languagestring  . $installer::globals::separator;
+                $path = $path . $languagestring . $installer::globals::separator;
                 create_directory($path);
             }
         }
