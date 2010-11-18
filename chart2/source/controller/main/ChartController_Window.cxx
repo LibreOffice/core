@@ -802,7 +802,11 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
         if ( m_eDrawMode == CHARTDRAW_INSERT && pDrawViewWrapper->IsCreateObj() )
         {
             pDrawViewWrapper->EndCreateObj( SDRCREATE_FORCEEND );
-            impl_switchDiagramPositioningToExcludingPositioning();
+            {
+                HiddenUndoContext aUndoContext( m_xUndoManager );
+                    // don't want the positioning Undo action to appear in the UI
+                impl_switchDiagramPositioningToExcludingPositioning();
+            }
             if ( pDrawViewWrapper->AreObjectsMarked() )
             {
                 if ( pDrawViewWrapper->GetCurrentObjIdentifier() == OBJ_TEXT )

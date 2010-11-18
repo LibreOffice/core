@@ -138,10 +138,61 @@ UndoGuardWithSelection::UndoGuardWithSelection(
 {
 }
 
+//-----------------------------------------------------------------------------
+
 UndoGuardWithSelection::~UndoGuardWithSelection()
 {
     if ( !isActionPosted() )
         rollback();
+}
+
+//-----------------------------------------------------------------------------
+
+UndoContext::UndoContext( const Reference< document::XUndoManager > & i_undoManager, const ::rtl::OUString& i_undoTitle )
+    :m_xUndoManager( i_undoManager )
+{
+    ENSURE_OR_THROW( m_xUndoManager.is(), "invalid undo manager!" );
+    m_xUndoManager->enterUndoContext( i_undoTitle );
+}
+
+//-----------------------------------------------------------------------------
+
+UndoContext::~UndoContext()
+{
+    m_xUndoManager->leaveUndoContext();
+}
+
+//-----------------------------------------------------------------------------
+
+HiddenUndoContext::HiddenUndoContext( const Reference< document::XUndoManager > & i_undoManager )
+    :m_xUndoManager( i_undoManager )
+{
+    ENSURE_OR_THROW( m_xUndoManager.is(), "invalid undo manager!" );
+    try
+    {
+        m_xUndoManager->enterHiddenUndoContext();
+    }
+    catch( const uno::Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+        m_xUndoManager.clear();
+            // prevents the leaveUndoContext in the dtor
+    }
+}
+
+//-----------------------------------------------------------------------------
+
+HiddenUndoContext::~HiddenUndoContext()
+{
+    try
+    {
+        if ( m_xUndoManager.is() )
+            m_xUndoManager->leaveUndoContext();
+    }
+    catch( const uno::Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
 }
 
 } //  namespace chart
