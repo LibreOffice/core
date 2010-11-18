@@ -33,13 +33,14 @@ instead of those above.
 	<xsl:param name="newline"><xsl:text xml:space="preserve">&#10;</xsl:text></xsl:param>
 
 	<xsl:template match="text:p/text()">
-		<xsl:call-template name="split-text">
-			<xsl:with-param name="num-prec-spaces">0</xsl:with-param>
-			<xsl:with-param name="text" select="."/>
-		</xsl:call-template>
+		<xsl:call-template name="split-current-text-node"/>
 	</xsl:template>
 
 	<xsl:template match="text:p/text:span/text()">
+		<xsl:call-template name="split-current-text-node"/>
+	</xsl:template>
+
+	<xsl:template name="split-current-text-node">
 		<xsl:call-template name="split-text">
 			<xsl:with-param name="num-prec-spaces">0</xsl:with-param>
 			<xsl:with-param name="text" select="."/>
