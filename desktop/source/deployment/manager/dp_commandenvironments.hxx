@@ -154,22 +154,6 @@ public:
     css::uno::Any m_UnknownException;
 };
 
-// class NoExceptionCommandEnv : public BaseCommandEnv
-// {
-//     css::uno::Type m_type;
-// public:
-//     NoExceptionCommandEnv::NoExceptionCommandEnv(){};
-//     NoExceptionCommandEnv::NoExceptionCommandEnv(
-//         css::uno::Reference< css::task::XInteractionHandler> const & handler,
-//         css::uno::Type const & type);
-
-// // XInteractionHandler
-//     virtual void SAL_CALL handle(
-//         css::uno::Reference<css::task::XInteractionRequest > const & xRequest )
-//         throw (css::uno::RuntimeException);
-
-// };
-
 }
 
 #endif
