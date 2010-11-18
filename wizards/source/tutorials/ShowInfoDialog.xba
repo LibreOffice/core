@@ -148,9 +148,9 @@ sub setImage(whatever as Object)
 	Dim bitmapPath As String
 	iPos = InStr(templatePath,&quot;/&quot;)
 	if(iPos &gt; 0) Then
-		bitmapPath = templatePath &amp; &quot;/wizard/bitmap/tutorial_background.gif&quot;
+		bitmapPath = templatePath &amp; &quot;../wizard/bitmap/tutorial_background.gif&quot;
 	Else
-		bitmapPath = templatePath &amp; &quot;\wizard\bitmap\tutorial_background.gif&quot;
+		bitmapPath = templatePath &amp; &quot;..\wizard\bitmap\tutorial_background.gif&quot;
 	End If
 	
 	dim props(0) as new com.sun.star.beans.PropertyValue
