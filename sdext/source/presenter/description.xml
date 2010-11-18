@@ -8,7 +8,7 @@
   <identifier value="com.sun.PresenterScreen-UPDATED_PLATFORM" />
 
   <dependencies>
-    <OpenOffice.org-minimal-version value="3.2" dep:name="OpenOffice.org 3.2"/>
+    <OpenOffice.org-minimal-version value="3.3" dep:name="OpenOffice.org 3.3"/>
   </dependencies>
 
   <registration>
