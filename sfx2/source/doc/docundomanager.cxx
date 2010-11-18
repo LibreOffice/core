@@ -272,6 +272,13 @@ namespace sfx2
     }
 
     //------------------------------------------------------------------------------------------------------------------
+    bool DocumentUndoManager::isInContext() const
+    {
+        // No mutex locking within this method, no disposal check - this is the responsibility of the owner.
+        return m_pImpl->getImplUndoManager().IsInListAction();
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL DocumentUndoManager::acquire(  ) throw ()
     {
         SfxModelSubComponent::acquire();

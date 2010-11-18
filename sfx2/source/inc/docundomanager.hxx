@@ -67,6 +67,12 @@ namespace sfx2
         // SfxModelSubComponent overridables
         virtual void    disposing();
 
+        // non-UNO API for our owner
+        /** determines whether we have an open Undo context. No mutex locking within this method, no disposal check - this
+            is the responsibility of the owner.
+        */
+        bool    isInContext() const;
+
         // XInterface
         virtual void SAL_CALL acquire(  ) throw ();
         virtual void SAL_CALL release(  ) throw ();
