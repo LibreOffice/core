@@ -129,19 +129,17 @@ void SvObjectServerList::FillInsertObjects()
     uno::Reference< lang::XMultiServiceFactory > _globalMSFactory= comphelper::getProcessServiceFactory();
     if( _globalMSFactory.is())
     {
-        ::rtl::OUString sProviderService =
-        ::rtl::OUString::createFromAscii( "com.sun.star.configuration.ConfigurationProvider" );
+        ::rtl::OUString sProviderService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationProvider" ));
         uno::Reference< lang::XMultiServiceFactory > sProviderMSFactory(
             _globalMSFactory->createInstance( sProviderService ), uno::UNO_QUERY );
 
         if( sProviderMSFactory.is())
         {
-            ::rtl::OUString sReaderService =
-                ::rtl::OUString::createFromAscii( "com.sun.star.configuration.ConfigurationAccess" );
+            ::rtl::OUString sReaderService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationAccess" ));
             uno::Sequence< uno::Any > aArguments( 1 );
             beans::PropertyValue aPathProp;
-            aPathProp.Name = ::rtl::OUString::createFromAscii( "nodepath" );
-            aPathProp.Value <<= ::rtl::OUString::createFromAscii( "/org.openoffice.Office.Embedding/ObjectNames");
+            aPathProp.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ));
+            aPathProp.Value <<= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Embedding/ObjectNames" ));
             aArguments[0] <<= aPathProp;
 
             uno::Reference< container::XNameAccess > xNameAccess(
@@ -183,8 +181,8 @@ void SvObjectServerList::FillInsertObjects()
                     {
                         ::rtl::OUString aUIName;
                         ::rtl::OUString aClassID;
-                        xEntry->getByName( ::rtl::OUString::createFromAscii("ObjectUIName") ) >>= aUIName;
-                        xEntry->getByName( ::rtl::OUString::createFromAscii("ClassID") ) >>= aClassID;
+                        xEntry->getByName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ObjectUIName" )) ) >>= aUIName;
+                        xEntry->getByName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ClassID" )) ) >>= aClassID;
 
                         if ( aUIName.getLength() )
                         {

@@ -383,7 +383,7 @@ namespace svt { namespace table
 
 ::com::sun::star::uno::Any TableControl::GetCellContent( sal_Int32 _nRowPos, sal_Int32 _nColPos) const
 {
-    ::com::sun::star::uno::Any cellContent(::com::sun::star::uno::Any(::rtl::OUString::createFromAscii("")));
+    ::com::sun::star::uno::Any cellContent(::com::sun::star::uno::Any(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("")) ));
     std::vector<std::vector< ::com::sun::star::uno::Any > >& aTableContent = GetModel()->getCellContent();
     if(&aTableContent)
         cellContent = aTableContent[_nRowPos][_nColPos];

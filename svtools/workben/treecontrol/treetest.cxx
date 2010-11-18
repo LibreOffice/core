@@ -348,7 +348,7 @@ int SAL_CALL main( int argc, char **argv )
     */
     Reference< XInterface > xInterface =
         xMultiComponentFactoryClient->createInstanceWithContext(
-            OUString::createFromAscii( "com.sun.star.bridge.UnoUrlResolver" ),
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.bridge.UnoUrlResolver" )),
             xComponentContext );
 
     Reference< XUnoUrlResolver > resolver( xInterface, UNO_QUERY );
@@ -369,7 +369,7 @@ int SAL_CALL main( int argc, char **argv )
 
     // gets the server component context as property of the office component factory
     Reference< XPropertySet > xPropSet( xInterface, UNO_QUERY );
-    xPropSet->getPropertyValue( OUString::createFromAscii("DefaultContext") ) >>= xComponentContext;
+    xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" )) ) >>= xComponentContext;
 
     // gets the service manager from the office
     Reference< XMultiComponentFactory > xMultiComponentFactoryServer(

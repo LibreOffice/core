@@ -386,7 +386,7 @@ namespace svt
             }
 
             Sequence< NamedValue > aJobResponse( 1 );
-            aJobResponse[0].Name = OUString::createFromAscii( "Deactivate" );
+            aJobResponse[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Deactivate" ));
             aJobResponse[0].Value <<= bDeactivateJob;
             aReturn <<= aJobResponse;
         }
@@ -402,7 +402,7 @@ namespace svt
         {
             // create the Desktop component which can load components
             Reference< XSystemShellExecute > xSystemShell(
-                m_xORB->createInstance( OUString::createFromAscii( "com.sun.star.system.SystemShellExecute" ) ),
+                m_xORB->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.system.SystemShellExecute" )) ),
                 UNO_QUERY
             );
             OSL_ENSURE( xSystemShell.is(), "OProductRegistration::doOnlineRegistration: invalid SystemExecute component!" );
@@ -470,7 +470,7 @@ SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo (
         Reference< XRegistryKey > xNewKey;
 
         xNewKey = xRegistryKey->createKey(
-            OUString::createFromAscii( "/" PRODREG_IMPLNAME "/UNO/SERVICES" ));
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "/" PRODREG_IMPLNAME "/UNO/SERVICES" )));
         xNewKey->createKey(
             OUString::createFromAscii( PRODREG_SERVNAME ));
 

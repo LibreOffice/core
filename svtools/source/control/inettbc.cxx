@@ -1196,7 +1196,7 @@ String SvtURLBox::GetURL()
         bool bSlash = aObj.hasFinalSlash();
         {
             static const rtl::OUString aPropName(
-                rtl::OUString::createFromAscii("CasePreservingURL"));
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CasePreservingURL" )));
 
             rtl::OUString aFileURL;
 

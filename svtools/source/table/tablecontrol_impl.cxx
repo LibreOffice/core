@@ -242,7 +242,7 @@ namespace svt { namespace table
     virtual std::vector<rtl::OUString>& getRowHeaderName()
     {
         aRowHeaderNames.clear();
-        aRowHeaderNames.push_back(rtl::OUString::createFromAscii(""));
+        aRowHeaderNames.push_back( rtl::OUString() );
         return aRowHeaderNames;
     }
     private:
@@ -1952,7 +1952,7 @@ namespace svt { namespace table
                 }
                 else
                 {
-                    aTooltipText+= ::rtl::OUString::createFromAscii("\n");
+                    aTooltipText+= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "\n" ));
                     ::com::sun::star::uno::Any content = m_pModel->getCellContent()[current][cols[i]];
                     aTooltipText += convertToString(content);
                 }
@@ -1966,7 +1966,7 @@ namespace svt { namespace table
                     aTooltipText = text[i];
                 else
                 {
-                    aTooltipText+= ::rtl::OUString::createFromAscii("\n");
+                    aTooltipText+= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "\n" ));
                     aTooltipText+= text[i];
                 }
             }
@@ -1988,7 +1988,7 @@ namespace svt { namespace table
                 }
                 else
                 {
-                    aTooltipText+= ::rtl::OUString::createFromAscii("\n");
+                    aTooltipText+= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "\n" ));
                     aTooltipText+= text[i];
                     if(nCols > i)
                     {

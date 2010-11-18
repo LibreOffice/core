@@ -868,8 +868,8 @@ void __EXPORT PanelDemo::Main()
 
     // initialize the UCB
     Sequence< Any > aArgs(2);
-    aArgs[0] <<= rtl::OUString::createFromAscii( "Local" );
-    aArgs[1] <<= rtl::OUString::createFromAscii( "Office" );
+    aArgs[0] <<= rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Local" ));
+    aArgs[1] <<= rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Office" ));
     ::ucbhelper::ContentBroker::initialize( xSMgr, aArgs );
 
     // run the application

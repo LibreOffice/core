@@ -49,7 +49,7 @@ void FileControl::ImplBrowseFile( )
     {
         XubString aNewText;
 
-        const ::rtl::OUString sServiceName = ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.FilePicker" );
+        const ::rtl::OUString sServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FilePicker" ));
 
         Reference< XMultiServiceFactory > xMSF = vcl::unohelper::GetMultiServiceFactory();
         Reference < dialogs::XFilePicker > xFilePicker( xMSF->createInstance( sServiceName ), UNO_QUERY );

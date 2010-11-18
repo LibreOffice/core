@@ -635,10 +635,10 @@ namespace svt
             // create a content for the current folder root
             Reference< XResultSet > xResultSet;
             Sequence< ::rtl::OUString > aContentProperties( 4);
-            aContentProperties[0] = ::rtl::OUString::createFromAscii( "Title" );
-            aContentProperties[1] = ::rtl::OUString::createFromAscii( "DateModified" );
-            aContentProperties[2] = ::rtl::OUString::createFromAscii( "DateCreated" );
-            aContentProperties[3] = ::rtl::OUString::createFromAscii( "IsFolder" );
+            aContentProperties[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ));
+            aContentProperties[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DateModified" ));
+            aContentProperties[2] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DateCreated" ));
+            aContentProperties[3] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFolder" ));
 
             // get the set of sub contents in the folder
             try

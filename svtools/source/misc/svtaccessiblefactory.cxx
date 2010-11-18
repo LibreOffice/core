@@ -290,8 +290,7 @@ namespace svt
                 s_hAccessibleImplementationModule = osl_loadModuleRelative( &thisModule, sModuleName.pData, 0 );
                 if ( s_hAccessibleImplementationModule != NULL )
                 {
-                    const ::rtl::OUString sFactoryCreationFunc =
-                        ::rtl::OUString::createFromAscii( "getSvtAccessibilityComponentFactory" );
+                    const ::rtl::OUString sFactoryCreationFunc( RTL_CONSTASCII_USTRINGPARAM( "getSvtAccessibilityComponentFactory" ));
                     s_pAccessibleFactoryFunc = (GetSvtAccessibilityComponentFactory)
                         osl_getFunctionSymbol( s_hAccessibleImplementationModule, sFactoryCreationFunc.pData );
 

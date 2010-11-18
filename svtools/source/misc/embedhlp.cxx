@@ -571,9 +571,8 @@ Graphic* EmbeddedObjectRef::GetHCGraphic() const
                     throw uno::RuntimeException();
 
                 datatransfer::DataFlavor aDataFlavor(
-                        ::rtl::OUString::createFromAscii(
-                                "application/x-openoffice-highcontrast-gdimetafile;windows_formatname=\"GDIMetaFile\"" ),
-                        ::rtl::OUString::createFromAscii( "GDIMetaFile" ),
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice-highcontrast-gdimetafile;windows_formatname=\"GDIMetaFile\"" )),
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "GDIMetaFile" )),
                         ::getCppuType( (const uno::Sequence< sal_Int8 >*) NULL ) );
 
                 uno::Sequence < sal_Int8 > aSeq;

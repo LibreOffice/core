@@ -1463,25 +1463,25 @@ void SVTXRoadmap::propertyChange( const ::com::sun::star::beans::PropertyChangeE
         xRoadmapItem = evt.Source;
         sal_Int32 nID = 0;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xPropertySet( xRoadmapItem, ::com::sun::star::uno::UNO_QUERY );
-        ::com::sun::star::uno::Any aValue = xPropertySet->getPropertyValue(::rtl::OUString::createFromAscii( "ID" ));
+        ::com::sun::star::uno::Any aValue = xPropertySet->getPropertyValue(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ID" )));
         aValue >>= nID;
 
         ::com::sun::star::uno::Any rVal = evt.NewValue;
         evt.NewValue >>= rVal;
         ::rtl::OUString sPropertyName = evt.PropertyName;
-        if ( sPropertyName.equals(::rtl::OUString::createFromAscii( "Enabled" ) ) )
+        if ( sPropertyName.equals(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Enabled" )) ) )
         {
             sal_Bool bEnable = false;
             evt.NewValue >>= bEnable;
             pField->EnableRoadmapItem( (RoadmapTypes::ItemId)nID , bEnable );
         }
-        else if ( sPropertyName.equals(::rtl::OUString::createFromAscii( "Label" ) ) )
+        else if ( sPropertyName.equals(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Label" )) ) )
         {
             ::rtl::OUString sLabel;
             evt.NewValue >>= sLabel;
             pField->ChangeRoadmapItemLabel( (RoadmapTypes::ItemId)nID , sLabel );
         }
-        else if  ( sPropertyName.equals(::rtl::OUString::createFromAscii( "ID" ) ) )
+        else if  ( sPropertyName.equals(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ID" )) ) )
         {
             sal_Int32 nNewID = 0;
             evt.NewValue >>= nNewID;
@@ -1512,11 +1512,11 @@ RMItemData SVTXRoadmap::GetRMItemData( const ::com::sun::star::container::Contai
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xPropertySet( xRoadmapItem, ::com::sun::star::uno::UNO_QUERY );
     if ( xPropertySet.is() )
     {
-        ::com::sun::star::uno::Any aValue = xPropertySet->getPropertyValue(::rtl::OUString::createFromAscii( "Label" ));
+        ::com::sun::star::uno::Any aValue = xPropertySet->getPropertyValue(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Label" )));
         aValue >>= aCurRMItemData.Label;
-        aValue = xPropertySet->getPropertyValue(::rtl::OUString::createFromAscii( "ID" ));
+        aValue = xPropertySet->getPropertyValue(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ID" )));
         aValue >>= aCurRMItemData.n_ID;
-        aValue = xPropertySet->getPropertyValue(::rtl::OUString::createFromAscii( "Enabled" ));
+        aValue = xPropertySet->getPropertyValue(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Enabled" )));
         aValue >>= aCurRMItemData.b_Enabled;
     }
     return aCurRMItemData;;
