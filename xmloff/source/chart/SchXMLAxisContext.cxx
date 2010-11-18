@@ -63,7 +63,7 @@ using com::sun::star::uno::Reference;
 //----------------------------------------
 //----------------------------------------
 
-static __FAR_DATA SvXMLEnumMapEntry aXMLAxisClassMap[] =
+static __FAR_DATA SvXMLEnumMapEntry aXMLAxisDimensionMap[] =
 {
     { XML_X,  SCH_XML_AXIS_X  },
     { XML_Y,  SCH_XML_AXIS_Y  },
@@ -77,7 +77,7 @@ static __FAR_DATA SvXMLEnumMapEntry aXMLAxisClassMap[] =
 class SchXMLCategoriesContext : public SvXMLImportContext
 {
 private:
-    SchXMLImportHelper& mrImportHelper;
+    SchXMLImportHelper& m_rImportHelper;
     OUString& mrAddress;
 
 public:
@@ -96,20 +96,20 @@ public:
 SchXMLAxisContext::SchXMLAxisContext( SchXMLImportHelper& rImpHelper,
                                       SvXMLImport& rImport, const OUString& rLocalName,
                                       Reference< chart::XDiagram > xDiagram,
-                                      std::vector< SchXMLAxis >& aAxes,
+                                      std::vector< SchXMLAxis >& rAxes,
                                       OUString & rCategoriesAddress,
                                       bool bAddMissingXAxisForNetCharts,
                                       bool bAdaptWrongPercentScaleValues,
                                       bool bAdaptXAxisOrientationForOld2DBarCharts,
                                       bool& rbAxisPositionAttributeImported ) :
         SvXMLImportContext( rImport, XML_NAMESPACE_CHART, rLocalName ),
-        mrImportHelper( rImpHelper ),
-        mxDiagram( xDiagram ),
-        maAxes( aAxes ),
-        mrCategoriesAddress( rCategoriesAddress ),
-        mbAddMissingXAxisForNetCharts( bAddMissingXAxisForNetCharts ),
-        mbAdaptWrongPercentScaleValues( bAdaptWrongPercentScaleValues ),
-        mbAdaptXAxisOrientationForOld2DBarCharts( bAdaptXAxisOrientationForOld2DBarCharts ),
+        m_rImportHelper( rImpHelper ),
+        m_xDiagram( xDiagram ),
+        m_rAxes( rAxes ),
+        m_rCategoriesAddress( rCategoriesAddress ),
+        m_bAddMissingXAxisForNetCharts( bAddMissingXAxisForNetCharts ),
+        m_bAdaptWrongPercentScaleValues( bAdaptWrongPercentScaleValues ),
+        m_bAdaptXAxisOrientationForOld2DBarCharts( bAdaptXAxisOrientationForOld2DBarCharts ),
         m_rbAxisPositionAttributeImported( rbAxisPositionAttributeImported )
 {
 }
@@ -125,14 +125,14 @@ Reference< drawing::XShape > SchXMLAxisContext::getTitleShape()
     Reference< drawing::XShape > xResult;
     uno::Any aTrueBool;
     aTrueBool <<= (sal_Bool)(sal_True);
-    Reference< beans::XPropertySet > xDiaProp( mxDiagram, uno::UNO_QUERY );
+    Reference< beans::XPropertySet > xDiaProp( m_xDiagram, uno::UNO_QUERY );
 
-    switch( maCurrentAxis.eClass )
+    switch( m_aCurrentAxis.eDimension )
     {
         case SCH_XML_AXIS_X:
-            if( maCurrentAxis.nIndexInCategory == 0 )
+            if( m_aCurrentAxis.nAxisIndex == 0 )
             {
-                Reference< chart::XAxisXSupplier > xSuppl( mxDiagram, uno::UNO_QUERY );
+                Reference< chart::XAxisXSupplier > xSuppl( m_xDiagram, uno::UNO_QUERY );
                 if( xSuppl.is())
                 {
                     if( xDiaProp.is())
@@ -142,7 +142,7 @@ Reference< drawing::XShape > SchXMLAxisContext::getTitleShape()
             }
             else
             {
-                Reference< chart::XSecondAxisTitleSupplier > xSuppl( mxDiagram, uno::UNO_QUERY );
+                Reference< chart::XSecondAxisTitleSupplier > xSuppl( m_xDiagram, uno::UNO_QUERY );
                 if( xSuppl.is() )
                 {
                     if( xDiaProp.is() )
@@ -152,9 +152,9 @@ Reference< drawing::XShape > SchXMLAxisContext::getTitleShape()
             }
             break;
         case SCH_XML_AXIS_Y:
-            if( maCurrentAxis.nIndexInCategory == 0 )
+            if( m_aCurrentAxis.nAxisIndex == 0 )
             {
-                Reference< chart::XAxisYSupplier > xSuppl( mxDiagram, uno::UNO_QUERY );
+                Reference< chart::XAxisYSupplier > xSuppl( m_xDiagram, uno::UNO_QUERY );
                 if( xSuppl.is())
                 {
                     if( xDiaProp.is())
@@ -164,7 +164,7 @@ Reference< drawing::XShape > SchXMLAxisContext::getTitleShape()
             }
             else
             {
-                Reference< chart::XSecondAxisTitleSupplier > xSuppl( mxDiagram, uno::UNO_QUERY );
+                Reference< chart::XSecondAxisTitleSupplier > xSuppl( m_xDiagram, uno::UNO_QUERY );
                 if( xSuppl.is() )
                 {
                     if( xDiaProp.is() )
@@ -175,7 +175,7 @@ Reference< drawing::XShape > SchXMLAxisContext::getTitleShape()
             break;
         case SCH_XML_AXIS_Z:
         {
-            Reference< chart::XAxisZSupplier > xSuppl( mxDiagram, uno::UNO_QUERY );
+            Reference< chart::XAxisZSupplier > xSuppl( m_xDiagram, uno::UNO_QUERY );
             if( xSuppl.is())
             {
                 if( xDiaProp.is())
@@ -192,10 +192,9 @@ Reference< drawing::XShape > SchXMLAxisContext::getTitleShape()
     return xResult;
 }
 
-void SchXMLAxisContext::CreateGrid( OUString sAutoStyleName,
-                                    sal_Bool bIsMajor )
+void SchXMLAxisContext::CreateGrid( OUString sAutoStyleName, bool bIsMajor )
 {
-    Reference< chart::XDiagram > xDia = mrImportHelper.GetChartDocument()->getDiagram();
+    Reference< chart::XDiagram > xDia = m_rImportHelper.GetChartDocument()->getDiagram();
     Reference< beans::XPropertySet > xGridProp;
     OUString sPropertyName;
     DBG_ASSERT( xDia.is(), "diagram object is invalid!" );
@@ -203,7 +202,7 @@ void SchXMLAxisContext::CreateGrid( OUString sAutoStyleName,
     Reference< beans::XPropertySet > xDiaProp( xDia, uno::UNO_QUERY );
     uno::Any aTrueBool( uno::makeAny( true ));
 
-    switch( maCurrentAxis.eClass )
+    switch( m_aCurrentAxis.eDimension )
     {
         case SCH_XML_AXIS_X:
             {
@@ -278,11 +277,11 @@ void SchXMLAxisContext::CreateGrid( OUString sAutoStyleName,
                                      uno::makeAny( COL_BLACK ));
         if( sAutoStyleName.getLength())
         {
-            const SvXMLStylesContext* pStylesCtxt = mrImportHelper.GetAutoStylesContext();
+            const SvXMLStylesContext* pStylesCtxt = m_rImportHelper.GetAutoStylesContext();
             if( pStylesCtxt )
             {
                 const SvXMLStyleContext* pStyle = pStylesCtxt->FindStyleChildContext(
-                    mrImportHelper.GetChartFamilyID(), sAutoStyleName );
+                    m_rImportHelper.GetChartFamilyID(), sAutoStyleName );
 
                 if( pStyle && pStyle->ISA( XMLPropStyleContext ))
                     (( XMLPropStyleContext* )pStyle )->FillPropertySet( xGridProp );
@@ -296,7 +295,7 @@ void SchXMLAxisContext::StartElement( const Reference< xml::sax::XAttributeList 
     // parse attributes
     sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
     SchXMLImport& rImport = ( SchXMLImport& )GetImport();
-    const SvXMLTokenMap& rAttrTokenMap = mrImportHelper.GetAxisAttrTokenMap();
+    const SvXMLTokenMap& rAttrTokenMap = m_rImportHelper.GetAxisAttrTokenMap();
 
     for( sal_Int16 i = 0; i < nAttrCount; i++ )
     {
@@ -310,26 +309,26 @@ void SchXMLAxisContext::StartElement( const Reference< xml::sax::XAttributeList 
             case XML_TOK_AXIS_DIMENSION:
                 {
                     USHORT nEnumVal;
-                    if( rImport.GetMM100UnitConverter().convertEnum( nEnumVal, aValue, aXMLAxisClassMap ))
-                        maCurrentAxis.eClass = ( SchXMLAxisClass )nEnumVal;
+                    if( rImport.GetMM100UnitConverter().convertEnum( nEnumVal, aValue, aXMLAxisDimensionMap ))
+                        m_aCurrentAxis.eDimension = ( SchXMLAxisDimension )nEnumVal;
                 }
                 break;
             case XML_TOK_AXIS_NAME:
-                maCurrentAxis.aName = aValue;
+                m_aCurrentAxis.aName = aValue;
                 break;
             case XML_TOK_AXIS_STYLE_NAME:
-                msAutoStyleName = aValue;
+                m_aAutoStyleName = aValue;
                 break;
         }
     }
 
-    // check for number of axes with same category
-    maCurrentAxis.nIndexInCategory = 0;
-    sal_Int32 nNumOfAxes = maAxes.size();
+    // check for number of axes with same dimension
+    m_aCurrentAxis.nAxisIndex = 0;
+    sal_Int32 nNumOfAxes = m_rAxes.size();
     for( sal_Int32 nCurrent = 0; nCurrent < nNumOfAxes; nCurrent++ )
     {
-        if( maAxes[ nCurrent ].eClass == maCurrentAxis.eClass )
-            maCurrentAxis.nIndexInCategory++;
+        if( m_rAxes[ nCurrent ].eDimension == m_aCurrentAxis.eDimension )
+            m_aCurrentAxis.nAxisIndex++;
     }
     CreateAxis();
 }
@@ -398,21 +397,21 @@ bool lcl_AdaptWrongPercentScaleValues(chart2::ScaleData& rScaleData)
 void SchXMLAxisContext::CreateAxis()
 {
     // add new Axis to list
-    maAxes.push_back( maCurrentAxis );
+    m_rAxes.push_back( m_aCurrentAxis );
 
     // set axis at chart
-    Reference< beans::XPropertySet > xDiaProp( mxDiagram, uno::UNO_QUERY );
+    Reference< beans::XPropertySet > xDiaProp( m_xDiagram, uno::UNO_QUERY );
     Reference< beans::XPropertySet > xProp;
     uno::Any aTrueBool;
     aTrueBool <<= (sal_Bool)(sal_True);
     uno::Any aFalseBool;
     aFalseBool <<= (sal_Bool)(sal_False);
-    Reference< frame::XModel > xDoc( mrImportHelper.GetChartDocument(), uno::UNO_QUERY );
+    Reference< frame::XModel > xDoc( m_rImportHelper.GetChartDocument(), uno::UNO_QUERY );
 
-    switch( maCurrentAxis.eClass )
+    switch( m_aCurrentAxis.eDimension )
     {
         case SCH_XML_AXIS_X:
-            if( maCurrentAxis.nIndexInCategory == 0 )
+            if( m_aCurrentAxis.nAxisIndex == 0 )
             {
                 try
                 {
@@ -423,7 +422,7 @@ void SchXMLAxisContext::CreateAxis()
                 {
                     DBG_ERROR( "Couldn't turn on x axis" );
                 }
-                Reference< chart::XAxisXSupplier > xSuppl( mxDiagram, uno::UNO_QUERY );
+                Reference< chart::XAxisXSupplier > xSuppl( m_xDiagram, uno::UNO_QUERY );
                 if( xSuppl.is())
                     xProp = xSuppl->getXAxis();
             }
@@ -438,14 +437,14 @@ void SchXMLAxisContext::CreateAxis()
                 {
                     DBG_ERROR( "Couldn't turn on second x axis" );
                 }
-                Reference< chart::XTwoAxisXSupplier > xSuppl( mxDiagram, uno::UNO_QUERY );
+                Reference< chart::XTwoAxisXSupplier > xSuppl( m_xDiagram, uno::UNO_QUERY );
                 if( xSuppl.is())
                     xProp = xSuppl->getSecondaryXAxis();
             }
             break;
 
         case SCH_XML_AXIS_Y:
-            if( maCurrentAxis.nIndexInCategory == 0 )
+            if( m_aCurrentAxis.nAxisIndex == 0 )
             {
                 try
                 {
@@ -456,12 +455,12 @@ void SchXMLAxisContext::CreateAxis()
                 {
                     DBG_ERROR( "Couldn't turn on y axis" );
                 }
-                Reference< chart::XAxisYSupplier > xSuppl( mxDiagram, uno::UNO_QUERY );
+                Reference< chart::XAxisYSupplier > xSuppl( m_xDiagram, uno::UNO_QUERY );
                 if( xSuppl.is())
                     xProp = xSuppl->getYAxis();
 
 
-                if( mbAddMissingXAxisForNetCharts )
+                if( m_bAddMissingXAxisForNetCharts )
                 {
                     if( xDiaProp.is() )
                     {
@@ -488,7 +487,7 @@ void SchXMLAxisContext::CreateAxis()
                 {
                     DBG_ERROR( "Couldn't turn on second y axis" );
                 }
-                Reference< chart::XTwoAxisYSupplier > xSuppl( mxDiagram, uno::UNO_QUERY );
+                Reference< chart::XTwoAxisYSupplier > xSuppl( m_xDiagram, uno::UNO_QUERY );
                 if( xSuppl.is())
                     xProp = xSuppl->getSecondaryYAxis();
             }
@@ -509,7 +508,7 @@ void SchXMLAxisContext::CreateAxis()
                 }
                 if( bSettingZAxisSuccedded )
                 {
-                    Reference< chart::XAxisZSupplier > xSuppl( mxDiagram, uno::UNO_QUERY );
+                    Reference< chart::XAxisZSupplier > xSuppl( m_xDiagram, uno::UNO_QUERY );
                     if( xSuppl.is())
                         xProp = xSuppl->getZAxis();
                 }
@@ -532,13 +531,13 @@ void SchXMLAxisContext::CreateAxis()
         // #88077# AutoOrigin 'on' is default
         xProp->setPropertyValue( OUString::createFromAscii( "AutoOrigin" ), aTrueBool );
 
-        if( msAutoStyleName.getLength())
+        if( m_aAutoStyleName.getLength())
         {
-            const SvXMLStylesContext* pStylesCtxt = mrImportHelper.GetAutoStylesContext();
+            const SvXMLStylesContext* pStylesCtxt = m_rImportHelper.GetAutoStylesContext();
             if( pStylesCtxt )
             {
                 const SvXMLStyleContext* pStyle = pStylesCtxt->FindStyleChildContext(
-                    mrImportHelper.GetChartFamilyID(), msAutoStyleName );
+                    m_rImportHelper.GetChartFamilyID(), m_aAutoStyleName );
 
                 if( pStyle && pStyle->ISA( XMLPropStyleContext ))
                 {
@@ -547,11 +546,11 @@ void SchXMLAxisContext::CreateAxis()
                     if( pPropStyleContext )
                         pPropStyleContext->FillPropertySet( xProp );
 
-                    if( mbAdaptWrongPercentScaleValues && maCurrentAxis.eClass==SCH_XML_AXIS_Y )
+                    if( m_bAdaptWrongPercentScaleValues && m_aCurrentAxis.eDimension==SCH_XML_AXIS_Y )
                     {
                         //set scale data of added x axis back to default
                         Reference< chart2::XAxis > xAxis( lcl_getAxis( GetImport().GetModel(),
-                                            1 /*nDimensionIndex*/, maCurrentAxis.nIndexInCategory /*nAxisIndex*/ ) );
+                                            1 /*nDimensionIndex*/, m_aCurrentAxis.nAxisIndex /*nAxisIndex*/ ) );
                         if( xAxis.is() )
                         {
                             chart2::ScaleData aScaleData( xAxis->getScaleData());
@@ -560,11 +559,11 @@ void SchXMLAxisContext::CreateAxis()
                         }
                     }
 
-                    if( mbAddMissingXAxisForNetCharts )
+                    if( m_bAddMissingXAxisForNetCharts )
                     {
                         //copy style from y axis to added x axis:
 
-                        Reference< chart::XAxisXSupplier > xSuppl( mxDiagram, uno::UNO_QUERY );
+                        Reference< chart::XAxisXSupplier > xSuppl( m_xDiagram, uno::UNO_QUERY );
                         if( xSuppl.is() )
                         {
                             Reference< beans::XPropertySet > xXAxisProp( xSuppl->getXAxis() );
@@ -591,7 +590,7 @@ void SchXMLAxisContext::CreateAxis()
                         }
                     }
 
-                    if( mbAdaptXAxisOrientationForOld2DBarCharts && maCurrentAxis.eClass == SCH_XML_AXIS_X )
+                    if( m_bAdaptXAxisOrientationForOld2DBarCharts && m_aCurrentAxis.eDimension == SCH_XML_AXIS_X )
                     {
                         bool bIs3DChart = false;
                         if( xDiaProp.is() && ( xDiaProp->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Dim3D"))) >>= bIs3DChart )
@@ -612,7 +611,7 @@ void SchXMLAxisContext::CreateAxis()
                                         if( xCooSysProp.is() && ( xCooSysProp->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("SwapXAndYAxis"))) >>= bSwapXandYAxis )
                                             && bSwapXandYAxis )
                                         {
-                                            Reference< chart2::XAxis > xAxis = xCooSys->getAxisByDimension( 0, maCurrentAxis.nIndexInCategory );
+                                            Reference< chart2::XAxis > xAxis = xCooSys->getAxisByDimension( 0, m_aCurrentAxis.nAxisIndex );
                                             if( xAxis.is() )
                                             {
                                                 chart2::ScaleData aScaleData = xAxis->getScaleData();
@@ -637,20 +636,19 @@ void SchXMLAxisContext::CreateAxis()
 void SchXMLAxisContext::SetAxisTitle()
 {
     // add new Axis to list
-    maAxes.push_back( maCurrentAxis );
+    m_rAxes.push_back( m_aCurrentAxis );
 
     // set axis at chart
-    sal_Bool bHasTitle = ( maCurrentAxis.aTitle.getLength() > 0 );
-    Reference< frame::XModel > xDoc( mrImportHelper.GetChartDocument(), uno::UNO_QUERY );
+    sal_Bool bHasTitle = ( m_aCurrentAxis.aTitle.getLength() > 0 );
+    Reference< frame::XModel > xDoc( m_rImportHelper.GetChartDocument(), uno::UNO_QUERY );
 
-    switch( maCurrentAxis.eClass )
+    switch( m_aCurrentAxis.eDimension )
     {
         case SCH_XML_AXIS_X:
-            if( maCurrentAxis.nIndexInCategory == 0 )
+            if( m_aCurrentAxis.nAxisIndex == 0 )
             {
-                Reference< chart::XAxisXSupplier > xSuppl( mxDiagram, uno::UNO_QUERY );
-                if( xSuppl.is() &&
-                    bHasTitle )
+                Reference< chart::XAxisXSupplier > xSuppl( m_xDiagram, uno::UNO_QUERY );
+                if( xSuppl.is() && bHasTitle )
                 {
                     Reference< beans::XPropertySet > xTitleProp( xSuppl->getXAxisTitle(), uno::UNO_QUERY );
                     if( xTitleProp.is())
@@ -658,7 +656,7 @@ void SchXMLAxisContext::SetAxisTitle()
                         try
                         {
                             uno::Any aAny;
-                            aAny <<= maCurrentAxis.aTitle;
+                            aAny <<= m_aCurrentAxis.aTitle;
                             xTitleProp->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "String" )), aAny );
                         }
                         catch( beans::UnknownPropertyException & )
@@ -670,9 +668,8 @@ void SchXMLAxisContext::SetAxisTitle()
             }
             else
             {
-                Reference< chart::XSecondAxisTitleSupplier > xSuppl( mxDiagram, uno::UNO_QUERY );
-                if( xSuppl.is() &&
-                    bHasTitle )
+                Reference< chart::XSecondAxisTitleSupplier > xSuppl( m_xDiagram, uno::UNO_QUERY );
+                if( xSuppl.is() && bHasTitle )
                 {
                     Reference< beans::XPropertySet > xTitleProp( xSuppl->getSecondXAxisTitle(), uno::UNO_QUERY );
                     if( xTitleProp.is())
@@ -680,7 +677,7 @@ void SchXMLAxisContext::SetAxisTitle()
                         try
                         {
                             uno::Any aAny;
-                            aAny <<= maCurrentAxis.aTitle;
+                            aAny <<= m_aCurrentAxis.aTitle;
                             xTitleProp->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "String" )), aAny );
                         }
                         catch( beans::UnknownPropertyException & )
@@ -693,11 +690,10 @@ void SchXMLAxisContext::SetAxisTitle()
             break;
 
         case SCH_XML_AXIS_Y:
-            if( maCurrentAxis.nIndexInCategory == 0 )
+            if( m_aCurrentAxis.nAxisIndex == 0 )
             {
-                Reference< chart::XAxisYSupplier > xSuppl( mxDiagram, uno::UNO_QUERY );
-                if( xSuppl.is() &&
-                    bHasTitle )
+                Reference< chart::XAxisYSupplier > xSuppl( m_xDiagram, uno::UNO_QUERY );
+                if( xSuppl.is() && bHasTitle )
                 {
                     Reference< beans::XPropertySet > xTitleProp( xSuppl->getYAxisTitle(), uno::UNO_QUERY );
                     if( xTitleProp.is())
@@ -705,7 +701,7 @@ void SchXMLAxisContext::SetAxisTitle()
                         try
                         {
                             uno::Any aAny;
-                            aAny <<= maCurrentAxis.aTitle;
+                            aAny <<= m_aCurrentAxis.aTitle;
                             xTitleProp->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "String" )), aAny );
                         }
                         catch( beans::UnknownPropertyException & )
@@ -717,9 +713,8 @@ void SchXMLAxisContext::SetAxisTitle()
             }
             else
             {
-                Reference< chart::XSecondAxisTitleSupplier > xSuppl( mxDiagram, uno::UNO_QUERY );
-                if( xSuppl.is() &&
-                    bHasTitle )
+                Reference< chart::XSecondAxisTitleSupplier > xSuppl( m_xDiagram, uno::UNO_QUERY );
+                if( xSuppl.is() && bHasTitle )
                 {
                     Reference< beans::XPropertySet > xTitleProp( xSuppl->getSecondYAxisTitle(), uno::UNO_QUERY );
                     if( xTitleProp.is())
@@ -727,7 +722,7 @@ void SchXMLAxisContext::SetAxisTitle()
                         try
                         {
                             uno::Any aAny;
-                            aAny <<= maCurrentAxis.aTitle;
+                            aAny <<= m_aCurrentAxis.aTitle;
                             xTitleProp->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "String" )), aAny );
                         }
                         catch( beans::UnknownPropertyException & )
@@ -741,9 +736,8 @@ void SchXMLAxisContext::SetAxisTitle()
 
         case SCH_XML_AXIS_Z:
             {
-                Reference< chart::XAxisZSupplier > xSuppl( mxDiagram, uno::UNO_QUERY );
-                if( xSuppl.is() &&
-                    bHasTitle )
+                Reference< chart::XAxisZSupplier > xSuppl( m_xDiagram, uno::UNO_QUERY );
+                if( xSuppl.is() && bHasTitle )
                 {
                     Reference< beans::XPropertySet > xTitleProp( xSuppl->getZAxisTitle(), uno::UNO_QUERY );
                     if( xTitleProp.is())
@@ -751,7 +745,7 @@ void SchXMLAxisContext::SetAxisTitle()
                         try
                         {
                             uno::Any aAny;
-                            aAny <<= maCurrentAxis.aTitle;
+                            aAny <<= m_aCurrentAxis.aTitle;
                             xTitleProp->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "String" )), aAny );
                         }
                         catch( beans::UnknownPropertyException & )
@@ -774,30 +768,30 @@ SvXMLImportContext* SchXMLAxisContext::CreateChildContext(
     const Reference< xml::sax::XAttributeList >& xAttrList )
 {
     SvXMLImportContext* pContext = 0;
-    const SvXMLTokenMap& rTokenMap = mrImportHelper.GetAxisElemTokenMap();
+    const SvXMLTokenMap& rTokenMap = m_rImportHelper.GetAxisElemTokenMap();
 
     switch( rTokenMap.Get( p_nPrefix, rLocalName ))
     {
         case XML_TOK_AXIS_TITLE:
         {
             Reference< drawing::XShape > xTitleShape = getTitleShape();
-            pContext = new SchXMLTitleContext( mrImportHelper, GetImport(), rLocalName,
-                                               maCurrentAxis.aTitle,
+            pContext = new SchXMLTitleContext( m_rImportHelper, GetImport(), rLocalName,
+                                               m_aCurrentAxis.aTitle,
                                                xTitleShape );
         }
         break;
 
         case XML_TOK_AXIS_CATEGORIES:
-            pContext = new SchXMLCategoriesContext( mrImportHelper, GetImport(),
+            pContext = new SchXMLCategoriesContext( m_rImportHelper, GetImport(),
                                                           p_nPrefix, rLocalName,
-                                                          mrCategoriesAddress );
-            maCurrentAxis.bHasCategories = true;
+                                                          m_rCategoriesAddress );
+            m_aCurrentAxis.bHasCategories = true;
             break;
 
         case XML_TOK_AXIS_GRID:
         {
             sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
-            sal_Bool bIsMajor = sal_True;       // default value for class is "major"
+            bool bIsMajor = true;       // default value for class is "major"
             OUString sAutoStyleName;
 
             for( sal_Int16 i = 0; i < nAttrCount; i++ )
@@ -811,7 +805,7 @@ SvXMLImportContext* SchXMLAxisContext::CreateChildContext(
                     if( IsXMLToken( aLocalName, XML_CLASS ) )
                     {
                         if( IsXMLToken( xAttrList->getValueByIndex( i ), XML_MINOR ) )
-                            bIsMajor = sal_False;
+                            bIsMajor = false;
                     }
                     else if( IsXMLToken( aLocalName, XML_STYLE_NAME ) )
                         sAutoStyleName = xAttrList->getValueByIndex( i );
@@ -987,7 +981,7 @@ SchXMLCategoriesContext::SchXMLCategoriesContext(
     const OUString& rLocalName,
     OUString& rAddress ) :
         SvXMLImportContext( rImport, nPrefix, rLocalName ),
-        mrImportHelper( rImpHelper ),
+        m_rImportHelper( rImpHelper ),
         mrAddress( rAddress )
 {
 }

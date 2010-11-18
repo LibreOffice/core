@@ -34,23 +34,6 @@
 
 class SchXMLAxisContext : public SvXMLImportContext
 {
-private:
-    SchXMLImportHelper& mrImportHelper;
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart::XDiagram > mxDiagram;
-    SchXMLAxis maCurrentAxis;
-    std::vector< SchXMLAxis >& maAxes;
-    rtl::OUString msAutoStyleName;
-    rtl::OUString& mrCategoriesAddress;
-    bool mbAddMissingXAxisForNetCharts; //to correct errors from older versions
-    bool mbAdaptWrongPercentScaleValues; //to correct errors from older versions
-    bool mbAdaptXAxisOrientationForOld2DBarCharts; //to correct different behaviour from older versions
-    bool& m_rbAxisPositionAttributeImported;
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > getTitleShape();
-    void CreateGrid( ::rtl::OUString sAutoStyleName, sal_Bool bIsMajor );
-    void CreateAxis();
-    void SetAxisTitle();
-
 public:
     SchXMLAxisContext( SchXMLImportHelper& rImpHelper,
                        SvXMLImport& rImport, const rtl::OUString& rLocalName,
@@ -74,6 +57,23 @@ public:
                           const ::rtl::OUString& rChartTypeServiceName,
                           const ::rtl::OUString& rODFVersionOfFile,
                           bool bAxisPositionAttributeImported );
+
+private:
+    SchXMLImportHelper& m_rImportHelper;
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart::XDiagram > m_xDiagram;
+    SchXMLAxis m_aCurrentAxis;
+    std::vector< SchXMLAxis >& m_rAxes;
+    rtl::OUString m_aAutoStyleName;
+    rtl::OUString& m_rCategoriesAddress;
+    bool m_bAddMissingXAxisForNetCharts; //to correct errors from older versions
+    bool m_bAdaptWrongPercentScaleValues; //to correct errors from older versions
+    bool m_bAdaptXAxisOrientationForOld2DBarCharts; //to correct different behaviour from older versions
+    bool& m_rbAxisPositionAttributeImported;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > getTitleShape();
+    void CreateGrid( ::rtl::OUString sAutoStyleName, bool bIsMajor );
+    void CreateAxis();
+    void SetAxisTitle();
 };
 
 #endif  // _SCH_XMLAXISCONTEXT_HXX_

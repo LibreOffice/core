@@ -591,7 +591,7 @@ void SchXMLPlotAreaContext::EndElement()
         ::std::vector< SchXMLAxis >::const_iterator aIt(
             ::std::find_if( maAxes.begin(), maAxes.end(), lcl_AxisHasCategories()));
         if( aIt != maAxes.end())
-            nDimension = static_cast< sal_Int32 >( (*aIt).eClass );
+            nDimension = static_cast< sal_Int32 >( (*aIt).eDimension );
         SchXMLTools::CreateCategories(
             xDataProvider, mxNewDoc, mrCategoriesAddress,
             0 /* nCooSysIndex */,
