@@ -671,7 +671,8 @@ void SimpleWinLayout::DrawText( SalGraphics& rGraphics ) const
         UINT oldTa = ::GetTextAlign( aHDC );
         ::SetTextAlign( aHDC, (oldTa & ~TA_NOUPDATECP) | TA_UPDATECP );
         ::MoveToEx( aHDC, aPos.X(), aPos.Y(), &oldPos );
-        for( int i = 0, n = 0; n < numGlyphPortions; ++n, i+=maxGlyphCount )
+        unsigned int i = 0;
+        for( unsigned int n = 0; n < numGlyphPortions; ++n, i+=maxGlyphCount )
             ::ExtTextOutW( aHDC, 0, 0, mnDrawOptions, NULL,
                 mpOutGlyphs+i, maxGlyphCount, mpGlyphAdvances+i );
         ::ExtTextOutW( aHDC, 0, 0, mnDrawOptions, NULL,

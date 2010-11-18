@@ -1907,22 +1907,21 @@ ULONG WinSalGraphics::GetKernPairs( ULONG nPairs, ImplKernPairData* pKernPairs )
         }
         mnFontKernPairCount = 0;
 
-            KERNINGPAIR* pPairs = NULL;
-            int nCount = ::GetKerningPairsW( mhDC, 0, NULL );
-            if( nCount )
-            {
-#ifdef GCP_KERN_HACK
-                pPairs = new KERNINGPAIR[ nCount+1 ];
-                mpFontKernPairs = pPairs;
-                mnFontKernPairCount = nCount;
-                ::GetKerningPairsW( mhDC, nCount, pPairs );
-#else // GCP_KERN_HACK
-                pPairs = pKernPairs;
-                nCount = (nCount < nPairs) : nCount : nPairs;
-                ::GetKerningPairsW( mhDC, nCount, pPairs );
-                return nCount;
-#endif // GCP_KERN_HACK
-            }
+        KERNINGPAIR* pPairs = NULL;
+        int nCount = ::GetKerningPairsW( mhDC, 0, NULL );
+        if( nCount )
+        {
+            #ifdef GCP_KERN_HACK
+            pPairs = new KERNINGPAIR[ nCount+1 ];
+            mpFontKernPairs = pPairs;
+            mnFontKernPairCount = nCount;
+            ::GetKerningPairsW( mhDC, nCount, pPairs );
+            #else // GCP_KERN_HACK
+            pPairs = pKernPairs;
+            nCount = (nCount < nPairs) : nCount : nPairs;
+            ::GetKerningPairsW( mhDC, nCount, pPairs );
+            return nCount;
+            #endif // GCP_KERN_HACK
         }
 
         mbFontKernInit = FALSE;
@@ -2491,146 +2490,145 @@ BOOL WinSalGraphics::GetGlyphOutline( long nIndex,
         return FALSE;
 
     // TODO: avoid tools polygon by creating B2DPolygon directly
-            int     nPtSize = 512;
-            Point*  pPoints = new Point[ nPtSize ];
-            BYTE*   pFlags = new BYTE[ nPtSize ];
+    int     nPtSize = 512;
+    Point*  pPoints = new Point[ nPtSize ];
+    BYTE*   pFlags = new BYTE[ nPtSize ];
 
-            TTPOLYGONHEADER* pHeader = (TTPOLYGONHEADER*)pData;
-            while( (BYTE*)pHeader < pData+nSize2 )
+    TTPOLYGONHEADER* pHeader = (TTPOLYGONHEADER*)pData;
+    while( (BYTE*)pHeader < pData+nSize2 )
+    {
+        // only outline data is interesting
+        if( pHeader->dwType != TT_POLYGON_TYPE )
+            break;
+
+        // get start point; next start points are end points
+        // of previous segment
+        USHORT nPnt = 0;
+
+        long nX = IntTimes256FromFixed( pHeader->pfxStart.x );
+        long nY = IntTimes256FromFixed( pHeader->pfxStart.y );
+        pPoints[ nPnt ] = Point( nX, nY );
+        pFlags[ nPnt++ ] = POLY_NORMAL;
+
+        bool bHasOfflinePoints = false;
+        TTPOLYCURVE* pCurve = (TTPOLYCURVE*)( pHeader + 1 );
+        pHeader = (TTPOLYGONHEADER*)( (BYTE*)pHeader + pHeader->cb );
+        while( (BYTE*)pCurve < (BYTE*)pHeader )
+        {
+            int nNeededSize = nPnt + 16 + 3 * pCurve->cpfx;
+            if( nPtSize < nNeededSize )
             {
-                // only outline data is interesting
-                if( pHeader->dwType != TT_POLYGON_TYPE )
-                    break;
-
-                // get start point; next start points are end points
-                // of previous segment
-                USHORT nPnt = 0;
-
-                long nX = IntTimes256FromFixed( pHeader->pfxStart.x );
-                long nY = IntTimes256FromFixed( pHeader->pfxStart.y );
-                pPoints[ nPnt ] = Point( nX, nY );
-                pFlags[ nPnt++ ] = POLY_NORMAL;
-
-                bool bHasOfflinePoints = false;
-                TTPOLYCURVE* pCurve = (TTPOLYCURVE*)( pHeader + 1 );
-                pHeader = (TTPOLYGONHEADER*)( (BYTE*)pHeader + pHeader->cb );
-                while( (BYTE*)pCurve < (BYTE*)pHeader )
+                Point* pOldPoints = pPoints;
+                BYTE* pOldFlags = pFlags;
+                nPtSize = 2 * nNeededSize;
+                pPoints = new Point[ nPtSize ];
+                pFlags = new BYTE[ nPtSize ];
+                for( USHORT i = 0; i < nPnt; ++i )
                 {
-                    int nNeededSize = nPnt + 16 + 3 * pCurve->cpfx;
-                    if( nPtSize < nNeededSize )
-                    {
-                        Point* pOldPoints = pPoints;
-                        BYTE* pOldFlags = pFlags;
-                        nPtSize = 2 * nNeededSize;
-                        pPoints = new Point[ nPtSize ];
-                        pFlags = new BYTE[ nPtSize ];
-                        for( USHORT i = 0; i < nPnt; ++i )
-                        {
-                            pPoints[ i ] = pOldPoints[ i ];
-                            pFlags[ i ] = pOldFlags[ i ];
-                        }
-                        delete[] pOldPoints;
-                        delete[] pOldFlags;
-                    }
-
-                    int i = 0;
-                    if( TT_PRIM_LINE == pCurve->wType )
-                    {
-                        while( i < pCurve->cpfx )
-                        {
-                            nX = IntTimes256FromFixed( pCurve->apfx[ i ].x );
-                            nY = IntTimes256FromFixed( pCurve->apfx[ i ].y );
-                            ++i;
-                            pPoints[ nPnt ] = Point( nX, nY );
-                            pFlags[ nPnt ] = POLY_NORMAL;
-                            ++nPnt;
-                        }
-                    }
-                    else if( TT_PRIM_QSPLINE == pCurve->wType )
-                    {
-                        bHasOfflinePoints = true;
-                        while( i < pCurve->cpfx )
-                        {
-                            // get control point of quadratic bezier spline
-                            nX = IntTimes256FromFixed( pCurve->apfx[ i ].x );
-                            nY = IntTimes256FromFixed( pCurve->apfx[ i ].y );
-                            ++i;
-                            Point aControlP( nX, nY );
-
-                            // calculate first cubic control point
-                            // P0 = 1/3 * (PBeg + 2 * PQControl)
-                            nX = pPoints[ nPnt-1 ].X() + 2 * aControlP.X();
-                            nY = pPoints[ nPnt-1 ].Y() + 2 * aControlP.Y();
-                            pPoints[ nPnt+0 ] = Point( (2*nX+3)/6, (2*nY+3)/6 );
-                            pFlags[ nPnt+0 ] = POLY_CONTROL;
-
-                            // calculate endpoint of segment
-                            nX = IntTimes256FromFixed( pCurve->apfx[ i ].x );
-                            nY = IntTimes256FromFixed( pCurve->apfx[ i ].y );
-
-                            if ( i+1 >= pCurve->cpfx )
-                            {
-                                // endpoint is either last point in segment => advance
-                                ++i;
-                            }
-                            else
-                            {
-                                // or endpoint is the middle of two control points
-                                nX += IntTimes256FromFixed( pCurve->apfx[ i-1 ].x );
-                                nY += IntTimes256FromFixed( pCurve->apfx[ i-1 ].y );
-                                nX = (nX + 1) / 2;
-                                nY = (nY + 1) / 2;
-                                // no need to advance, because the current point
-                                // is the control point in next bezier spline
-                            }
-
-                            pPoints[ nPnt+2 ] = Point( nX, nY );
-                            pFlags[ nPnt+2 ] = POLY_NORMAL;
-
-                            // calculate second cubic control point
-                            // P1 = 1/3 * (PEnd + 2 * PQControl)
-                            nX = pPoints[ nPnt+2 ].X() + 2 * aControlP.X();
-                            nY = pPoints[ nPnt+2 ].Y() + 2 * aControlP.Y();
-                            pPoints[ nPnt+1 ] = Point( (2*nX+3)/6, (2*nY+3)/6 );
-                            pFlags[ nPnt+1 ] = POLY_CONTROL;
-
-                            nPnt += 3;
-                        }
-                    }
-
-                    // next curve segment
-                    pCurve = (TTPOLYCURVE*)&pCurve->apfx[ i ];
+                    pPoints[ i ] = pOldPoints[ i ];
+                    pFlags[ i ] = pOldFlags[ i ];
                 }
-
-                // end point is start point for closed contour
-                // disabled, because Polygon class closes the contour itself
-                // pPoints[nPnt++] = pPoints[0];
-                // #i35928#
-                // Added again, but add only when not yet closed
-                if(pPoints[nPnt - 1] != pPoints[0])
-                {
-                    if( bHasOfflinePoints )
-                        pFlags[nPnt] = pFlags[0];
-
-                    pPoints[nPnt++] = pPoints[0];
-                }
-
-                // convert y-coordinates W32 -> VCL
-                for( int i = 0; i < nPnt; ++i )
-                    pPoints[i].Y() = -pPoints[i].Y();
-
-                // insert into polypolygon
-                Polygon aPoly( nPnt, pPoints, (bHasOfflinePoints ? pFlags : NULL) );
-                // convert to B2DPolyPolygon
-                // TODO: get rid of the intermediate PolyPolygon
-                rB2DPolyPoly.append( aPoly.getB2DPolygon() );
+                delete[] pOldPoints;
+                delete[] pOldFlags;
             }
 
-            delete[] pPoints;
-            delete[] pFlags;
+            int i = 0;
+            if( TT_PRIM_LINE == pCurve->wType )
+            {
+                while( i < pCurve->cpfx )
+                {
+                    nX = IntTimes256FromFixed( pCurve->apfx[ i ].x );
+                    nY = IntTimes256FromFixed( pCurve->apfx[ i ].y );
+                    ++i;
+                    pPoints[ nPnt ] = Point( nX, nY );
+                    pFlags[ nPnt ] = POLY_NORMAL;
+                    ++nPnt;
+                }
+            }
+            else if( TT_PRIM_QSPLINE == pCurve->wType )
+            {
+                bHasOfflinePoints = true;
+                while( i < pCurve->cpfx )
+                {
+                    // get control point of quadratic bezier spline
+                    nX = IntTimes256FromFixed( pCurve->apfx[ i ].x );
+                    nY = IntTimes256FromFixed( pCurve->apfx[ i ].y );
+                    ++i;
+                    Point aControlP( nX, nY );
 
-        delete[] pData;
+                    // calculate first cubic control point
+                    // P0 = 1/3 * (PBeg + 2 * PQControl)
+                    nX = pPoints[ nPnt-1 ].X() + 2 * aControlP.X();
+                    nY = pPoints[ nPnt-1 ].Y() + 2 * aControlP.Y();
+                    pPoints[ nPnt+0 ] = Point( (2*nX+3)/6, (2*nY+3)/6 );
+                    pFlags[ nPnt+0 ] = POLY_CONTROL;
+
+                    // calculate endpoint of segment
+                    nX = IntTimes256FromFixed( pCurve->apfx[ i ].x );
+                    nY = IntTimes256FromFixed( pCurve->apfx[ i ].y );
+
+                    if ( i+1 >= pCurve->cpfx )
+                    {
+                        // endpoint is either last point in segment => advance
+                        ++i;
+                    }
+                    else
+                    {
+                        // or endpoint is the middle of two control points
+                        nX += IntTimes256FromFixed( pCurve->apfx[ i-1 ].x );
+                        nY += IntTimes256FromFixed( pCurve->apfx[ i-1 ].y );
+                        nX = (nX + 1) / 2;
+                        nY = (nY + 1) / 2;
+                        // no need to advance, because the current point
+                        // is the control point in next bezier spline
+                    }
+
+                    pPoints[ nPnt+2 ] = Point( nX, nY );
+                    pFlags[ nPnt+2 ] = POLY_NORMAL;
+
+                    // calculate second cubic control point
+                    // P1 = 1/3 * (PEnd + 2 * PQControl)
+                    nX = pPoints[ nPnt+2 ].X() + 2 * aControlP.X();
+                    nY = pPoints[ nPnt+2 ].Y() + 2 * aControlP.Y();
+                    pPoints[ nPnt+1 ] = Point( (2*nX+3)/6, (2*nY+3)/6 );
+                    pFlags[ nPnt+1 ] = POLY_CONTROL;
+
+                    nPnt += 3;
+                }
+            }
+
+            // next curve segment
+            pCurve = (TTPOLYCURVE*)&pCurve->apfx[ i ];
+        }
+
+        // end point is start point for closed contour
+        // disabled, because Polygon class closes the contour itself
+        // pPoints[nPnt++] = pPoints[0];
+        // #i35928#
+        // Added again, but add only when not yet closed
+        if(pPoints[nPnt - 1] != pPoints[0])
+        {
+            if( bHasOfflinePoints )
+                pFlags[nPnt] = pFlags[0];
+
+            pPoints[nPnt++] = pPoints[0];
+        }
+
+        // convert y-coordinates W32 -> VCL
+        for( int i = 0; i < nPnt; ++i )
+            pPoints[i].Y() = -pPoints[i].Y();
+
+        // insert into polypolygon
+        Polygon aPoly( nPnt, pPoints, (bHasOfflinePoints ? pFlags : NULL) );
+        // convert to B2DPolyPolygon
+        // TODO: get rid of the intermediate PolyPolygon
+        rB2DPolyPoly.append( aPoly.getB2DPolygon() );
     }
+
+    delete[] pPoints;
+    delete[] pFlags;
+
+    delete[] pData;
 
     // rescaling needed for the PolyPolygon conversion
     if( rB2DPolyPoly.count() )
