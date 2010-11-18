@@ -1096,8 +1096,7 @@ else
                     }
                     break;
 
-        default:    if( ch && pCharClass->isLetter( sCommand, nCommandPos - 1)
-                            || '_' == ch )
+        default:    if (ch && (pCharClass->isLetter( sCommand, nCommandPos - 1) || '_' == ch))
                     {
                         xub_StrLen nStt = nCommandPos-1;
                         while( 0 != (ch = NextCh( sCommand, nCommandPos )) &&
