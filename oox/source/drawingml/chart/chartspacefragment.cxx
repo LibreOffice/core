@@ -78,6 +78,9 @@ ContextHandlerRef ChartSpaceFragment::onCreateContext( sal_Int32 nElement, const
                 case C_TOKEN( userShapes ):
                     mrModel.maDrawingPath = getFragmentPathFromRelId( rAttribs.getString( R_TOKEN( id ), OUString() ) );
                     return 0;
+                case C_TOKEN( pivotSource ):
+                    mrModel.mbPivotChart = true;
+                    return 0;
             }
         break;
 

@@ -46,12 +46,14 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
+using ::com::sun::star::uno::makeAny;
 using ::com::sun::star::util::XNumberFormatsSupplier;
 using ::com::sun::star::drawing::XDrawPageSupplier;
 using ::com::sun::star::drawing::XShapes;
 using ::com::sun::star::chart2::XDiagram;
 using ::com::sun::star::chart2::XTitled;
 using ::com::sun::star::chart2::data::XDataReceiver;
+using ::com::sun::star::beans::XPropertySet;
 
 namespace oox {
 namespace drawingml {
@@ -197,6 +199,17 @@ void ChartSpaceConverter::convertFromModel( const Reference< XShapes >& rxExtern
             getFilter(), mrModel.maDrawingPath, xShapes, getChartSize(), aShapesOffset, bOleSupport ) );
     }
     catch( Exception& )
+    {
+    }
+
+    // pivot chart
+    if ( mrModel.mbPivotChart ) try
+    {
+        Reference< XPropertySet > xProps( getChartDocument(), UNO_QUERY_THROW );
+        xProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "DisableDataTableDialog" ) ), makeAny( sal_True ) );
+        xProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "DisableComplexChartTypes" ) ), makeAny( sal_True ) );
+    }
+    catch ( Exception& )
     {
     }
 }
