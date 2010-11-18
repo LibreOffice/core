@@ -108,7 +108,7 @@ void X11Clipboard::fireChangedContentsEvent()
 {
     ClearableMutexGuard aGuard( m_rSelectionManager.getMutex() );
 #if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "X11Clipboard::fireChangedContentsEvent for %s (%d listeners)\n",
+    fprintf( stderr, "X11Clipboard::fireChangedContentsEvent for %s (%" SAL_PRI_SIZET "u listeners)\n",
              OUStringToOString( m_rSelectionManager.getString( m_aSelection ), RTL_TEXTENCODING_ISO_8859_1 ).getStr(), m_aListeners.size() );
 #endif
     ::std::list< Reference< XClipboardListener > > listeners( m_aListeners );

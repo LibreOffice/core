@@ -1842,7 +1842,7 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
         {
 #if OSL_DEBUG_LEVEL > 1
             if( t->tables[i] )
-                fprintf( stderr, "font file %s has bad table offset %d (tagnum=%d)\n", t->fname, (sal_uInt8*)t->tables[i]-t->ptr, i );
+                fprintf( stderr, "font file %s has bad table offset %" SAL_PRI_PTRDIFFT "d (tagnum=%d)\n", t->fname, (sal_uInt8*)t->tables[i]-t->ptr, i );
 #endif
             t->tlens[i] = 0;
             t->tables[i] = NULL;

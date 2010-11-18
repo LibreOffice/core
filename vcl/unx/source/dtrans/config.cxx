@@ -67,7 +67,7 @@ sal_Int32 SelectionManager::getSelectionTimeout()
         DtransX11ConfigItem aCfg;
         m_nSelectionTimeout = aCfg.getSelectionTimeout();
 #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "initialized selection timeout to %ld seconds\n", m_nSelectionTimeout );
+        fprintf( stderr, "initialized selection timeout to %" SAL_PRIdINT32 " seconds\n", m_nSelectionTimeout );
 #endif
     }
     return m_nSelectionTimeout;
@@ -88,7 +88,7 @@ DtransX11ConfigItem::DtransX11ConfigItem() :
         aKeys.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( SELECTION_PROPERTY ) );
         Sequence< Any > aValues = GetProperties( aKeys );
 #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "found %ld properties for %s\n", aValues.getLength(), SELECTION_PROPERTY );
+        fprintf( stderr, "found %" SAL_PRIdINT32 " properties for %s\n", aValues.getLength(), SELECTION_PROPERTY );
 #endif
         Any* pValue = aValues.getArray();
         for( int i = 0; i < aValues.getLength(); i++, pValue++ )

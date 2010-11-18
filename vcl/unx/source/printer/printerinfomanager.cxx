@@ -326,7 +326,7 @@ void PrinterInfoManager::initialize()
                 }
             }
             #if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "global settings: fontsubst = %s, %d substitutes\n", m_aGlobalDefaults.m_bPerformFontSubstitution ? "true" : "false", m_aGlobalDefaults.m_aFontSubstitutes.size() );
+            fprintf( stderr, "global settings: fontsubst = %s, %" SAL_PRI_SIZET "u substitutes\n", m_aGlobalDefaults.m_bPerformFontSubstitution ? "true" : "false", m_aGlobalDefaults.m_aFontSubstitutes.size() );
             #endif
         }
     }
