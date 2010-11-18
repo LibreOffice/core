@@ -27,6 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/embed/XVisualObject.hpp>
 #include <com/sun/star/embed/EmbedMisc.hpp>
@@ -42,9 +43,7 @@
 #include <svx/svdview.hxx>
 #include <sot/factory.hxx>
 #include <svl/itemiter.hxx>
-#ifndef _SOUND_HXX //autogen
 #include <vcl/sound.hxx>
-#endif
 #include <tools/bigint.hxx>
 #include <sot/storage.hxx>
 #include <svtools/insdlg.hxx>
@@ -60,28 +59,21 @@
 #include <vcl/graph.hxx>
 #include <sfx2/printer.hxx>
 #include <unotools/charclass.hxx>
-
 #include <comphelper/storagehelper.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
+#include <frmfmt.hxx>
 #include <fmtftn.hxx>
 #include <fmtpdsc.hxx>
-#ifndef _WDOCSH_HXX
 #include <wdocsh.hxx>
-#endif
-#ifndef _BASESH_HXX
 #include <basesh.hxx>
-#endif
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <uitool.hxx>
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
+#include <cfgitems.hxx>
 #include <pagedesc.hxx>
 #include <frmmgr.hxx>
 #include <shellio.hxx>
@@ -89,9 +81,7 @@
 #include <swundo.hxx>  // fuer Undo-Ids
 #include <swcli.hxx>
 #include <poolfmt.hxx>
-#ifndef _WVIEW_HXX
 #include <wview.hxx>
-#endif
 #include <edtwin.hxx>
 #include <fmtcol.hxx>
 #include <swtable.hxx>
@@ -100,15 +90,12 @@
 #include <swdtflvr.hxx>
 #include <crsskip.hxx>
 #include <doc.hxx>
-#ifndef _WRTSH_HRC
 #include <wrtsh.hrc>
-#endif
 #include <SwStyleNameMapper.hxx>
 #include <sfx2/request.hxx>
 #include <paratr.hxx>
 #include <ndtxt.hxx>
 #include <editeng/acorrcfg.hxx>
-//#include <svx/acorrcfg.hxx>
 #include <IMark.hxx>
 
 // -> #111827#
@@ -609,6 +596,11 @@ BOOL SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyFrmFm
     aFrmMgr.SetSize( aSz );
     SwFlyFrmFmt *pFmt = SwFEShell::InsertObject( xRef, &aFrmMgr.GetAttrSet() );
 
+    // --> #i972#
+    if ( bStarMath && pDoc->get( IDocumentSettingAccess::MATH_BASELINE_ALIGNMENT ) )
+        AlignFormulaToBaseline( xRef.GetObject() );
+    // <--
+
     if (pFlyFrmFmt)
         *pFlyFrmFmt = pFmt;
 
@@ -769,6 +761,8 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
         if ( (embed::EmbedMisc::EMBED_ACTIVATEIMMEDIATELY & nMisc) || bLinkingChart
             // TODO/LATER: ResizeOnPrinterChange
              //|| SVOBJ_MISCSTATUS_RESIZEONPRINTERCHANGE & xObj->GetMiscStatus()
+             || nMisc & embed::EmbedMisc::EMBED_NEVERRESIZE // non-resizable objects need to be
+                                                            // set the size back by this method
              )
         {
             pCli = new SwOleClient( &GetView(), &GetView().GetEditWin(), xObj );
@@ -879,6 +873,17 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
 
     if ( bUseObjectSize )
     {
+        // --> this moves non-resizable object so that when adding borders the baseline remains the same
+        const SwFlyFrmFmt *pFlyFrmFmt = dynamic_cast< const SwFlyFrmFmt * >( GetFlyFrmFmt() );
+        ASSERT( pFlyFrmFmt, "Could not find fly frame." );
+        if ( pFlyFrmFmt )
+        {
+            const Point &rPoint = pFlyFrmFmt->GetLastFlyFrmPrtRectPos();
+            SwRect aRect( pFlyPrtRect ? *pFlyPrtRect
+                        : GetAnyCurRect( RECT_FLY_PRT_EMBEDDED, 0, xObj.GetObject() ));
+            aArea += rPoint - aRect.Pos(); // adjust area by diff of printing area position in order to keep baseline alignment correct.
+        }
+        // <--
         aArea.Width ( _aVisArea.Width() );
         aArea.Height( _aVisArea.Height() );
         RequestObjectResize( aArea, xObj.GetObject() );
@@ -1864,3 +1869,4 @@ String SwWrtShell::GetSelDescr() const
 
     return aResult;
 }
+

@@ -95,9 +95,10 @@ testcase tSlideShowSlideShow
     endcatch
     printlog "close application "
     Call hCloseDocument
-
 endcase 'tSlideShowSlideShow
+
 '-------------------------------------------------------------------------------
+
 testcase tSlideShowRehearseTimings
 
     goto endsub
@@ -139,11 +140,11 @@ testcase tSlideShowRehearseTimings
     sleep 3
     printlog "close application "
     Call hCloseDocument
-
 endcase 'tSlideShowRehearseTimings
-'-------------------------------------------------------------------------------
-testcase tSlideShowSlideShowSettings
 
+'-------------------------------------------------------------------------------
+
+testcase tSlideShowSlideShowSettings
     printlog "open application "
     Call hNewDocument
     sleep 2
@@ -270,11 +271,11 @@ testcase tSlideShowCustomSlideShow
     endif
     printlog "close application "
     Call hCloseDocument
-
 endcase 'tSlideShowCustomSlideShow
-'------------------------------------------------------------------------------
-testcase tSlideShowSlideTransition
 
+'------------------------------------------------------------------------------
+
+testcase tSlideShowSlideTransition
     dim i as integer
     dim a as integer
     dim iCount as integer
@@ -326,7 +327,7 @@ testcase tSlideShowSlideTransition
     if (OeffnenDlg.exists (5)) then
         printlog "Read all entries in Listbox 'File type' "
         for i = 1 to Dateityp.getItemCount
-            printlog "" + i + ":" + Dateityp.getItemText(i)
+            printlog i + ":" + Dateityp.getItemText(i)
         next i
         printlog "cancel dialog 'Open' "
         OeffnenDlg.cancel
@@ -375,7 +376,9 @@ testcase tSlideShowSlideTransition
     Call hCloseDocument
 
 endcase 'tSlideShowSlideTransition
+
 '-------------------------------------------------------------------------------
+
 testcase tSlideShowShowHideSlide
 
     printlog "open application "
@@ -392,7 +395,9 @@ testcase tSlideShowShowHideSlide
     SlideShowShowSlide
     printlog "close application "
     Call hCloseDocument
-endcase
+endcase 'tSlideShowShowHideSlide
+
+'-------------------------------------------------------------------------------
 
 testcase tSlideShowAnimation
     printlog "open application "
@@ -478,9 +483,10 @@ testcase tSlideShowAnimation
     Call hCloseDocument
 
 endcase 'tSlideShowShowHideSlide
-'-------------------------------------------------------------------------------
-testcase tSlideShowCustomAnimation
 
+'-------------------------------------------------------------------------------
+
+testcase tSlideShowCustomAnimation
     dim bError as boolean
 
     printlog "open application"
@@ -641,7 +647,9 @@ testcase tSlideShowCustomAnimation
     Call hCloseDocument
 
 endcase 'tSlideShowCustomAnimation
+
 '-------------------------------------------------------------------------------
+
 testcase tSlideShowInteraction
 
     printlog "open application "

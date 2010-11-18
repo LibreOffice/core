@@ -49,20 +49,22 @@ testcase tViewZoom
     Datei$ = ConvertPath (gOfficePath + "user\work\test." & ExtensionString)
 
     Printlog "- View-Zoom testing"
-  if dir(Datei$) <> "" then app.Kill(Datei$) ' to avoid the anoying overwrite warnlog :-)
-  Call hNewDocument            '/// new document ///'
+    printlog "to avoid the anoying overwrite warnlog :-)"
+  if dir(Datei$) <> "" then app.Kill(Datei$)
+  printlog "new document"
+Call hNewDocument            
   ViewZoom
   Kontext "Massstab"
-  Vergroesserung100.Check       '/// set zoom to 50% ///'
+  Vergroesserung100.Check       
   Massstab.OK
-  '/// create a number of rectangles with different color properties ///'
+  printlog "create a number of rectangles with different color properties"
    Kontext "SD_Farbleiste"
    sleep 1
     if SD_Farbleiste.Exists then
        Printlog "- Color toolbar will be disabled now"
        ViewToolbarsColorBar
     end if
-   '/// All rectangles are created with same dimensions but using different zoom settings ///'
+   printlog "All rectangles are created with same dimensions but using different zoom settings"
    For Zaehler = 1 to 9
       Position1 = 5 * Zaehler - 3
       Position2 = 105 - 5 * Zaehler
@@ -77,9 +79,11 @@ testcase tViewZoom
        gMouseClick 50,0
    Next Zaehler
    sleep 2
-  hFileSaveAs (Datei$)        '/// save document ///'
+    printlog "save document"
+    hFileSaveAs (Datei$)
   sleep 3
-   for Zaehler = 1 to 6	          '/// changing zoom settings and checking functionality with controlling the color of the selected rectangle ///'
+  printlog "changing zoom settings and checking functionality with controlling the color of the selected rectangle"
+   for Zaehler = 1 to 6	          
       ViewZoom
       Kontext "Massstab"
       VergroesserungStufenlos.check
@@ -103,18 +107,14 @@ testcase tViewZoom
          Case 6: VergroesserungStufenlos.check
                  Stufenlos.Settext "200"
                  
-         'Case 2: Vergroesserung50.check
-         'Case 3: Vergroesserung75.check
-         'Case 4: Vergroesserung100.check
-         'Case 5: Vergroesserung150.check
-         'Case 6: Vergroesserung200.check
       End Select
       Massstab.OK
        sleep 1
       Kontext "DocumentImpress"
-       gMouseClick 15,15            'hier soll die Maus ein Rechteck treffen;
-                                    'die Farbe des Rechtecks sagt uns dann, ob
-      FormatArea                    'richtig vergroessert oder verkleinert wurde.
+      printlog "Mouseclick should hit a rectangle. Color tells us then if it was zoomed correctly."
+       gMouseClick 15,15        
+                                    
+      FormatArea                    
        sleep 1
       Kontext
       Active.SetPage TabFarben
@@ -128,6 +128,6 @@ testcase tViewZoom
   'Optimal.push
   'Seitenbreite.push
   sleep 2
-
- Call hCloseDocument         '/// close document ///'
+  printlog "close document"
+ Call hCloseDocument         
 endcase

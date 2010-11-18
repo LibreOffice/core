@@ -101,6 +101,7 @@ public:
     // used in Writer
     // Rectangle           PixelObjVisAreaToLogic( const Rectangle & rObjRect ) const;
     // Rectangle           LogicObjAreaToPixel( const Rectangle & rRect ) const;
+    virtual void        FormatChanged(); // object format was changed (used for StarMath formulas aligning)
 };
 
 #endif

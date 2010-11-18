@@ -336,6 +336,12 @@ sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
                 pColl->SetFmtAttr( aFontHeight );
             }
         }
+
+        // the default for documents created via 'File/New' should be 'on'
+        // (old documents, where this property was not yet implemented, will get the
+        // value 'false' in the SwDoc c-tor)
+        pDoc->set( IDocumentSettingAccess::MATH_BASELINE_ALIGNMENT,
+                SW_MOD()->GetUsrPref( bWeb )->IsAlignMathObjectsToBaseline() );
     }
 
     /* #106748# If the default frame direction of a document is RTL
@@ -823,4 +829,3 @@ void SwDocShell::SubInitNew()
 IDocumentDeviceAccess* SwDocShell::getIDocumentDeviceAccess() { return pDoc; }
 const IDocumentSettingAccess* SwDocShell::getIDocumentSettingAccess() const { return pDoc; }
 IDocumentChartDataProviderAccess* SwDocShell::getIDocumentChartDataProviderAccess() { return pDoc; }
-

@@ -39,6 +39,8 @@
 #include "vcl/cmdevt.hxx"
 #include "rtl/ustrbuf.hxx"
 
+#include "vcl/impimagetree.hxx"
+
 #include "premac.h"
 #import "Carbon/Carbon.h"
 #import "apple_remote/RemoteControl.h"
@@ -418,6 +420,7 @@
     #else // the clean version follows
     return pSalData->maFrames.front()->CallCallback( SALEVENT_SHUTDOWN, NULL ) ? NSTerminateCancel : NSTerminateNow;
     #endif
+    ImplImageTreeSingletonRef()->shutDown();
     return NSTerminateNow;
 }
 

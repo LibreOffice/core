@@ -82,9 +82,9 @@ testcase tiFileSaveAs
 
     sFilter (0) = 0 ' initalize ;-)...
     printlog " used document: graphics\required\input\tbo_alf_.od?"
-    sFileName = "graphics\required\input\tbo_alf_." + ExtensionString    ' this is the file with all features
+    sFileName = "graphics\required\input\tbo_alf_." + ExtensionString
     printlog "FileName is " + sFileName
-    sFile = "isas_"                                ' this is the filename of the export files
+    sFile = "isas_"
     sPath = ConvertPath ( gOfficePath + "user/work/graphics/required/"+gApplication+"\"+ gPlatform) ' this is the export path
     printlog "sPath is " + sPath
     if dir (sPath) = "" then
@@ -92,7 +92,7 @@ testcase tiFileSaveAs
     end if
 
     printlog " deleting all files in output directory: \\user\\work\\graphics\\required\\gApplication gPlatform isas_*"
-    if gSamePC = TRUE then ' delete export directory
+    if gSamePC = TRUE then 
         GetFileList ( sPath, sFile+"*", Exlist() )
         if KillFileList ( Exlist() ) <> TRUE then
             Warnlog "Couldn't delete all Files in Output-Export-Directory, the followings are still there:"
@@ -107,7 +107,7 @@ testcase tiFileSaveAs
     WaitSlot (3000)
     
     printlog "running 5 times save as with different Filters"
-    for i = 1 to 6 'run it 5 times
+    for i = 1 to 6
         printlog "calling Save as Dialog"
         FileSaveAs
         WaitSlot (2000)

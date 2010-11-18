@@ -50,16 +50,16 @@ sub main
     endif
 
     Call sFileExport 'OBSERVE - This line must run before the following testcases!
-    Call tPDF   '///+-   Portable Document Format           ///'
-    Call tPDF_Creator '///+-   test if the right creator is set in the PDF document
-    Call tSVG   '///+-   Scalable Vector Graphics           ///'
-    Call tSVM   '///+-   StarView Metafile                  ///'
-    Call tBMP   '///+-   Windows Bitmap                     ///'
-    Call tEMF   '///+-   Enhanced Metafile                  ///'
-    Call tPNG   '///+-   Portable Network Graphic           ///'
-    Call tMET   '///+-   OS/2 Metafile                      ///'
-    Call tWMF   '///+-   Windows Metafile                   ///'
-    Call tSWF   '///+-   Macromedia Flash (SWF) (.swf)      ///'
+    Call tPDF   ' Portable Document Format  
+    Call tPDF_Creator  'test if the right creator is set in the PDF document
+    Call tSVG   'Scalable Vector Graphics
+    Call tSVM   'StarView Metafile                 
+    Call tBMP   'Windows Bitmap                    
+    Call tEMF   'Enhanced Metafile                 
+    Call tPNG   'Portable Network Graphic          
+    Call tMET   'OS/2 Metafile                     
+    Call tWMF   'Windows Metafile                  
+    Call tSWF   'Macromedia Flash (SWF) (.swf)     
 
     Call hStatusOut
 end sub

@@ -74,8 +74,8 @@ my @valid_commands = (
 my %valid_options_hash = (
                             'help'       => ['help'],
                             'create'     => ['help', 'milestone', 'migration', 'hg'],
-                            'fetch'      => ['help', 'milestone', 'childworkspace','platforms','quiet',
-                                            'onlysolver'],
+                            'fetch'      => ['help', 'milestone', 'childworkspace','platforms','noautocommon',
+                                            'quiet', 'onlysolver'],
                             'query'      => ['help', 'milestone','masterworkspace','childworkspace'],
                             'task'       => ['help'],
                             'setcurrent' => ['help', 'milestone'],
@@ -120,6 +120,7 @@ sub parse_command_line
                                              'profile',
                                              'commit|C',
                                              'platforms|p=s',
+                                             'noautocommon|x=s',
                                              'onlysolver|o',
                                              'quiet|q',
                                              'help|h'
@@ -445,7 +446,7 @@ sub hg_clone_cws_or_milestone
         require LWP::Simple;
         my $content = LWP::Simple::get($cws_remote_source);
         my $pattern = "<title>cws/". $cws->child();
-        if ( $content =~ /$pattern/ ) {
+        if ( $content && $content =~ /$pattern/ ) {
             $pull_from_remote = 1;
         }
         else {
@@ -1457,21 +1458,28 @@ sub do_help
         print STDERR "fetch: fetch a milestone or CWS\n";
         print STDERR "usage: fetch [-q] [-p platforms] [-o] <-m milestone> <workspace>\n";
         print STDERR "usage: fetch [-q] [-p platforms] [-o] <-c cws> <workspace>\n";
+        print STDERR "usage: fetch [-q] [-x platforms] [-o] <-m milestone> <workspace>\n";
+        print STDERR "usage: fetch [-q] [-x platforms] [-o] <-c cws> <workspace>\n";
         print STDERR "usage: fetch [-q] <-m milestone> <workspace>\n";
         print STDERR "usage: fetch [-q] <-c cws> <workspace>\n";
-        print STDERR "\t-m milestone:           Checkout milestone <milestone> to workspace <workspace>\n";
-        print STDERR "\t                        Use 'latest' for the for lastest published milestone on the current master\n";
-        print STDERR "\t                        For cross master checkouts use the form <MWS>:<milestone>\n";
-        print STDERR "\t--milestone milestone:  Same as -m milestone\n";
-        print STDERR "\t-c childworkspace:      Checkout CWS <childworkspace> to workspace <workspace>\n";
-        print STDERR "\t--child childworkspace: Same as -c childworkspace\n";
-        print STDERR "\t-p platform:            Copy one or more prebuilt platforms 'platform'. \n";
-        print STDERR "\t                        Separate multiple platforms with commas.\n";
-        print STDERR "\t--platforms platform:   Same as -p\n";
-        print STDERR "\t-o                      Omit checkout of sources, copy only solver. \n";
-        print STDERR "\t--onlysolver:           Same as -o\n";
-        print STDERR "\t-q                      Silence some of the output of the command.\n";
-        print STDERR "\t--quiet:                Same as -q\n";
+        print STDERR "\t-m milestone:            Checkout milestone <milestone> to workspace <workspace>\n";
+        print STDERR "\t                         Use 'latest' for the for lastest published milestone on the current master\n";
+        print STDERR "\t                         For cross master checkouts use the form <MWS>:<milestone>\n";
+        print STDERR "\t--milestone milestone:   Same as -m milestone\n";
+        print STDERR "\t-c childworkspace:       Checkout CWS <childworkspace> to workspace <workspace>\n";
+        print STDERR "\t--child childworkspace:  Same as -c childworkspace\n";
+        print STDERR "\t-p platform:             Copy one or more prebuilt platforms 'platform'. \n";
+        print STDERR "\t                         Separate multiple platforms with commas.\n";
+        print STDERR "\t                         Automatically adds 'common[.pro]' as required.\n";
+        print STDERR "\t--platforms platform:    Same as -p\n";
+        print STDERR "\t-x platform:             Copy one or more prebuilt platforms 'platform'. \n";
+        print STDERR "\t                         Separate multiple platforms with commas.\n";
+        print STDERR "\t                         Does not automatically adds 'common[.pro]'.\n";
+        print STDERR "\t--noautocommon platform: Same as -x\n";
+        print STDERR "\t-o:                      Omit checkout of sources, copy only solver. \n";
+        print STDERR "\t--onlysolver:            Same as -o\n";
+        print STDERR "\t-q:                      Silence some of the output of the command.\n";
+        print STDERR "\t--quiet:                 Same as -q\n";
     }
     elsif ($arg eq 'setcurrent') {
         print STDERR "setcurrent: Set the current milestone for the CWS (only hg based CWSs)\n";
@@ -1576,6 +1584,7 @@ sub do_fetch
     my $milestone_opt = $options_ref->{'milestone'};
     my $child = $options_ref->{'childworkspace'};
     my $platforms = $options_ref->{'platforms'};
+    my $noautocommon = $options_ref->{'noautocommon'};
     my $quiet  = $options_ref->{'quiet'}  ? 1 : 0 ;
     my $switch = $options_ref->{'switch'} ? 1 : 0 ;
     my $onlysolver = $options_ref->{'onlysolver'} ? 1 : 0 ;
@@ -1590,8 +1599,13 @@ sub do_fetch
         do_help(['fetch']);
     }
 
-    if ( $onlysolver && !defined($platforms) ) {
-        print_error("Option '-o' is Only usuable combination with option '-p'.", 0);
+    if ( defined($platforms) && defined($noautocommon) ) {
+        print_error("Options -p and -x are mutally exclusive", 0);
+        do_help(['fetch']);
+    }
+
+    if ( $onlysolver && !(defined($platforms) || defined($noautocommon)) ) {
+        print_error("Option '-o' is Only usuable combination with option '-p' or '-x'.", 0);
         do_help(['fetch']);
     }
 
@@ -1634,42 +1648,47 @@ sub do_fetch
     # Check early for platforms so we can bail out before anything time consuming is done
     # in case of a missing platform
     my @platforms;
-    if ( defined($platforms) ) {
+    if ( defined($platforms) || defined($noautocommon) ) {
         use Archive::Zip; # warn early if module is missing
         if ( !defined($prebuild_dir ) ) {
             print_error("PREBUILD_BINARIES not configured, can't find platform solvers", 99);
         }
         $prebuild_dir = "$prebuild_dir/$masterws";
 
-        @platforms = split(/,/, $platforms);
+        if ( defined($platforms) ) {
+            @platforms = split(/,/, $platforms);
 
-        my $added_product = 0;
-        my $added_nonproduct = 0;
-        foreach(@platforms) {
-            if ( $_ eq 'common.pro' ) {
-                $added_product = 1;
-                print_warning("'$_' is added automatically to the platform list, don't specify it explicit");
+            my $added_product = 0;
+            my $added_nonproduct = 0;
+            foreach(@platforms) {
+                if ( $_ eq 'common.pro' ) {
+                    $added_product = 1;
+                    print_warning("'$_' is added automatically to the platform list, don't specify it explicit");
+                }
+                if ( $_ eq 'common' ) {
+                    $added_nonproduct = 1;
+                    print_warning("'$_' is added automatically to the platform list, don't specify it explicit");
+                }
             }
-            if ( $_ eq 'common' ) {
-                $added_nonproduct = 1;
-                print_warning("'$_' is added automatically to the platform list, don't specify it explicit");
+
+            # add common.pro/common to platform list
+            if ( $so_svn_server ) {
+                my $product = 0;
+                my $nonproduct = 0;
+                foreach(@platforms) {
+                    if ( /\.pro$/ ) {
+                        $product = 1;
+                    }
+                    else {
+                        $nonproduct = 1;
+                    }
+                }
+                unshift(@platforms, 'common.pro') if ($product && !$added_product);
+                unshift(@platforms, 'common') if ($nonproduct && !$added_nonproduct);
             }
         }
-
-        # add common.pro/common to platform list
-        if ( $so_svn_server ) {
-            my $product = 0;
-            my $nonproduct = 0;
-            foreach(@platforms) {
-                if ( /\.pro$/ ) {
-                    $product = 1;
-                }
-                else {
-                    $nonproduct = 1;
-                }
-            }
-            unshift(@platforms, 'common.pro') if ($product && !$added_product);
-            unshift(@platforms, 'common') if ($nonproduct && !$added_nonproduct);
+        else {
+            @platforms = split(/,/, $noautocommon);
         }
 
         foreach(@platforms) {
@@ -1733,7 +1752,7 @@ sub do_fetch
         }
     }
 
-    if ( defined($platforms) ) {
+    if ( defined($platforms) || defined($noautocommon) ) {
         if ( !-d $workspace ) {
             if ( !mkdir($workspace) ) {
                 print_error("Can't create directory '$workspace': $!.", 8);

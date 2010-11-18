@@ -52,7 +52,7 @@ module com {  module sun {  module star {  module  util {
 
     @since OOo 2.0.0
  */
-service OfficeInstallationDirectories
+published service OfficeInstallationDirectories
 {
   /** provides access to the current office installation directories (office
       base installation and user data).
@@ -67,7 +67,7 @@ service OfficeInstallationDirectories
 
     @see OfficeInstallationDirectories
 */
-singleton theOfficeInstallationDirectories
+published singleton theOfficeInstallationDirectories
 {
     service com::sun::star::util::OfficeInstallationDirectories;
 };

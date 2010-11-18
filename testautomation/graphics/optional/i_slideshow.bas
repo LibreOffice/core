@@ -52,7 +52,7 @@ sub main
         warnlog "Add 'slide' to FILE  /input/impress/locale_1.txt (take string from below)!!!"
     endif
 
-    '/// LOCALE Slide - 2 ///'
+    printlog "LOCALE Slide - 2"
     S1 = glLocale (2) + " 1"
     S2 = glLocale (2) + " 2"
     S3 = glLocale (2) + " 3"

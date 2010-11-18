@@ -338,6 +338,14 @@ published service FormulaProperties
     /** contains the metric value of the right margin of the formula.
      */
     [property] short    RightMargin;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the baselines offset in respect to the top of the formula rectangle
+
+    @since OOo 3.4
+     */
+    [property, optional] short    BaseLine;
 };
 
 //=============================================================================

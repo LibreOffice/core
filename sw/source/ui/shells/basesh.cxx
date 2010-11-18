@@ -1080,6 +1080,14 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 rSh.SetFlyFrmAttr(aSet);
             }
 
+            // if new anchor is 'as char' and it is a Math object and the usual
+            // pre-conditions are met then align the formula to the baseline of the text
+            const uno::Reference < embed::XEmbeddedObject > xObj( rSh.GetOleRef() );
+            const bool bDoMathBaselineAlignment = xObj.is() && SotExchange::IsMath( xObj->getClassID() )
+                    && FLY_AS_CHAR == eSet && rSh.GetDoc()->get( IDocumentSettingAccess::MATH_BASELINE_ALIGNMENT );
+            if (bDoMathBaselineAlignment)
+                rSh.AlignFormulaToBaseline( xObj );
+
             USHORT nHtmlMode = ::GetHtmlMode(GetView().GetDocShell());
             if( nHtmlMode )
             {

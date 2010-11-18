@@ -46,7 +46,7 @@ testcase tiEditUndo
     dim sTestfile as string
     dim sLocaltestfile as string
     
-    if ( gApplication = "IMPRESS" ) then
+    if (gApplication = "IMPRESS") then
         ExtensionString = "odp"
     else
         ExtensionString = "odg"
@@ -70,6 +70,7 @@ testcase tiEditUndo
     Kontext "TabPositionAndSize"
     printlog "defining variable for original position of object"
     Ueber_Text_1=PositionX.GetText
+    printlog "Position X is: " & Ueber_Text_1
     printlog "Canceling dialog."
     TabPositionAndSize.Cancel
     sleep 2
@@ -95,13 +96,15 @@ testcase tiEditUndo
     Kontext
     Messagebox.SetPage TabPositionAndSize
     Kontext "TabPositionAndSize"
-    if PositionX=0 Then Warnlog "Command was not completely executed, and it could not be undone."
+    printlog "Position X is: " & PositionX.GetText
+    if (PositionX.GetText)=0 Then Warnlog "Command was not completely executed, and it could not be undone."
     TabPositionAndSize.Cancel
     sleep 2
     gMouseClick 60,60
     sleep 1
+
     printlog "Edit Undo for BringBackward"
-    EditUndo
+    EditUndo							
     Sleep 2
     gMouseClick 60,60
     sleep 1
@@ -113,7 +116,7 @@ testcase tiEditUndo
     Kontext "Toolbar"
     Auswahl.Click
     printlog "Again checking position using Position and Size dialog"
-    ContextPositionAndSize
+    ContextPositionAndSize					
     kontext
     Messagebox.SetPage TabPositionAndSize
     kontext "TabPositionAndSize"
@@ -135,7 +138,10 @@ testcase tiEditUndo
     endif
     Call hCloseDocument	
 
-endcase
+    printlog "Close document"
+    Call hCloseDocument						
+
+endcase 'tiEditUndo
 
 '-------------------------------------------------------------------------------
 testcase tiEditRedo
@@ -150,8 +156,9 @@ testcase tiEditRedo
     end if
     
     Datei$ = gTesttoolPath + "graphics\required\input\leer."+ExtensionString
-    
-    hFileOpen ConvertPath (Datei$)			'/// Open test document (leer.od?) ///'
+
+    printlog "Open test document (leer.od?)"
+    hFileOpen ConvertPath (Datei$)			
     sleep 3
     ' check if the document is writable
     if fIsDocumentWritable = false then
@@ -176,7 +183,8 @@ testcase tiEditRedo
     sleep 1
     hTypeKeys "<TAB>"
     sleep 1
-    ContextArrangeBringBackward					'/// move object behind other object ///'
+    printlog "move object behind other object"
+    ContextArrangeBringBackward					
     sleep 1
     gMouseClick 60,60
     sleep 1
@@ -185,25 +193,29 @@ testcase tiEditRedo
     ContextPositionAndSize
     sleep 1
     Kontext
-    Messagebox.SetPage TabPositionAndSize					'/// checking new position values ///'
+    printlog "checking new position values"
+    Messagebox.SetPage TabPositionAndSize					
     Kontext "TabPositionAndSize"
      if PositionX.GetText = Ueber_Text_1 Then Warnlog "  Nothing changed, so nothing can be undone"
     TabPositionAndSize.Cancel
     sleep 1
     gMouseClick 60,60
-    EditUndo							'/// Edit Undo///'
+    printlog "Edit Undo"
+    EditUndo							
     sleep 1
     hTypeKeys "<TAB>"
     sleep 1
     ContextPositionAndSize
     sleep 1
     kontext
-    Messagebox.SetPage TabPositionAndSize					'/// checking again position ///'
+    printlog "checking again position"
+    Messagebox.SetPage TabPositionAndSize					
     kontext "TabPositionAndSize"
     if PositionX.GetText <> Ueber_Text_1 Then Warnlog "  Undo didn't worked, so repeat last action wont work either"
     TabPositionAndSize.Cancel
     sleep 2
-    EditRedo							'/// Edit Redo ///'
+    printlog "Edit Redo"
+    EditRedo							
     sleep 2
     gMouseClick 60,60
     sleep 2
@@ -214,16 +226,18 @@ testcase tiEditRedo
     kontext
     Messagebox.SetPage TabPositionAndSize
     kontext "TabPositionAndSize"
-    if PositionX.GetText <> Ueber_Text_1 then			'/// checking position ///'
+    printlog "checking position"
+    if PositionX.GetText <> Ueber_Text_1 then			
       printlog "Action Undo repeated"
     else
       warnlog "Action Undo not repeated"
     end if
     TabPositionAndSize.OK
     sleep 1
-    call hCloseDocument						'/// close document ///'
+    printlog "close document"
+    call hCloseDocument						
     sleep 1
-endcase
+endcase 'tiEditRedo
 
 '-------------------------------------------------------------------------------
 testcase tiEditClipboard
@@ -231,61 +245,63 @@ testcase tiEditClipboard
     Dim Ueber_Text_4 as string
     dim sTemp as string
     
-    '/// open application ///'
+    printlog "open application"
     Call hNewDocument
     Call sSelectEmptyLayout
     sleep 1
     SetClipboard ""
-    '/// Create rectangle ///'
+    printlog "Create rectangle"
     Call hRechteckErstellen ( 65, 65, 80, 80 )
     sleep 1
-    '///+ RightClick onto rectangle///'
+    printlog "RightClick onto rectangle"
     gMouseClick 70,70
     sleep 1
-    Ueber_Text_4 = fGetPositionX()				'/// Get values for position variables ///'
+    printlog "Get values for position variables"
+    Ueber_Text_4 = fGetPositionX()				
     Sleep 1
-    '/// <b> Edit->Copy </b> ///'
+    printlog "<b> Edit->Copy </b>"
     EditCopy
-    '///+ Type Key [Deletee] ///'
+    '///+ Type Key [Deletee]"
     hTypeKeys "<DELETE>"
-    '///+ <i> Edit->Paste </i> ///'
+    '///+ <i> Edit->Paste </i>"
     EditPaste
     sleep 1
-    '///+   Edit->Select All ///'
+    '///+   Edit->Select All"
     EditSelectAll
     sTemp = fGetPositionX()
-    if LiberalMeasurement(sTemp, Ueber_Text_4) then			'/// TabPositionAndSize: comparing position with original position ///'
+    printlog "TabPositionAndSize: comparing position with original position"
+    if LiberalMeasurement(sTemp, Ueber_Text_4) then			
       printlog "OK   EditCopy and EditPaste"
     else
       warnlog "- Edit paste did not work; is: '" + sTemp + "' ; should: '" + Ueber_Text_4 + "'"
     end if
     sleep 1
-    '/// Type Keys [escape], + EditSelectAll (to deselect object and to select again) ///'
+    printlog "Type Keys [escape], + EditSelectAll (to deselect object and to select again)"
     hTypeKeys "<escape>"
     EditSelectAll
     sleep 2
-    '/// <b> Edit->Cut </b>///'
+    printlog "<b> Edit->Cut"
     EditCut
     sleep 1
     hTypeKeys "<TAB>"
     try
-      '///+ - Format->Position And Size -> HAS TO FAIL / IS NOT AVAILABLE !!! '///'
+      printlog "Format->Position And Size -> HAS TO FAIL / IS NOT AVAILABLE !!! "
       ContextPositionAndSize
          kontext
-         '///+ - select TabPage 'Position And Size' ///'
+         printlog "select TabPage 'Position And Size'"
          Messagebox.SetPage TabPositionAndSize
          Kontext "TabPositionAndSize"
          if TabPositionAndSize.NOTexists then
             warnlog "TabPositionAndSize isn't up ?!!"
          endif
-      '///+ - Ok dialog 'Position And Size' ///'
+        printlog "Ok dialog 'Position And Size'"
       TabPositionAndSize.Ok
       warnlog "TabPositionAndSize IS up :-( Doesn't have to be, because object should be deleted !!!"
     catch
       Printlog " - There is no object in the document anymore :-)"
     endcatch
     sleep 1
-    '///+ <i> Edit->Paste </i> ///'
+    printlog "Edit->Paste"
     EditPaste
     sleep 2
     sTemp = fGetPositionX()
@@ -295,9 +311,9 @@ testcase tiEditClipboard
       warnlog "- Edit paste did not work; is: '" + sTemp + "' ; should: '" + Ueber_Text_4 + "'"
     end if
     sleep 3
-    '/// close application ///'
+    printlog "close application"
     Call hCloseDocument
-endcase
+endcase 'tiEditClipboard
 
 '-------------------------------------------------------------------------------
 testcase tiEditPasteSpecial_HTML
@@ -305,7 +321,8 @@ testcase tiEditPasteSpecial_HTML
     dim Zaehler as integer
     Kontext "Standardbar"
     sleep 1
-    Call hFileOpen ConvertPath (gTesttoolPath + "graphics\required\input\frame1.htm")	'/// Load html document ///'
+    printlog "Load html document"
+    Call hFileOpen ConvertPath (gTesttoolPath + "graphics\required\input\frame1.htm")	
     sleep 5
     autoexecute=false
     Kontext "DocumentWriter"
@@ -314,49 +331,61 @@ testcase tiEditPasteSpecial_HTML
     autoexecute=true
     EditSelectAll
     sleep 3
-    EditCopy									'/// Copy selection ///'
+    printlog "Copy selection"
+    EditCopy									
     Sleep 2
-    FileClose									'/// Close document ///'
+    printlog "Close document"
+    FileClose									
     sleep 3
-    Call hNewDocument								'/// Create new Impress document ///'
+    printlog "Create new Impress document"
+    Call hNewDocument								
     sleep 1
-    EditPasteSpecial								'/// Edit paste special ///'
+    printlog "Edit paste special"
+    EditPasteSpecial								
     sleep 1
     Kontext "InhaltEinfuegen"
     For Zaehler = 1 to Auswahl.GetItemCount
        Auswahl.select Zaehler
        printlog Zaehler, ". Selection = ", Auswahl.GetSelText
     next Zaehler
-    
-    if Auswahl.GetItemCount <> 4 then						'/// Controlling number of possible formats ///'
+
+    printlog "Controlling number of possible formats"
+    if Auswahl.GetItemCount <> 4 then						
       warnlog "formats for inserting Html <> 4"
     else
       printlog "OK   4 formats for HTML-Document"
     end if
     
     sleep 3
-    InhaltEinfuegen.OK								'/// Paste clipboard content ///'
+    printlog "Paste clipboard content"
+    InhaltEinfuegen.OK								
     sleep 3
     try
-     EditCopy									'/// Copy object back into clipboard ///'
+    printlog "Copy object back into clipboard"
+     EditCopy									
     catch
      Warnlog "-  Nothing inserted into document"
     endcatch
     sleep 3
-    Call hCloseDocument  								'/// Close document ///'
+    printlog "Close document"
+    Call hCloseDocument  								
     sleep 3
-endcase
+endcase 'tiEditPasteSpecial_HTML
 
 '-------------------------------------------------------------------------------
 testcase tdEditPasteSpecial_Text
     
     printlog "Insert Text"
-    call hNewDocument                 '/// new document  ///'
-    SetClipboard "I am a cool test-text in the Clipboard"  '/// put text into clipboard ///'
-    EditPasteSpecial                  '/// edit paste special ///'
+    printlog "new document "
+    call hNewDocument
+    printlog "put text into clipboard"
+    SetClipboard "I am a cool test-text in the Clipboard"  
+    printlog "edit paste special"
+    EditPasteSpecial                  
     sleep 1
     Kontext "InhaltEinfuegen"
-    Auswahl.Select 1                  '/// select list entree 1 ///'
+    printlog "select list entree 1"
+    Auswahl.Select 1                  
     printlog "Selection = ", Auswahl.GetSelText
     sleep 1
     if Auswahl.GetItemCount <> 1 then
@@ -364,53 +393,64 @@ testcase tdEditPasteSpecial_Text
     else
       printlog "Format Text OK"
     end if
-    InhaltEinfuegen.OK                '/// close dialog ///'
+    printlog "close dialog"
+    InhaltEinfuegen.OK                
     sleep 1
-    
-    Call hCloseDocument                   '/// close document ///'
-endcase
+
+    printlog "close document"
+    Call hCloseDocument                   
+endcase 'tdEditPasteSpecial_Text
 
 '-------------------------------------------------------------------------------
 testcase tdEditPasteSpecial_Graphic
     
     dim Zaehler as integer
-    
-    call hNewDocument                  '/// ^new document  ///'
+
+    printlog "new document "
+    call hNewDocument                  
     printlog "Insert graphic file"
-    InsertGraphicsFromFile               '/// insert graphic (sample.bmp)///'
+    InsertGraphicsFromFile               
     
     Kontext "GrafikEinfuegenDlg"
-      Dateiname.SetText ConvertPath (gTesttoolPath + "global\input\graf_inp\enter.bmp")
-      Oeffnen.Click
+    Dateiname.SetText ConvertPath (gTesttoolPath + "global\input\graf_inp\enter.bmp")
+    Oeffnen.Click
     sleep 1
-    EditSelectAll                     '/// select graphic ///'
-    EditCut                     '/// cut graphic ///'
-    EditPasteSpecial                  '/// edit paste special ///'
+    printlog "select graphic"
+    EditSelectAll
+    printlog "cut graphic"
+    EditCut
+    printlog "edit paste special"
+    EditPasteSpecial                  
     sleep 1
     Kontext "InhaltEinfuegen"
-    For Zaehler = 1 to Auswahl.GetItemCount         '/// get item count for Auswahl ///'
+    printlog "get item count for Auswahl"
+    For Zaehler = 1 to Auswahl.GetItemCount         
     Auswahl.select Zaehler
     printlog Zaehler, ". Selection = ", Auswahl.GetSelText
     next Zaehler
-    
-    if Auswahl.GetItemCount <> 4 then            '/// check if item count = 4 ///'
+
+    printlog "check if item count = 4"
+    if Auswahl.GetItemCount <> 4 then            
       warnlog "Format for insert graphic files should be 4, but is: " + Auswahl.GetItemCount
     else
       printlog "There are " + Auswahl.GetItemCount + " formats for graphic files"
     end if
-    InhaltEinfuegen.OK                '/// insert graphic from clipboard ///'
+    printlog "insert graphic from clipboard"
+    InhaltEinfuegen.OK                
     gMouseClick 90,90
     sleep 1
-    Call hCloseDocument                   '/// close document  ///'
-endcase
+    printlog "close document "
+    Call hCloseDocument                   
+endcase 'tdEditPasteSpecial_Graphic
 
 '-------------------------------------------------------------------------------
 testcase tdEditPasteSpecial_Circle
 
-   dim Zaehler as integer
- call hNewDocument                  '/// new document  ///'
+    dim Zaehler as integer
+    printlog "new document "
+    call hNewDocument
   sleep 5
-  printlog "Insert circle"                '/// create circle ///'
+  printlog "Insert circle"                
   Kontext "Toolbar"
   Ellipsen.Click
   sleep 3
@@ -418,28 +458,36 @@ testcase tdEditPasteSpecial_Circle
   sleep 1
   hTypeKeys "<escape>"
   sleep 2
-  EditSelectAll               '/// select circle ///'
+  printlog "select circle"
+  EditSelectAll               
   sleep 5
-  EditCut                     '/// cut circle ///'
+  printlog "cut circle"
+  EditCut                     
   sleep 1
-  EditPasteSpecial                  '/// edit paste special ///'
+  printlog "edit paste special"
+  EditPasteSpecial                  
   sleep 1
   Kontext "InhaltEinfuegen"
-  if EinfuegenAls.IsVisible Then EinfuegenAls.Check      '/// check "EinfuegenAls" ///'
-   For Zaehler = 1 to Auswahl.GetItemCount         '/// get item count for Auswahl ///'
+  printlog "check Insert as.."
+  if EinfuegenAls.IsVisible Then EinfuegenAls.Check
+  printlog "get item count for Auswahl"
+   For Zaehler = 1 to Auswahl.GetItemCount         
        Auswahl.select Zaehler
        printlog Zaehler, ". Selection = ", Auswahl.GetSelText
    next Zaehler
-   if Auswahl.GetItemCount <> 4 then            '/// check if item count = 4 ///'
+   printlog "check if item count = 4"
+   if Auswahl.GetItemCount <> 4 then            
      warnlog "Number of possible formats <> 4"
    else
      printlog "There are 4 formats for circle"
    end if
   sleep 1
-  InhaltEinfuegen.OK                '/// paste circle ///'
+  printlog "paste circle"
+  InhaltEinfuegen.OK                
   sleep 1
- Call hCloseDocument                   '/// close document  ///'
-endcase
+  printlog "close document "
+ Call hCloseDocument                   
+endcase 'tdEditPasteSpecial_Circle
 
 '-------------------------------------------------------------------------------
 testcase tiEditPasteSpecial
@@ -447,8 +495,8 @@ testcase tiEditPasteSpecial
   dim i as integer
   dim x as integer
 '   warnlog "TODOTBO: from draw, impress, math..."
-   '/// go into writer, type a text, select all, Edit->Cut, close writer ///'
-   '/// go into application to test, insert every format you can get from Edit->Paste->Special :-) ///'
+   printlog "go into writer, type a text, select all, Edit->Cut, close writer"
+   printlog "go into application to test, insert every format you can get from Edit->Paste->Special :-)"
    gApplication   = "WRITER"
    call hNewDocument
    kontext "DocumentWriter"
@@ -459,28 +507,29 @@ testcase tiEditPasteSpecial
    call hNewDocument
    sleep 1
 
- Printlog " get count of possibilities: "
-   EditPasteSpecial
-   sleep 1
-   Kontext "InhaltEinfuegen"
-   x = Auswahl.GetItemCount
-   for i = 1 to x
-      printlog " - " + i + " - " + Auswahl.GetItemText (i)
-   next i
-   InhaltEinfuegen.Cancel
+    Printlog " get count of possibilities: "
+    EditPasteSpecial
+    sleep 1
+    Kontext "InhaltEinfuegen"
+    x = Auswahl.GetItemCount
+    for i = 1 to x
+        printlog " - " + i + " - " + Auswahl.GetItemText (i)
+    next i
+    InhaltEinfuegen.Cancel
 
- Printlog " insert every possibility"
-   for i = 1 to x
-   Printlog " - processing number: "+i
-      EditPasteSpecial
-      sleep 1
-      Kontext "InhaltEinfuegen"
-      Auswahl.Select i
-      sleep 1
-      InhaltEinfuegen.OK
-      sleep 1
-   next i
-   Call hCloseDocument  '/// close document ///'
-endcase
+    Printlog " insert every possibility"
+    for i = 1 to x
+        Printlog " - processing number: "+i
+        EditPasteSpecial
+        sleep 1
+        Kontext "InhaltEinfuegen"
+        Auswahl.Select i
+        sleep 1
+        InhaltEinfuegen.OK
+        sleep 1
+    next i
+    printlog "close document"
+    Call hCloseDocument
+endcase 'tiEditPasteSpecial
 
 '-------------------------------------------------------------------------------

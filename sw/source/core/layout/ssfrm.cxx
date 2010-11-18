@@ -414,6 +414,19 @@ SwFrm::~SwFrm()
 #endif
 }
 
+/*************************************************************************/
+
+const SwFrmFmt * SwLayoutFrm::GetFmt() const
+{
+    return static_cast< const SwFlyFrmFmt * >( GetDep() );
+}
+
+SwFrmFmt * SwLayoutFrm::GetFmt()
+{
+    return static_cast< SwFlyFrmFmt * >( GetDep() );
+}
+
+
 /*************************************************************************
 |*
 |*    SwLayoutFrm::SetFrmFmt()

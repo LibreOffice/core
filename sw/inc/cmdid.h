@@ -908,6 +908,9 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_UNO_META                         (FN_EXTRA2 + 112)
 #define FN_UNO_NESTED_TEXT_CONTENT          (FN_EXTRA2 + 113)
 
+// #i972: bool items to be passed to SwFrmPage for evaluation
+#define FN_OLE_IS_MATH                      (FN_EXTRA2 + 114)
+#define FN_MATH_BASELINE_ALIGNMENT          (FN_EXTRA2 + 115)
 /*--------------------------------------------------------------------
     Bereich: Hilfe
  --------------------------------------------------------------------*/

@@ -43,32 +43,41 @@
 '      Dateiname.SetText ConvertPath (gTesttoolPath + "global\input\graf_inp\enter.bmp")
 
 testcase tEditDuplicate
- dim Ueber_Text_1
- dim Zaehler
 
- Call hNewDocument						'/// New Impress document ///'
-  Call hRechteckErstellen ( 5, 5, 20, 30 )			'/// Create rectangle ///'
-  EditSelectAll							'/// Select rectangle ///'
-  EditDuplicate							'/// Edit-duplicate ///'
-  Kontext "Duplizieren"
-  Ueber_Text_1 = AnzahlAnKopien.GetText
-  AnzahlAnKopien.SetText "50"					'/// Set number of copies to 50 ///'
-  Duplizieren.Cancel						'/// Cancel Edit Duplicate ///'
-  sleep 1
-   For Zaehler = 1 to 8
-       EditDuplicate						'/// Edit Duplicate ///'
-       sleep 1
-       Kontext "Duplizieren"
-       AnzahlAnKopien.SetText "30"				'/// Number of copies = 30 ///'
+    dim Ueber_Text_1
+    dim Zaehler
 
-       Select Case Zaehler					'/// Setting values for axis and angles ///'
-          Case 1:	XAchse.SetText "0,0"
+    printlog " New Impress document"
+    Call hNewDocument
+    printlog " Create rectangle"
+    Call hRechteckErstellen ( 5, 5, 20, 30 )
+    printlog " Select rectangle"
+    EditSelectAll
+    printlog " Edit-duplicate"
+    EditDuplicate
+    Kontext "Duplizieren"
+    Ueber_Text_1 = AnzahlAnKopien.GetText
+    printlog " Set number of copies to 50"
+    AnzahlAnKopien.SetText "50"
+    printlog " Cancel Edit Duplicate"
+    Duplizieren.Cancel
+    sleep 1
+    For Zaehler = 1 to 8
+        printlog " Edit Duplicate"
+        EditDuplicate
+        sleep 1
+        Kontext "Duplizieren"
+        printlog " Number of copies = 30"
+        AnzahlAnKopien.SetText "30"
+        printlog " Setting values for axis and angles"
+        Select Case Zaehler
+            Case 1:	XAchse.SetText "0,0"
             YAchse.SetText "0,45"
             Hoehe.SetText  "-0,1"
             Breite.SetText "-0,1"
             Drehwinkel.SetText "3"
             Anfang.Select Int((Anfang.GetItemCount * Rnd)+1)
-          Case 2,6:	XAchse.SetText "0,6"
+            Case 2,6:	XAchse.SetText "0,6"
             YAchse.SetText "0,0"
             Hoehe.SetText  "0,15"
             Breite.SetText "0,01"
@@ -78,26 +87,28 @@ testcase tEditDuplicate
             Hoehe.SetText  "-0,1"
             Breite.SetText "0,06"
             Drehwinkel.SetText "11"
-          Case 4,8:	XAchse.SetText "-0,6"
+            Case 4,8:	XAchse.SetText "-0,6"
             YAchse.SetText "0,0"
             Hoehe.SetText  "0,05"
             Breite.SetText "-0,08"
             Drehwinkel.SetText "347"
-          Case 5:	XAchse.SetText "0,1"
+            Case 5:	XAchse.SetText "0,1"
             YAchse.SetText "0,48"
             Hoehe.SetText  "-0,05"
             Breite.SetText "-0,05"
             Drehwinkel.SetText "355"
-    End Select
-    Ende.Select Int((Ende.GetItemCount * Rnd)+1)
-    Duplizieren.OK						'/// Execute Duplicate ///'
-    sleep 1
-   Next Zaehler
-  sleep 2
- Call hCloseDocument						'/// Close document ///'
+        End Select
+        Ende.Select Int((Ende.GetItemCount * Rnd)+1)
+        printlog " Execute Duplicate"
+        Duplizieren.OK
+        sleep 1
+    Next Zaehler
+    sleep 2
+    printlog " Close document"
+    Call hCloseDocument
  
 endcase 'tEditDuplicate
-'---------------------------------------------------------
+'-------------------------------------------------------------------------------
 testcase tEditFields
 
     Call hNewDocument
@@ -148,68 +159,85 @@ endcase 'tEditFields
 '--------------------------------------------------------
 testcase tEditDeleteSlide
 
- dim Ueber_Text_1 as string
- dim Ueber_Text_2 as string
- dim Ueber_Text_3 as string
-  Call hNewDocument						'/// New impress document ///'
-  sleep 3
-  Call hRechteckErstellen ( 30, 30, 70, 70 )			'/// create rectangle ///'
-  sleep 1
-  ContextPositionAndSize					'/// open Position and Size dialog ///'
-  kontext
-  Messagebox.SetPage TabPositionAndSize
-  kontext "TabPositionAndSize"
-  Ueber_Text_1 = PositionX.GetText				'/// get position values for rectangle ///'
-  TabPositionAndSize.OK
-  InsertSlide							'/// insert slide ///'
-  sleep 2
-  hTypekeys "<Pagedown>"
-  sleep 2
-  Call hRechteckErstellen ( 40, 40, 60, 60 )			'/// create rectangle ///'
-  sleep 1
-  EditDeleteSlide						'/// Delete slide ///'
-  sleep 1
-  Ueber_Text_2 = "OK   Page was closed"
-  Ueber_Text_3 = "Page was not closed"
-  call Position_Vergleichen (Ueber_Text_1,Ueber_Text_2,Ueber_Text_3)					'/// compare position of rectange ///'
-  sleep 1
- Call hCloseDocument						'/// close document ///'
+    dim Ueber_Text_1 as string
+    dim Ueber_Text_2 as string
+    dim Ueber_Text_3 as string
+
+    printlog " New impress document"
+    Call hNewDocument
+    sleep 3
+    printlog " create rectangle"
+    Call hRechteckErstellen ( 30, 30, 70, 70 )
+    sleep 1
+    printlog " open Position and Size dialog"
+    ContextPositionAndSize
+    kontext
+    Messagebox.SetPage TabPositionAndSize
+    kontext "TabPositionAndSize"
+    printlog " get position values for rectangle"
+    Ueber_Text_1 = PositionX.GetText
+    TabPositionAndSize.OK
+    printlog " insert slide"
+    InsertSlide
+    sleep 2
+    hTypekeys "<Pagedown>"
+    sleep 2
+    printlog " create rectangle"
+    Call hRechteckErstellen ( 40, 40, 60, 60 )
+    sleep 1
+    printlog " Delete slide"
+    EditDeleteSlide
+    sleep 1
+    Ueber_Text_2 = "OK   Page was closed"
+    Ueber_Text_3 = "Page was not closed"
+    printlog " compare position of rectange"
+    call Position_Vergleichen (Ueber_Text_1,Ueber_Text_2,Ueber_Text_3)
+    sleep 1
+    printlog " close document"
+    Call hCloseDocument
  
 endcase 'tEditDeleteSlide
 '--------------------------------------------------------
 testcase tEditLinks
 
- Call  hNewDocument						'/// New document ///'
-  InsertGraphicsFromFile					'/// insert graphic (sample.bmp) ///'
-  Kontext "GrafikEinfuegenDlg"
-  Link.Check							'/// check link ///'
-      Dateiname.SetText ConvertPath (gTesttoolPath + "global\input\graf_inp\enter.bmp")
-      Oeffnen.Click
-  sleep 3
-  EditLinksDraw					'/// edit links ///'
-  Kontext "VerknuepfungenBearbeiten"
-  Aktualisieren.Click						'/// refresh ///'
-  sleep 1
-  'Aendern							'kann man noch den Dialog aufrufen...
-  Loesen.Click
-  sleep 1
-  Kontext
-  Messagebox.Yes
-  VerknuepfungenBearbeiten.Close				'/// close dialog ///'
-  sleep 1
-  try
-    EditLinksDraw				'/// check if last changes remain in the dialog ///'
+    printlog " New document"
+    Call  hNewDocument
+    printlog " insert graphic (sample.bmp)"
+    InsertGraphicsFromFile
+    Kontext "GrafikEinfuegenDlg"
+    printlog " check link"
+    Link.Check
+    Dateiname.SetText ConvertPath (gTesttoolPath + "global\input\graf_inp\enter.bmp")
+    Oeffnen.Click
+    sleep 3
+    printlog " edit links"
+    EditLinksDraw
     Kontext "VerknuepfungenBearbeiten"
+    printlog " refresh"
+    Aktualisieren.Click
+    sleep 1
     Loesen.Click
     sleep 1
     Kontext
     Messagebox.Yes
+    printlog " close dialog"
     VerknuepfungenBearbeiten.Close
-    warnlog "Break link does not work"
+    sleep 1
+    try
+        printlog " check if last changes remain in the dialog"
+        EditLinksDraw
+        Kontext "VerknuepfungenBearbeiten"
+        Loesen.Click
+        sleep 1
+        Kontext
+        Messagebox.Yes
+        VerknuepfungenBearbeiten.Close
+        warnlog "Break link does not work"
   catch
-    printlog "OK   Link broken"
+        printlog "OK   Link broken"
   endcatch
- Call hCloseDocument						'/// close document ///'
+    printlog " close document"
+    Call hCloseDocument
  
 endcase 'tEditLinks
 '---------------------------------------------------------
@@ -218,77 +246,87 @@ testcase tdEditDeleteLayer
  dim Ueber_Text_1 as string
  dim Ueber_Text_2 as string
  dim Ueber_Text_3 as string
- Call hNewDocument                     '/// new document ///'
-  sleep 2
-  Call hRechteckErstellen ( 30, 30, 70, 70 )          '/// create rectangle ///'
-  sleep 1
-'/// View->Layer ///'
-   ViewLayer
-  ContextPositionAndSize                  '/// get position values for rectangle ///'
-  kontext
-  active.SetPage TabPositionAndSize
-  kontext "TabPositionAndSize"
-  Ueber_Text_1 = PositionX.GetText
-  TabPositionAndSize.OK
-  InsertLayer                             '/// insert layer ///'
-  Kontext "EbeneEinfuegenDlg"
-  EbeneEinfuegenDlg.OK
-  Call hRechteckErstellen ( 10, 40, 90, 60 )          '/// create rectangle on created layer ///'
-  sleep 1
-  EditDeleteLayer                   '/// delete layer ///'
-  sleep 1
-  Kontext
-  Active.Yes
-  sleep 1
-  Ueber_Text_2 = "OK   Layer was deleted"            '/// compare position of selected rectangle with position of created rectangle in deteted layer ///'
-  Ueber_Text_3 = "Layer was not deleted"
-  Call Position_Vergleichen (Ueber_Text_1,Ueber_Text_2,Ueber_Text_3)
-  sleep 1
- Call hCloseDocument                   '/// close document ///'
+
+    printlog " new document"
+    Call hNewDocument
+    sleep 2
+    printlog " create rectangle"
+    Call hRechteckErstellen ( 30, 30, 70, 70 )
+    sleep 1
+    printlog " View->Layer"
+    ViewLayer
+    printlog " get position values for rectangle"
+    ContextPositionAndSize
+    kontext
+    active.SetPage TabPositionAndSize
+    kontext "TabPositionAndSize"
+    Ueber_Text_1 = PositionX.GetText
+    TabPositionAndSize.OK
+    printlog " insert layer"
+    InsertLayer
+    Kontext "EbeneEinfuegenDlg"
+    EbeneEinfuegenDlg.OK
+    printlog " create rectangle on created layer"
+    Call hRechteckErstellen ( 10, 40, 90, 60 )
+    sleep 1
+    printlog " delete layer"
+    EditDeleteLayer
+    sleep 1
+    Kontext
+    Active.Yes
+    sleep 1
+    Ueber_Text_2 = "OK   Layer was deleted"
+    Ueber_Text_3 = "Layer was not deleted"
+    printlog " compare position of selected rectangle with position of created rectangle in deteted layer"
+    Call Position_Vergleichen (Ueber_Text_1,Ueber_Text_2,Ueber_Text_3)
+    sleep 1
+    printlog " close document"
+    Call hCloseDocument
  
 endcase 'tdEditDeleteLayer
 '--------------------------------------------------------
 testcase tEditObjectEdit
 
- Dim Schrieb  as string
+    Dim Schrieb  as string
 
-  Schrieb = gOLEWriter
-  if Schrieb = "" then
-      warnlog " the OLE is not defined :-((( gOLEWriter: " + iSprache
-  else
+    Schrieb = gOLEWriter
+    if Schrieb = "" then
+        warnlog " the OLE is not defined :-((( gOLEWriter: " + iSprache
+    else
+        printlog " new document"
+        Call hNewDocument
+        call sSelectEmptyLayout
+        sleep 1
+        printlog " insert writer ole object"
+        InsertObjectOLEObject             
+        Kontext "OLEObjektEinfuegen"
+        sleep 3
+        if ObjektTyp.GetItemCount = 0 Then
+            Warnlog "- No available Ole-entry in the list, maybe an error in the Install.ini?"
+            sleep 1
+            OleObjektEinfuegen.Cancel
+            sleep 1
+        else
+            ObjektTyp.Select Schrieb
+            sleep 1
+            OLEObjektEinfuegen.OK
+            sleep 3
+            gMouseMove  10,10,90,90
+            sleep 1
+            EditSelectAll
 
-      Call hNewDocument
-      call sSelectEmptyLayout
-      sleep 1               '/// new document ///'
-      InsertObjectOLEObject             '/// insert writer ole object ///'
-      Kontext "OLEObjektEinfuegen"
-      sleep 3
-      if ObjektTyp.GetItemCount = 0 Then
-         Warnlog "- No available Ole-entry in the list, maybe an error in the Install.ini?"
-         sleep 1
-         OleObjektEinfuegen.Cancel
-         sleep 1
-       else
-
-          ObjektTyp.Select Schrieb
-          sleep 1
-          OLEObjektEinfuegen.OK
-          sleep 3                                 ' Changed from Sleep 1 to Sleep 3
-          gMouseMove  10,10,90,90
-          sleep 1
-          EditSelectAll
-
-          try
-             EditObjectEdit      'keine ID      '/// try edit-objects ///'
-             sleep 2
-          catch
-             Warnlog "-  The EditObjectEdit did not work"
-          endcatch
+            try
+                EditObjectEdit
+                sleep 2
+            catch
+                Warnlog "-  The EditObjectEdit did not work"
+            endcatch
 
 
-          gMouseClick 90,90
+            gMouseClick 90,90
         end if
-      sleep 1
-     Call hCloseDocument                     '/// close document ///'
-  endif
+        sleep 1
+        printlog " close document"
+        Call hCloseDocument
+    endif
 endcase 'tEditObjectEdit

@@ -32,22 +32,15 @@
 #undef SW_DLLIMPLEMENTATION
 #endif
 
-#include <hintids.hxx>
-#include <cmdid.h>
-#include <vcl/svapp.hxx>
+#ifndef _SVSTDARR_HXX
 #define _SVSTDARR_STRINGSDTOR
 #include <svl/svstdarr.hxx>
-#include <svl/cjkoptions.hxx>
-#include <svtools/ctrltool.hxx>
-#include <svl/eitem.hxx>
-#include <svx/htmlmode.hxx>
-#include <sfx2/printer.hxx>
-#include <sfx2/bindings.hxx>
-#include <svx/xtable.hxx>
-#include <editeng/fhgtitem.hxx>
-#include <editeng/fontitem.hxx>
-#include <editeng/langitem.hxx>
-#include <svx/dlgutil.hxx>
+#endif
+
+#include <optpage.hxx>
+#include <doc.hxx>
+#include <hintids.hxx>
+#include <cmdid.h>
 #include <fmtcol.hxx>
 #include <charatr.hxx>
 #include <swtypes.hxx>
@@ -57,11 +50,10 @@
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
 #include <uitool.hxx>
-#include <cfgitems.hxx> //Items fuer Sw-Seiten
+#include <cfgitems.hxx>
 #include <poolfmt.hxx>
 #include <uiitems.hxx>
 #include <initui.hxx>
-#include <optpage.hxx>
 #include <printdata.hxx>
 #include <modcfg.hxx>
 #include <srcview.hxx>
@@ -71,13 +63,26 @@
 #include <config.hrc>
 #include <redlopt.hrc>
 #include <optdlg.hrc>
-#include <svx/strarray.hxx>
-#include <svl/slstitm.hxx>
-#include <sfx2/request.hxx>
 #include <swwrtshitem.hxx>
-#include <svl/ctloptions.hxx>
-
 #include <unomid.h>
+
+#include <editeng/fhgtitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/langitem.hxx>
+#include <sfx2/request.hxx>
+#include <sfx2/printer.hxx>
+#include <sfx2/bindings.hxx>
+#include <svl/slstitm.hxx>
+#include <svl/ctloptions.hxx>
+#include <svl/eitem.hxx>
+#include <svl/cjkoptions.hxx>
+#include <svtools/ctrltool.hxx>
+#include <svx/htmlmode.hxx>
+#include <svx/xtable.hxx>
+#include <svx/dlgutil.hxx>
+#include <svx/strarray.hxx>
+#include <vcl/svapp.hxx>
+
 
 
 using namespace ::com::sun::star;
@@ -1488,6 +1493,7 @@ IMPL_LINK(SwTableOptionsTabPage, CheckBoxHdl, CheckBox*, EMPTYARG)
     aRepeatHeaderCB.Enable(aHeaderCB.IsChecked());
     return 0;
 }
+
 void SwTableOptionsTabPage::PageCreated (SfxAllItemSet aSet)
 {
     SFX_ITEMSET_ARG (&aSet,pWrtSh,SwWrtShellItem,SID_WRT_SHELL,sal_False);
@@ -1525,15 +1531,17 @@ SwShdwCrsrOptionsTabPage::SwShdwCrsrOptionsTabPage( Window* pParent,
     aFillTabRB( this, SW_RES( RB_SHDWCRSFILLTAB )),
     aFillSpaceRB( this, SW_RES( RB_SHDWCRSFILLSPACE )),
     aCrsrOptFL   ( this, SW_RES( FL_CRSR_OPT)),
-    aCrsrInProtCB( this, SW_RES( CB_ALLOW_IN_PROT ))
+    aCrsrInProtCB( this, SW_RES( CB_ALLOW_IN_PROT )),
+    m_aLayoutOptionsFL( this, SW_RES( FL_LAYOUT_OPTIONS ) ),
+    m_aMathBaselineAlignmentCB( this, SW_RES( CB_MATH_BASELINE_ALIGNMENT ) ),
+    m_pWrtShell( NULL )
 {
     FreeResource();
     const SfxPoolItem* pItem = 0;
-    SwShadowCursorItem aOpt;
 
+    SwShadowCursorItem aOpt;
     if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_SHADOWCURSOR, FALSE, &pItem ))
         aOpt = *(SwShadowCursorItem*)pItem;
-
     aOnOffCB.Check( aOpt.IsOn() );
 
     BYTE eMode = aOpt.GetMode();
@@ -1578,6 +1586,15 @@ SfxTabPage* SwShdwCrsrOptionsTabPage::Create( Window* pParent, const SfxItemSet&
     return new SwShdwCrsrOptionsTabPage( pParent, rSet );
 }
 
+
+void SwShdwCrsrOptionsTabPage::PageCreated( SfxAllItemSet aSet )
+{
+    SFX_ITEMSET_ARG (&aSet,pWrtSh,SwWrtShellItem,SID_WRT_SHELL,sal_False);
+    if (pWrtSh)
+        SetWrtShell(pWrtSh->GetValue());
+}
+
+
 BOOL SwShdwCrsrOptionsTabPage::FillItemSet( SfxItemSet& rSet )
 {
     SwShadowCursorItem aOpt;
@@ -1602,6 +1619,10 @@ BOOL SwShdwCrsrOptionsTabPage::FillItemSet( SfxItemSet& rSet )
         rSet.Put( aOpt );
         bRet = TRUE;
     }
+
+    m_pWrtShell->GetDoc()->set( IDocumentSettingAccess::MATH_BASELINE_ALIGNMENT,
+            m_aMathBaselineAlignmentCB.IsChecked() );
+    bRet |= m_aMathBaselineAlignmentCB.IsChecked() != m_aMathBaselineAlignmentCB.GetSavedValue();
 
     if( aCrsrInProtCB.IsChecked() != aCrsrInProtCB.GetSavedValue())
     {
@@ -1636,11 +1657,10 @@ BOOL SwShdwCrsrOptionsTabPage::FillItemSet( SfxItemSet& rSet )
 void SwShdwCrsrOptionsTabPage::Reset( const SfxItemSet& rSet )
 {
     const SfxPoolItem* pItem = 0;
-    SwShadowCursorItem aOpt;
 
+    SwShadowCursorItem aOpt;
     if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_SHADOWCURSOR, FALSE, &pItem ))
         aOpt = *(SwShadowCursorItem*)pItem;
-
     aOnOffCB.Check( aOpt.IsOn() );
 
     BYTE eMode = aOpt.GetMode();
@@ -1648,6 +1668,9 @@ void SwShdwCrsrOptionsTabPage::Reset( const SfxItemSet& rSet )
     aFillMarginRB.Check( FILL_MARGIN == eMode );
     aFillTabRB.Check( FILL_TAB == eMode );
     aFillSpaceRB.Check( FILL_SPACE == eMode );
+
+    m_aMathBaselineAlignmentCB.Check( m_pWrtShell->GetDoc()->get( IDocumentSettingAccess::MATH_BASELINE_ALIGNMENT ) );
+    m_aMathBaselineAlignmentCB.SaveValue();
 
     if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_CRSR_IN_PROTECTED, FALSE, &pItem ))
         aCrsrInProtCB.Check(((const SfxBoolItem*)pItem)->GetValue());
@@ -2591,6 +2614,5 @@ IMPL_LINK_INLINE_START( SwTestTabPage, AutoClickHdl, CheckBox *, EMPTYARG )
 }
 IMPL_LINK_INLINE_END( SwTestTabPage, AutoClickHdl, CheckBox *, EMPTYARG )
 #endif
-
 
 

@@ -41,8 +41,7 @@ function tiPEngineOptionsTest
     dim lala, optsound, os, oa, odc, ota, ets, etspeed, etrep, etshap, etgt as integer
 
      Kontext "Tasks"
-'     if (NOT bError) then
-        '/// CLick on button '...' (Options) ///'
+        printlog "CLick on button '...' (Options)"
         EffectOptions.Click
         kontext "TabEffect"
         if TabEffect.Exists(5) then
@@ -56,13 +55,6 @@ function tiPEngineOptionsTest
                   kontext "TabEffect"
                else
                   kontext "TabEffect"
-'                  if play.isEnabled then
-'                     try
-'                        play.click
-'                     catch
-'                        warnlog Sound.GetSelText + " wasn't played correctly."
-'                     endcatch
-'                  endif
                endif
            next os
            if AfterAnimation.isEnabled AND AfterAnimation.isVisible then
@@ -89,7 +81,7 @@ function tiPEngineOptionsTest
            for ota = 1 to TextAnimation.GetItemCount
                TextAnimation.Select ota
            next ota
-           '/// switch to TabPage 'Timing' ///'
+           printlog "switch to TabPage 'Timing'"
            Kontext
            Active.SetPage TabTiming
            kontext "TabTiming"
@@ -130,7 +122,7 @@ function tiPEngineOptionsTest
            else
               warnlog "Impress:Tasks Pane:Custom Animation:Effect Options: Timing TabPage didn't work."
            endif
-           '/// switch to TabPage 'Timing' ///'
+           printlog "switch to TabPage 'Timing'"
            Kontext
            active.setPage TabTextAnimation
            kontext "TabTextAnimation"
@@ -163,9 +155,9 @@ function tiPEngineOptionsTest
            warnlog "Impress:Tasks Pane:Custom Animation:... button didn't work."
         endif
         Kontext "Tasks"
-end function
+end function 'tiPEngineOptionsTest
 
-
+'-------------------------------------------------------------------------------
 
 function optionstest2
     dim filedialogue as boolean
@@ -188,7 +180,7 @@ function optionstest2
            else
               Warnlog "DelayBetweenCharacters should have been enabled"
            endif
-           '/// switch to TabPage 'Timing' ///'
+           printlog "switch to TabPage 'Timing'"
            Kontext
            Active.SetPage TabTiming
            kontext "TabTiming"
@@ -234,7 +226,7 @@ function optionstest2
            else
               warnlog "Impress:Tasks Pane:Custom Animation:Effect Options: Timing TabPage didn't work."
            endif
-           '/// switch to TabPage 'Timing' ///'
+           printlog "switch to TabPage 'Timing'"
            Kontext
            active.setPage TabTextAnimation
            kontext "TabTextAnimation"
@@ -267,4 +259,4 @@ function optionstest2
            warnlog "Impress:Tasks Pane:Custom Animation:... button didn't work."
         endif
         Kontext "Tasks"
-end function
+end function 'optionstest2

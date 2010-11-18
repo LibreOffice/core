@@ -93,6 +93,7 @@ SwFrmDlg::SwFrmDlg( SfxViewFrame*       pViewFrame,
         aTmp += *pStr;
         aTmp += ')';
     }
+
     AddTabPage(TP_FRM_STD,  SwFrmPage::Create, 0);
     AddTabPage(TP_FRM_ADD,  SwFrmAddPage::Create, 0);
     AddTabPage(TP_FRM_WRAP, SwWrapTabPage::Create, 0);
@@ -217,3 +218,4 @@ void SwFrmDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
         break;
     }
 }
+

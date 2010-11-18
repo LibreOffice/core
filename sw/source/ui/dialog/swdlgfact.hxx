@@ -582,5 +582,3 @@ struct SwDialogsResMgr
 };
 
 #endif
-
-
