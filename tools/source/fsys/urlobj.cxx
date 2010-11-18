@@ -2336,7 +2336,7 @@ bool INetURLObject::setPassword(rtl::OUString const & rThePassword,
     else if (m_aHost.isPresent())
     {
         m_aAbsURIRef.insert(m_aHost.getBegin(),
-            rtl::OUString::createFromAscii(":@"));
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ":@" )));
         m_aUser.set(m_aAbsURIRef, rtl::OUString(), m_aHost.getBegin());
         nDelta
             = m_aAuth.set(m_aAbsURIRef, aNewAuth, m_aHost.getBegin() + 1) + 2;
