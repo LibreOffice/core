@@ -32,7 +32,7 @@
 
 #define OUTER_MARGIN_HOR     4
 #define OUTER_MARGIN_VER     4
-#define DATA_FIELD_BTN_GAP   4     // must be an even number
+#define DATA_FIELD_BTN_GAP   2     // must be an even number
 #define ROW_FIELD_BTN_GAP    2     // must be an even number
 #define FIELD_BTN_WIDTH     81
 #define FIELD_BTN_HEIGHT    23

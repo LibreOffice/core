@@ -37,6 +37,8 @@
 #include <vcl/scrbar.hxx>
 #include <cppuhelper/weakref.hxx>
 
+#define NEW_SELECT_FIELD 1
+
 #define PAGE_SIZE   16      // count of visible fields for scrollbar
 #define LINE_SIZE   8       // count of fields per column for scrollbar
 #define MAX_FIELDS  8       // maximum count of fields for row/col/data area
@@ -339,6 +341,20 @@ private:
 
 // ============================================================================
 
+#if NEW_SELECT_FIELD
+
+class ScDPSelectFieldControl : public ScDPHorFieldControl
+{
+public:
+    ScDPSelectFieldControl(
+        ScDPLayoutDlg* pDialog, const ResId& rResId, FixedText* pCaption);
+    virtual ~ScDPSelectFieldControl();
+
+    virtual ScDPFieldType GetFieldType() const;
+};
+
+#else
+
 class ScDPSelectFieldControl : public ScDPFieldControlBase
 {
 public:
@@ -364,6 +380,7 @@ protected:
     virtual size_t          GetDisplayPosition(size_t nIndex) const { return 0; }
     virtual void            Redraw();
 };
+#endif
 
 // ============================================================================
 

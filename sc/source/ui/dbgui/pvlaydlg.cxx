@@ -146,7 +146,7 @@ ScDPLayoutDlg::ScDPLayoutDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pPar
         aWndRow         ( this, ScResId( WND_ROW ), &aFtRow ),
         aFtData         ( this, ScResId( FT_DATA ) ),
         aWndData        ( this, ScResId( WND_DATA ), &aFtData ),
-        aWndSelect      ( this, ScResId( WND_SELECT ), String(ScResId(STR_SELECT)) ),
+        aWndSelect      ( this, ScResId( WND_SELECT ), NULL ),
         aSlider         ( this, ScResId( WND_HSCROLL ) ),
         aFtInfo         ( this, ScResId( FT_INFO ) ),
 
@@ -189,7 +189,8 @@ ScDPLayoutDlg::ScDPLayoutDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pPar
                                 GetViewData() ),
         pDoc            ( ((ScTabViewShell*)SfxViewShell::Current())->
                                 GetViewData()->GetDocument() ),
-        bRefInputMode   ( FALSE )
+        bRefInputMode   (false),
+        mbValidSrcRange (false)
 {
     xDlgDPObject->SetAlive( TRUE );     // needed to get structure information
     xDlgDPObject->FillOldParam( thePivotData, FALSE );
@@ -352,11 +353,6 @@ void ScDPLayoutDlg::Init(bool bNewOutput)
     aWndSelect.SetHelpId( HID_SC_DPLAY_SELECT );
 
     InitFocus();
-
-//  SetDispatcherLock( TRUE ); // Modal-Modus einschalten
-
-    //@BugID 54702 Enablen/Disablen nur noch in Basisklasse
-    //SFX_APPWINDOW->Disable(FALSE);        //! allgemeine Methode im ScAnyRefDlg
 }
 
 //----------------------------------------------------------------------------
@@ -1412,6 +1408,7 @@ void ScDPLayoutDlg::CalcWndSizes()
     aWndRow.CalcSize();
     aWndCol.CalcSize();
     aWndData.CalcSize();
+    aWndSelect.CalcSize();
 }
 
 namespace {
@@ -1467,6 +1464,7 @@ bool ScDPLayoutDlg::GetPivotArrays(
 
 void ScDPLayoutDlg::UpdateSrcRange()
 {
+    StackPrinter __stack_printer__("ScDPLayoutDlg::UpdateSrcRange");
     String  theCurPosStr = aEdInPos.GetText();
     USHORT  nResult = ScRange().Parse(theCurPosStr, pDoc, pDoc->GetAddressConvention());
 

@@ -181,7 +181,8 @@ private:
     ScPivotParam            thePivotData;
     ScViewData*             pViewData;
     ScDocument*             pDoc;
-    BOOL                    bRefInputMode;
+    bool                    bRefInputMode;
+    bool                    mbValidSrcRange;
 
 private:
     void                    Init            (bool bNewOutput);

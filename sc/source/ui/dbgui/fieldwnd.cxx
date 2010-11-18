@@ -41,7 +41,7 @@
 #include "dpuiglobal.hxx"
 #include "AccessibleDataPilotControl.hxx"
 #include "scresid.hxx"
-#include "sc.hrc"
+#include "pivot.hrc"
 
 using ::rtl::OUString;
 using ::std::vector;
@@ -1215,6 +1215,26 @@ IMPL_LINK(ScDPRowFieldControl, EndScrollHdl, ScrollBar*, EMPTYARG)
 
 //=============================================================================
 
+#if NEW_SELECT_FIELD
+
+ScDPSelectFieldControl::ScDPSelectFieldControl(
+        ScDPLayoutDlg* pDialog, const ResId& rResId, FixedText* pCaption) :
+    ScDPHorFieldControl(pDialog, rResId, pCaption)
+{
+    SetName(String(ScResId(STR_SELECT)));
+}
+
+ScDPSelectFieldControl::~ScDPSelectFieldControl()
+{
+}
+
+ScDPFieldType ScDPSelectFieldControl::GetFieldType() const
+{
+    return TYPE_SELECT;
+}
+
+#else
+
 ScDPSelectFieldControl::ScDPSelectFieldControl(
     ScDPLayoutDlg* pDialog, const ResId& rResId, const String& rName ) :
     ScDPFieldControlBase( pDialog, rResId, NULL )
@@ -1325,6 +1345,8 @@ ScDPFieldType ScDPSelectFieldControl::GetFieldType() const
 {
     return TYPE_SELECT;
 }
+
+#endif
 
 //=============================================================================
 
