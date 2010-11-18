@@ -1162,9 +1162,9 @@ void SfxObjectShell::PostActivateEvent_Impl( SfxViewFrame* pFrame )
             sal_uInt16 nId = pImp->nEventId;
             pImp->nEventId = 0;
             if ( nId == SFX_EVENT_OPENDOC )
-                pSfxApp->NotifyEvent(SfxEventHint( nId, GlobalEventConfig::GetEventName(STR_EVENT_OPENDOC), this ), sal_False);
+                pSfxApp->NotifyEvent(SfxViewEventHint( nId, GlobalEventConfig::GetEventName(STR_EVENT_OPENDOC), this, pFrame->GetFrame().GetController() ), sal_False);
             else if (nId == SFX_EVENT_CREATEDOC )
-                pSfxApp->NotifyEvent(SfxEventHint( nId, GlobalEventConfig::GetEventName(STR_EVENT_CREATEDOC), this ), sal_False);
+                pSfxApp->NotifyEvent(SfxViewEventHint( nId, GlobalEventConfig::GetEventName(STR_EVENT_CREATEDOC), this, pFrame->GetFrame().GetController() ), sal_False);
         }
     }
 }

@@ -36,6 +36,7 @@
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/frame/XController2.hpp>
 
 class SfxObjectShell;
 
@@ -63,6 +64,29 @@ public:
 
     SfxObjectShell*     GetObjShell() const
                         { return pObjShell; }
+};
+
+//-------------------------------------------------------------------
+
+class SFX2_DLLPUBLIC SfxViewEventHint : public SfxEventHint
+{
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController2 > xViewController;
+
+public:
+    TYPEINFO();
+
+    SfxViewEventHint( USHORT nId, const ::rtl::OUString& aName, SfxObjectShell *pObj, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >& xController )
+                        : SfxEventHint( nId, aName, pObj )
+                        , xViewController( xController, ::com::sun::star::uno::UNO_QUERY )
+                        {}
+
+    SfxViewEventHint( USHORT nId, const ::rtl::OUString& aName, SfxObjectShell *pObj, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController2 >& xController )
+                        : SfxEventHint( nId, aName, pObj )
+                        , xViewController( xController )
+                        {}
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController2 > GetController() const
+                        { return xViewController; }
 };
 
 //-------------------------------------------------------------------

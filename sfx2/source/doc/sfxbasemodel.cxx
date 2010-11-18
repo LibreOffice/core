@@ -2373,6 +2373,32 @@ void SAL_CALL SfxBaseModel::removeEventListener( const uno::Reference< XDOCEVENT
     m_pData->m_aInterfaceContainer.removeInterface( ::getCppuType((const uno::Reference< XDOCEVENTLISTENER >*)0), aListener );
 }
 
+//--------------------------------------------------------------------------------------------------------
+//  XDocumentEventBroadcaster
+//--------------------------------------------------------------------------------------------------------
+// ---------------------------------
+void SAL_CALL SfxBaseModel::addDocumentEventListener( const uno::Reference< document::XDocumentEventListener >& aListener )
+    throw ( uno::RuntimeException )
+{
+    SfxModelGuard aGuard( *this, SfxModelGuard::E_INITIALIZING );
+    m_pData->m_aInterfaceContainer.addInterface( ::getCppuType((const uno::Reference< document::XDocumentEventListener >*)0), aListener );
+}
+
+// ---------------------------------
+void SAL_CALL SfxBaseModel::removeDocumentEventListener( const uno::Reference< document::XDocumentEventListener >& aListener )
+    throw ( uno::RuntimeException )
+{
+    SfxModelGuard aGuard( *this );
+    m_pData->m_aInterfaceContainer.removeInterface( ::getCppuType((const uno::Reference< document::XDocumentEventListener >*)0), aListener );
+}
+
+// ---------------------------------
+void SAL_CALL SfxBaseModel::notifyDocumentEvent( const ::rtl::OUString& _EventName, const uno::Reference< frame::XController2 >& _ViewController, const uno::Any& _Supplement )
+    throw ( lang::IllegalArgumentException, lang::NoSupportException, uno::RuntimeException )
+{
+    throw lang::NoSupportException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SfxBaseModel controlls all the sent notifications itself!" ) ), uno::Reference< uno::XInterface >() );
+}
+
 //________________________________________________________________________________________________________
 //  SfxListener
 //________________________________________________________________________________________________________
@@ -2516,7 +2542,9 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
             break;
             }
 
-            postEvent_Impl( pNamedHint->GetEventName() );
+
+            SfxViewEventHint* pViewHint = PTR_CAST( SfxViewEventHint, &rHint );
+            postEvent_Impl( pNamedHint->GetEventName(), pViewHint ? pViewHint->GetController() : uno::Reference< frame::XController2 >() );
         }
 
         if ( pSimpleHint )
@@ -2869,8 +2897,32 @@ void SfxBaseModel::impl_store(  const   ::rtl::OUString&                   sURL 
 }
 
 //********************************************************************************************************
+namespace {
+template< typename ListenerT, typename EventT >
+class NotifySingleListenerIgnoreRE
+{
+private:
+    typedef void ( SAL_CALL ListenerT::*NotificationMethod )( const EventT& );
+    NotificationMethod  m_pMethod;
+    const EventT&       m_rEvent;
+public:
+    NotifySingleListenerIgnoreRE( NotificationMethod method, const EventT& event ) : m_pMethod( method ), m_rEvent( event ) { }
 
-void SfxBaseModel::postEvent_Impl( ::rtl::OUString aName )
+    void operator()( const uno::Reference<ListenerT>& listener ) const
+    {
+        try
+        {
+            (listener.get()->*m_pMethod)( m_rEvent );
+        }
+        catch( uno::RuntimeException& )
+        {
+            // this exception is ignored to avoid problems with invalid listeners, the listener should be probably thrown away in future
+        }
+    }
+};
+} // anonymous namespace
+
+void SfxBaseModel::postEvent_Impl( const ::rtl::OUString& aName, const uno::Reference< frame::XController2 >& xController )
 {
     // object already disposed?
     if ( impl_isDisposed() )
@@ -2880,34 +2932,41 @@ void SfxBaseModel::postEvent_Impl( ::rtl::OUString aName )
     if (!aName.getLength())
         return;
 
-    ::cppu::OInterfaceContainerHelper* pIC = m_pData->m_aInterfaceContainer.getContainer(
-                                        ::getCppuType((const uno::Reference< XDOCEVENTLISTENER >*)0) );
-    if( pIC )
-
+    ::cppu::OInterfaceContainerHelper* pIC =
+        m_pData->m_aInterfaceContainer.getContainer( ::getCppuType( (const uno::Reference< document::XDocumentEventListener >*)0 ) );
+    if ( pIC )
     {
 #ifdef DBG_UTIL
-        ByteString aTmp( "SfxEvent: ");
+        ByteString aTmp( "SfxDocumentEvent: " );
         aTmp += ByteString( String(aName), RTL_TEXTENCODING_UTF8 );
         DBG_TRACE( aTmp.GetBuffer() );
 #endif
-        document::EventObject aEvent( (frame::XModel *)this, aName );
-        ::cppu::OInterfaceContainerHelper aIC( m_aMutex );
-        uno::Sequence < uno::Reference < uno::XInterface > > aElements = pIC->getElements();
-        for ( sal_Int32 nElem=0; nElem<aElements.getLength(); nElem++ )
-            aIC.addInterface( aElements[nElem] );
-        ::cppu::OInterfaceIteratorHelper aIt( aIC );
-        while( aIt.hasMoreElements() )
-        {
-            try
-            {
-                ((XDOCEVENTLISTENER *)aIt.next())->notifyEvent( aEvent );
-            }
-            catch( uno::RuntimeException& )
-            {
-                aIt.remove();
-            }
-        }
+
+        document::DocumentEvent aDocumentEvent( (frame::XModel*)this, aName, xController, uno::Any() );
+
+        pIC->forEach< document::XDocumentEventListener, NotifySingleListenerIgnoreRE< document::XDocumentEventListener, document::DocumentEvent > >(
+            NotifySingleListenerIgnoreRE< document::XDocumentEventListener, document::DocumentEvent >(
+                &document::XDocumentEventListener::documentEventOccured,
+                aDocumentEvent ) );
     }
+
+    pIC = m_pData->m_aInterfaceContainer.getContainer( ::getCppuType( (const uno::Reference< document::XEventListener >*)0 ) );
+    if ( pIC )
+    {
+#ifdef DBG_UTIL
+        ByteString aTmp( "SfxEvent: " );
+        aTmp += ByteString( String(aName), RTL_TEXTENCODING_UTF8 );
+        DBG_TRACE( aTmp.GetBuffer() );
+#endif
+
+        document::EventObject aEvent( (frame::XModel*)this, aName );
+
+        pIC->forEach< document::XEventListener, NotifySingleListenerIgnoreRE< document::XEventListener, document::EventObject > >(
+            NotifySingleListenerIgnoreRE< document::XEventListener, document::EventObject >(
+                &document::XEventListener::notifyEvent,
+                aEvent ) );
+    }
+
 }
 
 uno::Reference < container::XIndexAccess > SAL_CALL SfxBaseModel::getViewData() throw(::com::sun::star::uno::RuntimeException)

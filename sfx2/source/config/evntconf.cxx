@@ -68,6 +68,7 @@
 // -----------------------------------------------------------------------
 TYPEINIT1(SfxEventHint, SfxHint);
 TYPEINIT1(SfxEventNamesItem, SfxPoolItem);
+TYPEINIT1(SfxViewEventHint, SfxHint);
 
 using namespace com::sun::star;
 
