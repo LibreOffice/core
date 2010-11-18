@@ -778,9 +778,7 @@ sub get_current_version
 ###############################################################################################
 # Setting the download file name
 # Syntax:
-# (PRODUCTNAME)_(VERSION)_(TIMESTAMP)_(OS)_(ARCH)_(INSTALLTYPE)_(LANGUAGE).(FILEEXTENSION)
-# Rules:
-# Timestamp only for Beta and Release Candidate
+# (PRODUCTNAME)_(VERSION)_(OS)_(ARCH)_(INSTALLTYPE)_(LANGUAGE).(FILEEXTENSION)
 ###############################################################################################
 
 sub set_download_filename
@@ -789,7 +787,6 @@ sub set_download_filename
 
     my $start = get_downloadname_productname($allvariables);
     my $versionstring = get_download_version($allvariables);
-    my $date = set_date_string($allvariables);
     my $platform = get_download_platformname();
     my $architecture = get_download_architecture();
     my $type = get_install_type($allvariables);
@@ -797,7 +794,7 @@ sub set_download_filename
 
     # Setting the extension happens automatically
 
-    my $filename = $start . "_" . $versionstring . "_" . $date . "_" . $platform . "_" . $architecture . "_" . $type . "_" . $language;
+    my $filename = $start . "_" . $versionstring . "_" . "_" . $platform . "_" . $architecture . "_" . $type . "_" . $language;
 
     $filename =~ s/\_\_/\_/g;   # necessary, if $versionstring or $platform or $language are empty
     $filename =~ s/\_\s*$//;    # necessary, if $language and $addon are empty
