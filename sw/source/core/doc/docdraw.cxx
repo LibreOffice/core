@@ -365,19 +365,6 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
                         // --> OD 2004-10-25 #i36010# - set layout direction of the position
                         pFmt->SetPositionLayoutDir(
                             text::PositionLayoutDir::PositionInLayoutDirOfAnchor );
-                        // <--
-                        // --> OD 2006-11-01 #130889#
-                        // creation of <SwDrawContact> instances for the group
-                        // members and its connection to the Writer layout is
-                        // done after intrinsic ungrouping.
-//                        SwDrawContact* pContact = new SwDrawContact( pFmt, pSubObj );
-//                        // --> OD 2004-11-22 #i35635#
-//                        pContact->MoveObjToVisibleLayer( pSubObj );
-//                        // <--
-//                        pContact->ConnectToLayout();
-//                        // OD 2004-04-07 #i26791# - Adjust positioning and
-//                        // alignment attributes.
-//                        lcl_AdjustPositioningAttr( pFmt, *pSubObj );
                         pFmtsAndObjs[i].push_back( std::pair< SwDrawFrmFmt*, SdrObject* >( pFmt, pSubObj ) );
                         // <--
 

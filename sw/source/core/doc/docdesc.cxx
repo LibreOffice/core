@@ -822,19 +822,6 @@ void SwDoc::PrtOLENotify( BOOL bAll )
                 //Wenn es keine Benachrichtigung wuenscht
                 if ( xObj.is() )
                 {
-                    //TODO/LATER: needs MiscStatus for ResizeOnPrinterChange
-                    /*
-                    if ( SVOBJ_MISCSTATUS_RESIZEONPRINTERCHANGE & xRef->GetMiscStatus())
-                    {
-                        if ( pOLENd->GetFrm() )
-                        {
-                            xObj->OnDocumentPrinterChanged( pPrt );
-                            pShell->CalcAndSetScale( xObj );//Client erzeugen lassen.
-                        }
-                        else
-                            pOLENd->SetOLESizeInvalid( TRUE );
-                    }
-                    else */
                         pGlobalOLEExcludeList->Insert(
                                 new SvGlobalName( aName ),
                                 pGlobalOLEExcludeList->Count() );
@@ -885,20 +872,6 @@ IMPL_LINK( SwDoc, DoUpdateModifiedOLE, Timer *, )
                 //Wenn es keine Benachrichtigung wuenscht
                 if( pOLENd->GetOLEObj().GetOleRef().is() ) //Kaputt?
                 {
-                    //TODO/LATER: needs MiscStatus for ResizeOnPrinterChange
-                    /*
-                    if( SVOBJ_MISCSTATUS_RESIZEONPRINTERCHANGE &
-                            xRef->GetMiscStatus() )
-                    {
-                        if( pOLENd->GetFrm() )
-                        {
-                            xRef->OnDocumentPrinterChanged( pPrt );
-                            pSh->CalcAndSetScale( xRef );//Client erzeugen lassen.
-                        }
-                        else
-                            pOLENd->SetOLESizeInvalid( TRUE );
-                    }*/
-                    // repaint it
                     pOLENd->Modify( &aMsgHint, &aMsgHint );
                 }
             }

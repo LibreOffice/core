@@ -158,9 +158,6 @@ void SwTblBoxFormula::ChangeState( const SfxPoolItem* pItem )
             // setze das Value-Flag zurueck
             // JP 17.06.96: interne Darstellung auf alle Formeln
             //              (Referenzen auf andere Tabellen!!!)
-//          if( VF_CMD & pFld->GetFormat() )
-//              pFld->PtrToBoxNm( pUpdtFld->pTbl );
-//          else
                 ChgValid( FALSE );
             break;
         case TBL_BOXNAME:

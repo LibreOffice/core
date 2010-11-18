@@ -246,9 +246,7 @@ BOOL lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
         // <--
 
         const SfxPoolItem* pItem;
-  //      USHORT __READONLY_DATA aSavIds[ 3 ] = { RES_PAGEDESC, RES_BREAK,  //#outline level,removed by zhaojianwei
-  //                                              RES_PARATR_NUMRULE };
-        //for( USHORT n = 0; n < 3; ++n )
+
         USHORT __READONLY_DATA aSavIds[ 4 ] = { RES_PAGEDESC, RES_BREAK,    //->add by zhaojianwei
                                                 RES_PARATR_NUMRULE,
                                                 RES_PARATR_OUTLINELEVEL };
@@ -1928,9 +1926,6 @@ SwTxtFmtColl* SwDoc::CopyTxtColl( const SwTxtFmtColl& rColl )
     // kopiere jetzt noch die Auto-Formate oder kopiere die Attribute
     pNewColl->CopyAttrs( rColl, TRUE );
 
-    // setze noch den Outline-Level
-    //if( NO_NUMBERING != rColl.GetOutlineLevel() ) //#outline level,zhaojianwei
-    //  pNewColl->SetOutlineLevel( rColl.GetOutlineLevel() );
     if(rColl.IsAssignedToListLevelOfOutlineStyle())
         pNewColl->AssignToListLevelOfOutlineStyle(rColl.GetAssignedOutlineStyleLevel());//<-end,zhaojianwei
     //<-end
@@ -2041,13 +2036,9 @@ void SwDoc::CopyFmtArr( const SvPtrarr& rSourceArr,
 
         pDest = FindFmtByName( rDestArr, pSrc->GetName() );
         pDest->SetAuto( FALSE );
-//      pDest->ResetAllAttr();
-//      pDest->CopyAttrs( *pSrc, TRUE );            // kopiere Attribute
+
 //JP 19.02.96: ist so wohl optimaler - loest ggfs. kein Modify aus!
         pDest->DelDiffs( *pSrc );
-        // --> OD 2009-03-23 #i94285#
-        // copy existing <SwFmtPageDesc> instance, before copying attributes
-//        pDest->SetFmtAttr( pSrc->GetAttrSet() );      // kopiere Attribute
         //JP 18.08.98: Bug 55115 - copy PageDescAttribute in this case
         const SfxPoolItem* pItem;
         if( &GetAttrPool() != pSrc->GetAttrSet().GetPool() &&
@@ -2063,7 +2054,6 @@ void SwDoc::CopyFmtArr( const SvPtrarr& rSourceArr,
                 pPageDesc = aPageDescs[ MakePageDesc( rNm ) ];
             }
             pPageDesc->Add( &aPageDesc );
-//            pDest->SetFmtAttr( aPageDesc );
             SwAttrSet aTmpAttrSet( pSrc->GetAttrSet() );
             aTmpAttrSet.Put( aPageDesc );
             pDest->SetFmtAttr( aTmpAttrSet );
@@ -2092,9 +2082,6 @@ void SwDoc::CopyFmtArr( const SvPtrarr& rSourceArr,
                 pDstColl->SetNextTxtFmtColl( *(SwTxtFmtColl*)FindFmtByName(
                     rDestArr, pSrcColl->GetNextTxtFmtColl().GetName() ) );
 
-            // setze noch den Outline-Level
-            //if( NO_NUMBERING != pSrcColl->GetOutlineLevel() ) //#outline level,zhaojianwei
-            //  pDstColl->SetOutlineLevel( pSrcColl->GetOutlineLevel() );
             if(pSrcColl->IsAssignedToListLevelOfOutlineStyle())
                 pDstColl->AssignToListLevelOfOutlineStyle(pSrcColl->GetAssignedOutlineStyleLevel());//<-end,zhaojianwei
             //<-end
@@ -2442,10 +2429,8 @@ void SwDoc::_CreateNumberFormatter()
     ASSERT( !pNumberFormatter, "ist doch schon vorhanden" );
 
 
-    LanguageType eLang = LANGUAGE_SYSTEM; //System::GetLanguage();
-/*              ((const SvxLanguageItem&)GetAttrPool().
-                    GetDefaultItem( RES_CHRATR_LANGUAGE )).GetLanguage();
-*/
+    LanguageType eLang = LANGUAGE_SYSTEM;
+
     Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
     pNumberFormatter = new SvNumberFormatter( xMSF, eLang );
     pNumberFormatter->SetEvalDateFormat( NF_EVALDATEFORMAT_FORMAT_INTL );
@@ -2534,19 +2519,6 @@ void SwDoc::SetFmtItemByAutoFmt( const SwPaM& rPam, const SfxItemSet& rSet )
         // in den Node gesetzt werden. Also muss man die Differenz nehmen
         SwRedlineExtraData_Format aExtraData( rSet );
 
-/*
-        if( pSet && pTNd->HasSwAttrSet() )
-        {
-            SfxItemSet aTmp( *pTNd->GetpSwAttrSet() );
-            aTmp.Differentiate( *pSet );
-            // das Adjust Item behalten wir extra
-            const SfxPoolItem* pItem;
-            if( SFX_ITEM_SET == pTNd->GetpSwAttrSet()->GetItemState(
-                    RES_PARATR_ADJUST, FALSE, &pItem ))
-                aTmp.Put( *pItem );
-            aExtraData.SetItemSet( aTmp );
-        }
-*/
         pRedl->SetExtraData( &aExtraData );
 
 // !!!!!!!!! Undo fehlt noch !!!!!!!!!!!!!!!!!!
@@ -2654,7 +2626,6 @@ namespace docfunc
                 SwTxtFmtColl* pTxtFmtColl = (*pTxtFmtColls)[i];
 
                 if ( pTxtFmtColl->IsDefault() ||
-                   //  pTxtFmtColl->GetOutlineLevel() == NO_NUMBERING ) //#outline level,zhaojianwei
                     ! pTxtFmtColl->IsAssignedToListLevelOfOutlineStyle() )  //<-end,zhaojianwei
                 {
                     continue;

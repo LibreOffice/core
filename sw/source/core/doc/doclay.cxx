@@ -253,18 +253,6 @@ void SwDoc::DelLayoutFmt( SwFrmFmt *pFmt )
         SwOLENode* pOLENd = GetNodes()[ pCntIdx->GetIndex()+1 ]->GetOLENode();
         if( pOLENd && pOLENd->GetOLEObj().IsOleRef() )
         {
-            /*
-            SwDoc* pDoc = (SwDoc*)pFmt->GetDoc();
-            if( pDoc )
-            {
-                SfxObjectShell* p = pDoc->GetPersist();
-                if( p )     // muss da sein
-                {
-                    SvInfoObjectRef aRef( p->Find( pOLENd->GetOLEObj().GetName() ) );
-                    if( aRef.Is() )
-                        aRef->SetObj(0);
-                }
-            } */
 
             // TODO/MBA: the old object closed the object, cleared all references to it, but didn't remove it from the container.
             // I have no idea, why, nobody could explain it - so I do my very best to mimic this behavior
@@ -280,7 +268,6 @@ void SwDoc::DelLayoutFmt( SwFrmFmt *pFmt )
                 }
             }
 
-            //pOLENd->GetOLEObj().GetOleRef() = 0;
         }
     }
 
@@ -870,15 +857,6 @@ if( DoesUndo() )    // werden erstmal alle Undo - Objecte geloescht.
             }
             else
             {
-/*
-                // alle Pams verschieben
-                SwPaM* pTmp = (SwPaM*)&rPam;
-                do {
-                    if( pTmp->HasMark() &&
-                        *pTmp->GetPoint() != *pTmp->GetMark() )
-                        MoveAndJoin( *pTmp, aPos );
-                } while( &rPam != ( pTmp = (SwPaM*)pTmp->GetNext() ) );
-*/
                 // copy all Pams and then delete all
                 SwPaM* pTmp = (SwPaM*)&rPam;
                 BOOL bOldFlag = mbCopyIsMove, bOldUndo = mbUndo;
@@ -1017,26 +995,6 @@ SwDrawFrmFmt* SwDoc::Insert( const SwPaM &rRg,
     SetModified();
     return pFmt;
 }
-
-/*************************************************************************
-|*
-|*  SwDoc::GetAllFlyFmts
-|*
-|*  Ersterstellung      MA 14. Jul. 93
-|*  Letzte Aenderung    MD 23. Feb. 95
-|*
-|*************************************************************************/
-/*sal_Bool TstFlyRange( const SwPaM* pPam, sal_uInt32 nFlyPos )
-{
-    sal_Bool bOk = sal_False;
-    const SwPaM* pTmp = pPam;
-    do {
-        bOk = pTmp->Start()->nNode.GetIndex() < nFlyPos &&
-                pTmp->End()->nNode.GetIndex() > nFlyPos;
-    } while( !bOk && pPam != ( pTmp = (const SwPaM*)pTmp->GetNext() ));
-    return bOk;
-}
-*/
 
 /* -----------------------------04.04.00 10:55--------------------------------
     paragraph frames - o.k. if the PaM includes the paragraph from the beginning

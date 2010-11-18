@@ -158,20 +158,6 @@ void SwAccessibleNoTextFrame::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
             }
         }
         break;
-        // <--
-        /*
-    case RES_OBJECTDYING:
-        if( aDepend.GetRegisteredIn() ==
-                static_cast< SwModify *>( static_cast< SwPtrMsgPoolItem * >( pOld )->pObject ) )
-            const_cast < SwModify *>( aDepend.GetRegisteredIn()->Remove( aDepend );
-        break;
-
-    case RES_FMT_CHG:
-        if( static_cast< SwFmtChg * >(pNew)->pChangedFmt == GetRegisteredIn() &&
-            static_cast< SwFmtChg * >(pOld)->pChangedFmt->IsFmtInDTOR() )
-            pRegisteredIn->Remove( this );
-        break;
-    */
     }
 }
 

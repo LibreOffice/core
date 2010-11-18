@@ -506,19 +506,6 @@ namespace
                     if( pBox && pBox->getRowSpan() > 0 )
                         lcl_CpyBox( rSource, rInfo.mpCopy, rDstTbl, pBox,
                                     TRUE, pUndo );
-                    /* Idea: If target cell is a covered cell, append content
-                             to master cell.
-                    BOOL bReplace = TRUE;
-                    if( pBox->getRowSpan() < 0 )
-                    {
-                        if( rInfo.mpCopy->getRowSpan() < 0 )
-                            continue;
-                        pBox = &pBox->FindStartOfRowSpan( rDstTbl );
-                        bReplace = FALSE;
-                    }
-                    lcl_CpyBox( rSource, rInfo.mpCopy, rDstTbl, pBox,
-                                bReplace, pUndo );
-                    */
                 }
             }
         }
@@ -616,7 +603,6 @@ void lcl_CpyBox( const SwTable& rCpyTbl, const SwTableBox* pCpyBox,
             }
 
             if( pCNd &&
-                /*RES_POOLCOLL_TABLE == */
                 RES_POOLCOLL_TABLE_HDLN !=
                     pCNd->GetFmtColl()->GetPoolFmtId() )
                 bReplaceColl = FALSE;

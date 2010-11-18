@@ -94,8 +94,6 @@ void SwSortElement::Init( SwDoc* pD, const SwSortOptions& rOpt,
 
     pSortCollator = new CollatorWrapper(
                                 ::comphelper::getProcessServiceFactory() );
-//  pSortCollator->loadCollatorAlgorithm( sAlgorithm, aLocale,
-//                      rOpt.bIgnoreCase ? SW_COLLATOR_IGNORES : 0 );
 }
 
 void SwSortElement::Finit()

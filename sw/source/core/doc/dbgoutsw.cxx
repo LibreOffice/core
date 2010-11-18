@@ -638,7 +638,6 @@ String lcl_dbg_out(const SwNode & rNode)
 
             aTmpStr += String("(", RTL_TEXTENCODING_ASCII_US);
             aTmpStr += String::CreateFromInt32
-                //(static_cast<SwTxtFmtColl *>(pColl)->GetOutlineLevel());//#outline level,zhaojianwei
                 (static_cast<SwTxtFmtColl *>(pColl)->GetAssignedOutlineStyleLevel());//<-end,zhaojianwei
 
             const SwNumRuleItem & rItem =

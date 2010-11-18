@@ -732,9 +732,6 @@ void _InitCore()
 
     SwBreakIt::_Create( xMSF );
     pCheckIt = NULL;
-    /*pAppCharClass = new CharClass(
-        xMSF, SwBreakIt::Get()->GetLocale( (LanguageType)GetAppLanguage() ));*/
-    //pCalendarWrapper = new SwCalendarWrapper( xMSF );
 
     _FrmInit();
     _TextInit();

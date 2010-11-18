@@ -125,13 +125,11 @@ namespace sw { namespace mark
     void MarkBase::SetMarkPos(const SwPosition& rNewPos)
     {
         ::boost::scoped_ptr<SwPosition>(new SwPosition(rNewPos)).swap(m_pPos1);
-        //lcl_FixPosition(*m_pPos1);
     }
 
     void MarkBase::SetOtherMarkPos(const SwPosition& rNewPos)
     {
         ::boost::scoped_ptr<SwPosition>(new SwPosition(rNewPos)).swap(m_pPos2);
-        //lcl_FixPosition(*m_pPos2);
     }
 
     rtl::OUString MarkBase::ToString( ) const

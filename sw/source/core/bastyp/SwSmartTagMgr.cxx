@@ -82,14 +82,4 @@ void SwSmartTagMgr::changesOccurred( const util::ChangesEvent& rEvent ) throw( R
     SmartTagMgr::changesOccurred( rEvent );
 }
 
-/*
-SmartTagMgr& SwSmartTagMgr::Get()
-{
-    if ( !pSmartTagMgr )
-        pSmartTagMgr = new SmartTagMgr( SwDocShell::Factory().GetModuleName() );
-
-     return *pSmartTagMgr;
-}
-*/
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

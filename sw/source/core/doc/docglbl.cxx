@@ -93,7 +93,6 @@ BOOL SwDoc::GenerateHTMLDoc( const String& rPath,
         BYTE nLvl = 1;
         const SwTxtFmtColls& rFmtColls =*GetTxtFmtColls();
         for( USHORT n = rFmtColls.Count(); n; )
-            //if( nLvl == rFmtColls[ --n ]->GetOutlineLevel() )//#outline level,zhaojianwei
             if( nLvl == rFmtColls[ --n ]->GetAttrOutlineLevel() -1 )//<-end,zhaojianwei 0814
             {
                 pSplitColl = rFmtColls[ n ];
@@ -129,7 +128,6 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
     {
         // wenn keine OutlineNumerierung ist, dann benutze eigenes Array
         // und sammel die Nodes zusammen.
-        //if( NO_NUMBERING == pSplitColl->GetOutlineLevel() )//#outline level,zhaojianwei
         if( pSplitColl->GetAttrOutlineLevel() == 0 )//<-end,zhaojianwei, 0814
         {
             pOutlNds = new SwOutlineNodes( 8, 8 );
@@ -151,7 +149,6 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
         // dann suche die Gliederungs - Vorlage, der 1. Ebene
         const SwTxtFmtColls& rFmtColls =*GetTxtFmtColls();
         for( USHORT n = rFmtColls.Count(); n; )
-            //if( !rFmtColls[ --n ]->GetOutlineLevel() )//#outline level,zhaojianwei
             if ( rFmtColls[ --n ]->GetAttrOutlineLevel() == 1 )//<-end,zhaojianwei
             {
                 pSplitColl = rFmtColls[ n ];
@@ -171,7 +168,6 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
         break;
 
     default:
-//  case SPLITDOC_TO_GLOBALDOC:
         pFilter = SwIoSystem::GetFilterOfFormat(
                                     String::CreateFromAscii( FILTER_XML ));
         eDocType = SPLITDOC_TO_GLOBALDOC;
@@ -231,11 +227,6 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
                 pNd = pOutlNds->GetObject( nOutl );
                 SwTxtFmtColl* pTColl = pNd->GetTxtNode()->GetTxtColl();
 
-                //if( ( pTColl == pSplitColl ||     //#outline level,zhaojianwei
-                //  (   NO_NUMBERING != pSplitColl->GetOutlineLevel() &&
-                //      pTColl->GetOutlineLevel() <
-                //      pSplitColl->GetOutlineLevel() )) &&
-                //  !pNd->FindTableNode() )
                 if( ( pTColl == pSplitColl ||
                     (   pSplitColl->GetAttrOutlineLevel() > 0 &&
                         pTColl->GetAttrOutlineLevel() > 0     &&
@@ -476,7 +467,6 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
         }
     } while( pSttNd );
 
-//  if( pOutlNds != (SwOutlineNodes*)&GetNodes().GetOutLineNds();
     if( pOutlNds != &GetNodes().GetOutLineNds() )
         delete pOutlNds;
 
@@ -494,7 +484,6 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
         }
         break;
 
-//  case SPLITDOC_TO_GLOBALDOC:
     default:
         // dann das Globaldoc speichern
         set(IDocumentSettingAccess::GLOBAL_DOCUMENT, true);
@@ -532,7 +521,6 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath, int nOutlineLevel )
         break;
 
     default:
-//  case SPLITDOC_TO_GLOBALDOC:
         pFilter = SwIoSystem::GetFilterOfFormat(
                                     String::CreateFromAscii( FILTER_XML ));
         eDocType = SPLITDOC_TO_GLOBALDOC;
@@ -670,7 +658,6 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath, int nOutlineLevel )
                     if( SPLITDOC_TO_HTML == eDocType &&
                         pDoc->GetSpzFrmFmts()->Count() )
                     {
-                        /* SfxViewFrame* pFrame = */
                             SfxViewFrame::LoadHiddenDocument( *xDocSh, 0 );
                     }
                     xDocSh->DoSaveAs( *pTmpMed );

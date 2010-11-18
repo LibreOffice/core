@@ -1256,37 +1256,6 @@ uno::Sequence<PropertyValue> SwAccessibleParagraph::getCharacterAttributes(
         ++i;
     }
 
-//    // create a (dummy) text portion for the sole purpose of calling
-//    // getPropertyValues on it
-//    Reference<XMultiPropertySet> xPortion = CreateUnoPortion( nIndex, nIndex + 1 );
-
-//    // get values
-//    Sequence<OUString> aNames = getAttributeNames();
-//    sal_Int32 nLength = aNames.getLength();
-//    Sequence<Any> aAnys( nLength );
-//    aAnys = xPortion->getPropertyValues( aNames );
-
-//    // copy names + anys into return sequence
-//    Sequence<PropertyValue> aValues( aNames.getLength() );
-//    const OUString* pNames = aNames.getConstArray();
-//    const Any* pAnys = aAnys.getConstArray();
-//    PropertyValue* pValues = aValues.getArray();
-//    for( sal_Int32 i = 0; i < nLength; i++ )
-//    {
-//        PropertyValue& rValue = pValues[i];
-//        rValue.Name = pNames[i];
-//        rValue.Value = pAnys[i];
-//        rValue.Handle = -1;                         // handle not supported
-//        rValue.State = PropertyState_DIRECT_VALUE;  // states not supported
-//    }
-
-//    // adjust background color if we're in a gray portion
-//    DBG_ASSERT( pValues[CHAR_BACK_COLOR_POS].Name.
-//                equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("CharBackColor")),
-//                "Please adjust CHAR_BACK_COLOR_POS constant." );
-//    if( GetPortionData().IsInGrayPortion( nIndex ) )
-//        pValues[CHAR_BACK_COLOR_POS].Value <<= SwViewOption::GetFieldShadingsColor().GetColor();
-
     return aValues;
 }
 
@@ -2384,9 +2353,7 @@ uno::Reference< XAccessibleHyperlink > SAL_CALL
 
     uno::Reference< XAccessibleHyperlink > xRet;
 
-    // --> OD 2007-06-27 #i77108# - provide hyperlinks also in editable documents.
-//    if( !IsEditableState() )
-    // <--
+    // #i77108#
     {
         const SwTxtFrm *pTxtFrm = static_cast<const SwTxtFrm*>( GetFrm() );
         SwHyperlinkIter_Impl aHIter( pTxtFrm );
@@ -2445,9 +2412,7 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getHyperLinkIndex( sal_Int32 nCharInde
     }
 
     sal_Int32 nRet = -1;
-    // --> OD 2007-06-27 #i77108# - provide hyperlinks also in editable documents.
-//    if( !IsEditableState() )
-    // <--
+    // #i77108#
     {
         const SwTxtFrm *pTxtFrm = static_cast<const SwTxtFrm*>( GetFrm() );
         SwHyperlinkIter_Impl aHIter( pTxtFrm );

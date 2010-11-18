@@ -315,9 +315,6 @@ BOOL SwCrsrShell::GotoNextTOXBase( const String* pName )
             0 != ( pSectNd = pSect->GetFmt()->GetSectionNode() ) &&
              pCurCrsr->GetPoint()->nNode < pSectNd->GetIndex() &&
             ( !pFnd || pFnd->GetIndex() > pSectNd->GetIndex() ) &&
-// JP 10.12.96: solange wir nur 3 Typen kennen und UI-seitig keine anderen
-//              einstellbar sind, muss ueber den Titel gesucht werden!
-//          ( !pName || *pName == ((SwTOXBaseSection*)pSect)->GetTypeName() ) &&
             ( !pName || *pName == ((SwTOXBaseSection*)pSect)->GetTOXName() )
             )
         {
@@ -365,9 +362,6 @@ BOOL SwCrsrShell::GotoPrevTOXBase( const String* pName )
             0 != ( pSectNd = pSect->GetFmt()->GetSectionNode() ) &&
             pCurCrsr->GetPoint()->nNode > pSectNd->EndOfSectionIndex() &&
             ( !pFnd || pFnd->GetIndex() < pSectNd->GetIndex() ) &&
-// JP 10.12.96: solange wir nur 3 Typen kennen und UI-seitig keine anderen
-//              einstellbar sind, muss ueber den Titel gesucht werden!
-//          ( !pName || *pName == ((SwTOXBaseSection*)pSect)->GetTypeName() ) &&
             ( !pName || *pName == ((SwTOXBaseSection*)pSect)->GetTOXName() )
             )
         {
@@ -903,7 +897,6 @@ USHORT SwCrsrShell::GetOutlinePos( BYTE nLevel )
     {
         pNd = rNds.GetOutLineNds()[ nPos ];
 
-        //if( ((SwTxtNode*)pNd)->GetTxtColl()->GetOutlineLevel() <= nLevel )//#outline level,zhaojianwei
         if( ((SwTxtNode*)pNd)->GetAttrOutlineLevel()-1 <= nLevel )//<-end,zhaojianwei
             return nPos;
 
@@ -936,12 +929,10 @@ BOOL SwCrsrShell::MakeOutlineSel( USHORT nSttPos, USHORT nEndPos,
 
     if( bWithChilds )
     {
-        //BYTE nLevel = pEndNd->GetTxtNode()->GetTxtColl()->GetOutlineLevel();//#outline level,zhaojianwei
         const int nLevel = pEndNd->GetTxtNode()->GetAttrOutlineLevel()-1;//<-end.zhaojianwei
         for( ++nEndPos; nEndPos < rOutlNds.Count(); ++nEndPos )
         {
             pEndNd = rOutlNds[ nEndPos ];
-            //BYTE nNxtLevel = pEndNd->GetTxtNode()->GetTxtColl()->GetOutlineLevel();//#outline level,zhaojianwei
             const int nNxtLevel = pEndNd->GetTxtNode()->GetAttrOutlineLevel()-1;//<-end,zhaojianwei
             if( nNxtLevel <= nLevel )
                 break;          // EndPos steht jetzt auf dem naechsten
@@ -1104,14 +1095,7 @@ BOOL SwCrsrShell::GetContentAtPos( const Point& rPt,
                         }
                         if( bRet )
                         {
-//                          rCntntAtPos.sStr = pTxtNd->GetExpandTxt(
-//                                      *pTxtAttr->GetStart(),
-//                                      *pTxtAttr->GetEnd() - *pTxtAttr->GetStart(),
-//                                      FALSE );
-
-//                          rCntntAtPos.aFnd.pAttr = &pTxtAttr->GetAttr();
                             rCntntAtPos.eCntntAtPos = SwContentAtPos::SW_SMARTTAG;
-//                          rCntntAtPos.pFndTxtAttr = pTxtAttr;
 
                             if( pFldRect && 0 != ( pFrm = pTxtNd->GetFrm( &aPt ) ) )
                                 pFrm->GetCharRect( *pFldRect, aPos, &aTmpState );
@@ -1784,9 +1768,6 @@ BOOL SwCrsrShell::SetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode )
                 {
                     *pCurCrsr->GetPoint() = aPos;
                     GetDoc()->SetTxtFmtColl( *pCurCrsr, pNextFmt, false );
-                    //JP 04.11.97: erstmal keine Folgevorlage der
-                    //              Folgevorlage beachten
-                    // pNextFmt = pNextFmt->GetNextTxtFmtColl();
                 }
                 if( n < aFPos.nColumnCnt )
                 {

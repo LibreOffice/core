@@ -930,12 +930,6 @@ SwCntntNode* GetNode( SwPaM & rPam, BOOL& rbFirst, SwMoveFn fnMove,
                             ( !bInReadOnly && pFrm->IsProtected() ) ||
                             ( pFrm->IsTxtFrm() &&
                                 ((SwTxtFrm*)pFrm)->IsHiddenNow() ) )
-
-//                          rNodes[ rNodes.EndOfAutotext ]->StartOfSection().GetIndex()
-//                          < aPos.nNode.GetIndex() && aPos.nNode.GetIndex()
-//                          < rNodes.EndOfAutotext.GetIndex() &&
-//                          0 == ( pFrm = pNd->GetFrm()) &&
-//                          pFrm->IsProtected() )
                         {
                             pNd = 0;
                             continue;       // suche weiter

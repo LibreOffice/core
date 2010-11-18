@@ -1478,14 +1478,6 @@ void SAL_CALL SwAccessibleTable::selectAccessibleChild(
     const SwStartNode* pStartNode = pBox->GetSttNd();
     if( pSelectedTable == NULL || !pCrsrShell->GetTblCrs() )
     {
-        // if we're in the wrong table, or there's no table selection
-        // at all, then select the current table cell.
-//      SwPaM* pPaM = pCrsrShell->GetCrsr();
-//      pPaM->DeleteMark();
-//      *(pPaM->GetPoint()) = SwPosition( *pStartNode );
-//      pPaM->Move( fnMoveForward, fnGoNode );
-// //   pCrsrShell->SelTblBox();
-
         pCrsrShell->StartAction();
         // Set cursor into current cell. This deletes any table cursor.
         SwPaM aPaM( *pStartNode );
@@ -1515,20 +1507,6 @@ void SAL_CALL SwAccessibleTable::selectAccessibleChild(
         *(aPaM.GetMark()) = *pPaM->GetMark();
         Select( aPaM );
 
-        // if only one box is selected, we select this one in
-        // order to maintain our table selection
-//        if( aPaM.GetPoint()->nNode.GetNode().FindTableBoxStartNode() ==
-//           aPaM.GetMark()->nNode.GetNode().FindTableBoxStartNode() )
-//        {
-// //            pCrsrShell->SelTblBox();
-//         }
-//         else
-//         {
-            // finally; set the selection. This will call UpdateCursor
-            // on the cursor shell, too.
-//            pCrsrShell->KillPams();
- //           pCrsrShell->SetSelection( aPaM );
-//         }
     }
 }
 

@@ -397,7 +397,6 @@ BOOL lcl_CopyCol( const _FndBox*& rpFndBox, void* pPara )
         else
         {
             aFindFrm = pCpyPara->rTabFrmArr[ nFndPos ];
-//          aFindFrm.pNewFrmFmt->Add( pBox );
             pBox->ChgFrmFmt( (SwTableBoxFmt*)aFindFrm.pNewFrmFmt );
         }
     }
@@ -1578,8 +1577,6 @@ BOOL lcl_Merge_MoveLine( const _FndLine*& rpFndLine, void* pPara )
         USHORT nLeft = pFndLn->GetTabBoxes().C40_GETPOS( SwTableBox, pLBx );
         USHORT nRight = pFndLn->GetTabBoxes().C40_GETPOS( SwTableBox, pRBx );
 
-//      if( ( nLeft && nRight+1 < pFndLn->GetTabBoxes().Count() ) ||
-//          ( !nLeft && nRight+1 >= pFndLn->GetTabBoxes().Count() ) )
         if( !nLeft || nRight == pFndLn->GetTabBoxes().Count() )
         {
             if( pULPara->bUL )  // Upper ?
@@ -4604,10 +4601,6 @@ SwFrmFmt* SwShareBoxFmts::GetFormat( const SwFrmFmt& rFmt,
 
 void SwShareBoxFmts::AddFormat( const SwFrmFmt& rOld, const SwFrmFmt& rNew )
 {
-    // wenn das Format nicht geshared ist, braucht es auch nicht in die
-    // Liste aufgenommen werden. Denn es gibt keinen 2. der es sucht.
-//leider werden auch die CellFrms gefunden
-//  if( !rOld.IsLastDepend() )
     {
         USHORT nPos;
         SwShareBoxFmt* pEntry;

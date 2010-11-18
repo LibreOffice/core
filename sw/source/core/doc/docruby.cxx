@@ -298,28 +298,7 @@ BOOL SwDoc::_SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry, USHORT )
 
         case UnicodeType::OTHER_LETTER:
             bChkNxtWrd = TRUE;
-            // no break!
-//      case UnicodeType::UNASSIGNED:
-//      case UnicodeType::MODIFIER_LETTER:
-//      case UnicodeType::NON_SPACING_MARK:
-//      case UnicodeType::ENCLOSING_MARK:
-//      case UnicodeType::COMBINING_SPACING_MARK:
-//      case UnicodeType::LETTER_NUMBER:
-//      case UnicodeType::OTHER_NUMBER:
-//      case UnicodeType::LINE_SEPARATOR:
-//      case UnicodeType::PARAGRAPH_SEPARATOR:
-//      case UnicodeType::FORMAT:
-//      case UnicodeType::SURROGATE:
-//      case UnicodeType::DASH_PUNCTUATION:
-//      case UnicodeType::CONNECTOR_PUNCTUATION:
-///*?? */case UnicodeType::OTHER_PUNCTUATION:
-//--> char '!' is to ignore!
-//      case UnicodeType::MATH_SYMBOL:
-//      case UnicodeType::CURRENCY_SYMBOL:
-//      case UnicodeType::MODIFIER_SYMBOL:
-//      case UnicodeType::OTHER_SYMBOL:
-//      case UnicodeType::INITIAL_PUNCTUATION:
-//      case UnicodeType::FINAL_PUNCTUATION:
+
         default:
                 bIsAlphaNum = FALSE;
                 break;

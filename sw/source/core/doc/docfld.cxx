@@ -1299,15 +1299,6 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
     // aktuelle Datensatznummer schon vorher einstellen
     SwNewDBMgr* pMgr = GetNewDBMgr();
     pMgr->CloseAll(FALSE);
-/*
-    if(pMgr && pMgr->OpenDB(DBMGR_STD, GetDBDesc(), FALSE))
-    {
-        if(!pMgr->IsInMerge() )
-            pMgr->ToFirstSelectedRecord(DBMGR_STD);
-
-        aCalc.VarChange( sDBNumNm, pMgr->GetCurSelectedRecordId(DBMGR_STD));
-    }
-*/
 
     String aNew;
     const _SetGetExpFldPtr* ppSortLst = pUpdtFlds->GetSortLst()->GetData();
@@ -1316,9 +1307,7 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
         SwSection* pSect = (SwSection*)(*ppSortLst)->GetSection();
         if( pSect )
         {
-            //!SECTION
 
-//          if( pGFld->IsInBodyTxt() )
             SwSbxValue aValue = aCalc.Calculate(
                                         pSect->GetCondition() );
             if(!aValue.IsVoidValue())
@@ -2140,9 +2129,7 @@ bool SwDoc::SetFieldsDirty( bool b, const SwNode* pChk, ULONG nLen )
             const SwTxtNode* pTNd = rNds[ nStt++ ]->GetTxtNode();
             if( pTNd )
             {
-                if( //pTNd->GetFmtColl() &&     //#outline level,zhaojianwei
-                //  MAXLEVEL > pTNd->GetTxtColl()->GetOutlineLevel() )
-                    pTNd->GetAttrOutlineLevel() != 0 )//<-end,zhaojianwei
+                if( pTNd->GetAttrOutlineLevel() != 0 )
                     // Kapitelfelder aktualisieren
                     b = TRUE;
                 else if( pTNd->GetpSwpHints() && pTNd->GetSwpHints().Count() )
@@ -2338,18 +2325,6 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
                 break;
 
             case RES_SETEXPFLD:
-                /// OD 04.10.2002 #102894#
-                /// fields of subtype <string> have also been add
-                /// for calculation (eGetMode == GETFLD_CALC).
-                /// Thus, add fields of subtype <string> in all modes
-                ///     (eGetMode == GETFLD_EXPAND||GETFLD_CALC||GETFLD_ALL)
-                /// and fields of other subtypes only in the modes
-                ///     (eGetMode == GETFLD_CALC||GETFLD_ALL)
-                /* "old" if construct - not deleted for history and code review
-                if( ( nsSwGetSetExpType::GSE_STRING & pFld->GetSubType()
-                        ? GETFLD_EXPAND : GETFLD_CALC )
-                        & eGetMode )
-                */
                 if ( !(eGetMode == GETFLD_EXPAND) ||
                      (nsSwGetSetExpType::GSE_STRING & pFld->GetSubType()) )
                 {
@@ -2661,10 +2636,6 @@ bool SwDoc::UpdateFld(SwTxtFld * pDstTxtFld, SwField & rSrcFld,
             AppendUndo(new SwUndoFieldFromDoc(aPosition, *pDstFld, rSrcFld,
                                               pMsgHnt, bUpdateFlds));
         }
-
-        // Das gefundene Feld wird angepasst ...
-        //pDstFld->ChangeFormat( rSrcFld.GetFormat() );
-        //pDstFld->SetLanguage( rSrcFld.GetLanguage() );
 
         SwField * pNewFld = rSrcFld.CopyField();
         pDstFmtFld->SetFld(pNewFld);

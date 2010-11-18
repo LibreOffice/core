@@ -415,20 +415,6 @@ void SwCache::DeleteObj( SwCacheObj *pObj )
     CHECK;
 }
 
-/*
-
-
-void SwCache::Delete( const void *pOwner, const USHORT nIndex )
-{
-    INCREMENT( nDelete );
-    SwCacheObj *pObj;
-    if ( 0 != (pObj = Get( pOwner, nIndex, FALSE )) )
-        DeleteObj( pObj );
-}
-*/
-
-
-
 void SwCache::Delete( const void *pOwner )
 {
     INCREMENT( nDelete );

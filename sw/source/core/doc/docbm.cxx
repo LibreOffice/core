@@ -396,12 +396,10 @@ namespace sw { namespace mark
             case IDocumentMarkAccess::BOOKMARK:
             case IDocumentMarkAccess::CROSSREF_NUMITEM_BOOKMARK:
             case IDocumentMarkAccess::CROSSREF_HEADING_BOOKMARK:
-            // if(dynamic_cast<IBookmark*>)
                 lcl_InsertMarkSorted(m_vBookmarks, pMark);
                 break;
             case IDocumentMarkAccess::TEXT_FIELDMARK:
             case IDocumentMarkAccess::CHECKBOX_FIELDMARK:
-            // if(dynamic_cast<IFieldmark*>
                 lcl_InsertMarkSorted(m_vFieldmarks, pMark);
                 break;
             case IDocumentMarkAccess::NAVIGATOR_REMINDER:
@@ -706,7 +704,6 @@ namespace sw { namespace mark
             }
             case IDocumentMarkAccess::TEXT_FIELDMARK:
             case IDocumentMarkAccess::CHECKBOX_FIELDMARK:
-            // if(dynamic_cast<IFieldmark*>
             {
                 IDocumentMarkAccess::iterator_t ppFieldmark = lcl_FindMark(m_vFieldmarks, *ppMark);
                 OSL_ENSURE(ppFieldmark != m_vFieldmarks.end(),
@@ -839,10 +836,6 @@ namespace sw { namespace mark
 
 }} // namespace ::sw::mark
 
-
-// old implementation
-
-//SV_IMPL_OP_PTRARR_SORT(SwBookmarks, SwBookmarkPtr)
 
 #define PCURCRSR (_pCurrCrsr)
 #define FOREACHPAM_START(pSttCrsr) \

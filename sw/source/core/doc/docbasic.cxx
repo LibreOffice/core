@@ -134,12 +134,6 @@ BOOL SwDoc::ExecMacro( const SvxMacro& rMacro, String* pRet, SbxArray* pArgs )
             eErr = pDocShell->CallXScript(
                 rMacro.GetMacName(), *pUnoArgs, aRet, aOutArgsIndex, aOutArgs);
 
-            //*pRet = pRetValue->GetString();
-            // use the AnyConverter to return a String if appropriate?
-
-            // need to call something like lcl_translateUno2Basic
-            // pArgs = lcl_translateUno2Basic( pUnoArgs );
-
             delete pUnoArgs;
             break;
         }
@@ -253,12 +247,6 @@ USHORT SwDoc::CallEvent( USHORT nEvent, const SwCallMouseEvent& rCallEvent,
 
                 nRet += 0 == pDocShell->CallXScript(
                     rMacro.GetMacName(), *pUnoArgs,aRet, aOutArgsIndex, aOutArgs) ? 1 : 0;
-
-                //*pRet = pRetValue->GetString();
-                // use the AnyConverter to return a String if appropriate?
-
-                // need to call something like lcl_translateUno2Basic
-                // pArgs = lcl_translateUno2Basic( pUnoArgs );
 
                 delete pUnoArgs;
             }

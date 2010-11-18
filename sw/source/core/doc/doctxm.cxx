@@ -1361,11 +1361,8 @@ void SwTOXBaseSection::UpdateAuthorities( const SwTOXInternational& rIntl )
         const SwTxtNode& rTxtNode = pTxtFld->GetTxtNode();
         ::SetProgressState( 0, pDoc->GetDocShell() );
 
-//      const SwTxtNode* pChapterCompareNode = 0;
-
         if( rTxtNode.GetTxt().Len() && rTxtNode.GetFrm() &&
-            rTxtNode.GetNodes().IsDocNodes() /*&&
-            (!IsFromChapter() || pChapterCompareNode == pOwnChapterNode) */)
+            rTxtNode.GetNodes().IsDocNodes() )
         {
             //#106485# the body node has to be used!
             SwCntntFrm *pFrm = rTxtNode.GetFrm();
@@ -1509,9 +1506,6 @@ void SwTOXBaseSection::UpdateCntnt( SwTOXElement eMyType,
                                                         MAXLEVEL - 1 );
                 if( pOutlNd )
                 {
-                    //USHORT nTmp = pOutlNd->GetTxtColl()->GetOutlineLevel();//#outline level,zhaojianwei
-                    //if( nTmp < NO_NUMBERING )
-                    //  nSetLevel = nTmp + 1;
                     if( pOutlNd->GetTxtColl()->IsAssignedToListLevelOfOutlineStyle())
                         nSetLevel = pOutlNd->GetTxtColl()->GetAttrOutlineLevel() ;//<-end,zhaojianwei
                 }
@@ -1567,9 +1561,6 @@ void SwTOXBaseSection::UpdateTable( const SwTxtNode* pOwnChapterNode )
                             ::lcl_FindChapterNode( *pCNd, MAXLEVEL - 1 );
                         if( pOutlNd )
                         {
-                            //USHORT nTmp = pOutlNd->GetTxtColl()->GetOutlineLevel();//#outline level,zhaojianwei
-                            //if( nTmp < NO_NUMBERING )
-                            //  pNew->SetLevel( nTmp + 1 );
                             if( pOutlNd->GetTxtColl()->IsAssignedToListLevelOfOutlineStyle())
                             {
                                 const int nTmp = pOutlNd->GetTxtColl()->GetAttrOutlineLevel();
@@ -1769,9 +1760,6 @@ void SwTOXBaseSection::GenerateText( USHORT nArrayIdx,
                         aInsStr += cEndPageNum;
                         rTxt.Append( aInsStr );
                     }
-//                      // Tab entfernen, wenn keine Seitennummer
-//                  else if( rTxt.Len() && '\t' == rTxt.GetChar( rTxt.Len() - 1 ))
-//                      rTxt.Erase( rTxt.Len()-1, 1 );
                 }
                 break;
 
@@ -1783,8 +1771,6 @@ void SwTOXBaseSection::GenerateText( USHORT nArrayIdx,
                         pTOXSource = &rBase.aTOXSources[0];
 
                     // --> OD 2008-02-14 #i53420#
-//                    if( pTOXSource && pTOXSource->pNd
-//                        pTOXSource->pNd->IsTxtNode() )
                     if ( pTOXSource && pTOXSource->pNd &&
                          pTOXSource->pNd->IsCntntNode() )
                     // <--
@@ -1796,7 +1782,6 @@ void SwTOXBaseSection::GenerateText( USHORT nArrayIdx,
                             SwChapterField aFld( &aFldTyp, aToken.nChapterFormat );
                             aFld.SetLevel( static_cast<BYTE>(aToken.nOutlineLevel - 1) );
                             // --> OD 2008-02-14 #i53420#
-//                            aFld.ChangeExpansion( pFrm, (SwTxtNode*)pTOXSource->pNd, TRUE );
                             aFld.ChangeExpansion( pFrm,
                                 dynamic_cast<const SwCntntNode*>(pTOXSource->pNd),
                                 TRUE );

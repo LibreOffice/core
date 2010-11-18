@@ -284,7 +284,6 @@ void _SaveFlyInRange( const SwPaM& rPam, const SwNodeIndex& rInsPos,
                     SwFmtAnchor aAnchor( *pAnchor );
                     aAnchor.SetAnchor( &aPos );
                     pFmt->SetFmtAttr( aAnchor );
-//                  ((SwFmtAnchor*)pAnchor)->SetAnchor( &aPos );
                 }
             }
             else if( ( rSttNdIdx.GetIndex() + nSttOff <= pAPos->nNode.GetIndex()
@@ -593,7 +592,6 @@ void lcl_SaveRedlines( const SwNodeRange& rRg, _SaveRedlines& rArr )
                             pTmpPos->nNode.GetNode().GetCntntNode(), 0 );
 
                 _SaveRedline* pSave = new _SaveRedline( pNewRedl, rRg.aStart );
-//              rArr.Insert( pSave, rArr.Count() );
                 rArr.C40_INSERT( _SaveRedline, pSave, rArr.Count() );
 
                 pTmpPos = pTmp->End();
@@ -617,7 +615,6 @@ void lcl_SaveRedlines( const SwNodeRange& rRg, _SaveRedlines& rArr )
             {
                 // gesamt verschieben
                 _SaveRedline* pSave = new _SaveRedline( pTmp, rRg.aStart );
-//              rArr.Insert( pSave, rArr.Count() );
                 rArr.C40_INSERT( _SaveRedline, pSave, rArr.Count() );
             }
             else
@@ -630,7 +627,6 @@ void lcl_SaveRedlines( const SwNodeRange& rRg, _SaveRedlines& rArr )
                             pTmpPos->nNode.GetNode().GetCntntNode(), 0 );
 
                 _SaveRedline* pSave = new _SaveRedline( pNewRedl, rRg.aStart );
-//              rArr.Insert( pSave, rArr.Count() );
                 rArr.C40_INSERT( _SaveRedline, pSave, rArr.Count() );
 
                 pTmpPos = pTmp->Start();
@@ -1046,7 +1042,6 @@ bool SwDoc::MoveRange( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
             }
             bJoin = sal_False;
         }
-//      else if( !bCorrSavePam && !pSavePam->Move( fnMoveForward, fnGoCntnt ))
         else if ( !aSavePam.Move( fnMoveForward, fnGoCntnt ) )
         {
             aSavePam.GetPoint()->nNode++;
@@ -2529,11 +2524,7 @@ bool SwDoc::DelFullPara( SwPaM& rPam )
     if( pTblNd && pNd->IsCntntNode() )
     {
         SwFrmFmt* pTableFmt = pTblNd->GetTable().GetFrmFmt();
-//JP 24.08.98: will man wirklich den PageDesc/Break vom
-//              nachfolgen Absatz ueberbuegeln?
-//      const SwAttrSet& rAttrSet = pTableFmt->GetAttrSet();
-//      if( SFX_ITEM_SET != rAttrSet.GetItemState( RES_PAGEDESC ) &&
-//          SFX_ITEM_SET != rAttrSet.GetItemState( RES_BREAK ))
+
         {
             const SfxPoolItem *pItem;
             const SfxItemSet* pSet = ((SwCntntNode*)pNd)->GetpSwAttrSet();

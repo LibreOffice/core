@@ -162,10 +162,6 @@ void SwServerObject::SendDataChanged( const SwPosition& rPos )
             SvLinkSource::NotifyDataChanged();
         }
     }
-    // sonst melden wir uns ab !!
-// ????? JP 27.06.95: geht das so ????
-//  else
-//      Closed();
 }
 
 
@@ -205,10 +201,6 @@ void SwServerObject::SendDataChanged( const SwPaM& rRange )
             SvLinkSource::NotifyDataChanged();
         }
     }
-    // sonst melden wir uns ab !!
-// ????? JP 27.06.95: geht das so ????
-//  else
-//      Closed();
 }
 
 
@@ -259,10 +251,6 @@ BOOL SwServerObject::IsLinkInServer( const SwBaseLink* pChkLnk ) const
 // um Rekursionen zu Verhindern: ServerType umsetzen!
 SwServerObject::ServerModes eSave = eType;
 if( !pChkLnk )
-// sowas sollte man nicht tun, wer weiss schon, wie gross ein enum ist
-// ICC nimmt keinen int
-// #41723#
-//  *((int*)&eType) = SECTION_SERVER+1;
     ((SwServerObject*)this)->eType = NONE_SERVER;
         for( USHORT n = rLnks.Count(); n; )
         {

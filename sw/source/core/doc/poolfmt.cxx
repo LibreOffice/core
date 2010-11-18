@@ -225,7 +225,6 @@ void lcl_SetHeadline( SwDoc* pDoc, SwTxtFmtColl* pColl,
     {
         if( !( nOutLvlBits & ( 1 << nLevel )) )
         {
-            //pColl->SetOutlineLevel( nLevel );          //#outline level zhaojianwei
             pColl->AssignToListLevelOfOutlineStyle(nLevel);//<-end,zhaojianwei
             if( !bHTMLMode )
             {
@@ -337,8 +336,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, bool bRegardLanguage )
         {
             return pNewColl;
         }
-        //if( pNewColl->GetOutlineLevel() < MAXLEVEL )          //#outline level,zhaojianwei
-        //nOutLvlBits |= ( 1 << pNewColl->GetOutlineLevel() );
+
         if( pNewColl->IsAssignedToListLevelOfOutlineStyle())
             nOutLvlBits |= ( 1 << pNewColl->GetAssignedOutlineStyleLevel() );//<-end,zhaojianwei
     }
@@ -970,7 +968,6 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, bool bRegardLanguage )
             aLR.SetLeft( GetMetricVal( CM_1 ));
             aLR.SetRight( GetMetricVal( CM_1 ));
             aSet.Put( aLR );
-//          aSet.Put( SvxAdjustItem( SVX_ADJUST_BLOCK, RES_PARATR_ADJUST ) );
             SvxULSpaceItem aUL( RES_UL_SPACE );
             aUL = pNewColl->GetULSpace();
             aUL.SetLower( HTML_PARSPACE );
@@ -1049,9 +1046,6 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, bool bRegardLanguage )
     {
         {
             pNewColl->SetFmtAttr( aSet );
-            // JP 31.08.95: erzeugen einer PoolVorlage ist keine Modifikation
-            //              (Bug: 18545)
-            // SetModified();
         }
     }
     return pNewColl;
@@ -1213,10 +1207,6 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId )
             SetAllScriptItem( aSet, SvxFontItem( rBulletFont.GetFamily(),
                       rBulletFont.GetName(), rBulletFont.GetStyleName(),
                         rBulletFont.GetPitch(), rBulletFont.GetCharSet(), RES_CHRATR_FONT ));
-            // --> OD 2008-06-02 #i63395#
-            // no font and no font size any more
-//            SetAllScriptItem( aSet, SvxFontHeightItem( PT_9, 100, RES_CHRATR_FONTSIZE ));
-            // <--
         }
         break;
 
@@ -1286,10 +1276,6 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId )
    case RES_POOLCHR_VERT_NUM:
             aSet.Put( SvxCharRotateItem( 900, sal_False, RES_CHRATR_ROTATE ) );
     break;
-//nichts besonderes
-//  case RES_POOLCHR_HTML_DEFINSTANCE:
-//          break;
-
 
     case RES_POOLFRM_FRAME:
         {
@@ -1377,9 +1363,6 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId )
     {
         {
             pNewFmt->SetFmtAttr( aSet );
-            // JP 31.08.95: erzeugen einer PoolVorlage ist keine Modifikation
-            //              (Bug: 18545)
-            // SetModified();
         }
     }
     return pNewFmt;
@@ -1626,9 +1609,6 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
             if( bSetLeft )
                 pNewPgDsc->GetLeft().SetFmtAttr( aSet );
             pNewPgDsc->GetMaster().SetFmtAttr( aSet );
-            // JP 31.08.95: erzeugen einer PoolVorlage ist keine Modifikation
-            //              (Bug: 18545)
-            // SetModified();
         }
     }
     return pNewPgDsc;
@@ -2374,36 +2354,6 @@ sal_Bool SwDoc::IsUsed( const SwModify& rModify ) const
 // erfrage ob die NumRule benutzt wird
 sal_Bool SwDoc::IsUsed( const SwNumRule& rRule ) const
 {
-    // --> OD 2008-03-04 #refactorlists#
-//    // dann teste mal, ob es abhaengige ContentNodes im Nodes Array gibt
-//    // (auch indirekte fuer Format-Ableitung! )
-//    sal_Bool bUsed = FALSE;
-//    SwAutoFmtGetDocNode aGetHt( &aNodes );
-//    SwModify* pMod;
-//    const SfxPoolItem* pItem;
-//    USHORT i, nMaxItems = GetAttrPool().GetItemCount( RES_PARATR_NUMRULE);
-//    for( i = 0; i < nMaxItems; ++i )
-//    {
-//        if( 0 != (pItem = GetAttrPool().GetItem( RES_PARATR_NUMRULE, i ) ) &&
-//            0 != ( pMod = (SwModify*)((SwNumRuleItem*)pItem)->GetDefinedIn()) &&
-//            ((SwNumRuleItem*)pItem)->GetValue().Len() &&
-//            ((SwNumRuleItem*)pItem)->GetValue() == rRule.GetName() )
-//        {
-//            if( pMod->IsA( TYPE( SwFmt )) )
-//            {
-//                bUsed = !pMod->GetInfo( aGetHt );
-//                if( bUsed )
-//                    break;
-//            }
-//            else if( ((SwTxtNode*)pMod)->GetNodes().IsDocNodes() )
-//            {
-//                bUsed = TRUE;
-//                break;
-//            }
-//        }
-//    }
-
-//    return bUsed;
     sal_Bool bUsed = rRule.GetTxtNodeListSize() > 0 ||
                      rRule.GetParagraphStyleListSize() > 0;
 

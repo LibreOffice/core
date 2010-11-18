@@ -585,10 +585,6 @@ int SwFindParaText::Find( SwPaM* pCrsr, SwMoveFn fnMove,
 
     BOOL bFnd = (BOOL)pCrsr->Find( rSearchOpt, bSearchInNotes, aSTxt, fnMove, pRegion, bInReadOnly );
 
-    /*   #i80135# if we found something in a note, Mark and Point is the same
-    if( bFnd && *pCrsr->GetMark() == *pCrsr->GetPoint() )
-        return FIND_NOT_FOUND;
-    */
 
     if( bFnd && bReplace )          // String ersetzen ??
     {

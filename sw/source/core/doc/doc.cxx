@@ -1341,7 +1341,6 @@ void SwDoc::CalculatePagesForPrinting(
     OUString aPageRange;
     if (bIsPDFExport)
     {
-        // ?? rOptions.getValue( C2U("Selection") );
         aPageRange = rOptions.getStringValue( "PageRange", OUString() );
     }
     else
@@ -2157,8 +2156,7 @@ void SwDoc::Summary( SwDoc* pExtDoc, BYTE nLevel, BYTE nPara, BOOL bImpress )
         {
             ::SetProgressState( i, GetDocShell() );
             const ULONG nIndex = rOutNds[ i ]->GetIndex();
-            //BYTE nLvl = ((SwTxtNode*)GetNodes()[ nIndex ])->GetTxtColl()//#outline level,zhaojianwei
-                        // ->GetOutlineLevel();
+
             const int nLvl = ((SwTxtNode*)GetNodes()[ nIndex ])->GetAttrOutlineLevel()-1;//<-end,zhaojianwei
             if( nLvl > nLevel )
                 continue;
@@ -2197,7 +2195,7 @@ void SwDoc::Summary( SwDoc* pExtDoc, BYTE nLevel, BYTE nPara, BOOL bImpress )
                 if( bImpress )
                 {
                     SwTxtFmtColl* pMyColl = pNd->GetTxtColl();
-                    //USHORT nHeadLine = static_cast<USHORT>(pMyColl->GetOutlineLevel()==NO_NUMBERING ?//#outlinelevel,zhaojianwei
+
                     const USHORT nHeadLine = static_cast<USHORT>(
                                 !pMyColl->IsAssignedToListLevelOfOutlineStyle() //<-end,zhaojianwei
                                 ? RES_POOLCOLL_HEADLINE2
