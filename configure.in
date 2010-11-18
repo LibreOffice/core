@@ -6531,6 +6531,8 @@ AC_MSG_CHECKING([whether to build the OpenGL Transitions component])
 ENABLE_OPENGL=
 
 if test "x$enable_opengl" != "xno" ; then
+   save_LDFLAGS=$LDFLAGS
+   LDFLAGS="$LDFLAGS -lm"
    AC_MSG_RESULT([yes])
    AC_CHECK_HEADER(GL/gl.h, [],
                    [AC_MSG_ERROR([OpenGL headers not found])], [])
@@ -6539,6 +6541,7 @@ if test "x$enable_opengl" != "xno" ; then
    AC_CHECK_LIB(GLU, main, [],
      [AC_MSG_ERROR(libGLU not installed or functional)], [])
    ENABLE_OPENGL=TRUE
+   LDFLAGS=$save_LDFLAGS
 else
    AC_MSG_RESULT([no])
 fi
