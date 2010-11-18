@@ -239,8 +239,7 @@ COMPONENT_BITMAPS=												\
     $(ZIP1DIR)$/bitmaps$/LabelMouseOverRight.png
 
 COMPONENT_IMAGES=\
-    $(ZIP1DIR)$/bitmaps$/extension_32.png \
-    $(ZIP1DIR)$/bitmaps$/extension_32_h.png
+    $(ZIP1DIR)$/bitmaps$/extension_32.png
 
 COMPONENT_MANIFEST= 							\
     $(ZIP1DIR)$/META-INF$/manifest.xml

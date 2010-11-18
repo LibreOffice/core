@@ -225,9 +225,7 @@ COMPONENT_LIBRARIES=\
             $(COMPONENT_LIBRARY)
 
 COMPONENT_IMAGES= \
-    $(EXTENSIONDIR)$/images$/extension_32.png \
-    $(EXTENSIONDIR)$/images$/extension_32_h.png
-
+    $(EXTENSIONDIR)$/images$/extension_32.png
 
 # ........ component description ........
 # one file for each WITH_LANG token

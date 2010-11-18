@@ -104,8 +104,7 @@ COMPONENT_BITMAPS= \
     $(EXTENSIONDIR)$/bitmaps$/minimizepresi_80_h.png
 
 COMPONENT_IMAGES=\
-    $(EXTENSIONDIR)$/bitmaps$/extension_32.png \
-    $(EXTENSIONDIR)$/bitmaps$/extension_32_h.png
+    $(EXTENSIONDIR)$/bitmaps$/extension_32.png
 
 # rather freestyle or common to all?
 COMPONENT_HELP= \
