@@ -282,9 +282,10 @@ css::uno::Any ChildAccess::asValue() {
             if (!Components::allLocales(locale)) {
                 // Find best match using an adaption of RFC 4647 lookup matching
                 // rules, removing "-" or "_" delimited segments from the end;
-                // defaults are the empty string locale, the "en-US" locale, the
-                // first child (if any), or a nil value (even though it may be
-                // illegal for the given property), in that order:
+                // defaults are the "en-US" locale, the "en" locale, the empty
+                // string locale, the first child (if any), or a nil value (even
+                // though it may be illegal for the given property), in that
+                // order:
                 rtl::Reference< ChildAccess > child;
                 for (;;) {
                     child = getChild(locale);
@@ -295,16 +296,26 @@ css::uno::Any ChildAccess::asValue() {
                     while (i > 0 && locale[i] != '-' && locale[i] != '_') {
                         --i;
                     }
+                    if (i == 0) {
+                        break;
+                    }
                     locale = locale.copy(0, i);
                 }
                 if (!child.is()) {
                     child = getChild(
                         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en-US")));
                     if (!child.is()) {
-                        std::vector< rtl::Reference< ChildAccess > > all(
-                            getAllChildren());
-                        if (!all.empty()) {
-                            child = all.front();
+                        child = getChild(
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en")));
+                        if (!child.is()) {
+                            child = getChild(rtl::OUString());
+                            if (!child.is()) {
+                                std::vector< rtl::Reference< ChildAccess > >
+                                    all(getAllChildren());
+                                if (!all.empty()) {
+                                    child = all.front();
+                                }
+                            }
                         }
                     }
                 }
