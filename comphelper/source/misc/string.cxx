@@ -101,7 +101,7 @@ rtl::OUString searchAndReplaceAsciiL(
     ::comphelper::intersperse(
         ::comphelper::stl_begin(i_rSeq), ::comphelper::stl_end(i_rSeq),
         ::comphelper::OUStringBufferAppender(buf),
-        ::rtl::OUString::createFromAscii(", "));
+        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ", " )));
     return buf.makeStringAndClear();
 }
 

@@ -59,7 +59,7 @@ MimeConfigurationHelper::MimeConfigurationHelper( const uno::Reference< lang::XM
         for ( sal_Int32 nInd = 0; nInd < aClassID.getLength(); nInd++ )
         {
             if ( nInd == 4 || nInd == 6 || nInd == 8 || nInd == 10 )
-                aResult += ::rtl::OUString::createFromAscii( "-" );
+                aResult += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "-" ));
 
             sal_Int32 nDigit1 = (sal_Int32)( (sal_uInt8)aClassID[nInd] / 16 );
             sal_Int32 nDigit2 = (sal_uInt8)aClassID[nInd] % 16;
@@ -132,18 +132,18 @@ uno::Reference< container::XNameAccess > MimeConfigurationHelper::GetConfigurati
         if ( !m_xConfigProvider.is() )
             m_xConfigProvider = uno::Reference< lang::XMultiServiceFactory >(
                 m_xFactory->createInstance(
-                    ::rtl::OUString::createFromAscii( "com.sun.star.configuration.ConfigurationProvider" ) ),
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationProvider" )) ),
                 uno::UNO_QUERY_THROW );
 
         uno::Sequence< uno::Any > aArgs( 1 );
         beans::PropertyValue aPathProp;
-        aPathProp.Name = ::rtl::OUString::createFromAscii( "nodepath" );
+        aPathProp.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ));
         aPathProp.Value <<= aPath;
         aArgs[0] <<= aPathProp;
 
         xConfig = uno::Reference< container::XNameAccess >(
                             m_xConfigProvider->createInstanceWithArguments(
-                                ::rtl::OUString::createFromAscii( "com.sun.star.configuration.ConfigurationAccess" ),
+                                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationAccess" )),
                                 aArgs ),
                             uno::UNO_QUERY );
     }
@@ -160,7 +160,7 @@ uno::Reference< container::XNameAccess > MimeConfigurationHelper::GetObjConfigur
 
     if ( !m_xObjectConfig.is() )
         m_xObjectConfig = GetConfigurationByPath(
-                                        ::rtl::OUString::createFromAscii( "/org.openoffice.Office.Embedding/Objects" ) );
+                                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Embedding/Objects" )) );
 
     return m_xObjectConfig;
 }
@@ -172,7 +172,7 @@ uno::Reference< container::XNameAccess > MimeConfigurationHelper::GetVerbsConfig
 
     if ( !m_xVerbsConfig.is() )
         m_xVerbsConfig = GetConfigurationByPath(
-                                        ::rtl::OUString::createFromAscii( "/org.openoffice.Office.Embedding/Verbs" ) );
+                                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Embedding/Verbs" )) );
 
     return m_xVerbsConfig;
 }
@@ -184,7 +184,7 @@ uno::Reference< container::XNameAccess > MimeConfigurationHelper::GetMediaTypeCo
 
     if ( !m_xMediaTypeConfig.is() )
         m_xMediaTypeConfig = GetConfigurationByPath(
-                    ::rtl::OUString::createFromAscii( "/org.openoffice.Office.Embedding/MimeTypeClassIDRelations" ) );
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Embedding/MimeTypeClassIDRelations" )) );
 
     return m_xMediaTypeConfig;
 }
@@ -196,7 +196,7 @@ uno::Reference< container::XNameAccess > MimeConfigurationHelper::GetMediaTypeCo
     try
     {
         uno::Reference< container::XNameAccess > xFilterFactory(
-            m_xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.document.FilterFactory" ) ),
+            m_xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.FilterFactory" )) ),
             uno::UNO_QUERY_THROW );
 
         uno::Any aFilterAnyData = xFilterFactory->getByName( aFilterName );
@@ -219,7 +219,7 @@ uno::Reference< container::XNameAccess > MimeConfigurationHelper::GetMediaTypeCo
 {
     uno::Reference< container::XContainerQuery > xTypeCFG(
             m_xFactory->createInstance(
-                ::rtl::OUString::createFromAscii( "com.sun.star.document.TypeDetection" ) ),
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.TypeDetection" )) ),
             uno::UNO_QUERY );
 
     if ( xTypeCFG.is() )
@@ -228,7 +228,7 @@ uno::Reference< container::XNameAccess > MimeConfigurationHelper::GetMediaTypeCo
         {
             // make query for all types matching the properties
             uno::Sequence < beans::NamedValue > aSeq( 1 );
-            aSeq[0].Name = ::rtl::OUString::createFromAscii( "MediaType" );
+            aSeq[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ));
             aSeq[0].Value <<= aMediaType;
 
             uno::Reference < container::XEnumeration > xEnum = xTypeCFG->createSubSetEnumerationByProperties( aSeq );
@@ -271,10 +271,10 @@ sal_Bool MimeConfigurationHelper::GetVerbByShortcut( const ::rtl::OUString& aVer
         if ( xVerbsConfig.is() && ( xVerbsConfig->getByName( aVerbShortcut ) >>= xVerbsProps ) && xVerbsProps.is() )
         {
             embed::VerbDescriptor aTempDescr;
-            if ( ( xVerbsProps->getByName( ::rtl::OUString::createFromAscii( "VerbID" ) ) >>= aTempDescr.VerbID )
-              && ( xVerbsProps->getByName( ::rtl::OUString::createFromAscii( "VerbUIName" ) ) >>= aTempDescr.VerbName )
-              && ( xVerbsProps->getByName( ::rtl::OUString::createFromAscii( "VerbFlags" ) ) >>= aTempDescr.VerbFlags )
-              && ( xVerbsProps->getByName( ::rtl::OUString::createFromAscii( "VerbAttributes" ) ) >>= aTempDescr.VerbAttributes ) )
+            if ( ( xVerbsProps->getByName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "VerbID" )) ) >>= aTempDescr.VerbID )
+              && ( xVerbsProps->getByName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "VerbUIName" )) ) >>= aTempDescr.VerbName )
+              && ( xVerbsProps->getByName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "VerbFlags" )) ) >>= aTempDescr.VerbFlags )
+              && ( xVerbsProps->getByName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "VerbAttributes" )) ) >>= aTempDescr.VerbAttributes ) )
             {
                   aDescriptor = aTempDescr;
                 bResult = sal_True;
@@ -302,7 +302,7 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjPropsFromConfi
             uno::Sequence< ::rtl::OUString > aObjPropNames = xObjectProps->getElementNames();
 
             aResult.realloc( aObjPropNames.getLength() + 1 );
-            aResult[0].Name = ::rtl::OUString::createFromAscii( "ClassID" );
+            aResult[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ClassID" ));
             aResult[0].Value <<= aClassID;
 
             for ( sal_Int32 nInd = 0; nInd < aObjPropNames.getLength(); nInd++ )
@@ -366,9 +366,9 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByStri
     if ( ClassIDsEqual( aClassID, GetSequenceClassID( SO3_DUMMY_CLASSID ) ) )
     {
         aObjProps.realloc(2);
-        aObjProps[0].Name = ::rtl::OUString::createFromAscii("ObjectFactory");
-        aObjProps[0].Value <<= ::rtl::OUString::createFromAscii("com.sun.star.embed.OOoSpecialEmbeddedObjectFactory");
-        aObjProps[1].Name = ::rtl::OUString::createFromAscii("ClassID");
+        aObjProps[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ObjectFactory" ));
+        aObjProps[0].Value <<= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.embed.OOoSpecialEmbeddedObjectFactory" ));
+        aObjProps[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ClassID" ));
         aObjProps[1].Value <<= aClassID;
         return aObjProps;
     }
@@ -399,9 +399,9 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByClas
     if ( ClassIDsEqual( aClassID, GetSequenceClassID( SO3_DUMMY_CLASSID ) ) )
     {
         aObjProps.realloc(2);
-        aObjProps[0].Name = ::rtl::OUString::createFromAscii("ObjectFactory");
-        aObjProps[0].Value <<= ::rtl::OUString::createFromAscii("com.sun.star.embed.OOoSpecialEmbeddedObjectFactory");
-        aObjProps[1].Name = ::rtl::OUString::createFromAscii("ClassID");
+        aObjProps[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ObjectFactory" ));
+        aObjProps[0].Value <<= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.embed.OOoSpecialEmbeddedObjectFactory" ));
+        aObjProps[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ClassID" ));
         aObjProps[1].Value <<= aClassID;
     }
 
@@ -466,7 +466,7 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByDocu
 
                     if ( ( xObjConfig->getByName( aClassIDs[nInd] ) >>= xObjectProps ) && xObjectProps.is()
                       && ( xObjectProps->getByName(
-                                  ::rtl::OUString::createFromAscii( "ObjectDocumentServiceName" ) ) >>= aEntryDocName )
+                                  ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ObjectDocumentServiceName" )) ) >>= aEntryDocName )
                       && aEntryDocName.equals( aDocName ) )
                     {
                         return GetObjPropsFromConfigEntry( GetSequenceClassIDRepresentation( aClassIDs[nInd] ),
@@ -500,13 +500,13 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByDocu
         try
         {
             if ( xObjConfig.is() && ( xObjConfig->getByName( aStringClassID.toAsciiUpperCase() ) >>= xObjectProps ) && xObjectProps.is() )
-                xObjectProps->getByName( ::rtl::OUString::createFromAscii( "ObjectFactory" ) ) >>= aResult;
+                xObjectProps->getByName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ObjectFactory" )) ) >>= aResult;
         }
         catch( uno::Exception& )
         {
             uno::Sequence< sal_Int8 > aClassID = GetSequenceClassIDRepresentation( aStringClassID );
             if ( ClassIDsEqual( aClassID, GetSequenceClassID( SO3_DUMMY_CLASSID ) ) )
-                return ::rtl::OUString::createFromAscii("com.sun.star.embed.OOoSpecialEmbeddedObjectFactory");
+                return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.embed.OOoSpecialEmbeddedObjectFactory" ));
         }
     }
 
@@ -533,10 +533,10 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByDocu
 
                     if ( ( xObjConfig->getByName( aClassIDs[nInd] ) >>= xObjectProps ) && xObjectProps.is()
                       && ( xObjectProps->getByName(
-                                  ::rtl::OUString::createFromAscii( "ObjectDocumentServiceName" ) ) >>= aEntryDocName )
+                                  ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ObjectDocumentServiceName" )) ) >>= aEntryDocName )
                       && aEntryDocName.equals( aDocName ) )
                     {
-                        xObjectProps->getByName( ::rtl::OUString::createFromAscii( "ObjectFactory" ) ) >>= aResult;
+                        xObjectProps->getByName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ObjectFactory" )) ) >>= aResult;
                         break;
                     }
                 }
@@ -581,7 +581,7 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByDocu
         // filter name is not specified, so type detection should be done
 
         uno::Reference< document::XTypeDetection > xTypeDetection(
-                m_xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.document.TypeDetection" ) ),
+                m_xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.TypeDetection" )) ),
                 uno::UNO_QUERY );
 
         if ( !xTypeDetection.is() )
@@ -602,7 +602,7 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByDocu
         {
             sal_Int32 nOldLen = aMediaDescr.getLength();
             aMediaDescr.realloc( nOldLen + 1 );
-            aMediaDescr[nOldLen].Name = ::rtl::OUString::createFromAscii( "FilterName" );
+            aMediaDescr[nOldLen].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ));
             aMediaDescr[ nOldLen ].Value <<= aFilterName;
 
         }
@@ -619,7 +619,7 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByDocu
                     {
                         sal_Int32 nOldLen = aMediaDescr.getLength();
                         aMediaDescr.realloc( nOldLen + 1 );
-                        aMediaDescr[nOldLen].Name = ::rtl::OUString::createFromAscii( "FilterName" );
+                        aMediaDescr[nOldLen].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ));
                         aMediaDescr[ nOldLen ].Value = aTypes[nInd].Value;
                         break;
                     }
@@ -659,7 +659,7 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByDocu
     {
         sal_Int32 nOldLen = aMediaDescr.getLength();
         aMediaDescr.realloc( nOldLen + 1 );
-        aMediaDescr[nOldLen].Name = ::rtl::OUString::createFromAscii( "DocumentService" );
+        aMediaDescr[nOldLen].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DocumentService" ));
         aMediaDescr[nOldLen].Value <<= aDocName;
     }
 
@@ -675,7 +675,7 @@ sal_Bool MimeConfigurationHelper::AddFilterNameCheckOwnFile(
         try
         {
             uno::Reference< container::XNameAccess > xFilterFactory(
-                m_xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.document.FilterFactory" ) ),
+                m_xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.FilterFactory" )) ),
                 uno::UNO_QUERY_THROW );
 
             uno::Any aFilterAnyData = xFilterFactory->getByName( aFilterName );
@@ -710,13 +710,13 @@ sal_Bool MimeConfigurationHelper::AddFilterNameCheckOwnFile(
         try
         {
             uno::Reference< container::XContainerQuery > xFilterQuery(
-                m_xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.document.FilterFactory" ) ),
+                m_xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.FilterFactory" )) ),
                 uno::UNO_QUERY_THROW );
 
             uno::Sequence< beans::NamedValue > aSearchRequest( 2 );
-            aSearchRequest[0].Name = ::rtl::OUString::createFromAscii( "DocumentService" );
+            aSearchRequest[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DocumentService" ));
             aSearchRequest[0].Value <<= aServiceName;
-            aSearchRequest[1].Name = ::rtl::OUString::createFromAscii( "FileFormatVersion" );
+            aSearchRequest[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FileFormatVersion" ));
             aSearchRequest[1].Value <<= nVersion;
 
             uno::Sequence< beans::PropertyValue > aFilterProps;
@@ -731,7 +731,7 @@ sal_Bool MimeConfigurationHelper::AddFilterNameCheckOwnFile(
                     if ( xFilterEnum->nextElement() >>= aProps )
                     {
                         SequenceAsHashMap aPropsHM( aProps );
-                        sal_Int32 nFlags = aPropsHM.getUnpackedValueOrDefault( ::rtl::OUString::createFromAscii( "Flags" ),
+                        sal_Int32 nFlags = aPropsHM.getUnpackedValueOrDefault( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Flags" )),
                                                                                 (sal_Int32)0 );
 
                         // that should be import, export, own filter and not a template filter ( TemplatePath flag )
@@ -740,7 +740,7 @@ sal_Bool MimeConfigurationHelper::AddFilterNameCheckOwnFile(
                             // if there are more than one filter the preffered one should be used
                             // if there is no preffered filter the first one will be used
                             if ( !aResult.getLength() || ( nFlags & 0x10000000L ) )
-                                aResult = aPropsHM.getUnpackedValueOrDefault( ::rtl::OUString::createFromAscii( "Name" ),
+                                aResult = aPropsHM.getUnpackedValueOrDefault( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Name" )),
                                                                                 ::rtl::OUString() );
                             if ( nFlags & 0x10000000L )
                                 break; // the preffered filter was found
