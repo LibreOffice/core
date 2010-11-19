@@ -889,7 +889,6 @@ void SwDrawView::ShowDragAnchor()
     {
         CalcAnchor();
         pHdl->SetPos(aAnchorPoint);
-        //OLMRefreshAllIAOManagers();
     }
 }
 
@@ -1096,16 +1095,6 @@ void SwDrawView::DeleteMarked()
     if( pDoc->GetRootFrm() )
         pDoc->GetRootFrm()->EndAllAction();
 }
-
-/********
-JP 02.10.98: sollte als Fix fuer 57153 gelten, hatte aber Nebenwirkungen,
-            wie Bug 57475
-const SdrMarkList& SwDrawView::GetMarkedObjectList() const
-{
-    FlushComeBackTimer();
-    return FmFormView::GetMarkedObjectList();
-}
-*************/
 
 
 

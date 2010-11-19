@@ -878,7 +878,6 @@ const SwTxtNode* SwNode::FindOutlineNodeOfLevel( BYTE nLvl ) const
             // oder ans Feld und von dort holen !!
             while( nPos &&
                    nLvl < ( pRet = rONds[nPos]->GetTxtNode() )
-                    //->GetTxtColl()->GetOutlineLevel() )//#outline level,zhaojianwei
                     ->GetAttrOutlineLevel() - 1 )  //<-end,zhaojianwei
                 --nPos;
 
@@ -916,9 +915,7 @@ BYTE SwNode::HasPrevNextLayNode() const
         // <--
         if( IsValidNextPrevNd( aIdx.GetNode() ))
             nRet |= ND_HAS_PREV_LAYNODE;
-        // --> OD 2007-06-04 #i77805#
-        // skip section start and end nodes
-//        aIdx += 2;
+        // #i77805# - skip section start and end nodes
         aIdx = SwNodeIndex( *this, +1 );
         while ( aIdx.GetNode().IsSectionNode() ||
                 ( aIdx.GetNode().IsEndNode() &&
@@ -926,7 +923,6 @@ BYTE SwNode::HasPrevNextLayNode() const
         {
             ++aIdx;
         }
-        // <--
         if( IsValidNextPrevNd( aIdx.GetNode() ))
             nRet |= ND_HAS_NEXT_LAYNODE;
     }
@@ -1484,25 +1480,6 @@ BOOL SwCntntNode::GetInfo( SfxPoolItem& rInfo ) const
             return FALSE;
         }
         break;
-    // --> OD 2008-02-19 #refactorlists#
-//    case RES_GETNUMNODES:
-//        // #111955# only numbered nodes in rInfo
-//        if( IsTxtNode())
-//        {
-//            SwTxtNode * pTxtNode = (SwTxtNode*)this;
-//            pItem = (SwNumRuleItem*)GetNoCondAttr(RES_PARATR_NUMRULE, TRUE );
-
-//            if (0 != pItem  &&
-//                pItem->GetValue().Len() &&
-//                pItem->GetValue() == ((SwNumRuleInfo&)rInfo).GetName() &&
-//                GetNodes().IsDocNodes())
-//            {
-//                ((SwNumRuleInfo&)rInfo).AddNode( *pTxtNode );
-//            }
-//        }
-
-//        return TRUE;
-    // <--
 
     case RES_FINDNEARESTNODE:
         if( ((SwFmtPageDesc&)GetAttr( RES_PAGEDESC )).GetPageDesc() )

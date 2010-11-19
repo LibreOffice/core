@@ -242,8 +242,6 @@ void SwLinguIter::_Start( SwEditShell *pShell, SwDocPositions eStart,
 
     SwPaM *pCrsr = pSh->GetCrsr();
 
-    // pStk->SetCurCrsr();
-//  if( pCrsr->HasMark() || pCrsr != pCrsr->GetNext() )
     if( pShell->HasSelection() || pCrsr != pCrsr->GetNext() )
     {
         bSetCurr = 0 != GetCurr();
@@ -358,8 +356,6 @@ uno::Any SwSpellIter::Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
     if( !pMySh )
         return aSpellRet;
 
-//  const SwPosition *pEnd = GetEnd();
-
     ASSERT( GetEnd(), "SwEditShell::SpellContinue() ohne Start?");
 
     uno::Reference< uno::XInterface >  xSpellRet;
@@ -433,8 +429,6 @@ uno::Any SwConvIter::Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
     SwEditShell *pMySh = GetSh();
     if( !pMySh )
         return aConvRet;
-
-//  const SwPosition *pEnd = GetEnd();
 
     ASSERT( GetEnd(), "SwConvIter::Continue() ohne Start?");
 
@@ -1166,12 +1160,6 @@ bool SwEditShell::GetGrammarCorrection(
                 sal_Int32 nEndOfSentence = ModelToViewHelper::ConvertToViewPosition( pConversionMap, pWrong->getSentenceEnd( nBegin ) );
                 if( nEndOfSentence == STRING_LEN )
                 {
-/*                    if( nStartOfSentence == 0 )
-                    {
-                        nStartOfSentence = -1;
-                        nEndOfSentence = -1;
-                    }
-                    else */
                         nEndOfSentence = aExpandText.getLength();
                 }
 
@@ -1206,10 +1194,6 @@ bool SwEditShell::GetGrammarCorrection(
                 xub_StrLen nLineEnd = GetCrsr()->GetPoint()->nContent.GetIndex();
                 Pop(FALSE);
 
-#if OSL_DEBUG_LEVEL > 1
-//                pNode->GetGrammarCheck()->Invalidate( 0, STRING_LEN );
-//                pNode->SetGrammarCheckDirty( true );
-#endif
                 // make sure the selection build later from the
                 // data below does not include footnotes and other
                 // "in word" character to the left and right in order

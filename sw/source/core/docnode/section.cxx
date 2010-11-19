@@ -76,7 +76,6 @@ using namespace ::com::sun::star;
 
 SV_IMPL_REF( SwServerObject )
 
-//static const char __FAR_DATA sSectionFmtNm[] = "Section";
 #define sSectionFmtNm aEmptyStr
 
 class SwIntrnlSectRefLink : public SwBaseLink
@@ -291,8 +290,6 @@ void SwSection::SetSectionData(SwSectionData const& rData)
 {
     bool const bOldHidden( m_Data.IsHidden() );
     m_Data = rData;
-    // now update format and reflink with new data
-//    SetLinkFileName(m_Data.GetLinkFileName()); // old code did not do this?
     // next 2 may actually overwrite m_Data.m_b{Protect,EditInReadonly}Flag
     // in Modify, which should result in same flag value as the old code!
     SetProtect(m_Data.IsProtectFlag());

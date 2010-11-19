@@ -420,17 +420,6 @@ SwTableNode* SwTableNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     SwNodes& rNds = (SwNodes&)GetNodes();
 
     {
-        // nicht in Fussnoten kopieren !!
-/*
-!! Mal ohne Frames
-        SwCntntNode* pCNd = pDoc->GetNodes()[ rIdx ]->GetCntntNode();
-        SwFrm* pFrm;
-        if( (pCNd && 0 != ( pFrm = pCNd->GetFrm()))
-                ? pFrm->FindFtnFrm()
-                : rIdx < pDoc->GetNodes().EndOfInserts &&
-                    pDoc->GetNodes()[pDoc->GetNodes().EndOfInserts]->StartOfSection()
-                    < rIdx )
-*/
         if( rIdx < pDoc->GetNodes().GetEndOfInserts().GetIndex() &&
             rIdx >= pDoc->GetNodes().GetEndOfInserts().StartOfSectionIndex() )
             return 0;
@@ -1298,9 +1287,7 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
 
     if ( pNumRuleToPropagate )
     {
-        // --> OD 2009-08-25 #i86492#
-        // use <SwDoc::SetNumRule(..)>, because it also handles the <ListId>
-//        pDoc->ReplaceNumRule(aCpyPam, *pNumRuleToPropagate);
+        // #i86492# - use <SwDoc::SetNumRule(..)>, because it also handles the <ListId>
         pDoc->SetNumRule( aCpyPam, *pNumRuleToPropagate, false,
                           aListIdToPropagate, sal_True, true );
     }

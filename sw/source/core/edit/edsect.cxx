@@ -401,9 +401,7 @@ const SwNode* lcl_SpecialInsertNode(const SwPosition* pCurrentPos)
             pReturn = pInnermostNode->EndOfSectionNode();
         else if ( bStart )
             pReturn = pInnermostNode;
-        // else pReturn = NULL;
     }
-    // else: pReturn = NULL
 
 
     DBG_ASSERT( ( pReturn == NULL ) || pReturn->IsStartNode() ||

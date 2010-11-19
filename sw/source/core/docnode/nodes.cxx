@@ -183,12 +183,9 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, ULONG nSz,
             if ( rNd.IsTxtNode() )
             {
                 SwTxtNode* pTxtNode = rNd.GetTxtNode();
-                // --> OD 2008-03-13 #refactorlists#
-//                pTxtNode->UnregisterNumber();
-                pTxtNode->RemoveFromList();
-                // <--
 
-                //if ( pTxtNode->GetTxtColl()->GetOutlineLevel() != NO_NUMBERING )//#outline level,zhaojianwei
+                pTxtNode->RemoveFromList();
+
                 if ( pTxtNode->GetAttrOutlineLevel() != 0 )//<-end,zhaojianwei
                 {
                     const SwNodePtr pSrch = (SwNodePtr)&rNd;
@@ -202,13 +199,10 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, ULONG nSz,
             if( rNd.IsTxtNode() )
             {
                 SwTxtNode& rTxtNd = (SwTxtNode&)rNd;
-                // --> OD 2008-03-13 #refactorlists#
-//                rTxtNd.SyncNumberAndNumRule();
+
                 rTxtNd.AddToList();
-                // <--
 
                 if( bInsOutlineIdx &&
-                    //NO_NUMBERING != rTxtNd.GetTxtColl()->GetOutlineLevel() )//#outline level,zhaojianwei
                     0 != rTxtNd.GetAttrOutlineLevel() )//<-end,zhaojianwei
                 {
                     const SwNodePtr pSrch = (SwNodePtr)&rNd;
@@ -250,7 +244,6 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, ULONG nSz,
                 SwTxtNode* pTxtNd = (SwTxtNode*)pNd;
 
                 // loesche die Gliederungs-Indizies aus dem alten Nodes-Array
-                //if( NO_NUMBERING != pTxtNd->GetTxtColl()->GetOutlineLevel() )//#outline level,zhaojianwei
                 if( 0 != pTxtNd->GetAttrOutlineLevel() )//<-end,zhaojianwei
                     pOutlineNds->Remove( pNd );
 
@@ -289,19 +282,14 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, ULONG nSz,
                 if( pTxtNd )
                 {
                     SwpHints * const pHts = pTxtNd->GetpSwpHints();
-                    // setze die OultineNodes im neuen Nodes-Array
-                    //if( bInsOutlineIdx && NO_NUMBERING != //#outline level,removed by zhaojianwei
-                    //  pTxtNd->GetTxtColl()->GetOutlineLevel() )
+                    // OultineNodes set the new nodes in the array
                     if( bInsOutlineIdx &&
                         0 != pTxtNd->GetAttrOutlineLevel() ) //#outline level,added by zhaojianwei
                     {
                         rNds.pOutlineNds->Insert( pTxtNd );
                     }
 
-                    // --> OD 2008-03-13 #refactorlists#
-//                    pTxtNd->SyncNumberAndNumRule();
                     pTxtNd->AddToList();
-                    // <--
 
                     // Sonderbehandlung fuer die Felder!
                     if( pHts && pHts->Count() )
@@ -506,14 +494,10 @@ BOOL SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
 
     // setze den Start-Index
     SwNodeIndex  aIdx( aIndex );
-/*
-    --- JP 17.11.94: sollte ueberholt sein, wird im ChgNode schon erledigt!
-    BOOL bCorrNum = pSect && pSect->aStart.GetIndex() == aIdx.GetIndex();
-*/
 
     SwStartNode* pStartNode = aIdx.GetNode().pStartOfSection;
     aSttNdStack.C40_INSERT( SwStartNode, pStartNode, 0 );
-//  aSttNdStack.Insert( rNodes[ aIdx ]->pStartOfSection, 0 );
+
     SwNodeRange aOrigInsPos( aIdx, -1, aIdx );      // Originale Insert Pos
 
     //JP 16.01.98: SectionNodes: DelFrms/MakeFrms beim obersten SectionNode!
@@ -571,22 +555,16 @@ BOOL SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                                 if( pTmpNd->IsTxtNode() )
                                     ((SwTxtNode*)pTmpNd)->RemoveFromList();
 
-//                              if( bNewFrms )
-//                                  pCNd->DelFrms();
-
                                 // setze bei Start/EndNodes die richtigen Indizies
                                 // loesche die Gliederungs-Indizies aus
                                 // dem alten Nodes-Array
-                                //if( pCNd->IsTxtNode() && NO_NUMBERING !=      //#outline level,zhaojianwei
-                                //  ((SwTxtNode*)pCNd)->GetTxtColl()->GetOutlineLevel() )
                                 if( pCNd->IsTxtNode() && 0 !=
                                     ((SwTxtNode*)pCNd)->GetAttrOutlineLevel() )//<-end,by zhaojianwei
                                     pOutlineNds->Remove( pCNd );
                                 else
                                     pCNd = 0;
                             }
-//                          else if( bNewFrms && pTmpNd->IsSectionNode() )
-//                              ((SwSectionNode*)pTmpNd)->DelFrms();
+
                             BigPtrArray::Move( aMvIdx.GetIndex(), aIdx.GetIndex() );
 
                             if( bInsOutlineIdx && pCNd )
@@ -610,16 +588,7 @@ BOOL SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                         for( ULONG n = 0; n < nInsPos; ++n )
                         {
                             SwNode* pNd = &aMvIdx.GetNode();
-/*                          if( bNewFrms )
-                            {
-                                if( pNd->IsCntntNode() )
-                                    ((SwCntntNode*)pNd)->DelFrms();
-                                else if( pNd->IsSectionNode() )
-                                    ((SwSectionNode*)pNd)->DelFrms();
-                            }
-*/
-                            //BOOL bOutlNd = pNd->IsTxtNode() && NO_NUMBERING !=//#outline level,zhaojianwei
-                            //  ((SwTxtNode*)pNd)->GetTxtColl()->GetOutlineLevel();
+
                             const bool bOutlNd = pNd->IsTxtNode() &&
                                     0 != ((SwTxtNode*)pNd)->GetAttrOutlineLevel();//<-end,zhaojianwei
                             // loesche die Gliederungs-Indizies aus
@@ -848,7 +817,6 @@ BOOL SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                     nInsPos = 0;
 
                     // loesche nur noch den Pointer aus dem Nodes-Array.
-//                  RemoveNode( aRg.aEnd.GetIndex(), 1, FALSE );
                     RemoveNode( aRg.aEnd.GetIndex(), 1, TRUE );
                     aRg.aEnd--;
 
@@ -872,7 +840,6 @@ BOOL SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                     DelNodes( aRg.aEnd, 2 );
                     aRg.aEnd--;
                 }
-//              aRg.aEnd--;
             }
             break;
 
@@ -1307,8 +1274,6 @@ void SwNodes::Delete(const SwNodeIndex &rIndex, ULONG nNodes)
 
                     if( pNd->IsTxtNode() )
                     {
-                        //if( NO_NUMBERING !=                   //#outline level,zhaojianwei
-                        //  ((SwTxtNode*)pNd)->GetTxtColl()->GetOutlineLevel() &&
                         if( 0 != ((SwTxtNode*)pNd)->GetAttrOutlineLevel() &&//<-end,zhaojianwei
                                 pOutlineNds->Seek_Entry( pNd, &nIdxPos ))
                         {
@@ -1697,7 +1662,6 @@ void SwNodes::DelNodes( const SwNodeIndex & rStart, ULONG nCnt )
             SwNode* pNd = (*this)[ n ];
 
             if( pNd->IsTxtNode() &&
-                //NO_NUMBERING != ((SwTxtNode*)pNd)->GetTxtColl()->GetOutlineLevel() )//#outline level,zhaojianwei
                 0 != ((SwTxtNode*)pNd)->GetAttrOutlineLevel() ) //<-end,zhaojianwei
             {                   // loesche die Gliederungs-Indizies.
                 USHORT nIdxPos;
@@ -2576,10 +2540,7 @@ void SwNodes::RemoveNode( ULONG nDelPos, ULONG nSz, BOOL bDel )
 
             if (pTxtNd)
             {
-                // --> OD 2008-03-13 #refactorlists#
-//                pTxtNd->UnregisterNumber();
                 pTxtNd->RemoveFromList();
-                // <--
             }
         }
     }
@@ -2687,12 +2648,6 @@ SwNode * SwNodes::DocumentSectionEndNode(SwNode * pNode) const
 {
     return DocumentSectionStartNode(pNode)->EndOfSectionNode();
 }
-
-//SwNode * SwNodes::operator[](int n) const
-//{
-//    return operator[]((ULONG) n);
-//}
-// <-#112139#
 
 sal_Bool SwNodes::IsDocNodes() const
 {

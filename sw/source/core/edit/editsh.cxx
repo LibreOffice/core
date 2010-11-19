@@ -383,30 +383,6 @@ void SwEditShell::GetGrfNms( String* pGrfName, String* pFltName,
 }
 
 
-// alternativen Text abfragen/setzen
-//const String& SwEditShell::GetAlternateText() const
-//{
-//    SwPaM* pCrsr = GetCrsr();
-//    const SwNoTxtNode* pNd;
-//    if( !pCrsr->HasMark() && 0 != ( pNd = pCrsr->GetNode()->GetNoTxtNode()) )
-//        return pNd->GetAlternateText();
-
-//    return aEmptyStr;
-//}
-
-
-//void SwEditShell::SetAlternateText( const String& rTxt )
-//{
-//    SwPaM* pCrsr = GetCrsr();
-//    SwNoTxtNode* pNd;
-//    if( !pCrsr->HasMark() && 0 != ( pNd = pCrsr->GetNode()->GetNoTxtNode()) )
-//    {
-//        pNd->SetAlternateText( rTxt, sal_True );
-//        GetDoc()->SetModified();
-//    }
-//}
-
-
 const PolyPolygon *SwEditShell::GetGraphicPolygon() const
 {
     SwNoTxtNode *pNd = GetCrsr()->GetNode()->GetNoTxtNode();

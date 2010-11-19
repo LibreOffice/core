@@ -565,12 +565,9 @@ BOOL SwAutoFormat::DoUnderline()
     xub_StrLen nCnt = 0;
     while( *pStr )
     {
-//JP 29.03.96: Spaces unterbrechen die Umrandung!
-//      if( !IsSpace( *pStr ) )
+        int eTmp = 0;
+        switch( *pStr )
         {
-            int eTmp = 0;
-            switch( *pStr )
-            {
             case '-': eTmp = 1; break;
             case '_': eTmp = 2; break;
             case '=': eTmp = 3; break;
@@ -579,13 +576,13 @@ BOOL SwAutoFormat::DoUnderline()
             case '#': eTmp = 6; break;
             default:
                 return FALSE;
-            }
-            if( 0 == eState )
-                eState = eTmp;
-            else if( eState != eTmp )
-                return FALSE;
-            ++nCnt;
         }
+        if( 0 == eState )
+            eState = eTmp;
+        else if( eState != eTmp )
+            return FALSE;
+        ++nCnt;
+
         ++pStr;
     }
 
@@ -595,8 +592,6 @@ BOOL SwAutoFormat::DoUnderline()
         DelEmptyLine( FALSE );
         aDelPam.SetMark();
         aDelPam.GetMark()->nContent = 0;
-//JP 19.03.96: kein Underline sondern eine Umrandung setzen!
-//      pDoc->Insert( aDelPam, SvxUnderlineItem( eState ) );
 
         SvxBorderLine aLine;
         switch( eState )
@@ -857,7 +852,6 @@ USHORT SwAutoFormat::GetDigitLevel( const SwTxtNode& rNd, xub_StrLen& rPos,
             // roemische Zeichen sind "mdclxvi". Da man aber eher mal eine
             // Numerierung mit c oder d anfangen will, werden diese erstmal
             // zu chars und spaeter ggfs. zu romischen Zeichen!
-//          if( strchr( "mdclxvi", cLow ))
 #ifdef WITH_ALPHANUM_AS_NUMFMT
             //detection of 'c' and 'd' a ROMAN numbering should not be done here
             if( 256 > cLow  &&( (eScan & (LOWER_ROMAN|UPPER_ROMAN))
@@ -1084,8 +1078,6 @@ BOOL SwAutoFormat::HasSelBlanks( SwPaM& rPam ) const
     SwTxtNode* pTxtNd = pPos->nNode.GetNode().GetTxtNode();
     if( nBlnkPos && nBlnkPos-- < pTxtNd->GetTxt().Len() &&
         ( ' ' == pTxtNd->GetTxt().GetChar( nBlnkPos ) ))
-// JP 23.08.95: keine Tabs stehen lassen, diese in Blanks wandeln
-//        ( ' ' == ( cCh = pTxtNd->GetTxt()[ nBlnkPos ] ) || '\t' == cCh ))
         pPos->nContent--;
     else
     {
@@ -1094,8 +1086,6 @@ BOOL SwAutoFormat::HasSelBlanks( SwPaM& rPam ) const
         pTxtNd = pPos->nNode.GetNode().GetTxtNode();
         if( nBlnkPos < pTxtNd->GetTxt().Len() &&
             ( ' ' == pTxtNd->GetTxt().GetChar( nBlnkPos )))
-// JP 23.08.95: keine Tabs stehen lassen, diese in Blanks wandeln
-//            ( ' ' == ( cCh = pTxtNd->GetTxt()[ nBlnkPos ] ) || '\t' == cCh ))
             pPos->nContent++;
         else
             return FALSE;
@@ -1470,7 +1460,6 @@ void SwAutoFormat::BuildEnum( USHORT nLvl, USHORT nDigitLevel )
                     IsBlanksInString( *pAktTxtNd ) ||
                     IsSentenceAtEnd( *pAktTxtNd );
     sal_Bool bRTL = pEditShell->IsInRightToLeftText();
-//  SetColl( RES_POOLCOLL_NUM_LEVEL1 + ( nLvl * 4 ) );
     DeleteAktPara( TRUE, TRUE );
 
     BOOL bChgBullet = FALSE, bChgEnum = FALSE;
@@ -1491,7 +1480,6 @@ void SwAutoFormat::BuildEnum( USHORT nLvl, USHORT nDigitLevel )
     const String& rStr = pAktTxtNd->GetTxt();
     xub_StrLen nTxtStt = 0, nOrigTxtStt = 0;
     const sal_Unicode* pFndBulletChr;
-//  if( aFlags.bAFmtByInput ? aFlags.bSetNumRule : aFlags.bChgEnumNum &&
     if( aFlags.bChgEnumNum &&
         2 < rStr.Len() &&
         0 != ( pFndBulletChr = StrChr( pBulletChar, rStr.GetChar( nTxtStt ) ))
@@ -2086,12 +2074,7 @@ void SwAutoFormat::AutoCorrect( xub_StrLen nPos )
             case '?':
                 if( aFlags.bCptlSttSntnc )
                     bFirstSent = TRUE;
-//alle Wortrenner loesen die Autokorrektur aus!
-//              break;
             default:
-//alle Wortrenner loesen die Autokorrektur aus!
-//          case ' ':
-//          case '\t':
                 if( !( rAppCC.isLetterNumeric( *pTxt, nPos )
                         || '/' == cChar )) //  '/' should not be a word seperator (e.g. '1/2' needs to be handled as one word for replacement)
                 {
@@ -2459,10 +2442,6 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
                     if( !bNxtEmpty && HasBreakAttr( *pNxtNd ) )
                         bNxtEmpty = TRUE;
 
-                    // fuer z.B. selbst definierte Einzuege oder
-                    // rechts/zentierte Ausrichtung
-//                  if( !nLevel && 0 != aFInfo.GetLineStart() )
-//                      nLevel = 1;
                 }
                 else
                 {
@@ -2501,13 +2480,6 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
                 // nicht, dann teste auf Ueberschrift
                 if( ':' == sEndClrStr.GetChar( nLen - 1 ) )
                 {
-//---------------------------------------------------------------------------
-// Wie ist denn nun die Bedingung fuer die Ueberschrift auf Ebene 3 ??
-// Zur Zeit: generell wenn am Ende ein ':' ist.
-//
-//                  if( bNxtEmpty || bNxtAlpha )
-//                      !IsEnumericChar( *pNxtNd ) )
-//---------------------------------------------------------------------------
                     {
                         BuildHeadLine( 2 );
                         eStat = READ_NEXT_PARA;
@@ -2520,16 +2492,8 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
                     if( bNxtEmpty || bNxtAlpha
                         || ( pNxtNd && IsEnumericChar( *pNxtNd ))
 
-//---------------------------------------------------------------------------
-// ist zum Verwechseln mit neg. Einzug !!
-                        /*|| nLevel < nNxtLevel*/
-//---------------------------------------------------------------------------
-
                         )
                     {
-                        // wurde Level vom Text vorgegeben ?
-//                      if( USHRT_MAX != nDigitLvl )
-//                          nLevel = nDigitLvl;
 
                         // eine Ebene runter ?
                         if( nLevel >= MAXLEVEL )
@@ -2571,9 +2535,6 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
                     BuildEnum( nLevel, nDigitLvl );
                     eStat = READ_NEXT_PARA;
                 }
-//JP 25.03.96: Vorlagen fuer Einzug zulassen
-//              else if( aFlags.bAFmtByInput )
-//                  eStat = READ_NEXT_PARA;
                 else if( bReplaceStyles )
                     eStat = nLevel ? TST_IDENT : TST_NEG_IDENT;
                 else

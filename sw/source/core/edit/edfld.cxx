@@ -376,11 +376,6 @@ void SwEditShell::UpdateFlds( SwField &rFld )
         SwTxtFld *pTxtFld;
         SwFmtFld *pFmtFld;
 
-//      if( pCrsr->GetNext() == pCrsr && !pCrsr->HasMark() &&
-//          ( 0 != ( pTxtFld = GetDocTxtFld( pCrsr->Start() ) ) ||
-//            0 != ( pTxtFld = lcl_FindInputFld( GetDoc(), rFld ) ) ) &&
-//          ( pFmtFld = (SwFmtFld*)&pTxtFld->GetFld())->GetFld()
-//              ->GetTyp()->Which() == rFld.GetTyp()->Which() )
         if ( pCrsr->GetNext() == pCrsr && !pCrsr->HasMark())
         {
             pTxtFld = GetDocTxtFld(pCrsr->Start());

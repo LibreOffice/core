@@ -53,7 +53,7 @@ void SwEditShell::ResetAttr( const SvUShortsSort* pAttrs )
         GetDoc()->StartUndo(UNDO_RESETATTR, NULL);
 
         FOREACHPAM_START(this)
-            // if ( PCURCRSR->HasMark() )
+
                 GetDoc()->ResetAttrs(*PCURCRSR, sal_True, pAttrs);
         FOREACHPAM_END()
 
@@ -67,10 +67,6 @@ void SwEditShell::ResetAttr( const SvUShortsSort* pAttrs )
 
 void SwEditShell::GCAttr()
 {
-//JP 04.02.97: wozu eine Action-Klammerung - ein Formatierung sollte nicht
-//              ausgeloest werden, so dass es hier ueberfluessig ist.
-//              Sonst Probleme im MouseBut.DownHdl - Bug 35562
-//  StartAllAction();
     FOREACHPAM_START(this)
         SwTxtNode *pTxtNode;
         if ( !PCURCRSR->HasMark() )
@@ -92,7 +88,6 @@ void SwEditShell::GCAttr()
                     aIdx <= rEnd );
         }
     FOREACHPAM_END()
-//  EndAllAction();
 }
 
 // Setze das Attribut als neues default Attribut im Dokument.
@@ -105,17 +100,6 @@ void SwEditShell::SetDefault( const SfxPoolItem& rFmtHint )
     GetDoc()->SetDefault( rFmtHint );
     EndAllAction();
 }
-
-/*
-
-void SwEditShell::SetDefault( const SfxItemSet& rSet )
-{
-    // 7502: Action-Klammerung
-    StartAllAction();
-    GetDoc()->SetDefault( rSet );
-    EndAllAction();
-}
-*/
 
 // Erfrage das Default Attribut in diesem Dokument.
 

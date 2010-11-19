@@ -341,13 +341,9 @@ void SwEditShell::SetIndent(short nIndent, const SwPosition & rPos)
         SwTxtNode * pTxtNode = aPaM.GetNode()->GetTxtNode();
 
         // --> OD 2008-06-09 #i90078#
-//        int nLevel = -1;
-//        int nReferenceLevel = pTxtNode->GetActualListLevel();
-//        if (! IsFirstOfNumRule(aPaM))
-//            nLevel = nReferenceLevel;
 
         SwNumRule aRule(*pCurNumRule);
-//        aRule.ChangeIndent(nIndent, nLevel, nReferenceLevel, FALSE);
+
         if ( IsFirstOfNumRule() )
         {
             aRule.SetIndentOfFirstListLevelAndChangeOthers( nIndent );
@@ -559,12 +555,8 @@ BOOL SwEditShell::IsProtectedOutlinePara() const
         {
             SwNodePtr pTmpNd = rOutlNd[ nPos ];
 
-            // --> OD 2008-04-02 #refactorlists#
-//            BYTE nTmpLvl = GetRealLevel( pTmpNd->GetTxtNode()->
-//                                    GetTxtColl()->GetOutlineLevel() );
- //           int nTmpLvl = pTmpNd->GetTxtNode()->GetOutlineLevel();//#outline level,zhaojianwei
             int nTmpLvl = pTmpNd->GetTxtNode()->GetAttrOutlineLevel();
- //           ASSERT( nTmpLvl >= 0 && nTmpLvl < MAXLEVEL,
+
             ASSERT( nTmpLvl >= 0 && nTmpLvl <= MAXLEVEL,            //<-end,zhaojianwei
                     "<SwEditShell::IsProtectedOutlinePara()>" );
             // <--
@@ -658,7 +650,6 @@ BOOL SwEditShell::IsNoNum( BOOL bChkStart ) const
 BYTE SwEditShell::GetNumLevel() const
 {
     // gebe die akt. Ebene zurueck, auf der sich der Point vom Cursor befindet
-    //BYTE nLevel = NO_NUMBERING;   //#outline level,zhaojianwei
     BYTE nLevel = MAXLEVEL;     //end,zhaojianwei
 
     SwPaM* pCrsr = GetCrsr();

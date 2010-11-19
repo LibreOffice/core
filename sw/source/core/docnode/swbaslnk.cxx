@@ -408,29 +408,9 @@ BOOL SwBaseLink::SwapIn( BOOL bWaitForData, BOOL bNativFormat )
     }
 #endif
 
-    // --> OD 2005-04-11 #i46300# - deactivate fix for issues i9861 and i33293
-//    TestBalloonInputStream* pTBIS = 0;
-//    if(!m_xInputStreamToLoadFrom.is()) {
-//        if ( !pCntntNode->IsGrfNode() ||
-//             static_cast<SwGrfNode*>(pCntntNode)->GetGrfObj().GetType()
-//                    != GRAPHIC_DEFAULT )
-//        {
-//            pTBIS = new TestBalloonInputStream();
-//            m_xInputStreamToLoadFrom = pTBIS;
-//        }
-//    }
-    // <--
-
     if( GetObj() )
     {
-        // --> OD 2005-04-11 #i46300# - deactivate fix for issues i9861 and i33293
-//        GetObj()->setStreamToLoadFrom(m_xInputStreamToLoadFrom,m_bIsReadOnly);
-        // <--
         String aMimeType( SotExchange::GetFormatMimeType( GetContentType() ));
-
-//!! ??? what have we here to do ????
-//!!        if( bNativFormat )
-//!!            aData.SetAspect( aData.GetAspect() | ASPECT_ICON );
 
         uno::Any aValue;
         GetObj()->GetData( aValue, aMimeType, !IsSynchron() && bWaitForData );
@@ -460,17 +440,6 @@ BOOL SwBaseLink::SwapIn( BOOL bWaitForData, BOOL bNativFormat )
 
     bSwapIn = FALSE;
 
-    // --> OD 2005-04-11 #i46300# - deactivate fix for issues i9861 and i33293
-//    if ( pTBIS && pTBIS->isTouched() )
-//    {
-//        // --> OD 2005-04-11 #i46300# - determine correct URL for the graphic
-//        String sGrfNm;
-//        GetLinkManager()->GetDisplayNames( this, 0, &sGrfNm, 0, 0 );
-//        (m_pReReadThread = new ReReadThread(
-//                this, sGrfNm, bWaitForData, bNativFormat))->create();
-//        // <--
-//    }
-    // <--
     return bRes;
 }
 

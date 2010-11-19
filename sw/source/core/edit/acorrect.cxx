@@ -184,10 +184,6 @@ BOOL SwAutoCorrDoc::Replace( xub_StrLen nPos, const String& rTxt )
     {
         SwDoc* pDoc = rEditSh.GetDoc();
 
-//      if( !pDoc->IsAutoFmtRedline() &&
-//          pPam != &rCrsr )    // nur an akt. Position das Redline sichern
-//          pDoc->SetRedlineMode_intern( eOld | REDLINE_IGNORE );
-
         if( pDoc->IsAutoFmtRedline() )
         {
             if( nPos == pNd->GetTxt().Len() )       // am Ende erfolgt ein Insert
@@ -287,7 +283,6 @@ const String* SwAutoCorrDoc::GetPrevPara( BOOL bAtNormalPos )
         (*pIdx)--;
         pTNd = pIdx->GetNode().GetTxtNode();
     }
-    //if( pTNd && NO_NUMBERING == pTNd->GetTxtColl()->GetOutlineLevel() )
     if( pTNd && 0 == pTNd->GetAttrOutlineLevel() )//#outline level,zhaojianwei
         pStr = &pTNd->GetTxt();
 

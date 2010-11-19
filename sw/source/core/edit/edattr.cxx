@@ -258,21 +258,6 @@ bool SwEditShell::SetCurFtn( const SwFmtFtn& rFillFtn )
 }
 
 
-
-/*USHORT SwEditShell::GetFtnCnt( BOOL bEndNotes = FALSE ) const
-{
-    const SwFtnIdxs &rIdxs = pDoc->GetFtnIdxs();
-    USHORT nCnt = 0;
-    for ( USHORT i = 0; i < rIdxs.Count(); ++i )
-    {
-        const SwFmtFtn &rFtn = rIdxs[i]->GetFtn();
-        if ( bEndNotes == rFtn.IsEndNote() )
-            nCnt++;
-    }
-    return nCnt;
-} */
-
-
 bool SwEditShell::HasFtns( bool bEndNotes ) const
 {
     const SwFtnIdxs &rIdxs = pDoc->GetFtnIdxs();
@@ -491,7 +476,7 @@ BOOL lcl_IsNoEndTxtAttrAtPos( const SwTxtNode& rTNd, xub_StrLen nPos,
 USHORT SwEditShell::GetScriptType() const
 {
     USHORT nRet = 0;
-    //if( pBreakIt->GetBreakIter().is() )
+
     {
         FOREACHPAM_START(this)
 

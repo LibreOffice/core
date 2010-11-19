@@ -121,12 +121,6 @@ SwFrmFmt *FindFrmFmt( SdrObject *pObj )
             pRetval = pContact->GetFmt();
         }
     }
-/* SJ: after prior consultation with OD we decided to remove this Assertion
-#if OSL_DEBUG_LEVEL > 1
-    ASSERT( pRetval,
-            "<::FindFrmFmt(..)> - no frame format found for given object. Please inform OD." );
-#endif
-*/
     return pRetval;
 }
 
@@ -1565,22 +1559,6 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
                     // <--
                 }
             }
-            // --> OD 2006-01-18 #129959#
-            // It reveals that the following code causes several defects -
-            // on copying or on ungrouping a group shape containing edge objects.
-            // Testing fix for #i53320# also reveal that the following code
-            // isn't necessary.
-//            // --> OD 2005-08-15 #i53320# - reset positioning attributes,
-//            // if anchored drawing object isn't yet positioned.
-//            else if ( pAnchoredDrawObj->NotYetPositioned() &&
-//                      static_cast<const SwDrawFrmFmt&>(pAnchoredDrawObj->GetFrmFmt()).IsPosAttrSet() )
-//            {
-//                const_cast<SwDrawFrmFmt&>(
-//                    static_cast<const SwDrawFrmFmt&>(pAnchoredDrawObj->GetFrmFmt()))
-//                        .ResetPosAttr();
-//            }
-//            // <--
-            // <--
         }
         break;
         case SDRUSERCALL_CHGATTR:
@@ -2092,8 +2070,6 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
                             }
                             pFrm->AppendDrawObj( *(pDrawVirtObj->AnchoredObj()) );
 
-                            // for repaint, use new ActionChanged()
-                            // pDrawVirtObj->SendRepaintBroadcast();
                             pDrawVirtObj->ActionChanged();
                         }
 
@@ -2605,8 +2581,6 @@ void SwDrawVirtObj::RecalcBoundRect()
     // OD 2004-04-05 #i26791# - switch order of calling <GetOffset()> and
     // <ReferencedObj().GetCurrentBoundRect()>, because <GetOffset()> calculates
     // its value by the 'BoundRect' of the referenced object.
-    //aOutRect = rRefObj.GetCurrentBoundRect();
-    //aOutRect += GetOffset();
 
     const Point aOffset(GetOffset());
     aOutRect = ReferencedObj().GetCurrentBoundRect() + aOffset;
@@ -2677,10 +2651,6 @@ void SwDrawVirtObj::NbcShear(const Point& rRef, long nWink, double tn, bool bVSh
 void SwDrawVirtObj::Move(const Size& rSiz)
 {
     SdrObject::Move( rSiz );
-//    Rectangle aBoundRect0; if(pUserCall) aBoundRect0 = GetLastBoundRect();
-//    rRefObj.Move( rSiz );
-//    SetRectsDirty();
-//    SendUserCall(SDRUSERCALL_RESIZE, aBoundRect0);
 }
 
 void SwDrawVirtObj::Resize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)

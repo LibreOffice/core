@@ -345,8 +345,6 @@ void SwEditShell::ApplyAutoMark()
         //
         // SearchOptions to be used in loop below
         //
-        //SearchAlgorithms eSrchType    = SearchAlgorithms_ABSOLUTE;
-        //OUString aSrchStr = rText;
         BOOL bCaseSensitive = TRUE;
         BOOL bWordOnly      = FALSE;
         BOOL bSrchInSel     = FALSE;
@@ -407,13 +405,11 @@ void SwEditShell::ApplyAutoMark()
                     //
                     if (!bCaseSensitive)
                     {
-                        //nSrchFlags |= SearchFlags::ALL_IGNORE_CASE;
                         aSearchOpt.transliterateFlags |=
                                      TransliterationModules_IGNORE_CASE;
                     }
                     else
                     {
-                        //aSearchOpt.searchFlag &= ~SearchFlags::ALL_IGNORE_CASE;
                         aSearchOpt.transliterateFlags &=
                                     ~TransliterationModules_IGNORE_CASE;
                     }

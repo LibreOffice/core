@@ -342,7 +342,6 @@ BOOL SwNodes::InsBoxen( SwTableNode* pTblNd,
 
         rTabBoxes.C40_INSERT( SwTableBox, pPrvBox, nRealInsPos );
 
-        //if( NO_NUMBERING == pTxtColl->GetOutlineLevel()//#outline level,zhaojianwei
         if( ! pTxtColl->IsAssignedToListLevelOfOutlineStyle()//<-end,zhaojianwei
 //FEATURE::CONDCOLL
             && RES_CONDTXTFMTCOLL != pTxtColl->Which()
@@ -516,10 +515,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
         for( USHORT i = 0; i < nBoxArrLen; ++i )
             aBoxFmtArr.Insert( (void*)0, i );
     }
-    // --> OD 2008-02-25 #refactorlists#
-//    SfxItemSet aCharSet( GetAttrPool(), RES_CHRATR_BEGIN, RES_PARATR_END-1 );
     SfxItemSet aCharSet( GetAttrPool(), RES_CHRATR_BEGIN, RES_PARATR_LIST_END-1 );
-    // <--
 
     SwNodeIndex aNdIdx( *pTblNd, 1 );   // auf den ersten Box-StartNode
     SwTableLines& rLines = pNdTbl->GetTabLines();
@@ -805,10 +801,8 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
                 aBoxFmtArr.Insert( (void*)0, i );
         }
 
-        // --> OD 2008-02-25 #refactorlists#
-//        SfxItemSet aCharSet( GetAttrPool(), RES_CHRATR_BEGIN, RES_PARATR_END-1 );
         SfxItemSet aCharSet( GetAttrPool(), RES_CHRATR_BEGIN, RES_PARATR_LIST_END-1 );
-        // <--
+
         SwHistory* pHistory = pUndo ? &pUndo->GetHistory() : 0;
 
         SwTableBoxFmt *pBoxF = 0;
@@ -972,8 +966,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
                     }
                 }
 
-                aPosArr.Insert( /*aFInfo.GetFrm()->Frm().Left() +*/
-                                static_cast<USHORT>(aFInfo.GetFrm()->IsVertical() ?
+                aPosArr.Insert( static_cast<USHORT>(aFInfo.GetFrm()->IsVertical() ?
                                 aFInfo.GetFrm()->Prt().Bottom() :
                                 aFInfo.GetFrm()->Prt().Right()),
                                 aPosArr.Count() );
@@ -987,9 +980,6 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
         const SfxItemSet* pSet = pTxtNd->GetpSwAttrSet();
         if( pSet )
         {
-// das entfernen der PageBreaks erst nach dem erzeugen der Tabelle
-// erfolgen, denn sonst stehen sie falsch in der History !!!
-//          SwRegHistory aRegH( pTxtNd, *pTxtNd, pHistory );
             const SfxPoolItem* pItem;
             if( SFX_ITEM_SET == pSet->GetItemState( RES_BREAK, FALSE, &pItem ) )
             {
@@ -1147,10 +1137,6 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
     SwUndoTxtToTbl* pUndo = 0;
     if( DoesUndo() )
     {
-//        StartUndo( UNDO_TEXTTOTABLE );
-//        pUndo = new SwUndoTxtToTbl( aOriginal, rInsTblOpts, cCh, eAdjust, pTAFmt );
-//        AppendUndo( pUndo );
-
         // das Splitten vom TextNode nicht in die Undohistory aufnehmen
         DoUndo( FALSE );
     }
@@ -1202,8 +1188,6 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
     pLineFmt->SetFmtAttr( SwFmtFillOrder( ATT_LEFT_TO_RIGHT ));
     // die Tabelle bekommt USHRT_MAX als default SSize
     pTableFmt->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE, USHRT_MAX ));
-//    if( !(rInsTblOpts.mnInsMode & tabopts::SPLIT_LAYOUT) )
-//        pTableFmt->SetAttr( SwFmtLayoutSplit( FALSE ));
 
     /* #106283# If the first node in the selection is a context node and if it
        has an item FRAMEDIR set (no default) propagate the item to the
@@ -1228,12 +1212,6 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
     ASSERT( pNdTbl, "kein Tabellen-Node angelegt."  )
    pTableFmt->Add( pNdTbl );       // das Frame-Format setzen
 
-//    const USHORT nRowsToRepeat =
-//            tabopts::HEADLINE == (rInsTblOpts.mnInsMode & tabopts::HEADLINE) ?
-//            rInsTblOpts.mnRowsToRepeat :
-//            0;
-//    pNdTbl->SetRowsToRepeat( nRowsToRepeat );
-
     BOOL bUseBoxFmt = FALSE;
     if( !pBoxFmt->GetDepends() )
     {
@@ -1242,27 +1220,10 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
         bUseBoxFmt = TRUE;
         pTableFmt->SetFmtAttr( pBoxFmt->GetFrmSize() );
         delete pBoxFmt;
-//        eAdjust = HORI_NONE;
     }
-
-    //Orientation am Fmt der Table setzen
-//    pTableFmt->SetAttr( SwFmtHoriOrient( 0, eAdjust ) );
-//    pTableFmt->Add( pNdTbl );       // das Frame-Format setzen
-
 
     ULONG nIdx = pTblNd->GetIndex();
     aNode2Layout.RestoreUpperFrms( GetNodes(), nIdx, nIdx + 1 );
-
-    {
-//        SwPaM& rTmp = (SwPaM&)rRange;   // Point immer an den Anfang
-//        rTmp.DeleteMark();
-//        rTmp.GetPoint()->nNode = *pTblNd;
-//        SwCntntNode* pCNd = GetNodes().GoNext( &rTmp.GetPoint()->nNode );
-//        rTmp.GetPoint()->nContent.Assign( pCNd, 0 );
-    }
-
-//    if( pUndo )
-//        EndUndo( UNDO_TEXTTOTABLE );
 
     SetModified();
     SetFieldsDirty( true, NULL, 0 );
@@ -1365,9 +1326,6 @@ SwTableNode* SwNodes::TextToTable( const SwNodes::TableRanges_t & rTableNodes,
     SwTableBox* pBox;
     USHORT nBoxes, nLines, nMaxBoxes = 0;
 
-//    SwHistory* pHistory = pUndo ? &pUndo->GetHistory() : 0;
-
-
     SwNodeIndex aNodeIndex = rTableNodes.begin()->begin()->aStart;
     // delete frames of all contained content nodes
     for( nLines = 0; aNodeIndex <= rTableNodes.rbegin()->rbegin()->aEnd; ++aNodeIndex,++nLines )
@@ -1381,15 +1339,11 @@ SwTableNode* SwNodes::TextToTable( const SwNodes::TableRanges_t & rTableNodes,
                 SwTxtNode& rTxtNode = static_cast<SwTxtNode&>(rNode);
                 // setze den bei allen TextNode in der Tabelle den TableNode
                 // als StartNode
-// FIXME: this is setting wrong node StartOfSections in nested tables.
-//                rTxtNode.pStartOfSection = pTblNd;
+
                 // remove PageBreaks/PageDesc/ColBreak
                 const SwAttrSet* pSet = rTxtNode.GetpSwAttrSet();
                 if( pSet )
                 {
-        // das entfernen der PageBreaks erst nach dem erzeugen der Tabelle
-        // erfolgen, denn sonst stehen sie falsch in der History !!!
-        //          SwRegHistory aRegH( pTxtNd, *pTxtNd, pHistory );
                     const SfxPoolItem* pItem;
                     if( SFX_ITEM_SET == pSet->GetItemState( RES_BREAK, FALSE, &pItem ) )
                     {
@@ -1412,38 +1366,19 @@ SwTableNode* SwNodes::TextToTable( const SwNodes::TableRanges_t & rTableNodes,
         }
     }
 
-//    SwNodeIndex aSttIdx( *pTblNd, 1 );
-//    SwNodeIndex aEndIdx( rlNodes.rbegin()->aEnd, -1 );
     std::vector<std::vector < SwNodeRange > >::const_iterator aRowIter = rTableNodes.begin();
     for( nLines = 0, nBoxes = 0;
         aRowIter != rTableNodes.end();
-        ++aRowIter, /*aSttIdx += 2, */nLines++, nBoxes = 0 )
+        ++aRowIter, nLines++, nBoxes = 0 )
     {
-//        SwTxtNode* pTxtNd = aSttIdx.GetNode().GetTxtNode();
-//        ASSERT( pTxtNd, "nur TextNodes in der Tabelle aufnehmen" );
 
         pLine = new SwTableLine( pLineFmt, 1, 0 );
         pTable->GetTabLines().C40_INSERT( SwTableLine, pLine, nLines );
 
-//        SwStartNode* pSttNd;
-//        SwPosition aCntPos( aSttIdx, SwIndex( pTxtNd ));
-
         std::vector< SwNodeRange >::const_iterator aCellIter = aRowIter->begin();
-//        SvULongs aBkmkArr( 15, 15 );
-//        _SaveCntntIdx( pDoc, aCellIter->aStart.GetIndex(), pTxtNd->GetTxt().Len(), aBkmkArr );
-//        const sal_Unicode* pTxt = pTxtNd->GetTxt().GetBuffer();
 
         for( ; aCellIter != aRowIter->end(); ++aCellIter )
         {
-//            aCellIter->aStart aCellIter->aEnd
-//                aCntPos.nContent = nChPos;
-//                SwCntntNode* pNewNd = pTxtNd->SplitNode( aCntPos );
-
-//        auch f?rs undo?
-//                if( aBkmkArr.Count() )
-//                    _RestoreCntntIdx( aBkmkArr, *pNewNd, nChPos,
-//                                        nChPos + 1 );
-
                 const SwNodeIndex aTmpIdx( aCellIter->aStart, 0 );
 
                SwNodeIndex aCellEndIdx(aCellIter->aEnd);
@@ -2131,11 +2066,6 @@ BOOL SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn )
             SwCntntNode* pNextNd = GetNodes()[ nNextNd ]->GetCntntNode();
             if( pNextNd )
             {
-//JP 24.08.98: will man wirklich den PageDesc/Break vom
-//              nachfolgen Absatz ueberbuegeln?
-//              const SwAttrSet& rAttrSet = pNextNd->GetSwAttrSet();
-//              if( SFX_ITEM_SET != rAttrSet.GetItemState( RES_PAGEDESC ) &&
-//                  SFX_ITEM_SET != rAttrSet.GetItemState( RES_BREAK ))
                 {
                     SwFrmFmt* pTableFmt = pTblNd->GetTable().GetFrmFmt();
                     const SfxPoolItem *pItem;
@@ -3271,9 +3201,6 @@ BOOL SwDoc::SplitTable( const SwPosition& rPos, USHORT eHdlnMode,
     aFndBox.SetTableLines( rTbl );
     aFndBox.DelFrms( rTbl );
 
-    // TL_CHART2: need to inform chart of probably changed cell names
-    //pDoc->UpdateCharts( rTbl.GetFrmFmt()->GetName() );
-
     SwTableNode* pNew = GetNodes().SplitTable( rPos.nNode, FALSE, bCalcNewSize );
 
     if( pNew )
@@ -4202,9 +4129,6 @@ void SwDoc::ChkBoxNumFmt( SwTableBox& rBox, BOOL bCallUpdate )
             // alle Zahlenformate entfernen
             USHORT nWhich1 = RES_BOXATR_FORMULA;
             if( !bIsEmptyTxtNd )
-                //JP 15.01.99: dieser Teil wurde doch schon oben abgeprueft!
-                /* && pFmtItem && !GetNumberFormatter()->
-                IsTextFormat( ((SwTblBoxNumFormat*)pFmtItem)->GetValue() ) )*/
             {
                 nWhich1 = RES_BOXATR_FORMAT;
 
