@@ -74,6 +74,7 @@ ModalDialog RID_XMLSECDLG_MACROWARN
     };
     PushButton PB_VIEWSIGNS
     {
+        HelpID = "uui:PushButton:RID_XMLSECDLG_MACROWARN:PB_VIEWSIGNS";
         Pos = MAP_APPFONT( MW_COL_3, MW_ROW_2 );
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
         Text [ en-US ] = "View Signatures...";
@@ -87,6 +88,7 @@ ModalDialog RID_XMLSECDLG_MACROWARN
     };
     CheckBox CB_ALWAYSTRUST
     {
+        HelpID = "uui:CheckBox:RID_XMLSECDLG_MACROWARN:CB_ALWAYSTRUST";
         Pos = MAP_APPFONT( MW_COL_1, MW_ROW_4 );
         Size = MAP_APPFONT( MW_COL_4-MW_COL_1, RSC_CD_CHECKBOX_HEIGHT );
         Text [ en-US ] = "Always trust macros from this source";

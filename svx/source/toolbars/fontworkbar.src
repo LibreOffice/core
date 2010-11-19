@@ -27,40 +27,6 @@
 
 #include <svx/dialogs.hrc>
 
-ToolBox RID_SVX_FONTWORK_BAR
-{
-    HelpId = RID_SVX_FONTWORK_BAR ;
-    Align = BOXALIGN_BOTTOM ;
-    ItemList =
-    {
-        ToolBoxItem
-        {
-            Identifier = SID_FONTWORK_GALLERY_FLOATER ;
-            HelpID = SID_FONTWORK_GALLERY_FLOATER ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_FONTWORK_SHAPE_TYPE ;
-            HelpID = SID_FONTWORK_SHAPE_TYPE ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_FONTWORK_SAME_LETTER_HEIGHTS ;
-            HelpID = SID_FONTWORK_SAME_LETTER_HEIGHTS ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_FONTWORK_ALIGNMENT_FLOATER ;
-            HelpID = SID_FONTWORK_ALIGNMENT_FLOATER ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_FONTWORK_CHARACTER_SPACING_FLOATER ;
-            HelpID = SID_FONTWORK_CHARACTER_SPACING_FLOATER ;
-        };
-    };
-};
-
 String RID_SVX_FONTWORK_BAR
 {
     Text [ en-US ] = "Fontwork";
