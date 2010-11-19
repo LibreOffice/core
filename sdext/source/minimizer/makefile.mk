@@ -98,10 +98,7 @@ COMPONENT_LIBRARIES= \
 COMPONENT_BITMAPS= \
     $(EXTENSIONDIR)$/bitmaps$/opt_16.png \
     $(EXTENSIONDIR)$/bitmaps$/opt_26.png \
-    $(EXTENSIONDIR)$/bitmaps$/opt_16_h.png \
-    $(EXTENSIONDIR)$/bitmaps$/opt_26_h.png \
-    $(EXTENSIONDIR)$/bitmaps$/minimizepresi_80.png \
-    $(EXTENSIONDIR)$/bitmaps$/minimizepresi_80_h.png
+    $(EXTENSIONDIR)$/bitmaps$/minimizepresi_80.png
 
 COMPONENT_IMAGES=\
     $(EXTENSIONDIR)$/bitmaps$/extension_32.png
