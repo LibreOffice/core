@@ -79,7 +79,7 @@ my ( $USR, $ETC, $BIN, $LIB, $LIB64, $INC, $INCLUDE, $DEV, $OPT, $LOCAL, $SOLENV
 # Environment variables.
 my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $JAVAFLAGS, $OOO_SHELL,
      $UPD, $WORK_STAMP, $SOURCE_ROOT_DIR ,
-     $SOLARSRC, $DEVROOT, $SOLARVER, $SOLARVERSION, $SOLARENV, 
+     $SOLARSRC, $DEVROOT, $SOLARVER, $SOLARVERSION, $WORKDIR, $OUTDIR, $SOLARENV, 
      $STAR_INIROOT, $STAR_INIROOTOLD, $STAR_STANDLST, $STAR_SSCOMMON, $STAR_SSOLARINI, 
      $DMAKEROOT, $CLASSPATH, $XCLASSPATH, $COMPATH,
      $MSPDB_PATH, $MIDL_PATH, $CSC_PATH,
@@ -1009,6 +1009,10 @@ else
 #Location of Solar version.
 $SOLARVERSION         = '$SOLARVER';
 
+#Location of gnu make directories.
+$WORKDIR              = '$SOLARVER/$INPATH/workdir';
+$OUTDIR              = '$SOLARVER/$INPATH';
+
 $SOLARENVINC          = '$SOLARENV'.$INC;
 # Location of 
 $LOCALINI             = '$SOLARENV'.$CONFIG;
@@ -1730,6 +1734,8 @@ ToFile( "UPD",               $UPD,               "e" );
 ToFile( "WORK_STAMP",        $WORK_STAMP,        "e" );
 ToFile( "SOLARVER",          $SOLARVER,          "e" );
 ToFile( "SOLARVERSION",      $SOLARVERSION,      "e" );
+ToFile( "WORKDIR",           $WORKDIR,           "e" );
+ToFile( "OUTDIR",            $OUTDIR,            "e" );
 ToFile( "SOLARENV",          $SOLARENV,          "e" );
 ToFile( "SOLARENVINC",       $SOLARENVINC,       "e" );
 ToFile( "LOCALINI",          $LOCALINI,          "e" );

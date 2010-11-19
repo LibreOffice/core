@@ -21,6 +21,7 @@ common
         *dmake
         *copyprj
 		__mgrdir
+        gb_LOCALBUILDDIR
 		product
         rsc_once
         wrapper_override_cc_wrapper
