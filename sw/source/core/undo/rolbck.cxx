@@ -1389,7 +1389,13 @@ SwRegHistory::SwRegHistory( const SwNode& rNd, SwHistory* pHst )
 
 void SwRegHistory::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
 {
-    if ( m_pHistory && ( pOld || pNew ) )
+    // --> OD 2010-10-05 #i114861#
+    // Do not handle a "noop" modify
+    // - e.g. <SwTxtNode::NumRuleChgd()> uses such a "noop" modify
+//    if ( m_pHistory && ( pOld || pNew ) )
+    if ( m_pHistory && ( pOld || pNew ) &&
+         pOld != pNew )
+    // <--
     {
         if ( pNew->Which() < POOLATTR_END )
         {

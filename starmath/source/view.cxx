@@ -1598,7 +1598,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
             break;
         }
 
-        case SID_INSERT_FORMULA:
+        case SID_IMPORT_FORMULA:
         {
             delete pImpl->pRequest;
             pImpl->pRequest = new SfxRequest( rReq );

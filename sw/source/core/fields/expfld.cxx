@@ -305,18 +305,15 @@ String SwGetExpField::Expand() const
         return sExpand;
 }
 
-String SwGetExpField::GetCntnt(BOOL bName) const
+String SwGetExpField::GetFieldName() const
 {
-    if ( bName )
-    {
-        String aStr( SwFieldType::GetTypeStr( static_cast<USHORT>(nsSwGetSetExpType::GSE_FORMULA & nSubType
-                                                ? TYP_FORMELFLD
-                                                : TYP_GETFLD ) ));
-        aStr += ' ';
-        aStr += GetFormula();
-        return aStr;
-    }
-    return Expand();
+    String aStr( SwFieldType::GetTypeStr(
+        static_cast<USHORT>(((nsSwGetSetExpType::GSE_FORMULA & nSubType) != 0)
+                                            ? TYP_FORMELFLD
+                                            : TYP_GETFLD ) ));
+    aStr += ' ';
+    aStr += GetFormula();
+    return aStr;
 }
 
 SwField* SwGetExpField::Copy() const
@@ -834,35 +831,28 @@ String SwSetExpField::Expand() const
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: liefert den Namen oder den Inhalt
+    @return the field name
  --------------------------------------------------------------------*/
 
-String SwSetExpField::GetCntnt(BOOL bName) const
+String SwSetExpField::GetFieldName() const
 {
-    if( bName )
+    SwFldTypesEnum const nStrType( (IsSequenceFld())
+                            ? TYP_SEQFLD
+                            : (bInput)
+                                ? TYP_SETINPFLD
+                                : TYP_SETFLD   );
+
+    String aStr( SwFieldType::GetTypeStr( static_cast<USHORT>(nStrType) ) );
+    aStr += ' ';
+    aStr += GetTyp()->GetName();
+
+    // Sequence: without formula
+    if (TYP_SEQFLD != nStrType)
     {
-        USHORT nStrType;
-
-        if( IsSequenceFld() )
-            nStrType = TYP_SEQFLD;
-        else if( bInput )
-            nStrType = TYP_SETINPFLD;
-        else
-            nStrType = TYP_SETFLD;
-
-        String aStr( SwFieldType::GetTypeStr( nStrType ) );
-        aStr += ' ';
-        aStr += GetTyp()->GetName();
-
-        if( TYP_SEQFLD != nStrType )
-        {
-            // Sequence nicht die Formel ausgeben
-            aStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " = " ));
-            aStr += GetFormula();
-        }
-        return aStr;
+        aStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " = " ) );
+        aStr += GetFormula();
     }
-    return Expand();
+    return aStr;
 }
 
 SwField* SwSetExpField::Copy() const
@@ -1021,20 +1011,16 @@ SwInputField::SwInputField(SwInputFieldType* pTyp, const String& rContent,
 {
 }
 
-String SwInputField::GetCntnt(BOOL bName) const
+String SwInputField::GetFieldName() const
 {
-    if ( bName )
+    String aStr(SwField::GetFieldName());
+    if ((nSubType & 0x00ff) == INP_USR)
     {
-        String aStr(SwField::GetCntnt(bName));
-        if ((nSubType & 0x00ff) == INP_USR)
-        {
-            aStr += GetTyp()->GetName();
-            aStr += ' ';
-            aStr += aContent;
-        }
-        return aStr;
+        aStr += GetTyp()->GetName();
+        aStr += ' ';
+        aStr += aContent;
     }
-    return Expand();
+    return aStr;
 }
 
 SwField* SwInputField::Copy() const

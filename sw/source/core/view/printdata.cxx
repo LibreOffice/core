@@ -40,7 +40,6 @@
 #include <wdocsh.hxx>
 #include <viewsh.hxx>
 #include <docfld.hxx>
-#include <swprtopt.hxx>
 
 #include <svl/languageoptions.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
@@ -127,7 +126,7 @@ void SwRenderData::ViewOptionAdjustStart( SwWrtShell &rSh, const SwViewOption &r
 }
 
 
-void SwRenderData::ViewOptionAdjust( const SwPrtOptions *pPrtOptions )
+void SwRenderData::ViewOptionAdjust(SwPrintData const*const pPrtOptions)
 {
     m_pViewOptionAdjust->AdjustViewOptions( pPrtOptions );
 }
@@ -144,7 +143,7 @@ void SwRenderData::ViewOptionAdjustStop()
 
 
 void SwRenderData::MakeSwPrtOptions(
-    SwPrtOptions &rOptions,
+    SwPrintData & rOptions,
     const SwDocShell *pDocShell,
     const SwPrintUIOptions *pOpt,
     const SwRenderData *pData,
@@ -156,7 +155,7 @@ void SwRenderData::MakeSwPrtOptions(
     // get default print options
     const TypeId aSwWebDocShellTypeId = TYPE(SwWebDocShell);
     BOOL bWeb = pDocShell->IsA( aSwWebDocShellTypeId );
-    rOptions.MakeOptions( bWeb );
+    ::sw::InitPrintOptionsFromApplication(rOptions, bWeb);
 
     // get print options to use from provided properties
     rOptions.bPrintGraphic          = pOpt->IsPrintGraphics();
@@ -183,17 +182,6 @@ void SwRenderData::MakeSwPrtOptions(
     //! function will destroy the pointers
     rOptions.SetPrintUIOptions( pOpt );
     rOptions.SetRenderData( pData );
-
-    // rOptions.aMulti is not used anymore in the XRenderable API
-    // Thus we set it to a dummy value here.
-    rOptions.aMulti = MultiSelection( Range( 1, 1 ) );
-
-    //! Note: Since for PDF export of (multi-)selection a temporary
-    //! document is created that contains only the selects parts,
-    //! and thus that document is to printed in whole the,
-    //! rOptions.bPrintSelection parameter will be false.
-    if (bIsPDFExport)
-        rOptions.bPrintSelection = FALSE;
 }
 
 
