@@ -290,12 +290,40 @@ void SchXMLAxisContext::CreateGrid( OUString sAutoStyleName, bool bIsMajor )
     }
 }
 
+namespace
+{
+enum AxisAttributeTokens
+{
+    XML_TOK_AXIS_DIMENSION,
+    XML_TOK_AXIS_NAME,
+    XML_TOK_AXIS_STYLE_NAME
+};
+
+SvXMLTokenMapEntry aAxisAttributeTokenMap[] =
+{
+    { XML_NAMESPACE_CHART,  XML_DIMENSION,              XML_TOK_AXIS_DIMENSION      },
+    { XML_NAMESPACE_CHART,  XML_NAME,                   XML_TOK_AXIS_NAME           },
+    { XML_NAMESPACE_CHART,  XML_STYLE_NAME,             XML_TOK_AXIS_STYLE_NAME     },
+    XML_TOKEN_MAP_END
+};
+
+class AxisAttributeTokenMap : public SvXMLTokenMap
+{
+public:
+    AxisAttributeTokenMap(): SvXMLTokenMap( aAxisAttributeTokenMap ) {}
+    virtual ~AxisAttributeTokenMap() {}
+};
+
+//a AxisAttributeTokenMap Singleton
+struct theAxisAttributeTokenMap : public rtl::Static< AxisAttributeTokenMap, theAxisAttributeTokenMap > {};
+}
+
 void SchXMLAxisContext::StartElement( const Reference< xml::sax::XAttributeList >& xAttrList )
 {
     // parse attributes
     sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
     SchXMLImport& rImport = ( SchXMLImport& )GetImport();
-    const SvXMLTokenMap& rAttrTokenMap = m_rImportHelper.GetAxisAttrTokenMap();
+    const SvXMLTokenMap& rAttrTokenMap = theAxisAttributeTokenMap::get();
 
     for( sal_Int16 i = 0; i < nAttrCount; i++ )
     {
@@ -762,13 +790,42 @@ void SchXMLAxisContext::SetAxisTitle()
     }
 }
 
+//-----------------------------------------------------------------------
+namespace
+{
+enum AxisChildTokens
+{
+    XML_TOK_AXIS_TITLE,
+    XML_TOK_AXIS_CATEGORIES,
+    XML_TOK_AXIS_GRID
+};
+
+SvXMLTokenMapEntry aAxisChildTokenMap[] =
+{
+    { XML_NAMESPACE_CHART,  XML_TITLE,                  XML_TOK_AXIS_TITLE      },
+    { XML_NAMESPACE_CHART,  XML_CATEGORIES,             XML_TOK_AXIS_CATEGORIES },
+    { XML_NAMESPACE_CHART,  XML_GRID,                   XML_TOK_AXIS_GRID       },
+    XML_TOKEN_MAP_END
+};
+
+class AxisChildTokenMap : public SvXMLTokenMap
+{
+public:
+    AxisChildTokenMap(): SvXMLTokenMap( aAxisChildTokenMap ) {}
+    virtual ~AxisChildTokenMap() {}
+};
+
+//a AxisChildTokenMap Singleton
+struct theAxisChildTokenMap : public rtl::Static< AxisChildTokenMap, theAxisChildTokenMap > {};
+}
+
 SvXMLImportContext* SchXMLAxisContext::CreateChildContext(
     USHORT p_nPrefix,
     const OUString& rLocalName,
     const Reference< xml::sax::XAttributeList >& xAttrList )
 {
     SvXMLImportContext* pContext = 0;
-    const SvXMLTokenMap& rTokenMap = m_rImportHelper.GetAxisElemTokenMap();
+    const SvXMLTokenMap& rTokenMap = theAxisChildTokenMap::get();
 
     switch( rTokenMap.Get( p_nPrefix, rLocalName ))
     {
