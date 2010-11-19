@@ -140,6 +140,9 @@ ScPreview::ScPreview( Window* pParent, ScDocShell* pDocSh, ScPreviewShell* pView
     SetUniqueId( HID_SC_WIN_PREVIEW );
 
     SetDigitLanguage( SC_MOD()->GetOptDigitLanguage() );
+
+    for (SCCOL i=0; i<=MAXCOL; i++)
+        nRight[i] = 0;                  // initialized with actual positions when markers are drawn
 }
 
 
@@ -368,6 +371,16 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
             DrawRect(Rectangle( 0, 0, aWinSize.Width(), -aOffset.Y() ));
     }
 
+    long   nLeftMargin = 0;
+    long   nRightMargin = 0;
+    long   nTopMargin = 0;
+    long   nBottomMargin = 0;
+    BOOL   bHeaderOn = FALSE;
+    BOOL   bFooterOn = FALSE;
+
+    ScDocument* pDoc = pDocShell->GetDocument();
+    BOOL   bLayoutRTL = pDoc->IsLayoutRTL( nTab );
+
     Size aLocalPageSize;
     if ( bValidPage )
     {
@@ -397,13 +410,61 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
         DBG_ASSERT(nPrinted<=1, "was'n nu los?");
 
         SetMapMode(aMMMode);
-//      USHORT nPrintZoom = pPrintFunc->GetZoom();
+
+        //init nLeftMargin ... in the ScPrintFunc::InitParam!!!
+        nLeftMargin = pPrintFunc->GetLeftMargin();
+        nRightMargin = pPrintFunc->GetRightMargin();
+        nTopMargin = pPrintFunc->GetTopMargin();
+        nBottomMargin = pPrintFunc->GetBottomMargin();
+        nHeaderHeight = pPrintFunc->GetHeader().nHeight;
+        nFooterHeight = pPrintFunc->GetFooter().nHeight;
+        bHeaderOn = pPrintFunc->GetHeader().bEnable;
+        bFooterOn = pPrintFunc->GetFooter().bEnable;
+        mnScale = pPrintFunc->GetZoom();
+
+        if ( bDoPrint && bPageMargin && pLocationData )     // don't make use of pLocationData while filling it
+        {
+            Rectangle aPixRect;
+            Rectangle aRectCellPosition;
+            Rectangle aRectPosition;
+            pLocationData->GetMainCellRange( aPageArea, aPixRect );
+            if( !bLayoutRTL )
+            {
+                pLocationData->GetCellPosition( aPageArea.aStart, aRectPosition );
+                nLeftPosition = aRectPosition.Left();
+                for( SCCOL i = aPageArea.aStart.Col(); i <= aPageArea.aEnd.Col(); i++ )
+                {
+                    pLocationData->GetCellPosition( ScAddress( i,aPageArea.aStart.Row(),aPageArea.aStart.Tab()),aRectCellPosition );
+                    nRight[i] = aRectCellPosition.Right();
+                }
+            }
+            else
+            {
+                pLocationData->GetCellPosition( aPageArea.aEnd, aRectPosition );
+                nLeftPosition = aRectPosition.Right()+1;
+
+                pLocationData->GetCellPosition( aPageArea.aStart,aRectCellPosition );
+                nRight[ aPageArea.aEnd.Col() ] = aRectCellPosition.Left();
+                for( SCCOL i = aPageArea.aEnd.Col(); i > aPageArea.aStart.Col(); i-- )
+                {
+                    pLocationData->GetCellPosition( ScAddress( i,aPageArea.aEnd.Row(),aPageArea.aEnd.Tab()),aRectCellPosition );
+                    nRight[ i-1 ] = nRight[ i ] + aRectCellPosition.Right() - aRectCellPosition.Left() + 1;
+                }
+            }
+        }
 
         if (nPrinted)   // wenn nichts, alles grau zeichnen
         {
             aLocalPageSize = pPrintFunc->GetPageSize();
             aLocalPageSize.Width()  = (long) (aLocalPageSize.Width()  * HMM_PER_TWIPS );
             aLocalPageSize.Height() = (long) (aLocalPageSize.Height() * HMM_PER_TWIPS );
+
+            nLeftMargin = (long) ( nLeftMargin * HMM_PER_TWIPS );
+            nRightMargin = (long) ( nRightMargin * HMM_PER_TWIPS );
+            nTopMargin = (long) ( nTopMargin * HMM_PER_TWIPS );
+            nBottomMargin = (long) ( nBottomMargin * HMM_PER_TWIPS );
+            nHeaderHeight = (long) ( nHeaderHeight * HMM_PER_TWIPS * mnScale / 100 + nTopMargin );
+            nFooterHeight = (long) ( nFooterHeight * HMM_PER_TWIPS * mnScale / 100 + nBottomMargin );
         }
 
         if (!bStateValid)
@@ -426,8 +487,39 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
         Point aWinEnd( aWinSize.Width(), aWinSize.Height() );
         BOOL bRight  = nPageEndX <= aWinEnd.X();
         BOOL bBottom = nPageEndY <= aWinEnd.Y();
+
+        if( bPageMargin && bValidPage )
+        {
+            SetMapMode(aMMMode);
+            SetLineColor( COL_BLACK );
+            DrawInvert( (long)( nTopMargin - aOffset.Y() ), POINTER_VSIZEBAR );
+            DrawInvert( (long)(nPageEndY - nBottomMargin ), POINTER_VSIZEBAR );
+            DrawInvert( (long)( nLeftMargin - aOffset.X() ), POINTER_HSIZEBAR );
+            DrawInvert( (long)( nPageEndX - nRightMargin ) , POINTER_HSIZEBAR );
+            if( bHeaderOn )
+            {
+                DrawInvert( nHeaderHeight - aOffset.Y(), POINTER_VSIZEBAR );
+            }
+            if( bFooterOn )
+            {
+                DrawInvert( nPageEndY - nFooterHeight, POINTER_VSIZEBAR );
+            }
+
+            SetMapMode( MapMode( MAP_PIXEL ) );
+            for( int i= aPageArea.aStart.Col(); i<= aPageArea.aEnd.Col(); i++ )
+            {
+                Point aColumnTop = LogicToPixel( Point( 0, -aOffset.Y() ) ,aMMMode );
+                SetLineColor( COL_BLACK );
+                SetFillColor( COL_BLACK );
+                DrawRect( Rectangle( Point( nRight[i] - 2, aColumnTop.Y() ),Point( nRight[i] + 2 , 4 + aColumnTop.Y()) ));
+                DrawLine( Point( nRight[i], aColumnTop.Y() ), Point( nRight[i],  10 + aColumnTop.Y()) );
+            }
+            SetMapMode( aMMMode );
+        }
+
         if (bRight || bBottom)
         {
+            SetMapMode(aMMMode);
             SetLineColor();
             SetFillColor(aBackColor);
             if (bRight)
@@ -486,188 +578,9 @@ void __EXPORT ScPreview::Paint( const Rectangle& /* rRect */ )
     bool bWasInPaint = bInPaint;        // nested calls shouldn't be necessary, but allow for now
     bInPaint = true;
 
-    if (!bValid)
-    {
-        CalcPages(0);
-        RecalcPages();
-        UpdateDrawView();       // Table possibly amended
-    }
-
-    Fraction aPreviewZoom( nZoom, 100 );
-    Fraction aHorPrevZoom( (long)( 100 * nZoom / pDocShell->GetOutputFactor() ), 10000 );
-    MapMode  aMMMode( MAP_100TH_MM, Point(), aHorPrevZoom, aPreviewZoom );
-
-    ScModule* pScMod = SC_MOD();
-    const svtools::ColorConfig& rColorCfg = pScMod->GetColorConfig();
-    Color aBackColor( rColorCfg.GetColorValue(svtools::APPBACKGROUND).nColor );
-
-    if ( aOffset.X() < 0 || aOffset.Y() < 0 )
-    {
-        SetMapMode( aMMMode );
-        SetLineColor();
-        SetFillColor(aBackColor);
-
-        Size aWinSize = GetOutputSize();
-        if ( aOffset.X() < 0 )
-            DrawRect(Rectangle( 0, 0, -aOffset.X(), aWinSize.Height() ));
-        if ( aOffset.Y() < 0 )
-            DrawRect(Rectangle( 0, 0, aWinSize.Width(), -aOffset.Y() ));
-    }
-
-    long   nLeftMargin = 0;
-    long   nRightMargin = 0;
-    long   nTopMargin = 0;
-    long   nBottomMargin = 0;
-    BOOL   bHeaderOn = FALSE;
-    BOOL   bFooterOn = FALSE;
-
-    ScDocument* pDoc = pDocShell->GetDocument();
-    BOOL   bLayoutRTL = pDoc->IsLayoutRTL( nTab );
-
-    Size aPaintPageSize;
-    if ( nPageNo < nTotalPages )
-    {
-        ScPrintOptions aOptions = SC_MOD()->GetPrintOptions();
-
-        ScPrintFunc* pPrintFunc;
-        if ( bStateValid )
-            pPrintFunc = new ScPrintFunc( pDocShell, this, aState, &aOptions );
-        else
-            pPrintFunc = new ScPrintFunc( pDocShell, this, nTab, nFirstAttr[nTab], nTotalPages, NULL, &aOptions );
-
-        pPrintFunc->SetOffset(aOffset);
-        pPrintFunc->SetManualZoom(nZoom);
-        pPrintFunc->SetDateTime(aDate,aTime);
-        pPrintFunc->SetClearFlag(TRUE);
-        pPrintFunc->SetUseStyleColor( pScMod->GetAccessOptions().GetIsForPagePreviews() );
-        pPrintFunc->SetDrawView( pDrawView );
-
-        // Multi Selection for one side must be something umstaendlich generated ...
-        Range aPageRange( nPageNo+1, nPageNo+1 );
-        MultiSelection aPage( aPageRange );
-        aPage.SetTotalRange( Range(0,RANGE_MAX) );
-        aPage.Select( aPageRange );
-
-        long nPrinted = pPrintFunc->DoPrint( aPage, nTabStart, nDisplayStart );
-        DBG_ASSERT(nPrinted<=1, "was'n nu los?");
-
-        SetMapMode(aMMMode);
-
-        //init nLeftMargin ... in the ScPrintFunc::InitParam!!!
-        nLeftMargin = pPrintFunc->GetLeftMargin();
-        nRightMargin = pPrintFunc->GetRightMargin();
-        nTopMargin = pPrintFunc->GetTopMargin();
-        nBottomMargin = pPrintFunc->GetBottomMargin();
-        nHeaderHeight = pPrintFunc->GetHeader().nHeight;
-        nFooterHeight = pPrintFunc->GetFooter().nHeight;
-        bHeaderOn = pPrintFunc->GetHeader().bEnable;
-        bFooterOn = pPrintFunc->GetFooter().bEnable;
-        mnScale = pPrintFunc->GetZoom();
-
-        Rectangle aPixRect;
-        Rectangle aRectCellPosition;
-        Rectangle aRectPosition;
-        GetLocationData().GetMainCellRange( aPageArea, aPixRect );
-        if( !bLayoutRTL )
-        {
-            GetLocationData().GetCellPosition( aPageArea.aStart, aRectPosition );
-            nLeftPosition = aRectPosition.Left();
-            for( SCCOL i = aPageArea.aStart.Col(); i <= aPageArea.aEnd.Col(); i++ )
-            {
-                GetLocationData().GetCellPosition( ScAddress( i,aPageArea.aStart.Row(),aPageArea.aStart.Tab()),aRectCellPosition );
-                nRight[i] = aRectCellPosition.Right();
-            }
-        }
-        else
-        {
-            GetLocationData().GetCellPosition( aPageArea.aEnd, aRectPosition );
-            nLeftPosition = aRectPosition.Right()+1;
-
-            GetLocationData().GetCellPosition( aPageArea.aStart,aRectCellPosition );
-            nRight[ aPageArea.aEnd.Col() ] = aRectCellPosition.Left();
-            for( SCCOL i = aPageArea.aEnd.Col(); i > aPageArea.aStart.Col(); i-- )
-            {
-                GetLocationData().GetCellPosition( ScAddress( i,aPageArea.aEnd.Row(),aPageArea.aEnd.Tab()),aRectCellPosition );
-                nRight[ i-1 ] = nRight[ i ] + aRectCellPosition.Right() - aRectCellPosition.Left() + 1;
-            }
-        }
-
-        if ( nPrinted ) // If nothing, all gray draw
-        {
-            aPaintPageSize = pPrintFunc->GetPageSize();
-            aPaintPageSize.Width()  = (long) (aPaintPageSize.Width()  * HMM_PER_TWIPS );
-            aPaintPageSize.Height() = (long) (aPaintPageSize.Height() * HMM_PER_TWIPS );
-
-            nLeftMargin = (long) ( nLeftMargin * HMM_PER_TWIPS );
-            nRightMargin = (long) ( nRightMargin * HMM_PER_TWIPS );
-            nTopMargin = (long) ( nTopMargin * HMM_PER_TWIPS );
-            nBottomMargin = (long) ( nBottomMargin * HMM_PER_TWIPS );
-            nHeaderHeight = (long) ( nHeaderHeight * HMM_PER_TWIPS * mnScale / 100 + nTopMargin );
-            nFooterHeight = (long) ( nFooterHeight * HMM_PER_TWIPS * mnScale / 100 + nBottomMargin );
-        }
-
-        if ( !bStateValid )
-        {
-            pPrintFunc->GetPrintState( aState );
-            aState.nDocPages = nTotalPages;
-            bStateValid = TRUE;
-        }
-
-        delete pPrintFunc;
-    }
-
-
-    long nPageEndX = aPaintPageSize.Width()  - aOffset.X();
-    long nPageEndY = aPaintPageSize.Height() - aOffset.Y();
-    Size aWinSize = GetOutputSize();
-    Point aWinEnd( aWinSize.Width(), aWinSize.Height() );
-    BOOL bRight  = nPageEndX <= aWinEnd.X();
-    BOOL bBottom = nPageEndY <= aWinEnd.Y();
-
-    if( bPageMargin )
-    {
-        SetMapMode(aMMMode);
-        SetLineColor( COL_BLACK );
-        DrawInvert( (long)( nTopMargin - aOffset.Y() ), POINTER_VSIZEBAR );
-        DrawInvert( (long)(nPageEndY - nBottomMargin ), POINTER_VSIZEBAR );
-        DrawInvert( (long)( nLeftMargin - aOffset.X() ), POINTER_HSIZEBAR );
-        DrawInvert( (long)( nPageEndX - nRightMargin ) , POINTER_HSIZEBAR );
-        if( bHeaderOn )
-        {
-            DrawInvert( nHeaderHeight - aOffset.Y(), POINTER_VSIZEBAR );
-        }
-        if( bFooterOn )
-        {
-            DrawInvert( nPageEndY - nFooterHeight, POINTER_VSIZEBAR );
-        }
-
-        SetMapMode( MapMode( MAP_PIXEL ) );
-        for( int i= aPageArea.aStart.Col(); i<= aPageArea.aEnd.Col(); i++ )
-        {
-            Point aColumnTop = LogicToPixel( Point( 0, -aOffset.Y() ) ,aMMMode );
-            SetLineColor( COL_BLACK );
-            SetFillColor( COL_BLACK );
-            DrawRect( Rectangle( Point( nRight[i] - 2, aColumnTop.Y() ),Point( nRight[i] + 2 , 4 + aColumnTop.Y()) ));
-            DrawLine( Point( nRight[i], aColumnTop.Y() ), Point( nRight[i],  10 + aColumnTop.Y()) );
-        }
-        SetMapMode( aMMMode );
-    }
-
-    if (bRight || bBottom)
-    {
-        SetMapMode(aMMMode);
-        SetLineColor();
-        SetFillColor(aBackColor);
-        if (bRight)
-            DrawRect(Rectangle(nPageEndX,0, aWinEnd.X(),aWinEnd.Y()));
-        if (bBottom)
-        {
-            if (bRight)
-                DrawRect(Rectangle(0,nPageEndY, nPageEndX,aWinEnd.Y()));    // Ecke nicht doppelt
-            else
-                DrawRect(Rectangle(0,nPageEndY, aWinEnd.X(),aWinEnd.Y()));
-        }
-    }
+    if (bPageMargin)
+        GetLocationData();              // fill location data for column positions
+    DoPrint( NULL );
     pViewShell->UpdateScrollBars();
 
     bInPaint = bWasInPaint;
@@ -1177,7 +1090,7 @@ void __EXPORT ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
 
                     if ( ValidTab( nTab ) )
                     {
-                        ScPrintFunc aPrintFunc( pDocShell, this, nTab );
+                        ScPrintFunc aPrintFunc( this, pDocShell, nTab );
                         aPrintFunc.UpdatePages();
                     }
 
@@ -1273,7 +1186,7 @@ void __EXPORT ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
 
                     if ( ValidTab( nTab ) )
                     {
-                        ScPrintFunc aPrintFunc( pDocShell, this, nTab );
+                        ScPrintFunc aPrintFunc( this, pDocShell, nTab );
                         aPrintFunc.UpdatePages();
                     }
 
@@ -1329,7 +1242,7 @@ void __EXPORT ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
                 }
                 if ( ValidTab( nTab ) )
                 {
-                    ScPrintFunc aPrintFunc( pDocShell, this, nTab );
+                    ScPrintFunc aPrintFunc( this, pDocShell, nTab );
                     aPrintFunc.UpdatePages();
                 }
                 Rectangle  nRect(0,0,10000,10000);
@@ -1363,9 +1276,9 @@ void __EXPORT ScPreview::MouseMove( const MouseEvent& rMEvt )
         ScPrintFunc* pPrintFunc;
 
         if (bStateValid)
-            pPrintFunc = new ScPrintFunc( pDocShell, this, aState, &aOptions );
+            pPrintFunc = new ScPrintFunc( this, pDocShell, aState, &aOptions );
         else
-            pPrintFunc = new ScPrintFunc( pDocShell, this, nTab, nFirstAttr[nTab], nTotalPages, NULL, &aOptions );
+            pPrintFunc = new ScPrintFunc( this, pDocShell, nTab, nFirstAttr[nTab], nTotalPages, NULL, &aOptions );
 
         nLeftMargin = (long)( pPrintFunc->GetLeftMargin() * HMM_PER_TWIPS - aOffset.X() );
         nRightMargin = (long)( pPrintFunc->GetRightMargin() * HMM_PER_TWIPS );
