@@ -1,4 +1,3 @@
 xo	xmloff	:	offapi svl vos NULL
-xo	xmloff									usr1	-	all	xo_mkout NULL
 xo	xmloff\prj								nmake	-	all	xo_prj NULL
 
