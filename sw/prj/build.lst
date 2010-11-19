@@ -1,12 +1,2 @@
 sw sw : l10n connectivity OOo:writerperfect svx stoc uui writerfilter filter oovbaapi cui vbahelper NULL
-sw sw     usr1  - all sw_mkout NULL
 sw sw\prj nmake - all sw_prj   NULL
-
-
-sw sw\qa\complex\accessibility      nmake - all sw_qa_complex_accessibility sw_prj NULL
-sw sw\qa\complex\checkColor         nmake - all sw_qa_complex_checkColor sw_prj NULL
-# fails
-# sw sw\qa\complex\indeterminateState nmake - all sw_qa_complex_indeterminateState sw_prj NULL
-# sw sw\qa\complex\writer             nmake - all sw_qa_complex_writer sw_prj NULL
-sw sw\qa\unoapi                     nmake - all sw_qa_unoapi sw_prj NULL
-
