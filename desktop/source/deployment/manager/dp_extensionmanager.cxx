@@ -283,29 +283,21 @@ void ExtensionManager::addExtensionsToMap(
 
 {
     ::std::list<Reference<deploy::XPackage> > extensionList;
-    try
-    {   //will throw an exception if the extension does not exist
-        extensionList.push_back(m_userRepository->getDeployedPackage(
-            identifier, fileName, Reference<ucb::XCommandEnvironment>()));
-    } catch(lang::IllegalArgumentException &)
+    Reference<deploy::XPackageManager> lRepos[] = {
+        m_userRepository, m_sharedRepository, m_bundledRepository };
+    for (int i(0); i != SAL_N_ELEMENTS(lRepos); ++i)
     {
-        extensionList.push_back(Reference<deploy::XPackage>());
-    }
-    try
-    {
-        extensionList.push_back(m_sharedRepository->getDeployedPackage(
-            identifier, fileName, Reference<ucb::XCommandEnvironment>()));
-    } catch (lang::IllegalArgumentException &)
-    {
-        extensionList.push_back(Reference<deploy::XPackage>());
-    }
-    try
-    {
-       extensionList.push_back(m_bundledRepository->getDeployedPackage(
-           identifier, fileName, Reference<ucb::XCommandEnvironment>()));
-    } catch (lang::IllegalArgumentException &)
-    {
-        extensionList.push_back(Reference<deploy::XPackage>());
+        Reference<deploy::XPackage> xPackage;
+        try
+        {
+            xPackage = lRepos[i]->getDeployedPackage(
+                identifier, fileName, Reference<ucb::XCommandEnvironment>());
+        }
+        catch(lang::IllegalArgumentException &)
+        {
+            // thrown if the extension does not exist in this repository
+        }
+        extensionList.push_back(xPackage);
     }
     OSL_ASSERT(extensionList.size() == 3);
     return extensionList;
