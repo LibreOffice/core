@@ -221,6 +221,7 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
     sal_Bool                                                m_bSaving               ;
     sal_Bool                                                m_bSuicide              ;
     sal_Bool                                                m_bInitialized          ;
+    sal_Bool                                                m_bExternalTitle        ;
     sal_Bool                                                m_bModifiedSinceLastSave;
     uno::Reference< com::sun::star::view::XPrintable>       m_xPrintable            ;
     uno::Reference< script::provider::XScriptProvider >     m_xScriptProvider;
@@ -241,6 +242,7 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
             ,   m_bSaving               ( sal_False     )
             ,   m_bSuicide              ( sal_False     )
             ,   m_bInitialized          ( sal_False     )
+            ,   m_bExternalTitle        ( sal_False     )
             ,   m_bModifiedSinceLastSave( sal_False     )
             ,   m_pStorageModifyListen  ( NULL          )
             ,   m_xTitleHelper          ()
@@ -3686,7 +3688,7 @@ css::uno::Reference< css::frame::XUntitledNumbers > SfxBaseModel::impl_getUntitl
     SfxModelGuard aGuard( *this );
 
     ::rtl::OUString aResult = impl_getTitleHelper()->getTitle ();
-    if ( m_pData->m_pObjectShell )
+    if ( !m_pData->m_bExternalTitle && m_pData->m_pObjectShell )
     {
         SfxMedium* pMedium = m_pData->m_pObjectShell->GetMedium();
         if ( pMedium )
@@ -3696,7 +3698,7 @@ css::uno::Reference< css::frame::XUntitledNumbers > SfxBaseModel::impl_getUntitl
                 aResult += String( SfxResId(STR_REPAIREDDOCUMENT) );
         }
 
-        if ( m_pData->m_pObjectShell->IsReadOnlyUI() || (m_pData->m_pObjectShell->GetMedium() && m_pData->m_pObjectShell->GetMedium()->IsReadOnly()) )
+        if ( m_pData->m_pObjectShell->IsReadOnlyUI() || (pMedium && pMedium->IsReadOnly()) )
             aResult += ::rtl::OUString( String( SfxResId(STR_READONLY) ) );
         else if ( m_pData->m_pObjectShell->IsDocShared() )
             aResult += ::rtl::OUString( String( SfxResId(STR_SHARED) ) );
@@ -3717,6 +3719,7 @@ void SAL_CALL SfxBaseModel::setTitle( const ::rtl::OUString& sTitle )
     SfxModelGuard aGuard( *this );
 
     impl_getTitleHelper()->setTitle (sTitle);
+    m_pData->m_bExternalTitle = sal_True;
 }
 
 //=============================================================================
