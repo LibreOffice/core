@@ -214,14 +214,7 @@ public:
     virtual String              GetSelectionText( BOOL bCompleteWords = FALSE );
     virtual BOOL                HasSelection( BOOL bText = TRUE ) const;
     virtual SdrView*            GetDrawView() const;
-    /** enters a standard mode of the view.
 
-        The view should leave any special modes, such as text editing of a shape, and the like.
-
-        The default implementation of the method doesn't do anything. It's up to the derived classes to define
-        what their "standard mode" is.
-    */
-    virtual void                EnterStandardMode();
     void                        SetSubShell( SfxShell *pShell );
     SfxShell*                   GetSubShell() const { return pSubShell; }
     void                        AddSubShell( SfxShell& rShell );

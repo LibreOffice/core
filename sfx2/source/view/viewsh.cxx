@@ -1391,12 +1391,6 @@ SdrView* SfxViewShell::GetDrawView() const
 
 //--------------------------------------------------------------------
 
-void SfxViewShell::EnterStandardMode()
-{
-}
-
-//--------------------------------------------------------------------
-
 String SfxViewShell::GetSelectionText
 (
     BOOL /*bCompleteWords*/     /*  FALSE (default)

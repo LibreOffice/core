@@ -117,7 +117,6 @@ namespace sfx2
         }
 
         void invalidateXDo_nolck();
-        void enterViewStandardMode();
 
     private:
         static IUndoManager* impl_retrieveUndoManager( SfxBaseModel& i_baseModel )
@@ -166,24 +165,6 @@ namespace sfx2
         {
             pViewFrame->GetBindings().Invalidate( SID_UNDO );
             pViewFrame->GetBindings().Invalidate( SID_REDO );
-            pViewFrame = SfxViewFrame::GetNext( *pViewFrame, pDocShell );
-        }
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    void DocumentUndoManager_Impl::enterViewStandardMode()
-    {
-        // TODO: not sure this is a good idea: This might add another action to the Undo/Redo stack, which
-        // will render the current call somewhat meaningless - finally, the caller can't be sure that really the action
-        // is undone/redone which s/he intended to.
-        SfxObjectShell* pDocShell = getObjectShell();
-        ENSURE_OR_RETURN_VOID( pDocShell, "DocumentUndoManager_Impl::enterViewStandardMode: do doc shell!" );
-        SfxViewFrame* pViewFrame = SfxViewFrame::GetFirst( pDocShell );
-        while ( pViewFrame )
-        {
-            SfxViewShell* pViewShell = pViewFrame->GetViewShell();
-            ENSURE_OR_CONTINUE( pViewShell, "DocumentUndoManager_Impl::enterViewStandardMode: no view shell in the frame!" );
-            pViewShell->EnterStandardMode();
             pViewFrame = SfxViewFrame::GetNext( *pViewFrame, pDocShell );
         }
     }
@@ -335,7 +316,6 @@ namespace sfx2
     {
         // SYNCHRONIZED --->
         UndoManagerGuard aGuard( *this );
-        m_pImpl->enterViewStandardMode();
         m_pImpl->aUndoHelper.undo( aGuard );
         // <--- SYNCHRONIZED
         m_pImpl->invalidateXDo_nolck();
@@ -346,7 +326,6 @@ namespace sfx2
     {
         // SYNCHRONIZED --->
         UndoManagerGuard aGuard( *this );
-        m_pImpl->enterViewStandardMode();
         m_pImpl->aUndoHelper.redo( aGuard );
         // <--- SYNCHRONIZED
         m_pImpl->invalidateXDo_nolck();
