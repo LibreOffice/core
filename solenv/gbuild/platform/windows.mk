@@ -177,7 +177,7 @@ endif
 
 # Helper class
 
-gb_Helper_GNUCOPY := cp
+gb_Deliver_GNUCOPY := cp
 gb_Helper_SRCDIR_NATIVE := $(shell cygpath -m $(SRCDIR))
 gb_Helper_WORKDIR_NATIVE := $(shell cygpath -m $(WORKDIR))
 gb_Helper_OUTDIR_NATIVE := $(shell cygpath -m $(OUTDIR))

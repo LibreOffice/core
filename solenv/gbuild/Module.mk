@@ -51,7 +51,7 @@ $(call gb_Module_get_target,%) :
 .DEFAULT_GOAL := all
 
 all : 
-    $(call gb_Output_announce,top level modules: $(foreach module,$^,$(notdir $(module))),$(true),ALL,6)
+    $(call gb_Output_announce,top level modules: $(foreach module,$(filter-out deliverlog,$^),$(notdir $(module))),$(true),ALL,6)
     $(call gb_Output_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(true),ALL,6)
     $(call gb_Output_announce_title,all done.)
     $(call gb_Output_announce_bell)
@@ -64,7 +64,6 @@ clean :
 
 install : all
 uninstall : clean
-
 
 define gb_Module_Module
 gb_Module_ALLMODULES += $(1)
@@ -113,7 +112,7 @@ gb_Module_TARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_TARGETSTACK)),$$(gb
 gb_Module_CLEANTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_CLEANTARGETSTACK)),$$(gb_Module_CLEANTARGETSTACK))
 
 ifneq ($$(gb_Module_TARGETSTACK),)
-$$(warn corrupted module target stack!)
+$$(eval $$(call gb_Output_error,Corrupted module target stack!))
 endif
 
 endef

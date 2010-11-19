@@ -29,10 +29,12 @@
 # PackagePart class
 
 $(foreach destination,$(call gb_PackagePart_get_destinations), $(destination)/%) :
-    $(call gb_Helper_deliver,$<,$@)
+    $(call gb_Deliver_deliver,$<,$@)
 
 define gb_PackagePart_PackagePart
 $(OUTDIR)/$(1) : $(2) 
+$(call gb_Deliver_add_deliverable,$(OUTDIR)/$(1),$(2))
+
 endef
 
 
@@ -60,7 +62,6 @@ $(call gb_Package_get_target,$(1)) : $(OUTDIR)/$(2)
 $(call gb_Package_get_clean_target,$(1)) : FILES += $(OUTDIR)/$(2)
 $(call gb_PackagePart_PackagePart,$(2),$$(gb_TARGET_PACKAGE_$(1)_SOURCEDIR)/$(3))
 $(OUTDIR)/$(2) : $$(gb_TARGET_PACKAGE_$(1)_SOURCEDIR)/$(3)
-
 endef
 
 # vim: set noet sw=4 ts=4:

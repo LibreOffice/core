@@ -133,7 +133,7 @@ endif
 # Helper class
 
 gb_Helper_abbreviate_dirs_native = $(gb_Helper_abbreviate_dirs)
-gb_Helper_GNUCOPY := cp
+gb_Deliver_GNUCOPY := cp
 
 
 # CObject class

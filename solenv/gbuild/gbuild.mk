@@ -170,6 +170,9 @@ endif
 gb_GLOBALDEFS := $(sort $(gb_GLOBALDEFS))
 
 include $(GBUILDDIR)/TargetLocations.mk
+include $(GBUILDDIR)/Deliver.mk
+
+$(eval $(call gb_Deliver_init))
 
 # We are using a set of scopes that we might as well call classes.
 

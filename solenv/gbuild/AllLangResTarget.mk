@@ -230,8 +230,8 @@ $(call gb_ResTarget_get_target,%) : $(gb_Helper_MISCDUMMY) | $(gb_ResTarget_RSCT
 
 $(call gb_ResTarget_get_outdir_target,%) :
     $(call gb_Helper_abbreviate_dirs,\
-        $(call gb_Helper_deliver,$<,$@) && \
-        $(call gb_Helper_deliver,$(dir $<)/$(notdir $(ILSTTARGET)),$(ILSTTARGET)))
+        $(call gb_Deliver_deliver,$<,$@) && \
+        $(call gb_Deliver_deliver,$(dir $<)/$(notdir $(ILSTTARGET)),$(ILSTTARGET)))
 
 define gb_ResTarget_ResTarget
 $(call gb_ResTarget_get_target,$(1)) : LIBRARY = $(2)
@@ -243,6 +243,8 @@ $(call gb_ResTarget_get_imagelist_target,$(1)) : $(call gb_ResTarget_get_target,
 
 $(call gb_ResTarget_get_outdir_target,$(1)) : $(call gb_ResTarget_get_target,$(1)) 
 $(call gb_ResTarget_get_outdir_target,$(1)) : ILSTTARGET = $(call gb_ResTarget_get_outdir_imagelist_target,$(1))
+$(call gb_Deliver_add_deliverable,$(call gb_ResTarget_get_outdir_target,$(1)),$(call gb_ResTarget_get_target,$(1)))
+$(call gb_Deliver_add_deliverable,$(call gb_ResTarget_get_outdir_imagelist_target,$(1)),$(call gb_ResTarget_get_imagelist_target,$(1)))
 
 endef
 
