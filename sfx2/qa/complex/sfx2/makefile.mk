@@ -57,7 +57,9 @@ JAVATESTFILES = \
     DocumentProperties.java \
     StandaloneDocumentInfo.java \
     DocumentMetadataAccess.java \
-    GlobalEventBroadcaster.java \
+
+# disabled: #i115674#
+#    GlobalEventBroadcaster.java \
 
 # --- Targets ------------------------------------------------------
 
