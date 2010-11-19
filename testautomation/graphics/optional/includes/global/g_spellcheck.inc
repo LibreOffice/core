@@ -221,7 +221,7 @@ endcase 'tiToolsSpellcheckCheck_ChangeAll
 
 function delete_all_added_words(aWords)
 
-    '/// this function delete the words in sWords in all user dictionaries
+    'this function delete the words in sWords in all user dictionaries
 
     Dim iBookCounter as integer
     Dim iWordCounter as integer
@@ -269,7 +269,7 @@ end function 'delete_all_added_words
 
 function delete_word_from_dictionary(sWord as String, sDictionary as String)
 
-    '/// this function delete the words in sWords in all user dictionaries
+    'this function delete the words in sWords in all user dictionaries
 
     Dim iBookCounter as integer
     Dim iWordCounter as integer
