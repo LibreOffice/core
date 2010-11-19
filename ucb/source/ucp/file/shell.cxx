@@ -1805,14 +1805,26 @@ shell::write( sal_Int32 CommandId,
         {
             aFile.close();
             err = aFile.open( OpenFlag_Write );
-        }
 
-        if( err != osl::FileBase::E_None )
-        {
-            installError( CommandId,
-                          TASKHANDLING_NO_OPEN_FILE_FOR_OVERWRITE,
-                          err );
-            return sal_False;
+            if( err != osl::FileBase::E_None )
+            {
+                installError( CommandId,
+                              TASKHANDLING_NO_OPEN_FILE_FOR_OVERWRITE,
+                              err );
+                return sal_False;
+            }
+
+            // the existing file was just opened and should be overwritten now,
+            // truncate it first
+
+            err = aFile.setSize( 0 );
+            if( err != osl::FileBase::E_None  )
+            {
+                installError( CommandId,
+                              TASKHANDLING_FILESIZE_FOR_WRITE,
+                              err );
+                return sal_False;
+            }
         }
     }
     else
@@ -1844,7 +1856,6 @@ shell::write( sal_Int32 CommandId,
 
     sal_Bool bSuccess = sal_True;
 
-    sal_uInt64 nTotalNumberOfBytes = 0;
     sal_uInt64 nWrittenBytes;
     sal_Int32 nReadBytes = 0, nRequestedBytes = 32768 /*32k*/;
     uno::Sequence< sal_Int8 > seq( nRequestedBytes );
@@ -1901,19 +1912,8 @@ shell::write( sal_Int32 CommandId,
                 bSuccess = sal_False;
                 break;
             }
-
-            nTotalNumberOfBytes += nWrittenBytes;
         }
     } while( nReadBytes == nRequestedBytes );
-
-    err = aFile.setSize( nTotalNumberOfBytes );
-    if( err != osl::FileBase::E_None  )
-    {
-        installError( CommandId,
-                      TASKHANDLING_FILESIZE_FOR_WRITE,
-                      err );
-        bSuccess = sal_False;
-    }
 
     err = aFile.close();
     if( err != osl::FileBase::E_None  )
