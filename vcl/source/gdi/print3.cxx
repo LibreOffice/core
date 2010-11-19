@@ -1031,6 +1031,14 @@ PrinterController::PageSize PrinterController::getFilteredPageFile( int i_nFilte
                     nCellX = (nSubPage / rMPS.nRows);
                     nCellY = (nSubPage % rMPS.nRows);
                     break;
+                case PrinterController::RLTB:
+                    nCellX = rMPS.nColumns - 1 - (nSubPage % rMPS.nColumns);
+                    nCellY = (nSubPage / rMPS.nColumns);
+                    break;
+                case PrinterController::TBRL:
+                    nCellX = rMPS.nColumns - 1 - (nSubPage / rMPS.nRows);
+                    nCellY = (nSubPage % rMPS.nRows);
+                    break;
                 }
                 // scale the metafile down to a sub page size
                 double fScaleX = double(aSubPageSize.Width())/double(aPageSize.aSize.Width());
