@@ -44,8 +44,8 @@
 
 #include <unistd.h>
 
-const rtl::OUString RECENTLY_USED_FILE_NAME = rtl::OUString::createFromAscii(".recently-used");
-const rtl::OUString SLASH = rtl::OUString::createFromAscii("/");
+const rtl::OUString RECENTLY_USED_FILE_NAME(RTL_CONSTASCII_USTRINGPARAM(".recently-used"));
+const rtl::OUString SLASH(RTL_CONSTASCII_USTRINGPARAM("/"));
 
 namespace /* private */ {
 

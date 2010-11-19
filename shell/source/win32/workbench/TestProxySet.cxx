@@ -114,7 +114,7 @@ int SAL_CALL main(int, char*, char* )
     try
     {
         Reference< XProxySettings > xProxySettings(
-            g_xFactory->createInstance( OUString::createFromAscii( "com.sun.star.system.SystemProxySettings" ) ), UNO_QUERY );
+            g_xFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.system.SystemProxySettings")) ), UNO_QUERY );
 
         if ( !xProxySettings.is() )
         {
@@ -141,7 +141,7 @@ int SAL_CALL main(int, char*, char* )
         printf( "Test of SystemProxySettings successful\n" );
 
         xProxySettings = Reference< XProxySettings >(
-            g_xFactory->createInstance( OUString::createFromAscii( "com.sun.star.system.SOProxySettings" ) ), UNO_QUERY );
+            g_xFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.system.SOProxySettings")) ), UNO_QUERY );
 
         if ( !xProxySettings.is() )
         {

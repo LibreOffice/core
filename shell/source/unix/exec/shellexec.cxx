@@ -81,7 +81,7 @@ namespace // private
     Sequence< OUString > SAL_CALL ShellExec_getSupportedServiceNames()
     {
         Sequence< OUString > aRet(1);
-        aRet[0] = OUString::createFromAscii("com.sun.star.sys.shell.SystemShellExecute");
+        aRet[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sys.shell.SystemShellExecute"));
         return aRet;
     }
 }
@@ -299,7 +299,7 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
 OUString SAL_CALL ShellExec::getImplementationName(  )
     throw( RuntimeException )
 {
-    return OUString::createFromAscii( SHELLEXEC_IMPL_NAME );
+    return OUString(RTL_CONSTASCII_USTRINGPARAM( SHELLEXEC_IMPL_NAME ));
 }
 
 // -------------------------------------------------

@@ -117,7 +117,7 @@ int SAL_CALL main(int nArgc, char* Argv[], char*    )
     //-------------------------------------------------
 
     Reference< XSystemShellExecute > xSysShExec(
-        g_xFactory->createInstance( OUString::createFromAscii( "com.sun.star.system.SystemShellExecute" ) ), UNO_QUERY );
+        g_xFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.system.SystemShellExecute")) ), UNO_QUERY );
 
     if ( !xSysShExec.is() )
     {

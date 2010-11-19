@@ -76,8 +76,8 @@ GConfClient* getGconfClient()
         mClient = gconf_client_get_default();
         if (!mClient)
         {
-            throw uno::RuntimeException(rtl::OUString::createFromAscii
-                ("GconfBackend:GconfLayer: Cannot Initialize Gconf connection"),NULL);
+            throw uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM
+                ("GconfBackend:GconfLayer: Cannot Initialize Gconf connection")),NULL);
         }
 
         static const char * const PreloadValuesList[] =
@@ -117,7 +117,7 @@ static OUString xdg_user_dir_lookup (const char *type)
 
     if (!aSecurity.getHomeDir( aHomeDirURL ) )
     {
-    osl::FileBase::getFileURLFromSystemPath(rtl::OUString::createFromAscii("/tmp"), aDocumentsDirURL);
+    osl::FileBase::getFileURLFromSystemPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/tmp")), aDocumentsDirURL);
     return aDocumentsDirURL;
     }
 
@@ -125,12 +125,12 @@ static OUString xdg_user_dir_lookup (const char *type)
     if (config_home == NULL || config_home[0] == 0)
     {
     aConfigFileURL = OUString(aHomeDirURL);
-    aConfigFileURL += OUString::createFromAscii( "/.config/user-dirs.dirs" );
+    aConfigFileURL += OUString(RTL_CONSTASCII_USTRINGPARAM("/.config/user-dirs.dirs"));
     }
     else
     {
     aConfigFileURL = OUString::createFromAscii(config_home);
-    aConfigFileURL += OUString::createFromAscii( "/user-dirs.dirs" );
+    aConfigFileURL += OUString(RTL_CONSTASCII_USTRINGPARAM("/user-dirs.dirs"));
     }
 
     if(osl_File_E_None == osl_openFile(aConfigFileURL.pData, &handle, osl_File_OpenFlag_Read))
@@ -281,9 +281,9 @@ uno::Any translateToOOo( const ConfigurationValue aValue, GConfValue *aGconfValu
             uno::Any aOriginalValue = makeAnyOfGconfValue( aGconfValue );
             aOriginalValue >>= aProxyMode;
 
-            if( aProxyMode.equals( rtl::OUString::createFromAscii( "manual" ) ) )
+            if( aProxyMode.equals( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("manual")) ) )
                 return uno::makeAny( (sal_Int32) 1 );
-            else if( aProxyMode.equals( rtl::OUString::createFromAscii( "none" ) ) )
+            else if( aProxyMode.equals( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("none")) ) )
                 return uno::makeAny( (sal_Int32) 0 );
         }
             break;
@@ -442,7 +442,7 @@ sal_Bool SAL_CALL isDependencySatisfied( GConfClient* aClient, const Configurati
                 g_get_real_name(), osl_getThreadTextEncoding() ) );
             if( !aCompleteName.equalsAscii( "Unknown" ) )
             {
-                if( aCompleteName.trim().indexOf(rtl::OUString::createFromAscii(" "), 0) != -1 )
+                if( aCompleteName.trim().indexOf(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ")), 0) != -1 )
                     return sal_True;
             }
         }
