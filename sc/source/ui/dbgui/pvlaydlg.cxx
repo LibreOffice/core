@@ -384,7 +384,6 @@ void ScDPLayoutDlg::StateChanged( StateChangedType nStateChange )
 
 void ScDPLayoutDlg::InitWndSelect( const vector<ScDPLabelDataRef>& rLabels )
 {
-    StackPrinter __stack_printer__("ScDPLayoutDlg::InitWndSelect");
     size_t nLabelCount = rLabels.size();
     if (nLabelCount > MAX_LABELS)
         nLabelCount = MAX_LABELS;
@@ -393,13 +392,12 @@ void ScDPLayoutDlg::InitWndSelect( const vector<ScDPLabelDataRef>& rLabels )
     aLabelDataArr.reserve( nLabelCount );
     for ( size_t i=0; i < nLabelCount; i++ )
     {
-        fprintf(stdout, "ScDPLayoutDlg::InitWndSelect:   label data = %s\n",
-                rtl::OUStringToOString(rLabels[i]->getDisplayName(), RTL_TEXTENCODING_UTF8).getStr());
         aLabelDataArr.push_back(*rLabels[i]);
         aWndSelect.AddField(aLabelDataArr[i].getDisplayName(), i);
         ScDPFuncDataRef p(new ScDPFuncData(aLabelDataArr[i].mnCol, aLabelDataArr[i].mnFuncMask));
         aSelectArr.push_back(p);
     }
+    aWndSelect.ResetScrollBar();
 }
 
 //----------------------------------------------------------------------------
@@ -1351,7 +1349,7 @@ void ScDPLayoutDlg::CalcWndSizes()
 
     // selection area
     aWndSelect.SetSizePixel(
-        Size(2 * nFldW + ROW_FIELD_BTN_GAP,
+        Size(2 * nFldW + ROW_FIELD_BTN_GAP + 10,
              LINE_SIZE * nFldH + (LINE_SIZE - 1) * ROW_FIELD_BTN_GAP));
 
     aRectPage   = Rectangle( aWndPage.GetPosPixel(),    aWndPage.GetSizePixel() );
