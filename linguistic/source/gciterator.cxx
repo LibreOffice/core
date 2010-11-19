@@ -792,7 +792,7 @@ sal_Int32 GrammarCheckingIterator::GetSuggestedEndOfSentence(
         uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
         if ( xMSF.is() )
             xBreakIterator = uno::Reference < i18n::XBreakIterator >( xMSF->createInstance(
-                ::rtl::OUString::createFromAscii("com.sun.star.i18n.BreakIterator") ), uno::UNO_QUERY );
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.BreakIterator")) ), uno::UNO_QUERY );
     }
     sal_Int32 nTextLen = rText.getLength();
     sal_Int32 nEndPosition = nTextLen;

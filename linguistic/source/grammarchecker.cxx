@@ -163,10 +163,10 @@ uno::Sequence< linguistic2::SingleGrammarError > GrammarChecker::GrammarChecking
     Error_t aError;
     uno::Sequence< OUString > aSuggestion(1);
     OUString *pSeggestion = aSuggestion.getArray();
-    pSeggestion[0] = OUString::createFromAscii("Modified");
+    pSeggestion[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("Modified"));
 
-    aError[OUString::createFromAscii("GrammarError")]  = aSuggestion;
-    aError[OUString::createFromAscii("Grammar Error")] = aSuggestion;
+    aError[OUString(RTL_CONSTASCII_USTRINGPARAM("GrammarError"))]  = aSuggestion;
+    aError[OUString(RTL_CONSTASCII_USTRINGPARAM("Grammar Error"))] = aSuggestion;
 
     typedef std::vector< linguistic2::SingleGrammarError> ErrorVector_t;
     ErrorVector_t aErrorVector;
