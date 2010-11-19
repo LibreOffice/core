@@ -105,18 +105,21 @@
 /** This macro asserts the given condition (in debug mode), and throws
     an RuntimeException afterwards.
  */
-#define ENSURE_OR_THROW(c, m) if( !(c) ) { \
-                                     OSL_ENSURE(c, m); \
-                                     throw ::com::sun::star::uno::RuntimeException( \
-                                     ::rtl::OUString::createFromAscii(BOOST_CURRENT_FUNCTION) + \
-                                     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ",\n"m )), \
-                                     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >() ); }
-#define ENSURE_OR_THROW2(c, m, ifc) if( !(c) ) { \
-                                          OSL_ENSURE(c, m); \
-                                          throw ::com::sun::star::uno::RuntimeException( \
-                                          ::rtl::OUString::createFromAscii(BOOST_CURRENT_FUNCTION) + \
-                                          ::rtl::OUString::( RTL_CONSTASCII_USTRINGPARAM( ",\n"m )), \
-                                          ifc ); }
+#define ENSURE_OR_THROW(c, m) \
+    if( !(c) ){ \
+        OSL_ENSURE(c, m); \
+        throw ::com::sun::star::uno::RuntimeException( \
+        ::rtl::OUString::createFromAscii(BOOST_CURRENT_FUNCTION) + \
+        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ",\n"m )), \
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >() ); }
+
+#define ENSURE_OR_THROW2(c, m, ifc) \
+    if( !(c) ) { \
+        OSL_ENSURE(c, m); \
+        throw ::com::sun::star::uno::RuntimeException( \
+        ::rtl::OUString::createFromAscii(BOOST_CURRENT_FUNCTION) + \
+        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ",\n"m )), \
+        ifc ); }
 
 /** This macro asserts the given condition (in debug mode), and
     returns the given value afterwards.
