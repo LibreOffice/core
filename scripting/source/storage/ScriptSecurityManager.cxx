@@ -63,17 +63,17 @@ const char* const SCRIPTSTORAGEMANAGER_SERVICE =
 namespace scripting_securitymgr
 {
 
-static OUString s_configProv = ::rtl::OUString::createFromAscii(
-    "com.sun.star.configuration.ConfigurationProvider");
+static OUString s_configProv(RTL_CONSTASCII_USTRINGPARAM(
+    "com.sun.star.configuration.ConfigurationProvider"));
 
-static OUString s_configAccess = ::rtl::OUString::createFromAscii(
-    "com.sun.star.configuration.ConfigurationAccess");
+static OUString s_configAccess(RTL_CONSTASCII_USTRINGPARAM(
+    "com.sun.star.configuration.ConfigurationAccess"));
 
-static OUString s_configUpdate = ::rtl::OUString::createFromAscii(
-    "com.sun.star.configuration.ConfigurationUpdateAccess");
+static OUString s_configUpdate(RTL_CONSTASCII_USTRINGPARAM(
+    "com.sun.star.configuration.ConfigurationUpdateAccess"));
 
-static OUString s_securityDialog = ::rtl::OUString::createFromAscii(
-    "com.sun.star.script.framework.security.SecurityDialog");
+static OUString s_securityDialog(RTL_CONSTASCII_USTRINGPARAM(
+    "com.sun.star.script.framework.security.SecurityDialog"));
 
 static const int PERMISSION_NEVER = 0;
 static const int PERMISSION_PATHLIST = 1;
@@ -356,7 +356,7 @@ void ScriptSecurityManager::checkPermission( const OUString & scriptStorageURL,
     const OUString & permissionRequest )
     throw ( RuntimeException, lang::IllegalArgumentException, security::AccessControlException )
 {
-    if( permissionRequest.equals( OUString::createFromAscii( "execute" ) ) )
+    if( permissionRequest.equals( OUString(RTL_CONSTASCII_USTRINGPARAM("execute")) ) )
     {
         OSL_TRACE(
             "ScriptSecurityManager::checkPermission: execute permission request for %s",
@@ -376,18 +376,18 @@ void ScriptSecurityManager::checkPermission( const OUString & scriptStorageURL,
                 OSL_TRACE( "permission refused" );
                 Any aPermission;
                 security::RuntimePermission permission;
-                permission.Name = OUString::createFromAscii( "execute" ).concat( scriptStorageURL );
+                permission.Name = OUString(RTL_CONSTASCII_USTRINGPARAM("execute")).concat( scriptStorageURL );
                 aPermission <<= permission;
                 throw security::AccessControlException(
-                    OUString::createFromAscii( "ScriptSecurityManager::checkPermission: no execute permission for URL" ).concat( scriptStorageURL ),
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("ScriptSecurityManager::checkPermission: no execute permission for URL")).concat( scriptStorageURL ),
                     Reference< XInterface > (), aPermission );
             }
         }
         // we should never get here!!
-        throw lang::IllegalArgumentException( OUString::createFromAscii( "ScriptSecurityManager::checkPermission: storageURL not found" ), Reference< XInterface > (), 0 );
+        throw lang::IllegalArgumentException( OUString(RTL_CONSTASCII_USTRINGPARAM("ScriptSecurityManager::checkPermission: storageURL not found")), Reference< XInterface > (), 0 );
     }
     // inappropriate permission request
-    throw lang::IllegalArgumentException( OUString::createFromAscii( "ScriptSecurityManager::checkPermission: storageURL not found" ), Reference< XInterface > (), 1 );
+    throw lang::IllegalArgumentException( OUString(RTL_CONSTASCII_USTRINGPARAM("ScriptSecurityManager::checkPermission: storageURL not found")), Reference< XInterface > (), 1 );
 }
 
 void ScriptSecurityManager::removePermissionSettings ( ::rtl::OUString & scriptStorageURL )
@@ -415,8 +415,8 @@ void ScriptSecurityManager::readConfiguration()
     try
     {
     beans::PropertyValue configPath;
-    configPath.Name = ::rtl::OUString::createFromAscii( "nodepath" );
-    configPath.Value <<= ::rtl::OUString::createFromAscii( "org.openoffice.Office.Common/Security/Scripting" );
+    configPath.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath"));
+    configPath.Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Common/Security/Scripting"));
     Sequence < Any > aargs( 1 );
     aargs[ 0 ] <<= configPath;
     validateXRef( m_xConfigProvFactory,
@@ -513,8 +513,8 @@ void ScriptSecurityManager::readConfiguration()
     validateXRef( xMgr,
         "ScriptSecurityManager::readConfiguration: cannot get XMultiComponentFactory" );
     xInterface = xMgr->createInstanceWithContext(
-        ::rtl::OUString::createFromAscii(
-        "com.sun.star.util.PathSubstitution"), m_xContext);
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+        "com.sun.star.util.PathSubstitution")), m_xContext);
     validateXRef( xInterface,
         "ScriptSecurityManager::readConfiguration: cannot get ConfigurationProvider" );
     Reference< util::XStringSubstitution > xStringSubstitution(
@@ -549,8 +549,8 @@ throw ( RuntimeException )
 {
     OSL_TRACE( "--->ScriptSecurityManager::addToSecurePaths" );
     beans::PropertyValue configPath;
-    configPath.Name = ::rtl::OUString::createFromAscii( "nodepath" );
-    configPath.Value <<= ::rtl::OUString::createFromAscii( "org.openoffice.Office.Common/Security/Scripting" );
+    configPath.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath"));
+    configPath.Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Common/Security/Scripting"));
     Sequence < Any > aargs( 1 );
     aargs[ 0 ] <<= configPath;
     Reference< XInterface > xInterface = m_xConfigProvFactory->createInstanceWithArguments( s_configUpdate,

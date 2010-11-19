@@ -50,7 +50,7 @@ public:
     virtual void SAL_CALL setValue( ::sal_Bool _value ) throw (::com::sun::star::uno::RuntimeException) { Value = _value; }
 
     // XDefaultProperty
-    ::rtl::OUString SAL_CALL getDefaultPropertyName() throw (com::sun::star::uno::RuntimeException) { return ::rtl::OUString::createFromAscii("Value"); }
+    ::rtl::OUString SAL_CALL getDefaultPropertyName() throw (com::sun::star::uno::RuntimeException) { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Value")); }
 };
 
 
@@ -69,7 +69,7 @@ public:
     virtual void SAL_CALL setValue( ::sal_Int32 _value ) throw (::com::sun::star::uno::RuntimeException) { Value = _value; }
 
     // XDefaultProperty
-    ::rtl::OUString SAL_CALL getDefaultPropertyName() throw (com::sun::star::uno::RuntimeException) { return ::rtl::OUString::createFromAscii("Value"); }
+    ::rtl::OUString SAL_CALL getDefaultPropertyName() throw (com::sun::star::uno::RuntimeException) { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Value")); }
 };
 #endif
 

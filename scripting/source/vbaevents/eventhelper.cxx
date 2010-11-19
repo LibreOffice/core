@@ -117,7 +117,7 @@ using namespace ::ooo::vba;
 #define GET_TYPE(x) ::getCppuType((uno::Reference< x > *)0);
 
 // Some constants
-const static rtl::OUString DELIM = rtl::OUString::createFromAscii( "::" );
+const static rtl::OUString DELIM(RTL_CONSTASCII_USTRINGPARAM("::"));
 const static sal_Int32 DELIMLEN = DELIM.getLength();
 
 bool isKeyEventOk( awt::KeyEvent& evt, const Sequence< Any >& params )
@@ -414,8 +414,8 @@ eventMethodToDescriptor( const ::rtl::OUString& rEventMethod, ScriptEventDescrip
 
         // set this it VBAInterop, ensures that it doesn't
         // get persisted or shown in property editors
-        evtDesc.ScriptType = rtl::OUString::createFromAscii(
-            "VBAInterop" );
+        evtDesc.ScriptType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "VBAInterop" ));
         return true;
     }
     return false;
@@ -522,18 +522,18 @@ public:
 
     virtual void SAL_CALL insertByName( const ::rtl::OUString&, const Any& ) throw (lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, RuntimeException)
     {
-        throw RuntimeException( rtl::OUString::createFromAscii( "ReadOnly container" ), Reference< XInterface >() );
+        throw RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReadOnly container")), Reference< XInterface >() );
 
     }
     virtual void SAL_CALL removeByName( const ::rtl::OUString& ) throw (::com::sun::star::container::NoSuchElementException, lang::WrappedTargetException, RuntimeException)
     {
-        throw RuntimeException( rtl::OUString::createFromAscii( "ReadOnly container" ), Reference< XInterface >() );
+        throw RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReadOnly container")), Reference< XInterface >() );
     }
 
     // XNameReplace
     virtual void SAL_CALL replaceByName( const ::rtl::OUString&, const Any& ) throw (lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, RuntimeException)
     {
-        throw RuntimeException( rtl::OUString::createFromAscii( "ReadOnly container" ), Reference< XInterface >() );
+        throw RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReadOnly container")), Reference< XInterface >() );
 
     }
 
@@ -699,7 +699,7 @@ OPropertyContainer(GetBroadcastHelper()), m_xContext( rxContext ), m_bDocClosed(
 {
     registerProperty( EVENTLSTNR_PROPERTY_MODEL, EVENTLSTNR_PROPERTY_ID_MODEL,
         beans::PropertyAttribute::TRANSIENT, &m_xModel, ::getCppuType( &m_xModel ) );
-    msProject = rtl::OUString::createFromAscii("Standard");
+    msProject = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Standard"));
 }
 
 void
@@ -924,7 +924,7 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet ) throw(RuntimeExce
 {
     OSL_TRACE("EventListener::firing_Impl( FAKE VBA_EVENTS )");
     static const ::rtl::OUString vbaInterOp =
-        ::rtl::OUString::createFromAscii("VBAInterop");
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VBAInterop"));
 
     // let default handlers deal with non vba stuff
     if ( !evt.ScriptType.equals( vbaInterOp ) )
@@ -998,8 +998,8 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet ) throw(RuntimeExce
     if ( sScriptCode.indexOf( '.' ) == -1 )
     {
        //'Project' is a better default but I want to force failures
-       //rtl::OUString sMacroLoc = rtl::OUString::createFromAscii("Project");
-        sProject = rtl::OUString::createFromAscii("Standard");
+       //rtl::OUString sMacroLoc(RTL_CONSTASCII_USTRINGPARAM("Project"));
+        sProject = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Standard"));
 
         if ( pBasicManager->GetName().Len() > 0 )
             sProject =  pBasicManager->GetName();
@@ -1011,8 +1011,8 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet ) throw(RuntimeExce
         sScriptCode = sScriptCode.copy( nIndex + 1 );
     }
         rtl::OUString sMacroLoc = sProject;
-        sMacroLoc = sMacroLoc.concat(  rtl::OUString::createFromAscii(".") );
-        sMacroLoc = sMacroLoc.concat( sScriptCode ).concat( rtl::OUString::createFromAscii(".") );
+        sMacroLoc = sMacroLoc.concat(  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".")) );
+        sMacroLoc = sMacroLoc.concat( sScriptCode ).concat( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".")) );
 
         OSL_TRACE("sMacroLoc is %s", rtl::OUStringToOString( sMacroLoc, RTL_TEXTENCODING_UTF8 ).getStr() );
         for ( ; txInfo != txInfo_end; ++txInfo )
@@ -1057,7 +1057,7 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet ) throw(RuntimeExce
                             RTL_TEXTENCODING_UTF8 ).getStr() );
                     try
                     {
-                        uno::Any aDummyCaller = uno::makeAny( rtl::OUString::createFromAscii("Error") );
+                        uno::Any aDummyCaller = uno::makeAny( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Error")) );
                         if ( pRet )
                             ooo::vba::executeMacro( mpShell, url, aArguments, *pRet, aDummyCaller );
                         else

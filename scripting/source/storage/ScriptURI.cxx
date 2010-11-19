@@ -47,7 +47,7 @@ using namespace ::com::sun::star::lang;
 
 namespace scripting_impl {
 
-static const OUString schema = OUString::createFromAscii( "vnd.sun.star.script://" );
+static const OUString schema(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.script://"));
 
 /**
  *  Constructor

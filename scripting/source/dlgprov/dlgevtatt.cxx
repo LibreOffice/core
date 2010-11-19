@@ -145,7 +145,7 @@ namespace dlgprov
 
     void DialogVBAScriptListenerImpl::firing_impl( const script::ScriptEvent& aScriptEvent, uno::Any* )
     {
-        if ( aScriptEvent.ScriptType.equals( rtl::OUString::createFromAscii("VBAInterop") ) && mxListener.is() )
+        if ( aScriptEvent.ScriptType.equals( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VBAInterop")) ) && mxListener.is() )
         {
             ScriptEvent aScriptEventCopy( aScriptEvent );
             aScriptEventCopy.ScriptCode = msDialogLibName.concat( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "." ) ) ).concat( msDialogCodeName );
@@ -172,12 +172,12 @@ namespace dlgprov
         // key listeners by protocol when ScriptType = 'Script'
         // otherwise key is the ScriptType e.g. StarBasic
         if ( rxRTLListener.is() ) // set up handler for RTL_BASIC
-            listernersForTypes[ rtl::OUString::createFromAscii("StarBasic") ] = rxRTLListener;
+            listernersForTypes[ rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StarBasic")) ] = rxRTLListener;
         else
-            listernersForTypes[ rtl::OUString::createFromAscii("StarBasic") ] = new DialogLegacyScriptListenerImpl( rxContext, rxModel );
-        // handler for Script & ::rtl::OUString::createFromAscii( "vnd.sun.star.UNO:" )
-        listernersForTypes[ rtl::OUString::createFromAscii("vnd.sun.star.UNO") ] = new DialogUnoScriptListenerImpl( rxContext, rxModel, rxControl, rxHandler, rxIntrospect, bProviderMode );
-        listernersForTypes[ rtl::OUString::createFromAscii("vnd.sun.star.script") ] = new DialogSFScriptListenerImpl( rxContext, rxModel );
+            listernersForTypes[ rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StarBasic")) ] = new DialogLegacyScriptListenerImpl( rxContext, rxModel );
+        // handler for Script & ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.UNO:"))
+        listernersForTypes[ rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.UNO")) ] = new DialogUnoScriptListenerImpl( rxContext, rxModel, rxControl, rxHandler, rxIntrospect, bProviderMode );
+        listernersForTypes[ rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.script")) ] = new DialogSFScriptListenerImpl( rxContext, rxModel );
         // Note: in a future cws ( npower13_ObjectModule ) it will be possible
         // to determine the vba mode from the basiclibrary container, the tunnel hack
         // below can then be replaced
@@ -193,7 +193,7 @@ namespace dlgprov
             }
         }
         if ( mbUseFakeVBAEvents )
-            listernersForTypes[ rtl::OUString::createFromAscii("VBAInterop") ] = new DialogVBAScriptListenerImpl( rxContext, rxControl, rxModel, sDialogLibName );
+            listernersForTypes[ rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VBAInterop")) ] = new DialogVBAScriptListenerImpl( rxContext, rxControl, rxModel, sDialogLibName );
     }
 
     // -----------------------------------------------------------------------------
@@ -235,7 +235,7 @@ namespace dlgprov
             Reference< XControlModel > xControlModel = xControl->getModel();
             Reference< XPropertySet > xProps( xControlModel, uno::UNO_QUERY );
             rtl::OUString sName;
-            xProps->getPropertyValue( rtl::OUString::createFromAscii("Name") ) >>= sName;
+            xProps->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name")) ) >>= sName;
             if ( xEventCont.is() )
             {
                 Sequence< ::rtl::OUString > aNames = xEventCont->getElementNames();
@@ -249,7 +249,7 @@ namespace dlgprov
                     Any aElement = xEventCont->getByName( pNames[ j ] );
                     aElement >>= aDesc;
                     rtl::OUString sKey = aDesc.ScriptType;
-                    if ( aDesc.ScriptType.equals( rtl::OUString::createFromAscii("Script" ) ) || aDesc.ScriptType.equals( rtl::OUString::createFromAscii("UNO" ) ) )
+                    if ( aDesc.ScriptType.equals( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Script")) ) || aDesc.ScriptType.equals( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UNO")) ) )
                     {
                         sal_Int32 nIndex = aDesc.ScriptCode.indexOf( ':' );
                         sKey = aDesc.ScriptCode.copy( 0, nIndex );
@@ -502,13 +502,13 @@ namespace dlgprov
                 {
                     Reference< provider::XScriptProviderFactory > xFactory(
                         m_xContext->getValueByName(
-                        ::rtl::OUString::createFromAscii( "/singletons/com.sun.star.script.provider.theMasterScriptProviderFactory" ) ),
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/singletons/com.sun.star.script.provider.theMasterScriptProviderFactory")) ),
                         UNO_QUERY );
                     OSL_ENSURE( xFactory.is(), "SFURL_firing_impl: failed to get master script provider factory" );
                     if ( xFactory.is() )
                     {
                         Any aCtx;
-                        aCtx <<= ::rtl::OUString::createFromAscii( "user" );
+                        aCtx <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("user"));
                         xScriptProvider.set( xFactory->createScriptProvider( aCtx ), UNO_QUERY );
                     }
                 }
@@ -553,9 +553,9 @@ namespace dlgprov
             sal_Int32 nIndex = sScriptCode.indexOf( ':' );
             if ( nIndex >= 0 && nIndex < sScriptCode.getLength() )
             {
-                sScriptURL = ::rtl::OUString::createFromAscii( "vnd.sun.star.script:" );
+                sScriptURL = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.script:"));
                 sScriptURL += sScriptCode.copy( nIndex + 1 );
-                sScriptURL += ::rtl::OUString::createFromAscii( "?language=Basic&location=" );
+                sScriptURL += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("?language=Basic&location="));
                 sScriptURL += sScriptCode.copy( 0, nIndex );
             }
             ScriptEvent aSFScriptEvent( aScriptEvent );
@@ -566,7 +566,7 @@ namespace dlgprov
 
     void DialogUnoScriptListenerImpl::firing_impl( const ScriptEvent& aScriptEvent, Any* pRet )
     {
-        static ::rtl::OUString sUnoURLScheme = ::rtl::OUString::createFromAscii( "vnd.sun.star.UNO:" );
+        static ::rtl::OUString sUnoURLScheme(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.UNO:"));
 
         ::rtl::OUString sScriptCode( aScriptEvent.ScriptCode );
         ::rtl::OUString aMethodName = aScriptEvent.ScriptCode.copy( sUnoURLScheme.getLength() );

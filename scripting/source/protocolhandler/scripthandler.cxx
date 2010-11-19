@@ -114,8 +114,8 @@ Reference< XDispatch > SAL_CALL ScriptProtocolHandler::queryDispatch(
     // get scheme of url
 
     Reference< uri::XUriReferenceFactory > xFac (
-         m_xFactory->createInstance( rtl::OUString::createFromAscii(
-            "com.sun.star.uri.UriReferenceFactory") ) , UNO_QUERY );
+         m_xFactory->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "com.sun.star.uri.UriReferenceFactory")) ) , UNO_QUERY );
     if ( xFac.is() )
     {
         Reference<  uri::XUriReference > uriRef(
@@ -163,7 +163,7 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
     {
         try
         {
-            bool bIsDocumentScript = ( aURL.Complete.indexOf( ::rtl::OUString::createFromAscii( "document" ) ) !=-1 );
+            bool bIsDocumentScript = ( aURL.Complete.indexOf( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("document")) ) !=-1 );
                 // TODO: isn't this somewhat strange? This should be a test for a location=document parameter, shouldn't it?
 
             if ( bIsDocumentScript )
@@ -252,8 +252,8 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
 #ifdef _DEBUG
         catch ( ... )
         {
-            ::rtl::OUString reason = ::rtl::OUString::createFromAscii(
-                "ScriptProtocolHandler::dispatch: caught unknown exception" );
+            ::rtl::OUString reason(RTL_CONSTASCII_USTRINGPARAM(
+                "ScriptProtocolHandler::dispatch: caught unknown exception" ));
 
             invokeResult <<= reason;
         }
@@ -262,9 +262,9 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
     }
     else
     {
-        ::rtl::OUString reason = ::rtl::OUString::createFromAscii(
+        ::rtl::OUString reason(RTL_CONSTASCII_USTRINGPARAM(
         "ScriptProtocolHandler::dispatchWithNotification failed, ScriptProtocolHandler not initialised"
-        );
+        ));
         invokeResult <<= reason;
     }
 
@@ -408,8 +408,8 @@ ScriptProtocolHandler::createScriptProvider()
             Reference< XComponentContext > xCtx(
                 xProps->getPropertyValue( dc ), UNO_QUERY_THROW );
 
-            ::rtl::OUString tmspf = ::rtl::OUString::createFromAscii(
-                "/singletons/com.sun.star.script.provider.theMasterScriptProviderFactory");
+            ::rtl::OUString tmspf(RTL_CONSTASCII_USTRINGPARAM(
+                "/singletons/com.sun.star.script.provider.theMasterScriptProviderFactory"));
 
             Reference< provider::XScriptProviderFactory > xFac(
                 xCtx->getValueByName( tmspf ), UNO_QUERY_THROW );
