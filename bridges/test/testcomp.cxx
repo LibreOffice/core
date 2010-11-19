@@ -774,7 +774,7 @@ Reference <XInterface > createComponent( const ::rtl::OUString &sService ,
         // erst registrieren
         Reference < XImplementationRegistration > rReg (
             rSMgr->createInstance(
-                OUString::createFromAscii( "com.sun.star.registry.ImplementationRegistration" )),
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.registry.ImplementationRegistration" ))),
             UNO_QUERY );
 
         OSL_ASSERT( rReg.is() );
@@ -783,7 +783,7 @@ Reference <XInterface > createComponent( const ::rtl::OUString &sService ,
         try
         {
             rReg->registerImplementation(
-                OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.loader.SharedLibrary" )),
                 aDllName,
                 Reference< XSimpleRegistry > () );
             rInterface = rSMgr->createInstance( sService );

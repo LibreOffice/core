@@ -88,30 +88,27 @@ sal_Int32 Client::run(css::uno::Sequence< rtl::OUString > const &)
         context->getServiceManager());
     if (!factory.is()) {
         throw new css::uno::RuntimeException(
-            rtl::OUString::createFromAscii(
-                "no component context service manager"),
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "no component context service manager" )),
             static_cast< cppu::OWeakObject * >(this));
     }
     css::uno::Reference< test::javauno::nativethreadpool::XRelay > relay;
     try {
         relay = css::uno::Reference< test::javauno::nativethreadpool::XRelay >(
             factory->createInstanceWithContext(
-                rtl::OUString::createFromAscii(
-                    "test.javauno.nativethreadpool.Relay"),
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "test.javauno.nativethreadpool.Relay" )),
                 context),
             css::uno::UNO_QUERY_THROW);
     } catch (css::uno::RuntimeException &) {
         throw;
     } catch (css::uno::Exception & e) {
         throw css::lang::WrappedTargetRuntimeException(
-            rtl::OUString::createFromAscii(
-                "creating test.javauno.nativethreadpool.Relay service"),
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "creating test.javauno.nativethreadpool.Relay service" )),
             static_cast< cppu::OWeakObject * >(this), css::uno::makeAny(e));
     }
     relay->start(this);
     if (!data.setData(reinterpret_cast< void * >(12345))) {
         throw new css::uno::RuntimeException(
-            rtl::OUString::createFromAscii("osl::ThreadData::setData failed"),
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "osl::ThreadData::setData failed" )),
             static_cast< cppu::OWeakObject * >(this));
     }
     css::uno::Reference< test::javauno::nativethreadpool::XSource > source;
@@ -119,23 +116,19 @@ sal_Int32 Client::run(css::uno::Sequence< rtl::OUString > const &)
         source
             = css::uno::Reference< test::javauno::nativethreadpool::XSource >(
                 css::bridge::UnoUrlResolver::create(context)->resolve(
-                    rtl::OUString::createFromAscii(
-                        "uno:socket,host=localhost,port=3830;urp;test")),
+                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "uno:socket,host=localhost,port=3830;urp;test" ))),
                 css::uno::UNO_QUERY_THROW);
     } catch (css::connection::NoConnectException & e) {
         throw css::lang::WrappedTargetRuntimeException(
-            rtl::OUString::createFromAscii(
-                "com.sun.star.uno.UnoUrlResolver.resolve"),
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.uno.UnoUrlResolver.resolve" )),
             static_cast< cppu::OWeakObject * >(this), css::uno::makeAny(e));
     } catch (css::connection::ConnectionSetupException & e) {
         throw css::lang::WrappedTargetRuntimeException(
-            rtl::OUString::createFromAscii(
-                "com.sun.star.uno.UnoUrlResolver.resolve"),
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.uno.UnoUrlResolver.resolve" )),
             static_cast< cppu::OWeakObject * >(this), css::uno::makeAny(e));
     } catch (css::lang::IllegalArgumentException & e) {
         throw css::lang::WrappedTargetRuntimeException(
-            rtl::OUString::createFromAscii(
-                "com.sun.star.uno.UnoUrlResolver.resolve"),
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.uno.UnoUrlResolver.resolve" )),
             static_cast< cppu::OWeakObject * >(this), css::uno::makeAny(e));
     }
     bool success = source->get() == 12345;
@@ -155,8 +148,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL create(
 }
 
 rtl::OUString SAL_CALL getImplementationName() {
-    return rtl::OUString::createFromAscii(
-        "test.javauno.nativethreadpool.client");
+    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "test.javauno.nativethreadpool.client" ));
 }
 
 css::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames() {

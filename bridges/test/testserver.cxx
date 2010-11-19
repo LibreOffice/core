@@ -160,7 +160,7 @@ void MyThread::run()
                             OUString( RTL_CONSTASCII_USTRINGPARAM("my test string")) , 2 );
                     }
                     printf( "all oneway are send\n" );
-                    rCallMe->call( OUString::createFromAscii( "reverse call me test finished" ) , 0 );
+                    rCallMe->call( OUString( RTL_CONSTASCII_USTRINGPARAM( "reverse call me test finished" )) , 0 );
                 printf( "revers callme test finished\n" );
                 }
             }

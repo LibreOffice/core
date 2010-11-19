@@ -494,14 +494,12 @@ sal_Int32 Service::run(css::uno::Sequence< rtl::OUString > const & arguments)
 }
 
 rtl::OUString Service::getImplementationName_static() {
-    return rtl::OUString::createFromAscii(
-        "com.sun.star.test.bridges.testacquire.impl");
+    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.test.bridges.testacquire.impl" ));
 }
 
 css::uno::Sequence< rtl::OUString > Service::getSupportedServiceNames_static() {
     css::uno::Sequence< rtl::OUString > names(1);
-    names[0] = rtl::OUString::createFromAscii(
-        "com.sun.star.test.bridges.testacquire");
+    names[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.test.bridges.testacquire" ));
     return names;
 }
 
@@ -543,9 +541,9 @@ namespace {
 
 bool writeInfo(void * registryKey, rtl::OUString const & implementationName,
                css::uno::Sequence< rtl::OUString > const & serviceNames) {
-    rtl::OUString keyName(rtl::OUString::createFromAscii("/"));
+    rtl::OUString keyName( RTL_CONSTASCII_USTRINGPARAM( "/" ));
     keyName += implementationName;
-    keyName += rtl::OUString::createFromAscii("/UNO/SERVICES");
+    keyName += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES" ));
     css::uno::Reference< css::registry::XRegistryKey > key;
     try {
         key = static_cast< css::registry::XRegistryKey * >(registryKey)->
