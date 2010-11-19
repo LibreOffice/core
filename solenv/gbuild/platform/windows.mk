@@ -498,6 +498,7 @@ gb_StaticLibrary_FILENAMES := \
 
 gb_StaticLibrary_FILENAMES := $(patsubst salcpprt:salcpprt%,salcpprt:cpprtl%,$(gb_StaticLibrary_FILENAMES))
 
+gb_StaticLibrary_StaticLibrary_platform =
 
 # Executable class
 

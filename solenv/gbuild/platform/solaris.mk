@@ -116,7 +116,7 @@ endif
 # Helper class
 
 gb_Helper_abbreviate_dirs_native = $(gb_Helper_abbreviate_dirs)
-gb_Deliver_GNUCOPY := $(firstword $(GNUCOPY) gnucp)
+gb_Deliver_GNUCOPY := $(or $(GNUCOPY),gnucp)
 
 
 # CObject class
@@ -272,6 +272,7 @@ gb_StaticLibrary_FILENAMES := \
     $(foreach lib,$(gb_StaticLibrary_JPEGLIBS),$(lib):$(gb_StaticLibrary_SYSPRE)$(lib)$(gb_StaticLibrary_JPEGEXT)) \
     $(foreach lib,$(gb_StaticLibrary_PLAINLIBS),$(lib):$(gb_StaticLibrary_SYSPRE)$(lib)$(gb_StaticLibrary_PLAINEXT)) \
 
+gb_StaticLibrary_StaticLibrary_platform =
 
 # Executable class
 

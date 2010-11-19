@@ -68,7 +68,7 @@ $(call gb_ComponentTarget_get_external_target,%) :
     $(call gb_Deliver_deliver,$<,$@)
 
 define gb_ComponentTarget_ComponentTarget
-$(call gb_ComponentTarget_get_target,$(1)) : LIBFILENAME := $(firstword $(3) $(2))
+$(call gb_ComponentTarget_get_target,$(1)) : LIBFILENAME := $(or $(3),$(2))
 $(call gb_ComponentTarget_get_outdir_target,$(1)) : $(call gb_ComponentTarget_get_target,$(1))
 $(call gb_Deliver_add_deliverable,$(call gb_ComponentTarget_get_outdir_target,$(1)),$(call gb_ComponentTarget_get_target,$(1)))
 
