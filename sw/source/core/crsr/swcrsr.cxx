@@ -1379,6 +1379,7 @@ BOOL SwCursor::SelectWordWT( sal_Int16 nWordType, const Point* pPt )
             const SwPosition rStart = pMark->GetMarkStart();
             GetPoint()->nNode = rStart.nNode;
             GetPoint()->nContent = rStart.nContent;
+            GetPoint()->nContent++; // Don't select the start delimiter
 
             const SwPosition rEnd = pMark->GetMarkEnd();
 
@@ -1387,6 +1388,7 @@ BOOL SwCursor::SelectWordWT( sal_Int16 nWordType, const Point* pPt )
                 SetMark();
                 GetMark()->nNode = rEnd.nNode;
                 GetMark()->nContent = rEnd.nContent;
+                GetMark()->nContent--; //Don't select the end delimiter
             }
             bRet = TRUE;
         }

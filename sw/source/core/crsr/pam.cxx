@@ -690,24 +690,18 @@ BOOL SwPaM::HasReadonlySel( bool bFormView ) const
     else
         pFrm = 0;
 
-    // --> FME 2004-06-29 #114856# Formular view
     // Will be set if point/mark are inside edit-in-readonly environment
     const SwFrm* pSttEIRFrm = 0;
     const SwFrm* pEndEIRFrm = 0;
 
     if( pFrm && ( pFrm->IsProtected() ||
-                  // --> FME 2004-06-29 #114856# Formular view
-                  ( bFormView &&
-                     0 == ( pSttEIRFrm = lcl_FindEditInReadonlyFrm( *pFrm ) ) ) ) )
-                  // <--
+                  ( bFormView && 0 == ( pSttEIRFrm = lcl_FindEditInReadonlyFrm( *pFrm ) ) ) ) )
         bRet = TRUE;
     else if( pNd )
     {
         const SwSectionNode* pSNd = pNd->GetSectionNode();
         if( pSNd && ( pSNd->GetSection().IsProtectFlag() ||
-                      // --> FME 2004-06-29 #114856# Formular view
                       (bFormView && !pSNd->GetSection().IsEditInReadonlyFlag()) ) )
-                      // <--
             bRet = TRUE;
     }
 
@@ -719,22 +713,16 @@ BOOL SwPaM::HasReadonlySel( bool bFormView ) const
             pFrm = 0;
 
         if( pFrm && ( pFrm->IsProtected() ||
-                  // --> FME 2004-06-29 #114856# Formular view
-                  ( bFormView &&
-                     0 == ( pEndEIRFrm = lcl_FindEditInReadonlyFrm( *pFrm ) ) ) ) )
-                  // <--
+                  ( bFormView && 0 == ( pEndEIRFrm = lcl_FindEditInReadonlyFrm( *pFrm ) ) ) ) )
             bRet = TRUE;
         else if( pNd )
         {
             const SwSectionNode* pSNd = pNd->GetSectionNode();
             if( pSNd && ( pSNd->GetSection().IsProtectFlag() ||
-                          // --> FME 2004-06-29 #114856# Formular view
                           (bFormView && !pSNd->GetSection().IsEditInReadonlyFlag()) ) )
-                          // <--
                 bRet = TRUE;
         }
 
-        // --> FME 2004-06-29 #114856# Formular view
         if ( !bRet && bFormView )
         {
            // Check if start and end frame are inside the _same_
@@ -742,7 +730,6 @@ BOOL SwPaM::HasReadonlySel( bool bFormView ) const
            if ( pSttEIRFrm != pEndEIRFrm )
                 bRet = TRUE;
         }
-        // <--
 
         // oder sollte eine geschuetzte Section innerhalb der
         // Selektion liegen?

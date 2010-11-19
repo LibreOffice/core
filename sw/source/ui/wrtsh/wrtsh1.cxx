@@ -1775,6 +1775,12 @@ SwWrtShell::SwWrtShell( SwDoc& rDoc, Window *_pWin, SwView &rShell,
     SET_CURR_SHELL( this );
     SetSfxViewShell( (SfxViewShell *)&rShell );
     SetFlyMacroLnk( LINK(this, SwWrtShell, ExecFlyMac) );
+
+    // place the cursor on the first field...
+    IFieldmark *pBM = NULL;
+    if ( IsFormProtected() && ( pBM = GetFieldmarkAfter( ) ) !=NULL ) {
+        GotoFieldmark(pBM);
+    }
 }
 
 /*
