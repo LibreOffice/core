@@ -78,7 +78,7 @@ $(call gb_Deliver_add_deliverable,$(call gb_Library_get_target,$(1)),$(call gb_L
 endef
 
 define gb_Library_set_componentfile
-$(call gb_ComponentTarget_ComponentTarget,$(2),$(call gb_Library_get_filename,$(1)))
+$(call gb_ComponentTarget_ComponentTarget,$(2),$(call gb_Library_get_filename,$(1)),$(call gb_Library_get_dllname,$(1)))
 $(call gb_Library_get_target,$(1)) : $(call gb_ComponentTarget_get_outdir_target,$(2))
 $(call gb_Library_get_clean_target,$(1)) : $(call gb_ComponentTarget_get_clean_target,$(2))
 
