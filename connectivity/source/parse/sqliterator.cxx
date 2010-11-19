@@ -904,7 +904,7 @@ void OSQLParseTreeIterator::traverseCreateColumns(const OSQLParseNode* pSelectNo
             }
             else if(pDatatype && pDatatype->getNodeType() == SQL_NODE_KEYWORD)
             {
-                aTypeName = ::rtl::OUString::createFromAscii("VARCHAR");
+                aTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VARCHAR"));
             }
 
             if (aTypeName.getLength())
@@ -946,7 +946,7 @@ bool OSQLParseTreeIterator::traverseSelectColumnNames(const OSQLParseNode* pSele
     if (pSelectNode->getChild(2)->isRule() && SQL_ISPUNCTUATION(pSelectNode->getChild(2)->getChild(0),"*"))
     {
         // SELECT * ...
-        setSelectColumnName(m_aSelectColumns,::rtl::OUString::createFromAscii("*"), aEmptyString,aEmptyString);
+        setSelectColumnName(m_aSelectColumns,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*")), aEmptyString,aEmptyString);
     }
     else if (SQL_ISRULE(pSelectNode->getChild(2),scalar_exp_commalist))
     {
@@ -966,7 +966,7 @@ bool OSQLParseTreeIterator::traverseSelectColumnNames(const OSQLParseNode* pSele
                 // alle Spalten der Tabelle
                 ::rtl::OUString aTableRange;
                 pColumnRef->getChild(0)->parseNodeToStr( aTableRange, m_pImpl->m_xConnection, NULL, sal_False, sal_False );
-                setSelectColumnName(m_aSelectColumns,::rtl::OUString::createFromAscii("*"), aEmptyString,aTableRange);
+                setSelectColumnName(m_aSelectColumns,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*")), aEmptyString,aTableRange);
                 continue;
             }
             else if (SQL_ISRULE(pColumnRef,derived_column))
@@ -1475,7 +1475,7 @@ void OSQLParseTreeIterator::traverseParameter(const OSQLParseNode* _pParseNode
                         ?   _rColumnAlias
                         :   _aColumnName.getLength()
                         ?   _aColumnName
-                        :   ::rtl::OUString::createFromAscii("?");
+                        :   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("?"));
     }
     else if (SQL_ISPUNCTUATION(pMark,":"))
     {
@@ -1681,8 +1681,8 @@ OSQLTable OSQLParseTreeIterator::impl_createTableObject( const ::rtl::OUString& 
         NULL,
         sal_False,
         rTableName,
-        ::rtl::OUString::createFromAscii("Table"),
-        ::rtl::OUString::createFromAscii("New Created Table"),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Table")),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("New Created Table")),
         rSchemaName,
         rCatalogName
     );
@@ -1788,7 +1788,7 @@ void OSQLParseTreeIterator::setSelectColumnName(::rtl::Reference<OSQLColumns>& _
                 // did not find a column with this name in any of the tables
                 OParseColumn* pColumn = new OParseColumn(
                     aNewColName,
-                    ::rtl::OUString::createFromAscii( "VARCHAR" ),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VARCHAR")),
                         // TODO: does this match with _nType?
                         // Or should be fill this from the getTypeInfo of the connection?
                     ::rtl::OUString(),
@@ -2143,7 +2143,7 @@ void OSQLParseTreeIterator::impl_appendError( IParseContext::ErrorCode _eError, 
 
         sErrorMessage = sErrorMessage.replaceAt( sErrorMessage.indexOf( sPlaceHolder1 ), sPlaceHolder1.getLength(), *_pReplaceToken1 );
         if ( _pReplaceToken2 )
-            sErrorMessage = sErrorMessage.replaceAt( sErrorMessage.indexOf( ::rtl::OUString::createFromAscii( "#2" ) ), 2, *_pReplaceToken2 );
+            sErrorMessage = sErrorMessage.replaceAt( sErrorMessage.indexOf( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#2")) ), 2, *_pReplaceToken2 );
     }
 
     impl_appendError( SQLException(

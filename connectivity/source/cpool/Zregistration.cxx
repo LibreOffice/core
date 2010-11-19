@@ -55,7 +55,7 @@ sal_Bool SAL_CALL component_writeInfo(void* /*_pServiceManager*/, com::sun::star
 {
     ::rtl::OUString sMainKeyName( RTL_CONSTASCII_USTRINGPARAM( "/" ));
     sMainKeyName += OPoolCollection::getImplementationName_Static();
-    sMainKeyName += ::rtl::OUString::createFromAscii("/UNO/SERVICES");
+    sMainKeyName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
 
     try
     {

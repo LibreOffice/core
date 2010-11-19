@@ -59,7 +59,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::logging;
 using namespace ::osl;
 
-#define SERVICE_SDBC_DRIVER     ::rtl::OUString::createFromAscii("com.sun.star.sdbc.Driver")
+#define SERVICE_SDBC_DRIVER     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.Driver"))
 
 void throwNoSuchElementException() throw(NoSuchElementException)
 {
@@ -563,7 +563,7 @@ Reference< XInterface > SAL_CALL OSDBCDriverManager::Create( const Reference< XM
 //--------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OSDBCDriverManager::getImplementationName_static(  ) throw(RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii("com.sun.star.comp.sdbc.OSDBCDriverManager");
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.sdbc.OSDBCDriverManager"));
 }
 
 //--------------------------------------------------------------------------

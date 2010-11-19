@@ -82,13 +82,13 @@ OPoolCollection::OPoolCollection(const Reference< XMultiServiceFactory >&   _rxF
     :m_xServiceFactory(_rxFactory)
 {
     // bootstrap all objects supporting the .sdb.Driver service
-    m_xManager = Reference< XDriverManager >(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.sdbc.DriverManager") ), UNO_QUERY);
+    m_xManager = Reference< XDriverManager >(m_xServiceFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.DriverManager")) ), UNO_QUERY);
     m_xDriverAccess = Reference< XDriverAccess >(m_xManager, UNO_QUERY);
     OSL_ENSURE(m_xDriverAccess.is(), "have no (or an invalid) driver manager!");
 
     m_xProxyFactory = Reference< XProxyFactory >(
         m_xServiceFactory->createInstance(
-            ::rtl::OUString::createFromAscii("com.sun.star.reflection.ProxyFactory")),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.ProxyFactory"))),
         UNO_QUERY);
     OSL_ENSURE(m_xProxyFactory.is(), "OConnectionPool::OConnectionPool: could not create a proxy factory!");
 
@@ -99,7 +99,7 @@ OPoolCollection::OPoolCollection(const Reference< XMultiServiceFactory >&   _rxF
     osl_incrementInterlockedCount( &m_refCount );
     {
 
-        m_xDesktop = Reference< ::com::sun::star::frame::XDesktop>( m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop") ), UNO_QUERY);
+        m_xDesktop = Reference< ::com::sun::star::frame::XDesktop>( m_xServiceFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ), UNO_QUERY);
         if ( m_xDesktop.is() )
             m_xDesktop->addTerminateListener(this);
 
@@ -182,14 +182,14 @@ Reference< XInterface > SAL_CALL OPoolCollection::CreateInstance(const Reference
 //--------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OPoolCollection::getImplementationName_Static(  ) throw(RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii("com.sun.star.sdbc.OConnectionPool");
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.OConnectionPool"));
 }
 
 //--------------------------------------------------------------------------
 Sequence< ::rtl::OUString > SAL_CALL OPoolCollection::getSupportedServiceNames_Static(  ) throw(RuntimeException)
 {
     Sequence< ::rtl::OUString > aSupported(1);
-    aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbc.ConnectionPool");
+    aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.ConnectionPool"));
     return aSupported;
 }
 // -----------------------------------------------------------------------------
@@ -386,7 +386,7 @@ Reference< XInterface > OPoolCollection::createWithProvider(const Reference< XMu
             }
             else
             {
-                OSL_ENSURE(xSI->supportsService(::rtl::OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider")),
+                OSL_ENSURE(xSI->supportsService(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationProvider"))),
                     "::createWithProvider: sure this is a provider? Missing the ConfigurationProvider service!");
             }
         }

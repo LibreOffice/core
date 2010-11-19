@@ -47,17 +47,17 @@ using namespace ::com::sun::star::sdbc;
 ::rtl::OUString SAL_CALL OColumn::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException)
 {
     if(isNew())
-        return ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.VColumnDescription");
-    return ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.VColumn");
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.VColumnDescription"));
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.VColumn"));
 }
 // -----------------------------------------------------------------------------
 ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL OColumn::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Sequence< ::rtl::OUString > aSupported(1);
     if(isNew())
-        aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.ColumnDescription");
+        aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.ColumnDescription"));
     else
-        aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.Column");
+        aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.Column"));
 
     return aSupported;
 }
