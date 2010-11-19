@@ -28,8 +28,8 @@
 #define SVT_TOOLPANELDECK_HXX
 
 #include "svtools/svtdllapi.h"
-#include "svtools/toolpanel.hxx"
-#include "svtools/decklayouter.hxx"
+#include "svtools/toolpanel/toolpanel.hxx"
+#include "svtools/toolpanel/decklayouter.hxx"
 
 #include <vcl/ctrl.hxx>
 

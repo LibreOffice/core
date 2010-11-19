@@ -26,7 +26,7 @@
 
 #include "precompiled_svtools.hxx"
 
-#include "svtools/refbase.hxx"
+#include "svtools/toolpanel/refbase.hxx"
 
 //........................................................................
 namespace svt

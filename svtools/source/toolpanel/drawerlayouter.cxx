@@ -26,7 +26,7 @@
 
 #include "precompiled_svtools.hxx"
 
-#include "svtools/drawerlayouter.hxx"
+#include "svtools/toolpanel/drawerlayouter.hxx"
 #include "toolpaneldrawer.hxx"
 
 #include <com/sun/star/accessibility/XAccessible.hpp>

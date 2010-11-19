@@ -27,8 +27,8 @@
 #ifndef TABITEMDESCRIPTOR_HXX
 #define TABITEMDESCRIPTOR_HXX
 
-#include "svtools/toolpanel.hxx"
-#include "svtools/tabitemcontent.hxx"
+#include "svtools/toolpanel/toolpanel.hxx"
+#include "svtools/toolpanel/tabitemcontent.hxx"
 
 #include <tools/gen.hxx>
 #include <osl/diagnose.h>

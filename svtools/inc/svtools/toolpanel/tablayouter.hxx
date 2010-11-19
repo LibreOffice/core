@@ -28,10 +28,10 @@
 #define SVT_TABLAYOUTER_HXX
 
 #include "svtools/svtdllapi.h"
-#include "svtools/decklayouter.hxx"
-#include "svtools/tabalignment.hxx"
-#include "svtools/tabitemcontent.hxx"
-#include "svtools/refbase.hxx"
+#include "svtools/toolpanel/decklayouter.hxx"
+#include "svtools/toolpanel/tabalignment.hxx"
+#include "svtools/toolpanel/tabitemcontent.hxx"
+#include "svtools/toolpanel/refbase.hxx"
 
 #include <memory>
 
