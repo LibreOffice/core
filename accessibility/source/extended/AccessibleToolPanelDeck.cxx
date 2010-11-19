@@ -35,7 +35,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 /** === end UNO includes === **/
 
-#include <svtools/toolpaneldeck.hxx>
+#include <svtools/toolpanel/toolpaneldeck.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
