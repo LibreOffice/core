@@ -190,10 +190,10 @@ int TestMetaData(Reference< ::com::sun::star::sdbc::XConnection> &pConnection)
         OSL_TRACE("Testing getColumns() : START\n");
         {
             Reference<XResultSet> xRes = xDmd->getColumns(
-                                makeAny(OUString::createFromAscii("")), // Catalog
-                                OUString::createFromAscii("%"),          // Schema
-                                OUString::createFromAscii("%"),          // TabName
-                                OUString::createFromAscii("%")
+                                makeAny(OUString(RTL_CONSTASCII_USTRINGPARAM(""))), // Catalog
+                                OUString(RTL_CONSTASCII_USTRINGPARAM("%")),          // Schema
+                                OUString(RTL_CONSTASCII_USTRINGPARAM("%")),          // TabName
+                                OUString(RTL_CONSTASCII_USTRINGPARAM("%"))
                                 );
             printXResultSets( xRes );
         }
@@ -209,9 +209,9 @@ int TestMetaData(Reference< ::com::sun::star::sdbc::XConnection> &pConnection)
         OSL_TRACE("Testing getTables() : START\n");
          {
             Reference<XResultSet> xRes = xDmd->getTables(
-                    makeAny(OUString::createFromAscii("")), // Catalog
-                    OUString::createFromAscii("%"),          // Schema
-                    OUString::createFromAscii("%"),          // TabName
+                    makeAny(OUString(RTL_CONSTASCII_USTRINGPARAM(""))), // Catalog
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("%")),          // Schema
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("%")),          // TabName
                     Sequence<rtl::OUString>() );
             printXResultSets( xRes );
         }
@@ -234,7 +234,7 @@ void TestQuery(Reference< ::com::sun::star::sdbc::XConnection> &pConnection)
         OSL_TRACE(": got statement\n");
         OSL_TRACE(":   excuteQuery() : START \n");
 //      SELECT "First Name", "Display Name", "E-mail" FROM tablename
-        OUString sqlPrefix= OUString::createFromAscii("SELECT  \"First Name\", \"Display Name\", \"E-mail\" FROM ");
+        OUString sqlPrefix(RTL_CONSTASCII_USTRINGPARAM("SELECT  \"First Name\", \"Display Name\", \"E-mail\" FROM "));
         try
         {
             sal_Int32 times=0;
@@ -245,9 +245,9 @@ void TestQuery(Reference< ::com::sun::star::sdbc::XConnection> &pConnection)
                 OUString qut      = xDmd->getIdentifierQuoteString();
 
                 Reference<XResultSet> xRes = xDmd->getTables(
-                    makeAny(OUString::createFromAscii("")), // Catalog
-                    OUString::createFromAscii("%"),          // Schema
-                    OUString::createFromAscii("%"),          // TabName
+                    makeAny(OUString(RTL_CONSTASCII_USTRINGPARAM(""))), // Catalog
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("%")),          // Schema
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("%")),          // TabName
                         Sequence<rtl::OUString>() );
                 sal_Int32 nTables = 0;
                 while( xRes.is() && xRes->next())
@@ -300,24 +300,24 @@ Reference< ::com::sun::star::sdbc::XConnection> TestConnected
     switch( nIndex)
     {
     case testLDAP:
-        url=OUString::createFromAscii("sdbc:address:ldap://");
+        url=OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:address:ldap://"));
         aValue.realloc(2);
-        aValue[0].Name = ::rtl::OUString::createFromAscii("HostName");
-        aValue[0].Value <<= rtl::OUString::createFromAscii("sun-ds");
-        aValue[1].Name = ::rtl::OUString::createFromAscii("BaseDN");
-        aValue[1].Value <<= rtl::OUString::createFromAscii("dc=sun,dc=com");
+        aValue[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HostName"));
+        aValue[0].Value <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sun-ds"));
+        aValue[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BaseDN"));
+        aValue[1].Value <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("dc=sun,dc=com"));
         break;
     case testMozilla:
-        url=OUString::createFromAscii("sdbc:address:mozilla://");
+        url=OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:address:mozilla://"));
         break;
     case testOp:
-        url=OUString::createFromAscii("sdbc:address:outlook://");
+        url=OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:address:outlook://"));
         break;
     case testOe:
-        url=OUString::createFromAscii("sdbc:address:outlookexp://");
+        url=OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:address:outlookexp://"));
         break;
     default:
-        url=OUString::createFromAscii("sdbc:address:mozilla://");
+        url=OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:address:mozilla://"));
         break;
     }
     pConnection =
@@ -364,7 +364,7 @@ void SAL_CALL mozThread(void*)
     {
         Reference< ::com::sun::star::sdbc::XDriver>
         m_xDriver(mMgr->createInstance(
-           OUString::createFromAscii("com.sun.star.comp.sdbc.MozabDriver")),
+           OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.sdbc.MozabDriver"))),
              UNO_QUERY);
        if(m_xDriver.is())
         {

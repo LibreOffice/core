@@ -128,7 +128,7 @@ public:
                         sectionName =  OStringToOUString(
                             line.copy(nIndexStart + 1,nIndexEnd - nIndexStart -1).trim(), RTL_TEXTENCODING_ASCII_US );
                         if (!sectionName.getLength())
-                            sectionName = OUString::createFromAscii("no name section");
+                            sectionName = OUString(RTL_CONSTASCII_USTRINGPARAM("no name section"));
 
                         ini_Section *aSection = &mAllSection[sectionName];
                         aSection->sName = sectionName;
@@ -184,7 +184,7 @@ int _cdecl main( int argc, char * argv[] )
 
 {
 
-    IniParser parser(OUString::createFromAscii("test.ini"));
+    IniParser parser(OUString(RTL_CONSTASCII_USTRINGPARAM("test.ini")));
     parser.Dump();
     return 0;
 }
