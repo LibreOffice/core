@@ -115,13 +115,6 @@ public:
 class SvXMLNumFmtDefaults
 {
 public:
-    static sal_Bool IsSystemLongDay( const SvtSysLocale& rSysLoc, BOOL bLong );
-    static sal_Bool IsSystemLongMonth( const SvtSysLocale& rSysLoc, BOOL bLong );
-    static sal_Bool IsSystemTextualMonth( const SvtSysLocale& rSysLoc, BOOL bLong );
-    static sal_Bool IsSystemLongYear( const SvtSysLocale& rSysLoc, BOOL bLong );
-    static sal_Bool IsSystemLongEra( const SvtSysLocale& rSysLoc, BOOL bLong );
-    static sal_Bool IsSystemLongDayOfWeek( const SvtSysLocale& rSysLoc, BOOL bLong );
-
     // return value is NfIndexTableOffset
     static sal_uInt16 GetDefaultDateFormat( SvXMLDateElementAttributes eDOW,
                 SvXMLDateElementAttributes eDay, SvXMLDateElementAttributes eMonth,
