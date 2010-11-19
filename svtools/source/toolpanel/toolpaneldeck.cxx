@@ -30,9 +30,9 @@
 #include "toolpanelcollection.hxx"
 #include "paneldecklisteners.hxx"
 #include "toolpaneldeckpeer.hxx"
-#include "svtools/toolpanel/toolpaneldeck.hxx"
-#include "svtools/toolpanel/tablayouter.hxx"
-#include "svtools/toolpanel/drawerlayouter.hxx"
+#include "svtools/toolpaneldeck.hxx"
+#include "svtools/tablayouter.hxx"
+#include "svtools/drawerlayouter.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/accessibility/XAccessible.hpp>

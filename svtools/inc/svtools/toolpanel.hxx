@@ -28,7 +28,7 @@
 #define SVT_TOOLPANEL_HXX
 
 #include "svtools/svtdllapi.h"
-#include "svtools/toolpanel/refbase.hxx"
+#include "svtools/refbase.hxx"
 
 #include <rtl/ustring.hxx>
 #include <vcl/image.hxx>

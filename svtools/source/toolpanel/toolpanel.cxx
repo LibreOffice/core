@@ -26,7 +26,7 @@
 
 #include "precompiled_svtools.hxx"
 
-#include "svtools/toolpanel/toolpanel.hxx"
+#include "svtools/toolpanel.hxx"
 
 //........................................................................
 namespace svt

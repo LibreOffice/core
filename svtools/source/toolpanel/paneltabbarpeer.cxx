@@ -27,7 +27,7 @@
 #include "precompiled_svtools.hxx"
 
 #include "paneltabbarpeer.hxx"
-#include "svtools/toolpanel/paneltabbar.hxx"
+#include "svtools/paneltabbar.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/lang/DisposedException.hpp>

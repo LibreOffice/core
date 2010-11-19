@@ -26,8 +26,8 @@
 
 #include "precompiled_svtools.hxx"
 
-#include "svtools/toolpanel/paneltabbar.hxx"
-#include "svtools/toolpanel/toolpaneldeck.hxx"
+#include "svtools/paneltabbar.hxx"
+#include "svtools/toolpaneldeck.hxx"
 #include "svtools/svtdata.hxx"
 #include "svtools/svtools.hrc"
 

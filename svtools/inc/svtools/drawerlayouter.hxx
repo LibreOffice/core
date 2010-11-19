@@ -28,9 +28,9 @@
 #define SVT_DRAWERLAYOUTER_HXX
 
 #include "svtools/svtdllapi.h"
-#include "svtools/toolpanel/refbase.hxx"
-#include "svtools/toolpanel/toolpaneldeck.hxx"
-#include "svtools/toolpanel/decklayouter.hxx"
+#include "svtools/refbase.hxx"
+#include "svtools/toolpaneldeck.hxx"
+#include "svtools/decklayouter.hxx"
 
 #include <boost/shared_ptr.hpp>
 

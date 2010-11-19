@@ -26,9 +26,9 @@
 
 #include "precompiled_svtools.hxx"
 
-#include "svtools/toolpanel/tablayouter.hxx"
-#include "svtools/toolpanel/toolpaneldeck.hxx"
-#include "svtools/toolpanel/paneltabbar.hxx"
+#include "svtools/tablayouter.hxx"
+#include "svtools/toolpaneldeck.hxx"
+#include "svtools/paneltabbar.hxx"
 #include "svtaccessiblefactory.hxx"
 
 #include <tools/gen.hxx>
