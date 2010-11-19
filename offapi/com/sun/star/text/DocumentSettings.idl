@@ -195,6 +195,16 @@ published service DocumentSettings
     */
     [optional, property] boolean ConsiderTextWrapOnObjPos;
 
+    // ------------------------------------------------------------
+    /** specifies if Math objects should automatically vertically aligned to
+        match the baseline of the surrounding text.
+
+        <p>If activated formula object that are anchored 'As Character' will be
+        vertically aligned to have their baseline match with the one from the text.</p>
+
+        @since OOo 3.4
+    */
+    [optional, property] boolean MathBaselineAlignment;
 };
 
 //=============================================================================
