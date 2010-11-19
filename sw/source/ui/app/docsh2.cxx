@@ -1209,7 +1209,19 @@ void SwDocShell::Execute(SfxRequest& rReq)
             }
             break;
 
-        case SID_MAIL_EXPORT_FINISHED:
+        case SID_MAIL_PREPAREEXPORT:
+        {
+            //pWrtShell is not set in page preview
+            if(pWrtShell)
+                pWrtShell->StartAllAction();
+            pDoc->UpdateFlds( NULL, false );
+            pDoc->EmbedAllLinks();
+            pDoc->RemoveInvisibleContent();
+            if(pWrtShell)
+                pWrtShell->EndAllAction();
+        }
+        break;
+          case SID_MAIL_EXPORT_FINISHED:
         {
                 if(pWrtShell)
                     pWrtShell->StartAllAction();
@@ -1240,7 +1252,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 if ( !aFileName.Len() )
                 {
                     FileDialogHelper aDlgHelper( TemplateDescription::FILESAVE_AUTOEXTENSION_TEMPLATE, 0 );
-                    //set HelpIds
+
                     const sal_Int16 nControlIds[] = {
                         CommonFilePickerElementIds::PUSHBUTTON_OK,
                         CommonFilePickerElementIds::PUSHBUTTON_CANCEL,
@@ -1251,17 +1263,33 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         ExtendedFilePickerElementIds::LISTBOX_TEMPLATE,
                         0
                     };
-                    sal_Int32 nHelpIds[8];
-                    sal_Int32 nStartHelpId =
-                        bCreateHtml ?
-                            HID_SEND_HTML_CTRL_PUSHBUTTON_OK : HID_SEND_MASTER_CTRL_PUSHBUTTON_OK ;
-                    for(int nHelp = 0; nHelp < 7; nHelp++)
-                        nHelpIds[nHelp] = nStartHelpId++;
-                    nHelpIds[7] = 0;
 
-                    aDlgHelper.SetControlHelpIds( nControlIds, nHelpIds );
-//                    aDlgHelper.SetDialogHelpId( bCreateHtml ? HID_SEND_HTML_DIALOG : HID_SEND_MASTER_DIALOG );
+                    const char* aHTMLHelpIds[] =
+                    {
+                         HID_SEND_HTML_CTRL_PUSHBUTTON_OK,
+                         HID_SEND_HTML_CTRL_PUSHBUTTON_CANCEL,
+                         HID_SEND_HTML_CTRL_LISTBOX_FILTER,
+                         HID_SEND_HTML_CTRL_CONTROL_FILEVIEW,
+                         HID_SEND_HTML_CTRL_EDIT_FILEURL,
+                         HID_SEND_HTML_CTRL_CHECKBOX_AUTOEXTENSION,
+                         HID_SEND_HTML_CTRL_LISTBOX_TEMPLATE,
+                         ""
+                    };
 
+                    const char* aMasterHelpIds[] =
+                    {
+                         HID_SEND_MASTER_CTRL_PUSHBUTTON_OK,
+                         HID_SEND_MASTER_CTRL_PUSHBUTTON_CANCEL,
+                         HID_SEND_MASTER_CTRL_LISTBOX_FILTER,
+                         HID_SEND_MASTER_CTRL_CONTROL_FILEVIEW,
+                         HID_SEND_MASTER_CTRL_EDIT_FILEURL,
+                         HID_SEND_MASTER_CTRL_CHECKBOX_AUTOEXTENSION,
+                         HID_SEND_MASTER_CTRL_LISTBOX_TEMPLATE,
+                         ""
+                    };
+
+                    const char** pHelpIds = bCreateHtml ? aHTMLHelpIds : aMasterHelpIds;
+                    aDlgHelper.SetControlHelpIds( nControlIds, pHelpIds );
                     uno::Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
 
                     const SfxFilter* pFlt;

@@ -50,6 +50,7 @@ ModalDialog DLG_ASCII_FILTER
     };
     ListBox LB_CHARSET
     {
+        HelpID = "sw:ListBox:DLG_ASCII_FILTER:LB_CHARSET";
         Pos = MAP_APPFONT ( 80 , 14 ) ;
         Size = MAP_APPFONT ( 90 , 61 ) ;
         TabStop = TRUE ;
@@ -64,6 +65,7 @@ ModalDialog DLG_ASCII_FILTER
     };
     ListBox LB_FONT
     {
+        HelpID = "sw:ListBox:DLG_ASCII_FILTER:LB_FONT";
         Pos = MAP_APPFONT ( 80 , 30 ) ;
         Size = MAP_APPFONT ( 90 , 61 ) ;
         TabStop = TRUE ;
@@ -78,6 +80,7 @@ ModalDialog DLG_ASCII_FILTER
     };
     ListBox LB_LANGUAGE
     {
+        HelpID = "sw:ListBox:DLG_ASCII_FILTER:LB_LANGUAGE";
         Pos = MAP_APPFONT ( 80 , 46 ) ;
         Size = MAP_APPFONT ( 90 , 61 ) ;
         TabStop = TRUE ;
@@ -92,6 +95,7 @@ ModalDialog DLG_ASCII_FILTER
     };
     RadioButton RB_CRLF
     {
+        HelpID = "sw:RadioButton:DLG_ASCII_FILTER:RB_CRLF";
         Pos = MAP_APPFONT ( 80 , 64 ) ;
         Size = MAP_APPFONT ( 40 , 10 ) ;
         TabStop = TRUE ;
@@ -100,6 +104,7 @@ ModalDialog DLG_ASCII_FILTER
     };
     RadioButton RB_CR
     {
+        HelpID = "sw:RadioButton:DLG_ASCII_FILTER:RB_CR";
         Pos = MAP_APPFONT ( 121 , 64 ) ;
         Size = MAP_APPFONT ( 20 , 10 ) ;
 //        TabStop = TRUE ;
@@ -107,6 +112,7 @@ ModalDialog DLG_ASCII_FILTER
     };
     RadioButton RB_LF
     {
+        HelpID = "sw:RadioButton:DLG_ASCII_FILTER:RB_LF";
         Pos = MAP_APPFONT ( 155 , 64 ) ;
         Size = MAP_APPFONT ( 20 , 10 ) ;
 //        TabStop = TRUE ;

@@ -457,7 +457,7 @@ BOOL lcl_IsNoEndTxtAttrAtPos( const SwTxtNode& rTNd, xub_StrLen nPos,
                 const SwField* const pFld = pAttr->GetFld().GetFld();
                 if (pFld)
                 {
-                    sExp += pFld->ExpandField(rTNd.GetDoc()->IsClipBoard());
+                    sExp += pFld->ExpandField(true);
                 }
             }
         }

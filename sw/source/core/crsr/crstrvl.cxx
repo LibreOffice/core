@@ -484,10 +484,10 @@ BOOL SwCrsrShell::GotoNxtPrvTblFormula( BOOL bNext, BOOL bOnlyErrors )
     {
         const SfxPoolItem* pItem;
         const SwTableBox* pTBox;
-        USHORT n, nMaxItems = GetDoc()->GetAttrPool().GetItemCount( RES_BOXATR_FORMULA );
+        sal_uInt32 n, nMaxItems = GetDoc()->GetAttrPool().GetItemCount2( RES_BOXATR_FORMULA );
 
         for( n = 0; n < nMaxItems; ++n )
-            if( 0 != (pItem = GetDoc()->GetAttrPool().GetItem(
+            if( 0 != (pItem = GetDoc()->GetAttrPool().GetItem2(
                                         RES_BOXATR_FORMULA, n ) ) &&
                 0 != (pTBox = ((SwTblBoxFormula*)pItem)->GetTableBox() ) &&
                 pTBox->GetSttNd() &&
@@ -556,10 +556,10 @@ BOOL SwCrsrShell::GotoNxtPrvTOXMark( BOOL bNext )
         const SwCntntFrm* pCFrm;
         const SwTxtNode* pTxtNd;
         const SwTxtTOXMark* pTxtTOX;
-        USHORT n, nMaxItems = GetDoc()->GetAttrPool().GetItemCount( RES_TXTATR_TOXMARK );
+        sal_uInt32 n, nMaxItems = GetDoc()->GetAttrPool().GetItemCount2( RES_TXTATR_TOXMARK );
 
         for( n = 0; n < nMaxItems; ++n )
-            if( 0 != (pItem = GetDoc()->GetAttrPool().GetItem(
+            if( 0 != (pItem = GetDoc()->GetAttrPool().GetItem2(
                                         RES_TXTATR_TOXMARK, n ) ) &&
                 0 != (pTxtTOX = ((SwTOXMark*)pItem)->GetTxtTOXMark() ) &&
                 ( pTxtNd = &pTxtTOX->GetTxtNode())->GetNodes().IsDocNodes() &&
@@ -717,8 +717,7 @@ BOOL SwCrsrShell::MoveFldType( const SwFieldType* pFldType, BOOL bNext,
             SwFmtFld* pFmtFld = new SwFmtFld( SwDateTimeField(
                 (SwDateTimeFieldType*)pDoc->GetSysFldType( RES_DATETIMEFLD ) ) );
 
-            pTxtFld = new SwTxtFld( *pFmtFld, rPos.nContent.GetIndex(),
-                        pDoc->IsClipBoard() );
+            pTxtFld = new SwTxtFld( *pFmtFld, rPos.nContent.GetIndex() );
             pTxtFld->ChgTxtNode( pTNd );
         }
 
