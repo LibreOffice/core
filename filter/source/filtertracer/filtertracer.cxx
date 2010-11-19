@@ -62,7 +62,7 @@ FilterTracer::FilterTracer( const REF( NMSP_LANG::XMultiServiceFactory )& rxMgr 
     mpStream    ( NULL ),
     mnLogLevel  ( NMSP_LOGGING::LogLevel::ALL )
 {
-    REF( NMSP_UNO::XInterface ) xObj( rxMgr->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.util.TextSearch" ) ) );
+    REF( NMSP_UNO::XInterface ) xObj( rxMgr->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.TextSearch" )) ) );
     mxTextSearch = REF( NMSP_UTIL::XTextSearch )( xObj, ::com::sun::star::uno::UNO_QUERY );
 }
 FilterTracer::~FilterTracer()

@@ -307,10 +307,10 @@ void XSLTFilter::disposing(const EventObject& ) throw (RuntimeException)
     {
         Reference< XComponentContext > xContext;
         Reference< XPropertySet > xProps( m_rServiceFactory, UNO_QUERY_THROW );
-        xContext.set( xProps->getPropertyValue( ::rtl::OUString::createFromAscii( "DefaultContext" ) ), UNO_QUERY_THROW );
-        Reference< XMacroExpander > xMacroExpander( xContext->getValueByName( ::rtl::OUString::createFromAscii( "/singletons/com.sun.star.util.theMacroExpander" ) ), UNO_QUERY_THROW );
+        xContext.set( xProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" )) ), UNO_QUERY_THROW );
+        Reference< XMacroExpander > xMacroExpander( xContext->getValueByName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/singletons/com.sun.star.util.theMacroExpander" )) ), UNO_QUERY_THROW );
         sExpandedUrl = xMacroExpander->expandMacros(sUrl);
-        sal_Int32 nPos = sExpandedUrl.indexOf(::rtl::OUString::createFromAscii("vnd.sun.star.expand:"));
+        sal_Int32 nPos = sExpandedUrl.indexOf(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.expand:" )));
         if ( nPos != -1 )
             sExpandedUrl = sExpandedUrl.copy(nPos+20);
     }
@@ -348,8 +348,8 @@ OUString XSLTFilter::rel2abs(const OUString& s)
 {
 
     Reference< XStringSubstitution > subs(m_rServiceFactory->createInstance(
-        OUString::createFromAscii("com.sun.star.util.PathSubstitution")), UNO_QUERY);
-    OUString aWorkingDir = subs->getSubstituteVariableValue(OUString::createFromAscii("$(progurl)"));
+        OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.PathSubstitution" ))), UNO_QUERY);
+    OUString aWorkingDir(subs->getSubstituteVariableValue(OUString(RTL_CONSTASCII_USTRINGPARAM("$(progurl)"))));
     INetURLObject aObj( aWorkingDir );
     aObj.setFinalSlash();
     bool bWasAbsolute;
@@ -395,7 +395,7 @@ sal_Bool XSLTFilter::importer(
     // create SAX parser that will read the document file
     // and provide events to xHandler passed to this call
     Reference < XParser > xSaxParser( m_rServiceFactory->createInstance(
-        OUString::createFromAscii("com.sun.star.xml.sax.Parser")), UNO_QUERY );
+        OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Parser" ))), UNO_QUERY );
     OSL_ASSERT(xSaxParser.is());
     if(!xSaxParser.is())return sal_False;
 
@@ -403,16 +403,16 @@ sal_Bool XSLTFilter::importer(
     Sequence< Any > args(3);
     NamedValue nv;
 
-    nv.Name = OUString::createFromAscii("StylesheetURL");
+    nv.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "StylesheetURL" ));
     nv.Value <<= expandUrl(udStyleSheet); args[0] <<= nv;
-    nv.Name = OUString::createFromAscii("SourceURL");
+    nv.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "SourceURL" ));
     nv.Value <<= aURL; args[1] <<= nv;
-    nv.Name = OUString::createFromAscii("SourceBaseURL");
+    nv.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "SourceBaseURL" ));
     nv.Value <<= OUString(INetURLObject(aURL).getBase());
     args[2] <<= nv;
 
     m_tcontrol = Reference< XActiveDataControl >(m_rServiceFactory->createInstanceWithArguments(
-        OUString::createFromAscii("com.sun.star.comp.JAXTHelper"), args), UNO_QUERY);
+        OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.JAXTHelper" )), args), UNO_QUERY);
 
     OSL_ASSERT(xHandler.is());
     OSL_ASSERT(xInputStream.is());
@@ -430,7 +430,7 @@ sal_Bool XSLTFilter::importer(
 
             // create pipe
             Reference< XOutputStream > pipeout(m_rServiceFactory->createInstance(
-                OUString::createFromAscii("com.sun.star.io.Pipe")), UNO_QUERY);
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.io.Pipe" ))), UNO_QUERY);
             Reference< XInputStream > pipein(pipeout, UNO_QUERY);
 
             //connect transformer to pipe
@@ -516,22 +516,22 @@ sal_Bool XSLTFilter::exporter(
         // get the document writer
         m_rDocumentHandler = Reference<XExtendedDocumentHandler>(
             m_rServiceFactory->createInstance(
-            OUString::createFromAscii("com.sun.star.xml.sax.Writer")),
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Writer" ))),
                 UNO_QUERY);
     }
 
     // create transformer
     Sequence< Any > args(4);
     NamedValue nv;
-    nv.Name = OUString::createFromAscii("StylesheetURL");
+    nv.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "StylesheetURL" ));
     nv.Value <<= expandUrl(udStyleSheet); args[0] <<= nv;
-    nv.Name = OUString::createFromAscii("TargetURL");
+    nv.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "TargetURL" ));
     nv.Value <<= sURL; args[1] <<= nv;
-    nv.Name = OUString::createFromAscii("DoctypeSystem");
+    nv.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "DoctypeSystem" ));
     nv.Value <<= aDoctypeSystem; args[2] <<= nv;
-    nv.Name = OUString::createFromAscii("DoctypePublic");
+    nv.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "DoctypePublic" ));
     nv.Value <<= aDoctypePublic; args[3] <<= nv;
-    nv.Name = OUString::createFromAscii("TargetBaseURL");
+    nv.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "TargetBaseURL" ));
     INetURLObject ineturl(sURL);
     ineturl.removeSegment();
     m_aExportBaseUrl = ineturl.GetMainURL(INetURLObject::NO_DECODE);
@@ -539,7 +539,7 @@ sal_Bool XSLTFilter::exporter(
     args[3] <<= nv;
 
     m_tcontrol = Reference< XActiveDataControl >(m_rServiceFactory->createInstanceWithArguments(
-        OUString::createFromAscii("com.sun.star.comp.JAXTHelper"), args), UNO_QUERY);
+        OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.JAXTHelper" )), args), UNO_QUERY);
 
     OSL_ASSERT(m_rDocumentHandler.is());
     OSL_ASSERT(m_rOutputStream.is());
@@ -551,7 +551,7 @@ sal_Bool XSLTFilter::exporter(
 
         // create pipe
         Reference< XOutputStream > pipeout(m_rServiceFactory->createInstance(
-            OUString::createFromAscii("com.sun.star.io.Pipe")), UNO_QUERY);
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.io.Pipe" ))), UNO_QUERY);
         Reference< XInputStream > pipein(pipeout, UNO_QUERY);
 
         // connect sax writer to pipe
@@ -691,7 +691,7 @@ sal_Bool SAL_CALL component_writeInfo(void * /* pServiceManager */, void * pRegi
         {
             Reference< XRegistryKey > xNewKey(
                 reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
-                    OUString::createFromAscii( "/" IMPLEMENTATION_NAME "/UNO/SERVICES" ) ) );
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( "/" IMPLEMENTATION_NAME "/UNO/SERVICES" )) ) );
 
             const Sequence< OUString > & rSNL = getSupportedServiceNames();
             const OUString * pArray = rSNL.getConstArray();

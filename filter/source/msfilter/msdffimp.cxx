@@ -4854,8 +4854,8 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
 
     if ( mbTracing )
         mpTracer->AddAttribute( aObjData.nSpFlags & SP_FGROUP
-                                ? rtl::OUString::createFromAscii( "GroupShape" )
-                                : rtl::OUString::createFromAscii( "Shape" ),
+                                ? rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "GroupShape" ))
+                                : rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Shape" )),
                                 rtl::OUString::valueOf( (sal_Int32)aObjData.nShapeId ) );
     aObjData.bOpt = maShapeRecords.SeekToContent( rSt, DFF_msofbtOPT, SEEK_FROM_CURRENT_AND_RESTART );
     if ( aObjData.bOpt )
@@ -5422,8 +5422,8 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
 
     if ( mbTracing )
         mpTracer->RemoveAttribute( aObjData.nSpFlags & SP_FGROUP
-                                    ? rtl::OUString::createFromAscii( "GroupShape" )
-                                    : rtl::OUString::createFromAscii( "Shape" ) );
+                                    ? rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "GroupShape" ))
+                                    : rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Shape" )) );
     return pRet;
 }
 
@@ -6184,7 +6184,7 @@ SvxMSDffManager::SvxMSDffManager(SvStream& rStCtrl_,
 {
     if ( mpTracer )
     {
-        uno::Any aAny( mpTracer->GetProperty( rtl::OUString::createFromAscii( "On" ) ) );
+        uno::Any aAny( mpTracer->GetProperty( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "On" )) ) );
         aAny >>= mbTracing;
     }
     SetModel( pSdrModel_, nApplicationScale );
@@ -6236,7 +6236,7 @@ SvxMSDffManager::SvxMSDffManager( SvStream& rStCtrl_, const String& rBaseURL, MS
 {
     if ( mpTracer )
     {
-        uno::Any aAny( mpTracer->GetProperty( rtl::OUString::createFromAscii( "On" ) ) );
+        uno::Any aAny( mpTracer->GetProperty( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "On" )) ) );
         aAny >>= mbTracing;
     }
     SetModel( NULL, 0 );

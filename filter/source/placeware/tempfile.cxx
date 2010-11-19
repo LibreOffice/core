@@ -163,7 +163,7 @@ OUString TempFile::createTempFileURL()
         if( aTmp.getStr()[ aTmp.getLength() - 1 ] != sal_Unicode( '/' ) )
             aTmp += OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ));
         aTmp += OUString::valueOf( (sal_Int32) (unsigned) u, nRadix );
-        aTmp += OUString::createFromAscii( ".tmp" );
+        aTmp += OUString( RTL_CONSTASCII_USTRINGPARAM( ".tmp" ));
 
         osl::File aFile( aTmp );
         osl::FileBase::RC err = aFile.open(osl_File_OpenFlag_Create);

@@ -424,7 +424,7 @@ public:
 class OCX_TabStrip : public OCX_Control
 {
 public:
-    OCX_TabStrip() : OCX_Control( rtl::OUString::createFromAscii("TabStrip")), nIdentifier(0), nFixedAreaLen(0), nNumTabs(0), bHasTabs(true) {}
+    OCX_TabStrip() : OCX_Control( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TabStrip" ))), nIdentifier(0), nFixedAreaLen(0), nNumTabs(0), bHasTabs(true) {}
 
         virtual sal_Bool ReadFontData(SotStorageStream *pS);
         virtual sal_Bool Read(SotStorageStream *pS);
@@ -440,9 +440,9 @@ public:
 class OCX_Image : public OCX_Control
 {
 public:
-    OCX_Image() : OCX_Control(rtl::OUString::createFromAscii("Image")), fEnabled(1), fBackStyle(0), bPictureTiling(false), bAutoSize(false) {
-                msFormType = rtl::OUString::createFromAscii("com.sun.star.form.component.DatabaseImageControl");
-        msDialogType = rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlImageControlModel");
+    OCX_Image() : OCX_Control(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Image" ))), fEnabled(1), fBackStyle(0), bPictureTiling(false), bAutoSize(false) {
+                msFormType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.component.DatabaseImageControl" ));
+        msDialogType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlImageControlModel" ));
          }
 
     ~OCX_Image() { }
@@ -693,9 +693,9 @@ private:
 class OCX_CheckBox : public OCX_ModernControl
 {
 public:
-    OCX_CheckBox() : OCX_ModernControl(rtl::OUString::createFromAscii("CheckBox")){
-        msFormType = rtl::OUString::createFromAscii("com.sun.star.form.component.CheckBox");
-        msDialogType = rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlCheckBoxModel");
+    OCX_CheckBox() : OCX_ModernControl(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CheckBox" ))){
+        msFormType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.component.CheckBox" ));
+        msDialogType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlCheckBoxModel" ));
         mnBackColor = 0x80000005L;
         mnForeColor = 0x80000008L;
         aFontData.SetHasAlign(TRUE);
@@ -718,11 +718,11 @@ public:
 class OCX_OptionButton : public OCX_ModernControl
 {
 public:
-    OCX_OptionButton() : OCX_ModernControl(rtl::OUString::createFromAscii("OptionButton"))
+    OCX_OptionButton() : OCX_ModernControl(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OptionButton" )))
     {
-        msFormType = rtl::OUString::createFromAscii("com.sun.star.form.component.RadioButton");
+        msFormType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.component.RadioButton" ));
         //msDialogType = rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlRadioButtonModel");
-        msDialogType = rtl::OUString::createFromAscii("com.sun.star.form.component.RadioButton");
+        msDialogType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.component.RadioButton" ));
         mnBackColor = 0x80000005L;
         mnForeColor = 0x80000008L;
         aFontData.SetHasAlign(TRUE);
@@ -747,9 +747,9 @@ public:
 class OCX_TextBox : public OCX_ModernControl
 {
 public:
-    OCX_TextBox() : OCX_ModernControl(rtl::OUString::createFromAscii("TextBox")) {
-        msFormType = rtl::OUString::createFromAscii("com.sun.star.form.component.TextField");
-        msDialogType = rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlEditModel");
+    OCX_TextBox() : OCX_ModernControl(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TextBox" ))) {
+        msFormType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.component.TextField" ));
+        msDialogType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlEditModel" ));
         mnBackColor = 0x80000005L;
         mnForeColor = 0x80000008L;
         nBorderColor = 0x80000006L;
@@ -774,7 +774,7 @@ public:
 class OCX_FieldControl: public OCX_ModernControl
 {
 public:
-    OCX_FieldControl() : OCX_ModernControl(rtl::OUString::createFromAscii("TextBox")) {
+    OCX_FieldControl() : OCX_ModernControl(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TextBox" ))) {
         mnBackColor = 0x80000005L;
         mnForeColor = 0x80000008L;
         nBorderColor = 0x80000006L;
@@ -794,9 +794,9 @@ public:
 class OCX_ToggleButton : public OCX_ModernControl
 {
 public:
-    OCX_ToggleButton() : OCX_ModernControl(rtl::OUString::createFromAscii("ToggleButton")) {
-                msFormType = rtl::OUString::createFromAscii("com.sun.star.form.component.CommandButton");
-                msDialogType = rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlButtonModel");
+    OCX_ToggleButton() : OCX_ModernControl(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ToggleButton" ))) {
+                msFormType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.component.CommandButton" ));
+                msDialogType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlButtonModel" ));
 
         mnBackColor = 0x8000000F;
         mnForeColor = 0x80000012;
@@ -821,9 +821,9 @@ public:
 class OCX_ComboBox : public OCX_ModernControl
 {
 public:
-    OCX_ComboBox() : OCX_ModernControl(rtl::OUString::createFromAscii("ComboBox")){
-        msFormType = rtl::OUString::createFromAscii("com.sun.star.form.component.ComboBox");
-            msDialogType = rtl::OUString::createFromAscii("com.sun.star.form.component.ComboBox");
+    OCX_ComboBox() : OCX_ModernControl(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ComboBox" ))){
+        msFormType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.component.ComboBox" ));
+            msDialogType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.component.ComboBox" ));
         mnBackColor = 0x80000005;
         mnForeColor = 0x80000008;
         nBorderColor = 0x80000006;
@@ -846,10 +846,10 @@ public:
 class OCX_ListBox : public OCX_ModernControl
 {
 public:
-    OCX_ListBox() : OCX_ModernControl(rtl::OUString::createFromAscii("ListBox")){
-        msFormType = rtl::OUString::createFromAscii("com.sun.star.form.component.ListBox");
+    OCX_ListBox() : OCX_ModernControl(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ListBox" ))){
+        msFormType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.component.ListBox" ));
         //msDialogType = rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlListBoxModel");
-        msDialogType = rtl::OUString::createFromAscii("com.sun.star.form.component.ListBox");
+        msDialogType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.component.ListBox" ));
         mnBackColor = 0x80000005;
         mnForeColor = 0x80000008;
         nBorderColor = 0x80000006;
@@ -879,8 +879,8 @@ public:
         nAccelerator(0), nIcon(0), pCaption(0), nIconLen(0), pIcon(0), nPictureLen(0),
         mbTakeFocus( true )
     {
-            msFormType = rtl::OUString::createFromAscii("com.sun.star.form.component.CommandButton");
-            msDialogType = rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlButtonModel");
+            msFormType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.component.CommandButton" ));
+            msDialogType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlButtonModel" ));
             mnForeColor = 0x80000012L;
                 mnBackColor = 0x8000000FL;
     }
@@ -986,15 +986,15 @@ public:
 class OCX_Label : public OCX_Control
 {
 public:
-    OCX_Label(OCX_Control* pParent = NULL ) : OCX_Control(rtl::OUString::createFromAscii("Label"), pParent ), fEnabled(1),
+    OCX_Label(OCX_Control* pParent = NULL ) : OCX_Control(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Label" )), pParent ), fEnabled(1),
         fLocked(0),fBackStyle(1),fWordWrap(1),
     fAutoSize(0),nCaptionLen(0),nVertPos(1),nHorzPos(7),nMousePointer(0),
     nBorderColor(0x80000006),nBorderStyle(0),nSpecialEffect(0),
     nPicture(0),nAccelerator(0),nIcon(0),pCaption(0),nIconLen(0),pIcon(0),
     nPictureLen(0)
     {
-        msFormType = rtl::OUString::createFromAscii("com.sun.star.form.component.FixedText");
-        msDialogType = rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlFixedTextModel");
+        msFormType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.component.FixedText" ));
+        msDialogType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlFixedTextModel" ));
                 mnForeColor = 0x80000008;
                 mnBackColor = 0x80000005;
         aFontData.SetHasAlign(TRUE);
@@ -1181,9 +1181,9 @@ public:
 class HTML_TextBox : public OCX_ModernControl
 {
 public:
-    HTML_TextBox() : OCX_ModernControl(rtl::OUString::createFromAscii("TextBox")) {
-        msFormType = rtl::OUString::createFromAscii("com.sun.star.form.component.TextField");
-        msDialogType = rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlEditModel");
+    HTML_TextBox() : OCX_ModernControl(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TextBox" ))) {
+        msFormType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.component.TextField" ));
+        msDialogType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlEditModel" ));
         mnBackColor = 0x80000005L;
         mnForeColor = 0x80000008L;
         nBorderColor = 0x80000006L;

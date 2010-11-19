@@ -332,7 +332,7 @@ static OUString getMimetypeForDocument( const Reference< XMultiServiceFactory >&
                         // find the related type name
                         OUString aTypeName;
                         Reference< container::XNameAccess > xFilterFactory(
-                            xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.document.FilterFactory" ) ),
+                            xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.FilterFactory" )) ),
                             uno::UNO_QUERY );
 
                         Sequence< beans::PropertyValue > aFilterData;
@@ -345,7 +345,7 @@ static OUString getMimetypeForDocument( const Reference< XMultiServiceFactory >&
                         {
                             // find the mediatype
                             Reference< container::XNameAccess > xTypeDetection(
-                                xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.document.TypeDetection" ) ),
+                                xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.TypeDetection" )) ),
                                 UNO_QUERY );
 
                             Sequence< beans::PropertyValue > aTypeData;
@@ -393,15 +393,15 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
             Reference< XServiceInfo > xInfo( mxSrcDoc, UNO_QUERY );
             if ( xInfo.is() )
             {
-                if ( xInfo->supportsService( rtl::OUString::createFromAscii( "com.sun.star.presentation.PresentationDocument" ) ) )
+                if ( xInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.PresentationDocument" )) ) )
                     aCreator.AppendAscii( "Impress" );
-                else if ( xInfo->supportsService( rtl::OUString::createFromAscii( "com.sun.star.drawing.DrawingDocument" ) ) )
+                else if ( xInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.DrawingDocument" )) ) )
                     aCreator.AppendAscii( "Draw" );
-                else if ( xInfo->supportsService( rtl::OUString::createFromAscii( "com.sun.star.text.TextDocument" ) ) )
+                else if ( xInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.TextDocument" )) ) )
                     aCreator.AppendAscii( "Writer" );
-                else if ( xInfo->supportsService( rtl::OUString::createFromAscii( "com.sun.star.sheet.SpreadsheetDocument" ) ) )
+                else if ( xInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sheet.SpreadsheetDocument" )) ) )
                     aCreator.AppendAscii( "Calc" );
-                else if ( xInfo->supportsService( rtl::OUString::createFromAscii( "com.sun.star.formula.FormulaProperties" ) ) )
+                else if ( xInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.formula.FormulaProperties" )) ) )
                     aCreator.AppendAscii( "Math" );
             }
 

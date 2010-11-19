@@ -84,17 +84,17 @@ namespace css = ::com::sun::star;
 #define SEPERATOR_QUERYPARAM                            ((sal_Unicode)':')
 #define SEPERATOR_QUERYPARAMVALUE                       ((sal_Unicode)'=')
 
-#define QUERYPARAM_IFLAGS                               ::rtl::OUString::createFromAscii("iflags")
-#define QUERYPARAM_EFLAGS                               ::rtl::OUString::createFromAscii("eflags")
-#define QUERYPARAM_SORT_PROP                            ::rtl::OUString::createFromAscii("sort_prop")
+#define QUERYPARAM_IFLAGS                               ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "iflags" ))
+#define QUERYPARAM_EFLAGS                               ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "eflags" ))
+#define QUERYPARAM_SORT_PROP                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "sort_prop" ))
 
-#define QUERYPARAM_DESCENDING                           ::rtl::OUString::createFromAscii("descending")
-#define QUERYPARAM_USE_ORDER                            ::rtl::OUString::createFromAscii("use_order")
-#define QUERYPARAM_DEFAULT_FIRST                        ::rtl::OUString::createFromAscii("default_first")
-#define QUERYPARAM_CASE_SENSITIVE                       ::rtl::OUString::createFromAscii("case_sensitive")
+#define QUERYPARAM_DESCENDING                           ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "descending" ))
+#define QUERYPARAM_USE_ORDER                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "use_order" ))
+#define QUERYPARAM_DEFAULT_FIRST                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "default_first" ))
+#define QUERYPARAM_CASE_SENSITIVE                       ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "case_sensitive" ))
 
-#define QUERYPARAMVALUE_SORT_PROP_NAME                  ::rtl::OUString::createFromAscii("name")
-#define QUERYPARAMVALUE_SORT_PROP_UINAME                ::rtl::OUString::createFromAscii("uiname")
+#define QUERYPARAMVALUE_SORT_PROP_NAME                  ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "name" ))
+#define QUERYPARAMVALUE_SORT_PROP_UINAME                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "uiname" ))
 
 /*-----------------------------------------------
     09.07.2003 07:43
@@ -249,7 +249,7 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL FilterFactory::crea
 
     // convert "_query_xxx:..." to "getByDocService=xxx:..."
     ::rtl::OUString sNewQuery(sQuery);
-    sal_Int32 pos = sNewQuery.indexOf(::rtl::OUString::createFromAscii("_query_"),0);
+    sal_Int32 pos = sNewQuery.indexOf(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_query_" )),0);
     if (pos != -1)
     {
         OSL_ENSURE(sal_False, "DEPRECATED!\nPlease use new query format: 'matchByDocumentService=...'");
@@ -354,43 +354,43 @@ OUStringList FilterFactory::impl_queryMatchByDocumentService(const QueryTokenize
     if (sDocumentService.equalsAscii("writer"))
     {
         OSL_ENSURE(sal_False, "DEPRECATED!\nPlease use right document service for filter query!");
-        sDocumentService = ::rtl::OUString::createFromAscii("com.sun.star.text.TextDocument");
+        sDocumentService = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.TextDocument" ));
     }
     else
     if (sDocumentService.equalsAscii("web"))
     {
         OSL_ENSURE(sal_False, "DEPRECATED!\nPlease use right document service for filter query!");
-        sDocumentService = ::rtl::OUString::createFromAscii("com.sun.star.text.WebDocument");
+        sDocumentService = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.WebDocument" ));
     }
     else
     if (sDocumentService.equalsAscii("global"))
     {
         OSL_ENSURE(sal_False, "DEPRECATED!\nPlease use right document service for filter query!");
-        sDocumentService = ::rtl::OUString::createFromAscii("com.sun.star.text.GlobalDocument");
+        sDocumentService = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.GlobalDocument" ));
     }
     else
     if (sDocumentService.equalsAscii("calc"))
     {
         OSL_ENSURE(sal_False, "DEPRECATED!\nPlease use right document service for filter query!");
-        sDocumentService = ::rtl::OUString::createFromAscii("com.sun.star.sheet.SpreadsheetDocument");
+        sDocumentService = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sheet.SpreadsheetDocument" ));
     }
     else
     if (sDocumentService.equalsAscii("draw"))
     {
         OSL_ENSURE(sal_False, "DEPRECATED!\nPlease use right document service for filter query!");
-        sDocumentService = ::rtl::OUString::createFromAscii("com.sun.star.drawing.DrawingDocument");
+        sDocumentService = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.DrawingDocument" ));
     }
     else
     if (sDocumentService.equalsAscii("impress"))
     {
         OSL_ENSURE(sal_False, "DEPRECATED!\nPlease use right document service for filter query!");
-        sDocumentService = ::rtl::OUString::createFromAscii("com.sun.star.presentation.PresentationDocument");
+        sDocumentService = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.PresentationDocument" ));
     }
     else
     if (sDocumentService.equalsAscii("math"))
     {
         OSL_ENSURE(sal_False, "DEPRECATED!\nPlease use right document service for filter query!");
-        sDocumentService = ::rtl::OUString::createFromAscii("com.sun.star.formula.FormulaProperties");
+        sDocumentService = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.formula.FormulaProperties" ));
     }
 #endif
 
@@ -699,7 +699,7 @@ OUStringList FilterFactory::impl_readSortedFilterListFromConfig(const ::rtl::OUS
 -----------------------------------------------*/
 ::rtl::OUString FilterFactory::impl_getImplementationName()
 {
-    return ::rtl::OUString::createFromAscii("com.sun.star.comp.filter.config.FilterFactory");
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.filter.config.FilterFactory" ));
 }
 
 /*-----------------------------------------------
@@ -708,7 +708,7 @@ OUStringList FilterFactory::impl_readSortedFilterListFromConfig(const ::rtl::OUS
 css::uno::Sequence< ::rtl::OUString > FilterFactory::impl_getSupportedServiceNames()
 {
     css::uno::Sequence< ::rtl::OUString > lServiceNames(1);
-    lServiceNames[0] = ::rtl::OUString::createFromAscii("com.sun.star.document.FilterFactory");
+    lServiceNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.FilterFactory" ));
     return lServiceNames;
 }
 

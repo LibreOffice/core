@@ -882,7 +882,7 @@ extern "C" sal_uInt32 __LOADONCALLAPI ImportCGM( String& rFileName, uno::Referen
                             aXStatInd = *(uno::Reference< task::XStatusIndicator > *)pProgressBar;
                         bProgressBar = aXStatInd.is();
                         if ( bProgressBar )
-                            aXStatInd->start( rtl::OUString::createFromAscii("CGM Import"), nInSize );
+                            aXStatInd->start( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CGM Import" )), nInSize );
 #endif
 
                         while ( pCGM->IsValid() && ( pIn->Tell() < nInSize ) && !pCGM->IsFinished() )

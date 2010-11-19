@@ -176,7 +176,7 @@ css::uno::Sequence< ::rtl::OUString > SAL_CALL ContentHandlerFactory::getAvailab
 -----------------------------------------------*/
 ::rtl::OUString ContentHandlerFactory::impl_getImplementationName()
 {
-    return ::rtl::OUString::createFromAscii("com.sun.star.comp.filter.config.ContentHandlerFactory");
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.filter.config.ContentHandlerFactory" ));
 }
 
 /*-----------------------------------------------
@@ -185,7 +185,7 @@ css::uno::Sequence< ::rtl::OUString > SAL_CALL ContentHandlerFactory::getAvailab
 css::uno::Sequence< ::rtl::OUString > ContentHandlerFactory::impl_getSupportedServiceNames()
 {
     css::uno::Sequence< ::rtl::OUString > lServiceNames(1);
-    lServiceNames[0] = ::rtl::OUString::createFromAscii("com.sun.star.frame.ContentHandlerFactory");
+    lServiceNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ContentHandlerFactory" ));
     return lServiceNames;
 }
 

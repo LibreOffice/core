@@ -60,7 +60,7 @@ LateInitListener::LateInitListener(const css::uno::Reference< css::lang::XMultiS
     osl_incrementInterlockedCount( &m_refCount );
 
     m_xBroadcaster = css::uno::Reference< css::document::XEventBroadcaster >(
-        m_xSMGR->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.GlobalEventBroadcaster")),
+        m_xSMGR->createInstance(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.GlobalEventBroadcaster" ))),
         css::uno::UNO_QUERY_THROW);
 
     m_xBroadcaster->addEventListener(static_cast< css::document::XEventListener* >(this));

@@ -56,7 +56,7 @@ MSFilterTracer::MSFilterTracer( const ::rtl::OUString& rConfigPath, uno::Sequenc
     mpStream( NULL ),
     mbEnabled( sal_False )  // will be set to true in StartTracing()
 {
-    if ( mpCfgItem->ReadBool( rtl::OUString::createFromAscii( "On" ), sal_False ) )
+    if ( mpCfgItem->ReadBool( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "On" )), sal_False ) )
     {
         uno::Reference< lang::XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
         if ( xMgr.is() )
@@ -65,17 +65,17 @@ MSFilterTracer::MSFilterTracer( const ::rtl::OUString& rConfigPath, uno::Sequenc
             parameter as default into the property sequence of the FilterConfigItem. It means we ensure that
             the property is available by trying to read it (the return value of the method is ignored) */
             ::rtl::OUString aEmptyString;
-            mpCfgItem->ReadInt32( rtl::OUString::createFromAscii( "LogLevel" ), util::logging::LogLevel::ALL );
-            mpCfgItem->ReadString( rtl::OUString::createFromAscii( "ClassFilter" ), aEmptyString );
-            mpCfgItem->ReadString( rtl::OUString::createFromAscii( "MethodFilter" ), aEmptyString );
-            mpCfgItem->ReadString( rtl::OUString::createFromAscii( "MessageFilter" ), aEmptyString );
+            mpCfgItem->ReadInt32( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LogLevel" )), util::logging::LogLevel::ALL );
+            mpCfgItem->ReadString( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ClassFilter" )), aEmptyString );
+            mpCfgItem->ReadString( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MethodFilter" )), aEmptyString );
+            mpCfgItem->ReadString( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MessageFilter" )), aEmptyString );
             util::SearchAlgorithms eSearchAlgorithm = (util::SearchAlgorithms)
-                mpCfgItem->ReadInt32( rtl::OUString::createFromAscii( "SearchAlgorithm" ), util::SearchAlgorithms_ABSOLUTE );
+                mpCfgItem->ReadInt32( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SearchAlgorithm" )), util::SearchAlgorithms_ABSOLUTE );
 
             // creating the name of the log file
-            rtl::OUString aPath( mpCfgItem->ReadString( rtl::OUString::createFromAscii( "Path" ), aEmptyString ) );
-            rtl::OUString aName( mpCfgItem->ReadString( rtl::OUString::createFromAscii( "Name" ), aEmptyString ) );
-            rtl::OUString aDocumentURL( mpCfgItem->ReadString( rtl::OUString::createFromAscii( "DocumentURL" ), aEmptyString ) );
+            rtl::OUString aPath( mpCfgItem->ReadString( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Path" )), aEmptyString ) );
+            rtl::OUString aName( mpCfgItem->ReadString( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Name" )), aEmptyString ) );
+            rtl::OUString aDocumentURL( mpCfgItem->ReadString( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DocumentURL" )), aEmptyString ) );
             INetURLObject aLogFile( aDocumentURL );
             if ( aLogFile.GetMainURL( INetURLObject::NO_DECODE ).getLength() )
             {
@@ -103,10 +103,10 @@ MSFilterTracer::MSFilterTracer( const ::rtl::OUString& rConfigPath, uno::Sequenc
                     }
                 }
                 if ( !aName.getLength() )
-                    aName = rtl::OUString::createFromAscii( "tracer" );
+                    aName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "tracer" ));
                 aLogFile.insertName( aName );
             }
-            aLogFile.setExtension( rtl::OUString::createFromAscii( "log" ) );
+            aLogFile.setExtension( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "log" )) );
 
             // creating the file stream
             mpStream = ::utl::UcbStreamHelper::CreateStream( aLogFile.GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE | STREAM_TRUNC | STREAM_SHARE_DENYNONE );
@@ -117,28 +117,28 @@ MSFilterTracer::MSFilterTracer( const ::rtl::OUString& rConfigPath, uno::Sequenc
                 uno::Reference< io::XOutputStream > xOutputStream( pHelper );
 
                 // instanciating the DocumentHandler, then setting the OutputStream
-                mxHandler = uno::Reference< xml::sax::XDocumentHandler >( xMgr->createInstance( rtl::OUString::createFromAscii( "com.sun.star.xml.sax.Writer" ) ), uno::UNO_QUERY );
+                mxHandler = uno::Reference< xml::sax::XDocumentHandler >( xMgr->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Writer" )) ), uno::UNO_QUERY );
                 uno::Reference< io::XActiveDataSource > xDocSrc( mxHandler, uno::UNO_QUERY );
                 xDocSrc->setOutputStream( xOutputStream );
                 mxHandler->startDocument();
-                mxHandler->ignorableWhitespace ( rtl::OUString::createFromAscii( " " ) );
+                mxHandler->ignorableWhitespace ( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " " )) );
 
                 // writing the "DocumentHandler" property, so the FilterTracer component
                 // will use it for the output
                 uno::Any aAny;
                 aAny <<= xDocSrc;
-                mpCfgItem->WriteAny( rtl::OUString::createFromAscii( "DocumentHandler" ), aAny );
+                mpCfgItem->WriteAny( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DocumentHandler" )), aAny );
 
                 SvXMLAttributeList* pAttrList = new SvXMLAttributeList;
-                pAttrList->AddAttribute( rtl::OUString::createFromAscii( "DocumentURL" ), aDocumentURL );
+                pAttrList->AddAttribute( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DocumentURL" )), aDocumentURL );
                 uno::Reference < xml::sax::XAttributeList > xAttributeList(pAttrList);
-                mxHandler->startElement( rtl::OUString::createFromAscii( "Document" ), xAttributeList );
+                mxHandler->startElement( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Document" )), xAttributeList );
             }
 
             uno::Sequence< uno::Any > aArgument( 1 );
             uno::Sequence< beans::PropertyValue > aPropValues( mpCfgItem->GetFilterData() );
             aArgument[ 0 ] <<= aPropValues;
-            mxFilterTracer = xMgr->createInstanceWithArguments( rtl::OUString::createFromAscii( "com.sun.star.util.FilterTracer" ), aArgument );
+            mxFilterTracer = xMgr->createInstanceWithArguments( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.FilterTracer" )), aArgument );
             if ( mxFilterTracer.is() )
             {
                 mxTextSearch = uno::Reference< util::XTextSearch >( mxFilterTracer, uno::UNO_QUERY );
@@ -159,9 +159,9 @@ MSFilterTracer::~MSFilterTracer()
     mxFilterTracer = NULL;
     if ( mxHandler.is() )
     {
-        mxHandler->ignorableWhitespace ( rtl::OUString::createFromAscii( " " ) );
-        mxHandler->endElement( rtl::OUString::createFromAscii( "Document" ) );
-        mxHandler->ignorableWhitespace ( rtl::OUString::createFromAscii( " " ) );
+        mxHandler->ignorableWhitespace ( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " " )) );
+        mxHandler->endElement( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Document" )) );
+        mxHandler->ignorableWhitespace ( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " " )) );
         mxHandler->endDocument();
         mxHandler = NULL;
     }
@@ -172,7 +172,7 @@ MSFilterTracer::~MSFilterTracer()
 
 void MSFilterTracer::StartTracing()
 {
-    mbEnabled = mpCfgItem->ReadBool( rtl::OUString::createFromAscii( "On" ), sal_False );
+    mbEnabled = mpCfgItem->ReadBool( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "On" )), sal_False );
 }
 
 void MSFilterTracer::EndTracing()

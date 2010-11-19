@@ -2121,7 +2121,7 @@ Reference < XBreakIterator > Writer::Impl_GetBreakIterator()
     if ( !mxBreakIterator.is() )
     {
         Reference< XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
-        mxBreakIterator.set( xMSF->createInstance( OUString::createFromAscii( "com.sun.star.i18n.BreakIterator" ) ), UNO_QUERY );
+        mxBreakIterator.set( xMSF->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.i18n.BreakIterator" )) ), UNO_QUERY );
     }
     return mxBreakIterator;
 }

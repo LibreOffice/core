@@ -140,7 +140,7 @@ TypeDetection::~TypeDetection()
     ::rtl::OUString sURL = stlDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_URL(), ::rtl::OUString());
 
 #if OSL_DEBUG_LEVEL > 0
-    if (stlDescriptor.find(::rtl::OUString::createFromAscii("FileName")) != stlDescriptor.end())
+    if (stlDescriptor.find(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FileName" ))) != stlDescriptor.end())
         OSL_ENSURE(sal_False, "Detect using of deprecated and already unsupported MediaDescriptor property \"FileName\"!");
 #endif
 
@@ -266,7 +266,7 @@ void TypeDetection::impl_checkResultsAndAddBestFilter(::comphelper::MediaDescrip
                 )
                )
             {
-                sRealType = ::rtl::OUString::createFromAscii("calc_Text_txt_csv_StarCalc");
+                sRealType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "calc_Text_txt_csv_StarCalc" ));
             }
             else
             if (
@@ -274,7 +274,7 @@ void TypeDetection::impl_checkResultsAndAddBestFilter(::comphelper::MediaDescrip
                 (sRealType.equalsAscii("calc_Text_txt_csv_StarCalc"           ))
                )
             {
-                sRealType = ::rtl::OUString::createFromAscii("writer_Text");
+                sRealType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "writer_Text" ));
             }
             #endif // WORKAROUND_CSV_TXT_BUG_i60158
 
@@ -1230,7 +1230,7 @@ sal_Bool TypeDetection::impl_validateAndSetFilterOnDescriptor(      ::comphelper
 -----------------------------------------------*/
 ::rtl::OUString TypeDetection::impl_getImplementationName()
 {
-    return ::rtl::OUString::createFromAscii("com.sun.star.comp.filter.config.TypeDetection");
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.filter.config.TypeDetection" ));
 }
 
 /*-----------------------------------------------
@@ -1239,7 +1239,7 @@ sal_Bool TypeDetection::impl_validateAndSetFilterOnDescriptor(      ::comphelper
 css::uno::Sequence< ::rtl::OUString > TypeDetection::impl_getSupportedServiceNames()
 {
     css::uno::Sequence< ::rtl::OUString > lServiceNames(1);
-    lServiceNames[0] = ::rtl::OUString::createFromAscii("com.sun.star.document.TypeDetection");
+    lServiceNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.TypeDetection" ));
     return lServiceNames;
 }
 

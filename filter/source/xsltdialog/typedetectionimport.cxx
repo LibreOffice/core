@@ -72,7 +72,7 @@ void TypeDetectionImporter::doImport( Reference< XMultiServiceFactory >& xMSF, R
 {
     try
     {
-        Reference< XParser > xParser( xMSF->createInstance(OUString::createFromAscii( "com.sun.star.xml.sax.Parser" ) ), UNO_QUERY );
+        Reference< XParser > xParser( xMSF->createInstance(OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Parser" )) ), UNO_QUERY );
         if( xParser.is() )
         {
             TypeDetectionImporter* pImporter = new TypeDetectionImporter( xMSF );

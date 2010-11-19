@@ -99,8 +99,8 @@ Reference< com::sun::star::frame::XModel > xModel;
 
 ::rtl::OUString SAL_CALL FilterDetect::detect( com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& aArguments ) throw( com::sun::star::uno::RuntimeException )
 {
-        ::rtl::OUString sTypeName = OUString::createFromAscii("");
-        ::rtl::OUString sUrl = OUString::createFromAscii("");
+        ::rtl::OUString sTypeName;
+        ::rtl::OUString sUrl;
         ::rtl::OUString originalTypeName;
         Sequence<PropertyValue > lProps ;
 
@@ -156,7 +156,7 @@ Reference< com::sun::star::frame::XModel > xModel;
 
 
              // test typedetect code
-            Reference <XNameAccess> xTypeCont(mxMSF->createInstance(OUString::createFromAscii("com.sun.star.document.TypeDetection")),UNO_QUERY);
+            Reference <XNameAccess> xTypeCont(mxMSF->createInstance(OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.TypeDetection" ))),UNO_QUERY);
             Sequence < ::rtl::OUString > myTypes= xTypeCont->getElementNames();
             nLength = myTypes.getLength();
 
@@ -172,7 +172,7 @@ Reference< com::sun::star::frame::XModel > xModel;
                 sal_Int32 j =0;
                 while( j < new_nlength && sTypeName.equalsAscii(""))
                 {
-                    ::rtl::OUString tmpStr =OUString::createFromAscii("");
+                    ::rtl::OUString tmpStr;
                     lProps[j].Value >>=tmpStr;
                     if((lProps[j].Name.equalsAscii("ClipboardFormat")) && (!tmpStr.equalsAscii("")) )
                     {
@@ -198,7 +198,7 @@ Reference< com::sun::star::frame::XModel > xModel;
             if ( location == aArguments.getLength() )
             {
                 aArguments.realloc(nLength+1);
-                aArguments[location].Name = ::rtl::OUString::createFromAscii( "TypeName" );
+                aArguments[location].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TypeName" ));
             }
             aArguments[location].Value <<=sTypeName;
         }
@@ -213,8 +213,8 @@ Reference< com::sun::star::frame::XModel > xModel;
 ::rtl::OUString SAL_CALL supportedByType( const ::rtl::OUString clipBoardFormat ,  const ::rtl::OString resultString, const ::rtl::OUString checkType)
 {
 
-    ::rtl::OUString sTypeName= OUString::createFromAscii("");
-    if((clipBoardFormat.match(OUString::createFromAscii("doctype:"))))
+    ::rtl::OUString sTypeName;
+    if((clipBoardFormat.match(OUString( RTL_CONSTASCII_USTRINGPARAM( "doctype:" )))))
     {
             ::rtl::OString tryStr = ::rtl::OUStringToOString(clipBoardFormat.copy(8),RTL_TEXTENCODING_ASCII_US).getStr();
             // OSL_ENSURE( sal_False, tryStr);

@@ -131,7 +131,7 @@ XMLFilterDialogComponent::XMLFilterDialogComponent( const com::sun::star::uno::R
     mxMSF( rxMSF ),
     mpDialog( NULL )
 {
-    Reference< XDesktop > xDesktop( mxMSF->createInstance( OUString::createFromAscii( "com.sun.star.frame.Desktop" ) ), UNO_QUERY );
+    Reference< XDesktop > xDesktop( mxMSF->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" )) ), UNO_QUERY );
     if( xDesktop.is() )
     {
         Reference< XTerminateListener > xListener( this );
@@ -422,7 +422,7 @@ sal_Bool SAL_CALL component_writeInfo(
         {
             Reference< XRegistryKey > xNewKey(
                 reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( XMLFilterDialogComponent_getImplementationName() ) );
-            xNewKey = xNewKey->createKey( OUString::createFromAscii( "/UNO/SERVICES" ) );
+            xNewKey = xNewKey->createKey( OUString( RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES" )) );
 
             singlecomponent_writeInfo( xNewKey, XMLFilterDialogComponent_getSupportedServiceNames() );
 

@@ -352,14 +352,14 @@ uno::Reference< graphic::XGraphicObject> lcl_readGraphicObject( SotStorageStream
         {
             // use the GraphicProvider service to get the XGraphic
             uno::Reference< graphic::XGraphicProvider > xGraphProvider(
-                    xServiceManager->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.graphic.GraphicProvider" ) ), uno::UNO_QUERY );
+                    xServiceManager->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.graphic.GraphicProvider" )) ), uno::UNO_QUERY );
             if( xGraphProvider.is() )
             {
                 uno::Reference< io::XInputStream > xStream( new utl::OInputStreamWrapper( *pS ) );
                 if( xStream.is() )
                 {
                     uno::Sequence< beans::PropertyValue > aMediaProps( 1 );
-                    aMediaProps[0].Name = ::rtl::OUString::createFromAscii( "InputStream" );
+                    aMediaProps[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "InputStream" ));
                     aMediaProps[0].Value <<= xStream;
                     uno::Reference< graphic::XGraphic > xGraphic = xGraphProvider->queryGraphic( aMediaProps );
                     if( xGraphic.is() )
@@ -567,8 +567,8 @@ void readArrayString( SotStorageStream *pS, std::vector< rtl::OUString >& sStrin
 
 OUString createSubStreamName( const sal_uInt32& subStorageId )
 {
-    static OUString sI = OUString::createFromAscii("i");
-    static OUString sZero = OUString::createFromAscii( "0" );
+    static OUString sI( RTL_CONSTASCII_USTRINGPARAM( "i" ));
+    static OUString sZero( RTL_CONSTASCII_USTRINGPARAM( "0" ));
     OUStringBuffer buf( 6 );
     buf.append( sI );
     // for subStorage id < 10 stream name has leading '0'
@@ -2033,7 +2033,7 @@ sal_Bool OCX_OptionButton::Import(com::sun::star::uno::Reference<
         sGroupName = sParentName.concat( C2U( ":" ) ).concat( sGroupName );
     }
     if ( sGroupName.getLength() == 0 )
-        sGroupName = rtl::OUString::createFromAscii("DefaultGroup");
+        sGroupName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultGroup" ));
     OSL_TRACE("RadioButton %s has groupname %s",
         rtl::OUStringToOString( sName, RTL_TEXTENCODING_UTF8 ).getStr(),  rtl::OUStringToOString( sGroupName, RTL_TEXTENCODING_UTF8 ).getStr() );
         try
@@ -4317,7 +4317,7 @@ OCX_Control * SvxMSConvertOCXControls::OCX_Factory(
         rControlModel,uno::UNO_QUERY);
 
     uno::Any aTmp = xPropSet->getPropertyValue(
-        OUString::createFromAscii("ClassId"));
+        OUString( RTL_CONSTASCII_USTRINGPARAM( "ClassId" )));
     sal_Int16 nClassId = *(sal_Int16*) aTmp.getValue();
 
 //Begin nasty hack
@@ -4337,8 +4337,7 @@ OCX_Control * SvxMSConvertOCXControls::OCX_Factory(
         uno::Reference< lang::XServiceInfo > xInfo(rControlModel,
             uno::UNO_QUERY);
         if (xInfo->
-            supportsService(OUString::createFromAscii(
-                "com.sun.star.form.component.FormattedField")))
+            supportsService(OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.component.FormattedField" ))))
         {
             rId.AppendAscii("8BD21D10-EC42-11CE-9e0d-00aa006002f3");
             rName.AppendAscii("TextBox");
@@ -4350,8 +4349,7 @@ OCX_Control * SvxMSConvertOCXControls::OCX_Factory(
         uno::Reference< lang::XServiceInfo > xInfo(rControlModel,
             uno::UNO_QUERY);
         if (xInfo->
-            supportsService(OUString::createFromAscii(
-                "com.sun.star.form.component.ImageControl")))
+            supportsService(OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.component.ImageControl" ))))
         nClassId = form::FormComponentType::IMAGECONTROL;
     }
 //End nasty hack

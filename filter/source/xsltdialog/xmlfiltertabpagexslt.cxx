@@ -78,7 +78,7 @@ XMLFilterTabPageXSLT::XMLFilterTabPageXSLT( Window* pParent, ResMgr& rResMgr, co
 
     try
     {
-        Reference< XConfigManager > xCfgMgr( rxMSF->createInstance(OUString::createFromAscii("com.sun.star.config.SpecialConfigManager")), UNO_QUERY );
+        Reference< XConfigManager > xCfgMgr( rxMSF->createInstance(OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.config.SpecialConfigManager" ))), UNO_QUERY );
         if( xCfgMgr.is() )
             sInstPath = xCfgMgr->substituteVariables( sInstPath );
     }

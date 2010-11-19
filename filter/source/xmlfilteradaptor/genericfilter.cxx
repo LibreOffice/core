@@ -101,7 +101,7 @@ sal_Bool SAL_CALL component_writeInfo(
 
                 reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( XmlFilterAdaptor_getImplementationName() ) );
 
-            xNewKey = xNewKey->createKey( OUString::createFromAscii( "/UNO/SERVICES" ) );
+            xNewKey = xNewKey->createKey( OUString( RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES" )) );
 
 
 

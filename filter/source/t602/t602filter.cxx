@@ -1041,12 +1041,12 @@ sal_Bool T602ImportFilterDialog::OptionsDlg()
     ous[2] = getResStr(T602FILTER_STR_ENCODING_CP895);
     ous[3] = getResStr(T602FILTER_STR_ENCODING_KOI8CS2);
     any <<= ous;
-    xPSetCodeLB->setPropertyValue(OUString::createFromAscii("StringItemList"), any);
+    xPSetCodeLB->setPropertyValue(OUString( RTL_CONSTASCII_USTRINGPARAM( "StringItemList" )), any);
 
     Sequence < sal_Int16 > shr(1);
     shr[0] = ini.forcecode ? ((sal_Int16) ini.xcode) + 1 : 0;
     any <<= shr;
-    xPSetCodeLB->setPropertyValue(OUString::createFromAscii("SelectedItems"), any);
+    xPSetCodeLB->setPropertyValue(OUString( RTL_CONSTASCII_USTRINGPARAM( "SelectedItems" )), any);
 
     Reference < XInterface > AzbCheckBoxModel = _Inst("com.sun.star.awt.UnoControlCheckBoxModel");
     Reference < XPropertySet > xPSetAzbukaCB( AzbCheckBoxModel, UNO_QUERY );

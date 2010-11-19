@@ -2203,7 +2203,7 @@ sal_Bool SdrPowerPointImport::ReadFontCollection()
                 aFont.SetHeight( 100 );
 
                 if ( mbTracing && !pFont->bAvailable )
-                    mpTracer->Trace( rtl::OUString::createFromAscii( "sd1000" ), pFont->aName );
+                    mpTracer->Trace( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "sd1000" )), pFont->aName );
 
 #ifdef DBG_EXTRACTFONTMETRICS
 
@@ -2879,8 +2879,8 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
     {
         if ( mbTracing )
             mpTracer->AddAttribute( eAktPageKind == PPT_SLIDEPAGE
-                                    ? rtl::OUString::createFromAscii( "Page" )
-                                    : rtl::OUString::createFromAscii( "NotesPage" ),
+                                    ? rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Page" ))
+                                    : rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NotesPage" )),
                                     rtl::OUString::valueOf( (sal_Int32)nAktPageNum + 1 ) );
 
         rSlidePersist.pHeaderFooterEntry = new HeaderFooterEntry( pMasterPersist );
@@ -3073,8 +3073,8 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
             SolveSolver( *rSlidePersist.pSolverContainer );
         if ( mbTracing )
             mpTracer->RemoveAttribute( eAktPageKind == PPT_SLIDEPAGE
-                                        ? rtl::OUString::createFromAscii( "Page" )
-                                        : rtl::OUString::createFromAscii( "NotesPage" ) );
+                                        ? rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Page" ))
+                                        : rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NotesPage" )) );
     }
     rStCtrl.Seek( nMerk );
 }

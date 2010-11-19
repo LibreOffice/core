@@ -146,7 +146,7 @@ bool XMLFilterTabDialog::onOk()
         {
             try
             {
-                Reference< XNameAccess > xFilterContainer( mxMSF->createInstance( OUString::createFromAscii("com.sun.star.document.FilterFactory" ) ), UNO_QUERY );
+                Reference< XNameAccess > xFilterContainer( mxMSF->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.FilterFactory" )) ), UNO_QUERY );
                 if( xFilterContainer.is() )
                 {
                     if( xFilterContainer->hasByName( mpNewInfo->maFilterName ) )
@@ -178,7 +178,7 @@ bool XMLFilterTabDialog::onOk()
         {
             try
             {
-                Reference< XNameAccess > xFilterContainer( mxMSF->createInstance( OUString::createFromAscii("com.sun.star.document.FilterFactory" ) ), UNO_QUERY );
+                Reference< XNameAccess > xFilterContainer( mxMSF->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.FilterFactory" )) ), UNO_QUERY );
                 if( xFilterContainer.is() )
                 {
                     Sequence< OUString > aFilterNames( xFilterContainer->getElementNames() );

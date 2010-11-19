@@ -64,14 +64,14 @@ extern "C"
                 sal_Int32                   nPos;
 
                 xNewKey = reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( PDFFilter_getImplementationName() );
-                xNewKey = xNewKey->createKey( OUString::createFromAscii( "/UNO/SERVICES" ) );
+                xNewKey = xNewKey->createKey( OUString( RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES" )) );
                 const Sequence< OUString > & rSNL1 = PDFFilter_getSupportedServiceNames();
                 const OUString * pArray1 = rSNL1.getConstArray();
                 for ( nPos = rSNL1.getLength(); nPos--; )
                     xNewKey->createKey( pArray1[nPos] );
 
                 xNewKey = reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( PDFDialog_getImplementationName() );
-                xNewKey = xNewKey->createKey( OUString::createFromAscii( "/UNO/SERVICES" ) );
+                xNewKey = xNewKey->createKey( OUString( RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES" )) );
                 const Sequence< OUString > & rSNL2 = PDFDialog_getSupportedServiceNames();
                 const OUString * pArray2 = rSNL2.getConstArray();
                 for ( nPos = rSNL2.getLength(); nPos--; )
