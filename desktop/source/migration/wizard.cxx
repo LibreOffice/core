@@ -209,7 +209,6 @@ FirstStartWizard::FirstStartWizard( Window* pParent, sal_Bool bLicenseNeedsAccep
     m_aDefaultPath = defineWizardPagesDependingFromContext();
     activatePath(m_aDefaultPath, sal_True);
 
-    enterState(STATE_WELCOME);
     ActivatePage();
 
     // set text of finish putton:

@@ -756,7 +756,7 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, Sfx
                                 DEFINE_CONST_UNICODE("com.sun.star.frame.ModuleManager") ), UNO_QUERY ),
     pbDeleted               ( NULL ),
 
-    aFmtLb                  ( this, WB_BORDER | WB_TABSTOP | WB_SORT ),
+    aFmtLb                  ( this, WB_BORDER | WB_TABSTOP | WB_SORT | WB_QUICK_SEARCH ),
     aFilterLb               ( pW, WB_BORDER | WB_DROPDOWN | WB_TABSTOP ),
 
     nActFamily              ( 0xffff ),
@@ -780,7 +780,7 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, Sfx
 {
     aFmtLb.SetHelpId( HID_TEMPLATE_FMT );
     aFilterLb.SetHelpId( HID_TEMPLATE_FILTER );
-    aFmtLb.SetWindowBits( WB_SORT | WB_HIDESELECTION );
+    aFmtLb.SetStyle( aFmtLb.GetStyle() | WB_SORT | WB_HIDESELECTION );
     Font aFont = aFmtLb.GetFont();
     aFont.SetWeight( WEIGHT_NORMAL );
     aFmtLb.SetFont( aFont );
@@ -823,7 +823,7 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, Mod
     bBindingUpdate          ( TRUE )
 
 {
-    aFmtLb.SetWindowBits( WB_SORT );
+    aFmtLb.SetStyle( aFmtLb.GetStyle() | WB_SORT );
 }
 
 //-------------------------------------------------------------------------
@@ -1776,7 +1776,7 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, FilterSelectHdl, ListBox *, pBox )
             pTreeBox = new StyleTreeListBox_Impl(
                     this, WB_HASBUTTONS | WB_HASLINES |
                     WB_BORDER | WB_TABSTOP | WB_HASLINESATROOT |
-                    WB_HASBUTTONSATROOT | WB_HIDESELECTION );
+                    WB_HASBUTTONSATROOT | WB_HIDESELECTION | WB_QUICK_SEARCH );
             pTreeBox->SetFont( aFmtLb.GetFont() );
 
             pTreeBox->SetPosSizePixel(aFmtLb.GetPosPixel(), aFmtLb.GetSizePixel());
@@ -2208,32 +2208,6 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, FmtSelectHdl, SvTreeListBox *, pListBox
     // HilfePI antriggern, wenn von Call als Handler und Bereich erlaubt ist
     if( !pListBox || pListBox->IsSelected( pListBox->GetHdlEntry() ) )
     {
-#ifdef WIR_KOENNEN_WIEDER_HILFE_FUER_STYLESHEETS
-        SfxHelpPI* pHelpPI = SFX_APP()->GetHelpPI();
-        if ( pHelpPI && pListBox && IsInitialized() &&
-             GetSelectedEntry().Len() )
-        {
-            const SfxStyleFamilyItem *pItem = GetFamilyItem_Impl();
-            const SfxStyleFamily eFam = pItem->GetFamily();
-            DBG_ASSERT(pStyleSheetPool, "Kein Pool");
-            // SfxStyleSheetBase* pStyle = pStyleSheetPool
-            //      ? pStyleSheetPool->Find( GetSelectedEntry(), eFam ) : 0;
-            SfxStyleSheetBase *pStyle;
-            if ( pStyleSheetPool )
-                pStyle = pStyleSheetPool->Find ( GetSelectedEntry(), eFam );
-            else
-                pStyle = 0;
-
-            if ( pStyle )
-            {
-                String aHelpFile;
-                ULONG nHelpId=pStyle->GetHelpId(aHelpFile);
-                if ( nHelpId )
-                    pHelpPI->LoadTopic( nHelpId );
-            }
-        }
-#endif
-
         // nur, wenn Giesskanne an ist
         if ( IsInitialized() &&
              IsCheckedItem(SID_STYLE_WATERCAN) &&
@@ -2373,18 +2347,18 @@ void SfxTemplateDialog_Impl::EnableFamilyItem( USHORT nId, BOOL bEnable )
 
 void SfxTemplateDialog_Impl::InsertFamilyItem(USHORT nId,const SfxStyleFamilyItem *pItem)
 {
-    USHORT nHelpId = 0;
+    rtl::OString sHelpId;
     switch( (USHORT) pItem->GetFamily() )
     {
-        case SFX_STYLE_FAMILY_CHAR: nHelpId = SID_STYLE_FAMILY1; break;
-        case SFX_STYLE_FAMILY_PARA: nHelpId = SID_STYLE_FAMILY2; break;
-        case SFX_STYLE_FAMILY_FRAME:nHelpId = SID_STYLE_FAMILY3; break;
-        case SFX_STYLE_FAMILY_PAGE: nHelpId = SID_STYLE_FAMILY4; break;
-        case SFX_STYLE_FAMILY_PSEUDO: nHelpId = SID_STYLE_FAMILY5; break;
-        default: DBG_ERROR("unbekannte StyleFamily"); break;
+        case SFX_STYLE_FAMILY_CHAR:     sHelpId = ".uno:CharStyle"; break;
+        case SFX_STYLE_FAMILY_PARA:     sHelpId = ".uno:ParaStyle"; break;
+        case SFX_STYLE_FAMILY_FRAME:    sHelpId = ".uno:FrameStyle"; break;
+        case SFX_STYLE_FAMILY_PAGE:     sHelpId = ".uno:PageStyle"; break;
+        case SFX_STYLE_FAMILY_PSEUDO:   sHelpId = ".uno:ListStyle"; break;
+        default: DBG_ERROR("unknown StyleFamily"); break;
     }
     m_aActionTbL.InsertItem( nId, pItem->GetImage(), pItem->GetText(), 0, 0);
-    m_aActionTbL.SetHelpId( nId, nHelpId );
+    m_aActionTbL.SetHelpId( nId, sHelpId );
 }
 
 // ------------------------------------------------------------------------
@@ -2694,7 +2668,7 @@ IMPL_LINK( SfxTemplateDialog_Impl, ToolBoxRClick, ToolBox *, pBox )
             aCommand = xUICommands->getByName(::rtl::OUString::createFromAscii(".uno:LoadStyles"));
             sLabel = lcl_GetLabel( aCommand );
             pMenu->InsertItem( SID_TEMPLATE_LOAD, sLabel );
-            pMenu->SetHelpId(SID_TEMPLATE_LOAD, SID_TEMPLATE_LOAD);
+            pMenu->SetHelpId(SID_TEMPLATE_LOAD, ".uno:LoadStyles");
 
             pMenu->SetSelectHdl(LINK(this, SfxTemplateDialog_Impl, MenuSelectHdl));
             pMenu->Execute( pBox,

@@ -102,8 +102,8 @@ FuncPage::FuncPage(Window* pParent,const IFunctionManager* _pFunctionManager):
     m_pFunctionManager(_pFunctionManager)
 {
     FreeResource();
-    m_aSmartHelpId = aLbFunction.GetSmartHelpId();
-    aLbFunction.SetSmartUniqueId(m_aSmartHelpId);
+    m_aHelpId = aLbFunction.GetHelpId();
+    aLbFunction.SetUniqueId(m_aHelpId);
 
     InitLRUList();
 
@@ -190,15 +190,15 @@ IMPL_LINK( FuncPage, SelHdl, ListBox*, pLb )
         const IFunctionDescription* pDesc = GetFuncDesc( GetFunction() );
         if ( pDesc )
         {
-            const long nHelpId = pDesc->getHelpId();
-            if ( nHelpId )
-                aLbFunction.SetSmartHelpId(SmartId(nHelpId));
+            const rtl::OString sHelpId = pDesc->getHelpId();
+            if ( sHelpId.getLength() )
+                aLbFunction.SetHelpId(sHelpId);
         }
         aSelectionLink.Call(this);
     }
     else
     {
-        aLbFunction.SetSmartHelpId(m_aSmartHelpId);
+        aLbFunction.SetHelpId(m_aHelpId);
         UpdateFunctionList();
     }
     return 0;

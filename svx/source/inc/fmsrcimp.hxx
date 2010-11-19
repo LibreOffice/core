@@ -46,15 +46,7 @@
 #include <unotools/collatorwrapper.hxx>
 #include <vos/thread.hxx>
 
-#ifndef _SVSTDARR_ULONGS
-#define _SVSTDARR_ULONGS
-#include <svl/svstdarr.hxx>
-#endif
-
-// ===================================================================================================
-// Hilfsstrukturen
-
-SV_DECL_OBJARR(SvInt32Array, sal_Int32, 16, 16)
+#include <deque>
 
 // ===================================================================================================
 // = class FmSearchThread - wie der Name schon sagt
@@ -189,8 +181,8 @@ class SVX_DLLPUBLIC FmSearchEngine
     enum SEARCHFOR_TYPE { SEARCHFOR_STRING, SEARCHFOR_NULL, SEARCHFOR_NOTNULL };
 
     // zugrundeliegende Daten
-    CursorWrapper           m_xSearchCursor;
-    SvInt32Array            m_arrFieldMapping;
+    CursorWrapper                   m_xSearchCursor;
+    std::deque<sal_Int32>           m_arrFieldMapping;
         // da der Iterator durchaus mehr Spalten haben kann, als ich eigentlich verwalte (in meiner Feld-Listbox),
         // muss ich mir hier ein Mapping dieser ::com::sun::star::form-Schluessel auf die Indizies der entsprechenden Spalten im Iterator halten
 

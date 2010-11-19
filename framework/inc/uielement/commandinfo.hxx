@@ -47,11 +47,13 @@ namespace framework
 struct CommandInfo
 {
     CommandInfo() : nId( 0 ),
+                    nWidth( 0 ),
                     nImageInfo( 0 ),
                     bMirrored( false ),
                     bRotated( false ) {}
 
     USHORT                  nId;
+    sal_uInt16              nWidth;
     ::std::vector< USHORT > aIds;
     sal_Int16               nImageInfo;
     sal_Bool                bMirrored : 1,

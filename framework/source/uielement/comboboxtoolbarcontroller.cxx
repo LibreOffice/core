@@ -261,19 +261,30 @@ void ComboboxToolbarController::LoseFocus()
 
 long ComboboxToolbarController::PreNotify( NotifyEvent& rNEvt )
 {
-    if( rNEvt.GetType() == EVENT_KEYINPUT )
+    switch ( rNEvt.GetType() )
     {
-        const ::KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
-        const KeyCode& rKeyCode = pKeyEvent->GetKeyCode();
-        if(( rKeyCode.GetModifier() | rKeyCode.GetCode()) == KEY_RETURN )
-        {
-            // Call execute only with non-empty text
-            if ( m_pComboBox->GetText().Len() > 0 )
-                execute( rKeyCode.GetModifier() );
-            return 1;
-        }
+        case EVENT_KEYINPUT :
+            {
+                const ::KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
+                const KeyCode& rKeyCode = pKeyEvent->GetKeyCode();
+                if(( rKeyCode.GetModifier() | rKeyCode.GetCode()) == KEY_RETURN )
+                {
+                    // Call execute only with non-empty text
+                    if ( m_pComboBox->GetText().Len() > 0 )
+                        execute( rKeyCode.GetModifier() );
+                    return 1;
+                }
+            }
+            break;
+        case EVENT_GETFOCUS :
+            notifyFocusGet();
+            break;
+        case EVENT_LOSEFOCUS :
+            notifyFocusLost();
+            break;
+        default :
+            break;
     }
-
     return 0;
 }
 
