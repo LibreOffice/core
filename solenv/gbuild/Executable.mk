@@ -50,7 +50,7 @@ endef
 
 define gb_Executable__Executable_impl
 $(call gb_LinkTarget_LinkTarget,$(2))
-$(call gb_LinkTarget_set_targettype_flags,$(2),$(gb_Executable_TARGETTYPEFLAGS)  $(call gb_LinkTarget_get_rpath,$(2),$(1)))
+$(call gb_LinkTarget_set_targettype_flags,$(2),$(gb_Executable_TARGETTYPEFLAGS) $(call gb_Executable_get_rpath,$(1)))
 $(call gb_Executable_get_target,$(1)) : $(call gb_LinkTarget_get_target,$(2))
 $(call gb_Executable_get_clean_target,$(1)) : $(call gb_LinkTarget_get_clean_target,$(2))
 $(call gb_Executable_Executable_platform,$(1),$(2))

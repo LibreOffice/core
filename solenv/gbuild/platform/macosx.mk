@@ -196,12 +196,6 @@ endef
 define gb_LinkTarget__get_rpath_for_layer
 $(patsubst $(1):%,%,$(filter $(1):%,$(gb_LinkTarget_RPATHS)))
 endef
-define gb_LinkTarget__get_installname
-$(if $(2),-install_name '$(2)$(notdir $(1))',)
-endef
-define gb_LinkTarget_get_rpath
-$(call gb_LinkTarget__get_installname,$(1),$(call gb_LinkTarget__get_rpath_for_layer,$(call gb_LinkTarget_get_layer,$(2))))
-endef
 
 gb_LinkTarget_RPATHS := \
     URELIB:@__________________________________________________URELIB/ \
@@ -211,21 +205,9 @@ gb_LinkTarget_RPATHS := \
     SDKBIN: \
     NONEBIN: \
 
-gb_LinkTarget_LAYER := \
-    $(foreach lib,$(gb_Library_OOOLIBS),$(lib):OOOLIB) \
-    $(foreach lib,$(gb_Library_PLAINLIBS_URE),$(lib):URELIB) \
-    $(foreach lib,$(gb_Library_PLAINLIBS_OOO),$(lib):OOOLIB) \
-    $(foreach lib,$(gb_Library_RTLIBS),$(lib):OOOLIB) \
-    $(foreach lib,$(gb_Library_RTVERLIBS),$(lib):URELIB) \
-    $(foreach lib,$(gb_Library_STLLIBS),$(lib):URELIB) \
-    $(foreach lib,$(gb_Library_UNOLIBS_URE),$(lib):URELIB) \
-    $(foreach lib,$(gb_Library_UNOLIBS_OOO),$(lib):OOOLIB) \
-    $(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):URELIB) \
-    $(foreach lib,$(gb_Executable_UREBIN),$(lib):UREBIN) \
-    $(foreach lib,$(gb_Executable_SDK),$(lib):SDKBIN) \
-    $(foreach lib,$(gb_Executable_OOO),$(lib):OOOLIB) \
-    $(foreach lib,$(gb_Executable_BRAND),$(lib):BRAND) \
-    $(foreach lib,$(gb_Executable_NONE),$(lib):NONEBIN) \
+define gb_LinkTarget__get_installname
+$(if $(2),-install_name '$(2)$(1)',)
+endef
 
 gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_COMPILEROPTFLAGS)
 gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS) $(gb_COMPILEROPTFLAGS)
@@ -259,6 +241,8 @@ $(call gb_Helper_abbreviate_dirs,\
         $(foreach lib,$(5),$(call gb_StaticLibrary_get_target,$(lib))) \
         -o $(1) \
         `cat $${DYLIB_FILE}` && \
+    $(if $(filter shl exe,$(TARGETTYPE)),$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl $(TARGETTYPE) $(LAYER) $(1) &&,) \
+    $(if $(filter shl,$(TARGETTYPE)),macosx-create-bundle $(1) &&,) \
     rm -f $${DYLIB_FILE})
 endef
 
@@ -309,7 +293,28 @@ gb_Library_FILENAMES := \
     $(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):$(gb_Library_UNOVERPRE)$(lib)$(gb_Library_PLAINEXT)) \
 
 
-gb_Library_Library_platform =
+# HACK
+# SUBSTITING OOOLIB with OOO to make the perl script happy
+define gb_Library_Library_platform
+$(call gb_LinkTarget_get_target,$(2)) : TARGETTYPE := shl
+$(call gb_LinkTarget_get_target,$(2)) : LAYER :=$(subst OOOLIB,OOO,$(call gb_Library_get_layer,$(1)))
+
+endef
+
+define gb_Library_get_rpath
+$(call gb_LinkTarget__get_installname,$(call gb_Library_get_filename,$(1)),$(call gb_LinkTarget__get_rpath_for_layer,$(call gb_Library_get_layer,$(1))))
+endef
+
+gb_Library_LAYER := \
+    $(foreach lib,$(gb_Library_OOOLIBS),$(lib):OOOLIB) \
+    $(foreach lib,$(gb_Library_PLAINLIBS_URE),$(lib):URELIB) \
+    $(foreach lib,$(gb_Library_PLAINLIBS_OOO),$(lib):OOOLIB) \
+    $(foreach lib,$(gb_Library_RTLIBS),$(lib):OOOLIB) \
+    $(foreach lib,$(gb_Library_RTVERLIBS),$(lib):URELIB) \
+    $(foreach lib,$(gb_Library_STLLIBS),$(lib):URELIB) \
+    $(foreach lib,$(gb_Library_UNOLIBS_URE),$(lib):URELIB) \
+    $(foreach lib,$(gb_Library_UNOLIBS_OOO),$(lib):OOOLIB) \
+    $(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):URELIB) \
 
 
 # StaticLibrary class
@@ -324,12 +329,35 @@ gb_StaticLibrary_FILENAMES := \
     $(foreach lib,$(gb_StaticLibrary_JPEGLIBS),$(lib):$(gb_StaticLibrary_SYSPRE)$(lib)$(gb_StaticLibrary_JPEGEXT)) \
     $(foreach lib,$(gb_StaticLibrary_PLAINLIBS),$(lib):$(gb_StaticLibrary_SYSPRE)$(lib)$(gb_StaticLibrary_PLAINEXT)) \
 
+define gb_StaticLibrary_StaticLibrary_platform
+$(call gb_LinkTarget_get_target,$(2)) : TARGETTYPE := staticlib
+$(call gb_LinkTarget_get_target,$(2)) : LAYER :=
+
+endef
 
 # Executable class
 
 gb_Executable_EXT :=
 gb_Executable_TARGETTYPEFLAGS := -bind_at_load
-gb_Executable_Executable_platform =
+
+# HACK
+# SUBSTITING OOOLIB with OOO to make the perl script happy
+define gb_Executable_Library_platform
+$(call gb_LinkTarget_get_target,$(2)) : TARGETTYPE := exe
+$(call gb_LinkTarget_get_target,$(2)) : LAYER :=$(subst OOOLIB,OOO,$(call gb_Executable_get_layer,$(1)))
+
+endef
+
+define gb_Executable_get_rpath
+$(call gb_LinkTarget__get_installname,$(1),$(call gb_LinkTarget__get_rpath_for_layer,$(call gb_Executable_get_layer,$(1))))
+endef
+
+gb_Executable_LAYER := \
+    $(foreach exe,$(gb_Executable_UREBIN),$(exe):UREBIN) \
+    $(foreach exe,$(gb_Executable_SDK),$(exe):SDKBIN) \
+    $(foreach exe,$(gb_Executable_OOO),$(exe):OOOLIB) \
+    $(foreach exe,$(gb_Executable_BRAND),$(exe):BRAND) \
+    $(foreach exe,$(gb_Executable_NONE),$(exe):NONEBIN) \
 
 
 # SdiTarget class

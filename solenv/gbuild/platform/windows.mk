@@ -361,7 +361,6 @@ endef
 
 # LinkTarget class
 
-gb_LinkTarget_get_rpath :=
 
 gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS) $(gb_COMPILEROPTFLAGS)
 gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_COMPILEROPTFLAGS)
@@ -404,6 +403,7 @@ endef
 
 gb_Library_DEFS := -DSHAREDLIBS -D_DLL_ -D_DLL
 gb_Library_TARGETTYPEFLAGS := -DLL
+gb_Library_get_rpath :=
 
 gb_Library_SYSPRE := i
 gb_Library_PLAINEXT := .lib
@@ -498,11 +498,13 @@ gb_StaticLibrary_FILENAMES := \
 
 gb_StaticLibrary_FILENAMES := $(patsubst salcpprt:salcpprt%,salcpprt:cpprtl%,$(gb_StaticLibrary_FILENAMES))
 
+gb_StaticLibrary_StaticLibrary_platform =
 
 # Executable class
 
 gb_Executable_EXT := .exe
 gb_Executable_TARGETTYPEFLAGS := -RELEASE -BASE:0x1b000000 -OPT:NOREF -INCREMENTAL:NO -DEBUG
+gb_Executable_get_rpath :=
 
 define gb_Executable_Executable_platform
 $(call gb_LinkTarget_set_auxtargets,$(2),\

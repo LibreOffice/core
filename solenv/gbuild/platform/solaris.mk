@@ -116,7 +116,7 @@ endif
 # Helper class
 
 gb_Helper_abbreviate_dirs_native = $(gb_Helper_abbreviate_dirs)
-gb_Deliver_GNUCOPY := $(firstword $(GNUCOPY) gnucp)
+gb_Deliver_GNUCOPY := $(or $(GNUCOPY),gnucp)
 
 
 # CObject class
@@ -161,9 +161,6 @@ endef
 define gb_LinkTarget__get_rpath_for_layer
 $(patsubst $(1):%,%,$(filter $(1):%,$(gb_LinkTarget__RPATHS)))
 endef
-define gb_LinkTarget_get_rpath
-'-R$(call gb_LinkTarget__get_rpath_for_layer,$(call gb_LinkTarget_get_layer,$(2)))'
-endef
 
 gb_LinkTarget__RPATHS := \
     URELIB:$$$$ORIGIN \
@@ -172,22 +169,6 @@ gb_LinkTarget__RPATHS := \
     BRAND:$$$$ORIGIN:$$$$ORIGIN/../basis-link/program:$$$$ORIGIN/../basis-link/ure-link/lib \
     SDKBIN:$$$$ORIGIN/../../ure-link/lib \
     NONEBIN:$$$$ORIGIN/../lib:$$$$ORIGIN \
-
-gb_LinkTarget_LAYER := \
-    $(foreach lib,$(gb_Library_OOOLIBS),$(lib):OOOLIB) \
-    $(foreach lib,$(gb_Library_PLAINLIBS_URE),$(lib):URELIB) \
-    $(foreach lib,$(gb_Library_PLAINLIBS_OOO),$(lib):OOOLIB) \
-    $(foreach lib,$(gb_Library_RTLIBS),$(lib):OOOLIB) \
-    $(foreach lib,$(gb_Library_RTVERLIBS),$(lib):URELIB) \
-    $(foreach lib,$(gb_Library_STLLIBS),$(lib):URELIB) \
-    $(foreach lib,$(gb_Library_UNOLIBS_URE),$(lib):URELIB) \
-    $(foreach lib,$(gb_Library_UNOLIBS_OOO),$(lib):OOOLIB) \
-    $(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):URELIB) \
-    $(foreach lib,$(gb_Executable_UREBIN),$(lib):UREBIN) \
-    $(foreach lib,$(gb_Executable_SDK),$(lib):SDKBIN) \
-    $(foreach lib,$(gb_Executable_OOO),$(lib):OOOLIB) \
-    $(foreach lib,$(gb_Executable_BRAND),$(lib):BRAND) \
-    $(foreach lib,$(gb_Executable_NONE),$(lib):NONEBIN) \
 
 gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS) $(gb_COMPILEROPTFLAGS)
 gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_COMPILEROPTFLAGS)
@@ -260,6 +241,21 @@ gb_Library_FILENAMES := \
 
 gb_Library__Library_platform =
 
+define gb_Library_get_rpath
+'-R$(call gb_LinkTarget__get_rpath_for_layer,$(call gb_Library_get_layer,$(1)))'
+endef
+
+gb_Library_LAYER := \
+    $(foreach lib,$(gb_Library_OOOLIBS),$(lib):OOOLIB) \
+    $(foreach lib,$(gb_Library_PLAINLIBS_URE),$(lib):URELIB) \
+    $(foreach lib,$(gb_Library_PLAINLIBS_OOO),$(lib):OOOLIB) \
+    $(foreach lib,$(gb_Library_RTLIBS),$(lib):OOOLIB) \
+    $(foreach lib,$(gb_Library_RTVERLIBS),$(lib):URELIB) \
+    $(foreach lib,$(gb_Library_STLLIBS),$(lib):URELIB) \
+    $(foreach lib,$(gb_Library_UNOLIBS_URE),$(lib):URELIB) \
+    $(foreach lib,$(gb_Library_UNOLIBS_OOO),$(lib):OOOLIB) \
+    $(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):URELIB) \
+
 
 # StaticLibrary class
 
@@ -276,12 +272,24 @@ gb_StaticLibrary_FILENAMES := \
     $(foreach lib,$(gb_StaticLibrary_JPEGLIBS),$(lib):$(gb_StaticLibrary_SYSPRE)$(lib)$(gb_StaticLibrary_JPEGEXT)) \
     $(foreach lib,$(gb_StaticLibrary_PLAINLIBS),$(lib):$(gb_StaticLibrary_SYSPRE)$(lib)$(gb_StaticLibrary_PLAINEXT)) \
 
+gb_StaticLibrary_StaticLibrary_platform =
 
 # Executable class
 
 gb_Executable_EXT :=
 gb_Executable_TARGETTYPEFLAGS :=
 gb_Executable__Executable_platform =
+
+define gb_Executable_get_rpath
+'-R$(call gb_LinkTarget__get_rpath_for_layer,$(call gb_Executable_get_layer,$(1)))'
+endef
+
+gb_Executable_LAYER := \
+    $(foreach exe,$(gb_Executable_UREBIN),$(exe):UREBIN) \
+    $(foreach exe,$(gb_Executable_SDK),$(exe):SDKBIN) \
+    $(foreach exe,$(gb_Executable_OOO),$(exe):OOOLIB) \
+    $(foreach exe,$(gb_Executable_BRAND),$(exe):BRAND) \
+    $(foreach exe,$(gb_Executable_NONE),$(exe):NONEBIN) \
 
 
 # SdiTarget class
