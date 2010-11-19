@@ -230,7 +230,6 @@ protected:
 
     virtual FASTBOOL KeyInput( const KeyEvent &rKeyEvent );
     virtual SdrView* GetDrawView() const;
-    virtual void    EnterStandardMode();
 
 public:
                     TYPEINFO_VISIBILITY(SC_DLLPUBLIC);

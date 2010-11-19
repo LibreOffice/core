@@ -75,14 +75,6 @@ SdrView* __EXPORT ScTabViewShell::GetDrawView() const
     return ((ScTabViewShell*)this)->GetScDrawView();    // GetScDrawView ist nicht-const
 }
 
-void ScTabViewShell::EnterStandardMode()
-{
-    // TODO:
-    // - finish cell text editing
-    // - finish shape text editing
-    // - more?
-}
-
 void ScTabViewShell::WindowChanged()
 {
     Window* pWin = GetActiveWin();
