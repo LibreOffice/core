@@ -77,6 +77,8 @@
 #include "moduledbu.hxx"
 #endif
 
+#include <tools/urlobj.hxx>
+
 #define BUTTONID_MORE   BUTTONID_RETRY + 1
 
 #define DIALOG_WIDTH    220
@@ -399,7 +401,7 @@ OExceptionChainDialog::OExceptionChainDialog( Window* pParent, const ExceptionDi
     m_aExceptionList.SetSelectionMode(SINGLE_SELECTION);
     m_aExceptionList.SetDragDropMode(0);
     m_aExceptionList.EnableInplaceEditing(sal_False);
-    m_aExceptionList.SetWindowBits(WB_HASLINES | WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HSCROLL);
+    m_aExceptionList.SetStyle(m_aExceptionList.GetStyle() | WB_HASLINES | WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HSCROLL);
 
     m_aExceptionList.SetSelectHdl(LINK(this, OExceptionChainDialog, OnExceptionSelected));
     m_aExceptionList.SetNodeDefaultImages( );
@@ -689,11 +691,14 @@ void OSQLMessageBox::impl_createStandardButtons( WinBits _nStyle )
     {
         lcl_addButton( *this, BUTTON_HELP, false );
 
-        SmartId aHelpId( m_sHelpURL );
-        if ( m_sHelpURL.indexOfAsciiL( "HID:", 4 ) == 0 )
-            aHelpId = SmartId( m_sHelpURL.copy( 4 ).toInt32() );
+        rtl::OUString aTmp;
+        INetURLObject aHID( m_sHelpURL );
+        if ( aHID.GetProtocol() == INET_PROT_HID )
+              aTmp = aHID.GetURLPath();
+        else
+            aTmp = m_sHelpURL;
 
-        SetSmartHelpId( aHelpId );
+        SetHelpId( rtl::OUStringToOString( aTmp, RTL_TEXTENCODING_UTF8 ) );
     }
 }
 

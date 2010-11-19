@@ -81,7 +81,7 @@ public:
     virtual void fillVisibleArgumentMapping(::std::vector<USHORT>& _rArguments) const ;
     virtual void initArgumentInfo()  const;
     virtual ::rtl::OUString getSignature() const ;
-    virtual long getHelpId() const ;
+    virtual rtl::OString getHelpId() const ;
     virtual sal_uInt32 getParameterCount() const ;
     virtual ::rtl::OUString getParameterName(sal_uInt32 _nPos) const ;
     virtual ::rtl::OUString getParameterDescription(sal_uInt32 _nPos) const ;
