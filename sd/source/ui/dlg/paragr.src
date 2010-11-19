@@ -27,6 +27,7 @@
 
 #include <svx/dialogs.hrc>
 #include "glob.hrc"
+#include "helpids.h"
 #include "paragr.hrc"
 
 TabDialog TAB_PARAGRAPH
@@ -105,13 +106,14 @@ TabDialog TAB_PARAGRAPH
 
 TabPage RID_TABPAGE_PARA_NUMBERING
 {
-    HelpId = RID_TABPAGE_PARA_NUMBERING ;
+    HelpId = HID_TABPAGE_PARA_NUMBERING ;
     Hide = TRUE ;
     Text = "Numbering" ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
 
     TriStateBox CB_NEW_START
     {
+        HelpID = "sd:TriStateBox:RID_TABPAGE_PARA_NUMBERING:CB_NEW_START";
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 160 , 10 ) ;
         TabStop = TRUE ;
@@ -119,6 +121,7 @@ TabPage RID_TABPAGE_PARA_NUMBERING
     };
     TriStateBox CB_NUMBER_NEW_START
     {
+        HelpID = "sd:TriStateBox:RID_TABPAGE_PARA_NUMBERING:CB_NUMBER_NEW_START";
         Pos = MAP_APPFONT ( 15 , 21 ) ;
         Size = MAP_APPFONT ( 103 , 10 ) ;
         Disable = TRUE ;
@@ -126,6 +129,7 @@ TabPage RID_TABPAGE_PARA_NUMBERING
     };
     NumericField NF_NEW_START
     {
+        HelpID = "sd:NumericField:RID_TABPAGE_PARA_NUMBERING:NF_NEW_START";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 124 , 20 ) ;
         Size = MAP_APPFONT ( 26 , 12 ) ;
