@@ -117,10 +117,10 @@ if [ "$COMMAND" = "clone" ] ; then
           help impress libs-core libs-extern libs-extern-sys libs-gui
           postprocess sdk testing ure writer"
 fi
-for D in $DIRS ; do
-    DIR="$CLONEDIR/$D"
-    NAME="$D"
-    if [ "$D" = "bootstrap" ] ; then
+for REPO in $DIRS ; do
+    DIR="$CLONEDIR/$REPO"
+    NAME="$REPO"
+    if [ "$REPO" = "bootstrap" ] ; then
         DIR="$RAWBUILDDIR"
         NAME="main repo"
     fi
@@ -128,7 +128,11 @@ for D in $DIRS ; do
     if [ \( -d "$DIR" -a -d "$DIR"/.git \) -o \( "$COMMAND" = "clone" \) ] ; then
         (
             # executed in a subshell
-            [ "$COMMAND" != "clone" ] && cd "$DIR"
+            if [ "$COMMAND" != "clone" ] ; then
+                cd "$DIR"
+            else
+                cd "$CLONEDIR"
+            fi
 
             # relativize the absolutized params again if we want to operate
             # only on the files belonging to this exact repo
@@ -138,7 +142,7 @@ for D in $DIRS ; do
                 PWD=`pwd`
                 PWDLEN=`pwd | wc -c`
                 for I in "${FILES[@]}" ; do
-                    I="${I//@REPO@/${DIR}}"
+                    I="${I//@REPO@/${REPO}}"
                     unset FILES[$FILESNUM]
                     FILESNUM=$(($FILESNUM+1))
                     # filter out files that don't belong to this repo
@@ -183,9 +187,7 @@ for D in $DIRS ; do
                     fi
                     ;;
                 clone)
-                    if [ -z "$FILES" ]; then
-                        EXTRA="$(git config remote.origin.url|sed 's|/[^/]\+$||')/${DIR}"
-                    fi
+                    EXTRA="$(git config remote.origin.url|sed 's|/[^/]\+$||')/${REPO}"
                     ;;
             esac
 
@@ -211,7 +213,7 @@ for D in $DIRS ; do
                     for link in `ls` ; do
                         if [ ! -e "$RAWBUILDDIR/$link" ] ; then
                             echo "Creating missing link $link"
-                            ln -s "$CLONEDIR/$DIR/$link" "$RAWBUILDDIR/$link"
+                            ln -s "$DIR/$link" "$RAWBUILDDIR/$link"
                         fi
                     done
                     ;;
