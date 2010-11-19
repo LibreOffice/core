@@ -96,6 +96,7 @@ namespace
         if ( aEndMark && ( ch_end != aEndMark ) )
         {
             io_pDoc->InsertString(aEndPaM, aEndMark);
+            rEnd.nContent++;
         }
         io_pDoc->EndUndo(UNDO_UI_REPLACE, NULL);
     };
@@ -119,7 +120,7 @@ namespace sw { namespace mark
 
     bool MarkBase::IsCoveringPosition(const SwPosition& rPos) const
     {
-        return GetMarkStart() <= rPos && rPos <= GetMarkEnd();
+        return GetMarkStart() <= rPos && rPos < GetMarkEnd();
     }
 
     void MarkBase::SetMarkPos(const SwPosition& rNewPos)

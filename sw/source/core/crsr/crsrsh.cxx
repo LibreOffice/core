@@ -2961,26 +2961,17 @@ void SwCrsrShell::SetReadOnlyAvailable( BOOL bFlag )
 BOOL SwCrsrShell::HasReadonlySel() const
 {
     BOOL bRet = FALSE;
-    if( IsReadOnlyAvailable() ||
-        // --> FME 2004-06-29 #114856# Formular view
-        GetViewOptions()->IsFormView() )
-        // <--
+    if( IsReadOnlyAvailable() || GetViewOptions()->IsFormView() )
     {
         if( pTblCrsr )
             bRet = pTblCrsr->HasReadOnlyBoxSel() ||
-                   pTblCrsr->HasReadonlySel(
-                            // --> FME 2004-06-29 #114856# Formular view
-                            GetViewOptions()->IsFormView() );
-                            // <--
+                   pTblCrsr->HasReadonlySel( GetViewOptions()->IsFormView() );
         else
         {
             const SwPaM* pCrsr = pCurCrsr;
 
             do {
-                if( pCrsr->HasReadonlySel(
-                        // --> FME 2004-06-29 #114856# Formular view
-                        GetViewOptions()->IsFormView() ) )
-                        // <--
+                if( pCrsr->HasReadonlySel( GetViewOptions()->IsFormView() ) )
                     bRet = TRUE;
             } while( !bRet && pCurCrsr != ( pCrsr = (SwPaM*)pCrsr->GetNext() ));
         }
