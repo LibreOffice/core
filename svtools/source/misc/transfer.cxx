@@ -2376,7 +2376,7 @@ sal_Bool TransferableDataHelper::IsEqual( const ::com::sun::star::datatransfer::
                     if( xRequestType1->getFullMediaType().equalsIgnoreAsciiCase( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "text/plain" )) ) )
                     {
                         // special handling for text/plain media types
-                        const ::rtl::OUString aCharsetString(( RTL_CONSTASCII_USTRINGPARAM( "charset" ));
+                        const ::rtl::OUString aCharsetString(RTL_CONSTASCII_USTRINGPARAM( "charset" ));
 
                         if( !xRequestType2->hasParameter( aCharsetString ) ||
                             xRequestType2->getParameterValue( aCharsetString ).equalsIgnoreAsciiCase( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "utf-16" )) ) ||
