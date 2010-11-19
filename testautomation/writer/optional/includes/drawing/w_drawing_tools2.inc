@@ -53,7 +53,7 @@ end sub
 
 '-------------------------------------------------------------------------
 
-testcase  tGroup_1
+testcase tGroup_1
 
     PrintLog "- Generate a objects group via menu Format/Group/Group"
 
@@ -80,7 +80,7 @@ endcase
 
 '-------------------------------------------------------------------------
 
-testcase  tGroup_2
+testcase tGroup_2
 
     PrintLog "- Generate a objects group via contextmenu Format/Group/Group"
 
@@ -109,7 +109,7 @@ endcase
 
 '-------------------------------------------------------------------------
 
-testcase  tGroup_3
+testcase tGroup_3
 
     PrintLog "- Menu entries may not be enabled if less then two objects are selected."
 
@@ -138,7 +138,7 @@ endcase
 
 '-------------------------------------------------------------------------
 
-testcase  tGroup_4
+testcase tGroup_4
 
     Dim sGroupName as String
 
@@ -193,7 +193,7 @@ endcase
 
 '-------------------------------------------------------------------------
 
-testcase  tGroup_5
+testcase tGroup_5
 
     Dim sGroupName as String
 
@@ -248,7 +248,7 @@ endcase
 
 '-------------------------------------------------------------------------
 
-testcase  tGroup_6
+testcase tGroup_6
 
     Dim sPositionX1 as String
     Dim sPositionY1 as String
@@ -283,7 +283,7 @@ testcase  tGroup_6
     Sleep 2
     Call gMouseClick(80,80)
 
-    Call wObjektSelektieren ( 28, 28, 70, 80 )
+    Call wObjektSelektieren ( 31, 31, 70, 80 )
     Sleep 2
     FormatGroupGroup
     Sleep 1
@@ -317,7 +317,7 @@ endcase
 
 '-------------------------------------------------------------------------
 
-testcase  tGroup_7
+testcase tGroup_7
 
     Dim sPositionX1 as String
     Dim sPositionY1 as String
@@ -351,7 +351,7 @@ testcase  tGroup_7
     Sleep 2
     Call gMouseClick(80,80)
     
-    Call wObjektSelektieren ( 28, 28, 70, 80 )
+    Call wObjektSelektieren ( 31, 31, 70, 80 )
     Sleep 2
     FormatGroupGroup
     Sleep 1
@@ -388,7 +388,7 @@ endcase
 
 '-------------------------------------------------------------------------
 
-testcase  tGroup_8
+testcase tGroup_8
 
     Dim sPositionX as String
     Dim sPositionY as String
@@ -445,7 +445,7 @@ endcase
 
 '-------------------------------------------------------------------------
 
-testcase  tGroup_9
+testcase tGroup_9
 
     Dim sPositionX as String
     Dim sPositionY as String
@@ -507,7 +507,7 @@ endcase
 
 '-------------------------------------------------------------------------
 
-testcase  tGroup_10
+testcase tGroup_10
 
     PrintLog "- create new objects inside the group ,"
     PrintLog "  Undo new created objects before leaving the group"
@@ -554,7 +554,7 @@ endcase
 
 '-------------------------------------------------------------------------
 
-testcase  tGroup_11
+testcase tGroup_11
 
     PrintLog "- create new objects inside the group ,"
     PrintLog "  Undo new created objects after leaving the group"
@@ -603,7 +603,7 @@ endcase
 
 '-------------------------------------------------------------------------
 
-testcase  tGroup_12
+testcase tGroup_12
 
     Dim sDocument as String
 
@@ -636,8 +636,8 @@ testcase  tGroup_12
     Call hCloseDocument
     
       PrintLog "- Open previous saved document "
-    Call hFileOpen (sDocument)
-    Call sMakeReadOnlyDocumentEditable
+    Call hFileOpen( sDocument)
+    
     Kontext "DocumentWriter"
     Call gMouseClick(34,34)    'set focus in the group
     
@@ -655,7 +655,7 @@ endcase
 
 '-------------------------------------------------------------------------
 
-testcase  tEncapsulatedGroup_1
+testcase tEncapsulatedGroup_1
 
     PrintLog "- Group objects inside the group ,Encapsulated Group"
     
@@ -667,7 +667,7 @@ testcase  tEncapsulatedGroup_1
     Sleep 1
     Call wZeichenobjektEinfuegen("ELLIPSE",  40, 45, 60, 70, false)
     Sleep 1
-    Call wObjektSelektieren ( 28, 28, 70, 80 )
+    Call wObjektSelektieren ( 31, 31, 70, 80 )
     Sleep 1
     
     FormatGroupGroup
@@ -677,20 +677,37 @@ testcase  tEncapsulatedGroup_1
     
       PrintLog "- insert 2 drawing objects (rectangle and ellipse) in the group"
     Call wZeichenobjektEinfuegen("RECHTECK", 35, 40, 38, 45, false)
-    Call wZeichenobjektEinfuegen("ELLIPSE",  52, 40, 78, 45, false)
-    Call wObjektSelektieren ( 28, 38, 80, 48 )
+    Call wZeichenobjektEinfuegen("ELLIPSE",  40, 40, 58, 45, false, true)
+    Call wObjektSelektieren ( 31, 31, 80, 80 )
+
+    Sleep 1
     
+    PrintLog "- generate a new group"
     try
-          PrintLog "- generate a new group"
         FormatGroupGroup
-          PrintLog "- edit the new group"
+    catch
+        Warnlog "Unable to execute Format / Group"
+    endcatch
+
+    PrintLog "- edit the new group"
+    try
         FormatGroupEditGroup
-          PrintLog "- leave the new group"
+    catch
+        Warnlog "Unable to execute Group / Enter Group"
+    endcatch
+
+    PrintLog "- leave the new group"
+    try
         FormatGroupExitGroup
-          PrintLog "- Undo the new group"
+    catch
+        Warnlog "Unable to exceute Format / Exit Group"
+    endcatch
+
+    PrintLog "- Undo the new group"
+    try
         FormatGroupUnGroup
     catch
-        Warnlog "Something wrong where operating the Encapsulated group!"
+        Warnlog "Unable to execute Format / Ungroup"
     endcatch
     
     Call hCloseDocument

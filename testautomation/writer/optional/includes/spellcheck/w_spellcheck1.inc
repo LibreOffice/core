@@ -50,7 +50,7 @@ DIM WordLanguageTemp    AS string 'variable for checking if Office language is a
 
     '///Load test document///
     call hFileOpen (ConvertPath ( gTesttoolPath + "writer\optional\input\spellcheck\Language_Guessing_Sample_Texts.odt"))      'loading Test-Doc
-    Call sMakeReadOnlyDocumentEditable
+    
     sleep(5)
     '----------------------------------------------------------------
     '///Enable auto spellcheck///

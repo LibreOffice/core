@@ -32,6 +32,9 @@
 '\******************************************************************************
 testcase tPNG
 
+    warnlog( "#i115138 - Loading test document freezes the office" )
+    goto endsub
+
     dim x as integer
     dim i as integer
     dim iWaitIndex as integer
@@ -72,6 +75,10 @@ endcase 'tPNG
 
 '-------------------------------------------------------------------------------
 testcase tSVM
+
+    warnlog( "#i115138 - Loading test document freezes the office" )
+    goto endsub
+
 
     dim x as integer
     dim i as integer
@@ -238,176 +245,136 @@ endcase 'tSVM
 '-------------------------------------------------------------------------------
 testcase tPDF
 
+    warnlog( "#i115138 - Loading test document freezes the office" )
+    goto endsub
+
+
     dim sPath as string
     dim sTemp as string
     dim iFileSize(12) as long
     dim i as integer
 
-    '/// Export the file 12 times: ///'
-    '///+ every compression level (3) and every range (3), check if button in toolbar uses last settings (6) (-> 12) ///'
+    printlog "Export the file 12 times: "
+    printlog "every compression level (3) and every range (3), check if button in toolbar uses last settings (6) (-> 12) "
     hFileOpen (ConvertPath ( gTesttoolPath + "graphics\required\input\graphicexport_pdf."+ExtensionString ))
     sleep (10)
 
     '---------------------------------------------------------------------------------------------------------------------------------------------------------
-    '###### all / Screen optimized ######
-    '/// File->Export as PDF document
     printlog "File->Export as PDF document"
-    '///+ range = All
     printlog " range = All"
-    '///+ compression = Screen optimized
     printlog " compression = Screen optimized"
-
     kontext "Standardbar"
     checkexppdfwaitmax10sec
 
-    '---------------------------------------------------------   Output the first file ---------------------------------------------------------------
+    printlog "-------------------   Output the first file ---------------------"
 
     hExportAsPDFmulti (3, TRUE, OutputGrafikTBO + 1, TRUE, FALSE, 1, 1)
-    '/// Export using Button in toolbar
     printlog "Export using Button in toolbar"
-    '///+ use the settings from the export before
     printlog " use the settings from the export before"
-
     kontext "Standardbar"
     checkexppdfwaitmax10sec
 
-    '-------------------------------------------------------   Output the second file -------------------------------------------------------------
+    printlog "---------------------   Output the second file -------------------"
 
     hExportAsPDFmulti (1, TRUE, OutputGrafikTBO + 2, TRUE, FALSE, 1, 1) ' button in toolbar -> last settings have to be used
 
-    '###### range / Screen optimized ######
-    '/// File->Export as PDF document
+   
     printlog "File->Export as PDF document"
-    '///+ range = Range
     printlog " range = Range"
-    '///+ compression = Screen optimized
     printlog " compression = Screen optimized"
-
     kontext "Standardbar"
     checkexppdfwaitmax10sec
 
-    '---------------------------------------------------------  Output the third file  ---------------------------------------------------------------
+    printlog "----------------  Output the third file  --------------------"
 
     hExportAsPDFmulti (3, TRUE, OutputGrafikTBO + 3, TRUE, FALSE, 2, 1, "2")
 
-    '/// Export using Button in toolbar
     printlog "Export using Button in toolbar"
-    '///+ use the settings from the export before
     printlog " use the settings from the export before"
-
     kontext "Standardbar"
     checkexppdfwaitmax10sec
 
-    '---------------------------------------------------------  Output the fourth file  -------------------------------------------------------------
+    printlog "----------------------  Output the fourth file  -----------------"
 
     hExportAsPDFmulti (1, TRUE, OutputGrafikTBO + 4, TRUE, FALSE, 2, 1) ' button in toolbar -> last settings have to be used
 
-    '###### all / Print optimized ######
-    '/// File->Export as PDF document
     printlog "File->Export as PDF document"
-    '///+ range = all
     printlog " range = all"
-    '///+ compression = Print optimized
     printlog " compression = Print optimized"
-
     kontext "Standardbar"
     checkexppdfwaitmax10sec
 
-    '------------------------------------------------------------  Output the fifth file  --------------------------------------------------------------
+    printlog "-----------------------------  Output the fifth file  ------------"
 
     hExportAsPDFmulti (3, TRUE, OutputGrafikTBO + 5, TRUE, FALSE, 1, 2)
 
-    '/// Export using Button in toolbar
     printlog "Export using Button in toolbar"
-    '///+ use the settings from the export before
     printlog " use the settings from the export before"
-
     kontext "Standardbar"
     checkexppdfwaitmax10sec
 
-    '-----------------------------------------------------------  Output the sixth file  ---------------------------------------------------------------
+    printlog "----------------------  Output the sixth file  -------------------"
 
     hExportAsPDFmulti (1, TRUE, OutputGrafikTBO + 6, TRUE, FALSE, 1, 2) ' button in toolbar -> last settings have to be used
 
-    '###### range / Print optimized ######
-    '/// File->Export as PDF document
     printlog "File->Export as PDF document"
-    '///+ range = Range
     printlog " range = Range"
-    '///+ compression = Screen optimized
     printlog " compression = Screen optimized"
-
     kontext "Standardbar"
     checkexppdfwaitmax10sec
 
-    '---------------------------------------------------------  Output the seventh file  -------------------------------------------------------------
+    printlog "------------------  Output the seventh file  ---------------------"
 
     hExportAsPDFmulti (3, TRUE, OutputGrafikTBO + 7, TRUE, FALSE, 2, 2, "2")
 
-    '/// Export using Button in toolbar
     printlog "Export using Button in toolbar"
-'    '///+ use the settings from the export before
     printlog " use the settings from the export before"
-
     kontext "Standardbar"
     checkexppdfwaitmax10sec
 
-    '------------------------------------------------------------  Output the eight file  ----------------------------------------------------------------
+    printlog "----------------------  Output the eight file  -------------------"
 
     hExportAsPDFmulti (1, TRUE, OutputGrafikTBO + 8, TRUE, FALSE, 2, 2) ' button in toolbar -> last settings have to be used
 
-    '###### all / Press optimized ######
-    '/// File->Export as PDF document ///'
-    printlog "File->Export as PDF document ///'"
-    '///+ range = all
+    printlog "File->Export as PDF document"
     printlog " range = all"
-    '///+ compression = Press optimized
     printlog " compression = Press optimized"
-
     kontext "Standardbar"
     checkexppdfwaitmax10sec
 
-    '------------------------------------------------------------  Output the ninth file  ----------------------------------------------------------------
+    printlog "-------------------  Output the ninth file  ----------------------"
 
     hExportAsPDFmulti (3, TRUE, OutputGrafikTBO + 9, TRUE, FALSE, 1, 3)
-    '/// Export using Button in toolbar
-    '///+ use the settings from the export before
-
+    printlog "Export using Button in toolbar"
+    printlog "use the settings from the export before"
     kontext "Standardbar"
     checkexppdfwaitmax10sec
 
-    '------------------------------------------------------------  Output the tenth file  ----------------------------------------------------------------
+    printlog "-------------------------  Output the tenth file  ----------------"
 
     hExportAsPDFmulti (1, TRUE, OutputGrafikTBO + 10, TRUE, FALSE, 1, 3) ' button in toolbar -> last settings have to be used
 
-    '###### range / Press optimized ######
-    '/// File->Export as PDF document ///'
-    printlog "File->Export as PDF document ///'"
-    '///+ range = all
+    printlog "File->Export as PDF document"
     printlog " range = all"
-    '///+ compression = Press optimized
     printlog " compression = Press optimized"
-
     kontext "Standardbar"
     checkexppdfwaitmax10sec
 
-    '-----------------------------------------------------------  Output the eleventh file  -------------------------------------------------------------
+    printlog "-----------------  Output the eleventh file  ---------------------"
 
     hExportAsPDFmulti (3, TRUE, OutputGrafikTBO + 11, TRUE, FALSE, 2, 3, "2")
-    '/// Export using Button in toolbar
-    '///+ use the settings from the export before
-
+    printlog "Export using Button in toolbar"
+    printlog "use the settings from the export before"
     kontext "Standardbar"
     checkexppdfwaitmax10sec
 
-    '-------------------------------------------------------------  Output the twelfth file  --------------------------------------------------------------
+    printlog "------------------  Output the twelfth file  ---------------------"
 
     hExportAsPDFmulti (1, TRUE, OutputGrafikTBO + 12, TRUE, FALSE, 2, 3) ' button in toolbar -> last settings have to be used
-
     kontext "Standardbar"
     checkexppdfwaitmax10sec
 
-    '-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+    '---------------------------------------------------------------------------
 
     for i=1 to 12
         sPath = OutputGrafikTBO
@@ -416,12 +383,12 @@ testcase tPDF
         Printlog (" - " + i + ": " + " " + iFileSize(i) + " " + sPath
         if (dir(sPath) <> "") then
             sleep(1)
-            '/// the first line has to be '%PDF-1.4' ///'
+            printlog " the first line has to be %PDF-1.4"
             sTemp = fGetFileText(sPath, 8)
             if (sTemp <> "%PDF-1.4") then
                 Warnlog "File doesn't start with '%PDF-1.4' it is: '" + sTemp + "'"
             endif
-            '/// the last line has to be '%%EOF' ///'
+            printlog "the last line has to be '%%EOF' "
             sTemp = left(fGetFileText(sPath, -6),5)
             if (sTemp <> "%%EOF") then
                 Warnlog "File doesn't end with '%%EOF' it is: '" + sTemp + "'"
@@ -431,24 +398,20 @@ testcase tPDF
         endif
     next i
 
-    ' Check if the file size is the same when exporting via toolbar and file/export
-    ' if the size different then the options are not used when exporting via the toolbar
+    printlog "Check if the file size is the same when exporting via toolbar and file/export"
+    printlog "if the size is different then the options are not used when exporting via the toolbar"
     if (iFileSize(1) <> iFileSize(2)) then
         qaerrorlog "i100919: pdf export: different file size when exporting with file/export or button"
         'Warnlog ("Diffrence in filesize for file 1 and 2")
     endif
-    ' print optimized
     if (iFileSize(5) <> iFileSize(6)) then
         qaerrorlog "i100919: pdf export: different file size when exporting with file/export or button"
         'Warnlog ("Difference in filesize for file 5 and 6")
     endif
-    ' press optimized
     if (iFileSize(9) <> iFileSize(10)) then
         qaerrorlog "i100919: pdf export: different file size when exporting with file/export or button"
         'Warnlog ("Difference in filesize for file 9 and 10")
     endif
-
-    
 
     if (iFileSize(1) > iFileSize(5)) then
     qaerrorlog "i100919: pdf export: different file size when exporting with file/export or button"
@@ -589,6 +552,9 @@ endcase 'tPDF_Creator
 '-------------------------------------------------------------------------------
 testcase tSVG
 
+    warnlog( "#i115138 - Loading test document freezes the office" )
+    goto endsub
+
     dim x as integer
     dim i as integer
     dim sFilter as string
@@ -653,6 +619,9 @@ endcase 'tSVG
 
 '-------------------------------------------------------------------------------
 testcase tBMP
+
+    warnlog( "#i115138 - Loading test document freezes the office" )
+    goto endsub
 
    dim x as integer
    dim i as integer
@@ -821,6 +790,9 @@ endcase 'tBMP
 '-------------------------------------------------------------------------------
 testcase tEMF
 
+    warnlog( "#i115138 - Loading test document freezes the office" )
+    goto endsub
+
     dim x as integer
     dim i as integer
     dim sFilter as string
@@ -951,6 +923,9 @@ endcase 'tEMF
 
 '-------------------------------------------------------------------------------
 testcase tMET
+
+    warnlog( "#i115138 - Loading test document freezes the office" )
+    goto endsub
 
     dim x as integer
     dim i as integer
@@ -1145,6 +1120,9 @@ endcase 'tMET
 '-------------------------------------------------------------------------------
 testcase tSWF
 
+    warnlog( "#i115138 - Loading test document freezes the office" )
+    goto endsub
+
     dim sFilter as string
     dim sExt as string
     dim x as integer
@@ -1169,6 +1147,9 @@ endcase 'tSWF
 
 '------------------------------------------------------------------------------
 testcase tWMF
+
+    warnlog( "#i115138 - Loading test document freezes the office" )
+    goto endsub
 
     dim x as integer
     dim i as integer
@@ -1328,31 +1309,31 @@ endcase 'tWMF
 '-------------------------------------------------------------------------
 
 function fGetFileText (sFilename as string, iCount as long) as string
-'/// This function is for getting  the first or last n characters of a file
-'///+<u>Input</u>:<ul><li>filename</li><li>number</li></ul>If the number greater 0 then get n characters from start.
-'///+A number smaller 0 get from end of file.
-'///+<u>Output</u>:<ul><li>string with <b><i>n</i></b> characters</li></ul>
+    printlog "This function is for getting  the first or last n characters of a file"
+    printlog "Input:filename number If the number greater 0 then get n characters from start."
+    printlog "number smaller 0 get from end of file."
+    printlog "Output:string with characters"
 
-   dim iFile as integer ' filehandle
-   dim iTem as integer  ' get 2 bytes of the file
-   dim iTemByte(2) as integer ' move 1 byte from iTem in each item
-   dim sTemp as string   ' string of file
-   dim iSize as long  ' size in bytes of file
-   dim i as long      ' runner :-)
+    dim iFile as integer ' filehandle
+    dim iTem as integer  ' get 2 bytes of the file
+    dim iTemByte(2) as integer ' move 1 byte from iTem in each item
+    dim sTemp as string   ' string of file
+    dim iSize as long  ' size in bytes of file
+    dim i as long      ' runner :-)
 
-   iFile = FreeFile
-'   Printlog "FreeFile: " + iFile
-   if (dir (sFilename) <> "") then
-'      Printlog "FileLen: " + FileLen(sFile)
-      Open sFilename For binary access read shared As #iFile
-'      Printlog "Loc: " + Loc(#iFile)  ' LONG! where am i in the file?
+    iFile = FreeFile
+    Printlog "FreeFile: " + iFile
+    if (dir (sFilename) <> "") then
+        Printlog "FileLen: " + FileLen(sFile)
+        Open sFilename For binary access read shared As #iFile
+        Printlog "Loc: " + Loc(#iFile)  ' LONG! where am i in the file?
 
-      iSize = Lof(#iFile) ' get size in bytes of file
-      if (iSize > 65530) then '65536 = 64kB
-         'Warnlog "fGetFileText: file '" + sFilename + "' might get problems on reading it? size is > 65530 Byte: '" + iSize + "'"
-      else
-'         printlog "iSize: " + iSize
-      endif
+        iSize = Lof(#iFile) ' get size in bytes of file
+            if (iSize > 65530) then '65536 = 64kB
+                'Warnlog "fGetFileText: file '" + sFilename + "' might get problems on reading it? size is > 65530 Byte: '" + iSize + "'"
+            else
+                printlog "iSize: " + iSize
+            endif
 
       sTemp = ""
       if (iCount >= 0) then   ' get bytes from file start
@@ -1377,7 +1358,7 @@ function fGetFileText (sFilename as string, iCount as long) as string
             sTemp = chr(iTemByte(1)) + chr(iTemByte(2)) + sTemp  ' put them together
          endif
        endif
-'      printlog "'"+left(sTemp,iSize)+"'"  ' gotcha!
+      printlog "'"+left(sTemp,iSize)+"'"  ' gotcha!
 
       if (iSize-(Abs(iCount)) >= 0) then
          fGetFileText = left(sTemp,Abs(iCount))

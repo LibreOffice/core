@@ -365,8 +365,9 @@ testcase tdFormatConnector
 
     WaitSlot (1000)
     hTypeKeys "<SHIFT F10>"   'OpenContextMenu(true)
-    sleep (3)
+    sleep (2)
     hMenuSelectNr(2)  ' Connector
+    sleep (1)
     Kontext "Verbinder"
         Typ.Select 2 ' the one with 2 from 3 posibilities to set a value...
    Sleep (1)

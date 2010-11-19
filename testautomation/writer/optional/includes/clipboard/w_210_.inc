@@ -225,7 +225,7 @@ testcase WriterToWriterFrame
             printlog " + Close saved document "
             Call hCloseDocument
             printlog " + Reopen saved document "
-            Call hFileOpen (gOfficepath + "user\work\writer_to_writer_frame.odt",false)
+            hFileOpen( gOfficepath + "user\work\writer_to_writer_frame.odt",false)
             printlog " + Close saved document "
             Call hCloseDocument
         else
@@ -267,7 +267,7 @@ testcase WriterToWriterDrawingObject
             printlog " + Close saved document "
             Call hCloseDocument
             printlog " + Reopen saved document "
-            Call hFileOpen (gOfficepath + "user\work\writer_to_writer_draw.odt",false)
+            hFileOpen( gOfficepath + "user\work\writer_to_writer_draw.odt",false)
             printlog " + Close saved document "
             Call hCloseDocument
         else
@@ -309,7 +309,7 @@ testcase WriterToWriterGraphicLinked
             printlog " + Close saved document "
             Call hCloseDocument
             printlog " + Reopen saved document "
-            Call hFileOpen (gOfficepath + "user\work\writer_to_writer_graphic1.odt",false)
+            hFileOpen( gOfficepath + "user\work\writer_to_writer_graphic1.odt",false)
             printlog " + Close saved document "
             Call hCloseDocument
         else
@@ -351,7 +351,7 @@ testcase WriterToWriterGraphicEmbedded
             printlog " + Close saved document "
             Call hCloseDocument
             printlog " + Reopen saved document "
-            Call hFileOpen (gOfficepath + "user\work\writer_to_writer_graphic2.odt",false)
+            hFileOpen( gOfficepath + "user\work\writer_to_writer_graphic2.odt",false)
             printlog " + Close saved document "
             Call hCloseDocument
         else
@@ -393,7 +393,7 @@ testcase WriterToWriterOLEObject
             printlog " + Close saved document "
             Call hCloseDocument
             printlog " + Reopen saved document "
-            Call hFileOpen (gOfficepath + "user\work\writer_to_writer_ole.odt",false)
+            hFileOpen( gOfficepath + "user\work\writer_to_writer_ole.odt",false)
             printlog " + Close saved document "
             Call hCloseDocument
         else
@@ -435,7 +435,7 @@ testcase WriterToWriterControl
             printlog " + Close saved document "
             Call hCloseDocument
             printlog " + Reopen saved document "
-            Call hFileOpen (gOfficepath + "user\work\writer_to_writer_control.odt",false)
+            hFileOpen( gOfficepath + "user\work\writer_to_writer_control.odt",false)
             printlog " + Close saved document "
             Call hCloseDocument
         else

@@ -177,6 +177,8 @@ endcase
 
 testcase tPickGraphic
 
+    Warnlog "#i115132#Missing .uno Slots in context menus"
+    goto endsub
 	printlog "Open context menu on not focussed graphic"
 	Call hNewDocument
 	Printlog "   Set zoom to 100%"
@@ -187,13 +189,13 @@ testcase tPickGraphic
 	Call wTypeKeys "<Escape>"
 	Call wTypeKeys "Don't be afraid !"
 
-	Call DocumentWriter.MouseMove 50,30
+	Call gMouseClick ( 50,30 )
 	Printlog "   Open context menu upon graphic with mouse"
 	Call wOpenContextMenu(true)
 
 	printlog "   Select 'ImageMap' in context menu"
 	try
-            CALL hMenuFindSelect (".uno:ImageMapDialog", true, 9, true)   'Find "ImageMap" and call the slot.
+            CALL hMenuFindSelect (".uno:ImageMapDialog", true, 11, true)   'Find "ImageMap" and call the slot.
             wait 500
 	catch
             Warnlog "Unable to open context menu"
@@ -245,13 +247,13 @@ testcase tPickHyperlink
     printlog "   Empty clipboard"
 	SetClipBoard = ""
     printlog "   Insert a hyperlink in document"
-	Call wTypeKeys "www.sun.com"
+	Call wTypeKeys "www.oracle.com"
 	Call wTypeKeys " "
 	Call wTypeKeys "<HOME>"
     printlog "   Open context menu on hyperlink"
         Call wTypeKeys "<SHIFT F10>"
     printlog "   Last entry in menu has to be 'Open hyperlink' ...."
-        CALL hMenuFindSelect (10955, true, 17, true)   'Find "Hyperlink-dialog" and call the slot.
+        CALL hMenuFindSelect (10955, false, 17, true)   'Find "Hyperlink-dialog" and call the slot.
     kontext "TabHyperlinkInternet"
     if TabHyperlinkInternet.Exists(3) then
         Warnlog "Hyperlink-Dialog opened!"
@@ -265,6 +267,9 @@ endcase
 
 testcase tHyperlinkEdit
 
+    Warnlog "#i115132#Missing .uno Slots in context menus"
+    goto endsub
+
     printlog "Context menu on hyperlinks"
     printlog "   Open a new text document"
 	CALL hNewDocument
@@ -277,19 +282,19 @@ testcase tHyperlinkEdit
 	Call wTypeKeys " "
 	Call wTypeKeys "<HOME>"
     printlog "   Open context menu on hyperlink"
-        Call wTypeKeys "<SHIFT F10>"
+    Call wTypeKeys "<SHIFT F10>"
 
     printlog "   Open contextmenu, find the entry 'Edit Hyperlink', and call the slot..."
-        CALL hMenuFindSelect (21835, true, 18, true)   'Find "Edit Hyperlink" and call the slot.
+    CALL hMenuFindSelect (21835, true, 18, true)   'Find "Edit Hyperlink" and call the slot.
     printlog "   Check if the Hyperlink-dialogue comes up correctly."
-        kontext "TabHyperlinkInternet"
-        if NOT TabHyperlinkInternet.Exists(3) then
-            Warnlog "No Hyperlink-Dialog visible!"
+    kontext "HyperlinkDialog"
+    if NOT HyperlinkDialog.Exists(3) then
+        Warnlog "No Hyperlink-Dialog visible!"
 	else
-	    TabHyperlinkInternet.Close
-        end if
+	    HyperlinkDialog.Close
+    end if
     printlog "   Close text document"
-        CALL hCloseDocument
+    CALL hCloseDocument
 endcase
 
 ' -----------------------------------------------------------------------------
@@ -386,6 +391,9 @@ endcase
 ' -----------------------------------------------------------------------------
 
 testcase tPickDrawingObjects
+
+    Warnlog "#i115132#Missing .uno Slots in context menus"
+    goto endsub
 
     printlog "Context menu on drawing objects"
     printlog "   Open a new text document"
