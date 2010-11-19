@@ -744,7 +744,7 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( Window* pParent, const SfxIt
     aModuleButton.SetClickHdl( LINK( this, SfxAcceleratorConfigPage, RadioHdl  ));
 
     // initialize Entriesbox
-    aEntriesBox.SetWindowBits(WB_HSCROLL|WB_CLIPCHILDREN);
+    aEntriesBox.SetStyle(aEntriesBox.GetStyle()|WB_HSCROLL|WB_CLIPCHILDREN);
     aEntriesBox.SetSelectionMode(SINGLE_SELECTION);
     aEntriesBox.SetTabs(&AccCfgTabs[0], MAP_APPFONT);
     aEntriesBox.Resize(); // OS: Hack for right selection
@@ -768,7 +768,7 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( Window* pParent, const SfxIt
     pGroupLBox->SetFunctionListBox(pFunctionBox);
 
     // initialize KeyBox
-    aKeyBox.SetWindowBits(WB_CLIPCHILDREN|WB_HSCROLL|WB_SORT);
+    aKeyBox.SetStyle(aKeyBox.GetStyle()|WB_CLIPCHILDREN|WB_HSCROLL|WB_SORT);
 }
 
 //-----------------------------------------------
@@ -1377,7 +1377,6 @@ void SfxAcceleratorConfigPage::StartFileDialog( WinBits nBits, const String& rTi
     m_pFileDlg = new sfx2::FileDialogHelper( nDialogType, 0 );
 
     m_pFileDlg->SetTitle( rTitle );
-//  m_pFileDlg->SetDialogHelpId( bSave ? HID_CONFIG_SAVE : HID_CONFIG_LOAD );
     m_pFileDlg->AddFilter( aFilterAllStr, DEFINE_CONST_UNICODE( FILEDIALOG_FILTER_ALL ) );
     m_pFileDlg->AddFilter( aFilterCfgStr, DEFINE_CONST_UNICODE( "*.cfg" ) );
 

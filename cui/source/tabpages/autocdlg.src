@@ -173,6 +173,7 @@ TabPage RID_OFAPAGE_AUTOFMT_APPLY
     };
     PushButton PB_EDIT
     {
+        HelpID = "cui:PushButton:RID_OFAPAGE_AUTOFMT_APPLY:PB_EDIT";
         Pos = MAP_APPFONT ( 6 , 162 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Edit..." ;
@@ -247,7 +248,7 @@ TabPage RID_OFAPAGE_AUTOFMT_APPLY
 
 ModalDialog RID_OFADLG_PRCNT_SET
 {
-    HelpID = SID_AUTOFORMAT ;
+    HelpID = CMD_SID_AUTOFORMAT ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 155 , 43 ) ;
@@ -273,6 +274,7 @@ ModalDialog RID_OFADLG_PRCNT_SET
     };
     MetricField ED_RIGHT_MARGIN
     {
+        HelpID = "cui:MetricField:RID_OFADLG_PRCNT_SET:ED_RIGHT_MARGIN";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 7 , 14 ) ;
         Size = MAP_APPFONT ( 31 , 12 ) ;
@@ -312,6 +314,7 @@ TabPage RID_OFAPAGE_AUTOCORR_REPLACE
     };
     Edit ED_SHORT
     {
+        HelpID = "cui:Edit:RID_OFAPAGE_AUTOCORR_REPLACE:ED_SHORT";
         Pos = MAP_APPFONT ( 7 , 13 ) ;
         Size = MAP_APPFONT ( 60 , 12 ) ;
         Border = TRUE ;
@@ -326,6 +329,7 @@ TabPage RID_OFAPAGE_AUTOCORR_REPLACE
     };
     Edit ED_REPLACE
     {
+        HelpID = "cui:Edit:RID_OFAPAGE_AUTOCORR_REPLACE:ED_REPLACE";
         Pos = MAP_APPFONT ( 71 , 13 ) ;
         Size = MAP_APPFONT ( 123 , 12 ) ;
         Border = TRUE ;
@@ -333,6 +337,7 @@ TabPage RID_OFAPAGE_AUTOCORR_REPLACE
     };
     CheckBox CB_TEXT_ONLY
     {
+        HelpID = "cui:CheckBox:RID_OFAPAGE_AUTOCORR_REPLACE:CB_TEXT_ONLY";
         Pos = MAP_APPFONT ( 140 , 3 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         TabStop = TRUE ;
@@ -340,6 +345,7 @@ TabPage RID_OFAPAGE_AUTOCORR_REPLACE
     };
     PushButton PB_NEW_REPLACE
     {
+        HelpID = "cui:PushButton:RID_OFAPAGE_AUTOCORR_REPLACE:PB_NEW_REPLACE";
         Pos = MAP_APPFONT ( 198 , 14 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
@@ -347,6 +353,7 @@ TabPage RID_OFAPAGE_AUTOCORR_REPLACE
     };
     PushButton PB_DELETE_REPLACE
     {
+        HelpID = "cui:PushButton:RID_OFAPAGE_AUTOCORR_REPLACE:PB_DELETE_REPLACE";
         Pos = MAP_APPFONT ( 198 , 32 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
@@ -385,6 +392,7 @@ TabPage RID_OFAPAGE_AUTOCORR_EXCEPT
     };
     Edit ED_ABBREV
     {
+        HelpID = "cui:Edit:RID_OFAPAGE_AUTOCORR_EXCEPT:ED_ABBREV";
         Pos = MAP_APPFONT ( 7 , 14 ) ;
         Size = MAP_APPFONT ( 123 , 12 ) ;
         TabStop = TRUE ;
@@ -392,6 +400,7 @@ TabPage RID_OFAPAGE_AUTOCORR_EXCEPT
     };
     ListBox LB_ABBREV
     {
+        HelpID = "cui:ListBox:RID_OFAPAGE_AUTOCORR_EXCEPT:LB_ABBREV";
         Pos = MAP_APPFONT ( 7 , 30 ) ;
         Size = MAP_APPFONT ( 123 , 58 ) ;
         TabStop = TRUE ;
@@ -401,6 +410,7 @@ TabPage RID_OFAPAGE_AUTOCORR_EXCEPT
     };
     PushButton PB_NEWABBREV
     {
+        HelpID = "cui:PushButton:RID_OFAPAGE_AUTOCORR_EXCEPT:PB_NEWABBREV";
         Pos = MAP_APPFONT ( 198 , 14 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
@@ -409,6 +419,7 @@ TabPage RID_OFAPAGE_AUTOCORR_EXCEPT
     };
     PushButton PB_DELABBREV
     {
+        HelpID = "cui:PushButton:RID_OFAPAGE_AUTOCORR_EXCEPT:PB_DELABBREV";
         Pos = MAP_APPFONT ( 198 , 31 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
@@ -417,6 +428,7 @@ TabPage RID_OFAPAGE_AUTOCORR_EXCEPT
     };
     CheckBox CB_AUTOABBREV
     {
+        HelpID = "cui:CheckBox:RID_OFAPAGE_AUTOCORR_EXCEPT:CB_AUTOABBREV";
         Pos = MAP_APPFONT ( 137 , 78 ) ;
         Size = MAP_APPFONT ( 111 , 10 ) ;
         Text [ en-US ] = "~AutoInclude";
@@ -431,6 +443,7 @@ TabPage RID_OFAPAGE_AUTOCORR_EXCEPT
     };
     Edit ED_DOUBLE_CAPS
     {
+        HelpID = "cui:Edit:RID_OFAPAGE_AUTOCORR_EXCEPT:ED_DOUBLE_CAPS";
         Pos = MAP_APPFONT ( 7 , 105 ) ;
         Size = MAP_APPFONT ( 123 , 12 ) ;
         TabStop = TRUE ;
@@ -438,6 +451,7 @@ TabPage RID_OFAPAGE_AUTOCORR_EXCEPT
     };
     ListBox LB_DOUBLE_CAPS
     {
+        HelpID = "cui:ListBox:RID_OFAPAGE_AUTOCORR_EXCEPT:LB_DOUBLE_CAPS";
         Pos = MAP_APPFONT ( 7 , 120 ) ;
         Size = MAP_APPFONT ( 123 , 59 ) ;
         TabStop = TRUE ;
@@ -447,6 +461,7 @@ TabPage RID_OFAPAGE_AUTOCORR_EXCEPT
     };
     PushButton PB_NEWDOUBLECAPS
     {
+        HelpID = "cui:PushButton:RID_OFAPAGE_AUTOCORR_EXCEPT:PB_NEWDOUBLECAPS";
         Pos = MAP_APPFONT ( 198 , 105 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Disable = TRUE ;
@@ -454,6 +469,7 @@ TabPage RID_OFAPAGE_AUTOCORR_EXCEPT
     };
     PushButton PB_DELDOUBLECAPS
     {
+        HelpID = "cui:PushButton:RID_OFAPAGE_AUTOCORR_EXCEPT:PB_DELDOUBLECAPS";
         Pos = MAP_APPFONT ( 198 , 122 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Disable = TRUE ;
@@ -461,6 +477,7 @@ TabPage RID_OFAPAGE_AUTOCORR_EXCEPT
     };
     CheckBox CB_AUTOCAPS
     {
+        HelpID = "cui:CheckBox:RID_OFAPAGE_AUTOCORR_EXCEPT:CB_AUTOCAPS";
         Pos = MAP_APPFONT ( 137 , 169 ) ;
         Size = MAP_APPFONT ( 111 , 10 ) ;
         Text [ en-US ] = "A~utoInclude";
@@ -509,8 +526,9 @@ TabPage RID_OFAPAGE_AUTOCORR_QUOTE
         Size = MAP_APPFONT ( 122 , 8 ) ;
         Text [ en-US ] = "Single quotes" ;
     };
-    Checkbox CB_SGL_TYPO
+    CheckBox CB_SGL_TYPO
     {
+            HelpId = "cui:CheckBox:RID_OFAPAGE_AUTOCORR_QUOTE:CB_SGL_TYPO";
         Pos = MAP_APPFONT ( 7 , 101 ) ;
         Size = MAP_APPFONT ( 86 , 10 ) ;
         Text [ en-US ] = "Repla~ce" ;
@@ -523,6 +541,7 @@ TabPage RID_OFAPAGE_AUTOCORR_QUOTE
     };
     PushButton PB_SGL_STARTQUOTE
     {
+        HelpID = "cui:PushButton:RID_OFAPAGE_AUTOCORR_QUOTE:PB_SGL_STARTQUOTE";
         Pos = MAP_APPFONT ( 10 , 125 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         Text = "\'" ;
@@ -541,6 +560,7 @@ TabPage RID_OFAPAGE_AUTOCORR_QUOTE
     };
     PushButton PB_SGL_ENDQUOTE
     {
+        HelpID = "cui:PushButton:RID_OFAPAGE_AUTOCORR_QUOTE:PB_SGL_ENDQUOTE";
         Pos = MAP_APPFONT ( 10 , 151 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         Text = "\'" ;
@@ -553,6 +573,7 @@ TabPage RID_OFAPAGE_AUTOCORR_QUOTE
     };
     PushButton PB_SGL_STD
     {
+        HelpID = "cui:PushButton:RID_OFAPAGE_AUTOCORR_QUOTE:PB_SGL_STD";
         Pos = MAP_APPFONT ( 7 , 167 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
@@ -566,6 +587,7 @@ TabPage RID_OFAPAGE_AUTOCORR_QUOTE
     };
     CheckBox CB_TYPO
     {
+        HelpID = "cui:CheckBox:RID_OFAPAGE_AUTOCORR_QUOTE:CB_TYPO";
         Pos = MAP_APPFONT ( 137 , 101 ) ;
         Size = MAP_APPFONT ( 86 , 10 ) ;
         TabStop = TRUE ;
@@ -579,6 +601,7 @@ TabPage RID_OFAPAGE_AUTOCORR_QUOTE
     };
     PushButton PB_STARTQUOTE
     {
+        HelpID = "cui:PushButton:RID_OFAPAGE_AUTOCORR_QUOTE:PB_STARTQUOTE";
         Pos = MAP_APPFONT ( 140 , 125 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         Text = "\"" ;
@@ -597,6 +620,7 @@ TabPage RID_OFAPAGE_AUTOCORR_QUOTE
     };
     PushButton PB_ENDQUOTE
     {
+        HelpID = "cui:PushButton:RID_OFAPAGE_AUTOCORR_QUOTE:PB_ENDQUOTE";
         Pos = MAP_APPFONT ( 140 , 151 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         Text = "\"" ;
@@ -609,6 +633,7 @@ TabPage RID_OFAPAGE_AUTOCORR_QUOTE
     };
     PushButton PB_DBL_STD
     {
+        HelpID = "cui:PushButton:RID_OFAPAGE_AUTOCORR_QUOTE:PB_DBL_STD";
         Pos = MAP_APPFONT ( 137 , 167 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
@@ -642,30 +667,35 @@ TabPage RID_OFAPAGE_AUTOCOMPLETE_OPTIONS
     Hide = TRUE ;
     CheckBox CB_ACTIV
     {
+        HelpID = "cui:CheckBox:RID_OFAPAGE_AUTOCOMPLETE_OPTIONS:CB_ACTIV";
         Pos = MAP_APPFONT( 4, 3 );
         Size = MAP_APPFONT( 116, 10 );
         Text [ en-US ] = "Enable word ~completion";
     };
     CheckBox CB_APPEND_SPACE
     {
+        HelpID = "cui:CheckBox:RID_OFAPAGE_AUTOCOMPLETE_OPTIONS:CB_APPEND_SPACE";
         Pos = MAP_APPFONT( 10, 17 );
         Size = MAP_APPFONT( 110, 10 );
         Text [ en-US ] = "~Append space";
     };
     CheckBox CB_AS_TIP
     {
+        HelpID = "cui:CheckBox:RID_OFAPAGE_AUTOCOMPLETE_OPTIONS:CB_AS_TIP";
         Pos = MAP_APPFONT( 10, 31 );
         Size = MAP_APPFONT( 110, 10 );
         Text [ en-US ] = "~Show as tip";
     };
     CheckBox CB_COLLECT
     {
+        HelpID = "cui:CheckBox:RID_OFAPAGE_AUTOCOMPLETE_OPTIONS:CB_COLLECT";
         Pos = MAP_APPFONT( 4, 45 );
         Size = MAP_APPFONT( 116, 10 );
         Text [ en-US ] = "C~ollect words";
     };
     CheckBox CB_REMOVE_LIST
     {
+        HelpID = "cui:CheckBox:RID_OFAPAGE_AUTOCOMPLETE_OPTIONS:CB_REMOVE_LIST";
         Pos = MAP_APPFONT( 10, 59 );
         Size = MAP_APPFONT( 110, 40 );
         WordBreak = TRUE;
@@ -679,6 +709,7 @@ TabPage RID_OFAPAGE_AUTOCOMPLETE_OPTIONS
     };
     ListBox DCB_EXPAND_KEY
     {
+        HelpID = "cui:ListBox:RID_OFAPAGE_AUTOCOMPLETE_OPTIONS:DCB_EXPAND_KEY";
         Pos = MAP_APPFONT( 4, 113 );
         Size = MAP_APPFONT( 116, 60 );
         TabStop = TRUE;
@@ -694,6 +725,7 @@ TabPage RID_OFAPAGE_AUTOCOMPLETE_OPTIONS
     };
     NumericField NF_MIN_WORDLEN
     {
+        HelpID = "cui:NumericField:RID_OFAPAGE_AUTOCOMPLETE_OPTIONS:NF_MIN_WORDLEN";
         Border = TRUE;
         Pos = MAP_APPFONT( 4, 140 );
         Size = MAP_APPFONT( 30, 12 );
@@ -716,6 +748,7 @@ TabPage RID_OFAPAGE_AUTOCOMPLETE_OPTIONS
     };
     NumericField NF_MAX_ENTRIES
     {
+        HelpID = "cui:NumericField:RID_OFAPAGE_AUTOCOMPLETE_OPTIONS:NF_MAX_ENTRIES";
         Border = TRUE;
         Pos = MAP_APPFONT( 4, 167 );
         Size = MAP_APPFONT( 30, 12 );
@@ -732,6 +765,7 @@ TabPage RID_OFAPAGE_AUTOCOMPLETE_OPTIONS
     };
     MultiListBox LB_ENTRIES
     {
+        HelpID = "cui:MultiListBox:RID_OFAPAGE_AUTOCOMPLETE_OPTIONS:LB_ENTRIES";
         Pos = MAP_APPFONT( 127, 3 );
         Size = MAP_APPFONT( 121, 158 );
         TabStop = TRUE;
@@ -742,6 +776,7 @@ TabPage RID_OFAPAGE_AUTOCOMPLETE_OPTIONS
     };
     PushButton PB_ENTRIES
     {
+        HelpID = "cui:PushButton:RID_OFAPAGE_AUTOCOMPLETE_OPTIONS:PB_ENTRIES";
         Pos = MAP_APPFONT( 127, 165 );
         Size = MAP_APPFONT( 121, 14 );
         TabStop = TRUE ;
@@ -767,6 +802,7 @@ TabPage RID_OFAPAGE_SMARTTAG_OPTIONS
 
     CheckBox CB_SMARTTAGS
     {
+        HelpID = "cui:CheckBox:RID_OFAPAGE_SMARTTAG_OPTIONS:CB_SMARTTAGS";
         Pos = MAP_APPFONT( 4, 3 );
         Size = MAP_APPFONT( 116, 10 );
         Text [ en-US ] = "Label text with smart tags";
@@ -789,6 +825,7 @@ TabPage RID_OFAPAGE_SMARTTAG_OPTIONS
 
     PushButton PB_SMARTTAGS
     {
+        HelpID = "cui:PushButton:RID_OFAPAGE_SMARTTAG_OPTIONS:PB_SMARTTAGS";
         Pos = MAP_APPFONT ( 188 , 25 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         Text [ en-US ] = "Properties...";

@@ -99,7 +99,7 @@ SFTreeListBox::SFTreeListBox( Window* pParent, const ResId& rResId ) :
     FreeResource();
     SetSelectionMode( SINGLE_SELECTION );
 
-    SetWindowBits( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL |
+    SetStyle( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL |
                    WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HIDESELECTION |
                    WB_HASLINES | WB_HASLINESATROOT );
     SetNodeDefaultImages();
