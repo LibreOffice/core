@@ -63,7 +63,4 @@ SHL1LIBS=       $(SLB)$/eggtray.lib
 
 # --- Targets ----------------------------------
 .ENDIF 		# L10N_framework
-.IF "$(OS)$(CPU)" == "LINUXX" && "$(LIBRARY_PATH)" != ""
-EXTRALIBPATHS+=-L$(LIBRARY_PATH)
-.ENDIF # "$(OS)$(CPU)" == "LINUXX"
 .INCLUDE : target.mk
