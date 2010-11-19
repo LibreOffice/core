@@ -312,7 +312,6 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
         case SID_INSERT_PLUGIN:
         case SID_INSERT_SOUND:
         case SID_INSERT_VIDEO:
-        case SID_INSERT_APPLET:
         case SID_INSERT_SMATH:
         case SID_INSERT_FLOATINGFRAME:
             FuInsertOLE(this, pWin, pView, pDrModel, rReq);
@@ -466,14 +465,6 @@ void ScTabViewShell::GetDrawInsState(SfxItemSet &rSet)
                  || !SvxPluginFileDlg::IsAvailable(nWhich)
                  */
                 if ( bOle || bTabProt || bShared )
-                    rSet.DisableItem( nWhich );
-                break;
-
-            case SID_INSERT_APPLET:
-                //  wenn SOLAR_JAVA nicht definiert ist, immer disablen
-#ifdef SOLAR_JAVA
-                if (bOle || bTabProt)
-#endif
                     rSet.DisableItem( nWhich );
                 break;
 

@@ -29,7 +29,7 @@
 ModelessDialog RID_SCDLG_SOLVER
 {
     OutputSize = TRUE ;
-    HelpId = SID_OPENDLG_SOLVE ;
+    HelpId = CMD_SID_OPENDLG_SOLVE ;
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 222 , 64 ) ;
@@ -44,6 +44,7 @@ ModelessDialog RID_SCDLG_SOLVER
     };
     Edit ED_FORMULACELL
     {
+        HelpID = "sc:Edit:RID_SCDLG_SOLVER:ED_FORMULACELL";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 64 , 14 ) ;
         Size = MAP_APPFONT ( 79 , 12 ) ;
@@ -51,6 +52,7 @@ ModelessDialog RID_SCDLG_SOLVER
     };
     ImageButton RB_FORMULACELL
     {
+        HelpID = "sc:ImageButton:RID_SCDLG_SOLVER:RB_FORMULACELL";
         Pos = MAP_APPFONT ( 145 , 13 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
@@ -64,6 +66,7 @@ ModelessDialog RID_SCDLG_SOLVER
     };
     Edit ED_TARGETVAL
     {
+        HelpID = "sc:Edit:RID_SCDLG_SOLVER:ED_TARGETVAL";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 64 , 30 ) ;
         Size = MAP_APPFONT ( 93 , 12 ) ;
@@ -77,6 +80,7 @@ ModelessDialog RID_SCDLG_SOLVER
     };
     Edit ED_VARCELL
     {
+        HelpID = "sc:Edit:RID_SCDLG_SOLVER:ED_VARCELL";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 64 , 46 ) ;
         Size = MAP_APPFONT ( 79 , 12 ) ;
@@ -84,6 +88,7 @@ ModelessDialog RID_SCDLG_SOLVER
     };
     ImageButton RB_VARCELL
     {
+        HelpID = "sc:ImageButton:RID_SCDLG_SOLVER:RB_VARCELL";
         Pos = MAP_APPFONT ( 145 , 45 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;

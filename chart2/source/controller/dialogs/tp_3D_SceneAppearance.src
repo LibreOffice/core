@@ -51,6 +51,7 @@
 
 TabPage TP_3D_SCENEAPPEARANCE
 {
+    HelpID = "chart2:TabPage:TP_3D_SCENEAPPEARANCE";
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Hide = TRUE ;
@@ -64,6 +65,7 @@ TabPage TP_3D_SCENEAPPEARANCE
     };
     ListBox LB_SCHEME
     {
+        HelpID = "chart2:ListBox:TP_3D_SCENEAPPEARANCE:LB_SCHEME";
         Border = TRUE;
         TabStop = TRUE;
         DropDown = TRUE;
@@ -78,12 +80,14 @@ TabPage TP_3D_SCENEAPPEARANCE
 
     CheckBox CB_SHADING
     {
+        HelpID = "chart2:CheckBox:TP_3D_SCENEAPPEARANCE:CB_SHADING";
         Pos = MAP_APPFONT ( POS_X_1 , POS_Y_SHADING ) ;
         Size = MAP_APPFONT ( WIDTH_FL , HEIGHT_LB ) ;
         Text [ en-US ] = "~Shading" ;
     };
     CheckBox CB_OBJECTLINES
     {
+        HelpID = "chart2:CheckBox:TP_3D_SCENEAPPEARANCE:CB_OBJECTLINES";
         Pos = MAP_APPFONT ( POS_X_1 , POS_Y_OBJECTLINES ) ;
         Size = MAP_APPFONT ( WIDTH_FL , HEIGHT_LB ) ;
         Text [ en-US ] = "~Object borders" ;

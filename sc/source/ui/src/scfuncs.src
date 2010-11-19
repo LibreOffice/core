@@ -72,7 +72,8 @@
  */
 
 // Hack:
-#define U2S(x)  ((x)-HID_START)
+//#define   U2S(x)  ((x)-HID_START)
+#define U2S(x) x
 // Macro U2S: unsigned to signed
 // is needed because the resource compiler only knows signed short int in
 // ExtraData, but the HID_XXX are unsigned and exceed 32k. Code reading the
