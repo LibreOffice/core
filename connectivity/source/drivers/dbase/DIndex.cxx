@@ -380,7 +380,7 @@ SvStream& connectivity::dbase::operator << (SvStream &rStream, ODbaseIndex& rInd
     ::rtl::OUString sDir = m_pTable->getConnection()->getURL();
     sDir += OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DELIMITER);
     sDir += m_Name;
-    sDir += ::rtl::OUString::createFromAscii(".ndx");
+    sDir += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".ndx"));
     return sDir;
 }
 //------------------------------------------------------------------
@@ -393,7 +393,7 @@ void ODbaseIndex::createINFEntry()
     ::rtl::OUString sCfgFile(m_pTable->getConnection()->getURL());
     sCfgFile += OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DELIMITER);
     sCfgFile += m_pTable->getName();
-    sCfgFile += ::rtl::OUString::createFromAscii(".inf");
+    sCfgFile += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".inf"));
 
     String sPhysicalPath;
     LocalFileHelper::ConvertURLToPhysicalName(sCfgFile,sPhysicalPath);
@@ -437,7 +437,7 @@ BOOL ODbaseIndex::DropImpl()
     ::rtl::OUString sCfgFile(m_pTable->getConnection()->getURL());
     sCfgFile += OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DELIMITER);
     sCfgFile += m_pTable->getName();
-    sCfgFile += ::rtl::OUString::createFromAscii(".inf");
+    sCfgFile += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".inf"));
 
     String sPhysicalPath;
     String sNDX(sCfgFile);

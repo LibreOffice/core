@@ -1041,7 +1041,7 @@ BOOL ODbaseTable::CreateImpl()
     {
         ::rtl::OUString aIdent = m_pConnection->getContent()->getIdentifier()->getContentIdentifier();
         if ( aIdent.lastIndexOf('/') != (aIdent.getLength()-1) )
-            aIdent += ::rtl::OUString::createFromAscii("/");
+            aIdent += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
         aIdent += m_Name;
         aName = aIdent.getStr();
     }
@@ -1080,7 +1080,7 @@ BOOL ODbaseTable::CreateImpl()
         try
         {
             Content aContent(aURL.GetMainURL(INetURLObject::NO_DECODE),Reference<XCommandEnvironment>());
-            aContent.executeCommand( rtl::OUString::createFromAscii( "delete" ),bool2any( sal_True ) );
+            aContent.executeCommand( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("delete")),bool2any( sal_True ) );
         }
         catch(Exception&) // an exception is thrown when no file exists
         {
@@ -1108,7 +1108,7 @@ BOOL ODbaseTable::CreateImpl()
             try
             {
                 Content aMemoContent(aURL.GetMainURL(INetURLObject::NO_DECODE),Reference<XCommandEnvironment>());
-                aMemoContent.executeCommand( rtl::OUString::createFromAscii( "delete" ),bool2any( sal_True ) );
+                aMemoContent.executeCommand( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("delete")),bool2any( sal_True ) );
             }
             catch(const Exception&)
             {
@@ -1124,7 +1124,7 @@ BOOL ODbaseTable::CreateImpl()
         {
             aURL.setExtension(aExt);      // kill dbf file
             Content aMemoContent(aURL.GetMainURL(INetURLObject::NO_DECODE),Reference<XCommandEnvironment>());
-            aMemoContent.executeCommand( rtl::OUString::createFromAscii( "delete" ),bool2any( sal_True ) );
+            aMemoContent.executeCommand( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("delete")),bool2any( sal_True ) );
             return sal_False;
         }
         m_aHeader.db_typ = dBaseIIIMemo;
@@ -1475,7 +1475,7 @@ BOOL ODbaseTable::Drop_Static(const ::rtl::OUString& _sUrl,sal_Bool _bHasMemoFie
             try
             {
                 ::ucbhelper::Content aDeleteContent( aURL.GetMainURL( INetURLObject::NO_DECODE ), Reference< XCommandEnvironment > () );
-                aDeleteContent.executeCommand( ::rtl::OUString::createFromAscii( "delete" ), makeAny( sal_Bool( sal_True ) ) );
+                aDeleteContent.executeCommand( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("delete")), makeAny( sal_Bool( sal_True ) ) );
             }
             catch(Exception&)
             {
@@ -2319,7 +2319,7 @@ namespace
         {
             ::rtl::OUString aIdent = _pConenction->getContent()->getIdentifier()->getContentIdentifier();
             if ( aIdent.lastIndexOf('/') != (aIdent.getLength()-1) )
-                aIdent += ::rtl::OUString::createFromAscii("/");
+                aIdent += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
             aIdent += oldName;
             aName = aIdent;
         }
@@ -2336,11 +2336,11 @@ namespace
             Content aContent(aURL.GetMainURL(INetURLObject::NO_DECODE),Reference<XCommandEnvironment>());
 
             Sequence< PropertyValue > aProps( 1 );
-            aProps[0].Name      = ::rtl::OUString::createFromAscii("Title");
+            aProps[0].Name      = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title"));
             aProps[0].Handle    = -1; // n/a
             aProps[0].Value     = makeAny( ::rtl::OUString(sNewName) );
             Sequence< Any > aValues;
-            aContent.executeCommand( rtl::OUString::createFromAscii( "setPropertyValues" ),makeAny(aProps) ) >>= aValues;
+            aContent.executeCommand( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("setPropertyValues")),makeAny(aProps) ) >>= aValues;
             if(aValues.getLength() && aValues[0].hasValue())
                 throw Exception();
         }
@@ -2501,7 +2501,7 @@ String ODbaseTable::createTempFile()
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::createTempFile" );
     ::rtl::OUString aIdent = m_pConnection->getContent()->getIdentifier()->getContentIdentifier();
     if ( aIdent.lastIndexOf('/') != (aIdent.getLength()-1) )
-        aIdent += ::rtl::OUString::createFromAscii("/");
+        aIdent += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
     String sTempName(aIdent);
     String sExt;
     sExt.AssignAscii(".");

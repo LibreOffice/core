@@ -54,7 +54,7 @@ namespace starutil      = ::com::sun::star::util;
 sdbcx::ObjectType OFlatTables::createObject(const ::rtl::OUString& _rName)
 {
     OFlatTable* pRet = new OFlatTable(this,(OFlatConnection*)static_cast<OFileCatalog&>(m_rParent).getConnection(),
-                                        _rName,::rtl::OUString::createFromAscii("TABLE"));
+                                        _rName,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TABLE")));
     sdbcx::ObjectType xRet = pRet;
     pRet->construct();
     return xRet;

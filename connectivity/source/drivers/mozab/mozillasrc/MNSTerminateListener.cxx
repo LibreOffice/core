@@ -78,7 +78,7 @@ void MNSTerminateListener::addTerminateListener()
 
     if( xFact.is() )
     {
-        Reference< XDesktop > xDesktop( xFact->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.frame.Desktop" ) ), UNO_QUERY );
+        Reference< XDesktop > xDesktop( xFact->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ), UNO_QUERY );
 
         if( xDesktop.is() )
             xDesktop->addTerminateListener(mxTerminateListener);

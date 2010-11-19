@@ -102,7 +102,7 @@ Sequence< ::rtl::OUString > OEvoabDriver::getSupportedServiceNames_Static(  ) th
     // which service is supported
     // for more information @see com.sun.star.sdbc.Driver
     Sequence< ::rtl::OUString > aSNS( 1 );
-    aSNS[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbc.Driver");
+    aSNS[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.Driver"));
     return aSNS;
 }
 //------------------------------------------------------------------

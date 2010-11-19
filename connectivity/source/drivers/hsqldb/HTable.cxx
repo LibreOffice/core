@@ -340,7 +340,7 @@ void OHSQLTable::executeStatement(const ::rtl::OUString& _rStatement )
 {
     ::rtl::OUString sSQL = _rStatement;
     if(sSQL.lastIndexOf(',') == (sSQL.getLength()-1))
-        sSQL = sSQL.replaceAt(sSQL.getLength()-1,1,::rtl::OUString::createFromAscii(")"));
+        sSQL = sSQL.replaceAt(sSQL.getLength()-1,1,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")")));
 
     Reference< XStatement > xStmt = getConnection()->createStatement(  );
     if ( xStmt.is() )

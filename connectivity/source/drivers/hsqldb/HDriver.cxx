@@ -478,14 +478,14 @@ namespace connectivity
     //------------------------------------------------------------------------------
     rtl::OUString ODriverDelegator::getImplementationName_Static(  ) throw(RuntimeException)
     {
-        return rtl::OUString::createFromAscii("com.sun.star.sdbcx.comp.hsqldb.Driver");
+        return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.comp.hsqldb.Driver"));
     }
     //------------------------------------------------------------------------------
     Sequence< ::rtl::OUString > ODriverDelegator::getSupportedServiceNames_Static(  ) throw (RuntimeException)
     {
         Sequence< ::rtl::OUString > aSNS( 2 );
         aSNS[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.Driver"));
-        aSNS[1] = ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.Driver");
+        aSNS[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.Driver"));
         return aSNS;
     }
     //------------------------------------------------------------------
@@ -799,7 +799,7 @@ namespace connectivity
             {
                 //.........................................................
                 Reference< XMultiServiceFactory > xConfigProvider(
-                    _rxORB->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.configuration.ConfigurationProvider" ) ),
+                    _rxORB->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationProvider")) ),
                     UNO_QUERY
                 );
                 OSL_ENSURE( xConfigProvider.is(), "lcl_getSystemLocale: could not create the config provider!" );
@@ -812,12 +812,12 @@ namespace connectivity
                 Sequence< Any > aArguments(2);
                 // the path to the node to open
                 ::rtl::OUString sNodePath = ::rtl::OUString::createFromAscii ("/org.openoffice.Setup/L10N" );
-                aArguments[0] <<= PropertyValue( ::rtl::OUString::createFromAscii( "nodepath"), 0,
+                aArguments[0] <<= PropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath")), 0,
                     makeAny( sNodePath ), PropertyState_DIRECT_VALUE
                 );
                 // the depth: -1 means unlimited
                 aArguments[1] <<= PropertyValue(
-                    ::rtl::OUString::createFromAscii( "depth"), 0,
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("depth")), 0,
                     makeAny( (sal_Int32)-1 ), PropertyState_DIRECT_VALUE
                 );
 
@@ -825,7 +825,7 @@ namespace connectivity
                 // create the access
                 Reference< XPropertySet > xNode(
                     xConfigProvider->createInstanceWithArguments(
-                        ::rtl::OUString::createFromAscii( "com.sun.star.configuration.ConfigurationAccess" ),
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationAccess")),
                         aArguments ),
                     UNO_QUERY );
                 OSL_ENSURE( xNode.is(), "lcl_getSystemLocale: invalid access returned (should throw an exception instead)!" );

@@ -63,12 +63,12 @@ using namespace ::com::sun::star::lang;
 {
      ::rtl::OUString aExceptionType = aExceptionType_;
      if( aExceptionType.getLength() == 0 )
-         aExceptionType = ::rtl::OUString( ::rtl::OUString::createFromAscii("Unknown" ) );
+         aExceptionType = ::rtl::OUString( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unknown")) );
 
-     ::rtl::OUString aTypeLine( ::rtl::OUString::createFromAscii("\nType: " ) );
+     ::rtl::OUString aTypeLine( RTL_CONSTASCII_USTRINGPARAM("\nType: ") );
      aTypeLine += aExceptionType;
 
-     ::rtl::OUString aMessageLine( ::rtl::OUString::createFromAscii("\nMessage: " ) );
+     ::rtl::OUString aMessageLine( RTL_CONSTASCII_USTRINGPARAM("\nMessage: ") );
          aMessageLine += ::rtl::OUString( e.Message );
 
      ::rtl::OUString aMsg(aTypeLine);
@@ -138,23 +138,23 @@ void OEvoabConnection::construct(const ::rtl::OUString& url,const Sequence< Prop
     {
         OSL_TRACE("Error at execute evolution-addressbook-export to get VCards");
         ::dbtools::throwGenericSQLException(
-                ::rtl::OUString::createFromAscii("Error at execute evolution-addressbook-export to get VCards"),NULL);
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Error at execute evolution-addressbook-export to get VCards")),NULL);
     }
 
     Sequence<PropertyValue> aDriverParam;
     ::std::vector<PropertyValue> aParam;
 
-    aParam.push_back(PropertyValue(::rtl::OUString::createFromAscii("EnableSQL92Check"), 0, Any(), PropertyState_DIRECT_VALUE));
+    aParam.push_back(PropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EnableSQL92Check")), 0, Any(), PropertyState_DIRECT_VALUE));
      ::dbtools::OCharsetMap aLookupIanaName;
      ::dbtools::OCharsetMap::const_iterator aLookup = aLookupIanaName.find(RTL_TEXTENCODING_UTF8);
-     aParam.push_back(PropertyValue(::rtl::OUString::createFromAscii("CharSet"), 0,
+     aParam.push_back(PropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharSet")), 0,
                                     makeAny((*aLookup).getIanaName()), PropertyState_DIRECT_VALUE));
-    aParam.push_back(PropertyValue(::rtl::OUString::createFromAscii("Extension"), 0, makeAny(getDriver()->getFileExt()), PropertyState_DIRECT_VALUE));
-    aParam.push_back(PropertyValue(::rtl::OUString::createFromAscii("HeaderLine"), 0, makeAny(m_bHeaderLine), PropertyState_DIRECT_VALUE));
-    aParam.push_back(PropertyValue(::rtl::OUString::createFromAscii("FieldDelimiter"), 0, makeAny(::rtl::OUString(&m_cFieldDelimiter,1)), PropertyState_DIRECT_VALUE));
-    aParam.push_back(PropertyValue(::rtl::OUString::createFromAscii("StringDelimiter"), 0, makeAny(::rtl::OUString(&m_cStringDelimiter,1)), PropertyState_DIRECT_VALUE));
-    aParam.push_back(PropertyValue(::rtl::OUString::createFromAscii("DecimalDelimiter"), 0, makeAny(::rtl::OUString(&m_cDecimalDelimiter,1)), PropertyState_DIRECT_VALUE));
-    aParam.push_back(PropertyValue(::rtl::OUString::createFromAscii("ThousandDelimiter"), 0, makeAny(::rtl::OUString(&m_cThousandDelimiter,1)), PropertyState_DIRECT_VALUE));
+    aParam.push_back(PropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Extension")), 0, makeAny(getDriver()->getFileExt()), PropertyState_DIRECT_VALUE));
+    aParam.push_back(PropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HeaderLine")), 0, makeAny(m_bHeaderLine), PropertyState_DIRECT_VALUE));
+    aParam.push_back(PropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FieldDelimiter")), 0, makeAny(::rtl::OUString(&m_cFieldDelimiter,1)), PropertyState_DIRECT_VALUE));
+    aParam.push_back(PropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StringDelimiter")), 0, makeAny(::rtl::OUString(&m_cStringDelimiter,1)), PropertyState_DIRECT_VALUE));
+    aParam.push_back(PropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DecimalDelimiter")), 0, makeAny(::rtl::OUString(&m_cDecimalDelimiter,1)), PropertyState_DIRECT_VALUE));
+    aParam.push_back(PropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ThousandDelimiter")), 0, makeAny(::rtl::OUString(&m_cThousandDelimiter,1)), PropertyState_DIRECT_VALUE));
 
     // build a new parameter sequence from the original parameters, appended by the new parameters from above
         PropertyValue *pParams = aParam.empty() ? 0 : &aParam[0];

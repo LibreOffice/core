@@ -148,7 +148,7 @@ void HViews::createView( const Reference< XPropertySet >& descriptor )
 
     aSql += ::dbtools::composeTableName( m_xMetaData, descriptor, ::dbtools::eInTableDefinitions, false, false, true );
 
-    aSql += ::rtl::OUString::createFromAscii(" AS ");
+    aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" AS "));
     descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_COMMAND)) >>= sCommand;
     aSql += sCommand;
 

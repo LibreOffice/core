@@ -144,10 +144,10 @@ void OTables::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
 
         Reference<XPropertySet> xProp(xObject,UNO_QUERY);
         sal_Bool bIsView;
-        if((bIsView = (xProp.is() && ::comphelper::getString(xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))) == ::rtl::OUString::createFromAscii("VIEW")))) // here we have a view
-            aSql += ::rtl::OUString::createFromAscii("VIEW ");
+        if((bIsView = (xProp.is() && ::comphelper::getString(xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))) == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VIEW"))))) // here we have a view
+            aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VIEW "));
         else
-            aSql += ::rtl::OUString::createFromAscii("TABLE ");
+            aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TABLE "));
 
         ::rtl::OUString sComposedName(
             ::dbtools::composeTableName( m_xMetaData, sCatalog, sSchema, sTable, sal_True, ::dbtools::eInDataManipulation ) );

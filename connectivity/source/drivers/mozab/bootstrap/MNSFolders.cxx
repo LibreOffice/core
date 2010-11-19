@@ -67,7 +67,7 @@ namespace
         ::rtl::OUString   aConfigPath;
 
         aSecurity.getConfigDir( aConfigPath );
-        return aConfigPath + ::rtl::OUString::createFromAscii( "/" );
+        return aConfigPath + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
     }
 
     // -------------------------------------------------------------------

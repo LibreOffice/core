@@ -90,9 +90,9 @@ sdbcx::ObjectType OUsers::appendObject( const ::rtl::OUString& _rForName, const 
     descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PASSWORD)) >>= sPassword;
     if ( sPassword.getLength() )
     {
-        aSql += ::rtl::OUString::createFromAscii(" IDENTIFIED BY '");
+        aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" IDENTIFIED BY '"));
         aSql += sPassword;
-        aSql += ::rtl::OUString::createFromAscii("'");
+        aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("'"));
     }
 
     Reference< XStatement > xStmt = m_xConnection->createStatement(  );

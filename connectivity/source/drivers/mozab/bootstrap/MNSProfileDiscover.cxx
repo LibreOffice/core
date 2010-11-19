@@ -280,7 +280,7 @@ namespace connectivity
 #endif
             ::rtl::OUString regDir = getRegistryDir(product);
             ::rtl::OUString profilesIni( regDir );
-            profilesIni += ::rtl::OUString::createFromAscii( "profiles.ini" );
+            profilesIni += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("profiles.ini"));
             IniParser parser( profilesIni );
             IniSectionMap &mAllSection = *(parser.getAllSection());
 
@@ -299,19 +299,19 @@ namespace connectivity
                     itor++)
                 {
                         struct ini_NameValue * aValue = &(*itor);
-                        if (aValue->sName.equals(::rtl::OUString::createFromAscii("Name")))
+                        if (aValue->sName.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name"))))
                         {
                             profileName = aValue->sValue;
                         }
-                        else if (aValue->sName.equals(::rtl::OUString::createFromAscii("IsRelative")))
+                        else if (aValue->sName.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsRelative"))))
                         {
                             sIsRelative = aValue->sValue;
                         }
-                        else if (aValue->sName.equals(::rtl::OUString::createFromAscii("Path")))
+                        else if (aValue->sName.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Path"))))
                         {
                             profilePath = aValue->sValue;
                         }
-                        else if (aValue->sName.equals(::rtl::OUString::createFromAscii("Default")))
+                        else if (aValue->sName.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Default"))))
                         {
                             sIsDefault = aValue->sValue;
                         }

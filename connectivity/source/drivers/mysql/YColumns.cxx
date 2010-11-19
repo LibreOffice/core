@@ -83,7 +83,7 @@ void OMySQLColumn::construct()
 Sequence< ::rtl::OUString > SAL_CALL OMySQLColumn::getSupportedServiceNames(  ) throw(RuntimeException)
 {
     Sequence< ::rtl::OUString > aSupported(1);
-    aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.Column");
+    aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.Column"));
 
     return aSupported;
 }

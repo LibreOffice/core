@@ -75,14 +75,14 @@ void OFileDriver::disposing()
 //------------------------------------------------------------------------------
 rtl::OUString OFileDriver::getImplementationName_Static(  ) throw(RuntimeException)
 {
-    return rtl::OUString::createFromAscii("com.sun.star.sdbc.driver.file.Driver");
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.driver.file.Driver"));
 }
 //------------------------------------------------------------------------------
 Sequence< ::rtl::OUString > OFileDriver::getSupportedServiceNames_Static(  ) throw (RuntimeException)
 {
     Sequence< ::rtl::OUString > aSNS( 2 );
-    aSNS[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbc.Driver");
-    aSNS[1] = ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.Driver");
+    aSNS[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.Driver"));
+    aSNS[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.Driver"));
     return aSNS;
 }
 
@@ -129,7 +129,7 @@ sal_Bool SAL_CALL OFileDriver::acceptsURL( const ::rtl::OUString& url )
                 throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OFileDriver::acceptsURL" );
-    return (!url.compareTo(::rtl::OUString::createFromAscii("sdbc:file:"),10));
+    return (!url.compareTo(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:file:")),10));
 }
 // --------------------------------------------------------------------------------
 Sequence< DriverPropertyInfo > SAL_CALL OFileDriver::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& /*info*/ ) throw(SQLException, RuntimeException)

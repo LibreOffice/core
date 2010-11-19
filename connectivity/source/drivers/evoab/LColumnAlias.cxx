@@ -43,39 +43,39 @@ using namespace ::com::sun::star::container;
 
 static const ::rtl::OUString sProgrammaticNames[] =
 {
-    ::rtl::OUString::createFromAscii("FirstName"),
-    ::rtl::OUString::createFromAscii("LastName"),
-    ::rtl::OUString::createFromAscii("DisplayName"),
-    ::rtl::OUString::createFromAscii("NickName"),
-    ::rtl::OUString::createFromAscii("PrimaryEmail"),
-    ::rtl::OUString::createFromAscii("SecondEmail"),
-    ::rtl::OUString::createFromAscii("PreferMailFormat"),
-    ::rtl::OUString::createFromAscii("WorkPhone"),
-    ::rtl::OUString::createFromAscii("HomePhone"),
-    ::rtl::OUString::createFromAscii("FaxNumber"),
-    ::rtl::OUString::createFromAscii("PagerNumber"),
-    ::rtl::OUString::createFromAscii("CellularNumber"),
-    ::rtl::OUString::createFromAscii("HomeAddress"),
-    ::rtl::OUString::createFromAscii("HomeAddress2"),
-    ::rtl::OUString::createFromAscii("HomeCity"),
-    ::rtl::OUString::createFromAscii("HomeState"),
-    ::rtl::OUString::createFromAscii("HomeZipCode"),
-    ::rtl::OUString::createFromAscii("HomeCountry"),
-    ::rtl::OUString::createFromAscii("WorkAddress"),
-    ::rtl::OUString::createFromAscii("WorkAddress2"),
-    ::rtl::OUString::createFromAscii("WorkCity"),
-    ::rtl::OUString::createFromAscii("WorkState"),
-    ::rtl::OUString::createFromAscii("WorkZipCode"),
-    ::rtl::OUString::createFromAscii("WorkCountry"),
-    ::rtl::OUString::createFromAscii("JobTitle"),
-    ::rtl::OUString::createFromAscii("Department"),
-    ::rtl::OUString::createFromAscii("Company"),
-    ::rtl::OUString::createFromAscii("WebPage1"),
-    ::rtl::OUString::createFromAscii("WebPage2"),
-    ::rtl::OUString::createFromAscii("BirthYear"),
-    ::rtl::OUString::createFromAscii("BirthMonth"),
-    ::rtl::OUString::createFromAscii("BirthDay"),
-    ::rtl::OUString::createFromAscii("Notes")
+    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FirstName")),
+    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LastName")),
+    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DisplayName")),
+    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NickName")),
+    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PrimaryEmail")),
+    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SecondEmail")),
+    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PreferMailFormat")),
+    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WorkPhone")),
+    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HomePhone")),
+    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FaxNumber")),
+    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PagerNumber")),
+    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CellularNumber")),
+    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HomeAddress")),
+    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HomeAddress2")),
+    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HomeCity")),
+    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HomeState")),
+    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HomeZipCode")),
+    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HomeCountry")),
+    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WorkAddress")),
+    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WorkAddress2")),
+    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WorkCity")),
+    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WorkState")),
+    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WorkZipCode")),
+    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WorkCountry")),
+    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JobTitle")),
+    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Department")),
+    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Company")),
+    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WebPage1")),
+    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WebPage2")),
+    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BirthYear")),
+    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BirthMonth")),
+    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BirthDay")),
+    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Notes"))
 };
 //------------------------------------------------------------------------------
 OColumnAlias::OColumnAlias()
@@ -121,8 +121,8 @@ void OColumnAlias::setAlias(const ::com::sun::star::uno::Reference<
             //=============================================================
             Reference< XNameAccess > xEvoAliasesNode;
             Reference< XNameAccess > xMozAliasesNode;
-            xEvoDriverNode->getPropertyValue( ::rtl::OUString::createFromAscii("ColumnAliases") ) >>= xEvoAliasesNode;
-            xMozDriverNode->getPropertyValue( ::rtl::OUString::createFromAscii("ColumnAliases") ) >>= xMozAliasesNode;
+            xEvoDriverNode->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ColumnAliases")) ) >>= xEvoAliasesNode;
+            xMozDriverNode->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ColumnAliases")) ) >>= xMozAliasesNode;
             OSL_ENSURE( xEvoAliasesNode.is(), "OColumnAlias::setAlias: missing the evolution aliases node!" );
             OSL_ENSURE( xMozAliasesNode.is(), "OColumnAlias::setAlias: missing the mozilla aliases node!" );
 

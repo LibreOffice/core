@@ -66,8 +66,8 @@ OEvoabDriver::OEvoabDriver(const Reference< XMultiServiceFactory >& _rxFactory) 
 
     if ( m_aEvoab_CLI_FullPathCommand.getLength() == 0 )
         m_aEvoab_CLI_FullPathCommand = ::rtl::OUString::createFromAscii(getEVOAB_CLI_FULLPATHCOMMAND());
-    if ( m_aEvoab_CLI_FullPathCommand.copy(0,7) != ::rtl::OUString::createFromAscii("file://") && m_aEvoab_CLI_FullPathCommand.copy(0,1) == ::rtl::OUString::createFromAscii("/"))
-        m_aEvoab_CLI_FullPathCommand = ::rtl::OUString::createFromAscii("file://") + m_aEvoab_CLI_FullPathCommand;
+    if ( m_aEvoab_CLI_FullPathCommand.copy(0,7) != ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file://")) && m_aEvoab_CLI_FullPathCommand.copy(0,1) == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")))
+        m_aEvoab_CLI_FullPathCommand = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file://")) + m_aEvoab_CLI_FullPathCommand;
     m_aEvoab_CLI_EffectiveCommand = m_aEvoab_CLI_FullPathCommand;
     m_aTempDir.EnableKillingFile();
 
@@ -310,7 +310,7 @@ sal_Bool OEvoabDriver::acceptsURL_Stat( const ::rtl::OUString& url )
         // There isn't any subschema: - but could be just subschema
         if ( aAddrbookURI.getLength() > 0 )
             aAddrbookScheme= aAddrbookURI;
-        else if(url == ::rtl::OUString::createFromAscii("sdbc:address:") )
+        else if(url == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:address:")) )
             return sal_True; // special case here
         else
             return sal_False;

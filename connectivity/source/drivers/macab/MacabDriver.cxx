@@ -235,7 +235,7 @@ Sequence< ::rtl::OUString > MacabDriver::getSupportedServiceNames_Static(  ) thr
     // which service is supported
     // for more information @see com.sun.star.sdbc.Driver
     Sequence< ::rtl::OUString > aSNS( 1 );
-    aSNS[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbc.Driver");
+    aSNS[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.Driver"));
 
     return aSNS;
 }
@@ -293,7 +293,7 @@ sal_Bool SAL_CALL MacabDriver::acceptsURL( const ::rtl::OUString& url )
         return sal_False;
 
     // here we have to look whether we support this URL format
-    return (!url.compareTo(::rtl::OUString::createFromAscii("sdbc:address:macab:"), 18));
+    return (!url.compareTo(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:address:macab:")), 18));
 }
 // --------------------------------------------------------------------------------
 Sequence< DriverPropertyInfo > SAL_CALL MacabDriver::getPropertyInfo( const ::rtl::OUString&, const Sequence< PropertyValue >& ) throw(SQLException, RuntimeException)

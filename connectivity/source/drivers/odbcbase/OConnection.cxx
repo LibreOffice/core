@@ -161,7 +161,7 @@ SQLRETURN OConnection::OpenConnection(const ::rtl::OUString& aConnectStr,sal_Int
     {
         ::rtl::OUString sVersion;
         OTools::GetInfo(this,m_aConnectionHandle,SQL_DRIVER_ODBC_VER,sVersion,*this,getTextEncoding());
-        m_bUseOldDateFormat =  sVersion == ::rtl::OUString::createFromAscii("02.50") || sVersion == ::rtl::OUString::createFromAscii("02.00");
+        m_bUseOldDateFormat =  sVersion == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("02.50")) || sVersion == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("02.00"));
     }
     catch(Exception&)
     {
@@ -236,12 +236,12 @@ SQLRETURN OConnection::Construct(const ::rtl::OUString& url,const Sequence< Prop
         else if(!pBegin->Name.compareToAscii(pUser))
         {
             OSL_VERIFY( pBegin->Value >>= aUID );
-            aDSN = aDSN + ::rtl::OUString::createFromAscii(";UID=") + aUID;
+            aDSN = aDSN + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(";UID=")) + aUID;
         }
         else if(!pBegin->Name.compareToAscii(pPwd))
         {
             OSL_VERIFY( pBegin->Value >>= aPWD );
-            aDSN = aDSN + ::rtl::OUString::createFromAscii(";PWD=") + aPWD;
+            aDSN = aDSN + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(";PWD=")) + aPWD;
         }
         else if(!pBegin->Name.compareToAscii(pUseCatalog))
         {
@@ -250,7 +250,7 @@ SQLRETURN OConnection::Construct(const ::rtl::OUString& url,const Sequence< Prop
         else if(!pBegin->Name.compareToAscii(pSysDrv))
         {
             OSL_VERIFY( pBegin->Value >>= aSysDrvSettings );
-            aDSN += ::rtl::OUString::createFromAscii(";");
+            aDSN += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(";"));
             aDSN += aSysDrvSettings;
         }
         else if(0 == pBegin->Name.compareToAscii(pCharSet))

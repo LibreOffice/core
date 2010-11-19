@@ -77,13 +77,13 @@ namespace ErrorCondition = ::com::sun::star::sdb::ErrorCondition;
 //------------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OEvoabResultSet::getImplementationName(  ) throw ( RuntimeException)   \
 {
-    return ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.evoab.ResultSet");
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.evoab.ResultSet"));
 }
 // -------------------------------------------------------------------------
  Sequence< ::rtl::OUString > SAL_CALL OEvoabResultSet::getSupportedServiceNames(  ) throw( RuntimeException)
 {
      Sequence< ::rtl::OUString > aSupported(1);
-    aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbc.ResultSet");
+    aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.ResultSet"));
     return aSupported;
 }
 // -------------------------------------------------------------------------
