@@ -26,6 +26,7 @@
  *
  ************************************************************************/
 package com.sun.star.wizards.fax;
+import com.sun.star.wizards.common.*;
 
 public interface FaxWizardDialogConst
 {
@@ -78,38 +79,38 @@ public interface FaxWizardDialogConst
      */
     public final static int HID = 41119; //TODO enter first hid here
     public static final int HIDMAIN = 41180;
-    public final String OPTBUSINESSFAX_HID = "HID:" + (HID + 1);
-    public final String LSTBUSINESSSTYLE_HID = "HID:" + (HID + 2);
-    public final String OPTPRIVATEFAX_HID = "HID:" + (HID + 3);
-    public final String LSTPRIVATESTYLE_HID = "HID:" + (HID + 4);
-    public final String IMAGECONTROL3_HID = "HID:" + (HID + 5);
-    public final String CHKUSELOGO_HID = "HID:" + (HID + 6);
-    public final String CHKUSEDATE_HID = "HID:" + (HID + 7);
-    public final String CHKUSECOMMUNICATIONTYPE_HID = "HID:" + (HID + 8);
-    public final String LSTCOMMUNICATIONTYPE_HID = "HID:" + (HID + 9);
-    public final String CHKUSESUBJECT_HID = "HID:" + (HID + 10);
-    public final String CHKUSESALUTATION_HID = "HID:" + (HID + 11);
-    public final String LSTSALUTATION_HID = "HID:" + (HID + 12);
-    public final String CHKUSEGREETING_HID = "HID:" + (HID + 13);
-    public final String LSTGREETING_HID = "HID:" + (HID + 14);
-    public final String CHKUSEFOOTER_HID = "HID:" + (HID + 15);
-    public final String OPTSENDERPLACEHOLDER_HID = "HID:" + (HID + 16);
-    public final String OPTSENDERDEFINE_HID = "HID:" + (HID + 17);
-    public final String TXTSENDERNAME_HID = "HID:" + (HID + 18);
-    public final String TXTSENDERSTREET_HID = "HID:" + (HID + 19);
-    public final String TXTSENDERPOSTCODE_HID = "HID:" + (HID + 20);
-    public final String TXTSENDERSTATE_HID = "HID:" + (HID + 21);
-    public final String TXTSENDERCITY_HID = "HID:" + (HID + 22);
-    public final String TXTSENDERFAX_HID = "HID:" + (HID + 23);
-    public final String OPTRECEIVERPLACEHOLDER_HID = "HID:" + (HID + 24);
-    public final String OPTRECEIVERDATABASE_HID = "HID:" + (HID + 25);
-    public final String TXTFOOTER_HID = "HID:" + (HID + 26);
-    public final String CHKFOOTERNEXTPAGES_HID = "HID:" + (HID + 27);
-    public final String CHKFOOTERPAGENUMBERS_HID = "HID:" + (HID + 28);
-    public final String TXTTEMPLATENAME_HID = "HID:" + (HID + 29);
-    public final String FILETEMPLATEPATH_HID = "HID:" + (HID + 30);
-    public final String OPTCREATEFAX_HID = "HID:" + (HID + 31);
-    public final String OPTMAKECHANGES_HID = "HID:" + (HID + 32);
-    public final String IMAGECONTROL2_HID = "HID:" + (HID + 33);
+    public final String OPTBUSINESSFAX_HID = HelpIds.getHelpIdString(HID + 1);
+    public final String LSTBUSINESSSTYLE_HID = HelpIds.getHelpIdString(HID + 2);
+    public final String OPTPRIVATEFAX_HID = HelpIds.getHelpIdString(HID + 3);
+    public final String LSTPRIVATESTYLE_HID = HelpIds.getHelpIdString(HID + 4);
+    public final String IMAGECONTROL3_HID = HelpIds.getHelpIdString(HID + 5);
+    public final String CHKUSELOGO_HID = HelpIds.getHelpIdString(HID + 6);
+    public final String CHKUSEDATE_HID = HelpIds.getHelpIdString(HID + 7);
+    public final String CHKUSECOMMUNICATIONTYPE_HID = HelpIds.getHelpIdString(HID + 8);
+    public final String LSTCOMMUNICATIONTYPE_HID = HelpIds.getHelpIdString(HID + 9);
+    public final String CHKUSESUBJECT_HID = HelpIds.getHelpIdString(HID + 10);
+    public final String CHKUSESALUTATION_HID = HelpIds.getHelpIdString(HID + 11);
+    public final String LSTSALUTATION_HID = HelpIds.getHelpIdString(HID + 12);
+    public final String CHKUSEGREETING_HID = HelpIds.getHelpIdString(HID + 13);
+    public final String LSTGREETING_HID = HelpIds.getHelpIdString(HID + 14);
+    public final String CHKUSEFOOTER_HID = HelpIds.getHelpIdString(HID + 15);
+    public final String OPTSENDERPLACEHOLDER_HID = HelpIds.getHelpIdString(HID + 16);
+    public final String OPTSENDERDEFINE_HID = HelpIds.getHelpIdString(HID + 17);
+    public final String TXTSENDERNAME_HID = HelpIds.getHelpIdString(HID + 18);
+    public final String TXTSENDERSTREET_HID = HelpIds.getHelpIdString(HID + 19);
+    public final String TXTSENDERPOSTCODE_HID = HelpIds.getHelpIdString(HID + 20);
+    public final String TXTSENDERSTATE_HID = HelpIds.getHelpIdString(HID + 21);
+    public final String TXTSENDERCITY_HID = HelpIds.getHelpIdString(HID + 22);
+    public final String TXTSENDERFAX_HID = HelpIds.getHelpIdString(HID + 23);
+    public final String OPTRECEIVERPLACEHOLDER_HID = HelpIds.getHelpIdString(HID + 24);
+    public final String OPTRECEIVERDATABASE_HID = HelpIds.getHelpIdString(HID + 25);
+    public final String TXTFOOTER_HID = HelpIds.getHelpIdString(HID + 26);
+    public final String CHKFOOTERNEXTPAGES_HID = HelpIds.getHelpIdString(HID + 27);
+    public final String CHKFOOTERPAGENUMBERS_HID = HelpIds.getHelpIdString(HID + 28);
+    public final String TXTTEMPLATENAME_HID = HelpIds.getHelpIdString(HID + 29);
+    public final String FILETEMPLATEPATH_HID = HelpIds.getHelpIdString(HID + 30);
+    public final String OPTCREATEFAX_HID = HelpIds.getHelpIdString(HID + 31);
+    public final String OPTMAKECHANGES_HID = HelpIds.getHelpIdString(HID + 32);
+    public final String IMAGECONTROL2_HID = HelpIds.getHelpIdString(HID + 33);
 }
-  
+

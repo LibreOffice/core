@@ -95,3 +95,11 @@ DEF1DES=Configuration: LDAP User Profile Backend
 .INCLUDE : target.mk
 .INCLUDE :  $(PRJ)$/util$/target.pmk
 
+
+ALLTAR : $(MISC)/ldapbe2.component
+
+$(MISC)/ldapbe2.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        ldapbe2.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt ldapbe2.component

@@ -25,7 +25,6 @@
  *
  ************************************************************************/
 #include "../inc/helpid.hrc"            // HID_XXX
-//#include "hidother.hrc"
 
 hidspecial HID_BASICIDE_PROP_BROWSER_LBOX   { HelpID = HID_BASICIDE_PROP_BROWSER_LBOX; };
 hidspecial HID_BASICIDE_PROP_BROWSER        { HelpID = HID_BASICIDE_PROP_BROWSER; };

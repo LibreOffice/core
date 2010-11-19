@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--**********************************************************************
+*
+* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+*
+* Copyright 2000, 2010 Oracle and/or its affiliates.
+*
+* OpenOffice.org - a multi-platform office productivity suite
+*
+* This file is part of OpenOffice.org.
+*
+* OpenOffice.org is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License version 3
+* only, as published by the Free Software Foundation.
+*
+* OpenOffice.org is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU Lesser General Public License version 3 for more details
+* (a copy is included in the LICENSE file that accompanied this code).
+*
+* You should have received a copy of the GNU Lesser General Public License
+* version 3 along with OpenOffice.org.  If not, see
+* <http://www.openoffice.org/license.html>
+* for a copy of the LGPLv3 License.
+*
+**********************************************************************-->
+
+<component loader="com.sun.star.loader.SharedLibrary"
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.form.ONavigationBarControl">
+    <service name="com.sun.star.form.control.NavigationToolBar"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.form.ONavigationBarModel">
+    <service name="com.sun.star.form.FormComponent"/>
+    <service name="com.sun.star.form.FormControlModel"/>
+    <service name="com.sun.star.form.component.NavigationToolBar"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.form.ORichTextControl">
+    <service name="com.sun.star.form.control.RichTextControl"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.forms.FormOperations">
+    <service name="com.sun.star.form.runtime.FormOperations"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.forms.ODatabaseForm">
+    <service name="com.sun.star.form.FormComponent"/>
+    <service name="com.sun.star.form.FormComponents"/>
+    <service name="com.sun.star.form.component.DataForm"/>
+    <service name="com.sun.star.form.component.Form"/>
+    <service name="com.sun.star.form.component.HTMLForm"/>
+    <service name="stardiv.one.form.component.Form"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.forms.OFilterControl">
+    <service name="com.sun.star.awt.UnoControl"/>
+    <service name="com.sun.star.form.control.FilterControl"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.forms.OFormattedFieldWrapper_ForcedFormatted">
+    <service name="com.sun.star.form.binding.BindableDatabaseFormattedField"/>
+    <service name="com.sun.star.form.component.DatabaseFormattedField"/>
+    <service name="com.sun.star.form.component.FormattedField"/>
+    <service name="stardiv.one.form.component.FormattedField"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.forms.ORichTextModel">
+    <service name="com.sun.star.form.FormComponent"/>
+    <service name="com.sun.star.form.FormControlModel"/>
+    <service name="com.sun.star.form.component.RichTextControl"/>
+    <service name="com.sun.star.style.CharacterProperties"/>
+    <service name="com.sun.star.style.CharacterPropertiesAsian"/>
+    <service name="com.sun.star.style.CharacterPropertiesComplex"/>
+    <service name="com.sun.star.style.ParagraphProperties"/>
+    <service name="com.sun.star.style.ParagraphPropertiesComplex"/>
+    <service name="com.sun.star.text.TextRange"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.forms.OScrollBarModel">
+    <service name="com.sun.star.form.FormComponent"/>
+    <service name="com.sun.star.form.FormControlModel"/>
+    <service name="com.sun.star.form.binding.BindableIntegerValueRange"/>
+    <service name="com.sun.star.form.component.ScrollBar"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.forms.OSpinButtonModel">
+    <service name="com.sun.star.form.FormComponent"/>
+    <service name="com.sun.star.form.FormControlModel"/>
+    <service name="com.sun.star.form.binding.BindableIntegerValueRange"/>
+    <service name="com.sun.star.form.component.SpinButton"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.xml.xpath.XFormsExtension">
+    <service name="com.sun.star.xml.xpath.XPathExtension"/>
+  </implementation>
+  <implementation name="com.sun.star.form.ImageProducer">
+    <service name="com.sun.star.awt.ImageProducer"/>
+  </implementation>
+  <implementation name="com.sun.star.form.Model">
+    <service name="com.sun.star.xforms.Model"/>
+  </implementation>
+  <implementation name="com.sun.star.form.OButtonControl">
+    <service name="com.sun.star.form.control.CommandButton"/>
+    <service name="stardiv.one.form.control.CommandButton"/>
+  </implementation>
+  <implementation name="com.sun.star.form.OButtonModel">
+    <service name="com.sun.star.form.component.CommandButton"/>
+    <service name="stardiv.one.form.component.CommandButton"/>
+  </implementation>
+  <implementation name="com.sun.star.form.OCheckBoxControl">
+    <service name="com.sun.star.form.control.CheckBox"/>
+    <service name="stardiv.one.form.control.CheckBox"/>
+  </implementation>
+  <implementation name="com.sun.star.form.OCheckBoxModel">
+    <service name="com.sun.star.form.binding.BindableDatabaseCheckBox"/>
+    <service name="com.sun.star.form.component.CheckBox"/>
+    <service name="com.sun.star.form.component.DatabaseCheckBox"/>
+    <service name="stardiv.one.form.component.CheckBox"/>
+  </implementation>
+  <implementation name="com.sun.star.form.OComboBoxControl">
+    <service name="com.sun.star.form.control.ComboBox"/>
+    <service name="stardiv.one.form.control.ComboBox"/>
+  </implementation>
+  <implementation name="com.sun.star.form.OComboBoxModel">
+    <service name="com.sun.star.form.binding.BindableDatabaseComboBox"/>
+    <service name="com.sun.star.form.component.ComboBox"/>
+    <service name="com.sun.star.form.component.DatabaseComboBox"/>
+    <service name="stardiv.one.form.component.ComboBox"/>
+  </implementation>
+  <implementation name="com.sun.star.form.OCurrencyControl">
+    <service name="com.sun.star.form.control.CurrencyField"/>
+    <service name="stardiv.one.form.control.CurrencyField"/>
+  </implementation>
+  <implementation name="com.sun.star.form.OCurrencyModel">
+    <service name="com.sun.star.form.component.CurrencyField"/>
+    <service name="com.sun.star.form.component.DatabaseCurrencyField"/>
+    <service name="stardiv.one.form.component.CurrencyField"/>
+  </implementation>
+  <implementation name="com.sun.star.form.ODateControl">
+    <service name="com.sun.star.form.control.DateField"/>
+    <service name="stardiv.one.form.control.DateField"/>
+  </implementation>
+  <implementation name="com.sun.star.form.ODateModel">
+    <service name="com.sun.star.form.component.DatabaseDateField"/>
+    <service name="com.sun.star.form.component.DateField"/>
+    <service name="stardiv.one.form.component.DateField"/>
+  </implementation>
+  <implementation name="com.sun.star.form.OEditControl">
+    <service name="com.sun.star.form.control.TextField"/>
+    <service name="stardiv.one.form.control.Edit"/>
+    <service name="stardiv.one.form.control.TextField"/>
+  </implementation>
+  <implementation name="com.sun.star.form.OEditModel">
+    <service name="com.sun.star.form.binding.BindableDatabaseTextField"/>
+    <service name="com.sun.star.form.component.DatabaseTextField"/>
+    <service name="com.sun.star.form.component.TextField"/>
+    <service name="stardiv.one.form.component.TextField"/>
+  </implementation>
+  <implementation name="com.sun.star.form.OFileControlModel">
+    <service name="com.sun.star.form.component.FileControl"/>
+    <service name="stardiv.one.form.component.FileControl"/>
+  </implementation>
+  <implementation name="com.sun.star.form.OFixedTextModel">
+    <service name="com.sun.star.form.component.FixedText"/>
+    <service name="stardiv.one.form.component.FixedText"/>
+  </implementation>
+  <implementation name="com.sun.star.form.OFormattedControl">
+    <service name="com.sun.star.form.control.FormattedField"/>
+    <service name="stardiv.one.form.control.FormattedField"/>
+  </implementation>
+  <implementation name="com.sun.star.form.OFormattedFieldWrapper">
+    <service name="stardiv.one.form.component.Edit"/>
+  </implementation>
+  <implementation name="com.sun.star.form.OFormsCollection">
+    <service name="com.sun.star.form.Forms"/>
+  </implementation>
+  <implementation name="com.sun.star.form.OGridControlModel">
+    <service name="com.sun.star.form.component.GridControl"/>
+    <service name="stardiv.one.form.component.Grid"/>
+    <service name="stardiv.one.form.component.GridControl"/>
+  </implementation>
+  <implementation name="com.sun.star.form.OGroupBoxControl">
+    <service name="com.sun.star.form.control.GroupBox"/>
+    <service name="stardiv.one.form.control.GroupBox"/>
+  </implementation>
+  <implementation name="com.sun.star.form.OGroupBoxModel">
+    <service name="com.sun.star.form.component.GroupBox"/>
+    <service name="stardiv.one.form.component.GroupBox"/>
+  </implementation>
+  <implementation name="com.sun.star.form.OHiddenModel">
+    <service name="com.sun.star.form.component.HiddenControl"/>
+    <service name="stardiv.one.form.component.Hidden"/>
+    <service name="stardiv.one.form.component.HiddenControl"/>
+  </implementation>
+  <implementation name="com.sun.star.form.OImageButtonControl">
+    <service name="com.sun.star.form.control.ImageButton"/>
+    <service name="stardiv.one.form.control.ImageButton"/>
+  </implementation>
+  <implementation name="com.sun.star.form.OImageButtonModel">
+    <service name="com.sun.star.form.component.ImageButton"/>
+    <service name="stardiv.one.form.component.ImageButton"/>
+  </implementation>
+  <implementation name="com.sun.star.form.OImageControlControl">
+    <service name="com.sun.star.form.control.ImageControl"/>
+    <service name="stardiv.one.form.control.ImageControl"/>
+  </implementation>
+  <implementation name="com.sun.star.form.OImageControlModel">
+    <service name="com.sun.star.form.component.DatabaseImageControl"/>
+    <service name="stardiv.one.form.component.ImageControl"/>
+  </implementation>
+  <implementation name="com.sun.star.form.OListBoxControl">
+    <service name="com.sun.star.form.control.ListBox"/>
+    <service name="stardiv.one.form.control.ListBox"/>
+  </implementation>
+  <implementation name="com.sun.star.form.OListBoxModel">
+    <service name="com.sun.star.form.binding.BindableDatabaseListBox"/>
+    <service name="com.sun.star.form.component.DatabaseListBox"/>
+    <service name="com.sun.star.form.component.ListBox"/>
+    <service name="stardiv.one.form.component.ListBox"/>
+  </implementation>
+  <implementation name="com.sun.star.form.ONumericControl">
+    <service name="com.sun.star.form.control.NumericField"/>
+    <service name="stardiv.one.form.control.NumericField"/>
+  </implementation>
+  <implementation name="com.sun.star.form.ONumericModel">
+    <service name="com.sun.star.form.binding.BindableDatabaseNumericField"/>
+    <service name="com.sun.star.form.component.DatabaseNumericField"/>
+    <service name="com.sun.star.form.component.NumericField"/>
+    <service name="stardiv.one.form.component.NumericField"/>
+  </implementation>
+  <implementation name="com.sun.star.form.OPatternControl">
+    <service name="com.sun.star.form.control.PatternField"/>
+    <service name="stardiv.one.form.control.PatternField"/>
+  </implementation>
+  <implementation name="com.sun.star.form.OPatternModel">
+    <service name="com.sun.star.form.component.DatabasePatternField"/>
+    <service name="com.sun.star.form.component.PatternField"/>
+    <service name="stardiv.one.form.component.PatternField"/>
+  </implementation>
+  <implementation name="com.sun.star.form.ORadioButtonControl">
+    <service name="com.sun.star.form.control.RadioButton"/>
+    <service name="stardiv.one.form.control.RadioButton"/>
+  </implementation>
+  <implementation name="com.sun.star.form.ORadioButtonModel">
+    <service name="com.sun.star.form.binding.BindableDatabaseRadioButton"/>
+    <service name="com.sun.star.form.component.DatabaseRadioButton"/>
+    <service name="com.sun.star.form.component.RadioButton"/>
+    <service name="stardiv.one.form.component.RadioButton"/>
+  </implementation>
+  <implementation name="com.sun.star.form.OTimeControl">
+    <service name="com.sun.star.form.control.TimeField"/>
+    <service name="stardiv.one.form.control.TimeField"/>
+  </implementation>
+  <implementation name="com.sun.star.form.OTimeModel">
+    <service name="com.sun.star.form.component.DatabaseTimeField"/>
+    <service name="com.sun.star.form.component.TimeField"/>
+    <service name="stardiv.one.form.component.TimeField"/>
+  </implementation>
+  <implementation name="com.sun.star.form.XForms">
+    <service name="com.sun.star.xforms.XForms"/>
+  </implementation>
+</component>

@@ -61,6 +61,7 @@ ModalDialog RID_SVXDLG_SECURITY_OPTIONS
     };
     CheckBox CB_SAVESENDDOCS
     {
+        HelpID = "cui:CheckBox:RID_SVXDLG_SECURITY_OPTIONS:CB_SAVESENDDOCS";
         Pos = MAP_APPFONT( COL_2, ROW_2 );
         Size = MAP_APPFONT( CHECKBOX_WIDTH, RSC_CD_CHECKBOX_HEIGHT );
         Text [ en-US ] = "When saving or sending";
@@ -72,6 +73,7 @@ ModalDialog RID_SVXDLG_SECURITY_OPTIONS
     };
     CheckBox CB_SIGNDOCS
     {
+        HelpID = "cui:CheckBox:RID_SVXDLG_SECURITY_OPTIONS:CB_SIGNDOCS";
         Pos = MAP_APPFONT( COL_2 + CHECKBOX_WIDTH + RSC_SP_CTRL_X, ROW_2 );
         Size = MAP_APPFONT( CHECKBOX_WIDTH, RSC_CD_CHECKBOX_HEIGHT );
         Text [ en-US ] = "When signing";
@@ -83,6 +85,7 @@ ModalDialog RID_SVXDLG_SECURITY_OPTIONS
     };
     CheckBox CB_PRINTDOCS
     {
+        HelpID = "cui:CheckBox:RID_SVXDLG_SECURITY_OPTIONS:CB_PRINTDOCS";
         Pos = MAP_APPFONT( COL_2, ROW_3 );
         Size = MAP_APPFONT( CHECKBOX_WIDTH, RSC_CD_CHECKBOX_HEIGHT );
         Text [ en-US ] = "When printing";
@@ -94,6 +97,7 @@ ModalDialog RID_SVXDLG_SECURITY_OPTIONS
     };
     CheckBox CB_CREATEPDF
     {
+        HelpID = "cui:CheckBox:RID_SVXDLG_SECURITY_OPTIONS:CB_CREATEPDF";
         Pos = MAP_APPFONT( COL_2 + CHECKBOX_WIDTH + RSC_SP_CTRL_X, ROW_3 );
         Size = MAP_APPFONT( CHECKBOX_WIDTH, RSC_CD_CHECKBOX_HEIGHT );
         Text [ en-US ] = "When creating PDF files";
@@ -111,6 +115,7 @@ ModalDialog RID_SVXDLG_SECURITY_OPTIONS
     };
     CheckBox CB_REMOVEINFO
     {
+        HelpID = "cui:CheckBox:RID_SVXDLG_SECURITY_OPTIONS:CB_REMOVEINFO";
         Pos = MAP_APPFONT( COL_1, ROW_5 );
         Size = MAP_APPFONT( COL_3-COL_1, RSC_CD_CHECKBOX_HEIGHT );
         Text [ en-US ] = "Remove personal information on saving";
@@ -122,6 +127,7 @@ ModalDialog RID_SVXDLG_SECURITY_OPTIONS
     };
     CheckBox CB_RECOMMENDPWD
     {
+        HelpID = "cui:CheckBox:RID_SVXDLG_SECURITY_OPTIONS:CB_RECOMMENDPWD";
         Pos = MAP_APPFONT( COL_1, ROW_6 );
         Size = MAP_APPFONT( COL_3-COL_1, RSC_CD_CHECKBOX_HEIGHT );
         Text [ en-US ] = "Recommend password protection on saving";
@@ -133,6 +139,7 @@ ModalDialog RID_SVXDLG_SECURITY_OPTIONS
     };
     CheckBox CB_CTRLHYPERLINK
     {
+        HelpID = "cui:CheckBox:RID_SVXDLG_SECURITY_OPTIONS:CB_CTRLHYPERLINK";
         Pos = MAP_APPFONT( COL_1, ROW_7 );
         Size = MAP_APPFONT( COL_3-COL_1, RSC_CD_CHECKBOX_HEIGHT );
         Text [ en-US ] = "Ctrl-click required to follow hyperlinks";

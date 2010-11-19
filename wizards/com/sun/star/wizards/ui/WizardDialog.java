@@ -32,7 +32,6 @@ import com.sun.star.wizards.ui.event.CommonListener;
 import com.sun.star.wizards.ui.event.EventNames;
 import com.sun.star.wizards.ui.event.MethodInvocation;
 import com.sun.star.uno.UnoRuntime;
-// import com.sun.star.awt.XItemEventBroadcaster;
 import com.sun.star.awt.*;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.XInterface;
@@ -47,6 +46,7 @@ import com.sun.star.frame.XTerminateListener;
 import com.sun.star.frame.TerminationVetoException;
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.beans.*;
+import com.sun.star.wizards.common.HelpIds;
 
 public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeListener, XTerminateListener, XCompletion
 {
@@ -488,7 +488,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
                 "Enabled", "Height", "HelpURL", "Label", "PositionX", "PositionY", "PushButtonType", "Step", "TabIndex", "Width"
             };
 
-            Helper.setUnoPropertyValue(super.xDialogModel, "HelpURL", "HID:" + hid);
+            Helper.setUnoPropertyValue(super.xDialogModel, "HelpURL", HelpIds.getHelpIdString(hid));
             insertButton("btnWizardHelp", HELP_ACTION_PERFORMED, new String[]
                     {
                         "Enabled", "Height", "Label", "PositionX", "PositionY", "PushButtonType", "Step", "TabIndex", "Width"
@@ -500,25 +500,25 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
             insertButton("btnWizardBack", BACK_ACTION_PERFORMED, propNames,
                     new Object[]
                     {
-                        new Boolean(false), IButtonHeight, "HID:" + (hid + 2), oWizardResource.getResText(UIConsts.RID_COMMON + 13), new Integer(iBackPosX), new Integer(iBtnPosY), new Short((short) PushButtonType.STANDARD_value), ICurStep, new Short(curtabindex++), IButtonWidth
+                        new Boolean(false), IButtonHeight, HelpIds.getHelpIdString(hid + 2), oWizardResource.getResText(UIConsts.RID_COMMON + 13), new Integer(iBackPosX), new Integer(iBtnPosY), new Short((short) PushButtonType.STANDARD_value), ICurStep, new Short(curtabindex++), IButtonWidth
                     });
 
             insertButton("btnWizardNext", NEXT_ACTION_PERFORMED, propNames,
                     new Object[]
                     {
-                        new Boolean(true), IButtonHeight, "HID:" + (hid + 3), oWizardResource.getResText(UIConsts.RID_COMMON + 14), new Integer(iNextPosX), new Integer(iBtnPosY), new Short((short) PushButtonType.STANDARD_value), ICurStep, new Short(curtabindex++), IButtonWidth
+                        new Boolean(true), IButtonHeight, HelpIds.getHelpIdString(hid + 3), oWizardResource.getResText(UIConsts.RID_COMMON + 14), new Integer(iNextPosX), new Integer(iBtnPosY), new Short((short) PushButtonType.STANDARD_value), ICurStep, new Short(curtabindex++), IButtonWidth
                     });
 
             insertButton("btnWizardFinish", FINISH_ACTION_PERFORMED, propNames,
                     new Object[]
                     {
-                        new Boolean(true), IButtonHeight, "HID:" + (hid + 4), oWizardResource.getResText(UIConsts.RID_COMMON + 12), new Integer(iFinishPosX), new Integer(iBtnPosY), new Short((short) PushButtonType.STANDARD_value), ICurStep, new Short(curtabindex++), IButtonWidth
+                        new Boolean(true), IButtonHeight, HelpIds.getHelpIdString(hid + 4), oWizardResource.getResText(UIConsts.RID_COMMON + 12), new Integer(iFinishPosX), new Integer(iBtnPosY), new Short((short) PushButtonType.STANDARD_value), ICurStep, new Short(curtabindex++), IButtonWidth
                     });
 
             insertButton("btnWizardCancel", CANCEL_ACTION_PERFORMED, propNames,
                     new Object[]
                     {
-                        new Boolean(true), IButtonHeight, "HID:" + (hid + 5), oWizardResource.getResText(UIConsts.RID_COMMON + 11), new Integer(iCancelPosX), new Integer(iBtnPosY), new Short((short) PushButtonType.STANDARD_value), ICurStep, new Short(curtabindex++), IButtonWidth
+                        new Boolean(true), IButtonHeight, HelpIds.getHelpIdString(hid + 5), oWizardResource.getResText(UIConsts.RID_COMMON + 11), new Integer(iCancelPosX), new Integer(iBtnPosY), new Short((short) PushButtonType.STANDARD_value), ICurStep, new Short(curtabindex++), IButtonWidth
                     });
 
             setControlProperty("btnWizardNext", "DefaultButton", Boolean.TRUE);

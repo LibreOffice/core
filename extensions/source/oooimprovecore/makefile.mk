@@ -75,3 +75,11 @@ SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 
 .INCLUDE : target.mk
 
+
+ALLTAR : $(MISC)/oooimprovecore.component
+
+$(MISC)/oooimprovecore.component .ERRREMOVE : \
+        $(SOLARENV)/bin/createcomponent.xslt oooimprovecore.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt oooimprovecore.component
