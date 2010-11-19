@@ -27,7 +27,7 @@
 #include "precompiled_svtools.hxx"
 
 #include "paneldecklisteners.hxx"
-#include "svtools/toolpaneldeck.hxx"
+#include "svtools/toolpanel/toolpaneldeck.hxx"
 
 //........................................................................
 namespace svt

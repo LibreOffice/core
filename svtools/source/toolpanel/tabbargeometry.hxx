@@ -27,7 +27,7 @@
 #ifndef TABBARGEOMETRY_HXX
 #define TABBARGEOMETRY_HXX
 
-#include "svtools/tabalignment.hxx"
+#include "svtools/toolpanel/tabalignment.hxx"
 
 #include "tabitemdescriptor.hxx"
 
