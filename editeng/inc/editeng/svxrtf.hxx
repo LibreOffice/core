@@ -470,7 +470,7 @@ inline const Color& SvxRTFParser::GetColor( size_t nId ) const
 inline SfxItemSet& SvxRTFParser::GetAttrSet()
 {
     SvxRTFItemStackTypePtr pTmp;
-    if( bNewGroup || 0 == ( pTmp = aAttrStack.back()) )
+    if( bNewGroup || 0 == ( pTmp = aAttrStack.empty() ? 0 : aAttrStack.back()) )
         pTmp = _GetAttrSet();
     return pTmp->aAttrSet;
 }
