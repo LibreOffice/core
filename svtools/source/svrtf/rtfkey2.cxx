@@ -1128,6 +1128,7 @@ sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_SOUTLVL, "\\soutlvl" );
 sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_SHP, "\\shp" );
 sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_SN, "\\sn" );
 sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_SV, "\\sv" );
+sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_SP, "\\sp" );
 /*
 sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_SHPLEFT, "\\shpleft" );
 sal_Char const SVTOOLS_CONSTASCII_DEF( sRTF_SHPTOP, "\\shptop" );

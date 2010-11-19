@@ -511,8 +511,8 @@ public:
     void                SetHelpText( USHORT nItemId, const XubString& rText );
     const XubString&    GetHelpText( USHORT nItemId ) const;
 
-    void                SetHelpId( USHORT nItemId, ULONG nHelpId );
-    ULONG               GetHelpId( USHORT nItemId ) const;
+    void                SetHelpId( USHORT nItemId, const rtl::OString& rHelpId );
+    rtl::OString        GetHelpId( USHORT nItemId ) const;
 
     //  window size according to current alignment, floating state and number of lines
     Size                CalcWindowSizePixel() const;
@@ -569,9 +569,9 @@ public:
     const XubString&    GetHelpText() const
                             { return DockingWindow::GetHelpText(); }
 
-    void                SetHelpId( ULONG nId )
-                            { DockingWindow::SetHelpId( nId ); }
-    ULONG               GetHelpId() const
+    void                SetHelpId( const rtl::OString& rId )
+                            { DockingWindow::SetHelpId( rId ); }
+    const rtl::OString& GetHelpId() const
                             { return DockingWindow::GetHelpId(); }
 
     void                SetClickHdl( const Link& rLink ) { maClickHdl = rLink; }

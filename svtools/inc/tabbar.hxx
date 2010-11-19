@@ -516,8 +516,8 @@ public:
     XubString       GetPageText( USHORT nPageId ) const;
     void            SetHelpText( USHORT nPageId, const XubString& rText );
     XubString       GetHelpText( USHORT nPageId ) const;
-    void            SetHelpId( USHORT nPageId, ULONG nHelpId );
-    ULONG           GetHelpId( USHORT nPageId ) const;
+    void            SetHelpId( USHORT nPageId, const rtl::OString& nHelpId );
+    rtl::OString    GetHelpId( USHORT nPageId ) const;
 
     long            GetSplitSize() const { return mnSplitSize; }
     long            GetMinSize() const;
@@ -526,9 +526,9 @@ public:
                         { Window::SetHelpText( rText ); }
     XubString       GetHelpText() const
                         { return Window::GetHelpText(); };
-    void            SetHelpId( ULONG nId )
-                        { Window::SetHelpId( nId ); }
-    ULONG           GetHelpId() const
+    void            SetHelpId( const rtl::OString& rId )
+                        { Window::SetHelpId( rId ); }
+    const rtl::OString& GetHelpId() const
                         { return Window::GetHelpId(); }
 
     void            SetStyle( WinBits nStyle );

@@ -196,8 +196,8 @@ public:
     int                 GetIndexFromChar( sal_uInt32 ) const;
     sal_uInt32          GetCharFromIndex( int ) const;
 
-    void                AddReference();
-    void                DeReference();
+    void                AddReference() const;
+    void                DeReference() const;
 
     int                 GetGlyphIndex( sal_uInt32 ) const;
 
@@ -213,8 +213,8 @@ private:
     const int*          mpStartGlyphs;    // range-specific mapper to glyphs
     const USHORT*       mpGlyphIds;       // individual glyphid mappings
     int                 mnRangeCount;
-    int                 mnCharCount;
-    int                 mnRefCount;
+    int                 mnCharCount;      // covered codepoints
+    mutable int         mnRefCount;
 };
 
 // CmapResult is a normalized version of the many CMAP formats

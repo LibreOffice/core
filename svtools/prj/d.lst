@@ -38,3 +38,6 @@ dos: sh -c "if test %OS% = MACOSX; then macosx-create-bundle %_DEST%\bin%_EXT%\b
 
 *.xml %_DEST%\xml%_EXT%\*.xml
 
+..\%__SRC%\misc\hatchwindowfactory.component %_DEST%\xml%_EXT%\hatchwindowfactory.component
+..\%__SRC%\misc\productregistration.uno.component %_DEST%\xml%_EXT%\productregistration.uno.component
+..\%__SRC%\misc\svt.component %_DEST%\xml%_EXT%\svt.component
