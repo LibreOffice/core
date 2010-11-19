@@ -1,4 +1,3 @@
 st	svtools	:	l10n svl offuh toolkit ucbhelper unotools JPEG:jpeg cppu cppuhelper comphelper sal sot jvmfwk NULL
-st	svtools								usr1	-	all	st_mkout NULL
 st	svtools\prj					        nmake	-	all	st_prj NULL
 
