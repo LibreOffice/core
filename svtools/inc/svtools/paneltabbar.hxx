@@ -28,8 +28,8 @@
 #define SVT_PANELTABBAR_HXX
 
 #include "svtools/svtdllapi.h"
-#include "svtools/toolpanel/tabalignment.hxx"
-#include "svtools/toolpanel/tabitemcontent.hxx"
+#include "svtools/tabalignment.hxx"
+#include "svtools/tabitemcontent.hxx"
 
 #include <vcl/ctrl.hxx>
 
