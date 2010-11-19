@@ -4311,7 +4311,7 @@ sal_Int16 OSQLParser::buildStringNodes(OSQLParseNode*& pLiteral)
 //-----------------------------------------------------------------------------
 sal_Int16 OSQLParser::buildComparsionRule(OSQLParseNode*& pAppend,OSQLParseNode* pLiteral)
 {
-	OSQLParseNode* pComp = new OSQLInternalNode(::rtl::OUString::createFromAscii("="), SQL_NODE_EQUAL);
+	OSQLParseNode* pComp = new OSQLInternalNode(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("=")), SQL_NODE_EQUAL);
 	return buildPredicateRule(pAppend,pLiteral,pComp);
 }
 
@@ -4340,7 +4340,7 @@ void OSQLParser::error(sal_Char *fmt)
 	if(!m_sErrorMessage.getLength())
 	{
 		::rtl::OUString sStr(fmt,strlen(fmt),RTL_TEXTENCODING_UTF8);
-		::rtl::OUString sSQL_TOKEN(::rtl::OUString::createFromAscii("SQL_TOKEN_"));
+		::rtl::OUString sSQL_TOKEN(RTL_CONSTASCII_USTRINGPARAM("SQL_TOKEN_"));
 
 		sal_Int32 nPos1 = sStr.indexOf(sSQL_TOKEN);
 		if(nPos1 != -1)
@@ -4364,7 +4364,7 @@ void OSQLParser::error(sal_Char *fmt)
 		::rtl::OUString aError = s_pScanner->getErrorMessage();
 		if(aError.getLength())
 		{
-			m_sErrorMessage += ::rtl::OUString::createFromAscii(", ");
+			m_sErrorMessage += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(", "));
 			m_sErrorMessage += aError;
 		}
 	}

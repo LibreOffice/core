@@ -811,7 +811,7 @@ namespace connectivity
                 // arguments for creating the config access
                 Sequence< Any > aArguments(2);
                 // the path to the node to open
-                ::rtl::OUString sNodePath = ::rtl::OUString::createFromAscii ("/org.openoffice.Setup/L10N" );
+                ::rtl::OUString sNodePath(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Setup/L10N" ));
                 aArguments[0] <<= PropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath")), 0,
                     makeAny( sNodePath ), PropertyState_DIRECT_VALUE
                 );

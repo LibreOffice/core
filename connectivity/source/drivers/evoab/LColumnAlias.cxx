@@ -113,7 +113,7 @@ void OColumnAlias::setAlias(const ::com::sun::star::uno::Reference<
         // the config path for our own driver's settings
     Reference< XPropertySet > xEvoDriverNode = createDriverConfigNode( _rxORB, OEvoabDriver::getImplementationName_Static() );
     //Reference< XPropertySet > xMozDriverNode = createDriverConfigNode( _rxORB, mozab::OConnection::getDriverImplementationName() );
-    Reference< XPropertySet > xMozDriverNode = createDriverConfigNode( _rxORB, ::rtl::OUString::createFromAscii ("com.sun.star.comp.sdbc.MozabDriver") );
+    Reference< XPropertySet > xMozDriverNode = createDriverConfigNode( _rxORB, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.comp.sdbc.MozabDriver")) );
     if ( xEvoDriverNode.is() && xMozDriverNode.is() )
     {
         try

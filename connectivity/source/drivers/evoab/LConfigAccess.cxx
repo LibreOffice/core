@@ -59,10 +59,10 @@ namespace connectivity
 
                 if ( xConfigProvider.is() )
                 {
-                    ::rtl::OUString sCompleteNodePath = ::rtl::OUString::createFromAscii ("/org.openoffice.Office.DataAccess/DriverSettings/" );
+                    ::rtl::OUString sCompleteNodePath(RTL_CONSTASCII_USTRINGPARAM ("/org.openoffice.Office.DataAccess/DriverSettings/" ));
                     sCompleteNodePath += _sDriverImplementationName;
                     //sCompleteNodePath += OEvoabConnection::getDriverImplementationName();
-                    //sCompleteNodePath += ::rtl::OUString::createFromAscii ("com.sun.star.comp.sdbc.MozabDriver");
+                    //sCompleteNodePath += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.comp.sdbc.MozabDriver"));
                     EVO_TRACE_STRING("createDriverConfigNode()::sCompleteNodePath = %s\n", sCompleteNodePath );
 
                     //=========================================================

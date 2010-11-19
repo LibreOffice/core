@@ -291,7 +291,7 @@ void SAL_CALL OMySQLUser::changePassword( const ::rtl::OUString& /*oldPassword*/
     ::rtl::OUString sAlterPwd;
     sAlterPwd = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SET PASSWORD FOR "));
     sAlterPwd += m_Name;
-    sAlterPwd += ::rtl::OUString::createFromAscii("@\"%\" = PASSWORD('") ;
+    sAlterPwd += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("@\"%\" = PASSWORD('")) ;
     sAlterPwd += newPassword;
     sAlterPwd += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("')")) ;
 

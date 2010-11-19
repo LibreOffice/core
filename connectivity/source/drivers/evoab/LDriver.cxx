@@ -77,7 +77,7 @@ OEvoabDriver::OEvoabDriver(const Reference< XMultiServiceFactory >& _rxFactory) 
 //------------------------------------------------------------------------------
 rtl::OUString OEvoabDriver::getImplementationName_Static(  ) throw(RuntimeException)
 {
-    return rtl::OUString::createFromAscii(EVOAB_DRIVER_IMPL_NAME);
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(EVOAB_DRIVER_IMPL_NAME));
 }
 
 //------------------------------------------------------------------

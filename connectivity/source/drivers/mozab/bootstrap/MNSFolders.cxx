@@ -167,7 +167,7 @@ namespace
     if (product == MozillaProductType_Default)
         return ::rtl::OUString();
 
-    return getRegistryDir(product) + ::rtl::OUString::createFromAscii(APP_REGISTRY_NAME);
+    return getRegistryDir(product) + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(APP_REGISTRY_NAME));
 }
 #endif
 

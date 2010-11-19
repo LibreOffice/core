@@ -464,7 +464,7 @@ sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsNonNullableColumns(  ) throw(S
 ::rtl::OUString OEvoabDatabaseMetaData::impl_getIdentifierQuoteString_throw(  )
 {
     // normally this is "
-    ::rtl::OUString aVal = ::rtl::OUString::createFromAscii("\"");
+    ::rtl::OUString aVal(RTL_CONSTASCII_USTRINGPARAM("\""));
     return aVal;
 }
 // -------------------------------------------------------------------------

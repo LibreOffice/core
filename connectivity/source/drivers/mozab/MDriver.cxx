@@ -93,7 +93,7 @@ void MozabDriver::disposing()
 //------------------------------------------------------------------------------
 rtl::OUString MozabDriver::getImplementationName_Static(  ) throw(RuntimeException)
 {
-    return rtl::OUString::createFromAscii(MOZAB_DRIVER_IMPL_NAME);
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(MOZAB_DRIVER_IMPL_NAME));
         // this name is referenced in the configuration and in the mozab.xml
         // Please take care when changing it.
 }

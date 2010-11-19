@@ -97,7 +97,7 @@ void MozillaBootstrap::disposing()
 //------------------------------------------------------------------------------
 rtl::OUString MozillaBootstrap::getImplementationName_Static(  ) throw(RuntimeException)
 {
-    return rtl::OUString::createFromAscii(MOZAB_MozillaBootstrap_IMPL_NAME);
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(MOZAB_MozillaBootstrap_IMPL_NAME));
 }
 //------------------------------------------------------------------------------
 Sequence< ::rtl::OUString > MozillaBootstrap::getSupportedServiceNames_Static(  ) throw (RuntimeException)

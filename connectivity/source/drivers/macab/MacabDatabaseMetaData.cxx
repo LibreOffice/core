@@ -217,7 +217,7 @@ sal_Bool SAL_CALL MacabDatabaseMetaData::supportsNonNullableColumns(  ) throw(SQ
 ::rtl::OUString SAL_CALL MacabDatabaseMetaData::getIdentifierQuoteString(  ) throw(SQLException, RuntimeException)
 {
     // normally this is "
-    ::rtl::OUString aVal = ::rtl::OUString::createFromAscii("\"");
+    ::rtl::OUString aVal(RTL_CONSTASCII_USTRINGPARAM("\""));
     return aVal;
 }
 // -------------------------------------------------------------------------
@@ -582,7 +582,7 @@ sal_Bool SAL_CALL MacabDatabaseMetaData::supportsANSI92IntermediateSQL(  ) throw
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL MacabDatabaseMetaData::getDriverVersion() throw(SQLException, RuntimeException)
 {
-    ::rtl::OUString aValue = ::rtl::OUString::createFromAscii(MACAB_DRIVER_VERSION);
+    ::rtl::OUString aValue(RTL_CONSTASCII_USTRINGPARAM(MACAB_DRIVER_VERSION));
     return aValue;
 }
 // -------------------------------------------------------------------------

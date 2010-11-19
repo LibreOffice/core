@@ -551,7 +551,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsNonNullableColumns(  ) throw(SQLExc
 ::rtl::OUString ODatabaseMetaData::impl_getIdentifierQuoteString_throw(  )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "ODatabaseMetaData::impl_getIdentifierQuoteString_throw" );
-    static const ::rtl::OUString sQuote = ::rtl::OUString::createFromAscii("\"");
+    static const ::rtl::OUString sQuote(RTL_CONSTASCII_USTRINGPARAM("\""));
     return sQuote;
 }
 // -------------------------------------------------------------------------

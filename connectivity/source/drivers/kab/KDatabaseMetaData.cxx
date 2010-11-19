@@ -220,7 +220,7 @@ sal_Bool SAL_CALL KabDatabaseMetaData::supportsNonNullableColumns(  ) throw(SQLE
 ::rtl::OUString SAL_CALL KabDatabaseMetaData::getIdentifierQuoteString(  ) throw(SQLException, RuntimeException)
 {
     // normally this is "
-    ::rtl::OUString aVal = ::rtl::OUString::createFromAscii("\"");
+    ::rtl::OUString aVal(RTL_CONSTASCII_USTRINGPARAM("\""));
     return aVal;
 }
 // -------------------------------------------------------------------------
@@ -585,7 +585,7 @@ sal_Bool SAL_CALL KabDatabaseMetaData::supportsANSI92IntermediateSQL(  ) throw(S
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL KabDatabaseMetaData::getDriverVersion() throw(SQLException, RuntimeException)
 {
-    ::rtl::OUString aValue = ::rtl::OUString::createFromAscii(KAB_DRIVER_VERSION);
+    ::rtl::OUString aValue(RTL_CONSTASCII_USTRINGPARAM(KAB_DRIVER_VERSION));
     return aValue;
 }
 // -------------------------------------------------------------------------
