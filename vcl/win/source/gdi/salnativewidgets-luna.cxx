@@ -188,6 +188,8 @@ void SalData::deInitNWF( void )
         iter++;
     }
     aThemeMap.clear();
+    if( maDwmLib )
+        osl_unloadModule( maDwmLib );
 }
 
 static HTHEME getThemeHandle( HWND hWnd, LPCWSTR name )
@@ -286,6 +288,22 @@ BOOL WinSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
         case CTRL_MENUBAR:
             if( nPart == PART_ENTIRE_CONTROL )
                 hTheme = getThemeHandle( mhWnd, L"Rebar");
+            else if( GetSalData()->mbThemeMenuSupport )
+            {
+                if( nPart == PART_MENU_ITEM )
+                    hTheme = getThemeHandle( mhWnd, L"Menu" );
+            }
+            break;
+        case CTRL_MENU_POPUP:
+            if( GetSalData()->mbThemeMenuSupport )
+            {
+                if( nPart == PART_ENTIRE_CONTROL ||
+                    nPart == PART_MENU_ITEM ||
+                    nPart == PART_MENU_ITEM_CHECK_MARK ||
+                    nPart == PART_MENU_ITEM_RADIO_MARK ||
+                    nPart == PART_MENU_SEPARATOR )
+                    hTheme = getThemeHandle( mhWnd, L"Menu" );
+            }
             break;
         case CTRL_PROGRESS:
             if( nPart == PART_ENTIRE_CONTROL )
@@ -867,15 +885,23 @@ BOOL ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
 
     if( nType == CTRL_MENUBAR )
     {
-        if( nPart != PART_ENTIRE_CONTROL )
-            return FALSE;
-
-        if( aValue.getType() == CTRL_MENUBAR )
+        if( nPart == PART_ENTIRE_CONTROL )
         {
-            const MenubarValue *pValue = static_cast<const MenubarValue*>(&aValue);
-            rc.bottom += pValue->maTopDockingAreaHeight;    // extend potential gradient to cover docking area as well
+            if( aValue.getType() == CTRL_MENUBAR )
+            {
+                const MenubarValue *pValue = static_cast<const MenubarValue*>(&aValue);
+                rc.bottom += pValue->maTopDockingAreaHeight;    // extend potential gradient to cover docking area as well
+            }
+            return ImplDrawTheme( hTheme, hDC, iPart, iState, rc, aCaption);
         }
-        return ImplDrawTheme( hTheme, hDC, iPart, iState, rc, aCaption);
+        else if( nPart == PART_MENU_ITEM )
+        {
+            if( (nState & CTRL_STATE_ENABLED) )
+                iState = (nState & CTRL_STATE_SELECTED) ? MBI_HOT : MBI_NORMAL;
+            else
+                iState = (nState & CTRL_STATE_SELECTED) ? MBI_DISABLEDHOT : MBI_DISABLED;
+            return ImplDrawTheme( hTheme, hDC, MENU_BARITEM, iState, rc, aCaption );
+        }
     }
 
     if( nType == CTRL_PROGRESS )
@@ -954,6 +980,69 @@ BOOL ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         return ImplDrawTheme( hTheme, hDC, iPart, iState, rc, aCaption );
     }
 
+    if( GetSalData()->mbThemeMenuSupport )
+    {
+        if( nType == CTRL_MENU_POPUP )
+        {
+            if( nPart == PART_ENTIRE_CONTROL )
+            {
+                RECT aGutterRC = rc;
+                aGutterRC.left += aValue.getNumericVal();
+                aGutterRC.right = aGutterRC.left+3;
+                return
+                ImplDrawTheme( hTheme, hDC, MENU_POPUPBACKGROUND, 0, rc, aCaption ) &&
+                ImplDrawTheme( hTheme, hDC, MENU_POPUPGUTTER, 0, aGutterRC, aCaption )
+                ;
+            }
+            else if( nPart == PART_MENU_ITEM )
+            {
+                if( (nState & CTRL_STATE_ENABLED) )
+                    iState = (nState & CTRL_STATE_SELECTED) ? MPI_HOT : MPI_NORMAL;
+                else
+                    iState = (nState & CTRL_STATE_SELECTED) ? MPI_DISABLEDHOT : MPI_DISABLED;
+                return ImplDrawTheme( hTheme, hDC, MENU_POPUPITEM, iState, rc, aCaption );
+            }
+            else if( nPart == PART_MENU_ITEM_CHECK_MARK || nPart == PART_MENU_ITEM_RADIO_MARK )
+            {
+                if( (nState & CTRL_STATE_PRESSED) )
+                {
+                    RECT aBGRect = rc;
+                    if( aValue.getType() == CTRL_MENU_POPUP )
+                    {
+                        const MenupopupValue& rMVal( static_cast<const MenupopupValue&>(aValue) );
+                        aBGRect.left   = rMVal.maItemRect.Left();
+                        aBGRect.top    = rMVal.maItemRect.Top();
+                        aBGRect.bottom = rMVal.maItemRect.Bottom()+1; // see below in drawNativeControl
+                        aBGRect.right  = rMVal.getNumericVal();
+
+                        // FIXME: magic
+                        aBGRect.left += 1; aBGRect.top += 1; aBGRect.bottom +=1;
+                    }
+                    iState = (nState & CTRL_STATE_ENABLED) ? MCB_NORMAL : MCB_DISABLED;
+                    ImplDrawTheme( hTheme, hDC, MENU_POPUPCHECKBACKGROUND, iState, aBGRect, aCaption );
+                    if( nPart == PART_MENU_ITEM_CHECK_MARK )
+                        iState = (nState & CTRL_STATE_ENABLED) ? MC_CHECKMARKNORMAL : MC_CHECKMARKDISABLED;
+                    else
+                        iState = (nState & CTRL_STATE_ENABLED) ? MC_BULLETNORMAL : MC_BULLETDISABLED;
+                    return ImplDrawTheme( hTheme, hDC, MENU_POPUPCHECK, iState, rc, aCaption );
+                }
+                else
+                    return true; // unchecked: do nothing
+            }
+            else if( nPart == PART_MENU_SEPARATOR )
+            {
+                rc.left += aValue.getNumericVal(); // adjust for gutter position
+                Rectangle aRect( ImplGetThemeRect( hTheme, hDC,
+                    MENU_POPUPSEPARATOR, 0, Rectangle( rc.left, rc.top, rc.right, rc.bottom ) ) );
+                // center the separator inside the passed rectangle
+                long nDY = ((rc.bottom - rc.top + 1) - aRect.GetHeight()) / 2;
+                rc.top += nDY;
+                rc.bottom = rc.top+aRect.GetHeight()-1;
+                return ImplDrawTheme( hTheme, hDC, MENU_POPUPSEPARATOR, 0, rc, aCaption );
+            }
+        }
+    }
+
     return false;
 }
 
@@ -1027,6 +1116,11 @@ BOOL WinSalGraphics::drawNativeControl( ControlType nType,
         case CTRL_MENUBAR:
             if( nPart == PART_ENTIRE_CONTROL )
                 hTheme = getThemeHandle( mhWnd, L"Rebar");
+            else if( GetSalData()->mbThemeMenuSupport )
+            {
+                if( nPart == PART_MENU_ITEM )
+                    hTheme = getThemeHandle( mhWnd, L"Menu" );
+            }
             break;
         case CTRL_PROGRESS:
             if( nPart == PART_ENTIRE_CONTROL )
@@ -1039,6 +1133,16 @@ BOOL WinSalGraphics::drawNativeControl( ControlType nType,
         case CTRL_SLIDER:
             if( nPart == PART_TRACK_HORZ_AREA || nPart == PART_TRACK_VERT_AREA )
                 hTheme = getThemeHandle( mhWnd, L"Trackbar" );
+            break;
+        case CTRL_MENU_POPUP:
+            if( GetSalData()->mbThemeMenuSupport )
+            {
+                if( nPart == PART_ENTIRE_CONTROL || nPart == PART_MENU_ITEM ||
+                    nPart == PART_MENU_ITEM_CHECK_MARK || nPart == PART_MENU_ITEM_RADIO_MARK ||
+                    nPart == PART_MENU_SEPARATOR
+                    )
+                    hTheme = getThemeHandle( mhWnd, L"Menu" );
+            }
             break;
         default:
             hTheme = NULL;
@@ -1196,7 +1300,7 @@ BOOL WinSalGraphics::getNativeControlRegion(  ControlType nType,
         HTHEME hTheme = getThemeHandle( mhWnd, L"Edit");
         if( hTheme )
         {
-            // get borderr size
+            // get border size
             Rectangle aBoxRect( rControlRegion );
             Rectangle aRect( ImplGetThemeRect( hTheme, hDC, EP_BACKGROUNDWITHBORDER,
                                                EBWBS_HOT, aBoxRect ) );
@@ -1220,6 +1324,29 @@ BOOL WinSalGraphics::getNativeControlRegion(  ControlType nType,
                     rNativeContentRegion = aBoxRect;
                     rNativeBoundingRegion = rNativeContentRegion;
                         bRet = TRUE;
+                }
+            }
+        }
+    }
+
+    if( GetSalData()->mbThemeMenuSupport )
+    {
+        if( nType == CTRL_MENU_POPUP )
+        {
+            if( nPart == PART_MENU_ITEM_CHECK_MARK ||
+                nPart == PART_MENU_ITEM_RADIO_MARK )
+            {
+                HTHEME hTheme = getThemeHandle( mhWnd, L"Menu");
+                Rectangle aBoxRect( rControlRegion );
+                Rectangle aRect( ImplGetThemeRect( hTheme, hDC,
+                    MENU_POPUPCHECK,
+                    MC_CHECKMARKNORMAL,
+                    aBoxRect ) );
+                if( aBoxRect.GetWidth() && aBoxRect.GetHeight() )
+                {
+                    rNativeContentRegion = aRect;
+                    rNativeBoundingRegion = rNativeContentRegion;
+                    bRet = TRUE;
                 }
             }
         }

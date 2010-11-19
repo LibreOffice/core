@@ -434,9 +434,12 @@ SalData::SalData()
     mpFirstIcon = 0;            // icon cache, points to first icon, NULL if none
     mpTempFontItem = 0;
     mbThemeChanged = FALSE;     // true if visual theme was changed: throw away theme handles
+    mbThemeMenuSupport = FALSE;
 
     // init with NULL
     gdiplusToken = 0;
+    maDwmLib     = 0;
+    mpDwmIsCompositionEnabled = 0;
 
     initKeyCodeMap();
 

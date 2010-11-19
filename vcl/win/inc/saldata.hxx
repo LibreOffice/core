@@ -33,6 +33,8 @@
 #include <vcl/salwtype.hxx>
 #include <wincomp.hxx>
 
+#include "osl/module.h"
+
 #include <set>  // for hMenu validation
 #include <map>
 
@@ -45,6 +47,8 @@ class WinSalPrinter;
 class Font;
 struct HDCCache;
 struct TempFontItem;
+
+typedef HRESULT (WINAPI  *DwmIsCompositionEnabled_ptr)(WIN_BOOL*);
 
 // --------------------
 // - Standard-Defines -
@@ -131,12 +135,15 @@ public:
     SalIcon*                mpFirstIcon;            // icon cache, points to first icon, NULL if none
     TempFontItem*           mpTempFontItem;
     BOOL                    mbThemeChanged;         // true if visual theme was changed: throw away theme handles
+    BOOL                    mbThemeMenuSupport;
 
     // for GdiPlus GdiplusStartup/GdiplusShutdown
     ULONG_PTR               gdiplusToken;
 
     std::set< HMENU >       mhMenuSet;              // keeps track of menu handles created by VCL, used by IsKnownMenuHandle()
     std::map< UINT,USHORT > maVKMap;      // map some dynamic VK_* entries
+    oslModule               maDwmLib;
+    DwmIsCompositionEnabled_ptr mpDwmIsCompositionEnabled;
 };
 
 inline void SetSalData( SalData* pData ) { ImplGetSVData()->mpSalData = (void*)pData; }
