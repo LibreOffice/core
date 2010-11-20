@@ -3091,7 +3091,7 @@ IMPL_LINK( SfxHelpWindow_Impl, OpenHdl, SfxHelpIndexWindow_Impl* , EMPTYARG )
 //  INetURLObject aObj(aEntry);
 //  BOOL bComplete = ( aObj.GetProtocol() == INET_PROT_VND_SUN_STAR_HELP );
 
-    BOOL bComplete = rtl::OUString(aEntry).toAsciiLowerCase().match(rtl::OUString::createFromAscii("vnd.sun.star.help"),0);
+    BOOL bComplete = rtl::OUString(aEntry).toAsciiLowerCase().match(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.help")),0);
 
     if (bComplete)
         sHelpURL = ::rtl::OUString(aEntry);

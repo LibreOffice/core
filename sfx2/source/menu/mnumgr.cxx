@@ -242,7 +242,7 @@ PopupMenu* InsertThesaurusSubmenu_Impl( SfxBindings* pBindings, Menu* pSVMenu )
 
                 String aItemText( GetThesaurusReplaceText_Impl( aSynonyms[i] ) );
                 pThesSubMenu->InsertItem( nId, aItemText );
-                ::rtl::OUString aCmd( ::rtl::OUString::createFromAscii( ".uno:ThesaurusFromContext?WordReplace:string=" ) );
+                ::rtl::OUString aCmd(RTL_CONSTASCII_USTRINGPARAM(".uno:ThesaurusFromContext?WordReplace:string=") );
                 aCmd += aItemText;
                 pThesSubMenu->SetItemCommand( nId, aCmd );
 
@@ -258,7 +258,7 @@ PopupMenu* InsertThesaurusSubmenu_Impl( SfxBindings* pBindings, Menu* pSVMenu )
         pThesSubMenu->InsertSeparator();
         const String sThesaurus( SfxResId( STR_MENU_THESAURUS ) );
         pThesSubMenu->InsertItem( 100, sThesaurus );
-        pThesSubMenu->SetItemCommand( 100, ::rtl::OUString::createFromAscii( ".uno:ThesaurusDialog" ) );
+        pThesSubMenu->SetItemCommand( 100, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:ThesaurusDialog")) );
 
         pSVMenu->InsertSeparator();
         const String sSynonyms( SfxResId( STR_MENU_SYNONYMS ) );
