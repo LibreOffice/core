@@ -2624,7 +2624,7 @@ IMPL_LINK( SfxTemplateDialog_Impl, ToolBoxRClick, ToolBox *, pBox )
         uno::Reference< container::XNameAccess > xUICommands;
         if ( xNameAccess.is() )
         {
-            rtl::OUString sTextDoc = ::rtl::OUString::createFromAscii("com.sun.star.text.TextDocument");
+            rtl::OUString sTextDoc(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextDocument"));
             if(xNameAccess->hasByName(sTextDoc))
             {
                 uno::Any a = xNameAccess->getByName( sTextDoc );
@@ -2636,18 +2636,18 @@ IMPL_LINK( SfxTemplateDialog_Impl, ToolBoxRClick, ToolBox *, pBox )
         try
         {
             uno::Sequence< beans::PropertyValue > aPropSeq;
-            uno::Any aCommand = xUICommands->getByName(::rtl::OUString::createFromAscii(".uno:StyleNewByExample"));
+            uno::Any aCommand = xUICommands->getByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:StyleNewByExample")));
             ::rtl::OUString sLabel = lcl_GetLabel( aCommand );
             pMenu->InsertItem( SID_STYLE_NEW_BY_EXAMPLE, sLabel );
             pMenu->SetHelpId(SID_STYLE_NEW_BY_EXAMPLE, HID_TEMPLDLG_NEWBYEXAMPLE);
 
-            aCommand = xUICommands->getByName(::rtl::OUString::createFromAscii(".uno:StyleUpdateByExample"));
+            aCommand = xUICommands->getByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:StyleUpdateByExample")));
             sLabel = lcl_GetLabel( aCommand );
 
             pMenu->InsertItem( SID_STYLE_UPDATE_BY_EXAMPLE, sLabel );
             pMenu->SetHelpId(SID_STYLE_UPDATE_BY_EXAMPLE, HID_TEMPLDLG_UPDATEBYEXAMPLE);
 
-            aCommand = xUICommands->getByName(::rtl::OUString::createFromAscii(".uno:LoadStyles"));
+            aCommand = xUICommands->getByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:LoadStyles")));
             sLabel = lcl_GetLabel( aCommand );
             pMenu->InsertItem( SID_TEMPLATE_LOAD, sLabel );
             pMenu->SetHelpId(SID_TEMPLATE_LOAD, SID_TEMPLATE_LOAD);

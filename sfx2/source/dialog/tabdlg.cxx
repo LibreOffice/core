@@ -63,7 +63,7 @@
 using namespace ::com::sun::star::uno;
 using namespace ::rtl;
 
-#define USERITEM_NAME           OUString::createFromAscii( "UserItem" )
+#define USERITEM_NAME           OUString(RTL_CONSTASCII_USTRINGPARAM("UserItem"))
 
 TYPEINIT1(LAYOUT_NS_SFX_TABDIALOG SfxTabDialogItem,SfxSetItem);
 

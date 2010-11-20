@@ -1227,21 +1227,21 @@ void SAL_CALL SfxDocumentMetaData::init(
             css::uno::Reference<css::xml::dom::XElement> xRElem(
                 i_xDoc->createElementNS(
                     ::rtl::OUString::createFromAscii(s_nsODF),
-                    ::rtl::OUString::createFromAscii("office:document-meta")));
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("office:document-meta"))));
             css::uno::Reference<css::xml::dom::XNode> xRNode(xRElem,
                 css::uno::UNO_QUERY_THROW);
             // NB: the following is a _bad_idea_ with our DOM implementation
             //     do _not_ create attributes with xmlns prefix!
-//        xRElem->setAttribute(::rtl::OUString::createFromAscii("xmlns:office"),
+//        xRElem->setAttribute(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("xmlns:office")),
 //                    ::rtl::OUString::createFromAscii(s_nsODF));
             xRElem->setAttributeNS(::rtl::OUString::createFromAscii(s_nsODF),
-                        ::rtl::OUString::createFromAscii("office:version"),
-                        ::rtl::OUString::createFromAscii("1.0"));
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("office:version")),
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("1.0")));
             i_xDoc->appendChild(xRNode);
             css::uno::Reference<css::xml::dom::XNode> xParent (
                 i_xDoc->createElementNS(
                     ::rtl::OUString::createFromAscii(s_nsODF),
-                    ::rtl::OUString::createFromAscii("office:meta")),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("office:meta"))),
             css::uno::UNO_QUERY_THROW);
             xRNode->appendChild(xParent);
             m_xParent = xParent;
@@ -1266,7 +1266,7 @@ void SAL_CALL SfxDocumentMetaData::init(
         // application-specific.
         css::uno::Reference<css::xml::dom::XNode> xNode =
             xPath->selectSingleNode(m_xParent,
-                ::rtl::OUString::createFromAscii("child::") + name);
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("child::")) + name);
         // Do not create an empty element if it is missing;
         // for certain elements, such as dateTime, this would be invalid
         m_meta[name] = xNode;
@@ -1277,7 +1277,7 @@ void SAL_CALL SfxDocumentMetaData::init(
         ::rtl::OUString name = ::rtl::OUString::createFromAscii(*pName);
         css::uno::Reference<css::xml::dom::XNodeList> nodes =
             xPath->selectNodeList(m_xParent,
-                ::rtl::OUString::createFromAscii("child::") + name);
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("child::")) + name);
         std::vector<css::uno::Reference<css::xml::dom::XNode> > v;
         for (sal_Int32 i = 0; i < nodes->getLength(); ++i) {
             v.push_back(nodes->item(i));
@@ -1298,7 +1298,7 @@ void SAL_CALL SfxDocumentMetaData::init(
 
 
     std::vector<css::uno::Reference<css::xml::dom::XNode> > & vec =
-        m_metaList[::rtl::OUString::createFromAscii("meta:user-defined")];
+        m_metaList[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("meta:user-defined"))];
     m_xUserDefined.clear(); // #i105826#: reset (may be re-initialization)
     if ( !vec.empty() )
     {
@@ -1316,7 +1316,7 @@ void SAL_CALL SfxDocumentMetaData::init(
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("name")));
         ::rtl::OUString type = xElem->getAttributeNS(
                 ::rtl::OUString::createFromAscii(s_nsODFMeta),
-                ::rtl::OUString::createFromAscii("value-type"));
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("value-type")));
         ::rtl::OUString text = getNodeText(*it);
         if (type.equalsAscii("float")) {
             double d;
@@ -1574,7 +1574,7 @@ SfxDocumentMetaData::setLanguage(const css::lang::Locale & the_value)
 {
     ::rtl::OUString text = the_value.Language;
     if (the_value.Country.getLength() > 0) {
-        text += ::rtl::OUString::createFromAscii("-").concat(the_value.Country);
+        text += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-")).concat(the_value.Country);
     }
     setMetaTextAndNotify("dc:language", text);
 }
@@ -1891,7 +1891,7 @@ SfxDocumentMetaData::resetUserData(const ::rtl::OUString & the_value)
         dateTimeToText(css::util::DateTime()));
     bModified |= setMetaText("meta:editing-duration", durationToText(0));
     bModified |= setMetaText("meta:editing-cycles",
-        ::rtl::OUString::createFromAscii("1"));
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("1")));
 
     if (bModified) {
         g.clear();
@@ -1960,7 +1960,7 @@ SfxDocumentMetaData::loadFromStorage(
     try {
         xPropArg->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BaseURI")))
             >>= input.sSystemId;
-        input.sSystemId += ::rtl::OUString::createFromAscii("/").concat(
+        input.sSystemId += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")).concat(
                 ::rtl::OUString::createFromAscii(s_metaXml));
     } catch (css::uno::Exception &) {
         input.sSystemId = ::rtl::OUString::createFromAscii(s_metaXml);
@@ -2017,7 +2017,7 @@ SfxDocumentMetaData::storeToStorage(
         css::uno::UNO_QUERY_THROW);
     xStreamProps->setPropertyValue(
         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")),
-        css::uno::makeAny(::rtl::OUString::createFromAscii("text/xml")));
+        css::uno::makeAny(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("text/xml"))));
     xStreamProps->setPropertyValue(
         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Compressed")),
         css::uno::makeAny(static_cast<sal_Bool> (sal_False)));

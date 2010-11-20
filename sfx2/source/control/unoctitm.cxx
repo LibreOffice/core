@@ -109,7 +109,7 @@ SfxUnoControllerItem::SfxUnoControllerItem( SfxControllerItem *pItem, SfxBinding
     DBG_ASSERT( !pCtrlItem || !pCtrlItem->IsBound(), "ControllerItem fehlerhaft!" );
 
     aCommand.Complete = rCmd;
-    Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY );
+    Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))), UNO_QUERY );
     xTrans->parseStrict( aCommand );
     pBindings->RegisterUnoController_Impl( this );
 }
@@ -512,7 +512,7 @@ SfxDispatchController_Impl::SfxDispatchController_Impl(
         ByteString aTmp(".uno:");
         aTmp += pUnoName;
         aDispatchURL.Complete = ::rtl::OUString::createFromAscii( aTmp.GetBuffer() );
-        Reference < ::com::sun::star::util::XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY );
+        Reference < ::com::sun::star::util::XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))), UNO_QUERY );
         xTrans->parseStrict( aDispatchURL );
     }
 
