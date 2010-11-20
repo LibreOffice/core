@@ -119,7 +119,7 @@ class ConfigurationHelper
                                                                       const ::rtl::OUString&                                        sRelPath  ,
                                                                             sal_Int32                                               nOpenFlags)
         {
-            static ::rtl::OUString PATH_SEPERATOR = ::rtl::OUString::createFromAscii("/");
+            static ::rtl::OUString PATH_SEPERATOR(RTL_CONSTASCII_USTRINGPARAM("/"));
 
             css::uno::Reference< css::uno::XInterface > xCFG;
 
@@ -143,13 +143,13 @@ class ConfigurationHelper
                 css::uno::Sequence< css::uno::Any > lParams(c);
                 css::beans::PropertyValue           aParam;
 
-                aParam.Name    = ::rtl::OUString::createFromAscii("nodepath");
+                aParam.Name    = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath"));
                 aParam.Value <<= sPath.makeStringAndClear();
                 lParams[0]   <<= aParam;
 
                 if (bAllLocales)
                 {
-                    aParam.Name    = ::rtl::OUString::createFromAscii("*");
+                    aParam.Name    = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*"));
                     aParam.Value <<= sal_True;
                     lParams[1]   <<= aParam;
                 }
