@@ -80,7 +80,7 @@ interface XPackage
         @param xCmdEnv
                command environment for error handling and other interaction.
         @alreadyInstalled
-            indicates that an extension with the same identifyer is already installed.
+            indicates that an extension with the same identifier is already installed.
 
         @return
             null - all prerequisites are met. Otherwise, a value from
@@ -97,7 +97,7 @@ interface XPackage
 
     /** checks if the dependencies for this package are still satisfied
 
-        After updateing the OpenOffice.org, some dependencies for packages might
+        After updating the OpenOffice.org, some dependencies for packages might
         no longer be satisfied.
 
         @since OOo 3.2.0
@@ -116,7 +116,7 @@ interface XPackage
                 com::sun::star::ucb::CommandFailedException);
 
 
-    /** determines whether the package is currently is registered, i.e.
+    /** determines whether the package is currently registered, i.e.
         whether it is active.
 
         @param xAbortChannel
@@ -183,7 +183,7 @@ interface XPackage
         e.g. a zip (legacy) package file or a document hosting script packages.
 
         @return
-                in case this package relfects a package bundle
+                <TRUE/> if this package is a package bundle, <FALSE/> otherwise
     */
     boolean isBundle();
 
@@ -273,8 +273,8 @@ interface XPackage
     */
     sequence<string> getUpdateInformationURLs()
         raises (ExtensionRemovedException);
-    /** returns the publisher info for a package, the strings
-        might be empty, if there are no publisher
+    /** returns the publisher info for the package, the strings
+        might be empty, if there is no publisher
 
         <type scope="::com::sun::star::beans">StringPair</type>::First
         represents the publisher name and
@@ -294,7 +294,7 @@ interface XPackage
     /** exports package to given destination URL.
 
         @param destFolderURL
-               package destination folder URL, must be UCB conform
+               package destination folder URL, must be UCB conforming
         @param newTitle
                new package name
         @param nameClashAction
