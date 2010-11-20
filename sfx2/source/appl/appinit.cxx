@@ -120,8 +120,8 @@ void SAL_CALL SfxTerminateListener_Impl::queryTermination( const EventObject& ) 
 
 void SAL_CALL SfxTerminateListener_Impl::notifyTermination( const EventObject& aEvent ) throw(RuntimeException )
 {
-    static ::rtl::OUString SERVICE_GLOBALEVENTBROADCASTER = ::rtl::OUString::createFromAscii("com.sun.star.frame.GlobalEventBroadcaster");
-    static ::rtl::OUString EVENT_QUIT_APP                 = ::rtl::OUString::createFromAscii("OnCloseApp");
+    static ::rtl::OUString SERVICE_GLOBALEVENTBROADCASTER(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.GlobalEventBroadcaster"));
+    static ::rtl::OUString EVENT_QUIT_APP                (RTL_CONSTASCII_USTRINGPARAM("OnCloseApp"));
 
     Reference< XDesktop > xDesktop( aEvent.Source, UNO_QUERY );
     if( xDesktop.is() == sal_True )
@@ -151,7 +151,7 @@ void SAL_CALL SfxTerminateListener_Impl::notifyTermination( const EventObject& a
 
 ::rtl::OUString SAL_CALL SfxTerminateListener_Impl::getImplementationName() throw (RuntimeException)
 {
-    static const ::rtl::OUString IMPLNAME = ::rtl::OUString::createFromAscii("com.sun.star.comp.sfx2.SfxTerminateListener");
+    static const ::rtl::OUString IMPLNAME(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.sfx2.SfxTerminateListener"));
     return IMPLNAME;
 }
 
@@ -178,7 +178,7 @@ Sequence< ::rtl::OUString > SAL_CALL SfxTerminateListener_Impl::getSupportedServ
     // The desktop must know, which listener will terminate the SfxApplication in real !
     // It must call this special listener as last one ... otherwise we shutdown the SfxApplication BEFORE other listener
     // can react ...
-    static const ::rtl::OUString SERVICENAME = ::rtl::OUString::createFromAscii("com.sun.star.frame.TerminateListener");
+    static const ::rtl::OUString SERVICENAME(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.TerminateListener"));
     Sequence< ::rtl::OUString > lNames(1);
     lNames[0] = SERVICENAME;
     return lNames;
