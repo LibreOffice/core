@@ -537,9 +537,6 @@ Sequence< rtl::OUString > OFileAccess::getFolderContents( const rtl::OUString& F
     ucbhelper::Content aCnt( aFolderObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
     Reference< XResultSet > xResultSet;
     Sequence< rtl::OUString > aProps(0);
-    //Sequence< rtl::OUString > aProps(1);
-    //rtl::OUString* pProps = aProps.getArray();
-    //pProps[0] == rtl::OUString::createFromAscii( "Url" );
 
     ucbhelper::ResultSetInclude eInclude = bIncludeFolders ? ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS : ucbhelper::INCLUDE_DOCUMENTS_ONLY;
 
@@ -858,7 +855,7 @@ Sequence< rtl::OUString > FileAccess_getSupportedServiceNames()
         if( !pNames )
         {
             static Sequence< rtl::OUString > seqNames(1);
-            seqNames.getArray()[0] = rtl::OUString::createFromAscii( SERVICE_NAME );
+            seqNames.getArray()[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SERVICE_NAME ));
             pNames = &seqNames;
         }
     }
