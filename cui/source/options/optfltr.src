@@ -96,20 +96,20 @@ TabPage RID_OFAPAGE_MSFILTEROPT
 
     FixedLine GB_PPOINT
     {
-        Pos = MAP_APPFONT ( 6 , 99 ) ;
+        Pos = MAP_APPFONT ( 6 , 113 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text [ en-US ] = "Microsoft PowerPoint 97/2000/XP";
     };
     CheckBox CB_PBAS_CODE
     {
-        Pos = MAP_APPFONT ( 12 , 110 ) ;
+        Pos = MAP_APPFONT ( 12 , 124 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "Load Ba~sic code";
     };
     CheckBox CB_PBAS_STG
     {
-        Pos = MAP_APPFONT ( 12 , 124 ) ;
+        Pos = MAP_APPFONT ( 12 , 138 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "Sav~e original Basic code";
