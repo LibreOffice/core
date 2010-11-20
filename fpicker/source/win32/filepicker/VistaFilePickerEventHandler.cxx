@@ -164,7 +164,7 @@ STDMETHODIMP VistaFilePickerEventHandler::OnFolderChange(IFileDialog* /*pDialog*
 //-----------------------------------------------------------------------------------------
 void lcl_updateVersionListDirectly(IFileDialog* pDialog)
 {
-    static const ::rtl::OUString SERVICENAME_REVISIONPERSISTENCE = ::rtl::OUString::createFromAscii("com.sun.star.document.DocumentRevisionListPersistence");
+    static const ::rtl::OUString SERVICENAME_REVISIONPERSISTENCE(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.DocumentRevisionListPersistence"));
     static const ::sal_Int16     CONTROL_VERSIONLIST             = css::ui::dialogs::ExtendedFilePickerElementIds::LISTBOX_VERSION;
 
     TFileDialog          iDialog   (pDialog);
@@ -405,8 +405,8 @@ void VistaFilePickerEventHandler::stopListening()
     }
 }
 
-static const ::rtl::OUString PROP_CONTROL_ID      = ::rtl::OUString::createFromAscii("control_id");
-static const ::rtl::OUString PROP_PICKER_LISTENER = ::rtl::OUString::createFromAscii("picker_listener");
+static const ::rtl::OUString PROP_CONTROL_ID(RTL_CONSTASCII_USTRINGPARAM("control_id"));
+static const ::rtl::OUString PROP_PICKER_LISTENER(RTL_CONSTASCII_USTRINGPARAM("picker_listener"));
 
 //-----------------------------------------------------------------------------------------
 class AsyncPickerEvents : public RequestHandler

@@ -287,7 +287,7 @@ sal_Bool OleEmbeddedObject::TryToConvertToOOo()
             || aFilterName.equals( ::rtl::OUString ( RTL_CONSTASCII_USTRINGPARAM( "MS Word 2007 XML" ) ) ) ) )
         {
             uno::Reference< container::XNameAccess > xFilterFactory(
-                m_xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.document.FilterFactory" ) ),
+                m_xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.FilterFactory" ) )),
                 uno::UNO_QUERY_THROW );
 
             ::rtl::OUString aDocServiceName;
@@ -313,21 +313,21 @@ sal_Bool OleEmbeddedObject::TryToConvertToOOo()
                 // let the model behave as embedded one
                 uno::Reference< frame::XModel > xModel( xDocument, uno::UNO_QUERY_THROW );
                 uno::Sequence< beans::PropertyValue > aSeq( 1 );
-                aSeq[0].Name = ::rtl::OUString::createFromAscii( "SetEmbedded" );
+                aSeq[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "SetEmbedded" ));
                 aSeq[0].Value <<= sal_True;
                 xModel->attachResource( ::rtl::OUString(), aSeq );
 
                 // load the model from the stream
                 uno::Sequence< beans::PropertyValue > aArgs( 5 );
-                aArgs[0].Name = ::rtl::OUString::createFromAscii( "HierarchicalDocumentName" );
+                aArgs[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "HierarchicalDocumentName" ));
                 aArgs[0].Value <<= m_aEntryName;
-                aArgs[1].Name = ::rtl::OUString::createFromAscii( "ReadOnly" );
+                aArgs[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ReadOnly" ));
                 aArgs[1].Value <<= sal_True;
-                aArgs[2].Name = ::rtl::OUString::createFromAscii( "FilterName" );
+                aArgs[2].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "FilterName" ));
                 aArgs[2].Value <<= aFilterName;
-                aArgs[3].Name = ::rtl::OUString::createFromAscii( "URL" );
-                aArgs[3].Value <<= ::rtl::OUString::createFromAscii( "private:stream" );
-                aArgs[4].Name = ::rtl::OUString::createFromAscii( "InputStream" );
+                aArgs[3].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "URL" ));
+                aArgs[3].Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "private:stream" ));
+                aArgs[4].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "InputStream" ));
                 aArgs[4].Value <<= m_xObjectStream->getInputStream();
 
                 xSeekable->seek( 0 );
@@ -339,7 +339,7 @@ sal_Bool OleEmbeddedObject::TryToConvertToOOo()
                 xDocument->close( sal_True );
                 uno::Reference< beans::XPropertySet > xStorProps( xTmpStorage, uno::UNO_QUERY_THROW );
                 ::rtl::OUString aMediaType;
-                xStorProps->getPropertyValue( ::rtl::OUString::createFromAscii( "MediaType" ) ) >>= aMediaType;
+                xStorProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "MediaType" )) ) >>= aMediaType;
                 xTmpStorage->dispose();
 
                 // look for the related embedded object factory
@@ -475,7 +475,7 @@ void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
         throw lang::DisposedException(); // TODO
 
     if ( m_nObjectState == -1 )
-        throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The object has no persistence!\n" ),
+        throw embed::WrongStateException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "The object has no persistence!\n" )),
                                         uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     // in case the object is already in requested state
@@ -632,7 +632,7 @@ uno::Sequence< sal_Int32 > SAL_CALL OleEmbeddedObject::getReachableStates()
         throw lang::DisposedException(); // TODO
 
     if ( m_nObjectState == -1 )
-        throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The object has no persistence!\n" ),
+        throw embed::WrongStateException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "The object has no persistence!\n" )),
                                         uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
 #ifdef WNT
@@ -674,7 +674,7 @@ sal_Int32 SAL_CALL OleEmbeddedObject::getCurrentState()
         throw lang::DisposedException(); // TODO
 
     if ( m_nObjectState == -1 )
-        throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The object has no persistence!\n" ),
+        throw embed::WrongStateException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "The object has no persistence!\n" )),
                                         uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     // TODO: Shouldn't we ask object? ( I guess no )
@@ -785,7 +785,7 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
         throw lang::DisposedException(); // TODO
 
     if ( m_nObjectState == -1 )
-        throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The object has no persistence!\n" ),
+        throw embed::WrongStateException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "The object has no persistence!\n" )),
                                         uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
 #ifdef WNT
@@ -921,7 +921,7 @@ uno::Sequence< embed::VerbDescriptor > SAL_CALL OleEmbeddedObject::getSupportedV
         throw lang::DisposedException(); // TODO
 
     if ( m_nObjectState == -1 )
-        throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The object has no persistence!\n" ),
+        throw embed::WrongStateException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "The object has no persistence!\n" )),
                                         uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 #ifdef WNT
     if ( m_pOleComponent )
@@ -966,7 +966,7 @@ void SAL_CALL OleEmbeddedObject::setClientSite(
     {
         if ( m_nObjectState != embed::EmbedStates::LOADED && m_nObjectState != embed::EmbedStates::RUNNING )
             throw embed::WrongStateException(
-                                    ::rtl::OUString::createFromAscii( "The client site can not be set currently!\n" ),
+                                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "The client site can not be set currently!\n" )),
                                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
         m_xClientSite = xClient;
@@ -992,7 +992,7 @@ uno::Reference< embed::XEmbeddedClient > SAL_CALL OleEmbeddedObject::getClientSi
         throw lang::DisposedException(); // TODO
 
     if ( m_nObjectState == -1 )
-        throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The object has no persistence!\n" ),
+        throw embed::WrongStateException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "The object has no persistence!\n" )),
                                         uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     return m_xClientSite;
@@ -1019,7 +1019,7 @@ void SAL_CALL OleEmbeddedObject::update()
         throw lang::DisposedException(); // TODO
 
     if ( m_nObjectState == -1 )
-        throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The object has no persistence!\n" ),
+        throw embed::WrongStateException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "The object has no persistence!\n" )),
                                         uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     if ( m_nUpdateMode == embed::EmbedUpdateModes::EXPLICIT_UPDATE )
@@ -1053,7 +1053,7 @@ void SAL_CALL OleEmbeddedObject::setUpdateMode( sal_Int32 nMode )
         throw lang::DisposedException(); // TODO
 
     if ( m_nObjectState == -1 )
-        throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The object has no persistence!\n" ),
+        throw embed::WrongStateException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "The object has no persistence!\n" )),
                                         uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     OSL_ENSURE( nMode == embed::EmbedUpdateModes::ALWAYS_UPDATE
@@ -1083,7 +1083,7 @@ sal_Int64 SAL_CALL OleEmbeddedObject::getStatus( sal_Int64
         throw lang::DisposedException(); // TODO
 
     if ( m_nObjectState == -1 )
-        throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The object must be in running state!\n" ),
+        throw embed::WrongStateException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "The object must be in running state!\n" )),
                                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     sal_Int64 nResult = 0;

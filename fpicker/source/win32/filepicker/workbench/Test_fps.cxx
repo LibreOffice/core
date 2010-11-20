@@ -98,7 +98,7 @@ void TestFilterManager( Reference< XFilePicker > xFilePicker );
 
 Reference< XMultiServiceFactory >   g_xFactory;
 
-const OUString BMP_EXTENSION = OUString::createFromAscii( "bmp" );
+const OUString BMP_EXTENSION(RTL_CONSTASCII_USTRINGPARAM( "bmp" ));
 
 //-------------------------------------------------------------------------------------------------------------------------
 // a test client
@@ -294,7 +294,7 @@ int SAL_CALL main(int nArgc, char* Argv[], char* Env[]  )
 
     Reference< XFilePicker > xFilePicker = Reference< XFilePicker >(
         g_xFactory->createInstanceWithArguments(
-            OUString::createFromAscii( FILE_PICKER_SERVICE_NAME ), arguments ), UNO_QUERY );
+            OUString(RTL_CONSTASCII_USTRINGPARAM( FILE_PICKER_SERVICE_NAME )), arguments ), UNO_QUERY );
 
         // install a FilePicker notifier
         Reference< XFilePickerListener > xFPListener(
@@ -304,9 +304,9 @@ int SAL_CALL main(int nArgc, char* Argv[], char* Env[]  )
         if ( xFPNotifier.is( ) )
             xFPNotifier->addFilePickerListener( xFPListener );
 
-        xFilePicker->setTitle( OUString::createFromAscii("FileOpen Simple..."));
+        xFilePicker->setTitle( OUString(RTL_CONSTASCII_USTRINGPARAM("FileOpen Simple...")));
         xFilePicker->setMultiSelectionMode( sal_True );
-        xFilePicker->setDefaultName( OUString::createFromAscii("d:\\test2.sxw"));
+        xFilePicker->setDefaultName( OUString(RTL_CONSTASCII_USTRINGPARAM("d:\\test2.sxw")));
 
         OUString aDirURL;
         OUString aSysPath = OStringToOUString( "d:\\ueaeoe", osl_getThreadTextEncoding( ) );

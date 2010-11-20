@@ -71,7 +71,7 @@ namespace
     Sequence< OUString > SAL_CALL FolderPicker_getSupportedServiceNames()
     {
         Sequence< OUString > aRet(1);
-        aRet[0] = OUString::createFromAscii("com.sun.star.ui.dialogs.SystemFolderPicker");
+        aRet[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.dialogs.SystemFolderPicker"));
         return aRet;
     }
 }
@@ -166,7 +166,7 @@ sal_Int16 SAL_CALL CFolderPicker::execute( )
 OUString SAL_CALL CFolderPicker::getImplementationName(  )
     throw( RuntimeException )
 {
-    return OUString::createFromAscii( FOLDERPICKER_IMPL_NAME );
+    return OUString(RTL_CONSTASCII_USTRINGPARAM( FOLDERPICKER_IMPL_NAME ));
 }
 
 // -------------------------------------------------

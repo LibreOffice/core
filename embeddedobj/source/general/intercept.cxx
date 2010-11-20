@@ -184,12 +184,12 @@ Interceptor::dispatch(
             if ( nInd == aNewArgs.getLength() )
             {
                 aNewArgs.realloc( nInd + 1 );
-                aNewArgs[nInd].Name = ::rtl::OUString::createFromAscii( "SaveTo" );
+                aNewArgs[nInd].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "SaveTo" ));
                 aNewArgs[nInd].Value <<= sal_True;
             }
 
             uno::Reference< frame::XDispatch > xDispatch = m_xSlaveDispatchProvider->queryDispatch(
-                URL, ::rtl::OUString::createFromAscii( "_self" ), 0 );
+                URL, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "_self" )), 0 );
             if ( xDispatch.is() )
                 xDispatch->dispatch( URL, aNewArgs );
         }

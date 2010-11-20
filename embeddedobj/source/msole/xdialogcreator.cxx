@@ -118,15 +118,15 @@ uno::Sequence< sal_Int8 > GetRelatedInternalID_Impl( const uno::Sequence< sal_In
 uno::Sequence< ::rtl::OUString > SAL_CALL MSOLEDialogObjectCreator::impl_staticGetSupportedServiceNames()
 {
     uno::Sequence< ::rtl::OUString > aRet(2);
-    aRet[0] = ::rtl::OUString::createFromAscii("com.sun.star.embed.MSOLEObjectSystemCreator");
-    aRet[1] = ::rtl::OUString::createFromAscii("com.sun.star.comp.embed.MSOLEObjectSystemCreator");
+    aRet[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.MSOLEObjectSystemCreator"));
+    aRet[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.embed.MSOLEObjectSystemCreator"));
     return aRet;
 }
 
 //-------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL MSOLEDialogObjectCreator::impl_staticGetImplementationName()
 {
-    return ::rtl::OUString::createFromAscii("com.sun.star.comp.embed.MSOLEObjectSystemCreator");
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.embed.MSOLEObjectSystemCreator"));
 }
 
 //-------------------------------------------------------------------------
@@ -152,12 +152,12 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceByDia
 #ifdef WNT
 
     if ( !xStorage.is() )
-        throw lang::IllegalArgumentException( ::rtl::OUString::createFromAscii( "No parent storage is provided!\n" ),
+        throw lang::IllegalArgumentException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "No parent storage is provided!\n" )),
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             1 );
 
     if ( !sEntName.getLength() )
-        throw lang::IllegalArgumentException( ::rtl::OUString::createFromAscii( "Empty element name is provided!\n" ),
+        throw lang::IllegalArgumentException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Empty element name is provided!\n" )),
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             2 );
 
@@ -180,11 +180,11 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceByDia
 
 
     ::osl::Module aOleDlgLib;
-    if( !aOleDlgLib.load( ::rtl::OUString::createFromAscii( "oledlg" ) ) )
+    if( !aOleDlgLib.load( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "oledlg" ) ) ))
         throw uno::RuntimeException();
 
     OleUIInsertObjectA_Type * pInsertFct = (OleUIInsertObjectA_Type *)
-                                aOleDlgLib.getSymbol( ::rtl::OUString::createFromAscii( "OleUIInsertObjectA" ) );
+                                aOleDlgLib.getSymbol( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "OleUIInsertObjectA" ) ));
     if( !pInsertFct )
         throw uno::RuntimeException();
 
@@ -196,7 +196,7 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceByDia
         {
             uno::Reference< embed::XEmbedObjectCreator > xEmbCreator(
                         m_xFactory->createInstance(
-                                ::rtl::OUString::createFromAscii( "com.sun.star.embed.EmbeddedObjectCreator" ) ),
+                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.embed.EmbeddedObjectCreator" ) )),
                         uno::UNO_QUERY );
             if ( !xEmbCreator.is() )
                 throw uno::RuntimeException();
@@ -229,7 +229,7 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceByDia
                 throw uno::RuntimeException();
 
             uno::Sequence< beans::PropertyValue > aMediaDescr( 1 );
-            aMediaDescr[0].Name = ::rtl::OUString::createFromAscii( "URL" );
+            aMediaDescr[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "URL" ));
             aMediaDescr[0].Value <<= aFileURL;
 
             // TODO: use config helper for type detection
@@ -239,12 +239,12 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceByDia
             if ( aHelper.AddFilterNameCheckOwnFile( aMediaDescr ) )
                 xEmbCreator = uno::Reference< embed::XEmbedObjectCreator >(
                         m_xFactory->createInstance(
-                                ::rtl::OUString::createFromAscii( "com.sun.star.embed.EmbeddedObjectCreator" ) ),
+                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.embed.EmbeddedObjectCreator" ) )),
                         uno::UNO_QUERY );
             else
                 xEmbCreator = uno::Reference< embed::XEmbedObjectCreator >(
                         m_xFactory->createInstance(
-                                ::rtl::OUString::createFromAscii( "com.sun.star.embed.OLEEmbeddedObjectFactory" ) ),
+                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.embed.OLEEmbeddedObjectFactory" ) )),
                         uno::UNO_QUERY );
 
             if ( !xEmbCreator.is() )
@@ -273,14 +273,14 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceByDia
                 if ( nBufSize && nBufSize == GetMetaFileBitsEx( pMF->hMF, nBufSize, pBuf+22 ) )
                 {
                     datatransfer::DataFlavor aFlavor(
-                        ::rtl::OUString::createFromAscii( "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"" ),
-                        ::rtl::OUString::createFromAscii( "Image WMF" ),
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"" )),
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Image WMF" )),
                         getCppuType( ( const uno::Sequence< sal_Int8 >* ) 0 ) );
 
                     aObjectInfo.Options.realloc( 2 );
-                    aObjectInfo.Options[0].Name = ::rtl::OUString::createFromAscii( "Icon" );
+                    aObjectInfo.Options[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Icon" ));
                     aObjectInfo.Options[0].Value <<= aMetafile;
-                    aObjectInfo.Options[1].Name = ::rtl::OUString::createFromAscii( "IconFormat" );
+                    aObjectInfo.Options[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "IconFormat" ));
                     aObjectInfo.Options[1].Value <<= aFlavor;
                 }
 
@@ -317,12 +317,12 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceInitF
 #ifdef WNT
 
     if ( !xStorage.is() )
-        throw lang::IllegalArgumentException( ::rtl::OUString::createFromAscii( "No parent storage is provided!\n" ),
+        throw lang::IllegalArgumentException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "No parent storage is provided!\n" )),
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             1 );
 
     if ( !sEntryName.getLength() )
-        throw lang::IllegalArgumentException( ::rtl::OUString::createFromAscii( "Empty element name is provided!\n" ),
+        throw lang::IllegalArgumentException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Empty element name is provided!\n" )),
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             2 );
 

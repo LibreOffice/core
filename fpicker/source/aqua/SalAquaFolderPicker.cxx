@@ -80,8 +80,8 @@ namespace
     uno::Sequence<rtl::OUString> SAL_CALL FolderPicker_getSupportedServiceNames()
     {
         uno::Sequence<rtl::OUString> aRet(2);
-        aRet[0] = rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.SystemFolderPicker" );
-        aRet[1] = rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.AquaFolderPicker" );
+        aRet[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.SystemFolderPicker" ));
+        aRet[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.AquaFolderPicker" ));
         return aRet;
     }
 }
@@ -137,7 +137,7 @@ sal_Int16 SAL_CALL SalAquaFolderPicker::execute() throw( uno::RuntimeException )
         break;
 
     default:
-        throw uno::RuntimeException(rtl::OUString::createFromAscii("The dialog returned with an unknown result!"), static_cast< XFolderPicker* >( this ));
+        throw uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("The dialog returned with an unknown result!")), static_cast< XFolderPicker* >( this ));
         break;
     }
 
@@ -189,7 +189,7 @@ rtl::OUString SAL_CALL SalAquaFolderPicker::getDirectory() throw( uno::RuntimeEx
     OSL_TRACE("# of items: %d", nFiles);
 
     if (nFiles < 1) {
-        throw uno::RuntimeException(rtl::OUString::createFromAscii("no directory selected"), static_cast< XFolderPicker* >( this ));
+        throw uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("no directory selected")), static_cast< XFolderPicker* >( this ));
     }
 
     rtl::OUString aDirectory;
@@ -226,7 +226,7 @@ rtl::OUString SAL_CALL SalAquaFolderPicker::getImplementationName()
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
 
-    rtl::OUString retVal = rtl::OUString::createFromAscii( FOLDER_PICKER_IMPL_NAME );
+    rtl::OUString retVal(RTL_CONSTASCII_USTRINGPARAM( FOLDER_PICKER_IMPL_NAME ));
 
     DBG_PRINT_EXIT(CLASS_NAME, __func__, retVal);
 

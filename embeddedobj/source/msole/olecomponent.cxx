@@ -198,28 +198,28 @@ struct OleComponentNative_Impl {
         m_aSupportedGraphFormats.realloc( 5 );
 
         m_aSupportedGraphFormats[0] = datatransfer::DataFlavor(
-            ::rtl::OUString::createFromAscii( "application/x-openoffice-emf;windows_formatname=\"Image EMF\"" ),
-            ::rtl::OUString::createFromAscii( "Windows Enhanced Metafile" ),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice-emf;windows_formatname=\"Image EMF\"" )),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Windows Enhanced Metafile" )),
             getCppuType( (const uno::Sequence< sal_Int8 >*) 0 ) );
 
         m_aSupportedGraphFormats[1] = datatransfer::DataFlavor(
-            ::rtl::OUString::createFromAscii( "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"" ),
-            ::rtl::OUString::createFromAscii( "Windows Metafile" ),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"" )),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Windows Metafile" )),
             getCppuType( (const uno::Sequence< sal_Int8 >*) 0 ) );
 
         m_aSupportedGraphFormats[2] = datatransfer::DataFlavor(
-            ::rtl::OUString::createFromAscii( "application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"" ),
-            ::rtl::OUString::createFromAscii( "Bitmap" ),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"" )),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Bitmap" )),
             getCppuType( (const uno::Sequence< sal_Int8 >*) 0 ) );
 
         m_aSupportedGraphFormats[3] = datatransfer::DataFlavor(
-            ::rtl::OUString::createFromAscii( "image/png" ),
-            ::rtl::OUString::createFromAscii( "PNG" ),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "image/png" )),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "PNG" )),
             getCppuType( (const uno::Sequence< sal_Int8 >*) 0 ) );
 
         m_aSupportedGraphFormats[0] = datatransfer::DataFlavor(
-            ::rtl::OUString::createFromAscii( "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"" ),
-            ::rtl::OUString::createFromAscii( "GDIMetafile" ),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"" )),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "GDIMetafile" )),
             getCppuType( (const uno::Sequence< sal_Int8 >*) 0 ) );
     }
 
@@ -239,11 +239,11 @@ struct OleComponentNative_Impl {
 //----------------------------------------------
 DWORD GetAspectFromFlavor( const datatransfer::DataFlavor& aFlavor )
 {
-    if ( aFlavor.MimeType.indexOf( ::rtl::OUString::createFromAscii( ";Aspect=THUMBNAIL" ) ) != -1 )
+    if ( aFlavor.MimeType.indexOf( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ";Aspect=THUMBNAIL" )) ) != -1 )
         return DVASPECT_THUMBNAIL;
-    else if ( aFlavor.MimeType.indexOf( ::rtl::OUString::createFromAscii( ";Aspect=ICON" ) ) != -1 )
+    else if ( aFlavor.MimeType.indexOf( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ";Aspect=ICON" )) ) != -1 )
         return DVASPECT_ICON;
-    else if ( aFlavor.MimeType.indexOf( ::rtl::OUString::createFromAscii( ";Aspect=DOCPRINT" ) ) != -1 )
+    else if ( aFlavor.MimeType.indexOf( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ";Aspect=DOCPRINT" )) ) != -1 )
         return DVASPECT_DOCPRINT;
     else
         return DVASPECT_CONTENT;
@@ -255,11 +255,11 @@ DWORD GetAspectFromFlavor( const datatransfer::DataFlavor& aFlavor )
     ::rtl::OUString aResult;
 
     if ( nAsp == DVASPECT_THUMBNAIL )
-        aResult = ::rtl::OUString::createFromAscii( ";Aspect=THUMBNAIL" );
+        aResult = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ";Aspect=THUMBNAIL" ));
     else if ( nAsp == DVASPECT_ICON )
-        aResult = ::rtl::OUString::createFromAscii( ";Aspect=ICON" );
+        aResult = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ";Aspect=ICON" ));
     else if ( nAsp == DVASPECT_DOCPRINT )
-        aResult = ::rtl::OUString::createFromAscii( ";Aspect=DOCPRINT" );
+        aResult = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ";Aspect=DOCPRINT" ));
 
     // no suffix for DVASPECT_CONTENT
 
@@ -301,7 +301,7 @@ sal_Bool OleComponentNative_Impl::ConvertDataForFlavor( const STGMEDIUM& aMedium
 
         if ( aMedium.tymed == TYMED_MFPICT ) // Win Metafile
         {
-            aFormat = ::rtl::OUString::createFromAscii("image/x-wmf");
+            aFormat = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("image/x-wmf"));
             METAFILEPICT* pMF = ( METAFILEPICT* )GlobalLock( aMedium.hMetaFilePict );
             if ( pMF )
             {
@@ -332,7 +332,7 @@ sal_Bool OleComponentNative_Impl::ConvertDataForFlavor( const STGMEDIUM& aMedium
         }
         else if ( aMedium.tymed == TYMED_ENHMF ) // Enh Metafile
         {
-            aFormat = ::rtl::OUString::createFromAscii("image/x-emf");
+            aFormat = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("image/x-emf"));
             nBufSize = GetEnhMetaFileBits( aMedium.hEnhMetaFile, 0, NULL );
             pBuf = new unsigned char[nBufSize];
             if ( nBufSize && nBufSize == GetEnhMetaFileBits( aMedium.hEnhMetaFile, nBufSize, pBuf ) )
@@ -346,7 +346,7 @@ sal_Bool OleComponentNative_Impl::ConvertDataForFlavor( const STGMEDIUM& aMedium
         }
         else if ( aMedium.tymed == TYMED_GDI ) // Bitmap
         {
-            aFormat = ::rtl::OUString::createFromAscii("image/x-MS-bmp");
+            aFormat = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("image/x-MS-bmp"));
             nBufSize = GetBitmapBits( aMedium.hBitmap, 0, NULL );
             pBuf = new unsigned char[nBufSize];
             if ( nBufSize && nBufSize == sal::static_int_cast< ULONG >( GetBitmapBits( aMedium.hBitmap, nBufSize, pBuf ) ) )
@@ -417,7 +417,7 @@ sal_Bool GetClassIDFromSequence_Impl( uno::Sequence< sal_Int8 > aSeq, CLSID& aRe
         {
             if ( *pStr == '&' )
             {
-                aResult += ::rtl::OUString::createFromAscii( "~" );
+                aResult += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "~" ));
                 while( *( ++pStr ) == '&' );
             }
             else
@@ -1420,7 +1420,7 @@ void OleComponent::OnViewChange_Impl( sal_uInt32 dwAspect )
     {
         uno::Reference < awt::XRequestCallback > xRequestCallback(
             m_xFactory->createInstance(
-             ::rtl::OUString::createFromAscii("com.sun.star.awt.AsyncCallback") ),
+             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.AsyncCallback") )),
              uno::UNO_QUERY );
         xRequestCallback->addCallback( new MainThreadNotificationRequest( xLockObject, OLECOMP_ONVIEWCHANGE, dwAspect ), uno::Any() );
     }
@@ -1441,7 +1441,7 @@ void OleComponent::OnClose_Impl()
     {
         uno::Reference < awt::XRequestCallback > xRequestCallback(
             m_xFactory->createInstance(
-             ::rtl::OUString::createFromAscii("com.sun.star.awt.AsyncCallback") ),
+             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.AsyncCallback") )),
              uno::UNO_QUERY );
         xRequestCallback->addCallback( new MainThreadNotificationRequest( xLockObject, OLECOMP_ONCLOSE ), uno::Any() );
     }
@@ -1604,7 +1604,7 @@ uno::Any SAL_CALL OleComponent::getTransferData( const datatransfer::DataFlavor&
         // allow to retrieve stream-representation of the object persistence
         bSupportedFlavor = sal_True;
         uno::Reference < io::XStream > xTempFileStream(
-            m_xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.io.TempFile" ) ),
+            m_xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.io.TempFile" ) )),
             uno::UNO_QUERY );
 
         if ( !xTempFileStream.is() )

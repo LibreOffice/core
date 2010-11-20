@@ -521,7 +521,7 @@ SvtFileDialog::~SvtFileDialog()
         SvtViewOptions aDlgOpt( E_DIALOG, _pImp->_aIniKey );
         aDlgOpt.SetWindowState( String( GetWindowState(), osl_getThreadTextEncoding() ) );
         String sUserData = _pFileView->GetConfigString();
-        aDlgOpt.SetUserItem( ::rtl::OUString::createFromAscii( "UserData" ),
+        aDlgOpt.SetUserItem( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "UserData" )),
                              makeAny( ::rtl::OUString( sUserData ) ) );
     }
 
@@ -2071,8 +2071,8 @@ short SvtFileDialog::PrepareExecute()
                                                     INetURLObject::NO_DECODE ) ),
                                  Reference< XCommandEnvironment >() );
             Sequence< rtl::OUString > aProps(2);
-            aProps[0] = rtl::OUString::createFromAscii( "IsVolume" );
-            aProps[1] = rtl::OUString::createFromAscii( "IsRemoveable" );
+            aProps[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "IsVolume" ));
+            aProps[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "IsRemoveable" ));
 
             Reference< XResultSet > xResultSet
                 = aCnt.createCursor( aProps, ::ucbhelper::INCLUDE_FOLDERS_ONLY );
@@ -2502,7 +2502,7 @@ void SvtFileDialog::InitSize()
     {
         SetWindowState( ByteString( String( aDlgOpt.GetWindowState() ), osl_getThreadTextEncoding() ) );
 
-        Any aUserData = aDlgOpt.GetUserItem( ::rtl::OUString::createFromAscii( "UserData" ) );
+        Any aUserData = aDlgOpt.GetUserItem( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "UserData" ) ));
         ::rtl::OUString sCfgStr;
         if ( aUserData >>= sCfgStr )
             _pFileView->SetConfigString( String( sCfgStr ) );

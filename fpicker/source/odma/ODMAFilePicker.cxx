@@ -85,7 +85,7 @@ ODMAFilePicker::ODMAFilePicker( const Reference < XMultiServiceFactory >& xFacto
 {
     m_bUseDMS = ::odma::DMSsAvailable();
     m_xSystemFilePicker = xFactory->createInstance(
-        ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.Win32FilePicker" ) );
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.Win32FilePicker" ) ));
 }
 
 // XExecutableDialog functions
@@ -163,7 +163,7 @@ sal_Int16 SAL_CALL ODMAFilePicker::execute( )
                     // Insane API... the first element is a full URI, the rest
                     // are just the "basenames" in the same "directory".
                     if (i == 0)
-                        strings[0] = rtl::OUString::createFromAscii( "vnd.sun.star.odma:/" ) + rtl::OUString::createFromAscii( p );
+                        strings[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.odma:/" )) + rtl::OUString::createFromAscii( p );
                     else
                         strings[i] = rtl::OUString::createFromAscii( p );
                     p += strlen( p );
@@ -198,7 +198,7 @@ sal_Int16 SAL_CALL ODMAFilePicker::execute( )
             NODMUnRegisterApp( handle );
             if (status == ODM_SUCCESS)
             {
-                rtl::OUString s( rtl::OUString::createFromAscii( "vnd.sun.star.odma:/" ) +
+                rtl::OUString s( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.odma:/" )) +
                                  rtl::OUString::createFromAscii( newdocid ) );
                 // Create a Content for the odma URL so that
                 // odma::ContentProvider will learn about the DOCID we
@@ -520,7 +520,7 @@ Sequence< rtl::OUString > ODMAFilePicker::impl_getStaticSupportedServiceNames( )
 {
     Sequence< rtl::OUString > seqServiceNames( 2 );
     rtl::OUString* pArray = seqServiceNames.getArray();
-    pArray[0] = rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.ODMAFilePicker" );
+    pArray[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.ODMAFilePicker" ));
 
     // Super-ugly, but check the function sal_Bool
     // lcl_isSystemFilePicker( const Reference< XFilePicker >& ) in
@@ -530,13 +530,13 @@ Sequence< rtl::OUString > ODMAFilePicker::impl_getStaticSupportedServiceNames( )
     // isn't it?  If we don't claim to implement this "service" (which
     // is not defined in any IDL file, btw), we get hangs.
 
-    pArray[1] = rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.SystemFilePicker" );
+    pArray[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.SystemFilePicker" ));
     return seqServiceNames ;
 }
 
 rtl::OUString ODMAFilePicker::impl_getStaticImplementationName( )
 {
-    return rtl::OUString::createFromAscii( "com.sun.star.svtools.ODMAFilePicker" );
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.svtools.ODMAFilePicker" ));
 }
 
 Reference< XInterface > SAL_CALL ODMAFilePicker::impl_createInstance(

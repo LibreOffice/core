@@ -226,7 +226,7 @@ namespace svt
         try
         {
             ::rtl::OUString sTitle;
-            m_pContent->getPropertyValue( ::rtl::OUString::createFromAscii( "Title" ) ) >>= sTitle;
+            m_pContent->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Title" )) ) >>= sTitle;
             _rTitle =  sTitle;
 
             // from here on, we definately know that the content is valid

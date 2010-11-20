@@ -89,9 +89,9 @@ namespace
     uno::Sequence<rtl::OUString> SAL_CALL FilePicker_getSupportedServiceNames()
     {
         uno::Sequence<rtl::OUString> aRet(3);
-            aRet[0] = rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.FilePicker" );
-        aRet[1] = rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.SystemFilePicker" );
-        aRet[2] = rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.GtkFilePicker" );
+            aRet[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FilePicker" ));
+        aRet[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.SystemFilePicker" ));
+        aRet[2] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.GtkFilePicker" ));
         return aRet;
     }
 }
@@ -907,7 +907,7 @@ uno::Sequence<rtl::OUString> SAL_CALL SalGtkFilePicker::getSelectedFiles() throw
 
                     if( sExtension.getLength() >= 3 ) // 3 = typical/minimum extension length
                     {
-                        static const OUString aStarDot = OUString::createFromAscii( "*." );
+                        static const OUString aStarDot(RTL_CONSTASCII_USTRINGPARAM( "*." ));
 
                         ::rtl::OUString aNewFilter;
                         ::rtl::OUString aOldFilter = getCurrentFilter();
@@ -977,7 +977,7 @@ uno::Sequence<rtl::OUString> SAL_CALL SalGtkFilePicker::getSelectedFiles() throw
             if( !bExtensionTypedIn && ( !sToken.equalsAscii( "*" ) ) )
             {
                 //if the filename does not already have the auto extension, stick it on
-                OUString sExtension = OUString::createFromAscii( "." ) + sToken;
+                OUString sExtension = OUString(RTL_CONSTASCII_USTRINGPARAM( "." )) + sToken;
                 OUString &rBase = aSelectedFiles[nIndex];
                 sal_Int32 nExtensionIdx = rBase.getLength() - sExtension.getLength();
                 OSL_TRACE( "idx are %d %d\n", rBase.lastIndexOf( sExtension ), nExtensionIdx );
@@ -1028,7 +1028,7 @@ sal_Int16 SAL_CALL SalGtkFilePicker::execute() throw( uno::RuntimeException )
     int btn = GTK_RESPONSE_NO;
 
     uno::Reference< awt::XExtendedToolkit > xToolkit(
-        m_xServiceMgr->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.awt.Toolkit") ), uno::UNO_QUERY);
+        m_xServiceMgr->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.Toolkit")) ), uno::UNO_QUERY);
 
     RunDialog* pRunDialog = new RunDialog(m_pDialog, xToolkit);
     uno::Reference < awt::XTopWindowListener > xLifeCycle(pRunDialog);
@@ -1505,7 +1505,7 @@ void SalGtkFilePicker::implChangeType( GtkTreeSelection *selection )
     {
         gchar *title;
         gtk_tree_model_get (model, &iter, 2, &title, -1);
-        aLabel += rtl::OUString::createFromAscii( ": " );
+        aLabel += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ": " ));
         aLabel += rtl::OUString( title, strlen(title), RTL_TEXTENCODING_UTF8 );
         g_free (title);
     }
@@ -1640,7 +1640,7 @@ void SAL_CALL SalGtkFilePicker::initialize( const uno::Sequence<uno::Any>& aArgu
     uno::Any aAny;
     if( 0 == aArguments.getLength() )
         throw lang::IllegalArgumentException(
-            rtl::OUString::createFromAscii( "no arguments" ),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "no arguments" )),
             static_cast<XFilePicker2*>( this ), 1 );
 
     aAny = aArguments[0];
@@ -1648,7 +1648,7 @@ void SAL_CALL SalGtkFilePicker::initialize( const uno::Sequence<uno::Any>& aArgu
     if( ( aAny.getValueType() != ::getCppuType( ( sal_Int16* )0 ) ) &&
          (aAny.getValueType() != ::getCppuType( ( sal_Int8* )0 ) ) )
          throw lang::IllegalArgumentException(
-            rtl::OUString::createFromAscii( "invalid argument type" ),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "invalid argument type" )),
             static_cast<XFilePicker2*>( this ), 1 );
 
     sal_Int16 templateId = -1;
@@ -1736,7 +1736,7 @@ void SAL_CALL SalGtkFilePicker::initialize( const uno::Sequence<uno::Any>& aArgu
                 break;
         default:
                 throw lang::IllegalArgumentException(
-                rtl::OUString::createFromAscii( "Unknown template" ),
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Unknown template" )),
                 static_cast< XFilePicker2* >( this ),
                 1 );
     }
@@ -1815,7 +1815,7 @@ void SAL_CALL SalGtkFilePicker::cancel() throw( uno::RuntimeException )
 rtl::OUString SAL_CALL SalGtkFilePicker::getImplementationName()
     throw( uno::RuntimeException )
 {
-    return rtl::OUString::createFromAscii( FILE_PICKER_IMPL_NAME );
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( FILE_PICKER_IMPL_NAME ));
 }
 
 // -------------------------------------------------
@@ -1915,7 +1915,7 @@ GtkFileFilter* SalGtkFilePicker::implAddFilter( const OUString& rFilter, const O
     OString aFilterName = rtl::OUStringToOString( aShrunkName, RTL_TEXTENCODING_UTF8 );
     gtk_file_filter_set_name( filter, aFilterName );
 
-    static const OUString aStarDot = OUString::createFromAscii( "*." );
+    static const OUString aStarDot(RTL_CONSTASCII_USTRINGPARAM( "*." ));
     OUString aTokens;
 
     bool bAllGlob = !rType.compareToAscii( "*.*" ) || !rType.compareToAscii( "*" );
@@ -1933,7 +1933,7 @@ GtkFileFilter* SalGtkFilePicker::implAddFilter( const OUString& rFilter, const O
             if (aToken.getLength())
             {
                 if (aTokens.getLength())
-                    aTokens += OUString::createFromAscii(",");
+                    aTokens += OUString(RTL_CONSTASCII_USTRINGPARAM(","));
                 aTokens = aTokens += aToken;
                 gtk_file_filter_add_custom (filter, GTK_FILE_FILTER_URI,
                     case_insensitive_filter,

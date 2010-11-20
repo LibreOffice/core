@@ -94,9 +94,9 @@ namespace
     uno::Sequence<rtl::OUString> SAL_CALL FilePicker_getSupportedServiceNames()
     {
         uno::Sequence<rtl::OUString> aRet(3);
-        aRet[0] = rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.FilePicker" );
-        aRet[1] = rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.SystemFilePicker" );
-        aRet[2] = rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.AquaFilePicker" );
+        aRet[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FilePicker" ));
+        aRet[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.SystemFilePicker" ));
+        aRet[2] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.AquaFilePicker" ));
         return aRet;
     }
 }
@@ -187,7 +187,6 @@ sal_Int16 SAL_CALL SalAquaFilePicker::execute() throw( uno::RuntimeException )
     // if m_pDialog is nil after initialization, something must have gone wrong before
     // or there was no initialization (see issue http://www.openoffice.org/issues/show_bug.cgi?id=100214)
     if (m_pDialog == nil) {
-        //throw uno::RuntimeException(rtl::OUString::createFromAscii("The dialog was not properly initialized!"), static_cast< XFilePicker* >( this ));
         m_nDialogType = NAVIGATIONSERVICES_OPEN;
     }
 
@@ -206,7 +205,7 @@ sal_Int16 SAL_CALL SalAquaFilePicker::execute() throw( uno::RuntimeException )
                     rtl::OUString ouName = [windowTitle OUString];
                     //a window title will typically be something like "Untitled1 - OpenOffice.org Writer"
                     //but we only want the "Untitled1" part of it
-                    sal_Int32 indexOfDash = ouName.indexOf(rtl::OUString::createFromAscii(" - "));
+                    sal_Int32 indexOfDash = ouName.indexOf(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" - ")));
                     if (indexOfDash > -1) {
                         m_sSaveFileName = ouName.copy(0,indexOfDash);
                         if (m_sSaveFileName.getLength() > 0) {
@@ -244,7 +243,7 @@ sal_Int16 SAL_CALL SalAquaFilePicker::execute() throw( uno::RuntimeException )
             break;
 
         default:
-            throw uno::RuntimeException(rtl::OUString::createFromAscii("The dialog returned with an unknown result!"), static_cast< XFilePicker* >( this ));
+            throw uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("The dialog returned with an unknown result!")), static_cast< XFilePicker* >( this ));
             break;
     }
 
@@ -506,14 +505,14 @@ throw( uno::Exception, uno::RuntimeException )
     // parameter checking
     uno::Any aAny;
     if( 0 == aArguments.getLength() )
-        throw lang::IllegalArgumentException(rtl::OUString::createFromAscii( "no arguments" ),
+        throw lang::IllegalArgumentException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "no arguments" )),
                                              static_cast<XFilePicker*>( this ), 1 );
 
     aAny = aArguments[0];
 
     if( ( aAny.getValueType() != ::getCppuType( ( sal_Int16* )0 ) ) &&
         (aAny.getValueType() != ::getCppuType( ( sal_Int8* )0 ) ) )
-        throw lang::IllegalArgumentException(rtl::OUString::createFromAscii( "invalid argument type" ),
+        throw lang::IllegalArgumentException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "invalid argument type" )),
                                              static_cast<XFilePicker*>( this ), 1 );
 
     sal_Int16 templateId = -1;
@@ -566,7 +565,7 @@ throw( uno::Exception, uno::RuntimeException )
             OSL_TRACE( "Template: FILESAVE_AUTOEXTENSION" );
             break;
         default:
-            throw lang::IllegalArgumentException(rtl::OUString::createFromAscii( "Unknown template" ),
+            throw lang::IllegalArgumentException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Unknown template" )),
                                                  static_cast< XFilePicker* >( this ),
                                                  1 );
     }
@@ -625,7 +624,7 @@ throw( uno::RuntimeException )
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
 
-    rtl::OUString retVal = rtl::OUString::createFromAscii( FILE_PICKER_IMPL_NAME );
+    rtl::OUString retVal(RTL_CONSTASCII_USTRINGPARAM( FILE_PICKER_IMPL_NAME ));
 
     DBG_PRINT_EXIT(CLASS_NAME, __func__, retVal);
 

@@ -77,9 +77,9 @@ namespace
     uno::Sequence<rtl::OUString> SAL_CALL FilePicker_getSupportedServiceNames()
     {
         uno::Sequence<rtl::OUString> aRet(3);
-        aRet[0] = rtl::OUString::createFromAscii("com.sun.star.ui.dialogs.FilePicker");
-        aRet[1] = rtl::OUString::createFromAscii("com.sun.star.ui.dialogs.SystemFilePicker");
-        aRet[2] = rtl::OUString::createFromAscii("com.sun.star.ui.dialogs.KDEFilePicker");
+        aRet[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.dialogs.FilePicker"));
+        aRet[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.dialogs.SystemFilePicker"));
+        aRet[2] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.dialogs.KDEFilePicker"));
         return aRet;
     }
 }
@@ -113,7 +113,7 @@ UnxFilePicker::~UnxFilePicker()
 {
     if ( m_nFilePickerPid > 0 )
     {
-        sendCommand( ::rtl::OUString::createFromAscii( "exit" ) );
+        sendCommand( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "exit" )) );
         waitpid( m_nFilePickerPid, NULL, 0 );
     }
 
@@ -182,7 +182,7 @@ sal_Int16 SAL_CALL UnxFilePicker::execute()
     // this is _not_ an osl::Condition, see i#93366
     m_pCommandThread->execCondition().reset();
 
-    sendCommand( ::rtl::OUString::createFromAscii( "exec" ) );
+    sendCommand( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "exec" ) ));
 
     m_pCommandThread->execCondition().wait();
 
@@ -196,8 +196,8 @@ void SAL_CALL UnxFilePicker::setMultiSelectionMode( sal_Bool bMode )
     ::osl::MutexGuard aGuard( m_aMutex );
 
     ::rtl::OUString aString = bMode?
-        ::rtl::OUString::createFromAscii( "setMultiSelection true" ):
-        ::rtl::OUString::createFromAscii( "setMultiSelection false" );
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "setMultiSelection true" )):
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "setMultiSelection false" ));
 
     sendCommand( aString );
 }
@@ -236,7 +236,7 @@ rtl::OUString SAL_CALL UnxFilePicker::getDisplayDirectory()
     checkFilePicker();
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    sendCommand( ::rtl::OUString::createFromAscii( "getDirectory" ),
+    sendCommand( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "getDirectory" )),
                  m_pCommandThread->getDirectoryCondition() );
 
     return m_pCommandThread->getDirectory();
@@ -248,7 +248,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL UnxFilePicker::getFiles()
     checkFilePicker();
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    sendCommand( ::rtl::OUString::createFromAscii( "getFiles" ),
+    sendCommand( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "getFiles" )),
                  m_pCommandThread->getFilesCondition() );
 
     return m_pCommandThread->getFiles();
@@ -290,7 +290,7 @@ rtl::OUString SAL_CALL UnxFilePicker::getCurrentFilter()
     checkFilePicker();
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    sendCommand( ::rtl::OUString::createFromAscii( "getCurrentFilter" ),
+    sendCommand( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "getCurrentFilter" )),
                  m_pCommandThread->getCurrentFilterCondition() );
 
     return m_pCommandThread->getCurrentFilter();
@@ -543,21 +543,21 @@ void SAL_CALL UnxFilePicker::initialize( const uno::Sequence<uno::Any> &rArgumen
     uno::Any aAny;
     if ( 0 == rArguments.getLength( ) )
         throw lang::IllegalArgumentException(
-                rtl::OUString::createFromAscii( "no arguments" ),
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "no arguments" )),
                 static_cast< XFilePicker* >( this ), 1 );
 
     aAny = rArguments[0];
 
     if ( ( aAny.getValueType() != ::getCppuType( (sal_Int16*)0 ) ) && ( aAny.getValueType() != ::getCppuType( (sal_Int8*)0 ) ) )
         throw lang::IllegalArgumentException(
-                rtl::OUString::createFromAscii( "invalid argument type" ),
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "invalid argument type" )),
                 static_cast< XFilePicker* >( this ), 1 );
 
     sal_Int16 templateId = -1;
     aAny >>= templateId;
 
-    ::rtl::OUString aTypeOpen   = ::rtl::OUString::createFromAscii( "setType \"open\"" );
-    ::rtl::OUString aTypeSaveAs = ::rtl::OUString::createFromAscii( "setType \"save\"" );
+    ::rtl::OUString aTypeOpen(RTL_CONSTASCII_USTRINGPARAM( "setType \"open\"" ));
+    ::rtl::OUString aTypeSaveAs(RTL_CONSTASCII_USTRINGPARAM( "setType \"save\"" ));
 
     switch ( templateId )
     {
@@ -634,7 +634,7 @@ void SAL_CALL UnxFilePicker::initialize( const uno::Sequence<uno::Any> &rArgumen
 
         default:
             throw lang::IllegalArgumentException(
-                    rtl::OUString::createFromAscii( "Unknown template" ),
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Unknown template" )),
                     static_cast< XFilePicker* >( this ),
                     1 );
     }
@@ -662,7 +662,7 @@ void SAL_CALL UnxFilePicker::disposing( const lang::EventObject &rEvent )
 rtl::OUString SAL_CALL UnxFilePicker::getImplementationName()
     throw( uno::RuntimeException )
 {
-    return rtl::OUString::createFromAscii( FILE_PICKER_IMPL_NAME );
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( FILE_PICKER_IMPL_NAME ));
 }
 
 sal_Bool SAL_CALL UnxFilePicker::supportsService( const rtl::OUString& ServiceName )
@@ -773,7 +773,7 @@ void UnxFilePicker::checkFilePicker() throw( ::com::sun::star::uno::RuntimeExcep
     else
     {
         throw uno::RuntimeException(
-                ::rtl::OUString::createFromAscii( "the external file picker does not run" ),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "the external file picker does not run" )),
                 *this );
     }
 }
@@ -783,7 +783,7 @@ void UnxFilePicker::sendCommand( const ::rtl::OUString &rCommand )
     if ( m_nFilePickerWrite < 0 )
         return;
 
-    ::rtl::OString aUtfString = OUStringToOString( rCommand + ::rtl::OUString::createFromAscii( "\n" ), RTL_TEXTENCODING_UTF8 );
+    ::rtl::OString aUtfString = OUStringToOString( rCommand + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "\n" )), RTL_TEXTENCODING_UTF8 );
 
 #if OSL_DEBUG_LEVEL > 0
     ::std::cerr << "UnxFilePicker sent: \"" << aUtfString.getStr() << "\"" << ::std::endl;

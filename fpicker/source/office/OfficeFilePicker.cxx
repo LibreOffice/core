@@ -1166,14 +1166,14 @@ Sequence< rtl::OUString > SvtFilePicker::impl_getStaticSupportedServiceNames()
 {
     Sequence< rtl::OUString > seqServiceNames( 1 );
     rtl::OUString* pArray = seqServiceNames.getArray();
-    pArray[0] = rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.OfficeFilePicker" );
+    pArray[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.OfficeFilePicker" ));
     return seqServiceNames ;
 }
 
 /* Helper for XServiceInfo */
 rtl::OUString SvtFilePicker::impl_getStaticImplementationName()
 {
-    return rtl::OUString::createFromAscii( "com.sun.star.svtools.OfficeFilePicker" );
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.svtools.OfficeFilePicker" ));
 }
 
 /* Helper for registry */

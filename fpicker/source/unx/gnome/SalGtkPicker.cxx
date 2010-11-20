@@ -221,19 +221,19 @@ static void lcl_setGTKLanguage(const uno::Reference<lang::XMultiServiceFactory>&
     {
         uno::Reference<lang::XMultiServiceFactory> xConfigMgr =
           uno::Reference<lang::XMultiServiceFactory>(xServiceMgr->createInstance(
-            OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider")),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationProvider"))),
               UNO_QUERY_THROW );
 
         Sequence< Any > theArgs(1);
-        theArgs[ 0 ] <<= OUString::createFromAscii("org.openoffice.Office.Linguistic/General");
+        theArgs[ 0 ] <<= OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Linguistic/General"));
 
         uno::Reference< container::XNameAccess > xNameAccess =
           uno::Reference< container::XNameAccess >(xConfigMgr->createInstanceWithArguments(
-            OUString::createFromAscii("com.sun.star.configuration.ConfigurationAccess"), theArgs ),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationAccess")), theArgs ),
               UNO_QUERY_THROW );
 
         if (xNameAccess.is())
-            xNameAccess->getByName(OUString::createFromAscii("UILocale")) >>= sUILocale;
+            xNameAccess->getByName(OUString(RTL_CONSTASCII_USTRINGPARAM("UILocale"))) >>= sUILocale;
     } catch (...) {}
 
     if (sUILocale.getLength())
