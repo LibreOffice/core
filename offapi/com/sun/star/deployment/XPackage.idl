@@ -71,8 +71,8 @@ interface XPackage
 
     /** checks if the package can be installed.
 
-        Only if the return value is true the package is allowed to be installed.
-        In case of false or in case of an exception, the package must be removed
+        Only if the return value is <TRUE/> the package is allowed to be installed.
+        In case of <FALSE/> or in case of an exception, the package must be removed
         completely.
         After return of this function no code from the extension may be used
         anymore, so that the extension can be safely removed from the harddisk.
@@ -83,7 +83,7 @@ interface XPackage
             indicates that an extension with the same identifier is already installed.
 
         @return
-            null - all prerequisites are met. Otherwise, a value from
+            <NULL/> - all prerequisites are met. Otherwise, a value from
             <member>Prerequisites</member> indicating what prerequisites are missing.
      */
     long checkPrerequisites(
@@ -106,8 +106,8 @@ interface XPackage
                command environment for error handling and other interaction.
 
         @return
-            true - all dependencies are satisfied
-            false - at least one dependency failed.
+            <TRUE/> - all dependencies are satisfied
+            <FALSE/> - at least one dependency failed.
      */
     boolean checkDependencies(
         [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
@@ -121,7 +121,7 @@ interface XPackage
 
         @param xAbortChannel
                abort channel to asynchronously abort the registration process,
-               or null
+               or <NULL/>
         @param xCmdEnv
                command environment for error and progress handling
         @return
@@ -143,11 +143,11 @@ interface XPackage
 
         @param startup
                indicates that registration is adapted to the particular
-               startup scenario. That is, it is set to true, when called
+               startup scenario. That is, it is set to <TRUE/>, when called
                from <member>XExtensionManager::synchronize</member>
         @param xAbortChannel
                abort channel to asynchronously abort the registration process,
-               or null
+               or <NULL/>
         @param xCmdEnv
                command environment for error and progress handling
     */
@@ -167,7 +167,7 @@ interface XPackage
 
         @param xAbortChannel
                abort channel to asynchronously abort the registration process,
-               or null
+               or <NULL/>
         @param xCmdEnv
                command environment for error and progress handling
     */
@@ -189,12 +189,12 @@ interface XPackage
 
     /** Gets packages of the bundle.
 
-        If <member>isRemoved</member> returns true then getBundle may return an
+        If <member>isRemoved</member> returns <TRUE/> then getBundle may return an
         empty sequence in case the object is not registered.
 
         @param xAbortChannel
                abort channel to asynchronously abort the registration process,
-               or null
+               or <NULL/>
         @param xCmdEnv
                command environment for error and progress handling
         @return
@@ -337,7 +337,7 @@ interface XPackage
         If registration data are created during registration, but the package is
         currently not registered, for example after calling
         <member>XPackage::revokePackage</member>, then <member
-        scope="com::sun::star::beans">Optional::IsPresent</member> is true and
+        scope="com::sun::star::beans">Optional::IsPresent</member> is <TRUE/> and
         the <member scope="com::sun::star::beans">Optional::Value</member> may
         be an empty string.
     */
@@ -346,7 +346,7 @@ interface XPackage
 
     /** indicates if this object represents a removed extension or extension
         item. This is the case when it was created by providing
-        <code>true</code> for the <code>removed</code> parameter in the function
+        <TRUE/> for the <code>removed</code> parameter in the function
         <member>XPackageRegistry::bindPackage</member>.
      */
     boolean isRemoved();
