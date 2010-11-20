@@ -282,7 +282,6 @@ sal_Int32 GetDiffDate360(
     {
         if( bUSAMethod && nDay1 != 30 )
         {
-            //aDate2 += 1;      -> 1.xx.yyyy
             nDay2 = 1;
             if( nMonth2 == 12 )
             {
@@ -433,7 +432,7 @@ sal_Int32 GetDiffDate( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEnd
             DaysToDate( nEndDate, nD2, nM2, nY2 );
 
             sal_Bool        bLeap = IsLeapYear( nY1 );
-            sal_Int32       nDays, nMonths/*, nYears*/;
+            sal_Int32       nDays, nMonths;
 
             nMonths = nM2 - nM1;
             nDays = nD2 - nD1;
@@ -1013,71 +1012,6 @@ double GetOddfprice( sal_Int32 /*nNullDate*/, sal_Int32 /*nSettle*/, sal_Int32 /
     sal_Int32 /*nBase*/ ) THROWDEF_RTE_IAE
 {
     THROW_RTE;  // #87380#
-/*
-    double      fN = GetCoupnum( nNullDate, nSettle, nMat, nFreq, nBase ) - 1.0;
-    double      fNq = GetCoupnum( nNullDate, nSettle, nFirstCoup, nFreq, nBase ) - 1.0;
-    double      fDSC = GetCoupdaysnc( nNullDate, nSettle, nFirstCoup, nFreq, nBase );
-    double      fDSC_E = fDSC / GetCoupdays( nNullDate, nSettle, nMat, nFreq, nBase );
-    double      fNC = GetCoupnum( nNullDate, nIssue, nFirstCoup, nFreq, nBase );
-    sal_uInt32  nNC = sal_uInt32( fNC );
-    sal_uInt16  nMonthDelta = 12 / sal_uInt16( nFreq );
-
-    sal_uInt32  i;
-    double      f1YieldFreq = 1.0 + fYield / double( nFreq );
-    double      f100RateFreq = 100.0 * fRate / double( nFreq );
-
-    double*     pDC = new double[ nNC + 1 ];
-    double*     pNL = new double[ nNC + 1 ];
-    double*     pA = new double[ nNC + 1 ];
-
-    pDC[ 0 ] = pNL[ 0 ] = pA[ 0 ] = 1.0;
-
-    ScaDate aStartDate( nNullDate, nSettle, nBase );
-    ScaDate aNextCoup( nNullDate, nFirstCoup, nBase );
-    if( nNC )
-    {
-        pDC[ 1 ] = ScaDate::GetDiff( aStartDate, aNextCoup );
-        pNL[ 1 ] = GetCoupdays( nNullDate, nSettle, nFirstCoup, nFreq, nBase );
-        pA[ 1 ] = pDC[ 1 ];
-        ScaDate aPre;
-        for( i = 1 ; i <= nNC ; i++ )
-        {
-            aPre = aStartDate;
-            aStartDate.addMonths( nMonthDelta );
-            aNextCoup.addMonths( nMonthDelta );
-            pDC[ i ] = ScaDate::GetDiff( aPre, aStartDate );
-            pNL[ i ] = GetCoupdays( nNullDate, aStartDate.GetDate( nNullDate ), aNextCoup.GetDate( nNullDate ),
-                                        nFreq, nBase );
-            pA[ i ] = ScaDate::GetDiff( aStartDate, aNextCoup );
-        }
-    }
-
-    double      fT1 = fRedemp / pow( f1YieldFreq, fN + fNq + fDSC_E );
-
-    double      fT2 = 0.0;
-    for( i = 1 ; i <= nNC ; i++ )
-        fT2 += pDC[ i ] / pNL[ i ];
-    fT2 *= f100RateFreq / pow( f1YieldFreq, fNq + fDSC_E );
-
-    double      fT3 = 0.0;
-    for( double k = 2.0 ; k <= fN ; k++ )
-        fT3 += 1.0 / pow( f1YieldFreq, k - fNq + fDSC_E );
-    fT3 *= f100RateFreq;
-
-    double      fT4 = 0.0;
-    for( i = 1 ; i <= nNC ; i++ )
-        fT4 += pA[ i ] / pNL[ i ];
-    fT4 *= f100RateFreq;
-
-    if( nNC )
-    {
-        delete pDC;
-        delete pNL;
-        delete pA;
-    }
-
-    return fT1 + fT2 + fT3 - fT4;
-*/
 }
 
 
@@ -1161,56 +1095,6 @@ double GetOddfyield( sal_Int32 /*nNullDate*/, sal_Int32 /*nSettle*/, sal_Int32 /
     sal_Int32 /*nBase*/ ) THROWDEF_RTE_IAE
 {
     THROW_RTE;  // #87380#
-/*
-    //GetOddfprice( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nIssue,
-    //sal_Int32 nFirstCoup, double fRate, double fYield, double fRedemp, sal_Int32 nFreq,
-    //sal_Int32 nBase )
-    double      fPriceN = 0.0;
-    double      fYield1 = 0.0;
-    double      fYield2 = 1.0;
-    double      fPrice1 = GetOddfprice( nNullDate, nSettle, nMat, nIssue, nFirstCoup, fRate, fYield1, fRedemp, nFreq, nBase );
-    double      fPrice2 = GetOddfprice( nNullDate, nSettle, nMat, nIssue, nFirstCoup, fRate, fYield2, fRedemp, nFreq, nBase );
-    double      fYieldN = ( fYield2 - fYield1 ) * 0.5;
-
-    for( sal_uInt32 nIter = 0 ; nIter < 100 && fPriceN != fPrice ; nIter++ )
-    {
-        fPriceN = GetOddfprice( nNullDate, nSettle, nMat, nIssue, nFirstCoup, fRate, fYieldN, fRedemp, nFreq, nBase );
-
-        if( fPrice == fPrice1 )
-            return fYield1;
-        else if( fPrice == fPrice2 )
-            return fYield2;
-        else if( fPrice == fPriceN )
-            return fYieldN;
-        else if( fPrice < fPrice2 )
-        {
-            fYield2 *= 2.0;
-            fPrice2 = GetOddfprice( nNullDate, nSettle, nMat, nIssue, nFirstCoup, fRate, fYield2, fRedemp, nFreq, nBase );
-
-            fYieldN = ( fYield2 - fYield1 ) * 0.5;
-        }
-        else
-        {
-            if( fPrice < fPriceN )
-            {
-                fYield1 = fYieldN;
-                fPrice1 = fPriceN;
-            }
-            else
-            {
-                fYield2 = fYieldN;
-                fPrice2 = fPriceN;
-            }
-
-            fYieldN = fYield2 - ( fYield2 - fYield1 ) * ( ( fPrice - fPrice2 ) / ( fPrice1 - fPrice2 ) );
-        }
-    }
-
-    if( fabs( fPrice - fPriceN ) > fPrice / 100.0 )
-        THROW_IAE;      // result not precise enough
-
-    return fYieldN;
-*/
 }
 
 
@@ -1281,23 +1165,6 @@ double GetZw( double fZins, double fZzr, double fRmz, double fBw, sal_Int32 nF )
 
     return -fZw;
 }
-
-
-/*double TBillYield( constREFXPS& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fPrice ) THROWDEF_RTE_IAE
-{
-    sal_Int32   nDiff = GetDiffDate360( xOpt, nSettle, nMat, sal_True );
-
-    if( fPrice <= 0.0 || nSettle >= nMat || nDiff > 360 )
-        THROW_IAE;
-
-    double      fRet = 100.0;
-    fRet /= fPrice;
-    fRet--;
-    fRet *= double( nDiff );
-    fRet /= 360.0;
-
-    return fRet;
-}*/
 
 
 //-----------------------------------------------------------------------------
@@ -1515,7 +1382,6 @@ FuncData::FuncData( const FuncDataBase& r, ResMgr& rResMgr ) :
     eCat( r.eCat )
 {
     AnalysisRscStrArrLoader aArrLoader( RID_ANALYSIS_DEFFUNCTION_NAMES, nCompID, rResMgr );
-//  ResStringArray      aDefFuncNameArray( AnalysisResId( nCompID, rResMgr ) );
     const ResStringArray&   rArr = aArrLoader.GetStringArray();
 
     sal_uInt16              nCount = sal::static_int_cast<sal_uInt16>( rArr.Count() );
@@ -2356,8 +2222,6 @@ double ConvertDataLinear::Convert(
 {
     if( Class() != r.Class() )
         THROW_IAE;
-
-//  return ::rtl::math::round( r.ConvertFromBase( ConvertToBase( f, nLevFrom ), nLevTo ), 13 );
     return r.ConvertFromBase( ConvertToBase( f, nLevFrom ), nLevTo );
 }
 
@@ -2462,14 +2326,12 @@ ConvertDataList::ConvertDataList( void )
     // ENERGY: 1 Joule is...
     NEWDP( "J",     1.0000000000000000E00,  CDC_Energy ); // Joule
     NEWDP( "e",     1.0000000000000000E07,  CDC_Energy ); // Erg  -> http://www.chemie.fu-berlin.de/chemistry/general/si.html
-//  NEWD( "e",      9.99999519343231E06,    CDC_Energy ); // Erg
     NEWDP( "c",     2.3900624947346700E-01, CDC_Energy ); // Thermodynamical Calorie
     NEWDP( "cal",   2.3884619064201700E-01, CDC_Energy ); // Calorie
     NEWDP( "eV",    6.2414570000000000E18,  CDC_Energy ); // Electronvolt
     NEWDP( "ev",    6.2414570000000000E18,  CDC_Energy ); // Electronvolt also
     NEWD( "HPh",    3.7250611111111111E-07, CDC_Energy ); // Horsepower Hours
     NEWD( "hh",     3.7250611111111111E-07, CDC_Energy ); // Horsepower Hours also
-//  NEWD( "HPh",    3.72506430801000E-07,   CDC_Energy ); // Horsepower Hours
     NEWDP( "Wh",    2.7777777777777778E-04, CDC_Energy ); // Watt Hours
     NEWDP( "wh",    2.7777777777777778E-04, CDC_Energy ); // Watt Hours also
     NEWD( "flb",    2.37304222192651E01,    CDC_Energy ); // Foot Pound
@@ -2482,7 +2344,6 @@ ConvertDataList::ConvertDataList( void )
     NEWD( "HP",     1.341022E-03,           CDC_Power ); // Horsepower
     NEWD( "h",      1.341022E-03,           CDC_Power ); // Horsepower also
     NEWD( "PS",     1.359622E-03,           CDC_Power ); // *** German Pferdestaerke
-//  NEWD( "HP",     1.4102006031908E-03,    CDC_Power ); // Excel seams to be a little bit wrong... either this doesn't fit to J -> HPh
 
     // MAGNETISM: 1 Tesla is...
     NEWDP( "T",     1.0000000000000000E00,  CDC_Magnetism ); // Tesla
@@ -2580,10 +2441,6 @@ ConvertDataList::~ConvertDataList()
 
 double ConvertDataList::Convert( double fVal, const STRING& rFrom, const STRING& rTo ) THROWDEF_RTE_IAE
 {
-// This will not catch illegal units
-//   if( rFrom == rTo )
-//       return fVal;
-
     ConvertData*    pFrom = NULL;
     ConvertData*    pTo = NULL;
     sal_Bool        bSearchFrom = sal_True;

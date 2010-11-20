@@ -234,9 +234,6 @@ AnalysisAddIn::~AnalysisAddIn()
     if( pCDL )
         delete pCDL;
 
-//  if( pResMgr )           no delete, because _all_ resource managers are deleted _before_ this dtor is called
-//      delete pResMgr;
-
     if( pDefLocales )
         delete[] pDefLocales;
 }
@@ -420,7 +417,7 @@ STRING SAL_CALL AnalysisAddIn::getDisplayArgumentName( const STRING& aName, sal_
     if( p && nArg <= 0xFFFF )
     {
         sal_uInt16  nStr = p->GetStrIndex( sal_uInt16( nArg ) );
-        if( nStr /*&& nStr < 4*/ )
+        if( nStr )
             aRet = GetFuncDescrStr( p->GetDescrID(), nStr );
         else
             aRet = STRFROMANSI( "internal" );
@@ -438,7 +435,7 @@ STRING SAL_CALL AnalysisAddIn::getArgumentDescription( const STRING& aName, sal_
     if( p && nArg <= 0xFFFF )
     {
         sal_uInt16  nStr = p->GetStrIndex( sal_uInt16( nArg ) );
-        if( nStr /*&& nStr < 4*/ )
+        if( nStr )
             aRet = GetFuncDescrStr( p->GetDescrID(), nStr + 1 );
         else
             aRet = STRFROMANSI( "for internal use only" );
@@ -564,13 +561,6 @@ SEQofLocName SAL_CALL AnalysisAddIn::getCompatibilityNames( const STRING& aProgr
 
 
 // XAnalysis
-
-/*double SAL_CALL AnalysisAddIn::get_Test( constREFXPS&,
-    sal_Int32 nMode, double f1, double f2, double f3 ) THROWDEF_RTE
-{
-    return _Test( nMode, f1, f2, f3 );
-}*/
-
 
 /**
  * Workday
@@ -793,7 +783,6 @@ double SAL_CALL AnalysisAddIn::getSeriessum( double fX, double fN, double fM, co
         sal_Int32       n1, n2;
         sal_Int32       nE1 = aCoeffList.getLength();
         sal_Int32       nE2;
-        //sal_Int32     nZ = 0;
 
         for( n1 = 0 ; n1 < nE1 ; n1++ )
         {
@@ -945,7 +934,6 @@ double SAL_CALL AnalysisAddIn::getBessely( double fNum, sal_Int32 nOrder ) THROW
     if( nOrder < 0 || fNum <= 0.0 )
         THROW_IAE;
 
-//  return yn( nOrder, fNum );
     double fRet = sca::analysis::BesselY( fNum, nOrder );
     RETURN_FINITE( fRet );
 }
@@ -1269,7 +1257,6 @@ STRING SAL_CALL AnalysisAddIn::getImsqrt( const STRING& aNum ) THROWDEF_RTE_IAE
 {
     Complex     z( aNum );
 
-//  z.Power( 0.5 );
     z.Sqrt();
 
     return z.GetString();
