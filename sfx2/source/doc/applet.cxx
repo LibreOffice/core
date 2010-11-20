@@ -138,8 +138,8 @@ AppletObject::getSupportedServiceNames()
 AppletObject::impl_getStaticSupportedServiceNames()
 {
     ::com::sun::star::uno::Sequence< ::rtl::OUString > seqServiceNames( 1 );
-    seqServiceNames.getArray() [0] = ::rtl::OUString::createFromAscii(
-        "com.sun.star.embed.SpecialEmbeddedObject" );
+    seqServiceNames.getArray() [0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+        "com.sun.star.embed.SpecialEmbeddedObject" ));
     return seqServiceNames ;
 }
 
@@ -154,8 +154,8 @@ AppletObject::impl_createInstance(
 
 ::rtl::OUString AppletObject::impl_getStaticImplementationName()
 {
-    return ::rtl::OUString::createFromAscii(
-        "com.sun.star.comp.sfx2.AppletObject" );
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+        "com.sun.star.comp.sfx2.AppletObject" ));
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >

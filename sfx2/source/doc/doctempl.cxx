@@ -2331,8 +2331,8 @@ void SfxDocTemplate_Impl::AddRegion( const OUString& rTitle,
     // now get the content of the region
     uno::Reference< XResultSet > xResultSet;
     Sequence< OUString > aProps(2);
-    aProps[0] = OUString::createFromAscii( TITLE );
-    aProps[1] = OUString::createFromAscii( TARGET_URL );
+    aProps[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( TITLE ));
+    aProps[1] = OUString(RTL_CONSTASCII_USTRINGPARAM( TARGET_URL ));
 
     try
     {
@@ -2368,7 +2368,7 @@ void SfxDocTemplate_Impl::CreateFromHierarchy( Content &rTemplRoot )
 {
     uno::Reference< XResultSet > xResultSet;
     Sequence< OUString > aProps(1);
-    aProps[0] = OUString::createFromAscii( TITLE );
+    aProps[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( TITLE ));
 
     try
     {
@@ -2476,7 +2476,7 @@ void SfxDocTemplate_Impl::GetTemplates( Content& rTargetFolder,
     uno::Reference< XResultSet > xResultSet;
     Sequence< OUString >    aProps(1);
 
-    aProps[0] = OUString::createFromAscii( TITLE );
+    aProps[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( TITLE ));
 
     try
     {

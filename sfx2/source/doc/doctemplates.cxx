@@ -1600,7 +1600,7 @@ sal_Bool SfxDocTplService_Impl::removeGroup( const OUString& rGroupName )
         uno::Reference< XResultSet > xResultSet;
         Sequence< OUString > aProps( 1 );
 
-        aProps[0] = OUString::createFromAscii( TARGET_URL );
+        aProps[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( TARGET_URL ));
 
         try
         {
@@ -1717,7 +1717,7 @@ sal_Bool SfxDocTplService_Impl::renameGroup( const OUString& rOldName,
         uno::Reference< XResultSet > xResultSet;
         Sequence< OUString > aProps( 1 );
 
-        aProps[0] = OUString::createFromAscii( TARGET_URL );
+        aProps[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( TARGET_URL ));
         ResultSetInclude eInclude = INCLUDE_DOCUMENTS_ONLY;
         xResultSet = aGroup.createCursor( aProps, eInclude );
 
@@ -2432,9 +2432,9 @@ void SfxDocTplService_Impl::addHierGroup( GroupList_Impl& rList,
     uno::Reference< XResultSet > xResultSet;
     Sequence< OUString >    aProps(3);
 
-    aProps[0] = OUString::createFromAscii( TITLE );
-    aProps[1] = OUString::createFromAscii( TARGET_URL );
-    aProps[2] = OUString::createFromAscii( PROPERTY_TYPE );
+    aProps[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( TITLE ));
+    aProps[1] = OUString(RTL_CONSTASCII_USTRINGPARAM( TARGET_URL ));
+    aProps[2] = OUString(RTL_CONSTASCII_USTRINGPARAM( PROPERTY_TYPE ));
 
     try
     {
@@ -2538,7 +2538,7 @@ void SfxDocTplService_Impl::addFsysGroup( GroupList_Impl& rList,
     Content                 aContent;
     uno::Reference< XResultSet > xResultSet;
     Sequence< OUString >    aProps(1);
-    aProps[0] = OUString::createFromAscii( TITLE );
+    aProps[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( TITLE ));
 
     try
     {
@@ -2606,7 +2606,7 @@ void SfxDocTplService_Impl::createFromContent( GroupList_Impl& rList,
 
     uno::Reference< XResultSet > xResultSet;
     Sequence< OUString > aProps(1);
-    aProps[0] = OUString::createFromAscii( TITLE );
+    aProps[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( TITLE ));
 
     try
     {
