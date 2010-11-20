@@ -309,7 +309,6 @@ void ScDocShell::Execute( SfxRequest& rReq )
             if (pReqArgs)
             {
                 ScDocument* pDoc = GetDocument();
-//                BOOL bUndo (pDoc->IsUndoEnabled());
                 const   SfxPoolItem* pItem;
                 String  aChartName, aRangeName;
 
@@ -459,7 +458,6 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 if (pBindings)
                 {
                     pBindings->Invalidate( FID_AUTO_CALC );
-//                  pBindings->Invalidate( FID_RECALC );        // jetzt immer enabled
                 }
                 rReq.AppendItem( SfxBoolItem( FID_AUTO_CALC, bNewVal ) );
                 rReq.Done();
@@ -2127,22 +2125,6 @@ void ScDocShell::Print( SfxProgress& rProgress, PrintDialog* pPrintDialog,
                     delete pDrawView;
                 }
             }
-
-#if 0
-            if ( n+1 < nCollateCopies &&
-                 (pPrinter->GetDuplexMode() == DUPLEX_SHORTEDGE || pPrinter->GetDuplexMode() == DUPLEX_LONGEDGE) &&
-                 ( nPrinted % 2 ) == 1 )
-            {
-                // #105584# when several collated copies are printed in duplex mode, and there is
-                // an odd number of pages, print an empty page between copies, so the first page of
-                // the second copy isn't printed on the back of the last page of the first copy.
-                // (same as in Writer ViewShell::Prt)
-
-                // FIXME: needs to be adapted to XRenderable interface
-                pPrinter->StartPage();
-                pPrinter->EndPage();
-            }
-#endif
         }
     }
 
@@ -2223,10 +2205,6 @@ void ScDocShell::GetState( SfxItemSet &rSet )
             //  Wenn eine Formel editiert wird, muss FID_RECALC auf jeden Fall enabled sein.
             //  Recalc fuer das Doc war mal wegen #29898# disabled, wenn AutoCalc an war,
             //  ist jetzt wegen #41540# aber auch immer enabled.
-//          case FID_RECALC:
-//              if ( aDocument.GetAutoCalc() )
-//                  rSet.DisableItem( nWhich );
-//              break;
 
             case SID_TABLES_COUNT:
                 rSet.Put( SfxInt16Item( nWhich, aDocument.GetTableCount() ) );
@@ -2276,7 +2254,6 @@ void ScDocShell::GetSbxState( SfxItemSet &rSet )
 
 void __EXPORT ScDocShell::Draw( OutputDevice* pDev, const JobSetup & /* rSetup */, USHORT nAspect )
 {
-//  bIsOle = TRUE;      // jetzt ueber den CreateMode
 
     SCTAB nVisTab = aDocument.GetVisibleTab();
     if (!aDocument.HasTable(nVisTab))
@@ -2319,7 +2296,6 @@ Rectangle __EXPORT ScDocShell::GetVisArea( USHORT nAspect ) const
 
     if( nAspect == ASPECT_THUMBNAIL )
     {
-//      Rectangle aArea( 0,0, 3175,3175 );                          //  120x120 Pixel in 1:1
         Rectangle aArea( 0,0, SC_PREVIEW_SIZE_X,SC_PREVIEW_SIZE_Y );
         BOOL bNegativePage = aDocument.IsNegativePage( aDocument.GetVisibleTab() );
         if ( bNegativePage )

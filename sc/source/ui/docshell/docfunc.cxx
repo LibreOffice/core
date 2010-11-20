@@ -3745,13 +3745,6 @@ BOOL ScDocFunc::AutoFormat( const ScRange& rRange, const ScMarkData* pTabMark,
 
         if (bSize)
         {
-/*          SCCOL nCols[2];
-            nCols[0] = nStartCol;
-            nCols[1] = nEndCol;
-            SCROW nRows[2];
-            nRows[0] = nStartRow;
-            nRows[1] = nEndRow;
-*/
             SCCOLROW nCols[2] = { nStartCol, nEndCol };
             SCCOLROW nRows[2] = { nStartRow, nEndRow };
 
