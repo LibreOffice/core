@@ -452,7 +452,7 @@ UICategoryDescription::UICategoryDescription( const Reference< XMultiServiceFact
 
     // insert generic categories mappings
     m_aModuleToCommandFileMap.insert( ModuleToCommandFileMap::value_type(
-        rtl::OUString::createFromAscii( GENERIC_MODULE_NAME ), aGenericCategories ));
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( GENERIC_MODULE_NAME )), aGenericCategories ));
 
     UICommandsHashMap::iterator pCatIter = m_aUICommandsHashMap.find( aGenericCategories );
     if ( pCatIter != m_aUICommandsHashMap.end() )

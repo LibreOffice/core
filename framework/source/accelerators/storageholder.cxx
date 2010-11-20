@@ -64,7 +64,7 @@
 
 #define PATH_SEPERATOR_ASCII        "/"
 #define PATH_SEPERATOR_UNICODE      ((sal_Unicode)'/')
-#define PATH_SEPERATOR              ::rtl::OUString::createFromAscii(PATH_SEPERATOR_ASCII)
+#define PATH_SEPERATOR              ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(PATH_SEPERATOR_ASCII))
 
 //===============================================
 // namespace

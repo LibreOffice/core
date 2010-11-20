@@ -188,15 +188,15 @@ OReadToolBoxDocumentHandler::OReadToolBoxDocumentHandler( const Reference< XInde
     }
 
     // pre-calculate a hash code for all style strings to speed up xml read process
-    m_nHashCode_Style_Radio         = ::rtl::OUString::createFromAscii( ATTRIBUTE_ITEMSTYLE_RADIO ).hashCode();
-    m_nHashCode_Style_Auto          = ::rtl::OUString::createFromAscii( ATTRIBUTE_ITEMSTYLE_AUTO ).hashCode();
-    m_nHashCode_Style_Left          = ::rtl::OUString::createFromAscii( ATTRIBUTE_ITEMSTYLE_LEFT ).hashCode();
-    m_nHashCode_Style_AutoSize      = ::rtl::OUString::createFromAscii( ATTRIBUTE_ITEMSTYLE_AUTOSIZE ).hashCode();
-    m_nHashCode_Style_DropDown      = ::rtl::OUString::createFromAscii( ATTRIBUTE_ITEMSTYLE_DROPDOWN ).hashCode();
-    m_nHashCode_Style_Repeat        = ::rtl::OUString::createFromAscii( ATTRIBUTE_ITEMSTYLE_REPEAT ).hashCode();
-    m_nHashCode_Style_DropDownOnly  = ::rtl::OUString::createFromAscii( ATTRIBUTE_ITEMSTYLE_DROPDOWNONLY ).hashCode();
-    m_nHashCode_Style_Text  = ::rtl::OUString::createFromAscii( ATTRIBUTE_ITEMSTYLE_TEXT ).hashCode();
-    m_nHashCode_Style_Image  = ::rtl::OUString::createFromAscii( ATTRIBUTE_ITEMSTYLE_IMAGE ).hashCode();
+    m_nHashCode_Style_Radio         = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_ITEMSTYLE_RADIO )).hashCode();
+    m_nHashCode_Style_Auto          = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_ITEMSTYLE_AUTO )).hashCode();
+    m_nHashCode_Style_Left          = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_ITEMSTYLE_LEFT )).hashCode();
+    m_nHashCode_Style_AutoSize      = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_ITEMSTYLE_AUTOSIZE )).hashCode();
+    m_nHashCode_Style_DropDown      = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_ITEMSTYLE_DROPDOWN )).hashCode();
+    m_nHashCode_Style_Repeat        = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_ITEMSTYLE_REPEAT )).hashCode();
+    m_nHashCode_Style_DropDownOnly  = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_ITEMSTYLE_DROPDOWNONLY )).hashCode();
+    m_nHashCode_Style_Text  = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_ITEMSTYLE_TEXT )).hashCode();
+    m_nHashCode_Style_Image  = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_ITEMSTYLE_IMAGE )).hashCode();
 
     m_bToolBarStartFound            = sal_False;
     m_bToolBarEndFound              = sal_False;

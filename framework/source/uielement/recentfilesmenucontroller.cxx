@@ -300,7 +300,7 @@ void RecentFilesMenuController::executeEntry( sal_Int32 nIndex )
 
         aArgsList.realloc( NUM_OF_PICKLIST_ARGS );
         aArgsList[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Referer" ));
-        aArgsList[0].Value = makeAny( ::rtl::OUString::createFromAscii( SFX_REFERER_USER ));
+        aArgsList[0].Value = makeAny( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SFX_REFERER_USER )));
 
         // documents in the picklist will never be opened as templates
         aArgsList[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AsTemplate" ));

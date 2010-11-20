@@ -463,11 +463,11 @@ void ImageManagerImpl::implts_initialize()
 
         try
         {
-            m_xUserImageStorage = m_xUserConfigStorage->openStorageElement( OUString::createFromAscii( IMAGE_FOLDER ),
+            m_xUserImageStorage = m_xUserConfigStorage->openStorageElement( OUString(RTL_CONSTASCII_USTRINGPARAM( IMAGE_FOLDER )),
                                                                             nModes );
             if ( m_xUserImageStorage.is() )
             {
-                m_xUserBitmapsStorage = m_xUserImageStorage->openStorageElement( OUString::createFromAscii( BITMAPS_FOLDER ),
+                m_xUserBitmapsStorage = m_xUserImageStorage->openStorageElement( OUString(RTL_CONSTASCII_USTRINGPARAM( BITMAPS_FOLDER )),
                                                                                  nModes );
             }
         }
@@ -1357,11 +1357,11 @@ throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException
     {
         long nModes = ElementModes::READWRITE;
 
-        uno::Reference< XStorage > xUserImageStorage = Storage->openStorageElement( OUString::createFromAscii( IMAGE_FOLDER ),
+        uno::Reference< XStorage > xUserImageStorage = Storage->openStorageElement( OUString(RTL_CONSTASCII_USTRINGPARAM( IMAGE_FOLDER )),
                                                                                     nModes );
         if ( xUserImageStorage.is() )
         {
-            uno::Reference< XStorage > xUserBitmapsStorage = xUserImageStorage->openStorageElement( OUString::createFromAscii( BITMAPS_FOLDER ),
+            uno::Reference< XStorage > xUserBitmapsStorage = xUserImageStorage->openStorageElement( OUString(RTL_CONSTASCII_USTRINGPARAM( BITMAPS_FOLDER )),
                                                                                                     nModes );
             for ( sal_Int32 i = 0; i < ImageType_COUNT; i++ )
             {

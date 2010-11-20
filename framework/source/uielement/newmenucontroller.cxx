@@ -446,7 +446,7 @@ void SAL_CALL NewMenuController::select( const css::awt::MenuEvent& rEvent ) thr
             xURLTransformer->parseStrict( aTargetURL );
 
             aArgsList[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Referer" ));
-            aArgsList[0].Value = makeAny( ::rtl::OUString::createFromAscii( SFX_REFERER_USER ));
+            aArgsList[0].Value = makeAny( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SFX_REFERER_USER )));
 
             rtl::OUString aTargetFrame( m_aTargetFrame );
             AddInfoForId::const_iterator pItem = m_aAddInfoForItem.find( rEvent.MenuId );

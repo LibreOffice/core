@@ -673,7 +673,7 @@ void BackingWindow::layoutButton(
                           const String& i_rStr
                           )
 {
-    rtl::OUString aURL( rtl::OUString::createFromAscii( i_pURL ? i_pURL : "" ) );
+    rtl::OUString aURL( i_pURL ? rtl::OUString::createFromAscii( i_pURL ) : rtl::OUString() );
     // setup button
     i_rBtn.SetPaintTransparent( TRUE );
     i_rBtn.SetClickHdl( LINK( this, BackingWindow, ClickHdl ) );
