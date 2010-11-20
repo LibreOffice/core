@@ -211,9 +211,6 @@ void ScPrintAreasDlg::SetReference( const ScRange& rRef, ScDocument* /* pDoc */ 
         if ( &aEdPrintArea == pRefInputEdit )
         {
             rRef.Format( aStr, SCR_ABS, pDoc, eConv );
-
-//          aEdPrintArea.ReplaceSelected( aStr );
-
             String aVal = aEdPrintArea.GetText();
             Selection aSel = aEdPrintArea.GetSelection();
             aSel.Justify();
@@ -473,7 +470,6 @@ void ScPrintAreasDlg::Impl_FillLists()
     {
         String          aName;
         String          aSymbol;
-//        ScRange         aRange;
         ScRangeData*    pData = NULL;
 
         for ( USHORT i=0; i<nCount; i++ )
