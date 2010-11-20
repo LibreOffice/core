@@ -438,7 +438,7 @@ uno::Reference< ::com::sun::star::frame::XLayoutManager > SAL_CALL SfxInPlaceCli
     uno::Reference< ::com::sun::star::frame::XLayoutManager > xMan;
     try
     {
-        uno::Any aAny = xFrame->getPropertyValue( ::rtl::OUString::createFromAscii("LayoutManager") );
+        uno::Any aAny = xFrame->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LayoutManager")) );
         aAny >>= xMan;
     }
     catch ( uno::Exception& )
