@@ -183,7 +183,7 @@ sal_Bool GetHelpAnchor_Impl( const String& _rURL, String& _rAnchor )
     {
         ::ucbhelper::Content aCnt( INetURLObject( _rURL ).GetMainURL( INetURLObject::NO_DECODE ),
                              Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
-        if ( ( aCnt.getPropertyValue( ::rtl::OUString::createFromAscii( "AnchorName" ) ) >>= sAnchor ) )
+        if ( ( aCnt.getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AnchorName")) ) >>= sAnchor ) )
         {
 
             if ( sAnchor.getLength() > 0 )
@@ -237,7 +237,7 @@ static Sequence< ::rtl::OUString > GetPropertyNames()
 }
 
 SfxHelpOptions_Impl::SfxHelpOptions_Impl()
-    : ConfigItem( ::rtl::OUString::createFromAscii("Office.SFX/Help") )
+    : ConfigItem( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Office.SFX/Help")) )
     , m_pIds( NULL )
 {
     Sequence< ::rtl::OUString > aNames = GetPropertyNames();
@@ -955,7 +955,7 @@ void SfxHelp::OpenHelpAgent( ULONG nHelpId )
                 URL aURL;
                 aURL.Complete = CreateHelpURL_Impl( nHelpId, GetHelpModuleName_Impl() );
                 Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
-                    ::rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" ) ), UNO_QUERY );
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer")) ), UNO_QUERY );
                 xTrans->parseStrict(aURL);
 
                 Reference < XFrame > xCurrentFrame;
@@ -968,7 +968,7 @@ void SfxHelp::OpenHelpAgent( ULONG nHelpId )
                 Reference< XDispatch > xHelpDispatch;
                 if ( xDispProv.is() )
                     xHelpDispatch = xDispProv->queryDispatch(
-                        aURL, ::rtl::OUString::createFromAscii("_helpagent"),
+                        aURL, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_helpagent")),
                         FrameSearchFlag::PARENT | FrameSearchFlag::SELF );
 
                 DBG_ASSERT( xHelpDispatch.is(), "OpenHelpAgent: could not get a dispatcher!" );

@@ -438,7 +438,7 @@ void SAL_CALL IMPL_SfxBaseController_CloseListenerHelper::queryClosing( const EV
                     pShell->TakeFrameOwnerShip_Impl();
             }
 
-            throw com::sun::star::util::CloseVetoException(::rtl::OUString::createFromAscii("Controller disagree ..."),static_cast< ::cppu::OWeakObject*>(this));
+            throw com::sun::star::util::CloseVetoException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Controller disagree ...")),static_cast< ::cppu::OWeakObject*>(this));
         }
     }
 }

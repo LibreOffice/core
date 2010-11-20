@@ -264,7 +264,7 @@ void ShutdownIcon::OpenURL( const ::rtl::OUString& aURL, const ::rtl::OUString& 
             aDispatchURL.Complete = aURL;
 
             Reference < com::sun::star::util::XURLTransformer > xURLTransformer(
-                ::comphelper::getProcessServiceFactory()->createInstance( OUString::createFromAscii("com.sun.star.util.URLTransformer") ),
+                ::comphelper::getProcessServiceFactory()->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer")) ),
                 com::sun::star::uno::UNO_QUERY );
             if ( xURLTransformer.is() )
             {
@@ -314,7 +314,7 @@ void ShutdownIcon::FromTemplate()
 
         URL aTargetURL;
         aTargetURL.Complete = OUString( RTL_CONSTASCII_USTRINGPARAM( "slot:5500" ) );
-        Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY );
+        Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))), UNO_QUERY );
         xTrans->parseStrict( aTargetURL );
 
         Reference < ::com::sun::star::frame::XDispatchProvider > xProv( xFrame, UNO_QUERY );
@@ -324,14 +324,14 @@ void ShutdownIcon::FromTemplate()
             if ( aTargetURL.Protocol.compareToAscii("slot:") == COMPARE_EQUAL )
                 xDisp = xProv->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
             else
-                xDisp = xProv->queryDispatch( aTargetURL, ::rtl::OUString::createFromAscii("_blank"), 0 );
+                xDisp = xProv->queryDispatch( aTargetURL, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_blank")), 0 );
         }
         if ( xDisp.is() )
         {
             Sequence<PropertyValue> aArgs(1);
             PropertyValue* pArg = aArgs.getArray();
-            pArg[0].Name = rtl::OUString::createFromAscii("Referer");
-            pArg[0].Value <<= ::rtl::OUString::createFromAscii("private:user");
+            pArg[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Referer"));
+            pArg[0].Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:user"));
             Reference< ::com::sun::star::frame::XNotifyingDispatch > xNotifyer( xDisp, UNO_QUERY );
             if ( xNotifyer.is() )
             {
@@ -418,18 +418,18 @@ IMPL_STATIC_LINK( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, EMPTYAR
                 Sequence< PropertyValue >   aArgs(3);
 
                 Reference < com::sun::star::task::XInteractionHandler > xInteraction(
-                    ::comphelper::getProcessServiceFactory()->createInstance( OUString::createFromAscii("com.sun.star.task.InteractionHandler") ),
+                    ::comphelper::getProcessServiceFactory()->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.task.InteractionHandler")) ),
                     com::sun::star::uno::UNO_QUERY );
 
-                aArgs[0].Name = OUString::createFromAscii( "InteractionHandler" );
+                aArgs[0].Name = OUString(RTL_CONSTASCII_USTRINGPARAM("InteractionHandler"));
                 aArgs[0].Value <<= xInteraction;
 
                 sal_Int16 nMacroExecMode = ::com::sun::star::document::MacroExecMode::USE_CONFIG;
-                aArgs[1].Name = OUString::createFromAscii( "MacroExecutionMode" );
+                aArgs[1].Name = OUString(RTL_CONSTASCII_USTRINGPARAM("MacroExecutionMode"));
                 aArgs[1].Value <<= nMacroExecMode;
 
                 sal_Int16 nUpdateDoc = ::com::sun::star::document::UpdateDocMode::ACCORDING_TO_CONFIG;
-                aArgs[2].Name = OUString::createFromAscii( "UpdateDocMode" );
+                aArgs[2].Name = OUString(RTL_CONSTASCII_USTRINGPARAM("UpdateDocMode"));
                 aArgs[2].Value <<= nUpdateDoc;
 
                 // pb: #102643# use the filedlghelper to get the current filter name,
@@ -451,7 +451,7 @@ IMPL_STATIC_LINK( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, EMPTYAR
                     if ( bReadOnly )
                     {
                         aArgs.realloc( ++nArgs );
-                        aArgs[nArgs-1].Name  = OUString::createFromAscii( "ReadOnly" );
+                        aArgs[nArgs-1].Name  = OUString(RTL_CONSTASCII_USTRINGPARAM("ReadOnly"));
                         aArgs[nArgs-1].Value <<= bReadOnly;
                     }
 
@@ -466,7 +466,7 @@ IMPL_STATIC_LINK( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, EMPTYAR
                         sal_Int16   uVersion = (sal_Int16)iVersion;
 
                         aArgs.realloc( ++nArgs );
-                        aArgs[nArgs-1].Name  = OUString::createFromAscii( "Version" );
+                        aArgs[nArgs-1].Name  = OUString(RTL_CONSTASCII_USTRINGPARAM("Version"));
                         aArgs[nArgs-1].Value <<= uVersion;
                     }
 
@@ -491,7 +491,7 @@ IMPL_STATIC_LINK( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, EMPTYAR
                         if ( aFilterName.getLength() )
                         {
                             aArgs.realloc( ++nArgs );
-                            aArgs[nArgs-1].Name  = OUString::createFromAscii( "FilterName" );
+                            aArgs[nArgs-1].Name  = OUString(RTL_CONSTASCII_USTRINGPARAM("FilterName"));
                             aArgs[nArgs-1].Value <<= aFilterName;
                         }
                     }
@@ -503,7 +503,7 @@ IMPL_STATIC_LINK( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, EMPTYAR
                 {
                     OUString    aBaseDirURL = sFiles[0];
                     if ( aBaseDirURL.getLength() > 0 && aBaseDirURL[aBaseDirURL.getLength()-1] != '/' )
-                        aBaseDirURL += OUString::createFromAscii("/");
+                        aBaseDirURL += OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
 
                     int iFiles;
                     for ( iFiles = 1; iFiles < nFiles; iFiles++ )

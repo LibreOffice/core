@@ -57,7 +57,7 @@ using namespace ::rtl;
 
 #define VERSION 1
 #define nPixel  30L
-#define USERITEM_NAME           OUString::createFromAscii( "UserItem" )
+#define USERITEM_NAME           OUString(RTL_CONSTASCII_USTRINGPARAM("UserItem"))
 
 struct SfxDock_Impl
 {
