@@ -63,20 +63,11 @@ class RulerCtrlItem : public SfxControllerItem
     RulerCtrlItem(USHORT nId, Ruler& rRlr, SfxBindings& rBind);
 };
 
-/*************************************************************************
-|*
-\************************************************************************/
-
 RulerCtrlItem::RulerCtrlItem(USHORT _nId, Ruler& rRlr, SfxBindings& rBind)
 : SfxControllerItem(_nId, rBind)
 , rRuler(rRlr)
 {
 }
-
-
-/*************************************************************************
-|*
-\************************************************************************/
 
 void RulerCtrlItem::StateChanged( USHORT nSId, SfxItemState, const SfxPoolItem* pState )
 {

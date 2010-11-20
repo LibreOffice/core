@@ -715,7 +715,6 @@ void SdNavigatorWin::RefreshDocumentLB( const String* pDocName )
 
                 maLbDocs.InsertEntry( aStr, LISTBOX_APPEND );
 
-                //
                 if( pDocShell == pCurrentDocShell )
                     pInfo->SetActive();
                 else

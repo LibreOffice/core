@@ -362,7 +362,7 @@ EditEngine* PresenterTextView::Implementation::CreateEditEngine (void)
         //
         SvtLinguOptions aOpt;
         SvtLinguConfig().GetOptions( aOpt );
-        //
+
         struct FontDta {
             INT16       nFallbackLang;
             INT16       nLang;
@@ -383,7 +383,7 @@ EditEngine* PresenterTextView::Implementation::CreateEditEngine (void)
         aTable[0].nLang = MsLangId::resolveSystemLanguageByScriptType(aOpt.nDefaultLanguage, ::com::sun::star::i18n::ScriptType::LATIN);
         aTable[1].nLang = MsLangId::resolveSystemLanguageByScriptType(aOpt.nDefaultLanguage_CJK, ::com::sun::star::i18n::ScriptType::ASIAN);
         aTable[2].nLang = MsLangId::resolveSystemLanguageByScriptType(aOpt.nDefaultLanguage_CTL, ::com::sun::star::i18n::ScriptType::COMPLEX);
-        //
+
         for (int i = 0;  i < 3;  ++i)
         {
             const FontDta &rFntDta = aTable[i];

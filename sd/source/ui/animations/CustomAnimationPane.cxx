@@ -824,9 +824,6 @@ void CustomAnimationPane::updateControls()
             mpPBPropertyMore->Enable( FALSE );
         }
 
-        //
-        // ---
-        //
         USHORT nPos = 0xffff;
 
         sal_Int16 nNodeType = pEffect->getNodeType();
@@ -1371,8 +1368,6 @@ STLPropertySet* CustomAnimationPane::createSelectionSet()
             InteractiveSequence* pIS = static_cast< InteractiveSequence* >( pEffectSequence );
             addValue( pSet, nHandleTrigger, makeAny( pIS->getTriggerShape() ) );
         }
-
-        //
 
         CustomAnimationPresetPtr pDescriptor = rPresets.getEffectDescriptor( pEffect->getPresetId() );
         if( pDescriptor.get() )

@@ -1710,12 +1710,6 @@ void SdPage::onRemoveObject( SdrObject* pObject )
     }
 }
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 void SdPage::SetSize(const Size& aSize)
 {
     Size aOldSize = GetSize();
@@ -1740,13 +1734,6 @@ void SdPage::SetSize(const Size& aSize)
     }
 }
 
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 void SdPage::SetBorder(INT32 nLft, INT32 nUpp, INT32 nRgt, INT32 nLwr)
 {
     if (nLft != GetLftBorder() || nUpp != GetUppBorder() ||
@@ -1756,13 +1743,6 @@ void SdPage::SetBorder(INT32 nLft, INT32 nUpp, INT32 nRgt, INT32 nLwr)
     }
 }
 
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 void SdPage::SetLftBorder(INT32 nBorder)
 {
     if (nBorder != GetLftBorder() )
@@ -1770,13 +1750,6 @@ void SdPage::SetLftBorder(INT32 nBorder)
         FmFormPage::SetLftBorder(nBorder);
     }
 }
-
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 void SdPage::SetRgtBorder(INT32 nBorder)
 {
@@ -1786,13 +1759,6 @@ void SdPage::SetRgtBorder(INT32 nBorder)
     }
 }
 
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 void SdPage::SetUppBorder(INT32 nBorder)
 {
     if (nBorder != GetUppBorder() )
@@ -1800,13 +1766,6 @@ void SdPage::SetUppBorder(INT32 nBorder)
         FmFormPage::SetUppBorder(nBorder);
     }
 }
-
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 void SdPage::SetLwrBorder(INT32 nBorder)
 {
@@ -2644,22 +2603,10 @@ const String& SdPage::GetName() const
     return maCreatedPageName;
 }
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 void SdPage::SetOrientation( Orientation eOrient)
 {
     meOrientation = eOrient;
 }
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 Orientation SdPage::GetOrientation() const
 {

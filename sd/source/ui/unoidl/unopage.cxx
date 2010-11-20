@@ -241,7 +241,6 @@ const SvxItemPropertySet* ImplGetDrawPagePropertySet( sal_Bool bImpress, PageKin
         GRAPHIC_PAGE_PROPERTIES
     };
 
-    //
     bool bWithoutBackground = ePageKind != PK_STANDARD && ePageKind != PK_HANDOUT;
     const SvxItemPropertySet* pRet = 0;
     if( bImpress )
@@ -372,9 +371,6 @@ sal_Int64 SAL_CALL SdGenericDrawPage::getSomething( const ::com::sun::star::uno:
         }
 }
 
-/***********************************************************************
-*                                                                      *
-***********************************************************************/
 SdGenericDrawPage::SdGenericDrawPage( SdXImpressDocument* _pModel, SdPage* pInPage, const SvxItemPropertySet* _pSet ) throw()
 :       SvxFmDrawPage( (SdrPage*) pInPage ),
         SdUnoSearchReplaceShape(this),
@@ -995,9 +991,6 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
     GetModel()->SetModified();
 }
 
-/***********************************************************************
-*                                                                      *
-***********************************************************************/
 Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
     throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
@@ -2002,9 +1995,6 @@ sal_Bool SAL_CALL SdPageLinkTargets::hasByName( const OUString& aName )
     return FindObject( aName ) != NULL;
 }
 
-/***********************************************************************
-*                                                                      *
-***********************************************************************/
 SdrObject* SdPageLinkTargets::FindObject( const String& rName ) const throw()
 {
     SdPage* pPage = mpUnoPage->GetPage();

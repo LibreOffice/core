@@ -1717,10 +1717,6 @@ BOOL SdPublishingDlg::Save()
 // *********************************************************************
 // SdDesignNameDlg Methoden
 // *********************************************************************
-
-// =====================================================================
-//
-// =====================================================================
 SdDesignNameDlg::SdDesignNameDlg(Window* pWindow, const String& aName):
                 ModalDialog             (pWindow, SdResId( DLG_DESIGNNAME )),
                 m_aEdit                 (this, SdResId(EDT_NAME)),
@@ -1733,17 +1729,11 @@ SdDesignNameDlg::SdDesignNameDlg(Window* pWindow, const String& aName):
     m_aBtnOK.Enable(aName.Len() != 0);
 }
 
-// =====================================================================
-//
-// =====================================================================
 String SdDesignNameDlg::GetDesignName()
 {
     return m_aEdit.GetText();
 }
 
-// =====================================================================
-//
-// =====================================================================
 IMPL_LINK( SdDesignNameDlg, ModifyHdl, Edit*, EMPTYARG )
 {
     m_aBtnOK.Enable(m_aEdit.GetText().Len() != 0);

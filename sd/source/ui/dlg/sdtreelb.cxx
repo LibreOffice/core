@@ -871,12 +871,6 @@ void SdPageObjsTLB::CloseBookmarkDoc()
     mpBookmarkDoc = NULL;
 }
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 void SdPageObjsTLB::SelectHdl()
 {
     SvLBoxEntry* pEntry = FirstSelected();
