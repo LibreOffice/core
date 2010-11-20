@@ -126,7 +126,7 @@ bool KabImplModule::impl_loadModule()
     OSL_ENSURE( !m_hConnectorModule && !m_pConnectionFactoryFunc && !m_pApplicationInitFunc && !m_pApplicationShutdownFunc && !m_pKDEVersionCheckFunc,
         "KabImplModule::impl_loadModule: inconsistence: inconsistency (never attempted load before, but some values already set)!");
 
-    const ::rtl::OUString sModuleName = ::rtl::OUString::createFromAscii( SAL_MODULENAME( "kabdrv1" ) );
+    const ::rtl::OUString sModuleName(RTL_CONSTASCII_USTRINGPARAM( SAL_MODULENAME( "kabdrv1" ) ));
     m_hConnectorModule = osl_loadModuleRelative( &thisModule, sModuleName.pData, SAL_LOADMODULE_NOW );   // LAZY! #i61335#
     OSL_ENSURE( m_hConnectorModule, "KabImplModule::impl_loadModule: could not load the implementation library!" );
     if ( !m_hConnectorModule )
