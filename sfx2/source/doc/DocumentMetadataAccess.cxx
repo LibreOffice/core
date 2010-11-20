@@ -384,7 +384,7 @@ removeFile(struct DocumentMetadataAccess_Impl & i_rImpl,
         throw;
     } catch (uno::Exception & e) {
         throw lang::WrappedTargetRuntimeException(
-            ::rtl::OUString::createFromAscii("removeFile: exception"),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("removeFile: exception")),
             0, uno::makeAny(e));
     }
 }
@@ -413,7 +413,7 @@ getAllParts(struct DocumentMetadataAccess_Impl & i_rImpl)
         throw;
     } catch (uno::Exception & e) {
         throw lang::WrappedTargetRuntimeException(
-            ::rtl::OUString::createFromAscii("getAllParts: exception"),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("getAllParts: exception")),
             0, uno::makeAny(e));
     }
 }
@@ -435,7 +435,7 @@ isPartOfType(struct DocumentMetadataAccess_Impl & i_rImpl,
         throw;
     } catch (uno::Exception & e) {
         throw lang::WrappedTargetRuntimeException(
-            ::rtl::OUString::createFromAscii("isPartOfType: exception"),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("isPartOfType: exception")),
             0, uno::makeAny(e));
     }
 }
@@ -452,10 +452,10 @@ mkException( ::rtl::OUString const & i_rMessage,
     iaioe.Classification = task::InteractionClassification_ERROR;
     iaioe.Code = i_ErrorCode;
 
-    const beans::PropertyValue uriProp(::rtl::OUString::createFromAscii("Uri"),
+    const beans::PropertyValue uriProp(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Uri")),
         -1, uno::makeAny(i_rUri), static_cast<beans::PropertyState>(0));
     const beans::PropertyValue rnProp(
-        ::rtl::OUString::createFromAscii("ResourceName"),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ResourceName")),
         -1, uno::makeAny(i_rResource), static_cast<beans::PropertyState>(0));
     iaioe.Arguments = ::comphelper::makeSequence(
         uno::makeAny(uriProp), uno::makeAny(rnProp));
@@ -621,7 +621,7 @@ retry:
         throw;
     } catch (uno::Exception & e) {
         throw lang::WrappedTargetRuntimeException(
-            ::rtl::OUString::createFromAscii("importFile: exception"),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("importFile: exception")),
             0, uno::makeAny(e));
     }
 }
@@ -642,7 +642,7 @@ exportStream(struct DocumentMetadataAccess_Impl & i_rImpl,
         uno::UNO_QUERY);
     if (xStreamProps.is()) { // this is NOT supported in FileSystemStorage
         xStreamProps->setPropertyValue(
-            ::rtl::OUString::createFromAscii("MediaType"),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")),
             uno::makeAny(::rtl::OUString::createFromAscii(s_rdfxml)));
     }
     const uno::Reference<io::XOutputStream> xOutStream(
@@ -788,7 +788,7 @@ static void init(struct DocumentMetadataAccess_Impl & i_rImpl)
             getURI<rdf::URIs::PKG_DOCUMENT>(i_rImpl.m_xContext).get());
     } catch (uno::Exception & e) {
         throw lang::WrappedTargetRuntimeException(
-            ::rtl::OUString::createFromAscii("init: unexpected exception"), 0,
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("init: unexpected exception")), 0,
             uno::makeAny(e));
     }
 
@@ -1135,7 +1135,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
 
     std::set< ::rtl::OUString > StgFiles;
     collectFilesFromStorage(i_xStorage,
-        ::rtl::OUString::createFromAscii(""), StgFiles);
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")), StgFiles);
 
     std::vector< ::rtl::OUString > MfstMetadataFiles;
 

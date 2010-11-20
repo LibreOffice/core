@@ -262,7 +262,7 @@ bool SFX2_DLLPUBLIC SaveOlePropertySet(
         const sal_Int32 nPropId = rCustomSect.GetFreePropertyId();
         rCustomSect.SetBlobValue( nPropId, *i_pGuid );
         rCustomSect.SetPropertyName( nPropId,
-            ::rtl::OUString::createFromAscii("_PID_GUID") );
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_PID_GUID")) );
     }
 
     // write hyperlinks
@@ -270,7 +270,7 @@ bool SFX2_DLLPUBLIC SaveOlePropertySet(
         const sal_Int32 nPropId = rCustomSect.GetFreePropertyId();
         rCustomSect.SetBlobValue( nPropId, *i_pHyperlinks );
         rCustomSect.SetPropertyName( nPropId,
-            ::rtl::OUString::createFromAscii("_PID_HLINKS") );
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_PID_HLINKS")) );
     }
 
     uno::Reference<beans::XPropertySet> xUserDefinedProps(

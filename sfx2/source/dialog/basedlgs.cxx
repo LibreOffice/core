@@ -56,7 +56,7 @@
 using namespace ::com::sun::star::uno;
 using namespace ::rtl;
 
-#define USERITEM_NAME OUString::createFromAscii( "UserItem" )
+#define USERITEM_NAME OUString(RTL_CONSTASCII_USTRINGPARAM("UserItem"))
 
 class SfxModelessDialog_Impl : public SfxListener
 {

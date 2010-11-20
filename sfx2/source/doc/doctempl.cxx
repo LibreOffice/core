@@ -1200,7 +1200,7 @@ sal_Bool SfxDocumentTemplates::CopyFrom
                                                 UNO_QUERY );
 
         Sequence< PropertyValue > aArgs( 1 );
-        aArgs[0].Name = ::rtl::OUString::createFromAscii("Hidden");
+        aArgs[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Hidden"));
         aArgs[0].Value <<= sal_True;
 
         INetURLObject   aTemplURL( rName );
@@ -1210,7 +1210,7 @@ sal_Bool SfxDocumentTemplates::CopyFrom
         {
             xStorable = uno::Reference< XStorable >(
                 xDesktop->loadComponentFromURL( aTemplURL.GetMainURL(INetURLObject::NO_DECODE),
-                                                OUString::createFromAscii( "_blank" ),
+                                                OUString(RTL_CONSTASCII_USTRINGPARAM("_blank")),
                                                 0,
                                                 aArgs ),
                 UNO_QUERY );
@@ -2430,7 +2430,7 @@ sal_Bool SfxDocTemplate_Impl::Construct( )
     Sequence< Any > aCompareArg(1);
     *(aCompareArg.getArray()) <<= xLocalizable->getLocale();;
     m_rCompareFactory = uno::Reference< XAnyCompareFactory >(
-                    xFactory->createInstanceWithArguments( OUString::createFromAscii( "com.sun.star.ucb.AnyCompareFactory" ),
+                    xFactory->createInstanceWithArguments( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.AnyCompareFactory")),
                                                            aCompareArg ),
                     UNO_QUERY );
 
