@@ -275,7 +275,7 @@ void PackageRegistryBackend::deleteUnusedFolders(
         // get all temp directories:
         ::std::vector<OUString> tempEntries;
 
-        char tmp[] = ".tmp";
+        const char tmp[] = ".tmp";
 
         while (xResultSet->next())
         {
@@ -284,7 +284,7 @@ void PackageRegistryBackend::deleteUnusedFolders(
                     xResultSet, UNO_QUERY_THROW )->getString(
                         1 /* Title */ ) );
 
-            if (title.endsWithAsciiL(tmp, sizeof(tmp) - 1))
+            if (title.endsWithAsciiL(RTL_CONSTASCII_STRINGPARAM(tmp)))
                 tempEntries.push_back(
                     makeURLAppendSysPathSegment(sDataFolder, title));
         }
