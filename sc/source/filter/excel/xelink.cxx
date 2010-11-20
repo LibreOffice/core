@@ -106,7 +106,7 @@ private:
     virtual void        WriteAddData( XclExpStream& rStrm );
 
 private:
-    typedef ScfRef< XclExpCachedMatrix > XclExpCachedMatRef;
+    typedef boost::shared_ptr< XclExpCachedMatrix > XclExpCachedMatRef;
     XclExpCachedMatRef  mxMatrix;       /// Cached results of the DDE link.
 };
 
@@ -247,7 +247,7 @@ protected:
     void                WriteExtNameBuffer( XclExpStream& rStrm );
 
 private:
-    typedef ScfRef< XclExpExtNameBuffer >   XclExpExtNameBfrRef;
+    typedef boost::shared_ptr< XclExpExtNameBuffer >   XclExpExtNameBfrRef;
     XclExpExtNameBfrRef mxExtNameBfr;   /// List of EXTERNNAME records.
 };
 
@@ -936,7 +936,7 @@ XclExpExtNameDde::XclExpExtNameDde( const XclExpRoot& rRoot,
 
 void XclExpExtNameDde::WriteAddData( XclExpStream& rStrm )
 {
-    if( mxMatrix.is() )
+    if( mxMatrix )
         mxMatrix->Save( rStrm );
 }
 
@@ -1232,7 +1232,7 @@ public:
 bool XclExpCrnList::InsertValue( SCCOL nScCol, SCROW nScRow, const Any& rValue )
 {
     RecordRefType xLastRec = GetLastRecord();
-    if( xLastRec.is() && xLastRec->InsertValue( nScCol, nScRow, rValue ) )
+    if( xLastRec && xLastRec->InsertValue( nScCol, nScRow, rValue ) )
         return true;
     if( GetSize() == SAL_MAX_UINT16 )
         return false;
@@ -1326,7 +1326,7 @@ XclExpExtNameBuffer& XclExpExternSheetBase::GetExtNameBuffer()
 
 void XclExpExternSheetBase::WriteExtNameBuffer( XclExpStream& rStrm )
 {
-    if( mxExtNameBfr.is() )
+    if( mxExtNameBfr )
         mxExtNameBfr->Save( rStrm );
 }
 
@@ -1530,7 +1530,7 @@ void XclExpSupbook::Save( XclExpStream& rStrm )
 const XclExpString* XclExpSupbook::GetTabName( sal_uInt16 nSBTab ) const
 {
     XclExpXctRef xXct = maXctList.GetRecord( nSBTab );
-    return xXct.is() ? &xXct->GetTabName() : 0;
+    return xXct ? &xXct->GetTabName() : 0;
 }
 
 void XclExpSupbook::WriteBody( XclExpStream& rStrm )
@@ -1611,7 +1611,7 @@ XclExpXti XclExpSupbookBuffer::GetXti( sal_uInt16 nFirstXclTab, sal_uInt16 nLast
             pRefLogEntry->mnFirstXclTab = nFirstXclTab;
             pRefLogEntry->mnLastXclTab = nLastXclTab;
             XclExpSupbookRef xSupbook = maSupbookList.GetRecord( aXti.mnSupbook );
-            if( xSupbook.is() )
+            if( xSupbook )
                 xSupbook->FillRefLogEntry( *pRefLogEntry, aXti.mnFirstSBTab, aXti.mnLastSBTab );
         }
     }
@@ -1633,8 +1633,8 @@ void XclExpSupbookBuffer::StoreCellRange( const ScRange& rRange )
     {
         const XclExpSBIndex& rSBIndex = maSBIndexVec[ nXclTab ];
         XclExpSupbookRef xSupbook = maSupbookList.GetRecord( rSBIndex.mnSupbook );
-        DBG_ASSERT( xSupbook.is(), "XclExpSupbookBuffer::StoreCellRange - missing SUPBOOK record" );
-        if( xSupbook.is() )
+        DBG_ASSERT( xSupbook , "XclExpSupbookBuffer::StoreCellRange - missing SUPBOOK record" );
+        if( xSupbook )
             xSupbook->StoreCellRange( rRange, rSBIndex.mnSBTab );
     }
 }
@@ -1874,7 +1874,7 @@ XclExpXti XclExpSupbookBuffer::GetXti( sal_uInt16 nFileId, const String& rTabNam
     {
         pRefLogEntry->mnFirstXclTab = 0;
         pRefLogEntry->mnLastXclTab  = 0;
-        if (xSupbook.is())
+        if (xSupbook)
             xSupbook->FillRefLogEntry(*pRefLogEntry, aXti.mnFirstSBTab, aXti.mnLastSBTab);
     }
 
@@ -1989,7 +1989,7 @@ bool XclExpLinkManagerImpl5::InsertAddIn(
         sal_uInt16& rnExtSheet, sal_uInt16& rnExtName, const String& rName )
 {
     XclExpExtSheetRef xExtSheet = FindInternal( rnExtSheet, EXC_EXTSH_ADDIN );
-    if( xExtSheet.is() )
+    if( xExtSheet )
     {
         rnExtName = xExtSheet->InsertAddIn( rName );
         return rnExtName > 0;

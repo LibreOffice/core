@@ -38,6 +38,7 @@
 #include <tools/debug.hxx>
 #include <oox/helper/helper.hxx>
 #include <boost/noncopyable.hpp>
+#include <boost/shared_ptr.hpp>
 #include "filter.hxx"
 #include "scdllapi.h"
 
@@ -139,96 +140,20 @@ void insert_value( Type& rnBitField, InsertType nValue, sal_uInt8 nStartBit, sal
 
 // ============================================================================
 
-/** Simple shared pointer (NOT thread-save, but faster than boost::shared_ptr). */
-template< typename Type >
-class ScfRef
-{
-    template< typename > friend class ScfRef;
-
-public:
-    typedef Type        element_type;
-    typedef ScfRef      this_type;
-
-    inline explicit     ScfRef( element_type* pObj = 0 ) { eat( pObj ); }
-    inline /*implicit*/ ScfRef( const this_type& rRef ) { eat( rRef.mpObj, rRef.mpnCount ); }
-    template< typename Type2 >
-    inline /*implicit*/ ScfRef( const ScfRef< Type2 >& rRef ) { eat( rRef.mpObj, rRef.mpnCount ); }
-    inline              ~ScfRef() { rel(); }
-
-    inline void         reset( element_type* pObj = 0 ) { rel(); eat( pObj ); }
-    inline this_type&   operator=( const this_type& rRef ) { if( this != &rRef ) { rel(); eat( rRef.mpObj, rRef.mpnCount ); } return *this; }
-    template< typename Type2 >
-    inline this_type&   operator=( const ScfRef< Type2 >& rRef ) { rel(); eat( rRef.mpObj, rRef.mpnCount ); return *this; }
-
-    inline element_type* get() const { return mpObj; }
-    inline bool         is() const { return mpObj != 0; }
-
-    inline element_type* operator->() const { return mpObj; }
-    inline element_type& operator*() const { return *mpObj; }
-
-    inline bool         operator!() const { return mpObj == 0; }
-
-private:
-    inline void         eat( element_type* pObj, size_t* pnCount = 0 ) { mpObj = pObj; mpnCount = mpObj ? (pnCount ? pnCount : new size_t( 0 )) : 0; if( mpnCount ) ++*mpnCount; }
-    inline void         rel() { if( mpnCount && !--*mpnCount ) { DELETEZ( mpObj ); DELETEZ( mpnCount ); } }
-
-private:
-    Type*               mpObj;
-    size_t*             mpnCount;
-};
-
-template< typename Type >
-inline bool operator==( const ScfRef< Type >& rxRef1, const ScfRef< Type >& rxRef2 )
-{
-    return rxRef1.get() == rxRef2.get();
-}
-
-template< typename Type >
-inline bool operator!=( const ScfRef< Type >& rxRef1, const ScfRef< Type >& rxRef2 )
-{
-    return rxRef1.get() != rxRef2.get();
-}
-
-template< typename Type >
-inline bool operator<( const ScfRef< Type >& rxRef1, const ScfRef< Type >& rxRef2 )
-{
-    return rxRef1.get() < rxRef2.get();
-}
-
-template< typename Type >
-inline bool operator>( const ScfRef< Type >& rxRef1, const ScfRef< Type >& rxRef2 )
-{
-    return rxRef1.get() > rxRef2.get();
-}
-
-template< typename Type >
-inline bool operator<=( const ScfRef< Type >& rxRef1, const ScfRef< Type >& rxRef2 )
-{
-    return rxRef1.get() <= rxRef2.get();
-}
-
-template< typename Type >
-inline bool operator>=( const ScfRef< Type >& rxRef1, const ScfRef< Type >& rxRef2 )
-{
-    return rxRef1.get() >= rxRef2.get();
-}
-
-// ----------------------------------------------------------------------------
-
 /** Template for a map of ref-counted objects with additional accessor functions. */
 template< typename KeyType, typename ObjType >
-class ScfRefMap : public ::std::map< KeyType, ScfRef< ObjType > >
+class ScfRefMap : public ::std::map< KeyType, boost::shared_ptr< ObjType > >
 {
 public:
     typedef KeyType                             key_type;
-    typedef ScfRef< ObjType >                   ref_type;
+    typedef boost::shared_ptr< ObjType >        ref_type;
     typedef ::std::map< key_type, ref_type >    map_type;
 
     /** Returns true, if the object accossiated to the passed key exists. */
     inline bool         has( key_type nKey ) const
                         {
                             typename map_type::const_iterator aIt = find( nKey );
-                            return (aIt != this->end()) && aIt->second.is();
+                            return (aIt != this->end()) && aIt->second;
                         }
 
     /** Returns a reference to the object accossiated to the passed key, or 0 on error. */

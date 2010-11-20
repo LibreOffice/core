@@ -1000,7 +1000,7 @@ static void lcl_WriteCell( XclExpXmlStream& rStrm, sal_Int32 nElement, const ScA
             break;
         case EXC_CHTR_TYPE_STRING:
             pStream->startElement( XML_is, FSEND );
-            if( pData->mpFormattedString.is() )
+            if( pData->mpFormattedString )
                 pData->mpFormattedString->WriteXml( rStrm );
             else
                 pData->pString->WriteXml( rStrm );

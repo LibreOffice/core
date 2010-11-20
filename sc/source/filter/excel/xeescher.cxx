@@ -89,6 +89,7 @@
 #include <oox/export/drawingml.hxx>
 #include <oox/export/chartexport.hxx>
 #include <oox/export/utils.hxx>
+#include <boost/shared_ptr.hpp>
 
 using ::rtl::OString;
 using ::rtl::OUString;
@@ -1358,7 +1359,7 @@ void XclExpNote::WriteXml( sal_Int32 nAuthorId, XclExpXmlStream& rStrm )
     rComments->writeEscaped( XclXmlUtils::ToOUString( maOrigNoteText ) );
     rComments->endElement ( XML_t );
 #else
-    if( mpNoteContents.is() )
+    if( mpNoteContents )
         mpNoteContents->WriteXml( rStrm );
 #endif
     rComments->endElement( XML_text );
@@ -1411,7 +1412,7 @@ XclMacroHelper::~XclMacroHelper()
 
 void XclMacroHelper::WriteMacroSubRec( XclExpStream& rStrm )
 {
-    if( mxMacroLink.is() )
+    if( mxMacroLink )
         WriteFormulaSubRec( rStrm, EXC_ID_OBJMACRO, *mxMacroLink );
 }
 
@@ -1557,9 +1558,9 @@ XclExpDffAnchorBase* XclExpObjectManager::CreateDffAnchor() const
     return new XclExpDffSheetAnchor( GetRoot() );
 }
 
-ScfRef< XclExpRecordBase > XclExpObjectManager::CreateDrawingGroup()
+boost::shared_ptr< XclExpRecordBase > XclExpObjectManager::CreateDrawingGroup()
 {
-    return ScfRef< XclExpRecordBase >( new XclExpMsoDrawingGroup( *mxEscherEx ) );
+    return boost::shared_ptr< XclExpRecordBase >( new XclExpMsoDrawingGroup( *mxEscherEx ) );
 }
 
 void XclExpObjectManager::StartSheet()
@@ -1567,7 +1568,7 @@ void XclExpObjectManager::StartSheet()
     mxObjList.reset( new XclExpObjList( GetRoot(), *mxEscherEx ) );
 }
 
-ScfRef< XclExpRecordBase > XclExpObjectManager::ProcessDrawing( SdrPage* pSdrPage )
+boost::shared_ptr< XclExpRecordBase > XclExpObjectManager::ProcessDrawing( SdrPage* pSdrPage )
 {
     if( pSdrPage )
         mxEscherEx->AddSdrPage( *pSdrPage );
@@ -1579,7 +1580,7 @@ ScfRef< XclExpRecordBase > XclExpObjectManager::ProcessDrawing( SdrPage* pSdrPag
     return mxObjList;
 }
 
-ScfRef< XclExpRecordBase > XclExpObjectManager::ProcessDrawing( const Reference< XShapes >& rxShapes )
+boost::shared_ptr< XclExpRecordBase > XclExpObjectManager::ProcessDrawing( const Reference< XShapes >& rxShapes )
 {
     if( rxShapes.is() )
         mxEscherEx->AddUnoShapes( rxShapes );

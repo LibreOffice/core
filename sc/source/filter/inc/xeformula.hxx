@@ -31,6 +31,7 @@
 
 #include "xlformula.hxx"
 #include "xeroot.hxx"
+#include <boost/shared_ptr.hpp>
 
 // External reference log =====================================================
 
@@ -88,7 +89,7 @@ public:
     XclTokenArrayRef    CreateNameXFormula( sal_uInt16 nExtSheet, sal_uInt16 nExtName );
 
 private:
-    typedef ScfRef< XclExpFmlaCompImpl > XclExpFmlaCompImplRef;
+    typedef boost::shared_ptr< XclExpFmlaCompImpl > XclExpFmlaCompImplRef;
     XclExpFmlaCompImplRef mxImpl;
 };
 

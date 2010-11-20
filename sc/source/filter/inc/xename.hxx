@@ -33,6 +33,7 @@
 #include "xlname.hxx"
 #include "xlformula.hxx"
 #include "xeroot.hxx"
+#include <boost/shared_ptr.hpp>
 
 // ============================================================================
 
@@ -80,7 +81,7 @@ public:
     virtual void        SaveXml( XclExpXmlStream& rStrm );
 
 private:
-    typedef ScfRef< XclExpNameManagerImpl > XclExpNameMgrImplRef;
+    typedef boost::shared_ptr< XclExpNameManagerImpl > XclExpNameMgrImplRef;
     XclExpNameMgrImplRef mxImpl;
 };
 

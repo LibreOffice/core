@@ -1685,7 +1685,7 @@ void XclExpPivotTable::WriteSxpi( XclExpStream& rStrm ) const
         for( ScfUInt16Vec::const_iterator aIt = maPageFields.begin(), aEnd = maPageFields.end(); aIt != aEnd; ++aIt )
         {
             XclExpPTFieldRef xField = maFieldList.GetRecord( *aIt );
-            if( xField.is() )
+            if( xField )
                 xField->WriteSxpiEntry( rStrm );
         }
         rStrm.EndRecord();
@@ -1697,7 +1697,7 @@ void XclExpPivotTable::WriteSxdiList( XclExpStream& rStrm ) const
     for( XclPTDataFieldPosVec::const_iterator aIt = maDataFields.begin(), aEnd = maDataFields.end(); aIt != aEnd; ++aIt )
     {
         XclExpPTFieldRef xField = maFieldList.GetRecord( aIt->first );
-        if( xField.is() )
+        if( xField )
             xField->WriteSxdi( rStrm, aIt->second );
     }
 }

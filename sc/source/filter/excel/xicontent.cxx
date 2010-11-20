@@ -1124,11 +1124,11 @@ ErrCode XclImpDecryptHelper::ReadFilepass( XclImpStream& rStrm )
     rStrm.SetDecrypter( xDecr );
 
     // request and verify a password (decrypter implements IDocPasswordVerifier)
-    if( xDecr.is() )
+    if( xDecr )
         rStrm.GetRoot().RequestPassword( *xDecr );
 
     // return error code (success, wrong password, etc.)
-    return xDecr.is() ? xDecr->GetError() : EXC_ENCR_ERROR_UNSUPP_CRYPT;
+    return xDecr ? xDecr->GetError() : EXC_ENCR_ERROR_UNSUPP_CRYPT;
 }
 
 // Document protection ========================================================

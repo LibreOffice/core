@@ -30,6 +30,7 @@
 #define SC_XEHELPER_HXX
 
 #include <boost/noncopyable.hpp>
+#include <boost/shared_ptr.hpp>
 #include "xladdress.hxx"
 #include "xeroot.hxx"
 #include "xestring.hxx"
@@ -183,7 +184,7 @@ class XclExpHyperlink;
 class XclExpHyperlinkHelper : protected XclExpRoot
 {
 public:
-    typedef ScfRef< XclExpHyperlink > XclExpHyperlinkRef;
+    typedef boost::shared_ptr< XclExpHyperlink > XclExpHyperlinkRef;
 
     explicit            XclExpHyperlinkHelper( const XclExpRoot& rRoot, const ScAddress& rScPos );
                         ~XclExpHyperlinkHelper();

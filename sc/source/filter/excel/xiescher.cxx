@@ -113,6 +113,7 @@
 #include "scextopt.hxx"
 
 #include "namebuff.hxx"
+#include <boost/shared_ptr.hpp>
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -1322,7 +1323,7 @@ void XclImpObjTextData::ReadByteString( XclImpStream& rStrm )
 
 void XclImpObjTextData::ReadFormats( XclImpStream& rStrm )
 {
-    if( mxString.is() )
+    if( mxString )
         mxString->ReadObjFormats( rStrm, maData.mnFormatSize );
     else
         rStrm.Ignore( maData.mnFormatSize );
@@ -1384,7 +1385,7 @@ void XclImpTextObj::DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject&
     // set text data
     if( SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( &rSdrObj ) )
     {
-        if( maTextData.mxString.is() )
+        if( maTextData.mxString )
         {
             if( maTextData.mxString->IsRich() )
             {
@@ -1569,7 +1570,7 @@ void XclImpChartObj::DoReadObj3( XclImpStream& rStrm, sal_uInt16 nMacroSize )
     rStrm.Ignore( 18 );
     ReadMacro3( rStrm, nMacroSize );
     // set frame format from OBJ record, it is used if chart itself is transparent
-    if( mxChart.is() )
+    if( mxChart )
         mxChart->UpdateObjFrame( maLineData, maFillData );
 }
 
@@ -1580,7 +1581,7 @@ void XclImpChartObj::DoReadObj4( XclImpStream& rStrm, sal_uInt16 nMacroSize )
     rStrm.Ignore( 18 );
     ReadMacro4( rStrm, nMacroSize );
     // set frame format from OBJ record, it is used if chart itself is transparent
-    if( mxChart.is() )
+    if( mxChart )
         mxChart->UpdateObjFrame( maLineData, maFillData );
 }
 
@@ -1593,7 +1594,7 @@ void XclImpChartObj::DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_u
     ReadMacro5( rStrm, nMacroSize );
     ReadChartSubStream( rStrm );
     // set frame format from OBJ record, it is used if chart itself is transparent
-    if( mxChart.is() )
+    if( mxChart )
         mxChart->UpdateObjFrame( maLineData, maFillData );
 }
 
@@ -1613,14 +1614,14 @@ void XclImpChartObj::DoReadObj8SubRec( XclImpStream& rStrm, sal_uInt16 nSubRecId
 
 sal_Size XclImpChartObj::DoGetProgressSize() const
 {
-    return mxChart.is() ? mxChart->GetProgressSize() : 1;
+    return mxChart ? mxChart->GetProgressSize() : 1;
 }
 
 SdrObject* XclImpChartObj::DoCreateSdrObj( XclImpDffConverter& rDffConv, const Rectangle& rAnchorRect ) const
 {
     SdrObjectPtr xSdrObj;
     SfxObjectShell* pDocShell = GetDocShell();
-    if( rDffConv.SupportsOleObjects() && SvtModuleOptions().IsChart() && pDocShell && mxChart.is() && !mxChart->IsPivotChart() )
+    if( rDffConv.SupportsOleObjects() && SvtModuleOptions().IsChart() && pDocShell && mxChart && !mxChart->IsPivotChart() )
     {
         // create embedded chart object
         OUString aEmbObjName;
@@ -1646,7 +1647,7 @@ SdrObject* XclImpChartObj::DoCreateSdrObj( XclImpDffConverter& rDffConv, const R
 void XclImpChartObj::DoPostProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const
 {
     const SdrOle2Obj* pSdrOleObj = dynamic_cast< const SdrOle2Obj* >( &rSdrObj );
-    if( mxChart.is() && pSdrOleObj )
+    if( mxChart && pSdrOleObj )
     {
         Reference< XEmbeddedObject > xEmbObj = pSdrOleObj->GetObjRef();
         if( xEmbObj.is() && ::svt::EmbeddedObjectRef::TryRunningState( xEmbObj ) ) try
@@ -1773,7 +1774,7 @@ void XclImpControlHelper::ApplySheetLinkProps() const
         if( xFactory.is() )
         {
             // cell link
-            if( mxCellLink.is() ) try
+            if( mxCellLink ) try
             {
                 Reference< XBindableValue > xBindable( xCtrlModel, UNO_QUERY_THROW );
 
@@ -1804,7 +1805,7 @@ void XclImpControlHelper::ApplySheetLinkProps() const
             }
 
             // source range
-            if( mxSrcRange.is() ) try
+            if( mxSrcRange ) try
             {
                 Reference< XListEntrySink > xEntrySink( xCtrlModel, UNO_QUERY_THROW );
 
@@ -1947,7 +1948,7 @@ bool XclImpTbxObjBase::FillMacroDescriptor( ScriptEventDescriptor& rDescriptor )
 
 void XclImpTbxObjBase::ConvertFont( ScfPropertySet& rPropSet ) const
 {
-    if( maTextData.mxString.is() )
+    if( maTextData.mxString )
     {
         const XclFormatRunVec& rFormatRuns = maTextData.mxString->GetFormats();
         if( rFormatRuns.empty() )
@@ -1959,7 +1960,7 @@ void XclImpTbxObjBase::ConvertFont( ScfPropertySet& rPropSet ) const
 
 void XclImpTbxObjBase::ConvertLabel( ScfPropertySet& rPropSet ) const
 {
-    if( maTextData.mxString.is() )
+    if( maTextData.mxString )
     {
         String aLabel = maTextData.mxString->GetText();
         if( maTextData.maData.mnShortcut > 0 )
@@ -2377,7 +2378,7 @@ void XclImpEditObj::DoReadObj8SubRec( XclImpStream& rStrm, sal_uInt16 nSubRecId,
 
 void XclImpEditObj::DoProcessControl( ScfPropertySet& rPropSet ) const
 {
-    if( maTextData.mxString.is() )
+    if( maTextData.mxString )
     {
         OUString aText = maTextData.mxString->GetText();
         if( IsNumeric() )
@@ -2711,7 +2712,7 @@ void XclImpDropDownObj::DoProcessControl( ScfPropertySet& rPropSet ) const
     if( GetDropDownType() == EXC_OBJ_DROPDOWN_COMBOBOX )
     {
         // text of editable combobox
-        if( maTextData.mxString.is() )
+        if( maTextData.mxString )
             rPropSet.SetStringProperty( CREATE_OUSTRING( "DefaultText" ), maTextData.mxString->GetText() );
     }
     else
@@ -3738,7 +3739,7 @@ void XclImpDrawing::ReadObj( XclImpStream& rStrm )
             DBG_ERROR_BIFF();
     }
 
-    if( xDrawObj.is() )
+    if( xDrawObj )
     {
         // insert into maRawObjs or into the last open group object
         maRawObjs.InsertGrouped( xDrawObj );
@@ -3987,7 +3988,7 @@ void XclImpSheetDrawing::ReadNote( XclImpStream& rStrm )
 void XclImpSheetDrawing::ReadTabChart( XclImpStream& rStrm )
 {
     DBG_ASSERT_BIFF( GetBiff() >= EXC_BIFF5 );
-    ScfRef< XclImpChartObj > xChartObj( new XclImpChartObj( GetRoot(), true ) );
+    boost::shared_ptr< XclImpChartObj > xChartObj( new XclImpChartObj( GetRoot(), true ) );
     xChartObj->ReadChartSubStream( rStrm );
     // insert the chart as raw object without connected DFF data
     AppendRawObject( xChartObj );

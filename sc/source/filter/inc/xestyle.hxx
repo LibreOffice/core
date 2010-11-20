@@ -38,6 +38,7 @@
 #include "xerecord.hxx"
 #include "xlstyle.hxx"
 #include "xeroot.hxx"
+#include <boost/shared_ptr.hpp>
 
 /* ============================================================================
 - Buffers for style records (PALETTE, FONT, FORMAT, XF, STYLE).
@@ -125,7 +126,7 @@ private:
     virtual void        WriteBody( XclExpStream& rStrm );
 
 private:
-    typedef ScfRef< XclExpPaletteImpl > XclExpPaletteImplRef;
+    typedef boost::shared_ptr< XclExpPaletteImpl > XclExpPaletteImplRef;
     XclExpPaletteImplRef mxImpl;
 };
 

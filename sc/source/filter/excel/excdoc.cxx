@@ -88,6 +88,7 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <oox/core/tokens.hxx>
+#include <boost/shared_ptr.hpp>
 
 using ::rtl::OString;
 
@@ -439,7 +440,7 @@ void ExcTable::FillAsTable( SCTAB nCodeNameIdx )
 
 
     // WSBOOL needs data from page settings, create it here, add it later
-    ScfRef< XclExpPageSettings > xPageSett( new XclExpPageSettings( GetRoot() ) );
+    boost::shared_ptr< XclExpPageSettings > xPageSett( new XclExpPageSettings( GetRoot() ) );
     bool bFitToPages = xPageSett->GetPageData().mbFitToPages;
 
     if( eBiff <= EXC_BIFF5 )
@@ -548,7 +549,7 @@ void ExcTable::FillAsXmlTable( SCTAB nCodeNameIdx )
     RootData& rR = GetOldRoot();
 
     // WSBOOL needs data from page settings, create it here, add it later
-    ScfRef< XclExpPageSettings > xPageSett( new XclExpPageSettings( GetRoot() ) );
+    boost::shared_ptr< XclExpPageSettings > xPageSett( new XclExpPageSettings( GetRoot() ) );
     bool bFitToPages = xPageSett->GetPageData().mbFitToPages;
 
     Add( new ExcBof8 );

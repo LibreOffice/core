@@ -369,7 +369,7 @@ void XclExpStream::SetEncrypter( XclExpEncrypterRef xEncrypter )
 
 bool XclExpStream::HasValidEncrypter() const
 {
-    return mxEncrypter.is() && mxEncrypter->IsValid();
+    return mxEncrypter && mxEncrypter->IsValid();
 }
 
 void XclExpStream::EnableEncryption( bool bEnable )

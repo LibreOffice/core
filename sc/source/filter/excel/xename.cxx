@@ -293,7 +293,7 @@ void XclExpName::SetSymbol( String sSymbol )
 
 bool XclExpName::IsVolatile() const
 {
-    return mxTokArr.is() && mxTokArr->IsVolatile();
+    return mxTokArr && mxTokArr->IsVolatile();
 }
 
 bool XclExpName::IsHidden() const
@@ -312,7 +312,7 @@ void XclExpName::Save( XclExpStream& rStrm )
 {
     DBG_ASSERT( mxName.is() && (mxName->Len() > 0), "XclExpName::Save - missing name" );
     DBG_ASSERT( !(IsGlobal() && ::get_flag( mnFlags, EXC_NAME_BUILTIN )), "XclExpName::Save - global built-in name" );
-    SetRecSize( 11 + mxName->GetSize() + (mxTokArr.is() ? mxTokArr->GetSize() : 2) );
+    SetRecSize( 11 + mxName->GetSize() + (mxTokArr ? mxTokArr->GetSize() : 2) );
     XclExpRecord::Save( rStrm );
 }
 
@@ -346,7 +346,7 @@ void XclExpName::SaveXml( XclExpXmlStream& rStrm )
 
 void XclExpName::WriteBody( XclExpStream& rStrm )
 {
-    sal_uInt16 nFmlaSize = mxTokArr.is() ? mxTokArr->GetSize() : 0;
+    sal_uInt16 nFmlaSize = mxTokArr ? mxTokArr->GetSize() : 0;
 
     rStrm   << mnFlags                  // flags
             << sal_uInt8( 0 );          // keyboard shortcut
@@ -357,7 +357,7 @@ void XclExpName::WriteBody( XclExpStream& rStrm )
             << sal_uInt32( 0 );         // length of menu/descr/help/status text
     mxName->WriteFlagField( rStrm );    // BIFF8 flag field (no-op in <=BIFF7)
     mxName->WriteBuffer( rStrm );       // character array of the name
-    if( mxTokArr.is() )
+    if( mxTokArr )
         mxTokArr->WriteArray( rStrm );  // token array without size
 }
 
@@ -505,7 +505,7 @@ sal_uInt16 XclExpNameManagerImpl::FindBuiltInNameIdx(
             if( xName->GetBuiltInName() == cBuiltIn )
             {
                 XclTokenArrayRef xTokArr = xName->GetTokenArray();
-                if( xTokArr.is() && (*xTokArr == rTokArr) )
+                if( xTokArr && (*xTokArr == rTokArr) )
                     return static_cast< sal_uInt16 >( nPos + 1 );
             }
         }

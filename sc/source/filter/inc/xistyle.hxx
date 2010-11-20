@@ -32,6 +32,7 @@
 #include <list>
 #include <tools/mempool.hxx>
 #include <boost/noncopyable.hpp>
+#include <boost/shared_ptr.hpp>
 #include "rangelst.hxx"
 #include "patattr.hxx"
 #include "xladdress.hxx"
@@ -655,10 +656,10 @@ private:
     void                SetBorderLine( const ScRange& rRange, SCTAB nScTab, USHORT nLine );
 
 private:
-    typedef ScfRef< XclImpXFRangeColumn >           XclImpXFRangeColumnRef;
-    typedef ::std::vector< XclImpXFRangeColumnRef > XclImpXFRangeColumnVec;
-    typedef ::std::pair< XclRange, String >         XclImpHyperlinkRange;
-    typedef ::std::list< XclImpHyperlinkRange >     XclImpHyperlinkList;
+    typedef boost::shared_ptr< XclImpXFRangeColumn > XclImpXFRangeColumnRef;
+    typedef ::std::vector< XclImpXFRangeColumnRef >  XclImpXFRangeColumnVec;
+    typedef ::std::pair< XclRange, String >          XclImpHyperlinkRange;
+    typedef ::std::list< XclImpHyperlinkRange >      XclImpHyperlinkList;
 
     XclImpXFRangeColumnVec maColumns;       /// Array of column XF index buffers.
     XclImpHyperlinkList maHyperlinks;       /// Maps URLs to hyperlink cells.

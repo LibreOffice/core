@@ -785,7 +785,7 @@ void XclImpPivotCache::ReadPivotCacheStream( XclImpStream& rStrm )
             case EXC_ID_SXSTRING:
             case EXC_ID_SXDATETIME:
             case EXC_ID_SXEMPTY:
-                if( xCurrField.is() )                   // inline items
+                if( xCurrField )                   // inline items
                 {
                     xCurrField->ReadItem( aPCStrm );
                 }
@@ -810,12 +810,12 @@ void XclImpPivotCache::ReadPivotCacheStream( XclImpStream& rStrm )
             break;
 
             case EXC_ID_SXNUMGROUP:
-                if( xCurrField.is() )
+                if( xCurrField )
                     xCurrField->ReadSxnumgroup( aPCStrm );
             break;
 
             case EXC_ID_SXGROUPINFO:
-                if( xCurrField.is() )
+                if( xCurrField )
                     xCurrField->ReadSxgroupinfo( aPCStrm );
             break;
 
@@ -909,7 +909,7 @@ XclImpPTField::XclImpPTField( const XclImpPivotTable& rPTable, sal_uInt16 nCache
 const XclImpPCField* XclImpPTField::GetCacheField() const
 {
     XclImpPivotCacheRef xPCache = mrPTable.GetPivotCache();
-    return xPCache.is() ? xPCache->GetField( maFieldInfo.mnCacheIdx ) : 0;
+    return xPCache ? xPCache->GetField( maFieldInfo.mnCacheIdx ) : 0;
 }
 
 const String& XclImpPTField::GetFieldName() const
@@ -1256,13 +1256,13 @@ void XclImpPivotTable::ReadSxvd( XclImpStream& rStrm )
 
 void XclImpPivotTable::ReadSxvi( XclImpStream& rStrm )
 {
-    if( mxCurrField.is() )
+    if( mxCurrField )
         mxCurrField->ReadSxvi( rStrm );
 }
 
 void XclImpPivotTable::ReadSxvdex( XclImpStream& rStrm )
 {
-    if( mxCurrField.is() )
+    if( mxCurrField )
         mxCurrField->ReadSxvdex( rStrm );
 }
 

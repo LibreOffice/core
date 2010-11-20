@@ -35,6 +35,7 @@
 #include "xlescher.hxx"
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include "svx/sdtaitm.hxx"
+#include <boost/shared_ptr.hpp>
 
 
 namespace com { namespace sun { namespace star {
@@ -330,7 +331,7 @@ public:
     void WriteShapeTransformation( sax_fastparser::FSHelperPtr pFS, const XShapeRef& rXShape, sal_Bool bFlipH = false, sal_Bool bFlipV = false, sal_Int32 nRotation = 0 );
 
 private:
-    typedef ScfRef< XclExpChart > XclExpChartRef;
+    typedef boost::shared_ptr< XclExpChart > XclExpChartRef;
     XclExpChartRef      mxChart;        /// The chart itself (BOF/EOF substream data).
     XShapeRef mxShape;
     XChartDocRef mxChartDoc;
@@ -423,17 +424,17 @@ public:
 
     /** Creates and returns the MSODRAWINGGROUP record containing global DFF
         data in the DGGCONTAINER. */
-    ScfRef< XclExpRecordBase > CreateDrawingGroup();
+    boost::shared_ptr< XclExpRecordBase > CreateDrawingGroup();
 
     /** Initializes the object manager for a new sheet. */
     void                StartSheet();
 
     /** Processes a drawing page and returns the record block containing all
         related records (MSODRAWING, OBJ, TXO, charts, etc.). */
-    ScfRef< XclExpRecordBase > ProcessDrawing( SdrPage* pSdrPage );
+    boost::shared_ptr< XclExpRecordBase > ProcessDrawing( SdrPage* pSdrPage );
     /** Processes a collection of UNO shapes and returns the record block
         containing all related records (MSODRAWING, OBJ, TXO, charts, etc.). */
-    ScfRef< XclExpRecordBase > ProcessDrawing( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes );
+    boost::shared_ptr< XclExpRecordBase > ProcessDrawing( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes );
 
     /** Finalizes the object manager after conversion of all sheets. */
     void                EndDocument();
@@ -451,10 +452,10 @@ private:
     void                InitStream( bool bTempFile );
 
 private:
-    ScfRef< ::utl::TempFile > mxTempFile;
-    ScfRef< SvStream >  mxDffStrm;
-    ScfRef< XclEscherEx > mxEscherEx;
-    ScfRef< XclExpObjList > mxObjList;
+    boost::shared_ptr< ::utl::TempFile > mxTempFile;
+    boost::shared_ptr< SvStream >  mxDffStrm;
+    boost::shared_ptr< XclEscherEx > mxEscherEx;
+    boost::shared_ptr< XclExpObjList > mxObjList;
 };
 
 // ----------------------------------------------------------------------------
