@@ -686,7 +686,7 @@ sal_uInt32 XclExpChEscherFormat::RegisterColor( sal_uInt16 nPropId )
 
 void XclExpChEscherFormat::WriteBody( XclExpStream& rStrm )
 {
-    DBG_ASSERT( maData.mxEscherSet.is(), "XclExpChEscherFormat::WriteBody - missing property container" );
+    DBG_ASSERT( maData.mxEscherSet, "XclExpChEscherFormat::WriteBody - missing property container" );
     // write Escher property container via temporary memory stream
     SvMemoryStream aMemStrm;
     maData.mxEscherSet->Commit( aMemStrm );

@@ -1775,7 +1775,7 @@ bool XclExpSupbookBuffer::InsertAddIn(
     }
     else
         xSupbook = maSupbookList.GetRecord( mnAddInSB );
-    DBG_ASSERT( xSupbook.is(), "XclExpSupbookBuffer::InsertAddin - missing add-in supbook" );
+    DBG_ASSERT( xSupbook, "XclExpSupbookBuffer::InsertAddin - missing add-in supbook" );
     rnSupbook = mnAddInSB;
     rnExtName = xSupbook->InsertAddIn( rName );
     return rnExtName > 0;

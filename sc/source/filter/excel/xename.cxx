@@ -310,7 +310,7 @@ bool XclExpName::IsMacroCall( bool bVBasic, bool bFunc ) const
 
 void XclExpName::Save( XclExpStream& rStrm )
 {
-    DBG_ASSERT( mxName.is() && (mxName->Len() > 0), "XclExpName::Save - missing name" );
+    DBG_ASSERT( mxName && (mxName->Len() > 0), "XclExpName::Save - missing name" );
     DBG_ASSERT( !(IsGlobal() && ::get_flag( mnFlags, EXC_NAME_BUILTIN )), "XclExpName::Save - global built-in name" );
     SetRecSize( 11 + mxName->GetSize() + (mxTokArr ? mxTokArr->GetSize() : 2) );
     XclExpRecord::Save( rStrm );

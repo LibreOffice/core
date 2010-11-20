@@ -680,7 +680,7 @@ bool XclExpLabelCell::IsMultiLineText() const
 void XclExpLabelCell::Init( const XclExpRoot& rRoot,
         const ScPatternAttr* pPattern, XclExpStringRef xText )
 {
-    DBG_ASSERT( xText.is() && xText->Len(), "XclExpLabelCell::XclExpLabelCell - empty string passed" );
+    DBG_ASSERT( xText && xText->Len(), "XclExpLabelCell::XclExpLabelCell - empty string passed" );
     mxText = xText;
     mnSstIndex = 0;
 
@@ -846,7 +846,7 @@ XclExpFormulaCell::XclExpFormulaCell(
             // other formula cell covered by a matrix - find the ARRAY record
             mxAddRec = rArrayBfr.FindArray( rScTokArr );
             // should always be found, if Calc document is not broken
-            DBG_ASSERT( mxAddRec.is(), "XclExpFormulaCell::XclExpFormulaCell - no matrix found" );
+            DBG_ASSERT( mxAddRec, "XclExpFormulaCell::XclExpFormulaCell - no matrix found" );
         }
         break;
         default:;
@@ -868,7 +868,7 @@ void XclExpFormulaCell::Save( XclExpStream& rStrm )
         mxTokArr = mxAddRec->CreateCellTokenArray( rStrm.GetRoot() );
 
     // FORMULA record itself
-    DBG_ASSERT( mxTokArr.is(), "XclExpFormulaCell::Save - missing token array" );
+    DBG_ASSERT( mxTokArr, "XclExpFormulaCell::Save - missing token array" );
     if( !mxTokArr )
         mxTokArr = rStrm.GetRoot().GetFormulaCompiler().CreateErrorFormula( EXC_ERR_NA );
     SetContSize( 16 + mxTokArr->GetSize() );
@@ -1936,7 +1936,7 @@ void XclExpRow::Save( XclExpStream& rStrm )
 
 void XclExpRow::InsertCell( XclExpCellRef xCell, size_t nPos, bool bIsMergedBase )
 {
-    DBG_ASSERT( xCell.is(), "XclExpRow::InsertCell - missing cell" );
+    DBG_ASSERT( xCell, "XclExpRow::InsertCell - missing cell" );
 
     /*  #109751# If we have a multi-line text in a merged cell, and the resulting
         row height has not been confirmed, we need to force the EXC_ROW_UNSYNCED
@@ -2005,7 +2005,7 @@ XclExpRowBuffer::XclExpRowBuffer( const XclExpRoot& rRoot ) :
 
 void XclExpRowBuffer::AppendCell( XclExpCellRef xCell, bool bIsMergedBase )
 {
-    DBG_ASSERT( xCell.is(), "XclExpRowBuffer::AppendCell - missing cell" );
+    DBG_ASSERT( xCell, "XclExpRowBuffer::AppendCell - missing cell" );
     GetOrCreateRow( xCell->GetXclRow(), false ).AppendCell( xCell, bIsMergedBase );
 }
 
