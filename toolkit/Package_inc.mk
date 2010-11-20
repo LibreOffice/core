@@ -34,6 +34,7 @@ $(eval $(call gb_Package_add_file,toolkit_inc,inc/toolkit/awt/vclxcontainer.hxx,
 $(eval $(call gb_Package_add_file,toolkit_inc,inc/toolkit/awt/vclxdevice.hxx,toolkit/awt/vclxdevice.hxx))
 $(eval $(call gb_Package_add_file,toolkit_inc,inc/toolkit/awt/vclxfont.hxx,toolkit/awt/vclxfont.hxx))
 $(eval $(call gb_Package_add_file,toolkit_inc,inc/toolkit/awt/vclxmenu.hxx,toolkit/awt/vclxmenu.hxx))
+$(eval $(call gb_Package_add_file,toolkit_inc,inc/toolkit/awt/vclxsystemdependentwindow.hxx,toolkit/awt/vclxsystemdependentwindow.hxx))
 $(eval $(call gb_Package_add_file,toolkit_inc,inc/toolkit/awt/vclxtoolkit.hxx,toolkit/awt/vclxtoolkit.hxx))
 $(eval $(call gb_Package_add_file,toolkit_inc,inc/toolkit/awt/vclxtopwindow.hxx,toolkit/awt/vclxtopwindow.hxx))
 $(eval $(call gb_Package_add_file,toolkit_inc,inc/toolkit/awt/vclxwindow.hxx,toolkit/awt/vclxwindow.hxx))
