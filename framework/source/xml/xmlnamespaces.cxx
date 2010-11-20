@@ -116,7 +116,7 @@ void XMLNamespaces::addNamespace( const ::rtl::OUString& aName, const ::rtl::OUS
         if ( aName.getLength() > index+1 )
         {
             ::rtl::OUString aAttributeName = getNamespaceValue( aName.copy( 0, index ) );
-            aAttributeName += ::rtl::OUString::createFromAscii( "^" );
+            aAttributeName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("^"));
             aAttributeName += aName.copy( index+1 );
             return aAttributeName;
         }
@@ -147,7 +147,7 @@ void XMLNamespaces::addNamespace( const ::rtl::OUString& aName, const ::rtl::OUS
     if ( aNamespace.getLength() > 0 )
     {
         aElementName = aNamespace;
-        aElementName += ::rtl::OUString::createFromAscii( "^" );
+        aElementName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("^"));
     }
     else
         return aName;

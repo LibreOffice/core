@@ -358,7 +358,7 @@ IMPL_LINK(AcceleratorExecute, impl_ts_asyncCallback, void*, pVoid)
         if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
         {
             Sequence<css::beans::PropertyValue> source;
-            ::comphelper::UiEventsLogger::appendDispatchOrigin(OUString::createFromAscii("AcceleratorExecute"));
+            ::comphelper::UiEventsLogger::appendDispatchOrigin(OUString(RTL_CONSTASCII_USTRINGPARAM("AcceleratorExecute")));
             ::comphelper::UiEventsLogger::logDispatch(aURL, source);
         }
         xDispatch->dispatch(aURL, css::uno::Sequence< css::beans::PropertyValue >());

@@ -285,7 +285,7 @@ ToolBarManager::ToolBarManager( const Reference< XMultiServiceFactory >& rServic
     // enables a menu for clipped items and customization
     SvtCommandOptions aCmdOptions;
     USHORT nMenuType = TOOLBOX_MENUTYPE_CLIPPEDITEMS;
-    if ( !aCmdOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED, ::rtl::OUString::createFromAscii( "CreateDialog" )))
+    if ( !aCmdOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CreateDialog"))))
          nMenuType |= TOOLBOX_MENUTYPE_CUSTOMIZE;
     //added for issue33668 by shizhoubo
     m_pToolBar->SetCommandHdl( LINK( this, ToolBarManager, Command ) );

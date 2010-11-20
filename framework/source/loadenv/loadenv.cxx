@@ -206,13 +206,13 @@ css::uno::Reference< css::lang::XComponent > LoadEnv::loadComponentFromURL(const
         {
             case LoadEnvException::ID_INVALID_MEDIADESCRIPTOR:
                     throw css::lang::IllegalArgumentException(
-                            ::rtl::OUString::createFromAscii("Optional list of arguments seem to be corrupted."),
+                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Optional list of arguments seem to be corrupted.")),
                             xLoader,
                             4);
 
             case LoadEnvException::ID_UNSUPPORTED_CONTENT:
                     throw css::lang::IllegalArgumentException(
-                            ::rtl::OUString::createFromAscii("URL seems to be an unsupported one."),
+                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL seems to be an unsupported one.")),
                             xLoader,
                             1);
 
@@ -818,8 +818,8 @@ LoadEnv::EContentType LoadEnv::classifyContent(const ::rtl::OUString&           
 void LoadEnv::impl_detectTypeAndFilter()
     throw(LoadEnvException, css::uno::RuntimeException)
 {
-    static ::rtl::OUString TYPEPROP_PREFERREDFILTER = ::rtl::OUString::createFromAscii("PreferredFilter");
-    static ::rtl::OUString FILTERPROP_FLAGS         = ::rtl::OUString::createFromAscii("Flags"          );
+    static ::rtl::OUString TYPEPROP_PREFERREDFILTER(RTL_CONSTASCII_USTRINGPARAM("PreferredFilter"));
+    static ::rtl::OUString FILTERPROP_FLAGS        (RTL_CONSTASCII_USTRINGPARAM("Flags"));
     static sal_Int32       FILTERFLAG_TEMPLATEPATH  = 16;
 
     // SAFE ->
@@ -1003,9 +1003,9 @@ sal_Bool LoadEnv::impl_furtherDocsAllowed()
     {
         css::uno::Any aVal = ::comphelper::ConfigurationHelper::readDirectKey(
                                 xSMGR,
-                                ::rtl::OUString::createFromAscii("org.openoffice.Office.Common/"),
-                                ::rtl::OUString::createFromAscii("Misc"),
-                                ::rtl::OUString::createFromAscii("MaxOpenDocuments"),
+                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Common/")),
+                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Misc")),
+                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MaxOpenDocuments")),
                                 ::comphelper::ConfigurationHelper::E_READONLY);
 
         // NIL means: count of allowed documents = infinite !
@@ -1304,7 +1304,7 @@ void LoadEnv::impl_jumpToMark(const css::uno::Reference< css::frame::XFrame >& x
     // <- SAFE
 
     css::util::URL aCmd;
-    aCmd.Complete = ::rtl::OUString::createFromAscii(".uno:JumpToMark");
+    aCmd.Complete = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:JumpToMark"));
 
     css::uno::Reference< css::util::XURLTransformer > xParser(xSMGR->createInstance(SERVICENAME_URLTRANSFORMER), css::uno::UNO_QUERY_THROW);
     xParser->parseStrict(aCmd);
@@ -1314,7 +1314,7 @@ void LoadEnv::impl_jumpToMark(const css::uno::Reference< css::frame::XFrame >& x
         return;
 
     ::comphelper::SequenceAsHashMap lArgs;
-    lArgs[::rtl::OUString::createFromAscii("Bookmark")] <<= aURL.Mark;
+    lArgs[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Bookmark"))] <<= aURL.Mark;
     xDispatcher->dispatch(aCmd, lArgs.getAsConstPropertyValueList());
 }
 
@@ -1757,9 +1757,9 @@ void LoadEnv::impl_makeFrameWindowVisible(const css::uno::Reference< css::awt::X
         bool bForceFrontAndFocus(false);
         css::uno::Any a = ::comphelper::ConfigurationHelper::readDirectKey(
             xSMGR,
-            ::rtl::OUString::createFromAscii("org.openoffice.Office.Common/View"),
-            ::rtl::OUString::createFromAscii("NewDocumentHandling"),
-            ::rtl::OUString::createFromAscii("ForceFocusAndToFront"),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Common/View")),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NewDocumentHandling")),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ForceFocusAndToFront")),
             ::comphelper::ConfigurationHelper::E_READONLY);
         a >>= bForceFrontAndFocus;
 
@@ -1802,7 +1802,7 @@ void LoadEnv::impl_makeFrameWindowVisible(const css::uno::Reference< css::awt::X
 -----------------------------------------------*/
 void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::awt::XWindow >& xWindow)
 {
-    static ::rtl::OUString PACKAGE_SETUP_MODULES = ::rtl::OUString::createFromAscii("/org.openoffice.Setup/Office/Factories");
+    static ::rtl::OUString PACKAGE_SETUP_MODULES(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Setup/Office/Factories"));
 
     // no window -> action not possible
     if (!xWindow.is())

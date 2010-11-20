@@ -441,7 +441,7 @@ void TabWindowService::impl_checkTabIndex (::sal_Int32 nID)
        )
     {
         throw css::lang::IndexOutOfBoundsException(
-                ::rtl::OUString::createFromAscii("Tab index out of bounds."),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Tab index out of bounds.")),
                 css::uno::Reference< css::uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY ));
     }
 }
@@ -455,7 +455,7 @@ TTabPageInfoHash::iterator TabWindowService::impl_getTabPageInfo(::sal_Int32 nID
     TTabPageInfoHash::iterator pIt = m_lTabPageInfos.find(nID);
     if (pIt == m_lTabPageInfos.end ())
         throw css::lang::IndexOutOfBoundsException(
-                ::rtl::OUString::createFromAscii("Tab index out of bounds."),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Tab index out of bounds.")),
                 css::uno::Reference< css::uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY ));
     return pIt;
 }

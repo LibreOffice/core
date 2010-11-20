@@ -993,8 +993,8 @@ IMPL_LINK( BackingWindow, ClickHdl, Button*, pButton )
 
         Sequence< com::sun::star::beans::PropertyValue > aArgs(1);
         PropertyValue* pArg = aArgs.getArray();
-        pArg[0].Name = rtl::OUString::createFromAscii("Referer");
-        pArg[0].Value <<= rtl::OUString::createFromAscii("private:user");
+        pArg[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Referer"));
+        pArg[0].Value <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:user"));
 
         dispatchURL( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(OPEN_URL) ), rtl::OUString(), xFrame, aArgs );
     }
@@ -1004,8 +1004,8 @@ IMPL_LINK( BackingWindow, ClickHdl, Button*, pButton )
 
         Sequence< com::sun::star::beans::PropertyValue > aArgs(1);
         PropertyValue* pArg = aArgs.getArray();
-        pArg[0].Name = rtl::OUString::createFromAscii("Referer");
-        pArg[0].Value <<= rtl::OUString::createFromAscii("private:user");
+        pArg[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Referer"));
+        pArg[0].Value <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:user"));
 
         dispatchURL( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(TEMPLATE_URL) ), rtl::OUString(), xFrame, aArgs );
     }
@@ -1084,7 +1084,7 @@ void BackingWindow::dispatchURL( const rtl::OUString& i_rURL,
     aDispatchURL.Complete = i_rURL;
 
     Reference < com::sun::star::util::XURLTransformer > xURLTransformer(
-        comphelper::getProcessServiceFactory()->createInstance( rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer") ),
+        comphelper::getProcessServiceFactory()->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer")) ),
         com::sun::star::uno::UNO_QUERY );
     if ( xURLTransformer.is() )
     {

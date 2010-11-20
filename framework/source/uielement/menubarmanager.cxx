@@ -1139,7 +1139,7 @@ IMPL_LINK( MenuBarManager, Select, Menu *, pMenu )
     {
         const sal_uInt32 nRef = Application::ReleaseSolarMutex();
         if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
-            UiEventLogHelper(::rtl::OUString::createFromAscii("MenuBarManager")).log(getServiceFactory(), m_xFrame, aTargetURL, aArgs);
+            UiEventLogHelper(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MenuBarManager"))).log(getServiceFactory(), m_xFrame, aTargetURL, aArgs);
         xDispatch->dispatch( aTargetURL, aArgs );
         Application::AcquireSolarMutex( nRef );
     }

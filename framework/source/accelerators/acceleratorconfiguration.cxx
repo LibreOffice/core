@@ -189,13 +189,13 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::setKeyEvent(const css::awt::KeyE
         (aKeyEvent.Modifiers == 0)
         )
         throw css::lang::IllegalArgumentException(
-        ::rtl::OUString::createFromAscii("Such key event seams not to be supported by any operating system."),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Such key event seams not to be supported by any operating system.")),
         static_cast< ::cppu::OWeakObject* >(this),
         0);
 
     if (!sCommand.getLength())
         throw css::lang::IllegalArgumentException(
-        ::rtl::OUString::createFromAscii("Empty command strings are not allowed here."),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Empty command strings are not allowed here.")),
         static_cast< ::cppu::OWeakObject* >(this),
         1);
 
@@ -235,7 +235,7 @@ css::uno::Sequence< css::awt::KeyEvent > SAL_CALL XMLBasedAcceleratorConfigurati
 {
     if (!sCommand.getLength())
         throw css::lang::IllegalArgumentException(
-                ::rtl::OUString::createFromAscii("Empty command strings are not allowed here."),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Empty command strings are not allowed here.")),
                 static_cast< ::cppu::OWeakObject* >(this),
                 1);
 
@@ -272,7 +272,7 @@ css::uno::Sequence< css::uno::Any > SAL_CALL XMLBasedAcceleratorConfiguration::g
         const ::rtl::OUString& rCommand = lCommandList[i];
         if (!rCommand.getLength())
             throw css::lang::IllegalArgumentException(
-                    ::rtl::OUString::createFromAscii("Empty command strings are not allowed here."),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Empty command strings are not allowed here.")),
                     static_cast< ::cppu::OWeakObject* >(this),
                     (sal_Int16)i);
 
@@ -301,7 +301,7 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::removeCommandFromAllKeyEvents(co
 {
     if (!sCommand.getLength())
         throw css::lang::IllegalArgumentException(
-                ::rtl::OUString::createFromAscii("Empty command strings are not allowed here."),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Empty command strings are not allowed here.")),
                 static_cast< ::cppu::OWeakObject* >(this),
                 0);
 
@@ -311,7 +311,7 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::removeCommandFromAllKeyEvents(co
     AcceleratorCache& rCache = impl_getCFG(sal_True); // TRUE => force getting of a writeable cache!
     if (!rCache.hasCommand(sCommand))
         throw css::container::NoSuchElementException(
-                ::rtl::OUString::createFromAscii("Command does not exists inside this container."),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Command does not exists inside this container.")),
                 static_cast< ::cppu::OWeakObject* >(this));
     rCache.removeCommand(sCommand);
 
@@ -342,7 +342,7 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::reload()
         xIn = xStream->getInputStream();
     if (!xIn.is())
         throw css::io::IOException(
-        ::rtl::OUString::createFromAscii("Could not open accelerator configuration for reading."),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Could not open accelerator configuration for reading.")),
         static_cast< ::cppu::OWeakObject* >(this));
 
     // impl_ts_load() does not clear the cache
@@ -381,7 +381,7 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::store()
 
     if (!xOut.is())
         throw css::io::IOException(
-        ::rtl::OUString::createFromAscii("Could not open accelerator configuration for saving."),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Could not open accelerator configuration for saving.")),
         static_cast< ::cppu::OWeakObject* >(this));
 
     impl_ts_save(xOut);
@@ -408,7 +408,7 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::storeToStorage(const css::uno::R
 
     if (!xOut.is())
         throw css::io::IOException(
-                ::rtl::OUString::createFromAscii("Could not open accelerator configuration for saving."),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Could not open accelerator configuration for saving.")),
                 static_cast< ::cppu::OWeakObject* >(this));
 
     impl_ts_save(xOut);
@@ -635,9 +635,9 @@ AcceleratorCache& XMLBasedAcceleratorConfiguration::impl_getCFG(sal_Bool bWriteA
 //-----------------------------------------------
 ::comphelper::Locale XMLBasedAcceleratorConfiguration::impl_ts_getLocale() const
 {
-    static ::rtl::OUString LOCALE_PACKAGE = ::rtl::OUString::createFromAscii("/org.openoffice.Setup");
-    static ::rtl::OUString LOCALE_PATH    = ::rtl::OUString::createFromAscii("L10N"                 );
-    static ::rtl::OUString LOCALE_KEY     = ::rtl::OUString::createFromAscii("ooLocale"             );
+    static ::rtl::OUString LOCALE_PACKAGE(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Setup"));
+    static ::rtl::OUString LOCALE_PATH(RTL_CONSTASCII_USTRINGPARAM("L10N"));
+    static ::rtl::OUString LOCALE_KEY(RTL_CONSTASCII_USTRINGPARAM("ooLocale"));
 
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
@@ -760,13 +760,13 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::setKeyEvent(const css::awt::KeyE
         (aKeyEvent.Modifiers == 0)
         )
         throw css::lang::IllegalArgumentException(
-                ::rtl::OUString::createFromAscii("Such key event seams not to be supported by any operating system."),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Such key event seams not to be supported by any operating system.")),
                 static_cast< ::cppu::OWeakObject* >(this),
                 0);
 
     if (!sCommand.getLength())
                 throw css::lang::IllegalArgumentException(
-                ::rtl::OUString::createFromAscii("Empty command strings are not allowed here."),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Empty command strings are not allowed here.")),
                 static_cast< ::cppu::OWeakObject* >(this),
                 1);
 
@@ -883,7 +883,7 @@ css::uno::Sequence< css::awt::KeyEvent > SAL_CALL XCUBasedAcceleratorConfigurati
 {
     if (!sCommand.getLength())
         throw css::lang::IllegalArgumentException(
-                ::rtl::OUString::createFromAscii("Empty command strings are not allowed here."),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Empty command strings are not allowed here.")),
                 static_cast< ::cppu::OWeakObject* >(this),
                 1);
 
@@ -947,7 +947,7 @@ css::uno::Sequence< css::uno::Any > SAL_CALL XCUBasedAcceleratorConfiguration::g
         const ::rtl::OUString& rCommand = lCommandList[i];
         if (!rCommand.getLength())
             throw css::lang::IllegalArgumentException(
-                    ::rtl::OUString::createFromAscii("Empty command strings are not allowed here."),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Empty command strings are not allowed here.")),
                     static_cast< ::cppu::OWeakObject* >(this),
                     (sal_Int16)i);
 
@@ -980,7 +980,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::removeCommandFromAllKeyEvents(co
 {
     if (!sCommand.getLength())
         throw css::lang::IllegalArgumentException(
-                ::rtl::OUString::createFromAscii("Empty command strings are not allowed here."),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Empty command strings are not allowed here.")),
                 static_cast< ::cppu::OWeakObject* >(this),
                 0);
 
@@ -992,7 +992,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::removeCommandFromAllKeyEvents(co
 
     if (!rPrimaryCache.hasCommand(sCommand) && !rSecondaryCache.hasCommand(sCommand))
         throw css::container::NoSuchElementException(
-                ::rtl::OUString::createFromAscii("Command does not exists inside this container."),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Command does not exists inside this container.")),
                 static_cast< ::cppu::OWeakObject* >(this));
 
     if (rPrimaryCache.hasCommand(sCommand))
@@ -1084,17 +1084,17 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::storeToStorage(const css::uno::R
         return;
 
     long nOpenModes = css::embed::ElementModes::READWRITE;
-    css::uno::Reference< css::embed::XStorage > xAcceleratorTypeStorage = xStorage->openStorageElement(::rtl::OUString::createFromAscii("accelerator"), nOpenModes);
+    css::uno::Reference< css::embed::XStorage > xAcceleratorTypeStorage = xStorage->openStorageElement(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("accelerator")), nOpenModes);
     if (!xAcceleratorTypeStorage.is())
         return;
 
-    css::uno::Reference< css::io::XStream > xStream = xAcceleratorTypeStorage->openStreamElement(::rtl::OUString::createFromAscii("current"), nOpenModes);
+    css::uno::Reference< css::io::XStream > xStream = xAcceleratorTypeStorage->openStreamElement(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("current")), nOpenModes);
     css::uno::Reference< css::io::XOutputStream > xOut;
     if (xStream.is())
         xOut = xStream->getOutputStream();
     if (!xOut.is())
         throw css::io::IOException(
-        ::rtl::OUString::createFromAscii("Could not open accelerator configuration for saving."),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Could not open accelerator configuration for saving.")),
         static_cast< ::cppu::OWeakObject* >(this));
 
     // the original m_aCache has been split into primay cache and secondary cache...
@@ -1293,7 +1293,7 @@ void XCUBasedAcceleratorConfiguration::impl_ts_load( sal_Bool bPreferred, const 
     }
 
     const ::rtl::OUString sIsoLang       = impl_ts_getLocale().toISO();
-    const ::rtl::OUString sDefaultLocale = ::rtl::OUString::createFromAscii("en-US");
+    const ::rtl::OUString sDefaultLocale(RTL_CONSTASCII_USTRINGPARAM("en-US"));
 
     css::uno::Reference< css::container::XNameAccess > xKey;
     css::uno::Reference< css::container::XNameAccess > xCommand;
@@ -1342,7 +1342,7 @@ void XCUBasedAcceleratorConfiguration::impl_ts_load( sal_Bool bPreferred, const 
 
             sal_Int32 nIndex = 0;
             ::rtl::OUString sKeyCommand = sKey.getToken(0, '_', nIndex);
-            ::rtl::OUString sPrefix = ::rtl::OUString::createFromAscii("KEY_");
+            ::rtl::OUString sPrefix(RTL_CONSTASCII_USTRINGPARAM("KEY_"));
             aKeyEvent.KeyCode = m_rKeyMapping->mapIdentifierToCode(sPrefix + sKeyCommand);
 
             css::uno::Sequence< ::rtl::OUString > sToken(4);
@@ -1577,7 +1577,7 @@ void XCUBasedAcceleratorConfiguration::reloadChanged( const ::rtl::OUString& sPr
 
     sal_Int32 nIndex = 0;
     sKeyIdentifier = sKey.getToken(0, '_', nIndex);
-    aKeyEvent.KeyCode = m_rKeyMapping->mapIdentifierToCode(::rtl::OUString::createFromAscii("KEY_")+sKeyIdentifier);
+    aKeyEvent.KeyCode = m_rKeyMapping->mapIdentifierToCode(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("KEY_"))+sKeyIdentifier);
 
     css::uno::Sequence< ::rtl::OUString > sToken(3);
     const sal_Int32 nToken = 3;
@@ -1677,9 +1677,9 @@ AcceleratorCache& XCUBasedAcceleratorConfiguration::impl_getCFG(sal_Bool bPrefer
 //-----------------------------------------------
 ::comphelper::Locale XCUBasedAcceleratorConfiguration::impl_ts_getLocale() const
 {
-    static ::rtl::OUString LOCALE_PACKAGE = ::rtl::OUString::createFromAscii("/org.openoffice.Setup");
-    static ::rtl::OUString LOCALE_PATH    = ::rtl::OUString::createFromAscii("L10N"                 );
-    static ::rtl::OUString LOCALE_KEY     = ::rtl::OUString::createFromAscii("ooLocale"             );
+    static ::rtl::OUString LOCALE_PACKAGE(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Setup"));
+    static ::rtl::OUString LOCALE_PATH(RTL_CONSTASCII_USTRINGPARAM("L10N"));
+    static ::rtl::OUString LOCALE_KEY(RTL_CONSTASCII_USTRINGPARAM("ooLocale"));
 
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);

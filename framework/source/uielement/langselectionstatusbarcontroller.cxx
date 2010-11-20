@@ -285,55 +285,55 @@ throw (::com::sun::star::uno::RuntimeException)
         {
             //set selected language as current language for selection
             String aSelectedLang = aLangMap[nId];
-            aURL.Complete += OUString::createFromAscii(".uno:LanguageStatus?Language:string=Current_");
+            aURL.Complete += OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:LanguageStatus?Language:string=Current_"));
             aURL.Complete += aSelectedLang;
         }
         else if (nId == MID_LANG_SEL_NONE)
         {
             //set None as current language for selection
-            aURL.Complete += OUString::createFromAscii(".uno:LanguageStatus?Language:string=Current_LANGUAGE_NONE");
+            aURL.Complete += OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:LanguageStatus?Language:string=Current_LANGUAGE_NONE"));
         }
         else if (nId == MID_LANG_SEL_RESET)
         {
             // reset language attributes for selection
-            aURL.Complete += OUString::createFromAscii(".uno:LanguageStatus?Language:string=Current_RESET_LANGUAGES");
+            aURL.Complete += OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:LanguageStatus?Language:string=Current_RESET_LANGUAGES"));
         }
         else if (nId == MID_LANG_SEL_MORE)
         {
             //open the dialog "format/character" for current selection
-            aURL.Complete += OUString::createFromAscii(".uno:FontDialog?Language:string=*");
+            aURL.Complete += OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:FontDialog?Language:string=*"));
         }
         else if (MID_LANG_PARA_1 <= nId && nId <= MID_LANG_PARA_9)
         {
             //set selected language for current paragraph
             String aSelectedLang = aLangMap[nId];
-            aURL.Complete += OUString::createFromAscii(".uno:LanguageStatus?Language:string=Paragraph_");
+            aURL.Complete += OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:LanguageStatus?Language:string=Paragraph_"));
             aURL.Complete += aSelectedLang;
         }
         else if (nId == MID_LANG_PARA_NONE)
         {
             //set None as language for current paragraph
-            aURL.Complete += OUString::createFromAscii(".uno:LanguageStatus?Language:string=Paragraph_LANGUAGE_NONE");
+            aURL.Complete += OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:LanguageStatus?Language:string=Paragraph_LANGUAGE_NONE"));
         }
         else if (nId == MID_LANG_PARA_RESET)
         {
             // reset language attributes for paragraph
-            aURL.Complete += OUString::createFromAscii(".uno:LanguageStatus?Language:string=Paragraph_RESET_LANGUAGES");
+            aURL.Complete += OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:LanguageStatus?Language:string=Paragraph_RESET_LANGUAGES"));
         }
         else if (nId == MID_LANG_PARA_MORE)
         {
             //open the dialog "format/character" for current paragraph
-            aURL.Complete += OUString::createFromAscii(".uno:FontDialogForParagraph");
+            aURL.Complete += OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:FontDialogForParagraph"));
         }
 
-        uno::Reference< util::XURLTransformer > xURLTransformer( m_xServiceManager->createInstance( OUString::createFromAscii("com.sun.star.util.URLTransformer" )), uno::UNO_QUERY );
+        uno::Reference< util::XURLTransformer > xURLTransformer( m_xServiceManager->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))), uno::UNO_QUERY );
         xURLTransformer->parseStrict( aURL );
         uno::Reference< XDispatch > xDispatch = xDispatchProvider->queryDispatch(aURL, OUString(), 0);
         if( xDispatch.is() )
         {
             uno::Sequence< beans::PropertyValue > aPV;
             if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
-                UiEventLogHelper( OUString::createFromAscii("ButtonToolbarController")).log(m_xServiceManager, m_xFrame, aURL, aPV);
+                UiEventLogHelper( OUString(RTL_CONSTASCII_USTRINGPARAM("ButtonToolbarController"))).log(m_xServiceManager, m_xFrame, aURL, aPV);
             xDispatch->dispatch( aURL, aPV);
         }
     }

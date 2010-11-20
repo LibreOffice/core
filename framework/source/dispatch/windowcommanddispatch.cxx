@@ -65,8 +65,8 @@ namespace css = ::com::sun::star;
 //_______________________________________________
 // declarations
 
-const ::rtl::OUString WindowCommandDispatch::COMMAND_PREFERENCES = ::rtl::OUString::createFromAscii(".uno:OptionsTreeDialog");
-const ::rtl::OUString WindowCommandDispatch::COMMAND_ABOUTBOX    = ::rtl::OUString::createFromAscii(".uno:About");
+const ::rtl::OUString WindowCommandDispatch::COMMAND_PREFERENCES(RTL_CONSTASCII_USTRINGPARAM(".uno:OptionsTreeDialog"));
+const ::rtl::OUString WindowCommandDispatch::COMMAND_ABOUTBOX(RTL_CONSTASCII_USTRINGPARAM(".uno:About"));
 
 //-----------------------------------------------
 WindowCommandDispatch::WindowCommandDispatch(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR ,

@@ -157,7 +157,7 @@ throw ( RuntimeException )
         pExecuteInfo->aTargetURL    = aTargetURL;
         pExecuteInfo->aArgs         = aArgs;
         if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
-            UiEventLogHelper(::rtl::OUString::createFromAscii("ComplexToolbarController")).log(
+            UiEventLogHelper(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ComplexToolbarController"))).log(
                 m_xServiceManager,
                 m_xFrame,
                 aTargetURL,

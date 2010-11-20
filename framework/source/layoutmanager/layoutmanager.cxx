@@ -333,7 +333,7 @@ static void impl_setDockingWindowVisibility( const css::uno::Reference< css::lan
         xDispatcher->executeDispatch(
             xProvider,
             aDockWinCommand,
-            ::rtl::OUString::createFromAscii("_self"),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_self")),
             0,
             aArgs);
     }
@@ -6227,8 +6227,8 @@ IMPL_LINK( LayoutManager, MenuBarClose, MenuBar *, EMPTYARG )
 
     xDispatcher->executeDispatch(
         xProvider,
-        ::rtl::OUString::createFromAscii(".uno:CloseWin"),
-        ::rtl::OUString::createFromAscii("_self"),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:CloseWin")),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_self")),
         0,
         css::uno::Sequence< css::beans::PropertyValue >());
 

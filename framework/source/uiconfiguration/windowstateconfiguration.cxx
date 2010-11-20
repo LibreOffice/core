@@ -1224,7 +1224,7 @@ void ConfigurationAccess_WindowState::impl_putPropertiesFromStruct( const Window
     sal_Int32                 i( 0 );
     sal_Int32                 nCount( m_aPropArray.size() );
     Sequence< PropertyValue > aPropSeq;
-    ::rtl::OUString                  aDelim( ::rtl::OUString::createFromAscii( "," ));
+    ::rtl::OUString                  aDelim( RTL_CONSTASCII_USTRINGPARAM(",") );
 
     for ( i = 0; i < nCount; i++ )
     {

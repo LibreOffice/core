@@ -60,26 +60,26 @@ namespace framework{
 // definitions
 
 // path to module config
-static ::rtl::OUString CFG_PACKAGE_MODULES      = ::rtl::OUString::createFromAscii("/org.openoffice.Setup/Office/Factories");
-static ::rtl::OUString CFG_PACKAGE_SETUP        = ::rtl::OUString::createFromAscii("/org.openoffice.Setup"             );
-static ::rtl::OUString CFG_PACKAGE_COMMON       = ::rtl::OUString::createFromAscii("/org.openoffice.Office.Common"     );
-static ::rtl::OUString CFG_PATH_L10N            = ::rtl::OUString::createFromAscii("L10N"                              );
-static ::rtl::OUString CFG_PATH_HELP            = ::rtl::OUString::createFromAscii("Help"                              );
-static ::rtl::OUString CFG_KEY_LOCALE           = ::rtl::OUString::createFromAscii("ooLocale"                          );
-static ::rtl::OUString CFG_KEY_HELPSYSTEM       = ::rtl::OUString::createFromAscii("System"                            );
+static ::rtl::OUString CFG_PACKAGE_MODULES     (RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Setup/Office/Factories"));
+static ::rtl::OUString CFG_PACKAGE_SETUP       (RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Setup"));
+static ::rtl::OUString CFG_PACKAGE_COMMON      (RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.Common"));
+static ::rtl::OUString CFG_PATH_L10N           (RTL_CONSTASCII_USTRINGPARAM("L10N"));
+static ::rtl::OUString CFG_PATH_HELP           (RTL_CONSTASCII_USTRINGPARAM("Help"));
+static ::rtl::OUString CFG_KEY_LOCALE          (RTL_CONSTASCII_USTRINGPARAM("ooLocale"));
+static ::rtl::OUString CFG_KEY_HELPSYSTEM      (RTL_CONSTASCII_USTRINGPARAM("System"));
 
 // props of job environment
-static ::rtl::OUString PROP_ENVIRONMENT         = ::rtl::OUString::createFromAscii("Environment"                       );
-static ::rtl::OUString PROP_JOBCONFIG           = ::rtl::OUString::createFromAscii("JobConfig"                         );
-static ::rtl::OUString PROP_ENVTYPE             = ::rtl::OUString::createFromAscii("EnvType"                           );
-static ::rtl::OUString PROP_MODEL               = ::rtl::OUString::createFromAscii("Model"                             );
+static ::rtl::OUString PROP_ENVIRONMENT        (RTL_CONSTASCII_USTRINGPARAM("Environment"));
+static ::rtl::OUString PROP_JOBCONFIG          (RTL_CONSTASCII_USTRINGPARAM("JobConfig"));
+static ::rtl::OUString PROP_ENVTYPE            (RTL_CONSTASCII_USTRINGPARAM("EnvType"));
+static ::rtl::OUString PROP_MODEL              (RTL_CONSTASCII_USTRINGPARAM("Model"));
 
 // props of module config
-static ::rtl::OUString PROP_HELP_BASEURL        = ::rtl::OUString::createFromAscii("ooSetupFactoryHelpBaseURL"         );
-static ::rtl::OUString PROP_AUTOMATIC_HELP      = ::rtl::OUString::createFromAscii("ooSetupFactoryHelpOnOpen"          );
+static ::rtl::OUString PROP_HELP_BASEURL       (RTL_CONSTASCII_USTRINGPARAM("ooSetupFactoryHelpBaseURL"));
+static ::rtl::OUString PROP_AUTOMATIC_HELP     (RTL_CONSTASCII_USTRINGPARAM("ooSetupFactoryHelpOnOpen"));
 
 // special value of job environment
-static ::rtl::OUString ENVTYPE_DOCUMENTEVENT    = ::rtl::OUString::createFromAscii("DOCUMENTEVENT"                     );
+static ::rtl::OUString ENVTYPE_DOCUMENTEVENT   (RTL_CONSTASCII_USTRINGPARAM("DOCUMENTEVENT"));
 
 //-----------------------------------------------
 

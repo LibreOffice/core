@@ -178,7 +178,7 @@ void FontMenuController::impl_select(const Reference< XDispatch >& _xDispatch,co
 {
     Sequence<PropertyValue>      aArgs;
     if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
-        UiEventLogHelper(::rtl::OUString::createFromAscii("FontMenuController")).log(
+        UiEventLogHelper(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FontMenuController"))).log(
             m_xServiceManager,
             m_xFrame,
             aTargetURL,

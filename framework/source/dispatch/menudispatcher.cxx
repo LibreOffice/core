@@ -383,7 +383,7 @@ IMPL_LINK( MenuDispatcher, Close_Impl, void*, EMPTYARG )
         return 0;
 
     css::util::URL aURL;
-    aURL.Complete = ::rtl::OUString::createFromAscii(".uno:CloseWin");
+    aURL.Complete = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:CloseWin"));
     css::uno::Reference< css::util::XURLTransformer >  xTrans ( m_xFactory->createInstance(
                         SERVICENAME_URLTRANSFORMER ), css::uno::UNO_QUERY );
     if( xTrans.is() )

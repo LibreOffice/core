@@ -57,7 +57,7 @@ namespace css = ::com::sun::star;
 //  exported const
 //_________________________________________________________________________________________________________________
 
-#define IMPLEMENTATIONNAME_UIINTERACTIONHANDLER                 ::rtl::OUString::createFromAscii("com.sun.star.comp.uui.UUIInteractionHandler")
+#define IMPLEMENTATIONNAME_UIINTERACTIONHANDLER                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.uui.UUIInteractionHandler"))
 
 //_________________________________________________________________________________________________________________
 //  exported definitions

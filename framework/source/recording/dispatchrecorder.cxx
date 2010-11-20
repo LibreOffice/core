@@ -132,7 +132,7 @@ DispatchRecorder::DispatchRecorder( const css::uno::Reference< css::lang::XMulti
         : ThreadHelpBase     ( &Application::GetSolarMutex() )
         , ::cppu::OWeakObject(                               )
         , m_xSMGR            ( xSMGR                         )
-        , m_xConverter( m_xSMGR->createInstance(::rtl::OUString::createFromAscii("com.sun.star.script.Converter")), css::uno::UNO_QUERY )
+        , m_xConverter( m_xSMGR->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.Converter"))), css::uno::UNO_QUERY )
 {
 }
 
@@ -345,7 +345,7 @@ void SAL_CALL DispatchRecorder::implts_recordMacro( const ::rtl::OUString& aURL,
     ::rtl::OUStringBuffer aArgumentBuffer(1000);
     ::rtl::OUString       sArrayName;
     // this value is used to name the arrays of aArgumentBuffer
-    sArrayName = ::rtl::OUString::createFromAscii("args");
+    sArrayName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("args"));
     sArrayName += ::rtl::OUString::valueOf((sal_Int32)m_nRecordingID);
 
     aScriptBuffer.appendAscii("rem ----------------------------------------------------------------------\n");

@@ -344,7 +344,7 @@ void ControlMenuController::impl_select(const Reference< XDispatch >& /*_xDispat
         Sequence<PropertyValue>      aArgs;
         Reference< XDispatch > xDispatch = pIter->second;
         if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
-            UiEventLogHelper(::rtl::OUString::createFromAscii("ControlMenuController")).log(m_xServiceManager, m_xFrame, aURL, aArgs);
+            UiEventLogHelper(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ControlMenuController"))).log(m_xServiceManager, m_xFrame, aURL, aArgs);
         if ( xDispatch.is() )
             xDispatch->dispatch( aURL, aArgs );
     }

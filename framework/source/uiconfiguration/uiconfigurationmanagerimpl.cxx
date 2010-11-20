@@ -803,8 +803,8 @@ void UIConfigurationManagerImpl::initialize( const Sequence< Any >& aArguments )
     if ( !m_bInitialized )
     {
         ::comphelper::SequenceAsHashMap lArgs(aArguments);
-        m_aModuleIdentifier = lArgs.getUnpackedValueOrDefault(::rtl::OUString::createFromAscii("ModuleIdentifier"), ::rtl::OUString());
-        m_aModuleShortName  = lArgs.getUnpackedValueOrDefault(::rtl::OUString::createFromAscii("ModuleShortName"), ::rtl::OUString());
+        m_aModuleIdentifier = lArgs.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ModuleIdentifier")), ::rtl::OUString());
+        m_aModuleShortName  = lArgs.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ModuleShortName")), ::rtl::OUString());
 
         for ( int i = 1; i < ::com::sun::star::ui::UIElementType::COUNT; i++ )
         {
@@ -1386,7 +1386,7 @@ Reference< XInterface > UIConfigurationManagerImpl::getShortCutManager() throw (
     } // if ( m_bUseDefault )
     else
     {
-        aProp.Name    = ::rtl::OUString::createFromAscii("DocumentRoot");
+        aProp.Name    = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentRoot"));
         aProp.Value <<= xDocumentRoot;
     }
     lArgs[0] <<= aProp;
