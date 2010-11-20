@@ -58,31 +58,12 @@ extern "C" {
 
 #endif
 
-#if 0
-// I18N doesn't get this right, can't specify more than one to ignore
-#define SC_COLLATOR_IGNORES ( \
-    ::com::sun::star::i18n::CollatorOptions::CollatorOptions_IGNORE_CASE | \
-    ::com::sun::star::i18n::CollatorOptions::CollatorOptions_IGNORE_KANA | \
-    ::com::sun::star::i18n::CollatorOptions::CollatorOptions_IGNORE_WIDTH )
-#else
 #define SC_COLLATOR_IGNORES ( \
     ::com::sun::star::i18n::CollatorOptions::CollatorOptions_IGNORE_CASE )
-#endif
-#if 0
-// #107998# Don't ignore Width and Kana. The issue was mainly with AutoInput,
-// but affects also comparison of names in general.
-#define SC_TRANSLITERATION_IGNORECASE ( \
-    ::com::sun::star::i18n::TransliterationModules_IGNORE_CASE | \
-    ::com::sun::star::i18n::TransliterationModules_IGNORE_KANA | \
-    ::com::sun::star::i18n::TransliterationModules_IGNORE_WIDTH )
-#define SC_TRANSLITERATION_CASESENSE ( \
-    ::com::sun::star::i18n::TransliterationModules_IGNORE_KANA | \
-    ::com::sun::star::i18n::TransliterationModules_IGNORE_WIDTH )
-#else
+
 #define SC_TRANSLITERATION_IGNORECASE ( \
     ::com::sun::star::i18n::TransliterationModules_IGNORE_CASE )
 #define SC_TRANSLITERATION_CASESENSE 0
-#endif
 
 //------------------------------------------------------------------------
 
