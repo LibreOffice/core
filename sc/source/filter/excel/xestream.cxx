@@ -1110,18 +1110,6 @@ bool XclExpXmlStream::exportDocument() throw()
     mpRoot = &aRoot;
     aRoot.GetOldRoot().pER = &aRoot;
     aRoot.GetOldRoot().eDateiTyp = Biff8;
-#if 0 // FIXME: Re-write this block without using SotStorage.
-    if ( SvtFilterOptions* pOptions = SvtFilterOptions::Get() )
-        if ( pShell && pOptions->IsLoadExcelBasicStorage() )
-            if ( sal_uInt32 nError
-                 = SvxImportMSVBasic( *pShell, *rStorage,
-                                      pOptions->IsLoadExcelBasicCode(),
-                                      pOptions->IsLoadExcelBasicStorage() )
-                .SaveOrDelMSVBAStorage( true, EXC_STORAGE_VBA_PROJECT) )
-            {
-                pShell->SetError( nError, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
-            }
-#endif
     // Get the viewsettings before processing
     if( pShell->GetViewData() )
         pShell->GetViewData()->WriteExtOptions( mpRoot->GetExtDocOptions() );

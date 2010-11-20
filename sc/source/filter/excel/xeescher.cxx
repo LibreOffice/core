@@ -1119,7 +1119,6 @@ void XclExpChartObj::SaveXml( XclExpXmlStream& rStrm )
         nChartCount++;
         aChartExport.WriteChartObj( mxShape, nChartCount );
         // TODO: get the correcto chart number
-        //WriteChartObj( pDrawing, rStrm );
     }
 
     pDrawing->singleElement( FSNS( XML_xdr, XML_clientData),
@@ -1155,9 +1154,7 @@ void XclExpChartObj::WriteChartObj( sax_fastparser::FSHelperPtr pDrawing, XclExp
     pDrawing->endElement( FSNS( XML_xdr, XML_nvGraphicFramePr ) );
 
     // visual chart properties
-    //pDrawing->startElement( FSNS( XML_xdr, XML_xfrm ), FSEND );
     WriteShapeTransformation( pDrawing, mxShape );
-    //pDrawing->endElement( FSNS( XML_xdr, XML_xfrm ) );
 
     // writer chart object
     pDrawing->startElement( FSNS( XML_a, XML_graphic ), FSEND );
@@ -1260,13 +1257,6 @@ XclExpNote::XclExpNote( const XclExpRoot& rRoot, const ScAddress& rScPos,
                     // AutoFill style would change if Postit.cxx object creation values are changed
                     OUString aCol(((XFillColorItem &)GETITEM(aItemSet, XFillColorItem , XATTR_FILLCOLOR)).GetValue());
                     mbAutoFill  = !aCol.getLength() && (GETITEMVALUE(aItemSet, XFillStyleItem, XATTR_FILLSTYLE, ULONG) == XFILL_SOLID);
-#if 0
-                    // TODO: Get AutoLine bool
-                    aCol = OUString(((XLineStartItem &)GETITEM(aItemSet, XLineStartItem, XATTR_LINESTART)).GetValue());
-                    mbAutoLine = !aCol.getLength() &&
-                                 (GETITEMVALUE(aItemSet, XLineStartWidthItem, XATTR_LINESTARTWIDTH, ULONG) == 200) &&
-                                 (GETITEMBOOL(aItemSet, XATTR_LINESTARTCENTER) == FALSE);
-#endif
                     mbAutoLine  = true;
                     mbRowHidden = (rRoot.GetDoc().RowHidden(maScPos.Row(),maScPos.Tab()));
                     mbColHidden = (rRoot.GetDoc().ColHidden(maScPos.Col(),maScPos.Tab()));
@@ -1354,14 +1344,8 @@ void XclExpNote::WriteXml( sal_Int32 nAuthorId, XclExpXmlStream& rStrm )
             FSEND );
     rComments->startElement( XML_text, FSEND );
     // OOXTODO: phoneticPr, rPh, r
-#if 0
-    rComments->startElement( XML_t, FSEND );
-    rComments->writeEscaped( XclXmlUtils::ToOUString( maOrigNoteText ) );
-    rComments->endElement ( XML_t );
-#else
     if( mpNoteContents )
         mpNoteContents->WriteXml( rStrm );
-#endif
     rComments->endElement( XML_text );
 
 /*
@@ -1374,9 +1358,7 @@ void XclExpNote::WriteXml( sal_Int32 nAuthorId, XclExpXmlStream& rStrm )
         rComments->startElement( XML_commentPr,
                 XML_autoFill,       XclXmlUtils::ToPsz( mbAutoFill ),
                 XML_autoScale,      XclXmlUtils::ToPsz( mbAutoScale ),
-                // XML_autoLine,       XclXmlUtils::ToPsz( mbAutoLine ),
                 XML_colHidden,      XclXmlUtils::ToPsz( mbColHidden ),
-                // XML_defaultSize,    "true",
                 XML_locked,         XclXmlUtils::ToPsz( mbLocked ),
                 XML_rowHidden,      XclXmlUtils::ToPsz( mbRowHidden ),
                 XML_textHAlign,     ToHorizAlign( meTHA ),
