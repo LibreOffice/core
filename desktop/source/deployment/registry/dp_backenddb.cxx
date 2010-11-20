@@ -625,11 +625,8 @@ bool RegisteredDb::getEntry(::rtl::OUString const & url)
         Reference<css::xml::xpath::XXPathAPI> xpathApi = getXPathAPI();
         Reference<css::xml::dom::XNode> aNode =
             xpathApi->selectSingleNode(root, sExpression);
-        if (!aNode.is())
-        {
-            return false;
-        }
-        return true;
+
+        return aNode.is();
     }
     catch(css::uno::Exception &)
     {
