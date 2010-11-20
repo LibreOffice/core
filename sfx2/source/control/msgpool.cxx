@@ -48,13 +48,6 @@
 
 //====================================================================
 
-struct SfxSIDRegistration_Impl
-{
-    String          _aGroup;
-    String          _aName;
-    USHORT          _nSID;
-};
-
 struct SfxSlotType_Impl
 {
     USHORT  nId;
