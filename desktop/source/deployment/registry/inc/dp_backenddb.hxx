@@ -140,8 +140,6 @@ protected:
      */
     virtual ::rtl::OUString getKeyElementName()=0;
 
-
-
 public:
     BackendDb(css::uno::Reference<css::uno::XComponentContext> const &  xContext,
               ::rtl::OUString const & url);
@@ -163,7 +161,6 @@ public:
     virtual bool getEntry(::rtl::OUString const & url);
 
 };
-
 
 }
 }
