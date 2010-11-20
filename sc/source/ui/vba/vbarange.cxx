@@ -3071,7 +3071,7 @@ ScVbaRange::Replace( const ::rtl::OUString& What, const ::rtl::OUString& Replace
     }
 
     // sanity check required params
-    if ( !What.getLength() /*|| !Replacement.getLength()*/ )
+    if ( !What.getLength()  )
         throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Range::Replace, missing params" )) , uno::Reference< uno::XInterface >() );
     rtl::OUString sWhat = VBAToRegexp( What);
     // #TODO #FIXME SearchFormat & ReplacesFormat are not processed
@@ -3425,15 +3425,6 @@ ScVbaRange::Sort( const uno::Any& Key1, const uno::Any& Order1, const uno::Any& 
     // 2) #TODO #FIXME need to refactor this ( below ) into a IsSingleCell() method
     uno::Reference< table::XColumnRowRange > xColumnRowRange(mxRange, uno::UNO_QUERY_THROW );
 
-    // 'Fraid I don't remember what I was trying to achieve here ???
-/*
-    if (  isSingleCellRange() )
-    {
-        uno::Reference< XRange > xCurrent = CurrentRegion();
-        xCurrent->Sort( Key1, Order1, Key2, Type, Order2, Key3, Order3, Header, OrderCustom, MatchCase, Orientation, SortMethod, DataOption1, DataOption2, DataOption3 );
-        return;
-    }
-*/
     // set up defaults
 
     sal_Int16 nOrder1 = aSortParam.bAscending[0] ? excel::XlSortOrder::xlAscending : excel::XlSortOrder::xlDescending;
@@ -5205,12 +5196,6 @@ void ScVbaRange::setShowDetail(const uno::Any& aShowDetail) throw ( css::uno::Ru
 ::com::sun::star::uno::Reference< ::ooo::vba::excel::XQueryTable > SAL_CALL
 ScVbaRange::getQueryTable() throw (::com::sun::star::uno::RuntimeException)
 {
-    /*
-    if (m_pQueryTable == NULL)
-    {
-        m_pQueryTable = new ScVbaQueryTable(mxParent ,mxContext, getScDocument(), this); //add by limingl
-    }
-    //*/
     if (!m_xQueryTable.is())
     {
         m_xQueryTable = new ScVbaQueryTable(mxParent ,mxContext, getScDocument(), this); //add by limingl
