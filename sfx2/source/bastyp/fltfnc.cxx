@@ -368,7 +368,7 @@ sal_uInt32  SfxFilterMatcher::GuessFilterIgnoringContent(
     SfxFilterFlags nMust,
     SfxFilterFlags nDont ) const
 {
-    Reference< XTypeDetection > xDetection( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.document.TypeDetection")), UNO_QUERY );
+    Reference< XTypeDetection > xDetection( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.TypeDetection"))), UNO_QUERY );
     ::rtl::OUString sTypeName;
     try
     {
@@ -420,7 +420,7 @@ sal_uInt32  SfxFilterMatcher::GuessFilterControlDefaultUI( SfxMedium& rMedium, c
     const SfxFilter* pOldFilter = *ppFilter;
 
     // no detection service -> nothing to do !
-    Reference< XTypeDetection > xDetection( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.document.TypeDetection")), UNO_QUERY );
+    Reference< XTypeDetection > xDetection( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.TypeDetection"))), UNO_QUERY );
     if (!xDetection.is())
         return ERRCODE_ABORT;
 
@@ -466,7 +466,7 @@ sal_uInt32  SfxFilterMatcher::GuessFilterControlDefaultUI( SfxMedium& rMedium, c
             // The DocumentService property is only a preselection, and all preselections are considered as optional!
             // This "wrong" type will be sorted out now because we match only allowed filters to the detected type
             ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > lQuery(1);
-            lQuery[0].Name = ::rtl::OUString::createFromAscii("Name");
+            lQuery[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name"));
             lQuery[0].Value <<= sTypeName;
 
             const SfxFilter* pFilter = GetFilterForProps(lQuery, nMust, nDont);
@@ -639,7 +639,7 @@ const SfxFilter* SfxFilterMatcher::GetFilterForProps( const com::sun::star::uno:
             ::rtl::OUString aValue;
 
             // try to get the preferred filter (works without loading all filters!)
-            if ( (aProps[::rtl::OUString::createFromAscii("PreferredFilter")] >>= aValue) && aValue.getLength() )
+            if ( (aProps[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PreferredFilter"))] >>= aValue) && aValue.getLength() )
             {
                 const SfxFilter* pFilter = SfxFilter::GetFilterByName( aValue );
                 if ( !pFilter || (pFilter->GetFilterFlags() & nMust) != nMust || (pFilter->GetFilterFlags() & nDont ) )
@@ -655,7 +655,7 @@ const SfxFilter* SfxFilterMatcher::GetFilterForProps( const com::sun::star::uno:
                     {
                         // preferred filter belongs to another document type; now we must search the filter
                         pImpl->InitForIterating();
-                        aProps[::rtl::OUString::createFromAscii("Name")] >>= aValue;
+                        aProps[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name"))] >>= aValue;
                         pFilter = GetFilter4EA( aValue, nMust, nDont );
                         if ( pFilter )
                             return pFilter;
@@ -689,7 +689,7 @@ const SfxFilter* SfxFilterMatcher::GetFilter4Mime( const String& rMediaType,SfxF
     }
 
     com::sun::star::uno::Sequence < com::sun::star::beans::NamedValue > aSeq(1);
-    aSeq[0].Name = ::rtl::OUString::createFromAscii("MediaType");
+    aSeq[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType"));
     aSeq[0].Value <<= ::rtl::OUString( rMediaType );
     return GetFilterForProps( aSeq, nMust, nDont );
 }
@@ -719,7 +719,7 @@ const SfxFilter* SfxFilterMatcher::GetFilter4EA( const String& rType,SfxFilterFl
     }
 
     com::sun::star::uno::Sequence < com::sun::star::beans::NamedValue > aSeq(1);
-    aSeq[0].Name = ::rtl::OUString::createFromAscii("Name");
+    aSeq[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name"));
     aSeq[0].Value <<= ::rtl::OUString( rType );
     return GetFilterForProps( aSeq, nMust, nDont );
 }
@@ -759,7 +759,7 @@ const SfxFilter* SfxFilterMatcher::GetFilter4Extension( const String& rExt, SfxF
         sExt.Erase(0,1);
 
     com::sun::star::uno::Sequence < com::sun::star::beans::NamedValue > aSeq(1);
-    aSeq[0].Name = ::rtl::OUString::createFromAscii("Extensions");
+    aSeq[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Extensions"));
     ::com::sun::star::uno::Sequence < ::rtl::OUString > aExts(1);
     aExts[0] = sExt;
     aSeq[0].Value <<= aExts;
@@ -789,7 +789,7 @@ const SfxFilter* SfxFilterMatcher::GetFilter4ClipBoardId( sal_uInt32 nId, SfxFil
 
     com::sun::star::uno::Sequence < com::sun::star::beans::NamedValue > aSeq(1);
     ::rtl::OUString aName = SotExchange::GetFormatName( nId );
-    aSeq[0].Name = ::rtl::OUString::createFromAscii("ClipboardFormat");
+    aSeq[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ClipboardFormat"));
     aSeq[0].Value <<= aName;
     return GetFilterForProps( aSeq, nMust, nDont );
 }
@@ -1199,7 +1199,7 @@ void SfxFilterContainer::ReadFilters_Impl( BOOL bUpdate )
                     // And conditional breakpoints on unicode values seams not to be supported .-(
                     #ifdef DEBUG
                     bool bDBGStop = FALSE;
-                    if (sFilterName.indexOf(::rtl::OUString::createFromAscii("DBG_"))>-1)
+                    if (sFilterName.indexOf(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DBG_")))>-1)
                         bDBGStop = TRUE;
                     #endif
 

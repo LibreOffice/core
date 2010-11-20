@@ -920,7 +920,7 @@ namespace sfx2
         {
             ::comphelper::SequenceAsHashMap lFilterProps (xFilterList->nextElement());
             ::rtl::OUString                 sFilterName  = lFilterProps.getUnpackedValueOrDefault(
-                                                             ::rtl::OUString::createFromAscii("Name"),
+                                                             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name")),
                                                              ::rtl::OUString());
             if (sFilterName.getLength())
                 m_lFilters.push_back(sFilterName);

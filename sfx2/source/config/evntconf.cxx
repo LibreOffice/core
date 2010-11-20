@@ -252,7 +252,7 @@ void PropagateEvent_Impl( SfxObjectShell *pDoc, rtl::OUString aEventName, const 
     {
         xSupplier = uno::Reference < document::XEventsSupplier >
                 ( ::comphelper::getProcessServiceFactory()->createInstance(
-                rtl::OUString::createFromAscii("com.sun.star.frame.GlobalEventBroadcaster" )), uno::UNO_QUERY );
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.GlobalEventBroadcaster"))), uno::UNO_QUERY );
     }
 
     if ( xSupplier.is() )

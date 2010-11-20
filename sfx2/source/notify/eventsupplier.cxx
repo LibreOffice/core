@@ -282,7 +282,7 @@ static void Execute( ANY& aEventData, const css::document::DocumentEvent& aTrigg
                 if ( xDisp.is() )
                 {
                     //::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue > aArgs(1);
-                    //aArgs[0].Name = rtl::OUString::createFromAscii("Referer");
+                    //aArgs[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Referer"));
                     //aArs[0].Value <<= ::rtl::OUString( pDoc->GetMedium()->GetName() );
                     //xDisp->dispatch( aURL, aArgs );
 
@@ -597,7 +597,7 @@ css::uno::Any SAL_CALL ModelCollectionEnumeration::nextElement()
     ::osl::ResettableMutexGuard aLock(m_aLock);
     if (m_pEnumerationIt == m_lModels.end())
         throw css::container::NoSuchElementException(
-                    ::rtl::OUString::createFromAscii("End of model enumeration reached."),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("End of model enumeration reached.")),
                     static_cast< css::container::XEnumeration* >(this));
     css::uno::Reference< css::frame::XModel > xModel(*m_pEnumerationIt, UNO_QUERY);
     ++m_pEnumerationIt;
@@ -623,7 +623,7 @@ SfxGlobalEvents_Impl::SfxGlobalEvents_Impl( const com::sun::star::uno::Reference
     pImp                   = new GlobalEventConfig();
     m_xEvents              = pImp;
     m_xJobExecutorListener = css::uno::Reference< css::document::XEventListener >(
-                        xSMGR->createInstance(::rtl::OUString::createFromAscii("com.sun.star.task.JobExecutor")),
+                        xSMGR->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.task.JobExecutor"))),
                         UNO_QUERY);
     m_refCount--;
 }
@@ -746,7 +746,7 @@ void SAL_CALL SfxGlobalEvents_Impl::insert( const css::uno::Any& aElement )
     aElement >>= xDoc;
     if (!xDoc.is())
         throw css::lang::IllegalArgumentException(
-                ::rtl::OUString::createFromAscii("Cant locate at least the model parameter."),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Cant locate at least the model parameter.")),
                 static_cast< css::container::XSet* >(this),
                 0);
 
@@ -783,7 +783,7 @@ void SAL_CALL SfxGlobalEvents_Impl::remove( const css::uno::Any& aElement )
     aElement >>= xDoc;
     if (!xDoc.is())
         throw css::lang::IllegalArgumentException(
-                ::rtl::OUString::createFromAscii("Cant locate at least the model parameter."),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Cant locate at least the model parameter.")),
                 static_cast< css::container::XSet* >(this),
                 0);
 
