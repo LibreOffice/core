@@ -916,7 +916,7 @@ void ScInterpreter::ScMatInv()
                         for (SCSIZE i=0; i < nR; ++i)
                             pY->PutDouble( X[i], j, i);
                     }
-#if 0
+#if OSL_DEBUG_LEVEL > 1
                     /* Possible checks for ill-condition:
                      * 1. Scale matrix, invert scaled matrix. If there are
                      *    elements of the inverted matrix that are several
