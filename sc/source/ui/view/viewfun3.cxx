@@ -58,18 +58,12 @@
 #define _MODALDLG_HXX
 #define _MOREBUTTON_HXX
 #define _OUTLINER_HXX
-//#define _PRNDLG_HXX
-//#define _POLY_HXX
 #define _PVRWIN_HXX
-//#define _QUEUE_HXX
 #define _RULER_HXX
 #define _SCRWIN_HXX
 #define _SETBRW_HXX
-//#define _STACK_HXX
-//#define _STATUS_HXX ***
 #define _STDCTRL_HXX
 #define _STDMENU_HXX
-//#define _TAB_HXX
 #define _TABBAR_HXX
 #define _TREELIST_HXX
 #define _VALUESET_HXX
@@ -80,38 +74,23 @@
 #define _VCONT_HXX
 #define _VDRWOBJ_HXX
 
-//#define _SELENG_HXX
-//#define _SOUND_HXX
-//#define _SYSDLG_HXX
-
-
-
-
 #define _PASSWD_HXX
 
 #define _SFX_DOCFILE_HXX
-//#define _SFX_DOCFILT_HXX
 #define _SFX_DOCINF_HXX
 #define _SFX_DOCSH_HXX
-//#define _SFXDOCFILT_HXX
-//#define _SFXDOCINF_HXX
-//#define _SFXDOCSH_HXX
 #define _SFX_PRNMON_HXX
 #define _SFX_RESMGR_HXX
 #define _SFX_TEMPLDLG_HXX
-//#define _SFXAPPWIN_HXX
 #define _SFXBASIC_HXX
 #define _SFXCTRLITEM
 #define _SFXDLGCFG_HXX
-//#define _SFXDISPATCH_HXX
 #define _SFXFILEDLG_HXX
-//#define _SFXIMGMGR_HXX
 #define _SFXIPFRM_HXX
 #define _SFX_MACRO_HXX
 #define _SFXMNUITEM_HXX
 #define _SFXMNUMGR_HXX
 #define _SFXMULTISEL_HXX
-//#define _SFXMSG_HXX
 #define _SFXMSGDESCR_HXX
 #define _SFXMSGPOOL_HXX
 #define _SFX_MINFITEM_HXX
@@ -124,14 +103,6 @@
 #define _SFXTBXMGR_HXX
 
 #define _SI_HXX
-//#define _SI_DLL_HXX
-//#define _SIDLL_HXX
-//#define _SI_NOITEMS
-//#define _SI_NOOTHERFORMS
-//#define _SI_NOSBXCONTROLS
-//#define _SINOSBXCONTROLS
-//#define _SI_NODRW
-//#define _SI_NOCONTROL
 
 #define _SVBOXITM_HXX
 #define _SVCONTNR_HXX     //
@@ -140,7 +111,6 @@
 
 #define _SVDRAG_HXX
 #define _SVINCVW_HXX
-//#define _SV_MULTISEL_HXX
 #define _SVRTV_HXX
 #define _SVTABBX_HXX
 #define _SVTREEBOX_HXX
@@ -211,7 +181,7 @@
 #include "drwtrans.hxx"
 #include "docuno.hxx"
 #include "clipparam.hxx"
-#include "undodat.hxx"   // Amelia Wang
+#include "undodat.hxx"
 
 using namespace com::sun::star;
 
@@ -722,13 +692,8 @@ void ScViewFunc::PasteFromSystem()
                 PasteFromSystem( SOT_FORMATSTR_ID_EMBED_SOURCE_OLE );
             else if (aDataHelper.HasFormat( SOT_FORMATSTR_ID_LINK_SOURCE_OLE ))
                 PasteFromSystem( SOT_FORMATSTR_ID_LINK_SOURCE_OLE );
-//          else
-//              ErrorMessage(STR_PASTE_ERROR);
         }
-//      else
-//          ErrorMessage(STR_PASTE_ERROR);
     }
-
     //  keine Fehlermeldung, weil SID_PASTE in der idl das FastCall-Flag hat,
     //  also auch gerufen wird, wenn nichts im Clipboard steht (#42531#)
 }
@@ -1253,12 +1218,6 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
     nUndoEndCol = sal::static_int_cast<SCCOL>( nUndoEndCol + nEndCol );
     nUndoEndRow = sal::static_int_cast<SCROW>( nUndoEndRow + nEndRow ); // destination area, expanded for merged cells
 
-//  if (nUndoEndCol < nEndCol) nUndoEndCol = nEndCol;
-//  if (nUndoEndRow < nEndRow) nUndoEndRow = nEndRow;
-
-//  nUndoEndCol += nMarkAddX;
-//  nUndoEndRow += nMarkAddY;
-
     if (nUndoEndCol>MAXCOL || nUndoEndRow>MAXROW)
     {
         ErrorMessage(STR_PASTE_FULL);
@@ -1278,9 +1237,6 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
 
         //! Test auf Ueberlappung
         //! nur wirkliche Schnittmenge testen !!!!!!!
-
-    //  pDoc->HasCommonAttr( StartCol,nStartRow, nUndoEndCol,nUndoEndRow, nStartTab,
-    //                          pClipDoc, nClipStartX, nClipStartY );
 
     ScDocFunc& rDocFunc = pDocSh->GetDocFunc();
     if ( bRecord )
@@ -1434,9 +1390,6 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
                                 TRUE, FALSE, bIncludeFiltered );
     }
 
-    //
-    //
-    //
 
     pDocSh->UpdatePaintExt( nExtFlags, nStartCol, nStartRow, nStartTab,
                                        nEndCol,   nEndRow,   nEndTab );     // content after the change
