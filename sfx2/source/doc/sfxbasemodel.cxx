@@ -281,8 +281,8 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
             const uno::Reference<frame::
                 XTransientDocumentsDocumentContentFactory> xTDDCF(
                     xMsf->createInstanceWithContext(
-                        ::rtl::OUString::createFromAscii( "com.sun.star.frame."
-                            "TransientDocumentsDocumentContentFactory"),
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame."
+                            "TransientDocumentsDocumentContentFactory")),
                     xContext),
                 uno::UNO_QUERY_THROW);
             const uno::Reference<ucb::XContent> xContent(
@@ -861,8 +861,8 @@ uno::Reference< document::XDocumentInfo > SAL_CALL SfxBaseModel::getDocumentInfo
         } catch (uno::RuntimeException &) {
             throw;
         } catch (uno::Exception & e) {
-            throw lang::WrappedTargetRuntimeException(::rtl::OUString::createFromAscii(
-                "SfxBaseModel::getDocumentInfo: cannot initialize"), *this,
+            throw lang::WrappedTargetRuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "SfxBaseModel::getDocumentInfo: cannot initialize")), *this,
                 uno::makeAny(e));
         }
         try {
@@ -3414,7 +3414,7 @@ embed::VisualRepresentation SAL_CALL SfxBaseModel::getPreferredVisualRepresentat
     SfxModelGuard aGuard( *this );
 
     datatransfer::DataFlavor aDataFlavor(
-            ::rtl::OUString::createFromAscii( "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"" ),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"" )),
             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GDIMetaFile")),
             ::getCppuType( (const uno::Sequence< sal_Int8 >*) NULL ) );
 
@@ -4029,8 +4029,8 @@ SfxBaseModel::getRDFRepository() throw (uno::RuntimeException)
 
     const uno::Reference<rdf::XDocumentMetadataAccess> xDMA(m_pData->GetDMA());
     if (!xDMA.is()) {
-        throw uno::RuntimeException( ::rtl::OUString::createFromAscii(
-            "model has no document metadata"), *this );
+        throw uno::RuntimeException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "model has no document metadata")), *this );
     }
 
     return xDMA->getRDFRepository();
@@ -4044,8 +4044,8 @@ SfxBaseModel::getStringValue() throw (uno::RuntimeException)
 
     const uno::Reference<rdf::XDocumentMetadataAccess> xDMA(m_pData->GetDMA());
     if (!xDMA.is()) {
-        throw uno::RuntimeException( ::rtl::OUString::createFromAscii(
-            "model has no document metadata"), *this );
+        throw uno::RuntimeException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "model has no document metadata")), *this );
     }
 
     return xDMA->getStringValue();
@@ -4059,8 +4059,8 @@ SfxBaseModel::getNamespace() throw (uno::RuntimeException)
 
     const uno::Reference<rdf::XDocumentMetadataAccess> xDMA(m_pData->GetDMA());
     if (!xDMA.is()) {
-        throw uno::RuntimeException( ::rtl::OUString::createFromAscii(
-            "model has no document metadata"), *this );
+        throw uno::RuntimeException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "model has no document metadata")), *this );
     }
 
     return xDMA->getNamespace();
@@ -4073,8 +4073,8 @@ SfxBaseModel::getLocalName() throw (uno::RuntimeException)
 
     const uno::Reference<rdf::XDocumentMetadataAccess> xDMA(m_pData->GetDMA());
     if (!xDMA.is()) {
-        throw uno::RuntimeException( ::rtl::OUString::createFromAscii(
-            "model has no document metadata"), *this );
+        throw uno::RuntimeException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "model has no document metadata")), *this );
     }
 
     return xDMA->getLocalName();
@@ -4090,8 +4090,8 @@ throw (uno::RuntimeException)
 
     const uno::Reference<rdf::XDocumentMetadataAccess> xDMA(m_pData->GetDMA());
     if (!xDMA.is()) {
-        throw uno::RuntimeException( ::rtl::OUString::createFromAscii(
-            "model has no document metadata"), *this );
+        throw uno::RuntimeException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "model has no document metadata")), *this );
     }
 
     return xDMA->getElementByMetadataReference(i_rReference);
@@ -4105,8 +4105,8 @@ throw (uno::RuntimeException, lang::IllegalArgumentException)
 
     const uno::Reference<rdf::XDocumentMetadataAccess> xDMA(m_pData->GetDMA());
     if (!xDMA.is()) {
-        throw uno::RuntimeException( ::rtl::OUString::createFromAscii(
-            "model has no document metadata"), *this );
+        throw uno::RuntimeException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "model has no document metadata")), *this );
     }
 
     return xDMA->getElementByURI(i_xURI);
@@ -4121,8 +4121,8 @@ throw (uno::RuntimeException, lang::IllegalArgumentException)
 
     const uno::Reference<rdf::XDocumentMetadataAccess> xDMA(m_pData->GetDMA());
     if (!xDMA.is()) {
-        throw uno::RuntimeException( ::rtl::OUString::createFromAscii(
-            "model has no document metadata"), *this );
+        throw uno::RuntimeException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "model has no document metadata")), *this );
     }
 
     return xDMA->getMetadataGraphsWithType(i_xType);
@@ -4138,8 +4138,8 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
 
     const uno::Reference<rdf::XDocumentMetadataAccess> xDMA(m_pData->GetDMA());
     if (!xDMA.is()) {
-        throw uno::RuntimeException( ::rtl::OUString::createFromAscii(
-            "model has no document metadata"), *this );
+        throw uno::RuntimeException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "model has no document metadata")), *this );
     }
 
     return xDMA->addMetadataFile(i_rFileName, i_rTypes);
@@ -4159,8 +4159,8 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
 
     const uno::Reference<rdf::XDocumentMetadataAccess> xDMA(m_pData->GetDMA());
     if (!xDMA.is()) {
-        throw uno::RuntimeException( ::rtl::OUString::createFromAscii(
-            "model has no document metadata"), *this );
+        throw uno::RuntimeException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "model has no document metadata")), *this );
     }
 
     return xDMA->importMetadataFile(i_Format,
@@ -4177,8 +4177,8 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
 
     const uno::Reference<rdf::XDocumentMetadataAccess> xDMA(m_pData->GetDMA());
     if (!xDMA.is()) {
-        throw uno::RuntimeException( ::rtl::OUString::createFromAscii(
-            "model has no document metadata"), *this );
+        throw uno::RuntimeException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "model has no document metadata")), *this );
     }
 
     return xDMA->removeMetadataFile(i_xGraphName);
@@ -4193,8 +4193,8 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
 
     const uno::Reference<rdf::XDocumentMetadataAccess> xDMA(m_pData->GetDMA());
     if (!xDMA.is()) {
-        throw uno::RuntimeException( ::rtl::OUString::createFromAscii(
-            "model has no document metadata"), *this );
+        throw uno::RuntimeException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "model has no document metadata")), *this );
     }
 
     return xDMA->addContentOrStylesFile(i_rFileName);
@@ -4209,8 +4209,8 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
 
     const uno::Reference<rdf::XDocumentMetadataAccess> xDMA(m_pData->GetDMA());
     if (!xDMA.is()) {
-        throw uno::RuntimeException( ::rtl::OUString::createFromAscii(
-            "model has no document metadata"), *this );
+        throw uno::RuntimeException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "model has no document metadata")), *this );
     }
 
     return xDMA->removeContentOrStylesFile(i_rFileName);
@@ -4229,8 +4229,8 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     const uno::Reference<rdf::XDocumentMetadataAccess> xDMA(
         m_pData->CreateDMAUninitialized());
     if (!xDMA.is()) {
-        throw uno::RuntimeException( ::rtl::OUString::createFromAscii(
-            "model has no document metadata"), *this );
+        throw uno::RuntimeException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "model has no document metadata")), *this );
     }
 
     try {
@@ -4256,8 +4256,8 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
 
     const uno::Reference<rdf::XDocumentMetadataAccess> xDMA(m_pData->GetDMA());
     if (!xDMA.is()) {
-        throw uno::RuntimeException( ::rtl::OUString::createFromAscii(
-            "model has no document metadata"), *this );
+        throw uno::RuntimeException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "model has no document metadata")), *this );
     }
 
     return xDMA->storeMetadataToStorage(i_xStorage);
@@ -4274,8 +4274,8 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     const uno::Reference<rdf::XDocumentMetadataAccess> xDMA(
         m_pData->CreateDMAUninitialized());
     if (!xDMA.is()) {
-        throw uno::RuntimeException( ::rtl::OUString::createFromAscii(
-            "model has no document metadata"), *this );
+        throw uno::RuntimeException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "model has no document metadata")), *this );
     }
 
     try {
@@ -4300,8 +4300,8 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
 
     const uno::Reference<rdf::XDocumentMetadataAccess> xDMA(m_pData->GetDMA());
     if (!xDMA.is()) {
-        throw uno::RuntimeException( ::rtl::OUString::createFromAscii(
-            "model has no document metadata"), *this );
+        throw uno::RuntimeException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "model has no document metadata")), *this );
     }
 
     return xDMA->storeMetadataToMedium(i_rMedium);
