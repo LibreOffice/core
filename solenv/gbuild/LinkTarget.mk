@@ -34,6 +34,8 @@ gb_CObject_get_source = $(1)/$(2).c
 # defined by platform
 #  gb_CObject__command
 
+# this rule generates an "always rebuild" dep file, to have something to include.
+# the dep file will be overridden on the fly, when the object is compiled
 ifeq ($(gb_FULLDEPS),$(true))
 define gb_CObject__command_dep
 mkdir -p $(dir $(1)) && \
@@ -71,6 +73,9 @@ gb_CxxObject_get_source = $(1)/$(2).cxx
 # defined by platform
 #  gb_CxxObject__command
 
+# This rule generates an "always rebuild" dep file, to have something to
+# include. The dep file will be overridden on the fly, when the object is
+# compiled.
 ifeq ($(gb_FULLDEPS),$(true))
 define gb_CxxObject__command_dep
 mkdir -p $(dir $(1)) && \
@@ -81,6 +86,12 @@ else
 gb_CxxObject__command_dep =
 endif
 
+# CXXFLAGS and DEFS we want to use for this object. This should usually be the case.
+# Only enable PCH if the PCH_CXXFLAGS and the PCH_DEFS (from the linktarget) are the same as the
+# PCH_CXXFLAGS/PCH_DEFS should never be overridden on an object -- they should be the same as for the whole
+# The DEFS/CXXFLAGS would have too be manually overridden for one object file for them to differ.
+# linktarget. In general it should be cleaner to use a static library compiled with different flags and link
+# that in rather than mixing different flags in one linktarget.
 define gb_CxxObject__set_pchflags
 ifeq ($(gb_ENABLE_PCH),$(true))
 ifneq ($(strip $$(PCH_NAME)),)
@@ -133,6 +144,8 @@ gb_ObjCxxObject_get_source = $(1)/$(2).mm
 # defined by platform
 #  gb_ObjCxxObject__command
 
+# this rule generates an "always rebuild" dep file, to have something to include.
+# the dep file will be overridden on the fly, when the object is compiled
 ifeq ($(gb_FULLDEPS),$(true))
 define gb_ObjCxxObject__command_dep
 mkdir -p $(dir $(1)) && \
@@ -192,6 +205,7 @@ $(call gb_LinkTarget_get_clean_target,%) :
             $(DLLTARGET) \
             $(AUXTARGETS))
 
+# cat the deps of all objects in one file, then we need only open that one file
 define gb_LinkTarget__command_dep
 $(call gb_Output_announce,LNK:$(2),$(true),DEP,1)
 $(call gb_Helper_abbreviate_dirs,\
@@ -211,6 +225,16 @@ $(call gb_LinkTarget_get_dep_target,%) : | $(call gb_LinkTarget_get_headers_targ
     $(call gb_LinkTarget__command_dep,$@,$*,$(COBJECTS),$(CXXOBJECTS),$(OBJCXXOBJECTS))
 endif
 
+# Ok, this is some dark voodoo: When declaring a linktarget with
+# gb_LinkTarget_LinkTarget we set SELF in the headertarget to name of the
+# target. When the rule for the headertarget is executed and SELF does not
+# match the target name, we are depending on a linktarget that was never
+# declared. In a full build exclusively in gbuild that should never happen.
+# However, partial gbuild build will not know about how to build lower level
+# linktargets, just as gbuild can not know about linktargets generated in the
+# old build.pl/dmake system. Once all is migrated, gbuild should error out
+# when is is told to depend on a linktarget it does not know about and not
+# only warn.
 define gb_LinkTarget__get_external_headers_check
 ifneq ($$(SELF),$$*)
 $$(eval $$(call gb_Output_info,LinkTarget $$* not defined: Assuming headers to be there!,ALL))
@@ -227,6 +251,38 @@ $(call gb_LinkTarget_get_headers_target,%) : $(call gb_LinkTarget_get_external_h
     $(call gb_Helper_abbreviate_dirs,\
         mkdir -p $(dir $@) && touch $@)
 
+# Explanation of some of the targets:
+# - gb_LinkTarget_get_external_headers_target is the targets that guarantees all
+#   headers from linked against libraries are in OUTDIR.
+# - gb_LinkTarget_get_headers_target is the target that guarantees all headers
+#   from the linked against the libraries and the linktargets own headers
+#   (including generated headers) are in the OUTDIR.
+# - gb_LinkTarget_get_target links the objects into a file in WORKDIR.
+# gb_LinkTarget_get_target depends on gb_LinkTarget_get_headers_target which in
+# turn depends gb_LinkTarget_get_external_headers_target.
+# gb_LinkTarget_get_target depends additionally on the objects, which in turn
+# depend build-order only on the gb_LinkTarget_get_headers_target. The build
+# order-only dependency ensures all headers to be there for compiling and
+# dependency generation without causing all objects to be rebuild when one
+# header changes. Only the ones with an explicit dependency in their generated
+# dependency file will be rebuild.
+#
+# gb_LinkTarget_get_target is the target that links the objects into a file in
+# WORKDIR
+# Explanation of some of the variables:
+# - AUXTARGETS are the additionally generated files that need to be cleaned out
+#   on clean.
+# - PCH_CXXFLAGS and PCH_DEFS are the flags that the precompiled headers will
+#   be compiled with.  They should never be overridden in a single object
+#   files.
+# - TARGETTYPEFLAGS are the flags that are needed for a specific kind of target
+#   (shl,exe...) They are mostly used by the platforms.
+#
+# Since most variables are set on the linktarget and not on the object, the
+# object learns about these setting via GNU makes scoping of target variables.
+# Therefore it is important that objects are only directly depended on by the
+# linktarget. This for example means that you cannot build a single object
+# alone, because then you would directly depend on the object.
 define gb_LinkTarget_LinkTarget
 $(call gb_LinkTarget_get_clean_target,$(1)) : AUXTARGETS :=
 $(call gb_LinkTarget_get_external_headers_target,$(1)) : SELF := $(1)
