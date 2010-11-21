@@ -25,6 +25,9 @@
 #
 #*************************************************************************
 
+# SdiTarget is evil, in that it does not support multiple repositories for now (hardcoded to SRCDIR)
+# Also there is no way to cleanly deliver the generated header to OUTDIR.
+# (This can be workarounded by using gb_Package, but really should not.)
 
 # SdiTarget class
 
