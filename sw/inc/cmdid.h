@@ -1090,7 +1090,6 @@ included in c-context files, so c++ style stuff will cause problems.
 
 #define FN_PARAM_ACT_NUMLEVEL           (FN_PARAM2+9) /* BYTE-Item with current NumLevel */
 
-#define FN_PARAM_9                      (FN_PARAM2+10)
 #define FN_PARAM_10                     (FN_PARAM2+11)
 
 #define FN_TEXT_RANGE                   (FN_PARAM2+12) /* TextRange Property*/
