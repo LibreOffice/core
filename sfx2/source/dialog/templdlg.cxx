@@ -2619,8 +2619,8 @@ IMPL_LINK( SfxTemplateDialog_Impl, ToolBoxRClick, ToolBox *, pBox )
         PopupMenu *pMenu = new PopupMenu;
         uno::Reference< container::XNameAccess > xNameAccess(
                     ::comphelper::getProcessServiceFactory()->
-                    createInstance( ::rtl::OUString::createFromAscii(
-                            "com.sun.star.frame.UICommandDescription") ), uno::UNO_QUERY );
+                    createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                            "com.sun.star.frame.UICommandDescription")) ), uno::UNO_QUERY );
         uno::Reference< container::XNameAccess > xUICommands;
         if ( xNameAccess.is() )
         {

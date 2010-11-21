@@ -1724,7 +1724,7 @@ void SfxAppToolBoxControl_Impl::Select( BOOL bMod1 )
                 Sequence< PropertyValue > aArgs( 1 );
 
                 aArgs[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Referer"));
-                aArgs[0].Value = makeAny( ::rtl::OUString::createFromAscii( SFX_REFERER_USER ));
+                aArgs[0].Value = makeAny( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SFX_REFERER_USER )) );
 
                 ExecuteInfo* pExecuteInfo = new ExecuteInfo;
                 pExecuteInfo->xDispatch     = xDispatch;
