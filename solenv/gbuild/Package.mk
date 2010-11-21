@@ -51,7 +51,7 @@ $(call gb_Package_get_target,%) :
     mkdir -p $(dir $@) && touch $@
 
 define gb_Package_Package
-gb_TARGET_PACKAGE_$(1)_SOURCEDIR := $(2)
+gb_Package_SOURCEDIR_$(1) := $(2)
 $(call gb_Package_get_clean_target,$(1)) : FILES := $(call gb_Package_get_target,$(1))
 $$(eval $$(call gb_Module_register_target,$(call gb_Package_get_target,$(1)),$(call gb_Package_get_clean_target,$(1))))
 
@@ -60,8 +60,8 @@ endef
 define gb_Package_add_file
 $(call gb_Package_get_target,$(1)) : $(OUTDIR)/$(2)
 $(call gb_Package_get_clean_target,$(1)) : FILES += $(OUTDIR)/$(2)
-$(call gb_PackagePart_PackagePart,$(2),$$(gb_TARGET_PACKAGE_$(1)_SOURCEDIR)/$(3))
-$(OUTDIR)/$(2) : $$(gb_TARGET_PACKAGE_$(1)_SOURCEDIR)/$(3)
+$(call gb_PackagePart_PackagePart,$(2),$$(gb_Package_SOURCEDIR_$(1))/$(3))
+$(OUTDIR)/$(2) : $$(gb_Package_SOURCEDIR_$(1))/$(3)
 endef
 
 # vim: set noet sw=4 ts=4:
