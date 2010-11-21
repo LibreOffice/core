@@ -200,9 +200,9 @@ void SvXMLMetaDocumentContext::initDocumentProperties()
         throw;
     } catch (uno::Exception & e) {
         throw lang::WrappedTargetRuntimeException(
-            ::rtl::OUString::createFromAscii(
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                 "SvXMLMetaDocumentContext::initDocumentProperties: "
-                "properties init exception"),
+                "properties init exception")),
             GetImport(), makeAny(e));
     }
 }

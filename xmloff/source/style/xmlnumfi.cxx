@@ -893,7 +893,7 @@ void lcl_EnquoteIfNecessary( rtl::OUStringBuffer& rContent, const SvXMLNumFormat
         {
             // A quote is turned into "\"" - a quote to end quoted text, an escaped quote,
             // and a quote to resume quoting.
-            rtl::OUString aInsert( rtl::OUString::createFromAscii( "\"\\\"" ) );
+            rtl::OUString aInsert( RTL_CONSTASCII_USTRINGPARAM( "\"\\\"" ) );
 
             sal_Int32 nPos = 0;
             while ( nPos < rContent.getLength() )

@@ -1274,7 +1274,7 @@ lcl_AddGrddl(SvXMLExport & rExport, const sal_Int32 nExportMode)
     if (EXPORT_SETTINGS != nExportMode) // meta, content, styles
     {
         rExport.AddAttribute( XML_NAMESPACE_GRDDL, XML_TRANSFORMATION,
-            OUString::createFromAscii(s_grddl_xsl) );
+            OUString(RTL_CONSTASCII_USTRINGPARAM(s_grddl_xsl)) );
     }
 }
 

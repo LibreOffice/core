@@ -396,7 +396,7 @@ rtl::OUString Ucb::m_aProtocol;
 // static
 rtl::OUString Ucb::getUnoURL()
 {
-    rtl::OUString aUnoURL(rtl::OUString::createFromAscii(
+    rtl::OUString aUnoURL(RTL_CONSTASCII_USTRINGPARAM(
                          "uno:socket,host=localhost,port=8121;"));
     if (m_aProtocol.getLength() == 0)
         aUnoURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("urp"));
@@ -659,8 +659,8 @@ uno::Any UcbCommandProcessor::executeCommand( const rtl::OUString& rName,
                 = uno::Reference< task::XInteractionHandler >(
                       m_rUCB.getServiceFactory()->
                           createInstance(
-                              rtl::OUString::createFromAscii(
-                                  "com.sun.star.task.InteractionHandler")),
+                              rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                  "com.sun.star.task.InteractionHandler"))),
                       uno::UNO_QUERY);
         uno::Reference< ucb::XProgressHandler >
             xProgressHandler(new ProgressHandler(m_rUCB));
@@ -1022,9 +1022,9 @@ void UcbContent::open( const rtl::OUString & rName, const UniString& rInput,
                               m_rUCB.
                                   getServiceFactory()->
                                       createInstance(
-                                          rtl::OUString::createFromAscii(
+                                          rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                                               "com.sun.star.ucb.SortedDynamic"
-                                                  "ResultSetFactory")),
+                                                  "ResultSetFactory"))),
                               uno::UNO_QUERY);
                 uno::Reference< ucb::XDynamicResultSet > xSorted;
                 if (xSortedFactory.is())
@@ -1062,8 +1062,8 @@ void UcbContent::open( const rtl::OUString & rName, const UniString& rInput,
                     try
                     {
                         xProperties->
-                            setPropertyValue(rtl::OUString::createFromAscii(
-                                                 "FetchSize"),
+                            setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                                 "FetchSize")),
                                              uno::makeAny(nFetchSize));
                         bSet = true;
                     }
@@ -1310,8 +1310,8 @@ void UcbContent::transfer( const rtl::OUString& rSourceURL, sal_Bool bMove  )
                             //rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NewTitle")),
                             ucb::NameClash::ERROR );
 
-        ucb::Command aTransferCommand( rtl::OUString::createFromAscii(
-                                                "globalTransfer" ),
+        ucb::Command aTransferCommand( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                                "globalTransfer" )),
                                              -1,
                                              uno::makeAny( aArg ) );
 
@@ -1321,8 +1321,8 @@ void UcbContent::transfer( const rtl::OUString& rSourceURL, sal_Bool bMove  )
                 = uno::Reference< task::XInteractionHandler >(
                           m_rUCB.getServiceFactory()->
                               createInstance(
-                                rtl::OUString::createFromAscii(
-                                      "com.sun.star.task.InteractionHandler")),
+                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                      "com.sun.star.task.InteractionHandler"))),
                         uno::UNO_QUERY);
         uno::Reference< ucb::XProgressHandler > xProgressHandler(
             new ProgressHandler(m_rUCB));
@@ -2287,7 +2287,7 @@ IMPL_LINK( MyWin, ToolBarHandler, ToolBox*, pToolBox )
         case MYWIN_ITEMID_REORGANIZE:
             if ( m_pContent )
                 m_pContent->executeCommand (
-                    rtl::OUString::createFromAscii ("reorganizeData"),
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("reorganizeData")),
                     uno::Any());
             else
                 print( "No content!" );
@@ -2449,9 +2449,9 @@ void MyApp::Main()
     // Read command line params.
     //////////////////////////////////////////////////////////////////////
 
-    rtl::OUString aConfigurationKey1(rtl::OUString::createFromAscii(
+    rtl::OUString aConfigurationKey1(RTL_CONSTASCII_USTRINGPARAM(
                                          UCB_CONFIGURATION_KEY1_LOCAL));
-    rtl::OUString aConfigurationKey2(rtl::OUString::createFromAscii(
+    rtl::OUString aConfigurationKey2(RTL_CONSTASCII_USTRINGPARAM(
                                          UCB_CONFIGURATION_KEY2_OFFICE));
 
     USHORT nParams = Application::GetCommandLineParamCount();
