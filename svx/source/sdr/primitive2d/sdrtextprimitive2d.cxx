@@ -59,7 +59,7 @@ namespace
         {
             try
             {
-                const uno::Any aNumber(xSet->getPropertyValue(::rtl::OUString::createFromAscii("Number")));
+                const uno::Any aNumber(xSet->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Number"))));
                 aNumber >>= nRetval;
             }
             catch(const uno::Exception&)

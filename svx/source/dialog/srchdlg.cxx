@@ -145,12 +145,12 @@ struct SearchDlg_Impl
         bDeltaCalculated( FALSE ),
         pRanges         ( NULL )
         {
-            aCommand1URL.Complete = aCommand1URL.Main = rtl::OUString::createFromAscii("vnd.sun.search:SearchViaComponent1");
-            aCommand1URL.Protocol = rtl::OUString::createFromAscii("vnd.sun.search:");
-            aCommand1URL.Path = rtl::OUString::createFromAscii("SearchViaComponent1");
-            aCommand2URL.Complete = aCommand2URL.Main = rtl::OUString::createFromAscii("vnd.sun.search:SearchViaComponent2");
-            aCommand2URL.Protocol = rtl::OUString::createFromAscii("vnd.sun.search:");
-            aCommand2URL.Path = rtl::OUString::createFromAscii("SearchViaComponent2");
+            aCommand1URL.Complete = aCommand1URL.Main = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.search:SearchViaComponent1"));
+            aCommand1URL.Protocol = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.search:"));
+            aCommand1URL.Path = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SearchViaComponent1"));
+            aCommand2URL.Complete = aCommand2URL.Main = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.search:SearchViaComponent2"));
+            aCommand2URL.Protocol = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.search:"));
+            aCommand2URL.Path = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SearchViaComponent2"));
         }
     ~SearchDlg_Impl() { delete[] pRanges; }
 };
@@ -499,7 +499,7 @@ void SvxSearchDialog::Construct_Impl()
     // vnd.sun.star::SearchViaComponent1 and 2 are supported
     const uno::Reference< frame::XFrame >xFrame = rBindings.GetActiveFrame();
     const uno::Reference< frame::XDispatchProvider > xDispatchProv(xFrame, uno::UNO_QUERY);
-    rtl::OUString sTarget = rtl::OUString::createFromAscii("_self");
+    rtl::OUString sTarget(RTL_CONSTASCII_USTRINGPARAM("_self"));
 
     bool bSearchComponent1 = false;
     bool bSearchComponent2 = false;
@@ -1606,9 +1606,9 @@ IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn )
     {
         uno::Sequence < beans::PropertyValue > aArgs(2);
         beans::PropertyValue* pArgs = aArgs.getArray();
-        pArgs[0].Name = ::rtl::OUString::createFromAscii("SearchString");
+        pArgs[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SearchString"));
         pArgs[0].Value <<= ::rtl::OUString(aSearchLB.GetText());
-        pArgs[1].Name = ::rtl::OUString::createFromAscii("ParentWindow");
+        pArgs[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParentWindow"));
         pArgs[1].Value <<= VCLUnoHelper::GetInterface( LAYOUT_THIS_WINDOW (this) );
         if(pBtn == &aSearchComponent1PB)
         {

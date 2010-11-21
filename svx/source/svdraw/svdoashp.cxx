@@ -359,7 +359,7 @@ Reference< XCustomShapeEngine > SdrObjCustomShape::GetCustomShapeEngine( const S
         {
             Sequence< Any > aArgument( 1 );
             Sequence< PropertyValue > aPropValues( 1 );
-            aPropValues[ 0 ].Name = rtl::OUString::createFromAscii( "CustomShape" );
+            aPropValues[ 0 ].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CustomShape"));
             aPropValues[ 0 ].Value <<= aXShape;
             aArgument[ 0 ] <<= aPropValues;
             Reference< XInterface > xInterface( xFactory->createInstanceWithArguments( aEngine, aArgument ) );
