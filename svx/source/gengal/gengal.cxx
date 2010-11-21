@@ -240,7 +240,7 @@ void GalApp::Init()
             lastSlash = fileName.lastIndexOf( '\\' );
 #endif
         rtl::OUString baseBinDir = fileName.copy( 0, lastSlash );
-        rtl::OUString installPrefix = baseBinDir + rtl::OUString::createFromAscii( "/../.." );
+        rtl::OUString installPrefix = baseBinDir + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/../.."));
 
         rtl::OUString envVar(RTL_CONSTASCII_USTRINGPARAM("OOO_INSTALL_PREFIX"));
         osl_setEnvironment(envVar.pData, installPrefix.pData);
@@ -266,9 +266,9 @@ void GalApp::InitUCB()
         <<= rtl::OUString::createFromAscii(UCB_CONFIGURATION_KEY1_LOCAL);
     aArgs[1]
         <<= rtl::OUString::createFromAscii(UCB_CONFIGURATION_KEY2_OFFICE);
-    aArgs[2] <<= rtl::OUString::createFromAscii("PIPE");
+    aArgs[2] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PIPE"));
     aArgs[3] <<= aEmpty;
-    aArgs[4] <<= rtl::OUString::createFromAscii("PORTAL");
+    aArgs[4] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PORTAL"));
     aArgs[5] <<= aEmpty;
 
     if (! ::ucbhelper::ContentBroker::initialize( xMSF, aArgs ) )
@@ -279,7 +279,7 @@ void GalApp::Main()
 {
     bool bHelp = false;
     rtl::OUString aPath, aDestDir;
-    rtl::OUString aName = rtl::OUString::createFromAscii( "Default name" );
+    rtl::OUString aName(RTL_CONSTASCII_USTRINGPARAM("Default name"));
     UINT32 nNumFrom = 0;
     FileNameList aFiles;
 

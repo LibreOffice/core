@@ -145,7 +145,7 @@ void SvxModifyControl::DoubleClick()
         return;
 
     Sequence<PropertyValue> aArgs;
-    execute(OUString::createFromAscii(".uno:Save"), aArgs);
+    execute(OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Save")), aArgs);
 }
 
 ULONG SvxModifyControl::GetDefItemWidth(const StatusBar& rStb)

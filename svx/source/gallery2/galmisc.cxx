@@ -285,7 +285,7 @@ BOOL FileExists( const INetURLObject& rURL )
             ::ucbhelper::Content        aCnt( rURL.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment >() );
             OUString    aTitle;
 
-            aCnt.getPropertyValue( OUString::createFromAscii( "Title" ) ) >>= aTitle;
+            aCnt.getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("Title")) ) >>= aTitle;
             bRet = ( aTitle.getLength() > 0 );
         }
         catch( const ucb::ContentCreationException& )
@@ -319,11 +319,11 @@ BOOL CreateDir( const INetURLObject& rURL )
             uno::Sequence< OUString >               aProps( 1 );
             uno::Sequence< uno::Any >               aValues( 1 );
 
-            aProps.getArray()[ 0 ] = OUString::createFromAscii( "Title" );
+            aProps.getArray()[ 0 ] = OUString(RTL_CONSTASCII_USTRINGPARAM("Title"));
             aValues.getArray()[ 0 ] = uno::makeAny( OUString( aNewFolderURL.GetName() ) );
 
         ::ucbhelper::Content aContent( aNewFolderURL.GetMainURL( INetURLObject::NO_DECODE ), aCmdEnv );
-        bRet = aParent.insertNewContent( OUString::createFromAscii( "application/vnd.sun.staroffice.fsys-folder" ), aProps, aValues, aContent );
+        bRet = aParent.insertNewContent( OUString(RTL_CONSTASCII_USTRINGPARAM("application/vnd.sun.staroffice.fsys-folder")), aProps, aValues, aContent );
         }
         catch( const ucb::ContentCreationException& )
         {
@@ -349,7 +349,7 @@ BOOL CopyFile(  const INetURLObject& rSrcURL, const INetURLObject& rDstURL )
     {
         ::ucbhelper::Content aDestPath( rDstURL.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment >() );
 
-        aDestPath.executeCommand( OUString::createFromAscii( "transfer" ),
+        aDestPath.executeCommand( OUString(RTL_CONSTASCII_USTRINGPARAM("transfer")),
                                   uno::makeAny( ucb::TransferInfo( sal_False, rSrcURL.GetMainURL( INetURLObject::NO_DECODE ),
                                                 rDstURL.GetName(), ucb::NameClash::OVERWRITE ) ) );
         bRet = TRUE;
@@ -378,7 +378,7 @@ BOOL KillFile( const INetURLObject& rURL )
         try
         {
             ::ucbhelper::Content aCnt( rURL.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment >() );
-            aCnt.executeCommand( OUString::createFromAscii( "delete" ), uno::makeAny( sal_Bool( sal_True ) ) );
+            aCnt.executeCommand( OUString(RTL_CONSTASCII_USTRINGPARAM("delete")), uno::makeAny( sal_Bool( sal_True ) ) );
         }
         catch( const ucb::ContentCreationException& )
         {
@@ -409,7 +409,7 @@ GalleryProgress::GalleryProgress( GraphicFilter* pFilter ) :
     if( xMgr.is() )
     {
         uno::Reference< awt::XProgressMonitor > xMonitor( xMgr->createInstance(
-                                                      ::rtl::OUString::createFromAscii( "com.sun.star.awt.XProgressMonitor" ) ),
+                                                      ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.XProgressMonitor")) ),
                                                       uno::UNO_QUERY );
 
         if ( xMonitor.is() )

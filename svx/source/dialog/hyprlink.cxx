@@ -69,10 +69,10 @@ public:
 };
 
 SearchDefaultConfigItem_Impl::SearchDefaultConfigItem_Impl() :
-        ConfigItem(OUString::createFromAscii("Inet/DefaultSearchEngine"))
+        ConfigItem(OUString(RTL_CONSTASCII_USTRINGPARAM("Inet/DefaultSearchEngine")))
 {
     uno::Sequence<OUString> aNames(1);
-    aNames.getArray()[0] = OUString::createFromAscii("Name");
+    aNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("Name"));
     uno::Sequence< uno::Any > aValues = GetProperties(aNames);
     aValues.getConstArray()[0] >>= sDefaultEngine;
 }

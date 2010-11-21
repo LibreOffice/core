@@ -382,7 +382,7 @@ void TableWindow::TableDialog( const Sequence< PropertyValue >& rArgs )
     {
         com::sun::star::util::URL aTargetURL;
         Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
-                    rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )),
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))),
                 UNO_QUERY );
         aTargetURL.Complete = maCommand;
         xTrans->parseStrict( aTargetURL );
