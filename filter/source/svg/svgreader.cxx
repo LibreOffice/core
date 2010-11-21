@@ -1124,8 +1124,7 @@ struct AnnotatingVisitor
             if( aPaintUri.first != aPaintUri.second )
             {
                 // assuming gradient. assumption does not hold generally
-                const char* pClosingBracket;
-                if( (pClosingBracket=strstr(sValue,")")) && rValue.getLength() > 5 )
+                if( strstr(sValue,")") && rValue.getLength() > 5 )
                 {
                     ElementRefMapType::iterator aRes;
                     if( (aRes=maGradientIdMap.find(
