@@ -248,8 +248,8 @@ static void Execute( ANY& aEventData, const css::document::DocumentEvent& aTrigg
                 ::com::sun::star::uno::Reference
                     < ::com::sun::star::util::XURLTransformer > xTrans(
                         ::comphelper::getProcessServiceFactory()->createInstance(
-                            rtl::OUString::createFromAscii(
-                                "com.sun.star.util.URLTransformer" ) ),
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                "com.sun.star.util.URLTransformer" )) ),
                         UNO_QUERY );
 
                 ::com::sun::star::util::URL aURL;
@@ -270,8 +270,8 @@ static void Execute( ANY& aEventData, const css::document::DocumentEvent& aTrigg
                     xProv = ::com::sun::star::uno::Reference
                         < ::com::sun::star::frame::XDispatchProvider > (
                             ::comphelper::getProcessServiceFactory()->createInstance(
-                                rtl::OUString::createFromAscii(
-                                    "com.sun.star.frame.Desktop" ) ),
+                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                    "com.sun.star.frame.Desktop" )) ),
                             UNO_QUERY );
                 }
 
@@ -539,11 +539,11 @@ void SfxEvents_Impl::BlowUpMacro( const ANY& rEvent, ANY& rRet, SfxObjectShell* 
                 aLibrary = String::CreateFromAscii("application");
         }
 
-        aOutProps[1].Name = OUSTRING::createFromAscii( PROP_SCRIPT );
+        aOutProps[1].Name = OUSTRING(RTL_CONSTASCII_USTRINGPARAM( PROP_SCRIPT ));
         aOutProps[1].Value <<= aScript;
-        aOutProps[2].Name = OUSTRING::createFromAscii( PROP_LIBRARY );
+        aOutProps[2].Name = OUSTRING(RTL_CONSTASCII_USTRINGPARAM( PROP_LIBRARY ));
         aOutProps[2].Value <<= aLibrary;
-        aOutProps[3].Name = OUSTRING::createFromAscii( PROP_MACRO_NAME );
+        aOutProps[3].Name = OUSTRING(RTL_CONSTASCII_USTRINGPARAM( PROP_MACRO_NAME ));
         aOutProps[3].Value <<= aMacroName;
         rRet <<= aOutProps;
     }

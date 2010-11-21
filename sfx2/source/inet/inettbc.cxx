@@ -124,7 +124,7 @@ void SfxURLToolBoxControl_Impl::OpenURL( const String& rName, BOOL /*bNew*/ ) co
         {
             Sequence< PropertyValue > aArgs( 2 );
             aArgs[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Referer"));
-            aArgs[0].Value = makeAny( ::rtl::OUString::createFromAscii( SFX_REFERER_USER ));
+            aArgs[0].Value = makeAny( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SFX_REFERER_USER )));
             aArgs[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FileName" ));
             aArgs[1].Value = makeAny( ::rtl::OUString( aName ));
 

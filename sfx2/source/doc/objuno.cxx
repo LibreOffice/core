@@ -443,14 +443,14 @@ SfxDocumentInfoObject::initialize(const uno::Sequence< uno::Any > & aArguments)
         uno::Any any = aArguments[0];
         uno::Reference<document::XDocumentProperties> xDoc;
         if (!(any >>= xDoc) || !xDoc.is()) throw lang::IllegalArgumentException(
-            ::rtl::OUString::createFromAscii(
-                "SfxDocumentInfoObject::initialize: no XDocumentProperties given"),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "SfxDocumentInfoObject::initialize: no XDocumentProperties given")),
                 *this, 0);
         _pImp->Reset(xDoc);
     } else {
         throw lang::IllegalArgumentException(
-            ::rtl::OUString::createFromAscii(
-                "SfxDocumentInfoObject::initialize: no argument given"),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "SfxDocumentInfoObject::initialize: no argument given")),
                 *this, 0);
     }
 }
