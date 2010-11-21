@@ -2159,7 +2159,6 @@ if ( $Warning ne "" )
 print "*********************************************************".
       "******************* $newline";
 
-print "\nTo download the build dependencies, issue:\n./g clone\n./download\n\n";
 print "To build, issue:\nmake\n\n";
 print "For the developer installation, issue:\nmake dev-install\n\n";
 
