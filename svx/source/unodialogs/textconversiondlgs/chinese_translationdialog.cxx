@@ -77,14 +77,14 @@ ChineseTranslationDialog::ChineseTranslationDialog( Window* pParent )
 
     SvtLinguConfig  aLngCfg;
     sal_Bool bValue = sal_Bool();
-    Any aAny( aLngCfg.GetProperty( rtl::OUString::createFromAscii( UPN_IS_DIRECTION_TO_SIMPLIFIED ) ) );
+    Any aAny( aLngCfg.GetProperty( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UPN_IS_DIRECTION_TO_SIMPLIFIED )) ) );
     aAny >>= bValue;
     if( bValue )
         m_aRB_To_Simplified.Check();
     else
         m_aRB_To_Traditional.Check();
 
-    aAny = aLngCfg.GetProperty( rtl::OUString::createFromAscii( UPN_IS_USE_CHARACTER_VARIANTS ) );
+    aAny = aLngCfg.GetProperty( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UPN_IS_USE_CHARACTER_VARIANTS )) );
     if( aAny >>= bValue )
         m_aCB_Use_Variants.Check( bValue );
 
@@ -96,7 +96,7 @@ ChineseTranslationDialog::ChineseTranslationDialog( Window* pParent )
     m_aCB_Use_Variants.Enable( sal_False );
     m_aCB_Use_Variants.Show( sal_False );
 
-    aAny = aLngCfg.GetProperty( rtl::OUString::createFromAscii( UPN_IS_TRANSLATE_COMMON_TERMS ) );
+    aAny = aLngCfg.GetProperty( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UPN_IS_TRANSLATE_COMMON_TERMS )) );
     if( aAny >>= bValue )
         m_aCB_Translate_Commonterms.Check( bValue );
 
@@ -154,11 +154,11 @@ IMPL_LINK( ChineseTranslationDialog, OkHdl, void*, EMPTYARG )
     SvtLinguConfig  aLngCfg;
     Any aAny;
     aAny <<= sal_Bool( !!m_aRB_To_Simplified.IsChecked() );
-    aLngCfg.SetProperty( rtl::OUString::createFromAscii( UPN_IS_DIRECTION_TO_SIMPLIFIED ), aAny );
+    aLngCfg.SetProperty( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UPN_IS_DIRECTION_TO_SIMPLIFIED )), aAny );
     aAny <<= sal_Bool( !!m_aCB_Use_Variants.IsChecked() );
-    aLngCfg.SetProperty( rtl::OUString::createFromAscii( UPN_IS_USE_CHARACTER_VARIANTS ), aAny );
+    aLngCfg.SetProperty( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UPN_IS_USE_CHARACTER_VARIANTS )), aAny );
     aAny <<= sal_Bool( !!m_aCB_Translate_Commonterms.IsChecked() );
-    aLngCfg.SetProperty( rtl::OUString::createFromAscii( UPN_IS_TRANSLATE_COMMON_TERMS ), aAny );
+    aLngCfg.SetProperty( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UPN_IS_TRANSLATE_COMMON_TERMS )), aAny );
 
     EndDialog( RET_OK );
     return 0;

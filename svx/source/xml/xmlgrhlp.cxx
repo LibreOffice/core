@@ -946,7 +946,7 @@ Reference< XOutputStream > SAL_CALL SvXMLGraphicHelper::createOutputStream()
 
                 if( aId.getLength() )
                 {
-                    aRet = ::rtl::OUString::createFromAscii( XML_GRAPHICOBJECT_URL_BASE );
+                    aRet = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XML_GRAPHICOBJECT_URL_BASE ));
                     aRet += aId;
                 }
             }

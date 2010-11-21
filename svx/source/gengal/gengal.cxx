@@ -263,9 +263,9 @@ void GalApp::InitUCB()
     rtl::OUString aEmpty;
     Sequence< Any > aArgs(6);
     aArgs[0]
-        <<= rtl::OUString::createFromAscii(UCB_CONFIGURATION_KEY1_LOCAL);
+        <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UCB_CONFIGURATION_KEY1_LOCAL));
     aArgs[1]
-        <<= rtl::OUString::createFromAscii(UCB_CONFIGURATION_KEY2_OFFICE);
+        <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UCB_CONFIGURATION_KEY2_OFFICE));
     aArgs[2] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PIPE"));
     aArgs[3] <<= aEmpty;
     aArgs[4] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PORTAL"));

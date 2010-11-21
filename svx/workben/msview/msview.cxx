@@ -1159,8 +1159,8 @@ void MSViewerWorkWindow::Resize()
 
         // Init UCB
         uno::Sequence< uno::Any > aArgs( 2 );
-        aArgs[ 0 ] <<= rtl::OUString::createFromAscii( UCB_CONFIGURATION_KEY1_LOCAL );
-        aArgs[ 1 ] <<= rtl::OUString::createFromAscii( UCB_CONFIGURATION_KEY2_OFFICE );
+        aArgs[ 0 ] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UCB_CONFIGURATION_KEY1_LOCAL ));
+        aArgs[ 1 ] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UCB_CONFIGURATION_KEY2_OFFICE ));
         sal_Bool bSuccess = ::ucb::ContentBroker::initialize( xMSF, aArgs );
         if ( !bSuccess )
         {

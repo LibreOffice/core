@@ -111,8 +111,8 @@ namespace svxform
             OSL_ENSURE(NULL == s_hDbtoolsModule, "ODbtoolsClient::registerClient: inconsistence: already have a module!");
             OSL_ENSURE(NULL == s_pFactoryCreationFunc, "ODbtoolsClient::registerClient: inconsistence: already have a factory function!");
 
-            const ::rtl::OUString sModuleName = ::rtl::OUString::createFromAscii(
-                SVLIBRARY( "dbtools" )
+            const ::rtl::OUString sModuleName(RTL_CONSTASCII_USTRINGPARAM(
+                SVLIBRARY( "dbtools" ))
             );
 
             // load the dbtools library
