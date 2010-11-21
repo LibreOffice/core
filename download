@@ -26,6 +26,9 @@
 #
 #*************************************************************************
 
+if [ ! -d clone ] ; then
+    ./g clone
+fi
 if [ -z "$TARFILE_LOCATION" ]; then
     . ./*.Set.sh
 fi
