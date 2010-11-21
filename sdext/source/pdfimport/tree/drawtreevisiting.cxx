@@ -120,15 +120,6 @@ void DrawXmlEmitter::visit( TextElement& elem, const std::list< Element* >::cons
 
     rtl::OUString str(elem.Text.getStr());
 
-    // Check for CTL
-    bool isComplex = false;
-    for(int i=0; i< elem.Text.getLength(); i++)
-    {
-    sal_Int16 nType = GetBreakIterator()->getScriptType( str, i + 1);
-    if (nType == ::com::sun::star::i18n::ScriptType::COMPLEX)
-        isComplex = true;
-    }
-
     m_rEmitContext.rEmitter.beginTag( "text:span", aProps );
 
     for(int i=0; i< elem.Text.getLength(); i++)
@@ -688,13 +679,7 @@ void DrawXmlOptimizer::optimizeTextElements(Element& rParent)
     std::list< Element* >::iterator next = rParent.Children.begin();
     std::list< Element* >::iterator it = next++;
     FrameElement* pFrame = dynamic_cast<FrameElement*>(rParent.Parent);
-    bool bRotatedFrame = false;
-    if( pFrame )
-    {
-        const GraphicsContext& rFrameGC = m_rProcessor.getGraphicsContext( pFrame->GCId );
-        if( rFrameGC.isRotatedOrSkewed() )
-            bRotatedFrame = true;
-    }
+
     while( next != rParent.Children.end() )
     {
         bool bConcat = false;
@@ -906,26 +891,6 @@ void DrawXmlFinalizer::visit( ParagraphElement& elem, const std::list< Element* 
     aStyle.SubStyles.push_back( &aSubStyle );
 
     elem.StyleId = m_rStyleContainer.getStyleId( aStyle );
-
-    // update page boundaries
-    if( elem.Parent )
-    {
-        // check for center alignement
-        // criterion: paragraph is small relative to parent and distributed around its center
-        double p_x = elem.Parent->x;
-        double p_y = elem.Parent->y;
-        double p_w = elem.Parent->w;
-        double p_h = elem.Parent->h;
-
-        PageElement* pPage = dynamic_cast<PageElement*>(elem.Parent);
-        if( pPage )
-        {
-            p_x += pPage->LeftMargin;
-            p_y += pPage->TopMargin;
-            p_w -= pPage->LeftMargin+pPage->RightMargin;
-            p_h -= pPage->TopMargin+pPage->BottomMargin;
-        }
-    }
 
     elem.applyToChildren(*this);
 }
