@@ -176,9 +176,9 @@ namespace
 
     static bool lcl_ShapeFilter(const Reference<XTextContent>& xTxtContent)
     {
-        static const OUString sTextFrameService = OUString::createFromAscii("com.sun.star.text.TextFrame");
-        static const OUString sTextGraphicService = OUString::createFromAscii("com.sun.star.text.TextGraphicObject");
-        static const OUString sTextEmbeddedService = OUString::createFromAscii("com.sun.star.text.TextEmbeddedObject");
+        static const OUString sTextFrameService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextFrame"));
+        static const OUString sTextGraphicService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextGraphicObject"));
+        static const OUString sTextEmbeddedService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextEmbeddedObject"));
         Reference<XShape> xShape(xTxtContent, UNO_QUERY);
         if(!xShape.is())
             return false;
@@ -231,8 +231,8 @@ namespace
             static const OUString our_sAnchorType;
             static const OUString our_sAnchorFrame;
     };
-    const OUString BoundFrames::our_sAnchorType = OUString::createFromAscii("AnchorType");
-    const OUString BoundFrames::our_sAnchorFrame = OUString::createFromAscii("AnchorFrame");
+    const OUString BoundFrames::our_sAnchorType(RTL_CONSTASCII_USTRINGPARAM("AnchorType"));
+    const OUString BoundFrames::our_sAnchorFrame(RTL_CONSTASCII_USTRINGPARAM("AnchorFrame"));
 
     class FieldParamExporter
     {
@@ -423,14 +423,14 @@ void FieldParamExporter::Export()
                 // Save the OLE object
                 Reference< embed::XStorage > xTargetStg = m_pExport->GetTargetStorage();
                 Reference< embed::XStorage > xDstStg = xTargetStg->openStorageElement(
-                        rtl::OUString::createFromAscii( "OLELinks" ), embed::ElementModes::WRITE );
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OLELinks")), embed::ElementModes::WRITE );
 
                 if ( !xDstStg->hasByName( sValue ) ) {
                     Reference< XStorageBasedDocument > xStgDoc (
                             m_pExport->GetModel( ), UNO_QUERY );
                     Reference< embed::XStorage > xDocStg = xStgDoc->getDocumentStorage();
                     Reference< embed::XStorage > xOleStg = xDocStg->openStorageElement(
-                            rtl::OUString::createFromAscii( "OLELinks" ), embed::ElementModes::READ );
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OLELinks")), embed::ElementModes::READ );
 
                     xOleStg->copyElementTo( sValue, xDstStg, sValue );
                     Reference< embed::XTransactedObject > xTransact( xDstStg, UNO_QUERY );
@@ -444,6 +444,7 @@ void FieldParamExporter::Export()
             sal_Bool bValue = false;
             aValue >>= bValue;
             ExportParameter(*pCurrent,OUString::createFromAscii(bValue ? "true" : "false"));
+            ExportParameter(*pCurrent, (bValue ? OUString(RTL_CONSTASCII_USTRINGPARAM( "true" )) : OUString(RTL_CONSTASCII_USTRINGPARAM("false"))) );
         }
         else if(aValueType == aSeqType)
         {
@@ -1523,7 +1524,7 @@ bool XMLTextParagraphExport::collectTextAutoStylesOptimized( sal_Bool bIsProgres
             {
                 Reference < XPropertySet > xSet( xTextField, UNO_QUERY );
                 Reference < XText > xText;
-                Any a = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("TextRange") );
+                Any a = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TextRange")) );
                 a >>= xText;
                 if ( xText.is() )
                 {

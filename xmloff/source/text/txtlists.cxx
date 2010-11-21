@@ -239,7 +239,7 @@ const ::rtl::OUString& XMLTextListsHelper::GetListStyleOfLastProcessedList() con
 ::rtl::OUString XMLTextListsHelper::GenerateNewListId() const
 {
     // Value of xml:id in element <text:list> has to be a valid ID type (#i92478#)
-    ::rtl::OUString sTmpStr( ::rtl::OUString::createFromAscii( "list" ) );
+    ::rtl::OUString sTmpStr( RTL_CONSTASCII_USTRINGPARAM( "list" ) );
     sal_Int64 n = Time().GetTime();
     n += Date().GetDate();
     n += rand();

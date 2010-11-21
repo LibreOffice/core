@@ -503,7 +503,7 @@ void XMLPropertiesTContext_Impl::StartElement(
                         {
                             if ( aNewAttrValue.getLength() > 0 )
                             {
-                                aNewAttrValue += rtl::OUString::createFromAscii( " " );
+                                aNewAttrValue += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( " " ));
                             }
 
                             if ( IsXMLToken( aToken, XML_HORIZONTAL_ON_EVEN ) )

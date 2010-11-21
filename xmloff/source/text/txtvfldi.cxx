@@ -343,7 +343,7 @@ void XMLSetVarFieldImportContext::EndElement()
         {
             // create field/Service
             Reference<XPropertySet> xPropSet;
-            if (CreateField(xPropSet, OUString::createFromAscii(sAPI_textfield_prefix) + GetServiceName()))
+            if (CreateField(xPropSet, OUString(RTL_CONSTASCII_USTRINGPARAM(sAPI_textfield_prefix)) + GetServiceName()))
             {
                 Reference<XDependentTextField> xDepTextField(xPropSet, UNO_QUERY);
                 if (xDepTextField.is())
@@ -995,7 +995,7 @@ sal_Bool XMLVariableDeclImportContext::FindFieldMaster(
 
         aAny = xMaster->getPropertyValue(
             // sPropertySubType
-            OUString::createFromAscii(sAPI_sub_type)
+            OUString(RTL_CONSTASCII_USTRINGPARAM(sAPI_sub_type))
             );
         sal_Int16 nType = 0;
         aAny >>= nType;
@@ -1072,7 +1072,7 @@ sal_Bool XMLVariableDeclImportContext::FindFieldMaster(
                 aAny <<= sName;
                 xMaster->setPropertyValue(
                     // sPropertyName
-                    OUString::createFromAscii(sAPI_name)
+                    OUString(RTL_CONSTASCII_USTRINGPARAM(sAPI_name))
                     , aAny);
 
                 if (eVarType != VarTypeUserField) {
@@ -1083,7 +1083,7 @@ sal_Bool XMLVariableDeclImportContext::FindFieldMaster(
                               SetVariableType::SEQUENCE);
                     xMaster->setPropertyValue(
                         // sPropertySubType
-                        OUString::createFromAscii(sAPI_sub_type)
+                        OUString(RTL_CONSTASCII_USTRINGPARAM(sAPI_sub_type))
                         , aAny);
                 } // else : user field: no subtype
 

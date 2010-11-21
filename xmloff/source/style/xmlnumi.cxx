@@ -311,7 +311,7 @@ SvxXMLListLevelStyleContext_Impl::SvxXMLListLevelStyleContext_Impl(
 :   SvXMLImportContext( rImport, nPrfx, rLName )
 ,   sStarBats( RTL_CONSTASCII_USTRINGPARAM( "StarBats" ) )
 ,   sStarMath( RTL_CONSTASCII_USTRINGPARAM( "StarMath" ) )
-,   sNumFormat( OUString::createFromAscii( "1" ) )
+,   sNumFormat( OUString(RTL_CONSTASCII_USTRINGPARAM("1")) )
 ,   nLevel( -1L )
 ,   nSpaceBefore( 0L )
 ,   nMinLabelWidth( 0L )

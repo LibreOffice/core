@@ -919,8 +919,8 @@ void XMLMetaImportContext::InsertMeta(
         const uno::Reference<rdf::XMetadatable> xMeta(
             XMLTextMarkImportContext::CreateAndInsertMark(
                 GetImport(),
-                OUString::createFromAscii(
-                    "com.sun.star.text.InContentMetadata"),
+                OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "com.sun.star.text.InContentMetadata")),
                 OUString(),
                 i_xInsertionRange, m_XmlId),
             uno::UNO_QUERY);
@@ -998,8 +998,8 @@ void XMLMetaFieldImportContext::InsertMeta(
         const Reference<XPropertySet> xPropertySet(
             XMLTextMarkImportContext::CreateAndInsertMark(
                 GetImport(),
-                OUString::createFromAscii(
-                    "com.sun.star.text.textfield.MetadataField"),
+                OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "com.sun.star.text.textfield.MetadataField")),
                 OUString(),
                 i_xInsertionRange, m_XmlId),
             UNO_QUERY);
@@ -1016,11 +1016,11 @@ void XMLMetaFieldImportContext::InsertMeta(
             if (-1 != nKey)
             {
                 static ::rtl::OUString sPropertyIsFixedLanguage(
-                    ::rtl::OUString::createFromAscii("IsFixedLanguage") );
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsFixedLanguage")) );
                 Any any;
                 any <<= nKey;
                 xPropertySet->setPropertyValue(
-                    OUString::createFromAscii("NumberFormat"), any);
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("NumberFormat")), any);
                 if ( xPropertySet->getPropertySetInfo()->
                         hasPropertyByName( sPropertyIsFixedLanguage ) )
                 {

@@ -1233,7 +1233,7 @@ void SvXMLNumFmtElementContext::EndElement()
             {
                 rParent.AddNumber( aNumInfo );      // simple number
 
-                rParent.AddToCode( OUString::createFromAscii( "E+" ) );
+                rParent.AddToCode( OUString(RTL_CONSTASCII_USTRINGPARAM("E+")) );
                 for (sal_Int32 i=0; i<aNumInfo.nExpDigits; i++)
                     rParent.AddToCode( OUString::valueOf((sal_Unicode)'0') );
             }
@@ -2104,7 +2104,7 @@ void SvXMLNumFormatContext::AddCondition( const sal_Int32 nIndex )
     rtl::OUString rCondition = aMyConditions[nIndex].sCondition;
     SvNumberFormatter* pFormatter = pData->GetNumberFormatter();
     sal_uInt32 l_nKey = pData->GetKeyForName( rApplyName );
-    OUString sValue = OUString::createFromAscii( "value()" );       //! define constant
+    OUString sValue(RTL_CONSTASCII_USTRINGPARAM("value()"));        //! define constant
     sal_Int32 nValLen = sValue.getLength();
 
     if ( pFormatter && l_nKey != NUMBERFORMAT_ENTRY_NOT_FOUND &&
@@ -2154,7 +2154,7 @@ void SvXMLNumFormatContext::AddCondition( const sal_Int32 nIndex )
 void SvXMLNumFormatContext::AddCondition( const sal_Int32 nIndex, const rtl::OUString& rFormat, const LocaleDataWrapper& rData )
 {
     rtl::OUString rCondition = aMyConditions[nIndex].sCondition;
-    OUString sValue = OUString::createFromAscii( "value()" );       //! define constant
+    OUString sValue(RTL_CONSTASCII_USTRINGPARAM("value()"));        //! define constant
     sal_Int32 nValLen = sValue.getLength();
 
     if ( rCondition.copy( 0, nValLen ) == sValue )
