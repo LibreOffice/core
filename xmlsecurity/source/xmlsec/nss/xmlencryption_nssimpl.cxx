@@ -99,12 +99,6 @@ SAL_CALL XMLEncryption_NssImpl :: encrypt(
          throw RuntimeException() ;
     }
 
-#if 0
-    XMLSecurityContext_NssImpl* pSecCtxt = ( XMLSecurityContext_NssImpl* )xSecTunnel->getSomething( XMLSecurityContext_NssImpl::getUnoTunnelId() ) ;
-    if( pSecCtxt == NULL )
-        throw RuntimeException() ;
-#endif
-
     SecurityEnvironment_NssImpl* pSecEnv =
         reinterpret_cast<SecurityEnvironment_NssImpl*>(
             sal::static_int_cast<sal_uIntPtr>(xSecTunnel->getSomething( SecurityEnvironment_NssImpl::getUnoTunnelId() ))) ;
@@ -156,11 +150,6 @@ SAL_CALL XMLEncryption_NssImpl :: encrypt(
         throw XMLEncryptionException() ;
     }
 
-    /* MM : remove the following 2 lines
-    xmlUnlinkNode(pContent);
-    xmlAddNextSibling(pEncryptedData, pContent);
-    */
-
     //remember the position of the element to be signed
     sal_Bool isParentRef = sal_True;
     xmlNodePtr pParent = pEncryptedData->parent;
@@ -196,32 +185,6 @@ SAL_CALL XMLEncryption_NssImpl :: encrypt(
     pEncryptedData = pTemplate->getNativeElement() ;
 
     //Find the element to be encrypted.
-    /* MM : remove the old method to get the target element
-    //This element is wrapped in the CipherValue sub-element.
-    xmlNodePtr pCipherData = pEncryptedData->children;
-    while (pCipherData != NULL && stricmp((const char *)(pCipherData->name), "CipherData"))
-    {
-        pCipherData = pCipherData->next;
-    }
-
-    if( pCipherData == NULL ) {
-        xmlSecEncCtxDestroy( pEncCtx ) ;
-        throw XMLEncryptionException() ;
-    }
-
-    xmlNodePtr pCipherValue = pCipherData->children;
-    while (pCipherValue != NULL && stricmp((const char *)(pCipherValue->name), "CipherValue"))
-    {
-        pCipherValue = pCipherValue->next;
-    }
-
-    if( pCipherValue == NULL ) {
-        xmlSecEncCtxDestroy( pEncCtx ) ;
-        throw XMLEncryptionException() ;
-    }
-
-    pContent = pCipherValue->children;
-    */
 
     //Encrypt the template
     if( xmlSecEncCtxXmlEncrypt( pEncCtx , pEncryptedData , pContent ) < 0 )

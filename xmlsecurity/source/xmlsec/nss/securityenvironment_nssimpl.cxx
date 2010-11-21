@@ -584,29 +584,6 @@ Reference< XCertificate > SecurityEnvironment_NssImpl :: getCertificate( const O
                  *       is not useful at all. (comment out now)
                  */
 
-                /*
-                sal_Int32 nIndex = 0;
-                OUString newIssuerName;
-                do
-                {
-                    OUString aToken = issuerName.getToken( 0, ',', nIndex ).trim();
-                    if (aToken.compareToAscii("S=",2) == 0)
-                    {
-                        newIssuerName+=OUString::createFromAscii("ST=");
-                        newIssuerName+=aToken.copy(2);
-                    }
-                    else
-                    {
-                        newIssuerName+=aToken;
-                    }
-
-                    if (nIndex >= 0)
-                    {
-                        newIssuerName+=OUString::createFromAscii(",");
-                    }
-                } while ( nIndex >= 0 );
-                */
-
                 /* end */
 
         //Create cert info from issue and serial

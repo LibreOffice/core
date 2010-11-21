@@ -126,11 +126,7 @@ SAL_CALL XMLSignature_NssImpl :: generate(
          throw RuntimeException() ;
     }
 
-#if 0 //i39448 : the key manager should be retrieved from SecurityEnvironment, instead of SecurityContext
-    XMLSecurityContext_NssImpl* pSecCtxt = ( XMLSecurityContext_NssImpl* )xSecTunnel->getSomething( XMLSecurityContext_NssImpl::getUnoTunnelId() ) ;
-    if( pSecCtxt == NULL )
-        throw RuntimeException() ;
-#endif
+    //i39448 : the key manager should be retrieved from SecurityEnvironment, instead of SecurityContext
 
     SecurityEnvironment_NssImpl* pSecEnv =
         reinterpret_cast<SecurityEnvironment_NssImpl*>(

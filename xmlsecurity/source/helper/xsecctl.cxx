@@ -715,57 +715,6 @@ cssu::Reference< com::sun::star::io::XInputStream >
     return xObjectInputStream;
 }
 
-#if 0
-sal_Int32 XSecController::getFastPropertyIndex(sal_Int32 nHandle) const
-/****** XSecController/getFastPropertyIndex ***********************************
- *
- *   NAME
- *  getFastPropertyIndex -- gets the index of a particular fast property
- *
- *   SYNOPSIS
- *  nIndex = getFastPropertyIndex( nHandle );
- *
- *   FUNCTION
- *  See NAME.
- *
- *   INPUTS
- *  nHandle - the key for the fast property
- *
- *   RESULT
- *  nIndex - the index of the fast property, or -1
- *           if the key is not found.
- *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
- ******************************************************************************/
-{
-    std::vector< sal_Int32 >::const_iterator ii = m_vFastPropertyIndexs.begin();
-    sal_Int32 nIndex = 0;
-
-    bool bFound = false;
-
-    for( ; ii != m_vFastPropertyIndexs.end(); ++ii,++nIndex )
-    {
-        if ( nHandle == (*ii))
-        {
-            bFound = true;
-            break;
-        }
-    }
-
-    if (!bFound)
-    {
-        nIndex = -1;
-    }
-
-    return nIndex;
-}
-#endif
-
 /*
  * public methods
  */
@@ -1091,11 +1040,6 @@ void XSecController::exportSignature(
             rtl::OUString tag_SignatureProperties(RTL_CONSTASCII_USTRINGPARAM(TAG_SIGNATUREPROPERTIES));
                 rtl::OUString tag_SignatureProperty(RTL_CONSTASCII_USTRINGPARAM(TAG_SIGNATUREPROPERTY));
                     rtl::OUString tag_Date(RTL_CONSTASCII_USTRINGPARAM(TAG_DATE));
-#if 0
-                    rtl::OUString tag_Timestamp(RTL_CONSTASCII_USTRINGPARAM(TAG_TIMESTAMP));
-                        rtl::OUString tag_Date(RTL_CONSTASCII_USTRINGPARAM(TAG_DATE));
-                        rtl::OUString tag_Time(RTL_CONSTASCII_USTRINGPARAM(TAG_TIME));
-#endif
 
     const SignatureReferenceInformations& vReferenceInfors = signatureInfo.vSignatureReferenceInfors;
     SvXMLAttributeList *pAttributeList;

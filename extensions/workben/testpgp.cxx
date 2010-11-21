@@ -512,75 +512,6 @@ inline rtl::OWString S2U (const sal_Char *ascii)
     return rtl::OWString::createFromAscii (ascii);
 }
 
-#if 0  /* OLD */
-
-/*
- * queryModuleActivator.
- */
-BOOL queryModuleActivator (
-    const XServiceManagerRef &rxManager,
-    XServiceActivatorRef     &rxActivator)
-{
-    XServiceProviderRef xProv;
-    XInterfaceRef       xProvInst;
-
-    xProv = rxManager->queryServiceProvider (
-        L"stardiv.uno.ServiceActivator.module");
-    if (!xProv.is())
-    {
-        printf ("Error: no ServiceActivator service.\n");
-        return FALSE;
-    }
-
-    xProvInst = xProv->createInstance();
-    if (!xProvInst.is())
-    {
-        printf ("Error: no ServiceActivator instance.\n");
-        return FALSE;
-    }
-
-    return xProvInst->queryInterface (
-        XServiceActivator::getSmartUik(), rxActivator);
-}
-
-/*
- * install.
- */
-BOOL install (
-    const XServiceActivatorRef &rxActivator,
-    const char                 *prefix)
-{
-    String aModule ("module://");
-    char   pBuffer[1024];
-
-    vos:ORealDynamicLoader::computeModuleName (
-        prefix, pBuffer, sizeof(pBuffer));
-    aModule += pBuffer;
-
-    return rxActivator->install (
-        StringToUString (aModule, CHARSET_SYSTEM));
-}
-
-/*
- * uninstall.
- */
-BOOL uninstall (
-    const XServiceActivatorRef &rxActivator,
-    const char                 *prefix)
-{
-    String aModule ("module://");
-    char   pBuffer[1024];
-
-    vos::ORealDynamicLoader::computeModuleName (
-        prefix, pBuffer, sizeof(pBuffer));
-    aModule += pBuffer;
-
-    return rxActivator->deinstall (
-        StringToUString (aModule, CHARSET_SYSTEM));
-}
-
-#endif /* OLD */
-
 /*
  * main.
  */
@@ -675,17 +606,7 @@ int SAL_CALL main (int argc, char **argv)
 
     if (nOptions & OPTION_INSTALL)
     {
-#if 0  /* OLD */
-        XServiceActivatorRef xActivator;
-        if (queryModuleActivator (xManager, xActivator))
-        {
-            if (install (xActivator, "pgp"))
-                printf ("Module PGP installed.\n");
-            else
-                printf ("Error: module PGP not installed.\n");
-        }
-        nOptions &= ~OPTION_INSTALL;
-#endif /* OLD */
+
     }
 
     if (nOptions & (OPTION_DECRYPT | OPTION_ENCRYPT | OPTION_SIGN))
@@ -823,17 +744,7 @@ int SAL_CALL main (int argc, char **argv)
 
     if (nOptions & OPTION_UNINSTALL)
     {
-#if 0  /* OLD */
-        XServiceActivatorRef xActivator;
-        if (queryModuleActivator (xManager, xActivator))
-        {
-            if (uninstall (xActivator, "pgp"))
-                printf ("Module PGP uninstalled.\n");
-            else
-                printf ("Error: module PGP not uninstalled.\n");
-        }
-        nOptions &= ~OPTION_UNINSTALL;
-#endif /* OLD */
+
     }
 
     return 0;

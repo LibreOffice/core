@@ -217,19 +217,6 @@ private:
     com::sun::star::uno::Reference<
         com::sun::star::xml::crypto::XXMLSecurityContext > m_xSecurityContext;
 
-#if 0
-    /*
-     * the signature creation result listener
-     */
-    com::sun::star::uno::Reference<
-        com::sun::star::xml::crypto::sax::XSignatureCreationResultListener > m_xSignatureCreationResultListener;
-    /*
-     * the signature verify result listener
-     */
-    com::sun::star::uno::Reference<
-        com::sun::star::xml::crypto::sax::XSignatureVerifyResultListener > m_xSignatureVerifyResultListener;
-#endif
-
     /*
      * the security id incrementer, in order to make any security id unique
      * to the SAXEventKeeper.

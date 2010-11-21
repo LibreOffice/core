@@ -583,22 +583,10 @@ NPError SAL_CALL NP_LOADDS  NPN_GetValue( NPP instance, NPNVariable variable, vo
             *(NPBool*)value = false;
             break;
     }
+
     /*
     provisional code should there ever be NPNVariables that we actually
     want to query from the PluginContext
-    ::rtl::OUString aValue;
-    try
-    {
-        pImpl->enterPluginCallback();
-        aValue = pImpl->getPluginContext()->
-            getValue( pImpl, (::com::sun::star::plugin::PluginVariable)variable );
-        pImpl->leavePluginCallback();
-    }
-    catch( ::com::sun::star::plugin::PluginException& e )
-    {
-        pImpl->leavePluginCallback();
-        return e.ErrorCode;
-    }
     */
 
     return aResult;

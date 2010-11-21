@@ -725,20 +725,6 @@ sal_Bool XPlugin_Impl::provideNewStream(const OUString& mimetype,
      // but currently none are known. Since this file opening/seeking/closing
      // is rather costly, it is #if'ed out. If there are plugins known to
      // make use of the file length, simply put it in
-#if 0
-    if( isfile && ! length )
-    {
-        osl::File aFile( url );
-        if( aFile.open( OpenFlag_Read ) == FileBase::E_None )
-        {
-            aFile.setPos( Pos_End, 0 );
-            sal_uInt64 nPos = 0;
-            if( aFile.getPos( nPos ) == FileBase::E_None )
-                length = nPos;
-            aFile.close();
-        }
-    }
-#endif
 
      PluginInputStream* pStream = new PluginInputStream( this, aURL.getStr(),
                                                         length, lastmodified );
