@@ -22,5 +22,6 @@ warn
 .svn
 CVS
 .hg
-.gitignore
 .hgignore
+/*/unxmac??
+/*/unxmac??.pro
