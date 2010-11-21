@@ -35,9 +35,9 @@ int main(int argc , char** argv, char** envp)
 {
     //prevent warning about unused parameters
     //we need to provide parameter names in C
-    argc = argc;
-    argv = argv;
-    envp = envp;
+    (void)argc;
+    (void)argv;
+    (void)envp;
 
     fprintf(stdout,"Hello world!\n");
     return 0;
