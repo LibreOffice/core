@@ -207,4 +207,9 @@ include $(foreach class, \
     Module \
 ,$(GBUILDDIR)/$(class).mk)
 
+# optional extensions that should never be essential
+ifneq ($(wildcard $(GBUILDDIR)/extensions/*.mk),)
+include $(wildcard $(GBUILDDIR)/extensions/*.mk)
+endif
+
 # vim: set noet sw=4 ts=4:

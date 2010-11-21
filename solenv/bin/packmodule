@@ -52,7 +52,7 @@ def main(args):
     [packedmodule.write(path) for path in stripped_paths_to_pack(deliverlog)]
     packedmodule.close()
 
-if __name__ == "__main__": 
+if __name__ == "__main__":
     main(sys.argv)
 
 # vim:set et sw=4 ts=4 filetype=python:
