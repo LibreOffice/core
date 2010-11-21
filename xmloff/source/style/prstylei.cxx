@@ -209,15 +209,15 @@ void XMLPropStyleContext::CreateAndInsert( sal_Bool bOverwrite )
                 {
                     aValues.realloc( nLen + 2 );
                     PropertyValue *pProps = aValues.getArray() + nLen;
-                    pProps->Name = rtl::OUString::createFromAscii("ParaStyleName");
+                    pProps->Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaStyleName"));
                     OUString sParent( GetParentName() );
                     if( sParent.getLength() )
                         sParent = GetImport().GetStyleDisplayName( GetFamily(), sParent );
                     else
-                        sParent =  rtl::OUString::createFromAscii("Standard");
+                        sParent =  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Standard"));
                     pProps->Value <<= sParent;
                     ++pProps;
-                    pProps->Name = rtl::OUString::createFromAscii("ParaConditionalStyleName");
+                    pProps->Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaConditionalStyleName"));
                     pProps->Value <<= sParent;
                 }
 
@@ -226,8 +226,8 @@ void XMLPropStyleContext::CreateAndInsert( sal_Bool bOverwrite )
                 {
                     Sequence< OUString > aPropNames(1);
                     aPropNames[0] = GetFamily() == XML_STYLE_FAMILY_TEXT_PARAGRAPH ?
-                        rtl::OUString::createFromAscii("ParaAutoStyleName") :
-                        rtl::OUString::createFromAscii("CharAutoStyleName");
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaAutoStyleName")) :
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharAutoStyleName"));
                     Sequence< Any > aAny = xAutoStyle->getPropertyValues( aPropNames );
                     if( aAny.hasElements() )
                     {

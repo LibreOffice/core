@@ -740,8 +740,8 @@ SvXMLImportContext *SchXMLImport::CreateContext( USHORT nPrefix, const OUString&
         if (xDPS.is()) {
             uno::Reference<xml::sax::XDocumentHandler> xDocBuilder(
                 mxServiceFactory->createInstance(
-                    ::rtl::OUString::createFromAscii(
-                        "com.sun.star.xml.dom.SAXDocumentBuilder")),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        "com.sun.star.xml.dom.SAXDocumentBuilder"))),
                     uno::UNO_QUERY_THROW);
             pContext = (IsXMLToken(rLocalName, XML_DOCUMENT_META))
                 ? new SvXMLMetaDocumentContext(*this,
