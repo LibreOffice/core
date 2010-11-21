@@ -868,7 +868,7 @@ Reference < i18n::XBreakIterator > EnhancedCustomShapeFontWork::GetBreakIterator
     if ( !mxBreakIterator.is() )
     {
         Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-        Reference < XInterface > xI = xMSF->createInstance( rtl::OUString::createFromAscii( "com.sun.star.i18n.BreakIterator" ) );
+        Reference < XInterface > xI = xMSF->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.BreakIterator")) );
         if ( xI.is() )
         {
             Any x = xI->queryInterface( ::getCppuType((const Reference< i18n::XBreakIterator >*)0) );

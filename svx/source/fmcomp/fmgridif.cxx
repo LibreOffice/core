@@ -431,7 +431,7 @@ sal_Bool SAL_CALL FmXGridControl::supportsService(const ::rtl::OUString& Service
 //------------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL FmXGridControl::getImplementationName() throw()
 {
-    return ::rtl::OUString::createFromAscii("com.sun.star.form.FmXGridControl");
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.FmXGridControl"));
 }
 
 //------------------------------------------------------------------------------
@@ -439,7 +439,7 @@ sal_Bool SAL_CALL FmXGridControl::supportsService(const ::rtl::OUString& Service
 {
     Sequence< ::rtl::OUString > aServiceNames(2);
     aServiceNames[0] = FM_SUN_CONTROL_GRIDCONTROL;
-    aServiceNames[1] = ::rtl::OUString::createFromAscii("com.sun.star.awt.UnoControl");
+    aServiceNames[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControl"));
     return aServiceNames;
 }
 
@@ -460,7 +460,7 @@ void SAL_CALL FmXGridControl::dispose() throw( RuntimeException )
 //------------------------------------------------------------------------------
 ::rtl::OUString FmXGridControl::GetComponentServiceName()
 {
-    ::rtl::OUString aName = ::rtl::OUString::createFromAscii("DBGrid");
+    ::rtl::OUString aName(RTL_CONSTASCII_USTRINGPARAM("DBGrid"));
     return aName;
 }
 
@@ -2798,7 +2798,7 @@ Sequence< ::com::sun::star::util::URL>& FmXGridPeer::getSupportedURLs()
         // let an ::com::sun::star::util::URL-transformer normalize the URLs
         Reference< ::com::sun::star::util::XURLTransformer >  xTransformer(
             ::comphelper::getProcessServiceFactory()->createInstance(
-                ::rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer")),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))),
             UNO_QUERY);
         pSupported = aSupported.getArray();
         if (xTransformer.is())

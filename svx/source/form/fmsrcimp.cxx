@@ -218,8 +218,8 @@ CheckBoxWrapper::CheckBoxWrapper(const Reference< ::com::sun::star::awt::XCheckB
 {
     switch ((TriState)m_xBox->getState())
     {
-        case STATE_NOCHECK: return rtl::OUString::createFromAscii("0");
-        case STATE_CHECK: return rtl::OUString::createFromAscii("1");
+        case STATE_NOCHECK: return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0"));
+        case STATE_CHECK: return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("1"));
         default: break;
     }
     return rtl::OUString();
@@ -1011,14 +1011,14 @@ void FmSearchEngine::SearchNextImpl()
             switch (m_nPosition)
             {
                 case MATCHING_ANYWHERE :
-                    strSearchExpression = ::rtl::OUString::createFromAscii("*") + strSearchExpression
-                    + ::rtl::OUString::createFromAscii("*");
+                    strSearchExpression = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*")) + strSearchExpression
+                    + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*"));
                     break;
                 case MATCHING_BEGINNING :
-                    strSearchExpression = strSearchExpression + ::rtl::OUString::createFromAscii("*");
+                    strSearchExpression = strSearchExpression + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*"));
                     break;
                 case MATCHING_END :
-                    strSearchExpression = ::rtl::OUString::createFromAscii("*") + strSearchExpression;
+                    strSearchExpression = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*")) + strSearchExpression;
                     break;
                 case MATCHING_WHOLETEXT :
                     break;

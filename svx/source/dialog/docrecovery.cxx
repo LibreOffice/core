@@ -557,7 +557,7 @@ void SAL_CALL RecoveryCore::statusChanged(const css::frame::FeatureStateEvent& a
     aNew.RecoveryState = E_NOT_RECOVERED_YET;
 
     // patch DisplayName! Because the document title contain more then the file name ...
-    sal_Int32 i = aNew.DisplayName.indexOf(::rtl::OUString::createFromAscii(" - "));
+    sal_Int32 i = aNew.DisplayName.indexOf(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" - ")));
     if (i > 0)
         aNew.DisplayName = aNew.DisplayName.copy(0, i);
 
@@ -2020,16 +2020,16 @@ void BrokenRecoveryDialog::impl_askForSavePath()
         {
 
 #if defined(WNT) || defined(OS2)
-            OUString    ustrValue = OUString::createFromAscii("${$BRAND_BASE_DIR/program/bootstrap.ini:UserInstallation}");
+            OUString    ustrValue = OUString(RTL_CONSTASCII_USTRINGPARAM("${$BRAND_BASE_DIR/program/bootstrap.ini:UserInstallation}"));
 #elif defined( MACOSX )
-            OUString    ustrValue = OUString::createFromAscii("~");
+            OUString    ustrValue = OUString(RTL_CONSTASCII_USTRINGPARAM("~"));
 #else
-            OUString    ustrValue = OUString::createFromAscii("$SYSUSERCONFIG");
+            OUString    ustrValue = OUString(RTL_CONSTASCII_USTRINGPARAM("$SYSUSERCONFIG"));
 #endif
             Bootstrap::expandMacros( ustrValue );
 
 #if defined(WNT) || defined(OS2)
-            ustrValue += OUString::createFromAscii("/user/crashdata");
+            ustrValue += OUString(RTL_CONSTASCII_USTRINGPARAM("/user/crashdata"));
 #endif
             return ustrValue;
         }

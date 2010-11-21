@@ -479,7 +479,7 @@ class FmXAutoControl: public UnoControl
 public:
     FmXAutoControl(){}
 
-    virtual ::rtl::OUString GetComponentServiceName() {return ::rtl::OUString::createFromAscii("Edit");}
+    virtual ::rtl::OUString GetComponentServiceName() {return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Edit"));}
     virtual void SAL_CALL createPeer( const Reference< XToolkit > & rxToolkit, const Reference< XWindowPeer >  & rParentPeer ) throw( RuntimeException );
 
 protected:
@@ -709,7 +709,7 @@ sal_Bool SAL_CALL FormController::supportsService(const ::rtl::OUString& Service
 //------------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL FormController::getImplementationName() throw( RuntimeException )
 {
-    return ::rtl::OUString::createFromAscii( "org.openoffice.comp.svx.FormController" );
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.svx.FormController"));
 }
 
 //------------------------------------------------------------------------------
@@ -747,7 +747,7 @@ Sequence< ::rtl::OUString> FormController::getSupportedServiceNames_Static(void)
     {
         aServices.realloc(2);
         aServices.getArray()[0] = FM_FORM_CONTROLLER;
-        aServices.getArray()[1] = ::rtl::OUString::createFromAscii("com.sun.star.awt.control.TabController");
+        aServices.getArray()[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.control.TabController"));
     }
     return aServices;
 }
@@ -3176,7 +3176,7 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
                         xQueryColumns->getByName(pRefValues[j].Name) >>= xSet;
 
                         // get the RealName
-                        xSet->getPropertyValue(::rtl::OUString::createFromAscii("RealName")) >>= aRealName;
+                        xSet->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RealName"))) >>= aRealName;
 
                         // compare the condition field name and the RealName
                         if (aCompare(aRealName, pRefValues[j].Name))
@@ -3189,7 +3189,7 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
                         for (sal_Int32 n = 0, nCount = xColumnsByIndex->getCount(); n < nCount; n++)
                         {
                             xColumnsByIndex->getByIndex(n) >>= xSet;
-                            xSet->getPropertyValue(::rtl::OUString::createFromAscii("RealName")) >>= aRealName;
+                            xSet->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RealName"))) >>= aRealName;
                             if (aCompare(aRealName, pRefValues[j].Name))
                             {
                                 // get the column by its alias
@@ -3217,10 +3217,10 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
                         if (aRow.find((*iter).xText) != aRow.end())
                         {
                             ::rtl::OUString aCompText = aRow[(*iter).xText];
-                            aCompText += ::rtl::OUString::createFromAscii(" ");
+                            aCompText += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "));
                             ::rtl::OString aVal = m_xParser->getContext().getIntlKeywordAscii(OParseContext::KEY_AND);
                             aCompText += ::rtl::OUString(aVal.getStr(),aVal.getLength(),RTL_TEXTENCODING_ASCII_US);
-                            aCompText += ::rtl::OUString::createFromAscii(" ");
+                            aCompText += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "));
                             aCompText += ::comphelper::getString(pRefValues[j].Value);
                             aRow[(*iter).xText] = aCompText;
                         }
@@ -3367,9 +3367,9 @@ void FormController::startFiltering()
                 {
                     // create a filter control
                     Sequence< Any > aCreationArgs( 3 );
-                    aCreationArgs[ 0 ] <<= NamedValue( ::rtl::OUString::createFromAscii( "MessageParent" ), makeAny( VCLUnoHelper::GetInterface( getDialogParentWindow() ) ) );
-                    aCreationArgs[ 1 ] <<= NamedValue( ::rtl::OUString::createFromAscii( "NumberFormatter" ), makeAny( xFormatter ) );
-                    aCreationArgs[ 2 ] <<= NamedValue( ::rtl::OUString::createFromAscii( "ControlModel" ), makeAny( xModel ) );
+                    aCreationArgs[ 0 ] <<= NamedValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MessageParent")), makeAny( VCLUnoHelper::GetInterface( getDialogParentWindow() ) ) );
+                    aCreationArgs[ 1 ] <<= NamedValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NumberFormatter")), makeAny( xFormatter ) );
+                    aCreationArgs[ 2 ] <<= NamedValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ControlModel")), makeAny( xModel ) );
                     Reference< XControl > xFilterControl(
                         m_aContext.createComponentWithArguments( "com.sun.star.form.control.FilterControl", aCreationArgs ),
                         UNO_QUERY
