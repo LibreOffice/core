@@ -39,15 +39,15 @@ using namespace ::com::sun::star;
 uno::Sequence< ::rtl::OUString > SAL_CALL MainThreadExecutor::impl_staticGetSupportedServiceNames()
 {
     uno::Sequence< ::rtl::OUString > aRet(2);
-    aRet[0] = ::rtl::OUString::createFromAscii("com.sun.star.thread.MainThreadExecutor");
-    aRet[1] = ::rtl::OUString::createFromAscii("com.sun.star.comp.thread.MainThreadExecutor");
+    aRet[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.thread.MainThreadExecutor"));
+    aRet[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.thread.MainThreadExecutor"));
     return aRet;
 }
 
 //-------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL MainThreadExecutor::impl_staticGetImplementationName()
 {
-    return ::rtl::OUString::createFromAscii("com.sun.star.comp.thread.MainThreadExecutor");
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.thread.MainThreadExecutor"));
 }
 
 //-------------------------------------------------------------------------
