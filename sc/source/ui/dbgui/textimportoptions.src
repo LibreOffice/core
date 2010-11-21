@@ -107,4 +107,3 @@ ModalDialog RID_SCDLG_TEXT_IMPORT_OPTIONS
         Text [ en-US ] = "Detect special numbers (such as dates)." ;
     };
 };
-

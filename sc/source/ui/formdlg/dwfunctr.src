@@ -27,6 +27,7 @@
  // include ---------------------------------------------------------------
 #include "sc.hrc"
 #include "dwfunctr.hrc"
+
  // pragma ----------------------------------------------------------------
 
  // RID_SVXDLG_CALCFUNC --------------------------------------------------
@@ -110,7 +111,7 @@ DockingWindow FID_FUNCTION_BOX
         {
             ImageBitmap = Bitmap
             {
-                File = "fx.bmp" ;
+                File = "fx.png";
             };
             MaskColor = STD_MASKCOLOR;
         };
@@ -120,36 +121,3 @@ DockingWindow FID_FUNCTION_BOX
     Text [ en-US ] = "Functions" ;
 };
  // ********************************************************************** EOF
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

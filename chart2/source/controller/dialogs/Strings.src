@@ -121,11 +121,6 @@ String STR_PAGE_POSITIONING
     Text [ en-US ] = "Positioning" ;
 };
 
-// String STR_PAGE_STATISTICS
-// {
-//  Text [ en-US ] = "Statistics" ;
-// };
-
 String STR_PAGE_TRENDLINE_TYPE
 {
     Text[ en-US ] = "Type";

@@ -246,19 +246,19 @@ ImageList RID_IMAGELIST_NAVCONT
 };
 Image RID_IMG_DROP_URL
 {
-    ImageBitmap = Bitmap { File = "dropurl.bmp" ; };
+    ImageBitmap = Bitmap { File = "dropurl.png" ; };
     MaskColor = STD_MASKCOLOR ;
 };
 
 Image RID_IMG_DROP_LINK
 {
-    ImageBitmap = Bitmap { File = "droplink.bmp" ; };
+    ImageBitmap = Bitmap { File = "droplink.png" ; };
     MaskColor = STD_MASKCOLOR ;
 };
 
 Image RID_IMG_DROP_COPY
 {
-    ImageBitmap = Bitmap { File = "dropcopy.bmp" ; };
+    ImageBitmap = Bitmap { File = "dropcopy.png" ; };
     MaskColor = STD_MASKCOLOR ;
 };
 

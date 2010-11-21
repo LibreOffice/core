@@ -27,7 +27,6 @@
 
 #include "retypepassdlg.hrc"
 
-
 ModalDialog RID_SCDLG_RETYPEPASS
 {
     Text [ en-US ] = "Re-type Password" ;

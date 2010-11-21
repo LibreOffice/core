@@ -250,15 +250,8 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text [ en-US ] = "L~eft to right (sort columns)" ;
         TabStop = TRUE ;
     };
-/*
-    FixedText FT_AREA_LABEL
-    {
-        Pos = MAP_APPFONT ( 6 , 171 ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ en-US ] = "Data area:" ;
-    };
-*/
 };
+
 TabDialog RID_SCDLG_SORT
 {
     OutputSize = TRUE ;

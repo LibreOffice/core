@@ -43,41 +43,4 @@ Resource RID_WRNHDLSC
         /* ### ACHTUNG: Neuer Text in Resource? Die Maximalanzahl von Zeilen wurde überschritten. überzählige Zeilen wurden nicht mitimportiert! : Die Maximalanzahl von Zeilen wurde ³berschritten. ³berzõhlige Zeilen wurden nicht mitimportiert! */
         Text [ en-US ] = "The number of rows exceeded the maximum. Additional rows were not imported!" ;
     };
-    /*
-    String ERRCODE_SC_  & SH_MAX
-        {
-    Text = "";
-        };
-*/
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
