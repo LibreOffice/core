@@ -50,15 +50,15 @@ gb_Deliver_DELIVERABLES += $$(patsubst $(SOURCE_ROOT_DIR)/%,%,$(2)):$$(patsubst 
 
 endef
 
-define gb_Deliver_get_deliverlog
-$(foreach deliverable,$(gb_Deliver_DELIVERABLES),$(NEWLINE)COPY $(subst :, ,$(deliverable)))
-endef
-
 define gb_Deliver_deliver
 $(call gb_Deliver__deliverprefix,$(2)) $(gb_Deliver_GNUCOPY) -f $(1) $(2)
 endef
 
-# we need the trailing whitespace so that the newline of echo does not become part of the last record
+# We are currently only creating a deliver.log, if only one module gets build.
+# As it is possible to add gbuild modules into other (which is done for example for
+# the toplevel ooo module already) it does not make sense to create a deliver.log once
+# fully migrated. The whole process should be rethought then.
+# We need the trailing whitespace so that the newline of echo does not become part of the last record.
 define gb_Deliver_setdeliverlogcommand
 ifeq ($$(words $(gb_Module_ALLMODULES)),1)
 $$(eval $$(call gb_Output_announce,$$(strip $$(gb_Module_ALLMODULES)),$$(true),LOG,1))
@@ -73,7 +73,7 @@ endef
 .PHONY : deliverlog
 deliverlog:
     $(eval $(call gb_Deliver_setdeliverlogcommand))
-    $(COMMAND)
+    $(call gb_Helper_abbreviate_dirs, $(COMMAND))
 
 all : deliverlog
 
