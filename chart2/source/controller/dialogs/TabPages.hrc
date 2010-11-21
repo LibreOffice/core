@@ -37,15 +37,6 @@
 #define FT_LEGEND_TEXTDIR           3
 #define LB_LEGEND_TEXTDIR           4
 
-//#define TP_DATA_DESCR 901
-
-//#define TP_ALIGNMENT 902
-////#define FL_ORDER 2
-////#define RBT_SIDEBYSIDE 1
-////#define RBT_UPDOWN 2
-////#define RBT_DOWNUP 3
-////#define RBT_AUTOORDER 4
-
 #define FL_TEXTBREAK                3
 #define CBX_TEXTBREAK               2
 #define CBX_TEXTOVERLAP             4

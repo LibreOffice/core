@@ -27,8 +27,6 @@
 
 #include <sc.hrc> // -> RID_SCDLG_INSERT_TABLE
 
-//#define RID_SCDLG_INSERT_TABLE 300
-
 #define BTN_OK                  1
 #define BTN_CANCEL              2
 #define BTN_HELP                3
@@ -48,5 +46,3 @@
 #define BTN_BROWSE              28
 #define CB_LINK                 29
 #define FT_PATH                 30
-
-

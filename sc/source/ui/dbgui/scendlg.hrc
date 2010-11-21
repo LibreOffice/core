@@ -25,7 +25,7 @@
  *
  ************************************************************************/
 #include "sc.hrc"
-//#define RID_SCDLG_NEWSCENARIO 256
+
 #define BTN_OK                  1
 #define BTN_CANCEL              2
 #define BTN_HELP                3

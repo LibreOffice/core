@@ -28,7 +28,6 @@
 #ifndef __GLOBSTR_HRC_
 #define __GLOBSTR_HRC_
 
-
 #define STR_UNDO_DELETECELLS        1
 #define STR_UNDO_CUT                2
 #define STR_UNDO_PASTE              3
@@ -92,7 +91,6 @@
 #define STR_MSSG_SOLVE_4            60
 #define STR_MSSG_SOLVE_5            61
 #define STR_MSSG_SOLVE_6            62
-// unused: 63
 
 #define STR_TABLE_GESAMTERGEBNIS    64
 #define STR_TABLE_ERGEBNIS          65
@@ -101,7 +99,6 @@
 #define STR_TABLE_ODER              68
 #define STR_UNDO_INSERTCELLS        69
 #define STR_TABLE_DEF               70
-//#define STR_STYLENAME_STANDARD      71 s.u.
 #define STR_MOVE_TO_END             72
 #define STR_BOX_YNI                 73
 #define STR_NO_REF_TABLE            74
@@ -165,8 +162,6 @@
 #define STR_FUN_TEXT_STDDEV         130
 #define STR_FUN_TEXT_VAR            131
 #define STR_DOC_STAT                132
-
-//#define STR_STYLENAME_RESULT        133 s.u.
 
 #define STR_DBNAME_IMPORT           134
 
@@ -352,7 +347,6 @@
 #define STR_SCATTR_PAGE_SCALETOPAGES 277
 
 #define STR_NOREF_STR               278     /* moved to compiler.src, keep define! */
-// unused: 279
 
 #define STR_UNDO_CHARTDATA          280
 #define STR_UNDO_ORIGINALSIZE       281
@@ -408,7 +402,6 @@
 #define STR_DETINVALID_OVERFLOW     315
 #define STR_GRAPHICNAME             316
 #define STR_INVALIDNAME             317
-//  318 ist oben
 #define STR_ERR_LINKOVERLAP         319
 
 #define STR_VALID_MACRONOTFOUND     320
@@ -597,6 +590,6 @@
 
 #define STR_PGNUM                    457
 
-#define STR_COUNT                       458
+#define STR_COUNT                    458
 
 #endif

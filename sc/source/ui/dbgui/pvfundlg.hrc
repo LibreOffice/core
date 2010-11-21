@@ -27,9 +27,6 @@
 
 #include "sc.hrc"
 
-// RID_SCDLG_DPDATAFIELD - DataPilot Data Field Function
-// RID_SCDLG_PIVOTSUBT - DataPilot Page/Row/Column Field Subtotals
-
 #define BTN_OK          1
 #define BTN_CANCEL      2
 #define BTN_HELP        3
@@ -80,4 +77,3 @@
 #define NF_SHOW         1
 
 #define CT_HIDE         1
-

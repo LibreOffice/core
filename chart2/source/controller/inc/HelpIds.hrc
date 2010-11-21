@@ -33,12 +33,6 @@
 
 //see old chart: schhids.h
 
-/*
-#define HID_SCH_DATA_ROW            (HID_SCH_START + 0)
-#define HID_SCH_DATA_LINE           (HID_SCH_START + 1)
-#define HID_SCH_DATA_POINT          (HID_SCH_START + 2)
-#define HID_SCH_DIAGRAM_X_AXIS      (HID_SCH_START + 3)
-*/
 #define HID_SCH_ALIGNMENT           (HID_SCH_START + 4)
 #define HID_SCH_LEGEND_POS          (HID_SCH_START + 5)
 #define HID_SCH_DATA_DESCR          (HID_SCH_START + 6)
@@ -159,10 +153,5 @@
 
 
 // HID_SCH_START should be 63280 (checked 25.Nov 2002)
-
-// 453 == SCH_IF_CHARTVIEWSHELL, da SFX_INTERFACE_LIB kein
-// Define sondern neuerdings ein Enum ist
-//#define HID_SCH_VIEWSHELL_DOCUMENT    (453)
-
 
 #endif

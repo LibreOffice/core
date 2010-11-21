@@ -31,7 +31,3 @@
 #define IMB_INSERT  1
 #define FI_FUNCDESC 1
 #define FT_SPLIT    2
-
-
-// ********************************************************************** EOF
-

@@ -26,8 +26,6 @@
  ************************************************************************/
 #include "sc.hrc"
 
-//#define RID_SCDLG_IMPORTOPT 2256
-
 #define BTN_OK          1
 #define BTN_CANCEL      2
 #define BTN_HELP        3
@@ -41,4 +39,3 @@
 #define FL_FIELDOPT     11
 #define CB_FIXEDWIDTH   12
 #define CB_SAVESHOWN    13
-

@@ -30,16 +30,14 @@
 #define BTN_OK          1
 #define BTN_CANCEL      2
 #define BTN_HELP        5
-//
+
 #define CTR_REDLINING   10
 #define TP_FILTER       11
 #define TP_VIEW         12
 
-
 #define FT_ASSIGN       14
 #define ED_ASSIGN       15
 #define RB_ASSIGN       16
-
 
 #define STR_INSERT_COLS  20
 #define STR_INSERT_ROWS 21
@@ -57,6 +55,7 @@
 #define STR_CHILD_CONTENT       33
 #define STR_CHILD_ORGCONTENT    34
 #define STR_EMPTY               35
+
 // Bitmaps
 #define BMP_STR_CLOSE       41
 #define BMP_STR_OPEN        42
@@ -70,6 +69,3 @@
 #define SC_SORT_AUTHOR      53
 #define SC_SORT_DATE        54
 #define SC_SORT_COMMENT     55
-
-//
-

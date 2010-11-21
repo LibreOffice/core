@@ -27,9 +27,6 @@
 
 #include "sc.hrc"
 
-//#define RID_SCPAGE_HFEDIT 256
-//#define RID_SCDLG_HFEDIT 256
-
 #define FT_LEFT 1
 #define FT_CENTER 2
 #define FT_RIGHT 3
