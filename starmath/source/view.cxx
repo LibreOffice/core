@@ -1451,7 +1451,7 @@ bool SmViewShell::Insert( SfxMedium& rMedium )
     SmDocShell *pDoc = GetDoc();
     String aText( pDoc->GetText() );
     String aTemp = aText;
-    bool bRet = false, bChkOldVersion = true;
+    bool bRet = false;
 
     uno::Reference < embed::XStorage > xStorage = rMedium.GetStorage();
     uno::Reference< container::XNameAccess > xNameAccess( xStorage, uno::UNO_QUERY );
@@ -1459,7 +1459,6 @@ bool SmViewShell::Insert( SfxMedium& rMedium )
     {
         if ( xNameAccess->hasByName( C2S( "content.xml" ) ) || xNameAccess->hasByName( C2S( "Content.xml" ) ))
         {
-            bChkOldVersion = false;
             // is this a fabulous math package ?
             Reference<com::sun::star::frame::XModel> xModel(pDoc->GetModel());
             SmXMLImportWrapper aEquation(xModel);    //!! modifies the result of pDoc->GetText() !!
@@ -1799,10 +1798,10 @@ void SmViewShell::Execute(SfxRequest& rReq)
                     {
                         pDlg = pFact->CreateSvxZoomDialog(&GetViewFrame()->GetWindow(), aSet);
                         OSL_ENSURE(pDlg, "Dialogdiet fail!");
+                        pDlg->SetLimits( MINZOOM, MAXZOOM );
+                        if( pDlg->Execute() != RET_CANCEL )
+                            pSet = pDlg->GetOutputItemSet();
                     }
-                    pDlg->SetLimits( MINZOOM, MAXZOOM );
-                    if( pDlg->Execute() != RET_CANCEL )
-                        pSet = pDlg->GetOutputItemSet();
                 }
                 if ( pSet )
                 {
