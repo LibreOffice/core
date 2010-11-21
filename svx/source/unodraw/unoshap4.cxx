@@ -523,7 +523,7 @@ sal_Bool SvxOle2Shape::createLink( const ::rtl::OUString& aLinkURL )
     ::comphelper::IEmbeddedHelper* pPersist = mpModel->GetPersist();
 
     uno::Sequence< beans::PropertyValue > aMediaDescr( 1 );
-    aMediaDescr[0].Name = ::rtl::OUString::createFromAscii( "URL" );
+    aMediaDescr[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL"));
     aMediaDescr[0].Value <<= aLinkURL;
 
     uno::Reference< task::XInteractionHandler > xInteraction = pPersist->getInteractionHandler();

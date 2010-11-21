@@ -433,16 +433,16 @@ void SvxStyleBox_Impl::Select()
 
             Sequence< PropertyValue > aArgs( 2 );
             aArgs[0].Value  = makeAny( OUString( aSelEntry ) );
-            aArgs[1].Name   = OUString::createFromAscii( "Family" );
+            aArgs[1].Name   = OUString(RTL_CONSTASCII_USTRINGPARAM("Family"));
             aArgs[1].Value  = makeAny( sal_Int16( eStyleFamily ));
             if( bCreateNew )
             {
-                aArgs[0].Name   = OUString::createFromAscii( "Param" );
+                aArgs[0].Name   = OUString(RTL_CONSTASCII_USTRINGPARAM("Param"));
                 SfxToolBoxControl::Dispatch( m_xDispatchProvider, String::CreateFromAscii(".uno:StyleNewByExample"), aArgs);
             }
             else
             {
-                aArgs[0].Name   = OUString::createFromAscii( "Template" );
+                aArgs[0].Name   = OUString(RTL_CONSTASCII_USTRINGPARAM("Template"));
                 SfxToolBoxControl::Dispatch( m_xDispatchProvider, m_aCommand, aArgs );
             }
         }

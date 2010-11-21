@@ -228,7 +228,7 @@ sal_Bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInpu
             aParserInput.aInputStream = xInputStream;
 
             // get parser
-            Reference< xml::sax::XParser > xParser( xServiceFactory->createInstance( OUString::createFromAscii("com.sun.star.xml.sax.Parser") ), UNO_QUERY );
+            Reference< xml::sax::XParser > xParser( xServiceFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser")) ), UNO_QUERY );
             DBG_ASSERT( xParser.is(), "Can't create parser" );
 
             // prepare filter arguments

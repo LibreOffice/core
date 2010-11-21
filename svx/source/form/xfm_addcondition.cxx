@@ -72,7 +72,7 @@ namespace svxform
     //--------------------------------------------------------------------
     ::rtl::OUString SAL_CALL OAddConditionDialog_GetImplementationName()
     {
-        return ::rtl::OUString::createFromAscii( "org.openoffice.comp.svx.OAddConditionDialog" );
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.svx.OAddConditionDialog"));
     }
 
     //====================================================================
