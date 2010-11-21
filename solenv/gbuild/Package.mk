@@ -53,7 +53,7 @@ $(call gb_Package_get_target,%) :
 define gb_Package_Package
 gb_TARGET_PACKAGE_$(1)_SOURCEDIR := $(2)
 $(call gb_Package_get_clean_target,$(1)) : FILES := $(call gb_Package_get_target,$(1))
-$(call gb_Module_register_target,$(call gb_Package_get_target,$(1)),$(call gb_Package_get_clean_target,$(1)))
+$$(eval $$(call gb_Module_register_target,$(call gb_Package_get_target,$(1)),$(call gb_Package_get_clean_target,$(1))))
 
 endef
 

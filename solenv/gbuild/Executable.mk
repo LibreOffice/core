@@ -54,7 +54,7 @@ $(call gb_LinkTarget_set_targettype_flags,$(2),$(gb_Executable_TARGETTYPEFLAGS) 
 $(call gb_Executable_get_target,$(1)) : $(call gb_LinkTarget_get_target,$(2))
 $(call gb_Executable_get_clean_target,$(1)) : $(call gb_LinkTarget_get_clean_target,$(2))
 $(call gb_Executable_Executable_platform,$(1),$(2))
-$(call gb_Module_register_target,$(call gb_Executable_get_target,$(1)),$(call gb_Executable_get_clean_target,$(1)))
+$$(eval $$(call gb_Module_register_target,$(call gb_Executable_get_target,$(1)),$(call gb_Executable_get_clean_target,$(1))))
 $(call gb_Deliver_add_deliverable,$(call gb_Executable_get_target,$(1)),$(call gb_LinkTarget_get_target,$(2)))
 
 endef

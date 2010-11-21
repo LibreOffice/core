@@ -68,11 +68,22 @@ uninstall : clean
 define gb_Module_Module
 gb_Module_ALLMODULES += $(1)
 gb_Module_MODULELOCATIONS += $(1):$(dir $(realpath $(lastword $(MAKEFILE_LIST))))
-$(call gb_Module_register_target,$(call gb_Module_get_target,$(1)),$(call gb_Module_get_clean_target,$(1)))
+$$(eval $$(call gb_Module_register_target,$(call gb_Module_get_target,$(1)),$(call gb_Module_get_clean_target,$(1))))
 
 endef
 
-# include the file and pop one target from each stack
+# This is called inside the included file and pushes one target on each stack.
+# This has to be called with full late evaluation ($$(eval $$(call ))) and
+# should never be inlined ($(call )) as the calls defining it might be sourced
+# before gb_Module.
+define gb_Module_register_target
+gb_Module_TARGETSTACK := $(1) $(gb_Module_TARGETSTACK)
+gb_Module_CLEANTARGETSTACK := $(2) $(gb_Module_CLEANTARGETSTACK)
+
+endef
+
+# Here we include the file (in it there will be a call to
+# gb_Module_register_target) and pop one target from each stack afterwards.
 define gb_Module_add_target
 include $(patsubst $(1):%,%,$(filter $(1):%,$(gb_Module_MODULELOCATIONS)))/$(2).mk
 $(call gb_Module_get_target,$(1)) : $$(firstword $$(gb_Module_TARGETSTACK))

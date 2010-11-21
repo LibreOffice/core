@@ -72,7 +72,7 @@ $(call gb_LinkTarget_set_defs,$(2),\
 )
 $(call gb_Library_get_target,$(1)) : $(call gb_LinkTarget_get_target,$(2))
 $(call gb_Library_Library_platform,$(1),$(2),$(gb_Library_DLLDIR)/$(call gb_Library_get_dllname,$(1)))
-$(call gb_Module_register_target,$(call gb_Library_get_target,$(1)),$(call gb_Library_get_clean_target,$(1)))
+$$(eval $$(call gb_Module_register_target,$(call gb_Library_get_target,$(1)),$(call gb_Library_get_clean_target,$(1))))
 $(call gb_Deliver_add_deliverable,$(call gb_Library_get_target,$(1)),$(call gb_LinkTarget_get_target,$(2)))
 
 endef
