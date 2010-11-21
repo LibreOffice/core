@@ -2,7 +2,7 @@
 #
 # Wrapper for git to handle more subdirs at the same time
 #
-
+set -x
 # no params, no action
 if [ "$#" -eq "0" ] ; then
     git
@@ -187,7 +187,8 @@ for REPO in $DIRS ; do
                     fi
                     ;;
                 clone)
-                    EXTRA="$(git config remote.origin.url|sed 's|/[^/]\+$||')/${REPO}"
+                    EXTRA="$(git config remote.origin.url)"
+		    EXTRA=${EXTRA/bootstrap/${REPO}}
                     ;;
             esac
 
