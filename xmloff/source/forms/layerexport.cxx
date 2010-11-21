@@ -87,7 +87,7 @@ namespace xmloff
     //---------------------------------------------------------------------
     const ::rtl::OUString& OFormLayerXMLExport_Impl::getControlNumberStyleNamePrefix()
     {
-        static const ::rtl::OUString s_sControlNumberStyleNamePrefix = ::rtl::OUString::createFromAscii("C");
+        static const ::rtl::OUString s_sControlNumberStyleNamePrefix(RTL_CONSTASCII_USTRINGPARAM("C"));
         return s_sControlNumberStyleNamePrefix;
     }
 
@@ -776,8 +776,8 @@ namespace xmloff
                 // create it for en-US (does not really matter, as we will specify a locale for every
                 // concrete language to use)
                 Sequence< Any > aSupplierArgs(1);
-                aSupplierArgs[0] <<= Locale (   ::rtl::OUString::createFromAscii("en"),
-                                                ::rtl::OUString::createFromAscii("US"),
+                aSupplierArgs[0] <<= Locale (   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en")),
+                                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("US")),
                                                 ::rtl::OUString()
                                             );
                 // #110680#

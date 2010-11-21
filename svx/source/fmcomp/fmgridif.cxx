@@ -802,7 +802,7 @@ void SAL_CALL FmXGridControl::setDesignMode(sal_Bool bOn) throw( RuntimeExceptio
 
         // prepare firing an event
         aModeChangeEvent.Source = *this;
-        aModeChangeEvent.NewMode = ::rtl::OUString::createFromAscii( mbDesignMode ? "design" : "alive" );
+        aModeChangeEvent.NewMode = mbDesignMode ? ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "design" )) : ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "alive" ));
     }
 
     // --- </mutex_lock> ---
