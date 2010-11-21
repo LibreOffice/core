@@ -221,7 +221,7 @@ void SQLExceptionInfo::prepend( const ::rtl::OUString& _rErrorMessage, const sal
     SQLException aException;
     aException.Message = _rErrorMessage;
     aException.ErrorCode = _nErrorCode;
-    aException.SQLState = ::rtl::OUString::createFromAscii( _pAsciiSQLState ? _pAsciiSQLState : "S1000" );
+    aException.SQLState = _pAsciiSQLState ? ::rtl::OUString::createFromAscii( _pAsciiSQLState ) : ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "S1000" ));
     aException.NextException = m_aContent;
     m_aContent <<= aException;
 
