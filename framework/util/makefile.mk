@@ -338,8 +338,14 @@ SHL4OBJS=       \
                 $(SLO)$/windowcommanddispatch.obj   \
                 $(SLO)$/windowstateconfiguration.obj \
                 $(SLO)$/windowcontentfactorymanager.obj \
-                $(SLO)$/startmoduledispatcher.obj
-
+                $(SLO)$/startmoduledispatcher.obj	\
+                $(SLO)$/modelwinservice.obj			\
+                $(SLO)$/panelmanager.obj			\
+                $(SLO)$/panel.obj					\
+                $(SLO)$/helpers.obj					\
+                $(SLO)$/uielement.obj				\
+                $(SLO)$/toolbarlayoutmanager.obj
+ 
 SHL4STDLIBS=    \
                 $(FWILIB)                           \
                 $(FWELIB)                           \

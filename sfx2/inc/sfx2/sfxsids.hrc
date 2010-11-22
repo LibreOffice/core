@@ -93,6 +93,8 @@
 #define SID_MAIL_PRIORITY                   (SID_SFX_START + 337)
 
 #define SID_MAIL_ATTACH_FILE                (SID_SFX_START + 375)
+#define SID_MAIL_PREPAREEXPORT              (SID_SFX_START + 385)
+#define SID_MAIL_NEEDS_PREPAREEXPORT        (SID_SFX_START + 386)
 
 #define SID_MAIL_EXPORT_FINISHED            (SID_SFX_START + 388)
 #define SID_WEBHTML                         (SID_SFX_START + 393)
@@ -191,7 +193,7 @@
 #define SID_EXPLORER_FILEPROPS_END          (SID_SFX_START + 1399)
 
 #define ID_FILETP_START                     SID_EXPLORER_FILEPROPS_START
-#define ID_FILETP_READONLY                  (ID_FILETP_START + 0)
+#define ID_FILETP_READONLY                      (ID_FILETP_START + 0)
 #define ID_FILETP_TITLE                     (ID_FILETP_START + 1)
 
 #define SID_EXPLORER_PROPS_START            (SID_SFX_START + 1410)
@@ -225,9 +227,9 @@
 #define SID_OFFICE_PLK                      (SID_SFX_START + 1601)
 #define SID_OFFICE_PALK                     (SID_SFX_START + 1604)
 #define SID_CHECK_KEY                       (SID_SFX_START + 1605)
-#define SID_OFFICE_PRIVATE_USE              (SID_SFX_START + 1606)
-#define SID_OFFICE_COMMERCIAL_USE           (SID_SFX_START + 1607)
-#define SID_OFFICE_CUSTOMERNUMBER           (SID_SFX_START + 1608)
+#define SID_OFFICE_PRIVATE_USE                  (SID_SFX_START + 1606)
+#define SID_OFFICE_COMMERCIAL_USE               (SID_SFX_START + 1607)
+#define SID_OFFICE_CUSTOMERNUMBER               (SID_SFX_START + 1608)
 #define SID_OFFICE_INVALIDATE_TITLE         (SID_SFX_START + 1609)
 #define SID_OFFICE_CHECK_PLZ                (SID_SFX_START + 1610)
 #define SID_INTERNET_SEARCH                 (SID_SFX_START + 1611)
@@ -240,11 +242,11 @@
 #define SID_NEW_MSG_PARENT                  (SID_SFX_START + 1622)
 
 
-#define SID_PGP_ENCODE                      (SID_SFX_START + 1625)
-#define SID_PGP_DECODE                      (SID_SFX_START + 1626)
-#define SID_TIPWINDOW                       (SID_SFX_START + 1632)
+#define SID_PGP_ENCODE                          (SID_SFX_START + 1625)
+#define SID_PGP_DECODE                          (SID_SFX_START + 1626)
+#define SID_TIPWINDOW                           (SID_SFX_START + 1632)
 #define SID_CHARSET                         (SID_SFX_START + 1633)
-#define SID_OVERWRITE                       (SID_SFX_START + 1634)
+#define SID_OVERWRITE                           (SID_SFX_START + 1634)
 #define SID_RENAME                          (SID_SFX_START + 1653)
 #define SID_PARTWIN                         (SID_SFX_START + 1640)
 #define SID_CRASH                           (SID_SFX_START + 1645)
@@ -275,7 +277,7 @@
 #define SID_SHOW_IME_STATUS_WINDOW          (SID_SFX_START + 1680)
 #define SID_UPDATE_CONFIG                   (SID_SFX_START + 1681)
 #define SID_VIEWONLY                        (SID_SFX_START + 1682)
-#define SID_REPAIRPACKAGE                   (SID_SFX_START + 1683)
+#define SID_REPAIRPACKAGE                       (SID_SFX_START + 1683)
 #define SID_ADDONHELP                       (SID_SFX_START + 1684)
 #define SID_OBJECTSHELL                     (SID_SFX_START + 1685)
 #define SID_MINIMIZED                       (SID_SFX_START + 1687)
@@ -309,7 +311,9 @@
 #define SID_DEFAULTFILENAME                 (SID_SFX_START + 1717)
 #define SID_MODIFYPASSWORDINFO              (SID_SFX_START + 1718)
 #define SID_RECOMMENDREADONLY               (SID_SFX_START + 1719)
-#define SID_SFX_free_START                  (SID_SFX_START + 1720)
+#define SID_SUGGESTEDSAVEASDIR              (SID_SFX_START + 1720)
+#define SID_SUGGESTEDSAVEASNAME             (SID_SFX_START + 1721)
+#define SID_SFX_free_START                  (SID_SFX_START + 1722)
 #define SID_SFX_free_END                    (SID_SFX_START + 3999)
 
 #define SID_OPEN_NEW_VIEW                   (SID_SFX_START + 520)
@@ -492,7 +496,7 @@
 #define SID_PASTE                           (SID_SFX_START + 712)
 
 // steht unter diesem Wert in chaos/cntids.hrc!!!
-//#define SID_DELETE            (SID_SFX_START + 713)
+//#define SID_DELETE                (SID_SFX_START + 713)
 
 #define SID_BACKSPACE                       (SID_SFX_START + 714)
 #define SID_FORMATPAINTBRUSH                (SID_SFX_START + 715)
@@ -642,7 +646,7 @@
 #define SID_OPT_HELP_PATH                   (SID_SFX_START + 1560)
 #define SID_OPT_BOOKMARKS_PATH              (SID_SFX_START + 1561)
 #define SID_OPT_GALLERY_PATH                (SID_SFX_START + 1562)
-#define SID_OPT_NEWDOC_PATH                 (SID_SFX_START + 1563)
+#define SID_OPT_NEWDOC_PATH                     (SID_SFX_START + 1563)
 #define SID_OPT_AGENTS_PATH                 (SID_SFX_START + 1564)
 #define SID_OPT_AUTOPILOT_PATH              (SID_SFX_START + 1565)
 #define SID_OPT_EXPLORER_PATH               (SID_SFX_START + 1566)
@@ -736,9 +740,9 @@
 #define SID_ATTR_AUTOHELPAGENT          (SID_OPTIONS_START + 67)
 #define SID_AUTOHELPAGENT_RESET         (SID_OPTIONS_START + 68)
 #define SID_HELPAGENT_TIMEOUT           (SID_OPTIONS_START + 93)
-#define SID_ATTR_WELCOMESCREEN          (SID_OPTIONS_START + 81)
+#define SID_ATTR_WELCOMESCREEN              (SID_OPTIONS_START + 81)
 #define SID_WELCOMESCREEN_RESET         (SID_OPTIONS_START + 82)
-#define SID_RESTORE_EXPAND_STATE        (SID_OPTIONS_START + 83)
+#define SID_RESTORE_EXPAND_STATE            (SID_OPTIONS_START + 83)
 #define SID_ATTR_QUICKLAUNCHER          (SID_OPTIONS_START + 74)
 #define SID_ATTR_YEAR2000               (SID_OPTIONS_START + 87)
 #define SID_ATTR_ALLOWFOLDERWEBVIEW     (SID_OPTIONS_START + 92)
@@ -810,7 +814,7 @@
 
 #define SID_INET_CHANNELS_ONOFF         (SID_OPTIONS_START + 64)
 
-#define SID_INET_COOKIESHANDLE          (SID_OPTIONS_START + 69)
+#define SID_INET_COOKIESHANDLE              (SID_OPTIONS_START + 69)
 
 #define SID_INET_CACHEJS                (SID_OPTIONS_START + 70)
 #define SID_INET_CACHEEXPIRED           (SID_OPTIONS_START + 71)
