@@ -181,7 +181,7 @@ void JobData::setAlias( const ::rtl::OUString& sAlias )
 
     // try to open the configuration set of this job directly and get a property access to it
     // We open it readonly here
-    ::rtl::OUString sKey(RTL_CONSTASCII_USTRINGPARAM(JOBCFG_ROOT));
+    ::rtl::OUString sKey(::rtl::OUString::createFromAscii(JOBCFG_ROOT));
     sKey += ::utl::wrapConfigurationElementName(m_sAlias);
 
     ConfigAccess aConfig(m_xSMGR, sKey);
@@ -198,11 +198,11 @@ void JobData::setAlias( const ::rtl::OUString& sAlias )
         css::uno::Any aValue;
 
         // read uno implementation name
-        aValue   = xJobProperties->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(JOBCFG_PROP_SERVICE)));
+        aValue   = xJobProperties->getPropertyValue(::rtl::OUString::createFromAscii(JOBCFG_PROP_SERVICE));
         aValue >>= m_sService;
 
         // read whole argument list
-        aValue = xJobProperties->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(JOBCFG_PROP_ARGUMENTS)));
+        aValue = xJobProperties->getPropertyValue(::rtl::OUString::createFromAscii(JOBCFG_PROP_ARGUMENTS));
         css::uno::Reference< css::container::XNameAccess > xArgumentList;
         if (
             (aValue >>= xArgumentList)  &&
@@ -311,7 +311,7 @@ void JobData::setJobConfig( const css::uno::Sequence< css::beans::NamedValue >& 
         // It doesn't matter if this config object was already opened before.
         // It doesn nothing here then ... or it change the mode automaticly, if
         // it was opened using another one before.
-        ::rtl::OUString sKey(RTL_CONSTASCII_USTRINGPARAM(JOBCFG_ROOT));
+        ::rtl::OUString sKey(::rtl::OUString::createFromAscii(JOBCFG_ROOT));
         sKey += ::utl::wrapConfigurationElementName(m_sAlias);
 
         ConfigAccess aConfig(m_xSMGR, sKey);
@@ -479,11 +479,11 @@ css::uno::Sequence< css::beans::NamedValue > JobData::getConfig() const
         lConfig.realloc(2);
         sal_Int32 i = 0;
 
-        lConfig[i].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(PROP_ALIAS));
+        lConfig[i].Name = ::rtl::OUString::createFromAscii(PROP_ALIAS);
         lConfig[i].Value <<= m_sAlias;
         ++i;
 
-        lConfig[i].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(PROP_SERVICE));
+        lConfig[i].Name = ::rtl::OUString::createFromAscii(PROP_SERVICE);
         lConfig[i].Value <<= m_sService;
         ++i;
     }
@@ -554,7 +554,7 @@ void JobData::disableJob()
         // Convert and write the user timestamp to the configuration.
         css::uno::Any aValue;
         aValue <<= Converter::convert_DateTime2ISO8601(DateTime());
-        xPropSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(EVENTCFG_PROP_USERTIME)), aValue);
+        xPropSet->setPropertyValue(::rtl::OUString::createFromAscii(EVENTCFG_PROP_USERTIME), aValue);
     }
 
     aConfig.close();
