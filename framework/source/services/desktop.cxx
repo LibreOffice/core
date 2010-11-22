@@ -83,6 +83,7 @@
 //_________________________________________________________________________________________________________________
 //  includes of other projects
 //_________________________________________________________________________________________________________________
+#include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/factory.hxx>
@@ -264,6 +265,7 @@ Desktop::Desktop( const css::uno::Reference< css::lang::XMultiServiceFactory >& 
         ,   m_xSWThreadManager      (                                               )
         ,   m_xSfxTerminator        (                                               )
         ,   m_xTitleNumberGenerator (                                               )
+        ,   m_bTerminating(false)
 {
     // Safe impossible cases
     // We don't accept all incoming parameter.
@@ -290,6 +292,39 @@ Desktop::~Desktop()
 //=============================================================================
 sal_Bool SAL_CALL Desktop::terminate()
     throw( css::uno::RuntimeException )
+{
+    bool bTerminating(false);
+    {
+        WriteGuard aGuard(m_aLock);
+        bTerminating = m_bTerminating;
+        m_bTerminating = true;
+    }
+    if (bTerminating)
+        return false;
+
+    css::uno::Any aException;
+    sal_Bool bTerminate(false);
+    try
+    {
+        bTerminate = impl_terminate();
+    }
+    catch (const css::uno::RuntimeException& rEx)
+    {
+        aException <<= rEx;
+    }
+
+    {
+        WriteGuard aGuard(m_aLock);
+        m_bTerminating = false;
+    }
+
+    if (aException.hasValue())
+        cppu::throwException(aException);
+
+    return bTerminate;
+}
+
+sal_Bool Desktop::impl_terminate()
 {
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
