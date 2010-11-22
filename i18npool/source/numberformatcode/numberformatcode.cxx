@@ -283,7 +283,7 @@ NumberFormatCodeMapper::createLocaleDataObject() {
 NumberFormatCodeMapper::getImplementationName(void)
                 throw( ::com::sun::star::uno::RuntimeException )
 {
-    return ::rtl::OUString::createFromAscii("com.sun.star.i18n.NumberFormatCodeMapper");
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.NumberFormatCodeMapper"));
 }
 
 const sal_Char cNumFormat[] = "com.sun.star.i18n.NumberFormatMapper";

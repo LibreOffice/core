@@ -158,7 +158,7 @@ TransliterationImpl::TransliterationImpl(const Reference <XMultiServiceFactory>&
     if ( xMSF.is() )
     {
         Reference < XInterface > xI=
-                xMSF->createInstance(OUString::createFromAscii("com.sun.star.i18n.LocaleData"));
+                xMSF->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.LocaleData")));
         if ( xI.is() ) {
             Any x = xI->queryInterface( ::getCppuType( (const uno::Reference< i18n::XLocaleData >*)0) );
             x >>= localedata;
@@ -180,7 +180,7 @@ TransliterationImpl::getName() throw(RuntimeException)
     if (numCascade == 1 && bodyCascade[0].is())
         return bodyCascade[0]->getName();
     if (numCascade < 1)
-        return ( OUString::createFromAscii("Not Loaded"));
+        return ( OUString(RTL_CONSTASCII_USTRINGPARAM("Not Loaded")));
     throw ERROR;
 }
 

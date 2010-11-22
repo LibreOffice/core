@@ -1111,7 +1111,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
             }
         }
         if (ref_name.getLength() > 0 && daysNode == NULL) {
-            of.writeParameter("dayRef", OUString::createFromAscii("ref"), i);
+            of.writeParameter("dayRef", OUString(RTL_CONSTASCII_USTRINGPARAM("ref")), i);
             of.writeParameter("dayRefName", ref_name, i);
             nbOfDays[i] = 0;
         } else {
@@ -1143,7 +1143,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
             }
         }
         if (ref_name.getLength() > 0 && monthsNode == NULL) {
-            of.writeParameter("monthRef", OUString::createFromAscii("ref"), i);
+            of.writeParameter("monthRef", OUString(RTL_CONSTASCII_USTRINGPARAM("ref")), i);
             of.writeParameter("monthRefName", ref_name, i);
             nbOfMonths[i] = 0;
         } else {
@@ -1175,7 +1175,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
             }
         }
         if (ref_name.getLength() > 0 && erasNode == NULL) {
-            of.writeParameter("eraRef", OUString::createFromAscii("ref"), i);
+            of.writeParameter("eraRef", OUString(RTL_CONSTASCII_USTRINGPARAM("ref")), i);
             of.writeParameter("eraRefName", ref_name, i);
             nbOfEras[i] = 0;
         } else {

@@ -484,7 +484,7 @@ Sequence< CalendarItem > &LocaleData::getCalendarItemByName(const OUString& name
             // Refered locale does not found, return name for en_US locale.
             if (index == cals.getLength()) {
                 cals = getAllCalendars(
-                        Locale(OUString::createFromAscii("en"), OUString::createFromAscii("US"), OUString()));
+                        Locale(OUString(RTL_CONSTASCII_USTRINGPARAM("en")), OUString(RTL_CONSTASCII_USTRINGPARAM("US")), OUString()));
                 if (cals.getLength() > 0)
                     ref_cal = cals[0];
                 else
@@ -876,7 +876,7 @@ OUString SAL_CALL
 LocaleData::getIndexKeysByAlgorithm( const Locale& rLocale, const OUString& algorithm ) throw(RuntimeException)
 {
         sal_Unicode **indexArray = getIndexArrayForAlgorithm(rLocale, algorithm);
-        return indexArray ? OUString::createFromAscii("0-9")+OUString(indexArray[2]) : OUString();
+        return indexArray ? OUString(RTL_CONSTASCII_USTRINGPARAM("0-9"))+OUString(indexArray[2]) : OUString();
 }
 
 OUString SAL_CALL
@@ -1296,8 +1296,8 @@ oslGenericFunction SAL_CALL LocaleData::getFunctionSymbol( const Locale& rLocale
         }
 
         oslGenericFunction pSymbol = 0;
-        static OUString tw(OUString::createFromAscii("TW"));
-        static OUString en_US(OUString::createFromAscii("en_US"));
+        static OUString tw(RTL_CONSTASCII_USTRINGPARAM("TW"));
+        static OUString en_US(RTL_CONSTASCII_USTRINGPARAM("en_US"));
 
         sal_Int32 l = rLocale.Language.getLength();
         sal_Int32 c = rLocale.Country.getLength();

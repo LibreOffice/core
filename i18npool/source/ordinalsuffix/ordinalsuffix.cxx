@@ -59,22 +59,22 @@ static OUString getOrdinalSuffixEn( sal_Int32 nNumber )
     switch( labs( nNumber ) % 100 )
     {
         case 11: case 12: case 13:
-            retValue = OUString::createFromAscii( "th" );
+            retValue = OUString(RTL_CONSTASCII_USTRINGPARAM("th"));
             break;
         default:
             switch( nNumber % 10 )
             {
                 case 1:
-                    retValue = OUString::createFromAscii( "st" );
+                    retValue = OUString(RTL_CONSTASCII_USTRINGPARAM("st"));
                     break;
                 case 2:
-                    retValue = OUString::createFromAscii( "nd" );
+                    retValue = OUString(RTL_CONSTASCII_USTRINGPARAM("nd"));
                     break;
                 case 3:
-                    retValue = OUString::createFromAscii( "rd" );
+                    retValue = OUString(RTL_CONSTASCII_USTRINGPARAM("rd"));
                     break;
                 default:
-                    retValue = OUString::createFromAscii( "th" );
+                    retValue = OUString(RTL_CONSTASCII_USTRINGPARAM("th"));
                     break;
             }
             break;

@@ -49,7 +49,7 @@ TextConversion_zh::TextConversion_zh( const Reference < XMultiServiceFactory >& 
 {
     Reference < XInterface > xI;
     xI = xMSF->createInstance(
-        OUString::createFromAscii( "com.sun.star.linguistic2.ConversionDictionaryList" ));
+        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.linguistic2.ConversionDictionaryList")));
     if ( xI.is() )
         xI->queryInterface( getCppuType((const Reference< XConversionDictionaryList>*)0) ) >>= xCDL;
 

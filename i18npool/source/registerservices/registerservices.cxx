@@ -596,7 +596,7 @@ sal_Bool SAL_CALL component_writeInfo( void* /*_pServiceManager*/, void* _pRegis
             xNewKey = pRegistryKey->createKey(
                     ::rtl::OUString::createFromAscii( pArr->pImplementationNm )  );
             xNewKey = xNewKey->createKey(
-                    ::rtl::OUString::createFromAscii( "/UNO/SERVICES" ) );
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES")) );
             xNewKey->createKey(
                     ::rtl::OUString::createFromAscii( pArr->pServiceNm ) );
         }

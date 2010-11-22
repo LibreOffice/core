@@ -66,10 +66,10 @@ IndexEntrySupplier_asian::getIndexCharacter( const OUString& rIndexEntry,
     sal_Int32 i=0;
     sal_uInt32 ch = rIndexEntry.iterateCodePoints(&i, 0);
     if (hModule) {
-        OUString get=OUString::createFromAscii("get_indexdata_");
+        OUString get(RTL_CONSTASCII_USTRINGPARAM("get_indexdata_"));
         sal_uInt16** (*func)(sal_Int16*)=NULL;
-        if (rLocale.Language.equalsAscii("zh") && OUString::createFromAscii("TW HK MO").indexOf(rLocale.Country) >= 0)
-            func=(sal_uInt16** (*)(sal_Int16*))osl_getFunctionSymbol(hModule, (get+rLocale.Language+OUString::createFromAscii("_TW_")+rAlgorithm).pData);
+        if (rLocale.Language.equalsAscii("zh") && OUString(RTL_CONSTASCII_USTRINGPARAM("TW HK MO")).indexOf(rLocale.Country) >= 0)
+            func=(sal_uInt16** (*)(sal_Int16*))osl_getFunctionSymbol(hModule, (get+rLocale.Language+OUString(RTL_CONSTASCII_USTRINGPARAM("_TW_"))+rAlgorithm).pData);
         if (!func)
             func=(sal_uInt16** (*)(sal_Int16*))osl_getFunctionSymbol(hModule, (get+rLocale.Language+OUString('_')+rAlgorithm).pData);
         if (func) {
@@ -121,7 +121,7 @@ IndexEntrySupplier_asian::getPhoneticCandidate( const OUString& rIndexEntry,
         sal_uInt16 **(*func)(sal_Int16*)=NULL;
         const sal_Char *func_name=NULL;
         if (rLocale.Language.equalsAscii("zh"))
-            func_name=(OUString::createFromAscii("TW HK MO").indexOf(rLocale.Country) >= 0) ?  "get_zh_zhuyin" : "get_zh_pinyin";
+            func_name=(OUString(RTL_CONSTASCII_USTRINGPARAM("TW HK MO")).indexOf(rLocale.Country) >= 0) ?  "get_zh_zhuyin" : "get_zh_pinyin";
         else if (rLocale.Language.equalsAscii("ko"))
             func_name="get_ko_phonetic";
         if (func_name)
