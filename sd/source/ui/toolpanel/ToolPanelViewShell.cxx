@@ -512,13 +512,18 @@ ToolPanelViewShell::ToolPanelViewShell( SfxViewFrame* pFrame, ViewShellBase& rVi
 
     SetName( String( RTL_CONSTASCII_USTRINGPARAM( "ToolPanelViewShell" ) ) );
 
-    // Some recent changes to the toolpanel make it necessary to create the
-    // accessibility object now.  Creating it on demand would lead to a
-    // pointer cycle in the tree of accessibility objects and would lead
-    // e.g. the accerciser AT tool into an infinite loop.
-    // It would be nice to get rid of this workaround in the future.
+    // enforce the creation of the Accessible object here.
+    // In some not-always-to-reproduce situations, creating the accessible on demand only leads to some
+    // cycliy parenthood references between the involved objects, which make some AT tools (accerciser, in particular)
+    // loop (which is /not/ a bug in the tool, of course).
+    // However, since those situations were not reproducible anymore, we deliberately leave the Accessible creation
+    // (which originally was intended as a workaround) herein. Better to be safe ...
+    // Note that this is not a performance problem: The implementation of the ToolPanelDeck's Accessible
+    // is separated from the implementation of its AccessibleContext (which even is in a separate library) - we only
+    // create the former here, the latter is still created on demand, when somebody requests it.
+    // #i113671# / 2010-09-17 / frank.schoenheit@oracle.com
     if (mpContentWindow.get())
-        mpContentWindow->SetAccessible(mpImpl->CreateAccessible(*mpContentWindow));
+        mpContentWindow->GetAccessible( TRUE );
 
     // For accessibility we have to shortly hide the content window.  This
     // triggers the construction of a new accessibility object for the new
@@ -629,12 +634,7 @@ DockingWindow* ToolPanelViewShell::GetDockingWindow()
 Reference< XAccessible > ToolPanelViewShell::CreateAccessibleDocumentView( ::sd::Window* i_pWindow )
 {
     ENSURE_OR_RETURN( i_pWindow, "ToolPanelViewShell::CreateAccessibleDocumentView: illegal window!", NULL );
-    // As said above, we have to create the accessibility object
-    // (unconditionally) in the constructor, not here on demand, or
-    // otherwise we would create a cycle in the tree of accessible objects
-    // which could lead to infinite loops in AT tools.
-    // return mpImpl->CreateAccessible( *i_pWindow );
-    return Reference<XAccessible>();
+    return mpImpl->CreateAccessible( *i_pWindow );
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
