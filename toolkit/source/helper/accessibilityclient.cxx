@@ -212,7 +212,7 @@ namespace toolkit
                 if ( s_hAccessibleImplementationModule != NULL )
                 {
                     const ::rtl::OUString sFactoryCreationFunc =
-                        ::rtl::OUString::createFromAscii( "getStandardAccessibleFactory" );
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("getStandardAccessibleFactory"));
                     s_pAccessibleFactoryFunc = (GetStandardAccComponentFactory)
                         osl_getFunctionSymbol( s_hAccessibleImplementationModule, sFactoryCreationFunc.pData );
 

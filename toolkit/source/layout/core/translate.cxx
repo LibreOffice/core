@@ -54,19 +54,19 @@ static std::list<OUString>
 getLocaleSubdirList( lang::Locale const& rLocale )
 {
     std::list<OUString> aSubdirs;
-    aSubdirs.push_front( OUString::createFromAscii( "." ) );
-    aSubdirs.push_front( OUString::createFromAscii( "en-US" ) );
+    aSubdirs.push_front( OUString(RTL_CONSTASCII_USTRINGPARAM(".")) );
+    aSubdirs.push_front( OUString(RTL_CONSTASCII_USTRINGPARAM("en-US")) );
     if ( rLocale.Language.getLength() )
         aSubdirs.push_front( rLocale.Language );
     if ( rLocale.Country.getLength() )
     {
         OUString aLocaleCountry = rLocale.Language
-            + OUString::createFromAscii( "-" )
+            + OUString(RTL_CONSTASCII_USTRINGPARAM("-"))
             + rLocale.Country;
         aSubdirs.push_front( aLocaleCountry );
         if ( rLocale.Variant.getLength() )
             aSubdirs.push_front( aLocaleCountry
-                                 + OUString::createFromAscii( "." )
+                                 + OUString(RTL_CONSTASCII_USTRINGPARAM("."))
                                  + rLocale.Variant );
     }
     return aSubdirs;
@@ -84,7 +84,7 @@ static OUString
 getFirstExisting( OUString const& aDir, std::list<OUString> const& aSubDirs,
                   OUString const& aXMLName )
 {
-    static OUString const aSlash = OUString::createFromAscii( "/" );
+    static OUString const aSlash(RTL_CONSTASCII_USTRINGPARAM("/"));
     String aResult;
     for ( std::list<OUString>::const_iterator i = aSubDirs.begin();
           i != aSubDirs.end(); i++ )
@@ -118,7 +118,7 @@ readRightTranslation( OUString const& aXMLName )
     {
         OUString aShareUrl;
         Bootstrap::locateSharedData( aShareUrl );
-        OUString aXMLUrl = aShareUrl + OUString::createFromAscii( "/layout" );
+        OUString aXMLUrl = aShareUrl + OUString(RTL_CONSTASCII_USTRINGPARAM("/layout"));
         String aXMLDir;
         LocalFileHelper::ConvertURLToPhysicalName( aXMLUrl, aXMLDir );
         aXMLFile = getFirstExisting( aXMLDir, aSubdirs, aXMLName );

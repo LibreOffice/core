@@ -1002,14 +1002,14 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
             break;
             case WINDOW_CONTROL:
                 if ( rDescriptor.WindowServiceName.equalsIgnoreAsciiCase(
-                        ::rtl::OUString::createFromAscii("simpleanimation") ) )
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("simpleanimation")) ) )
                 {
                     nWinBits |= WB_SCALE;
                     pNewWindow = new FixedImage( pParent, nWinBits );
                     *ppNewComp = new ::toolkit::XSimpleAnimation;
                 }
                 else if ( rDescriptor.WindowServiceName.equalsIgnoreAsciiCase(
-                        ::rtl::OUString::createFromAscii("throbber") ) )
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("throbber")) ) )
                 {
                     nWinBits |= WB_SCALE;
                     pNewWindow = new FixedImage( pParent, nWinBits );
@@ -1328,14 +1328,14 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
             {
                 // remember clipboard here
                 mxClipboard = ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard > (
-                    xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboard" ) ), ::com::sun::star::uno::UNO_QUERY );
+                    xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.clipboard.SystemClipboard")) ), ::com::sun::star::uno::UNO_QUERY );
             }
         }
 
         return mxClipboard;
     }
 
-    else if( clipboardName.equals( ::rtl::OUString::createFromAscii("Selection") ) )
+    else if( clipboardName.equals( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Selection")) ) )
     {
         return mxSelection;
     }
@@ -1346,7 +1346,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
 // XServiceInfo
 ::rtl::OUString VCLXToolkit::getImplementationName() throw(::com::sun::star::uno::RuntimeException)
 {
-    return rtl::OUString::createFromAscii( "stardiv.Toolkit.VCLXToolkit" );
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("stardiv.Toolkit.VCLXToolkit"));
 }
 
 sal_Bool VCLXToolkit::supportsService( const ::rtl::OUString& rServiceName ) throw(::com::sun::star::uno::RuntimeException)

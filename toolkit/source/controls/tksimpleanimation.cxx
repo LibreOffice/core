@@ -127,7 +127,7 @@ namespace toolkit
     //--------------------------------------------------------------------
     ::rtl::OUString UnoSimpleAnimationControl::GetComponentServiceName()
     {
-        return ::rtl::OUString::createFromAscii( "SimpleAnimation" );
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SimpleAnimation"));
     }
 
     //--------------------------------------------------------------------

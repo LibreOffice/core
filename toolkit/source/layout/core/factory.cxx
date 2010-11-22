@@ -88,14 +88,14 @@ sal_Bool SAL_CALL comp_Layout_component_writeInfo( void * /*serviceManager*/, vo
 // Component registration
 ::rtl::OUString SAL_CALL LayoutFactory::impl_staticGetImplementationName()
 {
-    return ::rtl::OUString::createFromAscii( "com.sun.star.comp.awt.Layout" );
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.awt.Layout"));
 }
 
 uno::Sequence< ::rtl::OUString > SAL_CALL LayoutFactory::impl_staticGetSupportedServiceNames()
 {
     uno::Sequence< ::rtl::OUString > aRet(2);
-    aRet[0] = ::rtl::OUString::createFromAscii("com.sun.star.awt.Layout");
-    aRet[1] = ::rtl::OUString::createFromAscii("com.sun.star.comp.awt.Layout");
+    aRet[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.Layout"));
+    aRet[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.awt.Layout"));
     return aRet;
 }
 

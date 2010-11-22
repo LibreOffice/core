@@ -148,7 +148,7 @@ UnoTreeControl::UnoTreeControl()
 
 OUString UnoTreeControl::GetComponentServiceName()
 {
-    return OUString::createFromAscii( "Tree" );
+    return OUString(RTL_CONSTASCII_USTRINGPARAM("Tree"));
 }
 
 // -------------------------------------------------------------------

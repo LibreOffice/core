@@ -174,9 +174,9 @@ WidgetElement::characters( OUString const& rChars )
         if ( xDialog.is() )
             xDialog->setTitle( rChars );
         else if ( xButton.is() )
-            mpWidget->setProperty( OUString::createFromAscii( "label" ), rChars );
+            mpWidget->setProperty( OUString(RTL_CONSTASCII_USTRINGPARAM("label")), rChars );
         else
-            mpWidget->setProperty( OUString::createFromAscii( "text" ), rChars );
+            mpWidget->setProperty( OUString(RTL_CONSTASCII_USTRINGPARAM("text")), rChars );
     }
 }
 // ---- ElementBase ----

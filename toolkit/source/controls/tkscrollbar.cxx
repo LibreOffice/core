@@ -104,7 +104,7 @@ namespace toolkit
 
     ::rtl::OUString UnoScrollBarControl::GetComponentServiceName()
     {
-        return ::rtl::OUString::createFromAscii( "ScrollBar" );
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScrollBar"));
     }
 
     // ::com::sun::star::uno::XInterface

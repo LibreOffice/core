@@ -586,7 +586,7 @@ Reference< XInterface > UnoControlDialogModel::createInstance( const ::rtl::OUSt
             Reference< XAggregation > xAgg( xCloneAccess, UNO_QUERY );
             if ( xAgg.is() )
             {
-                if ( xSI->supportsService( ::rtl::OUString::createFromAscii( "com.sun.star.awt.UnoControlModel" ) ) )
+                if ( xSI->supportsService( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlModel")) ) )
                 {
                     // release 3 of the 4 references we have to the object
                     xAgg.clear();
@@ -1227,8 +1227,8 @@ void UnoControlDialogModel::implUpdateGroupStructure()
 #if OSL_DEBUG_LEVEL > 1
                 Reference< XPropertySet > xModelProps( *pControlModels, UNO_QUERY );
                 ::rtl::OUString sLabel;
-                if ( xModelProps.is() && xModelProps->getPropertySetInfo().is() && xModelProps->getPropertySetInfo()->hasPropertyByName( ::rtl::OUString::createFromAscii( "Label" ) ) )
-                    xModelProps->getPropertyValue( ::rtl::OUString::createFromAscii( "Label" ) ) >>= sLabel;
+                if ( xModelProps.is() && xModelProps->getPropertySetInfo().is() && xModelProps->getPropertySetInfo()->hasPropertyByName( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Label")) ) )
+                    xModelProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Label")) ) >>= sLabel;
                 aCurrentGroupLabels.push_back( sLabel );
 #endif
             }
@@ -1251,8 +1251,8 @@ void UnoControlDialogModel::implUpdateGroupStructure()
 #if OSL_DEBUG_LEVEL > 1
                 Reference< XPropertySet > xModelProps( *pControlModels, UNO_QUERY );
                 ::rtl::OUString sLabel;
-                if ( xModelProps.is() && xModelProps->getPropertySetInfo().is() && xModelProps->getPropertySetInfo()->hasPropertyByName( ::rtl::OUString::createFromAscii( "Label" ) ) )
-                    xModelProps->getPropertyValue( ::rtl::OUString::createFromAscii( "Label" ) ) >>= sLabel;
+                if ( xModelProps.is() && xModelProps->getPropertySetInfo().is() && xModelProps->getPropertySetInfo()->hasPropertyByName( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Label")) ) )
+                    xModelProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Label")) ) >>= sLabel;
                 aCurrentGroupLabels.push_back( sLabel );
 #endif
             }
@@ -1568,9 +1568,9 @@ UnoDialogControl::UnoDialogControl() :
     sal_Bool bDecoration( sal_True );
     ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_DECORATION )) >>= bDecoration;
     if ( bDecoration )
-        return ::rtl::OUString::createFromAscii( "Dialog" );
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Dialog"));
     else
-        return ::rtl::OUString::createFromAscii( "TabPage" );
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TabPage"));
 }
 
 // XInterface
@@ -2275,10 +2275,10 @@ void UnoDialogControl::addingControl( const Reference< XControl >& _rxControl )
         {
             Sequence< ::rtl::OUString > aNames( 4 );
             ::rtl::OUString* pNames = aNames.getArray();
-            *pNames++ = ::rtl::OUString::createFromAscii( "PositionX" );
-            *pNames++ = ::rtl::OUString::createFromAscii( "PositionY" );
-            *pNames++ = ::rtl::OUString::createFromAscii( "Width" );
-            *pNames++ = ::rtl::OUString::createFromAscii( "Height" );
+            *pNames++ = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PositionX"));
+            *pNames++ = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PositionY"));
+            *pNames++ = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Width"));
+            *pNames++ = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Height"));
 
             xProps->addPropertiesChangeListener( aNames, this );
         }
@@ -2680,10 +2680,10 @@ void UnoParentControl::addingControl( const Reference< XControl >& _rxControl )
         {
             Sequence< ::rtl::OUString > aNames( 4 );
             ::rtl::OUString* pNames = aNames.getArray();
-            *pNames++ = ::rtl::OUString::createFromAscii( "PositionX" );
-            *pNames++ = ::rtl::OUString::createFromAscii( "PositionY" );
-            *pNames++ = ::rtl::OUString::createFromAscii( "Width" );
-            *pNames++ = ::rtl::OUString::createFromAscii( "Height" );
+            *pNames++ = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PositionX"));
+            *pNames++ = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PositionY"));
+            *pNames++ = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Width"));
+            *pNames++ = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Height"));
 
             xProps->addPropertiesChangeListener( aNames, this );
         }
@@ -2846,9 +2846,9 @@ uno::Any UnoMultiPageControl::queryAggregation( const uno::Type & rType ) throw(
     sal_Bool bDecoration( sal_True );
     ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_DECORATION )) >>= bDecoration;
     if ( bDecoration )
-        return ::rtl::OUString::createFromAscii( "tabcontrol" );
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("tabcontrol"));
     // Hopefully we can tweak the tabcontrol to display without tabs
-    return ::rtl::OUString::createFromAscii( "tabcontrolnotabs" );
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("tabcontrolnotabs"));
 }
 
 void UnoMultiPageControl::bindPage( const uno::Reference< awt::XControl >& _rxControl )
@@ -3035,7 +3035,7 @@ UnoPageControl::~UnoPageControl()
 
 ::rtl::OUString UnoPageControl::GetComponentServiceName()
 {
-    return ::rtl::OUString::createFromAscii( "tabpage" );
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("tabpage"));
 }
 
 
@@ -3145,7 +3145,7 @@ UnoFrameControl::~UnoFrameControl()
 
 ::rtl::OUString UnoFrameControl::GetComponentServiceName()
 {
-    return ::rtl::OUString::createFromAscii( "frame" );
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("frame"));
 }
 
 void UnoFrameControl::ImplSetPosSize( Reference< XControl >& rxCtrl )

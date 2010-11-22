@@ -1119,7 +1119,7 @@ void UnoControl::createPeer( const Reference< XToolkit >& rxToolkit, const Refer
     if ( !mxModel.is() )
     {
         RuntimeException aException;
-        aException.Message = ::rtl::OUString::createFromAscii( "createPeer: no model!" );
+        aException.Message = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("createPeer: no model!"));
         aException.Context = (XAggregation*)(::cppu::OWeakAggObject*)this;
         throw( aException );
     }

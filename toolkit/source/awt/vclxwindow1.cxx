@@ -57,7 +57,7 @@ void VCLXWindow::SetSystemParent_Impl( const com::sun::star::uno::Any& rHandle )
     {
         ::com::sun::star::uno::Exception *pException =
             new ::com::sun::star::uno::RuntimeException;
-        pException->Message = ::rtl::OUString::createFromAscii( "not a work window" );
+        pException->Message = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("not a work window"));
         throw pException;
     }
 
@@ -88,7 +88,7 @@ void VCLXWindow::SetSystemParent_Impl( const com::sun::star::uno::Any& rHandle )
     {
         ::com::sun::star::uno::Exception *pException =
             new ::com::sun::star::uno::RuntimeException;
-        pException->Message = ::rtl::OUString::createFromAscii( "incorrect window handle type" );
+        pException->Message = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("incorrect window handle type"));
         throw pException;
     }
     // create system parent data

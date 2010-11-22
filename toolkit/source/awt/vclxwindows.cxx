@@ -2429,7 +2429,7 @@ void SAL_CALL VCLXDialog::setVbaMethodParameter(
     const ::com::sun::star::uno::Any& Value )
 throw(::com::sun::star::uno::RuntimeException)
 {
-    if (rtl::OUString::createFromAscii( "Cancel" ) == PropertyName)
+    if (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Cancel")) == PropertyName)
     {
         SolarMutexGuard aGuard;
         if ( GetWindow() )
@@ -2970,7 +2970,7 @@ void VCLXFixedHyperlink::ProcessWindowEvent( const VclWindowEvent& rVclWindowEve
                     sURL = pBase->GetURL();
                 Reference< ::com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
                     ::comphelper::getProcessServiceFactory()->createInstance(
-                        ::rtl::OUString::createFromAscii( "com.sun.star.system.SystemShellExecute" )), uno::UNO_QUERY );
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.system.SystemShellExecute"))), uno::UNO_QUERY );
                 if ( sURL.getLength() > 0 && xSystemShellExecute.is() )
                 {
                     try
