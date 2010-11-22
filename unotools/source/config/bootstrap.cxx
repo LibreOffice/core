@@ -401,7 +401,7 @@ PathStatus getDerivedPath(
 
         OSL_ENSURE(sDerivedURL == _rURL,"Could not set derived URL via Bootstrap default parameter");
         OSL_POSTCOND(RTL_BOOTSTRAP_DEFAULTS_BROKEN ||
-                    _rData.getFrom(_sBootstrapParameter,sDerivedURL) && sDerivedURL==_rURL,"Use of default did not affect bootstrap value");
+                    (_rData.getFrom(_sBootstrapParameter,sDerivedURL) && sDerivedURL==_rURL),"Use of default did not affect bootstrap value");
     }
     else
     {
