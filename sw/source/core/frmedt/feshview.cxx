@@ -623,7 +623,6 @@ void SwFEShell::ScrollTo( const Point &rPt )
          (!Imp()->GetDrawView()->GetMarkedObjectList().GetMarkCount() ||
           Imp()->IsDragPossible( rPt )) )
     {
-        //SwSaveHdl aSave( Imp() );
         ScrollMDI( this, aRect, SCROLLVAL, SCROLLVAL );
     }
 }
@@ -659,7 +658,7 @@ long SwFEShell::BeginDrag( const Point* pPt, BOOL )
     {
         delete pChainFrom; delete pChainTo; pChainFrom = pChainTo = 0;
         SdrHdl* pHdl = pView->PickHandle( *pPt );
-        pView->BegDragObj( *pPt, 0 /*GetWin()*/, pHdl );
+        pView->BegDragObj( *pPt, 0, pHdl );
         ::FrameNotify( this, FLY_DRAG );
         return 1;
     }
@@ -778,8 +777,6 @@ const SwFrmFmt* SwFEShell::SelFlyGrabCrsr()
 
         if( pFly )
         {
-            // --> OD 2004-06-11 #i28701# - no format here
-//            pFly->GetAnchorFrm()->Calc();
             SwCntntFrm *pCFrm = pFly->ContainsCntnt();
             if ( pCFrm )
             {
@@ -1334,7 +1331,7 @@ namespace
     };
 }
 
-const SdrObject* SwFEShell::GetBestObject( BOOL bNext, USHORT /*GOTOOBJ_...*/ eType, BOOL bFlat, const ::svx::ISdrObjectFilter* pFilter )
+const SdrObject* SwFEShell::GetBestObject( BOOL bNext, USHORT eType, BOOL bFlat, const ::svx::ISdrObjectFilter* pFilter )
 {
     if( !Imp()->HasDrawView() )
         return NULL;
@@ -1568,7 +1565,7 @@ BOOL SwFEShell::BeginCreate( UINT16 /*SdrObjKind ?*/  eSdrObjectKind, const Poin
     return bRet;
 }
 
-BOOL SwFEShell::BeginCreate( UINT16 /*SdrObjKind ?*/  eSdrObjectKind, UINT32 eObjInventor,
+BOOL SwFEShell::BeginCreate( UINT16 eSdrObjectKind, UINT32 eObjInventor,
                              const Point &rPos )
 {
     BOOL bRet = FALSE;
@@ -2058,7 +2055,6 @@ void SwFEShell::MoveMark( const Point &rPos )
     {
         ScrollTo( rPos );
         SwDrawView* pDView = Imp()->GetDrawView();
-//      Imp()->GetDrawView()->MovMarkObj( rPos );
 
         if (pDView->IsInsObjPoint())
             pDView->MovInsObjPoint( rPos );
@@ -2104,7 +2100,6 @@ BOOL SwFEShell::EndMark()
                     {
                         if ( !bShowHdl )
                         {
-                            //HMHpDView->HideMarkHdl();
                             bShowHdl = TRUE;
                         }
                         rMrkList.DeleteMark( i );
@@ -2116,7 +2111,6 @@ BOOL SwFEShell::EndMark()
             {
                 pDView->MarkListHasChanged();
                 pDView->AdjustMarkHdl();
-                //HMHpDView->ShowMarkHdl();
             }
 
             if ( rMrkList.GetMarkCount() )
@@ -2512,8 +2506,6 @@ static BYTE __READONLY_DATA aChkArr[ 4 ] = {
             }
             else
             {
-                // --> OD 2004-06-11 #i28701# - no format here
-//                pFrm->GetAnchorFrm()->Calc();
                 SwCntntFrm *pCFrm = pFrm->ContainsCntnt();
                 if ( pCFrm )
                 {
@@ -2930,7 +2922,7 @@ long SwFEShell::GetSectionWidth( SwFmt& rFmt ) const
     return 0;
 }
 
-void SwFEShell::CreateDefaultShape( UINT16 /*SdrObjKind ?*/ eSdrObjectKind, const Rectangle& rRect,
+void SwFEShell::CreateDefaultShape( UINT16 eSdrObjectKind, const Rectangle& rRect,
                 USHORT nSlotId)
 {
     SdrView* pDrawView = GetDrawView();

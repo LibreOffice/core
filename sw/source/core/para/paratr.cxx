@@ -230,8 +230,6 @@ bool SwFmtDrop::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 nDistance   = MM100_TO_TWIP(pDrop->Distance);
             }
             else {
-                //exception( wrong_type)
-                ;
             }
         }
         break;

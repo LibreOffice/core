@@ -1253,8 +1253,6 @@ bool SwSetExpField::PutValue( const uno::Any& rAny, USHORT nWhichId )
             if(nTmp16 <= SVX_NUMBER_NONE )
                 SetFormat(nTmp16);
             else {
-                //exception(wrong_value)
-                ;
             }
         }
         break;

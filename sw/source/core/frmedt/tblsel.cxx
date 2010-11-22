@@ -1013,7 +1013,6 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
 //JP 24.09.96: Merge mit wiederholenden TabellenHeadline funktioniert nicht
 //              richtig. Warum nicht Point 0,0 benutzen? Dann ist garantiert,
 //              das die 1. Headline mit drin ist.
-//  Point aPt( rShell.GetCharRect().Pos() );
     Point aPt( 0, 0 );
     const SwLayoutFrm *pStart = rPam.GetCntntNode()->GetFrm(
                                                         &aPt )->GetUpper(),
@@ -1602,31 +1601,6 @@ SwTwips lcl_CalcWish( const SwLayoutFrm *pCell, long nWish,
     }
     return nRet;
 }
-
-/*  MA: 20. Sep. 93 wird nicht mehr gebraucht.
-static const SwLayoutFrm *GetPrevCell( const SwLayoutFrm *pCell )
-{
-    const SwLayoutFrm *pLay = pCell->GetPrevLayoutLeaf();
-    if ( pLay && pLay->IsLayoutFrm() && !pLay->IsTab() )
-    {
-        //GetPrevLayoutLeaf() liefert ggf. auch die Umgebung einer Tab zurueck
-        //(naehmlich genau dann, wenn die Zelle noch Vorgaenger hat).
-        const SwFrm *pFrm = pLay->Lower();
-        while ( pFrm->GetNext() )
-            pFrm = pFrm->GetNext();
-        pLay = pFrm->IsTabFrm() ? (SwLayoutFrm*)pFrm : 0;
-    }
-    if ( pLay && pLay->IsTabFrm() )
-    {
-        //GetPrevLayoutLeaf() liefert ggf. auch Tabellen zurueck die letzte
-        //Zelle dieser Tabelle ist das das gesuchte Blatt.
-        pLay = ((SwTabFrm*)pLay)->FindLastCntnt()->GetUpper();
-        while ( !pLay->IsCellFrm() )
-            pLay = pLay->GetUpper();
-    }
-    return pLay;
-}
-*/
 
 void lcl_FindStartEndRow( const SwLayoutFrm *&rpStart,
                              const SwLayoutFrm *&rpEnd,

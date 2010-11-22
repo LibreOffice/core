@@ -725,20 +725,6 @@ const SwTable* SwTableFormula::FindTable( SwDoc& rDoc, const String& rNm ) const
 
 const SwFrm* lcl_GetBoxFrm( const SwTableBox& rBox )
 {
-/*
-
-    // oder besser ueber die Box den Frame suchen
-
-    SwClientIter aIter( *pBox->GetFrmFmt() );
-    ULONG nMinPos = ULONG_MAX;
-    const SwFrm* pFnd = 0;
-    for( SwFrm* pF = (SwFrm*)aIter.First( TYPE( SwCellFrm )); pF;
-            pF = (SwFrm*)aIter.Next() )
-    {
-        if( pF->Frm().Y() <
-    }
-*/
-
     SwNodeIndex aIdx( *rBox.GetSttNd() );
     SwCntntNode* pCNd = aIdx.GetNodes().GoNext( &aIdx );
     ASSERT( pCNd, "Box hat keinen TextNode" );

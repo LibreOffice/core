@@ -353,7 +353,6 @@ void SwFEShell::ShLooseFcs()
         Imp()->GetDrawView()->hideMarkHandles();
         FrameNotify( this, FLY_DRAG_END );
     }
-//  ::ResetShell();
 }
 
 /*************************************************************************
@@ -496,7 +495,6 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const String &rTxt, const 
                 //Bei Flys den Index auf den StartNode herunterreichen.
                 nIdx = pCnt->FindFlyFrm()->
                             GetFmt()->GetCntnt().GetCntntIdx()->GetIndex();
-//warum?? Bug 61913     ParkCrsr( GetCrsr()->GetPoint()->nNode );
             }
             break;
         case LTYPE_TABLE:

@@ -582,10 +582,6 @@ void SwFEShell::_GetTabCols( SwTabCols &rToFill, const SwFrm *pBox ) const
                 {
                     pLastCols->SetLeftMin( nLeftMin );
 
-                    //ASSERT( bVert ||
-                    //        pLastCols->GetLeftMin() == (pTab->Frm().*fnRect->fnGetLeft)(),
-                    //        "GetTabCols: wrong result" )
-
                     pColumnCacheLastTabFrm = pTab;
                 }
                 else
@@ -990,9 +986,7 @@ BOOL SwFEShell::HasBoxSelection() const
     if( IsTableMode() )
         return TRUE;
     SwPaM* pPam = GetCrsr();
-        // leere Boxen gelten auch ohne Selektion als selektiert
-//  if( !pPam->HasMark() )
-//      return FALSE;
+        // empty boxes are also selected as the absence of selection
     BOOL bChg = FALSE;
     if( pPam->GetPoint() == pPam->End())
     {
@@ -1879,7 +1873,7 @@ Point lcl_ProjectOntoClosestTableFrm( const SwTabFrm& rTab, const Point& rPoint,
         else if ( aRet.Y() < aMin1.Y() )
             aRet.Y() = aMin1.Y();
     }
-    else //if ( bTop )
+    else
     {
         aRet.Y() = aMin1.Y();
         if ( aRet.X() > aMin2.X() )
@@ -2529,16 +2523,6 @@ BOOL SwFEShell::GetAutoSum( String& rFml ) const
         if( nW )
         {
             rFml += ')';
-
-/*
-            // TabellenSelektion erzeugen??
-            SwTblBoxFormula aTmp( rFml );
-            SwSelBoxes aBoxes;
-            for( USHORT nSelBoxes = aTmp.GetBoxesOfFormula( rTbl,aBoxes );
-                    nSelBoxes; )
-            {
-            }
-*/
         }
     }
 

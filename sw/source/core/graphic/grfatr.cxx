@@ -332,10 +332,6 @@ SfxPoolItem* SwDrawModeGrf::Clone( SfxItemPool * ) const
 
 USHORT SwDrawModeGrf::GetValueCount() const
 {
-    // GRAPHICDRAWMODE_STANDARD = 0,
-    // GRAPHICDRAWMODE_GREYS = 1,
-    // GRAPHICDRAWMODE_MONO = 2,
-    // GRAPHICDRAWMODE_WATERMARK = 3
     return GRAPHICDRAWMODE_WATERMARK + 1;
 }
 

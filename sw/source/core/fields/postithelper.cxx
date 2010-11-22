@@ -206,21 +206,4 @@ sw::sidebarwindows::SwSidebarWin* SwAnnotationItem::GetSidebarWindow(
                                                 pFmtFld );
 }
 
-/*
-SwPosition SwRedCommentItem::GetAnchorPosition()
-{
-    return *pRedline->Start();
-}
-
-SwSidebarWin* SwRedCommentItem::GetSidebarWindow(Window* pParent, WinBits nBits,SwPostItMgr* aMgr,SwPostItBits aBits)
-{
-    return new SwRedComment(pParent,nBits,aMgr,aBits,pRedline);
-}
-
-bool SwRedCommentItem::UseElement()
-{
-    return true;
-}
-*/
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

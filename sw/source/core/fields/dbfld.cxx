@@ -278,10 +278,7 @@ String SwDBField::GetCntnt(BOOL bName) const
     if(bName)
     {
         const String& rDBName = ((SwDBFieldType*)GetTyp())->GetName();
-        //TODO/CLEANUP
-        //Funktion tut nichts!
-        //String sContent( SFX_APP()->LocalizeDBName(INI2NATIONAL,
-        //                                    rDBName.GetToken(0, DB_DELIM)));
+
         String sContent( rDBName.GetToken(0, DB_DELIM) );
 
         if (sContent.Len() > 1)
@@ -704,18 +701,6 @@ bool SwDBNextSetField::PutValue( const uno::Any& rAny, USHORT nWhichId )
     return bRet;
 }
 
-/*
-String SwDBNextSetField::GetPar2() const
-{
-    return GetDBName();
-}
-
-void SwDBNextSetField::SetPar2(const String& rStr)
-{
-    GetDBName() = rStr;
-}
-*/
-
 /*--------------------------------------------------------------------
     Beschreibung: Datensatz mit bestimmter ID
  --------------------------------------------------------------------*/
@@ -1005,8 +990,6 @@ bool SwDBSetNumberField::PutValue( const uno::Any& rAny, USHORT nWhichId )
             if(nSet < (INT16) SVX_NUMBER_NONE )
                 SetFormat(nSet);
             else {
-                //exception(wrong_value)
-                ;
             }
         }
         break;

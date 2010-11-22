@@ -223,8 +223,6 @@ void SwEmbedObjectLink::DataChanged( const String& ,
     }
 
     pOleNode->GetNewReplacement();
-    // Initiate repainting
-    // pObj->SetChanged();
 }
 
 // -----------------------------------------------------------------------------
@@ -513,9 +511,6 @@ BOOL SwOLENode::IsOLEObjectDeleted() const
         if( p )     // muss da sein
         {
             return !p->GetEmbeddedObjectContainer().HasEmbeddedObject( aOLEObj.aName );
-            //SvInfoObjectRef aRef( p->Find( aOLEObj.aName ) );
-            //if( aRef.Is() )
-            //    bRet = aRef->IsDeleted();
         }
     }
     return bRet;
@@ -837,9 +832,6 @@ svt::EmbeddedObjectRef& SwOLEObj::GetObject()
 BOOL SwOLEObj::UnloadObject()
 {
     BOOL bRet = TRUE;
-    //Nicht notwendig im Doc DTor (MM)
-    //ASSERT( pOLERef && pOLERef->Is() && 1 < (*pOLERef)->GetRefCount(),
-    //        "Falscher RefCount fuers Unload" );
     if ( pOLENd )
     {
         const SwDoc* pDoc = pOLENd->GetDoc();
@@ -953,8 +945,6 @@ void SwOLELRUCache::Load()
     {
         sal_Int32 nVal = 0;
         *pValues >>= nVal;
-        //if( 20 > nVal )
-        //    nVal = 20;
 
         {
             if( nVal < nLRU_InitSize )

@@ -64,7 +64,6 @@ BOOL bAssert = FALSE;               // TRUE, wenn mal ein ASSERT kam.
 void AssertFail( const sal_Char* pError, const sal_Char* pFileName, USHORT nLine )
 {
     CVBREAK;
-    // NOTE4("ASSERT: %s at %d: %s\n", pFileName, nLine, pError);
     bAssert = TRUE;
 
     if( !bAssertFail && GetpApp() && GetpApp()->IsInMain() )

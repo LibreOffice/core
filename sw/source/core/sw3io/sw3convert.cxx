@@ -378,8 +378,6 @@ SW_DLLPUBLIC void sw3io_ConvertToOldField( const SwField* pFld, USHORT& rWhich,
                     break;
 
                 default:
-                // case REF_UPDOWN:
-                // case REF_PAGE_PGDESC:
                     rFmt = REF_PAGE;
                     break;
                 }

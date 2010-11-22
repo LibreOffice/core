@@ -308,13 +308,11 @@ void SwField::SetPar2(const String& )
 
 USHORT SwField::GetSubType() const
 {
-//  ASSERT(0, "Sorry Not implemented");
     return 0;
 }
 
 void SwField::SetSubType(USHORT )
 {
-//  ASSERT(0, "Sorry Not implemented");
 }
 
 bool  SwField::QueryValue( uno::Any& rVal, USHORT nWhichId ) const

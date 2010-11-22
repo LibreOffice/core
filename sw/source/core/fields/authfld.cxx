@@ -121,7 +121,6 @@ SwAuthorityFieldType::SwAuthorityFieldType( const SwAuthorityFieldType& rFType)
 
 SwAuthorityFieldType::~SwAuthorityFieldType()
 {
-//  DBG_ASSERT(!m_pDataArr->Count(), "Array is not empty");
     m_pSortKeyArr->DeleteAndDestroy(0, m_pSortKeyArr->Count());
     delete m_pSortKeyArr;
     delete m_pSequArr;

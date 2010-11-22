@@ -294,8 +294,6 @@ bool SwPageNumberField::PutValue( const uno::Any& rAny, USHORT nWhichId )
         if(nSet <= SVX_NUM_PAGEDESC )
             SetFormat(nSet);
         else {
-            //exception(wrong_value)
-            ;
         }
         break;
     case FIELD_PROP_USHORT1:
@@ -1963,7 +1961,6 @@ bool SwPostItField::PutValue( const uno::Any& rAny, USHORT nWhichId )
         break;
     case FIELD_PROP_TEXT:
         DBG_ERROR("Not implemented!");
-        // ::GetString( rAny, sTxt );
         break;
     case FIELD_PROP_DATE:
         if( rAny.getValueType() == ::getCppuType((util::Date*)0) )
@@ -2495,8 +2492,6 @@ bool SwRefPageGetField::PutValue( const uno::Any& rAny, USHORT nWhichId )
             if(nSet <= SVX_NUM_PAGEDESC )
                 SetFormat(nSet);
             else {
-                //exception(wrong_value)
-                ;
             }
         }
         break;
@@ -2612,7 +2607,6 @@ bool SwJumpEditField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
             case JE_FMT_FRAME:  nRet = text::PlaceholderType::TEXTFRAME; break;
             case JE_FMT_GRAPHIC:nRet = text::PlaceholderType::GRAPHIC; break;
             case JE_FMT_OLE:    nRet = text::PlaceholderType::OBJECT; break;
-//          case JE_FMT_TEXT:
             default:
                 nRet = text::PlaceholderType::TEXT; break;
             }
