@@ -53,50 +53,12 @@
 
 namespace DOM
 {
-    void CDocument::addnode(xmlNodePtr aNode)
-    {
-        if (aNode != (xmlNodePtr)m_aDocPtr)
-        {
-            Reference< XNode >* nref = new Reference< XNode >(CNode::get(aNode));
-            m_aNodeRefList.push_back(nref);
-        }
-    }
-
     CDocument::~CDocument()
     {
-        Reference< XNode >* pRef;
-        nodereflist_t::const_iterator r = m_aNodeRefList.begin();
-        while (r!=m_aNodeRefList.end())
-        {
-            pRef = *r;
-            delete pRef;
-            r++;
-        }
-
-        // get rid of leftover instances, if anybody still holds a
-        // reference to one of these, it will be invalid!
-        /*
-        CNode* aNode = 0;
-        nodelist_t::const_iterator i = m_aNodeList.begin();
-        while (i!=m_aNodeList.end())
-        {
-            aNode = CNode::get(*i, sal_False);
-            if (aNode != 0)
-            {
-                // CNode::remove(*i);
-                // delete will remove
-                delete aNode;
-            }
-            i++;
-        }
-        */
-
         xmlFreeDoc(m_aDocPtr);
-
     }
 
     CDocument::CDocument(xmlDocPtr aDocPtr):
-        m_aNodeRefList(),
         m_aDocPtr(aDocPtr),
         m_streamListeners()
     {
