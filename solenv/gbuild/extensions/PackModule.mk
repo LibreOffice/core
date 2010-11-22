@@ -34,7 +34,7 @@
 define gb_PackModule_setpackmodulecommand
 ifeq ($$(words $(gb_Module_ALLMODULES)),1)
 $$(eval $$(call gb_Output_announce,$$(strip $$(gb_Module_ALLMODULES)),$$(true),ZIP,5))
-packmodule : COMMAND := $$(SOLARENV)/bin/packmodule $$(OUTDIR) $$(strip $$(gb_Module_ALLMODULES)) $$(UPDMINOR)
+packmodule : COMMAND := $$(SOLARENV)/bin/packmodule $$(OUTDIR) $$(strip $$(gb_Module_ALLMODULES))
 else
 $$(eval $$(call gb_Output_announce,more than one module - creating no zipped package,$$(true),ZIP,5))
 packmodule : COMMAND := true
@@ -48,7 +48,7 @@ packmodule : all
 define gb_PackModule_setcleanpackmodulecommand
 ifeq ($$(words $(gb_Module_ALLMODULES)),1)
 $$(eval $$(call gb_Output_announce,$$(strip $$(gb_Module_ALLMODULES)),$$(false),ZIP,5))
-cleanpackmodule : COMMAND := rm -f $$(OUTDIR)/zip.$$(UPDMINOR)/$$(strip $$(gb_Module_ALLMODULES)).zip
+cleanpackmodule : COMMAND := rm -f $$(OUTDIR)/zip/$$(strip $$(gb_Module_ALLMODULES)).zip
 else
 $$(eval $$(call gb_Output_announce,more than one module - deleting no zipped package,$$(false),ZIP,5))
 cleanpackmodule : COMMAND := true
