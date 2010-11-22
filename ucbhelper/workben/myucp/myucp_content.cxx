@@ -179,7 +179,7 @@ rtl::OUString SAL_CALL Content::getImplementationName()
 {
     // @@@ Adjust implementation name.
     // Prefix with reversed company domain name.
-    return rtl::OUString::createFromAscii( "com.sun.star.comp.myucp.Content" );
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.myucp.Content"));
 }
 
 //=========================================================================
@@ -571,27 +571,27 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
     {
         // Append all Core Properties.
         xRow->appendString (
-            beans::Property( rtl::OUString::createFromAscii( "ContentType" ),
+            beans::Property( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ContentType")),
                       -1,
                       getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
                       beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY ),
             rData.aContentType );
         xRow->appendString (
-            beans::Property( rtl::OUString::createFromAscii( "Title" ),
+            beans::Property( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title")),
                       -1,
                       getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
                       beans::PropertyAttribute::BOUND ),
             rData.aTitle );
         xRow->appendBoolean(
-            beans::Property( rtl::OUString::createFromAscii( "IsDocument" ),
+            beans::Property( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsDocument")),
                       -1,
                       getCppuBooleanType(),
                       beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY ),
             rData.bIsDocument );
         xRow->appendBoolean(
-            beans::Property( rtl::OUString::createFromAscii( "IsFolder" ),
+            beans::Property( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsFolder")),
                       -1,
                       getCppuBooleanType(),
                       beans::PropertyAttribute::BOUND
@@ -820,7 +820,7 @@ void Content::queryChildren( ContentRefList& rChildren )
     if ( nPos != ( aURL.getLength() - 1 ) )
     {
         // No trailing slash found. Append.
-        aURL += ::rtl::OUString::createFromAscii( "/" );
+        aURL += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
     }
 
     sal_Int32 nLen = aURL.getLength();
@@ -895,7 +895,7 @@ void Content::insert(
             ucb::IOErrorCode_ALREADY_EXISTING,
             uno::Sequence< uno::Any >(&aProps, 1),
             Environment,
-            rtl::OUString::createFromAscii( "content already existing!!" ),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("content already existing!!")),
             this );
         // Unreachable
     }

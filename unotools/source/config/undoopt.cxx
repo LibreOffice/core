@@ -69,7 +69,7 @@ public:
 // -----------------------------------------------------------------------
 
 SvtUndoOptions_Impl::SvtUndoOptions_Impl()
-    : ConfigItem( OUString::createFromAscii("Office.Common/Undo") )
+    : ConfigItem( OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/Undo")) )
     , nUndoCount( 20 )
 {
     Load();

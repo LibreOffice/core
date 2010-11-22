@@ -259,13 +259,13 @@ namespace utl
         // create the config node for all our registration information
         m_aRegistrationNode = OConfigurationTreeRoot::createWithServiceFactory(
             ::comphelper::getProcessServiceFactory(),
-            ::rtl::OUString::createFromAscii( "/org.openoffice.Office.Common/Help/Registration" )
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.Common/Help/Registration"))
         );
 
         // cache some data
         //the URL to use for online registration
         ::rtl::OUString sStringValue;
-        m_aRegistrationNode.getNodeValue( ::rtl::OUString::createFromAscii( "URL" ) ) >>= sStringValue;
+        m_aRegistrationNode.getNodeValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL")) ) >>= sStringValue;
         m_sRegistrationURL = sStringValue;
 
         // the state of the dialog

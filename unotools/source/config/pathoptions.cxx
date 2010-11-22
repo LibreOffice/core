@@ -1062,7 +1062,7 @@ void SAL_CALL PathService::flush(  ) throw(::com::sun::star::uno::RuntimeExcepti
 
 ::rtl::OUString SAL_CALL PathService::getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    return OUString::createFromAscii("com.sun.star.comp.unotools.PathService");
+    return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.unotools.PathService"));
 }
 
 sal_Bool SAL_CALL PathService::supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException)
@@ -1076,7 +1076,7 @@ sal_Bool SAL_CALL PathService::supportsService( const ::rtl::OUString& ServiceNa
 ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL PathService::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     Sequence< OUString > aRet(1);
-    *aRet.getArray() = OUString::createFromAscii("com.sun.star.config.SpecialConfigManager");
+    *aRet.getArray() = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.config.SpecialConfigManager"));
     return aRet;
 }
 

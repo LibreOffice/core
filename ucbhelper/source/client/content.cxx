@@ -257,7 +257,7 @@ static ContentBroker* getContentBroker( bool bThrow )
     {
         if ( bThrow )
             throw RuntimeException(
-                    rtl::OUString::createFromAscii( "No Content Broker!" ),
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("No Content Broker!")),
                     Reference< XInterface >() );
     }
     else
@@ -535,7 +535,7 @@ Reference< XCommandInfo > Content::getCommands()
     throw( CommandAbortedException, RuntimeException, Exception )
 {
     Command aCommand;
-    aCommand.Name     = rtl::OUString::createFromAscii( "getCommandInfo" );
+    aCommand.Name     = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("getCommandInfo"));
     aCommand.Handle   = -1; // n/a
     aCommand.Argument = Any();
 
@@ -551,7 +551,7 @@ Reference< XPropertySetInfo > Content::getProperties()
     throw( CommandAbortedException, RuntimeException, Exception )
 {
     Command aCommand;
-    aCommand.Name     = rtl::OUString::createFromAscii( "getPropertySetInfo" );
+    aCommand.Name     = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("getPropertySetInfo"));
     aCommand.Handle   = -1; // n/a
     aCommand.Argument = Any();
 
@@ -678,7 +678,7 @@ Reference< XRow > Content::getPropertyValuesInterface(
     }
 
     Command aCommand;
-    aCommand.Name     = rtl::OUString::createFromAscii( "getPropertyValues" );
+    aCommand.Name     = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("getPropertyValues"));
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aProps;
 
@@ -711,7 +711,7 @@ Reference< XRow > Content::getPropertyValuesInterface(
     }
 
     Command aCommand;
-    aCommand.Name     = rtl::OUString::createFromAscii( "getPropertyValues" );
+    aCommand.Name     = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("getPropertyValues"));
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aProps;
 
@@ -759,7 +759,7 @@ Sequence< Any > Content::setPropertyValues(
     }
 
     Command aCommand;
-    aCommand.Name     = rtl::OUString::createFromAscii( "setPropertyValues" );
+    aCommand.Name     = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("setPropertyValues"));
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aProps;
 
@@ -807,7 +807,7 @@ Sequence< Any > Content::setPropertyValues(
     }
 
     Command aCommand;
-    aCommand.Name     = rtl::OUString::createFromAscii( "setPropertyValues" );
+    aCommand.Name     = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("setPropertyValues"));
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aProps;
 
@@ -876,7 +876,7 @@ Any Content::createCursorAny( const Sequence< rtl::OUString >& rPropertyNames,
     aArg.Properties = aProps;
 
     Command aCommand;
-    aCommand.Name     = rtl::OUString::createFromAscii( "open" );
+    aCommand.Name     = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("open"));
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aArg;
 
@@ -909,7 +909,7 @@ Any Content::createCursorAny( const Sequence< sal_Int32 >& rPropertyHandles,
     aArg.Properties = aProps;
 
     Command aCommand;
-    aCommand.Name     = rtl::OUString::createFromAscii( "open" );
+    aCommand.Name     = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("open"));
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aArg;
 
@@ -1022,7 +1022,7 @@ Reference< XDynamicResultSet > Content::createSortedDynamicCursor(
         if( aServiceManager.is() )
         {
             Reference< XSortedDynamicResultSetFactory > aSortFactory( aServiceManager->createInstance(
-                                rtl::OUString::createFromAscii( "com.sun.star.ucb.SortedDynamicResultSetFactory" )),
+                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SortedDynamicResultSetFactory"))),
                                 UNO_QUERY );
 
             aResult = aSortFactory->createSortedDynamicResultSet( aOrigCursor,
@@ -1057,7 +1057,7 @@ Reference< XDynamicResultSet > Content::createSortedDynamicCursor(
         if( aServiceManager.is() )
         {
             Reference< XSortedDynamicResultSetFactory > aSortFactory( aServiceManager->createInstance(
-                                rtl::OUString::createFromAscii( "com.sun.star.ucb.SortedDynamicResultSetFactory" )),
+                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SortedDynamicResultSetFactory"))),
                                 UNO_QUERY );
 
             aResult = aSortFactory->createSortedDynamicResultSet( aOrigCursor,
@@ -1097,7 +1097,7 @@ Reference< XResultSet > Content::createSortedCursor(
         if( aServiceManager.is() )
         {
             Reference< XSortedDynamicResultSetFactory > aSortFactory( aServiceManager->createInstance(
-                                rtl::OUString::createFromAscii( "com.sun.star.ucb.SortedDynamicResultSetFactory" )),
+                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SortedDynamicResultSetFactory"))),
                                 UNO_QUERY );
 
             aDynResult = aSortFactory->createSortedDynamicResultSet( aDynSet,
@@ -1151,7 +1151,7 @@ Reference< XResultSet > Content::createSortedCursor(
         if( aServiceManager.is() )
         {
             Reference< XSortedDynamicResultSetFactory > aSortFactory( aServiceManager->createInstance(
-                                rtl::OUString::createFromAscii( "com.sun.star.ucb.SortedDynamicResultSetFactory" )),
+                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SortedDynamicResultSetFactory"))),
                                 UNO_QUERY );
 
             aDynResult = aSortFactory->createSortedDynamicResultSet( aDynSet,
@@ -1198,7 +1198,7 @@ Reference< XInputStream > Content::openStream()
     aArg.Properties = Sequence< Property >( 0 ); // unused
 
     Command aCommand;
-    aCommand.Name     = rtl::OUString::createFromAscii( "open" );
+    aCommand.Name     = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("open"));
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aArg;
 
@@ -1223,7 +1223,7 @@ Reference< XInputStream > Content::openStreamNoLock()
     aArg.Properties = Sequence< Property >( 0 ); // unused
 
     Command aCommand;
-    aCommand.Name     = rtl::OUString::createFromAscii( "open" );
+    aCommand.Name     = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("open"));
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aArg;
 
@@ -1248,7 +1248,7 @@ Reference< XStream > Content::openWriteableStream()
     aArg.Properties = Sequence< Property >( 0 ); // unused
 
     Command aCommand;
-    aCommand.Name     = rtl::OUString::createFromAscii( "open" );
+    aCommand.Name     = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("open"));
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aArg;
 
@@ -1273,7 +1273,7 @@ Reference< XStream > Content::openWriteableStreamNoLock()
     aArg.Properties = Sequence< Property >( 0 ); // unused
 
     Command aCommand;
-    aCommand.Name     = rtl::OUString::createFromAscii( "open" );
+    aCommand.Name     = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("open"));
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aArg;
 
@@ -1296,7 +1296,7 @@ sal_Bool Content::openStream( const Reference< XActiveDataSink >& rSink )
     aArg.Properties = Sequence< Property >( 0 ); // unused
 
     Command aCommand;
-    aCommand.Name     = rtl::OUString::createFromAscii( "open" );
+    aCommand.Name     = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("open"));
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aArg;
 
@@ -1319,7 +1319,7 @@ sal_Bool Content::openStream( const Reference< XOutputStream >& rStream )
     aArg.Properties = Sequence< Property >( 0 ); // unused
 
     Command aCommand;
-    aCommand.Name     = rtl::OUString::createFromAscii( "open" );
+    aCommand.Name     = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("open"));
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aArg;
 
@@ -1338,7 +1338,7 @@ void Content::writeStream( const Reference< XInputStream >& rStream,
     aArg.ReplaceExisting = bReplaceExisting;
 
     Command aCommand;
-    aCommand.Name     = rtl::OUString::createFromAscii( "insert" );
+    aCommand.Name     = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("insert"));
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aArg;
 
@@ -1354,7 +1354,7 @@ Sequence< ContentInfo > Content::queryCreatableContentsInfo()
     // First, try it using "CreatableContentsInfo" property -> the "new" way.
     Sequence< ContentInfo > aInfo;
     if ( getPropertyValue(
-             rtl::OUString::createFromAscii( "CreatableContentsInfo" ) )
+             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CreatableContentsInfo")) )
          >>= aInfo )
         return aInfo;
 
@@ -1415,7 +1415,7 @@ sal_Bool Content::insertNewContent( const rtl::OUString& rContentType,
     aInfo.Attributes = 0;
 
     Command aCommand;
-    aCommand.Name     = rtl::OUString::createFromAscii( "createNewContent" );
+    aCommand.Name     = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("createNewContent"));
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aInfo;
 
@@ -1449,7 +1449,7 @@ sal_Bool Content::insertNewContent( const rtl::OUString& rContentType,
 
     Content aNewContent( xNew, m_xImpl->getEnvironment() );
     aNewContent.setPropertyValues( rPropertyNames, rPropertyValues );
-    aNewContent.executeCommand( rtl::OUString::createFromAscii( "insert" ),
+    aNewContent.executeCommand( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("insert")),
                                 makeAny(
                                     InsertCommandArgument(
                                         rData.is() ? rData : new EmptyInputStream,
@@ -1478,7 +1478,7 @@ sal_Bool Content::insertNewContent( const rtl::OUString& rContentType,
     aInfo.Attributes = 0;
 
     Command aCommand;
-    aCommand.Name     = rtl::OUString::createFromAscii( "createNewContent" );
+    aCommand.Name     = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("createNewContent"));
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aInfo;
 
@@ -1512,7 +1512,7 @@ sal_Bool Content::insertNewContent( const rtl::OUString& rContentType,
 
     Content aNewContent( xNew, m_xImpl->getEnvironment() );
     aNewContent.setPropertyValues( nPropertyHandles, rPropertyValues );
-    aNewContent.executeCommand( rtl::OUString::createFromAscii( "insert" ),
+    aNewContent.executeCommand( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("insert")),
                                 makeAny(
                                     InsertCommandArgument(
                                         rData.is() ? rData : new EmptyInputStream,
@@ -1582,7 +1582,7 @@ sal_Bool Content::transferContent( const Content& rSourceContent,
                                         rTitle,
                                         nNameClashAction );
     Command aCommand;
-    aCommand.Name     = rtl::OUString::createFromAscii( "globalTransfer" );
+    aCommand.Name     = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("globalTransfer"));
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aTransferArg;
 
@@ -1595,7 +1595,7 @@ sal_Bool Content::isFolder()
     throw( CommandAbortedException, RuntimeException, Exception )
 {
     sal_Bool bFolder = sal_False;
-    if ( getPropertyValue( rtl::OUString::createFromAscii( "IsFolder" ) )
+    if ( getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsFolder")) )
         >>= bFolder )
         return bFolder;
 
@@ -1616,7 +1616,7 @@ sal_Bool Content::isDocument()
     throw( CommandAbortedException, RuntimeException, Exception )
 {
     sal_Bool bDoc = sal_False;
-    if ( getPropertyValue( rtl::OUString::createFromAscii( "IsDocument" ) )
+    if ( getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsDocument")) )
         >>= bDoc )
         return bDoc;
 

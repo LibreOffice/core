@@ -742,14 +742,14 @@ void InternetProxyDecider_Impl::setNoProxyList(
                 if ( nColonPos == -1 )
                 {
                     // No port given, server pattern equals current token
-                    aPort = rtl::OUString::createFromAscii( "*" );
+                    aPort = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*"));
                     if ( aToken.indexOf( '*' ) == -1 )
                     {
                         // pattern describes exactly one server
                         aServer = aToken;
                     }
 
-                    aToken += rtl::OUString::createFromAscii( ":*" );
+                    aToken += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(":*"));
                 }
                 else
                 {

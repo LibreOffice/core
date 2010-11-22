@@ -309,7 +309,7 @@ XTYPEPROVIDER_IMPL_9( ResultSet,
 //=========================================================================
 
 XSERVICEINFO_NOFACTORY_IMPL_1( ResultSet,
-                    rtl::OUString::createFromAscii( "ResultSet" ),
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ResultSet")),
                     rtl::OUString::createFromAscii( RESULTSET_SERVICE_NAME ) );
 
 //=========================================================================
@@ -1358,13 +1358,13 @@ void SAL_CALL ResultSet::setPropertyValue( const rtl::OUString& aPropertyName,
         throw beans::UnknownPropertyException();
 
     if ( aPropertyName.equals(
-                rtl::OUString::createFromAscii( "RowCount" ) ) )
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RowCount")) ) )
     {
         // property is read-only.
         throw lang::IllegalArgumentException();
     }
     else if ( aPropertyName.equals(
-                rtl::OUString::createFromAscii( "IsRowCountFinal" ) ) )
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsRowCountFinal")) ) )
     {
         // property is read-only.
         throw lang::IllegalArgumentException();
@@ -1389,12 +1389,12 @@ uno::Any SAL_CALL ResultSet::getPropertyValue(
     uno::Any aValue;
 
     if ( PropertyName.equals(
-                rtl::OUString::createFromAscii( "RowCount" ) ) )
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RowCount")) ) )
     {
         aValue <<= m_pImpl->m_xDataSupplier->currentCount();
     }
     else if ( PropertyName.equals(
-                rtl::OUString::createFromAscii( "IsRowCountFinal" ) ) )
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsRowCountFinal")) ) )
     {
         aValue <<= m_pImpl->m_xDataSupplier->isCountFinal();
     }
@@ -1421,9 +1421,9 @@ void SAL_CALL ResultSet::addPropertyChangeListener(
 
     if ( aPropertyName.getLength() &&
          !aPropertyName.equals(
-                rtl::OUString::createFromAscii( "RowCount" ) ) &&
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RowCount")) ) &&
          !aPropertyName.equals(
-                rtl::OUString::createFromAscii( "IsRowCountFinal" ) ) )
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsRowCountFinal")) ) )
         throw beans::UnknownPropertyException();
 
     if ( !m_pImpl->m_pPropertyChangeListeners )
@@ -1447,9 +1447,9 @@ void SAL_CALL ResultSet::removePropertyChangeListener(
 
     if ( aPropertyName.getLength() &&
          !aPropertyName.equals(
-                rtl::OUString::createFromAscii( "RowCount" ) ) &&
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RowCount")) ) &&
          !aPropertyName.equals(
-                rtl::OUString::createFromAscii( "IsRowCountFinal" ) ) )
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsRowCountFinal")) ) )
         throw beans::UnknownPropertyException();
 
     if ( m_pImpl->m_pPropertyChangeListeners )
@@ -1536,7 +1536,7 @@ void ResultSet::rowCountChanged( sal_uInt32 nOld, sal_uInt32 nNew )
     propertyChanged(
         beans::PropertyChangeEvent(
             static_cast< cppu::OWeakObject * >( this ),
-            rtl::OUString::createFromAscii( "RowCount" ),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RowCount")),
             sal_False,
             1001,
             uno::makeAny( nOld ),     // old value
@@ -1552,7 +1552,7 @@ void ResultSet::rowCountFinal()
     propertyChanged(
         beans::PropertyChangeEvent(
             static_cast< cppu::OWeakObject * >( this ),
-            rtl::OUString::createFromAscii( "IsRowCountFinal" ),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsRowCountFinal")),
             sal_False,
             1000,
             uno:: makeAny( sal_False ),   // old value

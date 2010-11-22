@@ -1357,16 +1357,16 @@ sal_uInt32 SvtModuleOptions::GetFeatures() const
 {
     switch( eModule )
     {
-        case SvtModuleOptions::E_SWRITER    :   { return ::rtl::OUString::createFromAscii("Writer"); }
-        case SvtModuleOptions::E_SWEB       :   { return ::rtl::OUString::createFromAscii("Web"); }
-        case SvtModuleOptions::E_SGLOBAL    :   { return ::rtl::OUString::createFromAscii("Global"); }
-        case SvtModuleOptions::E_SCALC      :   { return ::rtl::OUString::createFromAscii("Calc"); }
-        case SvtModuleOptions::E_SDRAW      :   { return ::rtl::OUString::createFromAscii("Draw"); }
-        case SvtModuleOptions::E_SIMPRESS   :   { return ::rtl::OUString::createFromAscii("Impress"); }
-        case SvtModuleOptions::E_SMATH      :   { return ::rtl::OUString::createFromAscii("Math"); }
-        case SvtModuleOptions::E_SCHART     :   { return ::rtl::OUString::createFromAscii("Chart"); }
-        case SvtModuleOptions::E_SBASIC     :   { return ::rtl::OUString::createFromAscii("Basic"); }
-        case SvtModuleOptions::E_SDATABASE  :   { return ::rtl::OUString::createFromAscii("Database"); }
+        case SvtModuleOptions::E_SWRITER    :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Writer")); }
+        case SvtModuleOptions::E_SWEB       :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Web")); }
+        case SvtModuleOptions::E_SGLOBAL    :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Global")); }
+        case SvtModuleOptions::E_SCALC      :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Calc")); }
+        case SvtModuleOptions::E_SDRAW      :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Draw")); }
+        case SvtModuleOptions::E_SIMPRESS   :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Impress")); }
+        case SvtModuleOptions::E_SMATH      :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Math")); }
+        case SvtModuleOptions::E_SCHART     :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Chart")); }
+        case SvtModuleOptions::E_SBASIC     :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Basic")); }
+        case SvtModuleOptions::E_SDATABASE  :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Database")); }
         default:
             OSL_ASSERT( "unknown module" );
             break;
@@ -1379,16 +1379,16 @@ sal_uInt32 SvtModuleOptions::GetFeatures() const
 {
     switch( eFactory )
     {
-        case SvtModuleOptions::E_WRITER         :   { return ::rtl::OUString::createFromAscii("Writer"); }
-        case SvtModuleOptions::E_WRITERWEB      :   { return ::rtl::OUString::createFromAscii("Writer"); }
-        case SvtModuleOptions::E_WRITERGLOBAL   :   { return ::rtl::OUString::createFromAscii("Writer"); }
-        case SvtModuleOptions::E_CALC           :   { return ::rtl::OUString::createFromAscii("Calc"); }
-        case SvtModuleOptions::E_DRAW           :   { return ::rtl::OUString::createFromAscii("Draw"); }
-        case SvtModuleOptions::E_IMPRESS        :   { return ::rtl::OUString::createFromAscii("Impress"); }
-        case SvtModuleOptions::E_MATH           :   { return ::rtl::OUString::createFromAscii("Math"); }
-        case SvtModuleOptions::E_CHART          :   { return ::rtl::OUString::createFromAscii("Chart"); }
-        case SvtModuleOptions::E_BASIC          :   { return ::rtl::OUString::createFromAscii("Basic"); }
-        case SvtModuleOptions::E_DATABASE       :   { return ::rtl::OUString::createFromAscii("Database"); }
+        case SvtModuleOptions::E_WRITER         :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Writer")); }
+        case SvtModuleOptions::E_WRITERWEB      :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Writer")); }
+        case SvtModuleOptions::E_WRITERGLOBAL   :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Writer")); }
+        case SvtModuleOptions::E_CALC           :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Calc")); }
+        case SvtModuleOptions::E_DRAW           :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Draw")); }
+        case SvtModuleOptions::E_IMPRESS        :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Impress")); }
+        case SvtModuleOptions::E_MATH           :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Math")); }
+        case SvtModuleOptions::E_CHART          :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Chart")); }
+        case SvtModuleOptions::E_BASIC          :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Basic")); }
+        case SvtModuleOptions::E_DATABASE       :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Database")); }
         default:
             OSL_ASSERT( "unknown factory" );
             break;
@@ -1468,9 +1468,9 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByURL(const ::rtl::O
     try
     {
         xFilterCfg = css::uno::Reference< css::container::XNameAccess >(
-            xSMGR->createInstance(::rtl::OUString::createFromAscii("com.sun.star.document.FilterFactory")), css::uno::UNO_QUERY);
+            xSMGR->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.FilterFactory"))), css::uno::UNO_QUERY);
         xTypeCfg = css::uno::Reference< css::container::XNameAccess >(
-            xSMGR->createInstance(::rtl::OUString::createFromAscii("com.sun.star.document.TypeDetection")), css::uno::UNO_QUERY);
+            xSMGR->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.TypeDetection"))), css::uno::UNO_QUERY);
     }
     catch(const css::uno::RuntimeException&)
         { throw; }
@@ -1480,13 +1480,13 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByURL(const ::rtl::O
     ::comphelper::SequenceAsHashMap stlDesc(lMediaDescriptor);
 
     // is there already a filter inside the descriptor?
-    ::rtl::OUString sFilterName = stlDesc.getUnpackedValueOrDefault(::rtl::OUString::createFromAscii("FilterName"), ::rtl::OUString());
+    ::rtl::OUString sFilterName = stlDesc.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FilterName")), ::rtl::OUString());
     if (sFilterName.getLength())
     {
         try
         {
             ::comphelper::SequenceAsHashMap stlFilterProps   (xFilterCfg->getByName(sFilterName));
-            ::rtl::OUString                 sDocumentService = stlFilterProps.getUnpackedValueOrDefault(::rtl::OUString::createFromAscii("DocumentService"), ::rtl::OUString());
+            ::rtl::OUString                 sDocumentService = stlFilterProps.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentService")), ::rtl::OUString());
             SvtModuleOptions::EFactory      eApp             = SvtModuleOptions::ClassifyFactoryByServiceName(sDocumentService);
 
             if (eApp != E_UNKNOWN_FACTORY)
@@ -1499,7 +1499,7 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByURL(const ::rtl::O
     }
 
     // is there already a type inside the descriptor?
-    ::rtl::OUString sTypeName = stlDesc.getUnpackedValueOrDefault(::rtl::OUString::createFromAscii("TypeName"), ::rtl::OUString());
+    ::rtl::OUString sTypeName = stlDesc.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TypeName")), ::rtl::OUString());
     if (!sTypeName.getLength())
     {
         // no :-(
@@ -1516,9 +1516,9 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByURL(const ::rtl::O
     try
     {
         ::comphelper::SequenceAsHashMap stlTypeProps     (xTypeCfg->getByName(sTypeName));
-        ::rtl::OUString                 sPreferredFilter = stlTypeProps.getUnpackedValueOrDefault(::rtl::OUString::createFromAscii("PreferredFilter"), ::rtl::OUString());
+        ::rtl::OUString                 sPreferredFilter = stlTypeProps.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PreferredFilter")), ::rtl::OUString());
         ::comphelper::SequenceAsHashMap stlFilterProps   (xFilterCfg->getByName(sPreferredFilter));
-        ::rtl::OUString                 sDocumentService = stlFilterProps.getUnpackedValueOrDefault(::rtl::OUString::createFromAscii("DocumentService"), ::rtl::OUString());
+        ::rtl::OUString                 sDocumentService = stlFilterProps.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentService")), ::rtl::OUString());
         SvtModuleOptions::EFactory      eApp             = SvtModuleOptions::ClassifyFactoryByServiceName(sDocumentService);
 
         if (eApp != E_UNKNOWN_FACTORY)
