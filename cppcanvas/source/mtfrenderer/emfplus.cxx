@@ -1022,7 +1022,7 @@ namespace cppcanvas
                     EMFP_DEBUG (printf ("EMF+\t\tset gradient\n"));
            basegfx::B2DRange aBoundsRectangle (0, 0, 1, 1);
                     if (brush->type == 4) {
-           aGradientService = rtl::OUString::createFromAscii("LinearGradient");
+           aGradientService = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LinearGradient"));
            basegfx::tools::createLinearODFGradientInfo( aGradInfo,
                                     aBoundsRectangle,
                                     aStops.getLength(),
@@ -1030,7 +1030,7 @@ namespace cppcanvas
                                     0 );
 
                     } else {
-            aGradientService = rtl::OUString::createFromAscii("EllipticalGradient");
+            aGradientService = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EllipticalGradient"));
             basegfx::tools::createEllipticalODFGradientInfo( aGradInfo,
                                      aBoundsRectangle,
                                      ::basegfx::B2DVector( 0, 0 ),
@@ -1045,13 +1045,13 @@ namespace cppcanvas
             if( xFactory.is() ) {
             uno::Sequence<uno::Any> args( 3 );
             beans::PropertyValue aProp;
-            aProp.Name = rtl::OUString::createFromAscii( "Colors" );
+            aProp.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Colors"));
             aProp.Value <<= aColors;
             args[0] <<= aProp;
-            aProp.Name = rtl::OUString::createFromAscii( "Stops" );
+            aProp.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Stops"));
             aProp.Value <<= aStops;
             args[1] <<= aProp;
-            aProp.Name = rtl::OUString::createFromAscii( "AspectRatio" );
+            aProp.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AspectRatio"));
             aProp.Value <<= static_cast<sal_Int32>(1);
             args[2] <<= aProp;
 
