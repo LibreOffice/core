@@ -66,7 +66,6 @@ using namespace ::com::sun::star;
 void Ww1Sprm::Stop( Ww1Shell& rOut, Ww1Manager& rMan)
 {
     if(IsUsed())
-//      for(USHORT i=0;i<Count();i++)
         for(short i=Count()-1;i>=0;i--){    // rueckwaerts
             BYTE nId;
             USHORT nSize;
@@ -308,7 +307,6 @@ void Ww1SingleSprmPBrc10::Start(
                      rOut.GetFlyFrmAttr(RES_BOX) :rOut.GetAttr(RES_BOX));
     const SvxBoxItem &rBoxItem = (const SvxBoxItem&)rItem;
     SvxBoxItem aBox( rBoxItem );
-//  rOut >> aBox;
     SvxBorderLine aLine;
     aBox.SetLine(SetBorder(&aLine, pBrc), nBrcTrans[nLine] );
     Ww1SingleSprmPBrc::Start(rOut, nId, pBrc, nSize, rMan, aBox);
@@ -366,12 +364,8 @@ void Ww1SingleSprmPDyaLine::Start(
 void Ww1SingleSprmPChgTabsPapx::Start(
     Ww1Shell& rOut, BYTE /*nId*/, BYTE* pSprm, USHORT /*nSize*/, Ww1Manager& /*rMan*/)
 {
-#if OSL_DEBUG_LEVEL > 1
-//  rOut << 'T';
-#endif
+
     short nLeftPMgn = 0;    // Koordinaten etwa gleich ??
-//  ( pAktColl ) ? pCollA[nAktColl].nLeftParaMgn
-//                                 : nLeftParaMgn;      // Absatz L-Space
 
     short i;
     BYTE nDel = pSprm[1];
@@ -501,8 +495,6 @@ void Ww1SingleSprmTDefTable10::Start(
 // Erstmal die Zellenpositionen einlesen
     short nPos = SVBT16ToShort( p );    // signed, kann auch neg. sein !!!
 
-//  if( !rOut.IsTableWidthSet() ){      // Muss Tabellenbreite und -Ausrichtung
-                                        // noch gesetzt werden ?
     {
         short nWholeWidth = SVBT16ToShort( p + 2 * nCount ) - nPos;
         rOut.SetTableWidth( (USHORT)nWholeWidth );  // Tabellenbreite setzen
@@ -548,7 +540,6 @@ void Ww1SingleSprmTDefTable10::Start(
         if( pTc0 ){                     // gibts TCs ueberhaupt ?
             W1_TC* pTc2 = (W1_TC*)pTc0;
             BOOL bMerged2 = pTc2->fMergedGet();
-//          ASSERT( !bMerged2, "Gemergte Tabellenzellen noch nicht vollstaendig implementiert" );
             if( !bMerged2 ){
 // und nun die Umrandungen
                 SvxBoxItem aBox( (SvxBoxItem&)rOut.GetCellAttr( RES_BOX ));
@@ -595,10 +586,9 @@ void Ww1SingleSprmPpc::Start(
     switch ( ( nPpc & 0x30 ) >> 4 ){        // Y - Bindung bestimmt Sw-Bindung
     case 0: eAnchor = FLY_AT_PARA;          // Vert Margin
             eVRel = text::RelOrientation::PRINT_AREA;
-//          if( nYPos < 0 )
-//              nYPos = 0;                  // koennen wir nicht
+
             break;
-/*  case 1:*/                               // Vert. Seite
+
     default:eAnchor = FLY_AT_PAGE;          // Vert Page oder unknown
             eVRel = text::RelOrientation::FRAME;
             break;                          // 2=Vert. Paragraph, 3=Use Default
@@ -608,9 +598,9 @@ void Ww1SingleSprmPpc::Start(
     case 0:                                 // Hor. Spalte
     case 1:                                 // Hor. Absatz
             eHRel = text::RelOrientation::PRINT_AREA;
-//          nXPos += nPgLeft;               // in Seiten-Koordinaten umrechnen
+
             break;
-/*  case 2:*/                               // Hor. Seite
+
     default:
             eHRel = text::RelOrientation::FRAME;
             break;
@@ -643,7 +633,7 @@ void Ww1SingleSprmPDxaAbs::Start(
     case -4:  eHAlign = text::HoriOrientation::CENTER; nXPos = 0; break; // zentriert
     case -8:                                           // rechts
     case -16: eHAlign = text::HoriOrientation::RIGHT; nXPos = 0; break;  // Mogel: aussen -> rechts
-//  default:  nXPos += (short)nIniFlyDx; break; // Korrekturen per Ini-Datei
+
     }
     rOut.SetFlyXPos( nXPos, eHRel, eHAlign );
 }
@@ -659,7 +649,7 @@ void Ww1SingleSprmPDyaAbs::Start(
     case -4:  eVAlign = text::VertOrientation::TOP; nYPos = 0; break; // oben
     case -8:  eVAlign = text::VertOrientation::CENTER; nYPos = 0; break;  // zentriert
     case -12: eVAlign = text::VertOrientation::BOTTOM; nYPos = 0; break;  // unten
-//  default:  nYPos += (short)nIniFlyDy; break; // Korrekturen per Ini-Datei
+
     }
     rOut.SetFlyYPos( nYPos, eVRel, eVAlign );
 }

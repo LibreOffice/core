@@ -114,9 +114,6 @@ void SwRTFParser::ReadListLevel( SwNumRule& rRule, BYTE nNumLvl )
                 // Unknown und alle bekannten nicht ausgewerteten Gruppen
                 // sofort ueberspringen
                 else if( RTF_UNKNOWNCONTROL != ( nToken = GetNextToken() ))
-//                      RTF_PANOSE != nToken && RTF_FALT != nToken &&
-//                      RTF_FALT != nToken && RTF_FNAME != nToken &&
-//                      RTF_FONTEMB != nToken && RTF_FONTFILE != nToken )
                     nToken = SkipToken( -2 );
                 else
                 {
@@ -326,9 +323,6 @@ void SwRTFParser::ReadListTable()
                 // Unknown und alle bekannten nicht ausgewerteten Gruppen
                 // sofort ueberspringen
                 else if( RTF_UNKNOWNCONTROL != ( nToken = GetNextToken() ))
-//                      RTF_PANOSE != nToken && RTF_FALT != nToken &&
-//                      RTF_FALT != nToken && RTF_FNAME != nToken &&
-//                      RTF_FONTEMB != nToken && RTF_FONTFILE != nToken )
                     nToken = SkipToken( -2 );
                 else
                 {
@@ -608,17 +602,7 @@ void SwRTFParser::ReadListOverrideTable()
         const SwNumRule *pNumRule = 0;
         SvxRTFStyleType* pStyle = GetStyleTbl().First();
         do {
-            // --> OD 2007-12-17 #151213#
-            // suppress deletion of outline list style.
-            // refactoring of code: no assignments in if-condition
-//            if( MAXLEVEL > pStyle->nOutlineNo &&
-//                0 != ( pColl = aTxtCollTbl.Get( (USHORT)GetStyleTbl().
-//                                                        GetCurKey() )) &&
-//                SFX_ITEM_SET == pColl->GetItemState( RES_PARATR_NUMRULE,
-//                                                    FALSE, &pItem ) &&
-//                USHRT_MAX != (nRulePos = pDoc->FindNumRule(
-//                                ((SwNumRuleItem*)pItem)->GetValue() )) &&
-//                (pNumRule = pDoc->GetNumRuleTbl()[ nRulePos ])->IsAutoRule() )
+            // #151213#
             if ( MAXLEVEL > pStyle->nOutlineNo )
             {
                 pColl = aTxtCollTbl.Get( (USHORT)GetStyleTbl().GetCurKey() );

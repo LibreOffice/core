@@ -155,7 +155,6 @@ static RTF_FLD_TYPES _WhichFld( String& rName, String& rNext )
             ( !nFndPos || !isalpha(sNm.GetChar( static_cast< xub_StrLen >(nFndPos-1) )) ) &&
             ( nFndPos+nLen == sNm.Len() || !isalpha(sNm.GetChar( static_cast< xub_StrLen >(nFndPos+nLen) ) ) ) )
         {
-//          rName = sNm.Copy( nFndPos, nLen );
             rName = rName.Copy( nFndPos, static_cast< xub_StrLen >(nLen) );
             nFndPos += nTokenStt + static_cast< xub_StrLen >(nLen);
             while( rNext.GetChar( nFndPos ) == ' ' )    ++nFndPos;
@@ -407,9 +406,6 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
         break;
     case RTFFLD_IMPORT:
         {
-//JP 11.03.96: vertraegt sich nicht so ganz mit Internet!
-//            if( STRING_NOTFOUND != ( nPos = aSaveStr.Search( '.' )))
-//                aSaveStr.Erase( nPos+4 );
 
             aSaveStr.EraseLeadingAndTrailingChars();
             if( aSaveStr.Len() )
@@ -425,7 +421,7 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
                     INetURLObject(GetBaseURL()), aSaveStr,
                     URIHelper::GetMaybeFileHdl() );
             }
-//          SkipGroup();        // ueberlese den Rest
+
         }
         break;
 
@@ -687,7 +683,6 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
                 case 1:     aData.nJustificationCode = 3;   break;
                 case 2:     aData.nJustificationCode = 4;   break;
                 case 4:     aData.nJustificationCode = 2;   break;
-//              case 3:
                 default:    aData.nJustificationCode = 0;   break;
                 }
 

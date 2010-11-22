@@ -363,9 +363,6 @@ BOOL Writer::CopyLocalFileToINet( String& rFileNm )
     BOOL bRet = FALSE;
     INetURLObject aFileUrl( rFileNm ), aTargetUrl( *pOrigFileName );
 
-// JP 01.11.00: what is the correct question for the portal??
-//  if( aFileUrl.GetProtocol() == aFileUrl.GetProtocol() )
-//      return bRet;
 // this is our old without the Mail-Export
     if( ! ( INET_PROT_FILE == aFileUrl.GetProtocol() &&
             INET_PROT_FILE != aTargetUrl.GetProtocol() &&
@@ -427,8 +424,6 @@ void Writer::PutNumFmtFontsInAttrPool()
     const SwNumRuleTbl& rListTbl = pDoc->GetNumRuleTbl();
     const SwNumRule* pRule;
     const SwNumFmt* pFmt;
-    // --> OD 2006-06-27 #b644095#
-//    const Font *pFont, *pDefFont = &SwNumRule::GetDefBulletFont();
     const Font* pFont;
     const Font* pDefFont = &numfunc::GetDefBulletFont();
     // <--

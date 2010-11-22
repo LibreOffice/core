@@ -747,10 +747,7 @@ void rtfSections::SetSegmentToPageDesc(const rtfSection &rSection,
 {
     SwPageDesc &rPage = bTitlePage ? *rSection.mpTitlePage : *rSection.mpPage;
 
-//    SetNumberingType(rSection, rPage);
-
     SwFrmFmt &rFmt = rPage.GetMaster();
-//    mrReader.SetDocumentGrid(rFmt, rSection);
 
     wwULSpaceData aULData;
     GetPageULData(rSection, bTitlePage, aULData);
@@ -790,15 +787,11 @@ void rtfSections::MoveFrom(SwPageDesc &rFrom, SwPageDesc &rDest)
     SwFrmFmt &rFromMaster = rFrom.GetMaster();
     rDestMaster.SetFmtAttr(rFromMaster.GetHeader());
     rDestMaster.SetFmtAttr(rFromMaster.GetFooter());
-    //rFromMaster.SetAttr(SwFmtHeader()); //$flr uncommented due to bug fix #117882#
-    //rFromMaster.SetAttr(SwFmtFooter()); //$flr uncommented due to bug fix #117882#
 
     SwFrmFmt &rDestLeft = rDest.GetLeft();
     SwFrmFmt &rFromLeft = rFrom.GetLeft();
     rDestLeft.SetFmtAttr(rFromLeft.GetHeader());
     rDestLeft.SetFmtAttr(rFromLeft.GetFooter());
-    //rFromLeft.SetAttr(SwFmtHeader()); //$flr uncommented due to bug fix #117882#
-    //rFromLeft.SetAttr(SwFmtFooter()); //$flr uncommented due to bug fix #117882#
 }
 
 void rtfSections::SetHdFt(rtfSection &rSection)
@@ -1241,15 +1234,7 @@ void SwRTFParser::ReadDrawingObject()
         }
     }
     SkipToken(-1);
-    /*
-    const Point aPointC1( 0, 0 );
-    const Point aPointC2( 100, 200 );
-    const Point aPointC3( 300, 400 );
-    XPolygon aPolygonC(3);
-    aPolygonC[0] = aPointC1;
-    aPolygonC[1] = aPointC2;
-    aPolygonC[2] = aPointC3;
-    */
+
     if(bPolygonActive && aPolygon.count())
     {
         SdrPathObj* pStroke = new SdrPathObj(OBJ_PLIN, ::basegfx::B2DPolyPolygon(aPolygon));
@@ -1260,10 +1245,7 @@ void SwRTFParser::ReadDrawingObject()
         aFlySet.Put( aSur );
         SwFmtFollowTextFlow aFollowTextFlow( FALSE );
         aFlySet.Put( aFollowTextFlow );
-        /*
-        sw::util::SetLayer aSetLayer(*pDoc);
-        aSetLayer.SendObjectToHeaven(*pStroke);
-        */
+
         SwFmtAnchor aAnchor( FLY_AT_PARA );
         aAnchor.SetAnchor( pPam->GetPoint() );
         aFlySet.Put( aAnchor );
@@ -1316,7 +1298,7 @@ void SwRTFParser::ReadDrawingObject()
 
         pStroke->SetSnapRect(aRect);
 
-        /* SwFrmFmt* pRetFrmFmt = */pDoc->Insert(*pPam, *pStroke, &aFlySet, NULL);
+        pDoc->Insert(*pPam, *pStroke, &aFlySet, NULL);
     }
 }
 
@@ -1348,7 +1330,7 @@ void SwRTFParser::InsertShpObject(SdrObject* pStroke, int _nZOrder)
         SdrPage* pDrawPg = pDrawModel->GetPage(0);
         pDrawPg->InsertObject(pStroke);
         pDrawPg->SetObjectOrdNum(pStroke->GetOrdNum(), _nZOrder);
-        /* SwFrmFmt* pRetFrmFmt = */pDoc->Insert(*pPam, *pStroke, &aFlySet, NULL);
+        pDoc->Insert(*pPam, *pStroke, &aFlySet, NULL);
 }
 
 ::basegfx::B2DPoint rotate(const ::basegfx::B2DPoint& rStart, const ::basegfx::B2DPoint& rEnd)
@@ -1536,7 +1518,6 @@ void SwRTFParser::ReadShapeObject()
 
             SdrPathObj* pStroke = new SdrPathObj(OBJ_PLIN, ::basegfx::B2DPolyPolygon(aLine));
             pSdrObject = pStroke;
-            //pStroke->SetSnapRect(aRect);
 
             InsertShpObject(pStroke, this->nZOrder++);
             SfxItemSet aSet(pStroke->GetMergedItemSet());
@@ -1575,7 +1556,6 @@ extern void sw3io_ConvertFromOldField( SwDoc& rDoc, USHORT& rWhich,
 
 USHORT SwRTFParser::ReadRevTbl()
 {
-    // rStr.Erase( 0 );
     int nNumOpenBrakets = 1, nToken;        // die erste wurde schon vorher erkannt !!
     USHORT nAuthorTableIndex = 0;
 
@@ -2733,11 +2713,8 @@ void SwRTFParser::MakeStyleTab()
         if( !IsNewDoc() )
         {
             // search all outlined collections
-            //BYTE nLvl;
             const SwTxtFmtColls& rColls = *pDoc->GetTxtFmtColls();
             for( USHORT n = rColls.Count(); n; )
-                //if( MAXLEVEL > (nLvl = rColls[ --n ]->GetOutlineLevel() ))//#outline level,zhaojianwei
-                //  nValidOutlineLevels |= 1 << nLvl;
                 if( rColls[ --n ]->IsAssignedToListLevelOfOutlineStyle())
                     nValidOutlineLevels |= 1 << rColls[ n ]->GetAssignedOutlineStyleLevel();//<-end,zhaojianwei
         }
@@ -3516,20 +3493,6 @@ void SwRTFParser::ReadPageDescTbl()
     SkipToken( -1 );
 }
 
-// -------------- Methoden --------------------
-
-/*
-void SwRTFParser::ReadUnknownData()
-{
-    SvRTFParser::ReadUnknownData();
-}
-
-void SwRTFParser::ReadOLEData()
-{
-    SvRTFParser::ReadOLEData();
-}
-*/
-
 void SwRTFParser::ReadPrtData()
 {
     while( IsParserWorking() )
@@ -3876,29 +3839,6 @@ void SwRTFParser::SetSwgValues( SfxItemSet& rSet )
 
     }
 
-
-/*
- ????????????????????????????????????????????????????????????????????
- ?? muss die LineSpacing Hoehe 200Twip betragen ??
- ?? in rtfitem.hxx wird es auf 0 defaultet. Wenn ja, dann muss hier
- ?? ein neues Item gesetzt werden!!!!
- ????????????????????????????????????????????????????????????????????
-
-    // LineSpacing korrigieren
-    if( SFX_ITEM_SET == rSet.GetItemState( RES_PARATR_LINESPACING, FALSE, &pItem ))
-    {
-        const SvxLineSpacingItem* pLS = (const SvxLineSpacingItem*)pItem;
-        SvxLineSpacingItem aNew;
-
-        aNew.SetInterLineSpace( pLS->GetInterLineSpace() );
-        aNew.GetLineSpaceRule() = pLS->GetLineSpaceRule();
-        aNew.SetPropLineSpace( pLS->GetPropLineSpace() );
-        aNew.GetInterLineSpaceRule() = pLS->GetInterLineSpaceRule();
-
-        rSet.Put( aNew );
-    }
-?????????????????????????????????????????????????????????????????? */
-
 }
 
 
@@ -3906,7 +3846,6 @@ SwTxtFmtColl* SwRTFParser::MakeColl(const String& rName, USHORT nPos,
     BYTE nOutlineLevel, bool& rbCollExist)
 {
     if( BYTE(-1) == nOutlineLevel )
-        //nOutlineLevel = NO_NUMBERING;
         nOutlineLevel = MAXLEVEL;//#outline level,zhaojianwei
 
     rbCollExist = false;
@@ -3918,7 +3857,6 @@ SwTxtFmtColl* SwRTFParser::MakeColl(const String& rName, USHORT nPos,
         if( !nPos )
         {
             pColl = pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD, false );
-            //pColl->SetOutlineLevel( nOutlineLevel );      //#outline level,removed by zhaojianwei
             if(nOutlineLevel < MAXLEVEL )                           //->add by zhaojianwei
                 pColl->AssignToListLevelOfOutlineStyle( nOutlineLevel );
             else
@@ -3946,7 +3884,6 @@ SwTxtFmtColl* SwRTFParser::MakeColl(const String& rName, USHORT nPos,
 
     if (!rbCollExist)
     {
-        //pColl->SetOutlineLevel( nOutlineLevel );  //#outline level,removed by zhaojianwei
         if(nOutlineLevel < MAXLEVEL)                        //->add by zhaojianwei
             pColl->AssignToListLevelOfOutlineStyle( nOutlineLevel );
         else
@@ -4278,13 +4215,6 @@ void SwRTFParser::UnknownAttrToken( int nToken, SfxItemSet* pSet )
             pSet->Put( SfxUInt16Item( FN_PARAM_NUM_LEVEL, nLevel ));
         }
         break;
-
-/*
-    case RTF_SBYS:
-    case RTF_EXPND:
-    case RTF_KEEP:
-    case RTF_KEEPN:
-*/
 
     }
 }

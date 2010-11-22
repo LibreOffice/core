@@ -353,73 +353,6 @@ void SwRTFParser::ReadTable( int nToken )
                     aBox.SetDistance( static_cast< USHORT >(nTopCellPad), BOX_LINE_LEFT);
 
 
-                /*#106415# The Cell Borders are now balanced on import to
-                improve the layout of tables.
-                */
-/*
-                if ( aBoxFmts.Count()>1)
-                {
-
-                    SwTableBoxFmt* prevpFmt = aBoxFmts[ aBoxFmts.Count()-2 ];
-                    SvxBoxItem prevaBox(prevpFmt->GetBox());
-                    USHORT prevWidthRight=0;
-                    USHORT currWidthLeft=0;
-                    bool bDoubleLine=false;
-                    const SvxBorderLine*   brdrline ;
-                    const Color* pPrevRightColor;
-                    if(prevaBox.GetRight())
-                    {
-                        brdrline=prevaBox.GetRight();
-                        prevWidthRight = brdrline->GetOutWidth();
-                        pPrevRightColor = &brdrline->GetColor();
-                        if(brdrline->GetInWidth())
-                            bDoubleLine=true;
-                    }
-                    if(aBox.GetLeft())
-                    {
-                        brdrline=aBox.GetLeft();
-                        currWidthLeft = brdrline->GetOutWidth();
-                        if(brdrline->GetInWidth())
-                            bDoubleLine=true;
-                    }
-
-                    if((currWidthLeft >0 || prevWidthRight >0) &&
-                        !bDoubleLine)
-                    {
-                        USHORT newBorderWidth=(currWidthLeft+prevWidthRight)/2 ;
-                        if(newBorderWidth /2 ==DEF_LINE_WIDTH_0 )
-                        {
-                            newBorderWidth =DEF_LINE_WIDTH_0;
-                        }
-                        else if(newBorderWidth /2 >=(DEF_LINE_WIDTH_4-DEF_LINE_WIDTH_3))
-                        {
-                            newBorderWidth =DEF_LINE_WIDTH_4;
-                        }
-                        else if(newBorderWidth /2 >=(DEF_LINE_WIDTH_3-DEF_LINE_WIDTH_2))
-                        {
-                            newBorderWidth =DEF_LINE_WIDTH_3;
-                        }
-                        else if(newBorderWidth /2>=(DEF_LINE_WIDTH_2-DEF_LINE_WIDTH_1))
-                        {
-                            newBorderWidth =DEF_LINE_WIDTH_2;
-                        }
-                        else if(newBorderWidth /2>=(DEF_LINE_WIDTH_1 - DEF_LINE_WIDTH_0)  )
-                        {
-                            newBorderWidth =DEF_LINE_WIDTH_1;
-                        }
-                        else
-                        {
-                            newBorderWidth =DEF_LINE_WIDTH_0;
-                        }
-                        const SvxBorderLine  newbrdrline(pPrevRightColor, newBorderWidth,0,0);
-                        aBox.SetLine(&newbrdrline,BOX_LINE_LEFT);
-                        prevaBox.SetLine(&newbrdrline,BOX_LINE_RIGHT);
-                        prevpFmt->SetAttr(prevaBox);
-                    }
-
-                }
-*/
-
                 pFmt->SetFmtAttr(aBox);
 
                 bUseLeftCellPad = false;
@@ -964,7 +897,6 @@ void SwRTFParser::NewTblLine()
         pLns = &pTableNode->GetTable().GetTabLines();
     }
     else
-//      pDoc->InsertRow( aBoxes );
         pTableNode->GetTable().AppendRow( pDoc );
 
     pBox = (*pLns)[ pLns->Count()-1 ]->GetTabBoxes()[0];

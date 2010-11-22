@@ -370,9 +370,6 @@ static void MakeBookRegionOrPoint(SwFltStackEntry* pEntry, SwDoc* pDoc,
 {
     if (pEntry->MakeRegion(pDoc, rRegion, bCheck )){
         const SwNodes& rNds = pDoc->GetNodes();
-//      BOOL b1 = rNds[rRegion.GetPoint()->nNode]->FindTableNode() != 0;
-//      const SwStartNode* p1 = rNds[rRegion.GetPoint()->nNode]->FindTableBoxStartNode();
-//      const SwStartNode* p2 = rNds[rRegion.GetMark()->nNode]->FindTableBoxStartNode();
         if( rNds[rRegion.GetPoint()->nNode]->FindTableBoxStartNode()
               != rNds[rRegion.GetMark()->nNode]->FindTableBoxStartNode() ){
             rRegion.Exchange();         // Ungueltiger Bereich
@@ -632,7 +629,6 @@ const SfxPoolItem* SwFltControlStack::GetFmtAttr(const SwPosition& rPos, USHORT 
         return (const SfxPoolItem*)pHt;
 
     // im Stack ist das Attribut nicht vorhanden, also befrage das Dokument
-//  SwCntntNode * pNd = rPaM.GetCntntNode();
     SwCntntNode * pNd = pDoc->GetNodes()[ rPos.nNode ]->GetCntntNode();
 
     if (!pNd)           // kein ContentNode, dann das dflt. Attribut
@@ -1732,9 +1728,9 @@ SwFrmFmt* SwFltOutDoc::MakeFly( RndStdIds eAnchor, SfxItemSet* pSet )
     return pFly;
 }
 
-BOOL SwFltOutDoc::BeginFly( RndStdIds eAnchor /*= FLY_AT_PARA*/,
-                           BOOL bAbsolutePos /*= FALSE*/,
-                           const SfxItemSet* pMoreAttrs /*= 0*/ )
+BOOL SwFltOutDoc::BeginFly( RndStdIds eAnchor,
+                           BOOL bAbsolutePos ,
+                           const SfxItemSet* pMoreAttrs)
 
 {
     SwFltOutBase::BeginFly( eAnchor, bAbsolutePos, 0 );
@@ -1759,7 +1755,6 @@ BOOL SwFltOutDoc::BeginFly( RndStdIds eAnchor /*= FLY_AT_PARA*/,
 //  dieses NICHT bei Seitengebundenem Fly mit Seiten-NUMMER !
     aAnchor.SetAnchor(pPaM->GetPoint());    // braucht erstaunlicherweise
                                             // den Stack nicht
-//  aStack.NewAttr( *pPaM->GetPoint(), SwFltAnchor( pFly ) );
 
     pSet->Put( aAnchor );
     SwFrmFmt* pF = MakeFly( eAnchor, pSet );
@@ -1831,16 +1826,15 @@ void SwFltOutDoc::EndFly()
 
 /*virtual*/ const SfxPoolItem& SwFltFormatCollection::GetFlyFrmAttr(USHORT nWhich)
 {
-//  ASSERT( pFlyAttrs, "GetFlyFrmAttr ohne Coll-FlyAttrs" );
     if( pFlyAttrs )
         return pFlyAttrs->Get( nWhich, FALSE );
     else
         return GetDoc().GetAttrPool().GetDefaultItem(nWhich);
 }
 
-BOOL SwFltFormatCollection::BeginFly( RndStdIds eAnchor /*= FLY_AT_PARA*/,
-                           BOOL bAbsolutePos /*= FALSE*/,
-                           const SfxItemSet* pMoreAttrs /*= 0*/ )
+BOOL SwFltFormatCollection::BeginFly( RndStdIds eAnchor,
+                           BOOL bAbsolutePos,
+                           const SfxItemSet* pMoreAttrs)
 
 {
     SwFltOutBase::BeginFly( eAnchor, bAbsolutePos, pMoreAttrs );
@@ -1866,8 +1860,8 @@ BOOL SwFltFormatCollection::BeginStyleFly( SwFltOutDoc* pOutDoc )
 // Flys in SwFltShell
 //-----------------------------------------------------------------------------
 
-BOOL SwFltShell::BeginFly( RndStdIds eAnchor /*= FLY_AT_PARA*/,
-                           BOOL bAbsolutePos /*= FALSE*/ )
+BOOL SwFltShell::BeginFly( RndStdIds eAnchor,
+                           BOOL bAbsolutePos)
 
 {
     if (pOut->IsInFly()){
@@ -1883,14 +1877,14 @@ BOOL SwFltShell::BeginFly( RndStdIds eAnchor /*= FLY_AT_PARA*/,
     return TRUE;
 }
 
-void SwFltShell::SetFlyXPos( short nXPos, sal_Int16 eHRel /*= text::RelOrientation::FRAME*/,
-                             sal_Int16 eHAlign /*= text::HoriOrientation::NONE*/ )
+void SwFltShell::SetFlyXPos( short nXPos, sal_Int16 eHRel,
+                             sal_Int16 eHAlign)
 {
     SetFlyFrmAttr( SwFmtHoriOrient( nXPos, eHAlign, eHRel ) );
 }
 
-void SwFltShell::SetFlyYPos( short nYPos, sal_Int16 eVRel /*= text::RelOrientation::FRAME*/,
-                             sal_Int16 eVAlign /*= text::VertOrientation::NONE*/ )
+void SwFltShell::SetFlyYPos( short nYPos, sal_Int16 eVRel,
+                             sal_Int16 eVAlign)
 {
     SetFlyFrmAttr( SwFmtVertOrient( nYPos, eVAlign, eVRel ) );
 }
@@ -1928,7 +1922,6 @@ void SwFltShell::BeginFootnote()
 // Alle Attribute schliessen, da sonst Attribute entstehen koennen,
 // die in Fussnoten reinragen
     aStack.SetAttr( *pPaM->GetPoint(), 0, FALSE );
-//  aEndStack.SetAttr( *pPaM->GetPoint(), 0, FALSE );
 //  EndStack erstmal nicht zwangs-Schliessen, damit Bookmarks ueber
 //  Fussnoten im PMW uebernommen werden
 
@@ -1958,7 +1951,6 @@ void SwFltShell::EndFootnote()
                         // Alle Attribute schliessen, da sonst Attribute
                         // entstehen koennen, die aus Fussnoten rausragen
     aStack.SetAttr( *pPaM->GetPoint(), 0, FALSE );
-//  aEndStack.SetAttr( *pPaM->GetPoint(), 0, FALSE );
 //  EndStack erstmal nicht zwangs-Schliessen, damit Bookmarks ueber
 //  Fussnoten im PMW uebernommen werden
 
@@ -1969,8 +1961,7 @@ void SwFltShell::EndFootnote()
 
 void SwFltShell::BeginHeader(SwPageDesc* /*pPD*/)
 {
-    SwFrmFmt* pFmt = &pCurrentPageDesc->GetMaster(
-     ); //(bUseLeft) ?  &pCurrentPageDesc->GetLeft() :
+    SwFrmFmt* pFmt = &pCurrentPageDesc->GetMaster();
     SwFrmFmt* pHdFtFmt;
     pFmt->SetFmtAttr(SwFmtHeader(TRUE));
     pHdFtFmt = (SwFrmFmt*)pFmt->GetHeader().GetHeaderFmt();
@@ -1986,8 +1977,7 @@ void SwFltShell::BeginHeader(SwPageDesc* /*pPD*/)
 
 void SwFltShell::BeginFooter(SwPageDesc* /*pPD*/)
 {
-    SwFrmFmt* pFmt =  &pCurrentPageDesc->GetMaster(
-     ); //(bUseLeft) ?  &pCurrentPageDesc->GetLeft() :
+    SwFrmFmt* pFmt =  &pCurrentPageDesc->GetMaster();
     SwFrmFmt* pHdFtFmt;
     pFmt->SetFmtAttr(SwFmtFooter(TRUE));
     pHdFtFmt = (SwFrmFmt*)pFmt->GetFooter().GetFooterFmt();

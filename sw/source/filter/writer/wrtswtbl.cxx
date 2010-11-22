@@ -609,7 +609,6 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, USHORT nStartRow,
 
         SwWriteTableRow *pRow = aRows[nOldRow];
         SwWriteTableRow *pEndRow = aRows[nRow];
-//      if( nLine==0 && nParentLineHeight==0 )
         if( nLine+1==nNumOfHeaderRows && nParentLineHeight==0 )
             nHeadEndRow = nRow;
 
@@ -740,16 +739,6 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, USHORT nStartRow,
                         pEndRow->nBottomBorder = nBottomBorder;
                     }
                 }
-//              MIB: 13.12.2000: Why should a cell that contains a subtable
-//              not have borders? Moreover, switching them, off switches off
-//              the fill border lines between the columns and rows. (#74222#)
-//              else
-//              {
-//                  aCols[nOldCol]->bLeftBorder = FALSE;
-//                  aCols[nCol]->bRightBorder = FALSE;
-//                  pRow->bTopBorder = FALSE;
-//                  pEndRow->bBottomBorder = FALSE;
-//              }
             }
             else
             {

@@ -465,7 +465,6 @@ void SwRTFParser::SetFlysInDoc()
             if( !bSwPageDesc || 5430 < GetVersionNo() )
                 pFlySave->nSttNd++;
 
-//            if( !pFlySave->nSttNd.GetNode().IsCntntNode() )
             {
                 // Seitenumbrueche in den Bodybereich verschieben!
                 SwCntntNode* pSrcNd = aRg.aStart.GetNode().GetCntntNode();
@@ -981,16 +980,6 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
                 nTmp *= USHRT_MAX;
                 nTmp /= nWidth;
                 pCol->SetWishWidth( USHORT(nTmp) );
-/*
-    JP 07.07.95: der Dialog kennt nur eine Breite fuer alle Spalten
-                 darum hier nicht weiter beachten
-                nTmp = aColumns[ n+1 ];
-                if( nTmp )
-                    pCol->SetRight( USHORT(nTmp) );
-                else
-                    pCol->SetRight( 0 );
-                pCol->SetLeft( 0 );
-*/
             }
         }
         pSet->Put( aCol );
@@ -1113,8 +1102,6 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
         pPam->GetPoint()->nNode == pFlySave->nSttNd &&
         !pPam->GetPoint()->nContent.GetIndex() )
     {
-//      // dann erzeuge mindestens einen leeren TextNode
-//      pDoc->AppendTxtNode(*pPam);
         // dann zerstoere den FlySave wieder.
         aFlyArr.DeleteAndDestroy( --nFlyArrCnt );
 
@@ -1249,7 +1236,6 @@ void SwRTFParser::InsPicture( const String& rGrfNm, const Graphic* pGrf,
     SwGrfNode * pGrfNd;
     // --> OD 2008-12-22 #i83368#
     // Assure that graphic node is enclosed by fly frame node.
-//    if( bReadSwFly )
     if ( bReadSwFly && !mbReadCellWhileReadSwFly )
     // <--
     {
@@ -1277,8 +1263,7 @@ void SwRTFParser::InsPicture( const String& rGrfNm, const Graphic* pGrf,
     else
     {
         // wenn normale RTF-Grafik, dann steht diese im Textfluss !
-        SwAttrSet aFlySet( pDoc->GetAttrPool(), RES_OPAQUE, /*RES_OPAQUE,
-                                                RES_VERT_ORIENT,*/ RES_ANCHOR );
+        SwAttrSet aFlySet( pDoc->GetAttrPool(), RES_OPAQUE, RES_ANCHOR );
         const SwPosition* pPos = pPam->GetPoint();
 
         SwFmtAnchor aAnchor( FLY_AS_CHAR );
@@ -1408,33 +1393,6 @@ void SwRTFParser::_SetPictureSize( const SwNoTxtNode& rNd,
         BOOL bChg = FALSE;
         SwCropGrf aCrop;
 
-/*
- JP 28.07.99: Bug 67800 - no crop by MAC_QUICKDRAW. At time i dont know why
-                            it has been coded. But this has used for any
-                            RTF-File, but i dont found them.
-        if( SvxRTFPictureType::MAC_QUICKDRAW == pPicType->eStyle )
-        {
-            // evt. ein wenig Croppen ??
-            // IMMER auf 72 DPI bezogen, also 1pt == 20 Twip !!
-            long nTmp = pPicType->nWidth * 20;
-            if( nTmp != aSize.Width() )
-            {
-                // in der Breite (also rechts) croppen
-                aCrop.Right() = nTmp - aSize.Width();
-                aSize.Width() = nTmp;
-                bChg = TRUE;
-            }
-
-            nTmp = pPicType->nHeight * 20;
-            if( nTmp != aSize.Height() )
-            {
-                // in der Hoehe (also unten) croppen
-                aCrop.Bottom() = nTmp - aSize.Height();
-                aSize.Height() = nTmp;
-                bChg = TRUE;
-            }
-        }
-*/
         if( pPicType->nCropT )
         {
             aCrop.SetTop( pPicType->nCropT );
