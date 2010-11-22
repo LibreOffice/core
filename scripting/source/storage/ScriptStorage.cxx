@@ -290,8 +290,8 @@ throw ( RuntimeException, Exception )
 
         validateXRef( xSMI, "ScriptStorage::create: failed to obtain valid XExtendedDocumentHandler" );
 
-        xStringUri = xStringUri.concat( ::rtl::OUString::createFromAscii(
-            SCRIPT_DIR ) );
+        xStringUri = xStringUri.concat( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            SCRIPT_DIR )) );
 
        // No Scripts directory - just return
        if ( ! m_xSimpleFileAccess->isFolder( xStringUri ) )
@@ -329,7 +329,7 @@ throw ( RuntimeException, Exception )
                     RTL_TEXTENCODING_ASCII_US ).pData->buffer );
 
                 OUString parcelFile = parcelDirs[ j ].concat(
-                    ::rtl::OUString::createFromAscii( SCRIPT_PARCEL ) );
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCRIPT_PARCEL )) );
 
                 // Do not have a valid parcel.xml
                 if ( !m_xSimpleFileAccess->exists( parcelFile ) ||
@@ -559,8 +559,8 @@ throw ( RuntimeException )
     // xScriptInvocation = Reference<XScriptInvocation>(xx, UNO_QUERY_THROW);
     Reference< xml::sax::XExtendedDocumentHandler > xHandler;
 
-    OUString parcel_suffix = OUString::createFromAscii( SCRIPT_PARCEL );
-    OUString ou_parcel = OUString(
+    OUString parcel_suffix(RTL_CONSTASCII_USTRINGPARAM( SCRIPT_PARCEL ));
+    OUString ou_parcel(
         RTL_CONSTASCII_USTRINGPARAM( SCRIPT_PARCEL_NAME_ONLY ) );
 
     try

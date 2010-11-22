@@ -137,7 +137,7 @@ throw ( RuntimeException )
 
         Reference< XInterface > xInterface;
         Any a = m_xContext->getValueByName(
-                OUString::createFromAscii( SCRIPTSTORAGEMANAGER_SERVICE ) );
+                OUString(RTL_CONSTASCII_USTRINGPARAM( SCRIPTSTORAGEMANAGER_SERVICE )) );
         if ( sal_False == ( a >>= xInterface ) )
         {
             throw RuntimeException(

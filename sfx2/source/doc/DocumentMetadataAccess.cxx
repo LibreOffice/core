@@ -516,8 +516,8 @@ collectFilesFromStorage(uno::Reference<embed::XStorage> const& i_xStorage,
     ::rtl::OUString i_Path,
     std::set< ::rtl::OUString > & o_rFiles)
 {
-    static ::rtl::OUString content(::rtl::OUString::createFromAscii(s_content));
-    static ::rtl::OUString styles (::rtl::OUString::createFromAscii(s_styles ));
+    static ::rtl::OUString content(RTL_CONSTASCII_USTRINGPARAM(s_content));
+    static ::rtl::OUString styles(RTL_CONSTASCII_USTRINGPARAM(s_styles ));
     try {
         if (i_xStorage->hasByName(content) &&
             i_xStorage->isStreamElement(content))
@@ -643,7 +643,7 @@ exportStream(struct DocumentMetadataAccess_Impl & i_rImpl,
     if (xStreamProps.is()) { // this is NOT supported in FileSystemStorage
         xStreamProps->setPropertyValue(
             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")),
-            uno::makeAny(::rtl::OUString::createFromAscii(s_rdfxml)));
+            uno::makeAny(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s_rdfxml))));
     }
     const uno::Reference<io::XOutputStream> xOutStream(
         xStream->getOutputStream(), uno::UNO_SET_THROW );

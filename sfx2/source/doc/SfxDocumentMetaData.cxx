@@ -1232,8 +1232,6 @@ void SAL_CALL SfxDocumentMetaData::init(
                 css::uno::UNO_QUERY_THROW);
             // NB: the following is a _bad_idea_ with our DOM implementation
             //     do _not_ create attributes with xmlns prefix!
-//        xRElem->setAttribute(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("xmlns:office")),
-//                    ::rtl::OUString::createFromAscii(s_nsODF));
             xRElem->setAttributeNS(::rtl::OUString::createFromAscii(s_nsODF),
                         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("office:version")),
                         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("1.0")));
