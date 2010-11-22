@@ -908,7 +908,11 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_UNO_META                         (FN_EXTRA2 + 112)
 #define FN_UNO_NESTED_TEXT_CONTENT          (FN_EXTRA2 + 113)
 
-#define FN_EMBEDDED_OBJECT                  (FN_EXTRA2 + 114)
+// #i972: bool items to be passed to SwFrmPage for evaluation
+#define FN_OLE_IS_MATH                      (FN_EXTRA2 + 114)
+#define FN_MATH_BASELINE_ALIGNMENT          (FN_EXTRA2 + 115)
+
+#define FN_EMBEDDED_OBJECT                  (FN_EXTRA2 + 116)
 
 /*--------------------------------------------------------------------
     Bereich: Hilfe
@@ -1060,7 +1064,7 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 
 #define FN_ENVELOP                  (FN_ENVELP    )
 
-#define FN_DELETE_NOTE              (FN_NOTES+0)
+
 #define FN_DELETE_NOTE_AUTHOR       (FN_NOTES+1)
 #define FN_DELETE_ALL_NOTES         (FN_NOTES+2)
 #define FN_HIDE_NOTE                (FN_NOTES+3)

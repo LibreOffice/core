@@ -458,4 +458,3 @@ int SwTestItem::operator==( const SfxPoolItem& rAttr ) const
 #endif
 
 
-

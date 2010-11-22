@@ -38,6 +38,8 @@
 #include <comphelper/storagehelper.hxx>
 #include <rtl/logfile.hxx>
 #include <rtl/ustring.hxx>
+#include <unotools/eventcfg.hxx>
+#include <sfx2/event.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
@@ -181,7 +183,14 @@ void SmDocShell::SetText(const String& rBuffer)
         {
             pViewSh->GetViewFrame()->GetBindings().Invalidate(SID_TEXT);
             if ( SFX_CREATE_MODE_EMBEDDED == GetCreateMode() )
+            {
+                // have SwOleClient::FormatChanged() to align the modified formula properly
+                // even if the vis area does not change (e.g. when formula text changes from
+                // "{a over b + c} over d" to "d over {a over b + c}"
+                SFX_APP()->NotifyEvent(SfxEventHint( SFX_EVENT_VISAREACHANGED, GlobalEventConfig::GetEventName(STR_EVENT_VISAREACHANGED), this));
+
                 Repaint();
+            }
             else
                 pViewSh->GetGraphicWindow().Invalidate();
         }

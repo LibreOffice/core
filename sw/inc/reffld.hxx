@@ -24,8 +24,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _REFFLD_HXX
-#define _REFFLD_HXX
+#ifndef SW_REFFLD_HXX
+#define SW_REFFLD_HXX
 
 #include <fldbas.hxx>
 
@@ -99,6 +99,9 @@ private:
     USHORT nSubType;
     USHORT nSeqNo;
 
+    virtual String      Expand() const;
+    virtual SwField*    Copy() const;
+
     // --> OD 2007-08-24 #i81002#
     String MakeRefNumStr( const SwTxtNode& rTxtNodeOfField,
                           const SwTxtNode& rTxtNodeOfReferencedItem,
@@ -110,9 +113,7 @@ public:
 
     virtual ~SwGetRefField();
 
-    virtual String      GetCntnt(BOOL bName = FALSE) const;
-    virtual String      Expand() const;
-    virtual SwField*    Copy() const;
+    virtual String      GetFieldName() const;
 
     const String&       GetSetRefName() const { return sSetRefName; }
 
@@ -158,5 +159,5 @@ public:
 };
 
 
-#endif // _REFFLD_HXX
+#endif // SW_REFFLD_HXX
 
