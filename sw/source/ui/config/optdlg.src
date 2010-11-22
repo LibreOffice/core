@@ -1021,6 +1021,18 @@ TabPage TP_OPTSHDWCRSR
         Group = TRUE ;
         Text [ en-US ] = "Enable";
     };
+    FixedLine FL_LAYOUT_OPTIONS
+    {
+        Pos = MAP_APPFONT ( 6 , 133 ) ;
+        Size = MAP_APPFONT ( 118 , 8 ) ;
+        Text [ en-US ] = "Layout assistance";
+    };
+    CheckBox CB_MATH_BASELINE_ALIGNMENT
+    {
+        Pos = MAP_APPFONT ( 12 , 144 ) ;
+        Size = MAP_APPFONT ( 236 , 10 ) ;
+        Text [ en-US ] = "Math baseline alignment";
+    };
 };
 
 

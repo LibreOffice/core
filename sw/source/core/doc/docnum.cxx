@@ -1092,7 +1092,23 @@ void SwDoc::SetNumRule( const SwPaM& rPam,
     {
         SvUShortsSort aResetAttrsArray;
         aResetAttrsArray.Insert( RES_LR_SPACE );
-        ResetAttrs( rPam, sal_True, &aResetAttrsArray );
+        // --> OD 2010-10-05 #i114929#
+        // On a selection setup a corresponding Point-and-Mark in order to get
+        // the indentation attribute reset on all paragraphs touched by the selection
+        if ( rPam.HasMark() &&
+             rPam.End()->nNode.GetNode().GetTxtNode() )
+        {
+            SwPaM aPam( rPam.Start()->nNode,
+                        rPam.End()->nNode );
+            aPam.Start()->nContent = 0;
+            aPam.End()->nContent = rPam.End()->nNode.GetNode().GetTxtNode()->Len();
+            ResetAttrs( aPam, FALSE, &aResetAttrsArray );
+        }
+        else
+        {
+            ResetAttrs( rPam, FALSE, &aResetAttrsArray );
+        }
+        // <--
     }
     // <--
 
@@ -1104,22 +1120,27 @@ void SwDoc::SetNumRule( const SwPaM& rPam,
 
 void SwDoc::SetCounted(const SwPaM & rPam, bool bCounted)
 {
-    // --> OD 2008-04-03 #refactorlists#
-//    ULONG nStartPos = rPam.Start()->nNode.GetIndex();
-//    ULONG nEndPos = rPam.End()->nNode.GetIndex();
-
-//    for (ULONG n = nStartPos; n <= nEndPos; n++)
-//    {
-//        SwTxtNode * pNd = GetNodes()[n]->GetTxtNode();
-
-//        if (pNd)
-//            pNd->SetCountedInList(bCounted);
-//    }
     if ( bCounted )
     {
         SvUShortsSort aResetAttrsArray;
         aResetAttrsArray.Insert( RES_PARATR_LIST_ISCOUNTED );
-        ResetAttrs( rPam, sal_True, &aResetAttrsArray );
+        // --> OD 2010-10-05 #i114929#
+        // On a selection setup a corresponding Point-and-Mark in order to get
+        // the list-is-counted attribute reset on all paragraphs touched by the selection
+        if ( rPam.HasMark() &&
+             rPam.End()->nNode.GetNode().GetTxtNode() )
+        {
+            SwPaM aPam( rPam.Start()->nNode,
+                        rPam.End()->nNode );
+            aPam.Start()->nContent = 0;
+            aPam.End()->nContent = rPam.End()->nNode.GetNode().GetTxtNode()->Len();
+            ResetAttrs( aPam, FALSE, &aResetAttrsArray );
+        }
+        else
+        {
+            ResetAttrs( rPam, FALSE, &aResetAttrsArray );
+        }
+        // <--
     }
     else
     {
@@ -1127,30 +1148,6 @@ void SwDoc::SetCounted(const SwPaM & rPam, bool bCounted)
             SfxBoolItem( RES_PARATR_LIST_ISCOUNTED, FALSE ), 0 );
     }
 }
-
-//void SwDoc::ReplaceNumRule(const SwPaM & rPaM, const SwNumRule & rNumRule)
-//{
-//    if (DoesUndo())
-//        StartUndo(UNDO_START, NULL);
-
-//  ULONG nStt = rPaM.Start()->nNode.GetIndex();
-//  ULONG nEnd = rPaM.End()->nNode.GetIndex();
-
-//    for (ULONG n = nStt; n <= nEnd; n++)
-//    {
-//        SwTxtNode * pCNd = GetNodes()[n]->GetTxtNode();
-
-//        if (pCNd && NULL != pCNd->GetNumRule())
-//        {
-//            SwPaM aPam(*pCNd);
-
-//            InsertPoolItem(aPam, SwNumRuleItem(rNumRule.GetName()), 0);
-//        }
-//    }
-
-//    if (DoesUndo())
-//        EndUndo(UNDO_START, NULL);
-//}
 
 void SwDoc::SetNumRuleStart( const SwPosition& rPos, BOOL bFlag )
 {

@@ -366,6 +366,7 @@ SwDoc::SwDoc() :
     mbUseFormerObjectPos                = aOptions.IsUseObjectPositioning();
     mbUseFormerTextWrapping             = aOptions.IsUseOurTextWrapping();
     mbConsiderWrapOnObjPos              = aOptions.IsConsiderWrappingStyle();
+    mbMathBaselineAlignment                 = false;        // default for *old* documents is 'off'
     mbAddFlyOffsets                         = false;        // hidden
     mbOldNumbering                          = false;        // hidden
     mbUseHiResolutionVirtualDevice          = true;         // hidden
@@ -835,8 +836,8 @@ void SwDoc::ClearDoc()
         pFirstNd->SetAttr( SwFmtPageDesc( pDummyPgDsc ));
 
         SwPosition aPos( *pFirstNd, SwIndex( pFirstNd ));
-        ::PaMCorrAbs( aSttIdx, SwNodeIndex( GetNodes().GetEndOfContent() ),
-                         aPos );
+        SwPaM const tmpPaM(aSttIdx, SwNodeIndex(GetNodes().GetEndOfContent()));
+        ::PaMCorrAbs(tmpPaM, aPos);
     }
 
     GetNodes().Delete( aSttIdx,

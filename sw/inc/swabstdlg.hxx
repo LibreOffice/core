@@ -494,5 +494,5 @@ public:
     virtual CreateTabPage               GetTabPageCreatorFunc( USHORT nId ) = 0;
     virtual GetTabPageRanges            GetTabPageRangesFunc( USHORT nId ) = 0;
 };
-#endif
 
+#endif

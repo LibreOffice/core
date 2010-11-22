@@ -53,6 +53,8 @@ public:
     void SetInDoVerb( BOOL bFlag )              { bInDoVerb = bFlag; }
 
     BOOL IsCheckForOLEInCaption() const         { return bOldCheckForOLEInCaption; }
+
+    virtual void FormatChanged();
 };
 
 #endif
