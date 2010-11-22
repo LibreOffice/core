@@ -66,11 +66,14 @@ static void systray_disable_cb()
 
 static void exit_quickstarter_cb( GtkWidget * )
 {
-    egg_tray_icon_cancel_message (pTrayIcon, 1 );
-    plugin_shutdown_sys_tray();
-    //terminate may cause this .so to be unloaded. So we must be hands off
-    //all calls into this .so after this call
-    ShutdownIcon::terminateDesktop();
+    if (pTrayIcon)
+    {
+        egg_tray_icon_cancel_message (pTrayIcon, 1 );
+        plugin_shutdown_sys_tray();
+        //terminate may cause this .so to be unloaded. So we must be hands off
+        //all calls into this .so after this call
+        ShutdownIcon::terminateDesktop();
+    }
 }
 
 static void menu_deactivate_cb( GtkWidget *pMenu )
@@ -396,6 +399,9 @@ void SAL_DLLPUBLIC_EXPORT plugin_init_sys_tray()
     // disable shutdown
     pShutdownIcon->SetVeto( true );
     pShutdownIcon->addTerminateListener();
+
+    g_signal_connect(GTK_WIDGET(pTrayIcon), "destroy",
+            G_CALLBACK(exit_quickstarter_cb), NULL);
 }
 
 void SAL_DLLPUBLIC_EXPORT plugin_shutdown_sys_tray()
