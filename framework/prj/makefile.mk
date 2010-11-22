@@ -37,4 +37,4 @@ VERBOSEFLAG := -s
 .ENDIF
 
 all:
-    cd $(PRJ) && $(GNUMAKE) $(VERBOSEFLAG) -r -j$(MAXPROCESS) install
+    cd $(PRJ) && $(GNUMAKE) $(VERBOSEFLAG) -r -j$(MAXPROCESS)
