@@ -539,10 +539,6 @@ namespace framework
             }
         }
         while ( true );
-
-        OSL_ENSURE( false, "UndoManagerHelper_Impl::impl_processRequest: unreachable!" );
-            // there's only two exits from the above loop: a direct return, and a throw ...
-        m_bProcessingEvents = false;
     }
 
     //------------------------------------------------------------------------------------------------------------------
