@@ -246,27 +246,27 @@ ODBExport::ODBExport(const Reference< XMultiServiceFactory >& _rxMSF,sal_uInt16 
 
     GetAutoStylePool()->AddFamily(
         XML_STYLE_FAMILY_TABLE_TABLE,
-        rtl::OUString::createFromAscii( XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME ),
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME )),
         m_xExportHelper.get(),
-        rtl::OUString::createFromAscii( XML_STYLE_FAMILY_TABLE_TABLE_STYLES_PREFIX ));
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_TABLE_TABLE_STYLES_PREFIX )));
 
     GetAutoStylePool()->AddFamily(
         XML_STYLE_FAMILY_TABLE_COLUMN,
-        rtl::OUString::createFromAscii( XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME ),
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME )),
         m_xColumnExportHelper.get(),
-        rtl::OUString::createFromAscii( XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_PREFIX ));
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_PREFIX )));
 
     GetAutoStylePool()->AddFamily(
         XML_STYLE_FAMILY_TABLE_CELL,
-        rtl::OUString::createFromAscii( XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME ),
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME )),
         m_xCellExportHelper.get(),
-        rtl::OUString::createFromAscii( XML_STYLE_FAMILY_TABLE_CELL_STYLES_PREFIX ));
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_TABLE_CELL_STYLES_PREFIX )));
 
     GetAutoStylePool()->AddFamily(
         XML_STYLE_FAMILY_TABLE_ROW,
-        rtl::OUString::createFromAscii( XML_STYLE_FAMILY_TABLE_ROW_STYLES_NAME ),
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_TABLE_ROW_STYLES_NAME )),
         m_xRowExportHelper.get(),
-        rtl::OUString::createFromAscii( XML_STYLE_FAMILY_TABLE_ROW_STYLES_PREFIX ));
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_TABLE_ROW_STYLES_PREFIX )));
 }
 // -----------------------------------------------------------------------------
 IMPLEMENT_SERVICE_INFO1_STATIC( ODBExport, "com.sun.star.comp.sdb.DBExportFilter", "com.sun.star.document.ExportFilter")
