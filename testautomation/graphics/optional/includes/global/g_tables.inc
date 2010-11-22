@@ -44,10 +44,12 @@ testcase tiInsertTableUsingMenu
     Call hNewDocument
     printlog "Switching between Draw/Impress"
     if ( gApplication = "IMPRESS" ) then
+        Kontext "Document Impress"
         DocumentImpress.UseMenu
         hMenuSelectNr(4)
         hMenuSelectNr(14)
     else
+        Kontext "Document Draw"
         DocumentDraw.UseMenu
         hMenuSelectNr(4)
         hMenuSelectNr(11)
@@ -208,9 +210,11 @@ testcase tiTableObjectBar
     printlog "Switching between Draw/Impress"
     if ( gApplication = "IMPRESS" ) then
         DocumentImpress.UseMenu
+        Kontext "Document Impress"
         hMenuSelectNr(4)
         hMenuSelectNr(14)
     else
+        Kontext "Document Draw"
         DocumentDraw.UseMenu
         hMenuSelectNr(4)
         hMenuSelectNr(11)

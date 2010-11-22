@@ -28,28 +28,6 @@
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="Events" script:language="StarBasic">REM  *****  BASIC  *****
 
-Sub InitEvents
-    call ClickCutTest
-End Sub
-
-Sub ClickSaveTest
-    if not OptionsDlg.cbSaveTest.Value then
-        OptionsDlg.cbOpenTest.Value = false
-        OptionsDlg.cbOpenTest.Enabled = false
-    else
-        OptionsDlg.cbOpenTest.Enabled = true
-    end If
-End Sub
-
-Sub ClickCutTest
-    if not OptionsDlg.cbCutTest.Value then
-        OptionsDlg.cbPasteTest.Value = false
-        OptionsDlg.cbPasteTest.Enabled = false
-    else
-        OptionsDlg.cbPasteTest.Enabled = true
-    end If
-End Sub
-
 Sub PressCancel
     gDlgState = cDlgCancel
 end Sub
