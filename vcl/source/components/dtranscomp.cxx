@@ -145,7 +145,7 @@ rtl::OUString GenericClipboard::getImplementationName_static()
 Sequence< rtl::OUString > GenericClipboard::getSupportedServiceNames_static()
 {
     Sequence< OUString > aRet(1);
-    aRet[0] = OUString::createFromAscii("com.sun.star.datatransfer.clipboard.SystemClipboard");
+    aRet[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.clipboard.SystemClipboard"));
     return aRet;
 }
 
@@ -282,7 +282,7 @@ Reference< XInterface > ClipboardFactory::createInstanceWithArguments( const Seq
 Sequence< OUString > SAL_CALL Clipboard_getSupportedServiceNames()
 {
     Sequence< OUString > aRet(1);
-    aRet[0] = OUString::createFromAscii("com.sun.star.datatransfer.clipboard.SystemClipboard");
+    aRet[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.clipboard.SystemClipboard"));
     return aRet;
 }
 
@@ -335,13 +335,13 @@ public:
     static Sequence< OUString > getSupportedServiceNames_static()
     {
         Sequence< OUString > aRet( 1 );
-        aRet[0] = OUString::createFromAscii( "com.sun.star.datatransfer.dnd.GenericDragSource" );
+        aRet[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.dnd.GenericDragSource"));
         return aRet;
     }
 
     static OUString getImplementationName_static()
     {
-        return OUString::createFromAscii( "com.sun.star.datatransfer.dnd.VclGenericDragSource" );
+        return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.dnd.VclGenericDragSource"));
     }
 };
 
@@ -447,13 +447,13 @@ public:
     static Sequence< OUString > getSupportedServiceNames_static()
     {
         Sequence< OUString > aRet( 1 );
-        aRet[0] = OUString::createFromAscii( "com.sun.star.datatransfer.dnd.GenericDropTarget" );
+        aRet[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.dnd.GenericDropTarget"));
         return aRet;
     }
 
     static OUString getImplementationName_static()
     {
-        return OUString::createFromAscii( "com.sun.star.datatransfer.dnd.VclGenericDropTarget" );
+        return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.dnd.VclGenericDropTarget"));
     }
 };
 

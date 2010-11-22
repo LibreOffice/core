@@ -479,10 +479,10 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, BOOL bCallHdl )
         sal_Bool bTmp = sal_False, bAutoHCMode = sal_True;
         utl::OConfigurationNode aNode = utl::OConfigurationTreeRoot::tryCreateWithServiceFactory(
             vcl::unohelper::GetMultiServiceFactory(),
-            OUString::createFromAscii( "org.openoffice.Office.Common/Accessibility" ) );    // note: case sensisitive !
+            OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Common/Accessibility")) );    // note: case sensisitive !
         if ( aNode.isValid() )
         {
-            ::com::sun::star::uno::Any aValue = aNode.getNodeValue( OUString::createFromAscii( "AutoDetectSystemHC" ) );
+            ::com::sun::star::uno::Any aValue = aNode.getNodeValue( OUString(RTL_CONSTASCII_USTRINGPARAM("AutoDetectSystemHC")) );
             if( aValue >>= bTmp )
                 bAutoHCMode = bTmp;
         }
@@ -8576,22 +8576,22 @@ Reference< XDragSource > Window::GetDragSource()
                         Sequence< Any > aDragSourceAL( 2 ), aDropTargetAL( 2 );
                         OUString aDragSourceSN, aDropTargetSN;
 #if defined WNT
-                        aDragSourceSN = OUString::createFromAscii( "com.sun.star.datatransfer.dnd.OleDragSource" );
-                        aDropTargetSN = OUString::createFromAscii( "com.sun.star.datatransfer.dnd.OleDropTarget" );
+                        aDragSourceSN = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.dnd.OleDragSource"));
+                        aDropTargetSN = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.dnd.OleDropTarget"));
                         aDragSourceAL[ 1 ] = makeAny( (sal_uInt32) pEnvData->hWnd );
                         aDropTargetAL[ 0 ] = makeAny( (sal_uInt32) pEnvData->hWnd );
 #elif defined QUARTZ
             /* FIXME: Mac OS X specific dnd interface does not exist! *
              * Using Windows based dnd as a temporary solution        */
-                        aDragSourceSN = OUString::createFromAscii( "com.sun.star.datatransfer.dnd.OleDragSource" );
-                        aDropTargetSN = OUString::createFromAscii( "com.sun.star.datatransfer.dnd.OleDropTarget" );
+                        aDragSourceSN = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.dnd.OleDragSource"));
+                        aDropTargetSN = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.dnd.OleDropTarget"));
                         aDragSourceAL[ 1 ] = makeAny( static_cast<sal_uInt64>( reinterpret_cast<sal_IntPtr>(pEnvData->pView) ) );
                         aDropTargetAL[ 0 ] = makeAny( static_cast<sal_uInt64>( reinterpret_cast<sal_IntPtr>(pEnvData->pView) ) );
 #elif defined UNX
                         aDropTargetAL.realloc( 3 );
                         aDragSourceAL.realloc( 3 );
-                        aDragSourceSN = OUString::createFromAscii( "com.sun.star.datatransfer.dnd.X11DragSource" );
-                        aDropTargetSN = OUString::createFromAscii( "com.sun.star.datatransfer.dnd.X11DropTarget" );
+                        aDragSourceSN = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.dnd.X11DragSource"));
+                        aDropTargetSN = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.dnd.X11DropTarget"));
 
                         aDragSourceAL[ 0 ] = makeAny( Application::GetDisplayConnection() );
                         aDragSourceAL[ 2 ] = makeAny( vcl::createBmpConverter() );
@@ -8664,10 +8664,10 @@ Reference< XClipboard > Window::GetClipboard()
 
                 if( xFactory.is() )
                 {
-                    mpWindowImpl->mpFrameData->mxClipboard = Reference< XClipboard >( xFactory->createInstance( OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboardExt" ) ), UNO_QUERY );
+                    mpWindowImpl->mpFrameData->mxClipboard = Reference< XClipboard >( xFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.clipboard.SystemClipboardExt")) ), UNO_QUERY );
 
                     if( !mpWindowImpl->mpFrameData->mxClipboard.is() )
-                        mpWindowImpl->mpFrameData->mxClipboard = Reference< XClipboard >( xFactory->createInstance( OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboard" ) ), UNO_QUERY );
+                        mpWindowImpl->mpFrameData->mxClipboard = Reference< XClipboard >( xFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.clipboard.SystemClipboard")) ), UNO_QUERY );
 
 #if defined(UNX) && !defined(QUARTZ)          // unix clipboard needs to be initialized
                     if( mpWindowImpl->mpFrameData->mxClipboard.is() )
@@ -8678,7 +8678,7 @@ Reference< XClipboard > Window::GetClipboard()
                         {
                             Sequence< Any > aArgumentList( 3 );
                             aArgumentList[ 0 ] = makeAny( Application::GetDisplayConnection() );
-                            aArgumentList[ 1 ] = makeAny( OUString::createFromAscii( "CLIPBOARD" ) );
+                            aArgumentList[ 1 ] = makeAny( OUString(RTL_CONSTASCII_USTRINGPARAM("CLIPBOARD")) );
                             aArgumentList[ 2 ] = makeAny( vcl::createBmpConverter() );
 
                             xInit->initialize( aArgumentList );
@@ -8721,19 +8721,19 @@ Reference< XClipboard > Window::GetPrimarySelection()
 #if defined(UNX) && !defined(QUARTZ)
                     Sequence< Any > aArgumentList( 3 );
                       aArgumentList[ 0 ] = makeAny( Application::GetDisplayConnection() );
-                    aArgumentList[ 1 ] = makeAny( OUString::createFromAscii( "PRIMARY" ) );
+                    aArgumentList[ 1 ] = makeAny( OUString(RTL_CONSTASCII_USTRINGPARAM("PRIMARY")) );
                     aArgumentList[ 2 ] = makeAny( vcl::createBmpConverter() );
 
                     mpWindowImpl->mpFrameData->mxSelection = Reference< XClipboard >( xFactory->createInstanceWithArguments(
-                    OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboard" ), aArgumentList ), UNO_QUERY );
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.clipboard.SystemClipboard")), aArgumentList ), UNO_QUERY );
 #       else
                     static Reference< XClipboard >      s_xSelection;
 
                     if ( !s_xSelection.is() )
-                         s_xSelection = Reference< XClipboard >( xFactory->createInstance( OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.GenericClipboardExt" ) ), UNO_QUERY );
+                         s_xSelection = Reference< XClipboard >( xFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.clipboard.GenericClipboardExt")) ), UNO_QUERY );
 
                     if ( !s_xSelection.is() )
-                         s_xSelection = Reference< XClipboard >( xFactory->createInstance( OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.GenericClipboard" ) ), UNO_QUERY );
+                         s_xSelection = Reference< XClipboard >( xFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.clipboard.GenericClipboard")) ), UNO_QUERY );
 
                     mpWindowImpl->mpFrameData->mxSelection = s_xSelection;
 #       endif

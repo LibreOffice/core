@@ -2371,12 +2371,12 @@ BOOL ToolBox::AlwaysLocked()
 
         utl::OConfigurationNode aNode = utl::OConfigurationTreeRoot::tryCreateWithServiceFactory(
             vcl::unohelper::GetMultiServiceFactory(),
-            OUString::createFromAscii( "/org.openoffice.Office.UI.GlobalSettings/Toolbars" ) );    // note: case sensisitive !
+            OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.UI.GlobalSettings/Toolbars")) );    // note: case sensisitive !
         if ( aNode.isValid() )
         {
             // feature enabled ?
             BOOL bStatesEnabled = BOOL();
-            ::com::sun::star::uno::Any aValue = aNode.getNodeValue( OUString::createFromAscii( "StatesEnabled" ) );
+            ::com::sun::star::uno::Any aValue = aNode.getNodeValue( OUString(RTL_CONSTASCII_USTRINGPARAM("StatesEnabled")) );
             if( aValue >>= bStatesEnabled )
             {
                 if( bStatesEnabled == TRUE )
@@ -2384,10 +2384,10 @@ BOOL ToolBox::AlwaysLocked()
                     // now read the locking state
                     utl::OConfigurationNode aNode2 = utl::OConfigurationTreeRoot::tryCreateWithServiceFactory(
                         vcl::unohelper::GetMultiServiceFactory(),
-                        OUString::createFromAscii( "/org.openoffice.Office.UI.GlobalSettings/Toolbars/States" ) );    // note: case sensisitive !
+                        OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.UI.GlobalSettings/Toolbars/States")) );    // note: case sensisitive !
 
                     BOOL bLocked = BOOL();
-                    ::com::sun::star::uno::Any aValue2 = aNode2.getNodeValue( OUString::createFromAscii( "Locked" ) );
+                    ::com::sun::star::uno::Any aValue2 = aNode2.getNodeValue( OUString(RTL_CONSTASCII_USTRINGPARAM("Locked")) );
                     if( aValue2 >>= bLocked )
                         nAlwaysLocked = (bLocked == TRUE) ? 1 : 0;
                 }

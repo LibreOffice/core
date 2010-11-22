@@ -324,14 +324,14 @@ bool ImplInitAccessBridge(BOOL bAllowCancel, BOOL &rCancelled)
                         new AccessBridgeCurrentContext( com::sun::star::uno::getCurrentContext() ) );
 
                     pSVData->mxAccessBridge = xFactory->createInstanceWithArguments(
-                            OUString::createFromAscii( "com.sun.star.accessibility.AccessBridge" ),
+                            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.accessibility.AccessBridge")),
                             arguments
                         );
                 }
                 else
                 {
                     pSVData->mxAccessBridge = xFactory->createInstanceWithArguments(
-                            OUString::createFromAscii( "com.sun.star.accessibility.AccessBridge" ),
+                            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.accessibility.AccessBridge")),
                             arguments
                         );
                 }
@@ -453,11 +453,11 @@ bool ImplInitAccessBridge(BOOL bAllowCancel, BOOL &rCancelled)
             String aTitle;
             String aMessage(ResId(SV_ACCESSERROR_BRIDGE_MSG, *pResMgr));
 
-            if( 0 == e.Message.compareTo(::rtl::OUString::createFromAscii("ClassNotFound"), 13) )
+            if( 0 == e.Message.compareTo(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ClassNotFound")), 13) )
             {
                 aTitle = String(ResId(SV_ACCESSERROR_MISSING_BRIDGE, *pResMgr));
             }
-            else if( 0 == e.Message.compareTo(::rtl::OUString::createFromAscii("NoSuchMethod"), 12) )
+            else if( 0 == e.Message.compareTo(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NoSuchMethod")), 12) )
             {
                 aTitle = String(ResId(SV_ACCESSERROR_WRONG_VERSION, *pResMgr));
             }

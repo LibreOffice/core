@@ -796,7 +796,7 @@ Reference < i18n::XBreakIterator > Edit::ImplGetBreakIterator() const
 //    if ( !xBI.is() )
     {
         Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-        Reference < XInterface > xI = xMSF->createInstance( OUString::createFromAscii( "com.sun.star.i18n.BreakIterator" ) );
+        Reference < XInterface > xI = xMSF->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.BreakIterator")) );
         if ( xI.is() )
         {
             Any x = xI->queryInterface( ::getCppuType((const Reference< i18n::XBreakIterator >*)0) );
@@ -816,7 +816,7 @@ Reference < i18n::XExtendedInputSequenceChecker > Edit::ImplGetInputSequenceChec
 //    if ( !xISC.is() )
     {
         Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-        Reference < XInterface > xI = xMSF->createInstance( OUString::createFromAscii( "com.sun.star.i18n.InputSequenceChecker" ) );
+        Reference < XInterface > xI = xMSF->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.InputSequenceChecker")) );
         if ( xI.is() )
         {
             Any x = xI->queryInterface( ::getCppuType((const Reference< i18n::XExtendedInputSequenceChecker >*)0) );
@@ -878,12 +878,12 @@ void Edit::ImplInsertText( const XubString& rStr, const Selection* pNewSel, sal_
 
         // determine if input-sequence-checking should be applied or not
         //
-        static OUString sModule( OUString::createFromAscii( "/org.openoffice.Office.Common/I18N" ) );
-        static OUString sRelNode( OUString::createFromAscii( "CTL" ) );
-        static OUString sCTLSequenceChecking( OUString::createFromAscii( "CTLSequenceChecking" ) );
-        static OUString sCTLSequenceCheckingRestricted( OUString::createFromAscii( "CTLSequenceCheckingRestricted" ) );
-        static OUString sCTLSequenceCheckingTypeAndReplace( OUString::createFromAscii( "CTLSequenceCheckingTypeAndReplace" ) );
-        static OUString sCTLFont( OUString::createFromAscii( "CTLFont" ) );
+        static OUString sModule( RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.Common/I18N") );
+        static OUString sRelNode( RTL_CONSTASCII_USTRINGPARAM("CTL") );
+        static OUString sCTLSequenceChecking( RTL_CONSTASCII_USTRINGPARAM("CTLSequenceChecking") );
+        static OUString sCTLSequenceCheckingRestricted( RTL_CONSTASCII_USTRINGPARAM("CTLSequenceCheckingRestricted") );
+        static OUString sCTLSequenceCheckingTypeAndReplace( RTL_CONSTASCII_USTRINGPARAM("CTLSequenceCheckingTypeAndReplace") );
+        static OUString sCTLFont( RTL_CONSTASCII_USTRINGPARAM("CTLFont") );
         //
         sal_Bool bCTLSequenceChecking               = sal_False;
         sal_Bool bCTLSequenceCheckingRestricted     = sal_False;

@@ -523,7 +523,7 @@ bool GDIMetaFile::ImplPlayWithRenderer( OutputDevice* pOut, const Point& rPos, S
             uno::Reference< rendering::XBitmapCanvas > xBitmapCanvas( xBitmap, uno::UNO_QUERY );
             if( xBitmapCanvas.is() ) {
                 args[0] = uno::Any( xBitmapCanvas );
-                xMtfRenderer.set( xFactory->createInstanceWithArguments( ::rtl::OUString::createFromAscii( "com.sun.star.rendering.MtfRenderer" ),
+                xMtfRenderer.set( xFactory->createInstanceWithArguments( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.rendering.MtfRenderer")),
                                                                          args ), uno::UNO_QUERY );
 
                 if( xMtfRenderer.is() ) {

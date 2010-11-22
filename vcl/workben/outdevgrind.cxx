@@ -83,7 +83,7 @@ class TestWindow : public Dialog
     public:
         TestWindow() : Dialog( (Window *) NULL )
         {
-            SetText( rtl::OUString::createFromAscii( "OutDev grinding" ) );
+            SetText( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OutDev grinding")) );
             SetSizePixel( Size( 1024, 1024 ) );
             EnablePaint( true );
             Show();

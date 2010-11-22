@@ -398,8 +398,8 @@ PrinterJob::StartJob (
     maJobTitle = rJobName;
 
     rtl::OUString aExt = rtl::OUString::createFromAscii (".ps");
-    mpJobHeader  = CreateSpoolFile (rtl::OUString::createFromAscii("psp_head"), aExt);
-    mpJobTrailer = CreateSpoolFile (rtl::OUString::createFromAscii("psp_tail"), aExt);
+    mpJobHeader  = CreateSpoolFile (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("psp_head")), aExt);
+    mpJobTrailer = CreateSpoolFile (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("psp_tail")), aExt);
     if( ! (mpJobHeader && mpJobTrailer) ) // existing files are removed in destructor
         return sal_False;
 
@@ -671,9 +671,9 @@ PrinterJob::StartPage (const JobData& rJobSetup)
     rtl::OUString aExt    = aPageNo + rtl::OUString::createFromAscii (".ps");
 
     osl::File* pPageHeader = CreateSpoolFile (
-                                              rtl::OUString::createFromAscii("psp_pghead"), aExt);
+                                              rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("psp_pghead")), aExt);
     osl::File* pPageBody   = CreateSpoolFile (
-                                              rtl::OUString::createFromAscii("psp_pgbody"), aExt);
+                                              rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("psp_pgbody")), aExt);
 
     maHeaderList.push_back (pPageHeader);
     maPageList.push_back (pPageBody);

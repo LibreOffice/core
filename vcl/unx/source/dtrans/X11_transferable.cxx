@@ -75,13 +75,13 @@ Any SAL_CALL X11Transferable::getTransferData( const DataFlavor& rFlavor )
     Sequence< sal_Int8 > aData;
     bool bSuccess = m_rManager.getPasteData( m_aSelection ? m_aSelection : XA_PRIMARY, rFlavor.MimeType, aData );
     if( ! bSuccess && m_aSelection == 0 )
-        bSuccess = m_rManager.getPasteData( m_rManager.getAtom( OUString::createFromAscii( "CLIPBOARD" ) ), rFlavor.MimeType, aData );
+        bSuccess = m_rManager.getPasteData( m_rManager.getAtom( OUString(RTL_CONSTASCII_USTRINGPARAM("CLIPBOARD")) ), rFlavor.MimeType, aData );
 
     if( ! bSuccess )
     {
         throw UnsupportedFlavorException( rFlavor.MimeType, static_cast < XTransferable * > ( this ) );
     }
-    if( rFlavor.MimeType.equalsIgnoreAsciiCase( OUString::createFromAscii( "text/plain;charset=utf-16" ) ) )
+    if( rFlavor.MimeType.equalsIgnoreAsciiCase( OUString(RTL_CONSTASCII_USTRINGPARAM("text/plain;charset=utf-16")) ) )
     {
         int nLen = aData.getLength()/2;
         if( ((sal_Unicode*)aData.getConstArray())[nLen-1] == 0 )
@@ -107,7 +107,7 @@ Sequence< DataFlavor > SAL_CALL X11Transferable::getTransferDataFlavors()
     Sequence< DataFlavor > aFlavorList;
     bool bSuccess = m_rManager.getPasteDataTypes( m_aSelection ? m_aSelection : XA_PRIMARY, aFlavorList );
     if( ! bSuccess && m_aSelection == 0 )
-        bSuccess = m_rManager.getPasteDataTypes( m_rManager.getAtom( OUString::createFromAscii( "CLIPBOARD" ) ), aFlavorList );
+        bSuccess = m_rManager.getPasteDataTypes( m_rManager.getAtom( OUString(RTL_CONSTASCII_USTRINGPARAM("CLIPBOARD")) ), aFlavorList );
 
     return aFlavorList;
 }
@@ -119,7 +119,7 @@ sal_Bool SAL_CALL X11Transferable::isDataFlavorSupported( const DataFlavor& aFla
 {
     if( aFlavor.DataType != getCppuType( (Sequence< sal_Int8 >*)0 ) )
     {
-        if( ! aFlavor.MimeType.equalsIgnoreAsciiCase( OUString::createFromAscii( "text/plain;charset=utf-16" ) ) &&
+        if( ! aFlavor.MimeType.equalsIgnoreAsciiCase( OUString(RTL_CONSTASCII_USTRINGPARAM("text/plain;charset=utf-16")) ) &&
             aFlavor.DataType == getCppuType( (OUString*)0 ) )
             return false;
     }

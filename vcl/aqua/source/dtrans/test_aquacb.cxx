@@ -75,7 +75,7 @@ TestTransferable::TestTransferable() :
 {
     DataFlavor df;
 
-    df.MimeType = OUString::createFromAscii( "text/html" );
+    df.MimeType = OUString(RTL_CONSTASCII_USTRINGPARAM("text/html"));
     df.DataType = getCppuType( ( Sequence< sal_Int8 >* )0 );
 
     m_seqDFlv[0] = df;

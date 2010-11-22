@@ -123,7 +123,7 @@ class TestWindow : public Dialog
     public:
         TestWindow() : Dialog( (Window *) NULL )
         {
-            SetText( rtl::OUString::createFromAscii( "CanvasBitmap test harness" ) );
+            SetText( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CanvasBitmap test harness")) );
             SetSizePixel( Size( 1024, 1024 ) );
             EnablePaint( true );
             Show();

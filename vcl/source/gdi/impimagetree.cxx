@@ -273,7 +273,7 @@ void ImplImageTree::resetZips() {
                 u.GetMainURL(INetURLObject::NO_DECODE),
                 css::uno::Reference< css::container::XNameAccess >()));
     }
-    if ( m_style.equals(::rtl::OUString::createFromAscii("default")) )
+    if ( m_style.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("default"))) )
     {
         rtl::OUString url(
             RTL_CONSTASCII_USTRINGPARAM(
