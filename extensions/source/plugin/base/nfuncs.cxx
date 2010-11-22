@@ -584,11 +584,6 @@ NPError SAL_CALL NP_LOADDS  NPN_GetValue( NPP instance, NPNVariable variable, vo
             break;
     }
 
-    /*
-    provisional code should there ever be NPNVariables that we actually
-    want to query from the PluginContext
-    */
-
     return aResult;
 }
 

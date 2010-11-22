@@ -723,7 +723,7 @@ sal_Bool XPlugin_Impl::provideNewStream(const OUString& mimetype,
 
      // there may be plugins that can use the file length information,
      // but currently none are known. Since this file opening/seeking/closing
-     // is rather costly, it is #if'ed out. If there are plugins known to
+     // is rather costly, it is not implemented. If there are plugins known to
      // make use of the file length, simply put it in
 
      PluginInputStream* pStream = new PluginInputStream( this, aURL.getStr(),

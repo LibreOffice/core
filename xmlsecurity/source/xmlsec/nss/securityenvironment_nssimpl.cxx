@@ -576,32 +576,14 @@ Reference< XCertificate > SecurityEnvironment_NssImpl :: getCertificate( const O
         if( arena == NULL )
             throw RuntimeException() ;
 
-                /*
-                 * mmi : because MS Crypto use the 'S' tag (equal to the 'ST' tag in NSS), but the NSS can't recognise
-                 *      it, so the 'S' tag should be changed to 'ST' tag
-                 *
-                 * PS  : it can work, but inside libxmlsec, the 'S' tag is till used to find cert in NSS engine, so it
-                 *       is not useful at all. (comment out now)
-                 */
-
-                /* end */
-
-        //Create cert info from issue and serial
+        // Create cert info from issue and serial
         rtl::OString ostr = rtl::OUStringToOString( issuerName , RTL_TEXTENCODING_UTF8 ) ;
         chIssuer = PL_strndup( ( char* )ostr.getStr(), ( int )ostr.getLength() ) ;
         nmIssuer = CERT_AsciiToName( chIssuer ) ;
         if( nmIssuer == NULL ) {
             PL_strfree( chIssuer ) ;
             PORT_FreeArena( arena, PR_FALSE ) ;
-
-            /*
-             * i40394
-             *
-             * mmi : no need to throw exception
-             *       just return "no found"
-             */
-            //throw RuntimeException() ;
-            return NULL;
+            return NULL; // no need for exception cf. i40394
         }
 
         derIssuer = SEC_ASN1EncodeItem( arena, NULL, ( void* )nmIssuer, SEC_ASN1_GET( CERT_NameTemplate ) ) ;
