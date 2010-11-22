@@ -753,10 +753,11 @@ int ATSLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) cons
 
     // initial measurement of text break position
     UniCharArrayOffset nBreakPos = mnMinCharPos;
-    const ATSUTextMeasurement nATSUMaxWidth = Vcl2Fixed( nPixelWidth );
+    ATSUTextMeasurement nATSUMaxWidth = Vcl2Fixed( nPixelWidth );
+    if( nATSUMaxWidth <= 0xFFFF ) // #i108584# avoid ATSU rejecting the parameter
+        return mnMinCharPos;      //           or do ATSUMaxWidth=0x10000;
     OSStatus eStatus = ATSUBreakLine( maATSULayout, mnMinCharPos,
         nATSUMaxWidth, false, &nBreakPos );
-
     if( (eStatus != noErr) && (eStatus != kATSULineBreakInWord) )
         return STRING_LEN;
 
