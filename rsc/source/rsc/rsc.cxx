@@ -1320,7 +1320,7 @@ void RscCompiler::PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
                                 aBaseFileName += ByteString::CreateFromInt32( 0 );
 
                             if( GetImageFilePath( rOutputFile, rContext, aBaseFileName += aLine , aFilePath, pSysListFile ) )
-                                aEntryVector.push_back( ::std::make_pair< ByteString, sal_Int32 >( aFilePath, nNumber ) );
+                                aEntryVector.push_back( ::std::pair< ByteString, sal_Int32 >( aFilePath, nNumber ) );
                             else
                                 aMissingImages.push_back( aBaseFileName );
                         }
