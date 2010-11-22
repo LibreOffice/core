@@ -29,6 +29,8 @@
 # it depends on scripts outside the gbuild directory
 # nothing in the gbuild core should ever depend on it
 
+.PHONY : packmodule cleanpackmodule
+
 define gb_PackModule_setpackmodulecommand
 ifeq ($$(words $(gb_Module_ALLMODULES)),1)
 $$(eval $$(call gb_Output_announce,$$(strip $$(gb_Module_ALLMODULES)),$$(true),ZIP,5))
@@ -39,18 +41,22 @@ packmodule : COMMAND := true
 endif
 endef
 
-.PHONY : packmodule cleanpackmodule
 packmodule : all
     $(eval $(call gb_PackModule_setpackmodulecommand))
     $(COMMAND)
 
-# TODO: implement cleanpackmodule
-# Should cleanpackmodule depend on clean and thus remove the build too?  That
-# would be consistent with the current behaviour of packmodule.  Or should it
-# only remove the packed module, but nothing else?  Or should packmodule have
-# an order only dependency on all?  Then one could either pack whats there with
-# "packmodule" (might fail on an incomplete build) or make sure everything is
-# up-to-date with "packmodule all".
+define gb_PackModule_setcleanpackmodulecommand
+ifeq ($$(words $(gb_Module_ALLMODULES)),1)
+$$(eval $$(call gb_Output_announce,$$(strip $$(gb_Module_ALLMODULES)),$$(false),ZIP,5))
+cleanpackmodule : COMMAND := rm -f $$(OUTDIR)/zip.$$(UPDMINOR)/$$(strip $$(gb_Module_ALLMODULES)).zip
+else
+$$(eval $$(call gb_Output_announce,more than one module - deleting no zipped package,$$(false),ZIP,5))
+cleanpackmodule : COMMAND := true
+endif
+endef
 
-
+cleanpackmodule : clean
+    $(eval $(call gb_PackModule_setcleanpackmodulecommand))
+    $(COMMAND)
+    
 # vim: set noet ts=4 sw=4:

@@ -46,7 +46,7 @@ endef
 # FIXME: this does not really work for real multi repository builds, but the
 # deliver.log format is broken in that case anyway
 define gb_Deliver_add_deliverable
-gb_Deliver_DELIVERABLES += $$(patsubst $(SOURCE_ROOT_DIR)/%,%,$(2)):$$(patsubst $(SOURCE_ROOT_DIR)/%,%,$(1))
+gb_Deliver_DELIVERABLES += $$(patsubst $(REPO_DIR)/%,%,$(2)):$$(patsubst $(REPO_DIR)/%,%,$(1))
 
 endef
 
@@ -63,7 +63,7 @@ define gb_Deliver_setdeliverlogcommand
 ifeq ($$(words $(gb_Module_ALLMODULES)),1)
 $$(eval $$(call gb_Output_announce,$$(strip $$(gb_Module_ALLMODULES)),$$(true),LOG,1))
 deliverlog : COMMAND := mkdir -p $$(OUTDIR)/inc/$$(strip $$(gb_Module_ALLMODULES)) &&
-deliverlog : COMMAND += echo "$$(sort $$(gb_Deliver_DELIVERABLES)) " | awk -f $$(GBUILDDIR)/processdelivered.awk > $$(OUTDIR)/inc/$$(strip $(gb_Module_ALLMODULES))/deliver.log
+deliverlog : COMMAND += echo "$$(sort $$(gb_Deliver_DELIVERABLES)) " | awk -f $$(GBUILDDIR)/processdelivered.awk > $$(OUTDIR)/inc/$$(strip $(gb_Module_ALLMODULES))/gb_deliver.log
 else
 $$(eval $$(call gb_Output_announce,more than one module - creating no deliver.log,$$(true),LOG,1))
 deliverlog : COMMAND := true
