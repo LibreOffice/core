@@ -246,7 +246,7 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
             myFaxDoc.killEmptyFrames();
 
 
-            bSaveSuccess = OfficeDocument.store(xMSF, xTextDocument, sPath, "writer8_template", false, "Template could not be saved to" + sPath);
+            bSaveSuccess = OfficeDocument.store(xMSF, xTextDocument, sPath, "writer8_template", false);
             if (bSaveSuccess)
             {
                 saveConfiguration();
