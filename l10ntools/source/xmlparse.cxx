@@ -899,7 +899,7 @@ void XMLElement::Print(XMLNode *pCur, OUStringBuffer& buffer , bool rootelement 
 /*****************************************************************************/
     //YD FIXME somewhere COMMENT is defined as 4!
     static const String _COMMENT = String::CreateFromAscii("comment");
-    static const OUString XML_LANG ( OUString(RTL_CONSTASCII_USTRINGPARAM("xml-lang")) );
+    static const OUString XML_LANG ( RTL_CONSTASCII_USTRINGPARAM("xml-lang") );
 
     if(pCur!=NULL){
         if(rootelement){

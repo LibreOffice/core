@@ -64,13 +64,13 @@ void SourceTreeIterator::ExecuteDirectory( transex::Directory& aDirectory )
     if ( bInExecute ) {
         rtl::OUString sDirName = aDirectory.getDirectoryName();
 
-        static rtl::OUString WCARD1 ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("unxlng")) );
-        static rtl::OUString WCARD2 ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("unxsol")) );
-        static rtl::OUString WCARD3 ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("wntmsc")) );
-        static rtl::OUString WCARD4 ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("common")) );
-        static rtl::OUString WCARD5 ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("unxmac")) );
-        static rtl::OUString WCARD6 ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("unxubt")) );
-        static rtl::OUString WCARD7 ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".svn")) );
+        static rtl::OUString WCARD1 ( RTL_CONSTASCII_USTRINGPARAM("unxlng") );
+        static rtl::OUString WCARD2 ( RTL_CONSTASCII_USTRINGPARAM("unxsol") );
+        static rtl::OUString WCARD3 ( RTL_CONSTASCII_USTRINGPARAM("wntmsc") );
+        static rtl::OUString WCARD4 ( RTL_CONSTASCII_USTRINGPARAM("common") );
+        static rtl::OUString WCARD5 ( RTL_CONSTASCII_USTRINGPARAM("unxmac") );
+        static rtl::OUString WCARD6 ( RTL_CONSTASCII_USTRINGPARAM("unxubt") );
+        static rtl::OUString WCARD7 ( RTL_CONSTASCII_USTRINGPARAM(".svn") );
 
 
         if( sDirName.indexOf( WCARD1 , 0 ) > -1 ||
