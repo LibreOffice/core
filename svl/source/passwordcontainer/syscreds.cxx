@@ -33,7 +33,7 @@ using namespace com::sun::star;
 
 SysCredentialsConfigItem::SysCredentialsConfigItem(
     SysCredentialsConfig * pOwner )
-: utl::ConfigItem( rtl::OUString::createFromAscii( "Office.Common/Passwords" ),
+: utl::ConfigItem( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/Passwords")),
                    CONFIG_MODE_IMMEDIATE_UPDATE ),
   m_bInited( false ),
   m_pOwner( pOwner )
@@ -123,7 +123,7 @@ namespace
         if( aInd > 0  )
         {
             sal_Int32 aPrevInd = aURL.lastIndexOf( sal_Unicode( '/' ), aInd );
-            if ( aURL.indexOf( ::rtl::OUString::createFromAscii( "://" ) )
+            if ( aURL.indexOf( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("://")) )
                     != aPrevInd - 2 ||
                  aInd != aURL.getLength() - 1 )
             {
@@ -157,7 +157,7 @@ namespace
                 {
                     ::rtl::OUString tmpUrl( aUrl );
                     if ( tmpUrl.getStr()[tmpUrl.getLength() - 1] != (sal_Unicode)'/' )
-                      tmpUrl += ::rtl::OUString::createFromAscii( "/" );
+                      tmpUrl += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
 
                     aIter = rContainer.lower_bound( tmpUrl );
                     if( aIter != rContainer.end() && aIter->match( tmpUrl ) )

@@ -103,7 +103,7 @@ sal_Bool DocumentLockFile::CreateOwnLockFile()
     try
     {
         uno::Reference< io::XStream > xTempFile(
-            m_xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.io.TempFile" ) ),
+            m_xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.TempFile")) ),
             uno::UNO_QUERY_THROW );
         uno::Reference< io::XSeekable > xSeekable( xTempFile, uno::UNO_QUERY_THROW );
 
@@ -173,7 +173,7 @@ uno::Reference< io::XInputStream > DocumentLockFile::OpenStream()
 
     uno::Reference< lang::XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
         uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess > xSimpleFileAccess(
-            xFactory->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.ucb.SimpleFileAccess") ),
+            xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess")) ),
             uno::UNO_QUERY_THROW );
 
     // the file can be opened readonly, no locking will be done
@@ -226,7 +226,7 @@ void DocumentLockFile::RemoveFile()
 
     uno::Reference< lang::XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
     uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess > xSimpleFileAccess(
-        xFactory->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.ucb.SimpleFileAccess") ),
+        xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess")) ),
         uno::UNO_QUERY_THROW );
     xSimpleFileAccess->kill( m_aURL );
 }

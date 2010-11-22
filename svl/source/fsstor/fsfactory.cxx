@@ -53,15 +53,15 @@ using namespace ::com::sun::star;
 uno::Sequence< ::rtl::OUString > SAL_CALL FSStorageFactory::impl_staticGetSupportedServiceNames()
 {
     uno::Sequence< ::rtl::OUString > aRet(2);
-    aRet[0] = ::rtl::OUString::createFromAscii("com.sun.star.embed.FileSystemStorageFactory");
-    aRet[1] = ::rtl::OUString::createFromAscii("com.sun.star.comp.embed.FileSystemStorageFactory");
+    aRet[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.FileSystemStorageFactory"));
+    aRet[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.embed.FileSystemStorageFactory"));
     return aRet;
 }
 
 //-------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL FSStorageFactory::impl_staticGetImplementationName()
 {
-    return ::rtl::OUString::createFromAscii("com.sun.star.comp.embed.FileSystemStorageFactory");
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.embed.FileSystemStorageFactory"));
 }
 
 //-------------------------------------------------------------------------
@@ -154,7 +154,7 @@ uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstanceWithA
         if( aArguments[2] >>= aDescr )
         {
             aPropsToSet.realloc(1);
-            aPropsToSet[0].Name = ::rtl::OUString::createFromAscii( "URL" );
+            aPropsToSet[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL"));
             aPropsToSet[0].Value <<= aURL;
 
             for ( sal_Int32 nInd = 0, nNumArgs = 1; nInd < aDescr.getLength(); nInd++ )

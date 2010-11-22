@@ -79,7 +79,7 @@ SfxPoolItem* SfxIntegerListItem::Clone( SfxItemPool * ) const
 bool SfxIntegerListItem::PutValue  ( const com::sun::star::uno::Any& rVal, BYTE )
 {
     ::com::sun::star::uno::Reference < ::com::sun::star::script::XTypeConverter > xConverter
-            ( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.script.Converter")),
+            ( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.Converter"))),
             ::com::sun::star::uno::UNO_QUERY );
     ::com::sun::star::uno::Any aNew;
     try { aNew = xConverter->convertTo( rVal, ::getCppuType((const ::com::sun::star::uno::Sequence < sal_Int32 >*)0) ); }

@@ -36,24 +36,24 @@
 namespace css = ::com::sun::star;
 
 // using test  only
-#define ROOTNODE_PRINTOPTION                            rtl::OUString::createFromAscii("org.openoffice.Office.Common/Print/Option")
-#define PROPERTYNAME_REDUCETRANSPARENCY                 rtl::OUString::createFromAscii("ReduceTransparency")
-#define PROPERTYNAME_REDUCEDTRANSPARENCYMODE            rtl::OUString::createFromAscii("ReducedTransparencyMode")
-#define PROPERTYNAME_REDUCEGRADIENTS                    rtl::OUString::createFromAscii("ReduceGradients")
-#define PROPERTYNAME_REDUCEDGRADIENTMODE                rtl::OUString::createFromAscii("ReducedGradientMode")
-#define PROPERTYNAME_REDUCEDGRADIENTSTEPCOUNT           rtl::OUString::createFromAscii("ReducedGradientStepCount")
-#define PROPERTYNAME_REDUCEBITMAPS                      rtl::OUString::createFromAscii("ReduceBitmaps")
-#define PROPERTYNAME_REDUCEDBITMAPMODE                  rtl::OUString::createFromAscii("ReducedBitmapMode")
-#define PROPERTYNAME_REDUCEDBITMAPRESOLUTION            rtl::OUString::createFromAscii("ReducedBitmapResolution")
-#define PROPERTYNAME_REDUCEDBITMAPINCLUDESTRANSPARENCY  rtl::OUString::createFromAscii("ReducedBitmapIncludesTransparency")
-#define PROPERTYNAME_CONVERTTOGREYSCALES                rtl::OUString::createFromAscii("ConvertToGreyscales")
+#define ROOTNODE_PRINTOPTION                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Common/Print/Option"))
+#define PROPERTYNAME_REDUCETRANSPARENCY                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReduceTransparency"))
+#define PROPERTYNAME_REDUCEDTRANSPARENCYMODE            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReducedTransparencyMode"))
+#define PROPERTYNAME_REDUCEGRADIENTS                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReduceGradients"))
+#define PROPERTYNAME_REDUCEDGRADIENTMODE                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReducedGradientMode"))
+#define PROPERTYNAME_REDUCEDGRADIENTSTEPCOUNT           rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReducedGradientStepCount"))
+#define PROPERTYNAME_REDUCEBITMAPS                      rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReduceBitmaps"))
+#define PROPERTYNAME_REDUCEDBITMAPMODE                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReducedBitmapMode"))
+#define PROPERTYNAME_REDUCEDBITMAPRESOLUTION            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReducedBitmapResolution"))
+#define PROPERTYNAME_REDUCEDBITMAPINCLUDESTRANSPARENCY  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReducedBitmapIncludesTransparency"))
+#define PROPERTYNAME_CONVERTTOGREYSCALES                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ConvertToGreyscales"))
 
 PrintOptTest::PrintOptTest()
 {
     m_xCfg = css::uno::Reference< css::container::XNameAccess >(
             ::comphelper::ConfigurationHelper::openConfig(
             ::utl::getProcessServiceFactory(),
-            rtl::OUString::createFromAscii("org.openoffice.Office.Common/Print/Option"),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Common/Print/Option")),
             ::comphelper::ConfigurationHelper::E_STANDARD),
             css::uno::UNO_QUERY);
 
@@ -62,7 +62,7 @@ PrintOptTest::PrintOptTest()
             //UniString  sTmp = UniString("printer");
             //xub_StrLen nTokenCount = sTmp.GetTokenCount('/');
             //sTmp = sTmp.GetToken(nTokenCount - 1, '/');
-            m_xCfg->getByName(rtl::OUString::createFromAscii("Printer")) >>= m_xNode;
+            m_xCfg->getByName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Printer"))) >>= m_xNode;
         }
 }
 

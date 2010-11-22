@@ -405,7 +405,7 @@ util::Color SAL_CALL SvNumberFormatterServiceObj::queryPreviewColorForNumber(
 rtl::OUString SAL_CALL SvNumberFormatterServiceObj::getImplementationName()
                             throw(uno::RuntimeException)
 {
-    return rtl::OUString::createFromAscii("com.sun.star.uno.util.numbers.SvNumberFormatterServiceObject");
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uno.util.numbers.SvNumberFormatterServiceObject"));
 }
 
 sal_Bool SAL_CALL SvNumberFormatterServiceObj::supportsService( const rtl::OUString& ServiceName )
@@ -694,7 +694,7 @@ sal_Int32 SAL_CALL SvNumberFormatsObj::getFormatForLocale( sal_Int32 nKey, const
 rtl::OUString SAL_CALL SvNumberFormatsObj::getImplementationName()
                             throw(uno::RuntimeException)
 {
-    return rtl::OUString::createFromAscii("SvNumberFormatsObj");
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SvNumberFormatsObj"));
 }
 
 sal_Bool SAL_CALL SvNumberFormatsObj::supportsService( const rtl::OUString& ServiceName )
@@ -955,7 +955,7 @@ void SAL_CALL SvNumberFormatObj::setPropertyValues( const uno::Sequence<beans::P
 rtl::OUString SAL_CALL SvNumberFormatObj::getImplementationName()
                             throw(uno::RuntimeException)
 {
-    return rtl::OUString::createFromAscii("SvNumberFormatObj");
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SvNumberFormatObj"));
 }
 
 sal_Bool SAL_CALL SvNumberFormatObj::supportsService( const rtl::OUString& ServiceName )
@@ -1118,7 +1118,7 @@ void SAL_CALL SvNumberFormatSettingsObj::removeVetoableChangeListener( const rtl
 rtl::OUString SAL_CALL SvNumberFormatSettingsObj::getImplementationName()
                             throw(uno::RuntimeException)
 {
-    return rtl::OUString::createFromAscii("SvNumberFormatSettingsObj");
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SvNumberFormatSettingsObj"));
 }
 
 sal_Bool SAL_CALL SvNumberFormatSettingsObj::supportsService( const rtl::OUString& ServiceName )
