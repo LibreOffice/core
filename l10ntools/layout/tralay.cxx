@@ -247,9 +247,9 @@ static void insertMarker( XMLParentNode *p, ByteString const& file )
             if ( lst->Count() > 1
                  && lst->GetObject( 2 )->GetNodeType() == XML_NODE_TYPE_DEFAULT )
                 i++;
-            OUString marker = OUString::createFromAscii( "\n    NOTE: This file has been generated automagically by transex3/layout/tralay,\n          from source template: " )
+            OUString marker = OUString(RTL_CONSTASCII_USTRINGPARAM("\n    NOTE: This file has been generated automagically by transex3/layout/tralay,\n          from source template: "))
                 + STRING( file )
-                + OUString::createFromAscii( ".\n          Do not edit, changes will be lost.\n" );
+                + OUString(RTL_CONSTASCII_USTRINGPARAM(".\n          Do not edit, changes will be lost.\n"));
             lst->Insert( new XMLComment( marker, 0 ), i );
         }
 }
