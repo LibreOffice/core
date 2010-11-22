@@ -60,7 +60,7 @@ Os2Transferable::Os2Transferable(
     {
         ULONG handle = UWinQueryClipbrdData( hAB, UCLIP_CF_UNICODETEXT);
         if (handle) {
-            aFlavor.MimeType = OUString::createFromAscii( "text/plain;charset=utf-16" );
+            aFlavor.MimeType = OUString(RTL_CONSTASCII_USTRINGPARAM("text/plain;charset=utf-16"));
             aFlavor.DataType = getCppuType( (OUString*)0 );
             //debug_printf("Os2Transferable::Os2Transferable pszText %s\n", pszText);
         }
@@ -97,7 +97,7 @@ Any SAL_CALL Os2Transferable::getTransferData( const DataFlavor& rFlavor )
     Sequence< sal_Int8 > aData;
 
     // retrieve unicode text
-    if( rFlavor.MimeType.equalsIgnoreAsciiCase( OUString::createFromAscii( "text/plain;charset=utf-16" ) ) )
+    if( rFlavor.MimeType.equalsIgnoreAsciiCase( OUString(RTL_CONSTASCII_USTRINGPARAM("text/plain;charset=utf-16")) ) )
     {
         if( UWinOpenClipbrd( hAB ) )
         {
@@ -161,7 +161,7 @@ sal_Bool SAL_CALL Os2Transferable::isDataFlavorSupported( const DataFlavor& aFla
 
     if( aFlavor.DataType != getCppuType( (Sequence< sal_Int8 >*)0 ) )
     {
-        if( ! aFlavor.MimeType.equalsIgnoreAsciiCase( OUString::createFromAscii( "text/plain;charset=utf-16" ) ) &&
+        if( ! aFlavor.MimeType.equalsIgnoreAsciiCase( OUString(RTL_CONSTASCII_USTRINGPARAM("text/plain;charset=utf-16")) ) &&
             aFlavor.DataType == getCppuType( (OUString*)0 ) )
             return false;
     }

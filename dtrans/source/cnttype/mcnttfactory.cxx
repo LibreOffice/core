@@ -62,7 +62,7 @@ namespace
     Sequence< OUString > SAL_CALL MimeContentTypeFactory_getSupportedServiceNames( )
     {
         Sequence< OUString > aRet(1);
-        aRet[0] = OUString::createFromAscii("com.sun.star.datatransfer.MimeContentTypeFactory");
+        aRet[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.MimeContentTypeFactory"));
         return aRet;
     }
 }

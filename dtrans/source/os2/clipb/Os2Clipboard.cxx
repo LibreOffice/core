@@ -237,10 +237,10 @@ void SAL_CALL Os2Clipboard::setContents( const Reference< XTransferable >& xTran
 #endif
 
     // we can only export text or bitmap
-    DataFlavor nFlavorText( OUString::createFromAscii( "text/plain;charset=utf-16" ),
-                        OUString::createFromAscii( "Unicode-Text" ), CPPUTYPE_OUSTRING);
+    DataFlavor nFlavorText( OUString(RTL_CONSTASCII_USTRINGPARAM("text/plain;charset=utf-16")),
+                        OUString(RTL_CONSTASCII_USTRINGPARAM("Unicode-Text")), CPPUTYPE_OUSTRING);
     DataFlavor nFlavorBitmap( OUString::createFromAscii( "application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"" ),
-                        OUString::createFromAscii( "Bitmap" ), CPPUTYPE_DEFAULT);
+                        OUString(RTL_CONSTASCII_USTRINGPARAM("Bitmap")), CPPUTYPE_DEFAULT);
 
     // try text transfer data (if any)
     PSZ pSharedText = NULL;

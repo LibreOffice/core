@@ -454,7 +454,7 @@ void SAL_CALL CXTDataObject::renderSynthesizedHtmlAndSetupStgMedium( FORMATETC& 
     DataFlavor aFlavor;
 
     // creating a DataFlavor on the fly
-    aFlavor.MimeType = OUString::createFromAscii( "text/html" );
+    aFlavor.MimeType = OUString(RTL_CONSTASCII_USTRINGPARAM("text/html"));
     aFlavor.DataType = getCppuType( (Sequence< sal_Int8 >*)0 );
 
     Any aAny = m_XTransferable->getTransferData( aFlavor );

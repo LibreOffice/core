@@ -60,10 +60,10 @@
 #define CPPUTYPE_SALINT32         getCppuType( ( sal_Int32 * ) 0 )
 #define OUSTR( str )              OUString::createFromAscii( #str )
 #define OUSTR_( str )             OUString::createFromAscii( str )
-#define EMPTY_OUSTR               OUString::createFromAscii( "" )
+#define EMPTY_OUSTR               OUString(RTL_CONSTASCII_USTRINGPARAM(""))
 //#define PRIVATE_OO                  OUString::createFromAscii( "application/x-openoffice;" "windows_formatname=" )
 
-const rtl::OUString Windows_FormatName = rtl::OUString::createFromAscii("windows_formatname");
+const rtl::OUString Windows_FormatName (RTL_CONSTASCII_USTRINGPARAM("windows_formatname"));
 const com::sun::star::uno::Type CppuType_ByteSequence = ::getCppuType((const com::sun::star::uno::Sequence<sal_Int8>*)0);
 const com::sun::star::uno::Type CppuType_String       = ::getCppuType((const ::rtl::OUString*)0);
 
@@ -89,7 +89,7 @@ namespace MODULE_PRIVATE
     Sequence< OUString > SAL_CALL DataFormatTranslator_getSupportedServiceNames( )
     {
         Sequence< OUString > aRet(1);
-        aRet[0] = OUString::createFromAscii("com.sun.star.datatransfer.DataFormatTranslator");
+        aRet[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.DataFormatTranslator"));
         return aRet;
     }
 }

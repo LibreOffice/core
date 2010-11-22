@@ -283,7 +283,7 @@ void SAL_CALL CFormatRegistrar::RegisterFormats(
                 aFormatEtcContainer.addFormatEtc( fetc );
 
                 // and HTML Format
-                OUString htmlFormat( OUString::createFromAscii( "HTML Format" ) );
+                OUString htmlFormat( RTL_CONSTASCII_USTRINGPARAM("HTML Format") );
                 aFormatEtcContainer.addFormatEtc(
                     m_DataFormatTranslator.getFormatEtcForClipformatName( htmlFormat ) );
             }
