@@ -1203,12 +1203,6 @@ void SAL_CALL DiagramWrapper::removeEventListener(
     m_aEventListenerContainer.removeInterface( aListener );
 }
 
-// ____ XEventListener ____
-// void SAL_CALL DiagramWrapper::disposing( const lang::EventObject& Source )
-//     throw (uno::RuntimeException)
-// {
-// }
-
 //-----------------------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------------------

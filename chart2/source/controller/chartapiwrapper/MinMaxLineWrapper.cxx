@@ -69,7 +69,6 @@ const Sequence< Property > & lcl_GetPropertySequence()
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
 
         ::chart::LineProperties::AddPropertiesToVector( aProperties );
-//         ::chart::NamedLineProperties::AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 
         // and sort them for access via bsearch
@@ -282,8 +281,6 @@ void SAL_CALL MinMaxLineWrapper::setPropertyValues( const uno::Sequence< ::rtl::
         }
     }
     //todo: store unknown properties elsewhere
-//    if( bUnknownProperty )
-//        throw beans::UnknownPropertyException();
 }
 uno::Sequence< uno::Any > SAL_CALL MinMaxLineWrapper::getPropertyValues( const uno::Sequence< ::rtl::OUString >& rNameSeq )
                     throw (uno::RuntimeException)
