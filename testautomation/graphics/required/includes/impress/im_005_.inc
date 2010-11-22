@@ -43,20 +43,16 @@ testcase tiFormatModifyLayout
 
     printlog "open application "
     Call  hNewDocument
-
     printlog( "Format/Page" )
     FormatPage
-
     Kontext "SeitenLayout"
     if ( SeitenLayout.exists( 2 ) ) then
         DialogTest ( SeitenLayout )
-
         printlog "cancel dialog 'Page Setup' "
         hCloseDialog( SeitenLayout, "Cancel" )
     else
         warnlog( "Dialog <SeitenLayout> did not open" )
     endif
-
     printlog "close application"
     Call hCloseDocument
 

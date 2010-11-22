@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE dlg:window PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "dialog.dtd">
-<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="Dialog1" dlg:left="192" dlg:top="127" dlg:width="174" dlg:height="147" dlg:closeable="true" dlg:moveable="true" dlg:help-url="HID:123456" dlg:withtitlebar="false">
+<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="Dialog1" dlg:left="192" dlg:top="127" dlg:width="174" dlg:height="147" dlg:closeable="true" dlg:moveable="true" dlg:help-url="customcontrol1" dlg:withtitlebar="false">
  <dlg:bulletinboard>
   <dlg:button dlg:id="CommandButton1" dlg:tab-index="0" dlg:left="6" dlg:top="8" dlg:width="64" dlg:height="20" dlg:value="a wonderful button"/>
   <dlg:textfield dlg:id="TextField1" dlg:textarea-vertical-align="top" dlg:tab-index="1" dlg:left="6" dlg:top="38" dlg:width="64" dlg:height="59" dlg:value="a wonderful text"/>
