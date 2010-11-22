@@ -2356,8 +2356,10 @@ void AquaSalGraphics::GetGlyphWidths( const ImplFontData* pFontData, bool bVerti
 
             const ImplFontCharMap* pMap = mpMacFontData->GetImplFontCharMap();
             DBG_ASSERT( pMap && pMap->GetCharCount(), "no charmap" );
+            pMap->AddReference(); // TODO: add and use RAII object instead
 
             // get unicode<->glyph encoding
+            // TODO? avoid sft mapping by using the pMap itself
             int nCharCount = pMap->GetCharCount();
             sal_uInt32 nChar = pMap->GetFirstChar();
             for(; --nCharCount >= 0; nChar = pMap->GetNextChar( nChar ) )
