@@ -78,6 +78,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <comphelper/componentcontext.hxx>
 #include <unotools/streamwrap.hxx>
+#include <sal/macros.h>
 
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
@@ -938,7 +939,7 @@ public:
         if ( bDefaultProg )
             pS->Read( pDefaultProg, sizeof( pDefaultProg ) );
 
-        sal_Int32 nNumIds =  sizeof( ClsidList ) / sizeof( ClsidList[0] );
+        sal_Int32 nNumIds =  SAL_N_ELEMENTS( ClsidList );
 
         if ( bClsID )
         {
