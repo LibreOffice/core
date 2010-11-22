@@ -2463,11 +2463,12 @@ void DocxAttributeOutput::NumberingLevel( BYTE nLevel,
 
     // justification
     const char *pJc;
+    bool ecmaDialect = ( m_rExport.GetFilter().getVersion() == oox::core::ECMA_DIALECT );
     switch ( eAdjust )
     {
         case SVX_ADJUST_CENTER: pJc = "center"; break;
-        case SVX_ADJUST_RIGHT:  pJc = "right";  break;
-        default:                pJc = "left";   break;
+        case SVX_ADJUST_RIGHT:  pJc = !ecmaDialect ? "end" : "right";  break;
+        default:                pJc = !ecmaDialect ? "start" : "left";   break;
     }
     m_pSerializer->singleElementNS( XML_w, XML_lvlJc,
             FSNS( XML_w, XML_val ), pJc,
