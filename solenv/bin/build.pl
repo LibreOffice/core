@@ -803,7 +803,7 @@ sub dmake_dir {
         };
         _exit(0);
     } elsif ($error_code && ($error_code != -1)) {
-        $broken_build{$job_name} = $error_code if (!$processes_to_run && $error_code);
+        $broken_build{$job_name} = $error_code;
         return $error_code;
     };
 };
