@@ -157,7 +157,6 @@ ULONG SwHTMLWriter::WriteStream()
         nHTMLMode |= HTMLMODE_ABS_POS_FLY|HTMLMODE_ABS_POS_DRAW;
 
     if( HTML_CFG_WRITER==nExportMode )
-//      nHTMLMode |= HTMLMODE_FLY_MARGINS | HTMLMODE_FRSTLINE_IN_NUMBUL;
         nHTMLMode |= HTMLMODE_FLY_MARGINS;
 
     if( HTML_CFG_NS40==nExportMode )
@@ -192,14 +191,6 @@ ULONG SwHTMLWriter::WriteStream()
     const sal_Char *pCharSet =
         rtl_getBestMimeCharsetFromTextEncoding( eDestEnc );
     eDestEnc = rtl_getTextEncodingFromMimeCharset( pCharSet );
-
-    // fuer Netscape optimieren heisst Spacer- und Multicol ausgeben
-//  bCfgMultiCol = pHtmlOptions->IsNetscape3();
-//  bCfgSpacer = pHtmlOptions->IsNetscape3();
-
-    // wenn Styles exportiert werden, wird ein Style einem HTML-Tag manchmal
-    // vorgezogen, wenn nicht fuer Netscape exportiert wird
-    // bCfgPreferStyles = bCfgOutStyles; // && !pHtmlOptions->IsNetscape3();
 
     // Nur noch fuer den MS-IE ziehen wir den Export von Styles vor.
     bCfgPreferStyles = HTML_CFG_MSIE==nExportMode;
@@ -934,7 +925,6 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
     // DokumentInfo
     ByteString sIndent;
     GetIndentString( sIndent );
-//  OutNewLine();
     using namespace ::com::sun::star;
     uno::Reference<document::XDocumentProperties> xDocProps;
     SwDocShell *pDocShell(pDoc->GetDocShell());
@@ -955,8 +945,7 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
     OutFootEndNoteInfo();
 
     const SwPageDesc *pPageDesc = 0;
-    //if( !pDoc->IsHTMLMode() )
-    //{
+
         // In Nicht-HTML-Dokumenten wird die erste gesetzte Seitenvorlage
         // exportiert und wenn keine gesetzt ist die Standard-Vorlage
         ULONG nNodeIdx = pCurPam->GetPoint()->nNode.GetIndex();
@@ -982,12 +971,6 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
 
         if( !pPageDesc )
             pPageDesc = &const_cast<const SwDoc *>(pDoc)->GetPageDesc( 0 );
-    //}
-    //else
-    //{
-        // In HTML-Dokumenten nehmen wir immer die HTML-Vorlage
-    //  pPageDesc = pDoc->GetPageDescFromPool( RES_POOLPAGE_HTML );
-    //}
 
     // und nun ... das Style-Sheet!!!
     if( bCfgOutStyles )

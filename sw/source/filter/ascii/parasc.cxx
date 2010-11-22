@@ -405,12 +405,6 @@ ULONG SwASCIIParser::ReadChars()
         bool bIns = true, bSplitNode = false;
         switch( *pStt )
         {
-//JP 12.11.2001: task 94636 - don't ignore all behind the zero character,
-//                            change it to the default "control character"
-//      case 0:
-//                  pEnd = pStt;
-//                  bIns = false ;
-//                  break;
 
         case 0x0a:  if( LINEEND_LF == pUseMe->GetParaFlags() )
                     {
@@ -456,8 +450,6 @@ ULONG SwASCIIParser::ReadChars()
                         *pStt++ = 0;
                         if( nLineLen )
                         {
-                            // Change to charset system!!!!
-                            //rOpt.GetCharSet();
                             InsertText( String( pLastStt ));
                         }
                         pDoc->SplitNode( *pPam->GetPoint(), false );

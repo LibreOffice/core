@@ -68,7 +68,6 @@
 #include <viewopt.hxx>
 #endif
 
-//#define MAX_DEPTH (USHRT_MAX)
 #define MAX_DEPTH (3)
 
 using namespace ::com::sun::star;
@@ -282,8 +281,7 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
 
     SwWriteTableCol *pCol = aCols[nCol];
 
-//  sal_Bool bOutWidth = nColSpan>1 || pCol->GetOutWidth();
-    sal_Bool bOutWidth = sal_True; //nColSpan==1 && pCol->GetOutWidth();
+    sal_Bool bOutWidth = sal_True;
 
     const SwStartNode* pSttNd = pBox->GetSttNd();
     sal_Bool bHead = sal_False;
@@ -729,9 +727,6 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
             case 4:  pFrame = OOO_STRING_SVTOOLS_HTML_TF_lhs        ;break;
             case 8:  pFrame = OOO_STRING_SVTOOLS_HTML_TF_rhs        ;break;
             case 12: pFrame = OOO_STRING_SVTOOLS_HTML_TF_vsides ;break;
-            //FRAME=BOX ist der default wenn BORDER>0
-            //case 15:
-            //default: pFrame = OOO_STRING_SVTOOLS_HTML_TF_box      ;break; // geht nicht
         };
         if( pFrame )
             (((sOut += ' ' ) += OOO_STRING_SVTOOLS_HTML_O_frame ) += '=') += pFrame;

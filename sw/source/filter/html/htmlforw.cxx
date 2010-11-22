@@ -763,8 +763,6 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
     uno::Reference< beans::XPropertySetInfo > xPropSetInfo =
             xPropSet->getPropertySetInfo();
 
-//!!!   if( rHTMLWrt.pForm != pVCSbxCtrl->GetVCForm() )
-//!!!       rHTMLWrt.nWarn = 1; // Control wird falscher Form zugeordnet
     rHTMLWrt.nFormCntrlCnt++;
 
     enum Tag { TAG_INPUT, TAG_SELECT, TAG_TEXTAREA, TAG_NONE };

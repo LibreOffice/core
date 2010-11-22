@@ -1529,10 +1529,6 @@ HTMLOnOffState HTMLEndPosLst::GetHTMLItemState( const SfxPoolItem& rItem )
     case RES_PARATR_DROP:
         eState = HTML_DROPCAP_VALUE;
         break;
-
-//  default:
-//      eState = HTML_NOT_SUPPORTED;
-//      break;
     }
 
     return eState;
@@ -2792,11 +2788,6 @@ static Writer& OutHTML_SvxColor( Writer& rWrt, const SfxPoolItem& rHt )
     SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
     if( rHTMLWrt.bOutOpts )
         return rWrt;
-
-    // die Default-Farbe nur Schreiben, wenn sie als Hint vorkommt
-    //if( rHTMLWrt.bTagOn && !rHTMLWrt.bTxtAttr && rHTMLWrt.pDfltColor
-    //  && rColor == *rHTMLWrt.pDfltColor )
-    //  return rWrt;
 
     if( !rHTMLWrt.bTxtAttr && rHTMLWrt.bCfgOutStyles && rHTMLWrt.bCfgPreferStyles )
     {

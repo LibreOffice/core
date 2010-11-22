@@ -442,8 +442,6 @@ void SwHTMLParser::InsertEmbed()
             aCmdLst.FillSequence( aProps );
             xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PluginCommands")), uno::makeAny( aProps ) );
 
-            // TODO/LATER: EnableSetModified?!
-            //pPlugin->EnableSetModified( TRUE );
         }
     }
 
@@ -896,7 +894,6 @@ void SwHTMLParser::InsertFloatingFrame()
     ::rtl::OUString aObjName;
     uno::Reference < embed::XEmbeddedObject > xObj = aCnt.CreateEmbeddedObject( SvGlobalName( SO3_IFRAME_CLASSID ).GetByteSequence(), aObjName );
 
-    //pFrame->EnableSetModified( FALSE );
     try
     {
         // TODO/MBA: testing
@@ -920,12 +917,8 @@ void SwHTMLParser::InsertFloatingFrame()
                     xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsScrollingMode")),
                         uno::makeAny( (sal_Bool) ( eScroll == ScrollingYes) ) );
 
-                //if ( aFrmDescr.IsFrameBorderSet() )
                 xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsBorder")),
                         uno::makeAny( bHasBorder ) );
-                /*else
-                    xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsAutoBorder")),
-                        uno::makeAny( sal_True ) );*/
 
                 xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameMarginWidth")),
                     uno::makeAny( sal_Int32( aMargin.Width() ) ) );
@@ -938,8 +931,6 @@ void SwHTMLParser::InsertFloatingFrame()
     catch ( uno::Exception& )
     {
     }
-
-    //pFrame->EnableSetModified( TRUE );
 
     SfxItemSet aItemSet( pDoc->GetAttrPool(), pCSS1Parser->GetWhichMap() );
     SvxCSS1PropertyInfo aPropInfo;
@@ -978,89 +969,6 @@ void SwHTMLParser::InsertFloatingFrame()
 }
 
 /*  */
-
-/*
-#define SWHTML_OPTTYPE_IGNORE 0
-#define SWHTML_OPTTYPE_TAG 1
-#define SWHTML_OPTTYPE_PARAM 2
-
-
-static USHORT GetOptionType( const String& rName, BOOL bApplet )
-{
-    USHORT nType = bApplet ? SWHTML_OPTTYPE_PARAM : SWHTML_OPTTYPE_TAG;
-
-    switch( rName.GetChar(0) )
-    {
-    case 'A':
-    case 'a':
-        if( rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_align ) ||
-            rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_alt ) )
-            nType = SWHTML_OPTTYPE_IGNORE;
-        else if( bApplet &&
-                 (rName.EqualsIgnoreCaseAscii( sHTML_O_archive ) ||
-                 rName.EqualsIgnoreCaseAscii( sHTML_O_Archives )) )
-            nType = SWHTML_OPTTYPE_TAG;
-        break;
-    case 'C':
-    case 'c':
-        if( rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_class ) ||
-            (bApplet && (rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_code ) ||
-                         rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_codebase ))) )
-            nType = SWHTML_OPTTYPE_IGNORE;
-        break;
-    case 'H':
-    case 'h':
-        if( rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_height ) ||
-            rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_hspace ) ||
-            (!bApplet && rName.EqualsIgnoreCaseAscii( OOO_STRING_SW_HTML_O_Hidden )) )
-            nType = SWHTML_OPTTYPE_IGNORE;
-        break;
-    case 'I':
-    case 'i':
-        if( rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_id ) )
-            nType = SWHTML_OPTTYPE_IGNORE;
-        break;
-    case 'M':
-    case 'm':
-        if( bApplet && rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_mayscript ) )
-            nType = SWHTML_OPTTYPE_IGNORE;
-        break;
-    case 'N':
-    case 'n':
-        if( rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_name ) )
-            nType = SWHTML_OPTTYPE_IGNORE;
-        break;
-    case 'O':
-    case 'o':
-        if( bApplet && rName.EqualsIgnoreCaseAscii( sHTML_O_Object ) )
-            nType = SWHTML_OPTTYPE_TAG;
-        break;
-    case 'S':
-    case 's':
-        if( rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_style ) ||
-            (!bApplet && rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_src )) )
-            nType = SWHTML_OPTTYPE_IGNORE;
-        break;
-    case 'T':
-    case 't':
-        if( !bApplet && rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_type ) )
-            nType = SWHTML_OPTTYPE_IGNORE;
-        break;
-    case 'V':
-    case 'v':
-        if( rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_vspace ) )
-            nType = SWHTML_OPTTYPE_IGNORE;
-        break;
-    case 'W':
-    case 'w':
-        if( rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_width ) )
-            nType = SWHTML_OPTTYPE_IGNORE;
-        break;
-    }
-
-    return nType;
-}
-*/
 
 USHORT SwHTMLWriter::GuessOLENodeFrmType( const SwNode& rNode )
 {
@@ -1365,12 +1273,7 @@ Writer& OutHTML_FrmFmtOLENodeGrf( Writer& rWrt, const SwFrmFmt& rFrmFmt,
     if( !pOLENd )
         return rWrt;
 
-    // Inhalt des Nodes als Grafik speichern
-    //uno::Reference < embed::XEmbeddedObject > xObj = pOLENd->GetOLEObj().GetOleRef();
-    //GDIMetaFile aPic;
-    //if( xObj.is() && xRef->GetGDIMetaFile( aPic ).GetActionCount() )
     {
-        //Graphic aGrf( aPic );
         Graphic aGrf( *pOLENd->GetGraphic() );
         String aGrfNm;
         const String* pTempFileName = rHTMLWrt.GetOrigFileName();

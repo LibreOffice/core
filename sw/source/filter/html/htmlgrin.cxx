@@ -895,9 +895,6 @@ void SwHTMLParser::InsertBodyOptions()
                 break;
 
             case HTML_O_ONERROR:
-//              if( bAnyStarBasic )
-//                  InsertBasicDocEvent( SFX_EVENT_ACTIVATEDOC,
-//                                       pOption->GetString() );
                 break;
 
             case HTML_O_STYLE:

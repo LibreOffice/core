@@ -898,7 +898,6 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
         } while( bFound );
 
         BOOL bScale = FALSE;
-        //Size aGrfSize( rNode.GetTwipSize() );
         Fraction aScaleX( 1, 1 );
         Fraction aScaleY( 1, 1 );
 
@@ -1438,8 +1437,6 @@ static Writer & OutHTML_FrmFmtAsMulticol( Writer& rWrt,
         rHTMLWrt.bOutFlyFrame = sal_True;
         rHTMLWrt.Out_SwDoc( rWrt.pCurPam );
     }
-
-//  rHTMLWrt.ChangeParaToken( 0 );  // MIB 8.7.97: Passiert jetzt in Out_SwDoc
 
     rHTMLWrt.DecIndentLevel();  // den Inhalt von Multicol einruecken;
     if( rHTMLWrt.bLFPossible )

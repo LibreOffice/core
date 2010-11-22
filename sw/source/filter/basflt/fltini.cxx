@@ -122,11 +122,6 @@ void SwReaderWriterEntry::GetWriter( const String& rNm, const String& rBaseURL, 
         xWrt = WriterRef(0);
 }
 
-/*SwRead SwGetReaderSw3() // SW_DLLPUBLIC
-{
-    return ReadSw3;
-}
-*/
 SwRead SwGetReaderXML() // SW_DLLPUBLIC
 {
     return ReadXML;
@@ -208,15 +203,6 @@ SwRead GetReader( const String& rFltName )
 
 /*  */
 
-/////////////// die Storage Reader/Writer ////////////////////////////////
-
-/*void GetSw3Writer( const String&, const String& rBaseURL, WriterRef& xRet )
-{
-    DBG_ERROR( "Shouldn't happen!");
-    xRet = new Sw3Writer;
-}
-*/
-
 ULONG StgReader::OpenMainStream( SvStorageStreamRef& rRef, USHORT& rBuffSize )
 {
     ULONG nRet = ERR_SWG_READ_ERROR;
@@ -244,81 +230,6 @@ ULONG StgReader::OpenMainStream( SvStorageStreamRef& rRef, USHORT& rBuffSize )
 }
 
 /*  */
-/*
-ULONG Sw3Reader::Read( SwDoc &rDoc, SwPaM &rPam, const String & )
-{
-    ULONG nRet;
-    if( pStg && pIO )
-    {
-        // TRUE: Vorlagen ueberschreiben
-        pIO->SetReadOptions( aOpt,TRUE );
-        if( !bInsertMode )
-        {
-            // Im Laden-Modus darf der PaM-Content-Teil nicht
-            // in den Textbereich zeigen (Nodes koennen geloescht werden)
-            rPam.GetBound( TRUE ).nContent.Assign( 0, 0 );
-            rPam.GetBound( FALSE ).nContent.Assign( 0, 0 );
-        }
-        nRet = pIO->Load( pStg, bInsertMode ? &rPam : 0 );
-        aOpt.ResetAllFmtsOnly();
-        pIO->SetReadOptions( aOpt, TRUE );
-    }
-    else
-    {
-        ASSERT( !this, "Sw3-Read ohne Storage und/oder IO-System" );
-        nRet = ERR_SWG_READ_ERROR;
-    }
-    return nRet;
-}
-
-    // read the sections of the document, which is equal to the medium.
-    // returns the count of it
-USHORT Sw3Reader::GetSectionList( SfxMedium& rMedium,
-                                    SvStrings& rStrings ) const
-{
-    SvStorageRef aStg( rMedium.GetStorage() );
-    const SfxFilter* pFlt = rMedium.GetFilter();
-    ASSERT( pFlt && pFlt->GetVersion(),
-                                "Kein Filter oder Filter ohne FF-Version" );
-    if( pFlt && pFlt->GetVersion() )
-        aStg->SetVersion( (long)pFlt->GetVersion() );
-
-    if( pIO )
-        pIO->GetSectionList( &aStg, rStrings );
-    return rStrings.Count();
-    return 0;
-}
-*/
-
-/*ULONG Sw3Writer::WriteStorage()
-{
-    ULONG nRet;
-    if( pIO )
-    {
-        // der gleiche Storage -> Save, sonst SaveAs aufrufen
-        if( !bSaveAs )
-            nRet = pIO->Save( pOrigPam, bWriteAll );
-        else
-            nRet = pIO->SaveAs( pStg, pOrigPam, bWriteAll );
-
-        pIO = 0;        // nach dem Schreiben ist der Pointer ungueltig !!
-    }
-    else
-    {
-        ASSERT( !this, "Sw3-Writer ohne IO-System" )
-        nRet = ERR_SWG_WRITE_ERROR;
-    }
-    return nRet;
-}
-
-ULONG Sw3Writer::WriteMedium( SfxMedium& )
-{
-    DBG_ERROR( "Shouldn't be used currently!");
-    return WriteStorage();
-}
-
-BOOL Sw3Writer::IsSw3Writer() const { return TRUE; }
-*/
 
 void Writer::SetPasswd( const String& ) {}
 
@@ -327,7 +238,6 @@ void Writer::SetVersion( const String&, long ) {}
 
 
 BOOL Writer::IsStgWriter() const { return FALSE; }
-//BOOL Writer::IsSw3Writer() const { return FALSE; }
 
 BOOL StgWriter::IsStgWriter() const { return TRUE; }
 
@@ -491,18 +401,6 @@ void SwRelNumRuleSpaces::SetNumRelSpaces( SwDoc& rDoc )
             // Rule noch gueltig und am Doc vorhanden?
             if( USHRT_MAX != rDoc.GetNumRuleTbl().GetPos( pRule ))
             {
-                // --> OD 2008-02-19 #refactorlists#
-//                SwNumRuleInfo aUpd( pRule->GetName() );
-//                aUpd.MakeList( rDoc );
-
-//                // bei allen nmumerierten Absaetzen vom linken Rand
-//                // den absoluten Wert des NumFormates abziehen
-//                for( ULONG nUpdPos = 0; nUpdPos < aUpd.GetList().Count();
-//                    ++nUpdPos )
-//                {
-//                    SwTxtNode* pNd = aUpd.GetList().GetObject( nUpdPos );
-//                    SetNumLSpace( *pNd, *pRule );
-//                }
                 SwNumRule::tTxtNodeList aTxtNodeList;
                 pRule->GetTxtNodeList( aTxtNodeList );
                 for ( SwNumRule::tTxtNodeList::iterator aIter = aTxtNodeList.begin();
@@ -511,7 +409,6 @@ void SwRelNumRuleSpaces::SetNumRelSpaces( SwDoc& rDoc )
                     SwTxtNode* pNd = *aIter;
                     SetNumLSpace( *pNd, *pRule );
                 }
-                // <--
             }
         }
     }
@@ -551,16 +448,14 @@ void SwRelNumRuleSpaces::SetOultineRelSpaces( const SwNodeIndex& rStt,
 void SwRelNumRuleSpaces::SetNumLSpace( SwTxtNode& rNd, const SwNumRule& rRule )
 {
     BOOL bOutlineRule = OUTLINE_RULE == rRule.GetRuleType();
-    // --> OD 2005-11-18 #128056#
-    // correction of refactoring done by cws swnumtree:
+    // #128056# correction of refactoring done by cws swnumtree:
     // - assure a correct level for retrieving numbering format.
-//    BYTE nLvl = rNd.GetLevel();
     BYTE nLvl = 0;
     if ( rNd.GetActualListLevel() >= 0 && rNd.GetActualListLevel() < MAXLEVEL )
     {
         nLvl = static_cast< BYTE >(rNd.GetActualListLevel());
     }
-    // <--
+
     const SwNumFmt& rFmt = rRule.Get( nLvl );
     const SvxLRSpaceItem& rLR = rNd.GetSwAttrSet().GetLRSpace();
 

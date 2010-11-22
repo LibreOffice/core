@@ -525,8 +525,6 @@ CSS1Token CSS1Parser::GetNextToken()
             nRet = bPrevWhiteSpace ? CSS1_DOT_W_WS : CSS1_DOT_WO_WS;
             break;
 
-        // case '/': siehe oben
-
         case '+': // '+'
             nRet = CSS1_PLUS;
             break;
@@ -1406,7 +1404,6 @@ BOOL CSS1Expression::GetColor( Color &rColor ) const
                         nColor += c;
                 }
             }
-            // bRet = i==6;
             bRet = TRUE;
         }
         break;

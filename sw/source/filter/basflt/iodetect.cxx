@@ -194,8 +194,6 @@ BOOL SwIoSystem::IsValidStgFilter(SotStorage& rStg, const SfxFilter& rFilter)
                 bRet = !(nByte & 1);
             }
         }
-        //      else if( !rFilter.GetUserData().EqualsAscii(sCExcel) )
-        //          bRet = rFilter.GetFormat() == nStgFmtId;
     }
     return bRet;
 }
@@ -392,18 +390,6 @@ const SfxFilter* SwIoSystem::GetFileFilter(const String& rFileName,
         nBytesRead = pIStrm->Read(aBuffer, nMaxRead);
         pIStrm->Seek( nCurrPos );
     }
-    /*
-       else
-       {
-       SvFileStream aStrm( rFileName, STREAM_READ );
-
-    // ohne FileName oder ohne Stream gibts nur den ANSI-Filter
-    if( !rFileName.Len() || SVSTREAM_OK != aStrm.GetError() )
-    return 0;
-
-    nBytesRead = aStrm.Read(aBuffer, nMaxRead);
-    aStrm.Close();
-    }*/
 
     TerminateBuffer(aBuffer, nBytesRead, sizeof(aBuffer));
 

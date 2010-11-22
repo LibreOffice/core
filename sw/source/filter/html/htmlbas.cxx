@@ -103,10 +103,6 @@ void SwHTMLParser::EndScript()
     bIgnoreRawData = FALSE;
     aScriptSource.ConvertLineEnd();
 
-//  MIB 23.5.97: SGML-Kommentare brauchen nicht mehr entfernt zu werden,
-//  weil JS das jetzt selber kann.
-//  RemoveSGMLComment( aScriptSource, TRUE );
-
     // Ausser StarBasic und unbenutzem JavaScript jedes Script oder den
     // Modulnamen in einem Feld merken merken
     if( bInsSrcIntoFld && !bIgnoreHTMLComments )

@@ -324,7 +324,6 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
     bSelect( FALSE ),
     bInFootEndNoteAnchor( FALSE ),
     bInFootEndNoteSymbol( FALSE ),
-//    bIgnoreHTMLComments( bNoHTMLComments )
     bIgnoreHTMLComments( bNoHTMLComments ),
     bRemoveHidden( FALSE ),
     pTempViewFrame(0)
@@ -478,7 +477,6 @@ __EXPORT SwHTMLParser::~SwHTMLParser()
 
     ASSERT( !pTable, "Es existiert noch eine offene Tabelle" );
     delete pImageMaps;
-    //delete pTable;
 
     ASSERT( !pPendStack,
             "SwHTMLParser::~SwHTMLParser: Hier sollte es keinen Pending-Stack mehr geben" );
@@ -2284,11 +2282,7 @@ BOOL SwHTMLParser::AppendTxtNode( SwHTMLAppendMode eMode, BOOL bUpdateNum )
         if( GetNumInfo().GetDepth() )
         {
             BYTE nLvl = GetNumInfo().GetLevel();
-            // --> OD 2008-04-02 #refactorlists#
-//            SetNoNum (&nLvl, TRUE);
-//            SetNodeNum( nLvl);
             SetNodeNum( nLvl, false );
-            // <--
         }
         else
             pPam->GetNode()->GetTxtNode()->ResetAttr( RES_PARATR_NUMRULE );
@@ -2973,16 +2967,11 @@ void SwHTMLParser::EndAttr( _HTMLAttr* pAttr, _HTMLAttr **ppDepAttr,
             pLast = pLast->GetNext();
 
         ASSERT( pLast, "Attribut nicht in eigener Liste gefunden!" );
-
-        // das Attribut nicht an der PaM-Psoition beenden, sondern da,
-        // wo das danch gestartete Attribut anfing???
-        //pEndIdx = &pPrev->GetSttPara();
-        //nEndCnt = pPrev->GetSttCnt();
     }
 
     BOOL bMoveBack = FALSE;
     USHORT nWhich = pAttr->pItem->Which();
-    if( /*!pLast &&*/ !nEndCnt && RES_PARATR_BEGIN <= nWhich &&
+    if( !nEndCnt && RES_PARATR_BEGIN <= nWhich &&
         *pEndIdx != pAttr->GetSttPara() )
     {
         // dann eine Cntntnt Position zurueck!

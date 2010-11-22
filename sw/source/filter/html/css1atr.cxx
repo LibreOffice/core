@@ -3629,11 +3629,6 @@ Writer& OutCSS1_SvxBox( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
 
-    // Das Zeichen-Attribut wird nicht ausgegeben, wenn gerade
-    // Optionen ausgegeben werden
-//    if( !rHTMLWrt.IsHTMLMode(HTMLMODE_PARA_BORDER))
-//        return rWrt;
-
     const SvxBoxItem& rBoxItem = (const SvxBoxItem&)rHt;
     const SvxBorderLine *pTop = rBoxItem.GetTop();
     const SvxBorderLine *pBottom = rBoxItem.GetBottom();

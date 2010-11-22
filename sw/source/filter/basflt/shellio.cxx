@@ -95,12 +95,6 @@ ULONG SwReader::Read( const Reader& rOptions )
 
     GetDoc();
 
-    // am Sw3-Reader noch den pIo-Pointer "loeschen"
-    /*
-    if( po == ReadSw3 && pDoc->GetDocShell() &&
-        ((Sw3Reader*)po)->GetSw3Io() != pDoc->GetDocShell()->GetIoSystem() )
-            ((Sw3Reader*)po)->SetSw3Io( pDoc->GetDocShell()->GetIoSystem() );*/
-
     // waehrend des einlesens kein OLE-Modified rufen
     Link aOLELink( pDoc->GetOle2Link() );
     pDoc->SetOle2Link( Link() );
@@ -403,10 +397,6 @@ ULONG SwReader::Read( const Reader& rOptions )
     {
         pDoc->SetModified();
     }
-    // <--
-
-//  if( po == ReadSw3 )         // am Sw3-Reader noch den pIo-Pointer "loeschen"
-//      ((Sw3Reader*)po)->SetSw3Io( 0 );
 
     po->SetReadUTF8( FALSE );
     po->SetBlockMode( FALSE );
@@ -421,20 +411,6 @@ ULONG SwReader::Read( const Reader& rOptions )
  * Konstruktoren, Destruktor
  */
 
-// Initiales Einlesben
-
-                                       /*
-SwReader::SwReader(SvStorage& rStg, const String& rFileName, SwDoc *pDoc)
-    : SwDocFac(pDoc), pStrm(0), pStg(&rStg), pMedium(0), pCrsr(0),
-    aFileName(rFileName)
-{
-}
-
-SwReader::SwReader(const uno::Reference < embed::XStorage >& rStg, const String& rFileName, SwDoc *pDoc)
-    : SwDocFac(pDoc), pStrm(0), pMedium(0), pCrsr(0), xStg( rStg ), aFileName(rFileName)
-{
-}
-                                         */
 SwReader::SwReader(SfxMedium& rMedium, const String& rFileName, SwDoc *pDocument)
     : SwDocFac(pDocument), pStrm(0), pMedium(&rMedium), pCrsr(0),
     aFileName(rFileName)
@@ -450,13 +426,7 @@ SwReader::SwReader(SvStream& rStrm, const String& rFileName, const String& rBase
 {
     SetBaseURL( rBaseURL );
 }
-/*
-SwReader::SwReader(SvStorage& rStg, const String& rFileName, SwPaM& rPam)
-    : SwDocFac(rPam.GetDoc()), pStrm(0), pStg(&rStg), pMedium(0), pCrsr(&rPam),
-    aFileName(rFileName)
-{
-}
-*/
+
 SwReader::SwReader(SfxMedium& rMedium, const String& rFileName, SwPaM& rPam)
     : SwDocFac(rPam.GetDoc()), pStrm(0), pMedium(&rMedium),
     pCrsr(&rPam), aFileName(rFileName)
