@@ -25,11 +25,11 @@
 #
 #*************************************************************************
 
-ifneq ($(gb_LOCALBUILDDIR),)
 .PHONY : setuplocal removelocal
+ifneq ($(gb_LOCALBUILDDIR),)
 ifneq ($(wildcard $(gb_LOCALBUILDDIR)/SetupLocal.mk),)
 setuplocal :
-    $(eval, $(call gb_Output_error,$(gb_LOCALBUILDDIR) exists already.))
+    $(eval $(call gb_Output_error,$(gb_LOCALBUILDDIR) exists already.))
 
 else
 
@@ -55,6 +55,13 @@ removelocal :
     $(eval $(call gb_Output_warn,removing directory $(gb_LOCALBUILDDIR).,SYC))
     sleep 10
     rm -rf $(gb_LOCALBUILDDIR)
+
+else
+setuplocal:
+    $(eval $(call gb_Output_error,setuplocal: gb_LOCALBUILDDIR is not set.))
+
+removelocal:
+    $(eval $(call gb_Output_error,setuplocal: gb_LOCALBUILDDIR is not set.))
 
 endif
 

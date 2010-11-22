@@ -47,7 +47,7 @@ $(call gb_Module_get_target,%) :
         mkdir -p $(dir $@) && \
         touch $@)
 
-.PHONY : all clean install uninstall
+.PHONY : all clean
 .DEFAULT_GOAL := all
 
 all : 
@@ -61,9 +61,6 @@ clean :
     $(call gb_Output_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(false),ALL,6)
     $(call gb_Output_announce_title,all cleared.)
     $(call gb_Output_announce_bell)
-
-install : all
-uninstall : clean
 
 define gb_Module_Module
 gb_Module_ALLMODULES += $(1)
