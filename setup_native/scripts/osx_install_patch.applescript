@@ -43,7 +43,7 @@ if (button returned of result) is AbortLabel then
 	return 2
 end if
 
-set the found_ooos to (do shell script "mdfind \"kMDItemContentType == 'com.apple.application-bundle' && kMDItemDisplayName == '[PRODUCTNAME]*' && kMDItemDisplayName != '[FULLPRODUCTNAME].app'\"") & "
+set the found_ooos to (do shell script "mdfind \"kMDItemContentType == 'com.apple.application-bundle' && kMDItemDisplayName == '[PRODUCTNAME]*' && kMDItemDisplayName != '[FULLAPPPRODUCTNAME].app'\"") & "
 " & chooseMyOwn
 
 -- the choice returned is of type "list"
