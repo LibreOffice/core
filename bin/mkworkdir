@@ -57,18 +57,13 @@ done
 
 
 if [ -z "$BOOTSTRAP_DIR" ]; then
-    BOOTSTRAP_DIR=$(git rev-parse --git-dir 2>/dev/null) || die "Cannot use the current working directory as implicit source: Not a git repository"
-
-    case "$BOOTSTRAP_DIR" in
-	.git)
-	    BOOTSTRAP_DIR="$(pwd)"
-	    ;;
-	.)
-	    cd .. && BOOTSTRAP_DIR=$(pwd)
-	    ;;
-    esac
+    BOOTSTRAP_DIR=$(git rev-parse --show-toplevel 2>/dev/null) || die "Cannot use the current working directory as implicit source: Not a git repository"
+    if [ -n "$BOOTSTRAP_DIR" ] ; then
+	if [ "$(basename $(git config remote.origin.url))" != "bootstrap" ] ; then
+	    die "Cannot use the current working directory as implicit source: Not a bootstrap git repository"
+	fi
+    fi
 fi
-
 if [ -z "$DEST_DIR" ]; then
     echo "destination directory is missing."
     print_help $0
