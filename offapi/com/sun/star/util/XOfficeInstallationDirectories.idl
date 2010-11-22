@@ -47,7 +47,7 @@ module com { module sun { module star { module util {
 
     @since OOo 2.0.0
  */
-interface XOfficeInstallationDirectories : com::sun::star::uno::XInterface
+published interface XOfficeInstallationDirectories : com::sun::star::uno::XInterface
 {
     //------------------------------------------------------------------------
     /** returns the absolute URL containing the directory of the current office
@@ -61,7 +61,8 @@ interface XOfficeInstallationDirectories : com::sun::star::uno::XInterface
 
     //------------------------------------------------------------------------
     /** returns the absolute URL containing the directory where the current
-        office installation expects its user data (e.g. "file:///home/kso".)
+        office installation expects its user data (e.g.
+        "file:///home/kso/.openoffice.org".)
 
         @returns
         the absolute URL containing the directory of the current office

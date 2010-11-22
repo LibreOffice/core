@@ -385,6 +385,6 @@ UDK_3.6 { # OOo 3.3
 
 UDK_3.7 { # OOo 3.4
     global:
-        _ZN4cppu18OPropertySetHelper29setDependentFastPropertyValueElRKN3com3sun4star3uno3AnyE;
+        _ZN4cppu18OPropertySetHelper29setDependentFastPropertyValueE?RKN3com3sun4star3uno3AnyE;
 } UDK_3.6;
 
