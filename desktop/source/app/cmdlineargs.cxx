@@ -142,15 +142,16 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
         UNO_QUERY);
 
     // parse command line arguments
-    sal_Bool    bPrintEvent     = sal_False;
-    sal_Bool    bOpenEvent      = sal_True;
-    sal_Bool    bViewEvent      = sal_False;
-    sal_Bool    bStartEvent     = sal_False;
-    sal_Bool    bPrintToEvent   = sal_False;
-    sal_Bool    bPrinterName    = sal_False;
-    sal_Bool    bForceOpenEvent = sal_False;
-    sal_Bool    bForceNewEvent  = sal_False;
-    sal_Bool    bDisplaySpec    = sal_False;
+    bool bOpenEvent(true);
+    bool bPrintEvent(false);
+    bool bViewEvent(false);
+    bool bStartEvent(false);
+    bool bPrintToEvent(false);
+    bool bPrinterName(false);
+    bool bForceOpenEvent(false);
+    bool bForceNewEvent(false);
+    bool bDisplaySpec(false);
+    bool bOpenDoc(false);
 
     m_eArgumentCount = NONE;
 
@@ -169,8 +170,8 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
             if (tmp.getLength() > 0)
                 aArg = tmp;
         }
-        String          aArgStr = aArg;
 
+        String aArgStr = aArg;
         if ( aArg.getLength() > 0 )
         {
             m_eArgumentCount = m_eArgumentCount == NONE ? ONE : MANY;
@@ -182,98 +183,98 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                     if ( aArgStr.EqualsIgnoreCaseAscii( "-n" ))
                     {
                         // force new documents based on the following documents
-                        bForceNewEvent  = sal_True;
-                        bOpenEvent      = sal_False;
-                        bForceOpenEvent = sal_False;
-                        bPrintToEvent   = sal_False;
-                        bPrintEvent     = sal_False;
-                        bViewEvent      = sal_False;
-                        bStartEvent     = sal_False;
-                        bDisplaySpec    = sal_False;
-                     }
+                        bForceNewEvent  = true;
+                        bOpenEvent      = false;
+                        bForceOpenEvent = false;
+                        bPrintToEvent   = false;
+                        bPrintEvent     = false;
+                        bViewEvent      = false;
+                        bStartEvent     = false;
+                        bDisplaySpec    = false;
+                    }
                     else if ( aArgStr.EqualsIgnoreCaseAscii( "-o" ))
                     {
-                        // force open documents regards if they are templates or not
-                        bForceOpenEvent = sal_True;
-                        bOpenEvent      = sal_False;
-                        bForceNewEvent  = sal_False;
-                        bPrintToEvent   = sal_False;
-                        bPrintEvent     = sal_False;
-                        bViewEvent      = sal_False;
-                        bStartEvent     = sal_False;
-                        bDisplaySpec    = sal_False;
-                     }
+                        // force open documents regardless if they are templates or not
+                        bForceOpenEvent = true;
+                        bOpenEvent      = false;
+                        bForceNewEvent  = false;
+                        bPrintToEvent   = false;
+                        bPrintEvent     = false;
+                        bViewEvent      = false;
+                        bStartEvent     = false;
+                        bDisplaySpec    = false;
+                    }
                     else if ( aArgStr.EqualsIgnoreCaseAscii( "-pt" ))
                     {
                         // Print to special printer
-                        bPrintToEvent   = sal_True;
-                        bPrinterName    = sal_True;
-                        bPrintEvent     = sal_False;
-                        bOpenEvent      = sal_False;
-                        bForceNewEvent  = sal_False;
-                        bViewEvent      = sal_False;
-                        bStartEvent     = sal_False;
-                        bDisplaySpec    = sal_False;
-                         bForceOpenEvent = sal_False;
-                    }
-                    else if ( aArgStr.EqualsIgnoreCaseAscii( "-p" ))
-                    {
+                        bPrintToEvent   = true;
+                        bPrinterName    = true;
+                        bPrintEvent     = false;
+                        bOpenEvent      = false;
+                        bForceNewEvent  = false;
+                        bViewEvent      = false;
+                        bStartEvent     = false;
+                        bDisplaySpec    = false;
+                        bForceOpenEvent = false;
+                   }
+                   else if ( aArgStr.EqualsIgnoreCaseAscii( "-p" ))
+                   {
                         // Print to default printer
-                        bPrintEvent     = sal_True;
-                        bPrintToEvent   = sal_False;
-                        bOpenEvent      = sal_False;
-                        bForceNewEvent  = sal_False;
-                        bForceOpenEvent = sal_False;
-                        bViewEvent      = sal_False;
-                        bStartEvent     = sal_False;
-                        bDisplaySpec    = sal_False;
-                     }
-                    else if ( aArgStr.EqualsIgnoreCaseAscii( "-view" ))
-                    {
+                        bPrintEvent     = true;
+                        bPrintToEvent   = false;
+                        bOpenEvent      = false;
+                        bForceNewEvent  = false;
+                        bForceOpenEvent = false;
+                        bViewEvent      = false;
+                        bStartEvent     = false;
+                        bDisplaySpec    = false;
+                   }
+                   else if ( aArgStr.EqualsIgnoreCaseAscii( "-view" ))
+                   {
                         // open in viewmode
-                        bOpenEvent      = sal_False;
-                        bPrintEvent     = sal_False;
-                        bPrintToEvent   = sal_False;
-                        bForceNewEvent  = sal_False;
-                        bForceOpenEvent = sal_False;
-                        bViewEvent      = sal_True;
-                        bStartEvent     = sal_False;
-                        bDisplaySpec    = sal_False;
-                     }
+                        bOpenEvent      = false;
+                        bPrintEvent     = false;
+                        bPrintToEvent   = false;
+                        bForceNewEvent  = false;
+                        bForceOpenEvent = false;
+                        bViewEvent      = true;
+                        bStartEvent     = false;
+                        bDisplaySpec    = false;
+             }
                     else if ( aArgStr.EqualsIgnoreCaseAscii( "-show" ))
                     {
                         // open in viewmode
-                        bOpenEvent      = sal_False;
-                        bViewEvent      = sal_False;
-                        bStartEvent     = sal_True;
-                        bPrintEvent     = sal_False;
-                        bPrintToEvent   = sal_False;
-                        bForceNewEvent  = sal_False;
-                        bForceOpenEvent = sal_False;
-                        bDisplaySpec    = sal_False;
+                        bOpenEvent      = false;
+                        bViewEvent      = false;
+                        bStartEvent     = true;
+                        bPrintEvent     = false;
+                        bPrintToEvent   = false;
+                        bForceNewEvent  = false;
+                        bForceOpenEvent = false;
+                        bDisplaySpec    = false;
                     }
                     else if ( aArgStr.EqualsIgnoreCaseAscii( "-display" ))
                     {
                         // set display
-                        bOpenEvent      = sal_False;
-                           bPrintEvent     = sal_False;
-                        bForceOpenEvent = sal_False;
-                        bPrintToEvent   = sal_False;
-                        bForceNewEvent  = sal_False;
-                        bViewEvent      = sal_False;
-                        bStartEvent     = sal_False;
-                        bDisplaySpec    = sal_True;
+                        bOpenEvent      = false;
+                        bPrintEvent     = false;
+                        bForceOpenEvent = false;
+                        bPrintToEvent   = false;
+                        bForceNewEvent  = false;
+                        bViewEvent      = false;
+                        bStartEvent     = false;
+                        bDisplaySpec    = true;
                     }
                     else if ( aArgStr.EqualsIgnoreCaseAscii( "-language" ))
                     {
-                        bOpenEvent      = sal_False;
-                           bPrintEvent     = sal_False;
-                        bForceOpenEvent = sal_False;
-                        bPrintToEvent   = sal_False;
-                        bForceNewEvent  = sal_False;
-                        bViewEvent      = sal_False;
-                        bStartEvent     = sal_False;
-                        bDisplaySpec    = sal_False;
+                        bOpenEvent      = false;
+                        bPrintEvent     = false;
+                        bForceOpenEvent = false;
+                        bPrintToEvent   = false;
+                        bForceNewEvent  = false;
+                        bViewEvent      = false;
+                        bStartEvent     = false;
+                        bDisplaySpec    = false;
                     }
 
                     #ifdef MACOSX
@@ -285,14 +286,14 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                     else if ( aArgStr.CompareToAscii( "-psn", 4 ) == COMPARE_EQUAL )
                     {
                         // finder argument from MacOSX
-                        bOpenEvent      = sal_False;
-                           bPrintEvent     = sal_False;
-                        bForceOpenEvent = sal_False;
-                        bPrintToEvent   = sal_False;
-                        bForceNewEvent  = sal_False;
-                        bViewEvent      = sal_False;
-                        bStartEvent     = sal_False;
-                        bDisplaySpec    = sal_False;
+                        bOpenEvent      = false;
+                           bPrintEvent     = false;
+                        bForceOpenEvent = false;
+                        bPrintToEvent   = false;
+                        bForceNewEvent  = false;
+                        bViewEvent      = false;
+                        bStartEvent     = false;
+                        bDisplaySpec    = false;
                     }
                     #endif
                 }
@@ -308,29 +309,54 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                     {
                         // handle this argument as a filename
                         if ( bOpenEvent )
+                        {
                             AddStringListParam_Impl( CMD_STRINGPARAM_OPENLIST, aArgStr );
+                            bOpenDoc = true;
+                        }
                         else if ( bViewEvent )
+                    {
                             AddStringListParam_Impl( CMD_STRINGPARAM_VIEWLIST, aArgStr );
+                            bOpenDoc = true;
+                        }
                         else if ( bStartEvent )
+                        {
                             AddStringListParam_Impl( CMD_STRINGPARAM_STARTLIST, aArgStr );
+                            bOpenDoc = true;
+                        }
                         else if ( bPrintEvent )
+                        {
                             AddStringListParam_Impl( CMD_STRINGPARAM_PRINTLIST, aArgStr );
+                            bOpenDoc = true;
+                        }
                         else if ( bPrintToEvent )
+                        {
                             AddStringListParam_Impl( CMD_STRINGPARAM_PRINTTOLIST, aArgStr );
+                            bOpenDoc = true;
+                        }
                         else if ( bForceNewEvent )
+                        {
                             AddStringListParam_Impl( CMD_STRINGPARAM_FORCENEWLIST, aArgStr );
+                            bOpenDoc = true;
+                        }
                         else if ( bForceOpenEvent )
+                        {
                             AddStringListParam_Impl( CMD_STRINGPARAM_FORCEOPENLIST, aArgStr );
-                        else if ( bDisplaySpec ){
+                            bOpenDoc = true;
+                        }
+                        else if ( bDisplaySpec )
+                        {
                             AddStringListParam_Impl( CMD_STRINGPARAM_DISPLAY, aArgStr );
-                            bDisplaySpec = sal_False; // only one display, not a lsit
-                            bOpenEvent = sal_True;    // set back to standard
+                            bDisplaySpec = false; // only one display, not a lsit
+                            bOpenEvent = true;    // set back to standard
                         }
                     }
                 }
             }
         }
     }
+
+    if ( bOpenDoc )
+        m_bDocumentArgs = true;
 }
 
 void CommandLineArgs::AddStringListParam_Impl( StringParam eParam, const rtl::OUString& aParam )
@@ -432,8 +458,8 @@ sal_Bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& 
         return sal_True;
     }
     else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-help" ))
-        || aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-h" ))
-        || aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-?" )))
+          || aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-h" ))
+          || aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-?" )))
     {
         SetBoolParam_Impl( CMD_BOOLPARAM_HELP, sal_True );
         return sal_True;
@@ -473,18 +499,18 @@ sal_Bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& 
         SetBoolParam_Impl( CMD_BOOLPARAM_HELPMATH, sal_True );
         return sal_True;
     }
-    #ifdef MACOSX
-    /* #i84053# ignore -psn on Mac
-       Platform dependent #ifdef here is ugly, however this is currently
-       the only platform dependent parameter. Should more appear
-       we should find a better solution
-    */
+#ifdef MACOSX
+  /* #i84053# ignore -psn on Mac
+     Platform dependent #ifdef here is ugly, however this is currently
+     the only platform dependent parameter. Should more appear
+     we should find a better solution
+  */
     else if ( aArg.compareToAscii( "-psn", 4 ) == 0 )
     {
         SetBoolParam_Impl( CMD_BOOLPARAM_PSN, sal_True );
         return sal_True;
     }
-    #endif
+#endif
     else if ( aArgStr.Copy(0, 8).EqualsIgnoreCaseAscii( "-accept=" ))
     {
         AddStringListParam_Impl( CMD_STRINGPARAM_ACCEPT, aArgStr.Copy( 8 ) );
@@ -496,7 +522,7 @@ sal_Bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& 
         return sal_True;
     }
     else if ( aArgStr.CompareIgnoreCaseToAscii( "-portal," ,
-                                                RTL_CONSTASCII_LENGTH( "-portal," )) == COMPARE_EQUAL )
+              RTL_CONSTASCII_LENGTH( "-portal," )) == COMPARE_EQUAL )
     {
         AddStringListParam_Impl( CMD_STRINGPARAM_PORTAL, aArgStr.Copy( RTL_CONSTASCII_LENGTH( "-portal," )) );
         return sal_True;
@@ -504,13 +530,10 @@ sal_Bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& 
     else if ( aArgStr.Copy( 0, 7 ).EqualsIgnoreCaseAscii( "-userid" ))
     {
         if ( aArgStr.Len() > 8 )
-        {
-            rtl::OUString aUserDir = aArgStr;
-            AddStringListParam_Impl(
-                CMD_STRINGPARAM_USERDIR,
-                ::rtl::Uri::decode( aUserDir.copy( 8 ),
-                                    rtl_UriDecodeWithCharset,
-                                    RTL_TEXTENCODING_UTF8 ) );
+    {
+        rtl::OUString aUserDir = aArgStr;
+        AddStringListParam_Impl( CMD_STRINGPARAM_USERDIR,
+                     ::rtl::Uri::decode( aUserDir.copy( 8 ), rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 ) );
         }
         return sal_True;
     }
@@ -533,56 +556,64 @@ sal_Bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& 
     {
         sal_Bool bAlreadySet = CheckGroupMembers( CMD_GRPID_MODULE, CMD_BOOLPARAM_WRITER );
         if ( !bAlreadySet )
-            SetBoolParam_Impl( CMD_BOOLPARAM_WRITER, sal_True );
+        SetBoolParam_Impl( CMD_BOOLPARAM_WRITER, sal_True );
+        m_bDocumentArgs = true;
         return sal_True;
     }
     else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-calc" )) == sal_True )
     {
         sal_Bool bAlreadySet = CheckGroupMembers( CMD_GRPID_MODULE, CMD_BOOLPARAM_CALC );
         if ( !bAlreadySet )
-            SetBoolParam_Impl( CMD_BOOLPARAM_CALC, sal_True );
+        SetBoolParam_Impl( CMD_BOOLPARAM_CALC, sal_True );
+        m_bDocumentArgs = true;
         return sal_True;
     }
     else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-draw" )) == sal_True )
     {
         sal_Bool bAlreadySet = CheckGroupMembers( CMD_GRPID_MODULE, CMD_BOOLPARAM_DRAW );
         if ( !bAlreadySet )
-            SetBoolParam_Impl( CMD_BOOLPARAM_DRAW, sal_True );
+        SetBoolParam_Impl( CMD_BOOLPARAM_DRAW, sal_True );
+        m_bDocumentArgs = true;
         return sal_True;
     }
     else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-impress" )) == sal_True )
     {
         sal_Bool bAlreadySet = CheckGroupMembers( CMD_GRPID_MODULE, CMD_BOOLPARAM_IMPRESS );
         if ( !bAlreadySet )
-            SetBoolParam_Impl( CMD_BOOLPARAM_IMPRESS, sal_True );
+        SetBoolParam_Impl( CMD_BOOLPARAM_IMPRESS, sal_True );
+        m_bDocumentArgs = true;
         return sal_True;
     }
     else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-base" )) == sal_True )
     {
         sal_Bool bAlreadySet = CheckGroupMembers( CMD_GRPID_MODULE, CMD_BOOLPARAM_BASE );
         if ( !bAlreadySet )
-            SetBoolParam_Impl( CMD_BOOLPARAM_BASE, sal_True );
+        SetBoolParam_Impl( CMD_BOOLPARAM_BASE, sal_True );
+        m_bDocumentArgs = true;
         return sal_True;
     }
     else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-global" )) == sal_True )
     {
         sal_Bool bAlreadySet = CheckGroupMembers( CMD_GRPID_MODULE, CMD_BOOLPARAM_GLOBAL );
         if ( !bAlreadySet )
-            SetBoolParam_Impl( CMD_BOOLPARAM_GLOBAL, sal_True );
+        SetBoolParam_Impl( CMD_BOOLPARAM_GLOBAL, sal_True );
+        m_bDocumentArgs = true;
         return sal_True;
     }
     else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-math" )) == sal_True )
     {
         sal_Bool bAlreadySet = CheckGroupMembers( CMD_GRPID_MODULE, CMD_BOOLPARAM_MATH );
         if ( !bAlreadySet )
-            SetBoolParam_Impl( CMD_BOOLPARAM_MATH, sal_True );
+        SetBoolParam_Impl( CMD_BOOLPARAM_MATH, sal_True );
+        m_bDocumentArgs = true;
         return sal_True;
     }
     else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-web" )) == sal_True )
     {
         sal_Bool bAlreadySet = CheckGroupMembers( CMD_GRPID_MODULE, CMD_BOOLPARAM_WEB );
         if ( !bAlreadySet )
-            SetBoolParam_Impl( CMD_BOOLPARAM_WEB, sal_True );
+        SetBoolParam_Impl( CMD_BOOLPARAM_WEB, sal_True );
+        m_bDocumentArgs = true;
         return sal_True;
     }
 
@@ -605,12 +636,12 @@ sal_Bool CommandLineArgs::CheckGroupMembers( GroupParamId nGroupId, BoolParam nE
 void CommandLineArgs::ResetParamValues()
 {
     int i;
-
     for ( i = 0; i < CMD_BOOLPARAM_COUNT; i++ )
         m_aBoolParams[i] = sal_False;
     for ( i = 0; i < CMD_STRINGPARAM_COUNT; i++ )
         m_aStrSetParams[i] = sal_False;
     m_eArgumentCount = NONE;
+    m_bDocumentArgs  = false;
 }
 
 void CommandLineArgs::SetBoolParam( BoolParam eParam, sal_Bool bNewValue )
@@ -895,6 +926,12 @@ sal_Bool CommandLineArgs::IsEmptyOrAcceptOnly() const
     return m_eArgumentCount == NONE ||
            ( ( m_eArgumentCount == ONE ) && ( m_aStrParams[ CMD_STRINGPARAM_ACCEPT ].getLength() )) ||
            ( ( m_eArgumentCount == ONE ) && m_aBoolParams[ CMD_BOOLPARAM_PSN ] );
+}
+
+sal_Bool CommandLineArgs::WantsToLoadDocument() const
+{
+    osl::MutexGuard  aMutexGuard( m_aMutex );
+    return m_bDocumentArgs;
 }
 
 } // namespace desktop

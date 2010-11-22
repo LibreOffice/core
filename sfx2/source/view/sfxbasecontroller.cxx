@@ -1052,7 +1052,7 @@ void SAL_CALL SfxBaseController::dispose() throw( ::com::sun::star::uno::Runtime
         if ( pFrame && pFrame->GetViewShell() == m_pData->m_pViewShell )
             pFrame->GetFrame().SetIsClosing_Impl();
         m_pData->m_pViewShell->DiscardClients_Impl();
-        m_pData->m_pViewShell->pImp->bControllerSet = sal_False ;
+        m_pData->m_pViewShell->pImp->m_bControllerSet = false;
 
         if ( pFrame )
         {

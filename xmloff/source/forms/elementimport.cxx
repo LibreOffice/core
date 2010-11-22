@@ -880,6 +880,7 @@ namespace xmloff
                     ++aValueProps
                 )
             {
+                bool bSuccess = false;
                 switch (aValueProps->Handle)
                 {
                     case PROPID_VALUE:
@@ -889,6 +890,7 @@ namespace xmloff
                         if (!bRetrievedValues)
                         {
                             getValuePropertyNames(m_eElementType, nClassId, pCurrentValueProperty, pValueProperty);
+                            ENSURE_OR_BREAK( pCurrentValueProperty && pValueProperty, "OControlImport::StartElement: illegal value property names!" );
                             bRetrievedValues = sal_True;
                         }
                         OSL_ENSURE((PROPID_VALUE != aValueProps->Handle) || pValueProperty,
@@ -901,6 +903,7 @@ namespace xmloff
                             aValueProps->Name = ::rtl::OUString::createFromAscii(pValueProperty);
                         else
                             aValueProps->Name = ::rtl::OUString::createFromAscii(pCurrentValueProperty);
+                        bSuccess = true;
                     }
                     break;
                     case PROPID_MIN_VALUE:
@@ -910,6 +913,7 @@ namespace xmloff
                         if (!bRetrievedValueLimits)
                         {
                             getValueLimitPropertyNames(nClassId, pMinValueProperty, pMaxValueProperty);
+                            ENSURE_OR_BREAK( pMinValueProperty && pMaxValueProperty, "OControlImport::StartElement: illegal value limit property names!" );
                             bRetrievedValueLimits = sal_True;
                         }
                         OSL_ENSURE((PROPID_MIN_VALUE != aValueProps->Handle) || pMinValueProperty,
@@ -922,9 +926,13 @@ namespace xmloff
                             aValueProps->Name = ::rtl::OUString::createFromAscii(pMinValueProperty);
                         else
                             aValueProps->Name = ::rtl::OUString::createFromAscii(pMaxValueProperty);
+                        bSuccess = true;
                     }
                     break;
                 }
+
+                if ( !bSuccess )
+                    continue;
 
                 // translate the value
                 implTranslateValueProperty(m_xInfo, *aValueProps);

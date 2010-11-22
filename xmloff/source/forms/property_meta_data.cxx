@@ -51,19 +51,26 @@ namespace xmloff { namespace metadata
     //= property meta data
     //==================================================================================================================
     //------------------------------------------------------------------------------------------------------------------
-    static const PropertyDescription s_propertyMetaData[] =
+    namespace
     {
-        FORM_SINGLE_PROPERTY( DATE_MIN,        XML_MIN_VALUE        ),
-        FORM_SINGLE_PROPERTY( DATE_MAX,        XML_MAX_VALUE        ),
-        FORM_SINGLE_PROPERTY( DEFAULT_DATE,    XML_VALUE            ),
-        FORM_SINGLE_PROPERTY( DATE,            XML_CURRENT_VALUE    ),
-        FORM_SINGLE_PROPERTY( TIME_MIN,        XML_MIN_VALUE        ),
-        FORM_SINGLE_PROPERTY( TIME_MAX,        XML_MAX_VALUE        ),
-        FORM_SINGLE_PROPERTY( DEFAULT_TIME,    XML_VALUE            ),
-        FORM_SINGLE_PROPERTY( TIME,            XML_CURRENT_VALUE    ),
+        const PropertyDescription* lcl_getPropertyMetaData()
+        {
+            static const PropertyDescription s_propertyMetaData[] =
+            {
+                FORM_SINGLE_PROPERTY( DATE_MIN,        XML_MIN_VALUE        ),
+                FORM_SINGLE_PROPERTY( DATE_MAX,        XML_MAX_VALUE        ),
+                FORM_SINGLE_PROPERTY( DEFAULT_DATE,    XML_VALUE            ),
+                FORM_SINGLE_PROPERTY( DATE,            XML_CURRENT_VALUE    ),
+                FORM_SINGLE_PROPERTY( TIME_MIN,        XML_MIN_VALUE        ),
+                FORM_SINGLE_PROPERTY( TIME_MAX,        XML_MAX_VALUE        ),
+                FORM_SINGLE_PROPERTY( DEFAULT_TIME,    XML_VALUE            ),
+                FORM_SINGLE_PROPERTY( TIME,            XML_CURRENT_VALUE    ),
 
-        PropertyDescription()
-    };
+                PropertyDescription()
+            };
+            return s_propertyMetaData;
+        }
+    }
 
     //------------------------------------------------------------------------------------------------------------------
     namespace
@@ -85,7 +92,7 @@ namespace xmloff { namespace metadata
             static DescriptionsByName s_propertyDescriptionsByName;
             if ( s_propertyDescriptionsByName.empty() )
             {
-                const PropertyDescription* desc = s_propertyMetaData;
+                const PropertyDescription* desc = lcl_getPropertyMetaData();
                 while ( desc->propertyName.getLength() != 0 )
                 {
                     s_propertyDescriptionsByName[ desc->propertyName ] = desc;
@@ -105,7 +112,7 @@ namespace xmloff { namespace metadata
             static IndexedPropertyGroups s_indexedPropertyGroups;
             if ( s_indexedPropertyGroups.empty() )
             {
-                const PropertyDescription* desc = s_propertyMetaData;
+                const PropertyDescription* desc = lcl_getPropertyMetaData();
                 while ( desc->propertyName.getLength() != 0 )
                 {
                     if ( desc->propertyGroup != NO_GROUP )
@@ -126,7 +133,7 @@ namespace xmloff { namespace metadata
             static ReverseTokenLookup s_reverseTokenLookup;
             if ( s_reverseTokenLookup.empty() )
             {
-                const PropertyDescription* desc = s_propertyMetaData;
+                const PropertyDescription* desc = lcl_getPropertyMetaData();
                 while ( desc->propertyName.getLength() != 0 )
                 {
                     s_reverseTokenLookup[ token::GetXMLToken( desc->attribute.attributeToken ) ] = desc->attribute.attributeToken;
@@ -155,7 +162,7 @@ namespace xmloff { namespace metadata
             static AttributeGroups s_attributeGroups;
             if ( s_attributeGroups.empty() )
             {
-                const PropertyDescription* desc = s_propertyMetaData;
+                const PropertyDescription* desc = lcl_getPropertyMetaData();
                 while ( desc->propertyName.getLength() != 0 )
                 {
                     if ( desc->propertyGroup != NO_GROUP )
@@ -176,7 +183,7 @@ namespace xmloff { namespace metadata
             static AttributesWithoutGroup s_attributesWithoutGroup;
             if ( s_attributesWithoutGroup.empty() )
             {
-                const PropertyDescription* desc = s_propertyMetaData;
+                const PropertyDescription* desc = lcl_getPropertyMetaData();
                 while ( desc->propertyName.getLength() != 0 )
                 {
                     if ( desc->propertyGroup == NO_GROUP )
@@ -248,7 +255,6 @@ namespace xmloff { namespace metadata
     AttributeDescription getAttributeDescription( const sal_uInt16 i_namespacePrefix, const ::rtl::OUString& i_attributeName )
     {
         AttributeDescription attribute;
-
         const ReverseTokenLookup& rTokenLookup( getReverseTokenLookup() );
         const ReverseTokenLookup::const_iterator pos = rTokenLookup.find( i_attributeName );
         if ( pos != rTokenLookup.end() )
