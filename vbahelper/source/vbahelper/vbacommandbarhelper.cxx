@@ -41,7 +41,7 @@
 using namespace com::sun::star;
 using namespace ooo::vba;
 
-#define CREATEOUSTRING(asciistr) rtl::OUString::createFromAscii(asciistr)
+#define CREATEOUSTRING(asciistr) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(asciistr))
 
 typedef std::map< rtl::OUString, rtl::OUString > MSO2OOCommandbarMap;
 
