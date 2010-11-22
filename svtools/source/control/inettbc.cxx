@@ -41,10 +41,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
-
-#ifndef  _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HDL_
-#include <com/sun/star/task/XInteractionHandler.hdl>
-#endif
+#include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/ucb/NumberedSortingInfo.hpp>
 #include <com/sun/star/ucb/XAnyCompareFactory.hpp>
 #include <com/sun/star/ucb/XProgressHandler.hpp>
@@ -165,7 +162,7 @@ SvtMatchContext_Impl::SvtMatchContext_Impl(
     SvtURLBox* pBoxP, const String& rText )
     : aLink( STATIC_LINK( this, SvtMatchContext_Impl, Select_Impl ) )
     , aBaseURL( pBoxP->aBaseURL )
-    , aText(  rText )
+    , aText( rText )
     , pBox( pBoxP )
     , bStop( FALSE )
     , bOnlyDirectories( pBoxP->bOnlyDirectories )
@@ -426,7 +423,7 @@ void SvtMatchContext_Impl::ReadFolder( const String& rURL,
             uno::Reference< XDynamicResultSet > xDynResultSet;
             ResultSetInclude eInclude = INCLUDE_FOLDERS_AND_DOCUMENTS;
             if ( bOnlyDirectories )
-                eInclude =  INCLUDE_FOLDERS_ONLY;
+                eInclude = INCLUDE_FOLDERS_ONLY;
 
             xDynResultSet = aCnt.createDynamicCursor( aProps, eInclude );
 
@@ -654,7 +651,7 @@ void SvtMatchContext_Impl::run()
                 {
                     // if text input is a directory, it must be part of the match list! Until then it is scanned
                     if ( UCBContentHelper::IsFolder( aMainURL ) && aURLObject.hasFinalSlash() )
-                           Insert( aText, aMatch );
+                            Insert( aText, aMatch );
                     else
                         // otherwise the parent folder will be taken
                         aURLObject.removeSegment();
@@ -684,6 +681,7 @@ void SvtMatchContext_Impl::run()
             aCurObj.SetURL( *aPickList.GetObject( nPos ) );
             aCurObj.SetSmartURL( aCurObj.GetURLNoPass());
             aCurMainURL = aCurObj.GetMainURL( INetURLObject::NO_DECODE );
+
             if( eProt != INET_PROT_NOT_VALID && aCurObj.GetProtocol() != eProt )
                 continue;
 
@@ -708,7 +706,7 @@ void SvtMatchContext_Impl::run()
                     {
                         // try if text matches the scheme
                         String aScheme( INetURLObject::GetScheme( aCurObj.GetProtocol() ) );
-                        if ( aText.CompareTo( aScheme, aText.Len() ) == COMPARE_EQUAL && aText.Len() < aScheme.Len() )
+                        if ( aText.CompareIgnoreCaseToAscii( aScheme, aText.Len() ) == COMPARE_EQUAL && aText.Len() < aScheme.Len() )
                         {
                             if( bFull )
                                 aMatch = aCurObj.GetMainURL( INetURLObject::NO_DECODE );
@@ -727,7 +725,7 @@ void SvtMatchContext_Impl::run()
                         aCurString.Erase( 0, aScheme.Len() );
                     }
 
-                    if( aText.CompareTo( aCurString, aText.Len() )== COMPARE_EQUAL )
+                    if( aText.CompareIgnoreCaseToAscii( aCurString, aText.Len() )== COMPARE_EQUAL )
                     {
                         if( bFull )
                             aMatch = aCurObj.GetMainURL( INetURLObject::NO_DECODE );
@@ -1315,7 +1313,7 @@ sal_Bool SvtURLBox_Impl::TildeParsing(
                 return sal_False; // no such user
 #else
             pPasswd = getpwnam( OUStringToOString( OUString( aUserName ), RTL_TEXTENCODING_ASCII_US ).getStr() );
-             if( pPasswd )
+            if( pPasswd )
                 aParseTilde = String::CreateFromAscii( pPasswd->pw_dir );
             else
                 return sal_False; // no such user

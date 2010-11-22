@@ -39,6 +39,7 @@
 #define OOO_STRING_SVTOOLS_RTF_ALT "\\alt"
 #define OOO_STRING_SVTOOLS_RTF_ANNOTATION "\\annotation"
 #define OOO_STRING_SVTOOLS_RTF_ANSI "\\ansi"
+#define OOO_STRING_SVTOOLS_RTF_ATNDATE "\\atndate"
 #define OOO_STRING_SVTOOLS_RTF_ATNID "\\atnid"
 #define OOO_STRING_SVTOOLS_RTF_AUTHOR "\\author"
 #define OOO_STRING_SVTOOLS_RTF_B "\\b"
@@ -976,12 +977,15 @@
 #define OOO_STRING_SVTOOLS_RTF_SHPBXCOLUMN "\\shpbxcolumn"
 #define OOO_STRING_SVTOOLS_RTF_SHPBXMARGIN "\\shpbxmargin"
 #define OOO_STRING_SVTOOLS_RTF_SHPBXPAGE "\\shpbxpage"
+#define OOO_STRING_SVTOOLS_RTF_SHPBXIGNORE "\\shpbxignore"
 #define OOO_STRING_SVTOOLS_RTF_SHPBYMARGIN "\\shpbymargin"
 #define OOO_STRING_SVTOOLS_RTF_SHPBYPAGE "\\shpbypage"
 #define OOO_STRING_SVTOOLS_RTF_SHPBYPARA "\\shpbypara"
+#define OOO_STRING_SVTOOLS_RTF_SHPBYIGNORE "\\shpbyignore"
 #define OOO_STRING_SVTOOLS_RTF_SHPFBLWTXT "\\shpfblwtxt"
 #define OOO_STRING_SVTOOLS_RTF_SHPFHDR "\\shpfhdr"
 #define OOO_STRING_SVTOOLS_RTF_SHPGRP "\\shpgrp"
+#define OOO_STRING_SVTOOLS_RTF_SHPINST "\\shpinst"
 #define OOO_STRING_SVTOOLS_RTF_SHPLEFT "\\shpleft"
 #define OOO_STRING_SVTOOLS_RTF_SHPLID "\\shplid"
 #define OOO_STRING_SVTOOLS_RTF_SHPLOCKANCHOR "\\shplockanchor"
@@ -993,6 +997,7 @@
 #define OOO_STRING_SVTOOLS_RTF_SHPWRK "\\shpwrk"
 #define OOO_STRING_SVTOOLS_RTF_SHPWR "\\shpwr"
 #define OOO_STRING_SVTOOLS_RTF_SHPZ "\\shpz"
+#define OOO_STRING_SVTOOLS_RTF_SP "\\sp"
 #define OOO_STRING_SVTOOLS_RTF_SPRSBSP "\\sprsbsp"
 #define OOO_STRING_SVTOOLS_RTF_SPRSLNSP "\\sprslnsp"
 #define OOO_STRING_SVTOOLS_RTF_SPRSTSM "\\sprstsm"
@@ -1116,6 +1121,7 @@
 #define OOO_STRING_SVTOOLS_RTF_SHP "\\shp"
 #define OOO_STRING_SVTOOLS_RTF_SN "\\sn"
 #define OOO_STRING_SVTOOLS_RTF_SV "\\sv"
+#define OOO_STRING_SVTOOLS_RTF_SP "\\sp"
 
 // Support for overline attributes
 #define OOO_STRING_SVTOOLS_RTF_OL "\\ol"
@@ -1137,5 +1143,12 @@
 #define OOO_STRING_SVTOOLS_RTF_OLTHDASHDD "\\olthdashdd"
 #define OOO_STRING_SVTOOLS_RTF_OLHWAVE "\\olhwave"
 #define OOO_STRING_SVTOOLS_RTF_OLOLDBWAVE "\\ololdbwave"
+
+// Support for nested tables
+#define OOO_STRING_SVTOOLS_RTF_ITAP "\\itap"
+#define OOO_STRING_SVTOOLS_RTF_NESTCELL "\\nestcell"
+#define OOO_STRING_SVTOOLS_RTF_NESTTABLEPROPRS "\\nesttableprops"
+#define OOO_STRING_SVTOOLS_RTF_NESTROW "\\nestrow"
+#define OOO_STRING_SVTOOLS_RTF_NONESTTABLES "\\nonesttables"
 
 #endif // _RTFKEYWD_HXX
