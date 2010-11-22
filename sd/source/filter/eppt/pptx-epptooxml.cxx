@@ -1998,7 +1998,7 @@ SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo( void* /* pServiceMan
         {
             uno::Reference< registry::XRegistryKey > xNewKey1(
                 static_cast< registry::XRegistryKey* >( pRegistryKey )->createKey(
-                ::rtl::OUString::createFromAscii( IMPL_NAME "/UNO/SERVICES/" ) ) );
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( IMPL_NAME "/UNO/SERVICES/" )) ) );
             xNewKey1->createKey( oox::core::PowerPointExport_getSupportedServiceNames().getConstArray()[0] );
 
             bRet = sal_True;
@@ -2023,7 +2023,7 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( const sal_Char* pImplN
 
     if( rtl_str_compare( pImplName, IMPL_NAME ) == 0 )
     {
-        const ::rtl::OUString aServiceName( ::rtl::OUString::createFromAscii( IMPL_NAME ) );
+        const ::rtl::OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( IMPL_NAME ) );
 
         xFactory = uno::Reference< lang::XSingleServiceFactory >( ::cppu::createSingleFactory(
                         reinterpret_cast< lang::XMultiServiceFactory* >( pServiceManager ),
