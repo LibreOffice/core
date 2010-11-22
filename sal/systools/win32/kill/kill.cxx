@@ -272,7 +272,7 @@ static void ParseCommandArgs( LPDWORD lpProcesses, LPDWORD lpdwNumProcesses, int
         {
             for ( int n = 0; n < NumSupportedSignals; n++ )
             {
-                _tprintf( _T("%s "), SupportedSignals[n] );
+                _tprintf( _T("%s "), SupportedSignals[n].lpSignalName );
             }
             _tprintf( _T("\n") );
             ExitProcess( 0 );
