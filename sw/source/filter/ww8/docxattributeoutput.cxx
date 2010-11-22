@@ -1277,7 +1277,7 @@ static void impl_pageBorders( FSHelperPtr pSerializer, const SvxBoxItem& rBox, b
         BOX_LINE_TOP, BOX_LINE_LEFT, BOX_LINE_BOTTOM, BOX_LINE_RIGHT
     };
 
-    const USHORT aXmlElements[] =
+    const sal_Int32 aXmlElements[] =
     {
         XML_top,
         bUseStartEnd ? XML_start : XML_left,
@@ -1351,7 +1351,7 @@ void DocxAttributeOutput::TableCellProperties( ww8::WW8TableNodeInfoInner::Point
         BOX_LINE_TOP, BOX_LINE_LEFT, BOX_LINE_BOTTOM, BOX_LINE_RIGHT
     };
 
-    const USHORT aXmlElements[] =
+    const sal_Int32 aXmlElements[] =
     {
         XML_top,
         bEcma ? XML_left : XML_start,
