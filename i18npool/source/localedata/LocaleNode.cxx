@@ -168,7 +168,7 @@ void print_OUString( const OUString& s )
     printf( "%s", OUStringToOString( s, RTL_TEXTENCODING_UTF8).getStr());
 }
 
-bool is_empty( const OUString& s )
+bool is_empty_string( const OUString& s )
 {
      return (s.getLength()==0) || (s.getLength()==1 && s[0]=='\n');
 }
@@ -208,7 +208,7 @@ void print_node( const LocaleNode* p, int depth=0 )
      }
      printf(">");
      printf("\n");
-     if( !is_empty( p->getValue() ) )
+     if( !is_empty_string( p->getValue() ) )
      {
           print_indent( depth+1 );
           printf("value: ");
