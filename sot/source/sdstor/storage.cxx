@@ -807,8 +807,8 @@ uno::Reference< embed::XStorage > SotStorage::GetUNOAPIDuplicate( const String& 
                                 uno::Any aMediaType;
 
                                 if ( pChildUCBStg->GetProperty(
-                                                    ::rtl::OUString::createFromAscii( "MediaType" ), aMediaType ) )
-                                    pTempStorage->SetProperty( ::rtl::OUString::createFromAscii( "MediaType" ), aMediaType );
+                                                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")), aMediaType ) )
+                                    pTempStorage->SetProperty( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")), aMediaType );
 
                                 bStorageReady = !pChildUCBStg->GetError() && !pTempStorage->GetError()
                                             && pTempStorage->Commit();
@@ -826,7 +826,7 @@ uno::Reference< embed::XStorage > SotStorage::GetUNOAPIDuplicate( const String& 
                         try {
                             uno::Reference< lang::XSingleServiceFactory > xStorageFactory(
                                     ::comphelper::getProcessServiceFactory()->createInstance(
-                                        ::rtl::OUString::createFromAscii( "com.sun.star.embed.StorageFactory" ) ),
+                                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.StorageFactory")) ),
                                     uno::UNO_QUERY );
 
                             OSL_ENSURE( xStorageFactory.is(), "Can't create storage factory!\n" );
@@ -1466,7 +1466,7 @@ void SotStorage::SetKey( const ByteString& rKey )
             ::com::sun::star::uno::Sequence < sal_Int8 > aSequ( (sal_Int8*) pBuffer, RTL_DIGEST_LENGTH_SHA1 );
             ::com::sun::star::uno::Any aAny;
             aAny <<= aSequ;
-            SetProperty( ::rtl::OUString::createFromAscii("EncryptionKey"), aAny );
+            SetProperty( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EncryptionKey")), aAny );
         }
     }
 }
@@ -1515,7 +1515,7 @@ sal_Int32 SotStorage::GetFormatID( const com::sun::star::uno::Reference < com::s
         return 0;
 
     ::rtl::OUString aMediaType;
-    xProps->getPropertyValue( ::rtl::OUString::createFromAscii( "MediaType" ) ) >>= aMediaType;
+    xProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")) ) >>= aMediaType;
     if ( aMediaType.getLength() )
     {
         ::com::sun::star::datatransfer::DataFlavor aDataFlavor;

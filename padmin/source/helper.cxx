@@ -70,11 +70,11 @@ ResId padmin::PaResId( sal_uInt32 nId )
         utl::OConfigurationNode aNode =
             utl::OConfigurationTreeRoot::tryCreateWithServiceFactory(
                     vcl::unohelper::GetMultiServiceFactory(),
-                    OUString::createFromAscii( "org.openoffice.Setup/L10N" ) );
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Setup/L10N")) );
         if ( aNode.isValid() )
         {
             rtl::OUString aLoc;
-            Any aValue = aNode.getNodeValue( OUString::createFromAscii( "ooLocale" ) );
+            Any aValue = aNode.getNodeValue( OUString(RTL_CONSTASCII_USTRINGPARAM("ooLocale")) );
             if( aValue >>= aLoc )
             {
 //                LanguageType nTmpLang = MsLangId::convertIsoStringToLanguage( aLoc );

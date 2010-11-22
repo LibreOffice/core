@@ -509,7 +509,7 @@ int main (int argc, char **argv)
     {
         // Create registration service
         Reference < XInterface > x = xSMgr->createInstance(
-            OUString::createFromAscii( "com.sun.star.registry.ImplementationRegistration" ) );
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.registry.ImplementationRegistration")) );
         xReg = Reference<  XImplementationRegistration > ( x , UNO_QUERY );
     }
     catch( Exception & ) {
@@ -524,7 +524,7 @@ int main (int argc, char **argv)
         OUString aDllName =
             OUString::createFromAscii( "sax.uno" SAL_DLLEXTENSION );
         xReg->registerImplementation(
-            OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary")),
             aDllName,
             Reference< XSimpleRegistry > ()  );
     }
@@ -541,7 +541,7 @@ int main (int argc, char **argv)
     // read xml from a file and count elements
     //--------------------------------
     Reference< XInterface > x = xSMgr->createInstance(
-        OUString::createFromAscii( "com.sun.star.xml.sax.Parser" ) );
+        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser")) );
     if( x.is() )
     {
         Reference< XParser > rParser( x , UNO_QUERY );
@@ -581,7 +581,7 @@ int main (int argc, char **argv)
     //----------------------
     // The SAX-Writer demo
     //----------------------
-    x= xSMgr->createInstance( OUString::createFromAscii( "com.sun.star.xml.sax.Writer" ) );
+    x= xSMgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer")) );
     if( x.is() )
     {
         printf( "start writing to %s\n" , argv[2] );

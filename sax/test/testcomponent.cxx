@@ -79,7 +79,7 @@ int main (int argc, char **argv)
     {
         // Create registration service
         Reference < XInterface > x = xSMgr->createInstance(
-            OUString::createFromAscii( "com.sun.star.registry.ImplementationRegistration" ) );
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.registry.ImplementationRegistration")) );
         xReg = Reference<  XImplementationRegistration > ( x , UNO_QUERY );
     }
     catch( Exception & ) {
@@ -102,7 +102,7 @@ int main (int argc, char **argv)
             aDllName += OUString( RTL_CONSTASCII_USTRINGPARAM(".so"));
 #endif
             xReg->registerImplementation(
-                OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary")),
                 aDllName,
                 xSimpleReg );
         }
@@ -130,7 +130,7 @@ int main (int argc, char **argv)
 #endif
 
         xReg->registerImplementation(
-            OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ) ,
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary")) ,
             aDllName,
             xSimpleReg );
     }

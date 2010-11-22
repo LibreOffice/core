@@ -110,7 +110,7 @@ void SAL_CALL UNOStorageHolder::commited( const lang::EventObject& /*aEvent*/ )
 
     uno::Reference< lang::XSingleServiceFactory > xStorageFactory(
             ::comphelper::getProcessServiceFactory()->createInstance(
-                   ::rtl::OUString::createFromAscii( "com.sun.star.embed.StorageFactory" ) ),
+                   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.StorageFactory")) ),
             uno::UNO_QUERY );
 
     OSL_ENSURE( xStorageFactory.is(), "Can't create storage factory!\n" );
@@ -155,8 +155,8 @@ void SAL_CALL UNOStorageHolder::commited( const lang::EventObject& /*aEvent*/ )
     // CopyTo does not transport unknown media type
     // just workaround it
     uno::Any aMediaType;
-    if ( rTempStorage->GetProperty( ::rtl::OUString::createFromAscii( "MediaType" ), aMediaType ) )
-        m_rSotStorage->SetProperty( ::rtl::OUString::createFromAscii( "MediaType" ), aMediaType );
+    if ( rTempStorage->GetProperty( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")), aMediaType ) )
+        m_rSotStorage->SetProperty( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")), aMediaType );
 
     m_rSotStorage->Commit();
 }
