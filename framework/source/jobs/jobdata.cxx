@@ -181,8 +181,7 @@ void JobData::setAlias( const ::rtl::OUString& sAlias )
 
     // try to open the configuration set of this job directly and get a property access to it
     // We open it readonly here
-    ::rtl::OUString sKey;
-    sKey  = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(JOBCFG_ROOT));
+    ::rtl::OUString sKey(RTL_CONSTASCII_USTRINGPARAM(JOBCFG_ROOT));
     sKey += ::utl::wrapConfigurationElementName(m_sAlias);
 
     ConfigAccess aConfig(m_xSMGR, sKey);
@@ -312,8 +311,7 @@ void JobData::setJobConfig( const css::uno::Sequence< css::beans::NamedValue >& 
         // It doesn't matter if this config object was already opened before.
         // It doesn nothing here then ... or it change the mode automaticly, if
         // it was opened using another one before.
-        ::rtl::OUString sKey;
-        sKey  = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(JOBCFG_ROOT));
+        ::rtl::OUString sKey(RTL_CONSTASCII_USTRINGPARAM(JOBCFG_ROOT));
         sKey += ::utl::wrapConfigurationElementName(m_sAlias);
 
         ConfigAccess aConfig(m_xSMGR, sKey);
