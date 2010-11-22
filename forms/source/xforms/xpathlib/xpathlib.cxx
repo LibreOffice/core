@@ -211,7 +211,7 @@ void xforms_countNonEmptyFunction(xmlXPathParserContextPtr ctxt, int nargs)
     for (int i = 0; i <  xmlXPathNodeSetGetLength(pNodeSet); i++)
     {
         aString = xmlXPathCastNodeToString(xmlXPathNodeSetItem(pNodeSet, i));
-        if (strlen((char*)aString) > 0) nNotEmpty++;
+        if (*aString != 0) nNotEmpty++;
     }
     xmlXPathReturnNumber(ctxt, nNotEmpty);
 }
