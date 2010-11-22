@@ -46,7 +46,7 @@ endef
 # FIXME: this does not really work for real multi repository builds, but the
 # deliver.log format is broken in that case anyway
 define gb_Deliver_add_deliverable
-gb_Deliver_DELIVERABLES += $$(patsubst $(REPO_DIR)/%,%,$(2)):$$(patsubst $(REPO_DIR)/%,%,$(1))
+gb_Deliver_DELIVERABLES += $$(patsubst $(REPODIR)/%,%,$(2)):$$(patsubst $(REPODIR)/%,%,$(1))
 
 endef
 
