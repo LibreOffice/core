@@ -89,7 +89,7 @@ SvxConfigFunctionListBox_Impl::SvxConfigFunctionListBox_Impl( Window* pParent, c
     , pCurEntry( 0 )
     , m_pDraggingEntry( 0 )
 {
-    SetWindowBits( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_SORT );
+    SetStyle( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_SORT );
     GetModel()->SetSortMode( SortAscending );
 
     // Timer f"ur die BallonHelp
@@ -225,7 +225,7 @@ SvxConfigGroupListBox_Impl::SvxConfigGroupListBox_Impl(
         m_xFrame.set( xFrame );
     }
 
-    SetWindowBits( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_HASBUTTONS | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONSATROOT );
+    SetStyle( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_HASBUTTONS | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONSATROOT );
 
     ImageList aNavigatorImages( SVX_RES( RID_SVXIMGLIST_FMEXPL ) );
 

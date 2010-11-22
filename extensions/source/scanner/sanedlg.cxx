@@ -120,12 +120,13 @@ SaneDlg::SaneDlg( Window* pParent, Sane& rSane ) :
         Bitmap( SaneResId( RID_SCAN_BITMAP_PLUS ) ),
         Bitmap( SaneResId( RID_SCAN_BITMAP_MINUS ) )
         );
-    maOptionBox.SetWindowBits( WB_HASLINES              |
-                               WB_HASBUTTONS            |
-                               WB_NOINITIALSELECTION    |
-                               WB_HASBUTTONSATROOT      |
-                               WB_HASLINESATROOT
-                               );
+    maOptionBox.SetStyle( maOptionBox.GetStyle()|
+                          WB_HASLINES           |
+                          WB_HASBUTTONS         |
+                          WB_NOINITIALSELECTION |
+                          WB_HASBUTTONSATROOT   |
+                          WB_HASLINESATROOT
+                        );
     FreeResource();
 }
 
