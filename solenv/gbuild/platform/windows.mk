@@ -166,6 +166,9 @@ gb_LinkTarget_LDFLAGS := \
     -SUBSYSTEM:CONSOLE \
     $(patsubst %,-LIBPATH:%,$(filter-out .,$(subst ;, ,$(ILIB)))) \
 
+ifneq ($(ENABLE_CRASHDUMP),)
+gb_LinkTarget_LDFLAGS += -DEBUG
+endif
 
 ifeq ($(gb_DEBUGLEVEL),2)
 gb_COMPILEROPTFLAGS :=
@@ -472,10 +475,15 @@ $(call gb_LinkTarget_set_dlltarget,$(2),$(3))
 $(call gb_LinkTarget_set_auxtargets,$(2),\
     $(patsubst %.lib,%.exp,$(call gb_LinkTarget_get_target,$(2))) \
     $(3).manifest \
+    $(patsubst %.dll,%.pdb,$(3)) \
+    $(patsubst %.dll,%.ilk,$(3)) \
 )
 
 $(call gb_Library_get_target,$(1)) \
-$(call gb_Library_get_clean_target,$(1)) : AUXTARGETS := $(OUTDIR)/bin/$(notdir $(3))
+$(call gb_Library_get_clean_target,$(1)) : AUXTARGETS := $(OUTDIR)/bin/$(notdir $(3)) \
+        $(OUTDIR)/bin/$(notdir $(patsubst %.dll,%.pdb,$(3))) \
+        $(OUTDIR)/bin/$(notdir $(patsubst %.dll,%.ilk,$(3))) \
+
 $(call gb_Deliver_add_deliverable,$(OUTDIR)/bin/$(notdir $(3)),$(3))
 
 endef
