@@ -35,7 +35,7 @@
 
 #include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/wintypes.hxx>
+#include <tools/wintypes.hxx>
 #include <vcl/decoview.hxx>
 #include "strload.hxx"
 #include "global.hxx"

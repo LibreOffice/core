@@ -29,7 +29,7 @@
 #define _CHART2_CONFIGURATIONACCESS_HXX
 
 // header for enum FieldUnit
-#include <vcl/fldunit.hxx>
+#include <tools/fldunit.hxx>
 
 //.............................................................................
 namespace chart
