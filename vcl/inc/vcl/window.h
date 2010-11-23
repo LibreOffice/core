@@ -38,7 +38,7 @@
 #ifndef _SV_POINTR_HXX
 #include <vcl/pointr.hxx>
 #endif
-#include <vcl/wintypes.hxx>
+#include <tools/wintypes.hxx>
 #include <vcl/vclevent.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <cppuhelper/weakref.hxx>

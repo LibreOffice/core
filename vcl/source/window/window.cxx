@@ -66,6 +66,7 @@
 #include "unotools/fontcfg.hxx"
 #include "vcl/sysdata.hxx"
 #include "vcl/sallayout.hxx"
+#include "vcl/salctype.hxx"
 #include "vcl/button.hxx" // Button::GetStandardText
 #include "vcl/taskpanelist.hxx"
 #include "com/sun/star/awt/XWindowPeer.hpp"

@@ -34,7 +34,7 @@
 #include <tools/time.hxx>
 #include <vcl/spinfld.hxx>
 #include <vcl/combobox.hxx>
-#include <vcl/fldunit.hxx>
+#include <tools/fldunit.hxx>
 
 namespace com { namespace sun { namespace star { namespace lang { struct Locale; } } } }
 

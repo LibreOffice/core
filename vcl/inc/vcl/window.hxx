@@ -35,7 +35,7 @@
 #ifndef _SV_POINTR_HXX
 #include <vcl/pointr.hxx>
 #endif
-#include <vcl/wintypes.hxx>
+#include <tools/wintypes.hxx>
 #ifndef _SV_APPTYPES_HXX
 #include <vcl/apptypes.hxx>
 #endif
