@@ -53,7 +53,8 @@ SLOFILES=\
         $(SLO)$/sessionlistener.obj \
         $(SLO)$/taskcreatorsrv.obj \
         $(SLO)$/uriabbreviation.obj \
-        $(SLO)$/tabwindowservice.obj
+        $(SLO)$/tabwindowservice.obj \
+        $(SLO)$/modelwinservice.obj
 
 SRS1NAME=$(TARGET)
 SRC1FILES= fwk_services.src
