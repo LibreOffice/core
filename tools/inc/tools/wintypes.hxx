@@ -124,7 +124,6 @@ typedef USHORT WindowType;
 // - Window-Bits -
 // ---------------
 
-// By changes you must also change: rsc/vclrsc.hxx
 typedef sal_Int64 WinBits;
 
 // Window-Bits fuer Window
@@ -298,7 +297,6 @@ typedef sal_Int64 WinBits;
 // - WindowAlign -
 // ---------------
 
-// By changes you must also change: rsc/vclrsc.hxx
 enum WindowAlign { WINDOWALIGN_LEFT, WINDOWALIGN_TOP, WINDOWALIGN_RIGHT, WINDOWALIGN_BOTTOM };
 enum ImageAlign { IMAGEALIGN_LEFT, IMAGEALIGN_TOP, IMAGEALIGN_RIGHT, IMAGEALIGN_BOTTOM,
                   IMAGEALIGN_LEFT_TOP, IMAGEALIGN_LEFT_BOTTOM, IMAGEALIGN_TOP_LEFT,
@@ -310,7 +308,6 @@ enum SymbolAlign { SYMBOLALIGN_LEFT, SYMBOLALIGN_RIGHT };
 // - TriState -
 // ------------
 
-// By changes you must also change: rsc/vclrsc.hxx
 enum TriState { STATE_NOCHECK, STATE_CHECK, STATE_DONTKNOW };
 
 
