@@ -41,7 +41,7 @@
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/form/XForm.hpp>
 /** === end UNO includes === **/
-#include <vcl/fldunit.hxx>
+#include <tools/fldunit.hxx>
 #include <vcl/waitobj.hxx>
 #include <connectivity/dbtools.hxx>
 

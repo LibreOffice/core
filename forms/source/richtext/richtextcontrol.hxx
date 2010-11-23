@@ -37,7 +37,7 @@
 #include <comphelper/uno3.hxx>
 #include <comphelper/implementationreference.hxx>
 #include <cppuhelper/implbase1.hxx>
-#include <vcl/wintypes.hxx>
+#include <tools/wintypes.hxx>
 #include "rtattributes.hxx"
 #include "attributedispatcher.hxx"
 

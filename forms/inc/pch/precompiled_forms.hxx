@@ -392,7 +392,7 @@
 #include "vcl/mapunit.hxx"
 #include "vcl/stdtext.hxx"
 #include "vcl/timer.hxx"
-#include "vcl/wintypes.hxx"
+#include "tools/wintypes.hxx"
 
 #include "vos/mutex.hxx"
 #include "vos/thread.hxx"

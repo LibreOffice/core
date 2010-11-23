@@ -39,7 +39,7 @@
 #include <toolkit/awt/vclxwindow.hxx>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/implbase1.hxx>
-#include <vcl/wintypes.hxx>
+#include <tools/wintypes.hxx>
 
 //.........................................................................
 namespace frm
