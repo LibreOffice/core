@@ -795,13 +795,11 @@ void SvxHyperlinkDlg::DataChanged( const DataChangedEvent& rDCEvt )
 
 void SvxHyperlinkDlg::SetImages()
 {
-    bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
-
-    SetItemImage( BTN_LINK, mpManager->GetImage( BTN_LINK, bHighContrast ) );
-    SetItemImage( BTN_INSERT_BOOKMARK, mpManager->GetImage( BTN_INSERT_BOOKMARK, bHighContrast ) );
-    SetItemImage( BTN_INET_SEARCH, mpManager->GetImage( BTN_INET_SEARCH, bHighContrast ) );
-    SetItemImage( BTN_TARGET, mpManager->GetImage( BTN_TARGET, bHighContrast ) );
-    SetItemImage( BTN_OPENDIALOG, mpManager->GetImage( BTN_OPENDIALOG, bHighContrast ) );
+    SetItemImage( BTN_LINK,             mpManager->GetImage( BTN_LINK            ) );
+    SetItemImage( BTN_INSERT_BOOKMARK,  mpManager->GetImage( BTN_INSERT_BOOKMARK ) );
+    SetItemImage( BTN_INET_SEARCH,      mpManager->GetImage( BTN_INET_SEARCH     ) );
+    SetItemImage( BTN_TARGET,           mpManager->GetImage( BTN_TARGET          ) );
+    SetItemImage( BTN_OPENDIALOG,       mpManager->GetImage( BTN_OPENDIALOG      ) );
 }
 
 /*--------------------------------------------------------------------

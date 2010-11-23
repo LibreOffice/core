@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_SDR_PRIMITIVE2D_SDROLECONTENTPRIMITIVE2D_HXX
+#ifndef INCLUDED_SDR_PRIMITIVE2D_SdrOleContentPrimitive2D_HXX
 #define INCLUDED_SDR_PRIMITIVE2D_SDROLECONTENTPRIMITIVE2D_HXX
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
@@ -55,9 +55,6 @@ namespace drawinglayer
             // be expensive, e.g. triggering chart creation)
             sal_uInt32                                  mnGraphicVersion;
 
-            // bitfield
-            unsigned                                    mbHighContrast : 1;
-
         protected:
             // local decomposition.
             virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
@@ -66,8 +63,8 @@ namespace drawinglayer
             SdrOleContentPrimitive2D(
                 const SdrOle2Obj& rSdrOle2Obj,
                 const basegfx::B2DHomMatrix& rObjectTransform,
-                sal_uInt32 nGraphicVersion,
-                bool bHighContrast);
+                sal_uInt32 nGraphicVersion
+            );
 
             // compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
@@ -78,7 +75,6 @@ namespace drawinglayer
             // data access
             const basegfx::B2DHomMatrix& getObjectTransform() const { return maObjectTransform; }
             sal_uInt32 getGraphicVersion() const { return mnGraphicVersion; }
-            bool getHighContrast() const { return mbHighContrast; }
 
             // provide unique ID
             DeclPrimitrive2DIDBlock()

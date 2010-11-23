@@ -150,7 +150,7 @@ class SVX_DLLPUBLIC SdrHdl
     friend class                SdrHdlList;
 
     // #101928#
-    BitmapEx ImpGetBitmapEx(BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd, sal_Bool bFine, sal_Bool bIsHighContrast);
+    BitmapEx ImpGetBitmapEx(BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd, sal_Bool bFine );
 
 protected:
     SdrObject*                  pObj;      // Gehoert das Handle zu einem Objekt?
@@ -524,7 +524,7 @@ protected:
 
     BitmapEx GetBitmapForHandle( const BitmapEx& rBitmap, int nSize );
 
-    static BitmapEx GetHandlesBitmap( bool bIsFineHdl, bool bIsHighContrast );
+    static BitmapEx GetHandlesBitmap( bool bIsFineHdl );
 };
 
 #endif //_SVDHDL_HXX

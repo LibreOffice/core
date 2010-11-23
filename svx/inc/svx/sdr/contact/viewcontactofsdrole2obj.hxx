@@ -65,7 +65,7 @@ namespace sdr
             // scaling (e.g. for EmptyPresObj's), the correct graphic and other stuff. It is used from
             // createViewIndependentPrimitive2DSequence with false, and with evtl. HighContrast true
             // from the VOC which knows that
-            drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequenceWithParameters(bool bHighContrast) const;
+            drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequenceWithParameters() const;
 
         protected:
             // This method is responsible for creating the graphical visualisation data

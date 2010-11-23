@@ -1599,8 +1599,8 @@ String STR_ItemNam_SHEARANGLE
  // Ende der gecachten Strings
 
  // und hier noch Bitmaps
-Bitmap BMAP_GrafikEi { File = "grafikei.bmp" ; };
-Bitmap BMAP_GrafikDe { File = "grafikde.bmp" ; };
+Bitmap BMAP_GrafikEi { File = "grafikei.png" ; };
+Bitmap BMAP_GrafikDe { File = "grafikde.png" ; };
 
 // Strings fuer den Vorlagen-Dialog
 String SIP_UNKNOWN_ATTR
@@ -2747,24 +2747,18 @@ String SIP_SA_GRAFRESERVE6 { Text = "" ; };
 
 Bitmap SIP_SA_MARKERS
 {
-    File = "markers.bmp";
+    File = "markers.png";
 };
 
 Bitmap SIP_SA_FINE_MARKERS
 {
-    File = "markers2.bmp";
+    File = "markers2.png";
 };
 
 // #100499#
 Bitmap BMP_SVXOLEOBJ
 {
-    File = "oleobj.bmp" ;
-};
-
-// #101928#
-Bitmap SIP_SA_ACCESSIBILITY_MARKERS
-{
-    File = "markersACC.bmp";
+    File = "oleobj.png" ;
 };
 
 String STR_ObjNameSingulMEDIA
@@ -2846,89 +2840,12 @@ String STR_ObjNamePluralTable
 
 Bitmap SIP_SA_CROP_MARKERS
 {
-    File = "cropmarkers.bmp";
+    File = "cropmarkers.png";
 };
 
 Bitmap SIP_SA_CROP_FINE_MARKERS
 {
-    File = "cropmarkers2.bmp";
-};
-
-Bitmap SIP_SA_ACCESSIBILITY_CROP_MARKERS
-{
-    File = "cropmarkersACC.bmp";
+    File = "cropmarkers2.png";
 };
 
 // ******************************************************************* EOF
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -1492,11 +1492,6 @@ SdrObject* SdrOle2Obj::getFullDragClone() const
     Graphic* pOLEGraphic = GetGraphic();
     SdrObject* pClone = 0;
 
-    if(Application::GetSettings().GetStyleSettings().GetHighContrastMode())
-    {
-        pOLEGraphic = getEmbeddedObjectRef().GetHCGraphic();
-    }
-
     if(pOLEGraphic)
     {
         pClone = new SdrGrafObj(*pOLEGraphic, GetSnapRect());
