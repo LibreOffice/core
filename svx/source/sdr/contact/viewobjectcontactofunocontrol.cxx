@@ -1826,6 +1826,10 @@ namespace sdr { namespace contact {
             // disposed the control though it doesn't own it. So, /me thinks we should not bother here.
             return drawinglayer::primitive2d::Primitive2DSequence();
 
+        if ( GetObjectContact().getViewInformation2D().getViewTransformation().isIdentity() )
+            // remove this when #i115754# is fixed
+            return drawinglayer::primitive2d::Primitive2DSequence();
+
         // ignore existing controls which are in alive mode and manually switched to "invisible"
         // #102090# / 2009-06-05 / frank.schoenheit@sun.com
         const ControlHolder& rControl( m_pImpl->getExistentControl() );
