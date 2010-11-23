@@ -845,7 +845,11 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet ) :
 
         aAutoStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" (") );
 
-        ULONG nAutoStyle = aStyleSettings.GetAutoSymbolsStyle();
+        // prefer the icon style set by the desktop native widgets modules
+        ULONG nAutoStyle = aStyleSettings.GetPreferredSymbolsStyle();
+        // fallback to the statically defined values
+        if ( nAutoStyle == STYLE_SYMBOLS_AUTO || !aIconStyleItemId[nAutoStyle] )
+            nAutoStyle = aStyleSettings.GetAutoSymbolsStyle();
         if ( aIconStyleItemId[nAutoStyle] )
             aAutoStr += aIconStyleLB.GetEntry( aIconStyleItemId[nAutoStyle] );
 
