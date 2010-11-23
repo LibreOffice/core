@@ -379,13 +379,6 @@ void InitImageType()
     {
         theImageType |= css::ui::ImageType::SIZE_LARGE;
     }
-
-    Window* topwin = Application::GetActiveTopWindow();
-    if ( topwin != NULL &&
-         topwin->GetSettings().GetStyleSettings().GetHighContrastMode() )
-    {
-        theImageType |= css::ui::ImageType::COLOR_HIGHCONTRAST;
-    }
 }
 
 sal_Int16 GetImageType()
@@ -993,7 +986,7 @@ uno::Reference< graphic::XGraphic > GetGraphic(
 
     if ( xImageManager.is() )
     {
-        // TODO handle large and high contrast graphics
+        // TODO handle large graphics
         uno::Sequence< uno::Reference< graphic::XGraphic > > aGraphicSeq;
 
         uno::Sequence< OUString > aImageCmdSeq( 1 );
@@ -5063,8 +5056,6 @@ SvxToolbarEntriesListBox::SvxToolbarEntriesListBox(
     m_pButtonData = new SvLBoxButtonData( this );
     BuildCheckBoxButtonImages( m_pButtonData );
     EnableCheckButton( m_pButtonData );
-
-    m_bHiContrastMode = GetSettings().GetStyleSettings().GetHighContrastMode();
 }
 
 // --------------------------------------------------------
@@ -5139,9 +5130,6 @@ void SvxToolbarEntriesListBox::DataChanged( const DataChangedEvent& rDCEvt )
     if (( rDCEvt.GetType() == DATACHANGED_SETTINGS ) &&
         ( rDCEvt.GetFlags() & SETTINGS_STYLE ))
     {
-        // We have to reset all images because we change to/from high contrast mode
-        m_bHiContrastMode = GetSettings().GetStyleSettings().GetHighContrastMode();
-
         BuildCheckBoxButtonImages( m_pButtonData );
         Invalidate();
     }

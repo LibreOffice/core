@@ -582,7 +582,6 @@ class SvxToolbarEntriesListBox : public SvxMenuEntriesListBox
     Size            m_aCheckBoxImageSizePixel;
     Link            m_aChangedListener;
     SvLBoxButtonData*   m_pButtonData;
-    BOOL            m_bHiContrastMode;
     SvxConfigPage*  pPage;
 
     void            ChangeVisibility( SvLBoxEntry* pEntry );

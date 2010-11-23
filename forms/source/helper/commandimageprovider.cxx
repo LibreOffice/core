@@ -82,7 +82,7 @@ namespace frm
         }
 
         // ICommandImageProvider
-        virtual CommandImages getCommandImages( const CommandURLs& _rCommandURLs, const bool _bLarge, const bool _bHiContrast ) const;
+        virtual CommandImages getCommandImages( const CommandURLs& _rCommandURLs, const bool _bLarge ) const;
 
     private:
         void    impl_init_nothrow( const ::comphelper::ComponentContext& _rContext, const Reference< XModel >& _rxDocument );
@@ -130,15 +130,14 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    CommandImages DocumentCommandImageProvider::getCommandImages( const CommandURLs& _rCommandURLs, const bool _bLarge, const bool _bHiContrast ) const
+    CommandImages DocumentCommandImageProvider::getCommandImages( const CommandURLs& _rCommandURLs, const bool _bLarge ) const
     {
         const size_t nCommandCount = _rCommandURLs.getLength();
         CommandImages aImages( nCommandCount );
         try
         {
-            const sal_Int16 nImageType =
-                    ( _bLarge       ? ImageType::SIZE_LARGE         : ImageType::SIZE_DEFAULT )
-                +   ( _bHiContrast  ? ImageType::COLOR_HIGHCONTRAST : ImageType::COLOR_NORMAL );
+            const sal_Int16 nImageType = ImageType::COLOR_NORMAL
+                                       +  ( _bLarge ? ImageType::SIZE_LARGE : ImageType::SIZE_DEFAULT );
 
             Sequence< Reference< XGraphic > > aDocImages( nCommandCount );
             Sequence< Reference< XGraphic > > aModImages( nCommandCount );
