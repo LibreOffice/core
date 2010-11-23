@@ -130,7 +130,9 @@ testcase tiViewPanes
     hMenuSelectNr (4)
 
 endcase 'tiViewPanes
+
 '---------------------------------------------------------
+
 testcase tiViewMasterView
     printlog "open application"
     Call hNewDocument
@@ -150,7 +152,9 @@ testcase tiViewMasterView
     printlog "close application "
     Call hCloseDocument
 endcase 'tiViewMasterView
+
 '---------------------------------------------------------
+
 testcase tiViewSlideMaster
 
     printlog "open application with : File->Autopilot->Presentation; OK; OK "
@@ -187,7 +191,9 @@ testcase tiViewSlideMaster
     Call  hCloseDocument
 
 endcase 'tiViewSlideMaster
+
 '--------------------------------------------------------
+
 testcase tiViewToolbar_1
 
     const DEFAULT_DELAY = 3
@@ -198,7 +204,6 @@ testcase tiViewToolbar_1
     dim i as integer
     
     TestFile = ConvertPath (gTesttoolPath + "global\input\graf_inp\desp.bmp")
-
     printlog "open application "
     Call hNewDocument
 
@@ -209,10 +214,8 @@ testcase tiViewToolbar_1
     hUseAsyncSlot( "EditSelectAll" )
     Kontext "DocumentImpress"
     DocumentImpress.typeKeys("<DELETE>",true)
-
     printlog "Insert->Graphic... : global\input\graf_inp\desp.bmp "
     hUseAsyncSlot( "InsertGraphicsFromFile" )
-
     Kontext "GrafikEinfuegenDlg"
     if ( GrafikEinfuegenDlg.exists( DEFAULT_DELAY ) ) then
         Dateiname.SetText( TestFile )

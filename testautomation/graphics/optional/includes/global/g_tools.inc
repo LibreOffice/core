@@ -92,8 +92,7 @@ testcase tiToolsThesaurus
     case 90 : Printlog "- No Thesaurus available !"
         goto endsub
 
-    case else
-        if bAsianLan then
+    case else : if bAsianLan then
             hSetSpellHypLanguage
             sWord = "Hello"
         else
@@ -152,7 +151,7 @@ testcase tiToolsThesaurus
             endif
 
             if ( ReplaceWith.getText() <> sAlternativeText ) then
-                warnlog "the text is no transfered to the ReplaceWith field. " +"ReplaceWith = "  + ReplaceWith.getText() + ", Alternative = " + sAlternativeText
+                warnlog "the text is no transfered to the ReplaceWith field. " + "ReplaceWith = "  + ReplaceWith.getText() + ", Alternative = " + sAlternativeText
             else
                 printlog "the text is transfered to the ReplaceWith field."
             endif
@@ -162,9 +161,9 @@ testcase tiToolsThesaurus
         endif
         Thesaurus.OK
 
-        if( gApplication = "DRAW" ) then
+        if(gApplication = "DRAW") then
             Kontext "Draw"
-        elseif( gApplication = "IMPRESS") then
+        elseif(gApplication = "IMPRESS") then
             Kontext "Impress"
         else ' fallback
             warnlog "gApplication is wrong"
@@ -186,7 +185,7 @@ testcase tiToolsThesaurus
 
     Call hCloseDocument
 
-endcase
+endcase 'tiToolsThesaurus
 '-------------------------------------------------------------------------------
 testcase tiToolsThesaurusWithoutText
 
@@ -209,7 +208,7 @@ testcase tiToolsThesaurusWithoutText
     Call hCloseDocument
 
 
-endcase
+endcase 'tiToolsThesaurusWithoutText
 '-------------------------------------------------------------------------------
 testcase tiToolsThesaurusContextMenu
 
@@ -266,8 +265,7 @@ testcase tiToolsThesaurusContextMenu
     case 90 : Printlog "- No Thesaurus available !"
         goto endsub
 
-    case else
-        if bAsianLan then
+    case else : if bAsianLan then
             hSetSpellHypLanguage
             sWord = "Hello"
         else
@@ -306,62 +304,64 @@ testcase tiToolsThesaurusContextMenu
 
     call hCloseDocument
 
-endcase
+endcase 'tiToolsThesaurusContextMenu
 '-------------------------------------------------------------------------------
 testcase tiToolsHyphenation1
 
-    printlog "   - Hyphenation without any text"
-    Call hNewDocument									'/// New impress document ///'
-    sleep 3
-    ToolsLanguageHyphenationDraw								'/// Try  with empty document ///'
-    Kontext "Hyphenation"
+   printlog "   - Hyphenation without any text"
+   printlog "New impress document "
+   Call hNewDocument									
+   sleep 3
+   ToolsLanguageHyphenationDraw								
+   Kontext "Hyphenation"
+    printlog "Try with empty document"
     if Hyphenation.Exists(1) = True Then
         Warnlog "  - Dialog ist da"
         Hyphenation.Cancel
     else
         Printlog "  - Hyphenation activated"
     end if
-    '   Kontext "DocumentImpress"
-    printlog "   - Hyphenation with text, but without any possibility to break words"
-    select case iSprache
-    case 01 : hTextrahmenErstellen ("This ist a text with no split words",10,10,40,40)	'/// Create text without a pssibility to split words///'
-    case 03 : hTextrahmenErstellen ("Compare a tradu" + Chr(231) + Chr(227) + "o com o original",10,10,40,40)
-    case 07 : qaerrorlog "- No Hypenation for Russian available"
-        Call hCloseDocument                    '/// Close document ///'
-        goto endsub
-    case 31 : hTextrahmenErstellen ("Het is mijn bedoeling om voor en hulpmiddel.",10,10,40,40)
-    case 33 : hTextrahmenErstellen ("Merci beaucoup pout votre candidature du 13/11/97.",10,10,40,40)
-    case 34 : hTextrahmenErstellen ("This ist a text with no spliting words",10,10,40,40)
-    case 36 : hTextrahmenErstellen ("Semmi karhozattyoc nincz most azoknac, a kic az Iesus Christusban be oltattac",10,10,40,40)
-    case 39 : hTextrahmenErstellen ("Il documento 'Senza nome 1' stato modififcato",10,10,40,40)
-    case 45 : hTextrahmenErstellen ("at du har nok i dit hvis du",10,10,40,40 )
-    case 46 : hTextrahmenErstellen ("Detta är en text utan delade ord",10,10,40,40)
-    case 48 : hTextrahmenErstellen (" Jeoli jednak zechcesz",10,10,40,40)
-    case 49 : hTextrahmenErstellen ("Dies ist ein Text ohne eine Moeglichkeit Woerter zu trennen",10,10,40,40)
-    case 50 : hTextrahmenErstellen ("Zato ves �?as iš�?emo nove �?lane: sodelujte",10,10,40,40)
-    case 55 : hTextrahmenErstellen ("a Sun tentou adquirir a Apple",10,10,40,40)
-    case else
-        if bAsianLan then
-            printlog "For the language  " + iSprache +" nothing is prepared yet, but is AsianLan, so OK :-)"
-            printlog " :-) will use English instead"
-            hTextrahmenErstellen ("This ist a text with no split words",10,10,40,40)
-        else
-            Warnlog "For the language  " + iSprache +" nothing is prepared yet: insert text here"
-        endif
-    end select
-    hTypeKeys "<Home>"
-    ToolsLanguageHyphenationDraw								'/// Try  ///'
-    Kontext "Hyphenation"
-    if Hyphenation.Exists =True Then
-        Warnlog "Dialog exists"
-        Hyphenation.Cancel
-    else
-        Kontext "Active"
-        if Active.Exists then Active.OK
-    end if
-
-    Call hCloseDocument 										'/// Close document ///'
-
+'   Kontext "DocumentImpress"
+   printlog "   - Hyphenation with text, but without any possibility to break words"
+   select case iSprache
+       case 01 : hTextrahmenErstellen ("This ist a text with no split words",10,10,40,40)	
+       case 03 : hTextrahmenErstellen ("Compare a tradu" + Chr(231) + Chr(227) + "o com o original",10,10,40,40)
+       case 07 : qaerrorlog "- No Hypenation for Russian available"
+                printlog "Close document"
+                 Call hCloseDocument                    
+                 goto endsub
+       case 31 : hTextrahmenErstellen ("Het is mijn bedoeling om voor en hulpmiddel.",10,10,40,40)
+       case 33 : hTextrahmenErstellen ("Merci beaucoup pout votre candidature du 13/11/97.",10,10,40,40)
+       case 34 : hTextrahmenErstellen ("This ist a text with no spliting words",10,10,40,40)
+       case 36 : hTextrahmenErstellen ("Semmi karhozattyoc nincz most azoknac, a kic az Iesus Christusban be oltattac",10,10,40,40)
+       case 39 : hTextrahmenErstellen ("Il documento 'Senza nome 1' stato modififcato",10,10,40,40)
+       case 45 : hTextrahmenErstellen ("at du har nok i dit hvis du",10,10,40,40 )
+       case 46 : hTextrahmenErstellen ("Detta är en text utan delade ord",10,10,40,40)
+       case 48 : hTextrahmenErstellen (" Jeoli jednak zechcesz",10,10,40,40)
+       case 49 : hTextrahmenErstellen ("Dies ist ein Text ohne eine Moeglichkeit Woerter zu trennen",10,10,40,40)
+       case 50 : hTextrahmenErstellen ("Zato ves �?as iš�?emo nove �?lane: sodelujte",10,10,40,40)
+       case 55 : hTextrahmenErstellen ("a Sun tentou adquirir a Apple",10,10,40,40)
+       case else : if bAsianLan then
+                     printlog "For the language  " + iSprache +" nothing is prepared yet, but is AsianLan, so OK :-)"
+                     printlog " :-) will use English instead"
+                     hTextrahmenErstellen ("This ist a text with no split words",10,10,40,40)
+                  else
+                     Warnlog "For the language  " + iSprache +" nothing is prepared yet: insert text here"
+                  endif
+   end select
+   hTypeKeys "<Home>"
+   ToolsLanguageHyphenationDraw							
+   Kontext "Hyphenation"
+   if Hyphenation.Exists =True Then
+      Warnlog "Dialog exists"
+      Hyphenation.Cancel
+   else
+      Kontext "Active"
+      if Active.Exists then Active.OK
+   end if
+   printlog "Close document "
+   Call hCloseDocument 										
+   
 endcase 'tiToolsHyphenation1
 
 '-------------------------------------------------------------------------------
@@ -381,55 +381,61 @@ testcase tiToolsHyphenation2
 
     if ((not bAsianLan) AND (iSprache <> 07)) then
         sFile = gTesttoolpath + "graphics\required\input\silben_"+iSprache+sExt
-        hFileOpenLocally( sFile )
+        Call hFileOpenLocally( sFile )
     endif
 
-    select case iSprache					'/// Open prepared document ///'
-    case 01 :DasWort = "ation" : DasWort2 = "tion" : DasWort3 = "ion" : DasWort4 = "on"  '+Chr(34)
-    case 07 : qaerrorlog "- No Hypenation for Russian available"
-        goto endsub
-    case 31 :DasWort = "siteit" : DasWort2 = "iteit" : DasWort3 = "teit" : DasWort4 = "eit"
-    case 33 :DasWort = "ture" : DasWort2 = "ure" : DasWort3 = "re" : DasWort4 = "e"
-    case 34 :DasWort = "chvo" : DasWort2 = "hvo" : DasWort3 = "vo" : DasWort4 = "o"
-    case 36 :DasWort = "zatnal" : DasWort2 = "atnal" : DasWort3 = "tnal" : DasWort4 = "nal"
-    case 39 :DasWort = "sentu" : DasWort2 = "entu" : DasWort3 = "ntu" : DasWort4 = "tu"
-    case 46 :DasWort = "niska" : DasWort2 = "iska" : DasWort3 = "ska" : DasWort4 = "ka"
-    case 48 :DasWort = "nie" : DasWort2 = "ie" : DasWort3 = "e"
-    case 49 :DasWort = "nung" : DasWort2 = "ung" : DasWort3 = "ng" : DasWort4 = "g"
-    case 50 :DasWort = "nica" : DasWort2 = "ica" : DasWort3 = "ca" : DasWort4 = "a"
-    case 55 :DasWort = "gia" : DasWort2 = "ia" : DasWort3 = "a" : DasWort4 = "ogia"
-    case else
-        if bAsianLan then
-            printlog "For the language  " + iSprache +" nothing is prepared yet, but is AsianLan, so OK :-)"
-            printlog " :-) will use English instead"
-            hFileOpenLocally( gTesttoolpath + "graphics\required\input\silben_"+"1"+sExt )
-            DasWort = "ation" : DasWort2 = "tion" : DasWort3 = "ion" : DasWort4 = "on"  '+Chr(34)
-        else
-            Warnlog "For the language  " + iSprache +" nothing is prepared yet: insert text here and create file: "+sFile
-            hNewDocument
-        endif
-    end select
+   select case iSprache					
+       case 01 :DasWort = "ation" : DasWort2 = "tion" : DasWort3 = "ion" : DasWort4 = "on"  '+Chr(34)
+       case 07 : qaerrorlog "- No Hypenation for Russian available"
+                 goto endsub
+       case 31 :DasWort = "siteit" : DasWort2 = "iteit" : DasWort3 = "teit" : DasWort4 = "eit"
+       case 33 :DasWort = "ture" : DasWort2 = "ure" : DasWort3 = "re" : DasWort4 = "e"
+       case 34 :DasWort = "chvo" : DasWort2 = "hvo" : DasWort3 = "vo" : DasWort4 = "o"
+       case 36 :DasWort = "zatnal" : DasWort2 = "atnal" : DasWort3 = "tnal" : DasWort4 = "nal"
+       case 39 :DasWort = "sentu" : DasWort2 = "entu" : DasWort3 = "ntu" : DasWort4 = "tu"
+       case 46 :DasWort = "niska" : DasWort2 = "iska" : DasWort3 = "ska" : DasWort4 = "ka"
+       case 48 :DasWort = "nie" : DasWort2 = "ie" : DasWort3 = "e"
+       case 49 :DasWort = "nung" : DasWort2 = "ung" : DasWort3 = "ng" : DasWort4 = "g"
+       case 50 :DasWort = "nica" : DasWort2 = "ica" : DasWort3 = "ca" : DasWort4 = "a"
+       case 55 :DasWort = "gia" : DasWort2 = "ia" : DasWort3 = "a" : DasWort4 = "ogia"
+       case else : if bAsianLan then
+             printlog "For the language  " + iSprache +" nothing is prepared yet, but is AsianLan, so OK :-)"
+             printlog " :-) will use English instead"
+             printlog "Open prepared document"
+             Call hFileOpen (gTesttoolpath + "graphics\required\input\silben_"+"1"+sExt)
+             DasWort = "ation" : DasWort2 = "tion" : DasWort3 = "ion" : DasWort4 = "on"  '+Chr(34)
+          else
+             Warnlog "For the language  " + iSprache +" nothing is prepared yet: insert text here and create file: "+sFile
+             hNewDocument
+          endif
+   end select
 
-    printlog "   - Test hyphenation"
-    EditSelectAll '/// Press CTRL + A to select all ///'
-    '/// press return to go into the edit mode ///'
-    hTypeKeys "<Return>"
+  printlog "Test hyphenation"
+printlog "Press CTRL + A to select all"
+   EditSelectAll 
+   printlog "press return to go into the edit mode"
+   hTypeKeys "<Return>"
 
-    sleep 1
-    ' WA for draw, or smth else: get text part before hyphenation:
-    if iSprache = "1" OR bAsianLan = TRUE then
-        hTypeKeys "<MOD1 END><HOME><MOD1 SHIFT RIGHT RIGHT>"      '/// Select part of text and compare it with original text at this place ///'
-    else
-        hTypeKeys "<MOD1 END><HOME><MOD1 SHIFT RIGHT>"
-    endif
-    EditCopy
-    sDraw = GetClipboardText()
-    EditSelectAll						'/// Select whole text ///'
-    ToolsLanguageHyphenationDraw					'/// Run Hyphenation ///'
-    gMouseClick 50,50
-    hTypeKeys "<MOD1 END><HOME><MOD1 SHIFT RIGHT>"		'/// Select part of text and compare it with original text at this place ///'
-    sleep 3
-    EditCopy
+   sleep 1
+   ' WA for draw, or smth else: get text part before hyphenation:
+   if iSprache = "1" OR bAsianLan = TRUE then
+    printlog "Select part of text and compare it with original text at this place"
+      hTypeKeys "<MOD1 END><HOME><MOD1 SHIFT RIGHT RIGHT>"      
+   else
+      hTypeKeys "<MOD1 END><HOME><MOD1 SHIFT RIGHT>"
+   endif
+   EditCopy
+   sDraw = GetClipboardText()
+   printlog "Select whole text"
+   EditSelectAll
+   printlog "Run Hyphenation"
+   ToolsLanguageHyphenationDraw					
+   gMouseClick 50,50
+   printlog "Select part of text and compare it with original text at this place"
+   hTypeKeys "<MOD1 END><HOME><MOD1 SHIFT RIGHT>"		
+   sleep 3
+   EditCopy
+
     printlog GetClipboardText
     select case GetClipboardText
     case DasWort  : printlog "  - Hyphenation worked"
@@ -444,9 +450,10 @@ testcase tiToolsHyphenation2
         Warnlog "  - Hyphenation did not work"
         Printlog "Expected: '"+DasWort+"'; or something different than: '"+sDraw+"'; But what we got was: '"+GetClipboardText+"'"
     end if
-    sleep 1
-    Call hCloseDocument						'/// Close document ///'
-
+   sleep 1
+   printlog "Close document"
+ Call hCloseDocument						
+ 
 endcase 'tiToolsHyphenation2
 
 '-------------------------------------------------------------------------------
@@ -462,7 +469,7 @@ testcase tToolsMacro
     ToolsMacro
     Kontext "Makro"
 
-    '/// to get the count of all macros, the list needs to get elapsed-all ///'
+    printlog "to get the count of all macros, the list needs to get elapsed-all"
     for j = 1 to 2
         Zaehler=MakroAus.GetItemCount
         MakroAus.typeKeys "<end>"
