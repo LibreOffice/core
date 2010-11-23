@@ -26,6 +26,13 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sfx2.hxx"
+
+#include "sfxacldetect.hxx"
+
+#if EXTRA_ACL_CHECK
+
 #ifdef WNT
 
 // necessary to include system headers without warnings
@@ -101,6 +108,8 @@ sal_Bool IsReadonlyAccordingACL( const sal_Unicode* )
     // to be implemented
     return sal_False;
 }
+
+#endif
 
 #endif
 

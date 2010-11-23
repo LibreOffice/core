@@ -143,11 +143,10 @@ using namespace ::com::sun::star::io;
 #include "openflag.hxx"     // SFX_STREAM_READONLY etc.
 #include "sfxresid.hxx"
 #include <sfx2/appuno.hxx>
+#include "sfxacldetect.hxx"
 
 #define MAX_REDIRECT 5
 
-
-sal_Bool IsReadonlyAccordingACL( const sal_Unicode* pFilePath );
 
 //==========================================================
 namespace {
@@ -1055,6 +1054,11 @@ sal_Bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
             catch( uno::Exception )
             {}
 
+#if EXTRA_ACL_CHECK
+            // This block was introduced as a fix to i#102464, but removing
+            // this does not make the problem re-appear.  But leaving this
+            // part would interfere with documents saved in samba share.  This
+            // affects Windows only.
             if ( !bContentReadonly )
             {
                 // the file is not readonly, check the ACL
@@ -1063,6 +1067,7 @@ sal_Bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
                 if ( ::utl::LocalFileHelper::ConvertURLToPhysicalName( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ), aPhysPath ) )
                     bContentReadonly = IsReadonlyAccordingACL( aPhysPath.GetBuffer() );
             }
+#endif
         }
 
         // do further checks only if the file not readonly in fs
