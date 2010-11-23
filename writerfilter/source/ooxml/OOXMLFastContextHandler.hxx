@@ -225,7 +225,7 @@ public:
 
     void sendPropertyToParent();
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     static XMLTag::Pointer_t toPropertiesTag(OOXMLPropertySet::Pointer_t);
     virtual XMLTag::Pointer_t toTag() const;
     virtual string toString() const;
@@ -344,7 +344,7 @@ public:
     virtual void setPropertySet(OOXMLPropertySet::Pointer_t pPropertySet);
     virtual OOXMLPropertySet::Pointer_t getPropertySet() const;
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     virtual XMLTag::Pointer_t toTag() const;
 #endif
 

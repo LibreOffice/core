@@ -275,7 +275,7 @@ void OOXMLParserState::incContextCount()
     mnContexts++;
 }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 unsigned int OOXMLParserState::getContextCount() const
 {
     return mnContexts;

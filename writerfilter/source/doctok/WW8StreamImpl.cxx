@@ -40,7 +40,7 @@ namespace doctok
 {
 using namespace ::com::sun::star;
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 TagLogger::Pointer_t debug_logger(TagLogger::getInstance("DEBUG"));
 #endif
 

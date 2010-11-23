@@ -158,7 +158,7 @@ WW8Document::~WW8Document()
 {
 }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 class WW8IdToString : public IdToString
 {
 public:
