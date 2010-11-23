@@ -570,30 +570,30 @@ CanvasSettings::CanvasSettings() :
         Reference< XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
         Reference<XMultiServiceFactory> xConfigProvider(
             xFactory->createInstance(
-                OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider")),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationProvider"))),
                 UNO_QUERY_THROW );
 
         Any propValue(
             makeAny( PropertyValue(
-                         OUString::createFromAscii("nodepath"), -1,
-                         makeAny( OUString::createFromAscii("/org.openoffice.Office.Canvas") ),
+                         OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath")), -1,
+                         makeAny( OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.Canvas")) ),
                          PropertyState_DIRECT_VALUE ) ) );
 
         mxForceFlagNameAccess.set(
             xConfigProvider->createInstanceWithArguments(
-                OUString::createFromAscii("com.sun.star.configuration.ConfigurationUpdateAccess"),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationUpdateAccess")),
                 Sequence<Any>( &propValue, 1 ) ),
             UNO_QUERY_THROW );
 
         propValue = makeAny(
             PropertyValue(
-                OUString::createFromAscii("nodepath"), -1,
-                makeAny( OUString::createFromAscii("/org.openoffice.Office.Canvas/CanvasServiceList") ),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath")), -1,
+                makeAny( OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.Canvas/CanvasServiceList")) ),
                 PropertyState_DIRECT_VALUE ) );
 
         Reference<XNameAccess> xNameAccess(
             xConfigProvider->createInstanceWithArguments(
-                OUString::createFromAscii("com.sun.star.configuration.ConfigurationAccess"),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationAccess")),
                 Sequence<Any>( &propValue, 1 ) ), UNO_QUERY_THROW );
         Reference<XHierarchicalNameAccess> xHierarchicalNameAccess(
             xNameAccess, UNO_QUERY_THROW);
@@ -610,7 +610,7 @@ CanvasSettings::CanvasSettings() :
             if( xEntryNameAccess.is() )
             {
                 Sequence<OUString> preferredImplementations;
-                if( (xEntryNameAccess->getByName( OUString::createFromAscii("PreferredImplementations") ) >>= preferredImplementations) )
+                if( (xEntryNameAccess->getByName( OUString(RTL_CONSTASCII_USTRINGPARAM("PreferredImplementations")) ) >>= preferredImplementations) )
                     maAvailableImplementations.push_back( std::make_pair(*pCurr,preferredImplementations) );
             }
 
@@ -648,7 +648,7 @@ BOOL CanvasSettings::IsHardwareAccelerationAvailable() const
                                                           pCurrImpl->trim() ),
                                                       UNO_QUERY_THROW );
                     bool bHasAccel(false);
-                    if( (xPropSet->getPropertyValue(OUString::createFromAscii("HardwareAcceleration")) >>= bHasAccel) )
+                    if( (xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("HardwareAcceleration"))) >>= bHasAccel) )
                         if( bHasAccel )
                         {
                             mbHWAccelAvailable = true;
@@ -675,7 +675,7 @@ BOOL CanvasSettings::IsHardwareAccelerationEnabled() const
     if( !mxForceFlagNameAccess.is() )
         return true;
 
-    if( !(mxForceFlagNameAccess->getByName( OUString::createFromAscii("ForceSafeServiceImpl") ) >>= bForceLastEntry) )
+    if( !(mxForceFlagNameAccess->getByName( OUString(RTL_CONSTASCII_USTRINGPARAM("ForceSafeServiceImpl")) ) >>= bForceLastEntry) )
         return true;
 
     return !bForceLastEntry;
@@ -690,7 +690,7 @@ void CanvasSettings::EnabledHardwareAcceleration( BOOL _bEnabled ) const
     if( !xNameReplace.is() )
         return;
 
-    xNameReplace->replaceByName( OUString::createFromAscii("ForceSafeServiceImpl"),
+    xNameReplace->replaceByName( OUString(RTL_CONSTASCII_USTRINGPARAM("ForceSafeServiceImpl")),
                                  makeAny(!_bEnabled) );
 
     Reference< XChangesBatch > xChangesBatch(
@@ -1247,17 +1247,17 @@ struct LanguageConfig_Impl
 static sal_Bool bLanguageCurrentDoc_Impl = sal_False;
 
 // some things we'll need...
-static const OUString sConfigSrvc = OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider");
-static const OUString sAccessSrvc = OUString::createFromAscii("com.sun.star.configuration.ConfigurationAccess");
-static const OUString sAccessUpdSrvc = OUString::createFromAscii("com.sun.star.configuration.ConfigurationUpdateAccess");
-static const OUString sInstalledLocalesPath = OUString::createFromAscii("org.openoffice.Setup/Office/InstalledLocales");
-static OUString sUserLocalePath = OUString::createFromAscii("org.openoffice.Office.Linguistic/General");
-//static const OUString sUserLocalePath = OUString::createFromAscii("org.openoffice.Office/Linguistic");
-static const OUString sUserLocaleKey = OUString::createFromAscii("UILocale");
-static const OUString sSystemLocalePath = OUString::createFromAscii("org.openoffice.System/L10N");
-static const OUString sSystemLocaleKey = OUString::createFromAscii("UILocale");
-static const OUString sOfficeLocalePath = OUString::createFromAscii("org.openoffice.Office/L10N");
-static const OUString sOfficeLocaleKey = OUString::createFromAscii("ooLocale");
+static const OUString sConfigSrvc(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationProvider"));
+static const OUString sAccessSrvc(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationAccess"));
+static const OUString sAccessUpdSrvc(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationUpdateAccess"));
+static const OUString sInstalledLocalesPath(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Setup/Office/InstalledLocales"));
+static OUString sUserLocalePath(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Linguistic/General"));
+//static const OUString sUserLocalePath(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office/Linguistic"));
+static const OUString sUserLocaleKey(RTL_CONSTASCII_USTRINGPARAM("UILocale"));
+static const OUString sSystemLocalePath(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.System/L10N"));
+static const OUString sSystemLocaleKey(RTL_CONSTASCII_USTRINGPARAM("UILocale"));
+static const OUString sOfficeLocalePath(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office/L10N"));
+static const OUString sOfficeLocaleKey(RTL_CONSTASCII_USTRINGPARAM("ooLocale"));
 static Sequence< OUString > seqInstalledLanguages;
 
 OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSet ) :
@@ -1317,8 +1317,8 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
         Reference< XNameAccess > theNameAccess;
 
         // find out which locales are currently installed and add them to the listbox
-        theArgs[0] = makeAny(NamedValue(OUString::createFromAscii("NodePath"), makeAny(sInstalledLocalesPath)));
-        theArgs[1] = makeAny(NamedValue(OUString::createFromAscii("reload"), makeAny(sal_True)));
+        theArgs[0] = makeAny(NamedValue(OUString(RTL_CONSTASCII_USTRINGPARAM("NodePath")), makeAny(sInstalledLocalesPath)));
+        theArgs[1] = makeAny(NamedValue(OUString(RTL_CONSTASCII_USTRINGPARAM("reload")), makeAny(sal_True)));
     theNameAccess = Reference< XNameAccess > (
             theConfigProvider->createInstanceWithArguments(sAccessSrvc, theArgs ), UNO_QUERY_THROW );
         seqInstalledLanguages = theNameAccess->getElementNames();
@@ -1337,7 +1337,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
 
         // find out whether the user has a specific locale specified
         Sequence< Any > theArgs2(1);
-        theArgs2[0] = makeAny(NamedValue(OUString::createFromAscii("NodePath"), makeAny(sUserLocalePath)));
+        theArgs2[0] = makeAny(NamedValue(OUString(RTL_CONSTASCII_USTRINGPARAM("NodePath")), makeAny(sUserLocalePath)));
         theNameAccess = Reference< XNameAccess > (
             theConfigProvider->createInstanceWithArguments(sAccessSrvc, theArgs2 ), UNO_QUERY_THROW );
         if (theNameAccess->hasByName(sUserLocaleKey))
@@ -1527,7 +1527,7 @@ BOOL OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
             // tell quickstarter to stop being a veto listener
 
             Reference< XInitialization > xInit(theMSF->createInstance(
-                OUString::createFromAscii("com.sun.star.office.Quickstart")), UNO_QUERY);
+                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.office.Quickstart"))), UNO_QUERY);
             if (xInit.is())
             {
                 Sequence< Any > args(3);

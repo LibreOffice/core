@@ -257,7 +257,7 @@ BOOL SvxHlinkDlgMarkWnd::RefreshFromDoc( OUString aURL )
     uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
     if( xFactory.is() )
     {
-        uno::Reference< frame::XDesktop > xDesktop( xFactory->createInstance( OUString::createFromAscii( "com.sun.star.frame.Desktop" ) ),
+        uno::Reference< frame::XDesktop > xDesktop( xFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" )) ),
                     uno::UNO_QUERY );
         if( xDesktop.is() )
         {
@@ -272,9 +272,9 @@ BOOL SvxHlinkDlgMarkWnd::RefreshFromDoc( OUString aURL )
                     try
                     {
                         uno::Sequence< beans::PropertyValue > aArg(1);
-                        aArg.getArray()[0].Name = OUString::createFromAscii( "Hidden" );
+                        aArg.getArray()[0].Name = OUString(RTL_CONSTASCII_USTRINGPARAM( "Hidden" ));
                         aArg.getArray()[0].Value <<= (sal_Bool) TRUE;
-                        xComp = xLoader->loadComponentFromURL( aURL, OUString::createFromAscii( "_blank" ), 0, aArg );
+                        xComp = xLoader->loadComponentFromURL( aURL, OUString(RTL_CONSTASCII_USTRINGPARAM( "_blank" )), 0, aArg );
                     }
                     catch( const io::IOException& )
                     {

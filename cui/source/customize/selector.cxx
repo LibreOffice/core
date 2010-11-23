@@ -476,8 +476,8 @@ void SvxConfigGroupListBox_Impl::Init()
 
         Reference< ::com::sun::star::frame::XModuleManager >
             xModuleManager( xMCF->createInstanceWithContext(
-                OUString::createFromAscii(
-                    "com.sun.star.frame.ModuleManager" ),
+                OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "com.sun.star.frame.ModuleManager" )),
                 xContext ),
             UNO_QUERY );
 
@@ -489,8 +489,8 @@ void SvxConfigGroupListBox_Impl::Init()
 
         Reference< container::XNameAccess > xNameAccess(
             xMCF->createInstanceWithContext(
-                OUString::createFromAscii(
-                    "com.sun.star.frame.UICommandDescription" ),
+                OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "com.sun.star.frame.UICommandDescription" )),
                 xContext ),
             UNO_QUERY );
 
@@ -501,8 +501,8 @@ void SvxConfigGroupListBox_Impl::Init()
 
         Reference< container::XNameAccess > xAllCategories(
             xMCF->createInstanceWithContext(
-                OUString::createFromAscii(
-                    "com.sun.star.ui.UICategoryDescription" ),
+                OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "com.sun.star.ui.UICategoryDescription" )),
                 xContext ),
             UNO_QUERY );
 
@@ -584,7 +584,7 @@ void SvxConfigGroupListBox_Impl::Init()
                 ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
             xCtx.set( _xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))), UNO_QUERY_THROW );
             Reference< browse::XBrowseNodeFactory > xFac( xCtx->getValueByName(
-                OUString::createFromAscii( "/singletons/com.sun.star.script.browse.theBrowseNodeFactory") ), UNO_QUERY_THROW );
+                OUString(RTL_CONSTASCII_USTRINGPARAM( "/singletons/com.sun.star.script.browse.theBrowseNodeFactory")) ), UNO_QUERY_THROW );
             rootNode.set( xFac->createView( browse::BrowseNodeFactoryViewTypes::MACROSELECTOR ) );
         }
         catch( const Exception& )
@@ -641,7 +641,7 @@ Image SvxConfigGroupListBox_Impl::GetImage(
                     xModuleManager(
                         xCtx->getServiceManager()
                             ->createInstanceWithContext(
-                                OUString::createFromAscii("com.sun.star.frame.ModuleManager"),
+                                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.ModuleManager")),
                                 xCtx ),
                             UNO_QUERY_THROW );
                 Reference<container::XNameAccess> xModuleConfig(
@@ -653,7 +653,7 @@ Image SvxConfigGroupListBox_Impl::GetImage(
                 Any aAny = xModuleConfig->getByName(appModule);
                 if( sal_True != ( aAny >>= moduleDescr ) )
                 {
-                    throw RuntimeException(OUString::createFromAscii("SFTreeListBox::Init: failed to get PropertyValue"), Reference< XInterface >());
+                    throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("SFTreeListBox::Init: failed to get PropertyValue")), Reference< XInterface >());
                 }
                 beans::PropertyValue const * pmoduleDescr =
                     moduleDescr.getConstArray();
@@ -697,7 +697,7 @@ SvxConfigGroupListBox_Impl::getDocumentModel(
             xCtx->getServiceManager();
     Reference< frame::XDesktop > desktop (
         mcf->createInstanceWithContext(
-            OUString::createFromAscii("com.sun.star.frame.Desktop"),                 xCtx ),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")),                 xCtx ),
             UNO_QUERY );
 
     Reference< container::XEnumerationAccess > componentsAccess =
