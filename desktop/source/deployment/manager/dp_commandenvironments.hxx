@@ -100,7 +100,7 @@ private:
     ::rtl::OUString m_repository;
     bool m_bSuppressLicense;
 public:
-    LicenseCommandEnv(){};
+    LicenseCommandEnv() : m_bSuppressLicense(false) {};
     LicenseCommandEnv(
         css::uno::Reference< css::task::XInteractionHandler> const & handler,
         bool bSuppressLicense,
