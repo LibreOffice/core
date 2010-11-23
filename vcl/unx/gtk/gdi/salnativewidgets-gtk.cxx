@@ -268,7 +268,7 @@ public:
 
     void SetSize( int n)
         { delete [] pData; m_idx = 0; m_size = n; pData = new NWPixmapCacheData[m_size]; }
-    int GetSize() { return m_size; }
+    int GetSize() const { return m_size; }
 
     BOOL Find( ControlType aType, ControlState aState, const Rectangle& r_pixmapRect, GdkPixmap** pPixmap );
     void Fill( ControlType aType, ControlState aState, const Rectangle& r_pixmapRect, GdkPixmap* pPixmap );
