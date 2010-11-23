@@ -2174,7 +2174,7 @@ void SmNodeToTextVisitor::Visit( SmTableNode* pNode )
             LineToText( it.Current( ) );
             if( it.Next( ) ) {
                 Separate( );
-                Append( "## " );
+                Append( "# " );
             }else
                 break;
         }
@@ -2242,33 +2242,39 @@ void SmNodeToTextVisitor::Visit( SmOperNode* pNode )
         SmNode* pChild;
         if( ( pChild = pSubSup->GetSubSup( LSUP ) ) ) {
             Separate( );
-            Append( "lsup " );
+            Append( "lsup { " );
             LineToText( pChild );
+            Append( "} ");
         }
         if( ( pChild = pSubSup->GetSubSup( LSUB ) ) ) {
             Separate( );
-            Append( "lsub " );
+            Append( "lsub { " );
             LineToText( pChild );
+            Append( "} ");
         }
         if( ( pChild = pSubSup->GetSubSup( RSUP ) ) ) {
             Separate( );
-            Append( "rsup " );
+            Append( "rsup { " );
             LineToText( pChild );
+            Append( "} ");
         }
         if( ( pChild = pSubSup->GetSubSup( RSUB ) ) ) {
             Separate( );
-            Append( "rsub " );
+            Append( "rsub { " );
             LineToText( pChild );
+            Append( "} ");
         }
         if( ( pChild = pSubSup->GetSubSup( CSUP ) ) ) {
             Separate( );
-            Append( "csup " );
+            Append( "csup { " );
             LineToText( pChild );
+            Append( "} ");
         }
         if( ( pChild = pSubSup->GetSubSup( CSUB ) ) ) {
             Separate( );
-            Append( "csub " );
+            Append( "csub { " );
             LineToText( pChild );
+            Append( "} ");
         }
     }
     LineToText( pNode->GetSubNode( 1 ) );
@@ -2492,7 +2498,6 @@ void SmNodeToTextVisitor::Visit( SmTextNode* pNode )
 
 void SmNodeToTextVisitor::Visit( SmSpecialNode* pNode )
 {
-    Append( "%" );
     Append( pNode->GetToken( ).aText );
 }
 
@@ -2530,13 +2535,18 @@ void SmNodeToTextVisitor::Visit( SmLineNode* pNode )
 
 void SmNodeToTextVisitor::Visit( SmExpressionNode* pNode )
 {
-    Append( "{ " );
+    USHORT nSize = pNode->GetNumSubNodes();
+    if (nSize > 1) {
+        Append( "{ " );
+    }
     SmNodeIterator it( pNode );
     while( it.Next( ) ) {
         it->Accept( this );
         Separate( );
     }
-    Append( "}" );
+    if (nSize > 1) {
+        Append( "} " );
+    }
 }
 
 void SmNodeToTextVisitor::Visit( SmPolyLineNode* )
