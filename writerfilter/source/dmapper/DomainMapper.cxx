@@ -4243,6 +4243,7 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
 #ifdef DEBUG_DOMAINMAPPER
             dmapper_logger->startElement("unhandled");
             dmapper_logger->attribute("id", nSprmId);
+            dmapper_logger->attribute("name", rSprm.getName());
             dmapper_logger->endElement("unhandled");
 #endif
         }
