@@ -92,10 +92,6 @@ namespace xmloff
         SvXMLStylesContext*                 m_pAutoStyles;
 
     protected:
-        // style handling
-        ::vos::ORef< XMLPropertyHandlerFactory >    m_xPropertyHandlerFactory;
-        ::vos::ORef< SvXMLImportPropertyMapper >    m_xImportMapper;
-
         DECLARE_STL_USTRINGACCESS_MAP( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >, MapString2PropertySet );
         DECLARE_STL_MAP( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >, MapString2PropertySet, ODrawPageCompare, MapDrawPage2Map);
 
@@ -167,10 +163,6 @@ namespace xmloff
     protected:
         OFormLayerXMLImport_Impl(SvXMLImport& _rImporter);
         virtual ~OFormLayerXMLImport_Impl();
-
-        /** retrieves the property mapper form form related auto styles.
-        */
-        ::vos::ORef< SvXMLImportPropertyMapper > getStylePropertyMapper() const;
 
         /** start importing the forms of the given page
         */

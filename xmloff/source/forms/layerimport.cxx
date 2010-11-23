@@ -237,11 +237,6 @@ OFormLayerXMLImport_Impl::OFormLayerXMLImport_Impl(SvXMLImport& _rImporter)
         TabulatorCycle_RECORDS, OEnumMapper::getEnumMap(OEnumMapper::epTabCyle),
         &::getCppuType( static_cast<TabulatorCycle*>(NULL) ));
 
-    // initialize our style map
-    m_xPropertyHandlerFactory = new OControlPropertyHandlerFactory();
-    ::vos::ORef< XMLPropertySetMapper > xStylePropertiesMapper = new XMLPropertySetMapper(getControlStylePropertyMap(), m_xPropertyHandlerFactory.getBodyPtr());
-    m_xImportMapper = new SvXMLImportPropertyMapper(xStylePropertiesMapper.getBodyPtr(), _rImporter);
-
     // 'initialize'
     m_aCurrentPageIds = m_aControlIds.end();
 }
@@ -413,12 +408,6 @@ void OFormLayerXMLImport_Impl::registerControlReferences(const Reference< XPrope
     OSL_ENSURE(_rReferringControls.getLength(), "OFormLayerXMLImport_Impl::registerControlReferences: invalid (empty) control id list!");
     OSL_ENSURE(_rxControl.is(), "OFormLayerXMLImport_Impl::registerControlReferences: invalid (NULL) control!");
     m_aControlReferences.push_back( ModelStringPair( _rxControl, _rReferringControls ) );
-}
-
-//---------------------------------------------------------------------
-::vos::ORef< SvXMLImportPropertyMapper > OFormLayerXMLImport_Impl::getStylePropertyMapper() const
-{
-    return m_xImportMapper;
 }
 
 //---------------------------------------------------------------------
