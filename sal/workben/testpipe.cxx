@@ -44,8 +44,8 @@ const char szTestString[] = "This is a test";
 char       szBuffer[256];
 
 const char *  cp;
-Size_t  n;
-sSize_t nChars;
+size_t  n;
+sal_Int32 nChars;
 
 // osl specific variables
 oslPipe          Pipe;
@@ -91,10 +91,9 @@ int main (int argc, const char *argv[])
                                        0,
                                         osl_Process_NORMAL,
                                         0,
-                                        NULL,
                                        NULL,
-                                       0,
-                                        NULL,
+                                       NULL,
+                                        0,
                                         &Process );
 
     if( ProcessError != osl_Process_E_None )
@@ -158,8 +157,8 @@ int main (int argc, const char *argv[])
     osl_freeProcessHandle( Process );
 
     // schliesse die Pipes
-    osl_destroyPipe( C1Pipe );
-    osl_destroyPipe( Pipe );
+    osl_releasePipe( C1Pipe );
+    osl_releasePipe( Pipe );
 
     printf( "TestPipe Server: test passed.\n" );
     return 0;

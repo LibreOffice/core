@@ -40,9 +40,9 @@
     #define MAIN main
 #endif
 
-void MAIN (void)
+int MAIN (void)
 {
-    oslProcess Process;
+    //oslProcess Process;
     oslProcessError  ProcessError;
     sal_uInt32 nArgCount;
     sal_uInt32 index;
@@ -59,7 +59,7 @@ void MAIN (void)
 
         osl_getCommandArg(index,&ustrArg);
 
-        fprintf(stderr,"done ...\n\n",index);
+        fprintf(stderr,"done ...\n\n");
     }
 
     ProcessError = osl_getExecutableFile(&ustrExeFile);
@@ -73,6 +73,7 @@ void MAIN (void)
                         NULL,
                         NULL,
                         &Process );*/
+    return 0;
 }
 
 

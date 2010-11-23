@@ -46,9 +46,9 @@ static char *pt (unsigned char *md, int length)
  * main.
  */
 #ifdef WIN32
-int __cdecl main (int argc, char **argv)
+int __cdecl main (void)
 #else
-int main (int argc, char **argv)
+int main (void)
 #endif
 {
     rtlRandomPool pool;
