@@ -643,7 +643,8 @@ BOOL SwNewDBMgr::GetTableNames(ListBox* pListBox, const String& rDBName)
     else
     {
         rtl::OUString sDBName(rDBName);
-        xConnection = RegisterConnection( sDBName );
+        if ( sDBName.getLength() )
+            xConnection = RegisterConnection( sDBName );
     }
     if(xConnection.is())
     {
