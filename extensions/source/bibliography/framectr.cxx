@@ -218,7 +218,7 @@ BibFrameController_Impl::~BibFrameController_Impl()
 
 ::rtl::OUString SAL_CALL BibFrameController_Impl::getImplementationName() throw (::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii("com.sun.star.comp.extensions.Bibliography");
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.extensions.Bibliography"));
 }
 
 sal_Bool SAL_CALL BibFrameController_Impl::supportsService( const ::rtl::OUString& sServiceName ) throw (::com::sun::star::uno::RuntimeException)
@@ -234,7 +234,7 @@ sal_Bool SAL_CALL BibFrameController_Impl::supportsService( const ::rtl::OUStrin
     // return only top level services ...
     // base services are included there and should be asked by uno-rtti.
     ::com::sun::star::uno::Sequence< ::rtl::OUString > lNames(1);
-    lNames[0] = ::rtl::OUString::createFromAscii("com.sun.star.frame.Bibliography");
+    lNames[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Bibliography"));
     return lNames;
 }
 
@@ -511,27 +511,27 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
                 Sequence< Any > aDialogCreationArgs( 3 );
                 Any* pDialogCreationArgs = aDialogCreationArgs.getArray();
                 // the query composer
-                *pDialogCreationArgs++ <<= beans::PropertyValue( ::rtl::OUString::createFromAscii( "QueryComposer" ),
+                *pDialogCreationArgs++ <<= beans::PropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "QueryComposer" )),
                                                         -1,
                                                         makeAny( pDatMan->getParser() ),
                                                         beans::PropertyState_DIRECT_VALUE
                                                       );
 
                 // the rowset
-                *pDialogCreationArgs++ <<= beans::PropertyValue( ::rtl::OUString::createFromAscii( "RowSet" ),
+                *pDialogCreationArgs++ <<= beans::PropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "RowSet" )),
                                                         -1,
                                                         makeAny( pDatMan->getForm() ),
                                                         beans::PropertyState_DIRECT_VALUE
                                                       );
                 // the parent window for the dialog
-                *pDialogCreationArgs++ <<= beans::PropertyValue( ::rtl::OUString::createFromAscii( "ParentWindow" ),
+                *pDialogCreationArgs++ <<= beans::PropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ParentWindow" )),
                                                         -1,
                                                         makeAny( xWindow ),
                                                         beans::PropertyState_DIRECT_VALUE
                                                       );
 
                 // create the dialog object
-                const ::rtl::OUString sDialogServiceName = ::rtl::OUString::createFromAscii( "com.sun.star.sdb.FilterDialog" );
+                const ::rtl::OUString sDialogServiceName(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.FilterDialog" ));
                 uno::Reference< uno::XInterface > xDialog = xORB->createInstanceWithArguments(
                     sDialogServiceName,
                     aDialogCreationArgs

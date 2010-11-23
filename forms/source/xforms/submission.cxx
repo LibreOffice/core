@@ -665,7 +665,7 @@ Reference< XDocumentFragment > Submission::createSubmissionDocument(const Refere
 {
     using namespace com::sun::star::xml::xpath;
     Reference< XDocumentBuilder > aDocBuilder(m_aFactory->createInstance(
-        OUString::createFromAscii("com.sun.star.xml.dom.DocumentBuilder")), UNO_QUERY);
+        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.dom.DocumentBuilder"))), UNO_QUERY);
     Reference< XDocument > aDocument = aDocBuilder->newDocument();
     Reference< XDocumentFragment > aFragment = aDocument->createDocumentFragment();
 

@@ -227,13 +227,12 @@ extern "C"
     {
         try
         {
-            rtl::OUString sKey = rtl::OUString::createFromAscii("/");
+            rtl::OUString sKey(RTL_CONSTASCII_USTRINGPARAM("/"));
             sKey += BibliographyLoader::getImplementationName_Static();
             //creates the impl key:  /com.sun.star.extensions.Bibliography
             Reference< registry::XRegistryKey > xImplKey = pRegistryKey->createKey(sKey);
 
 
-            //sKey += rtl::OUString::createFromAscii("/UNO/SERVICES");
             Reference< registry::XRegistryKey > xNewKey = xImplKey->createKey(  C2U("/UNO/SERVICES") );
             Sequence< rtl::OUString > aServices = BibliographyLoader::getSupportedServiceNames_Static();
             for( INT32 i = 0; i < aServices.getLength(); i++ )

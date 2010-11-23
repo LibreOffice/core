@@ -1125,7 +1125,7 @@ HRESULT InterfaceOleWrapper_Impl::InvokeGeneral( DISPID dispidMember, unsigned s
             sal_Bool bStruct= sal_False;
 
 
-            Reference<XInterface> xIntCore= m_smgr->createInstance( OUString::createFromAscii("com.sun.star.reflection.CoreReflection"));
+            Reference<XInterface> xIntCore= m_smgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.CoreReflection")));
             Reference<XIdlReflection> xRefl( xIntCore, UNO_QUERY);
             if( xRefl.is() )
             {

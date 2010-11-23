@@ -74,7 +74,7 @@ LdapUserProfileBe::LdapUserProfileBe( const uno::Reference<uno::XComponentContex
                         &aDefinition, &loggedOnUser))
                 {
                     throw css::uno::RuntimeException(
-                        rtl::OUString::createFromAscii("LdapUserProfileBe- LDAP not configured"),
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LdapUserProfileBe- LDAP not configured")),
                         NULL);
                 }
 
@@ -126,7 +126,7 @@ bool LdapUserProfileBe::readLdapConfiguration(
         if (!xCfgProvider.is())
             return false;
 
-        css::beans::NamedValue aPath(rtl::OUString::createFromAscii("nodepath"), uno::makeAny(kComponent) );
+        css::beans::NamedValue aPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath")), uno::makeAny(kComponent) );
 
         uno::Sequence< uno::Any > aArgs(1);
         aArgs[0] <<=  aPath;
@@ -234,7 +234,7 @@ css::uno::Any LdapUserProfileBe::getPropertyValue(
 
 //------------------------------------------------------------------------------
 rtl::OUString SAL_CALL LdapUserProfileBe::getLdapUserProfileBeName(void) {
-    return rtl::OUString::createFromAscii("com.sun.star.comp.configuration.backend.LdapUserProfileBe") ;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.configuration.backend.LdapUserProfileBe"));
 }
 //------------------------------------------------------------------------------
 
@@ -275,6 +275,5 @@ SAL_CALL LdapUserProfileBe::getSupportedServiceNames(void)
 // ---------------------------------------------------------------------------------------
 }}}
 // ---------------------------------------------------------------------------------------
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

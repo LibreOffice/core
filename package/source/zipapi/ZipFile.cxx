@@ -291,7 +291,7 @@ Reference< XInputStream > ZipFile::StaticGetDataFromRawStream(  const Reference<
         throw ( packages::WrongPasswordException, ZipIOException, RuntimeException )
 {
     if ( !rData.is() )
-        throw ZipIOException( OUString::createFromAscii( "Encrypted stream without encryption data!\n" ),
+        throw ZipIOException( OUString(RTL_CONSTASCII_USTRINGPARAM( "Encrypted stream without encryption data!\n" )),
                             Reference< XInterface >() );
 
     if ( !rData->aKey.getLength() )
@@ -299,7 +299,7 @@ Reference< XInputStream > ZipFile::StaticGetDataFromRawStream(  const Reference<
 
     Reference< XSeekable > xSeek( xStream, UNO_QUERY );
     if ( !xSeek.is() )
-        throw ZipIOException( OUString::createFromAscii( "The stream must be seekable!\n" ),
+        throw ZipIOException( OUString(RTL_CONSTASCII_USTRINGPARAM( "The stream must be seekable!\n" )),
                             Reference< XInterface >() );
 
 
@@ -559,7 +559,7 @@ Reference< XInputStream > SAL_CALL ZipFile::getDataStream( ZipEntry& rEntry,
         // in case no digest is provided there is no way
         // to detect password correctness
         if ( !rData.is() )
-            throw ZipException( OUString::createFromAscii( "Encrypted stream without encryption data!\n" ),
+            throw ZipException( OUString(RTL_CONSTASCII_USTRINGPARAM( "Encrypted stream without encryption data!\n" )),
                                 Reference< XInterface >() );
 
         // if we have a digest, then this file is an encrypted one and we should

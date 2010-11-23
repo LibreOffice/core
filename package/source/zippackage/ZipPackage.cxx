@@ -596,18 +596,18 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
                         do
                         {
                             ::rtl::OUString aCommand = aParam.getToken( 0, '&', nIndex );
-                            if ( aCommand.equals( OUString::createFromAscii( "repairpackage" ) ) )
+                            if ( aCommand.equals( OUString(RTL_CONSTASCII_USTRINGPARAM( "repairpackage" )) ) )
                             {
                                 m_bForceRecovery = sal_True;
                                 break;
                             }
-                            else if ( aCommand.equals( OUString::createFromAscii( "purezip" ) ) )
+                            else if ( aCommand.equals( OUString(RTL_CONSTASCII_USTRINGPARAM( "purezip" )) ) )
                             {
                                 m_nFormat = embed::StorageFormats::ZIP;
                                 m_pRootFolder->setPackageFormat_Impl( m_nFormat );
                                 break;
                             }
-                            else if ( aCommand.equals( OUString::createFromAscii( "ofopxml" ) ) )
+                            else if ( aCommand.equals( OUString(RTL_CONSTASCII_USTRINGPARAM( "ofopxml" )) ) )
                             {
                                 m_nFormat = embed::StorageFormats::OFOPXML;
                                 m_pRootFolder->setPackageFormat_Impl( m_nFormat );
@@ -620,7 +620,7 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
                         m_aURL = aParamUrl;
 
                     Content aContent ( m_aURL, uno::Reference < XCommandEnvironment >() );
-                    Any aAny = aContent.getPropertyValue( OUString::createFromAscii( "Size" ) );
+                    Any aAny = aContent.getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( "Size" )) );
                     sal_uInt64 aSize = 0;
                     // kind of optimisation: treat empty files as nonexistent files
                     // and write to such files directly. Note that "Size" property is optional.
@@ -1313,7 +1313,7 @@ uno::Reference< XActiveDataStreamer > ZipPackage::openOriginalForOutput()
             {
                 Exception aDetect;
                 sal_Int64 aSize = 0;
-                Any aAny = aOriginalContent.setPropertyValue( OUString::createFromAscii( "Size" ), makeAny( aSize ) );
+                Any aAny = aOriginalContent.setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( "Size" )), makeAny( aSize ) );
                 if( !( aAny >>= aDetect ) )
                     bTruncSuccess = sal_True;
             }
@@ -1336,7 +1336,7 @@ uno::Reference< XActiveDataStreamer > ZipPackage::openOriginalForOutput()
                aArg.Sink       = xSink;
                aArg.Properties = Sequence< Property >( 0 ); // unused
 
-            aOriginalContent.executeCommand( OUString::createFromAscii( "open" ), makeAny( aArg ) );
+            aOriginalContent.executeCommand( OUString(RTL_CONSTASCII_USTRINGPARAM( "open" )), makeAny( aArg ) );
         }
         catch( Exception& )
         {

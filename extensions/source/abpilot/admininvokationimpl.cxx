@@ -85,14 +85,14 @@ namespace abp
 
             // the parent window
             Reference< XWindow > xDialogParent = VCLUnoHelper::GetInterface(m_pMessageParent);
-            *pArguments++ <<= PropertyValue(::rtl::OUString::createFromAscii("ParentWindow"), -1, makeAny(xDialogParent), PropertyState_DIRECT_VALUE);
+            *pArguments++ <<= PropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParentWindow")), -1, makeAny(xDialogParent), PropertyState_DIRECT_VALUE);
 
             // the title of the dialog
             String sAdminDialogTitle(ModuleRes(RID_STR_ADMINDIALOGTITLE));
-            *pArguments++ <<= PropertyValue(::rtl::OUString::createFromAscii("Title"), -1, makeAny(::rtl::OUString(sAdminDialogTitle)), PropertyState_DIRECT_VALUE);
+            *pArguments++ <<= PropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title")), -1, makeAny(::rtl::OUString(sAdminDialogTitle)), PropertyState_DIRECT_VALUE);
 
             // the name of the new data source
-            *pArguments++ <<= PropertyValue(::rtl::OUString::createFromAscii("InitialSelection"), -1, makeAny(m_xDataSource), PropertyState_DIRECT_VALUE);
+            *pArguments++ <<= PropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("InitialSelection")), -1, makeAny(m_xDataSource), PropertyState_DIRECT_VALUE);
 
             // create the dialog
             Reference< XExecutableDialog > xDialog;
@@ -110,7 +110,7 @@ namespace abp
                 // context needs to be freshly created
                 // Thus, we access the context here (within the WaitCursor), which means the user sees a waitcursor
                 // while his/her office blocks a few seconds ....
-                m_xORB->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.sdbc.DriverManager" ) );
+                m_xORB->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdbc.DriverManager" )) );
             }
 
             if (xDialog.is())

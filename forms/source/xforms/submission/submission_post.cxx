@@ -67,15 +67,12 @@ CSubmission::SubmissionResult CSubmissionPost::submit(const CSS::uno::Reference<
 
         // use post command
 
-        OUString aCommandName = OUString::createFromAscii("post");
+        OUString aCommandName(RTL_CONSTASCII_USTRINGPARAM("post"));
         PostCommandArgument2 aPostArgument;
         aPostArgument.Source = apSerialization->getInputStream();
-        //CSS::uno::Reference< XInterface > aSink( m_aFactory->createInstance(
-        //    OUString::createFromAscii("com.sun.star.io.Pipe")), UNO_QUERY_THROW);
         CSS::uno::Reference< XActiveDataSink > aSink(new ucbhelper::ActiveDataSink);
-        //    OUString::createFromAscii("com.sun.star.io.Pipe")), UNO_QUERY_THROW);
         aPostArgument.Sink = aSink;
-        aPostArgument.MediaType = OUString::createFromAscii("application/xml");
+        aPostArgument.MediaType = OUString(RTL_CONSTASCII_USTRINGPARAM("application/xml"));
         aPostArgument.Referer = OUString();
         Any aCommandArgument;
         aCommandArgument <<= aPostArgument;
