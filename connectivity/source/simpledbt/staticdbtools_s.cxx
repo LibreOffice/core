@@ -61,9 +61,9 @@ namespace connectivity
     }
 
     //----------------------------------------------------------------
-    double ODataAccessStaticTools::getValue(const Reference< XColumn>& _rxVariant, const Date& rNullDate, sal_Int16 nKeyType) const
+    double ODataAccessStaticTools::getValue(const Reference< XColumn>& _rxVariant, const Date& rNullDate ) const
     {
-        return ::dbtools::DBTypeConversion::getValue(_rxVariant, rNullDate, nKeyType);
+        return ::dbtools::DBTypeConversion::getValue( _rxVariant, rNullDate );
     }
 
     //----------------------------------------------------------------

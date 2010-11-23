@@ -98,8 +98,7 @@ namespace dbtools
                              const double& rValue,
                              sal_Int16 nKeyType) throw(::com::sun::star::lang::IllegalArgumentException);
 
-        static double getValue(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn>& xVariant, const ::com::sun::star::util::Date& rNullDate,
-                                    sal_Int16 nKeyType);
+        static double getValue( const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn>& xVariant, const ::com::sun::star::util::Date& rNullDate );
 
         // get the columnvalue as string with a default format given by the column or a default format
         // for the type

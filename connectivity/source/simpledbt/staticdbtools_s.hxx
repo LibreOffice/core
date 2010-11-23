@@ -54,8 +54,7 @@ namespace connectivity
         // ------------------------------------------------
         virtual double getValue(
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn>& _rxVariant,
-            const ::com::sun::star::util::Date& rNullDate,
-            sal_Int16 nKeyType) const;
+            const ::com::sun::star::util::Date& rNullDate ) const;
 
         // ------------------------------------------------
         virtual ::rtl::OUString getFormattedValue(

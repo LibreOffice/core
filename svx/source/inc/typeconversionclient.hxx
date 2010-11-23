@@ -60,12 +60,11 @@ namespace svxform
         // --------------------------------------------------------
         inline double getValue(
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn>& _rxVariant,
-            const ::com::sun::star::util::Date& _rNullDate,
-            sal_Int16 _nKeyType) const
+            const ::com::sun::star::util::Date& _rNullDate ) const
         {
             double nReturn(0);
             if ( ensureLoaded() )
-                nReturn = m_xTypeConversion->getValue(_rxVariant, _rNullDate, _nKeyType);
+                nReturn = m_xTypeConversion->getValue( _rxVariant, _rNullDate );
             return nReturn;
         }
 

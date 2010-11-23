@@ -1534,7 +1534,7 @@ String DbFormattedField::GetFormatText(const Reference< ::com::sun::star::sdb::X
             // ein double-Feld bindet und als Text formatiert, liefert m_rColumn.IsNumeric() sal_True. Das heisst
             // also einfach, dass ich den Inhalt der Variant mittels getDouble abfragen kann, und dann kann
             // ich den Rest (die Formatierung) dem FormattedField ueberlassen.
-            double dValue = getValue(_rxField, m_rColumn.GetParent().getNullDate(), m_nKeyType);
+            double dValue = getValue( _rxField, m_rColumn.GetParent().getNullDate() );
             if (_rxField->wasNull())
                 return aText;
             ((FormattedField*)m_pPainter)->SetValue(dValue);
@@ -1578,7 +1578,7 @@ void DbFormattedField::UpdateFromField(const Reference< ::com::sun::star::sdb::X
             // ein double-Feld bindet und als Text formatiert, liefert m_rColumn.IsNumeric() sal_True. Das heisst
             // also einfach, dass ich den Inhalt der Variant mittels getDouble abfragen kann, und dann kann
             // ich den Rest (die Formatierung) dem FormattedField ueberlassen.
-            double dValue = getValue(_rxField, m_rColumn.GetParent().getNullDate(), m_nKeyType);
+            double dValue = getValue( _rxField, m_rColumn.GetParent().getNullDate() );
             if (_rxField->wasNull())
                 m_pWindow->SetText(String());
             else
