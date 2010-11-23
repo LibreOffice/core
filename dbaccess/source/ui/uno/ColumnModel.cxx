@@ -105,8 +105,6 @@ void OColumnControlModel::registerProperties()
         &m_xConnection, ::getCppuType( &m_xConnection ) );
     Any a;
     a <<= m_xColumn;
-//  registerMayBeVoidProperty( PROPERTY_COLUMN, PROPERTY_ID_COLUMN, PropertyAttribute::TRANSIENT | PropertyAttribute::BOUND| PropertyAttribute::MAYBEVOID,
-//          &a, ::getCppuType( &m_xColumn ) );
     registerProperty( PROPERTY_COLUMN, PROPERTY_ID_COLUMN, PropertyAttribute::TRANSIENT | PropertyAttribute::BOUND,
             &m_xColumn, ::getCppuType( &m_xColumn ) );
 
