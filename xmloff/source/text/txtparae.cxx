@@ -847,13 +847,11 @@ void XMLTextParagraphExport::exportListChange(
     // end a list
     if ( rPrevInfo.GetLevel() > 0 )
     {
-        bool bRootListToBeClosed = false;
         sal_Int16 nListLevelsToBeClosed = 0;
         if ( !rNextInfo.BelongsToSameList( rPrevInfo ) ||
              rNextInfo.GetLevel() <= 0 )
         {
             // close complete previous list
-            bRootListToBeClosed = true;
             nListLevelsToBeClosed = rPrevInfo.GetLevel();
         }
         else if ( rPrevInfo.GetLevel() > rNextInfo.GetLevel() )
