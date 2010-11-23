@@ -37,4 +37,4 @@ VERBOSEFLAG := -s
 .ENDIF
 
 all:
-    cd $(PRJ) && $(GNUMAKE) $(VERBOSEFLAG) -r -j$(MAXPROCESS)
+    cd $(PRJ) && $(GNUMAKE) $(VERBOSEFLAG) -r -j$(MAXPROCESS) $(gb_MAKETARGET)
