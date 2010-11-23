@@ -130,6 +130,14 @@ File gid_File_Lib_Python_So
     Name = STRING(PY_FULL_DLL_NAME);
     Styles = (PACKED);
 End
+#ifdef UNX
+Shortcut gid_Shortcut_Lib_Python_So
+    FileID = gid_File_Lib_Python_So;
+    Dir = gid_Dir_Program;
+    Name = STRING(CONCAT3(libpython,PYMAJMIN,UNXSUFFIX));
+    Styles = (NETWORK,RELATIVE);
+End
+#endif //UNX
 #else //MACOSX
 //directory entries solely to be able to create the symlinks
 Directory gid_Dir_PythonFramework
