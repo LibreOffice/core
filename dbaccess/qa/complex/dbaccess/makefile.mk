@@ -55,7 +55,6 @@ JARTARGET       = $(TARGET).jar
 JAVATESTFILES = \
     ApplicationController.java \
     Beamer.java \
-    CopyTableWizard.java \
     DataSource.java \
     DatabaseDocument.java \
     Parser.java \
@@ -65,6 +64,9 @@ JAVATESTFILES = \
     RowSet.java \
     SingleSelectQueryComposer.java \
     UISettings.java \
+
+#	CopyTableWizard.java
+# disable for now (#i115753#)
 
 # put here all other files
 JAVAFILES = $(JAVATESTFILES) \
