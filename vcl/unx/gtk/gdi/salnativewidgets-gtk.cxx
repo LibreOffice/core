@@ -918,7 +918,13 @@ BOOL GtkSalGraphics::drawNativeMixedStateCheck( ControlType nType,
     // draw upper half in off state
     const_cast<ImplControlValue&>(aValue).setTristateVal( BUTTONVALUE_OFF );
     XLIB_Region aRegion = XCreateRegion();
-    XRectangle aXRect = { aCtrlRect.Left(), aCtrlRect.Top(), aCtrlRect.GetWidth(), aCtrlRect.GetHeight() };
+    XRectangle aXRect =
+    {
+        static_cast<short>(aCtrlRect.Left()),
+        static_cast<short>(aCtrlRect.Top()),
+        static_cast<unsigned short>(aCtrlRect.GetWidth()),
+        static_cast<unsigned short>(aCtrlRect.GetHeight())
+    };
     const unsigned short nH = aXRect.height/2;
     aXRect.height -= nH;
     XUnionRectWithRegion( &aXRect, aRegion, aRegion );
