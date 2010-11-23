@@ -3647,6 +3647,14 @@ void wwSectionManager::InsertSegments()
     mySegIter aStart = maSegments.begin();
     for (mySegIter aIter = aStart; aIter != aEnd; ++aIter)
     {
+        // If the section is of type "New column" (0x01), then simply insert a column break
+        if ( aIter->maSep.bkc == 1 )
+        {
+            SwPaM start( aIter->maStart );
+            mrReader.rDoc.InsertPoolItem( start, SvxFmtBreakItem(SVX_BREAK_COLUMN_BEFORE, RES_BREAK), 0);
+            continue;
+        }
+
         mySegIter aNext = aIter+1;
         mySegIter aPrev = (aIter == aStart) ? aIter : aIter-1;
 
@@ -3658,11 +3666,12 @@ void wwSectionManager::InsertSegments()
         bool bInsertSection = (aIter != aStart) ? (aIter->IsContinous() &&  bThisAndPreviousAreCompatible): false;
         bool bInsertPageDesc = !bInsertSection;
         bool bProtected = SectionIsProtected(*aIter); // do we really  need this ?? I guess I have a different logic in editshell which disales this...
-    if (bUseEnhFields && mrReader.pWDop->fProtEnabled && aIter->IsNotProtected()) {
-        // here we have the special case that the whole document is protected, with the execption of this section.
-        // I want to address this when I do the section rework, so for the moment we disable the overall protection then...
-        mrReader.rDoc.set(IDocumentSettingAccess::PROTECT_FORM, false );
-    }
+        if (bUseEnhFields && mrReader.pWDop->fProtEnabled && aIter->IsNotProtected())
+        {
+            // here we have the special case that the whole document is protected, with the execption of this section.
+            // I want to address this when I do the section rework, so for the moment we disable the overall protection then...
+            mrReader.rDoc.set(IDocumentSettingAccess::PROTECT_FORM, false );
+        }
 
 
         if (bInsertPageDesc)
