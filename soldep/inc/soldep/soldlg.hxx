@@ -28,7 +28,7 @@
 #ifndef _FMRWRK_SOLDLG_HXX
 #define _FMRWRK_SOLDLG_HXX
 
-#include <vcl/wintypes.hxx>
+#include <tools/wintypes.hxx>
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/msgbox.hxx>
