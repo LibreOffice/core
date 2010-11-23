@@ -292,26 +292,6 @@ bool SwWW8ImplReader::ReadGrafFile(String& rFileName, Graphic*& rpGraphic,
 
     if (pWwFib->envr != 1) // !MAC als Creator
     {
-
-/* SJ: #i40742#, we will use the prefsize from the mtf directly.
-The scaling has been done in former days, because the wmf filter was sometimes not
-able to calculate the proper prefsize (especially if the wmf fileheader was missing)
-
-
-        aWMF.SetPrefMapMode( MapMode( MAP_100TH_MM ) );
-        // MetaFile auf neue Groesse skalieren und
-        // neue Groesse am MetaFile setzen
-        if (rPic.MFP.xExt && rPic.MFP.yExt)
-        {
-            Size aOldSiz(aWMF.GetPrefSize());
-            Size aNewSiz(rPic.MFP.xExt, rPic.MFP.yExt );
-            Fraction aFracX(aNewSiz.Width(), aOldSiz.Width());
-            Fraction aFracY(aNewSiz.Height(), aOldSiz.Height());
-
-            aWMF.Scale(aFracX, aFracY);
-            aWMF.SetPrefSize(aNewSiz);
-        }
-*/
         rpGraphic = new Graphic( aWMF );
         return true;
     }
@@ -785,21 +765,6 @@ void WW8PicShadowToReal( WW8_PIC_SHADOW * pPicS, WW8_PIC * pPic )
 
 void WW8FSPAShadowToReal( WW8_FSPA_SHADOW * pFSPAS, WW8_FSPA * pFSPA )
 {
-    //long nSpId;       //Shape Identifier. Used in conjunction with the office art data (found via fcDggInfo in the FIB) to find the actual data for this shape.
-    //long nXaLeft; //left of rectangle enclosing shape relative to the origin of the shape
-    //long nYaTop;      //top of rectangle enclosing shape relative to the origin of the shape
-    //long nXaRight;    //right of rectangle enclosing shape relative to the origin of the shape
-    //long nYaBottom;//bottom of the rectangle enclosing shape relative to the origin of the shape
-    //USHORT bHdr:1;
-    //USHORT nbx:2;
-    //USHORT nby:2;
-    //USHORT nwr:4;
-    //USHORT nwrk:4;
-    //USHORT bRcaSimple:1;
-    //USHORT bAnchorLock:1;
-    //long nTxbx; //count of textboxes in shape (undo doc only)
-
-
     pFSPA->nSpId        = SVBT32ToUInt32( pFSPAS->nSpId );
     pFSPA->nXaLeft      = SVBT32ToUInt32( pFSPAS->nXaLeft );
     pFSPA->nYaTop       = SVBT32ToUInt32( pFSPAS->nYaTop );

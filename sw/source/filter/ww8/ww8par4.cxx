@@ -75,7 +75,6 @@ struct OLE_MFP
 
 using namespace ::com::sun::star;
 
-// SV_IMPL_OP_PTRARR_SORT(WW8AuthorInfos, WW8AuthorInfo_Ptr)
 SV_IMPL_OP_PTRARR_SORT(WW8OleMaps, WW8OleMap_Ptr)
 
 static bool SwWw8ReadScaling(long& rX, long& rY, SvStorageRef& rSrc1)

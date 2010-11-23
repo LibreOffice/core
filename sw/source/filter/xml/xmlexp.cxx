@@ -321,7 +321,6 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
             nRef += pDoc->GetCharFmts()->Count() - 1;
             nRef += pDoc->GetFrmFmts()->Count() - 1;
             nRef += pDoc->GetTxtFmtColls()->Count() - 1;
-//          nRef += pDoc->GetPageDescCnt();
             nRef *= 2; // for the above styles, xmloff will increment by 2!
             // #i93174#: count all paragraphs for the progress bar
             nRef += aDocStat.nAllPara; // 1: only content, no autostyle
@@ -813,9 +812,6 @@ Reference< XInterface > SAL_CALL SwXMLExportStyles_createInstance(
     throw( Exception )
 {
     // #110680#
-    //return (cppu::OWeakObject*)new SwXMLExport(
-    //  EXPORT_STYLES | EXPORT_MASTERSTYLES | EXPORT_AUTOSTYLES |
-    //  EXPORT_FONTDECLS );
     return (cppu::OWeakObject*)new SwXMLExport( rSMgr,
         EXPORT_STYLES | EXPORT_MASTERSTYLES | EXPORT_AUTOSTYLES |
         EXPORT_FONTDECLS|EXPORT_OASIS );
@@ -840,9 +836,6 @@ Reference< XInterface > SAL_CALL SwXMLExportContent_createInstance(
     throw( Exception )
 {
     // #110680#
-    //return (cppu::OWeakObject*)new SwXMLExport(
-    //  EXPORT_AUTOSTYLES | EXPORT_CONTENT | EXPORT_SCRIPTS |
-    //  EXPORT_FONTDECLS );
     return (cppu::OWeakObject*)new SwXMLExport(
         rSMgr,
         EXPORT_AUTOSTYLES | EXPORT_CONTENT | EXPORT_SCRIPTS |

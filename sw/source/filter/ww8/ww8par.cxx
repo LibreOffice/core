@@ -449,7 +449,6 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                     (pImpRec->eShapeType == mso_sptTextSimple) ||
                     (
                         (pImpRec->eShapeType == mso_sptRectangle)
-                        // && (eWrapMode == mso_wrapSquare)
                         && ShapeHasText(pImpRec->nShapeId, rObjData.rSpHd.GetRecBegFilePos() )
                     )
                 );
@@ -658,13 +657,6 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                         eTVA = SDRTEXTVERTADJUST_BOTTOM;
                 }
                 break;
-/*
-                case mso_anchorTopBaseline:
-                case mso_anchorBottomBaseline:
-                case mso_anchorTopCenteredBaseline:
-                case mso_anchorBottomCenteredBaseline:
-                break;
-*/
                 default:
                     ;
             }
@@ -1511,7 +1503,6 @@ void SwWW8ImplReader::ImportDop()
 
     // #110055# disable form design mode to be able to use imported controls directly
     // #i31239# always disable form design mode, not only in protected docs
-//    if (pWDop->fProtEnabled)
     {
         using namespace com::sun::star;
 
@@ -1873,10 +1864,7 @@ void SwWW8ImplReader::Read_HdFt(bool bIsTitle, int nSect,
     }
     else
     {
-        // --> OD 2008-08-06 #150965#
-        // Always read title page header/footer data - it could be used by following sections
-//        nWhichItems =
-//            rSection.maSep.grpfIhdt & (WW8_HEADER_FIRST | WW8_FOOTER_FIRST),
+        // #150965# - Always read title page header/footer data - it could be used by following sections
         nWhichItems = ( WW8_HEADER_FIRST | WW8_FOOTER_FIRST );
         // <--
         pPD = rSection.mpTitlePage;
@@ -3566,10 +3554,7 @@ SwFmtPageDesc wwSectionManager::SetSwFmtPageDesc(mySegIter &rIter,
     mySegIter &rStart, bool bIgnoreCols)
 {
     SwFmtPageDesc aEmpty;
-    // --> OD 2008-08-06 #150965#
-    // Always read title page header/footer data - it could be used by following sections
-//    if (rIter->HasTitlePage())
-    // <--
+    // #150965# - Always read title page header/footer data - it could be used by following sections
     {
         if (IsNewDoc() && rIter == rStart)
         {
@@ -3948,7 +3933,6 @@ void lcl_createTemplateToProjectEntry( const uno::Reference< container::XNameCon
             rtl::OUString templateNameWithExt = aObj.GetLastName();
             rtl::OUString templateName;
             sal_Int32 nIndex =  templateNameWithExt.lastIndexOf( '.' );
-            //xPrjNameCache->insertByName( templateNameWithExt, uno::makeAny( sVBAProjName ) );
             if ( nIndex != -1 )
             {
                 templateName = templateNameWithExt.copy( 0, nIndex );
@@ -4264,8 +4248,6 @@ ULONG SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
         SwEndNoteInfo aInfo;
         aInfo = rDoc.GetEndNoteInfo();  // parallel zu Ftn
 
-        // Ich kann nicht setzen, wann neu nummerieren...
-        //  aInfo.eNum = eNumA[pWDop->pDop->rncEdn];
         aInfo.aFmt.SetNumberingType( static_cast< sal_uInt16 >(eNumTA[pWDop->nfcEdnRef]) );
         if( pWDop->nEdn )
             aInfo.nFtnOffset = pWDop->nEdn - 1;
@@ -4836,7 +4818,6 @@ public:
     outlineeq(BYTE nNum) : mnNum(nNum) {}
     bool operator()(const SwTxtFmtColl *pTest) const
     {
-        //return pTest->GetOutlineLevel() == mnNum; //#outline level,zhaojianwei
         return pTest->IsAssignedToListLevelOfOutlineStyle() && pTest->GetAssignedOutlineStyleLevel() == mnNum;  //<-end,zhaojianwei
     }
 };
@@ -4852,7 +4833,6 @@ void SwWW8ImplReader::SetOutLineStyles()
     // <aOutlineRule>, because its used below to be compared this <&aOutlineRule>.
     // But at the end of the method <mpChosenOutlineNumRule> has to be set to
     // <rDoc.GetOutlineNumRule()>, because <aOutlineRule> will be destroyed.
-//    mpChosenOutlineNumRule = rDoc.GetOutlineNumRule();
     mpChosenOutlineNumRule = &aOutlineRule;
     // <--
 
@@ -4875,8 +4855,6 @@ void SwWW8ImplReader::SetOutLineStyles()
         for ( sw::ParaStyles::reverse_iterator aIter = aOutLined.rbegin(); aIter < aEnd; ++aIter)
         // <--
         {
-            //if ((*aIter)->GetOutlineLevel() < MAXLEVEL)   //#outline level,zhaojianwei,
-            //nFlagsStyleOutlLevel |= 1 << (*aIter)->GetOutlineLevel();
             if ((*aIter)->IsAssignedToListLevelOfOutlineStyle())
                 nFlagsStyleOutlLevel |= 1 << (*aIter)->GetAssignedOutlineStyleLevel();//<-end,zhaojianwei
             else
@@ -4946,8 +4924,6 @@ void SwWW8ImplReader::SetOutLineStyles()
             for ( sw::ParaStyles::reverse_iterator aIter = aOutLined.rbegin(); aIter < aEnd; ++aIter)
             // <--
             {
-                //if ((*aIter)->GetOutlineLevel() < MAXLEVEL)//#outline level,zhaojianwei
-                //    (*aIter)->SetOutlineLevel(NO_NUMBERING);
                 if((*aIter)->IsAssignedToListLevelOfOutlineStyle())
                     (*aIter)->DeleteAssignmentToListLevelOfOutlineStyle();  //<-end
 
@@ -4977,7 +4953,6 @@ void SwWW8ImplReader::SetOutLineStyles()
                 */
                 rSI.pFmt->SetFmtAttr(
                         SwNumRuleItem( rSI.pOutlineNumrule->GetName() ) );
-                //((SwTxtFmtColl*)rSI.pFmt)->SetOutlineLevel(NO_NUMBERING);
                 ((SwTxtFmtColl*)rSI.pFmt)->DeleteAssignmentToListLevelOfOutlineStyle();//#outline level,zhaojianwei
             }
             else
@@ -4999,7 +4974,6 @@ void SwWW8ImplReader::SetOutLineStyles()
                 myParaStyleIter aEnd = aOutLined.end();
                 while (aResult != aEnd  && aCmp(*aResult))
                 {
-                    //(*aResult)->SetOutlineLevel(NO_NUMBERING);//#outline level,zhaojianwei
                     (*aResult)->DeleteAssignmentToListLevelOfOutlineStyle();
                     ++aResult;
                 }
@@ -5019,8 +4993,6 @@ void SwWW8ImplReader::SetOutLineStyles()
                 BYTE nToLevel = rSI.nOutlineLevel;
                 const SwNumFmt& rRule=rSI.pOutlineNumrule->Get(nFromLevel);
                 aOutlineRule.Set(nToLevel, rRule);
-                // Set my outline level
-                //((SwTxtFmtColl*)rSI.pFmt)->SetOutlineLevel(nToLevel);//#outline level,zhaojianwei
                 ((SwTxtFmtColl*)rSI.pFmt)->AssignToListLevelOfOutlineStyle(nToLevel);   //<-end,zhaojianwei
                 // If there are more styles on this level ignore them
                 nFlagsStyleOutlLevel |= nAktFlags;

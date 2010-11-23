@@ -104,7 +104,6 @@ namespace
         bool operator()(const SwTxtFmtColl *pA, const SwTxtFmtColl *pB) const
         {
             // --> OD 2009-02-04 #i98791#
-//            return pA->GetAttrOutlineLevel() < pB->GetAttrOutlineLevel();   //<-end,zhaojianwei
             bool bResult( false );
             const bool bIsAAssignedToOutlineStyle( pA->IsAssignedToListLevelOfOutlineStyle() );
             const bool bIsBAssignedToOutlineStyle( pB->IsAssignedToListLevelOfOutlineStyle() );
@@ -296,8 +295,6 @@ namespace sw
             mxIPRef(rObj.GetObjRef()), mrPers(rPers),
             mpGraphic( rObj.GetGraphic() )
         {
-            //rObj.SetPersistName(String());
-            //rObj.SetObjRef(0);
             rObj.AbandonObject();
         }
 
@@ -320,7 +317,6 @@ namespace sw
                                                                     rName,
                                                                     ::rtl::OUString() );
 
-                //mxIPRef->changeState( embed::EmbedStates::LOADED );
                 mxIPRef = 0;
             }
 
@@ -845,12 +841,6 @@ namespace sw
             }
             return nRet;
         }
-/*
-        std::vector<String> WrtRedlineAuthor::GetNames()
-        {
-            return maAuthors;
-        }
-*/
     }
 }
 

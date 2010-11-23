@@ -153,13 +153,12 @@ _ReadFieldParams::_ReadFieldParams( const String& _rData )
 
     nFnd      = nNext;
     nSavPtr   = nNext;
-//  cLastChar = aData.GetChar( nSavPtr );
 }
 
 
 _ReadFieldParams::~_ReadFieldParams()
 {
-//  aData.SetChar( nSavPtr, cLastChar );
+
 }
 
 
@@ -670,10 +669,6 @@ short SwWW8ImplReader::GetTimeDatePara(String& rStr, sal_uInt32& rFormat,
 // Am Ende des Einlesens entsprechende Felder updaten ( z.Zt. die Referenzen )
 void SwWW8ImplReader::UpdateFields()
 {
-//  rDoc.GetSysFldType( RES_GETREFFLD )->UpdateFlds();  // Referenzen
-//  rDoc.UpdateFlds();                                  // SetExp-Fields
-//  rDoc.UpdateFlds();              // alles ???
-//  rDoc.UpdateExpFlds();                               // SetExp-Fields
     rDoc.SetUpdateExpFldStat(true);                 // JP: neu fuer alles wichtige
     rDoc.SetInitDBFields(true);             // Datenbank-Felder auch
 }
@@ -1725,13 +1720,6 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, String& rStr )
 
         if( !bFldFound )
         {
-/*
-            SwUserFieldType aTmp( &rDoc, aDocProperty );
-            aTmp.SetContent(GetFieldResult( pF ));
-            SwUserField aUFld( (SwUserFieldType*)rDoc.InsertFldType( aTmp ));
-            aUFld.ChangeFormat( UF_STRING );
-            rDoc.Insert( *pPaM, SwFmtFld( aUFld ), 0);
-*/
             SwDocInfoField aFld( (SwDocInfoFieldType*)
                 rDoc.GetSysFldType( RES_DOCINFOFLD ), DI_CUSTOM|nReg, aDocProperty, GetFieldResult( pF ) );
             rDoc.InsertPoolItem(*pPaM, SwFmtFld(aFld), 0);
@@ -2816,7 +2804,6 @@ bool SwWW8ImplReader::AddExtraOutlinesAsExtraStyles(SwTOXBase& rBase)
             sal_uInt16 nStyleLevel = rSI.nOutlineLevel;
             sal_uInt16 nMaxLevel = rBase.GetLevel();
             if (
-                 //nStyleLevel != pFmt->GetOutlineLevel() &&        //#outline level,zhaojianwei
                  nStyleLevel != (pFmt->GetAttrOutlineLevel()-1) &&  //<-end,zhaojianwei
                  nStyleLevel < nMaxLevel
                )
@@ -2968,7 +2955,6 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
     ::rtl::OUString aBookmarkName=(RTL_CONSTASCII_USTRINGPARAM("_TOC"));
     maFieldStack.back().SetBookmarkName(aBookmarkName);
     maFieldStack.back().SetBookmarkType(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_TOC)));
-//     maFieldStack.back().AddParam(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Description")), aFormula.sToolTip);
     return FLD_TEXT;
     }
 #endif
@@ -3496,7 +3482,6 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* /*pF*/, String& rStr )
     ::rtl::OUString aBookmarkName=(RTL_CONSTASCII_USTRINGPARAM("_HYPERLINK"));
     maFieldStack.back().SetBookmarkName(aBookmarkName);
     maFieldStack.back().SetBookmarkType(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_HYPERLINK)));
-//     maFieldStack.back().AddParam(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Description")), aFormula.sToolTip);
     return FLD_TEXT;
     }
 #endif

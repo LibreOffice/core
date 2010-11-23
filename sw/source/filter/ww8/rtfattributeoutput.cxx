@@ -2462,10 +2462,7 @@ void RtfAttributeOutput::ParaNumRule_Impl( const SwTxtNode* pTxtNd, sal_Int32 nL
 
     const SwNumRule* pRule = pTxtNd->GetNumRule();
 
-    // --> OD 2008-03-18 #refactorlists#
-    //    if( pRule && MAXLEVEL > pTxtNd->GetActualListLevel() )
     if( pRule && pTxtNd->IsInList() )
-        // <--
     {
         // --> OD 2008-03-18 #refactorlists#
         ASSERT( pTxtNd->GetActualListLevel() >= 0 && pTxtNd->GetActualListLevel() < MAXLEVEL,
@@ -2551,13 +2548,7 @@ void RtfAttributeOutput::ParaScriptSpace( const SfxBoolItem& rScriptSpace )
         case RES_PARATR_SCRIPTSPACE:
             m_aStyles.append(OOO_STRING_SVTOOLS_RTF_ASPALPHA);
             break;
-        /* Is this needed?
-        case RES_PARATR_HANGINGPUNCTUATION:
-            m_aStyles.append(OOO_STRING_SVTOOLS_RTF_NOOVERFLOW);
-            break;
-        case RES_PARATR_FORBIDDEN_RULES:
-            m_aStyles.append(OOO_STRING_SVTOOLS_RTF_NOCWRAP);
-            break;*/
+
         default:
             break;
     }
@@ -2574,7 +2565,7 @@ void RtfAttributeOutput::ParaVerticalAlign( const SvxParaVertAlignItem& rAlign )
         case SvxParaVertAlignItem::BOTTOM:      pStr = OOO_STRING_SVTOOLS_RTF_FAVAR;        break;
         case SvxParaVertAlignItem::CENTER:      pStr = OOO_STRING_SVTOOLS_RTF_FACENTER;     break;
         case SvxParaVertAlignItem::BASELINE:    pStr = OOO_STRING_SVTOOLS_RTF_FAROMAN;      break;
-        // default == SvxParaVertAlignItem::AUTOMATIC
+
         default:                                pStr = OOO_STRING_SVTOOLS_RTF_FAAUTO;       break;
     }
     m_aStyles.append(pStr);

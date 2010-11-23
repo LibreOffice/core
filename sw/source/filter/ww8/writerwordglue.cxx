@@ -638,7 +638,6 @@ namespace sw
                         nScript);
                     if (nEnd2 < 0)
                         break;
-//                    nPos = writer_cast<xub_StrLen>(nEnd2);
                     nPos = static_cast< xub_StrLen >(nEnd2);
                     aScripts.push_back(ScriptEntry(nPos, nScript));
                     nScript = pBreakIt->GetBreakIter()->getScriptType(rTxt, nPos);
@@ -666,7 +665,6 @@ namespace sw
                 if (aBiDiIter != aBiDiEnd)
                 {
                     if (aBiDiIter->first < nMinPos)
-//                        nMinPos = writer_cast<xub_StrLen>(aBiDiIter->first);
                         nMinPos = static_cast< xub_StrLen >(aBiDiIter->first);
                     bCharIsRTL = aBiDiIter->second;
                 }
@@ -888,7 +886,6 @@ namespace sw
                     {
                         // MM We have to escape '/' in case it's used as a char
                         rParams.Replace(nI, 1, CREATE_CONST_ASC("\\/"));
-                        // rParams.Insert( nI, '\\' );
                         nI++;
                         nLen++;
                     }

@@ -180,11 +180,7 @@ SwXMLTableLines_Impl::SwXMLTableLines_Impl( const SwTableLines& rLines ) :
                 }
                 else
                 {
-                    /*
-                    ASSERT( SwXMLTableColumn_impl(nCheckPos) ==
-                                        SwXMLTableColumn_Impl(nEndCPos),
-                    "rows have different total widths" );
-                    */
+
                 }
 #endif
                 nCPos = (sal_uInt16)nWidth;

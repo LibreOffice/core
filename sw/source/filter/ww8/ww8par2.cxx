@@ -132,11 +132,6 @@ struct WW8TabBandDesc
     sal_uInt32* pNewSHDs;
     WW8_BRC aDefBrcs[6];
 
-
-    // nur fuer WW6-7: diese Zelle hat WW-Flag bMerged (horizontal) gesetzt
-    //bool bWWMergedVer6[MAX_COL];
-
-
     bool bExist[MAX_COL];           // Existiert diese Zelle ?
     UINT8 nTransCell[MAX_COL + 2];  // UEbersetzung WW-Index -> SW-Index
 
@@ -652,7 +647,6 @@ static void SetBaseAnlv(SwNumFmt &rNum, WW8_ANLV &rAV, BYTE nSwLevel )
     if ((SVBT8ToByte(rAV.aBits1 ) & 0x4) >> 2)
         rNum.SetIncludeUpperLevels(nSwLevel + 1);
     rNum.SetStart( SVBT16ToShort( rAV.iStartAt ) );
-//  rNum.eNumAdjust = eAdjA[rAV.jc];
     rNum.SetNumAdjust( eAdjA[SVBT8ToByte( rAV.aBits1 ) & 0x3] );
 
     rNum.SetCharTextDistance( SVBT16ToShort( rAV.dxaSpace ) );
@@ -716,8 +710,6 @@ void SwWW8ImplReader::SetAnlvStrings(SwNumFmt &rNum, WW8_ANLV &rAV,
     else
     {                                       // Nummerierung / Aufzaehlung
         bInsert = true;
-//      if( SVBT16ToShort( rAV.ftc ) == 1
-//          || SVBT16ToShort( rAV.ftc ) == 3 ){ // Symbol / WingDings
         if( bListSymbol )
         {
             FontFamily eFamily;
@@ -726,18 +718,14 @@ void SwWW8ImplReader::SetAnlvStrings(SwNumFmt &rNum, WW8_ANLV &rAV,
 
             if( GetFontParams( SVBT16ToShort( rAV.ftc ), eFamily, aName,
                                 ePitch, eCharSet ) ){
-//              USHORT nSiz = ( SVBT16ToShort( rAV.hps ) ) ?
-//                          SVBT16ToShort( rAV.hps ) : 24; // Groesse in 1/2 Pt
-//                      darf nach JP nicht gesetzt werden, da immer die Size
-//                      genommen wird, die am ZeilenAnfang benutzt wird
+
                 Font aFont;
                 aFont.SetName( aName );
                 aFont.SetFamily( eFamily );
-//              aFont.SetPitch( ePitch );       // darf nach JP nicht
+
                 aFont.SetCharSet( eCharSet );
                 rNum.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
-//              if( rAV.ico )       // geht in UI und SWG-Writer/Reader nicht
-//                  aFont.SetColor( Color( GetCol( rAV.ico ) ) );
+
                 rNum.SetBulletFont( &aFont );
 
                 // take only the very first character
@@ -800,7 +788,6 @@ SwNumRule* SwWW8ImplReader::GetStyRule()
     const String aName( rDoc.GetUniqueNumRuleName( &aBaseName, false) );
 
     // --> OD 2008-06-04 #i86652#
-//    USHORT nRul = rDoc.MakeNumRule( aName );
     USHORT nRul = rDoc.MakeNumRule( aName, 0, FALSE,
                                     SvxNumberFormat::LABEL_ALIGNMENT );
     // <--
@@ -833,7 +820,6 @@ void SwWW8ImplReader::Read_ANLevelNo( USHORT, const BYTE* pData, short nLen )
             {
                 nSwNumLevel = *pData - 1;
                 if (!bNoAttrImport)
-                    //((SwTxtFmtColl*)pAktColl)->SetOutlineLevel( nSwNumLevel );    //#outline level,zhaojianwei
                     ((SwTxtFmtColl*)pAktColl)->AssignToListLevelOfOutlineStyle( nSwNumLevel ); //<-end,zhaojianwei
                     // Bei WW-NoNumbering koennte auch NO_NUMBERING gesetzt
                     // werden. ( Bei normaler Nummerierung muss NO_NUM gesetzt
@@ -1026,7 +1012,6 @@ void SwWW8ImplReader::StartAnl(const BYTE* pSprm13)
         if (!pNumRule)
         {
             // --> OD 2008-06-04 #i86652#
-//            pNumRule = rDoc.GetNumRuleTbl()[rDoc.MakeNumRule(sNumRule)];
             pNumRule = rDoc.GetNumRuleTbl()[
                             rDoc.MakeNumRule( sNumRule, 0, FALSE,
                                               SvxNumberFormat::LABEL_ALIGNMENT ) ];
@@ -2361,43 +2346,6 @@ void WW8TabDesc::CalcDefaults()
     the val from the top and put in on the bottom cell. I can't seem to make
     disjoint upper and lowers to see what happens there.
     */
-
-    /* #i29550# FME 2004-06-02 Removed this code because of the implementation
-       of the collapsing table borders model. So this should not be necessary
-       anymore. */
-
-    /*    for (pR = pFirstBand; pR; pR = pR->pNextBand)
-    {
-        WW8TabBandDesc *pNext = pR->pNextBand;
-        if (!pNext)
-            break;
-
-        for (int k = 0; k < pR->nWwCols; ++k)
-        {
-            WW8_BRC &rAbove = pR->pTCs[k].rgbrc[WW8_BOT];
-            short nAboveThick = rAbove.IsEmpty(pIo->bVer67) ?
-                0 : rAbove.DetermineBorderProperties(pIo->bVer67);
-            short nUpperLeft = pR->nCenter[k];
-            short nUpperRight = pR->nCenter[k+1];
-
-            for (int l = 0; l < pNext->nWwCols; ++l)
-            {
-                short nLowerLeft = pNext->nCenter[l];
-                short nLowerRight = pNext->nCenter[l+1];
-
-                if ((nLowerLeft < nUpperLeft) || (nLowerRight > nUpperRight))
-                    continue;
-
-                WW8_BRC &rBelow = pNext->pTCs[l].rgbrc[WW8_TOP];
-                short nBelowThick = rBelow.IsEmpty(pIo->bVer67) ?
-                    0 : rBelow.DetermineBorderProperties(pIo->bVer67);
-                if (nAboveThick > nBelowThick)
-                    rBelow = rAbove;
-            }
-
-            rAbove = WW8_BRC();
-        }
-    } */
 
     if ((nMinLeft && !bIsBiDi && text::HoriOrientation::LEFT == eOri) ||
         (nMinLeft != -108 && bIsBiDi && text::HoriOrientation::RIGHT == eOri)) // Word sets the first nCenter value to -108 when no indent is used
@@ -3931,10 +3879,6 @@ void WW8RStyle::Set1StyleDefaults()
     if (!bFontChanged)      // Style has no Font? set the default,
     {
         pIo->SetNewFontAttr(ftcAsci, true, RES_CHRATR_FONT);
-        /* removed by a patch from cmc for #i52786#
-        if (pIo->bVer67)
-            SetStyleCharSet(pIo->pCollA[pIo->nAktColl]);
-        */
     }
 
     if( !pIo->bNoAttrImport )
@@ -4177,10 +4121,6 @@ void WW8RStyle::PostProcessStyles()
 
 void WW8RStyle::ScanStyles()        // untersucht Style-Abhaengigkeiten
 {                               // und ermittelt die Filepos fuer jeden Style
-    /*
-    WW8_FC nStyleStart = rFib.fcStshf;
-    pStStrm->Seek( nStyleStart );
-    */
     for (USHORT i = 0; i < cstd; ++i)
     {
         short nSkip;
@@ -4264,7 +4204,6 @@ std::vector<BYTE> ChpxToSprms(const Word2CHPX &rChpx)
         SVBT16 a;
         ShortToSVBT16(rChpx.hps, a);
         aRet.push_back(a[0]);
-//        aRet.push_back(a[1]);
     }
 
     if (rChpx.fsPos)

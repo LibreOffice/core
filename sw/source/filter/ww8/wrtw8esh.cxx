@@ -867,7 +867,6 @@ xub_StrLen MSWord_SdrAttrIter::SearchNext( xub_StrLen nStartPos )
             SetCharSet(rHt, true);
         }
 
-//??        if( pHt->GetEnd() )         // Attr mit Ende
         {
             nPos = rHt.nEnd;        // gibt letztes Attr-Zeichen + 1
             if( nPos >= nStartPos && nPos < nMinPos )
@@ -876,16 +875,7 @@ xub_StrLen MSWord_SdrAttrIter::SearchNext( xub_StrLen nStartPos )
                 SetCharSet(rHt, false);
             }
         }
-/*      else
-        {                                   // Attr ohne Ende
-            nPos = rHt.nStart + 1;  // Laenge 1 wegen CH_TXTATR im Text
-            if( nPos >= nStartPos && nPos < nMinPos )
-            {
-                nMinPos = nPos;
-                SetCharSet(rHt, false);
-            }
-        }
-*/
+
     }
     return nMinPos;
 }
@@ -1567,7 +1557,6 @@ INT32 SwBasicEscherEx::WriteOLEFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId)
         instead ==> allows unicode text to be preserved
         */
 #ifdef OLE_PREVIEW_AS_EMF
-        //Graphic aGraphic = wwUtility::MakeSafeGDIMetaFile(xObj);
         Graphic* pGraphic = rOLENd.GetGraphic();
 #endif
         OpenContainer(ESCHER_SpContainer);
@@ -2018,13 +2007,6 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, WW8Export& rWW8Wrt)
             aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x00080008 );
             aPropOpt.AddOpt( ESCHER_Prop_shadowColor, 0x8000002 );
             aPropOpt.AddOpt( ESCHER_Prop_lineWidth, 0 );
-
-// winword defaults!
-//          aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x100000 );
-//          aPropOpt.AddOpt( ESCHER_Prop_lineWidth, 0 );
-//          aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x80000 );
-//          aPropOpt.AddOpt( ESCHER_Prop_bWMode, 0x9 );
-//          aPropOpt.AddOpt( ESCHER_Prop_fBackground, 0x10001 );
 
             aPropOpt.Commit( *pStrm );
 

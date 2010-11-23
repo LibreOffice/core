@@ -697,21 +697,6 @@ void SwWW8WrGrf::WriteGrfFromGrfNode(SvStream& rStrm, const SwGrfNode &rGrfNd,
         String aFileN;
         rGrfNd.GetFileFilterNms( &aFileN, 0 );
 
-        // --> OD 2007-06-06 #i29408# - take the file URL as it is.
-//        aFileN = URIHelper::simpleNormalizedMakeRelative(rWrt.GetBaseURL(),
-//                                          aFileN);
-//        INetURLObject aUrl( aFileN );
-//        if( aUrl.GetProtocol() == INET_PROT_FILE )
-//            aFileN = aUrl.PathToFileName();
-        // <--
-
-//JP 05.12.98: nach einigen tests hat sich gezeigt, das WW mit 99 nicht
-//              klarkommt. Sie selbst schreiben aber bei Verknuepfunfen,
-//              egal um welchen Type es sich handelt, immer den Wert 94.
-//              Bug 59859
-//      if ( COMPARE_EQUAL == aFiltN.ICompare( "TIF", 3 ) )
-//          mm = 99;                    // 99 = TIFF
-//      else
             UINT16 mm = 94;                    // 94 = BMP, GIF
 
         WritePICFHeader(rStrm, rFly, mm, nWidth, nHeight,

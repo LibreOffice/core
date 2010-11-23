@@ -5613,11 +5613,6 @@ WW8Fib::WW8Fib(BYTE nVer)
         fExtChar = true;
         fWord97Saved = fWord2000Saved = true;
 
-        // diese Flags muessen nicht gesetzt werden; koennen aber.
-        //  wMagicCreated = wMagicRevised = 0x6a62;
-        //  wMagicCreatedPrivate = wMagicRevisedPrivate = 0xb3b2;
-        //
-
         wMagicCreated = 0x6143;
         wMagicRevised = 0x6C6F;
         wMagicCreatedPrivate = 0x6E61;
@@ -6741,7 +6736,6 @@ WW8Dop::WW8Dop(SvStream& rSt, INT16 nFib, INT32 nPos, sal_uInt32 nSize) : bUseTh
                 a32Bit = Get_Long( pData );      // 512 0x200
 
                 // i#78591#
-                // fDontUseHTMLAutoSpacing = (a32Bit & 0x4) >> 2;
                 SetCompatabilityOptions2(a32Bit);
             }
             if (nRead >= 550)

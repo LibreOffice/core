@@ -204,35 +204,6 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
                 pStatusBarItem->GetValue() >>= xStatusIndicator;
         }
 
-//      try
-//      {
-//          uno::Reference<frame::XModel> xModel( pDoc->GetDocShell()->GetModel());
-//          if (xModel.is())
-//          {
-//              uno::Sequence< beans::PropertyValue > xMediaDescr
-//              uno::Reference<frame::XController> xController(
-//                  xModel->getCurrentController());
-//              if( xController.is())
-//              {
-//                  uno::Reference<frame::XFrame> xFrame( xController->getFrame());
-//                  if( xFrame.is())
-//                  {
-//                      uno::Reference<task::XStatusIndicatorFactory> xFactory(
-//                          xFrame, uno::UNO_QUERY );
-//                      if( xFactory.is())
-//                      {
-//                          xStatusIndicator =
-//                              xFactory->createStatusIndicator();
-//                      }
-//                  }
-//              }
-//          }
-//      }
-//      catch( const RuntimeException& )
-//      {
-//          xStatusIndicator = 0;
-//      }
-
         // set progress range and start status indicator
         sal_Int32 nProgressRange(1000000);
         if (xStatusIndicator.is())
@@ -472,8 +443,6 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
     if( pDoc->GetRootFrm() && pDoc->GetDocStat().nPage > 1 &&
         !(bOrganizerMode || bBlock || bErr) )
     {
-//          DBG_ASSERT( !pDoc->GetDocStat().bModified,
-//                      "doc stat is modified!" );
         OUString sStreamName( RTL_CONSTASCII_USTRINGPARAM("layout-cache") );
         try
         {

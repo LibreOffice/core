@@ -313,10 +313,6 @@ void SwWW8ImplReader::SetDocumentGrid(SwFrmFmt &rFmt, const wwSection &rSection)
     aGrid.SetLines(writer_cast<sal_uInt16>(nTextareaHeight/nLinePitch));
     aGrid.SetBaseHeight(writer_cast<sal_uInt16>(nLinePitch));
 
-    // ruby height is not supported in ww8
-    //sal_Int32 nRubyHeight = nLinePitch - nCharWidth;
-    //if (nRubyHeight < 0)
-    //    nRubyHeight = 0;
     sal_Int32 nRubyHeight = 0;
     aGrid.SetRubyHeight(writer_cast<sal_uInt16>(nRubyHeight));
 
@@ -1234,12 +1230,6 @@ static bool _SetWW8_BRC(bool bVer67, WW8_BRC& rVar, const BYTE* pS)
 BYTE lcl_ReadBorders(bool bVer67, WW8_BRC* brc, WW8PLCFx_Cp_FKP* pPap,
     const WW8RStyle* pSty, const WW8PLCFx_SEPX* pSep)
 {
-// Ausgegend von diesen defines:
-//      #define WW8_TOP 0
-//      #define WW8_LEFT 1
-//      #define WW8_BOT 2
-//      #define WW8_RIGHT 3
-//      #define WW8_BETW 4
 
 //returns a BYTE filled with a bit for each position that had a sprm
 //setting that border
@@ -4764,7 +4754,6 @@ sal_uInt32 SwWW8ImplReader::ExtractColour(const BYTE* &rpData,
     )
 {
     ASSERT(bVer67 == false, "Impossible");
-    //ASSERT(SVBT32ToUInt32(rpData) == 0xFF000000, "Unknown 1 not 0xff000000");
     sal_uInt32 nFore = wwUtility::BGRToRGB(SVBT32ToUInt32(rpData));
     rpData+=4;
     sal_uInt32 nBack = wwUtility::BGRToRGB(SVBT32ToUInt32(rpData));

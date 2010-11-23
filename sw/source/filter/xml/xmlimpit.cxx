@@ -124,9 +124,6 @@ void SvXMLImportItemMapper::importXML( SfxItemSet& rSet,
 
                     if( 0 == (pEntry->nMemberId&MID_SW_FLAG_SPECIAL_ITEM_IMPORT) )
                     {
-//                      bPut = pNewItem->importXML( rValue,
-//                                          pEntry->nMemberId & MID_SW_FLAG_MASK,
-//                                          rUnitConverter );
                         bPut = PutXMLValue( *pNewItem, rValue,
                                             static_cast<sal_uInt16>( pEntry->nMemberId & MID_SW_FLAG_MASK ),
                                             rUnitConverter );

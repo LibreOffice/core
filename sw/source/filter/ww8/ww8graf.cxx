@@ -1055,14 +1055,12 @@ SwFrmFmt* SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
                                 aSprmIter++;
                             }
 
-                            //if( bRead_Obj || bRead_PicLoc ) break;
                             if( !nLoop )
                             {
                                 pChp->GetPCDSprms(  aDesc );
                                 aSprmIter.SetSprms( aDesc.pMemPos,
                                     aDesc.nSprmsLen );
                             }
-                            //if( bRead_Obj || bRead_PicLoc ) break;
                         }
                         aSave.Restore(this);
                         bEmbeddObj=bOldEmbeddObj;
@@ -1852,13 +1850,6 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
             SdrShadowXDistItem);
         const INT32 nShdDistY = WW8ITEMVALUE(rOldSet, SDRATTR_SHADOWYDIST,
             SdrShadowYDistItem);
-        //const USHORT nShdTrans= WW8ITEMVALUE(rOldSet,
-        //   SDRATTR_SHADOWTRANSPARENCE, SdrShadowTransparenceItem);
-
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        //
-        // SfxVoidItem( SDRATTR_SHADOW3D    )
-        // SfxVoidItem( SDRATTR_SHADOWPERSP )
 
         aShadow.SetColor( Color( aShdColor ) );
 
@@ -2034,16 +2025,6 @@ void SwWW8ImplReader::AdjustULWrapForWordMargins(
     //Remove top margin if aligned vertically inside margin
     if ((rRecord.nYAlign == 4) && (nYRelTo == 0))
         rUL.SetUpper((USHORT)0);
-
-    /*
-    // Something like this needs to be done once inside and outside are
-    // fixed
-    if (rRecord.nYAlign == 4)
-    {
-        if (rRecord.nYRelTo == 0)
-            rUL.SetUpper((USHORT)0);
-    }
-    */
 }
 
 void SwWW8ImplReader::MapWrapIntoFlyFmt(SvxMSDffImportRec* pRecord,
@@ -2446,7 +2427,6 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
         if ( nInTable &&
              ( eHoriRel == text::RelOrientation::FRAME || eHoriRel == text::RelOrientation::CHAR ) &&
              pFSPA->nwr == 3 &&
-//             pRecord->nLayoutInTableCell == 0x80000000 )
              !IsObjectLayoutInTableCell( pRecord->nLayoutInTableCell ) )
         {
             eHoriRel = text::RelOrientation::PAGE_PRINT_AREA;
@@ -2651,13 +2631,7 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
 
     }
 
-    // OD 14.10.2003 - keep wrapping of objects in page header/footer.
-    /*
-    //#108778# when in a header or footer word appears to treat all elements
-    //are wrap through
-    if (bIsHeader || bIsFooter)
-        pF->nwr = 3;
-    */
+    //#108778# when in a header or footer word appears to treat all elements as wrap through
 
     // Umfluss-Modus ermitteln
     SfxItemSet aFlySet(rDoc.GetAttrPool(), RES_FRMATR_BEGIN, RES_FRMATR_END-1);
@@ -2739,13 +2713,6 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
     if (!pRecord)
         return 0;
 
-    // --> OD 2008-04-10 #i84783#
-//    //cmc: We're in a table, and the element has the magic Word XP bit set
-//    //to enable layout inside a cell
-//    // --> OD 2005-08-10 #124714# - undo change made for issue #i33442#
-//    bool bLayoutInTableCell = ( nInTable &&
-//                                pRecord->nLayoutInTableCell & 0x00008000 );
-//    // <--
     const bool bLayoutInTableCell =
         nInTable && IsObjectLayoutInTableCell( pRecord->nLayoutInTableCell );
     // <--

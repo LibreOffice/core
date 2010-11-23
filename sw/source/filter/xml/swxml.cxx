@@ -445,10 +445,8 @@ void lcl_AdjustOutlineStylesForOOo( SwDoc& _rDoc )
     for ( USHORT n = 1; n < rColls.Count(); ++n )
     {
         SwTxtFmtColl* pColl = rColls[ n ];
-        //if ( pColl->GetOutlineLevel() != NO_NUMBERING )       //#outline level zhaojianwei
         if ( pColl->IsAssignedToListLevelOfOutlineStyle() )
         {
-        //  aOutlineLevelAssigned[ pColl->GetOutlineLevel() ] = true;
             aOutlineLevelAssigned[ pColl->GetAssignedOutlineStyleLevel() ] = true;//<-end,zhaojianwei
         }
 
@@ -471,14 +469,12 @@ void lcl_AdjustOutlineStylesForOOo( SwDoc& _rDoc )
         // --> OD 2007-01-11 #i73361#
         // Do not change assignment of already created default outline style
         // to a certain outline level.
-//        if ( aCreatedDefaultOutlineStyles[ i ] != 0 && !aOutlineLevelAssigned[ i ] )
         if ( !aOutlineLevelAssigned[ i ] &&
              aCreatedDefaultOutlineStyles[ i ] != 0 &&
              ! aCreatedDefaultOutlineStyles[ i ]->IsAssignedToListLevelOfOutlineStyle() )
         // <--
         {
             // apply outline level at created default outline style
-            //aCreatedDefaultOutlineStyles[ i ]->SetOutlineLevel( i );
             aCreatedDefaultOutlineStyles[ i ]->AssignToListLevelOfOutlineStyle(i);//#outline level added by zhaojianwei
 
             // apply outline numbering rule, if none is set.

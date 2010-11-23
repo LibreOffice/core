@@ -1781,9 +1781,6 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
         AppendWordBookmark( sBkmkName );
     }
 
-    //Would need to move into WW8Export, probably not worth it
-    //ASSERT( pO->Count(), " pO ist am Zeilenanfang nicht leer" );
-
     String aStr( rNode.GetTxt() );
 
     xub_StrLen nAktPos = 0;
@@ -2568,13 +2565,6 @@ void WW8AttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFmt, const Point
         }
         if( !bDone )
         {
-            // ein NICHT zeichengebundener Rahmen liegt vor
-
-            // --> OD 2007-04-19 #i43447# - removed
-//            const SwFmtFrmSize& rS = rFrmFmt.GetFrmSize();
-//            nFlyWidth  = rS.GetWidth();  // Fuer Anpassung Graphic-Groesse
-//            nFlyHeight = rS.GetHeight();
-            // <--
 
             m_rWW8Export.SaveData( nStt, nEnd );
 

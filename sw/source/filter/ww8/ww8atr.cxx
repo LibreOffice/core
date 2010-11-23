@@ -688,12 +688,9 @@ void WW8AttributeOutput::OutlineNumbering( BYTE nLvl, const SwNumFmt &rNFmt, con
     else
     {
         m_rWW8Export.Out_SwNumLvl( nLvl );
-        // --> OD 2008-06-03 #i86652#
-//        if (rNFmt.GetAbsLSpace())
         if ( rNFmt.GetPositionAndSpaceMode() ==
                                    SvxNumberFormat::LABEL_WIDTH_AND_POSITION  &&
              rNFmt.GetAbsLSpace() )
-        // <--
         {
             SwNumFmt aNumFmt( rNFmt );
             const SvxLRSpaceItem& rLR =
@@ -767,12 +764,9 @@ void MSWordExportBase::OutputFormat( const SwFmt& rFmt, bool bPapFmt, bool bChpF
                 if ( bStyDef )
                     AttrOutput().OutlineNumbering( static_cast< BYTE >( nLvl ), rNFmt, rFmt );
 
-                // --> OD 2008-06-03 #i86652#
-//                if (rNFmt.GetAbsLSpace())
                 if ( rNFmt.GetPositionAndSpaceMode() ==
                                            SvxNumberFormat::LABEL_WIDTH_AND_POSITION  &&
                      rNFmt.GetAbsLSpace() )
-                // <--
                 {
                     SfxItemSet aSet( rFmt.GetAttrSet() );
                     SvxLRSpaceItem aLR(
@@ -2089,8 +2083,6 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
             }
             break;
 
-//      case TOX_AUTHORITIES:   eCode = eTOA; sStr = ???; break;
-
         case TOX_ILLUSTRATIONS:
         case TOX_OBJECTS:
         case TOX_TABLES:
@@ -2115,8 +2107,6 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
             }
             break;
 
-//      case TOX_USER:
-//      case TOX_CONTENT:
         default:
             {
                 sStr = FieldString(eCode);
@@ -2139,39 +2129,8 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
 
                 if( nsSwTOXElement::TOX_OUTLINELEVEL & pTOX->GetCreateType() )
                 {
-                    // --> OD 2009-02-27 #i99641#
-                    // The following code does not determine the minimum outline
-                    // level for the TOC
-//                    // Search over all the outline styles used and figure out
-//                    // what is the minimum outline level we need to display
-//                    // (ignoring headline styles 1-9)
-//                    //BYTE nLvl = 0, nMinLvl = 0; //#outline level, removed by zhaojianwei
-//                    int nLvl = 0, nMinLvl = 0;      //<-end,add by zhaojianwei
-//                    const SwTxtFmtColls& rColls = *GetExport().pDoc->GetTxtFmtColls();
-//                    const SwTxtFmtColl* pColl;
-//                    for( n = rColls.Count(); n; )
-//                    {
-//                        pColl = rColls[ --n ];
-//                        //nLvl = pColl->GetOutlineLevel();    //#outline level,zhaojianwei
-//                        //USHORT nPoolId = pColl->GetPoolFmtId();
-//                        //if( MAXLEVEL > nLvl && nMinLvl < nLvl &&        //<-end, ->add by zhaojianwei
-//                        USHORT nPoolId = pColl->GetPoolFmtId();
-//                        if( pColl->IsAssignedToListLevelOfOutlineStyle() &&
-//                          nMinLvl < (nLvl = pColl->GetAssignedOutlineStyleLevel()) && //<-end,zhaojianwei
-//                            ( RES_POOLCOLL_HEADLINE1 > nPoolId ||
-//                              RES_POOLCOLL_HEADLINE9 < nPoolId ))
-//                        {
-//                            // If we are using the default heading styles then use nTOXLvl
-//                            if(!nMinLvl)
-//                                nLvl = nTOXLvl;
-//                            else
-//                                nLvl = nMinLvl < nTOXLvl ? nMinLvl : (BYTE)nTOXLvl;
-//                            nMinLvl = nLvl;
-//                        }
-//                    }
                     const int nMinLvl = nTOXLvl;
 
-//                    if( nLvl )
                     if ( nMinLvl > 0 )
                     {
                         int nTmpLvl = nMinLvl;
@@ -2183,34 +2142,6 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                         sStr.AppendAscii(sEntryEnd);
 
                     }
-                    // <--
-
-                    // --> OD 2009-02-27 #i99641#
-                    // not needed to additional export paragraph style with
-                    // an outline level to the /t option
-//                    if( nMinLvl > 0 )
-//                    // <--
-//                    {
-//                        // collect this templates into the \t otion
-//                        const SwTxtFmtColls& rColls = *pDoc->GetTxtFmtColls();
-//                        const SwTxtFmtColl* pColl;
-//                        int nLvl = 0;
-//                        for( n = rColls.Count(); n;)
-//                        {
-//                            pColl = rColls[--n];
-//                            //nLvl =  pColl->GetOutlineLevel();         //#outline level, removed by zhaojianwei
-//                            //if (MAXLEVEL > nLvl && nMinLvl <= nLvl)
-//                            //{                                         //<-end, ->add by zhaojianwei
-//                            if( pColl->IsAssignedToListLevelOfOutlineStyle() &&
-//                                nMinLvl <= ( nLvl = pColl->GetAssignedOutlineStyleLevel()))
-//                            {                                           //<-end,zhaojianwei
-//                                if( sTOption.Len() )
-//                                    sTOption += ';';
-//                                (( sTOption += pColl->GetName() ) += ';' )
-//                                        += String::CreateFromInt32( nLvl + 1 );
-//                            }
-//                        }
-//                    }
 
                 }
 
@@ -2416,7 +2347,6 @@ bool MSWordExportBase::GetNumberFmt(const SwField& rFld, String& rStr)
     const SvNumberformat* pNumFmt = pNFmtr->GetEntry( nFmtIdx );
     if( pNumFmt )
     {
-        //USHORT nLng = rFld.GetLanguage();
         LocaleDataWrapper aLocDat( pNFmtr->GetServiceManager(),
             MsLangId::convertLanguageToLocale( LANGUAGE_ENGLISH_US ) );
 
@@ -3644,9 +3574,6 @@ void AttributeOutputBase::FormatBreak( const SvxFmtBreakItem& rBreak )
     {
         switch ( rBreak.GetBreak() )
         {
-            // JP 21.06.99: column breaks never change to pagebreaks
-            // case SVX_BREAK_COLUMN_BEFORE:
-            // case SVX_BREAK_COLUMN_BOTH:
             case SVX_BREAK_NONE:
             case SVX_BREAK_PAGE_BEFORE:
             case SVX_BREAK_PAGE_BOTH:

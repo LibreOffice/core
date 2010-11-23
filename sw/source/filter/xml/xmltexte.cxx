@@ -236,13 +236,6 @@ void SwXMLTextParagraphExport::setTextEmbeddedGraphicURL(
         pGrfNd->SwapOut();
     }
 }
-/*
-static void lcl_addParam ( SvXMLExport &rExport, const SvCommand &rCommand )
-{
-    rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, rCommand.GetCommand() );
-    rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_VALUE, rCommand.GetArgument() );
-    SvXMLElementExport aElem( rExport, XML_NAMESPACE_DRAW, XML_PARAM, sal_False, sal_True );
-}*/
 
 static void lcl_addURL ( SvXMLExport &rExport, const String &rURL,
                          sal_Bool bToRel = sal_True )
@@ -292,22 +285,18 @@ void lcl_addOutplaceProperties(
         if( aSize.Width() && aSize.Height() )
         {
             Any aAny;
-            //aAny <<= (sal_Int32)rVisArea.Left();
             aAny <<= 0L;
             *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_LEFT ), aAny );
             pStates++;
 
-            //aAny <<= (sal_Int32)rVisArea.Top();
             aAny <<= 0L;
             *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_TOP ), aAny );
             pStates++;
 
-            //aAny <<= (sal_Int32)rVisArea.GetWidth();
             aAny <<= (sal_Int32)aSize.Width();
             *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_WIDTH ), aAny );
             pStates++;
 
-            //aAny <<= (sal_Int32)rVisArea.GetHeight();
             aAny <<= (sal_Int32)aSize.Height();
             *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_HEIGHT ), aAny );
             pStates++;

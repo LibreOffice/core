@@ -1033,7 +1033,6 @@ void WW8ListManager::AdjustLVL( sal_uInt8 nLevel, SwNumRule& rNumRule,
         if( !pFmt )
         {
             // --> OD 2006-06-27 #b6440955#
-//            aFont = SwNumRule::GetDefBulletFont();
             aFont = numfunc::GetDefBulletFont();
             // <--
         }
@@ -1060,7 +1059,6 @@ SwNumRule* WW8ListManager::CreateNextRule(bool bSimple)
     String sPrefix(CREATE_CONST_ASC("WW8Num"));
     sPrefix += String::CreateFromInt32(nUniqueList++);
     // --> OD 2008-06-04 #i86652#
-//    sal_uInt16 nRul = rDoc.MakeNumRule(rDoc.GetUniqueNumRuleName(&sPrefix));
     sal_uInt16 nRul =
             rDoc.MakeNumRule( rDoc.GetUniqueNumRuleName(&sPrefix), 0, FALSE,
                               SvxNumberFormat::LABEL_ALIGNMENT );
@@ -1518,7 +1516,6 @@ SwNumRule* WW8ListManager::GetNumRuleForActivation(sal_uInt16 nLFOPosition,
 
     // #i25545#
     // --> OD 2009-03-12 #i100132# - a number format does not have to exist on given list level
-//    SwNumFmt pFmt(*(pLFOInfo->pNumRule->GetNumFmt(nLevel)));
     SwNumFmt pFmt(pLFOInfo->pNumRule->Get(nLevel));
     // <--
     if (rReader.IsRightToLeft() && nLastLFOPosition != nLFOPosition) {
@@ -1666,8 +1663,6 @@ bool SwWW8ImplReader::SetTxtFmtCollAndListLevel(const SwPaM& rRg,
             // could contain more than one outline numbering rule and the one
             // of the text format isn't the one, which a chosen as the Writer
             // outline rule.
-//            pTxtNode->
-//                SetLevel(((SwTxtFmtColl*) rStyleInfo.pFmt)->GetOutlineLevel());
             pTxtNode->SetAttrListLevel( rStyleInfo.nOutlineLevel );
             // <--
         }
@@ -1845,11 +1840,6 @@ void SwWW8ImplReader::RegisterNumFmtOnTxtNode(sal_uInt16 nActLFO,
                 }
             }
             // --> OD 2005-10-17 #126238#
-            // - re-introduce fix for issue #i49037#, which got lost by
-            // accident on a re-synchronisation on the master.
-//            if (pTxtNd->IsOutline() && pTxtNd->Len() == 0)
-//                pTxtNd->SetCounted(false);
-            // <--
 
             pTxtNd->SetAttrListLevel(nActLevel);
             // --> OD 2005-11-01 #126924#
@@ -2014,10 +2004,6 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
             else if (SwTxtNode* pTxtNode = pPaM->GetNode()->GetTxtNode())
             {
                 // --> OD 2005-10-21 #i54393#
-                // - Reset hard set numbering rule at paragraph instead of
-                //   setting hard no numbering.
-//                pTxtNode->SwCntntNode::SetAttr
-//                    (*GetDfltAttr(RES_PARATR_NUMRULE));
                 pTxtNode->ResetAttr( RES_PARATR_NUMRULE );
                 // <--
                 pTxtNode->SetCountedInList(false);
