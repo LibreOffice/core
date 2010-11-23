@@ -18,15 +18,15 @@
 	<body>
 		<div id="Intro">
 			<h1 id="Welcome" xml:lang="en-US">${PRODUCTNAME} ${PRODUCTVERSION} ReadMe</h1>
-			<p id="LatestUpdates" xml:lang="en-US">For latest updates to this readme file, see <a href="http://www.libreoffice.org/welcome/readme.html">http://www.libreoffice.org/welcome/readme.html</a></p>
+			<p id="LatestUpdates" xml:lang="en-US">For latest updates to this readme file, see <a href="http://www.libreoffice.org/welcome/readme/">http://www.libreoffice.org/welcome/readme/</a></p>
 			<p id="A6" xml:lang="en-US">This file contains important information about this program. Please read this information very carefully before starting work.</p>
-			<p id="A7" xml:lang="en-US">The LibreOffice Community, responsible for the development of this product, would like to invite you to participate as a community member. As a new user, you can check out the ${PRODUCTNAME} site with helpful user information at <a href="http://www.libreoffice.org/about_us/introduction.html">http://www.libreoffice.org/about_us/introduction.html</a></p>
+			<p id="A7" xml:lang="en-US">The LibreOffice Community, responsible for the development of this product, would like to invite you to participate as a community member. As a new user, you can check out the ${PRODUCTNAME} site with helpful user information at <a href="http://www.libreoffice.org/welcome/introduction/">http://www.libreoffice.org/welcome/introduction/</a></p>
 			<p id="A9" xml:lang="en-US">Also read the sections below about getting involved in the LibreOffice project.</p>
 			<h3 id="A10" xml:lang="en-US">Is ${PRODUCTNAME} really free for any user? </h3>
-			<p id="A11" xml:lang="en-US">${PRODUCTNAME} is free for use by everybody. You may take this copy of ${PRODUCTNAME} and install it on as many computers as you like, and use it for any purpose you like (including commercial, government, public administration and educational use). For further details see the license text delivered together with ${PRODUCTNAME} or <a href="http://www.libreoffice.org/license.html">http://www.libreoffice.org/license.html</a></p>
+			<p id="A11" xml:lang="en-US">${PRODUCTNAME} is free for use by everybody. You may take this copy of ${PRODUCTNAME} and install it on as many computers as you like, and use it for any purpose you like (including commercial, government, public administration and educational use). For further details see the license text delivered together with ${PRODUCTNAME} or <a href="http://www.libreoffice.org/license/">http://www.libreoffice.org/license/</a></p>
 			<h3 id="A12" xml:lang="en-US">Why is ${PRODUCTNAME} free for any user?</h3>
 			<p id="A13" xml:lang="en-US">You can use this copy of ${PRODUCTNAME} today free of charge because individual contributors and corporate sponsors have designed, developed, tested, translated, documented, supported, marketed, and helped in many other ways to make ${PRODUCTNAME} what it is today - the world's leading open-source office software.</p>
-			<p id="A13b" xml:lang="en-US">If you appreciate their efforts, and would like to ensure LibreOffice continues into the future, please consider contributing to the project - see <a href="http://www.documentfoundation.org/contribution/">http://www.documentfoundation.org/contribution/</a> for details. Everyone has a contribution to make.</p>
+			<p id="A13b" xml:lang="en-US">If you appreciate their efforts, and would like to ensure LibreOffice continues into the future, please consider contributing to the project - see <a href="http://www.libreoffice.org/contribution/">http://www.libreoffice.org/contribution/</a> for details. Everyone has a contribution to make.</p>
 		</div>
 
 		<div id="Installation">
@@ -39,7 +39,7 @@
 					</li>
 
 					<li>
-						<p id="macxicpu" xml:lang="en-US">Intel processor</p>
+						<p id="macxicpu" xml:lang="en-US">Intel or PowerPC processor</p>
 					</li>
 
 					<li>
@@ -47,7 +47,7 @@
 					</li>
 
 					<li>
-						<p id="macxHardDiksSpace" xml:lang="en-US">Up to 1.5 GB available hard disk space</p>
+						<p id="macxHardDiksSpace" xml:lang="en-US">Up to 800 MB available hard disk space</p>
 					</li>
 
 					<li>
@@ -189,18 +189,8 @@
 			<p id="Precautions" xml:lang="en-US">Please make sure you have enough free memory in the temporary directory on your system and that read, write and run access rights have been granted. Close all other programs before starting the installation.</p>
 		</div>
 
-		<div id="BerkeleyDB">
-			<h2 id="BDB11" xml:lang="en-US">Extension Database Incompatibility</h2>
-			<p id="BDB2a" xml:lang="en-US">The Berkeley database engine has been upgraded in this version of ${PRODUCTNAME}. The database engine upgrade introduces an incompatibility with user data for installed extensions for ${PRODUCTNAME} versions prior to 3.2 that may require your action if you downgrade your version of ${PRODUCTNAME}.</p>
-			<p id="BDB3a" xml:lang="en-US">This version of ${PRODUCTNAME} will convert your extension database to the new Berkeley database format when extensions are installed or removed. After this conversion, the database can no longer be read by earlier versions of ${PRODUCTNAME}. Downgrading to an earlier version may result in a dysfunctional installation.</p>
-			<p id="BDB4a" xml:lang="en-US">If you downgrade to an earlier version of ${PRODUCTNAME}, you must remove the user data directory <tt>{user data}/uno_packages</tt>, for example <tt>~/.libreoffice/3/user/uno_packages</tt>, and reinstall all extensions.</p>
-		</div>
-
 		<div class="LINUX WIN" id="StartupProblems">
 			<h2 id="naso01" xml:lang="en-US">Problems During Program Startup</h2>
-			<div class="LINUX" id="GnomeStartupProblems">
-				<p id="naso02" xml:lang="en-US">If you experience ${PRODUCTNAME} startup problems (most notably while using Gnome) please 'unset' the <tt>SESSION_MANAGER</tt> environment variable inside the shell you use to start ${PRODUCTNAME}. This can be done by adding the line "<tt>unset SESSION_MANAGER</tt>" to the beginning of the soffice shell script found in the "<tt>[office folder]/program</tt>" directory.</p>
-			</div>
 			<p id="abcdef" xml:lang="en-US">Difficulties starting ${PRODUCTNAME} (e.g. applications hang) as well as problems with the screen display are often caused by the graphics card driver. If these problems occur, please update your graphics card driver or try using the graphics driver delivered with your operating system. Difficulties displaying 3D objects can often be solved by deactivating the option "Use OpenGL" under 'Tools - Options - ${PRODUCTNAME} - View - 3D view'.</p>
 		</div>
 
@@ -234,6 +224,11 @@
 			<p class="note" id="pji76wsdf" xml:lang="en-US">Warning: The activated file locking feature can cause problems with Solaris 2.5.1 and 2.7 used in conjunction with Linux NFS 2.0. If your system environment has these parameters, we strongly recommend that you avoid using the file locking feature. Otherwise, ${PRODUCTNAME} will hang when you try to open a file from a NFS mounted directory from a Linux computer.</p>
 		</div>
 
+		<div class="LINUX" id="Graphic Performance">
+			<h2 id="gfh6w" xml:lang="en-US">Graphic Performance</h2>
+			<p id="pji76w" xml:lang="en-US">By default, ${PRODUCTNAME} favours nice-looking graphics over speed. If you experience slow graphics, switching off 'Tools - Options - ${PRODUCTNAME} - View - Use Anti-Aliasing' may help.</p>
+		</div>
+
 		<div class="WIN" id="Mapi">
 			<h2 id="gfh6w1" xml:lang="en-US">Problems When Sending Documents as E-mails From ${PRODUCTNAME}</h2>
 			<p id="pji76w1" xml:lang="en-US">When sending a document via 'File - Send - Document as E-mail' or 'Document as PDF Attachment' problems might occur (program crashes or hangs). This is due to the Windows system file "Mapi" (Messaging Application Programming Interface) which causes problems in some file versions. Unfortunately, the problem cannot be narrowed down to a certain version number. For more information visit <a href="http://www.microsoft.com">http://www.microsoft.com</a> to search the Microsoft Knowledge Base for "mapi dll".</p>
@@ -241,38 +236,28 @@
 
 		<div id="A11y">
 			<h2 id="aw22" xml:lang="en-US">Important Accessibility Notes</h2>
-			<p id="access7" xml:lang="en-US">For more information on the accessibility features in ${PRODUCTNAME}, see <a href="http://www.libreoffice.org/access/">http://www.libreoffice.org/access/</a></p>
-		</div>
-
-		<div id="Registration">
-			<h2 id="reg1" xml:lang="en-US">Registration </h2>
-			<p id="reg2" xml:lang="en-US">Please take a little time to complete the minimal Product Registration process when you install the software. While registration is optional, we encourage you to register, since the information enables the community to make an even better software suite and address user needs directly. Through its Privacy Policy, the ${PRODUCTNAME} Community takes every precaution to safeguard your personal data. If you missed the registration at installation, you can return and register at any time at by choosing "Help - Registration" from the main menu.</p>
-		</div>
-
-		<div id="UserSurvey">
-			<h2 id="survey" xml:lang="en-US">User Survey</h2>
-			<p id="survey1" xml:lang="en-US">There is also a User Survey located online which we encourage you to fill out. The User Survey results will help ${PRODUCTNAME} move more rapidly in setting new standards for the creation of the next-generation office suite. Through its Privacy Policy, the ${PRODUCTNAME} Community takes every precaution to safeguard your personal data.</p>
+			<p id="access7" xml:lang="en-US">For more information on the accessibility features in ${PRODUCTNAME}, see <a href="http://www.libreoffice.org/accessibility/">http://www.libreoffice.org/accessibility/</a></p>
 		</div>
 
 		<div id="UserSupport">
 			<h2 id="support" xml:lang="en-US">User Support</h2>
 			<p id="support1" xml:lang="en-US">The main support page <a href="http://support.libreoffice.org/">http://support.libreoffice.org/</a> offers various possibilities for help with ${PRODUCTNAME}. Your question may have already been answered - check the Community Forum at <a href="http://www.documentfoundation.org/nabble/">http://www.documentfoundation.org/nabble/</a> or search the archives of the 'users@libreoffice.org' mailing list at <a href="http://www.libreoffice.org/lists/users/">http://www.libreoffice.org/lists/users/</a>. Alternatively, you can send in your questions to <a href="mailto:users@libreoffice.org">users@libreoffice.org</a>. If you like to subscribe to the list (to get email responses), send an empty mail to: <a href="mailto:users+subscribe@libreoffice.org">users+subscribe@libreoffice.org</a>.</p>
-			<p id="faq" url="ahead" xml:lang="en-US">Also check the FAQ section at <a href="http://www.documentfoundation.org/faq/">http://www.documentfoundation.org/faq/.</a></p>
+			<p id="faq" url="ahead" xml:lang="en-US">Also check the FAQ section at <a href="http://www.libreoffice.org/faq/">http://www.libreoffice.org/faq/.</a></p>
 		</div>
 
 		<div id="ReportBugsIssues">
 			<h2 id="reportbugs" xml:lang="en-US">Reporting Bugs &amp; Issues</h2>
-			<p id="reportbugs1" xml:lang="en-US">The ${PRODUCTNAME} Web site hosts IssueZilla, our mechanism for reporting, tracking and solving bugs and issues. We encourage all users to feel entitled and welcome to report issues that may arise on your particular platform. Energetic reporting of issues is one of the most important contributions that the user community can make to the ongoing development and improvement of the suite.</p>
+			<p id="reportbugs1" xml:lang="en-US">Our system for reporting, tracking and solving bugs is currently BugZilla, kindly hosted at <a href="https://bugs.freedesktop.org/">https://bugs.freedesktop.org/</a>. We encourage all users to feel entitled and welcome to report bugs that may arise on your particular platform. Energetic reporting of bugs is one of the most important contributions that the user community can make to the ongoing development and improvement of ${PRODUCTNAME}.</p>
 		</div>
 
 		<div id="GettingInvolved">
 			<h2 id="gettinginvolved1" xml:lang="en-US">Getting Involved</h2>
 			<p id="gettinginvolved2" xml:lang="en-US">The ${PRODUCTNAME} Community would very much benefit from your active participation in the development of this important open source project.</p>
-			<p id="gettingimvolved3" xml:lang="en-US">As a user, you are already a valuable part of the suite's development process and we would like to encourage you to take an even more active role with a view to being a long-term contributor to the community. Please join and check out the contributing page at <a href="http://www.documentfoundation.org/contribution/">http://www.documentfoundation.org/contribution/</a></p>
+			<p id="gettingimvolved3" xml:lang="en-US">As a user, you are already a valuable part of the suite's development process and we would like to encourage you to take an even more active role with a view to being a long-term contributor to the community. Please join and check out the contributing page at <a href="http://www.libreoffice.org/contribution/">http://www.libreoffice.org/contribution/</a></p>
 			<h3 id="howtostart" xml:lang="en-US">How to Start</h3>
-			<p id="howtostart1" xml:lang="en-US">The best way to start contributing is to subscribe to one or more of the mailing lists, lurk for a while, and gradually use the mail archives to familiarize yourself with many of the topics covered since the ${PRODUCTNAME} source code was released back in October 2000. When you're comfortable, all you need to do is send an email self-introduction and jump right in. If you are familiar with Open Source Projects, check out our To-Dos list and see if there is anything you would like to help with at <a href="http://www.documentfoundation.org/develop/">http://www.documentfoundation.org/develop/</a>.</p>
+			<p id="howtostart1" xml:lang="en-US">The best way to start contributing is to subscribe to one or more of the mailing lists, lurk for a while, and gradually use the mail archives to familiarize yourself with many of the topics covered since the ${PRODUCTNAME} source code was released back in October 2000. When you're comfortable, all you need to do is send an email self-introduction and jump right in. If you are familiar with Open Source Projects, check out our To-Dos list and see if there is anything you would like to help with at <a href="http://www.libreoffice.org/develop/">http://www.libreoffice.org/develop/</a>.</p>
 			<h3 id="subscribe" xml:lang="en-US">Subscribe</h3>
-			<p id="subscribe1" xml:lang="en-US">Here are a few of the mailing lists to which you can subscribe at <a href="http://www.documentfoundation.org/contribution/">http://www.documentfoundation.org/contribution/</a></p>
+			<p id="subscribe1" xml:lang="en-US">Here are a few of the mailing lists to which you can subscribe at <a href="http://www.libreoffice.org/contribution/">http://www.libreoffice.org/contribution/</a></p>
 			<ul>
 				<li>
 					<p id="subscribelist1" xml:lang="en-US">News: announce@documentfoundation.org *recommended to all users* (light traffic)</p>
