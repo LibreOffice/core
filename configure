@@ -22450,23 +22450,23 @@ fi
   else
      PKG_CONFIG_MIN_VERSION=0.9.0
      if $PKG_CONFIG --atleast-pkgconfig-version $PKG_CONFIG_MIN_VERSION; then
-        echo "$as_me:$LINENO: checking for neon >= 0.24.0" >&5
-echo $ECHO_N "checking for neon >= 0.24.0... $ECHO_C" >&6
+        echo "$as_me:$LINENO: checking for neon >= 0.26.0" >&5
+echo $ECHO_N "checking for neon >= 0.26.0... $ECHO_C" >&6
 
-        if $PKG_CONFIG --exists "neon >= 0.24.0" ; then
+        if $PKG_CONFIG --exists "neon >= 0.26.0" ; then
             echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
             succeeded=yes
 
             echo "$as_me:$LINENO: checking NEON_CFLAGS" >&5
 echo $ECHO_N "checking NEON_CFLAGS... $ECHO_C" >&6
-            NEON_CFLAGS=`$PKG_CONFIG --cflags "neon >= 0.24.0"`
+            NEON_CFLAGS=`$PKG_CONFIG --cflags "neon >= 0.26.0"`
             echo "$as_me:$LINENO: result: $NEON_CFLAGS" >&5
 echo "${ECHO_T}$NEON_CFLAGS" >&6
 
             echo "$as_me:$LINENO: checking NEON_LIBS" >&5
 echo $ECHO_N "checking NEON_LIBS... $ECHO_C" >&6
-            NEON_LIBS=`$PKG_CONFIG --libs "neon >= 0.24.0"`
+            NEON_LIBS=`$PKG_CONFIG --libs "neon >= 0.26.0"`
             echo "$as_me:$LINENO: result: $NEON_LIBS" >&5
 echo "${ECHO_T}$NEON_LIBS" >&6
         else
@@ -22474,7 +22474,7 @@ echo "${ECHO_T}$NEON_LIBS" >&6
             NEON_LIBS=""
             ## If we have a custom action on failure, don't print errors, but
             ## do set a variable so people can do so.
-            NEON_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "neon >= 0.24.0"`
+            NEON_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "neon >= 0.26.0"`
 
         fi
 
@@ -22489,8 +22489,8 @@ echo "${ECHO_T}$NEON_LIBS" >&6
   if test $succeeded = yes; then
      :
   else
-     { { echo "$as_me:$LINENO: error: you need neon >= 0.24.x for system-neon" >&5
-echo "$as_me: error: you need neon >= 0.24.x for system-neon" >&2;}
+     { { echo "$as_me:$LINENO: error: you need neon >= 0.26.x for system-neon" >&5
+echo "$as_me: error: you need neon >= 0.26.x for system-neon" >&2;}
    { (exit 1); exit 1; }; }
   fi
 
