@@ -70,7 +70,6 @@ class SwNavigationPI : public Window,
     SwNavHelpToolBox    aContentToolBox;
     SwHelpToolBox       aGlobalToolBox;
     ImageList           aContentImageList;
-    ImageList           aContentImageListH;
     SwContentTree       aContentTree;
     SwGlobalTree        aGlobalTree;
     ListBox             aDocListBox;

@@ -707,7 +707,6 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
     aContentToolBox(this, SW_RES(TB_CONTENT)),
     aGlobalToolBox(this, SW_RES(TB_GLOBAL)),
     aContentImageList(SW_RES(IL_CONTENT)),
-    aContentImageListH(SW_RES(ILH_CONTENT)),
     aContentTree(this, SW_RES(TL_CONTENT)),
     aGlobalTree(this, SW_RES(TL_GLOBAL)),
     aDocListBox(this, SW_RES(LB_DOCS)),
@@ -1266,11 +1265,9 @@ void SwNavigationPI::SetRegionDropMode(USHORT nNewMode)
     else if(nRegionMode == REGION_MODE_EMBEDDED)
         nDropId = FN_DROP_REGION_COPY;
 
-    ImageList& rImgLst = aContentToolBox.GetSettings().GetStyleSettings().GetHighContrastMode()
-                ? aContentImageListH : aContentImageList;
+    ImageList& rImgLst = aContentImageList;
 
-    aContentToolBox.SetItemImage( FN_DROP_REGION,
-                                    rImgLst.GetImage(nDropId));
+    aContentToolBox.SetItemImage( FN_DROP_REGION, rImgLst.GetImage(nDropId));
 }
 
 
@@ -1399,8 +1396,7 @@ void SwNavigationPI::InitImageList()
 {
     USHORT k;
 
-    ImageList& rImgLst = aContentToolBox.GetSettings().GetStyleSettings().GetHighContrastMode() ?
-                aContentImageListH : aContentImageList;
+    ImageList& rImgLst = aContentImageList;
     for( k = 0; k < aContentToolBox.GetItemCount(); k++)
             aContentToolBox.SetItemImage(aContentToolBox.GetItemId(k),
                     rImgLst.GetImage(aContentToolBox.GetItemId(k)));

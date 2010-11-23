@@ -278,11 +278,6 @@ Graphic* SwOLENode::GetGraphic()
     return pGraphic;
 }
 
-Graphic* SwOLENode::GetHCGraphic()
-{
-    return aOLEObj.xOLERef.GetHCGraphic();
-}
-
 SwCntntNode *SwOLENode::SplitCntntNode( const SwPosition & )
 {
     // OLE-Objecte vervielfaeltigen ??

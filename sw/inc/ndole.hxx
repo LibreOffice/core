@@ -122,7 +122,6 @@ public:
 
     Graphic* GetGraphic();
 
-    Graphic* GetHCGraphic(); // tries to retrieve HighContrast representation if possible
     void GetNewReplacement();
 
     virtual BOOL SavePersistentData();
