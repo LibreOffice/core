@@ -1571,6 +1571,16 @@ Sequence< ::sal_Int16 > SAL_CALL OGenericUnoController::getSupportedCommandGroup
     return aCommandGroups;
 }
 
+namespace
+{
+    //Current c++0x draft (apparently) has std::identity, but not operator()
+    template<typename T> struct SGI_identity : public std::unary_function<T,T>
+    {
+        T& operator()(T& x) const { return x; }
+        const T& operator()(const T& x) const { return x; }
+    };
+}
+
 // -----------------------------------------------------------------------------
 Sequence< DispatchInformation > SAL_CALL OGenericUnoController::getConfigurableDispatchInformation( ::sal_Int16 CommandGroup ) throw (RuntimeException)
 {
@@ -1592,7 +1602,7 @@ Sequence< DispatchInformation > SAL_CALL OGenericUnoController::getConfigurableD
     ::std::transform( aInformationList.begin(),
         aInformationList.end(),
         aInformation.getArray(),
-        ::std::identity< DispatchInformation >()
+        SGI_identity< DispatchInformation >()
     );
 
     return aInformation;
