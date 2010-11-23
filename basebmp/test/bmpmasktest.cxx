@@ -135,8 +135,8 @@ public:
             aColWhite,
             DrawMode_PAINT );
 
-        aSvg = ::rtl::OUString::createFromAscii(
-            "m 0 0 h6 v10 h-6z" );
+        aSvg = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "m 0 0 h6 v10 h-6z" ));
 
         aPoly.clear();
         basegfx::tools::importFromSvgD( aPoly, aSvg );

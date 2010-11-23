@@ -68,8 +68,8 @@ private:
 
         basegfx::tools::importFromSvgD(
             aPoly,
-            rtl::OUString::createFromAscii(
-                "M2 2 l7 7 z" ) );
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "M2 2 l7 7 z" )) );
         rDevice->fillPolyPolygon(
             aPoly,
             aCol,
@@ -83,8 +83,8 @@ private:
         aPoly.clear();
         basegfx::tools::importFromSvgD(
             aPoly,
-            rtl::OUString::createFromAscii(
-            "M7 2 l-6 6 z" ) );
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "M7 2 l-6 6 z" )) );
         rDevice->fillPolyPolygon(
             aPoly,
             aCol,
@@ -103,8 +103,8 @@ private:
 
         basegfx::tools::importFromSvgD(
             aPoly,
-            rtl::OUString::createFromAscii(
-                "M2 2 h1 l7 7 h-1 z" ) );
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "M2 2 h1 l7 7 h-1 z" )) );
         rDevice->fillPolyPolygon(
             aPoly,
             aCol,
@@ -118,8 +118,8 @@ private:
         aPoly.clear();
         basegfx::tools::importFromSvgD(
             aPoly,
-            rtl::OUString::createFromAscii(
-            "M7 2 h-1 l-6 6 h1 z" ) );
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "M7 2 h-1 l-6 6 h1 z" )) );
         rDevice->fillPolyPolygon(
             aPoly,
             aCol,
@@ -133,8 +133,8 @@ private:
         aPoly.clear();
         basegfx::tools::importFromSvgD(
             aPoly,
-            rtl::OUString::createFromAscii(
-            "M0 0 l7 7 h-1 l-5-7 z" ) );
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "M0 0 l7 7 h-1 l-5-7 z" )) );
         rDevice->fillPolyPolygon(
             aPoly,
             aCol,
@@ -152,8 +152,8 @@ private:
         ::rtl::OUString aSvg;
 
         basegfx::tools::importFromSvgD( aPoly,
-                                        ::rtl::OUString::createFromAscii(
-                                            "M0 0 h7 v7 h-7 z M2 2 v3 h3 v-3 z" ) );
+                                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                            "M0 0 h7 v7 h-7 z M2 2 v3 h3 v-3 z" )) );
 
         rDevice->fillPolyPolygon(
             aPoly,
@@ -172,8 +172,8 @@ private:
         ::rtl::OUString aSvg;
 
         basegfx::tools::importFromSvgD( aPoly,
-                                        ::rtl::OUString::createFromAscii(
-                                            "M0 0 h7 v7 h-7 z M2 2 v3 h3 v-3 z" ) );
+                                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                            "M0 0 h7 v7 h-7 z M2 2 v3 h3 v-3 z" )) );
         basegfx::B2DHomMatrix aMat;
         aMat.translate(-3,-3);
         aMat.rotate( 1.7 );
@@ -210,12 +210,12 @@ private:
         ::rtl::OUString aSvg;
 
         basegfx::tools::importFromSvgD( aPoly,
-                                        ::rtl::OUString::createFromAscii(
+                                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                                             "M0 0 v2 l10 2 v-2 z"
                                             "M10 6 v-2 l-10 2 v2 z"
                                             "M1 0 h1 v10 h-1 z"
                                             "M4 0 h1 v10 h-1 z"
-                                            "M8 0 h1 v10 h-1 z" ) );
+                                            "M8 0 h1 v10 h-1 z" )) );
         rDevice->fillPolyPolygon(
             aPoly,
             aCol,
