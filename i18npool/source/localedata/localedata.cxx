@@ -432,8 +432,8 @@ oslGenericFunction SAL_CALL lcl_LookupTableHelper::getFunctionSymbolByName(
             if ( module->loadRelative(&thisModule, aBuf.makeStringAndClear()) )
             {
                 ::osl::MutexGuard aGuard( maMutex );
-                LocaleDataLookupTableItem* pNewItem = 0;
-                maLookupTable.push_back(pNewItem = new LocaleDataLookupTableItem(aLibTable[i].pLib, module, aLibTable[i].pLocale ));
+                LocaleDataLookupTableItem* pNewItem = new LocaleDataLookupTableItem(aLibTable[i].pLib, module, aLibTable[i].pLocale);
+                maLookupTable.push_back(pNewItem);
                 OSL_ASSERT( pOutCachedItem );
                 if( pOutCachedItem )
                 {
