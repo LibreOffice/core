@@ -590,7 +590,7 @@ namespace pcr
             // everything which survived the checks above should result in a factor of 1, i.e.,
             // it should have a direct counterpart as FieldUnit
             throw RuntimeException();
-        getTypedControlWindow()->SetUnit( eFieldUnit );
+        getTypedControlWindow()->MetricFormatter::SetUnit( eFieldUnit );
     }
 
     //--------------------------------------------------------------------
