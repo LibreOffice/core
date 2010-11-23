@@ -58,7 +58,6 @@ int SAL_CALL main( int argc, char **argv )
     xmlChar*            uriValue ;
     OUString*           uri = NULL ;
     Reference< XUriBinding >    xUriBinding ;
-    FILE*               dstFile = NULL ;
 
     if( argc !=3 && argc != 4 ) {
         fprintf( stderr, "Usage: %s <file_url> <rdb file>\n" , argv[0] ) ;
