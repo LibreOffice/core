@@ -32,6 +32,6 @@ endif
 GBUILDDIR := $(SOLARENV)/gbuild
 include $(GBUILDDIR)/gbuild.mk
 
-$(foreach repo,$(gb_REPOS),$(eval $(call gb_Module_make_global_targets,$(shell ls $(repo)/Module_*.mk))))
+$(foreach repo,$(gb_REPOS),$(eval $(call gb_Module_make_global_targets,$(wildcard $(repo)/Module_*.mk))))
 
 # vim: set noet sw=4 ts=4:
