@@ -1155,6 +1155,9 @@ CSS1Expression *CSS1Parser::ParseDeclaration( String& rProperty )
 /*  */
 
 CSS1Parser::CSS1Parser()
+    : nValue(0)
+    , eState(CSS1_PAR_ACCEPTED)
+    , nToken(CSS1_NULL)
 {
 }
 
