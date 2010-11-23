@@ -52,12 +52,12 @@ sal_Bool SAL_CALL component_writeInfo(
             Reference< XRegistryKey > xKey( reinterpret_cast< XRegistryKey * >( pRegistryKey ) );
 
             Reference< XRegistryKey > xNewKey( xKey->createKey(
-                OUString::createFromAscii( "/" PARSER_IMPLEMENTATION_NAME "/UNO/SERVICES" ) ) );
-            xNewKey->createKey( OUString::createFromAscii( PARSER_SERVICE_NAME ) );
+                OUString(RTL_CONSTASCII_USTRINGPARAM( "/" PARSER_IMPLEMENTATION_NAME "/UNO/SERVICES" )) ) );
+            xNewKey->createKey( OUString(RTL_CONSTASCII_USTRINGPARAM( PARSER_SERVICE_NAME )) );
 
             Reference< XRegistryKey > xNewKey1( xKey->createKey(
-                OUString::createFromAscii( "/" SERIALIZER_IMPLEMENTATION_NAME "/UNO/SERVICES" ) ) );
-            xNewKey1->createKey( OUString::createFromAscii( SERIALIZER_SERVICE_NAME ) );
+                OUString(RTL_CONSTASCII_USTRINGPARAM( "/" SERIALIZER_IMPLEMENTATION_NAME "/UNO/SERVICES" )) ) );
+            xNewKey1->createKey( OUString(RTL_CONSTASCII_USTRINGPARAM( SERIALIZER_SERVICE_NAME )) );
 
             return sal_True;
         }

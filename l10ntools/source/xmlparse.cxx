@@ -931,9 +931,9 @@ void XMLElement::Print(XMLNode *pCur, OUStringBuffer& buffer , bool rootelement 
                                 buffer.append( OUString(RTL_CONSTASCII_USTRINGPARAM(" ")) );
                                 buffer.append( aAttrName );
                                 buffer.append( OUString(RTL_CONSTASCII_USTRINGPARAM("=")) );
-                                buffer.append( OUString::createFromAscii("\\\"") );
+                                buffer.append( OUString(RTL_CONSTASCII_USTRINGPARAM("\\\"")) );
                                 buffer.append( pElement->GetAttributeList()->GetObject( j )->GetValue() );
-                                buffer.append( OUString::createFromAscii("\\\"") );
+                                buffer.append( OUString(RTL_CONSTASCII_USTRINGPARAM("\\\"")) );
                             }
                         }
                     }

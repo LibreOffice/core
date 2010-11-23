@@ -521,8 +521,7 @@ int main (int argc, char **argv)
     try
     {
         // Load dll for the tested component
-        OUString aDllName =
-            OUString::createFromAscii( "sax.uno" SAL_DLLEXTENSION );
+        OUString aDllName(RTL_CONSTASCII_USTRINGPARAM( "sax.uno" SAL_DLLEXTENSION ));
         xReg->registerImplementation(
             OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary")),
             aDllName,

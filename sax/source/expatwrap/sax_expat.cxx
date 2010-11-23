@@ -596,7 +596,7 @@ void SaxExpatParser::setLocale( const Locale & locale ) throw (RuntimeException)
 // XServiceInfo
 OUString SaxExpatParser::getImplementationName() throw ()
 {
-    return OUString::createFromAscii( IMPLEMENTATION_NAME );
+    return OUString(RTL_CONSTASCII_USTRINGPARAM( IMPLEMENTATION_NAME ));
 }
 
 // XServiceInfo
@@ -617,7 +617,7 @@ Sequence< OUString > SaxExpatParser::getSupportedServiceNames(void) throw ()
 {
 
     Sequence<OUString> seq(1);
-    seq.getArray()[0] = OUString::createFromAscii( SERVICE_NAME );
+    seq.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( SERVICE_NAME ));
     return seq;
 }
 
@@ -1047,8 +1047,8 @@ sal_Bool SAL_CALL component_writeInfo(
                 reinterpret_cast< XRegistryKey * >( pRegistryKey ) );
 
             Reference< XRegistryKey > xNewKey = xKey->createKey(
-                OUString::createFromAscii( "/" IMPLEMENTATION_NAME "/UNO/SERVICES" ) );
-            xNewKey->createKey( OUString::createFromAscii( SERVICE_NAME ) );
+                OUString(RTL_CONSTASCII_USTRINGPARAM( "/" IMPLEMENTATION_NAME "/UNO/SERVICES" )) );
+            xNewKey->createKey( OUString(RTL_CONSTASCII_USTRINGPARAM( SERVICE_NAME )) );
 
             xNewKey = xKey->createKey( OUString(RTL_CONSTASCII_USTRINGPARAM("/")) +
                                        SaxWriter_getImplementationName()+

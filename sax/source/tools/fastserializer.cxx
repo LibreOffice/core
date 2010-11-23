@@ -296,7 +296,7 @@ namespace sax_fastparser {
     // XServiceInfo
     OUString FastSaxSerializer::getImplementationName() throw (RuntimeException)
     {
-        return OUString::createFromAscii( SERIALIZER_IMPLEMENTATION_NAME );
+        return OUString(RTL_CONSTASCII_USTRINGPARAM( SERIALIZER_IMPLEMENTATION_NAME ));
     }
 
     // XServiceInfo
@@ -316,13 +316,13 @@ namespace sax_fastparser {
     Sequence< OUString > FastSaxSerializer::getSupportedServiceNames(void) throw (RuntimeException)
     {
         Sequence<OUString> seq(1);
-        seq.getArray()[0] = OUString::createFromAscii( SERIALIZER_SERVICE_NAME );
+        seq.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( SERIALIZER_SERVICE_NAME ));
         return seq;
     }
 
     OUString FastSaxSerializer::getImplementationName_Static()
     {
-        return OUString::createFromAscii( SERIALIZER_IMPLEMENTATION_NAME );
+        return OUString(RTL_CONSTASCII_USTRINGPARAM( SERIALIZER_IMPLEMENTATION_NAME ));
     }
 
     Sequence< OUString > FastSaxSerializer::getSupportedServiceNames_Static(void)
