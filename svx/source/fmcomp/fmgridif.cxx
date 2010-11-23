@@ -2075,25 +2075,28 @@ void FmXGridPeer::setProperty( const ::rtl::OUString& PropertyName, const Any& V
     }
     else if ( 0 == PropertyName.compareTo( FM_PROP_HASNAVIGATION ) )
     {
-        if (Value.getValueType() == ::getBooleanCppuType())
-            pGrid->EnableNavigationBar(*(sal_Bool*)Value.getValue());
+        sal_Bool bValue( sal_True );
+        OSL_VERIFY( Value >>= bValue );
+        pGrid->EnableNavigationBar( bValue );
     }
     else if ( 0 == PropertyName.compareTo( FM_PROP_RECORDMARKER ) )
     {
-        if (Value.getValueType() == ::getBooleanCppuType())
-            pGrid->EnableHandle(*(sal_Bool*)Value.getValue());
+        sal_Bool bValue( sal_True );
+        OSL_VERIFY( Value >>= bValue );
+        pGrid->EnableHandle( bValue );
     }
     else if ( 0 == PropertyName.compareTo( FM_PROP_ENABLED ) )
     {
-        if (Value.getValueType() == ::getBooleanCppuType())
-        {
-            // Im DesignModus nur das Datenfenster disablen
-            // Sonst kann das Control nicht mehr konfiguriert werden
-            if (isDesignMode())
-                pGrid->GetDataWindow().Enable(*(sal_Bool*)Value.getValue());
-            else
-                pGrid->Enable(*(sal_Bool*)Value.getValue());
-        }
+        sal_Bool bValue( sal_True );
+        OSL_VERIFY( Value >>= bValue );
+        pGrid->EnableHandle( bValue );
+
+        // Im DesignModus nur das Datenfenster disablen
+        // Sonst kann das Control nicht mehr konfiguriert werden
+        if (isDesignMode())
+            pGrid->GetDataWindow().Enable( bValue );
+        else
+            pGrid->Enable( bValue );
     }
     else
         VCLXWindow::setProperty( PropertyName, Value );
