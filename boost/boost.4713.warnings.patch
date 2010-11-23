@@ -127,3 +127,16 @@
                      scan.first);
          else
 
+--- misc/build/boost_1_39_0/boost/date_time/posix_time/posix_time_config.hpp
++++ misc/build/boost_1_39_0/boost/date_time/posix_time/posix_time_config.hpp
+@@ -82,8 +82,8 @@
+     //Give duration access to ticks constructor -- hide from users
+     friend class date_time::time_duration<time_duration, time_res_traits>;
+   private:
+-    explicit time_duration(impl_type ticks) :
+-      date_time::time_duration<time_duration, time_res_traits>(ticks)
++    explicit time_duration(impl_type _ticks) :
++      date_time::time_duration<time_duration, time_res_traits>(_ticks)
+     {}
+   };
+ 
