@@ -155,8 +155,6 @@ class FlashExportFilter : public cppu::WeakImplHelper4
     Reference< XMultiServiceFactory > mxMSF;
     Reference< XStatusIndicator> mxStatusIndicator;
 
-    osl::File* mpFile;
-
 public:
     FlashExportFilter( const Reference< XMultiServiceFactory > &rxMSF);
 
