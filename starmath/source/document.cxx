@@ -76,7 +76,7 @@
 #include <editeng/unolingu.hxx>
 #include <ucbhelper/content.hxx>
 #include <vcl/mapmod.hxx>
-#include <vcl/mapunit.hxx>
+#include <tools/mapunit.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/sfx.hrc>
 #include <document.hxx>

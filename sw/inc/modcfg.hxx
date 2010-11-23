@@ -28,7 +28,7 @@
 #define _MODOPT_HXX
 
 #include <tools/string.hxx>
-#include <vcl/wintypes.hxx>
+#include <tools/wintypes.hxx>
 #include <vcl/field.hxx>
 #include <svl/svarray.hxx>
 #include <unotools/configitem.hxx>

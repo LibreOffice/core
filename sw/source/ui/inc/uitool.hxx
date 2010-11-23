@@ -27,7 +27,7 @@
 #ifndef _UITOOL_HXX
 #define _UITOOL_HXX
 
-#include <vcl/wintypes.hxx>
+#include <tools/wintypes.hxx>
 #include <vcl/field.hxx>
 #include <swtypes.hxx>
 #include "swdllapi.h"
