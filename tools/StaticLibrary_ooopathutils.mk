@@ -35,11 +35,14 @@ $(eval $(call gb_StaticLibrary_add_exception_objects,ooopathutils,\
 
 
 # HACK for now
+# We really should fix the clients of this to link against the static library
+# Instead of this evil linking of an object from $(OUTDIR)
 define StaticLibrary_ooopathutils_hack
 $(call gb_StaticLibrary_get_target,ooopathutils) : $(OUTDIR)/lib/$(1)
+$$(eval $$(call gb_Deliver_add_deliverable,$(OUTDIR)/lib/$(1),$(call gb_CxxObject_get_target,tools/source/misc/pathutils)))
 
 $(OUTDIR)/lib/$(1) : $(call gb_CxxObject_get_target,tools/source/misc/pathutils)
-    cp -f $$< $$@
+    $$(call gb_Deliver_deliver,$$<,$$@)
 
 endef
 
