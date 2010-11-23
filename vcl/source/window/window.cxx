@@ -43,7 +43,6 @@
 #include "tools/rc.h"
 #endif
 #include "vcl/svdata.hxx"
-#include "vcl/windata.hxx"
 #include "vcl/dbggui.hxx"
 #include "vcl/outfont.hxx"
 #include "vcl/outdev.h"

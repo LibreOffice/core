@@ -101,7 +101,18 @@ namespace dnd {
 namespace vcl { struct ControlLayoutData; }
 
 
+// --------------
+// - Prototypes -
+// --------------
 
+long ImplWindowFrameProc( Window* pInst, SalFrame* pFrame, USHORT nEvent, const void* pEvent );
+
+// -----------
+// - HitTest -
+// -----------
+
+#define WINDOW_HITTEST_INSIDE           ((USHORT)0x0001)
+#define WINDOW_HITTEST_TRANSPARENT      ((USHORT)0x0002)
 
 // ---------------
 // - ImplWinData -
