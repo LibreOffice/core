@@ -216,7 +216,7 @@ public:
     {
         ::com::sun::star::uno::Sequence< ::rtl::OUString > aNode( 1 );
         *aNode.getArray()  = path;
-        *aNode.getArray() += ::rtl::OUString::createFromAscii( "/Store" );
+        *aNode.getArray() += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/Store"));
         EnableNotification( aNode );
     }
 
