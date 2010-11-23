@@ -348,7 +348,7 @@ namespace
                 {
                     ::comphelper::disposeComponent(xResult);
                     loadTableData(m_xTables->getByName(*pIter));
-                } // if ( xResult.is() && xResult->next() )
+                }
             }
             catch( const Exception& )
             {
@@ -410,7 +410,7 @@ namespace
                         }
                         else
                             continue; // table name could not be found so we do not show this table releation
-                    } // if ( aFind == m_aTableData.end() )
+                    }
                     TTableWindowData::value_type pReferencedTable = aRefFind->second;
 
                     ::rtl::OUString sKeyName;
@@ -454,7 +454,7 @@ namespace
                     pTabConnData->SetCardinality();
                 }
             }
-        } // if ( xKeys.is() )
+        }
     }
 }
 
@@ -478,7 +478,7 @@ void ORelationController::mergeData(const TTableConnectionData& _aConnectionData
         {
             m_vTableData.push_back((*aConnDataIter)->getReferencedTable());
         }
-    } // for(;aConnDataIter != aConnDataEnd;++aConnDataIter)
+    }
     if ( m_nThreadEvent )
     {
         --m_nThreadEvent;
@@ -535,8 +535,8 @@ void ORelationController::loadData()
                 nStart = nEnd;
                 nEnd += nMaxElements;
                 nEnd = ::std::min(nEnd,nCount);
-            } // for(;pIter != pEnd;++pIter)
-        } // if ( aMeta.supportsThreads() )
+            }
+        }
         else
         {
             RelationLoader* pThread = new RelationLoader(this,xMetaData,m_xTables,aNames,0,nCount);

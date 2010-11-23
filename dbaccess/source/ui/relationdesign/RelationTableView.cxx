@@ -180,7 +180,7 @@ void ORelationTableView::ReSync()
                 pTabConnDataList->erase( ::std::remove(pTabConnDataList->begin(),pTabConnDataList->end(),*aConIter),pTabConnDataList->end() );
                 continue;
             }
-        } // if ( !arrInvalidTables.empty() )
+        }
 
         addConnection( new ORelationTableConnection(this, *aConIter), sal_False ); // don't add the data again
     }
@@ -385,30 +385,6 @@ void ORelationTableView::RemoveTabWin( OTableWindow* pTabWin )
     }
 }
 // -----------------------------------------------------------------------------
-//namespace
-//{
-//    class OReleationAskDialog : public ButtonDialog
-//    {
-//        FixedImage        m_aInfoImage;
-//        FixedText     m_aTitle;
-//      FixedText       m_aMessage;
-//    public:
-//        OReleationDialog(Window* _pParent) : ButtonDialog(_pParent,WB_HORZ | WB_STDDIALOG)
-//            ,m_aInfoImage(this)
-//            ,m_aTitle(this,WB_WORDBREAK | WB_LEFT)
-//          ,m_aMessage(this,WB_WORDBREAK | WB_LEFT)
-//        {
-//            m_aMessage.SetText(ModuleRes(STR_QUERY_REL_EDIT_RELATION));
-//            m_aMessage.Show();
-//
-//            // Changed as per BugID 79541 Branding/Configuration
-//            String sDialogTitle( lcl_getProductName() );
-//            SetText( sDialogTitle.AppendAscii( " Base" ) );
-//            m_aTitle.Show();
-//        }
-//    };
-//}
-// -----------------------------------------------------------------------------
 void ORelationTableView::lookForUiActivities()
 {
     if(m_pExistingConnection)
@@ -477,7 +453,7 @@ void ORelationTableView::_elementRemoved( const container::ContainerEvent& _rEve
             m_pView->getController().InvalidateFeature(ID_BROWSER_UNDO);
             m_pView->getController().InvalidateFeature(ID_BROWSER_REDO);
         }
-    } // if ( _rEvent.Accessor >>= sName )
+    }
     m_bInRemove = false;
 }
 // -----------------------------------------------------------------------------
