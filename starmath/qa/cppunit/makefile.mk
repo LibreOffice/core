@@ -48,6 +48,7 @@ CFLAGSCXX += $(CPPUNIT_CFLAGS)
 
 SHL1OBJS=  \
     $(SLO)/test_starmath.obj \
+    $(SLO)/test_nodetotextvisitors.obj
 
 
 SHL1STDLIBS= \
