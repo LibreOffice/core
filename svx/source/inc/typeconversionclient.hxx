@@ -70,7 +70,7 @@ namespace svxform
         }
 
         // --------------------------------------------------------
-        inline ::rtl::OUString getValue(
+        inline ::rtl::OUString getFormattedValue(
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxColumn,
             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter,
             const ::com::sun::star::util::Date& _rNullDate,
@@ -79,7 +79,7 @@ namespace svxform
         {
             ::rtl::OUString sReturn;
             if ( ensureLoaded() )
-                sReturn = m_xTypeConversion->getValue(_rxColumn, _rxFormatter, _rNullDate, _nKey, _nKeyType);
+                sReturn = m_xTypeConversion->getFormattedValue(_rxColumn, _rxFormatter, _rNullDate, _nKey, _nKeyType);
             return sReturn;
         }
     };

@@ -409,12 +409,12 @@ double DBTypeConversion::getValue(const Reference<XColumn>& xVariant,
     }
 }
 //------------------------------------------------------------------------------
-::rtl::OUString DBTypeConversion::getValue(const Reference< XPropertySet>& _xColumn,
+::rtl::OUString DBTypeConversion::getFormattedValue(const Reference< XPropertySet>& _xColumn,
                                            const Reference<XNumberFormatter>& _xFormatter,
                                            const ::com::sun::star::lang::Locale& _rLocale,
                                            const Date& _rNullDate)
 {
-    OSL_ENSURE(_xColumn.is() && _xFormatter.is(), "DBTypeConversion::getValue: invalid arg !");
+    OSL_ENSURE(_xColumn.is() && _xFormatter.is(), "DBTypeConversion::getFormattedValue: invalid arg !");
     if (!_xColumn.is() || !_xFormatter.is())
         return ::rtl::OUString();
 
@@ -425,7 +425,7 @@ double DBTypeConversion::getValue(const Reference<XColumn>& xVariant,
     }
     catch (const Exception& )
     {
-        OSL_ENSURE(false, "DBTypeConversion::getValue: caught an exception while asking for the format key!");
+        OSL_ENSURE(false, "DBTypeConversion::getFormattedValue: caught an exception while asking for the format key!");
     }
 
     if (!nKey)
@@ -441,11 +441,11 @@ double DBTypeConversion::getValue(const Reference<XColumn>& xVariant,
 
     sal_Int16 nKeyType = getNumberFormatType(_xFormatter, nKey) & ~NumberFormat::DEFINED;
 
-    return DBTypeConversion::getValue(Reference< XColumn > (_xColumn, UNO_QUERY), _xFormatter, _rNullDate, nKey, nKeyType);
+    return DBTypeConversion::getFormattedValue(Reference< XColumn > (_xColumn, UNO_QUERY), _xFormatter, _rNullDate, nKey, nKeyType);
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString DBTypeConversion::getValue(const Reference<XColumn>& xVariant,
+::rtl::OUString DBTypeConversion::getFormattedValue(const Reference<XColumn>& xVariant,
                                    const Reference<XNumberFormatter>& xFormatter,
                                    const Date& rNullDate,
                                    sal_Int32 nKey,
@@ -478,7 +478,7 @@ double DBTypeConversion::getValue(const Reference<XColumn>& xVariant,
                          }
                          catch( const Exception& )
                          {
-                            OSL_ENSURE( sal_False, "DBTypeConversion::getValue: caught an exception while retrieving the formatter's NullDate!" );
+                            OSL_ENSURE( sal_False, "DBTypeConversion::getFormattedValue: caught an exception while retrieving the formatter's NullDate!" );
                          }
                          // get a value which represents the given date, relative to the null date of the formatter
                          fValue -= toDays( rNullDate, aFormatterNullDate );

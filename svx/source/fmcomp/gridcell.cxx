@@ -1193,7 +1193,7 @@ String DbTextField::GetFormatText(const Reference< XColumn >& _rxField, const Re
     if ( _rxField.is() )
         try
         {
-            aString = getValue( _rxField, xFormatter, m_rColumn.GetParent().getNullDate(), m_rColumn.GetKey(), m_nKeyType);
+            aString = getFormattedValue( _rxField, xFormatter, m_rColumn.GetParent().getNullDate(), m_rColumn.GetKey(), m_nKeyType);
         }
         catch( const Exception& )
         {
@@ -2553,7 +2553,7 @@ String DbComboBox::GetFormatText(const Reference< ::com::sun::star::sdb::XColumn
     if (_rxField.is())
         try
         {
-            aString = getValue( _rxField, xFormatter, m_rColumn.GetParent().getNullDate(), m_rColumn.GetKey(), m_nKeyType );
+            aString = getFormattedValue( _rxField, xFormatter, m_rColumn.GetParent().getNullDate(), m_rColumn.GetKey(), m_nKeyType );
         }
         catch( const Exception& )
         {
@@ -3164,7 +3164,7 @@ void DbFilterField::Update()
 
             while (!xListCursor->isAfterLast() && i++ < SHRT_MAX) // max anzahl eintraege
             {
-                aStr = getValue(xDataField, xFormatter, aNullDate, nFormatKey, nKeyType);
+                aStr = getFormattedValue(xDataField, xFormatter, aNullDate, nFormatKey, nKeyType);
                 aStringList.push_back(aStr);
                 xListCursor->next();
             }
