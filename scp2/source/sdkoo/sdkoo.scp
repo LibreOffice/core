@@ -95,13 +95,6 @@ End
 
 
 #if defined MACOSX
-ScpAction scp_Copy_License_Html_Sdk
-    README_TXT_ALL_LANG(Copy, LICENSE, html);
-    README_TXT_ALL_LANG(Name, LICENSE, html);
-    Styles = (SCPZIP_REPLACE);
-    Subdir = "LICENSEs";
-End
-
 ScpAction scp_Copy_License_Txt_Sdk
     README_ALL_LANG(Copy, LICENSE);
     README_ALL_LANG(Name, LICENSE);
@@ -109,7 +102,6 @@ ScpAction scp_Copy_License_Txt_Sdk
     Subdir = "LICENSEs";
 End
 #endif
-
 
 Directory gid_Dir_Share_Sdk
     ParentID = gid_Dir_Basis_Sdk;
@@ -141,18 +133,6 @@ File gid_File_Txt_License
     Styles = (PACKED, SCPZIP_REPLACE);
 End
 
-File gid_File_Txt_License_Html
-    TXT_FILE_BODY;
-    Dir = gid_Dir_Share_Readme_Sdk;
-  #ifdef UNX
-    Name = "LICENSE_en-US.html";
-  #endif
-  #ifdef WNT
-    Name = "license_en-US.html";
-  #endif
-    Styles = (PACKED, SCPZIP_REPLACE);
-End
-
 File gid_File_Txt_Readme
     TXT_FILE_BODY;
     Dir = gid_Dir_Share_Readme_Sdk;
@@ -164,19 +144,6 @@ File gid_File_Txt_Readme
   #endif
     Styles = (PACKED, SCPZIP_REPLACE);
 End
-
-File gid_File_Txt_Readme_Html
-    TXT_FILE_BODY;
-    Dir = gid_Dir_Share_Readme_Sdk;
-  #ifdef UNX
-    Name = "README_en-US.html";
-  #endif
-  #ifdef WNT
-    Name = "readme_en-US.html";
-  #endif
-    Styles = (PACKED, SCPZIP_REPLACE);
-End
-
 
 File gid_File_Zip_Odkexamples
     TXT_FILE_BODY;
