@@ -30,6 +30,8 @@ import com.sun.star.lib.uno.helper.WeakBase;
 import com.sun.star.task.XInteractionHandler;
 import com.sun.star.task.XInteractionRequest;
 
+import static org.junit.Assert.*;
+
 /**
  *
  * @author oj93728
@@ -37,14 +39,12 @@ import com.sun.star.task.XInteractionRequest;
 class CopyTableInterActionHandler extends WeakBase
         implements XInteractionHandler
 {
-    private final CopyTableWizard test;
-    public CopyTableInterActionHandler(CopyTableWizard testCase)
+    CopyTableInterActionHandler()
     {
-        test = testCase;
     }
 
     public void handle(XInteractionRequest xRequest)
     {
-        test.assure(xRequest.toString());
+        fail( "interaction handler is not expected to be called" );
     }
 }

@@ -32,7 +32,6 @@ import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdb.CommandType;
 import com.sun.star.sdb.XParametersSupplier;
 import com.sun.star.sdb.XResultSetAccess;
@@ -58,12 +57,7 @@ import java.lang.reflect.Method;
 import java.util.Random;
 
 // ---------- junit imports -----------------
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openoffice.test.OfficeConnection;
 import static org.junit.Assert.*;
 // ------------------------------------------
 
@@ -92,7 +86,7 @@ public class RowSet extends TestCase
         XRow m_row;
         int m_id;
 
-        public ResultSetMovementStress(XResultSet _resultSet, int _id) throws java.lang.Exception
+        ResultSetMovementStress(XResultSet _resultSet, int _id) throws java.lang.Exception
         {
             m_resultSet = _resultSet;
             m_row = UnoRuntime.queryInterface( XRow.class, m_resultSet );
@@ -122,27 +116,6 @@ public class RowSet extends TestCase
             }
         }
     }
-    // --------------------------------------------------------------------------------------------------------
-
-//    public String[] getTestMethodNames()
-//    {
-//        return new String[]
-//                {
-//                    "testRowSet",
-//                    "testRowSetEvents",
-//                    "testDeleteBehavior",
-//                    "testCloneMovesPlusDeletions",
-//                    "testCloneMovesPlusInsertions",
-//                    "testParameters"
-//                };
-//    }
-//
-//    // --------------------------------------------------------------------------------------------------------
-//    public String getTestObjectName()
-//    {
-//        return "RowSet";
-//    }
-//
     // --------------------------------------------------------------------------------------------------------
     private void createTestCase(boolean _defaultRowSet)
     {
@@ -174,12 +147,6 @@ public class RowSet extends TestCase
             createRowSet("TEST1", CommandType.TABLE, true, true);
         }
     }
-
-    // --------------------------------------------------------------------------------------------------------
-//    private XMultiServiceFactory getFactory()
-//    {
-//        return (XMultiServiceFactory) param.getMSF();
-//    }
 
     // --------------------------------------------------------------------------------------------------------
     /** creates a com.sun.star.sdb.RowSet to use during the test
@@ -239,7 +206,8 @@ public class RowSet extends TestCase
     }
 
     // --------------------------------------------------------------------------------------------------------
-    @Test public void testRowSet() throws java.lang.Exception
+    @Test
+    public void testRowSet() throws java.lang.Exception
     {
 
         System.out.println("testing testRowSet");
@@ -415,7 +383,8 @@ public class RowSet extends TestCase
     }
     // --------------------------------------------------------------------------------------------------------
 
-    @Test public void testRowSetEvents() throws java.lang.Exception
+    @Test
+    public void testRowSetEvents() throws java.lang.Exception
     {
         System.out.println("testing RowSet Events");
         createTestCase(true);
@@ -632,7 +601,8 @@ public class RowSet extends TestCase
     }
 
     // --------------------------------------------------------------------------------------------------------
-    @Test public void testDeleteBehavior() throws Exception
+    @Test
+    public void testDeleteBehavior() throws Exception
     {
         createTestCase(true);
 
@@ -765,8 +735,8 @@ public class RowSet extends TestCase
     /** checks whether deletions on the main RowSet properly interfere (or don't interfere) with the movement
      *  on a clone of the RowSet
      */
-    @SuppressWarnings("empty-statement")
-    @Test public void testCloneMovesPlusDeletions() throws SQLException, UnknownPropertyException, WrappedTargetException
+    @Test
+    public void testCloneMovesPlusDeletions() throws SQLException, UnknownPropertyException, WrappedTargetException
     {
         createTestCase(true);
         // ensure that all records are known
@@ -834,7 +804,8 @@ public class RowSet extends TestCase
     /** checks whether insertions on the main RowSet properly interfere (or don't interfere) with the movement
      *  on a clone of the RowSet
      */
-    @Test public void testCloneMovesPlusInsertions() throws SQLException, UnknownPropertyException, WrappedTargetException, PropertyVetoException, com.sun.star.lang.IllegalArgumentException
+    @Test
+    public void testCloneMovesPlusInsertions() throws SQLException, UnknownPropertyException, WrappedTargetException, PropertyVetoException, com.sun.star.lang.IllegalArgumentException
     {
         createTestCase(true);
         // ensure that all records are known
@@ -1019,7 +990,8 @@ public class RowSet extends TestCase
     // --------------------------------------------------------------------------------------------------------
     /** checks the XParametersSupplier functionality of a RowSet
      */
-    @Test public void testParameters()
+    @Test
+    public void testParameters()
     {
         createTestCase(false);
         // use an own RowSet instance, not the one which is also used for the other cases

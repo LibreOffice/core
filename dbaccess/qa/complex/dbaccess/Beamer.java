@@ -70,51 +70,10 @@ public class Beamer extends TestCase
         super();
     }
 
-//    // --------------------------------------------------------------------------------------------------------
-//    protected final XComponentContext getComponentContext()
-//    {
-//        XComponentContext context = null;
-//        try
-//        {
-//            final XPropertySet orbProps = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, getORB());
-//            context = (XComponentContext) UnoRuntime.queryInterface(XComponentContext.class,
-//                    orbProps.getPropertyValue("DefaultContext"));
-//        }
-//        catch (Exception ex)
-//        {
-//            failed("could not retrieve the ComponentContext");
-//        }
-//        return context;
-//    }
     // --------------------------------------------------------------------------------------------------------
-
-//    public String[] getTestMethodNames()
-//    {
-//        return new String[]
-//                {
-//                    "testBeamer"
-//                };
-//    }
-
-//    // --------------------------------------------------------------------------------------------------------
-//    public String getTestObjectName()
-//    {
-//        return getClass().getName();
-//    }
-
-    // --------------------------------------------------------------------------------------------------------
-//    protected final XMultiServiceFactory getORB()
-//    {
-//        return (XMultiServiceFactory) param.getMSF();
-//    }
-
-    // --------------------------------------------------------------------------------------------------------
-    private void impl_closeDocument()
-    {
-    }
-
-    // --------------------------------------------------------------------------------------------------------
-    @Before public void before() throws Exception, java.lang.Exception
+    @Before
+    @Override
+    public void before() throws Exception, java.lang.Exception
     {
         // load it into a frame
         final Object object = getMSF().createInstance("com.sun.star.frame.Desktop");
@@ -125,18 +84,20 @@ public class Beamer extends TestCase
     }
 
     // --------------------------------------------------------------------------------------------------------
-    @After public void after()
+    @After
+    @Override
+    public void after()
     {
     }
-    // --------------------------------------------------------------------------------------------------------
 
-    @Test public void testBeamer() throws Exception, IOException, java.lang.Exception
+    // --------------------------------------------------------------------------------------------------------
+    @Test
+    public void testBeamer() throws Exception, IOException, java.lang.Exception
     {
         final XController controller = docModel.getCurrentController();
         final XFrame frame = controller.getFrame();
         final XDispatchProvider dispatchP = UnoRuntime.queryInterface(XDispatchProvider.class, frame);
         URL command = new URL();
-        // command.Complete = ".component:DB/DataSourceBrowser";
         command.Complete = ".uno:ViewDataSourceBrowser";
 
         Object instance = getMSF().createInstance("com.sun.star.util.URLTransformer");

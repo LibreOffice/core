@@ -33,11 +33,7 @@ import java.util.logging.Logger;
 
 // ---------- junit imports -----------------
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.openoffice.test.OfficeConnection;
 import static org.junit.Assert.*;
 // ------------------------------------------
 
@@ -60,13 +56,17 @@ public abstract class CRMBasedTestCase extends TestCase
     }
 
     // --------------------------------------------------------------------------------------------------------
-    @Before public void before()
+    @Before
+    @Override
+    public void before()
     {
         createTestCase();
     }
 
     // --------------------------------------------------------------------------------------------------------
-    @After public void after()
+    @After
+    @Override
+    public void after()
     {
         try
         {

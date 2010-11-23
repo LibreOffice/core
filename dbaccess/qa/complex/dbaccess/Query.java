@@ -30,38 +30,19 @@ import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.container.XNamed;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdb.XQueriesSupplier;
 import com.sun.star.sdbcx.XColumnsSupplier;
 import com.sun.star.uno.UnoRuntime;
 import connectivity.tools.CRMDatabase;
 
 // ---------- junit imports -----------------
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openoffice.test.OfficeConnection;
 import static org.junit.Assert.*;
 // ------------------------------------------
 
 public class Query extends TestCase {
 
     connectivity.tools.HsqlDatabase m_database;
-
-    // --------------------------------------------------------------------------------------------------------
-//    public String[] getTestMethodNames() {
-//        return new String[]
-//        {
-//            "testQueryColumns"
-//        };
-//    }
-
-    // --------------------------------------------------------------------------------------------------------
-//    public String getTestObjectName() {
-//        return "Query";
-//    }
 
     // --------------------------------------------------------------------------------------------------------
     private void createTestCase()
@@ -89,7 +70,8 @@ public class Query extends TestCase {
 //    }
 
     // --------------------------------------------------------------------------------------------------------
-    @Test public void testQueryColumns()
+    @Test
+    public void testQueryColumns()
     {
         createTestCase();
 

@@ -26,6 +26,8 @@
  ************************************************************************/
 package complex.dbaccess;
 
+import com.sun.star.lang.NotInitializedException;
+import com.sun.star.frame.DoubleInitializationException;
 import com.sun.star.awt.XTopWindow;
 import com.sun.star.beans.PropertyState;
 import com.sun.star.document.DocumentEvent;
@@ -83,11 +85,8 @@ import java.util.logging.Logger;
 
 // ---------- junit imports -----------------
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openoffice.test.OfficeConnection;
 import static org.junit.Assert.*;
 // ------------------------------------------
 
@@ -253,25 +252,8 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
 
     // ========================================================================================================
     // --------------------------------------------------------------------------------------------------------
-//    public String[] getTestMethodNames()
-//    {
-//        return new String[]
-//                {
-//                    "testLoadable",
-//                    "testDocumentRevenants",
-//                    "testDocumentEvents",
-//                    "testGlobalEvents"
-//                };
-//    }
-//
-//    // --------------------------------------------------------------------------------------------------------
-//    public String getTestObjectName()
-//    {
-//        return "DatabaseDocument";
-//    }
-
-    // --------------------------------------------------------------------------------------------------------
-    @Before public void before() throws java.lang.Exception
+    @Before
+    public void before() throws java.lang.Exception
     {
         super.before();
 
@@ -297,7 +279,8 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
     }
 
     // --------------------------------------------------------------------------------------------------------
-    @After public void after() throws java.lang.Exception
+    @After
+    public void after() throws java.lang.Exception
     {
         try
         {
@@ -326,7 +309,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
         public Class unoInterfaceClass = null;
         public String methodName = null;
 
-        public UnoMethodDescriptor(Class _class, String _method)
+        UnoMethodDescriptor(Class _class, String _method)
         {
             unoInterfaceClass = _class;
             methodName = _method;
@@ -351,8 +334,8 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
 
         for (int i = 0; i < unsupportedMethods.length; ++i)
         {
-//            assureException( _document, unsupportedMethods[i].unoInterfaceClass,
-//                unsupportedMethods[i].methodName, new Object[]{}, _isInitialized ? null : NotInitializedException.class );
+            assureException( _document, unsupportedMethods[i].unoInterfaceClass,
+                unsupportedMethods[i].methodName, new Object[]{}, _isInitialized ? null : NotInitializedException.class );
         }
     }
 
@@ -410,7 +393,8 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
     }
 
     // --------------------------------------------------------------------------------------------------------
-    @Test public void testLoadable() throws Exception, IOException
+    @Test
+    public void testLoadable() throws Exception, IOException
     {
         XModel databaseDoc = impl_createEmptyEmbeddedHSQLDocument();
         String documentURL = databaseDoc.getURL();
@@ -438,10 +422,10 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
         impl_checkDocumentInitState(databaseDoc, true);
 
         // and while we are here ... initilizing the same document again should not be possible
-//        assureException( databaseDoc, XLoadable.class, "initNew", new Object[0],
-//            DoubleInitializationException.class );
-//        assureException( databaseDoc, XLoadable.class, "load", new Object[] { new PropertyValue[0] },
-//            DoubleInitializationException.class );
+        assureException( databaseDoc, XLoadable.class, "initNew", new Object[0],
+            DoubleInitializationException.class );
+        assureException( databaseDoc, XLoadable.class, "load", new Object[] { new PropertyValue[0] },
+            DoubleInitializationException.class );
 
         // ....................................................................
         // 3. XLoadable::initNew
@@ -453,10 +437,10 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
         impl_checkDocumentInitState(databaseDoc, true);
 
         // same as above - initializing the document a second time must fail
-//        assureException( databaseDoc, XLoadable.class, "initNew", new Object[0],
-//            DoubleInitializationException.class );
-//        assureException( databaseDoc, XLoadable.class, "load", new Object[] { new PropertyValue[0] },
-//            DoubleInitializationException.class );
+        assureException( databaseDoc, XLoadable.class, "initNew", new Object[0],
+            DoubleInitializationException.class );
+        assureException( databaseDoc, XLoadable.class, "load", new Object[] { new PropertyValue[0] },
+            DoubleInitializationException.class );
     }
 
     // --------------------------------------------------------------------------------------------------------
@@ -571,7 +555,8 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
      *  This method here tests some of those aspects of a document which should survive the death of one
      *  instance and re-creation as a revenant.
     */
-    @Test public void testDocumentRevenants() throws Exception, IOException
+    @Test
+    public void testDocumentRevenants() throws Exception, IOException
     {
         // create an empty document
         XModel databaseDoc = impl_createDocWithMacro( "Lib", "Module",
@@ -623,7 +608,8 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
     }
 
     // --------------------------------------------------------------------------------------------------------
-    @Test public void testDocumentEvents() throws Exception, IOException
+    @Test
+    public void testDocumentEvents() throws Exception, IOException
     {
         // create an empty document
         final String libName = "EventHandlers";
@@ -691,7 +677,8 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
     }
 
     // --------------------------------------------------------------------------------------------------------
-    @Test public void testGlobalEvents() throws Exception, IOException
+    @Test
+    public void testGlobalEvents() throws Exception, IOException
     {
         XModel databaseDoc = impl_createEmptyEmbeddedHSQLDocument();
         final XStorable storeDoc = UnoRuntime.queryInterface(XStorable.class, databaseDoc);
