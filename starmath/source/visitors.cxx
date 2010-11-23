@@ -2460,9 +2460,11 @@ void SmNodeToTextVisitor::Visit( SmMatrixNode* pNode )
     for ( USHORT i = 0; i < pNode->GetNumRows( ); i++ ) {
         for ( USHORT j = 0; j < pNode->GetNumCols( ); j++ ) {
             SmNode* pSubNode = pNode->GetSubNode( i * pNode->GetNumCols( ) + j );
+            Append( "{" );
             Separate( );
             pSubNode->Accept( this );
             Separate( );
+            Append( "}" );
             if( j != pNode->GetNumCols( ) - 1 )
                 Append( "#" );
         }
