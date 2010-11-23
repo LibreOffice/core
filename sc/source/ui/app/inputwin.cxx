@@ -127,7 +127,7 @@ SfxChildWinInfo __EXPORT ScInputWindowWrapper::GetInfo() const
 
 //==================================================================
 
-#define IMAGE(id) pImgMgr->SeekImage(id, bHC)
+#define IMAGE(id) pImgMgr->SeekImage(id)
 
 //==================================================================
 //  class ScInputWindow
@@ -165,8 +165,6 @@ ScInputWindow::ScInputWindow( Window* pParent, SfxBindings* pBind ) :
             pViewSh = PTR_CAST( ScTabViewShell, pViewFrm->GetViewShell() );
     }
     DBG_ASSERT( pViewSh, "no view shell for input window" );
-
-    BOOL bHC = GetSettings().GetStyleSettings().GetHighContrastMode();
 
     // Positionsfenster, 3 Buttons, Eingabefenster
     InsertWindow    ( 1, &aWndPos, 0,                                     0 );
@@ -560,8 +558,6 @@ void ScInputWindow::SetOkCancelMode()
     SfxImageManager* pImgMgr = SfxImageManager::GetImageManager( pScMod );
     if (!bIsOkCancelMode)
     {
-        BOOL bHC = GetSettings().GetStyleSettings().GetHighContrastMode();
-
         RemoveItem( 3 ); // SID_INPUT_SUM und SID_INPUT_EQUAL entfernen
         RemoveItem( 3 );
         InsertItem( SID_INPUT_CANCEL, IMAGE( SID_INPUT_CANCEL ), 0, 3 );
@@ -584,8 +580,6 @@ void ScInputWindow::SetSumAssignMode()
     SfxImageManager* pImgMgr = SfxImageManager::GetImageManager( pScMod );
     if (bIsOkCancelMode)
     {
-        BOOL bHC = GetSettings().GetStyleSettings().GetHighContrastMode();
-
         // SID_INPUT_CANCEL, und SID_INPUT_OK entfernen
         RemoveItem( 3 );
         RemoveItem( 3 );
@@ -694,11 +688,9 @@ void ScInputWindow::DataChanged( const DataChangedEvent& rDCEvt )
     if ( rDCEvt.GetType() == DATACHANGED_SETTINGS && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
         //  update item images
-
         ScModule*        pScMod  = SC_MOD();
         SfxImageManager* pImgMgr = SfxImageManager::GetImageManager( pScMod );
-        BOOL bHC = GetSettings().GetStyleSettings().GetHighContrastMode();
-        // IMAGE macro uses pScMod, pImgMgr, bHC
+        // IMAGE macro uses pScMod, pImgMg
 
         SetItemImage( SID_INPUT_FUNCTION, IMAGE( SID_INPUT_FUNCTION ) );
         if ( bIsOkCancelMode )
