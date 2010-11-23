@@ -88,7 +88,6 @@
 #include "vcl/unowrap.hxx"
 #include "vcl/dndlcon.hxx"
 #include "vcl/dndevdis.hxx"
-#include "vcl/impbmpconv.hxx"
 #include "unotools/confignode.hxx"
 #include "vcl/gdimtf.hxx"
 

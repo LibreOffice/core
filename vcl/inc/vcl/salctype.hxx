@@ -28,6 +28,9 @@
 #ifndef _SV_SALCTYPE_HXX
 #define _SV_SALCTYPE_HXX
 
+#include <com/sun/star/script/XInvocation.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+
 #include <vcl/graph.hxx>
 
 // -----------
@@ -76,5 +79,14 @@ public:
 typedef ULONG (*SALGRFCVTPROC)( void* pInst,
                                 ULONG nInFormat, void* pInBuffer, ULONG nInBufSize,
                                 ULONG nOutFormat, void** ppOutBuffer );
+
+// -------------------
+// - BitmapConverter -
+// -------------------
+
+namespace vcl
+{
+com::sun::star::uno::Reference< com::sun::star::script::XInvocation > createBmpConverter();
+}
 
 #endif // _SV_SALCTYPE_HXX
