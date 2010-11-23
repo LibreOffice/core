@@ -39,7 +39,7 @@
 #include <com/sun/star/media/ZoomLevel.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <vcl/fldunit.hxx>
+#include <tools/fldunit.hxx>
 #include <tools/shl.hxx>
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>

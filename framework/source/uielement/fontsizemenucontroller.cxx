@@ -51,7 +51,7 @@
 #ifndef _VCL_MENU_HXX_
 #include <vcl/menu.hxx>
 #endif
-#include <vcl/mapunit.hxx>
+#include <tools/mapunit.hxx>
 #ifndef _VCL_SVAPP_HXX_
 #include <vcl/svapp.hxx>
 #endif
