@@ -333,7 +333,7 @@ $(SHL1TARGETN) : \
         $(SHL1STDLIBS) \
         $(SHL1STDSHL) $(STDSHL1) \
         $(SHL1LINKRES) \
-    ) $(LINKOUTPUTFILTER)
+    )
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
@@ -357,7 +357,7 @@ $(SHL1TARGETN) : \
         $(SHL1STDLIBS)                      \
         $(SHL1STDSHL) $(STDSHL1)                           \
         $(SHL1LINKRES) \
-    ) $(LINKOUTPUTFILTER)
+    )
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
@@ -527,7 +527,6 @@ $(SHL1TARGETN) : \
         $(SHL1STDLIBS:^"-l") \
         $(SHL1LINKRES) \
         $(SHL1STDSHL:^"-l") $(STDSHL1:^"-l")                           \
-    $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
 
 .ENDIF			# "$(USE_DEFFILE)"!=""
@@ -875,7 +874,7 @@ $(SHL2TARGETN) : \
         $(SHL2STDLIBS) \
         $(SHL2STDSHL) $(STDSHL2) \
         $(SHL2LINKRES) \
-    ) $(LINKOUTPUTFILTER)
+    )
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
@@ -899,7 +898,7 @@ $(SHL2TARGETN) : \
         $(SHL2STDLIBS)                      \
         $(SHL2STDSHL) $(STDSHL2)                           \
         $(SHL2LINKRES) \
-    ) $(LINKOUTPUTFILTER)
+    )
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
@@ -1069,7 +1068,6 @@ $(SHL2TARGETN) : \
         $(SHL2STDLIBS:^"-l") \
         $(SHL2LINKRES) \
         $(SHL2STDSHL:^"-l") $(STDSHL2:^"-l")                           \
-    $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
 
 .ENDIF			# "$(USE_DEFFILE)"!=""
@@ -1417,7 +1415,7 @@ $(SHL3TARGETN) : \
         $(SHL3STDLIBS) \
         $(SHL3STDSHL) $(STDSHL3) \
         $(SHL3LINKRES) \
-    ) $(LINKOUTPUTFILTER)
+    )
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
@@ -1441,7 +1439,7 @@ $(SHL3TARGETN) : \
         $(SHL3STDLIBS)                      \
         $(SHL3STDSHL) $(STDSHL3)                           \
         $(SHL3LINKRES) \
-    ) $(LINKOUTPUTFILTER)
+    )
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
@@ -1611,7 +1609,6 @@ $(SHL3TARGETN) : \
         $(SHL3STDLIBS:^"-l") \
         $(SHL3LINKRES) \
         $(SHL3STDSHL:^"-l") $(STDSHL3:^"-l")                           \
-    $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
 
 .ENDIF			# "$(USE_DEFFILE)"!=""
@@ -1959,7 +1956,7 @@ $(SHL4TARGETN) : \
         $(SHL4STDLIBS) \
         $(SHL4STDSHL) $(STDSHL4) \
         $(SHL4LINKRES) \
-    ) $(LINKOUTPUTFILTER)
+    )
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
@@ -1983,7 +1980,7 @@ $(SHL4TARGETN) : \
         $(SHL4STDLIBS)                      \
         $(SHL4STDSHL) $(STDSHL4)                           \
         $(SHL4LINKRES) \
-    ) $(LINKOUTPUTFILTER)
+    )
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
@@ -2153,7 +2150,6 @@ $(SHL4TARGETN) : \
         $(SHL4STDLIBS:^"-l") \
         $(SHL4LINKRES) \
         $(SHL4STDSHL:^"-l") $(STDSHL4:^"-l")                           \
-    $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
 
 .ENDIF			# "$(USE_DEFFILE)"!=""
@@ -2501,7 +2497,7 @@ $(SHL5TARGETN) : \
         $(SHL5STDLIBS) \
         $(SHL5STDSHL) $(STDSHL5) \
         $(SHL5LINKRES) \
-    ) $(LINKOUTPUTFILTER)
+    )
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
@@ -2525,7 +2521,7 @@ $(SHL5TARGETN) : \
         $(SHL5STDLIBS)                      \
         $(SHL5STDSHL) $(STDSHL5)                           \
         $(SHL5LINKRES) \
-    ) $(LINKOUTPUTFILTER)
+    )
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
@@ -2695,7 +2691,6 @@ $(SHL5TARGETN) : \
         $(SHL5STDLIBS:^"-l") \
         $(SHL5LINKRES) \
         $(SHL5STDSHL:^"-l") $(STDSHL5:^"-l")                           \
-    $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
 
 .ENDIF			# "$(USE_DEFFILE)"!=""
@@ -3043,7 +3038,7 @@ $(SHL6TARGETN) : \
         $(SHL6STDLIBS) \
         $(SHL6STDSHL) $(STDSHL6) \
         $(SHL6LINKRES) \
-    ) $(LINKOUTPUTFILTER)
+    )
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
@@ -3067,7 +3062,7 @@ $(SHL6TARGETN) : \
         $(SHL6STDLIBS)                      \
         $(SHL6STDSHL) $(STDSHL6)                           \
         $(SHL6LINKRES) \
-    ) $(LINKOUTPUTFILTER)
+    )
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
@@ -3237,7 +3232,6 @@ $(SHL6TARGETN) : \
         $(SHL6STDLIBS:^"-l") \
         $(SHL6LINKRES) \
         $(SHL6STDSHL:^"-l") $(STDSHL6:^"-l")                           \
-    $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
 
 .ENDIF			# "$(USE_DEFFILE)"!=""
@@ -3585,7 +3579,7 @@ $(SHL7TARGETN) : \
         $(SHL7STDLIBS) \
         $(SHL7STDSHL) $(STDSHL7) \
         $(SHL7LINKRES) \
-    ) $(LINKOUTPUTFILTER)
+    )
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
@@ -3609,7 +3603,7 @@ $(SHL7TARGETN) : \
         $(SHL7STDLIBS)                      \
         $(SHL7STDSHL) $(STDSHL7)                           \
         $(SHL7LINKRES) \
-    ) $(LINKOUTPUTFILTER)
+    )
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
@@ -3779,7 +3773,6 @@ $(SHL7TARGETN) : \
         $(SHL7STDLIBS:^"-l") \
         $(SHL7LINKRES) \
         $(SHL7STDSHL:^"-l") $(STDSHL7:^"-l")                           \
-    $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
 
 .ENDIF			# "$(USE_DEFFILE)"!=""
@@ -4127,7 +4120,7 @@ $(SHL8TARGETN) : \
         $(SHL8STDLIBS) \
         $(SHL8STDSHL) $(STDSHL8) \
         $(SHL8LINKRES) \
-    ) $(LINKOUTPUTFILTER)
+    )
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
@@ -4151,7 +4144,7 @@ $(SHL8TARGETN) : \
         $(SHL8STDLIBS)                      \
         $(SHL8STDSHL) $(STDSHL8)                           \
         $(SHL8LINKRES) \
-    ) $(LINKOUTPUTFILTER)
+    )
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
@@ -4321,7 +4314,6 @@ $(SHL8TARGETN) : \
         $(SHL8STDLIBS:^"-l") \
         $(SHL8LINKRES) \
         $(SHL8STDSHL:^"-l") $(STDSHL8:^"-l")                           \
-    $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
 
 .ENDIF			# "$(USE_DEFFILE)"!=""
@@ -4669,7 +4661,7 @@ $(SHL9TARGETN) : \
         $(SHL9STDLIBS) \
         $(SHL9STDSHL) $(STDSHL9) \
         $(SHL9LINKRES) \
-    ) $(LINKOUTPUTFILTER)
+    )
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
@@ -4693,7 +4685,7 @@ $(SHL9TARGETN) : \
         $(SHL9STDLIBS)                      \
         $(SHL9STDSHL) $(STDSHL9)                           \
         $(SHL9LINKRES) \
-    ) $(LINKOUTPUTFILTER)
+    )
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
@@ -4863,7 +4855,6 @@ $(SHL9TARGETN) : \
         $(SHL9STDLIBS:^"-l") \
         $(SHL9LINKRES) \
         $(SHL9STDSHL:^"-l") $(STDSHL9:^"-l")                           \
-    $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
 
 .ENDIF			# "$(USE_DEFFILE)"!=""
@@ -5211,7 +5202,7 @@ $(SHL10TARGETN) : \
         $(SHL10STDLIBS) \
         $(SHL10STDSHL) $(STDSHL10) \
         $(SHL10LINKRES) \
-    ) $(LINKOUTPUTFILTER)
+    )
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
@@ -5235,7 +5226,7 @@ $(SHL10TARGETN) : \
         $(SHL10STDLIBS)                      \
         $(SHL10STDSHL) $(STDSHL10)                           \
         $(SHL10LINKRES) \
-    ) $(LINKOUTPUTFILTER)
+    )
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
@@ -5405,7 +5396,6 @@ $(SHL10TARGETN) : \
         $(SHL10STDLIBS:^"-l") \
         $(SHL10LINKRES) \
         $(SHL10STDSHL:^"-l") $(STDSHL10:^"-l")                           \
-    $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
 
 .ENDIF			# "$(USE_DEFFILE)"!=""
