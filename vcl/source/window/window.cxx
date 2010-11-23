@@ -286,8 +286,6 @@ bool Window::ImplCheckUIFont( const Font& rFont )
 
 void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, BOOL bCallHdl )
 {
-    // reset high contrast to false, so the system can either update it
-    // or AutoDetectSystemHC can kick in (see below)
     StyleSettings aTmpSt( rSettings.GetStyleSettings() );
     aTmpSt.SetHighContrastMode( FALSE );
     rSettings.SetStyleSettings( aTmpSt );
@@ -471,7 +469,6 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, BOOL bCallHdl )
 
     rSettings.SetStyleSettings( aStyleSettings );
 
-
     // auto detect HC mode; if the system already set it to "yes"
     // (see above) then accept that
     if( !rSettings.GetStyleSettings().GetHighContrastMode() )
@@ -493,6 +490,7 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, BOOL bCallHdl )
             {
                 aStyleSettings = rSettings.GetStyleSettings();
                 aStyleSettings.SetHighContrastMode( TRUE );
+                aStyleSettings.SetSymbolsStyle( STYLE_SYMBOLS_HICONTRAST );
                 rSettings.SetStyleSettings( aStyleSettings );
             }
         }
@@ -502,6 +500,7 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, BOOL bCallHdl )
     if( pEnvHC && *pEnvHC )
     {
         aStyleSettings.SetHighContrastMode( TRUE );
+        aStyleSettings.SetSymbolsStyle( STYLE_SYMBOLS_HICONTRAST );
         rSettings.SetStyleSettings( aStyleSettings );
     }
 

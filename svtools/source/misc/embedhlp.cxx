@@ -235,7 +235,6 @@ struct EmbeddedObjectRef_Impl
     ::rtl::OUString                             aMediaType;
     comphelper::EmbeddedObjectContainer*        pContainer;
     Graphic*                                    pGraphic;
-    Graphic*                                    pHCGraphic;
     sal_Int64                                   nViewAspect;
     BOOL                                        bIsLocked;
     sal_Bool                                    bNeedUpdate;
@@ -250,7 +249,6 @@ void EmbeddedObjectRef::Construct_Impl()
     mpImp = new EmbeddedObjectRef_Impl;
     mpImp->pContainer = 0;
     mpImp->pGraphic = 0;
-    mpImp->pHCGraphic = 0;
     mpImp->nViewAspect = embed::Aspects::MSOLE_CONTENT;
     mpImp->bIsLocked = FALSE;
     mpImp->bNeedUpdate = sal_False;
@@ -289,42 +287,15 @@ EmbeddedObjectRef::EmbeddedObjectRef( const EmbeddedObjectRef& rObj )
     else
         mpImp->pGraphic = 0;
 
-    mpImp->pHCGraphic = 0;
     mpImp->mnGraphicVersion = 0;
 }
 
 EmbeddedObjectRef::~EmbeddedObjectRef()
 {
     delete mpImp->pGraphic;
-    if ( mpImp->pHCGraphic )
-        DELETEZ( mpImp->pHCGraphic );
     Clear();
 }
-/*
-EmbeddedObjectRef& EmbeddedObjectRef::operator = ( const EmbeddedObjectRef& rObj )
-{
-    DBG_ASSERT( !mxObj.is(), "Never assign an already assigned object!" );
 
-    delete mpImp->pGraphic;
-    if ( mpImp->pHCGraphic ) DELETEZ( mpImp->pHCGraphic );
-    Clear();
-
-    mpImp->nViewAspect = rObj.mpImp->nViewAspect;
-    mpImp->bIsLocked = rObj.mpImp->bIsLocked;
-    mxObj = rObj.mxObj;
-    mpImp->xListener = EmbedEventListener_Impl::Create( this );
-    mpImp->pContainer = rObj.mpImp->pContainer;
-    mpImp->aPersistName = rObj.mpImp->aPersistName;
-    mpImp->aMediaType = rObj.mpImp->aMediaType;
-    mpImp->bNeedUpdate = rObj.mpImp->bNeedUpdate;
-
-    if ( rObj.mpImp->pGraphic && !rObj.mpImp->bNeedUpdate )
-        mpImp->pGraphic = new Graphic( *rObj.mpImp->pGraphic );
-    else
-        mpImp->pGraphic = 0;
-    return *this;
-}
-*/
 void EmbeddedObjectRef::Assign( const NS_UNO::Reference < NS_EMBED::XEmbeddedObject >& xObj, sal_Int64 nAspect )
 {
     DBG_ASSERT( !mxObj.is(), "Never assign an already assigned object!" );
@@ -448,8 +419,6 @@ void EmbeddedObjectRef::GetReplacement( BOOL bUpdate )
         DELETEZ( mpImp->pGraphic );
         mpImp->aMediaType = ::rtl::OUString();
         mpImp->pGraphic = new Graphic;
-        if ( mpImp->pHCGraphic )
-            DELETEZ( mpImp->pHCGraphic );
         mpImp->mnGraphicVersion++;
     }
     else if ( !mpImp->pGraphic )
@@ -546,69 +515,6 @@ Size EmbeddedObjectRef::GetSize( MapMode* pTargetMapMode ) const
     return aResult;
 }
 
-Graphic* EmbeddedObjectRef::GetHCGraphic() const
-{
-    if ( !mpImp->pHCGraphic )
-    {
-        uno::Reference< io::XInputStream > xInStream;
-        try
-        {
-            // if the object needs size on load, that means that it is not our object
-            // currently the HC mode is supported only for OOo own objects so the following
-            // check is used as an optimization
-            // TODO/LATER: shouldn't there be a special status flag to detect alien implementation?
-            if ( mpImp->nViewAspect == embed::Aspects::MSOLE_CONTENT
-              && mxObj.is() && !( mxObj->getStatus( mpImp->nViewAspect ) & embed::EmbedMisc::EMBED_NEEDSSIZEONLOAD ) )
-            {
-                // TODO/LATER: optimization, it makes no sence to do it for OLE objects
-                if ( mxObj->getCurrentState() == embed::EmbedStates::LOADED )
-                    mxObj->changeState( embed::EmbedStates::RUNNING );
-
-                // TODO: return for the aspect of the document
-                embed::VisualRepresentation aVisualRepresentation;
-                uno::Reference< datatransfer::XTransferable > xTransferable( mxObj->getComponent(), uno::UNO_QUERY );
-                if ( !xTransferable.is() )
-                    throw uno::RuntimeException();
-
-                datatransfer::DataFlavor aDataFlavor(
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice-highcontrast-gdimetafile;windows_formatname=\"GDIMetaFile\"" )),
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "GDIMetaFile" )),
-                        ::getCppuType( (const uno::Sequence< sal_Int8 >*) NULL ) );
-
-                uno::Sequence < sal_Int8 > aSeq;
-                if ( ( xTransferable->getTransferData( aDataFlavor ) >>= aSeq ) && aSeq.getLength() )
-                    xInStream = new ::comphelper::SequenceInputStream( aSeq );
-            }
-        }
-        catch ( uno::Exception& )
-        {
-        }
-
-        if ( xInStream.is() )
-        {
-            SvStream* pStream = NULL;
-            pStream = ::utl::UcbStreamHelper::CreateStream( xInStream );
-            if ( pStream )
-            {
-                if ( !pStream->GetError() )
-                {
-                    GraphicFilter* pGF = GraphicFilter::GetGraphicFilter();
-                    Graphic* pGraphic = new Graphic();
-                    if ( pGF->ImportGraphic( *pGraphic, String(), *pStream, GRFILTER_FORMAT_DONTKNOW ) == 0 )
-                        mpImp->pHCGraphic = pGraphic;
-                    else
-                        delete pGraphic;
-                    mpImp->mnGraphicVersion++;
-                }
-
-                delete pStream;
-            }
-        }
-    }
-
-    return mpImp->pHCGraphic;
-}
-
 void EmbeddedObjectRef::SetGraphicStream( const uno::Reference< io::XInputStream >& xInGrStream,
                                             const ::rtl::OUString& rMediaType )
 {
@@ -616,8 +522,6 @@ void EmbeddedObjectRef::SetGraphicStream( const uno::Reference< io::XInputStream
         delete mpImp->pGraphic;
     mpImp->pGraphic = new Graphic();
     mpImp->aMediaType = rMediaType;
-    if ( mpImp->pHCGraphic )
-        DELETEZ( mpImp->pHCGraphic );
     mpImp->mnGraphicVersion++;
 
     SvStream* pGraphicStream = ::utl::UcbStreamHelper::CreateStream( xInGrStream );
@@ -649,8 +553,6 @@ void EmbeddedObjectRef::SetGraphic( const Graphic& rGraphic, const ::rtl::OUStri
         delete mpImp->pGraphic;
     mpImp->pGraphic = new Graphic( rGraphic );
     mpImp->aMediaType = rMediaType;
-    if ( mpImp->pHCGraphic )
-        DELETEZ( mpImp->pHCGraphic );
     mpImp->mnGraphicVersion++;
 
     if ( mpImp->pContainer )
@@ -886,8 +788,6 @@ void EmbeddedObjectRef::UpdateReplacementOnDemand()
 {
     DELETEZ( mpImp->pGraphic );
     mpImp->bNeedUpdate = sal_True;
-    if ( mpImp->pHCGraphic )
-        DELETEZ( mpImp->pHCGraphic );
     mpImp->mnGraphicVersion++;
 
     if( mpImp->pContainer )

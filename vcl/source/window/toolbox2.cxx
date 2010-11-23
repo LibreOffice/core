@@ -2412,11 +2412,9 @@ void ToolBox::ImplUpdateImageList()
 {
     if (mpData->mpImageListProvider != NULL)
     {
-        BOOL bHC = GetSettings().GetStyleSettings().GetHighContrastMode();
         try
         {
-            ImageListType eType = bHC ? vcl::HIGHCONTRAST_YES : vcl::HIGHCONTRAST_NO;
-
+            ImageListType eType = vcl::HIGHCONTRAST_NO;
             if (eType != mpData->meImageListType)
             {
                 vcl::IImageListProvider* pImageListProvider = mpData->mpImageListProvider;
