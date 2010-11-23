@@ -789,7 +789,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
     ::com::sun::star::uno::Any aAny;
     if ( GetPropertyValue( aAny, mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "ParaLeftMargin" ) ) ) )
     {
-        sal_Int32 nVal;
+        sal_Int32 nVal(0);
         if ( aAny >>= nVal )
             nTextOfs = static_cast< sal_Int16 >( nVal / ( 2540.0 / 576 ) + 0.5 ) ;
     }

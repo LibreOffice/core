@@ -1188,7 +1188,7 @@ void PowerPointExport::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNu
     const char* pShow = NULL;
 
     if( GETA( Visible ) ) {
-    sal_Bool bShow;
+    sal_Bool bShow(sal_False);
     if( ( mAny >>= bShow ) && !bShow )
         pShow = "0";
     }
