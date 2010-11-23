@@ -32,7 +32,7 @@ Module gid_Module_Optional_Pyuno
     MOD_NAME_DESC ( MODULE_OPTIONAL_PYTHON );
     ParentID = gid_Module_Optional;
     Sortkey = "750";
-    Files = (gid_File_Pyuno,gid_File_Lib_Pyuno,gid_File_Lib_Pythonloader,gid_File_Py_Unohelper,gid_File_Py_Officehelper,gid_File_Py_Uno,gid_File_Py_Pythonloader,gid_File_Py_Python_Core,gid_File_Py_Python_Bin,gid_File_Lib_Python_So, gid_File_Lib_Python_So_Brand, gid_File_Py_Scriptprovider,gid_File_Py_Pythonscript,gid_File_Scripts_Python,gid_File_Share_Registry_Pyuno_Xcd);
+    Files = (gid_File_Pyuno,gid_File_Lib_Pyuno,gid_File_Lib_Pythonloader,gid_File_Py_Unohelper,gid_File_Py_Officehelper,gid_File_Py_Uno,gid_File_Py_Pythonloader,gid_File_Py_Python_Core,gid_File_Py_Python_Bin,gid_File_Lib_Python_So,gid_Shortcut_Lib_Python_So,gid_File_Lib_Python_So_Brand, gid_File_Py_Scriptprovider,gid_File_Py_Pythonscript,gid_File_Scripts_Python,gid_File_Share_Registry_Pyuno_Xcd);
     Minimal = NO;
     Default = YES;
     Styles = ( );
