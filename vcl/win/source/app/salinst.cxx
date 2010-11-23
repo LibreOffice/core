@@ -47,7 +47,7 @@
 #include <salobj.h>
 #include <vcl/salsys.hxx>
 #include <saltimer.h>
-#include <vcl/salatype.hxx>
+#include <vcl/apptypes.hxx>
 #include <salbmp.h>
 #include <vcl/salimestatus.hxx>
 #include <vcl/timer.hxx>
