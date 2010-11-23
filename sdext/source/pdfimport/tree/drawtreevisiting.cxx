@@ -678,7 +678,6 @@ void DrawXmlOptimizer::optimizeTextElements(Element& rParent)
     // concatenate child elements with same font id
     std::list< Element* >::iterator next = rParent.Children.begin();
     std::list< Element* >::iterator it = next++;
-    FrameElement* pFrame = dynamic_cast<FrameElement*>(rParent.Parent);
 
     while( next != rParent.Children.end() )
     {
