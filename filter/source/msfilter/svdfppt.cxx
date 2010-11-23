@@ -1475,9 +1475,9 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const S
 
         if ( bOk && ( nPersistPtrAnz < ( SAL_MAX_UINT32 / sizeof( UINT32 ) ) ) )
             pPersistPtr = new (std::nothrow) UINT32[ nPersistPtrAnz ];
-        if ( bOk && !pPersistPtr )
+        if ( !pPersistPtr )
             bOk = FALSE;
-        else
+        if ( bOk )
         {
             memset( pPersistPtr, 0x00, nPersistPtrAnz * 4 );
 
