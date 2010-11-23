@@ -35,7 +35,6 @@
 #include "vcl/salinst.hxx"
 #include "vcl/salgtype.hxx"
 #include "vcl/salgdi.hxx"
-#include "vcl/salctrlhandle.hxx"
 
 #include "vcl/unohelp.hxx"
 #include "tools/time.hxx"

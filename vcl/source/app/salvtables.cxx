@@ -38,7 +38,6 @@
 #include <vcl/salbmp.hxx>
 #include <vcl/salobj.hxx>
 #include <vcl/salmenu.hxx>
-#include <vcl/salctrlhandle.hxx>
 
 // this file contains the virtual destructors of the sal interface
 // compilers ususally put their vtables where the destructor is
@@ -159,9 +158,6 @@ Rectangle SalMenu::GetMenuBarButtonRectPixel( USHORT, SalFrame* )
 }
 
 SalMenuItem::~SalMenuItem()
-{
-}
-SalControlHandle::~SalControlHandle()
 {
 }
 

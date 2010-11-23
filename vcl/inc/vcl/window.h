@@ -56,7 +56,6 @@ class VirtualDevice;
 class Cursor;
 class ImplDevFontList;
 class ImplFontCache;
-class SalControlHandle;
 class VCLXWindow;
 class SalFrame;
 class SalObject;

@@ -36,7 +36,6 @@
 #include "vos/thread.hxx"
 #include "vcl/outdev.hxx"
 #include "vcl/salnativewidgets.hxx"
-#include "vcl/salctrlhandle.hxx"
 
 #include <map>
 
