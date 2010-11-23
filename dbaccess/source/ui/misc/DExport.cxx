@@ -290,7 +290,7 @@ ODatabaseExport::ODatabaseExport(const SharedConnection& _rxConnection,
                 break;
             }
         }
-    } // if(xSet.is())
+    }
     if ( !m_pTypeInfo )
         m_pTypeInfo = TOTypeInfoSP(new OTypeInfo());
     SetColumnTypes(pList,_pInfoMap);
@@ -326,9 +326,6 @@ void ODatabaseExport::insertValueIntoColumn()
                 sal_Int32 nPos = m_vColumns[nNewPos].first;
                 if ( nPos != COLUMN_POSITION_NOT_FOUND )
                 {
-    //                  if(m_nDefToken != LANGUAGE_DONTKNOW) // falls Sprache anders als Systemsprache
-    //                      m_pNF->ChangeIntl((LanguageType)m_nDefToken);
-
                     if ( !m_sTextToken.Len() && pField->IsNullable() )
                         m_pUpdateHelper->updateNull(nPos,pField->GetType());
                     else
@@ -790,7 +787,7 @@ void ODatabaseExport::showErrorDialog(const ::com::sun::star::sdbc::SQLException
             m_bDontAskAgain = TRUE;
         else
             m_bError = TRUE;
-    } // if(!m_bDontAskAgain)
+    }
 }
 // -----------------------------------------------------------------------------
 void ODatabaseExport::adjustFormat()

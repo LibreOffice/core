@@ -233,8 +233,6 @@ SQLExceptionInfo createConnection(  const Reference< ::com::sun::star::beans::XP
     catch(SQLException& e) { aInfo = SQLExceptionInfo(e); }
     catch(Exception&) { OSL_ENSURE(0,"SbaTableQueryBrowser::OnExpandEntry: could not connect - unknown exception!"); }
 
-    //  showError(aInfo);
-
     return aInfo;
 }
 // -----------------------------------------------------------------------------
@@ -419,11 +417,6 @@ TOTypeInfoSP getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
             // -> drop the precision and the scale restriction, accept any type with the property
             // type id (nType)
 
-            //OSL_ENSURE(sal_False,
-            //  (   ::rtl::OString("getTypeInfoFromType: did not find a matching type")
-            //  +=  ::rtl::OString(" (expected type name: ")
-            //  +=  ::rtl::OString(_sTypeName.getStr(), _sTypeName.getLength(), gsl_getSystemTextEncoding())
-            //  +=  ::rtl::OString(")! Defaulting to the first matching type.")).getStr());
             for(aIter = aPair.first; aIter != aPair.second; ++aIter)
             {
                 // search the best matching type (now comparing the local names)
@@ -947,7 +940,7 @@ sal_Bool callColumnFormatDialog(Window* _pParent,
                                 sal_Bool  _bHasFormat)
 {
     sal_Bool bRet = sal_False;
-    // the allowed format changes depend of the type of the field ...
+    // the allowed format changes depending on the type of the field ...
     _nFlags = TP_ATTR_ALIGN;
 
     if (_bHasFormat)
@@ -1448,13 +1441,13 @@ TOTypeInfoSP queryTypeInfoByType(sal_Int32 _nDataType,const OTypeInfoMap& _rType
             break;
         default:
             ;
-    } // switch(_nDataType)
+    }
     if ( !pTypeInfo )
     {
         ::rtl::OUString sCreate(RTL_CONSTASCII_USTRINGPARAM("x")),sTypeName;
         sal_Bool bForce = sal_True;
         pTypeInfo = ::dbaui::getTypeInfoFromType(_rTypeInfo,DataType::VARCHAR,sTypeName,sCreate,50,0,sal_False,bForce);
-    } // if ( !pTypeInfo )
+    }
     OSL_ENSURE(pTypeInfo,"Wrong DataType supplied!");
     return pTypeInfo;
 }

@@ -315,8 +315,6 @@ sal_Bool ORTFReader::CreateTable(int nToken)
                 }
                 break;
             case RTF_CF:
-                //  if(nTokenValue < m_vecColor.size())
-                    //  m_xTable->setPropertyValue(PROPERTY_TEXTCOLOR,makeAny(m_vecColor[nTokenValue]));
                 break;
             case RTF_B:
                 aFont.Weight = ::com::sun::star::awt::FontWeight::BOLD;

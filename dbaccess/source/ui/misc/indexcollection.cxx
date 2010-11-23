@@ -65,12 +65,6 @@ namespace dbaui
     }
 
     //------------------------------------------------------------------
-//  OIndexCollection::OIndexCollection(const Reference< XNameAccess >& _rxIndexes)
-//  {
-//      implConstructFrom(_rxIndexes);
-//  }
-
-    //------------------------------------------------------------------
     const OIndexCollection& OIndexCollection::operator=(const OIndexCollection& _rSource)
     {
         detach();

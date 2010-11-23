@@ -295,11 +295,6 @@ namespace dbaui
                 const Window* pContainerWindow = VCLUnoHelper::GetWindow( xContainerWindow );
                 ENSURE_OR_THROW( pContainerWindow, "no Window implementation for the frame's container window!" );
 
-                /*const Window* pContainerParentWindow = pContainerWindow->GetParent();
-                if ( pContainerParentWindow && ( pContainerParentWindow->GetType() == WINDOW_BORDERWINDOW ) )
-                    pContainerParentWindow = pContainerParentWindow->GetParent();
-                m_pData->m_bIsTopLevelDocumentWindow = ( pContainerParentWindow == NULL );*/
-
                 m_pData->m_bIsTopLevelDocumentWindow = ( pContainerWindow->GetExtendedStyle() & WB_EXT_DOCUMENT ) != 0;
             }
 

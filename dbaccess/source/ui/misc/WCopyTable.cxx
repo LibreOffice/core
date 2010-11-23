@@ -1025,7 +1025,7 @@ IMPL_LINK( OCopyTableWizard, ImplActivateHdl, WizardDialog*, EMPTYARG )
 void OCopyTableWizard::CheckButtons()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::CheckButtons" );
-    if(GetCurLevel() == 0) // erste Seite hat kein PrevButton
+    if(GetCurLevel() == 0) // the first page has no back button
     {
         if(m_nPageCount > 1)
             m_pbNext.Enable(sal_True);
@@ -1034,7 +1034,7 @@ void OCopyTableWizard::CheckButtons()
 
         m_pbPrev.Enable(sal_False);
     }
-    else if(GetCurLevel() == m_nPageCount-1) // letzte Seite hat keinen Next Button
+    else if(GetCurLevel() == m_nPageCount-1) // the last page has no next button
     {
         m_pbNext.Enable(sal_False);
         m_pbPrev.Enable(sal_True);
@@ -1042,7 +1042,7 @@ void OCopyTableWizard::CheckButtons()
     else
     {
         m_pbPrev.Enable(sal_True);
-        // next has already his state
+        // next already has its state
     }
 }
 // -----------------------------------------------------------------------

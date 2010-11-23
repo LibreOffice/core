@@ -161,7 +161,6 @@ sal_Bool OWizColumnSelect::LeavePage()
 {
     DBG_CHKTHIS(OWizColumnSelect,NULL);
 
-    //  m_pParent->getColumns()->clear();
     m_pParent->clearDestColumns();
 
     for(sal_uInt16 i=0 ; i< m_lbNewColumnNames.GetEntryCount();++i)

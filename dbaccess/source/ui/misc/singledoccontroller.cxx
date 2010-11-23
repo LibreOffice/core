@@ -667,13 +667,6 @@ namespace dbaui
             sTitle.appendAscii(" : ");
         }
         sTitle.append( getPrivateTitle() );
-        // There can be only one view with the same object
-        //const sal_Int32 nCurrentView = getCurrentStartNumber();
-        //if ( nCurrentView > 1 )
-        //{
-        //    sTitle.appendAscii(" : ");
-        //    sTitle.append(nCurrentView);
-        //}
 
         return sTitle.makeStringAndClear();
     }

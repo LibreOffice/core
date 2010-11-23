@@ -163,7 +163,6 @@ sal_Bool OWizNameMatching::LeavePage()
             ;
         const sal_Int32 nPos = ::std::distance(pSrcColumns->begin(),aSrcIter);
 
-        //  sal_Int32 nPos = m_CTRL_LEFT.GetModel()->GetAbsPos(pLeftEntry);
         if(m_CTRL_LEFT.GetCheckButtonState(pLeftEntry) == SV_BUTTON_CHECKED)
         {
             OFieldDescription* pDestField = static_cast<OFieldDescription*>(pRightEntry->GetUserData());

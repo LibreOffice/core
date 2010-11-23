@@ -360,7 +360,6 @@ namespace dbaui
 
                 com::sun::star::sdbc::SQLException aSQLException;
                 aSQLException.Message = sMessage;
-                // aSQLException.Context = e.Context;
                 aInfo = dbtools::SQLExceptionInfo(aSQLException);
             }
             return xRet;
