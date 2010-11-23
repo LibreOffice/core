@@ -409,8 +409,17 @@ void SAL_DLLPUBLIC_EXPORT plugin_shutdown_sys_tray()
     ::SolarMutexGuard aGuard;
     if( !pTrayIcon )
         return;
-    gtk_widget_destroy( GTK_WIDGET( pTrayIcon ) );
+
+    /* we have to set pTrayIcon to NULL now, because gtk_widget_destroy
+     * causes calling exit_quickstarter_cb (which then calls this func.)
+     * again -> crash.
+     * As an alternative, we could deregister the "destroy" signal here,
+     * but this is simpler .-)
+     */
+    GtkWidget* const pIcon = GTK_WIDGET( pTrayIcon );
     pTrayIcon = NULL;
+    gtk_widget_destroy( pIcon );
+
     pExitMenuItem = NULL;
     pOpenMenuItem = NULL;
     pDisableMenuItem = NULL;
