@@ -570,7 +570,7 @@ void ODBExport::exportConnectionData()
                         sURL.append(sal_Unicode('/'));
 
                     AddAttribute(XML_NAMESPACE_XLINK,XML_HREF,GetRelativeReference(sURL.makeStringAndClear()));
-                } // if ( sOrigUrl == sFileName )
+                }
                 else
                     AddAttribute(XML_NAMESPACE_XLINK,XML_HREF,sOrigUrl);
                 AddAttribute(XML_NAMESPACE_DB,XML_MEDIA_TYPE,m_aTypeCollection.getMediaType(sValue));
@@ -591,7 +591,6 @@ void ODBExport::exportConnectionData()
                 }
                 catch(const Exception&)
                 {
-                    // nii
                 }
                 SvXMLElementExport aFileBasedDB(*this,XML_NAMESPACE_DB, XML_FILE_BASED_DATABASE, sal_True, sal_True);
             }

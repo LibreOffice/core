@@ -346,7 +346,7 @@ void OCreationList::KeyInput( const KeyEvent& rKEvt )
         {
             InvalidateEntry( pNewCurrent );
             CallEventListeners( VCLEVENT_LISTBOX_SELECT, pNewCurrent );
-        } // if ( pNewCurrent )
+        }
         updateHelpText();
     }
 }
@@ -697,7 +697,6 @@ const TaskPaneData& OApplicationDetailView::impl_getTaskPaneData( ElementType _e
     OSL_ENSURE( ( _eType >= 0 ) && ( _eType < E_ELEMENT_TYPE_COUNT ), "OApplicationDetailView::impl_getTaskPaneData: illegal element type!" );
     TaskPaneData& rData = m_aTaskPaneData[ _eType ];
 
-//    if ( rData.aTasks.empty() )
     //oj: do not check, otherwise extensions will only be visible after a reload.
     impl_fillTaskPaneData( _eType, rData );
 

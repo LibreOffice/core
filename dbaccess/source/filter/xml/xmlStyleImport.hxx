@@ -51,7 +51,6 @@ namespace dbaxml
         ::rtl::OUString             sPageStyle;
         const rtl::OUString         sNumberFormat;
         SvXMLStylesContext*         pStyles;
-        //  std::vector<ScXMLMapContent>    aMaps;
         com::sun::star::uno::Any    aConditionalFormat;
         sal_Int32                   m_nNumberFormat;
         sal_Bool                    bConditionalFormatCreated : 1;

@@ -131,7 +131,7 @@ OXMLDataSourceInfo::OXMLDataSourceInfo( ODBFilter& rImport
                 aProperty.Name = INFO_THOUSANDSDELIMITER;
                 aProperty.Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","));
                 rImport.addInfo(aProperty);
-            } // if ( !bFoundThousand )
+            }
         }
         if ( XML_TOK_FONT_CHARSET == _nToken && !bFoundCharset )
         {

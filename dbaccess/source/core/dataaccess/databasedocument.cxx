@@ -1991,7 +1991,6 @@ uno::Reference< frame::XUntitledNumbers > ODatabaseDocument::impl_getUntitledHel
     }
     catch(uno::Exception)
     {
-        // ni
     }
     uno::Reference< frame::XUntitledNumbers > xNumberedControllers;
 

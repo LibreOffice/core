@@ -43,11 +43,9 @@ using namespace ::dbtools;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
-//  using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
-//  using namespace ::cppu;
 using namespace ::osl;
 
 void OBookmarkSet::construct(const Reference< XResultSet>& _xDriverSet,const ::rtl::OUString& i_sRowSetFilter)
@@ -204,8 +202,6 @@ void OBookmarkSet::updateColumn(sal_Int32 nPos,Reference< XRowUpdate > _xParamet
                     break;
                 case DataType::CHAR:
                 case DataType::VARCHAR:
-                //case DataType::DECIMAL:
-                //case DataType::NUMERIC:
                     _xParameter->updateString(nPos,_rValue);
                     break;
                 case DataType::BIGINT:

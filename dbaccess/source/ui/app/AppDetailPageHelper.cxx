@@ -1290,34 +1290,25 @@ void OAppDetailPageHelper::DataChanged( const DataChangedEvent& rDCEvt )
 void OAppDetailPageHelper::ImplInitSettings()
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-    if( true )
-    {
         Font aFont;
         aFont = rStyleSettings.GetFieldFont();
         aFont.SetColor( rStyleSettings.GetWindowTextColor() );
         SetPointFont( aFont );
         m_aTBPreview.SetPointFont( aFont );
-    }
 
-    if( true )
-    {
         SetTextColor( rStyleSettings.GetFieldTextColor() );
         SetTextFillColor();
         m_aBorder.SetTextColor( rStyleSettings.GetFieldTextColor() );
         m_aBorder.SetTextFillColor();
         m_aTBPreview.SetTextColor( rStyleSettings.GetFieldTextColor() );
         m_aTBPreview.SetTextFillColor();
-    } // if( true )
 
-    if( true )
-    {
         SetBackground( rStyleSettings.GetFieldColor() );
         m_aBorder.SetBackground( rStyleSettings.GetFieldColor() );
         m_aFL.SetBackground( rStyleSettings.GetFieldColor() );
         m_aDocumentInfo.SetBackground( rStyleSettings.GetFieldColor() );
         m_aTBPreview.SetBackground( rStyleSettings.GetFieldColor() );
         m_pTablePreview->SetBackground( rStyleSettings.GetFieldColor() );
-    } // if( true )
 }
 // -----------------------------------------------------------------------------
 OPreviewWindow::OPreviewWindow(Window* _pParent)

@@ -437,9 +437,6 @@ Sequence< Any > OContentHelper::setPropertyValues(const Sequence< PropertyValue 
 
     if ( nChanged > 0 )
     {
-        // @@@ Save changes.
-//      storeData();
-
         notifyDataSourceModified();
         aGuard.clear();
         aChanges.realloc( nChanged );

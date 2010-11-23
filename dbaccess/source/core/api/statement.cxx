@@ -113,7 +113,7 @@ Any OStatementBase::queryInterface( const Type & rType ) throw (RuntimeException
             Reference< XGeneratedResultSet > xGRes(m_xAggregateAsSet, UNO_QUERY);
             if ( ::getCppuType( (const Reference< XGeneratedResultSet > *)0 ) == rType && xGRes.is() )
                 aIface = ::cppu::queryInterface(rType,static_cast< XGeneratedResultSet * >( this ));
-        } // if ( !aIface.hasValue() )
+        }
         if ( !aIface.hasValue() )
         {
             Reference< XPreparedBatchExecution > xGRes(m_xAggregateAsSet, UNO_QUERY);

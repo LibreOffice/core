@@ -97,11 +97,7 @@ public class RowSet extends ComplexTestCase
                 for (int i = 0; m_resultSet.next(); ++i)
                 {
                     int pos = m_resultSet.getRow();
-                    // final int val = m_row.getInt(1);
-//                    log.println("Clone Move(" + m_id +")  before i: " + (i+1) + " Pos: " + pos + " Val: " + val);
                     testPosition(m_resultSet, m_row, i + 1, "clone move(" + m_id + ")");
-//                    val = m_row.getInt(1);
-//                    log.println("Clone Move(" + m_id +") after i: " + (i+1) + " Pos: " + pos + " Val: " + val);
                     int pos2 = m_resultSet.getRow();
                     assure("ResultSetMovementStress wrong position: " + i + " Pos1: " + pos + " Pos2: " + pos2, pos == pos2);
                 }
@@ -380,7 +376,6 @@ public class RowSet extends ComplexTestCase
         log.println("testing Thread");
         try
         {
-            // final XRow _row = (XRow)UnoRuntime.queryInterface(XRow.class,_resultSet);
             _resultSet.beforeFirst();
 
             final int numberOfThreads = 10;

@@ -173,7 +173,6 @@ void SAL_CALL DatabaseDataProvider::initialize(const uno::Sequence< uno::Any > &
 // chart2::data::XDataProvider:
 ::sal_Bool SAL_CALL DatabaseDataProvider::createDataSourcePossible(const uno::Sequence< beans::PropertyValue > & _aArguments) throw (uno::RuntimeException)
 {
-    //::osl::ResettableMutexGuard aClearForNotifies(m_aMutex);
     const beans::PropertyValue* pArgIter = _aArguments.getConstArray();
     const beans::PropertyValue* pArgEnd  = pArgIter + _aArguments.getLength();
     for(;pArgIter != pArgEnd;++pArgIter)

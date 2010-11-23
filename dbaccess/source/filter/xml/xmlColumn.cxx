@@ -101,7 +101,6 @@ OXMLColumn::OXMLColumn( ODBFilter& rImport
             case XML_TOK_COLUMN_DEFAULT_VALUE:
                 if ( sValue.getLength() && sType.getLength() )
                     m_aDefaultValue <<= sValue;
-                //    SvXMLUnitConverter::convertAny(m_aDefaultValue,sType,sValue);
                 break;
             case XML_TOK_COLUMN_VISIBLE:
                 m_bHidden = sValue.equalsAscii("false");
@@ -152,7 +151,7 @@ void OXMLColumn::EndElement()
                         pAutoStyle->FillPropertySet(xProp);
                     }
                 }
-            } // if ( m_sStyleName.getLength() )
+            }
             if ( m_sCellStyleName.getLength() )
             {
                 const SvXMLStylesContext* pAutoStyles = GetOwnImport().GetAutoStyles();
@@ -169,7 +168,7 @@ void OXMLColumn::EndElement()
             }
 
         }
-    } // if ( xFac.is() && m_sName.getLength() )
+    }
     else if ( m_sCellStyleName.getLength() )
     {
         const SvXMLStylesContext* pAutoStyles = GetOwnImport().GetAutoStyles();

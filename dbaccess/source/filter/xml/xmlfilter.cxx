@@ -199,7 +199,7 @@ namespace dbaxml
                 if ( m_aTypeCollection.needsJVM(sURL) )
                 {
                     pCreatorThread = new FastLoader(m_xFactory,FastLoader::E_JAVA);
-                } // if ( m_aTypeCollection.needsJVM(sURL) )
+                }
                 else if ( sURL.matchIgnoreAsciiCaseAsciiL("sdbc:calc:",10,0) )
                 {
                     pCreatorThread = new FastLoader(m_xFactory,FastLoader::E_CALC);
@@ -846,10 +846,8 @@ SvXMLImportContext* ODBFilter::CreateStylesContext(sal_uInt16 _nPrefix,const ::r
     {
         pContext = new OTableStylesContext(*this, _nPrefix, rLocalName, xAttrList, bIsAutoStyle);
         if (bIsAutoStyle)
-            //xAutoStyles = pContext;
             SetAutoStyles((SvXMLStylesContext*)pContext);
         else
-            //xStyles = pContext;
             SetStyles((SvXMLStylesContext*)pContext);
     }
     return pContext;

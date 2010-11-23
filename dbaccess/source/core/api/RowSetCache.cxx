@@ -264,9 +264,6 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
         // need to check if we could handle this select clause
         bAllKeysFound = bAllKeysFound && (nTablesCount == 1 || checkJoin(xConnection,_xAnalyzer,aUpdateTableName));
 
-        // || !(comphelper::hasProperty(PROPERTY_CANUPDATEINSERTEDROWS,xProp) && any2bool(xProp->getPropertyValue(PROPERTY_CANUPDATEINSERTEDROWS)))
-
-        // oj removed because keyset uses only the next// || (xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_RESULTSETTYPE) && comphelper::getINT32(xProp->getPropertyValue(PROPERTY_RESULTSETTYPE)) == ResultSetType::FORWARD_ONLY)
         if(!bAllKeysFound )
         {
             m_pCacheSet = new OStaticSet();
@@ -663,8 +660,6 @@ sal_Bool ORowSetCache::isFirst(  )
 
 sal_Bool ORowSetCache::isLast(  )
 {
-    //  return m_bRowCountFinal ? (m_nPosition==m_nRowCount) : m_pCacheSet->isLast();
-
     return m_nPosition == m_nRowCount;
 }
 
@@ -755,7 +750,6 @@ sal_Bool ORowSetCache::fillMatrix(sal_Int32& _nNewStartPos,sal_Int32 _nNewEndPos
         }
         bCheck = m_pCacheSet->next();
     }
-    //  m_nStartPos = _nNewStartPos;
     // we have to read one row forward to enshure that we know when we are on last row
     // but only when we don't know it already
     if(!m_bRowCountFinal)
@@ -932,9 +926,6 @@ sal_Bool ORowSetCache::moveWindow()
             sal_Bool bCheck = m_pCacheSet->absolute(nPos);
             bCheck = fill(aIter,aEnd,nPos,bCheck); // refill the region wew don't need anymore
 
-//          // we know that this is the current maximal rowcount here
-//          if ( !m_bRowCountFinal && bCheck )
-//              m_nRowCount = std::max(nPos,m_nRowCount);
             // we have to read one row forward to enshure that we know when we are on last row
             // but only when we don't know it already
             sal_Bool bOk = sal_True;

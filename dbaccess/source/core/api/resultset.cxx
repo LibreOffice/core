@@ -50,7 +50,6 @@
 
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
-//using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
