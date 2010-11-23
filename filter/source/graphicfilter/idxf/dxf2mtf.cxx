@@ -48,21 +48,6 @@ ULONG DXF2GDIMetaFile::CountEntities(const DXFEntities & rEntities)
     return nRes;
 }
 
-
-void DXF2GDIMetaFile::MayCallback(ULONG /*nMainEntitiesProcessed*/)
-{
-    // ULONG nPercent;
-/*
-    if (pCallback!=NULL && nMainEntitiesCount!=0) {
-        nPercent=nMinPercent+(nMaxPercent-nMinPercent)*nMainEntitiesProcessed/nMainEntitiesCount;
-        if (nPercent>=nLastPercent+4) {
-            if (((*pCallback)(pCallerData,(USHORT)nPercent))==TRUE) bStatus=FALSE;
-            nLastPercent=nPercent;
-        }
-    }
-*/
-}
-
 Color DXF2GDIMetaFile::ConvertColor(BYTE nColor)
 {
     return Color(
@@ -506,7 +491,7 @@ void DXF2GDIMetaFile::DrawInsertEntity(const DXFInsertEntity & rE, const DXFTran
                 aParentLayerDXFLineInfo=LTypeToDXFLineInfo(pLayer->sLineType);
             }
         }
-        DrawEntities(*pB,aT,FALSE);
+        DrawEntities(*pB,aT);
         aBlockDXFLineInfo=aSavedBlockDXFLineInfo;
         aParentLayerDXFLineInfo=aSavedParentLayerDXFLineInfo;
         nBlockColor=nSavedBlockColor;
@@ -757,7 +742,7 @@ void DXF2GDIMetaFile::DrawDimensionEntity(const DXFDimensionEntity & rE, const D
                 aParentLayerDXFLineInfo=LTypeToDXFLineInfo(pLayer->sLineType);
             }
         }
-        DrawEntities(*pB,aT,FALSE);
+        DrawEntities(*pB,aT);
         aBlockDXFLineInfo=aSavedBlockDXFLineInfo;
         aParentLayerDXFLineInfo=aSavedParentLayerDXFLineInfo;
         nBlockColor=nSavedBlockColor;
@@ -767,8 +752,7 @@ void DXF2GDIMetaFile::DrawDimensionEntity(const DXFDimensionEntity & rE, const D
 
 
 void DXF2GDIMetaFile::DrawEntities(const DXFEntities & rEntities,
-                                   const DXFTransform & rTransform,
-                                   BOOL bTopEntities)
+                                   const DXFTransform & rTransform)
 {
     ULONG nCount=0;
     DXFTransform aET;
@@ -834,7 +818,6 @@ void DXF2GDIMetaFile::DrawEntities(const DXFEntities & rEntities,
         }
         pE=pE->pSucc;
         nCount++;
-        if (bTopEntities) MayCallback(nCount);
     }
 }
 
@@ -957,7 +940,7 @@ BOOL DXF2GDIMetaFile::Convert(const DXFRepresentation & rDXF, GDIMetaFile & rMTF
     }
 
     if (bStatus==TRUE)
-        DrawEntities(pDXF->aEntities,aTransform,TRUE);
+        DrawEntities(pDXF->aEntities,aTransform);
 
     rMTF.Stop();
 
