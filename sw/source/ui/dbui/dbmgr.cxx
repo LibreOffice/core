@@ -1745,7 +1745,7 @@ String SwNewDBMgr::GetDBField(uno::Reference<XPropertySet> xColumnProps,
             try
             {
                 SwDbtoolsClient& aClient = SwNewDBMgr::GetDbtoolsClient();
-                sRet = aClient.getValue(
+                sRet = aClient.getFormattedValue(
                     xColumnProps,
                     rDBFormatData.xFormatter,
                     rDBFormatData.aLocale,
