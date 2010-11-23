@@ -588,6 +588,7 @@ private:
     bool mbUseFormerTextWrapping            : 1;    // FME 2005-05-11 #108724#
     bool mbConsiderWrapOnObjPos             : 1;    // OD  2004-05-05 #i28701#
                                                     // TRUE: object positioning algorithm has consider the wrapping style of                                                    //       the floating screen objects as given by its attribute 'WrapInfluenceOnObjPos'
+    bool mbMathBaselineAlignment            : 1;    // TL  2010-10-29 #i972#
 
     // non-ui-compatibility flags:
     bool mbOldNumbering                             : 1;   // HBRINKM #111955#
