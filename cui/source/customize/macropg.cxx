@@ -124,7 +124,6 @@ IMPL_LINK( _HeaderTabListBox, HeaderEndDrag_Impl, HeaderBar*, pBar )
     {
         Size    aSz;
         USHORT    _nTabs = maHeaderBar.GetItemCount();
-        long    nTmpSz = 0;
         long    nWidth = maHeaderBar.GetItemSize( ITEMID_EVENT );
         long    nBarWidth = maHeaderBar.GetSizePixel().Width();
 
@@ -134,7 +133,7 @@ IMPL_LINK( _HeaderTabListBox, HeaderEndDrag_Impl, HeaderBar*, pBar )
             maHeaderBar.SetItemSize( ITEMID_EVENT, nBarWidth - TAB_WIDTH_MIN );
 
         {
-            long    _nWidth;
+            long _nWidth, nTmpSz = 0;
             for( USHORT i = 1 ; i < _nTabs ; ++i )
             {
                 _nWidth = maHeaderBar.GetItemSize( i );
