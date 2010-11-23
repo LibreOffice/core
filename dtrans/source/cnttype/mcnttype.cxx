@@ -49,7 +49,7 @@ using namespace osl;
 // constants
 //------------------------------------------------------------------------
 
-const OUString TSPECIALS = OUString::createFromAscii( "()<>@,;:\\\"/[]?=" );
+const OUString TSPECIALS (RTL_CONSTASCII_USTRINGPARAM( "()<>@,;:\\\"/[]?=" ));
 const OUString TOKEN     (RTL_CONSTASCII_USTRINGPARAM("!#$%&'*+-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ^_`abcdefghijklmnopqrstuvwxyz{|}~."));
 const OUString SPACE     (RTL_CONSTASCII_USTRINGPARAM(" "));
 const OUString SEMICOLON (RTL_CONSTASCII_USTRINGPARAM(";"));
@@ -323,12 +323,12 @@ OUString SAL_CALL CMimeContentType::pValue( )
     OUString pvalue;
 
     // quoted pvalue
-    if ( m_nxtSym == OUString::createFromAscii( "\"" ) )
+    if ( m_nxtSym == OUString(RTL_CONSTASCII_USTRINGPARAM( "\"" )) )
     {
         getSym( );
         pvalue = quotedPValue( );
 
-        if (  OUString( &pvalue[pvalue.getLength() - 1], 1 ) != OUString::createFromAscii( "\"" ) )
+        if (  OUString( &pvalue[pvalue.getLength() - 1], 1 ) != OUString(RTL_CONSTASCII_USTRINGPARAM( "\"" )) )
             throw IllegalArgumentException( );
 
         // remove the last quote-sign
@@ -366,7 +366,7 @@ OUString SAL_CALL CMimeContentType::quotedPValue( )
         else if ( isInRange( m_nxtSym, TOKEN + TSPECIALS + SPACE ) )
         {
             pvalue += m_nxtSym;
-            if ( m_nxtSym == OUString::createFromAscii( "\"" ) )
+            if ( m_nxtSym == OUString(RTL_CONSTASCII_USTRINGPARAM( "\"" )) )
                 bAfterQuoteSign = sal_True;
             else
                 bAfterQuoteSign = sal_False;

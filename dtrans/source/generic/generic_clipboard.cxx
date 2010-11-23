@@ -76,7 +76,7 @@ void SAL_CALL GenericClipboard::initialize( const Sequence< Any >& aArguments )
 OUString SAL_CALL GenericClipboard::getImplementationName(  )
     throw(RuntimeException)
 {
-    return OUString::createFromAscii(GENERIC_CLIPBOARD_IMPLEMENTATION_NAME);
+    return OUString(RTL_CONSTASCII_USTRINGPARAM(GENERIC_CLIPBOARD_IMPLEMENTATION_NAME));
 }
 
 // ------------------------------------------------------------------------

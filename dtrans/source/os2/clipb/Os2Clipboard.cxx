@@ -134,7 +134,7 @@ void SAL_CALL Os2Clipboard::initialize( const Sequence< Any >& aArguments )
 OUString SAL_CALL Os2Clipboard::getImplementationName() throw( RuntimeException )
 {
     debug_printf("Os2Clipboard::getImplementationName\n");
-    return OUString::createFromAscii( OS2_CLIPBOARD_IMPL_NAME );
+    return OUString(RTL_CONSTASCII_USTRINGPARAM( OS2_CLIPBOARD_IMPL_NAME ));
 }
 
 sal_Bool SAL_CALL Os2Clipboard::supportsService( const OUString& ServiceName ) throw( RuntimeException )
@@ -239,7 +239,7 @@ void SAL_CALL Os2Clipboard::setContents( const Reference< XTransferable >& xTran
     // we can only export text or bitmap
     DataFlavor nFlavorText( OUString(RTL_CONSTASCII_USTRINGPARAM("text/plain;charset=utf-16")),
                         OUString(RTL_CONSTASCII_USTRINGPARAM("Unicode-Text")), CPPUTYPE_OUSTRING);
-    DataFlavor nFlavorBitmap( OUString::createFromAscii( "application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"" ),
+    DataFlavor nFlavorBitmap( OUString(RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"" )),
                         OUString(RTL_CONSTASCII_USTRINGPARAM("Bitmap")), CPPUTYPE_DEFAULT);
 
     // try text transfer data (if any)
@@ -414,7 +414,7 @@ void SAL_CALL Os2Clipboard::notifyAllClipboardListener( )
 Sequence< OUString > SAL_CALL Os2Clipboard_getSupportedServiceNames()
 {
     Sequence< OUString > aRet(1);
-    aRet[0] = OUString::createFromAscii( OS2_CLIPBOARD_SERVICE_NAME );
+    aRet[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( OS2_CLIPBOARD_SERVICE_NAME ));
     return aRet;
 }
 

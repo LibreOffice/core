@@ -293,7 +293,7 @@ void SAL_CALL CWinClipboard::disposing()
 OUString SAL_CALL CWinClipboard::getImplementationName(  )
     throw(RuntimeException)
 {
-    return OUString::createFromAscii( WINCLIPBOARD_IMPL_NAME );
+    return OUString(RTL_CONSTASCII_USTRINGPARAM( WINCLIPBOARD_IMPL_NAME ));
 }
 
 // -------------------------------------------------

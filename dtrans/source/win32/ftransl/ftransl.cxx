@@ -60,7 +60,7 @@
 #define CPPUTYPE_SALINT32         getCppuType( ( sal_Int32 * ) 0 )
 #define OUSTR( str )              OUString::createFromAscii( #str )
 #define OUSTR_( str )             OUString::createFromAscii( str )
-#define EMPTY_OUSTR               OUString(RTL_CONSTASCII_USTRINGPARAM(""))
+#define EMPTY_OUSTR               OUString()
 //#define PRIVATE_OO                  OUString::createFromAscii( "application/x-openoffice;" "windows_formatname=" )
 
 const rtl::OUString Windows_FormatName (RTL_CONSTASCII_USTRINGPARAM("windows_formatname"));
@@ -236,7 +236,7 @@ DataFlavor SAL_CALL CDataFormatTranslator::getDataFlavorFromSystemDataType( cons
 OUString SAL_CALL CDataFormatTranslator::getImplementationName(  )
     throw( RuntimeException )
 {
-    return OUString::createFromAscii( IMPL_NAME );
+    return OUString(RTL_CONSTASCII_USTRINGPARAM( IMPL_NAME ));
 }
 
 // -------------------------------------------------

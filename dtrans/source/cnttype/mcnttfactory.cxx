@@ -94,7 +94,7 @@ Reference< XMimeContentType > CMimeContentTypeFactory::createMimeContentType( co
 OUString SAL_CALL CMimeContentTypeFactory::getImplementationName(  )
     throw( RuntimeException )
 {
-    return OUString::createFromAscii( MIMECONTENTTYPEFACTORY_IMPL_NAME );
+    return OUString(RTL_CONSTASCII_USTRINGPARAM( MIMECONTENTTYPEFACTORY_IMPL_NAME ));
 }
 
 // -------------------------------------------------

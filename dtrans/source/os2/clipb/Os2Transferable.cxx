@@ -66,7 +66,7 @@ Os2Transferable::Os2Transferable(
         }
         handle = UWinQueryClipbrdData( hAB, UCLIP_CF_BITMAP);
         if (handle) {
-            aFlavor.MimeType = OUString::createFromAscii( "application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"" );
+            aFlavor.MimeType = OUString(RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"" ));
             aFlavor.DataType = getCppuType( (OUString*)0 );
             //debug_printf("Os2Transferable::Os2Transferable pszText %s\n", pszText);
         }
@@ -115,7 +115,7 @@ Any SAL_CALL Os2Transferable::getTransferData( const DataFlavor& rFlavor )
     }
 
     // retrieve bitmap
-    if( rFlavor.MimeType.equalsIgnoreAsciiCase( OUString::createFromAscii( "application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"" ) ) )
+    if( rFlavor.MimeType.equalsIgnoreAsciiCase( OUString(RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"" )) ) )
     {
         if( UWinOpenClipbrd( hAB ) )
         {

@@ -63,7 +63,7 @@ ClipboardManager::~ClipboardManager()
 OUString SAL_CALL ClipboardManager::getImplementationName(  )
     throw(RuntimeException)
 {
-    return OUString::createFromAscii(CLIPBOARDMANAGER_IMPLEMENTATION_NAME);
+    return OUString(RTL_CONSTASCII_USTRINGPARAM(CLIPBOARDMANAGER_IMPLEMENTATION_NAME));
 }
 
 // ------------------------------------------------------------------------
