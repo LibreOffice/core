@@ -787,6 +787,7 @@ public:
 
     SC_DLLPUBLIC void           GetString( SCCOL nCol, SCROW nRow, SCTAB nTab, String& rString );
     SC_DLLPUBLIC void           GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab, String& rString );
+    sal_uInt16                  GetStringForFormula( const ScAddress& rPos, rtl::OUString& rString );
     SC_DLLPUBLIC double         GetValue( const ScAddress& );
     SC_DLLPUBLIC void           GetValue( SCCOL nCol, SCROW nRow, SCTAB nTab, double& rValue );
     SC_DLLPUBLIC double         RoundValueAsShown( double fVal, ULONG nFormat );

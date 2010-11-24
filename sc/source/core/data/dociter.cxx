@@ -541,7 +541,8 @@ SCSIZE ScDBQueryDataIterator::SearchColEntryIndex(ScDocument& rDoc, SCTAB nTab, 
 ScDBQueryDataIterator::DataAccessInternal::DataAccessInternal(const ScDBQueryDataIterator* pParent, ScDBQueryParamInternal* pParam, ScDocument* pDoc) :
     DataAccess(pParent),
     mpParam(pParam),
-    mpDoc(pDoc)
+    mpDoc(pDoc),
+    bCalcAsShown( pDoc->GetDocOptions().IsCalcAsShown() )
 {
     nCol = mpParam->mnField;
     nRow = mpParam->nRow1;
