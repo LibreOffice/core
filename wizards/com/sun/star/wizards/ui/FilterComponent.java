@@ -112,6 +112,7 @@ public class FilterComponent
     final int SO_THIRDBOOLFIELDNAME = 256 + 3;
     final int SO_FOURTHBOOLFIELDNAME = 256 + 4;
     int SO_BOOLEANLIST[] =
+
     {
         SO_FIRSTBOOLFIELDNAME, SO_SECONDBOOLFIELDNAME, SO_THIRDBOOLFIELDNAME, SO_FOURTHBOOLFIELDNAME
     };
@@ -122,6 +123,7 @@ public class FilterComponent
 
     class ItemListenerImpl implements com.sun.star.awt.XItemListener
     {
+
         public void itemStateChanged(com.sun.star.awt.ItemEvent EventObject)
         {
             int iKey = CurUnoDialog.getControlKey(EventObject.Source, CurUnoDialog.ControlList);
@@ -247,10 +249,10 @@ public class FilterComponent
 
                 column.addProperty("Type", PropertyAttribute.BOUND, DataType.VARCHAR);
                 column.addProperty(PropertyNames.PROPERTY_NAME, PropertyAttribute.BOUND, "");
-                column.addProperty("Value", (short)( PropertyAttribute.MAYBEVOID | PropertyAttribute.REMOVABLE ), null );
+                column.addProperty("Value", (short) (PropertyAttribute.MAYBEVOID | PropertyAttribute.REMOVABLE), null);
                 final XPropertySet columnSet = UnoRuntime.queryInterface(XPropertySet.class, column);
 
-                if ( composer.getQuery().length() == 0)
+                if (composer.getQuery().length() == 0)
                 {
                     final String fromClause = composer.getFromClause();
                     StringBuilder sql = new StringBuilder();
@@ -259,7 +261,9 @@ public class FilterComponent
                     sql.append(fromClause);
                     composer.getQueryComposer().setElementaryQuery(sql.toString());
                 }
-                composer.getQueryComposer().setStructuredFilter( new PropertyValue[][] {} );
+                composer.getQueryComposer().setStructuredFilter(new PropertyValue[][]
+                        {
+                        });
                 for (int i = 0; i < RowCount; i++)
                 {
                     ControlRow currentControlRow = oControlRows[i];
@@ -273,27 +277,28 @@ public class FilterComponent
                             columnSet.setPropertyValue(PropertyNames.PROPERTY_NAME, aFieldColumn.getFieldName());
                             columnSet.setPropertyValue("Type", aFieldColumn.getXColumnPropertySet().getPropertyValue("Type"));
                             Object value = currentControlRow.getValue();
-                            switch(aFieldColumn.getFieldType())
+                            switch (aFieldColumn.getFieldType())
                             {
                                 case DataType.TIMESTAMP:
                                 case DataType.DATE:
-                                    value = ((Double)value) - oQueryMetaData.getNullDateCorrection();
+                                    value = ((Double) value) - oQueryMetaData.getNullDateCorrection();
                                     break;
                             }
-                            column.removeProperty( "Value" );
+                            column.removeProperty("Value");
                             final short operator = currentControlRow.getSelectedOperator();
-                            if  (   ( operator == SQLFilterOperator.SQLNULL )
-                                ||  ( operator == SQLFilterOperator.NOT_SQLNULL )
-                                ||  AnyConverter.isVoid( value )
-                                )
+                            if ((operator == SQLFilterOperator.SQLNULL)
+                                    || (operator == SQLFilterOperator.NOT_SQLNULL)
+                                    || AnyConverter.isVoid(value))
                             {
-                                column.addProperty("Value", (short)( PropertyAttribute.MAYBEVOID | PropertyAttribute.REMOVABLE ), new String() );
-                                value = new Any( new Type( TypeClass.VOID ), null );
+                                column.addProperty("Value", (short) (PropertyAttribute.MAYBEVOID | PropertyAttribute.REMOVABLE), new String());
+                                value = new Any(new Type(TypeClass.VOID), null);
                             }
                             else
-                                column.addProperty("Value", (short)( PropertyAttribute.MAYBEVOID | PropertyAttribute.REMOVABLE ), value );
+                            {
+                                column.addProperty("Value", (short) (PropertyAttribute.MAYBEVOID | PropertyAttribute.REMOVABLE), value);
+                            }
                             columnSet.setPropertyValue("Value", value);
-                            composer.getQueryComposer().appendFilterByColumn(columnSet, getfilterstate() == this.SOI_MATCHALL,nOperator);
+                            composer.getQueryComposer().appendFilterByColumn(columnSet, getfilterstate() == this.SOI_MATCHALL, nOperator);
                         }
                     }
                 }
@@ -305,7 +310,9 @@ public class FilterComponent
                     String smsgDuplicateCondition = getDisplayCondition(sDuplicateCondition, aduplicatecondition, null);
                     CurUnoDialog.showMessageBox("WarningBox", VclWindowPeerAttribute.OK, smsgDuplicateCondition);
                     CurUnoDialog.vetoableChange(new java.beans.PropertyChangeEvent(CurUnoDialog, "Steps", Integer.valueOf(1), Integer.valueOf(2)));
-                    return new PropertyValue[][]{};
+                    return new PropertyValue[][]
+                            {
+                            };
                 }
             }
             catch (Exception ex)
@@ -335,10 +342,12 @@ public class FilterComponent
                 FieldName = _filtercondition.Name;
             }
             String sreturn = JavaTools.replaceSubString(_BaseString, FieldName, "<FIELDNAME>");
-            String soperator = sLogicOperators[_filtercondition.Handle - 1];
+            String soperator = sLogicOperators[_filtercondition.Handle-1];
             sreturn = JavaTools.replaceSubString(sreturn, soperator, "<LOGICOPERATOR>");
             String sDisplayValue = "";
-            if (!AnyConverter.isVoid(_filtercondition.Value))
+            if ((_filtercondition.Handle != SQLFilterOperator.SQLNULL)
+                    && (_filtercondition.Handle != SQLFilterOperator.NOT_SQLNULL)
+                    && !AnyConverter.isVoid(_filtercondition.Value))
             {
                 sDisplayValue = AnyConverter.toString(_filtercondition.Value);
             }
@@ -532,6 +541,7 @@ public class FilterComponent
     // -------------------------------------------------------------------------
     final class ControlRow
     {
+
         private final static int SOLSTFIELDNAME = 3;
         private final static int SOLSTOPERATOR = 4;
         private final static int SOTXTVALUE = 5;
