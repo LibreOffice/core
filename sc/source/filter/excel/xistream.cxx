@@ -28,6 +28,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
+#include <comphelper/docpasswordhelper.hxx>
+#include <comphelper/sequenceashashmap.hxx>
+
 #include "xistream.hxx"
 #include "xlstring.hxx"
 #include "xiroot.hxx"
@@ -153,7 +156,26 @@ uno::Sequence< beans::NamedValue > XclImpBiff5Decrypter::OnVerifyPassword( const
         maCodec.InitKey( (sal_uInt8*)aBytePassword.getStr() );
 
         if ( maCodec.VerifyKey( mnKey, mnHash ) )
+        {
             maEncryptionData = maCodec.GetEncryptionData();
+
+            // since the export uses Std97 encryption always we have to request it here
+            ::std::vector< sal_uInt16 > aPassVect( 16 );
+            ::std::vector< sal_uInt16 >::iterator aIt = aPassVect.begin();
+            for( sal_Int32 nInd = 0; nInd < nLen; ++nInd, ++aIt )
+                *aIt = static_cast< sal_uInt16 >( rPassword.getStr()[nInd] );
+
+            uno::Sequence< sal_Int8 > aDocId = ::comphelper::DocPasswordHelper::GenerateRandomByteSequence( 16 );
+            OSL_ENSURE( aDocId.getLength() == 16, "Unexpected length of the senquence!" );
+
+            ::msfilter::MSCodec_Std97 aCodec97;
+            aCodec97.InitKey( &aPassVect.front(), (sal_uInt8*)aDocId.getConstArray() );
+
+            // merge the EncryptionData, there should be no conflicts
+            ::comphelper::SequenceAsHashMap aEncryptionHash( maEncryptionData );
+            aEncryptionHash.update( ::comphelper::SequenceAsHashMap( aCodec97.GetEncryptionData() ) );
+            aEncryptionHash >> maEncryptionData;
+        }
     }
 
     return maEncryptionData;

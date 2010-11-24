@@ -600,7 +600,7 @@ void XclExpBiff8Encrypter::Init( const uno::Sequence< beans::NamedValue >& aEncr
         // generate salt hash.
         ::msfilter::MSCodec_Std97 aCodec;
         aCodec.InitCodec( aEncryptionData );
-        aCodec.GetDigestFromSalt( mpnSalt, mpnSaltDigest );
+        aCodec.CreateSaltDigest( mpnSalt, mpnSaltDigest );
 
         // verify to make sure it's in good shape.
         mbValid = maCodec.VerifyKey( mpnSalt, mpnSaltDigest );
