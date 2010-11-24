@@ -1171,8 +1171,8 @@ void UpdateDialog::getIgnoredUpdates()
         ::rtl::OUString aIdentifier = aElementNames[i];
         ::rtl::OUString aVersion;
 
-        uno::Any aValue( uno::Reference< beans::XPropertySet >( xNameAccess->getByName( aIdentifier ), uno::UNO_QUERY_THROW )->getPropertyValue( PROPERTY_VERSION ) );
-        aValue >>= aVersion;
+        uno::Any aPropValue( uno::Reference< beans::XPropertySet >( xNameAccess->getByName( aIdentifier ), uno::UNO_QUERY_THROW )->getPropertyValue( PROPERTY_VERSION ) );
+        aPropValue >>= aVersion;
         IgnoredUpdate *pData = new IgnoredUpdate( aIdentifier, aVersion );
         m_ignoredUpdates.push_back( pData );
     }
@@ -1492,13 +1492,13 @@ IMPL_LINK( UpdateDialog, hyperlink_clicked, svt::FixedHyperlink*, pHyperlink )
 
     try
     {
-        uno::Reference< system::XSystemShellExecute > xSystemShellExecute(
+        uno::Reference< com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
             m_context->getServiceManager()->createInstanceWithContext(
                 OUSTR( "com.sun.star.system.SystemShellExecute" ),
                 m_context), uno::UNO_QUERY_THROW);
         //throws lang::IllegalArgumentException, system::SystemShellExecuteException
         xSystemShellExecute->execute(
-            sURL, ::rtl::OUString(), system::SystemShellExecuteFlags::DEFAULTS);
+                                     sURL, ::rtl::OUString(), com::sun::star::system::SystemShellExecuteFlags::DEFAULTS);
     }
     catch (uno::Exception& )
     {
