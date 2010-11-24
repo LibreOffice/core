@@ -759,74 +759,71 @@ IMPL_LINK( SvxColorTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
             pColTab->SetName( aURL.getName() ); // XXX
             if( pColTab->Load() )
             {
-                if( pColTab )
+                // Pruefen, ob Tabelle geloescht werden darf:
+                const XColorTable *pTempTable = 0;
+                SvxAreaTabDialog* pArea = dynamic_cast< SvxAreaTabDialog* >( DLGWIN );
+                SvxLineTabDialog* pLine = dynamic_cast< SvxLineTabDialog* >( DLGWIN );
+                if( pArea )
                 {
-                    // Pruefen, ob Tabelle geloescht werden darf:
-                    const XColorTable *pTempTable = 0;
-                    SvxAreaTabDialog* pArea = dynamic_cast< SvxAreaTabDialog* >( DLGWIN );
-                    SvxLineTabDialog* pLine = dynamic_cast< SvxLineTabDialog* >( DLGWIN );
-                    if( pArea )
-                    {
-                        pTempTable = pArea->GetColorTable();
-                    }
-                    else if( pLine )
-                    {
-                            pTempTable = pLine->GetColorTable();
-                    }
-
-                    if( pColorTab != pTempTable )
-                    {
-                        if( bDeleteColorTable )
-                            delete pColorTab;
-                        else
-                            bDeleteColorTable = TRUE;
-                    }
-
-                    pColorTab = pColTab;
-                    if( pArea )
-                    {
-                        pArea->SetNewColorTable( pColorTab );
-                    }
-                    else if( pLine )
-                    {
-                        pLine->SetNewColorTable( pColorTab );
-                    }
-
-                    aLbColor.Clear();
-                    aValSetColorTable.Clear();
-                    Construct();
-                    Reset( rOutAttrs );
-
-                    pColorTab->SetName( aURL.getName() );
-
-                    // Ermitteln (evtl. abschneiden) des Namens und in
-                    // der GroupBox darstellen
-                    String aString( ResId( RID_SVXSTR_TABLE, rMgr ) );
-                    aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
-
-                    if ( aURL.getBase().getLength() > 18 )
-                    {
-                        aString += String(aURL.getBase()).Copy( 0, 15 );
-                        aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "..." ) );
-                    }
-                    else
-                        aString += String(aURL.getBase());
-
-                    aTableNameFT.SetText( aString );
-
-                    // Flag fuer gewechselt setzen
-                    *pnColorTableState |= CT_CHANGED;
-                    // Flag fuer modifiziert entfernen
-                    *pnColorTableState &= ~CT_MODIFIED;
-
-                    if( aLbColor.GetSelectEntryPos() == LISTBOX_ENTRY_NOTFOUND )
-                        aLbColor.SelectEntryPos( 0 );
-                    else
-                        aLbColor.SelectEntryPos( aLbColor.GetSelectEntryPos() );
-
-                    ChangeColorHdl_Impl( this );
-                    SelectColorLBHdl_Impl( this );
+                    pTempTable = pArea->GetColorTable();
                 }
+                else if( pLine )
+                {
+                        pTempTable = pLine->GetColorTable();
+                }
+
+                if( pColorTab != pTempTable )
+                {
+                    if( bDeleteColorTable )
+                        delete pColorTab;
+                    else
+                        bDeleteColorTable = TRUE;
+                }
+
+                pColorTab = pColTab;
+                if( pArea )
+                {
+                    pArea->SetNewColorTable( pColorTab );
+                }
+                else if( pLine )
+                {
+                    pLine->SetNewColorTable( pColorTab );
+                }
+
+                aLbColor.Clear();
+                aValSetColorTable.Clear();
+                Construct();
+                Reset( rOutAttrs );
+
+                pColorTab->SetName( aURL.getName() );
+
+                // Ermitteln (evtl. abschneiden) des Namens und in
+                // der GroupBox darstellen
+                String aString( ResId( RID_SVXSTR_TABLE, rMgr ) );
+                aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
+
+                if ( aURL.getBase().getLength() > 18 )
+                {
+                    aString += String(aURL.getBase()).Copy( 0, 15 );
+                    aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "..." ) );
+                }
+                else
+                    aString += String(aURL.getBase());
+
+                aTableNameFT.SetText( aString );
+
+                // Flag fuer gewechselt setzen
+                *pnColorTableState |= CT_CHANGED;
+                // Flag fuer modifiziert entfernen
+                *pnColorTableState &= ~CT_MODIFIED;
+
+                if( aLbColor.GetSelectEntryPos() == LISTBOX_ENTRY_NOTFOUND )
+                    aLbColor.SelectEntryPos( 0 );
+                else
+                    aLbColor.SelectEntryPos( aLbColor.GetSelectEntryPos() );
+
+                ChangeColorHdl_Impl( this );
+                SelectColorLBHdl_Impl( this );
             }
             else
             {
