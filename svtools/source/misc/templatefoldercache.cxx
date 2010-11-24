@@ -490,7 +490,6 @@ namespace svt
         void        storeState( sal_Bool _bForceRetrieval );
 
     private:
-        void        initTemplDirs( ::std::vector< String >& _rRootDirs );
         sal_Bool    openCacheStream( sal_Bool _bForRead );
         void        closeCacheStream( );
 
@@ -836,11 +835,6 @@ namespace svt
             }
         }
         return m_bNeedsUpdate;
-    }
-
-    //---------------------------------------------------------------------
-    void TemplateFolderCacheImpl::initTemplDirs( ::std::vector< String >& )
-    {
     }
 
     //---------------------------------------------------------------------
