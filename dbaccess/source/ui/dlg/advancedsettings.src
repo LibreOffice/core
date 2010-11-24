@@ -351,7 +351,6 @@ TabDialog DLG_DATABASE_ADVANCED
     {
         OutputSize = TRUE ;
         HelpId = HID_DSADMIN_TABCONTROL;
-        SingleLine=TRUE;
     };
 
     String STR_GENERATED_VALUE
