@@ -670,12 +670,9 @@ SwUndoIdAndName * lcl_GetUndoIdAndName(const SwUndos & rUndos, sal_uInt16 nPos )
                    for first objects that is not a UNDO_END.
                  */
                 int nTmpPos = nPos + pUndoStart->GetEndOffset();
-                int nSubstitute = -1;
-
-                // --> OD 2009-09-30 #i105457#
-                if ( nTmpPos > 0 )
-                // <--
+                if ( nTmpPos > 0 ) // #i105457# Segmentation Fault opening graphics placeholder
                 {
+                    int nSubstitute = -1;
                     SwUndo * pTmpUndo;
                     do
                     {
@@ -714,11 +711,11 @@ SwUndoIdAndName * lcl_GetUndoIdAndName(const SwUndos & rUndos, sal_uInt16 nPos )
                  */
 
                 int nTmpPos = nPos;
-                int nUndoStart = nTmpPos - pUndoEnd->GetSttOffset();
-                int nSubstitute = -1;
 
                 if (nTmpPos > 0)
                 {
+                    int nUndoStart = nTmpPos - pUndoEnd->GetSttOffset();
+                    int nSubstitute = -1;
                     SwUndo * pTmpUndo;
 
                     do
