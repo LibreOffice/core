@@ -31,6 +31,7 @@
 #include "doctemplates.hxx"
 #include <vos/mutex.hxx>
 #include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -42,6 +43,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <unotools/pathoptions.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/componentcontext.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
@@ -59,7 +61,6 @@
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/uno/Exception.hpp>
-#include <com/sun/star/util/XOfficeInstallationDirectories.hpp>
 
 #include <svtools/templatefoldercache.hxx>
 #include <unotools/configmgr.hxx>
@@ -2876,11 +2877,35 @@ void SfxURLRelocator_Impl::initOfficeInstDirs()
 }
 
 // -----------------------------------------------------------------------
+void SfxURLRelocator_Impl::implExpandURL( ::rtl::OUString& io_url )
+{
+    const INetURLObject aParser( io_url );
+    if ( aParser.GetProtocol() != INET_PROT_VND_SUN_STAR_EXPAND )
+        return;
+
+    io_url = aParser.GetURLPath( INetURLObject::DECODE_WITH_CHARSET );
+    try
+    {
+        if ( !mxMacroExpander.is() )
+        {
+            ::comphelper::ComponentContext aContext( mxFactory );
+            mxMacroExpander.set( aContext.getSingleton( "com.sun.star.util.theMacroExpander" ), UNO_QUERY_THROW );
+        }
+        io_url = mxMacroExpander->expandMacros( io_url );
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+}
+
+// -----------------------------------------------------------------------
 void SfxURLRelocator_Impl::makeRelocatableURL( rtl::OUString & rURL )
 {
     if ( rURL.getLength() > 0 )
     {
         initOfficeInstDirs();
+        implExpandURL( rURL );
         rURL = mxOfficeInstDirs->makeRelocatableURL( rURL );
     }
 }
@@ -2891,6 +2916,7 @@ void SfxURLRelocator_Impl::makeAbsoluteURL( rtl::OUString & rURL )
     if ( rURL.getLength() > 0 )
     {
         initOfficeInstDirs();
+        implExpandURL( rURL );
         rURL = mxOfficeInstDirs->makeAbsoluteURL( rURL );
     }
 }
