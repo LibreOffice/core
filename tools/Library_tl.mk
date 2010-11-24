@@ -44,8 +44,8 @@ $(eval $(call gb_Library_set_include,tl,\
     -I$(OUTDIR)/inc/stl \
 ))
 
-$(eval $(call gb_Library_set_cxxflags,tl,\
-    $$(CXXFLAGS) \
+$(eval $(call gb_Library_set_defs,tl,\
+    $$(DEFS) \
     -DSHARED_LIB \
     -DTOOLS_DLLIMPLEMENTATION \
     -DVCL \
