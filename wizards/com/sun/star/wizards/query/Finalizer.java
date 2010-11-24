@@ -26,15 +26,15 @@
  ************************************************************************/
 package com.sun.star.wizards.query;
 
-import com.sun.star.wizards.common.*;
 import com.sun.star.awt.XRadioButton;
 import com.sun.star.awt.XTextComponent;
-import com.sun.star.wizards.db.*;
 import com.sun.star.lang.IllegalArgumentException;
-import com.sun.star.lang.XComponent;
 import com.sun.star.sdb.CommandType;
-import com.sun.star.uno.*;
-import com.sun.star.wizards.ui.*;
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.wizards.common.HelpIds;
+import com.sun.star.wizards.common.Helper;
+import com.sun.star.wizards.ui.UIConsts;
+import com.sun.star.wizards.ui.UnoDialog;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -145,7 +145,7 @@ public class Finalizer
                 {
                     String[] sCommandNames = CurDBMetaData.getIncludedCommandNames();
                     sCurQueryName = resQuery + "_" + sCommandNames[0];
-                    sCurQueryName = CurDBMetaData.ConnectionTools.getObjectNames().suggestName(CommandType.QUERY, sCurQueryName);
+                    sCurQueryName = CurDBMetaData.suggestName( CommandType.QUERY, sCurQueryName );
                     Helper.setUnoPropertyValue(UnoDialog.getModel(m_aTxtTitle), "Text", sCurQueryName);
                 }
             }

@@ -102,7 +102,7 @@ public class DBMetaData
     public int[] CommandTypes;
     public String DataSourceName;
     public com.sun.star.sdbc.XConnection DBConnection;
-    public com.sun.star.sdb.tools.XConnectionTools ConnectionTools;
+    private com.sun.star.sdb.tools.XConnectionTools m_connectionTools;
     public com.sun.star.lang.XMultiServiceFactory xMSF;
     public XComponent xConnectionComponent;
 
@@ -677,7 +677,7 @@ public class DBMetaData
         try
         {
             this.DBConnection = _DBConnection;
-            this.ConnectionTools = UnoRuntime.queryInterface( XConnectionTools.class, this.DBConnection );
+            this.m_connectionTools = UnoRuntime.queryInterface( XConnectionTools.class, this.DBConnection );
             getDataSourceObjects();
             return true;
         }
@@ -740,7 +740,7 @@ public class DBMetaData
             else
             {
                 xConnectionComponent = UnoRuntime.queryInterface( XComponent.class, DBConnection );
-                ConnectionTools = UnoRuntime.queryInterface( XConnectionTools.class, DBConnection );
+                m_connectionTools = UnoRuntime.queryInterface( XConnectionTools.class, DBConnection );
                 getDataSourceObjects();
             }
             return bgetConnection;
@@ -825,6 +825,16 @@ public class DBMetaData
         return false;
     }
 
+    public boolean supportsQueriesInFrom()
+    {
+        return m_connectionTools.getDataSourceMetaData().supportsQueriesInFrom();
+    }
+
+    public String suggestName( final int i_objectType, final String i_baseName ) throws IllegalArgumentException
+    {
+        return m_connectionTools.getObjectNames().suggestName( i_objectType, i_baseName );
+    }
+
     /**
      * inserts a Query to a datasource; There is no validation if the queryname is already existing in the datasource
      * @param oQuery
@@ -844,7 +854,7 @@ public class DBMetaData
             xPSet.setPropertyValue("Command", s);
 
             XNameContainer xNameCont = UnoRuntime.queryInterface( XNameContainer.class, xQueryDefs );
-            ConnectionTools.getObjectNames().checkNameForCreate(com.sun.star.sdb.CommandType.QUERY, _QueryName);
+            m_connectionTools.getObjectNames().checkNameForCreate(com.sun.star.sdb.CommandType.QUERY, _QueryName);
             xNameCont.insertByName(_QueryName, oQuery);
             return true;
         }
@@ -1080,7 +1090,7 @@ public class DBMetaData
         }
         catch (com.sun.star.uno.Exception ex)
         {
-            ex.printStackTrace();
+            Logger.getLogger( getClass().getName() ).log( Level.SEVERE, "error calling the error dialog", ex );
         }
     }
 
@@ -1095,7 +1105,7 @@ public class DBMetaData
         xDataSourcePropertySet = null;
         xWindowPeer = null;
         DBConnection = null;
-        ConnectionTools = null;
+        m_connectionTools = null;
         xMSF = null;
         xConnectionComponent = null;
         CommandObjects = null;

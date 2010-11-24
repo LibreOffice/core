@@ -308,7 +308,9 @@ public class QueryWizard extends DatabaseObjectWizard
     {
         try
         {
-            m_DBCommandFieldSelectio = new CommandFieldSelection(this, m_DBMetaData, 120, reslblFields, reslblSelFields, reslblTables, true, 40850);
+            m_DBCommandFieldSelectio = new CommandFieldSelection(
+                this, m_DBMetaData, 120, reslblFields, reslblSelFields, reslblTables,
+                m_DBMetaData.supportsQueriesInFrom(), 40850);
             m_DBCommandFieldSelectio.setAppendMode(true);
             m_DBCommandFieldSelectio.addFieldSelectionListener(new FieldSelectionListener());
             m_sortingComponent = new SortingComponent(this, SOSORTING_PAGE, 95, 27, 210, 40865);
