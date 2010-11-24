@@ -477,7 +477,7 @@ CustomAnimationList::CustomAnimationList( ::Window* pParent, const ResId& rResId
 ,   mpController( pController )
 ,   mpLastParentEntry(0)
 {
-    SetWindowBits( WinBits( WB_TABSTOP | WB_BORDER | WB_HASLINES | WB_HASBUTTONS | WB_HASBUTTONSATROOT ) );
+    SetStyle( GetStyle() | WB_TABSTOP | WB_BORDER | WB_HASLINES | WB_HASBUTTONS | WB_HASBUTTONSATROOT );
 
     EnableContextMenuHandling();
     SetSelectionMode( MULTIPLE_SELECTION );
