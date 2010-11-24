@@ -401,7 +401,7 @@ OExceptionChainDialog::OExceptionChainDialog( Window* pParent, const ExceptionDi
     m_aExceptionList.SetSelectionMode(SINGLE_SELECTION);
     m_aExceptionList.SetDragDropMode(0);
     m_aExceptionList.EnableInplaceEditing(sal_False);
-    m_aExceptionList.SetWindowBits(WB_HASLINES | WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HSCROLL);
+    m_aExceptionList.SetStyle(m_aExceptionList.GetStyle() | WB_HASLINES | WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HSCROLL);
 
     m_aExceptionList.SetSelectHdl(LINK(this, OExceptionChainDialog, OnExceptionSelected));
     m_aExceptionList.SetNodeDefaultImages( );

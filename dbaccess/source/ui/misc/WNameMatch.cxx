@@ -92,8 +92,8 @@ OWizNameMatching::OWizNameMatching( Window* pParent)
     m_CTRL_RIGHT.SetSelectHdl(LINK(this,OWizNameMatching,TableListRightSelectHdl));
     m_CTRL_RIGHT.EnableCheckButton( NULL );
 
-    m_CTRL_LEFT.SetWindowBits( WB_FORCE_MAKEVISIBLE );
-    m_CTRL_RIGHT.SetWindowBits( WB_FORCE_MAKEVISIBLE );
+    m_CTRL_LEFT.SetStyle( m_CTRL_LEFT.GetStyle() | WB_FORCE_MAKEVISIBLE );
+    m_CTRL_RIGHT.SetStyle( m_CTRL_RIGHT.GetStyle() | WB_FORCE_MAKEVISIBLE );
 
     m_sSourceText   = m_FT_TABLE_LEFT.GetText();
     m_sSourceText.AppendAscii("\n");
@@ -405,7 +405,7 @@ OColumnTreeBox::OColumnTreeBox( Window* pParent, const ResId& rResId )
 {
     SetDragDropMode( 0 );
     EnableInplaceEditing( sal_False );
-    SetWindowBits(WB_BORDER | WB_HASBUTTONS | WB_HSCROLL);
+    SetStyle(GetStyle() | WB_BORDER | WB_HASBUTTONS | WB_HSCROLL);
     SetSelectionMode( SINGLE_SELECTION );
 }
 //------------------------------------------------------------------------
