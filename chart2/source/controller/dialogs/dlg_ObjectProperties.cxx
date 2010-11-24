@@ -324,7 +324,6 @@ uno::Reference< chart2::XChartDocument > ObjectPropertiesDialogParameter::getDoc
     return m_xChartDocument;
 }
 
-//const USHORT nNoArrowDlg          = 1100;
 const USHORT nNoArrowNoShadowDlg    = 1101;
 
 //-------------------------------------------------------------------
@@ -529,7 +528,6 @@ void SchAttribTabDlg::PageCreated(USHORT nId, SfxTabPage &rPage)
                     aSet.Put(SvxGraphicItem(SID_GRAPHIC,*m_pAutoSymbolGraphic));
             }
             rPage.PageCreated(aSet);
-            //rPage.ActivatePage(*GetInputSetImpl()); //what for?
             break;
 
         case RID_SVXPAGE_AREA:
@@ -540,7 +538,6 @@ void SchAttribTabDlg::PageCreated(USHORT nId, SfxTabPage &rPage)
             aSet.Put(SfxUInt16Item(SID_PAGE_TYPE,nPageType));
             aSet.Put(SfxUInt16Item(SID_DLG_TYPE,nDlgType));
             rPage.PageCreated(aSet);
-            //rPage.ActivatePage(*GetInputSetImpl()); //what for?
             break;
 
         case RID_SVXPAGE_TRANSPARENCE:

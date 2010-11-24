@@ -317,7 +317,6 @@ rtl::OUString ObjectNameProvider::getName( ObjectType eObjectType, bool bPlural 
             }
                 break;
         case OBJECTTYPE_DATA_STOCK_RANGE:
-                //aRet=String(SchResId());
                 break;
         case OBJECTTYPE_DATA_STOCK_LOSS:
                 aRet=String(SchResId(STR_OBJECT_STOCK_LOSS));
@@ -659,11 +658,6 @@ rtl::OUString ObjectNameProvider::getHelpText( const rtl::OUString& rObjectCID, 
                         RegressionCurveHelper::initializeCurveCalculator( xCalculator, xSeries, xChartModel );
 
                         sal_Unicode aDecimalSep( '.' );
-                        // replace average value
-//                             SvtSysLocale aSysLocale;
-//                             OUString aSep( aSysLocale.GetLocaleData().getNumDecimalSep());
-//                             if( aSep.getLength() == 1 )
-//                                 aDecimalSep = aSep.toChar();
 
                         sal_Int32 nIndex = -1;
                         OUString aWildcard( C2U("%AVERAGE_VALUE") );
@@ -783,7 +777,6 @@ rtl::OUString ObjectNameProvider::getNameForCID(
             return getGridName( rObjectCID, xModel );
         case OBJECTTYPE_DATA_SERIES:
             return lcl_getFullSeriesName( rObjectCID, xModel );
-        //case OBJECTTYPE_LEGEND_ENTRY:
         case OBJECTTYPE_DATA_POINT:
         case OBJECTTYPE_DATA_LABELS:
         case OBJECTTYPE_DATA_LABEL:
