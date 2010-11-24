@@ -32,7 +32,6 @@ LIBTARGET=NO
 TARGET=shared
 LIB1TARGET=$(SLB)$/dbushared.lib
 LIB2TARGET=$(SLB)$/fltshared.lib
-LIB3TARGET=$(SLB)$/cfgshared.lib
 LIB4TARGET=$(SLB)$/sdbtshared.lib
 
 #ENABLE_EXCEPTIONS=TRUE
@@ -46,12 +45,10 @@ LIB4TARGET=$(SLB)$/sdbtshared.lib
 # --- Files -------------------------------------
 EXCEPTIONSFILES=	\
         $(SLO)$/dbu_reghelper.obj	\
-        $(SLO)$/cfg_reghelper.obj	\
         $(SLO)$/flt_reghelper.obj
         
 SLOFILES=	\
         $(EXCEPTIONSFILES)			\
-        $(SLO)$/cfgstrings.obj		\
         $(SLO)$/xmlstrings.obj		\
         $(SLO)$/dbustrings.obj
 
@@ -63,10 +60,6 @@ LIB2OBJFILES=	\
         $(SLO)$/flt_reghelper.obj	\
         $(SLO)$/xmlstrings.obj
         
-LIB3OBJFILES=	\
-        $(SLO)$/cfg_reghelper.obj	\
-        $(SLO)$/cfgstrings.obj
-
 LIB4OBJFILES=	\
         $(SLO)$/sdbtstrings.obj
 
