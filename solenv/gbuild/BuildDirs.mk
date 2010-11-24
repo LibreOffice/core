@@ -39,12 +39,10 @@ endif
 ifeq ($(strip $(gb_REPOS)),)
 gb_REPOS := $(SOLARSRC)
 endif
-SRCDIR := $(firstword $(gb_REPOS))
 
 # HACK
 # unixify windoze paths
 ifeq ($(OS),WNT)
-override SRCDIR := $(shell cygpath -u $(SRCDIR))
 override WORKDIR := $(shell cygpath -u $(WORKDIR))
 override OUTDIR := $(shell cygpath -u $(OUTDIR))
 override gb_REPOS := $(shell cygpath -u $(gb_REPOS))
