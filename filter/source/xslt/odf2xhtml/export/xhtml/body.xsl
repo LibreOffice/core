@@ -1778,7 +1778,7 @@
 		3) 'fo:text-indent' the indent of the first line of some child (e.g. paragraph) (applied by CSS class style)
 
 	Possible list children:
-	<!ELEMENT text:list-item (text:p|text:h|text:list|text:list)+>
+	<!ELEMENT text:list-item (text:p|text:h|text:list)+>
 
 	In the Office the list label before the text depends on two attributes:
 		- 'text:min-label-width': the distance between list label and all text of the list item.
