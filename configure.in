@@ -3639,10 +3639,8 @@ if test -n "$with_system_cppunit" -o -n "$with_system_libs" && \
         test "$with_system_cppunit" != "no"; then
     AC_MSG_RESULT([external])
     SYSTEM_CPPUNIT=YES
-    # might work for earlier, too but go sure. We didn't have
-    # a system-cppunit before the first version using a proper cppunit
-    # (and that being 1.12.1) anyway
-    PKG_CHECK_MODULES( CPPUNIT, cppunit >= 1.12.1 )
+    # might work for earlier, too but go sure:
+    PKG_CHECK_MODULES( CPPUNIT, cppunit >= 1.12.0 )
 else
     AC_MSG_RESULT([internal])
     SYSTEM_CPPUNIT=NO
@@ -4966,7 +4964,7 @@ AC_MSG_CHECKING([which neon to use])
 if test -n "$with_system_neon" -o -n "$with_system_libs" && \
 	test "$with_system_neon" != "no"; then
         AC_MSG_RESULT([external])
-        PKG_CHECK_MODULES(NEON, neon >= 0.24.0, , AC_MSG_ERROR([you need neon >= 0.24.x for system-neon]))
+        PKG_CHECK_MODULES(NEON, neon >= 0.26.0, , AC_MSG_ERROR([you need neon >= 0.26.x for system-neon]))
         NEON_VERSION="`$PKG_CONFIG --modversion neon | $SED 's/\.//g'`"
         NEON_CFLAGS="$NEON_CFLAGS -DSYSTEM_NEON -DUSE_DAV_LOCKS=1"
         SYSTEM_NEON=YES
