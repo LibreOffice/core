@@ -968,39 +968,36 @@ IMPL_LINK( SvxBitmapTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
             pBmpList->SetName( aURL.getName() );
             if( pBmpList->Load() )
             {
-                if( pBmpList )
+                // Pruefen, ob Tabelle geloescht werden darf:
+                if( pBitmapList != ( (SvxAreaTabDialog*) DLGWIN )->GetBitmapList() )
+                    delete pBitmapList;
+
+                pBitmapList = pBmpList;
+                ( (SvxAreaTabDialog*) DLGWIN )->SetNewBitmapList( pBitmapList );
+
+                aLbBitmaps.Clear();
+                aLbBitmaps.Fill( pBitmapList );
+                Reset( rOutAttrs );
+
+                pBitmapList->SetName( aURL.getName() );
+
+                // Ermitteln (evtl. abschneiden) des Namens und in
+                // der GroupBox darstellen
+                String aString( ResId( RID_SVXSTR_TABLE, rMgr ) );
+                aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
+
+                if ( aURL.getBase().getLength() > 18 )
                 {
-                    // Pruefen, ob Tabelle geloescht werden darf:
-                    if( pBitmapList != ( (SvxAreaTabDialog*) DLGWIN )->GetBitmapList() )
-                        delete pBitmapList;
-
-                    pBitmapList = pBmpList;
-                    ( (SvxAreaTabDialog*) DLGWIN )->SetNewBitmapList( pBitmapList );
-
-                    aLbBitmaps.Clear();
-                    aLbBitmaps.Fill( pBitmapList );
-                    Reset( rOutAttrs );
-
-                    pBitmapList->SetName( aURL.getName() );
-
-                    // Ermitteln (evtl. abschneiden) des Namens und in
-                    // der GroupBox darstellen
-                    String aString( ResId( RID_SVXSTR_TABLE, rMgr ) );
-                    aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
-
-                    if ( aURL.getBase().getLength() > 18 )
-                    {
-                        aString += String(aURL.getBase()).Copy( 0, 15 );
-                        aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "..." ) );
-                    }
-                    else
-                        aString += String(aURL.getBase());
-
-                    // Flag fuer gewechselt setzen
-                    *pnBitmapListState |= CT_CHANGED;
-                    // Flag fuer modifiziert entfernen
-                    *pnBitmapListState &= ~CT_MODIFIED;
+                    aString += String(aURL.getBase()).Copy( 0, 15 );
+                    aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "..." ) );
                 }
+                else
+                    aString += String(aURL.getBase());
+
+                // Flag fuer gewechselt setzen
+                *pnBitmapListState |= CT_CHANGED;
+                // Flag fuer modifiziert entfernen
+                *pnBitmapListState &= ~CT_MODIFIED;
                 LeaveWait();
             }
             else
