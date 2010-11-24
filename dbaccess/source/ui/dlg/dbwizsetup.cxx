@@ -229,7 +229,7 @@ void ODbTypeWizDialogSetup::declareAuthDepPath( const ::rtl::OUString& _sURL, Pa
     {
         if ( bHasAuthentication || ( *aIter != PAGE_DBSETUPWIZARD_AUTHENTIFICATION ) )
             aPath.push_back( *aIter );
-    } // for(;aIter != aEnd;++aIter)
+    }
 
     // call base method
     ::svt::RoadmapWizard::declarePath( _nPathId, aPath );
@@ -655,7 +655,7 @@ IMPL_LINK(ODbTypeWizDialogSetup, ImplClickHdl, OMySQLIntroPageSetup*, _pMySQLInt
         case  OMySQLIntroPageSetup::VIA_NATIVE:
             sURLPrefix = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:mysql:mysqlc:"));
             break;
-    } // switch( _pMySQLIntroPageSetup->getMySQLMode() )
+    }
     activatePath( static_cast<PathId>(m_pCollection->getIndexOf(sURLPrefix) + 1), sal_True);
     return sal_True;
 }
@@ -867,8 +867,6 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             ::rtl::OUString sPrefix = eType;
             sUrl = aDBPathURL.GetMainURL( INetURLObject::NO_DECODE);
             xSimpleFileAccess->createFolder(sUrl);
-            //OFileNotation aFileNotation(sUrl);
-            //sUrl = aFileNotation.get(OFileNotation::N_SYSTEM);
              sUrl = sPrefix.concat(sUrl);
         }
         m_pOutSet->Put(SfxStringItem(DSID_CONNECTURL, sUrl));

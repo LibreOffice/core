@@ -149,7 +149,6 @@ void ODbAdminDialog::impl_selectDataSource(const ::com::sun::star::uno::Any& _aD
     {
         case  ::dbaccess::DST_DBASE:
             addDetailPage(PAGE_DBASE, STR_PAGETITLE_ADVANCED, ODriversSettings::CreateDbase);
-            //  bResetPasswordRequired = sal_True;
             break;
 
         case  ::dbaccess::DST_ADO:
@@ -158,7 +157,6 @@ void ODbAdminDialog::impl_selectDataSource(const ::com::sun::star::uno::Any& _aD
 
         case  ::dbaccess::DST_FLAT:
             addDetailPage(PAGE_TEXT, STR_PAGETITLE_ADVANCED, ODriversSettings::CreateText);
-            //  bResetPasswordRequired = sal_True;
             break;
 
         case  ::dbaccess::DST_ODBC:

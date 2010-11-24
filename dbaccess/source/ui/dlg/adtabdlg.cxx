@@ -190,7 +190,7 @@ void TableListFacade::updateTableObjectList( bool _bAllowViews )
                     m_pContainerListener = new ::comphelper::OContainerListenerAdapter(this,xContainer);
             }
             sTables = xTables->getElementNames();
-        } // if ( xTables.is() )
+        }
 
         xViewSupp.set( xTableSupp, UNO_QUERY );
         if ( xViewSupp.is() )

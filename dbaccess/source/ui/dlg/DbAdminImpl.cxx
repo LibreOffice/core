@@ -586,7 +586,6 @@ String ODbDataSourceAdministrationHelper::getConnectionURL() const
             break;
         case  ::dbaccess::DST_LDAP:
             {
-                //  SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pHostName, SfxStringItem, DSID_CONN_HOSTNAME, sal_True);
                 SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pPortNumber, SfxInt32Item, DSID_CONN_LDAP_PORTNUMBER, sal_True);
                 sNewUrl = pCollection->cutPrefix(pUrlItem->GetValue());
                 sNewUrl += lcl_createHostWithPort(NULL,pPortNumber);
@@ -1119,7 +1118,6 @@ void ODbDataSourceAdministrationHelper::convertUrl(SfxItemSet& _rDest)
     USHORT nPortNumberId    = 0;
     sal_Int32 nPortNumber   = -1;
     String sNewHostName;
-    //String sUrl = pCollection->cutPrefix(pUrlItem->GetValue());
     String sUrlPart;
 
     pCollection->extractHostNamePort(pUrlItem->GetValue(),sUrlPart,sNewHostName,nPortNumber);

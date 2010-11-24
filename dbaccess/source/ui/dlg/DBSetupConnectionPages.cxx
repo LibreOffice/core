@@ -73,14 +73,6 @@ namespace dbaui
 {
 //.........................................................................
 using namespace ::com::sun::star;
-//  using namespace ::com::sun::star::ucb;
-//  using namespace ::com::sun::star::ui::dialogs;
-//  using namespace ::com::sun::star::sdbc;
-//  using namespace ::com::sun::star::beans;
-//  using namespace ::com::sun::star::lang;
-//  using namespace ::com::sun::star::container;
-//  using namespace ::dbtools;
-//  using namespace ::svt;
 
     OGenericAdministrationPage* OTextConnectionPageSetup::CreateTextTabPage( Window* pParent, const SfxItemSet& _rAttrSet )
     {
@@ -218,7 +210,6 @@ DBG_NAME(OTextConnectionPageSetup)
             bChangedSomething = sal_True;
         }
 
-        // fillString(_rSet,&m_aETHostServer, DSID_CONNECTURL, bChangedSomething);
         fillBool(_rSet,&m_aCBUseSSL,DSID_CONN_LDAP_USESSL,bChangedSomething);
         return bChangedSomething;
     }
@@ -664,8 +655,8 @@ DBG_NAME(OMySQLIntroPageSetup)
                 {
                     m_aETDriverClass.SetText(sDefaultJdbcDriverName);
                     m_aETDriverClass.SetModifyFlag();
-                } // if ( sDefaultJdbcDriverName.Len() )
-            } // if ( !pJdbcDrvItem->GetValue().Len() )
+                }
+            }
             else
             {
                 m_aETDriverClass.SetText(pDrvItem->GetValue());
@@ -686,7 +677,6 @@ DBG_NAME(OMySQLIntroPageSetup)
         BOOL bEnableTestConnection = !m_aConnectionURL.IsVisible() || (m_aConnectionURL.GetTextNoPrefix().Len() != 0);
         bEnableTestConnection = bEnableTestConnection && (m_aETDriverClass.GetText().Len() != 0);
         return bEnableTestConnection;
-//      m_aTestConnection.Enable(bEnableTestConnection);
     }
 
 

@@ -198,7 +198,6 @@ DBG_NAME(IndexFieldsControl)
         // insert rows for the the fields
         RowInserted(GetRowCount(), m_aFields.size(), sal_False);
         // insert an additional row for a new field for that index
-//      if(!m_nMaxColumnsInIndex || GetRowCount() < m_nMaxColumnsInIndex )
         RowInserted(GetRowCount(), 1, sal_False);
         SetUpdateMode(sal_True);
 

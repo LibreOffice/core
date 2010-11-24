@@ -446,7 +446,7 @@ DBG_NAME(OConnectionHelper)
         {
             if ( m_pCollection->isFileSystemBased( m_eType ) )
             {
-                // get the tow parts: prefix and file URL
+                // get the two parts: prefix and file URL
                 String sTypePrefix, sFileURLEncoded;
                 if ( _bPrefix )
                 {
@@ -492,7 +492,7 @@ DBG_NAME(OConnectionHelper)
         {
             if ( m_pCollection->isFileSystemBased( m_eType ) )
             {
-                // get the tow parts: prefix and file URL
+                // get the two parts: prefix and file URL
                 String sTypePrefix, sFileURLDecoded;
                 if ( _bPrefix )
                 {
@@ -742,7 +742,7 @@ DBG_NAME(OConnectionHelper)
                             return 1L;  // handled
                     }
                     break;
-            } // switch (_rNEvt.GetType())
+            }
         }
 
         return OGenericAdministrationPage::PreNotify( _rNEvt );

@@ -363,7 +363,7 @@ sal_Bool DlgFilterCrit::getCondition(const ListBox& _rField,const ListBox& _rCom
                     sTableName += _rFilter.Name;
                     _rFilter.Name = sTableName;
                 }
-            } // if ( !bFunction )
+            }
         }
     }
     catch(Exception)
@@ -586,11 +586,9 @@ void DlgFilterCrit::SelectField( ListBox& rBox, const String& rField )
 {
     DBG_CHKTHIS(DlgFilterCrit,NULL);
     sal_uInt16 nCnt = rBox.GetEntryCount();
-    //  sal_Bool bCase = m_rIterator.TablesAreSensitive();
 
     for( sal_uInt16 i=0 ; i<nCnt ; i++ )
     {
-        //  if(bCase ? rBox.GetEntry(i) == rField : rBox.GetEntry(i).EqualsIgnoreCaseAscii(rField))
         if(rBox.GetEntry(i) == rField)
         {
             rBox.SelectEntryPos(i);
@@ -781,7 +779,6 @@ void DlgFilterCrit::BuildWherePart()
     Sequence<Sequence<PropertyValue> > aFilter,aHaving;
     aFilter.realloc(1);
     aHaving.realloc(1);
-    //  ::rtl::OUString aFilter;
 
     if( LbPos(aLB_WHEREFIELD1) != 0 )
     {

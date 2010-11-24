@@ -213,7 +213,7 @@ namespace dbaui
                         ++loop
                     )
                     insertDatasourceTypeEntryData( loop->eType, loop->sDisplayName );
-            } // if ( m_pCollection )
+            }
         }
     }
 
@@ -607,7 +607,6 @@ namespace dbaui
         const SfxFilter* pFilter = getStandardDatabaseFilter();
         if ( pFilter )
         {
-//          aFileDlg.AddFilter(pFilter->GetUIName(),pFilter->GetDefaultExtension());
             aFileDlg.SetCurrentFilter(pFilter->GetUIName());
         }
         if ( aFileDlg.Execute() == ERRCODE_NONE )

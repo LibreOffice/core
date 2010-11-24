@@ -239,14 +239,6 @@ DBG_NAME(DbaIndexDialog)
 
         m_aClose.SetClickHdl(LINK(this, DbaIndexDialog, OnCloseDialog));
 
-        // get our most recent geometry settings
-//      if (m_aGeometrySettings.Exists())
-//      {
-//          Point aPos;
-//          m_aGeometrySettings.GetPosition(aPos.X(), aPos.Y());
-//          SetPosPixel(aPos);
-//      }
-
         // if all of the indexes have an empty description, we're not interested in displaying it
         Indexes::const_iterator aCheck;
 
@@ -341,10 +333,6 @@ DBG_NAME(DbaIndexDialog)
         setToolBox(NULL);
         delete m_pIndexes;
         delete m_pFields;
-
-        // save our geometry settings
-//      Point aPos = GetPosPixel();
-//      m_aGeometrySettings.SetPosition(aPos.X(), aPos.Y());
 
         DBG_DTOR(DbaIndexDialog,NULL);
     }
