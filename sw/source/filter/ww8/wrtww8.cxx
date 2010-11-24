@@ -3371,7 +3371,8 @@ MSWordExportBase::MSWordExportBase( SwDoc *pDocument, SwPaM *pCurrentPam, SwPaM 
     mpTableInfo(new ww8::WW8TableInfo()), nUniqueList(0),
     mnHdFtIndex(0), pAktPageDesc(0), pPapPlc(0), pChpPlc(0), pChpIter(0),
     pStyles( NULL ),
-    bHasHdr(false), bHasFtr(false),
+    bHasHdr(false), bHasFtr(false), bSubstituteBullets(true),
+    mbExportModeRTF( false ),
     pDoc( pDocument ),
     pCurPam( pCurrentPam ),
     pOrigPam( pOriginalPam )

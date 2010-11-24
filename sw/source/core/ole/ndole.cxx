@@ -781,7 +781,7 @@ BOOL SwOLEObj::IsOleRef() const
     return xOLERef.is();
 }
 
-uno::Reference < embed::XEmbeddedObject > SwOLEObj::GetOleRef()
+const uno::Reference < embed::XEmbeddedObject > SwOLEObj::GetOleRef()
 {
     if( !xOLERef.is() )
     {
@@ -1016,3 +1016,4 @@ void SwOLELRUCache::RemoveObj( SwOLEObj& rObj )
     if( !Count() )
         DELETEZ( pOLELRU_Cache );
 }
+
