@@ -646,10 +646,15 @@ IMPL_LINK( SwWrapTabPage, RangeModifyHdl, MetricField *, pEdit )
         else if (pEdit == &aBottomMarginED)
             pOpposite = &aTopMarginED;
 
-        sal_Int64 nOpposite = pOpposite->GetValue();
+        OSL_ASSERT(pOpposite);
 
-        if (nValue + nOpposite > Max(pEdit->GetMax(), pOpposite->GetMax()))
-            pOpposite->SetValue(pOpposite->GetMax() - nValue);
+        if (pOpposite)
+        {
+            sal_Int64 nOpposite = pOpposite->GetValue();
+
+            if (nValue + nOpposite > Max(pEdit->GetMax(), pOpposite->GetMax()))
+                pOpposite->SetValue(pOpposite->GetMax() - nValue);
+        }
     }
 
     return 0;
