@@ -34,8 +34,11 @@
 #include <GL/glext.h>
 
 class OGLShaders {
+
+#ifdef GL_VERSION_2_0
     static bool Initialize();
     static bool cbInitialized;
+#endif
 
 public:
 

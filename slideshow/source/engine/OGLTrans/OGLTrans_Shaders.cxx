@@ -36,9 +36,9 @@ namespace unx
 #include <GL/glxext.h>
 }
 
-bool OGLShaders::cbInitialized = false;
-
 #ifdef GL_VERSION_2_0
+
+bool OGLShaders::cbInitialized = false;
 
 PFNGLCREATESHADERPROC OGLShaders::glCreateShader = NULL;
 PFNGLSHADERSOURCEPROC OGLShaders::glShaderSource = NULL;
