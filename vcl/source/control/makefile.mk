@@ -43,16 +43,21 @@ CDEFS+=-D_STD_NO_NAMESPACE -D_VOS_NO_NAMESPACE -D_UNO_NO_NAMESPACE
 
 # --- Files --------------------------------------------------------
 
-SLOFILES=	$(SLO)$/button.obj		\
+EXCEPTIONSFILES=					\
+            $(SLO)$/button.obj		\
             $(SLO)$/ctrl.obj		\
-            $(SLO)$/combobox.obj	\
             $(SLO)$/edit.obj		\
-            $(SLO)$/field.obj		\
             $(SLO)$/field2.obj		\
+            $(SLO)$/ilstbox.obj		\
+            $(SLO)$/tabctrl.obj		\
+            $(SLO)$/throbber.obj
+
+SLOFILES=	$(EXCEPTIONSFILES)      \
+            $(SLO)$/combobox.obj	\
+            $(SLO)$/field.obj		\
             $(SLO)$/fixbrd.obj		\
             $(SLO)$/fixed.obj		\
             $(SLO)$/group.obj		\
-            $(SLO)$/ilstbox.obj 	\
             $(SLO)$/imgctrl.obj 	\
             $(SLO)$/longcurr.obj	\
             $(SLO)$/lstbox.obj		\
@@ -62,19 +67,12 @@ SLOFILES=	$(SLO)$/button.obj		\
             $(SLO)$/slider.obj		\
             $(SLO)$/spinfld.obj 	\
             $(SLO)$/spinbtn.obj 	\
-            $(SLO)$/tabctrl.obj     \
             $(SLO)$/quickselectionengine.obj
 
-EXCEPTIONSFILES=					\
-            $(SLO)$/button.obj		\
-            $(SLO)$/ctrl.obj		\
-            $(SLO)$/edit.obj		\
-            $(SLO)$/field2.obj		\
-            $(SLO)$/ilstbox.obj		\
-            $(SLO)$/tabctrl.obj
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk
 
 .INCLUDE :	$(PRJ)$/util$/target.pmk
+

@@ -53,7 +53,6 @@ SLOFILES=   \
             $(SLO)$/vclunohelper.obj				\
             $(SLO)$/externallock.obj                \
             $(SLO)$/imagealign.obj                  \
-            $(SLO)$/throbberimpl.obj                \
             $(SLO)$/formpdfexport.obj				\
             $(SLO)$/accessibilityclient.obj         \
             $(SLO)$/fixedhyperbase.obj

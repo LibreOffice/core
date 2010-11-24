@@ -257,6 +257,15 @@
     <service name="com.sun.star.awt.UnoControlSimpleAnimationModel"/>
     <service name="com.sun.star.awt.UnoSimpleAnimationControlModel"/>
   </implementation>
+  <implementation name="org.openoffice.comp.toolkit.SpinningProgressControlModel">
+    <service name="com.sun.star.awt.SpinningProgressControlModel"/>
+  </implementation>
+  <implementation name="org.openoffice.comp.toolkit.AnimatedImagesControlModel">
+    <service name="com.sun.star.awt.AnimatedImagesControlModel"/>
+  </implementation>
+  <implementation name="org.openoffice.comp.toolkit.AnimatedImagesControl">
+    <service name="com.sun.star.awt.AnimatedImagesControl"/>
+  </implementation>
   <implementation name="stardiv.Toolkit.UnoSpinButtonControl">
     <service name="com.sun.star.awt.UnoControlSpinButton"/>
   </implementation>
