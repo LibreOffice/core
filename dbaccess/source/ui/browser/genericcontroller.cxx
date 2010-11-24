@@ -308,12 +308,6 @@ void SAL_CALL OGenericUnoController::initialize( const Sequence< Any >& aArgumen
         {
             xFrame.set(aValue.Value,UNO_QUERY_THROW);
         }
-        /* #i42316#
-        else if ( ( *pIter >>= aValue ) && ( 0 == aValue.Name.compareToAscii( "ReadOnly" ) ) )
-        {
-            aValue.Value >>= m_bReadOnly;
-        }
-        */
         else if ( ( *pIter >>= aValue ) && ( 0 == aValue.Name.compareToAscii( "Preview" ) ) )
         {
             aValue.Value >>= m_bPreview;
@@ -674,7 +668,7 @@ void OGenericUnoController::InvalidateAll()
 void OGenericUnoController::InvalidateAll_Impl()
 {
     // ---------------------------------
-    // invalidate all aupported features
+    // invalidate all supported features
 
     for (   SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.begin();
             aIter != m_aSupportedFeatures.end();
@@ -793,12 +787,12 @@ void OGenericUnoController::addStatusListener(const Reference< XStatusListener >
     if ( m_xUrlTransformer.is() )
         m_xUrlTransformer->parseStrict( aParsedURL );
 
-    // remeber the listener together with the URL
+    // remember the listener together with the URL
     m_arrStatusListener.insert( m_arrStatusListener.end(), DispatchTarget( aParsedURL, aListener ) );
 
     // initially broadcast the state
     ImplBroadcastFeatureState( aParsedURL.Complete, aListener, sal_True );
-        // force the new state to be broadcasted to the new listener
+        // force the new state to be broadcast to the new listener
 }
 
 // -----------------------------------------------------------------------

@@ -955,7 +955,7 @@ void SbaTableQueryBrowser::checkDocumentDataSource()
     if (!bKnownDocDataSource)
     {
         if (NULL != pDataSourceEntry)
-        {   // at least the data source is know
+        {   // at least the data source is known
             if (NULL != pContainerEntry)
                 bKnownDocDataSource = sal_True; // assume we know it.
                 // TODO: should we expand the object container? This may be too expensive just for checking ....
@@ -1006,7 +1006,6 @@ namespace
         if ( aURL.GetProtocol() != INET_PROT_NOT_VALID )
         {
             _rDisplayName = aURL.getBase(INetURLObject::LAST_SEGMENT,true,INetURLObject::DECODE_WITH_CHARSET);
-            //  _rDisplayName = aURL.getName(INetURLObject::LAST_SEGMENT,true,INetURLObject::DECODE_WITH_CHARSET);
             _rUniqueId = aURL.GetMainURL( INetURLObject::NO_DECODE );
             return true;
         }
@@ -1149,7 +1148,6 @@ SvLBoxEntry* SbaTableQueryBrowser::getObjectEntry(const ::rtl::OUString& _rDataS
                             }
                         }
                     }
-                     //   m_pTreeView->getListBox().Expand(pCommandType);
                 }
                 while ( nIndex >= 0 );
             }
@@ -1308,7 +1306,7 @@ void SAL_CALL SbaTableQueryBrowser::disposing( const EventObject& _rSource ) thr
                     DBTreeListUserData* pData = static_cast<DBTreeListUserData*>(pDSLoop->GetUserData());
                     if ( pData && pData->xConnection == xCon )
                     {
-                        // we set the conenction to null to avoid a second disposing of the connection
+                        // we set the connection to null to avoid a second disposing of the connection
                         pData->xConnection.clear();
                         closeConnection(pDSLoop,sal_False);
                         break;
@@ -1750,7 +1748,7 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId) const
                     {
                         aReturn.bEnabled = m_aCurrentFrame.isActive();
                         break;
-                    } // if ( getBrowserView()->getVclControl()->GetSelectRowCount() )
+                    }
                     else
                         aReturn.bEnabled = pControl->canCopyCellText(pControl->GetCurRow(), pControl->GetCurColumnId());
                     break;
@@ -3498,7 +3496,7 @@ sal_Bool SbaTableQueryBrowser::implGetQuerySignature( ::rtl::OUString& _rCommand
 
     try
     {
-        // ontain the dss (data source signature) of the form
+        // contain the dss (data source signature) of the form
         ::rtl::OUString sDataSourceName;
         ::rtl::OUString sCommand;
         sal_Int32       nCommandType = CommandType::COMMAND;
@@ -3645,7 +3643,6 @@ void SbaTableQueryBrowser::postReloadForm()
 {
     InitializeGridModel(getFormComponent());
     LoadFinished(sal_True);
-    //updateTitle();
 }
 
 //------------------------------------------------------------------------------

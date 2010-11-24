@@ -200,7 +200,7 @@ void SAL_CALL SbaExternalSourceBrowser::dispatch(const ::com::sun::star::util::U
         Reference< XPropertySetInfo > xNewColProperties;
         if (xNewCol.is())
             xNewColProperties = xNewCol->getPropertySetInfo();
-        // set it's properties
+        // set its properties
         if (xNewColProperties.is())
         {
             const ::com::sun::star::beans::PropertyValue* pControlProps = aControlProps.getConstArray();
@@ -242,7 +242,7 @@ void SAL_CALL SbaExternalSourceBrowser::dispatch(const ::com::sun::star::util::U
             return;
 
         Reference< XRowSet >  xMasterForm;
-        // search the arguments for he master form
+        // search the arguments for the master form
         for (sal_uInt16 i=0; i<aArgs.getLength(); ++i, ++pArguments)
         {
             if ((pArguments->Name.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MasterForm")))) && (pArguments->Value.getValueTypeClass() == TypeClass_INTERFACE))
