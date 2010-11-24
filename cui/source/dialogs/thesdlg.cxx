@@ -180,7 +180,7 @@ ThesaurusAlternativesCtrl_Impl::ThesaurusAlternativesCtrl_Impl(
     SvxCheckListBox( pParent, CUI_RES( CT_THES_ALTERNATIVES ) ),
     m_rDialogImpl( rImpl )
 {
-    SetWindowBits( WB_CLIPCHILDREN | WB_HSCROLL | WB_FORCE_MAKEVISIBLE );
+    SetStyle( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_FORCE_MAKEVISIBLE );
     SetHighlightRange();
 }
 
