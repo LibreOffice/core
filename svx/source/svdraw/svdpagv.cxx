@@ -358,6 +358,21 @@ void SdrPageView::PrePaint()
     }
 }
 
+void SdrPageView::PostPaint()
+{
+    const sal_uInt32 nCount(PageWindowCount());
+
+    for(sal_uInt32 a(0); a < nCount; a++)
+    {
+        SdrPageWindow* pCandidate = GetPageWindow(a);
+
+        if(pCandidate)
+        {
+            pCandidate->PostPaint();
+        }
+    }
+}
+
 void SdrPageView::CompleteRedraw(SdrPaintWindow& rPaintWindow, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector) const
 {
     if(GetPage())

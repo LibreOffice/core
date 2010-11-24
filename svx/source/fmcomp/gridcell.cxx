@@ -2956,13 +2956,13 @@ sal_Bool DbFilterField::commitControl()
         case ::com::sun::star::form::FormComponentType::CHECKBOX:
             return sal_True;
         case ::com::sun::star::form::FormComponentType::LISTBOX:
+            aText.Erase();
             if (static_cast<ListBox*>(m_pWindow)->GetSelectEntryCount())
             {
                 sal_Int16 nPos = (sal_Int16)static_cast<ListBox*>(m_pWindow)->GetSelectEntryPos();
-                aText = (const sal_Unicode*)m_aValueList.getConstArray()[nPos];
+                if ( ( nPos >= 0 ) && ( nPos < m_aValueList.getLength() ) )
+                    aText = (const sal_Unicode*)m_aValueList.getConstArray()[nPos];
             }
-            else
-                aText.Erase();
 
             if (m_aText != aText)
             {
