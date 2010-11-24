@@ -154,6 +154,7 @@ RightFieldCell sym:DBACCESS_HID_RELATIONDIALOG_RIGHTFIELDCELL
 
 
 *LabelFieldSelection sym:extensions:ModalDialog:RID_DLG_SELECTLABELCONTROL
+CBNoAssignment sym:extensions:CheckBox:RID_DLG_SELECTLABELCONTROL:1
 
 *JPGOptions sym:svtools:ModalDialog:DLG_EXPORT
 Exportwidth sym:svtools:MetricField:DLG_EXPORT:MF_SIZEX
