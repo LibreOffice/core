@@ -132,6 +132,12 @@ public:
     /** Delete the current selection or do nothing */
     void Delete();
 
+    /** Delete selection, previous element or merge lines
+     *
+     * This method implements the behaviour of backspace.
+     */
+    void DeletePrev(OutputDevice* pDev);
+
     /** Insert text at the current position */
     void InsertText(XubString aString);
 
@@ -269,6 +275,28 @@ private:
      * This method also deletes SmErrorNode's as they're just meta info in the line.
      */
     static SmNodeList* LineToList(SmStructureNode* pLine, SmNodeList* pList = new SmNodeList());
+
+    /** Auxiliary function for calling LineToList on a node
+     *
+     * This method sets pNode = NULL and remove it from it's parent.
+     * (Assuming it has a parent, and is a child of it).
+     */
+    static SmNodeList* NodeToList(SmNode*& rpNode, SmNodeList* pList = new SmNodeList()){
+        //Remove from parent and NULL rpNode
+        SmNode* pNode = rpNode;
+        if(rpNode && rpNode->GetParent()){    //Don't remove this, correctness relies on it
+            int index = rpNode->GetParent()->IndexOfSubNode(rpNode);
+            if(index != -1)
+                rpNode->GetParent()->SetSubNode(index, NULL);
+        }
+        rpNode = NULL;
+        //Create line from node
+        if(pNode && IsLineCompositionNode(pNode))
+            return LineToList((SmStructureNode*)pNode, pList);
+        if(pNode)
+            pList->push_front(pNode);
+        return pList;
+    }
 
     /** Clone a visual line to a list
      *

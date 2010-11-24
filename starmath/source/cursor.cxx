@@ -186,6 +186,76 @@ void SmCursor::Draw(OutputDevice& pDev, Point Offset, bool isCaretVisible){
     SmCaretDrawingVisitor(pDev, GetPosition(), Offset, isCaretVisible);
 }
 
+void SmCursor::DeletePrev(OutputDevice* pDev){
+    //Delete only a selection if there's a selection
+    if(HasSelection()){
+        Delete();
+        return;
+    }
+
+    SmNode* pLine = FindTopMostNodeInLine(position->CaretPos.pSelectedNode);
+    SmStructureNode* pLineParent = pLine->GetParent();
+    int nLineOffset = pLineParent->IndexOfSubNode(pLine);
+
+    //If we're in front of a node who's parent is a TABLE
+    if(pLineParent->GetType() == NTABLE && position->CaretPos.Index == 0 && nLineOffset > 0){
+        //Now we can merge with nLineOffset - 1
+        BeginEdit();
+        //Line to merge things into, so we can delete pLine
+        SmNode* pMergeLine = pLineParent->GetSubNode(nLineOffset-1);
+        j_assert(pMergeLine, "pMergeLine cannot be NULL!");
+        //Convert first line to list
+        SmNodeList *pLineList = NodeToList(pMergeLine);
+        //Find iterator to patch
+        SmNodeList::iterator patchPoint = pLineList->end();
+        patchPoint--;
+        //Convert second line to list
+        NodeToList(pLine, pLineList);
+        //Patch the line list
+        patchPoint++;
+        SmCaretPos PosAfterDelete = PatchLineList(pLineList, patchPoint);
+        //Parse the line
+        pLine = SmNodeListParser().Parse(pLineList);
+        delete pLineList;
+        pLineParent->SetSubNode(nLineOffset-1, pLine);
+        //Delete the removed line slot
+        SmNodeArray lines(pLineParent->GetNumSubNodes()-1);
+        for(int i = 0; i < pLineParent->GetNumSubNodes(); i++){
+            if(i < nLineOffset)
+                lines[i] = pLineParent->GetSubNode(i);
+            else if(i > nLineOffset)
+                lines[i-1] = pLineParent->GetSubNode(i);
+        }
+        pLineParent->SetSubNodes(lines);
+        //Rebuild graph
+        anchor = NULL;
+        position = NULL;
+        BuildGraph();
+        AnnotateSelection();
+        //Set caret position
+        if(!SetCaretPosition(PosAfterDelete, true))
+            SetCaretPosition(SmCaretPos(pLine, 0), true);
+        //Finish editing
+        EndEdit();
+
+    //TODO: If we're in an empty (sub/super/*) script
+    /*}else if(pLineParent->GetType() == NSUBSUP &&
+             nLineOffset != 0 &&
+             pLine->GetType() == NEXPRESSION &&
+             pLine->GetNumSubNodes() == 0){
+        //There's a (sub/super/*) script we can delete
+    //Consider selecting the entire script if GetNumSubNodes() != 0 or pLine->GetType() != NEXPRESSION
+    //TODO: Handle case where we delete a limit
+    */
+
+    //Else move select, and delete if not complex
+    }else{
+        this->Move(pDev, MoveLeft, false);
+        if(!this->HasComplexSelection())
+            Delete();
+    }
+}
+
 void SmCursor::Delete(){
     //Return if we don't have a selection to delete
     if(!HasSelection())
@@ -214,13 +284,7 @@ void SmCursor::Delete(){
     //Position after delete
     SmCaretPos PosAfterDelete;
 
-    SmNodeList* pLineList;
-    if(IsLineCompositionNode(pLine))
-        pLineList = LineToList((SmStructureNode*)pLine);
-    else {
-        pLineList = new SmNodeList();
-        pLineList->push_back(pLine);
-    }
+    SmNodeList* pLineList = NodeToList(pLine);
 
     //Take the selected nodes and delete them...
     SmNodeList::iterator patchIt = TakeSelectedNodesFromList(pLineList);
@@ -256,13 +320,7 @@ void SmCursor::InsertNodes(SmNodeList* pNewNodes){
     j_assert(nParentIndex != -1, "pLine must be a subnode of pLineParent!");
 
     //Convert line to list
-    SmNodeList* pLineList;
-    if(IsLineCompositionNode(pLine))
-        pLineList = LineToList((SmStructureNode*)pLine);
-    else {
-        pLineList = new SmNodeList();
-        pLineList->push_front(pLine);
-    }
+    SmNodeList* pLineList = NodeToList(pLine);
 
     //Find iterator for place to insert nodes
     SmNodeList::iterator it = FindPositionInLineList(pLineList, pos);
@@ -465,13 +523,7 @@ void SmCursor::InsertSubSup(SmSubSup eSubSup) {
     BeginEdit();
 
     //Convert line to list
-    SmNodeList* pLineList;
-    if(IsLineCompositionNode(pLine))
-        pLineList = LineToList((SmStructureNode*)pLine);
-    else {
-        pLineList = new SmNodeList();
-        pLineList->push_front(pLine);
-    }
+    SmNodeList* pLineList = NodeToList(pLine);
 
     //Take the selection, and/or find iterator for current position
     SmNodeList* pSelectedNodesList = new SmNodeList();
@@ -518,14 +570,7 @@ void SmCursor::InsertSubSup(SmSubSup eSubSup) {
 
     //Convert existing, if any, sub-/superscript line to list
     SmNode *pScriptLine = pSubSup->GetSubSup(eSubSup);
-    SmNodeList* pScriptLineList;
-    if(pScriptLine && IsLineCompositionNode(pScriptLine))
-        pScriptLineList = LineToList((SmStructureNode*)pScriptLine);
-    else{
-        pScriptLineList = new SmNodeList();
-        if(pScriptLine)
-            pScriptLineList->push_front(pScriptLine);
-    }
+    SmNodeList* pScriptLineList = NodeToList(pScriptLine);
 
     //Add selection to pScriptLineList
     unsigned int nOldSize = pScriptLineList->size();
@@ -601,13 +646,7 @@ bool SmCursor::InsertLimit(SmSubSup eSubSup, bool bMoveCaret) {
     //If it's already there... let's move the caret
     } else if(bMoveCaret){
         pLine = pSubSup->GetSubSup(eSubSup);
-        SmNodeList* pLineList;
-        if(IsLineCompositionNode(pLine))
-            pLineList = LineToList((SmStructureNode*)pLine);
-        else {
-            pLineList = new SmNodeList();
-            pLineList->push_front(pLine);
-        }
+        SmNodeList* pLineList = NodeToList(pLine);
         if(pLineList->size() > 0)
             PosAfterLimit = SmCaretPos::GetPosAfter(pLineList->back());
         pLine = SmNodeListParser().Parse(pLineList);
@@ -649,13 +688,7 @@ void SmCursor::InsertBrackets(SmBracketType eBracketType) {
     j_assert( nParentIndex != -1, "pLine must be a subnode of pLineParent!");
 
     //Convert line to list
-    SmNodeList *pLineList;
-    if(IsLineCompositionNode(pLine))
-        pLineList = LineToList((SmStructureNode*)pLine);
-    else {
-        pLineList = new SmNodeList();
-        pLineList->push_front(pLine);
-    }
+    SmNodeList *pLineList = NodeToList(pLine);
 
     //Take the selection, and/or find iterator for current position
     SmNodeList *pSelectedNodesList = new SmNodeList();
@@ -816,13 +849,7 @@ bool SmCursor::InsertRow() {
     BeginEdit();
 
     //Convert line to list
-    SmNodeList *pLineList;
-    if(IsLineCompositionNode(pLine))
-        pLineList = LineToList((SmStructureNode*)pLine);
-    else {
-        pLineList = new SmNodeList();
-        pLineList->push_front(pLine);
-    }
+    SmNodeList *pLineList = NodeToList(pLine);
 
     //Find position in line
     SmNodeList::iterator it;
@@ -849,20 +876,21 @@ bool SmCursor::InsertRow() {
         //Parse new line
         SmNode *pNewLine = SmNodeListParser().Parse(pNewLineList);
         delete pNewLineList;
-        //Get position before we wrap in SmLineNode
-        //NOTE: This should be done after, if SmLineNode ever becomes a line composition node
-        PosAfterInsert = SmCaretPos(pNewLine, 0);
         //Wrap pNewLine in SmLineNode if needed
         if(pLineParent->GetType() == NLINE) {
             SmLineNode *pNewLineNode = new SmLineNode(SmToken(TNEWLINE, '\0', "newline"));
             pNewLineNode->SetSubNodes(pNewLine, NULL);
             pNewLine = pNewLineNode;
         }
+        //Get position
+        PosAfterInsert = SmCaretPos(pNewLine, 0);
         //Move other nodes if needed
         for( int i = pTable->GetNumSubNodes(); i > nTableIndex + 1; i--)
             pTable->SetSubNode(i, pTable->GetSubNode(i-1));
+
         //Insert new line
         pTable->SetSubNode(nTableIndex + 1, pNewLine);
+
         //Check if we need to change token type:
         if(pTable->GetNumSubNodes() > 2 && pTable->GetToken().eType == TBINOM) {
             SmToken tok = pTable->GetToken();
@@ -919,13 +947,7 @@ void SmCursor::InsertFraction() {
     BeginEdit();
 
     //Convert line to list
-    SmNodeList* pLineList;
-    if(IsLineCompositionNode(pLine))
-        pLineList = LineToList((SmStructureNode*)pLine);
-    else {
-        pLineList = new SmNodeList();
-        pLineList->push_front(pLine);
-    }
+    SmNodeList* pLineList = NodeToList(pLine);
 
     //Take the selection, and/or find iterator for current position
     SmNodeList* pSelectedNodesList = new SmNodeList();
@@ -956,7 +978,6 @@ void SmCursor::InsertFraction() {
     //Finish editing
     FinishEdit(pLineList, pLineParent, nParentIndex, SmCaretPos(pDenom, 1));
 }
-
 
 void SmCursor::InsertText(XubString aString){
     BeginEdit();
@@ -1142,13 +1163,7 @@ void SmCursor::InsertCommandText(XubString aCommandText) {
     pSubExpr->Prepare(pDocShell->GetFormat(), *pDocShell);
 
     //Convert subtree to list
-    SmNodeList* pLineList;
-    if(IsLineCompositionNode(pSubExpr))
-        pLineList = LineToList((SmStructureNode*)pSubExpr);
-    else {
-        pLineList = new SmNodeList();
-        pLineList->push_front(pSubExpr);
-    }
+    SmNodeList* pLineList = NodeToList(pSubExpr);
 
     BeginEdit();
 
@@ -1218,7 +1233,6 @@ SmNodeList* SmCursor::CloneList(SmNodeList* pList){
 
     return pClones;
 }
-
 
 void SmCursor::SetClipboard(SmNodeList* pList){
     if(pClipboard){

@@ -451,13 +451,16 @@ void SmGraphicWindow::KeyInput(const KeyEvent& rKEvt)
 #endif /* DEBUG_ENABLE_DUMPASDOT */
         }break;
         case KEY_DELETE:
-        case KEY_BACKSPACE:
         {
             if(!rCursor.HasSelection()){
                 rCursor.Move(this, nCode == KEY_DELETE ? MoveRight : MoveLeft, false);
                 if(rCursor.HasComplexSelection()) break;
             }
             rCursor.Delete();
+        }break;
+        case KEY_BACKSPACE:
+        {
+            rCursor.DeletePrev(this);
         }break;
         case KEY_ADD:
             rCursor.InsertElement(PlusElement);
