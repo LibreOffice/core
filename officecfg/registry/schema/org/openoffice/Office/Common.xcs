@@ -2600,39 +2600,6 @@
 				</constraints>
 				<value>100</value>
 			</prop>
-			<prop oor:name="LookAndFeel" oor:type="xs:short">
-				<!-- OldPath: General/View -->
-				<!-- OldLocation: soffice.cfg -->
-				<!-- UIHints: Tools  Options - General  View  [Section] Display -->
-				<info>
-					<author>PB</author>
-					<desc>Determines the look and feel of the application.</desc>
-					<label>Look &amp; Feel</label>
-				</info>
-				<constraints>
-					<enumeration oor:value="0">
-						<info>
-							<desc>Standard</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="1">
-						<info>
-							<desc>Macintosh</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="2">
-						<info>
-							<desc>X Window</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="3">
-						<info>
-							<desc>OS/2</desc>
-						</info>
-					</enumeration>
-				</constraints>
-				<value>0</value>
-			</prop>
 			<group oor:name="NewDocumentHandling">
 				<info>
 					<author>CD</author>
@@ -2714,17 +2681,6 @@
 					</info>
 					<value>true</value>
 				</prop>
-				<prop oor:name="ColoredTab" oor:type="xs:boolean">
-					<!-- OldPath: General/View -->
-					<!-- OldLocation: soffice.cfg -->
-					<!-- UIHints: Tools  Options - General  View  [Section] Options -->
-					<info>
-						<author>PB</author>
-						<desc>Specifies TabDialogs with colored tab control (True)</desc>
-						<label>Colored tab controls</label>
-					</info>
-					<value>false</value>
-				</prop>
 				<prop oor:name="MousePositioning" oor:type="xs:short">
 					<!-- OldPath: General/View -->
 					<!-- OldLocation: soffice.cfg -->
@@ -2779,17 +2735,6 @@
 						</enumeration>
 					</constraints>
 					<value>1</value>
-				</prop>
-				<prop oor:name="SingleLineTab" oor:type="xs:boolean">
-					<!-- OldPath: General/View -->
-					<!-- OldLocation: soffice.cfg -->
-					<!-- UIHints: Tools  Options - General  View  [Section] Options -->
-					<info>
-						<author>PB</author>
-						<desc>Specifies TabDialogs with single line tab control (True).</desc>
-						<label>Single line tab controls</label>
-					</info>
-					<value>false</value>
 				</prop>
 			</group>
 			<group oor:name="Localisation">

@@ -2196,17 +2196,6 @@ void Desktop::SystemSettingsChanging( AllSettings& rSettings, Window* )
     }
     hStyleSettings.SetUseImagesInMenus(bUseImagesInMenus);
 
-    sal_uInt16 nTabStyle = hStyleSettings.GetTabControlStyle();
-    nTabStyle &= ~STYLE_TABCONTROL_SINGLELINE;
-    if( aAppearanceCfg.IsSingleLineTabCtrl() )
-        nTabStyle |=STYLE_TABCONTROL_SINGLELINE;
-
-    nTabStyle &= ~STYLE_TABCONTROL_COLOR;
-    if( aAppearanceCfg.IsColoredTabCtrl() )
-        nTabStyle |= STYLE_TABCONTROL_COLOR;
-
-    hStyleSettings.SetTabControlStyle(nTabStyle);
-
     hStyleSettings.SetDragFullOptions( nDragFullOptions );
     rSettings.SetStyleSettings ( hStyleSettings );
 }
