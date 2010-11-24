@@ -1827,6 +1827,7 @@
 			<xsl:if test="$listStyle/text:list-style/text:list-level-style-number">
 				<xsl:choose>
 					<xsl:when test="$isListHeader">0</xsl:when>
+                    <xsl:when test="$isEmptyList">
 						<!--  An empty list item (no text:h/text:p as child), will not count as item and does not increment the count.  -->
 						<xsl:variable name="tempItemNumber">
 							<xsl:choose>
