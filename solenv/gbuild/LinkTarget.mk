@@ -300,6 +300,7 @@ $(call gb_LinkTarget_get_target,$(1)) : CXXFLAGS := $$(gb_LinkTarget_CXXFLAGS)
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : PCH_CXXFLAGS := $$(gb_LinkTarget_CXXFLAGS)
 $(call gb_LinkTarget_get_target,$(1)) : OBJCXXFLAGS := $$(gb_LinkTarget_OBJCXXFLAGS)
+$(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : DEFS := $$(gb_LinkTarget_DEFAULTDEFS)
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : PCH_DEFS := $$(gb_LinkTarget_DEFAULTDEFS)
@@ -341,10 +342,7 @@ $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : PCH_DEFS := $(2)
 
 ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_LinkTarget_get_target,$(1)) \
 $(call gb_LinkTarget_get_dep_target,$(1)) : DEFS := $(2)
-$(call gb_LinkTarget_get_target,$(1)) \
-$(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_dep_target,$(1)) : PCH_DEFS := $(2)
 endif
 
