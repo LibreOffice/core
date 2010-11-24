@@ -76,14 +76,14 @@ void
     args = NULL;
     if (tp < trp->lp && tp->type == LP && tp->wslen == 0)
     {
-        /* macro with args */
-        int narg = 0;
-
         tp += 1;
         args = new(Tokenrow);
         maketokenrow(2, args);
         if (tp->type != RP)
         {
+            /* macro with args */
+            int narg = 0;
+
             int err = 0;
 
             for (;;)
@@ -301,7 +301,7 @@ void
     expand(Tokenrow * trp, Nlist * np)
 {
     Tokenrow ntr;
-    int ntokc, narg, i;
+    int ntokc, narg;
     Tokenrow *atr[NARG + 1];
 
     if (Mflag == 2)
@@ -317,6 +317,8 @@ void
         ntokc = 1;
     else
     {
+        int i;
+
         ntokc = gatherargs(trp, atr, &narg);
         if (narg < 0)
         {                               /* not actually a call (no '(') */
@@ -330,7 +332,7 @@ void
             return;
         }
         substargs(np, &ntr, atr);       /* put args into replacement */
-        for (i = 0; i < narg; i++)
+        for (i = 0; i < narg; ++i)
         {
             dofree(atr[i]->bp);
             dofree(atr[i]);
