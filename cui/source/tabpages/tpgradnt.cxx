@@ -682,41 +682,38 @@ IMPL_LINK( SvxGradientTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
 
             if ( pGrdList->Load() )
             {
-                if ( pGrdList )
+                // Pruefen, ob Tabelle geloescht werden darf:
+                if ( pGradientList !=
+                     ( (SvxAreaTabDialog*) DLGWIN )->GetGradientList() )
+                    delete pGradientList;
+
+                pGradientList = pGrdList;
+                ( (SvxAreaTabDialog*) DLGWIN )->
+                    SetNewGradientList( pGradientList );
+
+                aLbGradients.Clear();
+                aLbGradients.Fill( pGradientList );
+                Reset( rOutAttrs );
+
+                pGradientList->SetName( aURL.getName() );
+
+                // Ermitteln (evtl. abschneiden) des Namens und in
+                // der GroupBox darstellen
+                String aString( ResId( RID_SVXSTR_TABLE, rMgr ) );
+                aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
+
+                if ( aURL.getBase().getLength() > 18 )
                 {
-                    // Pruefen, ob Tabelle geloescht werden darf:
-                    if ( pGradientList !=
-                         ( (SvxAreaTabDialog*) DLGWIN )->GetGradientList() )
-                        delete pGradientList;
-
-                    pGradientList = pGrdList;
-                    ( (SvxAreaTabDialog*) DLGWIN )->
-                        SetNewGradientList( pGradientList );
-
-                    aLbGradients.Clear();
-                    aLbGradients.Fill( pGradientList );
-                    Reset( rOutAttrs );
-
-                    pGradientList->SetName( aURL.getName() );
-
-                    // Ermitteln (evtl. abschneiden) des Namens und in
-                    // der GroupBox darstellen
-                    String aString( ResId( RID_SVXSTR_TABLE, rMgr ) );
-                    aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
-
-                    if ( aURL.getBase().getLength() > 18 )
-                    {
-                        aString += String(aURL.getBase()).Copy( 0, 15 );
-                        aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "..." ) );
-                    }
-                    else
-                        aString += String(aURL.getBase());
-
-                    // Flag fuer gewechselt setzen
-                    *pnGradientListState |= CT_CHANGED;
-                    // Flag fuer modifiziert entfernen
-                    *pnGradientListState &= ~CT_MODIFIED;
+                    aString += String(aURL.getBase()).Copy( 0, 15 );
+                    aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "..." ) );
                 }
+                else
+                    aString += String(aURL.getBase());
+
+                // Flag fuer gewechselt setzen
+                *pnGradientListState |= CT_CHANGED;
+                // Flag fuer modifiziert entfernen
+                *pnGradientListState &= ~CT_MODIFIED;
                 LeaveWait();
             }
             else
