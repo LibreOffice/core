@@ -426,7 +426,11 @@ BOOL ScPrintAreasDlg::Impl_CheckRefStrings()
         else if ( !bRepeatColOk ) pEd = &aEdRepeatCol;
 
         ERRORBOX( STR_INVALID_TABREF );
-        pEd->GrabFocus();
+
+        OSL_ASSERT(pEd);
+
+        if (pEd)
+            pEd->GrabFocus();
     }
 
     return bOk;
