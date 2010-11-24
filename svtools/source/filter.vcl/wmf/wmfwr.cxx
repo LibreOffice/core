@@ -841,13 +841,6 @@ void WMFWriter::WMFRecord_SelectObject(USHORT nObjectHandle)
 }
 
 
-void WMFWriter::WMFRecord_SetBkColor(const Color & rColor)
-{
-    WriteRecordHeader(0x00000005,W_META_SETBKCOLOR);
-    WriteColor(rColor);
-}
-
-
 void WMFWriter::WMFRecord_SetBkMode(BOOL bTransparent)
 {
     WriteRecordHeader(0x00000004,W_META_SETBKMODE);
