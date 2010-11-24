@@ -713,8 +713,7 @@ Module gid_Module_Root_Files_Images
              gid_File_ImagesCrystal_Zip,
              gid_File_ImagesOxygen_Zip,
              gid_File_ImagesHicontrast_Zip,
-             gid_File_ImagesTango_Zip,
-             gid_File_ImagesClassic8_Zip);
+             gid_File_ImagesTango_Zip);
 End
 
 #ifndef WITHOUT_FONTS
