@@ -159,7 +159,8 @@ namespace dbaccess
                 const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xTableKeys,
                 const ::rtl::OUString& _rUpdateTableName,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryAnalyzer >& _xComposer,
-                const ORowSetValueVector& _aParameterValueForCache);
+                const ORowSetValueVector& _aParameterValueForCache,
+                sal_Int32 i_nMaxRows);
 
         // late ctor which can throw exceptions
         virtual void construct(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xDriverSet,const ::rtl::OUString& i_sRowSetFilter);

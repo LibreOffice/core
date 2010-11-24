@@ -153,8 +153,10 @@ OKeySet::OKeySet(const connectivity::OSQLTable& _xTable,
                  const Reference< XIndexAccess>& _xTableKeys,
                  const ::rtl::OUString& _rUpdateTableName,    // this can be the alias or the full qualified name
                  const Reference< XSingleSelectQueryAnalyzer >& _xComposer,
-                 const ORowSetValueVector& _aParameterValueForCache)
-            :m_aParameterValueForCache(_aParameterValueForCache)
+                 const ORowSetValueVector& _aParameterValueForCache,
+                 sal_Int32 i_nMaxRows)
+            :OCacheSet(i_nMaxRows)
+            ,m_aParameterValueForCache(_aParameterValueForCache)
             ,m_pKeyColumnNames(NULL)
             ,m_pColumnNames(NULL)
             ,m_pParameterNames(NULL)
@@ -1382,7 +1384,7 @@ sal_Bool OKeySet::fetchRow()
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::fetchRow" );
     // fetch the next row and append on the keyset
     sal_Bool bRet = sal_False;
-    if ( !m_bRowCountFinal )
+    if ( !m_bRowCountFinal && (!m_nMaxRows || sal_Int32(m_aKeyMap.size()) < m_nMaxRows) )
         bRet = m_xDriverSet->next();
     if ( bRet )
     {

@@ -163,7 +163,7 @@
 
 #include <ReportControllerObserver.hxx>
 
-#define MAX_ROWS_FOR_PREVIEW    50
+#define MAX_ROWS_FOR_PREVIEW    20
 
 using namespace ::com::sun::star;
 using namespace uno;
