@@ -913,7 +913,7 @@
 #include "vcl/event.hxx"
 #include "vcl/field.hxx"
 #include "vcl/fixed.hxx"
-#include "vcl/fldunit.hxx"
+#include "tools/fldunit.hxx"
 #include "vcl/font.hxx"
 #include "unotools/fontcvt.hxx"
 #include "vcl/graph.hxx"
@@ -950,7 +950,7 @@
 #include "vcl/virdev.hxx"
 #include "vcl/waitobj.hxx"
 #include "vcl/window.hxx"
-#include "vcl/wintypes.hxx"
+#include "tools/wintypes.hxx"
 #include "vcl/wrkwin.hxx"
 
 #include "vos/mutex.hxx"
