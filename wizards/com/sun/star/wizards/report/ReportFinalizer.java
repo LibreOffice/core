@@ -90,7 +90,7 @@ public class ReportFinalizer
         CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblTitle",
                 new String[]
                 {
-                    "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -100,7 +100,7 @@ public class ReportFinalizer
         xTitleTextBox = CurUnoDialog.insertTextField("txtTitle", CHANGEREPORTTITLE_FUNCNAME, this,
                 new String[]
                 {
-                    "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -110,7 +110,7 @@ public class ReportFinalizer
         CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblChooseReportKind",
                 new String[]
                 {
-                    "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -120,7 +120,7 @@ public class ReportFinalizer
         CurUnoDialog.insertRadioButton("optCreateDocument", TOGGLESUBTEMPLATECONTROLS_FUNCNAME, this,
                 new String[]
                 {
-                    "Height", "HelpURL", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -130,7 +130,7 @@ public class ReportFinalizer
         CurUnoDialog.insertRadioButton("optCreateReportTemplate", TOGGLESUBTEMPLATECONTROLS_FUNCNAME, this,
                 new String[]
                 {
-                    "Height", "HelpURL", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -141,7 +141,7 @@ public class ReportFinalizer
         CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblHowProceed",
                 new String[]
                 {
-                    "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -152,7 +152,7 @@ public class ReportFinalizer
         CurUnoDialog.insertRadioButton("optEditTemplate", TOGGLESUBTEMPLATECONTROLS_FUNCNAME, this,
                 new String[]
                 {
-                    "Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -162,7 +162,7 @@ public class ReportFinalizer
         CurUnoDialog.insertRadioButton("optUseTemplate", TOGGLESUBTEMPLATECONTROLS_FUNCNAME, this,
                 new String[]
                 {
-                    "Height", "HelpURL", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -177,11 +177,11 @@ public class ReportFinalizer
     public void toggleSubTemplateControls()
     {
         // String sStorePath = "";
-        Short iState = (Short) CurUnoDialog.getControlProperty("optCreateReportTemplate", "State");
+        Short iState = (Short) CurUnoDialog.getControlProperty("optCreateReportTemplate", PropertyNames.PROPERTY_STATE);
         boolean bDoTemplateEnable = iState.shortValue() == 1;
-        CurUnoDialog.setControlProperty("optEditTemplate", "Enabled", new Boolean(bDoTemplateEnable));
-        CurUnoDialog.setControlProperty("optUseTemplate", "Enabled", new Boolean(bDoTemplateEnable));
-        CurUnoDialog.setControlProperty("lblHowProceed", "Enabled", new Boolean(bDoTemplateEnable));
+        CurUnoDialog.setControlProperty("optEditTemplate", PropertyNames.PROPERTY_ENABLED, new Boolean(bDoTemplateEnable));
+        CurUnoDialog.setControlProperty("optUseTemplate", PropertyNames.PROPERTY_ENABLED, new Boolean(bDoTemplateEnable));
+        CurUnoDialog.setControlProperty("lblHowProceed", PropertyNames.PROPERTY_ENABLED, new Boolean(bDoTemplateEnable));
 
         String sTitle = xTitleTextBox.getText();
         boolean bDoEnable = sTitle.equals("");
@@ -248,17 +248,17 @@ public class ReportFinalizer
     public int getReportOpenMode()
     {
         int ReportMode = SOCREATEDOCUMENT;
-        boolean bcreateTemplate = ((Short) CurUnoDialog.getControlProperty("optCreateReportTemplate", "State")).shortValue() == (short) 1;
+        boolean bcreateTemplate = ((Short) CurUnoDialog.getControlProperty("optCreateReportTemplate", PropertyNames.PROPERTY_STATE)).shortValue() == (short) 1;
         if (bcreateTemplate)
         {
             ReportMode = SOCREATETEMPLATE;
         }
-        boolean buseTemplate = ((Short) CurUnoDialog.getControlProperty("optUseTemplate", "State")).shortValue() == (short) 1;
+        boolean buseTemplate = ((Short) CurUnoDialog.getControlProperty("optUseTemplate", PropertyNames.PROPERTY_STATE)).shortValue() == (short) 1;
         if (buseTemplate)
         {
             ReportMode = SOUSETEMPLATE;
         }
-        boolean buseDocument = ((Short) CurUnoDialog.getControlProperty("optCreateDocument", "State")).shortValue() == (short) 1;
+        boolean buseDocument = ((Short) CurUnoDialog.getControlProperty("optCreateDocument", PropertyNames.PROPERTY_STATE)).shortValue() == (short) 1;
         if (buseDocument)
         {
             ReportMode = SOCREATEDOCUMENT;

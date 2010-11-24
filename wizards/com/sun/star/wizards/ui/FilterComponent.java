@@ -52,6 +52,7 @@ import com.sun.star.wizards.common.NumberFormatter;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.HelpIds;
 import com.sun.star.wizards.common.JavaTools;
+import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.db.FieldColumn;
 import com.sun.star.wizards.db.QueryMetaData;
 import com.sun.star.wizards.db.SQLQueryComposer;
@@ -221,7 +222,7 @@ public class FilterComponent
         {
             XControl xControl = (XControl) UnoRuntime.queryInterface(XControl.class, _oSourceevent);
             XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xControl.getModel());
-            final String sName = AnyConverter.toString(xPSet.getPropertyValue("Name"));
+            final String sName = AnyConverter.toString(xPSet.getPropertyValue(PropertyNames.PROPERTY_NAME));
             return sName;
         }
         catch (Exception e)
@@ -245,7 +246,7 @@ public class FilterComponent
                 final XPropertyContainer column = (XPropertyContainer) UnoRuntime.queryInterface(XPropertyContainer.class, oQueryMetaData.xMSF.createInstance(serviceName));
 
                 column.addProperty("Type", PropertyAttribute.BOUND, DataType.VARCHAR);
-                column.addProperty("Name", PropertyAttribute.BOUND, "");
+                column.addProperty(PropertyNames.PROPERTY_NAME, PropertyAttribute.BOUND, "");
                 column.addProperty("Value", (short)( PropertyAttribute.MAYBEVOID | PropertyAttribute.REMOVABLE ), null );
                 final XPropertySet columnSet = UnoRuntime.queryInterface(XPropertySet.class, column);
 
@@ -269,7 +270,7 @@ public class FilterComponent
                             String sFieldName = currentControlRow.getSelectedFieldName();
                             int nOperator = (int) currentControlRow.getSelectedOperator();
                             FieldColumn aFieldColumn = oQueryMetaData.getFieldColumnByDisplayName(sFieldName);
-                            columnSet.setPropertyValue("Name", aFieldColumn.getFieldName());
+                            columnSet.setPropertyValue(PropertyNames.PROPERTY_NAME, aFieldColumn.getFieldName());
                             columnSet.setPropertyValue("Type", aFieldColumn.getXColumnPropertySet().getPropertyValue("Type"));
                             Object value = currentControlRow.getValue();
                             switch(aFieldColumn.getFieldType())
@@ -419,15 +420,15 @@ public class FilterComponent
         CurUnoDialog.insertRadioButton("optMatchAll" + sIncSuffix, SOOPTANDMODE, new ItemListenerImpl(),
                 new String[]
                 {
-                    "Height",
-                    "HelpURL",
-                    "Label",
-                    "PositionX",
-                    "PositionY",
-                    "State",
-                    "Step",
-                    "TabIndex",
-                    "Width"
+                    PropertyNames.PROPERTY_HEIGHT,
+                    PropertyNames.PROPERTY_HELPURL,
+                    PropertyNames.PROPERTY_LABEL,
+                    PropertyNames.PROPERTY_POSITION_X,
+                    PropertyNames.PROPERTY_POSITION_Y,
+                    PropertyNames.PROPERTY_STATE,
+                    PropertyNames.PROPERTY_STEP,
+                    PropertyNames.PROPERTY_TABINDEX,
+                    PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -444,14 +445,14 @@ public class FilterComponent
         optMatchAny = CurUnoDialog.insertRadioButton("optMatchAny" + sIncSuffix, SOOPTORMODE, new ItemListenerImpl(),
                 new String[]
                 {
-                    "Height",
-                    "HelpURL",
-                    "Label",
-                    "PositionX",
-                    "PositionY",
-                    "Step",
-                    "TabIndex",
-                    "Width"
+                    PropertyNames.PROPERTY_HEIGHT,
+                    PropertyNames.PROPERTY_HELPURL,
+                    PropertyNames.PROPERTY_LABEL,
+                    PropertyNames.PROPERTY_POSITION_X,
+                    PropertyNames.PROPERTY_POSITION_Y,
+                    PropertyNames.PROPERTY_STEP,
+                    PropertyNames.PROPERTY_TABINDEX,
+                    PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -558,14 +559,14 @@ public class FilterComponent
                 ControlElements[0] = (XInterface) CurUnoDialog.insertLabel("lblFieldNames" + sCompSuffix,
                         new String[]
                         {
-                            "Enabled",
-                            "Height",
-                            "Label",
-                            "PositionX",
-                            "PositionY",
-                            "Step",
-                            "TabIndex",
-                            "Width"
+                            PropertyNames.PROPERTY_ENABLED,
+                            PropertyNames.PROPERTY_HEIGHT,
+                            PropertyNames.PROPERTY_LABEL,
+                            PropertyNames.PROPERTY_POSITION_X,
+                            PropertyNames.PROPERTY_POSITION_Y,
+                            PropertyNames.PROPERTY_STEP,
+                            PropertyNames.PROPERTY_TABINDEX,
+                            PropertyNames.PROPERTY_WIDTH
                         },
                         new Object[]
                         {
@@ -583,14 +584,14 @@ public class FilterComponent
                 ControlElements[1] = (XInterface) CurUnoDialog.insertLabel("lblOperators" + sCompSuffix,
                         new String[]
                         {
-                            "Enabled",
-                            "Height",
-                            "Label",
-                            "PositionX",
-                            "PositionY",
-                            "Step",
-                            "TabIndex",
-                            "Width"
+                            PropertyNames.PROPERTY_ENABLED,
+                            PropertyNames.PROPERTY_HEIGHT,
+                            PropertyNames.PROPERTY_LABEL,
+                            PropertyNames.PROPERTY_POSITION_X,
+                            PropertyNames.PROPERTY_POSITION_Y,
+                            PropertyNames.PROPERTY_STEP,
+                            PropertyNames.PROPERTY_TABINDEX,
+                            PropertyNames.PROPERTY_WIDTH
                         },
                         new Object[]
                         {
@@ -608,14 +609,14 @@ public class FilterComponent
                 ControlElements[2] = (XInterface) CurUnoDialog.insertLabel("lblValue" + sCompSuffix,
                         new String[]
                         {
-                            "Enabled",
-                            "Height",
-                            "Label",
-                            "PositionX",
-                            "PositionY",
-                            "Step",
-                            "TabIndex",
-                            "Width"
+                            PropertyNames.PROPERTY_ENABLED,
+                            PropertyNames.PROPERTY_HEIGHT,
+                            PropertyNames.PROPERTY_LABEL,
+                            PropertyNames.PROPERTY_POSITION_X,
+                            PropertyNames.PROPERTY_POSITION_Y,
+                            PropertyNames.PROPERTY_STEP,
+                            PropertyNames.PROPERTY_TABINDEX,
+                            PropertyNames.PROPERTY_WIDTH
                         },
                         new Object[]
                         {
@@ -633,16 +634,16 @@ public class FilterComponent
                 ControlElements[SOLSTFIELDNAME] = (XInterface) CurUnoDialog.insertListBox("lstFieldName" + sCompSuffix, SO_FIELDNAMELIST[Index], null, new ItemListenerImpl(),
                         new String[]
                         {
-                            "Enabled",
+                            PropertyNames.PROPERTY_ENABLED,
                             "Dropdown",
-                            "Height",
-                            "HelpURL",
+                            PropertyNames.PROPERTY_HEIGHT,
+                            PropertyNames.PROPERTY_HELPURL,
                             "LineCount",
-                            "PositionX",
-                            "PositionY",
-                            "Step",
-                            "TabIndex",
-                            "Width"
+                            PropertyNames.PROPERTY_POSITION_X,
+                            PropertyNames.PROPERTY_POSITION_Y,
+                            PropertyNames.PROPERTY_STEP,
+                            PropertyNames.PROPERTY_TABINDEX,
+                            PropertyNames.PROPERTY_WIDTH
                         },
                         new Object[]
                         {
@@ -662,17 +663,17 @@ public class FilterComponent
                 ControlElements[SOLSTOPERATOR] = (XInterface) CurUnoDialog.insertListBox("lstOperator" + sCompSuffix, SO_CONDITIONLIST[Index], null, new ItemListenerImpl(),
                         new String[]
                         {
-                            "Enabled",
+                            PropertyNames.PROPERTY_ENABLED,
                             "Dropdown",
-                            "Height",
-                            "HelpURL",
+                            PropertyNames.PROPERTY_HEIGHT,
+                            PropertyNames.PROPERTY_HELPURL,
                             "LineCount",
-                            "PositionX",
-                            "PositionY",
-                            "Step",
+                            PropertyNames.PROPERTY_POSITION_X,
+                            PropertyNames.PROPERTY_POSITION_Y,
+                            PropertyNames.PROPERTY_STEP,
                             "StringItemList",
-                            "TabIndex",
-                            "Width"
+                            PropertyNames.PROPERTY_TABINDEX,
+                            PropertyNames.PROPERTY_WIDTH
                         },
                         new Object[]
                         {
@@ -691,14 +692,14 @@ public class FilterComponent
                 ControlElements[SOTXTVALUE] = (XInterface) CurUnoDialog.insertFormattedField("txtValue" + sCompSuffix, SO_TEXTFIELDLIST[Index], new TextListenerImpl(),
                         new String[]
                         {
-                            "Enabled",
-                            "Height",
-                            "HelpURL",
-                            "PositionX",
-                            "PositionY",
-                            "Step",
-                            "TabIndex",
-                            "Width"
+                            PropertyNames.PROPERTY_ENABLED,
+                            PropertyNames.PROPERTY_HEIGHT,
+                            PropertyNames.PROPERTY_HELPURL,
+                            PropertyNames.PROPERTY_POSITION_X,
+                            PropertyNames.PROPERTY_POSITION_Y,
+                            PropertyNames.PROPERTY_STEP,
+                            PropertyNames.PROPERTY_TABINDEX,
+                            PropertyNames.PROPERTY_WIDTH
                         },
                         new Object[]
                         {
@@ -736,16 +737,16 @@ public class FilterComponent
 
                     {
                         // disable value field
-                        Helper.setUnoPropertyValue(UnoDialog.getModel(ControlElements[2]), "Enabled", Boolean.FALSE);
-                        Helper.setUnoPropertyValue(UnoDialog.getModel(ControlElements[SOTXTVALUE]), "Enabled", Boolean.FALSE);
+                        Helper.setUnoPropertyValue(UnoDialog.getModel(ControlElements[2]), PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
+                        Helper.setUnoPropertyValue(UnoDialog.getModel(ControlElements[SOTXTVALUE]), PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
 
                         return true;
                     }
                     else
                     {
                         // enable value field
-                        Helper.setUnoPropertyValue(UnoDialog.getModel(ControlElements[2]), "Enabled", Boolean.TRUE);
-                        Helper.setUnoPropertyValue(UnoDialog.getModel(ControlElements[SOTXTVALUE]), "Enabled", Boolean.TRUE);
+                        Helper.setUnoPropertyValue(UnoDialog.getModel(ControlElements[2]), PropertyNames.PROPERTY_ENABLED, Boolean.TRUE);
+                        Helper.setUnoPropertyValue(UnoDialog.getModel(ControlElements[SOTXTVALUE]), PropertyNames.PROPERTY_ENABLED, Boolean.TRUE);
                     }
                     if (nSelOperator != -1)
                     {
@@ -849,7 +850,7 @@ public class FilterComponent
             // enable all Controls Fieldname, operator, value
             for (int i = 0; i < ControlElements.length; i++)
             {
-                Helper.setUnoPropertyValue(UnoDialog.getModel(ControlElements[i]), "Enabled", Boolean.valueOf(_bEnabled));
+                Helper.setUnoPropertyValue(UnoDialog.getModel(ControlElements[i]), PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(_bEnabled));
             }
             m_bEnabled = _bEnabled;
             if (isEnabled())

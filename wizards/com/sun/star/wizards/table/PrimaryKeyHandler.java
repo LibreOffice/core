@@ -35,6 +35,7 @@ import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.JavaTools;
+import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.db.TableDescriptor;
 import com.sun.star.wizards.db.TypeInspector;
 import com.sun.star.wizards.ui.FieldSelection;
@@ -85,7 +86,7 @@ public class PrimaryKeyHandler implements XFieldSelectionListener
         CurUnoDialog.insertLabel("lblExplanation",
                 new String[]
                 {
-                    "Height", "Label", "MultiLine", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -95,7 +96,7 @@ public class PrimaryKeyHandler implements XFieldSelectionListener
         chkcreatePrimaryKey = CurUnoDialog.insertCheckBox("chkcreatePrimaryKey", SPRIMEKEYMODE, this,
                 new String[]
                 {
-                    "Height", "HelpURL", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -105,7 +106,7 @@ public class PrimaryKeyHandler implements XFieldSelectionListener
         optAddAutomatically = CurUnoDialog.insertRadioButton("optAddAutomatically", SPRIMEKEYMODE, this,
                 new String[]
                 {
-                    "Height", "HelpURL", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -115,7 +116,7 @@ public class PrimaryKeyHandler implements XFieldSelectionListener
         optUseExisting = CurUnoDialog.insertRadioButton("optUseExisting", SPRIMEKEYMODE, this,
                 new String[]
                 {
-                    "Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 }, //94
                 new Object[]
                 {
@@ -125,7 +126,7 @@ public class PrimaryKeyHandler implements XFieldSelectionListener
         optUseSeveral = CurUnoDialog.insertRadioButton("optUseSeveral", SPRIMEKEYMODE, this,
                 new String[]
                 {
-                    "Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -135,7 +136,7 @@ public class PrimaryKeyHandler implements XFieldSelectionListener
         chkApplyAutoValueAutomatic = CurUnoDialog.insertCheckBox("chkApplyAutoValueAutomatic", SPRIMEKEYMODE, this,
                 new String[]
                 {
-                    "Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 }, //107
                 new Object[]
                 {
@@ -145,7 +146,7 @@ public class PrimaryKeyHandler implements XFieldSelectionListener
         lblPrimeFieldName = CurUnoDialog.insertLabel("lblPrimeFieldName",
                 new String[]
                 {
-                    "Enabled", "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -156,15 +157,15 @@ public class PrimaryKeyHandler implements XFieldSelectionListener
                 new String[]
                 {
                     "Dropdown",
-                    "Enabled",
-                    "Height",
-                    "HelpURL",
+                    PropertyNames.PROPERTY_ENABLED,
+                    PropertyNames.PROPERTY_HEIGHT,
+                    PropertyNames.PROPERTY_HELPURL,
                     "LineCount",
-                    "PositionX",
-                    "PositionY",
-                    "Step",
-                    "TabIndex",
-                    "Width"
+                    PropertyNames.PROPERTY_POSITION_X,
+                    PropertyNames.PROPERTY_POSITION_Y,
+                    PropertyNames.PROPERTY_STEP,
+                    PropertyNames.PROPERTY_TABINDEX,
+                    PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -183,7 +184,7 @@ public class PrimaryKeyHandler implements XFieldSelectionListener
         chkApplyAutoValueExisting = CurUnoDialog.insertCheckBox("chkApplyAutoValueExisting", SPRIMEKEYMODE, this,
                 new String[]
                 {
-                    "Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 }, //107
                 new Object[]
                 {
@@ -259,10 +260,10 @@ public class PrimaryKeyHandler implements XFieldSelectionListener
     public void togglePrimeKeyFields()
     {
         boolean bdoEnable = (this.chkcreatePrimaryKey.getState() == 1);
-        Helper.setUnoPropertyValue(UnoDialog.getModel(optAddAutomatically), "Enabled", new Boolean(bdoEnable));
-        Helper.setUnoPropertyValue(UnoDialog.getModel(chkApplyAutoValueAutomatic), "Enabled", new Boolean(bAutoPrimaryKeysupportsAutoIncrmentation && bdoEnable));
-        Helper.setUnoPropertyValue(UnoDialog.getModel(optUseExisting), "Enabled", new Boolean(bdoEnable));
-        Helper.setUnoPropertyValue(UnoDialog.getModel(optUseSeveral), "Enabled", new Boolean(bdoEnable));
+        Helper.setUnoPropertyValue(UnoDialog.getModel(optAddAutomatically), PropertyNames.PROPERTY_ENABLED, new Boolean(bdoEnable));
+        Helper.setUnoPropertyValue(UnoDialog.getModel(chkApplyAutoValueAutomatic), PropertyNames.PROPERTY_ENABLED, new Boolean(bAutoPrimaryKeysupportsAutoIncrmentation && bdoEnable));
+        Helper.setUnoPropertyValue(UnoDialog.getModel(optUseExisting), PropertyNames.PROPERTY_ENABLED, new Boolean(bdoEnable));
+        Helper.setUnoPropertyValue(UnoDialog.getModel(optUseSeveral), PropertyNames.PROPERTY_ENABLED, new Boolean(bdoEnable));
         //toggle subcontrols of the radiobuttons...
         toggleAutomaticAutoValueCheckBox();
         boolean benableSinglePrimekeyControls = bdoEnable && optUseExisting.getState();
@@ -317,7 +318,7 @@ public class PrimaryKeyHandler implements XFieldSelectionListener
         boolean bisAutomaticMode = false;
         if (chkcreatePrimaryKey.getState() == 1)
         {
-            bisAutomaticMode = ((Short) Helper.getUnoPropertyValue(UnoDialog.getModel(optAddAutomatically), "State")).shortValue() == (short) 1;
+            bisAutomaticMode = ((Short) Helper.getUnoPropertyValue(UnoDialog.getModel(optAddAutomatically), PropertyNames.PROPERTY_STATE)).shortValue() == (short) 1;
         }
         return bisAutomaticMode;
     }
@@ -332,8 +333,8 @@ public class PrimaryKeyHandler implements XFieldSelectionListener
         boolean bischecked = false;
         if (chkcreatePrimaryKey.getState() == 1)
         {
-            boolean bisAutomaticMode = ((Short) Helper.getUnoPropertyValue(UnoDialog.getModel(optAddAutomatically), "State")).shortValue() == (short) 1;
-            boolean bisExistingMode = ((Short) Helper.getUnoPropertyValue(UnoDialog.getModel(optUseExisting), "State")).shortValue() == (short) 1;
+            boolean bisAutomaticMode = ((Short) Helper.getUnoPropertyValue(UnoDialog.getModel(optAddAutomatically), PropertyNames.PROPERTY_STATE)).shortValue() == (short) 1;
+            boolean bisExistingMode = ((Short) Helper.getUnoPropertyValue(UnoDialog.getModel(optUseExisting), PropertyNames.PROPERTY_STATE)).shortValue() == (short) 1;
             if (bisAutomaticMode)
             {
                 bischecked = chkApplyAutoValueAutomatic.getState() == (short) 1;
@@ -353,16 +354,16 @@ public class PrimaryKeyHandler implements XFieldSelectionListener
             String selfieldname = lstSinglePrimeKey.getSelectedItem();
             boolean bdoenable = isAutoIncrementatable(selfieldname);
             CurUnoDialog.setcompleted(TableWizard.SOPRIMARYKEYPAGE, lstSinglePrimeKey.getSelectedItemPos() != -1);
-            Helper.setUnoPropertyValue(UnoDialog.getModel(chkApplyAutoValueExisting), "Enabled", new Boolean(bdoenable));
+            Helper.setUnoPropertyValue(UnoDialog.getModel(chkApplyAutoValueExisting), PropertyNames.PROPERTY_ENABLED, new Boolean(bdoenable));
             XPropertySet xColPropertySet = curTableDescriptor.getByName(selfieldname);
             boolean bIsAutoIncremented = ((Boolean) xColPropertySet.getPropertyValue("IsAutoIncrement")).booleanValue();
             if (bIsAutoIncremented)
             {
-                Helper.setUnoPropertyValue(UnoDialog.getModel(chkApplyAutoValueExisting), "State", new Short((short) 1));
+                Helper.setUnoPropertyValue(UnoDialog.getModel(chkApplyAutoValueExisting), PropertyNames.PROPERTY_STATE, new Short((short) 1));
             }
             else
             {
-                Helper.setUnoPropertyValue(UnoDialog.getModel(chkApplyAutoValueExisting), "State", new Short((short) 0));
+                Helper.setUnoPropertyValue(UnoDialog.getModel(chkApplyAutoValueExisting), PropertyNames.PROPERTY_STATE, new Short((short) 0));
             }
         }
         catch (Exception e)
@@ -375,9 +376,9 @@ public class PrimaryKeyHandler implements XFieldSelectionListener
     {
         try
         {
-            boolean bisAutomaticMode = AnyConverter.toBoolean(Helper.getUnoPropertyValue(UnoDialog.getModel(optAddAutomatically), "Enabled"));
+            boolean bisAutomaticMode = AnyConverter.toBoolean(Helper.getUnoPropertyValue(UnoDialog.getModel(optAddAutomatically), PropertyNames.PROPERTY_ENABLED));
             boolean bdoenable = bAutoPrimaryKeysupportsAutoIncrmentation && optAddAutomatically.getState() && bisAutomaticMode;
-            Helper.setUnoPropertyValue(UnoDialog.getModel(chkApplyAutoValueAutomatic), "Enabled", new Boolean(bdoenable));
+            Helper.setUnoPropertyValue(UnoDialog.getModel(chkApplyAutoValueAutomatic), PropertyNames.PROPERTY_ENABLED, new Boolean(bdoenable));
         }
         catch (IllegalArgumentException e)
         {
@@ -387,11 +388,11 @@ public class PrimaryKeyHandler implements XFieldSelectionListener
 
     private void toggleSinglePrimeKeyFields(boolean _bdoenable)
     {
-        Helper.setUnoPropertyValue(UnoDialog.getModel(lblPrimeFieldName), "Enabled", new Boolean(_bdoenable));
-        Helper.setUnoPropertyValue(UnoDialog.getModel(lstSinglePrimeKey), "Enabled", new Boolean(_bdoenable));
-        Helper.setUnoPropertyValue(UnoDialog.getModel(chkApplyAutoValueExisting), "Enabled", new Boolean(_bdoenable));
+        Helper.setUnoPropertyValue(UnoDialog.getModel(lblPrimeFieldName), PropertyNames.PROPERTY_ENABLED, new Boolean(_bdoenable));
+        Helper.setUnoPropertyValue(UnoDialog.getModel(lstSinglePrimeKey), PropertyNames.PROPERTY_ENABLED, new Boolean(_bdoenable));
+        Helper.setUnoPropertyValue(UnoDialog.getModel(chkApplyAutoValueExisting), PropertyNames.PROPERTY_ENABLED, new Boolean(_bdoenable));
         boolean bdoenableAutoValueCheckBox = (isAutoIncrementatable(lstSinglePrimeKey.getSelectedItem()) && _bdoenable);
-        Helper.setUnoPropertyValue(UnoDialog.getModel(chkApplyAutoValueExisting), "Enabled", new Boolean(bdoenableAutoValueCheckBox));
+        Helper.setUnoPropertyValue(UnoDialog.getModel(chkApplyAutoValueExisting), PropertyNames.PROPERTY_ENABLED, new Boolean(bdoenableAutoValueCheckBox));
     }
 
     private void toggleSeveralPrimeKeyFields()

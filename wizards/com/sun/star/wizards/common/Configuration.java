@@ -334,7 +334,7 @@ public abstract class Configuration
     public static String[] getNodeDisplayNames(XNameAccess _xNameAccessNode)
     {
         String[] snames = null;
-        return getNodeChildNames(_xNameAccessNode, "Name");
+        return getNodeChildNames(_xNameAccessNode, PropertyNames.PROPERTY_NAME);
     }
 
     public static String[] getNodeChildNames(XNameAccess xNameAccessNode, String _schildname)
@@ -400,7 +400,7 @@ public abstract class Configuration
     public static XNameAccess getChildNodebyDisplayName(XNameAccess _xNameAccessNode, String _displayname)
     {
         String[] snames = null;
-        return getChildNodebyDisplayName(_xNameAccessNode, _displayname, "Name");
+        return getChildNodebyDisplayName(_xNameAccessNode, _displayname, PropertyNames.PROPERTY_NAME);
     }
 
     public static XNameAccess getChildNodebyDisplayName(XNameAccess _xNameAccessNode, String _displayname, String _nodename)

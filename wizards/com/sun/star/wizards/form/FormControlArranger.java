@@ -36,6 +36,7 @@ import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Exception;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.Resource;
+import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.db.*;
 import com.sun.star.wizards.document.Control;
 import com.sun.star.wizards.document.DatabaseControl;
@@ -643,7 +644,7 @@ public class FormControlArranger
                     if (DBControlList[i].getControlType() == FormHandler.SOCHECKBOX)
                     {
                         // Checkboxes have no Label near by
-                        DBControlList[i].setPropertyValue("Label", "");
+                        DBControlList[i].setPropertyValue(PropertyNames.PROPERTY_LABEL, "");
                     }
                 }
             }
@@ -662,7 +663,7 @@ public class FormControlArranger
             }
             if (nFieldType == DataType.LONGVARCHAR) /* memo */
             {
-                Helper.setUnoPropertyValue(LabelControlList[i], "MultiLine", Boolean.TRUE);
+                Helper.setUnoPropertyValue(LabelControlList[i], PropertyNames.PROPERTY_MULTILINE, Boolean.TRUE);
             }
             checkOuterPoints(nXDBPos, nDBWidth, nYDBPos, nDBHeight, true);
             aDBControl.setPropertyValue("Border", NBorderType);

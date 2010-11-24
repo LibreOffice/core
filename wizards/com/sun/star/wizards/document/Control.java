@@ -133,7 +133,7 @@ public class Control extends Shape
             {
                 XNameAccess xNameAccess = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, xFormName);
                 String sControlName = Desktop.getUniqueName(xNameAccess, getControlName(_fieldname));
-                xPropertySet.setPropertyValue("Name", sControlName);
+                xPropertySet.setPropertyValue(PropertyNames.PROPERTY_NAME, sControlName);
                 xFormName.insertByName(sControlName, xControlModel);
             }
         }
@@ -248,9 +248,9 @@ public class Control extends Shape
             {
                 xPropertySet.setPropertyValue("Text", sText);
             }
-            else if (xPropertySet.getPropertySetInfo().hasPropertyByName("Label"))
+            else if (xPropertySet.getPropertySetInfo().hasPropertyByName(PropertyNames.PROPERTY_LABEL))
             {
-                xPropertySet.setPropertyValue("Label", sText);
+                xPropertySet.setPropertyValue(PropertyNames.PROPERTY_LABEL, sText);
             }
             else
             {

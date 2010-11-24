@@ -33,6 +33,7 @@ import com.sun.star.lang.EventObject;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.wizards.common.Helper;
+import com.sun.star.wizards.common.PropertyNames;
 
 /**
  * @author rpiterman
@@ -139,7 +140,7 @@ public class PeerConfig implements XWindowListener
                 }
                 if (!sImageUrl.equals(""))
                 {
-                    Helper.setUnoPropertyValue(aImageUrlTask.oModel, "ImageURL", sImageUrl);
+                    Helper.setUnoPropertyValue(aImageUrlTask.oModel, PropertyNames.PROPERTY_IMAGEURL, sImageUrl);
                 }
             }
 
