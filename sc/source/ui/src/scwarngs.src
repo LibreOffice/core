@@ -28,8 +28,6 @@
 #include "scwarngs.hxx"
 #include "sc.hrc"
 
-
-
 #define SH_MAX 0x7fff
 
 Resource RID_WRNHDLSC

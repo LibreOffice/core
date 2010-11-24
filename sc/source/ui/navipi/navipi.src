@@ -59,23 +59,13 @@ Window RID_SCDLG_NAVIGATOR
 {
     SVLook = TRUE ;
     HelpId = HID_SC_NAVIGATOR ;
-     //?    Pos = MAP_APPFONT( 0, 0 );
     Size = MAP_APPFONT ( 115 , 116 ) ;
     OutputSize = TRUE ;
     DialogControl = TRUE ;
     Hide = TRUE ;
     Text [ en-US ] = "Navigator" ;
-     //    Closeable = TRUE ;
-     //    Moveable = TRUE ;
-     //    Zoomable = TRUE ;
-     //    Sizeable = TRUE ;
-     //    EnableResizing = TRUE ;
-     //    HideWhenDeactivate = TRUE ;
-     //    Border = TRUE ;
-     //    Dockable = TRUE ;
     FixedText FT_ROW
     {
-         //         Pos = MAP_APPFONT( 2, 20 );
         Pos = MAP_APPFONT ( 2 , 19 ) ;
          // an kleinere Toolbox-Bitmaps angepasst
         Size = MAP_APPFONT ( 19 , 10 ) ;
@@ -85,7 +75,6 @@ Window RID_SCDLG_NAVIGATOR
     {
         HelpId = HID_SC_NAVIPI_ROW ;
         Border = TRUE ;
-         //         Pos = MAP_APPFONT( 31, 19 );
         Pos = MAP_APPFONT ( 31 , 18 ) ;
          // an kleinere Toolbox-Bitmaps angepasst
         Size = MAP_APPFONT ( 30 , 12 ) ;
@@ -119,7 +108,6 @@ Window RID_SCDLG_NAVIGATOR
          // "Control" braucht immer eigene HelpId
         HelpId = HID_SC_NAVIPI_ENTRIES ;
         Border = TRUE ;
-         //         Pos = MAP_APPFONT( 2, 52 );
         Pos = MAP_APPFONT ( 2 , 35 ) ;
         Size = MAP_APPFONT ( 110 , 100 ) ;
         TabStop = TRUE ;
@@ -128,7 +116,6 @@ Window RID_SCDLG_NAVIGATOR
     {
         HelpId = HID_SC_NAVIPI_DOC ;
         Border = TRUE ;
-         //         Pos = MAP_APPFONT( 2, 35 );
         Pos = MAP_APPFONT ( 2 , 89 ) ;
         Size = MAP_APPFONT ( 82 , 50 ) ;
         TabStop = TRUE ;
@@ -244,6 +231,7 @@ ImageList RID_IMAGELIST_NAVCONT
     MaskColor = STD_MASKCOLOR ;
     SC_NAVI_CONT_IDLIST
 };
+
 Image RID_IMG_DROP_URL
 {
     ImageBitmap = Bitmap { File = "dropurl.png" ; };

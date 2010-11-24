@@ -26,16 +26,15 @@
  ************************************************************************/
 
 #include "simpref.hrc"
+
 ModelessDialog RID_SCDLG_SIMPLEREF
 {
     OutputSize = TRUE ;
-     //HelpId = SID_DEFINE_DBNAME ;
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 222 , 60 ) ;
     Text = "Bereich festlegen" ;
     Moveable = TRUE ;
-     // Closeable = TRUE;   // Dieser Dialog hat einen Cancel-Button !
     FixedText FT_ASSIGN
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;

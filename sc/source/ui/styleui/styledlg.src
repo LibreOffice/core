@@ -27,6 +27,7 @@
 
 #include "sc.hrc"
 #include "styledlg.hrc" // -> TP_xxx
+
 TabDialog RID_SCDLG_STYLES_PAR
 {
     OutputSize = TRUE ;
@@ -86,6 +87,7 @@ TabDialog RID_SCDLG_STYLES_PAR
         };
     };
 };
+
 TabDialog RID_SCDLG_STYLES_PAGE
 {
     OutputSize = TRUE ;

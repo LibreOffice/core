@@ -36,18 +36,22 @@ String RID_PROPERTY_NONNEGATIVE
 {
     Text [ en-US ] = "Assume variables as non-negative";
 };
+
 String RID_PROPERTY_INTEGER
 {
     Text [ en-US ] = "Assume variables as integer";
 };
+
 String RID_PROPERTY_TIMEOUT
 {
     Text [ en-US ] = "Solving time limit (seconds)";
 };
+
 String RID_PROPERTY_EPSILONLEVEL
 {
     Text [ en-US ] = "Epsilon level (0-3)";
 };
+
 String RID_PROPERTY_LIMITBBDEPTH
 {
     Text [ en-US ] = "Limit branch-and-bound depth";
@@ -57,20 +61,23 @@ String RID_ERROR_NONLINEAR
 {
     Text [ en-US ] = "The model is not linear.";
 };
+
 String RID_ERROR_EPSILONLEVEL
 {
     Text [ en-US ] = "The epsilon level is invalid.";
 };
+
 String RID_ERROR_INFEASIBLE
 {
     Text [ en-US ] = "The model is infeasible. Check limiting conditions.";
 };
+
 String RID_ERROR_UNBOUNDED
 {
     Text [ en-US ] = "The model is unbounded.";
 };
+
 String RID_ERROR_TIMEOUT
 {
     Text [ en-US ] = "The time limit was reached.";
 };
-

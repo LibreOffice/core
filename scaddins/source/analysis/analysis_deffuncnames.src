@@ -25,9 +25,7 @@
  *
  ************************************************************************/
 
-
 #include "analysis.hrc"
-
 
 Resource RID_ANALYSIS_DEFFUNCTION_NAMES
 {
@@ -868,5 +866,4 @@ Resource RID_ANALYSIS_DEFFUNCTION_NAMES
             < "FACTDOUBLE"; >;
         };
     };
-
 };

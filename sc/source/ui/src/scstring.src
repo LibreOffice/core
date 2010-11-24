@@ -24,6 +24,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #include "sc.hrc" // -> #include <sfx.hrc>
 
  // Strings fuer Interface-Namen ------------------------------------------
@@ -32,38 +33,47 @@ String SCSTR_APPLICATION
 {
     Text [ en-US ] = "%PRODUCTNAME Calc 6.0";
 };
+
 String SCSTR_50_APPLICATION
 {
     Text [ en-US ] = "StarCalc  5.0" ;
 };
+
 String SCSTR_40_APPLICATION
 {
     Text [ en-US ] = "StarCalc 4.0" ;
 };
+
 String SCSTR_30_APPLICATION
 {
     Text [ en-US ] = "StarCalc 3.0" ;
 };
+
 String SCSTR_LONG_SCDOC_NAME
 {
     Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION Spreadsheet";
 };
+
 String SCSTR_50_LONG_DOCNAME
 {
     Text [ en-US ] = "%PRODUCTNAME 5.0 Spreadsheet" ;
 };
+
 String SCSTR_40_LONG_DOCNAME
 {
     Text [ en-US ] = "%PRODUCTNAME 4.0 Spreadsheet" ;
 };
+
 String SCSTR_30_LONG_DOCNAME
 {
     Text [ en-US ] = "StarCalc 3.0 Spreadsheet" ;
 };
+
 String SCSTR_SHORT_SCDOC_NAME
 {
     Text [ en-US ] = "Spreadsheet" ;
 };
+
 String SCSTR_HUMAN_SCDOC_NAME
 {
     Text [ en-US ] = "Spreadsheet" ;
@@ -88,7 +98,6 @@ String SCSTR_FORMATSHELL
 {
     Text [ en-US ] = "Formats for Cells";
 };
-
 
 String SCSTR_DRAWSHELL
 {
@@ -119,6 +128,7 @@ String SCSTR_GRAPHICSHELL
 {
     Text [ en-US ] = "Graphics";
 };
+
 String SCSTR_PAGEBREAKSHELL
 {
     Text [ en-US ] = "Pagebreak";
@@ -150,148 +160,182 @@ String STR_ROWHEIGHT
 {
     Text [ en-US ] = "Height" ;
 };
+
 String STR_OPT_ROWHEIGHT
 {
     Text [ en-US ] = "Add" ;
 };
+
 String STR_ROWHEIGHT_TITLE
 {
     Text [ en-US ] = "Row Height" ;
 };
+
 String STR_OPT_ROWHEIGHT_TITLE
 {
     Text [ en-US ] = "Optimal Row Height" ;
 };
+
 String STR_COLWIDTH
 {
     Text [ en-US ] = "Width" ;
 };
+
 String STR_OPT_COLWIDTH
 {
     Text [ en-US ] = "Add" ;
 };
+
 String STR_COLWIDTH_TITLE
 {
     Text [ en-US ] = "Column Width" ;
 };
+
 String STR_OPT_COLWIDTH_TITLE
 {
     Text [ en-US ] = "Optimal Column Width" ;
 };
+
 String SCSTR_UNDEFINED
 {
     Text [ en-US ] = "- undefined -" ;
 };
+
 String SCSTR_NONE
 {
     Text [ en-US ] = "- none -" ;
 };
+
 String SCSTR_EMPTY
 {
     Text [ en-US ] = "- empty -" ;
 };
+
 String SCSTR_NOTEMPTY
 {
     Text [ en-US ] = "- not empty -" ;
 };
+
 String SCSTR_NEWTABLE
 {
     Text [ en-US ] = "- new sheet -" ;
 };
+
 String SCSTR_ALL
 {
     Text [ en-US ] = "- all -" ;
 };
+
 String SCSTR_STDFILTER
 {
     Text [ en-US ] = "Standard Filter..." ;
 };
+
 String SCSTR_TOP10FILTER
 {
     Text [ en-US ] = "Top 10" ;
 };
+
 String SCSTR_NONAME
 {
     Text [ en-US ] = "unnamed" ;
 };
+
 String SCSTR_COLUMN
 {
     Text [ en-US ] = "Column" ;
 };
+
 String SCSTR_ROW
 {
     Text [ en-US ] = "Row" ;
 };
+
 String SCSTR_NEW
 {
     Text [ en-US ] = "~New" ;
 };
+
 String SCSTR_ADD
 {
     Text [ en-US ] = "~Add" ;
 };
+
 String SCSTR_REMOVE
 {
     Text [ en-US ] = "~Delete" ;
 };
+
 String SCSTR_CANCEL
 {
     Text [ en-US ] = "Cance~l" ;
 };
+
 String SCSTR_MODIFY
 {
     Text [ en-US ] = "Modif~y" ;
 };
 
-
 String SCSTR_SHOWTABLE
 {
     Text [ en-US ] = "Show Sheet" ;
 };
+
 String SCSTR_HIDDENTABLES
 {
     Text [ en-US ] = "Hidden Sheets" ;
 };
+
 String SCSTR_SELECTDB
 {
     Text [ en-US ] = "Select Database Range" ;
 };
+
 String SCSTR_AREAS
 {
     Text [ en-US ] = "Ranges" ;
 };
+
 String SCSTR_TABLE
 {
     Text [ en-US ] = "Sheet" ;
 };
+
 String SCSTR_NAME
 {
     Text [ en-US ] = "Name" ;
 };
+
 String SCSTR_INSTABLE
 {
     Text [ en-US ] = "Insert Sheet" ;
 };
+
 String SCSTR_APDTABLE
 {
     Text [ en-US ] = "Append Sheet" ;
 };
+
 String SCSTR_RENAMETAB
 {
     Text [ en-US ] = "Rename Sheet" ;
 };
+
 String SCSTR_SET_TAB_BG_COLOR
 {
     Text [ en-US ] = "Tab Color" ;
 };
+
 String SCSTR_NO_TAB_BG_COLOR
 {
     Text [ en-US ] = "Default" ;
 };
+
 String SCSTR_RENAMEOBJECT
 {
     Text [ en-US ] = "Name Object";
 };
+
 String STR_INSERTGRAPHIC
 {
     Text [ en-US ] = "Insert Picture" ;
@@ -303,50 +347,62 @@ String SCSTR_HOR_JUSTIFY_LEFT
 {
     Text [ en-US ] = "Align left" ;
 };
+
 String SCSTR_HOR_JUSTIFY_CENTER
 {
     Text [ en-US ] = "Centered horizontally" ;
 };
+
 String SCSTR_HOR_JUSTIFY_RIGHT
 {
     Text [ en-US ] = "Align right" ;
 };
+
 String SCSTR_HOR_JUSTIFY_BLOCK
 {
     Text [ en-US ] = "Justify" ;
 };
+
 String SCSTR_HOR_JUSTIFY_REPEAT
 {
     Text [ en-US ] = "Repeat alignment" ;
 };
+
 String SCSTR_HOR_JUSTIFY_STANDARD
 {
     Text [ en-US ] = "Horizontal alignment default" ;
 };
+
 String SCSTR_VER_JUSTIFY_TOP
 {
     Text [ en-US ] = "Align to top" ;
 };
+
 String SCSTR_VER_JUSTIFY_CENTER
 {
     Text [ en-US ] = "Centered vertically" ;
 };
+
 String SCSTR_VER_JUSTIFY_BOTTOM
 {
     Text [ en-US ] = "Align to bottom" ;
 };
+
 String SCSTR_VER_JUSTIFY_STANDARD
 {
     Text [ en-US ] = "Vertical alignment default" ;
 };
+
 String SCSTR_ORIENTATION_TOPBOTTOM
 {
     Text [ en-US ] = "Top to bottom" ;
 };
+
 String SCSTR_ORIENTATION_BOTTOMTOP
 {
     Text [ en-US ] = "Bottom to Top" ;
 };
+
 String SCSTR_ORIENTATION_STANDARD
 {
     Text [ en-US ] = "Default orientation" ;
@@ -356,30 +412,37 @@ String SCSTR_PROTECTDOC
 {
     Text [ en-US ] = "Protect Document" ;
 };
+
 String SCSTR_UNPROTECTDOC
 {
     Text [ en-US ] = "Unprotect document" ;
 };
+
 String SCSTR_PROTECTTAB
 {
     Text [ en-US ] = "Protect Sheet" ;
 };
+
 String SCSTR_UNPROTECTTAB
 {
     Text [ en-US ] = "Unprotect sheet" ;
 };
+
 String SCSTR_CHG_PROTECT
 {
     Text [ en-US ] = "Protect Records" ;
 };
+
 String SCSTR_CHG_UNPROTECT
 {
     Text [ en-US ] = "Unprotect Records" ;
 };
+
 String SCSTR_PASSWORD
 {
     Text [ en-US ] = "Password:" ;
 };
+
 String SCSTR_PASSWORDOPT
 {
     Text [ en-US ] = "Password (optional):" ;
@@ -455,18 +518,22 @@ String SCSTR_VALID_MINIMUM
 {
     Text [ en-US ] = "~Minimum" ;
 };
+
 String SCSTR_VALID_MAXIMUM
 {
     Text [ en-US ] = "~Maximum" ;
 };
+
 String SCSTR_VALID_VALUE
 {
     Text [ en-US ] = "~Value" ;
 };
+
 String SCSTR_VALID_RANGE
 {
     Text [ en-US ] = "~Source" ;
 };
+
 String SCSTR_VALID_LIST
 {
     Text [ en-US ] = "~Entries" ;
@@ -505,26 +572,32 @@ String SCSTR_GRFILTER_OPENERROR
 {
     Text [ en-US ] = "Graphics file can not be opened" ;
 };
+
 String SCSTR_GRFILTER_IOERROR
 {
     Text [ en-US ] = "Graphics file can not be read" ;
 };
+
 String SCSTR_GRFILTER_FORMATERROR
 {
     Text [ en-US ] = "Unknown graphic format" ;
 };
+
 String SCSTR_GRFILTER_VERSIONERROR
 {
     Text [ en-US ] = "This graphic file version is not supported" ;
 };
+
 String SCSTR_GRFILTER_FILTERERROR
 {
     Text [ en-US ] = "Graphics filter not found" ;
 };
+
 String SCSTR_GRFILTER_TOOBIG
 {
     Text [ en-US ] = "Not enough memory available to insert graphics." ;
 };
+
 String SCSTR_UNDO_GRAFFILTER
 {
     Text [ en-US ] = "Graphics Filter" ;
@@ -773,4 +846,3 @@ String SCSTR_WARN_ME_IN_FUTURE_CHECK
 {
     Text [ en-US ] = "Warn me about this in the future.";
 };
-

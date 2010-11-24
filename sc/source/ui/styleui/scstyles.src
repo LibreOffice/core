@@ -27,6 +27,7 @@
 
 #include "sc.hrc"
 #include <svl/style.hrc>
+
 #define IMPL_FAMILY(family,filter) \
     StyleFamily = family;                       \
     FilterList = { filter }
@@ -43,14 +44,15 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             < STR_STYLE_FILTER_USED ; SFXSTYLEBIT_USED ; > ;
             < STR_STYLE_FILTER_USERDEF ; SFXSTYLEBIT_USERDEF ; > ; ) ;
             Text [ en-US ] = "Cell Styles" ;
-};
+        };
+
         SfxStyleFamilyItem
         {
             IMPL_FAMILY ( SFX_STYLE_FAMILY_PAGE ,
             < STR_STYLE_FILTER_ALL ; SFXSTYLEBIT_ALL ; > ;
             < STR_STYLE_FILTER_USERDEF ; SFXSTYLEBIT_USERDEF ; > ; ) ;
             Text [ en-US ] = "Page Styles" ;
-};
+        };
     };
 
     //  style family images are now taken from an ImageList

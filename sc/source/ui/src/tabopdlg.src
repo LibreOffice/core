@@ -26,6 +26,7 @@
  ************************************************************************/
 
 #include "tabopdlg.hrc"
+
 ModelessDialog RID_SCDLG_TABOP
 {
     OutputSize = TRUE ;

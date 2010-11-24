@@ -167,4 +167,3 @@ Resource RID_ERRHDLSC
         Text [ en-US ] = "Format error discovered in the file in sub-document $(ARG1) at $(ARG2)(row,col).";
     };
 };
-
