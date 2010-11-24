@@ -5,7 +5,7 @@
             xmlns:cfg="http://openoffice.org/2000/registry/instance">
 
 <service>
- <available-implementations cfg:type="string" cfg:derivedBy=="list"/>
+ <available-implementations cfg:type="string" cfg:derivedBy="list"/>
  <context-properties cfg:type="set" cfg:element-type="cfg:any"/>
 </service>
 
