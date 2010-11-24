@@ -112,6 +112,8 @@ DefaultText
 DiagonalBLTR
 DiagonalTLBR
 DialogLibraries
+DisableComplexChartTypes
+DisableDataTableDialog
 DisplayLabels
 DrillDownOnDoubleClick
 Dropdown

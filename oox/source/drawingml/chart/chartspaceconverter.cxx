@@ -203,14 +203,11 @@ void ChartSpaceConverter::convertFromModel( const Reference< XShapes >& rxExtern
     }
 
     // pivot chart
-    if ( mrModel.mbPivotChart ) try
+    if ( mrModel.mbPivotChart )
     {
-        Reference< XPropertySet > xProps( getChartDocument(), UNO_QUERY_THROW );
-        xProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "DisableDataTableDialog" ) ), makeAny( sal_True ) );
-        xProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "DisableComplexChartTypes" ) ), makeAny( sal_True ) );
-    }
-    catch ( Exception& )
-    {
+        PropertySet aProps( getChartDocument() );
+        aProps.setProperty( PROP_DisableDataTableDialog , true );
+        aProps.setProperty( PROP_DisableComplexChartTypes , true );
     }
 }
 
