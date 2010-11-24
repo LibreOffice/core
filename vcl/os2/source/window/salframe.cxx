@@ -2122,8 +2122,6 @@ void Os2SalFrame::UpdateSettings( AllSettings& rSettings )
 
     // --- Style settings ---
     StyleSettings aStyleSettings = rSettings.GetStyleSettings();
-    BOOL bCompBorder = (aStyleSettings.GetOptions() & (STYLE_OPTION_MACSTYLE | STYLE_OPTION_UNIXSTYLE)) == 0;
-
     // General settings
     LONG    nDisplayTime = PrfQueryProfileInt( HINI_PROFILE, (PSZ)aControlPanel, (PSZ)"LogoDisplayTime", -1 );
     ULONG   nSalDisplayTime;
@@ -2145,32 +2143,26 @@ void Os2SalFrame::UpdateSettings( AllSettings& rSettings )
 
     // Size settings
     aStyleSettings.SetScrollBarSize( WinQuerySysValue( HWND_DESKTOP, SV_CYHSCROLL ) );
-    if ( bCompBorder )
-    {
-        aStyleSettings.SetTitleHeight( WinQuerySysValue( HWND_DESKTOP, SV_CYTITLEBAR ) );
-    }
+    aStyleSettings.SetTitleHeight( WinQuerySysValue( HWND_DESKTOP, SV_CYTITLEBAR ) );
 
     // Color settings
-    if ( bCompBorder )
-    {
-        aStyleSettings.SetFaceColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_BUTTONMIDDLE, 0 ) ) );
-        aStyleSettings.SetInactiveTabColor( aStyleSettings.GetFaceColor() );
-        aStyleSettings.SetLightColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_BUTTONLIGHT, 0 ) ) );
-        aStyleSettings.SetLightBorderColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_BUTTONMIDDLE, 0 ) ) );
-        aStyleSettings.SetShadowColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_BUTTONDARK, 0 ) ) );
-        aStyleSettings.SetDarkShadowColor( Color( COL_BLACK ) );
-        aStyleSettings.SetDialogColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_DIALOGBACKGROUND, 0 ) ) );
-        aStyleSettings.SetButtonTextColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_MENUTEXT, 0 ) ) );
-        aStyleSettings.SetActiveColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_ACTIVETITLE, 0 ) ) );
-        aStyleSettings.SetActiveTextColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_ACTIVETITLETEXT, 0 ) ) );
-        aStyleSettings.SetActiveBorderColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_ACTIVEBORDER, 0 ) ) );
-        aStyleSettings.SetDeactiveColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_INACTIVETITLE, 0 ) ) );
-        aStyleSettings.SetDeactiveTextColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_INACTIVETITLETEXT, 0 ) ) );
-        aStyleSettings.SetDeactiveBorderColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_INACTIVEBORDER, 0 ) ) );
-        aStyleSettings.SetMenuColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_MENU, 0 ) ) );
-        aStyleSettings.SetMenuTextColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_MENUTEXT, 0 ) ) );
-        aStyleSettings.SetMenuBarTextColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_MENUTEXT, 0 ) ) );
-    }
+    aStyleSettings.SetFaceColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_BUTTONMIDDLE, 0 ) ) );
+    aStyleSettings.SetInactiveTabColor( aStyleSettings.GetFaceColor() );
+    aStyleSettings.SetLightColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_BUTTONLIGHT, 0 ) ) );
+    aStyleSettings.SetLightBorderColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_BUTTONMIDDLE, 0 ) ) );
+    aStyleSettings.SetShadowColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_BUTTONDARK, 0 ) ) );
+    aStyleSettings.SetDarkShadowColor( Color( COL_BLACK ) );
+    aStyleSettings.SetDialogColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_DIALOGBACKGROUND, 0 ) ) );
+    aStyleSettings.SetButtonTextColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_MENUTEXT, 0 ) ) );
+    aStyleSettings.SetActiveColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_ACTIVETITLE, 0 ) ) );
+    aStyleSettings.SetActiveTextColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_ACTIVETITLETEXT, 0 ) ) );
+    aStyleSettings.SetActiveBorderColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_ACTIVEBORDER, 0 ) ) );
+    aStyleSettings.SetDeactiveColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_INACTIVETITLE, 0 ) ) );
+    aStyleSettings.SetDeactiveTextColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_INACTIVETITLETEXT, 0 ) ) );
+    aStyleSettings.SetDeactiveBorderColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_INACTIVEBORDER, 0 ) ) );
+    aStyleSettings.SetMenuColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_MENU, 0 ) ) );
+    aStyleSettings.SetMenuTextColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_MENUTEXT, 0 ) ) );
+    aStyleSettings.SetMenuBarTextColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_MENUTEXT, 0 ) ) );
     aStyleSettings.SetDialogTextColor( aStyleSettings.GetButtonTextColor() );
     aStyleSettings.SetRadioCheckTextColor( aStyleSettings.GetButtonTextColor() );
     aStyleSettings.SetGroupTextColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_WINDOWSTATICTEXT, 0 ) ) );
@@ -2187,11 +2179,8 @@ void Os2SalFrame::UpdateSettings( AllSettings& rSettings )
     Color aMenuHighColor = ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_MENUHILITEBGND, 0 ) );
     if ( ImplSalIsSameColor( aMenuHighColor, aStyleSettings.GetMenuColor() ) )
     {
-        if ( bCompBorder )
-        {
-            aStyleSettings.SetMenuHighlightColor( Color( COL_BLUE ) );
-            aStyleSettings.SetMenuHighlightTextColor( Color( COL_WHITE ) );
-        }
+        aStyleSettings.SetMenuHighlightColor( Color( COL_BLUE ) );
+        aStyleSettings.SetMenuHighlightTextColor( Color( COL_WHITE ) );
     }
     else
     {

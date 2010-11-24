@@ -769,47 +769,6 @@ BOOL Button::IsTextDisplayEnabled()
 }
 
 // -----------------------------------------------------------------------
-void Button::DataChanged( const DataChangedEvent& rDCEvt )
-{
-    Control::DataChanged( rDCEvt );
-
-    // The flag SETTINGS_IN_UPDATE_SETTINGS is set when the settings changed due to a
-    // Application::SettingsChanged event. In this scenario we want to keep the style settings
-    // of our radio buttons and our check boxes.
-    if ( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) &&
-         ( rDCEvt.GetFlags() & SETTINGS_IN_UPDATE_SETTINGS ) )
-
-    {
-        const AllSettings* pOldSettings = rDCEvt.GetOldSettings();
-        if ( pOldSettings )
-        {
-            BOOL bResetStyleSettings = FALSE;
-            AllSettings aAllSettings = GetSettings();
-            StyleSettings aStyleSetting = aAllSettings.GetStyleSettings();
-
-            USHORT nCheckBoxStyle = aStyleSetting.GetCheckBoxStyle();
-            if ( nCheckBoxStyle != pOldSettings->GetStyleSettings().GetCheckBoxStyle() )
-            {
-                aStyleSetting.SetCheckBoxStyle( pOldSettings->GetStyleSettings().GetCheckBoxStyle() );
-                bResetStyleSettings = TRUE;
-            }
-
-            USHORT nRadioButtonStyle = aStyleSetting.GetRadioButtonStyle();
-            if ( nRadioButtonStyle != pOldSettings->GetStyleSettings().GetRadioButtonStyle() )
-            {
-                aStyleSetting.SetRadioButtonStyle( pOldSettings->GetStyleSettings().GetRadioButtonStyle() );
-                bResetStyleSettings = TRUE;
-            }
-
-            if ( bResetStyleSettings )
-            {
-                aAllSettings.SetStyleSettings( pOldSettings->GetStyleSettings() );
-                SetSettings( aAllSettings );
-            }
-        }
-    }
-}
-
 void Button::SetSmallSymbol (bool small)
 {
     ImplSetSmallSymbol (small);
@@ -925,125 +884,6 @@ void PushButton::ImplDrawPushButtonFrame( Window* pDev,
         StyleSettings aStyleSettings = pDev->GetSettings().GetStyleSettings();
         if ( pDev->IsControlBackground() )
             aStyleSettings.Set3DColors( pDev->GetControlBackground() );
-
-        USHORT nPushButtonSysStyle = aStyleSettings.GetPushButtonStyle() & STYLE_PUSHBUTTON_STYLE;
-        if ( nPushButtonSysStyle == STYLE_PUSHBUTTON_MAC )
-        {
-            pDev->SetLineColor();
-            pDev->SetFillColor( aStyleSettings.GetFaceColor() );
-            pDev->DrawRect( rRect );
-
-            if ( (aStyleSettings.GetOptions() & STYLE_OPTION_MONO) ||
-                 (pDev->GetOutDevType() == OUTDEV_PRINTER) )
-                nStyle |= BUTTON_DRAW_MONO;
-
-            if ( nStyle & BUTTON_DRAW_DEFAULT )
-            {
-                if ( nStyle & BUTTON_DRAW_MONO )
-                    pDev->SetLineColor( Color( COL_BLACK ) );
-                else
-                    pDev->SetLineColor( aStyleSettings.GetDarkShadowColor() );
-
-                pDev->DrawLine( Point( rRect.Left()+3, rRect.Top() ),
-                                Point( rRect.Right()-3, rRect.Top() ) );
-                pDev->DrawLine( Point( rRect.Left()+3, rRect.Bottom() ),
-                                Point( rRect.Right()-3, rRect.Bottom() ) );
-                pDev->DrawLine( Point( rRect.Left(), rRect.Top()+3 ),
-                                Point( rRect.Left(), rRect.Bottom()-3 ) );
-                pDev->DrawLine( Point( rRect.Right(), rRect.Top()+3 ),
-                                Point( rRect.Right(), rRect.Bottom()-3 ) );
-                pDev->DrawPixel( Point( rRect.Left()+2, rRect.Top()+1 ) );
-                pDev->DrawPixel( Point( rRect.Left()+1, rRect.Top()+2 ) );
-                pDev->DrawPixel( Point( rRect.Right()-2, rRect.Top()+1 ) );
-                pDev->DrawPixel( Point( rRect.Right()-1, rRect.Top()+2 ) );
-                pDev->DrawPixel( Point( rRect.Left()+2, rRect.Bottom()-1 ) );
-                pDev->DrawPixel( Point( rRect.Left()+1, rRect.Bottom()-2 ) );
-                pDev->DrawPixel( Point( rRect.Right()-2, rRect.Bottom()-1 ) );
-                pDev->DrawPixel( Point( rRect.Right()-1, rRect.Bottom()-2 ) );
-
-                if ( nStyle & BUTTON_DRAW_MONO )
-                    pDev->SetLineColor( Color( COL_BLACK ) );
-                else
-                    pDev->SetLineColor( aStyleSettings.GetShadowColor() );
-                pDev->DrawLine( Point( rRect.Left()+3, rRect.Bottom()-1 ),
-                                Point( rRect.Right()-3, rRect.Bottom()-1 ) );
-                pDev->DrawLine( Point( rRect.Right()-1, rRect.Top()+3 ),
-                                Point( rRect.Right()-1, rRect.Bottom()-3 ) );
-                pDev->DrawPixel( Point( rRect.Right()-3, rRect.Bottom()-2 ) );
-                pDev->DrawPixel( Point( rRect.Right()-2, rRect.Bottom()-2 ) );
-                pDev->DrawPixel( Point( rRect.Right()-2, rRect.Bottom()-3 ) );
-            }
-
-            rRect.Left()   += 2;
-            rRect.Top()    += 2;
-            rRect.Right()  -= 2;
-            rRect.Bottom() -= 2;
-
-            if ( nStyle & BUTTON_DRAW_MONO )
-                pDev->SetLineColor( Color( COL_BLACK ) );
-            else
-                pDev->SetLineColor( aStyleSettings.GetDarkShadowColor() );
-
-            pDev->DrawLine( Point( rRect.Left()+2, rRect.Top() ),
-                            Point( rRect.Right()-2, rRect.Top() ) );
-            pDev->DrawLine( Point( rRect.Left()+2, rRect.Bottom() ),
-                            Point( rRect.Right()-2, rRect.Bottom() ) );
-            pDev->DrawLine( Point( rRect.Left(), rRect.Top()+2 ),
-                            Point( rRect.Left(), rRect.Bottom()-2 ) );
-            pDev->DrawLine( Point( rRect.Right(), rRect.Top()+2 ),
-                            Point( rRect.Right(), rRect.Bottom()-2 ) );
-            pDev->DrawPixel( Point( rRect.Left()+1, rRect.Top()+1 ) );
-            pDev->DrawPixel( Point( rRect.Right()-1, rRect.Top()+1 ) );
-            pDev->DrawPixel( Point( rRect.Left()+1, rRect.Bottom()-1 ) );
-            pDev->DrawPixel( Point( rRect.Right()-1, rRect.Bottom()-1 ) );
-
-            pDev->SetLineColor();
-            if ( nStyle & BUTTON_DRAW_CHECKED )
-                pDev->SetFillColor( aStyleSettings.GetCheckedColor() );
-            else
-                pDev->SetFillColor( aStyleSettings.GetFaceColor() );
-            pDev->DrawRect( Rectangle( rRect.Left()+2, rRect.Top()+2, rRect.Right()-2, rRect.Bottom()-2 ) );
-
-            if ( !(nStyle & (BUTTON_DRAW_PRESSED | BUTTON_DRAW_CHECKED)) )
-            {
-                if ( nStyle & BUTTON_DRAW_MONO )
-                    pDev->SetLineColor( Color( COL_BLACK ) );
-                else
-                    pDev->SetLineColor( aStyleSettings.GetShadowColor() );
-                pDev->DrawLine( Point( rRect.Left()+2, rRect.Bottom()-1 ),
-                                Point( rRect.Right()-2, rRect.Bottom()-1 ) );
-                pDev->DrawLine( Point( rRect.Right()-1, rRect.Top()+2 ),
-                                Point( rRect.Right()-1, rRect.Bottom()-2 ) );
-                pDev->DrawPixel( Point( rRect.Right()-2, rRect.Bottom()-2 ) );
-                pDev->SetLineColor( aStyleSettings.GetLightColor() );
-            }
-            else
-                pDev->SetLineColor( aStyleSettings.GetShadowColor() );
-
-            if ( !(nStyle & BUTTON_DRAW_MONO) )
-            {
-                pDev->DrawLine( Point( rRect.Left()+2, rRect.Top()+1 ),
-                                Point( rRect.Right()-2, rRect.Top()+1 ) );
-                pDev->DrawLine( Point( rRect.Left()+1, rRect.Top()+2 ),
-                                Point( rRect.Left()+1, rRect.Bottom()-2 ) );
-                pDev->DrawPixel( Point( rRect.Top()+2, rRect.Right()+2 ) );
-            }
-
-            rRect.Left()   += 2;
-            rRect.Top()    += 2;
-            rRect.Right()  -= 2;
-            rRect.Bottom() -= 2;
-
-            if ( nStyle & (BUTTON_DRAW_PRESSED | BUTTON_DRAW_CHECKED) )
-            {
-                rRect.Left()++;
-                rRect.Top()++;
-                rRect.Right()++;
-                rRect.Bottom()++;
-            }
-
-            return;
-        }
     }
 
     DecorationView aDecoView( pDev );
@@ -1069,20 +909,6 @@ BOOL PushButton::ImplHitTestPushButton( Window* pDev,
 {
     Point       aTempPoint;
     Rectangle   aTestRect( aTempPoint, pDev->GetOutputSizePixel() );
-
-    if ( !(pDev->GetStyle() & (WB_RECTSTYLE | WB_SMALLSTYLE)) )
-    {
-        const StyleSettings& rStyleSettings = pDev->GetSettings().GetStyleSettings();
-
-        USHORT nPushButtonSysStyle = rStyleSettings.GetPushButtonStyle() & STYLE_PUSHBUTTON_STYLE;
-        if ( nPushButtonSysStyle == STYLE_PUSHBUTTON_MAC )
-        {
-            aTestRect.Left()    += 2;
-            aTestRect.Top()     += 2;
-            aTestRect.Right()   -= 2;
-            aTestRect.Bottom()  -= 2;
-        }
-    }
 
     return aTestRect.IsInside( rPos );
 }
@@ -3274,7 +3100,7 @@ Image RadioButton::GetRadioImage( const AllSettings& rSettings, USHORT nFlags )
 {
     ImplSVData*             pSVData = ImplGetSVData();
     const StyleSettings&    rStyleSettings = rSettings.GetStyleSettings();
-    USHORT                  nStyle = rStyleSettings.GetRadioButtonStyle() & STYLE_RADIOBUTTON_STYLE;
+    USHORT                  nStyle = 0;
 
     if ( rStyleSettings.GetOptions() & STYLE_OPTION_MONO )
         nStyle = STYLE_RADIOBUTTON_MONO;
@@ -4192,7 +4018,7 @@ Image CheckBox::GetCheckImage( const AllSettings& rSettings, USHORT nFlags )
 {
     ImplSVData*             pSVData = ImplGetSVData();
     const StyleSettings&    rStyleSettings = rSettings.GetStyleSettings();
-    USHORT                  nStyle = rStyleSettings.GetCheckBoxStyle() & STYLE_CHECKBOX_STYLE;
+    USHORT                  nStyle = 0;
 
     if ( rStyleSettings.GetOptions() & STYLE_OPTION_MONO )
         nStyle = STYLE_CHECKBOX_MONO;

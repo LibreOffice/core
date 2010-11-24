@@ -75,8 +75,6 @@ struct ImplTabItem
 
 struct ImplTabCtrlData
 {
-    PushButton*                     mpLeftBtn;
-    PushButton*                     mpRightBtn;
     std::hash_map< int, int >       maLayoutPageIdToLine;
     std::hash_map< int, int >       maLayoutLineToPageId;
     std::vector< Rectangle >        maTabRectangles;
@@ -85,27 +83,6 @@ struct ImplTabCtrlData
     ListBox*                        mpListBox;
     Size                            maMinSize;
 };
-
-// -----------------------------------------------------------------------
-
-#if 0
-// not used
-#define TABCOLORCOUNT   10
-
-static ColorData aImplTabColorAry[TABCOLORCOUNT] =
-{
-    RGB_COLORDATA(  80, 216, 248 ),
-    RGB_COLORDATA( 128, 216, 168 ),
-    RGB_COLORDATA( 128, 144, 248 ),
-    RGB_COLORDATA( 208, 180, 168 ),
-    RGB_COLORDATA( 248, 252, 168 ),
-    RGB_COLORDATA( 168, 144, 168 ),
-    RGB_COLORDATA( 248, 144,  80 ),
-    RGB_COLORDATA( 248, 216,  80 ),
-    RGB_COLORDATA( 248, 180, 168 ),
-    RGB_COLORDATA( 248, 216, 168 )
-};
-#endif
 
 // -----------------------------------------------------------------------
 
@@ -132,9 +109,6 @@ void TabControl::ImplInit( Window* pParent, WinBits nStyle )
     if ( !(nStyle & WB_NODIALOGCONTROL) )
         nStyle |= WB_DIALOGCONTROL;
 
-    // no single line tabs since NWF
-    nStyle &= ~WB_SINGLELINE;
-
     Control::ImplInit( pParent, nStyle, NULL );
 
     mnLastWidth                 = 0;
@@ -143,18 +117,12 @@ void TabControl::ImplInit( Window* pParent, WinBits nStyle )
     mnMaxPageWidth              = 0;
     mnActPageId                 = 0;
     mnCurPageId                 = 0;
-    mnFirstPagePos              = 0;
-    mnLastFirstPagePos          = 0;
     mbFormat                    = TRUE;
     mbRestoreHelpId             = FALSE;
     mbRestoreUnqId              = FALSE;
-    mbSingleLine                = FALSE;
-    mbScroll                    = FALSE;
     mbSmallInvalidate           = FALSE;
     mbExtraSpace                = FALSE;
     mpTabCtrlData               = new ImplTabCtrlData;
-    mpTabCtrlData->mpLeftBtn    = NULL;
-    mpTabCtrlData->mpRightBtn   = NULL;
     mpTabCtrlData->mpListBox    = NULL;
 
 
@@ -226,8 +194,6 @@ void TabControl::ImplInitSettings( BOOL bFont,
                 SetBackground( pParent->GetBackground() );
         }
     }
-
-    ImplScrollBtnsColor();
 }
 
 // -----------------------------------------------------------------------
@@ -299,10 +265,6 @@ TabControl::~TabControl()
     {
         if( mpTabCtrlData->mpListBox )
             delete mpTabCtrlData->mpListBox;
-        if ( mpTabCtrlData->mpLeftBtn )
-            delete mpTabCtrlData->mpLeftBtn;
-        if ( mpTabCtrlData->mpRightBtn )
-            delete mpTabCtrlData->mpRightBtn;
         delete mpTabCtrlData;
     }
 }
@@ -319,74 +281,6 @@ ImplTabItem* TabControl::ImplGetItem( USHORT nId ) const
     }
 
     return NULL;
-}
-
-// -----------------------------------------------------------------------
-
-void TabControl::ImplScrollBtnsColor()
-{
-    if ( mpTabCtrlData && mpTabCtrlData->mpLeftBtn )
-    {
-        mpTabCtrlData->mpLeftBtn->SetControlForeground();
-        mpTabCtrlData->mpRightBtn->SetControlForeground();
-    }
-}
-
-// -----------------------------------------------------------------------
-
-void TabControl::ImplSetScrollBtnsState()
-{
-    if ( mbScroll )
-    {
-        mpTabCtrlData->mpLeftBtn->Enable( mnFirstPagePos != 0 );
-        mpTabCtrlData->mpRightBtn->Enable( mnFirstPagePos < mnLastFirstPagePos );
-    }
-}
-
-// -----------------------------------------------------------------------
-
-void TabControl::ImplPosScrollBtns()
-{
-    if ( mbScroll )
-    {
-        if ( !mpTabCtrlData->mpLeftBtn )
-        {
-            mpTabCtrlData->mpLeftBtn = new PushButton( this, WB_RECTSTYLE | WB_SMALLSTYLE | WB_NOPOINTERFOCUS | WB_REPEAT );
-            mpTabCtrlData->mpLeftBtn->SetSymbol( SYMBOL_PREV );
-            mpTabCtrlData->mpLeftBtn->SetClickHdl( LINK( this, TabControl, ImplScrollBtnHdl ) );
-        }
-        if ( !mpTabCtrlData->mpRightBtn )
-        {
-            mpTabCtrlData->mpRightBtn = new PushButton( this, WB_RECTSTYLE | WB_SMALLSTYLE | WB_NOPOINTERFOCUS | WB_REPEAT );
-            mpTabCtrlData->mpRightBtn->SetSymbol( SYMBOL_NEXT );
-            mpTabCtrlData->mpRightBtn->SetClickHdl( LINK( this, TabControl, ImplScrollBtnHdl ) );
-        }
-
-        Rectangle aRect = ImplGetTabRect( TAB_PAGERECT );
-        aRect.Left()   -= TAB_OFFSET;
-        aRect.Top()    -= TAB_OFFSET;
-        aRect.Right()  += TAB_OFFSET;
-        aRect.Bottom() += TAB_OFFSET;
-        long nX = aRect.Right()-mnBtnSize+1;
-        long nY = aRect.Top()-mnBtnSize;
-        mpTabCtrlData->mpRightBtn->SetPosSizePixel( nX, nY, mnBtnSize, mnBtnSize );
-        nX -= mnBtnSize;
-        mpTabCtrlData->mpLeftBtn->SetPosSizePixel( nX, nY, mnBtnSize, mnBtnSize );
-        ImplScrollBtnsColor();
-        ImplSetScrollBtnsState();
-        mpTabCtrlData->mpLeftBtn->Show();
-        mpTabCtrlData->mpRightBtn->Show();
-    }
-    else
-    {
-        if ( mpTabCtrlData )
-        {
-            if ( mpTabCtrlData->mpLeftBtn )
-                mpTabCtrlData->mpLeftBtn->Hide();
-            if ( mpTabCtrlData->mpRightBtn )
-                mpTabCtrlData->mpRightBtn->Hide();
-        }
-    }
 }
 
 // -----------------------------------------------------------------------
@@ -524,8 +418,6 @@ Rectangle TabControl::ImplGetTabRect( USHORT nItemPos, long nWidth, long nHeight
             nMaxWidth = mnMaxPageWidth;
         nMaxWidth -= GetItemsOffset().X();
 
-        mbScroll = FALSE;
-
         USHORT          nLines = 0;
         USHORT          nCurLine = 0;
         long            nLineWidthAry[100];
@@ -650,8 +542,6 @@ Rectangle TabControl::ImplGetTabRect( USHORT nItemPos, long nWidth, long nHeight
         mnLastWidth     = nWidth;
         mnLastHeight    = nHeight;
         mbFormat        = FALSE;
-
-        ImplPosScrollBtns();
     }
 
     return size_t(nItemPos) < mpTabCtrlData->maItemList.size() ? mpTabCtrlData->maItemList[nItemPos].maRect : Rectangle();
@@ -791,13 +681,6 @@ void TabControl::ImplActivateTabPage( BOOL bNext )
     }
 
     SelectTabPage( GetPageId( nCurPos ) );
-}
-
-// -----------------------------------------------------------------------
-
-void TabControl::ImplSetFirstPagePos( USHORT )
-{
-    return; // was only required for single line
 }
 
 // -----------------------------------------------------------------------
@@ -1101,14 +984,6 @@ long TabControl::ImplHandleKeyEvent( const KeyEvent& rKeyEvent )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( TabControl, ImplScrollBtnHdl, PushButton*, EMPTYARG )
-{
-    ImplSetScrollBtnsState();
-    return 0;
-}
-
-// -----------------------------------------------------------------------
-
 IMPL_LINK( TabControl, ImplListBoxSelectHdl, ListBox*, EMPTYARG )
 {
     SelectTabPage( GetPageId( mpTabCtrlData->mpListBox->GetSelectEntryPos() ) );
@@ -1387,19 +1262,14 @@ void TabControl::Resize()
     // Feststellen, was invalidiert werden muss
     Size aNewSize = Control::GetOutputSizePixel();
     long nNewWidth = aNewSize.Width();
-    if ( mbScroll )
-        mbSmallInvalidate = FALSE;
-    else
+    for( std::vector< ImplTabItem >::iterator it = mpTabCtrlData->maItemList.begin();
+         it != mpTabCtrlData->maItemList.end(); ++it )
     {
-        for( std::vector< ImplTabItem >::iterator it = mpTabCtrlData->maItemList.begin();
-             it != mpTabCtrlData->maItemList.end(); ++it )
+        if ( !it->mbFullVisible ||
+             (it->maRect.Right()-2 >= nNewWidth) )
         {
-            if ( !it->mbFullVisible ||
-                 (it->maRect.Right()-2 >= nNewWidth) )
-            {
-                mbSmallInvalidate = FALSE;
-                break;
-            }
+            mbSmallInvalidate = FALSE;
+            break;
         }
     }
 
@@ -2009,13 +1879,6 @@ USHORT TabControl::GetCurPageId() const
         return mnActPageId;
     else
         return mnCurPageId;
-}
-
-// -----------------------------------------------------------------------
-
-void TabControl::SetFirstPageId( USHORT )
-{
-    return; // was only required for single line
 }
 
 // -----------------------------------------------------------------------

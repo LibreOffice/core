@@ -423,10 +423,6 @@ private:
     ULONG                           mnOptions;
     USHORT                          mnScreenZoom;
     USHORT                          mnScreenFontZoom;
-    USHORT                          mnRadioButtonStyle;
-    USHORT                          mnCheckBoxStyle;
-    USHORT                          mnPushButtonStyle;
-    USHORT                          mnTabControlStyle;
     USHORT                          mnHighContrast;
     USHORT                          mnUseSystemUIFonts;
     USHORT                          mnAutoMnemonic;
@@ -457,11 +453,6 @@ private:
 #define STYLE_OPTION_SPINARROW      ((ULONG)0x00000080)
 #define STYLE_OPTION_SPINUPDOWN     ((ULONG)0x00000100)
 #define STYLE_OPTION_NOMNEMONICS    ((ULONG)0x00000200)
-#define STYLE_OPTION_WINSTYLE       ((ULONG)0x00010000)
-#define STYLE_OPTION_OS2STYLE       ((ULONG)0x00020000)
-#define STYLE_OPTION_MACSTYLE       ((ULONG)0x00040000)
-#define STYLE_OPTION_UNIXSTYLE      ((ULONG)0x00080000)
-#define STYLE_OPTION_SYSTEMSTYLE    ((ULONG)0x000F0000)
 #define STYLE_OPTION_HIDEDISABLED   ((ULONG)0x00100000)
 
 #define DRAGFULL_OPTION_WINDOWMOVE  ((ULONG)0x00000001)
@@ -488,28 +479,8 @@ private:
 
 #define DISPLAY_OPTION_AA_DISABLE   ((ULONG)0x00000001)
 
-#define STYLE_RADIOBUTTON_WIN       ((USHORT)0x0001)
-#define STYLE_RADIOBUTTON_OS2       ((USHORT)0x0002)
-#define STYLE_RADIOBUTTON_MAC       ((USHORT)0x0003)
-#define STYLE_RADIOBUTTON_UNIX      ((USHORT)0x0004)
-#define STYLE_RADIOBUTTON_MONO      ((USHORT)0x0005)
-#define STYLE_RADIOBUTTON_STYLE     ((USHORT)0x000F)
-
-#define STYLE_CHECKBOX_WIN          ((USHORT)0x0001)
-#define STYLE_CHECKBOX_OS2          ((USHORT)0x0002)
-#define STYLE_CHECKBOX_MAC          ((USHORT)0x0003)
-#define STYLE_CHECKBOX_UNIX         ((USHORT)0x0004)
-#define STYLE_CHECKBOX_MONO         ((USHORT)0x0005)
-#define STYLE_CHECKBOX_STYLE        ((USHORT)0x000F)
-
-#define STYLE_PUSHBUTTON_WIN        ((USHORT)0x0001)
-#define STYLE_PUSHBUTTON_OS2        ((USHORT)0x0002)
-#define STYLE_PUSHBUTTON_MAC        ((USHORT)0x0003)
-#define STYLE_PUSHBUTTON_UNIX       ((USHORT)0x0004)
-#define STYLE_PUSHBUTTON_STYLE      ((USHORT)0x000F)
-
-#define STYLE_TABCONTROL_SINGLELINE ((USHORT)0x0001)
-#define STYLE_TABCONTROL_COLOR      ((USHORT)0x0002)
+#define STYLE_RADIOBUTTON_MONO      ((USHORT)0x0001) // legacy
+#define STYLE_CHECKBOX_MONO         ((USHORT)0x0001) // legacy
 
 #define STYLE_TOOLBAR_ICONSIZE_UNKNOWN      ((ULONG)0)
 #define STYLE_TOOLBAR_ICONSIZE_SMALL        ((ULONG)1)
@@ -813,23 +784,6 @@ public:
     const Font&                     GetIconFont() const
                                         { return mpData->maIconFont; }
 
-    void                            SetRadioButtonStyle( USHORT nStyle )
-                                        { CopyData(); mpData->mnRadioButtonStyle = nStyle; }
-    USHORT                          GetRadioButtonStyle() const
-                                        { return mpData->mnRadioButtonStyle; }
-    void                            SetCheckBoxStyle( USHORT nStyle )
-                                        { CopyData(); mpData->mnCheckBoxStyle = nStyle; }
-    USHORT                          GetCheckBoxStyle() const
-                                        { return mpData->mnCheckBoxStyle; }
-    void                            SetPushButtonStyle( USHORT nStyle )
-                                        { CopyData(); mpData->mnPushButtonStyle = nStyle; }
-    USHORT                          GetPushButtonStyle() const
-                                        { return mpData->mnPushButtonStyle; }
-    void                            SetTabControlStyle( USHORT nStyle )
-                                        { CopyData(); mpData->mnTabControlStyle = nStyle; }
-    USHORT                          GetTabControlStyle() const
-                                        { return mpData->mnTabControlStyle; }
-
     void                            SetBorderSize( long nSize )
                                         { CopyData(); mpData->mnBorderSize = nSize; }
     long                            GetBorderSize() const
@@ -971,10 +925,6 @@ public:
                                         { CopyData(); mpData->maWorkspaceGradient = rWall; }
 
     void                            SetStandardStyles();
-    void                            SetStandardWinStyles();
-    void                            SetStandardOS2Styles();
-    void                            SetStandardMacStyles();
-    void                            SetStandardUnixStyles();
 
     const StyleSettings&            operator =( const StyleSettings& rSet );
 

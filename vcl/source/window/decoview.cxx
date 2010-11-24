@@ -44,71 +44,6 @@
 
 // =======================================================================
 
-void ImplDrawOS2Symbol( OutputDevice* pDev, const Rectangle& rRect,
-                        USHORT nStyle, BOOL bClose )
-{
-    DecorationView          aView( pDev );
-    const StyleSettings&    rStyleSettings = pDev->GetSettings().GetStyleSettings();
-    Rectangle               aRect = rRect;
-    Color                   aColor1;
-    Color                   aColor2;
-
-    pDev->SetFillColor();
-
-    if ( nStyle & (BUTTON_DRAW_PRESSED | BUTTON_DRAW_CHECKED) )
-    {
-        aColor1 = rStyleSettings.GetShadowColor();
-        aColor2 = rStyleSettings.GetLightColor();
-    }
-    else
-    {
-        aColor1 = rStyleSettings.GetLightColor();
-        aColor2 = rStyleSettings.GetShadowColor();
-    }
-    aView.DrawFrame( aRect, aColor1, aColor2 );
-
-    aRect.Left()    += 2;
-    aRect.Top()     += 2;
-    aRect.Right()   -= 2;
-    aRect.Bottom()  -= 2;
-
-    if ( nStyle & (BUTTON_DRAW_PRESSED | BUTTON_DRAW_CHECKED) )
-        pDev->SetLineColor( rStyleSettings.GetLightColor() );
-    else
-        pDev->SetLineColor( rStyleSettings.GetShadowColor() );
-    if ( bClose )
-    {
-        pDev->DrawLine( aRect.TopLeft(), Point( aRect.Left(), aRect.Bottom()-2 ) );
-        pDev->DrawLine( aRect.TopLeft(), Point( aRect.Right()-2, aRect.Top() ) );
-        pDev->DrawLine( Point( aRect.Left()+2, aRect.Bottom()-1 ),
-                        Point( aRect.Right()-1, aRect.Top()+2 ) );
-    }
-    else
-    {
-        pDev->DrawLine( aRect.TopLeft(), aRect.BottomLeft() );
-        pDev->DrawLine( aRect.TopLeft(), Point( aRect.Right()-1, aRect.Top() ) );
-    }
-
-    if ( nStyle & (BUTTON_DRAW_PRESSED | BUTTON_DRAW_CHECKED) )
-        pDev->SetLineColor( rStyleSettings.GetShadowColor() );
-    else
-        pDev->SetLineColor( rStyleSettings.GetLightColor() );
-    if ( bClose )
-    {
-        pDev->DrawLine( Point( aRect.Right(), aRect.Top()+2 ), aRect.BottomRight() );
-        pDev->DrawLine( Point( aRect.Left()+2, aRect.Bottom() ), aRect.BottomRight() );
-        pDev->DrawLine( Point( aRect.Right()-2, aRect.Top()+1 ),
-                        Point( aRect.Left()+1, aRect.Bottom()-2 ) );
-    }
-    else
-    {
-        pDev->DrawLine( aRect.TopRight(), aRect.BottomRight() );
-        pDev->DrawLine( Point( aRect.Left()+1, aRect.Bottom() ), aRect.BottomRight() );
-    }
-}
-
-// =======================================================================
-
 static void ImplDrawSymbol( OutputDevice* pDev, const Rectangle& rRect,
                             SymbolType eType  )
 {
@@ -628,41 +563,6 @@ static void ImplDrawSymbol( OutputDevice* pDev, const Rectangle& rRect,
             Rectangle aRect( nCenterX-n2+nExtra, nCenterY+n2-1,
                              nCenterX+n2-nExtra, nCenterY+n2 );
             pDev->DrawRect( aRect );
-            }
-            break;
-
-        case SYMBOL_OS2CLOSE:
-            {
-            Rectangle aRect( nCenterX-n2, nCenterY-n2,
-                             nCenterX+n2, nCenterY+n2 );
-            ImplDrawOS2Symbol( pDev, aRect, 0, TRUE );
-            }
-            break;
-
-        case SYMBOL_OS2FLOAT:
-            {
-            Rectangle aRect( nCenterX-n2+4, nCenterY-n2+4,
-                             nCenterX+n2-4, nCenterY+n2-3 );
-            ImplDrawOS2Symbol( pDev, aRect, 0, FALSE );
-            DecorationView aDecoView( pDev );
-            Rectangle aRect2( nCenterX-n2, nCenterY-n2,
-                              nCenterX-n2+2, nCenterY+n2 );
-            aDecoView.DrawFrame( aRect2,
-                                 pDev->GetSettings().GetStyleSettings().GetLightColor(),
-                                 pDev->GetSettings().GetStyleSettings().GetShadowColor() );
-            Rectangle aRect3( nCenterX+n2-2, nCenterY-n2,
-                              nCenterX+n2, nCenterY+n2 );
-            aDecoView.DrawFrame( aRect3,
-                                 pDev->GetSettings().GetStyleSettings().GetLightColor(),
-                                 pDev->GetSettings().GetStyleSettings().GetShadowColor() );
-            }
-            break;
-
-        case SYMBOL_OS2HIDE:
-            {
-            Rectangle aRect( nCenterX-n2+3, nCenterY-n2+3,
-                             nCenterX+n2-3, nCenterY+n2-3 );
-            ImplDrawOS2Symbol( pDev, aRect, 0, FALSE );
             }
             break;
     }

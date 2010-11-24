@@ -419,10 +419,6 @@ ImplStyleData::ImplStyleData()
     mnCursorBlinkTime           = STYLE_CURSOR_NOBLINKTIME;
     mnScreenZoom                = 100;
     mnScreenFontZoom            = 100;
-    mnRadioButtonStyle          = 0;
-    mnCheckBoxStyle             = 0;
-    mnPushButtonStyle           = 0;
-    mnTabControlStyle           = 0;
     mnLogoDisplayTime           = LOGO_DISPLAYTIME_STARTTIME;
     mnDragFullOptions           = DRAGFULL_OPTION_WINDOWMOVE | DRAGFULL_OPTION_WINDOWSIZE |
                                   DRAGFULL_OPTION_OBJECTMOVE | DRAGFULL_OPTION_OBJECTSIZE |
@@ -523,10 +519,6 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     mnCursorBlinkTime           = rData.mnCursorBlinkTime;
     mnScreenZoom                = rData.mnScreenZoom;
     mnScreenFontZoom            = rData.mnScreenFontZoom;
-    mnRadioButtonStyle          = rData.mnRadioButtonStyle;
-    mnCheckBoxStyle             = rData.mnCheckBoxStyle;
-    mnPushButtonStyle           = rData.mnPushButtonStyle;
-    mnTabControlStyle           = rData.mnTabControlStyle;
     mnLogoDisplayTime           = rData.mnLogoDisplayTime;
     mnDragFullOptions           = rData.mnDragFullOptions;
     mnAnimationOptions          = rData.mnAnimationOptions;
@@ -617,12 +609,6 @@ void ImplStyleData::SetStandardStyles()
     maHighlightLinkColor        = Color( COL_LIGHTBLUE );
     maFontColor                 = Color( COL_BLACK );
 
-    mnRadioButtonStyle         &= ~STYLE_RADIOBUTTON_STYLE;
-    mnCheckBoxStyle            &= ~STYLE_CHECKBOX_STYLE;
-    mnPushButtonStyle          &= ~STYLE_PUSHBUTTON_STYLE;
-    mnTabControlStyle           = 0;
-
-    mnOptions                  &= ~(STYLE_OPTION_SYSTEMSTYLE | STDSYS_STYLE);
     mnBorderSize                = 1;
     mnTitleHeight               = 18;
     mnFloatTitleHeight          = 13;
@@ -874,34 +860,6 @@ void StyleSettings::SetStandardStyles()
 
 // -----------------------------------------------------------------------
 
-void StyleSettings::SetStandardWinStyles()
-{
-    return; // no more style changes since NWF
-}
-
-// -----------------------------------------------------------------------
-
-void StyleSettings::SetStandardOS2Styles()
-{
-    return; // no more style changes since NWF
-}
-
-// -----------------------------------------------------------------------
-
-void StyleSettings::SetStandardMacStyles()
-{
-    return; // no more style changes since NWF
-}
-
-// -----------------------------------------------------------------------
-
-void StyleSettings::SetStandardUnixStyles()
-{
-    return; // no more style changes since NWF
-}
-
-// -----------------------------------------------------------------------
-
 Color StyleSettings::GetFaceGradientColor() const
 {
     // compute a brighter face color that can be used in gradients
@@ -1036,10 +994,6 @@ BOOL StyleSettings::operator ==( const StyleSettings& rSet ) const
          (mpData->mnAntialiasedMin          == rSet.mpData->mnAntialiasedMin)           &&
          (mpData->mnScreenZoom              == rSet.mpData->mnScreenZoom)               &&
          (mpData->mnScreenFontZoom          == rSet.mpData->mnScreenFontZoom)           &&
-         (mpData->mnRadioButtonStyle        == rSet.mpData->mnRadioButtonStyle)         &&
-         (mpData->mnCheckBoxStyle           == rSet.mpData->mnCheckBoxStyle)            &&
-         (mpData->mnPushButtonStyle         == rSet.mpData->mnPushButtonStyle)          &&
-         (mpData->mnTabControlStyle         == rSet.mpData->mnTabControlStyle)          &&
          (mpData->mnHighContrast            == rSet.mpData->mnHighContrast)             &&
          (mpData->mnUseSystemUIFonts        == rSet.mpData->mnUseSystemUIFonts)         &&
          (mpData->mnUseFlatBorders          == rSet.mpData->mnUseFlatBorders)           &&

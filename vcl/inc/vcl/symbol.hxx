@@ -71,9 +71,6 @@ typedef USHORT SymbolType;
 #define SYMBOL_DOCK             ((SymbolType)32)
 #define SYMBOL_HIDE             ((SymbolType)33)
 #define SYMBOL_HELP             ((SymbolType)34)
-#define SYMBOL_OS2CLOSE         ((SymbolType)35)
-#define SYMBOL_OS2FLOAT         ((SymbolType)36)
-#define SYMBOL_OS2HIDE          ((SymbolType)37)
 #define SYMBOL_MENU             SYMBOL_SPIN_DOWN
 
 #define SYMBOL_NOSYMBOL         (SYMBOL_DONTKNOW)

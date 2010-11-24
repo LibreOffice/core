@@ -238,9 +238,6 @@ typedef sal_Int64 WinBits;
 #define WB_SCROLL               ((WinBits)0x02000000)
 #define WB_FORCETABCYCLE        ((WinBits)0x04000000)
 
-// Window-Bits for TabControl
-#define WB_SINGLELINE           ((WinBits)0x02000000)
-
 // Window-Bits for DockingWindows
 #define WB_DOCKBORDER           ((WinBits)0x00001000)
 

@@ -78,15 +78,6 @@ void MenuButton::ImplExecuteMenu()
         Point aPos( 0, 1 );
         Size aSize = GetSizePixel();
         Rectangle aRect( aPos, aSize );
-        const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-        if ( !((GetStyle() & (WB_RECTSTYLE | WB_SMALLSTYLE)) ||
-             !(rStyleSettings.GetOptions() & STYLE_OPTION_MACSTYLE)) )
-        {
-            aRect.Left()    += 2;
-            aRect.Top()     += 2;
-            aRect.Right()   -= 2;
-            aRect.Bottom()  -= 2;
-        }
         SetPressed( TRUE );
         EndSelection();
         mnCurItemId = mpMenu->Execute( this, aRect, POPUPMENU_EXECUTE_DOWN );

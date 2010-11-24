@@ -2890,30 +2890,26 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     }
 
     StyleSettings aStyleSettings = rSettings.GetStyleSettings();
-    BOOL bCompBorder = (aStyleSettings.GetOptions() & (STYLE_OPTION_MACSTYLE | STYLE_OPTION_UNIXSTYLE)) == 0;
     // TODO: once those options vanish: just set bCompBorder to TRUE
     // to have the system colors read
     aStyleSettings.SetScrollBarSize( GetSystemMetrics( SM_CXVSCROLL ) );
     aStyleSettings.SetSpinSize( GetSystemMetrics( SM_CXVSCROLL ) );
     aStyleSettings.SetCursorBlinkTime( GetCaretBlinkTime() );
-    if ( bCompBorder )
+    aStyleSettings.SetFloatTitleHeight( GetSystemMetrics( SM_CYSMCAPTION ) );
+    aStyleSettings.SetTitleHeight( GetSystemMetrics( SM_CYCAPTION ) );
+    aStyleSettings.SetActiveBorderColor( ImplWinColorToSal( GetSysColor( COLOR_ACTIVEBORDER ) ) );
+    aStyleSettings.SetDeactiveBorderColor( ImplWinColorToSal( GetSysColor( COLOR_INACTIVEBORDER ) ) );
+    if ( aSalShlData.mnVersion >= 410 )
     {
-        aStyleSettings.SetFloatTitleHeight( GetSystemMetrics( SM_CYSMCAPTION ) );
-        aStyleSettings.SetTitleHeight( GetSystemMetrics( SM_CYCAPTION ) );
-        aStyleSettings.SetActiveBorderColor( ImplWinColorToSal( GetSysColor( COLOR_ACTIVEBORDER ) ) );
-        aStyleSettings.SetDeactiveBorderColor( ImplWinColorToSal( GetSysColor( COLOR_INACTIVEBORDER ) ) );
-        if ( aSalShlData.mnVersion >= 410 )
-        {
-            aStyleSettings.SetActiveColor2( ImplWinColorToSal( GetSysColor( COLOR_GRADIENTACTIVECAPTION ) ) );
-            aStyleSettings.SetDeactiveColor( ImplWinColorToSal( GetSysColor( COLOR_GRADIENTINACTIVECAPTION ) ) );
-        }
-        aStyleSettings.SetFaceColor( ImplWinColorToSal( GetSysColor( COLOR_3DFACE ) ) );
-        aStyleSettings.SetInactiveTabColor( aStyleSettings.GetFaceColor() );
-        aStyleSettings.SetLightColor( ImplWinColorToSal( GetSysColor( COLOR_3DHILIGHT ) ) );
-        aStyleSettings.SetLightBorderColor( ImplWinColorToSal( GetSysColor( COLOR_3DLIGHT ) ) );
-        aStyleSettings.SetShadowColor( ImplWinColorToSal( GetSysColor( COLOR_3DSHADOW ) ) );
-        aStyleSettings.SetDarkShadowColor( ImplWinColorToSal( GetSysColor( COLOR_3DDKSHADOW ) ) );
+        aStyleSettings.SetActiveColor2( ImplWinColorToSal( GetSysColor( COLOR_GRADIENTACTIVECAPTION ) ) );
+        aStyleSettings.SetDeactiveColor( ImplWinColorToSal( GetSysColor( COLOR_GRADIENTINACTIVECAPTION ) ) );
     }
+    aStyleSettings.SetFaceColor( ImplWinColorToSal( GetSysColor( COLOR_3DFACE ) ) );
+    aStyleSettings.SetInactiveTabColor( aStyleSettings.GetFaceColor() );
+    aStyleSettings.SetLightColor( ImplWinColorToSal( GetSysColor( COLOR_3DHILIGHT ) ) );
+    aStyleSettings.SetLightBorderColor( ImplWinColorToSal( GetSysColor( COLOR_3DLIGHT ) ) );
+    aStyleSettings.SetShadowColor( ImplWinColorToSal( GetSysColor( COLOR_3DSHADOW ) ) );
+    aStyleSettings.SetDarkShadowColor( ImplWinColorToSal( GetSysColor( COLOR_3DDKSHADOW ) ) );
     aStyleSettings.SetWorkspaceColor( ImplWinColorToSal( GetSysColor( COLOR_APPWORKSPACE ) ) );
     aStyleSettings.SetHelpColor( ImplWinColorToSal( GetSysColor( COLOR_INFOBK ) ) );
     aStyleSettings.SetHelpTextColor( ImplWinColorToSal( GetSysColor( COLOR_INFOTEXT ) ) );
@@ -2935,53 +2931,51 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSettings.SetHighlightTextColor( ImplWinColorToSal( GetSysColor( COLOR_HIGHLIGHTTEXT ) ) );
     aStyleSettings.SetMenuHighlightColor( aStyleSettings.GetHighlightColor() );
     aStyleSettings.SetMenuHighlightTextColor( aStyleSettings.GetHighlightTextColor() );
+
     ImplSVData* pSVData = ImplGetSVData();
     pSVData->maNWFData.mnMenuFormatExtraBorder = 0;
     pSVData->maNWFData.maMenuBarHighlightTextColor = Color( COL_TRANSPARENT );
     GetSalData()->mbThemeMenuSupport = FALSE;
-    if ( bCompBorder )
+    aStyleSettings.SetMenuColor( ImplWinColorToSal( GetSysColor( COLOR_MENU ) ) );
+    aStyleSettings.SetMenuBarColor( aStyleSettings.GetMenuColor() );
+    aStyleSettings.SetMenuBorderColor( aStyleSettings.GetLightBorderColor() ); // overriden below for flat menus
+    aStyleSettings.SetUseFlatBorders( FALSE );
+    aStyleSettings.SetUseFlatMenues( FALSE );
+    aStyleSettings.SetMenuTextColor( ImplWinColorToSal( GetSysColor( COLOR_MENUTEXT ) ) );
+    aStyleSettings.SetMenuBarTextColor( ImplWinColorToSal( GetSysColor( COLOR_MENUTEXT ) ) );
+    aStyleSettings.SetActiveColor( ImplWinColorToSal( GetSysColor( COLOR_ACTIVECAPTION ) ) );
+    aStyleSettings.SetActiveTextColor( ImplWinColorToSal( GetSysColor( COLOR_CAPTIONTEXT ) ) );
+    aStyleSettings.SetDeactiveColor( ImplWinColorToSal( GetSysColor( COLOR_INACTIVECAPTION ) ) );
+    aStyleSettings.SetDeactiveTextColor( ImplWinColorToSal( GetSysColor( COLOR_INACTIVECAPTIONTEXT ) ) );
+    if ( aSalShlData.mbWXP )
     {
-        aStyleSettings.SetMenuColor( ImplWinColorToSal( GetSysColor( COLOR_MENU ) ) );
-        aStyleSettings.SetMenuBarColor( aStyleSettings.GetMenuColor() );
-        aStyleSettings.SetMenuBorderColor( aStyleSettings.GetLightBorderColor() ); // overriden below for flat menus
-        aStyleSettings.SetUseFlatBorders( FALSE );
-        aStyleSettings.SetUseFlatMenues( FALSE );
-        aStyleSettings.SetMenuTextColor( ImplWinColorToSal( GetSysColor( COLOR_MENUTEXT ) ) );
-        aStyleSettings.SetMenuBarTextColor( ImplWinColorToSal( GetSysColor( COLOR_MENUTEXT ) ) );
-        aStyleSettings.SetActiveColor( ImplWinColorToSal( GetSysColor( COLOR_ACTIVECAPTION ) ) );
-        aStyleSettings.SetActiveTextColor( ImplWinColorToSal( GetSysColor( COLOR_CAPTIONTEXT ) ) );
-        aStyleSettings.SetDeactiveColor( ImplWinColorToSal( GetSysColor( COLOR_INACTIVECAPTION ) ) );
-        aStyleSettings.SetDeactiveTextColor( ImplWinColorToSal( GetSysColor( COLOR_INACTIVECAPTIONTEXT ) ) );
-        if ( aSalShlData.mbWXP )
+        // only xp supports a different menu bar color
+        long bFlatMenues = 0;
+        SystemParametersInfo( SPI_GETFLATMENU, 0, &bFlatMenues, 0);
+        if( bFlatMenues )
         {
-            // only xp supports a different menu bar color
-            long bFlatMenues = 0;
-            SystemParametersInfo( SPI_GETFLATMENU, 0, &bFlatMenues, 0);
-            if( bFlatMenues )
-            {
-                aStyleSettings.SetUseFlatMenues( TRUE );
-                aStyleSettings.SetMenuBarColor( ImplWinColorToSal( GetSysColor( COLOR_MENUBAR ) ) );
-                aStyleSettings.SetMenuHighlightColor( ImplWinColorToSal( GetSysColor( COLOR_MENUHILIGHT ) ) );
-                aStyleSettings.SetMenuBorderColor( ImplWinColorToSal( GetSysColor( COLOR_3DSHADOW ) ) );
+            aStyleSettings.SetUseFlatMenues( TRUE );
+            aStyleSettings.SetMenuBarColor( ImplWinColorToSal( GetSysColor( COLOR_MENUBAR ) ) );
+            aStyleSettings.SetMenuHighlightColor( ImplWinColorToSal( GetSysColor( COLOR_MENUHILIGHT ) ) );
+            aStyleSettings.SetMenuBorderColor( ImplWinColorToSal( GetSysColor( COLOR_3DSHADOW ) ) );
 
-                // flat borders for our controls etc. as well in this mode (ie, no 3d borders)
-                // this is not active in the classic style appearance
-                aStyleSettings.SetUseFlatBorders( TRUE );
-            }
+            // flat borders for our controls etc. as well in this mode (ie, no 3d borders)
+            // this is not active in the classic style appearance
+            aStyleSettings.SetUseFlatBorders( TRUE );
         }
-        // check if vista or newer runs
-        // in Aero theme (and similar ?) the menu text color does not change
-        // for selected items; also on WinXP and earlier menus are not themed
-        if( aSalShlData.maVersionInfo.dwMajorVersion >= 6 &&
-            ImplDwmIsCompositionEnabled()
-            )
-        {
-            // in aero menuitem highlight text is drawn in the same color as normal
-            aStyleSettings.SetMenuHighlightTextColor( aStyleSettings.GetMenuTextColor() );
-            pSVData->maNWFData.mnMenuFormatExtraBorder = 2;
-            pSVData->maNWFData.maMenuBarHighlightTextColor = aStyleSettings.GetMenuTextColor();
-            GetSalData()->mbThemeMenuSupport = TRUE;
-        }
+    }
+    // check if vista or newer runs
+    // in Aero theme (and similar ?) the menu text color does not change
+    // for selected items; also on WinXP and earlier menus are not themed
+    if( aSalShlData.maVersionInfo.dwMajorVersion >= 6 &&
+       ImplDwmIsCompositionEnabled()
+       )
+    {
+        // in aero menuitem highlight text is drawn in the same color as normal
+        aStyleSettings.SetMenuHighlightTextColor( aStyleSettings.GetMenuTextColor() );
+        pSVData->maNWFData.mnMenuFormatExtraBorder = 2;
+        pSVData->maNWFData.maMenuBarHighlightTextColor = aStyleSettings.GetMenuTextColor();
+        GetSalData()->mbThemeMenuSupport = TRUE;
     }
     // Bei hellgrau geben wir die Farbe vor, damit es besser aussieht
     if ( aStyleSettings.GetFaceColor() == COL_LIGHTGRAY )

@@ -770,64 +770,7 @@ void ScrollBar::ImplDraw( USHORT nDrawFlags, OutputDevice* pOutDev )
             if ( bEnabled )
             {
                 nStyle = BUTTON_DRAW_NOLIGHTBORDER;
-                // pressed thumbs only in OS2 style
-                if ( rStyleSettings.GetOptions() & STYLE_OPTION_OS2STYLE )
-                    if ( mnStateFlags & SCRBAR_STATE_THUMB_DOWN )
-                        nStyle |= BUTTON_DRAW_PRESSED;
                 aTempRect = aDecoView.DrawButton( maThumbRect, nStyle );
-                // OS2 style requires pattern on the thumb
-                if ( rStyleSettings.GetOptions() & STYLE_OPTION_OS2STYLE )
-                {
-                    if ( GetStyle() & WB_HORZ )
-                    {
-                        if ( aTempRect.GetWidth() > 6 )
-                        {
-                            long nX = aTempRect.Center().X();
-                            nX -= 6;
-                            if ( nX < aTempRect.Left() )
-                                nX = aTempRect.Left();
-                            for ( int i = 0; i < 6; i++ )
-                            {
-                                if ( nX > aTempRect.Right()-1 )
-                                    break;
-
-                                pOutDev->SetLineColor( rStyleSettings.GetButtonTextColor() );
-                                pOutDev->DrawLine( Point( nX, aTempRect.Top()+1 ),
-                                          Point( nX, aTempRect.Bottom()-1 ) );
-                                nX++;
-                                pOutDev->SetLineColor( rStyleSettings.GetLightColor() );
-                                pOutDev->DrawLine( Point( nX, aTempRect.Top()+1 ),
-                                          Point( nX, aTempRect.Bottom()-1 ) );
-                                nX++;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if ( aTempRect.GetHeight() > 6 )
-                        {
-                            long nY = aTempRect.Center().Y();
-                            nY -= 6;
-                            if ( nY < aTempRect.Top() )
-                                nY = aTempRect.Top();
-                            for ( int i = 0; i < 6; i++ )
-                            {
-                                if ( nY > aTempRect.Bottom()-1 )
-                                    break;
-
-                                pOutDev->SetLineColor( rStyleSettings.GetButtonTextColor() );
-                                pOutDev->DrawLine( Point( aTempRect.Left()+1, nY ),
-                                          Point( aTempRect.Right()-1, nY ) );
-                                nY++;
-                                pOutDev->SetLineColor( rStyleSettings.GetLightColor() );
-                                pOutDev->DrawLine( Point( aTempRect.Left()+1, nY ),
-                                          Point( aTempRect.Right()-1, nY ) );
-                                nY++;
-                            }
-                        }
-                    }
-                    pOutDev->SetLineColor();
-                }
             }
             else
             {
