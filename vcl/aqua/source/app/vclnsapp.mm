@@ -39,6 +39,8 @@
 #include "vcl/cmdevt.hxx"
 #include "rtl/ustrbuf.hxx"
 
+#include "vcl/impimagetree.hxx"
+
 #include "premac.h"
 #import "Carbon/Carbon.h"
 #import "apple_remote/RemoteControl.h"
@@ -431,6 +433,7 @@
             GetpApp()->AppEvent( aEv );
             // call DeInitVCL only after our YIELD_GUARD has expired,
             // else its Mutex will be alredy destroyed when it runs out of scope !
+            ImplImageTreeSingletonRef()->shutDown();
             bCallDeInit = true;
         }
     }
