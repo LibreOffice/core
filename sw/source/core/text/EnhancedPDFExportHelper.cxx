@@ -1102,7 +1102,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                     static_cast<const SwTxtFrm*>(pFrm)->GetTxtNode();
 
                 const SwFmt* pTxtFmt = pTxtNd->GetFmtColl();
-                const SwFmt* pParentTxtFmt = pTxtFmt->DerivedFrom();
+                const SwFmt* pParentTxtFmt = pTxtFmt ? pTxtFmt->DerivedFrom() : NULL;
 
                 String sStyleName;
                 String sParentStyleName;
