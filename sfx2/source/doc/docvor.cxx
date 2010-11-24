@@ -414,7 +414,6 @@ ImpPath_Impl::ImpPath_Impl( const ImpPath_Impl& rCopy ) :
 class Path
 {
     ImpPath_Impl *pData;
-    void NewImp();
 public:
     Path(SvLBox *pBox, SvLBoxEntry *pEntry);
     Path(const Path &rPath):
@@ -461,17 +460,6 @@ Path::Path(SvLBox *pBox, SvLBoxEntry *pEntry) :
         pEntry = pParent;
         pParent = pBox->GetParent(pEntry);
     } while(1);
-}
-
-//-------------------------------------------------------------------------
-
-void Path::NewImp()
-{
-    if(pData->nRef != 1)
-    {
-        pData->nRef--;
-        pData = new ImpPath_Impl(*pData);
-    }
 }
 
 //-------------------------------------------------------------------------
