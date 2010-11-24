@@ -47,7 +47,6 @@ import com.sun.star.util.Time;
 
 import java.sql.Timestamp;
 
-
 public class SDBCReportData implements DataSource
 {
 
@@ -349,7 +348,7 @@ public class SDBCReportData implements DataSource
 
     private Object convertObject(final int type, final Object obj)
     {
-        final Object ret;
+        Object ret;
         switch (type)
         {
             case DataType.DATE:
@@ -365,7 +364,14 @@ public class SDBCReportData implements DataSource
             case DataType.NUMERIC:
                 if (!(obj instanceof Any))
                 {
-                    ret = new java.math.BigDecimal((String) obj);
+                    try
+                    {
+                        ret = new java.math.BigDecimal(String.valueOf(obj));
+                    }
+                    catch (NumberFormatException ex)
+                    {
+                        ret = obj;
+                    }
                 }
                 else
                 {
