@@ -20,6 +20,19 @@ if [ ! -e ${CLONEDIR} ]; then mkdir -p $CLONEDIR; fi
 RAWBUILDDIR=`perl -e 'use Cwd "abs_path"; print abs_path(shift);' $0 | sed -e ' s/\/g$//'`
 if [ ! -e ${RAWBUILDDIR} ]; then mkdir -p $RAWBUILDDIR; fi
 
+# should we need to update the hooks
+function update_hooks()
+{
+    HOOKDIR="$1"
+    for H in `cd "$RAWBUILDDIR/git-hooks" ; echo *` ; do
+        HOOK=".git/hooks/$H"
+        if [ ! -x "$HOOK" -a ! -L "$HOOK" ] ; then
+            rm -f "$HOOK"
+            ln -s "$HOOKDIR/$H" "$HOOK"
+        fi
+    done
+}
+
 # extra params for some commands, like log
 EXTRA=
 COMMAND="$1"
@@ -116,13 +129,17 @@ if [ "$COMMAND" = "clone" ] ; then
     DIRS="artwork base calc components extensions extras filters
           help impress libs-core libs-extern libs-extern-sys libs-gui
           postprocess sdk testing ure writer"
+    # update hooks in the main repo too
+    ( cd "$RAWBUILDDIR" ; update_hooks "../../git-hooks" )
 fi
 for REPO in $DIRS ; do
     DIR="$CLONEDIR/$REPO"
     NAME="$REPO"
+    HOOKDIR="../../../../git-hooks"
     if [ "$REPO" = "bootstrap" ] ; then
         DIR="$RAWBUILDDIR"
         NAME="main repo"
+        HOOKDIR="../../git-hooks"
     fi
 
     if [ \( -d "$DIR" -a -d "$DIR"/.git \) -o \( "$COMMAND" = "clone" \) ] ; then
@@ -130,6 +147,7 @@ for REPO in $DIRS ; do
             # executed in a subshell
             if [ "$COMMAND" != "clone" ] ; then
                 cd "$DIR"
+                update_hooks "$HOOKDIR"
             else
                 cd "$CLONEDIR"
             fi
@@ -202,7 +220,10 @@ for REPO in $DIRS ; do
             RETURN=$?
 
             # now we can change the dir in case of clone as well
-            [ "$COMMAND" = "clone" ] && cd $DIR
+            if [ "$COMMAND" = "clone" ] ; then
+                cd $DIR
+                update_hooks "$HOOKDIR"
+            fi
 
             # update stamp if the repo changed
             NEWHEADREF=`git show-ref --head HEAD`
