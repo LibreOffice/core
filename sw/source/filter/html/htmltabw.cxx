@@ -279,7 +279,9 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
     if ( !nRowSpan )
         return;
 
+#ifndef PURE_HTML
     SwWriteTableCol *pCol = aCols[nCol];
+#endif
 
     sal_Bool bOutWidth = sal_True;
 
