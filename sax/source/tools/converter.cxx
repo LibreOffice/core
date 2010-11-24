@@ -1179,11 +1179,10 @@ bool Converter::convertDateOrDateTime(
 
     const ::rtl::OUString string = rString.trim().toAsciiUpperCase();
     sal_Int32 nPos(0);
-    bool bNegative(false);
     if ((string.getLength() > nPos) && (sal_Unicode('-') == string[nPos]))
     {
+        //Negative Number
         ++nPos;
-        bNegative = true;
     }
 
     sal_Int32 nYear(0);
