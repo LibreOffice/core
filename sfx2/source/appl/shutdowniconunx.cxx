@@ -94,7 +94,8 @@ static GdkPixbuf * ResIdToPixbuf( USHORT nResId )
     g_return_val_if_fail( pSalBitmap != NULL, NULL );
 
     Size aSize( pSalBitmap->Width(), pSalBitmap->Height() );
-    g_return_val_if_fail( Size( pSalAlpha->Width(), pSalAlpha->Height() ) == aSize, NULL );
+    if (pSalAlpha)
+        g_return_val_if_fail( Size( pSalAlpha->Width(), pSalAlpha->Height() ) == aSize, NULL );
 
     int nX, nY;
     guchar *pPixbufData = ( guchar * )g_malloc( 4 * aSize.Width() * aSize.Height() );
