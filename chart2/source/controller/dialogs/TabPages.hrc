@@ -31,7 +31,6 @@
 
 //see attrib.hrc in old chart
 
-//#define TP_LEGEND_POS 900
 #define GRP_LEGEND                  1
 #define FL_LEGEND_TEXTORIENT        2
 #define FT_LEGEND_TEXTDIR           3
@@ -55,7 +54,6 @@
 
 //------------
 //from old chart tplabel.hrc
-//#define TP_AXIS_LABEL                 920
 
 #define CB_AXIS_LABEL_SCHOW_DESCR       1
 #define FL_AXIS_LABEL_ORIENTATION       3
