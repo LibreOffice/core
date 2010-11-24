@@ -389,7 +389,7 @@
 #include "vcl/bmpacc.hxx"
 #include "vcl/cvtgrf.hxx"
 #include "vcl/mapmod.hxx"
-#include "vcl/mapunit.hxx"
+#include "tools/mapunit.hxx"
 #include "vcl/stdtext.hxx"
 #include "vcl/timer.hxx"
 #include "tools/wintypes.hxx"
