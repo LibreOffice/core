@@ -141,7 +141,7 @@ namespace dbaui
 
     public:
         OModuleClient                   m_aModuleClient;
-        ::dbtools::SQLExceptionInfo     m_aCurrentError; // contains the current error which can be set through IEnvironment
+        ::dbtools::SQLExceptionInfo     m_aCurrentError;
 
         ::cppu::OInterfaceContainerHelper
                                         m_aModifyListeners;
@@ -367,6 +367,7 @@ namespace dbaui
     {
         // our connection was disposed so we need a new one
         reconnect( sal_True );
+        InvalidateAll();
     }
 
     //--------------------------------------------------------------------

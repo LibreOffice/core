@@ -29,7 +29,6 @@
 #define DBAUI_SINGLEDOCCONTROLLER_HXX
 
 #include "genericcontroller.hxx"
-#include "IEnvironment.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/document/XScriptInvocationContext.hpp>
@@ -69,7 +68,6 @@ namespace dbaui
     struct OSingleDocumentControllerImpl;
     class DBACCESS_DLLPUBLIC OSingleDocumentController
             :public OSingleDocumentController_Base
-            ,public IEnvironment
     {
     private:
         ::std::auto_ptr<OSingleDocumentControllerImpl> m_pImpl;
@@ -130,10 +128,9 @@ namespace dbaui
         */
         const ::dbtools::DatabaseMetaData& getSdbMetaData() const;
 
-        // IEnvironment
         /** appends an error in the current environment.
         */
-        virtual void appendError(
+        void appendError(
                         const ::rtl::OUString& _rErrorMessage,
                         const ::dbtools::StandardSQLState _eSQLState = ::dbtools::SQL_GENERAL_ERROR,
                         const sal_Int32 _nErrorCode = 1000
@@ -141,20 +138,20 @@ namespace dbaui
 
         /** clears the error state.
         */
-        virtual void clearError();
+        void clearError();
 
         /** @return
                 <TRUE/> when an error was set otherwise <FALSE/>
         */
-        virtual sal_Bool hasError() const;
+        sal_Bool hasError() const;
 
         /** returns the current error
         */
-        virtual const ::dbtools::SQLExceptionInfo& getError() const;
+        const ::dbtools::SQLExceptionInfo& getError() const;
 
         /** displays the current error, or does nothing if there is no current error
         */
-        virtual void displayError();
+        void displayError();
 
         /** shows an info box with the string conntection lost.
         */
@@ -164,7 +161,7 @@ namespace dbaui
             @return
                 the currently used connection.
         */
-        virtual const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >&
+        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >&
                     getConnection() const;
 
         /** returns the number formatter
