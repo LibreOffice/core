@@ -902,7 +902,7 @@
 #include "vcl/virdev.hxx"
 #include "vcl/waitobj.hxx"
 #include "vcl/window.hxx"
-#include "vcl/wintypes.hxx"
+#include "tools/wintypes.hxx"
 #include "vcl/wrkwin.hxx"
 
 #include "vos/diagnose.hxx"
