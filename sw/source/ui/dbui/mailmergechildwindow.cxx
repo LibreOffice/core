@@ -574,8 +574,8 @@ void  SwSendMailDialog::IterateMails()
             pCurrentMailDescriptor = m_pImpl->GetNextDescriptor();
             continue;
         }
-        SwMailMessage* pMessage = 0;
-        uno::Reference< mail::XMailMessage > xMessage = pMessage = new SwMailMessage;
+        SwMailMessage* pMessage = new SwMailMessage;
+        uno::Reference< mail::XMailMessage > xMessage = pMessage;
         if(m_pConfigItem->IsMailReplyTo())
             pMessage->setReplyToAddress(m_pConfigItem->GetMailReplyTo());
         pMessage->addRecipient( pCurrentMailDescriptor->sEMail );
