@@ -43,7 +43,6 @@
 #include "com/sun/star/awt/WindowAttribute.hpp"
 #include "com/sun/star/awt/WindowClass.hpp"
 #include "com/sun/star/awt/WindowDescriptor.hpp"
-#include "com/sun/star/awt/XThrobber.hpp"
 #include "com/sun/star/awt/XToolkit.hpp"
 #include "com/sun/star/awt/XWindow.hpp"
 #include "com/sun/star/awt/XWindowPeer.hpp"
@@ -577,6 +576,7 @@ UpdateDialog::UpdateDialog(
     ModalDialog(parent,DpGuiResId(RID_DLG_UPDATE)),
     m_context(context),
     m_checking(this, DpGuiResId(RID_DLG_UPDATE_CHECKING)),
+    m_throbber(this, DpGuiResId(RID_DLG_UPDATE_THROBBER)),
     m_update(this, DpGuiResId(RID_DLG_UPDATE_UPDATE)),
     m_updates(
         *this, DpGuiResId(RID_DLG_UPDATE_UPDATES),
@@ -634,23 +634,6 @@ UpdateDialog::UpdateDialog(
     } catch (css::uno::Exception & e) {
         throw css::uno::RuntimeException(e.Message, e.Context);
     }
-    Control c(this, DpGuiResId(RID_DLG_UPDATE_THROBBER));
-    Point pos(c.GetPosPixel());
-    Size size(c.GetSizePixel());
-    try {
-        m_throbber = css::uno::Reference< css::awt::XThrobber >(
-            toolkit->createWindow(
-                css::awt::WindowDescriptor(
-                    css::awt::WindowClass_SIMPLE,
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Throbber")),
-                    GetComponentInterface(), 0,
-                    css::awt::Rectangle(
-                        pos.X(), pos.Y(), size.Width(), size.Height()),
-                    css::awt::WindowAttribute::SHOW)),
-            css::uno::UNO_QUERY_THROW);
-    } catch (css::lang::IllegalArgumentException & e) {
-        throw css::uno::RuntimeException(e.Message, e.Context);
-    }
     m_updates.SetSelectHdl(LINK(this, UpdateDialog, selectionHandler));
     m_all.SetToggleHdl(LINK(this, UpdateDialog, allHandler));
     m_ok.SetClickHdl(LINK(this, UpdateDialog, okHandler));
@@ -675,7 +658,7 @@ BOOL UpdateDialog::Close() {
 }
 
 short UpdateDialog::Execute() {
-    m_throbber->start();
+    m_throbber.start();
     m_thread->launch();
     return ModalDialog::Execute();
 }
@@ -794,9 +777,8 @@ void UpdateDialog::addSpecificError(UpdateDialog::SpecificError const & data) {
 
 void UpdateDialog::checkingDone() {
     m_checking.Hide();
-    m_throbber->stop();
-    css::uno::Reference< css::awt::XWindow >(
-        m_throbber, css::uno::UNO_QUERY_THROW)->setVisible(false);
+    m_throbber.stop();
+    m_throbber.Hide();
     if (m_updates.getItemCount() == 0)
     {
         clearDescription();

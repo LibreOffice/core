@@ -26,37 +26,10 @@
  ************************************************************************/
 package complex.connectivity;
 
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.sdbc.*;
+import share.LogWriter;
 
-import com.sun.star.lang.XMultiServiceFactory;
-
-import complexlib.ComplexTestCase;
-
-
-//import complex.connectivity.DBaseStringFunctions;
-
-public class GeneralTest  extends ComplexTestCase {
-
-    public String[] getTestMethodNames() {
-        return new String[] { "test" };
-    }
-
-    public String getTestObjectName() {
-        return "GeneralTest";
-    }
-    public void assure2(String s,boolean b){
-        assure(s,b);
-    }
-
-    public void test() throws com.sun.star.uno.Exception,com.sun.star.beans.UnknownPropertyException {
-        try
-        {
-            XDriverManager driverManager = UnoRuntime.queryInterface( XDriverManager.class, ((XMultiServiceFactory)param.getMSF()).createInstance( "com.sun.star.sdbc.DriverManager" ) );
-            String databaseURL = "sdbc:calc:singin' in the rain" ;
-            XConnection catalogConnection = driverManager.getConnection(databaseURL);
-            failed();
-        }
-        catch(SQLException e){}
-    }
+public interface TestCase
+{
+    public void assure( final String i_message, final boolean i_condition );
+    public LogWriter getLog();
 }

@@ -1974,10 +1974,12 @@ void FmXGridPeer::setProperty( const ::rtl::OUString& PropertyName, const Any& V
     }
     else if ( 0 == PropertyName.compareTo( FM_PROP_HELPURL ) )
     {
-        INetURLObject aHID( ::comphelper::getString(Value) );
-        DBG_ASSERT( aHID.GetProtocol() == INET_PROT_HID, "Wrong HelpURL!" );
+        ::rtl::OUString sHelpURL;
+        OSL_VERIFY( Value >>= sHelpURL );
+        INetURLObject aHID( sHelpURL );
         if ( aHID.GetProtocol() == INET_PROT_HID )
-              pGrid->SetHelpId( rtl::OUStringToOString( aHID.GetURLPath(), RTL_TEXTENCODING_UTF8 ) );
+            sHelpURL = aHID.GetURLPath();
+        pGrid->SetHelpId( rtl::OUStringToOString( sHelpURL, RTL_TEXTENCODING_UTF8 ) );
     }
     else if ( 0 == PropertyName.compareTo( FM_PROP_DISPLAYSYNCHRON ) )
     {

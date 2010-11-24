@@ -897,8 +897,8 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
         OSQLParseNode *pOptEscape;
         const OSQLParseNode* pPart2 = parseTree->getChild(1);
         pColumn     = parseTree->getChild(0);                        // Match Item
-        pAtom       = pPart2->getChild(parseTree->count()-2);     // Match String
-        pOptEscape  = pPart2->getChild(parseTree->count()-1);     // Opt Escape Rule
+        pAtom       = pPart2->getChild(pPart2->count()-2);     // Match String
+        pOptEscape  = pPart2->getChild(pPart2->count()-1);     // Opt Escape Rule
         const bool bNot = SQL_ISTOKEN(pPart2->getChild(0), NOT);
 
         if (!(pAtom->getNodeType() == SQL_NODE_STRING ||
