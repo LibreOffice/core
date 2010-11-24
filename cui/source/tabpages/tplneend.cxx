@@ -598,25 +598,22 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
             pLeList->SetName( aURL.getName() );
             if( pLeList->Load() )
             {
-                if( pLeList )
-                {
-                    // Pruefen, ob Tabelle geloescht werden darf:
-                    if( pLineEndList != ( (SvxLineTabDialog*) DLGWIN )->GetLineEndList() )
-                        delete pLineEndList;
+                // Pruefen, ob Tabelle geloescht werden darf:
+                if( pLineEndList != ( (SvxLineTabDialog*) DLGWIN )->GetLineEndList() )
+                    delete pLineEndList;
 
-                    pLineEndList = pLeList;
-                    ( (SvxLineTabDialog*) DLGWIN )->SetNewLineEndList( pLineEndList );
-                    aLbLineEnds.Clear();
-                    aLbLineEnds.Fill( pLineEndList );
-                    Reset( rOutAttrs );
+                pLineEndList = pLeList;
+                ( (SvxLineTabDialog*) DLGWIN )->SetNewLineEndList( pLineEndList );
+                aLbLineEnds.Clear();
+                aLbLineEnds.Fill( pLineEndList );
+                Reset( rOutAttrs );
 
-                    pLineEndList->SetName( aURL.getName() );
+                pLineEndList->SetName( aURL.getName() );
 
-                    // Flag fuer gewechselt setzen
-                    *pnLineEndListState |= CT_CHANGED;
-                    // Flag fuer modifiziert entfernen
-                    *pnLineEndListState &= ~CT_MODIFIED;
-                }
+                // Flag fuer gewechselt setzen
+                *pnLineEndListState |= CT_CHANGED;
+                // Flag fuer modifiziert entfernen
+                *pnLineEndListState &= ~CT_MODIFIED;
             }
             else
                 ErrorBox( DLGWIN, WinBits( WB_OK ),
