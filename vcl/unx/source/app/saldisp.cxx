@@ -803,7 +803,7 @@ void SalDisplay::initScreen( int nScreen ) const
         }
         rSD.m_hInvert50 = XCreateBitmapFromData( pDisp_,
                                                  rSD.m_aRefWindow,
-                                                 invert50_bits,
+                                                 reinterpret_cast<const char*>(invert50_bits),
                                                  invert50_width,
                                                  invert50_height );
     }
@@ -1856,7 +1856,7 @@ KeySym SalDisplay::GetKeySym( XKeyEvent        *pEvent,
 #define MAKE_BITMAP( name ) \
     XCreateBitmapFromData( pDisp_, \
                            DefaultRootWindow( pDisp_ ), \
-                           name##_bits, \
+                           reinterpret_cast<const char*>(name##_bits), \
                            name##_width, \
                            name##_height )
 

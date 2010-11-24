@@ -286,7 +286,7 @@ SelectionManager::SelectionManager() :
     m_aDragRunning.reset();
 }
 
-XLIB_Cursor SelectionManager::createCursor( const char* pPointerData, const char* pMaskData, int width, int height, int hotX, int hotY )
+XLIB_Cursor SelectionManager::createCursor( const unsigned char* pPointerData, const unsigned char* pMaskData, int width, int height, int hotX, int hotY )
 {
     Pixmap aPointer;
     Pixmap aMask;
@@ -303,13 +303,13 @@ XLIB_Cursor SelectionManager::createCursor( const char* pPointerData, const char
     aPointer =
         XCreateBitmapFromData( m_pDisplay,
                                m_aWindow,
-                               pPointerData,
+                               reinterpret_cast<const char*>(pPointerData),
                                width,
                                height );
     aMask
         = XCreateBitmapFromData( m_pDisplay,
                                  m_aWindow,
-                                 pMaskData,
+                                 reinterpret_cast<const char*>(pMaskData),
                                  width,
                                  height );
     XLIB_Cursor aCursor =

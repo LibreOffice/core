@@ -316,17 +316,17 @@ long GtkSalDisplay::Dispatch( XEvent* pEvent )
     return GDK_FILTER_CONTINUE;
 }
 
-GdkCursor* GtkSalDisplay::getFromXPM( const char *pBitmap,
-                                      const char *pMask,
+GdkCursor* GtkSalDisplay::getFromXPM( const unsigned char *pBitmap,
+                                      const unsigned char *pMask,
                                       int nWidth, int nHeight,
                                       int nXHot, int nYHot )
 {
     GdkScreen *pScreen = gdk_display_get_default_screen( m_pGdkDisplay );
     GdkDrawable *pDrawable = GDK_DRAWABLE( gdk_screen_get_root_window (pScreen) );
     GdkBitmap *pBitmapPix = gdk_bitmap_create_from_data
-            ( pDrawable, pBitmap, nWidth, nHeight );
+            ( pDrawable, reinterpret_cast<const char*>(pBitmap), nWidth, nHeight );
     GdkBitmap *pMaskPix = gdk_bitmap_create_from_data
-            ( pDrawable, pMask, nWidth, nHeight );
+            ( pDrawable, reinterpret_cast<const char*>(pMask), nWidth, nHeight );
     GdkColormap *pColormap = gdk_drawable_get_colormap( pDrawable );
 
     GdkColor aWhite = { 0, 0xffff, 0xffff, 0xffff };
