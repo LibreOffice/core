@@ -312,6 +312,9 @@ static void lcl_PrintDigest(const sal_uInt8* /*pDigest*/, const char* /*msg*/)
 
 sal_Bool MSCodec_Std97::InitCodec( const uno::Sequence< beans::NamedValue >& aData )
 {
+#if DEBUG_MSO_ENCRYPTION_STD97
+    fprintf(stdout, "MSCodec_Std97::InitCodec: --begin\n");fflush(stdout);
+#endif
     sal_Bool bResult = sal_False;
 
     ::comphelper::SequenceAsHashMap aHashData( aData );
@@ -325,6 +328,8 @@ sal_Bool MSCodec_Std97::InitCodec( const uno::Sequence< beans::NamedValue >& aDa
         {
             (void)memcpy( m_pDocId, aUniqueID.getConstArray(), 16 );
             bResult = sal_True;
+            lcl_PrintDigest(m_pDigestValue, "digest value");
+            lcl_PrintDigest(m_pDocId, "DocId value");
         }
         else
             OSL_ENSURE( sal_False, "Unexpected document ID!\n" );
@@ -362,6 +367,8 @@ void MSCodec_Std97::InitKey (
     lcl_PrintDigest(m_pDigestValue, "digest value");
 
     (void)memcpy (m_pDocId, pDocId, 16);
+
+    lcl_PrintDigest(m_pDocId, "DocId value");
 }
 
 bool MSCodec_Std97::VerifyKey (
@@ -438,7 +445,7 @@ bool MSCodec_Std97::InitCipher (sal_uInt32 nCounter)
 bool MSCodec_Std97::CreateSaltDigest( const sal_uInt8 nSaltData[16], sal_uInt8 nSaltDigest[16] )
 {
 #if DEBUG_MSO_ENCRYPTION_STD97
-    lcl_PrintDigest(pSaltData, "salt data");
+    lcl_PrintDigest(nSaltData, "salt data");
 #endif
     bool result = false;
 
