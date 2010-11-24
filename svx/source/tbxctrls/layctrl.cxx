@@ -515,8 +515,6 @@ void ColumnsWindow::MouseMove( const MouseEvent& rMEvt )
 void ColumnsWindow::UpdateSize_Impl( long nNewCol )
 {
     Size    aWinSize = GetOutputSizePixel();
-    long    nMinCol = 0;
-    long    nMaxCol = 0;
     Point   aWinPos;// = GetPosPixel();
 
     if ( nWidth <= nNewCol )
@@ -546,6 +544,8 @@ void ColumnsWindow::UpdateSize_Impl( long nNewCol )
     {
         Invalidate( Rectangle( 0, aWinSize.Height()-nTextHeight+2,
                                aWinSize.Width(), aWinSize.Height() ) );
+
+        long nMinCol = 0, nMaxCol = 0;
 
         if ( nNewCol < nCol )
         {
