@@ -1577,7 +1577,6 @@ BOOL __EXPORT ScDocShell::SaveAs( SfxMedium& rMedium )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::SaveAs" );
 
-#if ENABLE_SHEET_PROTECTION
     ScTabViewShell* pViewShell = GetBestViewShell();
     bool bNeedsRehash = ScPassHashHelper::needsPassHashRegen(aDocument, PASSHASH_SHA1);
     if (bNeedsRehash)
@@ -1590,7 +1589,6 @@ BOOL __EXPORT ScDocShell::SaveAs( SfxMedium& rMedium )
             // password re-type cancelled.  Don't save the document.
             return false;
     }
-#endif
 
     ScRefreshTimerProtector( aDocument.GetRefreshTimerControlAddress() );
 
@@ -2125,13 +2123,11 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
                 }
             }
 
-#if ENABLE_SHEET_PROTECTION
             if( bDoSave )
             {
                 bool bNeedRetypePassDlg = ScPassHashHelper::needsPassHashRegen( aDocument, PASSHASH_XL );
                 bDoSave = !bNeedRetypePassDlg || pViewShell->ExecuteRetypePassDlg( PASSHASH_XL );
             }
-#endif
         }
 
         if( bDoSave )

@@ -132,9 +132,7 @@ static void lcl_AddWorkbookProtection( XclExpRecordList<>& aRecList, ExcTable& s
     {
         aRecList.AppendNewRecord( new XclExpWindowProtection(pProtect->isOptionEnabled(ScDocProtection::WINDOWS)) );
         aRecList.AppendNewRecord( new XclExpProtection(pProtect->isOptionEnabled(ScDocProtection::STRUCTURE)) );
-#if ENABLE_SHEET_PROTECTION
         aRecList.AppendNewRecord( new XclExpPassHash(pProtect->getPasswordHash(PASSHASH_XL)) );
-#endif
     }
 
     aRecList.AppendNewRecord( new XclExpXmlEndSingleElementRecord() );   // XML_workbookProtection
@@ -474,9 +472,7 @@ void ExcTable::FillAsTable( SCTAB nCodeNameIdx )
         Add( new XclExpProtection(true) );
         Add( new XclExpBoolRecord(0x00DD, pTabProtect->isOptionEnabled(ScTableProtection::SCENARIOS)) );
         Add( new XclExpBoolRecord(0x0063, pTabProtect->isOptionEnabled(ScTableProtection::OBJECTS)) );
-#if ENABLE_SHEET_PROTECTION
         Add( new XclExpPassHash(pTabProtect->getPasswordHash(PASSHASH_XL)) );
-#endif
     }
 
     // local link table: EXTERNCOUNT, EXTERNSHEET
