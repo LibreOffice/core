@@ -5,9 +5,6 @@
 
 #include "sal/config.h"
 
-#include <iostream>
-using namespace std;
-
 #include <cppuhelper/bootstrap.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppunit/TestAssert.h>
@@ -41,7 +38,6 @@ struct assertion_traits<String>
         std::string text = ByteString(x, RTL_TEXTENCODING_UTF8).GetBuffer();
         OStringStream ost;
         ost << text;
-        cout << ost.str();
         return ost.str();
     }
 };
@@ -453,6 +449,9 @@ void Test::parseandparseagain(const char *formula, const char *test_name)
     CPPUNIT_ASSERT_EQUAL_MESSAGE(test_name,
         output1,
         output2);
+
+    delete pNode1;
+    delete pNode2;
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
