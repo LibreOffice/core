@@ -102,10 +102,12 @@ String STR_QRY_TITLE
 {
     Text [ en-US ] = "Query #" ;
 };
+
 String STR_TBL_TITLE
 {
     Text [ en-US ] = "Table #" ;
 };
+
 String STR_VIEW_TITLE
 {
     Text [ en-US ] = "View #" ;
@@ -136,4 +138,3 @@ String STR_DATASOURCE_GRIDCONTROL_DESC
 {
     Text [ en-US ] = "Shows the selected table or query.";
 };
-

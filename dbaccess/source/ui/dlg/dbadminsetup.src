@@ -142,7 +142,6 @@ ModalDialog DLG_DATABASE_WIZARD
     };
 };
 
-
 String STR_DATABASEDEFAULTNAME
 {
     Text[ en-US ]  = "New Database" ;
@@ -163,7 +162,6 @@ TabPage PAGE_DBWIZARD_MYSQL_INTRO
         Text[ en-US ] = "Set up a connection to a MySQL database";
         WordBreak = TRUE;
     };
-
 
     FixedText FT_MYSQL_HELPTEXT
     {
@@ -202,7 +200,6 @@ TabPage PAGE_DBWIZARD_MYSQL_INTRO
         Text[ en-US ] = "Connect directly" ;
         Hide = TRUE ;
     };
-
 };
 
 #define AUTHENTEDIT_X   (EDIT_X - 10)
@@ -221,7 +218,6 @@ TabPage PAGE_DBWIZARD_AUTHENTIFICATION
         Text[ en-US ] = "Set up the user authentication";
         WordBreak = TRUE;
     };
-
 
     FixedText FT_AUTHENTIFICATIONHELPTEXT\
     {
@@ -261,7 +257,6 @@ TabPage PAGE_DBWIZARD_AUTHENTIFICATION
         Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
         Text[ en-US ] = "~Test Connection" ;
     };
-
 };
 
 
@@ -271,7 +266,6 @@ TabPage PAGE_DBWIZARD_FINAL
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
     Hide = TRUE ;
-
 
     FixedText FT_FINALHEADER
     {
@@ -289,7 +283,6 @@ TabPage PAGE_DBWIZARD_FINAL
         WordBreak = TRUE ;
     };
 
-
     RadioButton RB_REGISTERDATASOURCE
     {
         HelpId = HID_PAGE_DBWIZARD_FINAL_RB_REGISTERDATASOURCE;
@@ -298,7 +291,6 @@ TabPage PAGE_DBWIZARD_FINAL
         Group = TRUE;
         Text[ en-US ] = "~Yes, register the database for me" ;
     };
-
 
     RadioButton RB_DONTREGISTERDATASOURCE
     {
@@ -347,7 +339,6 @@ TabPage PAGE_DBWIZARD_MYSQL_JDBC
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
     Hide = TRUE ;
-
 
     String STR_MYSQLJDBC_HEADERTEXT
     {
@@ -410,41 +401,33 @@ TabPage PAGE_DBWIZARD_DBASE
         Text[ en-US ] = "Set up a connection to dBASE files" ;
     };
 
-
     String STR_DBASE_HELPTEXT
     {
         Text[ en-US ]  = "Select the folder where the dBASE files are stored." ;
     };
 
-     AUTO_HELP_BROWSECONTROLGROUP( 3, HID_PAGE_DBWIZARD_DBASE_ET_DBASELOCATION)
+    AUTO_HELP_BROWSECONTROLGROUP( 3, HID_PAGE_DBWIZARD_DBASE_ET_DBASELOCATION)
 };
-
 
 TabPage PAGE_DBWIZARD_TEXT
 {
-
     String STR_TEXT_HEADERTEXT
     {
         Text[ en-US ]   = "Set up a connection to text files" ;
     };
-
 
     String STR_TEXT_HELPTEXT
     {
         Text[ en-US ]   = "Select the folder where the CSV (Comma Separated Values) text files are stored. %PRODUCTNAME Base will open these files in read-only mode." ;
     };
 
-
     String STR_TEXT_PATH_OR_FILE{
         Text[ en-US ]  = "Path to text files";
     };
 
-
     AUTO_HELP_BROWSECONTROLGROUP(3, HID_PAGE_DBWIZARD_TEXT_ET_LOCATIONTEXTFILE)
     AUTO_SEPARATORCONTROLGROUP(82, WIZARD_PAGE_X)
  };
-
-
 
 TabPage PAGE_DBWIZARD_MSACCESS
 {
@@ -458,16 +441,13 @@ TabPage PAGE_DBWIZARD_MSACCESS
         Text[ en-US ] = "Set up a connection to a Microsoft Access database" ;
     };
 
-
     String STR_MSACCESS_HELPTEXT
     {
         Text[ en-US ] = "Please select the Microsoft Access file you want to access.";
     };
 
     AUTO_HELP_BROWSECONTROLGROUP(3, HID_PAGE_DBWIZARD_MSACCESS_ET_MSACCESSLOCATION)
-// FT_MSACCESS_MDB_FILE
 };
-
 
 TabPage PAGE_DBWIZARD_LDAP
 {
@@ -483,7 +463,6 @@ TabPage PAGE_DBWIZARD_LDAP
         Text[ en-US ] = "Set up a connection to an LDAP directory";
         WordBreak = TRUE;
     };
-
 
     FixedText FT_LDAP_HELPTEXT
     {
@@ -509,7 +488,6 @@ TabPage PAGE_DBWIZARD_LDAP
     };
 };
 
-
 TabPage PAGE_DBWIZARD_ADABAS
 {
     SVLook = TRUE ;
@@ -522,14 +500,12 @@ TabPage PAGE_DBWIZARD_ADABAS
         Text[ en-US ]   = "Set up a connection to an Adabas D database" ;
     };
 
-
     String STR_ADABAS_HELPTEXT{
         Text[ en-US ] = "Enter the name of the Adabas D database you want to connect to.\nClick 'Browse...' to select an Adabas D database that is already registered in %PRODUCTNAME." ;
     };
 
     AUTO_HELP_BROWSECONTROLGROUP(4, HID_PAGE_DBWIZARD_ADABAS_ET_ADABASNAME)
 };
-
 
 TabPage PAGE_DBWIZARD_ADO
 {
@@ -548,7 +524,6 @@ TabPage PAGE_DBWIZARD_ADO
     };
 
     AUTO_HELP_BROWSECONTROLGROUP(5, HID_PAGE_DBWIZARD_ADO_ET_ADOURL)
-
 };
 
 
@@ -580,8 +555,6 @@ TabPage PAGE_DBWIZARD_USERDEFINED
 
     AUTO_HELP_BROWSECONTROLGROUP(6, HID_PAGE_DBWIZARD_USERDEFINED_ET_BROWSE)
 };
-
-
 
 TabPage PAGE_DBWIZARD_JDBC
 {
@@ -622,11 +595,9 @@ TabPage PAGE_DBWIZARD_ORACLE
         Text[ en-US ] = "Default: 1521" ;
     };
 
-
     String STR_ORACLE_DRIVERCLASSTEXT{
         Text [ en-US ] = "Oracle JDBC ~driver class";
     };
-
 
     String STR_ORACLE_HELPTEXT{
         Text[ en-US ] = "Please enter the required information to connect to an Oracle database.Note that a JDBC Driver Class must be installed on your system and registered with %PRODUCTNAME.\nPlease contact your system administrator if you are unsure about the following settings." ;
@@ -648,11 +619,9 @@ TabPage PAGE_DBWIZARD_SPREADSHEET
         Text[ en-US ] = "Set up a connection to spreadsheets";
     };
 
-
     String STR_SPREADSHEET_HELPTEXT{
         Text[ en-US ] = "Click 'Browse...' to select a %PRODUCTNAME spreadsheet or Microsoft Excel workbook.\n%PRODUCTNAME will open this file in read-only mode." ;
     };
-
 
     AUTO_HELP_BROWSECONTROLGROUP(3, HID_PAGE_DBWIZARD_SPREADSHEET_ET_SPREADSHEETPATH )
 
@@ -669,5 +638,3 @@ TabPage PAGE_DBWIZARD_SPREADSHEET
         Text[ en-US ] = "~Password required" ;
     };
 };
-
-

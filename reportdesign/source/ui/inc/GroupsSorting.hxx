@@ -65,18 +65,15 @@ class OReportController;
 \************************************************************************/
 
 class OGroupsSortingDialog :    public FloatingWindow
-                            ,   public ::cppu::BaseMutex
-                                ,   public ::comphelper::OPropertyChangeListener
-                           ,public dbaui::OToolBoxHelper
-                           ,public vcl::IImageListProvider
+                           ,    public ::cppu::BaseMutex
+                           ,    public ::comphelper::OPropertyChangeListener
+                           ,    public dbaui::OToolBoxHelper
+                           ,    public vcl::IImageListProvider
 {
     friend class OFieldExpressionControl;
 
     FixedLine                               m_aFL2;
     FixedText                               m_aMove;
-//BTN   ImageButton                             m_aPB_Up;
-//BTN   ImageButton                             m_aPB_Down;
-//BTN   ImageButton                             m_aPB_Delete;
     ToolBox                                 m_aToolBox;
 
     FixedLine                               m_aFL3;
@@ -106,7 +103,6 @@ private:
     DECL_LINK( OnControlFocusLost, Control* );
     DECL_LINK( OnControlFocusGot, Control* );
     DECL_LINK( LBChangeHdl, ListBox* );
-//BTN   DECL_LINK( ClickHdl, ImageButton* );
     DECL_LINK( OnFormatAction,      ToolBox* );
 
     /** returns the groups

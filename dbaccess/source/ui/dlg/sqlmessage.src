@@ -38,19 +38,19 @@
 //-------------------------------------------------------------------------
 Image BMP_EXCEPTION_ERROR
 {
-    ImageBitmap = Bitmap { File = "exerror.bmp"; };
+    ImageBitmap = Bitmap { File = "exerror.png"; };
     MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
 };
 
 Image BMP_EXCEPTION_WARNING
 {
-    ImageBitmap = Bitmap { File = "exwarning.bmp"; };
+    ImageBitmap = Bitmap { File = "exwarning.png"; };
     MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
 };
 
 Image BMP_EXCEPTION_INFO
 {
-    ImageBitmap = Bitmap { File = "exinfo.bmp"; };
+    ImageBitmap = Bitmap { File = "exinfo.png"; };
     MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
 };
 

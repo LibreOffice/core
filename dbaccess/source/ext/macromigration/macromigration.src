@@ -339,6 +339,7 @@ TabPage TP_SUMMARY
     {
         Text [ en-US ] = "The migration was successful. Below is a log of the actions which have been taken to your document.";
     };
+
     String STR_UNSUCCESSFUL
     {
         Text [ en-US ] = "The migration was not successful. Examine the migration log below for details.";
@@ -443,10 +444,12 @@ String STR_INVALID_NUMBER_ARGS
 {
     Text [ en-US ] = "Invalid number of initialization arguments. Expected 1.";
 };
+
 String STR_NO_DATABASE
 {
     Text [ en-US ] = "No database document found in the initializatin arguments.";
 };
+
 String STR_NOT_READONLY
 {
     Text [ en-US ] = "Not applicable to read-only documents.";

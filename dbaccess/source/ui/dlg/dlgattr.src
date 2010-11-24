@@ -36,6 +36,7 @@
 #ifndef DBAUI_SBATTRDLG_HRC
 #include "dlgattr.hrc"
 #endif
+
  //================================================
  // Der Attributdialog:
 TabDialog DLG_ATTR
@@ -89,34 +90,3 @@ TabDialog DLG_ATTR
         Text [ en-US ] = "Table Format" ;
     };
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -103,5 +103,3 @@ ModalDialog DLG_DATASOURCE_SELECTION
         Text [ en-US ] = "Choose a database";
     };
 };
-
-

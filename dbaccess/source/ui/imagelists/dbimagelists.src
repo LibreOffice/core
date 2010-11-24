@@ -68,16 +68,19 @@ Image IMG_FORMFOLDER_TREE_L
     ImageBitmap = Bitmap { File = "forms_32"; };
     MASKCOLOR;
 };
+
 Image IMG_REPORTFOLDER_TREE_L
 {
     ImageBitmap = Bitmap { File = "reports_32"; };
     MASKCOLOR;
 };
+
 Image IMG_QUERYFOLDER_TREE_L
 {
     ImageBitmap = Bitmap { File = "queries_32"; };
     MASKCOLOR;
 };
+
 Image IMG_TABLEFOLDER_TREE_L
 {
     ImageBitmap = Bitmap { File = "tables_32"; };
@@ -92,7 +95,7 @@ Image IMG_TABLEFOLDER_TREE_L
 
 Image DATABASE_TREE_ICON
 {
-    ImageBitmap = Bitmap { File = "db.bmp"; };
+    ImageBitmap = Bitmap { File = "db.png"; };
     MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
 };
 
@@ -125,13 +128,13 @@ Image VIEW_TREE_ICON
 
 Image QUERY_TREE_ICON
 {
-    ImageBitmap = Bitmap { File = "sx03202.bmp"; };
+    ImageBitmap = Bitmap { File = "sx03202.png"; };
     MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
 };
 
 Image QUERYFOLDER_TREE_ICON
 {
-    ImageBitmap = Bitmap { File = "sx03201.bmp"; };
+    ImageBitmap = Bitmap { File = "sx03201.png"; };
     MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
 };
 
@@ -164,4 +167,3 @@ Image REPORTFOLDER_TREE_ICON
     ImageBitmap = Bitmap { File = "reports_16"; };
     MASKCOLOR;
 };
-

@@ -97,19 +97,17 @@ Menu RID_QUERYCOLPOPUPMENU
         };
     };
 };
+
 ImageList IMG_JOINS
 {
     Prefix = "jo";
-    MaskColor   = Color {
-            Red   = 0xffff;
-            Green = 0x0000;
-            Blue  = 0xffff;
-    };
+    MaskColor   = Color { Red   = 0xffff; Green = 0x0000; Blue  = 0xffff; };
     IdList = {
         IMG_PRIMARY_KEY; IMG_FOREIGN_KEY;
     };
     IdCount = { 2; };
 };
+
 String STR_QUERY_UNDO_TABWINSHOW
 {
     Text [ en-US ] = "Add Table Window" ;
@@ -147,6 +145,7 @@ String STR_QUERY_UNDO_TABFIELDCREATE
 {
     Text [ en-US ] = "Add Column" ;
 };
+
 String RID_STR_TABLE_DOESNT_EXIST
 {
     Text [ en-US ] = "Invalid expression, table '$name$' does not exist.";
@@ -156,6 +155,7 @@ String RID_STR_FIELD_DOESNT_EXIST
 {
     Text [ en-US ] = "Invalid expression, field name '$name$' does not exist.";
 };
+
 String RID_STR_TOMUCHTABLES
 {
     Text [ en-US ] = "The query covers #num# tables. The selected database type, however, can only process a maximum of #maxnum# table(s) per statement.";
@@ -170,10 +170,12 @@ String STR_QUERY_UNDO_MODIFY_CELL
 {
     Text [ en-US ] = "Edit Column Description";
 };
+
 String STR_QUERY_UNDO_SIZE_COLUMN
 {
     Text [ en-US ] = "Adjust column width";
 };
+
 String STR_QUERY_SORTTEXT
 {
     Text [ en-US ] = "(not sorted);ascending;descending" ;
@@ -183,14 +185,17 @@ String STR_QUERY_FUNCTIONS
 {
     Text [ en-US ] = "(no function);Group";
 };
+
 String STR_QUERY_NOTABLE
 {
     Text [ en-US ] = "(no table)";
 };
+
 String STR_QRY_ORDERBY_UNRELATED
 {
     Text [ en-US ] = "The database only supports sorting for visible fields.";
 };
+
 Menu RID_QUERYFUNCTION_POPUPMENU
 {
     ItemList =
@@ -229,6 +234,7 @@ Menu RID_QUERYFUNCTION_POPUPMENU
         };
     };
 };
+
 String STR_QUERY_HANDLETEXT
 {
     Text [ en-US ] = "Field;Alias;Table;Sort;Visible;Function;Criterion;Or;Or";
@@ -243,38 +249,47 @@ ErrorBox ERR_QRY_CRITERIA_ON_ASTERISK
 {
     Message [ en-US ] = "A condition cannot be applied to field [*]" ;
 };
+
 String STR_QRY_TOO_LONG_STATEMENT
 {
     Text [ en-US ] = "The SQL statement created is too long.";
 };
+
 String STR_QRY_TOOCOMPLEX
 {
     Text [ en-US ] = "Query is too complex" ;
 };
+
 String STR_QRY_NOSELECT
 {
     Text [ en-US ] = "Nothing has been selected." ;
 };
+
 String STR_QRY_TOOMANYCOND
 {
     Text [ en-US ] = "Too many search criteria" ;
 };
+
 String STR_QRY_SYNTAX
 {
     Text [ en-US ] = "SQL syntax error" ;
 };
+
 ErrorBox ERR_QRY_ORDERBY_ON_ASTERISK
 {
     Message [ en-US ] = "[*] cannot be used as a sort criterion.";
 };
+
 String STR_QUERY_TRUE
 {
     Text [ en-US ] = "TRUE" ;
 };
+
 String STR_QUERY_FALSE
 {
     Text [ en-US ] = "FALSE" ;
 };
+
 String STR_QRY_TOO_MANY_TABLES
 {
     Text [ en-US ] = "There are too many tables.";
@@ -284,10 +299,12 @@ String STR_QRY_NATIVE
 {
     Text [ en-US ] = "The statement will not be applied when querying in the SQL dialect of the database." ;
 };
+
 ErrorBox ERR_QRY_AMB_FIELD
 {
     Message [ en-US ] = "Field name not found or not unique" ;
 };
+
 String STR_QRY_ILLEGAL_JOIN
 {
     Text [ en-US ] = "Join could not be processed" ;

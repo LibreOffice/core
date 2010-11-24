@@ -131,4 +131,3 @@ String STR_DIRECTSQL_CONNECTIONLOST
 {
     Text [ en-US ] = "The connection to the database has been lost. This dialog will be closed.";
 };
-

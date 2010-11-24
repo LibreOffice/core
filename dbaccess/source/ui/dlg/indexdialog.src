@@ -57,7 +57,6 @@ ModalDialog DLG_INDEXDESIGN
     ToolBox TLB_ACTIONS
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
-        //  Size = MAP_APPFONT ( DIALOG_SIZE_X - 14 , 14 ) ;
         ButtonType = BUTTON_SYMBOL;
         Align = BOXALIGN_TOP;
         HelpId = HID_INDEX_DIALOG_ACTION_TB;
@@ -171,14 +170,17 @@ String STR_TAB_INDEX_SORTORDER
 {
     Text [ en-US ] = "Sort order" ;
 };
+
 String STR_TAB_INDEX_FIELD
 {
     Text [ en-US ] = "Index field" ;
 };
+
 String STR_ORDER_ASCENDING
 {
     Text [ en-US ] = "Ascending" ;
 };
+
 String STR_ORDER_DESCENDING
 {
     Text [ en-US ] = "Descending" ;
@@ -196,7 +198,7 @@ String STR_LOGICAL_INDEX_NAME
 
 Image IMG_PKEYICON
 {
-    ImageBitmap = Bitmap { File = "pkey.bmp"; };
+    ImageBitmap = Bitmap { File = "pkey.png"; };
     MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
 };
 
@@ -228,4 +230,3 @@ String STR_INDEXDESIGN_DOUBLE_COLUMN_NAME
 {
     Text [ en-US ] = "In an index definition, no table column may occur more than once. However, you have entered column \"$name$\" twice.";
 };
-

@@ -43,14 +43,12 @@
 #define FIXEDLINE_HEIGHT    1
 #define IMG_SIZE            15
 
-
 ModalDialog DLG_COLLECTION_VIEW
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Moveable = TRUE ;
     Closeable = TRUE ;
-    //Sizeable = TRUE;
     HelpId = HID_EXPLORERDLG_COLLECTION ;
 
     Size = MAP_APPFONT ( WIN_X , WIN_Y ) ;
@@ -128,7 +126,6 @@ ModalDialog DLG_COLLECTION_VIEW
         Size = MAP_APPFONT ( 50 , BUTTON_HEIGHT ) ;
     };
 
-
     String STR_PATHNAME
     {
         Text [ en-US ] = "~Path:" ;
@@ -139,11 +136,13 @@ String STR_NEW_FOLDER
 {
     Text [ en-US ] = "Folder" ;
 };
+
 Image IMG_NAVIGATION_BTN_UP_SC
 {
     ImageBitmap = Bitmap { File = "fp010"; };
     MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
 };
+
 Image IMG_NAVIGATION_CREATEFOLDER_SC
 {
     ImageBitmap = Bitmap { File = "fp015"; };

@@ -1000,7 +1000,7 @@ OGroupsSortingDialog::OGroupsSortingDialog( Window* _pParent
         pControlsLst[i]->SetGetFocusHdl(LINK(this, OGroupsSortingDialog, OnControlFocusGot));
         pControlsLst[i]->SetLoseFocusHdl(LINK(this, OGroupsSortingDialog, OnControlFocusLost));
         pControlsLst[i]->Show(TRUE);
-    } // for (int i = 0; i < SAL_N_ELEMENTS(pControls); ++i)
+    }
 
     for (size_t i = 0; i < (SAL_N_ELEMENTS(pControlsLst))-1; ++i)
         static_cast<ListBox*>(pControlsLst[i])->SetSelectHdl(LINK(this,OGroupsSortingDialog,LBChangeHdl));
@@ -1341,7 +1341,8 @@ void OGroupsSortingDialog::displayGroup(const uno::Reference<report::XGroup>& _x
             m_aGroupOnLst.InsertEntry(String(ModuleRes(STR_RPT_INTERVAL)));
             m_aGroupOnLst.SetEntryData(1,reinterpret_cast<void*>(report::GroupOn::INTERVAL));
             break;
-    } // switch(nDataType)
+    }
+
     USHORT nPos = 0;
     switch(_xGroup->getGroupOn())
     {
@@ -1409,7 +1410,7 @@ void OGroupsSortingDialog::Resize()
     for (size_t i = 0; i < SAL_N_ELEMENTS(pControls); ++i)
     {
         nMaxTextWidth = ::std::max<sal_Int32>(static_cast<sal_Int32>(GetTextWidth(pControls[i]->GetText())),nMaxTextWidth);
-    } // for (int i = 0; i < SAL_N_ELEMENTS(pControls); ++i)
+    }
 
     // aTotalOutputSize.Width() - m_aHeaderLst.GetSizePixel().Width() - 3*aSpace.Width()
     for (size_t i = 0; i < SAL_N_ELEMENTS(pControls); ++i)
@@ -1420,7 +1421,7 @@ void OGroupsSortingDialog::Resize()
         aPos.Y() = pControlsLst[i]->GetPosPixel().Y();
 
         pControlsLst[i]->SetPosSizePixel(aPos,Size(aTotalOutputSize.Width() - aPos.X() - aSpace.Width(),pControlsLst[i]->GetSizePixel().Height()));
-    } // for (int i = 0; i < SAL_N_ELEMENTS(pControls); ++i)
+    }
 
     m_aFL.SetSizePixel(Size(aTotalOutputSize.Width() - aSpace.Width(),m_aFL.GetSizePixel().Height()));
     m_aFL2.SetSizePixel(Size(aTotalOutputSize.Width() - aSpace.Width(),m_aFL2.GetSizePixel().Height()));

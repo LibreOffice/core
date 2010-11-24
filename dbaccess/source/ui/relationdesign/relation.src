@@ -44,22 +44,27 @@ String STR_QUERY_REL_EDIT_RELATION
 {
     Text [ en-US ] = "This relation already exists. Do you want to edit it or create a new one?" ;
 };
+
 String STR_QUERY_REL_EDIT
 {
     Text [ en-US ] = "Edit..." ;
 };
+
 String STR_QUERY_REL_CREATE
 {
     Text [ en-US ] = "Create..." ;
 };
+
 String STR_RELATIONDESIGN
 {
     Text [ en-US ] = " - %PRODUCTNAME Base: Relation design" ;
 };
+
 String STR_RELATIONDESIGN_NOT_AVAILABLE
 {
     Text [ en-US ] = "The database does not support relations." ;
 };
+
 QueryBox RELATION_DESIGN_SAVEMODIFIED
 {
     Buttons = WB_YES_NO_CANCEL ;
@@ -76,55 +81,3 @@ String STR_QUERY_REL_COULD_NOT_CREATE
 {
     Text [ en-US ] = "The database could not create the relation. May be foreign keys for this kind of table aren't supported.\nPlease check your documentation of the database.";
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

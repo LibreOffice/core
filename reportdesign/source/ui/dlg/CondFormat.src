@@ -276,12 +276,12 @@ ImageList IMG_CONDFORMAT_DLG_SC
     MASKCOLOR;
     FileList =
     {
-        < "res/commandimagelist/sc_bold.png" ; SID_ATTR_CHAR_WEIGHT ; > ;
-        < "res/commandimagelist/sc_italic.png" ; SID_ATTR_CHAR_POSTURE ; > ;
-        < "res/commandimagelist/sc_underline.png" ; SID_ATTR_CHAR_UNDERLINE ; > ;
-        < "res/commandimagelist/sc_backgroundcolor.png" ; SID_BACKGROUND_COLOR ; > ;
-        < "res/commandimagelist/sc_fontcolor.png" ; SID_ATTR_CHAR_COLOR2 ; > ;
-        < "res/commandimagelist/sc_fontdialog.png" ; SID_CHAR_DLG ; > ;
+        < "res/commandimagelist/sc_bold.png" ;              SID_ATTR_CHAR_WEIGHT ; > ;
+        < "res/commandimagelist/sc_italic.png" ;            SID_ATTR_CHAR_POSTURE ; > ;
+        < "res/commandimagelist/sc_underline.png" ;         SID_ATTR_CHAR_UNDERLINE ; > ;
+        < "res/commandimagelist/sc_backgroundcolor.png" ;   SID_BACKGROUND_COLOR ; > ;
+        < "res/commandimagelist/sc_fontcolor.png" ;         SID_ATTR_CHAR_COLOR2 ; > ;
+        < "res/commandimagelist/sc_fontdialog.png" ;        SID_CHAR_DLG ; > ;
     };
 };
 
@@ -290,12 +290,12 @@ ImageList IMG_CONDFORMAT_DLG_LC
     MASKCOLOR;
     FileList =
     {
-        < "res/commandimagelist/lc_bold.png" ; SID_ATTR_CHAR_WEIGHT ; > ;
-        < "res/commandimagelist/lc_italic.png" ; SID_ATTR_CHAR_POSTURE ; > ;
-        < "res/commandimagelist/lc_underline.png" ; SID_ATTR_CHAR_UNDERLINE ; > ;
-        < "res/commandimagelist/lc_backgroundcolor.png" ; SID_BACKGROUND_COLOR ; > ;
-        < "res/commandimagelist/lc_fontcolor.png" ; SID_ATTR_CHAR_COLOR2 ; > ;
-        < "res/commandimagelist/lc_fontdialog.png" ; SID_CHAR_DLG ; > ;
+        < "res/commandimagelist/lc_bold.png" ;              SID_ATTR_CHAR_WEIGHT ; > ;
+        < "res/commandimagelist/lc_italic.png" ;            SID_ATTR_CHAR_POSTURE ; > ;
+        < "res/commandimagelist/lc_underline.png" ;         SID_ATTR_CHAR_UNDERLINE ; > ;
+        < "res/commandimagelist/lc_backgroundcolor.png" ;   SID_BACKGROUND_COLOR ; > ;
+        < "res/commandimagelist/lc_fontcolor.png" ;         SID_ATTR_CHAR_COLOR2 ; > ;
+        < "res/commandimagelist/lc_fontdialog.png" ;        SID_CHAR_DLG ; > ;
     };
 };
 
@@ -350,9 +350,9 @@ ImageList IMG_ADDFIELD_DLG_SC
     MASKCOLOR;
     FileList =
     {
-        < "res/commandimagelist/sc_sortup.png" ; SID_FM_SORTUP ; > ;
-        < "res/commandimagelist/sc_sortdown.png" ; SID_FM_SORTDOWN ; > ;
-        < "res/commandimagelist/sc_removefiltersort.png" ; SID_FM_REMOVE_FILTER_SORT ; > ;
+        < "res/commandimagelist/sc_sortup.png" ;            SID_FM_SORTUP ; > ;
+        < "res/commandimagelist/sc_sortdown.png" ;          SID_FM_SORTDOWN ; > ;
+        < "res/commandimagelist/sc_removefiltersort.png" ;  SID_FM_REMOVE_FILTER_SORT ; > ;
     };
 };
 
@@ -361,9 +361,9 @@ ImageList IMG_ADDFIELD_DLG_LC
     MASKCOLOR;
     FileList =
     {
-        < "res/commandimagelist/lc_sortup.png" ; SID_FM_SORTUP ; > ;
-        < "res/commandimagelist/lc_sortdown.png" ; SID_FM_SORTDOWN ; > ;
-        < "res/commandimagelist/lc_removefiltersort.png" ; SID_FM_REMOVE_FILTER_SORT ; > ;
+        < "res/commandimagelist/lc_sortup.png" ;            SID_FM_SORTUP ; > ;
+        < "res/commandimagelist/lc_sortdown.png" ;          SID_FM_SORTDOWN ; > ;
+        < "res/commandimagelist/lc_removefiltersort.png" ;  SID_FM_REMOVE_FILTER_SORT ; > ;
     };
 };
 
