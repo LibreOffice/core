@@ -678,7 +678,6 @@ const tTemplateServiceChartTypeParameterMap& LineChartDialogController::getTempl
     ( C2U( "com.sun.star.chart2.template.StackedLine" ),                ChartTypeParameter(3,false,false,GlobalStackMode_STACK_Y,false,true) )
     ( C2U( "com.sun.star.chart2.template.PercentStackedLine" ),         ChartTypeParameter(3,false,false,GlobalStackMode_STACK_Y_PERCENT,false,true) )
     //-------------------------------------------------------
-    //( C2U( "com.sun.star.chart2.template.ThreeDLine" ),                 ChartTypeParameter(4,false,true,GlobalStackMode_NONE,false,true) )
     ( C2U( "com.sun.star.chart2.template.StackedThreeDLine" ),          ChartTypeParameter(4,false,true,GlobalStackMode_STACK_Y,false,true) )
     ( C2U( "com.sun.star.chart2.template.PercentStackedThreeDLine" ),   ChartTypeParameter(4,false,true,GlobalStackMode_STACK_Y_PERCENT,false,true) )
     ( C2U( "com.sun.star.chart2.template.ThreeDLineDeep" ),             ChartTypeParameter(4,false,true,GlobalStackMode_STACK_Z,false,true) )
