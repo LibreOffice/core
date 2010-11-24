@@ -3,7 +3,7 @@
 <module-description xmlns:xlink="http://www.w3.org/1999/xlink">
     <module-name>adabas</module-name>
     <component-description>
-        <author>Ocke Janssen</Author>
+        <author>Ocke Janssen</author>
         <name>com.sun.star.comp.sdbcx.adabas.ODriver</name>
         <description>
             This is the implementation of the sdbc-adabas bridge.
