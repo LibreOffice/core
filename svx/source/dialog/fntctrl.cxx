@@ -147,7 +147,7 @@ class FontPrevWin_Impl
 public:
     inline FontPrevWin_Impl() :
         pPrinter( NULL ), bDelPrinter( FALSE ),
-        pColor( NULL ), pBackColor( 0 ),
+        pColor( NULL ), pBackColor( 0 ), nAscent( 0 ),
         cStartBracket( 0 ), cEndBracket( 0 ), nFontWidthScale( 100 ),
         bSelection( FALSE ), bGetSelection( FALSE ), bUseResText( FALSE ),
         bTwoLines( FALSE ),
