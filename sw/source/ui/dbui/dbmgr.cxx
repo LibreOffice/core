@@ -1157,9 +1157,8 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                                     }
                                     else
                                     {
-                                        SwMailMessage* pMessage = 0;
-                                        uno::Reference< mail::XMailMessage > xMessage =
-                                                                pMessage = new SwMailMessage;
+                                        SwMailMessage* pMessage = new SwMailMessage;
+                                        uno::Reference< mail::XMailMessage > xMessage = pMessage;
                                         if(rMergeDescriptor.pMailMergeConfigItem->IsMailReplyTo())
                                             pMessage->setReplyToAddress(rMergeDescriptor.pMailMergeConfigItem->GetMailReplyTo());
                                         pMessage->addRecipient( sMailAddress );
