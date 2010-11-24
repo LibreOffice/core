@@ -786,26 +786,23 @@ IMPL_LINK( SvxLineDefTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
 
             if( pDshLst->Load() )
             {
-                if( pDshLst )
-                {
-                    // Pruefen, ob Tabelle geloescht werden darf:
-                    if( pDashList != ( (SvxLineTabDialog*) DLGWIN )->GetDashList() )
-                        delete pDashList;
+                // Pruefen, ob Tabelle geloescht werden darf:
+                if( pDashList != ( (SvxLineTabDialog*) DLGWIN )->GetDashList() )
+                    delete pDashList;
 
-                    pDashList = pDshLst;
-                    ( (SvxLineTabDialog*) DLGWIN )->SetNewDashList( pDashList );
+                pDashList = pDshLst;
+                ( (SvxLineTabDialog*) DLGWIN )->SetNewDashList( pDashList );
 
-                    aLbLineStyles.Clear();
-                    aLbLineStyles.Fill( pDashList );
-                    Reset( rOutAttrs );
+                aLbLineStyles.Clear();
+                aLbLineStyles.Fill( pDashList );
+                Reset( rOutAttrs );
 
-                    pDashList->SetName( aURL.getName() );
+                pDashList->SetName( aURL.getName() );
 
-                    // Flag fuer gewechselt setzen
-                    *pnDashListState |= CT_CHANGED;
-                    // Flag fuer modifiziert entfernen
-                    *pnDashListState &= ~CT_MODIFIED;
-                }
+                // Flag fuer gewechselt setzen
+                *pnDashListState |= CT_CHANGED;
+                // Flag fuer modifiziert entfernen
+                *pnDashListState &= ~CT_MODIFIED;
             }
             else
                 //aIStream.Close();
