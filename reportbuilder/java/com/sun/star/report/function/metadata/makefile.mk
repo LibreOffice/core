@@ -48,11 +48,12 @@ JAVAFILES       :=	AuthorFunction.java \
 
 # PROPERTYFILES := $(shell @$(FIND) . -name "*.properties")
 PROPERTYFILES := $(CLASSDIR)$/$(PACKAGE)$/category.properties \
-         $(CLASSDIR)$/$(PACKAGE)$/category_en_US.properties \
-                 $(CLASSDIR)$/$(PACKAGE)$/Author-Function.properties \
-         $(CLASSDIR)$/$(PACKAGE)$/Author-Function_en_US.properties \
-                 $(CLASSDIR)$/$(PACKAGE)$/Title-Function.properties	\
-         $(CLASSDIR)$/$(PACKAGE)$/Title-Function_en_US.properties
+                 $(CLASSDIR)$/$(PACKAGE)$/Title-Function.properties
+                 
+L10NPROPERTYFILES := $(CLASSDIR)$/$(PACKAGE)$/category_en_US.properties \
+                $(CLASSDIR)$/$(PACKAGE)$/Author-Function.properties \
+                $(CLASSDIR)$/$(PACKAGE)$/Author-Function_en_US.properties \
+                $(CLASSDIR)$/$(PACKAGE)$/Title-Function_en_US.properties
                  
 # --- Targets ------------------------------------------------------
 .INCLUDE :  target.mk
