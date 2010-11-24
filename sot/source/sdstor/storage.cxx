@@ -169,11 +169,10 @@ SotStorageStream::~SotStorageStream()
 *************************************************************************/
 void SotStorageStream::SyncSvStream()
 {
-    ULONG nPos = 0;
     if( pOwnStm )
     {
         pOwnStm->Flush();
-        nPos = pOwnStm->Tell();
+        ULONG nPos = pOwnStm->Tell();
         SetError( pOwnStm->GetError() );
         SvStream::SyncSvStream( nPos );
     }
