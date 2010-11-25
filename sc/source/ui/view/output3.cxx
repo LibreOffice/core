@@ -245,7 +245,6 @@ void ScOutputData::DrawSelectiveObjects(const sal_uInt16 nLayer)
 void ScOutputData::DrawingSingle(const sal_uInt16 nLayer)
 {
     BOOL    bHad    = FALSE;
-    long    nPosY   = nScrY;
     SCSIZE  nArrY;
     for (nArrY=1; nArrY+1<nArrCount; nArrY++)
     {
@@ -263,7 +262,6 @@ void ScOutputData::DrawingSingle(const sal_uInt16 nLayer)
             DrawSelectiveObjects( nLayer );
             bHad = FALSE;
         }
-        nPosY += pRowInfo[nArrY].nHeight;
     }
 
     if (bHad)
