@@ -1244,6 +1244,15 @@ ULONG PictReader::ReadData(USHORT nOpcode)
     USHORT nUSHORT;
     Point aPoint;
     ULONG nDataSize=0;
+    PictDrawingMethod shapeDMethod = PDM_UNDEFINED;
+    switch (nOpcode & 7) {
+    case 0: shapeDMethod = PDM_FRAME; break;
+    case 1: shapeDMethod = PDM_PAINT; break;
+    case 2: shapeDMethod = PDM_ERASE; break;
+    case 3: shapeDMethod = PDM_INVERT; break;
+    case 4: shapeDMethod = PDM_FILL; break;
+    default: break;
+    }
 
     switch(nOpcode) {
 
@@ -1538,23 +1547,11 @@ ULONG PictReader::ReadData(USHORT nOpcode)
         break;
 
     case 0x0030:   // frameRect
-        nDataSize=ReadAndDrawRect(PDM_FRAME);
-        break;
-
     case 0x0031:   // paintRect
-        nDataSize=ReadAndDrawRect(PDM_PAINT);
-        break;
-
     case 0x0032:   // eraseRect
-        nDataSize=ReadAndDrawRect(PDM_ERASE);
-        break;
-
     case 0x0033:   // invertRect
-        nDataSize=ReadAndDrawRect(PDM_INVERT);
-        break;
-
     case 0x0034:   // fillRect
-        nDataSize=ReadAndDrawRect(PDM_FILL);
+        nDataSize=ReadAndDrawRect(shapeDMethod);
         break;
 
     case 0x0035:   // Reserved (8 Bytes)
@@ -1564,23 +1561,11 @@ ULONG PictReader::ReadData(USHORT nOpcode)
         break;
 
     case 0x0038:   // frameSameRect
-        nDataSize=ReadAndDrawSameRect(PDM_FRAME);
-        break;
-
     case 0x0039:   // paintSameRect
-        nDataSize=ReadAndDrawSameRect(PDM_PAINT);
-        break;
-
     case 0x003a:   // eraseSameRect
-        nDataSize=ReadAndDrawSameRect(PDM_ERASE);
-        break;
-
     case 0x003b:   // invertSameRect
-        nDataSize=ReadAndDrawSameRect(PDM_INVERT);
-        break;
-
     case 0x003c:   // fillSameRect
-        nDataSize=ReadAndDrawSameRect(PDM_FILL);
+        nDataSize=ReadAndDrawSameRect(shapeDMethod);
         break;
 
     case 0x003d:   // Reserved (0 Bytes)
@@ -1590,23 +1575,11 @@ ULONG PictReader::ReadData(USHORT nOpcode)
         break;
 
     case 0x0040:   // frameRRect
-        nDataSize=ReadAndDrawRoundRect(PDM_FRAME);
-        break;
-
     case 0x0041:   // paintRRect
-        nDataSize=ReadAndDrawRoundRect(PDM_PAINT);
-        break;
-
     case 0x0042:   // eraseRRect
-        nDataSize=ReadAndDrawRoundRect(PDM_ERASE);
-        break;
-
     case 0x0043:   // invertRRect
-        nDataSize=ReadAndDrawRoundRect(PDM_INVERT);
-        break;
-
     case 0x0044:   // fillRRect
-        nDataSize=ReadAndDrawRoundRect(PDM_FILL);
+        nDataSize=ReadAndDrawRoundRect(shapeDMethod);
         break;
 
     case 0x0045:   // Reserved (8 Bytes)
@@ -1616,23 +1589,11 @@ ULONG PictReader::ReadData(USHORT nOpcode)
         break;
 
     case 0x0048:   // frameSameRRect
-        nDataSize=ReadAndDrawSameRoundRect(PDM_FRAME);
-        break;
-
     case 0x0049:   // paintSameRRect
-        nDataSize=ReadAndDrawSameRoundRect(PDM_PAINT);
-        break;
-
     case 0x004a:   // eraseSameRRect
-        nDataSize=ReadAndDrawSameRoundRect(PDM_ERASE);
-        break;
-
     case 0x004b:   // invertSameRRect
-        nDataSize=ReadAndDrawSameRoundRect(PDM_INVERT);
-        break;
-
     case 0x004c:   // fillSameRRect
-        nDataSize=ReadAndDrawSameRoundRect(PDM_FILL);
+        nDataSize=ReadAndDrawSameRoundRect(shapeDMethod);
         break;
 
     case 0x004d:   // Reserved (0 Bytes)
@@ -1642,23 +1603,11 @@ ULONG PictReader::ReadData(USHORT nOpcode)
         break;
 
     case 0x0050:   // frameOval
-        nDataSize=ReadAndDrawOval(PDM_FRAME);
-        break;
-
     case 0x0051:   // paintOval
-        nDataSize=ReadAndDrawOval(PDM_PAINT);
-        break;
-
     case 0x0052:   // eraseOval
-        nDataSize=ReadAndDrawOval(PDM_ERASE);
-        break;
-
     case 0x0053:   // invertOval
-        nDataSize=ReadAndDrawOval(PDM_INVERT);
-        break;
-
     case 0x0054:   // fillOval
-        nDataSize=ReadAndDrawOval(PDM_FILL);
+        nDataSize=ReadAndDrawOval(shapeDMethod);
         break;
 
     case 0x0055:   // Reserved (8 Bytes)
@@ -1668,23 +1617,11 @@ ULONG PictReader::ReadData(USHORT nOpcode)
         break;
 
     case 0x0058:   // frameSameOval
-        nDataSize=ReadAndDrawSameOval(PDM_FRAME);
-        break;
-
     case 0x0059:   // paintSameOval
-        nDataSize=ReadAndDrawSameOval(PDM_PAINT);
-        break;
-
     case 0x005a:   // eraseSameOval
-        nDataSize=ReadAndDrawSameOval(PDM_ERASE);
-        break;
-
     case 0x005b:   // invertSameOval
-        nDataSize=ReadAndDrawSameOval(PDM_INVERT);
-        break;
-
     case 0x005c:   // fillSameOval
-        nDataSize=ReadAndDrawSameOval(PDM_FILL);
+        nDataSize=ReadAndDrawSameOval(shapeDMethod);
         break;
 
     case 0x005d:   // Reserved (0 Bytes)
@@ -1694,23 +1631,11 @@ ULONG PictReader::ReadData(USHORT nOpcode)
         break;
 
     case 0x0060:   // frameArc
-        nDataSize=ReadAndDrawArc(PDM_FRAME);
-        break;
-
     case 0x0061:   // paintArc
-        nDataSize=ReadAndDrawArc(PDM_PAINT);
-        break;
-
     case 0x0062:   // eraseArc
-        nDataSize=ReadAndDrawArc(PDM_ERASE);
-        break;
-
     case 0x0063:   // invertArc
-        nDataSize=ReadAndDrawArc(PDM_INVERT);
-        break;
-
     case 0x0064:   // fillArc
-        nDataSize=ReadAndDrawArc(PDM_FILL);
+        nDataSize=ReadAndDrawArc(shapeDMethod);
         break;
 
     case 0x0065:   // Reserved (12 Bytes)
@@ -1720,23 +1645,11 @@ ULONG PictReader::ReadData(USHORT nOpcode)
         break;
 
     case 0x0068:   // frameSameArc
-        nDataSize=ReadAndDrawSameArc(PDM_FRAME);
-        break;
-
     case 0x0069:   // paintSameArc
-        nDataSize=ReadAndDrawSameArc(PDM_PAINT);
-        break;
-
     case 0x006a:   // eraseSameArc
-        nDataSize=ReadAndDrawSameArc(PDM_ERASE);
-        break;
-
     case 0x006b:   // invertSameArc
-        nDataSize=ReadAndDrawSameArc(PDM_INVERT);
-        break;
-
     case 0x006c:   // fillSameArc
-        nDataSize=ReadAndDrawSameArc(PDM_FILL);
+        nDataSize=ReadAndDrawSameArc(shapeDMethod);
         break;
 
     case 0x006d:   // Reserved (4 Bytes)
@@ -1746,23 +1659,11 @@ ULONG PictReader::ReadData(USHORT nOpcode)
         break;
 
     case 0x0070:   // framePoly
-        nDataSize=ReadAndDrawPolygon(PDM_FRAME);
-        break;
-
     case 0x0071:   // paintPoly
-        nDataSize=ReadAndDrawPolygon(PDM_PAINT);
-        break;
-
     case 0x0072:   // erasePoly
-        nDataSize=ReadAndDrawPolygon(PDM_ERASE);
-        break;
-
     case 0x0073:   // invertPoly
-        nDataSize=ReadAndDrawPolygon(PDM_INVERT);
-        break;
-
     case 0x0074:   // fillPoly
-        nDataSize=ReadAndDrawPolygon(PDM_FILL);
+        nDataSize=ReadAndDrawPolygon(shapeDMethod);
         break;
 
     case 0x0075:   // Reserved (Polygon-Size)
@@ -1772,23 +1673,11 @@ ULONG PictReader::ReadData(USHORT nOpcode)
         break;
 
     case 0x0078:   // frameSamePoly
-        nDataSize=ReadAndDrawSamePolygon(PDM_FRAME);
-        break;
-
     case 0x0079:   // paintSamePoly
-        nDataSize=ReadAndDrawSamePolygon(PDM_PAINT);
-        break;
-
     case 0x007a:   // eraseSamePoly
-        nDataSize=ReadAndDrawSamePolygon(PDM_ERASE);
-        break;
-
     case 0x007b:   // invertSamePoly
-        nDataSize=ReadAndDrawSamePolygon(PDM_INVERT);
-        break;
-
     case 0x007c:   // fillSamePoly
-        nDataSize=ReadAndDrawSamePolygon(PDM_FILL);
+        nDataSize=ReadAndDrawSamePolygon(shapeDMethod);
         break;
 
     case 0x007d:   // Reserved (0 Bytes)
@@ -1798,23 +1687,11 @@ ULONG PictReader::ReadData(USHORT nOpcode)
         break;
 
     case 0x0080:   // frameRgn
-        nDataSize=ReadAndDrawRgn(PDM_FILL);
-        break;
-
     case 0x0081:   // paintRgn
-        nDataSize=ReadAndDrawRgn(PDM_PAINT);
-        break;
-
     case 0x0082:   // eraseRgn
-        nDataSize=ReadAndDrawRgn(PDM_ERASE);
-        break;
-
     case 0x0083:   // invertRgn
-        nDataSize=ReadAndDrawRgn(PDM_INVERT);
-        break;
-
     case 0x0084:   // fillRgn
-        nDataSize=ReadAndDrawRgn(PDM_FILL);
+        nDataSize=ReadAndDrawRgn(shapeDMethod);
         break;
 
     case 0x0085:   // Reserved (Region-Size)
@@ -1824,23 +1701,11 @@ ULONG PictReader::ReadData(USHORT nOpcode)
         break;
 
     case 0x0088:   // frameSameRgn
-        nDataSize=ReadAndDrawSameRgn(PDM_FRAME);
-        break;
-
     case 0x0089:   // paintSameRgn
-        nDataSize=ReadAndDrawSameRgn(PDM_PAINT);
-        break;
-
     case 0x008a:   // eraseSameRgn
-        nDataSize=ReadAndDrawSameRgn(PDM_ERASE);
-        break;
-
     case 0x008b:   // invertSameRgn
-        nDataSize=ReadAndDrawSameRgn(PDM_INVERT);
-        break;
-
     case 0x008c:   // fillSameRgn
-        nDataSize=ReadAndDrawSameRgn(PDM_FILL);
+        nDataSize=ReadAndDrawSameRgn(shapeDMethod);
         break;
 
     case 0x008d:   // Reserved (0 Bytes)
