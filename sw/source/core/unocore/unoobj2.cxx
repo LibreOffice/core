@@ -187,7 +187,7 @@ void DeepCopyPaM(SwPaM const & rSource, SwPaM & rTarget)
 struct FrameDependSortListLess
 {
     bool operator() (FrameDependSortListEntry const& r1,
-                     FrameDependSortListEntry const& r2)
+                     FrameDependSortListEntry const& r2) const
     {
         return  (r1.nIndex <  r2.nIndex)
             || ((r1.nIndex == r2.nIndex) && (r1.nOrder < r2.nOrder));
