@@ -2699,7 +2699,7 @@ namespace cppcanvas
                 {
                 }
 
-                bool result()
+                bool result() const
                 {
                     return mbRet;
                 }
@@ -2734,7 +2734,7 @@ namespace cppcanvas
                 {
                 }
 
-                bool result()
+                bool result() const
                 {
                     return true; // nothing can fail here
                 }
