@@ -95,6 +95,7 @@ ChildAccess::ChildAccess(
     Access(components), root_(root), parent_(parent), name_(name), node_(node),
     inTransaction_(false)
 {
+    lock_ = lock();
     OSL_ASSERT(root.is() && parent.is() && node.is());
 }
 
@@ -103,6 +104,7 @@ ChildAccess::ChildAccess(
     rtl::Reference< Node > const & node):
     Access(components), root_(root), node_(node), inTransaction_(false)
 {
+    lock_ = lock();
     OSL_ASSERT(root.is() && node.is());
 }
 
@@ -169,7 +171,7 @@ css::uno::Reference< css::uno::XInterface > ChildAccess::getParent()
     throw (css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_ANY));
-    osl::MutexGuard g(lock);
+    osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     return static_cast< cppu::OWeakObject * >(parent_.get());
 }
@@ -178,7 +180,7 @@ void ChildAccess::setParent(css::uno::Reference< css::uno::XInterface > const &)
     throw (css::lang::NoSupportException, css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_ANY));
-    osl::MutexGuard g(lock);
+    osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     throw css::lang::NoSupportException(
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("setParent")),
@@ -190,7 +192,7 @@ sal_Int64 ChildAccess::getSomething(
     throw (css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_ANY));
-    osl::MutexGuard g(lock);
+    osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     return aIdentifier == getTunnelId()
         ? reinterpret_cast< sal_Int64 >(this) : 0;
@@ -360,7 +362,7 @@ void ChildAccess::commitChanges(bool valid, Modifications * globalModifications)
 }
 
 ChildAccess::~ChildAccess() {
-    osl::MutexGuard g(lock);
+    osl::MutexGuard g(*lock_);
     if (parent_.is()) {
         parent_->releaseChild(name_);
     }
@@ -390,7 +392,7 @@ css::uno::Any ChildAccess::queryInterface(css::uno::Type const & aType)
     throw (css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_ANY));
-    osl::MutexGuard g(lock);
+    osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     css::uno::Any res(Access::queryInterface(aType));
     return res.hasValue()

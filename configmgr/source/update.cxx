@@ -32,6 +32,7 @@
 #include <set>
 
 #include "boost/noncopyable.hpp"
+#include "boost/shared_ptr.hpp"
 #include "com/sun/star/configuration/XUpdate.hpp"
 #include "com/sun/star/lang/XSingleComponentFactory.hpp"
 #include "com/sun/star/uno/Any.hxx"
@@ -77,7 +78,10 @@ class Service:
     private boost::noncopyable
 {
 public:
-    Service() {}
+    Service()
+    {
+        lock_ = lock();
+    }
 
 private:
     virtual ~Service() {}
@@ -98,13 +102,15 @@ private:
         css::uno::Sequence< rtl::OUString > const & includedPaths,
         css::uno::Sequence< rtl::OUString > const & excludedPaths)
         throw (css::uno::RuntimeException);
+
+    boost::shared_ptr<osl::Mutex> lock_;
 };
 
 void Service::insertExtensionXcsFile(
     sal_Bool shared, rtl::OUString const & fileUri)
     throw (css::uno::RuntimeException)
 {
-    osl::MutexGuard g(lock);
+    osl::MutexGuard g(*lock_);
     Components::getSingleton().insertExtensionXcsFile(shared, fileUri);
 }
 
@@ -114,7 +120,7 @@ void Service::insertExtensionXcuFile(
 {
     Broadcaster bc;
     {
-        osl::MutexGuard g(lock);
+        osl::MutexGuard g(*lock_);
         Modifications mods;
         Components::getSingleton().insertExtensionXcuFile(
             shared, fileUri, &mods);
@@ -129,7 +135,7 @@ void Service::removeExtensionXcuFile(rtl::OUString const & fileUri)
 {
     Broadcaster bc;
     {
-        osl::MutexGuard g(lock);
+        osl::MutexGuard g(*lock_);
         Modifications mods;
         Components::getSingleton().removeExtensionXcuFile(fileUri, &mods);
         Components::getSingleton().initGlobalBroadcaster(
@@ -146,7 +152,7 @@ void Service::insertModificationXcuFile(
 {
     Broadcaster bc;
     {
-        osl::MutexGuard g(lock);
+        osl::MutexGuard g(*lock_);
         Modifications mods;
         Components::getSingleton().insertModificationXcuFile(
             fileUri, seqToSet(includedPaths), seqToSet(excludedPaths), &mods);

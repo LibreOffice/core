@@ -35,7 +35,13 @@
 
 namespace configmgr {
 
-osl::Mutex lock;
+boost::shared_ptr<osl::Mutex> lock()
+{
+    static boost::shared_ptr<osl::Mutex> theLock;
+    if (!theLock.get())
+        theLock.reset(new osl::Mutex);
+    return theLock;
+}
 
 }
 
