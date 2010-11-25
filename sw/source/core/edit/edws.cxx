@@ -297,35 +297,15 @@ SwUndoId SwEditShell::EndUndo(SwUndoId eUndoId,
                                 const SwRewriter *pRewriter)
 { return GetDoc()->GetIDocumentUndoRedo().EndUndo(eUndoId, pRewriter); }
 
-// liefert die Id der letzten undofaehigen Aktion zurueck
-// fuellt ggf. VARARR mit sdbcx::User-UndoIds
-
 
 SwUndoId SwEditShell::GetUndoIds(String* pStr,SwUndoIds *pUndoIds) const
 { return GetDoc()->GetIDocumentUndoRedo().GetUndoIds(pStr,pUndoIds); }
 
-String SwEditShell::GetUndoIdsStr(String* pStr,SwUndoIds *pUndoIds) const
-{ return GetDoc()->GetIDocumentUndoRedo().GetUndoIdsStr(pStr,pUndoIds); }
-
-// liefert die Id der letzten Redofaehigen Aktion zurueck
-// fuellt ggf. VARARR mit RedoIds
-
-
 SwUndoId SwEditShell::GetRedoIds(String* pStr,SwUndoIds *pRedoIds) const
 { return GetDoc()->GetIDocumentUndoRedo().GetRedoIds(pStr,pRedoIds); }
 
-String SwEditShell::GetRedoIdsStr(String* pStr,SwUndoIds *pRedoIds) const
-{ return GetDoc()->GetIDocumentUndoRedo().GetRedoIdsStr(pStr,pRedoIds); }
-
-// liefert die Id der letzten Repeatfaehigen Aktion zurueck
-// fuellt ggf. VARARR mit RedoIds
-
-
-SwUndoId SwEditShell::GetRepeatIds(String* pStr, SwUndoIds *pRedoIds) const
-{ return GetDoc()->GetIDocumentUndoRedo().GetRepeatIds(pStr,pRedoIds); }
-
-String SwEditShell::GetRepeatIdsStr(String* pStr, SwUndoIds *pRedoIds) const
-{ return GetDoc()->GetIDocumentUndoRedo().GetRepeatIdsStr(pStr,pRedoIds); }
+SwUndoId SwEditShell::GetRepeatIds(String* pStr) const
+{ return GetDoc()->GetIDocumentUndoRedo().GetRepeatIds(pStr); }
 
 
 

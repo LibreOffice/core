@@ -123,15 +123,6 @@ public:
     virtual SwUndoId GetUndoIds(String *const o_pStr,
                 SwUndoIds *const o_pUndoIds) const = 0;
 
-    /** Get Ids and comments of Undo actions.
-        @param o_pStr       if not 0, receives comment of last Undo action.
-        @param o_pUndoIds   if not 0, receives SwUndoIdAndName objects for all
-                            top-level Undo actions.
-        @return     comment of last Undo action, or empty string if none.
-    */
-    virtual String GetUndoIdsStr(String *const o_pStr,
-                SwUndoIds *const o_pUndoIds) const = 0;
-
     /** Is there an Undo action with the given Id, or a Start/End action
         with the given Id as UserId?
     */
@@ -168,38 +159,18 @@ public:
     virtual SwUndoId GetRedoIds(String *const o_pStr,
                 SwUndoIds *const o_pRedoIds) const = 0;
 
-    /** Get Ids and comments of Redo actions.
-        @param o_pStr       if not 0, receives comment of first Redo action.
-        @param o_pUndoIds   if not 0, receives SwUndoIdAndName objects for all
-                            top-level Redo actions.
-        @return     comment of first Redo action, or empty string if none.
-    */
-    virtual String GetRedoIdsStr(String *const o_pStr,
-                SwUndoIds *const o_pRedoIds) const = 0;
-
     /** Repeat the last Undo action.
         @return     true if repeating the last Undo Redo action was attempted.
     */
     virtual bool Repeat(SwUndoIter & rUndoIter, sal_uInt16 const nRepeatCnt) = 0;
 
-    /** Get Ids and comments of Undo actions.
-        @param o_pStr       if not 0, receives comment of last Undo action.
-        @param o_pUndoIds   if not 0, receives SwUndoIdAndName objects for all
-                            top-level Undo actions.
+    /** Get Id and comment of last Undo action, if it is Repeat capable.
+        @param o_pStr       if not 0, receives comment of last Undo action
+                            if it is Repeat capable.
         @return     Id of last Undo action if it is Repeat capable,
                     or UNDO_EMPTY if there is none or it is not Repeat capable.
     */
-    virtual SwUndoId GetRepeatIds(String *const o_pStr,
-                SwUndoIds *const o_pUndoIds) const = 0;
-
-    /** Get Ids and comments of Undo actions.
-        @param o_pStr       if not 0, receives comment of last Undo action.
-        @param o_pUndoIds   if not 0, receives SwUndoIdAndName objects for all
-                            top-level Undo actions.
-        @return     comment of last Undo action (sometimes).
-    */
-    virtual String GetRepeatIdsStr(String *const o_pStr,
-                SwUndoIds *const pUndoIds) const = 0;
+    virtual SwUndoId GetRepeatIds(String *const o_pStr) const = 0;
 
     /** Add new Undo action.
         Takes over ownership of pUndo.

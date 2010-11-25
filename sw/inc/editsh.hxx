@@ -533,27 +533,17 @@ public:
     SwUndoId StartUndo( SwUndoId eUndoId = UNDO_EMPTY, const SwRewriter * pRewriter = 0 );
     // schliesst Klammerung der nUndoId, nicht vom UI benutzt
     SwUndoId EndUndo( SwUndoId eUndoId = UNDO_EMPTY, const SwRewriter * pRewriter = 0 );
-    // liefert die Id der letzten undofaehigen Aktion zurueck
-    // fuellt ggf. VARARR mit User-UndoIds
     SwUndoId GetUndoIds( String* pUndoStr = 0, SwUndoIds *pUndoIds = 0) const;
-    String GetUndoIdsStr( String* pUndoStr = 0, SwUndoIds *pUndoIds = 0) const;
 
         // abfragen/setzen der Anzahl von wiederherstellbaren Undo-Actions
     static USHORT GetUndoActionCount();
     static void SetUndoActionCount( USHORT nNew );
 
     // Redo
-    // liefert die Id der letzten Redofaehigen Aktion zurueck
-    // fuellt ggf. VARARR mit RedoIds
     SwUndoId GetRedoIds( String* pRedoStr = 0, SwUndoIds *pRedoIds = 0) const;
-    String GetRedoIdsStr( String* pRedoStr = 0, SwUndoIds *pRedoIds = 0) const;
 
     // Repeat
-    // liefert die Id der letzten Repeatfaehigen Aktion zurueck
-    // fuellt ggf. VARARR mit RedoIds
-    SwUndoId GetRepeatIds( String* pRepeatStr = 0, SwUndoIds *pRedoIds = 0) const;
-    String GetRepeatIdsStr( String* pRepeatStr = 0,
-                            SwUndoIds *pRedoIds = 0) const;
+    SwUndoId GetRepeatIds( String* pRepeatStr = 0) const;
 
     // 0 letzte Aktion, sonst Aktionen bis zum Start der Klammerung nUndoId
     // mit KillPaMs, ClearMark

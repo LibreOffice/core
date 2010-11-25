@@ -40,9 +40,7 @@
 #include <undobj.hxx>
 #include <rolbck.hxx>
 #include <docary.hxx>
-#ifndef _UNDO_HRC
 #include <undo.hrc>
-#endif
 
 
 using namespace ::com::sun::star;
@@ -664,28 +662,6 @@ UndoManager::EndUndo(SwUndoId const i_eUndoId, SwRewriter const*const pRewriter)
     return eUndoId;
 }
 
-// liefert die Id der letzten Undofaehigen Aktion zurueck oder 0
-// fuellt ggf. VARARR mit User-UndoIds
-
-String
-UndoManager::GetUndoIdsStr(String *const o_pStr,
-        SwUndoIds *const o_pUndoIds) const
-{
-    String aTmpStr;
-
-    if (o_pStr != NULL)
-    {
-        GetUndoIds(o_pStr, o_pUndoIds);
-        aTmpStr = *o_pStr;
-    }
-    else
-    {
-        GetUndoIds( &aTmpStr, o_pUndoIds);
-    }
-
-    return aTmpStr;
-}
-
 /*-- 24.11.2004 16:11:21---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -951,26 +927,6 @@ bool UndoManager::Redo(SwUndoIter & rUndoIter)
 }
 
 
-// liefert die Id der letzten Redofaehigen Aktion zurueck oder 0
-// fuellt ggf. VARARR mit User-RedoIds
-
-String UndoManager::GetRedoIdsStr( String* pStr, SwUndoIds *pRedoIds ) const
-{
-    String aTmpStr;
-
-    if (pStr != NULL)
-    {
-        GetRedoIds( pStr, pRedoIds );
-        aTmpStr = *pStr;
-    }
-    else
-        GetRedoIds( &aTmpStr, pRedoIds );
-
-
-    return aTmpStr;
-}
-
-
 SwUndoId UndoManager::GetRedoIds( String* pStr, SwUndoIds *pRedoIds ) const
 {
     sal_uInt16 nTmpPos = nUndoPos;
@@ -1059,39 +1015,19 @@ bool UndoManager::Repeat(SwUndoIter & rUndoIter, sal_uInt16 const nRepeatCnt)
     return TRUE;
 }
 
-// liefert die Id der letzten Repeatfaehigen Aktion zurueck oder 0
-// fuellt ggf. VARARR mit User-RedoIds
-
-String
-UndoManager::GetRepeatIdsStr(String *const o_pStr,
-        SwUndoIds *const o_pRepeatIds) const
-{
-    String aTmpStr;
-    SwUndoId nId;
-
-    if (o_pStr != NULL)
-    {
-        nId = GetRepeatIds(o_pStr, o_pRepeatIds);
-        aTmpStr = *o_pStr;
-    }
-    else
-    {
-        nId = GetRepeatIds(&aTmpStr, o_pRepeatIds);
-    }
-
-    if (nId <= UNDO_END)
-        return String();
-
-    return aTmpStr;
-}
 
 SwUndoId
-UndoManager::GetRepeatIds(String *const o_pStr,
-        SwUndoIds *const o_pRepeatIds) const
+UndoManager::GetRepeatIds(String *const o_pStr) const
 {
-    SwUndoId nRepeatId = GetUndoIds( o_pStr, o_pRepeatIds );
+    SwUndoId const nRepeatId = GetUndoIds(o_pStr, 0);
     if( REPEAT_START <= nRepeatId && REPEAT_END > nRepeatId )
+    {
         return nRepeatId;
+    }
+    if (o_pStr) // not repeatable -> clear comment
+    {
+        *o_pStr = String();
+    }
     return UNDO_EMPTY;
 }
 

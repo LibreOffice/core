@@ -119,11 +119,11 @@ String SwWrtShell::GetDoString( DoType eDoType ) const
     {
     case UNDO:
         nResStr = STR_UNDO;
-        aUndoStr = GetUndoIdsStr();
+        GetUndoIds(& aUndoStr, 0);
         break;
     case REDO:
         nResStr = STR_REDO;
-        aUndoStr = GetRedoIdsStr();
+        GetRedoIds(& aUndoStr, 0);
         break;
     default:;//prevent warning
     }
@@ -168,7 +168,8 @@ USHORT SwWrtShell::GetDoStrings( DoType eDoType, SfxStringListItem& rStrs ) cons
 String SwWrtShell::GetRepeatString() const
 {
     String aStr;
-    String aUndoStr = GetRepeatIdsStr();
+    String aUndoStr;
+    GetRepeatIds(& aUndoStr);
 
     if (aUndoStr.Len() > 0)
     {

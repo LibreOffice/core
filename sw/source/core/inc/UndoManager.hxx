@@ -64,8 +64,6 @@ public:
     virtual void DelAllUndoObj();
     virtual SwUndoId GetUndoIds(String *const o_pStr,
                 SwUndoIds *const o_pUndoIds) const;
-    virtual String GetUndoIdsStr(String *const o_pStr,
-                SwUndoIds *const o_pUndoIds) const;
     virtual bool HasUndoId(SwUndoId const eId) const;
     virtual const SwNodes* GetUndoNds() const;
     virtual SwUndo* RemoveLastUndo(SwUndoId const eUndoId);
@@ -73,13 +71,8 @@ public:
     virtual bool Redo(SwUndoIter & rUndoIter);
     virtual SwUndoId GetRedoIds(String *const o_pStr,
                 SwUndoIds *const o_pRedoIds) const;
-    virtual String GetRedoIdsStr(String *const o_pStr,
-                SwUndoIds *const o_pRedoIds) const;
     virtual bool Repeat(SwUndoIter & rUndoIter, sal_uInt16 const nRepeatCnt);
-    virtual SwUndoId GetRepeatIds(String *const o_pStr,
-                SwUndoIds *const o_pUndoIds) const;
-    virtual String GetRepeatIdsStr(String *const o_pStr,
-                SwUndoIds *const o_pUndoIds) const;
+    virtual SwUndoId GetRepeatIds(String *const o_pStr) const;
     virtual void AppendUndo(SwUndo *const pUndo);
     virtual void ClearRedo();
     virtual void setUndoNoModifiedPosition(SwUndoNoModifiedPosition const nPos);
