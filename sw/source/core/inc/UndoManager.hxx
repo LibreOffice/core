@@ -95,15 +95,15 @@ private:
     /// Undo nodes array: content not currently in document
     ::std::auto_ptr<SwNodes> m_pUndoNodes;
 
-    ::std::auto_ptr<SwUndos>    pUndos;         // Undo/Redo History
+    ::std::auto_ptr<SwUndos> m_pUndos;  // Undo/Redo History
 
-    sal_uInt16  nUndoPos;       // current Undo-InsertPosition (beyond: Redo)
-    sal_uInt16  nUndoSavePos;   // position in Undo-Array at which Doc was saved
-    sal_uInt16  nUndoCnt;       // number of Undo/Redo actions
-    sal_uInt16  nUndoSttEnd;    // nesting depth: != 0 -> inside StartUndo()
+    sal_uInt16  m_nUndoPos;     // current Undo-InsertPosition (beyond: Redo)
+    sal_uInt16  m_nUndoSavePos; // position in Undo-Array at which Doc was saved
+    sal_uInt16  m_nUndoActions; // number of Undo/Redo actions
+    sal_uInt16  m_nNestingDepth;// nesting depth: != 0 -> inside StartUndo()
 
-    bool mbUndo             : 1;    // TRUE: Undo enabled
-    bool mbGroupUndo        : 1;    // TRUE: Undo grouping enabled
+    bool m_bUndo            : 1;    // TRUE: Undo enabled
+    bool m_bGroupUndo       : 1;    // TRUE: Undo grouping enabled
     bool m_bDrawUndo        : 1;    // TRUE: Draw Undo enabled
     bool m_bLockUndoNoModifiedPosition : 1;
 

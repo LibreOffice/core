@@ -113,16 +113,17 @@ UndoManager::UndoManager(::std::auto_ptr<SwNodes> pUndoNodes,
     ,   m_rRedlineAccess(rRedlineAccess)
     ,   m_rState(rState)
     ,   m_pUndoNodes(pUndoNodes)
-    ,   pUndos( new SwUndos( 0, 20 ) )
-    ,   nUndoPos(0)
-    ,   nUndoSavePos(0)
-    ,   nUndoCnt(0)
-    ,   nUndoSttEnd(0)
-    ,   mbUndo(false)
-    ,   mbGroupUndo(true)
+    ,   m_pUndos( new SwUndos( 0, 20 ) )
+    ,   m_nUndoPos(0)
+    ,   m_nUndoSavePos(0)
+    ,   m_nUndoActions(0)
+    ,   m_nNestingDepth(0)
+    ,   m_bUndo(false)
+    ,   m_bGroupUndo(true)
     ,   m_bDrawUndo(true)
     ,   m_bLockUndoNoModifiedPosition(false)
 {
+    OSL_ASSERT(m_pUndoNodes.get());
 }
 
 SwNodes const& UndoManager::GetUndoNodes() const
@@ -142,7 +143,7 @@ bool UndoManager::IsUndoNodes(SwNodes const& rNodes) const
 
 void UndoManager::DoUndo(bool const bDoUndo)
 {
-    mbUndo = bDoUndo;
+    m_bUndo = bDoUndo;
 
     SdrModel *const pSdrModel = m_rDrawModelAccess.GetDrawModel();
     if( pSdrModel )
@@ -153,17 +154,17 @@ void UndoManager::DoUndo(bool const bDoUndo)
 
 bool UndoManager::DoesUndo() const
 {
-    return mbUndo;
+    return m_bUndo;
 }
 
 void UndoManager::DoGroupUndo(bool const bDoUndo)
 {
-    mbGroupUndo = bDoUndo;
+    m_bGroupUndo = bDoUndo;
 }
 
 bool UndoManager::DoesGroupUndo() const
 {
-    return mbGroupUndo;
+    return m_bGroupUndo;
 }
 
 void UndoManager::DoDrawUndo(bool const bDoUndo)
@@ -179,20 +180,20 @@ bool UndoManager::DoesDrawUndo() const
 
 bool UndoManager::IsUndoNoResetModified() const
 {
-    return USHRT_MAX == nUndoSavePos;
+    return USHRT_MAX == m_nUndoSavePos;
 }
 
 void UndoManager::SetUndoNoResetModified()
 {
-    nUndoSavePos = USHRT_MAX;
+    m_nUndoSavePos = USHRT_MAX;
 }
 
 void UndoManager::SetUndoNoModifiedPosition()
 {
     if (!m_bLockUndoNoModifiedPosition)
     {
-        nUndoSavePos = (pUndos->Count())
-            ?   nUndoPos
+        m_nUndoSavePos = (m_pUndos->Count())
+            ?   m_nUndoPos
             :   USHRT_MAX;
     }
 }
@@ -210,9 +211,9 @@ void UndoManager::UnLockUndoNoModifiedPosition()
 
 SwUndo* UndoManager::GetLastUndo()
 {
-    return (0 == nUndoPos)
-        ? 0
-        : (*pUndos)[nUndoPos-1];
+    return (0 == m_nUndoPos)
+        ?   0
+        :   (*m_pUndos)[m_nUndoPos-1];
 }
 
 void UndoManager::AppendUndo(SwUndo *const pUndo)
@@ -226,28 +227,35 @@ void UndoManager::AppendUndo(SwUndo *const pUndo)
     // USHRT_MAX elements. Of course it doesn't see any necessity for asserting
     // or even doing error handling. pUndos should definitely be replaced by an
     // STL container that doesn't have this problem. cf #95884#
-    DBG_ASSERT( pUndos->Count() < USHRT_MAX - 16,
+    OSL_ENSURE( m_pUndos->Count() < USHRT_MAX - 16,
                 "Writer will crash soon. I apologize for the inconvenience." );
 
-    pUndos->Insert( pUndo, nUndoPos );
-    ++nUndoPos;
+    m_pUndos->Insert(pUndo, m_nUndoPos);
+    ++m_nUndoPos;
     switch( pUndo->GetId() )
     {
-    case UNDO_START:        ++nUndoSttEnd;
-                            break;
+        case UNDO_START:
+            ++m_nNestingDepth;
+        break;
 
-    case UNDO_END:          ASSERT( nUndoSttEnd, "Undo-Ende ohne Start" );
-                            --nUndoSttEnd;
-                            // kein break !!!
-    default:
-        if( pUndos->Count() != nUndoPos && UNDO_END != pUndo->GetId() )
-        {
-            ClearRedo();
-        }
-        OSL_ENSURE( pUndos->Count() == nUndoPos || UNDO_END == pUndo->GetId(),
-                    "Redo history not deleted!" );
-        if( !nUndoSttEnd )
-            ++nUndoCnt;
+        case UNDO_END:
+            OSL_ENSURE(m_nNestingDepth, "AppendUndo(): Undo-End without Start");
+            --m_nNestingDepth;
+            // no break !
+
+        default:
+            if ((m_pUndos->Count() != m_nUndoPos) &&
+                (UNDO_END != pUndo->GetId()))
+            {
+                ClearRedo();
+            }
+            OSL_ENSURE( m_pUndos->Count() == m_nUndoPos
+                    ||  UNDO_END == pUndo->GetId(),
+                        "AppendUndo(): Redo history not deleted!" );
+            if (!m_nNestingDepth)
+            {
+                ++m_nUndoActions;
+            }
         break;
     }
 
@@ -255,12 +263,14 @@ void UndoManager::AppendUndo(SwUndo *const pUndo)
     // zur Anzeige der aktuellen Undo-Groessen
     if( !pUndoMsgWin )
             pUndoMsgWin = new UndoArrStatus;
-    pUndoMsgWin->Set( pUndos->Count(), GetUndoNodes()->Count() );
+    pUndoMsgWin->Set( m_pUndos->Count(), GetUndoNodes()->Count() );
 #endif
 
-    // noch eine offene Klammerung, kann man sich den Rest schenken
-    if( nUndoSttEnd )
+    // if the bracketing is still open, nothing more to do here
+    if (m_nNestingDepth)
+    {
         return;
+    }
 
     // folgende Array-Grenzen muessen ueberwacht werden:
     //  - Undo,             Grenze: fester Wert oder USHRT_MAX - 1000
@@ -270,36 +280,39 @@ void UndoManager::AppendUndo(SwUndo *const pUndo)
 
     USHORT nEnde = UNDO_ACTION_LIMIT;
 
-// nur zum Testen der neuen DOC-Member
 #ifdef DBG_UTIL
 {
-    SwUndoId nId = UNDO_EMPTY;
     USHORT nUndosCnt = 0, nSttEndCnt = 0;
-    for( USHORT nCnt = 0; nCnt < nUndoPos; ++nCnt )
+    for (USHORT nCnt = 0; nCnt < m_nUndoPos; ++nCnt)
     {
-        if( UNDO_START == ( nId = (*pUndos)[ nCnt ]->GetId()) )
+        SwUndoId const nId = (*m_pUndos)[ nCnt ]->GetId();
+        if (UNDO_START == nId)
+        {
             ++nSttEndCnt;
+        }
         else if( UNDO_END == nId )
             --nSttEndCnt;
         if( !nSttEndCnt )
             ++nUndosCnt;
     }
-    ASSERT( nSttEndCnt == nUndoSttEnd, "Start-Ende Count ungleich" );
-    ASSERT( nUndosCnt == nUndoCnt, "Undo Count ungleich" );
+    OSL_ENSURE(nSttEndCnt == m_nNestingDepth,
+            "AppendUndo(): nesting depth is wrong");
+    OSL_ENSURE(nUndosCnt == m_nUndoActions,
+            "AppendUndo(): Undo action count is wrong");
 }
 #endif
 
     sal_Int32 const nActions(SW_MOD()->GetUndoOptions().GetUndoCount());
-    if (nActions < nUndoCnt)
+    if (nActions < m_nUndoActions)
     {
         // immer 1/10 loeschen
         //JP 23.09.95: oder wenn neu eingestellt wurde um die Differenz
         //JP 29.5.2001: Task #83891#: remove only the overlapping actions
-        DelUndoObj( nUndoCnt - nActions );
+        DelUndoObj( m_nUndoActions - nActions );
     }
     else
     {
-        USHORT nUndosCnt = nUndoCnt;
+        USHORT const nUndosCnt = m_nUndoActions;
             // immer 1/10 loeschen bis der "Ausloeser" behoben ist
         while (nEnde < GetUndoNodes().Count())
         {
@@ -311,113 +324,128 @@ void UndoManager::AppendUndo(SwUndo *const pUndo)
 
 void UndoManager::ClearRedo()
 {
-    if (nUndoPos != pUndos->Count())
+    if (m_nUndoPos != m_pUndos->Count())
     {
-//?? why ??     if( !nUndoSttEnd )
+        // update m_nUndoActions
+        for (USHORT nCnt = m_pUndos->Count(); m_nUndoPos < nCnt;
+                --m_nUndoActions)
         {
-            // setze UndoCnt auf den neuen Wert
-            SwUndo* pUndo;
-            for( USHORT nCnt = pUndos->Count(); nUndoPos < nCnt; --nUndoCnt )
-                // Klammerung ueberspringen
-                if( UNDO_END == (pUndo = (*pUndos)[ --nCnt ])->GetId() )
-                    nCnt = nCnt - ((SwUndoEnd*)pUndo)->GetSttOffset();
+            // skip Start/End bracketing
+            SwUndo *const pUndo = (*m_pUndos)[ --nCnt ];
+            if (UNDO_END == pUndo->GetId())
+            {
+                nCnt = nCnt - static_cast<SwUndoEnd*>(pUndo)->GetSttOffset();
+            }
         }
 
-        // loesche die Undo-Aktionen (immer von hinten !)
-        pUndos->DeleteAndDestroy( nUndoPos, pUndos->Count() - nUndoPos );
+        // delete Undo actions in reverse order!
+        m_pUndos->DeleteAndDestroy(m_nUndoPos, m_pUndos->Count() - m_nUndoPos);
     }
 }
 
 
-    // loescht die gesamten UndoObjecte
 void UndoManager::DelAllUndoObj()
 {
     ::sw::UndoGuard const undoGuard(*this);
 
     ClearRedo();
 
-    // Offene Undo-Klammerungen erhalten !!
-    SwUndo* pUndo;
-    USHORT nSize = pUndos->Count();
+    // retain open Start bracketing!
+    USHORT nSize = m_pUndos->Count();
     while( nSize )
-        if( UNDO_START != ( pUndo = (*pUndos)[ --nSize ] )->GetId() ||
-            ((SwUndoStart*)pUndo)->GetEndOffset() )
-            // keine offenen Gruppierung ?
-            pUndos->DeleteAndDestroy( nSize, 1 );
+    {
+        SwUndo *const pUndo = (*m_pUndos)[ --nSize ];
+        if ((UNDO_START != pUndo->GetId()) ||
+            // bracketing closed with End?
+            static_cast<SwUndoStart*>(pUndo)->GetEndOffset())
+        {
+            m_pUndos->DeleteAndDestroy( nSize, 1 );
+        }
+    }
 
-    nUndoCnt = 0;
-    nUndoPos = pUndos->Count();
+    m_nUndoActions = 0;
+    m_nUndoPos = m_pUndos->Count();
 
-/*
-    while( nUndoPos )
-        aUndos.DelDtor( --nUndoPos, 1 );
-    nUndoCnt = nUndoSttEnd = nUndoPos = 0;
-*/
-    nUndoSavePos = USHRT_MAX;
+    m_nUndoSavePos = USHRT_MAX;
 }
 
 
-    // loescht alle UndoObjecte vom Anfang bis zum angegebenen Ende
 bool UndoManager::DelUndoObj( sal_uInt16 nEnd )
 {
     if (0 == nEnd)  // in case 0 is passed in
     {
-        if( !pUndos->Count() )
-            return FALSE;
+        if (!m_pUndos->Count())
+        {
+            return false;
+        }
         ++nEnd;     // correct it to 1 // FIXME  why ???
     }
 
     ::sw::UndoGuard const undoGuard(*this);
 
-    // pruefe erstmal, wo das Ende steht
-    SwUndoId nId = UNDO_EMPTY;
+    // check where the end is
     USHORT nSttEndCnt = 0;
     USHORT nCnt;
 
-    for (nCnt = 0; nEnd && nCnt < nUndoPos; ++nCnt)
+    for (nCnt = 0; nEnd && nCnt < m_nUndoPos; ++nCnt)
     {
-        if( UNDO_START == ( nId = (*pUndos)[ nCnt ]->GetId() ))
+        SwUndoId const nId = (*m_pUndos)[ nCnt ]->GetId();
+        if (UNDO_START == nId)
+        {
             ++nSttEndCnt;
+        }
         else if( UNDO_END == nId )
+        {
             --nSttEndCnt;
+        }
         if( !nSttEndCnt )
-            --nEnd, --nUndoCnt;
+        {
+            --nEnd, --m_nUndoActions;
+        }
     }
 
-    ASSERT( nCnt < nUndoPos || nUndoPos == pUndos->Count(),
-            "Undo-Del-Ende liegt in einer Redo-Aktion" );
+    OSL_ENSURE( nCnt < m_nUndoPos || m_nUndoPos == m_pUndos->Count(),
+            "DelUndoObj(): end inside of Redo actions!" );
 
-    // dann setze ab Ende bis Undo-Ende bei allen Undo-Objecte die Werte um
-    nSttEndCnt = nCnt;          // Position merken
-    if( nUndoSavePos < nSttEndCnt )     // SavePos wird aufgegeben
-        nUndoSavePos = USHRT_MAX;
-    else if( nUndoSavePos != USHRT_MAX )
-        nUndoSavePos = nUndoSavePos - nSttEndCnt;
+    // update positions
+    nSttEndCnt = nCnt;
+    if (m_nUndoSavePos < nSttEndCnt) // abandon SavePos
+    {
+        m_nUndoSavePos = USHRT_MAX;
+    }
+    else if (m_nUndoSavePos != USHRT_MAX)
+    {
+        m_nUndoSavePos = m_nUndoSavePos - nSttEndCnt;
+    }
 
     while( nSttEndCnt )
-        pUndos->DeleteAndDestroy( --nSttEndCnt, 1 );
-    nUndoPos = pUndos->Count();
+    {
+        m_pUndos->DeleteAndDestroy( --nSttEndCnt, 1 );
+    }
+    m_nUndoPos = m_pUndos->Count();
 
-    return TRUE;
+    return true;
 }
 
 /**************** UNDO ******************/
 
 bool UndoManager::HasUndoId(SwUndoId const eId) const
 {
-    USHORT nSize = nUndoPos;
-    SwUndo * pUndo;
+    USHORT nSize = m_nUndoPos;
     while( nSize-- )
-        if( ( pUndo = (*pUndos)[nSize])->GetId() == eId ||
+    {
+        SwUndo *const pUndo = (*m_pUndos)[nSize];
+        if ((pUndo->GetId() == eId) ||
             ( UNDO_START == pUndo->GetId() &&
-                ((SwUndoStart*)pUndo)->GetUserId() == eId )
+                (static_cast<SwUndoStart*>(pUndo)->GetUserId() == eId))
             || ( UNDO_END == pUndo->GetId() &&
-                ((SwUndoEnd*)pUndo)->GetUserId() == eId ) )
+                (static_cast<SwUndoEnd*>(pUndo)->GetUserId() == eId)))
         {
-            return TRUE;
+            return true;
         }
+    }
 
-    return FALSE;
+    return false;
 }
 
 
@@ -426,15 +454,15 @@ bool UndoManager::Undo( SwUndoIter& rUndoIter )
     if ( (rUndoIter.GetId()!=0) && (!HasUndoId(rUndoIter.GetId())) )
     {
         rUndoIter.bWeiter = FALSE;
-        return FALSE;
+        return false;
     }
-    if( !nUndoPos )
+    if (!m_nUndoPos)
     {
         rUndoIter.bWeiter = FALSE;
-        return FALSE;
+        return false;
     }
 
-    SwUndo *pUndo = (*pUndos)[ --nUndoPos ];
+    SwUndo * pUndo = (*m_pUndos)[ --m_nUndoPos ];
 
     RedlineMode_t const eOld = m_rRedlineAccess.GetRedlineMode();
     RedlineMode_t eTmpMode = (RedlineMode_t)pUndo->GetRedlineMode();
@@ -445,10 +473,8 @@ bool UndoManager::Undo( SwUndoIter& rUndoIter )
     }
     m_rRedlineAccess.SetRedlineMode_intern(
         static_cast<RedlineMode_t>(eTmpMode | nsRedlineMode_t::REDLINE_IGNORE));
-    // Undo ausfuehren
 
-    // zum spaeteren ueberpruefen
-    SwUndoId nAktId = pUndo->GetId();
+    SwUndoId const nAktId = pUndo->GetId();
     //JP 11.05.98: FlyFormate ueber die EditShell selektieren, nicht aus dem
     //              Undo heraus
     switch( nAktId )
@@ -466,46 +492,47 @@ bool UndoManager::Undo( SwUndoIter& rUndoIter )
 
     m_rRedlineAccess.SetRedlineMode( eOld );
 
-    // Besonderheit von Undo-Replace (interne History)
-    if( UNDO_REPLACE == nAktId && ((SwUndoReplace*)pUndo)->nAktPos )
+    // special treatment for Undo Replace: internal history
+    if ((UNDO_REPLACE == nAktId) && static_cast<SwUndoReplace*>(pUndo)->nAktPos)
     {
-        ++nUndoPos;
-        return TRUE;
+        ++m_nUndoPos;
+        return true;
     }
 
-    // Objekt aus History entfernen und zerstoeren
-    if( nUndoPos && !rUndoIter.bWeiter &&
-        UNDO_START == ( pUndo = (*pUndos)[ nUndoPos-1 ] )->GetId() )
-        --nUndoPos;
-
-    // JP 29.10.96: Start und End setzen kein Modify-Flag.
-    //              Sonst gibt es Probleme mit der autom. Aufnahme von Ausnahmen
-    //              bei der Autokorrektur
-    if( UNDO_START != nAktId && UNDO_END != nAktId )
+    if (m_nUndoPos && !rUndoIter.bWeiter)
     {
-        m_rState.SetModified(); // default: always set, can be reset
+        pUndo = (*m_pUndos)[ m_nUndoPos-1 ];
+        if (UNDO_START == pUndo->GetId())
+        {
+            --m_nUndoPos;
+        }
     }
 
-    // ist die History leer und wurde nicht wegen Speichermangel
-    // verworfen, so kann das Dokument als unveraendert gelten
-    if( nUndoSavePos == nUndoPos )
+    // if we are at the "last save" position, the document is not modified
+    if (m_nUndoSavePos == m_nUndoPos)
     {
         m_rState.ResetModified();
     }
+    // JP 29.10.96: Start und End setzen kein Modify-Flag.
+    //              Sonst gibt es Probleme mit der autom. Aufnahme von Ausnahmen
+    //              bei der Autokorrektur
+    else if ((UNDO_START != nAktId) && (UNDO_END != nAktId))
+    {
+        m_rState.SetModified();
+    }
 
-    return TRUE;
+    return true;
 }
-
-
-// setzt Undoklammerung auf, liefert nUndoId der Klammerung
 
 
 SwUndoId
 UndoManager::StartUndo(SwUndoId const i_eUndoId,
         SwRewriter const*const pRewriter)
 {
-    if( !mbUndo )
+    if (!m_bUndo)
+    {
         return UNDO_EMPTY;
+    }
 
     SwUndoId const eUndoId( (0 == i_eUndoId) ? UNDO_START : i_eUndoId );
 
@@ -518,91 +545,107 @@ UndoManager::StartUndo(SwUndoId const i_eUndoId,
 
     return eUndoId;
 }
-// schliesst Klammerung der nUndoId, nicht vom UI benutzt
 
 
 SwUndoId
 UndoManager::EndUndo(SwUndoId const i_eUndoId, SwRewriter const*const pRewriter)
 {
-    USHORT nSize = nUndoPos;
-    if( !mbUndo || !nSize-- )
+    USHORT nSize = m_nUndoPos;
+    if (!m_bUndo || !nSize--)
+    {
         return UNDO_EMPTY;
+    }
 
     SwUndoId const eUndoId( ((0 == i_eUndoId) || (UNDO_START == i_eUndoId))
             ? UNDO_END : i_eUndoId );
 
-    SwUndo* pUndo = (*pUndos)[ nSize ];
+    SwUndo * pUndo = (*m_pUndos)[ nSize ];
     if( UNDO_START == pUndo->GetId() )
     {
-        // leere Start/End-Klammerung ??
-        pUndos->DeleteAndDestroy( nSize );
-        --nUndoPos;
-        --nUndoSttEnd;
+        // empty Start/End bracketing?
+        m_pUndos->DeleteAndDestroy( nSize );
+        --m_nUndoPos;
+        --m_nNestingDepth;
         return UNDO_EMPTY;
     }
 
     // exist above any redo objects? If yes, delete them
-    if( nUndoPos != pUndos->Count() )
+    if (m_nUndoPos != m_pUndos->Count())
     {
-        // setze UndoCnt auf den neuen Wert
-        for( USHORT nCnt = pUndos->Count(); nUndoPos < nCnt; --nUndoCnt )
-            // Klammerung ueberspringen
-            if( UNDO_END == (pUndo = (*pUndos)[ --nCnt ])->GetId() )
-                nCnt = nCnt - ((SwUndoEnd*)pUndo)->GetSttOffset();
+        // update UndoCnt
+        for (USHORT nCnt = m_pUndos->Count(); m_nUndoPos < nCnt;
+                --m_nUndoActions)
+        {
+            // skip bracketing
+            pUndo = (*m_pUndos)[ --nCnt ];
+            if (UNDO_END == pUndo->GetId())
+            {
+                nCnt -= static_cast<SwUndoEnd*>(pUndo)->GetSttOffset();
+            }
+        }
 
-        pUndos->DeleteAndDestroy( nUndoPos, pUndos->Count() - nUndoPos );
+        m_pUndos->DeleteAndDestroy(m_nUndoPos, m_pUndos->Count() - m_nUndoPos);
     }
 
-    // suche den Anfang dieser Klammerung
-    SwUndoId nId = UNDO_EMPTY;
+    // search for Start of this bracketing
+    SwUndoStart * pUndoStart(0);
     while( nSize )
-        if( UNDO_START == ( nId = (pUndo = (*pUndos)[ --nSize ] )->GetId()) &&
-            !((SwUndoStart*)pUndo)->GetEndOffset() )
-            break;      // Start gefunden
+    {
+        SwUndo *const pTmpUndo = (*m_pUndos)[ --nSize ];
+        if ((UNDO_START == pTmpUndo->GetId()) &&
+            !static_cast<SwUndoStart*>(pTmpUndo)->GetEndOffset())
+        {
+            pUndoStart = static_cast<SwUndoStart *>(pTmpUndo);
+            break;      // found start
+        }
+    }
 
-    if( nId != UNDO_START )
+    if (!pUndoStart)
     {
         // kann eigentlich nur beim Abspielen von Macros passieren, die
         // Undo/Redo/Repeat benutzen und die eine exitierende Selection
         // durch Einfuegen loeschen
-        ASSERT( !this, "kein entsprechendes Ende gefunden" );
-        // kein entsprechenden Start gefunden -> Ende nicht einfuegen
-        // und die Member am Doc updaten
+        OSL_ENSURE(false , "EndUndo(): corresponding UNDO_START not found");
+        // not found => do not insert end and reset members
 
-        nUndoSttEnd = 0;
-        nUndoCnt = 0;
-        // setze UndoCnt auf den neuen Wert
-        SwUndo* pTmpUndo;
-        for( USHORT nCnt = 0; nCnt < pUndos->Count(); ++nCnt, ++nUndoCnt )
-            // Klammerung ueberspringen
-            if( UNDO_START == (pTmpUndo = (*pUndos)[ nCnt ])->GetId() )
-                nCnt = nCnt + ((SwUndoStart*)pTmpUndo)->GetEndOffset();
+        m_nNestingDepth = 0;
+        m_nUndoActions = 0;
+        // update m_nUndoActions
+        for (USHORT nCnt = 0; nCnt < m_pUndos->Count();
+                ++nCnt, ++m_nUndoActions)
+        {
+            // skip bracketing
+            SwUndo *const pTmpUndo = (*m_pUndos)[ nCnt ];
+            if (UNDO_START == pTmpUndo->GetId())
+            {
+                nCnt += static_cast<SwUndoStart*>(pTmpUndo)->GetEndOffset();
+            }
+        }
         return UNDO_EMPTY;
-
     }
 
-    // Klammerung um eine einzelne Action muss nicht sein!
-    // Aussnahme: es ist eine eigene ID definiert
-    if(  2 == pUndos->Count() - nSize &&
-        (UNDO_END == eUndoId || eUndoId == (*pUndos)[ nSize+1 ]->GetId() ))
+    // bracketing around single Undo action is unnecessary!
+    // except if there is a custom user ID.
+    if ((2 == m_pUndos->Count() - nSize) &&
+        ((UNDO_END == eUndoId) || (eUndoId == (*m_pUndos)[ nSize+1 ]->GetId())))
     {
-        pUndos->DeleteAndDestroy( nSize );
-        nUndoPos = pUndos->Count();
-        if( !--nUndoSttEnd )
+        m_pUndos->DeleteAndDestroy( nSize );
+        m_nUndoPos = m_pUndos->Count();
+        if (!--m_nNestingDepth)
         {
-            ++nUndoCnt;
+            ++m_nUndoActions;
             sal_Int32 const nActions(SW_MOD()->GetUndoOptions().GetUndoCount());
-            if (nActions < nUndoCnt)
+            if (nActions < m_nUndoActions)
             {
                 // immer 1/10 loeschen
                 //JP 23.09.95: oder wenn neu eingestellt wurde um die Differenz
                 //JP 29.5.2001: Task #83891#: remove only the overlapping actions
-                DelUndoObj( nUndoCnt - nActions );
+                DelUndoObj( m_nUndoActions - nActions );
             }
             else
             {
                 USHORT nEnde = USHRT_MAX - 1000;
-                USHORT nUndosCnt = nUndoCnt;
+                USHORT const nUndosCnt = m_nUndoActions;
                     // immer 1/10 loeschen bis der "Ausloeser" behoben ist
                 while (nEnde < GetUndoNodes().Count())
                 {
@@ -613,21 +656,23 @@ UndoManager::EndUndo(SwUndoId const i_eUndoId, SwRewriter const*const pRewriter)
         return eUndoId;
     }
 
-    // setze die Klammerung am Start/End-Undo
-    nSize = pUndos->Count() - nSize;
-    ((SwUndoStart*)pUndo)->SetEndOffset( nSize );
+    // set offset for Start/End bracketing
+    nSize = m_pUndos->Count() - nSize;
+    pUndoStart->SetEndOffset( nSize );
 
-    SwUndoEnd* pUndoEnd = new SwUndoEnd( eUndoId );
+    SwUndoEnd *const pUndoEnd = new SwUndoEnd( eUndoId );
     pUndoEnd->SetSttOffset( nSize );
 
 // nur zum Testen der Start/End-Verpointerung vom Start/End Undo
 #ifdef DBG_UTIL
     {
-        USHORT nEndCnt = 1, nCnt = pUndos->Count();
+        USHORT nEndCnt = 1;
+        USHORT nCnt = m_pUndos->Count();
         SwUndoId nTmpId = UNDO_EMPTY;
         while( nCnt )
         {
-            if( UNDO_START == ( nTmpId = (*pUndos)[ --nCnt ]->GetId()) )
+            nTmpId = (*m_pUndos)[ --nCnt ]->GetId();
+            if (UNDO_START == nTmpId)
             {
                 if( !nEndCnt ) // falls mal ein Start ohne Ende vorhanden ist
                     continue;
@@ -640,18 +685,20 @@ UndoManager::EndUndo(SwUndoId const i_eUndoId, SwRewriter const*const pRewriter)
             else if( !nEndCnt )
                 break;
         }
-        ASSERT( nCnt == pUndos->Count() - nSize,
-                "Start-Ende falsch geklammert" );
+        OSL_ENSURE( nCnt == m_pUndos->Count() - nSize,
+                "EndUndo(): Start-End bracketing wrong" );
     }
 #endif
 
     if (pRewriter)
     {
-        ((SwUndoStart *) pUndo)->SetRewriter(*pRewriter);
+        pUndoStart->SetRewriter(*pRewriter);
         pUndoEnd->SetRewriter(*pRewriter);
     }
     else
-        pUndoEnd->SetRewriter(((SwUndoStart *) pUndo)->GetRewriter());
+    {
+        pUndoEnd->SetRewriter(pUndoStart->GetRewriter());
+    }
 
     AppendUndo( pUndoEnd );
     return eUndoId;
@@ -691,7 +738,7 @@ SwUndoIdAndName * lcl_GetUndoIdAndName(const SwUndos & rUndos, sal_uInt16 nPos )
     SwUndoId nId = UNDO_EMPTY;
     String sStr("??", RTL_TEXTENCODING_ASCII_US);
 
-    ASSERT( nPos < rUndos.Count(), "nPos out of range");
+    OSL_ENSURE( nPos < rUndos.Count(), "nPos out of range");
 
     switch (pUndo->GetId())
     {
@@ -793,16 +840,17 @@ SwUndoIdAndName * lcl_GetUndoIdAndName(const SwUndos & rUndos, sal_uInt16 nPos )
 SwUndoId
 UndoManager::GetUndoIds(String *const o_pStr, SwUndoIds *const o_pUndoIds) const
 {
-    int nTmpPos = nUndoPos - 1;
+    int nTmpPos = m_nUndoPos - 1;
     SwUndoId nId = UNDO_EMPTY;
 
     while (nTmpPos >= 0)
     {
-        SwUndo * pUndo = (*pUndos)[ static_cast<USHORT>(nTmpPos) ];
+        SwUndo *const pUndo = (*m_pUndos)[ static_cast<USHORT>(nTmpPos) ];
 
-        SwUndoIdAndName * pIdAndName = lcl_GetUndoIdAndName( *pUndos, static_cast<sal_uInt16>(nTmpPos) );
+        SwUndoIdAndName *const pIdAndName =
+            lcl_GetUndoIdAndName( *m_pUndos, static_cast<sal_uInt16>(nTmpPos) );
 
-        if (nTmpPos == nUndoPos - 1)
+        if (nTmpPos == m_nUndoPos - 1)
         {
             nId = pIdAndName->GetUndoId();
 
@@ -820,7 +868,9 @@ UndoManager::GetUndoIds(String *const o_pStr, SwUndoIds *const o_pUndoIds) const
             break;
 
         if (pUndo->GetId() == UNDO_END)
-            nTmpPos -= ((SwUndoEnd *) pUndo)->GetSttOffset();
+        {
+            nTmpPos -= static_cast<SwUndoEnd *>(pUndo)->GetSttOffset();
+        }
 
         nTmpPos--;
     }
@@ -833,9 +883,10 @@ bool UndoManager::HasTooManyUndos() const
     // AppendUndo checks the UNDO_ACTION_LIMIT, unless there's a nested undo.
     // So HasTooManyUndos() may only occur when undos are nested; else
     // AppendUndo has some sort of bug.
-    DBG_ASSERT( (nUndoSttEnd != 0) || (pUndos->Count() < UNDO_ACTION_LIMIT),
+    OSL_ENSURE(
+        (m_nNestingDepth != 0) || (m_pUndos->Count() < UNDO_ACTION_LIMIT),
                 "non-nested undos should have been handled in AppendUndo" );
-    return (pUndos->Count() >= UNDO_ACTION_LIMIT);
+    return (m_pUndos->Count() >= UNDO_ACTION_LIMIT);
 }
 
 
@@ -847,15 +898,15 @@ bool UndoManager::Redo(SwUndoIter & rUndoIter)
     if( rUndoIter.GetId() && !HasUndoId( rUndoIter.GetId() ) )
     {
         rUndoIter.bWeiter = FALSE;
-        return FALSE;
+        return false;
     }
-    if( nUndoPos == pUndos->Count() )
+    if (m_nUndoPos == m_pUndos->Count())
     {
         rUndoIter.bWeiter = FALSE;
-        return FALSE;
+        return false;
     }
 
-    SwUndo *pUndo = (*pUndos)[ nUndoPos++ ];
+    SwUndo *const pUndo = (*m_pUndos)[ m_nUndoPos++ ];
 
     RedlineMode_t const eOld = m_rRedlineAccess.GetRedlineMode();
     RedlineMode_t eTmpMode = (RedlineMode_t)pUndo->GetRedlineMode();
@@ -876,20 +927,21 @@ bool UndoManager::Redo(SwUndoIter & rUndoIter)
 
     m_rRedlineAccess.SetRedlineMode(eOld);
 
-    // Besonderheit von Undo-Replace (interne History)
-    if( UNDO_REPLACE == pUndo->GetId() &&
-        USHRT_MAX != ((SwUndoReplace*)pUndo)->nAktPos )
+    // special treatment for Undo Replace: internal history
+    if ((UNDO_REPLACE == pUndo->GetId()) &&
+        (USHRT_MAX != static_cast<SwUndoReplace*>(pUndo)->nAktPos))
     {
-        --nUndoPos;
-        return TRUE;
+        --m_nUndoPos;
+        return true;
     }
 
-    if( rUndoIter.bWeiter && nUndoPos >= pUndos->Count() )
+    if (rUndoIter.bWeiter && (m_nUndoPos >= m_pUndos->Count()))
+    {
         rUndoIter.bWeiter = FALSE;
+    }
 
-    // ist die History leer und wurde nicht wegen Speichermangel
-    // verworfen, so kann das Dokument als unveraendert gelten
-    if( nUndoSavePos == nUndoPos )
+    // if we are at the "last save" position, the document is not modified
+    if (m_nUndoSavePos == m_nUndoPos)
     {
         m_rState.ResetModified();
     }
@@ -897,36 +949,45 @@ bool UndoManager::Redo(SwUndoIter & rUndoIter)
     {
         m_rState.SetModified();
     }
-    return TRUE;
+    return true;
 }
 
 
-SwUndoId UndoManager::GetRedoIds( String* pStr, SwUndoIds *pRedoIds ) const
+SwUndoId
+UndoManager::GetRedoIds(String *const o_pStr, SwUndoIds *const o_pRedoIds) const
 {
-    sal_uInt16 nTmpPos = nUndoPos;
+    sal_uInt16 nTmpPos = m_nUndoPos;
     SwUndoId nId = UNDO_EMPTY;
 
-    while (nTmpPos < pUndos->Count())
+    while (nTmpPos < m_pUndos->Count())
     {
-        SwUndo * pUndo = (*pUndos)[nTmpPos];
+        SwUndo *const pUndo = (*m_pUndos)[nTmpPos];
 
-        SwUndoIdAndName * pIdAndName = lcl_GetUndoIdAndName(*pUndos, nTmpPos);
+        SwUndoIdAndName *const pIdAndName =
+            lcl_GetUndoIdAndName(*m_pUndos, nTmpPos);
 
-        if (nTmpPos == nUndoPos)
+        if (nTmpPos == m_nUndoPos)
         {
             nId = pIdAndName->GetUndoId();
 
-            if (pStr)
-                *pStr = *pIdAndName->GetUndoStr();
+            if (o_pStr)
+            {
+                *o_pStr = *pIdAndName->GetUndoStr();
+            }
         }
 
-        if (pRedoIds)
-            pRedoIds->Insert(pIdAndName, pRedoIds->Count());
+        if (o_pRedoIds)
+        {
+            o_pRedoIds->Insert(pIdAndName, o_pRedoIds->Count());
+        }
         else
             break;
 
         if (pUndo->GetId() == UNDO_START)
-            nTmpPos = nTmpPos + ((SwUndoStart *) pUndo)->GetEndOffset();
+        {
+            nTmpPos =
+                nTmpPos + static_cast<SwUndoStart *>(pUndo)->GetEndOffset();
+        }
 
         nTmpPos++;
     }
@@ -942,51 +1003,57 @@ bool UndoManager::Repeat(SwUndoIter & rUndoIter, sal_uInt16 const nRepeatCnt)
     if( rUndoIter.GetId() && !HasUndoId( rUndoIter.GetId() ) )
     {
         rUndoIter.bWeiter = FALSE;
-        return FALSE;
+        return false;
     }
-    USHORT nSize = nUndoPos;
-    if( !nSize )
+    USHORT nCurrentRepeat = m_nUndoPos;
+    if( !nCurrentRepeat )
     {
         rUndoIter.bWeiter = FALSE;
-        return FALSE;
+        return false;
     }
 
-    // dann suche jetzt ueber die End/Start-Gruppen die gueltige Repeat-Aktion
-    SwUndo *pUndo = (*pUndos)[ --nSize ];
+    // look for current Repeat action, considering Start/End bracketing
+    SwUndo *const pUndo = (*m_pUndos)[ --nCurrentRepeat ];
     if( UNDO_END == pUndo->GetId() )
-        nSize = nSize - ((SwUndoEnd*)pUndo)->GetSttOffset();
+    {
+        nCurrentRepeat -= static_cast<SwUndoEnd*>(pUndo)->GetSttOffset();
+    }
 
-    USHORT nEndCnt = nUndoPos;
-    BOOL bOneUndo = nSize + 1 == nUndoPos;
+    USHORT const nEndCnt = m_nUndoPos;
+    bool const bOneUndo = (nCurrentRepeat + 1 == m_nUndoPos);
 
     SwPaM* pTmpCrsr = rUndoIter.pAktPam;
     SwUndoId nId = UNDO_EMPTY;
 
-    if( pTmpCrsr != pTmpCrsr->GetNext() || !bOneUndo )  // Undo-Klammerung aufbauen
+    // need Start/End bracketing?
+    if (pTmpCrsr != pTmpCrsr->GetNext() || !bOneUndo)
     {
         if (pUndo->GetId() == UNDO_END)
         {
-            SwUndoStart * pStartUndo =
-                (SwUndoStart *) (*pUndos)[nSize];
-
+            SwUndoStart *const pStartUndo =
+                static_cast<SwUndoStart *>((*m_pUndos)[nCurrentRepeat]);
             nId = pStartUndo->GetUserId();
         }
 
         StartUndo( nId, NULL );
     }
-    do {        // dann durchlaufe mal den gesamten Ring
+    do {    // iterate over ring
         for( USHORT nRptCnt = nRepeatCnt; nRptCnt > 0; --nRptCnt )
         {
             rUndoIter.pLastUndoObj = 0;
-            for( USHORT nCnt = nSize; nCnt < nEndCnt; ++nCnt )
-                (*pUndos)[ nCnt ]->Repeat( rUndoIter );     // Repeat ausfuehren
+            for (USHORT nCnt = nCurrentRepeat; nCnt < nEndCnt; ++nCnt)
+            {
+                (*m_pUndos)[ nCnt ]->Repeat( rUndoIter );
+            }
         }
-    } while( pTmpCrsr !=
-        ( rUndoIter.pAktPam = (SwPaM*)rUndoIter.pAktPam->GetNext() ));
+        rUndoIter.pAktPam = static_cast<SwPaM*>(rUndoIter.pAktPam->GetNext());
+    } while (pTmpCrsr != rUndoIter.pAktPam);
     if( pTmpCrsr != pTmpCrsr->GetNext() || !bOneUndo )
+    {
         EndUndo( nId, NULL );
+    }
 
-    return TRUE;
+    return true;
 }
 
 
@@ -1008,19 +1075,18 @@ UndoManager::GetRepeatIds(String *const o_pStr) const
 
 SwUndo* UndoManager::RemoveLastUndo(SwUndoId const eUndoId)
 {
-    SwUndo* pUndo = (*pUndos)[ nUndoPos - 1 ];
-    if( eUndoId == pUndo->GetId() && nUndoPos == pUndos->Count() )
+    SwUndo *const pUndo = (*m_pUndos)[ m_nUndoPos - 1 ];
+    if ((eUndoId != pUndo->GetId()) || (m_nUndoPos != m_pUndos->Count()))
     {
-        if( !nUndoSttEnd )
-            --nUndoCnt;
-        --nUndoPos;
-        pUndos->Remove( nUndoPos, 1 );
+        OSL_ENSURE(false, "RemoveLastUndo(): wrong Undo action");
+        return 0;
     }
-    else
+    if (!m_nNestingDepth)
     {
-        pUndo = 0;
-        ASSERT( !this, "falsches Undo-Object" );
+        --m_nUndoActions;
     }
+    --m_nUndoPos;
+    m_pUndos->Remove( m_nUndoPos, 1 );
     return pUndo;
 }
 
