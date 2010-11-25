@@ -35,6 +35,7 @@ import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.HelpIds;
 import com.sun.star.wizards.common.JavaTools;
 import com.sun.star.wizards.common.IRenderer;
+import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.ui.ImageList;
 import com.sun.star.wizards.ui.UIConsts;
 import com.sun.star.wizards.ui.UnoDialog2;
@@ -132,7 +133,7 @@ public abstract class ImageListDialog extends UnoDialog2 implements UIConsts
         Helper.setUnoPropertyValues(xDialogModel,
                 new String[]
                 {
-                    "Closeable", "Height", "HelpURL", "Moveable", "Name", "PositionX", "PositionY", "Step", "Title", "Width"
+                    "Closeable", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, "Moveable", PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, "Title", PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -143,7 +144,7 @@ public abstract class ImageListDialog extends UnoDialog2 implements UIConsts
 
         final String[] PROPNAMES = new String[]
         {
-            "DefaultButton", "Height", "HelpURL", "Label", "Name", "PositionX", "PositionY", "PushButtonType", "TabIndex", "Width"
+            "DefaultButton", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, "PushButtonType", PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
         };
 
         Integer iButtonsX = new Integer(6 + ilWidth + 6);
@@ -200,14 +201,14 @@ public abstract class ImageListDialog extends UnoDialog2 implements UIConsts
         il.create(this);
 
         /*lblContainer = insertLabel("lblContainer",
-        new String[] {"Height", "Name", "PositionX", "PositionY", "TabIndex", "Width"},
+        new String[] {PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH},
         new Object[] { new Integer(176),"lblContainer",new Integer(6),new Integer(17),new Short((short)5),new Integer(214)}
         );*/
 
         lblTitle = insertLabel("lblTitle",
                 new String[]
                 {
-                    "FontDescriptor", "Height", "Label", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    "FontDescriptor", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {

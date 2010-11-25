@@ -36,6 +36,7 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.wizards.common.Configuration;
 import com.sun.star.wizards.common.Properties;
+import com.sun.star.wizards.common.PropertyNames;
 
 public class FieldDescription
 {
@@ -70,7 +71,7 @@ public class FieldDescription
         }
         else
         {
-            xNameAccessFieldNode = Configuration.getChildNodebyDisplayName(xMSF, aLocale, xNameAccessTableNode, keyname, "Name", _nmaxcharCount);
+            xNameAccessFieldNode = Configuration.getChildNodebyDisplayName(xMSF, aLocale, xNameAccessTableNode, keyname, PropertyNames.PROPERTY_NAME, _nmaxcharCount);
         }
         setFieldProperties(xNameAccessFieldNode);
     }
@@ -80,7 +81,7 @@ public class FieldDescription
         Name = _fieldname;
         aPropertyValues = new Vector();
         Type = new Integer(com.sun.star.sdbc.DataType.VARCHAR);
-        aPropertyValues.addElement(Properties.createProperty("Name", _fieldname));
+        aPropertyValues.addElement(Properties.createProperty(PropertyNames.PROPERTY_NAME, _fieldname));
         aPropertyValues.addElement(Properties.createProperty("Type", Type));
     }
 
@@ -89,7 +90,7 @@ public class FieldDescription
         for (int i = 0; i < aPropertyValues.size(); i++)
         {
             PropertyValue aPropertyValue = (PropertyValue) aPropertyValues.get(i);
-            if (aPropertyValue.Name.equals("Name"))
+            if (aPropertyValue.Name.equals(PropertyNames.PROPERTY_NAME))
             {
                 aPropertyValue.Value = _newfieldname;
                 aPropertyValues.set(i, aPropertyValue);
@@ -133,9 +134,9 @@ public class FieldDescription
         {
             xPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, _xNameAccessFieldNode);
 //      Integer Index = (Integer) xPropertySet.getPropertyValue("Index");
-            if (propertyexists("Name"))
+            if (propertyexists(PropertyNames.PROPERTY_NAME))
             {
-                aPropertyValues.addElement(Properties.createProperty("Name", Name));
+                aPropertyValues.addElement(Properties.createProperty(PropertyNames.PROPERTY_NAME, Name));
             }
             if (propertyexists("Type"))
             {

@@ -32,6 +32,7 @@ import com.sun.star.awt.XTextComponent;
 import com.sun.star.sdbc.SQLException;
 import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.JavaTools;
+import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.db.TableDescriptor;
 import com.sun.star.wizards.ui.*;
 
@@ -78,7 +79,7 @@ public class Finalizer
             CurUnoDialog.insertLabel("lblTableName",
                     new String[]
                     {
-                        "Height", "Label", "PositionX", "PositionY", "Step", "Width"
+                        PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_WIDTH
                     },
                     new Object[]
                     {
@@ -87,7 +88,7 @@ public class Finalizer
             txtTableName = CurUnoDialog.insertTextField("txtTableName", SETCOMPLETIONFLAG, this,
                     new String[]
                     {
-                        "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Text", "Width"
+                        PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, "Text", PropertyNames.PROPERTY_WIDTH
                     },
                     new Object[]
                     {
@@ -114,7 +115,7 @@ public class Finalizer
                         CurUnoDialog.insertLabel("lblCatalog",
                                 new String[]
                                 {
-                                    "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                                 },
                                 new Object[]
                                 {
@@ -126,7 +127,7 @@ public class Finalizer
                             xCatalogListBox = CurUnoDialog.insertListBox("lstCatalog", null, null,
                                     new String[]
                                     {
-                                        "Dropdown", "Height", "HelpURL", "LineCount", "PositionX", "PositionY", "Step", "StringItemList", "TabIndex", "Width"
+                                        "Dropdown", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, "LineCount", PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, "StringItemList", PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                                     },
                                     new Object[]
                                     {
@@ -169,7 +170,7 @@ public class Finalizer
                         CurUnoDialog.insertLabel("lblSchema",
                                 new String[]
                                 {
-                                    "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                                 },
                                 new Object[]
                                 {
@@ -181,7 +182,7 @@ public class Finalizer
                             xSchemaListBox = CurUnoDialog.insertListBox("lstSchema", null, null,
                                     new String[]
                                     {
-                                        "Dropdown", "Height", "HelpURL", "LineCount", "PositionX", "PositionY", "Step", "StringItemList", "TabIndex", "Width"
+                                        "Dropdown", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, "LineCount", PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, "StringItemList", PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                                     },
                                     new Object[]
                                     {
@@ -209,7 +210,7 @@ public class Finalizer
                 CurUnoDialog.insertLabel("lblcongratulations",
                         new String[]
                         {
-                            "Height", "Label", "MultiLine", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                            PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                         },
                         new Object[]
                         {
@@ -223,7 +224,7 @@ public class Finalizer
             CurUnoDialog.insertLabel("lblProceed",
                     new String[]
                     {
-                        "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                        PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                     },
                     new Object[]
                     {
@@ -232,7 +233,7 @@ public class Finalizer
             optWorkWithTable = CurUnoDialog.insertRadioButton("optWorkWithTable", null,
                     new String[]
                     {
-                        "Height", "HelpURL", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"
+                        PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                     },
                     new Object[]
                     {
@@ -241,7 +242,7 @@ public class Finalizer
             optModifyTable = CurUnoDialog.insertRadioButton("optModifyTable", null,
                     new String[]
                     {
-                        "Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                        PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                     },
                     new Object[]
                     {
@@ -250,7 +251,7 @@ public class Finalizer
             optStartFormWizard = CurUnoDialog.insertRadioButton("optStartFormWizard", null,
                     new String[]
                     {
-                        "Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                        PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                     },
                     new Object[]
                     {

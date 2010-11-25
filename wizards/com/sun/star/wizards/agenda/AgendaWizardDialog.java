@@ -26,7 +26,6 @@
  ************************************************************************/
 package com.sun.star.wizards.agenda;
 
-import com.sun.star.wizards.common.HelpIds;
 import com.sun.star.awt.FontDescriptor;
 import com.sun.star.awt.XButton;
 import com.sun.star.awt.XCheckBox;
@@ -39,6 +38,7 @@ import com.sun.star.awt.XTextComponent;
 import com.sun.star.awt.XTimeField;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.wizards.common.Helper;
+import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.ui.UIConsts;
 import com.sun.star.wizards.ui.WizardDialog;
 
@@ -116,14 +116,14 @@ public abstract class AgendaWizardDialog  extends WizardDialog implements Agenda
   //Resources Object
   AgendaWizardDialogResources resources;
 
-  private String[] PROPS_LIST = new String[] {"Dropdown", "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width"};
-  private String[] PROPS_LABEL_B = new String[] {"FontDescriptor", "Height", "Label", "MultiLine", "PositionX", "PositionY", "Step", "TabIndex", "Width"};
-  private String[] PROPS_CHECK = new String[] {"Height", "HelpURL", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"};
-  private String[] PROPS_BUTTON = new String[] {"Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"};
-  private String[] PROPS_X = new String[] {"Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width"};
-  private String[] PROPS_TEXTAREA = new String[] {"Height", "Label", "MultiLine", "PositionX", "PositionY", "Step", "TabIndex", "Width"};
-  private String[] PROPS_TEXT = new String[] {"Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"};
-  private String[] PROPS_IMAGE = new String[] {"Border", "Height", "HelpURL", "ImageURL", "PositionX", "PositionY", "ScaleImage", "Step", "TabIndex", "Width"};
+  private String[] PROPS_LIST = new String[] {"Dropdown", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH};
+  private String[] PROPS_LABEL_B = new String[] {"FontDescriptor", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH};
+  private String[] PROPS_CHECK = new String[] {PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH};
+  private String[] PROPS_BUTTON = new String[] {PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH};
+  private String[] PROPS_X = new String[] {PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH};
+  private String[] PROPS_TEXTAREA = new String[] {PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH};
+  private String[] PROPS_TEXT = new String[] {PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH};
+  private String[] PROPS_IMAGE = new String[] {"Border", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_IMAGEURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, "ScaleImage", PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH};
 
   private static final Short NO_BORDER = new Short((short)0);
 
@@ -134,7 +134,7 @@ public abstract class AgendaWizardDialog  extends WizardDialog implements Agenda
 
     //set dialog properties...
     Helper.setUnoPropertyValues(xDialogModel,
-      new String[] { "Closeable","Height","Moveable","PositionX","PositionY","Step","TabIndex","Title","Width"},
+      new String[] { "Closeable",PropertyNames.PROPERTY_HEIGHT,"Moveable",PropertyNames.PROPERTY_POSITION_X,PropertyNames.PROPERTY_POSITION_Y,PropertyNames.PROPERTY_STEP,PropertyNames.PROPERTY_TABINDEX,"Title",PropertyNames.PROPERTY_WIDTH},
       new Object[] { Boolean.TRUE,new Integer(210),Boolean.TRUE,new Integer(200),new Integer(52),INTEGERS[1],new Short((short)1),resources.resAgendaWizardDialog_title,new Integer(310)}
     );
 
@@ -192,7 +192,7 @@ public abstract class AgendaWizardDialog  extends WizardDialog implements Agenda
       new Object[] { INTEGERS[8],resources.reslblTime_value,new Integer(97),new Integer(50),INTEGERS[2],new Short((short)203),new Integer(66)}
     );
     txtTime = insertTimeField("txtTime", null,
-      new String[] {"Height", "HelpURL", "PositionX", "PositionY", "Step", "StrictFormat", "TabIndex", "Width"},
+      new String[] {PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, "StrictFormat", PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH},
      new Object[] { INTEGER_12,TXTTIME_HID,new Integer(166),new Integer(48),INTEGERS[2],Boolean.TRUE,new Short((short)204),new Integer(70)}
     );
 
@@ -201,7 +201,7 @@ public abstract class AgendaWizardDialog  extends WizardDialog implements Agenda
       new Object[] { INTEGERS[8],resources.reslblTitle_value,new Integer(97),new Integer(68),INTEGERS[2],new Short((short)205),new Integer(66)}
     );
     txtTitle = insertTextField("txtTitle", null,
-      new String[] {"Height", "HelpURL", "MultiLine", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
+      new String[] {PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH},
       new Object[] { new Integer(26),TXTTITLE_HID,Boolean.TRUE,new Integer(166),new Integer(66),INTEGERS[2],new Short((short)206),new Integer(138)}
     );
     lblLocation = insertLabel("lblLocation",
@@ -209,7 +209,7 @@ public abstract class AgendaWizardDialog  extends WizardDialog implements Agenda
       new Object[] { INTEGERS[8],resources.reslblLocation_value,new Integer(97),new Integer(100),INTEGERS[2],new Short((short)207),new Integer(66)}
     );
     cbLocation = insertTextField("cbLocation", null,null,
-      new String[] { "Height", "HelpURL", "MultiLine", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
+      new String[] { PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH},
       new Object[] { new Integer(34),CBLOCATION_HID,Boolean.TRUE,new Integer(166),new Integer(98),INTEGERS[2],new Short((short)208),new Integer(138)}
     );
 

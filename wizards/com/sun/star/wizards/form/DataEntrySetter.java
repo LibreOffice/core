@@ -34,6 +34,7 @@ import com.sun.star.wizards.common.Properties;
 import com.sun.star.wizards.ui.UnoDialog;
 import com.sun.star.wizards.ui.WizardDialog;
 import com.sun.star.wizards.ui.UIConsts;
+import com.sun.star.wizards.common.PropertyNames;
 
 public class DataEntrySetter
 {
@@ -61,7 +62,7 @@ public class DataEntrySetter
         optNewDataOnly = CurUnoDialog.insertRadioButton("optNewDataOnly", "toggleCheckBoxes", this,
                 new String[]
                 {
-                    "Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -71,7 +72,7 @@ public class DataEntrySetter
         optDisplayAllData = CurUnoDialog.insertRadioButton("optDisplayAllData", "toggleCheckBoxes", this,
                 new String[]
                 {
-                    "Height", "HelpURL", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -80,7 +81,7 @@ public class DataEntrySetter
         chknomodification = CurUnoDialog.insertCheckBox("chknomodification", null,
                 new String[]
                 {
-                    "Height", "HelpURL", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -89,7 +90,7 @@ public class DataEntrySetter
         chknodeletion = CurUnoDialog.insertCheckBox("chknodeletion", null,
                 new String[]
                 {
-                    "Height", "HelpURL", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -98,7 +99,7 @@ public class DataEntrySetter
         chknoaddition = CurUnoDialog.insertCheckBox("chknoaddition", null,
                 new String[]
                 {
-                    "Height", "HelpURL", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -107,7 +108,7 @@ public class DataEntrySetter
         CurUnoDialog.insertLabel("lbldontdisplayExistingData",
                 new String[]
                 {
-                    "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -121,9 +122,9 @@ public class DataEntrySetter
         if (optDisplayAllData.getState())
         {
             retProperties = new PropertyValue[3];
-            boolean bAllowUpdates = (((Short) Helper.getUnoPropertyValue(UnoDialog.getModel(chknomodification), "State")).shortValue()) != 1;
-            boolean bAllowDeletes = (((Short) Helper.getUnoPropertyValue(UnoDialog.getModel(chknodeletion), "State")).shortValue()) != 1;
-            boolean bAllowInserts = (((Short) Helper.getUnoPropertyValue(UnoDialog.getModel(chknoaddition), "State")).shortValue()) != 1;
+            boolean bAllowUpdates = (((Short) Helper.getUnoPropertyValue(UnoDialog.getModel(chknomodification), PropertyNames.PROPERTY_STATE)).shortValue()) != 1;
+            boolean bAllowDeletes = (((Short) Helper.getUnoPropertyValue(UnoDialog.getModel(chknodeletion), PropertyNames.PROPERTY_STATE)).shortValue()) != 1;
+            boolean bAllowInserts = (((Short) Helper.getUnoPropertyValue(UnoDialog.getModel(chknoaddition), PropertyNames.PROPERTY_STATE)).shortValue()) != 1;
             retProperties[0] = Properties.createProperty("AllowUpdates", new Boolean(bAllowUpdates));
             retProperties[1] = Properties.createProperty("AllowDeletes", new Boolean(bAllowDeletes));
             retProperties[2] = Properties.createProperty("AllowInserts", new Boolean(bAllowInserts));
@@ -140,8 +141,8 @@ public class DataEntrySetter
     public void toggleCheckBoxes()
     {
         boolean bdisplayalldata = optDisplayAllData.getState();
-        Helper.setUnoPropertyValue(UnoDialog.getModel(chknomodification), "Enabled", new Boolean(bdisplayalldata));
-        Helper.setUnoPropertyValue(UnoDialog.getModel(chknodeletion), "Enabled", new Boolean(bdisplayalldata));
-        Helper.setUnoPropertyValue(UnoDialog.getModel(chknoaddition), "Enabled", new Boolean(bdisplayalldata));
+        Helper.setUnoPropertyValue(UnoDialog.getModel(chknomodification), PropertyNames.PROPERTY_ENABLED, new Boolean(bdisplayalldata));
+        Helper.setUnoPropertyValue(UnoDialog.getModel(chknodeletion), PropertyNames.PROPERTY_ENABLED, new Boolean(bdisplayalldata));
+        Helper.setUnoPropertyValue(UnoDialog.getModel(chknoaddition), PropertyNames.PROPERTY_ENABLED, new Boolean(bdisplayalldata));
     }
 }

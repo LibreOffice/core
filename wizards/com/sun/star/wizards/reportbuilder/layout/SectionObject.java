@@ -29,6 +29,7 @@
 package com.sun.star.wizards.reportbuilder.layout;
 
 import com.sun.star.awt.FontDescriptor;
+import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.common.PropertySetHelper;
 
 /**
@@ -64,7 +65,7 @@ abstract public class SectionObject
 
     public int getHeight(int _nDefault)
     {
-        final int nHeight = getPropertySetHelper().getPropertyValueAsInteger("Height", _nDefault);
+        final int nHeight = getPropertySetHelper().getPropertyValueAsInteger(PropertyNames.PROPERTY_HEIGHT, _nDefault);
         return nHeight;
     }
 

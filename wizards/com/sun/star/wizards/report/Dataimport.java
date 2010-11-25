@@ -119,7 +119,7 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
             Helper.setUnoPropertyValues(xDialogModel,
                     new String[]
                     {
-                        "Height", "Step", "Title", "Width"
+                        PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_STEP, "Title", PropertyNames.PROPERTY_WIDTH
                     },
                     new Object[]
                     {
@@ -132,7 +132,7 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
                 insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblProgressDBConnection",
                         new String[]
                         {
-                            "FontDescriptor", "Height", "Label", "PositionX", "PositionY", "Step", "Width"
+                            "FontDescriptor", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_WIDTH
                         },
                         new Object[]
                         {
@@ -142,7 +142,7 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
                 insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblProgressDataImport",
                         new String[]
                         {
-                            "Height", "Label", "PositionX", "PositionY", "Step", "Width"
+                            PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_WIDTH
                         },
                         new Object[]
                         {
@@ -154,7 +154,7 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
                 insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblProgressDataImport",
                         new String[]
                         {
-                            "FontDescriptor", "Height", "Label", "PositionX", "PositionY", "Step", "Width"
+                            "FontDescriptor", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_WIDTH
                         },
                         new Object[]
                         {
@@ -164,7 +164,7 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
             insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblCurProgress",
                     new String[]
                     {
-                        "Height", "Label", "PositionX", "PositionY", "Step", "Width"
+                        PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_WIDTH
                     },
                     new Object[]
                     {
@@ -174,7 +174,7 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
             insertButton("cmdCancel", 10000, this,
                     new String[]
                     {
-                        "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width", "Label"
+                        PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH, PropertyNames.PROPERTY_LABEL
                     },
                     new Object[]
                     {

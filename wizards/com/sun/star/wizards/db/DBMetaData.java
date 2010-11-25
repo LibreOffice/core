@@ -83,6 +83,7 @@ import com.sun.star.wizards.common.Properties;
 import com.sun.star.wizards.common.Resource;
 import com.sun.star.wizards.common.SystemDialog;
 import com.sun.star.uno.Any;
+import com.sun.star.wizards.common.PropertyNames;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -611,7 +612,7 @@ public class DBMetaData
                     XPropertySet xPSet = UnoRuntime.queryInterface( XPropertySet.class, m_dataSource );
                     if (xPSet != null)
                     {
-                        DataSourceName = AnyConverter.toString(xPSet.getPropertyValue("Name"));
+                        DataSourceName = AnyConverter.toString(xPSet.getPropertyValue(PropertyNames.PROPERTY_NAME));
                     }
                     return getConnection(xConnection);
                 }
@@ -947,7 +948,7 @@ public class DBMetaData
             xCloseable.close(false);
 
             NamedValueCollection creationArgs = new NamedValueCollection();
-            creationArgs.put( "Name", basename );
+            creationArgs.put( PropertyNames.PROPERTY_NAME, basename );
             creationArgs.put( "URL", documentURL );
             creationArgs.put( "AsTemplate", i_createTemplate );
             XMultiServiceFactory xDocMSF = UnoRuntime.queryInterface( XMultiServiceFactory.class, _xDocNameAccess );

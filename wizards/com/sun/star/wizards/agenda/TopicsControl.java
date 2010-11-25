@@ -45,6 +45,7 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.Properties;
+import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.ui.ControlScroller;
 import com.sun.star.wizards.ui.UnoDialog2;
 import com.sun.star.wizards.ui.event.EventNames;
@@ -328,7 +329,7 @@ public class TopicsControl extends ControlScroller implements XFocusListener
         try
         {
             //calculate in which row we are...
-            String name = (String) Helper.getUnoPropertyValue(UnoDialog2.getModel(control), "Name");
+            String name = (String) Helper.getUnoPropertyValue(UnoDialog2.getModel(control), PropertyNames.PROPERTY_NAME);
             int i = name.indexOf("_");
             String num = name.substring(i + 1);
             lastFocusRow = Integer.valueOf(num).intValue() + nscrollvalue;
@@ -943,7 +944,7 @@ public class TopicsControl extends ControlScroller implements XFocusListener
      */
     private int getColumn(Object control)
     {
-        String name = (String) Helper.getUnoPropertyValue(UnoDialog2.getModel(control), "Name");
+        String name = (String) Helper.getUnoPropertyValue(UnoDialog2.getModel(control), PropertyNames.PROPERTY_NAME);
         if (name.startsWith(TOPIC))
         {
             return 1;
@@ -1047,14 +1048,14 @@ public class TopicsControl extends ControlScroller implements XFocusListener
      */
     private static final String[] LABEL_PROPS = new String[]
     {
-        "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+        PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
     };
     /**
      * A static member used for the child-class ControlRow (GUI Constant)
      */
     private static final String[] TEXT_PROPS = new String[]
     {
-        "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+        PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
     };
 
     /**

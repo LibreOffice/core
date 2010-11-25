@@ -50,6 +50,7 @@ import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.JavaTools;
 import com.sun.star.wizards.common.Resource;
 import com.sun.star.wizards.common.SystemDialog;
+import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.db.DBMetaData;
 import com.sun.star.wizards.db.DatabaseObjectWizard;
 import com.sun.star.wizards.db.RecordParser;
@@ -107,15 +108,15 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener,
             Helper.setUnoPropertyValues(xDialogModel,
                     new String[]
                     {
-                        "Height",
+                        PropertyNames.PROPERTY_HEIGHT,
                         "Moveable",
-                        "Name",
-                        "PositionX",
-                        "PositionY",
-                        "Step",
-                        "TabIndex",
+                        PropertyNames.PROPERTY_NAME,
+                        PropertyNames.PROPERTY_POSITION_X,
+                        PropertyNames.PROPERTY_POSITION_Y,
+                        PropertyNames.PROPERTY_STEP,
+                        PropertyNames.PROPERTY_TABINDEX,
                         "Title",
-                        "Width"
+                        PropertyNames.PROPERTY_WIDTH
                     },
                     new Object[]
                     {
@@ -324,7 +325,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener,
             insertLabel("lblBinaryFields",
                     new String[]
                     {
-                        "Height", "Label", "PositionX", "PositionY", "Step", "Width"
+                        PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_WIDTH
                     },
                     new Object[]
                     {
@@ -602,7 +603,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener,
         try
         {
             Object oRoadmapItem = null;
-            int CurStep = AnyConverter.toInt(Helper.getUnoPropertyValue(xDialogModel, "Step"));
+            int CurStep = AnyConverter.toInt(Helper.getUnoPropertyValue(xDialogModel, PropertyNames.PROPERTY_STEP));
             boolean bEnabled = false;
             int CurItemID;
             for (int i = 0; i < getRMItemCount(); i++)
@@ -618,7 +619,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener,
                     bEnabled = true;
                 }
 
-                Helper.setUnoPropertyValue(oRoadmapItem, "Enabled", new Boolean(bEnabled));
+                Helper.setUnoPropertyValue(oRoadmapItem, PropertyNames.PROPERTY_ENABLED, new Boolean(bEnabled));
             }
         }
         catch (com.sun.star.uno.Exception exception)
@@ -630,8 +631,8 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener,
     private void enableWizardSteps(String[] NewItems)
     {
         boolean bEnabled = NewItems.length > 0;
-        setControlProperty("btnWizardNext", "Enabled", new Boolean(bEnabled));
-        setControlProperty("btnWizardFinish", "Enabled", new Boolean(bEnabled));
+        setControlProperty("btnWizardNext", PropertyNames.PROPERTY_ENABLED, new Boolean(bEnabled));
+        setControlProperty("btnWizardFinish", PropertyNames.PROPERTY_ENABLED, new Boolean(bEnabled));
         enableRoadmapItems(bEnabled);   // Note: Performancewise this could be improved
     }
 
@@ -716,7 +717,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener,
             else
             {
                 boolean bEnabled = (CurGroupFieldSelection.getSelectedFieldNames().length > 0);
-                Helper.setUnoPropertyValue(getRoadmapItemByID(SOGROUPPAGE), "Enabled", new Boolean(bEnabled));
+                Helper.setUnoPropertyValue(getRoadmapItemByID(SOGROUPPAGE), PropertyNames.PROPERTY_ENABLED, new Boolean(bEnabled));
             }
         }
 
@@ -731,7 +732,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener,
             else
             {
                 boolean bEnabled = (CurGroupFieldSelection.getSelectedFieldNames().length > 0);
-                Helper.setUnoPropertyValue(getRoadmapItemByID(SOGROUPPAGE), "Enabled", new Boolean(bEnabled));
+                Helper.setUnoPropertyValue(getRoadmapItemByID(SOGROUPPAGE), PropertyNames.PROPERTY_ENABLED, new Boolean(bEnabled));
             }
         }
 

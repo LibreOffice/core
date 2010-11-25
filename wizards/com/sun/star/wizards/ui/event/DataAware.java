@@ -31,6 +31,7 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
+import com.sun.star.wizards.common.PropertyNames;
 
 /**
  * @author rpiterman
@@ -275,7 +276,7 @@ public abstract class DataAware {
         /**
          * creates a PropertyValue for the property with
          * the given name, of the given JavaBean object.
-         * @param propertyName the property to access. Must be a Cup letter (e.g. "Name" for getName() and setName("..."). )
+         * @param propertyName the property to access. Must be a Cup letter (e.g. PropertyNames.PROPERTY_NAME for getName() and setName("..."). )
          * @param propertyOwner the object which "own" or "contains" the property.
          */
         public PropertyValue(String propertyName, Object propertyOwner) {
