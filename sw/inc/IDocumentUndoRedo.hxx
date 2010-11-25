@@ -47,39 +47,35 @@ typedef sal_uInt16 SwUndoNoModifiedPosition;
 class IDocumentUndoRedo
 {
 public:
-    /**
-    */
-    virtual void SetUndoNoResetModified() = 0;
 
-    /**
+    /** Enable/Disable Undo.
     */
-    virtual bool IsUndoNoResetModified() const = 0;
+    virtual void DoUndo(bool const bDoUndo) = 0;
 
-    /** UndoHistory am Dokument pflegen
-        bei Save, SaveAs, Create wird UndoHistory zurueckgesetzt ???
-    */
-    virtual void DoUndo(bool bUn) = 0;
-
-    /**
+    /** Is Undo enabled?
     */
     virtual bool DoesUndo() const = 0;
 
-    /** Zusammenfassen von Kontinuierlichen Insert/Delete/Overwrite von
-        Charaktern. Default ist ::com::sun::star::sdbcx::Group-Undo.
+    /** Enable/Disable Group Undo.
+        This determines whether successive Insert/Delete/Overwrite
+        actions are combined.
     */
-    virtual void DoGroupUndo(bool bUn) = 0;
+    virtual void DoGroupUndo(bool const bDoUndo) = 0;
 
-    /**
+    /** Is Group Undo enabled?
     */
     virtual bool DoesGroupUndo() const = 0;
 
-    /** macht rueckgaengig:
-        0 letzte Aktion, sonst Aktionen bis zum Start der Klammerung nUndoId
-        In rUndoRange wird der restaurierte Bereich gesetzt.
+    /** Execute Undo.
+
+        @postcondition rUndoIter.pAktPam will contain the affected range.
+        @return     true if executing the last Undo action was successful.
     */
-    virtual bool Undo( SwUndoIter& ) = 0; // -> #111827#
+    virtual bool Undo(SwUndoIter & rUndoIter) = 0; // -> #111827#
 
     /** Opens undo block.
+
+        @remark     StartUndo() and EndUndo() do nothing if !DoesUndo().
 
         @param nUndoId        undo ID for the start object
         @param pRewriter      rewriter for comments @see SwUndo::GetComment
@@ -89,10 +85,13 @@ public:
 
         @return the undo ID of the created object
     */
-    virtual SwUndoId StartUndo( SwUndoId eUndoId, const SwRewriter * pRewriter) = 0;
+    virtual SwUndoId StartUndo(SwUndoId const eUndoId,
+                SwRewriter const*const  pRewriter) = 0;
 
     /**
        Closes undo block.
+
+       @remark     StartUndo() and EndUndo() do nothing if !DoesUndo().
 
        @param nUndoId         undo ID for the closure object
        @param pRewriter       rewriter for comments @see SwUndo::GetComment
@@ -102,30 +101,41 @@ public:
 
        If pRewriter is not equal to zero the given rewriter will be
        set for the generated closure object and the corresponding
-       start object. Otherwise an existent rewriter in theIDocumentRedlineAccess
+       start object. Otherwise an existent rewriter in the
        corresponding start object will be propagated to the generated
        closure object.
     */
-    virtual SwUndoId EndUndo( SwUndoId eUndoId, const SwRewriter * pRewriter) = 0;
+    virtual SwUndoId EndUndo(SwUndoId const eUndoId,
+                SwRewriter const*const  pRewriter) = 0;
 
     /** <- #111827#
-        loescht die gesamten UndoObjecte ( fuer Methoden die am Nodes
-        Array drehen ohne entsprechendes Undo !!)
+        Delete all Undo actions.
+        Of course Undo will be disabled during deletion.
     */
     virtual void DelAllUndoObj() = 0;
 
-    /** liefert die Id der letzten undofaehigen Aktion zurueck
-        oder USHRT_MAX fuellt ggf. VARARR mit ::com::sun::star::sdbcx::User-UndoIds
+    /** Get Ids and comments of Undo actions.
+        @param o_pStr       if not 0, receives comment of last Undo action.
+        @param o_pUndoIds   if not 0, receives SwUndoIdAndName objects for all
+                            top-level Undo actions.
+        @return     Id of last Undo action, or UNDO_EMPTY if there is none.
     */
-    virtual SwUndoId GetUndoIds(String* pStr, SwUndoIds *pUndoIds) const = 0;
+    virtual SwUndoId GetUndoIds(String *const o_pStr,
+                SwUndoIds *const o_pUndoIds) const = 0;
 
-    /**
+    /** Get Ids and comments of Undo actions.
+        @param o_pStr       if not 0, receives comment of last Undo action.
+        @param o_pUndoIds   if not 0, receives SwUndoIdAndName objects for all
+                            top-level Undo actions.
+        @return     comment of last Undo action, or empty string if none.
     */
-    virtual String GetUndoIdsStr(String* pStr, SwUndoIds *pUndoIds) const = 0;
+    virtual String GetUndoIdsStr(String *const o_pStr,
+                SwUndoIds *const o_pUndoIds) const = 0;
 
-    /** gibt es Klammerung mit der Id?
+    /** Is there an Undo action with the given Id, or a Start/End action
+        with the given Id as UserId?
     */
-    virtual bool HasUndoId(SwUndoId eId) const = 0;
+    virtual bool HasUndoId(SwUndoId const eId) const = 0;
 
     /* @@@MAINTAINABILITY-HORROR@@@
        Implementation details made public.
@@ -134,7 +144,7 @@ public:
     */
     virtual const SwNodes* GetUndoNds() const = 0;
 
-    virtual SwUndo* RemoveLastUndo(SwUndoId eUndoId) = 0;
+    virtual SwUndo* RemoveLastUndo(SwUndoId const eUndoId) = 0;
 
     /** 2002-05-31 dvo, #95884#: To prevent an undo array overflow when
         doing nested undos, undo may have to be disabled. Undo-intensive
@@ -142,51 +152,86 @@ public:
     */
     virtual bool HasTooManyUndos() const = 0;
 
-    /**
-    */
-    virtual bool Redo( SwUndoIter& ) = 0;
+    /** Execute Redo.
 
-    /** liefert die Id der letzten Redofaehigen Aktion zurueck
-        fuellt ggf. VARARR mit RedoIds
+        @postcondition rUndoIter.pAktPam will contain the affected range.
+        @return     true if executing the first Redo action was successful.
     */
-    virtual SwUndoId GetRedoIds( String* pStr, SwUndoIds *pRedoIds) const = 0;
+    virtual bool Redo(SwUndoIter & rUndoIter) = 0;
 
-    /**
+    /** Get Ids and comments of Redo actions.
+        @param o_pStr       if not 0, receives comment of first Redo action.
+        @param o_pUndoIds   if not 0, receives SwUndoIdAndName objects for all
+                            top-level Redo actions.
+        @return     Id of first Redo action, or UNDO_EMPTY if there is none.
     */
-    virtual String GetRedoIdsStr( String* pStr, SwUndoIds *pRedoIds) const = 0;
+    virtual SwUndoId GetRedoIds(String *const o_pStr,
+                SwUndoIds *const o_pRedoIds) const = 0;
 
-    /**
+    /** Get Ids and comments of Redo actions.
+        @param o_pStr       if not 0, receives comment of first Redo action.
+        @param o_pUndoIds   if not 0, receives SwUndoIdAndName objects for all
+                            top-level Redo actions.
+        @return     comment of first Redo action, or empty string if none.
     */
-    virtual bool Repeat( SwUndoIter&, sal_uInt16 nRepeatCnt) = 0;
+    virtual String GetRedoIdsStr(String *const o_pStr,
+                SwUndoIds *const o_pRedoIds) const = 0;
 
-    /** liefert die Id der letzten Repeatfaehigen Aktion zurueck
-        fuellt ggf. VARARR mit RedoIds
+    /** Repeat the last Undo action.
+        @return     true if repeating the last Undo Redo action was attempted.
     */
-    virtual SwUndoId GetRepeatIds( String* pStr, SwUndoIds *pRedoIds) const = 0;
+    virtual bool Repeat(SwUndoIter & rUndoIter, sal_uInt16 const nRepeatCnt) = 0;
 
-    /**
+    /** Get Ids and comments of Undo actions.
+        @param o_pStr       if not 0, receives comment of last Undo action.
+        @param o_pUndoIds   if not 0, receives SwUndoIdAndName objects for all
+                            top-level Undo actions.
+        @return     Id of last Undo action if it is Repeat capable,
+                    or UNDO_EMPTY if there is none or it is not Repeat capable.
     */
-    virtual String GetRepeatIdsStr( String* pStr, SwUndoIds *pRedoIds) const = 0;
+    virtual SwUndoId GetRepeatIds(String *const o_pStr,
+                SwUndoIds *const o_pUndoIds) const = 0;
 
-    /** interne Verkuerzung fuer Insert am Ende
+    /** Get Ids and comments of Undo actions.
+        @param o_pStr       if not 0, receives comment of last Undo action.
+        @param o_pUndoIds   if not 0, receives SwUndoIdAndName objects for all
+                            top-level Undo actions.
+        @return     comment of last Undo action (sometimes).
     */
-    virtual void AppendUndo(SwUndo*) = 0;
+    virtual String GetRepeatIdsStr(String *const o_pStr,
+                SwUndoIds *const pUndoIds) const = 0;
 
-    /** loescht alle UndoObjecte von nUndoPos
-        bis zum Ende des Undo-Arrays
+    /** Add new Undo action.
+        Takes over ownership of pUndo.
+        @remark     calls ClearRedo(), except for UNDO_START/UNDO_END.
+        @remark     does intentionally not check DoesUndo();
+                    that is caller's responsibility.
+    */
+    virtual void AppendUndo(SwUndo *const pUndo) = 0;
+
+    /** Delete all Redo actions.
     */
     virtual void ClearRedo() = 0;
 
     /** Manipulates the position of the undo stack which reset the modified flag
     */
-    virtual void setUndoNoModifiedPosition( SwUndoNoModifiedPosition ) = 0;
+    virtual void setUndoNoModifiedPosition(SwUndoNoModifiedPosition const nPos)
+        = 0;
 
     /** Gets the position of the undo stack which reset the modified flag
     */
     virtual SwUndoNoModifiedPosition getUndoNoModifiedPosition() const = 0;
 
+    /** Disable (re)setting the document modified flag on Undo/Redo.
+    */
+    virtual void SetUndoNoResetModified() = 0;
+
+    /** Is setting the document modified flag on Undo/Redo disabled?
+    */
+    virtual bool IsUndoNoResetModified() const = 0;
+
 protected:
-     virtual ~IDocumentUndoRedo() {};
+    virtual ~IDocumentUndoRedo() {};
 };
 
 

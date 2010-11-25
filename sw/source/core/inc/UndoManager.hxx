@@ -52,29 +52,37 @@ public:
     /** IDocumentUndoRedo */
     virtual void SetUndoNoResetModified();
     virtual bool IsUndoNoResetModified() const;
-    virtual void DoUndo(bool bUn);
+    virtual void DoUndo(bool const bDoUndo);
     virtual bool DoesUndo() const;
-    virtual void DoGroupUndo(bool bUn);
+    virtual void DoGroupUndo(bool const bDoUndo);
     virtual bool DoesGroupUndo() const;
-    virtual bool Undo(SwUndoIter& );
-    virtual SwUndoId StartUndo(SwUndoId eUndoId, const SwRewriter * pRewriter);
-    virtual SwUndoId EndUndo(SwUndoId eUndoId, const SwRewriter * pRewriter);
+    virtual bool Undo(SwUndoIter & rUndoIter);
+    virtual SwUndoId StartUndo(SwUndoId const eUndoId,
+                SwRewriter const*const pRewriter);
+    virtual SwUndoId EndUndo(SwUndoId const eUndoId,
+                SwRewriter const*const pRewriter);
     virtual void DelAllUndoObj();
-    virtual SwUndoId GetUndoIds(String* pStr, SwUndoIds *pUndoIds) const;
-    virtual String GetUndoIdsStr(String* pStr, SwUndoIds *pUndoIds) const;
-    virtual bool HasUndoId(SwUndoId eId) const;
+    virtual SwUndoId GetUndoIds(String *const o_pStr,
+                SwUndoIds *const o_pUndoIds) const;
+    virtual String GetUndoIdsStr(String *const o_pStr,
+                SwUndoIds *const o_pUndoIds) const;
+    virtual bool HasUndoId(SwUndoId const eId) const;
     virtual const SwNodes* GetUndoNds() const;
-    virtual SwUndo* RemoveLastUndo(SwUndoId eUndoId);
+    virtual SwUndo* RemoveLastUndo(SwUndoId const eUndoId);
     virtual bool HasTooManyUndos() const;
-    virtual bool Redo(SwUndoIter&);
-    virtual SwUndoId GetRedoIds(String* pStr, SwUndoIds *pRedoIds) const;
-    virtual String GetRedoIdsStr(String* pStr, SwUndoIds *pRedoIds) const;
-    virtual bool Repeat(SwUndoIter&, sal_uInt16 nRepeatCnt);
-    virtual SwUndoId GetRepeatIds(String* pStr, SwUndoIds *pRedoIds) const;
-    virtual String GetRepeatIdsStr(String* pStr, SwUndoIds *pRedoIds) const;
-    virtual void AppendUndo(SwUndo*);
+    virtual bool Redo(SwUndoIter & rUndoIter);
+    virtual SwUndoId GetRedoIds(String *const o_pStr,
+                SwUndoIds *const o_pRedoIds) const;
+    virtual String GetRedoIdsStr(String *const o_pStr,
+                SwUndoIds *const o_pRedoIds) const;
+    virtual bool Repeat(SwUndoIter & rUndoIter, sal_uInt16 const nRepeatCnt);
+    virtual SwUndoId GetRepeatIds(String *const o_pStr,
+                SwUndoIds *const o_pUndoIds) const;
+    virtual String GetRepeatIdsStr(String *const o_pStr,
+                SwUndoIds *const o_pUndoIds) const;
+    virtual void AppendUndo(SwUndo *const pUndo);
     virtual void ClearRedo();
-    virtual void setUndoNoModifiedPosition( SwUndoNoModifiedPosition );
+    virtual void setUndoNoModifiedPosition(SwUndoNoModifiedPosition const nPos);
     virtual SwUndoNoModifiedPosition getUndoNoModifiedPosition() const;
 
     SwUndo* GetLastUndo();

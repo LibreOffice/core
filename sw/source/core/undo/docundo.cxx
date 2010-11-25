@@ -174,13 +174,15 @@ void UndoManager::SetUndoNoResetModified()
     nUndoSavePos = USHRT_MAX;
 }
 
-void UndoManager::DoUndo(bool bUn)
+void UndoManager::DoUndo(bool const bDoUndo)
 {
-    mbUndo = bUn;
+    mbUndo = bDoUndo;
 
     SdrModel *const pSdrModel = m_rDoc.GetDrawModel();
     if( pSdrModel )
-        pSdrModel->EnableUndo(bUn);
+    {
+        pSdrModel->EnableUndo(bDoUndo);
+    }
 }
 
 bool UndoManager::DoesUndo() const
@@ -188,9 +190,9 @@ bool UndoManager::DoesUndo() const
     return mbUndo;
 }
 
-void UndoManager::DoGroupUndo(bool bUn)
+void UndoManager::DoGroupUndo(bool const bDoUndo)
 {
-    mbGroupUndo = bUn;
+    mbGroupUndo = bDoUndo;
 }
 
 bool UndoManager::DoesGroupUndo() const
@@ -205,7 +207,7 @@ SwUndo* UndoManager::GetLastUndo()
         : (*pUndos)[nUndoPos-1];
 }
 
-void UndoManager::AppendUndo( SwUndo* pUndo )
+void UndoManager::AppendUndo(SwUndo *const pUndo)
 {
     if( nsRedlineMode_t::REDLINE_NONE == pUndo->GetRedlineMode() )
     {
@@ -392,7 +394,7 @@ bool UndoManager::DelUndoObj( sal_uInt16 nEnd )
 
 /**************** UNDO ******************/
 
-void UndoManager::setUndoNoModifiedPosition( SwUndoNoModifiedPosition nNew )
+void UndoManager::setUndoNoModifiedPosition(SwUndoNoModifiedPosition const nNew)
 {
     nUndoSavePos = nNew;
     if( !pUndos->Count() || nUndoSavePos > pUndos->Count() - 1 )
@@ -409,7 +411,7 @@ SwUndoNoModifiedPosition UndoManager::getUndoNoModifiedPosition() const
 }
 
 
-bool UndoManager::HasUndoId(SwUndoId eId) const
+bool UndoManager::HasUndoId(SwUndoId const eId) const
 {
     USHORT nSize = nUndoPos;
     SwUndo * pUndo;
@@ -507,13 +509,13 @@ bool UndoManager::Undo( SwUndoIter& rUndoIter )
 
 
 SwUndoId
-UndoManager::StartUndo( SwUndoId eUndoId, const SwRewriter * pRewriter )
+UndoManager::StartUndo(SwUndoId const i_eUndoId,
+        SwRewriter const*const pRewriter)
 {
     if( !mbUndo )
         return UNDO_EMPTY;
 
-    if( !eUndoId )
-        eUndoId = UNDO_START;
+    SwUndoId const eUndoId( (0 == i_eUndoId) ? UNDO_START : i_eUndoId );
 
     SwUndoStart * pUndo = new SwUndoStart( eUndoId );
 
@@ -527,14 +529,15 @@ UndoManager::StartUndo( SwUndoId eUndoId, const SwRewriter * pRewriter )
 // schliesst Klammerung der nUndoId, nicht vom UI benutzt
 
 
-SwUndoId UndoManager::EndUndo(SwUndoId eUndoId, const SwRewriter * pRewriter)
+SwUndoId
+UndoManager::EndUndo(SwUndoId const i_eUndoId, SwRewriter const*const pRewriter)
 {
     USHORT nSize = nUndoPos;
     if( !mbUndo || !nSize-- )
         return UNDO_EMPTY;
 
-    if( UNDO_START == eUndoId || !eUndoId )
-        eUndoId = UNDO_END;
+    SwUndoId const eUndoId( ((0 == i_eUndoId) || (UNDO_START == i_eUndoId))
+            ? UNDO_END : i_eUndoId );
 
     SwUndo* pUndo = (*pUndos)[ nSize ];
     if( UNDO_START == pUndo->GetId() )
@@ -664,17 +667,21 @@ SwUndoId UndoManager::EndUndo(SwUndoId eUndoId, const SwRewriter * pRewriter)
 // liefert die Id der letzten Undofaehigen Aktion zurueck oder 0
 // fuellt ggf. VARARR mit User-UndoIds
 
-String UndoManager::GetUndoIdsStr( String* pStr, SwUndoIds *pUndoIds) const
+String
+UndoManager::GetUndoIdsStr(String *const o_pStr,
+        SwUndoIds *const o_pUndoIds) const
 {
     String aTmpStr;
 
-    if (pStr != NULL)
+    if (o_pStr != NULL)
     {
-        GetUndoIds( pStr, pUndoIds);
-        aTmpStr = *pStr;
+        GetUndoIds(o_pStr, o_pUndoIds);
+        aTmpStr = *o_pStr;
     }
     else
-        GetUndoIds( &aTmpStr, pUndoIds);
+    {
+        GetUndoIds( &aTmpStr, o_pUndoIds);
+    }
 
     return aTmpStr;
 }
@@ -833,7 +840,8 @@ SwUndoIdAndName * lcl_GetUndoIdAndName(const SwUndos & rUndos, sal_uInt16 nPos )
     return new SwUndoIdAndName(nId, &sStr);
 }
 
-SwUndoId UndoManager::GetUndoIds( String* pStr, SwUndoIds *pUndoIds) const
+SwUndoId
+UndoManager::GetUndoIds(String *const o_pStr, SwUndoIds *const o_pUndoIds) const
 {
     int nTmpPos = nUndoPos - 1;
     SwUndoId nId = UNDO_EMPTY;
@@ -848,12 +856,16 @@ SwUndoId UndoManager::GetUndoIds( String* pStr, SwUndoIds *pUndoIds) const
         {
             nId = pIdAndName->GetUndoId();
 
-            if (pStr)
-                *pStr = *pIdAndName->GetUndoStr();
+            if (o_pStr)
+            {
+                *o_pStr = *pIdAndName->GetUndoStr();
+            }
         }
 
-        if (pUndoIds)
-            pUndoIds->Insert(pIdAndName, pUndoIds->Count());
+        if (o_pUndoIds)
+        {
+            o_pUndoIds->Insert(pIdAndName, o_pUndoIds->Count());
+        }
         else
             break;
 
@@ -880,7 +892,7 @@ bool UndoManager::HasTooManyUndos() const
 /**************** REDO ******************/
 
 
-bool UndoManager::Redo( SwUndoIter& rUndoIter )
+bool UndoManager::Redo(SwUndoIter & rUndoIter)
 {
     if( rUndoIter.GetId() && !HasUndoId( rUndoIter.GetId() ) )
     {
@@ -995,7 +1007,7 @@ SwUndoId UndoManager::GetRedoIds( String* pStr, SwUndoIds *pRedoIds ) const
 /**************** REPEAT ******************/
 
 
-bool UndoManager::Repeat( SwUndoIter& rUndoIter, sal_uInt16 nRepeatCnt )
+bool UndoManager::Repeat(SwUndoIter & rUndoIter, sal_uInt16 const nRepeatCnt)
 {
     if( rUndoIter.GetId() && !HasUndoId( rUndoIter.GetId() ) )
     {
@@ -1050,18 +1062,22 @@ bool UndoManager::Repeat( SwUndoIter& rUndoIter, sal_uInt16 nRepeatCnt )
 // liefert die Id der letzten Repeatfaehigen Aktion zurueck oder 0
 // fuellt ggf. VARARR mit User-RedoIds
 
-String UndoManager::GetRepeatIdsStr(String* pStr, SwUndoIds *pRepeatIds) const
+String
+UndoManager::GetRepeatIdsStr(String *const o_pStr,
+        SwUndoIds *const o_pRepeatIds) const
 {
     String aTmpStr;
     SwUndoId nId;
 
-    if ( pStr != NULL)
+    if (o_pStr != NULL)
     {
-        nId = GetRepeatIds(pStr, pRepeatIds);
-        aTmpStr = *pStr;
+        nId = GetRepeatIds(o_pStr, o_pRepeatIds);
+        aTmpStr = *o_pStr;
     }
     else
-        nId = GetRepeatIds(&aTmpStr, pRepeatIds);
+    {
+        nId = GetRepeatIds(&aTmpStr, o_pRepeatIds);
+    }
 
     if (nId <= UNDO_END)
         return String();
@@ -1069,16 +1085,18 @@ String UndoManager::GetRepeatIdsStr(String* pStr, SwUndoIds *pRepeatIds) const
     return aTmpStr;
 }
 
-SwUndoId UndoManager::GetRepeatIds(String* pStr, SwUndoIds *pRepeatIds) const
+SwUndoId
+UndoManager::GetRepeatIds(String *const o_pStr,
+        SwUndoIds *const o_pRepeatIds) const
 {
-    SwUndoId nRepeatId = GetUndoIds( pStr, pRepeatIds );
+    SwUndoId nRepeatId = GetUndoIds( o_pStr, o_pRepeatIds );
     if( REPEAT_START <= nRepeatId && REPEAT_END > nRepeatId )
         return nRepeatId;
     return UNDO_EMPTY;
 }
 
 
-SwUndo* UndoManager::RemoveLastUndo( SwUndoId eUndoId )
+SwUndo* UndoManager::RemoveLastUndo(SwUndoId const eUndoId)
 {
     SwUndo* pUndo = (*pUndos)[ nUndoPos - 1 ];
     if( eUndoId == pUndo->GetId() && nUndoPos == pUndos->Count() )
