@@ -69,10 +69,8 @@ Point ScOutputData::PrePrintDrawingLayer(long nLogStX, long nLogStY )
     aOffset.Y() -= pDoc->GetRowHeight( 0, nY1-1, nTab );
 
     long nDataWidth = 0;
-    long nDataHeight = 0;
     for (nCol=nX1; nCol<=nX2; nCol++)
         nDataWidth += pDoc->GetColWidth( nCol, nTab );
-    nDataHeight += pDoc->GetRowHeight( nY1, nY2, nTab );
 
     if ( bLayoutRTL )
         aOffset.X() += nDataWidth;
