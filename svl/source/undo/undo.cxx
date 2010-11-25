@@ -515,8 +515,8 @@ void SfxUndoManager::Reset()
     UndoManagerGuard aGuard( *m_pData );
 
     // clear all locks
-    while ( ImplIsUndoEnabled_Lock() )
-        ImplEnableUndo_Lock( false );
+    while ( !ImplIsUndoEnabled_Lock() )
+        ImplEnableUndo_Lock( true );
 
     // cancel all list actions
     while ( IsInListAction() )
