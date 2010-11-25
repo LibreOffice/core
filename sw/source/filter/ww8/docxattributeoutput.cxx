@@ -3154,7 +3154,7 @@ void DocxAttributeOutput::FootnotesEndnotes( bool bFootnotes )
 
 }
 
-void DocxAttributeOutput::ParaLineSpacing_Impl( short nSpace, short /*nMulti*/ )
+void DocxAttributeOutput::ParaLineSpacing_Impl( short nSpace, short nMulti )
 {
     if ( !m_pSpacingAttrList )
         m_pSpacingAttrList = m_pSerializer->createAttrList();
@@ -3163,6 +3163,11 @@ void DocxAttributeOutput::ParaLineSpacing_Impl( short nSpace, short /*nMulti*/ )
     {
         m_pSpacingAttrList->add( FSNS( XML_w, XML_lineRule ), "exact" );
         m_pSpacingAttrList->add( FSNS( XML_w, XML_line ), OString::valueOf( sal_Int32( -nSpace ) ) );
+    }
+    else if( nMulti )
+    {
+        m_pSpacingAttrList->add( FSNS( XML_w, XML_lineRule ), "auto" );
+        m_pSpacingAttrList->add( FSNS( XML_w, XML_line ), OString::valueOf( sal_Int32( nSpace ) ) );
     }
     else if ( nSpace > 0 )
     {

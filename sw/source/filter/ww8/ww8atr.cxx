@@ -4506,7 +4506,9 @@ void AttributeOutputBase::ParaLineSpacing( const SvxLineSpacingItem& rSpacing )
         }
         break;
     }
-
+    // if nSpace is negative, it is a fixed size in 1/20 of a point
+    // if nSpace is positive and nMulti is 1, it is 1/240 of a single line height
+    // otherwise, I have no clue what the heck it is
     ParaLineSpacing_Impl( nSpace, nMulti );
 }
 
