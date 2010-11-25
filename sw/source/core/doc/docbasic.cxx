@@ -100,7 +100,7 @@ BOOL SwDoc::ExecMacro( const SvxMacro& rMacro, String* pRet, SbxArray* pArgs )
             aRef = pRetValue;
             eErr = pDocShell->CallBasic( rMacro.GetMacName(),
                                          rMacro.GetLibName(),
-                                         0, pArgs, pRet ? pRetValue : 0 );
+                                         pArgs, pRet ? pRetValue : 0 );
 
             if( pRet && SbxNULL <  pRetValue->GetType() &&
                         SbxVOID != pRetValue->GetType() )
@@ -231,7 +231,7 @@ USHORT SwDoc::CallEvent( USHORT nEvent, const SwCallMouseEvent& rCallEvent,
             if( STARBASIC == rMacro.GetScriptType() )
             {
                 nRet += 0 == pDocShell->CallBasic( rMacro.GetMacName(),
-                                    rMacro.GetLibName(), 0, pArgs ) ? 1 : 0;
+                                    rMacro.GetLibName(), pArgs ) ? 1 : 0;
             }
             else if( EXTENDED_STYPE == rMacro.GetScriptType() )
             {
