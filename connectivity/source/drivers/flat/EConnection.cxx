@@ -112,6 +112,7 @@ void OFlatConnection::construct(const ::rtl::OUString& url,const Sequence< Prope
 
     osl_decrementInterlockedCount( &m_refCount );
     OConnection::construct(url,info);
+    m_bShowDeleted = sal_True; // we do not supported rows for this type
 }
 // --------------------------------------------------------------------------------
 Reference< XDatabaseMetaData > SAL_CALL OFlatConnection::getMetaData(  ) throw(SQLException, RuntimeException)

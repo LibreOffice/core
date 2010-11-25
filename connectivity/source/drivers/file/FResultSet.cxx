@@ -138,7 +138,7 @@ OResultSet::OResultSet(OStatement_Base* pStmt,OSQLParseTreeIterator&    _aSQLIte
 
     m_nResultSetConcurrency = isCount() ? ResultSetConcurrency::READ_ONLY : ResultSetConcurrency::UPDATABLE;
     construct();
-    m_aSkipDeletedSet.SetDeleted(m_bShowDeleted);
+    m_aSkipDeletedSet.SetDeletedVisible(m_bShowDeleted);
     osl_decrementInterlockedCount( &m_refCount );
 }
 
