@@ -37,7 +37,7 @@ module com {  module sun {  module star {  module util {
 
 //=============================================================================
 
-/** thrown when file I/O error occurs.
+/** @deprecated
  */
 published exception FileIOException: com::sun::star::uno::Exception
 {
@@ -48,3 +48,4 @@ published exception FileIOException: com::sun::star::uno::Exception
 }; }; }; };
 
 #endif
+

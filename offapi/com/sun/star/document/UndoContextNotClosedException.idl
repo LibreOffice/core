@@ -1,5 +1,4 @@
 /*************************************************************************
- *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
@@ -24,28 +23,29 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_util_DiskFullException_idl__
-#define __com_sun_star_util_DiskFullException_idl__
 
-#ifndef __com_sun_star_util_FileIOException_idl__
-#include <com/sun/star/util/FileIOException.idl>
-#endif
+#ifndef __com_sun_star_document_UndoContextNotClosedException_idl__
+#define __com_sun_star_document_UndoContextNotClosedException_idl__
 
+#include <com/sun/star/util/InvalidStateException.idl>
 
-//=============================================================================
+//==================================================================================================================
 
-module com {  module sun {  module star {  module util {
+module com { module sun { module star { module document {
 
-//=============================================================================
+//==================================================================================================================
 
-/** @deprecated
+/** is thrown when an operation is attempted at an <type>XUndoManager</type> which requires all undo
+    contexts to be closed, but this requirement is not fullfilled.
  */
-published exception DiskFullException: com::sun::star::util::FileIOException
+exception UndoContextNotClosedException : ::com::sun::star::util::InvalidStateException
 {
 };
 
-//=============================================================================
+//==================================================================================================================
 
 }; }; }; };
+
+//==================================================================================================================
 
 #endif
