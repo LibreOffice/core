@@ -41,18 +41,6 @@ File gid_Brand_File_Txt_License
     Styles = (PACKED, SCPZIP_REPLACE);
 End
 
-File gid_Brand_File_Txt_License_Html
-    TXT_FILE_BODY;
-    Dir = gid_Brand_Dir_Share_Readme;
-  #ifdef UNX
-    README_TXT_ALL_LANG(Name, LICENSE, html);
-  #endif
-  #ifdef WNT
-    README_TXT_ALL_LANG(Name, license, html);
-  #endif
-    Styles = (PACKED, SCPZIP_REPLACE);
-End
-
 File gid_Brand_File_License_License
     TXT_FILE_BODY;
     Dir = gid_Brand_Dir_License;
@@ -61,18 +49,6 @@ File gid_Brand_File_License_License
   #endif
   #ifdef WNT
     README_TXT_ALL_LANG(Name, license, txt);
-  #endif
-    Styles = (PACKED, SCPZIP_REPLACE);
-End
-
-File gid_Brand_File_License_License_Html
-    TXT_FILE_BODY;
-    Dir = gid_Brand_Dir_License;
-  #ifdef UNX
-    README_TXT_ALL_LANG(Name, LICENSE, html);
-  #endif
-  #ifdef WNT
-    README_TXT_ALL_LANG(Name, license, html);
   #endif
     Styles = (PACKED, SCPZIP_REPLACE);
 End
