@@ -175,9 +175,9 @@ public:
     sal_Int32                           GetCurrentColumn() const { return maTables.back().GetColCount(); }
     sal_Int32                           GetCurrentRow() const { return maTables.back().GetRow(); }
     ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheet >
-                                        GetCurrentXSheet()  { return xCurrentSheet; }
+                                        GetCurrentXSheet() const { return xCurrentSheet; }
     ::com::sun::star::uno::Reference< ::com::sun::star::table::XCellRange >
-                                        GetCurrentXCellRange()  { return xCurrentCellRange; }
+                                        GetCurrentXCellRange() const { return xCurrentCellRange; }
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >
                                         GetCurrentXDrawPage();
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
