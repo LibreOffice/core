@@ -127,6 +127,7 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
     ::comphelper::UStringMixEqual aCase(bCase);
     ::std::vector<String> aColumnNames,m_aTypeNames;
     m_aTypeNames.resize(nFieldCount);
+    const sal_Int32 nMaxRowsToScan = pConnection->getMaxRowsToScan();
     sal_Int32 nRowCount = 0;
     do
     {
@@ -158,7 +159,7 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
         }
         ++nRowCount;
     }
-    while(nRowCount < 50 && m_pFileStream->ReadByteStringLine(aFirstLine,nEncoding));
+    while(nRowCount < nMaxRowsToScan && m_pFileStream->ReadByteStringLine(aFirstLine,nEncoding));
 
     for (xub_StrLen i = 0; i < nFieldCount; i++)
     {

@@ -56,6 +56,7 @@ using namespace ::com::sun::star::lang;
 
 // --------------------------------------------------------------------------------
 OFlatConnection::OFlatConnection(ODriver*   _pDriver) : OConnection(_pDriver)
+    ,m_nMaxRowsToScan(50)
     ,m_bHeaderLine(sal_True)
     ,m_cFieldDelimiter(';')
     ,m_cStringDelimiter('"')
@@ -107,6 +108,10 @@ void OFlatConnection::construct(const ::rtl::OUString& url,const Sequence< Prope
             ::rtl::OUString aVal;
             OSL_VERIFY( pBegin->Value >>= aVal );
             m_cThousandDelimiter = aVal.toChar();
+        }
+        else if ( !pBegin->Name.compareToAscii("MaxRowScan") )
+        {
+            pBegin->Value >>= m_nMaxRowsToScan;
         }
     }
 
