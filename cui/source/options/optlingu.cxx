@@ -574,7 +574,7 @@ public:
     void SetChecked( const Sequence< OUString > &rConfiguredServices );
     void Reconfigure( const OUString &rDisplayName, BOOL bEnable );
 
-    const Sequence<Locale> &    GetAllSupportedLocales() { return aAllServiceLocales; }
+    const Sequence<Locale> &    GetAllSupportedLocales() const { return aAllServiceLocales; }
 
     const LangImplNameTable &   GetSpellTable() const   { return aCfgSpellTable; }
     LangImplNameTable &         GetSpellTable()         { return aCfgSpellTable; }
