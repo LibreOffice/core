@@ -97,7 +97,6 @@ ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
     // title has to be from the view that opened the dialog,
     // even if it's not the current view
 
-    SfxObjectShell* pParentDoc = NULL;
     if ( pB )
     {
         SfxDispatcher* pMyDisp = pB->GetDispatcher();
@@ -109,14 +108,9 @@ ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
                 pScViewShell = PTR_CAST( ScTabViewShell, pMyViewFrm->GetViewShell() );
                 if( pScViewShell )
                     pScViewShell->UpdateInputHandler(TRUE);
-                pParentDoc = pMyViewFrm->GetObjectShell();
             }
         }
     }
-    //if ( !pParentDoc && pScViewShell )                    // use current only if above fails
-    //  pParentDoc = pScViewShell->GetObjectShell();
-    //if ( pParentDoc )
-    //  aDocName = pParentDoc->GetTitle();
 
     if ( pDoc == NULL )
         pDoc = pViewData->GetDocument();
@@ -209,7 +203,7 @@ ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
         pCell = new ScFormulaCell( pDoc, aCursorPos, rStrExp );
 
         Update(rStrExp);
-    } // if (!pData)
+    }
 
 }
 
