@@ -2,3 +2,4 @@ te test : BOOST:boost cppu cppuhelper CPPUNIT:cppunit javaunohelper offuh ridlja
 te test\inc nmake - all inc NULL
 te test\source\cpp nmake - all source_cpp inc NULL
 te test\source\java\org\openoffice\test nmake - all source_java NULL
+te test\source\java\org\openoffice\test\tools nmake - all source_java_tools NULL
