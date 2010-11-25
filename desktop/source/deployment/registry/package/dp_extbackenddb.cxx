@@ -29,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_desktop.hxx"
 
-#include "rtl/string.h"
 #include "rtl/bootstrap.hxx"
 #include "cppuhelper/exc_hlp.hxx"
 #include "com/sun/star/uno/XComponentContext.hpp"
