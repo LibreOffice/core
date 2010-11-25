@@ -2105,7 +2105,6 @@ void XclExpRowBuffer::Save( XclExpStream& rStrm )
     for (itr = itrBeg; itr != itrEnd; ++itr)
     {
         // find end of row block
-        ++itrBlkEnd;
         while( (itrBlkEnd != itrEnd) && (itrBlkEnd->second->GetXclRow() - nStartXclRow < EXC_ROW_ROWBLOCKSIZE) )
             ++itrBlkEnd;
 
@@ -2118,7 +2117,7 @@ void XclExpRowBuffer::Save( XclExpStream& rStrm )
         for( itRow = itrBlkStart; itRow != itrBlkEnd; ++itRow )
              itRow->second->WriteCellList( rStrm );
 
-        itrBlkStart = itrBlkEnd;
+        itrBlkStart = (itrBlkEnd == itrEnd) ? itrBlkEnd : itrBlkEnd++;
         nStartXclRow += EXC_ROW_ROWBLOCKSIZE;
     }
 }
