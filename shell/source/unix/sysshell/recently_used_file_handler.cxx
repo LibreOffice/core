@@ -396,8 +396,8 @@ namespace /* private */ {
             uri_(uri)
         {}
 
-        bool operator() (const recently_used_item* item)
-        { return (item->uri_ == uri_); }
+        bool operator() (const recently_used_item* item) const
+            { return (item->uri_ == uri_); }
     private:
         string_t uri_;
     };
