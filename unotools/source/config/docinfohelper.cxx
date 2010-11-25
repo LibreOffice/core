@@ -72,8 +72,8 @@ namespace utl
         }
 
         aResult.append( (sal_Unicode)'$' );
-        aResult.append( ::rtl::OUString::createFromAscii(
-                                TOOLS_INETDEF_OS ).replace( ' ', '_' ) );
+        aResult.append( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                TOOLS_INETDEF_OS )).replace( ' ', '_' ) );
 
         aResult.append( (sal_Unicode)' ' );
     }
