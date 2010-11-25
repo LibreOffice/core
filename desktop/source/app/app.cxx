@@ -140,6 +140,9 @@
 #include <vcl/stdtext.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/sfx.hrc>
+#include <sfx2/app.hxx>
+#include <svl/itemset.hxx>
+#include <svl/eitem.hxx>
 #include <ucbhelper/contentbroker.hxx>
 #include <unotools/bootstrap.hxx>
 #include <cppuhelper/bootstrap.hxx>
@@ -2071,6 +2074,22 @@ void Desktop::FlushConfiguration()
     }
 }
 
+sal_Bool Desktop::shouldLaunchQuickstart()
+{
+    sal_Bool bQuickstart = GetCommandLineArgs()->IsQuickstart();
+    if (!bQuickstart)
+    {
+        const SfxPoolItem* pItem=0;
+        SfxItemSet aQLSet(SFX_APP()->GetPool(), SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER);
+        SFX_APP()->GetOptions(aQLSet);
+        SfxItemState eState = aQLSet.GetItemState(SID_ATTR_QUICKLAUNCHER, FALSE, &pItem);
+        if (SFX_ITEM_SET == eState)
+            bQuickstart = ((SfxBoolItem*)pItem)->GetValue();
+    }
+    return bQuickstart;
+}
+
+
 sal_Bool Desktop::InitializeQuickstartMode( Reference< XMultiServiceFactory >& rSMgr )
 {
     try
@@ -2080,9 +2099,7 @@ sal_Bool Desktop::InitializeQuickstartMode( Reference< XMultiServiceFactory >& r
         // this will only be activated if -quickstart was specified on cmdline
         RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) createInstance com.sun.star.office.Quickstart" );
 
-        sal_Bool bQuickstart = GetCommandLineArgs()->IsQuickstart();
-        Sequence< Any > aSeq( 1 );
-        aSeq[0] <<= bQuickstart;
+        sal_Bool bQuickstart = shouldLaunchQuickstart();
 
         // Try to instanciate quickstart service. This service is not mandatory, so
         // do nothing if service is not available
@@ -2095,6 +2112,8 @@ sal_Bool Desktop::InitializeQuickstartMode( Reference< XMultiServiceFactory >& r
         if ( bQuickstart )
         #endif
         {
+            Sequence< Any > aSeq( 1 );
+            aSeq[0] <<= bQuickstart;
             Reference < XComponent > xQuickstart( rSMgr->createInstanceWithArguments(
                                                 DEFINE_CONST_UNICODE( "com.sun.star.office.Quickstart" ), aSeq ),
                                                 UNO_QUERY );
