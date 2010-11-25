@@ -87,12 +87,12 @@ namespace bridges_urp
 
         // is only valid, after finish has been called.
         // valid until destructed.
-        inline sal_Int32 getSize();
+        inline sal_Int32 getSize() const;
 
-        inline sal_Int32 getPos()
+        inline sal_Int32 getPos() const
             { return m_pos - m_base; }
 
-        inline sal_Bool isSystemLittleEndian()
+        inline sal_Bool isSystemLittleEndian() const
             { return g_bMarshalSystemIsLittleEndian; }
 
     private:

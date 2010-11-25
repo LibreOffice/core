@@ -199,12 +199,12 @@ class PolicyReader
     inline void back( sal_Unicode c ) SAL_THROW( () )
         { m_back = c; }
 
-    inline bool isWhiteSpace( sal_Unicode c ) SAL_THROW( () )
+    inline bool isWhiteSpace( sal_Unicode c ) const SAL_THROW( () )
         { return (' ' == c || '\t' == c || '\n' == c || '\r' == c); }
     void skipWhiteSpace()
         SAL_THROW( (RuntimeException) );
 
-    inline bool isCharToken( sal_Unicode c ) SAL_THROW( () )
+    inline bool isCharToken( sal_Unicode c ) const SAL_THROW( () )
         { return (';' == c || ',' == c || '{' == c || '}' == c); }
 
 public:
