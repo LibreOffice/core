@@ -114,6 +114,9 @@ namespace utl {
     class TransliterationWrapper;
 }
 
+namespace sw {
+    class UndoManager;
+}
 
 const String UNDO_ARG1("$1", RTL_TEXTENCODING_ASCII_US);
 const String UNDO_ARG2("$2", RTL_TEXTENCODING_ASCII_US);
@@ -1263,7 +1266,7 @@ SV_DECL_PTRARR_DEL( _UnReplaceDatas, _UnReplaceData*, 10, 25 )
 
 class SwUndoReplace : public SwUndo
 {
-    friend class SwDoc;
+    friend class ::sw::UndoManager;
 
     BOOL bOldIterFlag;      // Status vom Undo-Iter vorm 1. Aufruf
     USHORT nAktPos;         // fuer GetUndoRange und Undo/Redo
@@ -1831,7 +1834,7 @@ public:
 
 class SwUndoIter
 {
-    friend class SwDoc;     // um im SwDoc::Undo  bWeiter zu stezen
+    friend class ::sw::UndoManager; // to set bWeiter in SwDoc::Undo
     friend void SwUndoEnd::Undo( SwUndoIter& );
     friend void SwUndoStart::Undo( SwUndoIter& );
     friend void SwUndoEnd::Redo( SwUndoIter& );

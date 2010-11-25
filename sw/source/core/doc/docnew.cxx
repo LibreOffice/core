@@ -96,6 +96,7 @@
 #include <IGrammarContact.hxx>
 #include <tblsel.hxx>
 #include <MarkManager.hxx>
+#include <UndoManager.hxx>
 #include <unochart.hxx>
 
 #include <cmdid.h>              // fuer den dflt - Printer in SetJob
@@ -223,6 +224,7 @@ SwDoc::SwDoc() :
     mpAttrPool(new SwAttrPool(this)),
     pMarkManager(new ::sw::mark::MarkManager(*this)),
     m_pMetaFieldManager(new ::sw::MetaFieldManager()),
+    m_pUndoManager(new ::sw::UndoManager(*this)),
     pDfltFrmFmt( new SwFrmFmt( GetAttrPool(), sFrmFmtStr, 0 ) ),
     pEmptyPageFmt( new SwFrmFmt( GetAttrPool(), sEmptyPageStr, pDfltFrmFmt ) ),
     pColumnContFmt( new SwFrmFmt( GetAttrPool(), sColumnCntStr, pDfltFrmFmt ) ),
@@ -240,7 +242,6 @@ SwDoc::SwDoc() :
     pDefTOXBases( new SwDefTOXBase_Impl() ),
     pLayout( 0 ),                   // Rootframe des spezifischen Layouts.
     pDrawModel( 0 ),
-    pUndos( new SwUndos( 0, 20 ) ),
     pUpdtFlds( new SwDocUpdtFld() ),
     pFldTypes( new SwFldTypes() ),
     pVirDev( 0 ),
@@ -282,10 +283,6 @@ SwDoc::SwDoc() :
     mpListItemsList( new tImplSortedNodeNumList() ),
     // <--
     m_pXmlIdRegistry(),
-    nUndoPos( 0 ),
-    nUndoSavePos( 0 ),
-    nUndoCnt( 0 ),
-    nUndoSttEnd( 0 ),
     nAutoFmtRedlnCommentNo( 0 ),
     nLinkUpdMode( GLOBALSETTING ),
      eFldUpdMode( AUTOUPD_GLOBALSETTING ),
@@ -310,13 +307,11 @@ SwDoc::SwDoc() :
     mbGlossDoc =
     mbModified =
     mbDtor =
-    mbUndo =
     mbPageNums =
     mbLoaded =
     mbUpdateExpFld =
     mbNewDoc =
     mbCopyIsMove =
-    mbNoDrawUndoObj =
     mbBrowseMode =
     mbInReading =
     mbInXMLImport =
@@ -342,7 +337,6 @@ SwDoc::SwDoc() :
     // <--
                             false;
 
-    mbGroupUndo =
     mbNewFldLst =
     mbVisibleLinks =
     mbPurgeOLE =
@@ -523,8 +517,9 @@ SwDoc::~SwDoc()
 
     delete pPgPViewPrtData;
 
-    mbUndo = FALSE;         // immer das Undo abschalten !!
-    // damit die Fussnotenattribute die Fussnotennodes in Frieden lassen.
+    // turn off Undo so the footnote attributes don't mess with
+    // the footnote nodes
+    DoUndo(false);
     mbDtor = TRUE;
 
     DELETEZ( pLayout );
@@ -555,8 +550,8 @@ SwDoc::~SwDoc()
 
     pFtnIdxs->Remove( USHORT(0), pFtnIdxs->Count() );
 
-    pUndos->DeleteAndDestroy( 0, pUndos->Count() ); //Es koennen in den Attributen noch
-                                                    //noch indizes angemeldet sein.
+    // indices could be registered in attributes
+    m_pUndoManager->DelAllUndoObj();
 
     // in den BookMarks sind Indizies auf den Content. Diese muessen vorm
     // loesche der Nodes geloescht werden.
@@ -692,7 +687,6 @@ SwDoc::~SwDoc()
     delete pFtnIdxs;
     delete pFldTypes;
     delete pTOXTypes;
-    delete pUndos;
     delete pDocStat;
     delete pEmptyPageFmt;
     delete pColumnContFmt;
@@ -794,9 +788,9 @@ SfxObjectShell* SwDoc::GetPersist() const
 
 void SwDoc::ClearDoc()
 {
-    BOOL bOldUndo = mbUndo;
+    bool const bOldUndo = DoesUndo();
     DelAllUndoObj();
-    mbUndo = FALSE;         // immer das Undo abschalten !!
+    DoUndo(false);
 
     // Undo-Benachrichtigung vom Draw abschalten
     if( pDrawModel )
@@ -908,7 +902,7 @@ void SwDoc::ClearDoc()
     // delete now the dummy pagedesc
     DelPageDesc( nDummyPgDsc );
 
-    mbUndo = bOldUndo;
+    DoUndo(bOldUndo);
 }
 
 void SwDoc::SetPreViewPrtData( const SwPagePreViewPrtData* pNew )
@@ -1062,6 +1056,19 @@ SwDoc::GetMetaFieldManager()
 {
     return *m_pMetaFieldManager;
 }
+
+::sw::UndoManager &
+SwDoc::GetUndoManager()
+{
+    return *m_pUndoManager;
+}
+
+::sw::UndoManager const&
+SwDoc::GetUndoManager() const
+{
+    return *m_pUndoManager;
+}
+
 
 void SwDoc::InitTOXTypes()
 {

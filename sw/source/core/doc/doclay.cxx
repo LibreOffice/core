@@ -888,9 +888,10 @@ if( DoesUndo() )    // werden erstmal alle Undo - Objecte geloescht.
 */
                 // copy all Pams and then delete all
                 SwPaM* pTmp = (SwPaM*)&rPam;
-                BOOL bOldFlag = mbCopyIsMove, bOldUndo = mbUndo;
+                BOOL bOldFlag = mbCopyIsMove;
+                bool bOldUndo = DoesUndo();
                 mbCopyIsMove = TRUE;
-                mbUndo = FALSE;
+                DoUndo(false);
                 do {
                     if( pTmp->HasMark() &&
                         *pTmp->GetPoint() != *pTmp->GetMark() )
@@ -900,7 +901,7 @@ if( DoesUndo() )    // werden erstmal alle Undo - Objecte geloescht.
                     pTmp = static_cast<SwPaM*>(pTmp->GetNext());
                 } while ( &rPam != pTmp );
                 mbCopyIsMove = bOldFlag;
-                mbUndo = bOldUndo;
+                DoUndo(bOldUndo);
 
                 pTmp = (SwPaM*)&rPam;
                 do {

@@ -48,6 +48,7 @@
 #include <cntfrm.hxx>           // fuers Spell
 #include <crsrsh.hxx>
 #include <doc.hxx>
+#include <UndoManager.hxx>
 #include <docsh.hxx>
 #include <docary.hxx>
 #include <doctxm.hxx>       // beim Move: Verzeichnisse korrigieren
@@ -782,7 +783,6 @@ bool SwDoc::Overwrite( const SwPaM &rRg, const String &rStr )
     SwIndex& rIdx = rPt.nContent;
     xub_StrLen nStart = 0;
 
-    sal_uInt16 nUndoSize = pUndos->Count();
     SwUndo * pUndo;
     sal_Unicode c;
     String aStr;
@@ -801,14 +801,20 @@ bool SwDoc::Overwrite( const SwPaM &rRg, const String &rStr )
         c = rStr.GetChar( nCnt );
         if( DoesUndo() )
         {
-            if( DoesGroupUndo() && nUndoSize &&
-                UNDO_OVERWRITE == ( pUndo = (*pUndos)[ nUndoSize-1 ])->GetId() &&
-                ((SwUndoOverwrite*)pUndo)->CanGrouping( this, rPt, c ))
-                ;// wenn CanGrouping() sal_True returnt, ist schon alles erledigt
-            else
+            bool bMerged(false);
+            if (DoesGroupUndo())
+            {
+                pUndo = GetUndoManager().GetLastUndo();
+                if (pUndo && (UNDO_OVERWRITE == pUndo->GetId()))
+                {
+                    // if CanGrouping() returns true it's already merged
+                    bMerged = static_cast<SwUndoOverwrite*>(pUndo)
+                                ->CanGrouping( this, rPt, c );
+                }
+            }
+            if (!bMerged)
             {
                 AppendUndo( new SwUndoOverwrite( this, rPt, c ));
-                nUndoSize = pUndos->Count();
             }
         }
         else
@@ -1553,7 +1559,6 @@ bool SwDoc::DeleteAndJoinWithRedlineImpl( SwPaM & rPam, const bool )
     ASSERT( IsRedlineOn(), "DeleteAndJoinWithRedline: redline off" );
 
     {
-        sal_uInt16 nUndoSize = 0;
         SwUndoRedlineDelete* pUndo = 0;
         RedlineMode_t eOld = GetRedlineMode();
         checkRedlining(eOld);
@@ -1565,7 +1570,6 @@ bool SwDoc::DeleteAndJoinWithRedlineImpl( SwPaM & rPam, const bool )
     SetRedlineMode(
            (RedlineMode_t)(nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE ));
 
-            nUndoSize = pUndos->Count();
             StartUndo(UNDO_EMPTY, NULL);
             AppendUndo( pUndo = new SwUndoRedlineDelete( rPam, UNDO_DELETE ));
         }
@@ -1576,17 +1580,33 @@ bool SwDoc::DeleteAndJoinWithRedlineImpl( SwPaM & rPam, const bool )
         if( pUndo )
         {
             EndUndo(UNDO_EMPTY, NULL);
-            SwUndo* pPrevUndo;
-            if( nUndoSize && DoesGroupUndo() &&
-                nUndoSize + 1 == pUndos->Count() &&
-                UNDO_REDLINE == ( pPrevUndo = (*pUndos)[ nUndoSize-1 ])->GetId() &&
-                UNDO_DELETE == ((SwUndoRedline*)pPrevUndo)->GetUserId() &&
-                ((SwUndoRedlineDelete*)pPrevUndo)->CanGrouping( *pUndo ))
+            // ??? why the hell is the AppendUndo not below the
+            // CanGrouping, so this hideous cleanup wouldn't be necessary?
+            // bah, this is redlining, probably changing this would break it...
+            if (DoesGroupUndo())
             {
-                DoUndo( sal_False );
-                pUndos->DeleteAndDestroy( nUndoSize, 1 );
-                --nUndoPos, --nUndoCnt;
-                DoUndo( sal_True );
+                SwUndo *const pLastUndo( GetUndoManager().GetLastUndo() );
+                if (pLastUndo &&
+                    (UNDO_REDLINE == pLastUndo->GetId()) &&
+                    (UNDO_DELETE ==
+                     static_cast<SwUndoRedline*>(pLastUndo)->GetUserId()))
+                {
+                    bool const bMerged =
+                        static_cast<SwUndoRedlineDelete*>(pLastUndo)
+                            ->CanGrouping( *pUndo );
+                    if (bMerged)
+                    {
+                        bool const bUndo( DoesUndo() );
+                        DoUndo( false  );
+                        SwUndo const*const pDeleted =
+                            GetUndoManager().RemoveLastUndo(UNDO_REDLINE);
+                        OSL_ENSURE(pDeleted == pUndo,
+                            "DeleteAndJoinWithRedlineImpl: "
+                            "undo removed is not undo inserted?");
+                        delete pDeleted;
+                        DoUndo( bUndo );
+                    }
+                }
             }
 //JP 06.01.98: MUSS noch optimiert werden!!!
 SetRedlineMode( eOld );
@@ -1686,14 +1706,21 @@ bool SwDoc::DeleteRangeImplImpl(SwPaM & rPam)
     if( DoesUndo() )
     {
         ClearRedo();
-        sal_uInt16 nUndoSize = pUndos->Count();
-        SwUndo * pUndo;
-        if( DoesGroupUndo() && nUndoSize-- &&
-            UNDO_DELETE == ( pUndo = (*pUndos)[ nUndoSize ])->GetId() &&
-            ((SwUndoDelete*)pUndo)->CanGrouping( this, rPam ))
-            ;// wenn CanGrouping() sal_True returnt, ist schon alles erledigt
-        else
+        bool bMerged(false);
+        if (DoesGroupUndo())
+        {
+            SwUndo *const pLastUndo( GetUndoManager().GetLastUndo() );
+            if (pLastUndo && (UNDO_DELETE == pLastUndo->GetId()))
+            {
+                bMerged = static_cast<SwUndoDelete*>(pLastUndo)
+                            ->CanGrouping( this, rPam );
+                // if CanGrouping() returns true it's already merged
+            }
+        }
+        if (!bMerged)
+        {
             AppendUndo( new SwUndoDelete( rPam ) );
+        }
 
         SetModified();
 
@@ -2436,11 +2463,14 @@ SetRedlineMode( eOld );
             if( DoesUndo() )
             {
                 ClearRedo();
-                SwUndo* pU;
 
-                if( !pUndos->Count() ||
-                    UNDO_REPLACE != ( pU = (*pUndos)[ pUndos->Count()-1 ])->GetId() ||
-                    ( pUndoRpl = (SwUndoReplace*)pU )->IsFull() )
+                SwUndo *const pLastUndo( GetUndoManager().GetLastUndo() );
+                if (pLastUndo &&
+                    (UNDO_REPLACE == pLastUndo->GetId()))
+                {
+                    pUndoRpl = static_cast<SwUndoReplace*>(pLastUndo);
+                }
+                if (!pUndoRpl || pUndoRpl->IsFull())
                 {
                     pUndoRpl = new SwUndoReplace();
                     AppendUndo( pUndoRpl );

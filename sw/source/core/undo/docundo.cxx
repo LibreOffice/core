@@ -28,6 +28,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+#include <UndoManager.hxx>
+
 #include <svx/svdmodel.hxx>
 
 #include <vcl/wrkwin.hxx>
@@ -46,7 +48,8 @@
 using namespace ::com::sun::star;
 
 
-USHORT SwDoc::nUndoActions = UNDO_ACTION_COUNT;     // anzahl von Undo-Action
+/// max number of Undo actions
+static USHORT g_nUndoActions = UNDO_ACTION_COUNT;
 
 // the undo array should never grow beyond this limit:
 #define UNDO_ACTION_LIMIT (USHRT_MAX - 1000)
@@ -97,59 +100,243 @@ void UndoArrStatus::Paint( const Rectangle& )
 
 #endif
 
-void SwDoc::SetUndoNoResetModified()
-{
-    nUndoSavePos = USHRT_MAX;
-}
-
-bool SwDoc::IsUndoNoResetModified() const
-{
-    return USHRT_MAX == nUndoSavePos;
-}
-
-void SwDoc::DoUndo(bool bUn)
-{
-    mbUndo = bUn;
-
-    SdrModel* pSdrModel = GetDrawModel();
-    if( pSdrModel )
-        pSdrModel->EnableUndo(bUn);
-}
-
-bool SwDoc::DoesUndo() const
-{
-    return mbUndo;
-}
-
-void SwDoc::DoGroupUndo(bool bUn)
-{
-    mbGroupUndo = bUn;
-}
-
-bool SwDoc::DoesGroupUndo() const
-{
-    return mbGroupUndo;
-}
-
-sal_uInt16 SwDoc::GetUndoActionCount()
-{
-    return nUndoActions;
-}
-
-void SwDoc::SetUndoActionCount( sal_uInt16 nNew )
-{
-    nUndoActions = nNew;
-}
+// SwDoc methods /////////////////////////////////////////////////////////
 
 const SwNodes* SwDoc::GetUndoNds() const
 {
     return &aUndoNodes;
 }
 
+bool SwDoc::IsNoDrawUndoObj() const
+{
+    return GetUndoManager().IsNoDrawUndoObj();
+}
+
+void SwDoc::SetNoDrawUndoObj( bool const bFlag )
+{
+    GetUndoManager().SetNoDrawUndoObj(bFlag);
+}
+
+void SwDoc::SetUndoNoResetModified()
+{
+    GetUndoManager().SetUndoNoResetModified();
+}
+
+bool SwDoc::IsUndoNoResetModified() const
+{
+    return GetUndoManager().IsUndoNoResetModified();
+}
+
+void SwDoc::DoUndo(bool bUn)
+{
+    GetUndoManager().DoUndo(bUn);
+}
+
+bool SwDoc::DoesUndo() const
+{
+    return GetUndoManager().DoesUndo();
+}
+
+void SwDoc::DoGroupUndo(bool bUn)
+{
+    GetUndoManager().DoGroupUndo(bUn);
+}
+
+bool SwDoc::DoesGroupUndo() const
+{
+    return GetUndoManager().DoesGroupUndo();
+}
+
+sal_uInt16 SwDoc::GetUndoActionCount()
+{
+    return ::sw::UndoManager::GetUndoActionCount();
+}
+
+void SwDoc::SetUndoActionCount( sal_uInt16 nNew )
+{
+    ::sw::UndoManager::SetUndoActionCount(nNew);
+}
+
 void SwDoc::AppendUndo( SwUndo* pUndo )
 {
+    GetUndoManager().AppendUndo(pUndo);
+}
+
+void SwDoc::ClearRedo()
+{
+    GetUndoManager().ClearRedo();
+}
+
+void SwDoc::DelAllUndoObj()
+{
+    GetUndoManager().DelAllUndoObj();
+}
+
+void SwDoc::setUndoNoModifiedPosition( SwUndoNoModifiedPosition nNew )
+{
+    return GetUndoManager().setUndoNoModifiedPosition(nNew);
+}
+
+SwUndoNoModifiedPosition SwDoc::getUndoNoModifiedPosition() const
+{
+    return GetUndoManager().getUndoNoModifiedPosition();
+}
+
+bool SwDoc::HasUndoId(SwUndoId eId) const
+{
+    return GetUndoManager().HasUndoId(eId);
+}
+
+bool SwDoc::Undo( SwUndoIter& rUndoIter )
+{
+    return GetUndoManager().Undo(rUndoIter);
+}
+
+SwUndoId SwDoc::StartUndo( SwUndoId eUndoId, const SwRewriter * pRewriter )
+{
+    return GetUndoManager().StartUndo(eUndoId, pRewriter);
+}
+
+SwUndoId SwDoc::EndUndo(SwUndoId eUndoId, const SwRewriter * pRewriter)
+{
+    return GetUndoManager().EndUndo(eUndoId, pRewriter);
+}
+
+String SwDoc::GetUndoIdsStr( String* pStr, SwUndoIds *pUndoIds) const
+{
+    return GetUndoManager().GetUndoIdsStr(pStr, pUndoIds);
+}
+
+sal_Bool SwDoc::RestoreInvisibleContent()
+{
+    return GetUndoManager().RestoreInvisibleContent();
+}
+
+SwUndoId SwDoc::GetUndoIds( String* pStr, SwUndoIds *pUndoIds) const
+{
+    return GetUndoManager().GetUndoIds(pStr, pUndoIds);
+}
+
+bool SwDoc::HasTooManyUndos() const
+{
+    return GetUndoManager().HasTooManyUndos();
+}
+
+bool SwDoc::Redo( SwUndoIter& rUndoIter )
+{
+    return GetUndoManager().Redo(rUndoIter);
+}
+
+String SwDoc::GetRedoIdsStr( String* pStr, SwUndoIds *pRedoIds ) const
+{
+
+    return GetUndoManager().GetRedoIdsStr(pStr, pRedoIds);
+}
+
+SwUndoId SwDoc::GetRedoIds( String* pStr, SwUndoIds *pRedoIds ) const
+{
+    return GetUndoManager().GetRedoIds(pStr, pRedoIds);
+}
+
+bool SwDoc::Repeat( SwUndoIter& rUndoIter, sal_uInt16 nRepeatCnt )
+{
+    return GetUndoManager().Repeat(rUndoIter, nRepeatCnt);
+}
+
+String SwDoc::GetRepeatIdsStr(String* pStr, SwUndoIds *pRepeatIds) const
+{
+    return GetUndoManager().GetRepeatIdsStr(pStr, pRepeatIds);
+}
+
+SwUndoId SwDoc::GetRepeatIds(String* pStr, SwUndoIds *pRepeatIds) const
+{
+    return GetUndoManager().GetRepeatIds(pStr, pRepeatIds);
+}
+
+SwUndo* SwDoc::RemoveLastUndo( SwUndoId eUndoId )
+{
+    return GetUndoManager().RemoveLastUndo(eUndoId);
+}
+
+// UndoManager ///////////////////////////////////////////////////////////
+
+namespace sw {
+
+sal_uInt16 UndoManager::GetUndoActionCount()
+{
+    return g_nUndoActions;
+}
+
+void UndoManager::SetUndoActionCount( sal_uInt16 nNew )
+{
+    g_nUndoActions = nNew;
+}
+
+UndoManager::UndoManager(SwDoc & rDoc)
+    :   m_rDoc(rDoc)
+    ,   pUndos( new SwUndos( 0, 20 ) )
+    ,   nUndoPos(0)
+    ,   nUndoSavePos(0)
+    ,   nUndoCnt(0)
+    ,   nUndoSttEnd(0)
+    ,   mbUndo(false)
+    ,   mbGroupUndo(true)
+    ,   mbNoDrawUndoObj(false)
+{
+}
+
+const SwNodes* UndoManager::GetUndoNds() const
+{
+    return m_rDoc.GetUndoNds();
+}
+
+bool UndoManager::IsUndoNoResetModified() const
+{
+    return USHRT_MAX == nUndoSavePos;
+}
+
+void UndoManager::SetUndoNoResetModified()
+{
+    nUndoSavePos = USHRT_MAX;
+}
+
+void UndoManager::DoUndo(bool bUn)
+{
+    mbUndo = bUn;
+
+    SdrModel *const pSdrModel = m_rDoc.GetDrawModel();
+    if( pSdrModel )
+        pSdrModel->EnableUndo(bUn);
+}
+
+bool UndoManager::DoesUndo() const
+{
+    return mbUndo;
+}
+
+void UndoManager::DoGroupUndo(bool bUn)
+{
+    mbGroupUndo = bUn;
+}
+
+bool UndoManager::DoesGroupUndo() const
+{
+    return mbGroupUndo;
+}
+
+SwUndo* UndoManager::GetLastUndo()
+{
+    return (0 == nUndoPos)
+        ? 0
+        : (*pUndos)[nUndoPos-1];
+}
+
+void UndoManager::AppendUndo( SwUndo* pUndo )
+{
     if( nsRedlineMode_t::REDLINE_NONE == pUndo->GetRedlineMode() )
-        pUndo->SetRedlineMode( GetRedlineMode() );
+    {
+        pUndo->SetRedlineMode( m_rDoc.GetRedlineMode() );
+    }
 
     // Unfortunately, the silly SvPtrArr can only store a little less than
     // USHRT_MAX elements. Of course it doesn't see any necessity for asserting
@@ -184,7 +371,7 @@ void SwDoc::AppendUndo( SwUndo* pUndo )
     // zur Anzeige der aktuellen Undo-Groessen
     if( !pUndoMsgWin )
             pUndoMsgWin = new UndoArrStatus;
-    pUndoMsgWin->Set( pUndos->Count(), aUndoNodes.Count() );
+    pUndoMsgWin->Set( pUndos->Count(), m_rDoc.GetUndoNds()->Count() );
 #endif
 
     // noch eine offene Klammerung, kann man sich den Rest schenken
@@ -218,23 +405,26 @@ void SwDoc::AppendUndo( SwUndo* pUndo )
 }
 #endif
 
-    if( SwDoc::nUndoActions < nUndoCnt )
+    if (GetUndoActionCount() < nUndoCnt)
+    {
         // immer 1/10 loeschen
         //JP 23.09.95: oder wenn neu eingestellt wurde um die Differenz
         //JP 29.5.2001: Task #83891#: remove only the overlapping actions
-        DelUndoObj( nUndoCnt - SwDoc::nUndoActions );
+        DelUndoObj( nUndoCnt - GetUndoActionCount() );
+    }
     else
     {
         USHORT nUndosCnt = nUndoCnt;
             // immer 1/10 loeschen bis der "Ausloeser" behoben ist
-        while( aUndoNodes.Count() && nEnde < aUndoNodes.Count() )
+        while (nEnde < m_rDoc.GetUndoNds()->Count())
+        {
             DelUndoObj( nUndosCnt / 10 );
+        }
     }
 }
 
 
-
-void SwDoc::ClearRedo()
+void UndoManager::ClearRedo()
 {
     if( DoesUndo() && nUndoPos != pUndos->Count() )
     {
@@ -255,7 +445,7 @@ void SwDoc::ClearRedo()
 
 
     // loescht die gesamten UndoObjecte
-void SwDoc::DelAllUndoObj()
+void UndoManager::DelAllUndoObj()
 {
     ClearRedo();
 
@@ -284,13 +474,13 @@ void SwDoc::DelAllUndoObj()
 
 
     // loescht alle UndoObjecte vom Anfang bis zum angegebenen Ende
-BOOL SwDoc::DelUndoObj( USHORT nEnde )
+bool UndoManager::DelUndoObj( sal_uInt16 nEnd )
 {
-    if( !nEnde )                    // sollte mal 0 uebergeben werden,
+    if (0 == nEnd)  // in case 0 is passed in
     {
         if( !pUndos->Count() )
             return FALSE;
-        ++nEnde;                    // dann korrigiere es auf 1
+        ++nEnd;     // correct it to 1 // FIXME  why ???
     }
 
     DoUndo( FALSE );
@@ -300,14 +490,14 @@ BOOL SwDoc::DelUndoObj( USHORT nEnde )
     USHORT nSttEndCnt = 0;
     USHORT nCnt;
 
-    for( nCnt = 0; nEnde && nCnt < nUndoPos; ++nCnt )
+    for (nCnt = 0; nEnd && nCnt < nUndoPos; ++nCnt)
     {
         if( UNDO_START == ( nId = (*pUndos)[ nCnt ]->GetId() ))
             ++nSttEndCnt;
         else if( UNDO_END == nId )
             --nSttEndCnt;
         if( !nSttEndCnt )
-            --nEnde, --nUndoCnt;
+            --nEnd, --nUndoCnt;
     }
 
     ASSERT( nCnt < nUndoPos || nUndoPos == pUndos->Count(),
@@ -330,20 +520,24 @@ BOOL SwDoc::DelUndoObj( USHORT nEnde )
 
 /**************** UNDO ******************/
 
-void SwDoc::setUndoNoModifiedPosition( SwUndoNoModifiedPosition nNew )
+void UndoManager::setUndoNoModifiedPosition( SwUndoNoModifiedPosition nNew )
 {
     nUndoSavePos = nNew;
     if( !pUndos->Count() || nUndoSavePos > pUndos->Count() - 1 )
         nUndoSavePos = USHRT_MAX;
+    else if (nUndoSavePos == 0)
+    {   // FIXME HACK magic value 0: find better way without exposing nUndoPos!
+        nUndoSavePos = nUndoPos; // set to current position
+    }
 }
 
-SwUndoNoModifiedPosition SwDoc::getUndoNoModifiedPosition() const
+SwUndoNoModifiedPosition UndoManager::getUndoNoModifiedPosition() const
 {
     return nUndoSavePos;
 }
 
 
-bool SwDoc::HasUndoId(SwUndoId eId) const
+bool UndoManager::HasUndoId(SwUndoId eId) const
 {
     USHORT nSize = nUndoPos;
     SwUndo * pUndo;
@@ -361,7 +555,7 @@ bool SwDoc::HasUndoId(SwUndoId eId) const
 }
 
 
-bool SwDoc::Undo( SwUndoIter& rUndoIter )
+bool UndoManager::Undo( SwUndoIter& rUndoIter )
 {
     if ( (rUndoIter.GetId()!=0) && (!HasUndoId(rUndoIter.GetId())) )
     {
@@ -376,13 +570,15 @@ bool SwDoc::Undo( SwUndoIter& rUndoIter )
 
     SwUndo *pUndo = (*pUndos)[ --nUndoPos ];
 
-    RedlineMode_t eOld = GetRedlineMode();
+    RedlineMode_t const eOld = m_rDoc.GetRedlineMode();
     RedlineMode_t eTmpMode = (RedlineMode_t)pUndo->GetRedlineMode();
     if( (nsRedlineMode_t::REDLINE_SHOW_MASK & eTmpMode) != (nsRedlineMode_t::REDLINE_SHOW_MASK & eOld) &&
         UNDO_START != pUndo->GetId() && UNDO_END != pUndo->GetId() )
-        SetRedlineMode( eTmpMode );
-
-    SetRedlineMode_intern((RedlineMode_t)(eTmpMode | nsRedlineMode_t::REDLINE_IGNORE));
+    {
+        m_rDoc.SetRedlineMode( eTmpMode );
+    }
+    m_rDoc.SetRedlineMode_intern(
+        static_cast<RedlineMode_t>(eTmpMode | nsRedlineMode_t::REDLINE_IGNORE));
     // Undo ausfuehren
 
     // zum spaeteren ueberpruefen
@@ -402,7 +598,7 @@ bool SwDoc::Undo( SwUndoIter& rUndoIter )
 
     pUndo->Undo( rUndoIter );
 
-    SetRedlineMode( eOld );
+    m_rDoc.SetRedlineMode( eOld );
 
     // Besonderheit von Undo-Replace (interne History)
     if( UNDO_REPLACE == nAktId && ((SwUndoReplace*)pUndo)->nAktPos )
@@ -420,12 +616,16 @@ bool SwDoc::Undo( SwUndoIter& rUndoIter )
     //              Sonst gibt es Probleme mit der autom. Aufnahme von Ausnahmen
     //              bei der Autokorrektur
     if( UNDO_START != nAktId && UNDO_END != nAktId )
-        SetModified();      // default: immer setzen, kann zurueck gesetzt werden
+    {
+        m_rDoc.SetModified(); // default: always set, can be reset
+    }
 
     // ist die History leer und wurde nicht wegen Speichermangel
     // verworfen, so kann das Dokument als unveraendert gelten
     if( nUndoSavePos == nUndoPos )
-        ResetModified();
+    {
+        m_rDoc.ResetModified();
+    }
 
     return TRUE;
 }
@@ -434,7 +634,8 @@ bool SwDoc::Undo( SwUndoIter& rUndoIter )
 // setzt Undoklammerung auf, liefert nUndoId der Klammerung
 
 
-SwUndoId SwDoc::StartUndo( SwUndoId eUndoId, const SwRewriter * pRewriter )
+SwUndoId
+UndoManager::StartUndo( SwUndoId eUndoId, const SwRewriter * pRewriter )
 {
     if( !mbUndo )
         return UNDO_EMPTY;
@@ -454,7 +655,7 @@ SwUndoId SwDoc::StartUndo( SwUndoId eUndoId, const SwRewriter * pRewriter )
 // schliesst Klammerung der nUndoId, nicht vom UI benutzt
 
 
-SwUndoId SwDoc::EndUndo(SwUndoId eUndoId, const SwRewriter * pRewriter)
+SwUndoId UndoManager::EndUndo(SwUndoId eUndoId, const SwRewriter * pRewriter)
 {
     USHORT nSize = nUndoPos;
     if( !mbUndo || !nSize-- )
@@ -523,18 +724,22 @@ SwUndoId SwDoc::EndUndo(SwUndoId eUndoId, const SwRewriter * pRewriter)
         if( !--nUndoSttEnd )
         {
             ++nUndoCnt;
-            if( SwDoc::nUndoActions < nUndoCnt )
+            if (GetUndoActionCount() < nUndoCnt)
+            {
                 // immer 1/10 loeschen
                 //JP 23.09.95: oder wenn neu eingestellt wurde um die Differenz
                 //JP 29.5.2001: Task #83891#: remove only the overlapping actions
-                DelUndoObj( nUndoCnt - SwDoc::nUndoActions );
+                DelUndoObj( nUndoCnt - GetUndoActionCount() );
+            }
             else
             {
                 USHORT nEnde = USHRT_MAX - 1000;
                 USHORT nUndosCnt = nUndoCnt;
                     // immer 1/10 loeschen bis der "Ausloeser" behoben ist
-                while( aUndoNodes.Count() && nEnde < aUndoNodes.Count() )
+                while (nEnde < m_rDoc.GetUndoNds()->Count())
+                {
                     DelUndoObj( nUndosCnt / 10 );
+                }
             }
         }
         return eUndoId;
@@ -587,7 +792,7 @@ SwUndoId SwDoc::EndUndo(SwUndoId eUndoId, const SwRewriter * pRewriter)
 // liefert die Id der letzten Undofaehigen Aktion zurueck oder 0
 // fuellt ggf. VARARR mit User-UndoIds
 
-String SwDoc::GetUndoIdsStr( String* pStr, SwUndoIds *pUndoIds) const
+String UndoManager::GetUndoIdsStr( String* pStr, SwUndoIds *pUndoIds) const
 {
     String aTmpStr;
 
@@ -605,7 +810,7 @@ String SwDoc::GetUndoIdsStr( String* pStr, SwUndoIds *pUndoIds) const
 /*-- 24.11.2004 16:11:21---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-sal_Bool SwDoc::RestoreInvisibleContent()
+sal_Bool UndoManager::RestoreInvisibleContent()
 {
     sal_Bool bRet = sal_False;
     if(nUndoPos > 0 )
@@ -614,7 +819,7 @@ sal_Bool SwDoc::RestoreInvisibleContent()
         if( ( pUndo->GetId() == UNDO_END &&
             static_cast<SwUndoEnd *>(pUndo)->GetUserId() == UNDO_UI_DELETE_INVISIBLECNTNT) )
         {
-            SwPaM aPam( GetNodes().GetEndOfPostIts() );
+            SwPaM aPam( m_rDoc.GetNodes().GetEndOfPostIts() );
             SwUndoIter aUndoIter( &aPam );
             do
             {
@@ -627,7 +832,6 @@ sal_Bool SwDoc::RestoreInvisibleContent()
     }
     return bRet;
 }
-
 
 /**
    Returns id and comment for a certain undo object in an undo stack.
@@ -757,7 +961,7 @@ SwUndoIdAndName * lcl_GetUndoIdAndName(const SwUndos & rUndos, sal_uInt16 nPos )
     return new SwUndoIdAndName(nId, &sStr);
 }
 
-SwUndoId SwDoc::GetUndoIds( String* pStr, SwUndoIds *pUndoIds) const
+SwUndoId UndoManager::GetUndoIds( String* pStr, SwUndoIds *pUndoIds) const
 {
     int nTmpPos = nUndoPos - 1;
     SwUndoId nId = UNDO_EMPTY;
@@ -790,7 +994,7 @@ SwUndoId SwDoc::GetUndoIds( String* pStr, SwUndoIds *pUndoIds) const
     return nId;
 }
 
-bool SwDoc::HasTooManyUndos() const
+bool UndoManager::HasTooManyUndos() const
 {
     // AppendUndo checks the UNDO_ACTION_LIMIT, unless there's a nested undo.
     // So HasTooManyUndos() may only occur when undos are nested; else
@@ -804,7 +1008,7 @@ bool SwDoc::HasTooManyUndos() const
 /**************** REDO ******************/
 
 
-bool SwDoc::Redo( SwUndoIter& rUndoIter )
+bool UndoManager::Redo( SwUndoIter& rUndoIter )
 {
     if( rUndoIter.GetId() && !HasUndoId( rUndoIter.GetId() ) )
     {
@@ -819,12 +1023,15 @@ bool SwDoc::Redo( SwUndoIter& rUndoIter )
 
     SwUndo *pUndo = (*pUndos)[ nUndoPos++ ];
 
-    RedlineMode_t eOld = GetRedlineMode();
+    RedlineMode_t const eOld = m_rDoc.GetRedlineMode();
     RedlineMode_t eTmpMode = (RedlineMode_t)pUndo->GetRedlineMode();
     if( (nsRedlineMode_t::REDLINE_SHOW_MASK & eTmpMode) != (nsRedlineMode_t::REDLINE_SHOW_MASK & eOld) &&
         UNDO_START != pUndo->GetId() && UNDO_END != pUndo->GetId() )
-        SetRedlineMode( eTmpMode );
-    SetRedlineMode_intern( (RedlineMode_t)(eTmpMode | nsRedlineMode_t::REDLINE_IGNORE));
+    {
+        m_rDoc.SetRedlineMode( eTmpMode );
+    }
+    m_rDoc.SetRedlineMode_intern(
+        static_cast<RedlineMode_t>(eTmpMode | nsRedlineMode_t::REDLINE_IGNORE));
 
     //JP 11.05.98: FlyFormate ueber die EditShell selektieren, nicht aus dem
     //              Undo heraus
@@ -833,7 +1040,7 @@ bool SwDoc::Redo( SwUndoIter& rUndoIter )
 
     pUndo->Redo( rUndoIter );
 
-    SetRedlineMode( eOld );
+    m_rDoc.SetRedlineMode( eOld );
 
     // Besonderheit von Undo-Replace (interne History)
     if( UNDO_REPLACE == pUndo->GetId() &&
@@ -849,9 +1056,13 @@ bool SwDoc::Redo( SwUndoIter& rUndoIter )
     // ist die History leer und wurde nicht wegen Speichermangel
     // verworfen, so kann das Dokument als unveraendert gelten
     if( nUndoSavePos == nUndoPos )
-        ResetModified();
+    {
+        m_rDoc.ResetModified();
+    }
     else
-        SetModified();
+    {
+        m_rDoc.SetModified();
+    }
     return TRUE;
 }
 
@@ -859,7 +1070,7 @@ bool SwDoc::Redo( SwUndoIter& rUndoIter )
 // liefert die Id der letzten Redofaehigen Aktion zurueck oder 0
 // fuellt ggf. VARARR mit User-RedoIds
 
-String SwDoc::GetRedoIdsStr( String* pStr, SwUndoIds *pRedoIds ) const
+String UndoManager::GetRedoIdsStr( String* pStr, SwUndoIds *pRedoIds ) const
 {
     String aTmpStr;
 
@@ -876,7 +1087,7 @@ String SwDoc::GetRedoIdsStr( String* pStr, SwUndoIds *pRedoIds ) const
 }
 
 
-SwUndoId SwDoc::GetRedoIds( String* pStr, SwUndoIds *pRedoIds ) const
+SwUndoId UndoManager::GetRedoIds( String* pStr, SwUndoIds *pRedoIds ) const
 {
     sal_uInt16 nTmpPos = nUndoPos;
     SwUndoId nId = UNDO_EMPTY;
@@ -912,7 +1123,7 @@ SwUndoId SwDoc::GetRedoIds( String* pStr, SwUndoIds *pRedoIds ) const
 /**************** REPEAT ******************/
 
 
-bool SwDoc::Repeat( SwUndoIter& rUndoIter, sal_uInt16 nRepeatCnt )
+bool UndoManager::Repeat( SwUndoIter& rUndoIter, sal_uInt16 nRepeatCnt )
 {
     if( rUndoIter.GetId() && !HasUndoId( rUndoIter.GetId() ) )
     {
@@ -967,7 +1178,7 @@ bool SwDoc::Repeat( SwUndoIter& rUndoIter, sal_uInt16 nRepeatCnt )
 // liefert die Id der letzten Repeatfaehigen Aktion zurueck oder 0
 // fuellt ggf. VARARR mit User-RedoIds
 
-String SwDoc::GetRepeatIdsStr(String* pStr, SwUndoIds *pRepeatIds) const
+String UndoManager::GetRepeatIdsStr(String* pStr, SwUndoIds *pRepeatIds) const
 {
     String aTmpStr;
     SwUndoId nId;
@@ -986,7 +1197,7 @@ String SwDoc::GetRepeatIdsStr(String* pStr, SwUndoIds *pRepeatIds) const
     return aTmpStr;
 }
 
-SwUndoId SwDoc::GetRepeatIds(String* pStr, SwUndoIds *pRepeatIds) const
+SwUndoId UndoManager::GetRepeatIds(String* pStr, SwUndoIds *pRepeatIds) const
 {
     SwUndoId nRepeatId = GetUndoIds( pStr, pRepeatIds );
     if( REPEAT_START <= nRepeatId && REPEAT_END > nRepeatId )
@@ -995,7 +1206,7 @@ SwUndoId SwDoc::GetRepeatIds(String* pStr, SwUndoIds *pRepeatIds) const
 }
 
 
-SwUndo* SwDoc::RemoveLastUndo( SwUndoId eUndoId )
+SwUndo* UndoManager::RemoveLastUndo( SwUndoId eUndoId )
 {
     SwUndo* pUndo = (*pUndos)[ nUndoPos - 1 ];
     if( eUndoId == pUndo->GetId() && nUndoPos == pUndos->Count() )
@@ -1012,6 +1223,10 @@ SwUndo* SwDoc::RemoveLastUndo( SwUndoId eUndoId )
     }
     return pUndo;
 }
+
+} // namespace sw
+
+// SwUndoIdAndName ///////////////////////////////////////////////////////
 
 SwUndoIdAndName::SwUndoIdAndName( SwUndoId nId, const String* pStr )
     : eUndoId( nId ), pUndoStr( pStr ? new String( *pStr ) : 0 )

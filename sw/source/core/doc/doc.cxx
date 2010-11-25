@@ -27,7 +27,9 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #include <doc.hxx>
+#include <UndoManager.hxx>
 #include <hintids.hxx>
 
 #include <tools/shl.hxx>
@@ -875,11 +877,9 @@ bool SwDoc::InsertString( const SwPaM &rRg, const String &rStr,
         if (!(nInsertMode & IDocumentContentOperations::INS_FORCEHINTEXPAND))
         // -> #111827#
         {
-            USHORT const nUndoSize = pUndos->Count();
-            if (0 != nUndoSize)
+            SwUndo *const pLastUndo = GetUndoManager().GetLastUndo();
+            if (pLastUndo)
             {
-                SwUndo * const pLastUndo = (*pUndos)[ nUndoSize - 1 ];
-
                 switch (pLastUndo->GetId())
                 {
                     case UNDO_INSERT:
@@ -1997,7 +1997,7 @@ void SwDoc::ResetModified()
     // it is correct. In this case we reset the modified flag.
     if ( 0 != pDocStat->nChar )
         pDocStat->bModified = FALSE;
-    nUndoSavePos = nUndoPos;
+    setUndoNoModifiedPosition(0/*FIXME*/);
     if( nCall && aOle2Link.IsSet() )
     {
         mbInCallModified = TRUE;

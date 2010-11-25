@@ -24,8 +24,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _DOC_HXX
-#define _DOC_HXX
+#ifndef SW_DOC_HXX
+#define SW_DOC_HXX
 
 /** SwDoc interfaces */
 
@@ -191,7 +191,6 @@ class SwURLStateChanged;
 class SwUndo;
 class SwUndoIds;
 class SwUndoIter;
-class SwUndos;
 class SwUnoCrsr;
 class SwUnoCrsrTbl;
 class ViewShell;
@@ -227,6 +226,7 @@ namespace sw { namespace mark {
 }}
 namespace sw {
     class MetaFieldManager;
+    class UndoManager;
 }
 
 namespace com { namespace sun { namespace star {
@@ -311,6 +311,7 @@ class SW_DLLPUBLIC SwDoc :
 
     const ::boost::scoped_ptr< ::sw::mark::MarkManager> pMarkManager;
     const ::boost::scoped_ptr< ::sw::MetaFieldManager > m_pMetaFieldManager;
+    const ::boost::scoped_ptr< ::sw::UndoManager > m_pUndoManager;
 
     // -------------------------------------------------------------------
     // die Pointer
@@ -335,8 +336,6 @@ class SW_DLLPUBLIC SwDoc :
 
     SwRootFrm       *pLayout;           // Rootframe des spezifischen Layouts.
     SdrModel        *pDrawModel;        // StarView Drawing
-
-    SwUndos         *pUndos;            // Undo/Redo History
 
     SwDocUpdtFld    *pUpdtFlds;         // Struktur zum Field-Update
     SwFldTypes      *pFldTypes;         // Feldtypen
@@ -428,11 +427,6 @@ private:
 
     // -------------------------------------------------------------------
     // sonstige
-    sal_uInt16  nUndoPos;           // akt. Undo-InsertPosition (fuers Redo!)
-    sal_uInt16  nUndoSavePos;       // Position im Undo-Array, ab der das Doc
-                                    // nicht als modifiziert gilt
-    sal_uInt16  nUndoCnt;           // Anzahl von Undo Aktionen
-    sal_uInt16  nUndoSttEnd;        // != 0 -> innerhalb einer Klammerung
 
     sal_uInt16 nAutoFmtRedlnCommentNo;  // SeqNo fuers UI-seitige zusammenfassen
                                     // von AutoFmt-Redlines. Wird vom SwAutoFmt
@@ -464,15 +458,12 @@ private:
                                          //      leider auch temporaer von
                                          //      SwSwgReader::InLayout(), wenn fehlerhafte
                                          //      Frames geloescht werden muessen
-    bool mbUndo                  : 1;    // TRUE: Undo eingeschaltet
-    bool mbGroupUndo             : 1;    // TRUE: Undos werden gruppiert
     bool mbPageNums              : 1;    // TRUE: es gibt virtuelle Seitennummern
     bool mbLoaded                : 1;    // TRUE: ein geladenes Doc
     bool mbUpdateExpFld          : 1;    // TRUE: Expression-Felder updaten
     bool mbNewDoc                : 1;    // TRUE: neues Doc
     bool mbNewFldLst             : 1;    // TRUE: Felder-Liste neu aufbauen
     bool mbCopyIsMove            : 1;    // TRUE: Copy ist ein verstecktes Move
-    bool mbNoDrawUndoObj         : 1;    // TRUE: keine DrawUndoObjecte speichern
     bool mbVisibleLinks          : 1;    // TRUE: Links werden sichtbar eingefuegt
     bool mbBrowseMode            : 1;    // TRUE: Dokument im BrowseModus anzeigen
     bool mbInReading             : 1;    // TRUE: Dokument wird gerade gelesen
@@ -616,13 +607,10 @@ private:
     sal_Bool    mbStartIdleTimer                 ;    // idle timer mode start/stop
 
     static SwAutoCompleteWord *pACmpltWords;    // Liste aller Worte fuers AutoComplete
-    static sal_uInt16 nUndoActions;     // anzahl von Undo ::com::sun::star::chaos::Action
 
     //---------------- private Methoden ------------------------------
     void checkRedlining(RedlineMode_t& _rReadlineMode);
 
-    sal_Bool DelUndoObj( sal_uInt16 nEnde  );   // loescht alle UndoObjecte vom Anfang
-                                        // bis zum angegebenen Ende
     DECL_LINK( AddDrawUndo, SdrUndoAction * );
                                         // DrawModel
     void DrawNotifyUndoHdl();   // wegen CLOOKs
@@ -838,7 +826,6 @@ public:
     virtual void ClearRedo();
     virtual void setUndoNoModifiedPosition( SwUndoNoModifiedPosition );
     virtual SwUndoNoModifiedPosition getUndoNoModifiedPosition() const;
-
 
     /** abfragen/setzen der Anzahl von wiederherstellbaren Undo-Actions */
     static sal_uInt16 GetUndoActionCount();
@@ -1858,9 +1845,8 @@ public:
     bool IsCopyIsMove() const              { return mbCopyIsMove; }
     void SetCopyIsMove( bool bFlag )        { mbCopyIsMove = bFlag; }
 
-    // fuers Draw-Undo: Aktionen auf Flys wollen wir selbst behandeln
-    bool IsNoDrawUndoObj() const           { return mbNoDrawUndoObj; }
-    void SetNoDrawUndoObj( bool bFlag )    { mbNoDrawUndoObj = bFlag; }
+    bool IsNoDrawUndoObj() const;
+    void SetNoDrawUndoObj( bool const bFlag );
     SwDrawContact* GroupSelection( SdrView& );
     void UnGroupSelection( SdrView& );
     sal_Bool DeleteSelection( SwDrawView& );
@@ -2140,6 +2126,8 @@ public:
 #endif
     ::sfx2::IXmlIdRegistry& GetXmlIdRegistry();
     ::sw::MetaFieldManager & GetMetaFieldManager();
+    ::sw::UndoManager      & GetUndoManager();
+    ::sw::UndoManager const& GetUndoManager() const;
     SfxObjectShell* CreateCopy(bool bCallInitNew) const;
 };
 
