@@ -480,9 +480,15 @@ $(call gb_LinkTarget_set_auxtargets,$(2),\
 )
 
 $(call gb_Library_get_target,$(1)) \
-$(call gb_Library_get_clean_target,$(1)) : AUXTARGETS := $(OUTDIR)/bin/$(notdir $(3)) \
+$(call gb_Library_get_clean_target,$(1)) : AUXTARGETS := $(OUTDIR)/bin/$(notdir $(3))
+
+ifneq ($(ENABLE_CRASHDUMP),)
+$(call gb_Library_get_target,$(1)) \
+$(call gb_Library_get_clean_target,$(1)) : AUXTARGETS +=  \
         $(OUTDIR)/bin/$(notdir $(patsubst %.dll,%.pdb,$(3))) \
         $(OUTDIR)/bin/$(notdir $(patsubst %.dll,%.ilk,$(3))) \
+
+endif
 
 $(call gb_Deliver_add_deliverable,$(OUTDIR)/bin/$(notdir $(3)),$(3))
 
