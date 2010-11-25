@@ -58,7 +58,7 @@ public:
 
     bool loadImage(
         rtl::OUString const & name, rtl::OUString const & style,
-        BitmapEx & bitmap, bool localized = false );
+        BitmapEx & bitmap, bool localized = false, bool loadMissing = false );
 
     void shutDown();
         // a crude form of life cycle control (called from DeInitVCL; otherwise,
@@ -66,6 +66,10 @@ public:
         // be too late for the destructors of the bitmaps in m_iconCache)
 
 private:
+    bool doLoadImage(
+        rtl::OUString const & name, rtl::OUString const & style,
+        BitmapEx & bitmap, bool localized);
+
     typedef std::list<
         std::pair<
             rtl::OUString,
