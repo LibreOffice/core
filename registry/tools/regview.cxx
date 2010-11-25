@@ -28,65 +28,16 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_registry.hxx"
 
-#include <stdio.h>
-
 #include "registry/registry.h"
-#include    <rtl/ustring.hxx>
-#include    <rtl/alloc.h>
-#include <osl/process.h>
-#include <osl/diagnose.h>
-#include <osl/thread.h>
-#include <osl/file.hxx>
+#include "fileurl.hxx"
 
-#ifdef SAL_UNX
-#define SEPARATOR '/'
-#else
-#define SEPARATOR '\\'
-#endif
+#include "rtl/ustring.hxx"
 
-using namespace ::rtl;
-using namespace ::osl;
+#include <stdio.h>
+#include <string.h>
 
-sal_Bool isFileUrl(const OString& fileName)
-{
-    if (fileName.indexOf("file://") == 0 )
-        return sal_True;
-    return sal_False;
-}
-
-OUString convertToFileUrl(const OString& fileName)
-{
-    if ( isFileUrl(fileName) )
-    {
-        return OStringToOUString(fileName, osl_getThreadTextEncoding());
-    }
-
-    OUString uUrlFileName;
-    OUString uFileName(fileName.getStr(), fileName.getLength(), osl_getThreadTextEncoding());
-    if ( fileName.indexOf('.') == 0 || fileName.indexOf(SEPARATOR) < 0 )
-    {
-        OUString uWorkingDir;
-        if (osl_getProcessWorkingDir(&uWorkingDir.pData) != osl_Process_E_None)
-        {
-            OSL_ASSERT(false);
-        }
-        if (FileBase::getAbsoluteFileURL(uWorkingDir, uFileName, uUrlFileName)
-            != FileBase::E_None)
-        {
-            OSL_ASSERT(false);
-        }
-    } else
-    {
-        if (FileBase::getFileURLFromSystemPath(uFileName, uUrlFileName)
-            != FileBase::E_None)
-        {
-            OSL_ASSERT(false);
-        }
-    }
-
-    return uUrlFileName;
-}
-
+using rtl::OUString;
+using namespace registry::tools;
 
 #if (defined UNX) || (defined OS2)
 int main( int argc, char * argv[] )
@@ -103,7 +54,7 @@ int _cdecl main( int argc, char * argv[] )
         exit(1);
     }
 
-    OUString regName( convertToFileUrl(argv[1]) );
+    OUString regName( convertToFileUrl(argv[1], strlen(argv[1])) );
     if (reg_openRegistry(regName.pData, &hReg, REG_READONLY))
     {
         fprintf(stderr, "open registry \"%s\" failed\n", argv[1]);
@@ -127,12 +78,14 @@ int _cdecl main( int argc, char * argv[] )
                     fprintf(stderr, "closing key \"%s\" of registry \"%s\" failed\n",
                             argv[2], argv[1]);
                 }
-            } else
+            }
+            else
             {
                 fprintf(stderr, "key \"%s\" not exists in registry \"%s\"\n",
                         argv[2], argv[1]);
             }
-        } else
+        }
+        else
         {
             if (reg_dumpRegistry(hRootKey))
             {
@@ -144,7 +97,8 @@ int _cdecl main( int argc, char * argv[] )
         {
             fprintf(stderr, "closing root key of registry \"%s\" failed\n", argv[1]);
         }
-    } else
+    }
+    else
     {
         fprintf(stderr, "open root key of registry \"%s\" failed\n", argv[1]);
     }
