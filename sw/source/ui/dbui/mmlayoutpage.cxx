@@ -482,7 +482,6 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
         rShell.MovePara(GetfnParaCurr(), GetfnParaStart());
     }
     bool bSplitNode = rShell.GetText().Len() > 0;
-//    rShell.SetTxtFmtColl( rShell.GetTxtCollFromPool( RES_POOLCOLL_GREETING ) );
     sal_Int32 nMoves = rConfigItem.GetGreetingMoves();
     if( !bExample && 0 != nMoves )
     {
@@ -710,8 +709,6 @@ IMPL_LINK(SwMailMergeLayoutPage, PreviewLoadedHdl_Impl, void*, EMPTYARG)
     aZoom <<= (sal_Int16)DocumentZoomType::ENTIRE_PAGE;
     m_xViewProperties->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_ZOOM_TYPE)), aZoom);
 
-
-//    m_pExampleWrtShell->SetTxtFmtColl( rSh.GetTxtCollFromPool( RES_POOLCOLL_STANDARD ) );
     const SwFmtFrmSize& rPageSize = m_pExampleWrtShell->GetPageDesc(
                                      m_pExampleWrtShell->GetCurPageDesc()).GetMaster().GetFrmSize();
     m_aLeftMF.SetMax(rPageSize.GetWidth() - DEFAULT_LEFT_DISTANCE);

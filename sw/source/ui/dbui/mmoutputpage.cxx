@@ -518,7 +518,7 @@ IMPL_LINK(SwMailMergeOutputPage, OutputTypeHdl_Impl, RadioButton*, pButton)
         aPos = m_aFromNF.GetPosPixel();     aPos.Y() = nNewRBXPos + nRB_FT_Offset; m_aFromNF.SetPosPixel(aPos);
         aPos = m_aToNF.GetPosPixel();       aPos.Y() = nNewRBXPos + nRB_FT_Offset; m_aToNF.SetPosPixel(aPos);
     }
-    else /*if(&m_aSendMailRB == pButton)*/
+    else
     {
         Control* aMailControls[] =
         {
@@ -785,7 +785,6 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
             SfxObjectShellRef xTempDocShell( new SwDocShell( SFX_CREATE_MODE_STANDARD ) );
             xTempDocShell->DoInitNew( 0 );
             SfxViewFrame* pTempFrame = SfxViewFrame::LoadHiddenDocument( *xTempDocShell, 0 );
-//            pTempFrame->GetFrame().Appear();
             SwView* pTempView = static_cast<SwView*>( pTempFrame->GetViewShell() );
             pTargetView->GetWrtShell().StartAction();
             SwgReaderOption aOpt;
@@ -805,8 +804,6 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
             String sCounter('_');
             sCounter += String::CreateFromInt32(nDoc);
             sOutPath.Insert(sCounter, sOutPath.Len() - sExtension.Len() - 1);
-            //SfxStringItem aName(SID_FILE_NAME, sOutPath);
-            //SfxStringItem aFilter(SID_FILTER_NAME, sFilter);
 
             while(true)
             {
@@ -885,7 +882,6 @@ IMPL_LINK(SwMailMergeOutputPage, PrinterChangeHdl_Impl, ListBox*, pBox)
         m_aPrinterSettingsPB.Disable();
     m_pWizard->GetConfigItem().SetSelectedPrinter( pBox->GetSelectEntry() );
 
-//    return m_pTempPrinter;
     return 0;
 }
 
@@ -930,7 +926,6 @@ IMPL_LINK(SwMailMergeOutputPage, PrintHdl_Impl, PushButton*, EMPTYARG)
     SfxObjectShell* pObjSh = pTargetView->GetViewFrame()->GetObjectShell();
     SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE, SwDocShell::GetEventName(STR_SW_EVENT_MAIL_MERGE), pObjSh));
     rSh.GetNewDBMgr()->SetMergeType( DBMGR_MERGE_DOCUMENTS );
-    //SfxDispatcher *pDis = pTargetView->GetViewFrame()->GetDispatcher();
     SfxBoolItem aMergeSilent(SID_SILENT, sal_False);
     m_pWizard->enableButtons(WZB_CANCEL, sal_False);
 
@@ -1174,7 +1169,6 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
         SfxObjectShellRef xTempDocShell( new SwDocShell( SFX_CREATE_MODE_STANDARD ) );
         xTempDocShell->DoInitNew( 0 );
         SfxViewFrame* pTempFrame = SfxViewFrame::LoadHiddenDocument( *xTempDocShell, 0 );
-//        pTempFrame->GetFrame().Appear();
         SwView* pTempView = static_cast<SwView*>( pTempFrame->GetViewShell() );
         pTargetView->GetWrtShell().StartAction();
         SwgReaderOption aOpt;
@@ -1195,14 +1189,6 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
                     INetURLObject(), utl::TempFile::CreateTempName(0),
                     URIHelper::GetMaybeFileHdl()) );
 
-/*        if(bIsPDF)
-        {
-            SfxDispatcher* pSfxDispatcher = pTempView->GetViewFrame()->GetDispatcher();
-            pSfxDispatcher->Execute(
-                            SID_DIRECTEXPORTDOCASPDF,
-                                  SFX_CALLMODE_SYNCHRON, &aName, &aFilterName, 0L );
-        }
-        else*/
         {
             uno::Sequence< beans::PropertyValue > aFilterValues(MM_DOCTYPE_TEXT == nDocType ? 2 : 1);
             beans::PropertyValue* pFilterValues = aFilterValues.getArray();

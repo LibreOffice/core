@@ -695,7 +695,6 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
             aConditionED.SetText(sCondition);
         else
         {
-//          aConditionED.SetText(aEmptyStr);
             aConditionFT.Enable(FALSE);
             aConditionED.Enable(FALSE);
         }
@@ -705,7 +704,6 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
         aFileNameED .Enable(FALSE);
         aSubRegionFT.Enable(FALSE);
         aSubRegionED.Enable(FALSE);
-//        aNameFT     .Enable(FALSE);
         aCurName    .Enable(FALSE);
         aOptionsPB  .Enable(FALSE);
         aDDECB              .Enable(FALSE);
@@ -726,7 +724,6 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
     }
     else if (pEntry )
     {
-//        aNameFT     .Enable(TRUE);
         aCurName    .Enable(TRUE);
         aOptionsPB  .Enable(TRUE);
         SectRepr* pRepr=(SectRepr*) pEntry->GetUserData();
@@ -800,7 +797,6 @@ IMPL_LINK( SwEditRegionDlg, DeselectHdl, SvTreeListBox *, pBox )
         aFileNameED  .Enable(FALSE);
         aSubRegionFT .Enable(FALSE);
         aSubRegionED .Enable(FALSE);
-//        aNameFT      .Enable(FALSE);
         aCurName     .Enable(FALSE);
         aDDECB              .Enable(FALSE);
         aDDECommandFT       .Enable(FALSE);
@@ -881,7 +877,6 @@ IMPL_LINK( SwEditRegionDlg, OkHdl, CheckBox *, EMPTYARG )
         if( USHRT_MAX != nNewPos )
             rSh.DelSectionFmt( nNewPos );
     }
-//    rSh.ChgSectionPasswd(aNewPasswd);
 
     aOrigArray.Remove( 0, aOrigArray.Count() );
 
@@ -1850,7 +1845,6 @@ IMPL_LINK( SwInsertSectionTabPage, UseFileHdl, CheckBox *, pBox )
     aDDECB.Enable(bFile);
     if( bFile )
     {
-//      aFileNameED.SetText( aFileName );
         aFileNameED.GrabFocus();
         aProtectCB.Check( TRUE );
     }
@@ -1858,7 +1852,6 @@ IMPL_LINK( SwInsertSectionTabPage, UseFileHdl, CheckBox *, pBox )
     {
         aDDECB.Check(FALSE);
         DDEHdl(&aDDECB);
-//      aFileNameED.SetText(aEmptyStr);
     }
     return 0;
 }
@@ -2082,7 +2075,6 @@ void SwSectionFtnEndTabPage::ResetState( BOOL bFtn,
     USHORT eState = rAttr.GetValue();
     switch( eState )
     {
-    // case FTNEND_ATPGORDOCEND:
     case FTNEND_ATTXTEND_OWNNUMANDFMT:
         pNtNumFmtCB->SetState( STATE_CHECK );
         // no break;

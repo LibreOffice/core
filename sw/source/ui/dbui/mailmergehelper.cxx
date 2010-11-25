@@ -662,13 +662,11 @@ SwConnectionListener::~SwConnectionListener()
 void SwConnectionListener::connected(const lang::EventObject& /*aEvent*/)
     throw (uno::RuntimeException)
 {
-    //OSL_ENSURE(false, "Connection opened");
 }
 
 void SwConnectionListener::disconnected(const lang::EventObject& /*aEvent*/)
     throw (uno::RuntimeException)
 {
-    //OSL_ENSURE(false, "Connection closed");
 }
 
 void SwConnectionListener::disposing(const lang::EventObject& /*aEvent*/)

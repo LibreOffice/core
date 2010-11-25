@@ -226,7 +226,6 @@ sal_Int8 SwEditWin::ExecuteDrop( const ExecuteDropEvent& rEvt )
         if ( aRect.IsInside(aPos) )
         {
             rSh.StartAllAction();
-//!!            sal_Int8 nRet = DND_ACTION_NONE/*pOLV->ExecuteDrop( rEvt )*/;
             rSh.EndAllAction();
             return nRet;
         }

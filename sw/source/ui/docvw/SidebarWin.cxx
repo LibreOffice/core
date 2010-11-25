@@ -998,11 +998,7 @@ IMPL_LINK( SwSidebarWin, WindowEventListener, VclSimpleEvent*, pEvent )
             }
             else if ( pMouseEvt->IsLeaveWindow())
             {
-                if (IsPreview())
-                {
-                    //doLazyDelete();
-                }
-                else
+                if (!IsPreview())
                 {
                     mbMouseOver = false;
                     if ( !HasFocus() )

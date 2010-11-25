@@ -921,8 +921,6 @@ BOOL  lcl_GetLanguagesForEncoding(rtl_TextEncoding eEnc, LanguageType aLanguages
         case RTL_TEXTENCODING_TIS_620          :
             aLanguages[0] = LANGUAGE_THAI;
         break;
-//        case RTL_TEXTENCODING_SYMBOL      :
-//        case RTL_TEXTENCODING_DONTKNOW:        :
         default: aLanguages[0] = Application::GetSettings().GetUILanguage();
     }
     return aLanguages[0] != LANGUAGE_SYSTEM;

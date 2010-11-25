@@ -377,9 +377,6 @@ void SwEditWin::UpdatePointer(const Point &rLPt, USHORT nModifier )
         return;
     }
 
-    // Removed ExecHyperlink option.
-    //BOOL bExecHyperlinks = rSh.GetViewOptions()->IsExecHyperlinks() ^
-    //                     (nModifier == KEY_MOD2 ? TRUE : FALSE);
     BOOL bExecHyperlinks = rView.GetDocShell()->IsReadOnly();
     if ( !bExecHyperlinks )
     {
@@ -4129,7 +4126,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                                     }
                                 }
                             }
-                            else // if ( SwContentAtPos::SW_INETATTR == aCntntAtPos.eCntntAtPos )
+                            else
                             {
                                 if ( bExecHyperlinks )
                                     rSh.ClickToINetAttr( *(SwFmtINetFmt*)aCntntAtPos.aFnd.pAttr, nFilter );
