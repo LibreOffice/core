@@ -473,7 +473,4 @@ void OPrimKeyUndoAct::Redo()
     OTableEditorUndoAct::Redo();
 }
 
-
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

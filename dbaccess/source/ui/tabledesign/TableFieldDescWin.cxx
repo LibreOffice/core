@@ -317,5 +317,4 @@ long OTableFieldDescWin::PreNotify( NotifyEvent& rNEvt )
     return bHandled ? 1L : TabPage::PreNotify(rNEvt);
 }
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -156,7 +156,7 @@ namespace dbaui
             _rStr << sal_Int32(pFieldDesc->IsAutoIncrement() ? 1 : 0);
             _rStr << sal_Int32(pFieldDesc->IsPrimaryKey() ? 1 : 0);
             _rStr << sal_Int32(pFieldDesc->IsCurrency() ? 1 : 0);
-        } // if(pFieldDesc)
+        }
         else
             _rStr << (sal_Int32)0;
         return _rStr;
@@ -225,7 +225,5 @@ namespace dbaui
     }
     // -----------------------------------------------------------------------------
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

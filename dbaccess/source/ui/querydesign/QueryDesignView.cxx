@@ -375,7 +375,6 @@ namespace
     {
         ::rtl::OUString aDBName(pEntryTab->GetComposedName());
 
-        //  Reference< XConnection> xConnection = static_cast<OQueryController&>(_pView->getController()).getConnection();
         if( _xConnection.is() )
         {
             try
