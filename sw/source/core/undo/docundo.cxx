@@ -100,12 +100,6 @@ void UndoArrStatus::Paint( const Rectangle& )
 
 #endif
 
-// SwDoc methods /////////////////////////////////////////////////////////
-
-sal_Bool SwDoc::RestoreInvisibleContent()
-{
-    return GetUndoManager().RestoreInvisibleContent();
-}
 
 // UndoManager ///////////////////////////////////////////////////////////
 
@@ -661,28 +655,7 @@ UndoManager::EndUndo(SwUndoId const i_eUndoId, SwRewriter const*const pRewriter)
 /*-- 24.11.2004 16:11:21---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-sal_Bool UndoManager::RestoreInvisibleContent()
-{
-    sal_Bool bRet = sal_False;
-    if(nUndoPos > 0 )
-    {
-        SwUndo * pUndo = (*pUndos)[ nUndoPos - 1 ];
-        if( ( pUndo->GetId() == UNDO_END &&
-            static_cast<SwUndoEnd *>(pUndo)->GetUserId() == UNDO_UI_DELETE_INVISIBLECNTNT) )
-        {
-            SwPaM aPam( m_rDoc.GetNodes().GetEndOfPostIts() );
-            SwUndoIter aUndoIter( &aPam );
-            do
-            {
-                Undo( aUndoIter );
-            }
-            while ( aUndoIter.IsNextUndo() );
-            ClearRedo();
-            bRet = sal_True;
-        }
-    }
-    return bRet;
-}
+
 
 /**
    Returns id and comment for a certain undo object in an undo stack.

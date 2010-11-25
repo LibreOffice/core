@@ -79,7 +79,6 @@ public:
 
     SwUndo* GetLastUndo();
 
-    sal_Bool RestoreInvisibleContent();
     SwNodes const& GetUndoNodes() const;
     SwNodes      & GetUndoNodes();
 

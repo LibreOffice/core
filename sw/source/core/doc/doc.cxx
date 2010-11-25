@@ -2230,7 +2230,7 @@ void SwDoc::Summary( SwDoc* pExtDoc, BYTE nLevel, BYTE nPara, BOOL bImpress )
 
     // loesche den nicht sichtbaren Content aus dem Document, wie z.B.:
     // versteckte Bereiche, versteckte Absaetze
-BOOL SwDoc::RemoveInvisibleContent()
+bool SwDoc::RemoveInvisibleContent()
 {
     BOOL bRet = FALSE;
     GetIDocumentUndoRedo().StartUndo( UNDO_UI_DELETE_INVISIBLECNTNT, NULL );
@@ -2403,7 +2403,7 @@ BOOL SwDoc::RemoveInvisibleContent()
 /*-- 25.08.2010 14:18:12---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-BOOL SwDoc::HasInvisibleContent() const
+bool SwDoc::HasInvisibleContent() const
 {
     BOOL bRet = sal_False;
 
@@ -2448,6 +2448,26 @@ BOOL SwDoc::HasInvisibleContent() const
     }
     return bRet;
 }
+
+bool SwDoc::RestoreInvisibleContent()
+{
+    bool bRet = false;
+    if (UNDO_UI_DELETE_INVISIBLECNTNT ==
+            GetIDocumentUndoRedo().GetUndoIds(0, 0))
+    {
+        SwPaM aPam( GetNodes().GetEndOfPostIts() );
+        SwUndoIter aUndoIter( &aPam );
+        do
+        {
+            GetIDocumentUndoRedo().Undo( aUndoIter );
+        }
+        while (aUndoIter.IsNextUndo());
+        GetIDocumentUndoRedo().ClearRedo();
+        bRet = true;
+    }
+    return bRet;
+}
+
 /*-- 11.06.2004 08:34:04---------------------------------------------------
 
   -----------------------------------------------------------------------*/

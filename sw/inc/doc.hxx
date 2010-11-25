@@ -1851,12 +1851,11 @@ public:
     inline       SvNumberFormatter* GetNumberFormatter( sal_Bool bCreate = sal_True );
     inline const SvNumberFormatter* GetNumberFormatter( sal_Bool bCreate = sal_True ) const;
 
-    // loesche den nicht sichtbaren ::com::sun::star::ucb::Content aus dem Document, wie z.B.:
-    // versteckte Bereiche, versteckte Absaetze
-    sal_Bool RemoveInvisibleContent();
-    sal_Bool HasInvisibleContent() const;
-    //restore the invisible content if it's available on the undo stack
-    sal_Bool RestoreInvisibleContent();
+    bool HasInvisibleContent() const;
+    /// delete invisible content, like hidden sections and paragraphs
+    bool RemoveInvisibleContent();
+    /// restore the invisible content if it's available on the undo stack
+    bool RestoreInvisibleContent();
     // replace fields by text - mailmerge support
     BOOL ConvertFieldsToText();
 
