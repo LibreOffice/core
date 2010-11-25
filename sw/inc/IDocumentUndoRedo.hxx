@@ -64,6 +64,15 @@ public:
     */
     virtual bool DoesGroupUndo() const = 0;
 
+    /** Enable/Disable Undo for Drawing objects.
+     */
+    virtual void DoDrawUndo(bool const bDoUndo) = 0;
+
+    /** Is Undo for Drawing objects enabled?
+        for Draw-Undo: writer wants to handle actions on Flys on its own.
+     */
+    virtual bool DoesDrawUndo() const = 0;
+
     /** Set the position at which the document is in the "unmodified" state
         to the current position in the Undo stack.
     */
@@ -248,6 +257,27 @@ private:
     IDocumentUndoRedo & m_rUndoRedo;
     bool const m_bGroupUndoWasEnabled;
 };
+
+class DrawUndoGuard
+{
+public:
+
+    DrawUndoGuard(IDocumentUndoRedo & rUndoRedo)
+        :   m_rUndoRedo(rUndoRedo)
+        ,   m_bDrawUndoWasEnabled(rUndoRedo.DoesDrawUndo())
+    {
+        m_rUndoRedo.DoDrawUndo(false);
+    }
+    ~DrawUndoGuard()
+    {
+        m_rUndoRedo.DoDrawUndo(m_bDrawUndoWasEnabled);
+    }
+
+private:
+    IDocumentUndoRedo & m_rUndoRedo;
+    bool const m_bDrawUndoWasEnabled;
+};
+
 
 } // namespace sw
 

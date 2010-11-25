@@ -71,6 +71,7 @@
 #include "pagefrm.hxx"
 #include "sectfrm.hxx"
 #include "doc.hxx"
+#include <IDocumentUndoRedo.hxx>
 #include "dview.hxx"
 #include "dflyobj.hxx"
 #include "dcontact.hxx"
@@ -722,7 +723,7 @@ long SwFEShell::EndDrag( const Point *, BOOL )
         pView->EndDragObj();
         // JP 18.08.95: DrawUndo-Action auf FlyFrames werden nicht gespeichert
         //              Die Fly aendern das Flag
-        GetDoc()->SetNoDrawUndoObj( FALSE );
+        GetDoc()->GetIDocumentUndoRedo().DoDrawUndo(true);
         ChgAnchor( 0, TRUE );
 
         EndUndo( UNDO_END );
@@ -1621,10 +1622,12 @@ BOOL SwFEShell::EndCreate( UINT16 eSdrCreateCmd )
     // das Undo abschalten
     ASSERT( Imp()->HasDrawView(), "EndCreate without DrawView?" );
     if( !Imp()->GetDrawView()->IsGroupEntered() )
-        GetDoc()->SetNoDrawUndoObj( TRUE );
+    {
+        GetDoc()->GetIDocumentUndoRedo().DoDrawUndo(false);
+    }
     BOOL bCreate = Imp()->GetDrawView()->EndCreateObj(
                                     SdrCreateCmd( eSdrCreateCmd ) );
-    GetDoc()->SetNoDrawUndoObj( FALSE );
+    GetDoc()->GetIDocumentUndoRedo().DoDrawUndo(true);
 
     if ( !bCreate )
     {
@@ -1850,7 +1853,7 @@ BOOL SwFEShell::ImpEndCreate()
 
         //Erzeugtes Object wegwerfen, so kann der Fly am elegentesten
         //ueber vorhandene SS erzeugt werden.
-        GetDoc()->SetNoDrawUndoObj( TRUE );         // siehe oben
+        GetDoc()->GetIDocumentUndoRedo().DoDrawUndo(false); // see above
         // --> OD 2005-08-08 #i52858# - method name changed
         SdrPage *pPg = getIDocumentDrawModelAccess()->GetOrCreateDrawModel()->GetPage( 0 );
         // <--
@@ -1863,7 +1866,7 @@ BOOL SwFEShell::ImpEndCreate()
         pPg->RecalcObjOrdNums();
         SdrObject* pRemovedObject = pPg->RemoveObject( rSdrObj.GetOrdNumDirect() );
         SdrObject::Free( pRemovedObject );
-        GetDoc()->SetNoDrawUndoObj( FALSE );
+        GetDoc()->GetIDocumentUndoRedo().DoDrawUndo(true);
 
         SwFlyFrm* pFlyFrm;
         if( NewFlyFrm( aSet, TRUE ) &&

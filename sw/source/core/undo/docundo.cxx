@@ -102,16 +102,6 @@ void UndoArrStatus::Paint( const Rectangle& )
 
 // SwDoc methods /////////////////////////////////////////////////////////
 
-bool SwDoc::IsNoDrawUndoObj() const
-{
-    return GetUndoManager().IsNoDrawUndoObj();
-}
-
-void SwDoc::SetNoDrawUndoObj( bool const bFlag )
-{
-    GetUndoManager().SetNoDrawUndoObj(bFlag);
-}
-
 sal_uInt16 SwDoc::GetUndoActionCount()
 {
     return ::sw::UndoManager::GetUndoActionCount();
@@ -151,7 +141,7 @@ UndoManager::UndoManager(SwDoc & rDoc)
     ,   nUndoSttEnd(0)
     ,   mbUndo(false)
     ,   mbGroupUndo(true)
-    ,   mbNoDrawUndoObj(false)
+    ,   m_bDrawUndo(true)
     ,   m_bLockUndoNoModifiedPosition(false)
 {
 }
@@ -195,6 +185,16 @@ void UndoManager::DoGroupUndo(bool const bDoUndo)
 bool UndoManager::DoesGroupUndo() const
 {
     return mbGroupUndo;
+}
+
+void UndoManager::DoDrawUndo(bool const bDoUndo)
+{
+    m_bDrawUndo = bDoUndo;
+}
+
+bool UndoManager::DoesDrawUndo() const
+{
+    return m_bDrawUndo;
 }
 
 

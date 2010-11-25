@@ -474,8 +474,7 @@ void SwDoc::SetFlyFrmTitle( SwFlyFrmFmt& rFlyFrmFmt,
         return;
     }
 
-    const bool bFormerIsNoDrawUndoObj( IsNoDrawUndoObj() );
-    SetNoDrawUndoObj( true );
+    ::sw::DrawUndoGuard const drawUndoGuard(GetIDocumentUndoRedo());
 
     if (GetIDocumentUndoRedo().DoesUndo())
     {
@@ -486,8 +485,6 @@ void SwDoc::SetFlyFrmTitle( SwFlyFrmFmt& rFlyFrmFmt,
     }
 
     rFlyFrmFmt.SetObjTitle( sNewTitle, true );
-
-    SetNoDrawUndoObj( bFormerIsNoDrawUndoObj );
 
     SetModified();
 }
@@ -500,8 +497,7 @@ void SwDoc::SetFlyFrmDescription( SwFlyFrmFmt& rFlyFrmFmt,
         return;
     }
 
-    const bool bFormerIsNoDrawUndoObj( IsNoDrawUndoObj() );
-    SetNoDrawUndoObj( true );
+    ::sw::DrawUndoGuard const drawUndoGuard(GetIDocumentUndoRedo());
 
     if (GetIDocumentUndoRedo().DoesUndo())
     {
@@ -512,8 +508,6 @@ void SwDoc::SetFlyFrmDescription( SwFlyFrmFmt& rFlyFrmFmt,
     }
 
     rFlyFrmFmt.SetObjDescription( sNewDescription, true );
-
-    SetNoDrawUndoObj( bFormerIsNoDrawUndoObj );
 
     SetModified();
 }

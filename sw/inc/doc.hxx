@@ -1816,8 +1816,6 @@ public:
     bool IsCopyIsMove() const              { return mbCopyIsMove; }
     void SetCopyIsMove( bool bFlag )        { mbCopyIsMove = bFlag; }
 
-    bool IsNoDrawUndoObj() const;
-    void SetNoDrawUndoObj( bool const bFlag );
     SwDrawContact* GroupSelection( SdrView& );
     void UnGroupSelection( SdrView& );
     sal_Bool DeleteSelection( SwDrawView& );

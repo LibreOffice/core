@@ -1567,14 +1567,13 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
         return 0;
 
     ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
-    sal_Bool bWasNoDrawUndo = IsNoDrawUndoObj();
+    ::sw::DrawUndoGuard const drawUndoGuard(GetIDocumentUndoRedo());
     SwUndoInsertLabel* pUndo = 0;
     if (undoGuard.UndoWasEnabled())
     {
         GetIDocumentUndoRedo().ClearRedo();
         pUndo = new SwUndoInsertLabel(
             LTYPE_DRAW, rTxt, rSeparator, rNumberSeparator, sal_False, nId, rCharacterStyle, sal_False );
-        SetNoDrawUndoObj( sal_True );
     }
 
     // Erstmal das Feld bauen, weil ueber den Namen die TxtColl besorgt
@@ -1802,7 +1801,6 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
     if( pUndo )
     {
         GetIDocumentUndoRedo().AppendUndo( pUndo );
-        SetNoDrawUndoObj( bWasNoDrawUndo );
     }
     else
     {

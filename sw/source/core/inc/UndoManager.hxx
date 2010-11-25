@@ -54,6 +54,8 @@ public:
     virtual bool DoesUndo() const;
     virtual void DoGroupUndo(bool const bDoUndo);
     virtual bool DoesGroupUndo() const;
+    virtual void DoDrawUndo(bool const bDoUndo);
+    virtual bool DoesDrawUndo() const;
     virtual void SetUndoNoModifiedPosition();
     virtual void LockUndoNoModifiedPosition();
     virtual void UnLockUndoNoModifiedPosition();
@@ -80,10 +82,6 @@ public:
 
     SwUndo* GetLastUndo();
 
-    // for Draw-Undo: writer wants to handle actions on Flys on its own
-    bool IsNoDrawUndoObj() const           { return mbNoDrawUndoObj; }
-    void SetNoDrawUndoObj( bool const bFlag )    { mbNoDrawUndoObj = bFlag; }
-
     sal_Bool RestoreInvisibleContent();
     SwNodes const& GetUndoNodes() const;
     SwNodes      & GetUndoNodes();
@@ -103,7 +101,7 @@ private:
 
     bool mbUndo             : 1;    // TRUE: Undo enabled
     bool mbGroupUndo        : 1;    // TRUE: Undo grouping enabled
-    bool mbNoDrawUndoObj    : 1;    // TRUE: no Draw Undo Objects stored
+    bool m_bDrawUndo        : 1;    // TRUE: Draw Undo enabled
     bool m_bLockUndoNoModifiedPosition : 1;
 
     /// delete all undo objects from 0 until nEnd

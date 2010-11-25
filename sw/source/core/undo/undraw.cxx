@@ -78,7 +78,7 @@ IMPL_LINK( SwDoc, AddDrawUndo, SdrUndoAction *, pUndo )
 #endif
 
     if (GetIDocumentUndoRedo().DoesUndo() &&
-        !IsNoDrawUndoObj())
+        GetIDocumentUndoRedo().DoesDrawUndo())
     {
         const SdrMarkList* pMarkList = 0;
         ViewShell* pSh = GetRootFrm() ? GetRootFrm()->GetCurrShell() : 0;

@@ -1485,7 +1485,7 @@ void SwFEShell::Paste( SvStream& rStrm, USHORT nAction, const Point* pPt )
 
     if( SW_PASTESDR_INSERT == nAction )
     {
-        GetDoc()->SetNoDrawUndoObj( TRUE );
+        ::sw::DrawUndoGuard drawUndoGuard(GetDoc()->GetIDocumentUndoRedo());
 
         sal_Bool bDesignMode = pView->IsDesignMode();
         if( !bDesignMode )
@@ -1526,7 +1526,6 @@ void SwFEShell::Paste( SvStream& rStrm, USHORT nAction, const Point* pPt )
             if( !bDesignMode )
                 pView->SetDesignMode( sal_False );
         }
-        GetDoc()->SetNoDrawUndoObj( FALSE );
     }
     EndUndo();
     EndAllAction();
