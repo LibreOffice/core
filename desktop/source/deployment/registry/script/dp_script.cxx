@@ -306,12 +306,10 @@ BackendImpl * BackendImpl::PackageImpl::getMyBackend() const
 
 beans::Optional< beans::Ambiguous<sal_Bool> >
 BackendImpl::PackageImpl::isRegistered_(
-    ::osl::ResettableMutexGuard &,
-    ::rtl::Reference<AbortChannel> const &,
-    Reference<XCommandEnvironment> const & xCmdEnv )
+    ::osl::ResettableMutexGuard & /* guard */,
+    ::rtl::Reference<AbortChannel> const & /* abortChannel */,
+    Reference<XCommandEnvironment> const & /* xCmdEnv */ )
 {
-    (void)xCmdEnv;
-
     BackendImpl * that = getMyBackend();
     Reference< deployment::XPackage > xThisPackage( this );
 
@@ -323,14 +321,12 @@ BackendImpl::PackageImpl::isRegistered_(
 
 //______________________________________________________________________________
 void BackendImpl::PackageImpl::processPackage_(
-    ::osl::ResettableMutexGuard &,
+    ::osl::ResettableMutexGuard & /* guard */,
     bool doRegisterPackage,
     bool startup,
-    ::rtl::Reference<AbortChannel> const &,
-    Reference<XCommandEnvironment> const & xCmdEnv )
+    ::rtl::Reference<AbortChannel> const & /* abortChannel */,
+    Reference<XCommandEnvironment> const & /* xCmdEnv */ )
 {
-    (void)xCmdEnv;
-
     BackendImpl * that = getMyBackend();
 
     Reference< deployment::XPackage > xThisPackage( this );
