@@ -219,14 +219,6 @@ void ScDbNameDlg::Init()
     aBtnMore.AddWindow( &aFTSource );
     aBtnMore.AddWindow( &aFTOperations );
 
-    String  theAreaStr;
-    SCCOL   nStartCol   = 0;
-    SCROW   nStartRow   = 0;
-    SCTAB   nStartTab   = 0;
-    SCCOL   nEndCol     = 0;
-    SCROW   nEndRow     = 0;
-    SCTAB   nEndTab     = 0;
-
     aBtnOk.SetClickHdl      ( LINK( this, ScDbNameDlg, OkBtnHdl ) );
     aBtnCancel.SetClickHdl  ( LINK( this, ScDbNameDlg, CancelBtnHdl ) );
     aBtnAdd.SetClickHdl     ( LINK( this, ScDbNameDlg, AddBtnHdl ) );
@@ -235,8 +227,17 @@ void ScDbNameDlg::Init()
     aEdAssign.SetModifyHdl  ( LINK( this, ScDbNameDlg, AssModifyHdl ) );
     UpdateNames();
 
+    String  theAreaStr;
+
     if ( pViewData && pDoc )
     {
+        SCCOL   nStartCol   = 0;
+        SCROW   nStartRow   = 0;
+        SCTAB   nStartTab   = 0;
+        SCCOL   nEndCol     = 0;
+        SCROW   nEndRow     = 0;
+        SCTAB   nEndTab     = 0;
+
         ScDBCollection* pDBColl = pDoc->GetDBCollection();
         ScDBData*       pDBData = NULL;
 
