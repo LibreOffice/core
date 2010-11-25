@@ -638,28 +638,37 @@ sal_Bool ZipFile::readLOC( ZipEntry &rEntry )
     aGrabber >> nExtraLen;
     rEntry.nOffset = static_cast < sal_Int32 > (aGrabber.getPosition()) + nPathLen + nExtraLen;
 
-    // read always in UTF8, some tools seem not to set UTF8 bit
-    uno::Sequence < sal_Int8 > aNameBuffer( nPathLen );
-    sal_Int32 nRead = aGrabber.readBytes( aNameBuffer, nPathLen );
-    if ( nRead < aNameBuffer.getLength() )
-            aNameBuffer.realloc( nRead );
+    sal_Bool bBroken = sal_False;
 
-    ::rtl::OUString sLOCPath = rtl::OUString::intern( (sal_Char *) aNameBuffer.getArray(),
-                                                        aNameBuffer.getLength(),
-                                                        RTL_TEXTENCODING_UTF8 );
-
-    if ( rEntry.nPathLen == -1 ) // the file was created
+    try
     {
-        rEntry.nPathLen = nPathLen;
-        rEntry.sPath = sLOCPath;
-    }
+        // read always in UTF8, some tools seem not to set UTF8 bit
+        uno::Sequence < sal_Int8 > aNameBuffer( nPathLen );
+        sal_Int32 nRead = aGrabber.readBytes( aNameBuffer, nPathLen );
+        if ( nRead < aNameBuffer.getLength() )
+                aNameBuffer.realloc( nRead );
 
-    // the method can be reset for internal use so it is not checked
-    sal_Bool bBroken = rEntry.nVersion != nVersion
-                    || rEntry.nFlag != nFlag
-                    || rEntry.nTime != nTime
-                    || rEntry.nPathLen != nPathLen
-                    || !rEntry.sPath.equals( sLOCPath );
+        ::rtl::OUString sLOCPath = rtl::OUString::intern( (sal_Char *) aNameBuffer.getArray(),
+                                                            aNameBuffer.getLength(),
+                                                            RTL_TEXTENCODING_UTF8 );
+
+        if ( rEntry.nPathLen == -1 ) // the file was created
+        {
+            rEntry.nPathLen = nPathLen;
+            rEntry.sPath = sLOCPath;
+        }
+
+        // the method can be reset for internal use so it is not checked
+        bBroken = rEntry.nVersion != nVersion
+                        || rEntry.nFlag != nFlag
+                        || rEntry.nTime != nTime
+                        || rEntry.nPathLen != nPathLen
+                        || !rEntry.sPath.equals( sLOCPath );
+    }
+    catch(::std::bad_alloc &)
+    {
+        bBroken = sal_True;
+    }
 
     if ( bBroken && !bRecoveryMode )
         throw ZipIOException( OUString( RTL_CONSTASCII_USTRINGPARAM( "The stream seems to be broken!" ) ),
