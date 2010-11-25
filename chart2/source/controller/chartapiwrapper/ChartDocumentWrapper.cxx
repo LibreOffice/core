@@ -56,7 +56,6 @@
 #include "WrappedAddInProperty.hxx"
 #include "WrappedIgnoreProperty.hxx"
 #include "ChartRenderer.hxx"
-#include "UndoManager.hxx"
 #include <com/sun/star/chart2/XTitled.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
@@ -83,6 +82,7 @@ using namespace ::com::sun::star::chart;
 
 using ::com::sun::star::chart::XComplexDescriptionAccess;
 using ::com::sun::star::uno::Any;
+using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::beans::Property;
@@ -1409,12 +1409,6 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
             }
         }
         xResult.set( m_xChartView );
-        bServiceFound = true;
-    }
-    else if ( aServiceSpecifier.equals( CHART_UNDOMANAGER_SERVICE_NAME ) )
-    {
-        Reference< chart2::XUndoManager > xUndoManager( new UndoManager() );
-        xResult.set( xUndoManager );
         bServiceFound = true;
     }
     else

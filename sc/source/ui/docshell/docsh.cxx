@@ -2594,7 +2594,7 @@ __EXPORT ScDocShell::~ScDocShell()
 
 //------------------------------------------------------------------
 
-SfxUndoManager* __EXPORT ScDocShell::GetUndoManager()
+::svl::IUndoManager* __EXPORT ScDocShell::GetUndoManager()
 {
     return aDocument.GetUndoManager();
 }

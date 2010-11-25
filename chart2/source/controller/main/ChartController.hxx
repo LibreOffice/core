@@ -42,7 +42,7 @@
 #include <cppuhelper/implbase12.hxx>
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
-#include <com/sun/star/chart2/XUndoManager.hpp>
+#include <com/sun/star/document/XUndoManager.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
@@ -88,6 +88,8 @@ namespace graphic {
 namespace chart
 {
 //.............................................................................
+
+class UndoGuard;
 
 enum ChartDrawMode { CHARTDRAW_INSERT, CHARTDRAW_SELECT };
 
@@ -578,7 +580,8 @@ private:
 
     bool volatile       m_bConnectingToView;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XUndoManager > m_xUndoManager;
+    ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoManager >    m_xUndoManager;
+    ::std::auto_ptr< UndoGuard >                                                    m_pTextActionUndoGuard;
     /// needed for dispatching URLs in FeatureStateEvents
     mutable ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer > m_xURLTransformer;
 

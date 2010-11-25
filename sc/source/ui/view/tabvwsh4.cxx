@@ -1117,7 +1117,7 @@ BOOL ScTabViewShell::IsAuditShell() const
     return ( pAuditingShell && ( GetMySubShell() == pAuditingShell ) );
 }
 
-void ScTabViewShell::SetDrawTextUndo( SfxUndoManager* pNewUndoMgr )
+void ScTabViewShell::SetDrawTextUndo( ::svl::IUndoManager* pNewUndoMgr )
 {
     // Default: Undo-Manager der DocShell
     if (!pNewUndoMgr)
@@ -1764,7 +1764,7 @@ void ScTabViewShell::Construct( BYTE nForceDesignMode )
         MakeDrawView( nForceDesignMode );
     ViewOptionsHasChanged(FALSE);   // legt auch evtl. DrawView an
 
-    SfxUndoManager* pMgr = pDocSh->GetUndoManager();
+    ::svl::IUndoManager* pMgr = pDocSh->GetUndoManager();
     SetUndoManager( pMgr );
     pFormShell->SetUndoManager( pMgr );
     if ( !pDoc->IsUndoEnabled() )
