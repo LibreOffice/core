@@ -3132,6 +3132,11 @@ Size ImplListBoxFloatingWindow::CalcFloatSize()
             long nSBWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
             aFloatSz.Width() += nSBWidth;
         }
+
+        long nDesktopWidth = GetDesktopRectPixel().getWidth();
+        if (aFloatSz.Width() > nDesktopWidth)
+            // Don't exceed the desktop width.
+            aFloatSz.Width() = nDesktopWidth;
     }
 
     if ( aFloatSz.Height() > nMaxHeight )
@@ -3158,6 +3163,13 @@ Size ImplListBoxFloatingWindow::CalcFloatSize()
         aFloatSz.Height() = nInnerHeight + nTop + nBottom;
     }
 
+    if (aFloatSz.Width() < aSz.Width())
+    {
+        // The max width of list box entries exceeds the window width.
+        // Account for the scroll bar height.
+        long nSBWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
+        aFloatSz.Height() += nSBWidth;
+    }
     return aFloatSz;
 }
 
