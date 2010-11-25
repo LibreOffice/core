@@ -147,9 +147,9 @@ void LayoutTest::InitUCB()
     OUString aEmpty;
     Sequence< Any > aArgs( 6 );
     aArgs[0]
-        <<= OUString::createFromAscii( UCB_CONFIGURATION_KEY1_LOCAL );
+        <<= OUString(RTL_CONSTASCII_USTRINGPARAM( UCB_CONFIGURATION_KEY1_LOCAL ));
     aArgs[1]
-        <<= OUString::createFromAscii( UCB_CONFIGURATION_KEY2_OFFICE );
+        <<= OUString(RTL_CONSTASCII_USTRINGPARAM( UCB_CONFIGURATION_KEY2_OFFICE ));
     aArgs[2] <<= OUString(RTL_CONSTASCII_USTRINGPARAM("PIPE"));
     aArgs[3] <<= aEmpty;
     aArgs[4] <<= OUString(RTL_CONSTASCII_USTRINGPARAM("PORTAL"));
@@ -279,7 +279,7 @@ void TestDialog( OUString const& name )
         QueryBox query ( 0,
                          WinBits( WB_YES_NO | WB_DEF_YES ),
 //                         WinBits( WB_ABORT_RETRY_IGNORE ),
-                         OUString::createFromAscii ("Do you want to do?"));
+                         OUString(RTL_CONSTASCII_USTRINGPARAM ("Do you want to do?")));
         RunDialog( query );
     }
     else if ( name.equalsAscii( "recover" ) )

@@ -129,7 +129,7 @@ SAL_THROW (())
     if ( xRadio.is() )
     {
         if (!bSetRadioGroup)
-            aRadioGroup = OUString::createFromAscii ("default");
+            aRadioGroup = OUString(RTL_CONSTASCII_USTRINGPARAM ("default"));
         pImport->mxRadioGroups.addItem( aRadioGroup, xRadio );
     }
 }

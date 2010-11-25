@@ -1428,7 +1428,7 @@ void UnoControl::setDesignMode( sal_Bool bOn ) throw(RuntimeException)
         disposeAccessibleContext();
 
         aModeChangeEvent.Source = *this;
-        aModeChangeEvent.NewMode = ::rtl::OUString::createFromAscii( mbDesignMode ? "design" : "alive" );
+        aModeChangeEvent.NewMode = mbDesignMode ? ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("design")) : ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("alive" ));
     }
 
     // ajust the visibility of our window
