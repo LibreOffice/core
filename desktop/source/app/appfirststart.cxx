@@ -286,7 +286,8 @@ void Desktop::DoRestartActionsIfNecessary( sal_Bool bQuickStart )
                 Reference< util::XChangesBatch >( xPSet, UNO_QUERY_THROW )->commitChanges();
 
                 Sequence< Any > aSeq( 1 );
-                aSeq[0] <<= sal_True;
+                sal_Bool bQuickstart = shouldLaunchQuickstart();
+                aSeq[0] <<= bQuickstart;
 
                 Reference < XInitialization > xQuickstart( ::comphelper::getProcessServiceFactory()->createInstance(
                     OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.office.Quickstart" ) ) ),UNO_QUERY_THROW );
