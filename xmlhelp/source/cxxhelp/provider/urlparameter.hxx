@@ -126,16 +126,16 @@ namespace chelp {
                       Databases* pDatabases )
             throw( com::sun::star::ucb::IllegalIdentifierException );
 
-        bool isPicture()        { return m_aModule.compareToAscii("picture") == 0; }
-        bool isActive()         { return m_aActive.getLength() > 0 && m_aActive.compareToAscii( "true" ) == 0; }
-        bool isQuery()          { return m_aId.compareToAscii("") == 0 && m_aQuery.compareToAscii("") != 0; }
-        bool isEntryForModule() { return m_aId.compareToAscii("start") == 0 || m_bStart; }
-        bool isFile()           { return m_aId.compareToAscii( "" ) != 0; }
-        bool isModule()         { return m_aId.compareToAscii("") == 0 && m_aModule.compareToAscii("") != 0; }
-        bool isRoot()           { return m_aModule.compareToAscii("") == 0; }
+        bool isPicture() const { return m_aModule.compareToAscii("picture") == 0; }
+        bool isActive() const { return m_aActive.getLength() > 0 && m_aActive.compareToAscii( "true" ) == 0; }
+        bool isQuery() const { return m_aId.compareToAscii("") == 0 && m_aQuery.compareToAscii("") != 0; }
+        bool isEntryForModule() const { return m_aId.compareToAscii("start") == 0 || m_bStart; }
+        bool isFile() const { return m_aId.compareToAscii( "" ) != 0; }
+        bool isModule() const { return m_aId.compareToAscii("") == 0 && m_aModule.compareToAscii("") != 0; }
+        bool isRoot() const { return m_aModule.compareToAscii("") == 0; }
         bool isErrorDocument();
 
-        rtl::OUString get_url() { return m_aURL; }
+        rtl::OUString get_url() const { return m_aURL; }
 
         rtl::OUString get_id();
 
@@ -145,36 +145,39 @@ namespace chelp {
 
         rtl::OUString get_path()   { return get_the_path(); }
 
-        rtl::OUString get_eid()    { return m_aEid; }
+        rtl::OUString get_eid() const   { return m_aEid; }
 
         rtl::OUString get_title();
 
         rtl::OUString get_jar()      { return get_the_jar(); }      // BerkeleyDb
 
-        rtl::OUString get_ExtensionRegistryPath()    { return m_aExtensionRegistryPath; }
+        rtl::OUString get_ExtensionRegistryPath() const { return m_aExtensionRegistryPath; }
 
-        rtl::OUString get_module()   { return m_aModule; }
+        rtl::OUString get_module() const { return m_aModule; }
 
-        rtl::OUString get_dbpar()    {
-            if( m_aDbPar.getLength() ) return m_aDbPar;
-            else return m_aModule;
+        rtl::OUString get_dbpar() const
+        {
+            if( m_aDbPar.getLength() )
+                return m_aDbPar;
+            else
+                return m_aModule;
         }
 
-        rtl::OUString get_prefix()   { return m_aPrefix; }
+        rtl::OUString get_prefix() const { return m_aPrefix; }
 
         rtl::OUString get_language();
 
-        rtl::OUString get_device()   { return m_aDevice; }
+        rtl::OUString get_device() const { return m_aDevice; }
 
         rtl::OUString get_program();
 
-        rtl::OUString get_query()    { return m_aQuery; }
+        rtl::OUString get_query() const { return m_aQuery; }
 
-        rtl::OUString get_scope()    { return m_aScope; }
+        rtl::OUString get_scope() const { return m_aScope; }
 
-        rtl::OUString get_system()   { return m_aSystem; }
+        rtl::OUString get_system() const { return m_aSystem; }
 
-        sal_Int32     get_hitCount() { return m_nHitCount; }
+        sal_Int32     get_hitCount() const { return m_nHitCount; }
 
         rtl::OString getByName( const char* par );
 
