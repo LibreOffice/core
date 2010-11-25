@@ -107,6 +107,7 @@
 
 #include <ndgrf.hxx>
 #include <ndole.hxx>
+
 #include <cstdio>
 
 using namespace ::com::sun::star;
