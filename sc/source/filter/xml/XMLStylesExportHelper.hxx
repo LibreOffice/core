@@ -139,8 +139,8 @@ public:
         const sal_Int32 nLastRow, const sal_Int32 nLastCol,
         const ScFormatRangeStyles* pCellStyles, ScDocument* pDoc);
 
-    const ScMyDefaultStyleList* GetRowDefaults() { return pRowDefaults; }
-    const ScMyDefaultStyleList* GetColDefaults() { return pColDefaults; }
+    const ScMyDefaultStyleList* GetRowDefaults() const { return pRowDefaults; }
+    const ScMyDefaultStyleList* GetColDefaults() const { return pColDefaults; }
 };
 
 struct ScMyRowFormatRange
@@ -177,8 +177,8 @@ public:
     void Clear();
     void AddRange(ScMyRowFormatRange& rFormatRange, const sal_Int32 nStartRow);
     sal_Bool GetNext(ScMyRowFormatRange& rFormatRange);
-    sal_Int32 GetMaxRows();
-    sal_Int32 GetSize();
+    sal_Int32 GetMaxRows() const;
+    sal_Int32 GetSize() const;
     void Sort();
 };
 
