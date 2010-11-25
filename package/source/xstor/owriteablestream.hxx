@@ -187,11 +187,11 @@ public:
 
     void AddLog( const ::rtl::OUString& aMessage );
 
-    sal_Bool UsesCommonPass_Impl() { return m_bUseCommonPass; }
-    sal_Bool HasTempFile_Impl() { return ( m_aTempURL.getLength() != 0 ); }
+    sal_Bool UsesCommonPass_Impl() const { return m_bUseCommonPass; }
+    sal_Bool HasTempFile_Impl() const { return ( m_aTempURL.getLength() != 0 ); }
     sal_Bool IsTransacted();
 
-    sal_Bool HasWriteOwner_Impl() { return ( m_pAntiImpl != NULL ); }
+    sal_Bool HasWriteOwner_Impl() const { return ( m_pAntiImpl != NULL ); }
 
     void InsertIntoPackageFolder(
             const ::rtl::OUString& aName,
@@ -199,9 +199,9 @@ public:
 
     void SetToBeCommited() { m_bFlushed = sal_True; }
 
-    sal_Bool HasCachedPassword() { return m_bHasCachedPassword; }
-    ::rtl::OUString GetCachedPassword() { return m_aPass; }
-    sal_Bool IsModified() { return m_bHasDataToFlush || m_bFlushed; }
+    sal_Bool HasCachedPassword() const { return m_bHasCachedPassword; }
+    ::rtl::OUString GetCachedPassword() const { return m_aPass; }
+    sal_Bool IsModified() const { return m_bHasDataToFlush || m_bFlushed; }
 
     sal_Bool IsEncrypted();
     void SetDecrypted();
