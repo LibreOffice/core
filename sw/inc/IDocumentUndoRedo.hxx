@@ -123,11 +123,6 @@ public:
     virtual SwUndoId GetUndoIds(String *const o_pStr,
                 SwUndoIds *const o_pUndoIds) const = 0;
 
-    /** Is there an Undo action with the given Id, or a Start/End action
-        with the given Id as UserId?
-    */
-    virtual bool HasUndoId(SwUndoId const eId) const = 0;
-
     /* @@@MAINTAINABILITY-HORROR@@@
        Implementation details made public.
        die drei folgenden Methoden werden beim Undo und nur dort

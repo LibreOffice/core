@@ -64,7 +64,6 @@ public:
     virtual void DelAllUndoObj();
     virtual SwUndoId GetUndoIds(String *const o_pStr,
                 SwUndoIds *const o_pUndoIds) const;
-    virtual bool HasUndoId(SwUndoId const eId) const;
     virtual const SwNodes* GetUndoNds() const;
     virtual SwUndo* RemoveLastUndo(SwUndoId const eUndoId);
     virtual bool HasTooManyUndos() const;
@@ -101,7 +100,11 @@ private:
     bool mbNoDrawUndoObj    : 1;    // TRUE: no Draw Undo Objects stored
 
     /// delete all undo objects from 0 until nEnd
-    bool DelUndoObj( sal_uInt16 nEnd );
+    bool DelUndoObj(sal_uInt16 nEnd);
+    /** Is there an Undo action with the given Id, or a Start/End action
+        with the given Id as UserId?
+    */
+    bool HasUndoId(SwUndoId const eId) const;
     /// max number of Undo actions
 //    static sal_uInt16 nUndoActions;
 };
