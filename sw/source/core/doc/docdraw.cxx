@@ -27,6 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #include <hintids.hxx>
 #include <rtl/logfile.hxx>
 #include <vcl/outdev.hxx>
@@ -49,6 +50,7 @@
 #include <viewimp.hxx>
 #include <swhints.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <docsh.hxx>
 #include <rootfrm.hxx>  //Damit der RootDtor gerufen wird.
 #include <poolfmt.hxx>
@@ -227,7 +229,7 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
         SwDrawContact *pMyContact = (SwDrawContact*)GetUserCall(pObj);
         const SwFmtAnchor aAnch( pMyContact->GetFmt()->GetAnchor() );
 
-        SwUndoDrawGroup* pUndo = !DoesUndo()
+        SwUndoDrawGroup *const pUndo = (!GetIDocumentUndoRedo().DoesUndo())
                                  ? 0
                                  : new SwUndoDrawGroup( (USHORT)rMrkList.GetMarkCount() );
 
@@ -303,14 +305,16 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
         if( pUndo )
         {
             pUndo->SetGroupFmt( pFmt );
-            ClearRedo();
-            AppendUndo( pUndo );
+            GetIDocumentUndoRedo().ClearRedo();
+            GetIDocumentUndoRedo().AppendUndo( pUndo );
         }
     }
     else
     {
-        if ( DoesUndo() )
-            ClearRedo();
+        if (GetIDocumentUndoRedo().DoesUndo())
+        {
+            GetIDocumentUndoRedo().ClearRedo();
+        }
 
         rDrawView.GroupMarked();
         ASSERT( rMrkList.GetMarkCount() == 1, "GroupMarked more or none groups." );
@@ -322,9 +326,11 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
 
 void SwDoc::UnGroupSelection( SdrView& rDrawView )
 {
-    const int bUndo = DoesUndo();
+    bool const bUndo = GetIDocumentUndoRedo().DoesUndo();
     if( bUndo )
-        ClearRedo();
+    {
+        GetIDocumentUndoRedo().ClearRedo();
+    }
 
     // OD 30.06.2003 #108784# - replace marked 'virtual' drawing objects by
     // the corresponding 'master' drawing objects.
@@ -358,7 +364,7 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
                     if( bUndo )
                     {
                         pUndo = new SwUndoDrawUnGroup( (SdrObjGroup*)pObj );
-                        AppendUndo( pUndo );
+                        GetIDocumentUndoRedo().AppendUndo(pUndo);
                     }
 
                     for ( USHORT i2 = 0; i2 < pLst->GetObjCount(); ++i2 )
@@ -403,7 +409,7 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
         if( bUndo )
         {
             pUndo = new SwUndoDrawUnGroupConnectToLayout();
-            AppendUndo( pUndo );
+            GetIDocumentUndoRedo().AppendUndo(pUndo);
         }
 
         while ( pFmtsAndObjs[i].size() > 0 )
@@ -442,7 +448,7 @@ BOOL SwDoc::DeleteSelection( SwDrawView& rDrawView )
     const SdrMarkList &rMrkList = rDrawView.GetMarkedObjectList();
     if( rMrkList.GetMarkCount() )
     {
-        StartUndo(UNDO_EMPTY, NULL);
+        GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
         USHORT i;
         BOOL bDelMarked = TRUE;
 
@@ -483,7 +489,9 @@ BOOL SwDoc::DeleteSelection( SwDrawView& rDrawView )
             SdrObject *pObj = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
             if( !pObj->GetUpGroup() )
             {
-                SwUndoDrawDelete* pUndo = !DoesUndo() ? 0
+                SwUndoDrawDelete *const pUndo =
+                    (!GetIDocumentUndoRedo().DoesUndo())
+                        ? 0
                             : new SwUndoDrawDelete( (USHORT)rMrkList.GetMarkCount() );
 
                 //ContactObjekte vernichten, Formate sicherstellen.
@@ -516,13 +524,15 @@ BOOL SwDoc::DeleteSelection( SwDrawView& rDrawView )
                 }
 
                 if( pUndo )
-                    AppendUndo( pUndo );
+                {
+                    GetIDocumentUndoRedo().AppendUndo( pUndo );
+                }
             }
             bCallBase = TRUE;
         }
         SetModified();
 
-        EndUndo(UNDO_EMPTY, NULL);
+        GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, NULL);
     }
 
     return bCallBase;
@@ -625,7 +635,7 @@ void SwDoc::InitDrawModel()
     //Seite.
     pDrawModel = new SwDrawDocument( this );
 
-    pDrawModel->EnableUndo( DoesUndo() );
+    pDrawModel->EnableUndo( GetIDocumentUndoRedo().DoesUndo() );
 
     String sLayerNm;
     sLayerNm.AssignAscii(RTL_CONSTASCII_STRINGPARAM("Hell" ));

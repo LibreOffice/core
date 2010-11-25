@@ -519,7 +519,7 @@ SwDoc::~SwDoc()
 
     // turn off Undo so the footnote attributes don't mess with
     // the footnote nodes
-    DoUndo(false);
+    GetIDocumentUndoRedo().DoUndo(false);
     mbDtor = TRUE;
 
     DELETEZ( pLayout );
@@ -788,9 +788,9 @@ SfxObjectShell* SwDoc::GetPersist() const
 
 void SwDoc::ClearDoc()
 {
-    bool const bOldUndo = DoesUndo();
-    DelAllUndoObj();
-    DoUndo(false);
+    bool const bOldUndo = GetIDocumentUndoRedo().DoesUndo();
+    GetIDocumentUndoRedo().DelAllUndoObj();
+    GetIDocumentUndoRedo().DoUndo(false);
 
     // Undo-Benachrichtigung vom Draw abschalten
     if( pDrawModel )
@@ -902,7 +902,7 @@ void SwDoc::ClearDoc()
     // delete now the dummy pagedesc
     DelPageDesc( nDummyPgDsc );
 
-    DoUndo(bOldUndo);
+    GetIDocumentUndoRedo().DoUndo(bOldUndo);
 }
 
 void SwDoc::SetPreViewPrtData( const SwPagePreViewPrtData* pNew )
@@ -1069,6 +1069,17 @@ SwDoc::GetUndoManager() const
     return *m_pUndoManager;
 }
 
+IDocumentUndoRedo &
+SwDoc::GetIDocumentUndoRedo()
+{
+    return *m_pUndoManager;
+}
+
+IDocumentUndoRedo const&
+SwDoc::GetIDocumentUndoRedo() const
+{
+    return *m_pUndoManager;
+}
 
 void SwDoc::InitTOXTypes()
 {
@@ -1182,7 +1193,7 @@ void SwDoc::Paste( const SwDoc& rSource )
     aCpyPam.SetMark();
     aCpyPam.Move( fnMoveForward, fnGoDoc );
 
-    this->StartUndo( UNDO_INSGLOSSARY, NULL );
+    this->GetIDocumentUndoRedo().StartUndo( UNDO_INSGLOSSARY, NULL );
     this->LockExpFlds();
 
     {
@@ -1236,7 +1247,7 @@ void SwDoc::Paste( const SwDoc& rSource )
         }
     }
 
-    this->EndUndo( UNDO_INSGLOSSARY, NULL );
+    this->GetIDocumentUndoRedo().EndUndo( UNDO_INSGLOSSARY, NULL );
 
     UnlockExpFlds();
     UpdateFlds(NULL, false);

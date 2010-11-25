@@ -32,6 +32,7 @@
 #include <hintids.hxx>
 #include <editeng/lrspitem.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <swundo.hxx>           // fuer die UndoIds
 #include <pam.hxx>
 #include <ndtxt.hxx>
@@ -93,8 +94,8 @@ void SwUndoInsNum::Undo( SwUndoIter& rUndoIter )
     if( nSttNode )
         SetPaM( rUndoIter );
 
-    BOOL bUndo = rDoc.DoesUndo();
-    rDoc.DoUndo( FALSE );
+    bool const bUndo = rDoc.GetIDocumentUndoRedo().DoesUndo();
+    rDoc.GetIDocumentUndoRedo().DoUndo(false);
 
     if( pOldNumRule )
         rDoc.ChgNumRuleFmts( *pOldNumRule );
@@ -136,7 +137,7 @@ void SwUndoInsNum::Undo( SwUndoIter& rUndoIter )
 
     if( nSttNode )
         SetPaM( rUndoIter );
-    rDoc.DoUndo( bUndo );
+    rDoc.GetIDocumentUndoRedo().DoUndo(bUndo);
 }
 
 
@@ -219,8 +220,8 @@ void SwUndoDelNum::Undo( SwUndoIter& rUndoIter )
     SwDoc& rDoc = rUndoIter.GetDoc();
     SetPaM( rUndoIter );
 
-    BOOL bUndo = rDoc.DoesUndo();
-    rDoc.DoUndo( FALSE );
+    bool const bUndo = rDoc.GetIDocumentUndoRedo().DoesUndo();
+    rDoc.GetIDocumentUndoRedo().DoUndo(false);
 
     pHistory->TmpRollback( &rDoc, 0 );
     pHistory->SetTmpEnd( pHistory->Count() );
@@ -236,7 +237,7 @@ void SwUndoDelNum::Undo( SwUndoIter& rUndoIter )
     }
 
     SetPaM( rUndoIter );
-    rDoc.DoUndo( bUndo );
+    rDoc.GetIDocumentUndoRedo().DoUndo(bUndo);
 }
 
 

@@ -87,6 +87,7 @@
 #include <docary.hxx>
 #include <docstat.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <mdiexp.hxx>           // ...Percent()
@@ -109,9 +110,7 @@
 
 #include <sfx2/viewfrm.hxx>
 
-#ifndef _STATSTR_HRC
 #include <statstr.hrc>          // ResId fuer Statusleiste
-#endif
 #include <swerror.h>
 
 #define FONTSIZE_MASK           7
@@ -631,8 +630,8 @@ void __EXPORT SwHTMLParser::Continue( int nToken )
     pDoc->SetOle2Link( Link() );
 
     BOOL bModified = pDoc->IsModified();
-    BOOL bWasUndo = pDoc->DoesUndo();
-    pDoc->DoUndo( FALSE );
+    bool const bWasUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
+    pDoc->GetIDocumentUndoRedo().DoUndo(false);
 
     // Wenn der Import abgebrochen wird, kein Continue mehr rufen.
     // Falls ein Pending-Stack existiert aber durch einen Aufruf
@@ -889,8 +888,8 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( FALSE ).nNode.GetIndex() )
     {
         if( bWasUndo )
         {
-            pDoc->DelAllUndoObj();
-            pDoc->DoUndo( TRUE );
+            pDoc->GetIDocumentUndoRedo().DelAllUndoObj();
+            pDoc->GetIDocumentUndoRedo().DoUndo(true);
         }
         else if( !pInitVSh )
         {
@@ -900,7 +899,9 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( FALSE ).nNode.GetIndex() )
             // wir muessen das Undo noch anschalten.
             ViewShell *pTmpVSh = CheckActionViewShell();
             if( pTmpVSh )
-                pDoc->DoUndo( TRUE );
+            {
+                pDoc->GetIDocumentUndoRedo().DoUndo(true);
+            }
         }
 
         pDoc->SetOle2Link( aOLELink );
@@ -951,7 +952,7 @@ void SwHTMLParser::DocumentDetected()
 
         CallEndAction( TRUE, TRUE );
 
-        pDoc->DoUndo( FALSE );
+        pDoc->GetIDocumentUndoRedo().DoUndo(false);
         // Durch das DocumentDetected wurde im allgemeinen eine
         // ViewShell angelegt. Es kann aber auch sein, dass sie
         // erst spaeter angelegt wird, naemlich dann, wenn die UI

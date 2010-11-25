@@ -29,8 +29,10 @@
 #include "precompiled_sw.hxx"
 
 #include <stdlib.h>
+
 #include <node.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <pam.hxx>
 #include <txtfld.hxx>
 #include <fmtfld.hxx>
@@ -1841,10 +1843,10 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
             if( rNodes.IsDocNodes() )
             {
                 SwDoc* const pInsDoc = pDestNd->GetDoc();
-                const bool bIsUndo = pInsDoc->DoesUndo();
-                pInsDoc->DoUndo( false );
+                bool const bIsUndo(pInsDoc->GetIDocumentUndoRedo().DoesUndo());
+                pInsDoc->GetIDocumentUndoRedo().DoUndo(false);
                 pInsDoc->SplitNode( rPos, false );
-                pInsDoc->DoUndo( bIsUndo );
+                pInsDoc->GetIDocumentUndoRedo().DoUndo(bIsUndo);
             }
             else
             {
@@ -1872,10 +1874,10 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
         if( bCopyCollFmt )
         {
             SwDoc* const pInsDoc = pDestNd->GetDoc();
-            const bool bIsUndo = pInsDoc->DoesUndo();
-            pInsDoc->DoUndo( false );
+            bool const bIsUndo( pInsDoc->GetIDocumentUndoRedo().DoesUndo() );
+            pInsDoc->GetIDocumentUndoRedo().DoUndo(false);
             pSrcNd->CopyCollFmt( *pDestNd );
-            pInsDoc->DoUndo( bIsUndo );
+            pInsDoc->GetIDocumentUndoRedo().DoUndo(bIsUndo);
             bCopyCollFmt = FALSE;
         }
 
@@ -1911,10 +1913,11 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
                 if( rNodes.IsDocNodes() )
                 {
                     SwDoc* const pInsDoc = pDestNd->GetDoc();
-                    const bool bIsUndo = pInsDoc->DoesUndo();
-                    pInsDoc->DoUndo( false );
+                    bool const bIsUndo =
+                        pInsDoc->GetIDocumentUndoRedo().DoesUndo();
+                    pInsDoc->GetIDocumentUndoRedo().DoUndo(false);
                     pInsDoc->SplitNode( rPos, false );
-                    pInsDoc->DoUndo( bIsUndo );
+                    pInsDoc->GetIDocumentUndoRedo().DoUndo(bIsUndo);
                 }
                 else
                 {
@@ -1966,10 +1969,10 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
             if( bCopyCollFmt )
             {
                 SwDoc* const pInsDoc = pDestNd->GetDoc();
-                const bool bIsUndo = pInsDoc->DoesUndo();
-                pInsDoc->DoUndo( false );
+                bool const bIsUndo(pInsDoc->GetIDocumentUndoRedo().DoesUndo());
+                pInsDoc->GetIDocumentUndoRedo().DoUndo(false);
                 pEndSrcNd->CopyCollFmt( *pDestNd );
-                pInsDoc->DoUndo( bIsUndo );
+                pInsDoc->GetIDocumentUndoRedo().DoUndo(bIsUndo);
             }
         }
     }

@@ -51,6 +51,7 @@
 #include <reffld.hxx>
 #include <swundo.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <viewopt.hxx>      // SwViewOptions
 #include <frmfmt.hxx>       // fuer UpdateTable
 #include <swtable.hxx>      // fuer UpdateTable
@@ -229,10 +230,11 @@ BOOL SwWrtShell::UpdateTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet)
 
         if (pSet == NULL)
         {
-            SwDoc * _pDoc = GetDoc();
-
-            if (_pDoc != NULL)
-                _pDoc->DelAllUndoObj();
+            SwDoc *const pDoc_ = GetDoc();
+            if (pDoc_)
+            {
+                pDoc_->GetIDocumentUndoRedo().DelAllUndoObj();
+            }
         }
     }
 

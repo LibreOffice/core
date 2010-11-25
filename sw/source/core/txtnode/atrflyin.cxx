@@ -28,11 +28,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-
 #include "hintids.hxx"
 #include "cntfrm.hxx"       // _GetFly
 #include "doc.hxx"
+#include <IDocumentUndoRedo.hxx>
 #include "pam.hxx"          // fuer SwTxtFlyCnt
 #include "flyfrm.hxx"       // fuer SwTxtFlyCnt
 #include "ndtxt.hxx"        // SwFlyFrmFmt
@@ -117,9 +116,9 @@ void SwTxtFlyCnt::CopyFlyFmt( SwDoc* pDoc )
     // In CopyLayoutFmt (siehe doclay.cxx) wird das FlyFrmFmt erzeugt
     // und der Inhalt dupliziert.
 
-    // fuers kopieren vom Attribut das Undo immer abschalten
-    BOOL bUndo = pDoc->DoesUndo();
-    pDoc->DoUndo( FALSE );
+    // disable undo while copying attribute
+    bool const bUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
+    pDoc->GetIDocumentUndoRedo().DoUndo(false);
     SwFmtAnchor aAnchor( pFmt->GetAnchor() );
     if ((FLY_AT_PAGE != aAnchor.GetAnchorId()) &&
         (pDoc != pFmt->GetDoc()))   // different documents?
@@ -146,7 +145,7 @@ void SwTxtFlyCnt::CopyFlyFmt( SwDoc* pDoc )
     }
 
     SwFrmFmt* pNew = pDoc->CopyLayoutFmt( *pFmt, aAnchor, false, false );
-    pDoc->DoUndo( bUndo );
+    pDoc->GetIDocumentUndoRedo().DoUndo(bUndo);
     ((SwFmtFlyCnt&)GetFlyCnt()).SetFlyFmt( pNew );
 }
 
@@ -193,16 +192,17 @@ void SwTxtFlyCnt::SetAnchor( const SwTxtNode *pNode )
     // stehen wir noch im falschen Dokument ?
     if( pDoc != pFmt->GetDoc() )
     {
-        // fuers kopieren vom Attribut das Undo immer abschalten
-        BOOL bUndo = pDoc->DoesUndo();
-        pDoc->DoUndo( FALSE );
+        // disable undo while copying attribute
+        bool const bUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
+        pDoc->GetIDocumentUndoRedo().DoUndo(false);
         SwFrmFmt* pNew = pDoc->CopyLayoutFmt( *pFmt, aAnchor, false, false );
-        pDoc->DoUndo( bUndo );
+        pDoc->GetIDocumentUndoRedo().DoUndo(bUndo);
 
-        bUndo = pFmt->GetDoc()->DoesUndo();
-        pFmt->GetDoc()->DoUndo( FALSE );
+        bool const bFmtDocUndo =
+            pFmt->GetDoc()->GetIDocumentUndoRedo().DoesUndo();
+        pFmt->GetDoc()->GetIDocumentUndoRedo().DoUndo(false);
         pFmt->GetDoc()->DelLayoutFmt( pFmt );
-        pFmt->GetDoc()->DoUndo( bUndo );
+        pFmt->GetDoc()->GetIDocumentUndoRedo().DoUndo(bFmtDocUndo);
         ((SwFmtFlyCnt&)GetFlyCnt()).SetFlyFmt( pNew );
     }
     else if( pNode->GetpSwpHints() &&

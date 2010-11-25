@@ -27,10 +27,13 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #include <tools/rtti.hxx>
+
 #include <SwUndoField.hxx>
 #include <swundo.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <txtfld.hxx>
 #include <fldbas.hxx>
 #include <ndtxt.hxx>
@@ -90,11 +93,11 @@ void SwUndoFieldFromDoc::Undo( SwUndoIter& )
 
     if (pField)
     {
-        BOOL bUndo = pDoc->DoesUndo();
+        bool const bUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
 
-        pDoc->DoUndo(FALSE);
+        pDoc->GetIDocumentUndoRedo().DoUndo(false);
         pDoc->UpdateFld(pTxtFld, *pOldField, pHnt, bUpdate);
-        pDoc->DoUndo(bUndo);
+        pDoc->GetIDocumentUndoRedo().DoUndo(bUndo);
     }
 }
 
@@ -105,15 +108,15 @@ void SwUndoFieldFromDoc::Redo( SwUndoIter& )
 
     if (pField)
     {
-        BOOL bUndo = pDoc->DoesUndo();
+        bool const bUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
 
-        pDoc->DoUndo(FALSE);
+        pDoc->GetIDocumentUndoRedo().DoUndo(false);
         pDoc->UpdateFld(pTxtFld, *pNewField, pHnt, bUpdate);
         SwFmtFld* pDstFmtFld = (SwFmtFld*)&pTxtFld->GetFld();
 
         if ( pDoc->GetFldType(RES_POSTITFLD, aEmptyStr,false) == pDstFmtFld->GetFld()->GetTyp() )
             pDoc->GetDocShell()->Broadcast( SwFmtFldHint( pDstFmtFld, SWFMTFLD_INSERTED ) );
-        pDoc->DoUndo(bUndo);
+        pDoc->GetIDocumentUndoRedo().DoUndo(bUndo);
     }
 }
 

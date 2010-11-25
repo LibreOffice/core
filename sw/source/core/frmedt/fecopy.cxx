@@ -68,6 +68,7 @@
 #include <txtflcnt.hxx>
 #include <fesh.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <rootfrm.hxx>
 #include <ndtxt.hxx>
 #include <pam.hxx>
@@ -104,7 +105,7 @@ BOOL SwFEShell::Copy( SwDoc* pClpDoc, const String* pNewClpTxt )
 {
     ASSERT( pClpDoc, "kein Clipboard-Dokument"  );
 
-    pClpDoc->DoUndo( FALSE );       // immer auf FALSE !!
+    pClpDoc->GetIDocumentUndoRedo().DoUndo(false); // always false!
 
     // steht noch Inhalt im ClpDocument, dann muss dieser geloescht werden
     SwNodeIndex aSttIdx( pClpDoc->GetNodes().GetEndOfExtras(), 2 );
@@ -733,7 +734,7 @@ BOOL SwFEShell::Paste( SwDoc* pClpDoc, BOOL bIncludingPageFrames )
 
     BOOL bRet = TRUE, bDelTbl = TRUE;
     StartAllAction();
-    GetDoc()->StartUndo( UNDO_INSGLOSSARY, NULL );
+    GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_INSGLOSSARY, NULL );
     GetDoc()->LockExpFlds();
 
     // When the clipboard content has been created by a rectangular selection
@@ -1112,7 +1113,7 @@ BOOL SwFEShell::Paste( SwDoc* pClpDoc, BOOL bIncludingPageFrames )
         FOREACHPAM_END()
     }
 
-    GetDoc()->EndUndo( UNDO_INSGLOSSARY, NULL );
+    GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_INSGLOSSARY, NULL );
 
     // wurden neue Tabellenformeln eingefuegt ?
     if( pTblFldTyp->GetDepends() )

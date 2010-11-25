@@ -27,6 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #include <hintids.hxx>
 #include <tools/urlobj.hxx>
 
@@ -71,9 +72,7 @@
 #include <srcview.hxx>
 #include <wrtsh.hxx>
 #include <docsh.hxx>
-#ifndef _CMDID_H
 #include <cmdid.h>          // Funktion-Ids
-#endif
 #include <initui.hxx>
 #include <uitool.hxx>
 #include <swmodule.hxx>
@@ -83,13 +82,12 @@
 #include <gloslst.hxx>      // SwGlossaryList
 #include <glosdoc.hxx>      // SwGlossaryList
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <cfgitems.hxx>
 #include <prtopt.hxx>
 #include <modcfg.hxx>
 #include <globals.h>        // globale Konstanten z.B.
-#ifndef _APP_HRC
 #include <app.hrc>
-#endif
 #include <fontcfg.hxx>
 #include <barcfg.hxx>
 #include <uinums.hxx>
@@ -813,7 +811,7 @@ void SwModule::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdCst, sal
             SwDocShell* pDocShell = (SwDocShell*)SfxObjectShell::GetFirst(&aType);
             while( pDocShell )
             {
-                pDocShell->GetDoc()->DoUndo( bUndo );
+                pDocShell->GetDoc()->GetIDocumentUndoRedo().DoUndo(bUndo);
                 pDocShell = (SwDocShell*)SfxObjectShell::GetNext(*pDocShell, &aType);
             }
         }

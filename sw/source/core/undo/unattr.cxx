@@ -47,6 +47,7 @@
 #include <fmtcntnt.hxx>
 #include <ftnidx.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <docary.hxx>
 #include <swundo.hxx>           // fuer die UndoIds
 #include <pam.hxx>
@@ -1143,14 +1144,14 @@ SwUndoMoveLeftMargin::~SwUndoMoveLeftMargin()
 void SwUndoMoveLeftMargin::Undo( SwUndoIter& rIter )
 {
     SwDoc* pDoc = &rIter.GetDoc();
-    BOOL bUndo = pDoc->DoesUndo();
-    pDoc->DoUndo( FALSE );
+    bool const bUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
+    pDoc->GetIDocumentUndoRedo().DoUndo(false);
 
     // restore old values
     m_pHistory->TmpRollback( pDoc, 0 );
     m_pHistory->SetTmpEnd( m_pHistory->Count() );
 
-    pDoc->DoUndo( bUndo );
+    pDoc->GetIDocumentUndoRedo().DoUndo(bUndo);
     SetPaM( rIter );
 }
 
@@ -1192,8 +1193,8 @@ void SwUndoChangeFootNote::Undo( SwUndoIter& rIter )
     SwDoc& rDoc = rIter.GetDoc();
     SetPaM( rIter );
 
-    BOOL bUndo = rDoc.DoesUndo();
-    rDoc.DoUndo( FALSE );
+    bool const bUndo = rDoc.GetIDocumentUndoRedo().DoesUndo();
+    rDoc.GetIDocumentUndoRedo().DoUndo(false);
 
     m_pHistory->TmpRollback( &rDoc, 0 );
     m_pHistory->SetTmpEnd( m_pHistory->Count() );
@@ -1201,7 +1202,7 @@ void SwUndoChangeFootNote::Undo( SwUndoIter& rIter )
     rDoc.GetFtnIdxs().UpdateAllFtn();
 
     SetPaM( rIter );
-    rDoc.DoUndo( bUndo );
+    rDoc.GetIDocumentUndoRedo().DoUndo(bUndo);
 }
 
 void SwUndoChangeFootNote::Redo( SwUndoIter& rIter )

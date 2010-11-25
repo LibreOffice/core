@@ -36,7 +36,11 @@
 #include <hintids.hxx>
 
 #include <svl/svstdarr.hxx>
+
 #include <unotools/charclass.hxx>
+
+#include <vcl/msgbox.hxx>
+
 #include <editeng/boxitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/brkitem.hxx>
@@ -46,12 +50,13 @@
 #include <editeng/langitem.hxx>
 #include <editeng/cscoitem.hxx>
 #include <editeng/unolingu.hxx>
-
 #include <editeng/acorrcfg.hxx>
+
 #include <swwait.hxx>
 #include <fmtpdsc.hxx>
 #include <fmtanchr.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <docary.hxx>
 #include <editsh.hxx>
 #include <index.hxx>
@@ -72,13 +77,8 @@
 #include <frmatr.hxx>
 #include <charatr.hxx>
 #include <mdiexp.hxx>
-#ifndef _STATSTR_HRC
 #include <statstr.hrc>
-#endif
-#ifndef _COMCORE_HRC
 #include <comcore.hrc>
-#endif
-#include <vcl/msgbox.hxx>
 #include <numrule.hxx>
 
 using namespace ::com::sun::star;
@@ -2253,7 +2253,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
     pDoc->SetRedlineMode( eRedlMode );
 
     // save undo state (might be turned off)
-    sal_Bool bUndoState = pDoc->DoesUndo();
+    bool const bUndoState = pDoc->GetIDocumentUndoRedo().DoesUndo();
 
     // wenn mehrere Zeilen, dann erstmal nicht mit
     // dem nachfolgenden Absatz zusammenfassen.
@@ -2273,7 +2273,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
     {
         // #95884# limit redline array size to prevent overflow and to conserve
         // memory
-        if( pDoc->HasTooManyUndos() )
+        if (pDoc->GetIDocumentUndoRedo().HasTooManyUndos())
         {
             DBG_ASSERT( bUndoState, "undo overflow without undo?" );
 
@@ -2299,8 +2299,8 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
             if( nResult == RET_YES )
             {
                 // turn off undo and continue
-                pDoc->DoUndo( sal_False );
-                pDoc->DelAllUndoObj();
+                pDoc->GetIDocumentUndoRedo().DoUndo(false);
+                pDoc->GetIDocumentUndoRedo().DelAllUndoObj();
             }
             else if( nResult == RET_NO )
             {
@@ -2709,7 +2709,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
     pDoc->SetRedlineMode( eOldMode );
 
     // restore undo (in case it has been changed)
-    pDoc->DoUndo( bUndoState );
+    pDoc->GetIDocumentUndoRedo().DoUndo(bUndoState);
 
     // Prozent-Anzeige wieder abschalten
     if( !aFlags.bAFmtByInput )

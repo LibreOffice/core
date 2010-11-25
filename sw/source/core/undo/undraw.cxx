@@ -41,6 +41,7 @@
 #include <txtflcnt.hxx>
 #include <frmfmt.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <docary.hxx>
 #include <frame.hxx>
 #include <swundo.hxx>           // fuer die UndoIds
@@ -76,15 +77,16 @@ IMPL_LINK( SwDoc, AddDrawUndo, SdrUndoAction *, pUndo )
     String sComment( pUndo->GetComment() );
 #endif
 
-    if( DoesUndo() && !IsNoDrawUndoObj() )
+    if (GetIDocumentUndoRedo().DoesUndo() &&
+        !IsNoDrawUndoObj())
     {
-        ClearRedo();
+        GetIDocumentUndoRedo().ClearRedo();
         const SdrMarkList* pMarkList = 0;
         ViewShell* pSh = GetRootFrm() ? GetRootFrm()->GetCurrShell() : 0;
         if( pSh && pSh->HasDrawView() )
             pMarkList = &pSh->GetDrawView()->GetMarkedObjectList();
 
-        AppendUndo( new SwSdrUndo( pUndo, pMarkList ) );
+        GetIDocumentUndoRedo().AppendUndo( new SwSdrUndo(pUndo, pMarkList) );
     }
     else
         delete pUndo;

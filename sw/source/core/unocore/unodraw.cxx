@@ -42,6 +42,7 @@
 #include <svx/svditer.hxx>
 #include <swunohelper.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <fmtcntnt.hxx>
 #include <fmtflcnt.hxx>
 #include <txtatr.hxx>
@@ -866,7 +867,7 @@ uno::Reference< drawing::XShapeGroup >  SwXDrawPage::group(const uno::Reference<
                 if( !bFlyInCnt )
                 {
                     UnoActionContext aContext(pDoc);
-                    pDoc->StartUndo( UNDO_START, NULL );
+                    pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
 
                     SwDrawContact* pContact = pDoc->GroupSelection( *pPage->GetDrawView() );
                     pDoc->ChgAnchor(
@@ -880,7 +881,7 @@ uno::Reference< drawing::XShapeGroup >  SwXDrawPage::group(const uno::Reference<
                         uno::Reference< uno::XInterface >  xInt = pPage->GetInterface( pContact->GetMaster() );
                         xRet = uno::Reference< drawing::XShapeGroup >(xInt, uno::UNO_QUERY);
                     }
-                    pDoc->EndUndo( UNDO_END, NULL );
+                    pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
                 }
             }
             pPage->RemovePageView();
@@ -903,13 +904,13 @@ void SwXDrawPage::ungroup(const uno::Reference< drawing::XShapeGroup > & xShapeG
         {
             pPage->PreUnGroup(xShapeGroup);
             UnoActionContext aContext(pDoc);
-            pDoc->StartUndo( UNDO_START, NULL );
+            pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
 
             pDoc->UnGroupSelection( *pPage->GetDrawView() );
             pDoc->ChgAnchor( pPage->GetDrawView()->GetMarkedObjectList(),
                         FLY_AT_PARA/*int eAnchorId*/,
                         sal_True, sal_False );
-            pDoc->EndUndo( UNDO_END, NULL );
+            pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
         }
         pPage->RemovePageView();
     }

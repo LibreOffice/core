@@ -44,9 +44,7 @@
 #include <svl/zformat.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svtools/transfer.hxx>
-#ifndef _SFXSIDS_HRC //autogen
 #include <sfx2/dialogs.hrc>
-#endif
 #include <sfx2/dinfdlg.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
@@ -57,9 +55,7 @@
 #include <svtools/sfxecode.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
-#ifndef _SVX_SVXIDS_HRC //autogen
 #include <svx/svxids.hrc>
-#endif
 #include <svx/drawitem.hxx>
 #include <editeng/svxacorr.hxx>
 #include <editeng/langitem.hxx>
@@ -86,6 +82,7 @@
 #include <redlndlg.hxx>
 #include <docstyle.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <pagedesc.hxx>
 #include <shellio.hxx>
 #include <pview.hxx>
@@ -103,15 +100,9 @@
 #include <cmdid.h>
 #include <globals.h>
 #include <helpid.h>
-#ifndef _APP_HRC
 #include <app.hrc>
-#endif
-#ifndef _POOLFMT_HRC
 #include <poolfmt.hrc>
-#endif
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
@@ -342,8 +333,8 @@ BOOL SwDocShell::Insert( SfxObjectShell &rSource,
     // --> OD 2005-05-10 #i48949# - actions aren't undoable. Thus, allow no undo
     // actions
     // Note: The undo action stack is cleared at the end of this method.
-    bool bDoesUndo( GetDoc()->DoesUndo() );
-    GetDoc()->DoUndo( sal_False );
+    bool const bDoesUndo( GetDoc()->GetIDocumentUndoRedo().DoesUndo() );
+    GetDoc()->GetIDocumentUndoRedo().DoUndo(false);
     // <--
 
     BOOL bRet = FALSE;
@@ -544,9 +535,9 @@ BOOL SwDocShell::Insert( SfxObjectShell &rSource,
     // the document node array. Thus, clear the undo action stack.
     if ( bDoesUndo )
     {
-        GetDoc()->DelAllUndoObj();
+        GetDoc()->GetIDocumentUndoRedo().DelAllUndoObj();
     }
-    GetDoc()->DoUndo( bDoesUndo );
+    GetDoc()->GetIDocumentUndoRedo().DoUndo(bDoesUndo);
     // <--
 
     return bRet;
@@ -1637,7 +1628,9 @@ void SwDocShell::SetModified( BOOL bSet )
                 BOOL bOld = pDoc->IsModified();
                 pDoc->SetModified();
                 if( !bOld )
-                    pDoc->SetUndoNoResetModified();
+                {
+                    pDoc->GetIDocumentUndoRedo().SetUndoNoResetModified();
+                }
             }
             else
                 pDoc->ResetModified();

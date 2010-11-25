@@ -35,9 +35,7 @@
 #define _SVSTDARR_ULONGS
 #include <svl/svstdarr.hxx>
 
-#ifndef _APP_HXX //autogen
 #include <vcl/svapp.hxx>
-#endif
 #include <vcl/window.hxx>
 #include <editeng/boxitem.hxx>
 #include <swwait.hxx>
@@ -45,6 +43,7 @@
 #include <frmatr.hxx>
 #include <editsh.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <cntfrm.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
@@ -259,7 +258,9 @@ void SwEditShell::SetTblChgMode( TblChgMode eMode )
     {
         ((SwTable&)pTblNd->GetTable()).SetTblChgMode( eMode );
         if( !GetDoc()->IsModified() )   // Bug 57028
-            GetDoc()->SetUndoNoResetModified();
+        {
+            GetDoc()->GetIDocumentUndoRedo().SetUndoNoResetModified();
+        }
         GetDoc()->SetModified();
     }
 }
@@ -331,10 +332,10 @@ void SwEditShell::SetTblBoxFormulaAttrs( const SfxItemSet& rSet )
         ClearTblBoxCntnt();
 
     StartAllAction();
-    GetDoc()->StartUndo( UNDO_START, NULL );
+    GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
     for( USHORT n = 0; n < aBoxes.Count(); ++n )
         GetDoc()->SetTblBoxFormulaAttrs( *aBoxes[ n ], rSet );
-    GetDoc()->EndUndo( UNDO_END, NULL );
+    GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
     EndAllAction();
 }
 
@@ -407,11 +408,11 @@ BOOL SwEditShell::SplitTable( USHORT eMode )
     if( pCrsr->GetNode()->FindTableNode() )
     {
         StartAllAction();
-        GetDoc()->StartUndo(UNDO_EMPTY, NULL);
+        GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
 
         bRet = GetDoc()->SplitTable( *pCrsr->GetPoint(), eMode, TRUE );
 
-        GetDoc()->EndUndo(UNDO_EMPTY, NULL);
+        GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, NULL);
         ClearFEShellTabCols();
         EndAllAction();
     }
@@ -425,11 +426,11 @@ BOOL SwEditShell::MergeTable( BOOL bWithPrev, USHORT nMode )
     if( pCrsr->GetNode()->FindTableNode() )
     {
         StartAllAction();
-        GetDoc()->StartUndo(UNDO_EMPTY, NULL);
+        GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
 
         bRet = GetDoc()->MergeTable( *pCrsr->GetPoint(), bWithPrev, nMode );
 
-        GetDoc()->EndUndo(UNDO_EMPTY, NULL);
+        GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, NULL);
         ClearFEShellTabCols();
         EndAllAction();
     }

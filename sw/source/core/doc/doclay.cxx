@@ -75,6 +75,7 @@
 #include <ndnotxt.hxx>
 #include <ndole.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
 #include <cntfrm.hxx>
@@ -197,10 +198,11 @@ SwFrmFmt *SwDoc::MakeLayoutFmt( RndStdIds eRequest, const SfxItemSet* pSet )
             if( pSet )      // noch ein paar Attribute setzen ?
                 pFmt->SetFmtAttr( *pSet );
 
-            if( DoesUndo() )
+            if (GetIDocumentUndoRedo().DoesUndo())
             {
-                ClearRedo();
-                AppendUndo( new SwUndoInsLayFmt( pFmt,0,0 ));
+                GetIDocumentUndoRedo().ClearRedo();
+                GetIDocumentUndoRedo().AppendUndo(
+                    new SwUndoInsLayFmt(pFmt, 0, 0));
             }
         }
         break;
@@ -253,7 +255,7 @@ void SwDoc::DelLayoutFmt( SwFrmFmt *pFmt )
     }
 
     const SwNodeIndex* pCntIdx = pFmt->GetCntnt().GetCntntIdx();
-    if( pCntIdx && !DoesUndo() )
+    if (pCntIdx && !GetIDocumentUndoRedo().DoesUndo())
     {
         //Verbindung abbauen, falls es sich um ein OLE-Objekt handelt.
         SwOLENode* pOLENd = GetNodes()[ pCntIdx->GetIndex()+1 ]->GetOLENode();
@@ -295,11 +297,11 @@ void SwDoc::DelLayoutFmt( SwFrmFmt *pFmt )
 
     // erstmal sind nur Fly's Undofaehig
     const sal_uInt16 nWh = pFmt->Which();
-    if( DoesUndo() && (RES_FLYFRMFMT == nWh || RES_DRAWFRMFMT == nWh) )
+    if (GetIDocumentUndoRedo().DoesUndo() &&
+        (RES_FLYFRMFMT == nWh || RES_DRAWFRMFMT == nWh))
     {
-        // erstmal werden alle Undo - Objecte geloescht.
-        ClearRedo();
-        AppendUndo( new SwUndoDelLayFmt( pFmt ));
+        GetIDocumentUndoRedo().ClearRedo();
+        GetIDocumentUndoRedo().AppendUndo( new SwUndoDelLayFmt( pFmt ));
     }
     else
     {
@@ -494,10 +496,10 @@ SwFrmFmt *SwDoc::CopyLayoutFmt( const SwFrmFmt& rSource,
             }
         }
 
-        if( DoesUndo() )
+        if (GetIDocumentUndoRedo().DoesUndo())
         {
-            ClearRedo();
-            AppendUndo( new SwUndoInsLayFmt( pDest,0,0 ));
+            GetIDocumentUndoRedo().ClearRedo();
+            GetIDocumentUndoRedo().AppendUndo(new SwUndoInsLayFmt(pDest,0,0));
         }
 
         // sorge dafuer das auch Fly's in Fly's kopiert werden
@@ -536,10 +538,10 @@ SwFrmFmt *SwDoc::CopyLayoutFmt( const SwFrmFmt& rSource,
         else
             pDest->SetFmtAttr( rNewAnchor );
 
-        if( DoesUndo() )
+        if (GetIDocumentUndoRedo().DoesUndo())
         {
-            ClearRedo();
-            AppendUndo( new SwUndoInsLayFmt( pDest,0,0 ));
+            GetIDocumentUndoRedo().ClearRedo();
+            GetIDocumentUndoRedo().AppendUndo(new SwUndoInsLayFmt(pDest,0,0));
         }
     }
 
@@ -729,12 +731,13 @@ SwFlyFrmFmt* SwDoc::_MakeFlySection( const SwPosition& rAnchPos,
     if( GetRootFrm() )
         pFmt->MakeFrms();           // ???
 
-    if( DoesUndo() )
+    if (GetIDocumentUndoRedo().DoesUndo())
     {
-        ClearRedo();
+        GetIDocumentUndoRedo().ClearRedo();
         ULONG nNodeIdx = rAnchPos.nNode.GetIndex();
         xub_StrLen nCntIdx = rAnchPos.nContent.GetIndex();
-        AppendUndo( new SwUndoInsLayFmt( pFmt, nNodeIdx, nCntIdx ));
+        GetIDocumentUndoRedo().AppendUndo(
+            new SwUndoInsLayFmt( pFmt, nNodeIdx, nCntIdx ));
     }
 
     SetModified();
@@ -803,7 +806,7 @@ SwFlyFrmFmt* SwDoc::MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rSet,
 {
     SwFmtAnchor& rAnch = (SwFmtAnchor&)rSet.Get( RES_ANCHOR );
 
-    StartUndo( UNDO_INSLAYFMT, NULL );
+    GetIDocumentUndoRedo().StartUndo( UNDO_INSLAYFMT, NULL );
 
     SwFlyFrmFmt* pFmt = MakeFlySection( rAnch.GetAnchorId(), rPam.GetPoint(),
                                         &rSet, pParent );
@@ -871,8 +874,11 @@ SwFlyFrmFmt* SwDoc::MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rSet,
                 GetNodes().Delete( aIndex, 1 );
 
 //JP erstmal ein Hack, solange keine Flys/Headers/Footers Undofaehig sind
-if( DoesUndo() )    // werden erstmal alle Undo - Objecte geloescht.
-    DelAllUndoObj();
+// werden erstmal alle Undo - Objecte geloescht.
+if( GetIDocumentUndoRedo().DoesUndo() )
+{
+    GetIDocumentUndoRedo().DelAllUndoObj();
+}
 
             }
             else
@@ -889,9 +895,9 @@ if( DoesUndo() )    // werden erstmal alle Undo - Objecte geloescht.
                 // copy all Pams and then delete all
                 SwPaM* pTmp = (SwPaM*)&rPam;
                 BOOL bOldFlag = mbCopyIsMove;
-                bool bOldUndo = DoesUndo();
+                bool const bOldUndo = GetIDocumentUndoRedo().DoesUndo();
                 mbCopyIsMove = TRUE;
-                DoUndo(false);
+                GetIDocumentUndoRedo().DoUndo(false);
                 do {
                     if( pTmp->HasMark() &&
                         *pTmp->GetPoint() != *pTmp->GetMark() )
@@ -901,7 +907,7 @@ if( DoesUndo() )    // werden erstmal alle Undo - Objecte geloescht.
                     pTmp = static_cast<SwPaM*>(pTmp->GetNext());
                 } while ( &rPam != pTmp );
                 mbCopyIsMove = bOldFlag;
-                DoUndo(bOldUndo);
+                GetIDocumentUndoRedo().DoUndo(bOldUndo);
 
                 pTmp = (SwPaM*)&rPam;
                 do {
@@ -918,7 +924,7 @@ if( DoesUndo() )    // werden erstmal alle Undo - Objecte geloescht.
 
     SetModified();
 
-    EndUndo( UNDO_INSLAYFMT, NULL );
+    GetIDocumentUndoRedo().EndUndo( UNDO_INSLAYFMT, NULL );
 
     return pFmt;
 }
@@ -1017,10 +1023,10 @@ SwDrawFrmFmt* SwDoc::Insert( const SwPaM &rRg,
         // <--
     }
 
-    if( DoesUndo() )
+    if (GetIDocumentUndoRedo().DoesUndo())
     {
-        ClearRedo();
-        AppendUndo( new SwUndoInsLayFmt( pFmt,0,0 ));
+        GetIDocumentUndoRedo().ClearRedo();
+        GetIDocumentUndoRedo().AppendUndo( new SwUndoInsLayFmt(pFmt, 0, 0) );
     }
 
     SetModified();
@@ -1232,14 +1238,14 @@ SwFlyFrmFmt* SwDoc::InsertLabel( const SwLabelType eType, const String &rTxt, co
             const String& rCharacterStyle,
             const sal_Bool bCpyBrd )
 {
-    sal_Bool bWasUndo = DoesUndo();
+    bool const bWasUndo = GetIDocumentUndoRedo().DoesUndo();
     SwUndoInsertLabel* pUndo = 0;
     if( bWasUndo )
     {
-        ClearRedo();
+        GetIDocumentUndoRedo().ClearRedo();
         pUndo = new SwUndoInsertLabel( eType, rTxt, rSeparator, rNumberingSeparator,
                                        bBefore, nId, rCharacterStyle, bCpyBrd );
-        DoUndo( sal_False );
+        GetIDocumentUndoRedo().DoUndo(false);
     }
 
     sal_Bool bTable = sal_False;    //Um etwas Code zu sparen.
@@ -1530,10 +1536,14 @@ SwFlyFrmFmt* SwDoc::InsertLabel( const SwLabelType eType, const String &rTxt, co
     }
 
     if( pUndo )
-        AppendUndo( pUndo );
+    {
+        GetIDocumentUndoRedo().AppendUndo(pUndo);
+    }
     else
-        DelAllUndoObj();
-    DoUndo( bWasUndo );
+    {
+        GetIDocumentUndoRedo().DelAllUndoObj();
+    }
+    GetIDocumentUndoRedo().DoUndo(bWasUndo);
 
     return pNewFmt;
 }
@@ -1565,15 +1575,15 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
     if( !pOldFmt )
         return 0;
 
-    sal_Bool bWasUndo = DoesUndo();
+    bool const bWasUndo = GetIDocumentUndoRedo().DoesUndo();
     sal_Bool bWasNoDrawUndo = IsNoDrawUndoObj();
     SwUndoInsertLabel* pUndo = 0;
     if( bWasUndo )
     {
-        ClearRedo();
+        GetIDocumentUndoRedo().ClearRedo();
         pUndo = new SwUndoInsertLabel(
             LTYPE_DRAW, rTxt, rSeparator, rNumberSeparator, sal_False, nId, rCharacterStyle, sal_False );
-        DoUndo( sal_False );
+        GetIDocumentUndoRedo().DoUndo(false);
         SetNoDrawUndoObj( sal_True );
     }
 
@@ -1801,12 +1811,14 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
 
     if( pUndo )
     {
-        AppendUndo( pUndo );
+        GetIDocumentUndoRedo().AppendUndo( pUndo );
         SetNoDrawUndoObj( bWasNoDrawUndo );
     }
     else
-        DelAllUndoObj();
-    DoUndo( bWasUndo );
+    {
+        GetIDocumentUndoRedo().DelAllUndoObj();
+    }
+    GetIDocumentUndoRedo().DoUndo(bWasUndo);
 
     return pNewFmt;
 }

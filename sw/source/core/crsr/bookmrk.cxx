@@ -31,6 +31,7 @@
 
 #include <bookmrk.hxx>
 #include <IDocumentMarkAccess.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <doc.hxx>
 #include <errhdl.hxx>
 #include <ndtxt.hxx>
@@ -85,7 +86,7 @@ namespace
         const sal_Unicode ch_end=pEndTxtNode->GetTxt().GetChar(rEnd.nContent.GetIndex()-1);
         SwPaM aStartPaM(rStart);
         SwPaM aEndPaM(rEnd);
-        io_pDoc->StartUndo(UNDO_UI_REPLACE, NULL);
+        io_pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_UI_REPLACE, NULL);
         if(ch_start != aStartMark)
         {
             io_pDoc->InsertString(aStartPaM, aStartMark);
@@ -94,7 +95,7 @@ namespace
         {
             io_pDoc->InsertString(aEndPaM, aEndMark);
         }
-        io_pDoc->EndUndo(UNDO_UI_REPLACE, NULL);
+        io_pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_UI_REPLACE, NULL);
     };
 }
 
@@ -231,10 +232,11 @@ namespace sw { namespace mark
 
     void Bookmark::InitDoc(SwDoc* const io_pDoc)
     {
-        if(io_pDoc->DoesUndo())
+        if (io_pDoc->GetIDocumentUndoRedo().DoesUndo())
         {
-            io_pDoc->ClearRedo();
-            io_pDoc->AppendUndo(new SwUndoInsBookmark(*this));
+            io_pDoc->GetIDocumentUndoRedo().ClearRedo();
+            io_pDoc->GetIDocumentUndoRedo().AppendUndo(
+                    new SwUndoInsBookmark(*this));
         }
         io_pDoc->SetModified();
     }

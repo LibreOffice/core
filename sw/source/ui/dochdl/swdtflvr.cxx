@@ -88,6 +88,7 @@
 #include <shellio.hxx>
 #include <ddefld.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <pagedesc.hxx>
 #include <IMark.hxx>
 #include <docary.hxx>
@@ -3797,8 +3798,8 @@ void SwTrnsfrDdeLink::Disconnect( BOOL bRemoveDataAdvise )
     if( bDelBookmrk && refObj.Is() && FindDocShell() )
     {
         SwDoc* pDoc = pDocShell->GetDoc();
-        BOOL bUndo = pDoc->DoesUndo();
-        pDoc->DoUndo( FALSE );
+        bool const bUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
+        pDoc->GetIDocumentUndoRedo().DoUndo(false);
 
         // --> OD, CD, OS 2005-11-25 #i58448#
         Link aSavedOle2Link( pDoc->GetOle2Link() );
@@ -3815,7 +3816,7 @@ void SwTrnsfrDdeLink::Disconnect( BOOL bRemoveDataAdvise )
         pDoc->SetOle2Link( aSavedOle2Link );
         // <--
 
-        pDoc->DoUndo( bUndo );
+        pDoc->GetIDocumentUndoRedo().DoUndo(bUndo);
         bDelBookmrk = FALSE;
     }
 

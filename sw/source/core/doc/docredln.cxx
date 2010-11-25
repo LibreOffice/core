@@ -31,15 +31,14 @@
 
 #include <hintids.hxx>
 #include <tools/shl.hxx>
-#ifndef _SFX_ITEMITER_HXX //autogen
 #include <svl/itemiter.hxx>
-#endif
 #include <sfx2/app.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/crsditem.hxx>
 #include <swmodule.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <docary.hxx>
 #include <ndtxt.hxx>
 #include <redline.hxx>
@@ -1398,13 +1397,13 @@ bool SwDoc::DeleteRedline( const SwPaM& rRange, bool bSaveInUndo,
 
     BOOL bChg = FALSE;
 
-    if( bSaveInUndo && DoesUndo() )
+    if (bSaveInUndo && GetIDocumentUndoRedo().DoesUndo())
     {
         SwUndoRedline* pUndo = new SwUndoRedline( UNDO_REDLINE, rRange );
         if( pUndo->GetRedlSaveCount() )
         {
-            ClearRedo();
-            AppendUndo( pUndo );
+            GetIDocumentUndoRedo().ClearRedo();
+            GetIDocumentUndoRedo().AppendUndo(pUndo);
         }
         else
             delete pUndo;
@@ -2089,13 +2088,13 @@ bool SwDoc::AcceptRedline( USHORT nPos, bool bCallDelete )
     SwRedline* pTmp = (*pRedlineTbl)[ nPos ];
     if( pTmp->HasMark() && pTmp->IsVisible() )
     {
-        if( DoesUndo() )
+        if (GetIDocumentUndoRedo().DoesUndo())
         {
             // #111827#
             SwRewriter aRewriter;
 
             aRewriter.AddRule(UNDO_ARG1, pTmp->GetDescr());
-            StartUndo( UNDO_ACCEPT_REDLINE, &aRewriter);
+            GetIDocumentUndoRedo().StartUndo(UNDO_ACCEPT_REDLINE, &aRewriter);
         }
 
         int nLoopCnt = 2;
@@ -2103,8 +2102,11 @@ bool SwDoc::AcceptRedline( USHORT nPos, bool bCallDelete )
 
         do {
 
-            if( DoesUndo() )
-                AppendUndo( new SwUndoAcceptRedline( *pTmp ));
+            if (GetIDocumentUndoRedo().DoesUndo())
+            {
+                SwUndo *const pUndo( new SwUndoAcceptRedline(*pTmp) );
+                GetIDocumentUndoRedo().AppendUndo(pUndo);
+            }
 
             bRet |= lcl_AcceptRedline( *pRedlineTbl, nPos, bCallDelete );
 
@@ -2133,8 +2135,10 @@ bool SwDoc::AcceptRedline( USHORT nPos, bool bCallDelete )
             SetModified();
         }
 
-        if( DoesUndo() )
-            EndUndo( UNDO_ACCEPT_REDLINE, NULL );
+        if (GetIDocumentUndoRedo().DoesUndo())
+        {
+            GetIDocumentUndoRedo().EndUndo( UNDO_ACCEPT_REDLINE, NULL );
+        }
     }
     return bRet;
 }
@@ -2152,10 +2156,10 @@ bool SwDoc::AcceptRedline( const SwPaM& rPam, bool bCallDelete )
     SwPaM aPam( *rPam.GetMark(), *rPam.GetPoint() );
     lcl_AdjustRedlineRange( aPam );
 
-    if( DoesUndo() )
+    if (GetIDocumentUndoRedo().DoesUndo())
     {
-        StartUndo( UNDO_ACCEPT_REDLINE, NULL );
-        AppendUndo( new SwUndoAcceptRedline( aPam ));
+        GetIDocumentUndoRedo().StartUndo( UNDO_ACCEPT_REDLINE, NULL );
+        GetIDocumentUndoRedo().AppendUndo( new SwUndoAcceptRedline( aPam ));
     }
 
     // #111827#
@@ -2166,7 +2170,7 @@ bool SwDoc::AcceptRedline( const SwPaM& rPam, bool bCallDelete )
         CompressRedlines();
         SetModified();
     }
-    if( DoesUndo() )
+    if (GetIDocumentUndoRedo().DoesUndo())
     {
         // #111827#
         String aTmpStr;
@@ -2180,7 +2184,7 @@ bool SwDoc::AcceptRedline( const SwPaM& rPam, bool bCallDelete )
         SwRewriter aRewriter;
         aRewriter.AddRule(UNDO_ARG1, aTmpStr);
 
-        EndUndo( UNDO_ACCEPT_REDLINE, &aRewriter );
+        GetIDocumentUndoRedo().EndUndo( UNDO_ACCEPT_REDLINE, &aRewriter );
     }
     return nRet != 0;
 }
@@ -2197,13 +2201,13 @@ bool SwDoc::RejectRedline( USHORT nPos, bool bCallDelete )
     SwRedline* pTmp = (*pRedlineTbl)[ nPos ];
     if( pTmp->HasMark() && pTmp->IsVisible() )
     {
-        if( DoesUndo() )
+        if (GetIDocumentUndoRedo().DoesUndo())
         {
             // #111827#
             SwRewriter aRewriter;
 
             aRewriter.AddRule(UNDO_ARG1, pTmp->GetDescr());
-            StartUndo( UNDO_REJECT_REDLINE, NULL );
+            GetIDocumentUndoRedo().StartUndo( UNDO_REJECT_REDLINE, NULL );
         }
 
         int nLoopCnt = 2;
@@ -2211,8 +2215,11 @@ bool SwDoc::RejectRedline( USHORT nPos, bool bCallDelete )
 
         do {
 
-            if( DoesUndo() )
-                AppendUndo( new SwUndoRejectRedline( *pTmp ));
+            if (GetIDocumentUndoRedo().DoesUndo())
+            {
+                SwUndo *const pUndo( new SwUndoRejectRedline( *pTmp ) );
+                GetIDocumentUndoRedo().AppendUndo(pUndo);
+            }
 
             bRet |= lcl_RejectRedline( *pRedlineTbl, nPos, bCallDelete );
 
@@ -2241,8 +2248,10 @@ bool SwDoc::RejectRedline( USHORT nPos, bool bCallDelete )
             SetModified();
         }
 
-        if( DoesUndo() )
-            EndUndo( UNDO_REJECT_REDLINE, NULL );
+        if (GetIDocumentUndoRedo().DoesUndo())
+        {
+            GetIDocumentUndoRedo().EndUndo( UNDO_REJECT_REDLINE, NULL );
+        }
     }
     return bRet;
 }
@@ -2260,10 +2269,10 @@ bool SwDoc::RejectRedline( const SwPaM& rPam, bool bCallDelete )
     SwPaM aPam( *rPam.GetMark(), *rPam.GetPoint() );
     lcl_AdjustRedlineRange( aPam );
 
-    if( DoesUndo() )
+    if (GetIDocumentUndoRedo().DoesUndo())
     {
-        StartUndo( UNDO_REJECT_REDLINE, NULL );
-        AppendUndo( new SwUndoRejectRedline( aPam ));
+        GetIDocumentUndoRedo().StartUndo( UNDO_REJECT_REDLINE, NULL );
+        GetIDocumentUndoRedo().AppendUndo( new SwUndoRejectRedline(aPam) );
     }
 
     // #111827#
@@ -2274,7 +2283,7 @@ bool SwDoc::RejectRedline( const SwPaM& rPam, bool bCallDelete )
         CompressRedlines();
         SetModified();
     }
-    if( DoesUndo() )
+    if (GetIDocumentUndoRedo().DoesUndo())
     {
         // #111827#
         String aTmpStr;
@@ -2288,7 +2297,7 @@ bool SwDoc::RejectRedline( const SwPaM& rPam, bool bCallDelete )
         SwRewriter aRewriter;
         aRewriter.AddRule(UNDO_ARG1, aTmpStr);
 
-        EndUndo( UNDO_REJECT_REDLINE, &aRewriter );
+        GetIDocumentUndoRedo().EndUndo( UNDO_REJECT_REDLINE, &aRewriter );
     }
 
     return nRet != 0;
@@ -3148,8 +3157,8 @@ void SwRedline::Show( USHORT nLoop )
         SwDoc* pDoc = GetDoc();
         RedlineMode_t eOld = pDoc->GetRedlineMode();
         pDoc->SetRedlineMode_intern((RedlineMode_t)(eOld | nsRedlineMode_t::REDLINE_IGNORE));
-        BOOL bUndo = pDoc->DoesUndo();
-        pDoc->DoUndo( FALSE );
+        bool const bUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
+        pDoc->GetIDocumentUndoRedo().DoUndo(false);
 
         switch( GetType() )
         {
@@ -3171,7 +3180,7 @@ void SwRedline::Show( USHORT nLoop )
             break;
         }
         pDoc->SetRedlineMode_intern( eOld );
-        pDoc->DoUndo( bUndo );
+        pDoc->GetIDocumentUndoRedo().DoUndo(bUndo);
     }
 }
 
@@ -3180,8 +3189,8 @@ void SwRedline::Hide( USHORT nLoop )
     SwDoc* pDoc = GetDoc();
     RedlineMode_t eOld = pDoc->GetRedlineMode();
     pDoc->SetRedlineMode_intern((RedlineMode_t)(eOld | nsRedlineMode_t::REDLINE_IGNORE));
-    BOOL bUndo = pDoc->DoesUndo();
-    pDoc->DoUndo( FALSE );
+    bool const bUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
+    pDoc->GetIDocumentUndoRedo().DoUndo(false);
 
     switch( GetType() )
     {
@@ -3210,7 +3219,7 @@ void SwRedline::Hide( USHORT nLoop )
         break;
     }
     pDoc->SetRedlineMode_intern( eOld );
-    pDoc->DoUndo( bUndo );
+    pDoc->GetIDocumentUndoRedo().DoUndo(bUndo);
 }
 
 void SwRedline::ShowOriginal( USHORT nLoop )
@@ -3220,8 +3229,8 @@ void SwRedline::ShowOriginal( USHORT nLoop )
     SwRedlineData* pCur;
 
     pDoc->SetRedlineMode_intern((RedlineMode_t)(eOld | nsRedlineMode_t::REDLINE_IGNORE));
-    BOOL bUndo = pDoc->DoesUndo();
-    pDoc->DoUndo( FALSE );
+    bool const bUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
+    pDoc->GetIDocumentUndoRedo().DoUndo(false);
 
     // bestimme den Type, ist der erste auf Stack
     for( pCur = pRedlineData; pCur->pNext; )
@@ -3254,7 +3263,7 @@ void SwRedline::ShowOriginal( USHORT nLoop )
         break;
     }
     pDoc->SetRedlineMode_intern( eOld );
-    pDoc->DoUndo( bUndo );
+    pDoc->GetIDocumentUndoRedo().DoUndo(bUndo);
 }
 
 

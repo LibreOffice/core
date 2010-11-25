@@ -27,6 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #include <hintids.hxx>
 #include <unotools/charclass.hxx>
 #include <sot/storage.hxx>
@@ -38,6 +39,7 @@
 #include <fmtanchr.hxx>
 #include <frmfmt.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <swundo.hxx>           // fuer die UndoIds
 #include <pam.hxx>
 #include <ndtxt.hxx>
@@ -430,11 +432,11 @@ void SwUndoInsert::Repeat( SwUndoIter& rUndoIter )
         else
         {
             String aTxt( ((SwTxtNode*)pCNd)->GetTxt() );
-            BOOL bGroupUndo = rDoc.DoesGroupUndo();
-            rDoc.DoGroupUndo( FALSE );
+            bool const bGroupUndo = rDoc.GetIDocumentUndoRedo().DoesGroupUndo();
+            rDoc.GetIDocumentUndoRedo().DoGroupUndo(false);
             rDoc.InsertString( *rUndoIter.pAktPam,
                 aTxt.Copy( nCntnt - nLen, nLen ) );
-            rDoc.DoGroupUndo( bGroupUndo );
+            rDoc.GetIDocumentUndoRedo().DoGroupUndo(bGroupUndo);
         }
         break;
     case ND_GRFNODE:
@@ -765,8 +767,8 @@ void _UnReplaceData::Undo( SwUndoIter& rIter )
 void _UnReplaceData::Redo( SwUndoIter& rIter )
 {
     SwDoc& rDoc = rIter.GetDoc();
-    BOOL bUndo = rDoc.DoesUndo();
-    rDoc.DoUndo( FALSE );
+    bool const bUndo = rDoc.GetIDocumentUndoRedo().DoesUndo();
+    rDoc.GetIDocumentUndoRedo().DoUndo(false);
 
     SwPaM& rPam = *rIter.pAktPam;
     rPam.DeleteMark();
@@ -805,7 +807,7 @@ void _UnReplaceData::Redo( SwUndoIter& rIter )
 
     rDoc.ReplaceRange( rPam, m_sIns, m_bRegExp );
     rPam.DeleteMark();
-    rDoc.DoUndo( bUndo );
+    rDoc.GetIDocumentUndoRedo().DoUndo(bUndo);
 }
 
 void _UnReplaceData::SetEnd( const SwPaM& rPam )

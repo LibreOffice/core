@@ -28,8 +28,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <pam.hxx>
 #include <swundo.hxx>           // fuer die UndoIds
 #include <ndtxt.hxx>
@@ -190,8 +190,8 @@ void SwUndoMove::SetDestRange( const SwNodeIndex& rStt,
 void SwUndoMove::Undo( SwUndoIter& rUndoIter )
 {
     SwDoc* pDoc = &rUndoIter.GetDoc();
-    BOOL bUndo = pDoc->DoesUndo();
-    pDoc->DoUndo( FALSE );
+    bool const bUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
+    pDoc->GetIDocumentUndoRedo().DoUndo(false);
 
     // Block, damit aus diesem gesprungen werden kann
     do {
@@ -276,7 +276,7 @@ void SwUndoMove::Undo( SwUndoIter& rUndoIter )
         pHistory->SetTmpEnd( pHistory->Count() );
     }
 
-    pDoc->DoUndo( bUndo );
+    pDoc->GetIDocumentUndoRedo().DoUndo(bUndo);
 
     // setze noch den Cursor auf den Undo-Bereich
     if( !bMoveRange )

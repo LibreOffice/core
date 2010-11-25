@@ -45,6 +45,7 @@
 #include <fchrfmt.hxx>
 #include <charfmt.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <swcrsr.hxx>
 #include <editsh.hxx>
 #include <ndtxt.hxx>
@@ -1287,9 +1288,11 @@ ULONG SwCursor::Find( const SfxItemSet& rSet, BOOL bNoCollections,
     BOOL bReplace = ( pSearchOpt && ( pSearchOpt->replaceString.getLength() ||
                                     !rSet.Count() ) ) ||
                     (pReplSet && pReplSet->Count());
-    BOOL bSttUndo = pDoc->DoesUndo() && bReplace;
-    if( bSttUndo )
-        pDoc->StartUndo( UNDO_REPLACE, NULL );
+    bool const bStartUndo = pDoc->GetIDocumentUndoRedo().DoesUndo() && bReplace;
+    if (bStartUndo)
+    {
+        pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_REPLACE, NULL );
+    }
 
     SwFindParaAttr aSwFindParaAttr( rSet, bNoCollections, pSearchOpt,
                                     pReplSet, *this );
@@ -1299,8 +1302,10 @@ ULONG SwCursor::Find( const SfxItemSet& rSet, BOOL bNoCollections,
     if( nRet && bReplace )
         pDoc->SetModified();
 
-    if( bSttUndo )
-        pDoc->EndUndo( UNDO_REPLACE, NULL );
+    if (bStartUndo)
+    {
+        pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_REPLACE, NULL );
+    }
 
     return nRet;
 }

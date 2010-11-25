@@ -32,9 +32,8 @@
 #include <sfx2/printer.hxx>
 #include <rtl/logfile.hxx>
 #include <doc.hxx>
-#ifndef _DOCSH_HXX
+#include <IDocumentUndoRedo.hxx>
 #include <docsh.hxx>
-#endif
 #include <viewsh.hxx>
 #include <rootfrm.hxx>
 #include <viewimp.hxx>
@@ -220,7 +219,8 @@ ViewShell::ViewShell( SwDoc& rDocument, Window *pWindow,
 
     //In Init wird ein Standard-FrmFmt angelegt.
     // --> OD 2005-02-11 #i38810#
-    if ( !pDoc->IsUndoNoResetModified() && !bIsDocModified )
+    if (   !pDoc->GetIDocumentUndoRedo().IsUndoNoResetModified()
+        && !bIsDocModified )
     // <--
     {
         pDoc->ResetModified();
@@ -293,8 +293,10 @@ ViewShell::ViewShell( ViewShell& rShell, Window *pWindow,
             SetHiddenFlag( !pOpt->IsShowHiddenField() );
 
     // in Init wird ein Standard-FrmFmt angelegt
-    if( !bModified && !pDoc->IsUndoNoResetModified() )
+    if( !bModified && !pDoc->GetIDocumentUndoRedo().IsUndoNoResetModified() )
+    {
         pDoc->ResetModified();
+    }
 
     //Format-Cache erweitern.
     if ( SwTxtFrm::GetTxtCache()->GetCurMax() < 2550 )

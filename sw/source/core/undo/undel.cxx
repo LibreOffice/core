@@ -36,6 +36,7 @@
 #include <frmfmt.hxx>
 #include <fmtanchr.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <swtable.hxx>
 #include <swundo.hxx>           // fuer die UndoIds
 #include <pam.hxx>
@@ -147,10 +148,10 @@ SwUndoDelete::SwUndoDelete( SwPaM& rPam, BOOL bFullPara, BOOL bCalledByTblCpy )
         DelCntntIndex( *rPam.GetMark(), *rPam.GetPoint(),
                         DelCntntType(nsDelCntntType::DELCNT_ALL | nsDelCntntType::DELCNT_CHKNOCNTNT) );
 
-        BOOL bDoesUndo = pDoc->DoesUndo();
-        pDoc->DoUndo( FALSE );
+        bool const bDoesUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
+        pDoc->GetIDocumentUndoRedo().DoUndo(false);
         _DelBookmarks(pStt->nNode, pEnd->nNode);
-        pDoc->DoUndo( bDoesUndo );
+        pDoc->GetIDocumentUndoRedo().DoUndo(bDoesUndo);
     }
     else
         DelCntntIndex( *rPam.GetMark(), *rPam.GetPoint() );
@@ -253,11 +254,12 @@ SwUndoDelete::SwUndoDelete( SwPaM& rPam, BOOL bFullPara, BOOL bCalledByTblCpy )
                     ++nReplaceDummy;
                     SwNodeRange aMvRg( *pEndTxtNd, 0, *pEndTxtNd, 1 );
                     SwPosition aSplitPos( *pEndTxtNd );
-                    BOOL bDoesUndo = pDoc->DoesUndo();
-                    pDoc->DoUndo( FALSE );
+                    bool const bDoesUndo =
+                        pDoc->GetIDocumentUndoRedo().DoesUndo();
+                    pDoc->GetIDocumentUndoRedo().DoUndo(false);
                     pDoc->SplitNode( aSplitPos, false );
                     rDocNds._MoveNodes( aMvRg, rDocNds, aRg.aEnd, TRUE );
-                    pDoc->DoUndo( bDoesUndo );
+                    pDoc->GetIDocumentUndoRedo().DoUndo(bDoesUndo);
                     aRg.aEnd--;
                 }
                 else
@@ -279,11 +281,12 @@ SwUndoDelete::SwUndoDelete( SwPaM& rPam, BOOL bFullPara, BOOL bCalledByTblCpy )
                 {
                     SwNodeRange aMvRg( *pSttTxtNd, 0, *pSttTxtNd, 1 );
                     SwPosition aSplitPos( *pSttTxtNd );
-                    BOOL bDoesUndo = pDoc->DoesUndo();
-                    pDoc->DoUndo( FALSE );
+                    bool const bDoesUndo =
+                        pDoc->GetIDocumentUndoRedo().DoesUndo();
+                    pDoc->GetIDocumentUndoRedo().DoUndo(false);
                     pDoc->SplitNode( aSplitPos, false );
                     rDocNds._MoveNodes( aMvRg, rDocNds, aRg.aStart, TRUE );
-                    pDoc->DoUndo( bDoesUndo );
+                    pDoc->GetIDocumentUndoRedo().DoUndo(bDoesUndo);
                     aRg.aStart--;
                 }
             }
@@ -651,8 +654,8 @@ void lcl_ReAnchorAtCntntFlyFrames( const SwSpzFrmFmts& rSpzArr, SwPosition &rPos
 void SwUndoDelete::Undo( SwUndoIter& rUndoIter )
 {
     SwDoc* pDoc = &rUndoIter.GetDoc();
-    BOOL bUndo = pDoc->DoesUndo();
-    pDoc->DoUndo( FALSE );
+    bool const bUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
+    pDoc->GetIDocumentUndoRedo().DoUndo(false);
 
     ULONG nCalcStt = nSttNode - nNdDiff;
 
@@ -854,7 +857,7 @@ void SwUndoDelete::Undo( SwUndoIter& rUndoIter )
     if( pRedlSaveData )
         SetSaveData( *pDoc, *pRedlSaveData );
 
-    pDoc->DoUndo( bUndo );          // Undo wieder einschalten
+    pDoc->GetIDocumentUndoRedo().DoUndo(bUndo);
     SetPaM( rUndoIter, TRUE );
 }
 
@@ -988,8 +991,8 @@ void SwUndoDelete::Repeat( SwUndoIter& rUndoIter )
 
     SwPaM& rPam = *rUndoIter.pAktPam;
     SwDoc& rDoc = *rPam.GetDoc();
-    BOOL bGroupUndo = rDoc.DoesGroupUndo();
-    rDoc.DoGroupUndo( FALSE );
+    bool const bGroupUndo = rDoc.GetIDocumentUndoRedo().DoesGroupUndo();
+    rDoc.GetIDocumentUndoRedo().DoGroupUndo(false);
     if( !rPam.HasMark() )
     {
         rPam.SetMark();
@@ -999,7 +1002,7 @@ void SwUndoDelete::Repeat( SwUndoIter& rUndoIter )
         rDoc.DelFullPara( rPam );
     else
         rDoc.DeleteAndJoin( rPam );
-    rDoc.DoGroupUndo( bGroupUndo );
+    rDoc.GetIDocumentUndoRedo().DoGroupUndo(bGroupUndo);
     rUndoIter.pLastUndoObj = this;
 }
 

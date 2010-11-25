@@ -28,11 +28,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+#include <tools/ref.hxx>
 
 #include <hintids.hxx>
-#include <tools/ref.hxx>
 #include <fesh.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <pagefrm.hxx>
 #include <rootfrm.hxx>
 #include <cntfrm.hxx>
@@ -42,6 +43,7 @@
 #include <tabfrm.hxx>
 #include <edimp.hxx>
 #include <SwStyleNameMapper.hxx>
+
 /*************************************************************************
 |*
 |*  SwFEShell::GetPageDescCnt()
@@ -144,11 +146,11 @@ void SwFEShell::ChgPageDesc( USHORT i, const SwPageDesc &rChged )
     SET_CURR_SHELL( this );
     //Fix i64842: because Undo has a very special way to handle header/footer content
     // we have to copy the page descriptor before calling ChgPageDesc.
-    const sal_Bool bDoesUndo( GetDoc()->DoesUndo() );
+    bool const bDoesUndo( GetDoc()->GetIDocumentUndoRedo().DoesUndo() );
     SwPageDesc aDesc( rChged );
-    GetDoc()->DoUndo( sal_False );
+    GetDoc()->GetIDocumentUndoRedo().DoUndo(false);
     GetDoc()->CopyPageDesc(rChged, aDesc);
-    GetDoc()->DoUndo( bDoesUndo );
+    GetDoc()->GetIDocumentUndoRedo().DoUndo(bDoesUndo);
     GetDoc()->ChgPageDesc( i, aDesc );
     EndAllActionAndCall();
 }

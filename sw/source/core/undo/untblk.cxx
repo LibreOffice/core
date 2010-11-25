@@ -28,11 +28,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <hintids.hxx>
 #include <fmtanchr.hxx>
 #include <frmfmt.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <docary.hxx>
 #include <swundo.hxx>           // fuer die UndoIds
 #include <pam.hxx>
@@ -176,8 +176,8 @@ void SwUndoInserts::Undo( SwUndoIter& rUndoIter )
     SwPaM * pPam = rUndoIter.pAktPam;
     SwDoc* pDoc = pPam->GetDoc();
     SetPaM( rUndoIter );
-    BOOL bUndo = pDoc->DoesUndo();
-    pDoc->DoUndo( FALSE );
+    bool const bUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
+    pDoc->GetIDocumentUndoRedo().DoUndo(false);
 
     if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ))
         pDoc->DeleteRedline( *pPam, true, USHRT_MAX );
@@ -269,7 +269,7 @@ void SwUndoInserts::Undo( SwUndoIter& rUndoIter )
         }
     }
 
-    pDoc->DoUndo( bUndo );
+    pDoc->GetIDocumentUndoRedo().DoUndo(bUndo);
     if( pPam != rUndoIter.pAktPam )
         delete pPam;
 }

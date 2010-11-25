@@ -35,6 +35,7 @@
 #include <svl/zforlist.hxx>
 #include <frmfmt.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <cntfrm.hxx>
 #include <pam.hxx>
 #include <swtable.hxx>
@@ -558,9 +559,9 @@ void lcl_CpyBox( const SwTable& rCpyTbl, const SwTableBox* pCpyBox,
     if( pUndo )
         pUndo->AddBoxBefore( *pDstBox, bDelCntnt );
 
-    BOOL bUndo = pDoc->DoesUndo();
+    bool const bUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
     bool bUndoRedline = pUndo && pDoc->IsRedlineOn();
-    pDoc->DoUndo( FALSE );
+    pDoc->GetIDocumentUndoRedo().DoUndo(false);
 
     SwNodeIndex aSavePos( aInsIdx, -1 );
     if( pRg.get() )
@@ -686,7 +687,7 @@ void lcl_CpyBox( const SwTable& rCpyTbl, const SwTableBox* pCpyBox,
         }
     }
 
-    pDoc->DoUndo( bUndo );
+    pDoc->GetIDocumentUndoRedo().DoUndo(bUndo);
 }
 
 BOOL SwTable::InsNewTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,

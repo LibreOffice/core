@@ -34,6 +34,7 @@
 #include <ftnidx.hxx>
 #include <frmfmt.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <docary.hxx>
 #include <swundo.hxx>           // fuer die UndoIds
 #include <pam.hxx>
@@ -45,12 +46,8 @@
 #include <mvsave.hxx>
 #include <redline.hxx>
 #include <crossrefbookmark.hxx>
-#ifndef _UNDO_HRC
 #include <undo.hrc>
-#endif
-#ifndef _COMCORE_HRC
 #include <comcore.hrc>
-#endif
 #include <docsh.hxx>
 
 class SwRedlineSaveData : public SwUndRng, public SwRedlineData,
@@ -289,8 +286,8 @@ void SwUndoSaveCntnt::MoveToUndoNds( SwPaM& rPaM, SwNodeIndex* pNodeIdx,
                     SwIndex* pCntIdx, ULONG* pEndNdIdx, xub_StrLen* pEndCntIdx )
 {
     SwDoc& rDoc = *rPaM.GetDoc();
-    BOOL bUndo = rDoc.DoesUndo();
-    rDoc.DoUndo( FALSE );
+    bool const bUndo = rDoc.GetIDocumentUndoRedo().DoesUndo();
+    rDoc.GetIDocumentUndoRedo().DoUndo(false);
 
     SwNoTxtNode* pCpyNd = rPaM.GetNode()->GetNoTxtNode();
 
@@ -372,7 +369,7 @@ void SwUndoSaveCntnt::MoveToUndoNds( SwPaM& rPaM, SwNodeIndex* pNodeIdx,
             pCntIdx->Assign( 0, 0 );
     }
 
-    rDoc.DoUndo( bUndo );
+    rDoc.GetIDocumentUndoRedo().DoUndo(bUndo);
 }
 
 void SwUndoSaveCntnt::MoveFromUndoNds( SwDoc& rDoc, ULONG nNodeIdx,
@@ -384,8 +381,8 @@ void SwUndoSaveCntnt::MoveFromUndoNds( SwDoc& rDoc, ULONG nNodeIdx,
     if( nNodeIdx == rNds.GetEndOfPostIts().GetIndex() )
         return;     // nichts gespeichert
 
-    BOOL bUndo = rDoc.DoesUndo();
-    rDoc.DoUndo( FALSE );
+    bool const bUndo = rDoc.GetIDocumentUndoRedo().DoesUndo();
+    rDoc.GetIDocumentUndoRedo().DoUndo(false);
 
     SwPaM aPaM( rInsPos );
     if( pEndNdIdx )         // dann hole aus diesem den Bereich
@@ -441,7 +438,7 @@ void SwUndoSaveCntnt::MoveFromUndoNds( SwDoc& rDoc, ULONG nNodeIdx,
         ASSERT( FALSE, "was ist es denn nun?" );
     }
 
-    rDoc.DoUndo( bUndo );
+    rDoc.GetIDocumentUndoRedo().DoUndo(bUndo);
 }
 
 // diese beiden Methoden bewegen den Point vom Pam zurueck/vor. Damit
@@ -501,8 +498,8 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
 
     SwDoc* pDoc = rMark.nNode.GetNode().GetDoc();
 
-    BOOL bDoesUndo = pDoc->DoesUndo();
-    pDoc->DoUndo( FALSE );
+    bool const bDoesUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
+    pDoc->GetIDocumentUndoRedo().DoUndo(false);
 
     // 1. Fussnoten
     if( nsDelCntntType::DELCNT_FTN & nDelCntntType )
@@ -814,7 +811,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
         }
     }
 
-    pDoc->DoUndo( bDoesUndo );
+    pDoc->GetIDocumentUndoRedo().DoUndo(bDoesUndo);
 }
 
 

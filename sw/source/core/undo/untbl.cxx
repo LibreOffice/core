@@ -34,6 +34,7 @@
 #include <fmtornt.hxx>
 #include <fmtpdsc.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <editsh.hxx>
 #include <docary.hxx>
 #include <ndtxt.hxx>
@@ -1956,7 +1957,8 @@ void SwUndoTblNdsChg::Redo( SwUndoIter& rUndoIter )
             TblChgMode eOldMode = rTbl.GetTblChgMode();
             rTbl.SetTblChgMode( (TblChgMode)nCount );
 
-            rDoc.DoUndo( TRUE );        // wir brauchen die SaveSections!
+            // need the SaveSections!
+            rDoc.GetIDocumentUndoRedo().DoUndo( true );
             SwUndoTblNdsChg* pUndo = 0;
 
             switch( nSetColType & 0xff )
@@ -1984,7 +1986,7 @@ void SwUndoTblNdsChg::Redo( SwUndoIter& rUndoIter )
 
                 delete pUndo;
             }
-            rDoc.DoUndo( FALSE );
+            rDoc.GetIDocumentUndoRedo().DoUndo( false );
 
             rTbl.SetTblChgMode( eOldMode );
         }
@@ -2192,13 +2194,13 @@ void SwUndoTblMerge::MoveBoxCntnt( SwDoc* pDoc, SwNodeRange& rRg, SwNodeIndex& r
 {
     SwNodeIndex aTmp( rRg.aStart, -1 ), aTmp2( rPos, -1 );
     SwUndoMove* pUndo = new SwUndoMove( pDoc, rRg, rPos );
-    sal_Bool bDoesUndo = pDoc->DoesUndo();
-    pDoc->DoUndo( sal_False );
+    bool const bDoesUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
+    pDoc->GetIDocumentUndoRedo().DoUndo(false);
     pDoc->MoveNodeRange( rRg, rPos, (pSaveTbl->IsNewModel()) ?
         IDocumentContentOperations::DOC_NO_DELFRMS :
         IDocumentContentOperations::DOC_MOVEDEFAULT );
     if( bDoesUndo )
-        pDoc->DoUndo( sal_True );
+        pDoc->GetIDocumentUndoRedo().DoUndo(true);
     aTmp++;
     aTmp2++;
     pUndo->SetDestRange( aTmp2, rPos, aTmp );

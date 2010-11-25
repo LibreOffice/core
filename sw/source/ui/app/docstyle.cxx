@@ -54,6 +54,7 @@
 #include <docary.hxx>
 #include <ccoll.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <cmdid.h>
 #include <swstyle.h>
 #include <app.hrc>
@@ -844,11 +845,11 @@ BOOL  SwDocStyleSheet::SetName( const String& rStr)
                 String aOldName(aPageDesc.GetName());
 
                 aPageDesc.SetName( rStr );
-                BOOL bDoesUndo = rDoc.DoesUndo();
+                bool const bDoesUndo = rDoc.GetIDocumentUndoRedo().DoesUndo();
 
-                rDoc.DoUndo(aOldName.Len() > 0);
+                rDoc.GetIDocumentUndoRedo().DoUndo(aOldName.Len() > 0);
                 rDoc.ChgPageDesc(aOldName, aPageDesc);
-                rDoc.DoUndo(bDoesUndo);
+                rDoc.GetIDocumentUndoRedo().DoUndo(bDoesUndo);
                 // <- #116530#
 
                 rDoc.SetModified();
@@ -1140,11 +1141,11 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
     ASSERT( &rSet != &aCoreSet, "SetItemSet mit eigenem Set ist nicht erlaubt" );
 
     // --> OD 2008-02-12 #newlistlevelattrs#
-    if ( rDoc.DoesUndo() )
+    if (rDoc.GetIDocumentUndoRedo().DoesUndo())
     {
         SwRewriter aRewriter;
         aRewriter.AddRule( UNDO_ARG1, GetName() );
-        rDoc.StartUndo( UNDO_INSFMTATTR, &aRewriter );
+        rDoc.GetIDocumentUndoRedo().StartUndo( UNDO_INSFMTATTR, &aRewriter );
     }
     // <--
 
@@ -1310,10 +1311,10 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
                     pNewDsc = new SwPageDesc( *pDesc );
                     // --> OD 2005-05-09 #i48949# - no undo actions for the
                     // copy of the page style
-                    const sal_Bool bDoesUndo( rDoc.DoesUndo() );
-                    rDoc.DoUndo( sal_False );
+                    bool const bUndo(rDoc.GetIDocumentUndoRedo().DoesUndo());
+                    rDoc.GetIDocumentUndoRedo().DoUndo(false);
                     rDoc.CopyPageDesc(*pDesc, *pNewDsc); // #i7983#
-                    rDoc.DoUndo( bDoesUndo );
+                    rDoc.GetIDocumentUndoRedo().DoUndo(bUndo);
                     // <--
 
                     pFmt = &pNewDsc->GetMaster();
@@ -1409,9 +1410,9 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
     }
 
     // --> OD 2008-02-12 #newlistlevelattrs#
-    if ( rDoc.DoesUndo() )
+    if (rDoc.GetIDocumentUndoRedo().DoesUndo())
     {
-        rDoc.EndUndo( UNDO_INSFMTATTR, NULL );
+        rDoc.GetIDocumentUndoRedo().EndUndo( UNDO_INSFMTATTR, NULL );
     }
     // <--
 }

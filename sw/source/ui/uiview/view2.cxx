@@ -86,6 +86,7 @@
 #include <uivwimp.hxx>
 #include <docsh.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <wrtsh.hxx>
 #include <viewopt.hxx>
 #include <basesh.hxx>
@@ -2105,10 +2106,11 @@ long SwView::InsertMedium( USHORT nSlotId, SfxMedium* pMedium, INT16 nVersion )
                     }
                     else
                     {
-                        sal_Bool bUndo = pDoc->DoesUndo();
-                        pDoc->DoUndo( sal_False );
+                        bool const bUndo =
+                            pDoc->GetIDocumentUndoRedo().DoesUndo();
+                        pDoc->GetIDocumentUndoRedo().DoUndo(false);
                         nErrno = pDocSh->InsertFrom( *pMedium ) ? 0 : ERR_SWG_READ_ERROR;
-                        pDoc->DoUndo( bUndo );
+                        pDoc->GetIDocumentUndoRedo().DoUndo(bUndo);
                     }
 
                 }
@@ -2125,7 +2127,9 @@ long SwView::InsertMedium( USHORT nSlotId, SfxMedium* pMedium, INT16 nVersion )
                 { // Disable Undo for .sdw (136991) or
                   // if the number of page styles with header/footer has changed (#i67305)
                     if( !pRead || nUndoCheck != lcl_PageDescWithHeader( *pDoc ) )
-                        pDoc->DelAllUndoObj();
+                    {
+                        pDoc->GetIDocumentUndoRedo().DelAllUndoObj();
+                    }
                 }
 
                 pWrtShell->EndAllAction();

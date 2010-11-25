@@ -78,6 +78,7 @@
 #include <tgrditem.hxx>
 #include <hfspacingitem.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <pagefrm.hxx>
 #include <rootfrm.hxx>
 #include <cntfrm.hxx>
@@ -106,9 +107,7 @@
 
 #include <cmdid.h>
 #include <unomid.h>
-#ifndef _COMCORE_HRC
 #include <comcore.hrc>
-#endif
 #include <svx/svdundo.hxx> // #111827#
 // OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
@@ -244,14 +243,16 @@ void DelHFFormat( SwClient *pToRemove, SwFrmFmt *pFmt )
 
             // beim Loeschen von Header/Footer-Formaten IMMER das Undo
             // abschalten! (Bug 31069)
-            sal_Bool bDoesUndo = pDoc->DoesUndo();
-            pDoc->DoUndo( sal_False );
+            bool const bDoesUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
+            pDoc->GetIDocumentUndoRedo().DoUndo(false);
 
             ASSERT( pNode, "Ein grosses Problem." );
             pDoc->DeleteSection( pNode );
 
             if( bDoesUndo )
-                pDoc->DoUndo( sal_True );
+            {
+                pDoc->GetIDocumentUndoRedo().DoUndo(true);
+            }
         }
         delete pFmt;
     }

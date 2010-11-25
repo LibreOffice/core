@@ -28,11 +28,15 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+#include <tools/resid.hxx>
 
 #include <unotools/charclass.hxx>
 #include <unotools/transliterationwrapper.hxx>
+
 #include <comphelper/processfactory.hxx>
+
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <swundo.hxx>           // fuer die UndoIds
 #include <pam.hxx>
 #include <ndtxt.hxx>
@@ -41,7 +45,6 @@
 #include <acorrect.hxx>
 #include <docary.hxx>
 
-#include <tools/resid.hxx>
 #include <comcore.hrc> // #111827#
 #include <undo.hrc>
 
@@ -275,10 +278,10 @@ void SwUndoOverwrite::Repeat( SwUndoIter& rUndoIter )
 
     SwDoc& rDoc = *pAktPam->GetDoc();
 
-    BOOL bGroupUndo = rDoc.DoesGroupUndo();
-    rDoc.DoGroupUndo( FALSE );
+    bool const bGroupUndo = rDoc.GetIDocumentUndoRedo().DoesGroupUndo();
+    rDoc.GetIDocumentUndoRedo().DoGroupUndo(false);
     rDoc.Overwrite( *pAktPam, aInsStr.GetChar( 0 ));
-    rDoc.DoGroupUndo( bGroupUndo );
+    rDoc.GetIDocumentUndoRedo().DoGroupUndo(bGroupUndo);
     for( xub_StrLen n = 1; n < aInsStr.Len(); ++n )
         rDoc.Overwrite( *pAktPam, aInsStr.GetChar( n ) );
 }
@@ -383,8 +386,8 @@ SwUndoTransliterate::~SwUndoTransliterate()
 void SwUndoTransliterate::Undo( SwUndoIter& rUndoIter )
 {
     SwDoc& rDoc = rUndoIter.GetDoc();
-    BOOL bUndo = rDoc.DoesUndo();
-    rDoc.DoUndo( FALSE );
+    bool const bUndo = rDoc.GetIDocumentUndoRedo().DoesUndo();
+    rDoc.GetIDocumentUndoRedo().DoUndo(false);
 
     // since the changes were added to the vector from the end of the string/node towards
     // the start, we need to revert them from the start towards the end now to keep the
@@ -393,7 +396,7 @@ void SwUndoTransliterate::Undo( SwUndoIter& rUndoIter )
     for (sal_Int32 i = aChanges.size() - 1; i >= 0;  --i)
         aChanges[i]->SetChangeAtNode( rDoc );
 
-    rDoc.DoUndo( bUndo );
+    rDoc.GetIDocumentUndoRedo().DoUndo(bUndo);
     SetPaM( rUndoIter, TRUE );
 }
 

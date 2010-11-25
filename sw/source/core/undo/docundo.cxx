@@ -117,36 +117,6 @@ void SwDoc::SetNoDrawUndoObj( bool const bFlag )
     GetUndoManager().SetNoDrawUndoObj(bFlag);
 }
 
-void SwDoc::SetUndoNoResetModified()
-{
-    GetUndoManager().SetUndoNoResetModified();
-}
-
-bool SwDoc::IsUndoNoResetModified() const
-{
-    return GetUndoManager().IsUndoNoResetModified();
-}
-
-void SwDoc::DoUndo(bool bUn)
-{
-    GetUndoManager().DoUndo(bUn);
-}
-
-bool SwDoc::DoesUndo() const
-{
-    return GetUndoManager().DoesUndo();
-}
-
-void SwDoc::DoGroupUndo(bool bUn)
-{
-    GetUndoManager().DoGroupUndo(bUn);
-}
-
-bool SwDoc::DoesGroupUndo() const
-{
-    return GetUndoManager().DoesGroupUndo();
-}
-
 sal_uInt16 SwDoc::GetUndoActionCount()
 {
     return ::sw::UndoManager::GetUndoActionCount();
@@ -157,105 +127,9 @@ void SwDoc::SetUndoActionCount( sal_uInt16 nNew )
     ::sw::UndoManager::SetUndoActionCount(nNew);
 }
 
-void SwDoc::AppendUndo( SwUndo* pUndo )
-{
-    GetUndoManager().AppendUndo(pUndo);
-}
-
-void SwDoc::ClearRedo()
-{
-    GetUndoManager().ClearRedo();
-}
-
-void SwDoc::DelAllUndoObj()
-{
-    GetUndoManager().DelAllUndoObj();
-}
-
-void SwDoc::setUndoNoModifiedPosition( SwUndoNoModifiedPosition nNew )
-{
-    return GetUndoManager().setUndoNoModifiedPosition(nNew);
-}
-
-SwUndoNoModifiedPosition SwDoc::getUndoNoModifiedPosition() const
-{
-    return GetUndoManager().getUndoNoModifiedPosition();
-}
-
-bool SwDoc::HasUndoId(SwUndoId eId) const
-{
-    return GetUndoManager().HasUndoId(eId);
-}
-
-bool SwDoc::Undo( SwUndoIter& rUndoIter )
-{
-    return GetUndoManager().Undo(rUndoIter);
-}
-
-SwUndoId SwDoc::StartUndo( SwUndoId eUndoId, const SwRewriter * pRewriter )
-{
-    return GetUndoManager().StartUndo(eUndoId, pRewriter);
-}
-
-SwUndoId SwDoc::EndUndo(SwUndoId eUndoId, const SwRewriter * pRewriter)
-{
-    return GetUndoManager().EndUndo(eUndoId, pRewriter);
-}
-
-String SwDoc::GetUndoIdsStr( String* pStr, SwUndoIds *pUndoIds) const
-{
-    return GetUndoManager().GetUndoIdsStr(pStr, pUndoIds);
-}
-
 sal_Bool SwDoc::RestoreInvisibleContent()
 {
     return GetUndoManager().RestoreInvisibleContent();
-}
-
-SwUndoId SwDoc::GetUndoIds( String* pStr, SwUndoIds *pUndoIds) const
-{
-    return GetUndoManager().GetUndoIds(pStr, pUndoIds);
-}
-
-bool SwDoc::HasTooManyUndos() const
-{
-    return GetUndoManager().HasTooManyUndos();
-}
-
-bool SwDoc::Redo( SwUndoIter& rUndoIter )
-{
-    return GetUndoManager().Redo(rUndoIter);
-}
-
-String SwDoc::GetRedoIdsStr( String* pStr, SwUndoIds *pRedoIds ) const
-{
-
-    return GetUndoManager().GetRedoIdsStr(pStr, pRedoIds);
-}
-
-SwUndoId SwDoc::GetRedoIds( String* pStr, SwUndoIds *pRedoIds ) const
-{
-    return GetUndoManager().GetRedoIds(pStr, pRedoIds);
-}
-
-bool SwDoc::Repeat( SwUndoIter& rUndoIter, sal_uInt16 nRepeatCnt )
-{
-    return GetUndoManager().Repeat(rUndoIter, nRepeatCnt);
-}
-
-String SwDoc::GetRepeatIdsStr(String* pStr, SwUndoIds *pRepeatIds) const
-{
-    return GetUndoManager().GetRepeatIdsStr(pStr, pRepeatIds);
-}
-
-SwUndoId SwDoc::GetRepeatIds(String* pStr, SwUndoIds *pRepeatIds) const
-{
-    return GetUndoManager().GetRepeatIds(pStr, pRepeatIds);
-}
-
-SwUndo* SwDoc::RemoveLastUndo( SwUndoId eUndoId )
-{
-    return GetUndoManager().RemoveLastUndo(eUndoId);
 }
 
 // UndoManager ///////////////////////////////////////////////////////////

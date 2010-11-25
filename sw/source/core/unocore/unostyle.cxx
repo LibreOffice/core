@@ -47,6 +47,7 @@
 #include <editeng/paperinf.hxx>
 #include <pagedesc.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <docary.hxx>
 #include <charfmt.hxx>
 #include <cmdid.h>
@@ -3397,15 +3398,15 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
     }
     if(aBaseImpl.HasItemSet())
     {
-        BOOL bDoesUndo = GetDoc()->DoesUndo();
+        bool const bDoesUndo = GetDoc()->GetIDocumentUndoRedo().DoesUndo();
         if( bDoesUndo )
         {
             // Fix i64460: as long as Undo of page styles with header/footer causes trouble...
-            GetDoc()->DelAllUndoObj();
-            GetDoc()->DoUndo( FALSE );
+            GetDoc()->GetIDocumentUndoRedo().DelAllUndoObj();
+            GetDoc()->GetIDocumentUndoRedo().DoUndo(false);
         }
         aBaseImpl.mxNewBase->SetItemSet(aBaseImpl.GetItemSet());
-        GetDoc()->DoUndo( bDoesUndo );
+        GetDoc()->GetIDocumentUndoRedo().DoUndo(bDoesUndo);
     }
 }
 

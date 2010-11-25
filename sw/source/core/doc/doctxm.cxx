@@ -49,6 +49,7 @@
 #include <frmatr.hxx>
 #include <pagedesc.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <pagefrm.hxx>
 #include <ndtxt.hxx>
 #include <swtable.hxx>
@@ -188,14 +189,14 @@ void SwDoc::DeleteTOXMark( const SwTOXMark* pTOXMark )
     SwTxtNode& rTxtNd = const_cast<SwTxtNode&>(pTxtTOXMark->GetTxtNode());
     ASSERT( rTxtNd.GetpSwpHints(), "kann nicht geloescht werden" );
 
-    if( DoesUndo() )
+    if (GetIDocumentUndoRedo().DoesUndo())
     {
-        // fuers Undo die Attribute sichern
-        ClearRedo();
+        // save attributes for Undo
+        GetIDocumentUndoRedo().ClearRedo();
         SwUndoResetAttr* pUndo = new SwUndoResetAttr(
             SwPosition( rTxtNd, SwIndex( &rTxtNd, *pTxtTOXMark->GetStart() ) ),
             RES_TXTATR_TOXMARK );
-        AppendUndo( pUndo );
+        GetIDocumentUndoRedo().AppendUndo( pUndo );
 
         SwRegHistory aRHst( rTxtNd, &pUndo->GetHistory() );
         rTxtNd.GetpSwpHints()->Register( &aRHst );
@@ -203,7 +204,7 @@ void SwDoc::DeleteTOXMark( const SwTOXMark* pTOXMark )
 
     rTxtNd.DeleteAttribute( const_cast<SwTxtTOXMark*>(pTxtTOXMark) );
 
-    if ( DoesUndo() )
+    if (GetIDocumentUndoRedo().DoesUndo())
     {
         if( rTxtNd.GetpSwpHints() )
             rTxtNd.GetpSwpHints()->DeRegister();
@@ -364,7 +365,7 @@ const SwTOXBaseSection* SwDoc::InsertTableOf( const SwPosition& rPos,
                                                 const SfxItemSet* pSet,
                                                 BOOL bExpand )
 {
-    StartUndo( UNDO_INSTOX, NULL );
+    GetIDocumentUndoRedo().StartUndo( UNDO_INSTOX, NULL );
 
     String sSectNm( rTOX.GetTOXName() );
     sSectNm = GetUniqueTOXBaseName( *rTOX.GetTOXType(), &sSectNm );
@@ -406,7 +407,7 @@ sNm.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "_Head" ));
         }
     }
 
-    EndUndo( UNDO_INSTOX, NULL );
+    GetIDocumentUndoRedo().EndUndo( UNDO_INSTOX, NULL );
 
     return pNewSection;
 }
@@ -548,7 +549,7 @@ BOOL SwDoc::DeleteTOX( const SwTOXBase& rTOXBase, BOOL bDelNodes )
     SwSectionFmt* pFmt = rTOXSect.GetFmt();
     if( pFmt )
     {
-        StartUndo( UNDO_CLEARTOXRANGE, NULL );
+        GetIDocumentUndoRedo().StartUndo( UNDO_CLEARTOXRANGE, NULL );
 
         /* Save the start node of the TOX' section. */
         SwSectionNode * pMyNode = pFmt->GetSectionNode();
@@ -620,7 +621,7 @@ BOOL SwDoc::DeleteTOX( const SwTOXBase& rTOXBase, BOOL bDelNodes )
 
         DelSectionFmt( pFmt, bDelNodes );
 
-        EndUndo( UNDO_CLEARTOXRANGE, NULL );
+        GetIDocumentUndoRedo().EndUndo( UNDO_CLEARTOXRANGE, NULL );
         bRet = TRUE;
     }
 

@@ -28,8 +28,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <editsh.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
@@ -52,7 +52,9 @@ void SwEditShell::SetGlblDocSaveLinks( BOOL bFlag )
 {
     getIDocumentSettingAccess()->set(IDocumentSettingAccess::GLOBAL_DOCUMENT_SAVE_LINKS, bFlag);
     if( !GetDoc()->IsModified() )   // Bug 57028
-        GetDoc()->SetUndoNoResetModified();
+    {
+        GetDoc()->GetIDocumentUndoRedo().SetUndoNoResetModified();
+    }
     GetDoc()->SetModified();
 }
 
@@ -169,7 +171,7 @@ BOOL SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos,
     else
     {
         bEndUndo = TRUE;
-        pMyDoc->StartUndo( UNDO_START, NULL );
+        pMyDoc->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
         rPos.nNode--;
         pMyDoc->AppendTxtNode( rPos );
         pCrsr->SetMark();
@@ -178,7 +180,9 @@ BOOL SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos,
     InsertSection( rNew );
 
     if( bEndUndo )
-        pMyDoc->EndUndo( UNDO_END, NULL );
+    {
+        pMyDoc->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
+    }
     EndAllAction();
 
     return TRUE;
@@ -209,7 +213,7 @@ BOOL SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos,
     else
     {
         bEndUndo = TRUE;
-        pMyDoc->StartUndo( UNDO_START, NULL );
+        pMyDoc->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
         rPos.nNode--;
         pMyDoc->AppendTxtNode( rPos );
     }
@@ -217,7 +221,9 @@ BOOL SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos,
     InsertTableOf( rTOX );
 
     if( bEndUndo )
-        pMyDoc->EndUndo( UNDO_END, NULL );
+    {
+        pMyDoc->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
+    }
     EndAllAction();
 
     return TRUE;

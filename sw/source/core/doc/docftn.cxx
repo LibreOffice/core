@@ -39,6 +39,7 @@
 #include <undobj.hxx>
 #include <rolbck.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <ndtxt.hxx>
 #include <poolfmt.hxx>
 #include <ftninfo.hxx>
@@ -259,10 +260,10 @@ void SwDoc::SetFtnInfo(const SwFtnInfo& rInfo)
     {
         const SwFtnInfo &rOld = GetFtnInfo();
 
-        if( DoesUndo() )
+        if (GetIDocumentUndoRedo().DoesUndo())
         {
-            ClearRedo();
-            AppendUndo( new SwUndoFootNoteInfo( rOld ) );
+            GetIDocumentUndoRedo().ClearRedo();
+            GetIDocumentUndoRedo().AppendUndo( new SwUndoFootNoteInfo(rOld) );
         }
 
         BOOL bFtnPos  = rInfo.ePos != rOld.ePos;
@@ -326,10 +327,11 @@ void SwDoc::SetEndNoteInfo(const SwEndNoteInfo& rInfo)
 {
     if( !(GetEndNoteInfo() == rInfo) )
     {
-        if( DoesUndo() )
+        if(GetIDocumentUndoRedo().DoesUndo())
         {
-            ClearRedo();
-            AppendUndo( new SwUndoEndNoteInfo( GetEndNoteInfo() ) );
+            GetIDocumentUndoRedo().ClearRedo();
+            SwUndo *const pUndo( new SwUndoEndNoteInfo( GetEndNoteInfo() ) );
+            GetIDocumentUndoRedo().AppendUndo(pUndo);
         }
 
         BOOL bNumChg  = rInfo.nFtnOffset != GetEndNoteInfo().nFtnOffset;
@@ -403,9 +405,9 @@ bool SwDoc::SetCurFtn( const SwPaM& rPam, const String& rNumStr,
     rFtnArr.SeekEntry( pStt->nNode, &nPos );
 
     SwUndoChangeFootNote* pUndo = 0;
-    if( DoesUndo() )
+    if (GetIDocumentUndoRedo().DoesUndo())
     {
-        ClearRedo();
+        GetIDocumentUndoRedo().ClearRedo();
         pUndo = new SwUndoChangeFootNote( rPam, rNumStr, nNumber, bIsEndNote );
     }
 
@@ -479,8 +481,8 @@ bool SwDoc::SetCurFtn( const SwPaM& rPam, const String& rNumStr,
     {
         if( pUndo )
         {
-            ClearRedo();
-            AppendUndo( pUndo );
+            GetIDocumentUndoRedo().ClearRedo();
+            GetIDocumentUndoRedo().AppendUndo(pUndo);
         }
 
         if ( bTypeChgd )

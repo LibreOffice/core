@@ -27,6 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #include <hintids.hxx>
 #include <i18npool/mslangid.hxx>
 #include <unotools/localedatawrapper.hxx>
@@ -54,6 +55,7 @@
 #include <editeng/scriptspaceitem.hxx>
 #include <viewopt.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <fmtanchr.hxx>
 #include <fmtornt.hxx>
 #include <fmtsrnd.hxx>
@@ -67,9 +69,7 @@
 #include <fmtcol.hxx>
 #include <ndtxt.hxx>
 #include <fmtline.hxx>
-#ifndef _POOLFMT_HRC
 #include <poolfmt.hrc>
-#endif
 #include <GetMetricVal.hxx>
 #include <numrule.hxx>
 
@@ -1164,8 +1164,8 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId )
     {
         BOOL bIsModified = IsModified();
 
-        BOOL bDoesUndo = DoesUndo();
-        DoUndo(FALSE);
+        bool const bDoesUndo = GetIDocumentUndoRedo().DoesUndo();
+        GetIDocumentUndoRedo().DoUndo(false);
         switch (nId & (COLL_GET_RANGE_BITS + POOLGRP_NOCOLLID) )
         {
         case POOLGRP_CHARFMT:
@@ -1180,7 +1180,7 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId )
             break;
         }
 
-        DoUndo(bDoesUndo);
+        GetIDocumentUndoRedo().DoUndo(bDoesUndo);
 
         if( !bIsModified )
             ResetModified();
@@ -1486,10 +1486,10 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
     {
         BOOL bIsModified = IsModified();
 
-        BOOL bDoesUndo = DoesUndo();
-        DoUndo(FALSE);
+        bool const bDoesUndo = GetIDocumentUndoRedo().DoesUndo();
+        GetIDocumentUndoRedo().DoUndo(false);
         n = MakePageDesc( aNm, 0, bRegardLanguage );
-        DoUndo(bDoesUndo);
+        GetIDocumentUndoRedo().DoUndo(bDoesUndo);
 
         pNewPgDsc = aPageDescs[ n ];
         pNewPgDsc->SetPoolFmtId( nId );

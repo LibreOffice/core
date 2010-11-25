@@ -75,12 +75,12 @@
 #include <beziersh.hxx>
 #include <globdoc.hxx>
 #include <scroll.hxx>
-#include <globdoc.hxx>
 #include <navipi.hxx>
 #include <gloshdl.hxx>
 #include <usrpref.hxx>
 #include <srcview.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <drawdoc.hxx>
 #include <wdocsh.hxx>
 #include <wview.hxx>
@@ -1021,7 +1021,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     //              so setze das Modified NICHT zurueck.
     // --> OD 2005-02-11 #i38810# - no reset of modified state, if document
     // was already modified.
-    if ( !pWrtShell->GetDoc()->IsUndoNoResetModified() &&
+    if (!pWrtShell->GetDoc()->GetIDocumentUndoRedo().IsUndoNoResetModified() &&
          ( !pFirst || pFirst == pVFrame ) &&
          !bIsDocModified )
     // <--

@@ -38,6 +38,7 @@
 #include <txtftn.hxx>
 #include <fmtclds.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <rootfrm.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
@@ -58,9 +59,7 @@
 #include <node2lay.hxx>
 #include <doctxm.hxx>
 #include <fmtftntx.hxx>
-#ifndef _COMCORE_HRC
 #include <comcore.hrc>
-#endif
 // --> OD 2005-12-01 #i27138#
 #include <viewsh.hxx>
 #include <txtfrm.hxx>
@@ -188,12 +187,13 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
     }
 
     SwUndoInsSection* pUndoInsSect = 0;
-    if( DoesUndo() )
+    bool const bUndo(GetIDocumentUndoRedo().DoesUndo());
+    if (bUndo)
     {
-        ClearRedo();
+        GetIDocumentUndoRedo().ClearRedo();
         pUndoInsSect = new SwUndoInsSection(rRange, rNewData, pAttr, pTOXBase);
-        AppendUndo( pUndoInsSect );
-        DoUndo( FALSE );
+        GetIDocumentUndoRedo().AppendUndo( pUndoInsSect );
+        GetIDocumentUndoRedo().DoUndo(false);
     }
 
     SwSectionFmt* const pFmt = MakeSectionFmt( 0 );
@@ -374,7 +374,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
     {
         pUndoInsSect->SetSectNdPos( pNewSectNode->GetIndex() );
         pUndoInsSect->SetUpdtFtnFlag( bUpdateFtn );
-        DoUndo( TRUE );
+        GetIDocumentUndoRedo().DoUndo(bUndo);
     }
 
     if (rNewData.IsLinkType())
@@ -527,7 +527,7 @@ void SwDoc::DelSectionFmt( SwSectionFmt *pFmt, BOOL bDelNodes )
 {
     USHORT nPos = pSectionFmtTbl->GetPos( pFmt );
 
-    StartUndo(UNDO_DELSECTION, NULL);
+    GetIDocumentUndoRedo().StartUndo(UNDO_DELSECTION, NULL);
 
     if( USHRT_MAX != nPos )
     {
@@ -541,24 +541,24 @@ void SwDoc::DelSectionFmt( SwSectionFmt *pFmt, BOOL bDelNodes )
 
         const SwSectionNode* pSectNd;
 
-        if( DoesUndo() )
+        if( GetIDocumentUndoRedo().DoesUndo() )
         {
-            ClearRedo();
+            GetIDocumentUndoRedo().ClearRedo();
             if( bDelNodes && pIdx && &GetNodes() == &pIdx->GetNodes() &&
                 0 != (pSectNd = pIdx->GetNode().GetSectionNode() ))
             {
                 SwNodeIndex aUpdIdx( *pIdx );
-                ClearRedo();
+                GetIDocumentUndoRedo().ClearRedo();
                 SwPaM aPaM( *pSectNd->EndOfSectionNode(), *pSectNd );
-                AppendUndo( new SwUndoDelete( aPaM ));
+                GetIDocumentUndoRedo().AppendUndo( new SwUndoDelete( aPaM ));
                 if( pFtnEndAtTxtEnd )
                     GetFtnIdxs().UpdateFtn( aUpdIdx );
                 SetModified();
                 //#126178# start/end undo have to be pairs!
-                EndUndo(UNDO_DELSECTION, NULL);
+                GetIDocumentUndoRedo().EndUndo(UNDO_DELSECTION, NULL);
                 return ;
             }
-            AppendUndo( MakeUndoDelSection( *pFmt ) );
+            GetIDocumentUndoRedo().AppendUndo( MakeUndoDelSection( *pFmt ) );
         }
         else if( bDelNodes && pIdx && &GetNodes() == &pIdx->GetNodes() &&
                 0 != (pSectNd = pIdx->GetNode().GetSectionNode() ))
@@ -569,7 +569,7 @@ void SwDoc::DelSectionFmt( SwSectionFmt *pFmt, BOOL bDelNodes )
                 GetFtnIdxs().UpdateFtn( aUpdIdx );
             SetModified();
             //#126178# start/end undo have to be pairs!
-            EndUndo(UNDO_DELSECTION, NULL);
+            GetIDocumentUndoRedo().EndUndo(UNDO_DELSECTION, NULL);
             return ;
         }
 
@@ -613,7 +613,7 @@ void SwDoc::DelSectionFmt( SwSectionFmt *pFmt, BOOL bDelNodes )
 //FEATURE::CONDCOLL
     }
 
-    EndUndo(UNDO_DELSECTION, NULL);
+    GetIDocumentUndoRedo().EndUndo(UNDO_DELSECTION, NULL);
 
     SetModified();
 }
@@ -651,22 +651,23 @@ void SwDoc::UpdateSection(sal_uInt16 const nPos, SwSectionData & rNewData,
 
         if( bOnlyAttrChg )
         {
-            const BOOL bDoesUndo = DoesUndo();
-            if( DoesUndo() )
+            bool const bDoesUndo = GetIDocumentUndoRedo().DoesUndo();
+            if (bDoesUndo)
             {
-                ClearRedo();
-                AppendUndo( MakeUndoUpdateSection( *pFmt, true ) );
+                GetIDocumentUndoRedo().ClearRedo();
+                GetIDocumentUndoRedo().AppendUndo(
+                    MakeUndoUpdateSection( *pFmt, true ) );
                 // --> FME 2004-10-13 #i32968#
                 // Inserting columns in the section causes MakeFrmFmt to put two
                 // objects of type SwUndoFrmFmt on the undo stack. We don't want them.
-                DoUndo( FALSE );
+                GetIDocumentUndoRedo().DoUndo(false);
                 // <--
             }
             pFmt->SetFmtAttr( *pAttr );
             SetModified();
 
             // --> FME 2004-10-13 #i32968#
-            DoUndo( bDoesUndo );
+            GetIDocumentUndoRedo().DoUndo( bDoesUndo );
             // <--
         }
         return;
@@ -692,15 +693,15 @@ void SwDoc::UpdateSection(sal_uInt16 const nPos, SwSectionData & rNewData,
         }
     }
 
-    const BOOL bDoesUndo = DoesUndo();
-    if( DoesUndo() )
+    bool const bDoesUndo = GetIDocumentUndoRedo().DoesUndo();
+    if (bDoesUndo)
     {
-        ClearRedo();
-        AppendUndo( MakeUndoUpdateSection( *pFmt, false ) );
+        GetIDocumentUndoRedo().ClearRedo();
+        GetIDocumentUndoRedo().AppendUndo(MakeUndoUpdateSection(*pFmt, false));
         // --> FME 2004-10-13 #i32968#
         // Inserting columns in the section causes MakeFrmFmt to put two
         // objects of type SwUndoFrmFmt on the undo stack. We don't want them.
-        DoUndo( FALSE );
+        GetIDocumentUndoRedo().DoUndo(false);
         // <--
     }
 
@@ -772,7 +773,7 @@ void SwDoc::UpdateSection(sal_uInt16 const nPos, SwSectionData & rNewData,
     SetModified();
 
     // --> FME 2004-10-13 #i32968#
-    DoUndo( bDoesUndo );
+    GetIDocumentUndoRedo().DoUndo(bDoesUndo);
     // <--
 }
 
@@ -1097,7 +1098,6 @@ SwSectionNode::~SwSectionNode()
                 pLast = aIter++;
         }
     }
-    SwDoc* pDoc = GetDoc();
 
     SwSectionFmt* pFmt = m_pSection->GetFmt();
     if( pFmt )
@@ -1108,12 +1108,6 @@ SwSectionNode::~SwSectionNode()
         pFmt->ResetFmtAttr( RES_CNTNT );
         pFmt->UnlockModify();
     }
-
-    BOOL bUndo = pDoc->DoesUndo();
-    // verhinder beim Loeschen aus der Undo/Redo-History einen rekursiven Aufruf
-    if( bUndo && &pDoc->GetNodes() != &GetNodes() )
-        pDoc->DoUndo( FALSE );
-    pDoc->DoUndo( bUndo );
 }
 
 

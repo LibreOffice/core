@@ -34,7 +34,6 @@
 #include <IDocumentDeviceAccess.hxx>
 #include <IDocumentMarkAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
-#include <IDocumentUndoRedo.hxx>
 #include <IDocumentLinksAdministration.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentContentOperations.hxx>
@@ -188,9 +187,6 @@ class SwTextBlocks;
 class SwTxtFmtColl;
 class SwTxtFmtColls;
 class SwURLStateChanged;
-class SwUndo;
-class SwUndoIds;
-class SwUndoIter;
 class SwUnoCrsr;
 class SwUnoCrsrTbl;
 class ViewShell;
@@ -220,6 +216,7 @@ class SwPrintData;
 class SwRenderData;
 class SwPageFrm;
 class SwViewOption;
+class IDocumentUndoRedo;
 
 namespace sw { namespace mark {
     class MarkManager;
@@ -262,7 +259,6 @@ class SW_DLLPUBLIC SwDoc :
     public IDocumentSettingAccess,
     public IDocumentDeviceAccess,
     public IDocumentRedlineAccess,
-    public IDocumentUndoRedo,
     public IDocumentLinksAdministration,
     public IDocumentFieldsAccess,
     public IDocumentContentOperations,
@@ -800,32 +796,9 @@ public:
 
     /** IDocumentUndoRedo
     */
-    virtual void SetUndoNoResetModified();
-    virtual bool IsUndoNoResetModified() const;
-    virtual void DoUndo(bool bUn);
-    virtual bool DoesUndo() const;
-    virtual void DoGroupUndo(bool bUn);
-    virtual bool DoesGroupUndo() const;
-    virtual bool Undo(SwUndoIter& );
-    virtual SwUndoId StartUndo(SwUndoId eUndoId, const SwRewriter * pRewriter);
-    virtual SwUndoId EndUndo(SwUndoId eUndoId, const SwRewriter * pRewriter);
-    virtual void DelAllUndoObj();
-    virtual SwUndoId GetUndoIds(String* pStr, SwUndoIds *pUndoIds) const;
-    virtual String GetUndoIdsStr(String* pStr, SwUndoIds *pUndoIds) const;
-    virtual bool HasUndoId(SwUndoId eId) const;
-    virtual const SwNodes* GetUndoNds() const;
-    virtual SwUndo* RemoveLastUndo(SwUndoId eUndoId);
-    virtual bool HasTooManyUndos() const;
-    virtual bool Redo(SwUndoIter&);
-    virtual SwUndoId GetRedoIds(String* pStr, SwUndoIds *pRedoIds) const;
-    virtual String GetRedoIdsStr(String* pStr, SwUndoIds *pRedoIds) const;
-    virtual bool Repeat(SwUndoIter&, sal_uInt16 nRepeatCnt);
-    virtual SwUndoId GetRepeatIds(String* pStr, SwUndoIds *pRedoIds) const;
-    virtual String GetRepeatIdsStr(String* pStr, SwUndoIds *pRedoIds) const;
-    virtual void AppendUndo(SwUndo*);
-    virtual void ClearRedo();
-    virtual void setUndoNoModifiedPosition( SwUndoNoModifiedPosition );
-    virtual SwUndoNoModifiedPosition getUndoNoModifiedPosition() const;
+    IDocumentUndoRedo      & GetIDocumentUndoRedo();
+    IDocumentUndoRedo const& GetIDocumentUndoRedo() const;
+    virtual SwNodes const* GetUndoNds() const;
 
     /** abfragen/setzen der Anzahl von wiederherstellbaren Undo-Actions */
     static sal_uInt16 GetUndoActionCount();

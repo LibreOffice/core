@@ -28,11 +28,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <svx/svdview.hxx>
+
 #include <editsh.hxx>
 #include <fesh.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <pam.hxx>
 #include <undobj.hxx>
 #include <swundo.hxx>
@@ -54,9 +55,9 @@ BOOL SwEditShell::Undo( SwUndoId nUndoId, USHORT nCnt )
 
     // #105332# current undo state was not saved
     BOOL bRet = FALSE;
-    BOOL bSaveDoesUndo = GetDoc()->DoesUndo();
+    bool const bSaveDoesUndo = GetDoc()->GetIDocumentUndoRedo().DoesUndo();
 
-    GetDoc()->DoUndo( FALSE );
+    GetDoc()->GetIDocumentUndoRedo().DoUndo(false);
     StartAllAction();
     {
         // eigentlich muesste ja nur der aktuelle Cursor berarbeitet
@@ -69,7 +70,8 @@ BOOL SwEditShell::Undo( SwUndoId nUndoId, USHORT nCnt )
 
         // JP 02.04.98: Cursor merken - beim Auto-Format/-Korrektur
         //              soll dieser wieder an die Position
-        SwUndoId nLastUndoId = GetDoc()->GetUndoIds(NULL, NULL);
+        SwUndoId const nLastUndoId =
+            GetDoc()->GetIDocumentUndoRedo().GetUndoIds(NULL, NULL);
         BOOL bRestoreCrsr = 1 == nCnt && ( UNDO_AUTOFORMAT == nLastUndoId ||
                                            UNDO_AUTOCORRECT == nLastUndoId );
         Push();
@@ -85,7 +87,8 @@ BOOL SwEditShell::Undo( SwUndoId nUndoId, USHORT nCnt )
         {
             do {
 
-                bRet = GetDoc()->Undo( aUndoIter ) || bRet;
+                bRet = GetDoc()->GetIDocumentUndoRedo().Undo( aUndoIter )
+                    || bRet;
 
                 if( !aUndoIter.IsNextUndo() )
                     break;
@@ -135,7 +138,7 @@ BOOL SwEditShell::Undo( SwUndoId nUndoId, USHORT nCnt )
     EndAllAction();
 
     // #105332# undo state was not restored but set to FALSE everytime
-    GetDoc()->DoUndo( bSaveDoesUndo );
+    GetDoc()->GetIDocumentUndoRedo().DoUndo(bSaveDoesUndo);
     return bRet;
 }
 
@@ -146,9 +149,9 @@ USHORT SwEditShell::Redo( USHORT nCnt )
     BOOL bRet = FALSE;
 
     // #105332# undo state was not saved
-    BOOL bSaveDoesUndo = GetDoc()->DoesUndo();
+    bool const bSaveDoesUndo = GetDoc()->GetIDocumentUndoRedo().DoesUndo();
 
-    GetDoc()->DoUndo( FALSE );
+    GetDoc()->GetIDocumentUndoRedo().DoUndo(false);
     StartAllAction();
 
     {
@@ -171,7 +174,8 @@ USHORT SwEditShell::Redo( USHORT nCnt )
         {
             do {
 
-                bRet = GetDoc()->Redo( aUndoIter ) || bRet;
+                bRet = GetDoc()->GetIDocumentUndoRedo().Redo( aUndoIter )
+                    || bRet;
 
                 if( !aUndoIter.IsNextUndo() )
                     break;
@@ -222,7 +226,7 @@ USHORT SwEditShell::Redo( USHORT nCnt )
     EndAllAction();
 
     // #105332# undo state was not restored but set FALSE everytime
-    GetDoc()->DoUndo( bSaveDoesUndo );
+    GetDoc()->GetIDocumentUndoRedo().DoUndo(bSaveDoesUndo);
     return bRet;
 }
 
@@ -235,7 +239,8 @@ USHORT SwEditShell::Repeat( USHORT nCount )
     StartAllAction();
 
         SwUndoIter aUndoIter( GetCrsr(), UNDO_EMPTY );
-        bRet = GetDoc()->Repeat( aUndoIter, nCount ) || bRet;
+        bRet = GetDoc()->GetIDocumentUndoRedo().Repeat( aUndoIter, nCount )
+            || bRet;
 
     EndAllAction();
     return bRet;

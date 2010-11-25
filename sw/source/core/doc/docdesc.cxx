@@ -27,6 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #include <hintids.hxx>
 #include <vcl/virdev.hxx>
 #include <svx/svdmodel.hxx>
@@ -48,6 +49,7 @@
 #include <ndole.hxx>
 #include <mdiexp.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <docary.hxx>
 #include <pagefrm.hxx>  //Fuer DelPageDesc
 #include <rootfrm.hxx>  //Fuer DelPageDesc
@@ -55,9 +57,7 @@
 #include <frmtool.hxx>
 #include <pagedesc.hxx>
 #include <poolfmt.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <ndindex.hxx>
 #include <ftnidx.hxx>
 #include <fmtftn.hxx>
@@ -69,9 +69,7 @@
 #include <swwait.hxx>
 #include <GetMetricVal.hxx>
 #include <unotools/syslocale.hxx>
-#ifndef _STATSTR_HRC
 #include <statstr.hrc>
-#endif
 
 #include <SwUndoPageDesc.hxx>
 
@@ -203,11 +201,12 @@ void SwDoc::ChgPageDesc( USHORT i, const SwPageDesc &rChged )
 
     SwPageDesc *pDesc = aPageDescs[i];
 
-    BOOL bDoesUndo = DoesUndo();
-    if (DoesUndo())
+    bool const bDoesUndo = GetIDocumentUndoRedo().DoesUndo();
+    if (bDoesUndo)
     {
-        AppendUndo(new SwUndoPageDesc(*pDesc, rChged, this));
-        DoUndo(FALSE);
+        SwUndo *const pUndo(new SwUndoPageDesc(*pDesc, rChged, this));
+        GetIDocumentUndoRedo().AppendUndo(pUndo);
+        GetIDocumentUndoRedo().DoUndo(false);
     }
 
     //Als erstes wird ggf. gespiegelt.
@@ -426,13 +425,13 @@ void SwDoc::ChgPageDesc( USHORT i, const SwPageDesc &rChged )
     }
     SetModified();
 
-    DoUndo(bDoesUndo);
+    GetIDocumentUndoRedo().DoUndo(bDoesUndo);
 
     // #i46909# no undo if header or footer changed
     if( bHeaderFooterChanged )
     {
-        ClearRedo();
-        DelAllUndoObj();
+        GetIDocumentUndoRedo().ClearRedo();
+        GetIDocumentUndoRedo().DelAllUndoObj();
     }
 }
 
@@ -570,9 +569,10 @@ void SwDoc::DelPageDesc( USHORT i, BOOL bBroadcast )
                                 SFX_STYLESHEET_ERASED);
     // <- #116530#
 
-    if (DoesUndo())
+    if (GetIDocumentUndoRedo().DoesUndo())
     {
-        AppendUndo(new SwUndoPageDescDelete(*pDel, this));
+        SwUndo *const pUndo(new SwUndoPageDescDelete(*pDel, this));
+        GetIDocumentUndoRedo().AppendUndo(pUndo);
     }
 
     PreDelPageDesc(pDel); // #i7983#
@@ -629,8 +629,11 @@ USHORT SwDoc::MakePageDesc( const String &rName, const SwPageDesc *pCpy,
                                 SFX_STYLESHEET_CREATED);
     // <- #116530#
 
-    if (DoesUndo())
-        AppendUndo(new SwUndoPageDescCreate(pNew, this));    //  #116530#
+    if (GetIDocumentUndoRedo().DoesUndo())
+    {
+        // #116530#
+        GetIDocumentUndoRedo().AppendUndo(new SwUndoPageDescCreate(pNew, this));
+    }
 
     SetModified();
     return (aPageDescs.Count()-1);
