@@ -117,13 +117,13 @@ public:
 
     inline void setBridgePropertyCall()
         { m_bBridgePropertyCall = sal_True; }
-    inline sal_Bool isBridgePropertyCall()
+    inline sal_Bool isBridgePropertyCall() const
         { return m_bBridgePropertyCall; }
-    inline sal_Bool isOneway()
+    inline sal_Bool isOneway() const
         { return m_bOneway; }
 
-        inline void setUnmarshal( Unmarshal *p )
-                { m_pUnmarshal = p; }
+    inline void setUnmarshal( Unmarshal *p )
+        { m_pUnmarshal = p; }
 public:
     typelib_InterfaceMethodTypeDescription    *m_pMethodType;
     typelib_InterfaceAttributeTypeDescription *m_pAttributeType;
@@ -248,7 +248,7 @@ public:
             m_aEntries[m_nCalls].m_bIgnoreCache = bIgnoreCache;
         }
 
-    inline sal_Bool isFull()
+    inline sal_Bool isFull() const
         { return m_nCalls >= m_nMaxMessages; }
 
     inline sal_Int8 *getHeap( sal_Int32 nSizeToAlloc )
