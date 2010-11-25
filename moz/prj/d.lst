@@ -236,5 +236,8 @@ mkdir: %_DEST%\inc%_EXT%\mozilla\xpcom_obsolete
 ..\%__SRC%\inc\xpnet\* %_DEST%\inc%_EXT%\mozilla\xpnet
 ..\%__SRC%\inc\zlib\* %_DEST%\inc%_EXT%\mozilla\zlib
 ..\%__SRC%\inc\xpcom_obsolete\* %_DEST%\inc%_EXT%\mozilla\xpcom_obsolete
+
+mkdir: %_DEST%\lib%_EXT%\sqlite
+..\%__SRC%\lib\libsqlite3* %_DEST%\lib%_EXT%\sqlite
 ..\%__SRC%\lib\* %_DEST%\lib%_EXT%
 ..\%__SRC%\bin\*.zip %_DEST%\bin%_EXT%

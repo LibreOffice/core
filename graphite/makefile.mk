@@ -93,7 +93,8 @@ GR_CONFIGURE_FLAGS= --enable-final=yes --enable-static --disable-shared
 EXTRA_GR_CXX_FLAGS=-fPIC
 
 .IF "$(USE_SYSTEM_STL)"!="YES"
-EXTRA_GR_LD_FLAGS=$(LIBSTLPORT) -lm
+# #i112124# STLPort seems to require libstdc++
+EXTRA_GR_LD_FLAGS=$(LIBSTLPORT) -lm -lstdc++
 GR_LIB_PATH=LD_LIBRARY_PATH=$(SOLARVERSION)/$(INPATH)/lib$(UPDMINOREXT)
 .ELSE
 GR_LIB_PATH=

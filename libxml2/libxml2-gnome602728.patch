@@ -1,0 +1,12 @@
+--- misc/libxml2-2.7.6/configure	2009-12-18 12:12:08.000000000 +0000
++++ misc/build/libxml2-2.7.6/configure	2009-12-18 12:20:40.000000000 +0000
+@@ -12150,7 +12150,7 @@
+ $(/usr/bin/ld --help 2>&1 | grep -- --version-script >/dev/null) && \
+     VERSION_SCRIPT_FLAGS=-Wl,--version-script=
+ test "`uname`" == "SunOS" && \
+-    VERSION_SCRIPT_FLAGS="-Wl,-M -Wl,"
++    VERSION_SCRIPT_FLAGS=""
+ 
+  if test -n "$VERSION_SCRIPT_FLAGS"; then
+   USE_VERSION_SCRIPT_TRUE=
+

@@ -42,21 +42,19 @@ all:
 
 # --- Files --------------------------------------------------------
 
-LIBXML2VERSION=2.6.31
+LIBXML2VERSION=2.7.6
 
 TARFILE_NAME=$(PRJNAME)-$(LIBXML2VERSION)
-TARFILE_MD5=71ef7bcd3493a94395abccecbcf62dd7
-#.IF "$(OS)$(COM)"=="WNTGCC"
-#PATCH_FILES=$(TARFILE_NAME)-mingw.patch
-#.ELSE
-PATCH_FILES=$(TARFILE_NAME).patch
-#.ENDIF
+TARFILE_MD5=7740a8ec23878a2f50120e1faa2730f2
+PATCH_FILES=libxml2-configure.patch \
+            libxml2-mingw.patch \
+            libxml2-gnome599717.patch \
+            libxml2-gnome602728.patch
 
 # This is only for UNX environment now
 
 .IF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
-PATCH_FILES+=$(TARFILE_NAME)-mingw.patch
 xml2_CC=$(CC)
 .IF "$(MINGW_SHARED_GCCLIB)"=="YES"
 xml2_CC+=-shared-libgcc

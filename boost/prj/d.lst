@@ -81,6 +81,10 @@ mkdir: %_DEST%\inc%_EXT%\boost\preprocessor\seq\detail
 mkdir: %_DEST%\inc%_EXT%\boost\preprocessor\slot
 mkdir: %_DEST%\inc%_EXT%\boost\preprocessor\slot\detail
 mkdir: %_DEST%\inc%_EXT%\boost\preprocessor\tuple
+mkdir: %_DEST%\inc%_EXT%\boost\ptr_container
+mkdir: %_DEST%\inc%_EXT%\boost\ptr_container\detail
+mkdir: %_DEST%\inc%_EXT%\boost\range
+mkdir: %_DEST%\inc%_EXT%\boost\range\detail
 mkdir: %_DEST%\inc%_EXT%\boost\spirit
 mkdir: %_DEST%\inc%_EXT%\boost\spirit\actor
 mkdir: %_DEST%\inc%_EXT%\boost\spirit\attribute
@@ -147,6 +151,7 @@ mkdir: %_DEST%\inc%_EXT%\boost\tuple\detail
 mkdir: %_DEST%\inc%_EXT%\boost\type_traits
 mkdir: %_DEST%\inc%_EXT%\boost\type_traits\detail
 mkdir: %_DEST%\inc%_EXT%\boost\utility
+mkdir: %_DEST%\inc%_EXT%\boost\utility\detail
 mkdir: %_DEST%\inc%_EXT%\boost\variant
 mkdir: %_DEST%\inc%_EXT%\boost\variant\detail
 
@@ -232,6 +237,10 @@ mkdir: %_DEST%\inc%_EXT%\boost\variant\detail
 ..\%__SRC%\inc\boost\preprocessor\slot\* %_DEST%\inc%_EXT%\boost\preprocessor\slot
 ..\%__SRC%\inc\boost\preprocessor\slot\detail\* %_DEST%\inc%_EXT%\boost\preprocessor\slot\detail
 ..\%__SRC%\inc\boost\preprocessor\tuple\* %_DEST%\inc%_EXT%\boost\preprocessor\tuple
+..\%__SRC%\inc\boost\ptr_container\* %_DEST%\inc%_EXT%\boost\ptr_container
+..\%__SRC%\inc\boost\ptr_container\detail\* %_DEST%\inc%_EXT%\boost\ptr_container\detail
+..\%__SRC%\inc\boost\range\* %_DEST%\inc%_EXT%\boost\range
+..\%__SRC%\inc\boost\range\detail\* %_DEST%\inc%_EXT%\boost\range\detail
 ..\%__SRC%\inc\boost\spirit\* %_DEST%\inc%_EXT%\boost\spirit
 ..\%__SRC%\inc\boost\spirit\actor\* %_DEST%\inc%_EXT%\boost\spirit\actor
 ..\%__SRC%\inc\boost\spirit\attribute\* %_DEST%\inc%_EXT%\boost\spirit\attribute
@@ -298,5 +307,6 @@ mkdir: %_DEST%\inc%_EXT%\boost\variant\detail
 ..\%__SRC%\inc\boost\type_traits\* %_DEST%\inc%_EXT%\boost\type_traits
 ..\%__SRC%\inc\boost\type_traits\detail\* %_DEST%\inc%_EXT%\boost\type_traits\detail
 ..\%__SRC%\inc\boost\utility\* %_DEST%\inc%_EXT%\boost\utility
+..\%__SRC%\inc\boost\utility\detail\* %_DEST%\inc%_EXT%\boost\utility\detail
 ..\%__SRC%\inc\boost\variant\* %_DEST%\inc%_EXT%\boost\variant
 ..\%__SRC%\inc\boost\variant\detail\* %_DEST%\inc%_EXT%\boost\variant\detail
