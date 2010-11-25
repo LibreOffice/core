@@ -249,7 +249,7 @@ void SwFlyFreeFrm::MakeAll()
             ++nLoopControlRuns;
 
 #if OSL_DEBUG_LEVEL > 1
-            ASSERT( nLoopControlRuns < nLoopControlMax, "LoopControl in SwFlyFreeFrm::MakeAll" )
+            OSL_ENSURE( nLoopControlRuns < nLoopControlMax, "LoopControl in SwFlyFreeFrm::MakeAll" );
 #endif
 
             if ( nLoopControlRuns < nLoopControlMax )
@@ -260,9 +260,9 @@ void SwFlyFreeFrm::MakeAll()
     }
     Unlock();
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     SWRECTFN( this )
-    ASSERT( bHeightClipped || ( (Frm().*fnRect->fnGetHeight)() > 0 &&
+    OSL_ENSURE( bHeightClipped || ( (Frm().*fnRect->fnGetHeight)() > 0 &&
             (Prt().*fnRect->fnGetHeight)() > 0),
             "SwFlyFreeFrm::Format(), flipping Fly." );
 
@@ -507,7 +507,7 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
     }
 
     // --> OD 2004-10-14 #i26945#
-    ASSERT( Frm().Height() >= 0,
+    OSL_ENSURE( Frm().Height() >= 0,
             "<SwFlyFreeFrm::CheckClip(..)> - fly frame has negative height now." );
     // <--
 }
@@ -572,7 +572,7 @@ void SwFlyLayFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
 
     if( pAnch )
     {
-        ASSERT( pAnch->GetAnchorId() ==
+        OSL_ENSURE( pAnch->GetAnchorId() ==
                 GetFmt()->GetAnchor().GetAnchorId(),
                 "8-) Unzulaessiger Wechsel des Ankertyps." );
 
@@ -655,7 +655,7 @@ void SwPageFrm::AppendFlyToPage( SwFlyFrm *pNew )
     }
 
     SdrObject* pObj = pNew->GetVirtDrawObj();
-    ASSERT( pNew->GetAnchorFrm(), "Fly without Anchor" );
+    OSL_ENSURE( pNew->GetAnchorFrm(), "Fly without Anchor" );
     const SwFlyFrm* pFly = pNew->GetAnchorFrm()->FindFlyFrm();
     if ( pFly && pObj->GetOrdNum() < pFly->GetVirtDrawObj()->GetOrdNum() )
     {
@@ -681,12 +681,12 @@ void SwPageFrm::AppendFlyToPage( SwFlyFrm *pNew )
 #endif
         pSortedObjs->Insert( *pNew );
 #if OSL_DEBUG_LEVEL > 1
-        ASSERT( bSucessInserted, "Fly nicht in Sorted eingetragen." )
+        OSL_ENSURE( bSucessInserted, "Fly nicht in Sorted eingetragen." );
         (void) bSucessInserted;
 #endif
 
         // --> OD 2008-04-22 #i87493#
-        ASSERT( pNew->GetPageFrm() == 0 || pNew->GetPageFrm() == this,
+        OSL_ENSURE( pNew->GetPageFrm() == 0 || pNew->GetPageFrm() == this,
                 "<SwPageFrm::AppendFlyToPage(..)> - anchored fly frame seems to be registered at another page frame. Serious defect -> please inform OD." );
         // <--
         // --> OD 2004-06-30 #i28701# - use new method <SetPageFrm(..)>
@@ -852,7 +852,7 @@ void SwPageFrm::MoveFly( SwFlyFrm *pToMove, SwPageFrm *pDest )
 #endif
     pDest->GetSortedObjs()->Insert( *pToMove );
 #if OSL_DEBUG_LEVEL > 1
-    ASSERT( bSucessInserted, "Fly nicht in Sorted eingetragen." )
+    OSL_ENSURE( bSucessInserted, "Fly nicht in Sorted eingetragen." );
     (void) bSucessInserted;
 #endif
 
@@ -915,7 +915,7 @@ void SwPageFrm::AppendDrawObjToPage( SwAnchoredObject& _rNewObj )
 {
     if ( !_rNewObj.ISA(SwAnchoredDrawObject) )
     {
-        ASSERT( false,
+        OSL_ENSURE( false,
                 "SwPageFrm::AppendDrawObjToPage(..) - anchored object of unexcepted type -> object not appended" );
         return;
     }
@@ -925,7 +925,7 @@ void SwPageFrm::AppendDrawObjToPage( SwAnchoredObject& _rNewObj )
         ((SwRootFrm*)GetUpper())->InvalidateBrowseWidth();
     }
 
-    ASSERT( _rNewObj.GetAnchorFrm(), "anchored draw object without anchor" );
+    OSL_ENSURE( _rNewObj.GetAnchorFrm(), "anchored draw object without anchor" );
     const SwFlyFrm* pFlyFrm = _rNewObj.GetAnchorFrm()->FindFlyFrm();
     if ( pFlyFrm &&
          _rNewObj.GetDrawObj()->GetOrdNum() < pFlyFrm->GetVirtDrawObj()->GetOrdNum() )
@@ -949,13 +949,13 @@ void SwPageFrm::AppendDrawObjToPage( SwAnchoredObject& _rNewObj )
     }
     if ( !pSortedObjs->Insert( _rNewObj ) )
     {
-#ifdef DBG_UTIL
-        ASSERT( pSortedObjs->Contains( _rNewObj ),
+#if OSL_DEBUG_LEVEL > 1
+        OSL_ENSURE( pSortedObjs->Contains( _rNewObj ),
                 "Drawing object not appended into list <pSortedObjs>." );
 #endif
     }
     // --> OD 2008-04-22 #i87493#
-    ASSERT( _rNewObj.GetPageFrm() == 0 || _rNewObj.GetPageFrm() == this,
+    OSL_ENSURE( _rNewObj.GetPageFrm() == 0 || _rNewObj.GetPageFrm() == this,
             "<SwPageFrm::AppendDrawObjToPage(..)> - anchored draw object seems to be registered at another page frame. Serious defect -> please inform OD." );
     // <--
     _rNewObj.SetPageFrm( this );
@@ -968,7 +968,7 @@ void SwPageFrm::RemoveDrawObjFromPage( SwAnchoredObject& _rToRemoveObj )
 {
     if ( !_rToRemoveObj.ISA(SwAnchoredDrawObject) )
     {
-        ASSERT( false,
+        OSL_ENSURE( false,
                 "SwPageFrm::RemoveDrawObjFromPage(..) - anchored object of unexcepted type -> object not removed" );
         return;
     }
@@ -1008,7 +1008,7 @@ void SwPageFrm::PlaceFly( SwFlyFrm* pFly, SwFlyFrmFmt* pFmt )
 {
     // --> OD 2005-06-09 #i50432# - consider the case that page is an empty page:
     // In this case append the fly frame at the next page
-    ASSERT( !IsEmptyPage() || GetNext(),
+    OSL_ENSURE( !IsEmptyPage() || GetNext(),
             "<SwPageFrm::PlaceFly(..)> - empty page with no next page! -> fly frame appended at empty page" );
     if ( IsEmptyPage() && GetNext() )
     {
@@ -1021,7 +1021,7 @@ void SwPageFrm::PlaceFly( SwFlyFrm* pFly, SwFlyFrmFmt* pFmt )
         if ( pFly )
             AppendFly( pFly );
         else
-        {   ASSERT( pFmt, ":-( kein Format fuer Fly uebergeben." );
+        {   OSL_ENSURE( pFmt, ":-( kein Format fuer Fly uebergeben." );
             pFly = new SwFlyLayFrm( (SwFlyFrmFmt*)pFmt, this );
             AppendFly( pFly );
             ::RegistFlys( this, pFly );
@@ -1101,7 +1101,7 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
             const SwFrm* pVertPosOrientFrm = pFly->GetVertPosOrientFrm();
             if ( !pVertPosOrientFrm )
             {
-                ASSERT( false,
+                OSL_ENSURE( false,
                         "::CalcClipRect(..) - frame, vertical position is oriented at, is missing .");
                 pVertPosOrientFrm = pFly->GetAnchorFrm();
             }
@@ -1322,7 +1322,7 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
             const SwFrm* pAnchorFrm = pC->GetAnchorFrm( pSdrObj );
             if( !pAnchorFrm )
             {
-                ASSERT( false, "<::CalcClipRect(..)> - missing anchor frame." );
+                OSL_ENSURE( false, "<::CalcClipRect(..)> - missing anchor frame." );
                 ((SwDrawContact*)pC)->ConnectToLayout();
                 pAnchorFrm = pC->GetAnchorFrm();
             }

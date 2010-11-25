@@ -389,7 +389,7 @@ bool MSWordExportBase::SetAktPageDescFromNode(const SwNode &rNd)
 {
     bool bNewPageDesc = false;
     const SwPageDesc* pCurrent = SwPageDesc::GetPageDescOfNode(rNd);
-    ASSERT(pCurrent && pAktPageDesc, "Not possible surely");
+    OSL_ENSURE(pCurrent && pAktPageDesc, "Not possible surely");
     if (pAktPageDesc && pCurrent)
     {
         if (pCurrent != pAktPageDesc)
@@ -477,7 +477,7 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
 
             if ( !bRemoveHardBreakInsideTable )
             {
-                ASSERT(pAktPageDesc, "should not be possible");
+                OSL_ENSURE(pAktPageDesc, "should not be possible");
                 /*
                  If because of this pagebreak the page desc following the page
                  break is the follow style of the current page desc then output a
@@ -533,7 +533,7 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
 
     if ( bHackInBreak )
     {
-        ASSERT( pAktPageDesc, "should not be possible" );
+        OSL_ENSURE( pAktPageDesc, "should not be possible" );
         if ( pAktPageDesc )
             bNewPageDesc = SetAktPageDescFromNode( rNd );
     }
@@ -609,7 +609,7 @@ void WW8Export::PrepareNewPageDesc( const SfxItemSet*pSet,
     const SwSectionFmt* pFmt = GetSectionFormat( rNd );
     const ULONG nLnNm = GetSectionLineNo( pSet, rNd );
 
-    ASSERT( pNewPgDescFmt || pNewPgDesc, "Neither page desc format nor page desc provided." );
+    OSL_ENSURE( pNewPgDescFmt || pNewPgDesc, "Neither page desc format nor page desc provided." );
 
     if ( pNewPgDescFmt )
     {
@@ -809,7 +809,7 @@ void MSWordExportBase::OutputFormat( const SwFmt& rFmt, bool bPapFmt, bool bChpF
     case RES_FLYFRMFMT:
         if (bFlyFmt)
         {
-            ASSERT(mpParentFrame, "No parent frame, all broken");
+            OSL_ENSURE(mpParentFrame, "No parent frame, all broken");
 
             if (mpParentFrame)
             {
@@ -844,7 +844,7 @@ void MSWordExportBase::OutputFormat( const SwFmt& rFmt, bool bPapFmt, bool bChpF
         }
         break;
     default:
-        ASSERT( !this, "Was wird hier ausgegeben ??? " );
+        OSL_ENSURE( !this, "Was wird hier ausgegeben ??? " );
         break;
     }
 
@@ -1033,7 +1033,7 @@ void WW8AttributeOutput::OutputFKP()
 
 void WW8AttributeOutput::ParagraphStyle( USHORT nStyle )
 {
-    ASSERT( !m_rWW8Export.pO->Count(), " pO ist am ZeilenEnde nicht leer" );
+    OSL_ENSURE( !m_rWW8Export.pO->Count(), " pO ist am ZeilenEnde nicht leer" );
 
     SVBT16 nSty;
     ShortToSVBT16( nStyle, nSty );
@@ -1054,7 +1054,7 @@ void WW8AttributeOutput::OutputWW8Attribute( BYTE nId, bool bVal )
 
 void WW8AttributeOutput::OutputWW8AttributeCTL( BYTE nId, bool bVal )
 {
-    ASSERT( nId <= 1, "out of range" );
+    OSL_ENSURE( nId <= 1, "out of range" );
     if ( !m_rWW8Export.bWrtWW8 || nId > 1 )
         return;
 
@@ -1294,7 +1294,7 @@ void WW8AttributeOutput::CharUnderline( const SvxUnderlineItem& rUnderline )
             b = 0;
             break;
         default:
-            ASSERT( rUnderline.GetLineStyle() == UNDERLINE_NONE, "Unhandled underline type" );
+            OSL_ENSURE( rUnderline.GetLineStyle() == UNDERLINE_NONE, "Unhandled underline type" );
             break;
     }
 
@@ -1775,7 +1775,7 @@ WW8_WrPlcFld* WW8Export::CurrentFieldPlc() const
             pFldP = pFldHFTxtBxs;
             break;
         default:
-            ASSERT( !this, "was ist das fuer ein SubDoc-Type?" );
+            OSL_ENSURE( !this, "was ist das fuer ein SubDoc-Type?" );
     }
     return pFldP;
 }
@@ -2391,7 +2391,7 @@ void AttributeOutputBase::GetNumberPara( String& rStr, const SwField& rFld )
             rStr.APPEND_CONST_ASC("\\*roman ");
             break;
         default:
-            ASSERT(rFld.GetFormat() == SVX_NUM_ARABIC,
+            OSL_ENSURE(rFld.GetFormat() == SVX_NUM_ARABIC,
                 "Unknown numbering type exported as default\n");
         case SVX_NUM_ARABIC:
             rStr.APPEND_CONST_ASC("\\*Arabic ");
@@ -3069,7 +3069,7 @@ void WW8AttributeOutput::ParaVerticalAlign( const SvxParaVertAlignItem& rAlign )
             break;
         default:
             nVal = 4;
-            ASSERT( false, "Unknown vert alignment" );
+            OSL_ENSURE( false, "Unknown vert alignment" );
             break;
     }
     m_rWW8Export.InsUInt16( nVal );
@@ -3453,7 +3453,7 @@ void WW8AttributeOutput::FormatFrameSize( const SwFmtFrmSize& rSize )
 ULONG WW8Export::ReplaceCr( BYTE nChar )
 {
     // Bug #49917#
-    ASSERT( nChar, "gegen 0 ersetzt bringt WW97/95 zum Absturz" );
+    OSL_ENSURE( nChar, "gegen 0 ersetzt bringt WW97/95 zum Absturz" );
 
     bool bReplaced = false;
     SvStream& rStrm = Strm();
@@ -3521,13 +3521,6 @@ ULONG WW8Export::ReplaceCr( BYTE nChar )
         pChpPlc->AppendFkpEntry(rStrm.Tell());
         nRetPos = rStrm.Tell();
     }
-#ifndef DBG_UTIL
-    else
-    {
-        ASSERT( nRetPos || nPos == (ULONG)pFib->fcMin,
-                "WW8_ReplaceCr an falscher FilePos gerufen" );
-    }
-#endif
     return nRetPos;
 }
 
@@ -3668,7 +3661,7 @@ void WW8AttributeOutput::FormatTextGrid( const SwTextGridItem& rGrid )
         switch ( rGrid.GetGridType() )
         {
             default:
-                ASSERT(false, "Unknown grid type");
+                OSL_ENSURE(false, "Unknown grid type");
             case GRID_NONE:
                 nGridType = 0;
                 break;
@@ -3831,7 +3824,7 @@ void WW8AttributeOutput::FormatULSpace( const SvxULSpaceItem& rUL )
     }
     else if ( m_rWW8Export.bOutPageDescs )            // Page-UL
     {
-        ASSERT( m_rWW8Export.GetCurItemSet(), "Impossible" );
+        OSL_ENSURE( m_rWW8Export.GetCurItemSet(), "Impossible" );
         if ( !m_rWW8Export.GetCurItemSet() )
             return;
 
@@ -3946,7 +3939,7 @@ void WW8AttributeOutput::FormatHorizOrientation( const SwFmtHoriOrient& rFlyHori
 {
     if ( !m_rWW8Export.mpParentFrame )
     {
-        ASSERT( m_rWW8Export.mpParentFrame, "HoriOrient without mpParentFrame !!" );
+        OSL_ENSURE( m_rWW8Export.mpParentFrame, "HoriOrient without mpParentFrame !!" );
         return;
     }
 
@@ -3985,7 +3978,7 @@ void WW8AttributeOutput::FormatHorizOrientation( const SwFmtHoriOrient& rFlyHori
 
 void WW8AttributeOutput::FormatAnchor( const SwFmtAnchor& rAnchor )
 {
-    ASSERT( m_rWW8Export.mpParentFrame, "Anchor without mpParentFrame !!" );
+    OSL_ENSURE( m_rWW8Export.mpParentFrame, "Anchor without mpParentFrame !!" );
 
     if ( m_rWW8Export.bOutFlyFrmAttrs )
     {
@@ -4151,7 +4144,7 @@ WW8_BRC WW8Export::TranslateBorderLine(const SvxBorderLine& rLine,
 void WW8Export::Out_BorderLine(WW8Bytes& rO, const SvxBorderLine* pLine,
     USHORT nDist, sal_uInt16 nSprmNo, bool bShadow)
 {
-    ASSERT( ( nSprmNo == 0 ) ||
+    OSL_ENSURE( ( nSprmNo == 0 ) ||
             ( nSprmNo >= 38 && nSprmNo <= 41 ) ||
             ( nSprmNo >= NS_sprm::LN_PBrcTop && nSprmNo <= NS_sprm::LN_PBrcRight ) ||
             ( nSprmNo >= NS_sprm::LN_SBrcTop && nSprmNo <= NS_sprm::LN_SBrcRight ),
@@ -4484,7 +4477,7 @@ void AttributeOutputBase::ParaLineSpacing( const SvxLineSpacingItem& rSpacing )
                                 getScriptType(pNd->GetTxt(), 0);
                         }
                     }
-                    ASSERT( pSet, "No attrset for lineheight :-(" );
+                    OSL_ENSURE( pSet, "No attrset for lineheight :-(" );
                     if ( pSet )
                     {
                         nSpace = nSpace + (short)( AttrSetToLineHeight( *GetExport().pDoc,
@@ -4625,7 +4618,7 @@ void WW8AttributeOutput::FormatFrameDirection( const SvxFrameDirectionItem& rDir
     {
         default:
             //Can't get an unknown type here
-            ASSERT(false, "Unknown frame direction");
+            OSL_ENSURE(false, "Unknown frame direction");
         case FRMDIR_HORI_LEFT_TOP:
             nTextFlow = 0;
             break;
@@ -4774,8 +4767,8 @@ void SwWW8WrTabu::PutAll(WW8Export& rWrt)
 {
     if (!nAdd && !nDel) //It its a no-op
         return;
-    ASSERT(nAdd <= 255, "more than 255 added tabstops ?");
-    ASSERT(nDel <= 255, "more than 244 removed tabstops ?");
+    OSL_ENSURE(nAdd <= 255, "more than 255 added tabstops ?");
+    OSL_ENSURE(nDel <= 255, "more than 244 removed tabstops ?");
     if (nAdd > 255)
         nAdd = 255;
     if (nDel > 255)
@@ -5198,7 +5191,7 @@ void AttributeOutputBase::OutputStyleItemSet( const SfxItemSet& rSet, BOOL bDeep
     const SfxPoolItem* pItem;
     if ( !bDeep || !pSet->GetParent() )
     {
-        ASSERT( rSet.Count(), "Wurde doch schon behandelt oder?" );
+        OSL_ENSURE( rSet.Count(), "Wurde doch schon behandelt oder?" );
         SfxItemIter aIter( *pSet );
         pItem = aIter.GetCurItem();
         do {

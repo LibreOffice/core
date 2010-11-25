@@ -158,7 +158,7 @@ __EXPORT SwDrawTextShell::~SwDrawTextShell()
     //Dann wird vor dem Flush wieder ein DrawTextShell gepusht und der Mode ist
     //eingeschaltet. In diesem Moment wird der Dispatcher geflusht und die alte
     //DrawTextShell zerstoert.
-//  ASSERT( !pSdrView->IsTextEdit(), "TextEdit in DTor DrwTxtSh?" );
+// OSL_ENSURE( !pSdrView->IsTextEdit(), "TextEdit in DTor DrwTxtSh?" );
 //    if (pSdrView->IsTextEdit())
 //      GetShell().EndTextEdit();   // Danebengeklickt, Ende mit Edit
 

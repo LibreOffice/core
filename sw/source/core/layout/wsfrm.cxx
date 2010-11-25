@@ -103,11 +103,11 @@ SwFrm::SwFrm( SwModify *pMod ) :
     , bInfFtn ( FALSE )
     , bInfSct ( FALSE )
 {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     bFlag01 = bFlag02 = bFlag03 = bFlag04 = bFlag05 = 0;
 #endif
 
-    ASSERT( pMod, "Kein Frameformat uebergeben." );
+    OSL_ENSURE( pMod, "Kein Frameformat uebergeben." );
     bInvalidR2L = bInvalidVert = 1;
     bDerivedR2L = bDerivedVert = bRightToLeft = bVertical = bReverse = 0;
     bValidPos = bValidPrtArea = bValidSize = bValidLineNum = bRetouche =
@@ -337,7 +337,7 @@ void SwFrm::_UpdateAttrFrm( SfxPoolItem *pOld, SfxPoolItem *pNew,
             break;
         }
         case RES_COL:
-            ASSERT( FALSE, "Spalten fuer neuen FrmTyp?" );
+            OSL_ENSURE( FALSE, "Spalten fuer neuen FrmTyp?" );
             break;
 
         default:
@@ -571,8 +571,8 @@ Size SwFrm::ChgSize( const Size& aNewSize )
 |*************************************************************************/
 void SwFrm::InsertBefore( SwLayoutFrm* pParent, SwFrm* pBehind )
 {
-    ASSERT( pParent, "Kein Parent fuer Insert." );
-    ASSERT( (!pBehind || (pBehind && pParent == pBehind->GetUpper())),
+    OSL_ENSURE( pParent, "Kein Parent fuer Insert." );
+    OSL_ENSURE( (!pBehind || (pBehind && pParent == pBehind->GetUpper())),
             "Framebaum inkonsistent." );
 
     pUpper = pParent;
@@ -612,8 +612,8 @@ void SwFrm::InsertBefore( SwLayoutFrm* pParent, SwFrm* pBehind )
 |*************************************************************************/
 void SwFrm::InsertBehind( SwLayoutFrm *pParent, SwFrm *pBefore )
 {
-    ASSERT( pParent, "Kein Parent fuer Insert." );
-    ASSERT( (!pBefore || (pBefore && pParent == pBefore->GetUpper())),
+    OSL_ENSURE( pParent, "Kein Parent fuer Insert." );
+    OSL_ENSURE( (!pBefore || (pBefore && pParent == pBefore->GetUpper())),
             "Framebaum inkonsistent." );
 
     pUpper = pParent;
@@ -661,8 +661,8 @@ void SwFrm::InsertBehind( SwLayoutFrm *pParent, SwFrm *pBefore )
 |*************************************************************************/
 void SwFrm::InsertGroupBefore( SwFrm* pParent, SwFrm* pBehind, SwFrm* pSct )
 {
-    ASSERT( pParent, "Kein Parent fuer Insert." );
-    ASSERT( (!pBehind || (pBehind && ( pParent == pBehind->GetUpper())
+    OSL_ENSURE( pParent, "Kein Parent fuer Insert." );
+    OSL_ENSURE( (!pBehind || (pBehind && ( pParent == pBehind->GetUpper())
             || ( pParent->IsSctFrm() && pBehind->GetUpper()->IsColBodyFrm() ) ) ),
             "Framebaum inkonsistent." );
     if( pSct )
@@ -705,9 +705,9 @@ void SwFrm::InsertGroupBefore( SwFrm* pParent, SwFrm* pBehind, SwFrm* pSct )
             SwLayoutFrm* pTmp = (SwLayoutFrm*)pSct;
             if( pTmp->Lower() )
             {
-                ASSERT( pTmp->Lower()->IsColumnFrm(), "InsertGrp: Used SectionFrm" );
+                OSL_ENSURE( pTmp->Lower()->IsColumnFrm(), "InsertGrp: Used SectionFrm" );
                 pTmp = (SwLayoutFrm*)((SwLayoutFrm*)pTmp->Lower())->Lower();
-                ASSERT( pTmp, "InsertGrp: Missing ColBody" );
+                OSL_ENSURE( pTmp, "InsertGrp: Missing ColBody" );
             }
             pBehind->pUpper = pTmp;
             pBehind->GetUpper()->pLower = pBehind;
@@ -720,7 +720,7 @@ void SwFrm::InsertGroupBefore( SwFrm* pParent, SwFrm* pBehind, SwFrm* pSct )
         }
         else
         {
-            ASSERT( pSct->IsSctFrm(), "InsertGroup: For SectionFrms only" );
+            OSL_ENSURE( pSct->IsSctFrm(), "InsertGroup: For SectionFrms only" );
             delete ((SwSectionFrm*)pSct);
         }
     }
@@ -767,14 +767,14 @@ void SwFrm::InsertGroupBefore( SwFrm* pParent, SwFrm* pBehind, SwFrm* pSct )
 |*************************************************************************/
 void SwFrm::Remove()
 {
-    ASSERT( pUpper, "Removen ohne Upper?" );
+    OSL_ENSURE( pUpper, "Removen ohne Upper?" );
 
     if( pPrev )
         // einer aus der Mitte wird removed
         pPrev->pNext = pNext;
     else
     {   // der erste in einer Folge wird removed
-        ASSERT( pUpper->pLower == this, "Layout inkonsistent." );
+        OSL_ENSURE( pUpper->pLower == this, "Layout inkonsistent." );
         pUpper->pLower = pNext;
     }
     if( pNext )
@@ -794,14 +794,14 @@ void SwFrm::Remove()
 |*************************************************************************/
 void SwCntntFrm::Paste( SwFrm* pParent, SwFrm* pSibling)
 {
-    ASSERT( pParent, "Kein Parent fuer Paste." );
-    ASSERT( pParent->IsLayoutFrm(), "Parent ist CntntFrm." );
-    ASSERT( pParent != this, "Bin selbst der Parent." );
-    ASSERT( pSibling != this, "Bin mein eigener Nachbar." );
-    ASSERT( !GetPrev() && !GetNext() && !GetUpper(),
+    OSL_ENSURE( pParent, "Kein Parent fuer Paste." );
+    OSL_ENSURE( pParent->IsLayoutFrm(), "Parent ist CntntFrm." );
+    OSL_ENSURE( pParent != this, "Bin selbst der Parent." );
+    OSL_ENSURE( pSibling != this, "Bin mein eigener Nachbar." );
+    OSL_ENSURE( !GetPrev() && !GetNext() && !GetUpper(),
             "Bin noch irgendwo angemeldet." );
-    ASSERT( !pSibling || pSibling->IsFlowFrm(),
-            "<SwCntntFrm::Paste(..)> - sibling not of expected type." )
+    OSL_ENSURE( !pSibling || pSibling->IsFlowFrm(),
+            "<SwCntntFrm::Paste(..)> - sibling not of expected type." );
 
     //In den Baum einhaengen.
     InsertBefore( (SwLayoutFrm*)pParent, pSibling );
@@ -902,7 +902,7 @@ void SwCntntFrm::Paste( SwFrm* pParent, SwFrm* pSibling)
 |*************************************************************************/
 void SwCntntFrm::Cut()
 {
-    ASSERT( GetUpper(), "Cut ohne Upper()." );
+    OSL_ENSURE( GetUpper(), "Cut ohne Upper()." );
 
     SwPageFrm *pPage = FindPageFrm();
     InvalidatePage( pPage );
@@ -1095,11 +1095,11 @@ void SwCntntFrm::Cut()
 |*************************************************************************/
 void SwLayoutFrm::Paste( SwFrm* pParent, SwFrm* pSibling)
 {
-    ASSERT( pParent, "Kein Parent fuer Paste." );
-    ASSERT( pParent->IsLayoutFrm(), "Parent ist CntntFrm." );
-    ASSERT( pParent != this, "Bin selbst der Parent." );
-    ASSERT( pSibling != this, "Bin mein eigener Nachbar." );
-    ASSERT( !GetPrev() && !GetNext() && !GetUpper(),
+    OSL_ENSURE( pParent, "Kein Parent fuer Paste." );
+    OSL_ENSURE( pParent->IsLayoutFrm(), "Parent ist CntntFrm." );
+    OSL_ENSURE( pParent != this, "Bin selbst der Parent." );
+    OSL_ENSURE( pSibling != this, "Bin mein eigener Nachbar." );
+    OSL_ENSURE( !GetPrev() && !GetNext() && !GetUpper(),
             "Bin noch irgendwo angemeldet." );
 
     //In den Baum einhaengen.
@@ -1265,7 +1265,7 @@ void SwLayoutFrm::Cut()
 |*************************************************************************/
 SwTwips SwFrm::Grow( SwTwips nDist, BOOL bTst, BOOL bInfo )
 {
-    ASSERT( nDist >= 0, "Negatives Wachstum?" );
+    OSL_ENSURE( nDist >= 0, "Negatives Wachstum?" );
 
     PROTOCOL_ENTER( this, bTst ? PROT_GROW_TST : PROT_GROW, 0, &nDist )
 
@@ -1317,7 +1317,7 @@ SwTwips SwFrm::Grow( SwTwips nDist, BOOL bTst, BOOL bInfo )
 |*************************************************************************/
 SwTwips SwFrm::Shrink( SwTwips nDist, BOOL bTst, BOOL bInfo )
 {
-    ASSERT( nDist >= 0, "Negative Verkleinerung?" );
+    OSL_ENSURE( nDist >= 0, "Negative Verkleinerung?" );
 
     PROTOCOL_ENTER( this, bTst ? PROT_SHRINK_TST : PROT_SHRINK, 0, &nDist )
 
@@ -1651,14 +1651,14 @@ SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, BOOL bTst )
         if( ( IsHeaderFrm() || IsFooterFrm() ) && pBoss->GetDrawObjs() )
         {
             const SwSortedObjs &rObjs = *pBoss->GetDrawObjs();
-            ASSERT( pBoss->IsPageFrm(), "Header/Footer out of page?" );
+            OSL_ENSURE( pBoss->IsPageFrm(), "Header/Footer out of page?" );
             for ( USHORT i = 0; i < rObjs.Count(); ++i )
             {
                 SwAnchoredObject* pAnchoredObj = rObjs[i];
                 if ( pAnchoredObj->ISA(SwFlyFrm) )
                 {
                     SwFlyFrm* pFly = static_cast<SwFlyFrm*>(pAnchoredObj);
-                    ASSERT( !pFly->IsFlyInCntFrm(), "FlyInCnt at Page?" );
+                    OSL_ENSURE( !pFly->IsFlyInCntFrm(), "FlyInCnt at Page?" );
                     const SwFmtVertOrient &rVert =
                                         pFly->GetFmt()->GetVertOrient();
                    // Wann muss invalidiert werden?
@@ -1768,7 +1768,7 @@ void SwFrm::ImplInvalidateLineNum()
     if ( _InvalidationAllowed( INVALID_LINENUM ) )
     {
         bValidLineNum = FALSE;
-        ASSERT( IsTxtFrm(), "line numbers are implemented for text only" );
+        OSL_ENSURE( IsTxtFrm(), "line numbers are implemented for text only" );
         InvalidatePage();
 
         // OD 2004-05-19 #i28701#
@@ -1996,8 +1996,8 @@ SwTwips SwCntntFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
 SwTwips SwCntntFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
 {
     SWRECTFN( this )
-    ASSERT( nDist >= 0, "nDist < 0" );
-    ASSERT( nDist <= (Frm().*fnRect->fnGetHeight)(),
+    OSL_ENSURE( nDist >= 0, "nDist < 0" );
+    OSL_ENSURE( nDist <= (Frm().*fnRect->fnGetHeight)(),
             "nDist > als aktuelle Grosse." );
 
     if ( !bTst )
@@ -2583,7 +2583,7 @@ SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
     if( !(GetType() & nTmpType) && HasFixSize() )
         return 0;
 
-    ASSERT( nDist >= 0, "nDist < 0" );
+    OSL_ENSURE( nDist >= 0, "nDist < 0" );
     SWRECTFN( this )
     SwTwips nFrmHeight = (Frm().*fnRect->fnGetHeight)();
     if ( nDist > nFrmHeight )
@@ -2639,7 +2639,7 @@ SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
                                             + nRealDist - nReal );
                 if( bChgPos )
                     Frm().Pos().X() += nRealDist - nReal;
-                ASSERT( !IsAccessibleFrm(), "bMoveAccFrm has to be set!" );
+                OSL_ENSURE( !IsAccessibleFrm(), "bMoveAccFrm has to be set!" );
             }
         }
     }
@@ -2652,7 +2652,7 @@ SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
                                           + nReal - nTmp );
             if( bChgPos )
                 Frm().Pos().X() += nTmp - nReal;
-            ASSERT( !IsAccessibleFrm(), "bMoveAccFrm has to be set!" );
+            OSL_ENSURE( !IsAccessibleFrm(), "bMoveAccFrm has to be set!" );
             nReal = nTmp;
         }
     }
@@ -3041,7 +3041,7 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
                              ( IsColumnFrm() && IsInSct() )
                            )
                         {
-                            ASSERT( pLowerFrm->IsBodyFrm() || pLowerFrm->IsFtnContFrm(),
+                            OSL_ENSURE( pLowerFrm->IsBodyFrm() || pLowerFrm->IsFtnContFrm(),
                                     "ChgLowersProp - only for body or foot note container" );
                             if ( pLowerFrm->IsBodyFrm() || pLowerFrm->IsFtnContFrm() )
                             {
@@ -3053,7 +3053,7 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
                                     if ( nNewHeight < 0)
                                     {
                                         // OD 01.04.2003 #108446# - adjust assertion condition and text
-                                        ASSERT( !( IsPageFrm() &&
+                                        OSL_ENSURE( !( IsPageFrm() &&
                                                    (pLowerFrm->Frm().Height()>0) &&
                                                    (pLowerFrm->IsValid()) ),
                                                     "ChgLowersProg - negative height for lower.");
@@ -3133,12 +3133,12 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
         const SwFmtCol* pColAttr = NULL;
         if ( IsPageBodyFrm() )
         {
-            ASSERT( GetUpper()->IsPageFrm(), "Upper is not page frame" )
+            OSL_ENSURE( GetUpper()->IsPageFrm(), "Upper is not page frame" );
             pColAttr = &GetUpper()->GetFmt()->GetCol();
         }
         else
         {
-            ASSERT( IsFlyFrm() || IsSctFrm(), "Columns not in fly or section" )
+            OSL_ENSURE( IsFlyFrm() || IsSctFrm(), "Columns not in fly or section" );
             pColAttr = &GetFmt()->GetCol();
         }
 
@@ -3159,7 +3159,7 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
 |*************************************************************************/
 void SwLayoutFrm::Format( const SwBorderAttrs *pAttrs )
 {
-    ASSERT( pAttrs, "LayoutFrm::Format, pAttrs ist 0." );
+    OSL_ENSURE( pAttrs, "LayoutFrm::Format, pAttrs ist 0." );
 
     if ( bValidPrtArea && bValidSize )
         return;
@@ -3251,7 +3251,7 @@ void SwLayoutFrm::Format( const SwBorderAttrs *pAttrs )
 |*************************************************************************/
 static void InvaPercentFlys( SwFrm *pFrm, SwTwips nDiff )
 {
-    ASSERT( pFrm->GetDrawObjs(), "Can't find any Objects" );
+    OSL_ENSURE( pFrm->GetDrawObjs(), "Can't find any Objects" );
     for ( USHORT i = 0; i < pFrm->GetDrawObjs()->Count(); ++i )
     {
         SwAnchoredObject* pAnchoredObj = (*pFrm->GetDrawObjs())[i];
@@ -3297,7 +3297,7 @@ void SwLayoutFrm::InvaPercentLowers( SwTwips nDiff )
             if ( pFrm->IsInTab() && !IsTabFrm() )
             {
                 SwFrm *pTmp = pFrm->FindTabFrm();
-                ASSERT( pTmp, "Where's my TabFrm?" );
+                OSL_ENSURE( pTmp, "Where's my TabFrm?" );
                 if( IsAnLower( pTmp ) )
                     pFrm = pTmp;
             }
@@ -3354,7 +3354,7 @@ long MA_FASTCALL lcl_CalcMinColDiff( SwLayoutFrm *pLayFrm )
 {
     long nDiff = 0, nFirstDiff = 0;
     SwLayoutFrm *pCol = (SwLayoutFrm*)pLayFrm->Lower();
-    ASSERT( pCol, "Where's the columnframe?" );
+    OSL_ENSURE( pCol, "Where's the columnframe?" );
     SwFrm *pFrm = pCol->Lower();
     do
     {
@@ -3569,7 +3569,7 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
             ::CalcCntnt( this );
 
             pCol = (SwLayoutFrm*)Lower();
-            ASSERT( pCol && pCol->GetNext(), ":-( Spalten auf Urlaub?");
+            OSL_ENSURE( pCol && pCol->GetNext(), ":-( Spalten auf Urlaub?");
             // bMinDiff wird gesetzt, wenn es keine leere Spalte gibt
             BOOL bMinDiff = TRUE;
             // OD 28.03.2003 #108446# - check for all column content and all columns
@@ -3603,7 +3603,7 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
                 {
                     bFoundLower = TRUE;
                     pLay = (SwLayoutFrm*)pLay->GetNext();
-                    ASSERT( pLay->IsFtnContFrm(),"FtnContainer exspected" );
+                    OSL_ENSURE( pLay->IsFtnContFrm(),"FtnContainer exspected" );
                     nInnerHeight += pLay->InnerHeight();
                     nInnerHeight += (pLay->Frm().*fnRect->fnGetHeight)() -
                                     (pLay->Prt().*fnRect->fnGetHeight)();
@@ -3845,9 +3845,9 @@ void lcl_InvalidateCntnt( SwCntntFrm *pCnt, BYTE nInv )
                 if( pLastSctCnt == pCnt )
                     pLastSctCnt = NULL;
             }
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
             else
-                ASSERT( !pLastSctCnt, "Where's the last SctCntnt?" );
+                OSL_ENSURE( !pLastSctCnt, "Where's the last SctCntnt?" );
 #endif
         }
         if( nInv & INV_TABLE )
@@ -3873,9 +3873,9 @@ void lcl_InvalidateCntnt( SwCntntFrm *pCnt, BYTE nInv )
                     pLastSctCnt = NULL;
                 }
             }
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
             else
-                ASSERT( !pLastTabCnt, "Where's the last TabCntnt?" );
+                OSL_ENSURE( !pLastTabCnt, "Where's the last TabCntnt?" );
 #endif
         }
 

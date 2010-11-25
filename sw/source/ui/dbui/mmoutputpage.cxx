@@ -1219,11 +1219,11 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
         }
         xTempDocShell->DoClose();
 
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 1
         sal_Int32 nTarget =
-#endif
                 rConfigItem.MoveResultSet(rInfo.nDBRow);
         OSL_ENSURE( nTarget == rInfo.nDBRow, "row of current document could not be selected");
+#endif
         OSL_ENSURE( sEMailColumn.Len(), "No email column selected");
         ::rtl::OUString sEMail = lcl_GetColumnValueOf(sEMailColumn, xColAccess);
         SwMailDescriptor aDesc;

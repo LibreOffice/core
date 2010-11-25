@@ -109,7 +109,7 @@ void SwIntrnlRefLink::DataChanged( const String& rMimeType,
         return;
     }
 
-    ASSERT( rFldType.GetDoc(), "Kein pDoc" );
+    OSL_ENSURE( rFldType.GetDoc(), "Kein pDoc" );
 
     // keine Abhaengigen mehr?
     if( rFldType.GetDepends() && !rFldType.IsModifyLocked() && !ChkNoDataFlag() )
@@ -299,7 +299,7 @@ void SwDDEFieldType::SetDoc( SwDoc* pNewDoc )
 
     if( pDoc && refLink.Is() )
     {
-        ASSERT( !nRefCnt, "wie kommen die Referenzen rueber?" );
+        OSL_ENSURE( !nRefCnt, "wie kommen die Referenzen rueber?" );
         pDoc->GetLinkManager().Remove( refLink );
     }
 

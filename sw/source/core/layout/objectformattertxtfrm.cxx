@@ -240,7 +240,7 @@ bool SwObjectFormatterTxtFrm::DoFormatObj( SwAnchoredObject& _rAnchoredObj,
                     }
                     else
                     {
-                        ASSERT( false,
+                        OSL_ENSURE( false,
                                 "<SwObjectFormatterTxtFrm::DoFormatObj(..)> - anchor frame not marked to move forward" );
                     }
                 }
@@ -252,7 +252,7 @@ bool SwObjectFormatterTxtFrm::DoFormatObj( SwAnchoredObject& _rAnchoredObj,
                 // index of anchored object in collection of page numbers and
                 // anchor types
                 sal_uInt32 nIdx( CountOfCollected() );
-                ASSERT( nIdx > 0,
+                OSL_ENSURE( nIdx > 0,
                         "<SwObjectFormatterTxtFrm::DoFormatObj(..)> - anchored object not collected!?" );
                 --nIdx;
 
@@ -300,7 +300,7 @@ bool SwObjectFormatterTxtFrm::DoFormatObj( SwAnchoredObject& _rAnchoredObj,
                     }
                     else
                     {
-                        ASSERT( false,
+                        OSL_ENSURE( false,
                                 "<SwObjectFormatterTxtFrm::DoFormatObj(..)> - anchor frame not marked to move forward" );
                     }
                     // <--
@@ -341,7 +341,7 @@ bool SwObjectFormatterTxtFrm::DoFormatObjs()
         else
         {
             // the anchor text frame has to be valid, thus assert.
-            ASSERT( false,
+            OSL_ENSURE( false,
                     "<SwObjectFormatterTxtFrm::DoFormatObjs()> called for invalidate anchor text frame." );
         }
 
@@ -357,7 +357,7 @@ bool SwObjectFormatterTxtFrm::DoFormatObjs()
         // are registered at the 'master' anchor text frame.
         // Thus, format the other floating screen objects through the 'master'
         // anchor text frame
-        ASSERT( mpMasterAnchorTxtFrm,
+        OSL_ENSURE( mpMasterAnchorTxtFrm,
                 "SwObjectFormatterTxtFrm::DoFormatObjs() - missing 'master' anchor text frame" );
         bSuccess = _FormatObjsAtFrm( mpMasterAnchorTxtFrm );
 
@@ -442,7 +442,7 @@ bool SwObjectFormatterTxtFrm::DoFormatObjs()
                 }
                 else
                 {
-                    ASSERT( false,
+                    OSL_ENSURE( false,
                             "<SwObjectFormatterTxtFrm::DoFormatObjs(..)> - anchor frame not marked to move forward" );
                 }
             }
@@ -485,7 +485,7 @@ bool SwObjectFormatterTxtFrm::DoFormatObjs()
             }
             else
             {
-                ASSERT( false,
+                OSL_ENSURE( false,
                         "<SwObjectFormatterTxtFrm::DoFormatObjs(..)> - anchor frame not marked to move forward" );
             }
             // <--
@@ -573,7 +573,7 @@ SwAnchoredObject* SwObjectFormatterTxtFrm::_GetFirstObjWithMovedFwdAnchor(
                                     bool& _boInFollow )
 {
     // --> OD 2004-10-18 #i35017# - constant names have changed
-    ASSERT( _nWrapInfluenceOnPosition == text::WrapInfluenceOnPosition::ONCE_SUCCESSIVE ||
+    OSL_ENSURE( _nWrapInfluenceOnPosition == text::WrapInfluenceOnPosition::ONCE_SUCCESSIVE ||
             _nWrapInfluenceOnPosition == text::WrapInfluenceOnPosition::ONCE_CONCURRENT,
             "<SwObjectFormatterTxtFrm::_GetFirstObjWithMovedFwdAnchor(..)> - invalid value for parameter <_nWrapInfluenceOnPosition>" );
     // <--
@@ -658,7 +658,7 @@ bool SwObjectFormatterTxtFrm::CheckMovedFwdCondition(
          (_rAnchoredObj.GetFrmFmt().GetAnchor().GetAnchorId() == FLY_AT_PARA)))
     {
         SwFrm* pAnchorFrm = _rAnchoredObj.GetAnchorFrmContainingAnchPos();
-        ASSERT( pAnchorFrm->IsTxtFrm(),
+        OSL_ENSURE( pAnchorFrm->IsTxtFrm(),
                 "<SwObjectFormatterTxtFrm::CheckMovedFwdCondition(..) - wrong type of anchor frame>" );
         SwTxtFrm* pAnchorTxtFrm = static_cast<SwTxtFrm*>(pAnchorFrm);
         bool bCheck( false );

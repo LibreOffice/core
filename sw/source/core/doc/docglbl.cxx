@@ -349,7 +349,7 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
                                 aTmp.Exchange();
                                 if( !aTmp.Move( fnMoveBackward, fnGoNode ))
                                 {
-                                    ASSERT( FALSE, "kein Node mehr vorhanden" );
+                                    OSL_ENSURE( FALSE, "kein Node mehr vorhanden" );
                                 }
                             }
                                 // Bookmarks usw. verschieben
@@ -696,7 +696,7 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath, int nOutlineLevel )
                                 aTmp.Exchange();
                                 if( !aTmp.Move( fnMoveBackward, fnGoNode ))
                                 {
-                                    ASSERT( FALSE, "kein Node mehr vorhanden" );
+                                    OSL_ENSURE( FALSE, "kein Node mehr vorhanden" );
                                 }
                             }
                                 // Bookmarks usw. verschieben

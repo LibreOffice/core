@@ -196,7 +196,7 @@ void lcl_DescSetAttr( const SwFrmFmt &rSource, SwFrmFmt &rDest,
 
 void SwDoc::ChgPageDesc( USHORT i, const SwPageDesc &rChged )
 {
-    ASSERT( i < aPageDescs.Count(), "PageDescs ueberindiziert." );
+    OSL_ENSURE( i < aPageDescs.Count(), "PageDescs ueberindiziert." );
 
     SwPageDesc *pDesc = aPageDescs[i];
 
@@ -485,7 +485,7 @@ void SwDoc::PreDelPageDesc(SwPageDesc * pDel)
                     ((SwFmt*)pMod)->SetFmtAttr( aDfltDesc );
                 else
                 {
-                    ASSERT( !this, "was ist das fuer ein Mofify-Obj?" );
+                    OSL_ENSURE( !this, "was ist das fuer ein Mofify-Obj?" );
                     aPageDescs[0]->Add( pLast );
                 }
             }
@@ -554,8 +554,8 @@ void SwDoc::BroadcastStyleOperation(String rName, SfxStyleFamily eFamily,
 
 void SwDoc::DelPageDesc( USHORT i, BOOL bBroadcast )
 {
-    ASSERT( i < aPageDescs.Count(), "PageDescs ueberindiziert." );
-    ASSERT( i != 0, "Default Pagedesc loeschen is nicht." );
+    OSL_ENSURE( i < aPageDescs.Count(), "PageDescs ueberindiziert." );
+    OSL_ENSURE( i != 0, "Default Pagedesc loeschen is nicht." );
     if ( i == 0 )
         return;
 
@@ -661,8 +661,8 @@ void SwDoc::PrtDataChanged()
 //!!!!!!!! Bei Aenderungen hier bitte ggf. InJobSetup im Sw3io mitpflegen
 
     // --> FME 2005-01-21 #i41075#
-    ASSERT( get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE) ||
-            0 != getPrinter( sal_False ), "PrtDataChanged will be called recursive!" )
+    OSL_ENSURE( get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE) ||
+            0 != getPrinter( sal_False ), "PrtDataChanged will be called recursive!" );
     // <--
 
     SwWait *pWait = 0;

@@ -206,7 +206,7 @@ SwRead GetReader( const String& rFltName )
 ULONG StgReader::OpenMainStream( SvStorageStreamRef& rRef, USHORT& rBuffSize )
 {
     ULONG nRet = ERR_SWG_READ_ERROR;
-    ASSERT( pStg, "wo ist mein Storage?" );
+    OSL_ENSURE( pStg, "wo ist mein Storage?" );
     const SfxFilter* pFltr = SwIoSystem::GetFilterOfFormat( aFltName );
     if( pFltr )
     {
@@ -229,7 +229,6 @@ ULONG StgReader::OpenMainStream( SvStorageStreamRef& rRef, USHORT& rBuffSize )
     return nRet;
 }
 
-/*  */
 
 void Writer::SetPasswd( const String& ) {}
 
@@ -752,7 +751,7 @@ rtl_TextEncoding CharSetFromName(const String& rChrSetStr)
         }
     }
 
-    ASSERT(nRet != pStart->eCode, "TXT: That was an unknown language!");
+    OSL_ENSURE(nRet != pStart->eCode, "TXT: That was an unknown language!");
 
     return nRet;
 }
@@ -775,7 +774,7 @@ String NameFromCharSet(rtl_TextEncoding nChrSet)
         }
     }
 
-    ASSERT(pRet != pStart->pName, "TXT: That was an unknown language!");
+    OSL_ENSURE(pRet != pStart->pName, "TXT: That was an unknown language!");
 
     return String::CreateFromAscii(pRet);
 }

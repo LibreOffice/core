@@ -583,13 +583,15 @@ long AbstractMailMergeWizard_Impl::GetResult()
     return pDlg->GetResult();
 }
 
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 1
 IMPL_LINK( AbstractMailMergeWizard_Impl, EndDialogHdl, SwMailMergeWizard*, pDialog )
 #else
 IMPL_LINK( AbstractMailMergeWizard_Impl, EndDialogHdl, SwMailMergeWizard*, EMPTYARG )
 #endif
 {
+#if OSL_DEBUG_LEVEL > 1
     OSL_ENSURE( pDialog == pDlg, "wrong dialog passed to EndDialogHdl!" );
+#endif
 
     aEndDlgHdl.Call( this );
     aEndDlgHdl = Link();

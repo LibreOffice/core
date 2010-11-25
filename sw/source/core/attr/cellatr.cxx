@@ -60,7 +60,7 @@ SwTblBoxNumFormat::SwTblBoxNumFormat( UINT32 nFormat, BOOL bFlag )
 
 int SwTblBoxNumFormat::operator==( const SfxPoolItem& rAttr ) const
 {
-    ASSERT( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
+    OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
     return GetValue() == ((SwTblBoxNumFormat&)rAttr).GetValue() &&
             bAuto == ((SwTblBoxNumFormat&)rAttr).bAuto;
 }
@@ -88,7 +88,7 @@ SwTblBoxFormula::SwTblBoxFormula( const String& rFormula )
 
 int SwTblBoxFormula::operator==( const SfxPoolItem& rAttr ) const
 {
-    ASSERT( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
+    OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
     return GetFormula() == ((SwTblBoxFormula&)rAttr).GetFormula() &&
             pDefinedIn == ((SwTblBoxFormula&)rAttr).pDefinedIn;
 }
@@ -248,7 +248,7 @@ SwTblBoxValue::SwTblBoxValue( const double nVal )
 
 int SwTblBoxValue::operator==( const SfxPoolItem& rAttr ) const
 {
-    ASSERT(SfxPoolItem::operator==(rAttr), "SwTblBoxValue: item not equal");
+    OSL_ENSURE(SfxPoolItem::operator==(rAttr), "SwTblBoxValue: item not equal");
     SwTblBoxValue const& rOther( static_cast<SwTblBoxValue const&>(rAttr) );
     // items with NaN should be equal to enable pooling
     return ::rtl::math::isNan(nValue)

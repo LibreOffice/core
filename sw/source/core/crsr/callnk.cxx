@@ -244,7 +244,7 @@ SwCallLink::~SwCallLink()
         0 != ( pFlyFrm = pFrm->FindFlyFrm() ) && !rShell.IsTableMode() )
     {
         const SwNodeIndex* pIndex = pFlyFrm->GetFmt()->GetCntnt().GetCntntIdx();
-        ASSERT( pIndex, "Fly ohne Cntnt" );
+        OSL_ENSURE( pIndex, "Fly ohne Cntnt" );
 
         if (!pIndex)
             return;

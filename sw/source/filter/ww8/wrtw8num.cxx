@@ -141,7 +141,7 @@ USHORT MSWordExportBase::GetId( const SwNumRule& rNumRule )
 //here in the ww export filter
 sal_Int16 GetWordFirstLineOffset(const SwNumFmt &rFmt)
 {
-    ASSERT( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION,
+    OSL_ENSURE( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION,
             "<GetWordFirstLineOffset> - misusage: position-and-space-mode does not equal LABEL_WIDTH_AND_POSITION" );
 
     short nFirstLineOffset;
@@ -359,7 +359,7 @@ void MSWordExportBase::AbstractNumberingDefinitions()
                     default:
                     {
                         nFollow = 0;
-                        ASSERT( false,
+                        OSL_ENSURE( false,
                                 "unknown GetLabelFollowedBy() return value" );
                     }
                 }
@@ -609,8 +609,7 @@ void WW8Export::Out_WwNumLvl( BYTE nWwLevel )
 
 void WW8Export::Out_SwNumLvl( BYTE nSwLevel )
 {
-
-    ASSERT( nSwLevel < MAXLEVEL, "numbered?");
+    OSL_ENSURE( nSwLevel < MAXLEVEL, "numbered?");
     Out_WwNumLvl( nSwLevel + 1 );
 }
 
@@ -891,7 +890,7 @@ bool WW8Export::Out_SwNum(const SwTxtNode* pNd)
 
     if (nLevel < 0 || nLevel >= MAXLEVEL)
     {
-        ASSERT(FALSE, "Invalid level");
+        OSL_ENSURE(FALSE, "Invalid level");
 
         return false;
     }

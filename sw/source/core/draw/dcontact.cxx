@@ -170,7 +170,7 @@ SwContact* GetUserCall( const SdrObject* pObj )
     SdrObject *pTmp;
     while ( !pObj->GetUserCall() && 0 != (pTmp = pObj->GetUpGroup()) )
         pObj = pTmp;
-    ASSERT( !pObj->GetUserCall() || pObj->GetUserCall()->ISA(SwContact),
+    OSL_ENSURE( !pObj->GetUserCall() || pObj->GetUserCall()->ISA(SwContact),
             "<::GetUserCall(..)> - wrong type of found object user call." );
     return static_cast<SwContact*>(pObj->GetUserCall());
 }
@@ -237,7 +237,7 @@ void SwContact::MoveObjToVisibleLayer( SdrObject* _pDrawObj )
     if ( bNotify )
     {
         SwAnchoredObject* pAnchoredObj = GetAnchoredObj( _pDrawObj );
-        ASSERT( pAnchoredObj,
+        OSL_ENSURE( pAnchoredObj,
                 "<SwContact::MoveObjToInvisibleLayer(..)> - missing anchored object" );
         if ( pAnchoredObj )
         {
@@ -274,7 +274,7 @@ void SwContact::MoveObjToInvisibleLayer( SdrObject* _pDrawObj )
     if ( bNotify )
     {
         SwAnchoredObject* pAnchoredObj = GetAnchoredObj( _pDrawObj );
-        ASSERT( pAnchoredObj,
+        OSL_ENSURE( pAnchoredObj,
                 "<SwContact::MoveObjToInvisibleLayer(..)> - missing anchored object" );
         // Note: as-character anchored objects aren't registered at a page frame and
         //       a notification of its background isn't needed.
@@ -300,20 +300,20 @@ void SwContact::_MoveObjToLayer( const bool _bToVisible,
 {
     if ( !_pDrawObj )
     {
-        ASSERT( false, "SwDrawContact::_MoveObjToLayer(..) - no drawing object!" );
+        OSL_ENSURE( false, "SwDrawContact::_MoveObjToLayer(..) - no drawing object!" );
         return;
     }
 
     if ( !pRegisteredIn )
     {
-        ASSERT( false, "SwDrawContact::_MoveObjToLayer(..) - no drawing frame format!" );
+        OSL_ENSURE( false, "SwDrawContact::_MoveObjToLayer(..) - no drawing frame format!" );
         return;
     }
 
     const IDocumentDrawModelAccess* pIDDMA = static_cast<SwFrmFmt*>(pRegisteredIn)->getIDocumentDrawModelAccess();
     if ( !pIDDMA )
     {
-        ASSERT( false, "SwDrawContact::_MoveObjToLayer(..) - no writer document!" );
+        OSL_ENSURE( false, "SwDrawContact::_MoveObjToLayer(..) - no writer document!" );
         return;
     }
 
@@ -418,7 +418,7 @@ sal_uInt32 SwContact::GetMinOrdNum() const
         aObjs.pop_back();
     }
 
-    ASSERT( nMinOrdNum != SAL_MAX_UINT32,
+    OSL_ENSURE( nMinOrdNum != SAL_MAX_UINT32,
             "<SwContact::GetMinOrdNum()> - no order number found." );
     return nMinOrdNum;
 }
@@ -485,11 +485,11 @@ SwFlyDrawContact::~SwFlyDrawContact()
 // OD 2004-03-29 #i26791#
 const SwAnchoredObject* SwFlyDrawContact::GetAnchoredObj( const SdrObject* _pSdrObj ) const
 {
-    ASSERT( _pSdrObj,
+    OSL_ENSURE( _pSdrObj,
             "<SwFlyDrawContact::GetAnchoredObj(..)> - no object provided" );
-    ASSERT( _pSdrObj->ISA(SwVirtFlyDrawObj),
+    OSL_ENSURE( _pSdrObj->ISA(SwVirtFlyDrawObj),
             "<SwFlyDrawContact::GetAnchoredObj(..)> - wrong object type object provided" );
-    ASSERT( GetUserCall( _pSdrObj ) == const_cast<SwFlyDrawContact*>(this),
+    OSL_ENSURE( GetUserCall( _pSdrObj ) == const_cast<SwFlyDrawContact*>(this),
             "<SwFlyDrawContact::GetAnchoredObj(..)> - provided object doesn't belongs to this contact" );
 
     const SwAnchoredObject* pRetAnchoredObj = 0L;
@@ -504,11 +504,11 @@ const SwAnchoredObject* SwFlyDrawContact::GetAnchoredObj( const SdrObject* _pSdr
 
 SwAnchoredObject* SwFlyDrawContact::GetAnchoredObj( SdrObject* _pSdrObj )
 {
-    ASSERT( _pSdrObj,
+    OSL_ENSURE( _pSdrObj,
             "<SwFlyDrawContact::GetAnchoredObj(..)> - no object provided" );
-    ASSERT( _pSdrObj->ISA(SwVirtFlyDrawObj),
+    OSL_ENSURE( _pSdrObj->ISA(SwVirtFlyDrawObj),
             "<SwFlyDrawContact::GetAnchoredObj(..)> - wrong object type provided" );
-    ASSERT( GetUserCall( _pSdrObj ) == this,
+    OSL_ENSURE( GetUserCall( _pSdrObj ) == this,
             "<SwFlyDrawContact::GetAnchoredObj(..)> - provided object doesn't belongs to this contact" );
 
     SwAnchoredObject* pRetAnchoredObj = 0L;
@@ -533,7 +533,7 @@ SdrObject* SwFlyDrawContact::GetMaster()
 
 void SwFlyDrawContact::SetMaster( SdrObject* _pNewMaster )
 {
-    ASSERT( _pNewMaster->ISA(SwFlyDrawObj),
+    OSL_ENSURE( _pNewMaster->ISA(SwFlyDrawObj),
             "<SwFlyDrawContact::SetMaster(..)> - wrong type of new master object" );
     mpMasterObj = static_cast<SwFlyDrawObj *>(_pNewMaster);
 }
@@ -638,7 +638,7 @@ void SwFlyDrawContact::Modify( SfxPoolItem *, SfxPoolItem * )
 // Writer fly frame are also made visible.
 void SwFlyDrawContact::MoveObjToVisibleLayer( SdrObject* _pDrawObj )
 {
-    ASSERT( _pDrawObj->ISA(SwVirtFlyDrawObj),
+    OSL_ENSURE( _pDrawObj->ISA(SwVirtFlyDrawObj),
             "<SwFlyDrawContact::MoveObjToVisibleLayer(..)> - wrong SdrObject type -> crash" );
 
     if ( GetFmt()->getIDocumentDrawModelAccess()->IsVisibleLayerId( _pDrawObj->GetLayer() ) )
@@ -677,7 +677,7 @@ void SwFlyDrawContact::MoveObjToVisibleLayer( SdrObject* _pDrawObj )
 // Writer fly frame are also made invisible.
 void SwFlyDrawContact::MoveObjToInvisibleLayer( SdrObject* _pDrawObj )
 {
-    ASSERT( _pDrawObj->ISA(SwVirtFlyDrawObj),
+    OSL_ENSURE( _pDrawObj->ISA(SwVirtFlyDrawObj),
             "<SwFlyDrawContact::MoveObjToInvisibleLayer(..)> - wrong SdrObject type -> crash" );
 
     if ( !GetFmt()->getIDocumentDrawModelAccess()->IsVisibleLayerId( _pDrawObj->GetLayer() ) )
@@ -822,12 +822,12 @@ const SwAnchoredObject* SwDrawContact::GetAnchoredObj( const SdrObject* _pSdrObj
         _pSdrObj = GetMaster();
     }
 
-    ASSERT( _pSdrObj,
+    OSL_ENSURE( _pSdrObj,
             "<SwDrawContact::GetAnchoredObj(..)> - no object provided" );
-    ASSERT( _pSdrObj->ISA(SwDrawVirtObj) ||
+    OSL_ENSURE( _pSdrObj->ISA(SwDrawVirtObj) ||
             ( !_pSdrObj->ISA(SdrVirtObj) && !_pSdrObj->ISA(SwDrawVirtObj) ),
             "<SwDrawContact::GetAnchoredObj(..)> - wrong object type object provided" );
-    ASSERT( GetUserCall( _pSdrObj ) == const_cast<SwDrawContact*>(this) ||
+    OSL_ENSURE( GetUserCall( _pSdrObj ) == const_cast<SwDrawContact*>(this) ||
             _pSdrObj == GetMaster(),
             "<SwDrawContact::GetAnchoredObj(..)> - provided object doesn't belongs to this contact" );
 
@@ -856,12 +856,12 @@ SwAnchoredObject* SwDrawContact::GetAnchoredObj( SdrObject* _pSdrObj )
         _pSdrObj = GetMaster();
     }
 
-    ASSERT( _pSdrObj,
+    OSL_ENSURE( _pSdrObj,
             "<SwDrawContact::GetAnchoredObj(..)> - no object provided" );
-    ASSERT( _pSdrObj->ISA(SwDrawVirtObj) ||
+    OSL_ENSURE( _pSdrObj->ISA(SwDrawVirtObj) ||
             ( !_pSdrObj->ISA(SdrVirtObj) && !_pSdrObj->ISA(SwDrawVirtObj) ),
             "<SwDrawContact::GetAnchoredObj(..)> - wrong object type object provided" );
-    ASSERT( GetUserCall( _pSdrObj ) == this || _pSdrObj == GetMaster(),
+    OSL_ENSURE( GetUserCall( _pSdrObj ) == this || _pSdrObj == GetMaster(),
             "<SwDrawContact::GetAnchoredObj(..)> - provided object doesn't belongs to this contact" );
 
     SwAnchoredObject* pRetAnchoredObj = 0L;
@@ -905,7 +905,7 @@ void SwDrawContact::SetMaster( SdrObject* _pNewMaster )
     if ( _pNewMaster )
     {
 #if OSL_DEBUG_LEVEL > 1
-        ASSERT( false, "debug notification - master replaced!" );
+        OSL_ENSURE( false, "debug notification - master replaced!" );
 #endif
         maAnchoredDrawObj.SetDrawObj( *_pNewMaster );
     }
@@ -931,8 +931,8 @@ const SwFrm* SwDrawContact::GetAnchorFrm( const SdrObject* _pDrawObj ) const
     }
     else
     {
-        ASSERT( false,
-                "<SwDrawContact::GetAnchorFrm(..)> - unknown drawing object." )
+        OSL_ENSURE( false,
+                "<SwDrawContact::GetAnchorFrm(..)> - unknown drawing object." );
     }
 
     return pAnchorFrm;
@@ -949,8 +949,8 @@ SwFrm* SwDrawContact::GetAnchorFrm( SdrObject* _pDrawObj )
     }
     else
     {
-        ASSERT( _pDrawObj->ISA(SwDrawVirtObj),
-                "<SwDrawContact::GetAnchorFrm(..)> - unknown drawing object." )
+        OSL_ENSURE( _pDrawObj->ISA(SwDrawVirtObj),
+                "<SwDrawContact::GetAnchorFrm(..)> - unknown drawing object." );
         pAnchorFrm = static_cast<SwDrawVirtObj*>(_pDrawObj)->AnchorFrm();
     }
 
@@ -1309,7 +1309,7 @@ class NestedUserCallHdl
 
                 if ( bTmpAssert )
                 {
-                    ASSERT( false,
+                    OSL_ENSURE( false,
                             "<SwDrawContact::_Changed(..)> - unknown nested <UserCall> event. This is serious, please inform OD." );
                 }
             }
@@ -1369,7 +1369,7 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
                 // OD 10.10.2003 #112299#
                 if ( mbDisconnectInProgress )
                 {
-                    ASSERT( false,
+                    OSL_ENSURE( false,
                             "<SwDrawContact::_Changed(..)> - Insert event during disconnection from layout is invalid." );
                 }
                 else
@@ -1506,7 +1506,7 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
                     break;
                     default:
                     {
-                        ASSERT( false,
+                        OSL_ENSURE( false,
                                 "<SwDrawContact::_Changed(..)> - unsupported layout direction" );
                     }
                 }
@@ -1603,7 +1603,7 @@ namespace
 void SwDrawContact::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
 {
     // OD 10.10.2003 #112299#
-    ASSERT( !mbDisconnectInProgress,
+    OSL_ENSURE( !mbDisconnectInProgress,
             "<SwDrawContact::Modify(..)> called during disconnection.");
 
     USHORT nWhich = pNew ? pNew->Which() : 0;
@@ -1639,7 +1639,7 @@ void SwDrawContact::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
                 const SwFmtAnchor* pOldAnchorFmt = pOld ? lcl_getAnchorFmt( *pOld ) : NULL;
                 if ( !pOldAnchorFmt || ( pOldAnchorFmt->GetAnchorId() != pNewAnchorFmt->GetAnchorId() ) )
                 {
-                    ASSERT( maAnchoredDrawObj.DrawObj(), "SwDrawContact::Modify: no draw object here?" );
+                    OSL_ENSURE( maAnchoredDrawObj.DrawObj(), "SwDrawContact::Modify: no draw object here?" );
                     if ( maAnchoredDrawObj.DrawObj() )
                     {
                         // --> OD 2009-07-10 #i102752#
@@ -1712,7 +1712,7 @@ void SwDrawContact::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
 #if OSL_DEBUG_LEVEL > 1
         else
         {
-            ASSERT( false,
+            OSL_ENSURE( false,
                     "<SwDrawContact::Modify(..)> - unhandled attribute? - please inform od@openoffice.org" );
         }
 #endif
@@ -1912,7 +1912,7 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
     // layout.
     if ( mbDisconnectInProgress )
     {
-        ASSERT( false,
+        OSL_ENSURE( false,
                 "<SwDrawContact::ConnectToLayout(..)> called during disconnection.");
         return;
     }
@@ -1921,7 +1921,7 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
     // object isn't inserted in the drawing page
     if ( !GetMaster()->IsInserted() )
     {
-        ASSERT( false, "<SwDrawContact::ConnectToLayout(..)> - master drawing object not inserted -> no connect to layout. Please inform od@openoffice.org" );
+        OSL_ENSURE( false, "<SwDrawContact::ConnectToLayout(..)> - master drawing object not inserted -> no connect to layout. Please inform od@openoffice.org" );
         return;
     }
     // <--
@@ -2040,7 +2040,7 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
                         if ( FLY_AT_FLY == pAnch->GetAnchorId() && !pFrm->IsFlyFrm() )
                         {
                             pFrm = pFrm->FindFlyFrm();
-                            ASSERT( pFrm,
+                            OSL_ENSURE( pFrm,
                                     "<SwDrawContact::ConnectToLayout(..)> - missing fly frame -> crash." );
                         }
 
@@ -2082,7 +2082,7 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
             }
             break;
         default:
-            ASSERT( FALSE, "Unknown Anchor." )
+            OSL_ENSURE( FALSE, "Unknown Anchor." );
             break;
     }
     if ( GetAnchorFrm() )
@@ -2129,7 +2129,7 @@ void SwDrawContact::ChkPage()
     // OD 10.10.2003 #112299#
     if ( mbDisconnectInProgress )
     {
-        ASSERT( false,
+        OSL_ENSURE( false,
                 "<SwDrawContact::ChkPage()> called during disconnection." );
         return;
     }
@@ -2312,7 +2312,7 @@ namespace sdr
 
         drawinglayer::primitive2d::Primitive2DSequence VOCOfDrawVirtObj::createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const
         {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
             // #i101734#
             static bool bCheckOtherThanTranslate(false);
             static double fShearX(0.0);
@@ -2331,7 +2331,7 @@ namespace sdr
 
             if(aLocalOffset.X() || aLocalOffset.Y())
             {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
                 // #i101734# added debug code to check more complex transformations
                 // than just a translation
                 if(bCheckOtherThanTranslate)

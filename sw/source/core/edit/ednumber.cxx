@@ -557,9 +557,9 @@ BOOL SwEditShell::IsProtectedOutlinePara() const
 
             int nTmpLvl = pTmpNd->GetTxtNode()->GetAttrOutlineLevel();
 
-            ASSERT( nTmpLvl >= 0 && nTmpLvl <= MAXLEVEL,            //<-end,zhaojianwei
+            OSL_ENSURE( nTmpLvl >= 0 && nTmpLvl <= MAXLEVEL,
                     "<SwEditShell::IsProtectedOutlinePara()>" );
-            // <--
+
             if( bFirst )
             {
                 nLvl = nTmpLvl;
@@ -575,10 +575,10 @@ BOOL SwEditShell::IsProtectedOutlinePara() const
             }
         }
     }
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     else
     {
-        ASSERT(!this, "Cursor not on an outline node" );
+        OSL_ENSURE(!this, "Cursor not on an outline node" );
     }
 #endif
     return bRet;
@@ -656,7 +656,7 @@ BYTE SwEditShell::GetNumLevel() const
     const SwTxtNode* pTxtNd = pCrsr->GetNode()->GetTxtNode();
 
     // --> FME 2005-09-12 #124972# Made code robust:
-    ASSERT( pTxtNd, "GetNumLevel() without text node" )
+    OSL_ENSURE( pTxtNd, "GetNumLevel() without text node" );
     if ( !pTxtNd )
         return nLevel;
     // <--

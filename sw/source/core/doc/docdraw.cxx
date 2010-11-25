@@ -96,14 +96,14 @@ void lcl_AdjustPositioningAttr( SwDrawFrmFmt* _pFrmFmt,
                                 const SdrObject& _rSdrObj )
 {
     const SwContact* pContact = GetUserCall( &_rSdrObj );
-    ASSERT( pContact, "<lcl_AdjustPositioningAttr(..)> - missing contact object." );
+    OSL_ENSURE( pContact, "<lcl_AdjustPositioningAttr(..)> - missing contact object." );
 
     // determine position of new group object relative to its anchor frame position
     SwTwips nHoriRelPos = 0;
     SwTwips nVertRelPos = 0;
     {
         const SwFrm* pAnchorFrm = pContact->GetAnchoredObj( &_rSdrObj )->GetAnchorFrm();
-        ASSERT( !pAnchorFrm ||
+        OSL_ENSURE( !pAnchorFrm ||
                 !pAnchorFrm->IsTxtFrm() ||
                 !static_cast<const SwTxtFrm*>(pAnchorFrm)->IsFollow(),
                 "<lcl_AdjustPositioningAttr(..)> - anchor frame is a follow. Please inform OD." );
@@ -136,7 +136,7 @@ void lcl_AdjustPositioningAttr( SwDrawFrmFmt* _pFrmFmt,
                     // vertical from left-to-right - not supported yet
                     bVert = true;
                     bR2L = true;
-                    ASSERT( false,
+                    OSL_ENSURE( false,
                             "<lcl_AdjustPositioningAttr(..)> - vertical from left-to-right not supported." );
                 }
                 break;
@@ -241,10 +241,10 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
             SwDrawContact *pContact = (SwDrawContact*)GetUserCall(pObj);
 
             // --> OD 2005-08-16 #i53320#
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
             SwAnchoredDrawObject* pAnchoredDrawObj =
                 static_cast<SwAnchoredDrawObject*>(pContact->GetAnchoredObj( pObj ));
-            ASSERT( bGroupMembersNotPositioned == pAnchoredDrawObj->NotYetPositioned(),
+            OSL_ENSURE( bGroupMembersNotPositioned == pAnchoredDrawObj->NotYetPositioned(),
                     "<SwDoc::GroupSelection(..)> - group members have different positioning status!" );
 #endif
             // <--
@@ -278,7 +278,7 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
         // <--
 
         rDrawView.GroupMarked();
-        ASSERT( rMrkList.GetMarkCount() == 1, "GroupMarked more or none groups." );
+        OSL_ENSURE( rMrkList.GetMarkCount() == 1, "GroupMarked more or none groups." );
 
         SdrObject* pNewGroupObj = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
         pNewContact = new SwDrawContact( pFmt, pNewGroupObj );
@@ -308,7 +308,7 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
             ClearRedo();
 
         rDrawView.GroupMarked();
-        ASSERT( rMrkList.GetMarkCount() == 1, "GroupMarked more or none groups." );
+        OSL_ENSURE( rMrkList.GetMarkCount() == 1, "GroupMarked more or none groups." );
     }
 
     return pNewContact;
@@ -483,7 +483,7 @@ BOOL SwDoc::DeleteSelection( SwDrawView& rDrawView )
                         // Thus, assert, if a <SwDrawVirt>-object is found in the mark list.
                         if ( pObj->ISA(SwDrawVirtObj) )
                         {
-                            ASSERT( false,
+                            OSL_ENSURE( false,
                                     "<SwDrawVirtObj> is still marked for delete. application will crash!" );
                         }
                         //loescht sich selbst!
@@ -550,7 +550,7 @@ _ZSortFly::_ZSortFly( const SwFrmFmt* pFrmFmt, const SwFmtAnchor* pFlyAn,
             nOrdNum = ((SwDrawContact*)aIter())->GetMaster()->GetOrdNum();
     }
     else {
-        ASSERT( !this, "was ist das fuer ein Format?" );
+        OSL_ENSURE( !this, "was ist das fuer ein Format?" );
     }
 }
 
@@ -708,7 +708,7 @@ bool SwDoc::IsVisibleLayerId( const SdrLayerID& _nLayerId ) const
     }
     else
     {
-        ASSERT( false, "<SwDoc::IsVisibleLayerId(..)> - unknown layer ID." );
+        OSL_ENSURE( false, "<SwDoc::IsVisibleLayerId(..)> - unknown layer ID." );
         bRetVal = false;
     }
 
@@ -743,12 +743,12 @@ SdrLayerID SwDoc::GetVisibleLayerIdByInvisibleOne( const SdrLayerID& _nInvisible
               _nInvisibleLayerId == GetHellId() ||
               _nInvisibleLayerId == GetControlsId() )
     {
-        ASSERT( false, "<SwDoc::GetVisibleLayerIdByInvisibleOne(..)> - given layer ID already an invisible one." );
+        OSL_ENSURE( false, "<SwDoc::GetVisibleLayerIdByInvisibleOne(..)> - given layer ID already an invisible one." );
         nVisibleLayerId = _nInvisibleLayerId;
     }
     else
     {
-        ASSERT( false, "<SwDoc::GetVisibleLayerIdByInvisibleOne(..)> - given layer ID is unknown." );
+        OSL_ENSURE( false, "<SwDoc::GetVisibleLayerIdByInvisibleOne(..)> - given layer ID is unknown." );
         nVisibleLayerId = _nInvisibleLayerId;
     }
 
@@ -783,12 +783,12 @@ SdrLayerID SwDoc::GetInvisibleLayerIdByVisibleOne( const SdrLayerID& _nVisibleLa
               _nVisibleLayerId == GetInvisibleHellId() ||
               _nVisibleLayerId == GetInvisibleControlsId() )
     {
-        ASSERT( false, "<SwDoc::GetInvisibleLayerIdByVisibleOne(..)> - given layer ID already an invisible one." );
+        OSL_ENSURE( false, "<SwDoc::GetInvisibleLayerIdByVisibleOne(..)> - given layer ID already an invisible one." );
         nInvisibleLayerId = _nVisibleLayerId;
     }
     else
     {
-        ASSERT( false, "<SwDoc::GetInvisibleLayerIdByVisibleOne(..)> - given layer ID is unknown." );
+        OSL_ENSURE( false, "<SwDoc::GetInvisibleLayerIdByVisibleOne(..)> - given layer ID is unknown." );
         nInvisibleLayerId = _nVisibleLayerId;
     }
 
@@ -807,9 +807,9 @@ void SwDoc::ReleaseDrawModel()
         delete pDrawModel; pDrawModel = 0;
         SfxItemPool *pSdrPool = GetAttrPool().GetSecondaryPool();
 
-        ASSERT( pSdrPool, "missing Pool" );
+        OSL_ENSURE( pSdrPool, "missing Pool" );
         SfxItemPool *pEEgPool = pSdrPool->GetSecondaryPool();
-        ASSERT( !pEEgPool->GetSecondaryPool(), "i don't accept additional pools");
+        OSL_ENSURE( !pEEgPool->GetSecondaryPool(), "i don't accept additional pools");
         pSdrPool->Delete();                 //Erst die Items vernichten lassen,
                                             //dann erst die Verkettung loesen
         GetAttrPool().SetSecondaryPool( 0 );    //Der ist ein muss!
@@ -824,7 +824,7 @@ void SwDoc::ReleaseDrawModel()
 
 SdrModel* SwDoc::_MakeDrawModel()
 {
-    ASSERT( !pDrawModel, "_MakeDrawModel: Why?" );
+    OSL_ENSURE( !pDrawModel, "_MakeDrawModel: Why?" );
     InitDrawModel();
     if ( pLayout && pLayout->GetCurrShell() )
     {
@@ -1017,7 +1017,7 @@ namespace docfunc
                         {
                             if ( !pAnchoredDrawObj )
                             {
-                                ASSERT( false,
+                                OSL_ENSURE( false,
                                         "<docfunc::AllDrawObjsOnPage() - missing anchored draw object" );
                                 bAllDrawObjsOnPage = false;
                                 break;

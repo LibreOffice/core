@@ -79,7 +79,7 @@ BOOL SwTable::IsTblComplexForChart( const String& rSelection,
         if( '>' == sBox.GetChar( sBox.Len()-1  ) ) sBox.Erase( sBox.Len()-1 );
 
         xub_StrLen nTrenner = sBox.Search( ':' );
-        ASSERT( STRING_NOTFOUND != nTrenner, "keine gueltige Selektion" );
+        OSL_ENSURE( STRING_NOTFOUND != nTrenner, "keine gueltige Selektion" );
 
         pSttBox = GetTblBox( sBox.Copy( 0, nTrenner ));
         pEndBox = GetTblBox( sBox.Copy( nTrenner+1 ));

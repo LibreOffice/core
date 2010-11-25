@@ -1005,7 +1005,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
     ULONG nStt = rFlyCntnt.GetCntntIdx()->GetIndex()+1;
     SwOLENode *pOLENd = rHTMLWrt.pDoc->GetNodes()[ nStt ]->GetOLENode();
 
-    ASSERT( pOLENd, "OLE-Node erwartet" );
+    OSL_ENSURE( pOLENd, "OLE-Node erwartet" );
     if( !pOLENd )
         return rWrt;
 
@@ -1269,7 +1269,7 @@ Writer& OutHTML_FrmFmtOLENodeGrf( Writer& rWrt, const SwFrmFmt& rFrmFmt,
     ULONG nStt = rFlyCntnt.GetCntntIdx()->GetIndex()+1;
     SwOLENode *pOLENd = rHTMLWrt.pDoc->GetNodes()[ nStt ]->GetOLENode();
 
-    ASSERT( pOLENd, "OLE-Node erwartet" );
+    OSL_ENSURE( pOLENd, "OLE-Node erwartet" );
     if( !pOLENd )
         return rWrt;
 

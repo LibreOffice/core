@@ -138,10 +138,6 @@
 
 #include <PostItMgr.hxx>
 
-//TODO: This one could most probably be removed
-#if defined(DBG_UTIL) && (OSL_DEBUG_LEVEL > 1)
-#endif
-
 using namespace sw::mark;
 using namespace ::com::sun::star;
 

@@ -84,7 +84,7 @@ SwAsCharAnchoredObjectPosition::~SwAsCharAnchoredObjectPosition()
 */
 const SwTxtFrm& SwAsCharAnchoredObjectPosition::GetAnchorTxtFrm() const
 {
-    ASSERT( GetAnchorFrm().ISA(SwTxtFrm),
+    OSL_ENSURE( GetAnchorFrm().ISA(SwTxtFrm),
             "SwAsCharAnchoredObjectPosition::GetAnchorTxtFrm() - wrong anchor frame type" );
 
     return static_cast<const SwTxtFrm&>(GetAnchorFrm());
@@ -289,7 +289,7 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
             rAnchorFrm.SwitchHorizontalToVertical( aAnchorPos );
 
         // --> OD 2005-03-09 #i44347# - keep last object rectangle at anchored object
-        ASSERT ( GetAnchoredObj().ISA(SwAnchoredDrawObject),
+       OSL_ENSURE( GetAnchoredObj().ISA(SwAnchoredDrawObject),
                  "<SwAsCharAnchoredObjectPosition::CalcPosition()> - wrong type of anchored object." );
         SwAnchoredDrawObject& rAnchoredDrawObj =
                         static_cast<SwAnchoredDrawObject&>( GetAnchoredObj() );
@@ -317,7 +317,7 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
             aRelAttr = Point( 0, nRelPos );
 
         // OD 2004-03-23 #i26791#
-        ASSERT( GetAnchoredObj().ISA(SwFlyInCntFrm),
+        OSL_ENSURE( GetAnchoredObj().ISA(SwFlyInCntFrm),
                 "<SwAsCharAnchoredObjectPosition::CalcPosition()> - wrong anchored object." );
         const SwFlyInCntFrm& rFlyInCntFrm =
                 static_cast<const SwFlyInCntFrm&>(GetAnchoredObj());
@@ -338,7 +338,7 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
                 aObjBoundRect.Height( aObjBoundRect.Height() + rULSpace.GetLower() );
             }
         }
-        ASSERT( (rFlyInCntFrm.Frm().*fnRect->fnGetHeight)(),
+        OSL_ENSURE( (rFlyInCntFrm.Frm().*fnRect->fnGetHeight)(),
             "SwAnchoredObjectPosition::CalcPosition(..) - fly frame has an invalid height" );
     }
 

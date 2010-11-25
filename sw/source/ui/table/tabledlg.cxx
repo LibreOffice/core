@@ -81,8 +81,8 @@ using namespace ::com::sun::star;
 #ifdef DEBUG_TBLDLG
 void DbgTblRep(SwTableRep* pRep)
 {
-    OSL_ENSURE(false, String(pRep->GetColCount()))
-    OSL_ENSURE(false, String(pRep->GetAllColCount()))
+    OSL_ENSURE(false, String(pRep->GetColCount()));
+    OSL_ENSURE(false, String(pRep->GetAllColCount()));
     SwTwips nSum = 0;
     for(USHORT i = 0; i < pRep->GetAllColCount(); i++)
     {
@@ -90,23 +90,23 @@ void DbgTblRep(SwTableRep* pRep)
         sMsg += pRep->GetColumns()[i].bVisible ? " v " : " h ";
         sMsg += pRep->GetColumns()[i].nWidth;
         nSum +=pRep->GetColumns()[i].nWidth;
-        OSL_ENSURE(false, sMsg)
+        OSL_ENSURE(false, sMsg);
     }
     String sMsg("Column sum: ");
     sMsg += nSum;
     sMsg += " table width: ";
     sMsg += pRep->GetWidth();
-    OSL_ENSURE(false, sMsg)
+    OSL_ENSURE(false, sMsg);
     sMsg = "Gesamt/Links/Rechts: ";
     sMsg += pRep->GetSpace();
     sMsg += '/';
     sMsg += pRep->GetLeftSpace();
     sMsg += '/';
     sMsg += pRep->GetRightSpace();
-    OSL_ENSURE(false, sMsg)
+    OSL_ENSURE(false, sMsg);
     sMsg = "Align: ";
     sMsg += pRep->GetAlign();
-    OSL_ENSURE(false, sMsg)
+    OSL_ENSURE(false, sMsg);
 
 };
 

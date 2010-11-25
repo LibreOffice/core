@@ -93,7 +93,7 @@ bool lcl_IsInSameTblBox( SwNodes& _rNds,
                  ? !_rNds.GoPrevSection( &aChkIdx, FALSE, FALSE )
                  : !_rNds.GoNextSection( &aChkIdx, FALSE, FALSE ) )
             {
-                ASSERT( false, "<lcl_IsInSameTblBox(..)> - no previous/next!" );
+                OSL_ENSURE( false, "<lcl_IsInSameTblBox(..)> - no previous/next!" );
                 return false;
             }
             else
@@ -166,7 +166,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
     if( rRange.HasMark() &&
         0 == ( nRegionRet = IsInsRegionAvailable( rRange, &pPrvNd ) ))
     {
-        ASSERT( !this, "Selection ueber verschiedene Sections" );
+        OSL_ENSURE( !this, "Selection ueber verschiedene Sections" );
         return 0;
     }
 
@@ -212,7 +212,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
                     *pEndPos = (SwPosition*)rRange.End();
         if( pPrvNd && 3 == nRegionRet )
         {
-            ASSERT( pPrvNd, "der SectionNode fehlt" );
+            OSL_ENSURE( pPrvNd, "der SectionNode fehlt" );
             SwNodeIndex aStt( pSttPos->nNode ), aEnd( pEndPos->nNode, +1 );
             while( pPrvNd != aStt.GetNode().StartOfSectionNode() )
                 aStt--;
@@ -832,7 +832,7 @@ SwSectionNode* SwNodes::InsertTextSection(SwNodeIndex const& rNdIdx,
     if( !pEnde )        // kein Bereich also neue Section davor/hinter anlegen
     {
         // #i26762#
-        ASSERT(!pEnde || rNdIdx <= *pEnde,
+        OSL_ENSURE(!pEnde || rNdIdx <= *pEnde,
                "Section start and end in wrong order!");
 
         if( bInsAtStart )
@@ -1055,7 +1055,7 @@ SwFrm* SwClearDummies( SwFrm* pFrm )
     SwFrm* pTmp = pFrm;
     while( pTmp )
     {
-        ASSERT( !pTmp->GetUpper(), "SwClearDummies: No Upper allowed!" );
+        OSL_ENSURE( !pTmp->GetUpper(), "SwClearDummies: No Upper allowed!" );
         if( pTmp->IsSctFrm() )
         {
             SwSectionFrm* pSectFrm = (SwSectionFrm*)pFrm;
@@ -1149,7 +1149,7 @@ void SwSectionNode::MakeFrms(const SwNodeIndex & rIdx )
             SwFrm *pFrm, *pNew;
             while( 0 != (pFrm = aNode2Layout.NextFrm()) )
             {
-                ASSERT( pFrm->IsSctFrm(), "Depend von Section keine Section." );
+                OSL_ENSURE( pFrm->IsSctFrm(), "Depend von Section keine Section." );
                 pNew = rIdx.GetNode().GetCntntNode()->MakeFrm();
 
                 SwSectionNode* pS = rIdx.GetNode().FindSectionNode();
@@ -1179,7 +1179,7 @@ void SwSectionNode::MakeFrms(const SwNodeIndex & rIdx )
                     SwLayoutFrm* pUp = pSct;
                     while( pUp->Lower() )  // for columned sections
                     {
-                        ASSERT( pUp->Lower()->IsLayoutFrm(),"Who's in there?" );
+                        OSL_ENSURE( pUp->Lower()->IsLayoutFrm(),"Who's in there?" );
                         pUp = (SwLayoutFrm*)pUp->Lower();
                     }
                     pNew->Paste( pUp, NULL );
@@ -1239,7 +1239,7 @@ void SwSectionNode::MakeFrms(const SwNodeIndex & rIdx )
 
 void SwSectionNode::MakeFrms( SwNodeIndex* pIdxBehind, SwNodeIndex* pEndIdx )
 {
-    ASSERT( pIdxBehind, "kein Index" );
+    OSL_ENSURE( pIdxBehind, "kein Index" );
     SwNodes& rNds = GetNodes();
     SwDoc* pDoc = rNds.GetDoc();
 
@@ -1307,7 +1307,7 @@ SwSectionNode* SwSectionNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) c
     ::std::auto_ptr<SwTOXBase> pTOXBase;
     if (TOX_CONTENT_SECTION == GetSection().GetType())
     {
-        ASSERT( GetSection().ISA( SwTOXBaseSection ), "no TOXBaseSection!" );
+        OSL_ENSURE( GetSection().ISA( SwTOXBaseSection ), "no TOXBaseSection!" );
         SwTOXBaseSection const& rTBS(
             dynamic_cast<SwTOXBaseSection const&>(GetSection()));
         pTOXBase.reset( new SwTOXBase(rTBS, pDoc) );
@@ -1375,7 +1375,7 @@ SwSectionNode* SwSectionNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) c
 
 BOOL SwSectionNode::IsCntntHidden() const
 {
-    ASSERT( !m_pSection->IsHidden(),
+    OSL_ENSURE( !m_pSection->IsHidden(),
             "That's simple: Hidden Section => Hidden Content" );
     SwNodeIndex aTmp( *this, 1 );
     ULONG nEnd = EndOfSectionIndex();
@@ -1392,7 +1392,7 @@ BOOL SwSectionNode::IsCntntHidden() const
         {
             if( aTmp.GetNode().IsCntntNode() || aTmp.GetNode().IsTableNode() )
                 return FALSE; // Nicht versteckter Inhalt wurde gefunden
-            ASSERT( aTmp.GetNode().IsEndNode(), "EndNode expected" );
+            OSL_ENSURE( aTmp.GetNode().IsEndNode(), "EndNode expected" );
         }
         aTmp++;
     }
@@ -1436,7 +1436,7 @@ void SwSectionNode::NodesArrChgd()
         // verschieben vom Nodes- ins UndoNodes-Array?
         if( rNds.IsDocNodes() )
         {
-            ASSERT( pDoc == GetDoc(),
+            OSL_ENSURE( pDoc == GetDoc(),
                     "verschieben in unterschiedliche Documente?" );
             if (m_pSection->IsLinkType())
             {

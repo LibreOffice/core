@@ -145,7 +145,7 @@ static Writer& OutHTML_SvxAdjust( Writer& rWrt, const SfxPoolItem& rHt );
 
 static Writer& OutHTML_HoriSpacer( Writer& rWrt, INT16 nSize )
 {
-    ASSERT( nSize>0, "horizontaler SPACER mit negativem Wert?" )
+    OSL_ENSURE( nSize>0, "horizontaler SPACER mit negativem Wert?" );
     if( nSize <= 0 )
         return rWrt;
 
@@ -363,9 +363,9 @@ SwHTMLFmtInfo::SwHTMLFmtInfo( const SwFmt *pF, SwDoc *pDoc, SwDoc *pTemplate,
     // Den Selektor des Formats holen
     USHORT nDeep = SwHTMLWriter::GetCSS1Selector( pFmt, aToken, aClass,
                                                   nRefPoolId );
-    ASSERT( nDeep ? aToken.Len()>0 : aToken.Len()==0,
+    OSL_ENSURE( nDeep ? aToken.Len()>0 : aToken.Len()==0,
             "Hier stimmt doch was mit dem Token nicht!" );
-    ASSERT( nDeep ? nRefPoolId : !nRefPoolId,
+    OSL_ENSURE( nDeep ? nRefPoolId : !nRefPoolId,
             "Hier stimmt doch was mit der Vergleichs-Vorlage nicht!" );
 
     BOOL bTxtColl = pFmt->Which() == RES_TXTFMTCOLL ||
@@ -576,7 +576,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
                     const SfxItemSet *pNodeItemSet,
                     SwHTMLTxtCollOutputInfo& rInfo )
 {
-    ASSERT( RES_CONDTXTFMTCOLL==rFmt.Which() || RES_TXTFMTCOLL==rFmt.Which(),
+    OSL_ENSURE( RES_CONDTXTFMTCOLL==rFmt.Which() || RES_TXTFMTCOLL==rFmt.Which(),
             "keine Absatz-Vorlage" );
 
     SwHTMLWriter & rHWrt = (SwHTMLWriter&)rWrt;
@@ -619,9 +619,9 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
         bNumbered = aNumInfo.IsNumbered();
         BYTE nLvl = aNumInfo.GetLevel();
 
-        ASSERT( pTxtNd->GetActualListLevel() == nLvl,
+        OSL_ENSURE( pTxtNd->GetActualListLevel() == nLvl,
                 "Gemerkter Num-Level ist falsch" );
-        ASSERT( bNumbered == static_cast< BOOL >(pTxtNd->IsCountedInList()),
+        OSL_ENSURE( bNumbered == static_cast< BOOL >(pTxtNd->IsCountedInList()),
                 "Gemerkter Numerierungs-Zustand ist falsch" );
 
         if( bNumbered )
@@ -674,13 +674,13 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
         // der erste Buchstabe reicht meistens
         switch( rInfo.aToken.GetChar( 0 ) )
         {
-        case 'A':   ASSERT( rInfo.aToken.Equals(OOO_STRING_SVTOOLS_HTML_address),
+        case 'A': OSL_ENSURE( rInfo.aToken.Equals(OOO_STRING_SVTOOLS_HTML_address),
                             "Doch kein ADDRESS?" );
                     rInfo.bParaPossible = TRUE;
                     rHWrt.bNoAlign = TRUE;
                     break;
 
-        case 'B':   ASSERT( rInfo.aToken.Equals(OOO_STRING_SVTOOLS_HTML_blockquote),
+        case 'B': OSL_ENSURE( rInfo.aToken.Equals(OOO_STRING_SVTOOLS_HTML_blockquote),
                             "Doch kein BLOCKQUOTE?" );
                     rInfo.bParaPossible = TRUE;
                     rHWrt.bNoAlign = TRUE;
@@ -692,7 +692,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
                     }
                     else
                     {
-                        ASSERT( rInfo.aToken.Equals(OOO_STRING_SVTOOLS_HTML_preformtxt),
+                        OSL_ENSURE( rInfo.aToken.Equals(OOO_STRING_SVTOOLS_HTML_preformtxt),
                                 "Doch kein PRE?" );
                         if( HTML_PREFORMTXT_ON == rHWrt.nLastParaToken )
                         {
@@ -707,7 +707,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
                     }
                     break;
 
-        case 'D':   ASSERT( rInfo.aToken.Equals(OOO_STRING_SVTOOLS_HTML_dt) ||
+        case 'D': OSL_ENSURE( rInfo.aToken.Equals(OOO_STRING_SVTOOLS_HTML_dt) ||
                             rInfo.aToken.Equals(OOO_STRING_SVTOOLS_HTML_dd),
                             "Doch kein DD/DT?" );
                     bDT = rInfo.aToken.Equals(OOO_STRING_SVTOOLS_HTML_dt);
@@ -729,7 +729,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
     // Falls noetig, die harte Attributierung der Vorlage uebernehmen
     if( pFmtInfo->pItemSet )
     {
-        ASSERT( !rInfo.pItemSet, "Wo kommt der Item-Set her?" );
+        OSL_ENSURE( !rInfo.pItemSet, "Wo kommt der Item-Set her?" );
         rInfo.pItemSet = new SfxItemSet( *pFmtInfo->pItemSet );
     }
 
@@ -858,7 +858,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
     // ggf. eine Aufzaehlung- oder Numerierungsliste beginnen
     if( rInfo.bInNumBulList )
     {
-        ASSERT( !rHWrt.nDefListLvl, "DL in OL geht nicht!" );
+        OSL_ENSURE( !rHWrt.nDefListLvl, "DL in OL geht nicht!" );
         OutHTML_NumBulListStart( rHWrt, aNumInfo );
 
         if( bNumbered )
@@ -1115,8 +1115,8 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
 
     if( nBulletGrfLvl != 255 )
     {
-        ASSERT( aNumInfo.GetNumRule(), "Wo ist die Numerierung geblieben???" );
-        ASSERT( nBulletGrfLvl < MAXLEVEL, "So viele Ebenen gibt's nicht" );
+        OSL_ENSURE( aNumInfo.GetNumRule(), "Wo ist die Numerierung geblieben???" );
+        OSL_ENSURE( nBulletGrfLvl < MAXLEVEL, "So viele Ebenen gibt's nicht" );
         const SwNumFmt& rNumFmt = aNumInfo.GetNumRule()->Get(nBulletGrfLvl);
 
         OutHTML_BulletImage( rWrt, OOO_STRING_SVTOOLS_HTML_image, 0,
@@ -1340,7 +1340,7 @@ USHORT HTMLEndPosLst::_FindStartPos( const HTMLSttEndPos *pPos ) const
     for( i = 0; i < aStartLst.Count() && aStartLst[i] != pPos;  i++ )
         ;
 
-    ASSERT( i != aStartLst.Count(), "Item nicht in Start-Liste gefunden!" );
+    OSL_ENSURE( i != aStartLst.Count(), "Item nicht in Start-Liste gefunden!" );
 
     return i==aStartLst.Count() ? USHRT_MAX : i;
 }
@@ -1352,7 +1352,7 @@ USHORT HTMLEndPosLst::_FindEndPos( const HTMLSttEndPos *pPos ) const
     for( i = 0; i < aEndLst.Count() && aEndLst[i] != pPos;  i++ )
         ;
 
-    ASSERT( i != aEndLst.Count(), "Item nicht in Ende-Liste gefunden" );
+    OSL_ENSURE( i != aEndLst.Count(), "Item nicht in Ende-Liste gefunden" );
 
     return i==aEndLst.Count() ? USHRT_MAX : i;
 }
@@ -1801,8 +1801,8 @@ HTMLEndPosLst::HTMLEndPosLst( SwDoc *pD, SwDoc* pTempl,
 
 HTMLEndPosLst::~HTMLEndPosLst()
 {
-    ASSERT( !aStartLst.Count(), "Start-Liste im Destruktor nicht leer" );
-    ASSERT( !aEndLst.Count(), "End-Liste im Destruktor nicht leer" );
+    OSL_ENSURE( !aStartLst.Count(), "Start-Liste im Destruktor nicht leer" );
+    OSL_ENSURE( !aEndLst.Count(), "End-Liste im Destruktor nicht leer" );
 }
 
 
@@ -1854,7 +1854,7 @@ void HTMLEndPosLst::InsertNoScript( const SfxPoolItem& rItem,
 
         case HTML_CHRFMT_VALUE:
             {
-                ASSERT( RES_TXTATR_CHARFMT == rItem.Which(),
+                OSL_ENSURE( RES_TXTATR_CHARFMT == rItem.Which(),
                         "Doch keine Zeichen-Vorlage" );
                 const SwFmtCharFmt& rChrFmt = (const SwFmtCharFmt&)rItem;
                 const SwCharFmt* pFmt = rChrFmt.GetCharFmt();
@@ -1887,7 +1887,7 @@ void HTMLEndPosLst::InsertNoScript( const SfxPoolItem& rItem,
             // Eine Vordergrund-Farbe als Absatz-Attribut wird nur
             // exportiert, wenn sie nicht der Default-Farbe entspricht.
             {
-                ASSERT( RES_CHRATR_COLOR == rItem.Which(),
+                OSL_ENSURE( RES_CHRATR_COLOR == rItem.Which(),
                         "Doch keine Vordergrund-Farbe" );
                 Color aColor( ((const SvxColorItem&)rItem).GetValue() );
                 if( COL_AUTO == aColor.GetColor() )
@@ -1899,7 +1899,7 @@ void HTMLEndPosLst::InsertNoScript( const SfxPoolItem& rItem,
 
         case HTML_DROPCAP_VALUE:
             {
-                ASSERT( RES_PARATR_DROP == rItem.Which(),
+                OSL_ENSURE( RES_PARATR_DROP == rItem.Which(),
                         "Doch kein Drop-Cap" );
                 const SwFmtDrop& rDrop = (const SwFmtDrop&)rItem;
                 nEnd = nStart + rDrop.GetChars();
@@ -2081,7 +2081,7 @@ sal_uInt16 HTMLEndPosLst::GetScriptAtPos( xub_StrLen nPos ,
     sal_uInt16 i=0;
     while( i < nScriptChgs && nPos >= aScriptChgLst[i] )
         i++;
-    ASSERT( i < nScriptChgs, "script list is to short" );
+    OSL_ENSURE( i < nScriptChgs, "script list is to short" );
     if( i < nScriptChgs )
     {
         if( i18n::ScriptType::WEAK == aScriptLst[i] )
@@ -2161,7 +2161,7 @@ void HTMLEndPosLst::OutEndAttrs( SwHTMLWriter& rHWrt, xub_StrLen nPos,
         {
             // Das Attribut wird vor der aktuellen Position beendet. Das
             // darf nicht sein, aber wie koennen trotzdem damit umgehen
-            ASSERT( nEnd >= nPos,
+            OSL_ENSURE( nEnd >= nPos,
                     "Das Attribut sollte schon laengst beendet sein" );
             i++;
         }
@@ -2578,7 +2578,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
                     else
                     {
                         // Hints ohne-Ende werden als letztes ausgebeben
-                        ASSERT( !pTxtHt,
+                        OSL_ENSURE( !pTxtHt,
                                 "Wieso gibt es da schon ein Attribut ohne Ende?" );
                         if( rHTMLWrt.nTxtAttrsToIgnore>0 )
                         {
@@ -2684,7 +2684,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
     if( bFlysLeft )
         bFlysLeft = rHTMLWrt.OutFlyFrm( rNode.GetIndex(),
                                        nEnde, HTML_POS_INSIDE );
-    ASSERT( !bFlysLeft, "Es wurden nicht alle Rahmen gespeichert!" );
+    OSL_ENSURE( !bFlysLeft, "Es wurden nicht alle Rahmen gespeichert!" );
 
     rHTMLWrt.bTxtAttr = FALSE;
 
@@ -3207,7 +3207,7 @@ static Writer& OutHTML_SwFmtINetFmt( Writer& rWrt, const SfxPoolItem& rHt )
         // das
         OutHTML_INetFmt( rWrt, rINetFmt, FALSE );
 
-        ASSERT( rHTMLWrt.aINetFmts.Count(), "da fehlt doch ein URL-Attribut" );
+        OSL_ENSURE( rHTMLWrt.aINetFmts.Count(), "da fehlt doch ein URL-Attribut" );
         if( rHTMLWrt.aINetFmts.Count() )
         {
             // das eigene Attribut vom Stack holen
@@ -3251,7 +3251,7 @@ static Writer& OutHTML_SwTxtCharFmt( Writer& rWrt, const SfxPoolItem& rHt )
         return rWrt;
 
     const SwHTMLFmtInfo *pFmtInfo = rHTMLWrt.aChrFmtInfos[nPos];
-    ASSERT( pFmtInfo, "Wieso gint es keine Infos ueber die Zeichenvorlage?" );
+    OSL_ENSURE( pFmtInfo, "Wieso gint es keine Infos ueber die Zeichenvorlage?" );
 
     if( rHTMLWrt.bTagOn )
     {

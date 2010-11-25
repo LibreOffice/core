@@ -70,7 +70,7 @@ namespace TxtFmtCollFunc
         if ( !pTxtFmtColl )
         {
     #if OSL_DEBUG_LEVEL > 1
-            ASSERT( false,
+            OSL_ENSURE( false,
                     "<TxtFmtCollFunc::CheckTxtFmtCollFuncForDeletionOfAssignmentToOutlineStyle> - misuse of method - it's only for instances of <SwTxtFmtColl>" );
     #endif
             return;
@@ -501,7 +501,7 @@ bool SwTxtFmtColl::AreListLevelIndentsApplicable() const
             }
 
             pColl = dynamic_cast<const SwTxtFmtColl*>(pColl->DerivedFrom());
-            ASSERT( pColl,
+            OSL_ENSURE( pColl,
                     "<SwTxtFmtColl::AreListLevelIndentsApplicable()> - something wrong in paragraph style hierarchy. The applied list style is not found." );
         }
     }
@@ -661,7 +661,7 @@ void SwConditionTxtFmtColl::SetConditions( const SwFmtCollConditions& rCndClls )
 //#outline level, zhaojianwei
 void SwTxtFmtColl::SetAttrOutlineLevel( int nLevel)
 {
-    ASSERT( 0 <= nLevel && nLevel <= MAXLEVEL ,"SwTxtFmtColl: Level Out Of Range" );
+    OSL_ENSURE( 0 <= nLevel && nLevel <= MAXLEVEL ,"SwTxtFmtColl: Level Out Of Range" );
     SetFmtAttr( SfxUInt16Item( RES_PARATR_OUTLINELEVEL,
                             static_cast<UINT16>(nLevel) ) );
 }
@@ -673,7 +673,7 @@ int SwTxtFmtColl::GetAttrOutlineLevel() const
 
 int SwTxtFmtColl::GetAssignedOutlineStyleLevel() const
 {
-    ASSERT( IsAssignedToListLevelOfOutlineStyle(),
+    OSL_ENSURE( IsAssignedToListLevelOfOutlineStyle(),
         "<SwTxtFmtColl::GetAssignedOutlineStyleLevel()> - misuse of method");
     return GetAttrOutlineLevel() - 1;
 }

@@ -347,7 +347,7 @@ public:
     */
     const SwNumberTreeNode* GetPrecedingNodeOf( const SwNumberTreeNode& rNode ) const;
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     static unsigned long GetInstances();
     unsigned long GetSerial();
 #endif
@@ -450,7 +450,7 @@ protected:
      */
     mutable tSwNumberTreeChildren::iterator mItLastValid;
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     /**
        Counter for the number of created instances.
      */

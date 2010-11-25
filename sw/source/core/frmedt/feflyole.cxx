@@ -87,7 +87,7 @@ SwFlyFrm *SwFEShell::FindFlyFrm( const uno::Reference < embed::XEmbeddedObject >
             nSttIdx = pStNd->EndOfSectionIndex() + 1;
         }
 
-        ASSERT( bExist, "OLE-Object unknown and FlyFrm not found." );
+        OSL_ENSURE( bExist, "OLE-Object unknown and FlyFrm not found." );
     }
     return pFly;
 }

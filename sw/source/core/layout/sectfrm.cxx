@@ -126,7 +126,7 @@ SwSectionFrm::SwSectionFrm( SwSectionFrm &rSect, BOOL bMaster ) :
 //       frame and its insert in the layout.
 void SwSectionFrm::Init()
 {
-    ASSERT( GetUpper(), "SwSectionFrm::Init before insertion?!" );
+    OSL_ENSURE( GetUpper(), "SwSectionFrm::Init before insertion?!" );
     SWRECTFN( this )
     long nWidth = (GetUpper()->Prt().*fnRect->fnGetWidth)();
     (Frm().*fnRect->fnSetWidth)( nWidth );
@@ -191,7 +191,7 @@ void SwSectionFrm::DelEmpty( BOOL bRemove )
 {
     if( IsColLocked() )
     {
-        ASSERT( !bRemove, "Don't delete locked SectionFrms" );
+        OSL_ENSURE( !bRemove, "Don't delete locked SectionFrms" );
         return;
     }
     SwFrm* pUp = GetUpper();
@@ -262,7 +262,7 @@ void SwSectionFrm::Cut()
 
 void SwSectionFrm::_Cut( BOOL bRemove )
 {
-    ASSERT( GetUpper(), "Cut ohne Upper()." );
+    OSL_ENSURE( GetUpper(), "Cut ohne Upper()." );
 
     PROTOCOL( this, PROT_CUT, 0, GetUpper() )
 
@@ -347,11 +347,11 @@ void SwSectionFrm::_Cut( BOOL bRemove )
 
 void SwSectionFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
 {
-    ASSERT( pParent, "Kein Parent fuer Paste." );
-    ASSERT( pParent->IsLayoutFrm(), "Parent ist CntntFrm." );
-    ASSERT( pParent != this, "Bin selbst der Parent." );
-    ASSERT( pSibling != this, "Bin mein eigener Nachbar." );
-    ASSERT( !GetPrev() && !GetUpper(),
+    OSL_ENSURE( pParent, "Kein Parent fuer Paste." );
+    OSL_ENSURE( pParent->IsLayoutFrm(), "Parent ist CntntFrm." );
+    OSL_ENSURE( pParent != this, "Bin selbst der Parent." );
+    OSL_ENSURE( pSibling != this, "Bin mein eigener Nachbar." );
+    OSL_ENSURE( !GetPrev() && !GetUpper(),
             "Bin noch irgendwo angemeldet." );
 
     PROTOCOL( this, PROT_PASTE, 0, GetUpper() )
@@ -547,7 +547,7 @@ void SwSectionFrm::MergeNext( SwSectionFrm* pNxt )
 
 BOOL SwSectionFrm::SplitSect( SwFrm* pFrm, BOOL bApres )
 {
-    ASSERT( pFrm, "SplitSect: Why?" );
+    OSL_ENSURE( pFrm, "SplitSect: Why?" );
     SwFrm* pOther = bApres ? pFrm->FindNext() : pFrm->FindPrev();
     if( !pOther )
         return FALSE;
@@ -556,7 +556,7 @@ BOOL SwSectionFrm::SplitSect( SwFrm* pFrm, BOOL bApres )
         return FALSE;
     // Den Inhalt zur Seite stellen
     SwFrm* pSav = ::SaveCntnt( this, bApres ? pOther : pFrm );
-    ASSERT( pSav, "SplitSect: What's on?" );
+    OSL_ENSURE( pSav, "SplitSect: What's on?" );
     if( pSav ) // Robust
     {   // Einen neuen SctFrm anlegen, nicht als Follow/Master
         SwSectionFrm* pNew = new SwSectionFrm( *pSect->GetSection() );
@@ -776,7 +776,7 @@ void SwSectionFrm::MoveCntntAndDelete( SwSectionFrm* pDel, BOOL bSave )
     // jetzt koennen eventuell zwei Teile des uebergeordneten Bereich verschmelzen
     if( pPrvSct && !pPrvSct->IsJoinLocked() )
     {
-        ASSERT( pNxtSct, "MoveCntnt: No Merge" );
+        OSL_ENSURE( pNxtSct, "MoveCntnt: No Merge" );
         pPrvSct->MergeNext( pNxtSct );
     }
 }
@@ -787,7 +787,9 @@ void SwSectionFrm::MakeAll()
         return;
     if( !pSection ) // Durch DelEmpty
     {
-        ASSERT( GetFmt()->GetDoc()->GetRootFrm()->IsInDelList( this ), "SectionFrm without Section" );
+#if OSL_DEBUG_LEVEL > 1
+        OSL_ENSURE( GetFmt()->GetDoc()->GetRootFrm()->IsInDelList( this ), "SectionFrm without Section" );
+#endif
         if( !bValidPos )
         {
             if( GetUpper() )
@@ -840,7 +842,7 @@ void SwSectionFrm::MakeAll()
 
 BOOL SwSectionFrm::ShouldBwdMoved( SwLayoutFrm *, BOOL , BOOL & )
 {
-    ASSERT( FALSE, "Hups, wo ist meine Tarnkappe?" );
+    OSL_ENSURE( FALSE, "Hups, wo ist meine Tarnkappe?" );
     return FALSE;
 }
 
@@ -957,7 +959,7 @@ SwFtnFrm* lcl_FindEndnote( SwSectionFrm* &rpSect, BOOL &rbEmpty,
     SwSectionFrm* pSect = rbEmpty ? rpSect->GetFollow() : rpSect;
     while( pSect )
     {
-       ASSERT( (pSect->Lower() && pSect->Lower()->IsColumnFrm()) || pSect->GetUpper()->IsFtnFrm(),
+       OSL_ENSURE( (pSect->Lower() && pSect->Lower()->IsColumnFrm()) || pSect->GetUpper()->IsFtnFrm(),
                 "InsertEndnotes: Where's my column?" );
 
         // i73332: Columned section in endnote
@@ -1026,9 +1028,9 @@ void lcl_ColumnRefresh( SwSectionFrm* pSect, BOOL bFollow )
 
 void SwSectionFrm::CollectEndnotes( SwLayouter* pLayouter )
 {
-    ASSERT( IsColLocked(), "CollectEndnotes: You love the risk?" );
+    OSL_ENSURE( IsColLocked(), "CollectEndnotes: You love the risk?" );
     // i73332: Section in footnode does not have columns!
-    ASSERT( (Lower() && Lower()->IsColumnFrm()) || GetUpper()->IsFtnFrm(), "Where's my column?" );
+    OSL_ENSURE( (Lower() && Lower()->IsColumnFrm()) || GetUpper()->IsFtnFrm(), "Where's my column?" );
 
     SwSectionFrm* pSect = this;
     SwFtnFrm* pFtn;
@@ -1153,7 +1155,7 @@ void SwSectionFrm::SimpleFormat()
 {
     if ( IsJoinLocked() || IsColLocked() )
         return;
-    // ASSERT( pFollow, "SimpleFormat: Follow required" );
+    // OSL_ENSURE( pFollow, "SimpleFormat: Follow required" );
     LockJoin();
     SWRECTFN( this )
     if( GetPrev() || GetUpper() )
@@ -1333,8 +1335,10 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
 {
     if( !pSection ) // Durch DelEmpty
     {
-        ASSERT( GetFmt()->GetDoc()->GetRootFrm()->IsInDelList( this ),
+#if OSL_DEBUG_LEVEL > 1
+        OSL_ENSURE( GetFmt()->GetDoc()->GetRootFrm()->IsInDelList( this ),
                  "SectionFrm without Section" );
+#endif
         bValidSize = bValidPos = bValidPrtArea = TRUE;
         return;
     }
@@ -1584,7 +1588,7 @@ SwLayoutFrm *SwFrm::GetNextSctLeaf( MakePageType eMakePage )
 //  SwSectionFrm *pSect = GetUpper()->FindSctFrm();
     SwSectionFrm *pSect = FindSctFrm();
     BOOL bWrongPage = FALSE;
-    ASSERT( pSect, "GetNextSctLeaf: Missing SectionFrm" );
+    OSL_ENSURE( pSect, "GetNextSctLeaf: Missing SectionFrm" );
 
     // Hier eine Abkuerzung fuer Bereiche mit Follows,
     // dieser kann akzeptiert werden, wenn keine Spalten oder Seiten (ausser Dummyseiten)
@@ -1753,7 +1757,7 @@ SwLayoutFrm *SwFrm::GetNextSctLeaf( MakePageType eMakePage )
                         pNxt = (SwSectionFrm*)pTmp;
                     else
                     {
-                        ASSERT( pTmp->IsTabFrm(), "GetNextSctLeaf: Wrong Type" );
+                        OSL_ENSURE( pTmp->IsTabFrm(), "GetNextSctLeaf: Wrong Type" );
                         pNxt = (SwTabFrm*)pTmp;
                     }
                     while( !pNxtCntnt && 0 != ( pTmp = pTmp->GetNext() ) )
@@ -1843,7 +1847,7 @@ SwLayoutFrm *SwFrm::GetPrevSctLeaf( MakePageType )
     // nur ein Spaltenwechsel erfolgen, eine der oberen Abkuerzungen haette
     // zuschlagen muessen, ebenso wenn der Bereich einen pPrev hat.
     // Jetzt ziehen wir sogar eine leere Spalte in Betracht...
-    ASSERT( FindSctFrm(), "GetNextSctLeaf: Missing SectionFrm" );
+    OSL_ENSURE( FindSctFrm(), "GetNextSctLeaf: Missing SectionFrm" );
     if( ( IsInTab() && !IsTabFrm() ) || FindFooterOrHeader() )
         return pCol;
 
@@ -2314,7 +2318,7 @@ SwFrm* SwFrm::_GetIndPrev() const
     // could be an empty section frame. The caller has to assure, that the
     // frame has no direct previous frame or only empty section frames as
     // previous frames.
-    ASSERT( /*!pPrev &&*/ IsInSct(), "Why?" );
+    OSL_ENSURE( /*!pPrev &&*/ IsInSct(), "Why?" );
     // <--
     const SwFrm* pSct = GetUpper();
     if( !pSct )
@@ -2328,8 +2332,8 @@ SwFrm* SwFrm::_GetIndPrev() const
         const SwFrm* pCol = GetUpper()->GetUpper()->GetPrev();
         while( pCol )
         {
-            ASSERT( pCol->IsColumnFrm(), "GetIndPrev(): ColumnFrm expected" );
-            ASSERT( pCol->GetLower() && pCol->GetLower()->IsBodyFrm(),
+            OSL_ENSURE( pCol->IsColumnFrm(), "GetIndPrev(): ColumnFrm expected" );
+            OSL_ENSURE( pCol->GetLower() && pCol->GetLower()->IsBodyFrm(),
                     "GetIndPrev(): Where's the body?");
             if( ((SwLayoutFrm*)((SwLayoutFrm*)pCol)->Lower())->Lower() )
                 return NULL;
@@ -2346,7 +2350,7 @@ SwFrm* SwFrm::_GetIndPrev() const
 
 SwFrm* SwFrm::_GetIndNext()
 {
-    ASSERT( !pNext && IsInSct(), "Why?" );
+    OSL_ENSURE( !pNext && IsInSct(), "Why?" );
     SwFrm* pSct = GetUpper();
     if( !pSct )
         return NULL;
@@ -2358,8 +2362,8 @@ SwFrm* SwFrm::_GetIndNext()
         SwFrm* pCol = GetUpper()->GetUpper()->GetNext();
         while( pCol )
         {
-            ASSERT( pCol->IsColumnFrm(), "GetIndNext(): ColumnFrm expected" );
-            ASSERT( pCol->GetLower() && pCol->GetLower()->IsBodyFrm(),
+            OSL_ENSURE( pCol->IsColumnFrm(), "GetIndNext(): ColumnFrm expected" );
+            OSL_ENSURE( pCol->GetLower() && pCol->GetLower()->IsBodyFrm(),
                     "GetIndNext(): Where's the body?");
             if( ((SwLayoutFrm*)((SwLayoutFrm*)pCol)->Lower())->Lower() )
                 return NULL;
@@ -2630,7 +2634,7 @@ SwFtnContFrm* SwSectionFrm::ContainsFtnCont( const SwFtnContFrm* pCont ) const
     if( pCont )
     {
         pLay = pCont->FindFtnBossFrm( 0 );
-        ASSERT( IsAnLower( pLay ), "ConatainsFtnCont: Wrong FtnContainer" );
+        OSL_ENSURE( IsAnLower( pLay ), "ConatainsFtnCont: Wrong FtnContainer" );
         pLay = (SwLayoutFrm*)pLay->GetNext();
     }
     else if( Lower() && Lower()->IsColumnFrm() )
@@ -2641,11 +2645,11 @@ SwFtnContFrm* SwSectionFrm::ContainsFtnCont( const SwFtnContFrm* pCont ) const
     {
         if( pLay->Lower() && pLay->Lower()->GetNext() )
         {
-            ASSERT( pLay->Lower()->GetNext()->IsFtnContFrm(),
+            OSL_ENSURE( pLay->Lower()->GetNext()->IsFtnContFrm(),
                     "ToMaximize: Unexspected Frame" );
             pRet = (SwFtnContFrm*)pLay->Lower()->GetNext();
         }
-        ASSERT( !pLay->GetNext() || pLay->GetNext()->IsLayoutFrm(),
+        OSL_ENSURE( !pLay->GetNext() || pLay->GetNext()->IsLayoutFrm(),
                 "ToMaximize: ColFrm exspected" );
         pLay = (SwLayoutFrm*)pLay->GetNext();
     }
@@ -2741,12 +2745,12 @@ void SwRootFrm::InsertEmptySct( SwSectionFrm* pDel )
 
 void SwRootFrm::_DeleteEmptySct()
 {
-    ASSERT( pDestroy, "Keine Liste, keine Kekse" );
+    OSL_ENSURE( pDestroy, "Keine Liste, keine Kekse" );
     while( pDestroy->Count() )
     {
         SwSectionFrm* pSect = (*pDestroy)[0];
         pDestroy->Remove( USHORT(0) );
-        ASSERT( !pSect->IsColLocked() && !pSect->IsJoinLocked(),
+        OSL_ENSURE( !pSect->IsColLocked() && !pSect->IsJoinLocked(),
                 "DeleteEmptySct: Locked SectionFrm" );
         if( !pSect->Frm().HasArea() && !pSect->ContainsCntnt() )
         {
@@ -2766,20 +2770,20 @@ void SwRootFrm::_DeleteEmptySct()
             }
         }
         else {
-            ASSERT( pSect->GetSection(), "DeleteEmptySct: Halbtoter SectionFrm?!" );
+            OSL_ENSURE( pSect->GetSection(), "DeleteEmptySct: Halbtoter SectionFrm?!" );
         }
     }
 }
 
 void SwRootFrm::_RemoveFromList( SwSectionFrm* pSct )
 {
-    ASSERT( pDestroy, "Where's my list?" );
+    OSL_ENSURE( pDestroy, "Where's my list?" );
     USHORT nPos;
     if( pDestroy->Seek_Entry( pSct, &nPos ) )
         pDestroy->Remove( nPos );
 }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 
 BOOL SwRootFrm::IsInDelList( SwSectionFrm* pSct ) const
 {

@@ -33,7 +33,7 @@
 #include <ctype.h>
 #include <editeng/unolingu.hxx>
 #include <tools/shl.hxx>    // needed for SW_MOD() macro
-#include <errhdl.hxx>   // ASSERTs
+#include <errhdl.hxx>   //OSL_ENSURE
 #include <dlelstnr.hxx>
 #include <swmodule.hxx>
 #include <IDocumentSettingAccess.hxx>
@@ -74,10 +74,10 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
     if( !rInf.GetLen() || !rInf.GetTxt().Len() )
         return sal_False;
 
-    ASSERT( rInf.GetIdx() < rInf.GetTxt().Len(),
+    OSL_ENSURE( rInf.GetIdx() < rInf.GetTxt().Len(),
             "+SwTxtGuess::Guess: invalid SwTxtFormatInfo" );
 
-    ASSERT( nPorHeight, "+SwTxtGuess::Guess: no height" );
+    OSL_ENSURE( nPorHeight, "+SwTxtGuess::Guess: no height" );
 
     USHORT nMinSize;
     USHORT nMaxSizeDiff;
@@ -174,12 +174,12 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
     {
         nCutPos = rInf.GetTxtBreak( nLineWidth, nMaxLen, nMaxComp );
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         if ( STRING_LEN != nCutPos )
         {
             rInf.GetTxtSize( &rSI, rInf.GetIdx(), nCutPos - rInf.GetIdx(),
                              nMaxComp, nMinSize, nMaxSizeDiff );
-            ASSERT( nMinSize <= nLineWidth, "What a Guess!!!" );
+            OSL_ENSURE( nMinSize <= nLineWidth, "What a Guess!!!" );
         }
 #endif
     }
@@ -330,7 +330,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
             {
                 USHORT nScript = pBreakIt->GetRealScriptOfText( rInf.GetTxt(),
                                                                 nLangIndex );
-                ASSERT( nScript, "Script is not between 1 and 4" );
+                OSL_ENSURE( nScript, "Script is not between 1 and 4" );
 
                 // compare current script with script from last "real" character
                 if ( nScript - 1 != rInf.GetFont()->GetActual() )
@@ -423,7 +423,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
         }
         else if ( !bHyph && nBreakPos >= rInf.GetLineStart() )
         {
-            ASSERT( nBreakPos != STRING_LEN, "we should have found a break pos" );
+            OSL_ENSURE( nBreakPos != STRING_LEN, "we should have found a break pos" );
 
             // found break position within line
             xHyphWord = NULL;
@@ -452,7 +452,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
             // no line break found, setting nBreakPos to STRING_LEN
             // causes a break cut
             nBreakPos = STRING_LEN;
-            ASSERT( nCutPos >= rInf.GetIdx(), "Deep cut" );
+            OSL_ENSURE( nCutPos >= rInf.GetIdx(), "Deep cut" );
             nPorLen = nCutPos - rInf.GetIdx();
         }
 
@@ -461,7 +461,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
             const xub_StrLen nHangingLen = nBreakPos - nCutPos;
             SwPosSize aTmpSize = rInf.GetTxtSize( &rSI, nCutPos,
                                                   nHangingLen, 0 );
-            ASSERT( !pHanging, "A hanging portion is hanging around" );
+            OSL_ENSURE( !pHanging, "A hanging portion is hanging around" );
             pHanging = new SwHangingPortion( aTmpSize );
             pHanging->SetLen( nHangingLen );
             nPorLen = nCutPos - rInf.GetIdx();
@@ -478,11 +478,11 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
                 nBreakPos = nOldIdx - 1;
             else if ( STRING_LEN != nBreakPos )
             {
-                ASSERT( nBreakPos >= nFieldDiff, "I've got field trouble!" );
+                OSL_ENSURE( nBreakPos >= nFieldDiff, "I've got field trouble!" );
                 nBreakPos = nBreakPos - nFieldDiff;
             }
 
-            ASSERT( nCutPos >= rInf.GetIdx() && nCutPos >= nFieldDiff,
+            OSL_ENSURE( nCutPos >= rInf.GetIdx() && nCutPos >= nFieldDiff,
                     "I've got field trouble, part2!" );
             nCutPos = nCutPos - nFieldDiff;
 
@@ -492,7 +492,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
             rInf.SetIdx( nOldIdx );
 
 #if OSL_DEBUG_LEVEL > 1
-            ASSERT( aDebugString == rInf.GetTxt(),
+            OSL_ENSURE( aDebugString == rInf.GetTxt(),
                     "Somebody, somebody, somebody put something in my string" );
 #endif
         }
@@ -545,7 +545,7 @@ sal_Bool SwTxtGuess::AlternativeSpelling( const SwTxtFormatInfo &rInf,
 
     // check, if word has alternative spelling
     Reference< XHyphenator >  xHyph( ::GetHyphenator() );
-    ASSERT( xHyph.is(), "Hyphenator is missing");
+    OSL_ENSURE( xHyph.is(), "Hyphenator is missing");
     //! subtract 1 since the UNO-interface is 0 based
     xHyphWord = xHyph->queryAlternativeSpelling( OUString(aTxt),
                         pBreakIt->GetLocale( rInf.GetFont()->GetLanguage() ),

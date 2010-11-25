@@ -617,7 +617,7 @@ SwTemplNameFieldType::SwTemplNameFieldType(SwDoc *pDocument)
 
 String SwTemplNameFieldType::Expand(ULONG nFmt) const
 {
-    ASSERT( nFmt < FF_END, "Expand: kein guelt. Fmt!" );
+    OSL_ENSURE( nFmt < FF_END, "Expand: kein guelt. Fmt!" );
 
     String aRet;
     SwDocShell *pDocShell(pDoc->GetDocShell());
@@ -782,7 +782,7 @@ String SwDocStatFieldType::Expand(sal_uInt16 nSubType, sal_uInt32 nFmt) const
                 nFmt = (sal_uInt32)nNumberingType;
             break;
         default:
-            ASSERT( sal_False, "SwDocStatFieldType::Expand: unbekannter SubType" );
+            OSL_ENSURE( sal_False, "SwDocStatFieldType::Expand: unbekannter SubType" );
     }
 
     String sRet;
@@ -1429,7 +1429,7 @@ String SwHiddenTxtField::Expand() const
 
 void SwHiddenTxtField::Evaluate(SwDoc* pDoc)
 {
-    ASSERT(pDoc, Wo ist das Dokument Seniore);
+    OSL_ENSURE(pDoc, "Wo ist das Dokument Seniore");
 
     if( TYP_CONDTXTFLD == nSubType )
     {
@@ -2031,7 +2031,7 @@ String SwExtUserFieldType::Expand(sal_uInt16 nSub, sal_uInt32 ) const
     case EU_STATE:          nRet = USER_OPT_STATE;          break;
     case EU_FATHERSNAME:    nRet = USER_OPT_FATHERSNAME;    break;
     case EU_APARTMENT:      nRet = USER_OPT_APARTMENT;      break;
-    default:                ASSERT( !this, "Field unknown");
+    default:             OSL_ENSURE( !this, "Field unknown");
     }
     if( USHRT_MAX != nRet )
     {
@@ -2308,8 +2308,8 @@ sal_uInt16 SwRefPageGetFieldType::MakeSetList( _SetGetExpFlds& rTmpLst )
                 {
                     // einen sdbcx::Index fuers bestimmen vom TextNode anlegen
                     SwPosition aPos( pDoc->GetNodes().GetEndOfPostIts() );
-#ifdef DBG_UTIL
-                    ASSERT( GetBodyTxtNode( *pDoc, aPos, *pFrm ),
+#if OSL_DEBUG_LEVEL > 1
+                    OSL_ENSURE( GetBodyTxtNode( *pDoc, aPos, *pFrm ),
                             "wo steht das Feld" );
 #else
                     GetBodyTxtNode( *pDoc, aPos, *pFrm );
@@ -2418,7 +2418,7 @@ void SwRefPageGetField::ChangeExpansion( const SwFrm* pFrm,
 
     sTxt.Erase();
 
-    ASSERT( !pFrm->IsInDocBody(), "Flag ist nicht richtig, Frame steht im DocBody" );
+    OSL_ENSURE( !pFrm->IsInDocBody(), "Flag ist nicht richtig, Frame steht im DocBody" );
 
     // sammel erstmal alle SetPageRefFelder ein.
     _SetGetExpFlds aTmpLst( 10, 5 );

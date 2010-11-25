@@ -71,7 +71,7 @@ SwAccessibleChildMap::SwAccessibleChildMap( const SwRect& rVisArea,
 
     if ( rFrm.IsPageFrm() )
     {
-        ASSERT( bVisibleChildrenOnly, "page frame within tab frame???" );
+        OSL_ENSURE( bVisibleChildrenOnly, "page frame within tab frame???" );
         const SwPageFrm *pPgFrm =
             static_cast< const SwPageFrm * >( &rFrm );
         const SwSortedObjs *pObjs = pPgFrm->GetSortedObjs();

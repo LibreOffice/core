@@ -361,7 +361,7 @@ sal_Bool SwAccessibleFrame::IsEditable( ViewShell *pVSh ) const
     if( !pFrm )
         return sal_False;
 
-    ASSERT( pVSh, "no view shell" );
+    OSL_ENSURE( pVSh, "no view shell" );
     if( pVSh && (pVSh->GetViewOptions()->IsReadonly() ||
                  pVSh->IsPreView()) )
         return sal_False;
@@ -378,7 +378,7 @@ sal_Bool SwAccessibleFrame::IsOpaque( ViewShell *pVSh ) const
     if( !aFrm.GetSwFrm() )
         return sal_False;
 
-    ASSERT( pVSh, "no view shell" );
+    OSL_ENSURE( pVSh, "no view shell" );
     if( !pVSh )
         return sal_False;
 

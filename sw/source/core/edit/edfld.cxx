@@ -267,7 +267,7 @@ void SwEditShell::Insert2(SwField& rFld, const bool bForceExpandHints)
 
     FOREACHPAM_START(this)                      // fuer jeden PaM
         bool bSuccess(GetDoc()->InsertPoolItem(*PCURCRSR, aFld, nInsertFlags));
-        ASSERT( bSuccess, "Doc->Insert(Field) failed");
+        OSL_ENSURE( bSuccess, "Doc->Insert(Field) failed");
         (void) bSuccess;
     FOREACHPAM_END()                      // fuer jeden PaM
 

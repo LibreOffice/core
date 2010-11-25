@@ -112,7 +112,7 @@ long SwWriteTable::GetBoxWidth( const SwTableBox *pBox )
 
 long SwWriteTable::GetLineHeight( const SwTableLine *pLine )
 {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     BOOL bOldGetLineHeightCalled = bGetLineHeightCalled;
     bGetLineHeightCalled = TRUE;
 #endif
@@ -133,8 +133,8 @@ long SwWriteTable::GetLineHeight( const SwTableLine *pLine )
         // <--
         bUseLayoutHeights = bLayoutAvailable; /*FALSE;*/
 
-#ifdef DBG_UTIL
-        ASSERT( bLayoutAvailable || !bOldGetLineHeightCalled, "Layout ungueltig?" );
+#if OSL_DEBUG_LEVEL > 1
+        OSL_ENSURE( bLayoutAvailable || !bOldGetLineHeightCalled, "Layout ungueltig?" );
 #endif
     }
 
@@ -362,7 +362,7 @@ USHORT SwWriteTable::GetAbsWidth( USHORT nCol, USHORT nColSpan ) const
 
     nWidth -= GetLeftSpace( nCol ) + GetRightSpace( nCol, nColSpan );
 
-    ASSERT( nWidth > 0, "Spaltenbreite <= 0. OK?" );
+    OSL_ENSURE( nWidth > 0, "Spaltenbreite <= 0. OK?" );
     return nWidth > 0 ? (USHORT)nWidth : 0;
 }
 
@@ -409,7 +409,7 @@ long SwWriteTable::GetAbsHeight( long nRawHeight, USHORT nRow,
             nRawHeight -= nBorder;
     }
 
-    ASSERT( nRawHeight > 0, "Zeilenheohe <= 0. OK?" );
+    OSL_ENSURE( nRawHeight > 0, "Zeilenheohe <= 0. OK?" );
     return nRawHeight > 0 ? nRawHeight : 0;
 }
 
@@ -429,7 +429,7 @@ void SwWriteTable::CollectTableRowsCols( long nStartRPos,
     BOOL bSubExpanded = FALSE;
     USHORT nLines = rLines.Count();
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     USHORT nEndCPos = 0;
 #endif
 
@@ -450,7 +450,7 @@ void SwWriteTable::CollectTableRowsCols( long nStartRPos,
                 layout, you may run into this robust code.
                 It's not allowed that subrows leaves their parentrow. If this would happen the line
                 height of subrow is reduced to a part of the remaining height */
-                ASSERT( FALSE, "Corrupt line height I" );
+                OSL_ENSURE( FALSE, "Corrupt line height I" );
                 nRPos -= nLineHeight;
                 nLineHeight = nStartRPos + nParentLineHeight - nRPos; // remaining parent height
                 nLineHeight /= nLines - nLine; // divided through the number of remaining sub rows
@@ -465,17 +465,17 @@ void SwWriteTable::CollectTableRowsCols( long nStartRPos,
         }
         else
         {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
             long nCheckPos = nRPos + GetLineHeight( pLine );
 #endif
             nRPos = nStartRPos + nParentLineHeight;
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
             SwWriteTableRow aRow( nStartRPos + nParentLineHeight, bUseLayoutHeights );
-            ASSERT( aRows.Seek_Entry(&aRow),
+            OSL_ENSURE( aRows.Seek_Entry(&aRow),
                     "Parent-Zeile nicht gefunden" );
             SwWriteTableRow aRowCheckPos(nCheckPos,bUseLayoutHeights);
             SwWriteTableRow aRowRPos(nRPos,bUseLayoutHeights);
-            ASSERT( !bUseLayoutHeights ||
+            OSL_ENSURE( !bUseLayoutHeights ||
                     aRowCheckPos == aRowRPos,
                     "Hoehe der Zeilen stimmt nicht mit Parent ueberein" );
 #endif
@@ -505,14 +505,14 @@ void SwWriteTable::CollectTableRowsCols( long nStartRPos,
 
                 if( nBox==nBoxes-1 )
                 {
-                    ASSERT( nLine==0 && nParentLineWidth==0,
+                    OSL_ENSURE( nLine==0 && nParentLineWidth==0,
                             "Jetzt wird die Parent-Breite plattgemacht!" );
                     nParentLineWidth = nCPos-nStartCPos;
                 }
             }
             else
             {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
                 USHORT nCheckPos = nCPos + (USHORT)GetBoxWidth( pBox );
                 if( !nEndCPos )
                 {
@@ -520,17 +520,17 @@ void SwWriteTable::CollectTableRowsCols( long nStartRPos,
                 }
                 else
                 {
-                    ASSERT( SwWriteTableCol(nCheckPos) ==
+                    OSL_ENSURE( SwWriteTableCol(nCheckPos) ==
                                                 SwWriteTableCol(nEndCPos),
                     "Zelle enthaelt unterschiedlich breite Zeilen" );
                 }
 #endif
                 nCPos = nStartCPos + nParentLineWidth;
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
                 SwWriteTableCol aCol( nStartCPos + nParentLineWidth );
-                ASSERT( aCols.Seek_Entry(&aCol),
+                OSL_ENSURE( aCols.Seek_Entry(&aCol),
                         "Parent-Zelle nicht gefunden" );
-                ASSERT( SwWriteTableCol(nCheckPos) ==
+                OSL_ENSURE( SwWriteTableCol(nCheckPos) ==
                                             SwWriteTableCol(nCPos),
                         "Breite der Zellen stimmt nicht mit Parent ueberein" );
 #endif
@@ -579,7 +579,7 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, USHORT nStartRow,
             if( nParentLineHeight && nStartRPos + nParentLineHeight <= nRPos )
             {
                 /* See comment in CollectTableRowCols */
-                ASSERT( FALSE, "Corrupt line height II" );
+                OSL_ENSURE( FALSE, "Corrupt line height II" );
                 nRPos -= nLineHeight;
                 nLineHeight = nStartRPos + nParentLineHeight - nRPos; // remaining parent height
                 nLineHeight /= nLines - nLine; // divided through the number of remaining sub rows
@@ -592,13 +592,15 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, USHORT nStartRow,
         // Und ihren Index
         USHORT nOldRow = nRow;
         SwWriteTableRow aRow( nRPos,bUseLayoutHeights );
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         BOOL bFound =
 #endif
             aRows.Seek_Entry( &aRow, &nRow );
-        ASSERT( bFound, "Wo ist die Zeile geblieben?" );
+#if OSL_DEBUG_LEVEL > 1
+        OSL_ENSURE( bFound, "Wo ist die Zeile geblieben?" );
+#endif
 
-        ASSERT( nOldRow <= nRow, "Don't look back!" );
+        OSL_ENSURE( nOldRow <= nRow, "Don't look back!" );
         if( nOldRow > nRow )
         {
             nOldRow = nRow;
@@ -676,11 +678,13 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, USHORT nStartRow,
             // Und ihren Index
             USHORT nOldCol = nCol;
             SwWriteTableCol aCol( nCPos );
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
             BOOL bFound2 =
 #endif
                 aCols.Seek_Entry( &aCol, &nCol );
-            ASSERT( bFound2, "Wo ist die Spalte geblieben?" );
+#if OSL_DEBUG_LEVEL > 1
+            OSL_ENSURE( bFound2, "Wo ist die Spalte geblieben?" );
+#endif
 
             if( !ShouldExpandSub( pBox, bSubExpanded, nDepth ) )
             {
@@ -711,7 +715,7 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, USHORT nStartRow,
                     if (!(nBorderMask & 4) && nOldCol < aCols.Count())
                     {
                         SwWriteTableCol *pCol = aCols[nOldCol];
-                        ASSERT(pCol, "No TableCol found, panic!");
+                        OSL_ENSURE(pCol, "No TableCol found, panic!");
                         if (pCol)
                             pCol->bLeftBorder = FALSE;
                     }
@@ -719,7 +723,7 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, USHORT nStartRow,
                     if (!(nBorderMask & 8))
                     {
                         SwWriteTableCol *pCol = aCols[nCol];
-                        ASSERT(pCol, "No TableCol found, panic!");
+                        OSL_ENSURE(pCol, "No TableCol found, panic!");
                         if (pCol)
                             pCol->bRightBorder = FALSE;
                     }
@@ -763,7 +767,7 @@ SwWriteTable::SwWriteTable(const SwTableLines& rLines, long nWidth,
     nInnerBorder(0), nBaseWidth(nBWidth), nHeadEndRow(USHRT_MAX),
      nLeftSub(nLSub), nRightSub(nRSub), nTabWidth(nWidth), bRelWidths(bRel),
     bUseLayoutHeights(true),
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     bGetLineHeightCalled(false),
 #endif
     bColsOption(false), bColTags(true), bLayoutExport(false),
@@ -790,7 +794,7 @@ SwWriteTable::SwWriteTable( const SwHTMLTableLayout *pLayoutInfo )
     nInnerBorder(0), nBaseWidth(pLayoutInfo->GetWidthOption()), nHeadEndRow(0),
     nLeftSub(0), nRightSub(0), nTabWidth(pLayoutInfo->GetWidthOption()),
     bRelWidths(pLayoutInfo->HasPrcWidthOption()), bUseLayoutHeights(false),
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     bGetLineHeightCalled(false),
 #endif
     bColsOption(pLayoutInfo->HasColsOption()),
@@ -861,7 +865,7 @@ SwWriteTable::SwWriteTable( const SwHTMLTableLayout *pLayoutInfo )
             USHORT nRowSpan = pLayoutCell->GetRowSpan();
             USHORT nColSpan = pLayoutCell->GetColSpan();
             const SwTableBox *pBox = pLayoutCnts->GetTableBox();
-            ASSERT( pBox,
+            OSL_ENSURE( pBox,
                     "Tabelle in Tabelle kann nicht ueber Layout exportiert werden" );
 
             long nHeight = bHeightExported ? 0 : GetLineHeight( pBox );

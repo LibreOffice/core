@@ -48,67 +48,17 @@
 #define CVBREAK
 #endif
 
-BOOL bAssertFail = FALSE;           // ist gerade eine Assertbox oben ?
-BOOL bAssert = FALSE;               // TRUE, wenn mal ein ASSERT kam.
-
 /*------------------------------------------------------------------------
     Ausgabe einer Fehlermeldung inkl. Bedingung, Dateiname und Zeilennummer
     wo der Fehler auftrat.
-    Die Funktion wird durch das ASSERT Makro gerufen!
-    Parameter:
-                char    *pError     Fehlermeldung
-                char    *pFileName  Filename in dem der Fehler auftrat
-                USHORT  nLine       Zeilennummer in dem der Fehler auftrat
-------------------------------------------------------------------------*/
-
-void AssertFail( const sal_Char* pError, const sal_Char* pFileName, USHORT nLine )
-{
-    CVBREAK;
-    bAssert = TRUE;
-
-    if( !bAssertFail && GetpApp() && GetpApp()->IsInMain() )
-    {
-        bAssertFail = TRUE;
-        ByteString  aErr;
-        aErr = "Assertion failed\n==================\nFILE      :  ";
-        aErr += pFileName;
-        aErr += " at line ";
-        aErr += ByteString::CreateFromInt32( nLine );
-        aErr += "\nERROR :  ";
-        aErr += pError;
-
-        ByteString aTmp( getenv( "SW_NOBEEP" ) );
-        if ( aTmp != "TRUE" )
-            Sound::Beep(SOUND_ERROR);
-
-#if defined( UNX ) && !defined( DBG_UTIL )
-        DBG_ERROR( aErr.GetBuffer() ); // DbgErr ist in UNIX-nicht Produkt-Versionen nicht definiert
-#else
-        DbgError( aErr.GetBuffer() );
-#endif
-        bAssertFail = FALSE;
-    }
-    else
-    {
-        Sound::Beep(SOUND_ERROR);
-        Sound::Beep(SOUND_ERROR);
-        Sound::Beep(SOUND_ERROR);
-        if( !bAssertFail )
-            *(short *)0 = 4711;         // UAE ausloesen
-    }
-}
-
-/*------------------------------------------------------------------------
-    Ausgabe einer Fehlermeldung inkl. Bedingung, Dateiname und Zeilennummer
-    wo der Fehler auftrat.
-    Die Funktion wird durch das ASSERT Makro gerufen!
+    Die Funktion wird durch das OSL_ENSURE(Makro gerufen!
     Parameter:
                 USHORT  nErrorId    Id fuer Fehlermeldung
                 char    *pFileName  Filename in dem der Fehler auftrat
                 USHORT  nLine       Zeilennummer in dem der Fehler auftrat
 ------------------------------------------------------------------------*/
 
-void AssertFail( USHORT nErrorId, const sal_Char* pFileName, USHORT nLine )
+void AssertFail( USHORT nErrorId, const sal_Char* pFileName )
 {
     // Umsetzung der ErrorId in eine Fehlermeldung
     static const sal_Char
@@ -132,7 +82,7 @@ void AssertFail( USHORT nErrorId, const sal_Char* pFileName, USHORT nLine )
     else
         pMsg = sERR_UNKNOWN;
 
-    AssertFail( pMsg, pFileName, nLine );
+    OSL_ENSURE( pMsg, pFileName );
 }
 
 

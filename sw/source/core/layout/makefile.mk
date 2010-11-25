@@ -89,7 +89,7 @@ SLOFILES =  \
     $(SLO)$/swselectionlist.obj \
     $(SLO)$/unusedf.obj
 
-.IF "$(dbgutil)"!=""
+.IF "$(DBG_LEVEL)">="2"
 SLOFILES +=  \
         $(SLO)$/dbg_lay.obj
 .ENDIF

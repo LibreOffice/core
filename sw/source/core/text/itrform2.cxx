@@ -108,7 +108,7 @@ void SwTxtFormatter::CtorInitTxtFormatter( SwTxtFrm *pNewFrm, SwTxtFormatInfo *p
 
     if( nStart > GetInfo().GetTxt().Len() )
     {
-        ASSERT( !this, "+SwTxtFormatter::CTOR: bad offset" );
+        OSL_ENSURE( !this, "+SwTxtFormatter::CTOR: bad offset" );
         nStart = GetInfo().GetTxt().Len();
     }
 
@@ -218,7 +218,7 @@ SwLinePortion *SwTxtFormatter::UnderFlow( SwTxtFormatInfo &rInf )
                     pTmpPrev->Move( rInf );
                     rInf.SetLast( pTmpPrev );
                     pTmpPrev = pTmpPrev->GetPortion();
-                    ASSERT( pTmpPrev, "UnderFlow: Loosing control!" );
+                    OSL_ENSURE( pTmpPrev, "UnderFlow: Loosing control!" );
                 };
             }
             pPor = pPor->GetPortion();
@@ -236,7 +236,7 @@ SwLinePortion *SwTxtFormatter::UnderFlow( SwTxtFormatInfo &rInf )
     }
 
     // Was? Die Unterlaufsituation ist nicht in der Portion-Kette ?
-    ASSERT( pPor, "SwTxtFormatter::UnderFlow: overflow but underflow" );
+    OSL_ENSURE( pPor, "SwTxtFormatter::UnderFlow: overflow but underflow" );
 
     // OD 2004-05-26 #i29529# - correction: no delete of footnotes
 //    if( rInf.IsFtnInside() && pPor && !rInf.IsQuick() )
@@ -380,7 +380,7 @@ void SwTxtFormatter::InsertPortion( SwTxtFormatInfo &rInf,
 
 void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
 {
-    ASSERT( rInf.GetTxt().Len() < STRING_LEN,
+    OSL_ENSURE( rInf.GetTxt().Len() < STRING_LEN,
             "SwTxtFormatter::BuildPortions: bad text length in info" );
 
     rInf.ChkNoHyph( CntEndHyph(), CntMidHyph() );
@@ -391,7 +391,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
     rInf.SetLast( pCurr );
     rInf.ForcedLeftMargin( 0 );
 
-    ASSERT( pCurr->FindLastPortion() == pCurr, "pLast supposed to equal pCurr" );
+    OSL_ENSURE( pCurr->FindLastPortion() == pCurr, "pLast supposed to equal pCurr" );
 
     if( !pCurr->GetAscent() && !pCurr->Height() )
         CalcAscent( rInf, pCurr );
@@ -399,7 +399,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
     SeekAndChg( rInf );
 
     // In CalcFlyWidth wird Width() verkuerzt, wenn eine FlyPortion vorliegt.
-    ASSERT( !rInf.X() || pMulti, "SwTxtFormatter::BuildPortion X=0?" );
+    OSL_ENSURE( !rInf.X() || pMulti, "SwTxtFormatter::BuildPortion X=0?" );
     CalcFlyWidth( rInf );
     SwFlyPortion *pFly = rInf.GetFly();
     if( pFly )
@@ -432,7 +432,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
 
     while( pPor && !rInf.IsStop() )
     {
-        ASSERT( rInf.GetLen() < STRING_LEN &&
+        OSL_ENSURE( rInf.GetLen() < STRING_LEN &&
                 rInf.GetIdx() <= rInf.GetTxt().Len(),
                 "SwTxtFormatter::BuildPortions: bad length in info" );
         DBG_LOOP;
@@ -668,7 +668,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
             if ( nRestWidth > 0 && SW_CJK != nCurrScript &&
                 ! rInf.IsUnderFlow() && ( bFull || SW_CJK == nNextScript ) )
             {
-                ASSERT( pGridKernPortion, "No GridKernPortion available" )
+                OSL_ENSURE( pGridKernPortion, "No GridKernPortion available" );
 
                 // calculate size
                 SwLinePortion* pTmpPor = pGridKernPortion->GetPortion();
@@ -687,8 +687,8 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
                                                 nRestWidth );
                 const USHORT nKernWidth_1 = (USHORT)(nKernWidth / 2);
 
-                ASSERT( nKernWidth <= nRestWidth,
-                        "Not enough space left for adjusting non-asian text in grid mode" )
+                OSL_ENSURE( nKernWidth <= nRestWidth,
+                        "Not enough space left for adjusting non-asian text in grid mode" );
 
                 pGridKernPortion->Width( pGridKernPortion->Width() + nKernWidth_1 );
                 rInf.X( rInf.X() + nKernWidth_1 );
@@ -1062,8 +1062,8 @@ SwLinePortion *SwTxtFormatter::WhichFirstPortion(SwTxtFormatInfo &rInf)
         // 5) Die Fussnotenzahlen
         if( !rInf.IsFtnDone() )
         {
-            ASSERT( ( ! rInf.IsMulti() && ! pMulti ) || pMulti->HasRotation(),
-                     "Rotated number portion trouble" )
+            OSL_ENSURE( ( ! rInf.IsMulti() && ! pMulti ) || pMulti->HasRotation(),
+                     "Rotated number portion trouble" );
 
             sal_Bool bFtnNum = pFrm->IsFtnNumFrm();
             rInf.GetParaPortion()->SetFtnNum( bFtnNum );
@@ -1084,8 +1084,8 @@ SwLinePortion *SwTxtFormatter::WhichFirstPortion(SwTxtFormatInfo &rInf)
         // 7) Die Numerierungen
         if( !rInf.IsNumDone() && !pPor )
         {
-            ASSERT( ( ! rInf.IsMulti() && ! pMulti ) || pMulti->HasRotation(),
-                     "Rotated number portion trouble" )
+            OSL_ENSURE( ( ! rInf.IsMulti() && ! pMulti ) || pMulti->HasRotation(),
+                     "Rotated number portion trouble" );
 
             // Wenn wir im Follow stehen, dann natuerlich nicht.
             if( GetTxtFrm()->GetTxtNode()->GetNumRule() )
@@ -1161,7 +1161,7 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
     rInf.SetStopUnderFlow( sal_False );
     if( rInf.GetUnderFlow() )
     {
-        ASSERT( rInf.IsFull(), "SwTxtFormatter::NewPortion: underflow but not full" );
+        OSL_ENSURE( rInf.IsFull(), "SwTxtFormatter::NewPortion: underflow but not full" );
         return UnderFlow( rInf );
     }
 
@@ -1348,7 +1348,7 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
                   if ( GetTxtFrm()->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TAB_COMPAT) /*rInf.GetVsh()->IsTabCompat();*/ &&
                          POR_TABDECIMAL == pLastTabPortion->GetWhichPor() )
                     {
-                        ASSERT( rInf.X() >= pLastTabPortion->Fix(), "Decimal tab stop position cannot be calculated" )
+                        OSL_ENSURE( rInf.X() >= pLastTabPortion->Fix(), "Decimal tab stop position cannot be calculated" );
                         const USHORT nWidthOfPortionsUpToDecimalPosition = (USHORT)(rInf.X() - pLastTabPortion->Fix() );
                         static_cast<SwTabDecimalPortion*>(pLastTabPortion)->SetWidthOfPortionsUpToDecimalPosition( nWidthOfPortionsUpToDecimalPosition );
                         rInf.SetTabDecimal( 0 );
@@ -1461,12 +1461,12 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
     // Werte bereithalten muss:
     if( !pCurr->Height() )
     {
-        ASSERT( pCurr->Height(), "SwTxtFormatter::NewPortion: limbo dance" );
+        OSL_ENSURE( pCurr->Height(), "SwTxtFormatter::NewPortion: limbo dance" );
         pCurr->Height( pPor->Height() );
         pCurr->SetAscent( pPor->GetAscent() );
     }
 
-    ASSERT( !pPor || pPor->Height(),
+    OSL_ENSURE( !pPor || pPor->Height(),
             "SwTxtFormatter::NewPortion: something went wrong");
     if( pPor->IsPostItsPortion() && rInf.X() >= rInf.Width() && rInf.GetFly() )
     {
@@ -1482,7 +1482,7 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
 
 xub_StrLen SwTxtFormatter::FormatLine( const xub_StrLen nStartPos )
 {
-    ASSERT( ! pFrm->IsVertical() || pFrm->IsSwapped(),
+    OSL_ENSURE( ! pFrm->IsVertical() || pFrm->IsSwapped(),
             "SwTxtFormatter::FormatLine( nStartPos ) with unswapped frame" );
 
     // For the formatting routines, we set pOut to the reference device.
@@ -1786,7 +1786,7 @@ pCurr->GetAscent() )
                     pInf->GetParaPortion()->SetFixLineHeight();
                 }
                 break;
-                default: ASSERT( sal_False, ": unknown LineSpaceRule" );
+                default: OSL_ENSURE( sal_False, ": unknown LineSpaceRule" );
             }
             if( !IsParaLine() )
                 switch( pSpace->GetInterLineSpaceRule() )
@@ -1813,7 +1813,7 @@ pCurr->GetAscent() )
                         nLineHeight = nLineHeight + pSpace->GetInterLineSpace();
                         break;
                     }
-                    default: ASSERT( sal_False, ": unknown InterLineSpaceRule" );
+                    default: OSL_ENSURE( sal_False, ": unknown InterLineSpaceRule" );
                 }
         }
 #if OSL_DEBUG_LEVEL > 1
@@ -2081,7 +2081,7 @@ long SwTxtFormatter::CalcOptRepaint( xub_StrLen nOldLineEnd,
                 CH_BLANK == GetInfo().GetChar( nReformat ) )
             --nReformat;
 
-        ASSERT( nReformat < GetInfo().GetIdx(), "Reformat too small for me!" );
+        OSL_ENSURE( nReformat < GetInfo().GetIdx(), "Reformat too small for me!" );
         SwRect aRect;
 
         // Note: GetChareRect is not const. It definitely changes the

@@ -566,8 +566,8 @@ public:
 // methoden zur verwaltung von styles:
     void BeginStyle(USHORT nUserCode, RES_POOL_COLLFMT_TYPE aType)
     {
-        ASSERT(nUserCode<sizeof(pColls)/sizeof(*pColls), "code out of bounds");
-        ASSERT(pColls[nUserCode] == NULL, "user codes dublicate");
+        OSL_ENSURE(nUserCode<sizeof(pColls)/sizeof(*pColls), "code out of bounds");
+        OSL_ENSURE(pColls[nUserCode] == NULL, "user codes dublicate");
         if (eSubMode == Style)
             EndStyle();
         pOut = pColls[nUserCode] = new SwFltFormatCollection(GetDoc(), aType);
@@ -576,8 +576,8 @@ public:
     }
     void BeginStyle( USHORT nUserCode, const String& rName )
     {
-        ASSERT(nUserCode<sizeof(pColls)/sizeof(*pColls), "code out of bounds");
-        ASSERT(pColls[nUserCode] == NULL, "user codes dublicate");
+        OSL_ENSURE(nUserCode<sizeof(pColls)/sizeof(*pColls), "code out of bounds");
+        OSL_ENSURE(pColls[nUserCode] == NULL, "user codes dublicate");
         if (eSubMode == Style)
             EndStyle();
         pOut = pColls[nUserCode] = new SwFltFormatCollection(GetDoc(), rName );
@@ -588,8 +588,8 @@ public:
         { return pColls[nUserCode] != 0; }
     void BaseStyle(USHORT nBased)
     {
-        ASSERT(eSubMode == Style, "wrong state for style");
-        ASSERT(pColls[nBased], "Style based on noexistent style" );
+        OSL_ENSURE(eSubMode == Style, "wrong state for style");
+        OSL_ENSURE(pColls[nBased], "Style based on noexistent style" );
         if( eSubMode == Style && pColls[nBased]->GetColl() )
             ((SwFltFormatCollection*)pOut)->Derived(pColls[nBased]->GetColl());
     }
@@ -597,7 +597,7 @@ public:
 
     void EndStyle()
     {
-//      ASSERT(eSubMode == Style, "wrong state for style");
+//   OSL_ENSURE(eSubMode == Style, "wrong state for style");
         nAktStyle = 0;
         pOut = pOutDoc;
         eSubMode = None;

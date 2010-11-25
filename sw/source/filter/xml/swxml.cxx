@@ -255,7 +255,7 @@ sal_Int32 ReadThroughComponent(
         }
         else
         {
-            ASSERT( bMustBeSuccessfull, "Warnings are not supported" );
+            OSL_ENSURE( bMustBeSuccessfull, "Warnings are not supported" );
             return *new StringErrorInfo( ERR_FORMAT_ROWCOL, sErr,
                              ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR );
         }
@@ -537,7 +537,7 @@ ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const S
     // Get service factory
     uno::Reference< lang::XMultiServiceFactory > xServiceFactory =
             comphelper::getProcessServiceFactory();
-    ASSERT( xServiceFactory.is(),
+    OSL_ENSURE( xServiceFactory.is(),
             "XMLReader::Read: got no service manager" );
     if( !xServiceFactory.is() )
         return ERR_SWG_READ_ERROR;
@@ -576,11 +576,11 @@ ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const S
 
     // Get the docshell, the model, and finally the model's component
     SwDocShell *pDocSh = rDoc.GetDocShell();
-    ASSERT( pDocSh, "XMLReader::Read: got no doc shell" );
+    OSL_ENSURE( pDocSh, "XMLReader::Read: got no doc shell" );
     if( !pDocSh )
         return ERR_SWG_READ_ERROR;
     uno::Reference< lang::XComponent > xModelComp( pDocSh->GetModel(), UNO_QUERY );
-    ASSERT( xModelComp.is(),
+    OSL_ENSURE( xModelComp.is(),
             "XMLReader::Read: got no model" );
     if( !xModelComp.is() )
         return ERR_SWG_READ_ERROR;
@@ -1083,7 +1083,7 @@ USHORT XMLReader::GetSectionList( SfxMedium& rMedium,
 {
     uno::Reference< lang::XMultiServiceFactory > xServiceFactory =
             comphelper::getProcessServiceFactory();
-    ASSERT( xServiceFactory.is(),
+    OSL_ENSURE( xServiceFactory.is(),
             "XMLReader::Read: got no service manager" );
     uno::Reference < embed::XStorage > xStg2;
     if( xServiceFactory.is() && ( xStg2 = rMedium.GetStorage() ).is() )
@@ -1101,7 +1101,7 @@ USHORT XMLReader::GetSectionList( SfxMedium& rMedium,
             // get parser
             uno::Reference< XInterface > xXMLParser = xServiceFactory->createInstance(
                 OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser")) );
-            ASSERT( xXMLParser.is(),
+            OSL_ENSURE( xXMLParser.is(),
                 "XMLReader::Read: com.sun.star.xml.sax.Parser service missing" );
             if( xXMLParser.is() )
             {

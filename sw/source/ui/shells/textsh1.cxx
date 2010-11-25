@@ -1109,30 +1109,15 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 SwEditWin& rEditWin = GetView().GetEditWin();
                 rEditWin.SetTextColor(aSet);
                 SwApplyTemplate* pApply = rEditWin.GetApplyTemplate();
-                SvxColorItem aItem(aSet, RES_CHRATR_COLOR);
 
-                // besteht eine Selektion, wird sie gleich gefaerbt
-                if(!pApply && rWrtSh.HasSelection())
+                // If there is a selection, then set the color on it
+                // otherwise, it'll be the color for the next text to be typed
+                if(!pApply || pApply->nColor != SID_ATTR_CHAR_COLOR_EXT)
                 {
                     rWrtSh.SetAttr(SvxColorItem (aSet, RES_CHRATR_COLOR));
                 }
-                else if(!pApply || pApply->nColor != SID_ATTR_CHAR_COLOR_EXT)
-                {
-                    GetView().GetViewFrame()->GetDispatcher()->Execute(SID_ATTR_CHAR_COLOR_EXT);
-                }
 
                 rReq.Done();
-/*              OS 22.02.97 18:40 Das alte Verhalten ist unerwuenscht
-                SwEditWin& rEdtWin = GetView().GetEditWin();
-
-                SwApplyTemplate* pApply = rEdtWin.GetApplyTemplate();
-                SvxColorItem aItem(aSet, RES_CHRATR_COLOR);
-
-                if(!pApply || pApply->nColor != SID_ATTR_CHAR_COLOR_EXT)
-                {
-                    GetShell().SetAttr(aItem);
-                }
-*/
             }
         }
         break;

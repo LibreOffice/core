@@ -78,7 +78,7 @@ void lcl_GetCharRectInsideField( SwTxtSizeInfo& rInf, SwRect& rOrig,
                                  const SwCrsrMoveState& rCMS,
                                  const SwLinePortion& rPor )
 {
-    ASSERT( rCMS.pSpecialPos, "Information about special pos missing" )
+    OSL_ENSURE( rCMS.pSpecialPos, "Information about special pos missing" );
 
     if ( rPor.InFldGrp() && ((SwFldPortion&)rPor).GetExp().Len() )
     {
@@ -110,7 +110,7 @@ void lcl_GetCharRectInsideField( SwTxtSizeInfo& rInf, SwRect& rOrig,
 
         } while ( TRUE );
 
-        ASSERT( nCharOfst >= nFldIdx, "Request of position inside field failed" )
+        OSL_ENSURE( nCharOfst >= nFldIdx, "Request of position inside field failed" );
         USHORT nLen = nCharOfst - nFldIdx + 1;
 
         if ( pString )
@@ -288,7 +288,7 @@ void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
                     case SVX_LINE_SPACE_FIX:
                         nFirstLineOfs = pSpace->GetLineHeight();
                     break;
-                    default: ASSERT( sal_False, ": unknown LineSpaceRule" );
+                    default: OSL_ENSURE( sal_False, ": unknown LineSpaceRule" );
                 }
                 switch( pSpace->GetInterLineSpaceRule() )
                 {
@@ -314,7 +314,7 @@ void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
                         nFirstLineOfs += pSpace->GetInterLineSpace();
                         break;
                     }
-                    default: ASSERT( sal_False, ": unknown InterLineSpaceRule" );
+                    default: OSL_ENSURE( sal_False, ": unknown InterLineSpaceRule" );
                 }
             }
         }
@@ -499,7 +499,7 @@ sal_Bool SwTxtCursor::GetEndCharRect( SwRect* pOrig, const xub_StrLen nOfst,
             pCMS->aRealHeight.X() = nTmpAscent - nPorAscent;
         else
             pCMS->aRealHeight.X() = 0;
-        ASSERT( nPorHeight, "GetCharRect: Missing Portion-Height" );
+        OSL_ENSURE( nPorHeight, "GetCharRect: Missing Portion-Height" );
         pCMS->aRealHeight.Y() = nPorHeight;
     }
 
@@ -964,7 +964,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
 
         if( pPor )
         {
-            ASSERT( !pPor->InNumberGrp() || bInsideFirstField, "Number surprise" );
+            OSL_ENSURE( !pPor->InNumberGrp() || bInsideFirstField, "Number surprise" );
             sal_Bool bEmptyFld = sal_False;
             if( pPor->InFldGrp() && pPor->GetLen() )
             {
@@ -975,7 +975,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                     SwLinePortion *pNext = pTmp->GetPortion();
                     while( pNext && !pNext->InFldGrp() )
                     {
-                        ASSERT( !pNext->GetLen(), "Where's my field follow?" );
+                        OSL_ENSURE( !pNext->GetLen(), "Where's my field follow?" );
                         nAddX = nAddX + pNext->Width();
                         pNext = pNext->GetPortion();
                     }
@@ -1152,8 +1152,8 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                     const SwLinePortion *pLast = rLineLayout.FindLastPortion();
                     if ( pLast->IsMultiPortion() )
                     {
-                        ASSERT( ((SwMultiPortion*)pLast)->IsBidi(),
-                                 "Non-BidiPortion inside BidiPortion" )
+                        OSL_ENSURE( ((SwMultiPortion*)pLast)->IsBidi(),
+                                 "Non-BidiPortion inside BidiPortion" );
                         pOrig->Pos().X() += pLast->Width() +
                                             pLast->CalcSpacing( nSpaceAdd, aInf );
                     }
@@ -1182,7 +1182,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                 pCMS->aRealHeight.X() = nTmpAscent - nPorAscent;
             else
                 pCMS->aRealHeight.X() = 0;
-            ASSERT( nPorHeight, "GetCharRect: Missing Portion-Height" );
+            OSL_ENSURE( nPorHeight, "GetCharRect: Missing Portion-Height" );
             if ( nTmpHeight > nPorHeight )
                 pCMS->aRealHeight.Y() = nPorHeight;
             else
@@ -1209,8 +1209,8 @@ sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
     {
         const BYTE nExtendRange = pCMS->pSpecialPos->nExtendRange;
 
-        ASSERT( ! pCMS->pSpecialPos->nLineOfst || SP_EXTEND_RANGE_BEFORE != nExtendRange,
-                "LineOffset AND Number Portion?" )
+        OSL_ENSURE( ! pCMS->pSpecialPos->nLineOfst || SP_EXTEND_RANGE_BEFORE != nExtendRange,
+                "LineOffset AND Number Portion?" );
 
         // portions which are behind the string
         if ( SP_EXTEND_RANGE_BEHIND == nExtendRange )
@@ -1629,7 +1629,7 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                         ((SwDropPortion*)pPor)->GetFnt() : NULL );
 
                 SwParaPortion* pPara = (SwParaPortion*)GetInfo().GetParaPortion();
-                ASSERT( pPara, "No paragraph!" );
+                OSL_ENSURE( pPara, "No paragraph!" );
 
                 SwDrawTextInfo aDrawInf( aSizeInf.GetVsh(),
                                          *aSizeInf.GetOut(),

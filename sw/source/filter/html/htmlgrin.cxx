@@ -111,7 +111,7 @@ ImageMap *SwHTMLParser::FindImageMap( const String& rName ) const
 {
     ImageMap *pMap = 0;
 
-    ASSERT( rName.GetChar(0) != '#', "FindImageName: Name beginnt mit #!" );
+    OSL_ENSURE( rName.GetChar(0) != '#', "FindImageName: Name beginnt mit #!" );
 
     if( pImageMaps )
     {
@@ -456,7 +456,7 @@ IMAGE_SETEVENT:
 
         if( pTxtNode && ! pTxtNode->IsCountedInList())
         {
-            ASSERT( pTxtNode->GetActualListLevel() == GetNumInfo().GetLevel(),
+            OSL_ENSURE( pTxtNode->GetActualListLevel() == GetNumInfo().GetLevel(),
                     "Numerierungs-Ebene stimmt nicht" );
 
             pTxtNode->SetCountedInList( true );
@@ -691,7 +691,7 @@ IMAGE_SETEVENT:
     // min. Werte einhalten !!
     if( nPrcWidth )
     {
-        ASSERT( !aTwipSz.Width(),
+        OSL_ENSURE( !aTwipSz.Width(),
                 "Wieso ist da trotz %-Angabe eine Breite gesetzt?" );
         aTwipSz.Width() = aGrfSz.Width() ? aGrfSz.Width()
                                          : HTML_DFLT_IMG_WIDTH;
@@ -704,7 +704,7 @@ IMAGE_SETEVENT:
     }
     if( nPrcHeight )
     {
-        ASSERT( !aTwipSz.Height(),
+        OSL_ENSURE( !aTwipSz.Height(),
                 "Wieso ist da trotz %-Angabe eine Hoehe gesetzt?" );
         aTwipSz.Height() = aGrfSz.Height() ? aGrfSz.Height()
                                            : HTML_DFLT_IMG_HEIGHT;
@@ -1383,7 +1383,7 @@ void SwHTMLParser::StripTrailingPara()
                     SwCntntNode* pNd = pDoc->GetNodes().GoPrevious(&nNewNdIdx);
                     if(!pNd)
                     {
-                        ASSERT(!this, "Hoppla, wo ist mein Vorgaenger-Node");
+                        OSL_ENSURE(!this, "Hoppla, wo ist mein Vorgaenger-Node");
                         return;
                     }
                     // --> OD 2007-09-27 #i81002# - refactoring

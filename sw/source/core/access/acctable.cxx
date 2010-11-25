@@ -237,17 +237,17 @@ sal_Bool SwAccessibleTableData_Impl::FindCell(
     {
         const SwAccessibleChild& rLower = *aIter;
         const SwFrm *pLower = rLower.GetSwFrm();
-        ASSERT( pLower, "child should be a frame" );
+        OSL_ENSURE( pLower, "child should be a frame" );
         if( pLower )
         {
             if( rLower.IsAccessible( mbIsInPagePreview ) )
             {
-                ASSERT( pLower->IsCellFrm(), "lower is not a cell frame" );
+                OSL_ENSURE( pLower->IsCellFrm(), "lower is not a cell frame" );
                 const SwRect& rFrm = pLower->Frm();
                 if( rFrm.Right() >= rPos.X() && rFrm.Bottom() >= rPos.Y() )
                 {
                     // We have found the cell
-                    ASSERT( rFrm.Left() <= rPos.X() && rFrm.Top() <= rPos.Y(),
+                    OSL_ENSURE( rFrm.Left() <= rPos.X() && rFrm.Top() <= rPos.Y(),
                             "find frame moved to far!" );
                     bFound = sal_True;
                     if( !bExact ||
@@ -289,13 +289,13 @@ void SwAccessibleTableData_Impl::GetSelection(
     {
         const SwAccessibleChild& rLower = *aIter;
         const SwFrm *pLower = rLower.GetSwFrm();
-        ASSERT( pLower, "child should be a frame" );
+        OSL_ENSURE( pLower, "child should be a frame" );
         const SwRect& rBox = rLower.GetBox( mrAccMap );
         if( pLower && rBox.IsOver( rArea ) )
         {
             if( rLower.IsAccessible( mbIsInPagePreview ) )
             {
-                ASSERT( pLower->IsCellFrm(), "lower is not a cell frame" );
+                OSL_ENSURE( pLower->IsCellFrm(), "lower is not a cell frame" );
                 const SwCellFrm *pCFrm =
                         static_cast < const SwCellFrm * >( pLower );
                 SwTableBox *pBox =
@@ -561,7 +561,7 @@ inline SwAccAllTableSelHander_Impl::SwAccAllTableSelHander_Impl( sal_Int32 nSize
 
 uno::Sequence < sal_Int32 > SwAccAllTableSelHander_Impl::GetSelSequence()
 {
-    ASSERT( nCount >= 0, "underflow" );
+    OSL_ENSURE( nCount >= 0, "underflow" );
     uno::Sequence < sal_Int32 > aRet( nCount );
     sal_Int32 *pRet = aRet.getArray();
     sal_Int32 nPos = 0;
@@ -575,7 +575,7 @@ uno::Sequence < sal_Int32 > SwAccAllTableSelHander_Impl::GetSelSequence()
         }
     }
 
-    ASSERT( nPos == nCount, "count is wrong" );
+    OSL_ENSURE( nPos == nCount, "count is wrong" );
 
     return aRet;
 }
@@ -583,9 +583,9 @@ uno::Sequence < sal_Int32 > SwAccAllTableSelHander_Impl::GetSelSequence()
 void SwAccAllTableSelHander_Impl::Unselect( sal_Int32 nRowOrCol,
                                             sal_Int32 nExt )
 {
-    ASSERT( static_cast< size_t >( nRowOrCol ) < aSelected.size(),
+    OSL_ENSURE( static_cast< size_t >( nRowOrCol ) < aSelected.size(),
              "index to large" );
-    ASSERT( static_cast< size_t >( nRowOrCol+nExt ) <= aSelected.size(),
+    OSL_ENSURE( static_cast< size_t >( nRowOrCol+nExt ) <= aSelected.size(),
              "extent to large" );
     while( nExt )
     {
@@ -751,7 +751,7 @@ void SwAccessibleTable::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
         if( pTabFrm )
         {
             const SwFrmFmt *pFrmFmt = pTabFrm->GetFmt();
-            ASSERT( pFrmFmt == GetRegisteredIn(), "invalid frame" );
+            OSL_ENSURE( pFrmFmt == GetRegisteredIn(), "invalid frame" );
 
             OUString sOldName( GetName() );
 
@@ -919,7 +919,7 @@ OUString SAL_CALL SwAccessibleTable::getAccessibleRowDescription(
     {
         uno::Reference< XAccessible > xRowHeaderCell =
                         xTableRowHeader->getAccessibleCellAt( nRow, 0 );
-        ASSERT( xRowHeaderCell.is(),
+        OSL_ENSURE( xRowHeaderCell.is(),
                 "<SwAccessibleTable::getAccessibleRowDescription(..)> - missing row header cell -> serious issue." );
         uno::Reference< XAccessibleContext > xRowHeaderCellContext =
                                     xRowHeaderCell->getAccessibleContext();
@@ -955,7 +955,7 @@ OUString SAL_CALL SwAccessibleTable::getAccessibleColumnDescription(
     {
         uno::Reference< XAccessible > xColumnHeaderCell =
                         xTableColumnHeader->getAccessibleCellAt( 0, nColumn );
-        ASSERT( xColumnHeaderCell.is(),
+        OSL_ENSURE( xColumnHeaderCell.is(),
                 "<SwAccessibleTable::getAccessibleColumnDescription(..)> - missing column header cell -> serious issue." );
         uno::Reference< XAccessibleContext > xColumnHeaderCellContext =
                                     xColumnHeaderCell->getAccessibleContext();
@@ -1271,7 +1271,7 @@ sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleRow( sal_Int32 nChildIndex )
     }
     else
     {
-        ASSERT( !aCell.IsValid(), "SwAccessibleTable::getAccessibleColumn:"
+        OSL_ENSURE( !aCell.IsValid(), "SwAccessibleTable::getAccessibleColumn:"
                 "aCell not expected to be valid.");
 
         throw lang::IndexOutOfBoundsException();
@@ -1310,7 +1310,7 @@ sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleColumn(
     }
     else
     {
-        ASSERT( !aCell.IsValid(), "SwAccessibleTable::getAccessibleColumn:"
+        OSL_ENSURE( !aCell.IsValid(), "SwAccessibleTable::getAccessibleColumn:"
                 "aCell not expected to be valid.");
 
         throw lang::IndexOutOfBoundsException();
@@ -1372,7 +1372,7 @@ void SwAccessibleTable::DisposeChild( const SwAccessibleChild& rChildFrmOrObj,
     SolarMutexGuard aGuard;
 
     const SwFrm *pFrm = rChildFrmOrObj.GetSwFrm();
-    ASSERT( pFrm, "frame expected" );
+    OSL_ENSURE( pFrm, "frame expected" );
     if( HasTableData() )
     {
         FireTableChangeEvent( GetTableData() );
@@ -1396,7 +1396,7 @@ void SwAccessibleTable::InvalidateChildPosOrSize( const SwAccessibleChild& rChil
 
     if( HasTableData() )
     {
-        ASSERT( !HasTableData() ||
+        OSL_ENSURE( !HasTableData() ||
                 GetFrm()->Frm().Pos() == GetTableData().GetTablePos(),
                 "table has invalid position" );
         if( HasTableData() )

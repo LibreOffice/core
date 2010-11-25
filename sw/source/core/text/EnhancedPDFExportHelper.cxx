@@ -100,7 +100,7 @@ FrmTagIdMap SwEnhancedPDFExportHelper::aFrmTagIdMap;
 
 LanguageType SwEnhancedPDFExportHelper::eLanguageDefault = 0;
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 
 static std::vector< USHORT > aStructStack;
 
@@ -289,7 +289,7 @@ SwTaggedPDFHelper::SwTaggedPDFHelper( const Num_Info* pNumInfo,
 
     if ( mpPDFExtOutDevData && mpPDFExtOutDevData->GetIsExportTaggedPDF() )
     {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         sal_Int32 nCurrentStruct = mpPDFExtOutDevData->GetCurrentStructureElement();
         lcl_DBGCheckStack();
 #endif
@@ -302,7 +302,7 @@ SwTaggedPDFHelper::SwTaggedPDFHelper( const Num_Info* pNumInfo,
         else
             BeginTag( vcl::PDFWriter::NonStructElement, aEmptyString );
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         nCurrentStruct = mpPDFExtOutDevData->GetCurrentStructureElement();
         lcl_DBGCheckStack();
 #endif
@@ -317,13 +317,13 @@ SwTaggedPDFHelper::~SwTaggedPDFHelper()
 {
     if ( mpPDFExtOutDevData && mpPDFExtOutDevData->GetIsExportTaggedPDF() )
     {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         sal_Int32 nCurrentStruct = mpPDFExtOutDevData->GetCurrentStructureElement();
         lcl_DBGCheckStack();
 #endif
         EndStructureElements();
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         nCurrentStruct = mpPDFExtOutDevData->GetCurrentStructureElement();
         lcl_DBGCheckStack();
 #endif
@@ -390,9 +390,9 @@ bool SwTaggedPDFHelper::CheckReopenTag()
     {
         nRestoreCurrentTag = mpPDFExtOutDevData->GetCurrentStructureElement();
         const bool bSuccess = mpPDFExtOutDevData->SetCurrentStructureElement( nReopenTag );
-        ASSERT( bSuccess, "Failed to reopen tag" )
+        OSL_ENSURE( bSuccess, "Failed to reopen tag" );
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         aStructStack.push_back( 99 );
 #endif
 
@@ -413,9 +413,9 @@ bool SwTaggedPDFHelper::CheckRestoreTag() const
     {
         const bool bSuccess = mpPDFExtOutDevData->SetCurrentStructureElement( nRestoreCurrentTag );
         (void)bSuccess;
-        ASSERT( bSuccess, "Failed to restore reopened tag" )
+        OSL_ENSURE( bSuccess, "Failed to restore reopened tag" );
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         aStructStack.pop_back();
 #endif
 
@@ -435,7 +435,7 @@ void SwTaggedPDFHelper::BeginTag( vcl::PDFWriter::StructElement eType, const Str
     const sal_Int32 nId = mpPDFExtOutDevData->BeginStructureElement( eType, rtl::OUString( rString ) );
     ++nEndStructureElement;
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     aStructStack.push_back( static_cast<USHORT>(eType) );
 #endif
 
@@ -495,7 +495,7 @@ void SwTaggedPDFHelper::EndTag()
 {
     mpPDFExtOutDevData->EndStructureElement();
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     aStructStack.pop_back();
 #endif
 }
@@ -656,7 +656,7 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
 
         if ( bTextIndent )
         {
-            ASSERT( pFrm->IsTxtFrm(), "Frame type <-> tag attribute mismatch" )
+            OSL_ENSURE( pFrm->IsTxtFrm(), "Frame type <-> tag attribute mismatch" );
             const SvxLRSpaceItem &rSpace =
                 static_cast<const SwTxtFrm*>(pFrm)->GetTxtNode()->GetSwAttrSet().GetLRSpace();
             nVal =  rSpace.GetTxtFirstLineOfst();
@@ -666,7 +666,7 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
 
         if ( bTextAlign )
         {
-            ASSERT( pFrm->IsTxtFrm(), "Frame type <-> tag attribute mismatch" )
+            OSL_ENSURE( pFrm->IsTxtFrm(), "Frame type <-> tag attribute mismatch" );
             const SwAttrSet& aSet = static_cast<const SwTxtFrm*>(pFrm)->GetTxtNode()->GetSwAttrSet();
             const SvxAdjust nAdjust = aSet.GetAdjust().GetAdjust();
             if ( SVX_ADJUST_BLOCK == nAdjust || SVX_ADJUST_CENTER == nAdjust ||
@@ -685,7 +685,7 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
 
         if ( bAlternateText )
         {
-            ASSERT( pFrm->IsFlyFrm(), "Frame type <-> tag attribute mismatch" )
+            OSL_ENSURE( pFrm->IsFlyFrm(), "Frame type <-> tag attribute mismatch" );
             const SwFlyFrm* pFly = static_cast<const SwFlyFrm*>(pFrm);
             if ( pFly->Lower() && pFly->Lower()->IsNoTxtFrm() )
             {
@@ -741,7 +741,7 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
                 const TableColumnsMapEntry::const_iterator aLeftIter =  rCols.find( nLeft );
                 const TableColumnsMapEntry::const_iterator aRightIter = rCols.find( nRight );
 
-                ASSERT( aLeftIter != rCols.end() && aRightIter != rCols.end(), "Colspan trouble" )
+                OSL_ENSURE( aLeftIter != rCols.end() && aRightIter != rCols.end(), "Colspan trouble" );
                 if ( aLeftIter != rCols.end() && aRightIter != rCols.end() )
                 {
                     nVal = std::distance( aLeftIter, aRightIter );
@@ -863,12 +863,12 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
  */
 void SwTaggedPDFHelper::BeginNumberedListStructureElements()
 {
-    ASSERT( mpNumInfo, "List without mpNumInfo?" )
+    OSL_ENSURE( mpNumInfo, "List without mpNumInfo?" );
     if ( !mpNumInfo )
         return;
 
     const SwFrm& rFrm = mpNumInfo->mrFrm;
-    ASSERT( rFrm.IsTxtFrm(), "numbered only for text frames" )
+    OSL_ENSURE( rFrm.IsTxtFrm(), "numbered only for text frames" );
     const SwTxtFrm& rTxtFrm = static_cast<const SwTxtFrm&>(rFrm);
 
     //
@@ -971,7 +971,7 @@ void SwTaggedPDFHelper::BeginNumberedListStructureElements()
             nRestoreCurrentTag = mpPDFExtOutDevData->GetCurrentStructureElement();
             mpPDFExtOutDevData->SetCurrentStructureElement( nReopenTag );
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
             aStructStack.push_back( 99 );
 #endif
         }
@@ -1526,7 +1526,7 @@ SwEnhancedPDFExportHelper::SwEnhancedPDFExportHelper( SwEditShell& rSh,
     aNumListBodyIdMap.clear();
     aFrmTagIdMap.clear();
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     aStructStack.clear();
 #endif
 
@@ -1599,7 +1599,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                 {
                     const SwTxtNode* pTNd =
                         (SwTxtNode*)((SwFmtFld*)pFirst)->GetTxtFld()->GetpTxtNode();
-                    ASSERT( 0 != pTNd, "Enhanced pdf export - text node is missing" )
+                    OSL_ENSURE( 0 != pTNd, "Enhanced pdf export - text node is missing" );
 
                     // 1. Check if the whole paragraph is hidden
                     // 2. Move to the field
@@ -1655,10 +1655,10 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
         for( sal_uInt16 n = 0; n < nHyperLinkCount; ++n )
         {
             SwGetINetAttr* p = aArr[ n ];
-            ASSERT( 0 != p, "Enhanced pdf export - SwGetINetAttr is missing" )
+            OSL_ENSURE( 0 != p, "Enhanced pdf export - SwGetINetAttr is missing" );
 
             const SwTxtNode* pTNd = p->rINetAttr.GetpTxtNode();
-            ASSERT( 0 != pTNd, "Enhanced pdf export - text node is missing" )
+            OSL_ENSURE( 0 != pTNd, "Enhanced pdf export - text node is missing" );
 
             // 1. Check if the whole paragraph is hidden
             // 2. Move to the hyperlink
@@ -1689,7 +1689,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                     // be deleted again in JumpToSwMark.
                     SwRects aTmp;
                     aTmp.Insert( mrSh.SwCrsrShell::_GetCrsr(), 0 );
-                    ASSERT( aTmp.Count() > 0, "Enhanced pdf export - rectangles are missing" )
+                    OSL_ENSURE( aTmp.Count() > 0, "Enhanced pdf export - rectangles are missing" );
 
                     // Create the destination for internal links:
                     sal_Int32 nDestId = -1;
@@ -1841,7 +1841,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
             {
                 const SwTxtNode* pTNd =
                     (SwTxtNode*)((SwFmtFld*)pFirst)->GetTxtFld()->GetpTxtNode();
-               ASSERT( 0 != pTNd, "Enhanced pdf export - text node is missing" )
+               OSL_ENSURE( 0 != pTNd, "Enhanced pdf export - text node is missing" );
 
                 // 1. Check if the whole paragraph is hidden
                 // 2. Move to the field
@@ -1857,7 +1857,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                     // Link Rectangles
                     SwRects aTmp;
                     aTmp.Insert( mrSh.SwCrsrShell::_GetCrsr(), 0 );
-                    ASSERT( aTmp.Count() > 0, "Enhanced pdf export - rectangles are missing" )
+                    OSL_ENSURE( aTmp.Count() > 0, "Enhanced pdf export - rectangles are missing" );
 
                     mrSh.SwCrsrShell::ClearMark();
 
@@ -1948,7 +1948,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
             // Link Rectangle
             SwRects aTmp;
             aTmp.Insert( mrSh.SwCrsrShell::_GetCrsr(), 0 );
-            ASSERT( aTmp.Count() > 0, "Enhanced pdf export - rectangles are missing" )
+            OSL_ENSURE( aTmp.Count() > 0, "Enhanced pdf export - rectangles are missing" );
             const SwRect aLinkRect( aTmp[ 0 ] );
 
             mrSh._GetCrsr()->RestoreSavePos();
@@ -2003,7 +2003,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
             {
                 // Check if outline is hidden
                 const SwTxtNode* pTNd = mrSh.GetNodes().GetOutLineNds()[ i ]->GetTxtNode();
-                ASSERT( 0 != pTNd, "Enhanced pdf export - text node is missing" )
+                OSL_ENSURE( 0 != pTNd, "Enhanced pdf export - text node is missing" );
 
                 if ( pTNd->IsHidden() ||
                      // --> FME 2005-01-10 #i40292# Skip empty outlines:

@@ -126,7 +126,7 @@ SwHeadFootFrm::SwHeadFootFrm( SwFrmFmt * pFmt, USHORT nTypeIn)
 
     const SwFmtCntnt &rCnt = pFmt->GetCntnt();
 
-    ASSERT( rCnt.GetCntntIdx(), "Kein Inhalt fuer Header." );
+    OSL_ENSURE( rCnt.GetCntntIdx(), "Kein Inhalt fuer Header." );
 
     //Fuer Header Footer die Objekte gleich erzeugen lassen.
     BOOL bOld = bObjsDirect;
@@ -282,7 +282,7 @@ void SwHeadFootFrm::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
                     // --> OD 2005-05-03 #i46941# - frame has to be valid.
                     // Note: frame could be invalid after calling its format,
                     //       if it's locked
-                    ASSERT( StackHack::IsLocked() || !pFrm->IsTxtFrm() ||
+                    OSL_ENSURE( StackHack::IsLocked() || !pFrm->IsTxtFrm() ||
                             pFrm->IsValid() ||
                             static_cast<SwTxtFrm*>(pFrm)->IsJoinLocked(),
                             "<SwHeadFootFrm::FormatSize(..)> - text frame invalid and not locked." );
@@ -418,7 +418,7 @@ void SwHeadFootFrm::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
 
 void SwHeadFootFrm::Format(const SwBorderAttrs * pAttrs)
 {
-    ASSERT( pAttrs, "SwFooterFrm::Format, pAttrs ist 0." );
+    OSL_ENSURE( pAttrs, "SwFooterFrm::Format, pAttrs ist 0." );
 
     if ( bValidPrtArea && bValidSize )
         return;
@@ -459,7 +459,7 @@ SwTwips SwHeadFootFrm::GrowFrm( SwTwips nDist, BOOL bTst,  BOOL bInfo )
 
         SwBorderAttrAccess * pAccess =
             new SwBorderAttrAccess( SwFrm::GetCache(), this );
-        ASSERT(pAccess, "no border attributes");
+        OSL_ENSURE(pAccess, "no border attributes");
 
         SwBorderAttrs * pAttrs = pAccess->Get();
 
@@ -592,7 +592,7 @@ SwTwips SwHeadFootFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
 
             SwBorderAttrAccess * pAccess =
                 new SwBorderAttrAccess( SwFrm::GetCache(), this );
-            ASSERT(pAccess, "no border attributes");
+            OSL_ENSURE(pAccess, "no border attributes");
 
             SwBorderAttrs * pAttrs = pAccess->Get();
 
@@ -662,7 +662,7 @@ SwTwips SwHeadFootFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
 BOOL SwHeadFootFrm::GetEatSpacing() const
 {
     const SwFrmFmt * pFmt = GetFmt();
-    ASSERT(pFmt, "SwHeadFootFrm: no format?");
+    OSL_ENSURE(pFmt, "SwHeadFootFrm: no format?");
 
     if (pFmt->GetHeaderAndFooterEatSpacing().GetValue())
         return TRUE;
@@ -715,7 +715,7 @@ void SwPageFrm::PrepareHeader()
 
     if ( bOn && rH.IsActive() )
     {   //Header einsetzen, vorher entfernen falls vorhanden.
-        ASSERT( rH.GetHeaderFmt(), "FrmFmt fuer Header nicht gefunden." );
+        OSL_ENSURE( rH.GetHeaderFmt(), "FrmFmt fuer Header nicht gefunden." );
 
         if ( pLay->GetFmt() == (SwFrmFmt*)rH.GetHeaderFmt() )
             return; //Der Footer ist bereits der richtige
@@ -727,7 +727,7 @@ void SwPageFrm::PrepareHeader()
             pDel->Cut();
             delete pDel;
         }
-        ASSERT( pLay, "Wohin mit dem Header?" );
+        OSL_ENSURE( pLay, "Wohin mit dem Header?" );
         SwHeaderFrm *pH = new SwHeaderFrm( (SwFrmFmt*)rH.GetHeaderFmt() );
         pH->Paste( this, pLay );
         if ( GetUpper() )
@@ -765,7 +765,7 @@ void SwPageFrm::PrepareFooter()
 
     if ( bOn && rF.IsActive() )
     {   //Footer einsetzen, vorher entfernen falls vorhanden.
-        ASSERT( rF.GetFooterFmt(), "FrmFmt fuer Footer nicht gefunden." );
+        OSL_ENSURE( rF.GetFooterFmt(), "FrmFmt fuer Footer nicht gefunden." );
 
         if ( pLay->GetFmt() == (SwFrmFmt*)rF.GetFooterFmt() )
             return; //Der Footer ist bereits der richtige.

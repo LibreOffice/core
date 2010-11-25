@@ -64,7 +64,7 @@
 #define SNAP_FLYFRAMES   0x00000002
 #define SNAP_TABLECONT   0x00000004
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 
 #include "swtypes.hxx"
 

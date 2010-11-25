@@ -35,7 +35,7 @@
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <sfx2/sfx.hrc>
 #include <svx/svxids.hrc>
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 #include <stdlib.h>
 #endif
 #include <hintids.hxx>
@@ -193,7 +193,7 @@ String HTMLReader::GetTemplateName() const
     if( !bSet )
     {
         sTemplate.Erase();
-        ASSERT( !this,
+        OSL_ENSURE( !this,
             "Die html.vor befindet sich nicht mehr im definierten Directory!");
     }
 
@@ -202,7 +202,7 @@ String HTMLReader::GetTemplateName() const
 
 int HTMLReader::SetStrmStgPtr()
 {
-    ASSERT( pMedium, "Wo ist das Medium??" );
+    OSL_ENSURE( pMedium, "Wo ist das Medium??" );
 
     if( pMedium->IsRemote() || !pMedium->IsStorage() )
     {
@@ -218,7 +218,7 @@ ULONG HTMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPam, const 
 {
     if( !pStrm )
     {
-        ASSERT( pStrm, "HTML-Read ohne Stream" );
+        OSL_ENSURE( pStrm, "HTML-Read ohne Stream" );
         return ERR_SWG_READ_ERROR;
     }
 
@@ -304,7 +304,7 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
     // <--
     nOpenParaToken( 0 ),
     eJumpTo( JUMPTO_NONE ),
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     nContinue( 0 ),
 #endif
     eParaAdjust( SVX_ADJUST_END ),
@@ -433,8 +433,8 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
 
 __EXPORT SwHTMLParser::~SwHTMLParser()
 {
-#ifdef DBG_UTIL
-    ASSERT( !nContinue, "DTOR im Continue - Das geht schief!!!" );
+#if OSL_DEBUG_LEVEL > 1
+    OSL_ENSURE( !nContinue, "DTOR im Continue - Das geht schief!!!" );
 #endif
     BOOL bAsync = pDoc->IsInLoadAsynchron();
     pDoc->SetInLoadAsynchron( FALSE );
@@ -465,7 +465,7 @@ __EXPORT SwHTMLParser::~SwHTMLParser()
 
     if( aSetAttrTab.Count() )
     {
-        ASSERT( !aSetAttrTab.Count(),"Es stehen noch Attribute auf dem Stack" );
+        OSL_ENSURE( !aSetAttrTab.Count(),"Es stehen noch Attribute auf dem Stack" );
         aSetAttrTab.DeleteAndDestroy( 0, aSetAttrTab.Count() );
     }
 
@@ -475,10 +475,10 @@ __EXPORT SwHTMLParser::~SwHTMLParser()
     DeleteFormImpl();
     DeleteFootEndNoteImpl();
 
-    ASSERT( !pTable, "Es existiert noch eine offene Tabelle" );
+    OSL_ENSURE( !pTable, "Es existiert noch eine offene Tabelle" );
     delete pImageMaps;
 
-    ASSERT( !pPendStack,
+    OSL_ENSURE( !pPendStack,
             "SwHTMLParser::~SwHTMLParser: Hier sollte es keinen Pending-Stack mehr geben" );
     while( pPendStack )
     {
@@ -583,15 +583,15 @@ SvParserState __EXPORT SwHTMLParser::CallParser()
 
 void __EXPORT SwHTMLParser::Continue( int nToken )
 {
-#ifdef DBG_UTIL
-    ASSERT( !nContinue, "Continue im Continue - Das sollte doch nicht sein, oder?" );
+#if OSL_DEBUG_LEVEL > 1
+    OSL_ENSURE( !nContinue, "Continue im Continue - Das sollte doch nicht sein, oder?" );
     nContinue++;
 #endif
 
     // Wenn der Import (vom SFX) abgebrochen wurde, wird ein Fehler
     // gesetzt aber trotzdem noch weiter gemacht, damit vernuenftig
     // aufgeraeumt wird.
-    ASSERT( SVPAR_ERROR!=eState,
+    OSL_ENSURE( SVPAR_ERROR!=eState,
             "SwHTMLParser::Continue: bereits ein Fehler gesetzt" );
     if( pDoc->GetDocShell() && pDoc->GetDocShell()->IsAbortingImport() )
         eState = SVPAR_ERROR;
@@ -609,7 +609,7 @@ void __EXPORT SwHTMLParser::Continue( int nToken )
         bViewCreated = TRUE;
         pDoc->SetInLoadAsynchron( TRUE );
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         nContinue--;
 #endif
 
@@ -637,11 +637,11 @@ void __EXPORT SwHTMLParser::Continue( int nToken )
     // beendet wird.
     if( SVPAR_ERROR == eState )
     {
-        ASSERT( !pPendStack || pPendStack->nToken,
+        OSL_ENSURE( !pPendStack || pPendStack->nToken,
                 "SwHTMLParser::Continue: Pending-Stack ohne Token" );
         if( pPendStack && pPendStack->nToken )
             NextToken( pPendStack->nToken );
-        ASSERT( !pPendStack,
+        OSL_ENSURE( !pPendStack,
                 "SwHTMLParser::Continue: Es gibt wieder einen Pend-Stack" );
     }
     else
@@ -683,7 +683,7 @@ void __EXPORT SwHTMLParser::Continue( int nToken )
             while( GetNumInfo().GetNumRule() )
                 EndNumBulList();
 
-            ASSERT( !nContextStMin, "Es gibt geschuetzte Kontexte" );
+            OSL_ENSURE( !nContextStMin, "Es gibt geschuetzte Kontexte" );
             nContextStMin = 0;
             while( aContexts.Count() )
             {
@@ -719,11 +719,11 @@ void __EXPORT SwHTMLParser::Continue( int nToken )
                     pPam->GetPoint()->nContent.Assign( pTxtNode, nStt );
                 }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 // !!! sollte nicht moeglich sein, oder ??
-ASSERT( pSttNdIdx->GetIndex()+1 != pPam->GetBound( TRUE ).nNode.GetIndex(),
+OSL_ENSURE( pSttNdIdx->GetIndex()+1 != pPam->GetBound( TRUE ).nNode.GetIndex(),
             "Pam.Bound1 steht noch im Node" );
-ASSERT( pSttNdIdx->GetIndex()+1 != pPam->GetBound( FALSE ).nNode.GetIndex(),
+OSL_ENSURE( pSttNdIdx->GetIndex()+1 != pPam->GetBound( FALSE ).nNode.GetIndex(),
             "Pam.Bound2 steht noch im Node" );
 
 if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( TRUE ).nNode.GetIndex() )
@@ -917,7 +917,7 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( FALSE ).nNode.GetIndex() )
     // wieder rekonstruieren.
     CallEndAction( TRUE );
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     nContinue--;
 #endif
 }
@@ -939,7 +939,7 @@ void SwHTMLParser::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
 
 void SwHTMLParser::DocumentDetected()
 {
-    ASSERT( !bDocInitalized, "DocumentDetected mehrfach aufgerufen" );
+    OSL_ENSURE( !bDocInitalized, "DocumentDetected mehrfach aufgerufen" );
     bDocInitalized = TRUE;
     if( IsNewDoc() )
     {
@@ -966,13 +966,13 @@ void __EXPORT SwHTMLParser::NextToken( int nToken )
         // wurde der Import vom SFX abgebrochen? Wenn ein Pending-Stack
         // existiert den noch aufraumen
         eState = SVPAR_ERROR;
-        ASSERT( !pPendStack || pPendStack->nToken,
+        OSL_ENSURE( !pPendStack || pPendStack->nToken,
                 "SwHTMLParser::NextToken: Pending-Stack ohne Token" );
         if( 1 == pDoc->getReferenceCount() || !pPendStack )
             return ;
     }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     if( pPendStack )
     {
         switch( nToken )
@@ -989,7 +989,7 @@ void __EXPORT SwHTMLParser::NextToken( int nToken )
         case HTML_SELECT_OFF:
             break;
         default:
-            ASSERT( !pPendStack, "Unbekanntes Token fuer Pending-Stack" );
+            OSL_ENSURE( !pPendStack, "Unbekanntes Token fuer Pending-Stack" );
             break;
         }
     }
@@ -1099,7 +1099,7 @@ void __EXPORT SwHTMLParser::NextToken( int nToken )
                 break;
 
             default:
-                ASSERT( !this, "SwHTMLParser::NextToken: ungueltiges Tag" );
+                OSL_ENSURE( !this, "SwHTMLParser::NextToken: ungueltiges Tag" );
                 break;
             }
 
@@ -1698,7 +1698,7 @@ void __EXPORT SwHTMLParser::NextToken( int nToken )
         {
             if( nOpenParaToken )
                 EndPara();
-            ASSERT( !pTable, "Tabelle in Tabelle darf hier nicht vorkommen" );
+            OSL_ENSURE( !pTable, "Tabelle in Tabelle darf hier nicht vorkommen" );
             if( !pTable && (IsNewDoc() || !pPam->GetNode()->FindTableNode()) &&
                 (pPam->GetPoint()->nNode.GetIndex() >
                             pDoc->GetNodes().GetEndOfExtras().GetIndex() ||
@@ -2197,7 +2197,7 @@ BOOL SwHTMLParser::AppendTxtNode( SwHTMLAppendMode eMode, BOOL bUpdateNum )
                     {
                         const SwTxtNode *pTxtNd =
                             pAttr->GetSttPara().GetNode().GetTxtNode();
-                        ASSERT( pTxtNd, "No text node" );
+                        OSL_ENSURE( pTxtNd, "No text node" );
                         if( pTxtNd )
                         {
                             const String& rText = pTxtNd->GetTxt();
@@ -2294,7 +2294,7 @@ BOOL SwHTMLParser::AppendTxtNode( SwHTMLAppendMode eMode, BOOL bUpdateNum )
     // Now it is time to get rid of all script dependent hints that are
     // equal to the settings in the style
     SwTxtNode *pTxtNd = rEndIdx.GetNode().GetTxtNode();
-    ASSERT( pTxtNd, "There is the txt node" );
+    OSL_ENSURE( pTxtNd, "There is the txt node" );
     sal_uInt16 nCntAttr = (pTxtNd  && pTxtNd->GetpSwpHints())
                             ? pTxtNd->GetSwpHints().Count() : 0;
     if( nCntAttr )
@@ -2361,7 +2361,7 @@ BOOL SwHTMLParser::AppendTxtNode( SwHTMLAppendMode eMode, BOOL bUpdateNum )
                 {
                     // The hint starts before another one ends.
                     // The hint in this case is not deleted
-                    ASSERT( pHt->GetEnd() && *pHt->GetEnd() <= aEndPos[nIdx],
+                    OSL_ENSURE( pHt->GetEnd() && *pHt->GetEnd() <= aEndPos[nIdx],
                             "hints aren't nested properly!" );
                 }
             }
@@ -2416,7 +2416,7 @@ void SwHTMLParser::Show()
     // - die eiegen View-Shell wieder gesetzt
     // - und Start-Action gerufen
 
-    ASSERT( SVPAR_WORKING==eState, "Show nicht im Working-State - Das kann ins Auge gehen" );
+    OSL_ENSURE( SVPAR_WORKING==eState, "Show nicht im Working-State - Das kann ins Auge gehen" );
     ViewShell *pOldVSh = CallEndAction();
 
     GetpApp()->Reschedule();
@@ -2446,7 +2446,7 @@ void SwHTMLParser::ShowStatline()
     // - die eiegen View-Shell wieder gesetzt
     // - ein Start/End-Action gerufen, wenn gescrollt wurde.
 
-    ASSERT( SVPAR_WORKING==eState, "ShowStatLine nicht im Working-State - Das kann ins Auge gehen" );
+    OSL_ENSURE( SVPAR_WORKING==eState, "ShowStatLine nicht im Working-State - Das kann ins Auge gehen" );
 
     // Laufbalkenanzeige
     if( !GetMedium() || !GetMedium()->IsRemote() )
@@ -2474,16 +2474,16 @@ void SwHTMLParser::ShowStatline()
 
 ViewShell *SwHTMLParser::CallStartAction( ViewShell *pVSh, BOOL bChkPtr )
 {
-    ASSERT( !pActionViewShell, "CallStartAction: ViewShell schon gesetzt" );
+    OSL_ENSURE( !pActionViewShell, "CallStartAction: ViewShell schon gesetzt" );
 
     if( !pVSh || bChkPtr )
     {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         ViewShell *pOldVSh = pVSh;
 #endif
         pDoc->GetEditShell( &pVSh );
-        ASSERT( !pVSh || !pOldVSh || pOldVSh == pVSh, "CallStartAction: Wer hat die ViewShell ausgetauscht?" );
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
+        OSL_ENSURE( !pVSh || !pOldVSh || pOldVSh == pVSh, "CallStartAction: Wer hat die ViewShell ausgetauscht?" );
         if( pOldVSh && !pVSh )
             pVSh = 0;
 #endif
@@ -2507,7 +2507,7 @@ ViewShell *SwHTMLParser::CallEndAction( BOOL bChkAction, BOOL bChkPtr )
     {
         ViewShell *pVSh = 0;
         pDoc->GetEditShell( &pVSh );
-        ASSERT( !pVSh || pActionViewShell == pVSh,
+        OSL_ENSURE( !pVSh || pActionViewShell == pVSh,
                 "CallEndAction: Wer hat die ViewShell ausgetauscht?" );
 #if OSL_DEBUG_LEVEL > 1
         if( pActionViewShell && !pVSh )
@@ -2573,7 +2573,7 @@ ViewShell *SwHTMLParser::CheckActionViewShell()
 {
     ViewShell *pVSh = 0;
     pDoc->GetEditShell( &pVSh );
-    ASSERT( !pVSh || pActionViewShell == pVSh,
+    OSL_ENSURE( !pVSh || pActionViewShell == pVSh,
             "CheckActionViewShell: Wer hat die ViewShell ausgetauscht?" );
 #if OSL_DEBUG_LEVEL > 1
     if( pActionViewShell && !pVSh )
@@ -2644,7 +2644,7 @@ void SwHTMLParser::_SetAttr( BOOL bChkEnd, BOOL bBeforeTable,
             USHORT ii = aParaAttrs.Count();
             while( ii-- )
             {
-                ASSERT( pAttr != aParaAttrs[ii],
+                OSL_ENSURE( pAttr != aParaAttrs[ii],
                         "SetAttr: Attribut duerfte noch nicht gesetzt werden" );
                 aParaAttrs.Remove( ii );
             }
@@ -2685,7 +2685,7 @@ void SwHTMLParser::_SetAttr( BOOL bChkEnd, BOOL bBeforeTable,
                         pAttr->nSttCntnt = 0;
                     else
                     {
-                        ASSERT( !this, "SetAttr: GoNext() failed!" );
+                        OSL_ENSURE( !this, "SetAttr: GoNext() failed!" );
                         delete pAttr;
                         pAttr = pPrev;
                         continue; // break;
@@ -2713,7 +2713,7 @@ void SwHTMLParser::_SetAttr( BOOL bChkEnd, BOOL bBeforeTable,
                             pAttr->nEndCntnt = pCNd->Len();
                         else
                         {
-                            ASSERT( !this, "SetAttr: GoPrevious() failed!" );
+                            OSL_ENSURE( !this, "SetAttr: GoPrevious() failed!" );
                             pAttrPam->DeleteMark();
                             delete pAttr;
                             pAttr = pPrev;
@@ -2748,7 +2748,7 @@ void SwHTMLParser::_SetAttr( BOOL bChkEnd, BOOL bBeforeTable,
                         if( pAttrPam->GetMark()->nNode.GetIndex() !=
                             rEndIdx.GetIndex() )
                         {
-                            ASSERT( !pAttrPam->GetPoint()->nContent.GetIndex(),
+                            OSL_ENSURE( !pAttrPam->GetPoint()->nContent.GetIndex(),
                                     "Content-Position vor Tabelle nicht 0???" );
                             pAttrPam->Move( fnMoveBackward );
                         }
@@ -2815,7 +2815,7 @@ void SwHTMLParser::_SetAttr( BOOL bChkEnd, BOOL bBeforeTable,
                         pCNd->SetAttr( *pAttr->pItem );
                         break;
                     }
-                    ASSERT( !this,
+                    OSL_ENSURE( !this,
                             "LRSpace ueber mehrere Absaetze gesetzt!" );
                     // kein break (hier sollen wir trotzdem nie hinkommen;
                 default:
@@ -2844,7 +2844,7 @@ void SwHTMLParser::_SetAttr( BOOL bChkEnd, BOOL bBeforeTable,
         SwFrmFmt *pFrmFmt = aMoveFlyFrms[ --n ];
 
         const SwFmtAnchor& rAnchor = pFrmFmt->GetAnchor();
-        ASSERT( FLY_AT_PARA == rAnchor.GetAnchorId(),
+        OSL_ENSURE( FLY_AT_PARA == rAnchor.GetAnchorId(),
                 "Nur Auto-Rahmen brauchen eine Spezialbehandlung" );
         const SwPosition *pFlyPos = rAnchor.GetCntntAnchor();
         ULONG nFlyParaIdx = pFlyPos->nNode.GetIndex();
@@ -2904,8 +2904,8 @@ void SwHTMLParser::_SetAttr( BOOL bChkEnd, BOOL bBeforeTable,
         if( bBeforeTable &&
             pAttrPam->GetPoint()->nNode.GetIndex() == rEndIdx.GetIndex() )
         {
-            ASSERT( !bBeforeTable, "Aha, der Fall tritt also doch ein" );
-            ASSERT( !pAttrPam->GetPoint()->nContent.GetIndex(),
+            OSL_ENSURE( !bBeforeTable, "Aha, der Fall tritt also doch ein" );
+            OSL_ENSURE( !pAttrPam->GetPoint()->nContent.GetIndex(),
                     "Content-Position vor Tabelle nicht 0???" );
             // !!!
             pAttrPam->Move( fnMoveBackward );
@@ -2942,11 +2942,11 @@ void SwHTMLParser::NewAttr( _HTMLAttr **ppAttr, const SfxPoolItem& rItem )
 void SwHTMLParser::EndAttr( _HTMLAttr* pAttr, _HTMLAttr **ppDepAttr,
                             BOOL bChkEmpty )
 {
-    ASSERT( !ppDepAttr, "SwHTMLParser::EndAttr: ppDepAttr-Feature ungetestet?" );
+    OSL_ENSURE( !ppDepAttr, "SwHTMLParser::EndAttr: ppDepAttr-Feature ungetestet?" );
     // Der Listenkopf ist im Attribut gespeichert
     _HTMLAttr **ppHead = pAttr->ppHead;
 
-    ASSERT( ppHead, "keinen Attributs-Listenkopf gefunden!" );
+    OSL_ENSURE( ppHead, "keinen Attributs-Listenkopf gefunden!" );
 
     // die aktuelle Psoition als Ende-Position merken
     const SwNodeIndex* pEndIdx = &pPam->GetPoint()->nNode;
@@ -2966,7 +2966,7 @@ void SwHTMLParser::EndAttr( _HTMLAttr* pAttr, _HTMLAttr **ppDepAttr,
         while( pLast && pLast->GetNext() != pAttr )
             pLast = pLast->GetNext();
 
-        ASSERT( pLast, "Attribut nicht in eigener Liste gefunden!" );
+        OSL_ENSURE( pLast, "Attribut nicht in eigener Liste gefunden!" );
     }
 
     BOOL bMoveBack = FALSE;
@@ -3008,7 +3008,7 @@ void SwHTMLParser::EndAttr( _HTMLAttr* pAttr, _HTMLAttr **ppDepAttr,
     {
         const SwTxtNode *pTxtNd = pAttr->GetSttPara().GetNode()
                                             .GetTxtNode();
-        ASSERT( pTxtNd, "No text node" );
+        OSL_ENSURE( pTxtNd, "No text node" );
         const String& rText = pTxtNd->GetTxt();
         sal_uInt16 nScriptTxt = pBreakIt->GetBreakIter()->getScriptType(
                         rText, pAttr->GetSttCnt() );
@@ -3105,7 +3105,7 @@ void SwHTMLParser::DeleteAttr( _HTMLAttr* pAttr )
 {
     // Hier darf es keine vorlauefigen Absatz-Attribute geben, den die
     // koennten jetzt gesetzt werden und dann sind die Zeiger ungueltig!!!
-    ASSERT( !aParaAttrs.Count(),
+    OSL_ENSURE( !aParaAttrs.Count(),
             "Hoechste Gefahr: Es gibt noch nicht-endgueltige Absatz-Attribute" );
     if( aParaAttrs.Count() )
         aParaAttrs.Remove( 0, aParaAttrs.Count() );
@@ -3113,7 +3113,7 @@ void SwHTMLParser::DeleteAttr( _HTMLAttr* pAttr )
     // Der Listenkopf ist im Attribut gespeichert
     _HTMLAttr **ppHead = pAttr->ppHead;
 
-    ASSERT( ppHead, "keinen Attributs-Listenkopf gefunden!" );
+    OSL_ENSURE( ppHead, "keinen Attributs-Listenkopf gefunden!" );
 
     // Wird das zueltzt gestartete oder ein frueher gestartetes Attribut
     // entfernt?
@@ -3129,7 +3129,7 @@ void SwHTMLParser::DeleteAttr( _HTMLAttr* pAttr )
         while( pLast && pLast->GetNext() != pAttr )
             pLast = pLast->GetNext();
 
-        ASSERT( pLast, "Attribut nicht in eigener Liste gefunden!" );
+        OSL_ENSURE( pLast, "Attribut nicht in eigener Liste gefunden!" );
     }
 
     // nun das Attrubut entfernen
@@ -3161,7 +3161,7 @@ void SwHTMLParser::SaveAttrTab( _HTMLAttrTable& rNewAttrTab )
 {
     // Hier darf es keine vorlauefigen Absatz-Attribute geben, den die
     // koennten jetzt gesetzt werden und dann sind die Zeiger ungueltig!!!
-    ASSERT( !aParaAttrs.Count(),
+    OSL_ENSURE( !aParaAttrs.Count(),
             "Hoechste Gefahr: Es gibt noch nicht-endgueltige Absatz-Attribute" );
     if( aParaAttrs.Count() )
         aParaAttrs.Remove( 0, aParaAttrs.Count() );
@@ -3190,7 +3190,7 @@ void SwHTMLParser::SplitAttrTab( _HTMLAttrTable& rNewAttrTab,
 {
     // Hier darf es keine vorlauefigen Absatz-Attribute geben, den die
     // koennten jetzt gesetzt werden und dann sind die Zeiger ungueltig!!!
-    ASSERT( !aParaAttrs.Count(),
+    OSL_ENSURE( !aParaAttrs.Count(),
             "Hoechste Gefahr: Es gibt noch nicht-endgueltige Absatz-Attribute" );
     if( aParaAttrs.Count() )
         aParaAttrs.Remove( 0, aParaAttrs.Count() );
@@ -3294,7 +3294,7 @@ void SwHTMLParser::RestoreAttrTab( const _HTMLAttrTable& rNewAttrTab,
 {
     // Hier darf es keine vorlauefigen Absatz-Attribute geben, den die
     // koennten jetzt gesetzt werden und dann sind die Zeiger ungueltig!!!
-    ASSERT( !aParaAttrs.Count(),
+    OSL_ENSURE( !aParaAttrs.Count(),
             "Hoechste Gefahr: Es gibt noch nicht-endgueltige Absatz-Attribute" );
     if( aParaAttrs.Count() )
         aParaAttrs.Remove( 0, aParaAttrs.Count() );
@@ -3305,7 +3305,7 @@ void SwHTMLParser::RestoreAttrTab( const _HTMLAttrTable& rNewAttrTab,
     for( USHORT nCnt = sizeof( _HTMLAttrTable ) / sizeof( _HTMLAttr* );
         nCnt--; (++pTbl, ++pSaveTbl) )
     {
-        ASSERT( !*pTbl, "Die Attribut-Tabelle ist nicht leer!" );
+        OSL_ENSURE( !*pTbl, "Die Attribut-Tabelle ist nicht leer!" );
 
         const SwPosition *pPos = pPam->GetPoint();
         const SwNodeIndex& rSttPara = pPos->nNode;
@@ -3316,7 +3316,7 @@ void SwHTMLParser::RestoreAttrTab( const _HTMLAttrTable& rNewAttrTab,
         _HTMLAttr *pAttr = *pTbl;
         while( pAttr )
         {
-            ASSERT( !pAttr->GetPrev() || !pAttr->GetPrev()->ppHead,
+            OSL_ENSURE( !pAttr->GetPrev() || !pAttr->GetPrev()->ppHead,
                     "Previous-Attribut hat noch einen Header" );
             pAttr->SetHead( pTbl );
             if( bSetNewStart )
@@ -3463,12 +3463,12 @@ void SwHTMLParser::NewStdAttr( int nToken,
         InsertAttr( ppAttr ,rItem, pCntxt );
         if( pItem2 )
         {
-            ASSERT( ppAttr2, "missing table entry for item2" );
+            OSL_ENSURE( ppAttr2, "missing table entry for item2" );
             InsertAttr( ppAttr2, *pItem2, pCntxt );
         }
         if( pItem3 )
         {
-            ASSERT( ppAttr3, "missing table entry for item3" );
+            OSL_ENSURE( ppAttr3, "missing table entry for item3" );
             InsertAttr( ppAttr3, *pItem3, pCntxt );
         }
     }
@@ -3679,7 +3679,7 @@ void SwHTMLParser::NewFontAttr( int nToken )
             nFontHeight = aFontHeights[nSize-1];
     }
 
-    ASSERT( !nSize == !nFontHeight, "HTML-Font-Size != Font-Height" );
+    OSL_ENSURE( !nSize == !nFontHeight, "HTML-Font-Size != Font-Height" );
 
     String aFontName, aStyleName;
     FontFamily eFamily = FAMILY_DONTKNOW;   // Family und Pitch,
@@ -3857,7 +3857,7 @@ void SwHTMLParser::NewPara()
 
         if( ParseStyleOptions( aStyle, aId, aEmptyStr, aItemSet, aPropInfo, &aLang, &aDir ) )
         {
-            ASSERT( !aClass.Len() || !pCSS1Parser->GetClass( aClass ),
+            OSL_ENSURE( !aClass.Len() || !pCSS1Parser->GetClass( aClass ),
                     "Class wird nicht beruecksichtigt" );
             DoPositioning( aItemSet, aPropInfo, pCntxt );
             InsertAttrs( aItemSet, aPropInfo, pCntxt );
@@ -3876,7 +3876,7 @@ void SwHTMLParser::NewPara()
     // Laufbalkenanzeige
     ShowStatline();
 
-    ASSERT( !nOpenParaToken, "Jetzt geht ein offenes Absatz-Element verloren" );
+    OSL_ENSURE( !nOpenParaToken, "Jetzt geht ein offenes Absatz-Element verloren" );
     nOpenParaToken = HTML_PARABREAK_ON;
 }
 
@@ -3884,10 +3884,10 @@ void SwHTMLParser::EndPara( BOOL bReal )
 {
     if( HTML_LI_ON==nOpenParaToken && pTable )
     {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         const SwNumRule *pNumRule = pPam->GetNode()->GetTxtNode()->GetNumRule();
+        OSL_ENSURE( pNumRule, "Wo ist die Numrule geblieben" );
 #endif
-        ASSERT( pNumRule, "Wo ist die Numrule geblieben" );
     }
 
     // leere Absaetze werden von Netscape uebersprungen, von uns jetzt auch
@@ -3992,7 +3992,7 @@ void SwHTMLParser::NewHeading( int nToken )
 
         if( ParseStyleOptions( aStyle, aId, aEmptyStr, aItemSet, aPropInfo, &aLang, &aDir ) )
         {
-            ASSERT( !aClass.Len() || !pCSS1Parser->GetClass( aClass ),
+            OSL_ENSURE( !aClass.Len() || !pCSS1Parser->GetClass( aClass ),
                     "Class wird nicht beruecksichtigt" );
             DoPositioning( aItemSet, aPropInfo, pCntxt );
             InsertAttrs( aItemSet, aPropInfo, pCntxt );
@@ -4108,7 +4108,7 @@ void SwHTMLParser::NewTxtFmtColl( int nToken, USHORT nColl )
         eMode = AM_SOFTNOSPACE;
         break;
     default:
-        ASSERT( !this, "unbekannte Vorlage" );
+        OSL_ENSURE( !this, "unbekannte Vorlage" );
         break;
     }
     if( pPam->GetPoint()->nContent.GetIndex() )
@@ -4127,7 +4127,7 @@ void SwHTMLParser::NewTxtFmtColl( int nToken, USHORT nColl )
 
         if( ParseStyleOptions( aStyle, aId, aEmptyStr, aItemSet, aPropInfo, &aLang, &aDir ) )
         {
-            ASSERT( !aClass.Len() || !pCSS1Parser->GetClass( aClass ),
+            OSL_ENSURE( !aClass.Len() || !pCSS1Parser->GetClass( aClass ),
                     "Class wird nicht beruecksichtigt" );
             DoPositioning( aItemSet, aPropInfo, pCntxt );
             InsertAttrs( aItemSet, aPropInfo, pCntxt );
@@ -4161,7 +4161,7 @@ void SwHTMLParser::EndTxtFmtColl( int nToken )
         eMode = AM_SOFTNOSPACE;
         break;
     default:
-        ASSERT( !this, "unbekannte Vorlage" );
+        OSL_ENSURE( !this, "unbekannte Vorlage" );
         break;
     }
     if( pPam->GetPoint()->nContent.GetIndex() )
@@ -4343,7 +4343,7 @@ void SwHTMLParser::NewDefListItem( int nToken )
     if( !bInDefList )
     {
         nDefListDeep++;
-        ASSERT( !nOpenParaToken,
+        OSL_ENSURE( !nOpenParaToken,
                 "Jetzt geht ein offenes Absatz-Element verloren" );
         nOpenParaToken = static_cast< sal_uInt16 >(nToken);
     }
@@ -4742,7 +4742,7 @@ void SwHTMLParser::NewCharFmt( int nToken )
 
     // die Vorlage setzen und im Kontext merken
     SwCharFmt* pCFmt = pCSS1Parser->GetChrFmt( static_cast< sal_uInt16 >(nToken), aClass );
-    ASSERT( pCFmt, "keine Zeichenvorlage zu Token gefunden" );
+    OSL_ENSURE( pCFmt, "keine Zeichenvorlage zu Token gefunden" );
 
 
     // Styles parsen (zu Class siehe auch NewPara)
@@ -4753,7 +4753,7 @@ void SwHTMLParser::NewCharFmt( int nToken )
 
         if( ParseStyleOptions( aStyle, aId, aEmptyStr, aItemSet, aPropInfo, &aLang, &aDir ) )
         {
-            ASSERT( !aClass.Len() || !pCSS1Parser->GetClass( aClass ),
+            OSL_ENSURE( !aClass.Len() || !pCSS1Parser->GetClass( aClass ),
                     "Class wird nicht beruecksichtigt" );
             DoPositioning( aItemSet, aPropInfo, pCntxt );
             InsertAttrs( aItemSet, aPropInfo, pCntxt, TRUE );
@@ -5329,7 +5329,7 @@ void SwHTMLParser::InsertHorzRule()
 
     // den aktuellen Kontext vom Stack holen
     _HTMLAttrContext *pPoppedContext = PopContext( HTML_HORZRULE );
-    ASSERT( pPoppedContext==pCntxt, "wo kommt denn da ein HR-Kontext her?" );
+    OSL_ENSURE( pPoppedContext==pCntxt, "wo kommt denn da ein HR-Kontext her?" );
     delete pPoppedContext;
 
     pPam->Move( fnMoveForward );
@@ -5480,11 +5480,11 @@ void _HTMLAttr::Reset( const SwNodeIndex& rSttPara, USHORT nSttCnt,
 
 void _HTMLAttr::InsertPrev( _HTMLAttr *pPrv )
 {
-    ASSERT( !pPrv->pNext || pPrv->pNext == this,
+    OSL_ENSURE( !pPrv->pNext || pPrv->pNext == this,
             "_HTMLAttr::InsertPrev: pNext falsch" );
     pPrv->pNext = 0;
 
-    ASSERT( 0 == pPrv->ppHead || ppHead == pPrv->ppHead,
+    OSL_ENSURE( 0 == pPrv->ppHead || ppHead == pPrv->ppHead,
             "_HTMLAttr::InsertPrev: ppHead falsch" );
     pPrv->ppHead = 0;
 

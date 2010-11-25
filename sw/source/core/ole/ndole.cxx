@@ -281,7 +281,7 @@ Graphic* SwOLENode::GetGraphic()
 SwCntntNode *SwOLENode::SplitCntntNode( const SwPosition & )
 {
     // OLE-Objecte vervielfaeltigen ??
-    ASSERT( FALSE, "OleNode: can't split." );
+    OSL_ENSURE( FALSE, "OleNode: can't split." );
     return this;
 }
 
@@ -298,7 +298,7 @@ BOOL SwOLENode::RestorePersistentData()
         {
             // TODO/LATER: reicht hier nicht ein EmbeddedObjectContainer? Was passiert mit
             // diesem Dokument?
-            ASSERT( !this, "warum wird hier eine DocShell angelegt?" );
+            OSL_ENSURE( !this, "warum wird hier eine DocShell angelegt?" );
             p = new SwDocShell( GetDoc(), SFX_CREATE_MODE_INTERNAL );
             p->DoInitNew( NULL );
         }
@@ -376,7 +376,7 @@ SwOLENode * SwNodes::MakeOLENode( const SwNodeIndex & rWhere,
                                     SwGrfFmtColl* pGrfColl,
                                     SwAttrSet* pAutoAttr )
 {
-    ASSERT( pGrfColl,"SwNodes::MakeOLENode: Formatpointer ist 0." );
+    OSL_ENSURE( pGrfColl,"SwNodes::MakeOLENode: Formatpointer ist 0." );
 
     SwOLENode *pNode =
         new SwOLENode( rWhere, xObj, pGrfColl, pAutoAttr );
@@ -398,7 +398,7 @@ SwOLENode * SwNodes::MakeOLENode( const SwNodeIndex & rWhere,
 SwOLENode * SwNodes::MakeOLENode( const SwNodeIndex & rWhere,
     const String &rName, sal_Int64 nAspect, SwGrfFmtColl* pGrfColl, SwAttrSet* pAutoAttr )
 {
-    ASSERT( pGrfColl,"SwNodes::MakeOLENode: Formatpointer ist 0." );
+    OSL_ENSURE( pGrfColl,"SwNodes::MakeOLENode: Formatpointer ist 0." );
 
     SwOLENode *pNode =
         new SwOLENode( rWhere, rName, nAspect, pGrfColl, pAutoAttr );
@@ -430,8 +430,8 @@ SwCntntNode* SwOLENode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     {
         // TODO/LATER: reicht hier nicht ein EmbeddedObjectContainer? Was passiert mit
         // diesem Dokument?
-        ASSERT( pDoc->GetRefForDocShell(),
-                        "wo ist die Ref-Klasse fuer die DocShell?")
+        OSL_ENSURE( pDoc->GetRefForDocShell(),
+                        "wo ist die Ref-Klasse fuer die DocShell?");
         p = new SwDocShell( pDoc, SFX_CREATE_MODE_INTERNAL );
         *pDoc->GetRefForDocShell() = p;
         p->DoInitNew( NULL );
@@ -736,7 +736,7 @@ void SwOLEObj::SetNode( SwOLENode* pNode )
         {
             // TODO/LATER: reicht hier nicht ein EmbeddedObjectContainer? Was passiert mit
             // diesem Dokument?
-            ASSERT( !this, "warum wird hier eine DocShell angelegt?" );
+            OSL_ENSURE( !this, "warum wird hier eine DocShell angelegt?" );
             p = new SwDocShell( pDoc, SFX_CREATE_MODE_INTERNAL );
             p->DoInitNew( NULL );
         }
@@ -771,10 +771,10 @@ uno::Reference < embed::XEmbeddedObject > SwOLEObj::GetOleRef()
     if( !xOLERef.is() )
     {
         SfxObjectShell* p = pOLENd->GetDoc()->GetPersist();
-        ASSERT( p, "kein SvPersist vorhanden" );
+        OSL_ENSURE( p, "kein SvPersist vorhanden" );
 
         uno::Reference < embed::XEmbeddedObject > xObj = p->GetEmbeddedObjectContainer().GetEmbeddedObject( aName );
-        ASSERT( !xOLERef.is(), "rekursiver Aufruf von GetOleRef() ist nicht erlaubt" )
+        OSL_ENSURE( !xOLERef.is(), "rekursiver Aufruf von GetOleRef() ist nicht erlaubt" );
 
         if ( !xObj.is() )
         {

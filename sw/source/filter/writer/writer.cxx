@@ -93,7 +93,7 @@ Writer_Impl::~Writer_Impl()
 
 void Writer_Impl::RemoveFontList( SwDoc& rDoc )
 {
-    ASSERT( pFontRemoveLst, "wo ist die FontListe?" );
+    OSL_ENSURE( pFontRemoveLst, "wo ist die FontListe?" );
     for( USHORT i = pFontRemoveLst->Count(); i; )
     {
         SvxFontItem* pItem = (SvxFontItem*)(*pFontRemoveLst)[ --i ];
@@ -232,7 +232,7 @@ SwPaM* Writer::NewSwPaM( SwDoc & rDoc, ULONG nStartIdx, ULONG nEndIdx,
     SwCntntNode* pCNode = aStt.GetNode().GetCntntNode();
     if( !pCNode && 0 == ( pCNode = pNds->GoNext( &aStt )) )
     {
-        ASSERT( false, "An StartPos kein ContentNode mehr" );
+        OSL_ENSURE( false, "An StartPos kein ContentNode mehr" );
     }
 
     SwPaM* pNew = new SwPaM( aStt );
@@ -241,7 +241,7 @@ SwPaM* Writer::NewSwPaM( SwDoc & rDoc, ULONG nStartIdx, ULONG nEndIdx,
     if( 0 == (pCNode = aStt.GetNode().GetCntntNode()) &&
         0 == (pCNode = pNds->GoPrevious( &aStt )) )
     {
-        ASSERT( false, "An StartPos kein ContentNode mehr" );
+        OSL_ENSURE( false, "An StartPos kein ContentNode mehr" );
     }
     pCNode->MakeEndIndex( &pNew->GetPoint()->nContent );
     pNew->GetPoint()->nNode = aStt;
@@ -253,7 +253,7 @@ SwPaM* Writer::NewSwPaM( SwDoc & rDoc, ULONG nStartIdx, ULONG nEndIdx,
 // Stream-spezifisches
 SvStream& Writer::Strm()
 {
-    ASSERT( m_pImpl->m_pStream, "Oh-oh. Writer with no Stream!" );
+    OSL_ENSURE( m_pImpl->m_pStream, "Oh-oh. Writer with no Stream!" );
     return *m_pImpl->m_pStream;
 }
 
@@ -345,13 +345,13 @@ ULONG Writer::Write( SwPaM& rPam, SfxMedium& rMed, const String* pFileName )
 
 ULONG Writer::Write( SwPaM& /*rPam*/, SvStorage&, const String* )
 {
-    ASSERT( !this, "Schreiben in Storages auf einem Stream?" );
+    OSL_ENSURE( !this, "Schreiben in Storages auf einem Stream?" );
     return ERR_SWG_WRITE_ERROR;
 }
 
 ULONG Writer::Write( SwPaM&, const uno::Reference < embed::XStorage >&, const String*, SfxMedium* )
 {
-    ASSERT( !this, "Schreiben in Storages auf einem Stream?" );
+    OSL_ENSURE( !this, "Schreiben in Storages auf einem Stream?" );
     return ERR_SWG_WRITE_ERROR;
 }
 
@@ -532,7 +532,7 @@ void Writer::CreateBookmarkTbl()
 USHORT Writer::GetBookmarks(const SwCntntNode& rNd, xub_StrLen nStt,
     xub_StrLen nEnd, SvPtrarr& rArr)
 {
-    ASSERT( !rArr.Count(), "es sind noch Eintraege vorhanden" );
+    OSL_ENSURE( !rArr.Count(), "es sind noch Eintraege vorhanden" );
 
     ULONG nNd = rNd.GetIndex();
     SvPtrarr* pArr = (m_pImpl->pBkmkNodePos) ?
@@ -576,7 +576,7 @@ USHORT Writer::GetBookmarks(const SwCntntNode& rNd, xub_StrLen nStt,
 
 ULONG StgWriter::WriteStream()
 {
-    ASSERT( !this, "Schreiben in Streams auf einem Storage?" );
+    OSL_ENSURE( !this, "Schreiben in Streams auf einem Storage?" );
     return ERR_SWG_WRITE_ERROR;
 }
 

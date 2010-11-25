@@ -77,7 +77,7 @@ SV_IMPL_OP_PTRARR_SORT( SwSortElements, SwSortElementPtr );
 void SwSortElement::Init( SwDoc* pD, const SwSortOptions& rOpt,
                             FlatFndBox* pFltBx )
 {
-    ASSERT( !pDoc && !pOptions && !pBox, "wer hat das Finit vergessen?" );
+    OSL_ENSURE( !pDoc && !pOptions && !pBox, "wer hat das Finit vergessen?" );
     pDoc = pD;
     pOptions = new SwSortOptions( rOpt );
     pBox = pFltBx;
@@ -265,7 +265,7 @@ String SwSortBoxElement::GetKey(USHORT nKey) const
     if( pFndBox )
     {   // StartNode holen und ueberlesen
         const SwTableBox* pMyBox = pFndBox->GetBox();
-        ASSERT(pMyBox, "Keine atomare Box");
+        OSL_ENSURE(pMyBox, "Keine atomare Box");
 
         if( pMyBox->GetSttNd() )
         {
@@ -485,7 +485,7 @@ BOOL SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
 BOOL SwDoc::SortTbl(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
 {
     // uebers SwDoc fuer Undo !!
-    ASSERT( rBoxes.Count(), "keine gueltige Box-Liste" );
+    OSL_ENSURE( rBoxes.Count(), "keine gueltige Box-Liste" );
     SwTableNode* pTblNd = (SwTableNode*)rBoxes[0]->GetSttNd()->FindTableNode();
     if( !pTblNd )
         return FALSE;
@@ -712,7 +712,7 @@ void MoveCol(SwDoc* pDoc, const FlatFndBox& rBox, USHORT nS, USHORT nT,
 void MoveCell(SwDoc* pDoc, const SwTableBox* pSource, const SwTableBox* pTar,
               BOOL bMovedBefore, SwUndoSort* pUD)
 {
-    ASSERT(pSource && pTar,"Fehlende Quelle oder Ziel");
+    OSL_ENSURE(pSource && pTar,"Fehlende Quelle oder Ziel");
 
     if(pSource == pTar)
         return;
@@ -742,7 +742,7 @@ void MoveCell(SwDoc* pDoc, const SwTableBox* pSource, const SwTableBox* pTar,
     BOOL bDelFirst = FALSE;
     if( nCount == 2 )
     {
-        ASSERT( pNd->GetCntntNode(), "Kein ContentNode");
+        OSL_ENSURE( pNd->GetCntntNode(), "Kein ContentNode");
         bDelFirst = !pNd->GetCntntNode()->Len() && bMovedBefore;
     }
 
@@ -969,13 +969,13 @@ const _FndBox* FlatFndBox::GetBox(USHORT n_Col, USHORT n_Row) const
     USHORT nOff = n_Row * nCols + n_Col;
     const _FndBox* pTmp = *(pArr + nOff);
 
-    ASSERT(n_Col < nCols && n_Row < nRows && pTmp, "unzulaessiger Array-Zugriff");
+    OSL_ENSURE(n_Col < nCols && n_Row < nRows && pTmp, "unzulaessiger Array-Zugriff");
     return pTmp;
 }
 
 const SfxItemSet* FlatFndBox::GetItemSet(USHORT n_Col, USHORT n_Row) const
 {
-    ASSERT( !ppItemSets || ( n_Col < nCols && n_Row < nRows), "unzulaessiger Array-Zugriff");
+    OSL_ENSURE( !ppItemSets || ( n_Col < nCols && n_Row < nRows), "unzulaessiger Array-Zugriff");
 
     return ppItemSets ? *(ppItemSets + (n_Row * nCols + n_Col )) : 0;
 }

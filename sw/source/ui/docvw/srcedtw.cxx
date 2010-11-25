@@ -660,13 +660,13 @@ void SwSrcEditWindow::ImpDoHighlight( const String& rSource, USHORT nLineOff )
         // optimiert das die TextEngine.
         USHORT nLastEnd = 0;
 
-#if OSL_DEBUG_LEVEL > 0
-        USHORT nLine = aPortionList[0].nLine;
-#endif
         for ( USHORT i = 0; i < nCount; i++ )
         {
             SwTextPortion& r = aPortionList[i];
+#if OSL_DEBUG_LEVEL > 1
+            USHORT nLine = aPortionList[0].nLine;
             OSL_ENSURE( r.nLine == nLine, "doch mehrere Zeilen ?" );
+#endif
             if ( r.nStart > r.nEnd )    // Nur bis Bug von MD behoeben
                 continue;
 

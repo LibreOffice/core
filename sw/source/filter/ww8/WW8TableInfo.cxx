@@ -206,7 +206,7 @@ GridColsPtr WW8TableNodeInfoInner::getGridColsOfRow(AttributeOutputBase & rBase)
     WidthsPtr pWidths(getWidthsOfRow());
 
     const SwFrmFmt *pFmt = getTable()->GetFrmFmt();
-    ASSERT(pFmt,"Impossible");
+    OSL_ENSURE(pFmt,"Impossible");
     if (!pFmt)
         return pResult;
 

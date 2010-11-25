@@ -157,7 +157,7 @@ void XTextRangeOrNodeIndexPosition::SetAsNodeIndex(
 
     // SwXTextRange -> PaM
     SwUnoInternalPaM aPaM(*pDoc);
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     sal_Bool bSuccess =
 #endif
         ::sw::XTextRangeToSwPaM(aPaM, rRange);
@@ -175,7 +175,7 @@ void XTextRangeOrNodeIndexPosition::CopyPositionInto(SwPosition& rPos)
     if (NULL == pIndex)
     {
         SwUnoInternalPaM aUnoPaM(*GetDoc());
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         sal_Bool bSuccess =
 #endif
             ::sw::XTextRangeToSwPaM(aUnoPaM, xRange);
@@ -685,9 +685,9 @@ void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
             if( nPoint < pRedlineInfo->pContentIndex->GetIndex() ||
                 nPoint > pRedlineInfo->pContentIndex->GetNode().EndOfSectionIndex() )
                 pRedline->SetContentIdx(pRedlineInfo->pContentIndex);
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
             else
-                ASSERT( false, "Recursive change tracking" );
+                OSL_ENSURE( false, "Recursive change tracking" );
 #endif
         }
 

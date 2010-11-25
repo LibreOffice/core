@@ -100,17 +100,11 @@
 // <--
 #include <fldupde.hxx>
 
-
-#ifndef DBG_UTIL
-#define CHECK_TABLE(t)
-#else
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 #define CHECK_TABLE(t) (t).CheckConsistency();
 #else
 #define CHECK_TABLE(t)
 #endif
-#endif
-
 
 using namespace ::com::sun::star;
 
@@ -278,7 +272,7 @@ BOOL SwNodes::InsBoxen( SwTableNode* pTblNd,
 {
     if( !nCnt )
         return FALSE;
-    ASSERT( pLine, "keine gueltige Zeile" );
+    OSL_ENSURE( pLine, "keine gueltige Zeile" );
 
     // Index hinter die letzte Box der Line
     ULONG nIdxPos = 0;
@@ -372,8 +366,8 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
                                    BOOL bCalledFromShell,
                                    BOOL bNewModel )
 {
-    ASSERT( nRows, "Tabelle ohne Zeile?" );
-    ASSERT( nCols, "Tabelle ohne Spalten?" );
+    OSL_ENSURE( nRows, "Tabelle ohne Zeile?" );
+    OSL_ENSURE( nCols, "Tabelle ohne Spalten?" );
 
     {
         // nicht in Fussnoten kopieren !!
@@ -728,7 +722,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
 
     if( aRg.aEnd.GetIndex() == aRg.aStart.GetIndex() )
     {
-        ASSERT( FALSE, "Kein Bereich" );
+        OSL_ENSURE( FALSE, "Kein Bereich" );
         aRg.aEnd++;
     }
 
@@ -769,7 +763,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
             GetTxtCollFromPool( RES_POOLCOLL_STANDARD ), pUndo );
 
     SwTable * pNdTbl = &pTblNd->GetTable();
-    ASSERT( pNdTbl, "kein Tabellen-Node angelegt."  )
+    OSL_ENSURE( pNdTbl, "kein Tabellen-Node angelegt."  );
 
     const USHORT nRowsToRepeat =
             tabopts::HEADLINE == (rInsTblOpts.mnInsMode & tabopts::HEADLINE) ?
@@ -944,7 +938,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
         aSttIdx += 2, nLines++, nBoxes = 0 )
     {
         SwTxtNode* pTxtNd = aSttIdx.GetNode().GetTxtNode();
-        ASSERT( pTxtNd, "nur TextNodes in der Tabelle aufnehmen" );
+        OSL_ENSURE( pTxtNd, "nur TextNodes in der Tabelle aufnehmen" );
 
         if( !nLines && 0x0b == cCh )
         {
@@ -1101,7 +1095,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
 
         // damit die Tabelle die richtige Groesse bekommt, im BoxFormat die
         // Groesse nach "oben" transportieren.
-        ASSERT( !pBoxFmt->GetDepends(), "wer ist in dem Format noch angemeldet" );
+        OSL_ENSURE( !pBoxFmt->GetDepends(), "wer ist in dem Format noch angemeldet" );
         pBoxFmt->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE, nLastPos ));
     }
     else
@@ -1170,7 +1164,7 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
 
     if( aRg.aEnd.GetIndex() == aRg.aStart.GetIndex() )
     {
-        ASSERT( FALSE, "Kein Bereich" );
+        OSL_ENSURE( FALSE, "Kein Bereich" );
         aRg.aEnd++;
     }
 
@@ -1209,7 +1203,7 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
             GetTxtCollFromPool( RES_POOLCOLL_STANDARD )/*, pUndo*/ );
 
     SwTable * pNdTbl = &pTblNd->GetTable();
-    ASSERT( pNdTbl, "kein Tabellen-Node angelegt."  )
+    OSL_ENSURE( pNdTbl, "kein Tabellen-Node angelegt."  );
    pTableFmt->Add( pNdTbl );       // das Frame-Format setzen
 
     BOOL bUseBoxFmt = FALSE;
@@ -1371,7 +1365,6 @@ SwTableNode* SwNodes::TextToTable( const SwNodes::TableRanges_t & rTableNodes,
         aRowIter != rTableNodes.end();
         ++aRowIter, nLines++, nBoxes = 0 )
     {
-
         pLine = new SwTableLine( pLineFmt, 1, 0 );
         pTable->GetTabLines().C40_INSERT( SwTableLine, pLine, nLines );
 
@@ -1426,7 +1419,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodes::TableRanges_t & rTableNodes,
 
         // damit die Tabelle die richtige Groesse bekommt, im BoxFormat die
         // Groesse nach "oben" transportieren.
-        ASSERT( !pBoxFmt->GetDepends(), "wer ist in dem Format noch angemeldet" );
+        OSL_ENSURE( !pBoxFmt->GetDepends(), "wer ist in dem Format noch angemeldet" );
         pBoxFmt->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE, nLastPos ));
     }
     else
@@ -1509,7 +1502,7 @@ BOOL lcl_DelBox( const SwTableBox*&, void *pPara );
 
 BOOL lcl_DelLine( const SwTableLine*& rpLine, void* pPara )
 {
-    ASSERT( pPara, "die Parameter fehlen" );
+    OSL_ENSURE( pPara, "die Parameter fehlen" );
     _DelTabPara aPara( *(_DelTabPara*)pPara );
     ((SwTableLine*&)rpLine)->GetTabBoxes().ForEach( &lcl_DelBox, &aPara );
     if( rpLine->GetUpper() )        // gibt es noch eine uebergeordnete Box ??
@@ -1521,7 +1514,7 @@ BOOL lcl_DelLine( const SwTableLine*& rpLine, void* pPara )
 
 BOOL lcl_DelBox( const SwTableBox*& rpBox, void* pPara )
 {
-    ASSERT( pPara, "die Parameter fehlen" );
+    OSL_ENSURE( pPara, "die Parameter fehlen" );
 
     // loesche erstmal die Lines der Box
     _DelTabPara* pDelPara = (_DelTabPara*)pPara;
@@ -1717,7 +1710,7 @@ BOOL SwDoc::InsertCol( const SwCursor& rCursor, USHORT nCnt, BOOL bBehind )
 BOOL SwDoc::InsertCol( const SwSelBoxes& rBoxes, USHORT nCnt, BOOL bBehind )
 {
     // uebers SwDoc fuer Undo !!
-    ASSERT( rBoxes.Count(), "keine gueltige Box-Liste" );
+    OSL_ENSURE( rBoxes.Count(), "keine gueltige Box-Liste" );
     SwTableNode* pTblNd = (SwTableNode*)rBoxes[0]->GetSttNd()->FindTableNode();
     if( !pTblNd )
         return FALSE;
@@ -1782,7 +1775,7 @@ BOOL SwDoc::InsertRow( const SwCursor& rCursor, USHORT nCnt, BOOL bBehind )
 BOOL SwDoc::InsertRow( const SwSelBoxes& rBoxes, USHORT nCnt, BOOL bBehind )
 {
     // uebers SwDoc fuer Undo !!
-    ASSERT( rBoxes.Count(), "keine gueltige Box-Liste" );
+    OSL_ENSURE( rBoxes.Count(), "keine gueltige Box-Liste" );
     SwTableNode* pTblNd = (SwTableNode*)rBoxes[0]->GetSttNd()->FindTableNode();
     if( !pTblNd )
         return FALSE;
@@ -1973,7 +1966,7 @@ BOOL SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn )
         return FALSE;
 
     // uebers SwDoc fuer Undo !!
-    ASSERT( rBoxes.Count(), "keine gueltige Box-Liste" );
+    OSL_ENSURE( rBoxes.Count(), "keine gueltige Box-Liste" );
     SwTableNode* pTblNd = (SwTableNode*)rBoxes[0]->GetSttNd()->FindTableNode();
     if( !pTblNd )
         return FALSE;
@@ -2183,7 +2176,7 @@ BOOL SwDoc::SplitTbl( const SwSelBoxes& rBoxes, sal_Bool bVert, USHORT nCnt,
                       sal_Bool bSameHeight )
 {
     // uebers SwDoc fuer Undo !!
-    ASSERT( rBoxes.Count() && nCnt, "keine gueltige Box-Liste" );
+    OSL_ENSURE( rBoxes.Count() && nCnt, "keine gueltige Box-Liste" );
     SwTableNode* pTblNd = (SwTableNode*)rBoxes[0]->GetSttNd()->FindTableNode();
     if( !pTblNd )
         return FALSE;
@@ -2397,7 +2390,7 @@ void SwTableNode::MakeFrms(const SwNodeIndex & rIdx )
     SwFrm *pFrm, *pNew;
     SwCntntNode * pNode = rIdx.GetNode().GetCntntNode();
 
-    ASSERT( pNode, "Kein Contentnode oder Copy-Node und neuer Node identisch.");
+    OSL_ENSURE( pNode, "Kein Contentnode oder Copy-Node und neuer Node identisch.");
 
     BOOL bBefore = rIdx < GetIndex();
 
@@ -2421,7 +2414,7 @@ void SwTableNode::MakeFrms(const SwNodeIndex & rIdx )
 
 void SwTableNode::MakeFrms( SwNodeIndex* pIdxBehind )
 {
-    ASSERT( pIdxBehind, "kein Index" );
+    OSL_ENSURE( pIdxBehind, "kein Index" );
     *pIdxBehind = *this;
     SwNode *pNd = GetNodes().FindPrvNxtFrmNode( *pIdxBehind, EndOfSectionNode() );
     if( !pNd )
@@ -2546,7 +2539,7 @@ void SwDoc::GetTabCols( SwTabCols &rFill, const SwCursor* pCrsr,
     }
     else if( !pCrsr && !pBoxFrm )
     {
-        ASSERT( !this, "einer von beiden muss angegeben werden!" );
+        OSL_ENSURE( !this, "einer von beiden muss angegeben werden!" );
         return ;
     }
 
@@ -2600,7 +2593,7 @@ bool lcl_IsFrmInColumn( const SwCellFrm& rFrm, SwSelBoxes& rBoxes )
 void SwDoc::GetTabRows( SwTabCols &rFill, const SwCursor* ,
                         const SwCellFrm* pBoxFrm ) const
 {
-    ASSERT( pBoxFrm, "GetTabRows called without pBoxFrm" )
+    OSL_ENSURE( pBoxFrm, "GetTabRows called without pBoxFrm" );
 
     // --> FME 2005-09-12 #121591# Make code robust:
     if ( !pBoxFrm )
@@ -2625,14 +2618,14 @@ void SwDoc::GetTabRows( SwTabCols &rFill, const SwCursor* ,
     // --> FME 2005-09-12 #121591# Make code robust:
     if ( aDelCheck.HasBeenDeleted() )
     {
-        ASSERT( false, "Current box has been deleted during GetTabRows()" )
+        OSL_ENSURE( false, "Current box has been deleted during GetTabRows()" );
         return;
     }
     // <--
 
     // --> FME 2005-09-12 #121591# Make code robust:
     const SwTabFrm* pTab = pBoxFrm->FindTabFrm();
-    ASSERT( pTab, "GetTabRows called without a table" )
+    OSL_ENSURE( pTab, "GetTabRows called without a table" );
     if ( !pTab )
         return;
     // <--
@@ -2729,7 +2722,7 @@ void SwDoc::GetTabRows( SwTabCols &rFill, const SwCursor* ,
     }
 
     // delete first and last entry
-    ASSERT( rFill.Count(), "Deleting from empty vector. Fasten your seatbelts!" )
+    OSL_ENSURE( rFill.Count(), "Deleting from empty vector. Fasten your seatbelts!" );
     // --> FME 2006-01-19 #i60818# There may be only one entry in rFill. Make
     // code robust by checking count of rFill.
     if ( rFill.Count() ) rFill.Remove( 0, 1 );
@@ -2771,7 +2764,7 @@ void SwDoc::SetTabCols( const SwTabCols &rNew, BOOL bCurRowOnly,
     }
     else if( !pCrsr && !pBoxFrm )
     {
-        ASSERT( !this, "einer von beiden muss angegeben werden!" );
+        OSL_ENSURE( !this, "einer von beiden muss angegeben werden!" );
         return ;
     }
 
@@ -2820,7 +2813,7 @@ void SwDoc::SetTabRows( const SwTabCols &rNew, BOOL bCurColOnly, const SwCursor*
     const SwTableBox* pBox;
     SwTabFrm *pTab;
 
-    ASSERT( pBoxFrm, "SetTabRows called without pBoxFrm" )
+    OSL_ENSURE( pBoxFrm, "SetTabRows called without pBoxFrm" );
 
     pTab = ((SwFrm*)pBoxFrm)->ImplFindTabFrm();
     pBox = pBoxFrm->GetTabBox();
@@ -2857,7 +2850,7 @@ void SwDoc::SetTabRows( const SwTabCols &rNew, BOOL bCurColOnly, const SwCursor*
     // check for differences between aOld and rNew:
     const USHORT nCount = rNew.Count();
     const SwTable* pTable = pTab->GetTable();
-    ASSERT( pTable, "My colleague told me, this couldn't happen" );
+    OSL_ENSURE( pTable, "My colleague told me, this couldn't happen" );
 
     for ( USHORT i = 0; i <= nCount; ++i )
     {
@@ -3429,7 +3422,7 @@ SwTableNode* SwNodes::SplitTable( const SwNodeIndex& rPos, BOOL bAfter,
     SwTableNode * pNewTblNd;
     {
         SwEndNode* pOldTblEndNd = (SwEndNode*)pTNd->EndOfSectionNode()->GetEndNode();
-        ASSERT( pOldTblEndNd, "wo ist der EndNode?" )
+        OSL_ENSURE( pOldTblEndNd, "wo ist der EndNode?" );
 
         SwNodeIndex aIdx( *pBox->GetSttNd() );
         new SwEndNode( aIdx, *pTNd );
@@ -3441,7 +3434,7 @@ SwTableNode* SwNodes::SplitTable( const SwNodeIndex& rPos, BOOL bAfter,
 
         SwNode* pBoxNd = aIdx.GetNode().GetStartNode();
         do {
-            ASSERT( pBoxNd->IsStartNode(), "das muss ein StartNode sein!" );
+            OSL_ENSURE( pBoxNd->IsStartNode(), "das muss ein StartNode sein!" );
             pBoxNd->pStartOfSection = pNewTblNd;
             pBoxNd = (*this)[ pBoxNd->EndOfSectionIndex() + 1 ];
         } while( pBoxNd != pOldTblEndNd );
@@ -3569,10 +3562,10 @@ BOOL SwNodes::MergeTable( const SwNodeIndex& rPos, BOOL bWithPrev,
                             USHORT nMode, SwHistory* )
 {
     SwTableNode* pDelTblNd = rPos.GetNode().GetTableNode();
-    ASSERT( pDelTblNd, "wo ist der TableNode geblieben?" );
+    OSL_ENSURE( pDelTblNd, "wo ist der TableNode geblieben?" );
 
     SwTableNode* pTblNd = (*this)[ rPos.GetIndex() - 1]->FindTableNode();
-    ASSERT( pTblNd, "wo ist der TableNode geblieben?" );
+    OSL_ENSURE( pTblNd, "wo ist der TableNode geblieben?" );
 
     if( !pDelTblNd || !pTblNd )
         return FALSE;
@@ -3643,7 +3636,7 @@ BOOL SwNodes::MergeTable( const SwNodeIndex& rPos, BOOL bWithPrev,
 
     SwNode* pBoxNd = aIdx.GetNode().GetStartNode();
     do {
-        ASSERT( pBoxNd->IsStartNode(), "das muss ein StartNode sein!" );
+        OSL_ENSURE( pBoxNd->IsStartNode(), "das muss ein StartNode sein!" );
         pBoxNd->pStartOfSection = pTblNd;
         pBoxNd = (*this)[ pBoxNd->EndOfSectionIndex() + 1 ];
     } while( pBoxNd != pTblEndNd );
@@ -3766,7 +3759,7 @@ BOOL lcl_SetAFmtBox( const _FndBox*& rpBox, void *pPara )
         // AutoFormat fuer die Tabelle/TabellenSelection
 BOOL SwDoc::SetTableAutoFmt( const SwSelBoxes& rBoxes, const SwTableAutoFmt& rNew )
 {
-    ASSERT( rBoxes.Count(), "keine gueltige Box-Liste" );
+    OSL_ENSURE( rBoxes.Count(), "keine gueltige Box-Liste" );
     SwTableNode* pTblNd = (SwTableNode*)rBoxes[0]->GetSttNd()->FindTableNode();
     if( !pTblNd )
         return FALSE;
@@ -3841,7 +3834,7 @@ BOOL SwDoc::SetTableAutoFmt( const SwSelBoxes& rBoxes, const SwTableAutoFmt& rNe
         // Erfrage wie attributiert ist
 BOOL SwDoc::GetTableAutoFmt( const SwSelBoxes& rBoxes, SwTableAutoFmt& rGet )
 {
-    ASSERT( rBoxes.Count(), "keine gueltige Box-Liste" );
+    OSL_ENSURE( rBoxes.Count(), "keine gueltige Box-Liste" );
     SwTableNode* pTblNd = (SwTableNode*)rBoxes[0]->GetSttNd()->FindTableNode();
     if( !pTblNd )
         return FALSE;
@@ -4382,7 +4375,7 @@ BOOL SwDoc::InsCopyOfTbl( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
             {
                 SwTableBox* pBox = pInsTblNd->GetTable().GetTblBox(
                                         pSttNd->GetIndex() );
-                ASSERT( pBox, "Box steht nicht in dieser Tabelle" );
+                OSL_ENSURE( pBox, "Box steht nicht in dieser Tabelle" );
                 aBoxes.Insert( pBox );
                 pBoxes = &aBoxes;
             }

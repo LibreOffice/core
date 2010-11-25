@@ -256,7 +256,7 @@ public:
                            const SwLinePortion* _pDontConsiderPortion = NULL,
                            const bool _bNoFlyCntPorAndLinePor = false ) const;
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     void DebugPortions( SvStream &rOs, const XubString &rTxt,
                         const xub_StrLen nStart ); //$ ostream
 #endif

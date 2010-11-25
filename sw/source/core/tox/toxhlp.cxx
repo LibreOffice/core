@@ -58,12 +58,12 @@ IndexEntrySupplierWrapper::IndexEntrySupplierWrapper()
         }
     }
     catch ( UNO_NMSPC::Exception&
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         e
 #endif
         )
     {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         ByteString aMsg( "IndexEntrySupplierWrapper: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
@@ -84,12 +84,12 @@ String IndexEntrySupplierWrapper::GetIndexKey( const String& rTxt,
         sRet = xIES->getIndexKey( rTxt, rTxtReading, rLocale );
     }
     catch ( UNO_NMSPC::Exception&
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         e
 #endif
         )
     {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         ByteString aMsg( "getIndexKey: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
@@ -105,12 +105,12 @@ String IndexEntrySupplierWrapper::GetFollowingText( BOOL bMorePages ) const
         sRet = xIES->getIndexFollowPageWord( bMorePages, aLcl );
     }
     catch ( UNO_NMSPC::Exception&
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         e
 #endif
         )
     {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         ByteString aMsg( "getIndexFollowPageWord: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
@@ -128,12 +128,12 @@ IndexEntrySupplierWrapper::GetAlgorithmList( const STAR_NMSPC::lang::Locale& rLc
         sRet = xIES->getAlgorithmList( rLcl );
     }
     catch ( UNO_NMSPC::Exception&
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         e
 #endif
         )
     {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         ByteString aMsg( "getAlgorithmList: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
@@ -151,12 +151,12 @@ sal_Bool IndexEntrySupplierWrapper::LoadAlgorithm(
         bRet = xIES->loadAlgorithm( rLcl, sSortAlgorithm, nOptions );
     }
     catch ( UNO_NMSPC::Exception&
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         e
 #endif
         )
     {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         ByteString aMsg( "loadAlgorithm: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
@@ -177,12 +177,12 @@ sal_Int16 IndexEntrySupplierWrapper::CompareIndexEntry(
                                         rTxt2, rTxtReading2, rLocale2 );
     }
     catch ( UNO_NMSPC::Exception&
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         e
 #endif
         )
     {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         ByteString aMsg( "compareIndexEntry: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );

@@ -427,7 +427,7 @@ void DocxExport::PrepareNewPageDesc( const SfxItemSet* pSet,
     const SwSectionFmt* pFmt = GetSectionFormat( rNd );
     const ULONG nLnNm = GetSectionLineNo( pSet, rNd );
 
-    ASSERT( pNewPgDescFmt || pNewPgDesc, "Neither page desc format nor page desc provided." );
+    OSL_ENSURE( pNewPgDescFmt || pNewPgDesc, "Neither page desc format nor page desc provided." );
 
     if ( pNewPgDescFmt )
     {

@@ -1045,7 +1045,7 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
         else if( FN_UNO_TITLE == pEntry->nWID )
         {
             SwFlyFrmFmt* pFlyFmt = dynamic_cast<SwFlyFrmFmt*>(pFmt);
-            ASSERT( pFmt,
+            OSL_ENSURE( pFmt,
                     "unexpected type of <pFmt> --> crash" );
             OUString uTemp;
             aValue >>= uTemp;
@@ -1058,7 +1058,7 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
         else if( FN_UNO_DESCRIPTION == pEntry->nWID )
         {
             SwFlyFrmFmt* pFlyFmt = dynamic_cast<SwFlyFrmFmt*>(pFmt);
-            ASSERT( pFmt,
+            OSL_ENSURE( pFmt,
                     "unexpected type of <pFmt> --> crash" );
             OUString uTemp;
             aValue >>= uTemp;
@@ -1552,7 +1552,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
         else if( FN_UNO_TITLE == pEntry->nWID )
         {
             SwFlyFrmFmt* pFlyFmt = dynamic_cast<SwFlyFrmFmt*>(pFmt);
-            ASSERT( pFmt,
+            OSL_ENSURE( pFmt,
                     "unexpected type of <pFmt> --> crash" );
             // assure that <SdrObject> instance exists.
             GetOrCreateSdrObject( pFlyFmt );
@@ -1562,7 +1562,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
         else if( FN_UNO_DESCRIPTION == pEntry->nWID )
         {
             SwFlyFrmFmt* pFlyFmt = dynamic_cast<SwFlyFrmFmt*>(pFmt);
-            ASSERT( pFmt,
+            OSL_ENSURE( pFmt,
                     "unexpected type of <pFmt> --> crash" );
             // assure that <SdrObject> instance exists.
             GetOrCreateSdrObject( pFlyFmt );
@@ -1827,7 +1827,7 @@ void SwXFrame::setPropertyToDefault( const OUString& rPropertyName )
             else if( FN_UNO_TITLE == pEntry->nWID )
             {
                 SwFlyFrmFmt* pFlyFmt = dynamic_cast<SwFlyFrmFmt*>(pFmt);
-                ASSERT( pFmt,
+                OSL_ENSURE( pFmt,
                         "unexpected type of <pFmt> --> crash" );
                 // assure that <SdrObject> instance exists.
                 GetOrCreateSdrObject( pFlyFmt );
@@ -1837,7 +1837,7 @@ void SwXFrame::setPropertyToDefault( const OUString& rPropertyName )
             else if( FN_UNO_DESCRIPTION == pEntry->nWID )
             {
                 SwFlyFrmFmt* pFlyFmt = dynamic_cast<SwFlyFrmFmt*>(pFmt);
-                ASSERT( pFmt,
+                OSL_ENSURE( pFmt,
                         "unexpected type of <pFmt> --> crash" );
                 // assure that <SdrObject> instance exists.
                 GetOrCreateSdrObject( pFlyFmt );
@@ -2266,7 +2266,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                     sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
                     ::svt::EmbeddedObjectRef xObjRef( xIPObj, nAspect );
                     pFmt2 = pDoc->Insert(aPam, xObjRef, &aFrmSet, NULL, NULL );
-                    ASSERT( pFmt2, "Doc->Insert(notxt) failed." );
+                    OSL_ENSURE( pFmt2, "Doc->Insert(notxt) failed." );
 
                     pDoc->EndUndo(UNDO_INSERT, NULL);
                     pFmt2->Add(this);

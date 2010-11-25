@@ -232,7 +232,7 @@ namespace sw
                 }
                 else
                 {
-                    ASSERT(!this, "Impossible");
+                    OSL_ENSURE(!this, "Impossible");
                     meWriterType = eTxtBox;
                 }
                 break;
@@ -247,7 +247,7 @@ namespace sw
                 }
                 else
                 {
-                    ASSERT(!this, "Impossible");
+                    OSL_ENSURE(!this, "Impossible");
                     meWriterType = eDrawing;
                 }
                 break;
@@ -300,7 +300,7 @@ namespace sw
 
         bool DrawingOLEAdaptor::TransferToDoc( ::rtl::OUString &rName )
         {
-            ASSERT(mxIPRef.is(), "Transferring invalid object to doc");
+            OSL_ENSURE(mxIPRef.is(), "Transferring invalid object to doc");
             if (!mxIPRef.is())
                 return false;
 
@@ -594,7 +594,7 @@ namespace sw
                 return &(pRule->Get( static_cast< USHORT >(rTxtNode.GetActualListLevel()) ));
             }
 
-            ASSERT(rTxtNode.GetDoc(), "No document for node?, suspicious");
+            OSL_ENSURE(rTxtNode.GetDoc(), "No document for node?, suspicious");
             if (!rTxtNode.GetDoc())
                 return 0;
 
@@ -632,7 +632,7 @@ namespace sw
         SwNoTxtNode *GetNoTxtNodeFromSwFrmFmt(const SwFrmFmt &rFmt)
         {
             const SwNodeIndex *pIndex = rFmt.GetCntnt().GetCntntIdx();
-            ASSERT(pIndex, "No NodeIndex in SwFrmFmt ?, suspicious");
+            OSL_ENSURE(pIndex, "No NodeIndex in SwFrmFmt ?, suspicious");
             if (!pIndex)
                 return 0;
             SwNodeIndex aIdx(*pIndex, 1);
@@ -646,7 +646,7 @@ namespace sw
             {
                 const SwTable& rTable = rNd.GetTableNode()->GetTable();
                 const SwFrmFmt* pApply = rTable.GetFrmFmt();
-                ASSERT(pApply, "impossible");
+                OSL_ENSURE(pApply, "impossible");
                 if (pApply)
                     pBreak = &(ItemGet<SvxFmtBreakItem>(*pApply, RES_BREAK));
             }
@@ -724,13 +724,13 @@ namespace sw
                 }
             }
 
-            ASSERT(aGrTwipSz.Width() && aGrTwipSz.Height(), "0 x 0 graphic ?");
+            OSL_ENSURE(aGrTwipSz.Width() && aGrTwipSz.Height(), "0 x 0 graphic ?");
             return aGrTwipSz;
         }
 
         void RedlineStack::open(const SwPosition& rPos, const SfxPoolItem& rAttr)
         {
-            ASSERT(rAttr.Which() == RES_FLTR_REDLINE, "not a redline");
+            OSL_ENSURE(rAttr.Which() == RES_FLTR_REDLINE, "not a redline");
             maStack.push_back(new SwFltStackEntry(rPos,rAttr.Clone()));
         }
 

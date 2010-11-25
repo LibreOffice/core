@@ -565,7 +565,7 @@ void SwHTMLParser::NewNumBulListItem( int nToken )
 
         pDoc->MakeNumRule( aNumRuleName, &aNumRule );
 
-        ASSERT( !nOpenParaToken,
+        OSL_ENSURE( !nOpenParaToken,
                 "Jetzt geht ein offenes Absatz-Element verloren" );
         // Wir tun so, als ob wir in einem Absatz sind. Dann wird
         // beim naechsten Absatz wenigstens die Numerierung
@@ -675,9 +675,9 @@ void SwHTMLParser::EndNumBulListItem( int nToken, sal_Bool bSetColl,
 void SwHTMLParser::SetNodeNum( sal_uInt8 nLevel, bool bCountedInList )
 {
     SwTxtNode* pTxtNode = pPam->GetNode()->GetTxtNode();
-    ASSERT( pTxtNode, "Kein Text-Node an PaM-Position" );
+    OSL_ENSURE( pTxtNode, "Kein Text-Node an PaM-Position" );
 
-    ASSERT( GetNumInfo().GetNumRule(), "Kein Numerierungs-Regel" );
+    OSL_ENSURE( GetNumInfo().GetNumRule(), "Kein Numerierungs-Regel" );
     const String& rName = GetNumInfo().GetNumRule()->GetName();
     ((SwCntntNode *)pTxtNode)->SetAttr( SwNumRuleItem(rName) );
 
@@ -784,7 +784,7 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
                                 break;
                             }
 
-                            ASSERT(! pTxtNd->IsOutline(),
+                            OSL_ENSURE(! pTxtNd->IsOutline(),
                                    "outline not expected");
 
                             if( pTxtNd->GetActualListLevel() + 1 <
@@ -898,7 +898,7 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
                 }
                 else
                 {
-                    ASSERT( false,
+                    OSL_ENSURE( false,
                             "<OutHTML_NumBulListStart(..) - text node has no number." );
                 }
             }

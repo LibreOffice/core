@@ -195,7 +195,7 @@ BOOL lcl_FindAnchorPos( SwDoc& rDoc, const Point& rPt, const SwFrm& rFrm,
         break;
 
     default:
-        ASSERT( !&rDoc, "Falsche ID fuer neuen Anker." );
+        OSL_ENSURE( !&rDoc, "Falsche ID fuer neuen Anker." );
     }
 
     rSet.Put( aNewAnch );
@@ -218,8 +218,8 @@ sal_Bool lcl_ChkAndSetNewAnchor( const SwFlyFrm& rFly, SfxItemSet& rSet )
 
     SwDoc* pDoc = (SwDoc*)rFmt.GetDoc();
 
-#ifdef DBG_UTIL
-    ASSERT( !(nNew == FLY_AT_PAGE &&
+#if OSL_DEBUG_LEVEL > 1
+    OSL_ENSURE( !(nNew == FLY_AT_PAGE &&
         (FLY_AT_PARA==nOld || FLY_AT_CHAR==nOld || FLY_AS_CHAR==nOld ) &&
         pDoc->IsInHeaderFooter( rOldAnch.GetCntntAnchor()->nNode )),
             "Unerlaubter Ankerwechsel in Head/Foot." );
@@ -242,7 +242,7 @@ void SwFEShell::SelectFlyFrm( SwFlyFrm& rFrm, sal_Bool bNew )
     SwViewImp *pImpl = Imp();
     if( GetWin() && (bNew || !pImpl->GetDrawView()->AreObjectsMarked()) )
     {
-        ASSERT( rFrm.IsFlyFrm(), "SelectFlyFrm will einen Fly" );
+        OSL_ENSURE( rFrm.IsFlyFrm(), "SelectFlyFrm will einen Fly" );
 
         //Wenn der Fly bereits selektiert ist gibt es hier ja wohl nichts
         //zu tun.
@@ -330,8 +330,8 @@ const SwFrmFmt* SwFEShell::IsFlyInFly()
         const SwFrm* pFly = pObj->ISA(SwVirtFlyDrawObj) ?
             ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm()->GetAnchorFrm() :
             ((SwDrawContact*)GetUserCall(pObj))->GetAnchorFrm( pObj );
-        ASSERT( pFly, "IsFlyInFly: Where's my anchor?" );
-        ASSERT( pFly->IsFlyFrm(), "IsFlyInFly: Funny anchor!" );
+        OSL_ENSURE( pFly, "IsFlyInFly: Where's my anchor?" );
+        OSL_ENSURE( pFly->IsFlyFrm(), "IsFlyInFly: Funny anchor!" );
         return ((SwFlyFrm*)pFly)->GetFmt();
     }
 
@@ -595,11 +595,11 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, sal_Bool bMoveIt )
             SwRect aTmpRect( aRet, rAbsPos );
             if( aTmpRect.HasArea() )
                 MakeVisible( aTmpRect );
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
             //TODO: That doesn't seem to be intended
             if( Color(COL_TRANSPARENT) != GetOut()->GetLineColor() )
             {
-                ASSERT( FALSE, "Hey, Joe: Where's my Null Pen?" );
+                OSL_ENSURE( FALSE, "Hey, Joe: Where's my Null Pen?" );
                 GetOut()->SetLineColor( Color(COL_TRANSPARENT) );
             }
 #endif
@@ -679,7 +679,7 @@ const SwFrmFmt *SwFEShell::NewFlyFrm( const SfxItemSet& rSet, sal_Bool bAnchVali
         break;
 
     default:
-        ASSERT( !this, "Was sollte das fuer ein Fly werden?" )
+        OSL_ENSURE( !this, "Was sollte das fuer ein Fly werden?" );
         break;
     }
 
@@ -845,7 +845,7 @@ void SwFEShell::Insert( const String& rGrfName, const String& rFltName,
                                 rFltName, pGraphic,
                                 pFlyAttrSet,
                                 pGrfAttrSet, pFrmFmt );
-        ASSERT( pFmt, "Doc->Insert(notxt) failed." );
+        OSL_ENSURE( pFmt, "Doc->Insert(notxt) failed." );
 
     } while( (pCursor = dynamic_cast<SwShellCrsr*>(pCursor->GetNext()))
              != pStartCursor );
@@ -875,7 +875,7 @@ SwFlyFrmFmt* SwFEShell::InsertObject( const svt::EmbeddedObjectRef&  xObj,
         FOREACHPAM_START( this )
             pFmt = GetDoc()->Insert(*PCURCRSR, xObj,
                                     pFlyAttrSet, pGrfAttrSet, pFrmFmt );
-            ASSERT( pFmt, "Doc->Insert(notxt) failed." );
+            OSL_ENSURE( pFmt, "Doc->Insert(notxt) failed." );
 
         FOREACHPAM_END()
     EndAllAction();
@@ -1041,7 +1041,7 @@ sal_Bool SwFEShell::GetFlyFrmAttr( SfxItemSet &rSet ) const
         SwFrm* pCurrFrm( GetCurrFrm() );
         if ( !pCurrFrm )
         {
-            ASSERT( false,
+            OSL_ENSURE( false,
                     "<SwFEShell::GetFlyFrmAttr(..)> - missing current frame. This is a serious defect, please inform OD." );
             return sal_False;
         }
@@ -1049,7 +1049,7 @@ sal_Bool SwFEShell::GetFlyFrmAttr( SfxItemSet &rSet ) const
         pFly = GetCurrFrm()->FindFlyFrm();
         if ( !pFly )
         {
-            ASSERT( !this, "GetFlyFrmAttr, no Fly selected." );
+            OSL_ENSURE( !this, "GetFlyFrmAttr, no Fly selected." );
             return sal_False;
         }
     }
@@ -1104,9 +1104,9 @@ sal_Bool SwFEShell::SetFlyFrmAttr( SfxItemSet& rSet )
         SwFlyFrm *pFly = FindFlyFrm();
         if( !pFly )
         {
-            ASSERT( GetCurrFrm(), "Crsr in parking zone" );
+            OSL_ENSURE( GetCurrFrm(), "Crsr in parking zone" );
             pFly = GetCurrFrm()->FindFlyFrm();
-            ASSERT( pFly, "SetFlyFrmAttr, no Fly selected." );
+            OSL_ENSURE( pFly, "SetFlyFrmAttr, no Fly selected." );
         }
         if( pFly )
         {
@@ -1193,9 +1193,9 @@ sal_Bool SwFEShell::ResetFlyFrmAttr( sal_uInt16 nWhich, const SfxItemSet* pSet )
         SwFlyFrm *pFly = FindFlyFrm();
         if( !pFly )
         {
-            ASSERT( GetCurrFrm(), "Crsr in parking zone" );
+            OSL_ENSURE( GetCurrFrm(), "Crsr in parking zone" );
             pFly = GetCurrFrm()->FindFlyFrm();
-            ASSERT( pFly, "SetFlyFrmAttr, no Fly selected." );
+            OSL_ENSURE( pFly, "SetFlyFrmAttr, no Fly selected." );
         }
 
         if( pFly )
@@ -1263,7 +1263,7 @@ void SwFEShell::SetFrmFmt( SwFrmFmt *pNewFmt, sal_Bool bKeepOrient, Point* pDocP
     }
     else
         pFly = FindFlyFrm();
-    ASSERT( pFly, "SetFrmFmt: kein Frame" );
+    OSL_ENSURE( pFly, "SetFrmFmt: kein Frame" );
     if( pFly )
     {
         StartAllAction();
@@ -1471,9 +1471,9 @@ Size SwFEShell::RequestObjectResize( const SwRect &rRect, const uno::Reference <
         aResult = pFly->ChgSize( aSz );
 
         //Wenn sich das Objekt aendert ist die Kontur hoechstwahrscheinlich daneben.
-        ASSERT( pFly->Lower()->IsNoTxtFrm(), "Request ohne NoTxt" );
+        OSL_ENSURE( pFly->Lower()->IsNoTxtFrm(), "Request ohne NoTxt" );
         SwNoTxtNode *pNd = ((SwCntntFrm*)pFly->Lower())->GetNode()->GetNoTxtNode();
-        ASSERT( pNd, "Request ohne Node" );
+        OSL_ENSURE( pNd, "Request ohne Node" );
         pNd->SetContour( 0 );
         ClrContourCache();
     }
@@ -1554,7 +1554,7 @@ void SwFEShell::SetFlyName( const String& rName )
     if( pFly )
         GetDoc()->SetFlyName( *(SwFlyFrmFmt*)pFly->GetFmt(), rName );
     else {
-        ASSERT( !this, "kein FlyFrame selektiert" )
+        OSL_ENSURE( !this, "kein FlyFrame selektiert" );
     }
 }
 
@@ -1564,7 +1564,7 @@ const String& SwFEShell::GetFlyName() const
     if( pFly )
         return pFly->GetFmt()->GetName();
 
-    ASSERT( !this, "kein FlyFrame selektiert" )
+    OSL_ENSURE( !this, "kein FlyFrame selektiert" );
     return aEmptyStr;
 }
 
@@ -1788,7 +1788,7 @@ ObjCntType SwFEShell::GetObjCntType( const SdrObject& rObj ) const
         SwDrawContact* pDrawContact( dynamic_cast<SwDrawContact*>(GetUserCall( pInvestigatedObj ) ) );
         if ( !pDrawContact )
         {
-            ASSERT( false,
+            OSL_ENSURE( false,
                     "<SwFEShell::GetObjCntType(..)> - missing draw contact object" );
             eType = OBJCNT_NONE;
         }
@@ -1797,7 +1797,7 @@ ObjCntType SwFEShell::GetObjCntType( const SdrObject& rObj ) const
             SwFrmFmt* pFrmFmt( pDrawContact->GetFmt() );
             if ( !pFrmFmt )
             {
-                ASSERT( false,
+                OSL_ENSURE( false,
                         "<SwFEShell::GetObjCntType(..)> - missing frame format" );
                 eType = OBJCNT_NONE;
             }
@@ -1921,7 +1921,7 @@ sal_Bool SwFEShell::ReplaceSdrObj( const String& rGrfName, const String& rFltNam
 
 static USHORT SwFmtGetPageNum(const SwFlyFrmFmt * pFmt)
 {
-    ASSERT(pFmt != NULL, "invalid argument");
+    OSL_ENSURE(pFmt != NULL, "invalid argument");
 
     SwFlyFrm * pFrm = pFmt->GetFrm();
 

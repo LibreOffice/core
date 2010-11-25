@@ -45,7 +45,7 @@
 #include <guess.hxx>    //
 #include <splargs.hxx>  // SwInterHyphInfo
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 extern const sal_Char *GetLangName( const MSHORT nLang );
 #endif
 
@@ -65,7 +65,7 @@ Reference< XHyphenatedWord >  SwTxtFormatInfo::HyphWord(
 {
     if( rTxt.Len() < 4 || pFnt->IsSymbol(pVsh) )
         return 0;
-//  ASSERT( IsHyphenate(), "SwTxtFormatter::HyphWord: why?" );
+// OSL_ENSURE( IsHyphenate(), "SwTxtFormatter::HyphWord: why?" );
     Reference< XHyphenator >  xHyph = ::GetHyphenator();
     Reference< XHyphenatedWord > xHyphWord;
 
@@ -85,12 +85,12 @@ Reference< XHyphenatedWord >  SwTxtFormatInfo::HyphWord(
 
 sal_Bool SwTxtFrm::Hyphenate( SwInterHyphInfo &rHyphInf )
 {
-    ASSERT( ! IsVertical() || ! IsSwapped(),"swapped frame at SwTxtFrm::Hyphenate" );
+    OSL_ENSURE( ! IsVertical() || ! IsSwapped(),"swapped frame at SwTxtFrm::Hyphenate" );
 
     if( !pBreakIt->GetBreakIter().is() )
         return sal_False;;
     // Wir machen den Laden erstmal dicht:
-    ASSERT( !IsLocked(), "SwTxtFrm::Hyphenate: this is locked" );
+    OSL_ENSURE( !IsLocked(), "SwTxtFrm::Hyphenate: this is locked" );
     // 4935: Der frame::Frame muss eine gueltige SSize haben!
     Calc();
     GetFormatted();
@@ -149,7 +149,7 @@ sal_Bool SwTxtFrm::Hyphenate( SwInterHyphInfo &rHyphInf )
 
 void SetParaPortion( SwTxtInfo *pInf, SwParaPortion *pRoot )
 {
-    ASSERT( pRoot, "SetParaPortion: no root anymore" );
+    OSL_ENSURE( pRoot, "SetParaPortion: no root anymore" );
     pInf->pPara = pRoot;
 }
 
@@ -182,7 +182,7 @@ sal_Bool SwTxtFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
         SwParaPortion *pPara = new SwParaPortion();
         SetParaPortion( &rInf, pPara );
         pCurr = pPara;
-        ASSERT( IsParaLine(), "SwTxtFormatter::Hyphenate: not the first" );
+        OSL_ENSURE( IsParaLine(), "SwTxtFormatter::Hyphenate: not the first" );
     }
     else
         pCurr = new SwLineLayout();
@@ -235,7 +235,7 @@ sal_Bool SwTxtFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
     if( pOldCurr->IsParaPortion() )
     {
         SetParaPortion( &rInf, (SwParaPortion*)pOldCurr );
-        ASSERT( IsParaLine(), "SwTxtFormatter::Hyphenate: even not the first" );
+        OSL_ENSURE( IsParaLine(), "SwTxtFormatter::Hyphenate: even not the first" );
     }
 
     if( nWrdStart )
@@ -300,11 +300,11 @@ sal_Bool SwTxtFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
 #ifdef DEBUGGY
             if( OPTDBG( rInf ) )
             {
-                ASSERT( aSelTxt == aHyphWord,
+                OSL_ENSURE( aSelTxt == aHyphWord,
                         "!SwTxtFormatter::Hyphenate: different words, different planets" );
                 aDbstream << "Diff: \"" << aSelTxt.GetStr() << "\" != \""
                           << aHyphWord.GetStr() << "\"" << endl;
-                ASSERT( bRet, "!SwTxtFormatter::Hyphenate: three of a perfect pair" );
+                OSL_ENSURE( bRet, "!SwTxtFormatter::Hyphenate: three of a perfect pair" );
                 aDbstream << "Hyphenate: ";
             }
 #endif
@@ -321,8 +321,8 @@ sal_Bool SwTxtPortion::CreateHyphen( SwTxtFormatInfo &rInf, SwTxtGuess &rGuess )
 {
     Reference< XHyphenatedWord >  xHyphWord = rGuess.HyphWord();
 
-    ASSERT( !pPortion, "SwTxtPortion::CreateHyphen(): another portion, another planet..." )
-    ASSERT( xHyphWord.is(), "SwTxtPortion::CreateHyphen(): You are lucky! The code is robust here." )
+    OSL_ENSURE( !pPortion, "SwTxtPortion::CreateHyphen(): another portion, another planet..." );
+    OSL_ENSURE( xHyphWord.is(), "SwTxtPortion::CreateHyphen(): You are lucky! The code is robust here." );
 
     if( rInf.IsHyphForbud() ||
         pPortion || // robust
@@ -340,7 +340,7 @@ sal_Bool SwTxtPortion::CreateHyphen( SwTxtFormatInfo &rInf, SwTxtGuess &rGuess )
     {
         SvxAlternativeSpelling aAltSpell;
         aAltSpell = SvxGetAltSpelling( xHyphWord );
-        ASSERT( aAltSpell.bIsAltSpelling, "no alternatve spelling" );
+        OSL_ENSURE( aAltSpell.bIsAltSpelling, "no alternatve spelling" );
 
         XubString  aAltTxt   = aAltSpell.aReplacement;
         nPorEnd = aAltSpell.nChangedPos + rGuess.BreakStart() - rGuess.FieldDiff();

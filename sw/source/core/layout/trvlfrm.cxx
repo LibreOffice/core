@@ -211,7 +211,7 @@ BOOL SwPageFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
             if ( pCMS && pCMS->bStop )
                 return FALSE;
 
-            ASSERT( pCnt, "Crsr is gone to a Black hole" );
+            OSL_ENSURE( pCnt, "Crsr is gone to a Black hole" );
             if( pCMS && pCMS->pFill && pCnt->IsTxtFrm() )
                 bRet = pCnt->GetCrsrOfst( pPos, rPoint, pCMS );
             else
@@ -305,7 +305,7 @@ BOOL SwRootFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
 {
     sal_Bool bOldAction = IsCallbackActionEnabled();
     ((SwRootFrm*)this)->SetCallbackActionEnabled( FALSE );
-    ASSERT( (Lower() && Lower()->IsPageFrm()), "Keinen PageFrm gefunden." );
+    OSL_ENSURE( (Lower() && Lower()->IsPageFrm()), "Keinen PageFrm gefunden." );
     if( pCMS && pCMS->pFill )
         ((SwCrsrMoveState*)pCMS)->bFillRet = FALSE;
     Point aOldPoint = rPoint;
@@ -599,7 +599,7 @@ const SwCntntFrm * MA_FASTCALL lcl_MissProtectedFrames( const SwCntntFrm *pCnt,
 BOOL MA_FASTCALL lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
                     GetNxtPrvCnt fnNxtPrv, BOOL bInReadOnly )
 {
-    ASSERT( pPam->GetNode() == (SwCntntNode*)pStart->GetNode(),
+    OSL_ENSURE( pPam->GetNode() == (SwCntntNode*)pStart->GetNode(),
             "lcl_UpDown arbeitet nicht fuer andere." );
 
     const SwCntntFrm *pCnt = 0;
@@ -678,7 +678,7 @@ BOOL MA_FASTCALL lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
             const SwFrm *pCell = pStart->GetUpper();
             while ( pCell && !pCell->IsCellFrm() )
                 pCell = pCell->GetUpper();
-            ASSERT( pCell, "Zelle nicht gefunden." );
+            OSL_ENSURE( pCell, "Zelle nicht gefunden." );
             nX =  (pCell->Frm().*fnRect->fnGetLeft)() +
                   (pCell->Frm().*fnRect->fnGetWidth)() / 2;
 
@@ -892,7 +892,7 @@ BOOL SwCntntFrm::UnitDown( SwPaM* pPam, const SwTwips, BOOL bInReadOnly ) const
 |*************************************************************************/
 USHORT SwRootFrm::GetCurrPage( const SwPaM *pActualCrsr ) const
 {
-    ASSERT( pActualCrsr, "Welche Seite soll's denn sein?" );
+    OSL_ENSURE( pActualCrsr, "Welche Seite soll's denn sein?" );
     const SwFrm *pActFrm = GetFmt()->GetDoc()->GetNodes()[pActualCrsr->GetPoint()->nNode]->
                                     GetCntntNode()->GetFrm( 0,
                                                     pActualCrsr->GetPoint(),
@@ -916,7 +916,7 @@ USHORT SwRootFrm::GetCurrPage( const SwPaM *pActualCrsr ) const
 |*************************************************************************/
 USHORT SwRootFrm::SetCurrPage( SwCursor* pToSet, USHORT nPageNum )
 {
-    ASSERT( Lower() && Lower()->IsPageFrm(), "Keine Seite vorhanden." );
+    OSL_ENSURE( Lower() && Lower()->IsPageFrm(), "Keine Seite vorhanden." );
 
     SwPageFrm *pPage = (SwPageFrm*)Lower();
     BOOL bEnd =FALSE;
@@ -1284,10 +1284,10 @@ const SwCntntFrm *SwLayoutFrm::GetCntntPos( Point& rPoint,
             break;
     }
 
-#ifdef DBG_UTIL
-    ASSERT( pActual, "Keinen Cntnt gefunden." );
+#if OSL_DEBUG_LEVEL > 1
+    OSL_ENSURE( pActual, "Keinen Cntnt gefunden." );
     if ( bBodyOnly )
-        ASSERT( pActual->IsInDocBody(), "Cnt nicht im Body." );
+        OSL_ENSURE( pActual->IsInDocBody(), "Cnt nicht im Body." );
 #endif
 
     //Spezialfall fuer das selektieren von Tabellen, nicht in wiederholte
@@ -1433,7 +1433,7 @@ void SwPageFrm::GetCntntPosition( const Point &rPt, SwPosition &rPos ) const
     {
         // CntntFrm nicht formatiert -> immer auf Node-Anfang
         SwCntntNode* pCNd = (SwCntntNode*)pAct->GetNode();
-        ASSERT( pCNd, "Wo ist mein CntntNode?" );
+        OSL_ENSURE( pCNd, "Wo ist mein CntntNode?" );
         rPos.nNode = *pCNd;
         rPos.nContent.Assign( pCNd, 0 );
     }
@@ -1578,7 +1578,7 @@ Point SwRootFrm::GetNextPrevCntntPos( const Point& rPoint, BOOL bNext ) const
 |*************************************************************************/
 Point SwRootFrm::GetPagePos( USHORT nPageNum ) const
 {
-    ASSERT( Lower() && Lower()->IsPageFrm(), "Keine Seite vorhanden." );
+    OSL_ENSURE( Lower() && Lower()->IsPageFrm(), "Keine Seite vorhanden." );
 
     const SwPageFrm *pPage = (const SwPageFrm*)Lower();
     while ( TRUE )
@@ -1764,7 +1764,7 @@ BOOL SwFrm::WannaRightPage() const
             pDesc = (SwPageDesc*)&pDoc->GetPageDesc( 0 );
         }
     }
-    ASSERT( pDesc, "No pagedescriptor" );
+    OSL_ENSURE( pDesc, "No pagedescriptor" );
     BOOL bOdd;
     if( nPgNum )
         bOdd = nPgNum % 2 ? TRUE : FALSE;
@@ -1855,7 +1855,7 @@ USHORT SwFrm::GetVirtPageNum() const
 bool SwRootFrm::MakeTblCrsrs( SwTableCursor& rTblCrsr )
 {
     //Union-Rects und Tabellen (Follows) der Selektion besorgen.
-    ASSERT( rTblCrsr.GetCntntNode() && rTblCrsr.GetCntntNode( FALSE ),
+    OSL_ENSURE( rTblCrsr.GetCntntNode() && rTblCrsr.GetCntntNode( FALSE ),
             "Tabselection nicht auf Cnt." );
 
     bool bRet = false;
@@ -1885,7 +1885,7 @@ bool SwRootFrm::MakeTblCrsrs( SwTableCursor& rTblCrsr )
     const SwLayoutFrm* pStart = pTmpStartFrm ? pTmpStartFrm->GetUpper() : 0;
     const SwLayoutFrm* pEnd   = pTmpEndFrm   ? pTmpEndFrm->GetUpper() : 0;
 
-    ASSERT( pStart && pEnd, "MakeTblCrsrs: Good to have the code robust here!" )
+    OSL_ENSURE( pStart && pEnd, "MakeTblCrsrs: Good to have the code robust here!" );
     // <--
 
     /* #109590# Only change table boxes if the frames are
@@ -1918,7 +1918,7 @@ bool SwRootFrm::MakeTblCrsrs( SwTableCursor& rTblCrsr )
 
                     while ( pCell && pRow->IsAnLower( pCell ) )
                     {
-                        ASSERT( pCell->IsCellFrm(), "Frame ohne Celle" );
+                        OSL_ENSURE( pCell->IsCellFrm(), "Frame ohne Celle" );
                         if( IsFrmInTblSel( pUnion->GetUnion(), pCell ) &&
                             (bReadOnlyAvailable ||
                              !pCell->GetFmt()->GetProtect().IsCntntProtected()))
@@ -1946,7 +1946,7 @@ bool SwRootFrm::MakeTblCrsrs( SwTableCursor& rTblCrsr )
                                 while( !pCell->IsCellFrm() )
                                 {
                                     pCell = pCell->GetUpper();
-                                    ASSERT( pCell, "Where's my cell?" );
+                                    OSL_ENSURE( pCell, "Where's my cell?" );
                                 }
                             }
                         }
@@ -2041,7 +2041,7 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
     const SwCntntFrm *pEndFrm   = rNds[ pEndPos->nNode ]->
         GetCntntNode()->GetFrm( &rCrsr.GetEndPos(), pEndPos );
 
-    ASSERT( (pStartFrm && pEndFrm), "Keine CntntFrms gefunden." );
+    OSL_ENSURE( (pStartFrm && pEndFrm), "Keine CntntFrms gefunden." );
 
     //Damit die FlyFrms, in denen selektierte Frames stecken, nicht
     //abgezogen werden
@@ -2049,10 +2049,10 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
     if ( pStartFrm->IsInFly() )
     {
         const SwAnchoredObject* pObj = pStartFrm->FindFlyFrm();
-        ASSERT( pObj, "No Start Object." );
+        OSL_ENSURE( pObj, "No Start Object." );
         if (pObj) aSortObjs.Insert( *(const_cast<SwAnchoredObject*>(pObj)) );
         const SwAnchoredObject* pObj2 = pEndFrm->FindFlyFrm();
-        ASSERT( pObj2, "No Start Object." );
+        OSL_ENSURE( pObj2, "No Start Object." );
         if (pObj2) aSortObjs.Insert( *(const_cast<SwAnchoredObject*>(pObj2)) );
     }
 
@@ -2087,7 +2087,7 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
             if( !pEndLFrm )
                 break;
 
-            ASSERT( pEndLFrm->GetType() == pSttLFrm->GetType(),
+            OSL_ENSURE( pEndLFrm->GetType() == pSttLFrm->GetType(),
                     "Selection ueber unterschiedliche Inhalte" );
             switch( pSttLFrm->GetType() )
             {
@@ -2504,7 +2504,7 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
             // --> OD 2006-01-24 #123908# - introduce robust code:
             // The stacktrace issue reveals that <pCntnt> could be NULL.
             // One root cause found by AMA - see #130650#
-            ASSERT( pCntnt,
+            OSL_ENSURE( pCntnt,
                     "<SwRootFrm::CalcFrmRects(..)> - no content frame. This is a serious defect -> please inform OD" );
             while ( pCntnt && pCntnt != pEndFrm )
             // <--
@@ -2545,7 +2545,7 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
                 }
                 pCntnt = pCntnt->GetNextCntntFrm();
                 // --> OD 2006-01-24 #123908#
-                ASSERT( pCntnt,
+                OSL_ENSURE( pCntnt,
                         "<SwRootFrm::CalcFrmRects(..)> - no content frame. This is a serious defect -> please inform OD" );
                 // <--
             }
@@ -2610,7 +2610,7 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
                     const UINT32 nPos = pObj->GetOrdNum();
                     for ( USHORT k = 0; bSub && k < aSortObjs.Count(); ++k )
                     {
-                        ASSERT( aSortObjs[k]->ISA(SwFlyFrm),
+                        OSL_ENSURE( aSortObjs[k]->ISA(SwFlyFrm),
                                 "<SwRootFrm::CalcFrmRects(..)> - object in <aSortObjs> of unexcepted type" );
                         const SwFlyFrm* pTmp = static_cast<SwFlyFrm*>(aSortObjs[k]);
                         do

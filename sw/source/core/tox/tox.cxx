@@ -215,7 +215,7 @@ SwTOXMark::~SwTOXMark()
 
 int SwTOXMark::operator==( const SfxPoolItem& rAttr ) const
 {
-    ASSERT( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
+    OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
     return GetRegisteredIn() == ((SwTOXMark&)rAttr).GetRegisteredIn();
 }
 
@@ -250,7 +250,7 @@ String SwTOXMark::GetText() const
     else if( pTxtAttr && pTxtAttr->GetpTxtNd() )
     {
         xub_StrLen* pEndIdx = pTxtAttr->GetEnd();
-        ASSERT( pEndIdx, "TOXMark ohne Mark!!");
+        OSL_ENSURE( pEndIdx, "TOXMark ohne Mark!!");
         if( pEndIdx )
         {
             const xub_StrLen nStt = *pTxtAttr->GetStart();
@@ -308,7 +308,7 @@ SwForm::SwForm( TOXTypes eTyp ) // #i21237#
     case TOX_TABLES       : nPoolId = STR_POOLCOLL_TOX_TABLESH; break;
     case TOX_AUTHORITIES  : nPoolId = STR_POOLCOLL_TOX_AUTHORITIESH;    break;
     default:
-        ASSERT( !this, "ungueltiger TOXTyp");
+        OSL_ENSURE( !this, "ungueltiger TOXTyp");
         return ;
     }
 
@@ -917,7 +917,7 @@ FormTokenType SwFormTokensHelper::GetTokenType(const String & sToken,
             break;
         }
 
-    ASSERT( pNm, "wrong token" );
+    OSL_ENSURE( pNm, "wrong token" );
     if (pTokenLen)
         *pTokenLen = nTokenLen;
 
@@ -928,13 +928,13 @@ FormTokenType SwFormTokensHelper::GetTokenType(const String & sToken,
 
 void SwForm::SetPattern(USHORT nLevel, const SwFormTokens& rTokens)
 {
-    ASSERT(nLevel < GetFormMax(), "Index >= FORM_MAX");
+    OSL_ENSURE(nLevel < GetFormMax(), "Index >= FORM_MAX");
     aPattern[nLevel] = rTokens;
 }
 
 void SwForm::SetPattern(USHORT nLevel, const String & rStr)
 {
-    ASSERT(nLevel < GetFormMax(), "Index >= FORM_MAX");
+    OSL_ENSURE(nLevel < GetFormMax(), "Index >= FORM_MAX");
 
     SwFormTokensHelper aHelper(rStr);
     aPattern[nLevel] = aHelper.GetTokens();
@@ -942,7 +942,7 @@ void SwForm::SetPattern(USHORT nLevel, const String & rStr)
 
 const SwFormTokens& SwForm::GetPattern(USHORT nLevel) const
 {
-    ASSERT(nLevel < GetFormMax(), "Index >= FORM_MAX");
+    OSL_ENSURE(nLevel < GetFormMax(), "Index >= FORM_MAX");
     return aPattern[nLevel];
 }
 

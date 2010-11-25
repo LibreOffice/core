@@ -2465,7 +2465,7 @@ void RtfAttributeOutput::ParaNumRule_Impl( const SwTxtNode* pTxtNd, sal_Int32 nL
     if( pRule && pTxtNd->IsInList() )
     {
         // --> OD 2008-03-18 #refactorlists#
-        ASSERT( pTxtNd->GetActualListLevel() >= 0 && pTxtNd->GetActualListLevel() < MAXLEVEL,
+        OSL_ENSURE( pTxtNd->GetActualListLevel() >= 0 && pTxtNd->GetActualListLevel() < MAXLEVEL,
                 "<SwRTFWriter::OutListNum(..)> - text node does not have valid list level. Serious defect -> please inform OD" );
         // <--
 
@@ -2663,8 +2663,7 @@ void RtfAttributeOutput::FormatULSpace( const SvxULSpaceItem& rULSpace )
     {
         if( m_rExport.bOutPageDescs )
         {
-
-            ASSERT( m_rExport.GetCurItemSet(), "Impossible" );
+            OSL_ENSURE( m_rExport.GetCurItemSet(), "Impossible" );
             if ( !m_rExport.GetCurItemSet() )
                 return;
 

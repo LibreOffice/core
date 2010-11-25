@@ -57,14 +57,11 @@
 #include <pagedesc.hxx>
 #include <poolfmt.hxx>
 #include <SwNodeNum.hxx>
-#ifndef DBG_UTIL
-#define CHECK_TABLE(t)
-#else
-#ifdef DEBUG
+
+#if OSL_DEBUG_LEVEL > 1
 #define CHECK_TABLE(t) (t).CheckConsistency();
 #else
 #define CHECK_TABLE(t)
-#endif
 #endif
 
 namespace
@@ -364,7 +361,7 @@ BOOL lcl_CopyTblBox( const SwTableBox*& rpBox, void* pPara )
     {
         SwNodeIndex aNewIdx( *pCT->pTblNd,
                             rpBox->GetSttIdx() - pCT->nOldTblSttIdx );
-        ASSERT( aNewIdx.GetNode().IsStartNode(), "Index nicht auf einem StartNode" );
+        OSL_ENSURE( aNewIdx.GetNode().IsStartNode(), "Index nicht auf einem StartNode" );
         pNewBox = new SwTableBox( pBoxFmt, aNewIdx, pCT->pInsLine );
         pNewBox->setRowSpan( rpBox->getRowSpan() );
     }
@@ -461,7 +458,7 @@ SwTableNode* SwTableNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
             pDoc->InsDeletedFldType( *pDDEType );
         else
             pDDEType = (SwDDEFieldType*)pDoc->InsertFldType( *pDDEType );
-        ASSERT( pDDEType, "unbekannter FieldType" );
+        OSL_ENSURE( pDDEType, "unbekannter FieldType" );
 
         // tauschen am Node den Tabellen-Pointer aus
         SwDDETable* pNewTable = new SwDDETable( pTblNd->GetTable(), pDDEType );
@@ -722,8 +719,8 @@ SwDoc::CopyRange( SwPaM& rPam, SwPosition& rPos, const bool bCopyAll ) const
     }
     else
     {
-        ASSERT( this == pDoc, " falscher Copy-Zweig!" );
-        ASSERT(false, "mst: i thought this could be dead code;"
+        OSL_ENSURE( this == pDoc, " falscher Copy-Zweig!" );
+        OSL_ENSURE(false, "mst: i thought this could be dead code;"
                 "please tell me what you did to get here!");
         pDoc->SetRedlineMode_intern((RedlineMode_t)(eOld | nsRedlineMode_t::REDLINE_IGNORE));
 
@@ -1318,7 +1315,7 @@ void SwDoc::CopyWithFlyInFly( const SwNodeRange& rRg, const xub_StrLen nEndConte
 
     aRedlRest.Restore();
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     {
         //JP 17.06.99: Bug 66973 - check count only if the selection is in
         //              the same (or no) section. Becaus not full selected
@@ -1330,9 +1327,9 @@ void SwDoc::CopyWithFlyInFly( const SwNodeRange& rRg, const xub_StrLen nEndConte
             !rRg.aStart.GetNode().IsSectionNode() &&
             !aTmpI.GetNode().IsEndNode() )
         {
-            ASSERT( rInsPos.GetIndex() - aSavePos.GetIndex() ==
+            OSL_ENSURE( rInsPos.GetIndex() - aSavePos.GetIndex() ==
                     rRg.aEnd.GetIndex() - rRg.aStart.GetIndex(),
-                    "Es wurden zu wenig Nodes kopiert!" )
+                    "Es wurden zu wenig Nodes kopiert!" );
         }
     }
 #endif
@@ -1495,7 +1492,7 @@ void SwDoc::CopyFlyInFlyImpl( const SwNodeRange& rRg,
             {
                 // This case can *not* happen, but to be robust take the first
                 // text node in the destination document.
-                ASSERT( false,
+                OSL_ENSURE( false,
                         "<SwDoc::_CopyFlyInFly(..)> - anchor text node in copied range not found" );
                 nAnchorTxtNdNumInRange = 1;
             }
@@ -1521,7 +1518,7 @@ void SwDoc::CopyFlyInFlyImpl( const SwNodeRange& rRg,
             {
                 // This case can *not* happen, but to be robust take the first
                 // text node in the destination document.
-                ASSERT( false,
+                OSL_ENSURE( false,
                         "<SwDoc::_CopyFlyInFly(..)> - found anchor node index isn't a text node" );
                 aAnchorNdIdx = rStartIdx;
                 while ( !aAnchorNdIdx.GetNode().IsTxtNode() )
@@ -1577,7 +1574,7 @@ void SwDoc::CopyFlyInFlyImpl( const SwNodeRange& rRg,
 
     //Alle chains, die im Original vorhanden sind, soweit wie moeglich wieder
     //aufbauen.
-    ASSERT( aArr.Count() == aNewArr.Count(), "Missing new Flys" );
+    OSL_ENSURE( aArr.Count() == aNewArr.Count(), "Missing new Flys" );
     if ( aArr.Count() == aNewArr.Count() )
     {
         for ( USHORT n = 0; n < aArr.Count(); ++n )

@@ -191,7 +191,7 @@ SwObjectFormatter* SwObjectFormatter::CreateObjFormatter(
     }
     else
     {
-        ASSERT( false,
+        OSL_ENSURE( false,
                 "<SwObjectFormatter::CreateObjFormatter(..)> - unexcepted type of anchor frame" );
     }
 
@@ -233,11 +233,11 @@ bool SwObjectFormatter::FormatObj( SwAnchoredObject& _rAnchoredObj,
 {
     bool bSuccess( true );
 
-    ASSERT( _pAnchorFrm || _rAnchoredObj.GetAnchorFrm(),
+    OSL_ENSURE( _pAnchorFrm || _rAnchoredObj.GetAnchorFrm(),
             "<SwObjectFormatter::FormatObj(..)> - missing anchor frame" );
     SwFrm& rAnchorFrm = _pAnchorFrm ? *(_pAnchorFrm) : *(_rAnchoredObj.AnchorFrm());
 
-    ASSERT( _pPageFrm || rAnchorFrm.FindPageFrm(),
+    OSL_ENSURE( _pPageFrm || rAnchorFrm.FindPageFrm(),
             "<SwObjectFormatter::FormatObj(..)> - missing page frame" );
     const SwPageFrm& rPageFrm = _pPageFrm ? *(_pPageFrm) : *(rAnchorFrm.FindPageFrm());
 
@@ -409,7 +409,7 @@ void SwObjectFormatter::_FormatObj( SwAnchoredObject& _rAnchoredObj )
             if ( ++nLoopControlRuns >= nLoopControlMax )
             {
 #if OSL_DEBUG_LEVEL > 1
-                ASSERT( false, "LoopControl in SwObjectFormatter::_FormatObj: Stage 3!!!" );
+                OSL_ENSURE( false, "LoopControl in SwObjectFormatter::_FormatObj: Stage 3!!!" );
 #endif
                 rFlyFrm.ValidateThisAndAllLowers( 2 );
                 nLoopControlRuns = 0;
@@ -491,7 +491,7 @@ bool SwObjectFormatter::_FormatObjsAtFrm( SwTxtFrm* _pMasterTxtFrm )
         // is replaced by method <FindPageFrmOfAnchor()>. It's return value
         // have to be checked.
         SwPageFrm* pPageFrmOfAnchor = pAnchoredObj->FindPageFrmOfAnchor();
-        ASSERT( pPageFrmOfAnchor,
+        OSL_ENSURE( pPageFrmOfAnchor,
                 "<SwObjectFormatter::_FormatObjsAtFrm()> - missing page frame." );
         // --> OD 2004-10-08 #i26945#
         if ( pPageFrmOfAnchor && pPageFrmOfAnchor == &mrPageFrm )

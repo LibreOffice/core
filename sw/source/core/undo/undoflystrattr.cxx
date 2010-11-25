@@ -41,7 +41,7 @@ SwUndoFlyStrAttr::SwUndoFlyStrAttr( SwFlyFrmFmt& rFlyFrmFmt,
       msOldStr( sOldStr ),
       msNewStr( sNewStr )
 {
-    ASSERT( eUndoId == UNDO_FLYFRMFMT_TITLE ||
+    OSL_ENSURE( eUndoId == UNDO_FLYFRMFMT_TITLE ||
             eUndoId == UNDO_FLYFRMFMT_DESCRIPTION,
             "<SwUndoFlyStrAttr::SwUndoFlyStrAttr(..)> - unexpected undo id --> Undo will not work" );
 }

@@ -115,7 +115,7 @@ static void SetRowBorder(SfxItemSet& rSet, const Row &rRow)
 void rtfSections::PrependedInlineNode(const SwPosition &rPos,
     const SwNode &rNode)
 {
-    ASSERT(!mrReader.IsNewDoc() || !maSegments.empty(),
+    OSL_ENSURE(!mrReader.IsNewDoc() || !maSegments.empty(),
         "should not be possible, must be at least one segment in a new document");
     if ((!maSegments.empty()) && (maSegments.back().maStart == rPos.nNode))
         maSegments.back().maStart = SwNodeIndex(rNode);
@@ -719,7 +719,7 @@ void SwRTFParser::ReadTable( int nToken )
             aBoxFmts[0]->Add( pBox );
             SwTxtNode* pTNd = pDoc->GetNodes()[ pBox->GetSttIdx()+1 ]
                                             ->GetTxtNode();
-            ASSERT( pTNd, "wo ist der Textnode dieser Box?" );
+            OSL_ENSURE( pTNd, "wo ist der Textnode dieser Box?" );
             pTNd->ChgFmtColl( pColl );
             ++nStt;
             nRowsToRepeat=0;
@@ -762,7 +762,7 @@ void SwRTFParser::ReadTable( int nToken )
         }
     }
 
-    ASSERT(!bFailure, "RTF Table failure");
+    OSL_ENSURE(!bFailure, "RTF Table failure");
     if (bFailure)
     {
         SkipToken( -1 );            // zum Letzen gueltigen zurueck
@@ -808,7 +808,7 @@ void SwRTFParser::GotoNextBox()
 {
     nInsTblRow = USHRT_MAX;
 
-    ASSERT( pTableNode, "Kein Tabellennode, dann auch keine Box" );
+    OSL_ENSURE( pTableNode, "Kein Tabellennode, dann auch keine Box" );
 
     if (!pTableNode)
         return;

@@ -75,7 +75,7 @@ SwAnchoredObjectPosition::SwAnchoredObjectPosition( SdrObject& _rDrawObj )
             ( !mrDrawObj.ISA(SdrVirtObj) &&    // 'master' drawing object
               !mrDrawObj.ISA(SwFlyDrawObj) );  // - indirectly checked
     (void) bObjOfExceptedType;
-    ASSERT( bObjOfExceptedType,
+    OSL_ENSURE( bObjOfExceptedType,
             "SwAnchoredObjectPosition(..) - object of unexcepted type!" );
 #endif
 
@@ -100,7 +100,7 @@ void SwAnchoredObjectPosition::_GetInfoAboutObj()
     // determine contact object
     {
         mpContact = static_cast<SwContact*>(GetUserCall( &mrDrawObj ));
-        ASSERT( mpContact,
+        OSL_ENSURE( mpContact,
                 "SwAnchoredObjectPosition::_GetInfoAboutObj() - missing SwContact-object." );
     }
 
@@ -108,7 +108,7 @@ void SwAnchoredObjectPosition::_GetInfoAboutObj()
     {
         // OD 2004-03-30 #i26791#
         mpAnchoredObj = mpContact->GetAnchoredObj( &mrDrawObj );
-        ASSERT( mpAnchoredObj,
+        OSL_ENSURE( mpAnchoredObj,
                 "SwAnchoredObjectPosition::_GetInfoAboutObj() - missing anchored object." );
     }
 
@@ -116,7 +116,7 @@ void SwAnchoredObjectPosition::_GetInfoAboutObj()
     {
         // OD 2004-03-23 #i26791#
         mpAnchorFrm = mpAnchoredObj->AnchorFrm();
-        ASSERT( mpAnchorFrm,
+        OSL_ENSURE( mpAnchorFrm,
                 "SwAnchoredObjectPosition::_GetInfoAboutObj() - missing anchor frame." );
     }
 
@@ -124,7 +124,7 @@ void SwAnchoredObjectPosition::_GetInfoAboutObj()
     {
         // --> OD 2004-07-01 #i28701#
         mpFrmFmt = &mpAnchoredObj->GetFrmFmt();
-        ASSERT( mpFrmFmt,
+        OSL_ENSURE( mpFrmFmt,
                 "<SwAnchoredObjectPosition::_GetInfoAboutObj() - missing frame format." );
     }
 
@@ -305,7 +305,7 @@ void SwAnchoredObjectPosition::_GetVertAlignmentValues(
             }
             else
             {
-                ASSERT( false,
+                OSL_ENSURE( false,
                         "<SwAnchoredObjectPosition::_GetVertAlignmentValues(..)> - invalid relative alignment" );
             }
         }
@@ -320,7 +320,7 @@ void SwAnchoredObjectPosition::_GetVertAlignmentValues(
             }
             else
             {
-                ASSERT( false,
+                OSL_ENSURE( false,
                         "<SwAnchoredObjectPosition::_GetVertAlignmentValues(..)> - invalid relative alignment" );
             }
         }
@@ -328,7 +328,7 @@ void SwAnchoredObjectPosition::_GetVertAlignmentValues(
         // no break here, because text::RelOrientation::CHAR is invalid, if !mbAnchorToChar
         default:
         {
-            ASSERT( false,
+            OSL_ENSURE( false,
                     "<SwAnchoredObjectPosition::_GetVertAlignmentValues(..)> - invalid relative alignment" );
         }
     }
@@ -386,7 +386,7 @@ SwTwips SwAnchoredObjectPosition::_GetVertRelPos(
         break;
         default:
         {
-            ASSERT( false,
+            OSL_ENSURE( false,
                     "<SwAnchoredObjectPosition::_GetVertRelPos(..) - invalid vertical positioning" );
         }
     }
@@ -876,7 +876,7 @@ SwTwips SwAnchoredObjectPosition::_AdjustHoriRelPosForDrawAside(
     if ( !GetAnchorFrm().ISA(SwTxtFrm) ||
          !GetAnchoredObj().ISA(SwFlyAtCntFrm) )
     {
-        ASSERT( false,
+        OSL_ENSURE( false,
                 "<SwAnchoredObjectPosition::_AdjustHoriRelPosForDrawAside(..) - usage for wrong anchor type" );
         return _nProposedRelPosX;
     }

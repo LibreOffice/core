@@ -210,13 +210,13 @@ class SwLayIdle
     BOOL        bPageValid;     // Konnte die Seite alles validiert werden?
     BOOL        bAllValid;      // Konnte alles validiert werden?
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     BOOL bIndicator;
 #endif
 
 #ifdef _LAYACT_CXX
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     void ShowIdle( ColorData eName );
 #endif
 

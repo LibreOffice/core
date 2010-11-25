@@ -115,11 +115,11 @@ const SwSection* SwEditShell::GetAnySection( BOOL bOutOfTab, const Point* pPt ) 
     if( pFrm && pFrm->IsInSct() )
     {
         SwSectionFrm* pSect = pFrm->FindSctFrm();
-        ASSERT( pSect, "GetAnySection: Where's my Sect?" );
+        OSL_ENSURE( pSect, "GetAnySection: Where's my Sect?" );
         if( pSect->IsInFtn() && pSect->GetUpper()->IsInSct() )
         {
             pSect = pSect->GetUpper()->FindSctFrm();
-            ASSERT( pSect, "GetAnySection: Where's my SectFrm?" );
+            OSL_ENSURE( pSect, "GetAnySection: Where's my SectFrm?" );
         }
         return pSect->GetSection();
     }

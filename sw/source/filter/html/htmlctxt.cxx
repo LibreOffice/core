@@ -150,7 +150,7 @@ void SwHTMLParser::SplitAttrTab( const SwPosition& rNewPos )
 {
     // Hier darf es keine vorlauefigen Absatz-Attribute geben, den die
     // koennten jetzt gesetzt werden und dann sind die Zeiger ungueltig!!!
-    ASSERT( !aParaAttrs.Count(),
+    OSL_ENSURE( !aParaAttrs.Count(),
         "Hoechste Gefahr: Es gibt noch nicht-endgueltige Absatz-Attribute" );
     if( aParaAttrs.Count() )
         aParaAttrs.Remove( 0, aParaAttrs.Count() );
@@ -358,7 +358,7 @@ void SwHTMLParser::EndContext( _HTMLAttrContext *pContext )
         while( aContexts.Count() > nContextStMin )
         {
             _HTMLAttrContext *pCntxt = PopContext();
-            ASSERT( pCntxt != pContext,
+            OSL_ENSURE( pCntxt != pContext,
                     "Kontext noch im Stack" );
             if( pCntxt == pContext )
                 break;
@@ -414,10 +414,10 @@ void SwHTMLParser::ClearContext( _HTMLAttrContext *pContext )
         DeleteAttr( rAttrs[i] );
     }
 
-    ASSERT( !pContext->GetSpansSection(),
+    OSL_ENSURE( !pContext->GetSpansSection(),
             "Bereich kann nicht mehr verlassen werden" );
 
-    ASSERT( !pContext->HasSaveDocContext(),
+    OSL_ENSURE( !pContext->HasSaveDocContext(),
             "Rahmen kann nicht mehr verlassen werden" );
 
     // PRE-/LISTING- und XMP-Umgebungen wieder starten
@@ -543,7 +543,7 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
         pCSS1Parser->SetFmtBreak( rItemSet, rPropInfo );
 // /Feature: PrintExt
 
-    ASSERT( aContexts.Count() <= nContextStAttrMin ||
+    OSL_ENSURE( aContexts.Count() <= nContextStAttrMin ||
             aContexts[aContexts.Count()-1] != pContext,
             "SwHTMLParser::InsertAttrs: Kontext doch schon auf dem Stack" );
 
@@ -588,7 +588,7 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
                 // eingefuegt.
                 if( rPropInfo.bLeftMargin )
                 {
-                    ASSERT( rPropInfo.nLeftMargin < 0 ||
+                    OSL_ENSURE( rPropInfo.nLeftMargin < 0 ||
                             rPropInfo.nLeftMargin == pLRItem->GetTxtLeft(),
                             "linker Abstand stimmt nicht mit Item ueberein" );
                     if( rPropInfo.nLeftMargin < 0 &&
@@ -599,7 +599,7 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
                 }
                 if( rPropInfo.bRightMargin )
                 {
-                    ASSERT( rPropInfo.nRightMargin < 0 ||
+                    OSL_ENSURE( rPropInfo.nRightMargin < 0 ||
                             rPropInfo.nRightMargin == pLRItem->GetRight(),
                             "rechter Abstand stimmt nicht mit Item ueberein" );
                     if( rPropInfo.nRightMargin < 0 &&

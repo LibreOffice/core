@@ -51,7 +51,7 @@ SLOFILES =  \
         $(SLO)$/txtcache.obj \
         $(SLO)$/txtinit.obj
 
-.IF "$(dbgutil)"!=""
+.IF "$(DBG_LEVEL)">="2"
 SLOFILES +=  \
         $(SLO)$/txtio.obj
 .ENDIF

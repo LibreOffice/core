@@ -334,7 +334,7 @@ static bool lcl_HaveCommonAttributes( IStyleAccess& rStyleAccess,
 
     if ( !pSet1 )
     {
-        ASSERT( nWhichId, "lcl_HaveCommonAttributes not used correctly" )
+        OSL_ENSURE( nWhichId, "lcl_HaveCommonAttributes not used correctly" );
         if ( SFX_ITEM_SET == rSet2.GetItemState( nWhichId, FALSE ) )
         {
             pNewSet = rSet2.Clone( TRUE );
@@ -634,7 +634,7 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, USHORT nWhich,
 
 XubString SwTxtNode::GetCurWord( xub_StrLen nPos ) const
 {
-    ASSERT( nPos <= m_Text.Len(), "SwTxtNode::GetCurWord: invalid index." );
+    OSL_ENSURE( nPos <= m_Text.Len(), "SwTxtNode::GetCurWord: invalid index." );
 
     if (!m_Text.Len())
         return m_Text;
@@ -675,7 +675,7 @@ SwScanner::SwScanner( const SwTxtNode& rNd, const String& rTxt, const LanguageTy
                       USHORT nType, xub_StrLen nStart, xub_StrLen nEnde, BOOL bClp )
     : rNode( rNd ), rText( rTxt), pLanguage( pLang ), pConversionMap( pConvMap ), nLen( 0 ), nWordType( nType ), bClip( bClp )
 {
-    ASSERT( rText.Len(), "SwScanner: EmptyString" );
+    OSL_ENSURE( rText.Len(), "SwScanner: EmptyString" );
     nStartPos = nBegin = nStart;
     nEndPos = nEnde;
 
@@ -749,7 +749,7 @@ BOOL SwScanner::NextWord()
     // we have to differenciate between these cases:
     if ( aBound.startPos <= nBegin )
     {
-        ASSERT( aBound.endPos >= nBegin, "Unexpected aBound result" )
+        OSL_ENSURE( aBound.endPos >= nBegin, "Unexpected aBound result" );
 
         // restrict boundaries to script boundaries and nEndPos
         const USHORT nCurrScript =
@@ -1475,9 +1475,9 @@ BOOL SwTxtNode::Hyphenate( SwInterHyphInfo &rHyphInf )
     {
         // 4935: Seit der Trennung ueber Sonderbereiche sind Faelle
         // moeglich, in denen kein Frame zum Node vorliegt.
-        // Also kein ASSERT!
+        // Also keinOSL_ENSURE
 #if OSL_DEBUG_LEVEL > 1
-        ASSERT( pFrm, "!SwTxtNode::Hyphenate: can't find any frame" );
+        OSL_ENSURE( pFrm, "!SwTxtNode::Hyphenate: can't find any frame" );
 #endif
         return FALSE;
     }
@@ -2079,8 +2079,8 @@ SwGrammarMarkUp* SwTxtNode::GetGrammarCheck()
 
 void SwTxtNode::SetSmartTags( SwWrongList* pNew, bool bDelete )
 {
-    ASSERT( !pNew || SwSmartTagMgr::Get().IsSmartTagsEnabled(),
-            "Weird - we have a smart tag list without any recognizers?" )
+    OSL_ENSURE( !pNew || SwSmartTagMgr::Get().IsSmartTagsEnabled(),
+            "Weird - we have a smart tag list without any recognizers?" );
 
     if ( m_pParaIdleData_Impl )
     {

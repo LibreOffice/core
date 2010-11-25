@@ -91,7 +91,7 @@ class SW_DLLPUBLIC SwNode : private /* public*/ BigPtrEntry
 {
     friend class SwNodes;
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     static long nSerial;
     long nMySerial;
 #endif
@@ -115,7 +115,7 @@ protected:
 public:
     virtual ~SwNode();
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     long int GetSerial() const { return nMySerial; }
 #endif
 

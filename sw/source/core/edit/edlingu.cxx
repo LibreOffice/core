@@ -216,7 +216,7 @@ const SwTxtNode *pLinguNode;
 SwLinguIter::SwLinguIter()
     : pSh( 0 ), pStart( 0 ), pEnd( 0 ), pCurr( 0 ), pCurrX( 0 )
 {
-    // @@@ es fehlt: Sicherstellen der Reentrance, ASSERTs etc.
+    // @@@ es fehlt: Sicherstellen der Reentrance, OSL_ENSURE( etc.
 }
 
 /*************************************************************************
@@ -238,7 +238,7 @@ void SwLinguIter::_Start( SwEditShell *pShell, SwDocPositions eStart,
 
     SET_CURR_SHELL( pSh );
 
-    ASSERT( !pEnd, "LinguStart ohne End?");
+    OSL_ENSURE( !pEnd, "LinguStart ohne End?");
 
     SwPaM *pCrsr = pSh->GetCrsr();
 
@@ -297,7 +297,7 @@ void SwLinguIter::_End(bool bRestoreSelection)
     if( !pSh )
         return;
 
-    ASSERT( pEnd, "SwEditShell::SpellEnd() ohne Start?");
+    OSL_ENSURE( pEnd, "SwEditShell::SpellEnd() ohne Start?");
     if(bRestoreSelection)
     {
         while( nCrsrCnt-- )
@@ -356,7 +356,7 @@ uno::Any SwSpellIter::Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
     if( !pMySh )
         return aSpellRet;
 
-    ASSERT( GetEnd(), "SwEditShell::SpellContinue() ohne Start?");
+    OSL_ENSURE( GetEnd(), "SwEditShell::SpellContinue() ohne Start?");
 
     uno::Reference< uno::XInterface >  xSpellRet;
     sal_Bool bGoOn = sal_True;
@@ -430,7 +430,7 @@ uno::Any SwConvIter::Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
     if( !pMySh )
         return aConvRet;
 
-    ASSERT( GetEnd(), "SwConvIter::Continue() ohne Start?");
+    OSL_ENSURE( GetEnd(), "SwConvIter::Continue() ohne Start?");
 
     rtl::OUString aConvText;
     sal_Bool bGoOn = sal_True;
@@ -517,7 +517,7 @@ void SwHyphIter::Start( SwEditShell *pShell, SwDocPositions eStart, SwDocPositio
     // robust
     if( GetSh() || GetEnd() )
     {
-        ASSERT( !GetSh(), "+SwEditShell::HyphStart: missing HyphEnd()" );
+        OSL_ENSURE( !GetSh(), "+SwEditShell::HyphStart: missing HyphEnd()" );
         return;
     }
 
@@ -561,7 +561,7 @@ uno::Any SwHyphIter::Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
     do {
         SwPaM *pCrsr;
         do {
-            ASSERT( GetEnd(), "SwEditShell::SpellContinue() ohne Start?" );
+            OSL_ENSURE( GetEnd(), "SwEditShell::SpellContinue() ohne Start?" );
             pCrsr = pMySh->GetCrsr();
             if ( !pCrsr->HasMark() )
                 pCrsr->SetMark();
@@ -647,7 +647,7 @@ void SwHyphIter::DelSoftHyph( SwPaM &rPam )
 void SwHyphIter::InsertSoftHyph( const xub_StrLen nHyphPos )
 {
     SwEditShell *pMySh = GetSh();
-    ASSERT( pMySh,  "+SwEditShell::InsertSoftHyph: missing HyphStart()");
+    OSL_ENSURE( pMySh,  "+SwEditShell::InsertSoftHyph: missing HyphStart()");
     if( !pMySh )
         return;
 
@@ -660,9 +660,9 @@ void SwHyphIter::InsertSoftHyph( const xub_StrLen nHyphPos )
 
     if( pSttPos->nNode != pEndPos->nNode || !nLastHyphLen )
     {
-        ASSERT( pSttPos->nNode == pEndPos->nNode,
+        OSL_ENSURE( pSttPos->nNode == pEndPos->nNode,
                 "+SwEditShell::InsertSoftHyph: node warp during hyphenation" );
-        ASSERT(nLastHyphLen, "+SwEditShell::InsertSoftHyph: missing HyphContinue()");
+        OSL_ENSURE(nLastHyphLen, "+SwEditShell::InsertSoftHyph: missing HyphContinue()");
         *pSttPos = *pEndPos;
         return;
     }
@@ -747,14 +747,14 @@ void SwEditShell::SpellStart(
     // do not spell if interactive spelling is active elsewhere
     if (!pConvArgs && !pSpellIter)
     {
-        ASSERT( !pSpellIter, "wer ist da schon am spellen?" );
+        OSL_ENSURE( !pSpellIter, "wer ist da schon am spellen?" );
         pSpellIter = new SwSpellIter;
         pLinguIter = pSpellIter;
     }
     // do not do text conversion if it is active elsewhere
     if (pConvArgs && !pConvIter)
     {
-        ASSERT( !pConvIter, "text conversion already active!" );
+        OSL_ENSURE( !pConvIter, "text conversion already active!" );
         pConvIter = new SwConvIter( *pConvArgs );
         pLinguIter = pConvIter;
     }
@@ -785,13 +785,13 @@ void SwEditShell::SpellEnd( SwConversionArgs *pConvArgs, bool bRestoreSelection 
 {
     if (!pConvArgs && pSpellIter && pSpellIter->GetSh() == this)
     {
-        ASSERT( pSpellIter, "wo ist mein Iterator?" );
+        OSL_ENSURE( pSpellIter, "wo ist mein Iterator?" );
         pSpellIter->_End(bRestoreSelection);
         delete pSpellIter, pSpellIter = 0;
     }
     if (pConvArgs && pConvIter && pConvIter->GetSh() == this)
     {
-        ASSERT( pConvIter, "wo ist mein Iterator?" );
+        OSL_ENSURE( pConvIter, "wo ist mein Iterator?" );
         pConvIter->_End();
         delete pConvIter, pConvIter = 0;
     }
@@ -822,8 +822,8 @@ uno::Any SwEditShell::SpellContinue(
             ::StartProgress( STR_STATSTR_SPELL, 0, nEndPage, GetDoc()->GetDocShell() );
     }
 
-    ASSERT(  pConvArgs || pSpellIter, "SpellIter missing" );
-    ASSERT( !pConvArgs || pConvIter,  "ConvIter missing" );
+    OSL_ENSURE(  pConvArgs || pSpellIter, "SpellIter missing" );
+    OSL_ENSURE( !pConvArgs || pConvIter,  "ConvIter missing" );
     //JP 18.07.95: verhinder bei Fehlermeldungen die Anzeige der Selektionen
     //              KEIN StartAction, da damit auch die Paints abgeschaltet
     //              werden !!!!!
@@ -888,7 +888,7 @@ void SwEditShell::HyphStart( SwDocPositions eStart, SwDocPositions eEnd )
     // do not hyphenate if interactive hyphenationg is active elsewhere
     if (!pHyphIter)
     {
-        ASSERT( !pHyphIter, "wer ist da schon am hyphinieren?" );
+        OSL_ENSURE( !pHyphIter, "wer ist da schon am hyphinieren?" );
         pHyphIter = new SwHyphIter;
         pHyphIter->Start( this, eStart, eEnd );
     }
@@ -906,7 +906,7 @@ void SwEditShell::HyphEnd()
 {
     if (pHyphIter->GetSh() == this)
     {
-        ASSERT( pHyphIter, "wo ist mein Iterator?" );
+        OSL_ENSURE( pHyphIter, "wo ist mein Iterator?" );
         pHyphIter->End();
         delete pHyphIter, pHyphIter = 0;
     }
@@ -940,7 +940,7 @@ uno::Reference< uno::XInterface >
             *pPageSt = 1;   // das StatLineStartPercent
     }
 
-    ASSERT( pHyphIter, "wo ist mein Iterator?" );
+    OSL_ENSURE( pHyphIter, "wo ist mein Iterator?" );
     //JP 18.07.95: verhinder bei Fehlermeldungen die Anzeige der Selektionen
     //              KEIN StartAction, da damit auch die Paints abgeschaltet
     //              werden !!!!!
@@ -966,7 +966,7 @@ uno::Reference< uno::XInterface >
 
 void SwEditShell::InsertSoftHyph( const xub_StrLen nHyphPos )
 {
-    ASSERT( pHyphIter, "wo ist mein Iterator?" );
+    OSL_ENSURE( pHyphIter, "wo ist mein Iterator?" );
     pHyphIter->InsertSoftHyph( nHyphPos );
 }
 
@@ -979,7 +979,7 @@ void SwEditShell::InsertSoftHyph( const xub_StrLen nHyphPos )
 
 void SwEditShell::HyphIgnore()
 {
-    ASSERT( pHyphIter, "wo ist mein Iterator?" );
+    OSL_ENSURE( pHyphIter, "wo ist mein Iterator?" );
     //JP 18.07.95: verhinder bei Fehlermeldungen die Anzeige der Selektionen
     //              KEIN StartAction, da damit auch die Paints abgeschaltet
     //              werden !!!!!
@@ -1242,7 +1242,7 @@ bool SwEditShell::GetGrammarCorrection(
 
 bool SwEditShell::SpellSentence(::svx::SpellPortions& rPortions, bool bIsGrammarCheck)
 {
-    ASSERT(  pSpellIter, "SpellIter missing" );
+    OSL_ENSURE(  pSpellIter, "SpellIter missing" );
     if(!pSpellIter)
         return false;
     bool bRet = pSpellIter->SpellSentence(rPortions, bIsGrammarCheck);
@@ -1258,7 +1258,7 @@ bool SwEditShell::SpellSentence(::svx::SpellPortions& rPortions, bool bIsGrammar
   -----------------------------------------------------------------------*/
 void SwEditShell::PutSpellingToSentenceStart()
 {
-    ASSERT(  pSpellIter, "SpellIter missing" );
+    OSL_ENSURE(  pSpellIter, "SpellIter missing" );
     if(!pSpellIter)
         return;
     pSpellIter->ToSentenceStart();
@@ -1294,15 +1294,15 @@ void SwEditShell::ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions,
     // Note: rNewPortions.size() == 0 is valid and happens when the whole
     // sentence got removed in the dialog
 
-    ASSERT(  pSpellIter, "SpellIter missing" );
+    OSL_ENSURE(  pSpellIter, "SpellIter missing" );
     if(pSpellIter &&
        pSpellIter->GetLastPortions().size() > 0)    // no portions -> no text to be changed
     {
         const SpellPortions& rLastPortions = pSpellIter->GetLastPortions();
         const SpellContentPositions  rLastPositions = pSpellIter->GetLastPositions();
-        ASSERT(rLastPortions.size() > 0 &&
+        OSL_ENSURE(rLastPortions.size() > 0 &&
                 rLastPortions.size() == rLastPositions.size(),
-                "last vectors of spelling results are not set or not equal")
+                "last vectors of spelling results are not set or not equal");
 
         // iterate over the new portions, beginning at the end to take advantage of the previously
         // saved content positions
@@ -1528,7 +1528,7 @@ bool SwSpellIter::SpellSentence(::svx::SpellPortions& rPortions, bool bIsGrammar
     if( !pMySh )
         return false;
 
-    ASSERT( GetEnd(), "SwEditShell::SpellSentence() ohne Start?");
+    OSL_ENSURE( GetEnd(), "SwEditShell::SpellSentence() ohne Start?");
 
     uno::Reference< XSpellAlternatives >  xSpellRet;
     linguistic2::ProofreadingResult aGrammarResult;

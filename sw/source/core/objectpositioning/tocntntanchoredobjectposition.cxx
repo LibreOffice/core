@@ -94,7 +94,7 @@ SwTwips SwToCntntAnchoredObjectPosition::ToCharTopOfLine() const
 
 SwTxtFrm& SwToCntntAnchoredObjectPosition::GetAnchorTxtFrm() const
 {
-    ASSERT( GetAnchorFrm().ISA(SwTxtFrm),
+    OSL_ENSURE( GetAnchorFrm().ISA(SwTxtFrm),
             "SwToCntntAnchoredObjectPosition::GetAnchorTxtFrm() - wrong anchor frame type" );
 
     return static_cast<SwTxtFrm&>(GetAnchorFrm());
@@ -311,7 +311,7 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                     }
                     else
                     {
-                        ASSERT( false,
+                        OSL_ENSURE( false,
                                 "<SwToCntntAnchoredObjectPosition::CalcPosition()> - unknown combination of vertical position and vertical alignment." );
                     }
                 }
@@ -331,7 +331,7 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                     }
                     else
                     {
-                        ASSERT( false,
+                        OSL_ENSURE( false,
                                 "<SwToCntntAnchoredObjectPosition::CalcPosition()> - unknown combination of vertical position and vertical alignment." );
                     }
                 }
@@ -372,7 +372,7 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                     }
                     else
                     {
-                        ASSERT( false,
+                        OSL_ENSURE( false,
                                 "<SwToCntntAnchoredObjectPosition::CalcPosition()> - unknown combination of vertical position and vertical alignment." );
                     }
                 }
@@ -697,7 +697,7 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                                     else
                                     {
 #if OSL_DEBUG_LEVEL > 1
-                                        ASSERT( false, "<SwToCntntAnchoredObjectPosition::CalcPosition()> - code under investigation by OD, please inform OD about this assertion!" );
+                                        OSL_ENSURE( false, "<SwToCntntAnchoredObjectPosition::CalcPosition()> - code under investigation by OD, please inform OD about this assertion!" );
 #endif
                                         nRelDiff = nRelPosY;
                                         nRelPosY = 0;

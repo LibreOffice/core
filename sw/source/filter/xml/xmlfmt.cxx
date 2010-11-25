@@ -416,7 +416,7 @@ void SwXMLTextStyleContext_Impl::Finish( sal_Bool bOverwrite )
     const SwDoc *pDoc = pStyle->GetDoc();
 
     SwTxtFmtColl *pColl = pDoc->FindTxtFmtCollByName( pStyle->GetStyleName() );
-    ASSERT( pColl, "Text collection not found" );
+    OSL_ENSURE( pColl, "Text collection not found" );
     if( !pColl || RES_CONDTXTFMTCOLL != pColl->Which() )
         return;
 
@@ -435,7 +435,7 @@ void SwXMLTextStyleContext_Impl::Finish( sal_Bool bOverwrite )
                                       sal_True);
         sName = aString;
         SwTxtFmtColl* pCondColl = pDoc->FindTxtFmtCollByName( sName );
-        ASSERT( pCondColl,
+        OSL_ENSURE( pCondColl,
             "SwXMLItemSetStyleContext_Impl::ConnectConditions: cond coll missing" );
         if( pCondColl )
         {
@@ -542,7 +542,7 @@ SvXMLImportContext *SwXMLItemSetStyleContext_Impl::CreateItemSetContext(
         sal_uInt16 nPrefix, const OUString& rLName,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {
-    ASSERT( !pItemSet,
+    OSL_ENSURE( !pItemSet,
             "SwXMLItemSetStyleContext_Impl::CreateItemSetContext: item set exists" );
 
     SvXMLImportContext *pContext = 0;
@@ -565,7 +565,7 @@ SvXMLImportContext *SwXMLItemSetStyleContext_Impl::CreateItemSetContext(
         pItemSet = new SfxItemSet( rItemPool, aTableBoxSetRange );
         break;
     default:
-        ASSERT( !this,
+        OSL_ENSURE( !this,
         "SwXMLItemSetStyleContext_Impl::CreateItemSetContext: unknown family" );
         break;
     }

@@ -134,7 +134,7 @@ SwCharFmt* SwLineNumberInfo::GetCharFmt( IDocumentStylePoolAccess& rIDSPA ) cons
 
 void SwLineNumberInfo::SetCharFmt( SwCharFmt *pChFmt )
 {
-    ASSERT( pChFmt, "SetCharFmt, 0 is not a valid pointer" );
+    OSL_ENSURE( pChFmt, "SetCharFmt, 0 is not a valid pointer" );
     pChFmt->Add( this );
 }
 

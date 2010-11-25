@@ -773,7 +773,7 @@ void _FinitCore()
 
     delete SwEditShell::pAutoFmtFlags;
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     //Defaultattribut freigeben lassen um asserts zu vermeiden.
     if ( aAttrTab[0]->GetRefCount() )
         SfxItemPool::ReleaseDefaults( aAttrTab, POOLATTR_END-POOLATTR_BEGIN, FALSE);

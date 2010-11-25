@@ -68,7 +68,7 @@ wwZOrderer::wwZOrderer(const sw::util::SetLayer &rSetLayer, SdrPage* pDrawPg,
     mpShapeOrders(pShapeOrders)
 {
     mnNoInitialObjects = mpDrawPg->GetObjCount();
-    ASSERT(mpDrawPg,"Missing draw page impossible!");
+    OSL_ENSURE(mpDrawPg,"Missing draw page impossible!");
 }
 
 void wwZOrderer::InsideEscher(ULONG nSpId)
@@ -208,7 +208,7 @@ void wwZOrderer::InsertTextLayerObject(SdrObject* pObject)
             ++aIter;
         }
 
-        ASSERT(aEnd != maEscherLayer.end(), "Something very wrong here");
+        OSL_ENSURE(aEnd != maEscherLayer.end(), "Something very wrong here");
         if (aEnd != maEscherLayer.end())
         {
             aEnd->mnNoInlines++;
@@ -357,7 +357,7 @@ void SwWW8ImplReader::ReplaceObj(const SdrObject &rReplaceObj,
     }
     else
     {
-        ASSERT( !this, "Impossible!");
+        OSL_ENSURE( !this, "Impossible!");
     }
 }
 

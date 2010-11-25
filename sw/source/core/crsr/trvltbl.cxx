@@ -99,7 +99,7 @@ BOOL SwCrsrShell::GoNextCell( BOOL bAppendLine )
                                     pCrsr->GetPoint()->nNode.GetNode().
                                     StartOfSectionIndex() );
 
-                ASSERT( pTableBox, "Box steht nicht in dieser Tabelle" );
+                OSL_ENSURE( pTableBox, "Box steht nicht in dieser Tabelle" );
                 SwSelBoxes aBoxes;
 
                 //Das Dokument veraendert sich evtl. ohne Action wuerden die Sichten
@@ -305,7 +305,7 @@ BOOL SwCrsrShell::SelTblBox()
     const SwStartNode* pStartNode =
         pCurCrsr->GetPoint()->nNode.GetNode().FindTableBoxStartNode();
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     // the old code checks whether we're in a table by asking the
     // frame. This should yield the same result as searching for the
     // table box start node, right?
@@ -365,7 +365,7 @@ bool lcl_FindNextCell( SwNodeIndex& rIdx, BOOL bInReadOnly )
 
     if ( !pTblNd )
     {
-        ASSERT( false, "lcl_FindNextCell not celled with table start node!" )
+        OSL_ENSURE( false, "lcl_FindNextCell not celled with table start node!" );
         return false;
     }
 
@@ -443,7 +443,7 @@ bool lcl_FindPrevCell( SwNodeIndex& rIdx, BOOL bInReadOnly  )
 
     if ( !pTblNd )
     {
-        ASSERT( false, "lcl_FindPrevCell not celled with table start node!" )
+        OSL_ENSURE( false, "lcl_FindPrevCell not celled with table start node!" );
         return false;
     }
 
@@ -756,7 +756,7 @@ String SwCrsrShell::GetBoxNms() const
             pFrm = pFrm->GetUpper();
         } while ( pFrm && !pFrm->IsCellFrm() );
 
-        ASSERT( pFrm, "kein Frame zur Box" );
+        OSL_ENSURE( pFrm, "kein Frame zur Box" );
         sNm = ((SwCellFrm*)pFrm)->GetTabBox()->GetName();
         sNm += ':';
         pPos = pTblCrsr->End();

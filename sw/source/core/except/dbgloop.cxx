@@ -29,8 +29,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-#ifndef DBG_UTIL
-#error Wer fummelt denn an den makefiles rum?
+#if !defined(OSL_DEBUG_LEVEL) || OSL_DEBUG_LEVEL == 0
+#error Who broke the makefiles?
 #endif
 #include <tools/stream.hxx>
 #include "dbgloop.hxx"
@@ -73,7 +73,7 @@ void DbgLoopStack::Push( const void *pThis )
     if( DBG_MAX_STACK > nPtr )
     {
         // Wenn eine loop entdeckt wird, wird der counter wieder zurueckgesetzt.
-        ASSERT( DBG_MAX_LOOP > aCount[nPtr], "DbgLoopStack::Push: loop detected" );
+        OSL_ENSURE( DBG_MAX_LOOP > aCount[nPtr], "DbgLoopStack::Push: loop detected" );
         if( DBG_MAX_LOOP > aCount[nPtr] )
             ++(aCount[nPtr]);
         else
@@ -89,9 +89,9 @@ void DbgLoopStack::Pop()
 {
     if( DBG_MAX_STACK > nPtr )
     {
-        ASSERT( nPtr, "DbgLoopStack::Pop: can't pop the stack" );
+        OSL_ENSURE( nPtr, "DbgLoopStack::Pop: can't pop the stack" );
 
-        ASSERT( aCount[nPtr], "DbgLoopStack::Pop: can't dec the count" );
+        OSL_ENSURE( aCount[nPtr], "DbgLoopStack::Pop: can't dec the count" );
         if( DBG_MAX_STACK > nPtr + 1 )
             aCount[nPtr + 1] = 0;
     }

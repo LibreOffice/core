@@ -102,11 +102,12 @@ SwField* SwChapterField::Copy() const
     return pTmp;
 }
 
+// #i53420#
 void SwChapterField::ChangeExpansion(const SwFrm* pFrm,
                                       const SwCntntNode* pCntntNode,
                                       sal_Bool bSrchNum )
 {
-    ASSERT( pFrm, "in welchem Frame stehe ich denn?" )
+    OSL_ENSURE( pFrm, "in welchem Frame stehe ich denn?" );
     SwDoc* pDoc = (SwDoc*)pCntntNode->GetDoc();
 
     const SwTxtNode* pTxtNode = dynamic_cast<const SwTxtNode*>(pCntntNode);
@@ -121,7 +122,6 @@ void SwChapterField::ChangeExpansion(const SwFrm* pFrm,
         ChangeExpansion( *pTxtNode, bSrchNum );
     }
 }
-// <--
 
 void SwChapterField::ChangeExpansion(const SwTxtNode &rTxtNd, sal_Bool bSrchNum)
 {
@@ -137,10 +137,9 @@ void SwChapterField::ChangeExpansion(const SwTxtNode &rTxtNd, sal_Bool bSrchNum)
                 {
                     BYTE nPrevLvl = nLevel;
 
-                    ASSERT( pONd->GetAttrOutlineLevel() >= 0 && pONd->GetAttrOutlineLevel() <= MAXLEVEL,
+                    OSL_ENSURE( pONd->GetAttrOutlineLevel() >= 0 && pONd->GetAttrOutlineLevel() <= MAXLEVEL,
                             "<SwChapterField::ChangeExpansion(..)> - outline node with inconsistent outline level. Serious defect -> please inform OD." );
-                    nLevel = static_cast<BYTE>(pONd->GetAttrOutlineLevel());                            //<-end,zhaojianwei
-                    // <--
+                    nLevel = static_cast<BYTE>(pONd->GetAttrOutlineLevel());
 
                     if( nPrevLvl < nLevel )
                         nLevel = nPrevLvl;

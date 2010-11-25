@@ -550,7 +550,7 @@ String lcl_dbg_out(const SwNode & rNode)
     aTmpStr += String::CreateFromInt32(rNode.GetIndex());
     aTmpStr += String("\"", RTL_TEXTENCODING_ASCII_US);
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     aTmpStr += String(" serial=\"", RTL_TEXTENCODING_ASCII_US);
     aTmpStr += String::CreateFromInt32(rNode.GetSerial());
     aTmpStr += String("\"", RTL_TEXTENCODING_ASCII_US);
@@ -1042,7 +1042,7 @@ String lcl_TokenType2Str(FormTokenType nType)
         return String("??", RTL_TEXTENCODING_ASCII_US);
     }
 
-    ASSERT(false, "should not be reached");
+    OSL_ENSURE(false, "should not be reached");
 
     return  String("??", RTL_TEXTENCODING_ASCII_US);
 }

@@ -435,7 +435,7 @@ int SwAttrCheckArr::SetAttrFwd( const SwTxtAttr& rAttr )
                 // vorhanden, auf den Stack. Aber nur wenn es noch grosser ist
                 if( pCmp->nEnd > aTmp.nEnd )
                 {
-                    ASSERT( !pStackArr[ nWhch - nArrStart ].nWhich,
+                    OSL_ENSURE( !pStackArr[ nWhch - nArrStart ].nWhich,
                                     "Stack-Platz ist noch belegt" );
 
                     if( aTmp.nStt <= pCmp->nStt )
@@ -588,7 +588,7 @@ int SwAttrCheckArr::SetAttrBwd( const SwTxtAttr& rAttr )
                 // vorhanden, auf den Stack. Aber nur wenn es noch grosser ist
                 if( pCmp->nStt < aTmp.nStt )
                 {
-                    ASSERT( !pStackArr[ nWhch - nArrStart ].nWhich,
+                    OSL_ENSURE( !pStackArr[ nWhch - nArrStart ].nWhich,
                             "Stack-Platz ist noch belegt" );
 
                     if( aTmp.nEnd <= pCmp->nEnd )
@@ -667,7 +667,7 @@ int SwAttrCheckArr::CheckStack()
         {
             // alle die "offen" sind, heisst ueber die Start Position ragen,
             // im FndSet setzen
-            ASSERT( !pFndArr[ n ].nWhich, "Array-Platz ist noch belegt" );
+            OSL_ENSURE( !pFndArr[ n ].nWhich, "Array-Platz ist noch belegt" );
             pFndArr[ n ] = *pArrPtr;
             pArrPtr->nWhich = 0;
             nFound++;

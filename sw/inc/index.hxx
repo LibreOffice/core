@@ -41,17 +41,17 @@ class SwIndex;
 class SwIndexReg;
 struct SwPosition;
 
-#ifndef DBG_UTIL
-#define INLINE inline
-#else
+#if OSL_DEBUG_LEVEL > 1
 #define INLINE
+#else
+#define INLINE inline
 #endif
 
 class SW_DLLPUBLIC SwIndex
 {
     friend class SwIndexReg;
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     static int nSerial;
     int MySerial;
 #endif
@@ -148,7 +148,7 @@ public:
     void MoveTo( SwIndexReg& rArr );
 };
 
-#ifndef DBG_UTIL
+#if !defined(OSL_DEBUG_LEVEL) || OSL_DEBUG_LEVEL < 2
 
 inline xub_StrLen SwIndex::operator++()
 {

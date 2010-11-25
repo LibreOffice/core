@@ -277,8 +277,8 @@ void sw::util::RedlineStack::close( const SwPosition& rPos,
     {
         if( pTabDesc && pTabDesc->getOldRedlineStack() )
         {
-#ifdef DBG_UTIL
-            ASSERT( pTabDesc->getOldRedlineStack()->close(rPos, eType), "close without open!");
+#if OSL_DEBUG_LEVEL > 1
+            OSL_ENSURE( pTabDesc->getOldRedlineStack()->close(rPos, eType), "close without open!");
 #else
             pTabDesc->getOldRedlineStack()->close( rPos, eType );
 #endif
@@ -289,7 +289,7 @@ void sw::util::RedlineStack::close( const SwPosition& rPos,
 
 void wwSectionManager::SetCurrentSectionHasFootnote()
 {
-    ASSERT(!maSegments.empty(),
+    OSL_ENSURE(!maSegments.empty(),
         "should not be possible, must be at least one segment");
     if (!maSegments.empty())
         maSegments.back().mbHasFootnote = true;
@@ -297,7 +297,7 @@ void wwSectionManager::SetCurrentSectionHasFootnote()
 
 bool wwSectionManager::CurrentSectionIsVertical() const
 {
-    ASSERT(!maSegments.empty(),
+    OSL_ENSURE(!maSegments.empty(),
         "should not be possible, must be at least one segment");
     if (!maSegments.empty())
         return maSegments.back().IsVertical();
@@ -306,7 +306,7 @@ bool wwSectionManager::CurrentSectionIsVertical() const
 
 bool wwSectionManager::CurrentSectionIsProtected() const
 {
-    ASSERT(!maSegments.empty(),
+    OSL_ENSURE(!maSegments.empty(),
         "should not be possible, must be at least one segment");
     if (!maSegments.empty())
         return SectionIsProtected(maSegments.back());
@@ -353,7 +353,7 @@ sal_uInt16 SwWW8ImplReader::End_Ftn()
         return 0;
     }
 
-    ASSERT(!maFtnStack.empty(), "footnote end without start");
+    OSL_ENSURE(!maFtnStack.empty(), "footnote end without start");
     if (maFtnStack.empty())
         return 0;
 
@@ -378,7 +378,7 @@ sal_uInt16 SwWW8ImplReader::End_Ftn()
         SwFmtFtn aFtn(rDesc.meType == MAN_EDN);
         pFN = pTxt->InsertItem(aFtn, nPos, nPos);
     }
-    ASSERT(pFN, "Probleme beim Anlegen des Fussnoten-Textes");
+    OSL_ENSURE(pFN, "Probleme beim Anlegen des Fussnoten-Textes");
     if (pFN)
     {
 
@@ -388,7 +388,7 @@ sal_uInt16 SwWW8ImplReader::End_Ftn()
         WW8PLCFMan* pOldPlcxMan = pPlcxMan;
 
         const SwNodeIndex* pSttIdx = ((SwTxtFtn*)pFN)->GetStartNode();
-        ASSERT(pSttIdx, "Probleme beim Anlegen des Fussnoten-Textes");
+        OSL_ENSURE(pSttIdx, "Probleme beim Anlegen des Fussnoten-Textes");
 
         ((SwTxtFtn*)pFN)->SetSeqNo( rDoc.GetFtnIdxs().Count() );
 
@@ -400,7 +400,7 @@ sal_uInt16 SwWW8ImplReader::End_Ftn()
         bFtEdOk = true;
         bFtnEdn = bOld;
 
-        ASSERT(sChar.Len()==1 && ((rDesc.mbAutoNum == (sChar.GetChar(0) == 2))),
+        OSL_ENSURE(sChar.Len()==1 && ((rDesc.mbAutoNum == (sChar.GetChar(0) == 2))),
          "footnote autonumbering must be 0x02, and everthing else must not be");
 
         // If no automatic numbering use the following char from the main text
@@ -503,7 +503,7 @@ bool SwWW8ImplReader::SearchRowEnd(WW8PLCFx_Cp_FKP* pPap, WW8_CP &rStartCp,
                 }
                 else
                 {
-                    ASSERT(!nLevel || pLevel, "sublevel without level sprm");
+                    OSL_ENSURE(!nLevel || pLevel, "sublevel without level sprm");
                     return true;    // RowEnd found
                 }
             }
@@ -587,7 +587,7 @@ ApoTestResults SwWW8ImplReader::TestApo(int nCellLevel, bool bTableRowEnd,
             {
                 if (!pTableDesc)
                 {
-                    ASSERT(pTableDesc, "What!");
+                    OSL_ENSURE(pTableDesc, "What!");
                     bTestAllowed = false;
                 }
                 else
@@ -1475,8 +1475,8 @@ void WW8TabBandDesc::ProcessDirection(const BYTE* pParams)
     sal_uInt8 nEndCell = *pParams++;
     sal_uInt16 nCode = SVBT16ToShort(pParams);
 
-    ASSERT(nStartCell < nEndCell, "not as I thought");
-    ASSERT(nEndCell < MAX_COL + 1, "not as I thought");
+    OSL_ENSURE(nStartCell < nEndCell, "not as I thought");
+    OSL_ENSURE(nEndCell < MAX_COL + 1, "not as I thought");
     if (nStartCell > MAX_COL)
         return;
     if (nEndCell > MAX_COL + 1)
@@ -1489,19 +1489,19 @@ void WW8TabBandDesc::ProcessDirection(const BYTE* pParams)
 void WW8TabBandDesc::ProcessSpacing(const BYTE* pParams)
 {
     BYTE nLen = pParams ? *(pParams - 1) : 0;
-    ASSERT(nLen == 6, "Unexpected spacing len");
+    OSL_ENSURE(nLen == 6, "Unexpected spacing len");
     if (nLen != 6)
         return;
     mbHasSpacing=true;
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     BYTE nWhichCell = *pParams;
-    ASSERT(nWhichCell == 0, "Expected cell to be 0!");
+    OSL_ENSURE(nWhichCell == 0, "Expected cell to be 0!");
 #endif
     ++pParams; //Skip which cell
     ++pParams; //unknown byte
 
     BYTE nSideBits = *pParams++;
-    ASSERT(nSideBits < 0x10, "Unexpected value for nSideBits");
+    OSL_ENSURE(nSideBits < 0x10, "Unexpected value for nSideBits");
     ++pParams; //unknown byte
     USHORT nValue =  SVBT16ToShort( pParams );
     for (int i = wwTOP; i <= wwRIGHT; i++)
@@ -1523,7 +1523,7 @@ void WW8TabBandDesc::ProcessSpacing(const BYTE* pParams)
             case 0:
                 break;
             default:
-                ASSERT(!this, "Impossible");
+                OSL_ENSURE(!this, "Impossible");
                 break;
         }
     }
@@ -1532,24 +1532,24 @@ void WW8TabBandDesc::ProcessSpacing(const BYTE* pParams)
 void WW8TabBandDesc::ProcessSpecificSpacing(const BYTE* pParams)
 {
     BYTE nLen = pParams ? *(pParams - 1) : 0;
-    ASSERT(nLen == 6, "Unexpected spacing len");
+    OSL_ENSURE(nLen == 6, "Unexpected spacing len");
     if (nLen != 6)
         return;
     BYTE nWhichCell = *pParams++;
-    ASSERT(nWhichCell < MAX_COL + 1, "Cell out of range in spacings");
+    OSL_ENSURE(nWhichCell < MAX_COL + 1, "Cell out of range in spacings");
     if (nWhichCell >= MAX_COL + 1)
         return;
 
     ++pParams; //unknown byte
     BYTE nSideBits = *pParams++;
-    ASSERT(nSideBits < 0x10, "Unexpected value for nSideBits");
+    OSL_ENSURE(nSideBits < 0x10, "Unexpected value for nSideBits");
     nOverrideSpacing[nWhichCell] |= nSideBits;
 
-    ASSERT(nOverrideSpacing[nWhichCell] < 0x10,
+    OSL_ENSURE(nOverrideSpacing[nWhichCell] < 0x10,
         "Unexpected value for nSideBits");
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     BYTE nUnknown2 = *pParams;
-    ASSERT(nUnknown2 == 0x3, "Unexpected value for spacing2");
+    OSL_ENSURE(nUnknown2 == 0x3, "Unexpected value for spacing2");
 #endif
     ++pParams;
     USHORT nValue =  SVBT16ToShort( pParams );
@@ -2315,7 +2315,7 @@ void WW8TabDesc::CalcDefaults()
             }
         }
 
-        ASSERT(i,"no columns in row ?");
+        OSL_ENSURE(i,"no columns in row ?");
 
         /*
         #96345#
@@ -2356,7 +2356,7 @@ void WW8TabDesc::CalcDefaults()
         bOk = false;
     pActBand = pFirstBand;
     nAktBandRow = 0;
-    ASSERT( pActBand, "pActBand ist 0" );
+    OSL_ENSURE( pActBand, "pActBand ist 0" );
 }
 
 void WW8TabDesc::SetSizePosition(SwFrmFmt* pFrmFmt)
@@ -2364,7 +2364,7 @@ void WW8TabDesc::SetSizePosition(SwFrmFmt* pFrmFmt)
     SwFrmFmt* pApply = pFrmFmt;
     if (!pApply )
         pApply = pTable->GetFrmFmt();
-    ASSERT(pApply,"No frame");
+    OSL_ENSURE(pApply,"No frame");
     pApply->SetFmtAttr(aItemSet);
     if (pFrmFmt)
     {
@@ -2379,7 +2379,7 @@ void WW8TabDesc::SetSizePosition(SwFrmFmt* pFrmFmt)
 void wwSectionManager::PrependedInlineNode(const SwPosition &rPos,
     const SwNode &rNode)
 {
-    ASSERT(!maSegments.empty(),
+    OSL_ENSURE(!maSegments.empty(),
         "should not be possible, must be at least one segment");
     if ((!maSegments.empty()) && (maSegments.back().maStart == rPos.nNode))
         maSegments.back().maStart = SwNodeIndex(rNode);
@@ -2437,12 +2437,12 @@ void WW8TabDesc::CreateSwTable()
             SwInsertTableOptions( tabopts::HEADLINE_NO_BORDER, 0 ),
             *pTmpPos, nBands, nDefaultSwCols, eOri, 0, 0, FALSE, TRUE );
 
-    ASSERT(pTable && pTable->GetFrmFmt(), "insert table failed");
+    OSL_ENSURE(pTable && pTable->GetFrmFmt(), "insert table failed");
     if (!pTable || !pTable->GetFrmFmt())
         return;
 
     SwTableNode* pTableNode = pTable->GetTableNode();
-    ASSERT(pTableNode, "no table node!");
+    OSL_ENSURE(pTableNode, "no table node!");
     if (pTableNode)
     {
         pIo->maSectionManager.PrependedInlineNode(*pIo->pPaM->GetPoint(),
@@ -2547,7 +2547,7 @@ void WW8TabDesc::UseSwTable()
 
     pTblNd  = (SwTableNode*)(*pTabLines)[0]->GetTabBoxes()[0]->
         GetSttNd()->FindTableNode();
-    ASSERT( pTblNd, "wo ist mein TabellenNode" );
+    OSL_ENSURE( pTblNd, "wo ist mein TabellenNode" );
 
     // --> mloiseleur 2007-10-10 #i69519# Restrict rows to repeat to a decent value
     if ( nRowsToRepeat == static_cast<USHORT>(nRows) )
@@ -2587,7 +2587,7 @@ void WW8TabDesc::MergeCells()
                     //
                     // ggfs. eine neue Merge-Gruppe beginnen
                     //
-                    ASSERT(nRow < pTabLines->Count(),
+                    OSL_ENSURE(nRow < pTabLines->Count(),
                         "Too few lines, table ended early");
                     if (nRow >= pTabLines->Count())
                         return;
@@ -2597,7 +2597,7 @@ void WW8TabDesc::MergeCells()
                     USHORT nCol = pActBand->nTransCell[ i ];
                     if (!pActBand->bExist[i])    //#113434#
                         continue;
-                    ASSERT(nCol < pTabBoxes->Count(),
+                    OSL_ENSURE(nCol < pTabBoxes->Count(),
                         "Too few columns, table ended early");
                     if (nCol >= pTabBoxes->Count())
                         return;
@@ -2728,7 +2728,7 @@ void WW8TabDesc::ParkPaM()
 
 void WW8TabDesc::MoveOutsideTable()
 {
-    ASSERT(pTmpPos && pIo, "I've forgotten where the table is anchored");
+    OSL_ENSURE(pTmpPos && pIo, "I've forgotten where the table is anchored");
     if (pTmpPos && pIo)
         *pIo->pPaM->GetPoint() = *pTmpPos;
 }
@@ -2861,7 +2861,7 @@ bool WW8TabDesc::InFirstParaInCell() const
     //e.g. #i19718#
     if (!pTabBox || !pTabBox->GetSttNd())
     {
-        ASSERT(false, "Problem with table");
+        OSL_ENSURE(false, "Problem with table");
         return false;
     }
 
@@ -2876,7 +2876,7 @@ bool WW8TabDesc::InFirstParaInCell() const
 
 void WW8TabDesc::StartMiserableHackForUnsupportedDirection(short nWwCol)
 {
-    ASSERT(pActBand, "Impossible");
+    OSL_ENSURE(pActBand, "Impossible");
     if (pActBand && pActBand->maDirections[nWwCol] == 3)
     {
         pIo->pCtrlStck->NewAttr(*pIo->pPaM->GetPoint(),
@@ -2886,20 +2886,20 @@ void WW8TabDesc::StartMiserableHackForUnsupportedDirection(short nWwCol)
 
 void WW8TabDesc::EndMiserableHackForUnsupportedDirection(short nWwCol)
 {
-    ASSERT(pActBand, "Impossible");
+    OSL_ENSURE(pActBand, "Impossible");
     if (pActBand && pActBand->maDirections[nWwCol] == 3)
         pIo->pCtrlStck->SetAttr(*pIo->pPaM->GetPoint(), RES_CHRATR_ROTATE);
 }
 
 bool WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)
 {
-    ASSERT( pActBand, "pActBand ist 0" );
+    OSL_ENSURE( pActBand, "pActBand ist 0" );
 
     USHORT nCol = pActBand->nTransCell[nWwCol];
 
     if ((USHORT)nAktRow >= pTabLines->Count())
     {
-        ASSERT(!this, "Actual row bigger than expected." );
+        OSL_ENSURE(!this, "Actual row bigger than expected." );
         if (bPam)
             MoveOutsideTable();
         return false;
@@ -2934,7 +2934,7 @@ bool WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)
     pTabBox = (*pTabBoxes)[nCol];
     if( !pTabBox->GetSttNd() )
     {
-        ASSERT(pTabBox->GetSttNd(), "Probleme beim Aufbau der Tabelle");
+        OSL_ENSURE(pTabBox->GetSttNd(), "Probleme beim Aufbau der Tabelle");
         if (bPam)
             MoveOutsideTable();
         return false;
@@ -3101,7 +3101,7 @@ SvxFrameDirection MakeDirection(sal_uInt16 nCode, BOOL bIsBiDi)
     switch (nCode)
     {
         default:
-            ASSERT(eDir == 4, "unknown direction code, maybe its a bitfield");
+            OSL_ENSURE(eDir == 4, "unknown direction code, maybe its a bitfield");
         case 3:
             // --> FME/Alan Yaniger: 2006-09-15 #i38158# Consider RTL tables:
             eDir = bIsBiDi ? FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP;
@@ -3164,8 +3164,8 @@ void WW8TabDesc::AdjustNewBand()
         InsertCells( pActBand->nSwCols - nDefaultSwCols );
 
     SetPamInCell( 0, false);
-    ASSERT( pTabBoxes && pTabBoxes->Count() == (USHORT)pActBand->nSwCols,
-        "Falsche Spaltenzahl in Tabelle" )
+    OSL_ENSURE( pTabBoxes && pTabBoxes->Count() == (USHORT)pActBand->nSwCols,
+        "Falsche Spaltenzahl in Tabelle" );
 
     if( bClaimLineFmt )
     {
@@ -3298,7 +3298,7 @@ void WW8TabDesc::TableCellEnd()
         nAktCol = 0;
         nAktRow++;
         nAktBandRow++;
-        ASSERT( pActBand , "pActBand ist 0" );
+        OSL_ENSURE( pActBand , "pActBand ist 0" );
         if( pActBand )
         {
             if( nAktRow >= nRows )  // am Tabellenende gibt's nichts sinnvolles
@@ -3309,7 +3309,7 @@ void WW8TabDesc::TableCellEnd()
             {                       // neues Band noetig ?
                 pActBand = pActBand->pNextBand; //
                 nAktBandRow = 0;
-                ASSERT( pActBand, "pActBand ist 0" );
+                OSL_ENSURE( pActBand, "pActBand ist 0" );
                 AdjustNewBand();
             }
             else
@@ -3476,7 +3476,7 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
         int nNewInTable = nInTable + 1;
         if (InEqualApo(nNewInTable))
         {
-            ASSERT(pSFlyPara->pFlyFmt,
+            OSL_ENSURE(pSFlyPara->pFlyFmt,
                 "how could we be in a local apo and have no apo");
         }
 
@@ -3494,7 +3494,7 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
             aItemSet.Put( aAnchor );
             pTableDesc->pFlyFmt = rDoc.MakeFlySection( eAnchor,
                                                       pTableDesc->pParentPos, &aItemSet);
-            ASSERT( pTableDesc->pFlyFmt->GetAnchor().GetAnchorId() == eAnchor,
+            OSL_ENSURE( pTableDesc->pFlyFmt->GetAnchor().GetAnchorId() == eAnchor,
                    "Not the anchor type requested!" );
             // <--
             MoveInsideFly(pTableDesc->pFlyFmt);
@@ -3630,7 +3630,7 @@ void SwWW8ImplReader::StopTable()
 {
     maTracer.LeaveEnvironment(sw::log::eTable);
 
-    ASSERT(pTableDesc, "Panic, stop table with no table!");
+    OSL_ENSURE(pTableDesc, "Panic, stop table with no table!");
     if (!pTableDesc)
         return;
 

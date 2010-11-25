@@ -304,7 +304,7 @@ void SwAnchoredDrawObject::MakeObjPos()
     // to anchor frame
     if ( mbNotYetAttachedToAnchorFrame )
     {
-        ASSERT( false,
+        OSL_ENSURE( false,
                 "<SwAnchoredDrawObject::MakeObjPos() - drawing object not yet attached to anchor frame -> no positioning" );
         return;
     }
@@ -377,7 +377,7 @@ void SwAnchoredDrawObject::MakeObjPos()
             break;
             default:
             {
-                ASSERT( false, "<SwAnchoredDrawObject::MakeObjPos()> - unknown anchor type - please inform OD." );
+                OSL_ENSURE( false, "<SwAnchoredDrawObject::MakeObjPos()> - unknown anchor type - please inform OD." );
             }
         }
 
@@ -680,13 +680,13 @@ void SwAnchoredDrawObject::InvalidateObjPos()
 
 SwFrmFmt& SwAnchoredDrawObject::GetFrmFmt()
 {
-    ASSERT( static_cast<SwDrawContact*>(GetUserCall(GetDrawObj()))->GetFmt(),
+    OSL_ENSURE( static_cast<SwDrawContact*>(GetUserCall(GetDrawObj()))->GetFmt(),
             "<SwAnchoredDrawObject::GetFrmFmt()> - missing frame format -> crash." );
     return *(static_cast<SwDrawContact*>(GetUserCall(GetDrawObj()))->GetFmt());
 }
 const SwFrmFmt& SwAnchoredDrawObject::GetFrmFmt() const
 {
-    ASSERT( static_cast<SwDrawContact*>(GetUserCall(GetDrawObj()))->GetFmt(),
+    OSL_ENSURE( static_cast<SwDrawContact*>(GetUserCall(GetDrawObj()))->GetFmt(),
             "<SwAnchoredDrawObject::GetFrmFmt()> - missing frame format -> crash." );
     return *(static_cast<SwDrawContact*>(GetUserCall(GetDrawObj()))->GetFmt());
 }
@@ -838,7 +838,7 @@ void SwAnchoredDrawObject::_SetPositioningAttr()
                 break;
                 default:
                 {
-                    ASSERT( false,
+                    OSL_ENSURE( false,
                             "<SwAnchoredDrawObject::_SetPositioningAttr()> - unsupported layout direction" );
                 }
             }

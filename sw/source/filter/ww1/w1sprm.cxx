@@ -102,7 +102,7 @@ void Ww1SingleSprm::Start(
 void Ww1SingleSprm::Stop(
     Ww1Shell&, BYTE, BYTE*, USHORT, Ww1Manager&)
 {
-//  ASSERT(FALSE, "Unknown Sprm");
+// OSL_ENSURE(FALSE, "Unknown Sprm");
 }
 
 ////////////////////////////////////////////////////////////////// STOP
@@ -213,7 +213,7 @@ SvxBorderLine* Ww1SingleSprmPBrc::SetBorder(SvxBorderLine* pLine, W1_BRC10* pBrc
     {
         switch(pBrc->dxpLine1WidthGet())
         {
-        default: ASSERT(FALSE, "unknown linewidth");
+        default: OSL_ENSURE(FALSE, "unknown linewidth");
         case 0: return 0;                           // keine Linie
         case 1: nCode = DEF_LINE_WIDTH_0; break;
         case 2: nCode = DEF_LINE_WIDTH_1; break;
@@ -237,20 +237,20 @@ SvxBorderLine* Ww1SingleSprmPBrc::SetBorder(SvxBorderLine* pLine, W1_BRC10* pBrc
     {
         switch(pBrc->dxpLine1WidthGet())
         {
-        default: ASSERT(FALSE, "unknown linewidth");
+        default: OSL_ENSURE(FALSE, "unknown linewidth");
         case 1: nCode = DEF_DOUBLE_LINE0_IN; break;
         }
         pLine->SetOutWidth(nCode);
         switch(pBrc->dxpLine2WidthGet())
         {
-        default: ASSERT(FALSE, "unknown linewidth");
+        default: OSL_ENSURE(FALSE, "unknown linewidth");
         case 1: nCode = DEF_DOUBLE_LINE0_OUT; break;
         }
         pLine->SetInWidth(nCode);
     }
     switch(pBrc->dxpLine1WidthGet())
     {
-    default: ASSERT(FALSE, "unknown space");
+    default: OSL_ENSURE(FALSE, "unknown space");
     case 0: nCode = DEF_DOUBLE_LINE0_DIST; break;
     case 1: nCode = DEF_DOUBLE_LINE1_DIST; break;
     case 2: nCode = DEF_DOUBLE_LINE2_DIST; break;
@@ -264,14 +264,16 @@ void Ww1SingleSprmPBrc::Start(
     Ww1Shell& rOut, BYTE,
     W1_BRC10* pBrc,
     USHORT
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     nSize
 #endif
     ,
     Ww1Manager& /*rMan*/,
     SvxBoxItem& aBox)
 {
-    ASSERT(sizeof(W1_BRC10) == nSize, "sizemissmatch");
+#if OSL_DEBUG_LEVEL > 1
+    OSL_ENSURE(sizeof(W1_BRC10) == nSize, "sizemissmatch");
+#endif
     if(pBrc->dxpSpaceGet())
         aBox.SetDistance(10 + 20 * pBrc->dxpSpaceGet());
             //??? Warum 10+... ????
@@ -459,14 +461,16 @@ void Ww1SingleSprmPFInTable::Start(
 
 void Ww1SingleSprmPFInTable::Stop(
     Ww1Shell&
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     rOut
 #endif
     ,
     BYTE, BYTE*, USHORT,
     Ww1Manager& rMan)
 {
-    ASSERT(rOut.IsInTable(), "");
+#if OSL_DEBUG_LEVEL > 1
+    OSL_ENSURE(rOut.IsInTable(), "");
+#endif
     rMan.SetInTtp( FALSE );
 }
 

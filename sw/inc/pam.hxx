@@ -189,8 +189,10 @@ public:
             m_pMark = m_pPoint;
         }
     }
-#ifndef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
+    void Exchange();
 
+#else
     void Exchange()
     {
         if (m_pPoint != m_pMark)
@@ -200,8 +202,6 @@ public:
             m_pMark = pTmp;
         }
     }
-#else
-    void Exchange();
 #endif
 
     /** A PaM marks a selection if Point and Mark are distinct positions.

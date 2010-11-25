@@ -117,7 +117,7 @@ using namespace sw::mark;
 using namespace nsFieldFlags;
 
 static String lcl_getFieldCode( const IFieldmark* pFieldmark ) {
-    ASSERT(pFieldmark!=NULL, "where is my fieldmark???");
+    OSL_ENSURE(pFieldmark!=NULL, "where is my fieldmark???");
 
     if ( pFieldmark->GetFieldname( ).equalsAscii( ODF_FORMTEXT ) ) {
         return String::CreateFromAscii(" FORMTEXT ");
@@ -137,7 +137,7 @@ static String lcl_getFieldCode( const IFieldmark* pFieldmark ) {
 }
 
 ww::eField lcl_getFieldId( const IFieldmark* pFieldmark ) {
-    ASSERT(pFieldmark!=NULL, "where is my fieldmark???");
+    OSL_ENSURE(pFieldmark!=NULL, "where is my fieldmark???");
     if ( pFieldmark->GetFieldname( ).equalsAscii( ODF_FORMTEXT ) ) {
         return ww::eFORMTEXT;
     } else if ( pFieldmark->GetFieldname( ).equalsAscii( ODF_FORMDROPDOWN ) ) {
@@ -180,7 +180,7 @@ public:
 
 void SwWW8AttrIter::IterToCurrent()
 {
-    ASSERT(maCharRuns.begin() != maCharRuns.end(), "Impossible");
+    OSL_ENSURE(maCharRuns.begin() != maCharRuns.end(), "Impossible");
     mnScript = maCharRunIter->mnScript;
     meChrSet = maCharRunIter->meCharSet;
     mbCharIsRTL = maCharRunIter->mbRTL;
@@ -499,7 +499,7 @@ void SwWW8AttrIter::OutAttr( xub_StrLen nSwPos, bool bRuby )
         m_rExport.pOutFmtNode = pOldMod;
     }
 
-    ASSERT( pFont, "must be *some* font associated with this txtnode" );
+    OSL_ENSURE( pFont, "must be *some* font associated with this txtnode" );
     if ( pFont )
     {
         SvxFontItem aFont( *pFont );
@@ -665,7 +665,7 @@ void WW8AttributeOutput::StartRuby( const SwTxtNode& rNode, xub_StrLen /*nPos*/,
             cDirective = 'd';
             break;
         default:
-            ASSERT( !this,"Unhandled Ruby justication code" );
+            OSL_ENSURE( !this,"Unhandled Ruby justication code" );
             break;
     }
     aStr += String::CreateFromInt32( nJC );
@@ -764,7 +764,7 @@ String &TruncateBookmark( String &rRet )
 {
     if ( rRet.Len() > 40 )
         rRet.Erase( 40 );
-    ASSERT( rRet.Len() <= 40, "Word cannot have bookmarks longer than 40 chars" );
+    OSL_ENSURE( rRet.Len() <= 40, "Word cannot have bookmarks longer than 40 chars" );
     return rRet;
 }
 
@@ -1111,7 +1111,7 @@ void AttributeOutputBase::TOXMark( const SwTxtNode& rNode, const SwTOXMark& rAtt
             }
             break;
         default:
-            ASSERT( !this, "Unhandled option for toc export" );
+            OSL_ENSURE( !this, "Unhandled option for toc export" );
             break;
     }
 
@@ -1327,7 +1327,7 @@ short MSWordExportBase::TrueFrameDirection( const SwFrmFmt &rFlyFmt ) const
     else
         nRet = GetCurrentPageDirection();
 
-    ASSERT( nRet != FRMDIR_ENVIRONMENT, "leaving with environment direction" );
+    OSL_ENSURE( nRet != FRMDIR_ENVIRONMENT, "leaving with environment direction" );
     return nRet;
 }
 
@@ -1930,7 +1930,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
         // Exception: footnotes at the end of line
         if ( nNextAttr == nEnd )
         {
-            ASSERT( nOpenAttrWithRange >= 0, "odd to see this happening, expected >= 0" );
+            OSL_ENSURE( nOpenAttrWithRange >= 0, "odd to see this happening, expected >= 0" );
             if ( !bTxtAtr && nOpenAttrWithRange <= 0 )
             {
                 if ( aAttrIter.IsRedlineAtEnd( nEnd ) )
@@ -1959,13 +1959,13 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
         // Exception: footnotes at the end of line
         if ( nNextAttr == nEnd )
         {
-            ASSERT(nOpenAttrWithRange >= 0,
+            OSL_ENSURE(nOpenAttrWithRange >= 0,
                 "odd to see this happening, expected >= 0");
             bool bAttrWithRange = (nOpenAttrWithRange > 0);
             if ( nAktPos != nEnd )
             {
                 nOpenAttrWithRange += aAttrIter.OutAttrWithRange(nEnd);
-                ASSERT(nOpenAttrWithRange == 0,
+                OSL_ENSURE(nOpenAttrWithRange == 0,
                     "odd to see this happening, expected 0");
             }
 
@@ -2461,7 +2461,7 @@ void WW8Export::AppendSection( const SwPageDesc *pPageDesc, const SwSectionFmt* 
 
 void WW8Export::OutWW6FlyFrmsInCntnt( const SwTxtNode& rNd )
 {
-    ASSERT(!bWrtWW8, "I shouldn't be needed for Word >=8");
+    OSL_ENSURE(!bWrtWW8, "I shouldn't be needed for Word >=8");
     if ( bWrtWW8 )
         return;
 
@@ -2539,7 +2539,7 @@ void WW8AttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFmt, const Point
 
     if (bUseEscher)
     {
-        ASSERT( m_rWW8Export.bWrtWW8, "this has gone horribly wrong" );
+        OSL_ENSURE( m_rWW8Export.bWrtWW8, "this has gone horribly wrong" );
         // write as escher
         m_rWW8Export.AppendFlyInFlys(rFmt, rNdTopLeft);
     }
@@ -2686,7 +2686,7 @@ void WW8AttributeOutput::Redline( const SwRedlineData* pRedline )
         }
         break;
     default:
-        ASSERT(!this, "Unhandled redline type for export");
+        OSL_ENSURE(!this, "Unhandled redline type for export");
         break;
     }
 

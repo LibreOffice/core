@@ -586,7 +586,7 @@ SwTableAutoFmt::~SwTableAutoFmt()
 
 void SwTableAutoFmt::SetBoxFmt( const SwBoxAutoFmt& rNew, BYTE nPos )
 {
-    ASSERT( nPos < 16, "falscher Bereich" );
+    OSL_ENSURE( nPos < 16, "falscher Bereich" );
 
     SwBoxAutoFmt* pFmt = aBoxAutoFmt[ nPos ];
     if( pFmt )      // ist gesetzt -> kopieren
@@ -598,7 +598,7 @@ void SwTableAutoFmt::SetBoxFmt( const SwBoxAutoFmt& rNew, BYTE nPos )
 
 const SwBoxAutoFmt& SwTableAutoFmt::GetBoxFmt( BYTE nPos ) const
 {
-    ASSERT( nPos < 16, "falscher Bereich" );
+    OSL_ENSURE( nPos < 16, "falscher Bereich" );
 
     SwBoxAutoFmt* pFmt = aBoxAutoFmt[ nPos ];
     if( pFmt )      // ist gesetzt -> kopieren
@@ -619,7 +619,7 @@ SwBoxAutoFmt& SwTableAutoFmt::UpdateFromSet( BYTE nPos,
                                             UpdateFlags eFlags,
                                             SvNumberFormatter* pNFmtr )
 {
-    ASSERT( nPos < 16, "falscher Bereich" );
+    OSL_ENSURE( nPos < 16, "falscher Bereich" );
 
     SwBoxAutoFmt* pFmt = aBoxAutoFmt[ nPos ];
     if( !pFmt )     // ist gesetzt -> kopieren
@@ -997,7 +997,7 @@ BOOL SwTableAutoFmtTbl::Load( SvStream& rStream )
 //                  rStream >> nFileVers;
                 if( rStream.Tell() != ULONG(nPos + nCnt) )
                 {
-                    ASSERT( !this, "Der Header enthaelt mehr/neuere Daten" );
+                    OSL_ENSURE( !this, "Der Header enthaelt mehr/neuere Daten" );
                     rStream.Seek( nPos + nCnt );
                 }
                 rStream.SetStreamCharSet( (CharSet)nChrSet );

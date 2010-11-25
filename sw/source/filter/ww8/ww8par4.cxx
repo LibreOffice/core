@@ -98,7 +98,7 @@ static bool SwWw8ReadScaling(long& rX, long& rY, SvStorageRef& rSrc1)
     pS->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
     pS->Seek( STREAM_SEEK_TO_END );
 
-    ASSERT( pS->Tell() >=  76, "+OLE-PIC-Stream is shorter than 76 Byte" );
+    OSL_ENSURE( pS->Tell() >=  76, "+OLE-PIC-Stream is shorter than 76 Byte" );
 
     INT32 nOrgWidth,
           nOrgHeight,
@@ -123,7 +123,7 @@ static bool SwWw8ReadScaling(long& rX, long& rY, SvStorageRef& rSrc1)
     rY = nOrgHeight - nCropTop  - nCropBottom;
     if (10 > nScaleX || 65536 < nScaleX || 10 > nScaleY || 65536 < nScaleY)
     {
-        ASSERT( !pS, "+OLE-Scalinginformation in PIC-Stream wrong" );
+        OSL_ENSURE( !pS, "+OLE-Scalinginformation in PIC-Stream wrong" );
         return false;
     }
     else
@@ -154,23 +154,23 @@ static bool SwWw6ReadMetaStream(GDIMetaFile& rWMF, OLE_MFP* pMfp,
 
     if( pMfp->mm == 94 || pMfp->mm == 99 )
     {
-        ASSERT( !pSt, "+OLE: Falscher Metafile-Typ" );
+        OSL_ENSURE( !pSt, "+OLE: Falscher Metafile-Typ" );
         return false;
     }
     if( pMfp->mm != 8 )
     {
-        ASSERT( !pSt, "+OLE: Falscher Metafile-Typ ( nicht Anisotropic )" );
+        OSL_ENSURE( !pSt, "+OLE: Falscher Metafile-Typ ( nicht Anisotropic )" );
     }
     if( !pMfp->xExt || !pMfp->yExt )
     {
-        ASSERT( !pSt, "+OLE: Groesse von 0 ???" );
+        OSL_ENSURE( !pSt, "+OLE: Groesse von 0 ???" );
         return false;
     }
     bool bOk = ReadWindowMetafile( *pSt, rWMF, NULL ) ? true : false;   // WMF lesen
                     // *pSt >> aWMF  geht nicht ohne placable Header
     if (!bOk || pSt->GetError() || rWMF.GetActionCount() == 0)
     {
-        ASSERT( !pSt, "+OLE: Konnte Metafile nicht lesen" );
+        OSL_ENSURE( !pSt, "+OLE: Konnte Metafile nicht lesen" );
         return false;
     }
 
@@ -219,7 +219,7 @@ SwFlyFrmFmt* SwWW8ImplReader::InsertOle(SdrOle2Obj &rObject,
     const SfxItemSet &rFlySet, const SfxItemSet &rGrfSet)
 {
     SfxObjectShell *pPersist = rDoc.GetPersist();
-    ASSERT(pPersist, "No persist, cannot insert objects correctly");
+    OSL_ENSURE(pPersist, "No persist, cannot insert objects correctly");
     if (!pPersist)
         return 0;
 
@@ -252,7 +252,7 @@ SwFlyFrmFmt* SwWW8ImplReader::InsertOle(SdrOle2Obj &rObject,
     ::rtl::OUString sNewName;
     bool bSuccess = aOLEObj.TransferToDoc(sNewName);
 
-    ASSERT(bSuccess, "Insert OLE failed");
+    OSL_ENSURE(bSuccess, "Insert OLE failed");
     if (bSuccess)
     {
         const SfxItemSet *pFlySet = pMathFlySet ? pMathFlySet : &rFlySet;
@@ -356,7 +356,7 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
     const Graphic* pGrf, const SfxItemSet* pFlySet, const Rectangle& aVisArea )
 {
     SdrObject* pRet = 0;
-    ASSERT( pStg, "ohne storage geht hier fast gar nichts!" );
+    OSL_ENSURE( pStg, "ohne storage geht hier fast gar nichts!" );
 
     ::SetProgressState( nProgress, rDoc.GetDocShell() );     // Update
 
@@ -414,11 +414,11 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
     {
         //Can't put them in headers/footers :-(
         uno::Reference< drawing::XShape > xRef;
-        ASSERT(pFormImpl, "Impossible");
+        OSL_ENSURE(pFormImpl, "Impossible");
         if (pFormImpl && pFormImpl->ReadOCXStream(xSrc1, &xRef, false))
         {
             pRet = GetSdrObjectFromXShape(xRef);
-            ASSERT(pRet, "Impossible");
+            OSL_ENSURE(pRet, "Impossible");
             if (pRet)
                 pRet->SetLogicRect(aRect);
             return pRet;

@@ -194,7 +194,7 @@ void SwPaintQueue::Remove( ViewShell *pSh )
 
 void SetSwVisArea( ViewShell *pSh, const SwRect &rRect, BOOL /*bPDFExport*/ )
 {
-    ASSERT( !pSh->GetWin(), "Drucken mit Window?" );
+    OSL_ENSURE( !pSh->GetWin(), "Drucken mit Window?" );
     pSh->aVisArea = rRect;
     pSh->Imp()->SetFirstVisPageInvalid();
     Point aPt( rRect.Pos() );
@@ -241,7 +241,7 @@ void ViewShell::InitPrt( OutputDevice *pOutDev )
 
 void ViewShell::ChgAllPageOrientation( USHORT eOri )
 {
-    ASSERT( nStartAction, "missing an Action" );
+    OSL_ENSURE( nStartAction, "missing an Action" );
     SET_CURR_SHELL( this );
 
     USHORT nAll = GetDoc()->GetPageDescCnt();
@@ -277,7 +277,7 @@ void ViewShell::ChgAllPageOrientation( USHORT eOri )
 
 void ViewShell::ChgAllPageSize( Size &rSz )
 {
-    ASSERT( nStartAction, "missing an Action" );
+    OSL_ENSURE( nStartAction, "missing an Action" );
     SET_CURR_SHELL( this );
 
     SwDoc* pMyDoc = GetDoc();
@@ -344,7 +344,7 @@ void ViewShell::CalcPagesForPrint( USHORT nMax )
 
 SwDoc * ViewShell::CreatePrtDoc( SfxObjectShellRef &rDocShellRef)
 {
-    ASSERT( this->IsA( TYPE(SwFEShell) ),"ViewShell::Prt for FEShell only");
+    OSL_ENSURE( this->IsA( TYPE(SwFEShell) ),"ViewShell::Prt for FEShell only");
     SwFEShell* pFESh = (SwFEShell*)this;
 
     SwDoc *pPrtDoc = new SwDoc;
@@ -388,7 +388,7 @@ SwDoc * ViewShell::CreatePrtDoc( SfxObjectShellRef &rDocShellRef)
     }
 
     const SwPageFrm* pPage = GetLayout()->GetPageAtPos( aSelPoint );
-    ASSERT( pPage, "no page found!" );
+    OSL_ENSURE( pPage, "no page found!" );
 
     // get page descriptor - fall back to the first one if pPage could not be found
     const SwPageDesc* pPageDesc = pPage ? pPrtDoc->FindPageDescByName(
@@ -438,7 +438,7 @@ SwDoc * ViewShell::CreatePrtDoc( SfxObjectShellRef &rDocShellRef)
 
 SwDoc * ViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
 {
-    ASSERT( this->IsA( TYPE(SwFEShell) ),"ViewShell::Prt for FEShell only");
+    OSL_ENSURE( this->IsA( TYPE(SwFEShell) ),"ViewShell::Prt for FEShell only");
     SwFEShell* pFESh = (SwFEShell*)this;
     pPrtDoc->LockExpFlds();
 
@@ -483,7 +483,7 @@ SwDoc * ViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
     }
 
     const SwPageFrm* pPage = GetLayout()->GetPageAtPos( aSelPoint );
-    ASSERT( pPage, "no page found!" );
+    OSL_ENSURE( pPage, "no page found!" );
 
     // get page descriptor - fall back to the first one if pPage could not be found
     const SwPageDesc* pPageDesc = pPage ? pPrtDoc->FindPageDescByName(

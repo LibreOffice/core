@@ -129,8 +129,8 @@ using namespace ::com::sun::star;
 
 void SwTxtFormatter::CalcUnclipped( SwTwips& rTop, SwTwips& rBottom )
 {
-    ASSERT( ! pFrm->IsVertical() || pFrm->IsSwapped(),
-            "SwTxtFormatter::CalcUnclipped with unswapped frame" )
+    OSL_ENSURE( ! pFrm->IsVertical() || pFrm->IsSwapped(),
+            "SwTxtFormatter::CalcUnclipped with unswapped frame" );
 
     long nFlyAsc, nFlyDesc;
     // OD 08.01.2004 #i11859# - use new method <SwLineLayout::MaxAscentDescent(..)>
@@ -150,8 +150,8 @@ void SwTxtFormatter::CalcUnclipped( SwTwips& rTop, SwTwips& rBottom )
 void SwTxtFormatter::UpdatePos( SwLineLayout *pCurrent, Point aStart,
     xub_StrLen nStartIdx, sal_Bool bAllWays ) const
 {
-    ASSERT( ! pFrm->IsVertical() || pFrm->IsSwapped(),
-            "SwTxtFormatter::UpdatePos with unswapped frame" )
+    OSL_ENSURE( ! pFrm->IsVertical() || pFrm->IsSwapped(),
+            "SwTxtFormatter::UpdatePos with unswapped frame" );
 
     if( GetInfo().IsTest() )
         return;
@@ -237,14 +237,14 @@ void SwTxtFormatter::UpdatePos( SwLineLayout *pCurrent, Point aStart,
         }
         if( pPos->IsMultiPortion() && ((SwMultiPortion*)pPos)->HasFlyInCntnt() )
         {
-            ASSERT( !GetMulti(), "Too much multi" );
+            OSL_ENSURE( !GetMulti(), "Too much multi" );
             ((SwTxtFormatter*)this)->pMulti = (SwMultiPortion*)pPos;
             SwLineLayout *pLay = &GetMulti()->GetRoot();
             Point aSt( aTmpInf.X(), aStart.Y() );
 
             if ( GetMulti()->HasBrackets() )
             {
-                ASSERT( GetMulti()->IsDouble(), "Brackets only for doubles");
+                OSL_ENSURE( GetMulti()->IsDouble(), "Brackets only for doubles");
                 aSt.X() += ((SwDoubleLinePortion*)GetMulti())->PreWidth();
             }
             else if( GetMulti()->HasRotation() )
@@ -281,8 +281,8 @@ void SwTxtFormatter::UpdatePos( SwLineLayout *pCurrent, Point aStart,
 
 void SwTxtFormatter::AlignFlyInCntBase( long nBaseLine ) const
 {
-    ASSERT( ! pFrm->IsVertical() || pFrm->IsSwapped(),
-            "SwTxtFormatter::AlignFlyInCntBase with unswapped frame" )
+    OSL_ENSURE( ! pFrm->IsVertical() || pFrm->IsSwapped(),
+            "SwTxtFormatter::AlignFlyInCntBase with unswapped frame" );
 
     if( GetInfo().IsTest() )
         return;
@@ -340,7 +340,7 @@ void SwTxtFormatter::AlignFlyInCntBase( long nBaseLine ) const
 
 sal_Bool SwTxtFormatter::ChkFlyUnderflow( SwTxtFormatInfo &rInf ) const
 {
-    ASSERT( rInf.GetTxtFly()->IsOn(), "SwTxtFormatter::ChkFlyUnderflow: why?" );
+    OSL_ENSURE( rInf.GetTxtFly()->IsOn(), "SwTxtFormatter::ChkFlyUnderflow: why?" );
     if( GetCurr() )
     {
         // Erst pruefen wir, ob ueberhaupt ein Fly mit der Zeile ueberlappt.
@@ -848,7 +848,7 @@ sal_Bool SwTxtFly::IsAnyFrm() const
 {
     SWAP_IF_SWAPPED( pCurrFrm )
 
-    ASSERT( bOn, "IsAnyFrm: Why?" );
+    OSL_ENSURE( bOn, "IsAnyFrm: Why?" );
     SwRect aRect( pCurrFrm->Frm().Pos() + pCurrFrm->Prt().Pos(),
         pCurrFrm->Prt().SSize() );
 
@@ -869,7 +869,7 @@ sal_Bool SwTxtFly::IsAnyFrm() const
 
 sal_Bool SwTxtFly::IsAnyObj( const SwRect &rRect ) const
 {
-    ASSERT ( bOn, "SwTxtFly::IsAnyObj: Who's knocking?" );
+   OSL_ENSURE( bOn, "SwTxtFly::IsAnyObj: Who's knocking?" );
 
     SwRect aRect( rRect );
     if ( aRect.IsEmpty() )
@@ -956,7 +956,7 @@ sal_Bool SwTxtFly::DrawTextOpaque( SwDrawTextInfo &rInf )
                             ? mpCurrAnchoredObj->GetDrawObj()->GetOrdNum()
                             : SAL_MAX_UINT32;
     // <--
-    ASSERT( !bTopRule, "DrawTextOpaque: Wrong TopRule" );
+    OSL_ENSURE( !bTopRule, "DrawTextOpaque: Wrong TopRule" );
 
     // --> OD 2006-08-15 #i68520#
     SwAnchoredObjList::size_type nCount( bOn ? GetAnchoredObjList()->size() : 0 );
@@ -1062,7 +1062,7 @@ void SwTxtFly::DrawFlyRect( OutputDevice* pOut, const SwRect &rRect,
         const SwTxtPaintInfo &rInf, sal_Bool bNoGraphic )
 {
     SwRegionRects aRegion( rRect );
-    ASSERT( !bTopRule, "DrawFlyRect: Wrong TopRule" );
+    OSL_ENSURE( !bTopRule, "DrawFlyRect: Wrong TopRule" );
     // --> OD 2006-08-15 #i68520#
     SwAnchoredObjList::size_type nCount( bOn ? GetAnchoredObjList()->size() : 0 );
     if ( bOn && nCount > 0 )
@@ -1121,7 +1121,7 @@ void SwTxtFly::DrawFlyRect( OutputDevice* pOut, const SwRect &rRect,
             pOut->DrawRect( aRegion[i].SVRect() );
         else
         {
-            ASSERT( ((SvxBrushItem*)-1) != rInf.GetBrushItem(),
+            OSL_ENSURE( ((SvxBrushItem*)-1) != rInf.GetBrushItem(),
                     "DrawRect: Uninitialized BrushItem!" );
             ::DrawGraphic( rInf.GetBrushItem(), pOut, rInf.GetBrushRect(),
                        aRegion[i] );
@@ -1271,7 +1271,7 @@ sal_Bool SwTxtFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
             // --> OD 2004-10-06 #i26945#
             const SwFmtAnchor& rNewA = _pAnchoredObj->GetFrmFmt().GetAnchor();
             // <--
-            ASSERT( FLY_AS_CHAR != rNewA.GetAnchorId(),
+            OSL_ENSURE( FLY_AS_CHAR != rNewA.GetAnchorId(),
                     "Don't call GetTop with a FlyInCntFrm" );
             if (FLY_AT_PAGE == rNewA.GetAnchorId())
                 return sal_True;  // Seitengebundenen wird immer ausgewichen.
@@ -1413,9 +1413,9 @@ struct AnchoredObjOrder
 // --> OD 2006-08-15 #i68520#
 SwAnchoredObjList* SwTxtFly::InitAnchoredObjList()
 {
-    ASSERT( pCurrFrm, "InitFlyList: No Frame, no FlyList" );
+    OSL_ENSURE( pCurrFrm, "InitFlyList: No Frame, no FlyList" );
     // --> OD 2006-08-15 #i68520#
-    ASSERT( !mpAnchoredObjList, "InitFlyList: FlyList already initialized" );
+    OSL_ENSURE( !mpAnchoredObjList, "InitFlyList: FlyList already initialized" );
     // <--
 
     SWAP_IF_SWAPPED( pCurrFrm )
@@ -1674,7 +1674,7 @@ SwContourCache::~SwContourCache()
 
 void SwContourCache::ClrObject( MSHORT nPos )
 {
-    ASSERT( pTextRanger[ nPos ], "ClrObject: Allready cleared. Good Bye!" );
+    OSL_ENSURE( pTextRanger[ nPos ], "ClrObject: Allready cleared. Good Bye!" );
     nPntCnt -= pTextRanger[ nPos ]->GetPointCount();
     delete pTextRanger[ nPos ];
     --nObjCnt;
@@ -1877,7 +1877,7 @@ const SwRect SwContourCache::ContourRect( const SwFmt* pFmt,
  *                      SwContourCache::ShowContour()
  * zeichnet die PolyPolygone des Caches zu Debugzwecken.
  *************************************************************************/
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 
 void SwContourCache::ShowContour( OutputDevice* pOut, const SdrObject* pObj,
     const Color& rClosedColor, const Color& rOpenColor )
@@ -1928,7 +1928,7 @@ void SwContourCache::ShowContour( OutputDevice* pOut, const SdrObject* pObj,
  *                      SwTxtFly::ShowContour()
  * zeichnet die PolyPolygone des Caches zu Debugzwecken.
  *************************************************************************/
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 
 void SwTxtFly::ShowContour( OutputDevice* pOut )
 {
@@ -2084,8 +2084,8 @@ void SwTxtFly::CalcRightMargin( SwRect &rFly,
                                 const SwRect &rLine ) const
 {
     // Normalerweise ist der rechte Rand der rechte Rand der Printarea.
-    ASSERT( ! pCurrFrm->IsVertical() || ! pCurrFrm->IsSwapped(),
-            "SwTxtFly::CalcRightMargin with swapped frame" )
+    OSL_ENSURE( ! pCurrFrm->IsVertical() || ! pCurrFrm->IsSwapped(),
+            "SwTxtFly::CalcRightMargin with swapped frame" );
     SWRECTFN( pCurrFrm )
     // --> OD 2004-12-14 #118796# - correct determination of right of printing area
     SwTwips nRight = (pCurrFrm->*fnRect->fnGetPrtRight)();
@@ -2188,8 +2188,8 @@ void SwTxtFly::CalcLeftMargin( SwRect &rFly,
                                SwAnchoredObjList::size_type nFlyPos,
                                const SwRect &rLine ) const
 {
-    ASSERT( ! pCurrFrm->IsVertical() || ! pCurrFrm->IsSwapped(),
-            "SwTxtFly::CalcLeftMargin with swapped frame" )
+    OSL_ENSURE( ! pCurrFrm->IsVertical() || ! pCurrFrm->IsSwapped(),
+            "SwTxtFly::CalcLeftMargin with swapped frame" );
     SWRECTFN( pCurrFrm )
     // --> OD 2004-12-14 #118796# - correct determination of left of printing area
     SwTwips nLeft = (pCurrFrm->*fnRect->fnGetPrtLeft)();
@@ -2423,7 +2423,7 @@ sal_Bool SwTxtFly::IsAnyFrm( const SwRect &rLine ) const
 
     SWAP_IF_SWAPPED( pCurrFrm )
 
-    ASSERT( bOn, "IsAnyFrm: Why?" );
+    OSL_ENSURE( bOn, "IsAnyFrm: Why?" );
 
     const sal_Bool bRet = ForEach( rLine, NULL, sal_False );
     UNDO_SWAP( pCurrFrm )

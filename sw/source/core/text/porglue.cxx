@@ -112,9 +112,9 @@ void SwGluePortion::Paint( const SwTxtPaintInfo &rInf ) const
 
     if( rInf.OnWin() && rInf.GetOpt().IsBlank() && rInf.IsNoSymbol() )
     {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         const xub_Unicode cChar = rInf.GetChar( rInf.GetIdx() );
-        ASSERT( CH_BLANK  == cChar || CH_BULLET == cChar,
+        OSL_ENSURE( CH_BLANK  == cChar || CH_BULLET == cChar,
                 "SwGluePortion::Paint: blank expected" );
 #endif
         if( 1 == GetLen() )

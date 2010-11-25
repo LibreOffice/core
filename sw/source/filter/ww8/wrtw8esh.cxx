@@ -115,7 +115,7 @@ using namespace nsFieldFlags;
 //#110185# get a part fix for this type of element
 bool WW8Export::MiserableFormFieldExportHack(const SwFrmFmt& rFrmFmt)
 {
-    ASSERT(bWrtWW8, "Not allowed");
+    OSL_ENSURE(bWrtWW8, "Not allowed");
     if (!bWrtWW8)
         return false;
     bool bHack = false;
@@ -203,7 +203,7 @@ void WW8Export::DoComboBox(const rtl::OUString &rName,
                              const rtl::OUString &rSelected,
                              uno::Sequence<rtl::OUString> &rListItems)
 {
-    ASSERT(bWrtWW8, "Not allowed");
+    OSL_ENSURE(bWrtWW8, "Not allowed");
     if (!bWrtWW8)
         return;
     OutputField(0, ww::eFORMDROPDOWN, FieldString(ww::eFORMDROPDOWN),
@@ -516,7 +516,7 @@ void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
             }
             else
             {
-                ASSERT(pObj, "wo ist das SDR-Object?");
+                OSL_ENSURE(pObj, "wo ist das SDR-Object?");
                 if (pObj)
                 {
                     aRect = pObj->GetSnapRect();
@@ -618,7 +618,7 @@ void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
                     nFlags |= 0x0400 | nContour;
                     break;
                 default:
-                    ASSERT(!this, "Unsupported surround type for export");
+                    OSL_ENSURE(!this, "Unsupported surround type for export");
                     break;
             }
             if (pObj && (pObj->GetLayer() == rWrt.pDoc->GetHellId() ||
@@ -768,8 +768,8 @@ UINT32 WW8Export::GetSdrOrdNum( const SwFrmFmt& rFmt ) const
 void WW8Export::AppendFlyInFlys(const sw::Frame& rFrmFmt,
     const Point& rNdTopLeft)
 {
-    ASSERT(bWrtWW8, "this has gone horribly wrong");
-    ASSERT(!pEscher, "der EscherStream wurde schon geschrieben!");
+    OSL_ENSURE(bWrtWW8, "this has gone horribly wrong");
+    OSL_ENSURE(!pEscher, "der EscherStream wurde schon geschrieben!");
     if (pEscher)
         return ;
     PlcDrawObj *pDrwO;
@@ -786,7 +786,7 @@ void WW8Export::AppendFlyInFlys(const sw::Frame& rFrmFmt,
 
     WW8_CP nCP = Fc2Cp(Strm().Tell());
     bool bSuccess = pDrwO->Append(*this, nCP, rFrmFmt, rNdTopLeft);
-    ASSERT(bSuccess, "Couldn't export a graphical element!");
+    OSL_ENSURE(bSuccess, "Couldn't export a graphical element!");
 
     if (bSuccess)
     {
@@ -1044,7 +1044,7 @@ const SfxPoolItem& MSWord_SdrAttrIter::GetItem( USHORT nWhich ) const
     {
         SfxItemSet aSet(pEditObj->GetParaAttribs(nPara));
         nWhich = GetSetWhichFromSwDocWhich(aSet, *m_rExport.pDoc, nWhich);
-        ASSERT(nWhich, "Impossible, catastrophic failure imminent");
+        OSL_ENSURE(nWhich, "Impossible, catastrophic failure imminent");
         pRet = &aSet.Get(nWhich);
     }
     return *pRet;
@@ -1089,7 +1089,7 @@ void MSWord_SdrAttrIter::OutParaAttr(bool bCharAttr)
 void WW8Export::WriteSdrTextObj(const SdrObject& rObj, BYTE nTyp)
 {
     const SdrTextObj* pTxtObj = PTR_CAST(SdrTextObj, &rObj);
-    ASSERT(pTxtObj, "That is no SdrTextObj!");
+    OSL_ENSURE(pTxtObj, "That is no SdrTextObj!");
     if (!pTxtObj)
         return;
 
@@ -1134,7 +1134,7 @@ void WW8Export::WriteOutliner(const OutlinerParaObject& rParaObj, BYTE nTyp)
 
         rtl_TextEncoding eChrSet = aAttrIter.GetNodeCharSet();
 
-        ASSERT( !pO->Count(), " pO ist am Zeilenanfang nicht leer" );
+        OSL_ENSURE( !pO->Count(), " pO ist am Zeilenanfang nicht leer" );
 
         String aStr( rEditObj.GetText( n ));
         xub_StrLen nAktPos = 0;
@@ -1171,7 +1171,7 @@ void WW8Export::WriteOutliner(const OutlinerParaObject& rParaObj, BYTE nTyp)
         }
         while( nAktPos < nEnd );
 
-        ASSERT( !pO->Count(), " pO ist am ZeilenEnde nicht leer" );
+        OSL_ENSURE( !pO->Count(), " pO ist am ZeilenEnde nicht leer" );
 
         pO->Insert( bNul, pO->Count() );        // Style # as short
         pO->Insert( bNul, pO->Count() );
@@ -1227,7 +1227,7 @@ void WW8Export::CreateEscher()
         GetItemState(RES_BACKGROUND);
     if (pHFSdrObjs->size() || pSdrObjs->size() || SFX_ITEM_SET == eBackSet)
     {
-        ASSERT( !pEscher, "wer hat den Pointer nicht geloescht?" );
+        OSL_ENSURE( !pEscher, "wer hat den Pointer nicht geloescht?" );
         SvMemoryStream* pEscherStrm = new SvMemoryStream;
         pEscherStrm->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
         pEscher = new SwEscherEx(pEscherStrm, *this);
@@ -1339,7 +1339,7 @@ INT32 SwBasicEscherEx::WriteGrfFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId)
     INT32 nBorderThick=0;
     SwNoTxtNode *pNd = GetNoTxtNodeFromSwFrmFmt(rFmt);
     SwGrfNode *pGrfNd = pNd ? pNd->GetGrfNode() : 0;
-    ASSERT(pGrfNd, "No SwGrfNode ?, suspicious");
+    OSL_ENSURE(pGrfNd, "No SwGrfNode ?, suspicious");
     if (!pGrfNd)
         return nBorderThick;
 
@@ -1932,7 +1932,7 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, WW8Export& rWW8Wrt)
         {
             INT32 nBorderThick=0;
             DrawObj *pObj = (*aIter);
-            ASSERT(pObj, "impossible");
+            OSL_ENSURE(pObj, "impossible");
             if (!pObj)
                 continue;
             const sw::Frame &rFrame = pObj->maCntnt;
@@ -1971,9 +1971,9 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, WW8Export& rWW8Wrt)
                         if (bSwapInPage)
                             (const_cast<SdrObject*>(pSdrObj))->SetPage(0);
                     }
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
                     else
-                        ASSERT( !this, "Where is the SDR-Object?" );
+                        OSL_ENSURE( !this, "Where is the SDR-Object?" );
 #endif
                 }
 
@@ -2186,7 +2186,7 @@ bool WinwordAnchoring::ConvertPosition( SwFmtHoriOrient& _iorHoriOri,
                 }
                 break;
                 default:
-                    ASSERT( false,
+                    OSL_ENSURE( false,
                             "<WinwordAnchoring::ConvertPosition(..)> - unknown horizontal relation" );
             }
         }
@@ -2300,7 +2300,7 @@ bool WinwordAnchoring::ConvertPosition( SwFmtHoriOrient& _iorHoriOri,
                 case text::RelOrientation::FRAME_LEFT:
                 case text::RelOrientation::FRAME_RIGHT:
                 default:
-                    ASSERT( false,
+                    OSL_ENSURE( false,
                             "<WinwordAnchoring::ConvertPosition(..)> - unknown vertical relation" );
             }
         }
@@ -2572,7 +2572,7 @@ USHORT FindPos(const SwFrmFmt &rFmt, unsigned int nHdFtIndex,
     for (DrawObjPointerIter aIter = rPVec.begin(); aIter != aEnd; ++aIter)
     {
         const DrawObj *pObj = (*aIter);
-        ASSERT(pObj, "Impossible");
+        OSL_ENSURE(pObj, "Impossible");
         if (!pObj)
             continue;
         if (
@@ -2611,7 +2611,7 @@ INT32 SwEscherEx::WriteTxtFlyFrame(const DrawObj &rObj, UINT32 nShapeId,
     switch (nDirection)
     {
         default:
-            ASSERT(!this, "unknown direction type");
+            OSL_ENSURE(!this, "unknown direction type");
         case FRMDIR_HORI_LEFT_TOP:
             nFlow=mso_txflHorzN;
         break;
@@ -2669,7 +2669,7 @@ void SwEscherEx::WriteOCXControl( const SwFrmFmt& rFmt, UINT32 nShapeId )
 
         SdrModel *pModel = rWrt.pDoc->GetDrawModel();
         OutputDevice *pDevice = Application::GetDefaultDevice();
-        ASSERT(pModel && pDevice, "no model or device");
+        OSL_ENSURE(pModel && pDevice, "no model or device");
 
         // #i71538# use complete SdrViews
         // SdrExchangeView aExchange(pModel, pDevice);

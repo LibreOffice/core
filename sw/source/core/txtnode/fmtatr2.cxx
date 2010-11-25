@@ -101,7 +101,7 @@ SwFmtCharFmt::~SwFmtCharFmt() {}
 
 int SwFmtCharFmt::operator==( const SfxPoolItem& rAttr ) const
 {
-    ASSERT( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
+    OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
     return GetCharFmt() == ((SwFmtCharFmt&)rAttr).GetCharFmt();
 }
 
@@ -167,7 +167,7 @@ SwFmtAutoFmt::~SwFmtAutoFmt()
 
 int SwFmtAutoFmt::operator==( const SfxPoolItem& rAttr ) const
 {
-    ASSERT( SfxPoolItem::operator==( rAttr ), "different attributes" );
+    OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "different attributes" );
     return mpHandle == ((SwFmtAutoFmt&)rAttr).mpHandle;
 }
 
@@ -242,7 +242,7 @@ SwFmtINetFmt::~SwFmtINetFmt()
 
 int SwFmtINetFmt::operator==( const SfxPoolItem& rAttr ) const
 {
-    ASSERT( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
+    OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
     BOOL bRet = SfxPoolItem::operator==( (SfxPoolItem&) rAttr )
                 && aURL == ((SwFmtINetFmt&)rAttr).aURL
                 && aName == ((SwFmtINetFmt&)rAttr).aName
@@ -491,7 +491,7 @@ SwFmtRuby& SwFmtRuby::operator=( const SwFmtRuby& rAttr )
 
 int SwFmtRuby::operator==( const SfxPoolItem& rAttr ) const
 {
-    ASSERT( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
+    OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
     return sRubyTxt == ((SwFmtRuby&)rAttr).sRubyTxt &&
            sCharFmtName == ((SwFmtRuby&)rAttr).sCharFmtName &&
            nCharFmtId == ((SwFmtRuby&)rAttr).nCharFmtId &&
@@ -594,7 +594,7 @@ SwFmtMeta::SwFmtMeta(const USHORT i_nWhich)
     , m_pMeta()
     , m_pTxtAttr( 0 )
 {
-    ASSERT((RES_TXTATR_META == i_nWhich) || (RES_TXTATR_METAFIELD == i_nWhich),
+   OSL_ENSURE((RES_TXTATR_META == i_nWhich) || (RES_TXTATR_METAFIELD == i_nWhich),
             "ERROR: SwFmtMeta: invalid which id!");
 }
 
@@ -604,9 +604,9 @@ SwFmtMeta::SwFmtMeta( ::boost::shared_ptr< ::sw::Meta > const & i_pMeta,
     , m_pMeta( i_pMeta )
     , m_pTxtAttr( 0 )
 {
-    ASSERT((RES_TXTATR_META == i_nWhich) || (RES_TXTATR_METAFIELD == i_nWhich),
+   OSL_ENSURE((RES_TXTATR_META == i_nWhich) || (RES_TXTATR_METAFIELD == i_nWhich),
             "ERROR: SwFmtMeta: invalid which id!");
-    ASSERT(m_pMeta, "SwFmtMeta: no Meta ?");
+    OSL_ENSURE(m_pMeta, "SwFmtMeta: no Meta ?");
     // DO NOT call m_pMeta->SetFmtMeta(this) here; only from SetTxtAttr!
 }
 
@@ -620,7 +620,7 @@ SwFmtMeta::~SwFmtMeta()
 
 int SwFmtMeta::operator==( const SfxPoolItem & i_rOther ) const
 {
-    ASSERT( SfxPoolItem::operator==( i_rOther ), "i just copied this assert" );
+    OSL_ENSURE( SfxPoolItem::operator==( i_rOther ), "i just copied this assert" );
     return SfxPoolItem::operator==( i_rOther )
         && (m_pMeta == static_cast<SwFmtMeta const &>( i_rOther ).m_pMeta);
 }
@@ -634,12 +634,12 @@ SfxPoolItem * SwFmtMeta::Clone( SfxItemPool * /*pPool*/ ) const
 
 void SwFmtMeta::SetTxtAttr(SwTxtMeta * const i_pTxtAttr)
 {
-    ASSERT(!(m_pTxtAttr && i_pTxtAttr),
+    OSL_ENSURE(!(m_pTxtAttr && i_pTxtAttr),
         "SwFmtMeta::SetTxtAttr: already has text attribute?");
-    ASSERT(  m_pTxtAttr || i_pTxtAttr ,
+    OSL_ENSURE(  m_pTxtAttr || i_pTxtAttr ,
         "SwFmtMeta::SetTxtAttr: no attribute to remove?");
     m_pTxtAttr = i_pTxtAttr;
-    ASSERT(m_pMeta, "inserted SwFmtMeta has no sw::Meta?");
+    OSL_ENSURE(m_pMeta, "inserted SwFmtMeta has no sw::Meta?");
     // the sw::Meta must be able to find the current text attribute!
     if (i_pTxtAttr && m_pMeta)
     {
@@ -651,7 +651,7 @@ void SwFmtMeta::NotifyChangeTxtNode(SwTxtNode *const pTxtNode)
 {
     // N.B.: do not reset m_pTxtAttr here: see call in nodes.cxx,
     // where the hint is not deleted!
-    ASSERT(m_pMeta, "NotifyRemoval: no meta ?");
+    OSL_ENSURE(m_pMeta, "NotifyRemoval: no meta ?");
     if (m_pMeta)
     {
         if (!pTxtNode)
@@ -671,7 +671,7 @@ void SwFmtMeta::NotifyChangeTxtNode(SwTxtNode *const pTxtNode)
 // and if it is not called when copying, total chaos will undoubtedly ensue
 void SwFmtMeta::DoCopy(SwFmtMeta & rOriginalMeta)
 {
-    ASSERT(m_pMeta, "DoCopy called for SwFmtMeta with no sw::Meta?");
+    OSL_ENSURE(m_pMeta, "DoCopy called for SwFmtMeta with no sw::Meta?");
     if (m_pMeta)
     {
         const ::boost::shared_ptr< ::sw::Meta> pOriginal( m_pMeta );

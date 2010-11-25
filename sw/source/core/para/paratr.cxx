@@ -145,7 +145,7 @@ sal_Bool SwFmtDrop::GetInfo( SfxPoolItem& ) const
 
 int SwFmtDrop::operator==( const SfxPoolItem& rAttr ) const
 {
-    ASSERT( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
+    OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
     return ( nLines == ((SwFmtDrop&)rAttr).GetLines() &&
              nChars == ((SwFmtDrop&)rAttr).GetChars() &&
              nDistance ==  ((SwFmtDrop&)rAttr).GetDistance() &&
@@ -258,7 +258,7 @@ SfxPoolItem* SwNumRuleItem::Clone( SfxItemPool * ) const
 }
 int SwNumRuleItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    ASSERT( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
+    OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
     // --> OD 2008-03-04 #refactorlists# - removed <pDefinedIn>
     return GetValue() == ((SwNumRuleItem&)rAttr).GetValue();
     // <--

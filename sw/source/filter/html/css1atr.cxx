@@ -338,7 +338,7 @@ static void AddUnitPropertyValue( long nVal, FieldUnit eUnit, ByteString& rOut )
     switch( eUnit )
     {
     case FUNIT_100TH_MM:
-        ASSERT( FUNIT_MM == eUnit, "Masseinheit wird nicht unterstuetzt" );
+        OSL_ENSURE( FUNIT_MM == eUnit, "Masseinheit wird nicht unterstuetzt" );
     case FUNIT_MM:
         // 0.01mm = 0.57twip
         nMul = 25400;   // 25.4 * 1000
@@ -349,7 +349,7 @@ static void AddUnitPropertyValue( long nVal, FieldUnit eUnit, ByteString& rOut )
 
     case FUNIT_M:
     case FUNIT_KM:
-        ASSERT( FUNIT_CM == eUnit, "Masseinheit wird nicht unterstuetzt" );
+        OSL_ENSURE( FUNIT_CM == eUnit, "Masseinheit wird nicht unterstuetzt" );
     case FUNIT_CM:
 #ifdef EXACT_VALUES
         // 0.001cm = 0.57twip
@@ -366,7 +366,7 @@ static void AddUnitPropertyValue( long nVal, FieldUnit eUnit, ByteString& rOut )
         break;
 
     case FUNIT_TWIP:
-        ASSERT( FUNIT_POINT == eUnit, "Masseinheit wird nicht unterstuetzt" );
+        OSL_ENSURE( FUNIT_POINT == eUnit, "Masseinheit wird nicht unterstuetzt" );
     case FUNIT_POINT:
 #ifdef EXACT_VALUES
         // 0.01pt = 0.2twip
@@ -404,7 +404,7 @@ static void AddUnitPropertyValue( long nVal, FieldUnit eUnit, ByteString& rOut )
     case FUNIT_PERCENT:
     case FUNIT_INCH:
     default:
-        ASSERT( FUNIT_INCH == eUnit, "Masseinheit wird nicht unterstuetzt" );
+        OSL_ENSURE( FUNIT_INCH == eUnit, "Masseinheit wird nicht unterstuetzt" );
 #ifdef EXACT_VALUES
         // 0.0001in = 0.144twip
         nMul = 100000;
@@ -879,7 +879,7 @@ USHORT SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, ByteString& rToken,
 
             // Wenn eine PoolId gesetzt ist, entspricht der Name der
             // Vorlage dem szugehoerigen Token
-            ASSERT( rRefPoolId != 0 == rToken.Len() > 0,
+            OSL_ENSURE( rRefPoolId != 0 == rToken.Len() > 0,
                     "Token missing" );
         }
         else
@@ -1106,7 +1106,7 @@ const SwFmt *SwHTMLWriter::GetTemplateFmt( USHORT nPoolFmtId,
 
     if( pTemplate )
     {
-        ASSERT( !(USER_FMT & nPoolFmtId),
+        OSL_ENSURE( !(USER_FMT & nPoolFmtId),
                 "In der Dok-Vorlage gibt es keine Benutzer-Vorlagen" );
         if( POOLGRP_NOCOLLID & nPoolFmtId )
             pRefFmt = pTemplate->GetCharFmtFromPool( nPoolFmtId );
@@ -1119,7 +1119,7 @@ const SwFmt *SwHTMLWriter::GetTemplateFmt( USHORT nPoolFmtId,
 
 const SwFmt *SwHTMLWriter::GetParentFmt( const SwFmt& rFmt, USHORT nDeep )
 {
-    ASSERT( nDeep != USHRT_MAX, "GetParent fuer HTML-Vorlage aufgerufen!" );
+    OSL_ENSURE( nDeep != USHRT_MAX, "GetParent fuer HTML-Vorlage aufgerufen!" );
     const SwFmt *pRefFmt = 0;
 
     if( nDeep > 0 )
@@ -1151,7 +1151,7 @@ void SwHTMLWriter::SubtractItemSet( SfxItemSet& rItemSet,
                                     BOOL bClearSame,
                                      const SfxItemSet *pRefScriptItemSet )
 {
-    ASSERT( bSetDefaults || bClearSame,
+    OSL_ENSURE( bSetDefaults || bClearSame,
             "SwHTMLWriter::SubtractItemSet: Bei diesen Flags passiert nix" );
     SfxItemSet aRefItemSet( *rRefItemSet.GetPool(), rRefItemSet.GetRanges() );
     aRefItemSet.Set( rRefItemSet );
@@ -2160,10 +2160,10 @@ void SwHTMLWriter::OutCSS1_FrmFmtOptions( const SwFrmFmt& rFrmFmt,
                 BOOL bOutXPos = FALSE, bOutYPos = FALSE;
                 if( RES_DRAWFRMFMT == rFrmFmt.Which() )
                 {
-                    ASSERT( pSdrObj, "Kein SdrObject uebergeben. Ineffizient" );
+                    OSL_ENSURE( pSdrObj, "Kein SdrObject uebergeben. Ineffizient" );
                     if( !pSdrObj )
                         pSdrObj = rFrmFmt.FindSdrObject();
-                    ASSERT( pSdrObj, "Wo ist das SdrObject" );
+                    OSL_ENSURE( pSdrObj, "Wo ist das SdrObject" );
                     if( pSdrObj )
                     {
                         Point aPos( pSdrObj->GetRelativePos() );
@@ -2227,10 +2227,10 @@ void SwHTMLWriter::OutCSS1_FrmFmtOptions( const SwFrmFmt& rFrmFmt,
     {
         if( RES_DRAWFRMFMT == rFrmFmt.Which() )
         {
-            ASSERT( pSdrObj, "Kein SdrObject uebergeben. Ineffizient" );
+            OSL_ENSURE( pSdrObj, "Kein SdrObject uebergeben. Ineffizient" );
             if( !pSdrObj )
                 pSdrObj = rFrmFmt.FindSdrObject();
-            ASSERT( pSdrObj, "Wo ist das SdrObject" );
+            OSL_ENSURE( pSdrObj, "Wo ist das SdrObject" );
             if( pSdrObj )
             {
                 Size aTwipSz( pSdrObj->GetLogicRect().GetSize() );
@@ -2254,9 +2254,9 @@ void SwHTMLWriter::OutCSS1_FrmFmtOptions( const SwFrmFmt& rFrmFmt,
         }
         else
         {
-            ASSERT( HTML_FRMOPT_ABSSIZE & nFrmOpts,
+            OSL_ENSURE( HTML_FRMOPT_ABSSIZE & nFrmOpts,
                     "Absolute Groesse wird exportiert" );
-            ASSERT( HTML_FRMOPT_ANYSIZE & nFrmOpts,
+            OSL_ENSURE( HTML_FRMOPT_ANYSIZE & nFrmOpts,
                     "Jede Groesse wird exportiert" );
             USHORT nMode = 0;
             if( nFrmOpts & HTML_FRMOPT_S_WIDTH )
@@ -2426,7 +2426,7 @@ void SwHTMLWriter::OutCSS1_FrmFmtBackground( const SwFrmFmt& rFrmFmt )
 
     // Schliesslich bleibt noch der Hintergrund der Seite uebrig und als
     // letzte Rettung das Item der Config.
-    ASSERT( pCurrPageDesc, "Keine Seiten-Vorlage gemerkt" );
+    OSL_ENSURE( pCurrPageDesc, "Keine Seiten-Vorlage gemerkt" );
     if( !OutCSS1_FrmFmtBrush( *this,
                               pCurrPageDesc->GetMaster().GetBackground() ) )
     {
@@ -2478,7 +2478,7 @@ static Writer& OutCSS1_SvxTxtLn_SvxCrOut_SvxBlink( Writer& rWrt,
             {
                 // das geht auch in HTML und muss nicht als STYLE-Option
                 // und darf nicht als Hint geschrieben werden
-                ASSERT( !rHTMLWrt.IsCSS1Source(CSS1_OUTMODE_HINT),
+                OSL_ENSURE( !rHTMLWrt.IsCSS1Source(CSS1_OUTMODE_HINT),
                         "Underline als Hint schreiben?" );
                 pUStr = sCSS1_PV_underline;
             }
@@ -2501,7 +2501,7 @@ static Writer& OutCSS1_SvxTxtLn_SvxCrOut_SvxBlink( Writer& rWrt,
             {
                 // das geht auch in HTML und muss nicht als STYLE-Option
                 // und darf nicht als Hint geschrieben werden
-                ASSERT( !rHTMLWrt.IsCSS1Source(CSS1_OUTMODE_HINT),
+                OSL_ENSURE( !rHTMLWrt.IsCSS1Source(CSS1_OUTMODE_HINT),
                         "Overline als Hint schreiben?" );
                 pOStr = sCSS1_PV_overline;
             }
@@ -2524,7 +2524,7 @@ static Writer& OutCSS1_SvxTxtLn_SvxCrOut_SvxBlink( Writer& rWrt,
             {
                 // das geht auch in HTML und muss nicht als STYLE-Option
                 // und darf nicht als Hint geschrieben werden
-                ASSERT( !rHTMLWrt.IsCSS1Source(CSS1_OUTMODE_HINT),
+                OSL_ENSURE( !rHTMLWrt.IsCSS1Source(CSS1_OUTMODE_HINT),
                         "CrossedOut als Hint schreiben?" );
                 pCOStr = sCSS1_PV_line_through;
             }
@@ -2543,7 +2543,7 @@ static Writer& OutCSS1_SvxTxtLn_SvxCrOut_SvxBlink( Writer& rWrt,
         {
             // das geht auch in HTML und muss nicht als STYLE-Option
             // und darf nicht als Hint geschrieben werden
-            ASSERT( !rHTMLWrt.IsCSS1Source(CSS1_OUTMODE_HINT),
+            OSL_ENSURE( !rHTMLWrt.IsCSS1Source(CSS1_OUTMODE_HINT),
                     "Blink als Hint schreiben?" );
             pBStr = sCSS1_PV_blink;
         }
@@ -2617,7 +2617,7 @@ static Writer& OutCSS1_SvxColor( Writer& rWrt, const SfxPoolItem& rHt )
     if( rHTMLWrt.IsCSS1Source( CSS1_OUTMODE_PARA ) &&
         !rHTMLWrt.bCfgPreferStyles )
         return rWrt;
-    ASSERT( !rHTMLWrt.IsCSS1Source(CSS1_OUTMODE_HINT),
+    OSL_ENSURE( !rHTMLWrt.IsCSS1Source(CSS1_OUTMODE_HINT),
             "Farbe wirklich als Hint ausgeben?" );
 
     Color aColor( ((const SvxColorItem&)rHt).GetValue() );
@@ -2662,7 +2662,7 @@ static Writer& OutCSS1_SvxFont( Writer& rWrt, const SfxPoolItem& rHt )
     if( !rHTMLWrt.IsCSS1Script( nScript ) )
         return rWrt;
 
-    ASSERT( !rHTMLWrt.IsCSS1Source(CSS1_OUTMODE_HINT),
+    OSL_ENSURE( !rHTMLWrt.IsCSS1Source(CSS1_OUTMODE_HINT),
             "Font wirklich als Hint ausgeben?" );
 
     String sOut;
@@ -2736,7 +2736,7 @@ static Writer& OutCSS1_SvxPosture( Writer& rWrt, const SfxPoolItem& rHt )
         {
             // das geht auch in HTML und muss nicht als STYLE-Option
             // und darf nicht als Hint geschrieben werden
-            ASSERT( !rHTMLWrt.IsCSS1Source(CSS1_OUTMODE_HINT),
+            OSL_ENSURE( !rHTMLWrt.IsCSS1Source(CSS1_OUTMODE_HINT),
                     "Italic als Hint schreiben?" );
             pStr = sCSS1_PV_italic;
         }
@@ -2804,7 +2804,7 @@ static Writer& OutCSS1_SvxLanguage( Writer& rWrt, const SfxPoolItem& rHt )
     if( !rHTMLWrt.IsCSS1Script( nScript ) )
         return rWrt;
 
-    ASSERT( !rHTMLWrt.IsCSS1Source(CSS1_OUTMODE_HINT),
+    OSL_ENSURE( !rHTMLWrt.IsCSS1Source(CSS1_OUTMODE_HINT),
             "Language wirklich als Hint ausgeben?" );
 
     LanguageType eLang = ((const SvxLanguageItem &)rHt).GetLanguage();
@@ -2870,7 +2870,7 @@ static Writer& OutCSS1_SvxFontWeight( Writer& rWrt, const SfxPoolItem& rHt )
         {
             // das geht auch in HTML und muss nicht als STYLE-Option
             // und darf nicht als Hint geschrieben werden
-            ASSERT( !rHTMLWrt.IsCSS1Source(CSS1_OUTMODE_HINT),
+            OSL_ENSURE( !rHTMLWrt.IsCSS1Source(CSS1_OUTMODE_HINT),
                     "Fett als Hint schreiben?" );
             pStr = sCSS1_PV_bold;
         }
@@ -3123,7 +3123,7 @@ static Writer& OutCSS1_SwFmtFrmSize( Writer& rWrt, const SfxPoolItem& rHt,
             bOutHeight = (nMode & CSS1_FRMSIZE_VARHEIGHT) != 0;
             break;
         default:
-            ASSERT( bOutHeight, "Hoehe wird nicht exportiert" );
+            OSL_ENSURE( bOutHeight, "Hoehe wird nicht exportiert" );
             break;
         }
 
@@ -3382,7 +3382,7 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
     {
         // Fuer Seitenvorlagen wurde der Grafik-Name uebergeben. Es wird
         // nur ein Attribut ausgegeben, wenn die Grafik nicht gekachelt ist.
-        ASSERT( pLink, "Wo ist der Grafik-Name der Seitenvorlage?" );
+        OSL_ENSURE( pLink, "Wo ist der Grafik-Name der Seitenvorlage?" );
         if( !pLink || !pLink->Len() || GPOS_TILED==ePos )
             return rWrt;
     }

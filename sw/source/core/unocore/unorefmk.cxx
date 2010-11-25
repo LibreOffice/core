@@ -829,7 +829,7 @@ bool SwXMeta::CheckForOwnMemberMeta(const SwPaM & rPam, const bool bAbsorb)
     xub_StrLen nMetaStart;
     xub_StrLen nMetaEnd;
     const bool bSuccess( SetContentRange(pTxtNode, nMetaStart, nMetaEnd) );
-    ASSERT(bSuccess, "no pam?");
+    OSL_ENSURE(bSuccess, "no pam?");
     if (!bSuccess)
         throw lang::DisposedException();
 
@@ -974,7 +974,7 @@ SwXMeta::dispose() throw (uno::RuntimeException)
         xub_StrLen nMetaStart;
         xub_StrLen nMetaEnd;
         const bool bSuccess(SetContentRange(pTxtNode, nMetaStart, nMetaEnd));
-        ASSERT(bSuccess, "no pam?");
+        OSL_ENSURE(bSuccess, "no pam?");
         if (bSuccess)
         {
             // -1 because of CH_TXTATR
@@ -1062,7 +1062,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     }
     if (!pTxtAttr)
     {
-        ASSERT(false, "meta inserted, but has no text attribute?");
+        OSL_ENSURE(false, "meta inserted, but has no text attribute?");
         throw uno::RuntimeException(
             C2S("SwXMeta::attach(): cannot create meta"),
                 static_cast< ::cppu::OWeakObject* >(this));
@@ -1104,7 +1104,7 @@ SwXMeta::getAnchor() throw (uno::RuntimeException)
     xub_StrLen nMetaStart;
     xub_StrLen nMetaEnd;
     const bool bSuccess(SetContentRange(pTxtNode, nMetaStart, nMetaEnd));
-    ASSERT(bSuccess, "no pam?");
+    OSL_ENSURE(bSuccess, "no pam?");
     if (!bSuccess)
     {
         throw lang::DisposedException(
@@ -1271,7 +1271,7 @@ SwXMeta::createEnumeration() throw (uno::RuntimeException)
     xub_StrLen nMetaStart;
     xub_StrLen nMetaEnd;
     const bool bSuccess(SetContentRange(pTxtNode, nMetaStart, nMetaEnd));
-    ASSERT(bSuccess, "no pam?");
+    OSL_ENSURE(bSuccess, "no pam?");
     if (!bSuccess)
         throw lang::DisposedException();
 
@@ -1322,7 +1322,7 @@ SwXMetaField::SwXMetaField(SwDoc *const pDoc, ::sw::Meta *const pMeta,
         TextRangeList_t const*const pPortions)
     : SwXMetaField_Base(pDoc, pMeta, xParentText, pPortions)
 {
-    ASSERT(pMeta && dynamic_cast< ::sw::MetaField* >(pMeta),
+    OSL_ENSURE(pMeta && dynamic_cast< ::sw::MetaField* >(pMeta),
         "SwXMetaField created for wrong hint!");
 }
 

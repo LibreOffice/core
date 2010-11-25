@@ -150,13 +150,13 @@ BOOL SwGrfNode::ReRead(
 {
     BOOL bReadGrf = FALSE, bSetTwipSize = TRUE;
 
-    ASSERT( pGraphic || pGrfObj || rGrfName.Len(),
+    OSL_ENSURE( pGraphic || pGrfObj || rGrfName.Len(),
             "GraphicNode without a name, Graphic or GraphicObject" );
 
     // ReadRead mit Namen
     if( refLink.Is() )
     {
-        ASSERT( !bInSwapIn, "ReRead: stehe noch im SwapIn" );
+        OSL_ENSURE( !bInSwapIn, "ReRead: stehe noch im SwapIn" );
 
         if( rGrfName.Len() )
         {
@@ -322,7 +322,7 @@ SwGrfNode::~SwGrfNode()
     SwDoc* pDoc = GetDoc();
     if( refLink.Is() )
     {
-        ASSERT( !bInSwapIn, "DTOR: stehe noch im SwapIn" );
+        OSL_ENSURE( !bInSwapIn, "DTOR: stehe noch im SwapIn" );
         pDoc->GetLinkManager().Remove( refLink );
         refLink->Disconnect();
     }
@@ -362,7 +362,7 @@ SwGrfNode * SwNodes::MakeGrfNode( const SwNodeIndex & rWhere,
                                 SwAttrSet* pAutoAttr,
                                 BOOL bDelayed )
 {
-    ASSERT( pGrfColl, "MakeGrfNode: Formatpointer ist 0." );
+    OSL_ENSURE( pGrfColl, "MakeGrfNode: Formatpointer ist 0." );
     SwGrfNode *pNode;
     // Delayed erzeugen nur aus dem SW/G-Reader
     if( bDelayed )
@@ -379,7 +379,7 @@ SwGrfNode * SwNodes::MakeGrfNode( const SwNodeIndex & rWhere,
                                 SwGrfFmtColl* pGrfColl,
                                 SwAttrSet* pAutoAttr )
 {
-    ASSERT( pGrfColl, "MakeGrfNode: Formatpointer ist 0." );
+    OSL_ENSURE( pGrfColl, "MakeGrfNode: Formatpointer ist 0." );
     return new SwGrfNode( rWhere, rGrfObj, pGrfColl, pAutoAttr );
 }
 
@@ -472,7 +472,7 @@ short SwGrfNode::SwapIn( BOOL bWaitForData )
             catch ( uno::Exception& )
             {
                 // --> OD 2005-04-25 #i48434#
-                ASSERT( false, "<SwGrfNode::SwapIn(..)> - unhandled exception!" );
+                OSL_ENSURE( false, "<SwGrfNode::SwapIn(..)> - unhandled exception!" );
                 // <--
             }
             // <--
@@ -555,7 +555,7 @@ BOOL SwGrfNode::SavePersistentData()
 {
     if( refLink.Is() )
     {
-        ASSERT( !bInSwapIn, "SavePersistentData: stehe noch im SwapIn" );
+        OSL_ENSURE( !bInSwapIn, "SavePersistentData: stehe noch im SwapIn" );
         GetDoc()->GetLinkManager().Remove( refLink );
         return TRUE;
     }
@@ -690,7 +690,7 @@ void SwGrfNode::ScaleImageMap()
         nWidth -= rBox.CalcLineSpace(BOX_LINE_LEFT) +
                   rBox.CalcLineSpace(BOX_LINE_RIGHT);
 
-        ASSERT( nWidth>0, "Gibt es 0 twip breite Grafiken!?" );
+        OSL_ENSURE( nWidth>0, "Gibt es 0 twip breite Grafiken!?" );
 
         if( nGrfSize.Width() != nWidth )
         {
@@ -705,7 +705,7 @@ void SwGrfNode::ScaleImageMap()
         nHeight -= rBox.CalcLineSpace(BOX_LINE_TOP) +
                    rBox.CalcLineSpace(BOX_LINE_BOTTOM);
 
-        ASSERT( nHeight>0, "Gibt es 0 twip hohe Grafiken!?" );
+        OSL_ENSURE( nHeight>0, "Gibt es 0 twip hohe Grafiken!?" );
 
         if( nGrfSize.Height() != nHeight )
         {
@@ -745,7 +745,7 @@ void SwGrfNode::DelStreamName()
             catch ( uno::Exception& )
             {
                 // --> OD 2005-04-25 #i48434#
-                ASSERT( false, "<SwGrfNode::DelStreamName()> - unhandled exception!" );
+                OSL_ENSURE( false, "<SwGrfNode::DelStreamName()> - unhandled exception!" );
                 // <--
             }
         }
@@ -764,7 +764,7 @@ uno::Reference< embed::XStorage > SwGrfNode::_GetDocSubstorageOrRoot( const Stri
 {
     uno::Reference < embed::XStorage > refStor =
         const_cast<SwGrfNode*>(this)->GetDoc()->GetDocStorage();
-    ASSERT( refStor.is(), "Kein Storage am Doc" );
+    OSL_ENSURE( refStor.is(), "Kein Storage am Doc" );
 
     if ( aStgName.Len() )
     {
@@ -829,7 +829,7 @@ SvStream* SwGrfNode::_GetStreamForEmbedGrf(
         }
         else
         {
-            ASSERT( false, "<SwGrfNode::_GetStreamForEmbedGrf(..)> - embedded graphic file not found!" );
+            OSL_ENSURE( false, "<SwGrfNode::_GetStreamForEmbedGrf(..)> - embedded graphic file not found!" );
         }
     }
 
@@ -873,10 +873,10 @@ void SwGrfNode::_GetStreamStorageNames( String& rStrmName,
     }
     else
     {
-        ASSERT( false,
+        OSL_ENSURE( false,
                 "<SwGrfNode::_GetStreamStorageNames(..)> - unknown graphic URL type. Code for handling 3.1 - 5.2 storages has been deleted by issue i53025." );
     }
-    ASSERT( STRING_NOTFOUND == rStrmName.Search( '/' ),
+    OSL_ENSURE( STRING_NOTFOUND == rStrmName.Search( '/' ),
             "invalid graphic stream name" );
 }
 // <--
@@ -908,7 +908,7 @@ SwCntntNode* SwGrfNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
         catch ( uno::Exception& )
         {
             // --> OD 2005-04-25 #i48434#
-            ASSERT( false, "<SwGrfNode::MakeCopy(..)> - unhandled exception!" );
+            OSL_ENSURE( false, "<SwGrfNode::MakeCopy(..)> - unhandled exception!" );
             // <--
         }
         // <--
@@ -1000,7 +1000,7 @@ IMPL_LINK( SwGrfNode, SwapGraphic, GraphicObject*, pGrfObj )
             catch ( uno::Exception& )
             {
                 // --> OD 2005-04-25 #i48434#
-                ASSERT( false, "<SwapGraphic> - unhandled exception!" );
+                OSL_ENSURE( false, "<SwapGraphic> - unhandled exception!" );
                 // <--
             }
             // <--
@@ -1132,7 +1132,7 @@ void SwGrfNode::TriggerAsyncRetrieveInputStream()
 {
     if ( !IsLinkedFile() )
     {
-        ASSERT( false,
+        OSL_ENSURE( false,
                 "<SwGrfNode::TriggerAsyncLoad()> - Method is misused. Method call is only valid for graphic nodes, which refer a linked graphic file" );
         return;
     }

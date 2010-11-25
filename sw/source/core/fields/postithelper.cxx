@@ -65,9 +65,9 @@ struct LayoutInfoOrder
         else
         {
             // corresponding <SwFrm> instances are in different repeating table header rows
-            ASSERT( rLayoutInfo.mpAnchorFrm->FindTabFrm(),
+            OSL_ENSURE( rLayoutInfo.mpAnchorFrm->FindTabFrm(),
                     "<LayoutInfoOrder::operator()> - table frame not found" );
-            ASSERT( rNewLayoutInfo.mpAnchorFrm->FindTabFrm(),
+            OSL_ENSURE( rNewLayoutInfo.mpAnchorFrm->FindTabFrm(),
                     "<LayoutInfoOrder::operator()> - table frame not found" );
             const SwTabFrm* pLayoutInfoTabFrm( rLayoutInfo.mpAnchorFrm->FindTabFrm() );
             const SwTabFrm* pNewLayoutInfoTabFrm( rNewLayoutInfo.mpAnchorFrm->FindTabFrm() );

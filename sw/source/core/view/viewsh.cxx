@@ -515,10 +515,10 @@ void ViewShell::MakeVisible( const SwRect &rRect )
                     EndAction();
                 } while( nOldH != pRoot->Frm().Height() && nLoopCnt-- );
             }
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
             else
             {
-                ASSERT( !this, "MakeVisible fuer Drucker wird doch gebraucht?" );
+                OSL_ENSURE( !this, "MakeVisible fuer Drucker wird doch gebraucht?" );
             }
 
 #endif
@@ -940,15 +940,15 @@ void ViewShell::SizeChgNotify()
 
 void ViewShell::VisPortChgd( const SwRect &rRect)
 {
-    ASSERT( GetWin(), "VisPortChgd ohne Window." );
+    OSL_ENSURE( GetWin(), "VisPortChgd ohne Window." );
 
     if ( rRect == VisArea() )
         return;
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     if ( bInEndAction )
     {
-        ASSERT( !this, "Scroll waehrend einer EndAction." );
+        OSL_ENSURE( !this, "Scroll waehrend einer EndAction." );
     }
 #endif
 
@@ -1799,7 +1799,7 @@ void ViewShell::CheckBrowseView( BOOL bBrowseChgd )
 
     SET_CURR_SHELL( this );
 
-    ASSERT( GetLayout(), "Layout not ready" );
+    OSL_ENSURE( GetLayout(), "Layout not ready" );
 
     // Wenn das Layout noch nicht einmal eine Hoehe hat,
     // ist sowieso nichts formatiert.
@@ -1941,7 +1941,7 @@ void ViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
     Window *pMyWin = GetWin();
     if( !pMyWin )
     {
-        ASSERT( pMyWin, "ViewShell::ApplyViewOptions: no window" );
+        OSL_ENSURE( pMyWin, "ViewShell::ApplyViewOptions: no window" );
         return;
     }
 
@@ -2157,8 +2157,8 @@ uno::Reference< ::com::sun::star::accessibility::XAccessible > ViewShell::Create
     SwDoc *pMyDoc = GetDoc();
 
     // We require a layout and an XModel to be accessible.
-    ASSERT( pMyDoc->GetRootFrm(), "no layout, no access" );
-    ASSERT( GetWin(), "no window, no access" );
+    OSL_ENSURE( pMyDoc->GetRootFrm(), "no layout, no access" );
+    OSL_ENSURE( GetWin(), "no window, no access" );
 
     if( pMyDoc->GetRootFrm() && GetWin() )
         xAcc = Imp()->GetAccessibleMap().GetDocumentView();
@@ -2173,8 +2173,8 @@ ViewShell::CreateAccessiblePreview()
                 "Can't create accessible preview for non-preview ViewShell" );
 
     // We require a layout and an XModel to be accessible.
-    ASSERT( pDoc->GetRootFrm(), "no layout, no access" );
-    ASSERT( GetWin(), "no window, no access" );
+    OSL_ENSURE( pDoc->GetRootFrm(), "no layout, no access" );
+    OSL_ENSURE( GetWin(), "no window, no access" );
 
     if ( IsPreView() && pDoc->GetRootFrm() && GetWin() )
     {
@@ -2264,7 +2264,7 @@ void ViewShell::SetCareWin( Window* pNew )
 // #i12836# enhanced pdf export
 sal_Int32 ViewShell::GetPageNumAndSetOffsetForPDF( OutputDevice& rOut, const SwRect& rRect ) const
 {
-    ASSERT( GetLayout(), "GetPageNumAndSetOffsetForPDF assumes presence of layout" )
+    OSL_ENSURE( GetLayout(), "GetPageNumAndSetOffsetForPDF assumes presence of layout" );
 
     sal_Int32 nRet = -1;
 
@@ -2275,7 +2275,7 @@ sal_Int32 ViewShell::GetPageNumAndSetOffsetForPDF( OutputDevice& rOut, const SwR
     const SwPageFrm* pPage = GetLayout()->GetPageAtPos( aRect.Center() );
     if ( pPage )
     {
-        ASSERT( pPage, "GetPageNumAndSetOffsetForPDF: No page found" )
+        OSL_ENSURE( pPage, "GetPageNumAndSetOffsetForPDF: No page found" );
 
         Point aOffset( pPage->Frm().Pos() );
         aOffset.X() = -aOffset.X();

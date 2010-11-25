@@ -937,7 +937,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
                     else
                         pVout = 0;
 
-                    ASSERT( OUTDEV_VIRDEV != pOut->GetOutDevType() ||
+                    OSL_ENSURE( OUTDEV_VIRDEV != pOut->GetOutDevType() ||
                             pShell->GetViewOptions()->IsPDFExport(),
                             "pOut sollte kein virtuelles Device sein" );
 
@@ -1043,7 +1043,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
                 nMiscStatus & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE )
         {
             const SwFlyFrm *pFly = FindFlyFrm();
-            ASSERT( pFly, "OLE not in FlyFrm" );
+            OSL_ENSURE( pFly, "OLE not in FlyFrm" );
             ((SwFEShell*)pShell)->ConnectObj( pOLENd->GetOLEObj().GetObject(), pFly->Prt(), pFly->Frm());
         }
 

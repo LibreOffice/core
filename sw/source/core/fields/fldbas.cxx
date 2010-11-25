@@ -159,7 +159,7 @@ SwFieldType::SwFieldType( USHORT nWhichId )
     DBG_CTOR( SwFieldType, 0 );
 }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 
 SwFieldType::~SwFieldType()
 {
@@ -193,7 +193,7 @@ SwField::SwField(SwFieldType* pTyp, sal_uInt32 nFmt, USHORT nLng) :
     bIsAutomaticLanguage(TRUE),
     nFormat(nFmt)
 {
-    ASSERT( pTyp, "SwField: ungueltiger SwFieldType" );
+    OSL_ENSURE( pTyp, "SwField: ungueltiger SwFieldType" );
     pType = pTyp;
 }
 
@@ -205,10 +205,10 @@ SwField::~SwField()
     Beschreibung: Statt Umweg ueber den Typ
  --------------------------------------------------------------------*/
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 USHORT SwField::Which() const
 {
-    ASSERT(pType, "Kein Typ vorhanden");
+    OSL_ENSURE(pType, "Kein Typ vorhanden");
     return pType->Which();
 }
 #endif
@@ -356,7 +356,7 @@ bool SwField::PutValue( const uno::Any& rVal, USHORT nWhichId )
 
 SwFieldType* SwField::ChgTyp( SwFieldType* pNewType )
 {
-    ASSERT( pNewType && pNewType->Which() == pType->Which(),
+    OSL_ENSURE( pNewType && pNewType->Which() == pType->Which(),
             "kein Typ oder ungleiche Typen" );
 
     SwFieldType* pOld = pType;
@@ -453,7 +453,7 @@ String FormatNumber(USHORT nNum, sal_uInt32 nFormat)
         return  String::CreateFromInt32( nNum );
     SvxNumberType aNumber;
 
-    ASSERT(nFormat != SVX_NUM_NUMBER_NONE, "Falsches Nummern-Format" );
+    OSL_ENSURE(nFormat != SVX_NUM_NUMBER_NONE, "Falsches Nummern-Format" );
 
     aNumber.SetNumberingType((sal_Int16)nFormat);
     return aNumber.GetNumStr(nNum);
@@ -517,7 +517,7 @@ String SwValueFieldType::ExpandValue( const double& rVal,
             else
                 nFmt = nNewFormat;
         }
-        ASSERT(pEntry, "Unbekanntes Zahlenformat!");
+        OSL_ENSURE(pEntry, "Unbekanntes Zahlenformat!");
     }
 
     if( pFormatter->IsTextFormat( nFmt ) )
@@ -672,7 +672,7 @@ void SwValueField::SetLanguage( USHORT nLng )
                 }
                 SetFormat( nNewFormat );
             }
-            ASSERT(pEntry, "Unbekanntes Zahlenformat!");
+            OSL_ENSURE(pEntry, "Unbekanntes Zahlenformat!");
         }
     }
 

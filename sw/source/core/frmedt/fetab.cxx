@@ -117,7 +117,7 @@ void SwFEShell::ParkCursorInTab()
 {
     SwCursor * pSwCrsr = GetSwCrsr();
 
-    ASSERT(pSwCrsr, "no SwCursor");
+    OSL_ENSURE(pSwCrsr, "no SwCursor");
 
     SwPosition aStartPos = *pSwCrsr->GetPoint(), aEndPos = aStartPos;
 
@@ -1005,7 +1005,7 @@ BOOL SwFEShell::HasBoxSelection() const
             if( !pCNd )
             {
                 pCNd = GetDoc()->GetNodes().GoPrevious( &aIdx );
-                ASSERT( pCNd, "kein ContentNode in der Box ??" );
+                OSL_ENSURE( pCNd, "kein ContentNode in der Box ??" );
             }
             if( pPam->GetMark()->nContent == pCNd->Len() )
             {
@@ -1430,7 +1430,7 @@ USHORT SwFEShell::GetCurTabColNum() const
     USHORT nRet = 0;
 
     SwFrm *pFrm = GetCurrFrm();
-    ASSERT( pFrm, "Crsr geparkt?" );
+    OSL_ENSURE( pFrm, "Crsr geparkt?" );
 
     // pruefe ob vom aktuellen Crsr der SPoint/Mark in einer Tabelle stehen
     if( pFrm && pFrm->IsInTab() )
@@ -1554,7 +1554,7 @@ const SwCellFrm *lcl_FindFrm( const SwLayoutFrm *pLay, const Point &rPt,
 
                     // We first check if the given point is 'close' to the left or top
                     // border of the table frame:
-                    ASSERT( pFrm, "Nested table frame without outer table" )
+                    OSL_ENSURE( pFrm, "Nested table frame without outer table" );
                     SWRECTFN( pFrm )
                     const bool bRTL = pFrm->IsRightToLeft();
 
@@ -1652,7 +1652,7 @@ const SwCellFrm *lcl_FindFrm( const SwLayoutFrm *pLay, const Point &rPt,
                 if ( !bMouseMoveRowCols )
                 {
 
-                    ASSERT( pbCol && pbRow, "pbCol or pbRow missing" )
+                    OSL_ENSURE( pbCol && pbRow, "pbCol or pbRow missing" );
 
                     if ( bCloseToRow || bCloseToCol )
                     {
@@ -1701,7 +1701,7 @@ const SwCellFrm *lcl_FindFrm( const SwLayoutFrm *pLay, const Point &rPt,
     }
 
     // robust:
-    ASSERT( !pRet || pRet->IsCellFrm(), "lcl_FindFrm() is supposed to find a cell frame!" )
+    OSL_ENSURE( !pRet || pRet->IsCellFrm(), "lcl_FindFrm() is supposed to find a cell frame!" );
     return pRet && pRet->IsCellFrm() ? static_cast<const SwCellFrm*>(pRet) : 0;
 }
 
@@ -2201,7 +2201,7 @@ USHORT SwFEShell::GetCurMouseTabColNum( const Point &rPt ) const
     USHORT nRet = 0;
 
     const SwFrm *pFrm = GetBox( rPt );
-    ASSERT( pFrm, "Table not found" );
+    OSL_ENSURE( pFrm, "Table not found" );
     if( pFrm )
     {
         const long nX = pFrm->Frm().Left();
@@ -2268,13 +2268,13 @@ void SwFEShell::SetTblAttr( const SfxItemSet &rNew )
  */
 bool lcl_GoTableRow( SwCrsrShell* pShell, bool bUp )
 {
-    ASSERT( pShell != NULL, "need shell" );
+    OSL_ENSURE( pShell != NULL, "need shell" );
 
     bool bRet = false;
 
     SwPaM* pPam = pShell->GetCrsr();
     const SwStartNode* pTableBox = pPam->GetNode()->FindTableBoxStartNode();
-    ASSERT( pTableBox != NULL, "I'm living in a box... NOT!" );
+    OSL_ENSURE( pTableBox != NULL, "I'm living in a box... NOT!" );
 
     // move cursor to start node of table box
     pPam->GetPoint()->nNode = pTableBox->GetIndex();
@@ -2542,7 +2542,7 @@ BOOL SwFEShell::IsMouseTableRightToLeft(const Point &rPt) const
 {
     SwFrm *pFrm = (SwFrm *)GetBox( rPt );
     const SwTabFrm*  pTabFrm = pFrm ? pFrm->ImplFindTabFrm() : 0;
-    ASSERT( pTabFrm, "Table not found" );
+    OSL_ENSURE( pTabFrm, "Table not found" );
     return pTabFrm ? pTabFrm->IsRightToLeft() : FALSE;
 }
 

@@ -139,7 +139,7 @@ void SwFmtFld::SetFld(SwField * _pField)
 
 int SwFmtFld::operator==( const SfxPoolItem& rAttr ) const
 {
-    ASSERT( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
+    OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
     // OD 2004-05-14 #i29146# - correction: check, if <pField> and
     // <((SwFmtFld&)rAttr).GetFld()> are set.
     // OD 2004-05-14 #i29146# - items are equal, if both fields aren't set.
@@ -164,7 +164,7 @@ void SwFmtFld::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
         return;
 
     SwTxtNode* pTxtNd = (SwTxtNode*)&pTxtAttr->GetTxtNode();
-    ASSERT( pTxtNd, "wo ist denn mein Node?" );
+    OSL_ENSURE( pTxtNd, "wo ist denn mein Node?" );
     if( pNew )
     {
         switch( pNew->Which() )
@@ -292,7 +292,7 @@ SwTxtFld::~SwTxtFld( )
 void SwTxtFld::Expand() const
 {
     // Wenn das expandierte Feld sich nicht veraendert hat, wird returnt
-    ASSERT( m_pTxtNode, "SwTxtFld: where is my TxtNode?" );
+    OSL_ENSURE( m_pTxtNode, "SwTxtFld: where is my TxtNode?" );
 
     const SwField* pFld = GetFld().GetFld();
     XubString aNewExpand(
@@ -334,8 +334,8 @@ void SwTxtFld::Expand() const
 
 void SwTxtFld::CopyFld( SwTxtFld *pDest ) const
 {
-    ASSERT( m_pTxtNode, "SwTxtFld: where is my TxtNode?" );
-    ASSERT( pDest->m_pTxtNode, "SwTxtFld: where is pDest's TxtNode?" );
+    OSL_ENSURE( m_pTxtNode, "SwTxtFld: where is my TxtNode?" );
+    OSL_ENSURE( pDest->m_pTxtNode, "SwTxtFld: where is pDest's TxtNode?" );
 
     IDocumentFieldsAccess* pIDFA = m_pTxtNode->getIDocumentFieldsAccess();
     IDocumentFieldsAccess* pDestIDFA = pDest->m_pTxtNode->getIDocumentFieldsAccess();
@@ -364,7 +364,7 @@ void SwTxtFld::CopyFld( SwTxtFld *pDest ) const
             ((SwDDEFieldType*)pFldType)->IncRefCnt();
         }
 
-        ASSERT( pFldType, "unbekannter FieldType" );
+        OSL_ENSURE( pFldType, "unbekannter FieldType" );
         pFldType->Add( &rFmtFld );          // ummelden
         rFmtFld.GetFld()->ChgTyp( pFldType );
     }

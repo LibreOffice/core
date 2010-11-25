@@ -555,13 +555,13 @@ bool SwUndoFmtAttr::RestoreFlyAnchor( SwUndoIter& rIter )
         //Verbindung zwischen Attribut und Format.
         const SwPosition *pPos = rOldAnch.GetCntntAnchor();
         SwTxtNode *pTxtNode = (SwTxtNode*)&pPos->nNode.GetNode();
-        ASSERT( pTxtNode->HasHints(), "Missing FlyInCnt-Hint." );
+        OSL_ENSURE( pTxtNode->HasHints(), "Missing FlyInCnt-Hint." );
         const xub_StrLen nIdx = pPos->nContent.GetIndex();
         SwTxtAttr * const pHnt =
             pTxtNode->GetTxtAttrForCharAt( nIdx, RES_TXTATR_FLYCNT );
-        ASSERT( pHnt && pHnt->Which() == RES_TXTATR_FLYCNT,
+        OSL_ENSURE( pHnt && pHnt->Which() == RES_TXTATR_FLYCNT,
                     "Missing FlyInCnt-Hint." );
-        ASSERT( pHnt && pHnt->GetFlyCnt().GetFrmFmt() == pFrmFmt,
+        OSL_ENSURE( pHnt && pHnt->GetFlyCnt().GetFrmFmt() == pFrmFmt,
                     "Wrong TxtFlyCnt-Hint." );
         const_cast<SwFmtFlyCnt&>(pHnt->GetFlyCnt()).SetFlyFmt();
 
@@ -600,7 +600,7 @@ bool SwUndoFmtAttr::RestoreFlyAnchor( SwUndoIter& rIter )
 
         if( pCont->GetAnchorFrm() && !pObj->IsInserted() )
         {
-            ASSERT( pDoc->GetDrawModel(), "RestoreFlyAnchor without DrawModel" );
+            OSL_ENSURE( pDoc->GetDrawModel(), "RestoreFlyAnchor without DrawModel" );
             pDoc->GetDrawModel()->GetPage( 0 )->InsertObject( pObj );
         }
         pObj->SetRelativePos( aDrawSavePt );
@@ -614,7 +614,7 @@ bool SwUndoFmtAttr::RestoreFlyAnchor( SwUndoIter& rIter )
     {
         const SwPosition* pPos = aNewAnchor.GetCntntAnchor();
         SwTxtNode* pTxtNd = pPos->nNode.GetNode().GetTxtNode();
-        ASSERT( pTxtNd, "no Text Node at position." );
+        OSL_ENSURE( pTxtNd, "no Text Node at position." );
         SwFmtFlyCnt aFmt( pFrmFmt );
         pTxtNd->InsertItem( aFmt, pPos->nContent.GetIndex(), 0 );
     }
