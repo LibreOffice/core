@@ -53,7 +53,7 @@ void SAL_CALL CConfigFilter::initialize(const Sequence< Any >& seqArgs)
         throw (Exception)
 {
     NamedValue nv;
-    for (sal_Int32 i=0; i < seqArgs.getLength(); i++)
+    for (sal_Int32 i=0; i < seqArgs.getLength(); ++i)
     {
         if (seqArgs[i] >>= nv)
         {
@@ -109,7 +109,7 @@ sal_Bool CConfigFilter::checkElement(rtl::OUString aName)
 
     // check whether any include patterns patch this path
     for (strings_v::const_iterator i_in = m_pvInclude->begin();
-        i_in != m_pvInclude->end(); i_in++)
+        i_in != m_pvInclude->end(); ++i_in)
     {
         // pattern is beginning of path
         // or path is a begiing for pattern
@@ -124,7 +124,7 @@ sal_Bool CConfigFilter::checkElement(rtl::OUString aName)
     if (bResult)
     {
         for (strings_v::const_iterator i_ex = m_pvExclude->begin();
-            i_ex != m_pvExclude->end(); i_ex++)
+            i_ex != m_pvExclude->end(); ++i_ex)
         {
             if (aFullPath.match(*i_ex, 0)) // pattern is beginning of path
             {
