@@ -27,6 +27,8 @@
 #ifndef DBACCESS_DBAUNDOMANAGER_HXX
 #define DBACCESS_DBAUNDOMANAGER_HXX
 
+#include "dbaccessdllapi.h"
+
 /** === begin UNO includes === **/
 #include <com/sun/star/document/XUndoManager.hpp>
 /** === end UNO includes === **/
@@ -47,7 +49,7 @@ namespace dbaui
     //==================================================================================================================
     struct UndoManager_Impl;
     typedef ::cppu::ImplHelper1< ::com::sun::star::document::XUndoManager > UndoManager_Base;
-    class UndoManager : public UndoManager_Base
+    class DBACCESS_DLLPUBLIC UndoManager : public UndoManager_Base
     {
     public:
         UndoManager( ::cppu::OWeakObject& i_parent, ::osl::Mutex& i_mutex );

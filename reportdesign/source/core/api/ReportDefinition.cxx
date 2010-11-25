@@ -24,18 +24,66 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #include "ReportDefinition.hxx"
+
+#include "FixedLine.hxx"
+#include "FixedText.hxx"
+#include "FormattedField.hxx"
+#include "Functions.hxx"
+#include "Groups.hxx"
+#include "ImageControl.hxx"
+#include "ReportComponent.hxx"
+#include "ReportHelperImpl.hxx"
+#include "RptDef.hxx"
+#include "RptModel.hxx"
+#include "Section.hxx"
+#include "Shape.hxx"
+#include "Tools.hxx"
+#include "UndoEnv.hxx"
+#include "core_resource.hrc"
+#include "core_resource.hxx"
+#include "corestrings.hrc"
+
+/** === begin UNO includes === **/
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/beans/XMultiPropertyStates.hpp>
+#include <com/sun/star/chart2/data/DatabaseDataProvider.hpp>
+#include <com/sun/star/document/EventObject.hpp>
+#include <com/sun/star/document/XEventListener.hpp>
+#include <com/sun/star/document/XExporter.hpp>
+#include <com/sun/star/document/XFilter.hpp>
+#include <com/sun/star/document/XImporter.hpp>
+#include <com/sun/star/embed/Aspects.hpp>
+#include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/embed/EmbedMapUnits.hpp>
+#include <com/sun/star/embed/EntryInitModes.hpp>
+#include <com/sun/star/embed/XEmbedPersist.hpp>
+#include <com/sun/star/embed/XTransactedObject.hpp>
+#include <com/sun/star/frame/FrameSearchFlag.hpp>
+#include <com/sun/star/frame/XComponentLoader.hpp>
+#include <com/sun/star/io/XActiveDataSource.hpp>
+#include <com/sun/star/io/XSeekable.hpp>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/report/GroupKeepTogether.hpp>
 #include <com/sun/star/report/ReportPrintOption.hpp>
 #include <com/sun/star/report/XFunction.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
+#include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
+#include <com/sun/star/style/GraphicLocation.hpp>
+#include <com/sun/star/style/NumberingType.hpp>
+#include <com/sun/star/style/PageStyleLayout.hpp>
+#include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/table/BorderLine.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
-#include <com/sun/star/style/PageStyleLayout.hpp>
-#include <com/sun/star/style/GraphicLocation.hpp>
+#include <com/sun/star/task/ErrorCodeIOException.hpp>
+#include <com/sun/star/task/XStatusIndicator.hpp>
+#include <com/sun/star/task/XStatusIndicatorFactory.hpp>
+#include <com/sun/star/ui/XUIConfigurationStorage.hpp>
 #include <com/sun/star/xml/AttributeData.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
+/** === end UNO includes === **/
+
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/genericpropertyset.hxx>
@@ -44,83 +92,41 @@
 #include <comphelper/namecontainer.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/numberedcollection.hxx>
-#include <comphelper/propertystatecontainer.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/propertysetinfo.hxx>
-#include <comphelper/sequence.hxx>
+#include <comphelper/propertystatecontainer.hxx>
 #include <comphelper/seqstream.hxx>
+#include <comphelper/sequence.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/uno3.hxx>
-#include <com/sun/star/chart2/data/DatabaseDataProvider.hpp>
+#include <connectivity/CommonTools.hxx>
+#include <connectivity/dbconversion.hxx>
+#include <connectivity/dbtools.hxx>
+#include <cppuhelper/exc_hlp.hxx>
+#include <cppuhelper/interfacecontainer.h>
+#include <dbaccess/dbaundomanager.hxx>
+#include <editeng/paperinf.hxx>
+#include <framework/titlehelper.hxx>
+#include <osl/thread.hxx>
+#include <svl/itempool.hxx>
+#include <svl/undo.hxx>
+#include <svx/svdlayer.hxx>
+#include <svx/unofill.hxx>
+#include <svx/xmleohlp.hxx>
+#include <svx/xmlgrhlp.hxx>
+#include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
+#include <unotools/moduleoptions.hxx>
+#include <unotools/saveopt.hxx>
+#include <unotools/streamwrap.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 #include <vos/mutex.hxx>
-#include <com/sun/star/beans/XMultiPropertyStates.hpp>
-#include <com/sun/star/document/EventObject.hpp>
-#include <com/sun/star/document/XEventListener.hpp>
-#include <com/sun/star/style/XStyle.hpp>
-#include <com/sun/star/embed/XTransactedObject.hpp>
-#include <com/sun/star/embed/ElementModes.hpp>
-#include <com/sun/star/embed/EmbedMapUnits.hpp>
-#include <com/sun/star/embed/EntryInitModes.hpp>
-#include <com/sun/star/embed/Aspects.hpp>
-#include <com/sun/star/io/XActiveDataSource.hpp>
-#include <com/sun/star/embed/ElementModes.hpp>
-#include <com/sun/star/io/XSeekable.hpp>
-#include <com/sun/star/embed/XEmbedPersist.hpp>
-#include <com/sun/star/task/XStatusIndicator.hpp>
-#include <com/sun/star/task/XStatusIndicatorFactory.hpp>
-#include <com/sun/star/ui/XUIConfigurationStorage.hpp>
-#include <com/sun/star/document/XExporter.hpp>
-#include <com/sun/star/document/XImporter.hpp>
-#include <com/sun/star/document/XFilter.hpp>
-#include <com/sun/star/task/ErrorCodeIOException.hpp>
-#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#include <com/sun/star/frame/XComponentLoader.hpp>
-#include <com/sun/star/frame/FrameSearchFlag.hpp>
-#include "corestrings.hrc"
-#include "Groups.hxx"
-#include "RptDef.hxx"
-#include "Section.hxx"
-#include "FixedLine.hxx"
-#include "core_resource.hrc"
-#include "core_resource.hxx"
-#include "Tools.hxx"
-#include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
-#include <unotools/streamwrap.hxx>
-#include <connectivity/CommonTools.hxx>
-#include <connectivity/dbconversion.hxx>
-#include <framework/titlehelper.hxx>
-#include <connectivity/dbtools.hxx>
-#include <com/sun/star/task/XStatusIndicator.hpp>
-#include "Functions.hxx"
-#include <boost/mem_fn.hpp>
-#include <boost/bind.hpp>
-#include <boost/utility.hpp>
-#include <unotools/saveopt.hxx>
-#include "RptModel.hxx"
-#include "UndoEnv.hxx"
-#include "FormattedField.hxx"
-#include "FixedText.hxx"
-#include "ImageControl.hxx"
-#include "Shape.hxx"
-#include "ReportHelperImpl.hxx"
-#include <svl/itempool.hxx>
-#include <unotools/moduleoptions.hxx>
-#include <osl/thread.hxx>
 
-#include <editeng/paperinf.hxx>
-#include <svx/svdlayer.hxx>
-#include <svx/xmleohlp.hxx>
-#include <svx/xmlgrhlp.hxx>
-#include <svx/unofill.hxx>
-#include <cppuhelper/interfacecontainer.h>
-#include <cppuhelper/exc_hlp.hxx>
-#include "ReportComponent.hxx"
-#include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
-#include <com/sun/star/style/NumberingType.hpp>
+#include <boost/bind.hpp>
+#include <boost/mem_fn.hpp>
+#include <boost/utility.hpp>
 
 #define MAP_LEN(x) x, sizeof(x) - 1
 #define MAP_CHAR_LEN(x) ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(x))
@@ -607,6 +613,7 @@ struct OReportDefinitionImpl
     ::boost::shared_ptr< ::comphelper::EmbeddedObjectContainer>
                                                             m_pObjectContainer;
     ::boost::shared_ptr<rptui::OReportModel>                m_pReportModel;
+    ::rtl::Reference< ::dbaui::UndoManager >                m_pUndoManager;
     ::rtl::OUString                                         m_sCaption;
     ::rtl::OUString                                         m_sCommand;
     ::rtl::OUString                                         m_sFilter;
@@ -623,6 +630,7 @@ struct OReportDefinitionImpl
     sal_Bool                                                m_bModified;
     sal_Bool                                                m_bEscapeProcessing;
     sal_Bool                                                m_bSetModifiedEnabled;
+
     OReportDefinitionImpl(::osl::Mutex& _aMutex)
     :m_aStorageChangeListeners(_aMutex)
     ,m_aCloseListener(_aMutex)
@@ -746,7 +754,6 @@ OReportDefinition::~OReportDefinition()
 }
 // -----------------------------------------------------------------------------
 IMPLEMENT_FORWARD_REFCOUNT( OReportDefinition, ReportDefinitionBase )
-//IMPLEMENT_FORWARD_XINTERFACE2(OReportDefinition,ReportDefinitionBase,ReportDefinitionPropertySet)
 void OReportDefinition::init()
 {
     try
@@ -764,7 +771,7 @@ void OReportDefinition::init()
                 pCreatorThread->createSuspended();
                 pCreatorThread->setPriority(osl_Thread_PriorityBelowNormal);
                 pCreatorThread->resume();
-            } // for ( ; pIter != pEnd; ++pIter )
+            }
         }
 
         m_pImpl->m_pReportModel.reset(new OReportModel(this));
@@ -774,6 +781,9 @@ void OReportDefinition::init()
         rAdmin.NewStandardLayer(RPT_LAYER_FRONT);
         rAdmin.NewLayer(UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "back" ) ), RPT_LAYER_BACK );
         rAdmin.NewLayer( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "HiddenLayer" ) ), RPT_LAYER_HIDDEN );
+
+        m_pImpl->m_pUndoManager = new ::dbaui::UndoManager( *this, m_aMutex );
+        m_pImpl->m_pReportModel->SetSdrUndoManager( &m_pImpl->m_pUndoManager->GetSfxUndoManager() );
 
         m_pImpl->m_xFunctions = new OFunctions(this,m_aProps->m_xContext);
         if ( !m_pImpl->m_xStorage.is() )
@@ -789,9 +799,9 @@ void OReportDefinition::init()
         }
         m_pImpl->m_pObjectContainer.reset( new comphelper::EmbeddedObjectContainer(m_pImpl->m_xStorage , static_cast<cppu::OWeakObject*>(this) ) );
     }
-    catch(uno::Exception)
+    catch ( const uno::Exception& )
     {
-        OSL_ENSURE(0,"Error!");
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 // -----------------------------------------------------------------------------
@@ -1296,10 +1306,21 @@ void SAL_CALL OReportDefinition::close( ::sal_Bool _bDeliverOwnership ) throw (u
     ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
 
     ::osl::MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
+    ::connectivity::checkDisposed( ReportDefinitionBase::rBHelper.bDisposed );
     ::comphelper::MediaDescriptor aDescriptor( _aArguments );
-    fillArgs(aDescriptor);
-    m_pImpl->m_pReportModel->SetModified(sal_False);
+
+    m_pImpl->m_pUndoManager->GetSfxUndoManager().EnableUndo( false );
+    try
+    {
+        fillArgs(aDescriptor);
+        m_pImpl->m_pReportModel->SetModified(sal_False);
+    }
+    catch ( ... )
+    {
+        m_pImpl->m_pUndoManager->GetSfxUndoManager().EnableUndo( true );
+        throw;
+    }
+    m_pImpl->m_pUndoManager->GetSfxUndoManager().EnableUndo( true );
     return sal_True;
 }
 // -----------------------------------------------------------------------------
@@ -1842,7 +1863,6 @@ void SAL_CALL OReportDefinition::load( const uno::Sequence< beans::PropertyValue
     else if ( sURL.getLength() )
         aStorageSource <<= sURL;
     else
-        // TODO: error message
         throw lang::IllegalArgumentException(
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "No input source (URL or InputStream) found." ) ),
                 // TODO: resource
@@ -2931,8 +2951,15 @@ uno::Sequence< datatransfer::DataFlavor > SAL_CALL OReportDefinition::getTransfe
 {
     return aFlavor.MimeType.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("image/png")));
 }
+
 // -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
+uno::Reference< document::XUndoManager > SAL_CALL OReportDefinition::getUndoManager(  ) throw (uno::RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    return m_pImpl->m_pUndoManager.get();
+}
+
+
 // =============================================================================
 }// namespace reportdesign
 // =============================================================================
