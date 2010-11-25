@@ -67,7 +67,6 @@ public:
     virtual void DelAllUndoObj();
     virtual SwUndoId GetUndoIds(String *const o_pStr,
                 SwUndoIds *const o_pUndoIds) const;
-    virtual const SwNodes* GetUndoNds() const;
     virtual SwUndo* RemoveLastUndo(SwUndoId const eUndoId);
     virtual bool HasTooManyUndos() const;
     virtual bool Redo(SwUndoIter & rUndoIter);
@@ -77,6 +76,7 @@ public:
     virtual SwUndoId GetRepeatIds(String *const o_pStr) const;
     virtual void AppendUndo(SwUndo *const pUndo);
     virtual void ClearRedo();
+    virtual bool IsUndoNodes(SwNodes const& rNodes) const;
 
     SwUndo* GetLastUndo();
 
@@ -85,9 +85,14 @@ public:
     void SetNoDrawUndoObj( bool const bFlag )    { mbNoDrawUndoObj = bFlag; }
 
     sal_Bool RestoreInvisibleContent();
+    SwNodes const& GetUndoNodes() const;
+    SwNodes      & GetUndoNodes();
 
 private:
     SwDoc & m_rDoc;
+
+    /// Undo nodes array: content not currently in document
+    ::std::auto_ptr<SwNodes> m_pUndoNodes;
 
     ::std::auto_ptr<SwUndos>    pUndos;         // Undo/Redo History
 

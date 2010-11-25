@@ -228,8 +228,8 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, ULONG nSz,
     }
     else
     {
-        int bSavePersData = GetDoc()->GetUndoNds() == &rNds;
-        int bRestPersData = GetDoc()->GetUndoNds() == this;
+        bool bSavePersData(GetDoc()->GetIDocumentUndoRedo().IsUndoNodes(rNds));
+        bool bRestPersData(GetDoc()->GetIDocumentUndoRedo().IsUndoNodes(*this));
         SwDoc* pDestDoc = rNds.GetDoc() != GetDoc() ? rNds.GetDoc() : 0;
         if( !bRestPersData && !bSavePersData && pDestDoc )
             bSavePersData = bRestPersData = TRUE;
@@ -660,7 +660,8 @@ BOOL SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                             }
                         }
 
-                        if( GetDoc()->GetUndoNds() == &rNodes )
+                        if (GetDoc()->GetIDocumentUndoRedo().IsUndoNodes(
+                                    rNodes))
                         {
                             SwFrmFmt* pTblFmt = pTblNd->GetTable().GetFrmFmt();
                             SwPtrMsgPoolItem aMsgHint( RES_REMOVE_UNO_OBJECT,
@@ -697,8 +698,8 @@ BOOL SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                             // noch den EndNode erzeugen
                             new SwEndNode( aIdx, *pTmp );
                         }
-                        else if( (const SwNodes*)&rNodes ==
-                                GetDoc()->GetUndoNds() )
+                        else if (GetDoc()->GetIDocumentUndoRedo().IsUndoNodes(
+                                    rNodes))
                         {
                             // im UndoNodes-Array spendieren wir einen
                             // Platzhalter
@@ -764,7 +765,7 @@ BOOL SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
 
         case ND_SECTIONNODE:
             if( !nLevel &&
-                ( (const SwNodes*)&rNodes == GetDoc()->GetUndoNds() ) )
+                GetDoc()->GetIDocumentUndoRedo().IsUndoNodes(rNodes))
             {
                 // dann muss an der akt. InsPos ein SectionDummyNode
                 // eingefuegt werden
@@ -891,7 +892,7 @@ BOOL SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
             break;
 
         case ND_SECTIONDUMMY:
-            if( (const SwNodes*)this == GetDoc()->GetUndoNds() )
+            if (GetDoc()->GetIDocumentUndoRedo().IsUndoNodes(*this))
             {
                 if( &rNodes == this )       // innerhalb vom UndoNodesArray
                 {
@@ -2208,7 +2209,7 @@ void SwNodes::_CopyNodes( const SwNodeRange& rRange,
             break;
 
         case ND_SECTIONDUMMY:
-            if( (const SwNodes*)this == GetDoc()->GetUndoNds() )
+            if (GetDoc()->GetIDocumentUndoRedo().IsUndoNodes(*this))
             {
                 // dann muss an der akt. InsPos auch ein SectionNode
                 // (Start/Ende) stehen; dann diesen ueberspringen.

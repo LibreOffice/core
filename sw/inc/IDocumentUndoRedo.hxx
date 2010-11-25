@@ -144,13 +144,6 @@ public:
     virtual SwUndoId GetUndoIds(String *const o_pStr,
                 SwUndoIds *const o_pUndoIds) const = 0;
 
-    /* @@@MAINTAINABILITY-HORROR@@@
-       Implementation details made public.
-       die drei folgenden Methoden werden beim Undo und nur dort
-       benoetigt. Sollten sonst nicht aufgerufen werden.
-    */
-    virtual const SwNodes* GetUndoNds() const = 0;
-
     virtual SwUndo* RemoveLastUndo(SwUndoId const eUndoId) = 0;
 
     /** 2002-05-31 dvo, #95884#: To prevent an undo array overflow when
@@ -199,6 +192,10 @@ public:
     /** Delete all Redo actions.
     */
     virtual void ClearRedo() = 0;
+
+    /* Is the given nodes array the Undo nodes array?
+    */
+    virtual bool IsUndoNodes(SwNodes const& rNodes) const = 0;
 
 protected:
     virtual ~IDocumentUndoRedo() {};

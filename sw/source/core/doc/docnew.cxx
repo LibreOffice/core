@@ -220,7 +220,6 @@ BOOL lcl_DelFmtIndizes( const SwFrmFmtPtr& rpFmt, void* )
 
 SwDoc::SwDoc() :
     aNodes( this ),
-    aUndoNodes( this ),
     mpAttrPool(new SwAttrPool(this)),
     pMarkManager(new ::sw::mark::MarkManager(*this)),
     m_pMetaFieldManager(new ::sw::MetaFieldManager()),
@@ -428,7 +427,9 @@ SwDoc::SwDoc() :
     pOutlineRule->SetCountPhantoms( !get(IDocumentSettingAccess::OLD_NUMBERING) );
     // <--
 
-    new SwTxtNode( SwNodeIndex( aUndoNodes.GetEndOfContent() ), pDfltTxtFmtColl );
+    new SwTxtNode(
+            SwNodeIndex(GetUndoManager().GetUndoNodes().GetEndOfContent()),
+            pDfltTxtFmtColl );
     new SwTxtNode( SwNodeIndex( aNodes.GetEndOfContent() ),
                     GetTxtCollFromPool( RES_POOLCOLL_STANDARD ));
 
@@ -546,7 +547,8 @@ SwDoc::~SwDoc()
     // die KapitelNummern / Nummern muessen vor den Vorlage geloescht werden
     // ansonsten wird noch staendig geupdatet !!!
     aNodes.pOutlineNds->Remove( USHORT(0), aNodes.pOutlineNds->Count() );
-    aUndoNodes.pOutlineNds->Remove( USHORT(0), aUndoNodes.pOutlineNds->Count() );
+    SwNodes & rUndoNodes( GetUndoManager().GetUndoNodes() );
+    rUndoNodes.pOutlineNds->Remove(USHORT(0), rUndoNodes.pOutlineNds->Count());
 
     pFtnIdxs->Remove( USHORT(0), pFtnIdxs->Count() );
 
@@ -595,7 +597,7 @@ SwDoc::~SwDoc()
     // nicht erst durch den SwNodes-DTOR, damit Formate
     // keine Abhaengigen mehr haben.
     aNodes.DelNodes( SwNodeIndex( aNodes ), aNodes.Count() );
-    aUndoNodes.DelNodes( SwNodeIndex( aUndoNodes ), aUndoNodes.Count() );
+    rUndoNodes.DelNodes( SwNodeIndex( rUndoNodes ), rUndoNodes.Count() );
 
     // Formate loeschen, spaeter mal permanent machen.
 

@@ -129,7 +129,7 @@ class SW_DLLPUBLIC SwNodes: private BigPtrArray
                     BOOL bNewFrms = TRUE, BOOL bTblInsDummyNode = FALSE ) const;
     void _DelDummyNodes( const SwNodeRange& rRg );
 
-protected:
+public:
     SwNodes( SwDoc* pDoc );
 
 public:

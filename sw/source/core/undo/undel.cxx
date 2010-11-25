@@ -36,7 +36,7 @@
 #include <frmfmt.hxx>
 #include <fmtanchr.hxx>
 #include <doc.hxx>
-#include <IDocumentUndoRedo.hxx>
+#include <UndoManager.hxx>
 #include <swtable.hxx>
 #include <swundo.hxx>           // fuer die UndoIds
 #include <pam.hxx>
@@ -219,7 +219,7 @@ SwUndoDelete::SwUndoDelete( SwPaM& rPam, BOOL bFullPara, BOOL bCalledByTblCpy )
 
     if( bMoveNds )      // sind noch Nodes zu verschieben ?
     {
-        SwNodes& rNds = (SwNodes&)*pDoc->GetUndoNds();
+        SwNodes& rNds = pDoc->GetUndoManager().GetUndoNodes();
         SwNodes& rDocNds = pDoc->GetNodes();
         SwNodeRange aRg( rDocNds, nSttNode - nNdDiff,
                          rDocNds, nEndNode - nNdDiff );
@@ -680,7 +680,6 @@ void SwUndoDelete::Undo( SwUndoIter& rUndoIter )
         else
             pInsNd = 0;         // Node nicht loeschen !!
 
-        SwNodes* pUNds = (SwNodes*)pDoc->GetUndoNds();
         BOOL bNodeMove = 0 != nNode;
 
         if( pEndStr )
@@ -757,7 +756,7 @@ void SwUndoDelete::Undo( SwUndoIter& rUndoIter )
         {
             SwNodeRange aRange( *pMvStt, 0, *pMvStt, nNode );
             SwNodeIndex aCopyIndex( aPos.nNode, -1 );
-            pUNds->_Copy( aRange, aPos.nNode );
+            pDoc->GetUndoManager().GetUndoNodes()._Copy( aRange, aPos.nNode );
 
             if( nReplaceDummy )
             {

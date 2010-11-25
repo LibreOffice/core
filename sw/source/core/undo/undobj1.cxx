@@ -394,7 +394,7 @@ SwUndoDelLayFmt::SwUndoDelLayFmt( SwFrmFmt* pFormat )
     SwNodeIndex* pIdx = GetMvSttIdx();
     SwNode* pNd;
     if( 1 == GetMvNodeCnt() && pIdx &&
-        ( pNd = (*pDoc->GetUndoNds())[ *pIdx ] )->IsNoTxtNode() )
+        ( pNd = & pIdx->GetNode() )->IsNoTxtNode() )
     {
         // dann setze eine andere Undo-ID; Grafik oder OLE
         if( pNd->IsGrfNode() )
@@ -418,7 +418,7 @@ SwRewriter SwUndoDelLayFmt::GetRewriter() const
         SwNodeIndex* pIdx = GetMvSttIdx();
         if( 1 == GetMvNodeCnt() && pIdx)
         {
-            SwNode * pNd = (*pDoc->GetUndoNds())[ *pIdx ];
+            SwNode *const pNd = & pIdx->GetNode();
 
             if ( pNd->IsNoTxtNode() && pNd->IsOLENode())
             {

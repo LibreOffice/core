@@ -223,10 +223,10 @@ sal_Int32 Writer::FindPos_Bkmk(const SwPosition& rPos) const
 }
 
 
-SwPaM* Writer::NewSwPaM( SwDoc & rDoc, ULONG nStartIdx, ULONG nEndIdx,
-                        BOOL bNodesArray )
+SwPaM *
+Writer::NewSwPaM(SwDoc & rDoc, ULONG const nStartIdx, ULONG const nEndIdx)
 {
-    SwNodes* pNds = bNodesArray ? &rDoc.GetNodes() : (SwNodes*)rDoc.GetUndoNds();
+    SwNodes *const pNds = &rDoc.GetNodes();
 
     SwNodeIndex aStt( *pNds, nStartIdx );
     SwCntntNode* pCNode = aStt.GetNode().GetCntntNode();

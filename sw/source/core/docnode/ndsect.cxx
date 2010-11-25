@@ -1342,7 +1342,8 @@ SwSectionNode* SwSectionNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) c
                                                  : CREATE_NONE );
 
     // falls als Server aus dem Undo kopiert wird, wieder eintragen
-    if (m_pSection->IsServer() && (pDoc->GetUndoNds() == &rNds))
+    if (m_pSection->IsServer()
+        && pDoc->GetIDocumentUndoRedo().IsUndoNodes(rNds))
     {
         pNewSect->SetRefObject( m_pSection->GetObject() );
         pDoc->GetLinkManager().InsertServer( pNewSect->GetObject() );

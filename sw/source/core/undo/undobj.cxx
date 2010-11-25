@@ -34,7 +34,7 @@
 #include <ftnidx.hxx>
 #include <frmfmt.hxx>
 #include <doc.hxx>
-#include <IDocumentUndoRedo.hxx>
+#include <UndoManager.hxx>
 #include <docary.hxx>
 #include <swundo.hxx>           // fuer die UndoIds
 #include <pam.hxx>
@@ -291,7 +291,7 @@ void SwUndoSaveCntnt::MoveToUndoNds( SwPaM& rPaM, SwNodeIndex* pNodeIdx,
     SwNoTxtNode* pCpyNd = rPaM.GetNode()->GetNoTxtNode();
 
     // jetzt kommt das eigentliche Loeschen(Verschieben)
-    SwNodes& rNds = (SwNodes&)*rDoc.GetUndoNds();
+    SwNodes & rNds = rDoc.GetUndoManager().GetUndoNodes();
     SwPosition aPos( pEndNdIdx ? rNds.GetEndOfPostIts()
                                : rNds.GetEndOfExtras() );
     aPos.nNode--;
@@ -374,7 +374,7 @@ void SwUndoSaveCntnt::MoveFromUndoNds( SwDoc& rDoc, ULONG nNodeIdx,
                             ULONG* pEndNdIdx, xub_StrLen* pEndCntIdx )
 {
     // jetzt kommt das wiederherstellen
-    SwNodes& rNds = (SwNodes&)*rDoc.GetUndoNds();
+    SwNodes & rNds = rDoc.GetUndoManager().GetUndoNodes();
     if( nNodeIdx == rNds.GetEndOfPostIts().GetIndex() )
         return;     // nichts gespeichert
 

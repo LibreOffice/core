@@ -288,7 +288,6 @@ class SW_DLLPUBLIC SwDoc :
     // -------------------------------------------------------------------
     // die Objecte
     SwNodes     aNodes;                 // Inhalt des Dokumentes
-    SwNodes     aUndoNodes;             // Inhalt fuer das Undo
     SwAttrPool* mpAttrPool;             // der Attribut Pool
     SwPageDescs aPageDescs;             // PageDescriptoren
     Link        aOle2Link;              // OLE 2.0-Benachrichtigung
@@ -798,7 +797,6 @@ public:
     */
     IDocumentUndoRedo      & GetIDocumentUndoRedo();
     IDocumentUndoRedo const& GetIDocumentUndoRedo() const;
-    virtual SwNodes const* GetUndoNds() const;
 
     /** abfragen/setzen der Anzahl von wiederherstellbaren Undo-Actions */
     static sal_uInt16 GetUndoActionCount();

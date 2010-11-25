@@ -30,10 +30,12 @@
 
 #include <UndoManager.hxx>
 
+#include <vcl/wrkwin.hxx>
+
 #include <svx/svdmodel.hxx>
 
-#include <vcl/wrkwin.hxx>
 #include <doc.hxx>
+#include <ndarr.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <swundo.hxx>       // fuer die UndoIds
@@ -100,11 +102,6 @@ void UndoArrStatus::Paint( const Rectangle& )
 
 // SwDoc methods /////////////////////////////////////////////////////////
 
-const SwNodes* SwDoc::GetUndoNds() const
-{
-    return &aUndoNodes;
-}
-
 bool SwDoc::IsNoDrawUndoObj() const
 {
     return GetUndoManager().IsNoDrawUndoObj();
@@ -146,6 +143,7 @@ void UndoManager::SetUndoActionCount( sal_uInt16 nNew )
 
 UndoManager::UndoManager(SwDoc & rDoc)
     :   m_rDoc(rDoc)
+    ,   m_pUndoNodes( new SwNodes(&rDoc) )
     ,   pUndos( new SwUndos( 0, 20 ) )
     ,   nUndoPos(0)
     ,   nUndoSavePos(0)
@@ -158,9 +156,19 @@ UndoManager::UndoManager(SwDoc & rDoc)
 {
 }
 
-const SwNodes* UndoManager::GetUndoNds() const
+SwNodes const& UndoManager::GetUndoNodes() const
 {
-    return m_rDoc.GetUndoNds();
+    return *m_pUndoNodes;
+}
+
+SwNodes      & UndoManager::GetUndoNodes()
+{
+    return *m_pUndoNodes;
+}
+
+bool UndoManager::IsUndoNodes(SwNodes const& rNodes) const
+{
+    return & rNodes == m_pUndoNodes.get();
 }
 
 void UndoManager::DoUndo(bool const bDoUndo)
@@ -268,7 +276,7 @@ void UndoManager::AppendUndo(SwUndo *const pUndo)
     // zur Anzeige der aktuellen Undo-Groessen
     if( !pUndoMsgWin )
             pUndoMsgWin = new UndoArrStatus;
-    pUndoMsgWin->Set( pUndos->Count(), m_rDoc.GetUndoNds()->Count() );
+    pUndoMsgWin->Set( pUndos->Count(), GetUndoNodes()->Count() );
 #endif
 
     // noch eine offene Klammerung, kann man sich den Rest schenken
@@ -313,7 +321,7 @@ void UndoManager::AppendUndo(SwUndo *const pUndo)
     {
         USHORT nUndosCnt = nUndoCnt;
             // immer 1/10 loeschen bis der "Ausloeser" behoben ist
-        while (nEnde < m_rDoc.GetUndoNds()->Count())
+        while (nEnde < GetUndoNodes().Count())
         {
             DelUndoObj( nUndosCnt / 10 );
         }
@@ -615,7 +623,7 @@ UndoManager::EndUndo(SwUndoId const i_eUndoId, SwRewriter const*const pRewriter)
                 USHORT nEnde = USHRT_MAX - 1000;
                 USHORT nUndosCnt = nUndoCnt;
                     // immer 1/10 loeschen bis der "Ausloeser" behoben ist
-                while (nEnde < m_rDoc.GetUndoNds()->Count())
+                while (nEnde < GetUndoNodes().Count())
                 {
                     DelUndoObj( nUndosCnt / 10 );
                 }
