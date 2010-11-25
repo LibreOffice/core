@@ -117,8 +117,7 @@ void SwTxtFlyCnt::CopyFlyFmt( SwDoc* pDoc )
     // und der Inhalt dupliziert.
 
     // disable undo while copying attribute
-    bool const bUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
-    pDoc->GetIDocumentUndoRedo().DoUndo(false);
+    ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
     SwFmtAnchor aAnchor( pFmt->GetAnchor() );
     if ((FLY_AT_PAGE != aAnchor.GetAnchorId()) &&
         (pDoc != pFmt->GetDoc()))   // different documents?
@@ -145,7 +144,6 @@ void SwTxtFlyCnt::CopyFlyFmt( SwDoc* pDoc )
     }
 
     SwFrmFmt* pNew = pDoc->CopyLayoutFmt( *pFmt, aAnchor, false, false );
-    pDoc->GetIDocumentUndoRedo().DoUndo(bUndo);
     ((SwFmtFlyCnt&)GetFlyCnt()).SetFlyFmt( pNew );
 }
 
@@ -193,16 +191,12 @@ void SwTxtFlyCnt::SetAnchor( const SwTxtNode *pNode )
     if( pDoc != pFmt->GetDoc() )
     {
         // disable undo while copying attribute
-        bool const bUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
-        pDoc->GetIDocumentUndoRedo().DoUndo(false);
+        ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
         SwFrmFmt* pNew = pDoc->CopyLayoutFmt( *pFmt, aAnchor, false, false );
-        pDoc->GetIDocumentUndoRedo().DoUndo(bUndo);
 
-        bool const bFmtDocUndo =
-            pFmt->GetDoc()->GetIDocumentUndoRedo().DoesUndo();
-        pFmt->GetDoc()->GetIDocumentUndoRedo().DoUndo(false);
+        ::sw::UndoGuard const undoGuardFmt(
+            pFmt->GetDoc()->GetIDocumentUndoRedo());
         pFmt->GetDoc()->DelLayoutFmt( pFmt );
-        pFmt->GetDoc()->GetIDocumentUndoRedo().DoUndo(bFmtDocUndo);
         ((SwFmtFlyCnt&)GetFlyCnt()).SetFlyFmt( pNew );
     }
     else if( pNode->GetpSwpHints() &&

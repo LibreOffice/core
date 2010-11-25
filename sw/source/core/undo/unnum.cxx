@@ -94,8 +94,7 @@ void SwUndoInsNum::Undo( SwUndoIter& rUndoIter )
     if( nSttNode )
         SetPaM( rUndoIter );
 
-    bool const bUndo = rDoc.GetIDocumentUndoRedo().DoesUndo();
-    rDoc.GetIDocumentUndoRedo().DoUndo(false);
+    ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
 
     if( pOldNumRule )
         rDoc.ChgNumRuleFmts( *pOldNumRule );
@@ -137,7 +136,6 @@ void SwUndoInsNum::Undo( SwUndoIter& rUndoIter )
 
     if( nSttNode )
         SetPaM( rUndoIter );
-    rDoc.GetIDocumentUndoRedo().DoUndo(bUndo);
 }
 
 
@@ -220,8 +218,7 @@ void SwUndoDelNum::Undo( SwUndoIter& rUndoIter )
     SwDoc& rDoc = rUndoIter.GetDoc();
     SetPaM( rUndoIter );
 
-    bool const bUndo = rDoc.GetIDocumentUndoRedo().DoesUndo();
-    rDoc.GetIDocumentUndoRedo().DoUndo(false);
+    ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
 
     pHistory->TmpRollback( &rDoc, 0 );
     pHistory->SetTmpEnd( pHistory->Count() );
@@ -237,7 +234,6 @@ void SwUndoDelNum::Undo( SwUndoIter& rUndoIter )
     }
 
     SetPaM( rUndoIter );
-    rDoc.GetIDocumentUndoRedo().DoUndo(bUndo);
 }
 
 

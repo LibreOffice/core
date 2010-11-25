@@ -3798,8 +3798,7 @@ void SwTrnsfrDdeLink::Disconnect( BOOL bRemoveDataAdvise )
     if( bDelBookmrk && refObj.Is() && FindDocShell() )
     {
         SwDoc* pDoc = pDocShell->GetDoc();
-        bool const bUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
-        pDoc->GetIDocumentUndoRedo().DoUndo(false);
+        ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
 
         // --> OD, CD, OS 2005-11-25 #i58448#
         Link aSavedOle2Link( pDoc->GetOle2Link() );
@@ -3816,7 +3815,6 @@ void SwTrnsfrDdeLink::Disconnect( BOOL bRemoveDataAdvise )
         pDoc->SetOle2Link( aSavedOle2Link );
         // <--
 
-        pDoc->GetIDocumentUndoRedo().DoUndo(bUndo);
         bDelBookmrk = FALSE;
     }
 

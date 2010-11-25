@@ -72,19 +72,16 @@ void SwUndoFmtCreate::Undo(SwUndoIter &)
             nId = pNew->GetPoolFmtId() & COLL_GET_RANGE_BITS;
             bAuto = pNew->IsAuto();
 
-            bool const bDoesUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
-            pDoc->GetIDocumentUndoRedo().DoUndo(false);
+            ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
             Delete();
-            pDoc->GetIDocumentUndoRedo().DoUndo(bDoesUndo);
         }
     }
 }
 
 void SwUndoFmtCreate::Redo(SwUndoIter &)
 {
-    bool const bDoesUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
+    ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
 
-    pDoc->GetIDocumentUndoRedo().DoUndo(false);
     SwFmt * pDerivedFrom = Find(sDerivedFrom);
     SwFmt * pFmt = Create(pDerivedFrom);
 
@@ -100,8 +97,6 @@ void SwUndoFmtCreate::Redo(SwUndoIter &)
     }
     else
         pNew = NULL;
-
-    pDoc->GetIDocumentUndoRedo().DoUndo(bDoesUndo);
 }
 
 SwRewriter SwUndoFmtCreate::GetRewriter() const
@@ -133,9 +128,7 @@ SwUndoFmtDelete::~SwUndoFmtDelete()
 
 void SwUndoFmtDelete::Undo(SwUndoIter &)
 {
-    bool const bDoesUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
-
-    pDoc->GetIDocumentUndoRedo().DoUndo(false);
+    ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
 
     SwFmt * pDerivedFrom = Find(sDerivedFrom);
 
@@ -148,10 +141,7 @@ void SwUndoFmtDelete::Undo(SwUndoIter &)
         pFmt->SetPoolFmtId((pFmt->GetPoolFmtId() &
                                 ~COLL_GET_RANGE_BITS)
                                | nId);
-
     }
-
-    pDoc->GetIDocumentUndoRedo().DoUndo(bDoesUndo);
 }
 
 void SwUndoFmtDelete::Redo(SwUndoIter &)
@@ -160,11 +150,8 @@ void SwUndoFmtDelete::Redo(SwUndoIter &)
 
     if (pOld)
     {
-        bool const bDoesUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
-
-        pDoc->GetIDocumentUndoRedo().DoUndo(false);
+        ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
         Delete(pOld);
-        pDoc->GetIDocumentUndoRedo().DoUndo(bDoesUndo);
     }
 }
 
@@ -197,10 +184,8 @@ void SwUndoRenameFmt::Undo(SwUndoIter &)
 
     if (pFmt)
     {
-        bool const bDoesUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
-        pDoc->GetIDocumentUndoRedo().DoUndo(false);
+        ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
         pDoc->RenameFmt(*pFmt, sOldName, TRUE);
-        pDoc->GetIDocumentUndoRedo().DoUndo(bDoesUndo);
     }
 }
 
@@ -210,10 +195,8 @@ void SwUndoRenameFmt::Redo(SwUndoIter &)
 
     if (pFmt)
     {
-        bool bDoesUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
-        pDoc->GetIDocumentUndoRedo().DoUndo(false);
+        ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
         pDoc->RenameFmt(*pFmt, sNewName, TRUE);
-        pDoc->GetIDocumentUndoRedo().DoUndo(bDoesUndo);
     }
 }
 
@@ -400,8 +383,7 @@ SwUndoNumruleCreate::SwUndoNumruleCreate(const SwNumRule * _pNew,
 
 void SwUndoNumruleCreate::Undo(SwUndoIter &)
 {
-    bool const bDoesUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
-    pDoc->GetIDocumentUndoRedo().DoUndo(false);
+    ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
 
     if (! bInitialized)
     {
@@ -410,15 +392,12 @@ void SwUndoNumruleCreate::Undo(SwUndoIter &)
     }
 
     pDoc->DelNumRule(aNew.GetName(), TRUE);
-    pDoc->GetIDocumentUndoRedo().DoUndo(bDoesUndo);
 }
 
 void SwUndoNumruleCreate::Redo(SwUndoIter &)
 {
-    bool const bDoesUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
-    pDoc->GetIDocumentUndoRedo().DoUndo(false);
+    ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
     pDoc->MakeNumRule(aNew.GetName(), &aNew, TRUE);
-    pDoc->GetIDocumentUndoRedo().DoUndo(bDoesUndo);
 }
 
 SwRewriter SwUndoNumruleCreate::GetRewriter() const
@@ -444,18 +423,14 @@ SwUndoNumruleDelete::SwUndoNumruleDelete(const SwNumRule & rRule,
 
 void SwUndoNumruleDelete::Undo(SwUndoIter &)
 {
-    bool const bDoesUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
-    pDoc->GetIDocumentUndoRedo().DoUndo(false);
+    ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
     pDoc->MakeNumRule(aOld.GetName(), &aOld, TRUE);
-    pDoc->GetIDocumentUndoRedo().DoUndo(bDoesUndo);
 }
 
 void SwUndoNumruleDelete::Redo(SwUndoIter &)
 {
-    bool const bDoesUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
-    pDoc->GetIDocumentUndoRedo().DoUndo(false);
+    ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
     pDoc->DelNumRule(aOld.GetName(), TRUE);
-    pDoc->GetIDocumentUndoRedo().DoUndo(bDoesUndo);
 }
 
 SwRewriter SwUndoNumruleDelete::GetRewriter() const
@@ -477,18 +452,14 @@ SwUndoNumruleRename::SwUndoNumruleRename(const String & _aOldName,
 
 void SwUndoNumruleRename::Undo(SwUndoIter &)
 {
-    bool const bDoesUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
-    pDoc->GetIDocumentUndoRedo().DoUndo(false);
+    ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
     pDoc->RenameNumRule(aNewName, aOldName, TRUE);
-    pDoc->GetIDocumentUndoRedo().DoUndo(bDoesUndo);
 }
 
 void SwUndoNumruleRename::Redo(SwUndoIter &)
 {
-    bool const bDoesUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
-    pDoc->GetIDocumentUndoRedo().DoUndo(false);
+    ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
     pDoc->RenameNumRule(aOldName, aNewName, TRUE);
-    pDoc->GetIDocumentUndoRedo().DoUndo(bDoesUndo);
 }
 
 SwRewriter SwUndoNumruleRename::GetRewriter() const

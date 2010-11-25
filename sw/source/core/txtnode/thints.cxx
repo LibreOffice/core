@@ -1320,11 +1320,8 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
                             Update( aTmpIdx, 1, TRUE );
                         }
                         // do not record deletion of Format!
-                        bool const bUndo =
-                            pDoc->GetIDocumentUndoRedo().DoesUndo();
-                        pDoc->GetIDocumentUndoRedo().DoUndo(false);
+                        ::sw::UndoGuard const ug(pDoc->GetIDocumentUndoRedo());
                         DestroyAttr( pAttr );
-                        pDoc->GetIDocumentUndoRedo().DoUndo(bUndo);
                         return false;
                     }
                 }

@@ -278,10 +278,10 @@ void SwUndoOverwrite::Repeat( SwUndoIter& rUndoIter )
 
     SwDoc& rDoc = *pAktPam->GetDoc();
 
-    bool const bGroupUndo = rDoc.GetIDocumentUndoRedo().DoesGroupUndo();
-    rDoc.GetIDocumentUndoRedo().DoGroupUndo(false);
-    rDoc.Overwrite( *pAktPam, aInsStr.GetChar( 0 ));
-    rDoc.GetIDocumentUndoRedo().DoGroupUndo(bGroupUndo);
+    {
+        ::sw::GroupUndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
+        rDoc.Overwrite(*pAktPam, aInsStr.GetChar(0));
+    }
     for( xub_StrLen n = 1; n < aInsStr.Len(); ++n )
         rDoc.Overwrite( *pAktPam, aInsStr.GetChar( n ) );
 }
@@ -386,8 +386,7 @@ SwUndoTransliterate::~SwUndoTransliterate()
 void SwUndoTransliterate::Undo( SwUndoIter& rUndoIter )
 {
     SwDoc& rDoc = rUndoIter.GetDoc();
-    bool const bUndo = rDoc.GetIDocumentUndoRedo().DoesUndo();
-    rDoc.GetIDocumentUndoRedo().DoUndo(false);
+    ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
 
     // since the changes were added to the vector from the end of the string/node towards
     // the start, we need to revert them from the start towards the end now to keep the
@@ -396,7 +395,6 @@ void SwUndoTransliterate::Undo( SwUndoIter& rUndoIter )
     for (sal_Int32 i = aChanges.size() - 1; i >= 0;  --i)
         aChanges[i]->SetChangeAtNode( rDoc );
 
-    rDoc.GetIDocumentUndoRedo().DoUndo(bUndo);
     SetPaM( rUndoIter, TRUE );
 }
 

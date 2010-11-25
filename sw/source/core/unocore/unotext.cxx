@@ -406,11 +406,9 @@ throw (uno::RuntimeException)
         // so the text is inserted before
         UnoActionContext aContext(GetDoc());
         SwPaM aInsertPam(*pPam->Start());
-        bool const bGroupUndo(GetDoc()->GetIDocumentUndoRedo().DoesGroupUndo());
-        GetDoc()->GetIDocumentUndoRedo().DoGroupUndo(false);
+        ::sw::GroupUndoGuard const undoGuard(GetDoc()->GetIDocumentUndoRedo());
         SwUnoCursorHelper::DocInsertStringSplitCR(
             *GetDoc(), aInsertPam, rString, bForceExpandHints );
-        GetDoc()->GetIDocumentUndoRedo().DoGroupUndo(bGroupUndo);
     }
 }
 

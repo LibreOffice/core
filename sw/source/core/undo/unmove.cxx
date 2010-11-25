@@ -190,8 +190,7 @@ void SwUndoMove::SetDestRange( const SwNodeIndex& rStt,
 void SwUndoMove::Undo( SwUndoIter& rUndoIter )
 {
     SwDoc* pDoc = &rUndoIter.GetDoc();
-    bool const bUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
-    pDoc->GetIDocumentUndoRedo().DoUndo(false);
+    ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
 
     // Block, damit aus diesem gesprungen werden kann
     do {
@@ -275,8 +274,6 @@ void SwUndoMove::Undo( SwUndoIter& rUndoIter )
         pHistory->TmpRollback( pDoc, 0 );
         pHistory->SetTmpEnd( pHistory->Count() );
     }
-
-    pDoc->GetIDocumentUndoRedo().DoUndo(bUndo);
 
     // setze noch den Cursor auf den Undo-Bereich
     if( !bMoveRange )

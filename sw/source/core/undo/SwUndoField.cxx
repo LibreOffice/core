@@ -93,11 +93,8 @@ void SwUndoFieldFromDoc::Undo( SwUndoIter& )
 
     if (pField)
     {
-        bool const bUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
-
-        pDoc->GetIDocumentUndoRedo().DoUndo(false);
+        ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
         pDoc->UpdateFld(pTxtFld, *pOldField, pHnt, bUpdate);
-        pDoc->GetIDocumentUndoRedo().DoUndo(bUndo);
     }
 }
 
@@ -108,15 +105,12 @@ void SwUndoFieldFromDoc::Redo( SwUndoIter& )
 
     if (pField)
     {
-        bool const bUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
-
-        pDoc->GetIDocumentUndoRedo().DoUndo(false);
+        ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
         pDoc->UpdateFld(pTxtFld, *pNewField, pHnt, bUpdate);
         SwFmtFld* pDstFmtFld = (SwFmtFld*)&pTxtFld->GetFld();
 
         if ( pDoc->GetFldType(RES_POSTITFLD, aEmptyStr,false) == pDstFmtFld->GetFld()->GetTyp() )
             pDoc->GetDocShell()->Broadcast( SwFmtFldHint( pDstFmtFld, SWFMTFLD_INSERTED ) );
-        pDoc->GetIDocumentUndoRedo().DoUndo(bUndo);
     }
 }
 

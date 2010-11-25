@@ -333,8 +333,7 @@ BOOL SwDocShell::Insert( SfxObjectShell &rSource,
     // --> OD 2005-05-10 #i48949# - actions aren't undoable. Thus, allow no undo
     // actions
     // Note: The undo action stack is cleared at the end of this method.
-    bool const bDoesUndo( GetDoc()->GetIDocumentUndoRedo().DoesUndo() );
-    GetDoc()->GetIDocumentUndoRedo().DoUndo(false);
+    ::sw::UndoGuard const undoGuard(GetDoc()->GetIDocumentUndoRedo());
     // <--
 
     BOOL bRet = FALSE;
@@ -533,11 +532,10 @@ BOOL SwDocShell::Insert( SfxObjectShell &rSource,
 
     // --> OD 2005-05-10 #i48949# - actions aren't undoable and could have change
     // the document node array. Thus, clear the undo action stack.
-    if ( bDoesUndo )
+    if (undoGuard.UndoWasEnabled())
     {
         GetDoc()->GetIDocumentUndoRedo().DelAllUndoObj();
     }
-    GetDoc()->GetIDocumentUndoRedo().DoUndo(bDoesUndo);
     // <--
 
     return bRet;

@@ -432,11 +432,9 @@ void SwUndoInsert::Repeat( SwUndoIter& rUndoIter )
         else
         {
             String aTxt( ((SwTxtNode*)pCNd)->GetTxt() );
-            bool const bGroupUndo = rDoc.GetIDocumentUndoRedo().DoesGroupUndo();
-            rDoc.GetIDocumentUndoRedo().DoGroupUndo(false);
+            ::sw::GroupUndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
             rDoc.InsertString( *rUndoIter.pAktPam,
                 aTxt.Copy( nCntnt - nLen, nLen ) );
-            rDoc.GetIDocumentUndoRedo().DoGroupUndo(bGroupUndo);
         }
         break;
     case ND_GRFNODE:
@@ -767,8 +765,7 @@ void _UnReplaceData::Undo( SwUndoIter& rIter )
 void _UnReplaceData::Redo( SwUndoIter& rIter )
 {
     SwDoc& rDoc = rIter.GetDoc();
-    bool const bUndo = rDoc.GetIDocumentUndoRedo().DoesUndo();
-    rDoc.GetIDocumentUndoRedo().DoUndo(false);
+    ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
 
     SwPaM& rPam = *rIter.pAktPam;
     rPam.DeleteMark();
@@ -807,7 +804,6 @@ void _UnReplaceData::Redo( SwUndoIter& rIter )
 
     rDoc.ReplaceRange( rPam, m_sIns, m_bRegExp );
     rPam.DeleteMark();
-    rDoc.GetIDocumentUndoRedo().DoUndo(bUndo);
 }
 
 void _UnReplaceData::SetEnd( const SwPaM& rPam )

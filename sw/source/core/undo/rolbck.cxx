@@ -625,8 +625,7 @@ SwHistoryBookmark::SwHistoryBookmark(
 
 void SwHistoryBookmark::SetInDoc( SwDoc* pDoc, bool )
 {
-    bool const bDoesUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
-    pDoc->GetIDocumentUndoRedo().DoUndo(false);
+    ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
 
     SwNodes& rNds = pDoc->GetNodes();
     IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
@@ -697,7 +696,6 @@ void SwHistoryBookmark::SetInDoc( SwDoc* pDoc, bool )
             }
         }
     }
-    pDoc->GetIDocumentUndoRedo().DoUndo(bDoesUndo);
 }
 
 
@@ -792,8 +790,7 @@ SwHistorySetAttrSet::SwHistorySetAttrSet( const SfxItemSet& rSet,
 
 void SwHistorySetAttrSet::SetInDoc( SwDoc* pDoc, bool )
 {
-    bool const bDoesUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
-    pDoc->GetIDocumentUndoRedo().DoUndo(false);
+    ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
 
     SwNode * pNode = pDoc->GetNodes()[ m_nNodeIndex ];
     if ( pNode->IsCntntNode() )
@@ -814,8 +811,6 @@ void SwHistorySetAttrSet::SetInDoc( SwDoc* pDoc, bool )
             rFmt.ResetFmtAttr( *m_ResetArray.GetData() );
         }
     }
-
-    pDoc->GetIDocumentUndoRedo().DoUndo(bDoesUndo);
 }
 
 /*************************************************************************/
@@ -878,8 +873,7 @@ SwHistoryResetAttrSet::SwHistoryResetAttrSet( const SfxItemSet& rSet,
 
 void SwHistoryResetAttrSet::SetInDoc( SwDoc* pDoc, bool )
 {
-    bool const bDoesUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
-    pDoc->GetIDocumentUndoRedo().DoUndo(false);
+    ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
 
     SwCntntNode * pCntntNd = pDoc->GetNodes()[ m_nNodeIndex ]->GetCntntNode();
     ASSERT( pCntntNd, "SwHistoryResetAttrSet: no CntntNode" );
@@ -905,8 +899,6 @@ void SwHistoryResetAttrSet::SetInDoc( SwDoc* pDoc, bool )
             }
         }
     }
-
-    pDoc->GetIDocumentUndoRedo().DoUndo(bDoesUndo);
 }
 
 
@@ -926,8 +918,7 @@ SwHistoryChangeFlyAnchor::SwHistoryChangeFlyAnchor( SwFrmFmt& rFmt )
 
 void SwHistoryChangeFlyAnchor::SetInDoc( SwDoc* pDoc, bool )
 {
-    bool const bDoesUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
-    pDoc->GetIDocumentUndoRedo().DoUndo(false);
+    ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
 
     USHORT nPos = pDoc->GetSpzFrmFmts()->GetPos( &m_rFmt );
     if ( USHRT_MAX != nPos )    // Format does still exist
@@ -955,7 +946,6 @@ void SwHistoryChangeFlyAnchor::SetInDoc( SwDoc* pDoc, bool )
 
         m_rFmt.SetFmtAttr( aTmp );
     }
-    pDoc->GetIDocumentUndoRedo().DoUndo(bDoesUndo);
 }
 
 

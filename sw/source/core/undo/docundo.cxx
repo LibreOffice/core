@@ -321,9 +321,9 @@ void UndoManager::ClearRedo()
     // loescht die gesamten UndoObjecte
 void UndoManager::DelAllUndoObj()
 {
-    ClearRedo();
+    ::sw::UndoGuard const undoGuard(*this);
 
-    DoUndo( FALSE );
+    ClearRedo();
 
     // Offene Undo-Klammerungen erhalten !!
     SwUndo* pUndo;
@@ -343,7 +343,6 @@ void UndoManager::DelAllUndoObj()
     nUndoCnt = nUndoSttEnd = nUndoPos = 0;
 */
     nUndoSavePos = USHRT_MAX;
-    DoUndo( TRUE );
 }
 
 
@@ -357,7 +356,7 @@ bool UndoManager::DelUndoObj( sal_uInt16 nEnd )
         ++nEnd;     // correct it to 1 // FIXME  why ???
     }
 
-    DoUndo( FALSE );
+    ::sw::UndoGuard const undoGuard(*this);
 
     // pruefe erstmal, wo das Ende steht
     SwUndoId nId = UNDO_EMPTY;
@@ -388,7 +387,6 @@ bool UndoManager::DelUndoObj( sal_uInt16 nEnd )
         pUndos->DeleteAndDestroy( --nSttEndCnt, 1 );
     nUndoPos = pUndos->Count();
 
-    DoUndo( TRUE );
     return TRUE;
 }
 

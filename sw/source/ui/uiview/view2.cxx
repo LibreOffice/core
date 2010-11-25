@@ -2106,11 +2106,8 @@ long SwView::InsertMedium( USHORT nSlotId, SfxMedium* pMedium, INT16 nVersion )
                     }
                     else
                     {
-                        bool const bUndo =
-                            pDoc->GetIDocumentUndoRedo().DoesUndo();
-                        pDoc->GetIDocumentUndoRedo().DoUndo(false);
+                        ::sw::UndoGuard const ug(pDoc->GetIDocumentUndoRedo());
                         nErrno = pDocSh->InsertFrom( *pMedium ) ? 0 : ERR_SWG_READ_ERROR;
-                        pDoc->GetIDocumentUndoRedo().DoUndo(bUndo);
                     }
 
                 }

@@ -3398,15 +3398,13 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
     }
     if(aBaseImpl.HasItemSet())
     {
-        bool const bDoesUndo = GetDoc()->GetIDocumentUndoRedo().DoesUndo();
-        if( bDoesUndo )
+        ::sw::UndoGuard const undoGuard(GetDoc()->GetIDocumentUndoRedo());
+        if (undoGuard.UndoWasEnabled())
         {
             // Fix i64460: as long as Undo of page styles with header/footer causes trouble...
             GetDoc()->GetIDocumentUndoRedo().DelAllUndoObj();
-            GetDoc()->GetIDocumentUndoRedo().DoUndo(false);
         }
         aBaseImpl.mxNewBase->SetItemSet(aBaseImpl.GetItemSet());
-        GetDoc()->GetIDocumentUndoRedo().DoUndo(bDoesUndo);
     }
 }
 

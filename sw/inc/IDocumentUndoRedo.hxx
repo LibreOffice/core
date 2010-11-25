@@ -189,5 +189,55 @@ protected:
      virtual ~IDocumentUndoRedo() {};
 };
 
+
+namespace sw {
+
+class UndoGuard
+{
+public:
+
+    UndoGuard(IDocumentUndoRedo & rUndoRedo)
+        :   m_rUndoRedo(rUndoRedo)
+        ,   m_bUndoWasEnabled(rUndoRedo.DoesUndo())
+    {
+        m_rUndoRedo.DoUndo(false);
+    }
+    ~UndoGuard()
+    {
+        m_rUndoRedo.DoUndo(m_bUndoWasEnabled);
+    }
+
+    bool UndoWasEnabled() const
+    {
+        return m_bUndoWasEnabled;
+    }
+
+private:
+    IDocumentUndoRedo & m_rUndoRedo;
+    bool const m_bUndoWasEnabled;
+};
+
+class GroupUndoGuard
+{
+public:
+
+    GroupUndoGuard(IDocumentUndoRedo & rUndoRedo)
+        :   m_rUndoRedo(rUndoRedo)
+        ,   m_bGroupUndoWasEnabled(rUndoRedo.DoesGroupUndo())
+    {
+        m_rUndoRedo.DoGroupUndo(false);
+    }
+    ~GroupUndoGuard()
+    {
+        m_rUndoRedo.DoGroupUndo(m_bGroupUndoWasEnabled);
+    }
+
+private:
+    IDocumentUndoRedo & m_rUndoRedo;
+    bool const m_bGroupUndoWasEnabled;
+};
+
+} // namespace sw
+
 #endif
 

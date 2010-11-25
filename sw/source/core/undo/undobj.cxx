@@ -286,8 +286,7 @@ void SwUndoSaveCntnt::MoveToUndoNds( SwPaM& rPaM, SwNodeIndex* pNodeIdx,
                     SwIndex* pCntIdx, ULONG* pEndNdIdx, xub_StrLen* pEndCntIdx )
 {
     SwDoc& rDoc = *rPaM.GetDoc();
-    bool const bUndo = rDoc.GetIDocumentUndoRedo().DoesUndo();
-    rDoc.GetIDocumentUndoRedo().DoUndo(false);
+    ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
 
     SwNoTxtNode* pCpyNd = rPaM.GetNode()->GetNoTxtNode();
 
@@ -368,8 +367,6 @@ void SwUndoSaveCntnt::MoveToUndoNds( SwPaM& rPaM, SwNodeIndex* pNodeIdx,
         else
             pCntIdx->Assign( 0, 0 );
     }
-
-    rDoc.GetIDocumentUndoRedo().DoUndo(bUndo);
 }
 
 void SwUndoSaveCntnt::MoveFromUndoNds( SwDoc& rDoc, ULONG nNodeIdx,
@@ -381,8 +378,7 @@ void SwUndoSaveCntnt::MoveFromUndoNds( SwDoc& rDoc, ULONG nNodeIdx,
     if( nNodeIdx == rNds.GetEndOfPostIts().GetIndex() )
         return;     // nichts gespeichert
 
-    bool const bUndo = rDoc.GetIDocumentUndoRedo().DoesUndo();
-    rDoc.GetIDocumentUndoRedo().DoUndo(false);
+    ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
 
     SwPaM aPaM( rInsPos );
     if( pEndNdIdx )         // dann hole aus diesem den Bereich
@@ -437,8 +433,6 @@ void SwUndoSaveCntnt::MoveFromUndoNds( SwDoc& rDoc, ULONG nNodeIdx,
     else {
         ASSERT( FALSE, "was ist es denn nun?" );
     }
-
-    rDoc.GetIDocumentUndoRedo().DoUndo(bUndo);
 }
 
 // diese beiden Methoden bewegen den Point vom Pam zurueck/vor. Damit
@@ -498,8 +492,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
 
     SwDoc* pDoc = rMark.nNode.GetNode().GetDoc();
 
-    bool const bDoesUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
-    pDoc->GetIDocumentUndoRedo().DoUndo(false);
+    ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
 
     // 1. Fussnoten
     if( nsDelCntntType::DELCNT_FTN & nDelCntntType )
@@ -810,8 +803,6 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
             }
         }
     }
-
-    pDoc->GetIDocumentUndoRedo().DoUndo(bDoesUndo);
 }
 
 

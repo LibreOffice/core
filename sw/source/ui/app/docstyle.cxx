@@ -1311,10 +1311,8 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
                     pNewDsc = new SwPageDesc( *pDesc );
                     // --> OD 2005-05-09 #i48949# - no undo actions for the
                     // copy of the page style
-                    bool const bUndo(rDoc.GetIDocumentUndoRedo().DoesUndo());
-                    rDoc.GetIDocumentUndoRedo().DoUndo(false);
+                    ::sw::UndoGuard const ug(rDoc.GetIDocumentUndoRedo());
                     rDoc.CopyPageDesc(*pDesc, *pNewDsc); // #i7983#
-                    rDoc.GetIDocumentUndoRedo().DoUndo(bUndo);
                     // <--
 
                     pFmt = &pNewDsc->GetMaster();
