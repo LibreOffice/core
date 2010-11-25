@@ -3206,6 +3206,7 @@ fi
 dnl ===================================================================
 dnl system stl sanity tests
 dnl ===================================================================
+HAVE_GCC_VISIBILITY_BROKEN=
 if test "$USE_SYSTEM_STL" = "YES"; then
    AC_MSG_CHECKING([if hash_map will be in __gnu_cxx namespace])
    AC_LANG_PUSH([C++])
@@ -3245,9 +3246,9 @@ using namespace std;
       gccvisok=no)
       AC_MSG_RESULT([$gccvisok])
       if test "$gccvisok" = "no"; then
-         AC_MSG_WARN([Your gcc is not -fvisibility-inlines-hidden safe. Disabling visibility])
-         echo "Your gcc is not -fvisibility-inlines-hidden safe. Disabling visibility" >> warn
-         unset HAVE_GCC_VISIBILITY_FEATURE
+         AC_MSG_WARN([Your gcc is not -fvisibility-inlines-hidden safe, disabling that.])
+         echo "Your gcc is not -fvisibility-inlines-hidden safe, disabling that." >> warn
+         HAVE_GCC_VISIBILITY_BROKEN="TRUE"
       fi
 
       LDFLAGS=$sharedlink_ldflags_save
@@ -3294,6 +3295,7 @@ _ACEOF
 fi
 
 AC_SUBST(HAVE_GCC_VISIBILITY_FEATURE)
+AC_SUBST(HAVE_GCC_VISIBILITY_BROKEN)
 
 dnl ===================================================================
 dnl allocator

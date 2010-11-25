@@ -89,7 +89,7 @@ CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 
 # -fpermissive should be removed as soon as possible
 CFLAGSCXX= -pipe $(ARCH_FLAGS)
-.IF "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
+.IF "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE" && "$(HAVE_GCC_VISIBILITY_BROKEN)" != "TRUE"
 CFLAGSCXX += -fvisibility-inlines-hidden
 .ENDIF # "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
 
