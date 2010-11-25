@@ -156,10 +156,9 @@ struct ScMyRowFormatRange
     sal_Bool operator<(const ScMyRowFormatRange& rRange) const;
 };
 
-typedef std::list<ScMyRowFormatRange> ScMyRowFormatRangesList;
-
 class ScRowFormatRanges
 {
+    typedef std::list<ScMyRowFormatRange> ScMyRowFormatRangesList;
     ScMyRowFormatRangesList     aRowFormatRanges;
     const ScMyDefaultStyleList* pRowDefaults;
     const ScMyDefaultStyleList* pColDefaults;
@@ -197,11 +196,11 @@ struct ScMyFormatRange
     sal_Bool operator< (const ScMyFormatRange& rRange) const;
 };
 
-typedef std::list<ScMyFormatRange>          ScMyFormatRangeAddresses;
-typedef std::vector<ScMyFormatRangeAddresses*>  ScMyFormatRangeListVec;
-
 class ScFormatRangeStyles
 {
+    typedef std::list<ScMyFormatRange>          ScMyFormatRangeAddresses;
+    typedef std::vector<ScMyFormatRangeAddresses*>  ScMyFormatRangeListVec;
+
     ScMyFormatRangeListVec      aTables;
     ScMyOUStringVec             aStyleNames;
     ScMyOUStringVec             aAutoStyleNames;
@@ -254,12 +253,10 @@ struct ScColumnStyle
     ScColumnStyle() : nIndex(-1), bIsVisible(sal_True) {}
 };
 
-
-typedef std::vector<ScColumnStyle>  ScMyColumnStyleVec;
-typedef std::vector<ScMyColumnStyleVec> ScMyColumnVectorVec;
-
 class ScColumnStyles : public ScColumnRowStylesBase
 {
+    typedef std::vector<ScColumnStyle>  ScMyColumnStyleVec;
+    typedef std::vector<ScMyColumnStyleVec> ScMyColumnVectorVec;
     ScMyColumnVectorVec             aTables;
 
 public:
@@ -273,11 +270,10 @@ public:
     virtual rtl::OUString* GetStyleName(const sal_Int32 nTable, const sal_Int32 nField);
 };
 
-typedef std::vector<sal_Int32>  ScMysalInt32Vec;
-typedef std::vector<ScMysalInt32Vec>    ScMyRowVectorVec;
-
 class ScRowStyles : public ScColumnRowStylesBase
 {
+    typedef std::vector<sal_Int32>          ScMysalInt32Vec;
+    typedef std::vector<ScMysalInt32Vec>    ScMyRowVectorVec;
     ScMyRowVectorVec                aTables;
 
 public:

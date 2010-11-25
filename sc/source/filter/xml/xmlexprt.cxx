@@ -170,6 +170,48 @@ using ::rtl::OUStringBuffer;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY;
 
+#include <stdio.h>
+#include <string>
+#include <sys/time.h>
+
+namespace {
+
+class StackPrinter
+{
+public:
+    explicit StackPrinter(const char* msg) :
+        msMsg(msg)
+    {
+        fprintf(stdout, "%s: --begin\n", msMsg.c_str());
+        mfStartTime = getTime();
+    }
+
+    ~StackPrinter()
+    {
+        double fEndTime = getTime();
+        fprintf(stdout, "%s: --end (duration: %g sec)\n", msMsg.c_str(), (fEndTime-mfStartTime));
+    }
+
+    void printTime(int line) const
+    {
+        double fEndTime = getTime();
+        fprintf(stdout, "%s: --(%d) (duration: %g sec)\n", msMsg.c_str(), line, (fEndTime-mfStartTime));
+    }
+
+private:
+    double getTime() const
+    {
+        timeval tv;
+        gettimeofday(&tv, NULL);
+        return tv.tv_sec + tv.tv_usec / 1000000.0;
+    }
+
+    ::std::string msMsg;
+    double mfStartTime;
+};
+
+}
+
 //----------------------------------------------------------------------------
 
 namespace
@@ -2242,6 +2284,8 @@ void ScXMLExport::_ExportAutoStyles()
 
     if (getExportFlags() & EXPORT_CONTENT)
     {
+        StackPrinter __stack_printer__("ScXMLExport::_ExportAutoStyles");
+
         //  re-create automatic styles with old names from stored data
         ScSheetSaveData* pSheetData = ScModelObj::getImplementation(xSpreadDoc)->GetSheetSaveData();
         if (pSheetData && pDoc)
@@ -2519,6 +2563,7 @@ void ScXMLExport::_ExportAutoStyles()
         CollectShapesAutoStyles(nTableCount);
         for (sal_Int32 nTable = 0; nTable < nTableCount; ++nTable, IncrementProgressBar(sal_False))
         {
+            fprintf(stdout, "ScXMLExport::_ExportAutoStyles:   table = %ld\n", nTable);
             bool bUseStream = pSheetData && pDoc && pDoc->IsStreamValid((SCTAB)nTable) &&
                               pSheetData->HasStreamPos(nTable) && xSourceStream.is();
 
