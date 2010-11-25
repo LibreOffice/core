@@ -235,7 +235,10 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
             if ( nNextState == embed::EmbedStates::INPLACE_ACTIVE )
             {
                 if ( !m_xClientSite.is() )
-                    throw embed::WrongStateException(); //TODO: client site is not set!
+                    throw embed::WrongStateException(
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "client site not set, yet" ) ),
+                        *this
+                    );
 
                 uno::Reference< embed::XInplaceClient > xInplaceClient( m_xClientSite, uno::UNO_QUERY );
                 if ( xInplaceClient.is() && xInplaceClient->canInplaceActivate() )
@@ -538,7 +541,7 @@ void SAL_CALL OCommonEmbeddedObject::doVerb( sal_Int32 nVerbID )
 {
     RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OCommonEmbeddedObject::doVerb" );
 
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::ClearableMutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
@@ -561,7 +564,10 @@ void SAL_CALL OCommonEmbeddedObject::doVerb( sal_Int32 nVerbID )
         // TODO/LATER: check if the verb is a supported one and if it is produce related operation
     }
     else
+    {
+        aGuard.clear();
         changeState( nNewState );
+    }
 }
 
 //----------------------------------------------

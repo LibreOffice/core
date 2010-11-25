@@ -65,11 +65,15 @@ class SfxShellSubObject;
 class SfxDispatcher;
 class SfxViewFrame;
 class SfxSlot;
-class SfxUndoManager;
 class SfxRepeatTarget;
 class SbxVariable;
 class SbxBase;
 class SfxBindings;
+
+namespace svl
+{
+    class IUndoManager;
+}
 
 //====================================================================
 
@@ -162,7 +166,7 @@ class SFX2_DLLPUBLIC SfxShell: public SfxBroadcaster
 
     SfxShell_Impl*              pImp;
     SfxItemPool*                pPool;
-    SfxUndoManager*             pUndoMgr;
+    ::svl::IUndoManager*        pUndoMgr;
 
 private:
                                 SfxShell( const SfxShell & ); // n.i.
@@ -212,8 +216,9 @@ public:
     inline SfxItemPool&         GetPool() const;
     inline void                 SetPool( SfxItemPool *pNewPool ) ;
 
-    virtual SfxUndoManager*     GetUndoManager();
-    void                        SetUndoManager( SfxUndoManager *pNewUndoMgr );
+    virtual ::svl::IUndoManager*
+                                GetUndoManager();
+    void                        SetUndoManager( ::svl::IUndoManager *pNewUndoMgr );
 
     SfxRepeatTarget*            GetRepeatTarget() const;
     void                        SetRepeatTarget( SfxRepeatTarget *pTarget );

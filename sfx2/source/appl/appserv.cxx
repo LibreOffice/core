@@ -111,7 +111,6 @@
 #include <sfx2/new.hxx>
 #include <sfx2/templdlg.hxx>
 #include "sfxtypes.hxx"
-#include "sfxbasic.hxx"
 #include <sfx2/tabdlg.hxx>
 #include "arrdecl.hxx"
 #include "fltfnc.hxx"
@@ -122,7 +121,6 @@
 #include "arrdecl.hxx"
 #include <sfx2/childwin.hxx>
 #include "appdata.hxx"
-#include <sfx2/macrconf.hxx>
 #include "minfitem.hxx"
 #include <sfx2/event.hxx>
 #include <sfx2/module.hxx>

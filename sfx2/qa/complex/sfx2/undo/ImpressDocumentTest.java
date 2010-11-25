@@ -1,5 +1,4 @@
 /*************************************************************************
- *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
@@ -23,26 +22,25 @@
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
  *
- ************************************************************************/
-package complex.standalonedocumentinfo;
+ *************************************************************************/
 
+package complex.sfx2.undo;
 
-public class TestHelper {
+import com.sun.star.lang.XMultiServiceFactory;
+import org.openoffice.test.tools.DocumentType;
 
-    String m_sTestPrefix;
-
-    /** Creates a new instance of TestHelper
-     * @param sTestPrefix
-     */
-    public TestHelper ( String sTestPrefix ) {
-        m_sTestPrefix = sTestPrefix;
+/**
+ * @author frank.schoenheit@oracle.com
+ */
+public class ImpressDocumentTest extends DrawingOrPresentationDocumentTest
+{
+    public ImpressDocumentTest( XMultiServiceFactory i_orb ) throws com.sun.star.uno.Exception
+    {
+        super( i_orb, DocumentType.PRESENTATION );
     }
 
-    public void Error ( String sError ) {
-        System.out.println ( m_sTestPrefix + "Error: " + sError );
-    }
-
-    public void Message ( String sMessage ) {
-        System.out.println ( m_sTestPrefix + sMessage );
+    public String getDocumentDescription()
+    {
+        return "presentation document";
     }
 }

@@ -24,7 +24,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-package complex.framework.DocHelper;
+package complex.sfx2.tools;
 
 import com.sun.star.accessibility.AccessibleRole;
 import com.sun.star.accessibility.XAccessible;
@@ -40,7 +40,6 @@ import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.XCloseable;
 
-import complex.framework.DocHelper.DialogThread;
 import java.io.PrintWriter;
 
 import util.AccessibilityTools;
@@ -104,13 +103,12 @@ public class WriterHelper {
 
         if (createButton.length() > 1) {
             XExtendedToolkit tk = getToolkit();
-            AccessibilityTools at = new AccessibilityTools();
             Object atw = tk.getActiveTopWindow();
 
             XWindow xWindow = UnoRuntime.queryInterface(XWindow.class, atw);
 
-            XAccessible xRoot = at.getAccessibleObject(xWindow);
-            XAccessibleContext buttonContext = at.getAccessibleObjectForRole(
+            XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
+            XAccessibleContext buttonContext = AccessibilityTools.getAccessibleObjectForRole(
                                                        xRoot,
                                                        AccessibleRole.PUSH_BUTTON,
                                                        createButton);
@@ -154,28 +152,26 @@ public class WriterHelper {
     public XTextDocument DocByAutopilot(XMultiServiceFactory msf,
                                         int[] indexes, boolean destroyLocal,
                                         String bName) {
-        XTextDocument xLocalDoc = WriterTools.createTextDoc(m_xMSF);
+        XTextDocument xTextDoc = WriterTools.createTextDoc(m_xMSF);
         Object toolkit = null;
 
         try {
             toolkit = msf.createInstance("com.sun.star.awt.Toolkit");
         } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace();
+            e.printStackTrace( System.err );
         }
 
         XExtendedToolkit tk = UnoRuntime.queryInterface(XExtendedToolkit.class, toolkit);
 
         shortWait();
 
-        AccessibilityTools at = new AccessibilityTools();
-
         Object atw = tk.getActiveTopWindow();
 
         XWindow xWindow = UnoRuntime.queryInterface(XWindow.class, atw);
 
-        XAccessible xRoot = at.getAccessibleObject(xWindow);
+        XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
-        XAccessibleContext ARoot = at.getAccessibleObjectForRole(xRoot,
+        XAccessibleContext ARoot = AccessibilityTools.getAccessibleObjectForRole(xRoot,
                                                                  AccessibleRole.MENU_BAR);
         XAccessibleSelection sel = UnoRuntime.queryInterface(XAccessibleSelection.class, ARoot);
 
@@ -196,11 +192,11 @@ public class WriterHelper {
 
         xWindow = UnoRuntime.queryInterface(XWindow.class, atw);
 
-        xRoot = at.getAccessibleObject(xWindow);
+        xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
         //at.printAccessibleTree(new PrintWriter(System.out),xRoot);
 
-        XAccessibleAction action = UnoRuntime.queryInterface(XAccessibleAction.class, at.getAccessibleObjectForRole(xRoot, AccessibleRole.PUSH_BUTTON, bName));
+        XAccessibleAction action = UnoRuntime.queryInterface(XAccessibleAction.class, AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.PUSH_BUTTON, bName));
 
         try {
             action.doAccessibleAction(0);
@@ -213,11 +209,11 @@ public class WriterHelper {
 
         xWindow = UnoRuntime.queryInterface(XWindow.class, atw);
 
-        xRoot = at.getAccessibleObject(xWindow);
+        xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
-        at.printAccessibleTree(new PrintWriter(System.out),xRoot);
+        AccessibilityTools.printAccessibleTree(new PrintWriter(System.out),xRoot);
 
-        action = UnoRuntime.queryInterface(XAccessibleAction.class, at.getAccessibleObjectForRole(xRoot, AccessibleRole.PUSH_BUTTON, "Yes"));
+        action = UnoRuntime.queryInterface(XAccessibleAction.class, AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.PUSH_BUTTON, "Yes"));
 
         try {
             if (action != null) action.doAccessibleAction(0);
@@ -231,7 +227,7 @@ public class WriterHelper {
         XTextDocument returnDoc = UnoRuntime.queryInterface(XTextDocument.class, xDesktop.getCurrentComponent());
 
         if (destroyLocal) {
-            closeDoc(xLocalDoc);
+            closeDoc(xTextDoc);
         }
 
         return returnDoc;
@@ -259,7 +255,7 @@ public class WriterHelper {
             toolkit = m_xMSF.createInstance("com.sun.star.awt.Toolkit");
         } catch (com.sun.star.uno.Exception e) {
             System.out.println("Couldn't get toolkit");
-            e.printStackTrace();
+            e.printStackTrace( System.err );
         }
 
         XExtendedToolkit tk = UnoRuntime.queryInterface(XExtendedToolkit.class, toolkit);
@@ -277,7 +273,7 @@ public class WriterHelper {
             desk = m_xMSF.createInstance("com.sun.star.frame.Desktop");
         } catch (com.sun.star.uno.Exception e) {
             System.out.println("Couldn't get desktop");
-            e.printStackTrace();
+            e.printStackTrace( System.err );
         }
 
         XDesktop xDesktop = UnoRuntime.queryInterface(XDesktop.class, desk);

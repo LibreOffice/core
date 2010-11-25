@@ -24,7 +24,7 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
-PRJ=..$/..
+PRJ=../..
 
 PRJNAME=			framework
 TARGET=				fwk_helper
@@ -41,28 +41,30 @@ CDEFS+=-DCOMPMOD_NAMESPACE=framework
 
 # --- Generate -----------------------------------------------------
 
-SLOFILES= 			$(SLO)$/ocomponentaccess.obj					\
-                    $(SLO)$/ocomponentenumeration.obj				\
-                    $(SLO)$/oframes.obj								\
-                    $(SLO)$/statusindicatorfactory.obj				\
-                    $(SLO)$/statusindicator.obj						\
-                    $(SLO)$/imageproducer.obj						\
-                    $(SLO)$/propertysetcontainer.obj				\
-                    $(SLO)$/actiontriggerhelper.obj					\
-                    $(SLO)$/persistentwindowstate.obj				\
-                    $(SLO)$/networkdomain.obj						\
-                    $(SLO)$/acceleratorinfo.obj                     \
-                    $(SLO)$/uielementwrapperbase.obj                \
-                    $(SLO)$/dockingareadefaultacceptor.obj          \
-                    $(SLO)$/uiconfigelementwrapperbase.obj          \
-                    $(SLO)$/shareablemutex.obj                      \
-                    $(SLO)$/vclstatusindicator.obj                  \
-                    $(SLO)$/wakeupthread.obj                        \
-                    $(SLO)$/configimporter.obj                      \
-                    $(SLO)$/tagwindowasmodified.obj                 \
-                    $(SLO)$/titlebarupdate.obj                      \
-                    $(SLO)$/titlehelper.obj                         \
-                    $(SLO)$/mischelper.obj
+SLOFILES= 			$(SLO)/ocomponentaccess.obj             \
+                    $(SLO)/ocomponentenumeration.obj        \
+                    $(SLO)/oframes.obj                      \
+                    $(SLO)/statusindicatorfactory.obj       \
+                    $(SLO)/statusindicator.obj              \
+                    $(SLO)/imageproducer.obj                \
+                    $(SLO)/propertysetcontainer.obj         \
+                    $(SLO)/actiontriggerhelper.obj          \
+                    $(SLO)/persistentwindowstate.obj        \
+                    $(SLO)/networkdomain.obj                \
+                    $(SLO)/acceleratorinfo.obj              \
+                    $(SLO)/uielementwrapperbase.obj         \
+                    $(SLO)/dockingareadefaultacceptor.obj   \
+                    $(SLO)/uiconfigelementwrapperbase.obj   \
+                    $(SLO)/shareablemutex.obj               \
+                    $(SLO)/vclstatusindicator.obj           \
+                    $(SLO)/wakeupthread.obj                 \
+                    $(SLO)/configimporter.obj               \
+                    $(SLO)/tagwindowasmodified.obj          \
+                    $(SLO)/titlebarupdate.obj               \
+                    $(SLO)/titlehelper.obj                  \
+                    $(SLO)/mischelper.obj                   \
+                    $(SLO)/documentundoguard.obj            \
+                    $(SLO)/undomanagerhelper.obj            \
 
 # --- Targets ------------------------------------------------------
 

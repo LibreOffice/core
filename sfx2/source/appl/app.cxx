@@ -41,6 +41,8 @@
 #include <tools/simplerm.hxx>
 #include <tools/config.hxx>
 #include <basic/basrdll.hxx>
+#include <basic/sbmeth.hxx>
+#include <basic/sbmod.hxx>
 #include <svtools/asynclink.hxx>
 #include <svl/stritem.hxx>
 #ifndef _SOUND_HXX //autogen
@@ -843,3 +845,7 @@ void SfxApplication::MacroOrganizer( INT16 nTabId )
     pSymbol( nTabId );
 }
 
+ErrCode SfxApplication::CallBasic( const String& rCode, BasicManager* pMgr, SbxArray* pArgs, SbxValue* pRet )
+{
+    return pMgr->ExecuteMacro( rCode, pArgs, pRet);
+}

@@ -214,6 +214,7 @@ public:
     virtual String              GetSelectionText( BOOL bCompleteWords = FALSE );
     virtual BOOL                HasSelection( BOOL bText = TRUE ) const;
     virtual SdrView*            GetDrawView() const;
+
     void                        SetSubShell( SfxShell *pShell );
     SfxShell*                   GetSubShell() const { return pSubShell; }
     void                        AddSubShell( SfxShell& rShell );

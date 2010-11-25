@@ -53,7 +53,6 @@ SLOFILES = \
     $(SLO)$/bindings.obj \
     $(SLO)$/ctrlitem.obj \
     $(SLO)$/dispatch.obj \
-    $(SLO)$/macrconf.obj \
         $(SLO)$/macro.obj \
     $(SLO)$/minfitem.obj \
     $(SLO)$/msg.obj \

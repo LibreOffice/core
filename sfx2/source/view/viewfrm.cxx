@@ -960,7 +960,7 @@ void SfxViewFrame::ExecHistory_Impl( SfxRequest &rReq )
 {
     // gibt es an der obersten Shell einen Undo-Manager?
     SfxShell *pSh = GetDispatcher()->GetShell(0);
-    SfxUndoManager* pShUndoMgr = pSh->GetUndoManager();
+    ::svl::IUndoManager* pShUndoMgr = pSh->GetUndoManager();
     sal_Bool bOK = sal_False;
     if ( pShUndoMgr )
     {
@@ -972,20 +972,20 @@ void SfxViewFrame::ExecHistory_Impl( SfxRequest &rReq )
                 break;
 
             case SID_UNDO:
-                pShUndoMgr->Undo(0);
+                pShUndoMgr->Undo();
                 GetBindings().InvalidateAll(sal_False);
                 bOK = sal_True;
                 break;
 
             case SID_REDO:
-                pShUndoMgr->Redo(0);
+                pShUndoMgr->Redo();
                 GetBindings().InvalidateAll(sal_False);
                 bOK = sal_True;
                 break;
 
             case SID_REPEAT:
                 if ( pSh->GetRepeatTarget() )
-                    pShUndoMgr->Repeat( *pSh->GetRepeatTarget(), 0);
+                    pShUndoMgr->Repeat( *pSh->GetRepeatTarget() );
                 bOK = sal_True;
                 break;
         }
@@ -1011,7 +1011,7 @@ void SfxViewFrame::StateHistory_Impl( SfxItemSet &rSet )
         // Ich bin gerade am Reloaden und Yielde so vor mich hin ...
         return;
 
-    SfxUndoManager *pShUndoMgr = pSh->GetUndoManager();
+    ::svl::IUndoManager *pShUndoMgr = pSh->GetUndoManager();
     if ( !pShUndoMgr )
     {
         // der SW hat eigenes Undo an der View
@@ -1047,10 +1047,10 @@ void SfxViewFrame::StateHistory_Impl( SfxItemSet &rSet )
         rSet.DisableItem( SID_REDO );
     SfxRepeatTarget *pTarget = pSh->GetRepeatTarget();
     if ( pShUndoMgr && pTarget && pShUndoMgr->GetRepeatActionCount() &&
-         pShUndoMgr->CanRepeat(*pTarget, 0) )
+         pShUndoMgr->CanRepeat(*pTarget) )
     {
         String aTmp( SfxResId(STR_REPEAT) );
-        aTmp += pShUndoMgr->GetRepeatActionComment(*pTarget, 0);
+        aTmp += pShUndoMgr->GetRepeatActionComment(*pTarget);
         rSet.Put( SfxStringItem( SID_REPEAT, aTmp ) );
     }
     else
@@ -2883,8 +2883,6 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const ::rtl::OUString& sMacro )
             }
         }
 
-        pSfxApp->EnterBasicCall();
-
         BasicManager* pBasMgr = 0;
         if ( aLocation.EqualsIgnoreCaseAscii( "application" ) )
         {
@@ -3017,19 +3015,11 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const ::rtl::OUString& sMacro )
                 }
             }
         }
-
-        pSfxApp->LeaveBasicCall();
     }
     else
     {
         // add code for "session only" macro
     }
-
-    /*
-    FILE* pFile = fopen( "macro.bas", "a" );
-    fprintf( pFile, "%s", ::rtl::OUStringToOString(sBuffer.makeStringAndClear(),RTL_TEXTENCODING_UTF8).getStr() );
-    fclose ( pFile );
-    */
 }
 
 void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )

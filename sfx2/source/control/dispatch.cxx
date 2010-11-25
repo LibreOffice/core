@@ -69,7 +69,6 @@
 #include "slotserv.hxx"
 #include <sfx2/ipclient.hxx>
 #include "sfxtypes.hxx"
-#include <sfx2/macrconf.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/childwin.hxx>
@@ -1029,10 +1028,6 @@ void SfxDispatcher::_Execute
     if ( IsLocked( rSlot.GetSlotId() ) )
         return;
 
-    sal_uInt16 nSlot = rSlot.GetSlotId();
-    if ( SfxMacroConfig::IsMacroSlot( nSlot ) )
-        SFX_APP()->GetMacroConfig()->RegisterSlotId( nSlot );
-
     if ( (eCallMode & SFX_CALLMODE_ASYNCHRON) ||
          ( !(eCallMode & SFX_CALLMODE_SYNCHRON) &&
            rSlot.IsMode(SFX_SLOT_ASYNCHRON) ) )
@@ -1628,7 +1623,7 @@ void SfxDispatcher::EnterAction( const String& rName )
     DBG_ASSERT( pImp->aStack.Count() > 0, "EnterAction on empty dispatcher stack" );
     if ( ++pImp->nActionLevel == 1 )
     {
-        SfxUndoManager *pUndoMgr = GetShell(0)->GetUndoManager();
+        ::svl::IUndoManager *pUndoMgr = GetShell(0)->GetUndoManager();
         if ( pUndoMgr )
             pUndoMgr->EnterListAction( rName, rName HACK(RepeatComment), 0 HACK(ID) );
     }
@@ -1643,7 +1638,7 @@ void SfxDispatcher::LeaveAction()
     DBG_ASSERT( pImp->nActionLevel > 0, "EnterAction without LeaveAction" );
     if ( --pImp->nActionLevel == 0 )
     {
-        SfxUndoManager *pUndoMgr = GetShell(0)->GetUndoManager();
+        ::svl::IUndoManager *pUndoMgr = GetShell(0)->GetUndoManager();
         if ( pUndoMgr )
             pUndoMgr->LeaveListAction();
     }
@@ -2298,7 +2293,6 @@ sal_Bool SfxDispatcher::_FindServer
     SFX_STACK(SfxDispatcher::_FindServer);
 
     // Dispatcher gelockt? (SID_HELP_PI trotzdem durchlassen)
-    SfxApplication *pSfxApp = SFX_APP();
     if ( IsLocked(nSlot) )
     {
         pImp->bInvalidateOnUnlock = sal_True;
@@ -2318,25 +2312,8 @@ sal_Bool SfxDispatcher::_FindServer
         }
     }
 
-    // Makro-Slot?
-    if ( SfxMacroConfig::IsMacroSlot( nSlot ) )
-    {
-        const SfxMacroInfo* pInfo = pSfxApp->GetMacroConfig()->GetMacroInfo(nSlot);
-        if ( pInfo )
-        {
-            const SfxSlot* pSlot = pInfo->GetSlot();
-            if ( pSlot )
-            {
-                rServer.SetShellLevel(nTotCount-1);
-                rServer.SetSlot( pSlot );
-                return sal_True;
-            }
-        }
-
-        return sal_False;
-    }
     // Verb-Slot?
-    else if (nSlot >= SID_VERB_START && nSlot <= SID_VERB_END)
+    if (nSlot >= SID_VERB_START && nSlot <= SID_VERB_END)
     {
         for ( sal_uInt16 nShell = 0;; ++nShell )
         {
@@ -2474,10 +2451,7 @@ sal_Bool SfxDispatcher::HasSlot_Impl( sal_uInt16 nSlot )
         nTotCount = nTotCount + pImp->aStack.Count();
     }
 
-    if ( SfxMacroConfig::IsMacroSlot( nSlot ) )
-        // Makro-Slot?
-        return sal_True;
-    else if (nSlot >= SID_VERB_START && nSlot <= SID_VERB_END)
+    if (nSlot >= SID_VERB_START && nSlot <= SID_VERB_END)
     {
         // Verb-Slot?
         for ( sal_uInt16 nShell = 0;; ++nShell )
@@ -2657,10 +2631,6 @@ const SfxPoolItem* SfxDispatcher::_Execute( const SfxSlotServer &rSvr )
     if ( pSlot )
     {
         Flush();
-
-        sal_uInt16 nSlot = pSlot->GetSlotId();
-        if ( SfxMacroConfig::IsMacroSlot( nSlot ) )
-            SFX_APP()->GetMacroConfig()->RegisterSlotId( nSlot );
 
         if ( pSlot->IsMode(SFX_SLOT_ASYNCHRON) )
             //! ignoriert rSvr
