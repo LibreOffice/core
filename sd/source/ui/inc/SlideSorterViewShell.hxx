@@ -192,7 +192,7 @@ protected:
     /** This method is overloaded to handle a missing tool bar correctly.
         This is the case when the slide sorter is not the main view shell.
     */
-    virtual SfxUndoManager* ImpGetUndoManager (void) const;
+    virtual ::svl::IUndoManager* ImpGetUndoManager (void) const;
 
 private:
     ::boost::shared_ptr<SlideSorter> mpSlideSorter;

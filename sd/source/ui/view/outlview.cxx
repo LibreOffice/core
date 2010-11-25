@@ -1451,7 +1451,7 @@ SdPage* OutlineView::GetActualPage()
 
     SdPage* pCurrent = GetPageForParagraph(static_cast<Paragraph*>(pSelList->First()) );
     DBG_ASSERT( pCurrent ||
-                (mpDocSh->GetUndoManager() && static_cast< sd::UndoManager *>(mpDocSh->GetUndoManager())->isInUndo()) ||
+                (mpDocSh->GetUndoManager() && static_cast< sd::UndoManager *>(mpDocSh->GetUndoManager())->IsDoing()) ||
                 maDragAndDropModelGuard.get(),
                 "sd::OutlineView::GetActualPage(), no current page?" );
     if( pCurrent )
@@ -1783,7 +1783,7 @@ void OutlineView::EndModelChange()
 {
     UpdateDocument();
 
-    SfxUndoManager* pDocUndoMgr = mpDocSh->GetUndoManager();
+    ::svl::IUndoManager* pDocUndoMgr = mpDocSh->GetUndoManager();
 
     bool bHasUndoActions = pDocUndoMgr->GetUndoActionCount() != 0;
 
@@ -1801,6 +1801,9 @@ void OutlineView::EndModelChange()
 
     if( bHasUndoActions && mpOutliner->GetEditEngine().HasTriedMergeOnLastAddUndo() )
         TryToMergeUndoActions();
+
+    mpOutlineViewShell->Invalidate( SID_UNDO );
+    mpOutlineViewShell->Invalidate( SID_REDO );
 }
 
 /** updates all changes in the outliner model to the draw model */
@@ -1838,7 +1841,7 @@ void OutlineView::UpdateDocument()
 /** merge edit engine undo actions if possible */
 void OutlineView::TryToMergeUndoActions()
 {
-    SfxUndoManager& rOutlineUndo = mpOutliner->GetUndoManager();
+    ::svl::IUndoManager& rOutlineUndo = mpOutliner->GetUndoManager();
     if( rOutlineUndo.GetUndoActionCount() > 1 )
     {
         SfxListUndoAction* pListAction = dynamic_cast< SfxListUndoAction* >( rOutlineUndo.GetUndoAction(0) );
@@ -1883,7 +1886,7 @@ void OutlineView::TryToMergeUndoActions()
                     delete pEditUndo;
 
                     // now check if we also can merge the draw undo actions
-                    SfxUndoManager* pDocUndoManager = mpDocSh->GetUndoManager();
+                    ::svl::IUndoManager* pDocUndoManager = mpDocSh->GetUndoManager();
                     if( pDocUndoManager && ( pListAction->aUndoActions.Count() == 1 ))
                     {
                         SfxLinkUndoAction* pLinkAction = dynamic_cast< SfxLinkUndoAction* >( pListAction->aUndoActions[0] );
