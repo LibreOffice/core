@@ -114,8 +114,8 @@ void TextSearch::setOptions( const SearchOptions& rOptions ) throw( RuntimeExcep
         if( !xTranslit.is() )
         {
             Reference < XInterface > xI = xMSF->createInstance(
-                    OUString::createFromAscii(
-                        "com.sun.star.i18n.Transliteration"));
+                    OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        "com.sun.star.i18n.Transliteration")));
             if ( xI.is() )
                 xI->queryInterface( ::getCppuType(
                             (const Reference< XExtendedTransliteration >*)0))
@@ -136,8 +136,8 @@ void TextSearch::setOptions( const SearchOptions& rOptions ) throw( RuntimeExcep
         if( !xTranslit2.is() )
         {
             Reference < XInterface > xI = xMSF->createInstance(
-                    OUString::createFromAscii(
-                        "com.sun.star.i18n.Transliteration"));
+                    OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        "com.sun.star.i18n.Transliteration")));
             if ( xI.is() )
                 xI->queryInterface( ::getCppuType(
                             (const Reference< XExtendedTransliteration >*)0))
