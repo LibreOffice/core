@@ -46,9 +46,9 @@ IndexEntrySupplier_asian::IndexEntrySupplier_asian(
 {
     implementationName = "com.sun.star.i18n.IndexEntrySupplier_asian";
 #ifdef SAL_DLLPREFIX
-    OUString lib=OUString::createFromAscii(SAL_DLLPREFIX"index_data"SAL_DLLEXTENSION);
+    OUString lib(RTL_CONSTASCII_USTRINGPARAM(SAL_DLLPREFIX"index_data"SAL_DLLEXTENSION));
 #else
-    OUString lib=OUString::createFromAscii("index_data"SAL_DLLEXTENSION);
+    OUString lib(RTL_CONSTASCII_USTRINGPARAM("index_data"SAL_DLLEXTENSION));
 #endif
     hModule = osl_loadModuleRelative(
         &thisModule, lib.pData, SAL_LOADMODULE_DEFAULT );

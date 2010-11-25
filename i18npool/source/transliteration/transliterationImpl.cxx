@@ -604,7 +604,7 @@ void TransliterationImpl::loadBody( OUString &implName, Reference<XExtendedTrans
 
     Reference< XContentEnumerationAccess > xEnumAccess( xSMgr, UNO_QUERY );
     Reference< XEnumeration > xEnum(xEnumAccess->createContentEnumeration(
-                                    OUString::createFromAscii(TRLT_SERVICELNAME_L10N)));
+                                    OUString(RTL_CONSTASCII_USTRINGPARAM(TRLT_SERVICELNAME_L10N))));
     if (xEnum.is()) {
         while (xEnum->hasMoreElements()) {
             Any a = xEnum->nextElement();
@@ -634,7 +634,7 @@ sal_Bool SAL_CALL
 TransliterationImpl::loadModuleByName( const OUString& implName,
         Reference<XExtendedTransliteration>& body, const Locale& rLocale) throw(RuntimeException)
 {
-    OUString cname = OUString::createFromAscii(TRLT_IMPLNAME_PREFIX) + implName;
+    OUString cname = OUString(RTL_CONSTASCII_USTRINGPARAM(TRLT_IMPLNAME_PREFIX)) + implName;
     loadBody(cname, body);
     if (body.is()) {
         body->loadModule((TransliterationModules)0, rLocale); // toUpper/toLoad need rLocale
@@ -645,7 +645,7 @@ TransliterationImpl::loadModuleByName( const OUString& implName,
                 if (i == 0) // current module is caseignore
                     body->loadModule(TMlist[0].tm, rLocale); // caseingore need to setup module name
                 if (! caseignore.is()) {
-                    OUString bname = OUString::createFromAscii(TRLT_IMPLNAME_PREFIX) +
+                    OUString bname = OUString(RTL_CONSTASCII_USTRINGPARAM(TRLT_IMPLNAME_PREFIX)) +
                                 OUString::createFromAscii(TMlist[0].implName);
                     loadBody(bname, caseignore);
                 }
