@@ -88,6 +88,8 @@
 // --> OD 2008-11-26 #158694#
 #include <SwNodeNum.hxx>
 // <--
+#include <fmtmeta.hxx>
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -101,6 +103,37 @@ using ::rtl::OUString;
 
 namespace SwUnoCursorHelper
 {
+
+uno::Reference<text::XTextContent>
+GetNestedTextContent(SwTxtNode & rTextNode, xub_StrLen const nIndex,
+        bool const bParent)
+{
+    // these should be unambiguous because of the dummy character
+    SwTxtNode::GetTxtAttrMode const eMode( (bParent)
+        ? SwTxtNode::PARENT : SwTxtNode::EXPAND );
+    SwTxtAttr *const pMetaTxtAttr =
+        rTextNode.GetTxtAttrAt(nIndex, RES_TXTATR_META, eMode);
+    SwTxtAttr *const pMetaFieldTxtAttr =
+        rTextNode.GetTxtAttrAt(nIndex, RES_TXTATR_METAFIELD, eMode);
+    // which is innermost?
+    SwTxtAttr *const pTxtAttr = (pMetaTxtAttr)
+        ? ((pMetaFieldTxtAttr)
+            ? ((*pMetaFieldTxtAttr->GetStart() >
+                    *pMetaTxtAttr->GetStart())
+                ? pMetaFieldTxtAttr : pMetaTxtAttr)
+            : pMetaTxtAttr)
+        : pMetaFieldTxtAttr;
+    uno::Reference<XTextContent> xRet;
+    if (pTxtAttr)
+    {
+        ::sw::Meta *const pMeta(
+            static_cast<SwFmtMeta &>(pTxtAttr->GetAttr()).GetMeta());
+        OSL_ASSERT(pMeta);
+        xRet.set(pMeta->MakeUnoObject(), uno::UNO_QUERY);
+    }
+    return xRet;
+}
+
 
 /* -----------------16.09.98 12:27-------------------
 *   Lesen spezieller Properties am Cursor
@@ -300,14 +333,15 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
             break;
         case FN_UNO_DOCUMENT_INDEX_MARK:
         {
-            SwTxtAttr* pTxtAttr = rPam.GetNode()->GetTxtNode()->GetTxtAttr(
-                                rPam.GetPoint()->nContent, RES_TXTATR_TOXMARK);
-            if(pTxtAttr)
+            ::std::vector<SwTxtAttr *> const marks(
+                rPam.GetNode()->GetTxtNode()->GetTxtAttrsAt(
+                    rPam.GetPoint()->nContent.GetIndex(), RES_TXTATR_TOXMARK));
+            if (marks.size())
             {
                 if( pAny )
-                {
+                {   // hmm... can only return 1 here
                     SwTOXMark & rMark =
-                        static_cast<SwTOXMark&>(pTxtAttr->GetAttr());
+                        static_cast<SwTOXMark &>((*marks.begin())->GetAttr());
                     const uno::Reference< text::XDocumentIndexMark > xRef =
                         SwXDocumentIndexMark::CreateXDocumentIndexMark(
                             *rPam.GetDoc(),
@@ -343,9 +377,10 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
             const SwPosition *pPos = rPam.Start();
             const SwTxtNode *pTxtNd =
                 rPam.GetDoc()->GetNodes()[pPos->nNode.GetIndex()]->GetTxtNode();
-            SwTxtAttr* pTxtAttr =
-                pTxtNd ? pTxtNd->GetTxtAttr(pPos->nContent, RES_TXTATR_FIELD)
-                       : 0;
+            SwTxtAttr *const pTxtAttr = (pTxtNd)
+                ? pTxtNd->GetTxtAttrForCharAt(
+                        pPos->nContent.GetIndex(), RES_TXTATR_FIELD)
+                : 0;
             if(pTxtAttr)
             {
                 if( pAny )
@@ -434,8 +469,9 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
         case FN_UNO_ENDNOTE:
         case FN_UNO_FOOTNOTE:
         {
-            SwTxtAttr* pTxtAttr = rPam.GetNode()->GetTxtNode()->
-                                        GetTxtAttr(rPam.GetPoint()->nContent, RES_TXTATR_FTN);
+            SwTxtAttr *const pTxtAttr =
+                rPam.GetNode()->GetTxtNode()->GetTxtAttrForCharAt(
+                    rPam.GetPoint()->nContent.GetIndex(), RES_TXTATR_FTN);
             if(pTxtAttr)
             {
                 const SwFmtFtn& rFtn = pTxtAttr->GetFtn();
@@ -457,19 +493,38 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
         break;
         case FN_UNO_REFERENCE_MARK:
         {
-            SwTxtAttr* pTxtAttr = rPam.GetNode()->GetTxtNode()->
-                                        GetTxtAttr(rPam.GetPoint()->nContent, RES_TXTATR_REFMARK);
-            if(pTxtAttr)
+            ::std::vector<SwTxtAttr *> const marks(
+                rPam.GetNode()->GetTxtNode()->GetTxtAttrsAt(
+                    rPam.GetPoint()->nContent.GetIndex(), RES_TXTATR_REFMARK));
+            if (marks.size())
             {
                 if( pAny )
-                {
-                    const SwFmtRefMark& rRef = pTxtAttr->GetRefMark();
+                {   // hmm... can only return 1 here
+                    const SwFmtRefMark& rRef = (*marks.begin())->GetRefMark();
                     uno::Reference< XTextContent >  xRef = SwXReferenceMarks::GetObject( rPam.GetDoc(), &rRef );
                     pAny->setValue(&xRef, ::getCppuType((uno::Reference<XTextContent>*)0));
                 }
             }
             else
                 eNewState = PropertyState_DEFAULT_VALUE;
+        }
+        break;
+        case FN_UNO_NESTED_TEXT_CONTENT:
+        {
+            uno::Reference<XTextContent> const xRet(
+                GetNestedTextContent(*rPam.GetNode()->GetTxtNode(),
+                    rPam.GetPoint()->nContent.GetIndex(), false));
+            if (xRet.is())
+            {
+                if (pAny)
+                {
+                    (*pAny) <<= xRet;
+                }
+            }
+            else
+            {
+                eNewState = PropertyState_DEFAULT_VALUE;
+            }
         }
         break;
         case FN_UNO_CHARFMT_SEQUENCE:

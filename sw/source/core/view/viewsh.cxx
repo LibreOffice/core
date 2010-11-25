@@ -860,21 +860,6 @@ void ViewShell::SetTabCompat( bool bNew )
     }
 }
 
-/*-- 29.11.2007 09:03:18---------------------------------------------------
-    //#i24363# tab stops relative to indent
-  -----------------------------------------------------------------------*/
-void ViewShell::SetTabsRelativeToIndent(bool bNew)
-{
-    IDocumentSettingAccess* pIDSA = getIDocumentSettingAccess();
-    if( pIDSA->get(IDocumentSettingAccess::TABS_RELATIVE_TO_INDENT) != bNew  )
-    {
-        SwWait aWait( *GetDoc()->GetDocShell(), TRUE );
-        pIDSA->set(IDocumentSettingAccess::TABS_RELATIVE_TO_INDENT, bNew );
-        const BYTE nInv = INV_PRTAREA | INV_SIZE | INV_TABLE | INV_SECTION;
-        lcl_InvalidateAllCntnt( *this, nInv );
-    }
-}
-
 void ViewShell::SetAddExtLeading( bool bNew )
 {
     IDocumentSettingAccess* pIDSA = getIDocumentSettingAccess();
@@ -1231,16 +1216,23 @@ void ViewShell::VisPortChgd( const SwRect &rRect)
 
                     SwTwips nPageLeft = 0;
                     SwTwips nPageRight = 0;
-                    if (pPage->MarginSide())
+                    switch ( pPage->SidebarPosition() )
                     {
-                        nPageLeft =  aPageRect.Left() - nBorderWidth - nSidebarWidth;
-                        nPageRight = aPageRect.Right() + nBorderWidth + nShadowWidth;
-                    }
-                    else
-                    {
-                        // OD 03.03.2003 #107927# - use correct datatype
-                        nPageLeft =  aPageRect.Left() - nBorderWidth;
-                        nPageRight = aPageRect.Right() + nBorderWidth + nShadowWidth + nSidebarWidth;
+                        case sw::sidebarwindows::SIDEBAR_LEFT:
+                        {
+                            nPageLeft =  aPageRect.Left() - nBorderWidth - nSidebarWidth;
+                            nPageRight = aPageRect.Right() + nBorderWidth + nShadowWidth;
+                        }
+                        break;
+                        case sw::sidebarwindows::SIDEBAR_RIGHT:
+                        {
+                            nPageLeft =  aPageRect.Left() - nBorderWidth;
+                            nPageRight = aPageRect.Right() + nBorderWidth + nShadowWidth + nSidebarWidth;
+                        }
+                        break;
+                        case sw::sidebarwindows::SIDEBAR_NONE:
+                            // nothing to do
+                        break;
                     }
                     if( nPageLeft < nMinLeft )
                         nMinLeft = nPageLeft;
@@ -1309,6 +1301,15 @@ void ViewShell::VisPortChgd( const SwRect &rRect)
         Imp()->GetDrawView()->SetActualWin( GetWin() );
     }
     GetWin()->Update();
+
+    // --> OD 2010-02-11 #i88070#
+    if ( pPostItMgr )
+    {
+        pPostItMgr->Rescale();
+        pPostItMgr->CalcRects();
+        pPostItMgr->LayoutPostIts();
+    }
+    // <--
 
     if ( !bScrolled && pPostItMgr && pPostItMgr->HasNotes() && pPostItMgr->ShowNotes() )
         pPostItMgr->CorrectPositions();
@@ -1708,7 +1709,8 @@ void ViewShell::PaintDesktop( const SwRect &rRect )
                 aPageRect.SSize() = rFormatPage.Frm().SSize();
             }
 
-            const bool bSidebarRight = !static_cast<const SwPageFrm*>(pPage)->MarginSide();
+            const bool bSidebarRight =
+                static_cast<const SwPageFrm*>(pPage)->SidebarPosition() == sw::sidebarwindows::SIDEBAR_RIGHT;
             aPageRect.Pos().X() -= bSidebarRight ? 0 : nSidebarWidth;
             aPageRect.SSize().Width() += nSidebarWidth;
 
@@ -2591,6 +2593,15 @@ void ViewShell::InvalidateAccessibleParaAttrs( const SwTxtFrm& rTxtFrm )
     }
 }
 
+SwAccessibleMap* ViewShell::GetAccessibleMap()
+{
+    if ( Imp()->IsAccessible() )
+    {
+        return &(Imp()->GetAccessibleMap());
+    }
+
+    return 0;
+}
 /* -----------------------------06.05.2002 13:23------------------------------
 
  ---------------------------------------------------------------------------*/

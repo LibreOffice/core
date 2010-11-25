@@ -54,6 +54,9 @@ SwExtTextInput::SwExtTextInput( const SwPaM& rPam, Ring* pRing )
 
 SwExtTextInput::~SwExtTextInput()
 {
+    SwDoc *const pDoc = GetDoc();
+    if (pDoc->IsInDtor()) { return; /* #i58606# */ }
+
     SwTxtNode* pTNd = GetPoint()->nNode.GetNode().GetTxtNode();
     if( pTNd )
     {
@@ -69,7 +72,6 @@ SwExtTextInput::~SwExtTextInput()
 
             // damit Undo / Redlining usw. richtig funktioniert,
             // muss ueber die Doc-Schnittstellen gegangen werden !!!
-            SwDoc* pDoc = GetDoc();
             if(eInputLanguage != LANGUAGE_DONTKNOW)
             {
                 // --> FME 2005-02-11 #i41974# Only set language attribute

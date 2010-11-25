@@ -28,198 +28,146 @@
 #define SYMBOL_HXX
 
 #include <vos/refernce.hxx>
-#ifndef _FONT_HXX //autogen
 #include <vcl/font.hxx>
-#endif
 #include <tools/list.hxx>
 #include <tools/debug.hxx>
 #include <tools/dynary.hxx>
 #include <svl/lstner.hxx>
 #include <svl/svarray.hxx>
-#include "utility.hxx"
-#include <smmod.hxx>
 
-#define SS_ATTR_ACCESS      0x80
+#include <map>
+#include <vector>
+#include <set>
+
+#include "utility.hxx"
+#include "smmod.hxx"
+
 
 #define SYMBOLSET_NONE  0xFFFF
 #define SYMBOL_NONE     0xFFFF
 
-class SmSymSetManager;
 
 ////////////////////////////////////////////////////////////////////////////////
 
 inline const String GetExportSymbolName( const String &rUiSymbolName )
 {
-    return SM_MOD1()->GetLocSymbolData().GetExportSymbolName( rUiSymbolName );
+    return SM_MOD()->GetLocSymbolData().GetExportSymbolName( rUiSymbolName );
 }
 
 
 inline const String GetUiSymbolName( const String &rExportSymbolName )
 {
-    return SM_MOD1()->GetLocSymbolData().GetUiSymbolName( rExportSymbolName );
+    return SM_MOD()->GetLocSymbolData().GetUiSymbolName( rExportSymbolName );
 }
 
 inline const String GetExportSymbolSetName( const String &rUiSymbolSetName )
 {
-    return SM_MOD1()->GetLocSymbolData().GetExportSymbolSetName( rUiSymbolSetName );
+    return SM_MOD()->GetLocSymbolData().GetExportSymbolSetName( rUiSymbolSetName );
 }
 
 
 inline const String GetUiSymbolSetName( const String &rExportSymbolSetName )
 {
-    return SM_MOD1()->GetLocSymbolData().GetUiSymbolSetName( rExportSymbolSetName );
+    return SM_MOD()->GetLocSymbolData().GetUiSymbolSetName( rExportSymbolSetName );
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
 class SmSym
 {
-    friend class SmSymSetManager;
-
-    SmFace               Face;
-    String               Name;
-    String               aExportName;
-    String               aSetName;
-    SmSym               *pHashNext;
-    SmSymSetManager     *pSymSetManager;
-    sal_Unicode          Character;
-    BYTE                 Attribut;
-    BOOL                 bPredefined;
-    BOOL                 bDocSymbol;
+    SmFace              m_aFace;
+    String              m_aName;
+    String              m_aExportName;
+    String              m_aSetName;
+    sal_Unicode         m_cChar;
+    BOOL                m_bPredefined;
+    BOOL                m_bDocSymbol;
 
 public:
     SmSym();
-    SmSym(const SmSym& rSymbol);
     SmSym(const String& rName, const Font& rFont, sal_Unicode cChar,
           const String& rSet, BOOL bIsPredefined = FALSE);
+    SmSym(const SmSym& rSymbol);
 
     SmSym&      operator = (const SmSym& rSymbol);
 
-    const Font&     GetFace() const { return Face; }
-    sal_Unicode     GetCharacter() const { return Character; }
-    const String&   GetName() const { return Name; }
+    const Font&     GetFace() const { return m_aFace; }
+    sal_Unicode     GetCharacter() const { return m_cChar; }
+    const String&   GetName() const { return m_aName; }
 
-    void            SetFace( const Font& rFont )        { Face = rFont; }
-    void            SetCharacter( sal_Unicode cChar )   { Character = cChar; }
-    void            SetName( const String &rTxt )       { Name = rTxt; }
+    void            SetFace( const Font& rFont )        { m_aFace = rFont; }
+    void            SetCharacter( sal_Unicode cChar )   { m_cChar = cChar; }
 
-    BOOL            IsPredefined() const    { return bPredefined; }
-    const String &  GetSetName() const      { return aSetName; }
-    void            SetSetName( const String &rName )    { aSetName = rName; }
-    const String &  GetExportName() const   { return aExportName; }
-    void            SetExportName( const String &rName )    { aExportName = rName; }
+//! since the symbol name is also used as key in the map it should not be possible to change the name
+//! because ten the key would not be the same as its supposed copy here
+//    void            SetName( const String &rTxt )       { m_aName = rTxt; }
 
-    BOOL            IsDocSymbol() const         { return bDocSymbol; }
-    void            SetDocSymbol( BOOL bVal )   { bDocSymbol = bVal; }
+    BOOL            IsPredefined() const        { return m_bPredefined; }
+    const String &  GetSymbolSetName() const    { return m_aSetName; }
+    void            SetSymbolSetName( const String &rName )     { m_aSetName = rName; }
+    const String &  GetExportName() const       { return m_aExportName; }
+    void            SetExportName( const String &rName )        { m_aExportName = rName; }
+
+    BOOL            IsDocSymbol() const         { return m_bDocSymbol; }
+    void            SetDocSymbol( BOOL bVal )   { m_bDocSymbol = bVal; }
+
+    // true if rSymbol has the same name, font and character
+    bool            IsEqualInUI( const SmSym& rSymbol ) const;
 };
-
-DECLARE_LIST(SmListSym, SmSym *)
-SV_DECL_PTRARR( SymbolArray, SmSym *, 32, 32 )
 
 /**************************************************************************/
 
-class SmSymSet
+struct lt_String
 {
-    friend class SmSymSetManager;
-
-    SmListSym            SymbolList;
-    String               Name;
-    SmSymSetManager     *pSymSetManager;
-
-public:
-    SmSymSet();
-    SmSymSet(const SmSymSet& rSymbolSet);
-    SmSymSet(const String& rName);
-    ~SmSymSet();
-
-    SmSymSet&   operator = (const SmSymSet& rSymbolSet);
-
-    const String&   GetName() const { return Name; }
-    USHORT          GetCount() const { return (USHORT) SymbolList.Count(); }
-
-    const SmSym&    GetSymbol(USHORT SymbolNo) const
+    bool operator()( const String &r1, const String &r2 ) const
     {
-        DBG_ASSERT(SymbolList.GetObject(SymbolNo), "Symbol nicht vorhanden");
-        return *SymbolList.GetObject(SymbolNo);
+        // r1 < r2 ?
+        return r1.CompareTo( r2 ) == COMPARE_LESS;
     }
-
-    USHORT      AddSymbol(SmSym* pSymbol);
-    void        DeleteSymbol(USHORT SymbolNo);
-    SmSym *     RemoveSymbol(USHORT SymbolNo);
-    USHORT      GetSymbolPos(const String& rName);
-};
-
-DECLARE_DYNARRAY(SmArraySymSet, SmSymSet *)
-
-/**************************************************************************/
-
-class SmSymbolDialog;
-
-
-struct SmSymSetManager_Impl
-{
-    SmArraySymSet       SymbolSets;
-    SmSymSetManager &   rSymSetMgr;
-    SmSym**             HashEntries;
-    USHORT              NoSymbolSets;
-    USHORT              NoHashEntries;
-    BOOL                Modified;
-
-    SmSymSetManager_Impl( SmSymSetManager &rMgr, USHORT HashTableSize );
-    ~SmSymSetManager_Impl();
-
-    SmSymSetManager_Impl & operator = ( const SmSymSetManager_Impl &rImpl );
 };
 
 
-class SmSymSetManager : public SfxListener
-{
-    friend struct SmSymSetManager_Impl;
+// type of the actual container to hold the symbols
+typedef std::map< String, SmSym, lt_String >    SymbolMap_t;
 
-    SmSymSetManager_Impl *pImpl;
+// vector of pointers to the actual symbols in the above container
+typedef std::vector< const SmSym * >            SymbolPtrVec_t;
+
+class SmSymbolManager : public SfxListener
+{
+    SymbolMap_t         m_aSymbols;
+    bool                m_bModified;
 
     virtual void SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType,
                         const SfxHint& rHint, const TypeId& rHintType);
 
-    UINT32      GetHashIndex(const String& rSymbolName);
-    void        EnterHashTable(SmSym& rSymbol);
-    void        EnterHashTable(SmSymSet& rSymbolSet);
-    void        FillHashTable();
     void        Init();
     void        Exit();
 
 public:
-    SmSymSetManager(USHORT HashTableSize = 137);
-    SmSymSetManager(const SmSymSetManager& rSymbolSetManager);
-    ~SmSymSetManager();
+    SmSymbolManager();
+    SmSymbolManager(const SmSymbolManager& rSymbolSetManager);
+    ~SmSymbolManager();
 
-    SmSymSetManager&   operator = (const SmSymSetManager& rSymbolSetManager);
+    SmSymbolManager &   operator = (const SmSymbolManager& rSymbolSetManager);
 
-    void        GetSymbols( std::vector< SmSym > &rSymbols ) const;
+    // symbol sets are for UI purpose only, thus we assemble them here
+    std::set< String >      GetSymbolSetNames() const;
+    const SymbolPtrVec_t    GetSymbolSet(  const String& rSymbolSetName );
 
-
-    USHORT      AddSymbolSet(SmSymSet* pSymbolSet);
-    void        ChangeSymbolSet(SmSymSet* pSymbolSet);
-    void        DeleteSymbolSet(USHORT SymbolSetNo);
-    USHORT      GetSymbolSetPos(const String& rSymbolSetName) const;
-    USHORT      GetSymbolSetCount() const { return pImpl->NoSymbolSets; }
-    SmSymSet   *GetSymbolSet(USHORT SymbolSetNo) const
-    {
-        return pImpl->SymbolSets.Get(SymbolSetNo);
-    }
+    USHORT                  GetSymbolCount() const  { return static_cast< USHORT >(m_aSymbols.size()); }
+    const SymbolPtrVec_t    GetSymbols() const;
+    bool                    AddOrReplaceSymbol( const SmSym & rSymbol, bool bForceChange = false );
+    void                    RemoveSymbol( const String & rSymbolName );
 
     SmSym       *   GetSymbolByName(const String& rSymbolName);
     const SmSym *   GetSymbolByName(const String& rSymbolName) const
     {
-        return ((SmSymSetManager *) this)->GetSymbolByName(rSymbolName);
+        return ((SmSymbolManager *) this)->GetSymbolByName(rSymbolName);
     }
 
-    void            AddReplaceSymbol( const SmSym & rSymbol );
-    USHORT          GetSymbolCount() const;
-    const SmSym *   GetSymbolByPos( USHORT nPos ) const;
-
-    BOOL        IsModified() const { return pImpl->Modified; }
-    void        SetModified(BOOL Modify) { pImpl->Modified = Modify; }
+    bool        IsModified() const          { return m_bModified; }
+    void        SetModified(bool bModify)   { m_bModified = bModify; }
 
     void        Load();
     void        Save();

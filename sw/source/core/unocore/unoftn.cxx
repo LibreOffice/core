@@ -78,7 +78,9 @@ public:
         , m_rThis(rThis)
         , m_bIsEndnote(bIsEndnote)
         , m_ListenerContainer(static_cast< ::cppu::OWeakObject* >(&rThis))
-        , m_bIsDescriptor(0 == pFootnote)
+// #i111177#: unxsols4 (Sun C++ 5.9 SunOS_sparc) generates wrong code for this
+//        , m_bIsDescriptor(0 == pFootnote)
+        , m_bIsDescriptor((0 == pFootnote) ? true : false)
         , m_pFmtFtn(pFootnote)
     {
     }

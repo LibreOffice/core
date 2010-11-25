@@ -1435,7 +1435,7 @@ void SwFldMgr::UpdateCurFld(ULONG nFormat,
     }
     else
     {
-        pTmpFld = pCurFld->Copy();
+        pTmpFld = pCurFld->CopyField();
         bDelete = true;
     }
 

@@ -607,48 +607,9 @@ BOOL SwGlossaryHdl::Expand( const String& rShortName,
                 aShortName.Erase(nMaxLen);
                 aShortName.AppendAscii(" ...");
             }
-            if ( aShortName.EqualsAscii ( "StarWriterTeam", 0, 14 ) )
-            {
-                String sGraphicName ( RTL_CONSTASCII_USTRINGPARAM ( "StarWriter team photo" ) );
-                String sTeamCredits ( RTL_CONSTASCII_USTRINGPARAM ( "StarWriter team credits" ) );
-                pWrtShell->StartUndo ( UNDO_INSGLOSSARY );
-                pWrtShell->StartAllAction();
-                if(pWrtShell->HasSelection())
-                    pWrtShell->DelLeft();
-                Bitmap aBitmap ( SW_RES ( BMP_SW_TEAM_MUGSHOT ) );
-                pWrtShell->Insert ( aEmptyStr, aEmptyStr, aBitmap);
-                pWrtShell->SetFlyName ( sGraphicName );
-                SwTxtFmtColl* pColl = pWrtShell->GetTxtCollFromPool ( RES_POOLCOLL_LABEL_ABB );
-                const IDocumentFieldsAccess* pIDFA = pWrtShell->getIDocumentFieldsAccess();
-                SwFieldType* pType = pIDFA->GetFldType( RES_SETEXPFLD, pColl->GetName(), false );
-                sal_uInt16 nId = pIDFA->GetFldTypes()->GetPos( pType );
-                pWrtShell->InsertLabel( LTYPE_OBJECT, aEmptyStr, aEmptyStr, aEmptyStr, FALSE, nId, aEmptyStr );
-                pWrtShell->SwFEShell::SetFlyName( sTeamCredits );
-                pWrtShell->SwFEShell::SelectObj ( Point ( ULONG_MAX, ULONG_MAX ) );
-                pWrtShell->EnterStdMode();
-                pWrtShell->EndPara ( TRUE );
-                String aTmp ( SW_RES ( STR_SW_TEAM_NAMES ) );
-                pWrtShell->Insert ( aTmp );
-                SvxAdjustItem aAdjustItem( SVX_ADJUST_CENTER, RES_PARATR_ADJUST );
-                pWrtShell->SetAttr( aAdjustItem );
-                pWrtShell->SttPara ();
-                pWrtShell->SplitNode();
-                pWrtShell->Left(CRSR_SKIP_CHARS, FALSE, 1, FALSE );
-                SvxWeightItem aWeightItem ( WEIGHT_BOLD, RES_CHRATR_WEIGHT );
-                pWrtShell->Insert ( String ( RTL_CONSTASCII_USTRINGPARAM ( "The StarWriter team!" ) ) );
-                pWrtShell->SttPara ( TRUE );
-                pWrtShell->SetAttr( aWeightItem);
-                pWrtShell->GotoFly ( sTeamCredits);
-                pWrtShell->EndAllAction();
-                pWrtShell->EndUndo( UNDO_INSGLOSSARY );
-            }
-            else
-            {
-                String aTmp( SW_RES(STR_NOGLOS));
-                aTmp.SearchAndReplaceAscii("%1", aShortName);
-                InfoBox( pWrtShell->GetView().GetWindow(), aTmp ).Execute();
-
-            }
+            String aTmp( SW_RES(STR_NOGLOS));
+            aTmp.SearchAndReplaceAscii("%1", aShortName);
+            InfoBox( pWrtShell->GetView().GetWindow(), aTmp ).Execute();
         }
 
         return FALSE;

@@ -124,7 +124,8 @@ BOOL SwASC_AttrIter::OutAttr( xub_StrLen nSwPos )
                 switch( pHt->Which() )
                 {
                 case RES_TXTATR_FIELD:
-                    sOut = ((SwTxtFld*)pHt)->GetFld().GetFld()->Expand();
+                    sOut = static_cast<SwTxtFld const*>(pHt)->GetFld().GetFld()
+                            ->ExpandField(rWrt.pDoc->IsClipBoard());
                     break;
 
                 case RES_TXTATR_FTN:
@@ -169,7 +170,14 @@ static Writer& OutASC_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
     SwASC_AttrIter aAttrIter( (SwASCWriter&)rWrt, rNd, nStrPos );
 
     if( !nStrPos && rWrt.bExportPargraphNumbering )
-        rWrt.Strm().WriteUnicodeOrByteText( rNd.GetNumString() );
+    {
+        String numString( rNd.GetNumString() );
+        if (numString.Len())
+        {
+            numString.Append(' ');
+            rWrt.Strm().WriteUnicodeOrByteText(numString);
+        }
+    }
 
     String aStr( rNd.GetTxt() );
     if( rWrt.bASCII_ParaAsBlanc )

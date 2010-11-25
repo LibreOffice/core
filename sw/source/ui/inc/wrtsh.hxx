@@ -47,7 +47,7 @@ class SdrView;
 class SwView;
 class SvGlobalName;
 class SwInputFieldList;
-class SwSection;
+class SwSectionData;
 class Timer;
 class SvxMacro;
 class SwFmtINetFmt;
@@ -460,7 +460,7 @@ typedef BOOL (SwWrtShell:: *FNSimpleMove)();
     void AutoUpdatePara(SwTxtFmtColl* pColl, const SfxItemSet& rStyleSet);
 
     // Link fuers einfuegen von Bereichen uebers Drag&Drop/Clipboard
-    DECL_STATIC_LINK( SwWrtShell, InsertRegionDialog, SwSection* );
+    DECL_STATIC_LINK( SwWrtShell, InsertRegionDialog, SwSectionData* );
 
 
     //ctoren, der erstere ist eine Art kontrollierter copy ctor fuer weitere

@@ -773,7 +773,8 @@ void SwpHints::BuildPortions( SwTxtNode& rNode, SwTxtAttr& rNewHint,
 
                     // For each attribute in the automatic style check if it
                     // is also set the the new character style:
-                    SfxItemSet aNewSet( *pOldStyle->GetPool(), RES_CHRATR_BEGIN, RES_CHRATR_END );
+                    SfxItemSet aNewSet( *pOldStyle->GetPool(),
+                        aCharAutoFmtSetRange);
                     SfxItemIter aItemIter( *pOldStyle );
                     const SfxPoolItem* pItem = aItemIter.GetCurItem();
                     while( TRUE )
@@ -1042,7 +1043,8 @@ SwTxtAttr* MakeTxtAttr( SwDoc & rDoc, SfxPoolItem& rAttr,
         pNew = new SwTxtINetFmt( (SwFmtINetFmt&)rNew, nStt, nEnd );
         break;
     case RES_TXTATR_FIELD:
-        pNew = new SwTxtFld( (SwFmtFld&)rNew, nStt );
+        pNew = new SwTxtFld( static_cast<SwFmtFld &>(rNew), nStt,
+                    rDoc.IsClipBoard() );
         break;
     case RES_TXTATR_FLYCNT:
         {
@@ -2059,25 +2061,202 @@ BOOL SwTxtNode::GetAttr( SfxItemSet& rSet, xub_StrLen nStt, xub_StrLen nEnd,
     return rSet.Count() ? TRUE : FALSE;
 }
 
-int lcl_IsNewAttrInSet( const SwpHints& rHints, const SfxPoolItem& rItem,
-                        const xub_StrLen nEnd )
-{
-    int bIns = TRUE;
-    for( USHORT i = 0; i < rHints.Count(); ++i )
-    {
-        const SwTxtAttr *pOther = rHints[ i ];
-        if( *pOther->GetStart() )
-            break;
 
-        if( pOther->GetEnd() &&
-            *pOther->GetEnd() == nEnd &&
-            ( pOther->IsCharFmtAttr() || pOther->Which() == rItem.Which() ) )
+namespace
+{
+
+typedef std::pair<USHORT, USHORT> AttrSpan_t;
+typedef std::multimap<AttrSpan_t, const SwTxtAttr*> AttrSpanMap_t;
+
+
+struct IsAutoStyle
+{
+    bool
+    operator()(const AttrSpanMap_t::value_type& i_rAttrSpan)
+    const
+    {
+        return i_rAttrSpan.second && i_rAttrSpan.second->Which() == RES_TXTATR_AUTOFMT;
+    }
+};
+
+
+/** Removes from io_rAttrSet all items that are set by style on the
+    given span.
+  */
+struct RemovePresentAttrs
+{
+    RemovePresentAttrs(SfxItemSet& io_rAttrSet)
+        : m_rAttrSet(io_rAttrSet)
+    {
+    }
+
+    void
+    operator()(const AttrSpanMap_t::value_type& i_rAttrSpan)
+    const
+    {
+        if (!i_rAttrSpan.second)
         {
-            bIns = FALSE;
-            break;
+            return;
+        }
+
+        const SwTxtAttr* const pAutoStyle(i_rAttrSpan.second);
+        SfxItemIter aIter(m_rAttrSet);
+        const SfxPoolItem* pItem(aIter.GetCurItem());
+        while (true)
+        {
+            const USHORT nWhich(pItem->Which());
+            if (CharFmt::IsItemIncluded(nWhich, pAutoStyle))
+            {
+                m_rAttrSet.ClearItem(nWhich);
+            }
+
+            if (aIter.IsAtEnd())
+            {
+                break;
+            }
+            pItem = aIter.NextItem();
         }
     }
-    return bIns;
+
+private:
+    SfxItemSet& m_rAttrSet;
+};
+
+
+/** Collects all style-covered spans from i_rHints to o_rSpanMap. In
+    addition inserts dummy spans with pointer to format equal to 0 for
+    all gaps (i.e. spans not covered by any style). This simplifies
+    creation of autostyles for all needed spans, but it means all code
+    that tries to access the pointer has to check if it's non-null!
+ */
+void
+lcl_CollectHintSpans(const SwpHints& i_rHints, const USHORT nLength,
+        AttrSpanMap_t& o_rSpanMap)
+{
+    USHORT nLastEnd(0);
+
+    for (USHORT i(0); i != i_rHints.Count(); ++i)
+    {
+        const SwTxtAttr* const pHint(i_rHints[i]);
+        const USHORT nWhich(pHint->Which());
+        if (nWhich == RES_TXTATR_CHARFMT || nWhich == RES_TXTATR_AUTOFMT)
+        {
+            const AttrSpan_t aSpan(*pHint->GetStart(), *pHint->GetEnd());
+            o_rSpanMap.insert(AttrSpanMap_t::value_type(aSpan, pHint));
+
+            if (aSpan.first != nLastEnd)
+            {
+                // insert dummy span covering the gap
+                o_rSpanMap.insert(AttrSpanMap_t::value_type(
+                            AttrSpan_t(nLastEnd, aSpan.first), 0));
+            }
+
+            nLastEnd = aSpan.second;
+        }
+    }
+
+    // no hints at the end (special case: no hints at all in i_rHints)
+    if (nLastEnd != nLength && nLength != 0)
+    {
+        o_rSpanMap.insert(
+            AttrSpanMap_t::value_type(AttrSpan_t(nLastEnd, nLength), 0));
+    }
+}
+
+
+void
+lcl_FillWhichIds(const SfxItemSet& i_rAttrSet, std::vector<USHORT>& o_rClearIds)
+{
+    o_rClearIds.reserve(i_rAttrSet.Count());
+    SfxItemIter aIter(i_rAttrSet);
+    const SfxPoolItem* pItem(aIter.GetCurItem());
+    while (true)
+    {
+        o_rClearIds.push_back(pItem->Which());
+
+        if (aIter.IsAtEnd())
+        {
+            break;
+        }
+        pItem = aIter.NextItem();
+    }
+}
+
+struct SfxItemSetClearer
+{
+    SfxItemSet & m_rItemSet;
+    SfxItemSetClearer(SfxItemSet & rItemSet) : m_rItemSet(rItemSet) { }
+    void operator()(USHORT const nWhich) { m_rItemSet.ClearItem(nWhich); }
+};
+
+}
+
+
+/** Does the hard work of SwTxtNode::FmtToTxtAttr: the real conversion
+    of items to automatic styles.
+ */
+void
+SwTxtNode::impl_FmtToTxtAttr(const SfxItemSet& i_rAttrSet)
+{
+    typedef AttrSpanMap_t::iterator AttrSpanMap_iterator_t;
+    AttrSpanMap_t aAttrSpanMap;
+
+    if (i_rAttrSet.Count() == 0)
+    {
+        return;
+    }
+
+    // 1. Identify all spans in hints' array
+
+    lcl_CollectHintSpans(*m_pSwpHints, m_Text.Len(), aAttrSpanMap);
+
+    // 2. Go through all spans and insert new attrs
+
+    AttrSpanMap_iterator_t aCurRange(aAttrSpanMap.begin());
+    const AttrSpanMap_iterator_t aEnd(aAttrSpanMap.end());
+    while (aCurRange != aEnd)
+    {
+        typedef std::pair<AttrSpanMap_iterator_t, AttrSpanMap_iterator_t>
+            AttrSpanMapRange_t;
+        AttrSpanMapRange_t aRange(aAttrSpanMap.equal_range(aCurRange->first));
+
+        // 2a. Collect attributes to insert
+
+        SfxItemSet aCurSet(i_rAttrSet);
+        std::for_each(aRange.first, aRange.second, RemovePresentAttrs(aCurSet));
+
+        // 2b. Insert automatic style containing the collected attributes
+
+        if (aCurSet.Count() != 0)
+        {
+            AttrSpanMap_iterator_t aAutoStyleIt(
+                    std::find_if(aRange.first, aRange.second, IsAutoStyle()));
+            if (aAutoStyleIt != aRange.second)
+            {
+                // there already is an automatic style on that span:
+                // create new one and remove the original one
+                SwTxtAttr* const pAutoStyle(const_cast<SwTxtAttr*>(aAutoStyleIt->second));
+                const boost::shared_ptr<SfxItemSet> pOldStyle(
+                        static_cast<const SwFmtAutoFmt&>(
+                            pAutoStyle->GetAttr()).GetStyleHandle());
+                aCurSet.Put(*pOldStyle);
+
+                // remove the old hint
+                m_pSwpHints->Delete(pAutoStyle);
+                DestroyAttr(pAutoStyle);
+            }
+            m_pSwpHints->Insert(
+                    MakeTxtAttr(*GetDoc(), aCurSet,
+                        aCurRange->first.first, aCurRange->first.second));
+        }
+
+        aCurRange = aRange.second;
+    }
+
+    // 3. Clear items from the node
+    std::vector<USHORT> aClearedIds;
+    lcl_FillWhichIds(i_rAttrSet, aClearedIds);
+    ClearItemsFromAttrSet(aClearedIds);
 }
 
 void SwTxtNode::FmtToTxtAttr( SwTxtNode* pNd )
@@ -2090,91 +2269,79 @@ void SwTxtNode::FmtToTxtAttr( SwTxtNode* pNd )
 
     if( pNd == this )
     {
-        if( aThisSet.Count() )
-        {
-            SfxItemIter aIter( aThisSet );
-            const SfxPoolItem* pItem = aIter.GetCurItem();
-            std::vector<USHORT> aClearWhichIds;
-
-            while ( true )
-            {
-                if (lcl_IsNewAttrInSet( *m_pSwpHints, *pItem, GetTxt().Len() ))
-                {
-                    m_pSwpHints->SwpHintsArray::Insert(
-                        MakeTxtAttr( *GetDoc(),
-                            const_cast<SfxPoolItem&>(*pItem),
-                            0, GetTxt().Len() ) );
-                    aClearWhichIds.push_back( pItem->Which() );
-                }
-
-                if( aIter.IsAtEnd() )
-                    break;
-                pItem = aIter.NextItem();
-            }
-
-            ClearItemsFromAttrSet( aClearWhichIds );
-        }
+        impl_FmtToTxtAttr(aThisSet);
     }
     else
     {
+        // There are five possible combinations of items from this and
+        // pNd (pNd is the 'main' node):
+        //
+        //  case    pNd     this     action
+        //  ----------------------------------------------------
+        //     1     -       -      do nothing
+        //     2     -       a      convert item to attr of this
+        //     3     a       -      convert item to attr of pNd
+        //     4     a       a      clear item in this
+        //     5     a       b      convert item to attr of this
+
         SfxItemSet aNdSet( pNd->GetDoc()->GetAttrPool(), aCharFmtSetRange );
         if( pNd->HasSwAttrSet() && pNd->GetpSwAttrSet()->Count() )
             aNdSet.Put( *pNd->GetpSwAttrSet() );
 
         pNd->GetOrCreateSwpHints();
 
+        std::vector<USHORT> aProcessedIds;
+
         if( aThisSet.Count() )
         {
             SfxItemIter aIter( aThisSet );
-            const SfxPoolItem* pItem = aIter.GetCurItem(), *pNdItem;
+            const SfxPoolItem* pItem = aIter.GetCurItem(), *pNdItem = 0;
+            SfxItemSet aConvertSet( GetDoc()->GetAttrPool(), aCharFmtSetRange );
             std::vector<USHORT> aClearWhichIds;
 
-            while( TRUE )
+            while( true )
             {
-                if( ( SFX_ITEM_SET != aNdSet.GetItemState( pItem->Which(), FALSE,
-                    &pNdItem ) || *pItem != *pNdItem ) &&
-                    lcl_IsNewAttrInSet( *m_pSwpHints, *pItem, GetTxt().Len() ) )
+                if( SFX_ITEM_SET == aNdSet.GetItemState( pItem->Which(), FALSE, &pNdItem ) )
                 {
-                    m_pSwpHints->SwpHintsArray::Insert( MakeTxtAttr( *GetDoc(),
-                        const_cast<SfxPoolItem&>(*pItem),
-                        0, GetTxt().Len() ) );
-                    aClearWhichIds.push_back( pItem->Which() );
+                    if (*pItem == *pNdItem) // 4
+                    {
+                        aClearWhichIds.push_back( pItem->Which() );
+                    }
+                    else    // 5
+                    {
+                        aConvertSet.Put(*pItem);
+                    }
+                    aProcessedIds.push_back(pItem->Which());
                 }
-                aNdSet.ClearItem( pItem->Which() );
+                else    // 2
+                {
+                    aConvertSet.Put(*pItem);
+                }
 
                 if( aIter.IsAtEnd() )
                     break;
                 pItem = aIter.NextItem();
             }
+
+            // 4/ clear items of this that are set with the same value on pNd
             ClearItemsFromAttrSet( aClearWhichIds );
+
+            // 2, 5/ convert all other items to attrs
+            impl_FmtToTxtAttr(aConvertSet);
         }
 
-        if( aNdSet.Count() )
         {
-            SfxItemIter aIter( aNdSet );
-            const SfxPoolItem* pItem = aIter.GetCurItem();
-            std::vector<USHORT> aClearWhichIds;
+            std::for_each(aProcessedIds.begin(), aProcessedIds.end(),
+                    SfxItemSetClearer(aNdSet));
 
-            while ( true )
+            // 3/ convert items to attrs
+            pNd->impl_FmtToTxtAttr(aNdSet);
+
+            if( aNdSet.Count() )
             {
-                if ( lcl_IsNewAttrInSet( *pNd->m_pSwpHints, *pItem,
-                        pNd->GetTxt().Len() ) )
-                {
-                    pNd->m_pSwpHints->SwpHintsArray::Insert(
-                            MakeTxtAttr( *pNd->GetDoc(),
-                                         const_cast<SfxPoolItem&>(*pItem),
-                                         0, pNd->GetTxt().Len() ) );
-                }
-                aClearWhichIds.push_back( pItem->Which() );
-
-                if( aIter.IsAtEnd() )
-                    break;
-                pItem = aIter.NextItem();
+                SwFmtChg aTmp1( pNd->GetFmtColl() );
+                pNd->SwModify::Modify( &aTmp1, &aTmp1 );
             }
-
-            pNd->ClearItemsFromAttrSet( aClearWhichIds );
-            SwFmtChg aTmp1( pNd->GetFmtColl() );
-            pNd->SwModify::Modify( &aTmp1, &aTmp1 );
         }
     }
 

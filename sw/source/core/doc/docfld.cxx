@@ -1241,13 +1241,18 @@ void SwDoc::FldsToExpand( SwHash**& ppHashTbl, USHORT& rTblSize,
                 // Eintrag in den HashTable eintragen
                 // Eintrag vorhanden ?
                 pFnd = Find( rName, ppHashTbl, rTblSize, &nPos );
+                String const value(pFld->ExpandField(IsClipBoard()));
                 if( pFnd )
+                {
                     // Eintrag in der HashTabelle aendern
-                    ((_HashStr*)pFnd)->aSetStr = pFld->Expand();
+                    static_cast<_HashStr*>(pFnd)->aSetStr = value;
+                }
                 else
+                {
                     // neuen Eintrag einfuegen
                     *(ppHashTbl + nPos ) = new _HashStr( rName,
-                                pFld->Expand(), (_HashStr*)*(ppHashTbl + nPos));
+                        value, static_cast<_HashStr *>(*(ppHashTbl + nPos)));
+                }
             }
             break;
         }
@@ -1413,13 +1418,18 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
             // Eintrag vorhanden ?
             USHORT nPos;
             SwHash* pFnd = Find( rName, pHashStrTbl, nStrFmtCnt, &nPos );
+            String const value(pFld->ExpandField(IsClipBoard()));
             if( pFnd )
+            {
                 // Eintrag in der HashTabelle aendern
-                ((_HashStr*)pFnd)->aSetStr = pFld->Expand();
+                static_cast<_HashStr*>(pFnd)->aSetStr = value;
+            }
             else
+            {
                 // neuen Eintrag einfuegen
                 *(pHashStrTbl + nPos ) = new _HashStr( rName,
-                            pFld->Expand(), (_HashStr*)*(pHashStrTbl + nPos));
+                    value, static_cast<_HashStr *>(*(pHashStrTbl + nPos)));
+            }
         }
         break;
         case RES_GETEXPFLD:
@@ -2724,7 +2734,7 @@ bool SwDoc::UpdateFld(SwTxtFld * pDstTxtFld, SwField & rSrcFld,
         //pDstFld->ChangeFormat( rSrcFld.GetFormat() );
         //pDstFld->SetLanguage( rSrcFld.GetLanguage() );
 
-        SwField * pNewFld = rSrcFld.Copy();
+        SwField * pNewFld = rSrcFld.CopyField();
         pDstFmtFld->SetFld(pNewFld);
 
         switch( nFldWhich )

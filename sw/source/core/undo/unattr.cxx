@@ -1055,8 +1055,8 @@ void SwUndoAttr::RemoveIdx( SwDoc& rDoc )
             SwTxtNode* pTxtNd = rNds[ nNode ]->GetTxtNode();
             if( pTxtNd )
             {
-                SwIndex aIdx( pTxtNd, nCntnt );
-                SwTxtAttr * pTxtHt = pTxtNd->GetTxtAttr( aIdx, RES_TXTATR_FTN );
+                SwTxtAttr *const pTxtHt =
+                    pTxtNd->GetTxtAttrForCharAt(nCntnt, RES_TXTATR_FTN);
                 if( pTxtHt )
                 {
                     // ok, dann hole mal die Werte

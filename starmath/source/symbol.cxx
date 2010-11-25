@@ -34,11 +34,12 @@
 #include <ucbhelper/content.hxx>
 #include <vcl/msgbox.hxx>
 
-#ifndef _SV_RESARY_HXX
-#include <tools/resary.hxx>
-#endif
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
+
+#include <map>
+#include <vector>
+#include <iterator>
 
 #include "symbol.hxx"
 #include "view.hxx"
@@ -55,72 +56,38 @@ using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::uno;
 using namespace ::rtl;
 
-// Das hier muss auch mal alles "uberarbeitet werden. Insbesondere die nicht
-// funktionierende und bei l"oschen/"andern von Symbolen nicht gepflegte
-// Hash Tabelle!!!  Diese aktualisert sich erst im Wertzuweisungsoperator
-// beim Verlassen des 'SmSymDefineDialog's!
 
 /**************************************************************************/
-/*
-**
-**  MACRO DEFINTION
-**
-**/
-
-#define SF_SM20IDENT 0x03031963L
-#define SF_IDENT     0x30334D53L
-
-
-SV_IMPL_PTRARR( SymbolArray, SmSym * );
-
-/**************************************************************************/
-/*
-**
-**  DATA DEFINITION
-**
-**/
-
-long                SF_Ident = SF_IDENT;
-
-/**************************************************************************/
-/*
-**
-**  CLASS IMPLEMENTATION
-**
-**/
 
 SmSym::SmSym() :
-    Name(C2S("unknown")),
-    aSetName(C2S("unknown")),
-    pHashNext(0),
-    pSymSetManager(0),
-    Character('\0'),
-    bPredefined(FALSE),
-    bDocSymbol(FALSE)
+    m_aName(C2S("unknown")),
+    m_aSetName(C2S("unknown")),
+    m_cChar('\0'),
+    m_bPredefined(FALSE),
+    m_bDocSymbol(FALSE)
 {
-    aExportName = Name;
-    Face.SetTransparent(TRUE);
-    Face.SetAlign(ALIGN_BASELINE);
+    m_aExportName = m_aName;
+    m_aFace.SetTransparent(TRUE);
+    m_aFace.SetAlign(ALIGN_BASELINE);
 }
 
 
 SmSym::SmSym(const SmSym& rSymbol)
 {
-    pSymSetManager = 0;
     *this = rSymbol;
 }
 
 
-SmSym::SmSym(const String& rName, const Font& rFont, sal_Unicode aChar,
+SmSym::SmSym(const String& rName, const Font& rFont, sal_Unicode cChar,
              const String& rSet, BOOL bIsPredefined)
 {
-    Name        = aExportName   = rName;
+    m_aName     = m_aExportName   = rName;
 
-    Face        = rFont;
-    Face.SetTransparent(TRUE);
-    Face.SetAlign(ALIGN_BASELINE);
+    m_aFace     = rFont;
+    m_aFace.SetTransparent(TRUE);
+    m_aFace.SetAlign(ALIGN_BASELINE);
 
-    Character   = aChar;
+    m_cChar   = cChar;
 //! according to HDU this should not be used anymore now
 //! since this was necessary in the early days but should
 //! not be done now since this is handled now at a more
@@ -132,481 +99,231 @@ SmSym::SmSym(const String& rName, const Font& rFont, sal_Unicode aChar,
 //
 //    if (RTL_TEXTENCODING_SYMBOL == rFont.GetCharSet())
 //        Character |= 0xF000;
-    aSetName    = rSet;
-    bPredefined = bIsPredefined;
-    bDocSymbol  = FALSE;
-
-    pHashNext      = 0;
-    pSymSetManager = 0;
+    m_aSetName      = rSet;
+    m_bPredefined   = bIsPredefined;
+    m_bDocSymbol    = FALSE;
 }
 
 
 SmSym& SmSym::operator = (const SmSym& rSymbol)
 {
-    Name        = rSymbol.Name;
-    Face        = rSymbol.Face;
-    Character   = rSymbol.Character;
-    aSetName    = rSymbol.aSetName;
-    bPredefined = rSymbol.bPredefined;
-    bDocSymbol  = rSymbol.bDocSymbol;
-    aExportName = rSymbol.aExportName;
+    m_aName         = rSymbol.m_aName;
+    m_aExportName   = rSymbol.m_aExportName;
+    m_cChar         = rSymbol.m_cChar;
+    m_aFace         = rSymbol.m_aFace;
+    m_aSetName      = rSymbol.m_aSetName;
+    m_bPredefined   = rSymbol.m_bPredefined;
+    m_bDocSymbol    = rSymbol.m_bDocSymbol;
 
-    pHashNext = 0;
-
+    SmSymbolManager * pSymSetManager = &SM_MOD()->GetSymbolManager();
     if (pSymSetManager)
-        pSymSetManager->SetModified(TRUE);
+        pSymSetManager->SetModified(true);
 
     return *this;
 }
 
-/**************************************************************************/
 
-SmSymSet::SmSymSet() :
-    Name(C2S("unknown")),
-    pSymSetManager(0)
+bool SmSym::IsEqualInUI( const SmSym& rSymbol ) const
 {
-    SymbolList.Clear();
-}
-
-SmSymSet::SmSymSet(const SmSymSet& rSymbolSet)
-{
-    pSymSetManager = 0;
-    *this = rSymbolSet;
-}
-
-SmSymSet::SmSymSet(const String& rName)
-{
-    Name = rName;
-    SymbolList.Clear();
-
-    pSymSetManager = 0;
-}
-
-SmSymSet::~SmSymSet()
-{
-    for (USHORT i = 0; i < GetCount(); i++)
-        delete SymbolList.GetObject(i);
-}
-
-SmSymSet& SmSymSet::operator = (const SmSymSet& rSymbolSet)
-{
-    USHORT i;
-    for (i = 0; i < GetCount(); i++)
-        delete SymbolList.GetObject(i);
-
-    Name = rSymbolSet.Name;
-    SymbolList.Clear();
-    for (i = 0; i < rSymbolSet.GetCount(); i++)
-        AddSymbol(new SmSym(rSymbolSet.GetSymbol(i)));
-
-    if (pSymSetManager)
-        pSymSetManager->SetModified(TRUE);
-
-    return *this;
-}
-
-USHORT SmSymSet::AddSymbol(SmSym* pSymbol)
-{
-    DBG_ASSERT(pSymbol, "Kein Symbol");
-
-    if (pSymbol)
-        pSymbol->SetSetName( GetName() );
-    SymbolList.Insert(pSymbol, LIST_APPEND);
-    DBG_ASSERT(SymbolList.GetPos(pSymbol) == SymbolList.Count() - 1,
-        "Sm : ... ergibt falschen return Wert");
-
-    if (pSymSetManager)
-        pSymSetManager->SetModified(TRUE);
-
-    return (USHORT) SymbolList.Count() - 1;
-}
-
-void SmSymSet::DeleteSymbol(USHORT SymbolNo)
-{
-    delete RemoveSymbol(SymbolNo);
-}
-
-SmSym * SmSymSet::RemoveSymbol(USHORT SymbolNo)
-{
-    DBG_ASSERT(SymbolList.GetObject(SymbolNo), "Symbol nicht vorhanden");
-
-    SmSym *pSym = SymbolList.GetObject(SymbolNo);
-    SymbolList.Remove(SymbolNo);
-
-    if (pSymSetManager)
-        pSymSetManager->SetModified(TRUE);
-
-    return pSym;
-}
-
-USHORT SmSymSet::GetSymbolPos(const String& rName)
-{
-    for (USHORT i = 0; i < GetCount(); i++)
-        if (SymbolList.GetObject(i)->GetName() == rName)
-            return (i);
-
-    return SYMBOL_NONE;
+    return  m_aName == rSymbol.m_aName &&
+            m_aFace == rSymbol.m_aFace &&
+            m_cChar == rSymbol.m_cChar;
 }
 
 /**************************************************************************/
 
-SmSymSetManager_Impl::SmSymSetManager_Impl(
-        SmSymSetManager &rMgr, USHORT HashTableSize ) :
-
-    rSymSetMgr    (rMgr)
-{
-    NoSymbolSets    = 0;
-    NoHashEntries   = HashTableSize;
-    HashEntries     = new SmSym *[NoHashEntries];
-    memset( HashEntries, 0, sizeof(SmSym *) * NoHashEntries );
-    Modified        = FALSE;
-}
-
-
-SmSymSetManager_Impl::~SmSymSetManager_Impl()
-{
-    for (USHORT i = 0;  i < NoSymbolSets;  ++i)
-        delete SymbolSets.Get(i);
-    SymbolSets.Clear();
-
-    NoSymbolSets = 0;
-    if (HashEntries)
-    {
-        delete[] HashEntries;
-        HashEntries = 0;
-    }
-    NoHashEntries = 0;
-    Modified = FALSE;
-}
-
-
-SmSymSetManager_Impl & SmSymSetManager_Impl::operator = ( const SmSymSetManager_Impl &rImpl )
-{
-    //! rMySymSetMgr remains unchanged
-
-    NoHashEntries   = rImpl.NoHashEntries;
-    if (HashEntries)
-        delete [] HashEntries;
-    HashEntries = new SmSym *[NoHashEntries];
-    memset( HashEntries, 0, sizeof(SmSym *) * NoHashEntries );
-
-    NoSymbolSets    = 0;
-    SymbolSets.Clear();
-    for (USHORT i = 0;  i < rImpl.NoSymbolSets;  ++i)
-    {
-        rSymSetMgr.AddSymbolSet( new SmSymSet( *rImpl.rSymSetMgr.GetSymbolSet(i) ) );
-    }
-    DBG_ASSERT( NoSymbolSets == rImpl.NoSymbolSets,
-            "incorrect number of symbolsets" );
-
-    Modified        = TRUE;
-    return *this;
-}
-
-/**************************************************************************/
-
-void SmSymSetManager::SFX_NOTIFY(SfxBroadcaster& /*rBC*/, const TypeId& rBCType,
+void SmSymbolManager::SFX_NOTIFY(SfxBroadcaster& /*rBC*/, const TypeId& rBCType,
                               const SfxHint& /*rHint*/, const TypeId& rHintType)
 {
 }
 
 
-UINT32 SmSymSetManager::GetHashIndex(const String& rSymbolName)
+void SmSymbolManager::Init()
 {
-    UINT32 x = 1;
-    for (xub_StrLen i = 0; i < rSymbolName.Len(); i++)
-        x += x * rSymbolName.GetChar(i) + i;
-
-    return x % pImpl->NoHashEntries;
-}
-
-
-void SmSymSetManager::EnterHashTable(SmSym& rSymbol)
-{
-    int j = GetHashIndex( rSymbol.GetName() );
-    if (pImpl->HashEntries[j] == 0)
-        pImpl->HashEntries[j] = &rSymbol;
-    else
-    {
-        SmSym *p = pImpl->HashEntries[j];
-        while (p->pHashNext)
-            p = p->pHashNext;
-        p->pHashNext = &rSymbol;
-    }
-    rSymbol.pHashNext = 0;
-}
-
-
-void SmSymSetManager::EnterHashTable(SmSymSet& rSymbolSet)
-{
-    for (USHORT i = 0; i < rSymbolSet.GetCount(); i++)
-        EnterHashTable( *rSymbolSet.SymbolList.GetObject(i) );
-}
-
-void SmSymSetManager::FillHashTable()
-{
-    if (pImpl->HashEntries)
-    {
-        memset( pImpl->HashEntries, 0, pImpl->NoHashEntries * sizeof(SmSym *) );
-
-        for (UINT32 i = 0; i < pImpl->NoSymbolSets; i++)
-            EnterHashTable( *GetSymbolSet( (USHORT) i ) );
-    }
-}
-
-void SmSymSetManager::Init()
-{
-    SmModule *pp = SM_MOD1();
+    SmModule *pp = SM_MOD();
     StartListening(*pp->GetConfig());
 }
 
 
-void SmSymSetManager::Exit()
+void SmSymbolManager::Exit()
 {
-    SmModule *pp = SM_MOD1();
+    SmModule *pp = SM_MOD();
     EndListening(*pp->GetConfig());
 }
 
 
-SmSymSetManager::SmSymSetManager(USHORT HashTableSize)
+SmSymbolManager::SmSymbolManager()
 {
-    pImpl = new SmSymSetManager_Impl( *this, HashTableSize );
+    m_bModified     = false;
 }
 
 
-SmSymSetManager::SmSymSetManager(const SmSymSetManager& rSymbolSetManager) :
+SmSymbolManager::SmSymbolManager(const SmSymbolManager& rSymbolSetManager) :
     SfxListener()
 {
-    pImpl = new SmSymSetManager_Impl( *this, rSymbolSetManager.pImpl->NoHashEntries );
-    *pImpl = *rSymbolSetManager.pImpl;
+    m_aSymbols      = rSymbolSetManager.m_aSymbols;
+    m_bModified     = true;
 }
 
 
-SmSymSetManager::~SmSymSetManager()
+SmSymbolManager::~SmSymbolManager()
 {
-    delete pImpl;
-    pImpl = 0;
 }
 
-SmSymSetManager& SmSymSetManager::operator = (const SmSymSetManager& rSymbolSetManager)
+
+SmSymbolManager& SmSymbolManager::operator = (const SmSymbolManager& rSymbolSetManager)
 {
-    *pImpl = *rSymbolSetManager.pImpl;
+    m_aSymbols      = rSymbolSetManager.m_aSymbols;
+    m_bModified     = true;
     return *this;
 }
 
-USHORT SmSymSetManager::AddSymbolSet(SmSymSet* pSymbolSet)
+
+SmSym *SmSymbolManager::GetSymbolByName(const String& rSymbolName)
 {
-    if (pImpl->NoSymbolSets >= pImpl->SymbolSets.GetSize())
-        pImpl->SymbolSets.SetSize(pImpl->NoSymbolSets + 1);
-
-    pImpl->SymbolSets.Put(pImpl->NoSymbolSets++, pSymbolSet);
-
-    pSymbolSet->pSymSetManager = this;
-
-    for (USHORT i = 0; i < pSymbolSet->GetCount(); i++)
-        pSymbolSet->SymbolList.GetObject(i)->pSymSetManager = this;
-
-    FillHashTable();
-    pImpl->Modified = TRUE;
-
-    return (USHORT) (pImpl->NoSymbolSets - 1);
-}
-
-void SmSymSetManager::ChangeSymbolSet(SmSymSet* pSymbolSet)
-{
-    if (pSymbolSet)
-    {
-        FillHashTable();
-        pImpl->Modified = TRUE;
-    }
-}
-
-void SmSymSetManager::DeleteSymbolSet(USHORT SymbolSetNo)
-{
-    delete pImpl->SymbolSets.Get(SymbolSetNo);
-    pImpl->NoSymbolSets--;
-
-    for (UINT32 i = SymbolSetNo; i < pImpl->NoSymbolSets; i++)
-        pImpl->SymbolSets.Put(i, pImpl->SymbolSets.Get(i + 1));
-
-    FillHashTable();
-
-    pImpl->Modified = TRUE;
-}
-
-
-USHORT SmSymSetManager::GetSymbolSetPos(const String& rSymbolSetName) const
-{
-    for (USHORT i = 0; i < pImpl->NoSymbolSets; i++)
-        if (pImpl->SymbolSets.Get(i)->GetName() == rSymbolSetName)
-            return (i);
-
-    return SYMBOLSET_NONE;
-}
-
-SmSym *SmSymSetManager::GetSymbolByName(const String& rSymbolName)
-{
-    SmSym *pSym = pImpl->HashEntries[GetHashIndex(rSymbolName)];
-    while (pSym)
-    {
-        if (pSym->Name == rSymbolName)
-            break;
-        pSym = pSym->pHashNext;
-    }
-
-    return pSym;
-}
-
-
-void SmSymSetManager::AddReplaceSymbol( const SmSym &rSymbol )
-{
-    SmSym *pSym = GetSymbolByName( rSymbol.GetName() );
-    if (pSym)
-    {
-        *pSym = rSymbol;
-    }
-    else
-    {
-        USHORT nPos = GetSymbolSetPos( rSymbol.GetSetName() );
-        if (SYMBOLSET_NONE == nPos)
-        {
-            AddSymbolSet( new SmSymSet( rSymbol.GetSetName() ) );
-            nPos = GetSymbolSetPos( rSymbol.GetSetName() );
-        }
-        DBG_ASSERT( nPos != SYMBOLSET_NONE, "SymbolSet not found");
-        SmSym *pTmpSym = new SmSym( rSymbol );
-        GetSymbolSet( nPos )->AddSymbol( pTmpSym );
-        EnterHashTable( *pTmpSym );
-    }
-    SetModified( TRUE );
-}
-
-
-USHORT SmSymSetManager::GetSymbolCount() const
-{
-    USHORT nRes = 0;
-    USHORT nSets = GetSymbolSetCount();
-    for (USHORT i = 0;  i < nSets;  ++i)
-        nRes = nRes + GetSymbolSet(i)->GetCount();
-    return nRes;
-}
-
-
-const SmSym * SmSymSetManager::GetSymbolByPos( USHORT nPos ) const
-{
-    const SmSym *pRes = 0;
-
-    INT16 nIdx = 0;
-    USHORT nSets = GetSymbolSetCount();
-    USHORT i = 0;
-    while (i < nSets  &&  !pRes)
-    {
-        USHORT nEntries = GetSymbolSet(i)->GetCount();
-        if (nPos < nIdx + nEntries)
-            pRes = &GetSymbolSet(i)->GetSymbol( nPos - nIdx );
-        else
-            nIdx = nIdx + nEntries;
-        ++i;
-    }
-
+    SmSym *pRes = NULL;
+    SymbolMap_t::iterator aIt( m_aSymbols.find( rSymbolName ) );
+    if (aIt != m_aSymbols.end())
+        pRes = &aIt->second;
     return pRes;
 }
 
 
-void SmSymSetManager::GetSymbols( std::vector< SmSym > &rSymbols ) const
+const SymbolPtrVec_t SmSymbolManager::GetSymbols() const
 {
-    INT32 nCount = GetSymbolCount();
-    rSymbols.resize( nCount );
-    USHORT nPos = 0;
-    std::vector< SmSym >::iterator aIt( rSymbols.begin() );
-    std::vector< SmSym >::iterator aEnd( rSymbols.end() );
-    while (aIt != aEnd)
-    {
-        const SmSym *pSym = GetSymbolByPos( nPos++ );
-        DBG_ASSERT( pSym, "symbol missing" );
-        if (pSym)
-            *aIt++ = *pSym;
-    }
-    DBG_ASSERT( nPos == nCount, "index out of range?" );
+    SymbolPtrVec_t aRes;
+    SymbolMap_t::const_iterator aIt( m_aSymbols.begin() );
+    for ( ; aIt != m_aSymbols.end(); ++aIt)
+        aRes.push_back( &aIt->second );
+//    DBG_ASSERT( sSymbols.size() == m_aSymbols.size(), "number of symbols mismatch " );
+    return aRes;
 }
 
 
-void SmSymSetManager::Load()
+bool SmSymbolManager::AddOrReplaceSymbol( const SmSym &rSymbol, bool bForceChange )
 {
-    std::vector< SmSym > aSymbols;
-    SmMathConfig &rCfg = *SM_MOD1()->GetConfig();
-    rCfg.GetSymbols( aSymbols );
-    INT32 nSymbolCount = aSymbols.size();
+    bool bAdded = false;
 
-    USHORT i;
-    for (i = 0;  i < nSymbolCount;  ++i)
+    const String aSymbolName( rSymbol.GetName() );
+    if (aSymbolName.Len() > 0 && rSymbol.GetSymbolSetName().Len() > 0)
     {
-        const SmSym &rSym = aSymbols[i];
-        DBG_ASSERT( rSym.Name.Len() > 0, "symbol without name!" );
-        if (rSym.Name.Len() > 0)
-        {
-            SmSymSet *pSymSet = 0;
-            const String &rSetName = rSym.GetSetName();
-            USHORT nSetPos = GetSymbolSetPos( rSetName );
-            if (SYMBOLSET_NONE != nSetPos)
-                pSymSet = GetSymbolSet( nSetPos );
-            else
-            {
-                pSymSet = new SmSymSet( rSetName );
-                AddSymbolSet( pSymSet );
-            }
+        const SmSym *pFound = GetSymbolByName( aSymbolName );
+        const bool bSymbolConflict = pFound && !pFound->IsEqualInUI( rSymbol );
 
-            pSymSet->AddSymbol( new SmSym( rSym ) );
+        // avoid having the same symbol name twice but with different symbols in use
+        if (!pFound || bForceChange)
+        {
+            m_aSymbols[ aSymbolName ] = rSymbol;
+            bAdded = true;
+        }
+        else if (pFound && !bForceChange && bSymbolConflict)
+        {
+                // TODO: but what ...
+                DBG_ASSERT( 0, "symbol conflict, different symbol with same name found!" );
         }
     }
-    // build HashTables
-    INT32 nSymbolSetCount = GetSymbolSetCount();
-    for (i = 0;  i < nSymbolSetCount;  ++i)
-        ChangeSymbolSet( GetSymbolSet( i ) );
+
+    DBG_ASSERT( bAdded, "failed to add symbol" );
+    if (bAdded)
+        m_bModified = true;
+
+    return bAdded;
+}
+
+
+void SmSymbolManager::RemoveSymbol( const String & rSymbolName )
+{
+    if (rSymbolName.Len() > 0)
+    {
+        size_t nOldSize = m_aSymbols.size();
+        m_aSymbols.erase( rSymbolName );
+        m_bModified = nOldSize != m_aSymbols.size();
+    }
+}
+
+
+std::set< String > SmSymbolManager::GetSymbolSetNames() const
+{
+    std::set< String >  aRes;
+    SymbolMap_t::const_iterator aIt( m_aSymbols.begin() );
+    for ( ; aIt != m_aSymbols.end(); ++aIt )
+        aRes.insert( aIt->second.GetSymbolSetName() );
+    return aRes;
+}
+
+
+const SymbolPtrVec_t SmSymbolManager::GetSymbolSet( const String& rSymbolSetName )
+{
+    SymbolPtrVec_t aRes;
+    if (rSymbolSetName.Len() > 0)
+    {
+        SymbolMap_t::const_iterator aIt( m_aSymbols.begin() );
+        for ( ; aIt != m_aSymbols.end(); ++aIt )
+        {
+            if (aIt->second.GetSymbolSetName() == rSymbolSetName)
+                aRes.push_back( &aIt->second );
+        }
+    }
+    return aRes;
+}
+
+
+void SmSymbolManager::Load()
+{
+    std::vector< SmSym > aSymbols;
+    SmMathConfig &rCfg = *SM_MOD()->GetConfig();
+    rCfg.GetSymbols( aSymbols );
+    size_t nSymbolCount = aSymbols.size();
+
+    m_aSymbols.clear();
+    for (size_t i = 0;  i < nSymbolCount;  ++i)
+    {
+        const SmSym &rSym = aSymbols[i];
+        DBG_ASSERT( rSym.GetName().Len() > 0, "symbol without name!" );
+        if (rSym.GetName().Len() > 0)
+            AddOrReplaceSymbol( rSym );
+    }
+    m_bModified = true;
 
     if (0 == nSymbolCount)
     {
         DBG_ERROR( "no symbol set found" );
-        pImpl->Modified = FALSE;
+        m_bModified = false;
     }
 }
 
-void SmSymSetManager::Save()
+void SmSymbolManager::Save()
 {
-    SmMathConfig &rCfg = *SM_MOD1()->GetConfig();
-
-    // get number of Symbols
-    USHORT nSymbolCount = 0;
-    USHORT nSetCount = GetSymbolSetCount();
-    USHORT i;
-    for (i = 0;  i < nSetCount;  ++i)
-        nSymbolCount = nSymbolCount + GetSymbolSet( i )->GetCount();
-
-    if (nSymbolCount)
+    if (m_bModified)
     {
-        USHORT nSaveSymbolCnt = 0;
-        const SmSym **pSymbols = new const SmSym* [ nSymbolCount ];
-        const SmSym **pSym = pSymbols;
-        for (i = 0;  i < nSetCount;  ++i)
+        SmMathConfig &rCfg = *SM_MOD()->GetConfig();
+
+#if 0
+        USHORT nSymbolCount     = GetSymbolCount();
+        USHORT nSaveSymbolCnt   = 0;
+        const SmSym **pSymbols  = new const SmSym* [ nSymbolCount ];
+        const SmSym **pSym      = pSymbols;
+        for (USHORT j = 0;  j < nSymbolCount;  ++j)
         {
-            const SmSymSet *pSymSet = GetSymbolSet( i );
-            USHORT n = pSymSet->GetCount();
-            for (USHORT j = 0;  j < n;  ++j)
+            const SmSym &rSym = *pSymSet->GetSymbol( j );
+            if (!rSym.IsDocSymbol())
             {
-                const SmSym &rSym = pSymSet->GetSymbol( j );
-                if (!rSym.IsDocSymbol())
-                {
-                    *pSym++ = &rSym;
-                    ++nSaveSymbolCnt;
-                }
+                *pSym++ = &rSym;
+                ++nSaveSymbolCnt;
             }
         }
         DBG_ASSERT(pSym - pSymbols == nSaveSymbolCnt, "wrong number of symbols" );
-
+#endif
+        SymbolPtrVec_t aTmp( GetSymbols() );
         std::vector< SmSym > aSymbols;
-        GetSymbols( aSymbols );
+        for (size_t i = 0; i < aTmp.size(); ++i)
+            aSymbols.push_back( *aTmp[i] );
         rCfg.SetSymbols( aSymbols );
+#if 0
         delete [] pSymbols;
+#endif
+
+        m_bModified = false;
     }
 }
 

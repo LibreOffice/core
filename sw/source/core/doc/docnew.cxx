@@ -1084,14 +1084,10 @@ void SwDoc::InitTOXTypes()
 /*-- 08.05.2009 10:07:57---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-SwDoc* SwDoc::CreateCopy() const
+SfxObjectShell* SwDoc::CreateCopy(bool bCallInitNew ) const
 {
     SwDoc* pRet = new SwDoc;
     //copy settings
-/*
-    //aNodes( this ),
-    //aUndoNodes( this ),
-    mpAttrPool(new SwAttrPool(this)),*/
     USHORT __FAR_DATA aRangeOfDefaults[] = {
         RES_FRMATR_BEGIN, RES_FRMATR_END-1,
         RES_CHRATR_BEGIN, RES_CHRATR_END-1,
@@ -1120,143 +1116,8 @@ SwDoc* SwDoc::CreateCopy() const
     if( aNewDefaults.Count() )
         pRet->SetDefault( aNewDefaults );
 
-    /*
-    pDfltFrmFmt( new SwFrmFmt( GetAttrPool(), sFrmFmtStr, 0 ) ),
-    pEmptyPageFmt( new SwFrmFmt( GetAttrPool(), sEmptyPageStr, pDfltFrmFmt ) ),
-    pColumnContFmt( new SwFrmFmt( GetAttrPool(), sColumnCntStr, pDfltFrmFmt ) ),
-    pDfltCharFmt( new SwCharFmt( GetAttrPool(), sCharFmtStr, 0 ) ),
-    pDfltTxtFmtColl( new SwTxtFmtColl( GetAttrPool(), sTxtCollStr ) ),
-    pDfltGrfFmtColl( new SwGrfFmtColl( GetAttrPool(), sGrfCollStr ) ),
-    pFrmFmtTbl( new SwFrmFmts() ),
-    pCharFmtTbl( new SwCharFmts() ),
-    pSpzFrmFmtTbl( new SwSpzFrmFmts() ),
-    pSectionFmtTbl( new SwSectionFmts() ),
-    pTblFrmFmtTbl( new SwFrmFmts() ),
-    pTxtFmtCollTbl( new SwTxtFmtColls() ),
-    pGrfFmtCollTbl( new SwGrfFmtColls() ),
-    pBookmarkTbl( new SwBookmarks( 0, 16 ) ),
-    pTOXTypes( new SwTOXTypes() ),
-    pDefTOXBases( new SwDefTOXBase_Impl() ),
-    pLayout( 0 ),                   // Rootframe des spezifischen Layouts.
-    pDrawModel( 0 ),
-    pUndos( new SwUndos( 0, 20 ) ),
-    pUpdtFlds( new SwDocUpdtFld() ),
-    pFldTypes( new SwFldTypes() ),
-    pVirDev( 0 ),
-    pPrt( 0 ),
-    pPrtData( 0 ),
-    pGlossaryDoc( 0 ),
-    pOutlineRule( 0 ),
-    pFtnInfo( new SwFtnInfo ),
-    pEndNoteInfo( new SwEndNoteInfo ),
-    pLineNumberInfo( new SwLineNumberInfo ),
-    pFtnIdxs( new SwFtnIdxs ),
-    pDocStat( new SwDocStat ),
-    pDocShell( 0 ),
-    pDocShRef( 0 ),
-    pLinkMgr( new sfx2::LinkManager( 0 ) ),
-    pACEWord( 0 ),
-    pURLStateChgd( 0 ),
-    pNumberFormatter( 0 ),
-    pNumRuleTbl( new SwNumRuleTbl ),
-    // --> OD 2008-03-26 #refactorlists#
-    maLists(),
-    maListStyleLists(),
-    // <--
-    pRedlineTbl( new SwRedlineTbl ),
-    pAutoFmtRedlnComment( 0 ),
-    pUnoCrsrTbl( new SwUnoCrsrTbl( 0, 16 ) ),
-    pPgPViewPrtData( 0 ),
-    pExtInputRing( 0 ),
-    pLayouter( 0 ),
-    // --> OD 2008-03-07 #refactorlists#
-    pStyleAccess( 0 ),
-    // <--
-    pLayoutCache( 0 ),
-    pUnoCallBack(new SwUnoCallBack(0)),
-    mpGrammarContact( 0 ),
-    aChartDataProviderImplRef(),
-    pChartControllerHelper( 0 ),
-    // --> OD 2007-10-31 #i83479#
-    mpListItemsList( new tImplSortedNodeNumList() ),
-    // <--
-    nUndoPos( 0 ),
-    nUndoSavePos( 0 ),
-    nUndoCnt( 0 ),
-    nUndoSttEnd( 0 ),
-    nAutoFmtRedlnCommentNo( 0 ),
-    nLinkUpdMode( GLOBALSETTING ),
-    eFldUpdMode( AUTOUPD_GLOBALSETTING ),
-    eRedlineMode((RedlineMode_t)(nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE)),
-    eChrCmprType( CHARCOMPRESS_NONE ),
-    mReferenceCount(0),
-    mIdleBlockCount(0),
-    nLockExpFld( 0 ),
-    mbReadlineChecked(false),
-    mbWinEncryption(sal_False),
-    // --> OD 2005-02-11 #i38810#
-    mbLinksUpdated( sal_False ),
-    mbClipBoard( false ),
-    mbColumnSelection( false ),
-    // i#78591#
-    mbProtectForm(false),*/
     pRet->n32DummyCompatabilityOptions1 = n32DummyCompatabilityOptions1;
     pRet->n32DummyCompatabilityOptions2 = n32DummyCompatabilityOptions2;
-    /*
-    mbStartIdleTimer(sal_False)
-{
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDoc::SwDoc" );
-
-    mbGlossDoc =
-    mbModified =
-    mbDtor =
-    mbUndo =
-    mbPageNums =
-    mbLoaded =
-    mbUpdateExpFld =
-    mbNewDoc =
-    mbCopyIsMove =
-    mbNoDrawUndoObj =
-    mbBrowseMode =
-    mbInReading =
-    mbInXMLImport =
-    mbUpdateTOX =
-    mbInLoadAsynchron =
-    mbHTMLMode =
-    mbInCallModified =
-    mbIsGlobalDoc =
-    mbGlblDocSaveLinks =
-    mbIsLabelDoc =
-    mbIsAutoFmtRedline =
-    mbOLEPrtNotifyPending =
-    mbAllOLENotify =
-    mbIsRedlineMove =
-    mbInsOnlyTxtGlssry =
-    mbContains_MSVBasic =
-    mbKernAsianPunctuation =
-#ifndef PRODUCT
-    mbXMLExport =
-#endif
-    // --> OD 2006-03-21 #b6375613#
-    mbApplyWorkaroundForB6375613 =
-    // <--
-                            false;
-
-    mbGroupUndo =
-    mbNewFldLst =
-    mbVisibleLinks =
-    mbPurgeOLE =
-                            true;
-
-    //
-    // COMPATIBILITY FLAGS START
-    //
-
-    // Note: Any non-hidden compatibility flag should obtain its default
-    // by asking SvtCompatibilityOptions, see below.
-    //
-    const SvtCompatibilityOptions aOptions;
-     */
     pRet->mbParaSpaceMax                          = mbParaSpaceMax                          ;
     pRet->mbParaSpaceMaxAtPages                   = mbParaSpaceMaxAtPages                   ;
     pRet->mbTabCompat                             = mbTabCompat                             ;
@@ -1286,92 +1147,16 @@ SwDoc* SwDoc::CreateCopy() const
     //
     // COMPATIBILITY FLAGS END
     //
-    /*
-    pMacroTable = new SvxMacroTableDtor;
-
-    mpGrammarContact = ::createGrammarContact();
-
-    // Formate
-    pFrmFmtTbl->Insert(pDfltFrmFmt, 0 );
-    pCharFmtTbl->Insert(pDfltCharFmt, 0 );
-
-    // FmtColls
-    // TXT
-    pTxtFmtCollTbl->Insert(pDfltTxtFmtColl, 0 );
-    // GRF
-    pGrfFmtCollTbl->Insert(pDfltGrfFmtColl, 0 );
-
-    // PageDesc, EmptyPageFmt und ColumnFmt anlegen
-    if ( !aPageDescs.Count() )
-        GetPageDescFromPool( RES_POOLPAGE_STANDARD );
-
-        //Leere Seite Einstellen.
-    pEmptyPageFmt->SetFmtAttr( SwFmtFrmSize( ATT_FIX_SIZE ) );
-        //BodyFmt fuer Spalten Einstellen.
-    pColumnContFmt->SetFmtAttr( SwFmtFillOrder( ATT_LEFT_TO_RIGHT ) );
-
-    _InitFieldTypes();
-
-    // lege (fuer die Filter) eine Default-OutlineNumRule an
-    // --> OD 2008-02-11 #newlistlevelattrs#
-    pOutlineRule = new SwNumRule( String::CreateFromAscii( SwNumRule::GetOutlineRuleName() ),
-                                  // --> OD 2008-06-06 #i89178#
-                                  numfunc::GetDefaultPositionAndSpaceMode(),
-                                  // <--
-                                  OUTLINE_RULE );
-    // <--
-    // #115901#
-    AddNumRule(pOutlineRule);
-    // --> OD 2005-10-21 - counting of phantoms depends on <IsOldNumbering()>
-    pOutlineRule->SetCountPhantoms( !get(IDocumentSettingAccess::OLD_NUMBERING) );
-    // <--
-
-    new SwTxtNode( SwNodeIndex( aUndoNodes.GetEndOfContent() ), pDfltTxtFmtColl );
-    new SwTxtNode( SwNodeIndex( aNodes.GetEndOfContent() ),
-                    GetTxtCollFromPool( RES_POOLCOLL_STANDARD ));
-
-    // den eigenen IdleTimer setzen
-    aIdleTimer.SetTimeout( 600 );
-    aIdleTimer.SetTimeoutHdl( LINK(this, SwDoc, DoIdleJobs) );
-
-    aOLEModifiedTimer.SetTimeout( 1000 );
-    aOLEModifiedTimer.SetTimeoutHdl( LINK( this, SwDoc, DoUpdateModifiedOLE ));
-
-    // DBMgr anlegen
-    pNewDBMgr = new SwNewDBMgr;
-
-    // create TOXTypes
-    ShellResource* pShellRes = ViewShell::GetShellRes();
-
-    SwTOXType * pNew = new SwTOXType(TOX_CONTENT,   pShellRes->aTOXContentName        );
-    pTOXTypes->Insert( pNew, pTOXTypes->Count() );
-    pNew = new SwTOXType(TOX_INDEX,                 pShellRes->aTOXIndexName  );
-    pTOXTypes->Insert( pNew, pTOXTypes->Count() );
-    pNew = new SwTOXType(TOX_USER,                  pShellRes->aTOXUserName  );
-    pTOXTypes->Insert( pNew, pTOXTypes->Count() );
-    pNew = new SwTOXType(TOX_ILLUSTRATIONS,         pShellRes->aTOXIllustrationsName );
-    pTOXTypes->Insert( pNew, pTOXTypes->Count() );
-    pNew = new SwTOXType(TOX_OBJECTS,               pShellRes->aTOXObjectsName       );
-    pTOXTypes->Insert( pNew, pTOXTypes->Count() );
-    pNew = new SwTOXType(TOX_TABLES,                pShellRes->aTOXTablesName        );
-    pTOXTypes->Insert( pNew, pTOXTypes->Count() );
-    pNew = new SwTOXType(TOX_AUTHORITIES,           pShellRes->aTOXAuthoritiesName   );
-    pTOXTypes->Insert( pNew, pTOXTypes->Count() );
-
-    {
-        SfxItemSet aIgnorableParagraphItems( GetAttrPool(),
-                                             RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END-1,
-                                             0 );
-        pStyleAccess = createStyleManager( &aIgnorableParagraphItems );
-    }
-
-    ResetModified();
-
-*/
-    pRet->ReplaceStyles( *(SwDoc*)this );
+    pRet->ReplaceStyles( * const_cast< SwDoc*>( this ));
+    SfxObjectShellRef aDocShellRef = const_cast< SwDocShell* >( GetDocShell() );
+    pRet->SetRefForDocShell( boost::addressof(aDocShellRef) );
+    SfxObjectShellRef xRetShell = new SwDocShell( pRet, SFX_CREATE_MODE_STANDARD );
+    if( bCallInitNew )
+        xRetShell->DoInitNew();
     //copy content
     pRet->Paste( *this );
-    return pRet;
+    pRet->SetRefForDocShell( 0 );
+    return xRetShell;
 }
 /*-- 08.05.2009 10:52:40---------------------------------------------------
     copy document content - code from SwFEShell::Paste( SwDoc* , BOOL  )
@@ -1407,8 +1192,8 @@ void SwDoc::Paste( const SwDoc& rSource )
 
             {
                 aIndexBefore++;
-                SwPaM aPaM(SwPosition(aIndexBefore, 0),
-                           SwPosition(rInsPos.nNode, 0));
+                SwPaM aPaM(SwPosition(aIndexBefore),
+                           SwPosition(rInsPos.nNode));
 
                 MakeUniqueNumRules(aPaM);
             }

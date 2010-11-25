@@ -1392,14 +1392,17 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
         case POR_PARA :
             {
                 SwTxtNode* pNd = (SwTxtNode*)pFrm->GetTxtNode();
-                SwIndex aIndex( pNd, rInf.GetIdx() );
-                const SwTxtAttr* pInetFmtAttr = pNd->GetTxtAttr( aIndex, RES_TXTATR_INETFMT );
+                SwTxtAttr const*const pInetFmtAttr =
+                    pNd->GetTxtAttrAt(rInf.GetIdx(), RES_TXTATR_INETFMT);
 
                 String sStyleName;
                 if ( !pInetFmtAttr )
                 {
-                    const SwTxtAttr* pCharFmtAttr = pNd->GetTxtAttr( aIndex, RES_TXTATR_CHARFMT );
-                    const SwCharFmt* pCharFmt = pCharFmtAttr ? pCharFmtAttr->GetCharFmt().GetCharFmt() : 0;
+                    ::std::vector<SwTxtAttr *> const charAttrs(
+                        pNd->GetTxtAttrsAt(rInf.GetIdx(), RES_TXTATR_CHARFMT));
+                    // TODO: handle more than 1 char style?
+                    const SwCharFmt* pCharFmt = (charAttrs.size())
+                        ? (*charAttrs.begin())->GetCharFmt().GetCharFmt() : 0;
                     if ( pCharFmt )
                         SwStyleNameMapper::FillProgName( pCharFmt->GetName(), sStyleName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, sal_True );
                 }

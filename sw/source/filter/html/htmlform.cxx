@@ -547,18 +547,20 @@ void SwHTMLImageWatcher::init( sal_Int32 Width, sal_Int32 Height )
                 0 != (pANd = pDoc->GetNodes()[pAPos->nNode]) &&
                 0 != (pTblNd = pANd->FindTableNode()) )
             {
-                sal_Bool bLastGrf = !pTblNd->GetTable().DecGrfsThatResize();
+                const sal_Bool bLastGrf = !pTblNd->GetTable().DecGrfsThatResize();
                 SwHTMLTableLayout *pLayout =
                     pTblNd->GetTable().GetHTMLTableLayout();
                 if( pLayout )
                 {
-                    sal_uInt16 nBrowseWidth =
+                    const sal_uInt16 nBrowseWidth =
                         pLayout->GetBrowseWidthByTable( *pDoc );
 
-                    if( nBrowseWidth )
+                    if ( nBrowseWidth )
+                    {
                         pLayout->Resize( nBrowseWidth, sal_True, sal_True,
                                          bLastGrf ? HTMLTABLE_RESIZE_NOW
                                                   : 500 );
+                    }
                 }
             }
         }

@@ -59,8 +59,7 @@ SLO1FILES =  \
         $(SLO)$/SwXFilterOptions.obj\
         $(SLO)$/RefreshListenerContainer.obj \
         $(SLO)$/unomodule.obj \
-        $(SLO)$/unodoc.obj \
-                $(SLO)$/warnpassword.obj
+        $(SLO)$/unodoc.obj 
 
 SLO2FILES = \
     $(SLO)$/swdetect.obj		\

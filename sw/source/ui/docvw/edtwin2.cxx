@@ -35,9 +35,7 @@
 #include <stdio.h>
 #endif
 
-#ifndef _HELP_HXX //autogen
 #include <vcl/help.hxx>
-#endif
 #include <svl/stritem.hxx>
 #include <unotools/securityoptions.hxx>
 #include <tools/urlobj.hxx>
@@ -46,24 +44,15 @@
 #include <editeng/flditem.hxx>
 #include <svl/urihelper.hxx>
 #include <svx/svdotext.hxx>
-#ifndef _OUTLINER_HXX //autogen
-#define _EEITEMID_HXX
 #include <editeng/outliner.hxx>
-#endif
 #include <svl/itemiter.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdpagv.hxx>
 #include <swmodule.hxx>
-#ifndef _MODCFG_HXX
 #include <modcfg.hxx>
-#endif
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <wrtsh.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <edtwin.hxx>
 #include <dpage.hxx>
 #include <shellres.hxx>
@@ -80,14 +69,9 @@
 #include <txttxmrk.hxx>
 #include <uitool.hxx>
 #include <viewopt.hxx>
-#ifndef _DOCVW_HRC
 #include <docvw.hrc>
-#endif
-#ifndef _UTLUI_HRC
 #include <utlui.hrc>
-#endif
 
-#include <postit.hxx>
 #include <PostItMgr.hxx>
 #include <fmtfld.hxx>
 
@@ -320,7 +304,8 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                         {
                             USHORT nOldSubType = pFld->GetSubType();
                             ((SwField*)pFld)->SetSubType(nsSwExtendedSubType::SUB_CMD);
-                            sTxt = pFld->Expand();
+                            sTxt =
+                                pFld->ExpandField(rSh.GetDoc()->IsClipBoard());
                             ((SwField*)pFld)->SetSubType(nOldSubType);
                         }
                         break;

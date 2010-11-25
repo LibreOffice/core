@@ -1120,7 +1120,12 @@ void SwRedlineSaveData::RedlineToDoc( SwPaM& rPam )
     if (rDoc.GetDocShell() && (pRedl->GetComment() != String(::rtl::OUString::createFromAscii(""))) )
         rDoc.GetDocShell()->Broadcast(SwRedlineHint(pRedl,SWREDLINE_INSERTED));
     //
-    rDoc.AppendRedline( pRedl, true );
+#if OSL_DEBUG_LEVEL > 0
+    bool const bSuccess =
+#endif
+        rDoc.AppendRedline( pRedl, true );
+    OSL_ENSURE(bSuccess,
+        "SwRedlineSaveData::RedlineToDoc: insert redline failed");
     rDoc.SetRedlineMode_intern( eOld );
 }
 

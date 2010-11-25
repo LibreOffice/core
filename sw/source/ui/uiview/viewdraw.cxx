@@ -520,7 +520,8 @@ sal_Bool SwView::EnterDrawTextMode(const Point& aDocPos)
 /******************************************************************************
  *  Beschreibung: DrawTextEditMode einschalten
  ******************************************************************************/
-sal_Bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin, sal_Bool bIsNewObj)
+sal_Bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin,
+        bool bIsNewObj, bool bSetSelectionToStart)
 {
     SwWrtShell *pSh = &GetWrtShell();
     SdrView *pSdrView = pSh->GetDrawView();
@@ -606,7 +607,11 @@ sal_Bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin, 
             Color aBackground(pSh->GetShapeBackgrd());
             pView->SetBackgroundColor(aBackground);
         }
+
+        // editing should start at the end of text, spell checking at the beginning ...
         ESelection aNewSelection(EE_PARA_NOT_FOUND, EE_INDEX_NOT_FOUND, EE_PARA_NOT_FOUND, EE_INDEX_NOT_FOUND);
+        if (bSetSelectionToStart)
+            aNewSelection = ESelection();
         pView->SetSelection(aNewSelection);
     }
 

@@ -300,7 +300,7 @@ public:
 
 class SmShowSymbolSet : public Control
 {
-    SmSymSet    aSymbolSet;
+    SymbolPtrVec_t aSymbolSet;
     ScrollBar   aVScrollBar;
     Size        aOutputSize;
     Link        aSelectHdlLink;
@@ -318,7 +318,7 @@ class SmShowSymbolSet : public Control
 public:
     SmShowSymbolSet(Window *pParent, const ResId& rResId);
 
-    void    SetSymbolSet(const SmSymSet& rSymbolSet);
+    void    SetSymbolSet(const SymbolPtrVec_t& rSymbolSet);
 
     void    SelectSymbol(USHORT nSymbol);
     USHORT  GetSelectSymbol() const { return nSelectSymbol; }
@@ -360,8 +360,10 @@ class SmSymbolDialog : public ModalDialog
     PushButton      aEditBtn;
 
     SmViewShell        &rViewSh;
-    SmSymSetManager    &rSymSetMgr;
-    const SmSymSet     *pSymSet;
+    SmSymbolManager    &rSymbolMgr;
+
+    String              aSymbolSetName;
+    SymbolPtrVec_t      aSymbolSet;
 
     OutputDevice       *pFontListDev;
 
@@ -373,7 +375,7 @@ class SmSymbolDialog : public ModalDialog
     DECL_LINK(GetClickHdl, Button *);
 
     void            FillSymbolSets(BOOL bDeleteText = TRUE);
-    void            SetSymbolSetManager(SmSymSetManager &rMgr);
+    void            SetSymbolSetManager(SmSymbolManager &rMgr);
     const SmSym    *GetSymbol() const;
     void            InitColor_Impl();
 
@@ -381,7 +383,7 @@ class SmSymbolDialog : public ModalDialog
 
 public:
     SmSymbolDialog(Window * pParent, OutputDevice *pFntListDevice,
-            SmSymSetManager &rSymSetMgr, SmViewShell &rViewShell, BOOL bFreeRes = TRUE);
+            SmSymbolManager &rSymbolMgr, SmViewShell &rViewShell, BOOL bFreeRes = TRUE);
     virtual ~SmSymbolDialog();
 
     BOOL    SelectSymbolSet(const XubString &rSymbolSetName);
@@ -439,8 +441,8 @@ class SmSymDefineDialog : public ModalDialog
     Image           aRigthArrow_Im;
     Image           aRigthArrow_Im_HC;     // hi-contrast version
 
-    SmSymSetManager     aSymSetMgrCopy,
-                       &rSymSetMgr;
+    SmSymbolManager     aSymbolMgrCopy,
+                       &rSymbolMgr;
     const SmSym        *pOrigSymbol;
 
     const SubsetMap    *pSubsetMap;
@@ -462,7 +464,7 @@ class SmSymDefineDialog : public ModalDialog
     void    FillFonts(BOOL bDeleteText = TRUE);
     void    FillStyles(BOOL bDeleteText = TRUE);
 
-    void    SetSymbolSetManager(const SmSymSetManager &rMgr);
+    void    SetSymbolSetManager(const SmSymbolManager &rMgr);
     void    SetFont(const XubString &rFontName, const XubString &rStyleName);
     void    SetOrigSymbol(const SmSym *pSymbol, const XubString &rSymbolSetName);
     void    UpdateButtons();
@@ -474,18 +476,18 @@ class SmSymDefineDialog : public ModalDialog
     BOOL    SelectFont(const XubString &rFontName, BOOL bApplyFont);
     BOOL    SelectStyle(const XubString &rStyleName, BOOL bApplyFont);
 
-
-    SmSymSet              *GetSymbolSet(const ComboBox &rComboBox);
-    inline const SmSymSet *GetSymbolSet(const ComboBox &rComboBox) const;
-    SmSym                 *GetSymbol(const ComboBox &rComboBox);
-    inline const SmSym    *GetSymbol(const ComboBox &rComboBox) const;
+    SmSym       * GetSymbol(const ComboBox &rComboBox);
+    const SmSym * GetSymbol(const ComboBox &rComboBox) const
+    {
+        return ((SmSymDefineDialog *) this)->GetSymbol(rComboBox);
+    }
 
     void            InitColor_Impl();
 
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
 public:
-    SmSymDefineDialog(Window *pParent, OutputDevice *pFntListDevice, SmSymSetManager &rMgr, BOOL bFreeRes = TRUE);
+    SmSymDefineDialog(Window *pParent, OutputDevice *pFntListDevice, SmSymbolManager &rMgr, BOOL bFreeRes = TRUE);
     ~SmSymDefineDialog();
 
     using OutputDevice::SetFont;
@@ -493,44 +495,31 @@ public:
     // Dialog
     virtual short   Execute();
 
-    inline BOOL SelectOldSymbolSet(const XubString &rSymbolSetName);
-    inline BOOL SelectOldSymbol(const XubString &rSymbolName);
-    inline BOOL SelectSymbolSet(const XubString &rSymbolSetName);
-    inline BOOL SelectSymbol(const XubString &rSymbolName);
+    BOOL SelectOldSymbolSet(const XubString &rSymbolSetName)
+    {
+        return SelectSymbolSet(aOldSymbolSets, rSymbolSetName, FALSE);
+    }
+
+    BOOL SelectOldSymbol(const XubString &rSymbolName)
+    {
+        return SelectSymbol(aOldSymbols, rSymbolName, FALSE);
+    }
+
+    BOOL SelectSymbolSet(const XubString &rSymbolSetName)
+    {
+        return SelectSymbolSet(aSymbolSets, rSymbolSetName, FALSE);
+    }
+
+    BOOL SelectSymbol(const XubString &rSymbolName)
+    {
+        return SelectSymbol(aSymbols, rSymbolName, FALSE);
+    }
+
     BOOL        SelectFont(const XubString &rFontName)   { return SelectFont(rFontName, TRUE); }
     BOOL        SelectStyle(const XubString &rStyleName) { return SelectStyle(rStyleName, TRUE); };
     void        SelectChar(xub_Unicode cChar);
 };
 
-inline const SmSymSet * SmSymDefineDialog::GetSymbolSet(const ComboBox &rComboBox) const
-{
-    return ((SmSymDefineDialog *) this)->GetSymbolSet(rComboBox);
-}
-
-inline const SmSym * SmSymDefineDialog::GetSymbol(const ComboBox &rComboBox) const
-{
-    return ((SmSymDefineDialog *) this)->GetSymbol(rComboBox);
-}
-
-inline BOOL SmSymDefineDialog::SelectOldSymbolSet(const XubString &rSymbolSetName)
-{
-    return SelectSymbolSet(aOldSymbolSets, rSymbolSetName, FALSE);
-}
-
-inline BOOL SmSymDefineDialog::SelectOldSymbol(const XubString &rSymbolName)
-{
-    return SelectSymbol(aOldSymbols, rSymbolName, FALSE);
-}
-
-inline BOOL SmSymDefineDialog::SelectSymbolSet(const XubString &rSymbolSetName)
-{
-    return SelectSymbolSet(aSymbolSets, rSymbolSetName, FALSE);
-}
-
-inline BOOL SmSymDefineDialog::SelectSymbol(const XubString &rSymbolName)
-{
-    return SelectSymbol(aSymbols, rSymbolName, FALSE);
-}
 
 
 #endif

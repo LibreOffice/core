@@ -369,7 +369,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     }
 
     String tmp(m_pImpl->m_sName);
-    SwSection aSect(eType, pDoc->GetUniqueSectionName(&tmp));
+    SwSectionData aSect(eType, pDoc->GetUniqueSectionName(&tmp));
     aSect.SetCondition(m_pImpl->m_pProps->m_sCondition);
     ::rtl::OUStringBuffer sLinkNameBuf(m_pImpl->m_pProps->m_sLinkFileName);
     sLinkNameBuf.append(sfx2::cTokenSeperator);
@@ -379,9 +379,9 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     aSect.SetLinkFileName(sLinkNameBuf.makeStringAndClear());
 
     aSect.SetHidden(m_pImpl->m_pProps->m_bHidden);
-    aSect.SetProtect(m_pImpl->m_pProps->m_bProtect);
+    aSect.SetProtectFlag(m_pImpl->m_pProps->m_bProtect);
     // --> FME 2004-06-22 #114856# edit in readonly sections
-    aSect.SetEditInReadonly(m_pImpl->m_pProps->m_bEditInReadonly);
+    aSect.SetEditInReadonlyFlag(m_pImpl->m_pProps->m_bEditInReadonly);
     // <--
 
     SfxItemSet aSet(pDoc->GetAttrPool(),
@@ -427,11 +427,11 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     // section password
     if (m_pImpl->m_pProps->m_Password.getLength() > 0)
     {
-        aSect.SetPasswd(m_pImpl->m_pProps->m_Password);
+        aSect.SetPassword(m_pImpl->m_pProps->m_Password);
     }
 
     SwSection *const pRet =
-        pDoc->InsertSwSection( aPam, aSect, aSet.Count() ? &aSet : 0 );
+        pDoc->InsertSwSection( aPam, aSect, 0, aSet.Count() ? &aSet : 0 );
     pRet->GetFmt()->Add(m_pImpl.get());
     pRet->GetFmt()->SetXObject(static_cast< ::cppu::OWeakObject*>(this));
 
@@ -549,6 +549,56 @@ SwXTextSection::getPropertySetInfo() throw (uno::RuntimeException)
 /* -----------------------------12.02.01 10:45--------------------------------
 
  ---------------------------------------------------------------------------*/
+static void
+lcl_UpdateLinkType(SwSection & rSection, bool const bLinkUpdateAlways = true)
+{
+    if (rSection.GetType() == DDE_LINK_SECTION)
+    {
+        // set update type; needs an established link
+        if (!rSection.IsConnected())
+        {
+            rSection.CreateLink(CREATE_CONNECT);
+        }
+        rSection.SetUpdateType( static_cast< USHORT >((bLinkUpdateAlways)
+            ? sfx2::LINKUPDATE_ALWAYS : sfx2::LINKUPDATE_ONCALL) );
+    }
+}
+
+static void
+lcl_UpdateSection(SwSectionFmt *const pFmt,
+    ::std::auto_ptr<SwSectionData> const& pSectionData,
+    ::std::auto_ptr<SfxItemSet> const& pItemSet,
+    bool const bLinkModeChanged, bool const bLinkUpdateAlways = true)
+{
+    if (pFmt)
+    {
+        SwSection & rSection = *pFmt->GetSection();
+        SwDoc *const pDoc = pFmt->GetDoc();
+        SwSectionFmts const& rFmts = pDoc->GetSections();
+        UnoActionContext aContext(pDoc);
+        for (sal_uInt16 i = 0; i < rFmts.Count(); i++)
+        {
+            if (rFmts[i]->GetSection()->GetSectionName()
+                    == rSection.GetSectionName())
+            {
+                pDoc->UpdateSection(i, *pSectionData, pItemSet.get(),
+                        pDoc->IsInReading());
+                {
+                    // temporarily remove actions to allow cursor update
+                    UnoActionRemoveContext aRemoveContext( pDoc );
+                }
+
+                if (bLinkModeChanged)
+                {
+                    lcl_UpdateLinkType(rSection, bLinkUpdateAlways);
+                }
+                // section found and processed: break from loop
+                break;
+            }
+        }
+    }
+}
+
 void SwXTextSection::Impl::SetPropertyValues_Impl(
     const uno::Sequence< OUString >& rPropertyNames,
     const uno::Sequence< uno::Any >& rValues)
@@ -566,12 +616,9 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         throw uno::RuntimeException();
     }
 
-    SwSection aSection(CONTENT_SECTION, aEmptyStr);
-    SwSection *const pSect = (pFmt) ? pFmt->GetSection() : 0;
-    if (pFmt)
-    {
-        aSection = *pSect;
-    }
+    ::std::auto_ptr<SwSectionData> const pSectionData(
+        (pFmt) ? new SwSectionData(*pFmt->GetSection()) : 0);
+
     OUString const*const pPropertyNames = rPropertyNames.getConstArray();
     uno::Any const*const pValues = rValues.getConstArray();
     ::std::auto_ptr<SfxItemSet> pItemSet;
@@ -609,7 +656,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                 }
                 else
                 {
-                    aSection.SetCondition(uTmp);
+                    pSectionData->SetCondition(uTmp);
                 }
             }
             break;
@@ -637,16 +684,16 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                 }
                 else
                 {
-                    String sLinkFileName(aSection.GetLinkFileName());
-                    if (aSection.GetType() != DDE_LINK_SECTION)
+                    String sLinkFileName(pSectionData->GetLinkFileName());
+                    if (pSectionData->GetType() != DDE_LINK_SECTION)
                     {
                         sLinkFileName = sfx2::cTokenSeperator;
                         sLinkFileName += sfx2::cTokenSeperator;
-                        aSection.SetType(DDE_LINK_SECTION);
+                        pSectionData->SetType(DDE_LINK_SECTION);
                     }
                     sLinkFileName.SetToken(pEntry->nWID - WID_SECT_DDE_TYPE,
                             sfx2::cTokenSeperator, sTmp);
-                    aSection.SetLinkFileName(sLinkFileName);
+                    pSectionData->SetLinkFileName(sLinkFileName);
                 }
             }
             break;
@@ -683,10 +730,10 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                 }
                 else
                 {
-                    if (aSection.GetType() != FILE_LINK_SECTION &&
+                    if (pSectionData->GetType() != FILE_LINK_SECTION &&
                         aLink.FileURL.getLength())
                     {
-                        aSection.SetType(FILE_LINK_SECTION);
+                        pSectionData->SetType(FILE_LINK_SECTION);
                     }
                     ::rtl::OUStringBuffer sFileNameBuf;
                     if (aLink.FileURL.getLength())
@@ -700,14 +747,14 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                     sFileNameBuf.append(aLink.FilterName);
                     sFileNameBuf.append(sfx2::cTokenSeperator);
                     sFileNameBuf.append(
-                        aSection.GetLinkFileName().GetToken(2,
+                        pSectionData->GetLinkFileName().GetToken(2,
                             sfx2::cTokenSeperator));
                     const ::rtl::OUString sFileName(
                             sFileNameBuf.makeStringAndClear());
-                    aSection.SetLinkFileName(sFileName);
+                    pSectionData->SetLinkFileName(sFileName);
                     if (sFileName.getLength() < 3)
                     {
-                        aSection.SetType(CONTENT_SECTION);
+                        pSectionData->SetType(CONTENT_SECTION);
                     }
                 }
             }
@@ -723,21 +770,21 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                 }
                 else
                 {
-                    if (aSection.GetType() != FILE_LINK_SECTION &&
+                    if (pSectionData->GetType() != FILE_LINK_SECTION &&
                         sLink.getLength())
                     {
-                        aSection.SetType(FILE_LINK_SECTION);
+                        pSectionData->SetType(FILE_LINK_SECTION);
                     }
-                    String sSectLink(aSection.GetLinkFileName());
+                    String sSectLink(pSectionData->GetLinkFileName());
                     while (3 < sSectLink.GetTokenCount(sfx2::cTokenSeperator))
                     {
                         sSectLink += sfx2::cTokenSeperator;
                     }
                     sSectLink.SetToken(2, sfx2::cTokenSeperator, sLink);
-                    aSection.SetLinkFileName(sSectLink);
+                    pSectionData->SetLinkFileName(sSectLink);
                     if (sSectLink.Len() < 3)
                     {
-                        aSection.SetType(CONTENT_SECTION);
+                        pSectionData->SetType(CONTENT_SECTION);
                     }
                 }
             }
@@ -755,7 +802,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                 }
                 else
                 {
-                    aSection.SetHidden(!bVal);
+                    pSectionData->SetHidden(!bVal);
                 }
             }
             break;
@@ -772,9 +819,9 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                 }
                 else
                 {
-                    if (aSection.GetCondition().Len() != 0)
+                    if (pSectionData->GetCondition().Len() != 0)
                     {
-                        aSection.SetCondHidden(!bVal);
+                        pSectionData->SetCondHidden(!bVal);
                     }
                 }
             }
@@ -792,7 +839,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                 }
                 else
                 {
-                    aSection.SetProtect(bVal);
+                    pSectionData->SetProtectFlag(bVal);
                 }
             }
             break;
@@ -810,7 +857,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                 }
                 else
                 {
-                    aSection.SetEditInReadonly(bVal);
+                    pSectionData->SetEditInReadonlyFlag(bVal);
                 }
             }
             // <--
@@ -825,7 +872,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                 }
                 else
                 {
-                    aSection.SetPasswd(aSeq);
+                    pSectionData->SetPassword(aSeq);
                 }
             }
             break;
@@ -925,38 +972,8 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         }
     }
 
-    if (pFmt)
-    {
-        SwDoc* pDoc = pFmt->GetDoc();
-        const SwSectionFmts& rFmts = pDoc->GetSections();
-        UnoActionContext aContext(pDoc);
-        for (sal_uInt16 i = 0; i < rFmts.Count(); i++)
-        {
-            if (rFmts[i]->GetSection()->GetName() == pSect->GetName())
-            {
-                pDoc->ChgSection(i, aSection, pItemSet.get(),
-                        pDoc->IsInReading());
-                {
-                    // temporarily remove actions to allow cursor update
-                    UnoActionRemoveContext aRemoveContext( pDoc );
-                }
-
-                //SwSection* pSect = pFmt->GetSection();
-                if (bLinkModeChanged && pSect->GetType() == DDE_LINK_SECTION)
-                {
-                    // set update type; needs an established link
-                    if (!pSect->IsConnected())
-                    {
-                        pSect->CreateLink(CREATE_CONNECT);
-                    }
-                    pSect->SetUpdateType( static_cast< USHORT >((bLinkMode) ?
-                        sfx2::LINKUPDATE_ALWAYS : sfx2::LINKUPDATE_ONCALL) );
-                }
-                // section found and processed: break from loop
-                break;
-            }
-        }
-    }
+    lcl_UpdateSection(pFmt, pSectionData, pItemSet, bLinkModeChanged,
+        bLinkMode);
 }
 
 void SAL_CALL
@@ -1147,7 +1164,8 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
             {
                 if (pFmt)
                 {
-                    pRet[nProperty] <<= OUString(pFmt->GetSection()->GetName());
+                    pRet[nProperty] <<=
+                        OUString(pFmt->GetSection()->GetSectionName());
                 }
             }
             break;
@@ -1222,7 +1240,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
             case WID_SECT_PASSWORD:
             {
                 pRet[nProperty] <<= (m_bIsDescriptor)
-                    ? m_pProps->m_Password : pSect->GetPasswd();
+                    ? m_pProps->m_Password : pSect->GetPassword();
             }
             break;
             default:
@@ -1562,12 +1580,6 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
         throw uno::RuntimeException();
     }
 
-    SwSection aSection(CONTENT_SECTION, aEmptyStr);
-    SwSection *const pSect = (pFmt) ? pFmt->GetSection() : 0;
-    if (pFmt)
-    {
-        aSection = *pSect;
-    }
     SfxItemPropertySimpleEntry const*const pEntry =
         m_pImpl->m_rPropSet.getPropertyMap()->getByName(rPropertyName);
     if (!pEntry)
@@ -1584,7 +1596,12 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
             static_cast<cppu::OWeakObject *>(this));
     }
 
+    ::std::auto_ptr<SwSectionData> const pSectionData(
+        (pFmt) ? new SwSectionData(*pFmt->GetSection()) : 0);
+
     ::std::auto_ptr<SfxItemSet> pNewAttrSet;
+    bool bLinkModeChanged = false;
+
     switch (pEntry->nWID)
     {
         case WID_SECT_CONDITION:
@@ -1595,7 +1612,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
             }
             else
             {
-                aSection.SetCondition(aEmptyStr);
+                pSectionData->SetCondition(aEmptyStr);
             }
         }
         break;
@@ -1604,10 +1621,27 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
         case WID_SECT_DDE_ELEMENT   :
         case WID_SECT_LINK     :
         case WID_SECT_REGION :
-            aSection.SetType(CONTENT_SECTION);
+            if (m_pImpl->m_bIsDescriptor)
+            {
+                m_pImpl->m_pProps->m_bDDE = false;
+                m_pImpl->m_pProps->m_sLinkFileName = ::rtl::OUString();
+                m_pImpl->m_pProps->m_sSectionRegion = ::rtl::OUString();
+                m_pImpl->m_pProps->m_sSectionFilter = ::rtl::OUString();
+            }
+            else
+            {
+                pSectionData->SetType(CONTENT_SECTION);
+            }
         break;
         case WID_SECT_DDE_AUTOUPDATE:
-            aSection.SetUpdateType(sfx2::LINKUPDATE_ALWAYS);
+            if (m_pImpl->m_bIsDescriptor)
+            {
+                m_pImpl->m_pProps->m_bUpdateType = true;
+            }
+            else
+            {
+                bLinkModeChanged = true;
+            }
         break;
         case WID_SECT_VISIBLE   :
         {
@@ -1617,7 +1651,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
             }
             else
             {
-                aSection.SetHidden(FALSE);
+                pSectionData->SetHidden(false);
             }
         }
         break;
@@ -1629,7 +1663,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
             }
             else
             {
-                aSection.SetProtect(FALSE);
+                pSectionData->SetProtectFlag(false);
             }
         }
         break;
@@ -1642,7 +1676,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
             }
             else
             {
-                aSection.SetEditInReadonly(FALSE);
+                pSectionData->SetEditInReadonlyFlag(false);
             }
         }
         break;
@@ -1678,25 +1712,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
         }
     }
 
-    if (pFmt)
-    {
-        SwDoc *const pDoc = pFmt->GetDoc();
-        const SwSectionFmts& rFmts = pDoc->GetSections();
-        UnoActionContext aContext(pDoc);
-        for (sal_uInt16 i = 0; i < rFmts.Count(); i++)
-        {
-            if (rFmts[i]->GetSection()->GetName() == pSect->GetName())
-            {
-                pDoc->ChgSection(i, aSection, pNewAttrSet.get(),
-                    pDoc->IsInReading());
-                {
-                    // temporarily remove actions to allow cursor update
-                    UnoActionRemoveContext aRemoveContext( pDoc );
-                }
-                break;
-            }
-        }
-    }
+    lcl_UpdateSection(pFmt, pSectionData, pNewAttrSet, bLinkModeChanged);
 }
 
 /*-- 08.11.00 10:47:56---------------------------------------------------
@@ -1737,7 +1753,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         case WID_SECT_DDE_AUTOUPDATE:
         case WID_SECT_VISIBLE   :
         {
-            sal_Bool bTemp = TRUE;
+            sal_Bool bTemp = sal_True;
             aRet.setValue( &bTemp, ::getCppuBooleanType());
         }
         break;
@@ -1746,7 +1762,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         case WID_SECT_EDIT_IN_READONLY:
         // <--
         {
-            sal_Bool bTemp = FALSE;
+            sal_Bool bTemp = sal_False;
             aRet.setValue( &bTemp, ::getCppuBooleanType());
         }
         break;
@@ -1778,7 +1794,7 @@ OUString SAL_CALL SwXTextSection::getName() throw (uno::RuntimeException)
     SwSectionFmt const*const pFmt = m_pImpl->GetSectionFmt();
     if(pFmt)
     {
-        sRet = pFmt->GetSection()->GetName();
+        sRet = pFmt->GetSection()->GetSectionName();
     }
     else if (m_pImpl->m_bIsDescriptor)
     {
@@ -1801,11 +1817,10 @@ throw (uno::RuntimeException)
     SwSectionFmt *const pFmt = m_pImpl->GetSectionFmt();
     if(pFmt)
     {
-        SwSection   aSection(CONTENT_SECTION, aEmptyStr);
         SwSection *const pSect = pFmt->GetSection();
-        aSection = *pSect;
+        SwSectionData aSection(*pSect);
         String sNewName(rName);
-        aSection.SetName(sNewName);
+        aSection.SetSectionName(sNewName);
 
         const SwSectionFmts& rFmts = pFmt->GetDoc()->GetSections();
         sal_uInt16 nApplyPos = USHRT_MAX;
@@ -1815,7 +1830,7 @@ throw (uno::RuntimeException)
             {
                 nApplyPos = i;
             }
-            else if(sNewName == rFmts[i]->GetSection()->GetName())
+            else if (sNewName == rFmts[i]->GetSection()->GetSectionName())
             {
                 throw uno::RuntimeException();
             }
@@ -1824,7 +1839,7 @@ throw (uno::RuntimeException)
         {
             {
                 UnoActionContext aContext(pFmt->GetDoc());
-                pFmt->GetDoc()->ChgSection( nApplyPos, aSection);
+                pFmt->GetDoc()->UpdateSection(nApplyPos, aSection);
             }
             {
                 // temporarily remove actions to allow cursor update
@@ -1877,5 +1892,24 @@ SwXTextSection::getSupportedServiceNames() throw (uno::RuntimeException)
 {
     return ::sw::GetSupportedServiceNamesImpl(
             g_nServicesTextSection, g_ServicesTextSection);
+}
+
+
+// MetadatableMixin
+::sfx2::Metadatable* SwXTextSection::GetCoreObject()
+{
+    SwSectionFmt *const pSectionFmt( m_pImpl->GetSectionFmt() );
+    return pSectionFmt;
+}
+
+uno::Reference<frame::XModel> SwXTextSection::GetModel()
+{
+    SwSectionFmt *const pSectionFmt( m_pImpl->GetSectionFmt() );
+    if (pSectionFmt)
+    {
+        SwDocShell const*const pShell( pSectionFmt->GetDoc()->GetDocShell() );
+        return (pShell) ? pShell->GetModel() : 0;
+    }
+    return 0;
 }
 

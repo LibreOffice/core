@@ -62,11 +62,13 @@ BOOL SwCursor::GotoFtnTxt()
 {
     // springe aus dem Content zur Fussnote
     BOOL bRet = FALSE;
-    SwTxtAttr *pFtn;
     SwTxtNode* pTxtNd = GetPoint()->nNode.GetNode().GetTxtNode();
 
-    if( pTxtNd && 0 != (
-        pFtn = pTxtNd->GetTxtAttr( GetPoint()->nContent, RES_TXTATR_FTN ) ))
+    SwTxtAttr *const pFtn( (pTxtNd)
+        ? pTxtNd->GetTxtAttrForCharAt(
+            GetPoint()->nContent.GetIndex(), RES_TXTATR_FTN)
+        : 0);
+    if (pFtn)
     {
         SwCrsrSaveState aSaveState( *this );
         GetPoint()->nNode = *((SwTxtFtn*)pFtn)->GetStartNode();

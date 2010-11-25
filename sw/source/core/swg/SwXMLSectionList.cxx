@@ -68,18 +68,22 @@ SvXMLImportContext *SwXMLSectionList::CreateContext(
 {
     SvXMLImportContext *pContext = 0;
 
-    if  (nPrefix == XML_NAMESPACE_OFFICE && IsXMLToken ( rLocalName, XML_BODY ) ||
-         nPrefix == XML_NAMESPACE_TEXT &&
-        (IsXMLToken ( rLocalName, XML_P ) ||
-         IsXMLToken ( rLocalName, XML_H ) ||
-         IsXMLToken ( rLocalName, XML_A ) ||
-         IsXMLToken ( rLocalName, XML_SPAN ) ||
-         IsXMLToken ( rLocalName, XML_SECTION ) ||
-         IsXMLToken ( rLocalName, XML_INDEX_BODY ) ||
-         IsXMLToken ( rLocalName, XML_INDEX_TITLE )||
-         IsXMLToken ( rLocalName, XML_INSERTION ) ||
-         IsXMLToken ( rLocalName, XML_DELETION ) ) )
+    if(( nPrefix == XML_NAMESPACE_OFFICE && IsXMLToken ( rLocalName, XML_BODY )) ||
+        ( nPrefix == XML_NAMESPACE_TEXT &&
+            (IsXMLToken ( rLocalName, XML_P ) ||
+            IsXMLToken ( rLocalName, XML_H ) ||
+            IsXMLToken ( rLocalName, XML_A ) ||
+            IsXMLToken ( rLocalName, XML_SPAN ) ||
+            IsXMLToken ( rLocalName, XML_SECTION ) ||
+            IsXMLToken ( rLocalName, XML_INDEX_BODY ) ||
+            IsXMLToken ( rLocalName, XML_INDEX_TITLE )||
+            IsXMLToken ( rLocalName, XML_INSERTION ) ||
+            IsXMLToken ( rLocalName, XML_DELETION ) )
+        )
+      )
+    {
         pContext = new SvXMLSectionListContext (*this, nPrefix, rLocalName, xAttrList);
+    }
     else
         pContext = SvXMLImport::CreateContext( nPrefix, rLocalName, xAttrList );
     return pContext;

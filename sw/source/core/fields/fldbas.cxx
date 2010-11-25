@@ -437,6 +437,23 @@ BOOL SwField::IsFixed() const
     return bRet;
 }
 
+String SwField::ExpandField(bool const bInClipboard) const
+{
+    if (!bInClipboard) // #i85766# do not expand fields in clipboard documents
+    {
+        m_Cache = Expand();
+    }
+    return m_Cache;
+}
+
+SwField * SwField::CopyField() const
+{
+    SwField *const pNew = Copy();
+    // #i85766# cache expansion of source (for clipboard)
+    pNew->m_Cache = Expand();
+    return pNew;
+}
+
 /*--------------------------------------------------------------------
     Beschreibung: Numerierung expandieren
  --------------------------------------------------------------------*/

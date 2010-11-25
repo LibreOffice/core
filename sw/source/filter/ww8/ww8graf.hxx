@@ -30,12 +30,8 @@
 #ifndef _WW8GRAF_HXX
 #define _WW8GRAF_HXX
 
-#ifndef __SGI_STL_VECTOR
 #include <vector>
-#endif
-#ifndef __SGI_STL_STACK
 #include <stack>
-#endif
 #include "writerhelper.hxx"
 
 struct EscherShape

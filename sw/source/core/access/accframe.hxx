@@ -27,14 +27,22 @@
 #ifndef _ACCFRAME_HXX
 #define _ACCFRAME_HXX
 
+#include <swrect.hxx>
+
 #include <sal/types.h>
+#include <tools/string.hxx>
 
 #include <list>
 #include <accfrmobj.hxx>
 
-// Any method of this class must be called with an acquired solar mutex!
-
 class SwAccessibleMap;
+class SwFrm;
+class ViewShell;
+namespace sw { namespace access {
+    class SwAccessibleChild;
+}}
+
+// Any method of this class must be called with an acquired solar mutex!
 
 class SwAccessibleFrame
 {
@@ -45,26 +53,34 @@ class SwAccessibleFrame
 protected:
     // --> OD 2007-06-29 #i77106#
     // method needs to be called by new class <SwAccessibleTableColHeaders>
-    static sal_Int32 GetChildCount( const SwRect& rVisArea,
+    static sal_Int32 GetChildCount( SwAccessibleMap& rAccMap,
+                                    const SwRect& rVisArea,
                                     const SwFrm *pFrm,
                                     sal_Bool bInPagePreview );
 private:
-    static SwFrmOrObj GetChild( const SwRect& rVisArea,
-                                  const SwFrm *pFrm,
-                                  sal_Int32& rPos,
-                                sal_Bool bInPagePreview);
-    static sal_Bool GetChildIndex( const SwRect& rVisArea,
-                                    const SwFrm *pFrm,
-                                    const SwFrmOrObj& rChild,
-                                    sal_Int32& rPos,
-                                    sal_Bool bInPagePreview );
-    static SwFrmOrObj GetChildAtPixel( const SwRect& rVisArea,
-                                    const SwFrm *pFrm,
-                                    const Point& rPos,
-                                    sal_Bool bInPagePreview,
-                                    const SwAccessibleMap *pMap );
-    static void GetChildren( const SwRect& rVisArea, const SwFrm *pFrm,
-                             ::std::list< SwFrmOrObj >& rChildren,
+    static sw::access::SwAccessibleChild GetChild( SwAccessibleMap& rAccMap,
+                                                   const SwRect& rVisArea,
+                                                   const SwFrm& rFrm,
+                                                   sal_Int32& rPos,
+                                                   sal_Bool bInPagePreview);
+
+    static sal_Bool GetChildIndex( SwAccessibleMap& rAccMap,
+                                   const SwRect& rVisArea,
+                                   const SwFrm& rFrm,
+                                   const sw::access::SwAccessibleChild& rChild,
+                                   sal_Int32& rPos,
+                                   sal_Bool bInPagePreview );
+
+    static sw::access::SwAccessibleChild GetChildAtPixel( const SwRect& rVisArea,
+                                                          const SwFrm& rFrm,
+                                                          const Point& rPos,
+                                                          sal_Bool bInPagePreview,
+                                                          SwAccessibleMap& rAccMap );
+
+    static void GetChildren( SwAccessibleMap& rAccMap,
+                             const SwRect& rVisArea,
+                             const SwFrm& rFrm,
+                             ::std::list< sw::access::SwAccessibleChild >& rChildren,
                              sal_Bool bInPagePreview );
 
 protected:
@@ -73,9 +89,10 @@ protected:
 
     sal_Bool IsOpaque( ViewShell *pVSh ) const;
 
+    sal_Bool IsShowing( const SwAccessibleMap& rAccMap,
+                        const sw::access::SwAccessibleChild& rFrmOrObj ) const;
     inline sal_Bool IsShowing( const SwRect& rFrm ) const;
-    inline sal_Bool IsShowing( const SwFrmOrObj& rFrmOrObj ) const;
-    inline sal_Bool IsShowing() const;
+    inline sal_Bool IsShowing( const SwAccessibleMap& rAccMap ) const;
 
     inline sal_Bool IsInPagePreview() const
     {
@@ -94,17 +111,20 @@ protected:
 
 public:
     // Return the SwFrm this context is attached to.
-    const SwFrm *GetFrm() const { return mpFrm; };
+    const SwFrm* GetFrm() const { return mpFrm; };
 
-
-    static const SwFrm *GetParent( const SwFrmOrObj& rFrmOrObj,
+    static const SwFrm* GetParent( const sw::access::SwAccessibleChild& rFrmOrObj,
                                    sal_Bool bInPagePreview );
+
+    sal_Int32 GetChildIndex( SwAccessibleMap& rAccMap,
+                             const sw::access::SwAccessibleChild& rChild ) const;
 
 protected:
 
     // Return the bounding box of the frame clipped to the vis area. If
     // no frame is specified, use this' frame.
-    SwRect GetBounds( const SwFrm *pFrm=0 );
+    SwRect GetBounds( const SwAccessibleMap& rAccMap,
+                      const SwFrm *pFrm = 0 );
 
     // Return the upper that has a context attached. This might be
     // another one than the immediate upper.
@@ -112,12 +132,13 @@ protected:
 
     // Return the lower count or the nth lower, there the lowers have a
     // not be same one as the SwFrm's lowers
-    inline sal_Int32 GetChildCount() const;
-    inline SwFrmOrObj GetChild( sal_Int32 nPos ) const;
-    inline sal_Int32 GetChildIndex( const SwFrmOrObj& rChild ) const;
-    inline SwFrmOrObj GetChildAtPixel( const Point& rPos,
-                                    const SwAccessibleMap *pMap ) const;
-    inline void GetChildren( ::std::list< SwFrmOrObj >& rChildren ) const;
+    sal_Int32 GetChildCount( SwAccessibleMap& rAccMap ) const;
+    sw::access::SwAccessibleChild GetChild( SwAccessibleMap& rAccMap,
+                                            sal_Int32 nPos ) const;
+    sw::access::SwAccessibleChild GetChildAtPixel( const Point& rPos,
+                                                   SwAccessibleMap& rAccMap ) const;
+    void GetChildren( SwAccessibleMap& rAccMap,
+                      ::std::list< sw::access::SwAccessibleChild >& rChildren ) const;
 
     inline void SetVisArea( const SwRect& rNewVisArea )
     {
@@ -138,48 +159,17 @@ inline sal_Bool SwAccessibleFrame::IsShowing( const SwRect& rFrm ) const
     return rFrm.IsOver( maVisArea );
 }
 
-inline sal_Bool SwAccessibleFrame::IsShowing( const SwFrmOrObj& rFrmOrObj ) const
+inline sal_Bool SwAccessibleFrame::IsShowing( const SwAccessibleMap& rAccMap ) const
 {
-    return IsShowing( rFrmOrObj.GetBox() );
-}
-
-inline sal_Bool SwAccessibleFrame::IsShowing() const
-{
-    SwFrmOrObj aFrmOrObj( GetFrm() );
-    return IsShowing( aFrmOrObj );
+    sw::access::SwAccessibleChild aFrmOrObj( GetFrm() );
+    return IsShowing( rAccMap, aFrmOrObj );
 }
 
 inline const SwFrm *SwAccessibleFrame::GetParent() const
 {
-    SwFrmOrObj aFrmOrObj( GetFrm() );
+    sw::access::SwAccessibleChild aFrmOrObj( GetFrm() );
     return GetParent( aFrmOrObj, IsInPagePreview()  );
 }
 
-inline sal_Int32 SwAccessibleFrame::GetChildCount() const
-{
-    return GetChildCount( maVisArea, mpFrm, IsInPagePreview() );
-}
-
-inline SwFrmOrObj SwAccessibleFrame::GetChild( sal_Int32 nPos ) const
-{
-    return GetChild( maVisArea, mpFrm, nPos, IsInPagePreview() );
-}
-
-inline sal_Int32 SwAccessibleFrame::GetChildIndex( const SwFrmOrObj& rChild ) const
-{
-    sal_Int32 nPos = 0;
-    return GetChildIndex( maVisArea, mpFrm, rChild, nPos, IsInPagePreview() ) ? nPos : -1L;
-}
-
-inline SwFrmOrObj SwAccessibleFrame::GetChildAtPixel( const Point& rPos,
-                                    const SwAccessibleMap *pMap ) const
-{
-    return GetChildAtPixel( maVisArea, mpFrm, rPos, IsInPagePreview(), pMap );
-}
-
-inline void SwAccessibleFrame::GetChildren( ::std::list< SwFrmOrObj >& rChildren ) const
-{
-    GetChildren( maVisArea, mpFrm, rChildren, IsInPagePreview() );
-}
 #endif
 

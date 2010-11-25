@@ -32,14 +32,18 @@
 #include <redline.hxx>
 #include <vector>
 #include <vcl/window.hxx>
+#include <SidebarWindowsTypes.hxx>
 #include <svl/brdcst.hxx>
 
 class SwTxtFld;
 class SwRootFrm;
 class SwPostIt;
 class String;
-class SwMarginWin;
 class SwPostItMgr;
+class SwEditWin;
+namespace sw { namespace sidebarwindows {
+    class SwSidebarWin;
+} }
 
 struct SwPosition;
 
@@ -47,12 +51,23 @@ typedef sal_Int64 SwPostItBits;
 
 struct SwLayoutInfo
 {
+    const SwFrm* mpAnchorFrm;
     SwRect mPosition;
     SwRect mPageFrame;
     SwRect mPagePrtArea;
     unsigned long mnPageNumber;
-    bool mbMarginSide;
+    sw::sidebarwindows::SidebarPosition meSidebarPosition;
     USHORT mRedlineAuthor;
+
+    SwLayoutInfo()
+        : mpAnchorFrm(0)
+        , mPosition()
+        , mPageFrame()
+        , mPagePrtArea()
+        , mnPageNumber(1)
+        , meSidebarPosition(sw::sidebarwindows::SIDEBAR_NONE)
+        , mRedlineAuthor(0)
+    {}
 };
 
 namespace SwPostItHelper
@@ -63,77 +78,82 @@ namespace SwPostItHelper
     };
 
     SwLayoutStatus getLayoutInfos( std::vector< SwLayoutInfo >&, SwPosition& );
-    SwLayoutStatus getLayoutInfos( std::vector< SwLayoutInfo >&, SwTxtFld* );
     long getLayoutHeight( const SwRootFrm* pRoot );
     void setSidebarChanged( SwRootFrm* pRoot, bool bBrowseMode );
     unsigned long getPageInfo( SwRect& rPageFrm, const SwRootFrm* , const Point& );
 }
 
-class SwMarginItem
+class SwSidebarItem
 {
 public:
-    SwMarginWin* pPostIt;
+    sw::sidebarwindows::SwSidebarWin* pPostIt;
     bool bShow;
     bool bFocus;
-    bool bMarginSide;
-    SwRect mPos;
-    SwRect mFramePos;
-    SwRect mPagePos;
-    unsigned long mnPageNumber;
+
     SwPostItHelper::SwLayoutStatus mLayoutStatus;
-    USHORT mRedlineAuthor;
-    SwMarginItem(bool aShow, bool aFocus)
-        : pPostIt(0),
-        bShow(aShow),
-        bFocus(aFocus),
-        bMarginSide(false),
-        mnPageNumber(1),
-        mLayoutStatus( SwPostItHelper::INVISIBLE ),
-        mRedlineAuthor(0)
+    SwLayoutInfo maLayoutInfo;
+
+    SwSidebarItem( const bool aShow,
+                   const bool aFocus)
+        : pPostIt(0)
+        , bShow(aShow)
+        , bFocus(aFocus)
+        , mLayoutStatus( SwPostItHelper::INVISIBLE )
+        , maLayoutInfo()
     {}
-    virtual ~SwMarginItem(){}
-    virtual SwPosition GetPosition() = 0;
+    virtual ~SwSidebarItem(){}
+    virtual SwPosition GetAnchorPosition() const = 0;
     virtual bool UseElement() = 0;
-    virtual SwFmtFld* GetFmtFld() = 0;
+    virtual SwFmtFld* GetFmtFld() const = 0;
     virtual SfxBroadcaster* GetBroadCaster() const = 0;
-    virtual SwMarginWin* GetMarginWindow(Window* pParent, WinBits nBits,SwPostItMgr* aMgr,SwPostItBits aBits) = 0;
+    virtual sw::sidebarwindows::SwSidebarWin* GetSidebarWindow( SwEditWin& rEditWin,
+                                                                WinBits nBits,
+                                                                SwPostItMgr& aMgr,
+                                                                SwPostItBits aBits) = 0;
 };
 /*
-class SwRedCommentItem: public SwMarginItem
+class SwRedCommentItem: public SwSidebarItem
 {
 private:
     SwRedline* pRedline;
 public:
 
     SwRedCommentItem( SwRedline* pRed, bool aShow, bool aFocus)
-        : SwMarginItem(aShow,aFocus),
+        : SwSidebarItem(aShow,aFocus),
         pRedline(pRed) {}
     virtual ~SwRedCommentItem() {}
-    virtual SwPosition GetPosition();
+    virtual SwPosition GetAnchorPosition() const;
     virtual bool UseElement();
-    virtual SwFmtFld* GetFmtFld() {return 0; }
+    virtual SwFmtFld* GetFmtFld() const {return 0; }
     virtual SfxBroadcaster* GetBroadCaster() const { return dynamic_cast<SfxBroadcaster *> (pRedline); }
-    virtual SwMarginWin* GetMarginWindow(Window* pParent, WinBits nBits,SwPostItMgr* aMgr,SwPostItBits aBits);
+    virtual sw::sidebarwindows::SwSidebarWin* GetSidebarWindow( SwEditWin& rEditWin,
+                                                                WinBits nBits,
+                                                                SwPostItMgr& aMgr,
+                                                                SwPostItBits aBits);
 };
 */
 
-class SwPostItItem: public SwMarginItem
+class SwAnnotationItem: public SwSidebarItem
 {
     private:
     SwFmtFld* pFmtFld;
 
     public:
-    SwPostItItem( SwFmtFld* p, bool aShow, bool aFocus)
-        : SwMarginItem(aShow,aFocus) ,
-        pFmtFld(p)
-    {
-    }
-    virtual ~SwPostItItem() {}
-    virtual SwPosition GetPosition();
+    SwAnnotationItem( SwFmtFld* p,
+                      const bool aShow,
+                      const bool aFocus)
+        : SwSidebarItem( aShow, aFocus )
+        , pFmtFld(p)
+    {}
+    virtual ~SwAnnotationItem() {}
+    virtual SwPosition GetAnchorPosition() const;
     virtual bool UseElement();
-    virtual SwFmtFld* GetFmtFld() {return pFmtFld;}
+    virtual SwFmtFld* GetFmtFld() const {return pFmtFld;}
     virtual SfxBroadcaster* GetBroadCaster() const { return dynamic_cast<SfxBroadcaster *> (pFmtFld); }
-    virtual SwMarginWin* GetMarginWindow(Window* pParent, WinBits nBits,SwPostItMgr* aMgr,SwPostItBits aBits);
+    virtual sw::sidebarwindows::SwSidebarWin* GetSidebarWindow( SwEditWin& rEditWin,
+                                                                WinBits nBits,
+                                                                SwPostItMgr& aMgr,
+                                                                SwPostItBits aBits);
 };
 
 #endif // _POSTITHELPER_HXX

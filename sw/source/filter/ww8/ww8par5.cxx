@@ -2354,11 +2354,13 @@ eF_ResT SwWW8ImplReader::Read_F_IncludeText( WW8FieldDesc* /*pF*/, String& rStr 
     */
     SwPosition aTmpPos(*pPaM->GetPoint());
 
-    SwSection aSection(FILE_LINK_SECTION, maSectionNameGenerator.UniqueName());
+    SwSectionData aSection(FILE_LINK_SECTION,
+            maSectionNameGenerator.UniqueName());
     aSection.SetLinkFileName( aPara );
-    aSection.SetProtect(true);
+    aSection.SetProtectFlag(true);
 
-    SwSection*const pSection = rDoc.InsertSwSection(*pPaM, aSection, 0, false);
+    SwSection *const pSection =
+        rDoc.InsertSwSection(*pPaM, aSection, 0, 0, false);
     ASSERT(pSection, "no section inserted");
     if (!pSection)
         return FLD_TEXT;

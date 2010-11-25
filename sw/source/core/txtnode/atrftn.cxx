@@ -289,39 +289,45 @@ void SwTxtFtn::SetNumber( const USHORT nNewNum, const XubString* pStr )
 }
 
 // Die Fussnoten duplizieren
-void SwTxtFtn::CopyFtn( SwTxtFtn *pDest ) const
+void SwTxtFtn::CopyFtn(SwTxtFtn & rDest, SwTxtNode & rDestNode) const
 {
-    if ( m_pStartNode && pDest->GetStartNode() )
+    if (m_pStartNode && !rDest.GetStartNode())
     {
-        // die Fussnoten koennen in unterschiedlichen Dokumenten stehen !!
-        SwDoc* pDstDoc = pDest->m_pTxtNode->GetDoc();
+        // dest missing node section? create it here!
+        // (happens in SwTxtNode::CopyText if pDest == this)
+        rDest.MakeNewTextSection( rDestNode.GetNodes() );
+    }
+    if (m_pStartNode && rDest.GetStartNode())
+    {
+        // footnotes not necessarily in same document!
+        SwDoc *const pDstDoc = rDestNode.GetDoc();
         SwNodes &rDstNodes = pDstDoc->GetNodes();
 
-        // Wir kopieren nur den Inhalt der Sektion
+        // copy only the content of the section
         SwNodeRange aRg( *m_pStartNode, 1,
                     *m_pStartNode->GetNode().EndOfSectionNode() );
 
-        // Wir fuegen auf dem Ende von pDest ein, d.h. die Nodes
-        // werden angehaengt. nDestLen haelt die Anzahl der CntNodes
-        // in pDest _vor_ dem Kopieren.
-        SwNodeIndex aStart( *(pDest->GetStartNode()) );
+        // insert at the end of rDest, i.e., the nodes are appended.
+        // nDestLen contains number of CntntNodes in rDest _before_ copy.
+        SwNodeIndex aStart( *(rDest.GetStartNode()) );
         SwNodeIndex aEnd( *aStart.GetNode().EndOfSectionNode() );
         ULONG  nDestLen = aEnd.GetIndex() - aStart.GetIndex() - 1;
 
         m_pTxtNode->GetDoc()->CopyWithFlyInFly( aRg, 0, aEnd, TRUE );
 
-        // Wenn die Dest-Sektion nicht leer war, so muessen die alten
-        // Nodes geloescht werden:
-        // Vorher:   Src: SxxxE,  Dst: SnE
-        // Nachher:  Src: SxxxE,  Dst: SnxxxE
-        // und       Src: SxxxE,  Dst: SxxxE
+        // in case the destination section was not empty, delete the old nodes
+        // before:   Src: SxxxE,  Dst: SnE
+        // now:      Src: SxxxE,  Dst: SnxxxE
+        // after:    Src: SxxxE,  Dst: SxxxE
         aStart++;
         rDstNodes.Delete( aStart, nDestLen );
     }
 
-    // Der benutzerdefinierte String muss auch uebertragen werden.
+    // also copy user defined number string
     if( GetFtn().aNumber.Len() )
-        ((SwFmtFtn&)pDest->GetFtn()).aNumber = GetFtn().aNumber;
+    {
+        const_cast<SwFmtFtn &>(rDest.GetFtn()).aNumber = GetFtn().aNumber;
+    }
 }
 
 

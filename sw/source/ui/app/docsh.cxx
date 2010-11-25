@@ -69,7 +69,6 @@
 #include <view.hxx>         // fuer die aktuelle Sicht
 #include <edtwin.hxx>
 #include <PostItMgr.hxx>
-#include <postit.hxx>
 #include <wrtsh.hxx>        // Verbindung zur Core
 #include <docsh.hxx>        // Dokumenterzeugung
 #include <basesh.hxx>
@@ -102,7 +101,6 @@
 #include <cmdid.h>
 #include <globals.hrc>
 #include <app.hrc>
-#include "warnpassword.hxx"
 
 #include <cfgid.h>
 #include <unotools/moduleoptions.hxx>
@@ -429,8 +427,12 @@ sal_Bool SwDocShell::SaveAs( SfxMedium& rMedium )
         pView->GetEditWin().StopQuickHelp();
 
     //#i91811# mod if we have an active margin window, write back the text
-    if (pView && pView->GetPostItMgr() && pView->GetPostItMgr()->GetActivePostIt())
-        pView->GetPostItMgr()->GetActivePostIt()->UpdateData();
+    if ( pView &&
+         pView->GetPostItMgr() &&
+         pView->GetPostItMgr()->HasActiveSidebarWin() )
+    {
+        pView->GetPostItMgr()->UpdateDataOnActiveSidebarWin();
+    }
 
     if( pDoc->get(IDocumentSettingAccess::GLOBAL_DOCUMENT) &&
         !pDoc->get(IDocumentSettingAccess::GLOBAL_DOCUMENT_SAVE_LINKS) )
@@ -575,8 +577,12 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
         pView->GetEditWin().StopQuickHelp();
 
     //#i91811# mod if we have an active margin window, write back the text
-    if (pView && pView->GetPostItMgr() && pView->GetPostItMgr()->GetActivePostIt())
-        pView->GetPostItMgr()->GetActivePostIt()->UpdateData();
+    if ( pView &&
+         pView->GetPostItMgr() &&
+         pView->GetPostItMgr()->HasActiveSidebarWin() )
+    {
+        pView->GetPostItMgr()->UpdateDataOnActiveSidebarWin();
+    }
 
     ULONG nVBWarning = 0;
 

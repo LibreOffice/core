@@ -457,7 +457,7 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
     bHasTextContent( sal_False ),
     bHasTableContent( sal_False )
 {
-    sSaveParaDefault = GetImport().GetTextImport()->sCellParaStyleDefault;
+    sSaveParaDefault = GetImport().GetTextImport()->GetCellParaStyleDefault();
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
@@ -477,7 +477,7 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
             break;
         case XML_TOK_TABLE_STYLE_NAME:
             aStyleName = rValue;
-            GetImport().GetTextImport()->sCellParaStyleDefault = rValue;
+            GetImport().GetTextImport()->SetCellParaStyleDefault(rValue);
             break;
         case XML_TOK_TABLE_NUM_COLS_SPANNED:
             nColSpan = (sal_uInt32)rValue.toInt32();
@@ -715,7 +715,7 @@ void SwXMLTableCellContext_Impl::EndElement()
             }
         }
     }
-    GetImport().GetTextImport()->sCellParaStyleDefault = sSaveParaDefault;
+    GetImport().GetTextImport()->SetCellParaStyleDefault(sSaveParaDefault);
 }
 
 // ---------------------------------------------------------------------

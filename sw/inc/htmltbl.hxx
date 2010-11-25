@@ -267,6 +267,7 @@ class SwHTMLTableLayout
 
     DECL_STATIC_LINK( SwHTMLTableLayout, DelayedResize_Impl, void* );
 
+    static USHORT GetBrowseWidthByVisArea( const SwDoc& rDoc );
 public:
 
     SwHTMLTableLayout( const SwTable *pSwTbl,
@@ -348,7 +349,6 @@ public:
     // oder eine ViewShell vorhanden ist. Sonst wird 0 zurueckgegeben.
     // (Wird vom HTML-Filter benoetigt, da der nicht an das Layout kommt.)
     static USHORT GetBrowseWidth( const SwDoc& rDoc );
-    static USHORT GetBrowseWidthByVisArea( const SwDoc& rDoc );
 
     // Ermitteln der verfuegbaren Breite uber den Tabellen-Frame
     USHORT GetBrowseWidthByTabFrm( const SwTabFrm& rTabFrm ) const;

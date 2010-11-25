@@ -32,6 +32,7 @@
 
 
 #include <functional>
+#include <algorithm>
 
 #include <string.h>         // memset()
 #include <rtl/tencinfo.h>
@@ -2121,7 +2122,7 @@ xub_StrLen WW8ScannerBase::WW8ReadString( SvStream& rStrm, String& rStr,
 
 // Bei nStartPos < 0 wird das erste Element des PLCFs genommen
 WW8PLCFspecial::WW8PLCFspecial(SvStream* pSt, long nFilePos, long nPLCF,
-    long nStruct, long nStartPos, bool bNoEnd)
+    long nStruct, long nStartPos)
     : nIdx(0), nStru(nStruct)
 {
     nIMax = ( nPLCF - 4 ) / ( 4 + nStruct );
@@ -2137,8 +2138,6 @@ WW8PLCFspecial::WW8PLCFspecial(SvStream* pSt, long nFilePos, long nPLCF,
         pPLCF_PosArray[nIdx] = SWAPLONG( pPLCF_PosArray[nIdx] );
     nIdx = 0;
 #endif // OSL_BIGENDIAN
-    if( bNoEnd )
-        nIMax++;
     if( nStruct ) // Pointer auf Inhalts-Array
         pPLCF_Contents = (BYTE*)&pPLCF_PosArray[nIMax + 1];
     else
@@ -4004,8 +4003,7 @@ WW8PLCFx_Book::WW8PLCFx_Book(SvStream* pTblSt, const WW8Fib& rFib)
     {
         pBook[0] = new WW8PLCFspecial(pTblSt,rFib.fcPlcfbkf,rFib.lcbPlcfbkf,4);
 
-        pBook[1] = new WW8PLCFspecial( pTblSt, rFib.fcPlcfbkl, rFib.lcbPlcfbkl,
-            0, -1, true);
+        pBook[1] = new WW8PLCFspecial(pTblSt,rFib.fcPlcfbkl,rFib.lcbPlcfbkl,0);
 
         rtl_TextEncoding eStructChrSet = WW8Fib::GetFIBCharset(rFib.chseTables);
 
@@ -6400,8 +6398,10 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
 #ifdef __WW8_NEEDS_COPY
                 {
                     BYTE nLen = 0x28;
+                    BYTE nLength = sizeof( pVer8->szFfn ) / sizeof( SVBT16 );
+                    nLength = std::min( nLength, BYTE( pVer8->cbFfnM1+1 ) );
                     for( UINT16* pTmp = pVer8->szFfn;
-                        nLen < pVer8->cbFfnM1 + 1 ; ++pTmp, nLen+=2 )
+                        nLen < nLength; ++pTmp, nLen+=2 )
                     {
                         *pTmp = SVBT16ToShort( *(SVBT16*)pTmp );
                     }

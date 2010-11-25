@@ -870,10 +870,10 @@ oncemore:
 
             String aName( String::CreateFromAscii(
                                         RTL_CONSTASCII_STRINGPARAM( "WW" )));
-            SwSection* pSection = new SwSection( FILE_LINK_SECTION,
+            SwSectionData * pSection = new SwSectionData( FILE_LINK_SECTION,
                 rOut.GetDoc().GetUniqueSectionName( &aStr ) );
             pSection->SetLinkFileName( aFName );
-            pSection->SetProtect( TRUE );
+            pSection->SetProtectFlag( true );
             rOut << SwFltSection( pSection );
             rOut.EndItem( RES_FLTR_SECTION );
             rOut.NextParagraph();

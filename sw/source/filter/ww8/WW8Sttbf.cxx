@@ -29,6 +29,7 @@
 #include <iostream>
 #include <dbgoutsw.hxx>
 #include "WW8Sttbf.hxx"
+#include <cstdio>
 
 namespace ww8
 {

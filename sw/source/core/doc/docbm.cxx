@@ -1023,9 +1023,8 @@ SaveBookmark::SaveBookmark(
         m_aShortName = pBookmark->GetShortName();
         m_aCode = pBookmark->GetKeyCode();
 
-        ::sfx2::Metadatable * const pMetadatable(
-            const_cast< ::sfx2::Metadatable * >( // CreateUndo should be const?
-                dynamic_cast< ::sfx2::Metadatable const* >(pBookmark)));
+        ::sfx2::Metadatable const*const pMetadatable(
+                dynamic_cast< ::sfx2::Metadatable const* >(pBookmark));
         if (pMetadatable)
         {
             m_pMetadataUndo = pMetadatable->CreateUndo();

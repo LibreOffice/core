@@ -84,13 +84,13 @@ SwVbaRange::getXTextRange() throw (uno::RuntimeException)
     uno::Reference< text::XTextRange > xTextRange( mxTextCursor, uno::UNO_QUERY_THROW );
     return xTextRange;
 }
-
+#ifdef TOMORROW
 void SwVbaRange::setXTextRange( const uno::Reference< text::XTextRange >& xRange ) throw (uno::RuntimeException)
 {
     mxTextCursor->gotoRange( xRange->getStart(), sal_False );
     mxTextCursor->gotoRange( xRange->getEnd(), sal_True );
 }
-
+#endif
 /**
 * The complexity in this method is because we need to workaround
 * an issue that the last paragraph in a document does not have a trailing CRLF.

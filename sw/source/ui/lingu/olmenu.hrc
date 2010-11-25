@@ -30,35 +30,65 @@
 
 #include "rcid.hrc"
 
-#define MN_SPELL_POPUP  (RC_LINGU_BEGIN + 1)
-#define STR_SPELL_OK    (RC_LINGU_BEGIN + 2)
-#define STR_HYP_OK      (RC_LINGU_BEGIN + 3)
-#define STR_WORD        (RC_LINGU_BEGIN + 4)
-#define STR_PARAGRAPH   (RC_LINGU_BEGIN + 5)
-#define STR_LANGSTATUS_NONE     (RC_LINGU_BEGIN + 6)
-#define STR_LANGSTATUS_MORE     (RC_LINGU_BEGIN + 7)
-#define STR_IGNORE_SELECTION    (RC_LINGU_BEGIN + 8)
+#define MN_SPELL_POPUP                  (RC_LINGU_BEGIN + 1)
+#define STR_SPELL_OK                    (RC_LINGU_BEGIN + 2)
+#define STR_HYP_OK                      (RC_LINGU_BEGIN + 3)
+#define STR_WORD                        (RC_LINGU_BEGIN + 4)
+#define STR_PARAGRAPH                   (RC_LINGU_BEGIN + 5)
+#define STR_LANGSTATUS_NONE             (RC_LINGU_BEGIN + 6)
+#define STR_LANGSTATUS_MORE             (RC_LINGU_BEGIN + 7)
+#define STR_IGNORE_SELECTION            (RC_LINGU_BEGIN + 8)
+#define STR_RESET_TO_DEFAULT_LANGUAGE   (RC_LINGU_BEGIN + 9)
 
-#define IMG_INFO_16     (RC_LINGU_BEGIN + 8)
+#define IMG_INFO_16                     (RC_LINGU_BEGIN + 100)
 
 //! Don't change these values. You may break context menu modifying extensions!
-#define MN_SPELLING             100
-#define MN_IGNORE_SELECTION     101
-#define MN_IGNORE               102
-#define MN_INSERT               103
-#define MN_AUTOCORR             104
-#define MN_LANGUAGE_WORD        105
-#define MN_LANGUAGE_PARA        106
-#define MN_LANGUAGE_SELECTION   107
-#define MN_LANGUAGE_PARAGRAPH   108
-#define MN_LANGUAGE_ALL_TEXT    109
+#define MN_SPELLING_DLG                 200
+#define MN_IGNORE_SELECTION             201
+#define MN_IGNORE_WORD                  202
+#define MN_ADD_TO_DIC                   203
+#define MN_AUTOCORR                     204
+#define MN_SET_LANGUAGE_SELECTION       205
+#define MN_SET_LANGUAGE_PARAGRAPH       206
+#define MN_SET_LANGUAGE_ALL_TEXT        207
+#define MN_SHORT_COMMENT                208
 
-#define MN_INSERT_START 500
-#define MN_AUTOCORR_START 900
+// id range for dictionaries sub menu
+#define MN_DICTIONARIES_START               300
+#define MN_DICTIONARIES_END                 (MN_DICTIONARIES_START + 99)
 
-#define MN_LANGUAGE_SELECTION_START     1170
-#define MN_LANGUAGE_PARAGRAPH_START     1270
-#define MN_LANGUAGE_ALL_TEXT_START      1370
+// id range for suggestions from spell and grammar checker
+#define MN_SUGGESTION_START                 500
+#define MN_SUGGESTION_END                   (MN_SUGGESTION_START + MN_MAX_NUM_LANG)
+
+// id range for auto correction sub menu entries
+#define MN_AUTOCORR_START                   700
+#define MN_AUTOCORR_END                     (MN_AUTOCORR_START + MN_MAX_NUM_LANG)
+
+// max number of language entries sub menus
+#define MN_MAX_NUM_LANG                 99
+
+#define MN_NONE_OFFSET                  (MN_MAX_NUM_LANG + 1)
+#define MN_RESET_OFFSET                 (MN_MAX_NUM_LANG + 2)
+#define MN_MORE_OFFSET                  (MN_MAX_NUM_LANG + 3)
+
+// id range for 'set language for selection' sub menu entries
+#define MN_SET_LANGUAGE_SELECTION_START     900
+#define MN_SET_LANGUAGE_SELECTION_END       (MN_SET_LANGUAGE_SELECTION_START + MN_MAX_NUM_LANG)
+#define MN_SET_SELECTION_NONE       (MN_SET_LANGUAGE_SELECTION_START + MN_NONE_OFFSET)
+#define MN_SET_SELECTION_RESET      (MN_SET_LANGUAGE_SELECTION_START + MN_RESET_OFFSET)
+#define MN_SET_SELECTION_MORE       (MN_SET_LANGUAGE_SELECTION_START + MN_MORE_OFFSET)
+
+// id range for 'set language for paragraph' sub menu entries
+#define MN_SET_LANGUAGE_PARAGRAPH_START     1100
+#define MN_SET_LANGUAGE_PARAGRAPH_END       (MN_SET_LANGUAGE_PARAGRAPH_START + MN_MAX_NUM_LANG)
+#define MN_SET_PARA_NONE            (MN_SET_LANGUAGE_PARAGRAPH_START + MN_NONE_OFFSET)
+#define MN_SET_PARA_RESET           (MN_SET_LANGUAGE_PARAGRAPH_START + MN_RESET_OFFSET)
+#define MN_SET_PARA_MORE            (MN_SET_LANGUAGE_PARAGRAPH_START + MN_MORE_OFFSET)
+
+// id range for 'set language for all text' sub menu entries
+#define MN_SET_LANGUAGE_ALL_TEXT_START      1300
+#define MN_SET_LANGUAGE_ALL_TEXT_END        (MN_SET_LANGUAGE_ALL_TEXT_START + MN_MAX_NUM_LANG)
 
 #endif
 

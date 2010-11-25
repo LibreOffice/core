@@ -378,19 +378,20 @@ static sal_uInt16 nBCTitleNo = 0;
                                 else
                                     pSh->SetMark();     // set only the mark
 
-                                SwSection aSect( CONTENT_SECTION,
-                                                String::CreateFromAscii(MASTER_LABEL));
+                                SwSectionData aSect(CONTENT_SECTION,
+                                    String::CreateFromAscii(MASTER_LABEL));
                                 pSh->InsertSection(aSect);
                             }
                         }
                         else if (rItem.bSynchron)
                         {
-                            SwSection aSect(FILE_LINK_SECTION, pSh->GetUniqueSectionName());
+                            SwSectionData aSect(FILE_LINK_SECTION,
+                                    pSh->GetUniqueSectionName());
                             String sLinkName(sfx2::cTokenSeperator);
                             sLinkName += sfx2::cTokenSeperator;
                             sLinkName += String::CreateFromAscii(MASTER_LABEL);
                             aSect.SetLinkFileName(sLinkName);
-                            aSect.SetProtect();
+                            aSect.SetProtectFlag(true);
                             pSh->Insert(aDotStr);   // Dummytext zum Zuweisen der Section
                             pSh->SttDoc();
                             pSh->EndDoc(sal_True);  // Alles im Rahmen selektieren

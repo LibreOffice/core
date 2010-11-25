@@ -13,3 +13,6 @@ sm.SmGraphicAccessible::com::sun::star::accessibility::XAccessibleEventBroadcast
 
 ### i94275 ###
 sm.SmGraphicAccessible::com::sun::star::accessibility::XAccessibleText
+
+### i111220 ###
+sm.XMLMetaExporter::com::sun::star::document::XFilter

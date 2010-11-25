@@ -1162,8 +1162,7 @@ void SwEditShell::SetExtTextInputData( const CommandExtTextInputData& rData )
 
 void SwEditShell::TransliterateText( sal_uInt32 nType )
 {
-    utl::TransliterationWrapper aTrans(
-                        ::comphelper::getProcessServiceFactory(), nType );
+    utl::TransliterationWrapper aTrans( ::comphelper::getProcessServiceFactory(), nType );
     StartAllAction();
     SET_CURR_SHELL( this );
 
@@ -1184,6 +1183,32 @@ void SwEditShell::TransliterateText( sal_uInt32 nType )
 
     EndAllAction();
 }
+
+void SwEditShell::TransliterateText( const String& rModuleName )
+{
+    utl::TransliterationWrapper aTrans(::comphelper::getProcessServiceFactory(), 0 );
+    aTrans.loadModuleByImplName( rModuleName, LANGUAGE_SYSTEM );
+    StartAllAction();
+    SET_CURR_SHELL( this );
+
+    SwPaM* pCrsr = GetCrsr();
+    if( pCrsr->GetNext() != pCrsr )
+    {
+        GetDoc()->StartUndo(UNDO_EMPTY, NULL);
+        FOREACHPAM_START( this )
+
+        if( PCURCRSR->HasMark() )
+            GetDoc()->TransliterateText( *PCURCRSR, aTrans );
+
+        FOREACHPAM_END()
+        GetDoc()->EndUndo(UNDO_EMPTY, NULL);
+    }
+    else
+        GetDoc()->TransliterateText( *pCrsr, aTrans );
+
+    EndAllAction();
+}
+
 
 void SwEditShell::CountWords( SwDocStat& rStat ) const
 {

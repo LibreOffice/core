@@ -38,13 +38,13 @@ Menu MN_SPELL_POPUP
     {
         MenuItem
         {
-            Identifier = MN_IGNORE ;
+            Identifier = MN_IGNORE_WORD ;
             HelpID = HID_LINGU_IGNORE_WORD ;
             Text [ en-US ] = "Ignore All" ;
         };
         MenuItem
         {
-            Identifier = MN_INSERT ;
+            Identifier = MN_ADD_TO_DIC ;
             HelpID = HID_LINGU_ADD_WORD ;
             SubMenu = Menu
             {
@@ -62,14 +62,14 @@ Menu MN_SPELL_POPUP
         };
         MenuItem
         {
-            Identifier = MN_SPELLING ;
+            Identifier = MN_SPELLING_DLG ;
             HelpID = HID_LINGU_SPELLING_DLG ;
             Text [ en-US ] = "~Spellcheck..." ;
         };
         SEPARATOR
         MenuItem
         {
-            Identifier = MN_LANGUAGE_SELECTION ;
+            Identifier = MN_SET_LANGUAGE_SELECTION ;
             SubMenu = Menu
             {
             };
@@ -77,7 +77,7 @@ Menu MN_SPELL_POPUP
         };
         MenuItem
         {
-            Identifier = MN_LANGUAGE_PARAGRAPH ;
+            Identifier = MN_SET_LANGUAGE_PARAGRAPH ;
             SubMenu = Menu
             {
             };
@@ -86,7 +86,7 @@ Menu MN_SPELL_POPUP
 /*
        MenuItem
         {
-            Identifier = MN_LANGUAGE_ALL_TEXT ;
+            Identifier = MN_SET_LANGUAGE_ALL_TEXT ;
             SubMenu = Menu
             {
             };
@@ -114,6 +114,11 @@ String STR_HYP_OK
 String STR_LANGSTATUS_NONE
 {
     Text [ en-US ] = "None (Do not check spelling)" ;
+};
+String STR_RESET_TO_DEFAULT_LANGUAGE
+{
+    Text [ en-US ] = "Reset to Default Language" ;
+    Text [ x-comment ] = " ";
 };
 String STR_LANGSTATUS_MORE
 {

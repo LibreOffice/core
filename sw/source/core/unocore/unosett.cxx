@@ -1659,9 +1659,14 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
                 aPropertyValues.Insert(pData, aPropertyValues.Count());
             }
              Size aSize = rFmt.GetGraphicSize();
-            aSize.Width() = TWIP_TO_MM100( aSize.Width() );
-            aSize.Height() = TWIP_TO_MM100( aSize.Height() );
-            pData = new PropValData((void*)&aSize, SW_PROP_NAME_STR(UNO_NAME_GRAPHIC_SIZE), ::getCppuType((const awt::Size*)0));
+            // --> OD 2010-05-04 #i101131# - applying patch from CMC
+            // adjust conversion due to type mismatch between <Size> and <awt::Size>
+//            aSize.Width() = TWIP_TO_MM100( aSize.Width() );
+//            aSize.Height() = TWIP_TO_MM100( aSize.Height() );
+//            pData = new PropValData((void*)&aSize, SW_PROP_NAME_STR(UNO_NAME_GRAPHIC_SIZE), ::getCppuType((const awt::Size*)0));
+            awt::Size aAwtSize(TWIP_TO_MM100(aSize.Width()), TWIP_TO_MM100(aSize.Height()));
+            pData = new PropValData((void*)&aAwtSize, SW_PROP_NAME_STR(UNO_NAME_GRAPHIC_SIZE), ::getCppuType((const awt::Size*)0));
+            // <--
             aPropertyValues.Insert(pData, aPropertyValues.Count());
 
             const SwFmtVertOrient* pOrient = rFmt.GetGraphicOrientation();

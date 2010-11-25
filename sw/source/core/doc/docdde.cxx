@@ -99,7 +99,9 @@ BOOL lcl_FindSection( const SwSectionFmtPtr& rpSectFmt, void* pArgs, bool bCaseS
     SwSection* pSect = rpSectFmt->GetSection();
     if( pSect )
     {
-        String sNm( bCaseSensitive ? pSect->GetName() : GetAppCharClass().lower( pSect->GetName() ));
+        String sNm( (bCaseSensitive)
+                ? pSect->GetSectionName()
+                : GetAppCharClass().lower( pSect->GetSectionName() ));
         String sCompare( (bCaseSensitive)
                 ? pItem->m_Item
                 : GetAppCharClass().lower( pItem->m_Item ) );

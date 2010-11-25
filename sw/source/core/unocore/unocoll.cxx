@@ -1363,7 +1363,8 @@ uno::Any SwXTextSections::getByName(const OUString& Name)
         for(sal_uInt16 i = 0; i < rFmts.Count(); i++)
         {
             SwSectionFmt* pFmt = rFmts[i];
-            if(pFmt->IsInNodesArr() && aName == pFmt->GetSection()->GetName())
+            if (pFmt->IsInNodesArr()
+                && (aName == pFmt->GetSection()->GetSectionName()))
             {
                 xSect = GetObject(*pFmt);
                 aRet.setValue(&xSect, ::getCppuType((uno::Reference<XTextSection>*)0));
@@ -1407,7 +1408,7 @@ uno::Sequence< OUString > SwXTextSections::getElementNames(void)
             {
                 pFmt = rFmts[++nIndex];
             }
-            pArray[i] = pFmt->GetSection()->GetName();
+            pArray[i] = pFmt->GetSection()->GetSectionName();
         }
     }
     return aSeq;
@@ -1427,7 +1428,7 @@ sal_Bool SwXTextSections::hasByName(const OUString& Name)
         for(sal_uInt16 i = 0; i < rFmts.Count(); i++)
         {
             const SwSectionFmt* pFmt = rFmts[i];
-            if(aName == pFmt->GetSection()->GetName())
+            if (aName == pFmt->GetSection()->GetSectionName())
             {
                 bRet = sal_True;
                 break;

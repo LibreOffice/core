@@ -42,28 +42,16 @@
 #include <fmtfld.hxx>
 #include <viewopt.hxx>
 #include <fldedt.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <swmodule.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <wrtsh.hxx>
 #include <expfld.hxx>
-#ifndef _FLDTDLG_HXX
 #include <fldtdlg.hxx>
-#endif
-#ifndef _FLDPAGE_HXX
 #include <fldpage.hxx>
-#endif
 #include <docufld.hxx>
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
 #include <sfx2/bindings.hxx>
 
 using namespace ::com::sun::star;
@@ -218,7 +206,7 @@ BOOL SwFldPage::InsertFld(USHORT nTypeId, USHORT nSubType, const String& rPar1,
     }
     else    // Feld aendern
     {
-        SwField * pTmpFld = m_pCurFld->Copy();
+        SwField *const pTmpFld = m_pCurFld->CopyField();
 
         String sPar1(rPar1);
         String sPar2(rPar2);

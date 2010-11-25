@@ -43,10 +43,8 @@
 #define STR_PRIVATEOLE              (RC_DOCHDL_BEGIN + 10)
 #define STR_DDEFORMAT               (RC_DOCHDL_BEGIN + 11)
 
-#define BMP_SW_TEAM_MUGSHOT         (RC_DOCHDL_BEGIN + 12)
-#define STR_SW_TEAM_NAMES           (RC_DOCHDL_BEGIN + 13)
 
-#define DOCHDL_ACT_END              STR_SW_TEAM_NAMES
+#define DOCHDL_ACT_END              STR_DDEFORMAT
 
 #if DOCHDL_ACT_END > RC_DOCHDL_END
 #error Resource-Id Ueberlauf in #file, #line

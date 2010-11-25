@@ -39,6 +39,7 @@
 #include <unotextrange.hxx>
 #include <unoprnms.hxx>
 #include <editeng/unoprnms.hxx>
+#include <svx/svditer.hxx>
 #include <swunohelper.hxx>
 #include <doc.hxx>
 #include <fmtcntnt.hxx>
@@ -1052,25 +1053,34 @@ SwXShape::SwXShape(uno::Reference< uno::XInterface > & xShape) :
   -----------------------------------------------------------------------*/
 void SwXShape::AddExistingShapeToFmt( SdrObject& _rObj )
 {
-    SwXShape* pSwShape = NULL;
-    uno::Reference< lang::XUnoTunnel > xShapeTunnel( _rObj.getWeakUnoShape(), uno::UNO_QUERY );
-    if ( xShapeTunnel.is() )
-        pSwShape = reinterpret_cast< SwXShape * >(
-                sal::static_int_cast< sal_IntPtr >( xShapeTunnel->getSomething( SwXShape::getUnoTunnelId() ) ) );
-    if ( pSwShape )
+    SdrObjListIter aIter( _rObj, IM_DEEPNOGROUPS );
+    while ( aIter.IsMore() )
     {
-        if ( pSwShape->m_bDescriptor )
-        {
-            SwFrmFmt* pFmt = ::FindFrmFmt( &const_cast< SdrObject& >( _rObj ) );
-            if ( pFmt )
-                pFmt->Add( pSwShape );
-            pSwShape->m_bDescriptor = sal_False;
-        }
+        SdrObject* pCurrent = aIter.Next();
+        OSL_ENSURE( pCurrent, "SwXShape::AddExistingShapeToFmt: invalid object list element!" );
+        if ( !pCurrent )
+            continue;
 
-        if ( !pSwShape->pImpl->bInitializedPropertyNotifier )
+        SwXShape* pSwShape = NULL;
+        uno::Reference< lang::XUnoTunnel > xShapeTunnel( pCurrent->getWeakUnoShape(), uno::UNO_QUERY );
+        if ( xShapeTunnel.is() )
+            pSwShape = reinterpret_cast< SwXShape * >(
+                    sal::static_int_cast< sal_IntPtr >( xShapeTunnel->getSomething( SwXShape::getUnoTunnelId() ) ) );
+        if ( pSwShape )
         {
-            lcl_addShapePropertyEventFactories( _rObj, *pSwShape );
-            pSwShape->pImpl->bInitializedPropertyNotifier = true;
+            if ( pSwShape->m_bDescriptor )
+            {
+                SwFrmFmt* pFmt = ::FindFrmFmt( const_cast< SdrObject* >( pCurrent ) );
+                if ( pFmt )
+                    pFmt->Add( pSwShape );
+                pSwShape->m_bDescriptor = sal_False;
+            }
+
+            if ( !pSwShape->pImpl->bInitializedPropertyNotifier )
+            {
+                lcl_addShapePropertyEventFactories( *pCurrent, *pSwShape );
+                pSwShape->pImpl->bInitializedPropertyNotifier = true;
+            }
         }
     }
 }

@@ -303,7 +303,7 @@ void SwView::GetState(SfxItemSet &rSet)
                     rSet.DisableItem( nWhich );
             }
             break;
-            case FN_THESAURUS_DLG:
+            case SID_THESAURUS:
             {
                 SwWrtShell  &rSh = GetWrtShell();
                 if (2 <= rSh.GetCrsrCnt())  // multi selection?

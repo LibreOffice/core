@@ -26,192 +26,70 @@
  ************************************************************************/
 #ifndef _ACCFRMOBJ_HXX
 #define _ACCFRMOBJ_HXX
-#include <flyfrm.hxx>
-#include <pagefrm.hxx>
-#include <dflyobj.hxx>
-#include <swtable.hxx>
 
-class SwFrmOrObj
+#include <sal/types.h>
+
+class SwAccessibleMap;
+class SwFrm;
+class SdrObject;
+class Window;
+class SwRect;
+
+namespace sw { namespace access {
+
+class SwAccessibleChild
 {
-    const SdrObject *pObj;
-    const SwFrm *pFrm;
+    public:
+        SwAccessibleChild();
+        explicit SwAccessibleChild( const SdrObject* pDrawObj );
+        explicit SwAccessibleChild( const SwFrm* pFrm );
+        explicit SwAccessibleChild( Window* pWindow );
+        SwAccessibleChild( const SwFrm* pFrm,
+                           const SdrObject* pDrawObj,
+                           Window* pWindow );
 
-    inline void Init( const SdrObject *pO );
-    inline void Init( const SwFrm *pF );
+        SwAccessibleChild( const SwAccessibleChild& r );
+        SwAccessibleChild& operator=( const SwAccessibleChild& r );
 
-public:
+        SwAccessibleChild& operator=( const SdrObject* pDrawObj );
+        SwAccessibleChild& operator=( const SwFrm* pFrm );
+        SwAccessibleChild& operator=( Window* pWindow );
 
-    inline SwFrmOrObj();
-    inline SwFrmOrObj( const SdrObject *pO );
-    inline SwFrmOrObj( const SwFrm *pF );
-    inline SwFrmOrObj( const SwFrm *pF, const SdrObject *pO );
-    inline SwFrmOrObj( const SwFrmOrObj& r );
+        bool operator==( const SwAccessibleChild& r ) const;
 
-    inline SwFrmOrObj& operator=( const SwFrmOrObj& r );
-    inline SwFrmOrObj& operator=( const SdrObject *pO );
-    inline SwFrmOrObj& operator=( const SwFrm *pF );
+        bool IsValid() const;
 
-    inline sal_Bool operator==( const SwFrmOrObj& r ) const;
-    inline sal_Bool operator==( const SdrObject *pO ) const;
-    inline sal_Bool operator==( const SwFrm *pF ) const;
+        const SwFrm* GetSwFrm() const;
+        const SdrObject* GetDrawObject() const;
+        Window* GetWindow() const;
 
-    inline sal_Bool IsValid() const;
+        const SwFrm* GetParent( const sal_Bool bInPagePreview ) const;
 
-    inline const SdrObject *GetSdrObject() const;
-    inline const SwFrm *GetSwFrm() const;
+        bool IsAccessible( sal_Bool bPagePreview ) const;
+        bool IsBoundAsChar() const;
 
-    sal_Bool IsAccessible( sal_Bool bPagePreview ) const;
-    sal_Bool IsBoundAsChar() const;
-    inline sal_Bool IsVisibleChildrenOnly() const;
-    inline SwRect GetBox() const;
-    inline SwRect GetBounds() const;
+        bool IsVisibleChildrenOnly() const;
+        SwRect GetBox( const SwAccessibleMap& rAccMap ) const;
+        SwRect GetBounds( const SwAccessibleMap& rAccMap ) const;
+
+        /** indicating, if accessible child is included even, if the corresponding
+            object is not visible.
+
+            @author OD
+        */
+        bool AlwaysIncludeAsChild() const;
+
+    private:
+        const SwFrm* mpFrm;
+        const SdrObject* mpDrawObj;
+        Window* mpWindow;
+
+        void Init( const SdrObject* pDrawObj );
+        void Init( const SwFrm* pFrm );
+        void Init( Window* pWindow );
 };
 
-inline void SwFrmOrObj::Init( const SdrObject *pO )
-{
-    pObj = pO;
-    // #110094#-1
-    pFrm = pObj && pObj->ISA(SwVirtFlyDrawObj)
-                ? static_cast < const SwVirtFlyDrawObj * >( pObj )->GetFlyFrm()
-                : 0;
-}
 
-inline void SwFrmOrObj::Init( const SwFrm *pF )
-{
-    pFrm = pF;
-    pObj = pFrm && pFrm->IsFlyFrm()
-                ? static_cast < const SwFlyFrm * >( pFrm )->GetVirtDrawObj()
-                : 0;
-}
-
-inline SwFrmOrObj::SwFrmOrObj() :
-    pObj( 0 ), pFrm( 0 )
-{}
-
-inline SwFrmOrObj::SwFrmOrObj( const SdrObject *pO )
-{
-    Init( pO );
-}
-
-inline SwFrmOrObj::SwFrmOrObj( const SwFrm *pF )
-{
-    Init( pF );
-}
-
-inline SwFrmOrObj::SwFrmOrObj( const SwFrm *pF, const SdrObject *pO )
-{
-    if( pF )
-        Init( pF );
-    else
-        Init( pO );
-    ASSERT( (!pF || pF == pFrm) && (!pO || pO == pObj),
-            "invalid frame/object combination" );
-
-}
-
-inline SwFrmOrObj::SwFrmOrObj( const SwFrmOrObj& r ) :
-    pObj( r.pObj ), pFrm( r.pFrm )
-{}
-
-inline SwFrmOrObj& SwFrmOrObj::operator=( const SwFrmOrObj& r )
-{
-    pObj = r.pObj;
-    pFrm = r.pFrm;
-    return *this;
-}
-
-inline SwFrmOrObj& SwFrmOrObj::operator=( const SdrObject *pO )
-{
-    Init( pO );
-    return *this;
-}
-
-inline SwFrmOrObj& SwFrmOrObj::operator=( const SwFrm *pF )
-{
-    Init( pF );
-    return *this;
-}
-
-inline sal_Bool SwFrmOrObj::operator==( const SwFrmOrObj& r ) const
-{
-    return pObj == r.pObj && pFrm == r.pFrm;
-}
-
-inline sal_Bool SwFrmOrObj::operator==( const SdrObject *pO ) const
-{
-    return pObj == pO;
-}
-
-inline sal_Bool SwFrmOrObj::operator==( const SwFrm *pF ) const
-{
-    return pFrm == pF;
-}
-
-inline sal_Bool SwFrmOrObj::IsValid() const
-{
-    return pObj != 0 || pFrm != 0;
-}
-
-inline const SdrObject *SwFrmOrObj::GetSdrObject() const
-{
-    return pObj;
-}
-
-inline const SwFrm *SwFrmOrObj::GetSwFrm() const
-{
-    return pFrm;
-}
-
-inline sal_Bool SwFrmOrObj::IsVisibleChildrenOnly() const
-{
-    return !pFrm || pFrm->IsRootFrm() ||
-           !( pFrm->IsTabFrm() || pFrm->IsInTab() ||
-              ( IsBoundAsChar() &&
-                static_cast<const SwFlyFrm*>(pFrm)->GetAnchorFrm()->IsInTab()) );
-}
-
-inline SwRect SwFrmOrObj::GetBox() const
-{
-    if( pFrm )
-    {
-        if( pFrm->IsPageFrm() &&
-            static_cast< const SwPageFrm * >( pFrm )->IsEmptyPage() )
-        {
-            SwRect aBox( pFrm->Frm().Left(), pFrm->Frm().Top()-1, 1, 1 );
-            return aBox;
-        }
-        else if ( pFrm->IsTabFrm() )
-        {
-            SwRect aBox( pFrm->Frm() );
-            aBox.Intersection( pFrm->GetUpper()->Frm() );
-            return aBox;
-        }
-        else
-            return pFrm->Frm();
-    }
-    else if( pObj )
-        return SwRect( pObj->GetCurrentBoundRect() );
-    else
-        return SwRect();
-}
-
-inline SwRect SwFrmOrObj::GetBounds() const
-{
-    if( pFrm )
-    {
-        if( pFrm->IsPageFrm() &&
-            static_cast< const SwPageFrm * >( pFrm )->IsEmptyPage() )
-        {
-            SwRect aBox( pFrm->Frm().Left(), pFrm->Frm().Top()-1, 0, 0 );
-            return aBox;
-        }
-        else
-            return pFrm->PaintArea();
-    }
-    else if( pObj )
-        return SwRect( pObj->GetCurrentBoundRect() );
-    return SwRect();
-}
-
+} } // eof of namespace sw::access
 
 #endif

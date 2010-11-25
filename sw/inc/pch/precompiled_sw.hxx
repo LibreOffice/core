@@ -728,7 +728,7 @@
 #include "editeng/eeitem.hxx"
 #include "filter/msfilter/escherex.hxx"
 #include "svx/extrusionbar.hxx"
-#include "svx/extrusioncontrols.hxx"
+#include "svx/extrusioncolorcontrol.hxx"
 #include "svx/fillctrl.hxx"
 #include "svx/flagsdef.hxx"
 #include "editeng/flstitem.hxx"

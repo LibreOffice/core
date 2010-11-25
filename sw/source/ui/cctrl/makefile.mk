@@ -50,6 +50,9 @@ SLOFILES =  \
         $(SLO)$/popbox.obj \
         $(SLO)$/swlbox.obj
 
+EXCEPTIONSFILES = \
+        $(SLO)$/popbox.obj
+
 # --- Tagets -------------------------------------------------------
 
 .INCLUDE :  target.mk

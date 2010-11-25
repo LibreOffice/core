@@ -41,6 +41,7 @@
 #include <swtable.hxx>
 #include "crsrsh.hxx"
 #include "viscrs.hxx"
+#include <accfrmobj.hxx>
 #include <accfrmobjslist.hxx>
 #include "frmfmt.hxx"
 #include "cellatr.hxx"
@@ -56,6 +57,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using ::rtl::OUString;
+using namespace sw::access;
 
 const sal_Char sServiceName[] = "com.sun.star.table.AccessibleCellView";
 const sal_Char sImplementationName[] = "com.sun.star.comp.Writer.SwAccessibleCellView";
@@ -83,8 +85,7 @@ sal_Bool SwAccessibleCell::IsSelected()
     return bRet;
 }
 
-void SwAccessibleCell::GetStates(
-        ::utl::AccessibleStateSetHelper& rStateSet )
+void SwAccessibleCell::GetStates( ::utl::AccessibleStateSetHelper& rStateSet )
 {
     SwAccessibleContext::GetStates( rStateSet );
 
@@ -104,11 +105,10 @@ void SwAccessibleCell::GetStates(
     }
 }
 
-SwAccessibleCell::SwAccessibleCell(
-        SwAccessibleMap *pInitMap,
-        const SwCellFrm *pCellFrm   ) :
-    SwAccessibleContext( pInitMap, AccessibleRole::TABLE_CELL, pCellFrm ),
-    bIsSelected( sal_False )
+SwAccessibleCell::SwAccessibleCell( SwAccessibleMap *pInitMap,
+                                    const SwCellFrm *pCellFrm )
+    : SwAccessibleContext( pInitMap, AccessibleRole::TABLE_CELL, pCellFrm )
+    , bIsSelected( sal_False )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     OUString sBoxName( pCellFrm->GetTabBox()->GetName() );
@@ -145,11 +145,11 @@ sal_Bool SwAccessibleCell::_InvalidateChildrenCursorPos( const SwFrm *pFrm )
 {
     sal_Bool bChanged = sal_False;
 
-    const SwFrmOrObjSList aVisList( GetVisArea(), pFrm );
-    SwFrmOrObjSList::const_iterator aIter( aVisList.begin() );
+    const SwAccessibleChildSList aVisList( GetVisArea(), *pFrm, *GetMap() );
+    SwAccessibleChildSList::const_iterator aIter( aVisList.begin() );
     while( aIter != aVisList.end() )
     {
-        const SwFrmOrObj& rLower = *aIter;
+        const SwAccessibleChild& rLower = *aIter;
         const SwFrm *pLower = rLower.GetSwFrm();
         if( pLower )
         {
@@ -184,7 +184,7 @@ sal_Bool SwAccessibleCell::_InvalidateChildrenCursorPos( const SwFrm *pFrm )
 void SwAccessibleCell::_InvalidateCursorPos()
 {
 
-    const SwFrm *pParent = GetParent( GetFrm(), IsInPagePreview() );
+    const SwFrm *pParent = GetParent( SwAccessibleChild(GetFrm()), IsInPagePreview() );
     ASSERT( pParent->IsTabFrm(), "parent is not a tab frame" );
     const SwTabFrm *pTabFrm = static_cast< const SwTabFrm * >( pParent );
     if( pTabFrm->IsFollow() )
@@ -253,21 +253,21 @@ uno::Sequence< OUString > SAL_CALL SwAccessibleCell::getSupportedServiceNames()
 
 void SwAccessibleCell::Dispose( sal_Bool bRecursive )
 {
-    const SwFrm *pParent = GetParent( GetFrm(), IsInPagePreview() );
+    const SwFrm *pParent = GetParent( SwAccessibleChild(GetFrm()), IsInPagePreview() );
     ::vos::ORef< SwAccessibleContext > xAccImpl(
             GetMap()->GetContextImpl( pParent, sal_False ) );
     if( xAccImpl.isValid() )
-        xAccImpl->DisposeChild( GetFrm(), bRecursive );
+        xAccImpl->DisposeChild( SwAccessibleChild(GetFrm()), bRecursive );
     SwAccessibleContext::Dispose( bRecursive );
 }
 
 void SwAccessibleCell::InvalidatePosOrSize( const SwRect& rOldBox )
 {
-    const SwFrm *pParent = GetParent( GetFrm(), IsInPagePreview() );
+    const SwFrm *pParent = GetParent( SwAccessibleChild(GetFrm()), IsInPagePreview() );
     ::vos::ORef< SwAccessibleContext > xAccImpl(
             GetMap()->GetContextImpl( pParent, sal_False ) );
     if( xAccImpl.isValid() )
-        xAccImpl->InvalidateChildPosOrSize( GetFrm(), rOldBox );
+        xAccImpl->InvalidateChildPosOrSize( SwAccessibleChild(GetFrm()), rOldBox );
     SwAccessibleContext::InvalidatePosOrSize( rOldBox );
 }
 

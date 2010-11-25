@@ -33,12 +33,13 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 
 #include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase6.hxx>
 
 #include <sfx2/Metadatable.hxx>
 
@@ -57,10 +58,11 @@ namespace sw {
     class MetaField;
 }
 
-typedef ::cppu::ImplInheritanceHelper5
+typedef ::cppu::ImplInheritanceHelper6
 <   ::sfx2::MetadatableMixin
 ,   ::com::sun::star::lang::XUnoTunnel
 ,   ::com::sun::star::lang::XServiceInfo
+,   ::com::sun::star::container::XChild
 ,   ::com::sun::star::container::XEnumerationAccess
 ,   ::com::sun::star::text::XTextContent
 ,   ::com::sun::star::text::XText
@@ -150,6 +152,17 @@ public:
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::lang::XEventListener > & xListener)
         throw (::com::sun::star::uno::RuntimeException);
+
+    // XChild
+    virtual ::com::sun::star::uno::Reference<
+            ::com::sun::star::uno::XInterface > SAL_CALL
+        getParent()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setParent(
+            ::com::sun::star::uno::Reference<
+                ::com::sun::star::uno::XInterface> const& xParent)
+        throw (::com::sun::star::uno::RuntimeException,
+            ::com::sun::star::lang::NoSupportException);
 
     // XElementAccess
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType()
