@@ -64,8 +64,8 @@ JAVATESTFILES = \
     RowSet.java \
     SingleSelectQueryComposer.java \
     UISettings.java \
+    CopyTableWizard.java
 
-#	CopyTableWizard.java
 # disable for now (#i115753#)
 
 # put here all other files
