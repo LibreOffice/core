@@ -308,5 +308,3 @@ ModalDialog RID_SCDLG_RETYPEPASS_INPUT
         Text [ en-US ] = "Remove password from this protected item." ;
     };
 };
-
-

@@ -31,7 +31,6 @@
 TabPage TP_YERRORBAR
 {
     Hide = TRUE ;
-//  HelpID = HID_SCH_STAT ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
     RESOURCE_ERRORBARS( 260 - 12, 0 )

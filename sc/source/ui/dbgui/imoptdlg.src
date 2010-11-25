@@ -25,7 +25,6 @@
  *
  ************************************************************************/
 
-
 #include "imoptdlg.hrc"
 
 ModalDialog RID_SCDLG_IMPORTOPT
@@ -121,10 +120,3 @@ ModalDialog RID_SCDLG_IMPORTOPT
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
 };
-
-
-
-
-
-
-

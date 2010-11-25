@@ -33,7 +33,7 @@ Image IMG_TYPE_COLUMN
 };
 Image IMG_TYPE_BAR
 {
-    ImageBitmap = Bitmap { File = "typebar_16.png " ; };
+    ImageBitmap = Bitmap { File = "typebar_16.png" ; };
     MaskColor = STD_MASKCOLOR;
 };
 Image IMG_TYPE_PIE
@@ -53,7 +53,7 @@ Image IMG_TYPE_XY
 };
 Image IMG_TYPE_AREA
 {
-    ImageBitmap = Bitmap { File = "typearea_16.png" ; };
+    ImageBitmap = Bitmap { File = " " ; };
     MaskColor = STD_MASKCOLOR;
 };
 Image IMG_TYPE_NET
@@ -113,7 +113,7 @@ Bitmap BMP_BARS_2D_2
 {
     File = "barstack_52x60.png" ;
 };
-Bitmap BMP_BARS_2D_3
+Bitmap
 {
     File = "barpercent_52x60.png" ;
 };
@@ -501,35 +501,35 @@ Image BMP_REGRESSION_NONE
 {
     ImageBitmap = Bitmap
     {
-        File = "regno.bmp" ;
+        File = "regno.png" ;
     };
 };
 Image BMP_REGRESSION_LINEAR
 {
     ImageBitmap = Bitmap
     {
-        File = "reglin.bmp" ;
+        File = "reglin.png" ;
     };
 };
 Image BMP_REGRESSION_LOG
 {
     ImageBitmap = Bitmap
     {
-        File = "reglog.bmp" ;
+        File = "reglog.png" ;
     };
 };
 Image BMP_REGRESSION_EXP
 {
     ImageBitmap = Bitmap
     {
-        File = "regexp.bmp" ;
+        File = "regexp.png" ;
     };
 };
 Image BMP_REGRESSION_POWER
 {
     ImageBitmap = Bitmap
     {
-        File = "regpow.bmp" ;
+        File = "regpow.png" ;
     };
 };
 //---------------------
