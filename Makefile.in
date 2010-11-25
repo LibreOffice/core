@@ -7,7 +7,7 @@ all:
 	@. ./*[Ee]nv.[Ss]et.sh && \
         ./bootstrap && \
         cd instsetoo_native && \
-        ../solenv/bin/build.pl -P@BUILD_NCPUS@ --all -P@BUILD_MAX_JOBS@
+        ../solenv/bin/build.pl -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@
 
 distclean:
 	@. ./*[Ee]nv.[Ss]et.sh && \
