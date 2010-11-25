@@ -89,9 +89,11 @@ public:
     //    Reference<sdbc::XResultSet> mxFolderResultSet;
     Reference<com::sun::star::ucb::XCommandEnvironment> mxFolderEnvironment;
 
-    class Comparator { public:
-        bool operator() (const FolderDescriptor& r1, const FolderDescriptor& r2)
-        { return r1.mnPriority < r2.mnPriority; }
+    class Comparator
+    {
+    public:
+        bool operator() (const FolderDescriptor& r1, const FolderDescriptor& r2) const
+            { return r1.mnPriority < r2.mnPriority; }
     };
 };
 
