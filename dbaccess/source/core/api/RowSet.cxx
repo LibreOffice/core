@@ -2243,7 +2243,7 @@ Reference< XNameAccess > ORowSet::impl_getTables_throw()
         try
         {
             Reference<XDatabaseMetaData> xMeta = m_xActiveConnection->getMetaData();
-            bCase = xMeta.is() && xMeta->storesMixedCaseQuotedIdentifiers();
+            bCase = xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers();
         }
         catch(SQLException&)
         {

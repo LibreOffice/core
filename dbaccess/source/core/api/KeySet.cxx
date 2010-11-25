@@ -193,7 +193,7 @@ OKeySet::~OKeySet()
 void OKeySet::initColumns()
 {
     Reference<XDatabaseMetaData> xMeta = m_xConnection->getMetaData();
-    bool bCase = (xMeta.is() && xMeta->storesMixedCaseQuotedIdentifiers()) ? true : false;
+    bool bCase = (xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers()) ? true : false;
     m_pKeyColumnNames.reset( new SelectColumnsMetaData(bCase) );
     m_pColumnNames.reset( new SelectColumnsMetaData(bCase) );
     m_pParameterNames.reset( new SelectColumnsMetaData(bCase) );
