@@ -2563,7 +2563,7 @@ void ScXMLExport::_ExportAutoStyles()
         CollectShapesAutoStyles(nTableCount);
         for (sal_Int32 nTable = 0; nTable < nTableCount; ++nTable, IncrementProgressBar(sal_False))
         {
-            fprintf(stdout, "ScXMLExport::_ExportAutoStyles:   table = %ld\n", nTable);
+            fprintf(stdout, "ScXMLExport::_ExportAutoStyles:   table = %" SAL_PRIdINT32 "\n", nTable);
             bool bUseStream = pSheetData && pDoc && pDoc->IsStreamValid((SCTAB)nTable) &&
                               pSheetData->HasStreamPos(nTable) && xSourceStream.is();
 
