@@ -1513,3 +1513,14 @@ File gid_License_Odt
     Name = "LICENSE.odt";
     Styles = (PACKED);
 End
+
+File gid_Credits_Odt
+    BIN_FILE_BODY;
+#if defined MACOSX
+    Dir = gid_Brand_Dir_BasisLink;
+#else
+    Dir = gid_Dir_Brand_Root;
+#endif
+    Name = "CREDITS.odt";
+    Styles = (PACKED);
+End
