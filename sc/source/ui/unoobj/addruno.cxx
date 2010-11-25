@@ -320,8 +320,8 @@ uno::Sequence<rtl::OUString> SAL_CALL ScAddressConversionObj::getSupportedServic
 {
     uno::Sequence<rtl::OUString> aRet(1);
     rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = rtl::OUString::createFromAscii( bIsRange ? SC_SERVICENAME_RANGEADDRESS
-                                                         : SC_SERVICENAME_CELLADDRESS );
+    pArray[0] = bIsRange ? rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_SERVICENAME_RANGEADDRESS))
+                         : rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_SERVICENAME_CELLADDRESS));
     return aRet;
 }
 

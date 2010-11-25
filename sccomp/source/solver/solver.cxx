@@ -559,13 +559,13 @@ void SAL_CALL SolverComponent::solve() throw(uno::RuntimeException)
 uno::Sequence< OUString > SolverComponent_getSupportedServiceNames()
 {
     uno::Sequence< OUString > aServiceNames( 1 );
-    aServiceNames[ 0 ] = OUString::createFromAscii( "com.sun.star.sheet.Solver" );
+    aServiceNames[ 0 ] = OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sheet.Solver" ));
     return aServiceNames;
 }
 
 OUString SolverComponent_getImplementationName()
 {
-    return OUString::createFromAscii( "com.sun.star.comp.Calc.Solver" );
+    return OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Calc.Solver" ));
 }
 
 OUString SAL_CALL SolverComponent::getImplementationName() throw(uno::RuntimeException)
@@ -614,7 +614,7 @@ extern "C"
                 sal_Int32                              nPos;
 
                 xNewKey = reinterpret_cast< registry::XRegistryKey * >( pRegistryKey )->createKey( SolverComponent_getImplementationName() );
-                xNewKey = xNewKey->createKey( OUString::createFromAscii( "/UNO/SERVICES" ) );
+                xNewKey = xNewKey->createKey( OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES" )) );
                 const uno::Sequence< OUString > & rSNL1 = SolverComponent_getSupportedServiceNames();
                 const OUString * pArray1 = rSNL1.getConstArray();
                 for ( nPos = rSNL1.getLength(); nPos--; )

@@ -2126,8 +2126,8 @@ uno::Sequence<rtl::OUString> SAL_CALL ScStyleObj::getSupportedServiceNames()
     uno::Sequence<rtl::OUString> aRet(2);
     rtl::OUString* pArray = aRet.getArray();
     pArray[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCSTYLE_SERVICE ));
-    pArray[1] = rtl::OUString::createFromAscii( bPage ? SCPAGESTYLE_SERVICE
-                                                      : SCCELLSTYLE_SERVICE );
+    pArray[1] = bPage ? rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SCPAGESTYLE_SERVICE))
+                      : rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SCCELLSTYLE_SERVICE));
     return aRet;
 }
 
