@@ -341,8 +341,8 @@ namespace cppcanvas
                 }
             }
 
-            UINT32 GetType () { return type; }
-            const ::Color& GetColor () { return solidColor; }
+            UINT32 GetType() const { return type; }
+            const ::Color& GetColor() const { return solidColor; }
 
             void Read (SvStream& s, ImplRenderer& rR)
             {

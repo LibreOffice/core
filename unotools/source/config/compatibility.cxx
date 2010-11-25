@@ -223,7 +223,7 @@ class SvtCompatibility
             return lEntries.size();
         }
 
-        const SvtCompatibilityEntry& operator[]( int i )
+        const SvtCompatibilityEntry& operator[]( int i ) const
         {
             return lEntries[i];
         }

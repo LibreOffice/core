@@ -350,12 +350,12 @@ namespace basegfx
                 return 0.0f;
             }
 
-            bool isEnded()
+            bool isEnded() const
             {
                 return mnYCounter<=0;
             }
 
-            bool isDownwards()
+            bool isDownwards() const
             {
                 return mbDownwards;
             }
