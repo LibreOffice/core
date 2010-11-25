@@ -93,7 +93,7 @@ namespace connectivity
             OSL_PRECOND( m_xConnection.is(), "OSQLParseTreeIteratorImpl::OSQLParseTreeIteratorImpl: invalid connection!" );
             m_xDatabaseMetaData = m_xConnection->getMetaData();
 
-            m_bIsCaseSensitive = m_xDatabaseMetaData.is() && m_xDatabaseMetaData->storesMixedCaseQuotedIdentifiers();
+            m_bIsCaseSensitive = m_xDatabaseMetaData.is() && m_xDatabaseMetaData->supportsMixedCaseQuotedIdentifiers();
             m_pTables.reset( new OSQLTables( m_bIsCaseSensitive ) );
             m_pSubTables.reset( new OSQLTables( m_bIsCaseSensitive ) );
 
