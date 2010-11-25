@@ -161,11 +161,12 @@
 #define SC_SHOW_CHANGES_BY_RANGES                   11
 #define SC_SHOW_CHANGES_BY_RANGES_LIST              12
 
-using namespace rtl;
 using namespace formula;
 using namespace com::sun::star;
 using namespace xmloff::token;
 using ::std::vector;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 using ::com::sun::star::uno::UNO_QUERY;
 
 //----------------------------------------------------------------------------
