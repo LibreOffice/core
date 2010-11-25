@@ -97,7 +97,7 @@
     time and will be depricated soon!
     Another solution will be introduced as final one.
  */
-interface XOptimizedStorage
+published interface XOptimizedStorage
 {
     // -----------------------------------------------------------------------
     /** allows to insert a raw stream representing nonencrypted stream with

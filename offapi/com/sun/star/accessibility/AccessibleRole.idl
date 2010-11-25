@@ -686,6 +686,33 @@ published constants AccessibleRole
         @since OOo 3.0
     */
     const short TREE_TABLE = 80;
+
+    /** Comment role
+
+        <p>An object which represents a comment.</p>
+
+        <p>A comment is anchored at a certain content position in the document and
+        annotates this document content position or a certain text range of the document content.
+        In the OpenDocument file format a comment is known as an annotation.</p>
+
+        <p>See also <const>COMMENT_END</const>.</p>
+
+        @since OOo 3.2
+    */
+    const short COMMENT = 81;
+
+    /** Comment end role
+
+        <p>An invisible object which represents the end position of a text range which
+        is annotated by a comment - see <const>COMMENT</const>.</p>
+
+        <p>This object and the corresponding object representing the comment shall be
+        in relation of type <const>MEMBER_OF</const>.</p>
+
+        @since OOo 3.2
+    */
+    const short COMMENT_END = 82;
+
 };
 
 }; }; }; };

@@ -55,7 +55,7 @@
 
 /** creates a hatch window implementation.
  */
-interface XHatchWindowFactory: com::sun::star::uno::XInterface
+published interface XHatchWindowFactory: com::sun::star::uno::XInterface
 {
     //------------------------------------------------------------------------
     /** creates a new hatch window instance.

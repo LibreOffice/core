@@ -46,7 +46,7 @@
 //============================================================================
 /** allows transacted access to an object.
  */
-interface XTransactedObject: com::sun::star::uno::XInterface
+published interface XTransactedObject: com::sun::star::uno::XInterface
 {
     // -----------------------------------------------------------------------
     /** commits the changes made for object.

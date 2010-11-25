@@ -43,7 +43,7 @@
 
 /** is intended to provide result of creation of an embedded object by dialog.
  */
-struct InsertedObjectInfo
+published struct InsertedObjectInfo
 {
     //-------------------------------------------------------------------------
     /** The new created embedded object.

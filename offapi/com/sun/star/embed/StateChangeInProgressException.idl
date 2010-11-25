@@ -42,7 +42,7 @@
     to call requested functionality currently because the object is changing
     state.
  */
-exception StateChangeInProgressException: com::sun::star::embed::WrongStateException
+published exception StateChangeInProgressException: com::sun::star::embed::WrongStateException
 {
     //------------------------------------------------------------------------
     /** contains the target state the object tries to reach currently.

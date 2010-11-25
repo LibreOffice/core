@@ -57,7 +57,7 @@ module com {  module sun {  module star {  module embed {
     the listener throw related veto exception until the service is disposed.
     </p>
 */
-service InstanceLocker : com::sun::star::lang::XComponent
+published service InstanceLocker : com::sun::star::lang::XComponent
 {
     /** is used to initialize the object on it's creation.
 

@@ -58,7 +58,7 @@ module com { module sun { module star { module embed {
     subcomponents are either OLE storages themself or streams.
     </p>
 */
-interface XOLESimpleStorage
+published interface XOLESimpleStorage
 {
     //INTERFACES
     //

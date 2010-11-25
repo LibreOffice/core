@@ -90,6 +90,7 @@ IDLFILES=\
     ResultSet.idl \
     RowChangeAction.idl \
     RowChangeEvent.idl \
+    RowsChangeEvent.idl \
     RowSet.idl \
     RowSetVetoException.idl \
     SingleSelectQueryAnalyzer.idl \
@@ -128,6 +129,8 @@ IDLFILES=\
     XRowSetApproveListener.idl \
     XRowSetChangeBroadcaster.idl \
     XRowSetChangeListener.idl \
+    XRowsChangeBroadcaster.idl \
+    XRowsChangeListener.idl \
     XRowSetSupplier.idl \
     XSingleSelectQueryAnalyzer.idl \
     XSingleSelectQueryComposer.idl \

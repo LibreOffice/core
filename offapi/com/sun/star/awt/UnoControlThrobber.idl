@@ -45,9 +45,11 @@
 /** specifies a simple animation control.
 
     <p>The model of an <type>UnoControlThrobber</type> control must support
-    the <type>UnoControlThrobberModel</type> service.
+    the <type>UnoControlThrobberModel</type> service.</p>
+
+    @since OOo 2.2
  */
-service UnoControlThrobber
+published service UnoControlThrobber
 {
     service com::sun::star::awt::UnoControl;
 

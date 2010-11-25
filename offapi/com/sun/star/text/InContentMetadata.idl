@@ -32,6 +32,10 @@
 #include <com/sun/star/container/XEnumerationAccess.idl>
 #endif
 
+#ifndef __com_sun_star_container_XChild_idl__
+#include <com/sun/star/container/XChild.idl>
+#endif
+
 #ifndef __com_sun_star_text_TextContent_idl__
 #include <com/sun/star/text/TextContent.idl>
 #endif
@@ -67,6 +71,12 @@ service InContentMetadata
     /** The <type>TextContent</type>s that are contained in the
         annotated range of text can be enumerated. */
     interface com::sun::star::container::XEnumerationAccess;
+
+    //-------------------------------------------------------------------------
+    /** The <type>TextContent</type> that is the parent of this text range.
+        @since OOo 3.3
+     */
+    interface com::sun::star::container::XChild;
 
 };
 

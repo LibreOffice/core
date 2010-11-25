@@ -35,7 +35,7 @@ module com { module sun { module star { module embed {
 /** This constant set contains possible actions that could be approved by
 <type>ActionsApproval</type> implementation.
 */
-constants Actions
+published constants Actions
 {
     //------------------------------------------------------------------------
     /** "Prevent Close" - throws veto excetion if target object is going to

@@ -61,7 +61,7 @@ namespace
         long r8, void ** gpreg, double *fpreg, void ** ovrflw,
         sal_Int64 * pRegisterReturn /* space for register return */ )
     {
-        void ** startovrflw;
+        void ** startovrflw = ovrflw;
         int nregs = 0; //number of words passed in registers
 
 #ifdef CMC_DEBUG
@@ -143,7 +143,7 @@ namespace
                         }
                         else
                         {
-                            if ((startovrflw-ovrflw) & 4)
+                            if ((startovrflw-ovrflw) & 1)
                                 ovrflw--;
                             pCppArgs[nPos] = pUnoArgs[nPos] = ((char*)ovrflw - 4);
                             bOverFlowUsed = true;
@@ -182,7 +182,7 @@ namespace
                         }
                         else
                         {
-                            if ((startovrflw-ovrflw) & 4)
+                            if ((startovrflw-ovrflw) & 1)
                                 ovrflw--;
                             pCppArgs[nPos] = pUnoArgs[nPos] = ((char*)ovrflw - 4);
                             bOverFlowUsed = true;

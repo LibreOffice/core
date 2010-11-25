@@ -54,7 +54,7 @@
 //============================================================================
 /** specifies an additional implementation for linked embedded object support.
  */
-interface XLinkageSupport: XCommonEmbedPersist
+published interface XLinkageSupport: XCommonEmbedPersist
 {
     //------------------------------------------------------------------------
     /** breaks the link and provides the object with a parent storage and a

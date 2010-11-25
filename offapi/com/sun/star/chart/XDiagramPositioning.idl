@@ -1,0 +1,107 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: XDiagramPositioning.idl,v $
+ * $Revision: 1.1 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_chart_XDiagramPositioning_idl__
+#define __com_sun_star_chart_XDiagramPositioning_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+#ifndef __com_sun_star_awt_Rectangle_idl__
+#include <com/sun/star/awt/Rectangle.idl>
+#endif
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module chart {
+
+//=============================================================================
+
+/** allow for different positioning options for a diagram
+
+    @see Diagram
+ */
+interface XDiagramPositioning : com::sun::star::uno::XInterface
+{
+    /** the diagram will be placed automtically
+    */
+    void setAutomaticDiagramPositioning();
+
+    /** @returns whether the diagram is placed automtically
+    */
+    boolean isAutomaticDiagramPositioning();
+
+    /** place the inner diagram part excluding any axes, labels and titles
+        @param PositionRect
+            specifies the position and size in 100/th mm
+    */
+    void setDiagramPositionExcludingAxes( [in] com::sun::star::awt::Rectangle PositionRect );
+
+    /** @returns true in case the diagram position was set with method setDiagramPositionExcludingAxes
+    */
+    boolean isExcludingDiagramPositioning();
+
+    /** @returns the position rectangle of the inner diagram part excluding any axes, labels and titles.
+        Position and size are given in 100/th mm.
+        It might be necessary to calculate the positioning so this method can be expensive and the result may depend on different other settings.
+    */
+    com::sun::star::awt::Rectangle calculateDiagramPositionExcludingAxes();
+
+
+    /** place the outer diagram part including the axes and axes labels, but excluding the axes titles.
+        @param PositionRect
+            specifies the position and size in 100/th mm
+    */
+    void setDiagramPositionIncludingAxes( [in] com::sun::star::awt::Rectangle PositionRect );
+
+    /** @returns the position rectangle of the diagram including the axes and axes labels, but excluding the axes titles.
+        Position and size are given in 100/th mm.
+        It might be necessary to calculate the positioning so this method can be expensive and the result may depend on different other settings.
+    */
+    com::sun::star::awt::Rectangle calculateDiagramPositionIncludingAxes();
+
+    /** place the diagram including the axes, axes labels and axes titles.
+        For the placement the current axis titles are taken into account, so the titles must be initialized properly before this method is called.
+        @param PositionRect
+            specifies the position and size in 100/th mm
+    */
+    void setDiagramPositionIncludingAxesAndAxisTitles( [in] com::sun::star::awt::Rectangle PositionRect );
+
+    /** @returns the position rectangle of the diagram including the axes, axes labels and axes titles.
+        Position and size are given in 100/th mm.
+        It might be necessary to calculate the positioning so this method can be expensive and the result may depend on different other settings.
+    */
+    com::sun::star::awt::Rectangle calculateDiagramPositionIncludingAxesAndAxisTitles();
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

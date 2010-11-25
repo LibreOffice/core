@@ -51,7 +51,7 @@
     internally, and can be used as a temporary storage usually used.
     </p>
  */
-exception UseBackupException: com::sun::star::io::IOException
+published exception UseBackupException: com::sun::star::io::IOException
 {
     /** The URL of the temporary file the storage is based on now.
      */

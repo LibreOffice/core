@@ -47,7 +47,7 @@
     addition to the loaded state. Other states and possible verbs can be
     detected only after object is switched to running state.
  */
-exception NeedsRunningStateException: WrongStateException
+published exception NeedsRunningStateException: WrongStateException
 {
 };
 

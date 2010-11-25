@@ -58,7 +58,7 @@
 //============================================================================
 /** allows to create and initialize a new link of specified type.
  */
-interface XLinkFactory: com::sun::star::uno::XInterface
+published interface XLinkFactory: com::sun::star::uno::XInterface
 {
     //------------------------------------------------------------------------
     /** creates a new link and transport parameters for persistent

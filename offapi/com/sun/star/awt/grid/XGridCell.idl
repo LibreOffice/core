@@ -39,7 +39,7 @@ module com {  module sun {  module star {  module awt {  module grid {
 
 //=============================================================================
 
-interface XGridCell: com::sun::star::uno::XInterface
+interface XGridCell
 {
 
     [attribute] string Value;

@@ -88,7 +88,7 @@ module com {   module sun {   module star {   module document {
             for getting access to an instance from a loaded document
     @see DocumentProperties     for a service that implements this interface
  */
-interface XDocumentProperties
+published interface XDocumentProperties
 {
     //-------------------------------------------------------------------------
     /** contains the initial author of the document.
@@ -352,8 +352,6 @@ interface XDocumentProperties
                  if thrown when trying to open a stream in the given storage
         @throws com::sun::star::io::IOException
                  if thrown when trying to open a stream in the given storage
-        @throws com::sun::star::uno::Exception
-                 in various unspecified circumstances
      */
 
     void loadFromStorage( [in] com::sun::star::embed::XStorage Storage,
@@ -361,15 +359,10 @@ interface XDocumentProperties
         raises( com::sun::star::lang::IllegalArgumentException,
                 com::sun::star::io::WrongFormatException,
                 com::sun::star::lang::WrappedTargetException,
-                com::sun::star::io::IOException,
-                com::sun::star::uno::Exception );
+                com::sun::star::io::IOException );
 
     //-------------------------------------------------------------------------
     /** loads document properties from an ODF package or an OLE container.
-        <p>
-        For compatibility reasons this method also supports the import from
-        former StarOffice binary file formats.
-        </p>
 
         @param URL
             the URL of the source document
@@ -389,16 +382,13 @@ interface XDocumentProperties
                  if thrown when trying to open a stream in the given storage
         @throws com::sun::star::io::IOException
                  if thrown when trying to open a stream in the given storage
-        @throws com::sun::star::uno::Exception
-                 in various unspecified circumstances
      */
 
     void loadFromMedium( [in] string URL,
                 [in] sequence < com::sun::star::beans::PropertyValue > Medium )
         raises( com::sun::star::io::WrongFormatException,
                 com::sun::star::lang::WrappedTargetException,
-                com::sun::star::io::IOException,
-                com::sun::star::uno::Exception );
+                com::sun::star::io::IOException );
 
     //-------------------------------------------------------------------------
     /** stores document properties to an ODF package.
@@ -428,23 +418,16 @@ interface XDocumentProperties
                  if thrown when trying to open a stream in the given storage
         @throws com::sun::star::io::IOException
                  if thrown when writing to the storage
-        @throws com::sun::star::uno::Exception
-                 in various unspecified circumstances
      */
 
     void storeToStorage( [in] com::sun::star::embed::XStorage Storage,
                 [in] sequence < com::sun::star::beans::PropertyValue > Medium )
         raises( com::sun::star::lang::IllegalArgumentException,
                 com::sun::star::lang::WrappedTargetException,
-                com::sun::star::io::IOException,
-                com::sun::star::uno::Exception );
+                com::sun::star::io::IOException );
 
     //-------------------------------------------------------------------------
     /** stores document properties to an ODF package or an OLE container.
-        <p>
-        For compatibility reasons this method also supports the export to former
-        StarOffice binary file formats.
-        </p>
 
         @param URL
             the URL of the target document
@@ -462,15 +445,12 @@ interface XDocumentProperties
                  if thrown when trying to open a stream in the given storage
         @throws com::sun::star::io::IOException
                  if thrown when writing to the storage
-        @throws com::sun::star::uno::Exception
-                 in various unspecified circumstances
      */
 
     void storeToMedium( [in] string URL,
                 [in] sequence < com::sun::star::beans::PropertyValue > Medium )
         raises( com::sun::star::lang::WrappedTargetException,
-                com::sun::star::io::IOException,
-                com::sun::star::uno::Exception );
+                com::sun::star::io::IOException );
 };
 
 //=============================================================================

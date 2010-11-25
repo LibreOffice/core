@@ -45,7 +45,7 @@ module com { module sun { module star { module embed {
 /** This service provides a simple functionality to allow
     read/write the storages in OLE storage format.
 */
-service OLESimpleStorage: XOLESimpleStorage
+published service OLESimpleStorage: XOLESimpleStorage
 {
     // CONSTRUCTORS ----------------------------------------------------------
     /** is used to initialize the object on it's creation.

@@ -31,24 +31,14 @@
 #include <com/sun/star/lang/EventObject.idl>
 #endif
 
-#ifndef __com_sun_star_awt_grid_XGridColumn_idl__
-#include <com/sun/star/awt/grid/XGridColumn.idl>
-#endif
-
 //=============================================================================
 
 module com {  module sun {  module star {  module awt { module grid {
 
 //=============================================================================
+/** An event used by a <type>XGridColumn</type> to notify changes in the column.
 
-/** An event used by a <type>XGridColumnModel</type> to notify changes in the column
-    model to the <type>XGridControl</type>.
-    You usually need to fill this event only if you implement the <type>XGridColumnModel</type>
-    yourself.
-
-    @see XGridColumnModel
-    @see XGridControl
-    @see XGridColumnListener
+    @since OOo 3.3.0
  */
 struct GridColumnEvent: com::sun::star::lang::EventObject
 {
@@ -63,9 +53,6 @@ struct GridColumnEvent: com::sun::star::lang::EventObject
 
     /** Contains the index of the changed column**/
     long index;
-
-    /** Contains the changed column**/
-    XGridColumn column;
     //-------------------------------------------------------------------------
 };
 

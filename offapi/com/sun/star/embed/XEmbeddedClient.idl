@@ -52,7 +52,7 @@
 //============================================================================
 /** represents common functionality for embedded clients.
  */
-interface XEmbeddedClient: XComponentSupplier
+published interface XEmbeddedClient: XComponentSupplier
 {
     //------------------------------------------------------------------------
     /** asks client to let the object store itself.

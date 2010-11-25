@@ -45,9 +45,11 @@
 /** specifies a simple animation control.
 
     <p>The model of an <type>UnoControlSimpleAnimation</type> control must support
-    the <type>UnoControlSimpleAnimationModel</type> service.
+    the <type>UnoControlSimpleAnimationModel</type> service.</p>
+
+    @since OOo 2.2
  */
-service UnoControlSimpleAnimation
+published service UnoControlSimpleAnimation
 {
     service com::sun::star::awt::UnoControl;
 

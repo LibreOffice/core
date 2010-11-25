@@ -44,7 +44,7 @@
     possible actions must be documented in documentation of the object.
     </p>
  */
-interface XActionsApproval: com::sun::star::uno::XInterface
+published interface XActionsApproval: com::sun::star::uno::XInterface
 {
     //------------------------------------------------------------------------
     /** requests an approval for the specified action.

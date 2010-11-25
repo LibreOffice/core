@@ -136,6 +136,14 @@ published service Shape
     //-------------------------------------------------------------------------
 
     /** If this is <FALSE/>, the <type>Shape</type> is not visible
+        on screen outputs. Please note that the <type>Shape</type> may still
+        be visible when printed, see <member>Printable</member>.
+     */
+    [optional, property] boolean Visible;
+
+    //-------------------------------------------------------------------------
+
+    /** If this is <FALSE/>, the <type>Shape</type> is not visible
         on printer outputs.
      */
     [optional, property] boolean Printable;

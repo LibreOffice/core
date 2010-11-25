@@ -379,5 +379,6 @@ UDK_3.6 { # OOo 3.3
         _ZN4cppu11OWeakObject26disposeWeakConnectionPointEv;
         _ZN3com3sun4star3uno19WeakReferenceHelperaSERKNS2_9ReferenceINS2_10XInterfaceEEE;
         _ZN3com3sun4star3uno19WeakReferenceHelper5clearEv;
+        _ZN4cppu33createOneInstanceComponentFactoryEPFN3com3sun4star3uno9ReferenceINS3_10XInterfaceEEERKNS4_INS3_17XComponentContextEEEERKN3rtl8OUStringERKNS3_8SequenceISE_EEP16_rtl_ModuleCount;
 } UDK_3.5;
 

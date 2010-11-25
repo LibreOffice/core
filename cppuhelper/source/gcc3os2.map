@@ -373,4 +373,5 @@ UDK_3.5 { # OOo 3.0
     global:
         _ZN4cppu18OPropertySetHelperC1ERNS_19OBroadcastHelperVarINS_34OMultiTypeInterfaceContainerHelperEN3com3sun4star3uno4TypeEEEPNS_22IEventNotificationHookEb;
         _ZN4cppu18OPropertySetHelperC2ERNS_19OBroadcastHelperVarINS_34OMultiTypeInterfaceContainerHelperEN3com3sun4star3uno4TypeEEEPNS_22IEventNotificationHookEb;
+        _ZN4cppu28createOneInstanceComponentFactoryEPFN3com3sun4star3uno9ReferenceINS3_10XInterfaceEEERKNS4_INS3_17XComponentContextEEEERKN3rtl8OUStringERKNS3_8SequenceISE_EEP16_rtl_ModuleCount;
 } UDK_3.4;

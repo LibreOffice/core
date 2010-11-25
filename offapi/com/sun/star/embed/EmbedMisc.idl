@@ -47,7 +47,7 @@ module com { module sun { module star { module embed {
 
     @see XEmbeddedObject
 */
-constants EmbedMisc
+published constants EmbedMisc
 {
     // analog of the MS OLEMISC enum
 

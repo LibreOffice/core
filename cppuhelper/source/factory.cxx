@@ -1124,6 +1124,17 @@ Reference< lang::XSingleComponentFactory > SAL_CALL createSingleComponentFactory
         Reference< XMultiServiceFactory >(), rImplementationName, 0, fptr, &rServiceNames, pModCount, sal_False );
 }
 
+Reference< lang::XSingleComponentFactory > SAL_CALL createOneInstanceComponentFactory(
+    ComponentFactoryFunc fptr,
+    OUString const & rImplementationName,
+    Sequence< OUString > const & rServiceNames,
+    rtl_ModuleCount * pModCount)
+    SAL_THROW( () )
+{
+    return new OFactoryComponentHelper(
+        Reference< XMultiServiceFactory >(), rImplementationName, 0, fptr, &rServiceNames, pModCount, sal_True );
+}
+
 }
 
 

@@ -36,7 +36,7 @@ module com { module sun { module star { module embed {
 /** This constant set contains possible states for
 <type>EmbeddedObject</type>.
 */
-constants EmbedStates
+published constants EmbedStates
 {
     //------------------------------------------------------------------------
     /** "Loaded" - the persistent representation of the object is loaded in
