@@ -1522,52 +1522,6 @@ void AnimationImporter::importTimeContainer( const Atom* pAtom, const Reference<
 
 // --------------------------------------------------------------------
 
-/* todo: for now we dump sub containers into its parent container, what else to do with it? */
-void AnimationImporter::importAnimationSubContainer( const Atom* pAtom, const Reference< XAnimationNode >& xNode )
-{
-    DBG_ASSERT( pAtom && xNode.is(), "invalid call to ppt::AnimationImporter::importTimeContainer()!");
-    if( pAtom && xNode.is() )
-    {
-        // import sub containers
-        const Atom* pChildAtom = pAtom->findFirstChildAtom();
-
-        while( pChildAtom )
-        {
-            switch( pChildAtom->getType() )
-            {
-                case DFF_msofbtAnimNode:
-                case DFF_msofbtAnimEvent:
-                case DFF_msofbtAnimValue:
-                case DFF_msofbtAnimAction:
-                case DFF_msofbtAnimPropertySet:
-                    break;
-                case DFF_msofbtAnimCommand:
-                {
-                    const OUString aServiceName( OUString::createFromAscii("com.sun.star.animations.Command") );
-                    Reference< XAnimationNode > xChildNode( ::comphelper::getProcessServiceFactory()->createInstance(aServiceName), UNO_QUERY );
-                    importAnimationNodeContainer( pChildAtom, xChildNode );
-                    Reference< XTimeContainer > xParentContainer( xNode, UNO_QUERY );
-                    if( xParentContainer.is() && xChildNode.is() )
-                        xParentContainer->appendChild( xChildNode );
-                }
-                break;
-
-                default:
-                {
-                    dump_atom_header( pChildAtom, true, false );
-                    dump_atom( pChildAtom );
-                    dump_atom_header( pChildAtom, false, false );
-                }
-                break;
-            }
-
-            pChildAtom = pAtom->findNextChildAtom( pChildAtom );
-        }
-    }
-}
-
-// --------------------------------------------------------------------
-
 void AnimationImporter::importAnimationNodeContainer( const Atom* pAtom, const Reference< XAnimationNode >& xNode )
 {
     DBG_ASSERT( pAtom && xNode.is(), "invalid call to ppt::AnimationImporter::importAnimationNodeContainer()!");
@@ -3894,14 +3848,6 @@ void AnimationImporter::dump_atom( const Atom* , bool  )
 {
 }
 
-void AnimationImporter::dump( sal_uInt32 , bool  )
-{
-}
-
-void AnimationImporter::dump_anim_group( const Atom* , const AnimationNode& , const PropertySet& , bool  )
-{
-}
-
 void AnimationImporter::dump_target( ::com::sun::star::uno::Any&  )
 {
 }
@@ -3919,10 +3865,6 @@ void AnimationImporter::dump( const AnimationNode&  )
 }
 
 void AnimationImporter::dump( const char *  )
-{
-}
-
-void AnimationImporter::dump( const rtl::OUString&  )
 {
 }
 

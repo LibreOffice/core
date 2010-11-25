@@ -592,17 +592,6 @@ bool ResourceId::IsBoundToAnchor (
 
 
 
-bool ResourceId::IsValid (void) const
-{
-    return maResourceURLs.size() == 0
-        || maResourceURLs[0].getLength()>0
-        || maResourceURLs.size() == 1;
-
-}
-
-
-
-
 void ResourceId::ParseResourceURL (void)
 {
     ::osl::Guard< ::osl::Mutex > aGuard (::osl::Mutex::getGlobalMutex());

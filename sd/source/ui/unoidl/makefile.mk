@@ -50,7 +50,6 @@ NOOPTFILES= $(SLO)$/unowcntr.obj
 
 SLO1FILES =      \
         $(SLO)$/DrawController.obj \
-        $(SLO)$/SdUnoPresView.obj\
         $(SLO)$/SdUnoSlideView.obj\
         $(SLO)$/SdUnoOutlineView.obj\
         $(SLO)$/SdUnoDrawView.obj \
@@ -66,7 +65,6 @@ SLO1FILES =      \
         $(SLO)$/unowcntr.obj	\
         $(SLO)$/unokywds.obj	\
         $(SLO)$/unopback.obj	\
-        $(SLO)$/unovwcrs.obj	\
         $(SLO)$/unodoc.obj      \
         $(SLO)$/unomodule.obj	\
         $(SLO)$/randomnode.obj

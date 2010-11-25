@@ -92,17 +92,6 @@ public:
     */
     void AddResource (const ::css::uno::Reference<css::uno::XInterface>& rxResource);
 
-    /** Tell the container that it is not any longer responsible for the
-        specified resource.
-        @return
-            When the specified resource has previously added to the
-            container the resource is returned (which is, of course, the
-            same pointer as the given one.)  Otherwise a NULL pointer is
-            returned.
-    */
-    ::std::auto_ptr<SdGlobalResource> ReleaseResource (
-        SdGlobalResource* pResource);
-
 protected:
     friend class ::SdModule;
     friend class ::std::auto_ptr<SdGlobalResourceContainer>;

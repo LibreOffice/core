@@ -142,7 +142,6 @@ List* SdInsertPagesObjsDlg::GetList( USHORT nType )
         // wird das gesamte Dokument (und nicht mehr!) eingefuegt.
         if( aLbTree.GetSelectionCount() == 0 ||
             ( aLbTree.IsSelected( aLbTree.First() ) ) )
-            //return( aLbTree.GetBookmarkList( nType ) );
             return( NULL ); // #37350#
     }
     return( aLbTree.GetSelectEntryList( nType ) );

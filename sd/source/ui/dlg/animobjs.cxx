@@ -691,19 +691,6 @@ void AnimationWindow::ResetAttrs()
 
 // -----------------------------------------------------------------------
 
-void AnimationWindow::WaitInEffect( ULONG nMilliSeconds ) const
-{
-    ULONG nEnd = Time::GetSystemTicks() + nMilliSeconds;
-    ULONG nCurrent = Time::GetSystemTicks();
-    while (nCurrent < nEnd)
-    {
-        nCurrent = Time::GetSystemTicks();
-        Application::Reschedule();
-    }
-}
-
-// -----------------------------------------------------------------------
-
 void AnimationWindow::WaitInEffect( ULONG nMilliSeconds, ULONG nTime,
                                     SfxProgress* pProgress ) const
 {

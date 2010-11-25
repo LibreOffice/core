@@ -2040,6 +2040,7 @@ IMPL_LINK(OutlineView, PaintingFirstLineHdl, PaintFirstLineInfo*, pInfo)
     return 0;
 }
 
+#if 0
 sal_Int32 OutlineView::GetPageNumberWidthPixel()
 {
     Window* pActWin = mpOutlineViewShell->GetActiveWindow();
@@ -2062,6 +2063,7 @@ sal_Int32 OutlineView::GetPageNumberWidthPixel()
     }
     return mnPageNumberWidthPixel;
 }
+#endif
 
 // --------------------------------------------------------------------
 

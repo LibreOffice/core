@@ -76,12 +76,12 @@
     </menu:menu>
     <menu:menu menu:id=".uno:ViewMenu">
         <menu:menupopup>
-            <menu:menuitem menu:id=".uno:NormalMultiPaneGUI"/>
-            <menu:menuitem menu:id=".uno:OutlineMode"/>
-            <menu:menuitem menu:id=".uno:DiaMode"/>
+            <menu:menuitem menu:id=".uno:NormalMultiPaneGUI" menu:style="radio"/>
+            <menu:menuitem menu:id=".uno:OutlineMode" menu:style="radio"/>
+            <menu:menuitem menu:id=".uno:DiaMode" menu:style="radio"/>
             <menu:menuitem menu:id=".uno:Presentation"/>
-            <menu:menuitem menu:id=".uno:NotesMode"/>
-            <menu:menuitem menu:id=".uno:HandoutMode"/>
+            <menu:menuitem menu:id=".uno:NotesMode" menu:style="radio"/>
+            <menu:menuitem menu:id=".uno:HandoutMode" menu:style="radio"/>
                <menu:menuseparator/>
             <menu:menu menu:id=".uno:MasterPageMenu">
                 <menu:menupopup>
@@ -93,14 +93,14 @@
             </menu:menu>
             <menu:menu menu:id=".uno:DisplayQualityMenu">
                 <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:OutputQualityColor"/>
-                    <menu:menuitem menu:id=".uno:OutputQualityGrayscale"/>
-                    <menu:menuitem menu:id=".uno:OutputQualityBlackWhite"/>
+                    <menu:menuitem menu:id=".uno:OutputQualityColor" menu:style="radio"/>
+                    <menu:menuitem menu:id=".uno:OutputQualityGrayscale" menu:style="radio"/>
+                    <menu:menuitem menu:id=".uno:OutputQualityBlackWhite" menu:style="radio"/>
                 </menu:menupopup>
             </menu:menu>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:RightPane"/>
-            <menu:menuitem menu:id=".uno:LeftPaneImpress"/>
+      <menu:menuitem menu:id=".uno:TaskPane"/>
+      <menu:menuitem menu:id=".uno:LeftPaneImpress"/>
             <menu:menuitem menu:id=".uno:AvailableToolbars"/>
             <menu:menuitem menu:id=".uno:StatusBarVisible"/>
             <menu:menuitem menu:id=".uno:ShowImeStatusWindow"/>
@@ -181,8 +181,6 @@
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:InsertObject"/>
                     <menu:menuitem menu:id=".uno:InsertPlugin"/>
-                    <menu:menuitem menu:id=".uno:InsertSound"/>
-                    <menu:menuitem menu:id=".uno:InsertVideo"/>
                     <menu:menuitem menu:id=".uno:InsertMath"/>
                 </menu:menupopup>
             </menu:menu>
@@ -203,8 +201,11 @@
             <menu:menuseparator/>
             <menu:menu menu:id=".uno:TransliterateMenu">
                 <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:ChangeCaseToUpper"/>
+                    <menu:menuitem menu:id=".uno:ChangeCaseToSentenceCase"/>
                     <menu:menuitem menu:id=".uno:ChangeCaseToLower"/>
+                    <menu:menuitem menu:id=".uno:ChangeCaseToUpper"/>
+                    <menu:menuitem menu:id=".uno:ChangeCaseToTitleCase"/>
+                    <menu:menuitem menu:id=".uno:ChangeCaseToToggleCase"/>
                     <menu:menuitem menu:id=".uno:ChangeCaseToHalfWidth"/>
                     <menu:menuitem menu:id=".uno:ChangeCaseToFullWidth"/>
                     <menu:menuitem menu:id=".uno:ChangeCaseToHiragana"/>
@@ -239,7 +240,7 @@
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:HangulHanjaConversion"/>
                     <menu:menuitem menu:id=".uno:ChineseConversion"/>
-                    <menu:menuitem menu:id=".uno:Thesaurus"/>
+                    <menu:menuitem menu:id=".uno:ThesaurusDialog"/>
                     <menu:menuitem menu:id=".uno:Hyphenation"/>
                     <menu:menuseparator/>
                     <menu:menuitem menu:id=".uno:MoreDictionaries"/>

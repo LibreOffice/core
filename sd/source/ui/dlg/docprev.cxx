@@ -45,7 +45,6 @@
 #include "DrawDocShell.hxx"
 #include "ViewShell.hxx"
 #include "ViewShellBase.hxx"
-#include "showview.hxx"
 #include "drawview.hxx"
 #include "sdpage.hxx"
 #include "sfx2/viewfrm.hxx"
@@ -81,17 +80,6 @@ SdDocPreviewWin::SdDocPreviewWin( Window* pParent, const ResId& rResId )
     SetBackground( aEmpty );
 }
 
-SdDocPreviewWin::SdDocPreviewWin( Window* pParent )
-: Control(pParent, 0 ), pMetaFile( 0 ), bInEffect(FALSE), mpObj(NULL), mnShowPage(0)
-{
-    SetBorderStyle( WINDOW_BORDER_MONO );
-    svtools::ColorConfig aColorConfig;
-    Wallpaper aEmpty;
-    SetBackground( aEmpty );
-    Resize();
-    Show();
-}
-
 SdDocPreviewWin::~SdDocPreviewWin()
 {
     delete pMetaFile;
@@ -102,13 +90,6 @@ void SdDocPreviewWin::Resize()
     Invalidate();
     if( mxSlideShow.is() )
         mxSlideShow->resize( GetSizePixel() );
-}
-
-void SdDocPreviewWin::SetGDIFile( GDIMetaFile* pFile )
-{
-    delete pMetaFile;
-    pMetaFile = pFile;
-    Invalidate();
 }
 
 void SdDocPreviewWin::CalcSizeAndPos( GDIMetaFile* pFile, Size& rSize, Point& rPoint )

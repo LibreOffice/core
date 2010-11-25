@@ -441,7 +441,6 @@ public:
     CharClass*          GetCharClass() const { return mpCharClass; }
 
     void                RestoreLayerNames();
-    void                MakeUniqueLayerNames();
 
     void                UpdateAllLinks();
 
@@ -464,18 +463,6 @@ public:
 public:
 
     static SdDrawDocument* pDocLockedInsertingLinks;  // static to prevent recursions while resolving links
-
-    /** This method acts as a simplified front end for the more complex
-        <member>CreatePage()</member> method.
-        @param nPageNum
-            The page number as passed to the <member>GetSdPage()</member>
-            method from which to use certain properties for the new pages.
-            These include the auto layout.
-        @return
-            Returns an index of the inserted pages that can be used with the
-            <member>GetSdPage()</member> method.
-    */
-    USHORT CreatePage (USHORT nPageNum);
 
     /** Create and insert a set of two new pages: a standard (draw) page and
         the associated notes page.  The new pages are inserted direclty
@@ -687,7 +674,6 @@ namespace sd
 class ModifyGuard
 {
 public:
-    ModifyGuard( DrawDocShell* pDocShell );
     ModifyGuard( SdDrawDocument* pDoc );
     ~ModifyGuard();
 

@@ -73,24 +73,6 @@ namespace {
 
 typedef ::std::vector<SharedMasterPageDescriptor> MasterPageContainerType;
 
-
-class PreviewCreationRequest
-{
-public:
-    PreviewCreationRequest (MasterPageContainer::Token aToken, int nPriority);
-    MasterPageContainer::Token maToken;
-    int mnPriority;
-    class Compare {public:
-        bool operator() (const PreviewCreationRequest& r1,const PreviewCreationRequest& r2);
-    };
-    class CompareToken {public:
-        MasterPageContainer::Token maToken;
-        CompareToken(MasterPageContainer::Token aToken);
-        bool operator() (const PreviewCreationRequest& rRequest);
-    };
-};
-
-
 } // end of anonymous namespace
 
 
@@ -423,28 +405,6 @@ MasterPageContainer::Token MasterPageContainer::GetTokenForURL (
 
 
 
-MasterPageContainer::Token MasterPageContainer::GetTokenForPageName (
-    const String& sPageName)
-{
-    const ::osl::MutexGuard aGuard (mpImpl->maMutex);
-
-    Token aResult (NIL_TOKEN);
-    if (sPageName.Len() > 0)
-    {
-        MasterPageContainerType::iterator iEntry (
-            ::std::find_if (
-                mpImpl->maContainer.begin(),
-                mpImpl->maContainer.end(),
-                MasterPageDescriptor::PageNameComparator(sPageName)));
-        if (iEntry != mpImpl->maContainer.end())
-            aResult = (*iEntry)->maToken;
-    }
-    return aResult;
-}
-
-
-
-
 MasterPageContainer::Token MasterPageContainer::GetTokenForStyleName (const String& sStyleName)
 {
     const ::osl::MutexGuard aGuard (mpImpl->maMutex);
@@ -589,46 +549,6 @@ sal_Int32 MasterPageContainer::GetTemplateIndexForToken (Token aToken)
 
 
 
-void MasterPageContainer::SetPreviewProviderForToken (
-    Token aToken,
-    const ::boost::shared_ptr<PreviewProvider>& rpPreviewProvider)
-{
-    const ::osl::MutexGuard aGuard (mpImpl->maMutex);
-
-    SharedMasterPageDescriptor pDescriptor = mpImpl->GetDescriptor(aToken);
-    if (pDescriptor.get()!=NULL)
-    {
-        pDescriptor->mpPreviewProvider = rpPreviewProvider;
-        mpImpl->InvalidatePreview(aToken);
-    }
-}
-
-
-
-
-SdPage* MasterPageContainer::GetSlideForToken (
-    MasterPageContainer::Token aToken,
-    bool bLoad)
-{
-    const ::osl::MutexGuard aGuard (mpImpl->maMutex);
-
-    SdPage* pSlide = NULL;
-    SharedMasterPageDescriptor pDescriptor = mpImpl->GetDescriptor(aToken);
-    if (pDescriptor.get() != NULL)
-    {
-        pSlide = pDescriptor->mpSlide;
-        if (pSlide==NULL && bLoad)
-        {
-            GetPageObjectForToken(aToken, bLoad);
-            pSlide = pDescriptor->mpSlide;
-        }
-    }
-    return pSlide;
-}
-
-
-
-
 SharedMasterPageDescriptor MasterPageContainer::GetDescriptorForToken (
     MasterPageContainer::Token aToken)
 {
@@ -636,19 +556,6 @@ SharedMasterPageDescriptor MasterPageContainer::GetDescriptorForToken (
 
     return mpImpl->GetDescriptor(aToken);
 }
-
-
-
-
-bool MasterPageContainer::UpdateDescriptor (
-    const SharedMasterPageDescriptor& rpDescriptor,
-    bool bForcePageObject,
-    bool bForcePreview,
-    bool bSendEvents)
-{
-    return mpImpl->UpdateDescriptor(rpDescriptor, bForcePageObject, bForcePreview, bSendEvents);
-}
-
 
 
 
@@ -1311,58 +1218,3 @@ void MasterPageContainer::Implementation::FillingDone (void)
 
 
 } } } // end of namespace ::sd::toolpanel::controls
-
-
-
-
-namespace {
-
-//===== PreviewCreationRequest ================================================
-
-PreviewCreationRequest::PreviewCreationRequest (
-    MasterPageContainer::Token aToken,
-    int nPriority)
-    : maToken(aToken),
-      mnPriority(nPriority)
-{
-}
-
-
-
-
-bool PreviewCreationRequest::Compare::operator() (
-    const PreviewCreationRequest& aRequest1,
-    const PreviewCreationRequest& aRequest2)
-{
-    if (aRequest1.mnPriority != aRequest2.mnPriority)
-    {
-        // Prefer requests with higher priority.
-        return aRequest1.mnPriority > aRequest2.mnPriority;
-    }
-    else
-    {
-        // Prefer tokens that have been earlier created (those with lower
-        // value).
-        return aRequest1.maToken < aRequest2.maToken;
-    }
-}
-
-
-
-
-PreviewCreationRequest::CompareToken::CompareToken (MasterPageContainer::Token aToken)
-    : maToken(aToken)
-{
-}
-
-
-
-
-bool PreviewCreationRequest::CompareToken::operator() (const PreviewCreationRequest& aRequest)
-{
-    return maToken==aRequest.maToken;
-}
-
-
-
-} // end of anonymous namespace

@@ -173,14 +173,6 @@ ViewShell::ViewShell( SfxViewFrame*, ::Window* pParentWindow, ViewShellBase& rVi
     construct();
 }
 
-ViewShell::ViewShell( SfxViewFrame*, ::Window* pParentWindow, const ViewShell& rShell)
-:   SfxShell(rShell.GetViewShell())
-,   mbCenterAllowed(rShell.mbCenterAllowed)
-,   mpParentWindow(pParentWindow)
-{
-    construct();
-}
-
 ViewShell::~ViewShell()
 {
     // Keep the content window from accessing in its destructor the

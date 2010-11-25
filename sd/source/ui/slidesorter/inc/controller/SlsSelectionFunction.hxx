@@ -99,7 +99,6 @@ protected:
 private:
     class SubstitutionHandler;
     class EventDescriptor;
-    class InsertionIndicatorHandler;
 
     /// Set in MouseButtonDown this flag indicates that a page has been hit.
     bool mbPageHit;
@@ -120,8 +119,6 @@ private:
     bool mbProcessingMouseButtonDown;
 
     ::std::auto_ptr<SubstitutionHandler> mpSubstitutionHandler;
-
-    ::std::auto_ptr<InsertionIndicatorHandler> mpInsertionIndicatorHandler;
 
     DECL_LINK( DragSlideHdl, Timer* );
     void StartDrag (void);
@@ -181,11 +178,6 @@ private:
     /** Select all pages that lie completly in the selection rectangle.
     */
     void ProcessRectangleSelection (bool bToggleSelection);
-
-    /** Hide and clear the insertion indiciator, substitution display and
-        selection rectangle.
-    */
-    void ClearOverlays (void);
 
     /** Compute a numerical code that describes a mouse event and that can
         be used for fast look up of the appropriate reaction.

@@ -58,22 +58,6 @@ void SAL_CALL PropertySet::disposing (void)
 {
 }
 
-
-
-
-beans::UnknownPropertyException PropertySet::CreateUnknownPropertyException (
-    const rtl::OUString& rsPropertyName)
-{
-    return beans::UnknownPropertyException(
-        OUString::createFromAscii("property ")
-            + rsPropertyName
-                + OUString::createFromAscii(" is not known"),
-        static_cast<XWeak*>(this));
-}
-
-
-
-
 //----- XPropertySet ----------------------------------------------------------
 
 Reference<beans::XPropertySetInfo> SAL_CALL PropertySet::getPropertySetInfo (void)

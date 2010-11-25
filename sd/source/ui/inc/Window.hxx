@@ -66,8 +66,6 @@ public:
 
     void    SetViewShell (ViewShell* pViewSh);
 
-    void    ShareViewArea(::sd::Window* pOtherWin);
-
     /** Set the zoom factor to the specified value and center the display
         area arround the zoom center.
         @param nZoom

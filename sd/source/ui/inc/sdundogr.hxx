@@ -48,7 +48,6 @@ public:
     virtual void   Redo();
 
     void           AddAction(SdUndoAction* pAction);
-    SdUndoAction*  GetAction(ULONG nAction) const;
     ULONG          Count() const { return aCtn.Count(); }
 
 };

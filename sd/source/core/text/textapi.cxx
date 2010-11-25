@@ -118,7 +118,6 @@ public:
 
     void                Dispose();
     void                SetText( OutlinerParaObject& rText );
-    void                SetString( const String& rText );
     OutlinerParaObject* CreateText();
     String              GetText();
     SdDrawDocument*     GetDoc() { return pImpl->mpDoc; }
@@ -175,16 +174,6 @@ void SAL_CALL TextApiObject::dispose() throw(RuntimeException)
 OutlinerParaObject* TextApiObject::CreateText()
 {
     return mpSource->CreateText();
-}
-
-void TextApiObject::SetString( const String& rText )
-{
-    SdrModel* pModel = mpSource->GetDoc();
-    if( pModel && pModel->IsUndoEnabled() )
-        pModel->AddUndo( new UndoTextAPIChanged( *pModel, this ) );
-
-    mpSource->SetString( rText );
-    maSelection.nStartPara = 0xffff;
 }
 
 void TextApiObject::SetText( OutlinerParaObject& rText )
@@ -285,22 +274,6 @@ void TextAPIEditSource::SetText( OutlinerParaObject& rText )
         }
 
         pImpl->mpOutliner->SetText( rText );
-    }
-}
-
-void TextAPIEditSource::SetString( const String& rText )
-{
-    if ( pImpl->mpDoc )
-    {
-        if( !pImpl->mpOutliner )
-        {
-            //init draw model first
-            pImpl->mpOutliner = new Outliner( pImpl->mpDoc, OUTLINERMODE_TEXTOBJECT );
-            pImpl->mpDoc->SetCalcFieldValueHdl( pImpl->mpOutliner );
-        }
-        else
-            pImpl->mpOutliner->Clear();
-        pImpl->mpOutliner->Insert( rText );
     }
 }
 

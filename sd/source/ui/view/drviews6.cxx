@@ -81,7 +81,6 @@
 #include "FrameView.hxx"
 #include "Window.hxx"
 #include "DrawDocShell.hxx"
-#include "TaskPaneViewShell.hxx"
 #include "framework/FrameworkHelper.hxx"
 
 namespace sd {
@@ -189,32 +188,6 @@ void DrawViewShell::GetFormTextState(SfxItemSet& rSet)
         mpDrawView->GetAttributes( aSet );
         rSet.Set( aSet );
     }
-}
-
-/*************************************************************************
-|*
-|* SfxRequests fuer Objektpalette bearbeiten
-|*
-\************************************************************************/
-
-void DrawViewShell::ExecObjPalette( SfxRequest& )
-{
-    // Diese Methode muss erhalten bleiben, bis
-    // der/die Slots entfernt wurden;
-    // ==> Voll-Update
-}
-
-/*************************************************************************
-|*
-|* Statuswerte fuer Objektpalette zurueckgeben
-|*
-\************************************************************************/
-
-void DrawViewShell::GetObjPaletteState(SfxItemSet& )
-{
-    // Diese Methode muss erhalten bleiben, bis
-    // der/die Slots entfernt wurden;
-    // ==> Voll-Update
 }
 
 /*************************************************************************

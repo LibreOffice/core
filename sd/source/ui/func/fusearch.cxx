@@ -38,7 +38,6 @@
 #include <svx/srchdlg.hxx>
 #include <sfx2/bindings.hxx>
 #include "fupoor.hxx"
-#include "fuspell.hxx"  // wegen SidArraySpell[]
 #ifndef SD_WINDOW_SHELL_HXX
 #include "Window.hxx"
 #endif
@@ -54,6 +53,14 @@
 class SfxRequest;
 
 namespace sd {
+
+static USHORT SidArraySpell[] = {
+            SID_DRAWINGMODE,
+            SID_OUTLINEMODE,
+            SID_DIAMODE,
+            SID_NOTESMODE,
+            SID_HANDOUTMODE,
+            0 };
 
 TYPEINIT1( FuSearch, FuPoor );
 

@@ -53,12 +53,6 @@ public:
     TYPEINFO();
     SFX_DECL_INTERFACE(SD_IF_SDSLIDESORTERVIEWSHELL)
 
-    static SfxShell* CreateInstance (
-        sal_Int32 nId,
-        SfxShell* pParent,
-        void* pUserData,
-        ViewShellBase& rBase);
-
     static ::boost::shared_ptr<SlideSorterViewShell> Create(
         SfxViewFrame* pFrame,
         ViewShellBase& rViewShellBase,

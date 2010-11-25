@@ -49,6 +49,7 @@
 #include <com/sun/star/frame/FrameActionEvent.hpp>
 #include <com/sun/star/frame/FrameAction.hpp>
 #include <sfx2/viewfrm.hxx>
+#include <tools/diagnose_ex.h>
 
 
 using namespace ::com::sun::star::accessibility;
@@ -228,8 +229,7 @@ void Listener::ConnectToController (void)
             }
             catch (beans::UnknownPropertyException aEvent)
             {
-                OSL_TRACE ("caught exception in SlideSorterController::SetupListeners: %s",
-                    ::rtl::OUStringToOString(aEvent.Message, RTL_TEXTENCODING_UTF8).getStr());
+                DBG_UNHANDLED_EXCEPTION();
             }
             try
             {
@@ -237,8 +237,7 @@ void Listener::ConnectToController (void)
             }
             catch (beans::UnknownPropertyException aEvent)
             {
-                OSL_TRACE ("caught exception in SlideSorterController::SetupListeners: %s",
-                    ::rtl::OUStringToOString(aEvent.Message, RTL_TEXTENCODING_UTF8).getStr());
+                DBG_UNHANDLED_EXCEPTION();
             }
         }
 
@@ -286,9 +285,7 @@ void Listener::DisconnectFromController (void)
         }
         catch (beans::UnknownPropertyException aEvent)
         {
-            OSL_TRACE ("caught exception in destructor of SlideSorterController: %s",
-                ::rtl::OUStringToOString(aEvent.Message,
-                    RTL_TEXTENCODING_UTF8).getStr());
+            DBG_UNHANDLED_EXCEPTION();
         }
 
         mbListeningToController = false;
@@ -488,9 +485,7 @@ void SAL_CALL Listener::propertyChange (
             }
             catch (beans::UnknownPropertyException aEvent)
             {
-                OSL_TRACE ("caught exception while accessing the page number of a slide: %s",
-                    ::rtl::OUStringToOString(aEvent.Message,
-                        RTL_TEXTENCODING_UTF8).getStr());
+                DBG_UNHANDLED_EXCEPTION();
             }
             catch (lang::DisposedException&)
             {

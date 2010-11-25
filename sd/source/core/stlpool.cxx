@@ -144,30 +144,6 @@ SfxStyleSheetBase* SdStyleSheetPool::GetTitleSheet(const String& rLayoutName)
     return pResult;
 }
 
-// ----------------------------------------------------------
-// find layout name of first layout
-// ----------------------------------------------------------
-
-String SdStyleSheetPool::GetLayoutName() const
-{
-    String aName( SdResId(STR_LAYOUT_DEFAULT_NAME ) );
-    sal_uInt32  nCount = aStyles.size();
-
-    for( sal_uInt32 n = 0; n < nCount; n++ )
-    {
-        aName = aStyles[n]->GetName();
-        sal_uInt16 nPos = aName.SearchAscii( SD_LT_SEPARATOR );
-        if( nPos != STRING_NOTFOUND )
-            break;
-    }
-
-    sal_uInt16 nPos = aName.Search( sal_Unicode( ' ' ));
-    if( nPos != STRING_NOTFOUND )
-        aName.Erase( nPos );       // removing blanks and number (e.g. "Gliederung 1")
-
-    return aName;
-}
-
 /*************************************************************************
 |*
 |* eine Liste der Gliederungstextvorlagen fuer ein Praesentationlayout
@@ -570,32 +546,6 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
 
     DBG_ASSERT( !bCheck || !bCreated, "missing layout style sheets detected!" );
 }
-
-/*************************************************************************
-|*
-|* StyleSheets des genannten Praesentationslayouts loeschen
-|*
-\************************************************************************/
-
-void SdStyleSheetPool::EraseLayoutStyleSheets(const String& rLayoutName)
-{
-    SfxStyleSheetBase* pSheet = NULL;
-
-    List* pNameList = CreateLayoutSheetNames(rLayoutName);
-
-    String* pName = (String*)pNameList->First();
-    while (pName)
-    {
-        pSheet = Find(*pName, SD_STYLE_FAMILY_MASTERPAGE);
-        DBG_ASSERT(pSheet, "EraseLayoutStyleSheets: Vorlage nicht gefunden");
-        if (pSheet)
-            Remove(pSheet);
-        delete pName;
-        pName = (String*)pNameList->Next();
-    }
-    delete pNameList;
-}
-
 
 /*************************************************************************
 |*
@@ -1437,6 +1387,8 @@ void SAL_CALL SdStyleSheetPool::dispose() throw (RuntimeException)
 
 //      EndListening( *mpDoc );
         mpDoc = 0;
+
+        Clear();
     }
 }
 
@@ -1472,6 +1424,18 @@ SdStyleSheetVector SdStyleSheetPool::CreateChildList( SdStyleSheet* pSheet )
     }
 
     return aResult;
+}
+
+// --------------------------------------------------------------------
+
+void SAL_CALL SdStyleSheetPool::acquire (void) throw ()
+{
+    SdStyleSheetPoolBase::acquire();
+}
+
+void SAL_CALL SdStyleSheetPool::release (void) throw ()
+{
+    SdStyleSheetPoolBase::release();
 }
 
 // --------------------------------------------------------------------

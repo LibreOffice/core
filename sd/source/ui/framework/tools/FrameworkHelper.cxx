@@ -52,6 +52,7 @@
 #include "vcl/svapp.hxx"
 #include <osl/doublecheckedlocking.h>
 #include <osl/getglobalmutex.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -218,7 +219,7 @@ const OUString FrameworkHelper::msViewTabBarURL(
 
 // Task panel URLs.
 const ::rtl::OUString FrameworkHelper::msTaskPanelURLPrefix(
-    OUString::createFromAscii("private:resource/taskpanel/"));
+    OUString::createFromAscii("private:resource/toolpanel/DrawingFramework/"));
 const ::rtl::OUString FrameworkHelper::msMasterPagesTaskPanelURL(
     msTaskPanelURLPrefix + OUString::createFromAscii("MasterPages"));
 const ::rtl::OUString FrameworkHelper::msLayoutTaskPanelURL(
@@ -251,6 +252,46 @@ const OUString FrameworkHelper::msModuleControllerService(
     OUString::createFromAscii("com.sun.star.drawing.framework.ModuleController"));
 const OUString FrameworkHelper::msConfigurationControllerService(
     OUString::createFromAscii("com.sun.star.drawing.framework.ConfigurationController"));
+
+//----- helper ----------------------------------------------------------------
+namespace
+{
+    static ::boost::shared_ptr< ViewShell > lcl_getViewShell( const Reference< XResource >& i_rViewShellWrapper )
+    {
+        ::boost::shared_ptr< ViewShell > pViewShell;
+        if ( !i_rViewShellWrapper.is() )
+            return pViewShell;
+
+        try
+        {
+            Reference<lang::XUnoTunnel> xViewTunnel( i_rViewShellWrapper, UNO_QUERY_THROW );
+            pViewShell = reinterpret_cast< ViewShellWrapper* >(
+                xViewTunnel->getSomething( ViewShellWrapper::getUnoTunnelId() ) )->GetViewShell();
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+        return pViewShell;
+    }
+    Reference< XResource > lcl_getFirstViewInPane( const Reference< XConfigurationController >& i_rConfigController,
+        const Reference< XResourceId >& i_rPaneId )
+    {
+        try
+        {
+            Reference< XConfiguration > xConfiguration( i_rConfigController->getRequestedConfiguration(), UNO_SET_THROW );
+            Sequence< Reference< XResourceId > > aViewIds( xConfiguration->getResources(
+                i_rPaneId, FrameworkHelper::msViewURLPrefix, AnchorBindingMode_DIRECT ) );
+            if ( aViewIds.getLength() > 0 )
+                return i_rConfigController->getResource( aViewIds[0] );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+        return NULL;
+    }
+}
 
 
 //----- FrameworkHelper::ViewURLMap -------------------------------------------
@@ -438,8 +479,11 @@ bool FrameworkHelper::IsValid (void)
 
 ::boost::shared_ptr<ViewShell> FrameworkHelper::GetViewShell (const OUString& rsPaneURL)
 {
-    Reference<XResourceId> xPaneId (CreateResourceId(rsPaneURL));
-    return GetViewShell(GetView(xPaneId));
+    if ( !mxConfigurationController.is() )
+        return ::boost::shared_ptr<ViewShell>();
+
+    Reference<XResourceId> xPaneId( CreateResourceId( rsPaneURL ) );
+    return lcl_getViewShell( lcl_getFirstViewInPane( mxConfigurationController, xPaneId ) );
 }
 
 
@@ -447,22 +491,7 @@ bool FrameworkHelper::IsValid (void)
 
 ::boost::shared_ptr<ViewShell> FrameworkHelper::GetViewShell (const Reference<XView>& rxView)
 {
-    ::boost::shared_ptr<ViewShell> pViewShell;
-
-    try
-    {
-        Reference<lang::XUnoTunnel> xViewTunnel (rxView, UNO_QUERY);
-        if (xViewTunnel.is())
-        {
-            pViewShell = reinterpret_cast<ViewShellWrapper*>(xViewTunnel->getSomething(
-                ViewShellWrapper::getUnoTunnelId()))->GetViewShell();
-        }
-    }
-    catch (RuntimeException&)
-    {
-    }
-
-    return pViewShell;
+    return lcl_getViewShell( rxView.get() );
 }
 
 
@@ -479,21 +508,11 @@ Reference<XView> FrameworkHelper::GetView (const Reference<XResourceId>& rxPaneO
     {
         if (rxPaneOrViewId->getResourceURL().match(msViewURLPrefix))
         {
-            xView = Reference<XView>(
-                mxConfigurationController->getResource(rxPaneOrViewId), UNO_QUERY);
+            xView.set( mxConfigurationController->getResource( rxPaneOrViewId ), UNO_QUERY );
         }
         else
         {
-            Reference<XConfiguration> xConfiguration (
-                mxConfigurationController->getRequestedConfiguration());
-            if (xConfiguration.is())
-            {
-                Sequence<Reference<XResourceId> > aViewIds (xConfiguration->getResources(
-                    rxPaneOrViewId, msViewURLPrefix, AnchorBindingMode_DIRECT));
-                if (aViewIds.getLength() >= 1)
-                    xView = Reference<XView>(
-                        mxConfigurationController->getResource(aViewIds[0]), UNO_QUERY);
-            }
+            xView.set( lcl_getFirstViewInPane( mxConfigurationController, rxPaneOrViewId ), UNO_QUERY );
         }
     }
     catch (lang::DisposedException&)
@@ -501,7 +520,8 @@ Reference<XView> FrameworkHelper::GetView (const Reference<XResourceId>& rxPaneO
         Dispose();
     }
     catch (RuntimeException&)
-    {}
+    {
+    }
 
     return xView;
 }
@@ -717,7 +737,7 @@ void FrameworkHelper::HandleModeChangeSlot (
     }
     catch (RuntimeException&)
     {
-        OSL_TRACE("HandleModeChangeSlot: caught exception");
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 
@@ -800,7 +820,7 @@ void FrameworkHelper::WaitForEvent (const OUString& rsEventType) const
 
         if( (osl_getGlobalTimer() - nStartTime) > 60000  )
         {
-            DBG_ERROR("FrameworkHelper::WaitForEvent(), no event since a minute? giving up!");
+            DBG_ERROR("FrameworkHelper::WaitForEvent(), no event for a minute? giving up!");
             break;
         }
     }
@@ -852,7 +872,7 @@ void FrameworkHelper::UpdateConfiguration (void)
         }
         catch (RuntimeException&)
         {
-            DBG_ASSERT(false, "FrameworkHelper::UpdateConfiguration: caught exception");
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 }
@@ -982,28 +1002,6 @@ void SAL_CALL FrameworkHelper::DisposeListener::disposing (const lang::EventObje
 
 
 
-//----- DispatchCaller --------------------------------------------------------
-
-DispatchCaller::DispatchCaller (
-    SfxDispatcher& rDispatcher,
-    USHORT nSId)
-    : mrDispatcher(rDispatcher),
-      mnSId(nSId)
-{
-}
-
-
-
-
-void DispatchCaller::operator() (bool bEventSeen)
-{
-    (void)bEventSeen;
-    mrDispatcher.Execute(mnSId, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
-}
-
-
-
-
 //===== FrameworkHelperResourceIdFilter =======================================
 
 FrameworkHelperResourceIdFilter::FrameworkHelperResourceIdFilter (
@@ -1053,7 +1051,7 @@ CallbackCaller::CallbackCaller (
     }
     catch (RuntimeException&)
     {
-        DBG_ASSERT(false,"ConfigurationUpdateGuard: caught exception");
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 
@@ -1080,7 +1078,7 @@ void CallbackCaller::disposing (void)
     }
     catch (RuntimeException&)
     {
-        DBG_ASSERT(false,"~ConfigurationUpdateGuard: caught exception");
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 

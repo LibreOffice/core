@@ -131,13 +131,7 @@ public:
             Index into the value set control that is used for displaying the
             previews.
     */
-    void InvalidatePreview (MasterPageContainer::Token aToken);
     void InvalidatePreview (const SdPage* pPage);
-
-    /** Mark all previews as no being up-to-date anymore.  This method is
-        typically called when the size of the previews has changed.
-    */
-    void InvalidateAllPreviews (void);
 
     void UpdateAllPreviews (void);
 

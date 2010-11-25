@@ -115,7 +115,6 @@ public:
 
     sd::ViewShell* GetViewShell() { return mpViewShell; }
     ::sd::FrameView* GetFrameView();
-    ::Window* GetWindow() const;
     ::sd::FunctionReference GetDocShellFunction() const { return mxDocShellFunction; }
     void SetDocShellFunction( const ::sd::FunctionReference& xFunction );
 
@@ -163,8 +162,6 @@ public:
 
     UINT16                  GetStyleFamily() const { return mnStyleFamily; }
     void                    SetStyleFamily( UINT16 nSF ) { mnStyleFamily = nSF; }
-
-    sal_Bool                IsNewDocument() const;
 
     /** executes the SID_OPENDOC slot to let the framework open a document
         with the given URL and this document as a referer */

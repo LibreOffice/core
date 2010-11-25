@@ -40,8 +40,6 @@ class Window;
 
 namespace sd { namespace toolpanel {
 
-class ToolPanel;
-
 /** The sub tool panel is in function similar to the tool panel.  It
     differes in two points.  First, it is a control that can be used
     as element in a tool panel and thus is actually a nested tool
@@ -67,20 +65,8 @@ public:
         parent.  This will usually be a child window.
     */
     SubToolPanel (TreeNode* pParent);
+    SubToolPanel (Window& i_rParentWindow);
     virtual ~SubToolPanel (void);
-
-    /** Add a control to the sub panel.
-        @param rTitle
-            The title that will be shown in the two title bars that
-            belong to the control.
-        @param nHelpId
-            The help id is set at the title bar not the actual control.
-    */
-    void AddControl (
-        ::std::auto_ptr<TreeNode> pControl,
-        const String& rTitle,
-        ULONG nHelpId);
-    void AddControl (::std::auto_ptr<TreeNode> pControl);
 
     virtual void Paint (const Rectangle& rRect);
 
@@ -107,11 +93,6 @@ public:
             ::com::sun::star::accessibility::XAccessible>& rxParent);
 
     using Window::GetWindow;
-protected:
-    /** Initiate a rearrangement of the controls.
-    */
-    void ListHasChanged (void);
-
 private:
     ::Window maWindowFiller;
     bool mbIsRearrangePending;

@@ -124,3 +124,13 @@ void SdCustomShow::RemovePage( const SdPage* pPage )
     }
 }
 
+void   SdCustomShow::SetName(const String& rName)
+{
+    aName = rName;
+}
+
+String SdCustomShow::GetName() const
+{
+    return aName;
+}
+

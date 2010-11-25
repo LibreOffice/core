@@ -104,7 +104,8 @@ public:
         PROPERTY_ACTIVE_LAYER = 5,
         PROPERTY_ZOOMTYPE = 6,
         PROPERTY_ZOOMVALUE = 7,
-        PROPERTY_VIEWOFFSET = 8
+        PROPERTY_VIEWOFFSET = 8,
+        PROPERTY_DRAWVIEWMODE = 9
     };
 
     /** Create a new DrawController object for the given ViewShellBase.
@@ -125,8 +126,6 @@ public:
     */
     void SetSubController (
         const css::uno::Reference<css::drawing::XDrawSubController>& rxSubController);
-
-    ::com::sun::star::awt::Rectangle GetVisArea (void) const;
 
     /** Call this method when the VisArea has changed.
     */

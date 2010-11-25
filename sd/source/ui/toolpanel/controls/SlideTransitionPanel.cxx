@@ -30,6 +30,7 @@
 #include "SlideTransitionPanel.hxx"
 
 #include "taskpane/TaskPaneControlFactory.hxx"
+#include "taskpane/ToolPanelViewShell.hxx"
 
 #include "strings.hrc"
 #include "sdresid.hxx"
@@ -45,11 +46,12 @@ namespace toolpanel { namespace controls {
 
 
 
-SlideTransitionPanel::SlideTransitionPanel(TreeNode* pParent, ViewShellBase& rBase)
-    : SubToolPanel (pParent),
-      maPreferredSize( 100, 200 )
+SlideTransitionPanel::SlideTransitionPanel(Window& i_rParentWindow, ToolPanelViewShell& i_rToolPanelShell)
+    :SubToolPanel( i_rParentWindow )
+    ,maPreferredSize( 100, 200 )
+    ,m_pPanelViewShell( &i_rToolPanelShell )
 {
-    mpWrappedControl = createSlideTransitionPanel( pParent->GetWindow(), rBase );
+    mpWrappedControl = createSlideTransitionPanel( &i_rParentWindow, i_rToolPanelShell.GetViewShellBase() );
     mpWrappedControl->Show();
 }
 
@@ -58,10 +60,17 @@ SlideTransitionPanel::~SlideTransitionPanel()
     delete mpWrappedControl;
 }
 
-std::auto_ptr<ControlFactory> SlideTransitionPanel::CreateControlFactory (ViewShellBase& rBase)
+std::auto_ptr< ControlFactory > SlideTransitionPanel::CreateControlFactory( ToolPanelViewShell& i_rToolPanelShell )
 {
-    return std::auto_ptr<ControlFactory>(
-        new ControlFactoryWithArgs1<SlideTransitionPanel,ViewShellBase>(rBase));
+    return std::auto_ptr< ControlFactory >(
+        new RootControlFactoryWithArg< SlideTransitionPanel, ToolPanelViewShell >( i_rToolPanelShell ) );
+}
+
+TaskPaneShellManager* SlideTransitionPanel::GetShellManager()
+{
+    if ( m_pPanelViewShell )
+        return &m_pPanelViewShell->GetSubShellManager();
+    return SubToolPanel::GetShellManager();
 }
 
 Size SlideTransitionPanel::GetPreferredSize()

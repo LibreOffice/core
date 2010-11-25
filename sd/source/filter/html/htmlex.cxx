@@ -3371,15 +3371,6 @@ BOOL HtmlErrorContext::GetString( ULONG, String& rCtxStr )
 
 // =====================================================================
 
-void HtmlErrorContext::SetContext( USHORT nResId )
-{
-    mnResId = nResId;
-    maURL1.Erase();
-    maURL2.Erase();
-}
-
-// =====================================================================
-
 void HtmlErrorContext::SetContext( USHORT nResId, const String& rURL )
 {
     mnResId = nResId;

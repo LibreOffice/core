@@ -202,7 +202,7 @@ Menu RID_CUSTOMANIMATION_FONTSTYLE_POPUP
         MenuItem
         {
             Identifier = CM_UNDERLINED ;
-            Text [ en-US ] = "Underlinded" ;
+            Text [ en-US ] = "Underlined" ;
         };
     };
 };

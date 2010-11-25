@@ -54,29 +54,9 @@ SelectionCommand::SelectionCommand (
 
 
 
-void SelectionCommand::AddSlides (
-    const ::boost::shared_ptr<PageSelector::PageSelection>& rpSelection)
-{
-    PageSelector::PageSelection::iterator iPage = rpSelection->begin();
-    PageSelector::PageSelection::iterator iEnd = rpSelection->end();
-    for (; iPage!=iEnd; ++iPage)
-        AddSlide(((*iPage)->GetPageNum()-1)/2);
-}
-
-
-
-
 void SelectionCommand::AddSlide (USHORT nPageIndex)
 {
     maPagesToSelect.push_back(nPageIndex);
-}
-
-
-
-
-void SelectionCommand::SetCurrentSlide (USHORT nPageIndex)
-{
-    mnCurrentPageIndex = nPageIndex;
 }
 
 

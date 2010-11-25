@@ -36,6 +36,7 @@ class ViewShellBase;
 namespace sd { namespace toolpanel {
 class ControlFactory;
 class TreeNode;
+class ToolPanelViewShell;
 } }
 
 namespace sd { namespace toolpanel { namespace controls {
@@ -45,12 +46,16 @@ class SlideTransitionPanel
 {
 public:
     SlideTransitionPanel (
-        TreeNode* pParent,
-        ViewShellBase& rBase);
+        Window& i_rParentWindow,
+        ToolPanelViewShell& i_rToolPanelShell);
     virtual ~SlideTransitionPanel (void);
 
-    static std::auto_ptr<ControlFactory> CreateControlFactory (ViewShellBase& rBase);
+    static std::auto_ptr<ControlFactory> CreateControlFactory (ToolPanelViewShell& i_rToolPanelShell);
 
+    // TreeNode overridables
+    virtual TaskPaneShellManager* GetShellManager();
+
+    // ILayoutableWindow overridables
     virtual Size GetPreferredSize (void);
     virtual sal_Int32 GetPreferredWidth (sal_Int32 nHeigh);
     virtual sal_Int32 GetPreferredHeight (sal_Int32 nWidth);
@@ -68,6 +73,7 @@ public:
 private:
     Size maPreferredSize;
     ::Window* mpWrappedControl;
+    ToolPanelViewShell* m_pPanelViewShell;
 };
 
 } } } // end of namespace ::sd::toolpanel::controls

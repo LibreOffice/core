@@ -99,7 +99,7 @@ public:
     virtual css::uno::Reference<css::drawing::framework::XResource>
         SAL_CALL createResource (
             const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException);
 
     virtual void SAL_CALL
         releaseResource (
@@ -158,12 +158,6 @@ private:
             const css::uno::Reference<
                 css::drawing::framework::XResourceId>& rxPaneId,
             const PaneDescriptor& rDescriptor);
-
-    /** Return <TRUE/> when the specified resource is bound to one of the
-        child windows.
-    */
-    bool IsBoundToChildWindow (
-        const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId) const;
 
     void ThrowIfDisposed (void) const
         throw (css::lang::DisposedException);

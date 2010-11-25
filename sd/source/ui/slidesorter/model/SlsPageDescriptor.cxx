@@ -92,14 +92,6 @@ Reference<drawing::XDrawPage> PageDescriptor::GetXDrawPage (void) const
 
 
 
-sal_Int32 PageDescriptor::GetPageIndex (void) const
-{
-    return mnIndex;
-}
-
-
-
-
 view::PageObject* PageDescriptor::GetPageObject (void)
 {
     if (mpPageObject==NULL && mpPageObjectFactory!=NULL && mpPage != NULL)
@@ -274,14 +266,6 @@ void PageDescriptor::SetPageNumberAreaModelSize (const Size& rSize)
 Size PageDescriptor::GetPageNumberAreaModelSize (void) const
 {
     return maPageNumberAreaModelSize;
-}
-
-
-
-
-bool PageDescriptor::IsCurrentPage (void) const
-{
-    return mbIsCurrent;
 }
 
 

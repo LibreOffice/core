@@ -64,23 +64,10 @@ public:
         const ::boost::shared_ptr<controller::CurrentSlideManager>& rpCurrentSlideManager,
         const model::SlideSorterModel& rModel);
 
-    /** Add the pages in the given list of selected pages to those that will
-        be selected when this command is executed, i.e. its operator()
-        method is called.
-        The first page will be set as current page when the new current page
-        has not been specified previously.
-    */
-    void AddSlides (const ::boost::shared_ptr<PageSelector::PageSelection>& rpSelection);
-
     /** Remember the specified page to be selected when this command is
         executed.
     */
     void AddSlide (USHORT nPageIndex);
-
-    /** Call this method to explicitly set the page that will be made the
-        current page when this command is executed.
-    */
-    void SetCurrentSlide (USHORT nPageIndex);
 
     /** Execute the command and select the pages added by previous calls to
         AddPages() and AddPage().

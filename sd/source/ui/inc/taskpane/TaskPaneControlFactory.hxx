@@ -58,37 +58,34 @@ public:
     ControlFactory (void);
     virtual ~ControlFactory (void);
 
-    /** Derived classes should overload InternalCreateControl(), not this
-        method.
+    /** creates a tree node which acts as root of an own tree
+
+        Derived classes should overload InternalCreateControl.
     */
-    ::std::auto_ptr<TreeNode> CreateControl (TreeNode* pTreeNode);
+    ::std::auto_ptr<TreeNode> CreateControl( ::Window& i_rParent );
 
 protected:
-    /** This is the internal hook for derived classes to overload in order
-        to provide a new control instance.
-    */
-    virtual TreeNode* InternalCreateControl (TreeNode* pTreeNode) = 0;
+    virtual TreeNode* InternalCreateControl( ::Window& i_rParent ) = 0;
 };
 
 
 
-/** A simple helper class that realizes a ControlFactory that provides its
-    newly created controls with one additional argument (additional to the
-    parent TreeNode).
+/** A simple helper class that realizes a ControlFactory that is able to create root controls, providing
+    the to-be-created control with an additional parameter.
 */
 template<class ControlType, class ArgumentType>
-class ControlFactoryWithArgs1
+class RootControlFactoryWithArg
     : public ControlFactory
 {
 public:
-    ControlFactoryWithArgs1 (ArgumentType& rArgument)
+    RootControlFactoryWithArg (ArgumentType& rArgument)
         : mrArgument(rArgument)
     {}
 
 protected:
-    virtual TreeNode* InternalCreateControl (TreeNode* pTreeNode)
+    virtual TreeNode* InternalCreateControl( ::Window& i_rParent )
     {
-        return new ControlType(pTreeNode, mrArgument);
+        return new ControlType( i_rParent, mrArgument );
     }
 
 private:

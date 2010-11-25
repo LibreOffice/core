@@ -56,7 +56,7 @@ using rtl::OUString;
 using ::sd::framework::FrameworkHelper;
 
 #undef VERBOSE
-#define VERBOSE 3
+//#define VERBOSE 3
 
 
 namespace sd { namespace framework {
@@ -101,8 +101,6 @@ public:
         const Reference<frame::XController>& rxController);
     ~Implementation (void);
 
-    void Initialize (const Reference<frame::XController>& rxController);
-
     Reference<XControllerManager> mxControllerManager;
 
     /** The Broadcaster class implements storing and calling of listeners.
@@ -118,8 +116,6 @@ public:
         ::com::sun::star::drawing::framework::XConfiguration> mxRequestedConfiguration;
 
     ViewShellBase* mpBase;
-
-    bool mbIsInitialized;
 
     ::boost::shared_ptr<ResourceFactoryManager> mpResourceFactoryContainer;
 
@@ -705,7 +701,6 @@ ConfigurationController::Implementation::Implementation (
       mpBroadcaster(new ConfigurationControllerBroadcaster(&rController)),
       mxRequestedConfiguration(new Configuration(&rController, true)),
       mpBase(NULL),
-      mbIsInitialized(false),
       mpResourceFactoryContainer(new ResourceFactoryManager(mxControllerManager)),
       mpResourceManager(
           new ConfigurationControllerResourceManager(mpResourceFactoryContainer,mpBroadcaster)),
@@ -716,27 +711,6 @@ ConfigurationController::Implementation::Implementation (
       mnLockCount(0)
 {
     mpQueueProcessor->SetConfiguration(mxRequestedConfiguration);
-}
-
-
-
-
-void ConfigurationController::Implementation::Initialize (
-    const Reference<frame::XController>& rxController)
-{
-    mxControllerManager = Reference<XControllerManager>(rxController, UNO_QUERY_THROW);
-
-    mpConfigurationUpdater->SetControllerManager(mxControllerManager);
-
-    // Tunnel through the controller to obtain a ViewShellBase.
-    Reference<lang::XUnoTunnel> xTunnel (rxController, UNO_QUERY_THROW);
-    if (xTunnel.is())
-    {
-        ::sd::DrawController* pController = reinterpret_cast<sd::DrawController*>(
-            xTunnel->getSomething(sd::DrawController::getUnoTunnelId()));
-        if (pController != NULL)
-            mpBase = pController->GetViewShellBase();
-    }
 }
 
 

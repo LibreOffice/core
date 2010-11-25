@@ -67,15 +67,6 @@ IteratorPosition::IteratorPosition (const IteratorPosition& aPosition)
 {
 }
 
-IteratorPosition::IteratorPosition (SdrObject* pObject, sal_Int32 nText, sal_Int32 nPageIndex, PageKind ePageKind, EditMode eEditMode)
-: mxObject(pObject)
-, mnText(nText)
-, mnPageIndex(nPageIndex)
-, mePageKind(ePageKind)
-, meEditMode(eEditMode)
-{
-}
-
 IteratorPosition::~IteratorPosition (void)
 {
 }
@@ -117,11 +108,6 @@ Iterator::Iterator (const Iterator& rIterator)
 Iterator::Iterator (IteratorImplBase* pObject)
 {
     mpIterator = pObject;
-}
-
-Iterator::Iterator (const IteratorImplBase& rObject)
-{
-    mpIterator = rObject.Clone();
 }
 
 Iterator::~Iterator (void)
@@ -264,28 +250,6 @@ Iterator OutlinerContainer::CreateSelectionIterator (
 
     return Iterator (new SelectionIteratorImpl (
         rObjectList, nObjectIndex, pDocument, rpViewShell, bDirectionIsForward));
-}
-
-Iterator OutlinerContainer::CreateViewIterator (
-    SdDrawDocument* pDocument,
-    const ::boost::shared_ptr<ViewShell>& rpViewShell,
-    bool bDirectionIsForward,
-    IteratorLocation aLocation)
-{
-    OSL_ASSERT(rpViewShell.get());
-
-    const ::boost::shared_ptr<DrawViewShell> pDrawViewShell(
-        ::boost::dynamic_pointer_cast<DrawViewShell>(rpViewShell));
-    sal_Int32 nPageIndex = GetPageIndex (
-        pDocument,
-        rpViewShell,
-        pDrawViewShell.get() ? pDrawViewShell->GetPageKind() : PK_STANDARD,
-        pDrawViewShell.get() ? pDrawViewShell->GetEditMode() : EM_PAGE,
-        bDirectionIsForward,
-        aLocation);
-
-    return Iterator (new ViewIteratorImpl (
-        nPageIndex, pDocument, rpViewShell, bDirectionIsForward));
 }
 
 Iterator OutlinerContainer::CreateDocumentIterator (

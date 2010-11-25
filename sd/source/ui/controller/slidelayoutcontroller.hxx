@@ -25,28 +25,30 @@
  *
  ************************************************************************/
 
-#include "app.hrc"
-#include "ToolPanelChildWindow.hrc"
+#ifndef __SD_SLIDELAYOUTCONTROLLER_HXX_
+#define __SD_SLIDELAYOUTCONTROLLER_HXX_
 
-DockingWindow FLT_WIN_TOOLPANEL
+#include <svtools/popupwindowcontroller.hxx>
+
+namespace sd
 {
-    HelpID = SID_TOOLPANEL ;
-    Border = TRUE ;
-    Hide = FALSE ;
-    SVLook = TRUE ;
-    Sizeable = TRUE ;
-    Moveable = TRUE ;
-    Closeable = TRUE ;
-    Zoomable = TRUE ;
-    Dockable = TRUE ;
-    EnableResizing = TRUE ;
-    Size = MAP_APPFONT ( 140 , 120 ) ;
-    Text = "Tool Panel" ;
 
-    Control TOOLPANEL
-    {
-        Pos = MAP_APPFONT ( 0 , 0 ) ;
-        Size = MAP_APPFONT ( 69, 150 ) ;
-        Border = FALSE;
-    };
+class SlideLayoutController : public svt::PopupWindowController
+{
+public:
+    SlideLayoutController( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager, const rtl::OUString& sCommandURL, bool bInsertPage );
+
+    virtual ::Window* createPopupWindow( ::Window* pParent );
+
+    // XServiceInfo
+    virtual ::rtl::OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException );
+
+    using svt::PopupWindowController::createPopupWindow;
+private:
+    bool mbInsertPage;
 };
+
+}
+
+#endif // __SD_SLIDELAYOUTCONTROLLER_HXX_

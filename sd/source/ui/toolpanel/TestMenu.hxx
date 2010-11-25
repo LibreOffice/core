@@ -39,6 +39,8 @@ namespace sd { namespace toolpanel {
 
 class ControlFactory;
 
+#ifdef SHOW_COLOR_MENU
+
 /** This demo menu shows the colors that are available from the
     StyleSettings.
 */
@@ -47,7 +49,7 @@ class ColorMenu
       public TreeNode
 {
 public:
-    ColorMenu (TreeNode* pParent);
+    ColorMenu (::Window* i_pParent);
     virtual ~ColorMenu (void);
 
     static ::std::auto_ptr<ControlFactory> CreateControlFactory (void);
@@ -75,6 +77,7 @@ private:
     int CalculateRowCount (const Size& rItemSize, int nColumnCount);
     void Fill (void);
 };
+#endif
 
 } } // end of namespace ::sd::toolpanel
 

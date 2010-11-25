@@ -46,7 +46,7 @@ namespace sd { namespace toolpanel {
 /** The TaskPaneShellManager implements the ViewShellManager::ShellFactory
     interface.  However, it does not create or delete shells.  It only
     gives the ViewShellManager access to the sub shells of the
-    TaskPaneViewShell.  Life time control of the sub shells is managed by
+    ToolPanelViewShell.  Life time control of the sub shells is managed by
     the sub shells themselves.
 */
 class TaskPaneShellManager
@@ -86,6 +86,11 @@ public:
         NULL when this shell is requested.
     */
     void RemoveSubShell (const SfxShell* pShell);
+    /** removes the shell given by its ID from the set of sub shells managed by the
+        TaskPaneShellManager. Subsequent calls to CreateShell() will return
+        NULL when this shell is requested.
+    */
+    void RemoveSubShell (const ShellId i_nShellId);
 
     /** Move the given sub-shell to the top of the local shell stack.
         Furthermore move the view shell whose sub-shells this class manages

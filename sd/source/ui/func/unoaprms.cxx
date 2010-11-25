@@ -39,52 +39,6 @@ TYPEINIT1(SdAnimationPrmsUndoAction, SdUndoAction);
 
 /*************************************************************************
 |*
-|* 2. Ctor, der den ersten (inline) nach der Version 4.0 einmal ersetzen
-|* soll (mit 3. Parameter dann)
-|* Hier werden die Member mit den Animations-Informationen vorbelegt,
-|* um nicht immer alle inline-Methoden aufrufen zu muessen, auch im
-|* Hinblick auf zukuenftige Erweiterungen (neue Member etc.)
-|*
-\************************************************************************/
-
-SdAnimationPrmsUndoAction::SdAnimationPrmsUndoAction(
-                                SdDrawDocument* pTheDoc,
-                                SdrObject* pObj ) :
-    SdUndoAction    ( pTheDoc ),
-    pObject         ( pObj ),
-    bInfoCreated    ( FALSE ) // Fuer Animationsreihenfolge existiert Info
-{
-    SdAnimationInfo* pInfo = pTheDoc->GetAnimationInfo( pObject );
-    if( pInfo )
-    {
-        bNewActive      = bOldActive     = pInfo->mbActive;
-        eNewEffect      = eOldEffect     = pInfo->meEffect;
-        eNewTextEffect  = eOldTextEffect = pInfo->meTextEffect;
-        eNewSpeed       = eOldSpeed      = pInfo->meSpeed;
-        bNewDimPrevious = bOldDimPrevious= pInfo->mbDimPrevious;
-        aNewDimColor    = aOldDimColor   = pInfo->maDimColor;
-        bNewDimHide     = bOldDimHide    = pInfo->mbDimHide;
-        bNewSoundOn     = bOldSoundOn    = pInfo->mbSoundOn;
-        aNewSoundFile   = aOldSoundFile  = pInfo->maSoundFile;
-        bNewPlayFull    = bOldPlayFull   = pInfo->mbPlayFull;
-
-        pNewPathObj     = pOldPathObj    = pInfo->mpPathObj;
-
-        eNewClickAction     = eOldClickAction    = pInfo->meClickAction;
-        aNewBookmark        = aOldBookmark       = pInfo->GetBookmark();
-//      bNewInvisibleInPres = bOldInvisibleInPres= pInfo->mbInvisibleInPresentation;
-        nNewVerb            = nOldVerb           = pInfo->mnVerb;
-        nNewPresOrder       = nOldPresOrder      = pInfo->mnPresOrder;
-
-        eNewSecondEffect    = eOldSecondEffect   = pInfo->meSecondEffect;
-        eNewSecondSpeed     = eOldSecondSpeed    = pInfo->meSecondSpeed;
-        bNewSecondSoundOn   = bOldSecondSoundOn  = pInfo->mbSecondSoundOn;
-        bNewSecondPlayFull  = bOldSecondPlayFull = pInfo->mbSecondPlayFull;
-    }
-}
-
-/*************************************************************************
-|*
 |* Undo()
 |*
 \************************************************************************/

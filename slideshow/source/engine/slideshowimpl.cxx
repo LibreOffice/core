@@ -1545,7 +1545,9 @@ void SlideShowImpl::registerUserPaintPolygons( const uno::Reference< lang::XMult
                     for( sal_uInt32 n = 0; n < nPoints; n++ )
                     {
                         //Create a point from the polygon
-                        *pInnerSequence++ = awt::Point( aPoly.getB2DPoint(n).getX(), aPoly.getB2DPoint(n).getY());
+                        *pInnerSequence++ = awt::Point(
+                            basegfx::fround(aPoly.getB2DPoint(n).getX()),
+                            basegfx::fround(aPoly.getB2DPoint(n).getY()));
                     }
 
                     //Fill the properties

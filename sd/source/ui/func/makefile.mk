@@ -84,7 +84,6 @@ SLOFILES = \
         $(SLO)$/fuolbull.obj 	\
         $(SLO)$/fucopy.obj		\
         $(SLO)$/fulink.obj		\
-        $(SLO)$/fuspell.obj		\
         $(SLO)$/futhes.obj		\
         $(SLO)$/fusearch.obj 	\
         $(SLO)$/fuinsfil.obj 	\
@@ -98,7 +97,6 @@ SLOFILES = \
         $(SLO)$/fumorph.obj		\
         $(SLO)$/fuexpand.obj    \
         $(SLO)$/fusumry.obj     \
-        $(SLO)$/outlinfo.obj	\
         $(SLO)$/fucushow.obj	\
         $(SLO)$/fuvect.obj		\
         $(SLO)$/bulmaper.obj    \
@@ -159,7 +157,6 @@ LIB3OBJFILES= \
         $(SLO)$/fuolbull.obj 	\
         $(SLO)$/fucopy.obj		\
         $(SLO)$/fulink.obj		\
-        $(SLO)$/fuspell.obj		\
         $(SLO)$/futhes.obj		\
         $(SLO)$/fusearch.obj 	\
         $(SLO)$/fuinsfil.obj 	\
@@ -173,7 +170,6 @@ LIB3OBJFILES= \
         $(SLO)$/fumorph.obj		\
         $(SLO)$/fuexpand.obj    \
         $(SLO)$/fusumry.obj     \
-        $(SLO)$/outlinfo.obj	\
         $(SLO)$/fucushow.obj	\
         $(SLO)$/fuvect.obj		\
         $(SLO)$/bulmaper.obj    \

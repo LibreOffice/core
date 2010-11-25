@@ -59,8 +59,7 @@ SLOFILES =      							\
     $(SLO)$/RecentMasterPagesSelector.obj	\
     $(SLO)$/CustomAnimationPanel.obj		\
     $(SLO)$/SlideTransitionPanel.obj		\
-    $(SLO)$/TableDesignPanel.obj			\
-    $(SLO)$/AnimationSchemesPanel.obj
+    $(SLO)$/TableDesignPanel.obj
 
 # --- Tagets -------------------------------------------------------
 

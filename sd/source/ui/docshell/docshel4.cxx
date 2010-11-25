@@ -312,18 +312,6 @@ BOOL DrawDocShell::InitNew( const ::com::sun::star::uno::Reference< ::com::sun::
 |*
 \************************************************************************/
 
-sal_Bool DrawDocShell::IsNewDocument() const
-{
-    return( mbNewDocument &&
-            ( !GetMedium() || GetMedium()->GetURLObject().GetProtocol() == INET_PROT_NOT_VALID ) );
-}
-
-/*************************************************************************
-|*
-|* Load: Pools und Dokument laden
-|*
-\************************************************************************/
-
 BOOL DrawDocShell::Load( SfxMedium& rMedium )
 {
     mbNewDocument = sal_False;

@@ -99,12 +99,6 @@ public:
         const Size& rSize,
         bool bMayBeUpToDate = true);
 
-    /** Tell the cache to replace the bitmap associated with the given
-        request data with a new one that reflects recent changes in the
-        content of the page object.
-    */
-    void InvalidatePreviewBitmap (CacheKey aKey);
-
     /** Call this method when a view-object-contact object is being deleted
         and does not need (a) its current bitmap in the cache and (b) a
         requested a new bitmap.
@@ -123,10 +117,6 @@ public:
         use is to set the precious flag for the visible pages.
     */
     void SetPreciousFlag (CacheKey aKey, bool bIsPrecious);
-
-    /** Return <TRUE/> when there is no preview bitmap in the cache.
-    */
-    bool IsEmpty (void) const;
 
     void Pause (void);
     void Resume (void);

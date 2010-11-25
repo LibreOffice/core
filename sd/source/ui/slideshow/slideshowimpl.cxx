@@ -51,7 +51,8 @@
 
 #include <sfx2/imagemgr.hxx>
 #include <sfx2/request.hxx>
-#include "sfx2/docfile.hxx"
+#include <sfx2/docfile.hxx>
+#include <sfx2/app.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/svdoole2.hxx>
 
@@ -3472,39 +3473,11 @@ void SAL_CALL SlideshowImpl::gotoNextSlide(  ) throw (RuntimeException)
                 {
                     if( maPresSettings.mnPauseTimeout )
                     {
-                        boost::scoped_ptr< Graphic > pGraphic;
-
-                        if( maPresSettings.mbShowPauseLogo )
-                        {
-                            // load about image from module path
-                            String aBmpFileName( RTL_CONSTASCII_USTRINGPARAM("about.bmp") );
-                            INetURLObject aObj( SvtPathOptions().GetModulePath(), INET_PROT_FILE );
-                            aObj.insertName( aBmpFileName );
-                            SvFileStream aStrm( aObj.PathToFileName(), STREAM_STD_READ );
-                            if ( !aStrm.GetError() )
-                            {
-                                Bitmap aBmp;
-                                aStrm >> aBmp;
-                                pGraphic.reset( new Graphic(aBmp) );
-                                pGraphic->SetPrefMapMode(MAP_PIXEL);
-                            }
-                            else
-                            {
-                                //if no image is located in the module path
-                                //use default logo from iso resource:
-
-                                String aMgrName( RTL_CONSTASCII_USTRINGPARAM( "iso" ) );
-                                boost::scoped_ptr< ResMgr > pResMgr( ResMgr::CreateResMgr( U2S( aMgrName )) );
-                                DBG_ASSERT(pResMgr,"No ResMgr found");
-                                if(pResMgr.get())
-                                {
-                                    pGraphic.reset( new Graphic( Bitmap( ResId( RID_DEFAULT_ABOUT_BMP_LOGO, *pResMgr ) ) ) );
-                                    pGraphic->SetPrefMapMode(MAP_PIXEL);
-                                }
-                            }
-                        }
                         if( mpShowWindow )
-                            mpShowWindow->SetPauseMode( 0, maPresSettings.mnPauseTimeout, pGraphic.get() );
+                        {
+                            Graphic aGraphic( SfxApplication::GetApplicationLogo().GetBitmapEx() );
+                            mpShowWindow->SetPauseMode( 0, maPresSettings.mnPauseTimeout, &aGraphic );
+                        }
                     }
                     else
                     {
@@ -3724,14 +3697,7 @@ Reference< XSlideShow > SAL_CALL SlideshowImpl::getSlideShow() throw (RuntimeExc
 // --------------------------------------------------------------------
 
 
-PresentationSettingsEx::PresentationSettingsEx()
-: mbRehearseTimings(sal_False)
-, mbPreview(sal_False)
-, mpParentWindow( 0 )
-{
-}
-
-PresentationSettingsEx::PresentationSettingsEx( PresentationSettingsEx& r )
+PresentationSettingsEx::PresentationSettingsEx( const PresentationSettingsEx& r )
 : PresentationSettings( r )
 , mbRehearseTimings(r.mbRehearseTimings)
 , mbPreview(r.mbPreview)

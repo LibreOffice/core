@@ -60,6 +60,10 @@ public:
         parent.  This will usually be a child window.
     */
     ScrollPanel (TreeNode* pParent);
+    /** Create a new scroll panel which itself is the root of a TreeNode hierarchy
+        parent.  This will usually be a child window.
+    */
+    ScrollPanel (::Window& i_rParentWindow);
     virtual ~ScrollPanel (void);
 
     /** Add a control to the sub panel.  An title bar is added above the
@@ -127,11 +131,6 @@ public:
         Rectangle& aRectangle,
         ::Window* pWindow);
 
-protected:
-    /** Initiate a rearrangement of the controls.
-    */
-    void ListHasChanged (void);
-
 private:
     ::Control maScrollWindow;
     ScrollBar maVerticalScrollBar;
@@ -170,6 +169,10 @@ private:
         the bounding box.
     */
     sal_Int32 LayoutChildren (void);
+
+    /** ctor-impl
+    */
+    void    Construct();
 
     Size SetupScrollBars (const Size& rRequiresSize);
     sal_Int32 SetupVerticalScrollBar (bool bShow, sal_Int32 nRange);

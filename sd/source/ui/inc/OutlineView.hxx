@@ -162,7 +162,9 @@ public:
     */
     void IgnoreCurrentPageChanges (bool bIgnore);
 
+#if 0
     sal_Int32 GetPageNumberWidthPixel();
+#endif
 
     void InvalidateSlideNumberArea();
 

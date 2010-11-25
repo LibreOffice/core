@@ -548,21 +548,6 @@ void DrawDocShell::SetModified( BOOL bSet /* = TRUE */ )
     }
 }
 
-::Window* DrawDocShell::GetWindow() const
-{
-    SfxViewFrame* pFrame = GetFrame();
-    if( pFrame == NULL )
-        pFrame = SfxViewFrame::GetFirst( this );
-
-    if( pFrame )
-        return &(pFrame->GetWindow());
-    else
-    {
-        DBG_ASSERT( 0, "No active window for DrawDocShell found! (next gpf is caused by this assertion)" );
-        return NULL;
-    }
-}
-
 /*************************************************************************
 |*
 |* Callback fuer ExecuteSpellPopup()

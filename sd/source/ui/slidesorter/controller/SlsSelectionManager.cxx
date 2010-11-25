@@ -290,6 +290,7 @@ void SelectionManager::SelectionHasChanged (const bool bMakeSelectionVisible)
         pViewShell->Invalidate(SID_HIDE_SLIDE);
         pViewShell->Invalidate(SID_DELETE_PAGE);
         pViewShell->Invalidate(SID_DELETE_MASTER_PAGE);
+        pViewShell->Invalidate(SID_ASSIGN_LAYOUT);
 
         // StatusBar
         pViewShell->Invalidate (SID_STATUS_PAGE);

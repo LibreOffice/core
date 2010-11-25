@@ -53,7 +53,6 @@ public:
     virtual void SAL_CALL dispose() throw(::com::sun::star::uno::RuntimeException);
 
     OutlinerParaObject* CreateText();
-    void                SetString( const String& rText );
     void                SetText( OutlinerParaObject& rText );
     String              GetText();
 

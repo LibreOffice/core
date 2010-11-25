@@ -100,18 +100,18 @@ void GraphicViewShellBase::Execute (SfxRequest& rRequest)
 
     switch (nSlotId)
     {
-        case SID_RIGHT_PANE:
         case SID_NOTES_WINDOW:
         case SID_SLIDE_SORTER_MULTI_PANE_GUI:
         case SID_DIAMODE:
         case SID_OUTLINEMODE:
         case SID_NOTESMODE:
         case SID_HANDOUTMODE:
-        case SID_TASK_PANE:
+        case SID_SHOW_TOOL_PANEL:
             // Prevent some Impress-only slots from being executed.
             rRequest.Cancel();
             break;
 
+        case SID_TASKPANE:
         case SID_SWITCH_SHELL:
         case SID_LEFT_PANE_DRAW:
         case SID_LEFT_PANE_IMPRESS:

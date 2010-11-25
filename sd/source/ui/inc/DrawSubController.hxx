@@ -29,12 +29,27 @@
 #define SD_DRAW_SUB_CONTROLLER_HXX
 
 #include <com/sun/star/drawing/XDrawSubController.hpp>
-#include <cppuhelper/compbase1.hxx>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <cppuhelper/compbase2.hxx>
 
-namespace {
-    typedef ::cppu::WeakComponentImplHelper1 <
-        ::com::sun::star::drawing::XDrawSubController
-        > DrawSubControllerInterfaceBase;
+namespace sd {
+
+    class DrawSubControllerInterfaceBase : public ::cppu::WeakComponentImplHelper2<
+                    ::com::sun::star::drawing::XDrawSubController,
+                    ::com::sun::star::lang::XServiceInfo >
+    {
+    public:
+        DrawSubControllerInterfaceBase( ::osl::Mutex& aMutex )
+            :  ::cppu::WeakComponentImplHelper2<
+                    ::com::sun::star::drawing::XDrawSubController,
+                    ::com::sun::star::lang::XServiceInfo >( aMutex ) {}
+
+        // XServiceInfo
+        virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException) = 0;
+        virtual ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException) = 0;
+        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException) = 0;
+    };
+
 }
 
 
