@@ -878,41 +878,36 @@ int     wfc;
 
    /* Never change MAXPROCESS after _procs is allocated. */
    if( _procs_size != Max_proc ) {
-      /* If procs was never initialize this is OK, do it now. */
-      if( _procs == NIL(PR) ) {
-     _procs_size = Max_proc;
-     TALLOC( _procs, Max_proc, PR );
+     /* If procs was never initialize this is OK, do it now. */
+     if( _procs == NIL(PR) ) {
+       _procs_size = Max_proc;
+       TALLOC( _procs, Max_proc, PR );
 #if defined(USE_CREATEPROCESS)
-     TALLOC( _wpList, Max_proc, HANDLE );
+       TALLOC( _wpList, Max_proc, HANDLE );
 
-     /* Signed int values are cast to DMHANDLE in various places, use this
-      * sanity check to verify that DMHANDLE is large enough. */
-     if( sizeof(int) > sizeof(DMHANDLE) )
-        Fatal( "Internal Error: Check type of DMHANDLE!" );
+       /* Signed int values are cast to DMHANDLE in various places, use this
+        * sanity check to verify that DMHANDLE is large enough. */
+       if( sizeof(int) > sizeof(DMHANDLE) )
+         Fatal( "Internal Error: Check type of DMHANDLE!" );
 #endif
-      }
-      else {
-     Fatal( "MAXPROCESS changed from `%d' to `%d' after a command was executed!", _procs_size, Max_proc );
-      }
+     }
+     else {
+       Fatal( "MAXPROCESS changed from `%d' to `%d' after a command was executed!", _procs_size, Max_proc );
+     }
    }
 
    if( Measure & M_RECIPE )
       Do_profile_output( "s", M_RECIPE, target );
 
-   /* If _use_i!=-1 then this function is called by _finished_child()
-    * ( through runargv() ). */
+   /* If _use_i ! =-1 then this function is called by _finished_child() ( through runargv() ),
+      and we re-use the process queue number given by _use_i. */
    if( (i = _use_i) == -1 ) {
-      for( i=0; i<Max_proc; i++ )
-     if( !_procs[i].pr_valid )
-        break;
-   }
-   else {
-      /* Re-use the process queue number given by _use_i.
-       * Free the pointer before using it again below. */
-      FREE( _procs[i].pr_dir );
+     for( i=0; i<Max_proc; i++ )
+       if( !_procs[i].pr_valid )
+         break;
    }
 
-   pp = _procs+i;
+   pp = &(_procs[i]);
 
    pp->pr_valid  = 1;
    pp->pr_pid    = pid.pid;
@@ -921,7 +916,9 @@ int     wfc;
    pp->pr_ignore = ignore;
    pp->pr_last   = last;
    pp->pr_wfc    = wfc;
-   /* Freed above and after the last recipe in _finished child(). */
+
+   if( pp->pr_dir != NIL(char) )
+     FREE(pp->pr_dir);
    pp->pr_dir    = DmStrDup(Get_current_dir());
 
    Current_target = NIL(CELL);
@@ -953,80 +950,80 @@ _finished_child(cid, status)/*
 DMHANDLE cid;
 int status;
 {
-   register int i;
-   char     *dir;
+  register int i;
+  char     *dir;
 
-   if((int)cid < 1) { /* Force int. */
-      /* internal command */
-      i = -((int)cid);
-   }
-   else {
-      for( i=0; i<Max_proc; i++ )
-     if( _procs[i].pr_valid && _procs[i].pr_pid == cid )
+  if((int)cid < 1) { /* Force int. */
+    /* internal command */
+    i = -((int)cid);
+  }
+  else {
+    for( i=0; i<Max_proc; i++ )
+      if( _procs[i].pr_valid && _procs[i].pr_pid == cid )
         break;
 
-      /* Some children we didn't make esp true if using /bin/sh to execute a
-       * a pipe and feed the output as a makefile into dmake. */
-      if( i == Max_proc ) {
-     Warning("Internal Warning: finished pid %d is not in pq!?", cid);
-     return;
-      }
-   }
+    /* Some children we didn't make esp true if using /bin/sh to execute a
+     * a pipe and feed the output as a makefile into dmake. */
+    if( i == Max_proc ) {
+      Warning("Internal Warning: finished pid %d is not in pq!?", cid);
+      return;
+    }
+  }
 
-   /* Not a running process anymore, the next runargv() will not use
-    * _attach_cmd(). */
-   _procs[i].pr_valid = 0;
+  /* Not a running process anymore, the next runargv() will not use
+   * _attach_cmd(). */
+  _procs[i].pr_valid = 0;
 
-   if( Measure & M_RECIPE )
-      Do_profile_output( "e", M_RECIPE, _procs[i].pr_target );
+  if( Measure & M_RECIPE )
+    Do_profile_output( "e", M_RECIPE, _procs[i].pr_target );
 
-   _proc_cnt--;
-   dir = DmStrDup(Get_current_dir());
-   Set_dir( _procs[i].pr_dir );
+  _proc_cnt--;
+  dir = DmStrDup(Get_current_dir());
+  Set_dir( _procs[i].pr_dir );
 
-   if( _procs[i].pr_recipe != NIL(RCP) && !_abort_flg ) {
-      RCPPTR rp = _procs[i].pr_recipe;
+  if( _procs[i].pr_recipe != NIL(RCP) && !_abort_flg ) {
+    RCPPTR rp = _procs[i].pr_recipe;
 
 
-      Current_target = _procs[i].pr_target;
-      Handle_result( status, _procs[i].pr_ignore, FALSE, _procs[i].pr_target );
-      Current_target = NIL(CELL);
+    Current_target = _procs[i].pr_target;
+    Handle_result( status, _procs[i].pr_ignore, FALSE, _procs[i].pr_target );
+    Current_target = NIL(CELL);
 
-      if ( _procs[i].pr_target->ce_attr & A_ERROR ) {
-     _procs[i].pr_last = TRUE;
-     goto ABORT_REMAINDER_OF_RECIPE;
-      }
+    if ( _procs[i].pr_target->ce_attr & A_ERROR ) {
+      _procs[i].pr_last = TRUE;
+      goto ABORT_REMAINDER_OF_RECIPE;
+    }
 
-      _procs[i].pr_recipe = rp->prp_next;
+    _procs[i].pr_recipe = rp->prp_next;
 
-      _use_i = i;
-      /* Run next recipe line. The rp->prp_attr propagates a possible
-       * wfc condition. */
-      runargv( _procs[i].pr_target, rp->prp_group,
-           rp->prp_last, rp->prp_attr, &rp->prp_cmd );
-      _use_i = -1;
+    _use_i = i;
+    /* Run next recipe line. The rp->prp_attr propagates a possible
+     * wfc condition. */
+    runargv( _procs[i].pr_target, rp->prp_group,
+             rp->prp_last, rp->prp_attr, &rp->prp_cmd );
+    _use_i = -1;
 
-      FREE( rp->prp_cmd );
-      FREE( rp );
+    FREE( rp->prp_cmd );
+    FREE( rp );
 
-      /* If all process queues are used wait for the next process to
-       * finish. Is this really needed here? */
-      if( _proc_cnt == Max_proc ) {
-     Wait_for_child( FALSE, -1 );
-      }
-   }
-   else {
-      /* empty the queue on abort. */
-      if( _abort_flg )
-     _procs[i].pr_recipe = NIL(RCP);
+    /* If all process queues are used wait for the next process to
+     * finish. Is this really needed here? */
+    if( _proc_cnt == Max_proc ) {
+      Wait_for_child( FALSE, -1 );
+    }
+  }
+  else {
+    /* empty the queue on abort. */
+    if( _abort_flg )
+      _procs[i].pr_recipe = NIL(RCP);
 
-      Handle_result(status,_procs[i].pr_ignore,_abort_flg,_procs[i].pr_target);
+    Handle_result(status,_procs[i].pr_ignore,_abort_flg,_procs[i].pr_target);
 
- ABORT_REMAINDER_OF_RECIPE:
-      if( _procs[i].pr_last ) {
-     FREE(_procs[i].pr_dir ); /* Set in _add_child() */
+  ABORT_REMAINDER_OF_RECIPE:
+    if( _procs[i].pr_last ) {
+      FREE(_procs[i].pr_dir ); _procs[i].pr_dir = NIL(char); /* Set in _add_child() */
 
-     if( !Doing_bang ) {
+      if( !Doing_bang ) {
         /* Update_time_stamp() triggers the deletion of intermediate
          * targets.  This starts a new process queue, so we have to
          * clear the _use_i variable. */
@@ -1035,12 +1032,12 @@ int status;
         _use_i = -1;
         Update_time_stamp( _procs[i].pr_target );
         _use_i =  my_use_i;
-     }
       }
-   }
+    }
+  }
 
-   Set_dir(dir);
-   FREE(dir);
+  Set_dir(dir);
+  FREE(dir);
 }
 
 

@@ -66,157 +66,162 @@ Infer_recipe( cp, setdirroot )/*
 CELLPTR cp;
 CELLPTR setdirroot;
 {
-   ICELLPTR nomatch, match;
+  ICELLPTR nomatch, match;
 
-   DB_ENTER("Infer_recipe");
+  DB_ENTER("Infer_recipe");
 
-   if( cp->ce_attr & A_NOINFER ) {DB_VOID_RETURN;}
+  if( cp->ce_attr & A_NOINFER ) {DB_VOID_RETURN;}
 
-   DB_PRINT("inf", ("Inferring rule for [%s]", cp->CE_NAME));
+  DB_PRINT("inf", ("Inferring rule for [%s]", cp->CE_NAME));
 
-   match = NIL(ICELL);
-   nomatch = add_iset( NIL(ICELL), NIL(ICELL), NIL(CELL), NIL(DFALINK),
-            setdirroot, Prep+count_dots(cp->CE_NAME), 0,
-            DmStrDup(cp->CE_NAME), NIL(char),
-            cp->ce_time != (time_t)0L);
+  match = NIL(ICELL);
+  {
+    char *tmp;
+    nomatch = add_iset( NIL(ICELL), NIL(ICELL), NIL(CELL), NIL(DFALINK),
+                        setdirroot, Prep+count_dots(cp->CE_NAME), 0,
+                        tmp = DmStrDup(cp->CE_NAME), NIL(char),
+                        cp->ce_time != (time_t)0L);
+    FREE(tmp);
+  }
 
-   /* Make sure we try whole heartedly to infer at least one suffix */
-   if( nomatch->ic_dmax == 0 ) ++nomatch->ic_dmax;
+  /* Make sure we try whole heartedly to infer at least one suffix */
+  if( nomatch->ic_dmax == 0 ) ++nomatch->ic_dmax;
 
-   DB_EXECUTE( "inf", _dump_iset("nomatch",nomatch); );
+  DB_EXECUTE( "inf", _dump_iset("nomatch",nomatch); );
 
-   /* If nomatch is non-empty there was no match with an existing
-    * prerrequisite, try to derive one. */
-   while( nomatch != NIL(ICELL) ) {
-      ICELLPTR new_nomatch = NIL(ICELL);
-      ICELLPTR ic, pmatch, mmatch;
-      CELLPTR  prereq;
+  /* If nomatch is non-empty there was no match with an existing
+   * prerrequisite, try to derive one. */
+  while( nomatch != NIL(ICELL) ) {
+    ICELLPTR new_nomatch = NIL(ICELL);
+    ICELLPTR ic, pmatch, mmatch;
+    CELLPTR  prereq;
 
-      for( ic=nomatch; ic != NIL(ICELL); ic=ic->ic_next ) {
-     int ipush = FALSE;
+    for( ic=nomatch; ic != NIL(ICELL); ic=ic->ic_next ) {
+      int ipush = FALSE;
 
-     if( ic->ic_dir ) ipush = Push_dir(ic->ic_dir, ic->ic_name, FALSE);
-     match = union_iset(match, derive_prerequisites(ic, &new_nomatch));
-     if( ipush ) Pop_dir(FALSE);
-      }
+      if( ic->ic_dir ) ipush = Push_dir(ic->ic_dir, ic->ic_name, FALSE);
+      match = union_iset(match, derive_prerequisites(ic, &new_nomatch));
+      if( ipush ) Pop_dir(FALSE);
+    }
 
-      DB_EXECUTE( "inf", _dump_iset("match",match); );
-      DB_EXECUTE( "inf", _dump_iset("nomatch",new_nomatch); );
+    DB_EXECUTE( "inf", _dump_iset("match",match); );
+    DB_EXECUTE( "inf", _dump_iset("nomatch",new_nomatch); );
 
-      /* We have now deduced the two sets MATCH and NOMATCH.  MATCH holds the
-       * set of edges that we encountered that matched.  If this set is empty
-       * then we can apply transitive closure (if enabled) to the elements of
-       * NOMATCH to see if we can find some other method to make the target.
-       *
-       * If MATCH is non-empty, we have found a method for making the target.
-       * It is the shortest method for doing so (ie. uses fewest number of
-       * steps).  If MATCH contains more than one element then we have a
-       * possible ambiguity.
-       */
-      if( match == NIL(ICELL) ) {
-     nomatch = new_nomatch;
+    /* We have now deduced the two sets MATCH and NOMATCH.  MATCH holds the
+     * set of edges that we encountered that matched.  If this set is empty
+     * then we can apply transitive closure (if enabled) to the elements of
+     * NOMATCH to see if we can find some other method to make the target.
+     *
+     * If MATCH is non-empty, we have found a method for making the target.
+     * It is the shortest method for doing so (ie. uses fewest number of
+     * steps).  If MATCH contains more than one element then we have a
+     * possible ambiguity.
+     */
+    if( match == NIL(ICELL) ) {
+      nomatch = new_nomatch;
 
-     /* Skip the rest and try one level deeper. */
-     if( Transitive ) continue;
+      /* Skip the rest and try one level deeper. */
+      if( Transitive ) continue;
 
-     goto all_done;
-      }
+      goto all_done;
+    }
 
-      /* Ok, we have a set of possible matches in MATCH, we should check the
-       * set for ambiguity.  If more than one inference path exists of the
-       * same depth, then we may issue an ambiguous inference error message.
-       *
-       * The message is suppressed if MATCH contains two elements and one of
-       * them is the empty-prerequisite-rule.  In this case we ignore the
-       * ambiguity and take the rule that infers the prerequisite.
-       *
-       * Also if there are any chains that rely on a non-existant prerequisite
-       * that may get made because it has a recipe then we prefer any that
-       * rely on existing final prerequisites over those that we have to make.
-       */
+    /* Ok, we have a set of possible matches in MATCH, we should check the
+     * set for ambiguity.  If more than one inference path exists of the
+     * same depth, then we may issue an ambiguous inference error message.
+     *
+     * The message is suppressed if MATCH contains two elements and one of
+     * them is the empty-prerequisite-rule.  In this case we ignore the
+     * ambiguity and take the rule that infers the prerequisite.
+     *
+     * Also if there are any chains that rely on a non-existant prerequisite
+     * that may get made because it has a recipe then we prefer any that
+     * rely on existing final prerequisites over those that we have to make.
+     */
 
-      /* Split out those that have to be made from those that end in
-       * prerequisites that already exist. */
-      pmatch = mmatch = NIL(ICELL);
-      for(; match; match = ic ) {
-     /* This loop checks all possible matches. */
-     DB_PRINT("inf", ("Target [%s] : prerequisite [%s]",
-              match->ic_meta->CE_NAME, match->ic_name));
+    /* Split out those that have to be made from those that end in
+     * prerequisites that already exist. */
+    pmatch = mmatch = NIL(ICELL);
+    for(; match; match = ic ) {
+      /* This loop checks all possible matches. */
+      DB_PRINT("inf", ("Target [%s] : prerequisite [%s]",
+                       match->ic_meta->CE_NAME, match->ic_name));
 
-     ic = match->ic_next;
-     match->ic_next = NIL(ICELL);
+      ic = match->ic_next;
+      match->ic_next = NIL(ICELL);
 
-     if( match->ic_exists )
+      if( match->ic_exists )
         pmatch = union_iset(pmatch, match);
-     else
-        mmatch = union_iset(mmatch, match);
-      }
-
-      /* Prefer %-targets with existing prerequisites. */
-      if( pmatch )
-     match = pmatch;
       else
-     match = mmatch;
+        mmatch = union_iset(mmatch, match);
+    }
 
-      /* Make sure it is unique. It would be easy to check
-       * match->ic_meta->ce_prq for existence and prefer no prerequisites
-       * over prerequisites that are present, but we are currently not
-       * doing it. */
-      if( match->ic_next != NIL(ICELL) ) {
-     int count = 1;
+    /* Prefer %-targets with existing prerequisites. */
+    if( pmatch )
+      match = pmatch;
+    else
+      match = mmatch;
 
-     Warning( "Ambiguous inference chains for target '%s'", cp->CE_NAME );
-     for( ic=match; ic; ic=ic->ic_next )
+    /* Make sure it is unique. It would be easy to check
+     * match->ic_meta->ce_prq for existence and prefer no prerequisites
+     * over prerequisites that are present, but we are currently not
+     * doing it. */
+    if( match->ic_next != NIL(ICELL) ) {
+      int count = 1;
+
+      Warning( "Ambiguous inference chains for target '%s'", cp->CE_NAME );
+      for( ic=match; ic; ic=ic->ic_next )
         (void) dump_inf_chain(ic, TRUE, count++);
-     Warning( "First matching rule is chosen.");
-      }
+      Warning( "First matching rule is chosen.");
+    }
 
-      /* MATCH now points at the derived prerequisite chain(s).  We must now
-       * take cp, and construct the correct graph so that the make may
-       * proceed.  */
+    /* MATCH now points at the derived prerequisite chain(s).  We must now
+     * take cp, and construct the correct graph so that the make may
+     * proceed.  */
 
-      /* The folowing shows only the first element, i.e. the last matching
-       * recipe that was found.  */
-      if( Verbose & V_INFER ) {
-     char *tmp = dump_inf_chain(match, TRUE, FALSE);
-     printf("%s:  Inferring prerequistes and recipes using:\n%s:  ... %s\n",
-         Pname, Pname, tmp );
-     FREE(tmp);      }
+    /* The folowing shows only the first element, i.e. the last matching
+     * recipe that was found.  */
+    if( Verbose & V_INFER ) {
+      char *tmp = dump_inf_chain(match, TRUE, FALSE);
+      printf("%s:  Inferring prerequistes and recipes using:\n%s:  ... %s\n",
+             Pname, Pname, tmp );
+      FREE(tmp);
+    }
 
-      pmatch = NIL(ICELL);
-      prereq = NIL(CELL);
+    pmatch = NIL(ICELL);
+    prereq = NIL(CELL);
 
-      /* This loop treats the inferred targets last to first. */
-      while( match ) {
-         CELLPTR infcell=NIL(CELL);
+    /* This loop treats the inferred targets last to first. */
+    while( match ) {
+      CELLPTR infcell=NIL(CELL);
 
-     /* Compute the inferred prerequisite first. */
-     if( match->ic_name ) {
+      /* Compute the inferred prerequisite first. */
+      if( match->ic_name ) {
         if( match->ic_meta )
-           infcell = Def_cell( match->ic_name );
+          infcell = Def_cell( match->ic_name );
         else
-           infcell = cp;
+          infcell = cp;
 
         infcell->ce_flag |= F_TARGET;
 
         if( infcell != cp ) {
-           infcell->ce_flag |= F_INFER|F_REMOVE;
-           DB_PRINT("remove", ("Mark for deletion [%s]",
-                   infcell->CE_NAME));
+          infcell->ce_flag |= F_INFER|F_REMOVE;
+          DB_PRINT("remove", ("Mark for deletion [%s]",
+                              infcell->CE_NAME));
         }
 
         if( !match->ic_flag )
-           infcell->ce_attr |= A_NOINFER;
-     }
+          infcell->ce_attr |= A_NOINFER;
+      }
 
-     /* Add global prerequisites from previous rule if there are any and
-      * the recipe. */
-     if( pmatch ) {
+      /* Add global prerequisites from previous rule if there are any and
+       * the recipe. */
+      if( pmatch ) {
         CELLPTR imeta = pmatch->ic_meta;
         LINKPTR lp;
 
         DB_PRINT("inf", ("%%-target [%s] - infered target [%s]\n",
-                 imeta->CE_NAME, infcell->CE_NAME));
+                         imeta->CE_NAME, infcell->CE_NAME));
 
         infcell->ce_per   = pmatch->ic_dfa->dl_per;
         infcell->ce_attr |= (imeta->ce_attr & A_TRANSFER);
@@ -226,31 +231,31 @@ CELLPTR setdirroot;
          * the this target it might have been created and stated
          * therefore these values need to be reset. */
         if( infcell->ce_attr & A_PHONY ){
-           infcell->ce_time =  0L;
-           infcell->ce_flag &= ~F_STAT;
+          infcell->ce_time =  0L;
+          infcell->ce_flag &= ~F_STAT;
         }
 
         if( !(infcell->ce_flag & F_RULES) ) {
-           infcell->ce_flag |= (imeta->ce_flag&(F_SINGLE|F_GROUP))|F_RULES;
-           infcell->ce_recipe = imeta->ce_recipe;
+          infcell->ce_flag |= (imeta->ce_flag&(F_SINGLE|F_GROUP))|F_RULES;
+          infcell->ce_recipe = imeta->ce_recipe;
         }
 
         /* Add any conditional macro definitions that may be associated
          * with the inferred cell. */
         if (imeta->ce_cond != NIL(STRING)) {
-           STRINGPTR sp,last;
+          STRINGPTR sp,last;
 
-           last = infcell->ce_cond;
-           for(sp=imeta->ce_cond; sp; sp=sp->st_next) {
-          STRINGPTR new;
-          TALLOC(new, 1, STRING);
-          new->st_string = DmStrDup(sp->st_string);
-          if(last)
-             last->st_next = new;
-          else
-             infcell->ce_cond = new;
-          last = new;
-           }
+          last = infcell->ce_cond;
+          for(sp=imeta->ce_cond; sp; sp=sp->st_next) {
+            STRINGPTR new;
+            TALLOC(new, 1, STRING);
+            new->st_string = DmStrDup(sp->st_string);
+            if(last)
+              last->st_next = new;
+            else
+              infcell->ce_cond = new;
+            last = new;
+          }
         }
 
         pmatch->ic_dfa->dl_per = NIL(char);
@@ -258,63 +263,63 @@ CELLPTR setdirroot;
         /* If infcell already had a .SETDIR directory set then modify it
          * based on whether it was the original cell or some intermediary. */
         if( imeta->ce_dir ) {
-           if( infcell->ce_dir && infcell == cp ) {
-          /* cp->ce_dir was set and we have pushed the directory prior
-           * to calling this routine.
-           * We build a new path by appending imeta->ce_dir to the
-           * current directory of the original cell.
-           * We should therefore pop it and push the new concatenated
-           * directory required by the inference.
-           * This leaks memory as cp->ce_dir is not freed before
-           * setting the new the new infcell->ce_dir value but as
-           * the pointer could be a `A_POOL` member we accept this. */
-          infcell->ce_dir = DmStrDup(Build_path(infcell->ce_dir,
-                            imeta->ce_dir));
-           }
-           else {
-          /* Inherit a copy of the .SETDIR value. Use a copy because
-           * the original could have been freed in the meantime
-           * in Make() by the FREE() before _pool_lookup(). This can
-           * also leak if infcell->ce_dir was set before. */
-          infcell->ce_dir = DmStrDup(imeta->ce_dir);
-           }
+          if( infcell->ce_dir && infcell == cp ) {
+            /* cp->ce_dir was set and we have pushed the directory prior
+             * to calling this routine.
+             * We build a new path by appending imeta->ce_dir to the
+             * current directory of the original cell.
+             * We should therefore pop it and push the new concatenated
+             * directory required by the inference.
+             * This leaks memory as cp->ce_dir is not freed before
+             * setting the new the new infcell->ce_dir value but as
+             * the pointer could be a `A_POOL` member we accept this. */
+            infcell->ce_dir = DmStrDup(Build_path(infcell->ce_dir,
+                                                  imeta->ce_dir));
+          }
+          else {
+            /* Inherit a copy of the .SETDIR value. Use a copy because
+             * the original could have been freed in the meantime
+             * in Make() by the FREE() before _pool_lookup(). This can
+             * also leak if infcell->ce_dir was set before. */
+            infcell->ce_dir = DmStrDup(imeta->ce_dir);
+          }
         }
 
         for( lp=imeta->ce_indprq; lp != NIL(LINK); lp=lp->cl_next ) {
-           char    *name = lp->cl_prq->CE_NAME;
-           CELLPTR tcp;
+          char    *name = lp->cl_prq->CE_NAME;
+          CELLPTR tcp;
 
-           name = buildname( cp->CE_NAME, name, infcell->ce_per );
-           tcp  = Def_cell( name );
-           tcp->ce_flag |= F_REMOVE;
-           Add_prerequisite( infcell, tcp, FALSE, FALSE );
+          name = buildname( cp->CE_NAME, name, infcell->ce_per );
+          tcp  = Def_cell( name );
+          tcp->ce_flag |= F_REMOVE;
+          Add_prerequisite( infcell, tcp, FALSE, FALSE );
 
-           if( Verbose & V_INFER )
-          printf( "%s:  Inferred indirect prerequisite [%s]\n",
-              Pname, name );
-           FREE(name);
+          if( Verbose & V_INFER )
+            printf( "%s:  Inferred indirect prerequisite [%s]\n",
+                    Pname, name );
+          FREE(name);
         }
-     }
-
-     /* Add the previous cell as the prerequisite */
-     if( prereq )
-        (Add_prerequisite(infcell,prereq,FALSE,FALSE))->cl_flag |=F_TARGET;
-
-     pmatch = match;   /* Previous member in inference chain ... */
-     prereq = infcell; /* is a prerequisite to the next match.   */
-     /* ip->ic_parent is the next target in the inference chain to be
-      * build. If it is empty we are done. */
-     match  = match->ic_parent;
       }
 
-      DB_PRINT("inf", ("Terminated due to a match"));
-      break;
-   }
+      /* Add the previous cell as the prerequisite */
+      if( prereq )
+        (Add_prerequisite(infcell,prereq,FALSE,FALSE))->cl_flag |=F_TARGET;
 
-all_done:
-   free_icells();
+      pmatch = match;   /* Previous member in inference chain ... */
+      prereq = infcell; /* is a prerequisite to the next match.   */
+      /* ip->ic_parent is the next target in the inference chain to be
+       * build. If it is empty we are done. */
+      match  = match->ic_parent;
+    }
 
-   DB_VOID_RETURN;
+    DB_PRINT("inf", ("Terminated due to a match"));
+    break;
+  }
+
+ all_done:
+  free_icells();
+
+  DB_VOID_RETURN;
 }
 
 
