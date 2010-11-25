@@ -1310,7 +1310,7 @@ void MiscSettings::SetDisablePrinting( BOOL bEnable )
         vcl::SettingsConfigItem::get()->
             setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DesktopManagement" ) ),
                       rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DisablePrinting" ) ),
-                      rtl::OUString::createFromAscii( bEnable ? "true" : "false" ) );
+                      bEnable ? rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("true")) : rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("false" )) );
         mpData->mnDisablePrinting = bEnable ? 1 : 0;
     }
 }
@@ -1366,7 +1366,7 @@ void MiscSettings::SetEnableATToolSupport( BOOL bEnable )
         vcl::SettingsConfigItem::get()->
             setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Accessibility" ) ),
                       rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "EnableATToolSupport" ) ),
-                      rtl::OUString::createFromAscii( bEnable ? "true" : "false" ) );
+                      bEnable ? rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("true")) : rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("false" )) );
         mpData->mnEnableATT = bEnable ? 1 : 0;
     }
 }

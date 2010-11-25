@@ -4164,7 +4164,7 @@ void SelectionManagerHolder::startDrag(
 
 OUString SelectionManagerHolder::getImplementationName() throw()
 {
-    return OUString::createFromAscii(XDND_IMPLEMENTATION_NAME);
+    return OUString(RTL_CONSTASCII_USTRINGPARAM(XDND_IMPLEMENTATION_NAME));
 }
 
 // ------------------------------------------------------------------------

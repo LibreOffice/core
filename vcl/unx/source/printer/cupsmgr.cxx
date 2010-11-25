@@ -1109,7 +1109,7 @@ const char* CUPSManager::authenticateUser( const char* /*pIn*/ )
     const char* pRet = NULL;
 
 #ifdef ENABLE_CUPS
-    OUString aLib = OUString::createFromAscii( _XSALSET_LIBNAME );
+    OUString aLib(RTL_CONSTASCII_USTRINGPARAM( _XSALSET_LIBNAME ));
     oslModule pLib = osl_loadModule( aLib.pData, SAL_LOADMODULE_LAZY );
     if( pLib )
     {

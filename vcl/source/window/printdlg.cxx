@@ -653,7 +653,8 @@ void PrintDialog::JobTabPage::storeToSettings()
                      maCopyCountField.GetText() );
     pItem->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
                      rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Collate" ) ),
-                     rtl::OUString::createFromAscii( maCollateBox.IsChecked() ? "true" : "false" ) );
+                     maCollateBox.IsChecked() ? rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("true")) :
+                                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("false")) );
 }
 
 void PrintDialog::JobTabPage::Resize()
@@ -709,7 +710,8 @@ void PrintDialog::OutputOptPage::storeToSettings()
     SettingsConfigItem* pItem = SettingsConfigItem::get();
     pItem->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
                      rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ToFile" ) ),
-                     rtl::OUString::createFromAscii( maToFileBox.IsChecked() ? "true" : "false" ) );
+                     maToFileBox.IsChecked() ? rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("true"))
+                                             : rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("false")) );
 }
 
 void PrintDialog::OutputOptPage::Resize()

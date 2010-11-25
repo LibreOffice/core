@@ -261,7 +261,7 @@ Reference< XInterface > X11Clipboard::getReference() throw()
 OUString SAL_CALL X11Clipboard::getImplementationName(  )
     throw(RuntimeException)
 {
-    return OUString::createFromAscii(X11_CLIPBOARD_IMPLEMENTATION_NAME);
+    return OUString(RTL_CONSTASCII_USTRINGPARAM(X11_CLIPBOARD_IMPLEMENTATION_NAME));
 }
 
 // ------------------------------------------------------------------------

@@ -67,9 +67,9 @@ bool Application::LoadBrandBitmap (const char* pName, BitmapEx &rBitmap)
     rtl::OLocale aLoc( pLoc );
 
     rtl::OUString aName = aBaseName + aPng;
-    rtl::OUString aLocaleName = ( aBaseName + rtl::OUString::createFromAscii ("-") +
+    rtl::OUString aLocaleName = ( aBaseName + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("-")) +
                                   aLoc.getLanguage() +
-                                  rtl::OUString::createFromAscii ("_") +
+                                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("_")) +
                                   aLoc.getCountry() + aPng );
 
     return ( loadPng ("$BRAND_BASE_DIR/program/edition", aLocaleName, rBitmap) ||

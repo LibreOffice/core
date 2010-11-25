@@ -11802,7 +11802,7 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
             rNewWidget.m_nTextStyle =
                 TEXT_DRAW_VCENTER | TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK;
 
-        rNewWidget.m_aValue = OUString::createFromAscii( rBox.Checked ? "Yes" : "Off" );
+        rNewWidget.m_aValue = rBox.Checked ? OUString(RTL_CONSTASCII_USTRINGPARAM("Yes")) : OUString(RTL_CONSTASCII_USTRINGPARAM("Off" ));
         // create default appearance before m_aRect gets transformed
         createDefaultCheckBoxAppearance( rNewWidget, rBox );
     }

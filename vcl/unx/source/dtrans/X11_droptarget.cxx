@@ -203,7 +203,7 @@ void DropTarget::dragOver( const DropTargetDragEvent& dtde ) throw()
 
 OUString DropTarget::getImplementationName() throw()
 {
-    return OUString::createFromAscii(XDND_DROPTARGET_IMPLEMENTATION_NAME);
+    return OUString(RTL_CONSTASCII_USTRINGPARAM(XDND_DROPTARGET_IMPLEMENTATION_NAME));
 }
 
 // ------------------------------------------------------------------------
