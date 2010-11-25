@@ -65,12 +65,6 @@ namespace
 
 namespace oooimprovement
 {
-//    InviteJob::InviteJob(const Reference<XComponentContext>& context)
-//        : m_ServiceFactory(Reference<XMultiServiceFactory>(
-//            context->getServiceManager()->createInstanceWithContext(
-//                OUString::createFromAscii("com.sun.star.lang.XMultiServiceFactory"), context),
-//            UNO_QUERY))
-//    { }
 
     InviteJob::InviteJob(const Reference<XMultiServiceFactory>& sf)
         : m_ServiceFactory(sf)
@@ -125,9 +119,6 @@ namespace oooimprovement
         aServiceNames[0] = OUString::createFromAscii("com.sun.star.task.XAsyncJob");
         return aServiceNames;
     }
-
-//    Reference<XInterface> InviteJob::Create(const Reference<XComponentContext>& context)
-//    { return *(new InviteJob(context)); }
 
     Reference<XInterface> InviteJob::Create(const Reference<XMultiServiceFactory>& sm)
     { return *(new InviteJob(sm)); }

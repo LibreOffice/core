@@ -54,7 +54,6 @@ protected:
 
 public:
 
-    // #110680#
     SVGMtfExport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
         const REF( NMSP_SAX::XDocumentHandler )& rxHandler );
@@ -66,7 +65,6 @@ public:
 
 // -----------------------------------------------------------------------------
 
-// #110680#
 SVGMtfExport::SVGMtfExport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
     const REF( NMSP_SAX::XDocumentHandler )& rxHandler )
@@ -167,8 +165,6 @@ void SAL_CALL SVGWriter::write( const REF( NMSP_SAX::XDocumentHandler )& rxDocHa
 
     const REF( NMSP_SAX::XDocumentHandler ) xDocumentHandler( rxDocHandler );
 
-    // #110680#
-    // SVGMtfExport* pWriter = new SVGMtfExport( xDocumentHandler );
     SVGMtfExport* pWriter = new SVGMtfExport( mxFact, xDocumentHandler );
 
     pWriter->writeMtf( aMtf );

@@ -160,7 +160,6 @@ SANE_Status Sane::ControlOption( int nOption, SANE_Action nAction,
                  pAction );
     }
 #endif
-//  if( nInfo & ( SANE_INFO_RELOAD_OPTIONS | SANE_INFO_RELOAD_PARAMS ) )
     if( nInfo &  SANE_INFO_RELOAD_OPTIONS )
         ReloadOptions();
     return nStatus;

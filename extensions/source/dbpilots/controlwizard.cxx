@@ -745,31 +745,6 @@ namespace dbp
         // lemme see ...
         return (0 == getContext().aFieldNames.getLength());
             // if we got fields, the data source is valid ...
-//      try
-//      {
-//          // first, we need a valid data source name
-//          ::rtl::OUString sDataSourceName;
-//          m_aContext.xForm->getPropertyValue(::rtl::OUString::createFromAscii("DataSourceName")) >>= sDataSourceName;
-//          if (m_aContext.xDatasourceContext.is() && m_aContext.xDatasourceContext->hasByName(sDataSourceName))
-//          {   // at least the data source name is valid ...
-//              // then, a CommandType "table" would be nice ...
-//              sal_Int32 nCommandType = CommandType::COMMAND;
-//              m_aContext.xForm->getPropertyValue(::rtl::OUString::createFromAscii("CommandType")) >>= nCommandType;
-//              if (CommandType::TABLE == nCommandType)
-//              {   // okay ....
-//                  // now the table itself should be valid
-//                  ::rtl::OUString sTableName;
-//                  m_aContext.xForm->getPropertyValue(::rtl::OUString::createFromAscii("Command")) >>= sTableName;
-//                  if (m_aContext.xObjectContainer.is() && m_aContext.xObjectContainer->hasByName(sTableName))
-//                      return sal_False;
-//              }
-//          }
-//      }
-//      catch(Exception&)
-//      {
-//          DBG_ERROR("OControlWizard::needDatasourceSelection: caught an exception while checking the form settings!");
-//      }
-//      return sal_True;
     }
 
 //.........................................................................

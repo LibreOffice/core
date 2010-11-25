@@ -134,19 +134,12 @@ Reference< XConnection > getConnection(const ::rtl::OUString& _rURL)
         ::rtl::OUString sUser, sPwd;
         Reference< XPropertySet >  xDataSourceProps(xDataSource, UNO_QUERY);
         Reference< XCompletedConnection > xComplConn(xDataSource, UNO_QUERY);
-/*      Reference< XPropertySetInfo >  xInfo = xDataSourceProps.is() ? xDataSourceProps->getPropertySetInfo() : Reference< XPropertySetInfo > ();
-        if (xInfo.is() && xInfo->hasPropertyByName(C2U("User")))
-            xDataSourceProps->getPropertyValue(C2U("User")) >>= sUser;
-        if (xInfo.is() && xInfo->hasPropertyByName(C2U("Password")))
-            xDataSourceProps->getPropertyValue(C2U("Password"))>>= sPwd;
-*/
         try
         {
 
             Reference<XInterface> xHdl = xMgr->createInstance(C2U("com.sun.star.task.InteractionHandler"));
             Reference<task::XInteractionHandler> xIHdl(xHdl, UNO_QUERY);
             xConn = xComplConn->connectWithCompletion(xIHdl);
-//          xConn = xDataSource->getConnection(sUser, sPwd);
         }
         catch(SQLException&)
         {
@@ -582,7 +575,6 @@ class DBChangeDialog_Impl : public ModalDialog
 
     BibDataManager* pDatMan;
 
-//  DECL_LINK(EndDragHdl, HeaderBar*);
     DECL_LINK(DoubleClickHdl, SvTabListBox*);
 public:
     DBChangeDialog_Impl(Window* pParent, BibDataManager* pMan );
@@ -651,16 +643,6 @@ IMPL_LINK(DBChangeDialog_Impl, DoubleClickHdl, SvTabListBox*, /*pLB*/)
     return 0;
 }
 
-/*IMPL_LINK(DBChangeDialog_Impl, EndDragHdl, HeaderBar*, pHB)
-{
-    long nTabs[3];
-    nTabs[0] = 2;// Number of Tabs
-    nTabs[1] = 0;
-    nTabs[2] = pHB->GetItemSize( 1 );
-    aSelectionLB.SetTabs( &nTabs[0], MAP_PIXEL );
-    return 0;
-};*/
-
 DBChangeDialog_Impl::~DBChangeDialog_Impl()
 {
 }
@@ -676,7 +658,6 @@ String  DBChangeDialog_Impl::GetCurrentURL()const
     return sRet;
 }
 
-// #100312# --------------------------------------------------------------------
 // XDispatchProvider
 BibInterceptorHelper::BibInterceptorHelper( ::bib::BibBeamer* pBibBeamer, ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > xDispatch)
 {
@@ -762,7 +743,6 @@ void SAL_CALL BibInterceptorHelper::setMasterDispatchProvider( const ::com::sun:
 
 BibDataManager::BibDataManager()
     :BibDataManager_Base( GetMutex() )
-    // #100312# --------------
     ,m_pInterceptorHelper( NULL )
     ,m_aLoadListeners(m_aMutex)
     ,pBibView( NULL )
@@ -791,7 +771,6 @@ BibDataManager::~BibDataManager()
             xConnection->dispose();
         m_xForm = NULL;
     }
-    // #100312# ----------------
     if( m_pInterceptorHelper )
     {
         m_pInterceptorHelper->ReleaseInterceptor();
@@ -910,9 +889,6 @@ Reference< awt::XControlModel > BibDataManager::updateGridModel(const Reference<
             m_xGridModel = createGridModel( gGridName );
 
             Reference< XNameContainer >  xNameCont(xDbForm, UNO_QUERY);
-//          if (xNameCont->hasByName(sName))
-//              xNameCont->removeByName(sName);
-//
             xNameCont->insertByName( sName, makeAny( m_xGridModel ) );
         }
 
@@ -1513,7 +1489,6 @@ Reference< awt::XControlModel > BibDataManager::loadControlModel(
             // (as an anologon to the XStatusListener semantics).
             //
             // But this would be way too risky for this last-day fix here.
-            // 97140 - 30.01.2002 - fs@openoffice.org
             Reference< XLoadable > xLoad( m_xForm, UNO_QUERY );
             if ( xLoad.is() && xLoad->isLoaded() )
             {
@@ -1674,9 +1649,6 @@ void BibDataManager::CreateMappingDialog(Window* pParent)
     if(RET_OK == pDlg->Execute() && pBibView)
     {
         reload();
-//      unload();
-//      pBibView->UpdatePages();
-//      load();
     }
     delete pDlg;
 }
@@ -1746,13 +1718,11 @@ uno::Reference< form::runtime::XFormController > BibDataManager::GetFormControll
         m_xFormCtrl = uno::Reference< form::runtime::XFormController > (
             xMgr->createInstance(C2U("com.sun.star.form.runtime.FormController")), UNO_QUERY);
         m_xFormCtrl->setModel(uno::Reference< awt::XTabControllerModel > (getForm(), UNO_QUERY));
-        // #100312# -------------
         m_xFormDispatch = uno::Reference< frame::XDispatch > ( m_xFormCtrl, UNO_QUERY);
     }
     return m_xFormCtrl;
 }
 
-// #100312# ----------
 void BibDataManager::RegisterInterceptor( ::bib::BibBeamer* pBibBeamer)
 {
     DBG_ASSERT( !m_pInterceptorHelper, "BibDataManager::RegisterInterceptor: called twice!" );

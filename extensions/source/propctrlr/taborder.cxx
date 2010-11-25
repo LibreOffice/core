@@ -300,9 +300,7 @@ namespace pcr
         }
 
         // TODO: UNO action (to bracket all the single actions which are being created)
-//        pDrawModel->BegUndo(PcrRes(RID_STR_UNDO_TABORDER));
         m_xModel->setControlModels( aSortedControlModelSeq );
-//        pDrawModel->EndUndo();
 
         EndDialog( sal_True );
         return 0;

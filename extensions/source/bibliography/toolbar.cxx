@@ -84,10 +84,6 @@ void BibToolBarListener::statusChanged(const ::com::sun::star::frame::FeatureSta
             pToolBar->CheckItem(nIndex, bChecked);
         }
 
-        /*
-        rtl::OUString FeatureDescriptor;
-        sal_Bool Requery;
-        ::com::sun::star::uno::Any State;*/
     }
 };
 
@@ -166,7 +162,6 @@ void BibTBQueryMenuListener::statusChanged(const frame::FeatureStateEvent& rEvt)
                 sal_uInt16 nID=pToolBar->InsertFilterItem(String(pStringArray[i]));
                 if(pStringArray[i]==rEvt.FeatureDescriptor)
                 {
-//                  XubString aStr = rEvt.FeatureDescriptor;
                     pToolBar->SelectFilterItem(nID);
                 }
             }
@@ -460,7 +455,7 @@ long BibToolBar::PreNotify( NotifyEvent& rNEvt )
     long nResult=sal_True;
 
     sal_uInt16 nSwitch=rNEvt.GetType();
-    if(aEdQuery.HasFocus() && nSwitch==EVENT_KEYINPUT)// || nSwitch==EVENT_KEYUP)
+    if(aEdQuery.HasFocus() && nSwitch==EVENT_KEYINPUT)
     {
         const KeyCode& aKeyCode=rNEvt.GetKeyEvent()->GetKeyCode();
         sal_uInt16 nKey = aKeyCode.GetCode();

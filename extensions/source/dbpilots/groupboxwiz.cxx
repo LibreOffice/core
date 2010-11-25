@@ -84,9 +84,6 @@ namespace dbp
     {
         switch (_nState)
         {
-//          case GBW_STATE_DATASELECTION:
-//              return new OTableSelectionPage(this);
-//
             case GBW_STATE_OPTIONLIST:
                 return new ORadioSelectionPage(this);
 
@@ -111,9 +108,6 @@ namespace dbp
     {
         switch (_nCurrentState)
         {
-//          case GBW_STATE_DATASELECTION:
-//              return GBW_STATE_OPTIONLIST;
-//
             case GBW_STATE_OPTIONLIST:
                 return GBW_STATE_DEFAULTOPTION;
 

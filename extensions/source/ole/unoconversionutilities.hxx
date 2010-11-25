@@ -563,13 +563,6 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANTARG* pArg, Any& rAny,
                     bFail = true;
                 break;
             default:
-// case TypeClass_SERVICE:  break;  // meta construct
-// case TypeClass_TYPEDEF: break;
-// case TypeClass_UNION:    break;
-// case TypeClass_MODULE:   break;      // module
-// case TypeClass_EXCEPTION: break;
-// case TypeClass_ARRAY: break;    // there's no Array at the moment
-// case TypeClass_UNKNOWN:  break;
                 bCannotConvert = true;
                 break;
             }
