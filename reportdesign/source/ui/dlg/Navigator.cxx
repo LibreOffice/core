@@ -31,7 +31,7 @@
 #include "uistrings.hrc"
 #include "ReportController.hxx"
 #include "UITools.hxx"
-#include "Undo.hxx"
+#include "RptUndo.hxx"
 #include "reportformula.hxx"
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/report/XReportDefinition.hpp>

@@ -127,7 +127,7 @@
 #include "DesignView.hxx"
 #include "ModuleHelper.hxx"
 #include "RptObject.hxx"
-#include "Undo.hxx"
+#include "RptUndo.hxx"
 #include "uistrings.hrc"
 #include "RptDef.hxx"
 #include "ReportSection.hxx"
