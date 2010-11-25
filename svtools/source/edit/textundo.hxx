@@ -47,9 +47,9 @@ public:
                     ~TextUndoManager();
 
     using SfxUndoManager::Undo;
-    virtual BOOL    Undo( USHORT nCount=1 );
+    virtual BOOL    Undo();
     using SfxUndoManager::Redo;
-    virtual BOOL    Redo( USHORT nCount=1 );
+    virtual BOOL    Redo();
 
 };
 
