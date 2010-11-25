@@ -2674,13 +2674,13 @@ void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, String& sModuleName, String
         sal_Int32 nNum = 0;
         String genModuleName;
         if ( sModuleName.Len() )
-            sModuleName = sModuleName;
+            genModuleName = sModuleName;
         else
         {
              genModuleName = String::CreateFromAscii( "Sheet1" );
              nNum = 1;
         }
-        while( xLib->hasByName( genModuleName  ) )
+        while( xLib->hasByName( genModuleName ) )
             genModuleName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Sheet")) + rtl::OUString::valueOf( ++nNum );
 
         uno::Any aSourceAny;
