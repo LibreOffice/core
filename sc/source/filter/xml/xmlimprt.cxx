@@ -2842,8 +2842,11 @@ void ScXMLImport::SetNamedRanges()
                         ++nCount;
                     }
                 }
+                UnlockSolarMutex();
             }
         }
+        delete *aItr;
+        aItr = pNamedExpressions->erase(aItr);
     }
 
     aItr = pNamedExpressions->begin();

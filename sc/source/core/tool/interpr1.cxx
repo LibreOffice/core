@@ -5638,7 +5638,8 @@ void ScInterpreter::CalculateLookup(BOOL HLookup)
         SCCOL nCol2 = 0;
         SCROW nRow2 = 0;
         SCTAB nTab2;
-        if (GetStackType() == svDoubleRef)
+        StackVar eType = GetStackType();
+        if (eType == svDoubleRef)
         {
             PopDoubleRef(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
             if (nTab1 != nTab2)
@@ -5647,9 +5648,13 @@ void ScInterpreter::CalculateLookup(BOOL HLookup)
                 return;
             }
         }
-        else if (GetStackType() == svMatrix)
+        else if (eType == svMatrix || eType == svExternalDoubleRef)
         {
-            pMat = PopMatrix();
+            if (eType == svMatrix)
+                pMat = PopMatrix();
+            else
+                PopExternalDoubleRef(pMat);
+
             if (pMat)
                 pMat->GetDimensions(nC, nR);
             else

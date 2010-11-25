@@ -497,6 +497,7 @@ void ScFilterDlg::UpdateValueList( USHORT nList )
             }
         }
         pValList->SetText( aCurValue );
+        pValList->EnableDDAutoWidth(false);
     }
 
     UpdateHdrInValueList( nList );
