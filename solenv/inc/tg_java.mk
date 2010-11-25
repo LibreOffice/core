@@ -42,13 +42,11 @@ $(MISC)/java/com/sun/star/upd/$(VERSIONINFOFILE)_updversion.java .PHONY:
 
 .IF "$(JAVATARGET)"!=""
 .IF "$(PACKAGE)"!=""
-$(CLASSDIR)/$(IDLPACKAGE)/%.class .NOINFER .IGNORE : %.java
-#	echo $@
-    @@-$(RM) $(JAVATARGET)
+$(CLASSDIR)/$(PACKAGE)/%.class .NOINFER .IGNORE : %.java
+    $(COMMAND_ECHO)-$(RM) $(JAVATARGET)
 .ELSE			# "$(PACKAGE)"!=""
 $(CLASSDIR)/%.class .NOINFER .IGNORE : %.java
-#	echo $@
-    @@-$(RM) $(JAVATARGET)
+    $(COMMAND_ECHO)-$(RM) $(JAVATARGET)
 .ENDIF			# "$(PACKAGE)"!=""
 
 $(JAVATARGET) :	$(JAVAFILES) $(JAVACLASSFILES) 
@@ -78,7 +76,6 @@ $(JAVATARGET) :	$(JAVAFILES) $(JAVACLASSFILES)
     @@-find $(CLASSDIR) -type d -user $(USER) \! -perm -5 -print | xargs chmod a+r $$1
 .ENDIF
 .ENDIF
-    @echo > $@
+    @$(TOUCH) $@
 
 .ENDIF			# "$(JAVATARGET)"!=""
-
