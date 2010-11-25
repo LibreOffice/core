@@ -272,7 +272,7 @@ public:
 
     ::comphelper::SequenceAsHashMap& GetMediaDescr() { return m_aMediaDescrHM; }
 
-    sal_Bool IsRecommendReadOnly() { return m_bRecommendReadOnly; }
+    sal_Bool IsRecommendReadOnly() const { return m_bRecommendReadOnly; }
 
     const ::comphelper::SequenceAsHashMap& GetDocProps();
 
