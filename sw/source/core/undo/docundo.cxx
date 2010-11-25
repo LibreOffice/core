@@ -154,22 +154,13 @@ UndoManager::UndoManager(SwDoc & rDoc)
     ,   mbUndo(false)
     ,   mbGroupUndo(true)
     ,   mbNoDrawUndoObj(false)
+    ,   m_bLockUndoNoModifiedPosition(false)
 {
 }
 
 const SwNodes* UndoManager::GetUndoNds() const
 {
     return m_rDoc.GetUndoNds();
-}
-
-bool UndoManager::IsUndoNoResetModified() const
-{
-    return USHRT_MAX == nUndoSavePos;
-}
-
-void UndoManager::SetUndoNoResetModified()
-{
-    nUndoSavePos = USHRT_MAX;
 }
 
 void UndoManager::DoUndo(bool const bDoUndo)
@@ -197,6 +188,38 @@ bool UndoManager::DoesGroupUndo() const
 {
     return mbGroupUndo;
 }
+
+
+bool UndoManager::IsUndoNoResetModified() const
+{
+    return USHRT_MAX == nUndoSavePos;
+}
+
+void UndoManager::SetUndoNoResetModified()
+{
+    nUndoSavePos = USHRT_MAX;
+}
+
+void UndoManager::SetUndoNoModifiedPosition()
+{
+    if (!m_bLockUndoNoModifiedPosition)
+    {
+        nUndoSavePos = (pUndos->Count())
+            ?   nUndoPos
+            :   USHRT_MAX;
+    }
+}
+
+void UndoManager::LockUndoNoModifiedPosition()
+{
+    m_bLockUndoNoModifiedPosition = true;
+}
+
+void UndoManager::UnLockUndoNoModifiedPosition()
+{
+    m_bLockUndoNoModifiedPosition = false;
+}
+
 
 SwUndo* UndoManager::GetLastUndo()
 {
@@ -391,23 +414,6 @@ bool UndoManager::DelUndoObj( sal_uInt16 nEnd )
 }
 
 /**************** UNDO ******************/
-
-void UndoManager::setUndoNoModifiedPosition(SwUndoNoModifiedPosition const nNew)
-{
-    nUndoSavePos = nNew;
-    if( !pUndos->Count() || nUndoSavePos > pUndos->Count() - 1 )
-        nUndoSavePos = USHRT_MAX;
-    else if (nUndoSavePos == 0)
-    {   // FIXME HACK magic value 0: find better way without exposing nUndoPos!
-        nUndoSavePos = nUndoPos; // set to current position
-    }
-}
-
-SwUndoNoModifiedPosition UndoManager::getUndoNoModifiedPosition() const
-{
-    return nUndoSavePos;
-}
-
 
 bool UndoManager::HasUndoId(SwUndoId const eId) const
 {

@@ -1997,7 +1997,7 @@ void SwDoc::ResetModified()
     // it is correct. In this case we reset the modified flag.
     if ( 0 != pDocStat->nChar )
         pDocStat->bModified = FALSE;
-    GetIDocumentUndoRedo().setUndoNoModifiedPosition(0/*FIXME*/);
+    GetIDocumentUndoRedo().SetUndoNoModifiedPosition();
     if( nCall && aOle2Link.IsSet() )
     {
         mbInCallModified = TRUE;

@@ -40,8 +40,6 @@ class SwNodes;
 class SwUndo;
 
 
-typedef sal_uInt16 SwUndoNoModifiedPosition;
-
 /** IDocumentUndoRedo
 */
 class IDocumentUndoRedo
@@ -65,6 +63,29 @@ public:
     /** Is Group Undo enabled?
     */
     virtual bool DoesGroupUndo() const = 0;
+
+    /** Set the position at which the document is in the "unmodified" state
+        to the current position in the Undo stack.
+    */
+    virtual void SetUndoNoModifiedPosition() = 0;
+
+    /** Prevent updates to the "unmodified" state position
+        via SetUndoNoResetModified().
+    */
+    virtual void LockUndoNoModifiedPosition() = 0;
+
+    /** Allow updates to the "unmodified" state position
+        via SetUndoNoResetModified().
+    */
+    virtual void UnLockUndoNoModifiedPosition() = 0;
+
+    /** Disable (re)setting the document modified flag on Undo/Redo.
+    */
+    virtual void SetUndoNoResetModified() = 0;
+
+    /** Is setting the document modified flag on Undo/Redo disabled?
+    */
+    virtual bool IsUndoNoResetModified() const = 0;
 
     /** Execute Undo.
 
@@ -178,23 +199,6 @@ public:
     /** Delete all Redo actions.
     */
     virtual void ClearRedo() = 0;
-
-    /** Manipulates the position of the undo stack which reset the modified flag
-    */
-    virtual void setUndoNoModifiedPosition(SwUndoNoModifiedPosition const nPos)
-        = 0;
-
-    /** Gets the position of the undo stack which reset the modified flag
-    */
-    virtual SwUndoNoModifiedPosition getUndoNoModifiedPosition() const = 0;
-
-    /** Disable (re)setting the document modified flag on Undo/Redo.
-    */
-    virtual void SetUndoNoResetModified() = 0;
-
-    /** Is setting the document modified flag on Undo/Redo disabled?
-    */
-    virtual bool IsUndoNoResetModified() const = 0;
 
 protected:
     virtual ~IDocumentUndoRedo() {};

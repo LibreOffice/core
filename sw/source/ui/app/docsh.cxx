@@ -509,8 +509,7 @@ sal_Bool SwDocShell::SaveAs( SfxMedium& rMedium )
         // Modified-Flag merken und erhalten ohne den Link zu Callen
         // (fuer OLE; nach Anweisung von MM)
         BOOL bIsModified = pDoc->IsModified();
-        SwUndoNoModifiedPosition const aOldPos =
-            pDoc->GetIDocumentUndoRedo().getUndoNoModifiedPosition();
+        pDoc->GetIDocumentUndoRedo().LockUndoNoModifiedPosition();
         Link aOldOLELnk( pDoc->GetOle2Link() );
         pDoc->SetOle2Link( Link() );
 
@@ -537,7 +536,7 @@ sal_Bool SwDocShell::SaveAs( SfxMedium& rMedium )
         if( bIsModified )
         {
             pDoc->SetModified();
-            pDoc->GetIDocumentUndoRedo().setUndoNoModifiedPosition(aOldPos);
+            pDoc->GetIDocumentUndoRedo().UnLockUndoNoModifiedPosition();
         }
         pDoc->SetOle2Link( aOldOLELnk );
 

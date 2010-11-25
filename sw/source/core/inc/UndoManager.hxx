@@ -50,12 +50,15 @@ public:
     UndoManager(SwDoc & rDoc);
 
     /** IDocumentUndoRedo */
-    virtual void SetUndoNoResetModified();
-    virtual bool IsUndoNoResetModified() const;
     virtual void DoUndo(bool const bDoUndo);
     virtual bool DoesUndo() const;
     virtual void DoGroupUndo(bool const bDoUndo);
     virtual bool DoesGroupUndo() const;
+    virtual void SetUndoNoModifiedPosition();
+    virtual void LockUndoNoModifiedPosition();
+    virtual void UnLockUndoNoModifiedPosition();
+    virtual void SetUndoNoResetModified();
+    virtual bool IsUndoNoResetModified() const;
     virtual bool Undo(SwUndoIter & rUndoIter);
     virtual SwUndoId StartUndo(SwUndoId const eUndoId,
                 SwRewriter const*const pRewriter);
@@ -74,8 +77,6 @@ public:
     virtual SwUndoId GetRepeatIds(String *const o_pStr) const;
     virtual void AppendUndo(SwUndo *const pUndo);
     virtual void ClearRedo();
-    virtual void setUndoNoModifiedPosition(SwUndoNoModifiedPosition const nPos);
-    virtual SwUndoNoModifiedPosition getUndoNoModifiedPosition() const;
 
     SwUndo* GetLastUndo();
 
@@ -98,6 +99,7 @@ private:
     bool mbUndo             : 1;    // TRUE: Undo enabled
     bool mbGroupUndo        : 1;    // TRUE: Undo grouping enabled
     bool mbNoDrawUndoObj    : 1;    // TRUE: no Draw Undo Objects stored
+    bool m_bLockUndoNoModifiedPosition : 1;
 
     /// delete all undo objects from 0 until nEnd
     bool DelUndoObj(sal_uInt16 nEnd);
