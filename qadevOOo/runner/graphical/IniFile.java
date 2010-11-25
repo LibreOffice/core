@@ -26,7 +26,7 @@
  ************************************************************************/
 package graphical;
 
-import java.io.BufferedReader;
+// import java.io.BufferedReader;
 import java.io.File;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
@@ -44,7 +44,7 @@ public class IniFile implements Enumeration
      * Problem, if ini file changed why other write something difference, we don't realise this.
      */
     private String m_sFilename;
-    private ArrayList m_aList;
+    private ArrayList<String> m_aList;
     boolean m_bListContainUnsavedChanges = false;
     private int m_aEnumerationPos = 0;
 
@@ -76,13 +76,13 @@ public class IniFile implements Enumeration
             }
         }
 
-    private ArrayList loadLines()
+    private ArrayList<String> loadLines()
         {
             File aFile = new File(m_sFilename);
-            ArrayList aLines = new ArrayList();
+            ArrayList<String> aLines = new ArrayList<String>();
             if (!aFile.exists())
             {
-                GlobalLogWriter.get().println("couldn't find file '" + m_sFilename + "', will be created.");
+                // GlobalLogWriter.println("couldn't find file '" + m_sFilename + "', will be created.");
                 // DebugHelper.exception(BasicErrorCode.SbERR_FILE_NOT_FOUND, "");
                 // m_bListContainUnsavedChanges = false;
                 return aLines;
@@ -104,14 +104,14 @@ public class IniFile implements Enumeration
             }
             catch (java.io.FileNotFoundException fne)
             {
-                GlobalLogWriter.get().println("couldn't open file " + m_sFilename);
-                GlobalLogWriter.get().println("Message: " + fne.getMessage());
+                GlobalLogWriter.println("couldn't open file " + m_sFilename);
+                GlobalLogWriter.println("Message: " + fne.getMessage());
                 // DebugHelper.exception(BasicErrorCode.SbERR_FILE_NOT_FOUND, "");
             }
             catch (java.io.IOException ie)
             {
-                GlobalLogWriter.get().println("Exception occurs while reading from file " + m_sFilename);
-                GlobalLogWriter.get().println("Message: " + ie.getMessage());
+                GlobalLogWriter.println("Exception occurs while reading from file " + m_sFilename);
+                GlobalLogWriter.println("Message: " + ie.getMessage());
                 // DebugHelper.exception(BasicErrorCode.SbERR_INTERNAL_ERROR, ie.getMessage());
             }
             try
@@ -120,8 +120,8 @@ public class IniFile implements Enumeration
             }
             catch (java.io.IOException ie)
             {
-                GlobalLogWriter.get().println("Couldn't close file " + m_sFilename);
-                GlobalLogWriter.get().println("Message: " + ie.getMessage());
+                GlobalLogWriter.println("Couldn't close file " + m_sFilename);
+                GlobalLogWriter.println("Message: " + ie.getMessage());
                 // DebugHelper.exception(BasicErrorCode.SbERR_INTERNAL_ERROR, ie.getMessage());
             }
             return aLines;
@@ -165,7 +165,7 @@ public class IniFile implements Enumeration
 
     private String getItem(int i)
         {
-            return (String) m_aList.get(i);
+            return m_aList.get(i);
         }
 
     private String buildSectionName(String _sSectionName)
@@ -380,7 +380,7 @@ public class IniFile implements Enumeration
                 }
                 catch (java.lang.NumberFormatException e)
                 {
-                    GlobalLogWriter.get().println("IniFile.getIntValue(): Caught a number format exception, return the default value.");
+                    GlobalLogWriter.println("IniFile.getIntValue(): Caught a number format exception, return the default value.");
                 }
             }
             return nValue;
@@ -395,6 +395,8 @@ public class IniFile implements Enumeration
        write back the ini file to the disk, only if there exist changes
        * @deprecated use close() instead!
        */
+
+    // TODO: make private
     public void store()
         {
             if (m_bListContainUnsavedChanges == false)
@@ -411,7 +413,7 @@ public class IniFile implements Enumeration
                 aFile.delete();
                 if (aFile.exists())
                 {
-                    GlobalLogWriter.get().println("Couldn't delete the file " + m_sFilename);
+                    GlobalLogWriter.println("Couldn't delete the file " + m_sFilename);
                     return;
                     // DebugHelper.exception(BasicErrorCode.SbERR_INTERNAL_ERROR, "Couldn't delete the file " + m_sFilename);
                 }
@@ -439,14 +441,14 @@ public class IniFile implements Enumeration
             }
             catch (java.io.FileNotFoundException fne)
             {
-                GlobalLogWriter.get().println("couldn't open file for writing " + m_sFilename);
-                GlobalLogWriter.get().println("Message: " + fne.getMessage());
+                GlobalLogWriter.println("couldn't open file for writing " + m_sFilename);
+                GlobalLogWriter.println("Message: " + fne.getMessage());
                 // DebugHelper.exception(BasicErrorCode.SbERR_FILE_NOT_FOUND, "");
             }
             catch (java.io.IOException ie)
             {
-                GlobalLogWriter.get().println("Exception occurs while writing to file " + m_sFilename);
-                GlobalLogWriter.get().println("Message: " + ie.getMessage());
+                GlobalLogWriter.println("Exception occurs while writing to file " + m_sFilename);
+                GlobalLogWriter.println("Message: " + ie.getMessage());
                 // DebugHelper.exception(BasicErrorCode.SbERR_INTERNAL_ERROR, ie.getMessage());
             }
         }
@@ -467,7 +469,10 @@ public class IniFile implements Enumeration
        1. section doesn't exist, goto end and insert a new section, insert a new key value pair
        2. section exist but key not, search section, search key, if key is -1 get last known key position and insert new key value pair there
        3. section exist and key exist, remove the old key and insert the key value pair at the same position
-    */
+     * @param _sSection
+     * @param _sKey
+     * @param _sValue
+     */
     public void insertValue(String _sSection, String _sKey, String _sValue)
         {
             int i = findSection(_sSection);
@@ -637,7 +642,7 @@ public class IniFile implements Enumeration
             {
                 while (i < m_aList.size())
                 {
-                    String sLine = (String) m_aList.get(i);
+                    String sLine =  m_aList.get(i);
                     if (sLine.startsWith("["))
                     {
                         return i;
@@ -657,7 +662,7 @@ public class IniFile implements Enumeration
             int nLineWithSection = findNextSection(m_aEnumerationPos);
             if (nLineWithSection != -1)
             {
-                String sSection = (String) m_aList.get(nLineWithSection);
+                String sSection =  m_aList.get(nLineWithSection);
                 m_aEnumerationPos = findNextSection(nLineWithSection + 1);
                 sSection = sectionToString(sSection);
                 return sSection;

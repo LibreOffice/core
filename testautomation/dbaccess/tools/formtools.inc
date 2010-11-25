@@ -118,7 +118,7 @@ function fSaveForm( sFormName as string, optional bCloseForm as boolean )
                 endif
             fSaveForm = true    
         else
-            fSaveFrom = false
+            fSaveForm = false
         end if
      
      if ( IsMissing( bCloseForm ) ) then

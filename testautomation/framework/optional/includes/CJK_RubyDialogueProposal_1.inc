@@ -204,6 +204,7 @@ testcase tRubyDialog_4
     case 39   :  sCharacterStyle = "Testo Ruby"
     case 46   :  sCharacterStyle = "Rubytext"
     case 49   :  sCharacterStyle = "Rubys"
+    case 50   :  sCharacterStyle = "Rubys"
     case 55   :  sCharacterStyle = "Rubys"
     case 81   :  sCharacterStyle = "ふりがな"
     case 82   :  sCharacterStyle = "윗주 달기" ' not sure TBO
@@ -251,6 +252,7 @@ testcase tRubyDialog_5
     case 39   :  sCharacterStyle = "Testo Ruby"
     case 46   :  sCharacterStyle = "Rubytext"
     case 49   :  sCharacterStyle = "Rubys"
+    case 50   :  sCharacterStyle = "Rubys"
     case 55   :  sCharacterStyle = "Rubys"
     case 81   :  sCharacterStyle = "ふりがな"
     case 82   :  sCharacterStyle = "윗주 달기" ' not sure TBO was "덧말"

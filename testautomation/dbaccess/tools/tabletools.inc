@@ -127,7 +127,7 @@ function tCompareMatrixValues(sDSName as string, sRefFileUrl as string, cTable_o
         endif
 	else
         if cTable_or_Query = "t" then warnlog "Table: " + sTableName + " not found - Test aborted"
-        if cTable_or_Query = "q" then warnlog "Table: " + sQueryName + " not found - Test aborted"
+        if cTable_or_Query = "q" then warnlog "Query: " + sTableName + " not found - Test aborted"
 	endif
     printlog "*** End Testcase"
     sleep 1	
@@ -203,7 +203,8 @@ function fCreateRefFile(sDSName as string, cTable_or_Query as string, sTableName
         '/// reading out values from table, create a reference table and input values in
         printlog "start reading out values from table and writing in ref table"
         iNumber = Freefile
-        dim i,j as integer    	        'counter    
+        dim i as integer    	        'counter
+        dim j as integer    	        'counter
         Open sRefFileUrl for Output as iNumber
             for i = 1 to iRowAmount
                 for j = 1 to iColAmount
@@ -708,10 +709,10 @@ function fFindTableInBeamer(sDSName1,sTableName1)
 	next i
 	
     if (bfindTable = false) then
-        warnlog "Datasource " + sDSName + " not found!"
+        warnlog "Datasource " + sDSName1 + " not found!"
         exit function
     else
-        printlog "Datasource " + sDSName + " found!"
+        printlog "Datasource " + sDSName1 + " found!"
         ' I set the bfindTable flag again back to false
         ' for the next test of the table
         bfindTable = false

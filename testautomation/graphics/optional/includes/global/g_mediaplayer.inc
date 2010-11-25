@@ -232,7 +232,7 @@ testcase g_mediaplayer
         else
            kontext "DocumentDraw"
         endif
-        hTypeKeys ("<escape><tab>")
+        hTypeKeys ("<escape><tab><tab><tab>")
         hOpenContextMenu()
         hMenuSelectNr(1)
         

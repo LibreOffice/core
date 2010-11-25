@@ -289,10 +289,10 @@ end function
 '-------------------------------------------------------------------------------
 function fMakeDocumentWritable() as boolean
 
-    printlog " make a document is writeable"
-    printlog " <u>parameter:</u>"
-    printlog " <u>return:</u>"
-    printlog " true if the document can make writeable otherwise false"
+    'make a document is writeable
+    'parameter:</u>
+    '<u>return:</u>
+    'true if the document can make writeable otherwise false
 
     Kontext "Standardbar"
     sleep (1)
@@ -310,7 +310,7 @@ function fMakeDocumentWritable() as boolean
             printlog "Document is allready writable."
             fMakeDocumentWritable = true
         endif
-
+    sleep (1)
 end function
 
 '-------------------------------------------------------------------------------

@@ -923,7 +923,11 @@ testcase tiFormatStylesAndFormatting
        ErrorLog "There was no Stylist open, should be."
     else
         printlog "Close Stylist"
-        hTypekeys "<F11>"
+        if lcase(gPlatform) = "osx" then
+            hTypekeys "<mod1 t>"
+        else
+            hTypekeys "<F11>"
+        endif
         Kontext "Stylist"
         if (Stylist.Exists) then
             ErrorLog "The Stylist should be closed now."
@@ -960,6 +964,7 @@ testcase tiFormatGroup
 
     printlog "open application"
     Call hNewDocument
+    Call sSelectEmptyLayout
     printlog "create 2 rectangles"
     hRechteckErstellen ( 10, 10, 20, 20 )
     hRechteckErstellen ( 30, 30, 40, 40 )

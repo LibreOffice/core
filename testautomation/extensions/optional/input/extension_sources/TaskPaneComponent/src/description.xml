@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<description xmlns="http://openoffice.org/extensions/description/2006" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <version value="0.0.1"/>
+    <identifier value="com.example.TaskPaneComponent"/>
+</description>

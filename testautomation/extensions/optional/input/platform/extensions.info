@@ -125,7 +125,7 @@ Name=Single Platform: os2_x86
 
 [24]
 File=solaris_sparc.oxt
-Platform=Solaris Sparc
+Platform=Solaris SPARC
 Name=Single Platform: solaris_sparc
 
 [25]

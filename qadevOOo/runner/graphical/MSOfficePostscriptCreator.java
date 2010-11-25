@@ -88,14 +88,14 @@ public class MSOfficePostscriptCreator implements IOffice
 
         if (! isMSOfficeDocumentFormat(m_sDocumentName))
         {
-            GlobalLogWriter.get().println("This document type is not recognized as MSOffice format, as default fallback StarOffice/OpenOffice.org instead is used.");
+            GlobalLogWriter.println("This document type is not recognized as MSOffice format, as default fallback StarOffice/OpenOffice.org instead is used.");
             throw new OfficeException("This document type is not recognized as MSOffice format, as default fallback StarOffice/OpenOffice.org instead is used.");
         }
     }
 
     public void storeAsPostscript() throws OfficeException
     {
-        GlobalLogWriter.get().println("USE MSOFFICE AS EXPORT FORMAT.");
+        GlobalLogWriter.println("USE MSOFFICE AS EXPORT FORMAT.");
         try
         {
             String sDocumentName = m_sDocumentName + ".ps";
@@ -112,12 +112,12 @@ public class MSOfficePostscriptCreator implements IOffice
         catch(OfficeException e)
         {
             e.printStackTrace();
-            GlobalLogWriter.get().println(e.getMessage());
+            GlobalLogWriter.println(e.getMessage());
             throw new OfficeException("Exception caught. Problem with MSOffice printer methods.");
         }
         catch(java.io.IOException e)
         {
-            GlobalLogWriter.get().println(e.getMessage());
+            GlobalLogWriter.println(e.getMessage());
             throw new OfficeException("IOException caught. Problem with MSOffice printer methods.");
         }
     }
@@ -177,11 +177,11 @@ public class MSOfficePostscriptCreator implements IOffice
     private boolean isMSOfficeDocumentFormat(String _sFile)
     {
         String sDocumentSuffix = FileHelper.getSuffix(_sFile);
-        if (isWordDocument(sDocumentSuffix)) return true;
-        if (isExcelDocument(sDocumentSuffix)) return true;
-        if (isPowerPointDocument(sDocumentSuffix)) return true;
+        if (isWordDocument(sDocumentSuffix)) {return true;}
+        if (isExcelDocument(sDocumentSuffix)) {return true;}
+        if (isPowerPointDocument(sDocumentSuffix)) {return true;}
         // if suffix is xml, return also true, but we can't decide if word or excel
-        if (sDocumentSuffix.toLowerCase().endsWith(".xml")) return true;
+        if (sDocumentSuffix.toLowerCase().endsWith(".xml")) {return true;}
         return false;
     }
 
@@ -191,7 +191,7 @@ public class MSOfficePostscriptCreator implements IOffice
         {
             String sDocumentSuffix = FileHelper.getSuffix(_sInputFile);
             String sFilterName = _aGTA.getExportFilterName();
-            ArrayList aStartCommand = new ArrayList();
+            ArrayList<String> aStartCommand = new ArrayList<String>();
             if (isWordDocument(sDocumentSuffix))
             {
                 aStartCommand = createWordStoreHelper();
@@ -222,7 +222,7 @@ public class MSOfficePostscriptCreator implements IOffice
             }
             else
             {
-                GlobalLogWriter.get().println("No Microsoft Office document format found.");
+                GlobalLogWriter.println("No Microsoft Office document format found.");
 
                 throw new WrongSuffixException("No MS office document format found.");
             }
@@ -249,6 +249,11 @@ public class MSOfficePostscriptCreator implements IOffice
     // -----------------------------------------------------------------------------
     /**
      * print the given file (_sInputFile) to the file name (_sPrintFile)
+     * @param _aGTA
+     * @param _sInputFile
+     * @param _sPrintFilename
+     * @throws OfficeException
+     * @throws java.io.IOException
      */
     public void printToFileWithMSOffice( ParameterHelper _aGTA,
                                          String _sInputFile,
@@ -258,7 +263,7 @@ public class MSOfficePostscriptCreator implements IOffice
 
             setPrinterName(_aGTA.getPrinterName());
 
-            ArrayList aStartCommand = new ArrayList();
+            ArrayList<String> aStartCommand = new ArrayList<String>();
             if (isWordDocument(sDocumentSuffix))
             {
                 aStartCommand = createWordPrintHelper();
@@ -293,7 +298,7 @@ public class MSOfficePostscriptCreator implements IOffice
             }
             else
             {
-                GlobalLogWriter.get().println("No Microsoft Office document format found.");
+                GlobalLogWriter.println("No Microsoft Office document format found.");
 // TODO: use a better Exception!!!
                 throw new WrongSuffixException("No Mircosoft Office document format found.");
             }
@@ -368,7 +373,13 @@ public class MSOfficePostscriptCreator implements IOffice
         }
 
 
-    ArrayList createWordPrintHelper() throws java.io.IOException
+    private String getPerlExe()
+    {
+        final String sPerlExe = System.getProperty("perl.exe", "perl");
+        return sPerlExe;
+    }
+
+    ArrayList<String> createWordPrintHelper() throws java.io.IOException
         {
             // create a program in tmp file
             String sTmpPath = util.utils.getUsersTempDir();
@@ -376,7 +387,7 @@ public class MSOfficePostscriptCreator implements IOffice
 
             String sPrintViaWord = "printViaWord.pl";
 
-            ArrayList aList = searchLocalFile(sPrintViaWord);
+            ArrayList<String> aList = searchLocalFile(sPrintViaWord);
             if (aList.isEmpty() == false)
             {
                 return aList;
@@ -465,30 +476,30 @@ public class MSOfficePostscriptCreator implements IOffice
             out.write( "}" + ls);
             out.close();
 
-            aList.add("perl");
+            aList.add(getPerlExe());
             aList.add(sFileName);
             return aList;
         }
 
     // TODO: Maybe give a possibility to say where search the script from outside
 
-    ArrayList searchLocalFile(String _sScriptName)
+    ArrayList<String> searchLocalFile(String _sScriptName)
         {
             String userdir = System.getProperty("user.dir");
 
-            ArrayList aList = new ArrayList();
+            ArrayList<String> aList = new ArrayList<String>();
             String sFileName = FileHelper.appendPath(userdir, _sScriptName);
             File aPerlScript = new File(sFileName);
             if (FileHelper.isDebugEnabled())
             {
-                GlobalLogWriter.get().println("Search for local existance of " + aPerlScript.getAbsolutePath());
+                GlobalLogWriter.println("Search for local existance of " + aPerlScript.getAbsolutePath());
             }
 
             if (aPerlScript.exists())
             {
                 if (FileHelper.isDebugEnabled())
                 {
-                    GlobalLogWriter.get().println("OK, found it, use this instead the internal one.");
+                    GlobalLogWriter.println("OK, found it, use this instead the internal one.");
                 }
 
                 String sName = aPerlScript.getAbsolutePath();
@@ -501,7 +512,7 @@ public class MSOfficePostscriptCreator implements IOffice
             return aList;
         }
 
-    ArrayList createWordStoreHelper() throws java.io.IOException
+    ArrayList<String> createWordStoreHelper() throws java.io.IOException
         {
             // create a program in tmp file
             String sTmpPath = util.utils.getUsersTempDir();
@@ -510,7 +521,7 @@ public class MSOfficePostscriptCreator implements IOffice
             // ArrayList aList = new ArrayList();
             String sSaveViaWord = "saveViaWord.pl";
 
-            ArrayList aList = searchLocalFile(sSaveViaWord);
+            ArrayList<String> aList = searchLocalFile(sSaveViaWord);
             if (aList.isEmpty() == false)
             {
                 return aList;
@@ -519,7 +530,7 @@ public class MSOfficePostscriptCreator implements IOffice
             String sName = FileHelper.appendPath(sTmpPath, sSaveViaWord);
             if (FileHelper.isDebugEnabled())
             {
-                GlobalLogWriter.get().println("No local found, create a perl script: " + sName);
+                GlobalLogWriter.println("No local found, create a perl script: " + sName);
             }
 
             File aFile = new File(sName);
@@ -577,13 +588,13 @@ public class MSOfficePostscriptCreator implements IOffice
             out.write( "$Word->Quit();                                                                               " + ls );
             out.close();
 
-            aList.add("perl");
+            aList.add(getPerlExe());
             aList.add(sName);
             return aList;
         }
 
 
-    ArrayList createExcelPrintHelper() throws java.io.IOException
+    ArrayList<String> createExcelPrintHelper() throws java.io.IOException
         {
             // create a program in tmp file
             String sTmpPath = util.utils.getUsersTempDir();
@@ -591,7 +602,7 @@ public class MSOfficePostscriptCreator implements IOffice
 
             String sPrintViaExcel = "printViaExcel.pl";
 
-            ArrayList aList = searchLocalFile(sPrintViaExcel);
+            ArrayList<String> aList = searchLocalFile(sPrintViaExcel);
             if (aList.isEmpty() == false)
             {
                 return aList;
@@ -599,14 +610,20 @@ public class MSOfficePostscriptCreator implements IOffice
             String sName = FileHelper.appendPath(sTmpPath, sPrintViaExcel);
             if (FileHelper.isDebugEnabled())
             {
-                GlobalLogWriter.get().println("No local found, create a perl script: " + sName);
+                GlobalLogWriter.println("No local found, create a perl script: " + sName);
             }
 
             File aFile = new File(sName);
             FileWriter out = new FileWriter(aFile);
 
-            out.write( "eval 'exec perl -wS $0 ${1+\"$@\"}'                                                                                " + ls );
-            out.write( "   if 0;                                                                                                         " + ls );
+            // out.write( "eval 'exec perl -wS $0 ${1+\"$@\"}'                                                                                " + ls );
+            // out.write( "   if 0;                                                                                                         " + ls );
+            out.write("#BEGIN" + ls);
+            out.write("#{" + ls);
+            out.write("#" + ls);
+            out.write("#    # insert HACK" + ls);
+            out.write("#    unshift(@INC, '');" + ls);
+            out.write("#}" + ls);
             out.write( "use strict;                                                                                                      " + ls );
             out.write( "                                                                                                                 " + ls );
             out.write( "if ( $^O ne \"MSWin32\")                                                                                         " + ls );
@@ -675,12 +692,12 @@ public class MSOfficePostscriptCreator implements IOffice
             out.write( "}" + ls);
             out.close();
 
-            aList.add("perl");
+            aList.add(getPerlExe());
             aList.add(sName);
             return aList;
         }
 
-    ArrayList createExcelStoreHelper() throws java.io.IOException
+    ArrayList<String> createExcelStoreHelper() throws java.io.IOException
         {
             // create a program in tmp file
             String sTmpPath = util.utils.getUsersTempDir();
@@ -688,7 +705,7 @@ public class MSOfficePostscriptCreator implements IOffice
 
             String sSaveViaExcel = "saveViaExcel.pl";
 
-            ArrayList aList = searchLocalFile(sSaveViaExcel);
+            ArrayList<String> aList = searchLocalFile(sSaveViaExcel);
             if (aList.isEmpty() == false)
             {
                 return aList;
@@ -696,7 +713,7 @@ public class MSOfficePostscriptCreator implements IOffice
             String sName = FileHelper.appendPath(sTmpPath, sSaveViaExcel);
             if (FileHelper.isDebugEnabled())
             {
-                GlobalLogWriter.get().println("No local found, create a script: " + sName);
+                GlobalLogWriter.println("No local found, create a script: " + sName);
             }
 
             File aFile = new File(sName);
@@ -764,12 +781,12 @@ public class MSOfficePostscriptCreator implements IOffice
             out.write( "$Excel->Quit();                                                                                                     " + ls );
             out.close();
 
-            aList.add("perl");
+            aList.add(getPerlExe());
             aList.add(sName);
             return aList;
         }
 
-    ArrayList createPowerPointPrintHelper() throws java.io.IOException
+    ArrayList<String> createPowerPointPrintHelper() throws java.io.IOException
         {
             // create a program in tmp file
             String sTmpPath = util.utils.getUsersTempDir();
@@ -777,7 +794,7 @@ public class MSOfficePostscriptCreator implements IOffice
 
             String sPrintViaPowerPoint = "printViaPowerPoint.pl";
 
-            ArrayList aList = searchLocalFile(sPrintViaPowerPoint);
+            ArrayList<String> aList = searchLocalFile(sPrintViaPowerPoint);
             if (aList.isEmpty() == false)
             {
                 return aList;
@@ -785,7 +802,7 @@ public class MSOfficePostscriptCreator implements IOffice
             String sName = FileHelper.appendPath(sTmpPath, sPrintViaPowerPoint);
             if (FileHelper.isDebugEnabled())
             {
-                GlobalLogWriter.get().println("No local found, create a script: " + sName);
+                GlobalLogWriter.println("No local found, create a script: " + sName);
             }
 
             File aFile = new File(sName);
@@ -865,7 +882,7 @@ public class MSOfficePostscriptCreator implements IOffice
             out.write( "}" + ls);
             out.close();
 
-            aList.add("perl");
+            aList.add(getPerlExe());
             aList.add(sName);
             return aList;
         }
@@ -879,7 +896,7 @@ public class MSOfficePostscriptCreator implements IOffice
             File aFile = new File(_sFilename);
             if (! aFile.exists())
             {
-                GlobalLogWriter.get().println("couldn't find file " + _sFilename);
+                GlobalLogWriter.println("couldn't find file " + _sFilename);
                 return "";
             }
             RandomAccessFile aReader = null;
@@ -911,7 +928,7 @@ public class MSOfficePostscriptCreator implements IOffice
                                 }
                                 else
                                 {
-                                    GlobalLogWriter.get().println("Unknown/unsupported data file: " + aLine);
+                                    GlobalLogWriter.println("Unknown/unsupported data file: " + aLine);
                                 }
                             }
                         }

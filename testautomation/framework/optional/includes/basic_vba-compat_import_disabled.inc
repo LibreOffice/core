@@ -36,12 +36,23 @@ testcase tBasicVBACompatImportDisabled()
     printlog( "Test VBA compatibility switch / executable Microsoft(R) Excel(R) Macros" )
     printlog( "Test case 2: Import macros but do not set the executable mode" )
     
-    
     ' This test case is based on the use cases provided in issue #i88690
     ' Spec: http://specs.openoffice.org/appwide/options_settings/Option_Dialog.odt
+
+    const NODE_COUNT = 78
+
+    const DOCUMENT_POSITION_OFFSET = -7
+
+    const IMPORT_EXCEL_MACROS = TRUE
+    const EXEC_EXCEL_MACROS   = FALSE
+
+    const DOCUMENT_NAME = "vba-test.xls"
+    const MATCH_NONE    = 0
+    const MATCH_EXACT   = 1
+    const MATCH_PARTLY  = 2
     
     dim cTestFile as string
-        cTestFile = gTesttoolPath & "framework/optional/input/vba-compat/vba-test.xls"
+        cTestFile = gTesttoolPath & "framework/optional/input/vba-compat/" & DOCUMENT_NAME
         
     dim cNodeCount as integer
     
@@ -57,15 +68,6 @@ testcase tBasicVBACompatImportDisabled()
     dim iCurrentModule as integer  
     dim cCurrentModule as string
     dim bFound as boolean  
-    
-    ' Depending on the mode of macro import we have differtent basic libraries listed
-    const NODE_COUNT_OOO = 78 ' OpenOffice.org
-    const NODE_COUNT     = 80 ' branded product
- 
-    const DOCUMENT_POSITION_OFFSET = -7
-    
-    const IMPORT_EXCEL_MACROS = TRUE
-    const EXEC_EXCEL_MACROS   = FALSE
  
     printlog( "Set macro security to low" )
     hSetMacroSecurityAPI( GC_MACRO_SECURITY_LEVEL_LOW )
@@ -92,9 +94,11 @@ testcase tBasicVBACompatImportDisabled()
     
     printlog( "Verify position of the document node" )
     MakroAus.select( cNodeCount + DOCUMENT_POSITION_OFFSET )
-    if ( MakroAus.getSelText() <> "vba-test.xls" ) then
-        qaerrorlog( "The document node is not at the expected position" )
-    endif
+    select case( hCompareSubStrings( MakroAus.getSelText(), DOCUMENT_NAME  ) )
+    case MATCH_NONE   : warnlog ( "The document is not listed at the expected position" )
+    case MATCH_EXACT  : printlog( "The document is at the expected position and writable" )
+    case MATCH_PARTLY : printlog( "The document is at the expected position and write protected" )
+    end select
     
     for iCurrentModule = 2 to 7
     
@@ -134,7 +138,6 @@ testcase tBasicVBACompatImportDisabled()
     hCloseDocument()
     hSetExcelImportModeDefault()    
     hSetMacroSecurityAPI( GC_MACRO_SECURITY_LEVEL_DEFAULT )
-
 
 endcase
 

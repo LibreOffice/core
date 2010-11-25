@@ -43,7 +43,8 @@ testcase tCrossfading
     dim CounterForX as integer
     dim anothercounter as integer
 
-    Call hNewDocument						                '/// New Impress document ///'
+    Call hNewDocument
+    Call sSelectEmptyLayout					                '/// New Impress document ///'
     gMouseClick 50,50
    sleep 1
     Call hRechteckErstellen ( 5, 5, 20, 30 )			'/// Create rectangle ///'

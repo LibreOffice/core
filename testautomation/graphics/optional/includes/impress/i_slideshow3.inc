@@ -43,6 +43,7 @@
 testcase tExtrasInteraktion
     Printlog " -  SlideShow/Interaction"
  Call hNewDocument
+ Call sSelectEmptyLayout
  sleep 1
  Call hTextrahmenErstellen ("Seite 1",10,10,40,40)		'/// create textbox ///'
  SlideShowPresentationSettings							'/// Set slide show settings ///'
@@ -77,6 +78,7 @@ testcase tExtrasInteraktion
   endcatch
  hCloseDocument
  Call hNewDocument
+ Call sSelectEmptyLayout
  Call hRechteckErstellen (50,50,80,80)							'/// create rectangle ///'
  SlideShowInteraction
  Kontext "Interaktion"

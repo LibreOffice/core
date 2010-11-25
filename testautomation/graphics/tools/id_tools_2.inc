@@ -835,24 +835,6 @@ sub id_005
 '        tiFormatLayer ' not in impress
 end sub
 
-'------------------------------------------------------------------------------
-sub id_006
-
-    printLog Chr(13) + "---------    id_006    ----------"
-
-    call tiToolsSpellchecking
-    call tiToolsSpellcheckingAutomatic
-    call tiToolsThesaurus
-   call tiToolsHyphenation
-   call tiToolsAutoCorrect
-   call tChineseTranslation
-   call tiToolsMacro
-   call tiToolsGallery
-   call tiToolsEyedropper
-   call tiToolsOptions ' get just called one time here...
-   Call tToolsOptionsTest ' global one
-end sub
-
 '-------------------------------------------------------------------------------
 sub id_007
 
@@ -1064,3 +1046,18 @@ sub hWalkTheStyles (optional a as integer,optional b as integer)
 end sub
 
 '---------------------------------------------------------------------------------------
+sub sSelectEmptyLayout
+    if gApplication = "IMPRESS" then
+        printlog "Changing focus to TaskPane."
+        kontext "Tasks"
+        sleep (1)
+        printlog "Selecting first and empty layout."
+        LayoutsPreview.TypeKeys "<HOME>"
+        sleep (1)
+        LayoutsPreview.TypeKeys "<RETURN>"
+        sleep (1)
+        kontext "DocumentImpress"
+    else
+        printlog "No change of Layout needed."
+    endif
+end sub

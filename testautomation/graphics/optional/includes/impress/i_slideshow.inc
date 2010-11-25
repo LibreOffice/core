@@ -970,7 +970,11 @@ testcase tSlideShowSlideTransition
    WaitSlot (3000)
    try
       '/// type key [F11] to open the stylist (to check ending of presenation) ///'
-      hTypeKeys "<F11>"
+      if lcase(gPlatform) = "osx" then
+          hTypekeys "<mod1 t>"
+      else
+          hTypeKeys "<F11>"
+      endif
       Sleep (3)
       Kontext "Gestalter"
       Sleep (3)

@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<oor:component-data oor:name="Factories" oor:package="org.openoffice.Office.UI" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <node oor:name="Registered">
+    <node oor:name="UIElementFactories">
+      <node oor:name="com.example.TaskPaneComponent1" oor:op="replace">
+        <prop oor:name="Type">
+          <value>toolpanel</value>
+        </prop>
+        <prop oor:name="Name">
+          <value>com.example.TestPanel1</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="FactoryImplementation">
+          <value>com.example.TaskPaneComponent</value>
+        </prop>
+      </node>
+      <node oor:name="com.example.TaskPaneComponent2" oor:op="replace">
+        <prop oor:name="Type">
+          <value>toolpanel</value>
+        </prop>
+        <prop oor:name="Name">
+          <value>com.example.TestPanel2</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="FactoryImplementation">
+          <value>com.example.TaskPaneComponent</value>
+        </prop>
+      </node>
+    </node>
+  </node>
+</oor:component-data>

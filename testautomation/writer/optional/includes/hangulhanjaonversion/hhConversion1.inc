@@ -75,8 +75,8 @@ testcase tHHNoSelction_1
     Kontext "HangulHanjaConversion"
 
     '/// Press Peplace button
-    if Replace.IsEnabled then
-        Replace.Click
+    if ReplaceBtn.IsEnabled then
+        ReplaceBtn.Click
     else
         Warnlog "Replace button is disabled !"
         HangulHanjaConversion.Close
@@ -140,12 +140,12 @@ testcase tHHNoSelction_2
     Kontext "HangulHanjaConversion"
 
     '/// Press Peplace button
-    if Replace.IsEnabled then
-        Replace.Click
+    if ReplaceBtn.IsEnabled then
+        ReplaceBtn.Click
     else
         Ignore.Click
         Sleep 1
-        Replace.Click
+        ReplaceBtn.Click
     end if
 
     if HangulHanjaConversion.Exists then HangulHanjaConversion.Close
@@ -194,13 +194,13 @@ testcase tHHNoSelction_3
     Kontext "HangulHanjaConversion"
     
     '/// Press Peplace button
-    if Replace.IsEnabled then
-        Replace.Click
+    if ReplaceBtn.IsEnabled then
+        ReplaceBtn.Click
     else
         Sleep 1
         Ignore.Click
         Sleep 1
-        Replace.Click
+        ReplaceBtn.Click
         Sleep 1
         HangulHanjaConversion.Close
     end if
@@ -325,16 +325,16 @@ testcase tHHNoSelction_6
         Warnlog "Suggestion should be empty !"
     end if
     try
-        Replace.Click
+        ReplaceBtn.Click
         Warnlog "Replace button should NOT work !"
         AlwaysReplace.Click
         Warnlog "Always Replace button should NOT work !"
     catch
         Ignore.Click
     endcatch
-    Replace.Click
+    ReplaceBtn.Click
     Sleep 1
-    Replace.Click
+    ReplaceBtn.Click
     Sleep 1    
     if HangulHanjaConversion.Exists then HangulHanjaConversion.Close
 
@@ -388,16 +388,16 @@ testcase tHHNoSelction_7
          Warnlog "Suggestion should be empty !"
      end if
      try
-         Replace.Click
+         ReplaceBtn.Click
          Warnlog "Replace button should NOT work !"
          AlwaysReplace.Click
          Warnlog "Always Replace button should NOT work !"
      catch
          Ignore.Click
      endcatch
-     Replace.Click
+     ReplaceBtn.Click
      Sleep 1
-     Replace.Click
+     ReplaceBtn.Click
      Sleep 1
    HangulHanjaConversion.Close
 
@@ -446,11 +446,11 @@ testcase tHHSingleSelction_1
     '/// + Press Peplace button
     ToolsLanguageHangulHanjaConversion
     Kontext "HangulHanjaConversion"
-    if Replace.IsEnabled then 
-        Replace.Click
+    if ReplaceBtn.IsEnabled then 
+        ReplaceBtn.Click
         Sleep 1
         try
-            Replace.Click
+            ReplaceBtn.Click
             Sleep 1
         catch
         endcatch
@@ -501,9 +501,9 @@ testcase tHHMultiSelction_1
   '/// + Press Peplace button
    ToolsLanguageHangulHanjaConversion
    Kontext "HangulHanjaConversion"
-     Replace.Click
+     ReplaceBtn.Click
      Sleep 1
-     Replace.Click
+     ReplaceBtn.Click
      Sleep 1
 
   '/// Check if the result is correct

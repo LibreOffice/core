@@ -41,6 +41,7 @@ import java.lang.reflect.Method;
 
 import util.ValueChanger;
 import util.ValueComparer;
+import util.utils;
 
 import com.sun.star.uno.Any;
 import com.sun.star.uno.AnyConverter;
@@ -178,6 +179,25 @@ public class MultiPropertyTest extends MultiMethodTest
             try
             {
                 Object oldValue = oObj.getPropertyValue(propName);
+
+                if( (oldValue==null) || utils.isVoid(oldValue) )
+                {
+                    // #i111560# method getNewValue() does not work with an empty oldValue
+                    Property prop = info.getPropertyByName(propName);
+                    if( (prop.Attributes & PropertyAttribute.MAYBEVOID) != 0 )
+                    {
+                        // todo: implement a new test independent from method getNewValue()
+                        log.println("changing initially empty MAYBEVOID properties is not supported by the test framework so far - skip test of property: " + propName);
+                        tRes.tested(propName, true);
+                        return;
+                    }
+                    else
+                    {
+                        log.println( "property '"+propName+"' is not set but is not MAYBEVOID");
+                        tRes.tested(propName, false);
+                        return;
+                    }
+                }
 
                 Object newValue;
 

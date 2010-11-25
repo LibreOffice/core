@@ -70,6 +70,7 @@ testcase tContextSaveAsPicture
     endif
 
     Call hNewDocument
+    Call sSelectEmptyLayout
     setClipboard(" ")
     sleep 2
     InsertGraphicsFromFile
@@ -303,6 +304,7 @@ testcase tContextSaveAsPicture
     hTypeKeys "<DELETE>"
     call hCloseDocument
     call hNewDocument
+    Call sSelectEmptyLayout
     InsertGraphicsFromFile
     Kontext "GrafikEinfuegenDlg"
     if GrafikEinfuegenDlg.exists(5) then
@@ -368,6 +370,7 @@ testcase tContextSavePictureLinkAsPicture
     endif
 
     Call hNewDocument
+    Call sSelectEmptyLayout
     setClipboard(" ")
     sleep 2
     InsertGraphicsFromFile
@@ -725,6 +728,7 @@ endif
 hTypeKeys "<DELETE>"
 call hCloseDocument
 call hNewDocument
+Call sSelectEmptyLayout
 InsertGraphicsFromFile
 Kontext "GrafikEinfuegenDlg"
 if GrafikEinfuegenDlg.exists(5) then

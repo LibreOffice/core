@@ -261,9 +261,8 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tDocInformationUserDefined
-	qaerrorlog "#i93906# - Testcase outcommented due to bug. 'Copied field-content not pastable outside Office'"
-	goto endsub
-
+    QAErrorLog "#i112077#Tabpage 'Custom properties' has no declaration"
+    goto endsub
 	Dim sTestFile as String
 	Dim sOriginalFile as string
 	Dim sVarResult() as String

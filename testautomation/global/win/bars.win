@@ -356,6 +356,13 @@ ExtrusionLightingFloater .uno:ExtrusionLightingFloater
 ExtrusionSurfaceFloater .uno:ExtrusionSurfaceFloater
 Extrusion3DColor .uno:Extrusion3DColor
 '-------------------------------------------------------------------------
+*FindBar   .HelpId:findbar
+'-------------------------------------------------------------------------
+FindText .uno:FindText
+DownSearch .uno:DownSearch
+UpSearch .uno:UpSearch
+SearchDialog   .uno:SearchDialog
+'-------------------------------------------------------------------------
 *Flowchart .HelpId:flowchartshapes
 '-------------------------------------------------------------------------
 Process .uno:FlowChartShapes.flowchart-process

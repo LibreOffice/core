@@ -137,7 +137,7 @@ testcase tToolsAutocorrectCustomQuotes(bSimple as boolean)
         ExtensionString = "odg"
     end if
 
-    if iSprache = "1" OR iSprache = "33" OR iSprache = "34" OR iSprache = "36" OR iSprache = "39" OR iSprache = "46" OR iSprache = "48" OR iSprache = "49" OR iSprache = "55" then
+    if iSprache = "1" OR iSprache = "33" OR iSprache = "34" OR iSprache = "36" OR iSprache = "39" OR iSprache = "46" OR iSprache = "48" OR iSprache = "49" OR iSprache = "50" OR iSprache = "55" then
         sFileName = (ConvertPath ( gTesttoolPath + "graphics\required\input\rightfont" & iSprache & "." + ExtensionString ))
     elseif bAsianLan = true then
         Printlog "Language-file for Asian language " & iSprache & " is missing. Using standard instead."
@@ -159,7 +159,7 @@ testcase tToolsAutocorrectCustomQuotes(bSimple as boolean)
     printlog "File opened: " + sFileName
     Sleep 3
 
-    Call sMakeReadOnlyDocumentEditable
+    call fMakeDocumentWritable
 
     if bSimple then
         Printlog "- Tools/Autocorrect -single quotes"
@@ -179,6 +179,7 @@ testcase tToolsAutocorrectCustomQuotes(bSimple as boolean)
         case 46 : Vorn$ = Chr(8217) : Hinten$ = Chr(8217)
         case 48 : Vorn$ = Chr(8216) : Hinten$ = Chr(8217)
         case 49 : Vorn$ = Chr(8218) : Hinten$ = Chr(8216)
+        case 50 : Vorn$ = Chr(8216) : Hinten$ = Chr(8217)
         case 55 : Vorn$ = Chr(8216) : Hinten$ = Chr(8217)
         case 81, 82, 86, 88 : Vorn$ = Chr(8216) : Hinten$ = Chr(8217) ' Asian
         case else : Warnlog "- Nothing prepared for this language, but I run: take the warnlogs an insert the numbers here.: "+iSprache
@@ -202,6 +203,7 @@ testcase tToolsAutocorrectCustomQuotes(bSimple as boolean)
         case 46 : Vorn$ = Chr(8221) : Hinten$ = Chr(8221)
         case 48 : Vorn$ = Chr(8222) : Hinten$ = Chr(8221)
         case 49 : Vorn$ = Chr(8222) : Hinten$ = Chr(8220)
+        case 50 : Vorn$ = Chr(8220) : Hinten$ = Chr(8221)
         case 55 : Vorn$ = Chr(8220) : Hinten$ = Chr(8221)
         case 81, 82, 86, 88 : Vorn$ = Chr(8220) : Hinten$ = Chr(8221) ' Asian
         case else : Warnlog "- Nothing prepared for this language: "+iSprache

@@ -380,6 +380,7 @@ testcase tiPengine2ObjectsGetsEffects
 
     printlog "Create a new presentation."
     Call hNewDocument
+    Call sSelectEmptyLayout
     sleep (1)
 
     kontext "Toolbar"

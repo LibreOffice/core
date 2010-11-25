@@ -723,7 +723,11 @@ testcase tiFormatStylesAndFormatting
     if (Stylist.NotExists) then
         ErrorLog "There was no Stylist open, should be."
     else
-        hTypekeys "<F11>"
+        if lcase(gPlatform) = "osx" then
+            hTypekeys "<mod1 t>"
+        else
+            hTypekeys "<F11>"
+        endif
         Kontext "Stylist"
         if (Stylist.Exists) then
             ErrorLog "The Stylist should be closed now."

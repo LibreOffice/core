@@ -84,7 +84,7 @@ testcase tUndoFindAndReplace
 	'/// Type 'ThisReplacementText' in 'Replace with' field
 	ReplaceWith.Settext "ThisReplacementText"
 	'/// Choose Button 'Replace' and close dialog
-	Replace.Click
+	ReplaceBtn.Click
 	wait 500
 	Kontext "Active"
 	if Active.Exists then

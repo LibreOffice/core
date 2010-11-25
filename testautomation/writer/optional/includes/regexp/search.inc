@@ -79,13 +79,13 @@ testcase tCheckDialog
    if SearchAll.IsEnabled then Warnlog "Without Search-for-entry Find-All is active!"
    if SearchNow.IsEnabled then Warnlog "Without Search-for-entry Find is active!"
    if ReplaceAll.IsEnabled then Warnlog "Without Search-for-entry Replace-All is active!"
-   if Replace.IsEnabled then Warnlog "Without Search-for-entry Replace is active!"
+   if ReplaceBtn.IsEnabled then Warnlog "Without Search-for-entry Replace is active!"
    if NoFormat.IsEnabled then Warnlog "Without selecting Formats , No-Format is active!"
    SearchFor.SetText "Hallo"
    if NOT SearchAll.IsEnabled then Warnlog "Containing Search-for-entry Find-All is inactive!"
    if NOT SearchNow.IsEnabled then Warnlog "Containing Search-for-entry Find inactive!"
    if NOT ReplaceAll.IsEnabled then Warnlog "Containing Search-for-entry Replace-All is inactive!"
-   if NOT Replace.IsEnabled then Warnlog "Containing Search-for-entry Replace is inactive!"
+   if NOT ReplaceBtn.IsEnabled then Warnlog "Containing Search-for-entry Replace is inactive!"
 
    Sleep 5
   printlog "- Dependencies of Format-Properties"
@@ -170,6 +170,7 @@ testcase tCallDialog
       case 39 : Shortcut = "<Mod1 f>"
       case 46 : Shortcut = "<Mod1 f>"
       case 49 : Shortcut = "<Mod1 f>"
+      case 50 : Shortcut = "<Mod1 f>"
       case 55 : Shortcut = "<Mod1 f>"
 	  case 81 : Shortcut = "<Mod1 f>"
       case 82 : Shortcut = "<Mod1 f>"
@@ -474,6 +475,7 @@ testcase tUnderline_Search
             case 39: ToggleAttribute(27,"True")
             case 46: ToggleAttribute(30,"True")            
             case 49: ToggleAttribute(28,"True")
+            case 50: ToggleAttribute(15,"True")
             case 55: ToggleAttribute(29,"True")
             case 88: ToggleAttribute(13,"True")
             case else : QAErrorlog "Please adapt test for this language!"
@@ -490,6 +492,7 @@ testcase tUnderline_Search
             case 39: ToggleAttribute(35,"True")             ' Sottolineato
             case 46: ToggleAttribute(40,"True")             ' Understruken
             case 49: ToggleAttribute(37,"True")             ' Unterstrichen
+            case 50: ToggleAttribute(24,"True")             ' Podčrtano
             case 55: ToggleAttribute(38,"True")             ' Sublinhado
             case 88: ToggleAttribute(13,"True")
             case else : QAErrorlog "Please adapt test for this language!"
@@ -525,6 +528,7 @@ testcase tUnderline_Replace
             case 39: ToggleAttribute(27,"True")
             case 46: ToggleAttribute(30,"True")            
             case 49: ToggleAttribute(28,"True")
+            case 50: ToggleAttribute(15,"True")
             case 55: ToggleAttribute(29,"True")
             case 88: ToggleAttribute(13,"True")
             case else : QAErrorlog "Please adapt test for this language!"
@@ -541,6 +545,7 @@ testcase tUnderline_Replace
             case 39: ToggleAttribute(35,"True")             ' Sottolineato
             case 46: ToggleAttribute(40,"True")             ' Understruken
             case 49: ToggleAttribute(37,"True")             ' Unterstrichen
+            case 50: ToggleAttribute(24,"True")             ' Podčrtano
             case 55: ToggleAttribute(38,"True")             ' Sublinhado
             case 88: ToggleAttribute(13,"True")
             case else : QAErrorlog "Please adapt test for this language!"
@@ -788,6 +793,7 @@ testcase tParagraphStyle_Search
         Case 39 : Such_Text = "Intestazione"
         Case 46 : Such_Text = "Överskrift"
         Case 49 : Such_Text = "Überschrift"          'Suchen  Absatzformat "Überschrift"
+        Case 50 : Such_Text = "Naslov"
         Case 55 : Such_Text = "Título Principal"
         Case 81 : Such_Text = "見出し"
         Case 86 : Such_Text = "标题"
@@ -1184,7 +1190,7 @@ function wSelectAttributeName(aNumber as integer, AsianSupport as boolean, SetSt
 
   Case 31
    Select Case iSprache
-    Case 49: aSelectIt = "Silbentrennung"
+    Case 49: aSelectIt = "Hyphenation"
     Case else: Warnlog "Language not supported. No test"
                exit function
    end select
@@ -1463,7 +1469,7 @@ sub wCheckAttribute(aNumber as integer)
   Case 28    '"Schriftstellung asiatische Schrift"
   Case 29    '"Schusterjungen"
   Case 30    '"Seitenvorlage"
-  Case 31    '"Silbentrennung"
+  Case 31    '"Hyphenation"
   Case 32    '"Skalierung"
   Case 33    '"Sprache"
   Case 34    '"Sprache asiatische Schrift"
@@ -1625,6 +1631,7 @@ sub Meldungs_Test
         Case 39 : Text_In_Meldung = sProduct & " Writer ha cercato fino alla fine del documento. Volete continuare dall'inizio del documento?"
         Case 46 : Text_In_Meldung = sProduct & " Writer har sökt till slutet av dokument. Vill du fortsätta sökningen i början av dokumentet?"
         Case 49 : Text_In_Meldung = sProduct & " Writer hat bis zum Ende des Dokumentes gesucht. Möchten Sie die Suche am Dokumentanfang fortsetzen?"
+        Case 50 : Text_In_Meldung = sProduct & " Writer je preiskal do konca dokumenta. Ali želite nadaljevati na začetku?"
 		Case 55 : Text_In_Meldung = sProduct & " Writer pesquisou até o final do documento. Deseja continuar do início?"
         Case 81 : Text_In_Meldung = sProduct & " Writer は、文書末まで検索しました。文書の始めに戻って続行しますか。"
         Case 82 : Text_In_Meldung = sProduct & " Writer가 문서의 끝까지 검색했습니다. 문서의 시작부분에서 검색을 계속하겠습니까?"

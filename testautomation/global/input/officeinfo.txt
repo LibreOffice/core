@@ -1,6 +1,5 @@
 [Current program versions]
-StarOffice=9
-StarSuite=9
-OpenOffice.org=3.1
-BrOffice.org=3.1
+OpenOffice.org=3.3
+BrOffice.org=3.3
+Oracle Open Office=3.3
 

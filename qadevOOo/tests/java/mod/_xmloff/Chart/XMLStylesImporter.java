@@ -88,12 +88,16 @@ public class XMLStylesImporter extends TestCase {
         comp = xChartDoc;
     }
 
-    /**
-    * Disposes document.
-    */
+   /**
+     * Close document
+     */
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
-        log.println( "    disposing document " );
-        comp.dispose();
+        if( xChartDoc!=null ) {
+            log.println( "    closing xChartDoc" );
+            util.DesktopTools.closeDoc(xChartDoc);
+            xChartDoc = null;
+            comp = null;
+        }
     }
 
     /**

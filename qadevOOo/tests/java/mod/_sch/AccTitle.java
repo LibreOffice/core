@@ -109,9 +109,11 @@ public class AccTitle extends TestCase {
     * @param log writer to log information while testing
     */
     protected void cleanup( TestParameters Param, PrintWriter log) {
-        log.println( "    closing xChartDoc " );
-        util.DesktopTools.closeDoc(xChartDoc);
-
+        if( xChartDoc!=null ) {
+            log.println( "    closing xChartDoc" );
+            util.DesktopTools.closeDoc(xChartDoc);
+            xChartDoc = null;
+        }
     }
 
 }

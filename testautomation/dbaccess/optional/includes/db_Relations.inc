@@ -32,8 +32,10 @@
 '\***********************************************************************
 function tRelation( sFileName, sPWD, sRelTable1, sRelTable2 )
 	'/// create an 1:1 and 1:n relation between two test tables
-    Dim i, j, ix as integer			    'counter
-	Dim iNoDS as integer                'number of data source in listbox
+    Dim i as integer			    'counter
+    Dim j as integer			    'counter
+    Dim ix as integer			    'counter
+    Dim iNoDS as integer                'number of data source in listbox
     Dim iNoTab as integer               'number of tables in grid
     Dim DSOK as boolean                 'datasource present check      
     
@@ -206,8 +208,10 @@ end function
 function tDoubleRelation( sFileName, sPWD, sRelTable1, sRelTable2, sRelTable3 )
 	'/// create an 1:1 relation, close and save relation dialog,
     '/// reopen the dialog and add an 1:n relation with third test table
-    Dim i, j, ix as integer			    'counter
-	Dim iNoDS as integer                'number of data source in listbox
+    Dim i as integer			    'counter
+    Dim j as integer			    'counter
+    Dim ix as integer			    'counter
+    Dim iNoDS as integer                'number of data source in listbox
     Dim iNoTab as integer               'number of tables in grid
     Dim DSOK as boolean                 'datasource present check      
     
@@ -351,7 +355,7 @@ function tDoubleRelation( sFileName, sPWD, sRelTable1, sRelTable2, sRelTable3 )
         
         if breltablefound <> 1 then     'needed table not found if variable <> 1
             warnlog "proper table: " + sRelTable3 + " not found - test abort"
-            call fCloseRealtionDesign
+            call fCloseRelationDesign
             call fCloseDatabase
             exit function
         else

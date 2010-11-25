@@ -205,7 +205,11 @@ testcase tFF_Navigator
     elseif iSprache = 49 then
 	    if FilterNavigator.getSelText <> "WIE '*value*'" then
             warnlog "The text is not right in the filter navigator. It have to be WIE '*value*' but it is " + FilterNavigator.getSelText
-        endif    
+        endif
+    elseif iSprache = 50 then
+       if FilterNavigator.getSelText <> "LIKE '*value*'" then
+             warnlog "The text is not right in the filter navigator. It have to be LIKE '*value*' but it is " + FilterNavigator.getSelText
+       endif
     elseif iSprache = 81 then
     
     elseif iSprache = 82 then

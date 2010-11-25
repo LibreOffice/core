@@ -256,7 +256,7 @@ ViewSnapLinesFront SID_HELPLINES_FRONT
 ViewStatusBarVisible .uno:StatusBarVisible
 ViewShowImeStatusWindow .uno:ShowImeStatusWindow
 ViewShowRuler .uno:ShowRuler
-ViewTaskPane .uno:RightPane
+ViewTaskPane .uno:TaskPane
 ViewTaskSlide .uno:LeftPaneImpress
 ViewTitle SID_TITLE_MASTERPAGE
 ViewToolbarsOptionbar .uno:AvailableToolbars?Toolbar:string=optionsbar
@@ -414,6 +414,9 @@ FormatStylesLoad SID_TEMPLATE_LOAD
 FormatStylist SID_STYLE_DESIGNER
 FormatControl SID_FM_CTL_PROPERTIES
 FormatForm SID_FM_PROPERTIES
+FormatChangeCaseToSentence .uno:ChangeCaseToSentenceCase
+FormatChangeCaseCapitalizeEveryWord .uno:ChangeCaseToTitleCase
+FormatChangeCaseToggleCase .uno:ChangeCaseToToggleCase
 FormatChangeCaseUpper .uno:ChangeCaseToUpper
 FormatChangeCaseLower .uno:ChangeCaseToLower
 FormatChangeCaseHalfWidth .uno:ChangeCaseToHalfWidth
@@ -734,13 +737,13 @@ ToolsUpdateAllIndexes FN_UPDATE_TOX
 ToolsBibliographyDatabase SID_COMP_BIBLIOGRAPHY
 ToolsWordCount FN_WORDCOUNT_DIALOG
 TableTableProperties .uno:TableDialog
+ToolsLanguageHyphenation FN_HYPHENATE_OPT_DLG
 
 ' **** WriterWeb
 ToolsPageFormatting FN_REPAGINATE
 
 ' **** Calc
 ToolsSpellcheckAutoCheckCalc SID_AUTOSPELL_CHECK
-ToolsLanguageThesaurusCalc .uno:Thesaurus
 ToolsLanguageHyphenateCalc .uno:Hyphenate
 ToolsDetectiveRemoveAllTraces SID_DETECTIVE_DEL_ALL
 ToolsDetectiveFillMode SID_DETECTIVE_FILLMODE
@@ -766,6 +769,7 @@ ToolsGallery .uno:Gallery
 ToolsEyedropper SID_BMPMASK
 ToolsMediaPlayer .uno:AVMediaPlayer
 ToolsChineseTranslation .uno:ChineseConversion
+ToolsLanguageHyphenationDraw SID_HYPHENATION
 
 ' **** Math
 ToolsSymbolsCatalog SID_SYMBOLS_CATALOGUE

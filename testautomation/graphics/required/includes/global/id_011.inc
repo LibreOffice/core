@@ -45,6 +45,7 @@ testcase tiTextToolbar
 
     '/// open application ///'
     Call hNewDocument
+    Call sSelectEmptyLayout
 
     '/// create a textframe with text ///'
     hTextrahmenErstellen ("This is a Text, which will be formatted in several ways", 20,20,40,80)

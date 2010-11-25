@@ -39,22 +39,40 @@ testcase tBasicVBACompatImportEnabled()
     
     ' This test case is based on the use cases provided in issue #i88690
     ' Spec: http://specs.openoffice.org/appwide/options_settings/Option_Dialog.odt
-    
-    dim cFile as string : cFile = "vba-test.xls"
+
+    ' Depending on the mode of macro import we have differtent basic libraries listed
+    const NODE_COUNT = 78
+
+    const DOCUMENT_POSITION_OFFSET = -7
+
+    const IMPORT_EXCEL_MACROS = TRUE
+    const EXEC_EXCEL_MACROS   = TRUE
+
+    const DOCUMENT_NAME = "vba-test.xls"
+    const MATCH_NONE    = 0
+    const MATCH_EXACT   = 1
+    const MATCH_PARTLY  = 2
     
     dim cTestFile as string
-        cTestFile = gTesttoolPath & "framework/optional/input/vba-compat/" & cFile
+        cTestFile = gTesttoolPath & "framework/optional/input/vba-compat/" & DOCUMENT_NAME
         
     dim cNodeCount as integer
     
-    ' note that index 0 and 1 are ommitted intentionally
-    dim caNodeData( 3 ) as string
-        caNodeData( 2 ) = "Modul1"
-        caNodeData( 3 ) = "Modul2"
-        
-    dim caScripts( 3 ) as string
-        caScripts( 2 ) = "ConcatFct Ende"
-        caScripts( 3 ) = "WriteIt"
+    dim caNodeData( 7 ) as string
+        caNodeData( 0 ) = DOCUMENT_NAME ' The document, not used
+        caNodeData( 1 ) = "Standard"    ' The default library, not used
+        caNodeData( 2 ) = "DieseArbeitsmappe"
+        caNodeData( 3 ) = "Modul1"
+        caNodeData( 4 ) = "Modul2"
+        caNodeData( 5 ) = "Tabelle1"
+        caNodeData( 6 ) = "Tabelle2"
+        caNodeData( 7 ) = "Tabelle3"
+
+    ' These are the scripts belonging to each node above. If multiple scripts exist
+    ' they are separated by spaces. Example: "Modul1" has "ConcatFct" and "Ende" scripts.
+    dim caScripts( 7 ) as string
+        caScripts( 3 ) = "ConcatFct Ende"
+        caScripts( 4 ) = "WriteIt"
         
     dim iCurrentModule as integer  
     dim iCurrentScript as integer
@@ -62,19 +80,10 @@ testcase tBasicVBACompatImportEnabled()
     dim cTempString as string
     dim bFound as boolean  
     
-    ' Depending on the mode of macro import we have differtent basic libraries listed
-    const NODE_COUNT_OOO = 74
-    const NODE_COUNT     = 76
- 
-    const DOCUMENT_POSITION_OFFSET = -3
-    
-    const IMPORT_EXCEL_MACROS = TRUE
-    const EXEC_EXCEL_MACROS   = TRUE
- 
     printlog( "Set macro security to low" )
     hSetMacroSecurityAPI( GC_MACRO_SECURITY_LEVEL_LOW )
     
-    printlog( "Open Tools/Options" )
+    printlog( "Open Tools/Options and set the VBA macro execution mode" )
 
     hSetExcelBasicImportMode( IMPORT_EXCEL_MACROS, EXEC_EXCEL_MACROS )
     
@@ -96,26 +105,13 @@ testcase tBasicVBACompatImportEnabled()
     
     printlog( "Verify position of the document node." )
     MakroAus.select( cNodeCount + DOCUMENT_POSITION_OFFSET )
-    cTempString = MakroAus.getSelText()
-    if ( cTempString <> cFile ) then
-        qaerrorlog( "The filename does not match. File may be read-only." )
-        if ( instr( cTempString, cFile ) > 1 ) then
-            printlog( "Filename is contained in the UI string." )
-            select case ( getAttr( cTestFile ) )
-            case 0 : warnlog( "The file appears to be read-only but it is " & _
-                              "not write-protected on filesystem level." )
-            case 1 : printlog( "The file is read-only on filesystem level. Ok." )
-            case else
-                warnlog( "getAttr() returned unexpected value. 1 or 2 are allowed" )
-                printlog( "RC from getAttr() is: " &  getAttr( cTestFile ) )
-            end select
-        else
-            qaerrorlog( "The document node is not at the expected position." )
-            qaerrorlog( "Object at this position is: " & MakroAus.getSelText() )
-        endif
-    endif
+    select case( hCompareSubStrings( MakroAus.getSelText(), DOCUMENT_NAME  ) )
+    case MATCH_NONE   : warnlog ( "The document is not listed at the expected position" )
+    case MATCH_EXACT  : printlog( "The document is at the expected position and writable" )
+    case MATCH_PARTLY : printlog( "The document is at the expected position and write protected" )
+    end select
     
-    for iCurrentModule = 2 to 3
+    for iCurrentModule = 2 to 7
     
         printlog( "Look for: " & caNodeData( iCurrentModule ) )
         

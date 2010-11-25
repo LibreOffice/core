@@ -86,8 +86,11 @@ public class ChXChartAxis extends TestCase {
     * Disposes Chart document.
     */
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
-        log.println( "    closing xChartDoc " );
-        util.DesktopTools.closeDoc(xChartDoc);
+        if( xChartDoc!=null ) {
+            log.println( "    closing xChartDoc" );
+            util.DesktopTools.closeDoc(xChartDoc);
+            xChartDoc = null;
+        }
     }
 
     /**

@@ -78,69 +78,73 @@ testcase tFormatStylist1
     Dim xSize%
     Dim ySize%
 
-	printlog "- Format / Stylist : all methods with Navigator as window"
-	printlog "New writerdocument"
-	Call hNewDocument
-	printlog "  - Call Stylist with F11"
-	printlog "Call stylist with <F11> aand proof all windowmethods at stylist"
-	Call wTypeKeys "<F11>"
-	Kontext "Stylist"
-	if Stylist.NotExists then
-      	Warnlog "No Stylist with <F11>"
-		FormatStylist
-	end if
-	xPos = Stylist.GetPosX
-	yPos = Stylist.GetPosY
-	xSize% = Stylist.GetSizeX
-	ySize% = Stylist.GetSizeY
+    printlog "- Format / Stylist : all methods with Navigator as window"
+    printlog "New writerdocument"
+    Call hNewDocument
+    printlog "  - Call Stylist with F11"
+    printlog "Call stylist with <F11> aand proof all windowmethods at stylist"
+    if lcase(gPlatform) = "osx" then
+        call hTypekeys "<mod1 t>"
+    else
+        Call wTypeKeys "<F11>"
+    end if
+    Kontext "Stylist"
+    if Stylist.NotExists then
+        Warnlog "No Stylist with <F11>"
+        FormatStylist
+    end if
+    xPos = Stylist.GetPosX
+    yPos = Stylist.GetPosY
+    xSize% = Stylist.GetSizeX
+    ySize% = Stylist.GetSizeY
 
-	printlog "  - move Stylist"
-	Stylist.Move 10, 10
-	Sleep 1
-	Stylist.Move 300, 400
-	Sleep 1
-	Stylist.Move 590, 790
-	Sleep 1
-	Stylist.Move xPos, yPos
-	Sleep 1
+    printlog "  - move Stylist"
+    Stylist.Move 10, 10
+    Sleep 1
+    Stylist.Move 300, 400
+    Sleep 1
+    Stylist.Move 590, 790
+    Sleep 1
+    Stylist.Move xPos, yPos
+    Sleep 1
 
-	printlog "  - size Stylist"
-	try
-		Stylist.Size 300, 400
-	catch
-		Warnlog "Sizen Stylist doesn't work.. see #i32449"
-	endcatch	
-	Sleep 1
-	try
-		Stylist.Size xSize%, ySize%
-	catch
-		Warnlog "Sizen Stylist doesn't work.. see #i32449"
-	endcatch
-	Sleep 1
+    printlog "  - size Stylist"
+    try
+        Stylist.Size 300, 400
+    catch
+        Warnlog "Sizen Stylist doesn't work.. see #i32449"
+    endcatch    
+    Sleep 1
+    try
+        Stylist.Size xSize%, ySize%
+    catch
+        Warnlog "Sizen Stylist doesn't work.. see #i32449"
+    endcatch
+    Sleep 1
 
-	printlog "  - close Stylist and reopen ( has to be the same size )"
-	xPos = Stylist.GetPosX
-	yPos = Stylist.GetPosY
-	xSize% = Stylist.GetSizeX
-	ySize% = Stylist.GetSizeY
-	FormatStylist
-	Sleep 1
-	FormatStylist
-	if xPos <> Stylist.GetPosX then Warnlog "x-Pos. has been changed : Not -> "+ xPos + "  but -> "+ Stylist.GetPosX
-	if yPos <> Stylist.GetPosY then Warnlog "y-Pos. has been changed : Not -> "+ yPos + "  but -> "+ Stylist.GetPosY
-	if xSize% <> Stylist.GetSizeX then Warnlog "x-Size has been changed : Not -> "+ xSize% + "  but -> "+ Stylist.GetSizeX
-	if ySize% <> Stylist.GetSizeY then Warnlog "y-Size has been changed : Not -> "+ ySize% + "  but -> "+ Stylist.GetSizeY
+    printlog "  - close Stylist and reopen ( has to be the same size )"
+    xPos = Stylist.GetPosX
+    yPos = Stylist.GetPosY
+    xSize% = Stylist.GetSizeX
+    ySize% = Stylist.GetSizeY
+    FormatStylist
+    Sleep 1
+    FormatStylist
+    if xPos <> Stylist.GetPosX then Warnlog "x-Pos. has been changed : Not -> "+ xPos + "  but -> "+ Stylist.GetPosX
+    if yPos <> Stylist.GetPosY then Warnlog "y-Pos. has been changed : Not -> "+ yPos + "  but -> "+ Stylist.GetPosY
+    if xSize% <> Stylist.GetSizeX then Warnlog "x-Size has been changed : Not -> "+ xSize% + "  but -> "+ Stylist.GetSizeX
+    if ySize% <> Stylist.GetSizeY then Warnlog "y-Size has been changed : Not -> "+ ySize% + "  but -> "+ Stylist.GetSizeY
 
-	printlog "  - dock Stylist"
-	Stylist.Dock
-	Sleep 1
-	if NOT Stylist.IsDocked then Warnlog "Stylist has not been docked in"
-	Stylist.Undock
-	Sleep 1
+    printlog "  - dock Stylist"
+    Stylist.Dock
+    Sleep 1
+    if NOT Stylist.IsDocked then Warnlog "Stylist has not been docked in"
+    Stylist.Undock
+    Sleep 1
 
-	Stylist.Close
-	printlog "Close document"
-	Call hCloseDocument
+    Stylist.Close
+    printlog "Close document"
+    Call hCloseDocument
 
 endcase
 
@@ -152,64 +156,68 @@ testcase tFormatStylist2
     Dim xSize%
     Dim ySize%
 
-	printlog "- Format/Stylist : Methods from Stylist as Window between more than one document"
-	printlog " New document"
-	Call hNewDocument
-	printlog "check all methods of Stylist as Window between more than one document"
-	Call wTypeKeys "Test the stylist functions"
-	printlog "  - Call Stylist in first document and check in a second document"
-	Sleep 2
-	Kontext "Stylist"
-	If Not Stylist.Exists then FormatStylist
-	Sleep 2
-	Call hNewDocument
-	Call wTypeKeys "Test the stylist functions"
-	Sleep 2
-	Kontext "Stylist"
-	if Stylist.NotExists then Warnlog "No Stylist in new document"
+    printlog "- Format/Stylist : Methods from Stylist as Window between more than one document"
+    printlog " New document"
+    Call hNewDocument
+    printlog "check all methods of Stylist as Window between more than one document"
+    Call wTypeKeys "Test the stylist functions"
+    printlog "  - Call Stylist in first document and check in a second document"
+    Sleep 2
+    Kontext "Stylist"
+    If Not Stylist.Exists then FormatStylist
+    Sleep 2
+    Call hNewDocument
+    Call wTypeKeys "Test the stylist functions"
+    Sleep 2
+    Kontext "Stylist"
+    if Stylist.NotExists then Warnlog "No Stylist in new document"
 
-	printlog "  - Close all documents and reopen"
-	Sleep 2
-	Call hCloseDocument
-	Sleep 2
-	Call hCloseDocument
-	Sleep 2
-	Call hNewDocument
-	Sleep 2
-	Call wTypeKeys "Test the stylist functions"
-	Kontext "Stylist"
-	if Stylist.NotExists then Warnlog "No Stylist in a new document"
+    printlog "  - Close all documents and reopen"
+    Sleep 2
+    Call hCloseDocument
+    Sleep 2
+    Call hCloseDocument
+    Sleep 2
+    Call hNewDocument
+    Sleep 2
+    Call wTypeKeys "Test the stylist functions"
+    Kontext "Stylist"
+    if Stylist.NotExists then Warnlog "No Stylist in a new document"
 
-	printlog "  - Dock Stylist in first document and check in a new if docked"
-	Sleep 2
-	Stylist.Dock
-	Sleep 1
-	Call hNewDocument
-	Call wTypeKeys "Test the stylist functions"
-	Kontext "Stylist"
-	if NOT Stylist.IsDocked then Warnlog "Stylist is not docked in new document"
-	
-	printlog "  - Close all documents, reopen one and check docked Stylist"
-	Call hCloseDocument
-	Sleep 2
-	Call hCloseDocument
-	Sleep 2
-	Call hNewDocument
-	Kontext "Stylist"
-	if NOT Stylist.IsDocked then Warnlog "Stylist is not docked in new document"
-	
-	printlog "  - Close Stylist with <F11>"
-	Stylist.Undock
-	Sleep 1
-	Call wTypeKeys "<F11>"
-	Kontext "Stylist"
-	if NOT Stylist.NotExists then
-		Warnlog "Stylist is still open"
-		Stylist.Close
-	end if
-	printlog "Close document"
-	Call hCloseDocument
-	
+    printlog "  - Dock Stylist in first document and check in a new if docked"
+    Sleep 2
+    Stylist.Dock
+    Sleep 1
+    Call hNewDocument
+    Call wTypeKeys "Test the stylist functions"
+    Kontext "Stylist"
+    if NOT Stylist.IsDocked then Warnlog "Stylist is not docked in new document"
+    
+    printlog "  - Close all documents, reopen one and check docked Stylist"
+    Call hCloseDocument
+    Sleep 2
+    Call hCloseDocument
+    Sleep 2
+    Call hNewDocument
+    Kontext "Stylist"
+    if NOT Stylist.IsDocked then Warnlog "Stylist is not docked in new document"
+    
+    printlog "  - Close Stylist with <F11>"
+    Stylist.Undock
+    Sleep 1
+    if lcase(gPlatform) = "osx" then
+        call hTypekeys "<mod1 t>"
+    else
+        Call wTypeKeys "<F11>"
+    end if
+    Kontext "Stylist"
+    if NOT Stylist.NotExists then
+        Warnlog "Stylist is still open"
+        Stylist.Close
+    end if
+    printlog "Close document"
+    Call hCloseDocument
+    
 endcase
 
 ' **********************************************************************
@@ -295,7 +303,7 @@ testcase tFormatStylist3
         Sleep 1
     next i
     Stylist.Close
-	printlog "Close document"
+    printlog "Close document"
     Call hCloseDocument
 endcase
 
@@ -307,31 +315,31 @@ testcase tFormatStylist4
     Dim NeuerWert$
 
     printlog "- Format / Stylist : check created Styles"
-	printlog "New writerdocument"
-	Call hNewDocument
-	printlog "   - create Paragraph Style in Stylist"
-	Call wStyleCreate ( "ATesttool", "Paragraph", true )
-	Kontext "Stylist"
-	printlog "Check if Style has been added in stylist"
+    printlog "New writerdocument"
+    Call hNewDocument
+    printlog "   - create Paragraph Style in Stylist"
+    Call wStyleCreate ( "ATesttool", "Paragraph", true )
+    Kontext "Stylist"
+    printlog "Check if Style has been added in stylist"
     if wStyleSelect ( "ATesttool", "Paragraph" ) = false then Warnlog "Paragraph Style has not been found"
 
-	printlog "   - Create Character Style in Stylist"
-	Call wStyleCreate ( "BTesttool", "Character", true )
-	if wStyleSelect ( "BTesttool", "Character" ) = false then Warnlog "Character Style has not been found!"
-	printlog "   - Create Frame Style in Stylist"
+    printlog "   - Create Character Style in Stylist"
+    Call wStyleCreate ( "BTesttool", "Character", true )
+    if wStyleSelect ( "BTesttool", "Character" ) = false then Warnlog "Character Style has not been found!"
+    printlog "   - Create Frame Style in Stylist"
     Call wStyleCreate ( "CTesttool", "Frame", true )
     if wStyleSelect ( "CTesttool", "Frame" ) = false then Warnlog "Frame Style has not been found!"
 
-	printlog "   - Create Page Style in Stylist"
-	Call wStyleCreate ( "DTesttool", "Page", true )
-	if wStyleSelect ( "DTesttool", "Page" ) = false then Warnlog "Page Style has not been found"
+    printlog "   - Create Page Style in Stylist"
+    Call wStyleCreate ( "DTesttool", "Page", true )
+    if wStyleSelect ( "DTesttool", "Page" ) = false then Warnlog "Page Style has not been found"
 
-	printlog "   - creating Styles should not have been affecting to new documents"
+    printlog "   - creating Styles should not have been affecting to new documents"
     ' To avoid focus problems on unix first close stylist
-   	Kontext "Stylist"
+    Kontext "Stylist"
     if Stylist.Exists then FormatStylist   
-	Call hNewDocument
-   	Kontext "Stylist"
+    Call hNewDocument
+    Kontext "Stylist"
     if Not Stylist.Exists then FormatStylist
 
     if wStyleSelect ( "ATesttool", "Paragraph" ) = true then Warnlog "Paragraph Style has been found in new document"
@@ -351,32 +359,32 @@ testcase tFormatStylist5
     Dim bStyleFound as boolean
 
     printlog "- Format / Stylist : select Style"
-	printlog "New writerdocument"
-	if bAsianLan = True then
-    	printlog "- Not in Asian languages!"
-		goto endsub
-	end if
-	Call hNewDocument
-	Call wTypeKeys "Dies ist ein formatierter Text <Shift Home>"
-	printlog "  - format Text"
-	FormatCharacter
-	Kontext
-	Active.SetPage TabFontEffects
-	Kontext "TabFontEffects"
-	StrikeThrough.Select 2
-  	Outline.Check
-	TabFontEffects.OK
+    printlog "New writerdocument"
+    if bAsianLan = True then
+        printlog "- Not in Asian languages!"
+        goto endsub
+    end if
+    Call hNewDocument
+    Call wTypeKeys "Dies ist ein formatierter Text <Shift Home>"
+    printlog "  - format Text"
+    FormatCharacter
+    Kontext
+    Active.SetPage TabFontEffects
+    Kontext "TabFontEffects"
+    StrikeThrough.Select 2
+    Outline.Check
+    TabFontEffects.OK
 
-	printlog "  - adjust to Standard-Format through the Stylist"
-	printlog "adjust to Standard-Format through the Stylist"
-	FormatStylist
-	Kontext "Stylist"
-	if Stylist.NotExists then FormatStylist
-  	'Get name for 'default' template
-	Kontext "TextObjectbar"
-	SuchMal = Vorlage.GetSelText
-	printlog "Using " & SuchMal & " as 'default'" 
-	Kontext "Stylist"
+    printlog "  - adjust to Standard-Format through the Stylist"
+    printlog "adjust to Standard-Format through the Stylist"
+    FormatStylist
+    Kontext "Stylist"
+    if Stylist.NotExists then FormatStylist
+    'Get name for 'default' template
+    Kontext "TextObjectbar"
+    SuchMal = Vorlage.GetSelText
+    printlog "Using " & SuchMal & " as 'default'" 
+    Kontext "Stylist"
    
     Vorlagenliste.TypeKeys "<Home>"
     bStyleFound = false
@@ -394,19 +402,19 @@ testcase tFormatStylist5
         Warnlog "Style: " & Suchmal & " has not been found in Stylist"
         Call hCloseDocument
         goto endsub
-    end if   	
+    end if      
 
-	printlog "  - check format"
-	FormatCharacter
-	Kontext
-	Active.SetPage TabFontEffects
-	Kontext "TabFontEffects"
-	if StrikeThrough.GetSelIndex = 2 then Warnlog "Wrong entry selected in StrikeThrough"
-	if Outline.IsChecked then Warnlog "Format Outline is still checked"
-	TabFontEffects.OK
+    printlog "  - check format"
+    FormatCharacter
+    Kontext
+    Active.SetPage TabFontEffects
+    Kontext "TabFontEffects"
+    if StrikeThrough.GetSelIndex = 2 then Warnlog "Wrong entry selected in StrikeThrough"
+    if Outline.IsChecked then Warnlog "Format Outline is still checked"
+    TabFontEffects.OK
 
-	printlog "Close document"
-	Call hCloseDocument
+    printlog "Close document"
+    Call hCloseDocument
 endcase
 
 ' **********************************************************************
@@ -463,7 +471,7 @@ testcase tFormatStylist6
         TBGestalter.Click ZeichenVorlagen
         if Vorlagenliste.GetSeltext <> "Testtool" then  'Go find the entry.
             Vorlagenliste.TypeKeys "<Home>"
-	    For i = 1 to 100
+        For i = 1 to 100
                 Vorlagenliste.TypeKeys "<Down>"
                 if Vorlagenliste.GetSeltext = "Testtool" then  'Found it!
                     i = 102
@@ -483,7 +491,7 @@ testcase tFormatStylist6
             if NOT Shadow.IsChecked then Warnlog "Shadow is not checked anymore"
             if StrikeThrough.GetSelIndex <> 2 then Warnlog "Wrong entry selection in StrikeThrough"
             if Overline.GetSelIndex <> 2 then Warnlog "Overline is not checked anymore"
-	    if OverlineColor.GetSelIndex <> 6 then Warnlog "Wrong Overline Color selected"
+        if OverlineColor.GetSelIndex <> 6 then Warnlog "Wrong Overline Color selected"
             if NOT Outline.IsChecked then Warnlog "Outline is not checked anymore"
             if Effects.GetSelIndex <> 3 then Warnlog "Wrong effect selected"
             if NOT Blinking.IsChecked then Warnlog "Blinking is not checked anymore"
@@ -542,10 +550,10 @@ testcase tFormatStylist7
                     i = 102
                 end if
             next i
-	    if i = 101 then
-	       warnlog "No Testtool -Stylist found. Check if new stylists can be created. Test ends."
-	       goto endsub
-	    end if
+        if i = 101 then
+           warnlog "No Testtool -Stylist found. Check if new stylists can be created. Test ends."
+           goto endsub
+        end if
         end if
         Vorlagenliste.TypeKeys "<SHIFT F10>"  'Open ContextMenu
         Sleep 1
@@ -573,7 +581,7 @@ testcase tFormatStylist7
         TBGestalter.Click ZeichenVorlagen
         
         if Vorlagenliste.GetSeltext <> "Testtool" then
-	    Vorlagenliste.TypeKeys "<Home>"
+        Vorlagenliste.TypeKeys "<Home>"
             For i = 1 to 100
                 Vorlagenliste.TypeKeys "<Down>"
                 if Vorlagenliste.GetSeltext = "Testtool" then 'Found it!
@@ -614,17 +622,17 @@ testcase tAssigningStyles1
     Dim j as integer
     Dim bStyleInList as boolean
 
-	printlog "UI and Strings check"
+    printlog "UI and Strings check"
     Call hNewDocument
-	printlog "Open a new writerdocument"
-	printlog "Check if the following strings and only those strings are present:"
-	printlog "Clear formatting"
-	printlog "Heading 1"
-	printlog "Heading 2"
-	printlog "Heading 3"
-	printlog "Default"
-	printlog "Text body"
-	printlog "More..."
+    printlog "Open a new writerdocument"
+    printlog "Check if the following strings and only those strings are present:"
+    printlog "Clear formatting"
+    printlog "Heading 1"
+    printlog "Heading 2"
+    printlog "Heading 3"
+    printlog "Default"
+    printlog "Text body"
+    printlog "More..."
     Select Case iSprache
         Case 01 : sStyles = Array("Clear formatting", "Default", "Heading 1", "Heading 2", "Heading 3", "Text body", "More...")
         Case 07 : sStyles = Array("Отменить форматирование", "Базовый", "Заголовок 1", "Заголовок 2", "Заголовок 3", "Основной текст", "Дополнительно...")
@@ -690,17 +698,17 @@ testcase tAssigningStyles2
     Dim sTemp as string
 
     printlog "- Apply Style"
-	printlog "New writerdocument"
+    printlog "New writerdocument"
     Call hNewDocument
-	printlog "Insert dummytext"
+    printlog "Insert dummytext"
     if wBlindtextEinfuegen = false then
         Call hCloseDocument
         exit sub
     end if
     
-	printlog "Select whole dummytext"
+    printlog "Select whole dummytext"
     Call wTypeKeys "<Mod1 A>"
-	printlog "Apply style 'Heading 1' through Styles & Formatting combobox"
+    printlog "Apply style 'Heading 1' through Styles & Formatting combobox"
     Kontext "Textobjectbar"
     for i = 1 to Vorlage.GetItemCount
         Vorlage.Select i
@@ -711,7 +719,7 @@ testcase tAssigningStyles2
         end if
     next i
 
-	printlog "Check if style has been applied to paragraph"
+    printlog "Check if style has been applied to paragraph"
     Call wTypeKeys "<Mod1 Home><End>"
     Call wTypeKeys "<Left>", 2
     
@@ -740,17 +748,17 @@ testcase tAssigningStyles3
     Call wTypeKeys "<Mod1 A>"
     printlog "Format / Character" 
     FormatCharacter
-	Kontext
-	Active.Setpage TabFont
-	Kontext "TabFont" 
+    Kontext
+    Active.Setpage TabFont
+    Kontext "TabFont" 
     printlog "Apply first font in list and select 2nd Typeface"
-	if gAsianSup = True then
-		FontWest.Select 1
+    if gAsianSup = True then
+        FontWest.Select 1
         StyleWest.Select 2
-	else
-		Font.Select 1
+    else
+        Font.Select 1
         Style.Select 1
-	end if
+    end if
     TabFont.Ok
     
     printlog "Enter 'MyStyle' in Stylelistbox"
@@ -838,7 +846,7 @@ endcase
 testcase tAssigningStyles5
 
     printlog "- Clear formatting: whole paragraph with hard formatting of some characters"
-	printlog " - 1. Cursor outside of hard formatted string"
+    printlog " - 1. Cursor outside of hard formatted string"
     printlog "Open a new writer document"
     Call hNewDocument
     printlog "Insert a dummytext"
@@ -848,28 +856,28 @@ testcase tAssigningStyles5
     end if
 
     printlog "Highlight first line in dummy text"
-	Call wTypeKeys "<Mod1 Home>"
-	Call wTypeKeys "<Shift End>" 
-	
+    Call wTypeKeys "<Mod1 Home>"
+    Call wTypeKeys "<Shift End>" 
+    
     printlog "Format / Bold"
-	Kontext "TextObjectbar"
+    Kontext "TextObjectbar"
     if Not TextObjectbar.Exists then Call hToolbarSelect ( "FORMATTING", true )
-	Fett.Click
-	Wait 500
+    Fett.Click
+    Wait 500
 
     printlog "Set cursor outside of bold formatted text"
-	Call wTypeKeys "<Mod1 Home>"
-	Call wTypeKeys "<Down><Right>"
-	
+    Call wTypeKeys "<Mod1 Home>"
+    Call wTypeKeys "<Down><Right>"
+    
     printlog "Select 'Clear Formatting' in Style-Listbox"
-	Kontext "Textobjectbar"
+    Kontext "Textobjectbar"
     Vorlage.Select 1
     Vorlage.TypeKeys "<Return>"
     wait 500
 
     printlog "Check that first line is still bold and has not been reset"
-	Call wTypeKeys "<Mod1 Home>"
-	Call wTypeKeys "<Right>"
+    Call wTypeKeys "<Mod1 Home>"
+    Call wTypeKeys "<Right>"
 
     Kontext "TextObjectbar"
     if Fett.Getstate(2) = 0 then
@@ -877,7 +885,7 @@ testcase tAssigningStyles5
     end if
 
     printlog "Close document"
-	Call hCloseDocument
+    Call hCloseDocument
 endcase
 
 ' **********************************************************************
@@ -887,7 +895,7 @@ testcase tAssigningStyles6
     Dim iStandard as integer
 
     printlog "- Clear formatting: whole paragraph with hard formatting of some characters"
-	printlog " - 2. Cursor inside of hard formatted string"  
+    printlog " - 2. Cursor inside of hard formatted string"  
     printlog "Open a new writer document"
     Call hNewDocument
     printlog "Insert a dummytext"
@@ -897,34 +905,34 @@ testcase tAssigningStyles6
     end if
 
     printlog "Highlight first line in dummy text"
-	Call wTypeKeys "<Mod1 Home>"
-	Call wTypeKeys "<Shift End>" 
-	
+    Call wTypeKeys "<Mod1 Home>"
+    Call wTypeKeys "<Shift End>" 
+    
     printlog "Format / Bold"
-	Kontext "TextObjectbar"
+    Kontext "TextObjectbar"
     if Not TextObjectbar.Exists then Call hToolbarSelect ( "FORMATTING", true )
-	Fett.Click
-	Wait 500
+    Fett.Click
+    Wait 500
 
     printlog "Point cursor to first highlighted word of bold formatted text"
-	Call wTypeKeys "<Mod1 Home>"	
-	Call wTypeKeys "<Right>"
-	
+    Call wTypeKeys "<Mod1 Home>"    
+    Call wTypeKeys "<Right>"
+    
     printlog "Select 'Format / Default Formatting' in Style-Listbox"
-	FormatDefaultWriter
+    FormatDefaultWriter
     wait 500
 
     printlog "first highlighted word should be set to 'Standard'"
-	Call wTypeKeys "<Mod1 Home>"
-	Call wTypeKeys "<Right>"
+    Call wTypeKeys "<Mod1 Home>"
+    Call wTypeKeys "<Right>"
     Kontext "TextObjectbar"
     if Fett.Getstate(2) = 1 then
         Warnlog "Style 'Bold' has not been reset!"
     end if
-	
+    
     printlog "Check that rest of first line is still bold and has not been reset"
-	Call wTypeKeys "<Mod1 Home>"
-	Call wTypeKeys "<End><Left>"
+    Call wTypeKeys "<Mod1 Home>"
+    Call wTypeKeys "<End><Left>"
 
     Kontext "TextObjectbar"
     if Fett.Getstate(2) = 1 then
@@ -932,7 +940,7 @@ testcase tAssigningStyles6
     end if
 
     printlog "Close document"
-	Call hCloseDocument
+    Call hCloseDocument
 endcase
 
 ' **********************************************************************
@@ -942,27 +950,27 @@ testcase tAssigningStyles7
     printlog "More ..."  
     printlog "Open a new writer document"
     Call hNewDocument
-	
+    
     printlog "Select 'More...' in Style-Listbox"
-	Kontext "Textobjectbar"
+    Kontext "Textobjectbar"
     Vorlage.Select Vorlage.GetItemCount
     Vorlage.TypeKeys "<Return>"
     wait 500
 
     printlog "The Stylist should have been opened"
-	Kontext "Stylist"
-	if Not Stylist.Exists then
-		Warnlog "'Styles and Formatting' doesn't open if 'More...' is selected in Style-Listbox"
-	else
+    Kontext "Stylist"
+    if Not Stylist.Exists then
+        Warnlog "'Styles and Formatting' doesn't open if 'More...' is selected in Style-Listbox"
+    else
         printlog "In Style group listbox 'Automatic' should be selected"
-		if Gruppenliste.GetSelIndex <> 5 then
-			Warnlog "Seems 'Automatic' is not selected per default in 'Styles and Formatting'"
-		end if
-		Stylist.Close
-	end if
+        if Gruppenliste.GetSelIndex <> 5 then
+            Warnlog "Seems 'Automatic' is not selected per default in 'Styles and Formatting'"
+        end if
+        Stylist.Close
+    end if
 
     printlog "Close document"
-	Call hCloseDocument
+    Call hCloseDocument
 endcase
 
 ' **********************************************************************

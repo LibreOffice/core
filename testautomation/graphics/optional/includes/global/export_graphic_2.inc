@@ -146,7 +146,7 @@ testcase tSVM
     hFileOpen (sDocument)
     sleep (10)
 
-    sMakeReadOnlyDocumentEditable
+    call fMakeDocumentWritable
 
     hTypeKeys ("<escape><tab>")
     fGetSizeXY sx1, sY, TRUE
@@ -763,14 +763,8 @@ qaerrorlog
    endif
 
    ' check if the document is writable
-    if fIsDocumentWritable = false then
-        ' make the document writable and check if it's succesfull
-        if fMakeDocumentWritable = false then
-            warnlog "The document can't be make writeable. Test stopped."
-            goto endsub
-        endif
-    endif
-
+   call fMakeDocumentWritable
+    
    hTypeKeys ("<escape><tab>")
    fGetSizeXY sx1, sy, TRUE
    if hCallExport (OutputGrafikTBO + "1" , "BMP - Windows Bitmap (.bmp)", TRUE ) = TRUE then
@@ -948,9 +942,8 @@ testcase tEMF
         Filterauswahl.Cancel
         goto endsub
     endif
-   printlog "making doc editable if it is readonly"
-   sMakeReadOnlyDocumentEditable
-
+   printlog "making doc editable if it is readonly"   
+    call fMakeDocumentWritable
     hTypeKeys ("<escape><tab>")
     fGetSizeXY sx1, sY, TRUE
     if hCallExport (OutputGrafikTBO & "1" , sFilter, TRUE ) = TRUE then
@@ -1139,7 +1132,7 @@ testcase tMET
     sleep (10)
    
     printlog "making doc editable if it is readonly"
-    sMakeReadOnlyDocumentEditable
+    call fMakeDocumentWritable
 
     hTypeKeys ("<escape><tab>")
     fGetSizeXY sx1, sY, TRUE
@@ -1341,7 +1334,7 @@ testcase tWMF
     sleep (10)
    
     printlog "making doc editable if it is readonly"
-    sMakeReadOnlyDocumentEditable
+    call fMakeDocumentWritable
 
     hTypeKeys ("<escape><tab>")
     fGetSizeXY sx1, sY, TRUE

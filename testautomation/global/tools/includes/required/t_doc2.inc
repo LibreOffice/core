@@ -121,6 +121,7 @@ function sMakeReadOnlyDocumentEditable() as boolean
     ' no action was required (that is: Document was not read-only)
 
     dim iTry as integer
+    dim iWait as integer
     dim rc as integer
     const CFN = "sMakeReadOnlyDocumentEditable::"
     
@@ -143,8 +144,27 @@ function sMakeReadOnlyDocumentEditable() as boolean
         wait( 1000 )
     endif
     ' ==========  Workaround end  ==========
-    
     Kontext "Standardbar"
+    iWait = 0
+    Do
+        if ( Bearbeiten.IsEnabled() ) then
+            try
+                if Bearbeiten.getState( 2 ) = 0 then
+                    exit do
+                endif
+            catch
+                if ( VERBOSE ) then printlog "Attempt " & iWait & " to make document readable failed"
+                iWait = iWait + 1
+                wait ( 1000 )
+            endcatch
+        else
+            if ( VERBOSE ) then printlog "Attempt " & iWait & " to make document readable failed"
+            iWait = iWait + 1
+            wait ( 1000 )
+        end if
+        if iWait >= 5 then exit do
+    Loop
+
     if ( Bearbeiten.IsEnabled() ) then
         
         if ( Bearbeiten.getState( 2 ) = 0 ) then

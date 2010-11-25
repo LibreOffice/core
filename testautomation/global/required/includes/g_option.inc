@@ -502,21 +502,21 @@ testcase tToolsOptionsLanguageSettings
                 Optionen.TypeKeys "<Down>", 6
                 WaitSlot() ' similar effect as a NOOP
                 OptionenBearbeiten.Click
-                Kontext "SilbentrennungOptionen"
-                Call DialogTest ( SilbentrennungOptionen )
-                SilbentrennungOptionen.Cancel
+                Kontext "HyphenationOptions"
+                Call DialogTest ( HyphenationOptions )
+                HyphenationOptions.Cancel
                 Kontext "TabLinguistik"
                 Optionen.TypeKeys "<Down>"
                 OptionenBearbeiten.Click
-                Kontext "SilbentrennungOptionen"
-                Call DialogTest ( SilbentrennungOptionen )
-                SilbentrennungOptionen.Cancel
+                Kontext "HyphenationOptions"
+                Call DialogTest ( HyphenationOptions )
+                HyphenationOptions.Cancel
                 Kontext "TabLinguistik"
                 Optionen.TypeKeys "<Down>"
                 OptionenBearbeiten.Click
-                Kontext "SilbentrennungOptionen"
-                Call DialogTest ( SilbentrennungOptionen )
-                SilbentrennungOptionen.Cancel
+                Kontext "HyphenationOptions"
+                Call DialogTest ( HyphenationOptions )
+                HyphenationOptions.Cancel
             endif
         case 3,5 :
             try
