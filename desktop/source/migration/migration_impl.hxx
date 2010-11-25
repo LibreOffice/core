@@ -207,6 +207,7 @@ private:
 
     // functions to control the migration process
     bool          readAvailableMigrations(migrations_available&);
+    bool          alreadyMigrated();
     migrations_vr readMigrationSteps(const ::rtl::OUString& rMigrationName);
     sal_Int32     findPreferedMigrationProcess(const migrations_available&);
     install_info  findInstallation(const strings_v& rVersions);
@@ -235,12 +236,12 @@ private:
     void refresh();
 
     void setMigrationCompleted();
-    sal_Bool checkMigrationCompleted();
+    bool checkMigrationCompleted();
 
 public:
     MigrationImpl(const NS_UNO::Reference< NS_CSS::lang::XMultiServiceFactory >&);
     ~MigrationImpl();
-    sal_Bool initializeMigration();
+    bool initializeMigration();
     sal_Bool doMigration();
     rtl::OUString getOldVersionName();
 };
