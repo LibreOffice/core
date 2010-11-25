@@ -36,7 +36,7 @@ TARGET=odt
 
 # --- Files --------------------------------------------------------
 
-all: $(MISC)$/LICENSE.odt
+all: $(MISC)$/LICENSE.odt $(MISC)$/CREDITS.odt
 
 # --- Targets ------------------------------------------------------
 
@@ -44,3 +44,5 @@ all: $(MISC)$/LICENSE.odt
 
 $(MISC)$/LICENSE.odt: LICENSE.odt
     $(COPY) LICENSE.odt $@
+$(MISC)$/CREDITS.odt: CREDITS.odt
+    $(COPY) CREDITS.odt $@

@@ -27,6 +27,7 @@ mkdir: %_DEST%\bin%_EXT%\ure
 ..\%__SRC%\misc\THIRDPARTYLICENSEREADME.html %_DEST%\bin%_EXT%\THIRDPARTYLICENSEREADME.html
 
 ..\%__SRC%\misc\LICENSE.odt %_DEST%\bin%_EXT%\LICENSE.odt
+..\%__SRC%\misc\CREDITS.odt %_DEST%\bin%_EXT%\CREDITS.odt
 
 dos: echo =====================================================================
 dos: echo Delivering README files
