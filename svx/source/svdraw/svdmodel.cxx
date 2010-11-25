@@ -2113,6 +2113,11 @@ void SdrModel::SetSdrUndoManager( SfxUndoManager* pUndoManager )
     mpImpl->mpUndoManager = pUndoManager;
 }
 
+SfxUndoManager* SdrModel::GetSdrUndoManager() const
+{
+    return mpImpl->mpUndoManager;
+}
+
 SdrUndoFactory& SdrModel::GetSdrUndoFactory() const
 {
     if( !mpImpl->mpUndoFactory )
