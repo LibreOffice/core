@@ -46,6 +46,14 @@ End
 
 #ifndef MACOSX
 
+#ifdef WNT
+Directory gid_Dir_Sdkoo_Root
+    ParentID = PREDEFINED_PROGDIR;
+    HostName = "${PRODUCTNAME}_${PRODUCTVERSION}_${POSTVERSIONEXTENSION}";
+    Styles = (OFFICEDIRECTORY, ISINSTALLLOCATION);
+End
+#endif
+
 #ifndef WNT
 Directory gid_Dir_Ooo_Openofficeorg_Sdk
     ParentID = PREDEFINED_PROGDIR;
@@ -77,7 +85,7 @@ Directory gid_Dir_Basis_Sdk
     DosName = "OpenOffice.org${OOOBASEVERSION}_SDK";
 #else
   #if defined WNT
-    ParentID = PREDEFINED_PROGDIR;
+    ParentID = gid_Dir_Sdkoo_Root;
   #else
     ParentID = gid_Dir_Ooo_Basis_Sdk;
   #endif

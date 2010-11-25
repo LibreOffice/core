@@ -156,7 +156,7 @@ $(SLO)/precompiled_ex.% .PHONY:
 
 $(SLO)/%.obj : %.cxx
     @echo $(COMPILE_ECHO_SWITCH) Compiling: $(PRJNAME)/$(PATH_IN_MODULE)/$(COMPILE_ECHO_FILE)
-.IF "$(ENABLE_PCH)"!="" && ( "$(BUILD_SPECIAL)"!="TRUE" )
+.IF "$(ENABLE_PCH)"!=""
 # just a helper var	
     @noop $(assign used_exc_switches=$(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)))
 # cleanup first

@@ -50,18 +50,26 @@ sub put_language_into_name
     my $filename = "";
     my $extension = "";
 
-    if ( $oldname =~ /^\s*(.*)(\..*?)\s*$/ )    # files with extension
+    if ( $oldname =~ /en-US/ )  # files, that contain the language in the file name
     {
-        $filename = $1;
-        $extension = $2;
+        $newname = $oldname;
+        $newname =~ s/en-US/$onelanguage/;
     }
-    else
+    else    # files, that do not contain the language in the file name
     {
-        $filename = $oldname;
-        $extension = "";
-    }
+        if ( $oldname =~ /^\s*(.*)(\..*?)\s*$/ )    # files with extension
+        {
+            $filename = $1;
+            $extension = $2;
+        }
+        else
+        {
+            $filename = $oldname;
+            $extension = "";
+        }
 
-    $newname = $1 . "_" . $onelanguage . $2;
+        $newname = $1 . "_" . $onelanguage . $2;
+    }
 
     return $newname;
 }

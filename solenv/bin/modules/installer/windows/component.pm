@@ -162,6 +162,11 @@ sub get_file_component_directory
         }
 
         $uniquedir = $onedir->{'uniquename'};
+
+        if ( $uniquedir eq $installer::globals::officeinstalldirectory )
+        {
+            $uniquedir = "INSTALLLOCATION";
+        }
     }
 
     $onefile->{'uniquedirname'} = $uniquedir;       # saving it in the file collection
@@ -176,16 +181,7 @@ sub get_file_component_directory
 
 sub get_registry_component_directory
 {
-    my $componentdir = "";
-
-    if ( $installer::globals::officeinstalldirectoryset )
-    {
-        $componentdir = $installer::globals::officeinstalldirectory;
-    }
-    else
-    {
-        $componentdir = "INSTALLLOCATION";
-    }
+    my $componentdir = "INSTALLLOCATION";
 
     return $componentdir;
 }

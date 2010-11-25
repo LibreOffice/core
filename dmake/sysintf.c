@@ -420,7 +420,6 @@ char *ename;
 }
 
 
-
 /*
 ** Set the value of the environment string ename to value.
 **  Returns 0 if success, non-zero if failure
@@ -430,16 +429,23 @@ Write_env_string(ename, value)
 char *ename;
 char *value;
 {
-   char*   p;
-   char*   envstr = DmStrAdd(ename, value, FALSE);
+#if defined(HAVE_SETENV)
 
-   p = envstr+strlen(ename);    /* Don't change this code, DmStrAdd does not */
-   *p++ = '=';          /* add the space if *value is 0, it does    */
-   if( !*value ) *p = '\0'; /* allocate enough memory for one though.   */
+  return( setenv(ename, value, 1) );
 
-   return( putenv(envstr) );
+#else  /* !HAVE_SETENV */
+
+  char*   p;
+  char*   envstr = DmStrAdd(ename, value, FALSE);
+
+  p = envstr+strlen(ename); /* Don't change this code, DmStrAdd does not */
+  *p++ = '=';           /* add the space if *value is 0, it does    */
+  if( !*value ) *p = '\0';  /* allocate enough memory for one though.   */
+
+  return( putenv(envstr) ); /* Possibly leaking 'envstr' */
+
+#endif /* !HAVE_SETENV */
 }
-
 
 
 PUBLIC void

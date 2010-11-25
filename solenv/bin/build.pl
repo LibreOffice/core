@@ -2021,6 +2021,10 @@ sub do_custom_job {
                 $error_code = run_job($job, $module_paths{$module}, $module_job);
             };
         };
+        if ($error_code && $ignore) {
+            push(@ignored_errors, $module_job);
+            $error_code = 0;
+        };
         if ($error_code) {
             $modules_with_errors{$dependencies_hash}++;
             $broken_build{$module} = $error_code;
@@ -2205,7 +2209,6 @@ sub is_output_tree {
     };
     return '';
 };
-
 sub get_tmp_dir {
     my $tmp_dir;
     if( defined($ENV{TMPDIR}) ) {
@@ -2221,7 +2224,6 @@ sub get_tmp_dir {
     };
     return $tmp_dir;
 };
-
 
 sub retrieve_build_list {
     my $module = shift;

@@ -419,6 +419,12 @@ sub create_directory_structure
 
     foreach $dir (@startparents) { create_directory_tree($dir, \%fullpathhash, $targetdir, $dirhash); }
 
+    # Also adding the pathes of the startparents
+    foreach $dir (@startparents)
+    {
+        if ( ! exists($fullpathhash{$dir}) ) { $fullpathhash{$dir} = $targetdir; }
+    }
+
     return \%fullpathhash;
 }
 

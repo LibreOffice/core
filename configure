@@ -309,7 +309,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS EGREP AWK SED LOCAL_SOLENV _solenv UPD SOURCEVERSION build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os GNUTAR OSVERSION PTHREAD_CFLAGS PTHREAD_LIBS ENABLE_CRASHDUMP VC_STANDARD ENABLE_WERROR ENABLE_DEBUG PRODUCT PROFULLSWITCH PROEXT ENABLE_SYMBOLS DISABLE_STRIP ENABLE_CUPS ENABLE_FONTCONFIG TARFILE_LOCATION DO_FETCH_TARBALLS WITH_BINFILTER ENABLE_DIRECTX DISABLE_ACTIVEX DISABLE_ATL ENABLE_RPATH WITH_MYSPELL_DICTS SYSTEM_DICTS DICT_SYSTEM_DIR HYPH_SYSTEM_DIR THES_SYSTEM_DIR WITH_MINGWIN SHELLPATH GCC_HOME CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT COMPATH GCCVER HAVE_LD_BSYMBOLIC_FUNCTIONS ENABLE_PCH NO_HIDS GNUMAKE _cc HAVE_LD_HASH_STYLE PERL MSPDB_PATH COMEX USE_MINGW MIDL_PATH CSC_PATH FRAME_HOME CPP CXX CXXFLAGS ac_ct_CXX CXXCPP SIZEOF_LONG WORDS_BIGENDIAN LFS_CFLAGS ENABLE_VBA VBA_EXTENSION PAM NEW_SHADOW_API PAM_LINK CRYPT_LINK GXX_INCLUDE_PATH MINGW_LIB_INCLUDE_PATH MINGW_BACKWARD_INCLUDE_PATH MINGW_CLIB_DIR MINGW_SHARED_GCCLIB MINGW_GCCLIB_EH MINGW_SHARED_GXXLIB MINGW_GCCDLL MINGW_GXXDLL EXCEPTIONS STLPORT4 STLPORT_VER USE_SYSTEM_STL USE_CCACHE CCACHE HAVE_GCC_VISIBILITY_FEATURE ALLOC BUILD_VER_STRING SOLAR_JAVA JAVAINTERPRETER JAVACOMPILER JAVACISGCJ JAVADOC AWTLIB JAVAAOTCOMPILER JAVA_HOME JDK JAVAFLAGS JAVAIFLAGS DMAKE BUILD_DMAKE EPM DPKG PKGMK BUILD_EPM PKGFORMAT RPM GPERF MINGWCXX ac_ct_MINGWCXX MINGWSTRIP ac_ct_MINGWSTRIP BUILD_UNOWINREG BUILD_QADEVOOO SYSTEM_STDLIBS SYSTEM_ZLIB SYSTEM_JPEG SYSTEM_EXPAT PKG_CONFIG LIBWPD_CFLAGS LIBWPD_LIBS SYSTEM_LIBWPD CPPUNIT_CFLAGS CPPUNIT_LIBS SYSTEM_CPPUNIT FREETYPE_CFLAGS FREETYPE_LIBS USE_FT_EMBOLDEN LIBXSLT_CFLAGS LIBXSLT_LIBS XSLTPROC SYSTEM_LIBXSLT LIBXML_CFLAGS LIBXML_LIBS SYSTEM_LIBXML PYTHON PYTHON_VERSION PYTHON_PREFIX PYTHON_EXEC_PREFIX PYTHON_PLATFORM pythondir pkgpythondir pyexecdir pkgpyexecdir BZIP2 SYSTEM_PYTHON PYTHON_CFLAGS PYTHON_LIBS HOME SYSTEM_DB DB_VERSION DB_INCLUDES DB_JAR SYSTEM_LUCENE LUCENE_CORE_JAR LUCENE_ANALYZERS_JAR ENABLE_MYSQLC MYSQLCONFIG SYSTEM_MYSQL MYSQL_INC MYSQL_LIB MYSQL_DEFINES LIBMYSQL_PATH SYSTEM_MYSQL_CPPCONN SYSTEM_HSQLDB HSQLDB_JAR SYSTEM_BSH BSH_JAR SERIALIZER_JAR SYSTEM_SAXON SAXON_JAR CURLCONFIG SYSTEM_CURL CURL_CFLAGS CURL_LIBS SYSTEM_BOOST SYSTEM_VIGRA SYSTEM_ODBC_HEADERS WITH_MOZILLA WITH_LDAP WITH_OPENLDAP MOZ_NSS_CFLAGS MOZ_NSS_LIBS NSS_LIB MOZ_NSPR_CFLAGS MOZ_NSPR_LIBS NSPR_LIB MOZILLAXPCOM_CFLAGS MOZILLAXPCOM_LIBS MOZILLA_VERSION MOZILLA_TOOLKIT MOZGTK2_CFLAGS MOZGTK2_LIBS MOZLIBREQ_CFLAGS MOZLIBREQ_LIBS BUILD_MOZAB ENABLE_NSS_MODULE MOZILLABUILD SYSTEM_MOZILLA MOZ_FLAVOUR MOZ_INC MOZ_LIB MOZ_LIB_XPCOM MOZ_LDAP_CFLAGS SYSTEM_SANE_HEADER SYSTEM_GENBRK SYSTEM_GENCCODE SYSTEM_GENCMN SYSTEM_ICU GRAPHITE_CFLAGS GRAPHITE_LIBS ENABLE_GRAPHITE SYSTEM_GRAPHITE X_CFLAGS X_PRE_LIBS X_LIBS X_EXTRA_LIBS XINC XLIB XAU_LIBS DISABLE_XAW SYSTEM_XRENDER_HEADERS XRENDER_LINK XRANDR_CFLAGS XRANDR_LIBS XRANDR_DLOPEN ENABLE_RANDR DISABLE_NEON NEON_CFLAGS NEON_LIBS SYSTEM_NEON NEON_VERSION OPENSSL_CFLAGS OPENSSL_LIBS SYSTEM_OPENSSL ENABLE_AGG AGG_CFLAGS AGG_LIBS SYSTEM_AGG AGG_VERSION REDLAND_CFLAGS REDLAND_LIBS SYSTEM_REDLAND HUNSPELL_CFLAGS HUNSPELL_LIBS SYSTEM_HUNSPELL SYSTEM_HYPH HYPHEN_LIB SYSTEM_MYTHES SYSTEM_LPSOLVE PSDK_HOME WINDOWS_VISTA_PSDK DIRECTXSDK_HOME DIRECTXSDK_LIB NSIS_PATH BISON FLEX PATCH GNUCP GNUPATCH CYGWIN_PATH ML_EXE ASM_HOME ZIP UNZIP ZIP_HOME ENABLE_GTK ENABLE_KDE ENABLE_KDE4 GCONF_CFLAGS GCONF_LIBS ENABLE_GCONF GNOMEVFS_CFLAGS GNOMEVFS_LIBS ENABLE_GNOMEVFS GTK_CFLAGS GTK_LIBS DBUS_CFLAGS DBUS_LIBS GIO_CFLAGS GIO_LIBS ENABLE_GIO ENABLE_DBUS ENABLE_SYSTRAY_GTK CAIRO_CFLAGS CAIRO_LIBS ENABLE_CAIRO BUILD_PIXMAN SYSTEM_CAIRO ENABLE_OPENGL ENABLE_PRESENTER_EXTRA_UI ENABLE_MINIMIZER ENABLE_PRESENTER_SCREEN POPPLER_CFLAGS POPPLER_LIBS ENABLE_PDFIMPORT SYSTEM_POPPLER ENABLE_MEDIAWIKI SYSTEM_SERVLETAPI SERVLETAPI_JAR ENABLE_REPORTBUILDER SYSTEM_JFREEREPORT SAC_JAR LIBXML_JAR FLUTE_JAR JFREEREPORT_JAR LIBBASE_JAR LIBLAYOUT_JAR LIBLOADER_JAR LIBFORMULA_JAR LIBREPOSITORY_JAR LIBFONTS_JAR LIBSERIALIZER_JAR SYSTEM_APACHE_COMMONS COMMONS_CODEC_JAR COMMONS_LANG_JAR COMMONS_HTTPCLIENT_JAR COMMONS_LOGGING_JAR MOC KDE_CFLAGS KDE_LIBS MOC4 KDE4_CFLAGS KDE4_LIBS ENABLE_LOCKDOWN GOBJECT_CFLAGS GOBJECT_LIBS ENABLE_EVOAB2 ENABLE_KAB WITH_FONTS WITHOUT_PPDS WITHOUT_AFMS SCPDEFS USE_XINERAMA XINERAMA_LINK ANT ANT_HOME ANT_LIB OOO_JUNIT_JAR WITH_LANG WITH_POOR_HELP_LOCALIZATIONS WITH_DICT INTRO_BITMAPS ABOUT_BITMAPS OOO_VENDOR UNIXWRAPPERNAME ENABLE_STATIC_GTK ENABLE_LAYOUT VERBOSE LOCAL_SOLVER BUILD_TYPE LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS EGREP AWK SED LOCAL_SOLENV _solenv UPD SOURCEVERSION build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os GNUTAR OSVERSION PTHREAD_CFLAGS PTHREAD_LIBS ENABLE_CRASHDUMP VC_STANDARD ENABLE_WERROR ENABLE_DEBUG PRODUCT PROFULLSWITCH PROEXT ENABLE_SYMBOLS DISABLE_STRIP ENABLE_CUPS ENABLE_FONTCONFIG TARFILE_LOCATION DO_FETCH_TARBALLS WITH_BINFILTER ENABLE_DIRECTX DISABLE_ACTIVEX DISABLE_ATL ENABLE_RPATH WITH_MYSPELL_DICTS SYSTEM_DICTS DICT_SYSTEM_DIR HYPH_SYSTEM_DIR THES_SYSTEM_DIR WITH_MINGWIN SHELLPATH GCC_HOME CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT COMPATH GCCVER HAVE_LD_BSYMBOLIC_FUNCTIONS ENABLE_PCH NO_HIDS GNUMAKE _cc HAVE_LD_HASH_STYLE PERL MSPDB_PATH COMEX USE_MINGW MIDL_PATH CSC_PATH FRAME_HOME CPP CXX CXXFLAGS ac_ct_CXX CXXCPP SIZEOF_LONG WORDS_BIGENDIAN LFS_CFLAGS ENABLE_VBA VBA_EXTENSION PAM NEW_SHADOW_API PAM_LINK CRYPT_LINK GXX_INCLUDE_PATH MINGW_LIB_INCLUDE_PATH MINGW_BACKWARD_INCLUDE_PATH MINGW_CLIB_DIR MINGW_SHARED_GCCLIB MINGW_GCCLIB_EH MINGW_SHARED_GXXLIB MINGW_GCCDLL MINGW_GXXDLL EXCEPTIONS STLPORT4 STLPORT_VER USE_SYSTEM_STL USE_CCACHE CCACHE HAVE_GCC_VISIBILITY_FEATURE ALLOC BUILD_VER_STRING SOLAR_JAVA JAVAINTERPRETER JAVACOMPILER JAVACISGCJ JAVADOC AWTLIB JAVAAOTCOMPILER JAVA_HOME JDK JAVAFLAGS JAVAIFLAGS DMAKE BUILD_DMAKE EPM DPKG PKGMK BUILD_EPM PKGFORMAT RPM GPERF MINGWCXX ac_ct_MINGWCXX MINGWSTRIP ac_ct_MINGWSTRIP BUILD_UNOWINREG SYSTEM_STDLIBS SYSTEM_ZLIB SYSTEM_JPEG SYSTEM_EXPAT PKG_CONFIG LIBWPD_CFLAGS LIBWPD_LIBS SYSTEM_LIBWPD CPPUNIT_CFLAGS CPPUNIT_LIBS SYSTEM_CPPUNIT FREETYPE_CFLAGS FREETYPE_LIBS USE_FT_EMBOLDEN LIBXSLT_CFLAGS LIBXSLT_LIBS XSLTPROC SYSTEM_LIBXSLT LIBXML_CFLAGS LIBXML_LIBS SYSTEM_LIBXML PYTHON PYTHON_VERSION PYTHON_PREFIX PYTHON_EXEC_PREFIX PYTHON_PLATFORM pythondir pkgpythondir pyexecdir pkgpyexecdir BZIP2 SYSTEM_PYTHON PYTHON_CFLAGS PYTHON_LIBS HOME SYSTEM_DB DB_VERSION DB_INCLUDES DB_JAR SYSTEM_LUCENE LUCENE_CORE_JAR LUCENE_ANALYZERS_JAR ENABLE_MYSQLC MYSQLCONFIG SYSTEM_MYSQL MYSQL_INC MYSQL_LIB MYSQL_DEFINES LIBMYSQL_PATH SYSTEM_MYSQL_CPPCONN SYSTEM_HSQLDB HSQLDB_JAR SYSTEM_BSH BSH_JAR SERIALIZER_JAR SYSTEM_SAXON SAXON_JAR CURLCONFIG SYSTEM_CURL CURL_CFLAGS CURL_LIBS SYSTEM_BOOST SYSTEM_VIGRA SYSTEM_ODBC_HEADERS WITH_MOZILLA WITH_LDAP WITH_OPENLDAP MOZ_NSS_CFLAGS MOZ_NSS_LIBS NSS_LIB MOZ_NSPR_CFLAGS MOZ_NSPR_LIBS NSPR_LIB MOZILLAXPCOM_CFLAGS MOZILLAXPCOM_LIBS MOZILLA_VERSION MOZILLA_TOOLKIT MOZGTK2_CFLAGS MOZGTK2_LIBS MOZLIBREQ_CFLAGS MOZLIBREQ_LIBS BUILD_MOZAB ENABLE_NSS_MODULE MOZILLABUILD SYSTEM_MOZILLA MOZ_FLAVOUR MOZ_INC MOZ_LIB MOZ_LIB_XPCOM MOZ_LDAP_CFLAGS SYSTEM_SANE_HEADER SYSTEM_GENBRK SYSTEM_GENCCODE SYSTEM_GENCMN SYSTEM_ICU GRAPHITE_CFLAGS GRAPHITE_LIBS ENABLE_GRAPHITE SYSTEM_GRAPHITE X_CFLAGS X_PRE_LIBS X_LIBS X_EXTRA_LIBS XINC XLIB XAU_LIBS DISABLE_XAW SYSTEM_XRENDER_HEADERS XRENDER_LINK XRANDR_CFLAGS XRANDR_LIBS XRANDR_DLOPEN ENABLE_RANDR DISABLE_NEON NEON_CFLAGS NEON_LIBS SYSTEM_NEON NEON_VERSION OPENSSL_CFLAGS OPENSSL_LIBS SYSTEM_OPENSSL ENABLE_AGG AGG_CFLAGS AGG_LIBS SYSTEM_AGG AGG_VERSION REDLAND_CFLAGS REDLAND_LIBS SYSTEM_REDLAND HUNSPELL_CFLAGS HUNSPELL_LIBS SYSTEM_HUNSPELL SYSTEM_HYPH HYPHEN_LIB SYSTEM_MYTHES SYSTEM_LPSOLVE PSDK_HOME WINDOWS_VISTA_PSDK DIRECTXSDK_HOME DIRECTXSDK_LIB NSIS_PATH BISON FLEX PATCH GNUCP GNUPATCH CYGWIN_PATH ML_EXE ASM_HOME ZIP UNZIP ZIP_HOME ENABLE_GTK ENABLE_KDE ENABLE_KDE4 GCONF_CFLAGS GCONF_LIBS ENABLE_GCONF GNOMEVFS_CFLAGS GNOMEVFS_LIBS ENABLE_GNOMEVFS GTK_CFLAGS GTK_LIBS DBUS_CFLAGS DBUS_LIBS GIO_CFLAGS GIO_LIBS ENABLE_GIO ENABLE_DBUS ENABLE_SYSTRAY_GTK CAIRO_CFLAGS CAIRO_LIBS ENABLE_CAIRO BUILD_PIXMAN SYSTEM_CAIRO ENABLE_OPENGL ENABLE_PRESENTER_EXTRA_UI ENABLE_MINIMIZER ENABLE_PRESENTER_SCREEN POPPLER_CFLAGS POPPLER_LIBS ENABLE_PDFIMPORT SYSTEM_POPPLER ENABLE_MEDIAWIKI SYSTEM_SERVLETAPI SERVLETAPI_JAR ENABLE_REPORTBUILDER SYSTEM_JFREEREPORT SAC_JAR LIBXML_JAR FLUTE_JAR JFREEREPORT_JAR LIBBASE_JAR LIBLAYOUT_JAR LIBLOADER_JAR LIBFORMULA_JAR LIBREPOSITORY_JAR LIBFONTS_JAR LIBSERIALIZER_JAR SYSTEM_APACHE_COMMONS COMMONS_CODEC_JAR COMMONS_LANG_JAR COMMONS_HTTPCLIENT_JAR COMMONS_LOGGING_JAR MOC KDE_CFLAGS KDE_LIBS MOC4 KDE4_CFLAGS KDE4_LIBS ENABLE_LOCKDOWN GOBJECT_CFLAGS GOBJECT_LIBS ENABLE_EVOAB2 ENABLE_KAB WITH_FONTS WITHOUT_PPDS WITHOUT_AFMS SCPDEFS USE_XINERAMA XINERAMA_LINK ANT ANT_HOME ANT_LIB OOO_JUNIT_JAR WITH_LANG WITH_POOR_HELP_LOCALIZATIONS WITH_DICT INTRO_BITMAPS ABOUT_BITMAPS OOO_VENDOR UNIXWRAPPERNAME ENABLE_STATIC_GTK ENABLE_LAYOUT VERBOSE LOCAL_SOLVER BUILD_TYPE LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -887,9 +887,6 @@ Optional Features:
   --disable-odk           OO.o includes an ODK, office development kit
                           which some packagers may with to build without
 
-  --disable-qadevooo      OO.o includes some qa testsuites which some
-                          packagers may wish to build without
-
   --disable-mathmldtd     disable mathmldtd
                           (useful for distributions that want to avoid packaging
                           it)
@@ -1238,6 +1235,8 @@ Optional Packages:
   --with-system-lpsolve         Use lpsolve already on system
 
   --with-system-cppunit         Use cppunit already on system
+
+  --with-system-redland   Use redland library already on system
 
   --with-system-mozilla   Use mozilla already on system. Note that some
                           components cannot be built against a contemporary
@@ -2027,13 +2026,6 @@ if test "${enable_odk+set}" = set; then
 else
   enable_odk="yes"
 fi;
-# Check whether --enable-qadevooo or --disable-qadevooo was given.
-if test "${enable_qadevooo+set}" = set; then
-  enableval="$enable_qadevooo"
-
-else
-  enable_qadevooo="yes"
-fi;
 # Check whether --enable-mathmldtd or --disable-mathmldtd was given.
 if test "${enable_mathmldtd+set}" = set; then
   enableval="$enable_mathmldtd"
@@ -2725,6 +2717,12 @@ if test "${with_system_cppunit+set}" = set; then
 
 fi;
 
+# Check whether --with-system-redland or --without-system-redland was given.
+if test "${with_system_redland+set}" = set; then
+  withval="$with_system_redland"
+
+fi;
+
 # Check whether --with-system-mozilla or --without-system-mozilla was given.
 if test "${with_system_mozilla+set}" = set; then
   withval="$with_system_mozilla"
@@ -3370,7 +3368,7 @@ echo "$as_me: error: only sparc and i386 processors are supported" >&2;}
    { (exit 1); exit 1; }; }
    		fi
 		;;
-	linux-gnu*)
+	linux-gnu*|k*bsd*-gnu*)
 		test_gtk=yes
 		test_cairo=yes
 		test_kde=yes
@@ -3883,6 +3881,9 @@ fi
 echo "$as_me:$LINENO: result: $GCC_HOME" >&5
 echo "${ECHO_T}$GCC_HOME" >&6
 
+
+save_CC=$CC
+save_CXX=$CXX
 
 if test -n "$with_gcc_home"; then
    if test -z "$CC"; then
@@ -4879,7 +4880,6 @@ if test \( "$_os" != "WINNT" -o "$WITH_MINGWIN" = "yes" \) -a "$GCC" = "yes"; th
 echo $ECHO_N "checking the GNU gcc compiler version... $ECHO_C" >&6
    _gcc_version=`$CC -dumpversion`
    _gcc_major=`echo $_gcc_version | $AWK -F. '{ print \$1 }'`
-   _gcc_longver=`echo $_gcc_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
    GCCVER=`echo $_gcc_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
 
    if test "$_gcc_major" -lt "3"; then
@@ -4895,8 +4895,26 @@ echo "$as_me: error: version \"$_gcc_version\" gives internal error with small."
 	    fi
       fi
    fi
-   echo "$as_me:$LINENO: result: checked (gcc $_gcc_version)" >&5
+   if test "$_os" = "Darwin" -a "$GCCVER" -ge "040100" ; then
+      if test -z "$save_CC" -a -x "$GCC_HOME/bin/gcc-4.0" ; then
+         CC=$GCC_HOME/bin/gcc-4.0
+         GCCVER2=`"$CC" -dumpversion | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
+         if test "$GCCVER2" -ge "040000" -a "$GCCVER2" -lt "040100" ; then
+            GCCVER=$GCCVER2
+         fi
+      fi
+      if test "$GCCVER" -ge "040100" ; then
+         { { echo "$as_me:$LINENO: error: You need to use the gcc-4.0 compiler (gcc $_gcc_version won't work with the MacOSX10.4u.sdk) - set CC accordingly" >&5
+echo "$as_me: error: You need to use the gcc-4.0 compiler (gcc $_gcc_version won't work with the MacOSX10.4u.sdk) - set CC accordingly" >&2;}
+   { (exit 1); exit 1; }; }
+      else
+         echo "$as_me:$LINENO: result: implicitly using CC=$CC" >&5
+echo "${ECHO_T}implicitly using CC=$CC" >&6
+      fi
+   else
+      echo "$as_me:$LINENO: result: checked (gcc $_gcc_version)" >&5
 echo "${ECHO_T}checked (gcc $_gcc_version)" >&6
+   fi
    if test "$_os" = "SunOS"; then
       echo "$as_me:$LINENO: checking gcc linker" >&5
 echo $ECHO_N "checking gcc linker... $ECHO_C" >&6
@@ -9252,15 +9270,31 @@ if test "$GXX" = "yes"; then
 echo $ECHO_N "checking the GNU C++ compiler version... $ECHO_C" >&6
 
    _gpp_version=`$CXX -dumpversion`
-   _gpp_major=`echo $_gpp_version | $AWK -F. '{ print \$1 }'`
-   _gpp_minor=`echo $_gpp_version | $AWK -F. '{ print \$2 }'`
+   _gpp_majmin=`echo $_gpp_version | $AWK -F. '{ print \$1*100+\$2 }'`
 
-   echo "$as_me:$LINENO: result: checked (g++ $_gpp_version)" >&5
+   if test "$_os" = "Darwin" -a "$_gpp_majmin" -ge "401" ; then
+      if test -z "$save_CXX" -a -x "$GCC_HOME/bin/g++-4.0" ; then
+         CXX=$GCC_HOME/bin/g++-4.0
+         _gpp_majmin_2=`"$CXX" -dumpversion | $AWK -F. '{ print \$1*100+\$2 }'`
+         if test "$_gpp_majmin_2" -ge "400" -a "$_gpp_majmin_2" -lt "401" ; then
+            _gpp_majmin=$_gpp_majmin_2
+         fi
+      fi
+      if test "$_gpp_majmin" -ge "401" ; then
+         { { echo "$as_me:$LINENO: error: You need to use the g++-4.0 compiler (g++ $_gpp_version won't work with the MacOSX10.4u.sdk) - set CXX accordingly" >&5
+echo "$as_me: error: You need to use the g++-4.0 compiler (g++ $_gpp_version won't work with the MacOSX10.4u.sdk) - set CXX accordingly" >&2;}
+   { (exit 1); exit 1; }; }
+      else
+         echo "$as_me:$LINENO: result: implicitly using CXX=$CXX" >&5
+echo "${ECHO_T}implicitly using CXX=$CXX" >&6
+      fi
+   else
+      echo "$as_me:$LINENO: result: checked (g++ $_gpp_version)" >&5
 echo "${ECHO_T}checked (g++ $_gpp_version)" >&6
+   fi
 
-   if test "$_gpp_major" = "3"; then
-      if test "$_gpp_minor" = "4"; then
-         echo "$as_me:$LINENO: checking whether $CXX has the enum bug" >&5
+   if test "$_gpp_majmin" = "304"; then
+      echo "$as_me:$LINENO: checking whether $CXX has the enum bug" >&5
 echo $ECHO_N "checking whether $CXX has the enum bug... $ECHO_C" >&6
 if test "$cross_compiling" = yes; then
   { { echo "$as_me:$LINENO: error: cannot run test program while cross compiling
@@ -9323,7 +9357,6 @@ echo "${ECHO_T}no" >&6
 fi
 rm -f core *.core gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
 fi
-      fi
    fi
 fi
 
@@ -9465,20 +9498,6 @@ echo $ECHO_N "checking SunStudio C++ Compiler... $ECHO_C" >&6
          { echo "$as_me:$LINENO: WARNING: SunStudio C++ was not found" >&5
 echo "$as_me: WARNING: SunStudio C++ was not found" >&2;}
          echo "SunStudio C++ was not found" >> warn
-      else
-         echo "$as_me:$LINENO: result: checked" >&5
-echo "${ECHO_T}checked" >&6
-      fi
-   fi
-fi
-if test "$_os" = "Darwin"; then
-      if test "$CC" = "cc"; then
-      echo "$as_me:$LINENO: checking Macosx c++ Compiler" >&5
-echo $ECHO_N "checking Macosx c++ Compiler... $ECHO_C" >&6
-      if test "$CXX" != "c++"; then
-         { echo "$as_me:$LINENO: WARNING: Macosx C++ was not found" >&5
-echo "$as_me: WARNING: Macosx C++ was not found" >&2;}
-         echo "Macosx C++ was not found" >> warn
       else
          echo "$as_me:$LINENO: result: checked" >&5
 echo "${ECHO_T}checked" >&6
@@ -9677,7 +9696,13 @@ echo $ECHO_N "checking what the default STL should be... $ECHO_C" >&6
    if test "$_os" = "Linux"; then
      case "$build_cpu" in
        i?86)
-         DEFAULT_TO_STLPORT="yes"
+	 case "$build_os" in k*bsd*-gnu*)
+	 	DEFAULT_TO_STLPORT="no"
+		;;
+	 *)
+         	DEFAULT_TO_STLPORT="yes"
+		;;
+	  esac
          ;;
        *)
          DEFAULT_TO_STLPORT="no"
@@ -12704,20 +12729,6 @@ fi
 
 
 
-echo "$as_me:$LINENO: checking whether to build qadevOOo" >&5
-echo $ECHO_N "checking whether to build qadevOOo... $ECHO_C" >&6
-if test "z$enable_qadevooo" = "z" -o "$enable_qadevooo" != "no"; then
-   echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-   BUILD_QADEVOOO="YES"
-   BUILD_TYPE="$BUILD_TYPE QADEVOOO"
-else
-   BUILD_QADEVOOO="NO"
-   echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-fi
-
-
 if test "$_os" = "Linux" -a -z "$with_system_stdlibs" -a -z "$with_system_libs"; then
   if test -n "$checkforstdlibproblems"; then
     if test -f /etc/rpm/macros.prelink; then
@@ -14218,14 +14229,17 @@ fi
 
 
 
-if test "$_os" = "Darwin" && test "$with_system_python" != "no"; then
-   with_system_python=yes
-fi
 echo "$as_me:$LINENO: checking which python to use" >&5
 echo $ECHO_N "checking which python to use... $ECHO_C" >&6
-if test -n "$with_system_python" -o -n "$with_system_libs" && \
+if test "$_os" = "Darwin" && test "$with_system_python" != "no"; then
+   with_system_python=yes
+   echo "$as_me:$LINENO: result: compiling against MacOSX10.4u.sdk (python version 2.3)" >&5
+echo "${ECHO_T}compiling against MacOSX10.4u.sdk (python version 2.3)" >&6
+   PYTHON_CFLAGS="-I/Developer/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks/Python.framework/Versions/2.3/include/python2.3"
+   PYTHON_LIBS="-framework Python"
+elif test -n "$with_system_python" -o -n "$with_system_libs" && \
 	test "$with_system_python" != "no"; then
-   SYSTEM_PYTHON=YES
+   with_system_python=yes
    echo "$as_me:$LINENO: result: external" >&5
 echo "${ECHO_T}external" >&6
 
@@ -14417,13 +14431,10 @@ echo "${ECHO_T}$am_cv_python_pyexecdir" >&6
    python_include=`$PYTHON -c "import distutils.sysconfig; print distutils.sysconfig.get_config_var('INCLUDEPY');"`
    python_version=`$PYTHON -c "import distutils.sysconfig; print distutils.sysconfig.get_config_var('VERSION');"`
    PYTHON_CFLAGS="-I$python_include"
-
-   if test "$_os" = "Darwin"; then
-      PYTHON_LIBS="-framework Python"
-   else
-      PYTHON_LIBS="-lpython$python_version"
-   fi
-
+   PYTHON_LIBS="-lpython$python_version"
+fi
+if test "$with_system_python" = "yes" ; then
+   SYSTEM_PYTHON=YES
       save_CPPFLAGS="$CPPFLAGS"
    CPPFLAGS="$CPPFLAGS $PYTHON_CFLAGS"
    if test "${ac_cv_header_Python_h+set}" = set; then
@@ -19439,7 +19450,7 @@ ac_x_header_dirs='
 /usr/openwin/share/include'
 
 if test "$ac_x_includes" = no; then
-  # Guess where to find include files, by looking for Intrinsic.h.
+  # Guess where to find include files, by looking for Xlib.h.
   # First, try using that file with no special directory specified.
   cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
@@ -19447,7 +19458,7 @@ _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-#include <X11/Intrinsic.h>
+#include <X11/Xlib.h>
 _ACEOF
 if { (eval echo "$as_me:$LINENO: \"$ac_cpp conftest.$ac_ext\"") >&5
   (eval $ac_cpp conftest.$ac_ext) 2>conftest.er1
@@ -19474,7 +19485,7 @@ else
 sed 's/^/| /' conftest.$ac_ext >&5
 
   for ac_dir in $ac_x_header_dirs; do
-  if test -r "$ac_dir/X11/Intrinsic.h"; then
+  if test -r "$ac_dir/X11/Xlib.h"; then
     ac_x_includes=$ac_dir
     break
   fi
@@ -19488,18 +19499,18 @@ if test "$ac_x_libraries" = no; then
   # See if we find them without any special options.
   # Don't add to $LIBS permanently.
   ac_save_LIBS=$LIBS
-  LIBS="-lXt $LIBS"
+  LIBS="-lX11 $LIBS"
   cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-#include <X11/Intrinsic.h>
+#include <X11/Xlib.h>
 int
 main ()
 {
-XtMalloc (0)
+XrmInitialize ()
   ;
   return 0;
 }
@@ -22347,7 +22358,7 @@ fi
 
 echo "$as_me:$LINENO: checking which redland library to use" >&5
 echo $ECHO_N "checking which redland library to use... $ECHO_C" >&6
-if test -n "$with_system_redland" && \
+if test -n "$with_system_redland" -o -n "$with_system_libs" && \
 	test "$with_system_redland" != "no"; then
 	echo "$as_me:$LINENO: result: external" >&5
 echo "${ECHO_T}external" >&6
@@ -22406,23 +22417,23 @@ fi
   else
      PKG_CONFIG_MIN_VERSION=0.9.0
      if $PKG_CONFIG --atleast-pkgconfig-version $PKG_CONFIG_MIN_VERSION; then
-        echo "$as_me:$LINENO: checking for redland" >&5
-echo $ECHO_N "checking for redland... $ECHO_C" >&6
+        echo "$as_me:$LINENO: checking for redland >= 1.0.8" >&5
+echo $ECHO_N "checking for redland >= 1.0.8... $ECHO_C" >&6
 
-        if $PKG_CONFIG --exists "redland" ; then
+        if $PKG_CONFIG --exists "redland >= 1.0.8" ; then
             echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
             succeeded=yes
 
             echo "$as_me:$LINENO: checking REDLAND_CFLAGS" >&5
 echo $ECHO_N "checking REDLAND_CFLAGS... $ECHO_C" >&6
-            REDLAND_CFLAGS=`$PKG_CONFIG --cflags "redland"`
+            REDLAND_CFLAGS=`$PKG_CONFIG --cflags "redland >= 1.0.8"`
             echo "$as_me:$LINENO: result: $REDLAND_CFLAGS" >&5
 echo "${ECHO_T}$REDLAND_CFLAGS" >&6
 
             echo "$as_me:$LINENO: checking REDLAND_LIBS" >&5
 echo $ECHO_N "checking REDLAND_LIBS... $ECHO_C" >&6
-            REDLAND_LIBS=`$PKG_CONFIG --libs "redland"`
+            REDLAND_LIBS=`$PKG_CONFIG --libs "redland >= 1.0.8"`
             echo "$as_me:$LINENO: result: $REDLAND_LIBS" >&5
 echo "${ECHO_T}$REDLAND_LIBS" >&6
         else
@@ -22430,7 +22441,7 @@ echo "${ECHO_T}$REDLAND_LIBS" >&6
             REDLAND_LIBS=""
             ## If we have a custom action on failure, don't print errors, but
             ## do set a variable so people can do so.
-            REDLAND_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "redland"`
+            REDLAND_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "redland >= 1.0.8"`
             echo $REDLAND_PKG_ERRORS
         fi
 
@@ -22445,8 +22456,8 @@ echo "${ECHO_T}$REDLAND_LIBS" >&6
   if test $succeeded = yes; then
      :
   else
-     { { echo "$as_me:$LINENO: error: Library requirements (redland) not met; consider adjusting the PKG_CONFIG_PATH environment variable if your libraries are in a nonstandard prefix so pkg-config can find them." >&5
-echo "$as_me: error: Library requirements (redland) not met; consider adjusting the PKG_CONFIG_PATH environment variable if your libraries are in a nonstandard prefix so pkg-config can find them." >&2;}
+     { { echo "$as_me:$LINENO: error: Library requirements (redland >= 1.0.8) not met; consider adjusting the PKG_CONFIG_PATH environment variable if your libraries are in a nonstandard prefix so pkg-config can find them." >&5
+echo "$as_me: error: Library requirements (redland >= 1.0.8) not met; consider adjusting the PKG_CONFIG_PATH environment variable if your libraries are in a nonstandard prefix so pkg-config can find them." >&2;}
    { (exit 1); exit 1; }; }
   fi
 
@@ -27210,7 +27221,7 @@ fi
 echo "$as_me:$LINENO: result: $ac_cv_file__usr_share_java_commons_codec_jar" >&5
 echo "${ECHO_T}$ac_cv_file__usr_share_java_commons_codec_jar" >&6
 if test $ac_cv_file__usr_share_java_commons_codec_jar = yes; then
-   COMMONS_CODEC_JAR=/usr/share/java/commons-codecs.jar
+   COMMONS_CODEC_JAR=/usr/share/java/commons-codec.jar
 else
   { { echo "$as_me:$LINENO: error: commons-codec.jar replacement not found." >&5
 echo "$as_me: error: commons-codec.jar replacement not found." >&2;}
@@ -28060,13 +28071,13 @@ echo "${ECHO_T}no" >&6
   SCPDEFS="$SCPDEFS -DWITHOUT_MATHMLDTD"
 fi
 
-echo "$as_me:$LINENO: checking whether to include Bitstream Vera fonts" >&5
-echo $ECHO_N "checking whether to include Bitstream Vera fonts... $ECHO_C" >&6
+echo "$as_me:$LINENO: checking whether to include third-party fonts" >&5
+echo $ECHO_N "checking whether to include third-party fonts... $ECHO_C" >&6
 if test "$with_fonts" != "no" ; then
   echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
   WITH_FONTS=YES
-  BUILD_TYPE="$BUILD_TYPE BITSTREAM_VERA_FONTS"
+  BUILD_TYPE="$BUILD_TYPE MORE_FONTS"
 else
   echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
@@ -28701,12 +28712,12 @@ echo "${ECHO_T}$OOO_JUNIT_JAR" >&6
     else
         echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
-        { { echo "$as_me:$LINENO: error: cannot find JUnit 4 jar at $OOO_JUNIT_JAR;
-please install one and/or specify its pathname via --with-junit=...,
-or disable it via --without-junit" >&5
-echo "$as_me: error: cannot find JUnit 4 jar at $OOO_JUNIT_JAR;
-please install one and/or specify its pathname via --with-junit=...,
-or disable it via --without-junit" >&2;}
+        { { echo "$as_me:$LINENO: error: cannot find JUnit 4 jar; please install one in the default
+location (/usr/share/java), specify its pathname via
+--with-junit=..., or disable it via --without-junit" >&5
+echo "$as_me: error: cannot find JUnit 4 jar; please install one in the default
+location (/usr/share/java), specify its pathname via
+--with-junit=..., or disable it via --without-junit" >&2;}
    { (exit 1); exit 1; }; }
     fi
 fi
@@ -29664,7 +29675,6 @@ s,@ac_ct_MINGWCXX@,$ac_ct_MINGWCXX,;t t
 s,@MINGWSTRIP@,$MINGWSTRIP,;t t
 s,@ac_ct_MINGWSTRIP@,$ac_ct_MINGWSTRIP,;t t
 s,@BUILD_UNOWINREG@,$BUILD_UNOWINREG,;t t
-s,@BUILD_QADEVOOO@,$BUILD_QADEVOOO,;t t
 s,@SYSTEM_STDLIBS@,$SYSTEM_STDLIBS,;t t
 s,@SYSTEM_ZLIB@,$SYSTEM_ZLIB,;t t
 s,@SYSTEM_JPEG@,$SYSTEM_JPEG,;t t

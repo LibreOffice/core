@@ -1030,6 +1030,12 @@ File gid_File_Lm_Yiddish_Utf
     Styles = (PACKED);
 End
 
+File gid_File_Lm_Zulu
+    TXT_FILE_BODY;
+    Name = "zulu.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
 
 
 
@@ -1732,15 +1738,6 @@ File gid_File_App_InfoPlist
 End
 #endif
 
-#if defined MACOSX && !defined QUARTZ
-File gid_File_App_Bundle
-    ARCHIVE_TXT_FILE_BODY;
-    Dir = gid_Dir_Bundle_Contents;
-    Name = "osxbundle.zip";
-    Styles = (ARCHIVE,USE_INTERNAL_RIGHTS);
-End
-#endif
-
 #ifdef MACOSX
 File gid_File_Icns_Bundle
     ARCHIVE_TXT_FILE_BODY;
@@ -1774,15 +1771,6 @@ File gid_File_Spotlight_Bundle
     Dir = gid_Dir_Bundle_Contents_Library_Spotlight_Bundle_Contents;
     Name = "mdibundle.zip";
     Styles = (ARCHIVE,USE_INTERNAL_RIGHTS);
-End
-#endif
-
-#if defined MACOSX && !defined QUARTZ
-File gid_File_Bin_Fondu
-    BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
-    Name = "fondu";
-    Styles = (PACKED);
 End
 #endif
 
@@ -2016,6 +2004,15 @@ End
 #endif
 
 #ifndef WITHOUT_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_Ku_Tr
+	Dir = gid_Brand_Dir_Share_Extension_Install;
+	Name = "dict-ku-TR.oxt";
+	Styles = (PACKED, FORCELANGUAGEPACK);
+	UnixRights = 444;
+End
+#endif
+
+#ifndef WITHOUT_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Lt
 	Dir = gid_Brand_Dir_Share_Extension_Install;
 	Name = "dict-lt.oxt";
@@ -2100,7 +2097,7 @@ End
 File gid_File_Extension_Dictionary_Sl
 	Dir = gid_Brand_Dir_Share_Extension_Install;
 	Name = "dict-sl.oxt";
-	Styles = (PACKED, PATCH, FORCELANGUAGEPACK);
+	Styles = (PACKED, FORCELANGUAGEPACK);
 	UnixRights = 444;
 End
 #endif

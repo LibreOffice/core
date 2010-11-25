@@ -465,45 +465,45 @@ static char *
 _exec_uniq( args )
 char *args;
 {
-   char *res  = NIL(char);
-   char *data = Expand(args);
-   char **tokens;
-   char **tokens_after;
-   char *p;
-   char *white = " \t\n";
-   int  j;
-   int  i;
-   char *last = "";
-   int  k = 0;
+  char *res  = NIL(char);
+  char *data = Expand(args);
+  char **tokens;
+  char **tokens_after;
+  char *p;
+  char *white = " \t\n";
+  int  j;
+  int  i;
+  char *last = "";
+  int  k = 0;
 
-   for(i=0,p=DmStrSpn(data,white);*p;p=DmStrSpn(DmStrPbrk(p,white),white),i++);
+  for(i=0,p=DmStrSpn(data,white);*p;p=DmStrSpn(DmStrPbrk(p,white),white),i++);
 
-   if( i != 0 ) {
-      TALLOC(tokens, i, char *);
-      TALLOC(tokens_after, i, char *);
+  if( i != 0 ) {
+    TALLOC(tokens, i, char *);
+    TALLOC(tokens_after, i, char *);
 
-      for( i=0,p=DmStrSpn(data,white); *p; p=DmStrSpn(p,white),i++){
-         tokens[i] = p;
-         p = DmStrPbrk(p,white);
-         if( *p ) *p++ = '\0';
-      }
+    for( i=0,p=DmStrSpn(data,white); *p; p=DmStrSpn(p,white),i++){
+      tokens[i] = p;
+      p = DmStrPbrk(p,white);
+      if( *p ) *p++ = '\0';
+    }
 
-      qsort( tokens, i, sizeof(char *), _mystrcmp );
+    qsort( tokens, i, sizeof(char *), _mystrcmp );
 
-      for( j=0; j<i; j++ ) {
-     if (strcmp(tokens[j], last) != 0) {
+    for( j=0; j<i; j++ ) {
+      if (strcmp(tokens[j], last) != 0) {
         tokens_after[k++] = tokens[j];
         last = tokens[j];
-     }
       }
+    }
 
-      for( j=0; j<k; j++ ) res = DmStrApp(res, tokens_after[j]);
-      FREE(data);
-      FREE(tokens);
-      FREE(tokens_after);
-   }
+    for( j=0; j<k; j++ ) res = DmStrApp(res, tokens_after[j]);
+    FREE(tokens);
+    FREE(tokens_after);
+  }
 
-   return(res);
+  FREE(data);
+  return(res);
 }
 
 static int

@@ -148,12 +148,15 @@ sub register_extensions
             }
             close (UNOPKG);
 
-            for ( my $j = 0; $j <= $#unopkgoutput; $j++ ) { push( @installer::globals::logfileinfo, "$unopkgoutput[$j]"); }
-
             my $returnvalue = $?;   # $? contains the return value of the systemcall
 
             if ($returnvalue)
             {
+                # Writing content of @unopkgoutput only in the error case into the log file. Sometimes it
+                # contains strings like "Error" even in the case of success. This causes a packaging error
+                # when the log file is analyzed at the end, even if there is no real error.
+                for ( my $j = 0; $j <= $#unopkgoutput; $j++ ) { push( @installer::globals::logfileinfo, "$unopkgoutput[$j]"); }
+
                 $infoline = "ERROR: Could not execute \"$systemcall\"!\nExitcode: '$returnvalue'\n";
                 push( @installer::globals::logfileinfo, $infoline);
                 installer::exiter::exit_program("ERROR: $systemcall failed!", "register_extensions");
@@ -407,7 +410,12 @@ sub create_package
         }
 
         my $sla = 'sla.r';
-        my $ref = installer::scriptitems::get_sourcepath_from_filename_and_includepath( \$sla, $includepatharrayref, 0);
+        my $ref = "";
+
+        if ( ! $allvariables->{'HIDELICENSEDIALOG'} )
+        {
+            installer::scriptitems::get_sourcepath_from_filename_and_includepath( \$sla, $includepatharrayref, 0);
+        }
 
         my $localtempdir = $tempdir;
 
@@ -518,7 +526,7 @@ sub create_package
         }
 
         $systemcall = "cd $localtempdir && hdiutil makehybrid -hfs -hfs-openfolder $folder $folder -hfs-volume-name \"$volume_name\" -ov -o $installdir/tmp && hdiutil convert -ov -format UDZO $installdir/tmp.dmg -o $archive && ";
-        if ($$ref ne "") {
+        if (( $ref ne "" ) && ( $$ref ne "" )) {
             $systemcall .= "hdiutil unflatten $archive && Rez -a $$ref -o $archive && hdiutil flatten $archive &&";
         }
         $systemcall .= "rm -f $installdir/tmp.dmg";

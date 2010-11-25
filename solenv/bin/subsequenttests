@@ -102,7 +102,7 @@ while (@testpaths || $running > 0) {
         defined($pid) or die("$counter: $!");
         if ($pid == 0) {
             chdir($testpath) or die("$counter: $!");
-            $ENV{'OOO_SUBSEQUENT_TESTS'} = 'x';
+            $ENV{'OOO_SUBSEQUENT_TESTS'} = 'TRUE';
             open(OUTPUT, $cmd) or die("$counter: $!");
             while (<OUTPUT>) {
                 s/\r?\n$//;

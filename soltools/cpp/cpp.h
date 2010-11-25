@@ -15,10 +15,7 @@
 #define NULL    0
 #endif
 
-#ifndef __alpha
 typedef unsigned char uchar;
-
-#endif
 
 enum toktype
 {

@@ -84,7 +84,7 @@ File gid_File_Lib_Cached1
   #endif
 End
 
-SPECIAL_UNO_LIB_FILE(gid_File_Lib_Configmgr, configmgr)
+SPECIAL_UNO_COMPONENT_LIB_FILE(gid_File_Lib_Configmgr, configmgr.uno)
 
 #ifdef WITH_LDAP
 File gid_File_Lib_Ldapbe2
@@ -363,7 +363,7 @@ File gid_File_Lib_Vbaswobj
     TXT_FILE_BODY;
     Styles = (PACKED,UNO_COMPONENT);
     RegistryID = gid_Starregistry_Services_Rdb;
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
     Name = STRING(CONCAT4(libvbaswobj,DLLPOSTFIX,.uno,UNXSUFFIX));
   #else
@@ -375,7 +375,7 @@ File gid_File_Lib_Vbamsforms
     TXT_FILE_BODY;
     Styles = (PACKED,UNO_COMPONENT);
     RegistryID = gid_Starregistry_Services_Rdb;
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
     Name = STRING(CONCAT4(libmsforms,DLLPOSTFIX,.uno,UNXSUFFIX));
   #else
@@ -653,7 +653,7 @@ STD_LIB_FILE( gid_File_Lib_Fwi , fwi)
 File gid_File_Lib_Fwk
     Name = LIBNAME(fwk);
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH,UNO_COMPONENT);
+    Styles = (PACKED,UNO_COMPONENT);
     Dir = SCP2_OOO_BIN_DIR;
     RegistryID = gid_Starregistry_Services_Rdb;
 End
@@ -677,7 +677,7 @@ STD_LIB_FILE( gid_File_Lib_Helplinker, helplinker)
 
 File gid_File_Lib_I18npool
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH,UNO_COMPONENT);
+    Styles = (PACKED,UNO_COMPONENT);
     RegistryID = gid_Starregistry_Services_Rdb;
     Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
@@ -1325,7 +1325,7 @@ STD_UNO_LIB_FILE( gid_File_Lib_Sf_Prothdlr, protocolhandler )
 File gid_File_Lib_Sfx
     Name = LIBNAME(sfx);
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH,UNO_COMPONENT);
+    Styles = (PACKED,UNO_COMPONENT);
     Dir = SCP2_OOO_BIN_DIR;
     RegistryID = gid_Starregistry_Services_Rdb;
 End
@@ -1381,19 +1381,19 @@ SPECIAL_UNO_LIB_FILE(gid_File_Lib_Srtrs1,srtrs1)
 STD_LIB_FILE( gid_File_Lib_Sts , sts)
 
 STD_UNO_LIB_FILE( gid_File_Lib_Svl, svl )
-STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Svtools, svt )
+STD_UNO_LIB_FILE( gid_File_Lib_Svtools, svt )
 
-STD_LIB_FILE( gid_File_Lib_Svx_Core, svxcore)
+STD_UNO_LIB_FILE( gid_File_Lib_Svx_Core, svxcore)
 STD_UNO_LIB_FILE( gid_File_Lib_Svx, svx)
 STD_UNO_LIB_FILE( gid_File_Lib_TextConversionDlgs, textconversiondlgs)
 STD_LIB_FILE( gid_File_Lib_Editeng, editeng)
 
 STD_LIB_FILE( gid_File_Lib_Msfilter, msfilter)
 
-STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Sw , sw)
-STD_LIB_FILE_PATCH( gid_File_Lib_Swui, swui)
+STD_UNO_LIB_FILE( gid_File_Lib_Sw , sw)
+STD_LIB_FILE( gid_File_Lib_Swui, swui)
 
-STD_LIB_FILE_PATCH( gid_File_Lib_Msword, msword )
+STD_LIB_FILE( gid_File_Lib_Msword, msword )
 
 #if ! defined UNX
 File gid_File_Lib_Sysdtrans
@@ -1485,6 +1485,8 @@ SPECIAL_UNO_LIB_FILE(gid_File_Lib_Ucppkg1,ucppkg1)
 
 SPECIAL_UNO_COMPONENT_LIB_FILE(gid_File_Ucptdoc1, ucptdoc1.uno)
 
+SPECIAL_UNO_COMPONENT_LIB_FILE(gid_File_Ucpext, ucpext.uno)
+
 SPECIAL_UNO_COMPONENT_LIB_FILE(gid_File_Ucpexpand1, ucpexpand1.uno)
 
 File gid_File_Lib_Lnth
@@ -1537,7 +1539,7 @@ STD_UNO_LIB_FILE( gid_File_Lib_Xof , xof)
 File gid_File_Lib_Xo
     Name = LIBNAME(xo);
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH,UNO_COMPONENT);
+    Styles = (PACKED,UNO_COMPONENT);
     Dir = SCP2_OOO_BIN_DIR;
     RegistryID = gid_Starregistry_Services_Rdb;
 End

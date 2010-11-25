@@ -634,6 +634,15 @@ File gid_File_Dl_Jpipe
 End
 #endif
 
+#if defined SOLAR_JAVA && defined WNT
+File gid_File_Dl_Jpipx
+    TXT_FILE_BODY;
+    Dir = SCP2_URE_DL_DIR;
+    Name = SCP2_URE_DL_NORMAL("jpipx");
+    Styles = (PACKED);
+End
+#endif
+
 #if defined SOLAR_JAVA
 File gid_File_Dl_Juh
     TXT_FILE_BODY;
@@ -1153,6 +1162,7 @@ Module gid_Module_Root_Ure_Hidden
             gid_File_Dl_AffineUnoUno,
             gid_File_Dl_LogUnoUno,
             gid_File_Dl_Jpipe,
+            gid_File_Dl_Jpipx,
             gid_File_Dl_Juh,
             gid_File_Dl_Juhx,
             gid_File_Dl_Acceptor,
@@ -1263,5 +1273,5 @@ RegistryItem gid_Regitem_Path
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = "Software\OpenOffice.org\%PRODUCTNAME";
     Name = "Path";
-    Value = "[UREINSTALLLOCATION]";
+    Value = "[INSTALLLOCATION]";
 End

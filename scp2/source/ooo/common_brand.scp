@@ -119,19 +119,22 @@ Module gid_Module_Langpack_Brand_Template
             gid_Brand_Dir_Share_Readme);
     Files = (gid_Brand_File_Res_Iso,
              gid_Brand_File_Res_Ooo,
-             gid_Brand_File_Entitlement,
              gid_Brand_File_Help_C05_Sdatabase_Zip,
              gid_Brand_File_Help_C05_Scalc_Zip,
              gid_Brand_File_Help_C05_Sdraw_Zip,
              gid_Brand_File_Help_C05_Swriter_Zip,
              gid_Brand_File_License_License,
+             gid_Brand_File_License_License_Small,
              gid_Brand_File_License_License_Html,
+             gid_Brand_File_License_License_Html_Small,
              gid_Brand_File_Readme_Readme,
              gid_Brand_File_Readme_Readme_Html,
              gid_Brand_File_Share_Registry_Cjk_Xcd,
              gid_Brand_File_Share_Registry_Korea_Xcd,
              gid_Brand_File_Txt_License,
+             gid_Brand_File_Txt_License_Small,
              gid_Brand_File_Txt_License_Html,
+             gid_Brand_File_Txt_License_Html_Small,
              gid_Brand_File_Txt_Readme,
              gid_Brand_File_Txt_Readme_Html);
 End
@@ -1187,7 +1190,7 @@ ProfileItem gid_Brand_Profileitem_Setup_Ureinstall
     Section = "Bootstrap";
     Order = 4;
     Key = "UREINSTALLLOCATION";
-    Value = "[UREINSTALLLOCATION]";
+    Value = "[INSTALLLOCATION]URE\\";
     Inifiletablekey = "UreInstallLocation";
     Inifiletableaction = "1";
     Styles = (INIFILETABLE);
@@ -1201,7 +1204,7 @@ ProfileItem gid_Brand_Profileitem_Setup_Basisinstall
     Section = "Bootstrap";
     Order = 4;
     Key = "BASISINSTALLLOCATION";
-    Value = "[BASISINSTALLLOCATION]";
+    Value = "[INSTALLLOCATION]Basis\\";
     Inifiletablekey = "BasisInstallLocation";
     Inifiletableaction = "1";
     Styles = (INIFILETABLE);
@@ -1215,7 +1218,7 @@ ProfileItem gid_Brand_Profileitem_Setup_Officeinstall
     Section = "Bootstrap";
     Order = 4;
     Key = "OFFICEINSTALLLOCATION";
-    Value = "[OFFICEINSTALLLOCATION]";
+    Value = "[INSTALLLOCATION]";
     Inifiletablekey = "OfficeInstallLocation";
     Inifiletableaction = "1";
     Styles = (INIFILETABLE);

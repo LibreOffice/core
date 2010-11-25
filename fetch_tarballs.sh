@@ -3,13 +3,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.8 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -65,25 +61,31 @@ for i in wget /usr/bin/wget /usr/local/bin/wget /usr/sfw/bin/wget /opt/sfw/bin/w
     fi
 done
 
-for i in curl /usr/bin/curl /usr/local/bin/curl /usr/sfw/bin/curl /opt/sfw/bin/curl /opt/local/bin/curl; do
-# mac curl returns "2" on --version
-#    eval "$i --version" > /dev/null 2>&1
-#    ret=$?
-#    if [ $ret -eq 0 ]; then
-    if [ -x $i ]; then
-        curl=$i
-        echo found curl: $curl
-        break 2
-    fi
-done
+if [ -z "$wget" ]; then
+    for i in curl /usr/bin/curl /usr/local/bin/curl /usr/sfw/bin/curl /opt/sfw/bin/curl /opt/local/bin/curl; do
+    # mac curl returns "2" on --version
+    #    eval "$i --version" > /dev/null 2>&1
+    #    ret=$?
+    #    if [ $ret -eq 0 ]; then
+        if [ -x $i ]; then
+            curl=$i
+            echo found curl: $curl
+            break 2
+        fi
+    done
+fi
 
 if [ -z "$wget" -a -z "$curl" ]; then
     echo "ERROR: neither  wget nor curl found!"
     exit
 fi
 
-for i in md5sum /usr/local/bin/md5sum gmd5sum /usr/sfw/bin/md5sum /opt/sfw/bin/gmd5sum /opt/local/bin/md5sum; do
-    eval "$i --version" > /dev/null 2>&1
+for i in md5 md5sum /usr/local/bin/md5sum gmd5sum /usr/sfw/bin/md5sum /opt/sfw/bin/gmd5sum /opt/local/bin/md5sum; do
+    if [ "$i" = "md5" ]; then
+        eval "$i -x" > /dev/null 2>&1
+    else
+        eval "$i --version" > /dev/null 2>&1
+    fi
     ret=$?
     if [ $ret -eq 0 ]; then
         md5sum=$i
@@ -92,44 +94,61 @@ for i in md5sum /usr/local/bin/md5sum gmd5sum /usr/sfw/bin/md5sum /opt/sfw/bin/g
     fi
 done
 
+if [ "$md5sum" = "md5" ]; then
+    md5special=-r
+fi
+
 if [ -z "$md5sum" ]; then
     echo "Warning: no md5sum: found!"
 fi
 
 start_dir=`pwd`
+logfile=$TARFILE_LOCATION/fetch.log
+date >> $logfile
+
 filelist=`cat $1`
-cd $TARFILE_LOCATION
+mkdir -p $TARFILE_LOCATION/tmp
+cd $TARFILE_LOCATION/tmp
+echo $$ > fetch-running
 for i in $filelist ; do
-#   echo $i
+#    echo $i
     if [ "$i" != `echo $i | sed "s/^http:\///"` ]; then
         tarurl=$i
     # TODO: check for comment
     else
         if [ "$tarurl" != "" ]; then
-            if [ ! -f "$i" ]; then
+            if [ ! -f "../$i" ]; then
+                echo $i
                 if [ ! -z "$wget" ]; then
-                    $wget -nv -N $tarurl/$i
+                    $wget -nv -N $tarurl/$i 2>&1 | tee -a $logfile
                 else
                     echo fetching $i
-                    $curl $file_date_check -O $tarurl/$i
+                    $curl $file_date_check -O $tarurl/$i 2>&1 | tee -a $logfile
                 fi
                 wret=$?
                 if [ $wret -ne 0 ]; then
+                    mv $i ${i}_broken
                     failed="$failed $i"
                     wret=0
                 fi
                 if [ -f $i -a -n "$md5sum" ]; then
-                    sum=`$md5sum $i | sed "s/ [ *].*//"`
+                    sum=`$md5sum $md5special $i | sed "s/ .*//"`
                     sum2=`echo $i | sed "s/-.*//"`
                     if [ "$sum" != "$sum2" ]; then
-                        echo checksum failure for $i
+                        echo checksum failure for $i 2>&1 | tee -a $logfile
                         failed="$failed $i"
+                        mv $i ${i}_broken
+                    else
+                        mv $i ..
                     fi
+                else
+                    mv $i ..
                 fi
             fi
         fi
     fi
 done
+rm $TARFILE_LOCATION/tmp/*-*
 cd $start_dir
 
 if [ ! -z "$failed" ]; then
