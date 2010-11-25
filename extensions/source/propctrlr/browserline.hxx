@@ -79,7 +79,7 @@ namespace pcr
                             ~OBrowserLine();
 
         void setControl( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >& _rxControl );
-        const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >& getControl()
+        const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >& getControl() const
         {
             return m_xControl;
         }
