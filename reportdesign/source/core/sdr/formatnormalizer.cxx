@@ -35,7 +35,7 @@
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 /** === end UNO includes === **/
 
-#include <dbaccess/singledoccontroller.hxx>
+#include <dbaccess/dbsubcomponentcontroller.hxx>
 #include <unotools/syslocale.hxx>
 #include <connectivity/statementcomposer.hxx>
 #include <connectivity/dbtools.hxx>
@@ -186,7 +186,7 @@ namespace rptui
         if ( !m_xReportDefinition.is() )
             return false;
 
-        ::dbaui::OSingleDocumentController* pController( m_rModel.getController() );
+        ::dbaui::DBSubComponentController* pController( m_rModel.getController() );
         OSL_ENSURE( pController, "FormatNormalizer::impl_ensureUpToDateFieldList_nothrow: no controller? how can *this* happen?!" );
         if ( !pController )
             return false;

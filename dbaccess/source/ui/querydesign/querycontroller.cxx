@@ -685,9 +685,9 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
         break;
         case SID_BROWSER_CLEAR_QUERY:
             {
-                getUndoMgr()->EnterListAction( String( ModuleRes(STR_QUERY_UNDO_TABWINDELETE) ), String() );
+                GetUndoManager().EnterListAction( String( ModuleRes(STR_QUERY_UNDO_TABWINDELETE) ), String() );
                 getContainer()->clear();
-                getUndoMgr()->LeaveListAction();
+                GetUndoManager().LeaveListAction();
 
                 setStatement_fireEvent( ::rtl::OUString() );
                 if(m_bGraphicalDesign)
@@ -1037,7 +1037,7 @@ void OQueryController::impl_initialize()
             }
         }
 
-        getUndoMgr()->Clear();
+        ClearUndoManager();
 
         if  (  ( m_bGraphicalDesign )
             && (  ( !m_sName.getLength() && !editingCommand() )
@@ -1789,7 +1789,7 @@ void OQueryController::reset()
 {
     impl_reset();
     getContainer()->reset( NULL );
-    getUndoMgr()->Clear();
+    ClearUndoManager();
 }
 
 // -----------------------------------------------------------------------------

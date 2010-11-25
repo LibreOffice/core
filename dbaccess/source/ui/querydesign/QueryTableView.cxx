@@ -847,8 +847,8 @@ void OQueryTableView::RemoveTabWin(OTableWindow* pTabWin)
     // mein Parent brauche ich, da es vom Loeschen erfahren soll
     OQueryDesignView* pParent = static_cast<OQueryDesignView*>(getDesignView());
 
-    SfxUndoManager* pUndoMgr = m_pView->getController().getUndoMgr();
-    pUndoMgr->EnterListAction( String( ModuleRes(STR_QUERY_UNDO_TABWINDELETE) ), String() );
+    SfxUndoManager& rUndoMgr = m_pView->getController().GetUndoManager();
+    rUndoMgr.EnterListAction( String( ModuleRes(STR_QUERY_UNDO_TABWINDELETE) ), String() );
 
     // Undo-Action anlegen
     OQueryTabWinDelUndoAct* pUndoAction = new OQueryTabWinDelUndoAct(this);
@@ -861,7 +861,7 @@ void OQueryTableView::RemoveTabWin(OTableWindow* pTabWin)
     pParent->TableDeleted( static_cast< OQueryTableWindowData*>(pTabWin->GetData().get())->GetAliasName() );
 
     m_pView->getController().addUndoActionAndInvalidate( pUndoAction );
-    pUndoMgr->LeaveListAction();
+    rUndoMgr.LeaveListAction();
 
     if (m_lnkTabWinsChangeHandler.IsSet())
     {
