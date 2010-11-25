@@ -786,7 +786,7 @@ class FlagUpdater
 {
 public:
     FlagUpdater (bool& rFlag) : mrFlag(rFlag) {}
-    void operator() (bool) {mrFlag = true;}
+    void operator() (bool) const {mrFlag = true;}
 private:
     bool& mrFlag;
 };
