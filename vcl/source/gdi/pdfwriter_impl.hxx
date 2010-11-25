@@ -201,7 +201,7 @@ public:
             return *this;
         }
 
-        bool operator==( const BitmapID& rComp )
+        bool operator==( const BitmapID& rComp ) const
         {
             return (m_aPixelSize == rComp.m_aPixelSize &&
                     m_nSize == rComp.m_nSize &&
