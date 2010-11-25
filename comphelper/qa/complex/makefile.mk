@@ -32,9 +32,6 @@ PRJNAME = comphelper
 # --- Settings -----------------------------------------------------
 .INCLUDE: settings.mk
 
-
-.IF "$(BUILD_QADEVOOO)" == "YES"
-
 #----- compile .java files -----------------------------------------
 
 JARFILES        := ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar
@@ -63,8 +60,6 @@ RUNNER_APPEXECCOMMAND = -AppExecutionCommand "$(OFFICE)$/soffice -accept=socket,
 
 RUNNER_ARGS = org.openoffice.Runner -TestBase java_complex $(RUNNER_APPEXECCOMMAND)
 
-.END    # "$(BUILD_QADEVOOO)" == "YES"
-
 # --- Targets ------------------------------------------------------
 
 .IF "$(depend)" == ""
@@ -78,7 +73,6 @@ ALL: 	ALLDEP
 
 .INCLUDE :  target.mk
 
-.IF "$(BUILD_QADEVOOO)" == "YES"
 show_targets:
     +@java $(RUNNER_CLASSPATH) complexlib.ShowTargets $(foreach,i,$(JAVAFILES) $(i:s#.java##:s#./#complex.#))
 
@@ -87,11 +81,3 @@ run:
 
 run_%:
     +java $(RUNNER_CLASSPATH) $(RUNNER_ARGS) -o complex.$(PRJNAME).$(@:s/run_//)
-
-.ELSE
-run: show_targets
-
-show_targets:
-    +@echo "Built without qadevOOo, no QA tests"
-
-.ENDIF

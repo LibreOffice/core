@@ -106,6 +106,7 @@ SLOFILES=	$(EXCEPTIONSFILES)      \
             $(SLO)$/outdev4.obj 	\
             $(SLO)$/outdev5.obj 	\
             $(SLO)$/outdev6.obj 	\
+            $(SLO)$/outdevnative.obj 	\
             $(SLO)$/regband.obj 	\
             $(SLO)$/region.obj		\
             $(SLO)$/wall.obj		\

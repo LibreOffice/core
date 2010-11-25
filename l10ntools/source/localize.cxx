@@ -66,6 +66,7 @@ const char *ExeTable[][5] = {
     { "xcs", "cfgex", "-UTF8 -e -f", "negative", "iso" },
     { "xrm", "xrmex", "-UTF8 -e", "negative", "iso" },
     { "xhp", "helpex", " -e", "negative", "noiso" },
+       //{ "properties", "jpropex", " -e", "negative", "noiso" },
     { "NULL", "NULL", "NULL", "NULL", "NULL" }
 };
 
@@ -959,8 +960,16 @@ int _cdecl main( int argc, char *argv[] )
         aIter.SetLanguageRestriction( sLanguages );
         if ( bExport ){
             if( bQuiet2 ){ /*printf("");*/fflush( stdout );}
-            aIter.Extract( sFileName );
-            if( bQuiet2 ){ printf("\n    %d files found!\n",aIter.GetFileCnt());}
+            if( *iter == "ooo" )
+                aIter.Extract( sFileName );
+            else
+            {
+                ByteString sFileNameWithExt( sFileName );
+                sFileNameWithExt += ByteString( "." );
+                sFileNameWithExt += ByteString( (*iter).c_str() );
+                aIter.Extract( sFileNameWithExt );
+            }
+            if( bQuiet2 ){ printf("\n%d files found!\n",aIter.GetFileCnt());}
         }
     }
     if( hasPwd )
@@ -973,7 +982,7 @@ int _cdecl main( int argc, char *argv[] )
         if ( bExport ){
             if( bQuiet2 ){ /*printf("");*/fflush( stdout );}
             aIter.Extract( sFileName );
-            if( bQuiet2 ){ printf("\n    %d files found!\n",aIter.GetFileCnt());}
+            if( bQuiet2 ){ printf("\n%d files found!\n",aIter.GetFileCnt());}
         }
 
     }

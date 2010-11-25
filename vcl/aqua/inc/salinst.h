@@ -32,6 +32,7 @@
 #include "vos/mutex.hxx"
 #include "vos/thread.hxx"
 #include "vcl/salinst.hxx"
+#include "osl/conditn.h"
 
 #include "aquavcltypes.h"
 
@@ -96,6 +97,7 @@ public:
     int                                     mnActivePrintJobs;
     std::list< SalUserEvent >               maUserEvents;
     oslMutex                                maUserEventListMutex;
+    oslCondition                            maWaitingYieldCond;
 
     typedef std::list<const ApplicationEvent*> AppEventList;
     static AppEventList aAppEventList;

@@ -147,6 +147,11 @@ void PADialog::Init()
     ::psp::PrintFontManager& rFontManager( ::psp::PrintFontManager::get() );
     if( ! rFontManager.checkImportPossible() )
         m_aFontsPB.Enable( FALSE );
+    if( rFontManager.hasFontconfig() )
+    {
+        m_aFontsPB.Enable( FALSE );
+        m_aFontsPB.Show( FALSE );
+    }
 }
 
 PADialog::~PADialog()

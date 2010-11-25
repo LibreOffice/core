@@ -41,7 +41,7 @@ namespace com { namespace sun { namespace star { namespace ucb {
     class XContentProviderManager;
     class XCommandProcessor;
 } } } }
-#include <ucbhelper/configureucb.hxx>
+#include <ucbhelper/registerucb.hxx>
 #include "ucbhelper/ucbhelperdllapi.h"
 
 namespace ucbhelper

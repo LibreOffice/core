@@ -127,7 +127,7 @@ public:
     }
     m_segMap.clear();
   };
-  GrSegRecord * getSegment(ImplLayoutArgs & layoutArgs, bool bIsRtl)
+  GrSegRecord * getSegment(ImplLayoutArgs & layoutArgs, bool bIsRtl, int segCharLimit)
   {
     GrSegRecord * found = NULL;
     // try to find a segment starting at correct place, if not, try to find a
@@ -152,8 +152,6 @@ public:
       if (found->m_seg->startCharacter() <= layoutArgs.mnMinCharPos &&
           found->m_seg->stopCharacter() >= layoutArgs.mnEndCharPos)
       {
-        const size_t seg_char_limit = min(layoutArgs.mnLength, layoutArgs.mnEndCharPos
-          + GraphiteLayout::EXTRA_CONTEXT_LENGTH);
         DBG_ASSERT(found && found->m_seg, "null entry in GraphiteSegmentCache");
         // restore original start character, in case it has changed
         found->m_seg->setTextSourceOffset(found->m_startChar);
@@ -161,7 +159,7 @@ public:
         // interest
         // We could use substr and ==, but substr does a copy,
         // so its probably faster to do it like this
-        for (size_t i = layoutArgs.mnMinCharPos; i < seg_char_limit; i++)
+        for (int i = layoutArgs.mnMinCharPos; i < segCharLimit; i++)
         {
           //if (!found->m_rope->match(rtl::OUString(layoutArgs.mpStr[i], layoutArgs.mnLength), i - found->m_seg->startCharacter()))
           if (found->m_rope->getStr()[i-found->m_seg->startCharacter()] != layoutArgs.mpStr[i])
@@ -170,6 +168,15 @@ public:
         if (found->isRtl() != bIsRtl)
         {
             return NULL;
+        }
+        if (found->m_seg->stopCharacter() > layoutArgs.mnEndCharPos &&
+            static_cast<int>(found->char2BaseGlyph().size()) > layoutArgs.mnEndCharPos)
+        {
+            // check that the requested end character isn't mid cluster
+            if (found->char2BaseGlyph()[layoutArgs.mnEndCharPos-layoutArgs.mnMinCharPos] == -1)
+            {
+                return NULL;
+            }
         }
 //        if (found->m_lockCount != 0)
 //          OutputDebugString("Multple users of SegRecord!");
@@ -183,10 +190,8 @@ public:
       // this is expecially needed when editing a large paragraph
       // each edit changes the pointers, but if we don't reuse any segments it gets very
       // slow.
-      const size_t seg_char_limit = min(layoutArgs.mnLength, layoutArgs.mnEndCharPos
-          + GraphiteLayout::EXTRA_CONTEXT_LENGTH);
       rtl::OUString * rope = new rtl::OUString(layoutArgs.mpStr + layoutArgs.mnMinCharPos,
-                                         seg_char_limit - layoutArgs.mnMinCharPos);
+                                         segCharLimit - layoutArgs.mnMinCharPos);
       if (!rope) return NULL;
       size_t nHash = (*(rope)).hashCode();
       GrRMEntry range = m_ropeMap.equal_range(nHash);

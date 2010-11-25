@@ -199,9 +199,9 @@ void OLESimpleStorage::InsertNameAccessToStorage_Impl( BaseStorage* pStorage, ::
             uno::Reference< container::XNameAccess > xSubNameAccess;
             uno::Any aAny = xNameAccess->getByName( aElements[nInd] );
             if ( aAny >>= xInputStream )
-                InsertInputStreamToStorage_Impl( pNewStorage, aName, xInputStream );
+                InsertInputStreamToStorage_Impl( pNewStorage, aElements[nInd], xInputStream );
             else if ( aAny >>= xSubNameAccess )
-                InsertNameAccessToStorage_Impl( pNewStorage, aName, xSubNameAccess );
+                InsertNameAccessToStorage_Impl( pNewStorage, aElements[nInd], xSubNameAccess );
         }
     }
     catch( uno::Exception& )

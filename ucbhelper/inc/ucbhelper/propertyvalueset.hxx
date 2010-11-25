@@ -32,6 +32,7 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/sdbc/XColumnLocate.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
+#include <com/sun/star/beans/Property.hpp>
 #include <cppuhelper/weak.hxx>
 
 #include "osl/mutex.hxx"
@@ -43,7 +44,6 @@ namespace com { namespace sun { namespace star { namespace script {
 } } } }
 
 namespace com { namespace sun { namespace star { namespace beans {
-    struct Property;
     struct PropertyValue;
     class XPropertySet;
 } } } }
@@ -205,175 +205,205 @@ public:
       */
     sal_Int32 getLength() const;
 
-    /**
-      * This method appends a string to the value set.
-      *
-      * @param rProp is the property the value belongs to.
-      */
-    void appendString   ( const ::com::sun::star::beans::Property& rProp,
-                          const ::rtl::OUString& rValue );
+    void appendString( const ::rtl::OUString& rPropName, const ::rtl::OUString& rValue );
+    void appendString( const sal_Char* pAsciiPropName, const ::rtl::OUString& rValue )
+    {
+        appendString( ::rtl::OUString::createFromAscii( pAsciiPropName ), rValue );
+    }
+    void appendString( const ::com::sun::star::beans::Property& rProp, const ::rtl::OUString& rValue )
+    {
+        appendString( rProp.Name, rValue );
+    }
 
-    /**
-      * This method appends a boolean to the value set.
-      *
-      * @param rProp is the property the value belongs to.
-      */
-    void appendBoolean  ( const ::com::sun::star::beans::Property& rProp,
-                          sal_Bool bValue );
+    void appendBoolean( const ::rtl::OUString& rPropName, sal_Bool bValue );
+    void appendBoolean( const sal_Char* pAsciiPropName, sal_Bool bValue )
+    {
+        appendBoolean( ::rtl::OUString::createFromAscii( pAsciiPropName ), bValue );
+    }
+    void appendBoolean( const ::com::sun::star::beans::Property& rProp, sal_Bool bValue )
+    {
+        appendBoolean( rProp.Name, bValue );
+    }
 
-    /**
-      * This method appends a byte to the value set.
-      *
-      * @param rProp is the property the value belongs to.
-      */
-    void appendByte     ( const ::com::sun::star::beans::Property& rProp,
-                          sal_Int8 nValue );
+    void appendByte( const ::rtl::OUString& rPropName, sal_Int8 nValue );
+    void appendByte( const sal_Char* pAsciiPropName, sal_Int8 nValue )
+    {
+        appendByte( ::rtl::OUString::createFromAscii( pAsciiPropName ), nValue );
+    }
+    void appendByte( const ::com::sun::star::beans::Property& rProp, sal_Int8 nValue )
+    {
+        appendByte( rProp.Name, nValue );
+    }
 
-    /**
-      * This method appends a short to the value set.
-      *
-      * @param rProp is the property the value belongs to.
-      */
-    void appendShort    ( const ::com::sun::star::beans::Property& rProp,
-                          sal_Int16 nValue );
+    void appendShort( const ::rtl::OUString& rPropName, sal_Int16 nValue );
+    void appendShort( const sal_Char* pAsciiPropName, sal_Int16 nValue )
+    {
+        appendShort( ::rtl::OUString::createFromAscii( pAsciiPropName ), nValue );
+    }
+    void appendShort( const ::com::sun::star::beans::Property& rProp, sal_Int16 nValue )
+    {
+        appendShort( rProp.Name, nValue );
+    }
 
-    /**
-      * This method appends an int to the value set.
-      *
-      * @param rProp is the property the value belongs to.
-      */
-    void appendInt      ( const ::com::sun::star::beans::Property& rProp,
-                          sal_Int32 nValue );
+    void appendInt( const ::rtl::OUString& rPropName, sal_Int32 nValue );
+    void appendInt( const sal_Char* pAsciiPropName, sal_Int32 nValue )
+    {
+        appendInt( ::rtl::OUString::createFromAscii( pAsciiPropName ), nValue );
+    }
+    void appendInt( const ::com::sun::star::beans::Property& rProp, sal_Int32 nValue )
+    {
+        appendInt( rProp.Name, nValue );
+    }
 
-    /**
-      * This method appends a long to the value set.
-      *
-      * @param rProp is the property the value belongs to.
-      */
-    void appendLong     ( const ::com::sun::star::beans::Property& rProp,
-                          sal_Int64 nValue );
+    void appendLong( const ::rtl::OUString& rPropName, sal_Int64 nValue );
+    void appendLong( const sal_Char* pAsciiPropName, sal_Int64 nValue )
+    {
+        appendLong( ::rtl::OUString::createFromAscii( pAsciiPropName ), nValue );
+    }
+    void appendLong( const ::com::sun::star::beans::Property& rProp, sal_Int64 nValue )
+    {
+        appendLong( rProp.Name, nValue );
+    }
 
-    /**
-      * This method appends a float to the value set.
-      *
-      * @param rProp is the property the value belongs to.
-      */
-    void appendFloat    ( const ::com::sun::star::beans::Property& rProp,
-                          float nValue );
+    void appendFloat( const ::rtl::OUString& rPropName, float nValue );
+    void appendFloat( const sal_Char* pAsciiPropName, float nValue )
+    {
+        appendFloat( ::rtl::OUString::createFromAscii( pAsciiPropName ), nValue );
+    }
+    void appendFloat( const ::com::sun::star::beans::Property& rProp, float nValue )
+    {
+        appendFloat( rProp.Name, nValue );
+    }
 
-    /**
-      * This method appends a double to the value set.
-      *
-      * @param rProp is the property the value belongs to.
-      */
-    void appendDouble   ( const ::com::sun::star::beans::Property& rProp,
-                          double nValue );
+    void appendDouble( const ::rtl::OUString& rPropName, double nValue );
+    void appendDouble( const sal_Char* pAsciiPropName, double nValue )
+    {
+        appendDouble( ::rtl::OUString::createFromAscii( pAsciiPropName ), nValue );
+    }
+    void appendDouble( const ::com::sun::star::beans::Property& rProp, double nValue )
+    {
+        appendDouble( rProp.Name, nValue );
+    }
 
-    /**
-      * This method appends a byte sequence to the value set.
-      *
-      * @param rProp is the property the value belongs to.
-      */
-    void appendBytes    ( const ::com::sun::star::beans::Property& rProp,
-                          const ::com::sun::star::uno::Sequence<
-                              sal_Int8 >& rValue );
+    void appendBytes( const ::rtl::OUString& rPropName, const ::com::sun::star::uno::Sequence< sal_Int8 >& rValue );
+    void appendBytes( const sal_Char* pAsciiPropName, const ::com::sun::star::uno::Sequence< sal_Int8 >& rValue )
+    {
+        appendBytes( ::rtl::OUString::createFromAscii( pAsciiPropName ), rValue );
+    }
+    void appendBytes( const ::com::sun::star::beans::Property& rProp, const ::com::sun::star::uno::Sequence< sal_Int8 >& rValue )
+    {
+        appendBytes( rProp.Name, rValue );
+    }
 
-    /**
-      * This method appends a date to the value set.
-      *
-      * @param rProp is the property the value belongs to.
-      */
-    void appendDate     ( const ::com::sun::star::beans::Property& rProp,
-                          const ::com::sun::star::util::Date& rValue );
+    void appendDate( const ::rtl::OUString& rPropName, const ::com::sun::star::util::Date& rValue );
+    void appendDate( const sal_Char* pAsciiPropName, const ::com::sun::star::util::Date& rValue )
+    {
+        appendDate( ::rtl::OUString::createFromAscii( pAsciiPropName ), rValue );
+    }
+    void appendDate( const ::com::sun::star::beans::Property& rProp, const ::com::sun::star::util::Date& rValue )
+    {
+        appendDate( rProp.Name, rValue );
+    }
 
-    /**
-      * This method appends a time to the value set.
-      *
-      * @param rProp is the property the value belongs to.
-      */
-    void appendTime     ( const ::com::sun::star::beans::Property& rProp,
-                          const ::com::sun::star::util::Time& rValue );
+    void appendTime( const ::rtl::OUString& rPropName, const ::com::sun::star::util::Time& rValue );
+    void appendTime( const sal_Char* pAsciiPropName, const ::com::sun::star::util::Time& rValue )
+    {
+        appendTime( ::rtl::OUString::createFromAscii( pAsciiPropName ), rValue );
+    }
+    void appendTime( const ::com::sun::star::beans::Property& rProp, const ::com::sun::star::util::Time& rValue )
+    {
+        appendTime( rProp.Name, rValue );
+    }
 
-    /**
-      * This method appends a timestamp to the value set.
-      *
-      * @param rProp is the property the value belongs to.
-      */
-    void appendTimestamp( const ::com::sun::star::beans::Property& rProp,
-                          const ::com::sun::star::util::DateTime& rValue );
+    void appendTimestamp( const ::rtl::OUString& rPropName, const ::com::sun::star::util::DateTime& rValue );
+    void appendTimestamp( const sal_Char* pAsciiPropName, const ::com::sun::star::util::DateTime& rValue )
+    {
+        appendTimestamp( ::rtl::OUString::createFromAscii( pAsciiPropName ), rValue );
+    }
+    void appendTimestamp( const ::com::sun::star::beans::Property& rProp, const ::com::sun::star::util::DateTime& rValue )
+    {
+        appendTimestamp( rProp.Name, rValue );
+    }
 
-    /**
-      * This method appends a binary stream to the value set.
-      *
-      * @param rProp is the property the value belongs to.
-      */
-    void appendBinaryStream   ( const ::com::sun::star::beans::Property& rProp,
-                                const ::com::sun::star::uno::Reference<
-                                    ::com::sun::star::io::XInputStream >&
-                                        rValue );
+    void appendBinaryStream( const ::rtl::OUString& rPropName, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rValue );
+    void appendBinaryStream( const sal_Char* pAsciiPropName, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rValue )
+    {
+        appendBinaryStream( ::rtl::OUString::createFromAscii( pAsciiPropName ), rValue );
+    }
+    void appendBinaryStream( const ::com::sun::star::beans::Property& rProp, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rValue )
+    {
+        appendBinaryStream( rProp.Name, rValue );
+    }
 
-    /**
-      * This method appends a character stream to the value set.
-      *
-      * @param rProp is the property the value belongs to.
-      */
-    void appendCharacterStream( const ::com::sun::star::beans::Property& rProp,
-                                const ::com::sun::star::uno::Reference<
-                                    ::com::sun::star::io::XInputStream >&
-                                        rValue );
+    void appendCharacterStream( const ::rtl::OUString& rPropName, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rValue );
+    void appendCharacterStream( const sal_Char* pAsciiPropName, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rValue )
+    {
+        appendCharacterStream( ::rtl::OUString::createFromAscii( pAsciiPropName ), rValue );
+    }
+    void appendCharacterStream( const ::com::sun::star::beans::Property& rProp, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rValue )
+    {
+        appendCharacterStream( rProp.Name, rValue );
+    }
 
-    /**
-      * This method appends an object ( any ) to the value set.
-      *
-      * @param rProp is the property the value belongs to.
-      */
-    void appendObject   ( const ::com::sun::star::beans::Property& rProp,
-                          const ::com::sun::star::uno::Any& rValue );
+    void appendObject( const ::rtl::OUString& rPropName, const ::com::sun::star::uno::Any& rValue );
+    void appendObject( const sal_Char* pAsciiPropName, const ::com::sun::star::uno::Any& rValue )
+    {
+        appendObject( ::rtl::OUString::createFromAscii( pAsciiPropName ), rValue );
+    }
+    void appendObject( const ::com::sun::star::beans::Property& rProp, const ::com::sun::star::uno::Any& rValue )
+    {
+        appendObject( rProp.Name, rValue );
+    }
 
-    /**
-      * This method appends a ref to the value set.
-      *
-      * @param rProp is the property the value belongs to.
-      */
-    void appendRef      ( const ::com::sun::star::beans::Property& rProp,
-                          const ::com::sun::star::uno::Reference<
-                              ::com::sun::star::sdbc::XRef >& rValue );
+    void appendRef( const ::rtl::OUString& rPropName, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRef >& rValue );
+    void appendRef( const sal_Char* pAsciiPropName, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRef >& rValue )
+    {
+        appendRef( ::rtl::OUString::createFromAscii( pAsciiPropName ), rValue );
+    }
+    void appendRef( const ::com::sun::star::beans::Property& rProp, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRef >& rValue )
+    {
+        appendRef( rProp.Name, rValue );
+    }
 
-    /**
-      * This method appends a blob to the value set.
-      *
-      * @param rProp is the property the value belongs to.
-      */
-    void appendBlob     ( const ::com::sun::star::beans::Property& rProp,
-                          const ::com::sun::star::uno::Reference<
-                              ::com::sun::star::sdbc::XBlob >& rValue );
+    void appendBlob( const ::rtl::OUString& rPropName, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XBlob >& rValue );
+    void appendBlob( const sal_Char* pAsciiPropName, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XBlob >& rValue )
+    {
+        appendBlob( ::rtl::OUString::createFromAscii( pAsciiPropName ), rValue );
+    }
+    void appendBlob( const ::com::sun::star::beans::Property& rProp, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XBlob >& rValue )
+    {
+        appendBlob( rProp.Name, rValue );
+    }
 
-    /**
-      * This method appends a clob to the value set.
-      *
-      * @param rProp is the property the value belongs to.
-      */
-    void appendClob     ( const ::com::sun::star::beans::Property& rProp,
-                          const ::com::sun::star::uno::Reference<
-                              ::com::sun::star::sdbc::XClob >& rValue );
+    void appendClob( const ::rtl::OUString& rPropName, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XClob >& rValue );
+    void appendClob( const sal_Char* pAsciiPropName, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XClob >& rValue )
+    {
+        appendClob( ::rtl::OUString::createFromAscii( pAsciiPropName ), rValue );
+    }
+    void appendClob( const ::com::sun::star::beans::Property& rProp, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XClob >& rValue )
+    {
+        appendClob( rProp.Name, rValue );
+    }
 
-    /**
-      * This method appends an array to the value set.
-      *
-      * @param rProp is the property the value belongs to.
-      */
-    void appendArray    ( const ::com::sun::star::beans::Property& rProp,
-                          const ::com::sun::star::uno::Reference<
-                              ::com::sun::star::sdbc::XArray >& rValue );
+    void appendArray( const ::rtl::OUString& rPropName, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XArray >& rValue );
+    void appendArray( const sal_Char* pAsciiPropName, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XArray >& rValue )
+    {
+        appendArray( ::rtl::OUString::createFromAscii( pAsciiPropName ), rValue );
+    }
+    void appendArray( const ::com::sun::star::beans::Property& rProp, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XArray >& rValue )
+    {
+        appendArray( rProp.Name, rValue );
+    }
 
-    /**
-      * This method appends a void value ( a "hole" ) to the value set. This
-      * is useful, since void values indicate errors, like non-existing
-      * property (-values) etc.
-      *
-      * @param rProp is the property the value belongs to.
-      */
-    void appendVoid     ( const ::com::sun::star::beans::Property& rProp );
+    void appendVoid( const ::rtl::OUString& rPropName );
+    void appendVoid( const sal_Char* pAsciiPropName)
+    {
+        appendVoid( ::rtl::OUString::createFromAscii( pAsciiPropName ) );
+    }
+    void appendVoid( const ::com::sun::star::beans::Property& rProp )
+    {
+        appendVoid( rProp.Name );
+    }
 
     /**
       * This method tries to append all property values contained in a

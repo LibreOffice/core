@@ -542,7 +542,7 @@ BOOL BrowseBox::GetGlyphBoundRects( const Point& rOrigin, const String& rStr, in
     return Control::GetGlyphBoundRects( rOrigin, rStr, nIndex, nLen, nBase, rVector );
 }
 // -----------------------------------------------------------------------------
-Rectangle BrowseBox::GetWindowExtentsRelative( Window *pRelativeWindow )
+Rectangle BrowseBox::GetWindowExtentsRelative( Window *pRelativeWindow ) const
 {
     return Control::GetWindowExtentsRelative( pRelativeWindow );
 }

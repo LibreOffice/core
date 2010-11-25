@@ -57,6 +57,10 @@ class   ImplLayoutArgs;
 class   X11FontLayout;
 class   ServerFontLayout;
 
+namespace basegfx {
+    class B2DTrapezoid;
+}
+
 // -=-= SalGraphicsData =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 class CairoFontsCache
@@ -289,8 +293,11 @@ public:
     virtual void            drawPolyPolygon( sal_uInt32 nPoly,
                                              const sal_uInt32* pPoints,
                                              PCONSTSALPOINT* pPtAry );
-    virtual bool            drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPolygon, double fTransparency );
-    virtual bool            drawPolyLine( const ::basegfx::B2DPolygon& rPolygon, const ::basegfx::B2DVector& rLineWidth, basegfx::B2DLineJoin);
+    virtual bool            drawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double fTransparency );
+    virtual bool            drawPolyLine( const ::basegfx::B2DPolygon&, const ::basegfx::B2DVector& rLineWidth, basegfx::B2DLineJoin );
+    virtual bool            drawFilledTrapezoids( const ::basegfx::B2DTrapezoid*, int nTrapCount, double fTransparency );
+
+#if 1 // TODO: remove these obselete methods
     virtual sal_Bool        drawPolyLineBezier( ULONG nPoints,
                                                 const SalPoint* pPtAry,
                                                 const BYTE* pFlgAry );
@@ -301,6 +308,8 @@ public:
                                                    const sal_uInt32* pPoints,
                                                    const SalPoint* const* pPtAry,
                                                    const BYTE* const* pFlgAry );
+#endif
+
     virtual void            copyArea( long nDestX,
                                       long nDestY,
                                       long nSrcX,

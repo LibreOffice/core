@@ -41,7 +41,7 @@
 #include "imgdef.hxx"
 #include "txtattr.hxx"
 #ifndef _SVTOOLS_HRC
-#include <svl/svtools.hrc>
+#include <svtools/svtools.hrc>
 #endif
 #ifndef _SVTOOLS_TEMPLWIN_HRC
 #include "templwin.hrc"

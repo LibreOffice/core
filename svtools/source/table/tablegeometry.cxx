@@ -49,8 +49,8 @@ namespace svt { namespace table
     {
         if ( m_nRowPos == ROW_COL_HEADERS )
         {
-            DBG_ASSERT( m_rControl.m_pModel->hasColumnHeaders(),
-                "TableRowGeometry::TableRowGeometry: why asking for the geoemtry of the non-existent column header row?" );
+            //DBG_ASSERT( m_rControl.m_pModel->hasColumnHeaders(),
+            //    "TableRowGeometry::TableRowGeometry: why asking for the geoemtry of the non-existent column header row?" );
             m_aRect.Top() = 0;
             m_aRect.Bottom() = m_rControl.m_nColHeaderHeightPixel - 1;
         }
@@ -87,8 +87,8 @@ namespace svt { namespace table
     {
         if ( m_nColPos == COL_ROW_HEADERS )
         {
-            DBG_ASSERT( m_rControl.m_pModel->hasRowHeaders(),
-                "TableColumnGeometry::TableColumnGeometry: why asking for the geoemtry of the non-existent row header column?" );
+/*            DBG_ASSERT( m_rControl.m_pModel->hasRowHeaders(),
+                "TableColumnGeometry::TableColumnGeometry: why asking for the geoemtry of the non-existent row header column?" )*/;
             m_aRect.Left() = 0;
             m_aRect.Right() = m_rControl.m_nRowHeaderWidthPixel - 1;
         }

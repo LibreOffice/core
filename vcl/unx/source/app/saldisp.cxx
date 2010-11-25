@@ -322,12 +322,12 @@ sal_IsLocalDisplay( Display *pDisplay )
 
     if( pPtr != NULL )
     {
-        OUString aLocalHostname;
-        if( osl_getLocalHostname( &aLocalHostname.pData ) == osl_Socket_Ok)
+        const OUString& rLocalHostname( GetX11SalData()->GetLocalHostName() );
+        if( rLocalHostname.getLength() )
         {
             *pPtr = '\0';
             OUString aDisplayHostname( pDisplayHost, strlen( pDisplayHost ), osl_getThreadTextEncoding() );
-            bEqual = sal_EqualHosts( aLocalHostname, aDisplayHostname );
+            bEqual = sal_EqualHosts( rLocalHostname, aDisplayHostname );
             bEqual = bEqual && sal_IsDisplayNumber( pPtr + 1 );
         }
     }

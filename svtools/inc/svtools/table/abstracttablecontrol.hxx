@@ -30,6 +30,7 @@
 #include <sal/types.h>
 #include <vcl/event.hxx>
 #include <vcl/seleng.hxx>
+#include "tabletypes.hxx"
 //........................................................................
 namespace svt { namespace table
 {
@@ -112,14 +113,15 @@ namespace svt { namespace table
             @see TableControlAction
         */
         virtual bool    dispatchAction( TableControlAction _eAction ) = 0;
-        /** to be called on mouse button up/down
-            @return
-            <TRUE/> if the click was in the visible area of the table control,
-            <FALSE/> otherwise.*/
-        virtual bool    isClickInVisibleArea( const Point& _rPoint ) = 0;
-        /** returns selection engine*/
-        virtual SelectionEngine* getSelEngine() = 0;
-        virtual void setCursorAtCurrentCell(const Point& rPoint) = 0;
+    /** returns selection engine*/
+    virtual SelectionEngine* getSelEngine() = 0;
+    virtual void setCursorAtCurrentCell(const Point& rPoint) = 0;
+    virtual rtl::OUString& setTooltip(const Point& rPoint ) = 0;
+    virtual RowPos getCurrentRow(const Point& rPoint ) = 0;
+    virtual void resizeColumn(const Point& rPoint ) = 0;
+    virtual bool startResizeColumn(const Point& rPoint) = 0;
+    virtual bool endResizeColumn(const Point& rPoint) = 0;
+    virtual bool isRowSelected(RowPos _nRow) = 0;
 
         virtual ~IAbstractTableControl() {};
     };

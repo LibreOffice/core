@@ -32,7 +32,7 @@
 #include "unotools/regoptions.hxx"
 #include "registrationdlg.hxx"
 #ifndef _SVTOOLS_HRC
-#include <svl/svtools.hrc>
+#include <svtools/svtools.hrc>
 #endif
 #include "cppuhelper/factory.hxx"
 #include <cppuhelper/implbase1.hxx>

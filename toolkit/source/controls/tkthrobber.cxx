@@ -46,8 +46,13 @@ namespace toolkit
     //--------------------------------------------------------------------
     UnoThrobberControlModel::UnoThrobberControlModel()
     {
-        ImplRegisterProperty( BASEPROPERTY_DEFAULTCONTROL );
+        ImplRegisterProperty( BASEPROPERTY_BORDER );
+        ImplRegisterProperty( BASEPROPERTY_BORDERCOLOR );
         ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
+        ImplRegisterProperty( BASEPROPERTY_DEFAULTCONTROL );
+        ImplRegisterProperty( BASEPROPERTY_ENABLEVISIBLE );
+        ImplRegisterProperty( BASEPROPERTY_HELPTEXT );
+        ImplRegisterProperty( BASEPROPERTY_HELPURL );
     }
 
     //--------------------------------------------------------------------
@@ -63,6 +68,8 @@ namespace toolkit
         {
         case BASEPROPERTY_DEFAULTCONTROL:
             return uno::makeAny( ::rtl::OUString::createFromAscii( szServiceName_UnoThrobberControl ) );
+        case BASEPROPERTY_BORDER:
+            return uno::makeAny( (sal_Int16) 0 );
         default:
             return UnoControlModel::ImplGetDefaultValue( nPropId );
         }
@@ -100,8 +107,9 @@ namespace toolkit
         throw( uno::RuntimeException )
     {
         uno::Sequence< ::rtl::OUString > aServices( UnoControlModel::getSupportedServiceNames() );
-        aServices.realloc( aServices.getLength() + 1 );
-        aServices[ aServices.getLength() - 1 ] = ::rtl::OUString::createFromAscii( szServiceName_UnoThrobberControlModel );
+        aServices.realloc( aServices.getLength() + 2 );
+        aServices[ aServices.getLength() - 2 ] = ::rtl::OUString::createFromAscii( szServiceName_UnoThrobberControlModel );
+        aServices[ aServices.getLength() - 1 ] = ::rtl::OUString::createFromAscii( szServiceName2_UnoThrobberControlModel );
         return aServices;
     }
 
@@ -151,8 +159,9 @@ namespace toolkit
         throw( uno::RuntimeException )
     {
         uno::Sequence< ::rtl::OUString > aServices( UnoControlBase::getSupportedServiceNames() );
-        aServices.realloc( aServices.getLength() + 1 );
-        aServices[ aServices.getLength() - 1 ] = ::rtl::OUString::createFromAscii( szServiceName_UnoThrobberControl );
+        aServices.realloc( aServices.getLength() + 2 );
+        aServices[ aServices.getLength() - 2 ] = ::rtl::OUString::createFromAscii( szServiceName_UnoThrobberControl );
+        aServices[ aServices.getLength() - 1 ] = ::rtl::OUString::createFromAscii( szServiceName2_UnoThrobberControl );
         return aServices;
     }
 

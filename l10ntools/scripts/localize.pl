@@ -272,7 +272,9 @@ sub write_sdf
     foreach my $lang( keys( %{ $string_hash } ) )
     {
         my @sdf_file;
+        next , if( $lang eq "en-US" );
 
+        mkdir $l10n_file."/$lang";
         # mkdir!!!!
         my $current_l10n_file = $l10n_file."/$lang/localize.sdf";
         print "Writing '$current_l10n_file'\n";
@@ -380,11 +382,9 @@ sub merge_gsicheck{
     my ( $TMPHANDLE , $tmpfile ) = File::Temp::tempfile();
     close ( $TMPHANDLE );
 
-    if( $ENV{WRAPCMD} ){
-        $command = "$ENV{WRAPCMD} gsicheck";
-    }else{
-        $command = "gsicheck";
-    }
+    $command = "$ENV{WRAPCMD} " if( $ENV{WRAPCMD} );
+    $command .= "$ENV{SOLARVER}/$ENV{INPATH}/bin/gsicheck";
+
     my $errfile = $sdffile.".err";
     $command .= " -k -c -wcf $tmpfile -wef $errfile -l \"\" $sdffile";
     #my $rc = system( $command );

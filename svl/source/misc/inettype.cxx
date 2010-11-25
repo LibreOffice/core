@@ -31,9 +31,7 @@
 #include <tools/wldcrd.hxx>
 #include <svl/inettype.hxx>
 #include <svl/svldata.hxx>
-#ifndef _SVTOOLS_HRC
-#include <svl/svtools.hrc>
-#endif
+#include <svl/svl.hrc>
 
 #ifndef _SVSTDARR_STRINGSSORT_DECL
 #define _SVSTDARR_STRINGSSORT
@@ -806,16 +804,13 @@ namespace unnamed_svl_inettype {
 MediaTypeEntry const * seekEntry(UniString const & rTypeName,
                                  MediaTypeEntry const * pMap, sal_Size nSize)
 {
-#if defined DBG_UTIL || defined INETTYPE_DEBUG
-    static bool bChecked = false;
-    if (!bChecked)
-    {
-        for (sal_Size i = 0; i < nSize - 1; ++i)
-            DBG_ASSERT(pMap[i].m_pTypeName < pMap[i + 1].m_pTypeName,
-                       "seekEntry(): Bad map");
-        bChecked = true;
-    }
-#endif // DBG_UTIL, INETTYPE_DEBUG
+#if defined DBG_UTIL
+    for (sal_Size i = 0; i < nSize - 1; ++i)
+        DBG_ASSERT(
+            rtl_str_compare(
+                pMap[i].m_pTypeName, pMap[i + 1].m_pTypeName) < 0,
+            "seekEntry(): Bad map");
+#endif
 
     sal_Size nLow = 0;
     sal_Size nHigh = nSize;

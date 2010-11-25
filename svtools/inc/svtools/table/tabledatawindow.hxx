@@ -53,21 +53,27 @@ namespace svt { namespace table
     private:
         TableControl_Impl&  m_rTableControl;
         Link                m_aMouseButtonDownHdl;
-        Link                m_aMouseButtonUpHdl;
-
+         Link               m_aMouseButtonUpHdl;
+        Link                m_aSelectHdl;
+        RowPos              m_nRowAlreadySelected;
     public:
         TableDataWindow( TableControl_Impl& _rTableControl );
         inline void         SetMouseButtonDownHdl( const Link& rLink )  { m_aMouseButtonDownHdl = rLink; }
         inline const Link&  GetMouseButtonDownHdl() const               { return m_aMouseButtonDownHdl; }
         inline void         SetMouseButtonUpHdl( const Link& rLink )    { m_aMouseButtonUpHdl = rLink; }
         inline const Link&  GetMouseButtonUpHdl() const             { return m_aMouseButtonUpHdl; }
+        inline void         SetSelectHdl( const Link& rLink )   { m_aSelectHdl = rLink; }
+        inline const Link&  GetSelectHdl() const                { return m_aSelectHdl; }
 
         // Window overridables
         virtual void        Paint( const Rectangle& rRect );
         virtual void        MouseMove( const MouseEvent& rMEvt);
         virtual void        MouseButtonDown( const MouseEvent& rMEvt);
         virtual void        MouseButtonUp( const MouseEvent& rMEvt);
-
+        virtual void        SetPointer( const Pointer& rPointer );
+        virtual void        CaptureMouse();
+        virtual void        ReleaseMouse();
+        virtual long        Notify(NotifyEvent& rNEvt);
     };
 //........................................................................
 } } // namespace svt::table

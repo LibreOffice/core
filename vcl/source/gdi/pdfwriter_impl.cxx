@@ -9749,7 +9749,7 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
             aLine.append( " ]\n" );
         }
     }
-    else if( m_bIsPDF_A1 )
+    else if( m_bIsPDF_A1 && (bWriteMask || aTransparentColor != Color( COL_TRANSPARENT )) )
         m_aErrors.insert( PDFWriter::Warning_Transparency_Omitted_PDFA );
 
     aLine.append( ">>\n"
@@ -11733,7 +11733,7 @@ sal_Int32 PDFWriterImpl::findRadioGroupWidget( const PDFWriter::RadioButtonWidge
         m_aWidgets.back().m_nPage       = m_nCurrentPage;
         m_aWidgets.back().m_eType       = PDFWriter::RadioButton;
         m_aWidgets.back().m_nRadioGroup = rBtn.RadioGroup;
-        m_aWidgets.back().m_nFlags |= 0x00008000;
+        m_aWidgets.back().m_nFlags |= 0x0000C000;   // NoToggleToOff and Radio bits
 
         createWidgetFieldName( sal_Int32(m_aWidgets.size()-1), rBtn );
     }

@@ -48,6 +48,7 @@
 #include "aqua11ywrappersplitter.h"
 #include "aqua11ywrappertabgroup.h"
 #include "aqua11ywrappertoolbar.h"
+#include "aqua11ytablewrapper.h"
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 
 using namespace ::com::sun::star::accessibility;
@@ -142,6 +143,8 @@ static bool enabled = false;
             aWrapper = [ [ AquaA11yWrapperList alloc ] initWithAccessibleContext: rxAccessibleContext ];
         } else if ( [ nativeRole isEqualToString: NSAccessibilitySplitterRole ] ) {
             aWrapper = [ [ AquaA11yWrapperSplitter alloc ] initWithAccessibleContext: rxAccessibleContext ];
+        } else if ( [ nativeRole isEqualToString: NSAccessibilityTableRole ] ) {
+            aWrapper = [ [ AquaA11yTableWrapper alloc ] initWithAccessibleContext: rxAccessibleContext ];
         } else {
             aWrapper = [ [ AquaA11yWrapper alloc ] initWithAccessibleContext: rxAccessibleContext ];
         }

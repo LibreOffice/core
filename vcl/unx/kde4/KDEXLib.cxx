@@ -148,9 +148,6 @@ void KDEXLib::Init()
 
     ((VCLKDEApplication*)m_pApplication)->disp = pSalDisplay;
 
-    XSetIOErrorHandler    ( (XIOErrorHandler)X11SalData::XIOErrorHdl );
-    XSetErrorHandler      ( (XErrorHandler)X11SalData::XErrorHdl );
-
     pInputMethod->CreateMethod( pDisp );
     pInputMethod->AddConnectionWatch( pDisp, (void*)this );
     pSalDisplay->SetInputMethod( pInputMethod );

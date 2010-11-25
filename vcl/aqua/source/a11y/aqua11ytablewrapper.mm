@@ -35,38 +35,120 @@ using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::uno;
 
-@implementation AquaA11yTableWrapper : NSObject
+@implementation AquaA11yTableWrapper : AquaA11yWrapper
 
-+(id)childrenAttributeForElement:(AquaA11yWrapper *)wrapper
++(id)childrenAttributeForElement:(AquaA11yTableWrapper *)wrapper
 {
-    try
+    XAccessibleTable * accessibleTable = [ wrapper accessibleTable ];
+    NSArray* pResult = nil;
+    if( accessibleTable )
     {
         NSMutableArray * cells = [ [ NSMutableArray alloc ] init ];
-        XAccessibleComponent * accessibleComponent = [ wrapper accessibleComponent ];
-        XAccessibleTable * accessibleTable = [ wrapper accessibleTable ];
-        // find out which cells are actually visible by determining the top-left-cell and the bottom-right-cell
-        Size tableSize = accessibleComponent -> getSize();
-        Point point;
-        point.X = 0;
-        point.Y = 0;
-        Reference < XAccessible > rAccessibleTopLeft = accessibleComponent -> getAccessibleAtPoint ( point );
-        point.X = tableSize.Width - 1;
-        point.Y = tableSize.Height - 1;
-        Reference < XAccessible > rAccessibleBottomRight = accessibleComponent -> getAccessibleAtPoint ( point );
-        if ( rAccessibleTopLeft.is() && rAccessibleBottomRight.is() )
+        try
         {
-            sal_Int32 idxTopLeft = rAccessibleTopLeft -> getAccessibleContext() -> getAccessibleIndexInParent();
-            sal_Int32 idxBottomRight = rAccessibleBottomRight -> getAccessibleContext() -> getAccessibleIndexInParent();
-            sal_Int32 rowTopLeft = accessibleTable -> getAccessibleRow ( idxTopLeft );
-            sal_Int32 columnTopLeft = accessibleTable -> getAccessibleColumn ( idxTopLeft );
-            sal_Int32 rowBottomRight = accessibleTable -> getAccessibleRow ( idxBottomRight );
-            sal_Int32 columnBottomRight = accessibleTable -> getAccessibleColumn ( idxBottomRight );
-            // create an array containing the visible cells
-            for ( sal_Int32 rowCount = rowTopLeft; rowCount <= rowBottomRight; rowCount++ )
+            sal_Int32 nRows = accessibleTable->getAccessibleRowCount();
+            sal_Int32 nCols = accessibleTable->getAccessibleColumnCount();
+    
+            if( nRows * nCols < MAXIMUM_ACCESSIBLE_TABLE_CELLS )
             {
-                for ( sal_Int32 columnCount = columnTopLeft; columnCount <= columnBottomRight; columnCount++ )
+                // make all children visible to the hierarchy
+                for ( sal_Int32 rowCount = 0; rowCount < nRows; rowCount++ )
                 {
-                    Reference < XAccessible > rAccessibleCell = accessibleTable -> getAccessibleCellAt ( rowCount, columnCount );
+                    for ( sal_Int32 columnCount = 0; columnCount < nCols; columnCount++ )
+                    {
+                        Reference < XAccessible > rAccessibleCell = accessibleTable -> getAccessibleCellAt ( rowCount, columnCount );
+                        if ( rAccessibleCell.is() )
+                        {
+                            id cell_wrapper = [ AquaA11yFactory wrapperForAccessibleContext: rAccessibleCell -> getAccessibleContext() ];
+                            [ cells addObject: cell_wrapper ];
+                            [ cell_wrapper release ];
+                        }
+                    }
+                }
+            }
+            else
+            {
+                XAccessibleComponent * accessibleComponent = [ wrapper accessibleComponent ];
+                // find out which cells are actually visible by determining the top-left-cell and the bottom-right-cell
+                Size tableSize = accessibleComponent -> getSize();
+                Point point;
+                point.X = 0;
+                point.Y = 0;
+                Reference < XAccessible > rAccessibleTopLeft = accessibleComponent -> getAccessibleAtPoint ( point );
+                point.X = tableSize.Width - 1;
+                point.Y = tableSize.Height - 1;
+                Reference < XAccessible > rAccessibleBottomRight = accessibleComponent -> getAccessibleAtPoint ( point );
+                if ( rAccessibleTopLeft.is() && rAccessibleBottomRight.is() )
+                {
+                    sal_Int32 idxTopLeft = rAccessibleTopLeft -> getAccessibleContext() -> getAccessibleIndexInParent();
+                    sal_Int32 idxBottomRight = rAccessibleBottomRight -> getAccessibleContext() -> getAccessibleIndexInParent();
+                    sal_Int32 rowTopLeft = accessibleTable -> getAccessibleRow ( idxTopLeft );
+                    sal_Int32 columnTopLeft = accessibleTable -> getAccessibleColumn ( idxTopLeft );
+                    sal_Int32 rowBottomRight = accessibleTable -> getAccessibleRow ( idxBottomRight );
+                    sal_Int32 columnBottomRight = accessibleTable -> getAccessibleColumn ( idxBottomRight );
+                    // create an array containing the visible cells
+                    for ( sal_Int32 rowCount = rowTopLeft; rowCount <= rowBottomRight; rowCount++ )
+                    {
+                        for ( sal_Int32 columnCount = columnTopLeft; columnCount <= columnBottomRight; columnCount++ )
+                        {
+                            Reference < XAccessible > rAccessibleCell = accessibleTable -> getAccessibleCellAt ( rowCount, columnCount );
+                            if ( rAccessibleCell.is() )
+                            {
+                                id cell_wrapper = [ AquaA11yFactory wrapperForAccessibleContext: rAccessibleCell -> getAccessibleContext() ];
+                                [ cells addObject: cell_wrapper ];
+                                [ cell_wrapper release ];
+                            }
+                        }
+                    }
+                }
+            }
+            pResult = NSAccessibilityUnignoredChildren( cells );
+        }
+        catch (const Exception &e) 
+        {
+        }
+        [cells autorelease];
+    }
+    
+    return pResult;
+}
+
++(void)addAttributeNamesTo: (NSMutableArray *)attributeNames object: (AquaA11yWrapper*)pObject
+{
+    XAccessibleTable * accessibleTable = [ pObject accessibleTable ];
+    if( accessibleTable )
+    {
+        sal_Int32 nRows = accessibleTable->getAccessibleRowCount();
+        sal_Int32 nCols = accessibleTable->getAccessibleColumnCount();    
+        
+        
+        if( nRows*nCols < MAXIMUM_ACCESSIBLE_TABLE_CELLS )
+        {
+            [ attributeNames addObject: NSAccessibilityRowsAttribute ];
+            [ attributeNames addObject: NSAccessibilityColumnsAttribute ];
+        }
+    }
+}
+
+-(id)rowsAttribute
+{
+    NSArray* pResult = nil;
+
+    XAccessibleTable * accessibleTable = [ self accessibleTable ];
+    if( accessibleTable )
+    {
+        sal_Int32 nRows = accessibleTable->getAccessibleRowCount();
+        sal_Int32 nCols = accessibleTable->getAccessibleColumnCount();    
+        if( nRows * nCols < MAXIMUM_ACCESSIBLE_TABLE_CELLS )
+        {
+            NSMutableArray * cells = [ [ NSMutableArray alloc ] init ];
+            try
+            {
+                // find out number of rows
+                sal_Int32 nRows = accessibleTable->getAccessibleRowCount();
+                for( sal_Int32 n = 0; n < nRows; n++ )
+                {
+                    Reference < XAccessible > rAccessibleCell = accessibleTable -> getAccessibleCellAt ( n, 0 );
                     if ( rAccessibleCell.is() )
                     {
                         id cell_wrapper = [ AquaA11yFactory wrapperForAccessibleContext: rAccessibleCell -> getAccessibleContext() ];
@@ -74,16 +156,56 @@ using namespace ::com::sun::star::uno;
                         [ cell_wrapper release ];
                     }
                 }
+                pResult = NSAccessibilityUnignoredChildren( cells );
             }
+            catch (const Exception &e) 
+            {
+                pResult = nil;
+            }
+            [ cells autorelease ];
         }
-        [ cells autorelease ];
-        return NSAccessibilityUnignoredChildren( cells );
     }
-    catch (const Exception &e) 
+    
+    return pResult;
+}
+
+-(id)columnsAttribute
+{
+    NSArray* pResult = nil;
+
+    XAccessibleTable * accessibleTable = [ self accessibleTable ];
+    
+    if( accessibleTable )
     {
-        // TODO: Log
-        return nil;
+        sal_Int32 nRows = accessibleTable->getAccessibleRowCount();
+        sal_Int32 nCols = accessibleTable->getAccessibleColumnCount();    
+        if( nRows * nCols < MAXIMUM_ACCESSIBLE_TABLE_CELLS )
+        {
+            NSMutableArray * cells = [ [ NSMutableArray alloc ] init ];
+            try
+            {
+                // find out number of columns
+                for( sal_Int32 n = 0; n < nCols; n++ )
+                {
+                    Reference < XAccessible > rAccessibleCell = accessibleTable -> getAccessibleCellAt ( 0, n );
+                    if ( rAccessibleCell.is() )
+                    {
+                        id cell_wrapper = [ AquaA11yFactory wrapperForAccessibleContext: rAccessibleCell -> getAccessibleContext() ];
+                        [ cells addObject: cell_wrapper ];
+                        [ cell_wrapper release ];
+                    }
+                }
+                pResult = NSAccessibilityUnignoredChildren( cells );
+            }
+            catch (const Exception &e) 
+            {
+                pResult = nil;
+            }
+            [ cells autorelease ];
+        }
     }
+    
+    return pResult;
 }
 
 @end

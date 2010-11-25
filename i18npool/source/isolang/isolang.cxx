@@ -287,7 +287,8 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
     { LANGUAGE_BELARUSIAN,                  "be", "BY" },
     { LANGUAGE_CATALAN,                     "ca", "ES" },   // Spain (default)
     { LANGUAGE_CATALAN,                     "ca", "AD" },   // Andorra
-    { LANGUAGE_USER_CATALAN_VALENCIAN,      "ca", "XV" },   // XV: ISO 3166 user-assigned; workaround for UI localization only, do not use in document content!
+    { LANGUAGE_USER_CATALAN_VALENCIAN,      "ca", "XV" },   // XV: ISO 3166 user-assigned; old workaround for UI localization only, do not use in document content! Kept just in case..
+    { LANGUAGE_USER_CATALAN_VALENCIAN,     "qcv", "ES" },   // qcv: ISO 639-3 reserved-for-local-use; for UI localization, use in document content on own risk!
     { LANGUAGE_FRENCH_CAMEROON,             "fr", "CM" },
     { LANGUAGE_FRENCH_COTE_D_IVOIRE,        "fr", "CI" },
     { LANGUAGE_FRENCH_HAITI,                "fr", "HT" },

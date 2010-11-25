@@ -454,6 +454,84 @@ text_wrapper_set_caret_offset (AtkText *text,
     return FALSE;
 }
 
+// --> OD 2010-03-04 #i92232#
+AtkAttributeSet*
+handle_text_markup_as_run_attribute( accessibility::XAccessibleTextMarkup* pTextMarkup,
+                                     const gint nTextMarkupType,
+                                     const gint offset,
+                                     AtkAttributeSet* pSet,
+                                     gint *start_offset,
+                                     gint *end_offset )
+{
+    const gint nTextMarkupCount( pTextMarkup->getTextMarkupCount( nTextMarkupType ) );
+    if ( nTextMarkupCount > 0 )
+    {
+        for ( gint nTextMarkupIndex = 0;
+              nTextMarkupIndex < nTextMarkupCount;
+              ++nTextMarkupIndex )
+        {
+            accessibility::TextSegment aTextSegment =
+                pTextMarkup->getTextMarkup( nTextMarkupIndex, nTextMarkupType );
+            const gint nStartOffsetTextMarkup = aTextSegment.SegmentStart;
+            const gint nEndOffsetTextMarkup = aTextSegment.SegmentEnd;
+            if ( nStartOffsetTextMarkup <= offset )
+            {
+                if ( offset < nEndOffsetTextMarkup )
+                {
+                    // text markup at <offset>
+                    *start_offset = ::std::max( *start_offset,
+                                                nStartOffsetTextMarkup );
+                    *end_offset = ::std::min( *end_offset,
+                                              nEndOffsetTextMarkup );
+                    switch ( nTextMarkupType )
+                    {
+                        case com::sun::star::text::TextMarkupType::SPELLCHECK:
+                        {
+                            pSet = attribute_set_prepend_misspelled( pSet );
+                        }
+                        break;
+                        case com::sun::star::text::TextMarkupType::TRACK_CHANGE_INSERTION:
+                        {
+                            pSet = attribute_set_prepend_tracked_change_insertion( pSet );
+                        }
+                        break;
+                        case com::sun::star::text::TextMarkupType::TRACK_CHANGE_DELETION:
+                        {
+                            pSet = attribute_set_prepend_tracked_change_deletion( pSet );
+                        }
+                        break;
+                        case com::sun::star::text::TextMarkupType::TRACK_CHANGE_FORMATCHANGE:
+                        {
+                            pSet = attribute_set_prepend_tracked_change_formatchange( pSet );
+                        }
+                        break;
+                        default:
+                        {
+                            OSL_ASSERT( false );
+                        }
+                    }
+                    break; // no further iteration needed.
+                }
+                else
+                {
+                    *start_offset = ::std::max( *start_offset,
+                                                nEndOffsetTextMarkup );
+                    // continue iteration.
+                }
+            }
+            else
+            {
+                *end_offset = ::std::min( *end_offset,
+                                          nStartOffsetTextMarkup );
+                break; // no further iteration.
+            }
+        } // eof iteration over text markups
+    }
+
+    return pSet;
+}
+// <--
+
 static AtkAttributeSet *
 text_wrapper_get_run_attributes( AtkText        *text,
                                  gint           offset,
@@ -491,41 +569,41 @@ text_wrapper_get_run_attributes( AtkText        *text,
             }
         }
 
-        // Special handling for missspelled
+        // Special handling for misspelled text
+        // --> OD 2010-03-01 #i92232#
+        // - add special handling for tracked changes and refactor the
+        //   corresponding code for handling misspelled text.
         accessibility::XAccessibleTextMarkup* pTextMarkup = getTextMarkup( text );
         if( pTextMarkup )
         {
-            uno::Sequence< accessibility::TextSegment > aTextSegmentSeq =
-                pTextMarkup->getTextMarkupAtIndex( offset, com::sun::star::text::TextMarkupType::SPELLCHECK );
-            if( aTextSegmentSeq.getLength() > 0 )
+            // Get attribute run here if it hasn't been done before
+            if( !bOffsetsAreValid )
             {
-                accessibility::TextSegment aTextSegment = aTextSegmentSeq[0];
-                gint nStartOffsetMisspelled = aTextSegment.SegmentStart;
-                gint nEndOffsetMisspelled = aTextSegment.SegmentEnd;
-
-                // Get attribute run here if it hasn't been done before
-                if( !bOffsetsAreValid )
-                {
-                    accessibility::TextSegment aAttributeTextSegment =
-                        pText->getTextAtIndex(offset, accessibility::AccessibleTextType::ATTRIBUTE_RUN);
-                    *start_offset = aAttributeTextSegment.SegmentStart;
-                    *end_offset = aAttributeTextSegment.SegmentEnd;
-                }
-
-                if( nEndOffsetMisspelled <= offset )
-                    *start_offset = ::std::max( *start_offset, nEndOffsetMisspelled );
-                else if( nStartOffsetMisspelled <= offset )
-                    *start_offset = ::std::max( *start_offset, nStartOffsetMisspelled );
-
-                if( nStartOffsetMisspelled > offset )
-                    *end_offset = ::std::min( *end_offset, nStartOffsetMisspelled );
-                else if( nEndOffsetMisspelled > offset )
-                    *end_offset = ::std::min( *end_offset, nEndOffsetMisspelled );
-
-                if( nStartOffsetMisspelled <= offset && nEndOffsetMisspelled > offset )
-                    pSet = attribute_set_prepend_misspelled( pSet );
+                accessibility::TextSegment aAttributeTextSegment =
+                    pText->getTextAtIndex(offset, accessibility::AccessibleTextType::ATTRIBUTE_RUN);
+                *start_offset = aAttributeTextSegment.SegmentStart;
+                *end_offset = aAttributeTextSegment.SegmentEnd;
             }
+            // handle misspelled text
+            pSet = handle_text_markup_as_run_attribute(
+                    pTextMarkup,
+                    com::sun::star::text::TextMarkupType::SPELLCHECK,
+                    offset, pSet, start_offset, end_offset );
+            // handle tracked changes
+            pSet = handle_text_markup_as_run_attribute(
+                    pTextMarkup,
+                    com::sun::star::text::TextMarkupType::TRACK_CHANGE_INSERTION,
+                    offset, pSet, start_offset, end_offset );
+            pSet = handle_text_markup_as_run_attribute(
+                    pTextMarkup,
+                    com::sun::star::text::TextMarkupType::TRACK_CHANGE_DELETION,
+                    offset, pSet, start_offset, end_offset );
+            pSet = handle_text_markup_as_run_attribute(
+                    pTextMarkup,
+                    com::sun::star::text::TextMarkupType::TRACK_CHANGE_FORMATCHANGE,
+                    offset, pSet, start_offset, end_offset );
         }
+        // <--
     }
     catch(const uno::Exception& e){
 

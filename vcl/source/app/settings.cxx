@@ -188,7 +188,7 @@ ImplMouseData::ImplMouseData()
     mnActionDelay               = 250;
     mnMenuDelay                 = 150;
     mnFollow                    = MOUSE_FOLLOW_MENU | MOUSE_FOLLOW_DDLIST;
-    mnWheelBehavior             = MOUSE_WHEEL_FOCUS_ONLY;
+    mnWheelBehavior             = MOUSE_WHEEL_ALWAYS;
 }
 
 // -----------------------------------------------------------------------

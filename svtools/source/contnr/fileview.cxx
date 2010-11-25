@@ -34,7 +34,7 @@
 #include <svtools/headbar.hxx>
 #include <svtools/svtabbx.hxx>
 
-#include <svl/svtools.hrc>
+#include <svtools/svtools.hrc>
 #include "fileview.hrc"
 #include "contentenumeration.hxx"
 #include <svtools/AccessibleBrowseBoxObjType.hxx>

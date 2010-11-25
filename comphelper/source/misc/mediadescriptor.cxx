@@ -28,6 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_comphelper.hxx"
 #include <comphelper/mediadescriptor.hxx>
+#include <comphelper/stillreadwriteinteraction.hxx>
 
 //_______________________________________________
 // includes
@@ -59,20 +60,8 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 #endif
 
-#ifndef __COM_SUN_STAR_UCB_INTERACTIVEIOEXCEPTION_HPP__
-#include <com/sun/star/ucb/InteractiveIOException.hpp>
-#endif
-
-#ifndef __COM_SUN_STAR_UCB_UNSUPPORTEDDATASINKEXCEPTION_HPP__
-#include <com/sun/star/ucb/UnsupportedDataSinkException.hpp>
-#endif
-
 #ifndef __COM_SUN_STAR_UCB_COMMANDFAILEDEXCEPTION_HPP__
 #include <com/sun/star/ucb/CommandFailedException.hpp>
-#endif
-
-#ifndef __COM_SUN_STAR_TASK_XINTERACTIONABORT_HPP__
-#include <com/sun/star/task/XInteractionAbort.hpp>
 #endif
 
 #ifndef __COM_SUN_STAR_URI_XURIREFERENCEFACTORY_HPP__
@@ -180,6 +169,12 @@ const ::rtl::OUString& MediaDescriptor::PROP_FILTEROPTIONS()
 const ::rtl::OUString& MediaDescriptor::PROP_FORMAT()
 {
     static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("Format"));
+    return sProp;
+}
+
+const ::rtl::OUString& MediaDescriptor::PROP_FRAME()
+{
+    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("Frame"));
     return sProp;
 }
 
@@ -667,114 +662,6 @@ sal_Bool MediaDescriptor::impl_openStreamWithPostData( const css::uno::Reference
 }
 
 /*-----------------------------------------------*/
-class StillReadWriteInteraction : public ::ucbhelper::InterceptedInteraction
-{
-    private:
-        static const sal_Int32 HANDLE_INTERACTIVEIOEXCEPTION       = 0;
-        static const sal_Int32 HANDLE_UNSUPPORTEDDATASINKEXCEPTION = 1;
-
-        sal_Bool m_bUsed;
-        sal_Bool m_bHandledByMySelf;
-        sal_Bool m_bHandledByInternalHandler;
-
-    public:
-        StillReadWriteInteraction(const css::uno::Reference< css::task::XInteractionHandler >& xHandler)
-            : m_bUsed                    (sal_False)
-            , m_bHandledByMySelf         (sal_False)
-            , m_bHandledByInternalHandler(sal_False)
-        {
-            ::std::vector< ::ucbhelper::InterceptedInteraction::InterceptedRequest > lInterceptions;
-            ::ucbhelper::InterceptedInteraction::InterceptedRequest                  aInterceptedRequest;
-
-            aInterceptedRequest.Handle               = HANDLE_INTERACTIVEIOEXCEPTION;
-            aInterceptedRequest.Request            <<= css::ucb::InteractiveIOException();
-            aInterceptedRequest.Continuation         = ::getCppuType(static_cast< css::uno::Reference< css::task::XInteractionAbort >* >(0));
-            aInterceptedRequest.MatchExact           = sal_False;
-            lInterceptions.push_back(aInterceptedRequest);
-
-            aInterceptedRequest.Handle               = HANDLE_UNSUPPORTEDDATASINKEXCEPTION;
-            aInterceptedRequest.Request            <<= css::ucb::UnsupportedDataSinkException();
-            aInterceptedRequest.Continuation         = ::getCppuType(static_cast< css::uno::Reference< css::task::XInteractionAbort >* >(0));
-            aInterceptedRequest.MatchExact           = sal_False;
-            lInterceptions.push_back(aInterceptedRequest);
-
-            setInterceptedHandler(xHandler);
-            setInterceptions(lInterceptions);
-        }
-
-        void resetInterceptions()
-        {
-            setInterceptions(::std::vector< ::ucbhelper::InterceptedInteraction::InterceptedRequest >());
-        }
-
-        void resetErrorStates()
-        {
-            m_bUsed                     = sal_False;
-            m_bHandledByMySelf          = sal_False;
-            m_bHandledByInternalHandler = sal_False;
-        }
-
-        sal_Bool wasWriteError()
-        {
-            return (m_bUsed && m_bHandledByMySelf);
-        }
-
-    private:
-        virtual ucbhelper::InterceptedInteraction::EInterceptionState intercepted(const ::ucbhelper::InterceptedInteraction::InterceptedRequest&                         aRequest,
-                                                                                  const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest >& xRequest)
-        {
-            // we are used!
-            m_bUsed = sal_True;
-
-            // check if its a real interception - might some parameters are not the right ones ...
-            sal_Bool bAbort = sal_False;
-            switch(aRequest.Handle)
-            {
-                case HANDLE_INTERACTIVEIOEXCEPTION:
-                {
-                    css::ucb::InteractiveIOException exIO;
-                    xRequest->getRequest() >>= exIO;
-                    bAbort = (
-                                (exIO.Code == css::ucb::IOErrorCode_ACCESS_DENIED     )
-                             || (exIO.Code == css::ucb::IOErrorCode_LOCKING_VIOLATION )
-#ifdef MACOSX
-                             // this is a workaround for MAC, on this platform if the file is locked
-                             // the returned error code looks to be wrong
-                             || (exIO.Code == css::ucb::IOErrorCode_GENERAL )
-#endif
-                            );
-                }
-                break;
-
-                case HANDLE_UNSUPPORTEDDATASINKEXCEPTION:
-                {
-                    bAbort = sal_True;
-                }
-                break;
-            }
-
-            // handle interaction by ourself
-            if (bAbort)
-            {
-                m_bHandledByMySelf = sal_True;
-                css::uno::Reference< css::task::XInteractionContinuation > xAbort = ::ucbhelper::InterceptedInteraction::extractContinuation(
-                    xRequest->getContinuations(),
-                    ::getCppuType(static_cast< css::uno::Reference< css::task::XInteractionAbort >* >(0)));
-                if (!xAbort.is())
-                    return ::ucbhelper::InterceptedInteraction::E_NO_CONTINUATION_FOUND;
-                xAbort->select();
-                return ::ucbhelper::InterceptedInteraction::E_INTERCEPTED;
-            }
-
-            // Otherwhise use internal handler.
-            if (m_xInterceptedHandler.is())
-            {
-                m_bHandledByInternalHandler = sal_True;
-                m_xInterceptedHandler->handle(xRequest);
-            }
-            return ::ucbhelper::InterceptedInteraction::E_INTERCEPTED;
-        }
-};
 
 /*-----------------------------------------------
     25.03.2004 12:29

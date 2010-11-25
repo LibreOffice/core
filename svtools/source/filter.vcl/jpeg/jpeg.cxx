@@ -590,10 +590,11 @@ ReadState JPEGReader::Read( Graphic& rGraphic )
 // - JPEGWriter -
 // --------------
 
-JPEGWriter::JPEGWriter( SvStream& rStm, const uno::Sequence< beans::PropertyValue >* pFilterData ) :
+JPEGWriter::JPEGWriter( SvStream& rStm, const uno::Sequence< beans::PropertyValue >* pFilterData, bool* pExportWasGrey ) :
         rOStm       ( rStm ),
         pAcc        ( NULL ),
-        pBuffer     ( NULL )
+        pBuffer     ( NULL ),
+        pExpWasGrey ( pExportWasGrey )
 {
     FilterConfigItem aConfigItem( (uno::Sequence< beans::PropertyValue >*)pFilterData );
     bGreys = aConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "ColorMode" ) ), 0 ) != 0;
@@ -704,6 +705,9 @@ BOOL JPEGWriter::Write( const Graphic& rGraphic )
             bGreys = sal_True;
     }
 
+    if( pExpWasGrey )
+        *pExpWasGrey = bGreys;
+
     if( pAcc )
     {
         bNative = ( pAcc->GetScanlineFormat() == BMP_FORMAT_24BIT_TC_RGB );
@@ -765,8 +769,11 @@ BOOL ImportJPEG( SvStream& rStm, Graphic& rGraphic, void* pCallerData, sal_Int32
 //  - ExportJPEG -
 //  --------------
 
-BOOL ExportJPEG( SvStream& rOStm, const Graphic& rGraphic, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >* pFilterData )
+BOOL ExportJPEG( SvStream& rOStm, const Graphic& rGraphic,
+                 const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >* pFilterData,
+                 bool* pExportWasGrey
+                )
 {
-    JPEGWriter aJPEGWriter( rOStm, pFilterData );
+    JPEGWriter aJPEGWriter( rOStm, pFilterData, pExportWasGrey );
     return aJPEGWriter.Write( rGraphic );
 }

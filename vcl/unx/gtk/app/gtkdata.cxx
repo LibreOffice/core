@@ -636,9 +636,6 @@ void GtkXLib::Init()
 
     Display *pDisp = gdk_x11_display_get_xdisplay( pGdkDisp );
 
-    XSetIOErrorHandler    ( (XIOErrorHandler)X11SalData::XIOErrorHdl );
-    XSetErrorHandler      ( (XErrorHandler)X11SalData::XErrorHdl );
-
     m_pGtkSalDisplay = new GtkSalDisplay( pGdkDisp );
 
     gdk_window_add_filter( NULL, call_filterGdkEvent, m_pGtkSalDisplay );
@@ -800,15 +797,12 @@ void GtkXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
      */
 
     bool bDispatchThread = false;
+    gboolean wasEvent = FALSE;
     {
         // release YieldMutex (and re-acquire at block end)
         YieldMutexReleaser aReleaser;
         if( osl_tryToAcquireMutex( m_aDispatchMutex ) )
-        {
-            // we are the dispatch thread
-            osl_resetCondition( m_aDispatchCondition );
             bDispatchThread = true;
-        }
         else if( ! bWait )
             return; // someone else is waiting already, return
 
@@ -816,7 +810,7 @@ void GtkXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
         if( bDispatchThread )
         {
             int nMaxEvents = bHandleAllCurrentEvents ? 100 : 1;
-            gboolean wasEvent = FALSE, wasOneEvent = TRUE;
+            gboolean wasOneEvent = TRUE;
             while( nMaxEvents-- && wasOneEvent )
             {
                 wasOneEvent = g_main_context_iteration( NULL, FALSE );
@@ -824,17 +818,17 @@ void GtkXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
                     wasEvent = TRUE;
             }
             if( bWait && ! wasEvent )
-                g_main_context_iteration( NULL, TRUE );
+                wasEvent = g_main_context_iteration( NULL, TRUE );
         }
-        else if( userEventFn( this ) )
+        else if( bWait )
            {
             /* #i41693# in case the dispatch thread hangs in join
              * for this thread the condition will never be set
              * workaround: timeout of 1 second a emergency exit
              */
-            TimeValue aValue;
-            aValue.Seconds = 1;
-            aValue.Nanosec = 0;
+            // we are the dispatch thread
+            osl_resetCondition( m_aDispatchCondition );
+            TimeValue aValue = { 1, 0 };
             osl_waitCondition( m_aDispatchCondition, &aValue );
         }
     }
@@ -842,8 +836,8 @@ void GtkXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
     if( bDispatchThread )
     {
         osl_releaseMutex( m_aDispatchMutex );
-        osl_setCondition( m_aDispatchCondition ); // trigger non dispatch thread yields
-        osl_resetCondition( m_aDispatchCondition );
+        if( wasEvent )
+            osl_setCondition( m_aDispatchCondition ); // trigger non dispatch thread yields
     }
 }
 

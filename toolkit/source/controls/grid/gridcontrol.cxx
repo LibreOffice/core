@@ -33,6 +33,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/view/SelectionType.hpp>
 #include <com/sun/star/awt/grid/XGridDataModel.hpp>
+#include <com/sun/star/awt/grid/XGridColumnModel.hpp>
 #include <com/sun/star/awt/grid/ScrollBarMode.hpp>
 #include <toolkit/helper/unopropertyarrayhelper.hxx>
 #include <toolkit/helper/property.hxx>
@@ -68,12 +69,21 @@ UnoGridModel::UnoGridModel()
     ImplRegisterProperty( BASEPROPERTY_SIZEABLE ); // resizeable
     ImplRegisterProperty( BASEPROPERTY_HSCROLL );
     ImplRegisterProperty( BASEPROPERTY_VSCROLL );
+    ImplRegisterProperty( BASEPROPERTY_TABSTOP );
     ImplRegisterProperty( BASEPROPERTY_GRID_SHOWROWHEADER );
     ImplRegisterProperty( BASEPROPERTY_GRID_SHOWCOLUMNHEADER );
     ImplRegisterProperty( BASEPROPERTY_GRID_DATAMODEL );
     ImplRegisterProperty( BASEPROPERTY_GRID_COLUMNMODEL );
     ImplRegisterProperty( BASEPROPERTY_GRID_SELECTIONMODE );
-
+    ImplRegisterProperty( BASEPROPERTY_FONTRELIEF );
+    ImplRegisterProperty( BASEPROPERTY_FONTEMPHASISMARK );
+    ImplRegisterProperty( BASEPROPERTY_FONTDESCRIPTOR );
+    ImplRegisterProperty( BASEPROPERTY_TEXTCOLOR );
+    ImplRegisterProperty( BASEPROPERTY_VERTICALALIGN );
+    ImplRegisterProperty( BASEPROPERTY_GRID_EVEN_ROW_BACKGROUND );
+    ImplRegisterProperty( BASEPROPERTY_GRID_HEADER_BACKGROUND );
+    ImplRegisterProperty( BASEPROPERTY_GRID_LINE_COLOR );
+    ImplRegisterProperty( BASEPROPERTY_GRID_ROW_BACKGROUND );
 }
 
 UnoGridModel::UnoGridModel( const UnoGridModel& rModel )
@@ -99,6 +109,22 @@ Any UnoGridModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
             return uno::makeAny( ::rtl::OUString::createFromAscii( szServiceName_GridControl ) );
         case BASEPROPERTY_GRID_SELECTIONMODE:
             return uno::makeAny( SelectionType(1) );
+        case BASEPROPERTY_GRID_SHOWROWHEADER:
+            return uno::makeAny( (sal_Bool)sal_False );
+        case BASEPROPERTY_GRID_SHOWCOLUMNHEADER:
+            return uno::makeAny( (sal_Bool)sal_False );
+        case BASEPROPERTY_GRID_DATAMODEL:
+            return uno::makeAny( Reference<XGridDataModel> ());
+        case BASEPROPERTY_GRID_COLUMNMODEL:
+            return uno::makeAny(Reference<XGridColumnModel>() );
+        case BASEPROPERTY_GRID_EVEN_ROW_BACKGROUND:
+            return uno::makeAny( com::sun::star::util::Color(0xFFFFFF) );
+        case BASEPROPERTY_GRID_HEADER_BACKGROUND:
+            return uno::makeAny( com::sun::star::util::Color(0xFFFFFF) );
+        case BASEPROPERTY_GRID_LINE_COLOR:
+            return uno::makeAny( com::sun::star::util::Color(0xFFFFFF) );
+        case BASEPROPERTY_GRID_ROW_BACKGROUND:
+            return uno::makeAny(com::sun::star::util::Color(0xFFFFFF) );
         default:
             return UnoControlModel::ImplGetDefaultValue( nPropId );
     }
@@ -128,7 +154,8 @@ Reference< XPropertySetInfo > UnoGridModel::getPropertySetInfo(  ) throw(Runtime
 //  class UnoGridControl
 //  ----------------------------------------------------
 UnoGridControl::UnoGridControl()
-: mSelectionMode(SelectionType(1))
+: mSelectionMode(SelectionType(1)),
+    m_aSelectionListeners( *this )
 {
 }
 
@@ -139,6 +166,9 @@ OUString UnoGridControl::GetComponentServiceName()
 
 void SAL_CALL UnoGridControl::dispose(  ) throw(RuntimeException)
 {
+    lang::EventObject aEvt;
+    aEvt.Source = (::cppu::OWeakObject*)this;
+    m_aSelectionListeners.disposeAndClear( aEvt );
     UnoControl::dispose();
 }
 
@@ -147,63 +177,39 @@ void UnoGridControl::createPeer( const uno::Reference< awt::XToolkit > & rxToolk
     UnoControlBase::createPeer( rxToolkit, rParentPeer );
 
     Reference< XGridControl >  xGrid( getPeer(), UNO_QUERY_THROW );
+    xGrid->addSelectionListener(&m_aSelectionListeners);
 
     Reference<XGridDataListener> xListener ( getPeer(), UNO_QUERY_THROW );
+    Reference<XGridColumnListener> xColListener ( getPeer(), UNO_QUERY_THROW );
     Reference<XPropertySet> xPropSet ( getModel(), UNO_QUERY_THROW );
 
     Reference<XGridDataModel> xGridDataModel ( xPropSet->getPropertyValue(OUString::createFromAscii( "GridDataModel" )), UNO_QUERY_THROW );
-    xGridDataModel->addDataListener(xListener);
+    if(xGridDataModel != NULL)
+        xGridDataModel->addDataListener(xListener);
+    Reference<XGridColumnModel> xGridColumnModel ( xPropSet->getPropertyValue(OUString::createFromAscii( "ColumnModel" )), UNO_QUERY_THROW );
+    if(xGridColumnModel != NULL)
+    {
+        for(int i = 0;i<xGridColumnModel->getColumnCount();i++)
+        {
+            xGridColumnModel->getColumn(i)->addColumnListener(xColListener);
+        }
+    }
 }
 
 
 // -------------------------------------------------------------------
 // XGridControl
-// -------------------------------------------------------------------
-
-::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridColumnModel > SAL_CALL UnoGridControl::getColumnModel() throw (::com::sun::star::uno::RuntimeException)
-{
-    Reference<XPropertySet> xPropSet ( getModel(), UNO_QUERY_THROW );
-    Reference<XGridColumnModel> xGridColumnModel ( xPropSet->getPropertyValue(OUString::createFromAscii( "ColumnModel" )), UNO_QUERY_THROW );
-
-    return  xGridColumnModel;
-}
-
-void SAL_CALL UnoGridControl::setColumnModel(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridColumnModel > & model) throw (::com::sun::star::uno::RuntimeException)
-{
-    Reference<XPropertySet> xPropSet ( getModel(), UNO_QUERY_THROW );
-    xPropSet->setPropertyValue(OUString::createFromAscii( "ColumnModel" ), Any (model));
-}
-
-::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridDataModel > SAL_CALL UnoGridControl::getDataModel() throw (::com::sun::star::uno::RuntimeException)
-{
-    Reference<XPropertySet> xPropSet ( getModel(), UNO_QUERY_THROW );
-    Reference<XGridDataModel> xGridDataModel ( xPropSet->getPropertyValue(OUString::createFromAscii( "GridDataModel" )), UNO_QUERY_THROW );
-
-    return xGridDataModel;
-}
-
-void SAL_CALL UnoGridControl::setDataModel(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridDataModel > & model) throw (::com::sun::star::uno::RuntimeException)
-{
-    Reference<XPropertySet> xPropSet ( getModel(), UNO_QUERY_THROW );
-    xPropSet->setPropertyValue(OUString::createFromAscii( "GridDataModel" ), Any(model));
-}
 
 ::sal_Int32 UnoGridControl::getItemIndexAtPoint(::sal_Int32 x, ::sal_Int32 y) throw (::com::sun::star::uno::RuntimeException)
 {
-    return Reference< XGridControl >( getPeer(), UNO_QUERY_THROW )->getItemIndexAtPoint( x, y );
+    Reference< XGridControl > xGrid ( getPeer(), UNO_QUERY_THROW );
+    return xGrid->getItemIndexAtPoint( x, y );
 }
 
-/*
-void SAL_CALL UnoGridControl::addMouseListener(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseListener > & listener) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL UnoGridControl::setToolTip(const ::com::sun::star::uno::Sequence< ::rtl::OUString >& text, const ::com::sun::star::uno::Sequence< ::sal_Int32 >& columns) throw (::com::sun::star::uno::RuntimeException)
 {
-     Reference< XGridControl >( getPeer(), UNO_QUERY_THROW )->addMouseListener( listener );
+    Reference< XGridControl >( getPeer(), UNO_QUERY_THROW )->setToolTip( text, columns );
 }
-
-void SAL_CALL UnoGridControl::removeMouseListener(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseListener > & listener) throw (::com::sun::star::uno::RuntimeException)
-{
-    Reference< XGridControl >( getPeer(), UNO_QUERY_THROW )->removeMouseListener( listener );
-}
-*/
 // -------------------------------------------------------------------
 // XGridSelection
 // -------------------------------------------------------------------
@@ -218,16 +224,24 @@ void SAL_CALL UnoGridControl::removeMouseListener(const ::com::sun::star::uno::R
     return Reference< XGridControl >( getPeer(), UNO_QUERY_THROW )->getMaxSelectionIndex();
 }
 
-void SAL_CALL UnoGridControl::insertIndexIntervall(::sal_Int32 start, ::sal_Int32 length) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL UnoGridControl::selectRows(const ::com::sun::star::uno::Sequence< ::sal_Int32 >& rangeOfRows) throw (::com::sun::star::uno::RuntimeException)
 {
-    Reference< XGridControl >( getPeer(), UNO_QUERY_THROW )->insertIndexIntervall( start, length);
+    Reference< XGridControl >( getPeer(), UNO_QUERY_THROW )->selectRows( rangeOfRows);
 }
 
-void SAL_CALL UnoGridControl::removeIndexIntervall(::sal_Int32 start, ::sal_Int32 length) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL UnoGridControl::selectAllRows() throw (::com::sun::star::uno::RuntimeException)
 {
-    Reference< XGridControl >( getPeer(), UNO_QUERY_THROW )->removeIndexIntervall( start, length );
+    Reference< XGridControl >( getPeer(), UNO_QUERY_THROW )->selectAllRows();
+}
+void SAL_CALL UnoGridControl::deselectRows(const ::com::sun::star::uno::Sequence< ::sal_Int32 >& rangeOfRows) throw (::com::sun::star::uno::RuntimeException)
+{
+    Reference< XGridControl >( getPeer(), UNO_QUERY_THROW )->deselectRows( rangeOfRows);
 }
 
+void SAL_CALL UnoGridControl::deselectAllRows() throw (::com::sun::star::uno::RuntimeException)
+{
+    Reference< XGridControl >( getPeer(), UNO_QUERY_THROW )->deselectAllRows();
+}
 ::com::sun::star::uno::Sequence< ::sal_Int32 > SAL_CALL UnoGridControl::getSelection() throw (::com::sun::star::uno::RuntimeException)
 {
     return Reference< XGridControl >( getPeer(), UNO_QUERY_THROW )->getSelection();
@@ -250,14 +264,14 @@ void SAL_CALL UnoGridControl::selectRow(::sal_Int32 y) throw (::com::sun::star::
 
 void SAL_CALL UnoGridControl::addSelectionListener(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridSelectionListener > & listener) throw (::com::sun::star::uno::RuntimeException)
 {
-    Reference< XGridControl >( getPeer(), UNO_QUERY_THROW )->addSelectionListener( listener );
+    m_aSelectionListeners.addInterface( listener );
 }
 
 void SAL_CALL UnoGridControl::removeSelectionListener(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridSelectionListener > & listener) throw (::com::sun::star::uno::RuntimeException)
 {
-    Reference< XGridControl >( getPeer(), UNO_QUERY_THROW )->removeSelectionListener( listener );
+    m_aSelectionListeners.removeInterface( listener );
 }
-}
+}//namespace toolkit
 
 Reference< XInterface > SAL_CALL GridControl_CreateInstance( const Reference< XMultiServiceFactory >& )
 {

@@ -26,7 +26,7 @@
  ************************************************************************/
 
  // include ---------------------------------------------------------------
-#include <svl/svtools.hrc>
+#include <svtools/svtools.hrc>
 
 #define RSC_RESOURCE_USAGE 1
 #include <i18npool/lang.h>
@@ -138,7 +138,7 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Lithuanian" ; LANGUAGE_LITHUANIAN ; > ;
         < "Macedonian" ; LANGUAGE_MACEDONIAN ; > ;
         < "Malay (Malaysia)" ; LANGUAGE_MALAY_MALAYSIA ; > ;
-        < "Malay (Brunei Darusalam)" ; LANGUAGE_MALAY_BRUNEI_DARUSSALAM ; > ;
+        < "Malay (Brunei Darussalam)" ; LANGUAGE_MALAY_BRUNEI_DARUSSALAM ; > ;
         < "Malayalam" ; LANGUAGE_MALAYALAM ; > ;
         < "Manipuri" ; LANGUAGE_MANIPURI ; > ;
         < "Marathi" ; LANGUAGE_MARATHI ; > ;

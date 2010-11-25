@@ -25,28 +25,14 @@
  *
  ************************************************************************/
 
-#ifndef _SVT_UNO_UNOIFAC_HRC_
-#define _SVT_UNO_UNOIFAC_HRC_
 
+class Main
+{
 
-#ifndef _SOLAR_HRC
-#include <svl/solar.hrc>
-#endif
-
-//! Um den Überblick über alle benutzten HelpID's zu behalten sind diese
-//! zentral in <helpid.hrc>
-#ifndef _SVT_HELPID_HRC
-#include <svtools/helpid.hrc>
-#endif
-
-// RID's fuer das Kontextmenu der Textkomponente
-#define RID_CONTEXTMENU (RID_APP_START + 1024)
-#define RID_OPEN_LINK       (RID_APP_START + 10)
-#define RID_OPEN_LINK_NEW   (RID_APP_START + 11)
-#define RID_DOWNLOAD        (RID_APP_START + 12)
-#define RID_ADD_BOOKMARK    (RID_APP_START + 13)
-#define RID_COPY_LINK       (RID_APP_START + 14)
-
-
-#endif
+    public static void main( String args[] )
+    {
+        JPropEx jpropex = new JPropEx( args );
+        //jpropex.init();
+    }
+}
 

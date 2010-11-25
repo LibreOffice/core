@@ -94,13 +94,12 @@ public:
     virtual ::rtl::OUString GetAccessibleObjectDescription(AccessibleTableControlObjType eObjType, sal_Int32 _nPosition = -1) const= 0;
 
     /** Fills the StateSet with all states (except DEFUNC and SHOWING, done by
-        the accessible object), depending on the specified object type. */
-    virtual void FillAccessibleStateSet(
-            ::utl::AccessibleStateSetHelper& rStateSet,
+            the accessible object), depending on the specified object type. */
+    virtual void FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& rStateSet,
             AccessibleTableControlObjType eObjType ) const= 0;
 
     // Window
-    virtual Rectangle GetWindowExtentsRelative( Window *pRelativeWindow ) = 0;
+    virtual Rectangle GetWindowExtentsRelative( Window *pRelativeWindow ) const = 0;
     virtual void GrabFocus()= 0;
     virtual XACC GetAccessible( BOOL bCreate = TRUE )= 0;
     virtual Window* GetAccessibleParentWindow() const= 0;
@@ -122,8 +121,10 @@ public:
     virtual ::rtl::OUString GetRowName(sal_Int32 _nIndex) const = 0;
     virtual ::rtl::OUString GetColumnDescription( sal_uInt16 _nColumnPos ) const = 0;
     virtual ::rtl::OUString GetColumnName( sal_Int32 _nIndex ) const = 0;
-    virtual ::rtl::OUString GetCellContent( sal_Int32 _nRowPos, sal_Int32 _nColPos) const = 0;
+    virtual ::com::sun::star::uno::Any GetCellContent( sal_Int32 _nRowPos, sal_Int32 _nColPos) const = 0;
     virtual std::vector<sal_Int32>& GetSelectedRows() = 0;
+    virtual void RemoveSelectedRow(sal_Int32 _nRowPos) = 0;
+    virtual ::rtl::OUString GetAccessibleCellText(sal_Int32 _nRowPos, sal_Int32 _nColPos) = 0;
 };
 
 // ----------------------------------------------------------------------------

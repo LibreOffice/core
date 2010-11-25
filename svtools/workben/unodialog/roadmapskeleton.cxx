@@ -103,9 +103,9 @@ namespace udlg
     }
 
     //--------------------------------------------------------------------
-    sal_Bool RoadmapSkeletonDialog::onFinish( sal_Int32 _nResult )
+    sal_Bool RoadmapSkeletonDialog::onFinish()
     {
-        return RoadmapSkeletonDialog_Base::onFinish( _nResult );
+        return RoadmapSkeletonDialog_Base::onFinish();
     }
 
 //........................................................................

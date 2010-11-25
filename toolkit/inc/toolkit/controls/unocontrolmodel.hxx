@@ -74,7 +74,6 @@ protected:
     void                                        ImplRegisterProperties( const std::list< sal_uInt16 > &rIds );
     void                                        ImplRegisterProperty( sal_uInt16 nPropId, const ::com::sun::star::uno::Any& rDefault );
     ::com::sun::star::uno::Sequence<sal_Int32>  ImplGetPropertyIds() const;
-    virtual void                                ImplPropertyChanged( sal_uInt16 nPropId );
     virtual ::com::sun::star::uno::Any          ImplGetDefaultValue( sal_uInt16 nPropId ) const;
     sal_Bool                                    ImplHasProperty( sal_uInt16 nPropId ) const;
 

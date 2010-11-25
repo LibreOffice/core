@@ -70,6 +70,7 @@
 #include <osl/process.h>
 
 #include <comphelper/processfactory.hxx>
+#include <vos/mutex.hxx>
 
 #define DRAG_EVENT_MASK ButtonPressMask         |\
                               ButtonReleaseMask     |\
@@ -3807,7 +3808,10 @@ void SelectionManager::shutdown() throw()
          */
         aGuard.clear();
         while (osl_isThreadRunning(m_aThread))
+        {
+            vos::OGuard guard2(Application::GetSolarMutex());
             Application::Reschedule();
+        }
         osl_joinWithThread( m_aThread );
         osl_destroyThread( m_aThread );
         m_aThread = NULL;

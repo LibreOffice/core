@@ -122,23 +122,13 @@ typedef BYTE                SVBT64[8];
 #ifdef __cplusplus
 
 inline BYTE     SVBT8ToByte  ( const SVBT8  p ) { return p[0]; }
-#if defined OSL_LITENDIAN && SAL_TYPES_ALIGNMENT2 == 1
-inline USHORT   SVBT16ToShort( const SVBT16 p ) { return *(USHORT*)p; }
-#else
 inline USHORT   SVBT16ToShort( const SVBT16 p ) { return (USHORT)p[0]
                                                    + ((USHORT)p[1] <<  8); }
-#endif
-#if defined OSL_LITENDIAN && SAL_TYPES_ALIGNMENT4 == 1
-inline sal_uInt32   SVBT32ToUInt32 ( const SVBT32 p ) { return *(sal_uInt32*)p; }
-#else
 inline sal_uInt32   SVBT32ToUInt32 ( const SVBT32 p ) { return (sal_uInt32)p[0]
                                                    + ((sal_uInt32)p[1] <<  8)
                                                    + ((sal_uInt32)p[2] << 16)
                                                    + ((sal_uInt32)p[3] << 24); }
-#endif
-#if defined OSL_LITENDIAN && SAL_TYPES_ALIGNMENT8 == 1
-inline double   SVBT64ToDouble( const SVBT64 p ) { return *(double*)p; }
-#elif defined OSL_LITENDIAN
+#if defined OSL_LITENDIAN
 inline double   SVBT64ToDouble( const SVBT64 p ) { double n;
                                                     ((BYTE*)&n)[0] = p[0];
                                                     ((BYTE*)&n)[1] = p[1];
@@ -163,23 +153,13 @@ inline double   SVBT64ToDouble( const SVBT64 p ) { double n;
 #endif
 
 inline void     ByteToSVBT8  ( BYTE   n, SVBT8  p ) { p[0] = n; }
-#if defined OSL_LITENDIAN && SAL_TYPES_ALIGNMENT2 == 1
-inline void     ShortToSVBT16( USHORT n, SVBT16 p ) { *(USHORT*)p = n; }
-#else
 inline void     ShortToSVBT16( USHORT n, SVBT16 p ) { p[0] = (BYTE) n;
                                                       p[1] = (BYTE)(n >>  8); }
-#endif
-#if defined OSL_LITENDIAN && SAL_TYPES_ALIGNMENT4 == 1
-inline void     UInt32ToSVBT32 ( sal_uInt32  n, SVBT32 p ) { *(sal_uInt32*)p = n; }
-#else
 inline void     UInt32ToSVBT32 ( sal_uInt32  n, SVBT32 p ) { p[0] = (BYTE) n;
                                                       p[1] = (BYTE)(n >>  8);
                                                       p[2] = (BYTE)(n >> 16);
                                                       p[3] = (BYTE)(n >> 24); }
-#endif
-#if defined OSL_LITENDIAN && SAL_TYPES_ALIGNMENT8 == 1
-inline void     DoubleToSVBT64( double n, SVBT64 p ) { *(double*)p = n; }
-#elif defined OSL_LITENDIAN
+#if defined OSL_LITENDIAN
 inline void     DoubleToSVBT64( double n, SVBT64 p ) { p[0] = ((BYTE*)&n)[0];
                                                        p[1] = ((BYTE*)&n)[1];
                                                        p[2] = ((BYTE*)&n)[2];
@@ -384,6 +364,8 @@ template<typename T> inline T Abs(T a) { return (a>=0?a:-a); }
   #define __DLLEXTENSION "lm.so"
 #elif defined LINUX && defined HPPA
   #define __DLLEXTENSION "lh.so"
+#elif defined LINUX && defined AXP
+  #define __DLLEXTENSION "ll.so"
 #elif defined LINUX
   #error unknown plattform
 #elif defined FREEBSD && defined X86

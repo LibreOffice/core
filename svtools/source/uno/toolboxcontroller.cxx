@@ -42,6 +42,14 @@
 #include <toolkit/unohlp.hxx>
 #endif
 #include <vcl/toolbox.hxx>
+//shizhobo
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+const int TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIABLE  = 1;
+const int TOOLBARCONTROLLER_PROPCOUNT               = 1;
+const rtl::OUString TOOLBARCONTROLLER_PROPNAME_SUPPORTSVISIABLE( RTL_CONSTASCII_USTRINGPARAM( "SupportsVisiable" ));
+//end
+
+using ::rtl::OUString;
 
 using namespace ::cppu;
 using namespace ::com::sun::star::awt;
@@ -54,17 +62,38 @@ using namespace ::com::sun::star::frame;
 
 namespace svt
 {
+
+struct DispatchInfo
+{
+    Reference< XDispatch > mxDispatch;
+    const URL maURL;
+    const Sequence< PropertyValue > maArgs;
+
+    DispatchInfo( const Reference< XDispatch >& xDispatch, const URL& rURL, const Sequence< PropertyValue >& rArgs )
+        : mxDispatch( xDispatch ), maURL( rURL ), maArgs( rArgs ) {}
+};
+
 struct ToolboxController_Impl
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >          m_xParentWindow;
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer > m_xUrlTransformer;
+    rtl::OUString m_sModuleName;
+     sal_uInt16 m_nToolBoxId;
+
+    DECL_STATIC_LINK( ToolboxController_Impl, ExecuteHdl_Impl, DispatchInfo* );
+
+    ToolboxController_Impl()
+        : m_nToolBoxId( SAL_MAX_UINT16 )
+    {}
 };
 
 ToolboxController::ToolboxController(
+
     const Reference< XMultiServiceFactory >& rServiceManager,
     const Reference< XFrame >& xFrame,
     const ::rtl::OUString& aCommandURL ) :
-    OWeakObject()
+    OPropertyContainer(GetBroadcastHelper())
+    ,   OWeakObject()
     ,   m_bInitialized( sal_False )
     ,   m_bDisposed( sal_False )
     ,   m_xFrame(xFrame)
@@ -72,6 +101,10 @@ ToolboxController::ToolboxController(
     ,   m_aCommandURL( aCommandURL )
     ,   m_aListenerContainer( m_aMutex )
 {
+    //registger Propertyh by shizhoubo
+    registerProperty(TOOLBARCONTROLLER_PROPNAME_SUPPORTSVISIABLE, TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIABLE, com::sun::star::beans::PropertyAttribute::TRANSIENT | com::sun::star::beans::PropertyAttribute::READONLY,
+        &m_bSupportVisiable, getCppuType(&m_bSupportVisiable));
+
     m_pImpl = new ToolboxController_Impl;
 
     try
@@ -86,11 +119,16 @@ ToolboxController::ToolboxController(
 }
 
 ToolboxController::ToolboxController() :
-    OWeakObject()
+    OPropertyContainer(GetBroadcastHelper())
+    ,   OWeakObject()
     ,   m_bInitialized( sal_False )
     ,   m_bDisposed( sal_False )
     ,   m_aListenerContainer( m_aMutex )
 {
+    //registger Propertyh by shizhoubo
+    registerProperty(TOOLBARCONTROLLER_PROPNAME_SUPPORTSVISIABLE, TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIABLE, com::sun::star::beans::PropertyAttribute::TRANSIENT | com::sun::star::beans::PropertyAttribute::READONLY,
+        &m_bSupportVisiable, getCppuType(&m_bSupportVisiable));
+
     m_pImpl = new ToolboxController_Impl;
 }
 
@@ -146,11 +184,16 @@ throw ( RuntimeException )
                 static_cast< XInitialization* >( this ),
                 static_cast< XComponent* >( this ),
                 static_cast< XUpdatable* >( this ));
-
-    if ( a.hasValue() )
-        return a;
-
-    return OWeakObject::queryInterface( rType );
+    if ( !a.hasValue())
+    {
+        a = ::cppu::queryInterface(rType
+            ,static_cast<XPropertySet*>(this)
+            ,static_cast<XMultiPropertySet*>(this)
+            ,static_cast<XFastPropertySet*>(this));
+        if (!a.hasValue())
+            return OWeakObject::queryInterface( rType );
+    }
+    return a;
 }
 
 void SAL_CALL ToolboxController::acquire() throw ()
@@ -166,11 +209,6 @@ void SAL_CALL ToolboxController::release() throw ()
 void SAL_CALL ToolboxController::initialize( const Sequence< Any >& aArguments )
 throw ( Exception, RuntimeException )
 {
-    const rtl::OUString aFrameName( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
-    const rtl::OUString aCommandURLName( RTL_CONSTASCII_USTRINGPARAM( "CommandURL" ));
-    const rtl::OUString aServiceManagerName( RTL_CONSTASCII_USTRINGPARAM( "ServiceManager" ));
-    const rtl::OUString aParentWindow( RTL_CONSTASCII_USTRINGPARAM( "ParentWindow" ));
-
     bool bInitialized( true );
 
     {
@@ -186,20 +224,23 @@ throw ( Exception, RuntimeException )
     {
         vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
         m_bInitialized = sal_True;
-
+        //shizhoubo add
+        m_bSupportVisiable = sal_False;
         PropertyValue aPropValue;
         for ( int i = 0; i < aArguments.getLength(); i++ )
         {
             if ( aArguments[i] >>= aPropValue )
             {
-                if ( aPropValue.Name.equalsAscii( "Frame" ))
+                if ( aPropValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Frame") ))
                     m_xFrame.set(aPropValue.Value,UNO_QUERY);
-                else if ( aPropValue.Name.equalsAscii( "CommandURL" ))
+                else if ( aPropValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("CommandURL") ))
                     aPropValue.Value >>= m_aCommandURL;
-                else if ( aPropValue.Name.equalsAscii( "ServiceManager" ))
+                else if ( aPropValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("ServiceManager") ))
                     m_xServiceManager.set(aPropValue.Value,UNO_QUERY);
-                else if ( aPropValue.Name.equalsAscii( "ParentWindow" ))
+                else if ( aPropValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("ParentWindow") ))
                     m_pImpl->m_xParentWindow.set(aPropValue.Value,UNO_QUERY);
+                else if ( aPropValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("ModuleName" ) ) )
+                    aPropValue.Value >>= m_pImpl->m_sModuleName;
             }
         }
 
@@ -704,4 +745,142 @@ Reference< ::com::sun::star::awt::XWindow > ToolboxController::getParent() const
 {
     return m_pImpl->m_xParentWindow;
 }
+
+const rtl::OUString& ToolboxController::getModuleName() const
+{
+    return m_pImpl->m_sModuleName;
+}
+
+void ToolboxController::dispatchCommand( const OUString& sCommandURL, const Sequence< PropertyValue >& rArgs )
+{
+    try
+    {
+        Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY_THROW );
+        URL aURL;
+        aURL.Complete = sCommandURL;
+        getURLTransformer()->parseStrict( aURL );
+
+        Reference< XDispatch > xDispatch( xDispatchProvider->queryDispatch( aURL, OUString(), 0 ), UNO_QUERY_THROW );
+
+        Application::PostUserEvent( STATIC_LINK(0, ToolboxController_Impl, ExecuteHdl_Impl), new DispatchInfo( xDispatch, aURL, rArgs ) );
+
+    }
+    catch( Exception& )
+    {
+    }
+}
+
+//
+//-------------------------------------------------------------------------
+// XPropertySet by shizhoubo
+com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo >  SAL_CALL ToolboxController::getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException)
+{
+    Reference<XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
+    return xInfo;
+}
+//-------------------------------------------------------------------------
+::cppu::IPropertyArrayHelper& ToolboxController::getInfoHelper()
+{
+        return *const_cast<ToolboxController*>(this)->getArrayHelper();
+}
+//OPropertyArrayUsageHelper by shizhoubo
+//------------------------------------------------------------------------------
+::cppu::IPropertyArrayHelper* ToolboxController::createArrayHelper( ) const
+{
+        com::sun::star::uno::Sequence< Property > aProps;
+        describeProperties(aProps);
+        return new ::cppu::OPropertyArrayHelper(aProps);
+}
+//shizhoubo for supportsvisiable
+void ToolboxController::setSupportVisiableProperty(sal_Bool bValue)
+{
+    m_bSupportVisiable = bValue;
+}
+//OPropertySetHelper by shizhoubo
+sal_Bool SAL_CALL ToolboxController::convertFastPropertyValue( com::sun::star::uno::Any&    aConvertedValue ,
+                                             com::sun::star::uno::Any&        aOldValue       ,
+                                             sal_Int32                        nHandle         ,
+                                             const com::sun::star::uno::Any&  aValue          ) throw( com::sun::star::lang::IllegalArgumentException )
+{
+    switch (nHandle)
+    {
+        case TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIABLE:
+        {
+            sal_Bool aNewValue;
+            aValue >>= aNewValue;
+            if (aNewValue != m_bSupportVisiable)
+            {
+                aConvertedValue <<= aNewValue;
+                aOldValue <<= m_bSupportVisiable;
+                return sal_True;
+            }
+            return sal_False;
+        }
+    }
+    return OPropertyContainer::convertFastPropertyValue(aConvertedValue, aOldValue, nHandle, aValue);
+}
+
+void SAL_CALL ToolboxController::setFastPropertyValue_NoBroadcast(
+    sal_Int32                       nHandle,
+    const com::sun::star::uno::Any& aValue )
+throw( com::sun::star::uno::Exception)
+{
+    OPropertyContainer::setFastPropertyValue_NoBroadcast(nHandle, aValue);
+    if (TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIABLE == nHandle)
+    {
+        sal_Bool rValue(sal_False);
+        if (( aValue >>= rValue ) && m_bInitialized)
+            this->setSupportVisiableProperty( rValue );
+    }
+}
+
+//--------------------------------------------------------------------
+
+IMPL_STATIC_LINK_NOINSTANCE( ToolboxController_Impl, ExecuteHdl_Impl, DispatchInfo*, pDispatchInfo )
+{
+    pDispatchInfo->mxDispatch->dispatch( pDispatchInfo->maURL, pDispatchInfo->maArgs );
+    delete pDispatchInfo;
+    return 0;
+}
+
+void ToolboxController::enable( bool bEnable )
+{
+    ToolBox* pToolBox = 0;
+    sal_uInt16 nItemId = 0;
+    if( getToolboxId( nItemId, &pToolBox ) )
+    {
+        pToolBox->EnableItem( nItemId, bEnable ? TRUE : FALSE );
+    }
+}
+
+bool ToolboxController::getToolboxId( sal_uInt16& rItemId, ToolBox** ppToolBox )
+{
+    if( (m_pImpl->m_nToolBoxId != SAL_MAX_UINT16) && (ppToolBox == 0) )
+        return m_pImpl->m_nToolBoxId;
+
+    ToolBox* pToolBox = static_cast< ToolBox* >( VCLUnoHelper::GetWindow( getParent() ) );
+
+    if( (m_pImpl->m_nToolBoxId == SAL_MAX_UINT16) && pToolBox )
+    {
+        const sal_uInt16 nCount = pToolBox->GetItemCount();
+        for ( sal_uInt16 nPos = 0; nPos < nCount; ++nPos )
+        {
+            const sal_uInt16 nItemId = pToolBox->GetItemId( nPos );
+            if ( pToolBox->GetItemCommand( nItemId ) == String( m_aCommandURL ) )
+            {
+                m_pImpl->m_nToolBoxId = nItemId;
+                break;
+            }
+        }
+    }
+
+    if( ppToolBox )
+        *ppToolBox = pToolBox;
+
+    rItemId = m_pImpl->m_nToolBoxId;
+
+    return (rItemId != SAL_MAX_UINT16) && (( ppToolBox == 0) || (*ppToolBox != 0) );
+}
+//end
+
 } // svt

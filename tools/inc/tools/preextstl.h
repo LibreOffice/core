@@ -24,8 +24,11 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
+//1. Force inclusion of a std:: using header to ensure the stlport define
+//of std as "stlport"
+#include <algorithm>
 #if defined(ADAPT_EXT_STL)
+//2. Force inclusion of stlport headers to get their stlport:: definitions
 #   include <ostream>
 #   include <istream>
 #   include <fstream>
@@ -33,12 +36,14 @@
 #   include <vector>
 #   include <list>
 #   include <map>
-#   include <algorithm>
+//3. Now force inclusion of native headers to get their std:: definitions
 #   if defined(std)
 #       define std_was_redefined_as_stlport std
 #       undef std
 #       define _STLP_OUTERMOST_HEADER_ID 0xdeadbeaf
-#       pragma GCC visibility push(default)
+#       if defined(_GNUC__)
+#           pragma GCC visibility push(default)
+#       endif
 #       include _STLP_NATIVE_HEADER(exception_defines.h)
 #       include _STLP_NATIVE_HEADER(limits)
 #       include _STLP_NATIVE_HEADER(memory)
@@ -56,7 +61,9 @@
 #       include _STLP_NATIVE_HEADER(vector)
 #       include _STLP_NATIVE_HEADER(list)
 #       include _STLP_NATIVE_HEADER(map)
-#       pragma GCC visibility pop
+#       if defined(_GNUC__)
+#           pragma GCC visibility pop
+#       endif
 #   endif
 #endif
 //ext_std resolves to the std that external c++ libs, e.g. Graphite were built

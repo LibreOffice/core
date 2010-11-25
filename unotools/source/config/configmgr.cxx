@@ -70,6 +70,8 @@ namespace
         : public rtl::Static< ::rtl::OUString, ProductVersion > {};
     struct AboutBoxProductVersion
         : public rtl::Static< ::rtl::OUString, AboutBoxProductVersion > {};
+    struct OOOVendor
+        : public rtl::Static< ::rtl::OUString, OOOVendor > {};
     struct ProductExtension
         : public rtl::Static< ::rtl::OUString, ProductExtension > {};
     struct XMLFileFormatName
@@ -433,6 +435,14 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
         return aRet;
     }
 
+    rtl::OUString &rOOOVendor = OOOVendor::get();
+    if ( eProp == OOOVENDOR && rOOOVendor.getLength() )
+    {
+        aRet <<= rOOOVendor;
+        return aRet;
+    }
+
+
     rtl::OUString &rProductExtension = ProductExtension::get();
     if ( eProp == PRODUCTEXTENSION && rProductExtension.getLength() )
     {
@@ -493,6 +503,7 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
         case PRODUCTXMLFILEFORMATNAME :
         case PRODUCTXMLFILEFORMATVERSION:
         case OPENSOURCECONTEXT:
+        case OOOVENDOR:
         case ABOUTBOXPRODUCTVERSION:        sPath += C2U("Setup/Product"); break;
 
         case DEFAULTCURRENCY:               sPath += C2U("Setup/L10N"); break;
@@ -526,6 +537,7 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
             case PRODUCTNAME:                       sProperty = C2U("ooName"); break;
             case PRODUCTVERSION:                    sProperty = C2U("ooSetupVersion"); break;
             case ABOUTBOXPRODUCTVERSION:            sProperty = C2U("ooSetupVersionAboutBox"); break;
+            case OOOVENDOR:                         sProperty = C2U("ooVendor"); break;
             case PRODUCTEXTENSION:                  sProperty = C2U("ooSetupExtension"); break;
             case PRODUCTXMLFILEFORMATNAME:          sProperty = C2U("ooXMLFileFormatName"); break;
             case PRODUCTXMLFILEFORMATVERSION:       sProperty = C2U("ooXMLFileFormatVersion"); break;
@@ -564,6 +576,9 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
 
     if ( eProp == PRODUCTVERSION )
         aRet >>= rProductVersion;
+
+    if( eProp == OOOVENDOR )
+        aRet >>= rOOOVendor;
 
     if ( eProp == ABOUTBOXPRODUCTVERSION )
     {

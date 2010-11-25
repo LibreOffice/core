@@ -331,8 +331,11 @@
     </Currency>
   </LC_CURRENCY>
   <LC_TRANSLITERATION>
+    <Transliteration unoid="SENTENCE_CASE"/>
     <Transliteration unoid="LOWERCASE_UPPERCASE"/>
     <Transliteration unoid="UPPERCASE_LOWERCASE"/>
+    <Transliteration unoid="TITLE_CASE"/>
+    <Transliteration unoid="TOGGLE_CASE"/>
     <Transliteration unoid="IGNORE_CASE"/>
   </LC_TRANSLITERATION>
   <LC_MISC>

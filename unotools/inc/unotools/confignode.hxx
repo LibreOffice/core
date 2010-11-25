@@ -35,6 +35,11 @@
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <unotools/eventlisteneradapter.hxx>
 
+namespace comphelper
+{
+    class ComponentContext;
+}
+
 //........................................................................
 namespace utl
 {
@@ -59,19 +64,23 @@ namespace utl
                     m_xReplaceAccess;       /// replacing child values
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
                     m_xContainerAccess;     /// modifying set nodes  (optional interface of our UNO object)
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                    m_xProvider;            /// the configuration provider which supplied the nodes of the hierarchy we're a part of
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+                    m_xDummy;
         sal_Bool    m_bEscapeNames;         /// escape names before accessing children ?
 
         ::rtl::OUString
                     m_sCompletePath;
 
         OConfigurationNode  insertNode(const ::rtl::OUString& _rName,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xNode) const throw();
+
     protected:
         /// constructs a node object with an interface representing a node
         OConfigurationNode(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxNode,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxProvider);
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxNode
+        );
+
+        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >&
+            getUNONode() const { return m_xDirectAccess; }
 
     public:
         /// constructs an empty and invalid node object
@@ -87,6 +96,9 @@ namespace utl
 
         /// returns the local name of the node
         ::rtl::OUString     getLocalName() const;
+
+        /// returns the fully qualified path of the node
+        ::rtl::OUString     getNodePath() const;
 
         /** open a sub node
             @param      _rPath      access path of the to-be-opened sub node. May be a hierarchical path.
@@ -186,14 +198,6 @@ namespace utl
         */
         sal_Bool    getEscape() const { return m_bEscapeNames; }
 
-        /** clone the object, creating a new hierarchy where the root represents the same node as the object
-            where this method is called does.<p/>
-            The new hierarchy does not share any updates with the one the object is a part of, i.e. any changes made
-            in the existing hierarchy are not visible to the newly created one until committed (and vice versa).
-            @param      _rRoot      out parameter. upon return, contains the object representing the root of the new hierarchy.
-        */
-        OConfigurationTreeRoot cloneAsRoot() const throw();
-
         /// invalidate the object
         virtual void clear() throw();
 
@@ -246,22 +250,23 @@ namespace utl
         /** ctor<p/>
         */
         OConfigurationTreeRoot(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::util::XChangesBatch >& _rxRootNode,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxProvider);
+            const ::com::sun::star::uno::Reference< ::com::sun::star::util::XChangesBatch >& _rxRootNode
+        );
 
         /** ctor for a readonly node
         */
         OConfigurationTreeRoot(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxRootNode,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxProvider);
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxRootNode
+        );
 
     public:
-        /// modes to used when creating a top-level node object
+        /// modes to use when creating a top-level node object
         enum CREATION_MODE
         {
-            CM_READONLY,            /// open the node (i.e. sub tree) for read access only
-            CM_UPDATABLE,           /// open the node (i.e. sub tree) for read and write access
-            CM_PREFER_UPDATABLE     /// open the node (i.e. sub tree) for read and write access, if this fails, open it for read acces
+            /// open the node (i.e. sub tree) for read access only
+            CM_READONLY,
+            /// open the node (i.e. sub tree) for read and write access, fall back to read-only if write access is not possible
+            CM_UPDATABLE
         };
 
     public:
@@ -269,6 +274,22 @@ namespace utl
             The object constructed here is invalid (i.e. <method>isValid</method> will return sal_False).
         */
         OConfigurationTreeRoot() :OConfigurationNode() { }
+
+        /** creates a configuration tree for the given path in the given mode
+        */
+        OConfigurationTreeRoot(
+            const ::comphelper::ComponentContext& i_rContext,
+            const sal_Char* i_pAsciiNodePath,
+            const bool i_bUpdatable
+        );
+
+        /** creates a configuration tree for the given path in the given mode
+        */
+        OConfigurationTreeRoot(
+            const ::comphelper::ComponentContext& i_rContext,
+            const ::rtl::OUString& i_rNodePath,
+            const bool i_bUpdatable
+        );
 
         /// copy ctor
         OConfigurationTreeRoot(const OConfigurationTreeRoot& _rSource)
@@ -293,7 +314,7 @@ namespace utl
                 const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxConfProvider,
                 const ::rtl::OUString& _rPath,
                 sal_Int32 _nDepth = -1,
-                CREATION_MODE _eMode = CM_PREFER_UPDATABLE,
+                CREATION_MODE _eMode = CM_UPDATABLE,
                 sal_Bool _bLazyWrite = sal_True
             );
 
@@ -310,7 +331,7 @@ namespace utl
             @param      _eMode          specifies which privileges should be applied when retrieving the node
         */
         static OConfigurationTreeRoot createWithServiceFactory(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
-            const ::rtl::OUString& _rPath, sal_Int32 _nDepth = -1, CREATION_MODE _eMode = CM_PREFER_UPDATABLE, sal_Bool _bLazyWrite = sal_True);
+            const ::rtl::OUString& _rPath, sal_Int32 _nDepth = -1, CREATION_MODE _eMode = CM_UPDATABLE, sal_Bool _bLazyWrite = sal_True);
 
         /** tolerant version of the <member>createWithServiceFactory</member>
 
@@ -319,7 +340,7 @@ namespace utl
             given node path does not exist) are still asserted.</p>
         */
         static OConfigurationTreeRoot tryCreateWithServiceFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
-            const ::rtl::OUString& _rPath, sal_Int32 _nDepth = -1, CREATION_MODE _eMode = CM_PREFER_UPDATABLE, sal_Bool _bLazyWrite = sal_True );
+            const ::rtl::OUString& _rPath, sal_Int32 _nDepth = -1, CREATION_MODE _eMode = CM_UPDATABLE, sal_Bool _bLazyWrite = sal_True );
 
         /** commit all changes made on the subtree the object is the root for<p/>
             All changes made on any <type>OConfigurationNode</type> object retrieved (maybe indirect) from this root

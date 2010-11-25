@@ -976,10 +976,7 @@ sal_Int16 SAL_CALL ValueItemAcc::getAccessibleRole()
 ::rtl::OUString SAL_CALL ValueItemAcc::getAccessibleDescription()
     throw (uno::RuntimeException)
 {
-    const vos::OGuard   aSolarGuard( Application::GetSolarMutex() );
-    String              aRet( RTL_CONSTASCII_USTRINGPARAM( "ValueSet item" ) );
-
-    return aRet;
+    return ::rtl::OUString();
 }
 
 // -----------------------------------------------------------------------------
@@ -1239,7 +1236,7 @@ sal_Int32 SAL_CALL ValueItemAcc::getBackground(  )
     throw (uno::RuntimeException)
 {
     UINT32 nColor;
-    if (mpParent->meType == VALUESETITEM_COLOR)
+    if (mpParent && mpParent->meType == VALUESETITEM_COLOR)
         nColor = mpParent->maColor.GetColor();
     else
         nColor = Application::GetSettings().GetStyleSettings().GetWindowColor().GetColor();

@@ -34,6 +34,7 @@
 #include <sal/alloca.h>
 #include <wmadaptor.hxx>
 #include <saldisp.hxx>
+#include <saldata.hxx>
 #include <salframe.h>
 #include <vcl/salgdi.hxx>
 #include <osl/thread.h>
@@ -118,6 +119,7 @@ static const WMAdaptorProtocol aProtocolTab[] =
     { "_NET_NUMBER_OF_DESKTOPS", WMAdaptor::NET_NUMBER_OF_DESKTOPS },
     { "_NET_WM_DESKTOP", WMAdaptor::NET_WM_DESKTOP },
     { "_NET_WM_ICON_NAME", WMAdaptor::NET_WM_ICON_NAME },
+    { "_NET_WM_PING", WMAdaptor::NET_WM_PING },
     { "_NET_WM_STATE", WMAdaptor::NET_WM_STATE },
     { "_NET_WM_STATE_ABOVE", WMAdaptor::NET_WM_STATE_STAYS_ON_TOP },
     { "_NET_WM_STATE_FULLSCREEN", WMAdaptor::NET_WM_STATE_FULLSCREEN },
@@ -179,7 +181,8 @@ static const WMAdaptorProtocol aAtomTab[] =
     { "_XSETTINGS_SETTINGS", WMAdaptor::XSETTINGS },
     { "_XEMBED", WMAdaptor::XEMBED },
     { "_XEMBED_INFO", WMAdaptor::XEMBED_INFO },
-    { "_NET_WM_USER_TIME", WMAdaptor::NET_WM_USER_TIME }
+    { "_NET_WM_USER_TIME", WMAdaptor::NET_WM_USER_TIME },
+    { "_NET_WM_PID", WMAdaptor::NET_WM_PID }
 };
 
 extern "C" {
@@ -233,6 +236,7 @@ WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
         m_pSalDisplay( pDisplay ),
         m_bTransientBehaviour( true ),
         m_bEnableAlwaysOnTopWorks( false ),
+        m_bLegacyPartialFullscreen( false ),
         m_nWinGravity( StaticGravity ),
         m_nInitWinGravity( StaticGravity )
 {
@@ -908,6 +912,40 @@ bool WMAdaptor::getNetWmName()
                     {
                         XFree( pProperty );
                         pProperty = NULL;
+                    }
+                    // if this is metacity, check for version to enable a legacy workaround
+                    if( m_aWMName.EqualsAscii( "Metacity" ) )
+                    {
+                        int nVersionMajor = 0, nVersionMinor = 0;
+                        Atom nVersionAtom = XInternAtom( m_pDisplay, "_METACITY_VERSION", True );
+                        if( nVersionAtom )
+                        {
+                            if( XGetWindowProperty( m_pDisplay,
+                                                    aWMChild,
+                                                    nVersionAtom,
+                                                    0, 256,
+                                                    False,
+                                                    m_aWMAtoms[ UTF8_STRING ],
+                                                    &aRealType,
+                                                    &nFormat,
+                                                    &nItems,
+                                                    &nBytesLeft,
+                                                    &pProperty ) == 0
+                                && nItems != 0
+                                )
+                            {
+                                String aMetaVersion( (sal_Char*)pProperty, nItems, RTL_TEXTENCODING_UTF8 );
+                                nVersionMajor = aMetaVersion.GetToken( 0, '.' ).ToInt32();
+                                nVersionMinor = aMetaVersion.GetToken( 1, '.' ).ToInt32();
+                            }
+                            if( pProperty )
+                            {
+                                XFree( pProperty );
+                                pProperty = NULL;
+                            }
+                        }
+                        if( nVersionMajor < 2 || (nVersionMajor == 2 && nVersionMinor < 12) )
+                            m_bLegacyPartialFullscreen = true;
                     }
                 }
             }
@@ -2410,5 +2448,54 @@ void NetWMAdaptor::setUserTime( X11SalFrame* i_pFrame, long i_nUserTime ) const
                          (unsigned char*)&i_nUserTime,
                          1
                          );
+    }
+}
+
+/*
+ * WMAdaptor::setPID
+ */
+void WMAdaptor::setPID( X11SalFrame* i_pFrame ) const
+{
+    if( m_aWMAtoms[NET_WM_PID] )
+    {
+        long nPID = (long)getpid();
+        XChangeProperty( m_pDisplay,
+                         i_pFrame->GetShellWindow(),
+                         m_aWMAtoms[NET_WM_PID],
+                         XA_CARDINAL,
+                         32,
+                         PropModeReplace,
+                         (unsigned char*)&nPID,
+                         1
+                         );
+    }
+}
+
+/*
+* WMAdaptor::setClientMachine
+*/
+void WMAdaptor::setClientMachine( X11SalFrame* i_pFrame ) const
+{
+    rtl::OString aWmClient( rtl::OUStringToOString( GetX11SalData()->GetLocalHostName(), RTL_TEXTENCODING_ASCII_US ) );
+    XTextProperty aClientProp = { (unsigned char*)aWmClient.getStr(), XA_STRING, 8, aWmClient.getLength() };
+    XSetWMClientMachine( m_pDisplay, i_pFrame->GetShellWindow(), &aClientProp );
+}
+
+void WMAdaptor::answerPing( X11SalFrame* i_pFrame, XClientMessageEvent* i_pEvent ) const
+{
+    if( m_aWMAtoms[NET_WM_PING] &&
+        i_pEvent->message_type == m_aWMAtoms[ WM_PROTOCOLS ] &&
+        (Atom)i_pEvent->data.l[0] == m_aWMAtoms[ NET_WM_PING ] )
+    {
+        XEvent aEvent;
+        aEvent.xclient = *i_pEvent;
+        aEvent.xclient.window = m_pSalDisplay->GetRootWindow( i_pFrame->GetScreenNumber() );
+        XSendEvent( m_pDisplay,
+                    m_pSalDisplay->GetRootWindow( i_pFrame->GetScreenNumber() ),
+                    False,
+                    SubstructureNotifyMask | SubstructureRedirectMask,
+                    &aEvent
+                    );
+        XFlush( m_pDisplay );
     }
 }

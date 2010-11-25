@@ -61,6 +61,7 @@
 #include <rtl/instance.hxx>
 
 #include <math.h>
+#include <limits>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -177,6 +178,9 @@ SV_IMPL_PTRARR( NfWSStringsDtor, String* );
 
 
 /***********************Funktionen SvNumberFormatter**************************/
+
+const sal_uInt16 SvNumberFormatter::UNLIMITED_PRECISION   = ::std::numeric_limits<sal_uInt16>::max();
+const sal_uInt16 SvNumberFormatter::INPUTSTRING_PRECISION = ::std::numeric_limits<sal_uInt16>::max()-1;
 
 SvNumberFormatter::SvNumberFormatter(
             const Reference< XMultiServiceFactory >& xSMgr,
@@ -338,7 +342,7 @@ void SvNumberFormatter::ChangeStandardPrec(short nPrec)
     pFormatScanner->ChangeStandardPrec(nPrec);
 }
 
-short SvNumberFormatter::GetStandardPrec()
+sal_uInt16 SvNumberFormatter::GetStandardPrec()
 {
     return pFormatScanner->GetStandardPrec();
 }
@@ -1473,7 +1477,6 @@ void SvNumberFormatter::GetInputLineString(const double& fOutNumber,
                                            String& sOutString)
 {
     SvNumberformat* pFormat;
-    short nOldPrec;
     Color* pColor;
     pFormat = (SvNumberformat*) aFTable.Get(nFIndex);
     if (!pFormat)
@@ -1483,7 +1486,8 @@ void SvNumberFormatter::GetInputLineString(const double& fOutNumber,
     short eType = pFormat->GetType() & ~NUMBERFORMAT_DEFINED;
     if (eType == 0)
         eType = NUMBERFORMAT_DEFINED;
-    nOldPrec = -1;
+    sal_uInt16 nOldPrec = pFormatScanner->GetStandardPrec();
+    bool bPrecChanged = false;
     if (eType == NUMBERFORMAT_NUMBER || eType == NUMBERFORMAT_PERCENT
                                      || eType == NUMBERFORMAT_CURRENCY
                                      || eType == NUMBERFORMAT_SCIENTIFIC
@@ -1491,8 +1495,8 @@ void SvNumberFormatter::GetInputLineString(const double& fOutNumber,
     {
         if (eType != NUMBERFORMAT_PERCENT)  // spaeter Sonderbehandlung %
             eType = NUMBERFORMAT_NUMBER;
-        nOldPrec = pFormatScanner->GetStandardPrec();
-        ChangeStandardPrec(300);                        // Merkwert
+        ChangeStandardPrec(INPUTSTRING_PRECISION);
+        bPrecChanged = true;
     }
     sal_uInt32 nKey = nFIndex;
     switch ( eType )
@@ -1512,12 +1516,12 @@ void SvNumberFormatter::GetInputLineString(const double& fOutNumber,
     {
         if ( eType == NUMBERFORMAT_TIME && pFormat->GetFormatPrecision() )
         {
-            nOldPrec = pFormatScanner->GetStandardPrec();
-            ChangeStandardPrec(300);                        // Merkwert
+            ChangeStandardPrec(INPUTSTRING_PRECISION);
+            bPrecChanged = true;
         }
         pFormat->GetOutputString(fOutNumber, sOutString, &pColor);
     }
-    if (nOldPrec != -1)
+    if (bPrecChanged)
         ChangeStandardPrec(nOldPrec);
 }
 

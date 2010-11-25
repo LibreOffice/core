@@ -395,8 +395,11 @@
   </LC_CURRENCY>
   <LC_TRANSLITERATION>
     <!-- There is often English mixed with Myanmar, so leave these in for now -->
+    <Transliteration unoid="SENTENCE_CASE"/>
     <Transliteration unoid="LOWERCASE_UPPERCASE"/>
     <Transliteration unoid="UPPERCASE_LOWERCASE"/>
+    <Transliteration unoid="TITLE_CASE"/>
+    <Transliteration unoid="TOGGLE_CASE"/>
     <Transliteration unoid="IGNORE_CASE"/>
   </LC_TRANSLITERATION>
   <LC_MISC>

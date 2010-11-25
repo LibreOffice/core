@@ -123,6 +123,8 @@ class FontCfgWrapper
     FcPattern*      (*m_pFcFontSetMatch)(FcConfig*,FcFontSet**, int, FcPattern*,FcResult*);
     FcBool          (*m_pFcConfigAppFontAddFile)(FcConfig*, const FcChar8*);
     FcBool          (*m_pFcConfigAppFontAddDir)(FcConfig*, const FcChar8*);
+    FcBool          (*m_pFcConfigParseAndLoad)(FcConfig*,const FcChar8*,FcBool);
+
     FcBool          (*m_pFcConfigSubstitute)(FcConfig*,FcPattern*,FcMatchKind);
     FcBool          (*m_pFcPatternAddInteger)(FcPattern*,const char*,int);
     FcBool                    (*m_pFcPatternAddDouble)(FcPattern*,const char*,double);
@@ -221,6 +223,9 @@ public:
     { return m_pFcConfigAppFontAddFile( pConfig, pFileName ); }
     FcBool FcConfigAppFontAddDir(FcConfig* pConfig, const FcChar8* pDirName )
     { return m_pFcConfigAppFontAddDir( pConfig, pDirName ); }
+    FcBool FcConfigParseAndLoad( FcConfig* pConfig, const FcChar8* pFileName, FcBool bComplain )
+    { return m_pFcConfigParseAndLoad( pConfig, pFileName, bComplain ); }
+
     void FcDefaultSubstitute( FcPattern* pPattern )
     { m_pFcDefaultSubstitute( pPattern ); }
     FcPattern* FcFontSetMatch( FcConfig* pConfig, FcFontSet **ppFontSet, int nset, FcPattern* pPattern, FcResult* pResult )
@@ -326,6 +331,8 @@ FontCfgWrapper::FontCfgWrapper()
         loadSymbol( "FcConfigAppFontAddFile" );
     m_pFcConfigAppFontAddDir = (FcBool(*)(FcConfig*, const FcChar8*))
         loadSymbol( "FcConfigAppFontAddDir" );
+    m_pFcConfigParseAndLoad = (FcBool(*)(FcConfig*, const FcChar8*, FcBool))
+        loadSymbol( "FcConfigParseAndLoad" );
     m_pFcDefaultSubstitute = (void(*)(FcPattern *))
         loadSymbol( "FcDefaultSubstitute" );
     m_pFcFontSetMatch = (FcPattern*(*)(FcConfig*,FcFontSet**,int,FcPattern*,FcResult*))
@@ -383,6 +390,7 @@ FontCfgWrapper::FontCfgWrapper()
             m_pFcPatternGetBool             &&
             m_pFcConfigAppFontAddFile               &&
             m_pFcConfigAppFontAddDir                &&
+            m_pFcConfigParseAndLoad             &&
             m_pFcDefaultSubstitute          &&
             m_pFcConfigSubstitute           &&
             m_pFcPatternAddInteger          &&
@@ -767,10 +775,14 @@ int PrintFontManager::countFontconfigFonts( std::hash_map<rtl::OString, int, rtl
                 // set family name
                 if( pUpdate->m_nFamilyName != nFamilyName )
                 {
+#if 0 // fontconfig prefers nameid=16 for the family name which is all fine
+      // but Writer suffers from #i79878#
+      // the only reasonable workaround for now is to use the classic nameid=1
                     pUpdate->m_aAliases.remove( pUpdate->m_nFamilyName );
                     pUpdate->m_aAliases.push_back( pUpdate->m_nFamilyName );
                     pUpdate->m_aAliases.remove( nFamilyName );
                     pUpdate->m_nFamilyName = nFamilyName;
+#endif
                 }
                 if( eWeightRes == FcResultMatch )
                     pUpdate->m_eWeight = convertWeight(weight);
@@ -836,13 +848,25 @@ bool PrintFontManager::addFontconfigDir( const rtl::OString& rDirName )
     if( nVersion <= 20400 )
         return false;
     const char* pDirName = (const char*)rDirName.getStr();
-    bool bRet = (rWrapper.FcConfigAppFontAddDir( rWrapper.FcConfigGetCurrent(), (FcChar8*)pDirName ) == FcTrue);
+    bool bDirOk = (rWrapper.FcConfigAppFontAddDir( rWrapper.FcConfigGetCurrent(), (FcChar8*)pDirName ) == FcTrue);
 
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "FcConfigAppFontAddDir( \"%s\") => %d\n", pDirName, bRet );
 #endif
 
-    return bRet;
+    if( bDirOk )
+    {
+        const rtl::OString aConfFileName = rDirName + "/fc_local.conf";
+        bool bCfgOk = rWrapper.FcConfigParseAndLoad( rWrapper.FcConfigGetCurrent(),
+                            (FcChar8*)aConfFileName.getStr(), FcTrue );
+        (void)bCfgOk; // silence compiler warning
+
+#if OSL_DEBUG_LEVEL > 1
+        fprintf( stderr, "FcConfigParseAndLoad( \"%s\") => %d\n", aConfFileName.getStr(), bCfgOk );
+#endif
+    }
+
+    return bDirOk;
 }
 
 static void addtopattern(FontCfgWrapper& rWrapper, FcPattern *pPattern,

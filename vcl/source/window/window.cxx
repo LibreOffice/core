@@ -98,6 +98,7 @@
 #include "vcl/lazydelete.hxx"
 
 #include <set>
+#include <typeinfo>
 
 using namespace rtl;
 using namespace ::com::sun::star::uno;
@@ -1322,7 +1323,6 @@ ImplWinData* Window::ImplGetWinData() const
         mpWindowImpl->mpWinData->mnIsTopWindow  = (USHORT) ~0;  // not initialized yet, 0/1 will indicate TopWindow (see IsTopWindow())
         mpWindowImpl->mpWinData->mbMouseOver      = FALSE;
         mpWindowImpl->mpWinData->mbEnableNativeWidget = (pNoNWF && *pNoNWF) ? FALSE : TRUE; // TRUE: try to draw this control with native theme API
-        mpWindowImpl->mpWinData->mpSalControlHandle  = NULL;
         mpWindowImpl->mpWinData->mpSmartHelpId    = NULL;
         mpWindowImpl->mpWinData->mpSmartUniqueId  = NULL;
    }
@@ -4328,6 +4328,27 @@ Window::Window( Window* pParent, const ResId& rResId )
 }
 
 // -----------------------------------------------------------------------
+#if OSL_DEBUG_LEVEL > 0
+namespace
+{
+    void lcl_appendWindowInfo( ByteString& io_rErrorString, const Window& i_rWindow )
+    {
+        // skip border windows, they don't carry information which helps diagnosing the problem
+        const Window* pWindow( &i_rWindow );
+        while ( pWindow && ( pWindow->GetType() == WINDOW_BORDERWINDOW ) )
+            pWindow = pWindow->GetWindow( WINDOW_FIRSTCHILD );
+        if ( !pWindow )
+            pWindow = &i_rWindow;
+
+        io_rErrorString += char(13);
+        io_rErrorString += typeid( *pWindow ).name();
+        io_rErrorString += " (window text: '";
+        io_rErrorString += ByteString( pWindow->GetText(), RTL_TEXTENCODING_UTF8 );
+        io_rErrorString += "')";
+    }
+}
+#endif
+// -----------------------------------------------------------------------
 
 Window::~Window()
 {
@@ -4460,9 +4481,7 @@ Window::~Window()
             if ( ImplIsRealParentPath( pTempWin ) )
             {
                 bError = TRUE;
-                if ( aErrorStr.Len() )
-                    aErrorStr += "; ";
-                aErrorStr += ByteString( pTempWin->GetText(), RTL_TEXTENCODING_UTF8 );
+                lcl_appendWindowInfo( aErrorStr, *pTempWin );
             }
             pTempWin = pTempWin->mpWindowImpl->mpNextOverlap;
         }
@@ -4483,9 +4502,7 @@ Window::~Window()
             if ( ImplIsRealParentPath( pTempWin ) )
             {
                 bError = TRUE;
-                if ( aErrorStr.Len() )
-                    aErrorStr += "; ";
-                aErrorStr += ByteString( pTempWin->GetText(), RTL_TEXTENCODING_UTF8 );
+                lcl_appendWindowInfo( aErrorStr, *pTempWin );
             }
             pTempWin = pTempWin->mpWindowImpl->mpFrameData->mpNextFrame;
         }
@@ -4507,10 +4524,8 @@ Window::~Window()
             pTempWin = mpWindowImpl->mpFirstChild;
             while ( pTempWin )
             {
-                aTempStr += ByteString( pTempWin->GetText(), RTL_TEXTENCODING_UTF8 );
+                lcl_appendWindowInfo( aTempStr, *pTempWin );
                 pTempWin = pTempWin->mpWindowImpl->mpNext;
-                if ( pTempWin )
-                    aTempStr += "; ";
             }
             DBG_ERROR( aTempStr.GetBuffer() );
             GetpApp()->Abort( String( aTempStr, RTL_TEXTENCODING_UTF8 ) );   // abort in non-pro version, this must be fixed!
@@ -4524,10 +4539,8 @@ Window::~Window()
             pTempWin = mpWindowImpl->mpFirstOverlap;
             while ( pTempWin )
             {
-                aTempStr += ByteString( pTempWin->GetText(), RTL_TEXTENCODING_UTF8 );
+                lcl_appendWindowInfo( aTempStr, *pTempWin );
                 pTempWin = pTempWin->mpWindowImpl->mpNext;
-                if ( pTempWin )
-                    aTempStr += "; ";
             }
             DBG_ERROR( aTempStr.GetBuffer() );
             GetpApp()->Abort( String( aTempStr, RTL_TEXTENCODING_UTF8 ) );   // abort in non-pro version, this must be fixed!
@@ -4722,10 +4735,6 @@ Window::~Window()
             delete mpWindowImpl->mpWinData->mpFocusRect;
         if ( mpWindowImpl->mpWinData->mpTrackRect )
             delete mpWindowImpl->mpWinData->mpTrackRect;
-        // Native widget support
-        delete mpWindowImpl->mpWinData->mpSalControlHandle;
-        mpWindowImpl->mpWinData->mpSalControlHandle = NULL;
-
         if ( mpWindowImpl->mpWinData->mpSmartHelpId )
             delete mpWindowImpl->mpWinData->mpSmartHelpId;
         if ( mpWindowImpl->mpWinData->mpSmartUniqueId )
@@ -7444,13 +7453,13 @@ Rectangle Window::ImplOutputToUnmirroredAbsoluteScreenPixel( const Rectangle &rR
 
 // -----------------------------------------------------------------------
 
-Rectangle Window::GetWindowExtentsRelative( Window *pRelativeWindow )
+Rectangle Window::GetWindowExtentsRelative( Window *pRelativeWindow ) const
 {
     // with decoration
     return ImplGetWindowExtentsRelative( pRelativeWindow, FALSE );
 }
 
-Rectangle Window::GetClientWindowExtentsRelative( Window *pRelativeWindow )
+Rectangle Window::GetClientWindowExtentsRelative( Window *pRelativeWindow ) const
 {
     // without decoration
     return ImplGetWindowExtentsRelative( pRelativeWindow, TRUE );
@@ -7458,12 +7467,12 @@ Rectangle Window::GetClientWindowExtentsRelative( Window *pRelativeWindow )
 
 // -----------------------------------------------------------------------
 
-Rectangle Window::ImplGetWindowExtentsRelative( Window *pRelativeWindow, BOOL bClientOnly )
+Rectangle Window::ImplGetWindowExtentsRelative( Window *pRelativeWindow, BOOL bClientOnly ) const
 {
     SalFrameGeometry g = mpWindowImpl->mpFrame->GetGeometry();
     // make sure we use the extent of our border window,
     // otherwise we miss a few pixels
-    Window *pWin = (!bClientOnly && mpWindowImpl->mpBorderWindow) ? mpWindowImpl->mpBorderWindow : this;
+    const Window *pWin = (!bClientOnly && mpWindowImpl->mpBorderWindow) ? mpWindowImpl->mpBorderWindow : this;
 
     Point aPos( pWin->OutputToScreenPixel( Point(0,0) ) );
     aPos.X() += g.nX;

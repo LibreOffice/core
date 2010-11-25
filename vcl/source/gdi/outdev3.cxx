@@ -579,6 +579,7 @@ Font OutputDevice::GetDefaultFont( USHORT nType, LanguageType eLang,
     {
         aFont.SetHeight( nDefaultHeight );
         aFont.SetWeight( WEIGHT_NORMAL );
+        aFont.SetLanguage( eLang );
 
         if ( aFont.GetCharSet() == RTL_TEXTENCODING_DONTKNOW )
             aFont.SetCharSet( gsl_getSystemTextEncoding() );
@@ -1670,6 +1671,18 @@ void ImplDevFontList::InitMatchData() const
 
         pEntry->InitMatchData( rFontSubst, rSearchName );
     }
+}
+
+//----------------------------------------------------------------------------
+ImplDevFontListData* ImplDevFontList::ImplFindByLocale(com::sun::star::lang::Locale lc) const
+{
+    // get the default font for a specified locale
+    const DefaultFontConfiguration& rDefaults = *DefaultFontConfiguration::get();
+    String aDefault = rDefaults.getUserInterfaceFont( lc );
+    ImplDevFontListData* pFontData = ImplFindByTokenNames( aDefault );
+    if( pFontData )
+        return pFontData;
+    return 0;
 }
 
 // -----------------------------------------------------------------------
