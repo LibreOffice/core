@@ -38,7 +38,7 @@
 #define     FT_MACRO                5
 #define     LB_GROUP                6
 #define     LB_MACROS               7
-#define     LB_SCRIPTTYPE           8
+    // FREE
 #define     FT_LABEL4LB_MACROS      9
 #define     STR_JAVASCRIPT          10
 #define     STR_MACROS              11
