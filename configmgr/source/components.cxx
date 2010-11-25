@@ -183,6 +183,7 @@ private:
     rtl::OUString url_;
     Data const & data_;
     osl::Condition delay_;
+    boost::shared_ptr<osl::Mutex> lock_;
 };
 
 Components::WriteThread::WriteThread(
@@ -190,6 +191,7 @@ Components::WriteThread::WriteThread(
     rtl::OUString const & url, Data const & data):
     reference_(reference), components_(components), url_(url), data_(data)
 {
+    lock_ = lock();
     OSL_ASSERT(reference != 0);
     acquire();
 }
@@ -197,7 +199,7 @@ Components::WriteThread::WriteThread(
 void Components::WriteThread::run() {
     TimeValue t = { 1, 0 }; // 1 sec
     delay_.wait(&t); // must not throw; result_error is harmless and ignored
-    osl::MutexGuard g(lock); // must not throw
+    osl::MutexGuard g(*lock_); // must not throw
     try {
         try {
             writeModFile(components_, url_, data_);
@@ -304,7 +306,17 @@ void Components::addModification(Path const & path) {
     data_.modifications.add(path);
 }
 
+bool Components::hasModifications() const
+{
+    return data_.modifications.getRoot().children.begin() !=
+        data_.modifications.getRoot().children.end();
+}
+
 void Components::writeModifications() {
+
+    if (!hasModifications())
+        return;
+
     if (!writeThread_.is()) {
         writeThread_ = new WriteThread(
             &writeThread_, *this, getModificationFileUrl(), data_);
@@ -315,7 +327,7 @@ void Components::writeModifications() {
 void Components::flushModifications() {
     rtl::Reference< WriteThread > thread;
     {
-        osl::MutexGuard g(lock);
+        osl::MutexGuard g(*lock_);
         thread = writeThread_;
     }
     if (thread.is()) {
@@ -506,6 +518,8 @@ Components::Components(
     css::uno::Reference< css::uno::XComponentContext > const & context):
     context_(context)
 {
+    lock_ = lock();
+
     OSL_ASSERT(context.is());
     RTL_LOGFILE_TRACE_AUTHOR("configmgr", "sb", "begin parsing");
     parseXcsXcuLayer(

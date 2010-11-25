@@ -78,7 +78,9 @@ RootAccess::RootAccess(
     rtl::OUString const & locale, bool update):
     Access(components), pathRepresentation_(pathRepresentation),
     locale_(locale), update_(update)
-{}
+{
+    lock_ = lock();
+}
 
 Path RootAccess::getAbsolutePath() {
     getNode();
@@ -129,7 +131,7 @@ bool RootAccess::isUpdate() const {
 }
 
 RootAccess::~RootAccess() {
-    osl::MutexGuard g(lock);
+    osl::MutexGuard g(*lock_);
     getComponents().removeRootAccess(this);
 }
 
@@ -227,7 +229,7 @@ css::uno::Any RootAccess::queryInterface(css::uno::Type const & aType)
     throw (css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_ANY));
-    osl::MutexGuard g(lock);
+    osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     css::uno::Any res(Access::queryInterface(aType));
     if (res.hasValue()) {
@@ -251,7 +253,7 @@ void RootAccess::addChangesListener(
 {
     OSL_ASSERT(thisIs(IS_ANY));
     {
-        osl::MutexGuard g(lock);
+        osl::MutexGuard g(*lock_);
         checkLocalizedPropertyAccess();
         if (!aListener.is()) {
             throw css::uno::RuntimeException(
@@ -274,7 +276,7 @@ void RootAccess::removeChangesListener(
     throw (css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_ANY));
-    osl::MutexGuard g(lock);
+    osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     ChangesListeners::iterator i(changesListeners_.find(aListener));
     if (i != changesListeners_.end()) {
@@ -288,7 +290,7 @@ void RootAccess::commitChanges()
     OSL_ASSERT(thisIs(IS_UPDATE));
     Broadcaster bc;
     {
-        osl::MutexGuard g(lock);
+        osl::MutexGuard g(*lock_);
         checkLocalizedPropertyAccess();
         int finalizedLayer;
         Modifications globalMods;
@@ -306,7 +308,7 @@ void RootAccess::commitChanges()
 
 sal_Bool RootAccess::hasPendingChanges() throw (css::uno::RuntimeException) {
     OSL_ASSERT(thisIs(IS_UPDATE));
-    osl::MutexGuard g(lock);
+    osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     //TODO: Optimize:
     std::vector< css::util::ElementChange > changes;
@@ -318,7 +320,7 @@ css::util::ChangesSet RootAccess::getPendingChanges()
     throw (css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_UPDATE));
-    osl::MutexGuard g(lock);
+    osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     comphelper::SequenceAsVector< css::util::ElementChange > changes;
     reportChildChanges(&changes);

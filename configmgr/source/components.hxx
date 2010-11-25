@@ -35,6 +35,7 @@
 #include <set>
 
 #include "boost/noncopyable.hpp"
+#include "boost/shared_ptr.hpp"
 #include "com/sun/star/beans/Optional.hpp"
 #include "com/sun/star/uno/Reference.hxx"
 #include "rtl/ref.hxx"
@@ -94,6 +95,8 @@ public:
     void addModification(Path const & path);
 
     void writeModifications();
+
+    bool hasModifications() const;
 
     void flushModifications();
         // must be called with configmgr::lock unaquired; must be called before
@@ -174,6 +177,7 @@ private:
     WeakRootSet roots_;
     ExternalServices externalServices_;
     rtl::Reference< WriteThread > writeThread_;
+    boost::shared_ptr<osl::Mutex> lock_;
 };
 
 }

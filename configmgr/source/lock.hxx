@@ -30,12 +30,12 @@
 #define INCLUDED_CONFIGMGR_SOURCE_LOCK_HXX
 
 #include "sal/config.h"
-
 #include "osl/mutex.hxx"
+#include "boost/shared_ptr.hpp"
 
 namespace configmgr {
 
-extern osl::Mutex lock;
+boost::shared_ptr<osl::Mutex> lock();
 
 }
 

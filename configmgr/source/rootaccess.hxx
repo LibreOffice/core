@@ -39,6 +39,7 @@
 #include "com/sun/star/util/ChangesSet.hpp"
 #include "com/sun/star/util/XChangesBatch.hpp"
 #include "com/sun/star/util/XChangesNotifier.hpp"
+#include "boost/shared_ptr.hpp"
 #include "rtl/ref.hxx"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
@@ -151,6 +152,8 @@ private:
     rtl::OUString name_;
     bool finalized_;
     ChangesListeners changesListeners_;
+
+    boost::shared_ptr<osl::Mutex> lock_;
 };
 
 }
