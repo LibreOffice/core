@@ -115,17 +115,33 @@ sub GetIniInformation
     end if
     '--------
 
-   call GetTheInstallationType            ' gNetzInst and gNetzOfficePath will be set if StarOffice is a Network-Installation
-   gOfficeBasisPath = getOfficeBasisPath()
-   gOOoStartupTimeOut = fgetOOoStartupTimeOut()
-   gOOoShutdownTimeOut = fgetOOoShutdownTimeOut()
-   call sCheckValgrindStatus()
-    ' set a global path for custom scripts, like basepath, but outside of current environment
-   gPrivateEnvironmentLocation = getIniValue(gTesttoolIni, "PrivateEnvironment", "Current")
+    call GetTheInstallationType            ' gNetzInst and gNetzOfficePath will be set if StarOffice is a Network-Installation
+    gOfficeBasisPath = getOfficeBasisPath()
+    gOOoStartupTimeOut = fgetOOoStartupTimeOut()
+    gOOoShutdownTimeOut = fgetOOoShutdownTimeOut()
+    call sCheckValgrindStatus()
+    ' set a global path for custom scripts outside of current environment
+    gPrivateEnvironmentLocation = getIniValue(gTesttoolIni, "PrivateEnvironment", "Current")
     if (gPrivateEnvironmentLocation <> "" AND gPrivateEnvironmentLocation <> ".") then
-        if NOT fileExists(gPrivateEnvironmentLocation) then
-            qaErrorLog "[PrivateEnvironment] defined in: '"+gTesttoolIni+"', but the path '"+gPrivateEnvironmentLocation+"'does not exist!"
-            gPrivateEnvironmentLocation = ""
+        ' check if the gPrivateEnvironmentLocation path exists
+        if fileExists(gPrivateEnvironmentLocation) then
+            ' check if the path ends with a path sign and add the path sign if not
+            if (Right(gPrivateEnvironmentLocation,1) <> gPathSigne) then
+                gPrivateEnvironmentLocation = gPrivateEnvironmentLocation & gPathSigne
+            endif
+        else
+            ' check if the gTesttoolPath plus the gPrivateEnvironmentLocation path exists
+            ' f.e. this is for a relative path
+            if fileExists(gTesttoolPath & gPrivateEnvironmentLocation) then
+                gPrivateEnvironmentLocation = gTesttoolPath & gPrivateEnvironmentLocation
+                ' check if the path ends with a path sign and add the path sign if not
+                if (Right(gPrivateEnvironmentLocation,1) <> gPathSigne) then
+                    gPrivateEnvironmentLocation = gPrivateEnvironmentLocation & gPathSigne
+                endif
+            else
+                qaErrorLog "[PrivateEnvironment] defined in: '" & gTesttoolIni & "', but the path '" & gPrivateEnvironmentLocation & "'does not exist!"
+                gPrivateEnvironmentLocation = ""
+            endif
         end if
     else
        gPrivateEnvironmentLocation = ""
