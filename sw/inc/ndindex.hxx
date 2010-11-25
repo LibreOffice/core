@@ -43,7 +43,7 @@ class SW_DLLPUBLIC SwNodeIndex
     friend void SwNodes::DeRegisterIndex( SwNodeIndex& );
     friend void SwNodes::RemoveNode( ULONG, ULONG, BOOL );
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     static int nSerial;
     int MySerial;
 #endif

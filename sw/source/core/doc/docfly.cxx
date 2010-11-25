@@ -262,13 +262,13 @@ sal_Int8 SwDoc::SetFlyFrmAnchor( SwFrmFmt& rFmt, SfxItemSet& rSet, BOOL bNewFrms
         //Verbindung zwischen Attribut und Format.
         const SwPosition *pPos = rOldAnch.GetCntntAnchor();
         SwTxtNode *pTxtNode = pPos->nNode.GetNode().GetTxtNode();
-        ASSERT( pTxtNode->HasHints(), "Missing FlyInCnt-Hint." );
+        OSL_ENSURE( pTxtNode->HasHints(), "Missing FlyInCnt-Hint." );
         const xub_StrLen nIdx = pPos->nContent.GetIndex();
         SwTxtAttr * const  pHnt =
             pTxtNode->GetTxtAttrForCharAt( nIdx, RES_TXTATR_FLYCNT );
-        ASSERT( pHnt && pHnt->Which() == RES_TXTATR_FLYCNT,
+        OSL_ENSURE( pHnt && pHnt->Which() == RES_TXTATR_FLYCNT,
                     "Missing FlyInCnt-Hint." );
-        ASSERT( pHnt && pHnt->GetFlyCnt().GetFrmFmt() == &rFmt,
+        OSL_ENSURE( pHnt && pHnt->GetFlyCnt().GetFrmFmt() == &rFmt,
                     "Wrong TxtFlyCnt-Hint." );
         const_cast<SwFmtFlyCnt&>(pHnt->GetFlyCnt()).SetFlyFmt();
 
@@ -292,7 +292,7 @@ sal_Int8 SwDoc::SetFlyFrmAnchor( SwFrmFmt& rFmt, SfxItemSet& rSet, BOOL bNewFrms
         {
             const SwPosition *pPos = aNewAnch.GetCntntAnchor();
             SwTxtNode *pNd = pPos->nNode.GetNode().GetTxtNode();
-            ASSERT( pNd, "Crsr steht nicht auf TxtNode." );
+            OSL_ENSURE( pNd, "Crsr steht nicht auf TxtNode." );
 
             SwFmtFlyCnt aFmt( static_cast<SwFlyFrmFmt*>(&rFmt) );
             pNd->InsertItem( aFmt, pPos->nContent.GetIndex(), 0 );
@@ -417,7 +417,7 @@ BOOL SwDoc::SetFlyFrmAttr( SwFrmFmt& rFlyFmt, SfxItemSet& rSet )
         case RES_PAGEDESC:
         case RES_CNTNT:
         case RES_FOOTER:
-            ASSERT( !this, ":-) Unbekanntes Attribut fuer Fly." );
+            OSL_ENSURE( !this, ":-) Unbekanntes Attribut fuer Fly." );
             // kein break;
         case RES_CHAIN:
             rSet.ClearItem( nWhich );
@@ -641,7 +641,7 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                            const sal_Bool _bSameOnly,
                            const sal_Bool _bPosCorr )
 {
-    ASSERT( GetRootFrm(), "Ohne Layout geht gar nichts" );
+    OSL_ENSURE( GetRootFrm(), "Ohne Layout geht gar nichts" );
 
     if ( !_rMrkList.GetMarkCount() ||
          _rMrkList.GetMark( 0 )->GetMarkedSdrObj()->GetUpGroup() )
@@ -665,11 +665,11 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
             // Continue with next selected object and assert, if this isn't excepted.
             if ( !pContact )
             {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
                 bool bNoUserCallExcepted =
                         pObj->ISA(SwDrawVirtObj) &&
                         !static_cast<SwDrawVirtObj*>(pObj)->IsConnected();
-                ASSERT( bNoUserCallExcepted, "SwDoc::ChgAnchor(..) - no contact at selected drawing object" );
+                OSL_ENSURE( bNoUserCallExcepted, "SwDoc::ChgAnchor(..) - no contact at selected drawing object" );
 #endif
                 continue;
             }
@@ -817,14 +817,14 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                     // 'center to baseline'
                     SetAttr( SwFmtVertOrient( 0, text::VertOrientation::CENTER, text::RelOrientation::FRAME ), *pContact->GetFmt() );
                     SwTxtNode *pNd = aPos.nNode.GetNode().GetTxtNode();
-                    ASSERT( pNd, "Cursor not positioned at TxtNode." );
+                    OSL_ENSURE( pNd, "Cursor not positioned at TxtNode." );
 
                     SwFmtFlyCnt aFmt( pContact->GetFmt() );
                     pNd->InsertItem( aFmt, aPos.nContent.GetIndex(), 0 );
                 }
                 break;
             default:
-                ASSERT( !this, "unexpected AnchorId." );
+                OSL_ENSURE( !this, "unexpected AnchorId." );
             }
 
             if ( (FLY_AS_CHAR != _eAnchorType) &&
@@ -865,8 +865,8 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                 //Verbindung zwischen Attribut und Format.
                 const xub_StrLen nIndx( pOldAsCharAnchorPos->nContent.GetIndex() );
                 SwTxtNode* pTxtNode( pOldAsCharAnchorPos->nNode.GetNode().GetTxtNode() );
-                ASSERT( pTxtNode, "<SwDoc::ChgAnchor(..)> - missing previous anchor text node for as-character anchored object" );
-                ASSERT( pTxtNode->HasHints(), "Missing FlyInCnt-Hint." );
+                OSL_ENSURE( pTxtNode, "<SwDoc::ChgAnchor(..)> - missing previous anchor text node for as-character anchored object" );
+                OSL_ENSURE( pTxtNode->HasHints(), "Missing FlyInCnt-Hint." );
                 SwTxtAttr * const pHnt =
                     pTxtNode->GetTxtAttrForCharAt( nIndx, RES_TXTATR_FLYCNT );
                 const_cast<SwFmtFlyCnt&>(pHnt->GetFlyCnt()).SetFlyFmt();

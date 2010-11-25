@@ -107,7 +107,7 @@ SwField* SwChapterField::Copy() const
 //                                      const SwTxtNode* pTxtNd,
 //                                      sal_Bool bSrchNum )
 //{
-//    ASSERT( pFrm, "in welchem Frame stehe ich denn?" )
+//    OSL_ENSURE( pFrm, "in welchem Frame stehe ich denn?" )
 //    SwDoc* pDoc = (SwDoc*)pTxtNd->GetDoc();
 //    SwPosition aPos( pDoc->GetNodes().GetEndOfContent() );
 
@@ -122,7 +122,7 @@ void SwChapterField::ChangeExpansion(const SwFrm* pFrm,
                                       const SwCntntNode* pCntntNode,
                                       sal_Bool bSrchNum )
 {
-    ASSERT( pFrm, "in welchem Frame stehe ich denn?" )
+    OSL_ENSURE( pFrm, "in welchem Frame stehe ich denn?" );
     SwDoc* pDoc = (SwDoc*)pCntntNode->GetDoc();
 
     const SwTxtNode* pTxtNode = dynamic_cast<const SwTxtNode*>(pCntntNode);
@@ -156,10 +156,10 @@ void SwChapterField::ChangeExpansion(const SwTxtNode &rTxtNd, sal_Bool bSrchNum)
                     // --> OD 2008-04-02 #refactorlists#
 //                    nLevel = GetRealLevel( pONd->GetTxtColl()->
 //                                            GetOutlineLevel() );
-                    //ASSERT( pONd->GetOutlineLevel() >= 0 && pONd->GetOutlineLevel() < MAXLEVEL,   //#outline level,zhaojianwei
+                    // OSL_ENSURE( pONd->GetOutlineLevel() >= 0 && pONd->GetOutlineLevel() < MAXLEVEL,  //#outline level,zhaojianwei
                     //        "<SwChapterField::ChangeExpansion(..)> - outline node with inconsistent outline level. Serious defect -> please inform OD." );
                     //nLevel = static_cast<BYTE>(pONd->GetOutlineLevel());
-                    ASSERT( pONd->GetAttrOutlineLevel() >= 0 && pONd->GetAttrOutlineLevel() <= MAXLEVEL,
+                    OSL_ENSURE( pONd->GetAttrOutlineLevel() >= 0 && pONd->GetAttrOutlineLevel() <= MAXLEVEL,
                             "<SwChapterField::ChangeExpansion(..)> - outline node with inconsistent outline level. Serious defect -> please inform OD." );
                     nLevel = static_cast<BYTE>(pONd->GetAttrOutlineLevel());                            //<-end,zhaojianwei
                     // <--

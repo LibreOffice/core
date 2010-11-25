@@ -278,7 +278,7 @@ static void PutEEPoolItem( SfxItemSet &rEEItemSet,
 void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
 {
 
-    ASSERT( !pMarquee, "Marquee in Marquee???" );
+    OSL_ENSURE( !pMarquee, "Marquee in Marquee???" );
     aContents.Erase();
 
     String aId, aStyle, aClass;
@@ -569,7 +569,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
 
 void SwHTMLParser::EndMarquee()
 {
-    ASSERT( pMarquee && OBJ_TEXT==pMarquee->GetObjIdentifier(),
+    OSL_ENSURE( pMarquee && OBJ_TEXT==pMarquee->GetObjIdentifier(),
             "kein Marquee oder falscher Typ" );
 
     if( bFixMarqueeWidth )
@@ -597,7 +597,7 @@ void SwHTMLParser::EndMarquee()
 
 void SwHTMLParser::InsertMarqueeText()
 {
-    ASSERT( pMarquee && OBJ_TEXT==pMarquee->GetObjIdentifier(),
+    OSL_ENSURE( pMarquee && OBJ_TEXT==pMarquee->GetObjIdentifier(),
             "kein Marquee oder falscher Typ" );
 
     // das akteulle Textstueck an den Text anhaengen
@@ -606,7 +606,7 @@ void SwHTMLParser::InsertMarqueeText()
 
 void SwHTMLParser::ResizeDrawObject( SdrObject* pObj, SwTwips nWidth )
 {
-    ASSERT( OBJ_TEXT==pObj->GetObjIdentifier(),
+    OSL_ENSURE( OBJ_TEXT==pObj->GetObjIdentifier(),
             "kein Marquee oder falscher Typ" );
 
     if( OBJ_TEXT!=pObj->GetObjIdentifier() )
@@ -693,7 +693,7 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
 {
     SwHTMLWriter & rHTMLWrt = (SwHTMLWriter&)rWrt;
 
-    ASSERT( rWrt.pDoc->GetDrawModel(), "Da gibt's ein Draw-Obj ohne ein Draw-Model zu haben?" );
+    OSL_ENSURE( rWrt.pDoc->GetDrawModel(), "Da gibt's ein Draw-Obj ohne ein Draw-Model zu haben?" );
     const SdrTextObj *pTextObj = (const SdrTextObj *)&rSdrObject;
 
     // Gibt es ueberhaupt auszugebenden Text
@@ -710,10 +710,10 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
 
     // BEHAVIOUR
     SdrTextAniKind eAniKind = pTextObj->GetTextAniKind();
-    ASSERT( SDRTEXTANI_SCROLL==eAniKind ||
+    OSL_ENSURE( SDRTEXTANI_SCROLL==eAniKind ||
             SDRTEXTANI_ALTERNATE==eAniKind ||
             SDRTEXTANI_SLIDE==eAniKind,
-            "Text-Draw-Objekt nicht fuer Marquee geeignet" )
+            "Text-Draw-Objekt nicht fuer Marquee geeignet" );
 
     const sal_Char *pStr = 0;
     switch( eAniKind )

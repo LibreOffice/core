@@ -606,7 +606,7 @@ SwCalcExp* SwCalc::VarLook( const String& rStr, USHORT ins )
             pMgr->OpenDataSource(sSourceName, sTableName, -1, false))
         {
             String sColumnName( GetColumnName( sTmpName ));
-            ASSERT (sColumnName.Len(), "DB-Spaltenname fehlt!");
+           OSL_ENSURE(sColumnName.Len(), "DB-Spaltenname fehlt!");
 
             String sDBNum( SwFieldType::GetTypeStr(TYP_DBSETNUMBERFLD) );
             pCharClass->toLower(sDBNum);
@@ -656,7 +656,7 @@ SwCalcExp* SwCalc::VarLook( const String& rStr, USHORT ins )
     VarTable[ ii ] = pNewExp;
 
     String sColumnName( GetColumnName( sTmpName ));
-    ASSERT( sColumnName.Len(), "DB-Spaltenname fehlt!" );
+    OSL_ENSURE( sColumnName.Len(), "DB-Spaltenname fehlt!" );
     if( sColumnName.EqualsIgnoreCaseAscii(
                             SwFieldType::GetTypeStr( TYP_DBSETNUMBERFLD ) ))
     {
@@ -737,7 +737,7 @@ BOOL SwCalc::Push( const VoidPtr pPtr )
 
 void SwCalc::Pop( const VoidPtr )
 {
-    ASSERT( aRekurStk.Count(), "SwCalc: Pop auf ungueltigen Ptr" );
+    OSL_ENSURE( aRekurStk.Count(), "SwCalc: Pop auf ungueltigen Ptr" );
 
     aRekurStk.Remove( aRekurStk.Count() - 1 );
 }

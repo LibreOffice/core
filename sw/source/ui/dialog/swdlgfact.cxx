@@ -589,7 +589,9 @@ IMPL_LINK( AbstractMailMergeWizard_Impl, EndDialogHdl, SwMailMergeWizard*, pDial
 IMPL_LINK( AbstractMailMergeWizard_Impl, EndDialogHdl, SwMailMergeWizard*, EMPTYARG )
 #endif
 {
+#if OSL_DEBUG_LEVEL > 1
     OSL_ENSURE( pDialog == pDlg, "wrong dialog passed to EndDialogHdl!" );
+#endif
 
     aEndDlgHdl.Call( this );
     aEndDlgHdl = Link();

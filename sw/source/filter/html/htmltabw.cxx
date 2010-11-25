@@ -146,7 +146,7 @@ void SwHTMLWrtTable::PixelizeBorders()
 sal_Bool SwHTMLWrtTable::HasTabBackground( const SwTableBox& rBox,
                         sal_Bool bTop, sal_Bool bBottom, sal_Bool bLeft, sal_Bool bRight )
 {
-    ASSERT( bTop || bBottom || bLeft || bRight,
+    OSL_ENSURE( bTop || bBottom || bLeft || bRight,
             "HasTabBackground: darf nicht aufgerufen werden" );
 
     sal_Bool bRet = sal_False;
@@ -181,7 +181,7 @@ sal_Bool SwHTMLWrtTable::HasTabBackground( const SwTableBox& rBox,
 sal_Bool SwHTMLWrtTable::HasTabBackground( const SwTableLine& rLine,
                         sal_Bool bTop, sal_Bool bBottom, sal_Bool bLeft, sal_Bool bRight )
 {
-    ASSERT( bTop || bBottom || bLeft || bRight,
+    OSL_ENSURE( bTop || bBottom || bLeft || bRight,
             "HasTabBackground: darf nicht aufgerufen werden" );
 
     sal_Bool bRet = sal_False;
@@ -674,7 +674,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
         }
         else
         {
-            ASSERT( Application::GetDefaultDevice(), "kein Application-Window!?" );
+            OSL_ENSURE( Application::GetDefaultDevice(), "kein Application-Window!?" );
             sOut += "100%";
         }
     }
@@ -1081,7 +1081,7 @@ Writer& OutHTML_SwTblNode( Writer& rWrt, SwTableNode & rNode,
 
     if( bCheckDefList )
     {
-        ASSERT( !rHTMLWrt.GetNumInfo().GetNumRule() ||
+        OSL_ENSURE( !rHTMLWrt.GetNumInfo().GetNumRule() ||
                 rHTMLWrt.GetNextNumInfo(),
                 "NumInfo fuer naechsten Absatz fehlt!" );
         const SvxLRSpaceItem& aLRItem = pFmt->GetLRSpace();

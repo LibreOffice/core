@@ -48,14 +48,10 @@
 #include <editeng/protitem.hxx>
 #include <swtblfmt.hxx>
 
-#ifndef DBG_UTIL
-#define CHECK_TABLE(t)
-#else
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 #define CHECK_TABLE(t) (t).CheckConsistency();
 #else
 #define CHECK_TABLE(t)
-#endif
 #endif
 
 // ---------------------------------------------------------------
@@ -134,7 +130,7 @@ void lcl_CheckMinMax( long& rMin, long& rMax, const SwTableLine& rLine, USHORT n
     ++nCheck;
     if( rLine.GetTabBoxes().Count() < nCheck )
     {   // robust
-        ASSERT( false, "Box out of table line" );
+        OSL_ENSURE( false, "Box out of table line" );
         nCheck = rLine.GetTabBoxes().Count();
     }
 
@@ -143,7 +139,7 @@ void lcl_CheckMinMax( long& rMin, long& rMax, const SwTableLine& rLine, USHORT n
     for( USHORT nCurrBox = 0; nCurrBox < nCheck; ++nCurrBox )
     {
         SwTableBox* pBox = rLine.GetTabBoxes()[nCurrBox];
-        ASSERT( pBox, "Missing table box" );
+        OSL_ENSURE( pBox, "Missing table box" );
         nWidth = pBox->GetFrmFmt()->GetFrmSize().GetWidth();
         nNew += nWidth;
     }
@@ -177,12 +173,12 @@ long lcl_Box2LeftBorder( const SwTableBox& rBox )
     for( USHORT nCurrBox = 0; nCurrBox < nCount; ++nCurrBox )
     {
         SwTableBox* pBox = rLine.GetTabBoxes()[nCurrBox];
-        ASSERT( pBox, "Missing table box" );
+        OSL_ENSURE( pBox, "Missing table box" );
         if( pBox == &rBox )
             return nLeft;
         nLeft += pBox->GetFrmFmt()->GetFrmSize().GetWidth();
     }
-    ASSERT( false, "Box not found in own upper?" );
+    OSL_ENSURE( false, "Box not found in own upper?" );
     return nLeft;
 }
 
@@ -211,15 +207,15 @@ SwTableBox* lcl_LeftBorder2Box( long nLeft, const SwTableLine* pLine )
     for( USHORT nCurrBox = 0; nCurrBox < nCount; ++nCurrBox )
     {
         SwTableBox* pBox = pLine->GetTabBoxes()[nCurrBox];
-        ASSERT( pBox, "Missing table box" );
+        OSL_ENSURE( pBox, "Missing table box" );
         if( nCurrLeft >= nLeft && pBox->GetFrmFmt()->GetFrmSize().GetWidth() )
         {
-            ASSERT( nCurrLeft == nLeft, "Wrong box found" );
+            OSL_ENSURE( nCurrLeft == nLeft, "Wrong box found" );
             return pBox;
         }
         nCurrLeft += pBox->GetFrmFmt()->GetFrmSize().GetWidth();
     }
-    ASSERT( false, "Didn't found wished box" );
+    OSL_ENSURE( false, "Didn't found wished box" );
     return 0;
 }
 
@@ -257,7 +253,7 @@ void lcl_ChangeRowSpan( const SwTable& rTable, const long nDiff,
 {
     if( !nDiff || nRowIdx >= rTable.GetTabLines().Count() )
         return;
-    ASSERT( !bSingle || nDiff > 0, "Don't set bSingle when deleting lines!" );
+    OSL_ENSURE( !bSingle || nDiff > 0, "Don't set bSingle when deleting lines!" );
     bool bGoOn;
     // nDistance is the distance between the current row and the critical row,
     // e.g. the deleted rows or the inserted rows.
@@ -326,7 +322,7 @@ void lcl_ChangeRowSpan( const SwTable& rTable, const long nDiff,
 
 SwBoxSelection* SwTable::CollectBoxSelection( const SwPaM& rPam ) const
 {
-    ASSERT( bNewModel, "Don't call me for old tables" );
+    OSL_ENSURE( bNewModel, "Don't call me for old tables" );
     if( !aLines.Count() )
         return 0;
     const SwNode* pStartNd = rPam.Start()->nNode.GetNode().FindTableBoxStartNode();
@@ -341,12 +337,12 @@ SwBoxSelection* SwTable::CollectBoxSelection( const SwPaM& rPam ) const
     for( USHORT nRow = 0; nFound < 2 && nRow < nLines; ++nRow )
     {
         SwTableLine* pLine = aLines[nRow];
-        ASSERT( pLine, "Missing table line" );
+        OSL_ENSURE( pLine, "Missing table line" );
         USHORT nCols = pLine->GetTabBoxes().Count();
         for( USHORT nCol = 0; nCol < nCols; ++nCol )
         {
             SwTableBox* pBox = pLine->GetTabBoxes()[nCol];
-            ASSERT( pBox, "Missing table box" );
+            OSL_ENSURE( pBox, "Missing table box" );
             if( nFound )
             {
                 if( pBox->GetSttNd() == pEndNd )
@@ -381,7 +377,7 @@ SwBoxSelection* SwTable::CollectBoxSelection( const SwPaM& rPam ) const
     for( USHORT nRow = nTop; nRow <= nBottom && bOkay; ++nRow )
     {
         SwTableLine* pLine = aLines[nRow];
-        ASSERT( pLine, "Missing table line" );
+        OSL_ENSURE( pLine, "Missing table line" );
         SwSelBoxes *pBoxes = new SwSelBoxes();
         long nLeft = 0;
         long nRight = 0;
@@ -390,7 +386,7 @@ SwBoxSelection* SwTable::CollectBoxSelection( const SwPaM& rPam ) const
         for( USHORT nCurrBox = 0; nCurrBox < nCount; ++nCurrBox )
         {
             SwTableBox* pBox = pLine->GetTabBoxes()[nCurrBox];
-            ASSERT( pBox, "Missing table box" );
+            OSL_ENSURE( pBox, "Missing table box" );
             nLeft = nRight;
             nRight += pBox->GetFrmFmt()->GetFrmSize().GetWidth();
             nRowSpan = pBox->getRowSpan();
@@ -624,7 +620,7 @@ long lcl_InsertPosition( SwTable &rTable, std::vector<USHORT>& rInsPos,
         nAddWidth += nWidth;
         USHORT nCurrBox = pLine->GetTabBoxes().C40_GETPOS(SwTableBox, pBox );
         USHORT nCurrLine = rTable.GetTabLines().C40_GETPOS(SwTableLine, pLine );
-        ASSERT( nCurrLine != USHRT_MAX, "Time to say Good-Bye.." );
+        OSL_ENSURE( nCurrLine != USHRT_MAX, "Time to say Good-Bye.." );
         if( rInsPos[ nCurrLine ] == USHRT_MAX )
         {
             rInsPos[ nCurrLine ] = nCurrBox;
@@ -706,7 +702,7 @@ BOOL SwTable::NewInsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes,
     {
         SwTableLine* pLine = aLines[ i ];
         USHORT nInsPos = aInsPos[i];
-        ASSERT( nInsPos != USHRT_MAX, "Didn't found insert position" );
+        OSL_ENSURE( nInsPos != USHRT_MAX, "Didn't found insert position" );
         SwTableBox* pBox = pLine->GetTabBoxes()[ nInsPos ];
         if( bBehind )
             ++nInsPos;
@@ -777,13 +773,13 @@ BOOL SwTable::NewInsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes,
 
     aFndBox.MakeFrms( *this );
 //  aFndBox.RestoreChartData( *this );
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     {
         const SwTableBoxes &rTabBoxes = aLines[0]->GetTabBoxes();
         long nNewWidth = 0;
         for( USHORT i = 0; i < rTabBoxes.Count(); ++i )
             nNewWidth += rTabBoxes[i]->GetFrmFmt()->GetFrmSize().GetWidth();
-        ASSERT( nNewWidth > 0, "Very small" );
+        OSL_ENSURE( nNewWidth > 0, "Very small" );
     }
 #endif
     CHECK_TABLE( *this )
@@ -985,7 +981,7 @@ void SwTable::_FindSuperfluousRows( SwSelBoxes& rBoxes,
     for( USHORT nRow = nFirstLn; nRow <= nLastLn; ++nRow )
     {
         SwTableLine* pLine = aLines[nRow];
-        ASSERT( pLine, "Missing table line" );
+        OSL_ENSURE( pLine, "Missing table line" );
         USHORT nCols = pLine->GetTabBoxes().Count();
         bool bSuperfl = true;
         for( USHORT nCol = 0; nCol < nCols; ++nCol )
@@ -1070,7 +1066,7 @@ SwTableBox& SwTableBox::FindEndOfRowSpan( const SwTable& rTable, USHORT nMaxStep
 void lcl_getAllMergedBoxes( const SwTable& rTable, SwSelBoxes& rBoxes, SwTableBox& rBox )
 {
     SwTableBox* pBox = &rBox;
-    ASSERT( pBox == &rBox.FindStartOfRowSpan( rTable, USHRT_MAX ), "Not a master box" );
+    OSL_ENSURE( pBox == &rBox.FindStartOfRowSpan( rTable, USHRT_MAX ), "Not a master box" );
     rBoxes.Insert( pBox );
     if( pBox->getRowSpan() == 1 )
         return;
@@ -1158,7 +1154,7 @@ void lcl_FillSelBoxes( SwSelBoxes &rBoxes, SwTableLine &rLine )
 void SwTable::InsertSpannedRow( SwDoc* pDoc, USHORT nRowIdx, USHORT nCnt )
 {
     CHECK_TABLE( *this )
-    ASSERT( nCnt && nRowIdx < GetTabLines().Count(), "Wrong call of InsertSpannedRow" );
+    OSL_ENSURE( nCnt && nRowIdx < GetTabLines().Count(), "Wrong call of InsertSpannedRow" );
     SwSelBoxes aBoxes;
     SwTableLine& rLine = *GetTabLines()[ nRowIdx ];
     lcl_FillSelBoxes( aBoxes, rLine );
@@ -1213,7 +1209,7 @@ void lcl_SophisticatedFillLineIndices( SwLineOffsetArray &rArr,
     for( USHORT i = 0; i < rBoxes.Count(); ++i )
     {   // Collect all end line indices and the row spans
         const SwTableBox &rBox = rBoxes[ i ]->FindStartOfRowSpan( rTable );
-        ASSERT( rBox.getRowSpan() > 0, "Didn't I say 'StartOfRowSpan' ??" )
+        OSL_ENSURE( rBox.getRowSpan() > 0, "Didn't I say 'StartOfRowSpan' ??" );
         if( nCnt > rBox.getRowSpan() )
         {
             const SwTableLine *pLine = rBox.GetUpper();
@@ -1249,7 +1245,7 @@ void lcl_SophisticatedFillLineIndices( SwLineOffsetArray &rArr,
                      aLnOfs.second < pCurr->second )
                 aLnOfs.second = pCurr->second; // Found a smaller row span
         }
-        ASSERT( aLnOfs.second < nCnt, "Clean-up failed" )
+        OSL_ENSURE( aLnOfs.second < nCnt, "Clean-up failed" );
         aLnOfs.second = nCnt - aLnOfs.second; // the number of rows to insert
         rArr.insert( rArr.end(),
             SwLineOffset( aLnOfs.first - nSum, aLnOfs.second ) );
@@ -1312,7 +1308,7 @@ USHORT lcl_CalculateSplitLineHeights( SwSplitLines &rCurr, SwSplitLines &rNew,
     for( USHORT i = 0; i < rBoxes.Count(); ++i )
     {   // Collect all pairs (start+end) of line indices to split
         const SwTableBox &rBox = rBoxes[ i ]->FindStartOfRowSpan( rTable );
-        ASSERT( rBox.getRowSpan() > 0, "Didn't I say 'StartOfRowSpan' ??" )
+        OSL_ENSURE( rBox.getRowSpan() > 0, "Didn't I say 'StartOfRowSpan' ??" );
         const SwTableLine *pLine = rBox.GetUpper();
         const USHORT nStart = rTable.GetTabLines().C40_GETPOS( SwTableLine, pLine );
         const USHORT nEnd = USHORT( rBox.getRowSpan() + nStart - 1 );
@@ -1465,7 +1461,7 @@ BOOL SwTable::NewSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, USHORT nCnt,
     std::set< USHORT> aIndices;
     for( USHORT i = 0; i < rBoxes.Count(); ++i )
     {
-        ASSERT( rBoxes[i]->getRowSpan() != 1, "Forgot to split?" )
+        OSL_ENSURE( rBoxes[i]->getRowSpan() != 1, "Forgot to split?" );
         if( rBoxes[i]->getRowSpan() > 1 )
             aIndices.insert( i );
     }
@@ -1562,14 +1558,14 @@ void SwTable::PrepareDelBoxes( const SwSelBoxes& rBoxes )
                 long nLeft = lcl_Box2LeftBorder( *pBox );
                 SwTableLine *pLine = pBox->GetUpper();
                 USHORT nLinePos = GetTabLines().C40_GETPOS(SwTableLine, pLine);
-                ASSERT( nLinePos < USHRT_MAX, "Box/table mismatch" )
+                OSL_ENSURE( nLinePos < USHRT_MAX, "Box/table mismatch" );
                 if( nRowSpan > 1 )
                 {
                     if( ++nLinePos < GetTabLines().Count() )
                     {
                         pLine = GetTabLines()[ nLinePos ];
                         pBox = lcl_LeftBorder2Box( nLeft, pLine );
-                        ASSERT( pBox, "RowSpan irritation I" )
+                        OSL_ENSURE( pBox, "RowSpan irritation I" );
                         if( pBox )
                             pBox->setRowSpan( --nRowSpan );
                     }
@@ -1580,7 +1576,7 @@ void SwTable::PrepareDelBoxes( const SwSelBoxes& rBoxes )
                     {
                         pLine = GetTabLines()[ --nLinePos ];
                         pBox = lcl_LeftBorder2Box( nLeft, pLine );
-                        ASSERT( pBox, "RowSpan irritation II" )
+                        OSL_ENSURE( pBox, "RowSpan irritation II" );
                         if( pBox )
                         {
                             nRowSpan = pBox->getRowSpan();
@@ -1617,7 +1613,7 @@ void lcl_SearchSelBox( const SwTable &rTable, SwSelBoxes& rBoxes, long nMin, lon
     for( USHORT nCurrBox = 0; nCurrBox < nCount; ++nCurrBox )
     {
         SwTableBox* pBox = rLine.GetTabBoxes()[nCurrBox];
-        ASSERT( pBox, "Missing table box" );
+        OSL_ENSURE( pBox, "Missing table box" );
         long nWidth = pBox->GetFrmFmt()->GetFrmSize().GetWidth();
         nRight += nWidth;
         if( nRight > nMin )
@@ -1657,7 +1653,7 @@ void lcl_SearchSelBox( const SwTable &rTable, SwSelBoxes& rBoxes, long nMin, lon
 void SwTable::CreateSelection(  const SwPaM& rPam, SwSelBoxes& rBoxes,
     const SearchType eSearch, bool bChkProtected ) const
 {
-    ASSERT( bNewModel, "Don't call me for old tables" );
+    OSL_ENSURE( bNewModel, "Don't call me for old tables" );
     if( !aLines.Count() )
         return;
     const SwNode* pStartNd = rPam.GetPoint()->nNode.GetNode().FindTableBoxStartNode();
@@ -1695,12 +1691,12 @@ void SwTable::CreateSelection( const SwNode* pStartNd, const SwNode* pEndNd,
     for( USHORT nRow = 0; nFound < 2 && nRow < nLines; ++nRow )
     {
         SwTableLine* pLine = aLines[nRow];
-        ASSERT( pLine, "Missing table line" );
+        OSL_ENSURE( pLine, "Missing table line" );
         USHORT nCols = pLine->GetTabBoxes().Count();
         for( USHORT nCol = 0; nCol < nCols; ++nCol )
         {
             SwTableBox* pBox = pLine->GetTabBoxes()[nCol];
-            ASSERT( pBox, "Missing table box" );
+            OSL_ENSURE( pBox, "Missing table box" );
             if( pBox->GetSttNd() == pEndNd || pBox->GetSttNd() == pStartNd )
             {
                 if( !bChkProtected ||
@@ -1740,12 +1736,12 @@ void SwTable::CreateSelection( const SwNode* pStartNd, const SwNode* pEndNd,
         for( USHORT nRow = nTop; nRow <= nBottom; ++nRow )
         {
             SwTableLine* pLine = aLines[nRow];
-            ASSERT( pLine, "Missing table line" );
+            OSL_ENSURE( pLine, "Missing table line" );
             USHORT nCount = pLine->GetTabBoxes().Count();
             for( USHORT nCurrBox = 0; nCurrBox < nCount; ++nCurrBox )
             {
                 SwTableBox* pBox = pLine->GetTabBoxes()[nCurrBox];
-                ASSERT( pBox, "Missing table box" );
+                OSL_ENSURE( pBox, "Missing table box" );
                 if( pBox->getRowSpan() > 0 && ( !bChkProtected ||
                     !pBox->GetFrmFmt()->GetProtect().IsCntntProtected() ) )
                     rBoxes.Insert( pBox );
@@ -1848,7 +1844,7 @@ void SwTable::CreateSelection( const SwNode* pStartNd, const SwNode* pEndNd,
 
 void SwTable::ExpandColumnSelection( SwSelBoxes& rBoxes, long &rMin, long &rMax ) const
 {
-    ASSERT( bNewModel, "Don't call me for old tables" );
+    OSL_ENSURE( bNewModel, "Don't call me for old tables" );
     rMin = 0;
     rMax = 0;
     if( !aLines.Count() || !rBoxes.Count() )
@@ -1860,12 +1856,12 @@ void SwTable::ExpandColumnSelection( SwSelBoxes& rBoxes, long &rMin, long &rMax 
     for( USHORT nRow = 0; nRow < nLineCnt && nBox < nBoxCnt; ++nRow )
     {
         SwTableLine* pLine = aLines[nRow];
-        ASSERT( pLine, "Missing table line" );
+        OSL_ENSURE( pLine, "Missing table line" );
         USHORT nCols = pLine->GetTabBoxes().Count();
         for( USHORT nCol = 0; nCol < nCols; ++nCol )
         {
             SwTableBox* pBox = pLine->GetTabBoxes()[nCol];
-            ASSERT( pBox, "Missing table box" );
+            OSL_ENSURE( pBox, "Missing table box" );
             if( pBox == rBoxes[nBox] )
             {
                 lcl_CheckMinMax( rMin, rMax, *pLine, nCol, nBox == 0 );
@@ -1897,7 +1893,7 @@ void SwTable::ExpandColumnSelection( SwSelBoxes& rBoxes, long &rMin, long &rMax 
 */
 void SwTable::PrepareDeleteCol( long nMin, long nMax )
 {
-    ASSERT( bNewModel, "Don't call me for old tables" );
+    OSL_ENSURE( bNewModel, "Don't call me for old tables" );
     if( !aLines.Count() || nMax < nMin )
         return;
     long nMid = nMin ? ( nMin + nMax ) / 2 : 0;
@@ -1968,9 +1964,9 @@ void SwTable::ExpandSelection( SwSelBoxes& rBoxes ) const
 
 void SwTable::CheckRowSpan( SwTableLinePtr &rpLine, bool bUp ) const
 {
-    ASSERT( IsNewModel(), "Don't call me for old tables" );
+    OSL_ENSURE( IsNewModel(), "Don't call me for old tables" );
     USHORT nLineIdx = GetTabLines().C40_GETPOS( SwTableLine, rpLine );
-    ASSERT( nLineIdx < GetTabLines().Count(), "Start line out of range" );
+    OSL_ENSURE( nLineIdx < GetTabLines().Count(), "Start line out of range" );
     bool bChange = true;
     if( bUp )
     {
@@ -2033,12 +2029,12 @@ SwSaveRowSpan::SwSaveRowSpan( SwTableBoxes& rBoxes, USHORT nSplitLn )
 {
     bool bDontSave = true; // nothing changed, nothing to save
     USHORT nColCount = rBoxes.Count();
-    ASSERT( nColCount, "Empty Table Line" )
+    OSL_ENSURE( nColCount, "Empty Table Line" );
     mnRowSpans.resize( nColCount );
     for( USHORT nCurrCol = 0; nCurrCol < nColCount; ++nCurrCol )
     {
         SwTableBox* pBox = rBoxes[nCurrCol];
-        ASSERT( pBox, "Missing Table Box" );
+        OSL_ENSURE( pBox, "Missing Table Box" );
         long nRowSp = pBox->getRowSpan();
         mnRowSpans[ nCurrCol ] = nRowSp;
         if( nRowSp < 0 )
@@ -2059,24 +2055,24 @@ void SwTable::RestoreRowSpan( const SwSaveRowSpan& rSave )
     if( !IsNewModel() ) // for new model only
         return;
     USHORT nLineCount = GetTabLines().Count();
-    ASSERT( rSave.mnSplitLine < nLineCount, "Restore behind last line?" )
+    OSL_ENSURE( rSave.mnSplitLine < nLineCount, "Restore behind last line?" );
     if( rSave.mnSplitLine < nLineCount )
     {
         SwTableLine* pLine = GetTabLines()[rSave.mnSplitLine];
         USHORT nColCount = pLine->GetTabBoxes().Count();
-        ASSERT( nColCount, "Empty Table Line" )
-        ASSERT( nColCount == rSave.mnRowSpans.size(), "Wrong row span store" )
+        OSL_ENSURE( nColCount, "Empty Table Line" );
+        OSL_ENSURE( nColCount == rSave.mnRowSpans.size(), "Wrong row span store" );
         if( nColCount == rSave.mnRowSpans.size() )
         {
             for( USHORT nCurrCol = 0; nCurrCol < nColCount; ++nCurrCol )
             {
                 SwTableBox* pBox = pLine->GetTabBoxes()[nCurrCol];
-                ASSERT( pBox, "Missing Table Box" );
+                OSL_ENSURE( pBox, "Missing Table Box" );
                 long nRowSp = pBox->getRowSpan();
                 if( nRowSp != rSave.mnRowSpans[ nCurrCol ] )
                 {
-                    ASSERT( -nRowSp == rSave.mnRowSpans[ nCurrCol ], "Pardon me?!" )
-                    ASSERT( rSave.mnRowSpans[ nCurrCol ] < 0, "Pardon me?!" )
+                    OSL_ENSURE( -nRowSp == rSave.mnRowSpans[ nCurrCol ], "Pardon me?!" );
+                    OSL_ENSURE( rSave.mnRowSpans[ nCurrCol ] < 0, "Pardon me?!" );
                     pBox->setRowSpan( -nRowSp );
 
                     USHORT nLine = rSave.mnSplitLine;
@@ -2129,11 +2125,11 @@ void SwTable::CleanUpBottomRowSpan( USHORT nDelLines )
     USHORT nLastLine = GetTabLines().Count()-1;
     SwTableLine* pLine = GetTabLines()[nLastLine];
     USHORT nColCount = pLine->GetTabBoxes().Count();
-    ASSERT( nColCount, "Empty Table Line" )
+    OSL_ENSURE( nColCount, "Empty Table Line" );
     for( USHORT nCurrCol = 0; nCurrCol < nColCount; ++nCurrCol )
     {
         SwTableBox* pBox = pLine->GetTabBoxes()[nCurrCol];
-        ASSERT( pBox, "Missing Table Box" );
+        OSL_ENSURE( pBox, "Missing Table Box" );
         long nRowSp = pBox->getRowSpan();
         if( nRowSp < 0 )
             nRowSp = -nRowSp;
@@ -2145,7 +2141,7 @@ void SwTable::CleanUpBottomRowSpan( USHORT nDelLines )
     }
 }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 
 struct RowSpanCheck
 {
@@ -2167,25 +2163,25 @@ void SwTable::CheckConsistency() const
     {
         SwTwips nWidth = 0;
         SwTableLine* pLine = GetTabLines()[nCurrLine];
-        ASSERT( pLine, "Missing Table Line" )
+        OSL_ENSURE( pLine, "Missing Table Line" );
         USHORT nColCount = pLine->GetTabBoxes().Count();
-        ASSERT( nColCount, "Empty Table Line" )
+        OSL_ENSURE( nColCount, "Empty Table Line" );
         for( USHORT nCurrCol = 0; nCurrCol < nColCount; ++nCurrCol )
         {
             SwTableBox* pBox = pLine->GetTabBoxes()[nCurrCol];
-            ASSERT( pBox, "Missing Table Box" );
+            OSL_ENSURE( pBox, "Missing Table Box" );
             SwTwips nNewWidth = pBox->GetFrmFmt()->GetFrmSize().GetWidth() + nWidth;
             long nRowSp = pBox->getRowSpan();
             if( nRowSp < 0 )
             {
-                ASSERT( aIter != aRowSpanCells.end(), "Missing master box" )
-#ifdef DBG_UTIL
+                OSL_ENSURE( aIter != aRowSpanCells.end(), "Missing master box" );
+#if OSL_DEBUG_LEVEL > 1
                 //RowSpanCheck &rCheck = *aIter;
 #endif
-                ASSERT( aIter->nLeft == nWidth && aIter->nRight == nNewWidth,
+                OSL_ENSURE( aIter->nLeft == nWidth && aIter->nRight == nNewWidth,
                     "Wrong position/size of overlapped table box" );
                 --(aIter->nRowSpan);
-                ASSERT( aIter->nRowSpan == -nRowSp, "Wrong row span value" );
+                OSL_ENSURE( aIter->nRowSpan == -nRowSp, "Wrong row span value" );
                 if( nRowSp == -1 )
                 {
                     std::list< RowSpanCheck >::iterator aEraseIter = aIter;
@@ -2197,7 +2193,7 @@ void SwTable::CheckConsistency() const
             }
             else if( nRowSp != 1 )
             {
-                ASSERT( nRowSp, "Zero row span?!" );
+                OSL_ENSURE( nRowSp, "Zero row span?!" );
                 RowSpanCheck aEntry;
                 aEntry.nLeft = nWidth;
                 aEntry.nRight = nNewWidth;
@@ -2208,14 +2204,14 @@ void SwTable::CheckConsistency() const
         }
         if( !nCurrLine )
             nLineWidth = nWidth;
-        ASSERT( nWidth == nLineWidth, "Different Line Widths" )
-        ASSERT( nWidth == nTabSize, "Boxen der Line zu klein/gross" )
-        ASSERT( nWidth >= 0 && nWidth <= USHRT_MAX, "Width out of range" )
-        ASSERT( aIter == aRowSpanCells.end(), "Missing overlapped box" )
+        OSL_ENSURE( nWidth == nLineWidth, "Different Line Widths" );
+        OSL_ENSURE( nWidth == nTabSize, "Boxen der Line zu klein/gross" );
+        OSL_ENSURE( nWidth >= 0 && nWidth <= USHRT_MAX, "Width out of range" );
+        OSL_ENSURE( aIter == aRowSpanCells.end(), "Missing overlapped box" );
         aIter = aRowSpanCells.begin();
     }
     bool bEmpty = aRowSpanCells.empty();
-    ASSERT( bEmpty, "Open row span detected" )
+    OSL_ENSURE( bEmpty, "Open row span detected" );
 }
 
 #endif

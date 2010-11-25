@@ -402,10 +402,10 @@ public:
     inline sal_Bool IsSwapped() const { return bIsSwapped; }
 
     // Hat der Frm eine lokale Fussnote (in diesem Frm bzw. Follow)?
-#ifndef DBG_UTIL
-    void CalcFtnFlag();
+#if OSL_DEBUG_LEVEL > 1
+    void CalcFtnFlag( xub_StrLen nStop = STRING_LEN );//For testing SplitFrm
 #else
-    void CalcFtnFlag( xub_StrLen nStop = STRING_LEN );//Fuer den Test von SplitFrm
+    void CalcFtnFlag();
 #endif
 
     // Hidden

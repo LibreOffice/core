@@ -213,7 +213,7 @@ ULONG SwHTMLWriter::WriteStream()
     sal_Bool bOldHTMLMode = sal_False;
     sal_uInt16 nOldTxtFmtCollCnt = 0, nOldCharFmtCnt = 0;
 
-    ASSERT( !pTemplate, "Wo kommt denn die HTML-Vorlage hier her?" );
+    OSL_ENSURE( !pTemplate, "Wo kommt denn die HTML-Vorlage hier her?" );
     pTemplate = ((HTMLReader*)ReadHTML)->GetTemplateDoc();
     if( pTemplate )
     {
@@ -305,7 +305,7 @@ ULONG SwHTMLWriter::WriteStream()
             }
             else
             {
-                ASSERT( FILE_LINK_SECTION != pSNd->GetSection().GetType(),
+                OSL_ENSURE( FILE_LINK_SECTION != pSNd->GetSection().GetType(),
                         "Export gelinkter Bereiche am Dok-Anfang ist nicht implemntiert" );
 
                 // nur das Tag fuer die Section merken
@@ -388,7 +388,7 @@ ULONG SwHTMLWriter::WriteStream()
 
     // loesche die Tabelle mit den freifliegenden Rahmen
     sal_uInt16 i;
-    ASSERT( !pHTMLPosFlyFrms, "Wurden nicht alle Rahmen ausgegeben" );
+    OSL_ENSURE( !pHTMLPosFlyFrms, "Wurden nicht alle Rahmen ausgegeben" );
     if( pHTMLPosFlyFrms )
     {
         pHTMLPosFlyFrms->DeleteAndDestroy( 0, pHTMLPosFlyFrms->Count() );
@@ -434,7 +434,7 @@ ULONG SwHTMLWriter::WriteStream()
     delete pxFormComps;
     pxFormComps = 0;
 
-    ASSERT( !pFootEndNotes,
+    OSL_ENSURE( !pFootEndNotes,
             "SwHTMLWriter::Write: Ftns nicht durch OutFootEndNotes geloescht" );
 
     pCurrPageDesc = 0;
@@ -456,13 +456,13 @@ ULONG SwHTMLWriter::WriteStream()
         sal_uInt16 nTxtFmtCollCnt = pTemplate->GetTxtFmtColls()->Count();
         while( nTxtFmtCollCnt > nOldTxtFmtCollCnt )
             pTemplate->DelTxtFmtColl( --nTxtFmtCollCnt );
-        ASSERT( pTemplate->GetTxtFmtColls()->Count() == nOldTxtFmtCollCnt,
+        OSL_ENSURE( pTemplate->GetTxtFmtColls()->Count() == nOldTxtFmtCollCnt,
                 "falsche Anzahl TxtFmtColls geloescht" );
 
         sal_uInt16 nCharFmtCnt = pTemplate->GetCharFmts()->Count();
         while( nCharFmtCnt > nOldCharFmtCnt )
             pTemplate->DelCharFmt( --nCharFmtCnt );
-        ASSERT( pTemplate->GetCharFmts()->Count() == nOldCharFmtCnt,
+        OSL_ENSURE( pTemplate->GetCharFmts()->Count() == nOldCharFmtCnt,
                 "falsche Anzahl CharFmts geloescht" );
 
         // HTML-Modus wieder restaurieren
@@ -529,7 +529,7 @@ void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
                                   const SwFmtCol *pCol,
                                   sal_Bool bContinued=sal_False )
 {
-    ASSERT( pCol || !bContinued, "Continuation of DIV" );
+    OSL_ENSURE( pCol || !bContinued, "Continuation of DIV" );
 
     if( rHTMLWrt.bLFPossible )
         rHTMLWrt.OutNewLine();
@@ -656,7 +656,7 @@ static Writer& OutHTML_Section( Writer& rWrt, const SwSectionNode& rSectNd )
 
     const SwSection& rSection = rSectNd.GetSection();
     const SwSectionFmt *pFmt = rSection.GetFmt();
-    ASSERT( pFmt, "Section without a format?" );
+    OSL_ENSURE( pFmt, "Section without a format?" );
 
     sal_Bool bStartTag = sal_True;
     sal_Bool bEndTag = sal_True;
@@ -755,7 +755,7 @@ void SwHTMLWriter::Out_SwDoc( SwPaM* pPam )
         {
             SwNode * pNd = pCurPam->GetNode();
 
-            ASSERT( !(pNd->IsGrfNode() || pNd->IsOLENode()),
+            OSL_ENSURE( !(pNd->IsGrfNode() || pNd->IsOLENode()),
                     "Grf- oder OLE-Node hier unerwartet" );
             if( pNd->IsTxtNode() )
             {
@@ -882,7 +882,7 @@ sal_uInt16 SwHTMLWriter::OutHeaderAttrs()
             0==(pTxtNd=pDoc->GetNodes()[nIdx]->GetTxtNode()) )
         nIdx++;
 
-    ASSERT( pTxtNd, "Kein Text-Node gefunden" );
+    OSL_ENSURE( pTxtNd, "Kein Text-Node gefunden" );
     if( !pTxtNd || !pTxtNd->HasHints() )
         return 0;
 

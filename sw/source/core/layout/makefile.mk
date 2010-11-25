@@ -101,7 +101,7 @@ SLOFILES =  \
     $(SLO)$/virtoutp.obj \
     $(SLO)$/wsfrm.obj
 
-.IF "$(dbgutil)"!=""
+.IF "$(DBG_LEVEL)">="2"
 SLOFILES +=  \
         $(SLO)$/dbg_lay.obj
 .ENDIF

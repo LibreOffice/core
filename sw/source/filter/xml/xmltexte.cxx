@@ -92,10 +92,10 @@ SwNoTxtNode *SwXMLTextParagraphExport::GetNoTxtNode(
     const Reference < XPropertySet >& rPropSet ) const
 {
     Reference<XUnoTunnel> xCrsrTunnel( rPropSet, UNO_QUERY );
-    ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for embedded" );
+    OSL_ENSURE( xCrsrTunnel.is(), "missing XUnoTunnel for embedded" );
     SwXFrame *pFrame = reinterpret_cast< SwXFrame * >(
                 sal::static_int_cast< sal_IntPtr >( xCrsrTunnel->getSomething( SwXFrame::getUnoTunnelId() )));
-    ASSERT( pFrame, "SwXFrame missing" );
+    OSL_ENSURE( pFrame, "SwXFrame missing" );
     SwFrmFmt *pFrmFmt = pFrame->GetFrmFmt();
     const SwFmtCntnt& rCntnt = pFrmFmt->GetCntnt();
     const SwNodeIndex *pNdIdx = rCntnt.GetCntntIdx();
@@ -118,7 +118,7 @@ void SwXMLTextParagraphExport::exportStyleContent(
         const SwDoc *pDoc = pStyle->GetDoc();
         const SwTxtFmtColl *pColl =
             pDoc->FindTxtFmtCollByName( pStyle->GetStyleName() );
-        ASSERT( pColl, "There is the text collection?" );
+        OSL_ENSURE( pColl, "There is the text collection?" );
         if( pColl && RES_CONDTXTFMTCOLL == pColl->Which() )
         {
             const SwFmtCollConditions& rConditions =
@@ -659,7 +659,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
         }
         break;
     default:
-        ASSERT( !this, "unknown object type! Base class should have been called!" );
+        OSL_ENSURE( !this, "unknown object type! Base class should have been called!" );
     }
 
     {
@@ -671,7 +671,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
             if( (rXMLExport.getExportFlags() & EXPORT_EMBEDDED) != 0 )
             {
                 Reference < XEmbeddedObjectSupplier > xEOS( rPropSet, UNO_QUERY );
-                ASSERT( xEOS.is(), "no embedded object supplier for own object" );
+                OSL_ENSURE( xEOS.is(), "no embedded object supplier for own object" );
                 Reference < XComponent > xComp = xEOS->getEmbeddedObject();
                 rXMLExport.ExportEmbeddedOwnObject( xComp );
             }

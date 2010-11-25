@@ -74,14 +74,10 @@
 #include <redline.hxx>
 #include <list>
 
-#ifndef DBG_UTIL
-#define CHECK_TABLE(t)
-#else
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 #define CHECK_TABLE(t) (t).CheckConsistency();
 #else
 #define CHECK_TABLE(t)
-#endif
 #endif
 
 using namespace com::sun::star;
@@ -221,12 +217,12 @@ void _InsTblBox( SwDoc* pDoc, SwTableNode* pTblNd,
                         SwTableBox* pBox,
                         USHORT nInsPos, USHORT nCnt )
 {
-    ASSERT( pBox->GetSttNd(), "Box ohne Start-Node" );
+    OSL_ENSURE( pBox->GetSttNd(), "Box ohne Start-Node" );
     SwNodeIndex aIdx( *pBox->GetSttNd(), +1 );
     SwCntntNode* pCNd = aIdx.GetNode().GetCntntNode();
     if( !pCNd )
         pCNd = pDoc->GetNodes().GoNext( &aIdx );
-    ASSERT( pCNd, "Box ohne ContentNode" );
+    OSL_ENSURE( pCNd, "Box ohne ContentNode" );
 
     if( pCNd->IsTxtNode() )
     {
@@ -406,7 +402,7 @@ void lcl_ModifyBoxes( SwTableBoxes &rBoxes, const long nOld,
             }
         }
         else {
-            ASSERT( false, "Rounding error" );
+            OSL_ENSURE( false, "Rounding error" );
         }
         nSum += nBox;
     }
@@ -434,7 +430,7 @@ void SwTable::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
     {
         if ( !IsModifyLocked() )
         {
-            ASSERT( pOldSize && pOldSize->Which() == RES_FRM_SIZE &&
+            OSL_ENSURE( pOldSize && pOldSize->Which() == RES_FRM_SIZE &&
                     pNewSize && pNewSize->Which() == RES_FRM_SIZE,
                     "Kein Old oder New fuer FmtFrmSize-Modify der SwTable." );
             AdjustWidths( pOldSize->GetWidth(), pNewSize->GetWidth() );
@@ -949,7 +945,7 @@ void SwTable::SetTabCols( const SwTabCols &rNew, const SwTabCols &rOld,
 
     Parm aParm( rNew, rOld );
 
-    ASSERT( rOld.Count() == rNew.Count(), "Columnanzahl veraendert.");
+    OSL_ENSURE( rOld.Count() == rNew.Count(), "Columnanzahl veraendert.");
 
     //Raender verarbeiten. Groesse der Tabelle und ein paar Boxen mussen
     //angepasst werden. Bei der Groesseneinstellung darf allerdings das
@@ -1084,7 +1080,7 @@ void SwTable::SetTabCols( const SwTabCols &rNew, const SwTabCols &rOld,
         }
     }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     {
 // steht im tblrwcl.cxx
 extern void _CheckBoxWidth( const SwTableLine&, SwTwips );
@@ -1191,7 +1187,7 @@ static void lcl_CalcNewWidths( std::list<USHORT> &rSpanPos, ChangeList& rChanges
         USHORT nPos = (USHORT)nSum;
         while( pCurr != rChanges.end() && pCurr->first < nPos )
         {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
             USHORT nTemp = pCurr->first;
             nTemp = pCurr->second;
 #endif
@@ -1291,7 +1287,7 @@ static void lcl_CalcNewWidths( std::list<USHORT> &rSpanPos, ChangeList& rChanges
 void SwTable::NewSetTabCols( Parm &rParm, const SwTabCols &rNew,
     const SwTabCols &rOld, const SwTableBox *pStart, BOOL bCurRowOnly )
 {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     static int nCallCount = 0;
     ++nCallCount;
 #endif
@@ -1509,7 +1505,7 @@ const SwTableBox* SwTable::GetTblBox( const String& rName,
     // Box ist ??
     if( pBox && !pBox->GetSttNd() )
     {
-        ASSERT( FALSE, "Box ohne Inhalt, suche die naechste !!" );
+        OSL_ENSURE( FALSE, "Box ohne Inhalt, suche die naechste !!" );
         // "herunterfallen lassen" bis zur ersten Box
         while( pBox->GetTabLines().Count() )
             pBox = pBox->GetTabLines()[0]->GetTabBoxes()[0];
@@ -1761,7 +1757,7 @@ SwTableBox::SwTableBox( SwTableBoxFmt* pFmt, const SwNodeIndex &rIdx,
 
     // an der Table eintragen
     const SwTableNode* pTblNd = pSttNd->FindTableNode();
-    ASSERT( pTblNd, "in welcher Tabelle steht denn die Box?" );
+    OSL_ENSURE( pTblNd, "in welcher Tabelle steht denn die Box?" );
     SwTableSortBoxes& rSrtArr = (SwTableSortBoxes&)pTblNd->GetTable().
                                 GetTabSortBoxes();
     SwTableBox* p = this;   // error: &this
@@ -1779,7 +1775,7 @@ SwTableBox::SwTableBox( SwTableBoxFmt* pFmt, const SwStartNode& rSttNd, SwTableL
 
     // an der Table eintragen
     const SwTableNode* pTblNd = pSttNd->FindTableNode();
-    ASSERT( pTblNd, "in welcher Tabelle steht denn die Box?" );
+    OSL_ENSURE( pTblNd, "in welcher Tabelle steht denn die Box?" );
     SwTableSortBoxes& rSrtArr = (SwTableSortBoxes&)pTblNd->GetTable().
                                 GetTabSortBoxes();
     SwTableBox* p = this;   // error: &this
@@ -1793,7 +1789,7 @@ SwTableBox::~SwTableBox()
     {
         // an der Table austragen
         const SwTableNode* pTblNd = pSttNd->FindTableNode();
-        ASSERT( pTblNd, "in welcher Tabelle steht denn die Box?" );
+        OSL_ENSURE( pTblNd, "in welcher Tabelle steht denn die Box?" );
         SwTableSortBoxes& rSrtArr = (SwTableSortBoxes&)pTblNd->GetTable().
                                     GetTabSortBoxes();
         SwTableBox *p = this;   // error: &this
@@ -1995,7 +1991,7 @@ BOOL SwTableBox::IsInHeadline( const SwTable* pTbl ) const
     return pTbl->GetTabLines()[ 0 ] == pLine;
 }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 
 ULONG SwTableBox::GetSttIdx() const
 {
@@ -2340,7 +2336,7 @@ void SwTableBoxFmt::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
                 SwTableBox* pBox = (SwTableBox*)aIter.First( TYPE( SwTableBox ) );
                 if( pBox )
                 {
-                    ASSERT( !aIter.Next(), "keine Box oder mehrere am Format" );
+                    OSL_ENSURE( !aIter.Next(), "keine Box oder mehrere am Format" );
 
                     ULONG nNewFmt;
                     if( pNewFmt )

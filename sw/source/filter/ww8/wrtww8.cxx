@@ -458,7 +458,7 @@ void WW8Export::ExportDopTypography(WW8DopTypography &rTypo)
     in OOo have been changed away from OUR defaults, and if one has then
     export that. If more than one has in the future we may hack in something
     which examines our document properties to see which language is used the
-    most and choose that, for now we choose the first and throw an ASSERT.
+    most and choose that, for now we choose the first and throw an ASSERT
     */
 
     /*Our default Japanese Level is 2, this is a special MS hack to set this*/
@@ -511,7 +511,7 @@ void WW8Export::ExportDopTypography(WW8DopTypography &rTypo)
         }
     }
 
-    ASSERT( nNoNeeded<=1, "Example of unexportable forbidden chars" );
+    OSL_ENSURE( nNoNeeded<=1, "Example of unexportable forbidden chars" );
     rTypo.reserved1=nUseReserved;
     if (rTypo.iLevelOfKinsoku)
     {
@@ -559,7 +559,7 @@ const SfxPoolItem* MSWordExportBase::HasItem( USHORT nWhich ) const
         pItem = pChpIter->HasTextItem( nWhich );
     else
     {
-        ASSERT( !this, "Wo ist mein ItemSet / pChpIter ?" );
+        OSL_ENSURE( !this, "Wo ist mein ItemSet / pChpIter ?" );
         pItem = 0;
     }
     return pItem;
@@ -574,14 +574,14 @@ const SfxPoolItem& MSWordExportBase::GetItem(USHORT nWhich) const
         // ourer own Ids. So the Id have to translate from our into the
         // EditEngine Range
         nWhich = sw::hack::GetSetWhichFromSwDocWhich(*pISet, *pDoc, nWhich);
-        ASSERT(nWhich != 0, "All broken, Impossible");
+        OSL_ENSURE(nWhich != 0, "All broken, Impossible");
         pItem = &pISet->Get(nWhich, true);
     }
     else if( pChpIter )
         pItem = &pChpIter->GetItem( nWhich );
     else
     {
-        ASSERT( !this, "Wo ist mein ItemSet / pChpIter ?" );
+        OSL_ENSURE( !this, "Wo ist mein ItemSet / pChpIter ?" );
         pItem = 0;
     }
     return *pItem;
@@ -604,7 +604,7 @@ WW8_WrPlc1::~WW8_WrPlc1()
 WW8_CP WW8_WrPlc1::Prev() const
 {
     USHORT nLen = aPos.Count();
-    ASSERT(nLen,"Prev called on empty list");
+    OSL_ENSURE(nLen,"Prev called on empty list");
     return nLen ? aPos[nLen-1] : 0;
 }
 
@@ -758,9 +758,9 @@ ULONG SwWW8Writer::FillUntil( SvStream& rStrm, ULONG nEndPos )
 
     if( nEndPos > nCurPos )
         SwWW8Writer::FillCount( rStrm, nEndPos - nCurPos );
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     else
-        ASSERT( nEndPos == nCurPos, "Falsches FillUntil()" );
+        OSL_ENSURE( nEndPos == nCurPos, "Falsches FillUntil()" );
 #endif
     return rStrm.Tell();
 }
@@ -831,7 +831,7 @@ void WW8_WrPlcPn::AppendFkpEntry(WW8_FC nEndFc,short nVarLen,const BYTE* pSprms)
         aFkps.Insert( pF, aFkps.Count() );
         if( !pF->Append( nEndFc, nVarLen, pNewSprms ) )
         {
-            ASSERT( !this, "Sprm liess sich nicht einfuegen" );
+            OSL_ENSURE( !this, "Sprm liess sich nicht einfuegen" );
         }
     }
     if( pNewSprms != pSprms )   //Merge to new has created a new block
@@ -969,19 +969,19 @@ BYTE *WW8_WrFkp::CopyLastSprms(BYTE &rLen, bool bVer8)
 
 bool WW8_WrFkp::Append( WW8_FC nEndFc, USHORT nVarLen, const BYTE* pSprms )
 {
-    ASSERT( !nVarLen || pSprms, "Item-Pointer fehlt" );
-    ASSERT( nVarLen < ( ( ePlc == PAP ) ? 497U : 502U ), "Sprms zu lang !" );
+    OSL_ENSURE( !nVarLen || pSprms, "Item-Pointer fehlt" );
+    OSL_ENSURE( nVarLen < ( ( ePlc == PAP ) ? 497U : 502U ), "Sprms zu lang !" );
 
     if( bCombined )
     {
-        ASSERT( !this, "Fkp::Append: Fkp is already combined" );
+        OSL_ENSURE( !this, "Fkp::Append: Fkp is already combined" );
         return false;
     }
     INT32 n = ((INT32*)pFkp)[nIMax];        // letzter Eintrag
     if( nEndFc <= n )
     {
-        ASSERT( nEndFc >= n, "+Fkp: FC rueckwaerts" );
-        ASSERT( !nVarLen || !pSprms || nEndFc != n,
+        OSL_ENSURE( nEndFc >= n, "+Fkp: FC rueckwaerts" );
+        OSL_ENSURE( !nVarLen || !pSprms || nEndFc != n,
                                     "+Fkp: selber FC mehrfach benutzt" );
                         // selber FC ohne Sprm wird ohne zu mosern ignoriert.
 
@@ -1167,7 +1167,7 @@ void WW8_WrPct::AppendPc(WW8_FC nStartFc, bool bIsUnicode)
     {
         if ( 0 != pPcts->Count() )
         {
-            ASSERT( 1 == pPcts->Count(), "Leeres Piece !!");
+            OSL_ENSURE( 1 == pPcts->Count(), "Leeres Piece !!");
             pPcts->DeleteAndDestroy( pPcts->Count() - 1 , 1);
         }
     }
@@ -1239,14 +1239,14 @@ void WW8_WrPct::WritePc( WW8Export& rWrt )
 
 void WW8_WrPct::SetParaBreak()
 {
-    ASSERT( pPcts->Count(),"SetParaBreak : aPcts.Count = 0" );
+    OSL_ENSURE( pPcts->Count(),"SetParaBreak : aPcts.Count = 0" );
     pPcts->GetObject( pPcts->Count() - 1)->SetStatus();
 }
 
 WW8_CP WW8_WrPct::Fc2Cp( ULONG nFc ) const
 {
-    ASSERT( nFc >= (ULONG)nOldFc, "FilePos liegt vorm letzten Piece" );
-    ASSERT( pPcts->Count(), "Fc2Cp noch kein Piece vorhanden" );
+    OSL_ENSURE( nFc >= (ULONG)nOldFc, "FilePos liegt vorm letzten Piece" );
+    OSL_ENSURE( pPcts->Count(), "Fc2Cp noch kein Piece vorhanden" );
 
     nFc -= nOldFc;
     if( bIsUni )
@@ -1290,7 +1290,7 @@ void WW8_WrtBookmarks::Append( WW8_CP nStartCp, const String& rNm,  const ::sw::
     else
     {
         // old -> its the end position
-        ASSERT( aEndCps[ nPos ] == aSttCps[ nPos ], "end position is valid" );
+        OSL_ENSURE( aEndCps[ nPos ] == aSttCps[ nPos ], "end position is valid" );
 
         //If this bookmark was around a field in writer, then we want to move
         //it to the field result in word. The end is therefore one cp
@@ -1856,14 +1856,14 @@ void WW8Export::RestoreData()
 
     GetWriter().bWriteAll = rData.bOldWriteAll;
 
-    ASSERT( !pO->Count(), "pO is not empty in WW8Export::RestoreData()" );
+    OSL_ENSURE( !pO->Count(), "pO is not empty in WW8Export::RestoreData()" );
     if ( rData.pOOld )
     {
         delete pO;
         pO = rData.pOOld;
     }
 
-    ASSERT( !mpTableAt || !mpTableAt->Count(), "mpTableAt is not empty in WW8Export::RestoreData()" );
+    OSL_ENSURE( !mpTableAt || !mpTableAt->Count(), "mpTableAt is not empty in WW8Export::RestoreData()" );
     if ( mpTableAt )
         delete mpTableAt;
     mpTableAt = rData.mpTableAtOld;
@@ -2059,7 +2059,7 @@ void WW8AttributeOutput::TableOrientation( ww8::WW8TableNodeInfoInner::Pointer_t
     const SwTable * pTable = pTableTextNodeInfoInner->getTable();
 
     const SwFrmFmt *pFmt = pTable->GetFrmFmt();
-    ASSERT(pFmt,"Impossible");
+    OSL_ENSURE(pFmt,"Impossible");
     if (!pFmt)
         return;
 
@@ -2161,7 +2161,7 @@ void WW8AttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t 
      */
     //const bool bNewTableModel = pTbl->IsNewModel();
     const SwFrmFmt *pFmt = pTable->GetFrmFmt();
-    ASSERT(pFmt,"Impossible");
+    OSL_ENSURE(pFmt,"Impossible");
     if (!pFmt)
         return;
 
@@ -2265,7 +2265,7 @@ void AttributeOutputBase::GetTablePageSize( ww8::WW8TableNodeInfoInner * pTableT
     const SwTable *pTable = pTableTextNodeInfoInner->getTable( );
 
     const SwFrmFmt *pFmt = pTable->GetFrmFmt();
-    ASSERT(pFmt,"Impossible");
+    OSL_ENSURE(pFmt,"Impossible");
     if (!pFmt)
         return;
 
@@ -2278,7 +2278,7 @@ void AttributeOutputBase::GetTablePageSize( ww8::WW8TableNodeInfoInner * pTableT
     unsigned long nTblSz = static_cast<unsigned long>(rSize.GetWidth());
     if (nTblSz > USHRT_MAX/2 && !bRelBoxSize)
     {
-        ASSERT(bRelBoxSize, "huge table width but not relative, suspicious");
+        OSL_ENSURE(bRelBoxSize, "huge table width but not relative, suspicious");
         bRelBoxSize = true;
     }
 
@@ -2313,7 +2313,7 @@ void AttributeOutputBase::GetTablePageSize( ww8::WW8TableNodeInfoInner * pTableT
 
         }
 
-        ASSERT(nWidthPercent, "Impossible");
+        OSL_ENSURE(nWidthPercent, "Impossible");
         if (nWidthPercent)
         {
             nPageSize *= nWidthPercent;
@@ -3511,7 +3511,7 @@ void WW8SHDLong::Write( WW8Export& rExport )
 
 void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
 {
-    ASSERT( bWrtWW8, "No 95 export yet" );
+    OSL_ENSURE( bWrtWW8, "No 95 export yet" );
     if ( !bWrtWW8 )
         return;
 
@@ -3519,7 +3519,7 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
     const ::sw::mark::ICheckboxFieldmark* pAsCheckbox = dynamic_cast< const ::sw::mark::ICheckboxFieldmark* >( pFieldmark );
 
 
-    ASSERT(rFieldmark.GetFieldname().equalsAscii( ODF_FORMTEXT ) || rFieldmark.GetFieldname().equalsAscii( ODF_FORMDROPDOWN ) || rFieldmark.GetFieldname().equalsAscii( ODF_FORMCHECKBOX ), "Unknown field type!!!");
+    OSL_ENSURE(rFieldmark.GetFieldname().equalsAscii( ODF_FORMTEXT ) || rFieldmark.GetFieldname().equalsAscii( ODF_FORMDROPDOWN ) || rFieldmark.GetFieldname().equalsAscii( ODF_FORMCHECKBOX ), "Unknown field type!!!");
     if ( ! ( rFieldmark.GetFieldname().equalsAscii( ODF_FORMTEXT ) ||
                 rFieldmark.GetFieldname().equalsAscii( ODF_FORMDROPDOWN ) ||
                 rFieldmark.GetFieldname().equalsAscii( ODF_FORMCHECKBOX ) ) )

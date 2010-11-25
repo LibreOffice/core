@@ -389,7 +389,7 @@ void SwTableFormula::RelNmsToBoxNms( const SwTable& rTbl, String& rNewStr,
 {
     // relativen Namen zu Box-Namen (externe Darstellung)
     SwNode* pNd = (SwNode*)pPara;
-    ASSERT( pNd, "Feld steht in keinem TextNode" );
+    OSL_ENSURE( pNd, "Feld steht in keinem TextNode" );
     const SwTableBox *pRelBox, *pBox = (SwTableBox *)rTbl.GetTblBox(
                     pNd->FindTableBoxStartNode()->GetIndex() );
 
@@ -419,7 +419,7 @@ void SwTableFormula::RelBoxNmsToPtr( const SwTable& rTbl, String& rNewStr,
 {
     // relativen Namen zu Box-Pointern (interne Darstellung)
     SwNode* pNd = (SwNode*)pPara;
-    ASSERT( pNd, "Feld steht in keinem Node" );
+    OSL_ENSURE( pNd, "Feld steht in keinem Node" );
     const SwTableBox *pRelBox, *pBox = (SwTableBox*)rTbl.GetTblBox(
                     pNd->FindTableBoxStartNode()->GetIndex() );
 
@@ -450,7 +450,7 @@ void SwTableFormula::BoxNmsToRelNm( const SwTable& rTbl, String& rNewStr,
 {
     // Box-Namen (externe Darstellung) zu relativen Namen
     SwNode* pNd = (SwNode*)pPara;
-    ASSERT( pNd, "Feld steht in keinem Node" );
+    OSL_ENSURE( pNd, "Feld steht in keinem Node" );
     const SwTableNode* pTblNd = pNd->FindTableNode();
 
     String sRefBoxNm;
@@ -458,7 +458,7 @@ void SwTableFormula::BoxNmsToRelNm( const SwTable& rTbl, String& rNewStr,
     {
         const SwTableBox *pBox = rTbl.GetTblBox(
                 pNd->FindTableBoxStartNode()->GetIndex() );
-        ASSERT( pBox, "Feld steht in keiner Tabelle" );
+        OSL_ENSURE( pBox, "Feld steht in keiner Tabelle" );
         sRefBoxNm = pBox->GetName();
     }
 
@@ -673,7 +673,7 @@ String SwTableFormula::ScanString( FnScanFormel fnFormel, const SwTable& rTbl,
                         if( pFnd )
                             pTbl = pFnd;
                         // ??
-                        ASSERT( pFnd, "Tabelle nicht gefunden, was nun?" );
+                        OSL_ENSURE( pFnd, "Tabelle nicht gefunden, was nun?" );
                     }
                 }
             }
@@ -741,7 +741,7 @@ const SwFrm* lcl_GetBoxFrm( const SwTableBox& rBox )
 
     SwNodeIndex aIdx( *rBox.GetSttNd() );
     SwCntntNode* pCNd = aIdx.GetNodes().GoNext( &aIdx );
-    ASSERT( pCNd, "Box hat keinen TextNode" );
+    OSL_ENSURE( pCNd, "Box hat keinen TextNode" );
     Point aPt;      // den im Layout 1. Frame returnen - Tab.Kopfzeile !!
     return pCNd->GetFrm( &aPt, NULL, FALSE );
 }

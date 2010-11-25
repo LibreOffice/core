@@ -68,14 +68,14 @@ USHORT SwFEShell::GetPageDescCnt() const
 
 void SwFEShell::ChgCurPageDesc( const SwPageDesc& rDesc )
 {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     //Die SS veraendert keinen PageDesc, sondern setzt nur das Attribut.
     //Der Pagedesc muss im Dokument vorhanden sein!
     BOOL bFound = FALSE;
     for ( USHORT nTst = 0; nTst < GetPageDescCnt(); ++nTst )
         if ( &rDesc == &GetPageDesc( nTst ) )
             bFound = TRUE;
-    ASSERT( bFound, "ChgCurPageDesc mit ungueltigem Descriptor." );
+    OSL_ENSURE( bFound, "ChgCurPageDesc mit ungueltigem Descriptor." );
 #endif
 
     StartAllAction();
@@ -84,7 +84,7 @@ void SwFEShell::ChgCurPageDesc( const SwPageDesc& rDesc )
     const SwFrm *pFlow = 0;
     USHORT nPageNmOffset = 0;
 
-    ASSERT( !GetCrsr()->HasMark(), "ChgCurPageDesc nur ohne Selektion!");
+    OSL_ENSURE( !GetCrsr()->HasMark(), "ChgCurPageDesc nur ohne Selektion!");
 
     SET_CURR_SHELL( this );
     while ( pPage )
@@ -112,7 +112,7 @@ void SwFEShell::ChgCurPageDesc( const SwPageDesc& rDesc )
         {
             pPage   = (SwPageFrm*)pPage->GetNext();
             pFlow = pPage->FindFirstBodyCntnt();
-            ASSERT( pFlow, "Dokuemnt ohne Inhalt?!?" );
+            OSL_ENSURE( pFlow, "Dokuemnt ohne Inhalt?!?" );
         }
     }
 

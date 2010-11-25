@@ -140,12 +140,6 @@
 
 #include <PostItMgr.hxx>
 
-//JP 11.10.2001: enable test code for bug fix 91313
-//TODO: This one could most probably be removed
-#if defined(DBG_UTIL) && (OSL_DEBUG_LEVEL > 1)
-//#define TEST_FOR_BUG91313
-#endif
-
 using namespace sw::mark;
 using namespace ::com::sun::star;
 

@@ -312,7 +312,7 @@ SwDigitModeModifier::~SwDigitModeModifier()
 
 void SwTxtFrm::Init()
 {
-    ASSERT( !IsLocked(), "+SwTxtFrm::Init: this ist locked." );
+    OSL_ENSURE( !IsLocked(), "+SwTxtFrm::Init: this ist locked." );
     if( !IsLocked() )
     {
         ClearPara();
@@ -394,7 +394,7 @@ sal_Bool SwTxtFrm::IsHiddenNow() const
     if( !Frm().Width() && IsValid() && GetUpper()->IsValid() )
                                        //bei Stackueberlauf (StackHack) invalid!
     {
-//        ASSERT( false, "SwTxtFrm::IsHiddenNow: thin frame" );
+//        OSL_ENSURE( false, "SwTxtFrm::IsHiddenNow: thin frame" );
         return sal_True;
     }
 
@@ -426,7 +426,7 @@ sal_Bool SwTxtFrm::IsHiddenNow() const
 
 void SwTxtFrm::HideHidden()
 {
-    ASSERT( !GetFollow() && IsHiddenNow(),
+    OSL_ENSURE( !GetFollow() && IsHiddenNow(),
             "HideHidden on visible frame of hidden frame has follow" );
 
     const xub_StrLen nEnd = STRING_LEN;
@@ -606,7 +606,7 @@ void SwTxtFrm::HideAndShowObjects()
                 }
                 else
                 {
-                    ASSERT( false,
+                    OSL_ENSURE( false,
                             "<SwTxtFrm::HideAndShowObjects()> - object not anchored at/inside paragraph!?" );
                 }
             }
@@ -739,8 +739,8 @@ void SwTxtFrm::_InvalidateRange( const SwCharRange &aRange, const long nD)
 
 void SwTxtFrm::CalcLineSpace()
 {
-    ASSERT( ! IsVertical() || ! IsSwapped(),
-            "SwTxtFrm::CalcLineSpace with swapped frame!" )
+    OSL_ENSURE( ! IsVertical() || ! IsSwapped(),
+            "SwTxtFrm::CalcLineSpace with swapped frame!" );
 
     if( IsLocked() || !HasPara() )
         return;
@@ -1381,7 +1381,7 @@ sal_Bool SwTxtFrm::GetInfo( SfxPoolItem &rHnt ) const
 
 void SwTxtFrm::PrepWidows( const MSHORT nNeed, sal_Bool bNotify )
 {
-    ASSERT(GetFollow() && nNeed, "+SwTxtFrm::Prepare: lost all friends");
+    OSL_ENSURE(GetFollow() && nNeed, "+SwTxtFrm::Prepare: lost all friends");
 
     SwParaPortion *pPara = GetPara();
     if ( !pPara )
@@ -1535,7 +1535,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
     if( !HasPara() && PREP_MUST_FIT != ePrep )
     {
         SetInvalidVert( TRUE );  // Test
-        ASSERT( !IsLocked(), "SwTxtFrm::Prepare: three of a perfect pair" );
+        OSL_ENSURE( !IsLocked(), "SwTxtFrm::Prepare: three of a perfect pair" );
         if ( bNotify )
             InvalidateSize();
         else
@@ -1778,7 +1778,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
                 // letzte Zeile formatiert werden, damit ggf. die erste Zeile des Follows
                 // hochrutschen kann, die extra auf die naechste Seite gerutscht war, um mit
                 // der Fussnote zusammen zu sein, insbesondere bei spaltigen Bereichen.
-                ASSERT( GetFollow(), "PREP_FTN_GONE darf nur vom Follow gerufen werden" );
+                OSL_ENSURE( GetFollow(), "PREP_FTN_GONE darf nur vom Follow gerufen werden" );
                 xub_StrLen nPos = GetFollow()->GetOfst();
                 if( IsFollow() && GetOfst() == nPos )       // falls wir gar keine Textmasse besitzen,
                     FindMaster()->Prepare( PREP_FTN_GONE ); // rufen wir das Prepare unseres Masters
@@ -1800,7 +1800,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
             if( pVoid )
             {
                 xub_StrLen nWhere = CalcFlyPos( (SwFrmFmt*)pVoid );
-                ASSERT( STRING_LEN != nWhere, "Prepare: Why me?" );
+                OSL_ENSURE( STRING_LEN != nWhere, "Prepare: Why me?" );
                 InvalidateRange( SwCharRange( nWhere, 1 ) );
                 return;
             }
@@ -1894,7 +1894,7 @@ SwTestFormat::SwTestFormat( SwTxtFrm* pTxtFrm, const SwFrm* pPre, SwTwips nMaxHe
     pOldPara = pFrm->HasPara() ? pFrm->GetPara() : NULL;
     pFrm->SetPara( new SwParaPortion(), sal_False );
 
-    ASSERT( ! pFrm->IsSwapped(), "A frame is swapped before _Format" );
+    OSL_ENSURE( ! pFrm->IsSwapped(), "A frame is swapped before _Format" );
 
     if ( pFrm->IsVertical() )
         pFrm->SwapWidthAndHeight();
@@ -1907,7 +1907,7 @@ SwTestFormat::SwTestFormat( SwTxtFrm* pTxtFrm, const SwFrm* pPre, SwTwips nMaxHe
     if ( pFrm->IsVertical() )
         pFrm->SwapWidthAndHeight();
 
-    ASSERT( ! pFrm->IsSwapped(), "A frame is swapped after _Format" );
+    OSL_ENSURE( ! pFrm->IsSwapped(), "A frame is swapped after _Format" );
 }
 
 SwTestFormat::~SwTestFormat()
@@ -1947,7 +1947,7 @@ sal_Bool SwTxtFrm::TestFormat( const SwFrm* pPrv, SwTwips &rMaxHeight, sal_Bool 
 
 sal_Bool SwTxtFrm::WouldFit( SwTwips &rMaxHeight, sal_Bool &bSplit, sal_Bool bTst )
 {
-    ASSERT( ! IsVertical() || ! IsSwapped(),
+    OSL_ENSURE( ! IsVertical() || ! IsSwapped(),
             "SwTxtFrm::WouldFit with swapped frame" );
     SWRECTFN( this );
 
@@ -1979,7 +1979,7 @@ sal_Bool SwTxtFrm::WouldFit( SwTwips &rMaxHeight, sal_Bool &bSplit, sal_Bool bTs
     // In sehr unguenstigen Faellen kann GetPara immer noch 0 sein.
     // Dann returnen wir sal_True, um auf der neuen Seite noch einmal
     // anformatiert zu werden.
-    ASSERT( HasPara() || IsHiddenNow(), "WouldFit: GetFormatted() and then !HasPara()" );
+    OSL_ENSURE( HasPara() || IsHiddenNow(), "WouldFit: GetFormatted() and then !HasPara()" );
     if( !HasPara() || ( !(Frm().*fnRect->fnGetHeight)() && IsHiddenNow() ) )
         return sal_True;
 
@@ -2053,8 +2053,8 @@ sal_Bool SwTxtFrm::WouldFit( SwTwips &rMaxHeight, sal_Bool &bSplit, sal_Bool bTs
 
 KSHORT SwTxtFrm::GetParHeight() const
 {
-    ASSERT( ! IsVertical() || ! IsSwapped(),
-            "SwTxtFrm::GetParHeight with swapped frame" )
+    OSL_ENSURE( ! IsVertical() || ! IsSwapped(),
+            "SwTxtFrm::GetParHeight with swapped frame" );
 
     if( !HasPara() )
     {   // Fuer nichtleere Absaetze ist dies ein Sonderfall, da koennen wir
@@ -2271,7 +2271,7 @@ void SwTxtFrm::_CalcHeightOfLastLine( const bool _bUseFont )
     // <--
     // determine output device
     ViewShell* pVsh = GetShell();
-    ASSERT( pVsh, "<SwTxtFrm::_GetHeightOfLastLineForPropLineSpacing()> - no ViewShell" );
+    OSL_ENSURE( pVsh, "<SwTxtFrm::_GetHeightOfLastLineForPropLineSpacing()> - no ViewShell" );
     // --> OD 2007-07-02 #i78921# - make code robust, according to provided patch
     // There could be no <ViewShell> instance in the case of loading a binary
     // StarOffice file format containing an embedded Writer document.
@@ -2286,7 +2286,7 @@ void SwTxtFrm::_CalcHeightOfLastLine( const bool _bUseFont )
     {
         pOut = GetTxtNode()->getIDocumentDeviceAccess()->getReferenceDevice( true );
     }
-    ASSERT( pOut, "<SwTxtFrm::_GetHeightOfLastLineForPropLineSpacing()> - no OutputDevice" );
+    OSL_ENSURE( pOut, "<SwTxtFrm::_GetHeightOfLastLineForPropLineSpacing()> - no OutputDevice" );
     // --> OD 2007-07-02 #i78921# - make code robust, according to provided patch
     if ( !pOut )
     {
@@ -2349,7 +2349,7 @@ void SwTxtFrm::_CalcHeightOfLastLine( const bool _bUseFont )
 
             if ( bCalcHeightOfLastLine )
             {
-                ASSERT( HasPara(),
+                OSL_ENSURE( HasPara(),
                         "<SwTxtFrm::_CalcHeightOfLastLine()> - missing paragraph portions." );
                 const SwLineLayout* pLineLayout = GetPara();
                 while ( pLineLayout && pLineLayout->GetNext() )
@@ -2703,8 +2703,8 @@ SwTwips lcl_CalcFlyBasePos( const SwTxtFrm& rFrm, SwRect aFlyRect,
 
 void SwTxtFrm::CalcBaseOfstForFly()
 {
-    ASSERT( !IsVertical() || !IsSwapped(),
-            "SwTxtFrm::CalcBasePosForFly with swapped frame!" )
+    OSL_ENSURE( !IsVertical() || !IsSwapped(),
+            "SwTxtFrm::CalcBasePosForFly with swapped frame!" );
 
     const SwNode* pNode = GetTxtNode();
     if ( !pNode->getIDocumentSettingAccess()->get(IDocumentSettingAccess::ADD_FLY_OFFSETS) )

@@ -551,7 +551,7 @@ void SwPaM::SetMark()
     (*m_pMark) = (*m_pPoint);
 }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 
 void SwPaM::Exchange()
 {
@@ -756,7 +756,7 @@ BOOL SwPaM::HasReadonlySel( bool bFormView ) const
                     if( pFmt->GetProtect().IsCntntProtected() )
                     {
                         const SwFmtCntnt& rCntnt = pFmt->GetCntnt(FALSE);
-                        ASSERT( rCntnt.GetCntntIdx(), "wo ist der SectionNode?" );
+                        OSL_ENSURE( rCntnt.GetCntntIdx(), "wo ist der SectionNode?" );
                         ULONG nIdx = rCntnt.GetCntntIdx()->GetIndex();
                         if( nSttIdx <= nIdx && nEndIdx >= nIdx &&
                             rCntnt.GetCntntIdx()->GetNode().GetNodes().IsDocNodes() )

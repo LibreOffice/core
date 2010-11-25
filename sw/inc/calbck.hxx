@@ -198,7 +198,7 @@ private:
 class SwClientIter
 {
     friend SwClient* SwModify::_Remove(SwClient *); // fuer Ptr-Korrektur
-    friend void SwModify::Add(SwClient *);          // nur fuer ASSERT !
+    friend void SwModify::Add(SwClient *);          // nur fuer OSL_ENSURE(!
 
     SwModify const& rRoot;
     SwClient *pAkt, *pDelNext;

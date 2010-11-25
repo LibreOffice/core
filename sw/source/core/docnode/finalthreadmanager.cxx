@@ -241,14 +241,14 @@ void TerminateOfficeThread::PerformOfficeTermination()
         css::uno::UNO_QUERY );
     if ( !xTasksSupplier.is() )
     {
-        ASSERT( false, "<TerminateOfficeThread::PerformOfficeTermination()> - no XFramesSupplier!" );
+        OSL_ENSURE( false, "<TerminateOfficeThread::PerformOfficeTermination()> - no XFramesSupplier!" );
         return;
     }
 
     css::uno::Reference< css::container::XElementAccess > xList( xTasksSupplier->getFrames(), css::uno::UNO_QUERY );
     if ( !xList.is() )
     {
-        ASSERT( false, "<TerminateOfficeThread::PerformOfficeTermination()> - no XElementAccess!" );
+        OSL_ENSURE( false, "<TerminateOfficeThread::PerformOfficeTermination()> - no XElementAccess!" );
         return;
     }
 
@@ -317,7 +317,7 @@ FinalThreadManager::~FinalThreadManager()
 
     if ( !maThreads.empty() )
     {
-        ASSERT( false, "<FinalThreadManager::~FinalThreadManager()> - still registered jobs are existing -> perform cancellation" );
+        OSL_ENSURE( false, "<FinalThreadManager::~FinalThreadManager()> - still registered jobs are existing -> perform cancellation" );
         cancelAllJobs();
     }
 
@@ -325,7 +325,7 @@ FinalThreadManager::~FinalThreadManager()
     {
         if ( !mpCancelJobsThread->allJobsCancelled() )
         {
-            ASSERT( false, "<FinalThreadManager::~FinalThreadManager()> - cancellation of registered jobs not yet finished -> wait for its finish" );
+            OSL_ENSURE( false, "<FinalThreadManager::~FinalThreadManager()> - cancellation of registered jobs not yet finished -> wait for its finish" );
         }
 
         mpCancelJobsThread->stopWhenAllJobsCancelled();
@@ -397,7 +397,7 @@ void SAL_CALL FinalThreadManager::cancelAllJobs() throw (css::uno::RuntimeExcept
             if ( !mpCancelJobsThread->create() )
             {
                 // error handling
-                // ASSERT( false, "<FinalThreadManager::cancelAllJobs()> - thread to cancel jobs can't be setup --> synchron cancellation of jobs" );
+                // OSL_ENSURE( false, "<FinalThreadManager::cancelAllJobs()> - thread to cancel jobs can't be setup --> synchron cancellation of jobs" );
                 delete mpCancelJobsThread;
                 mpCancelJobsThread = 0;
                 while ( !aThreads.empty() )
@@ -450,7 +450,7 @@ void SAL_CALL FinalThreadManager::queryTermination( const css::lang::EventObject
                                                  m_xContext );
         if ( !mpTerminateOfficeThread->create() )
         {
-            // ASSERT( false, "FinalThreadManager::queryTermination(..) - thread to terminate office can't be started!" );
+            // OSL_ENSURE( false, "FinalThreadManager::queryTermination(..) - thread to terminate office can't be started!" );
             delete mpTerminateOfficeThread;
             mpTerminateOfficeThread = 0;
         }
@@ -480,7 +480,7 @@ void SAL_CALL FinalThreadManager::notifyTermination( const css::lang::EventObjec
     {
         if ( mpTerminateOfficeThread->isRunning() )
         {
-            // ASSERT( false, "<FinalThreadManager::notifyTermination()> - office termination thread still running!" );
+            // OSL_ENSURE( false, "<FinalThreadManager::notifyTermination()> - office termination thread still running!" );
             mpTerminateOfficeThread->StopOfficeTermination(); // thread kills itself.
         }
         else
@@ -492,7 +492,7 @@ void SAL_CALL FinalThreadManager::notifyTermination( const css::lang::EventObjec
 
     if ( !maThreads.empty() )
     {
-        // ASSERT( false, "<FinalThreadManager::notifyTermination()> - still registered jobs are existing" );
+        // OSL_ENSURE( false, "<FinalThreadManager::notifyTermination()> - still registered jobs are existing" );
         cancelAllJobs();
     }
 
@@ -500,7 +500,7 @@ void SAL_CALL FinalThreadManager::notifyTermination( const css::lang::EventObjec
     {
         if ( !mpCancelJobsThread->allJobsCancelled() )
         {
-            // ASSERT( false, "<FinalThreadManager::notifyTermination()> - cancellation of registered jobs not yet finished -> wait for its finish" );
+            // OSL_ENSURE( false, "<FinalThreadManager::notifyTermination()> - cancellation of registered jobs not yet finished -> wait for its finish" );
         }
 
         mpCancelJobsThread->stopWhenAllJobsCancelled();

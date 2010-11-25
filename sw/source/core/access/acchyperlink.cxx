@@ -94,7 +94,7 @@ sal_Bool SAL_CALL SwAccessibleHyperlink::doAccessibleAction( sal_Int32 nIndex )
             {
                 LoadURL( rINetFmt.GetValue(), pVSh, URLLOAD_NOFILTER,
                          &rINetFmt.GetTargetFrame() );
-                ASSERT( pTxtAttr == rINetFmt.GetTxtINetFmt(),
+                OSL_ENSURE( pTxtAttr == rINetFmt.GetTxtINetFmt(),
                          "lost my txt attr" );
                 const SwTxtINetFmt* pTxtAttr2 = rINetFmt.GetTxtINetFmt();
                 if( pTxtAttr2 )

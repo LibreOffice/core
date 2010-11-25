@@ -73,9 +73,9 @@ SwUndoFieldFromDoc::SwUndoFieldFromDoc(const SwPosition & rPos,
     , pHnt(_pHnt)
     , bUpdate(_bUpdate)
 {
-    ASSERT(pOldField, "No old field!");
-    ASSERT(pNewField, "No new field!");
-    ASSERT(pDoc, "No document!");
+    OSL_ENSURE(pOldField, "No old field!");
+    OSL_ENSURE(pNewField, "No new field!");
+    OSL_ENSURE(pDoc, "No document!");
 }
 
 SwUndoFieldFromDoc::~SwUndoFieldFromDoc()

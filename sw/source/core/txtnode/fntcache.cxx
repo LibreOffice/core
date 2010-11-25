@@ -308,7 +308,7 @@ USHORT SwFntObj::GetFontAscent( const ViewShell *pSh, const OutputDevice& rOut )
     if ( pSh && lcl_IsFontAdjustNecessary( rOut, rRefDev ) )
     {
         CreateScrFont( *pSh, rOut );
-        ASSERT( USHRT_MAX != nScrAscent, "nScrAscent is going berzerk" )
+        OSL_ENSURE( USHRT_MAX != nScrAscent, "nScrAscent is going berzerk" );
         nRet = nScrAscent;
     }
     else
@@ -331,7 +331,7 @@ USHORT SwFntObj::GetFontAscent( const ViewShell *pSh, const OutputDevice& rOut )
     nRet += GetFontLeading( pSh, rRefDev );
 #endif
 
-    ASSERT( USHRT_MAX != nRet, "GetFontAscent returned USHRT_MAX" )
+    OSL_ENSURE( USHRT_MAX != nRet, "GetFontAscent returned USHRT_MAX" );
     return nRet;
 }
 
@@ -355,7 +355,7 @@ USHORT SwFntObj::GetFontHeight( const ViewShell* pSh, const OutputDevice& rOut )
     if ( pSh && lcl_IsFontAdjustNecessary( rOut, rRefDev ) )
     {
         CreateScrFont( *pSh, rOut );
-        ASSERT( USHRT_MAX != nScrHeight, "nScrHeight is going berzerk" )
+        OSL_ENSURE( USHRT_MAX != nScrHeight, "nScrHeight is going berzerk" );
         nRet = nScrHeight + GetFontLeading( pSh, rRefDev );
     }
     else
@@ -373,7 +373,7 @@ USHORT SwFntObj::GetFontHeight( const ViewShell* pSh, const OutputDevice& rOut )
             long nTmpPrtHeight = (USHORT)aOutMet.GetAscent() + aOutMet.GetDescent();
             (void) nTmpPrtHeight;
             // #i106098#: do not compare with == here due to rounding error
-            ASSERT( abs(nTmpPrtHeight - nPrtHeight) < 3,
+            OSL_ENSURE( abs(nTmpPrtHeight - nPrtHeight) < 3,
                     "GetTextHeight != Ascent + Descent" );
 #endif
 
@@ -383,7 +383,7 @@ USHORT SwFntObj::GetFontHeight( const ViewShell* pSh, const OutputDevice& rOut )
         nRet = nPrtHeight + GetFontLeading( pSh, rRefDev );
     }
 
-    ASSERT( USHRT_MAX != nRet, "GetFontHeight returned USHRT_MAX" )
+    OSL_ENSURE( USHRT_MAX != nRet, "GetFontHeight returned USHRT_MAX" );
     return nRet;
 }
 
@@ -415,7 +415,7 @@ USHORT SwFntObj::GetFontLeading( const ViewShell *pSh, const OutputDevice& rOut 
             nRet = nGuessedLeading;
     }
 
-    ASSERT( USHRT_MAX != nRet, "GetFontLeading returned USHRT_MAX" )
+    OSL_ENSURE( USHRT_MAX != nRet, "GetFontLeading returned USHRT_MAX" );
     return nRet;
 }
 
@@ -579,7 +579,7 @@ void SwFntObj::GuessLeading( const ViewShell&
                     aWinMet.GetAscent() - rMet.GetAscent() - nTmpLeading );
                 if( nDiff > 0 )
                 {
-                    ASSERT( nPrtAscent < USHRT_MAX, "GuessLeading: PrtAscent-Fault" );
+                    OSL_ENSURE( nPrtAscent < USHRT_MAX, "GuessLeading: PrtAscent-Fault" );
                     if ( nPrtAscent < USHRT_MAX )
                         nPrtAscent = nPrtAscent + (USHORT)(( 2 * nDiff ) / 5);
                 }
@@ -817,7 +817,7 @@ static void lcl_DrawLineForWrongListData(
 
 void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 {
-    ASSERT( rInf.GetShell(), "SwFntObj::DrawText without shell" )
+    OSL_ENSURE( rInf.GetShell(), "SwFntObj::DrawText without shell" );
 
     OutputDevice& rRefDev = rInf.GetShell()->GetRefDev();
     OutputDevice* pWin = rInf.GetShell()->GetWin();
@@ -861,7 +861,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
     // a window. Therefore bUseSrcFont is always 0 in this case.
     //
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 
     const BOOL bNoAdjust = bPrt ||
             (  pWin &&
@@ -873,15 +873,15 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
         // Printer output
         if ( OUTDEV_PRINTER == rRefDev.GetOutDevType() )
         {
-            ASSERT( bNoAdjust == 1 && bUseScrFont == 0, "Outdev Check failed" )
+            OSL_ENSURE( bNoAdjust == 1 && bUseScrFont == 0, "Outdev Check failed" );
         }
         else if ( OUTDEV_VIRDEV == rRefDev.GetOutDevType() )
         {
-            ASSERT( bNoAdjust == 0 && bUseScrFont == 1, "Outdev Check failed" )
+            OSL_ENSURE( bNoAdjust == 0 && bUseScrFont == 1, "Outdev Check failed" );
         }
         else
         {
-            ASSERT( sal_False, "Outdev Check failed" )
+            OSL_ENSURE( sal_False, "Outdev Check failed" );
         }
     }
     else if ( OUTDEV_VIRDEV == rInf.GetOut().GetOutDevType() && ! pWin )
@@ -889,15 +889,15 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
         // PDF export
         if ( OUTDEV_PRINTER == rRefDev.GetOutDevType() )
         {
-            ASSERT( bNoAdjust == 0 && bUseScrFont == 1, "Outdev Check failed" )
+            OSL_ENSURE( bNoAdjust == 0 && bUseScrFont == 1, "Outdev Check failed" );
         }
         else if ( OUTDEV_VIRDEV == rRefDev.GetOutDevType() )
         {
-            ASSERT( bNoAdjust == 0 && bUseScrFont == 1, "Outdev Check failed" )
+            OSL_ENSURE( bNoAdjust == 0 && bUseScrFont == 1, "Outdev Check failed" );
         }
         else
         {
-            ASSERT( sal_False, "Outdev Check failed" )
+            OSL_ENSURE( sal_False, "Outdev Check failed" );
         }
     }
     else if ( OUTDEV_WINDOW == rInf.GetOut().GetOutDevType() ||
@@ -906,30 +906,30 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
         // Window or virtual window
         if ( OUTDEV_PRINTER == rRefDev.GetOutDevType() )
         {
-            ASSERT( bNoAdjust == 0 && bUseScrFont == 1, "Outdev Check failed" )
+            OSL_ENSURE( bNoAdjust == 0 && bUseScrFont == 1, "Outdev Check failed" );
         }
         else if ( OUTDEV_VIRDEV == rRefDev.GetOutDevType() )
         {
-            ASSERT( bNoAdjust == 0 && bUseScrFont == 1, "Outdev Check failed" )
+            OSL_ENSURE( bNoAdjust == 0 && bUseScrFont == 1, "Outdev Check failed" );
         }
         else if ( OUTDEV_WINDOW == rRefDev.GetOutDevType() )
         {
-            ASSERT( bNoAdjust == 1 && bUseScrFont == 0, "Outdev Check failed" )
+            OSL_ENSURE( bNoAdjust == 1 && bUseScrFont == 0, "Outdev Check failed" );
         }
         else
         {
-            ASSERT( sal_False, "Outdev Check failed" )
+            OSL_ENSURE( sal_False, "Outdev Check failed" );
         }
     }
     else
     {
-            ASSERT( sal_False, "Outdev Check failed" )
+            OSL_ENSURE( sal_False, "Outdev Check failed" );
     }
 
 #endif
 
     // robust: better use the printer font instead of using no font at all
-    ASSERT( pTmpFont, "No screen or printer font?" );
+    OSL_ENSURE( pTmpFont, "No screen or printer font?" );
     if ( ! pTmpFont )
         pTmpFont = pPrtFont;
 
@@ -1457,7 +1457,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                                     rInf.GetIdx(), rInf.GetLen() );
 
         // OLE: no printer available
-        // ASSERT( pPrinter, "DrawText needs pPrinter" )
+        // OSL_ENSURE( pPrinter, "DrawText needs pPrinter" )
         if ( pPrinter )
         {
             // pTmpFont has already been set as current font for rInf.GetOut()
@@ -1648,7 +1648,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             {
                 nCh = rInf.GetText().GetChar( rInf.GetIdx() + i );
 
-                ASSERT( pScrArray, "Where is the screen array?" )
+                OSL_ENSURE( pScrArray, "Where is the screen array?" );
                 long nScr;
                 nScr = pScrArray[ i ] - pScrArray[ i - 1 ];
 
@@ -1912,9 +1912,9 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
             aTxtSize.Width() =
                     pOutDev->GetTextWidth( rInf.GetText(), rInf.GetIdx(), nLn );
 
-            ASSERT( !rInf.GetShell() ||
+            OSL_ENSURE( !rInf.GetShell() ||
                     ( USHRT_MAX != GetGuessedLeading() && USHRT_MAX != GetExtLeading() ),
-                "Leading values should be already calculated" )
+                "Leading values should be already calculated" );
             aTxtSize.Height() = pOutDev->GetTextHeight() +
                                 GetFontLeading( rInf.GetShell(), rInf.GetOut() );
 
@@ -1973,7 +1973,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
                            rInf.GetScriptInfo()->CountCompChg() &&
                            lcl_IsMonoSpaceFont( rInf.GetOut() );
 
-    ASSERT( !bCompress || ( rInf.GetScriptInfo() && rInf.GetScriptInfo()->
+    OSL_ENSURE( !bCompress || ( rInf.GetScriptInfo() && rInf.GetScriptInfo()->
             CountCompChg()), "Compression without info" );
 
     // This is the part used e.g., for cursor travelling
@@ -2076,9 +2076,9 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
     if ( rInf.GetKern() && nLn )
         aTxtSize.Width() += ( nLn - 1 ) * long( rInf.GetKern() );
 
-    ASSERT( !rInf.GetShell() ||
+    OSL_ENSURE( !rInf.GetShell() ||
             ( USHRT_MAX != GetGuessedLeading() && USHRT_MAX != GetExtLeading() ),
-              "Leading values should be already calculated" )
+              "Leading values should be already calculated" );
     aTxtSize.Height() += GetFontLeading( rInf.GetShell(), rInf.GetOut() );
     return aTxtSize;
 }
@@ -2378,14 +2378,14 @@ SwFntAccess::SwFntAccess( const void* &rMagic,
             // SwFont sein, spaeter wird als Owner die "MagicNumber" gehalten.
             SwCacheAccess::pOwner = pOwn;
             pFntObj = Get(); // hier wird via NewObj() angelegt und gelockt.
-            ASSERT(pFntObj, "No Font, no Fun.");
+            OSL_ENSURE(pFntObj, "No Font, no Fun.");
         }
         else  // Font has been found, so we lock it.
         {
             pFntObj->Lock();
             if( pFntObj->pPrinter != pOut ) // Falls bis dato kein Drucker bekannt
             {
-                ASSERT( !pFntObj->pPrinter, "SwFntAccess: Printer Changed" );
+                OSL_ENSURE( !pFntObj->pPrinter, "SwFntAccess: Printer Changed" );
                 pFntObj->CreatePrtFont( *pOut );
                 pFntObj->pPrinter = pOut;
                 pFntObj->pScrFont = NULL;
@@ -2428,7 +2428,7 @@ xub_StrLen SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
                            rInf.GetScriptInfo()->CountCompChg() &&
                            lcl_IsMonoSpaceFont( rInf.GetOut() );
 
-    ASSERT( !bCompress || ( rInf.GetScriptInfo() && rInf.GetScriptInfo()->
+    OSL_ENSURE( !bCompress || ( rInf.GetScriptInfo() && rInf.GetScriptInfo()->
             CountCompChg()), "Compression without info" );
 
     USHORT nTxtBreak = 0;

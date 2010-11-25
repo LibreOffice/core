@@ -130,7 +130,7 @@ void lcl_html_outEvents( SvStream& rStrm,
 {
     uno::Reference< container::XChild > xChild( rFormComp, uno::UNO_QUERY );
     uno::Reference< uno::XInterface > xParentIfc = xChild->getParent();
-    ASSERT( xParentIfc.is(), "lcl_html_outEvents: no parent interface" );
+    OSL_ENSURE( xParentIfc.is(), "lcl_html_outEvents: no parent interface" );
     if( !xParentIfc.is() )
         return;
     uno::Reference< container::XIndexAccess > xIndexAcc( xParentIfc, uno::UNO_QUERY );
@@ -144,7 +144,7 @@ void lcl_html_outEvents( SvStream& rStrm,
     for( nPos = 0 ; nPos < nCount; nPos++ )
     {
         uno::Any aTmp = xIndexAcc->getByIndex(nPos);
-        ASSERT( aTmp.getValueType() ==
+        OSL_ENSURE( aTmp.getValueType() ==
                         ::getCppuType( (uno::Reference<form::XFormComponent>*)0 ) ||
                 aTmp.getValueType() ==
                         ::getCppuType( (uno::Reference<form::XForm>*)0 ),
@@ -401,27 +401,27 @@ void SwHTMLWriter::OutHiddenForms()
 
     uno::Reference< drawing::XDrawPageSupplier > xDPSupp( pDocSh->GetBaseModel(),
                                                      uno::UNO_QUERY );
-    ASSERT( xDPSupp.is(), "XTextDocument nicht vom XModel erhalten" );
+    OSL_ENSURE( xDPSupp.is(), "XTextDocument nicht vom XModel erhalten" );
     uno::Reference< drawing::XDrawPage > xDrawPage = xDPSupp->getDrawPage();
 
-    ASSERT( xDrawPage.is(), "XDrawPage nicht erhalten" );
+    OSL_ENSURE( xDrawPage.is(), "XDrawPage nicht erhalten" );
     if( !xDrawPage.is() )
         return;
 
     uno::Reference< form::XFormsSupplier > xFormsSupplier( xDrawPage, uno::UNO_QUERY );
-    ASSERT( xFormsSupplier.is(),
+    OSL_ENSURE( xFormsSupplier.is(),
             "XFormsSupplier nicht vom XDrawPage erhalten" );
 
     uno::Reference< container::XNameContainer > xTmp = xFormsSupplier->getForms();
-    ASSERT( xTmp.is(), "XForms nicht erhalten" );
+    OSL_ENSURE( xTmp.is(), "XForms nicht erhalten" );
     uno::Reference< container::XIndexContainer > xForms( xTmp, uno::UNO_QUERY );
-    ASSERT( xForms.is(), "XForms ohne container::XIndexContainer?" );
+    OSL_ENSURE( xForms.is(), "XForms ohne container::XIndexContainer?" );
 
     sal_Int32 nCount = xForms->getCount();
     for( sal_Int32 i=0; i<nCount; i++)
     {
         uno::Any aTmp = xForms->getByIndex( i );
-        ASSERT( aTmp.getValueType() ==
+        OSL_ENSURE( aTmp.getValueType() ==
                         ::getCppuType((uno::Reference< form::XForm >*)0),
                 "OutHiddenForms: falsche Reflection" );
         if( aTmp.getValueType() ==
@@ -441,7 +441,7 @@ void SwHTMLWriter::OutHiddenForm( const uno::Reference< form::XForm > & rForm )
     for( sal_Int32 i=0; i<nCount; i++ )
     {
         uno::Any aTmp = xFormComps->getByIndex( i );
-        ASSERT( aTmp.getValueType() ==
+        OSL_ENSURE( aTmp.getValueType() ==
                         ::getCppuType((uno::Reference<form::XFormComponent>*)0),
                 "OutHiddenForm: falsche Reflection" );
         if( aTmp.getValueType() !=
@@ -606,7 +606,7 @@ void SwHTMLWriter::OutHiddenControls(
         for( nPos=0; !bDone && nPos < nCount; nPos++ )
         {
             uno::Any aTmp = rFormComps->getByIndex( nPos );
-            ASSERT( aTmp.getValueType() ==
+            OSL_ENSURE( aTmp.getValueType() ==
                         ::getCppuType((uno::Reference< form::XFormComponent>*)0),
                     "OutHiddenControls: falsche Reflection" );
             bDone = aTmp.getValueType() ==
@@ -619,7 +619,7 @@ void SwHTMLWriter::OutHiddenControls(
     for( ; nPos < nCount; nPos++ )
     {
         uno::Any aTmp = rFormComps->getByIndex( nPos );
-        ASSERT( aTmp.getValueType() ==
+        OSL_ENSURE( aTmp.getValueType() ==
                         ::getCppuType((uno::Reference< form::XFormComponent>*)0),
                 "OutHiddenControls: falsche Reflection" );
         if( aTmp.getValueType() !=
@@ -687,7 +687,7 @@ void SwHTMLWriter::OutHiddenControls(
 const SdrObject *SwHTMLWriter::GetHTMLControl( const SwDrawFrmFmt& rFmt )
 {
     // es muss ein Draw-Format sein
-    ASSERT( RES_DRAWFRMFMT == rFmt.Which(),
+    OSL_ENSURE( RES_DRAWFRMFMT == rFmt.Which(),
             "GetHTMLControl nuer fuer Draw-Formate erlaubt" );
 
     // Schauen, ob es ein SdrObject dafuer gibt
@@ -699,7 +699,7 @@ const SdrObject *SwHTMLWriter::GetHTMLControl( const SwDrawFrmFmt& rFmt )
     uno::Reference< awt::XControlModel >  xControlModel =
             pFormObj->GetUnoControlModel();
 
-    ASSERT( xControlModel.is(), "UNO-Control ohne Model" );
+    OSL_ENSURE( xControlModel.is(), "UNO-Control ohne Model" );
     if( !xControlModel.is() )
         return 0;
 
@@ -730,11 +730,11 @@ static void GetControlSize( const SdrObject& rSdrObj, Size& rSz,
     SdrUnoObj *pFormObj = PTR_CAST( SdrUnoObj, &rSdrObj );
     uno::Reference< awt::XControl >  xControl;
     SdrView* pDrawView = pVSh->GetDrawView();
-    ASSERT( pDrawView && pVSh->GetWin(), "no DrawView or window!" );
+    OSL_ENSURE( pDrawView && pVSh->GetWin(), "no DrawView or window!" );
     if ( pDrawView && pVSh->GetWin() )
         xControl = pFormObj->GetUnoControl( *pDrawView, *pVSh->GetWin() );
     uno::Reference< awt::XTextLayoutConstrains > xLC( xControl, uno::UNO_QUERY );
-    ASSERT( xLC.is(), "kein XTextLayoutConstrains" );
+    OSL_ENSURE( xLC.is(), "kein XTextLayoutConstrains" );
     if( !xLC.is() )
         return;
 
@@ -755,7 +755,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
     uno::Reference< awt::XControlModel > xControlModel =
         pFormObj->GetUnoControlModel();
 
-    ASSERT( xControlModel.is(), "UNO-Control ohne Model" );
+    OSL_ENSURE( xControlModel.is(), "UNO-Control ohne Model" );
     if( !xControlModel.is() )
         return rWrt;
 
@@ -1080,7 +1080,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
         sOut.Erase();
     }
 
-    ASSERT( !bInCntnr, "Container wird fuer Controls nicht unterstuertzt" );
+    OSL_ENSURE( !bInCntnr, "Container wird fuer Controls nicht unterstuertzt" );
     if( rHTMLWrt.IsHTMLMode( HTMLMODE_ABS_POS_DRAW ) && !bInCntnr )
     {
         // Wenn Zeichen-Objekte nicht absolut positioniert werden duerfen,
@@ -1357,7 +1357,7 @@ static void AddControl( HTMLControls& rControls,
                         sal_uInt32 nNodeIdx )
 {
     SdrUnoObj *pFormObj = PTR_CAST( SdrUnoObj, pSdrObj );
-    ASSERT( pFormObj, "Doch kein FormObj" );
+    OSL_ENSURE( pFormObj, "Doch kein FormObj" );
     uno::Reference< awt::XControlModel > xControlModel =
             pFormObj->GetUnoControlModel();
     if( !xControlModel.is() )
@@ -1367,7 +1367,7 @@ static void AddControl( HTMLControls& rControls,
     uno::Reference< uno::XInterface >  xIfc = xFormComp->getParent();
     uno::Reference< form::XForm >  xForm(xIfc, uno::UNO_QUERY);
 
-    ASSERT( xForm.is(), "Wo ist die Form?" );
+    OSL_ENSURE( xForm.is(), "Wo ist die Form?" );
     if( xForm.is() )
     {
         uno::Reference< container::XIndexContainer >  xFormComps( xForm, uno::UNO_QUERY );
@@ -1402,7 +1402,7 @@ void SwHTMLWriter::GetControls()
                 continue;
 
             const SdrObject *pSdrObj = pPosFlyFrm->GetSdrObject();
-            ASSERT( pSdrObj, "Wo ist das SdrObject?" );
+            OSL_ENSURE( pSdrObj, "Wo ist das SdrObject?" );
             if( !pSdrObj )
                 continue;
 

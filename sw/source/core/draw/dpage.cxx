@@ -85,7 +85,7 @@ SwDPage::~SwDPage()
 SdrObject*  SwDPage::ReplaceObject( SdrObject* pNewObj, ULONG nObjNum )
 {
     SdrObject *pOld = GetObj( nObjNum );
-    ASSERT( pOld, "Oups, Object not replaced" );
+    OSL_ENSURE( pOld, "Oups, Object not replaced" );
     SdrObjUserCall* pContact;
     if ( 0 != ( pContact = GetUserCall(pOld) ) &&
          RES_DRAWFRMFMT == ((SwContact*)pContact)->GetFmt()->Which())

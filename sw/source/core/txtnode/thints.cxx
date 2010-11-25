@@ -86,7 +86,7 @@
 #include <algorithm>
 #include <map>
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 #define CHECK    Check();
 #else
 #define CHECK
@@ -173,7 +173,7 @@ bool isSelfNestable(const USHORT nWhich)
     if ((RES_TXTATR_INETFMT  == nWhich) ||
         (RES_TXTATR_CJK_RUBY == nWhich))
         return false;
-    ASSERT((RES_TXTATR_META  == nWhich) ||
+   OSL_ENSURE((RES_TXTATR_META  == nWhich) ||
            (RES_TXTATR_METAFIELD  == nWhich), "???");
     return true;
 }
@@ -184,7 +184,7 @@ bool isSplittable(const USHORT nWhich)
     if ((RES_TXTATR_INETFMT  == nWhich) ||
         (RES_TXTATR_CJK_RUBY == nWhich))
         return true;
-    ASSERT((RES_TXTATR_META  == nWhich) ||
+   OSL_ENSURE((RES_TXTATR_META  == nWhich) ||
            (RES_TXTATR_METAFIELD  == nWhich), "???");
     return false;
 }
@@ -254,7 +254,7 @@ MakeTxtAttrNesting(SwTxtNode & rNode, SwTxtAttrNesting & rNesting,
             break;
         }
         default:
-            ASSERT(false, "MakeTxtAttrNesting: what the hell is that?");
+            OSL_ENSURE(false, "MakeTxtAttrNesting: what the hell is that?");
             break;
     }
     return static_cast<SwTxtAttrNesting*>(pNew);
@@ -371,7 +371,7 @@ SwpHints::TryInsertNesting( SwTxtNode & rNode, SwTxtAttrNesting & rNewHint )
 //???    const bool bNoLengthAttribute( nNewStart == nNewEnd );
     const bool bNewSelfNestable( isSelfNestable(nNewWhich) );
 
-    ASSERT( (RES_TXTATR_INETFMT   == nNewWhich) ||
+    OSL_ENSURE( (RES_TXTATR_INETFMT   == nNewWhich) ||
             (RES_TXTATR_CJK_RUBY  == nNewWhich) ||
             (RES_TXTATR_META      == nNewWhich) ||
             (RES_TXTATR_METAFIELD == nNewWhich),
@@ -411,7 +411,7 @@ SwpHints::TryInsertNesting( SwTxtNode & rNode, SwTxtAttrNesting & rNewHint )
                             static_cast<SwTxtAttrNesting*>(pOther));
                         break;
                     default:
-                        ASSERT(false, "bad code monkey");
+                        OSL_ENSURE(false, "bad code monkey");
                         break;
                 }
             }
@@ -427,7 +427,7 @@ SwpHints::TryInsertNesting( SwTxtNode & rNode, SwTxtAttrNesting & rNewHint )
                 {
                     if (rNewHint.HasDummyChar())
                     {
-                        ASSERT(false,
+                        OSL_ENSURE(false,
                                 "ERROR: inserting duplicate CH_TXTATR hint");
                         return false;
                     } else if (nNewEnd < nOtherEnd) {
@@ -437,7 +437,7 @@ SwpHints::TryInsertNesting( SwTxtNode & rNode, SwTxtAttrNesting & rNewHint )
                         // in SwXMeta::createEnumeration
                         // SplitNew is sorted, so this is the first split
                         xub_StrLen *const pStart(SplitNew.front()->GetStart());
-                        ASSERT(*pStart == nNewStart, "how did that happen?");
+                        OSL_ENSURE(*pStart == nNewStart, "how did that happen?");
                         *pStart = nNewStart + 1;
                     }
                 }
@@ -445,7 +445,7 @@ SwpHints::TryInsertNesting( SwTxtNode & rNode, SwTxtAttrNesting & rNewHint )
         }
     }
 
-    ASSERT (isSplittable(nNewWhich) || SplitNew.size() == 1,
+   OSL_ENSURE(isSplittable(nNewWhich) || SplitNew.size() == 1,
             "splitting the unsplittable ???");
 
     // pass 2: split existing hints that overlap/nest with new hint
@@ -476,14 +476,14 @@ SwpHints::TryInsertNesting( SwTxtNode & rNode, SwTxtAttrNesting & rNewHint )
             {
                 case POS_INSIDE:
                     {
-                        ASSERT(!bRemoveOverlap,
+                        OSL_ENSURE(!bRemoveOverlap,
                             "this one should be in OverwrittenExisting?");
                     }
                     break;
                 case POS_OUTSIDE:
                 case POS_EQUAL:
                     {
-                        ASSERT(false, "existing hint inside new hint: why?");
+                        OSL_ENSURE(false, "existing hint inside new hint: why?");
                     }
                     break;
                 case POS_OVERLAP_BEFORE:
@@ -495,7 +495,7 @@ SwpHints::TryInsertNesting( SwTxtNode & rNode, SwTxtAttrNesting & rNewHint )
                         {
                             if ( USHRT_MAX == Count() )
                             {
-                                ASSERT(false, "hints array full :-(");
+                                OSL_ENSURE(false, "hints array full :-(");
                                 return false;
                             }
                             SwTxtAttrNesting * const pOtherLeft(
@@ -514,7 +514,7 @@ SwpHints::TryInsertNesting( SwTxtNode & rNode, SwTxtAttrNesting & rNewHint )
                         {
                             if ( USHRT_MAX == Count() )
                             {
-                                ASSERT(false, "hints array full :-(");
+                                OSL_ENSURE(false, "hints array full :-(");
                                 return false;
                             }
                             SwTxtAttrNesting * const pOtherRight(
@@ -532,7 +532,7 @@ SwpHints::TryInsertNesting( SwTxtNode & rNode, SwTxtAttrNesting & rNewHint )
 
     if ( USHRT_MAX - SplitNew.size() <= Count() )
     {
-        ASSERT(false, "hints array full :-(");
+        OSL_ENSURE(false, "hints array full :-(");
         return false;
     }
 
@@ -560,7 +560,7 @@ SwpHints::TryInsertNesting( SwTxtNode & rNode, SwTxtAttrNesting & rNewHint )
         }
         else
         {
-            ASSERT((nOtherStart < nNewStart) && (nNewEnd < nOtherEnd), "huh?");
+           OSL_ENSURE((nOtherStart < nNewStart) && (nNewEnd < nOtherEnd), "huh?");
         // scenario: there is a RUBY, and contained within that a META;
         // now a RUBY is inserted within the META => the exising RUBY is split:
         // here it is not possible to simply insert the left/right fragment
@@ -568,12 +568,12 @@ SwpHints::TryInsertNesting( SwTxtNode & rNode, SwTxtAttrNesting & rNewHint )
             Delete( *itOther ); // this also does NoteInHistory!
             *(*itOther)->GetEnd() = nNewStart;
             bool bSuccess( TryInsertNesting(rNode, **itOther) );
-            ASSERT(bSuccess, "recursive call 1 failed?");
+            OSL_ENSURE(bSuccess, "recursive call 1 failed?");
             SwTxtAttrNesting * const pOtherRight(
                 MakeTxtAttrNesting(
                     rNode, **itOther, nNewEnd, nOtherEnd ) );
             bSuccess = TryInsertNesting(rNode, *pOtherRight);
-            ASSERT(bSuccess, "recursive call 2 failed?");
+            OSL_ENSURE(bSuccess, "recursive call 2 failed?");
         }
 
     }
@@ -602,7 +602,7 @@ void SwpHints::BuildPortions( SwTxtNode& rNode, SwTxtAttr& rNewHint,
     std::vector<SwTxtAttr*> aInsDelHints;
     std::vector<SwTxtAttr*>::iterator aIter;
 
-    ASSERT( RES_TXTATR_CHARFMT == rNewHint.Which() ||
+    OSL_ENSURE( RES_TXTATR_CHARFMT == rNewHint.Which() ||
             RES_TXTATR_AUTOFMT == rNewHint.Which(),
             "Expecting CHARFMT or AUTOFMT" );
 
@@ -664,7 +664,7 @@ void SwpHints::BuildPortions( SwTxtNode& rNode, SwTxtAttr& rNewHint,
         }
     }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     if( !rNode.GetDoc()->IsInReading() )
         CHECK;
 #endif
@@ -705,7 +705,7 @@ void SwpHints::BuildPortions( SwTxtNode& rNode, SwTxtAttr& rNewHint,
     //
     while ( aStartIter != aEndIter || bNoLengthAttribute )
     {
-        ASSERT( bNoLengthAttribute || nPorStart < *aStartIter, "AUTOSTYLES: BuildPortion trouble" )
+        OSL_ENSURE( bNoLengthAttribute || nPorStart < *aStartIter, "AUTOSTYLES: BuildPortion trouble" );
 
         const xub_StrLen nPorEnd = bNoLengthAttribute ? nPorStart : *aStartIter;
         aInsDelHints.clear();
@@ -726,7 +726,7 @@ void SwpHints::BuildPortions( SwTxtNode& rNode, SwTxtAttr& rNewHint,
 
             if ( pOther->GetEnd() && *pOther->GetEnd() == nPorEnd && nOtherStart == nPorStart )
             {
-                ASSERT( *pOther->GetEnd() == nPorEnd, "AUTOSTYLES: BuildPortion trouble" )
+                OSL_ENSURE( *pOther->GetEnd() == nPorEnd, "AUTOSTYLES: BuildPortion trouble" );
                 aInsDelHints.push_back( pOther );
             }
         }
@@ -768,7 +768,7 @@ void SwpHints::BuildPortions( SwTxtNode& rNode, SwTxtAttr& rNewHint,
                 {
                     // remove all attributes from auto styles, which are explicitely set in
                     // the new character format:
-                    ASSERT( RES_TXTATR_AUTOFMT == (*aIter)->Which(), "AUTOSTYLES - Misc trouble" )
+                    OSL_ENSURE( RES_TXTATR_AUTOFMT == (*aIter)->Which(), "AUTOSTYLES - Misc trouble" );
                     SwTxtAttr* pOther = *aIter;
                     boost::shared_ptr<SfxItemSet> pOldStyle = static_cast<const SwFmtAutoFmt&>(pOther->GetAttr()).GetStyleHandle();
 
@@ -983,7 +983,7 @@ SwTxtAttr* MakeRedlineTxtAttr( SwDoc & rDoc, SfxPoolItem & rAttr )
         case RES_CHRATR_BACKGROUND:
             break;
         default:
-            ASSERT(false, "unsupported redline attribute");
+            OSL_ENSURE(false, "unsupported redline attribute");
             break;
     }
 
@@ -1081,7 +1081,7 @@ SwTxtAttr* MakeTxtAttr( SwDoc & rDoc, SfxPoolItem& rAttr,
         pNew = new SwTxtMeta( static_cast<SwFmtMeta&>(rNew), nStt, nEnd );
         break;
     default:
-        ASSERT(RES_TXTATR_AUTOFMT == rNew.Which(), "unknown attribute");
+        OSL_ENSURE(RES_TXTATR_AUTOFMT == rNew.Which(), "unknown attribute");
         pNew = new SwTxtAttrEnd( rNew, nStt, nEnd );
         break;
     }
@@ -1138,9 +1138,9 @@ void SwTxtNode::DestroyAttr( SwTxtAttr* pAttr )
                 const SwField* pFld = pAttr->GetFld().GetFld();
 
                 //JP 06-08-95: DDE-Felder bilden eine Ausnahme
-                ASSERT( RES_DDEFLD == pFld->GetTyp()->Which() ||
+                OSL_ENSURE( RES_DDEFLD == pFld->GetTyp()->Which() ||
                         this == ((SwTxtFld*)pAttr)->GetpTxtNode(),
-                        "Wo steht denn dieses Feld?" )
+                        "Wo steht denn dieses Feld?" );
 
                 // bestimmte Felder mussen am Doc das Calculations-Flag updaten
                 switch( pFld->GetTyp()->Which() )
@@ -1209,7 +1209,7 @@ SwTxtNode::InsertItem( SfxPoolItem& rAttr,
       const xub_StrLen nStart, const xub_StrLen nEnd, const SetAttrMode nMode )
 {
    // character attributes will be inserted as automatic styles:
-    ASSERT( !isCHRATR(rAttr.Which()), "AUTOSTYLES - "
+    OSL_ENSURE( !isCHRATR(rAttr.Which()), "AUTOSTYLES - "
         "SwTxtNode::InsertItem should not be called with character attributes");
 
     SwTxtAttr* const pNew = MakeTxtAttr( *GetDoc(), rAttr, nStart, nEnd );
@@ -1234,8 +1234,8 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
 {
     BOOL bHiddenPara = FALSE;
 
-    ASSERT( pAttr && *pAttr->GetStart() <= Len(), "StartIdx out of bounds!" );
-    ASSERT( !pAttr->GetEnd() || (*pAttr->GetEnd() <= Len()),
+    OSL_ENSURE( pAttr && *pAttr->GetStart() <= Len(), "StartIdx out of bounds!" );
+    OSL_ENSURE( !pAttr->GetEnd() || (*pAttr->GetEnd() <= Len()),
             "EndIdx out of bounds!" );
 
     // translate from SetAttrMode to InsertMode (for hints with CH_TXTATR)
@@ -1310,7 +1310,7 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
                         if( nsSetAttrMode::SETATTR_NOTXTATRCHR & nInsMode )
                         {
                             // loesche das Zeichen aus dem String !
-                            ASSERT( ( CH_TXTATR_BREAKWORD ==
+                            OSL_ENSURE( ( CH_TXTATR_BREAKWORD ==
                                         m_Text.GetChar(*pAttr->GetStart() ) ||
                                       CH_TXTATR_INWORD ==
                                         m_Text.GetChar(*pAttr->GetStart())),
@@ -1348,7 +1348,7 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
                     if( nsSetAttrMode::SETATTR_NOTXTATRCHR & nInsMode )
                     {
                         // loesche das Zeichen aus dem String !
-                        ASSERT( ( CH_TXTATR_BREAKWORD ==
+                        OSL_ENSURE( ( CH_TXTATR_BREAKWORD ==
                                       m_Text.GetChar(*pAttr->GetStart() ) ||
                                   CH_TXTATR_INWORD ==
                                       m_Text.GetChar(*pAttr->GetStart())),
@@ -1422,12 +1422,12 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
                 // FussNote im Redline-Bereich NICHT ins FtnArray einfuegen!
                 if( StartOfSectionIndex() > rNodes.GetEndOfRedlines().GetIndex() )
                 {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
                     const BOOL bSuccess =
 #endif
                         pDoc->GetFtnIdxs().Insert( pTxtFtn );
-#ifdef DBG_UTIL
-                    ASSERT( bSuccess, "FtnIdx nicht eingetragen." );
+#if OSL_DEBUG_LEVEL > 1
+                    OSL_ENSURE( bSuccess, "FtnIdx nicht eingetragen." );
 #endif
                 }
                 SwNodeIndex aTmpIndex( *this );
@@ -1478,7 +1478,7 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
         // resulting in infinite recursion
         if ( !(nsSetAttrMode::SETATTR_NOTXTATRCHR & nMode) )
         {
-            ASSERT( ( CH_TXTATR_BREAKWORD == m_Text.GetChar(nStart) ||
+            OSL_ENSURE( ( CH_TXTATR_BREAKWORD == m_Text.GetChar(nStart) ||
                       CH_TXTATR_INWORD    == m_Text.GetChar(nStart) ),
                     "where is my attribute character?" );
             SwIndex aIdx( this, nStart );
@@ -1503,7 +1503,7 @@ void SwTxtNode::DeleteAttribute( SwTxtAttr * const pAttr )
 {
     if ( !HasHints() )
     {
-        ASSERT(false, "DeleteAttribute called, but text node without hints?");
+        OSL_ENSURE(false, "DeleteAttribute called, but text node without hints?");
         return;
     }
 
@@ -1550,7 +1550,7 @@ void SwTxtNode::DeleteAttributes( const USHORT nWhich,
         {
             if ( nWhich == RES_CHRATR_HIDDEN  )
             {
-                ASSERT(false, "hey, that's a CHRATR! how did that get in?");
+                OSL_ENSURE(false, "hey, that's a CHRATR! how did that get in?");
                 SetCalcHiddenCharFlags();
             }
             else if ( nWhich == RES_TXTATR_CHARFMT )
@@ -1685,7 +1685,7 @@ BOOL SwTxtNode::SetAttr( const SfxItemSet& rSet, xub_StrLen nStt,
         if ( pItem && (reinterpret_cast<SfxPoolItem*>(-1) != pItem))
         {
             const USHORT nWhich = pItem->Which();
-            ASSERT( isCHRATR(nWhich) || isTXTATR(nWhich),
+            OSL_ENSURE( isCHRATR(nWhich) || isTXTATR(nWhich),
                     "SwTxtNode::SetAttr(): unknown attribute" );
             if ( isCHRATR(nWhich) || isTXTATR(nWhich) )
             {
@@ -1713,7 +1713,7 @@ BOOL SwTxtNode::SetAttr( const SfxItemSet& rSet, xub_StrLen nStt,
                         {
                             if ( nEnd != nStt && !pNew->GetEnd() )
                             {
-                                ASSERT(false,
+                                OSL_ENSURE(false,
                                     "Attribut without end, but area marked");
                                 DestroyAttr( pNew ); // do not insert
                             }
@@ -1953,7 +1953,7 @@ BOOL SwTxtNode::GetAttr( SfxItemSet& rSet, xub_StrLen nStt, xub_StrLen nEnd,
                     while ( pItem )
                     {
                         const USHORT nHintWhich = pItem->Which();
-                        ASSERT(!isUNKNOWNATR(nHintWhich),
+                        OSL_ENSURE(!isUNKNOWNATR(nHintWhich),
                                 "SwTxtNode::GetAttr(): unkonwn attribute?");
 
                         if ( !pAttrArr.get() )
@@ -2595,7 +2595,7 @@ bool SwpHints::TryInsertHint( SwTxtAttr* const pHint, SwTxtNode &rNode,
 {
     if ( USHRT_MAX == Count() ) // we're sorry, this flight is overbooked...
     {
-        ASSERT(false, "hints array full :-(");
+        OSL_ENSURE(false, "hints array full :-(");
         return false;
     }
 
@@ -2791,7 +2791,7 @@ bool SwpHints::TryInsertHint( SwTxtAttr* const pHint, SwTxtNode &rNode,
     {
         SwpHintsArray::Insert( pHint );
         CalcFlags();
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         if( !rNode.GetDoc()->IsInReading() )
             CHECK;
 #endif
@@ -2809,7 +2809,7 @@ bool SwpHints::TryInsertHint( SwTxtAttr* const pHint, SwTxtNode &rNode,
 
     if( *pHtEnd < nHtStart )
     {
-        ASSERT( *pHtEnd >= nHtStart,
+        OSL_ENSURE( *pHtEnd >= nHtStart,
                     "+SwpHints::Insert: invalid hint, end < start" );
 
         // Wir drehen den Quatsch einfach um:
@@ -2841,10 +2841,10 @@ bool SwpHints::TryInsertHint( SwTxtAttr* const pHint, SwTxtNode &rNode,
          ( RES_TXTATR_AUTOFMT == nWhich ||
            RES_TXTATR_CHARFMT == nWhich ) )
     {
-        ASSERT( nWhich != RES_TXTATR_AUTOFMT ||
+        OSL_ENSURE( nWhich != RES_TXTATR_AUTOFMT ||
                 static_cast<const SwFmtAutoFmt&>(pHint->GetAttr()).GetStyleHandle()->GetPool() ==
                 &rNode.GetDoc()->GetAttrPool(),
-                "AUTOSTYLES - Pool mismatch" )
+                "AUTOSTYLES - Pool mismatch" );
 
         BuildPortions( rNode, *pHint, nMode );
 
@@ -2884,7 +2884,7 @@ bool SwpHints::TryInsertHint( SwTxtAttr* const pHint, SwTxtNode &rNode,
         rNode.Modify( 0, &aHint );
     }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     if( !bNoHintAdjustMode && !rNode.GetDoc()->IsInReading() )
         CHECK;
 #endif
@@ -2929,13 +2929,13 @@ void SwpHints::DeleteAtPos( const USHORT nPos )
 }
 
 // Ist der Hint schon bekannt, dann suche die Position und loesche ihn.
-// Ist er nicht im Array, so gibt es ein ASSERT !!
+// Ist er nicht im Array, so gibt es ein OSL_ENSURE(!!
 
 void SwpHints::Delete( SwTxtAttr* pTxtHt )
 {
     // Attr 2.0: SwpHintsArr::Delete( pTxtHt );
     const USHORT nPos = GetStartOf( pTxtHt );
-    ASSERT( USHRT_MAX != nPos, "Attribut nicht im Attribut-Array!" );
+    OSL_ENSURE( USHRT_MAX != nPos, "Attribut nicht im Attribut-Array!" );
     if( USHRT_MAX != nPos )
         DeleteAtPos( nPos );
 }
@@ -3057,7 +3057,7 @@ sal_Unicode GetCharOfTxtAttr( const SwTxtAttr& rAttr )
             break;
 
         default:
-            ASSERT(false, "GetCharOfTxtAttr: unknown attr");
+            OSL_ENSURE(false, "GetCharOfTxtAttr: unknown attr");
             break;
     }
     return cRet;

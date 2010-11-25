@@ -29,7 +29,7 @@
 #ifndef _DBGLOOP_HXX
 #define _DBGLOOP_HXX
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 
 #include <tools/solar.h>
 

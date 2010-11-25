@@ -646,7 +646,7 @@ bool SwAnchoredObject::HasClearedEnvironment() const
     bool bHasClearedEnvironment( false );
 
     // --> OD 2005-03-03 #i43913# - layout frame, vertical position is orient at, has to be set.
-    ASSERT( GetVertPosOrientFrm(),
+    OSL_ENSURE( GetVertPosOrientFrm(),
             "<SwAnchoredObject::HasClearedEnvironment()> - layout frame missing, at which the vertical position is oriented at." );
     if ( GetVertPosOrientFrm() &&
          GetAnchorFrm()->IsTxtFrm() &&
@@ -691,7 +691,7 @@ const SwRect& SwAnchoredObject::GetObjRectWithSpaces() const
     if ( mbObjRectWithSpacesValid &&
          maLastObjRect != GetObjRect() )
     {
-        ASSERT( false,
+        OSL_ENSURE( false,
                 "<SwAnchoredObject::GetObjRectWithSpaces> - cache for object rectangle inclusive spaces marked as valid, but it couldn't be. Missing invalidation of cache. Please inform OD." );
         InvalidateObjRectWithSpaces();
     }
@@ -966,7 +966,7 @@ Point SwAnchoredObject::GetRelPosToAnchorFrm() const
 {
     Point aRelPos;
 
-    ASSERT( GetAnchorFrm(),
+    OSL_ENSURE( GetAnchorFrm(),
             "<SwAnchoredObject::GetRelPosToAnchorFrm()> - missing anchor frame." );
     aRelPos = GetObjRect().Pos();
     aRelPos -= GetAnchorFrm()->Frm().Pos();
@@ -993,9 +993,9 @@ Point SwAnchoredObject::GetRelPosToPageFrm( const bool _bFollowTextFlow,
     Point aRelPos;
     _obRelToTableCell = false;
 
-    ASSERT( GetAnchorFrm(),
+    OSL_ENSURE( GetAnchorFrm(),
             "<SwAnchoredObject::GetRelPosToPageFrm()> - missing anchor frame." );
-    ASSERT( GetAnchorFrm()->FindPageFrm(),
+    OSL_ENSURE( GetAnchorFrm()->FindPageFrm(),
             "<SwAnchoredObject::GetRelPosToPageFrm()> - missing page frame." );
 
     aRelPos = GetObjRect().Pos();

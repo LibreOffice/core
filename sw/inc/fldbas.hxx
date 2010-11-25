@@ -276,7 +276,7 @@ protected:
 
 public:
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     virtual ~SwFieldType();
 #endif
     static  const String&   GetTypeStr( USHORT nTypeId );
@@ -344,10 +344,10 @@ public:
 
     // ResId
     USHORT              Which() const
-#ifndef DBG_UTIL
-        { return pType->Which(); }
+#if OSL_DEBUG_LEVEL > 1
+        ;       // implemented in fldbas.cxx
 #else
-        ;       // in fldbas.cxx implementiert
+        { return pType->Which(); }
 #endif
 
     // TYP_ID

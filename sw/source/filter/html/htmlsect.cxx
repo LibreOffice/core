@@ -431,7 +431,7 @@ void SwHTMLParser::FixHeaderFooterDistance( sal_Bool bHeader,
     SwFrmFmt *pHdFtFmt =
         bHeader ? (SwFrmFmt*)rPageFmt.GetHeader().GetHeaderFmt()
                 : (SwFrmFmt*)rPageFmt.GetFooter().GetFooterFmt();
-    ASSERT( pHdFtFmt, "Doch keine Kopf- oder Fusszeile" );
+    OSL_ENSURE( pHdFtFmt, "Doch keine Kopf- oder Fusszeile" );
 
     const SwFmtCntnt& rFlyCntnt = pHdFtFmt->GetCntnt();
     const SwNodeIndex& rCntntStIdx = *rFlyCntnt.GetCntntIdx();
@@ -526,7 +526,7 @@ sal_Bool SwHTMLParser::EndSection( sal_Bool bLFStripped )
         return sal_True;
     }
 
-    ASSERT( !this, "Falsche PaM Position Beenden eines Bereichs" );
+    OSL_ENSURE( !this, "Falsche PaM Position Beenden eines Bereichs" );
 
     return sal_False;
 }
@@ -817,7 +817,7 @@ void SwHTMLParser::MovePageDescAttrs( SwNode *pSrcNd,
     SwCntntNode* pDestCntntNd =
         pDoc->GetNodes()[nDestIdx]->GetCntntNode();
 
-    ASSERT( pDestCntntNd, "Wieso ist das Ziel kein Content-Node?" );
+    OSL_ENSURE( pDestCntntNd, "Wieso ist das Ziel kein Content-Node?" );
 
     if( pSrcNd->IsCntntNode() )
     {

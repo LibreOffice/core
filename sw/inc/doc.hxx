@@ -500,7 +500,7 @@ private:
     bool mbColumnSelection       : 1;    // true: this content has bee created by a column selection
                                          //       (clipboard docs only)
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     bool mbXMLExport : 1;                // TRUE: during XML export
 #endif
 
@@ -1077,7 +1077,7 @@ public:
     inline void SetOLEPrtNotifyPending( bool bSet = true );
     void PrtOLENotify( sal_Bool bAll ); //Alle oder nur Markierte
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     bool InXMLExport() const            { return mbXMLExport; }
     void SetXMLExport( bool bFlag )     { mbXMLExport = bFlag; }
 #endif

@@ -467,13 +467,13 @@ public:
      */
     void Combine();
 
-#if !defined(DBG_UTIL)
+#if OSL_DEBUG_LEVEL > 1
+    void SttCrsrMove();
+    void EndCrsrMove( const BOOL bIdleEnd = FALSE );
+#else
     void SttCrsrMove() { ++nCrsrMove; StartAction(); }
     void EndCrsrMove( const BOOL bIdleEnd = FALSE )
             { EndAction( bIdleEnd ); --nCrsrMove; }
-#else
-    void SttCrsrMove();
-    void EndCrsrMove( const BOOL bIdleEnd = FALSE );
 #endif
 
     /*

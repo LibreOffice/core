@@ -139,7 +139,7 @@ static RTF_FLD_TYPES _WhichFld( String& rName, String& rNext )
 
     String sNm( rName );
     sNm = sNm.EraseLeadingChars().GetToken(0, ' ');
-    ASSERT( sNm.Len(), "Feldname hat keine Laenge!" );
+    OSL_ENSURE( sNm.Len(), "Feldname hat keine Laenge!" );
     if( !sNm.Len() )
         return RTFFLD_UNKNOWN;
 
@@ -181,7 +181,7 @@ static USHORT CheckNumberFmtStr( const String& rNStr )
         "\x04""PAGE"              /* PAGEDESC          */
     };
 
-    ASSERT(sizeof(aNumberTypeTab) / sizeof(sal_Char *)
+    OSL_ENSURE(sizeof(aNumberTypeTab) / sizeof(sal_Char *)
            >= SVX_NUM_PAGEDESC - SVX_NUM_CHARS_UPPER_LETTER, "impossible");
 
     for (USHORT n = SVX_NUM_CHARS_UPPER_LETTER;  n <= SVX_NUM_PAGEDESC; ++n)
@@ -1048,7 +1048,7 @@ void SwRTFParser::ReadField()
                         {
                             const SwField *pFld = pFldAttr->GetFld().GetFld();
                             SwFieldType *pTyp = pFld ? pFld->GetTyp() : 0;
-                            ASSERT(pTyp->Which() == RES_USERFLD, "expected a user field");
+                            OSL_ENSURE(pTyp->Which() == RES_USERFLD, "expected a user field");
                             if (pTyp->Which() == RES_USERFLD)
                             {
                                 SwUserFieldType *pUsrTyp = (SwUserFieldType*)pTyp;

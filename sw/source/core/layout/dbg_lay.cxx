@@ -104,8 +104,8 @@
  *
  * --------------------------------------------------*/
 
-#ifndef DBG_UTIL
-#error Wer fummelt denn an den makefiles rum?
+#if !defined(OSL_DEBUG_LEVEL) || OSL_DEBUG_LEVEL == 0
+#error Who broken the makefiles?
 #endif
 
 
@@ -137,7 +137,7 @@ SwImplProtocol* SwProtocol::pImpl = NULL;
 
 ULONG lcl_GetFrameId( const SwFrm* pFrm )
 {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     static BOOL bFrameId = FALSE;
     if( bFrameId )
         return pFrm->GetFrmId();

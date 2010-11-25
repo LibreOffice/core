@@ -100,7 +100,7 @@ public:
                                        const long nXPos,
                                        const sal_Bool bRight );
     // <--
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     void ShowContour( OutputDevice* pOut, const SdrObject* pObj,
                       const Color& rClosedColor, const Color& rOpenColor );
 #endif
@@ -233,7 +233,7 @@ public:
     }
     // <--
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     void ShowContour( OutputDevice* pOut );
 #endif
 };

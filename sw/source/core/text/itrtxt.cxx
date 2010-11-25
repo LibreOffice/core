@@ -69,7 +69,7 @@ void SwTxtIter::CtorInitTxtIter( SwTxtFrm *pNewFrm, SwTxtInfo *pNewInf )
 
     SwTxtNode *pNode = pNewFrm->GetTxtNode();
 
-    ASSERT( pNewFrm->GetPara(), "No paragraph" );
+    OSL_ENSURE( pNewFrm->GetPara(), "No paragraph" );
 
     CtorInitAttrIter( *pNode, pNewFrm->GetPara()->GetScriptInfo(), pNewFrm );
 
@@ -359,7 +359,7 @@ USHORT SwTxtCursor::AdjustBaseLine( const SwLineLayout& rLine,
                 nOfst = nOfst + nPorAscent;
                 break;
             case SvxParaVertAlignItem::CENTER :
-                ASSERT( rLine.Height() >= nPorHeight, "Portion height > Line height");
+                OSL_ENSURE( rLine.Height() >= nPorHeight, "Portion height > Line height");
                 nOfst += ( rLine.Height() - nPorHeight ) / 2 + nPorAscent;
                 break;
             case SvxParaVertAlignItem::BOTTOM :
@@ -510,7 +510,7 @@ SwHookOut::SwHookOut( SwTxtSizeInfo& rInfo ) :
      pOut( rInfo.GetOut() ),
      bOnWin( rInfo.OnWin() )
 {
-    ASSERT( rInfo.GetRefDev(), "No reference device for text formatting" )
+    OSL_ENSURE( rInfo.GetRefDev(), "No reference device for text formatting" );
 
     // set new values
     rInfo.SetOut( rInfo.GetRefDev() );

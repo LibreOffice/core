@@ -329,13 +329,13 @@ lcl_ExportFieldMark(
     SwDoc* pDoc = pUnoCrsr->GetDoc();
     //flr: maybe its a good idea to add a special hint to the hints array and rely on the hint segmentation....
     const xub_StrLen start = pUnoCrsr->Start()->nContent.GetIndex();
-    ASSERT(pUnoCrsr->End()->nContent.GetIndex() == start,
+    OSL_ENSURE(pUnoCrsr->End()->nContent.GetIndex() == start,
                "hmm --- why is this different");
 
     pUnoCrsr->Right(1, CRSR_SKIP_CHARS, FALSE, FALSE);
     if ( *pUnoCrsr->GetMark() == *pUnoCrsr->GetPoint() )
     {
-        ASSERT(false, "cannot move cursor?");
+        OSL_ENSURE(false, "cannot move cursor?");
         return 0;
     }
 
@@ -384,7 +384,7 @@ lcl_ExportFieldMark(
     }
     else
     {
-        ASSERT(false, "no fieldmark found?");
+        OSL_ENSURE(false, "no fieldmark found?");
     }
     return xRef;
 }
@@ -657,7 +657,7 @@ lcl_ExportHints(
                     case RES_TXTATR_META:
                     case RES_TXTATR_METAFIELD:
                     {
-                        ASSERT(*pAttr->GetStart() != *pAttr->GetEnd(),
+                        OSL_ENSURE(*pAttr->GetStart() != *pAttr->GetEnd(),
                                 "empty meta?");
                         if ((i_nStartPos > 0) &&
                             (*pAttr->GetStart() < i_nStartPos))
@@ -676,7 +676,7 @@ lcl_ExportHints(
                         PortionList_t Top = rPortionStack.top();
                         if (Top.second != pAttr)
                         {
-                            ASSERT(false, "ExportHints: stack error" );
+                            OSL_ENSURE(false, "ExportHints: stack error" );
                         }
                         else
                         {
@@ -1114,7 +1114,7 @@ lcl_CreatePortions(
                         bCursorMoved, nNextAttrIndex);
             if (PortionStack.empty())
             {
-                ASSERT(false, "CreatePortions: stack underflow");
+                OSL_ENSURE(false, "CreatePortions: stack underflow");
                 return;
             }
         }
@@ -1131,7 +1131,7 @@ lcl_CreatePortions(
         }
         else
         {
-            ASSERT(!FieldMarks.size() ||
+            OSL_ENSURE(!FieldMarks.size() ||
                    (FieldMarks.front() != nCurrentIndex),
                    "fieldmark and hint with CH_TXTATR at same pos?");
         }
@@ -1163,7 +1163,7 @@ lcl_CreatePortions(
         }
     }
 
-    ASSERT((PortionStack.size() == 1) && !PortionStack.top().second,
+   OSL_ENSURE((PortionStack.size() == 1) && !PortionStack.top().second,
             "CreatePortions: stack error" );
 }
 

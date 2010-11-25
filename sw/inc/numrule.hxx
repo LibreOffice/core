@@ -36,8 +36,8 @@
 #include "swdllapi.h"
 #include <swtypes.hxx>
 #include <calbck.hxx>
-#include <errhdl.hxx>       // Fuer die inline-ASSERTs
-#include <error.h>          // Fuer die inline-ASSERTs
+#include <errhdl.hxx>       // Fuer die inline ASSERT
+#include <error.h>          // Fuer die inline ASSERT
 #include <hints.hxx>
 #include <hash_map>
 #include <stringhash.hxx>
@@ -114,7 +114,7 @@ public:
 private:
     friend void _FinitCore();
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     long int nSerial;
     static long int nInstances;
 #endif

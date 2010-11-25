@@ -137,7 +137,7 @@ SwXMLTableLines_Impl::SwXMLTableLines_Impl( const SwTableLines& rLines ) :
     pLines( &rLines ),
     nWidth( 0UL )
 {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     sal_uInt16 nEndCPos = 0U;
 #endif
     sal_uInt16 nLines = rLines.Count();
@@ -164,14 +164,14 @@ SwXMLTableLines_Impl::SwXMLTableLines_Impl( const SwTableLines& rLines ) :
 
                 if( nBox==nBoxes-1U )
                 {
-                    ASSERT( nLine==0U && nWidth==0UL,
+                    OSL_ENSURE( nLine==0U && nWidth==0UL,
                             "parent width will be lost" );
                     nWidth = nCPos;
                 }
             }
             else
             {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
                 sal_uInt16 nCheckPos =
                     nCPos + (sal_uInt16)SwWriteTable::GetBoxWidth( pBox );
                 if( !nEndCPos )
@@ -181,17 +181,17 @@ SwXMLTableLines_Impl::SwXMLTableLines_Impl( const SwTableLines& rLines ) :
                 else
                 {
                     /*
-                    ASSERT( SwXMLTableColumn_impl(nCheckPos) ==
+                    OSL_ENSURE( SwXMLTableColumn_impl(nCheckPos) ==
                                         SwXMLTableColumn_Impl(nEndCPos),
                     "rows have different total widths" );
                     */
                 }
 #endif
                 nCPos = (sal_uInt16)nWidth;
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
                 SwXMLTableColumn_Impl aCol( (sal_uInt16)nWidth );
-                ASSERT( aCols.Seek_Entry(&aCol), "couldn't find last column" );
-                ASSERT( SwXMLTableColumn_Impl(nCheckPos) ==
+                OSL_ENSURE( aCols.Seek_Entry(&aCol), "couldn't find last column" );
+                OSL_ENSURE( SwXMLTableColumn_Impl(nCheckPos) ==
                                             SwXMLTableColumn_Impl(nCPos),
                         "rows have different total widths" );
 #endif
@@ -694,11 +694,13 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
             // Und ihren Index
             sal_uInt16 nOldCol = nCol;
             SwXMLTableColumn_Impl aCol( nCPos );
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
             sal_Bool bFound =
 #endif
                 pLines->GetColumns().Seek_Entry( &aCol, &nCol );
-            ASSERT( bFound, "couldn't find column" );
+#if OSL_DEBUG_LEVEL > 1
+            OSL_ENSURE( bFound, "couldn't find column" );
+#endif
 
             const SwStartNode *pBoxSttNd = pBox->GetSttNd();
             if( pBoxSttNd )
@@ -984,18 +986,20 @@ void SwXMLExport::ExportTableLine( const SwTableLine& rLine,
             const sal_uInt16 nOldCol = nCol;
             {
                 SwXMLTableColumn_Impl aCol( nCPos );
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
                 const sal_Bool bFound =
 #endif
                     rLines.GetColumns().Seek_Entry( &aCol, &nCol );
-                ASSERT( bFound, "couldn't find column" );
+#if OSL_DEBUG_LEVEL > 1
+                OSL_ENSURE( bFound, "couldn't find column" );
+#endif
             }
 
             // --> OD 2009-03-19 #i95726#
             // Some fault tolerance, if table is somehow corrupted.
             if ( nCol < nOldCol )
             {
-                ASSERT( false, "table and/or table information seems to be corrupted." );
+                OSL_ENSURE( false, "table and/or table information seems to be corrupted." );
                 if ( nBox == nBoxes - 1 )
                 {
                     nCol = rLines.GetColumns().Count() - 1;
@@ -1028,7 +1032,7 @@ void SwXMLExport::ExportTableLines( const SwTableLines& rLines,
                                     SwXMLTableInfo_Impl& rTblInfo,
                                     USHORT nHeaderRows )
 {
-    ASSERT( pTableLines && pTableLines->Count(),
+    OSL_ENSURE( pTableLines && pTableLines->Count(),
             "SwXMLExport::ExportTableLines: table columns infos missing" );
     if( !pTableLines || 0 == pTableLines->Count() )
         return;
@@ -1043,9 +1047,9 @@ void SwXMLExport::ExportTableLines( const SwTableLines& rLines,
             break;
         }
     }
-    ASSERT( pLines,
+    OSL_ENSURE( pLines,
             "SwXMLExport::ExportTableLines: table columns info missing" );
-    ASSERT( 0==nInfoPos,
+    OSL_ENSURE( 0==nInfoPos,
             "SwXMLExport::ExportTableLines: table columns infos are unsorted" );
     if( !pLines )
         return;
@@ -1216,16 +1220,16 @@ void SwXMLTextParagraphExport::exportTable(
         {
             pXTable = reinterpret_cast< SwXTextTable * >(
                     sal::static_int_cast< sal_IntPtr >( xTableTunnel->getSomething( SwXTextTable::getUnoTunnelId() )));
-            ASSERT( pXTable, "SwXTextTable missing" );
+            OSL_ENSURE( pXTable, "SwXTextTable missing" );
         }
         if( pXTable )
         {
             SwFrmFmt *pFmt = pXTable->GetFrmFmt();
-            ASSERT( pFmt, "table format missing" );
+            OSL_ENSURE( pFmt, "table format missing" );
             const SwTable *pTbl = SwTable::FindTable( pFmt );
-            ASSERT( pTbl, "table missing" );
+            OSL_ENSURE( pTbl, "table missing" );
             const SwTableNode *pTblNd = pTbl->GetTableNode();
-            ASSERT( pTblNd, "table node missing" );
+            OSL_ENSURE( pTblNd, "table node missing" );
             if( bAutoStyles )
             {
                 SwNodeIndex aIdx( *pTblNd );

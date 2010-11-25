@@ -530,7 +530,7 @@ SwDoc* Reader::GetTemplateDoc()
         if( bLoad )
         {
             ClearTemplate();
-            ASSERT( !pTemplate, "Who holds the template doc?" );
+            OSL_ENSURE( !pTemplate, "Who holds the template doc?" );
 
                 // #95605#: If the writer module is not installed,
                 // we cannot create a SwDocShell. We could create a
@@ -561,7 +561,7 @@ SwDoc* Reader::GetTemplateDoc()
                 }
         }
 
-        ASSERT( !pTemplate || FStatHelper::IsDocument( aFileName ) ||
+        OSL_ENSURE( !pTemplate || FStatHelper::IsDocument( aFileName ) ||
                 aTemplateNm.EqualsAscii( "$$Dummy$$" ),
                 "TemplatePtr but no template exist!" );
     }
@@ -620,7 +620,7 @@ void Reader::MakeHTMLDummyTemplateDoc()
 // muessen die Methode ueberladen
 int Reader::SetStrmStgPtr()
 {
-    ASSERT( pMedium, "Wo ist das Medium??" );
+    OSL_ENSURE( pMedium, "Wo ist das Medium??" );
 
     if( pMedium->IsStorage() )
     {
@@ -683,7 +683,7 @@ void Reader::ResetFrmFmts( SwDoc& rDoc )
         switch (i)
         {
             default:
-                ASSERT(i == 0, "Impossible");
+                OSL_ENSURE(i == 0, "Impossible");
                 //fallthrough
             case 0:
                 nPoolId = RES_POOLFRM_FRAME;
@@ -836,7 +836,7 @@ ULONG SwWriter::Write( WriterRef& rxWriter, const String* pRealFileName )
         SwTableNode* pTblNd = (SwTableNode*)aBoxes[0]->GetSttNd()->StartOfSectionNode();
         SwNodeIndex aIdx( pDoc->GetNodes().GetEndOfExtras(), 2 );
         SwCntntNode *pNd = aIdx.GetNode().GetCntntNode();
-        ASSERT( pNd, "Node not found" );
+        OSL_ENSURE( pNd, "Node not found" );
         SwPosition aPos( aIdx, SwIndex( pNd ) );
         pTblNd->GetTable().MakeCopy( pDoc, aPos, aBoxes );
     }

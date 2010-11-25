@@ -122,7 +122,7 @@ BOOL SwCntntFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, BOOL, BOOL & )
                 SwSectionFrm *pSect = pNewUpper->FindSctFrm();
                 while( pSect && pSect->IsInFtn() )
                     pSect = pSect->GetUpper()->FindSctFrm();
-                ASSERT( pSect, "Escaping footnote" );
+                OSL_ENSURE( pSect, "Escaping footnote" );
                 if( pSect != pMySect )
                     return FALSE;
             }
@@ -293,7 +293,7 @@ void SwFrm::PrepareMake()
     {
         if ( lcl_IsCalcUpperAllowed( *this ) )
             GetUpper()->Calc();
-        ASSERT( GetUpper(), ":-( Layoutgeruest wackelig (Upper wech)." );
+        OSL_ENSURE( GetUpper(), ":-( Layoutgeruest wackelig (Upper wech)." );
         if ( !GetUpper() )
             return;
 
@@ -338,7 +338,7 @@ void SwFrm::PrepareMake()
             SwFrm *pFrm = GetUpper()->Lower();
             while ( pFrm != this )
             {
-                ASSERT( pFrm, ":-( Layoutgeruest wackelig (this not found)." );
+                OSL_ENSURE( pFrm, ":-( Layoutgeruest wackelig (this not found)." );
                 if ( !pFrm )
                     return; //Oioioioi ...
 
@@ -378,14 +378,14 @@ void SwFrm::PrepareMake()
                         pFrm = pCnt;
                 }
             }
-            ASSERT( GetUpper(), "Layoutgeruest wackelig (Upper wech II)." );
+            OSL_ENSURE( GetUpper(), "Layoutgeruest wackelig (Upper wech II)." );
             if ( !GetUpper() )
                 return;
 
             if ( lcl_IsCalcUpperAllowed( *this ) )
                 GetUpper()->Calc();
 
-            ASSERT( GetUpper(), "Layoutgeruest wackelig (Upper wech III)." );
+            OSL_ENSURE( GetUpper(), "Layoutgeruest wackelig (Upper wech III)." );
         }
 
         if ( bTab && !bOldTabLock )
@@ -402,7 +402,7 @@ void SwFrm::OptPrepareMake()
     // <--
     {
         GetUpper()->Calc();
-        ASSERT( GetUpper(), ":-( Layoutgeruest wackelig (Upper wech)." );
+        OSL_ENSURE( GetUpper(), ":-( Layoutgeruest wackelig (Upper wech)." );
         if ( !GetUpper() )
             return;
     }
@@ -425,7 +425,7 @@ void SwFrm::PrepareCrsr()
         GetUpper()->PrepareCrsr();
         GetUpper()->Calc();
 
-        ASSERT( GetUpper(), ":-( Layoutgeruest wackelig (Upper wech)." );
+        OSL_ENSURE( GetUpper(), ":-( Layoutgeruest wackelig (Upper wech)." );
         if ( !GetUpper() )
             return;
 
@@ -452,7 +452,7 @@ void SwFrm::PrepareCrsr()
         SwFrm *pFrm = GetUpper()->Lower();
         while ( pFrm != this )
         {
-            ASSERT( pFrm, ":-( Layoutgeruest wackelig (this not found)." );
+            OSL_ENSURE( pFrm, ":-( Layoutgeruest wackelig (this not found)." );
             if ( !pFrm )
                 return; //Oioioioi ...
 
@@ -482,13 +482,13 @@ void SwFrm::PrepareCrsr()
                     pFrm = pCnt;
             }
         }
-        ASSERT( GetUpper(), "Layoutgeruest wackelig (Upper wech II)." );
+        OSL_ENSURE( GetUpper(), "Layoutgeruest wackelig (Upper wech II)." );
         if ( !GetUpper() )
             return;
 
         GetUpper()->Calc();
 
-        ASSERT( GetUpper(), "Layoutgeruest wackelig (Upper wech III)." );
+        OSL_ENSURE( GetUpper(), "Layoutgeruest wackelig (Upper wech III)." );
 
         if ( bTab && !bOldTabLock )
             ::PrepareUnlock( (SwTabFrm*)this );
@@ -795,7 +795,7 @@ void SwPageFrm::MakeAll()
                             else
                             {
                                 // OD 30.10.2002 #97265# - assert invalid lower property
-                                ASSERT( !(pFrm->Frm().Height() < pFrm->Prt().Height()),
+                                OSL_ENSURE( !(pFrm->Frm().Height() < pFrm->Prt().Height()),
                                         "SwPageFrm::MakeAll(): Lower with frame height < printing height" );
                                 nTmp += pFrm->Frm().Height() - pFrm->Prt().Height();
                             }
@@ -849,12 +849,12 @@ void SwPageFrm::MakeAll()
     if ( Frm() != aOldRect && GetUpper() )
         static_cast<SwRootFrm*>(GetUpper())->CheckViewLayout( 0, 0 );
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     //Der Upper (Root) muss mindestens so breit
     //sein, dass er die breiteste Seite aufnehmen kann.
     if ( GetUpper() )
     {
-        ASSERT( GetUpper()->Prt().Width() >= aFrm.Width(), "Rootsize" );
+        OSL_ENSURE( GetUpper()->Prt().Width() >= aFrm.Width(), "Rootsize" );
     }
 #endif
 }
@@ -1153,8 +1153,8 @@ inline void ValidateSz( SwFrm *pFrm )
 
 void SwCntntFrm::MakeAll()
 {
-    ASSERT( GetUpper(), "keinen Upper?" );
-    ASSERT( IsTxtFrm(), "MakeAll(), NoTxt" );
+    OSL_ENSURE( GetUpper(), "keinen Upper?" );
+    OSL_ENSURE( IsTxtFrm(), "MakeAll(), NoTxt" );
 
     if ( !IsFollow() && StackHack::IsLocked() )
         return;
@@ -1162,13 +1162,13 @@ void SwCntntFrm::MakeAll()
     if ( IsJoinLocked() )
         return;
 
-    ASSERT( !((SwTxtFrm*)this)->IsSwapped(), "Calculation of a swapped frame" );
+    OSL_ENSURE( !((SwTxtFrm*)this)->IsSwapped(), "Calculation of a swapped frame" );
 
     StackHack aHack;
 
     if ( ((SwTxtFrm*)this)->IsLocked() )
     {
-        ASSERT( FALSE, "Format fuer gelockten TxtFrm." );
+        OSL_ENSURE( FALSE, "Format fuer gelockten TxtFrm." );
         return;
     }
 
@@ -1179,14 +1179,14 @@ void SwCntntFrm::MakeAll()
     // <--
     PROTOCOL_ENTER( this, PROT_MAKEALL, 0, 0 )
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     const SwDoc *pDoc = GetAttrSet()->GetDoc();
     if( pDoc )
     {
         static sal_Bool bWarn = sal_False;
         if( pDoc->InXMLExport() )
         {
-            ASSERT( bWarn, "Formatting during XML-export!" );
+            OSL_ENSURE( bWarn, "Formatting during XML-export!" );
             bWarn = sal_True;
         }
         else
@@ -1346,7 +1346,7 @@ void SwCntntFrm::MakeAll()
                     //nach dem hin und her fliessen sparen.
                     GetUpper()->ResetCompletePaint();
                     //Der Vorgaenger wurde Invalidiert, das ist jetzt auch obsolete.
-                    ASSERT( pPre, "missing old Prev" );
+                    OSL_ENSURE( pPre, "missing old Prev" );
                     if( !pPre->IsSctFrm() )
                         ::ValidateSz( pPre );
                 }
@@ -1466,7 +1466,7 @@ void SwCntntFrm::MakeAll()
 #if OSL_DEBUG_LEVEL > 1
             else
             {
-                ASSERT( false, "debug assertion: <SwCntntFrm::MakeAll()> - format of text frame suppressed by fix b6448963" );
+                OSL_ENSURE( false, "debug assertion: <SwCntntFrm::MakeAll()> - format of text frame suppressed by fix b6448963" );
             }
 #endif
             // <--
@@ -1735,10 +1735,10 @@ void SwCntntFrm::MakeAll()
                       ( !bSct || !FindSctFrm()->IsColLocked() ) )
                     bMoveOrFit = TRUE;
             }
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
             else
             {
-                ASSERT( FALSE, "+TxtFrm hat WouldFit-Versprechen nicht eingehalten." );
+                OSL_ENSURE( FALSE, "+TxtFrm hat WouldFit-Versprechen nicht eingehalten." );
             }
 #endif
         }
@@ -1791,7 +1791,7 @@ void SwCntntFrm::MakeAll()
             }
 
 #if OSL_DEBUG_LEVEL > 1
-            ASSERT( false, "LoopControl in SwCntntFrm::MakeAll" )
+            OSL_ENSURE( false, "LoopControl in SwCntntFrm::MakeAll" );
 #endif
         }
         if ( bMovedBwd && GetUpper() )
@@ -1903,7 +1903,7 @@ void MakeNxt( SwFrm *pFrm, SwFrm *pNxt )
 
 BOOL lcl_IsNextFtnBoss( const SwFrm *pFrm, const SwFrm* pNxt )
 {
-    ASSERT( pFrm && pNxt, "lcl_IsNextFtnBoss: No Frames?" );
+    OSL_ENSURE( pFrm && pNxt, "lcl_IsNextFtnBoss: No Frames?" );
     pFrm = pFrm->FindFtnBossFrm();
     pNxt = pNxt->FindFtnBossFrm();
     // Falls pFrm eine letzte Spalte ist, wird stattdessen die Seite genommen
@@ -2098,7 +2098,7 @@ BOOL SwCntntFrm::_WouldFit( SwTwips nSpace,
                 // doesn't makes sense. Thus, return TRUE.
                 if ( IsAnFollow( pFrm ) && !pFrm->IsValid() )
                 {
-                    ASSERT( false, "Only a warning for task 108824:/n<SwCntntFrm::_WouldFit(..) - follow not valid!" );
+                    OSL_ENSURE( false, "Only a warning for task 108824:/n<SwCntntFrm::_WouldFit(..) - follow not valid!" );
                     return TRUE;
                 }
             }

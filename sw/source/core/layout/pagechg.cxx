@@ -419,7 +419,7 @@ void MA_FASTCALL lcl_MakeObjs( const SwSpzFrmFmts &rTbl, SwPageFrm *pPage )
             pSdrObj = 0;
             if ( bSdrObj  && 0 == (pSdrObj = pFmt->FindSdrObject()) )
             {
-                ASSERT( FALSE, "DrawObject not found." );
+                OSL_ENSURE( FALSE, "DrawObject not found." );
                 pFmt->GetDoc()->DelFrmFmt( pFmt );
                 --i;
                 continue;
@@ -592,17 +592,17 @@ void SwPageFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
             //Abgesehen von den Grossenverhaeltnissen sind noch andere
             //Dinge betroffen.
             //1. Spaltigkeit.
-            ASSERT( pOld && pNew, "FMT_CHG Missing Format." );
+            OSL_ENSURE( pOld && pNew, "FMT_CHG Missing Format." );
             const SwFmt* pOldFmt = ((SwFmtChg*)pOld)->pChangedFmt;
             const SwFmt* pNewFmt = ((SwFmtChg*)pNew)->pChangedFmt;
-            ASSERT( pOldFmt && pNewFmt, "FMT_CHG Missing Format." );
+            OSL_ENSURE( pOldFmt && pNewFmt, "FMT_CHG Missing Format." );
 
             const SwFmtCol &rOldCol = pOldFmt->GetCol();
             const SwFmtCol &rNewCol = pNewFmt->GetCol();
             if( rOldCol != rNewCol )
             {
                 SwLayoutFrm *pB = FindBodyCont();
-                ASSERT( pB, "Seite ohne Body." );
+                OSL_ENSURE( pB, "Seite ohne Body." );
                 pB->ChgColumns( rOldCol, rNewCol );
                 rInvFlags |= 0x20;
             }
@@ -670,7 +670,7 @@ void SwPageFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
         case RES_COL:
         {
             SwLayoutFrm *pB = FindBodyCont();
-            ASSERT( pB, "Seite ohne Body." );
+            OSL_ENSURE( pB, "Seite ohne Body." );
             pB->ChgColumns( *(const SwFmtCol*)pOld, *(const SwFmtCol*)pNew );
             rInvFlags |= 0x22;
         }
@@ -836,7 +836,7 @@ SwPageDesc *SwPageFrm::FindPageDesc()
                               ->GetPageDesc( 0 ));
 
 
-    ASSERT( pRet, "Kein Descriptor gefunden." );
+    OSL_ENSURE( pRet, "Kein Descriptor gefunden." );
     return pRet;
 }
 
@@ -948,11 +948,11 @@ void SwPageFrm::Cut()
 |*************************************************************************/
 void SwPageFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
 {
-    ASSERT( pParent->IsRootFrm(), "Parent ist keine Root." );
-    ASSERT( pParent, "Kein Parent fuer Paste." );
-    ASSERT( pParent != this, "Bin selbst der Parent." );
-    ASSERT( pSibling != this, "Bin mein eigener Nachbar." );
-    ASSERT( !GetPrev() && !GetNext() && !GetUpper(),
+    OSL_ENSURE( pParent->IsRootFrm(), "Parent ist keine Root." );
+    OSL_ENSURE( pParent, "Kein Parent fuer Paste." );
+    OSL_ENSURE( pParent != this, "Bin selbst der Parent." );
+    OSL_ENSURE( pSibling != this, "Bin mein eigener Nachbar." );
+    OSL_ENSURE( !GetPrev() && !GetNext() && !GetUpper(),
             "Bin noch irgendwo angemeldet." );
 
     //In den Baum einhaengen.
@@ -1065,7 +1065,7 @@ void SwPageFrm::PrepareRegisterChg()
 |*************************************************************************/
 void SwFrm::CheckPageDescs( SwPageFrm *pStart, BOOL bNotifyFields )
 {
-    ASSERT( pStart, "Keine Startpage." );
+    OSL_ENSURE( pStart, "Keine Startpage." );
 
     ViewShell *pSh   = pStart->GetShell();
     SwViewImp *pImp  = pSh ? pSh->Imp() : 0;
@@ -1192,10 +1192,10 @@ void SwFrm::CheckPageDescs( SwPageFrm *pStart, BOOL bNotifyFields )
                 if ( pPage->GetFmt() != pFmtWish )
                     pPage->SetFrmFmt( pFmtWish );
             }
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
             else
             {
-                ASSERT( FALSE, "CheckPageDescs, missing solution" );
+                OSL_ENSURE( FALSE, "CheckPageDescs, missing solution" );
             }
 #endif
         }
@@ -1235,7 +1235,7 @@ void SwFrm::CheckPageDescs( SwPageFrm *pStart, BOOL bNotifyFields )
         pDoc->UpdatePageFlds( &aMsgHnt );
     }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     //Ein paar Pruefungen muessen schon erlaubt sein.
 
     //1. Keine zwei EmptyPages hintereinander.
@@ -1248,7 +1248,7 @@ void SwFrm::CheckPageDescs( SwPageFrm *pStart, BOOL bNotifyFields )
         {
             if ( bEmpty )
             {
-                ASSERT( FALSE, "Doppelte Leerseiten." );
+                OSL_ENSURE( FALSE, "Doppelte Leerseiten." );
                 break;  //Einmal reicht.
             }
             bEmpty = TRUE;
@@ -1260,7 +1260,7 @@ void SwFrm::CheckPageDescs( SwPageFrm *pStart, BOOL bNotifyFields )
 //moeglich: Ein paar Seiten, auf der ersten 'erste Seite' anwenden,
 //rechte als folge der ersten, linke als folge der rechten, rechte als
 //folge der linken.
-//      ASSERT( pPg->GetPageDesc() == pPg->FindPageDesc(),
+//   OSL_ENSURE( pPg->GetPageDesc() == pPg->FindPageDesc(),
 //              "Seite mit falschem Descriptor." );
 
         pPg = (SwPageFrm*)pPg->GetNext();
@@ -1305,7 +1305,7 @@ SwPageFrm *SwFrm::InsertPage( SwPageFrm *pPrevPage, BOOL bFtn )
     if ( !pDesc )
         pDesc = pPrevPage->GetPageDesc()->GetFollow();
 
-    ASSERT( pDesc, "Missing PageDesc" );
+    OSL_ENSURE( pDesc, "Missing PageDesc" );
     if( !(bWishedOdd ? pDesc->GetRightFmt() : pDesc->GetLeftFmt()) )
         bWishedOdd = !bWishedOdd;
 
@@ -1336,7 +1336,7 @@ SwPageFrm *SwFrm::InsertPage( SwPageFrm *pPrevPage, BOOL bFtn )
             bCheckPages = TRUE;
     }
     pFmt = bWishedOdd ? pDesc->GetRightFmt() : pDesc->GetLeftFmt();
-    ASSERT( pFmt, "Descriptor without format." );
+    OSL_ENSURE( pFmt, "Descriptor without format." );
     SwPageFrm *pPage = new SwPageFrm( pFmt, pDesc );
     pPage->Paste( pRoot, pSibling );
     pPage->PreparePage( bFtn );
@@ -1432,8 +1432,8 @@ SwTwips SwRootFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL )
 |*************************************************************************/
 SwTwips SwRootFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL )
 {
-    ASSERT( nDist >= 0, "nDist < 0." );
-    ASSERT( nDist <= Frm().Height(), "nDist > als aktuelle Groesse." );
+    OSL_ENSURE( nDist >= 0, "nDist < 0." );
+    OSL_ENSURE( nDist <= Frm().Height(), "nDist > als aktuelle Groesse." );
 
     if ( !bTst )
         Frm().SSize().Height() -= nDist;
@@ -1519,7 +1519,7 @@ void SwRootFrm::RemoveSuperfluous()
                 while ( pPage->IsFtnPage() )
                 {
                     pPage = (SwPageFrm*)pPage->GetPrev();
-                    ASSERT( pPage, "Nur noch Endnotenseiten uebrig." );
+                    OSL_ENSURE( pPage, "Nur noch Endnotenseiten uebrig." );
                 }
                 continue;
             }
@@ -1672,14 +1672,14 @@ void SwRootFrm::AssertPageFlys( SwPageFrm *pPage )
                     {
                         //Umhaengen kann er sich selbst, indem wir ihm
                         //einfach ein Modify mit seinem AnkerAttr schicken.
-#ifndef DBG_UTIL
-                        rFmt.SwModify::Modify( 0, (SwFmtAnchor*)&rAnch );
-#else
+#if OSL_DEBUG_LEVEL > 1
                         const sal_uInt32 nCnt = pPage->GetSortedObjs()->Count();
                         rFmt.SwModify::Modify( 0, (SwFmtAnchor*)&rAnch );
-                        ASSERT( !pPage->GetSortedObjs() ||
+                        OSL_ENSURE( !pPage->GetSortedObjs() ||
                                 nCnt != pPage->GetSortedObjs()->Count(),
                                 "Kann das Obj nicht umhaengen." );
+#else
+                        rFmt.SwModify::Modify( 0, (SwFmtAnchor*)&rAnch );
 #endif
                         --i;
                     }
@@ -1759,7 +1759,7 @@ void SwRootFrm::ImplInvalidateBrowseWidth()
 |*************************************************************************/
 void SwRootFrm::ImplCalcBrowseWidth()
 {
-    ASSERT( GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE),
+    OSL_ENSURE( GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE),
             "CalcBrowseWidth and not in BrowseView" );
 
     //Die (minimale) Breite wird von Rahmen, Tabellen und Zeichenobjekten
@@ -2127,7 +2127,7 @@ void SwRootFrm::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* pVi
     }
     else
     {
-        ASSERT( pViewOpt, "CheckViewLayout required ViewOptions" )
+        OSL_ENSURE( pViewOpt, "CheckViewLayout required ViewOptions" );
 
         const USHORT nColumns =  pViewOpt->GetViewLayoutColumns();
         const bool   bBookMode = pViewOpt->IsViewLayoutBookMode();
@@ -2458,7 +2458,7 @@ bool SwRootFrm::IsLeftToRightViewLayout() const
 /*const SwRect SwRootFrm::GetExtendedPageArea( USHORT nPageNumber ) const
 {
     SwRect aRet;
-    ASSERT( nPageNumber < maPageRects.size(), "No extended page area available" )
+    OSL_ENSURE( nPageNumber < maPageRects.size(), "No extended page area available" );
     if ( nPageNumber < maPageRects.size() )
         aRet = maPageRects[ nPageNumber ];
     return aRet;
@@ -2489,7 +2489,7 @@ const SwPageFrm& SwPageFrm::GetFormatPage() const
                 pRet = static_cast<const SwPageFrm*>( GetNext() );
             }
         }
-        ASSERT( pRet,
+        OSL_ENSURE( pRet,
                 "<SwPageFrm::GetFormatPage()> - inconsistent layout: empty page without previous and next page frame --> crash." );
         // <--
     }

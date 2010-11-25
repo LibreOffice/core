@@ -116,8 +116,8 @@ void SetParent( boost::shared_ptr<const SfxItemSet>& mrpAttrSet,
                 const SwFmt* pConditionalFmt )
 {
     const SwAttrSet* pAttrSet = static_cast<const SwAttrSet*>(mrpAttrSet.get());
-    ASSERT( pAttrSet, "no SwAttrSet" )
-    ASSERT( pParentFmt || !pConditionalFmt, "ConditionalFmt without ParentFmt?" )
+    OSL_ENSURE( pAttrSet, "no SwAttrSet" );
+    OSL_ENSURE( pParentFmt || !pConditionalFmt, "ConditionalFmt without ParentFmt?" );
 
     const SwAttrSet* pParentSet = pParentFmt ? &pParentFmt->GetAttrSet() : 0;
 
@@ -337,7 +337,7 @@ USHORT SwNode::GetSectionLevel() const
 |*
 *******************************************************************/
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 long SwNode::nSerial = 0;
 #endif
 
@@ -369,7 +369,7 @@ SwNode::SwNode( const SwNodeIndex &rWhere, const BYTE nNdType )
         pStartOfSection = (SwStartNode*)this;
     }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     nMySerial = nSerial;
     nSerial++;
 #endif
@@ -402,7 +402,7 @@ SwNode::SwNode( SwNodes& rNodes, ULONG nPos, const BYTE nNdType )
         pStartOfSection = (SwStartNode*)this;
     }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     nMySerial = nSerial;
     nSerial++;
 #endif
@@ -641,7 +641,7 @@ const SwPageDesc* SwNode::FindPageDesc( BOOL bCalcLay,
                         }
                         if( n >= rFmts.Count() )
                         {
-                            ASSERT( !this, "Fly-Section aber kein Format gefunden" );
+                            OSL_ENSURE( !this, "Fly-Section aber kein Format gefunden" );
                             return FALSE;
                         }
                     }
@@ -727,7 +727,7 @@ const SwPageDesc* SwNode::FindPageDesc( BOOL bCalcLay,
                     // kann jetzt nur noch ein Seitengebundener Fly sein
                     // oder irgendetwas neueres.
                     // Hier koennen wir nur noch den Standard returnen
-                    ASSERT( pNd->FindFlyStartNode(),
+                    OSL_ENSURE( pNd->FindFlyStartNode(),
                             "wo befindet sich dieser Node?" );
 
                     pPgDesc = &pDoc->GetPageDesc( 0 );
@@ -1195,7 +1195,7 @@ xub_StrLen SwCntntNode::Len() const { return 0; }
 
 SwFmtColl *SwCntntNode::ChgFmtColl( SwFmtColl *pNewColl )
 {
-    ASSERT( pNewColl, "Collectionpointer ist 0." );
+    OSL_ENSURE( pNewColl, "Collectionpointer ist 0." );
     SwFmtColl *pOldColl = GetFmtColl();
 
     if( pNewColl != pOldColl )
@@ -1339,7 +1339,7 @@ BOOL SwCntntNode::GoPrevious(SwIndex * pIdx, USHORT nMode ) const
 
 void SwCntntNode::MakeFrms( SwCntntNode& rNode )
 {
-    ASSERT( &rNode != this,
+    OSL_ENSURE( &rNode != this,
             "Kein Contentnode oder Copy-Node und neuer Node identisch." );
 
     if( !GetDepends() || &rNode == this )   // gibt es ueberhaupt Frames ??
@@ -1348,7 +1348,7 @@ void SwCntntNode::MakeFrms( SwCntntNode& rNode )
     SwFrm *pFrm, *pNew;
     SwLayoutFrm *pUpper;
     // Frames anlegen fuer Nodes, die vor oder hinter der Tabelle stehen ??
-    ASSERT( FindTableNode() == rNode.FindTableNode(), "Table confusion" )
+    OSL_ENSURE( FindTableNode() == rNode.FindTableNode(), "Table confusion" );
 
     SwNode2Layout aNode2Layout( *this, rNode.GetIndex() );
 
@@ -1430,12 +1430,12 @@ void SwCntntNode::DelFrms()
             !pFrm->GetIndPrev() )
         {
             SwFtnFrm *pFtn = pFrm->FindFtnFrm();
-            ASSERT( pFtn, "You promised a FtnFrm?" );
+            OSL_ENSURE( pFtn, "You promised a FtnFrm?" );
             SwCntntFrm* pCFrm;
             if( !pFtn->GetFollow() && !pFtn->GetMaster() &&
                 0 != ( pCFrm = pFtn->GetRefFromAttr()) && pCFrm->IsFollow() )
             {
-                ASSERT( pCFrm->IsTxtFrm(), "NoTxtFrm has Footnote?" );
+                OSL_ENSURE( pCFrm->IsTxtFrm(), "NoTxtFrm has Footnote?" );
                 ((SwTxtFrm*)pCFrm->FindMaster())->Prepare( PREP_FTN_GONE );
             }
         }
@@ -1527,7 +1527,7 @@ BOOL SwCntntNode::SetAttr(const SfxPoolItem& rAttr )
     if( !GetpSwAttrSet() )            // lasse von den entsprechenden Nodes die
         NewAttrSet( GetDoc()->GetAttrPool() );      // AttrSets anlegen
 
-    ASSERT( GetpSwAttrSet(), "warum wurde kein AttrSet angelegt?" );
+    OSL_ENSURE( GetpSwAttrSet(), "warum wurde kein AttrSet angelegt?" );
 
     if ( IsInCache() )
     {
@@ -1568,7 +1568,7 @@ BOOL SwCntntNode::SetAttr( const SfxItemSet& rSet )
     const SfxPoolItem* pFnd = 0;
     if( SFX_ITEM_SET == rSet.GetItemState( RES_AUTO_STYLE, FALSE, &pFnd ) )
     {
-        ASSERT( rSet.Count() == 1, "SetAutoStyle mixed with other attributes?!" );
+        OSL_ENSURE( rSet.Count() == 1, "SetAutoStyle mixed with other attributes?!" );
         const SwFmtAutoFmt* pTmp = static_cast<const SwFmtAutoFmt*>(pFnd);
 
         // If there already is an attribute set (usually containing a numbering
@@ -1784,7 +1784,7 @@ USHORT SwCntntNode::ClearItemsFromAttrSet( const std::vector<USHORT>& rWhichIds 
     if ( 0 == rWhichIds.size() )
         return nRet;
 
-    ASSERT( GetpSwAttrSet(), "no item set" )
+    OSL_ENSURE( GetpSwAttrSet(), "no item set" );
     SwAttrSet aNewAttrSet( *GetpSwAttrSet() );
     for ( std::vector<USHORT>::const_iterator aIter = rWhichIds.begin();
           aIter != rWhichIds.end();

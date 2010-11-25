@@ -3282,7 +3282,7 @@ void DocxAttributeOutput::FormatULSpace( const SvxULSpaceItem& rULSpace )
     }
     else if (m_rExport.bOutPageDescs )
     {
-        ASSERT( m_rExport.GetCurItemSet(), "Impossible" );
+        OSL_ENSURE( m_rExport.GetCurItemSet(), "Impossible" );
         if ( !m_rExport.GetCurItemSet() )
             return;
 

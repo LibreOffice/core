@@ -41,7 +41,7 @@
 
 #include <svx/svdoutl.hxx>
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 #include <svx/fmglob.hxx>
 #endif
 
@@ -127,7 +127,7 @@ void SwViewImp::PaintLayer( const SdrLayerID _nLayerID,
         if ( (_nLayerID == pIDDMA->GetHellId()) ||
              (_nLayerID == pIDDMA->GetHeavenId()) )
         {
-            ASSERT( _pPageBackgrdColor,
+            OSL_ENSURE( _pPageBackgrdColor,
                     "incorrect usage of SwViewImp::PaintLayer: pPageBackgrdColor have to be set for painting layer <hell> or <heaven>");
             if ( _pPageBackgrdColor )
             {
@@ -217,7 +217,7 @@ void SwViewImp::NotifySizeChg( const Size &rNewSz )
     if ( !bCheckDrawObjs )
         return;
 
-    ASSERT( pSh->getIDocumentDrawModelAccess()->GetDrawModel(), "NotifySizeChg without DrawModel" );
+    OSL_ENSURE( pSh->getIDocumentDrawModelAccess()->GetDrawModel(), "NotifySizeChg without DrawModel" );
     SdrPage* pPage = pSh->getIDocumentDrawModelAccess()->GetDrawModel()->GetPage( 0 );
     const ULONG nObjs = pPage->GetObjCount();
     for( ULONG nObj = 0; nObj < nObjs; ++nObj )

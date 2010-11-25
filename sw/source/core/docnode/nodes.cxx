@@ -81,7 +81,7 @@ SwNodes::SwNodes( SwDoc* pDocument )
 {
     bInNodesDel = bInDelUpdOutl = bInDelUpdNum = FALSE;
 
-    ASSERT( pMyDoc, "in welchem Doc stehe ich denn?" );
+    OSL_ENSURE( pMyDoc, "in welchem Doc stehe ich denn?" );
 
     ULONG nPos = 0;
     SwStartNode* pSttNd = new SwStartNode( *this, nPos++ );
@@ -407,15 +407,15 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, ULONG nSz,
 
         if( !pFrmNd && aFrmNdIdx > rNds.GetEndOfExtras().GetIndex() )
         {
-            ASSERT( !this, "ob das so richtig ist ??" );
+            OSL_ENSURE( !this, "ob das so richtig ist ??" );
             aFrmNdIdx = rNds.GetEndOfContent();
             pFrmNd = rNds.GoPrevSection( &aFrmNdIdx, TRUE, FALSE );
             if( pFrmNd && !((SwCntntNode*)pFrmNd)->GetDepends() )
                 pFrmNd = 0;
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
             if( !pFrmNd )
-                ASSERT( !this, "ChgNode() - kein FrameNode gefunden" );
+                OSL_ENSURE( !this, "ChgNode() - kein FrameNode gefunden" );
 #endif
         }
         if( pFrmNd )
@@ -837,7 +837,7 @@ BOOL SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                 }
                 else                // es wurden alle Nodes innerhalb eines
                 {                   // Start- und End-Nodes verschoben
-                    ASSERT( pAktNode == aSttNdStack[nLevel] ||
+                    OSL_ENSURE( pAktNode == aSttNdStack[nLevel] ||
                             ( pAktNode->IsStartNode() &&
                                 aSttNdStack[nLevel]->IsSectionNode()),
                              "falscher StartNode" );
@@ -919,13 +919,13 @@ BOOL SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                 }
             }
             else {
-                ASSERT( FALSE, "wie kommt diser Node ins Nodes-Array??" );
+                OSL_ENSURE( FALSE, "wie kommt diser Node ins Nodes-Array??" );
             }
             aRg.aEnd--;
             break;
 
         default:
-            ASSERT( FALSE, "was ist das fuer ein Node??" );
+            OSL_ENSURE( FALSE, "was ist das fuer ein Node??" );
             break;
         }
 
@@ -2007,7 +2007,7 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
     if ( &pStt->nNode.GetNode() == &GetEndOfContent() )
     {
         const bool bSuccess = GoPrevious( &pStt->nNode );
-        ASSERT( bSuccess, "Move() - no ContentNode here" );
+        OSL_ENSURE( bSuccess, "Move() - no ContentNode here" );
         (void) bSuccess;
     }
     pStt->nContent.Assign( (*this)[ pStt->nNode ]->GetCntntNode(),
@@ -2226,12 +2226,12 @@ void SwNodes::_CopyNodes( const SwNodeRange& rRange,
                     aInsPos++;  // ueberspringen
             }
             else {
-                ASSERT( FALSE, "wie kommt diser Node ins Nodes-Array??" );
+                OSL_ENSURE( FALSE, "wie kommt diser Node ins Nodes-Array??" );
             }
             break;
 
         default:
-            ASSERT( FALSE, "weder Start-/End-/Content-Node, unbekannter Typ" );
+            OSL_ENSURE( FALSE, "weder Start-/End-/Content-Node, unbekannter Typ" );
         }
         aRg.aStart++;
     }

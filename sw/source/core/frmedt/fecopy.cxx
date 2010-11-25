@@ -103,7 +103,7 @@ using namespace ::com::sun::star;
 
 BOOL SwFEShell::Copy( SwDoc* pClpDoc, const String* pNewClpTxt )
 {
-    ASSERT( pClpDoc, "kein Clipboard-Dokument"  );
+    OSL_ENSURE( pClpDoc, "kein Clipboard-Dokument"  );
 
     pClpDoc->DoUndo( FALSE );       // immer auf FALSE !!
 
@@ -169,7 +169,7 @@ BOOL SwFEShell::Copy( SwDoc* pClpDoc, const String* pNewClpTxt )
         if( rSpzFrmFmts[ 0 ] != pFlyFmt )
         {
             USHORT nPos = rSpzFrmFmts.GetPos( pFlyFmt );
-            ASSERT( nPos != USHRT_MAX, "Fly steht nicht im Spz-Array" );
+            OSL_ENSURE( nPos != USHRT_MAX, "Fly steht nicht im Spz-Array" );
 
             rSpzFrmFmts.Remove( nPos );
             rSpzFrmFmts.Insert( pFlyFmt, 0 );
@@ -468,8 +468,8 @@ BOOL SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
 {
     BOOL bRet = FALSE;
 
-    ASSERT( pDestShell, "Copy ohne DestShell." );
-    ASSERT( this == pDestShell || !pDestShell->IsObjSelected(),
+    OSL_ENSURE( pDestShell, "Copy ohne DestShell." );
+    OSL_ENSURE( this == pDestShell || !pDestShell->IsObjSelected(),
             "Dest-Shell darf nie im Obj-Modus sein" );
 
     SET_CURR_SHELL( pDestShell );
@@ -550,7 +550,7 @@ BOOL SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
                 aNewAnch = pPg->Frm().Pos();
         }
         else {
-            ASSERT( !this, "was fuer ein Anchor ist es denn?" );
+            OSL_ENSURE( !this, "was fuer ein Anchor ist es denn?" );
         }
 
         if( bRet )
@@ -707,7 +707,7 @@ namespace {
 BOOL SwFEShell::Paste( SwDoc* pClpDoc, BOOL bIncludingPageFrames )
 {
     SET_CURR_SHELL( this );
-    ASSERT( pClpDoc, "kein Clipboard-Dokument"  );
+    OSL_ENSURE( pClpDoc, "kein Clipboard-Dokument"  );
     const USHORT nStartPageNumber = GetPhyPageNum();
     // dann bis zum Ende vom Nodes Array
     SwNodeIndex aIdx( pClpDoc->GetNodes().GetEndOfExtras(), 2 );
@@ -773,7 +773,7 @@ BOOL SwFEShell::Paste( SwDoc* pClpDoc, BOOL bIncludingPageFrames )
         while( nCount )
         {
             --nCount;
-            ASSERT( aIdx.GetNode().GetCntntNode(), "Who filled the clipboard?!" )
+            OSL_ENSURE( aIdx.GetNode().GetCntntNode(), "Who filled the clipboard?!" );
             if( aIdx.GetNode().GetCntntNode() ) // robust
             {
                 Insertion aInsertion( PaMPtr( new SwPaM( aIdx ) ),
@@ -874,7 +874,7 @@ BOOL SwFEShell::Paste( SwDoc* pClpDoc, BOOL bIncludingPageFrames )
                 // dann die Tabelle "relativ" kopieren
                 SwTableBox* pBox = pDestNd->GetTable().GetTblBox(
                                         pSttNd->GetIndex() );
-                ASSERT( pBox, "Box steht nicht in dieser Tabelle" );
+                OSL_ENSURE( pBox, "Box steht nicht in dieser Tabelle" );
                 aBoxes.Insert( pBox );
             }
 
@@ -1011,7 +1011,7 @@ BOOL SwFEShell::Paste( SwDoc* pClpDoc, BOOL bIncludingPageFrames )
                         }
                         else
                         {
-                            ASSERT( RES_DRAWFRMFMT == pNew->Which(), "Neues Format.");
+                            OSL_ENSURE( RES_DRAWFRMFMT == pNew->Which(), "Neues Format.");
                             // --> OD 2005-09-01 #i52780# - drawing object has
                             // to be made visible on paste.
                             {
@@ -1223,7 +1223,7 @@ BOOL SwFEShell::PastePages( SwFEShell& rToFill, USHORT nStartPage, USHORT nEndPa
 
 BOOL SwFEShell::GetDrawObjGraphic( ULONG nFmt, Graphic& rGrf ) const
 {
-    ASSERT( Imp()->HasDrawView(), "GetDrawObjGraphic without DrawView?" );
+    OSL_ENSURE( Imp()->HasDrawView(), "GetDrawObjGraphic without DrawView?" );
     const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
     BOOL bConvert = TRUE;
     if( rMrkList.GetMarkCount() )
@@ -1438,7 +1438,7 @@ void SwFEShell::Paste( SvStream& rStrm, USHORT nAction, const Point* pPt )
                         const SwTxtFrm* pTmp = (SwTxtFrm*)pAnchor;
                         do {
                             pTmp = pTmp->FindMaster();
-                            ASSERT( pTmp, "Where's my Master?" );
+                            OSL_ENSURE( pTmp, "Where's my Master?" );
                         } while( pTmp->IsFollow() );
                         pAnchor = pTmp;
                     }

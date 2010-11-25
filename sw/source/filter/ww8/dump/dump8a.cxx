@@ -39,7 +39,7 @@
 #include "ww8darr.hxx"
 #include "ww8dout.hxx"
 
-#define ASSERT( a, b ) ( (a)?(void)0:(void)(*pOut<<endl1<<"ASSERTION failed "<< __FILE__<<__LINE__<< b <<endl1) )
+#define OSL_ENSURE( a, b ) ( (a)?(void)0:(void)(*pOut<<endl1<<"ASSERTION failed "<< __FILE__<<__LINE__<< b <<endl1) )
 
 
 #define nWW8MaxListLevel 9
@@ -1300,7 +1300,7 @@ static void DumpPLCF( long nPos, long nLen, ePLCFT ePlc )
                         ACHTUNG: im FILTER nicht "FALSE" sondern "!this()" schreiben,
                                             da sonst Warning unter OS/2
                     */
-                    ASSERT( FALSE, "Es wurde vergessen, nVersion zu kodieren!" );
+                    OSL_ENSURE( FALSE, "Es wurde vergessen, nVersion zu kodieren!" );
                     return;
     }
 
@@ -1351,7 +1351,7 @@ static void DumpPLCF( long nPos, long nLen, ePLCFT ePlc )
                                             ACHTUNG: im FILTER nicht "FALSE" sondern "!this()" schreiben,
                                                                 da sonst Warning unter OS/2
                                         */
-                                        ASSERT( FALSE, "Es wurde vergessen, nVersion zu kodieren!" );
+                                        OSL_ENSURE( FALSE, "Es wurde vergessen, nVersion zu kodieren!" );
                                         return;
                         }
 
@@ -2650,7 +2650,7 @@ int DoConvert( const String& rName, BYTE nVersion )
                         ACHTUNG: im FILTER nicht "FALSE" sondern "!this()" schreiben,
                                             da sonst Warning unter OS/2
                     */
-                    ASSERT( FALSE, "Es wurde vergessen, nVersion zu kodieren!" );
+                    OSL_ENSURE( FALSE, "Es wurde vergessen, nVersion zu kodieren!" );
                     return 1;
     }
 

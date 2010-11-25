@@ -30,7 +30,7 @@
 #include "precompiled_sw.hxx"
 
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 #include <tools/stream.hxx>
 #endif
 #include <stdlib.h>
@@ -317,7 +317,7 @@ void SwRect::SetUpperRightCorner(  const Point& rNew )
 void SwRect::SetLowerLeftCorner(  const Point& rNew )
     { m_Point = Point(rNew.nA, rNew.nB - m_Size.getHeight()); }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 /*************************************************************************
  *                  operator<<( ostream&, SwRect&)
  *************************************************************************/

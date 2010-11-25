@@ -55,14 +55,9 @@ using namespace com::sun::star;
 
 TYPEINIT1(SwRedlineHint, SfxHint);
 
-#ifndef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 
-    #define _CHECK_REDLINE( pDoc )
-    #define _DEBUG_REDLINE( pDoc )
-
-#else
-
-#define _ERROR_PREFIX "redline table corrupted: "
+    #define _ERROR_PREFIX "redline table corrupted: "
 
     // helper function for lcl_CheckRedline
     // 1. make sure that pPos->nContent points into pPos->nNode
@@ -151,6 +146,12 @@ TYPEINIT1(SwRedlineHint, SfxHint);
     }
 
     #define _DEBUG_REDLINE( pDoc ) lcl_DebugRedline( pDoc );
+
+
+#else
+
+    #define _CHECK_REDLINE( pDoc )
+    #define _DEBUG_REDLINE( pDoc )
 
 #endif
 
@@ -1031,7 +1032,7 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
                             // pNew must be deleted if Insert() wasn't
                             // successful. But that can't happen, since pNew is
                             // part of the original pRedl redline.
-                            // ASSERT( bRet, "Can't insert existing redline?" );
+                            // OSL_ENSURE( bRet, "Can't insert existing redline?" );
 
                             // restart (now with pRedl being split up)
                             n = 0;
@@ -2637,7 +2638,7 @@ BOOL SwRedlineTbl::Insert( SwRedlinePtr& p, BOOL bIns )
         bRet = InsertWithValidRanges( p );
     else
     {
-        ASSERT( !this, "Redline: falscher Bereich" );
+        OSL_ENSURE( !this, "Redline: falscher Bereich" );
     }
     return bRet;
 }
@@ -2654,7 +2655,7 @@ BOOL SwRedlineTbl::Insert( SwRedlinePtr& p, USHORT& rP, BOOL bIns )
         bRet = InsertWithValidRanges( p, &rP );
     else
     {
-        ASSERT( !this, "Redline: falscher Bereich" );
+        OSL_ENSURE( !this, "Redline: falscher Bereich" );
     }
     return bRet;
 }
@@ -3317,7 +3318,7 @@ void SwRedline::CalcStartEnd( ULONG nNdIdx, USHORT& nStart, USHORT& nEnd ) const
         }
         else
         {
-            ASSERT( pREnd->nNode == nNdIdx,
+            OSL_ENSURE( pREnd->nNode == nNdIdx,
                 "SwRedlineItr::Seek: GetRedlinePos Error" );
             nStart = 0;             // Absatz wird vorne ueberlappt
             nEnd = pREnd->nContent.GetIndex();
@@ -3541,7 +3542,7 @@ void SwRedline::DelCopyOfSection()
                 // current ones can be affected.
                 const SwRedlineTbl& rTbl = pDoc->GetRedlineTbl();
                 USHORT n = rTbl.GetPos( this );
-                ASSERT( n != USHRT_MAX, "How strange. We don't exist!" );
+                OSL_ENSURE( n != USHRT_MAX, "How strange. We don't exist!" );
                 for( BOOL bBreak = FALSE; !bBreak && n > 0; )
                 {
                     --n;
@@ -3589,7 +3590,7 @@ void SwRedline::MoveFromSection()
         const SwRedlineTbl& rTbl = pDoc->GetRedlineTbl();
         SvPtrarr aBeforeArr( 16, 16 ), aBehindArr( 16, 16 );
         USHORT nMyPos = rTbl.GetPos( this );
-        ASSERT( this, "this nicht im Array?" );
+        OSL_ENSURE( this, "this nicht im Array?" );
         BOOL bBreak = FALSE;
         USHORT n;
 
@@ -3717,9 +3718,9 @@ void SwRedline::SetContentIdx( const SwNodeIndex* pIdx )
         delete pCntntSect, pCntntSect = 0;
         bIsVisible = FALSE;
     }
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     else
-        ASSERT( !this, "das ist keine gueltige Operation" );
+        OSL_ENSURE( !this, "das ist keine gueltige Operation" );
 #endif
 }
 
@@ -3822,7 +3823,7 @@ const SwRedlineData & SwRedline::GetRedlineData(USHORT nPos) const
         nPos--;
     }
 
-    ASSERT( 0 == nPos, "Pos angabe ist zu gross" );
+    OSL_ENSURE( 0 == nPos, "Pos angabe ist zu gross" );
 
     return *pCur;
 }

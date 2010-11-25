@@ -73,7 +73,7 @@ static ULONG WW1_Read_FieldIniFlags()
 ULONG WW1Reader::Read(SwDoc& rDoc, const String& rBaseURL, SwPaM& rPam, const String& /*cName*/)
 {
     ULONG nRet = ERR_SWG_READ_ERROR;
-    ASSERT(pStrm!=NULL, "W1-Read ohne Stream");
+    OSL_ENSURE(pStrm!=NULL, "W1-Read ohne Stream");
     if (pStrm != NULL)
     {
         BOOL bNew = !bInsertMode;           // Neues Doc ( kein Einfuegen )

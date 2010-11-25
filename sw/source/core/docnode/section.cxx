@@ -323,7 +323,7 @@ bool SwSection::DataEquals(SwSectionData const& rCmp) const
 void SwSection::ImplSetHiddenFlag(bool const bTmpHidden, bool const bCondition)
 {
     SwSectionFmt* pFmt = GetFmt();
-    ASSERT(pFmt, "ImplSetHiddenFlag: no format?");
+    OSL_ENSURE(pFmt, "ImplSetHiddenFlag: no format?");
     if( pFmt )
     {
         const bool bHide = bTmpHidden && bCondition;
@@ -376,7 +376,7 @@ BOOL SwSection::CalcHiddenFlag() const
 bool SwSection::IsProtect() const
 {
     SwSectionFmt *const pFmt( GetFmt() );
-    ASSERT(pFmt, "SwSection::IsProtect: no format?");
+    OSL_ENSURE(pFmt, "SwSection::IsProtect: no format?");
     return (pFmt)
         ?   pFmt->GetProtect().IsCntntProtected()
         :   IsProtectFlag();
@@ -386,7 +386,7 @@ bool SwSection::IsProtect() const
 bool SwSection::IsEditInReadonly() const
 {
     SwSectionFmt *const pFmt( GetFmt() );
-    ASSERT(pFmt, "SwSection::IsEditInReadonly: no format?");
+    OSL_ENSURE(pFmt, "SwSection::IsEditInReadonly: no format?");
     return (pFmt)
         ?   pFmt->GetEditInReadonly().GetValue()
         :   IsEditInReadonlyFlag();
@@ -406,7 +406,7 @@ void SwSection::SetHidden(bool const bFlag)
 void SwSection::SetProtect(bool const bFlag)
 {
     SwSectionFmt *const pFormat( GetFmt() );
-    ASSERT(pFormat, "SwSection::SetProtect: no format?");
+    OSL_ENSURE(pFormat, "SwSection::SetProtect: no format?");
     if (pFormat)
     {
         SvxProtectItem aItem( RES_PROTECT );
@@ -424,7 +424,7 @@ void SwSection::SetProtect(bool const bFlag)
 void SwSection::SetEditInReadonly(bool const bFlag)
 {
     SwSectionFmt *const pFormat( GetFmt() );
-    ASSERT(pFormat, "SwSection::SetEditInReadonly: no format?");
+    OSL_ENSURE(pFormat, "SwSection::SetEditInReadonly: no format?");
     if (pFormat)
     {
         SwFmtEditInReadonly aItem;
@@ -733,7 +733,7 @@ SwSection * SwSectionFmt::GetSection() const
         return (SwSectionPtr)aIter.First( TYPE(SwSection) );
     }
 
-    ASSERT( FALSE, "keine Section als Client." )
+    OSL_ENSURE( FALSE, "keine Section als Client." );
     return 0;
 }
 
@@ -992,7 +992,7 @@ extern "C" {
     {
         const SwSectionFmt* pFSectFmt = (*(SwSectionPtr*)pFirst)->GetFmt();
         const SwSectionFmt* pSSectFmt = (*(SwSectionPtr*)pSecond)->GetFmt();
-        ASSERT( pFSectFmt && pSSectFmt &&
+        OSL_ENSURE( pFSectFmt && pSSectFmt &&
                 pFSectFmt->GetCntnt(FALSE).GetCntntIdx() &&
                 pSSectFmt->GetCntnt(FALSE).GetCntntIdx(),
                     "ungueltige Sections" );
@@ -1011,7 +1011,7 @@ extern "C" {
     {
         const SwSectionPtr pFSect = *(SwSectionPtr*)pFirst;
         const SwSectionPtr pSSect = *(SwSectionPtr*)pSecond;
-        ASSERT( pFSect && pSSect, "ungueltige Sections" );
+        OSL_ENSURE( pFSect && pSSect, "ungueltige Sections" );
         StringCompare const eCmp =
             pFSect->GetSectionName().CompareTo( pSSect->GetSectionName() );
         return eCmp == COMPARE_EQUAL ? 0
@@ -1234,14 +1234,14 @@ void lcl_BreakSectionLinksInSect( const SwSectionNode& rSectNd )
 {
     if ( !rSectNd.GetDoc() )
     {
-        ASSERT( false,
+        OSL_ENSURE( false,
                 "method <lcl_RemoveSectionLinksInSect(..)> - no Doc at SectionNode" );
         return;
     }
 
     if ( !rSectNd.GetSection().IsConnected() )
     {
-        ASSERT( false,
+        OSL_ENSURE( false,
                 "method <lcl_RemoveSectionLinksInSect(..)> - no Link at Section of SectionNode" );
         return;
     }
@@ -1751,7 +1751,7 @@ void SwIntrnlSectRefLink::Closed()
 void SwSection::CreateLink( LinkCreateType eCreateType )
 {
     SwSectionFmt* pFmt = GetFmt();
-    ASSERT(pFmt, "SwSection::CreateLink: no format?");
+    OSL_ENSURE(pFmt, "SwSection::CreateLink: no format?");
     if (!pFmt || (CONTENT_SECTION == m_Data.GetType()))
         return ;
 
@@ -1797,7 +1797,7 @@ void SwSection::CreateLink( LinkCreateType eCreateType )
         }
         break;
     default:
-        ASSERT( !this, "Was ist das fuer ein Link?" )
+        OSL_ENSURE( !this, "Was ist das fuer ein Link?" );
     }
 
     switch( eCreateType )
@@ -1829,7 +1829,7 @@ void SwSection::BreakLink()
     if (m_RefLink.Is())
     {
         SwSectionFmt *const pFormat( GetFmt() );
-        ASSERT(pFormat, "SwSection::BreakLink: no format?");
+        OSL_ENSURE(pFormat, "SwSection::BreakLink: no format?");
         if (pFormat)
         {
             pFormat->GetDoc()->GetLinkManager().Remove( m_RefLink );

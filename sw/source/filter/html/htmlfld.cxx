@@ -559,25 +559,25 @@ void SwHTMLParser::EndField()
         switch( pField->Which() )
         {
         case RES_DOCINFOFLD:
-            ASSERT( ((SwDocInfoField*)pField)->IsFixed(),
+            OSL_ENSURE( ((SwDocInfoField*)pField)->IsFixed(),
                     "DokInfo-Feld haette nicht gemerkt werden muessen" );
             ((SwDocInfoField*)pField)->SetExpansion( aContents );
             break;
 
         case RES_EXTUSERFLD:
-            ASSERT( ((SwExtUserField*)pField)->IsFixed(),
+            OSL_ENSURE( ((SwExtUserField*)pField)->IsFixed(),
                     "ExtUser-Feld haette nicht gemerkt werden muessen" );
             ((SwExtUserField*)pField)->SetExpansion( aContents );
             break;
 
         case RES_AUTHORFLD:
-            ASSERT( ((SwAuthorField*)pField)->IsFixed(),
+            OSL_ENSURE( ((SwAuthorField*)pField)->IsFixed(),
                     "Author-Feld haette nicht gemerkt werden muessen" );
             ((SwAuthorField*)pField)->SetExpansion( aContents );
             break;
 
         case RES_FILENAMEFLD:
-            ASSERT( ((SwFileNameField*)pField)->IsFixed(),
+            OSL_ENSURE( ((SwFileNameField*)pField)->IsFixed(),
                     "FileName-Feld haette nicht gemerkt werden muessen" );
             ((SwFileNameField*)pField)->SetExpansion( aContents );
             break;

@@ -326,7 +326,7 @@ BOOL SwCursor::IsSelOvr( int eFlags )
                 if( rProtect.IsCntntProtected() )
                 {
                     const SwFmtCntnt& rCntnt = pFmt->GetCntnt(FALSE);
-                    ASSERT( rCntnt.GetCntntIdx(), "wo ist der SectionNode?" );
+                    OSL_ENSURE( rCntnt.GetCntntIdx(), "wo ist der SectionNode?" );
                     ULONG nIdx = rCntnt.GetCntntIdx()->GetIndex();
                     if( nSttIdx <= nIdx && nEndIdx >= nIdx )
                     {
@@ -536,7 +536,7 @@ BOOL SwCursor::IsInProtectTable( BOOL bMove, BOOL bChgCrsr )
     // Check for convered cell:
     bool bInCoveredCell = false;
     const SwStartNode* pTmpSttNode = pCNd->FindTableBoxStartNode();
-    ASSERT( pTmpSttNode, "In table, therefore I expect to get a SwTableBoxStartNode" )
+    OSL_ENSURE( pTmpSttNode, "In table, therefore I expect to get a SwTableBoxStartNode" );
     const SwTableBox* pBox = pTmpSttNode ? pTableNode->GetTable().GetTblBox( pTmpSttNode->GetIndex() ) : 0; //Robust #151355
     if ( pBox && pBox->getRowSpan() < 1 ) // Robust #151270
         bInCoveredCell = true;
@@ -1641,7 +1641,7 @@ BOOL SwCursor::LeftRight( BOOL bLeft, USHORT nCnt, USHORT nMode,
     else
         fnGo = CRSR_SKIP_CELLS == nMode ? fnGoCntntCells : fnGoCntnt;
 
-    // ASSERT( not in covered cell )
+    // OSL_ENSURE( not in covered cell )
 
     while( nCnt )
     {
@@ -1835,7 +1835,7 @@ BOOL SwCursor::UpDown( BOOL bUp, USHORT nCnt,
             // set the point to the last frame in the table box. This is
             // only necessary if we do not already have a table selection
             const SwStartNode* pTblNd = GetNode( TRUE )->FindTableBoxStartNode();
-            ASSERT( pTblNd, "pTblCrsr without SwTableNode?" )
+            OSL_ENSURE( pTblNd, "pTblCrsr without SwTableNode?" );
 
             if ( pTblNd ) // safety first
             {

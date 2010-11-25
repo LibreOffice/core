@@ -102,12 +102,12 @@ void SwDDETable::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
 
 void SwDDETable::ChangeContent()
 {
-    ASSERT( GetFrmFmt(), "Kein FrameFormat" );
+    OSL_ENSURE( GetFrmFmt(), "Kein FrameFormat" );
 
     // Stehen wir im richtigen NodesArray (Wegen UNDO)
     if( !aLines.Count() )
         return;
-    ASSERT( GetTabSortBoxes().Count(), "Tabelle ohne Inhalt?" );
+    OSL_ENSURE( GetTabSortBoxes().Count(), "Tabelle ohne Inhalt?" );
     if( !GetTabSortBoxes()[0]->GetSttNd()->GetNodes().IsDocNodes() )
         return;
 
@@ -124,10 +124,10 @@ void SwDDETable::ChangeContent()
         for( USHORT i = 0; i < pLine->GetTabBoxes().Count(); ++i )
         {
             SwTableBox* pBox = pLine->GetTabBoxes()[ i ];
-            ASSERT( pBox->GetSttIdx(), "keine InhaltsBox" );
+            OSL_ENSURE( pBox->GetSttIdx(), "keine InhaltsBox" );
             SwNodeIndex aNdIdx( *pBox->GetSttNd(), 1 );
             SwTxtNode* pTxtNode = aNdIdx.GetNode().GetTxtNode();
-            ASSERT( pTxtNode, "Kein Node" );
+            OSL_ENSURE( pTxtNode, "Kein Node" );
             SwIndex aCntIdx( pTxtNode, 0 );
             pTxtNode->EraseText( aCntIdx );
             pTxtNode->InsertText( aLine.GetToken( i, '\t' ), aCntIdx );
@@ -153,19 +153,19 @@ SwDDEFieldType* SwDDETable::GetDDEFldType()
 BOOL SwDDETable::NoDDETable()
 {
     // suche den TabellenNode
-    ASSERT( GetFrmFmt(), "Kein FrameFormat" );
+    OSL_ENSURE( GetFrmFmt(), "Kein FrameFormat" );
     SwDoc* pDoc = GetFrmFmt()->GetDoc();
 
     // Stehen wir im richtigen NodesArray (Wegen UNDO)
     if( !aLines.Count() )
         return FALSE;
-    ASSERT( GetTabSortBoxes().Count(), "Tabelle ohne Inhalt?" );
+    OSL_ENSURE( GetTabSortBoxes().Count(), "Tabelle ohne Inhalt?" );
     SwNode* pNd = (SwNode*)GetTabSortBoxes()[0]->GetSttNd();
     if( !pNd->GetNodes().IsDocNodes() )
         return FALSE;
 
     SwTableNode* pTblNd = pNd->FindTableNode();
-    ASSERT( pTblNd, "wo steht denn die Tabelle ?");
+    OSL_ENSURE( pTblNd, "wo steht denn die Tabelle ?");
 
     SwTable* pNewTbl = new SwTable( *this );
 

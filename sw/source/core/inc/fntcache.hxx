@@ -52,7 +52,7 @@ class SwFntCache : public SwCache
 public:
 
     inline SwFntCache() : SwCache(50,50
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     , ByteString( RTL_CONSTASCII_STRINGPARAM(
                         "Globaler Font-Cache pFntCache" ))
 #endif

@@ -113,7 +113,7 @@ public:
         { return pExt->Leave(rFnt, nNew ); }
     inline sal_Bool ExtOn() { if( pExt ) return pExt->IsOn(); return sal_False; }
     inline void UpdateExtFont( SwFont &rFnt ) {
-        ASSERT( ExtOn(), "UpdateExtFont without ExtOn" )
+        OSL_ENSURE( ExtOn(), "UpdateExtFont without ExtOn" );
         pExt->UpdateFont( rFnt ); }
 };
 

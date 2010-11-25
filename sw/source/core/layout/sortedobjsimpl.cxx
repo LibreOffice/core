@@ -67,7 +67,7 @@ SwAnchoredObject* SwSortedObjsImpl::operator[]( sal_uInt32 _nIndex )
 
     if ( _nIndex >= Count() )
     {
-        ASSERT( false, "<SwSortedObjsImpl::operator[]> - index out of range" );
+        OSL_ENSURE( false, "<SwSortedObjsImpl::operator[]> - index out of range" );
     }
     else
     {
@@ -220,7 +220,7 @@ bool SwSortedObjsImpl::Insert( SwAnchoredObject& _rAnchoredObj )
     {
         // list already contains object
 #if OSL_DEBUG_LEVEL > 1
-        ASSERT( false,
+        OSL_ENSURE( false,
                 "<SwSortedObjsImpl::Insert()> - already contains object" );
 #endif
         return true;
@@ -250,7 +250,7 @@ bool SwSortedObjsImpl::Remove( SwAnchoredObject& _rAnchoredObj )
         // object not found.
         bRet = false;
 #if OSL_DEBUG_LEVEL > 1
-        ASSERT( false,
+        OSL_ENSURE( false,
                 "<SwSortedObjsImpl::Remove()> - object not found" );
 #endif
     }
@@ -275,7 +275,7 @@ bool SwSortedObjsImpl::Update( SwAnchoredObject& _rAnchoredObj )
     if ( !Contains( _rAnchoredObj ) )
     {
         // given anchored object not found in list
-        ASSERT( false,
+        OSL_ENSURE( false,
                 "<SwSortedObjsImpl::Update(..) - sorted list doesn't contain given anchored object" );
         return false;
     }

@@ -157,14 +157,14 @@ const SwRect& SwFEShell::GetAnyCurRect( CurRectType eType, const Point* pPt,
         case RECT_OUTTABSECTION :   if( pFrm->IsInTab() )
                                         pFrm = pFrm->FindTabFrm();
                                     else {
-                                        ASSERT( FALSE, "Missing Table" );
+                                        OSL_ENSURE( FALSE, "Missing Table" );
                                     }
                                     /* KEIN BREAK */
         case RECT_SECTION_PRT:
         case RECT_SECTION:          if( pFrm->IsInSct() )
                                         pFrm = pFrm->FindSctFrm();
                                     else {
-                                        ASSERT( FALSE, "Missing section" );
+                                        OSL_ENSURE( FALSE, "Missing section" );
                                     }
 
                                     if( RECT_OUTTABSECTION_PRT == eType ||
@@ -301,7 +301,7 @@ USHORT SwFEShell::GetFrmType( const Point *pPt, BOOL bStopAtFly ) const
                                     nReturn |= FRMTYPE_FLY_ATCNT;
                                 else
                                 {
-                                    ASSERT( ((SwFlyFrm*)pFrm)->IsFlyInCntFrm(),
+                                    OSL_ENSURE( ((SwFlyFrm*)pFrm)->IsFlyInCntFrm(),
                                             "Neuer Rahmentyp?" );
                                     nReturn |= FRMTYPE_FLY_INCNT;
                                 }
@@ -397,7 +397,7 @@ USHORT SwFEShell::GetVirtPageNum( const BOOL bCalcFrm )
 void lcl_SetAPageOffset( USHORT nOffset, SwPageFrm* pPage, SwFEShell* pThis )
 {
     pThis->StartAllAction();
-    ASSERT( pPage->FindFirstBodyCntnt(),
+    OSL_ENSURE( pPage->FindFirstBodyCntnt(),
             "SwFEShell _SetAPageOffset() ohne CntntFrm" );
 
     SwFmtPageDesc aDesc( pPage->GetPageDesc() );
@@ -545,7 +545,7 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const String &rTxt, const 
             }
             break;
         default:
-            ASSERT( !this, "Crsr weder in Tabelle noch in Fly." );
+            OSL_ENSURE( !this, "Crsr weder in Tabelle noch in Fly." );
         }
 
         if( nIdx )
@@ -582,7 +582,7 @@ BOOL SwFEShell::Sort(const SwSortOptions& rOpt)
         // Tabelle sortieren
         // pruefe ob vom aktuellen Crsr der SPoint/Mark in einer Tabelle stehen
         SwFrm *pFrm = GetCurrFrm( FALSE );
-        ASSERT( pFrm->FindTabFrm(), "Crsr nicht in Tabelle." );
+        OSL_ENSURE( pFrm->FindTabFrm(), "Crsr nicht in Tabelle." );
 
         // lasse ueber das Layout die Boxen suchen
         SwSelBoxes  aBoxes;
@@ -693,7 +693,7 @@ USHORT SwFEShell::_GetCurColNum( const SwFrm *pFrm,
 
 USHORT SwFEShell::GetCurColNum( SwGetCurColNumPara* pPara ) const
 {
-    ASSERT( GetCurrFrm(), "Crsr geparkt?" );
+    OSL_ENSURE( GetCurrFrm(), "Crsr geparkt?" );
     return _GetCurColNum( GetCurrFrm(), pPara );
 }
 
@@ -701,12 +701,12 @@ USHORT SwFEShell::GetCurOutColNum( SwGetCurColNumPara* pPara ) const
 {
     USHORT nRet = 0;
     SwFrm* pFrm = GetCurrFrm();
-    ASSERT( pFrm, "Crsr geparkt?" );
+    OSL_ENSURE( pFrm, "Crsr geparkt?" );
     if( pFrm )
     {
         pFrm = pFrm->IsInTab() ? (SwFrm*)pFrm->FindTabFrm()
                                : (SwFrm*)pFrm->FindSctFrm();
-        ASSERT( pFrm, "No Tab, no Sect" );
+        OSL_ENSURE( pFrm, "No Tab, no Sect" );
         if( pFrm )
             nRet = _GetCurColNum( pFrm, pPara );
     }
@@ -939,7 +939,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
             }
             else
             {
-                ASSERT( rVertEnvironLayFrm.IsPageFrm(),
+                OSL_ENSURE( rVertEnvironLayFrm.IsPageFrm(),
                         "<SwFEShell::CalcBoundRect(..)> - not following text flow, but vertical environment *not* page!" );
                 aVertEnvironRect = rVertEnvironLayFrm.Frm();
                 // OD 19.09.2003 #i18732# - adjustment vertical 'virtual' anchor position
@@ -1255,7 +1255,7 @@ BOOL SwFEShell::IsFrmVertical(BOOL bEnvironment, BOOL& bRTL) const
         // --> OD 2006-01-06 #123831# - make code robust:
         if ( !pObj )
         {
-            ASSERT( false,
+            OSL_ENSURE( false,
                     "<SwFEShell::IsFrmVertical(..)> - missing SdrObject instance in marked object list -> This is a serious situation, please inform OD" );
             return bVert;
         }
@@ -1265,7 +1265,7 @@ BOOL SwFEShell::IsFrmVertical(BOOL bEnvironment, BOOL& bRTL) const
         // --> OD 2006-01-06 #123831# - make code robust:
         if ( !pContact )
         {
-            ASSERT( false,
+            OSL_ENSURE( false,
                     "<SwFEShell::IsFrmVertical(..)> - missing SwContact instance at marked object -> This is a serious situation, please inform OD" );
             return bVert;
         }
@@ -1274,7 +1274,7 @@ BOOL SwFEShell::IsFrmVertical(BOOL bEnvironment, BOOL& bRTL) const
         // --> OD 2006-01-06 #123831# - make code robust:
         if ( !pRef )
         {
-            ASSERT( false,
+            OSL_ENSURE( false,
                     "<SwFEShell::IsFrmVertical(..)> - missing anchor frame at marked object -> This is a serious situation, please inform OD" );
             return bVert;
         }

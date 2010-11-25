@@ -39,47 +39,47 @@
 
 void SwFrm::Format( const SwBorderAttrs * )
 {
-    ASSERT( FALSE, "Format() der Basisklasse gerufen." );
+    OSL_ENSURE( FALSE, "Format() der Basisklasse gerufen." );
 }
 
 void SwFrm::Paint(const SwRect &, const SwPrtOptions * ) const
 {
-    ASSERT( FALSE, "Paint() der Basisklasse gerufen." );
+    OSL_ENSURE( FALSE, "Paint() der Basisklasse gerufen." );
 }
 
 sal_Bool SwCntntFrm::WouldFit( SwTwips &, sal_Bool&, sal_Bool )
 {
-    ASSERT( FALSE, "WouldFit des CntntFrm gerufen." );
+    OSL_ENSURE( FALSE, "WouldFit des CntntFrm gerufen." );
     return FALSE;
 }
 
 bool SwFrm::FillSelection( SwSelectionList& , const SwRect& ) const
 {
-    ASSERT( false, "Don't call this function at the base class!" );
+    OSL_ENSURE( false, "Don't call this function at the base class!" );
     return false;
 }
 
 BOOL SwFrm::GetCrsrOfst( SwPosition *, Point&, SwCrsrMoveState*  ) const
 {
-    ASSERT( FALSE, "GetCrsrOfst der Basisklasse, hi!" );
+    OSL_ENSURE( FALSE, "GetCrsrOfst der Basisklasse, hi!" );
     return FALSE;
 }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 
 void SwRootFrm::Cut()
 {
-    ASSERT( FALSE, "Cut() des RootFrm gerufen." );
+    OSL_ENSURE( FALSE, "Cut() des RootFrm gerufen." );
 }
 
 void SwRootFrm::Paste( SwFrm *, SwFrm * )
 {
-    ASSERT( FALSE, "Paste() des RootFrm gerufen." );
+    OSL_ENSURE( FALSE, "Paste() des RootFrm gerufen." );
 }
 
 void SwFlyFrm::Paste( SwFrm *, SwFrm * )
 {
-    ASSERT( FALSE, "Paste() des FlyFrm gerufen." );
+    OSL_ENSURE( FALSE, "Paste() des FlyFrm gerufen." );
 }
 
 #endif
@@ -87,7 +87,7 @@ void SwFlyFrm::Paste( SwFrm *, SwFrm * )
 BOOL SwFrm::GetCharRect( SwRect&, const SwPosition&,
                          SwCrsrMoveState* ) const
 {
-    ASSERT( FALSE, "GetCharRect() der Basis gerufen." );
+    OSL_ENSURE( FALSE, "GetCharRect() der Basis gerufen." );
     return FALSE;
 }
 

@@ -372,12 +372,12 @@ BOOL SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
 
         if( pColl->IsAssignedToListLevelOfOutlineStyle() )
         {
-        // ASSERT(pColl->GetOutlineLevel() < MAXLEVEL,  //#outline level,removed by zhaojianwei
+        // OSL_ENSURE(pColl->GetOutlineLevel() < MAXLEVEL,  //#outline level,removed by zhaojianwei
         //         "non outline node in outline nodes?");
         //int nLevel = pColl->GetOutlineLevel();
             const int nLevel = pColl->GetAssignedOutlineStyleLevel();//#outline level,add by zhaojianwei
 
-            ASSERT(aMoveArr[nLevel] >= 0,
+            OSL_ENSURE(aMoveArr[nLevel] >= 0,
                 "move table: current TxtColl not found when building table!");
 
 
@@ -465,7 +465,7 @@ BOOL SwDoc::MoveOutlinePara( const SwPaM& rPam, short nOffset )
         nAktPos = nTmpPos;
     if( aEndRg == aSttRg )
     {
-        ASSERT( false, "Moving outlines: Surprising selection" );
+        OSL_ENSURE( false, "Moving outlines: Surprising selection" );
         aEndRg++;
     }
 
@@ -547,7 +547,7 @@ BOOL SwDoc::MoveOutlinePara( const SwPaM& rPam, short nOffset )
     if( pNd->FindTableNode() )
         return FALSE;
 
-    ASSERT( aSttRg.GetIndex() > nNewPos || nNewPos >= aEndRg.GetIndex(),
+    OSL_ENSURE( aSttRg.GetIndex() > nNewPos || nNewPos >= aEndRg.GetIndex(),
                 "Position liegt im MoveBereich" );
 
     // wurde ein Position in den Sonderbereichen errechnet, dann
@@ -676,7 +676,7 @@ USHORT lcl_FindOutlineNum( const SwNodes& rNds, String& rName )
                 // has as hard attribute 'no numbering' set, has an outline level,
                 // but no numbering tree node. Thus, consider this situation in
                 // the assertion condition.
-                ASSERT( !pNd->GetNumRule(),
+                OSL_ENSURE( !pNd->GetNumRule(),
                         "<lcl_FindOutlineNum(..)> - text node with outline level and numbering rule, but without numbering tree node. This is a serious defect -> inform OD" );
             }
         }
@@ -844,7 +844,7 @@ BOOL SwDoc::GotoOutline( SwPosition& rPos, const String& rName ) const
 void lcl_ChgNumRule( SwDoc& rDoc, const SwNumRule& rRule )
 {
     SwNumRule* pOld = rDoc.FindNumRulePtr( rRule.GetName() );
-    ASSERT( pOld, "ohne die alte NumRule geht gar nichts" );
+    OSL_ENSURE( pOld, "ohne die alte NumRule geht gar nichts" );
 
     USHORT nChgFmtLevel = 0, nMask = 1;
     BYTE n;
@@ -987,7 +987,7 @@ void SwDoc::SetNumRule( const SwPaM& rPam,
             {
                 // create new list and apply its list id
                 SwList* pNewList = createList( String(), pNew->GetName() );
-                ASSERT( pNewList,
+                OSL_ENSURE( pNewList,
                         "<SwDoc::SetNumRule(..)> - could not create new list. Serious defect -> please inform OD." );
                 sListId = pNewList->GetListId();
             }
@@ -1169,7 +1169,7 @@ BOOL SwDoc::DelNumRule( const String& rName, BOOL bBroadcast )
 
     if ( (*pNumRuleTbl)[ nPos ] == GetOutlineNumRule() )
     {
-        ASSERT( false,
+        OSL_ENSURE( false,
                 "<SwDoc::DelNumRule(..)> - No deletion of outline list style. This is serious defect - please inform OD" );
         return FALSE;
     }
@@ -1445,7 +1445,7 @@ namespace
 
 void SwDoc::MakeUniqueNumRules(const SwPaM & rPaM)
 {
-    ASSERT( rPaM.GetDoc() == this, "need same doc" );
+    OSL_ENSURE( rPaM.GetDoc() == this, "need same doc" );
 
 //    map<SwNumRule *, SwNumRule *> aMyNumRuleMap;
     ::std::map<SwNumRule *, ListStyleData> aMyNumRuleMap;
@@ -1616,7 +1616,7 @@ void SwDoc::InvalidateNumRules()
 BOOL lcl_IsNumOk( BYTE nSrchNum, BYTE& rLower, BYTE& rUpper,
                     BOOL bOverUpper, BYTE nNumber )
 {
-    ASSERT( nNumber < MAXLEVEL,
+    OSL_ENSURE( nNumber < MAXLEVEL,
             "<lcl_IsNumOk(..)> - misusage of method" );
 
     BOOL bRet = FALSE;
@@ -2174,7 +2174,7 @@ BOOL SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, BOOL bIsOutlMv )
                    the previous content node. */
                 SwPaM aInsPam(aInsPos);
                 BOOL bMoved = aInsPam.Move(fnMoveBackward);
-                ASSERT(bMoved, "No content node found!");
+                OSL_ENSURE(bMoved, "No content node found!");
 
                 if (bMoved)
                 {
@@ -2583,7 +2583,7 @@ void SwDoc::addListItem( const SwNodeNum& rNodeNum )
 
     const bool bAlreadyInserted(
             mpListItemsList->find( &rNodeNum ) != mpListItemsList->end() );
-    ASSERT( !bAlreadyInserted,
+    OSL_ENSURE( !bAlreadyInserted,
             "<SwDoc::InsertListItem(..)> - <SwNodeNum> instance already registered as numbered item!" );
     if ( !bAlreadyInserted )
     {
@@ -2601,7 +2601,7 @@ void SwDoc::removeListItem( const SwNodeNum& rNodeNum )
     const tImplSortedNodeNumList::size_type nDeleted = mpListItemsList->erase( &rNodeNum );
     if ( nDeleted > 1 )
     {
-        ASSERT( false,
+        OSL_ENSURE( false,
                 "<SwDoc::RemoveListItem(..)> - <SwNodeNum> was registered more than once as numbered item!" );
     }
 }
@@ -2698,7 +2698,7 @@ SwList* SwDoc::createList( String sListId,
 
     if ( getListByName( sListId ) )
     {
-        ASSERT( false,
+        OSL_ENSURE( false,
                 "<SwDoc::createList(..)> - provided list id already used. Serious defect -> please inform OD." );
         return 0;
     }
@@ -2706,7 +2706,7 @@ SwList* SwDoc::createList( String sListId,
     SwNumRule* pDefaultNumRuleForNewList = FindNumRulePtr( sDefaultListStyleName );
     if ( !pDefaultNumRuleForNewList )
     {
-        ASSERT( false,
+        OSL_ENSURE( false,
                 "<SwDoc::createList(..)> - for provided default list style name no list style is found. Serious defect -> please inform OD." );
         return 0;
     }
@@ -2745,14 +2745,14 @@ SwList* SwDoc::createListForListStyle( const String sListStyleName )
 {
     if ( sListStyleName.Len() == 0 )
     {
-        ASSERT( false,
+        OSL_ENSURE( false,
                 "<SwDoc::createListForListStyle(..)> - no list style name provided. Serious defect -> please inform OD." );
         return 0;
     }
 
     if ( getListForListStyle( sListStyleName ) )
     {
-        ASSERT( false,
+        OSL_ENSURE( false,
                 "<SwDoc::createListForListStyle(..)> - a list for the provided list style name already exists. Serious defect -> please inform OD." );
         return 0;
     }
@@ -2760,7 +2760,7 @@ SwList* SwDoc::createListForListStyle( const String sListStyleName )
     SwNumRule* pNumRule = FindNumRulePtr( sListStyleName );
     if ( !pNumRule )
     {
-        ASSERT( false,
+        OSL_ENSURE( false,
                 "<SwDoc::createListForListStyle(..)> - for provided list style name no list style is found. Serious defect -> please inform OD." );
         return 0;
     }
@@ -2796,7 +2796,7 @@ void SwDoc::deleteListForListStyle( const String sListStyleName )
     String sListId;
     {
         SwList* pList = getListForListStyle( sListStyleName );
-        ASSERT( pList,
+        OSL_ENSURE( pList,
                 "<SwDoc::deleteListForListStyle(..)> - misusage of method: no list found for given list style name" );
         if ( pList )
         {
@@ -2814,7 +2814,7 @@ void SwDoc::trackChangeOfListStyleName( const String sListStyleName,
                                         const String sNewListStyleName )
 {
     SwList* pList = getListForListStyle( sListStyleName );
-    ASSERT( pList,
+    OSL_ENSURE( pList,
             "<SwDoc::changeOfListStyleName(..)> - misusage of method: no list found for given list style name" );
 
     if ( pList != 0 )

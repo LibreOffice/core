@@ -125,7 +125,7 @@ SwTabFrm::SwTabFrm( SwTable &rTab ):
         else
             delete pNew;
     }
-    ASSERT( Lower() && Lower()->IsRowFrm(), "SwTabFrm::SwTabFrm: No rows." );
+    OSL_ENSURE( Lower() && Lower()->IsRowFrm(), "SwTabFrm::SwTabFrm: No rows." );
 }
 
 SwTabFrm::SwTabFrm( SwTabFrm &rTab ) :
@@ -200,7 +200,7 @@ void SwTabFrm::JoinAndDelFollows()
 |*************************************************************************/
 void SwTabFrm::RegistFlys()
 {
-    ASSERT( Lower() && Lower()->IsRowFrm(), "Keine Zeilen." );
+    OSL_ENSURE( Lower() && Lower()->IsRowFrm(), "Keine Zeilen." );
 
     SwPageFrm *pPage = FindPageFrm();
     if ( pPage )
@@ -271,7 +271,7 @@ SwTwips lcl_GetHeightOfRows( const SwFrm* pStart, long nCount )
 //
 SwRowFrm* lcl_InsertNewFollowFlowLine( SwTabFrm& rTab, const SwFrm& rTmpRow, bool bRowSpanLine )
 {
-    ASSERT( rTmpRow.IsRowFrm(), "No row frame to copy for FollowFlowLine" )
+    OSL_ENSURE( rTmpRow.IsRowFrm(), "No row frame to copy for FollowFlowLine" );
     const SwRowFrm& rRow = (SwRowFrm&)rTmpRow;
 
     rTab.SetFollowFlowLine( TRUE );
@@ -293,7 +293,7 @@ void lcl_InvalidateLowerObjs( SwLayoutFrm& _rLayoutFrm,
     if ( !_pPageFrm )
     {
         _pPageFrm = _rLayoutFrm.FindPageFrm();
-        ASSERT( _pPageFrm,
+        OSL_ENSURE( _pPageFrm,
                 "<lcl_InvalidateLowerObjs(..)> - missing page frame -> no move of lower objects out of range" );
         if ( !_pPageFrm )
         {
@@ -460,7 +460,7 @@ void lcl_MoveRowContent( SwRowFrm& rSourceLine, SwRowFrm& rDestLine )
                     while ( pTmpDestRow->GetNext() )
                         pTmpDestRow = (SwRowFrm*)pTmpDestRow->GetNext();
 
-                    ASSERT( pTmpDestRow->GetFollowRow() == pTmpSourceRow, "Knoten in der Tabelle" )
+                    OSL_ENSURE( pTmpDestRow->GetFollowRow() == pTmpSourceRow, "Knoten in der Tabelle" );
 
                     lcl_MoveRowContent( *pTmpSourceRow, *pTmpDestRow );
                     pTmpDestRow->SetFollowRow( pTmpSourceRow->GetFollowRow() );
@@ -650,7 +650,7 @@ void lcl_PostprocessRowsInCells( SwTabFrm& rTab, SwRowFrm& rLastLine )
 
             if ( NULL != pRowFrm->GetPrev() && !pRowFrm->ContainsCntnt() )
             {
-                ASSERT( pRowFrm->GetFollowRow(), "Deleting row frame without follow" )
+                OSL_ENSURE( pRowFrm->GetFollowRow(), "Deleting row frame without follow" );
 
                 // The footnotes have to be moved:
                 lcl_MoveFootnotes( rTab, *rTab.GetFollow(), *pRowFrm );
@@ -944,9 +944,9 @@ bool SwTabFrm::RemoveFollowFlowLine()
     // find last row in master
     SwFrm* pLastLine = GetLastLower();
 
-    ASSERT( HasFollowFlowLine() &&
+    OSL_ENSURE( HasFollowFlowLine() &&
             pFollowFlowLine &&
-            pLastLine, "There should be a flowline in the follow" )
+            pLastLine, "There should be a flowline in the follow" );
 
     // We have to reset the flag here, because lcl_MoveRowContent
     // calls a GrowFrm(), which has a different bahavior if
@@ -1053,7 +1053,7 @@ bool SwTabFrm::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowKee
     bool bRet = true;
 
     SWRECTFN( this )
-    //ASSERT( bVert ? nCutPos >= Frm().Left() &&
+    // OSL_ENSURE( bVert ? nCutPos >= Frm().Left() &&
     //                nCutPos <= Frm().Left() + Frm().Width() :
     //                nCutPos >= Frm().Top() && nCutPos <= Frm().Bottom(), "SplitLine out of table." );
 
@@ -1132,7 +1132,7 @@ bool SwTabFrm::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowKee
         // At least one more non-heading row has to stay in this table in
         // order to avoid loops:
         //
-        ASSERT( !GetIndPrev(), "Table is supposed to be at beginning" )
+        OSL_ENSURE( !GetIndPrev(), "Table is supposed to be at beginning" );
         bKeepNextRow = true;
     }
     else if ( !GetIndPrev() && nRepeat == nRowCount )
@@ -1410,7 +1410,7 @@ bool SwTabFrm::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowKee
 
 bool SwTabFrm::Join()
 {
-    ASSERT( !HasFollowFlowLine(), "Joining follow flow line" )
+    OSL_ENSURE( !HasFollowFlowLine(), "Joining follow flow line" );
 
     SwTabFrm *pFoll = GetFollow();
     SwTwips nHeight = 0;    //Gesamthoehe der eingefuegten Zeilen als Return.
@@ -1592,7 +1592,7 @@ bool MA_FASTCALL lcl_CalcLowers( SwLayoutFrm* pLay, const SwLayoutFrm* pDontLeav
             // to format the floating screen objects
             // --> OD 2005-05-03 #i46941# - frame has to be valid
             // Note: frame could be invalid after calling its format, if it's locked.
-            ASSERT( !pCnt->IsTxtFrm() ||
+            OSL_ENSURE( !pCnt->IsTxtFrm() ||
                     pCnt->IsValid() ||
                     static_cast<SwTxtFrm*>(pCnt)->IsJoinLocked(),
                     "<lcl_CalcLowers(..)> - text frame invalid and not locked." );
@@ -1620,7 +1620,7 @@ bool MA_FASTCALL lcl_CalcLowers( SwLayoutFrm* pLay, const SwLayoutFrm* pDontLeav
                     }
 
 #if OSL_DEBUG_LEVEL > 1
-                    ASSERT( false, "LoopControl in lcl_CalcLowers" )
+                    OSL_ENSURE( false, "LoopControl in lcl_CalcLowers" );
 #endif
                 }
             }
@@ -1710,9 +1710,9 @@ void MA_FASTCALL lcl_RecalcRow( SwRowFrm& rRow, long nBottom )
             if ( ++nLoopControlRuns_2 > nLoopControlMax )
             {
 #if OSL_DEBUG_LEVEL > 1
-                ASSERT( 0 != nLoopControlStage_2, "LoopControl_2 in lcl_RecalcRow: Stage 1!" );
-                ASSERT( 1 != nLoopControlStage_2, "LoopControl_2 in lcl_RecalcRow: Stage 2!!" );
-                ASSERT( 2 >  nLoopControlStage_2, "LoopControl_2 in lcl_RecalcRow: Stage 3!!!" );
+                OSL_ENSURE( 0 != nLoopControlStage_2, "LoopControl_2 in lcl_RecalcRow: Stage 1!" );
+                OSL_ENSURE( 1 != nLoopControlStage_2, "LoopControl_2 in lcl_RecalcRow: Stage 2!!" );
+                OSL_ENSURE( 2 >  nLoopControlStage_2, "LoopControl_2 in lcl_RecalcRow: Stage 3!!!" );
 #endif
                 rRow.ValidateThisAndAllLowers( nLoopControlStage_2++ );
                 nLoopControlRuns_2 = 0;
@@ -1759,9 +1759,9 @@ void MA_FASTCALL lcl_RecalcRow( SwRowFrm& rRow, long nBottom )
                 if ( ++nLoopControlRuns_1 > nLoopControlMax )
                 {
 #if OSL_DEBUG_LEVEL > 1
-                    ASSERT( 0 != nLoopControlStage_1, "LoopControl_1 in lcl_RecalcRow: Stage 1!" );
-                    ASSERT( 1 != nLoopControlStage_1, "LoopControl_1 in lcl_RecalcRow: Stage 2!!" );
-                    ASSERT( 2 >  nLoopControlStage_1, "LoopControl_1 in lcl_RecalcRow: Stage 3!!!" );
+                    OSL_ENSURE( 0 != nLoopControlStage_1, "LoopControl_1 in lcl_RecalcRow: Stage 1!" );
+                    OSL_ENSURE( 1 != nLoopControlStage_1, "LoopControl_1 in lcl_RecalcRow: Stage 2!!" );
+                    OSL_ENSURE( 2 >  nLoopControlStage_1, "LoopControl_1 in lcl_RecalcRow: Stage 3!!!" );
 #endif
                     rRow.ValidateThisAndAllLowers( nLoopControlStage_1++ );
                     nLoopControlRuns_1 = 0;
@@ -1896,8 +1896,8 @@ void SwTabFrm::MakeAll()
     if ( HasFollow() )
     {
         SwTabFrm* pFollowFrm = (SwTabFrm*)GetFollow();
-        ASSERT( !pFollowFrm->IsJoinLocked() || !pFollowFrm->IsRebuildLastLine(),
-                "SwTabFrm::MakeAll for master while follow is in RebuildLastLine()" )
+        OSL_ENSURE( !pFollowFrm->IsJoinLocked() || !pFollowFrm->IsRebuildLastLine(),
+                "SwTabFrm::MakeAll for master while follow is in RebuildLastLine()" );
         if ( pFollowFrm->IsJoinLocked() && pFollowFrm->IsRebuildLastLine() )
             return;
     }
@@ -2720,7 +2720,7 @@ void SwTabFrm::MakeAll()
 #if OSL_DEBUG_LEVEL > 1
             else
             {
-                ASSERT( false, "debug assertion: <SwTabFrm::MakeAll()> - format of table lowers suppressed by fix i44910" );
+                OSL_ENSURE( false, "debug assertion: <SwTabFrm::MakeAll()> - format of table lowers suppressed by fix i44910" );
             }
 #endif
             // <--
@@ -2916,7 +2916,7 @@ BOOL SwTabFrm::CalcFlyOffsets( SwTwips& rUpper,
 |*************************************************************************/
 void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
 {
-    ASSERT( pAttrs, "TabFrm::Format, pAttrs ist 0." );
+    OSL_ENSURE( pAttrs, "TabFrm::Format, pAttrs ist 0." );
 
     SWRECTFN( this )
     if ( !bValidSize )
@@ -3121,7 +3121,7 @@ void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
                 }
                 break;
             default:
-                ASSERT( FALSE, "Ungueltige orientation fuer Table." );
+                OSL_ENSURE( FALSE, "Ungueltige orientation fuer Table." );
         }
 
         // --> OD 2004-07-15 #i26250# - extend bottom printing area, if table
@@ -3496,10 +3496,10 @@ SwCntntFrm *SwTabFrm::FindLastCntnt()
             // Spalten abklappern, dies erledigt SwSectionFrm::FindLastCntnt
             if( pRet->IsColBodyFrm() )
             {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
                 SwSectionFrm* pSect = pRet->FindSctFrm();
-                ASSERT( pSect, "Wo kommt denn die Spalte her?")
-                ASSERT( IsAnLower( pSect ), "Gespaltene Zelle?" );
+                OSL_ENSURE( pSect, "Wo kommt denn die Spalte her?");
+                OSL_ENSURE( IsAnLower( pSect ), "Gespaltene Zelle?" );
 #endif
                 return pRet->FindSctFrm()->FindLastCntnt();
             }
@@ -3508,7 +3508,7 @@ SwCntntFrm *SwTabFrm::FindLastCntnt()
             // pRet may be a cell frame without a lower (cell has been split).
             // We have to find the last content the hard way:
             //
-            ASSERT( pRet->IsCellFrm(), "SwTabFrm::FindLastCntnt failed" )
+            OSL_ENSURE( pRet->IsCellFrm(), "SwTabFrm::FindLastCntnt failed" );
             const SwFrm* pRow = pRet->GetUpper();
             while ( pRow && !pRow->GetUpper()->IsTabFrm() )
                 pRow = pRow->GetUpper();
@@ -3685,7 +3685,7 @@ BOOL SwTabFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, BOOL, BOOL &rReformat )
 |*************************************************************************/
 void SwTabFrm::Cut()
 {
-    ASSERT( GetUpper(), "Cut ohne Upper()." );
+    OSL_ENSURE( GetUpper(), "Cut ohne Upper()." );
 
     SwPageFrm *pPage = FindPageFrm();
     InvalidatePage( pPage );
@@ -3743,7 +3743,7 @@ void SwTabFrm::Cut()
     Remove();
     if ( pUp )
     {
-        ASSERT( !pUp->IsFtnFrm(), "Tabelle in Fussnote." );
+        OSL_ENSURE( !pUp->IsFtnFrm(), "Tabelle in Fussnote." );
         SwSectionFrm *pSct = 0;
         // --> OD 2006-01-04 #126020# - adjust check for empty section
         // --> OD 2006-02-01 #130797# - correct fix #126020#
@@ -3780,11 +3780,11 @@ void SwTabFrm::Cut()
 |*************************************************************************/
 void SwTabFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
 {
-    ASSERT( pParent, "Kein Parent fuer Paste." );
-    ASSERT( pParent->IsLayoutFrm(), "Parent ist CntntFrm." );
-    ASSERT( pParent != this, "Bin selbst der Parent." );
-    ASSERT( pSibling != this, "Bin mein eigener Nachbar." );
-    ASSERT( !GetPrev() && !GetNext() && !GetUpper(),
+    OSL_ENSURE( pParent, "Kein Parent fuer Paste." );
+    OSL_ENSURE( pParent->IsLayoutFrm(), "Parent ist CntntFrm." );
+    OSL_ENSURE( pParent != this, "Bin selbst der Parent." );
+    OSL_ENSURE( pSibling != this, "Bin mein eigener Nachbar." );
+    OSL_ENSURE( !GetPrev() && !GetNext() && !GetUpper(),
             "Bin noch irgendwo angemeldet." );
 
     //In den Baum einhaengen.
@@ -4193,7 +4193,7 @@ SwTwips MA_FASTCALL lcl_CalcMinRowHeight( const SwRowFrm* _pRow,
 
     if ( _pRow->HasFixSize() && !_pRow->IsRowSpanLine() )
     {
-        ASSERT( ATT_FIX_SIZE == rSz.GetHeightSizeType(), "pRow claims to have fixed size" )
+        OSL_ENSURE( ATT_FIX_SIZE == rSz.GetHeightSizeType(), "pRow claims to have fixed size" );
         return rSz.GetHeight();
     }
 
@@ -4337,7 +4337,7 @@ USHORT lcl_GetBottomLineDist( const SwRowFrm& rRow )
 void SwRowFrm::Format( const SwBorderAttrs *pAttrs )
 {
     SWRECTFN( this )
-    ASSERT( pAttrs, "SwRowFrm::Format ohne Attrs." );
+    OSL_ENSURE( pAttrs, "SwRowFrm::Format ohne Attrs." );
 
     const BOOL bFix = bFixSize;
 
@@ -4407,8 +4407,8 @@ void SwRowFrm::Format( const SwBorderAttrs *pAttrs )
                 SwClient* pLast;
                 for ( pLast = aIter.First( TYPE( SwFrm ) ); pLast; pLast = aIter.Next() )
                 {
-                    ASSERT( ((SwFrm*)pLast)->IsRowFrm(),
-                                "Non-row frame registered in table line" )
+                    OSL_ENSURE( ((SwFrm*)pLast)->IsRowFrm(),
+                                "Non-row frame registered in table line" );
                     SwRowFrm* pRow = (SwRowFrm*)pLast;
                     // --> OD 2004-11-23 #115759# - do *not* take repeated
                     // headlines, because during split of table it can be
@@ -4463,11 +4463,11 @@ void SwRowFrm::Format( const SwBorderAttrs *pAttrs )
     {
         bValidSize = TRUE;
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         if ( HasFixSize() )
         {
             const SwFmtFrmSize &rFrmSize = GetFmt()->GetFrmSize();
-            ASSERT( rFrmSize.GetSize().Height() > 0, "Hat ihn" );
+            OSL_ENSURE( rFrmSize.GetSize().Height() > 0, "Hat ihn" );
         }
 #endif
         const SwTwips nDiff = (Frm().*fnRect->fnGetHeight)() -
@@ -4640,7 +4640,7 @@ void SwRowFrm::Cut()
                 SwFrm* pCellFrm( GetLower() );
                 while ( pCellFrm )
                 {
-                    ASSERT( pCellFrm->IsCellFrm(),
+                    OSL_ENSURE( pCellFrm->IsCellFrm(),
                             "<SwRowFrm::Cut()> - unexpected type of SwRowFrm lower." );
                     pVSh->Imp()->DisposeAccessibleFrm( pCellFrm );
 
@@ -4681,10 +4681,10 @@ SwTwips SwRowFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
     }
     else
     {
-        ASSERT( GetUpper()->IsCellFrm(), "RowFrm->GetUpper neither table nor cell" )
+        OSL_ENSURE( GetUpper()->IsCellFrm(), "RowFrm->GetUpper neither table nor cell" );
         bRestrictTableGrowth = GetFollowRow() && bHasFollowFlowLine;
-        ASSERT( !bRestrictTableGrowth || !GetNext(),
-                "GetFollowRow for row frame that has a Next" )
+        OSL_ENSURE( !bRestrictTableGrowth || !GetNext(),
+                "GetFollowRow for row frame that has a Next" );
 
         //
         // There may still be some space left in my direct upper:
@@ -4765,7 +4765,7 @@ SwTwips SwRowFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
         if( nMinHeight < (Frm().*fnRect->fnGetHeight)() )
         {
             // --> OD 2004-10-04 #i26945#
-            ASSERT( FindTabFrm(), "<SwRowFrm::ShrinkFrm(..)> - no table frame -> crash." );
+            OSL_ENSURE( FindTabFrm(), "<SwRowFrm::ShrinkFrm(..)> - no table frame -> crash." );
             const bool bConsiderObjs( FindTabFrm()->IsConsiderObjsForMinCellHeight() );
             // <--
             nMinHeight = lcl_CalcMinRowHeight( this, bConsiderObjs );
@@ -4839,7 +4839,7 @@ bool SwRowFrm::IsRowSplitAllowed() const
     // Fixed size rows are never allowed to split:
     if ( HasFixSize() )
     {
-        ASSERT( ATT_FIX_SIZE == GetFmt()->GetFrmSize().GetHeightSizeType(), "pRow claims to have fixed size" )
+        OSL_ENSURE( ATT_FIX_SIZE == GetFmt()->GetFrmSize().GetHeightSizeType(), "pRow claims to have fixed size" );
         return false;
     }
 
@@ -5136,7 +5136,7 @@ BOOL lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, BOOL bInva )
                     }
                     else
                     {
-                        ASSERT( false,
+                        OSL_ENSURE( false,
                                 "<lcl_ArrangeLowers(..)> - unknown type of anchored object!" );
                     }
                 }
@@ -5174,7 +5174,7 @@ BOOL lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, BOOL bInva )
 
 void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
 {
-    ASSERT( pAttrs, "CellFrm::Format, pAttrs ist 0." );
+    OSL_ENSURE( pAttrs, "CellFrm::Format, pAttrs ist 0." );
     const SwTabFrm* pTab = FindTabFrm();
     SWRECTFN( pTab )
 
@@ -5233,9 +5233,9 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
             const SwTwips nWish = pTab->GetFmt()->GetFrmSize().GetWidth();
             nWidth = pAttrs->GetSize().Width();
 
-            ASSERT( nWish, "Tabelle ohne Breite?" );
-            ASSERT( nWidth <= nWish, "Zelle breiter als Tabelle." );
-            ASSERT( nWidth > 0, "Box without width" );
+            OSL_ENSURE( nWish, "Tabelle ohne Breite?" );
+            OSL_ENSURE( nWidth <= nWish, "Zelle breiter als Tabelle." );
+            OSL_ENSURE( nWidth > 0, "Box without width" );
 
             const long nPrtWidth = (pTab->Prt().*fnRect->fnGetWidth)();
             if ( nWish != nPrtWidth )
@@ -5287,7 +5287,7 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
         }
         else
         {
-            ASSERT( pAttrs->GetSize().Width() > 0, "Box without width" );
+            OSL_ENSURE( pAttrs->GetSize().Width() > 0, "Box without width" );
             nWidth = (GetUpper()->Prt().*fnRect->fnGetWidth)();
             SwFrm *pPre = GetUpper()->Lower();
             while ( pPre != this )
@@ -5344,8 +5344,8 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
     {
         if ( !Lower()->IsCntntFrm() && !Lower()->IsSctFrm() && !Lower()->IsTabFrm() )
         {
-            //ASSERT fuer HTML-Import!
-            ASSERT( !this, "VAlign an Zelle ohne Inhalt" );
+            // OSL_ENSURE(fuer HTML-Import!
+            OSL_ENSURE( !this, "VAlign an Zelle ohne Inhalt" );
             return;
         }
         BOOL bVertDir = TRUE;
@@ -5559,8 +5559,8 @@ void SwCellFrm::Cut()
  */
 bool SwTabFrm::IsInHeadline( const SwFrm& rFrm ) const
 {
-    ASSERT( IsAnLower( &rFrm ) && rFrm.IsInTab(),
-             "SwTabFrm::IsInHeadline called for frame not lower of table" )
+    OSL_ENSURE( IsAnLower( &rFrm ) && rFrm.IsInTab(),
+             "SwTabFrm::IsInHeadline called for frame not lower of table" );
 
     const SwFrm* pTmp = &rFrm;
     while ( !pTmp->GetUpper()->IsTabFrm() )
@@ -5623,10 +5623,10 @@ bool SwTabFrm::IsLayoutSplitAllowed() const
 
 USHORT SwTabFrm::GetBottomLineSize() const
 {
-    ASSERT( IsCollapsingBorders(),
-            "BottomLineSize only required for collapsing borders" )
+    OSL_ENSURE( IsCollapsingBorders(),
+            "BottomLineSize only required for collapsing borders" );
 
-    ASSERT( Lower(), "Warning! Trying to prevent a crash, please inform FME" )
+    OSL_ENSURE( Lower(), "Warning! Trying to prevent a crash, please inform FME" );
 
     const SwFrm* pTmp = GetLastLower();
 
@@ -5812,7 +5812,7 @@ SwTwips SwTabFrm::CalcHeightOfFirstContentLine() const
     SwTwips nTmpHeight = 0;
 
     pFirstRow = GetFirstNonHeadlineRow();
-    ASSERT( !IsFollow() || pFirstRow, "FollowTable without Lower" )
+    OSL_ENSURE( !IsFollow() || pFirstRow, "FollowTable without Lower" );
 
     // NEW TABLES
     if ( pFirstRow && pFirstRow->IsRowSpanLine() && pFirstRow->GetNext() )

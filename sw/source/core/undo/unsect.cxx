@@ -131,7 +131,7 @@ void SwUndoInsSection::Undo( SwUndoIter& rUndoIter )
 
     SwSectionNode *const pNd =
         rDoc.GetNodes()[ m_nSectionNodePos ]->GetSectionNode();
-    ASSERT( pNd, "wo ist mein SectionNode?" );
+    OSL_ENSURE( pNd, "wo ist mein SectionNode?" );
 
     if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ))
         rDoc.DeleteRedline( *pNd, true, USHRT_MAX );
@@ -245,7 +245,7 @@ void SwUndoInsSection::Join( SwDoc& rDoc, ULONG nNode )
 {
     SwNodeIndex aIdx( rDoc.GetNodes(), nNode );
     SwTxtNode* pTxtNd = aIdx.GetNode().GetTxtNode();
-    ASSERT( pTxtNd, "wo ist mein TextNode?" );
+    OSL_ENSURE( pTxtNd, "wo ist mein TextNode?" );
 
     {
         RemoveIdxRel( nNode + 1, SwPosition( aIdx,
@@ -390,7 +390,7 @@ void SwUndoDelSection::Redo( SwUndoIter& rUndoIter )
 
     SwSectionNode *const pNd =
         rDoc.GetNodes()[ m_nStartNode ]->GetSectionNode();
-    ASSERT( pNd, "wo ist mein SectionNode?" );
+    OSL_ENSURE( pNd, "wo ist mein SectionNode?" );
     // einfach das Format loeschen, der Rest erfolgt automatisch
     rDoc.DelSectionFmt( pNd->GetSection().GetFmt() );
 }
@@ -442,7 +442,7 @@ void SwUndoUpdateSection::Undo( SwUndoIter& rUndoIter )
     SwDoc& rDoc = rUndoIter.GetDoc();
     SwSectionNode *const pSectNd =
         rDoc.GetNodes()[ m_nStartNode ]->GetSectionNode();
-    ASSERT( pSectNd, "wo ist mein SectionNode?" );
+    OSL_ENSURE( pSectNd, "wo ist mein SectionNode?" );
 
     SwSection& rNdSect = pSectNd->GetSection();
     SwFmt* pFmt = rNdSect.GetFmt();

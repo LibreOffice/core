@@ -222,7 +222,7 @@ void SwTxtInfo::CtorInitTxtInfo( SwTxtFrm *pFrm )
     nTxtStart = pFrm->GetOfst();
     if( !pPara )
     {
-        ASSERT( pPara, "+SwTxtInfo::CTOR: missing paragraph information" );
+        OSL_ENSURE( pPara, "+SwTxtInfo::CTOR: missing paragraph information" );
         pFrm->Format();
         pPara = pFrm->GetPara();
     }
@@ -234,7 +234,7 @@ SwTxtInfo::SwTxtInfo( const SwTxtInfo &rInf )
 { }
 
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 /*************************************************************************
  *                      ChkOutDev()
  *************************************************************************/
@@ -246,7 +246,7 @@ void ChkOutDev( const SwTxtSizeInfo &rInf )
 
     const OutputDevice* pOut = rInf.GetOut();
     const OutputDevice* pRef = rInf.GetRefDev();
-    ASSERT( pOut && pRef, "ChkOutDev: invalid output devices" )
+    OSL_ENSURE( pOut && pRef, "ChkOutDev: invalid output devices" );
 }
 #endif  // PRODUCT
 
@@ -287,7 +287,7 @@ SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew )
       bSnapToGrid( rNew.SnapToGrid() ),
       nDirection( rNew.GetDirection() )
 {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     ChkOutDev( *this );
 #endif
 }
@@ -324,7 +324,7 @@ void SwTxtSizeInfo::CtorInitTxtSizeInfo( SwTxtFrm *pFrame, SwFont *pNewFnt,
         pRef = pOut;
     }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     ChkOutDev( *this );
 #endif
 
@@ -412,7 +412,7 @@ SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew, const XubString &rTxt,
       bSnapToGrid( rNew.SnapToGrid() ),
       nDirection( rNew.GetDirection() )
 {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     ChkOutDev( *this );
 #endif
     SetLen( GetMinLen( *this ) );
@@ -441,8 +441,8 @@ void SwTxtSizeInfo::NoteAnimation() const
     if( OnWin() )
         SwRootFrm::FlushVout();
 
-    ASSERT( pOut == pVsh->GetOut(),
-            "SwTxtSizeInfo::NoteAnimation() changed pOut" )
+    OSL_ENSURE( pOut == pVsh->GetOut(),
+            "SwTxtSizeInfo::NoteAnimation() changed pOut" );
 }
 
 /*************************************************************************
@@ -519,7 +519,7 @@ xub_StrLen SwTxtSizeInfo::GetTxtBreak( const long nLineWidth,
     const SwScriptInfo& rScriptInfo =
                      ( (SwParaPortion*)GetParaPortion() )->GetScriptInfo();
 
-    ASSERT( pRef == pOut, "GetTxtBreak is supposed to use the RefDev" )
+    OSL_ENSURE( pRef == pOut, "GetTxtBreak is supposed to use the RefDev" );
     SwDrawTextInfo aDrawInf( pVsh, *pOut, &rScriptInfo,
                              *pTxt, GetIdx(), nMaxLen );
     aDrawInf.SetFrm( pFrm );
@@ -543,7 +543,7 @@ xub_StrLen SwTxtSizeInfo::GetTxtBreak( const long nLineWidth,
     const SwScriptInfo& rScriptInfo =
                      ( (SwParaPortion*)GetParaPortion() )->GetScriptInfo();
 
-    ASSERT( pRef == pOut, "GetTxtBreak is supposed to use the RefDev" )
+    OSL_ENSURE( pRef == pOut, "GetTxtBreak is supposed to use the RefDev" );
     SwDrawTextInfo aDrawInf( pVsh, *pOut, &rScriptInfo,
                              *pTxt, GetIdx(), nMaxLen );
     aDrawInf.SetFrm( pFrm );
@@ -570,10 +570,10 @@ void SwTxtPaintInfo::CtorInitTxtPaintInfo( SwTxtFrm *pFrame, const SwRect &rPain
     pGrammarCheckList = NULL;
     pSmartTags = NULL;  // SMARTTAGS
 
-#ifndef DBG_UTIL
-    pBrushItem = 0;
-#else
+#if OSL_DEBUG_LEVEL > 1
     pBrushItem = ((SvxBrushItem*)-1);
+#else
+    pBrushItem = 0;
 #endif
 }
 
@@ -710,7 +710,7 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
     const sal_Bool bTmpGrammarCheck = bGrammarCheck && OnWin() && bCfgIsAutoGrammar && GetOpt().IsOnlineSpell();
     const sal_Bool bTmpSmart = bSmartTag && OnWin() && !GetOpt().IsPagePreview() && SwSmartTagMgr::Get().IsSmartTagsEnabled(); // SMARTTAGS
 
-    ASSERT( GetParaPortion(), "No paragraph!");
+    OSL_ENSURE( GetParaPortion(), "No paragraph!");
     SwDrawTextInfo aDrawInf( pFrm->GetShell(), *pOut, pSI, rText, nStart, nLength,
                              rPor.Width(), bBullet );
 
@@ -917,7 +917,7 @@ static void lcl_DrawSpecial( const SwTxtPaintInfo& rInf, const SwLinePortion& rP
         nMaxWidth = rRect.Height();
         break;
     default:
-        ASSERT( sal_False, "Unknown direction set at font" )
+        OSL_ENSURE( sal_False, "Unknown direction set at font" );
         break;
     }
 
@@ -995,7 +995,7 @@ void SwTxtPaintInfo::DrawRect( const SwRect &rRect, sal_Bool bNoGraphic,
             pOut->DrawRect( rRect.SVRect() );
         else
         {
-            ASSERT( ((SvxBrushItem*)-1) != pBrushItem, "DrawRect: Uninitialized BrushItem!" );
+            OSL_ENSURE( ((SvxBrushItem*)-1) != pBrushItem, "DrawRect: Uninitialized BrushItem!" );
             ::DrawGraphic( pBrushItem, pOut, aItemRect, rRect );
         }
     }
@@ -1174,7 +1174,7 @@ void SwTxtPaintInfo::DrawCheckBox( const SwFieldFormPortion &rPor, bool checked)
  *************************************************************************/
 void SwTxtPaintInfo::DrawBackground( const SwLinePortion &rPor ) const
 {
-    ASSERT( OnWin(), "SwTxtPaintInfo::DrawBackground: printer polution ?" );
+    OSL_ENSURE( OnWin(), "SwTxtPaintInfo::DrawBackground: printer polution ?" );
 
     SwRect aIntersect;
     CalcRect( rPor, 0, &aIntersect );
@@ -1243,7 +1243,7 @@ void SwTxtPaintInfo::_DrawBackBrush( const SwLinePortion &rPor ) const
     }
     if( !pFnt->GetBackColor() ) return;
 
-    ASSERT( pFnt->GetBackColor(), "DrawBackBrush: Lost Color" );
+    OSL_ENSURE( pFnt->GetBackColor(), "DrawBackBrush: Lost Color" );
 
     SwRect aIntersect;
     CalcRect( rPor, 0, &aIntersect );
@@ -1301,7 +1301,7 @@ void SwTxtPaintInfo::DrawViewOpt( const SwLinePortion &rPor,
             case POR_BLANK:     if ( GetOpt().IsHardBlank())bDraw = sal_True; break;
             default:
             {
-                ASSERT( !this, "SwTxtPaintInfo::DrawViewOpt: don't know how to draw this" );
+                OSL_ENSURE( !this, "SwTxtPaintInfo::DrawViewOpt: don't know how to draw this" );
                 break;
             }
         }
@@ -1316,7 +1316,7 @@ void SwTxtPaintInfo::DrawViewOpt( const SwLinePortion &rPor,
 
 void SwTxtPaintInfo::_NotifyURL( const SwLinePortion &rPor ) const
 {
-    ASSERT( pNoteURL, "NotifyURL: pNoteURL gone with the wind!" );
+    OSL_ENSURE( pNoteURL, "NotifyURL: pNoteURL gone with the wind!" );
 
     SwRect aIntersect;
     CalcRect( rPor, 0, &aIntersect );
@@ -1671,7 +1671,7 @@ xub_StrLen SwTxtFormatInfo::ScanPortionEnd( const xub_StrLen nStart,
             {
                 if( cTabDec == cPos )
                 {
-                    ASSERT( cPos, "Unexpected end of string" );
+                    OSL_ENSURE( cPos, "Unexpected end of string" );
                     if( cPos ) // robust
                     {
                         cHookChar = cPos;

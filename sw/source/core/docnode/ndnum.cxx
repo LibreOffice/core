@@ -48,13 +48,13 @@ BOOL SwOutlineNodes::Seek_Entry( const SwNodePtr rSrch, USHORT* pFndPos ) const
 //JP 17.03.98: aufgrund des Bug 48592 - wo unter anderem nach Undo/Redo
 //              Nodes aus dem falschen NodesArray im OutlineArray standen,
 //              jetzt mal einen Check eingebaut.
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         {
             for( USHORT n = 1; n < nO; ++n )
                 if( &(*this)[ n-1 ]->GetNodes() !=
                     &(*this)[ n ]->GetNodes() )
                 {
-                    ASSERT( !this, "Node im falschen Outline-Array" );
+                    OSL_ENSURE( !this, "Node im falschen Outline-Array" );
                 }
         }
 #endif
@@ -106,7 +106,7 @@ void SwNodes::UpdateOutlineNode(SwNode & rNd)
                 }
                 else
                 {
-                    ASSERT( false,
+                    OSL_ENSURE( false,
                             "<SwNodes::UpdateOutlineNode(..)> - given text node isn't in the correct nodes array. This is a serious defect -> inform OD" );
                 }
                 // <--
@@ -136,7 +136,7 @@ void SwNodes::UpdateOutlineNode(SwNode & rNd)
 //  if( 0 == nOldLevel )                //<-end, zhaojianwei
 //  {
 //      // nicht vorhanden, also einfuegen
-//      //ASSERT( !bSeekIdx, "Der Node ist schon als OutlineNode vorhanden" );
+//      / OSL_ENSURE( !bSeekIdx, "Der Node ist schon als OutlineNode vorhanden" );
 //
 //      //JP 12.03.99: 63293 - Nodes vom RedlineBereich NIE aufnehmen
 //      ULONG nNd = rNd.GetIndex();
@@ -155,7 +155,7 @@ void SwNodes::UpdateOutlineNode(SwNode & rNd)
 //            }
 //            else
 //            {
-//                ASSERT( false,
+//                OSL_ENSURE( false,
 //                        "<SwNodes::UpdateOutlineNode(..)> - node <pSrch> isn't in correct nodes array. This is a serious defect -> inform OD" );
 //            }
 //            // <--

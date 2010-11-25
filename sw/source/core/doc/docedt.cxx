@@ -718,7 +718,7 @@ void _SaveRedlEndPosForRestore::_Restore()
 // Der uebergebene Node steht irgendwo in der gewuenschten Section
 void SwDoc::DeleteSection( SwNode *pNode )
 {
-    ASSERT( pNode, "Kein Node uebergeben." );
+    OSL_ENSURE( pNode, "Kein Node uebergeben." );
     SwStartNode* pSttNd = pNode->IsStartNode() ? (SwStartNode*)pNode
                                                : pNode->StartOfSectionNode();
     SwNodeIndex aSttIdx( *pSttNd ), aEndIdx( *pNode->EndOfSectionNode() );
@@ -1004,7 +1004,7 @@ bool SwDoc::MoveRange( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
     else
         rPaM.DeleteMark();
 
-    ASSERT( *aSavePam.GetMark() == rPos ||
+    OSL_ENSURE( *aSavePam.GetMark() == rPos ||
             ( aSavePam.GetMark()->nNode.GetNode().GetCntntNode() == NULL ),
             "PaM wurde nicht verschoben, am Anfang/Ende keine ContentNodes?" );
     *aSavePam.GetMark() = rPos;
@@ -1264,7 +1264,7 @@ SvUShorts * lcl_RangesToUShorts(USHORT * pRanges)
     int i = 0;
     while (pRanges[i] != 0)
     {
-        ASSERT(pRanges[i+1] != 0, "malformed ranges");
+        OSL_ENSURE(pRanges[i+1] != 0, "malformed ranges");
 
         for (USHORT j = pRanges[i]; j < pRanges[i+1]; j++)
             pResult->Insert(j, pResult->Count());
@@ -1316,7 +1316,7 @@ void lcl_GetJoinFlags( SwPaM& rPam, sal_Bool& rJoinTxt, sal_Bool& rJoinPrev )
                 if( bExchange )
                     rPam.Exchange();
                 rJoinPrev = rPam.GetPoint() == pStt;
-                ASSERT( !pStt->nContent.GetIndex() &&
+                OSL_ENSURE( !pStt->nContent.GetIndex() &&
                     pEndNd->GetTxt().Len() != pEnd->nContent.GetIndex()
                     ? rPam.GetPoint()->nNode < rPam.GetMark()->nNode
                     : rPam.GetPoint()->nNode > rPam.GetMark()->nNode,
@@ -1480,7 +1480,7 @@ lcl_CalcBreaks( ::std::vector<xub_StrLen> & rBreaks, SwPaM const & rPam )
             SwTxtAttr const * const pAttr( pTxtNode->GetTxtAttrForCharAt(i) );
             if (pAttr && pAttr->GetEnd() && (*pAttr->GetEnd() > nEnd))
             {
-                ASSERT(pAttr->HasDummyChar(), "GetTxtAttrForCharAt broken?");
+                OSL_ENSURE(pAttr->HasDummyChar(), "GetTxtAttrForCharAt broken?");
                 rBreaks.push_back(i);
             }
         }
@@ -1535,7 +1535,7 @@ bool lcl_DoWithBreaks(SwDoc & rDoc, SwPaM & rPam,
 
 bool SwDoc::DeleteAndJoinWithRedlineImpl( SwPaM & rPam, const bool )
 {
-    ASSERT( IsRedlineOn(), "DeleteAndJoinWithRedline: redline off" );
+    OSL_ENSURE( IsRedlineOn(), "DeleteAndJoinWithRedline: redline off" );
 
     {
         sal_uInt16 nUndoSize = 0;
@@ -2057,8 +2057,8 @@ SwHyphArgs::SwHyphArgs( const SwPaM *pPam, const Point &rCrsrPos,
     // Folgende Bedingungen muessen eingehalten werden:
     // 1) es gibt mindestens eine Selektion
     // 2) SPoint() == Start()
-    ASSERT( pPam->HasMark(), "SwDoc::Hyphenate: blowing in the wind");
-    ASSERT( *pPam->GetPoint() <= *pPam->GetMark(),
+    OSL_ENSURE( pPam->HasMark(), "SwDoc::Hyphenate: blowing in the wind");
+    OSL_ENSURE( *pPam->GetPoint() <= *pPam->GetMark(),
             "SwDoc::Hyphenate: New York, New York");
 
     const SwPosition *pPoint = pPam->GetPoint();
@@ -2093,7 +2093,7 @@ void SwHyphArgs::SetPam( SwPaM *pPam ) const
         pPam->GetMark()->nNode = nNode;
         pPam->GetMark()->nContent.Assign( pNode->GetCntntNode(),
                                           nWordStart + nWordLen );
-        ASSERT( nNode == pNode->GetIndex(),
+        OSL_ENSURE( nNode == pNode->GetIndex(),
                 "SwHyphArgs::SetPam: Pam desaster" );
     }
 }
@@ -2141,7 +2141,7 @@ uno::Reference< XHyphenatedWord >  SwDoc::Hyphenate(
                             SwPaM *pPam, const Point &rCrsrPos,
                              sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
 {
-    ASSERT(this == pPam->GetDoc(), "SwDoc::Hyphenate: strangers in the night");
+    OSL_ENSURE(this == pPam->GetDoc(), "SwDoc::Hyphenate: strangers in the night");
 
     if( *pPam->GetPoint() > *pPam->GetMark() )
         pPam->Exchange();
@@ -2201,7 +2201,7 @@ bool SwDoc::ReplaceRange( SwPaM& rPam, const String& rStr,
     {
         aPam.Move(fnMoveBackward);
     }
-    ASSERT((aPam.GetPoint()->nNode == aPam.GetMark()->nNode), "invalid pam?");
+   OSL_ENSURE((aPam.GetPoint()->nNode == aPam.GetMark()->nNode), "invalid pam?");
 
     lcl_CalcBreaks(Breaks, aPam);
 
@@ -2227,7 +2227,7 @@ bool SwDoc::ReplaceRange( SwPaM& rPam, const String& rStr,
     bool bRet( true );
     // iterate from end to start, to avoid invalidating the offsets!
     ::std::vector<xub_StrLen>::reverse_iterator iter( Breaks.rbegin() );
-    ASSERT(aPam.GetPoint() == aPam.End(), "wrong!");
+    OSL_ENSURE(aPam.GetPoint() == aPam.End(), "wrong!");
     SwPosition & rEnd( *aPam.End() );
     SwPosition & rStart( *aPam.Start() );
 
@@ -2249,7 +2249,7 @@ bool SwDoc::ReplaceRange( SwPaM& rPam, const String& rStr,
     }
 
     rStart = *rPam.Start(); // set to original start
-    ASSERT(rEnd.nContent > rStart.nContent, "replace part empty!");
+    OSL_ENSURE(rEnd.nContent > rStart.nContent, "replace part empty!");
     if (rEnd.nContent > rStart.nContent) // check if part is empty
     {
         bRet &= ReplaceRangeImpl(aPam, rStr, bRegExReplace);
@@ -2280,7 +2280,7 @@ bool SwDoc::ReplaceRangeImpl( SwPaM& rPam, const String& rStr,
 
         SwPosition *pStt = (SwPosition*)aDelPam.Start(),
                    *pEnd = (SwPosition*)aDelPam.End();
-        ASSERT( pStt->nNode == pEnd->nNode ||
+        OSL_ENSURE( pStt->nNode == pEnd->nNode ||
                 ( pStt->nNode.GetIndex() + 1 == pEnd->nNode.GetIndex() &&
                     !pEnd->nContent.GetIndex() ),
                 "invalid range: Point and Mark on different nodes" );
@@ -2600,7 +2600,7 @@ bool SwDoc::DelFullPara( SwPaM& rPam )
             rPam.Exchange();
             if( !rPam.Move( fnMoveBackward, fnGoNode ))
             {
-                ASSERT( sal_False, "kein Node mehr vorhanden" );
+                OSL_ENSURE( sal_False, "kein Node mehr vorhanden" );
                 return sal_False;
             }
         }

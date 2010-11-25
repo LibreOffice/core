@@ -54,7 +54,7 @@ public:
 
 inline const SwTxtNode& SwTxtRefMark::GetTxtNode() const
 {
-    ASSERT( m_pTxtNode, "SwTxtRefMark: where is my TxtNode?" );
+    OSL_ENSURE( m_pTxtNode, "SwTxtRefMark: where is my TxtNode?" );
     return *m_pTxtNode;
 }
 

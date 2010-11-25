@@ -220,7 +220,7 @@ SwRead GetReader( const String& rFltName )
 ULONG StgReader::OpenMainStream( SvStorageStreamRef& rRef, USHORT& rBuffSize )
 {
     ULONG nRet = ERR_SWG_READ_ERROR;
-    ASSERT( pStg, "wo ist mein Storage?" );
+    OSL_ENSURE( pStg, "wo ist mein Storage?" );
     const SfxFilter* pFltr = SwIoSystem::GetFilterOfFormat( aFltName );
     if( pFltr )
     {
@@ -265,7 +265,7 @@ ULONG Sw3Reader::Read( SwDoc &rDoc, SwPaM &rPam, const String & )
     }
     else
     {
-        ASSERT( !this, "Sw3-Read ohne Storage und/oder IO-System" );
+        OSL_ENSURE( !this, "Sw3-Read ohne Storage und/oder IO-System" );
         nRet = ERR_SWG_READ_ERROR;
     }
     return nRet;
@@ -278,7 +278,7 @@ USHORT Sw3Reader::GetSectionList( SfxMedium& rMedium,
 {
     SvStorageRef aStg( rMedium.GetStorage() );
     const SfxFilter* pFlt = rMedium.GetFilter();
-    ASSERT( pFlt && pFlt->GetVersion(),
+    OSL_ENSURE( pFlt && pFlt->GetVersion(),
                                 "Kein Filter oder Filter ohne FF-Version" );
     if( pFlt && pFlt->GetVersion() )
         aStg->SetVersion( (long)pFlt->GetVersion() );
@@ -305,7 +305,7 @@ USHORT Sw3Reader::GetSectionList( SfxMedium& rMedium,
     }
     else
     {
-        ASSERT( !this, "Sw3-Writer ohne IO-System" )
+        OSL_ENSURE( !this, "Sw3-Writer ohne IO-System" );
         nRet = ERR_SWG_WRITE_ERROR;
     }
     return nRet;
@@ -857,7 +857,7 @@ rtl_TextEncoding CharSetFromName(const String& rChrSetStr)
         }
     }
 
-    ASSERT(nRet != pStart->eCode, "TXT: That was an unknown language!");
+    OSL_ENSURE(nRet != pStart->eCode, "TXT: That was an unknown language!");
 
     return nRet;
 }
@@ -880,7 +880,7 @@ String NameFromCharSet(rtl_TextEncoding nChrSet)
         }
     }
 
-    ASSERT(pRet != pStart->pName, "TXT: That was an unknown language!");
+    OSL_ENSURE(pRet != pStart->pName, "TXT: That was an unknown language!");
 
     return String::CreateFromAscii(pRet);
 }

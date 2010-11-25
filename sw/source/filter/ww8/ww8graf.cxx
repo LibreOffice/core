@@ -179,7 +179,7 @@ bool SwWW8ImplReader::ReadGrafStart(void* pData, short nDataSiz,
 {
     if (SVBT16ToShort(pHd->cb) < sizeof(WW8_DPHEAD) + nDataSiz)
     {
-        ASSERT( !this, "+Grafik-Element: Size ?" );
+        OSL_ENSURE( !this, "+Grafik-Element: Size ?" );
         pStrm->SeekRel(SVBT16ToShort(pHd->cb) - sizeof(WW8_DPHEAD));
         return false;
     }
@@ -810,7 +810,7 @@ bool SwWW8ImplReader::GetTxbxTextSttEndCp(WW8_CP& rStartCp, WW8_CP& rEndCp,
     WW8PLCFspecial* pT = pPlcxMan ? pPlcxMan->GetTxbx() : 0;
     if( !pT )
     {
-        ASSERT( !this, "+Wo ist der Grafik-Text (1) ?" );
+        OSL_ENSURE( !this, "+Wo ist der Grafik-Text (1) ?" );
         return false;
     }
 
@@ -823,7 +823,7 @@ bool SwWW8ImplReader::GetTxbxTextSttEndCp(WW8_CP& rStartCp, WW8_CP& rEndCp,
     void* pT0;
     if( !pT->Get( rStartCp, pT0 ) )
     {
-        ASSERT( !this, "+Wo ist der Grafik-Text (2) ?" );
+        OSL_ENSURE( !this, "+Wo ist der Grafik-Text (2) ?" );
         return false;
     }
 
@@ -835,7 +835,7 @@ bool SwWW8ImplReader::GetTxbxTextSttEndCp(WW8_CP& rStartCp, WW8_CP& rEndCp,
             (*pT)++;
             if( !pT->Get( rStartCp, pT0 ) )
             {
-                ASSERT( !this, "+Wo ist der Grafik-Text (2-a) ?" );
+                OSL_ENSURE( !this, "+Wo ist der Grafik-Text (2-a) ?" );
                 return false;
             }
             bReusable = (0 != SVBT16ToShort( ((WW8_TXBXS*)pT0)->fReusable ));
@@ -844,7 +844,7 @@ bool SwWW8ImplReader::GetTxbxTextSttEndCp(WW8_CP& rStartCp, WW8_CP& rEndCp,
     (*pT)++;
     if( !pT->Get( rEndCp, pT0 ) )
     {
-        ASSERT( !this, "+Wo ist der Grafik-Text (3) ?" );
+        OSL_ENSURE( !this, "+Wo ist der Grafik-Text (3) ?" );
         return false;
     }
 
@@ -865,7 +865,7 @@ bool SwWW8ImplReader::GetTxbxTextSttEndCp(WW8_CP& rStartCp, WW8_CP& rEndCp,
             // den ersten Eintrag fuer diese TextBox-Story finden
             if( !pT->SeekPos( rStartCp ) )
             {
-                ASSERT( !this, "+Wo ist der Grafik-Text (4) ?" );
+                OSL_ENSURE( !this, "+Wo ist der Grafik-Text (4) ?" );
                 return false;
             }
             // ggfs. entsprechende Anzahl Eintraege weitergehen
@@ -874,7 +874,7 @@ bool SwWW8ImplReader::GetTxbxTextSttEndCp(WW8_CP& rStartCp, WW8_CP& rEndCp,
             if(    (!pT->Get( rStartCp, pT0 ))
                 || ( nMinStartCp > rStartCp  ) )
             {
-                ASSERT( !this, "+Wo ist der Grafik-Text (5) ?" );
+                OSL_ENSURE( !this, "+Wo ist der Grafik-Text (5) ?" );
                 return false;
             }
             if( rStartCp >= nMaxEndCp )
@@ -885,7 +885,7 @@ bool SwWW8ImplReader::GetTxbxTextSttEndCp(WW8_CP& rStartCp, WW8_CP& rEndCp,
                 if(    (!pT->Get( rEndCp, pT0 ))
                     || ( nMaxEndCp < rEndCp-1  ) )
                 {
-                    ASSERT( !this, "+Wo ist der Grafik-Text (6) ?" );
+                    OSL_ENSURE( !this, "+Wo ist der Grafik-Text (6) ?" );
                     return false;
                 }
                 rEndCp -= 1;
@@ -906,7 +906,7 @@ bool SwWW8ImplReader::GetRangeAsDrawingString(String& rString, long nStartCp, lo
     WW8_CP nOffset = pWwFib->GetBaseCp(eType);
 
     bool bOk = false;
-    ASSERT(nStartCp <= nEndCp, "+Wo ist der Grafik-Text (7) ?");
+    OSL_ENSURE(nStartCp <= nEndCp, "+Wo ist der Grafik-Text (7) ?");
     if (nStartCp == nEndCp)
         rString.Erase();      // leerer String: durchaus denkbar!
     else if (nStartCp < nEndCp)
@@ -914,7 +914,7 @@ bool SwWW8ImplReader::GetRangeAsDrawingString(String& rString, long nStartCp, lo
         // den Text einlesen: kann sich ueber mehrere Pieces erstrecken!!!
         USHORT nLen = pSBase->WW8ReadString(*pStrm, rString,
             nStartCp + nOffset, nEndCp - nStartCp, GetCurrentCharSet());
-        ASSERT(nLen, "+Wo ist der Grafik-Text (8) ?");
+        OSL_ENSURE(nLen, "+Wo ist der Grafik-Text (8) ?");
         if (nLen)
         {
             bOk = true;
@@ -1318,7 +1318,7 @@ SdrObject *SwWW8ImplReader::ReadGroup( WW8_DPHEAD* pHd, const WW8_DO* pDo,
             // #116150#
             // first add and then set ItemSet
             SdrObjList *pSubGroup = pObj->GetSubList();
-            ASSERT(pSubGroup, "Why no sublist available?");
+            OSL_ENSURE(pSubGroup, "Why no sublist available?");
             if (pSubGroup)
                 pSubGroup->InsertObject(pObject, 0);
             pObject->SetMergedItemSetAndBroadcast(aSet);
@@ -1376,7 +1376,7 @@ SdrObject* SwWW8ImplReader::ReadGrafPrimitive( short& rLeft, const WW8_DO* pDo,
     }
     else
     {
-        ASSERT( !this, "+Grafik-Overlap" );
+        OSL_ENSURE( !this, "+Grafik-Overlap" );
     }
     rLeft = rLeft - SVBT16ToShort( aHd.cb );
     return pRet;
@@ -1389,13 +1389,13 @@ void SwWW8ImplReader::ReadGrafLayer1( WW8PLCFspecial* pPF, long nGrafAnchorCp )
     void* pF0;
     if( !pPF->Get( nStartFc, pF0 ) )
     {
-        ASSERT( !this, "+Wo ist die Grafik (2) ?" );
+        OSL_ENSURE( !this, "+Wo ist die Grafik (2) ?" );
         return;
     }
     WW8_FDOA* pF = (WW8_FDOA*)pF0;
     if( !SVBT32ToUInt32( pF->fc ) )
     {
-        ASSERT( !this, "+Wo ist die Grafik (3) ?" );
+        OSL_ENSURE( !this, "+Wo ist die Grafik (3) ?" );
         return;
     }
     WW8_DO aDo;
@@ -1499,7 +1499,7 @@ const WW8_BordersSO &WW8_BordersSO::Get0x01LineMatch(eBorderCode eCode)
 /*18*/  { DEF_LINE_WIDTH_5, 0, 0, DOTTED }
     };
     size_t nPos = static_cast<size_t>(eCode);
-    ASSERT(nPos < sizeof(aLineTabVer8), "Impossible");
+    OSL_ENSURE(nPos < sizeof(aLineTabVer8), "Impossible");
     if (nPos >= sizeof(aLineTabVer8))
         eCode = single0;
     return aLineTabVer8[eCode];
@@ -1656,7 +1656,7 @@ INT32 SwWW8ImplReader::MatchSdrBoxIntoFlyBoxItem(const Color& rLineColor,
         break;
     // erroneously not implemented line style is set
     default:
-        ASSERT(!this, "eLineStyle is not (yet) implemented!");
+        OSL_ENSURE(!this, "eLineStyle is not (yet) implemented!");
         break;
     }
 
@@ -2269,7 +2269,7 @@ bool SwWW8ImplReader::MiserableRTLGraphicsHack(SwTwips &rLeft, SwTwips nWidth,
 RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
     WW8_FSPA *pFSPA, SfxItemSet &rFlySet, bool /*bOrgObjectWasReplace*/)
 {
-    ASSERT(pRecord || pFSPA, "give me something! to work with for anchoring");
+    OSL_ENSURE(pRecord || pFSPA, "give me something! to work with for anchoring");
     if (!pRecord && !pFSPA)
         return FLY_AT_PAGE;
 
@@ -2515,7 +2515,7 @@ bool SwWW8ImplReader::IsObjectLayoutInTableCell( const UINT32 nLayoutInTableCell
             case 0x0000: // version 8 aka Microsoft Word 97
             {
                 bIsObjectLayoutInTableCell = false;
-                ASSERT( nLayoutInTableCell == 0xFFFFFFFF,
+                OSL_ENSURE( nLayoutInTableCell == 0xFFFFFFFF,
                         "no explicit object attribute layout in table cell excepted." );
             }
             break;
@@ -2543,7 +2543,7 @@ bool SwWW8ImplReader::IsObjectLayoutInTableCell( const UINT32 nLayoutInTableCell
             break;
             default:
             {
-                ASSERT( false,
+                OSL_ENSURE( false,
                         "unknown version." );
             }
         }
@@ -2567,7 +2567,7 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
     WW8PLCFspecial* pPF = pPlcxMan->GetFdoa();
     if( !pPF )
     {
-        ASSERT( !this, "Where is the grapic (1) ?" );
+        OSL_ENSURE( !this, "Where is the grapic (1) ?" );
         return 0;
     }
 
@@ -2588,7 +2588,7 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
     WW8_FC nStartFc;
     void* pF0;
     if( !pPF->Get( nStartFc, pF0 ) ){
-        ASSERT( !this, "+Wo ist die Grafik (2) ?" );
+        OSL_ENSURE( !this, "+Wo ist die Grafik (2) ?" );
         return 0;
     }
 
@@ -2603,7 +2603,7 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
 #endif // defined __WW8_NEEDS_COPY
     if( !pF->nSpId )
     {
-        ASSERT( !this, "+Wo ist die Grafik (3) ?" );
+        OSL_ENSURE( !this, "+Wo ist die Grafik (3) ?" );
         return 0;
     }
 
@@ -2629,7 +2629,7 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
 
     if (!bOk)
     {
-        ASSERT( !this, "Where is the Shape ?" );
+        OSL_ENSURE( !this, "Where is the Shape ?" );
         return 0;
     }
 
@@ -2714,7 +2714,7 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
     // eingelesenes Objekt (kann eine ganze Gruppe sein) jetzt korrekt
     // positionieren usw.
 
-    ASSERT(!((aData.GetRecCount() != 1) && bReplaceable),
+    OSL_ENSURE(!((aData.GetRecCount() != 1) && bReplaceable),
         "Replaceable drawing with > 1 entries ?");
 
     if (aData.GetRecCount() != 1)
@@ -2735,7 +2735,7 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
             pRecord = 0;
     }
 
-    ASSERT(pRecord, "how did that happen?");
+    OSL_ENSURE(pRecord, "how did that happen?");
     if (!pRecord)
         return 0;
 
@@ -2836,7 +2836,7 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
 
             pRetFrmFmt = rDoc.Insert(*pPaM, *pObject, &aFlySet, NULL);
 
-            ASSERT(pRetFrmFmt->GetAnchor().GetAnchorId() ==
+            OSL_ENSURE(pRetFrmFmt->GetAnchor().GetAnchorId() ==
                 eAnchor, "Not the anchor type requested!");
 
             /*
@@ -3029,7 +3029,7 @@ SwFlyFrmFmt* SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
             rFlySet.Put(SvxFrameDirectionItem(FRMDIR_VERT_TOP_RIGHT, RES_FRAMEDIR));
 
         pRetFrmFmt = rDoc.MakeFlySection(eAnchor, pPaM->GetPoint(), &rFlySet);
-        ASSERT(pRetFrmFmt->GetAnchor().GetAnchorId() == eAnchor,
+        OSL_ENSURE(pRetFrmFmt->GetAnchor().GetAnchorId() == eAnchor,
             "Not the anchor type requested!");
 
         // if everything is OK, find pointer on new object and correct
@@ -3235,7 +3235,7 @@ void SwWW8ImplReader::GrafikCtor()  // Fuer SVDraw und VCControls und Escher
         rDoc.GetOrCreateDrawModel();
         // <--
         pDrawModel  = rDoc.GetDrawModel();
-        ASSERT(pDrawModel, "Kann DrawModel nicht anlegen");
+        OSL_ENSURE(pDrawModel, "Kann DrawModel nicht anlegen");
         pDrawPg = pDrawModel->GetPage(0);
 
         pMSDffManager = new SwMSDffManager(*this);
@@ -3260,7 +3260,7 @@ void SwWW8ImplReader::GrafikDtor()
 
 void SwWW8FltAnchorStack::AddAnchor(const SwPosition& rPos, SwFrmFmt *pFmt)
 {
-    ASSERT(pFmt->GetAnchor().GetAnchorId() != FLY_AS_CHAR,
+    OSL_ENSURE(pFmt->GetAnchor().GetAnchorId() != FLY_AS_CHAR,
         "Don't use fltanchors with inline frames, slap!");
     NewAttr(rPos, SwFltAnchor(pFmt));
 }

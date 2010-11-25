@@ -69,7 +69,7 @@ inline SwSaveClip::~SwSaveClip()
     Reset();
 }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 
 /*************************************************************************
  *                          class SwDbgOut

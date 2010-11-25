@@ -34,12 +34,13 @@
 #include <swtypes.hxx>
 #include <calbck.hxx>
 #include <swrect.hxx>
-#ifndef DBG_UTIL
-#include <node.hxx>         // fuer StartNode->GetMyIndex
-#else
+
+#if OSL_DEBUG_LEVEL > 1
 class SwStartNode;
 #include <memory>
 #include <boost/noncopyable.hpp>
+#else
+#include <node.hxx>         // fuer StartNode->GetMyIndex
 #endif
 
 class Color;
@@ -109,7 +110,7 @@ protected:
 
     BOOL        bModifyLocked   :1;
     BOOL        bNewModel       :1; // FALSE: old SubTableModel; TRUE: new RowSpanModel
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     bool bDontChangeModel;  // This is set by functions (like Merge()) to forbid a laet model change
 #endif
 
@@ -208,7 +209,7 @@ public:
     BOOL Merge( SwDoc* pDoc, const SwSelBoxes& rBoxes, const SwSelBoxes& rMerged,
                 SwTableBox* pMergeBox, SwUndoTblMerge* pUndo = 0 )
     {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         bDontChangeModel = true;
 #endif
         return bNewModel ? NewMerge( pDoc, rBoxes, rMerged, pMergeBox, pUndo ) :
@@ -217,7 +218,7 @@ public:
     BOOL SplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, USHORT nCnt=1,
                    BOOL bSameHeight = FALSE )
     {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         bDontChangeModel = true;
 #endif
         return bNewModel ? NewSplitRow( pDoc, rBoxes, nCnt, bSameHeight ) :
@@ -321,7 +322,7 @@ public:
                         SwTwips nAbsDiff, SwTwips nRelDiff, SwUndo** ppUndo );
     BOOL SetRowHeight( SwTableBox& rAktBox, USHORT eType,
                         SwTwips nAbsDiff, SwTwips nRelDiff, SwUndo** ppUndo );
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     void CheckConsistency() const;
 #endif
 };
@@ -410,10 +411,10 @@ public:
 
     const SwStartNode *GetSttNd() const { return pSttNd; }
     ULONG GetSttIdx() const
-#ifndef DBG_UTIL
-        { return pSttNd ? pSttNd->GetIndex() : 0; }
-#else
+#if OSL_DEBUG_LEVEL > 1
         ;
+#else
+        { return pSttNd ? pSttNd->GetIndex() : 0; }
 #endif
 
     // suche nach der naechsten/vorherigen Box mit Inhalt

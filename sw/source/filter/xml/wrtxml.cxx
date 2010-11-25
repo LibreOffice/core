@@ -92,7 +92,7 @@ sal_uInt32 SwXMLWriter::_Write( SfxMedium* pTargetMedium )
     // Get service factory
     uno::Reference< lang::XMultiServiceFactory > xServiceFactory =
             comphelper::getProcessServiceFactory();
-    ASSERT( xServiceFactory.is(),
+    OSL_ENSURE( xServiceFactory.is(),
             "SwXMLWriter::Write: got no service manager" );
     if( !xServiceFactory.is() )
         return ERR_SWG_WRITE_ERROR;
@@ -105,7 +105,7 @@ sal_uInt32 SwXMLWriter::_Write( SfxMedium* pTargetMedium )
     uno::Reference< document::XEmbeddedObjectResolver > xObjectResolver;
     SvXMLEmbeddedObjectHelper *pObjectHelper = 0;
 
-    ASSERT( xStg.is(), "Where is my storage?" );
+    OSL_ENSURE( xStg.is(), "Where is my storage?" );
 pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
                                                  GRAPHICHELPER_MODE_WRITE,
                                                  sal_False );
@@ -343,7 +343,7 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
     //Get model
     uno::Reference< lang::XComponent > xModelComp(
         pDoc->GetDocShell()->GetModel(), UNO_QUERY );
-    ASSERT( xModelComp.is(), "XMLWriter::Write: got no model" );
+    OSL_ENSURE( xModelComp.is(), "XMLWriter::Write: got no model" );
     if( !xModelComp.is() )
         return ERR_SWG_WRITE_ERROR;
 
@@ -642,9 +642,9 @@ sal_Bool SwXMLWriter::WriteThroughComponent(
     const Sequence<Any> & rArguments,
     const Sequence<PropertyValue> & rMediaDesc )
 {
-    ASSERT( xOutputStream.is(), "I really need an output stream!" );
-    ASSERT( xComponent.is(), "Need component!" );
-    ASSERT( NULL != pServiceName, "Need component name!" );
+    OSL_ENSURE( xOutputStream.is(), "I really need an output stream!" );
+    OSL_ENSURE( xComponent.is(), "Need component!" );
+    OSL_ENSURE( NULL != pServiceName, "Need component name!" );
 
     RTL_LOGFILE_CONTEXT_AUTHOR( aFilterLog, "sw", LOGFILE_AUTHOR,
                                 "SwXMLWriter::WriteThroughComponent" );
@@ -655,7 +655,7 @@ sal_Bool SwXMLWriter::WriteThroughComponent(
             String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(
                 "com.sun.star.xml.sax.Writer")) ),
         UNO_QUERY );
-    ASSERT( xSaxWriter.is(), "can't instantiate XML writer" );
+    OSL_ENSURE( xSaxWriter.is(), "can't instantiate XML writer" );
     if(!xSaxWriter.is())
         return sal_False;
 
@@ -675,7 +675,7 @@ sal_Bool SwXMLWriter::WriteThroughComponent(
     uno::Reference< document::XExporter > xExporter(
         rFactory->createInstanceWithArguments(
             OUString::createFromAscii(pServiceName), aArgs), UNO_QUERY);
-    ASSERT( xExporter.is(),
+    OSL_ENSURE( xExporter.is(),
             "can't instantiate export filter component" );
     if( !xExporter.is() )
         return sal_False;

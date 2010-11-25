@@ -298,7 +298,7 @@ void SwVisCrsr::Hide()
 
 void __EXPORT SwVisCrsr::Timeout()
 {
-    ASSERT( !bIsDragCrsr, "Timer vorher abschalten" );
+    OSL_ENSURE( !bIsDragCrsr, "Timer vorher abschalten" );
     if( bIsVisible )
     {
         if ( !pCrsrShell->GetWin() ) //SwFrmFmt::GetGraphic setzt das Win temp aus!
@@ -756,7 +756,7 @@ BOOL SwShellCrsr::UpDown( BOOL bUp, USHORT nCnt )
                             &GetPtPos(), GetShell()->GetUpDownX() );
 }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 
 // JP 05.03.98: zum Testen des UNO-Crsr Verhaltens hier die Implementierung
 //              am sichtbaren Cursor
@@ -853,7 +853,7 @@ void SwShellTableCrsr::FillRects()
         while( pFrm && !pFrm->IsCellFrm() )
             pFrm = pFrm->GetUpper();
 
-        ASSERT( pFrm, "Node nicht in einer Tabelle" );
+        OSL_ENSURE( pFrm, "Node nicht in einer Tabelle" );
 
         while ( pFrm )
         {
@@ -888,14 +888,14 @@ BOOL SwShellTableCrsr::IsInside( const Point& rPt ) const
         SwFrm* pFrm = pCNd->GetFrm( &GetPtPos() );
         while( pFrm && !pFrm->IsCellFrm() )
             pFrm = pFrm->GetUpper();
-        ASSERT( pFrm, "Node nicht in einer Tabelle" );
+        OSL_ENSURE( pFrm, "Node nicht in einer Tabelle" );
         if( pFrm && pFrm->Frm().IsInside( rPt ) )
             return TRUE;
     }
     return FALSE;
 }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 
 // JP 05.03.98: zum Testen des UNO-Crsr Verhaltens hier die Implementierung
 //              am sichtbaren Cursor

@@ -70,12 +70,12 @@ const SwLayoutFrm& SwEnvironmentOfAnchoredObject::GetHoriEnvironmentLayoutFrm(
                 !pHoriEnvironmentLayFrm->IsPageFrm() )
         {
             pHoriEnvironmentLayFrm = pHoriEnvironmentLayFrm->GetUpper();
-            ASSERT( pHoriEnvironmentLayFrm,
+            OSL_ENSURE( pHoriEnvironmentLayFrm,
                     "SwEnvironmentOfAnchoredObject::GetHoriEnvironmentLayoutFrm(..) - no page|fly|cell frame found" );
         }
     }
 
-    ASSERT( pHoriEnvironmentLayFrm->ISA(SwLayoutFrm),
+    OSL_ENSURE( pHoriEnvironmentLayFrm->ISA(SwLayoutFrm),
                 "SwEnvironmentOfAnchoredObject::GetHoriEnvironmentLayoutFrm(..) - found frame isn't a layout frame" );
 
     return static_cast<const SwLayoutFrm&>(*pHoriEnvironmentLayFrm);
@@ -110,12 +110,12 @@ const SwLayoutFrm& SwEnvironmentOfAnchoredObject::GetVertEnvironmentLayoutFrm(
                 !pVertEnvironmentLayFrm->IsPageFrm() )
         {
             pVertEnvironmentLayFrm = pVertEnvironmentLayFrm->GetUpper();
-            ASSERT( pVertEnvironmentLayFrm,
+            OSL_ENSURE( pVertEnvironmentLayFrm,
                     "SwEnvironmentOfAnchoredObject::GetVertEnvironmentLayoutFrm(..) - proposed frame not found" );
         }
     }
 
-    ASSERT( pVertEnvironmentLayFrm->ISA(SwLayoutFrm),
+    OSL_ENSURE( pVertEnvironmentLayFrm->ISA(SwLayoutFrm),
                 "SwEnvironmentOfAnchoredObject::GetVertEnvironmentLayoutFrm(..) - found frame isn't a layout frame" );
 
     return static_cast<const SwLayoutFrm&>(*pVertEnvironmentLayFrm);

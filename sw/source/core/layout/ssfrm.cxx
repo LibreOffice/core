@@ -379,7 +379,7 @@ SwFrm::~SwFrm()
             ViewShell *pVSh = pRootFrm->GetCurrShell();
             if( pVSh && pVSh->Imp() )
             {
-                ASSERT( !GetLower(), "Lowers should be dispose already!" );
+                OSL_ENSURE( !GetLower(), "Lowers should be dispose already!" );
                 pVSh->Imp()->DisposeAccessibleFrm( this );
             }
         }
@@ -397,7 +397,7 @@ SwFrm::~SwFrm()
                 SdrObject* pSdrObj = pAnchoredObj->DrawObj();
                 SwDrawContact* pContact =
                         static_cast<SwDrawContact*>(pSdrObj->GetUserCall());
-                ASSERT( pContact,
+                OSL_ENSURE( pContact,
                         "<SwFrm::~SwFrm> - missing contact for drawing object" );
                 if ( pContact )
                 {
@@ -409,7 +409,7 @@ SwFrm::~SwFrm()
             delete pDrawObjs;
     }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     // JP 15.10.2001: for detection of access to deleted frames
     pDrawObjs = (SwSortedObjs*)0x33333333;
 #endif
@@ -523,7 +523,7 @@ SwLayoutFrm::~SwLayoutFrm()
                     SdrObject* pSdrObj = pAnchoredObj->DrawObj();
                     SwDrawContact* pContact =
                             static_cast<SwDrawContact*>(pSdrObj->GetUserCall());
-                    ASSERT( pContact,
+                    OSL_ENSURE( pContact,
                             "<SwFrm::~SwFrm> - missing contact for drawing object" );
                     if ( pContact )
                     {
@@ -556,7 +556,7 @@ SwLayoutFrm::~SwLayoutFrm()
                 SdrObject* pSdrObj = pAnchoredObj->DrawObj();
                 SwDrawContact* pContact =
                         static_cast<SwDrawContact*>(pSdrObj->GetUserCall());
-                ASSERT( pContact,
+                OSL_ENSURE( pContact,
                         "<SwFrm::~SwFrm> - missing contact for drawing object" );
                 if ( pContact )
                 {
@@ -624,7 +624,7 @@ const SwRect SwFrm::PaintArea() const
             else
                 nTmpRight = (pNxt->Frm().*fnRect->fnGetRight)();
         }
-        ASSERT( pTmp, "PaintArea lost in time and space" );
+        OSL_ENSURE( pTmp, "PaintArea lost in time and space" );
         if( pTmp->IsPageFrm() || pTmp->IsFlyFrm() ||
             pTmp->IsCellFrm() || pTmp->IsRowFrm() || //nobody leaves a table!
             pTmp->IsRootFrm() )

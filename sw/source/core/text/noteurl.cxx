@@ -64,7 +64,7 @@ void SwNoteURL::InsertURLNote( const XubString& rURL, const XubString& rTarget,
 void SwNoteURL::FillImageMap( ImageMap *pMap, const Point &rPos,
     const MapMode& rMap )
 {
-    ASSERT( pMap, "FillImageMap: No ImageMap, no cookies!" );
+    OSL_ENSURE( pMap, "FillImageMap: No ImageMap, no cookies!" );
     MSHORT nCount = Count();
     if( nCount )
     {

@@ -61,7 +61,7 @@ SwObjectFormatterLayFrm* SwObjectFormatterLayFrm::CreateObjFormatter(
     if ( !_rAnchorLayFrm.IsPageFrm() &&
          !_rAnchorLayFrm.IsFlyFrm() )
     {
-        ASSERT( false,
+        OSL_ENSURE( false,
                 "<SwObjectFormatterLayFrm::CreateObjFormatter(..)> - unexcepted type of anchor frame " );
         return 0L;
     }
@@ -130,7 +130,7 @@ bool SwObjectFormatterLayFrm::_AdditionalFormatObjsOnPage()
 {
     if ( !GetAnchorFrm().IsPageFrm() )
     {
-        ASSERT( false,
+        OSL_ENSURE( false,
                 "<SwObjectFormatterLayFrm::_AdditionalFormatObjsOnPage()> - mis-usage of method, call only for anchor frames of type page frame" );
         return true;
     }
@@ -172,8 +172,8 @@ bool SwObjectFormatterLayFrm::_AdditionalFormatObjsOnPage()
         SwPageFrm* pPageFrmOfAnchor = pAnchoredObj->FindPageFrmOfAnchor();
         // --> OD 2004-10-08 #i26945# - check, if the page frame of the
         // object's anchor frame isn't the given page frame
-        ASSERT( pPageFrmOfAnchor,
-                "<SwObjectFormatterLayFrm::_AdditionalFormatObjsOnPage()> - missing page frame" )
+        OSL_ENSURE( pPageFrmOfAnchor,
+                "<SwObjectFormatterLayFrm::_AdditionalFormatObjsOnPage()> - missing page frame" );
         if ( pPageFrmOfAnchor &&
              // --> OD 2004-10-22 #i35911#
              pPageFrmOfAnchor->GetPhyPageNum() < rPageFrm.GetPhyPageNum() )

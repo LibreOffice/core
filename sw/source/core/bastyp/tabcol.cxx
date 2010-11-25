@@ -61,11 +61,11 @@ SwTabCols::SwTabCols( const SwTabCols& rCpy ) :
         SwTabColsEntry aEntry2 = rCpy.GetData()[i];
         (void) aEntry1;
         (void) aEntry2;
-        ASSERT( aEntry1.nPos == aEntry2.nPos &&
+        OSL_ENSURE( aEntry1.nPos == aEntry2.nPos &&
                 aEntry1.nMin == aEntry2.nMin &&
                 aEntry1.nMax == aEntry2.nMax &&
                 aEntry1.bHidden == aEntry2.bHidden,
-                "CopyContructor of SwTabColsEntries did not succeed!" )
+                "CopyContructor of SwTabColsEntries did not succeed!" );
     }
 #endif
 }

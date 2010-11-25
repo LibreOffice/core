@@ -65,7 +65,7 @@ SwFmtWrapInfluenceOnObjPos& SwFmtWrapInfluenceOnObjPos::operator=(
 
 int SwFmtWrapInfluenceOnObjPos::operator==( const SfxPoolItem& _rAttr ) const
 {
-    ASSERT( SfxPoolItem::operator==( _rAttr ), "keine gleichen Attribute" );
+    OSL_ENSURE( SfxPoolItem::operator==( _rAttr ), "keine gleichen Attribute" );
     return ( mnWrapInfluenceOnPosition ==
                     static_cast<const SwFmtWrapInfluenceOnObjPos&>(_rAttr).
                                                 GetWrapInfluenceOnObjPos() );
@@ -88,7 +88,7 @@ bool SwFmtWrapInfluenceOnObjPos::QueryValue( Any& rVal, BYTE nMemberId ) const
         }
         break;
         default:
-            ASSERT( false, "<SwFmtWrapInfluenceOnObjPos::QueryValue()> - unknown MemberId" );
+            OSL_ENSURE( false, "<SwFmtWrapInfluenceOnObjPos::QueryValue()> - unknown MemberId" );
             bRet = false;
     }
 
@@ -117,13 +117,13 @@ bool SwFmtWrapInfluenceOnObjPos::PutValue( const Any& rVal, BYTE nMemberId )
             }
             else
             {
-                ASSERT( false, "<SwFmtWrapInfluenceOnObjPos::PutValue(..)> - invalid attribute value" );
+                OSL_ENSURE( false, "<SwFmtWrapInfluenceOnObjPos::PutValue(..)> - invalid attribute value" );
                 bRet = false;
             }
         }
         break;
         default:
-            ASSERT( false, "<SwFmtWrapInfluenceOnObjPos::QueryValue()> - unknown MemberId" );
+            OSL_ENSURE( false, "<SwFmtWrapInfluenceOnObjPos::QueryValue()> - unknown MemberId" );
             bRet = false;
     }
 
@@ -143,7 +143,7 @@ void SwFmtWrapInfluenceOnObjPos::SetWrapInfluenceOnObjPos( sal_Int16 _nWrapInflu
     }
     else
     {
-        ASSERT( false, "<SwFmtWrapInfluenceOnObjPos::SetWrapInfluenceOnObjPos(..)> - invalid attribute value" );
+        OSL_ENSURE( false, "<SwFmtWrapInfluenceOnObjPos::SetWrapInfluenceOnObjPos(..)> - invalid attribute value" );
     }
 }
 

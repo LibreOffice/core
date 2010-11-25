@@ -40,7 +40,7 @@
 #include <tools/datetime.hxx>
 #include <tools/stream.hxx>
 #include <tools/string.hxx>
-#include <errhdl.hxx>       // ASSERT()
+#include <errhdl.hxx>       // OSL_ENSURE()
 #include "hash_wrap.hxx"
 #include "sortedarray.hxx"
 

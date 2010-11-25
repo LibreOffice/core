@@ -30,8 +30,8 @@
 #include "precompiled_sw.hxx"
 
 
-#ifndef DBG_UTIL
-#error Wer fummelt denn an den makefiles?
+#if !defined(OSL_DEBUG_LEVEL) || OSL_DEBUG_LEVEL == 0
+#error Who broke the makefiles?
 #endif
 
 #include "viewsh.hxx"       // IsDbg()
@@ -294,7 +294,7 @@ sal_Bool IsDbg( const SwTxtFrm *pFrm )
     if( pFrm && pFrm->GetShell() )
         return pFrm->GetShell()->GetViewOptions()->IsTest4();
     else
-#else
+#endif
         return sal_False;
 }
 
@@ -304,7 +304,7 @@ static void Error()
 {
     // wegen PM und BCC
     sal_Bool bFalse = sal_False;
-    ASSERT( bFalse, "txtio: No debug version" );
+    OSL_ENSURE( bFalse, "txtio: No debug version" );
 }
 
 #define IMPL_OUTOP(class) \
@@ -465,7 +465,7 @@ const char *GetPrepName( const PrepareHint ePrep )
         pPREP_UL_SPACE, pPREP_MUST_FIT, pPREP_WIDOWS, pPREP_QUOVADIS,
         pPREP_PAGE
     };
-    ASSERT( ePrep < PREP_END, "GetPrepName: unknown PrepareHint" );
+    OSL_ENSURE( ePrep < PREP_END, "GetPrepName: unknown PrepareHint" );
     return( ppNameArr[ePrep] );
 }
 

@@ -184,7 +184,7 @@ SwParaPortion *SwTxtFrm::GetPara()
 
 void SwTxtFrm::ClearPara()
 {
-    ASSERT( !IsLocked(), "+SwTxtFrm::ClearPara: this is locked." );
+    OSL_ENSURE( !IsLocked(), "+SwTxtFrm::ClearPara: this is locked." );
     if ( !IsLocked() && GetCacheIdx() != MSHRT_MAX )
     {
         SwTxtLine *pTxtLine = (SwTxtLine*)SwTxtFrm::GetTxtCache()->
@@ -223,7 +223,7 @@ void SwTxtFrm::SetPara( SwParaPortion *pNew, sal_Bool bDelete )
         }
         else
         {
-            ASSERT( !pNew, "+SetPara: Losing SwParaPortion" );
+            OSL_ENSURE( !pNew, "+SetPara: Losing SwParaPortion" );
             nCacheIdx = MSHRT_MAX;
         }
     }
@@ -234,7 +234,7 @@ void SwTxtFrm::SetPara( SwParaPortion *pNew, sal_Bool bDelete )
             nCacheIdx = pTxtLine->GetCachePos();
         else
         {
-            ASSERT( sal_False, "+SetPara: InsertCache failed." );
+            OSL_ENSURE( sal_False, "+SetPara: InsertCache failed." );
         }
     }
 }

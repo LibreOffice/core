@@ -369,7 +369,7 @@ void Hash::CalcHashValue( CompareData& rData )
         for( ULONG n = 0; n < rData.GetLineCount(); ++n )
         {
             const CompareLine* pLine = rData.GetLine( n );
-            ASSERT( pLine, "wo ist die Line?" );
+            OSL_ENSURE( pLine, "wo ist die Line?" );
             ULONG nH = pLine->GetHashValue();
 
             ULONG* pFound = &pHashArr[ nH % nPrime ];

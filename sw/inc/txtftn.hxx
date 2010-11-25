@@ -74,7 +74,7 @@ public:
 
 inline const SwTxtNode& SwTxtFtn::GetTxtNode() const
 {
-    ASSERT( m_pTxtNode, "SwTxtFtn: where is my TxtNode?" );
+    OSL_ENSURE( m_pTxtNode, "SwTxtFtn: where is my TxtNode?" );
     return *m_pTxtNode;
 }
 

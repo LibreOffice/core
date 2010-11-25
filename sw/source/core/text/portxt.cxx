@@ -327,7 +327,7 @@ sal_Bool SwTxtPortion::_Format( SwTxtFormatInfo &rInf )
             // this should usually be true but
             aGuess.AlternativeSpelling( rInf, rInf.GetSoftHyphPos() - 1 );
             bFull = CreateHyphen( rInf, aGuess );
-            ASSERT( bFull, "Problem with hyphenation!!!" );
+            OSL_ENSURE( bFull, "Problem with hyphenation!!!" );
         }
         rInf.ChgHyph( bHyph );
         rInf.SetSoftHyphPos( 0 );
@@ -435,7 +435,7 @@ sal_Bool SwTxtPortion::_Format( SwTxtFormatInfo &rInf )
 
             SetLen( aGuess.BreakPos() - rInf.GetIdx() );
 
-            ASSERT( aGuess.BreakStart() >= aGuess.FieldDiff(),
+            OSL_ENSURE( aGuess.BreakStart() >= aGuess.FieldDiff(),
                     "Trouble with expanded field portions during line break" );
             const xub_StrLen nRealStart = aGuess.BreakStart() - aGuess.FieldDiff();
             if( aGuess.BreakPos() < nRealStart && !InExpGrp() )
@@ -491,9 +491,9 @@ sal_Bool SwTxtPortion::Format( SwTxtFormatInfo &rInf )
         return sal_True;
     }
 
-    ASSERT( rInf.RealWidth() || (rInf.X() == rInf.Width()),
+    OSL_ENSURE( rInf.RealWidth() || (rInf.X() == rInf.Width()),
         "SwTxtPortion::Format: missing real width" );
-    ASSERT( Height(), "SwTxtPortion::Format: missing height" );
+    OSL_ENSURE( Height(), "SwTxtPortion::Format: missing height" );
 
     return _Format( rInf );
 }
@@ -551,7 +551,7 @@ void SwTxtPortion::FormatEOL( SwTxtFormatInfo &rInf )
 
 xub_StrLen SwTxtPortion::GetCrsrOfst( const KSHORT nOfst ) const
 {
-    ASSERT( !this, "SwTxtPortion::GetCrsrOfst: don't use this method!" );
+    OSL_ENSURE( !this, "SwTxtPortion::GetCrsrOfst: don't use this method!" );
     return SwLinePortion::GetCrsrOfst( nOfst );
 }
 
@@ -851,7 +851,7 @@ sal_Bool SwFieldFormPortion::Format( SwTxtFormatInfo & rInf )
     SwIndex aIndex( pNd, rInf.GetIdx(  ) );
     SwPosition aPosition( *pNd, aIndex );
     IFieldmark *pBM = doc->getIDocumentMarkAccess( )->getFieldmarkFor( aPosition );
-    ASSERT( pBM != NULL, "Where is my form field bookmark???" );
+    OSL_ENSURE( pBM != NULL, "Where is my form field bookmark???" );
     if ( pBM != NULL )
     {
         if ( pBM->GetFieldname( ).equalsAscii( ODF_FORMCHECKBOX ) )

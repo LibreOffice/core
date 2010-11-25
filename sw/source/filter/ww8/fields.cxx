@@ -30,7 +30,8 @@
 #include "precompiled_sw.hxx"
 
 #include "fields.hxx"
-#include <errhdl.hxx>   //ASSERT (use our own ww header later for asserts)
+#include <errhdl.hxx>
+#include <osl/diagnose.h>
 #include <sal/macros.h>
 #include <stddef.h>
 
@@ -144,7 +145,7 @@ namespace ww
         size_t nIndex = static_cast<size_t>(eIndex);
         if (nIndex >= SAL_N_ELEMENTS(aFieldNames))
             eIndex = eNONE;
-        ASSERT(eIndex != eNONE, "Unknown WinWord Field, let cmc know");
+        OSL_ENSURE(eIndex != eNONE, "Unknown WinWord Field, let cmc know");
         return aFieldNames[eIndex];
     }
 }

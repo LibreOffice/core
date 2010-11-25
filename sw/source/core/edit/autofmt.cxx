@@ -268,7 +268,7 @@ SwTxtFrm* SwAutoFormat::GetFrm( const SwTxtNode& rTxtNd ) const
 {
     // besorge mal den Frame
     const SwCntntFrm *pFrm = rTxtNd.GetFrm();
-    ASSERT( pFrm, "zum Autoformat muss das Layout vorhanden sein" );
+    OSL_ENSURE( pFrm, "zum Autoformat muss das Layout vorhanden sein" );
     if( aFlags.bAFmtByInput && !pFrm->IsValid() )
     {
         SwRect aTmpFrm( pFrm->Frm() );
@@ -2199,7 +2199,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
     pCharClass( 0 ),
     nRedlAutoFmtSeqId( 0 )
 {
-    ASSERT( (pSttNd && pEndNd) || (!pSttNd && !pEndNd),
+    OSL_ENSURE( (pSttNd && pEndNd) || (!pSttNd && !pEndNd),
             "Kein Bereich angegeben" );
 
     if( aFlags.bSetNumRule && !aFlags.bAFmtByInput )

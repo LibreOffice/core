@@ -182,7 +182,7 @@ USHORT SwEditShell::SaveGlossaryDoc( SwTextBlocks& rBlock,
 
 BOOL SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
 {
-    ASSERT( pInsDoc, "kein Ins.Dokument"  );
+    OSL_ENSURE( pInsDoc, "kein Ins.Dokument"  );
 
     SwNodes& rNds = pInsDoc->GetNodes();
 

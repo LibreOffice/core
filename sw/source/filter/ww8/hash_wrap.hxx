@@ -33,7 +33,7 @@
 
 #include <hash_set>
 #include <tools/debug.hxx>
-#include <errhdl.hxx>       // ASSERT()
+#include <errhdl.hxx>       // OSL_ENSURE()
 
 //simple wrapper around hash_set to behave like sorted array
 namespace ww
@@ -66,7 +66,7 @@ namespace ww
 
         WrappedHash(const C *pWwSprmTab, const size_t nNoElems)
         {
-            ASSERT(nNoElems && pWwSprmTab, "WW8: empty Array: Don't do that");
+            OSL_ENSURE(nNoElems && pWwSprmTab, "WW8: empty Array: Don't do that");
             const C *pIter = pWwSprmTab;
             const C *pEnd  = pWwSprmTab + nNoElems;
             while (pIter < pEnd)

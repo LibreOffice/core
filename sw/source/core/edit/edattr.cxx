@@ -431,7 +431,7 @@ BOOL lcl_IsNoEndTxtAttrAtPos( const SwTxtNode& rTNd, xub_StrLen nPos,
         // --> OD 2008-03-19 #refactorlists#
         if ( rTNd.IsInList() )
         {
-            ASSERT( rTNd.GetNumRule(),
+            OSL_ENSURE( rTNd.GetNumRule(),
                     "<lcl_IsNoEndTxtAttrAtPos(..)> - no list style found at text node. Serious defect -> please inform OD." );
             const SwNumRule* pNumRule = rTNd.GetNumRule();
             const SwNumFmt &rNumFmt = pNumRule->Get( static_cast<USHORT>(rTNd.GetActualListLevel()) );
@@ -552,7 +552,7 @@ USHORT SwEditShell::GetScriptType() const
                                                 ? pEnd->nContent.GetIndex()
                                                 : rTxt.Len();
 
-                        ASSERT( nEndPos <= rTxt.Len(), "Index outside the range - endless loop!" );
+                        OSL_ENSURE( nEndPos <= rTxt.Len(), "Index outside the range - endless loop!" );
                         if( nEndPos > rTxt.Len() )
                             nEndPos = rTxt.Len();
 
@@ -626,7 +626,7 @@ USHORT SwEditShell::GetScalingOfSelectedText() const
     const SwPaM* pCrsr = GetCrsr();
     const SwPosition* pStt = pCrsr->Start();
     const SwTxtNode* pTNd = pStt->nNode.GetNode().GetTxtNode();
-    ASSERT( pTNd, "no textnode available" );
+    OSL_ENSURE( pTNd, "no textnode available" );
 
     USHORT nScaleWidth;
     if( pTNd )

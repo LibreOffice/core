@@ -230,7 +230,7 @@ void SwUndoDelNum::Undo( SwUndoIter& rUndoIter )
     for( USHORT n = 0; n < aNodeIdx.Count(); ++n )
     {
         SwTxtNode* pNd = rDoc.GetNodes()[ aNodeIdx[ n ] ]->GetTxtNode();
-        ASSERT( pNd, "wo ist der TextNode geblieben?" );
+        OSL_ENSURE( pNd, "wo ist der TextNode geblieben?" );
         pNd->SetAttrListLevel(aLevels[ n ] );
 
         if( pNd->GetCondFmtColl() )

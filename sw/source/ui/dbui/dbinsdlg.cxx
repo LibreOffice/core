@@ -1186,7 +1186,9 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
 #endif
                 )
                 {
+#if OSL_DEBUG_LEVEL > 1
                     OSL_ENSURE(false, ByteString(String(aExcept.Message), gsl_getSystemTextEncoding()).GetBuffer());
+#endif
                 }
             }
 

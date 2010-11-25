@@ -28,6 +28,7 @@
 #ifndef _SWRECT_HXX
 #define _SWRECT_HXX
 #include "errhdl.hxx"
+#include <osl/diagnose.h>
 #include <tools/gen.hxx>
 class SvStream;
 
@@ -307,7 +308,7 @@ inline SwRect &SwRect::operator-=( const Size &rSz )
 //--------------------------- Sonstiges
 inline Rectangle SwRect::SVRect() const
 {
-    ASSERT( !IsEmpty(), "SVRect() without Width or Height" );
+    OSL_ENSURE( !IsEmpty(), "SVRect() without Width or Height" );
     return Rectangle( m_Point.getX(), m_Point.getY(),
         m_Point.getX() + m_Size.getWidth() - 1,         //Right()
         m_Point.getY() + m_Size.getHeight() - 1 );      //Bottom()

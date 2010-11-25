@@ -236,9 +236,9 @@ void SwRTFParser::SetFlysInDoc()
     {
         SwFlySave* pFlySave = aFlyArr[ n ];
 
-        ASSERT( !pFlySave->nSttNd.GetNode().FindFlyStartNode(),
+        OSL_ENSURE( !pFlySave->nSttNd.GetNode().FindFlyStartNode(),
                 "Content vom Fly steht in einem Fly" );
-        ASSERT( pFlySave->nSttNd.GetIndex() <= pFlySave->nEndNd.GetIndex(),
+        OSL_ENSURE( pFlySave->nSttNd.GetIndex() <= pFlySave->nEndNd.GetIndex(),
                 "Fly hat falschen Bereich" );
 
 
@@ -395,7 +395,7 @@ void SwRTFParser::SetFlysInDoc()
         // patch from cmc for #i52542#
         if (pSttNd->GetIndex() + 1 == pSttNd->EndOfSectionIndex())
         {
-            ASSERT(!this, "nothing in this frame, not legal");
+            OSL_ENSURE(!this, "nothing in this frame, not legal");
             delete pFlySave;
             continue;
         }
@@ -1446,7 +1446,7 @@ void SwRTFParser::_SetPictureSize( const SwNoTxtNode& rNd,
 
 void SwRTFParser::GetPageSize( Size& rSize )
 {
-    ASSERT(!maSegments.empty(), "not possible");
+    OSL_ENSURE(!maSegments.empty(), "not possible");
     if (maSegments.empty())
     {
         rSize.Width() = 12240 - 1800 - 1800;

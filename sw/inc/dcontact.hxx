@@ -182,7 +182,7 @@ public:
     // about the object (Writer fly frame resp. drawing object)
     const SwFmtAnchor& GetAnchorFmt() const
     {
-        ASSERT( GetFmt(),
+        OSL_ENSURE( GetFmt(),
                 "<SwContact::GetAnchorFmt()> - no frame format -> crash" );
 
         return GetFmt()->GetAnchor();
@@ -197,7 +197,7 @@ public:
 
     const SwPosition&  GetCntntAnchor() const
     {
-        ASSERT( GetAnchorFmt().GetCntntAnchor(),
+        OSL_ENSURE( GetAnchorFmt().GetCntntAnchor(),
                 "<SwContact::GetCntntAnchor()> - no content anchor -> crash" );
 
         return *(GetAnchorFmt().GetCntntAnchor());

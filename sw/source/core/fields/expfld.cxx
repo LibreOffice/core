@@ -143,7 +143,7 @@ SwTxtNode* GetFirstTxtNode( const SwDoc& rDoc, SwPosition& rPos,
         while( 0 != (pCNd = rNodes.GoNext( &rPos.nNode ) ) &&
                 0 == ( pTxtNode = pCNd->GetTxtNode() ) )
                         ;
-        ASSERT( pTxtNode, "wo ist der 1.TextNode" );
+        OSL_ENSURE( pTxtNode, "wo ist der 1.TextNode" );
         rPos.nContent.Assign( pTxtNode, 0 );
     }
     else if ( !pCFrm->IsValid() )
@@ -172,7 +172,7 @@ const SwTxtNode* GetBodyTxtNode( const SwDoc& rDoc, SwPosition& rPos,
         {
             // hole das FlyFormat
             SwFrmFmt* pFlyFmt = ((SwFlyFrm*)pLayout)->GetFmt();
-            ASSERT( pFlyFmt, "kein FlyFormat gefunden, wo steht das Feld" );
+            OSL_ENSURE( pFlyFmt, "kein FlyFormat gefunden, wo steht das Feld" );
 
             const SwFmtAnchor &rAnchor = pFlyFmt->GetAnchor();
 
@@ -187,7 +187,7 @@ const SwTxtNode* GetBodyTxtNode( const SwDoc& rDoc, SwPosition& rPos,
                      (FLY_AT_CHAR == rAnchor.GetAnchorId()) ||
                      (FLY_AS_CHAR == rAnchor.GetAnchorId()))
             {
-                ASSERT( rAnchor.GetCntntAnchor(), "keine gueltige Position" );
+                OSL_ENSURE( rAnchor.GetCntntAnchor(), "keine gueltige Position" );
                 rPos = *rAnchor.GetCntntAnchor();
                 pTxtNode = rPos.nNode.GetNode().GetTxtNode();
                 if ( FLY_AT_PARA == rAnchor.GetAnchorId() )
@@ -340,7 +340,7 @@ void SwGetExpField::ChangeExpansion( const SwFrm& rFrm, const SwTxtFld& rFld )
     if( bIsInBodyTxt )      // nur Felder in Footer, Header, FootNote, Flys
         return;
 
-    ASSERT( !rFrm.IsInDocBody(), "Flag ist nicht richtig, Frame steht im DocBody" );
+    OSL_ENSURE( !rFrm.IsInDocBody(), "Flag ist nicht richtig, Frame steht im DocBody" );
 
     // bestimme mal das Dokument (oder geht es noch einfacher?)
     const SwTxtNode* pTxtNode = &rFld.GetTxtNode();
@@ -646,7 +646,7 @@ void SwSetExpFieldType::SetChapter( SwSetExpField& rFld, const SwNode& rNd )
             }
             else
             {
-                ASSERT( false,
+                OSL_ENSURE( false,
                         "<SwSetExpFieldType::SetChapter(..)> - text node with numbering rule, but without number. This is a serious defect -> inform OD" );
             }
         }

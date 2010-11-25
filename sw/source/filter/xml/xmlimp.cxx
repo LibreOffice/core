@@ -564,12 +564,12 @@ sal_Int64 SAL_CALL SwXMLImport::getSomething( const Sequence< sal_Int8 >& rId )
 OTextCursorHelper *lcl_xml_GetSwXTextCursor( const Reference < XTextCursor >& rTextCursor )
 {
     Reference<XUnoTunnel> xCrsrTunnel( rTextCursor, UNO_QUERY );
-    ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
+    OSL_ENSURE( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
     if( !xCrsrTunnel.is() )
         return 0;
     OTextCursorHelper *pTxtCrsr = reinterpret_cast< OTextCursorHelper *>(
             sal::static_int_cast< sal_IntPtr >( xCrsrTunnel->getSomething(  OTextCursorHelper::getUnoTunnelId() )));
-    ASSERT( pTxtCrsr, "SwXTextCursor missing" );
+    OSL_ENSURE( pTxtCrsr, "SwXTextCursor missing" );
     return pTxtCrsr;
 }
 
@@ -694,12 +694,12 @@ void SwXMLImport::startDocument( void )
         if( IMPORT_ALL == getImportFlags() )
         {
             pTxtCrsr = lcl_xml_GetSwXTextCursor( xTextCursor );
-            ASSERT( pTxtCrsr, "SwXTextCursor missing" );
+            OSL_ENSURE( pTxtCrsr, "SwXTextCursor missing" );
             if( !pTxtCrsr )
                 return;
 
             pDoc = pTxtCrsr->GetDoc();
-            ASSERT( pDoc, "SwDoc missing" );
+            OSL_ENSURE( pDoc, "SwDoc missing" );
             if( !pDoc )
                 return;
 
@@ -727,12 +727,12 @@ void SwXMLImport::startDocument( void )
 
     if( !pTxtCrsr  )
         pTxtCrsr = lcl_xml_GetSwXTextCursor( xTextCursor );
-    ASSERT( pTxtCrsr, "SwXTextCursor missing" );
+    OSL_ENSURE( pTxtCrsr, "SwXTextCursor missing" );
     if( !pTxtCrsr )
         return;
 
     SwDoc *pDoc = pTxtCrsr->GetDoc();
-    ASSERT( pDoc, "SwDoc missing" );
+    OSL_ENSURE( pDoc, "SwDoc missing" );
     if( !pDoc )
         return;
 
@@ -815,10 +815,10 @@ void SwXMLImport::endDocument( void )
     {
         Reference<XUnoTunnel> xCrsrTunnel( GetTextImport()->GetCursor(),
                                               UNO_QUERY);
-        ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
+        OSL_ENSURE( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
         OTextCursorHelper *pTxtCrsr = reinterpret_cast< OTextCursorHelper *>(
                 sal::static_int_cast< sal_IntPtr >( xCrsrTunnel->getSomething( OTextCursorHelper::getUnoTunnelId() )));
-        ASSERT( pTxtCrsr, "SwXTextCursor missing" );
+        OSL_ENSURE( pTxtCrsr, "SwXTextCursor missing" );
         SwPaM *pPaM = pTxtCrsr->GetPaM();
         if( IsInsertMode() && pSttNdIdx->GetIndex() )
         {
@@ -839,12 +839,12 @@ void SwXMLImport::endDocument( void )
                                             pTxtNode->GetTxt().Len() );
                 }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
                 // !!! This should be impossible !!!!
-                ASSERT( pSttNdIdx->GetIndex()+1 !=
+                OSL_ENSURE( pSttNdIdx->GetIndex()+1 !=
                                         pPaM->GetBound( sal_True ).nNode.GetIndex(),
                         "PaM.Bound1 point to new node " );
-                ASSERT( pSttNdIdx->GetIndex()+1 !=
+                OSL_ENSURE( pSttNdIdx->GetIndex()+1 !=
                                         pPaM->GetBound( sal_False ).nNode.GetIndex(),
                         "PaM.Bound2 points to new node" );
 
@@ -1087,13 +1087,13 @@ void SwXMLImport::SetViewSettings(const Sequence < PropertyValue > & aViewProps)
     Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
     Reference < XText > xText = xTextDoc->getText();
     Reference<XUnoTunnel> xTextTunnel( xText, UNO_QUERY);
-    ASSERT( xTextTunnel.is(), "missing XUnoTunnel for Cursor" );
+    OSL_ENSURE( xTextTunnel.is(), "missing XUnoTunnel for Cursor" );
     if( !xTextTunnel.is() )
         return;
 
     SwXText *pText = reinterpret_cast< SwXText *>(
             sal::static_int_cast< sal_IntPtr >( xTextTunnel->getSomething( SwXText::getUnoTunnelId() )));
-    ASSERT( pText, "SwXText missing" );
+    OSL_ENSURE( pText, "SwXText missing" );
     if( !pText )
         return;
 
@@ -1457,12 +1457,12 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
     Reference < XText > xText = xTextDoc->getText();
     Reference<XUnoTunnel> xTextTunnel( xText, UNO_QUERY);
-    ASSERT( xTextTunnel.is(), "missing XUnoTunnel for Cursor" );
+    OSL_ENSURE( xTextTunnel.is(), "missing XUnoTunnel for Cursor" );
     if( xTextTunnel.is() )
     {
         SwXText *pText = reinterpret_cast< SwXText *>(
                 sal::static_int_cast< sal_IntPtr >( xTextTunnel->getSomething( SwXText::getUnoTunnelId() )));
-        ASSERT( pText, "SwXText missing" );
+        OSL_ENSURE( pText, "SwXText missing" );
         if( pText )
         {
             SwDoc *pDoc = pText->GetDoc();
@@ -1716,10 +1716,10 @@ SwDoc* SwImport::GetDocFromXMLImport( SvXMLImport& rImport )
     uno::Reference<lang::XUnoTunnel> xModelTunnel( rImport.GetModel(), uno::UNO_QUERY );
     SwXTextDocument *pTxtDoc = reinterpret_cast< SwXTextDocument *>(
             sal::static_int_cast< sal_IntPtr >(  xModelTunnel->getSomething(SwXTextDocument::getUnoTunnelId() )));
-    ASSERT( pTxtDoc, "Where is my model?" )
-    ASSERT( pTxtDoc->GetDocShell(), "Where is my shell?" )
+    OSL_ENSURE( pTxtDoc, "Where is my model?" );
+    OSL_ENSURE( pTxtDoc->GetDocShell(), "Where is my shell?" );
     SwDoc* pDoc = pTxtDoc->GetDocShell()->GetDoc();
-    ASSERT( pDoc, "Where is my document?" )
+    OSL_ENSURE( pDoc, "Where is my document?" );
     return pDoc;
 }
 

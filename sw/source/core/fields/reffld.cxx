@@ -482,7 +482,7 @@ String SwGetRefField::MakeRefNumStr( const SwTxtNode& rTxtNodeOfField,
     if ( rTxtNodeOfReferencedItem.HasNumber() &&
          rTxtNodeOfReferencedItem.IsCountedInList() )
     {
-        ASSERT( rTxtNodeOfReferencedItem.GetNum(),
+        OSL_ENSURE( rTxtNodeOfReferencedItem.GetNum(),
                 "<SwGetRefField::MakeRefNumStr(..)> - referenced paragraph has number, but no <SwNodeNum> instance --> please inform OD!" );
 
         // Determine, up to which level the superior list labels have to be
@@ -538,7 +538,7 @@ String SwGetRefField::MakeRefNumStr( const SwTxtNode& rTxtNodeOfField,
             ( nRestrictInclToThisLevel < rTxtNodeOfReferencedItem.GetActualListLevel() &&
               ( nRefNumFormat == REF_NUMBER || nRefNumFormat == REF_NUMBER_FULL_CONTEXT ) ) );
 
-        ASSERT( rTxtNodeOfReferencedItem.GetNumRule(),
+        OSL_ENSURE( rTxtNodeOfReferencedItem.GetNumRule(),
                 "<SwGetRefField::MakeRefNumStr(..)> - referenced numbered paragraph has no numbering rule set --> please inform OD!" );
         return rTxtNodeOfReferencedItem.GetNumRule()->MakeRefNumString(
                                             *(rTxtNodeOfReferencedItem.GetNum()),
@@ -816,7 +816,7 @@ SwTxtNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const String& rRefMark,
                                         USHORT nSubType, USHORT nSeqNo,
                                         USHORT* pStt, USHORT* pEnd )
 {
-    ASSERT( pStt, "warum wird keine StartPos abgefragt?" );
+    OSL_ENSURE( pStt, "warum wird keine StartPos abgefragt?" );
 
     SwTxtNode* pTxtNd = 0;
     switch( nSubType )
@@ -877,7 +877,7 @@ SwTxtNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const String& rRefMark,
                         // --> OD 2007-10-18 #i81002#
                         if(dynamic_cast< ::sw::mark::CrossRefBookmark const *>(pBkmk))
                         {
-                            ASSERT( pTxtNd,
+                            OSL_ENSURE( pTxtNd,
                                     "<SwGetRefFieldType::FindAnchor(..)> - node marked by cross-reference bookmark isn't a text node --> crash" );
                             *pEnd = pTxtNd->Len();
                         }

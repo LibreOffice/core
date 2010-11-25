@@ -484,7 +484,7 @@ void SwAccessibleParagraph::_InvalidateFocus()
             osl::MutexGuard aGuard( aMutex );
             nPos = nOldCaretPos;
         }
-        ASSERT( nPos != -1, "focus object should be selected" );
+        OSL_ENSURE( nPos != -1, "focus object should be selected" );
 
         FireStateChangedEvent( AccessibleStateType::FOCUSED,
                                pWin->HasFocus() && nPos != -1 );
@@ -877,7 +877,7 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL SwAccessibleParagraph::getAccess
     utl::AccessibleRelationSetHelper* pHelper = new utl::AccessibleRelationSetHelper();
 
     const SwTxtFrm* pTxtFrm = dynamic_cast<const SwTxtFrm*>(GetFrm());
-    ASSERT( pTxtFrm,
+    OSL_ENSURE( pTxtFrm,
             "<SwAccessibleParagraph::getAccessibleRelationSet()> - missing text frame");
     if ( pTxtFrm )
     {
@@ -1147,7 +1147,7 @@ sal_Int32 SwAccessibleParagraph::getCaretPosition()
     sal_Int32 nRet = GetCaretPos();
     {
         osl::MutexGuard aOldCaretPosGuard( aMutex );
-        ASSERT( nRet == nOldCaretPos, "caret pos out of sync" );
+        OSL_ENSURE( nRet == nOldCaretPos, "caret pos out of sync" );
         nOldCaretPos = nRet;
     }
     if( -1 != nRet )
@@ -1330,7 +1330,7 @@ void SwAccessibleParagraph::_getDefaultAttributesImpl(
         pSet->Put( aParaSet );
     }
     // get default character attributes and merge these into <pSet>
-    ASSERT( pTxtNode->GetTxtColl(),
+    OSL_ENSURE( pTxtNode->GetTxtColl(),
             "<SwAccessibleParagraph::_getDefaultAttributesImpl(..)> - missing paragraph style. Serious defect, please inform OD!" );
     if ( pTxtNode->GetTxtColl() )
     {

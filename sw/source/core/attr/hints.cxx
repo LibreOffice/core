@@ -84,7 +84,7 @@ SwRefMarkFldUpdate::SwRefMarkFldUpdate( const OutputDevice* pOutput )
     : SwMsgPoolItem( RES_REFMARKFLD_UPDATE ),
     pOut( pOutput )
 {
-    ASSERT( pOut, "es muss ein OutputDevice-Pointer gesetzt werden!" );
+    OSL_ENSURE( pOut, "es muss ein OutputDevice-Pointer gesetzt werden!" );
 }
 
 
@@ -103,7 +103,7 @@ SwTableFmlUpdate::SwTableFmlUpdate( const SwTable* pNewTbl )
 {
     DATA.pDelTbl = 0;
     bModified = bBehindSplitLine = FALSE;
-    ASSERT( pTbl, "es muss ein Table-Pointer gesetzt werden!" );
+    OSL_ENSURE( pTbl, "es muss ein Table-Pointer gesetzt werden!" );
 }
 
 
@@ -137,11 +137,11 @@ SwAttrSetChg::~SwAttrSetChg()
 }
 
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 
 void SwAttrSetChg::ClearItem( USHORT nWhch )
 {
-    ASSERT( bDelSet, "der Set darf nicht veraendert werden!" );
+    OSL_ENSURE( bDelSet, "der Set darf nicht veraendert werden!" );
     pChgSet->ClearItem( nWhch );
 }
 
@@ -156,14 +156,14 @@ SwMsgPoolItem::SwMsgPoolItem( USHORT nWhch )
 // "Overhead" vom SfxPoolItem
 int SwMsgPoolItem::operator==( const SfxPoolItem& ) const
 {
-    ASSERT( FALSE, "SwMsgPoolItem kennt kein ==" );
+    OSL_ENSURE( FALSE, "SwMsgPoolItem kennt kein ==" );
     return 0;
 }
 
 
 SfxPoolItem* SwMsgPoolItem::Clone( SfxItemPool* ) const
 {
-    ASSERT( FALSE, "SwMsgPoolItem kennt kein Clone" );
+    OSL_ENSURE( FALSE, "SwMsgPoolItem kennt kein Clone" );
     return 0;
 }
 
@@ -173,20 +173,20 @@ SfxPoolItem* SwMsgPoolItem::Clone( SfxItemPool* ) const
  * Ist keines vorhanden, returnt ein 0-Pointer !!!
  * Used to be inlined (hintids.hxx) in PRODUCT.
  ******************************************************************************/
-#ifndef DBG_UTIL
-const SfxPoolItem* GetDfltAttr( USHORT nWhich )
-{
-    return aAttrTab[ nWhich - POOLATTR_BEGIN ];
-}
-#else
+#if OSL_DEBUG_LEVEL > 1
 const SfxPoolItem* GetDfltAttr( USHORT nWhich )
 {
     ASSERT_ID( nWhich < POOLATTR_END && nWhich >= POOLATTR_BEGIN,
                ERR_OUTOFSCOPE );
 
     SfxPoolItem *pHt = aAttrTab[ nWhich - POOLATTR_BEGIN ];
-    ASSERT( pHt, "GetDfltFmtAttr(): Dflt == 0" );
+    OSL_ENSURE( pHt, "GetDfltFmtAttr(): Dflt == 0" );
     return pHt;
+}
+#else
+const SfxPoolItem* GetDfltAttr( USHORT nWhich )
+{
+    return aAttrTab[ nWhich - POOLATTR_BEGIN ];
 }
 #endif
 

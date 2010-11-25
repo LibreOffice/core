@@ -80,7 +80,7 @@ SwMultiPortion::~SwMultiPortion()
 
 void SwMultiPortion::Paint( const SwTxtPaintInfo & ) const
 {
-    ASSERT( FALSE,
+    OSL_ENSURE( FALSE,
     "Don't try SwMultiPortion::Paint, try SwTxtPainter::PaintMultiPortion" );
 }
 
@@ -624,8 +624,8 @@ SwRubyPortion::SwRubyPortion( const SwMultiCreator& rCreate, const SwFont& rFnt,
      : SwMultiPortion( nEnd )
 {
     SetRuby();
-    ASSERT( SW_MC_RUBY == rCreate.nId, "Ruby expected" );
-    ASSERT( RES_TXTATR_CJK_RUBY == rCreate.pAttr->Which(), "Wrong attribute" );
+    OSL_ENSURE( SW_MC_RUBY == rCreate.nId, "Ruby expected" );
+    OSL_ENSURE( RES_TXTATR_CJK_RUBY == rCreate.pAttr->Which(), "Wrong attribute" );
     const SwFmtRuby& rRuby = rCreate.pAttr->GetRuby();
     nAdjustment = rRuby.GetAdjustment();
     nRubyOffset = nOffs;
@@ -749,7 +749,7 @@ void SwRubyPortion::_Adjust( SwTxtFormatInfo &rInf )
             }
             break;
         }
-        default: ASSERT( sal_False, "New ruby adjustment" );
+        default: OSL_ENSURE( sal_False, "New ruby adjustment" );
     }
     if( nLeft || nRight )
     {
@@ -888,7 +888,7 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos,
     BYTE nCurrLevel;
     if ( pMulti )
     {
-        ASSERT( pMulti->IsBidi(), "Nested MultiPortion is not BidiPortion" )
+        OSL_ENSURE( pMulti->IsBidi(), "Nested MultiPortion is not BidiPortion" );
         // level associated with bidi-portion;
         nCurrLevel = ((SwBidiPortion*)pMulti)->GetLevel();
     }
@@ -1398,8 +1398,8 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
     {
         // these values are needed for the calculation of the x coordinate
         // and the layout mode
-        ASSERT( ! pEnvPor || pEnvPor->IsBidi(),
-                "Oh no, I expected a BidiPortion" )
+        OSL_ENSURE( ! pEnvPor || pEnvPor->IsBidi(),
+                "Oh no, I expected a BidiPortion" );
         nFrmDir = GetInfo().GetTxtFrm()->IsRightToLeft() ? 1 : 0;
         nEnvDir = pEnvPor ? ((SwBidiPortion*)pEnvPor)->GetLevel() % 2 : nFrmDir;
         nThisDir = ((SwBidiPortion&)rMulti).GetLevel() % 2;
@@ -1503,8 +1503,8 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
     sal_Bool bRest = pLay->IsRest();
     sal_Bool bFirst = sal_True;
 
-    ASSERT( 0 == GetInfo().GetUnderFnt() || rMulti.IsBidi(),
-            " Only BiDi portions are allowed to use the common underlining font" )
+    OSL_ENSURE( 0 == GetInfo().GetUnderFnt() || rMulti.IsBidi(),
+            " Only BiDi portions are allowed to use the common underlining font" );
 
     do
     {
@@ -1596,7 +1596,7 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
         if( pPor->IsMultiPortion() && ((SwMultiPortion*)pPor)->IsBidi() )
         {
             // but we do allow nested bidi portions
-            ASSERT( rMulti.IsBidi(), "Only nesting of bidi portions is allowed" )
+            OSL_ENSURE( rMulti.IsBidi(), "Only nesting of bidi portions is allowed" );
             PaintMultiPortion( rPaint, (SwMultiPortion&)*pPor, &rMulti );
         }
         else
@@ -1795,7 +1795,7 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
         // We set nTmpX (which is used for portion calculating) to the
         // current Y value
         const SwPageFrm* pPage = pFrm->FindPageFrm();
-        ASSERT( pPage, "No page in frame!");
+        OSL_ENSURE( pPage, "No page in frame!");
         const SwLayoutFrm* pUpperFrm = pPage;
 
         if ( pFrm->IsInTab() )
@@ -1803,7 +1803,7 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
             pUpperFrm = pFrm->GetUpper();
             while ( pUpperFrm && !pUpperFrm->IsCellFrm() )
                 pUpperFrm = pUpperFrm->GetUpper();
-            ASSERT( pUpperFrm, "pFrm is in table but does not have an upper cell frame" )
+            OSL_ENSURE( pUpperFrm, "pFrm is in table but does not have an upper cell frame" );
             const SwTableLine* pLine = ((SwRowFrm*)pUpperFrm->GetUpper())->GetTabLine();
             const SwFmtFrmSize& rFrmFmtSize = pLine->GetFrmFmt()->GetFrmSize();
             if ( ATT_VAR_SIZE == rFrmFmtSize.GetHeightSizeType() )
@@ -1900,7 +1900,7 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
 
         if( pFirstRest )
         {
-            ASSERT( pFirstRest->InFldGrp(), "BuildMulti: Fieldrest expected");
+            OSL_ENSURE( pFirstRest->InFldGrp(), "BuildMulti: Fieldrest expected");
             SwFldPortion *pFld =
                 ((SwFldPortion*)pFirstRest)->Clone(
                     ((SwFldPortion*)pFirstRest)->GetExp() );
@@ -1947,7 +1947,7 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
                 pNextFirst = aInf.GetRest();
                 if( pSecondRest )
                 {
-                    ASSERT( pSecondRest->InFldGrp(), "Fieldrest expected");
+                    OSL_ENSURE( pSecondRest->InFldGrp(), "Fieldrest expected");
                     SwFldPortion *pFld = ((SwFldPortion*)pSecondRest)->Clone(
                                     ((SwFldPortion*)pSecondRest)->GetExp() );
                     pFld->SetFollow( sal_True );
@@ -2085,7 +2085,7 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
     // line break has to be performed!
     if( bRet )
     {
-        ASSERT( !pNextFirst || pNextFirst->InFldGrp(),
+        OSL_ENSURE( !pNextFirst || pNextFirst->InFldGrp(),
             "BuildMultiPortion: Surprising restportion, field expected" );
         SwMultiPortion *pTmp;
         if( rMulti.IsDouble() )
@@ -2093,7 +2093,7 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
                                             nMultiLen + rInf.GetIdx() );
         else if( rMulti.IsRuby() )
         {
-            ASSERT( !pNextSecond || pNextSecond->InFldGrp(),
+            OSL_ENSURE( !pNextSecond || pNextSecond->InFldGrp(),
                 "BuildMultiPortion: Surprising restportion, field expected" );
 
             if ( rInf.GetIdx() == rInf.GetLineStart() )
@@ -2230,7 +2230,7 @@ SwLinePortion* SwTxtFormatter::MakeRestPortion( const SwLineLayout* pLine,
         }
         else if( pPor->IsMultiPortion() )
         {
-            ASSERT( !pHelpMulti || pHelpMulti->IsBidi(),
+            OSL_ENSURE( !pHelpMulti || pHelpMulti->IsBidi(),
                     "Nested multiportions are forbidden." );
 
             pFld = NULL;
@@ -2290,7 +2290,7 @@ SwLinePortion* SwTxtFormatter::MakeRestPortion( const SwLineLayout* pLine,
 
     if ( !pCreate )
     {
-        ASSERT( !pHelpMulti->GetLen(), "Multiportion without attribut?" );
+        OSL_ENSURE( !pHelpMulti->GetLen(), "Multiportion without attribut?" );
         if ( nMultiPos )
             --nMultiPos;
         pCreate = GetInfo().GetMultiCreator( --nMultiPos, 0 );

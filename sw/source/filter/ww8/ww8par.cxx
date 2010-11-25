@@ -293,7 +293,7 @@ SdrObject* SwMSDffManager::ImportOLE( long nOLEId,
     {
         SvStorageRef xSrc = xSrcStg->OpenSotStorage( sStorageName,
             STREAM_READWRITE| STREAM_SHARE_DENYALL );
-        ASSERT(rReader.pFormImpl, "No Form Implementation!");
+        OSL_ENSURE(rReader.pFormImpl, "No Form Implementation!");
         STAR_REFERENCE( drawing::XShape ) xShape;
         if ( (!(rReader.bIsHeader || rReader.bIsFooter)) &&
             rReader.pFormImpl->ReadOCXStream(xSrc,&xShape,true))
@@ -312,7 +312,7 @@ SdrObject* SwMSDffManager::ImportOLE( long nOLEId,
 
 void SwMSDffManager::DisableFallbackStream()
 {
-    ASSERT(!pFallbackStream || !pOldEscherBlipCache,
+    OSL_ENSURE(!pFallbackStream || !pOldEscherBlipCache,
         "if you're recursive, you're broken");
     pFallbackStream = pStData2;
     pOldEscherBlipCache = pEscherBlipCache;
@@ -885,9 +885,9 @@ void SwWW8ImplReader::Read_Majority( USHORT, const BYTE* , short )
 void SwWW8FltControlStack::NewAttr(const SwPosition& rPos,
     const SfxPoolItem& rAttr)
 {
-    ASSERT(RES_TXTATR_FIELD != rAttr.Which(), "probably don't want to put"
+    OSL_ENSURE(RES_TXTATR_FIELD != rAttr.Which(), "probably don't want to put"
         "fields into the control stack");
-    ASSERT(RES_FLTR_REDLINE != rAttr.Which(), "probably don't want to put"
+    OSL_ENSURE(RES_FLTR_REDLINE != rAttr.Which(), "probably don't want to put"
         "redlines into the control stack");
     SwFltControlStack::NewAttr(rPos, rAttr);
 }
@@ -917,7 +917,7 @@ void SwWW8FltControlStack::SetAttr(const SwPosition& rPos, USHORT nAttrId,
 
 long GetListFirstLineIndent(const SwNumFmt &rFmt)
 {
-    ASSERT( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION,
+    OSL_ENSURE( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION,
             "<GetListFirstLineIndent> - misusage: position-and-space-mode does not equal LABEL_WIDTH_AND_POSITION" );
 
     SvxAdjust eAdj = rFmt.GetNumAdjust();
@@ -934,7 +934,7 @@ long GetListFirstLineIndent(const SwNumFmt &rFmt)
 long lcl_GetTrueMargin(const SvxLRSpaceItem &rLR, const SwNumFmt &rFmt,
     long &rFirstLinePos)
 {
-    ASSERT( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION,
+    OSL_ENSURE( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION,
             "<lcl_GetTrueMargin> - misusage: position-and-space-mode does not equal LABEL_WIDTH_AND_POSITION" );
 
     const long nBodyIndent = rLR.GetTxtLeft();
@@ -1063,7 +1063,7 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
             }
             break;
         case RES_TXTATR_FIELD:
-            ASSERT(!this, "What is a field doing in the control stack,"
+            OSL_ENSURE(!this, "What is a field doing in the control stack,"
                 "probably should have been in the endstack");
             break;
         case RES_TXTATR_INETFMT:
@@ -1229,7 +1229,7 @@ void SwWW8FltRefStack::SetAttrInDoc(const SwPosition& rTmpPos,
             break;
         default:
         case RES_FLTR_BOOKMARK:
-            ASSERT(!this, "EndStck used with non field, not what we want");
+            OSL_ENSURE(!this, "EndStck used with non field, not what we want");
             SwFltEndStack::SetAttrInDoc(rTmpPos, pEntry);
             break;
     }
@@ -1777,7 +1777,7 @@ void SwWW8ImplReader::Read_HdFtTextAsHackedFrame(long nStart, long nLen,
     SwFrmFmt &rHdFtFmt, sal_uInt16 nPageWidth)
 {
     const SwNodeIndex* pSttIdx = rHdFtFmt.GetCntnt().GetCntntIdx();
-    ASSERT(pSttIdx, "impossible");
+    OSL_ENSURE(pSttIdx, "impossible");
     if (!pSttIdx)
         return;
 
@@ -1794,7 +1794,7 @@ void SwWW8ImplReader::Read_HdFtTextAsHackedFrame(long nStart, long nLen,
     // --> OD 2005-02-28 #i43427# - send frame for header/footer into background.
     pFrame->SetFmtAttr( SvxOpaqueItem( RES_OPAQUE, false ) );
     SdrObject* pFrmObj = CreateContactObject( pFrame );
-    ASSERT( pFrmObj,
+    OSL_ENSURE( pFrmObj,
             "<SwWW8ImplReader::Read_HdFtTextAsHackedFrame(..)> - missing SdrObject instance" );
     if ( pFrmObj )
     {
@@ -1971,7 +1971,7 @@ void wwSectionManager::SetHdFt(wwSection &rSection, int nSect,
     if (!rSection.maSep.grpfIhdt)
         return;
 
-    ASSERT(rSection.mpPage, "makes no sense to call with a main page");
+    OSL_ENSURE(rSection.mpPage, "makes no sense to call with a main page");
     if (rSection.mpPage)
     {
         mrReader.Read_HdFt(false, nSect, pPrevious ? pPrevious->mpPage : 0,
@@ -2131,7 +2131,7 @@ void SwWW8ImplReader::EndSpecial()
     if (maApos[0] == true)
         StopApo();
 
-    ASSERT(!nInTable, "unclosed table!");
+    OSL_ENSURE(!nInTable, "unclosed table!");
 }
 
 bool SwWW8ImplReader::ProcessSpecial(bool &rbReSync, WW8_CP nStartCp)
@@ -2142,7 +2142,7 @@ bool SwWW8ImplReader::ProcessSpecial(bool &rbReSync, WW8_CP nStartCp)
 
     rbReSync = false;
 
-    ASSERT(nInTable >= 0,"nInTable < 0!");
+    OSL_ENSURE(nInTable >= 0,"nInTable < 0!");
 
     // TabRowEnd
     bool bTableRowEnd = (pPlcxMan->HasParaSprm(bVer67 ? 25 : 0x2417) != 0 );
@@ -2467,7 +2467,7 @@ sal_Size Custom8BitToUnicode(rtl_TextToUnicodeConverter hConverter,
             pOut+nDestChars, nOutLen-nDestChars,
             nFlags, &nInfo, &nThisConverted);
 
-        ASSERT(nInfo == 0, "A character conversion failed!");
+        OSL_ENSURE(nInfo == 0, "A character conversion failed!");
 
         nConverted += nThisConverted;
 
@@ -2544,7 +2544,7 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, long nEnd, long nCpOfs)
         nLen = writer_cast<xub_StrLen>(nEnd - rPos);
     else
         nLen = STRING_MAXLEN-1;
-    ASSERT(nLen, "String is 0");
+    OSL_ENSURE(nLen, "String is 0");
     if (!nLen)
         return true;
 
@@ -2614,7 +2614,7 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, long nEnd, long nCpOfs)
                     aTest[0] = static_cast< sal_Char >((nUCode & 0xFF00) >> 8);
                     aTest[1] = static_cast< sal_Char >(nUCode & 0x00FF);
                     String aTemp(aTest, 2, eSrcCJKCharSet);
-                    ASSERT(aTemp.Len() == 1, "so much for that theory");
+                    OSL_ENSURE(aTemp.Len() == 1, "so much for that theory");
                     *pWork = aTemp.GetChar(0);
                 }
                 else
@@ -2876,7 +2876,7 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
                 if (!pResult)
                 {
                     cInsert = ' ';
-                    ASSERT(!bObj && !bEmbeddObj && !nObjLocFc,
+                    OSL_ENSURE(!bObj && !bEmbeddObj && !nObjLocFc,
                         "WW8: Please report this document, it may have a "
                         "missing graphic");
                 }
@@ -2996,20 +2996,20 @@ long SwWW8ImplReader::ReadTextAttr(WW8_CP& rTxtPos, bool& rbStartLine)
     long nSkipChars = 0;
     WW8PLCFManResult aRes;
 
-    ASSERT(pPaM->GetNode()->GetTxtNode(), "Missing txtnode");
+    OSL_ENSURE(pPaM->GetNode()->GetTxtNode(), "Missing txtnode");
     bool bStartAttr = pPlcxMan->Get(&aRes); // hole Attribut-Pos
     aRes.nAktCp = rTxtPos;              // Akt. Cp-Pos
 
     bool bNewSection = (aRes.nFlags & MAN_MASK_NEW_SEP) && !bIgnoreText;
     if ( bNewSection )  // neue Section
     {
-        ASSERT(pPaM->GetNode()->GetTxtNode(), "Missing txtnode");
+        OSL_ENSURE(pPaM->GetNode()->GetTxtNode(), "Missing txtnode");
         // PageDesc erzeugen und fuellen
         maSectionManager.CreateSep(rTxtPos, bPgSecBreak);
                                             // -> 0xc war ein Sectionbreak, aber
                                             // kein Pagebreak;
         bPgSecBreak = false;                // PageDesc erzeugen und fuellen
-        ASSERT(pPaM->GetNode()->GetTxtNode(), "Missing txtnode");
+        OSL_ENSURE(pPaM->GetNode()->GetTxtNode(), "Missing txtnode");
     }
 
     // neuer Absatz ueber Plcx.Fkp.papx
@@ -3186,7 +3186,7 @@ bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, ManTypes nType)
     while ( l<nStartCp+nTextLen )
     {
         ReadAttrs( nNext, l, bStartLine );// behandelt auch Section-Breaks
-        ASSERT(pPaM->GetNode()->GetTxtNode(), "Missing txtnode");
+        OSL_ENSURE(pPaM->GetNode()->GetTxtNode(), "Missing txtnode");
 
         if (mpPostProcessAttrsInfo != NULL)
             PostProcessAttrs();
@@ -3449,7 +3449,7 @@ void SwWW8ImplReader::DeleteStk(SwFltControlStack* pStck)
     }
     else
     {
-        ASSERT( !this, "WW-Stack bereits geloescht" );
+        OSL_ENSURE( !this, "WW-Stack bereits geloescht" );
     }
 }
 
@@ -3520,7 +3520,7 @@ void wwSectionManager::SetUseOn(wwSection &rSection)
     if (!bEven)
         eUse = (UseOnPage)(eUse | nsUseOnPage::PD_HEADERSHARE | nsUseOnPage::PD_FOOTERSHARE);
 
-    ASSERT(rSection.mpPage, "Makes no sense to call me with no pages to set");
+    OSL_ENSURE(rSection.mpPage, "Makes no sense to call me with no pages to set");
     if (rSection.mpPage)
         rSection.mpPage->WriteUseOn(eUse);
     if (rSection.mpTitlePage)
@@ -3545,7 +3545,7 @@ void GiveNodePageDesc(SwNodeIndex &rIdx, const SwFmtPageDesc &rPgDesc,
         SwTable& rTable =
             rIdx.GetNode().GetTableNode()->GetTable();
         SwFrmFmt* pApply = rTable.GetFrmFmt();
-        ASSERT(pApply, "impossible");
+        OSL_ENSURE(pApply, "impossible");
         if (pApply)
             pApply->SetFmtAttr(rPgDesc);
     }
@@ -3583,7 +3583,7 @@ SwFmtPageDesc wwSectionManager::SetSwFmtPageDesc(mySegIter &rIter,
                 , 0, false);
             rIter->mpTitlePage = &mrReader.rDoc._GetPageDesc(nPos);
         }
-        ASSERT(rIter->mpTitlePage, "no page!");
+        OSL_ENSURE(rIter->mpTitlePage, "no page!");
         if (!rIter->mpTitlePage)
             return aEmpty;
 
@@ -3603,7 +3603,7 @@ SwFmtPageDesc wwSectionManager::SetSwFmtPageDesc(mySegIter &rIter,
                 rIter->mpTitlePage, false);
         rIter->mpPage = &mrReader.rDoc._GetPageDesc(nPos);
     }
-    ASSERT(rIter->mpPage, "no page!");
+    OSL_ENSURE(rIter->mpPage, "no page!");
     if (!rIter->mpPage)
         return aEmpty;
 
@@ -4528,7 +4528,7 @@ ULONG SwWW8ImplReader::SetSubStreams(SvStorageStreamRef &rTableStream,
         case 8:
             if(!pStg)
             {
-                ASSERT( pStg, "Version 8 muss immer einen Storage haben!" );
+                OSL_ENSURE( pStg, "Version 8 muss immer einen Storage haben!" );
                 nErrRet = ERR_SWG_READ_ERROR;
                 break;
             }
@@ -4553,7 +4553,7 @@ ULONG SwWW8ImplReader::SetSubStreams(SvStorageStreamRef &rTableStream,
             break;
         default:
             // Programm-Fehler!
-            ASSERT( !this, "Es wurde vergessen, nVersion zu kodieren!" );
+            OSL_ENSURE( !this, "Es wurde vergessen, nVersion zu kodieren!" );
             nErrRet = ERR_SWG_READ_ERROR;
             break;
     }
@@ -4943,7 +4943,7 @@ void SwWW8ImplReader::SetOutLineStyles()
         }
         // <--
 
-        ASSERT(mpChosenOutlineNumRule, "Impossible");
+        OSL_ENSURE(mpChosenOutlineNumRule, "Impossible");
         if (mpChosenOutlineNumRule)
             aOutlineRule = *mpChosenOutlineNumRule;
 
@@ -5150,7 +5150,7 @@ ULONG SwWW8ImplReader::LoadDoc( SwPaM& rPaM,WW8Glossary *pGloss)
             break;
         default:
             nErrRet = ERR_WW8_NO_WW8_FILE_ERR;
-            ASSERT( !this, "Es wurde vergessen, nVersion zu kodieren!" );
+            OSL_ENSURE( !this, "Es wurde vergessen, nVersion zu kodieren!" );
             break;
     }
 
@@ -5186,7 +5186,7 @@ ULONG WW8Reader::Read(SwDoc &rDoc, const String& rBaseURL, SwPaM &rPam, const St
             nVersion = 6;
         else
         {
-            ASSERT(!this, "WinWord 95 Reader-Read ohne Stream");
+            OSL_ENSURE(!this, "WinWord 95 Reader-Read ohne Stream");
             nRet = ERR_SWG_READ_ERROR;
         }
     }
@@ -5204,7 +5204,7 @@ ULONG WW8Reader::Read(SwDoc &rDoc, const String& rBaseURL, SwPaM &rPam, const St
         }
         else
         {
-            ASSERT(!this, "WinWord 95/97 Reader-Read ohne Storage");
+            OSL_ENSURE(!this, "WinWord 95/97 Reader-Read ohne Storage");
             nRet = ERR_SWG_READ_ERROR;
         }
     }

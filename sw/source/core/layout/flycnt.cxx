@@ -123,7 +123,7 @@ void SwFlyAtCntFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
 
     if( pAnch )
     {
-        ASSERT( pAnch->GetAnchorId() == GetFmt()->GetAnchor().GetAnchorId(),
+        OSL_ENSURE( pAnch->GetAnchorId() == GetFmt()->GetAnchor().GetAnchorId(),
                 "Unzulaessiger Wechsel des Ankertyps." );
 
         //Abmelden, neuen Anker besorgen und 'dranhaengen.
@@ -196,7 +196,7 @@ void SwFlyAtCntFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
         {
             SwCntntNode *pNode = aNewIdx.GetNode().GetCntntNode();
             pCntnt = pNode->GetFrm( &pOldAnchor->Frm().Pos(), 0, FALSE );
-            ASSERT( pCntnt, "Neuen Anker nicht gefunden" );
+            OSL_ENSURE( pCntnt, "Neuen Anker nicht gefunden" );
         }
         //Flys haengen niemals an einem Follow sondern immer am
         //Master, den suchen wir uns jetzt.
@@ -457,7 +457,7 @@ void SwFlyAtCntFrm::MakeAll()
                 {
                     SwTxtFrm* pAnchPosAnchorFrm =
                             dynamic_cast<SwTxtFrm*>(GetAnchorFrmContainingAnchPos());
-                    ASSERT( pAnchPosAnchorFrm,
+                    OSL_ENSURE( pAnchPosAnchorFrm,
                             "<SwFlyAtCntFrm::MakeAll()> - anchor frame of wrong type -> crash" );
                     // --> OD 2006-01-27 #i58182# - For the usage of new method
                     // <SwObjectFormatterTxtFrm::CheckMovedFwdCondition(..)>
@@ -534,7 +534,7 @@ void SwFlyAtCntFrm::MakeAll()
                                 pFmt->UnlockModify();
                                 bOsz = false;
 #if OSL_DEBUG_LEVEL > 1
-                                ASSERT( false,
+                                OSL_ENSURE( false,
                                         "<SwFlyAtCntFrm::MakeAll()> - special loop prevention for dedicated document of b6403541 applied" );
 #endif
                             }
@@ -1446,7 +1446,7 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
 //    {
 //        if ( ++nCnt == 10 )
 //      {
-//          ASSERT( !nCnt, "DeepCalc: Loop detected1?" );
+//          OSL_ENSURE( !nCnt, "DeepCalc: Loop detected1?" );
 //          break;
 //      }
 

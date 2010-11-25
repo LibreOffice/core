@@ -149,7 +149,7 @@ SwFieldType*    SwAuthorityFieldType::Copy()  const
  --------------------------------------------------*/
 void    SwAuthorityFieldType::RemoveField(long nHandle)
 {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     BOOL bRemoved = FALSE;
 #endif
     for(USHORT j = 0; j < m_pDataArr->Count(); j++)
@@ -158,7 +158,7 @@ void    SwAuthorityFieldType::RemoveField(long nHandle)
         long nRet = (long)(void*)pTemp;
         if(nRet == nHandle)
         {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
             bRemoved = TRUE;
 #endif
             pTemp->RemoveRef();
@@ -171,7 +171,7 @@ void    SwAuthorityFieldType::RemoveField(long nHandle)
             break;
         }
     }
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     DBG_ASSERT(bRemoved, "Field unknown" );
 #endif
 }
@@ -245,7 +245,7 @@ const SwAuthEntry*  SwAuthorityFieldType::GetEntryByHandle(long nHandle) const
             break;
         }
     }
-    ASSERT( pRet, "invalid Handle" );
+    OSL_ENSURE( pRet, "invalid Handle" );
     return pRet;
 }
 /* -----------------21.09.99 13:34-------------------
@@ -343,7 +343,7 @@ long    SwAuthorityFieldType::GetHandle(USHORT nPos)
 USHORT  SwAuthorityFieldType::GetSequencePos(long nHandle)
 {
     //find the field in a sorted array of handles,
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     sal_Bool bCurrentFieldWithoutTextNode = sal_False;
 #endif
     if(m_pSequArr->Count() && m_pSequArr->Count() != m_pDataArr->Count())
@@ -361,7 +361,7 @@ USHORT  SwAuthorityFieldType::GetSequencePos(long nHandle)
             const SwTxtFld* pTxtFld = pFmtFld->GetTxtFld();
             if(!pTxtFld || !pTxtFld->GetpTxtNode())
             {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
                 if(nHandle == ((SwAuthorityField*)pFmtFld->GetFld())->GetHandle())
                     bCurrentFieldWithoutTextNode = sal_True;
 #endif
@@ -433,7 +433,9 @@ USHORT  SwAuthorityFieldType::GetSequencePos(long nHandle)
             break;
         }
     }
-    ASSERT(bCurrentFieldWithoutTextNode || nRet, "Handle not found")
+#if OSL_DEBUG_LEVEL > 1
+    OSL_ENSURE(bCurrentFieldWithoutTextNode || nRet, "Handle not found");
+#endif
     return nRet;
 }
 /* -----------------------------15.11.00 17:33--------------------------------

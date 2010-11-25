@@ -111,7 +111,7 @@ const String& SwDBFieldType::GetName() const
 
 void SwDBFieldType::ReleaseRef()
 {
-    ASSERT(nRefCnt > 0, "RefCount kleiner 0!");
+    OSL_ENSURE(nRefCnt > 0, "RefCount kleiner 0!");
 
     if (--nRefCnt <= 0)
     {

@@ -28,13 +28,13 @@
 #ifndef _ERRHDL_HXX
 #define _ERRHDL_HXX
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 
 #include <tools/solar.h>
 #include <sal/types.h>
 #include "swdllapi.h"
 
-extern BOOL bAssert;                // TRUE, wenn eine ASSERT-Box hochkam
+extern BOOL bAssert;                // TRUE, wenn eine ASSERT Box hochkam
 
 
 // -----------------------------------------------------------------------
@@ -42,15 +42,7 @@ extern BOOL bAssert;                // TRUE, wenn eine ASSERT-Box hochkam
 // wo der Fehler auftrat.
 // Die Funktion darf nicht direkt benutzt werden!
 // -----------------------------------------------------------------------
-SW_DLLPUBLIC void AssertFail( const sal_Char*, const sal_Char*, USHORT );
-SW_DLLPUBLIC void AssertFail( USHORT, const sal_Char*, USHORT );
-
-#define ASSERT( cond, message ) \
-    if( !(cond) ) { \
-        const char   *_pErrorText = #message; \
-        const char   *_pFileName  = __FILE__; \
-       ::AssertFail( _pErrorText, _pFileName, __LINE__ ); \
-    }
+SW_DLLPUBLIC void AssertFail( USHORT, const sal_Char* );
 
 // -----------------------------------------------------------------------
 // Prueft ob die angegebene Bedingung wahr ist, wenn nicht wird eine
@@ -59,7 +51,7 @@ SW_DLLPUBLIC void AssertFail( USHORT, const sal_Char*, USHORT );
 #define ASSERT_ID( cond, id ) \
     if( !(cond) ) { \
         const char   *_pFileName  = __FILE__; \
-       ::AssertFail( (USHORT)id, _pFileName, __LINE__ ); \
+       ::AssertFail( (USHORT)id, _pFileName ); \
     }
 
 
@@ -68,7 +60,6 @@ SW_DLLPUBLIC void AssertFail( USHORT, const sal_Char*, USHORT );
 // ignoriert
 // -----------------------------------------------------------------------
 #else
-#define ASSERT( cond, message )     ;
 #define ASSERT_ID( cond, id )       ;
 #endif // PRODUCT
 

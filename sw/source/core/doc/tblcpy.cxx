@@ -141,7 +141,7 @@ namespace
             for( USHORT nLine = 0; nLine < rBox.GetTabLines().Count(); ++nLine )
                 pStartLn = insertSubLine( rSubTable, *rBox.GetTabLines()[nLine],
                            pStartLn );
-            ASSERT( pStartLn == pEndLn, "Sub line confusion" );
+            OSL_ENSURE( pStartLn == pEndLn, "Sub line confusion" );
         }
         else
         {
@@ -540,7 +540,7 @@ void lcl_CpyBox( const SwTable& rCpyTbl, const SwTableBox* pCpyBox,
                     SwTable& rDstTbl, SwTableBox* pDstBox,
                     BOOL bDelCntnt, SwUndoTblCpyTbl* pUndo )
 {
-    ASSERT( ( !pCpyBox || pCpyBox->GetSttNd() ) && pDstBox->GetSttNd(),
+    OSL_ENSURE( ( !pCpyBox || pCpyBox->GetSttNd() ) && pDstBox->GetSttNd(),
             "Keine inhaltstragende Box" );
 
     SwDoc* pCpyDoc = rCpyTbl.GetFrmFmt()->GetDoc();
@@ -770,7 +770,7 @@ BOOL SwTable::InsTable( const SwTable& rCpyTbl, const SwNodeIndex& rSttBox,
     SwTableBox* pMyBox = (SwTableBox*)GetTblBox(
             rSttBox.GetNode().FindTableBoxStartNode()->GetIndex() );
 
-    ASSERT( pMyBox, "Index steht nicht in dieser Tabelle in einer Box" );
+    OSL_ENSURE( pMyBox, "Index steht nicht in dieser Tabelle in einer Box" );
 
     // loesche erstmal die Frames der Tabelle
     _FndBox aFndBox( 0, 0 );
@@ -840,14 +840,14 @@ BOOL SwTable::InsTable( const SwTable& rCpyTbl, const SwNodeIndex& rSttBox,
 BOOL SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
                         SwUndoTblCpyTbl* pUndo )
 {
-    ASSERT( rSelBoxes.Count(), "Missing selection" )
+    OSL_ENSURE( rSelBoxes.Count(), "Missing selection" );
 
     SetHTMLTableLayout( 0 );    // MIB 9.7.97: HTML-Layout loeschen
 
     if( IsNewModel() || rCpyTbl.IsNewModel() )
         return InsNewTable( rCpyTbl, rSelBoxes, pUndo );
 
-    ASSERT( !rCpyTbl.IsTblComplex(), "Table too complex" )
+    OSL_ENSURE( !rCpyTbl.IsTblComplex(), "Table too complex" );
 
             SwDoc* pDoc = GetFrmFmt()->GetDoc();
     SwDoc* pCpyDoc = rCpyTbl.GetFrmFmt()->GetDoc();
@@ -923,7 +923,7 @@ BOOL SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
                 // es ist also Platz fuer das zu kopierende vorhanden, also
                 // fuege entsprechend neue Zeilen ein.
                 SwTableBox* pInsBox = pLastLn->GetTabBoxes()[ nSttBox ];
-                ASSERT( pInsBox && pInsBox->GetSttNd(),
+                OSL_ENSURE( pInsBox && pInsBox->GetSttNd(),
                     "kein CntntBox oder steht nicht in dieser Tabelle" );
                 SwSelBoxes aBoxes;
 

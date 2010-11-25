@@ -268,7 +268,7 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
             nNextPos = nForced;
         }
         nNextPos += bRTL ? nLinePos - nTabLeft : nTabLeft - nLinePos;
-        ASSERT( nNextPos >= 0, "GetTabStop: Don't go back!" );
+        OSL_ENSURE( nNextPos >= 0, "GetTabStop: Don't go back!" );
         nNewTabPos = KSHORT(nNextPos);
     }
 
@@ -301,7 +301,7 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
             }
             default:
             {
-                   ASSERT( SVX_TAB_ADJUST_LEFT == eAdj || SVX_TAB_ADJUST_DEFAULT == eAdj,
+                   OSL_ENSURE( SVX_TAB_ADJUST_LEFT == eAdj || SVX_TAB_ADJUST_DEFAULT == eAdj,
                         "+SwTxtFormatter::NewTabPortion: unknown adjustment" );
                 pTabPor = new SwTabLeftPortion( nNewTabPos, cFill );
                 break;
@@ -328,10 +328,10 @@ SwTabPortion::SwTabPortion( const KSHORT nTabPosition, const xub_Unicode cFillCh
     : SwFixPortion( 0, 0 ), nTabPos(nTabPosition), cFill(cFillChar)
 {
     nLineLength = 1;
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     if( IsFilled() )
     {
-        ASSERT( ' ' != cFill, "SwTabPortion::CTOR: blanks ?!" );
+        OSL_ENSURE( ' ' != cFill, "SwTabPortion::CTOR: blanks ?!" );
     }
 #endif
     SetWhichPor( POR_TAB );
@@ -373,7 +373,7 @@ void SwTabPortion::FormatEOL( SwTxtFormatInfo &rInf )
 
 sal_Bool SwTabPortion::PreFormat( SwTxtFormatInfo &rInf )
 {
-    ASSERT( rInf.X() <= GetTabPos(), "SwTabPortion::PreFormat: rush hour" );
+    OSL_ENSURE( rInf.X() <= GetTabPos(), "SwTabPortion::PreFormat: rush hour" );
 
     // Hier lassen wir uns nieder...
     Fix( static_cast<USHORT>(rInf.X()) );
@@ -445,7 +445,7 @@ sal_Bool SwTabPortion::PreFormat( SwTxtFormatInfo &rInf )
 
                 break;
             }
-            default: ASSERT( !this, "SwTabPortion::PreFormat: unknown adjustment" );
+            default: OSL_ENSURE( !this, "SwTabPortion::PreFormat: unknown adjustment" );
         }
     }
 
@@ -501,7 +501,7 @@ sal_Bool SwTabPortion::PostFormat( SwTxtFormatInfo &rInf )
     }
 
     const MSHORT nWhich = GetWhichPor();
-    ASSERT( POR_TABLEFT != nWhich, "SwTabPortion::PostFormat: already formatted" );
+    OSL_ENSURE( POR_TABLEFT != nWhich, "SwTabPortion::PostFormat: already formatted" );
     const bool bTabCompat = rInf.GetTxtFrm()->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TAB_COMPAT);
 
     // --> FME 2005-12-19 #127428# Abandon dec. tab position if line is full:
@@ -563,7 +563,7 @@ sal_Bool SwTabPortion::PostFormat( SwTxtFormatInfo &rInf )
 
 void SwTabPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     // Wir wollen uns die Fixbreite anzeigen
     if( rInf.OnWin() && OPTDBG( rInf ) &&
         !rInf.GetOpt().IsPagePreview() && \
@@ -633,7 +633,7 @@ void SwTabPortion::Paint( const SwTxtPaintInfo &rInf ) const
         XubString aTxt( cFill );
         const KSHORT nCharWidth = rInf.GetTxtSize( aTxt ).Width();
 #if OSL_DEBUG_LEVEL > 1
-        ASSERT( nCharWidth, "!SwTabPortion::Paint: sophisticated tabchar" );
+        OSL_ENSURE( nCharWidth, "!SwTabPortion::Paint: sophisticated tabchar" );
 #endif
         // robust:
         if( nCharWidth )

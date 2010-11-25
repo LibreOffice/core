@@ -247,7 +247,7 @@ public:
             break;
             default:
             {
-                ASSERT( false,
+                OSL_ENSURE( false,
                         "<SwShapeDescriptor_Impl::SetPositionLayoutDir(..)> - invalid attribute value." );
             }
         }
@@ -368,7 +368,7 @@ uno::Reference< drawing::XShape >  SwFmDrawPage::_CreateShape( SdrObject *pObj )
             }
             else
             {
-                ASSERT( false,
+                OSL_ENSURE( false,
                         "<SwFmDrawPage::_CreateShape(..)> - could not retrieve type. Thus, no shape created." );
                 return xRet;
             }
@@ -953,7 +953,7 @@ SwXShape::SwXShape(uno::Reference< uno::XInterface > & xShape) :
             if ( xShapeAgg.is() )
             {
                 xShapeAgg->queryAggregation( ::getCppuType((uno::Reference< drawing::XShape >*)0) ) >>= mxShape;
-                ASSERT( mxShape.is(),
+                OSL_ENSURE( mxShape.is(),
                         "<SwXShape::SwXShape(..)> - no XShape found at <xShapeAgg>" );
             }
             // <--
@@ -1231,7 +1231,7 @@ void SwXShape::setPropertyValue(const rtl::OUString& rPropertyName, const uno::A
                                 //To prevent this the connection between format and attribute has to be broken before.
                                 const SwPosition *pPos = aAnchor.GetCntntAnchor();
                                 SwTxtNode *pTxtNode = pPos->nNode.GetNode().GetTxtNode();
-                                ASSERT( pTxtNode->HasHints(), "Missing FlyInCnt-Hint." );
+                                OSL_ENSURE( pTxtNode->HasHints(), "Missing FlyInCnt-Hint." );
                                 const xub_StrLen nIdx = pPos->nContent.GetIndex();
                                 SwTxtAttr * const pHnt =
                                     pTxtNode->GetTxtAttrForCharAt(
@@ -1318,7 +1318,7 @@ void SwXShape::setPropertyValue(const rtl::OUString& rPropertyName, const uno::A
                             //To prevent this the connection between format and attribute has to be broken before.
                             const SwPosition *pPos = rOldAnchor.GetCntntAnchor();
                             SwTxtNode *pTxtNode = pPos->nNode.GetNode().GetTxtNode();
-                            ASSERT( pTxtNode->HasHints(), "Missing FlyInCnt-Hint." );
+                            OSL_ENSURE( pTxtNode->HasHints(), "Missing FlyInCnt-Hint." );
                             const xub_StrLen nIdx = pPos->nContent.GetIndex();
                             SwTxtAttr * const pHnt =
                                 pTxtNode->GetTxtAttrForCharAt(
@@ -2118,7 +2118,7 @@ void SwXShape::dispose(void) throw( uno::RuntimeException )
         // a 'virtual' drawing object.
         // OD 25.08.2003 #111713# - refine assertion for safety reason.
         // --> OD 2005-02-02 #119236# - correct assertion and refine it.
-        ASSERT( !pObj ||
+        OSL_ENSURE( !pObj ||
                 pObj->ISA(SwDrawVirtObj) ||
                 pObj->GetUpGroup() ||
                 pObj == pFmt->FindSdrObject(),
@@ -2277,7 +2277,7 @@ awt::Point SAL_CALL SwXShape::getPosition() throw ( uno::RuntimeException )
 //                break;
 //                default:
 //                {
-//                    ASSERT( false,
+//                    OSL_ENSURE( false,
 //                            "<SwXShape::getPosition()> - unsupported layout direction" );
 //                }
 //            }
@@ -2530,7 +2530,7 @@ awt::Point SwXShape::_ConvertPositionToHoriL2R( const awt::Point _aObjPos,
             break;
             default:
             {
-                ASSERT( false,
+                OSL_ENSURE( false,
                         "<SwXShape::_ConvertPositionToHoriL2R(..)> - unsupported layout direction" );
             }
         }
@@ -2554,13 +2554,13 @@ drawing::HomogenMatrix3 SwXShape::_ConvertTransformationToLayoutDir(
     // --> OD 2005-03-10 #i44334#, #i44681# - direct manipulation of the
     // tranformation structure isn't valid, if it contains rotation.
     SvxShape* pSvxShape = GetSvxShape();
-    ASSERT( pSvxShape,
-            "<SwXShape::_ConvertTransformationToLayoutDir(..)> - no SvxShape found!")
+    OSL_ENSURE( pSvxShape,
+            "<SwXShape::_ConvertTransformationToLayoutDir(..)> - no SvxShape found!");
     if ( pSvxShape )
     {
         const SdrObject* pObj = pSvxShape->GetSdrObject();
-        ASSERT( pObj,
-                "<SwXShape::_ConvertTransformationToLayoutDir(..)> - no SdrObject found!")
+        OSL_ENSURE( pObj,
+                "<SwXShape::_ConvertTransformationToLayoutDir(..)> - no SdrObject found!");
         if ( pObj )
         {
             // get position of object in Writer coordinate system.
@@ -2705,13 +2705,13 @@ void SwXShape::_AdjustPositionProperties( const awt::Point _aPosition )
     awt::Point aConvertedPos( aStartOrEndPos );
 
     SvxShape* pSvxShape = GetSvxShape();
-    ASSERT( pSvxShape,
-            "<SwXShape::_ConvertStartOrEndPosToLayoutDir(..)> - no SvxShape found!")
+    OSL_ENSURE( pSvxShape,
+            "<SwXShape::_ConvertStartOrEndPosToLayoutDir(..)> - no SvxShape found!");
     if ( pSvxShape )
     {
         const SdrObject* pObj = pSvxShape->GetSdrObject();
-        ASSERT( pObj,
-                "<SwXShape::_ConvertStartOrEndPosToLayoutDir(..)> - no SdrObject found!")
+        OSL_ENSURE( pObj,
+                "<SwXShape::_ConvertStartOrEndPosToLayoutDir(..)> - no SdrObject found!");
         if ( pObj )
         {
             // get position of object in Writer coordinate system.
@@ -2743,13 +2743,13 @@ void SwXShape::_AdjustPositionProperties( const awt::Point _aPosition )
     drawing::PolyPolygonBezierCoords aConvertedPath( aPath );
 
     SvxShape* pSvxShape = GetSvxShape();
-    ASSERT( pSvxShape,
-            "<SwXShape::_ConvertStartOrEndPosToLayoutDir(..)> - no SvxShape found!")
+    OSL_ENSURE( pSvxShape,
+            "<SwXShape::_ConvertStartOrEndPosToLayoutDir(..)> - no SvxShape found!");
     if ( pSvxShape )
     {
         const SdrObject* pObj = pSvxShape->GetSdrObject();
-        ASSERT( pObj,
-                "<SwXShape::_ConvertStartOrEndPosToLayoutDir(..)> - no SdrObject found!")
+        OSL_ENSURE( pObj,
+                "<SwXShape::_ConvertStartOrEndPosToLayoutDir(..)> - no SdrObject found!");
         if ( pObj )
         {
             // get position of object in Writer coordinate system.
@@ -2795,7 +2795,7 @@ void SwXShape::_AdjustPositionProperties( const awt::Point _aPosition )
 SwXGroupShape::SwXGroupShape(uno::Reference< XInterface > & xShape) :
         SwXShape(xShape)
 {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     uno::Reference<XShapes> xShapes(xShapeAgg, uno::UNO_QUERY);
     DBG_ASSERT(xShapes.is(), "no SvxShape found or shape is not a group shape");
 #endif

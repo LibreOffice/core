@@ -242,7 +242,7 @@ bool SwTxtNode::GetDropSize(int& rFontHeight, int& rDropHeight, int& rDropDescen
             if ( !((SwTxtFrm*)pLastFrm)->IsEmpty() )
             {
                 const SwParaPortion* pPara = ((SwTxtFrm*)pLastFrm)->GetPara();
-                ASSERT( pPara, "GetDropSize could not find the ParaPortion, I'll guess the drop cap size" )
+                OSL_ENSURE( pPara, "GetDropSize could not find the ParaPortion, I'll guess the drop cap size" );
 
                 if ( pPara )
                 {
@@ -293,7 +293,7 @@ void SwDropPortion::PaintTxt( const SwTxtPaintInfo &rInf ) const
         !rInf.GetOpt().IsPagePreview() && !rInf.GetOpt().IsReadonly() && SwViewOption::IsFieldShadings()    )
         rInf.DrawBackground( *this );
 
-    ASSERT( nDropHeight && pPart && nLines != 1, "Drop Portion painted twice" );
+    OSL_ENSURE( nDropHeight && pPart && nLines != 1, "Drop Portion painted twice" );
 
     const SwDropPortionPart* pCurrPart = GetPart();
     const xub_StrLen nOldLen = GetLen();
@@ -527,7 +527,7 @@ void SwTxtFormatter::CalcDropHeight( const MSHORT nLines )
     {
         if( !Next() )
         {
-            ASSERT( !this, "SwTxtFormatter::_CalcDropHeight: left Toulouse" );
+            OSL_ENSURE( !this, "SwTxtFormatter::_CalcDropHeight: left Toulouse" );
             break;
         }
     }
@@ -545,7 +545,7 @@ void SwTxtFormatter::CalcDropHeight( const MSHORT nLines )
 
 void SwTxtFormatter::GuessDropHeight( const MSHORT nLines )
 {
-    ASSERT( nLines, "GuessDropHeight: Give me more Lines!" );
+    OSL_ENSURE( nLines, "GuessDropHeight: Give me more Lines!" );
     KSHORT nAscent = 0;
     KSHORT nHeight = 0;
     SetDropLines( nLines );
@@ -606,7 +606,7 @@ SwDropPortion *SwTxtFormatter::NewDropPortion( SwTxtFormatInfo &rInf )
     }
 
     // build DropPortionParts:
-    ASSERT( ! rInf.GetIdx(), "Drop Portion not at 0 position!" );
+    OSL_ENSURE( ! rInf.GetIdx(), "Drop Portion not at 0 position!" );
     xub_StrLen nNextChg = 0;
     const SwCharFmt* pFmt = pDropFmt->GetCharFmt();
     SwDropPortionPart* pCurrPart = 0;
@@ -660,7 +660,7 @@ SwDropPortion *SwTxtFormatter::NewDropPortion( SwTxtFormatInfo &rInf )
 void SwTxtPainter::PaintDropPortion()
 {
     const SwDropPortion *pDrop = GetInfo().GetParaPortion()->FindDropPortion();
-    ASSERT( pDrop, "DrapCop-Portion not available." );
+    OSL_ENSURE( pDrop, "DrapCop-Portion not available." );
     if( !pDrop )
         return;
 
@@ -758,7 +758,7 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTxtFormatInfo &rInf )
     const void* pFntNo = 0;
     MSHORT nTmpIdx = 0;
 
-    ASSERT( pDrop->GetPart(),"DropPortion without part during font calculation");
+    OSL_ENSURE( pDrop->GetPart(),"DropPortion without part during font calculation");
 
     SwDropPortionPart* pCurrPart = pDrop->GetPart();
     const sal_Bool bUseCache = ! pCurrPart->GetFollow();

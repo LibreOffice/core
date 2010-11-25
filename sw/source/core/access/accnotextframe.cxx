@@ -106,7 +106,7 @@ void SwAccessibleNoTextFrame::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
     }
 
     const SwNoTxtNode *pNd = GetNoTxtNode();
-    ASSERT( pNd == aDepend.GetRegisteredIn(), "invalid frame" );
+    OSL_ENSURE( pNd == aDepend.GetRegisteredIn(), "invalid frame" );
     switch( nWhich )
     {
         // --> OD 2009-07-14 #i73249#

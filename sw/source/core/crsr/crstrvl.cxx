@@ -707,7 +707,7 @@ BOOL SwCrsrShell::MoveFldType( const SwFieldType* pFldType, BOOL bNext,
         const SwPosition& rPos = *pCrsr->GetPoint();
 
         SwTxtNode* pTNd = rPos.nNode.GetNode().GetTxtNode();
-        ASSERT( pTNd, "Wo ist mein CntntNode?" );
+        OSL_ENSURE( pTNd, "Wo ist mein CntntNode?" );
 
         SwTxtFld * pTxtFld = static_cast<SwTxtFld *>(
             pTNd->GetTxtAttrForCharAt(rPos.nContent.GetIndex(),
@@ -925,7 +925,7 @@ BOOL SwCrsrShell::MakeOutlineSel( USHORT nSttPos, USHORT nEndPos,
 
     if( nSttPos > nEndPos )         // sollte jemand das vertauscht haben?
     {
-        ASSERT( !this, "Start- > Ende-Position im Array" );
+        OSL_ENSURE( !this, "Start- > Ende-Position im Array" );
         USHORT nTmp = nSttPos;
         nSttPos = nEndPos;
         nEndPos = nTmp;
@@ -1372,7 +1372,7 @@ BOOL SwCrsrShell::GetContentAtPos( const Point& rPt,
                 if( pSttNd && 0 != ( pTblNd = pTxtNd->FindTableNode()) &&
                     0 != ( pBox = pTblNd->GetTable().GetTblBox(
                                     pSttNd->GetIndex() )) &&
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
                     ( SFX_ITEM_SET == pBox->GetFrmFmt()->GetItemState(
                         RES_BOXATR_FORMULA, FALSE, &pItem ) ||
                       SFX_ITEM_SET == pBox->GetFrmFmt()->GetItemState(
@@ -1820,7 +1820,7 @@ BOOL SwCrsrShell::SetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode )
                     GetDoc()->InsertItemSet( *pCurCrsr, aSet, 0 );
                 }
                 else {
-                    ASSERT( !this, "wo ist mein CntntNode?" );
+                    OSL_ENSURE( !this, "wo ist mein CntntNode?" );
                 }
                 break;
 

@@ -118,7 +118,7 @@ USHORT SwEditShell::GetCurTOXMarks(SwTOXMarks& rMarks) const
  --------------------------------------------------*/
 BOOL SwEditShell::IsTOXBaseReadonly(const SwTOXBase& rTOXBase) const
 {
-    ASSERT( rTOXBase.ISA( SwTOXBaseSection ), "no TOXBaseSection!" );
+    OSL_ENSURE( rTOXBase.ISA( SwTOXBaseSection ), "no TOXBaseSection!" );
     const SwTOXBaseSection& rTOXSect = (const SwTOXBaseSection&)rTOXBase;
     return  rTOXSect.IsProtect();
 }
@@ -127,10 +127,10 @@ BOOL SwEditShell::IsTOXBaseReadonly(const SwTOXBase& rTOXBase) const
  --------------------------------------------------*/
 void SwEditShell::SetTOXBaseReadonly(const SwTOXBase& rTOXBase, BOOL bReadonly)
 {
-    ASSERT( rTOXBase.ISA( SwTOXBaseSection ), "no TOXBaseSection!" );
+    OSL_ENSURE( rTOXBase.ISA( SwTOXBaseSection ), "no TOXBaseSection!" );
     const SwTOXBaseSection& rTOXSect = (const SwTOXBaseSection&)rTOXBase;
     ((SwTOXBase&)rTOXBase).SetProtected(bReadonly);
-    ASSERT( rTOXSect.SwSection::GetType() == TOX_CONTENT_SECTION, "not a TOXContentSection" );
+    OSL_ENSURE( rTOXSect.SwSection::GetType() == TOX_CONTENT_SECTION, "not a TOXContentSection" );
 
     SwSectionData aSectionData(rTOXSect);
     aSectionData.SetProtectFlag(bReadonly);
@@ -168,7 +168,7 @@ void SwEditShell::InsertTableOf( const SwTOXBase& rTOX, const SfxItemSet* pSet )
     // Einfuegen des Verzeichnisses
     const SwTOXBaseSection* pTOX = pDoc->InsertTableOf(
                                         *GetCrsr()->GetPoint(), rTOX, pSet, TRUE );
-    ASSERT(pTOX, "Kein aktuelles Verzeichnis");
+    OSL_ENSURE(pTOX, "Kein aktuelles Verzeichnis");
 
     // Formatierung anstossen
     CalcLayout();
@@ -192,9 +192,9 @@ BOOL SwEditShell::UpdateTableOf( const SwTOXBase& rTOX, const SfxItemSet* pSet )
 {
     BOOL bRet = FALSE;
 
-    ASSERT( rTOX.ISA( SwTOXBaseSection ),  "keine TOXBaseSection!" );
+    OSL_ENSURE( rTOX.ISA( SwTOXBaseSection ),  "keine TOXBaseSection!" );
     SwTOXBaseSection* pTOX = (SwTOXBaseSection*)&rTOX;
-    ASSERT(pTOX, "Keine aktuelles Verzeichnis");
+    OSL_ENSURE(pTOX, "Keine aktuelles Verzeichnis");
     const SwSectionNode* pSectNd;
     if( pTOX && 0 != ( pSectNd = pTOX->GetFmt()->GetSectionNode() ) )
     {
@@ -290,7 +290,7 @@ const SwTOXBase* SwEditShell::GetTOX( USHORT nPos ) const
             pSect->GetFmt()->GetSectionNode() &&
             nCnt++ == nPos )
         {
-            ASSERT( pSect->ISA( SwTOXBaseSection ), "keine TOXBaseSection!" );
+            OSL_ENSURE( pSect->ISA( SwTOXBaseSection ), "keine TOXBaseSection!" );
             return (SwTOXBaseSection*)pSect;
         }
     }

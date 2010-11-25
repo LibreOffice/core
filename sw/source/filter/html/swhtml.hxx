@@ -451,7 +451,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     enum JumpToMarks { JUMPTO_NONE, JUMPTO_MARK, JUMPTO_TABLE, JUMPTO_FRAME,
                         JUMPTO_REGION, JUMPTO_GRAPHIC } eJumpTo;
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     sal_uInt16  nContinue;          // Tiefe der Continue-Aufrufe
 #endif
 

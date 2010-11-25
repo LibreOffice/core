@@ -36,7 +36,7 @@
 #include <swcache.hxx>
 #include <swfntcch.hxx>
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 #include <unotextmarkup.hxx>
 #endif
 
@@ -107,7 +107,7 @@ SwClient::~SwClient()
     if( pRegisteredIn && pRegisteredIn->GetDepends() )
         pRegisteredIn->Remove( this );
 
-    ASSERT( !IsModifyLocked(), "Modify destroyed but locked." );
+    OSL_ENSURE( !IsModifyLocked(), "Modify destroyed but locked." );
 }
 
 
@@ -209,9 +209,7 @@ void SwModify::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
 
     LockModify();
 
-#ifndef DBG_UTIL
-    bInModify = TRUE;
-#else
+#if OSL_DEBUG_LEVEL > 1
     if( !pOldValue )
         bInModify = TRUE;
     else
@@ -232,6 +230,8 @@ void SwModify::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
         default:
             bInModify = TRUE;
         }
+#else
+    bInModify = TRUE;
 #endif
 
     SwClientIter aIter( *this );
@@ -280,16 +280,16 @@ BOOL SwModify::GetInfo( SfxPoolItem& rInfo ) const
 
 void SwModify::Add(SwClient *pDepend)
 {
-    ASSERT( !bInModify, "Client innerhalb des eigenen Modifies einfuegen?" );
+    OSL_ENSURE( !bInModify, "Client innerhalb des eigenen Modifies einfuegen?" );
 
     // nur wenn das hier noch nicht eingetragen ist einfuegen
     if(pDepend->pRegisteredIn != this )
     {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         SwClientIter* pTmp = pClientIters;
         while( pTmp )
         {
-            ASSERT( &pTmp->rRoot != pRoot,
+            OSL_ENSURE( &pTmp->rRoot != pRoot,
                 "Client beim angemeldeten ClientIter einfuegen?" );
             pTmp = pTmp->pNxtIter;
         }
@@ -331,7 +331,9 @@ void SwModify::Add(SwClient *pDepend)
 SwClient *SwModify::_Remove(SwClient * pDepend)
 {
     // FME 2007-07-16 #i79641# SwXTextMarkup is allowed to be removed ...
-    ASSERT( !bInModify || 0 != dynamic_cast<SwXTextMarkup*>(pDepend), "Client innerhalb des eigenen Modifies loeschen?" );
+#if OSL_DEBUG_LEVEL > 1
+    OSL_ENSURE( !bInModify || 0 != dynamic_cast<SwXTextMarkup*>(pDepend), "Client innerhalb des eigenen Modifies loeschen?" );
+#endif
 
     // loesche das Object aus der Liste und setze den
     // Registrierungs-Pointer zurueck
@@ -366,7 +368,7 @@ SwClient *SwModify::_Remove(SwClient * pDepend)
         pDepend->pRight = 0;
     }
     else {
-        ASSERT( FALSE, "SwModify::Remove(): pDepend nicht gefunden");
+        OSL_ENSURE( FALSE, "SwModify::Remove(): pDepend nicht gefunden");
     }
     pDepend->pRegisteredIn = 0;
     return pDepend;
@@ -495,7 +497,7 @@ SwClientIter::~SwClientIter()
             while( pTmp->pNxtIter != this )
                 if( 0 == ( pTmp = pTmp->pNxtIter ) )
                 {
-                    ASSERT( this, "wo ist mein Pointer" );
+                    OSL_ENSURE( this, "wo ist mein Pointer" );
                     return ;
                 }
             pTmp->pNxtIter = pNxtIter;

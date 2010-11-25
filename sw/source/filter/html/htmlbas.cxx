@@ -255,12 +255,12 @@ void SwHTMLParser::InsertBasicDocEvent( rtl::OUString aEvent, const String& rNam
                                         ScriptType eScrType,
                                         const String& rScrType )
 {
-    ASSERT( rName.Len(), "InsertBasicDocEvent() ohne Macro gerufen" );
+    OSL_ENSURE( rName.Len(), "InsertBasicDocEvent() ohne Macro gerufen" );
     if( !rName.Len() )
         return;
 
     SwDocShell *pDocSh = pDoc->GetDocShell();
-    ASSERT( pDocSh, "Wo ist die DocShell?" );
+    OSL_ENSURE( pDocSh, "Wo ist die DocShell?" );
     if( !pDocSh )
         return;
 
@@ -285,7 +285,7 @@ void SwHTMLWriter::OutBasic()
     SFX_APP()->EnterBasicCall();
 
     BasicManager *pBasicMan = pDoc->GetDocShell()->GetBasicManager();
-    ASSERT( pBasicMan, "Wo ist der Basic-Manager?" );
+    OSL_ENSURE( pBasicMan, "Wo ist der Basic-Manager?" );
     //JP 17.07.96: Bug 29538 - nur das DocumentBasic schreiben
     if( !pBasicMan || pBasicMan == SFX_APP()->GetBasicManager() )
     {
@@ -304,7 +304,7 @@ void SwHTMLWriter::OutBasic()
         for( USHORT j=0; j<pModules->Count(); j++ )
         {
             const SbModule *pModule = PTR_CAST( SbModule, pModules->Get(j) );
-            ASSERT( pModule, "Wo ist das Modul?" );
+            OSL_ENSURE( pModule, "Wo ist das Modul?" );
 
             String sLang(
                     String::CreateFromAscii( SVX_MACRO_LANGUAGE_STARBASIC ) );

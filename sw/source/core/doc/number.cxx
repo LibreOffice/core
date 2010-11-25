@@ -175,14 +175,14 @@ void SwNumRule::SetNumRuleMap(std::hash_map<String, SwNumRule *, StringHash> *
 
 USHORT SwNumRule::GetNumIndent( BYTE nLvl )
 {
-    ASSERT( MAXLEVEL > nLvl, "NumLevel is out of range" );
+    OSL_ENSURE( MAXLEVEL > nLvl, "NumLevel is out of range" );
     return aDefNumIndents[ nLvl ];
 }
 
 
 USHORT SwNumRule::GetBullIndent( BYTE nLvl )
 {
-    ASSERT( MAXLEVEL > nLvl, "NumLevel is out of range" );
+    OSL_ENSURE( MAXLEVEL > nLvl, "NumLevel is out of range" );
     return aDefNumIndents[ nLvl ];
 }
 
@@ -443,7 +443,7 @@ const SwFmtVertOrient*      SwNumFmt::GetGraphicOrientation() const
     }
 }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 long int SwNumRule::nInstances = 0;
 #endif
 
@@ -468,7 +468,7 @@ SwNumRule::SwNumRule( const String& rNm,
     meDefaultNumberFormatPositionAndSpaceMode( eDefaultNumberFormatPositionAndSpaceMode ),
     msDefaultListId()
 {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     nSerial = nInstances++;
 #endif
 
@@ -550,7 +550,7 @@ SwNumRule::SwNumRule( const String& rNm,
         }
     }
     memset( aFmts, 0, sizeof( aFmts ));
-    ASSERT( sName.Len(), "NumRule ohne Namen!" );
+    OSL_ENSURE( sName.Len(), "NumRule ohne Namen!" );
 }
 
 SwNumRule::SwNumRule( const SwNumRule& rNumRule )
@@ -570,7 +570,7 @@ SwNumRule::SwNumRule( const SwNumRule& rNumRule )
       meDefaultNumberFormatPositionAndSpaceMode( rNumRule.meDefaultNumberFormatPositionAndSpaceMode ),
       msDefaultListId( rNumRule.msDefaultListId )
 {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     nSerial = nInstances++;
 #endif
 
@@ -676,7 +676,7 @@ BOOL SwNumRule::operator==( const SwNumRule& rRule ) const
 
 void SwNumRule::Set( USHORT i, const SwNumFmt& rNumFmt )
 {
-    ASSERT( i < MAXLEVEL, "Serious defect, please inform OD" )
+    OSL_ENSURE( i < MAXLEVEL, "Serious defect, please inform OD" );
     if( i < MAXLEVEL )
     {
         if( !aFmts[ i ] || !(rNumFmt == Get( i )) )
@@ -690,7 +690,7 @@ void SwNumRule::Set( USHORT i, const SwNumFmt& rNumFmt )
 
 void SwNumRule::Set( USHORT i, const SwNumFmt* pNumFmt )
 {
-    ASSERT( i < MAXLEVEL, "Serious defect, please inform OD" )
+    OSL_ENSURE( i < MAXLEVEL, "Serious defect, please inform OD" );
     if( i >= MAXLEVEL )
         return;
     SwNumFmt* pOld = aFmts[ i ];
@@ -927,7 +927,7 @@ void SwNumRule::SetInvalidRule(BOOL bFlag)
             // --> OD 2010-06-04 #i111681# - applying patch from cmc
 //            aLists.insert( pTxtNode->GetDoc()->getListByName( pTxtNode->GetListId() ) );
             SwList* pList = pTxtNode->GetDoc()->getListByName( pTxtNode->GetListId() );
-            ASSERT( pList, "<SwNumRule::SetInvalidRule(..)> - list at which the text node is registered at does not exist. This is a serious issue --> please inform OD.");
+            OSL_ENSURE( pList, "<SwNumRule::SetInvalidRule(..)> - list at which the text node is registered at does not exist. This is a serious issue --> please inform OD.");
             if ( pList )
             {
                 aLists.insert( pList );
@@ -1345,8 +1345,8 @@ namespace numfunc
         uno::Sequence<uno::Any> aValues =
                                                     GetProperties( aPropNames );
         const uno::Any* pValues = aValues.getConstArray();
-        ASSERT( aValues.getLength() == aPropNames.getLength(),
-                "<SwDefBulletConfig::SwDefBulletConfig()> - GetProperties failed")
+        OSL_ENSURE( aValues.getLength() == aPropNames.getLength(),
+                "<SwDefBulletConfig::SwDefBulletConfig()> - GetProperties failed");
         if ( aValues.getLength() == aPropNames.getLength() )
         {
             for ( int nProp = 0; nProp < aPropNames.getLength(); ++nProp )
@@ -1533,8 +1533,8 @@ namespace numfunc
         com::sun::star::uno::Sequence<com::sun::star::uno::Any> aValues =
                                                     GetProperties( aPropNames );
         const com::sun::star::uno::Any* pValues = aValues.getConstArray();
-        ASSERT( aValues.getLength() == aPropNames.getLength(),
-                "<SwNumberingUIBehaviorConfig::LoadConfig()> - GetProperties failed")
+        OSL_ENSURE( aValues.getLength() == aPropNames.getLength(),
+                "<SwNumberingUIBehaviorConfig::LoadConfig()> - GetProperties failed");
         if ( aValues.getLength() == aPropNames.getLength() )
         {
             for ( int nProp = 0; nProp < aPropNames.getLength(); ++nProp )
@@ -1550,8 +1550,8 @@ namespace numfunc
                         break;
                         default:
                         {
-                            ASSERT( false,
-                                    "<SwNumberingUIBehaviorConfig::LoadConfig()> - unknown configuration property")
+                            OSL_ENSURE( false,
+                                    "<SwNumberingUIBehaviorConfig::LoadConfig()> - unknown configuration property");
                         }
                     }
                 }

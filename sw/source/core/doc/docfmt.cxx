@@ -308,7 +308,7 @@ BOOL lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
             if( pPara->pDelSet && pPara->pDelSet->Count() )
             {
                 // --> OD 2008-04-15 #refactorlists#
-                ASSERT( !bKeepAttributes,
+                OSL_ENSURE( !bKeepAttributes,
                         "<lcl_RstAttr(..)> - certain attributes are kept, but not needed. -> please inform OD" );
                 // <--
                 SfxItemIter aIter( *pPara->pDelSet );
@@ -689,7 +689,7 @@ lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
             // --> OD 2005-10-24 #126346# - make code robust:
             if ( !pNumRule )
             {
-                ASSERT( false,
+                OSL_ENSURE( false,
                         "<InsAttr(..)> - PaM in front of label, but text node has no numbering rule set. This is a serious defect, please inform OD." );
                 DELETECHARSETS
                 return false;
@@ -1413,7 +1413,7 @@ void SwDoc::DelCharFmt(USHORT nFmt, BOOL bBroadcast)
 void SwDoc::DelCharFmt( SwCharFmt *pFmt, BOOL bBroadcast )
 {
     USHORT nFmt = pCharFmtTbl->GetPos( pFmt );
-    ASSERT( USHRT_MAX != nFmt, "Fmt not found," );
+    OSL_ENSURE( USHRT_MAX != nFmt, "Fmt not found," );
 
     DelCharFmt( nFmt, bBroadcast );
 }
@@ -1422,7 +1422,7 @@ void SwDoc::DelFrmFmt( SwFrmFmt *pFmt, BOOL bBroadcast )
 {
     if( pFmt->ISA( SwTableBoxFmt ) || pFmt->ISA( SwTableLineFmt ))
     {
-        ASSERT( !this, "Format steht nicht mehr im DocArray, "
+        OSL_ENSURE( !this, "Format steht nicht mehr im DocArray, "
                        "kann per delete geloescht werden" );
         delete pFmt;
     }
@@ -1451,7 +1451,7 @@ void SwDoc::DelFrmFmt( SwFrmFmt *pFmt, BOOL bBroadcast )
         else
         {
             nPos = GetSpzFrmFmts()->GetPos( pFmt );
-            ASSERT( nPos != USHRT_MAX, "FrmFmt not found." );
+            OSL_ENSURE( nPos != USHRT_MAX, "FrmFmt not found." );
             if( USHRT_MAX != nPos )
                 GetSpzFrmFmts()->DeleteAndDestroy( nPos );
         }
@@ -1461,7 +1461,7 @@ void SwDoc::DelFrmFmt( SwFrmFmt *pFmt, BOOL bBroadcast )
 void SwDoc::DelTblFrmFmt( SwTableFmt *pFmt )
 {
     USHORT nPos = pTblFrmFmtTbl->GetPos( pFmt );
-    ASSERT( USHRT_MAX != nPos, "Fmt not found," );
+    OSL_ENSURE( USHRT_MAX != nPos, "Fmt not found," );
     pTblFrmFmtTbl->DeleteAndDestroy( nPos );
 }
 
@@ -1683,7 +1683,7 @@ SwGrfFmtColl* SwDoc::MakeGrfFmtColl( const String &rFmtName,
 
 void SwDoc::DelTxtFmtColl(USHORT nFmtColl, BOOL bBroadcast)
 {
-    ASSERT( nFmtColl, "Remove fuer Coll 0." );
+    OSL_ENSURE( nFmtColl, "Remove fuer Coll 0." );
 
     // Wer hat die zu loeschende als Next
     SwTxtFmtColl *pDel = (*pTxtFmtCollTbl)[nFmtColl];
@@ -1714,7 +1714,7 @@ void SwDoc::DelTxtFmtColl(USHORT nFmtColl, BOOL bBroadcast)
 void SwDoc::DelTxtFmtColl( SwTxtFmtColl *pColl, BOOL bBroadcast )
 {
     USHORT nFmt = pTxtFmtCollTbl->GetPos( pColl );
-    ASSERT( USHRT_MAX != nFmt, "Collection not found," );
+    OSL_ENSURE( USHRT_MAX != nFmt, "Collection not found," );
     DelTxtFmtColl( nFmt, bBroadcast );
 }
 
@@ -1746,7 +1746,7 @@ BOOL lcl_SetTxtFmtColl( const SwNodePtr& rpNode, void* pArgs )
                 // Check, if the list style of the paragraph will change.
                 bool bChangeOfListStyleAtParagraph( true );
                 SwTxtNode* pTNd( dynamic_cast<SwTxtNode*>(pCNd) );
-                ASSERT( pTNd,
+                OSL_ENSURE( pTNd,
                         "<lcl_SetTxtFmtColl(..)> - text node expected -> crash" );
                 {
                     SwNumRule* pNumRuleAtParagraph( pTNd->GetNumRule() );
@@ -2439,7 +2439,7 @@ void SwDoc::_CreateNumberFormatter()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDoc::_CreateNumberFormatter" );
 
-    ASSERT( !pNumberFormatter, "ist doch schon vorhanden" );
+    OSL_ENSURE( !pNumberFormatter, "ist doch schon vorhanden" );
 
 
     LanguageType eLang = LANGUAGE_SYSTEM; //System::GetLanguage();

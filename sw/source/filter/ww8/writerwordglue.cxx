@@ -168,7 +168,7 @@ namespace myImplHelpers
         };
 
         const size_t nArrSize = (SAL_N_ELEMENTS(aArr));
-        ASSERT(nArrSize == 75, "Style Array has false size");
+        OSL_ENSURE(nArrSize == 75, "Style Array has false size");
 
         SwTxtFmtColl* pRet = 0;
         //If this is a built-in word style that has a built-in writer
@@ -531,7 +531,7 @@ namespace sw
             const String &rTxt = rTxtNd.GetTxt();
 
             bool bParaIsRTL = false;
-            ASSERT(rTxtNd.GetDoc(), "No document for node?, suspicious");
+            OSL_ENSURE(rTxtNd.GetDoc(), "No document for node?, suspicious");
             if (rTxtNd.GetDoc())
             {
                 if (FRMDIR_HORI_RIGHT_TOP ==
@@ -730,7 +730,7 @@ namespace sw
                 case RTL_TEXTENCODING_UTF7:
                 case RTL_TEXTENCODING_UTF8:
                 case RTL_TEXTENCODING_JAVA_UTF8:
-                    ASSERT(nRet != 0x80, "This method may be redundant");
+                    OSL_ENSURE(nRet != 0x80, "This method may be redundant");
                     nRet = 0x80;
                     break;
                 default:

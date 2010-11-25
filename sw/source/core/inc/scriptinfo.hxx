@@ -360,56 +360,56 @@ inline void SwScriptInfo::SetInvalidity( const xub_StrLen nPos )
 inline USHORT SwScriptInfo::CountScriptChg() const { return aScriptChg.Count(); }
 inline xub_StrLen SwScriptInfo::GetScriptChg( const USHORT nCnt ) const
 {
-    ASSERT( nCnt < aScriptChg.Count(),"No ScriptChange today!");
+    OSL_ENSURE( nCnt < aScriptChg.Count(),"No ScriptChange today!");
     return aScriptChg[ nCnt ];
 }
 inline BYTE SwScriptInfo::GetScriptType( const xub_StrLen nCnt ) const
 {
-    ASSERT( nCnt < aScriptChg.Count(),"No ScriptType today!");
+    OSL_ENSURE( nCnt < aScriptChg.Count(),"No ScriptType today!");
     return aScriptType[ nCnt ];
 }
 
 inline USHORT SwScriptInfo::CountDirChg() const { return aDirChg.Count(); }
 inline xub_StrLen SwScriptInfo::GetDirChg( const USHORT nCnt ) const
 {
-    ASSERT( nCnt < aDirChg.Count(),"No DirChange today!");
+    OSL_ENSURE( nCnt < aDirChg.Count(),"No DirChange today!");
     return aDirChg[ nCnt ];
 }
 inline BYTE SwScriptInfo::GetDirType( const xub_StrLen nCnt ) const
 {
-    ASSERT( nCnt < aDirChg.Count(),"No DirType today!");
+    OSL_ENSURE( nCnt < aDirChg.Count(),"No DirType today!");
     return aDirType[ nCnt ];
 }
 
 inline USHORT SwScriptInfo::CountKashida() const { return aKashida.Count(); }
 inline xub_StrLen SwScriptInfo::GetKashida( const USHORT nCnt ) const
 {
-    ASSERT( nCnt < aKashida.Count(),"No Kashidas today!");
+    OSL_ENSURE( nCnt < aKashida.Count(),"No Kashidas today!");
     return aKashida[ nCnt ];
 }
 
 inline USHORT SwScriptInfo::CountCompChg() const { return aCompChg.Count(); };
 inline xub_StrLen SwScriptInfo::GetCompStart( const USHORT nCnt ) const
 {
-    ASSERT( nCnt < aCompChg.Count(),"No CompressionStart today!");
+    OSL_ENSURE( nCnt < aCompChg.Count(),"No CompressionStart today!");
     return aCompChg[ nCnt ];
 }
 inline xub_StrLen SwScriptInfo::GetCompLen( const USHORT nCnt ) const
 {
-    ASSERT( nCnt < aCompChg.Count(),"No CompressionLen today!");
+    OSL_ENSURE( nCnt < aCompChg.Count(),"No CompressionLen today!");
     return aCompLen[ nCnt ];
 }
 
 inline BYTE SwScriptInfo::GetCompType( const USHORT nCnt ) const
 {
-    ASSERT( nCnt < aCompChg.Count(),"No CompressionType today!");
+    OSL_ENSURE( nCnt < aCompChg.Count(),"No CompressionType today!");
     return aCompType[ nCnt ];
 }
 
 inline USHORT SwScriptInfo::CountHiddenChg() const { return aHiddenChg.Count(); };
 inline xub_StrLen SwScriptInfo::GetHiddenChg( const USHORT nCnt ) const
 {
-    ASSERT( nCnt < aHiddenChg.Count(),"No HiddenChg today!");
+    OSL_ENSURE( nCnt < aHiddenChg.Count(),"No HiddenChg today!");
     return aHiddenChg[ nCnt ];
 }
 

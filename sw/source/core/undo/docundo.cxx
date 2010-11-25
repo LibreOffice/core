@@ -164,14 +164,14 @@ void SwDoc::AppendUndo( SwUndo* pUndo )
     case UNDO_START:        ++nUndoSttEnd;
                             break;
 
-    case UNDO_END:          ASSERT( nUndoSttEnd, "Undo-Ende ohne Start" );
+    case UNDO_END:          OSL_ENSURE( nUndoSttEnd, "Undo-Ende ohne Start" );
                             --nUndoSttEnd;
                             // kein break !!!
     default:
         if( pUndos->Count() != nUndoPos && UNDO_END != pUndo->GetId() )
             ClearRedo();
         else {
-            ASSERT( pUndos->Count() == nUndoPos || UNDO_END == pUndo->GetId(),
+            OSL_ENSURE( pUndos->Count() == nUndoPos || UNDO_END == pUndo->GetId(),
                     "Redo history not deleted!" );
         }
         if( !nUndoSttEnd )
@@ -199,7 +199,7 @@ void SwDoc::AppendUndo( SwUndo* pUndo )
     USHORT nEnde = UNDO_ACTION_LIMIT;
 
 // nur zum Testen der neuen DOC-Member
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 {
     SwUndoId nId = UNDO_EMPTY;
     USHORT nUndosCnt = 0, nSttEndCnt = 0;
@@ -212,8 +212,8 @@ void SwDoc::AppendUndo( SwUndo* pUndo )
         if( !nSttEndCnt )
             ++nUndosCnt;
     }
-    ASSERT( nSttEndCnt == nUndoSttEnd, "Start-Ende Count ungleich" );
-    ASSERT( nUndosCnt == nUndoCnt, "Undo Count ungleich" );
+    OSL_ENSURE( nSttEndCnt == nUndoSttEnd, "Start-Ende Count ungleich" );
+    OSL_ENSURE( nUndosCnt == nUndoCnt, "Undo Count ungleich" );
 }
 #endif
 
@@ -309,7 +309,7 @@ BOOL SwDoc::DelUndoObj( USHORT nEnde )
             --nEnde, --nUndoCnt;
     }
 
-    ASSERT( nCnt < nUndoPos || nUndoPos == pUndos->Count(),
+    OSL_ENSURE( nCnt < nUndoPos || nUndoPos == pUndos->Count(),
             "Undo-Del-Ende liegt in einer Redo-Aktion" );
 
     // dann setze ab Ende bis Undo-Ende bei allen Undo-Objecte die Werte um
@@ -496,7 +496,7 @@ SwUndoId SwDoc::EndUndo(SwUndoId eUndoId, const SwRewriter * pRewriter)
         // kann eigentlich nur beim Abspielen von Macros passieren, die
         // Undo/Redo/Repeat benutzen und die eine exitierende Selection
         // durch Einfuegen loeschen
-        ASSERT( !this, "kein entsprechendes Ende gefunden" );
+        OSL_ENSURE( !this, "kein entsprechendes Ende gefunden" );
         // kein entsprechenden Start gefunden -> Ende nicht einfuegen
         // und die Member am Doc updaten
 
@@ -547,7 +547,7 @@ SwUndoId SwDoc::EndUndo(SwUndoId eUndoId, const SwRewriter * pRewriter)
     pUndoEnd->SetSttOffset( nSize );
 
 // nur zum Testen der Start/End-Verpointerung vom Start/End Undo
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     {
         USHORT nEndCnt = 1, nCnt = pUndos->Count();
         SwUndoId nTmpId = UNDO_EMPTY;
@@ -566,7 +566,7 @@ SwUndoId SwDoc::EndUndo(SwUndoId eUndoId, const SwRewriter * pRewriter)
             else if( !nEndCnt )
                 break;
         }
-        ASSERT( nCnt == pUndos->Count() - nSize,
+        OSL_ENSURE( nCnt == pUndos->Count() - nSize,
                 "Start-Ende falsch geklammert" );
     }
 #endif
@@ -657,7 +657,7 @@ SwUndoIdAndName * lcl_GetUndoIdAndName(const SwUndos & rUndos, sal_uInt16 nPos )
     SwUndoId nId = UNDO_EMPTY;
     String sStr("??", RTL_TEXTENCODING_ASCII_US);
 
-    ASSERT( nPos < rUndos.Count(), "nPos out of range");
+    OSL_ENSURE( nPos < rUndos.Count(), "nPos out of range");
 
     switch (pUndo->GetId())
     {
@@ -1007,7 +1007,7 @@ SwUndo* SwDoc::RemoveLastUndo( SwUndoId eUndoId )
     else
     {
         pUndo = 0;
-        ASSERT( !this, "falsches Undo-Object" );
+        OSL_ENSURE( !this, "falsches Undo-Object" );
     }
     return pUndo;
 }
