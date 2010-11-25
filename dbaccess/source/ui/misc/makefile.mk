@@ -52,6 +52,7 @@ SLOFILES=    \
         $(SLO)/asyncmodaldialog.obj         \
         $(SLO)/imageprovider.obj            \
         $(SLO)/singledoccontroller.obj      \
+        $(SLO)/dbsubcomponentcontroller.obj \
         $(SLO)/datasourceconnector.obj      \
         $(SLO)/linkeddocuments.obj          \
         $(SLO)/indexcollection.obj          \

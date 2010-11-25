@@ -25,8 +25,8 @@
  *
  ************************************************************************/
 
-#ifndef DBAUI_SINGLEDOCCONTROLLER_HXX
-#define DBAUI_SINGLEDOCCONTROLLER_HXX
+#ifndef DBAUI_SUBCOMPONENTCONTROLLER_HXX
+#define DBAUI_SUBCOMPONENTCONTROLLER_HXX
 
 #include "genericcontroller.hxx"
 
@@ -37,15 +37,13 @@
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #include <com/sun/star/util/XNumberFormatter.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
-#include <com/sun/star/document/XUndoManagerSupplier.hpp>
 /** === end UNO includes === **/
 
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/propertycontainer.hxx>
 #include <connectivity/dbmetadata.hxx>
-#include <cppuhelper/implbase3.hxx>
-#include <svl/undo.hxx>
+#include <cppuhelper/implbase2.hxx>
 
 #include <memory>
 
@@ -55,22 +53,20 @@ namespace dbaui
 //........................................................................
 
     //====================================================================
-    //= OSingleDocumentController
+    //= DBSubComponentController
     //====================================================================
-    class OSingleDocumentController;
+    class DBSubComponentController;
 
-    typedef ::cppu::ImplInheritanceHelper3  <   OGenericUnoController
+    typedef ::cppu::ImplInheritanceHelper2  <   OGenericUnoController
                                             ,   ::com::sun::star::document::XScriptInvocationContext
                                             ,   ::com::sun::star::util::XModifiable
-                                            ,   ::com::sun::star::document::XUndoManagerSupplier
-                                            >   OSingleDocumentController_Base;
+                                            >   DBSubComponentController_Base;
 
-    struct OSingleDocumentControllerImpl;
-    class DBACCESS_DLLPUBLIC OSingleDocumentController
-            :public OSingleDocumentController_Base
+    struct DBSubComponentController_Impl;
+    class DBACCESS_DLLPUBLIC DBSubComponentController : public DBSubComponentController_Base
     {
     private:
-        ::std::auto_ptr<OSingleDocumentControllerImpl> m_pImpl;
+        ::std::auto_ptr<DBSubComponentController_Impl> m_pImpl;
 
     private:
         /** forces usage of a connection which we do not own
@@ -82,9 +78,7 @@ namespace dbaui
         // OGenericUnoController - initialization
         virtual void impl_initialize();
 
-        // state of a feature. 'feature' may be the handle of a ::com::sun::star::util::URL somebody requested a dispatch interface for OR a toolbar slot.
-        virtual FeatureState    GetState(sal_uInt16 nId) const;
-        // execute a feature
+        // OGenericUnoController
         virtual void            Execute(sal_uInt16 nId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs);
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > getPrivateModel() const;
@@ -98,14 +92,6 @@ namespace dbaui
         sal_Bool        isEditable()            const;
         void            setEditable(sal_Bool _bEditable);
 
-        // need for undo's and redo's
-        SfxUndoManager& GetUndoManager() const;
-
-        /** addUndoActionAndInvalidate adds an undo action to the undoManager,
-            additionally invalidates the UNDO and REDO slot
-            @param  pAction the undo action to add
-        */
-        void addUndoActionAndInvalidate(SfxUndoAction *pAction);
         // ----------------------------------------------------------------
         // asking for connection-related stuff
 
@@ -186,12 +172,9 @@ namespace dbaui
         // XTitle
         virtual ::rtl::OUString SAL_CALL getTitle(  ) throw (::com::sun::star::uno::RuntimeException);
 
-        // XUndoManagerSupplier
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoManager > SAL_CALL getUndoManager(  ) throw (::com::sun::star::uno::RuntimeException);
-
     protected:
-        OSingleDocumentController(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxORB);
-        virtual ~OSingleDocumentController();
+        DBSubComponentController(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxORB);
+        virtual ~DBSubComponentController();
 
         virtual void        disconnect();
         virtual void        reconnect( sal_Bool _bUI );
@@ -201,9 +184,6 @@ namespace dbaui
             <p>The default implementation does a reconnect</p>
         */
         virtual void losingConnection( );
-
-        // late construction
-        virtual sal_Bool Construct(Window* pParent);
 
     protected:
         // XEventListener
@@ -222,12 +202,12 @@ namespace dbaui
         sal_Int32 getCurrentStartNumber() const;
 
     private:
-        OSingleDocumentController();    // never implemented
+        DBSubComponentController();    // never implemented
     };
 
 //........................................................................
 }   // namespace dbaui
 //........................................................................
 
-#endif // DBAUI_SINGLEDOCCONTROLLER_HXX
+#endif // DBAUI_SUBCOMPONENTCONTROLLER_HXX
 

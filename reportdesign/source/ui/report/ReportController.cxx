@@ -391,7 +391,6 @@ void OReportController::disposing()
     OReportController_BASE::disposing();
 
 
-    // disconnect();
     try
     {
         m_xReportDefinition.clear();
@@ -2106,14 +2105,6 @@ void OReportController::impl_onModifyChanged()
     }
 }
 // -----------------------------------------------------------------------------
-void OReportController::losingConnection( )
-{
-    // let the base class do it's reconnect
-    OReportController_BASE::losingConnection( );
-
-    InvalidateAll();
-}
-// -----------------------------------------------------------------------------
 void OReportController::onLoadedMenu(const Reference< frame::XLayoutManager >& _xLayoutManager)
 {
     if ( _xLayoutManager.is() )
@@ -2300,6 +2291,7 @@ void SAL_CALL OReportController::propertyChange( const beans::PropertyChangeEven
 // -----------------------------------------------------------------------------
 void SAL_CALL OReportController::disposing( const lang::EventObject& Source ) throw(uno::RuntimeException)
 {
+    // simply disambiguate
     OReportController_BASE::disposing(Source);
 }
 

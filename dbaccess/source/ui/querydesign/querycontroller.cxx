@@ -1037,7 +1037,7 @@ void OQueryController::impl_initialize()
             }
         }
 
-        GetUndoManager().Clear();
+        ClearUndoManager();
 
         if  (  ( m_bGraphicalDesign )
             && (  ( !m_sName.getLength() && !editingCommand() )
@@ -1789,7 +1789,7 @@ void OQueryController::reset()
 {
     impl_reset();
     getContainer()->reset( NULL );
-    GetUndoManager().Clear();
+    ClearUndoManager();
 }
 
 // -----------------------------------------------------------------------------

@@ -2177,7 +2177,7 @@ namespace
         while ( false );
 
         // Durch das Neuerzeugen wurden wieder Undo-Actions in den Manager gestellt
-        rController.GetUndoManager().Clear();
+        rController.ClearUndoManager();
         _pSelectionBrw->Invalidate();
         return eErrorCode;
     }
@@ -3234,7 +3234,7 @@ void OQueryDesignView::initByFieldDescriptions( const Sequence< PropertyValue >&
         InsertField( pField, sal_True, sal_False );
     }
 
-    rController.GetUndoManager().Clear();
+    rController.ClearUndoManager();
     m_pSelectionBox->Invalidate();
 }
 
