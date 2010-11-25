@@ -467,7 +467,7 @@ public:
         else
             mbArgError = true;
     }
-    bool hasArgError() { return mbArgError; }
+    bool hasArgError() const { return mbArgError; }
 };
 
 template< class seq >

@@ -69,7 +69,7 @@ void ScMySharedData::SetLastColumn(const sal_Int32 nTable, const sal_Int32 nCol)
     if(nCol > nLastColumns[nTable]) nLastColumns[nTable] = nCol;
 }
 
-sal_Int32 ScMySharedData::GetLastColumn(const sal_Int32 nTable)
+sal_Int32 ScMySharedData::GetLastColumn(const sal_Int32 nTable) const
 {
     return nLastColumns[nTable];
 }
@@ -79,7 +79,7 @@ void ScMySharedData::SetLastRow(const sal_Int32 nTable, const sal_Int32 nRow)
     if(nRow > nLastRows[nTable]) nLastRows[nTable] = nRow;
 }
 
-sal_Int32 ScMySharedData::GetLastRow(const sal_Int32 nTable)
+sal_Int32 ScMySharedData::GetLastRow(const sal_Int32 nTable) const
 {
     return nLastRows[nTable];
 }
