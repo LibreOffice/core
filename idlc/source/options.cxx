@@ -28,9 +28,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_idlc.hxx"
 
+#include "idlc/options.hxx"
+
 #include <stdio.h>
-#include /*MSVC trouble: <cstring>*/ <string.h>
-#include <idlc/options.hxx>
+#include <string.h>
 
 using namespace rtl;
 
@@ -226,7 +227,7 @@ sal_Bool Options::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                     exit(0);
                 }
             case 's':
-                if (/*MSVC trouble: std::*/strcmp(&av[j][2], "tdin") == 0)
+                if (strcmp(&av[j][2], "tdin") == 0)
                 {
                     m_stdin = true;
                     break;
@@ -246,53 +247,49 @@ sal_Bool Options::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                     ret = sal_False;
                 } else
                 {
-                    int rargc=0;
-                    char* rargv[512];
-                    char  buffer[512]="";
+                    std::vector< std::string > args;
 
-                    int i=0;
-                    int found = 0;
-                    char c;
-                    while ( fscanf(cmdFile, "%c", &c) != EOF )
+                    std::string buffer;
+                    buffer.reserve(256);
+
+                    bool quoted = false;
+                    int c = EOF;
+                    while ((c = fgetc(cmdFile)) != EOF)
                     {
-                        if (c=='\"') {
-                            if (found) {
-                                found=0;
-                            } else {
-                                found=1;
-                                continue;
-                            }
-                        } else {
-                            if (c!=13 && c!=10) {
-                                if (found || c!=' ') {
-                                    buffer[i++]=c;
-                                    continue;
+                        switch(c)
+                        {
+                        case '\"':
+                            quoted = !quoted;
+                            break;
+                        case ' ':
+                        case '\t':
+                        case '\r':
+                        case '\n':
+                            if (!quoted)
+                            {
+                                if (!buffer.empty())
+                                {
+                                    // append current argument.
+                                    args.push_back(buffer);
+                                    buffer.clear();
                                 }
+                                break;
                             }
-                            if (i==0)
-                                continue;
+                        default:
+                            // quoted white-space fall through
+                            buffer.push_back(sal::static_int_cast<char>(c));
+                            break;
                         }
-                        buffer[i]='\0';
-                        found=0;
-                        i=0;
-                        rargv[rargc]= strdup(buffer);
-                        rargc++;
-                        buffer[0]='\0';
                     }
-                    if (buffer[0] != '\0') {
-                        buffer[i]='\0';
-                        rargv[rargc]= strdup(buffer);
-                        rargc++;
-                    }
-                    fclose(cmdFile);
-
-                    ret = initOptions(rargc, rargv, bCmdFile);
-
-                    long ii = 0;
-                    for (ii=0; ii < rargc; ii++)
+                    if (!buffer.empty())
                     {
-                        free(rargv[ii]);
+                        // append unterminated argument.
+                        args.push_back(buffer);
+                        buffer.clear();
                     }
+                    (void) fclose(cmdFile);
+
+                    ret = initOptions(args.size(), args.data(), bCmdFile);
                 }
             } else
             {

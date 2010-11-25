@@ -514,7 +514,6 @@ sal_Bool SAL_CALL osl_readProfileString(oslProfile Profile,
 
     if ( pTmpProfile->m_bIsValid == sal_False )
     {
-        OSL_ASSERT(pProfile->m_bIsValid);
         pthread_mutex_unlock(&(pTmpProfile->m_AccessLock));
 #ifdef TRACE_OSL_PROFILE
         OSL_TRACE("Out osl_readProfileString [not valid]\n");
