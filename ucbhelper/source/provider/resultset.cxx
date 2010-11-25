@@ -310,7 +310,7 @@ XTYPEPROVIDER_IMPL_9( ResultSet,
 
 XSERVICEINFO_NOFACTORY_IMPL_1( ResultSet,
                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ResultSet")),
-                    rtl::OUString::createFromAscii( RESULTSET_SERVICE_NAME ) );
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( RESULTSET_SERVICE_NAME )) );
 
 //=========================================================================
 //

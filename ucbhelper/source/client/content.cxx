@@ -227,9 +227,9 @@ static void ensureContentProviderForURL( const ContentBroker & rBroker,
     if ( !xMgr.is() )
     {
         throw RuntimeException(
-            rtl::OUString::createFromAscii(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                 "UCB does not implement mandatory interface "
-                "XContentProviderManager!" ),
+                "XContentProviderManager!" )),
             Reference< XInterface >() );
     }
     else
@@ -239,8 +239,8 @@ static void ensureContentProviderForURL( const ContentBroker & rBroker,
         if ( !xProv.is() )
         {
             throw ContentCreationException(
-                rtl::OUString::createFromAscii(
-                    "No Content Provider available for given URL!" ),
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "No Content Provider available for given URL!" )),
                 Reference< XInterface >(),
                 ContentCreationError_NO_CONTENT_PROVIDER );
         }
@@ -269,9 +269,9 @@ static ContentBroker* getContentBroker( bool bThrow )
         {
             if ( bThrow )
                 throw RuntimeException(
-                        rtl::OUString::createFromAscii(
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                             "UCB does not implement mandatory interface "
-                            "XContentProviderManager!" ),
+                            "XContentProviderManager!" )),
                         Reference< XInterface >() );
         }
         else
@@ -307,8 +307,8 @@ static Reference< XContentIdentifier > getContentIdentifier(
             ensureContentProviderForURL( rBroker, rURL );
 
             throw ContentCreationException(
-                rtl::OUString::createFromAscii(
-                    "Unable to create Content Identifier!" ),
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "Unable to create Content Identifier!" )),
                 Reference< XInterface >(),
                 ContentCreationError_IDENTIFIER_CREATION_FAILED );
         }
@@ -317,9 +317,9 @@ static Reference< XContentIdentifier > getContentIdentifier(
     {
         if ( bThrow )
             throw RuntimeException(
-                    rtl::OUString::createFromAscii(
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                         "UCB does not implement mandatory interface "
-                        "XContentIdentifierFactory!" ),
+                        "XContentIdentifierFactory!" )),
                     Reference< XInterface >() );
     }
 
@@ -357,8 +357,8 @@ static Reference< XContent > getContent(
             ensureContentProviderForURL( rBroker, xId->getContentIdentifier() );
 
             throw ContentCreationException(
-                    rtl::OUString::createFromAscii(
-                        "Unable to create Content! " ) + msg,
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        "Unable to create Content! " )) + msg,
                     Reference< XInterface >(),
                     ContentCreationError_CONTENT_CREATION_FAILED );
         }
@@ -367,9 +367,9 @@ static Reference< XContent > getContent(
     {
         if ( bThrow )
             throw RuntimeException(
-                    rtl::OUString::createFromAscii(
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                         "UCB does not implement mandatory interface "
-                        "XContentProvider!" ),
+                        "XContentProvider!" )),
                     Reference< XInterface >() );
     }
 
@@ -732,9 +732,9 @@ Sequence< Any > Content::setPropertyValues(
     {
         ucbhelper::cancelCommandExecution(
             makeAny( IllegalArgumentException(
-                        rtl::OUString::createFromAscii(
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                             "Length of property names sequence and value "
-                            "sequence are unequal!" ),
+                            "sequence are unequal!" )),
                         get(),
                         -1 ) ),
             m_xImpl->getEnvironment() );
@@ -780,9 +780,9 @@ Sequence< Any > Content::setPropertyValues(
     {
         ucbhelper::cancelCommandExecution(
             makeAny( IllegalArgumentException(
-                        rtl::OUString::createFromAscii(
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                             "Length of property handles sequence and value "
-                            "sequence are unequal!" ),
+                            "sequence are unequal!" )),
                         get(),
                         -1 ) ),
             m_xImpl->getEnvironment() );
@@ -1567,8 +1567,8 @@ sal_Bool Content::transferContent( const Content& rSourceContent,
         default:
             ucbhelper::cancelCommandExecution(
                 makeAny( IllegalArgumentException(
-                            rtl::OUString::createFromAscii(
-                                "Unknown transfer operation!" ),
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                "Unknown transfer operation!" )),
                             get(),
                             -1 ) ),
                          m_xImpl->getEnvironment() );
@@ -1601,8 +1601,8 @@ sal_Bool Content::isFolder()
 
      ucbhelper::cancelCommandExecution(
          makeAny( UnknownPropertyException(
-                    rtl::OUString::createFromAscii(
-                        "Unable to retreive value of property 'IsFolder'!" ),
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        "Unable to retreive value of property 'IsFolder'!" )),
                     get() ) ),
          m_xImpl->getEnvironment() );
 
@@ -1622,8 +1622,8 @@ sal_Bool Content::isDocument()
 
      ucbhelper::cancelCommandExecution(
          makeAny( UnknownPropertyException(
-                    rtl::OUString::createFromAscii(
-                        "Unable to retreive value of property 'IsDocument'!" ),
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        "Unable to retreive value of property 'IsDocument'!" )),
                     get() ) ),
          m_xImpl->getEnvironment() );
 

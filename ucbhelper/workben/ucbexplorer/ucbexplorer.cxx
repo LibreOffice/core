@@ -445,8 +445,8 @@ BOOL UcbExplorerListBoxEntry::createNewContent( const ContentInfo& rInfo,
             ResMgr::CreateResMgr( CREATEVERSIONRESMGR_NAME( ucbexplorer ) ) );
         StringInputDialog* pDlg = new StringInputDialog(
                                             *xManager.get(),
-                                            OUString::createFromAscii(
-                                                "Document Data Source URL" ),
+                                            OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                                "Document Data Source URL" )),
                                             OUString() );
         USHORT nRet = pDlg->Execute();
         if ( nRet == RET_OK )
@@ -470,8 +470,8 @@ BOOL UcbExplorerListBoxEntry::createNewContent( const ContentInfo& rInfo,
                 {
                     uno::Reference< XInteractionHandler > xInteractionHandler(
                         pBroker->getServiceManager()->createInstance(
-                                OUString::createFromAscii(
-                                    "com.sun.star.task.InteractionHandler" ) ),
+                                OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                    "com.sun.star.task.InteractionHandler" )) ),
                         UNO_QUERY );
 
                     uno::Reference< XProgressHandler > xProgressHandler
@@ -719,8 +719,8 @@ void UcbExplorerTreeListBox::Command( const CommandEvent& rCEvt )
                 pMenu->EnableItem( MENU_DELETE,
                                    pEntry->m_aContent
                                         .getCommands()->hasCommandByName(
-                                        OUString::createFromAscii(
-                                            "delete" ) ) );
+                                        OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                            "delete" )) ) );
             }
             catch ( CommandAbortedException const & )
             {
@@ -1007,8 +1007,8 @@ UcbExplorerListBoxEntry* UcbExplorerTreeListBox::InsertEntry(
         {
             uno::Reference< XInteractionHandler > xInteractionHandler(
                 pBroker->getServiceManager()->createInstance(
-                        OUString::createFromAscii(
-                            "com.sun.star.task.InteractionHandler" ) ),
+                        OUString(RTL_CONSTASCII_USTRINGPARAM(
+                            "com.sun.star.task.InteractionHandler" )) ),
                 UNO_QUERY );
 
             uno::Reference< XProgressHandler > xProgressHandler
@@ -1114,8 +1114,8 @@ void MyApp::Main()
 #if 1
     // Init UCB (Read configuration from registry)
     Sequence< Any > aArgs( 2 );
-    aArgs[ 0 ] <<= OUString::createFromAscii( UCB_CONFIGURATION_KEY1_LOCAL );
-    aArgs[ 1 ] <<= OUString::createFromAscii( UCB_CONFIGURATION_KEY2_OFFICE );
+    aArgs[ 0 ] <<= OUString(RTL_CONSTASCII_USTRINGPARAM( UCB_CONFIGURATION_KEY1_LOCAL ));
+    aArgs[ 1 ] <<= OUString(RTL_CONSTASCII_USTRINGPARAM( UCB_CONFIGURATION_KEY2_OFFICE ));
     sal_Bool bSuccess = ::ucbhelper::ContentBroker::initialize( xFac, aArgs );
 #else
     // Init UCB (Use provided configuration data)

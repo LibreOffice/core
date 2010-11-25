@@ -267,17 +267,17 @@ InternetProxyDecider_Impl::InternetProxyDecider_Impl(
 
         uno::Reference< lang::XMultiServiceFactory > xConfigProv(
                 rxSMgr->createInstance(
-                    rtl::OUString::createFromAscii(
-                        "com.sun.star.configuration.ConfigurationProvider" ) ),
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        "com.sun.star.configuration.ConfigurationProvider" )) ),
                 uno::UNO_QUERY );
 
         uno::Sequence< uno::Any > aArguments( 1 );
-        aArguments[ 0 ] <<= rtl::OUString::createFromAscii( CONFIG_ROOT_KEY );
+        aArguments[ 0 ] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( CONFIG_ROOT_KEY ));
 
         uno::Reference< uno::XInterface > xInterface(
                     xConfigProv->createInstanceWithArguments(
-                        rtl::OUString::createFromAscii(
-                            "com.sun.star.configuration.ConfigurationAccess" ),
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                            "com.sun.star.configuration.ConfigurationAccess" )),
                     aArguments ) );
 
         OSL_ENSURE( xInterface.is(),
@@ -295,8 +295,8 @@ InternetProxyDecider_Impl::InternetProxyDecider_Impl(
                 try
                 {
                     if ( !( xNameAccess->getByName(
-                                rtl::OUString::createFromAscii(
-                                    PROXY_TYPE_KEY ) ) >>= m_nProxyType ) )
+                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                    PROXY_TYPE_KEY )) ) >>= m_nProxyType ) )
                     {
                         OSL_ENSURE( sal_False,
                                     "InternetProxyDecider - "
@@ -314,8 +314,8 @@ InternetProxyDecider_Impl::InternetProxyDecider_Impl(
                 try
                 {
                     if ( !( xNameAccess->getByName(
-                                rtl::OUString::createFromAscii(
-                                    NO_PROXY_LIST_KEY ) ) >>= aNoProxyList ) )
+                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                    NO_PROXY_LIST_KEY )) ) >>= aNoProxyList ) )
                     {
                         OSL_ENSURE( sal_False,
                                     "InternetProxyDecider - "
@@ -334,8 +334,8 @@ InternetProxyDecider_Impl::InternetProxyDecider_Impl(
                 try
                 {
                     if ( !( xNameAccess->getByName(
-                                rtl::OUString::createFromAscii(
-                                    HTTP_PROXY_NAME_KEY ) )
+                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                    HTTP_PROXY_NAME_KEY )) )
                             >>= m_aHttpProxy.aName ) )
                     {
                         OSL_ENSURE( sal_False,
@@ -354,8 +354,8 @@ InternetProxyDecider_Impl::InternetProxyDecider_Impl(
                 try
                 {
                     uno::Any aValue = xNameAccess->getByName(
-                            rtl::OUString::createFromAscii(
-                                HTTP_PROXY_PORT_KEY ) );
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                HTTP_PROXY_PORT_KEY )) );
                     if ( aValue.hasValue() &&
                          !( aValue >>= m_aHttpProxy.nPort ) )
                     {
@@ -377,8 +377,8 @@ InternetProxyDecider_Impl::InternetProxyDecider_Impl(
                 try
                 {
                     if ( !( xNameAccess->getByName(
-                                rtl::OUString::createFromAscii(
-                                    FTP_PROXY_NAME_KEY ) )
+                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                    FTP_PROXY_NAME_KEY )) )
                             >>= m_aFtpProxy.aName ) )
                     {
                         OSL_ENSURE( sal_False,
@@ -397,8 +397,8 @@ InternetProxyDecider_Impl::InternetProxyDecider_Impl(
                 try
                 {
                     uno::Any aValue = xNameAccess->getByName(
-                            rtl::OUString::createFromAscii(
-                                FTP_PROXY_PORT_KEY ) );
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                FTP_PROXY_PORT_KEY )) );
                     if ( aValue.hasValue() &&
                          !( aValue >>= m_aFtpProxy.nPort ) )
                     {

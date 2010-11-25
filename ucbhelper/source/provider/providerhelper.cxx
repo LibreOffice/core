@@ -326,8 +326,8 @@ ContentProviderImplHelper::getAdditionalPropertySetRegistry()
         uno::Reference< com::sun::star::ucb::XPropertySetRegistryFactory >
             xRegFac(
                 m_xSMgr->createInstance(
-                    rtl::OUString::createFromAscii(
-                        "com.sun.star.ucb.Store" ) ),
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        "com.sun.star.ucb.Store" )) ),
                 uno::UNO_QUERY );
 
         OSL_ENSURE( xRegFac.is(),
