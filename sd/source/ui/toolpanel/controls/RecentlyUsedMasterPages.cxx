@@ -96,12 +96,14 @@ public:
           maToken(aToken)
     {}
     class TokenComparator
-    { public:
+    {
+    public:
         TokenComparator(::sd::toolpanel::controls::MasterPageContainer::Token aToken)
             : maToken(aToken) {}
-        bool operator () (const Descriptor& rDescriptor)
-        { return maToken==rDescriptor.maToken; }
-    private: ::sd::toolpanel::controls::MasterPageContainer::Token maToken;
+        bool operator () (const Descriptor& rDescriptor) const
+            { return maToken==rDescriptor.maToken; }
+    private:
+        ::sd::toolpanel::controls::MasterPageContainer::Token maToken;
     };
 };
 
