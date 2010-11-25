@@ -75,9 +75,6 @@ void OTableRowView::Init()
 {
     EditBrowseBox::Init();
 
-//  SetMapMode( MapMode(MAP_TWIP) );
-//  GetDataWindow().SetMapMode( GetMapMode() );
-
     Font aFont( GetDataWindow().GetFont() );
     aFont.SetWeight( WEIGHT_NORMAL );
     GetDataWindow().SetFont( aFont );

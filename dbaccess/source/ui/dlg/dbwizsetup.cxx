@@ -181,7 +181,6 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(Window* _pParent
     m_pOutSet = new SfxItemSet( *_pItems->GetPool(), _pItems->GetRanges() );
 
     m_pImpl->translateProperties(xDatasource, *m_pOutSet);
-//  eType = m_pImpl->getDatasourceType(*m_pOutSet);
 
     SetPageSizePixel(LogicToPixel(::Size(WIZARD_PAGE_X, WIZARD_PAGE_Y), MAP_APPFONT));
     ShowButtonFixedLine(sal_True);

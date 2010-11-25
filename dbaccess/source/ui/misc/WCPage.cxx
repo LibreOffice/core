@@ -134,7 +134,7 @@ IMPL_LINK( OCopyTable, AppendDataClickHdl, Button*, /*pButton*/ )
     SetAppendDataRadio();
     return 0;
 }
-//--------dyf ADD
+
 void OCopyTable::SetAppendDataRadio()
 {
     m_pParent->EnableButton(OCopyTableWizard::WIZARD_NEXT,sal_True);
@@ -144,7 +144,6 @@ void OCopyTable::SetAppendDataRadio()
     m_pParent->setOperation(CopyTableOperation::AppendData);
 }
 
-//--------add end
 //------------------------------------------------------------------------
 IMPL_LINK( OCopyTable, RadioChangeHdl, Button*, pButton )
 {
@@ -351,7 +350,6 @@ void OCopyTable::setCreatePrimaryKey( bool _bDoCreate, const ::rtl::OUString& _r
 }
 
 // -----------------------------------------------------------------------------
-//---dyf add 2006/7/10
 void OCopyTable::setCreateStyleAction()
 {
     // reselect the last action before
@@ -382,6 +380,5 @@ void OCopyTable::setCreateStyleAction()
             }
     }
 }
-//---add end
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

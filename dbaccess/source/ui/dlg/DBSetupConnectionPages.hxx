@@ -48,7 +48,6 @@ namespace dbaui
 //.........................................................................
 
     class IDatabaseSettingsDialog;
-//      static  OGenericAdministrationPage* CreateDbaseTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
 
 
        //========================================================================

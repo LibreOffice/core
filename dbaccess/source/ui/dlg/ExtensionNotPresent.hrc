@@ -37,7 +37,6 @@
 #define BUTTON_HEIGHT       14
 #define BUTTON_WIDTH        55
 #define BROWSER_HEIGHT      75
-// #define PAGE_WIDTH           ( CELL_PADDING + BUTTON_WIDTH + CELL_PADDING + BUTTON_WIDTH + CELL_PADDING)
 #define LEFT_PADDING        32 /* size for the icon */
 #define RIGHT_PADDING       16
 #define DLG_WIDTH           ( 250 )

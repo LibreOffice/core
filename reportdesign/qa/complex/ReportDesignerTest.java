@@ -47,9 +47,6 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.util.XCloseable;
 
-// import util.BasicMacroTools;
-// import util.DesktopTools;
-// import util.dbg;
 import complexlib.ComplexTestCase;
 import util.utils;
 import helper.OfficeProvider;
@@ -57,26 +54,6 @@ import helper.URLHelper;
 import helper.OfficeWatcher;
 
 import convwatch.DB;
-
-// import java.util.Date;
-// import java.text.SimpleDateFormat;
-// import java.text.ParsePosition;
-// import java.sql.Time;
-//
-// import java.io.BufferedReader;
-// import java.io.File;
-// import java.io.FileReader;
-// import java.io.IOException;
-// import java.io.FilenameFilter;
-//
-// import java.util.Vector;
-//
-// import helper.AppProvider;
-// import java.text.DecimalFormat;
-// import util.DynamicClassLoader;
-// import java.util.StringTokenizer;
-
-
 
 
 class PropertySetHelper
@@ -327,15 +304,6 @@ public class ReportDesignerTest extends ComplexTestCase {
 
             XComponent xDocComponent = loadComponent(sFileURL, getXDesktop(), null);
             log.println("Load done");
-//  context = createUnoService("com.sun.star.sdb.DatabaseContext")
-//     oDataBase = context.getByName("hh")
-//     oDBDoc = oDataBase.DatabaseDocument
-//
-//  dim args(1) as new com.sun.star.beans.PropertyValue
-//  args(0).Name = "ActiveConnection"
-//  args(0).Value = oDBDoc.getCurrentController().getPropertyValue("ActiveConnection")
-//  reportContainer = oDBDoc.getReportDocuments()
-//     report = reportContainer.loadComponentFromURL("Report40","",0,args)
 
             try
             {
@@ -346,45 +314,24 @@ public class ReportDesignerTest extends ComplexTestCase {
                 XNameAccess xNameAccess = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, x);
                 showElements(xNameAccess);
                 Object aObj = xNameAccess.getByName(sFileURL);
-//                    log.println("1");
 
-                    // PropertySetHelper aHelper = new PropertySetHelper(aObj);
                 XDocumentDataSource xDataSource = (XDocumentDataSource)UnoRuntime.queryInterface(XDocumentDataSource.class, aObj);
-//                    Object aDatabaseDocmuent = aHelper.getPropertyValueAsObject("DatabaseDocument");
                 XOfficeDatabaseDocument xOfficeDBDoc = xDataSource.getDatabaseDocument();
 
-                // XOfficeDatabaseDocument xOfficeDBDoc = (XOfficeDatabaseDocument)UnoRuntime.queryInterface(XOfficeDatabaseDocument.class, aDatabaseDocument);
                 assure("can't access DatabaseDocument", xOfficeDBDoc != null);
-//                    log.println("2");
 
                 XModel xDBSource = (XModel)UnoRuntime.queryInterface(XModel.class, xOfficeDBDoc);
                 Object aController = xDBSource.getCurrentController();
                 assure("Controller of xOfficeDatabaseDocument is empty!", aController != null);
-//                     log.println("3");
 
                 XDatabaseDocumentUI aDBDocUI = (XDatabaseDocumentUI)UnoRuntime.queryInterface(XDatabaseDocumentUI.class, aController);
                 boolean isConnect = aDBDocUI.connect();
-//                     if (isConnect)
-//                     {
-//                         System.out.println("true");
-//                     }
-//                     else
-//                     {
-//                         System.out.println("false");
-//                     }
-//                     log.println("4");
-
-                // aHelper = new PropertySetHelper(aController);
-
-                // Object aActiveConnectionObj = aHelper.getPropertyValueAsObject("ActiveConnection");
                 Object aActiveConnectionObj = aDBDocUI.getActiveConnection();
                 assure("ActiveConnection is empty", aActiveConnectionObj != null);
-//                     log.println("5");
 
                 XReportDocumentsSupplier xSupplier = (XReportDocumentsSupplier)UnoRuntime.queryInterface(XReportDocumentsSupplier.class, xOfficeDBDoc);
                 xNameAccess = xSupplier.getReportDocuments();
                 assure("xOfficeDatabaseDocument returns no Report Document", xNameAccess != null);
-//                     log.println("5");
 
                 showElements(xNameAccess);
 
@@ -402,11 +349,6 @@ public class ReportDesignerTest extends ComplexTestCase {
             {
                 log.println("ERROR: Exception caught");
             }
-
-                // String mTestDocumentPath = (String) param.get("TestDocumentPath");
-                // System.out.println("mTestDocumentPath: '" + mTestDocumentPath + "'");
-                // // workaround for issue using deprecated "DOCPTH" prop
-                // System.setProperty("DOCPTH", mTestDocumentPath);
 
                 // Close the document
                 closeComponent(xDocComponent);
@@ -440,8 +382,6 @@ public class ReportDesignerTest extends ComplexTestCase {
                                           sDestinationVersion, sDestinationName, sDestinationCreatorType,
                                           sDocumentPoolDir, sDocumentPoolName, m_sMailAddress,
                                           sSpecial);
-            // DB.test();
-            // System.exit(1);
         }
 
     private void loadAndStoreReports(XNameAccess _xNameAccess, ArrayList _aPropertyList, int _nType)
@@ -504,9 +444,6 @@ public class ReportDesignerTest extends ComplexTestCase {
             }
             sOutputPath += "tmp_123";
             sOutputPath += System.getProperty("file.separator");
-
-            // sOutputPath += getFileFormat(_nType);
-            // sOutputPath += System.getProperty("file.separator");
 
             File aOutputFile = new File(sOutputPath); // create the directory of the given output path
             aOutputFile.mkdirs();

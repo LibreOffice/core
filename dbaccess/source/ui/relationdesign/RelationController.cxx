@@ -96,8 +96,6 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::util;
-//  using namespace ::com::sun::star::sdbcx;
-//  using namespace ::connectivity;
 using namespace ::dbtools;
 using namespace ::dbaui;
 using namespace ::comphelper;

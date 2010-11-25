@@ -1049,7 +1049,6 @@ void OCopyTableWizard::CheckButtons()
 void OCopyTableWizard::EnableButton(Wizard_Button_Style eStyle,sal_Bool bEnable)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::EnableButton" );
-//  CheckButtons();
     Button* pButton;
     if(eStyle == WIZARD_NEXT)
         pButton = &m_pbNext;

@@ -76,8 +76,6 @@ class OAddFieldWindowListBox    : public SvTreeListBox
 
     OAddFieldWindowListBox(const OAddFieldWindowListBox&);
     void operator =(const OAddFieldWindowListBox&);
-protected:
-//  virtual void Command( const CommandEvent& rEvt );
 
 public:
     OAddFieldWindowListBox( OAddFieldWindow* _pParent );
@@ -207,7 +205,6 @@ OAddFieldWindow::OAddFieldWindow(Window* pParent
     m_aHelpText.SetControlBackground( GetSettings().GetStyleSettings().GetFaceColor() );
 
     SetSizePixel(Size(STD_WIN_SIZE_X,STD_WIN_SIZE_Y));
-    //Show();
 
     if ( m_xRowSet.is() )
     {
@@ -448,7 +445,7 @@ void OAddFieldWindow::fillDescriptor(SvLBoxEntry* _pSelected,::svx::ODataAccessD
                 uno::Reference<frame::XModel> xModel(xDocument->getDatabaseDocument(),uno::UNO_QUERY);
                 if ( xModel.is() )
                     _rDescriptor[ daDatabaseLocation ] <<= xModel->getURL();
-            } // if ( xDocument.is() )
+            }
         }
 
         _rDescriptor[ ::svx::daCommand ]            <<= GetCommand();
@@ -457,7 +454,6 @@ void OAddFieldWindow::fillDescriptor(SvLBoxEntry* _pSelected,::svx::ODataAccessD
         _rDescriptor[ ::svx::daConnection ]         <<= getConnection();
 
         ColumnInfo* pInfo = static_cast<ColumnInfo*>(_pSelected->GetUserData());
-        // ::rtl::OUString sColumnName = m_pListBox->GetEntryText( _pSelected );
         _rDescriptor[ ::svx::daColumnName ]         <<= pInfo->sColumnName;
         if ( m_xColumns->hasByName( pInfo->sColumnName ) )
             _rDescriptor[ ::svx::daColumnObject ] <<= m_xColumns->getByName(pInfo->sColumnName);
@@ -553,7 +549,7 @@ IMPL_LINK( OAddFieldWindow, OnSortAction, ToolBox*, /*NOTINTERESTEDIN*/ )
                     eSortMode = SortAscending;
                 else if ( m_aActions.IsItemChecked(SID_FM_SORTDOWN) )
                     eSortMode = SortDescending;
-            } // if ( SID_FM_REMOVE_FILTER_SORT != nCurItem )
+            }
 
             m_pListBox->GetModel()->SetSortMode(eSortMode);
             if ( SID_FM_REMOVE_FILTER_SORT == nCurItem )

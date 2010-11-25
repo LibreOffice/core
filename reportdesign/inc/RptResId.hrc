@@ -234,7 +234,6 @@
 #define RID_STR_PARAADJUST                  (RID_STRING_START + 161)
 
 
-// #define RID_STR_                     (RID_STRING_START + 130)
 // -----------------------------------------------------------------------
 #define RID_PAGEDIALOG_PAGE                 ( RID_PAGE_START +  1 )
 #define RID_PAGEDIALOG_BACKGROUND           ( RID_PAGE_START +  2 )

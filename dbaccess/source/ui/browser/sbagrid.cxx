@@ -257,8 +257,6 @@ void SAL_CALL SbaXGridControl::createPeer(const Reference< ::com::sun::star::awt
 
     // TODO: why the hell this whole class does not use any mutex?
 
-//  if (0 == m_nPeerCreationLevel)
-    {
         Reference< ::com::sun::star::frame::XDispatch >  xDisp(getPeer(), UNO_QUERY);
         for (   StatusMultiplexerArray::iterator aIter = m_aStatusMultiplexer.begin();
                 aIter != m_aStatusMultiplexer.end();
@@ -267,7 +265,6 @@ void SAL_CALL SbaXGridControl::createPeer(const Reference< ::com::sun::star::awt
             if ((*aIter).second && (*aIter).second->getLength())
                 xDisp->addStatusListener((*aIter).second, (*aIter).first);
         }
-    }
 }
 
 //---------------------------------------------------------------------------------------

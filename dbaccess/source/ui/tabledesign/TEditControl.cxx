@@ -241,11 +241,6 @@ void OTableEditorCtrl::SetReadOnly( sal_Bool bRead )
     DeactivateCell();
 
     //////////////////////////////////////////////////////////////////////
-    // ::com::sun::star::beans::Property Controls disablen
-//  if (pDescrWin)
-//      pDescrWin->SetReadOnly(bReadOnly || !SetDataPtr(nRow) || GetActRow()->IsReadOnly());
-
-    //////////////////////////////////////////////////////////////////////
     // Cursor des Browsers anpassen
     BrowserMode nMode(BROWSER_COLUMNSELECTION | BROWSER_MULTISELECTION | BROWSER_KEEPSELECTION |
                       BROWSER_HLINESFULL      | BROWSER_VLINESFULL|BROWSER_AUTOSIZE_LASTCOL);
@@ -313,7 +308,7 @@ void OTableEditorCtrl::InitCellController()
         const Size aTemp( pControls[i]->GetOptimalSize(WINDOWSIZE_PREFERRED) );
         if ( aTemp.Height() > aHeight.Height() )
             aHeight.Height() = aTemp.Height();
-    } // for(int i= 0; i < SAL_N_ELEMENTS(pControls);++i
+    }
     SetDataRowHeight(aHeight.Height());
 
     ClearModified();
@@ -402,8 +397,6 @@ void OTableEditorCtrl::PaintCell(OutputDevice& rDev, const Rectangle& rRect,
 
     if (rDev.IsClipRegion())
         rDev.SetClipRegion();
-//  rDev.DrawText(rRect.TopLeft(), aText);
-//  rDev.SetClipRegion( );
 }
 
 //------------------------------------------------------------------------------
@@ -710,15 +703,6 @@ sal_Bool OTableEditorCtrl::SaveModified()
 
     switch( nColId )
     {
-        //////////////////////////////////////////////////////////////
-        // NameCell
-        case FIELD_NAME:
-        {
-            // removed the former duplicate-check. this is done in OTableDocShell::CheckDefConsistency now.
-            // FS - 07.12.99 - 69575
-
-        } break;
-
         //////////////////////////////////////////////////////////////
         // TypeCell
         case FIELD_TYPE:
@@ -1191,7 +1175,6 @@ void OTableEditorCtrl::SetCellData( long nRow, sal_uInt16 nColId, const ::com::s
             break;
 
         case FIELD_PROPERTY_NUMTYPE:
-            //  pFieldDescr->SetNumType( _rNewData );
             OSL_ENSURE(sal_False, "OTableEditorCtrl::SetCellData: invalid column!");
             break;
 
@@ -1276,7 +1259,7 @@ Any OTableEditorCtrl::GetCellData( long nRow, sal_uInt16 nColId )
 
         case FIELD_PROPERTY_NUMTYPE:
             OSL_ENSURE(sal_False, "OTableEditorCtrl::GetCellData: invalid column!");
-            //  return pFieldDescr->GetNumType();
+            break;
 
         case FIELD_PROPERTY_AUTOINC:
             sValue = pFieldDescr->IsAutoIncrement() ? strYes : strNo;
@@ -1360,11 +1343,6 @@ sal_Bool OTableEditorCtrl::IsCutAllowed( long nRow )
         }
     }
 
-//  Reference<XPropertySet> xTable = GetView()->getController().getTable();
-//  if( !IsCopyAllowed(nRow) || (xTable.is() && ::comphelper::getString(xTable->getPropertyValue(PROPERTY_TYPE)) == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VIEW"))))
-//      return sal_False;
-
-    //  return bCutAllowed && IsDeleteAllowed( nRow );
     return bIsCutAllowed;
 }
 
@@ -1779,7 +1757,7 @@ void OTableEditorCtrl::AdjustFieldDescription(OFieldDescription* _pFieldDesc,
     {
         _pFieldDesc->SetIsNullable(ColumnValue::NO_NULLS);
         _pFieldDesc->SetControlDefault(Any());
-    } // if(!_bSet && _pFieldDesc->getTypeInfo()->bNullable)
+    }
     if ( _pFieldDesc->IsAutoIncrement() && !_bPrimaryKey )
     {
         OTableController& rController = GetView()->getController();
