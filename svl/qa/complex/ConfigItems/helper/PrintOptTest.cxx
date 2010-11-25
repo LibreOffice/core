@@ -397,9 +397,9 @@ void PrintOptTest::impl_checkPrint()
     if ( bNewValue == bOldValue ) // test the new source
     {
         throw css::uno::RuntimeException(
-            rtl::OUString::createFromAscii(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "null com.sun.star.configuration."
-            "the SetReduceTransparency() error!"),
+            "the SetReduceTransparency() error!")),
             0);
     }
 
@@ -413,9 +413,9 @@ void PrintOptTest::impl_checkPrint()
     if(bNewValue == bOldValue) // test the new source
     {
         throw css::uno::RuntimeException(
-            rtl::OUString::createFromAscii(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "null com.sun.star.configuration."
-            "the IsReduceTransparency() error!"),
+            "the IsReduceTransparency() error!")),
             0);
     }
 
@@ -430,9 +430,9 @@ void PrintOptTest::impl_checkPrint()
     if ( nNewMode == nOldMode ) // test the new source
     {
         throw css::uno::RuntimeException(
-            rtl::OUString::createFromAscii(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "null com.sun.star.configuration."
-            "the SetReducedTransparencyMode() error!"),
+            "the SetReducedTransparencyMode() error!")),
             0);
     }
 
@@ -446,10 +446,10 @@ void PrintOptTest::impl_checkPrint()
     if(nNewMode == nOldMode)  // test the new source
     {
         throw css::uno::RuntimeException(
-            rtl::OUString::createFromAscii(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "null com.sun.star.configuration."
             "the IsReducedTransparencyMode() error!"
-            "nOldMode's value is :"),
+            "nOldMode's value is :")),
             0);
     }
 
@@ -463,9 +463,9 @@ void PrintOptTest::impl_checkPrint()
     if (bNewValue == bOldValue)   //test the new source
     {
         throw css::uno::RuntimeException(
-            rtl::OUString::createFromAscii(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "null com.sun.star.configuration."
-            "the SetReduceGradients() error!"),
+            "the SetReduceGradients() error!")),
             0);
 
     }
@@ -480,9 +480,9 @@ void PrintOptTest::impl_checkPrint()
     if (bNewValue == bOldValue) // test the new source
     {
         throw css::uno::RuntimeException(
-            rtl::OUString::createFromAscii(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "null com.sun.star.configuration."
-            "the IsReduceGradients() error!"),
+            "the IsReduceGradients() error!")),
             0);
 
     }
@@ -497,9 +497,9 @@ void PrintOptTest::impl_checkPrint()
     if (nNewMode == nOldMode)// test the new source
     {
         throw css::uno::RuntimeException(
-            rtl::OUString::createFromAscii(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "null com.sun.star.configuration."
-            "the SetRedecedGradientMode() error!"),
+            "the SetRedecedGradientMode() error!")),
             0);
     }
 
@@ -513,9 +513,9 @@ void PrintOptTest::impl_checkPrint()
     if (nNewMode == nOldMode) // test the new source
     {
         throw css::uno::RuntimeException(
-            rtl::OUString::createFromAscii(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "null com.sun.star.configuration."
-            "the GetReducedGradientMode() error!"),
+            "the GetReducedGradientMode() error!")),
             0);
 
     }
@@ -532,9 +532,9 @@ void PrintOptTest::impl_checkPrint()
     if (nNewStepCount == nOldStepCount) // test the new source
     {
         throw css::uno::RuntimeException(
-            rtl::OUString::createFromAscii(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "null com.sun.star.configuration."
-            "the SetReducedGradientStepCount() error!"),
+            "the SetReducedGradientStepCount() error!")),
             0);
 
     }
@@ -549,9 +549,9 @@ void PrintOptTest::impl_checkPrint()
     if (nNewStepCount == nOldStepCount)  //test the new source
     {
         throw css::uno::RuntimeException(
-            rtl::OUString::createFromAscii(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "null com.sun.star.configuration."
-            "the GetReduceGradientStepCount() error!"),
+            "the GetReduceGradientStepCount() error!")),
             0);
     }
 
@@ -565,9 +565,9 @@ void PrintOptTest::impl_checkPrint()
     if (bNewValue == bOldValue) // test the new source
     {
         throw css::uno::RuntimeException(
-            rtl::OUString::createFromAscii(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "null com.sun.star.configuration."
-            "the SetReduceBitmaps() error!"),
+            "the SetReduceBitmaps() error!")),
             0);
     }
 
@@ -581,9 +581,9 @@ void PrintOptTest::impl_checkPrint()
     if (bNewValue == bOldValue) // test the new source
     {
         throw css::uno::RuntimeException(
-            rtl::OUString::createFromAscii(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "null com.sun.star.configuration."
-            "the IsReduceBitmaps() error!"),
+            "the IsReduceBitmaps() error!")),
             0);
     }
 
@@ -597,9 +597,9 @@ void PrintOptTest::impl_checkPrint()
     if (nNewMode == nOldMode)// test the new source
     {
         throw css::uno::RuntimeException(
-            rtl::OUString::createFromAscii(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "null com.sun.star.configuration."
-            "the SetReduceBitmap() error!"),
+            "the SetReduceBitmap() error!")),
             0);
     }
 
@@ -613,9 +613,9 @@ void PrintOptTest::impl_checkPrint()
     if (nNewMode == nOldMode)  // test the new source
     {
         throw css::uno::RuntimeException(
-            rtl::OUString::createFromAscii(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "null com.sun.star.configuration."
-            "the SetReduceBitmapMode() error!"),
+            "the SetReduceBitmapMode() error!")),
             0);
     }
 
@@ -629,9 +629,9 @@ void PrintOptTest::impl_checkPrint()
     if (nNewMode == nOldMode)// test the new source
     {
         throw css::uno::RuntimeException(
-            rtl::OUString::createFromAscii(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "null com.sun.star.configuration."
-            "the GetReduceBitmapMode() error!"),
+            "the GetReduceBitmapMode() error!")),
             0);
 
     }
@@ -648,9 +648,9 @@ void PrintOptTest::impl_checkPrint()
     if (nNewResolution == nOldResolution)// test the new source
     {
         throw css::uno::RuntimeException(
-            rtl::OUString::createFromAscii(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "null com.sun.star.configuration."
-            "the SetReducedBitmapResolution() error!"),
+            "the SetReducedBitmapResolution() error!")),
             0);
     }
 
@@ -664,9 +664,9 @@ void PrintOptTest::impl_checkPrint()
     if (nNewResolution == nOldResolution) // test the new source
     {
         throw css::uno::RuntimeException(
-            rtl::OUString::createFromAscii(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "null com.sun.star.configuration."
-            "the GetReduceBitmapResolution() error!"),
+            "the GetReduceBitmapResolution() error!")),
             0);
     }
 
@@ -680,9 +680,9 @@ void PrintOptTest::impl_checkPrint()
     if (bNewValue == bOldValue) // test the old source
     {
         throw css::uno::RuntimeException(
-            rtl::OUString::createFromAscii(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "null com.sun.star.configuration."
-            "the SetReducedBitmapIncludesTransparency() error!"),
+            "the SetReducedBitmapIncludesTransparency() error!")),
             0);
     }
 
@@ -696,9 +696,9 @@ void PrintOptTest::impl_checkPrint()
     if (bNewValue == bOldValue) // test the new source
     {
         throw css::uno::RuntimeException(
-            rtl::OUString::createFromAscii(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "null com.sun.star.configuration."
-            "the IsReducedBitmapIncludesTransparency() error!"),
+            "the IsReducedBitmapIncludesTransparency() error!")),
             0);
     }
 
@@ -712,9 +712,9 @@ void PrintOptTest::impl_checkPrint()
     if (bNewValue == bOldValue) // test the new source
     {
         throw css::uno::RuntimeException(
-            rtl::OUString::createFromAscii(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "null com.sun.star.configuration."
-            "the SetConvertToGreyscales() error!"),
+            "the SetConvertToGreyscales() error!")),
             0);
     }
 
@@ -728,9 +728,9 @@ void PrintOptTest::impl_checkPrint()
     if (bNewValue == bOldValue) // test the new source
     {
         throw css::uno::RuntimeException(
-            rtl::OUString::createFromAscii(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "null com.sun.star.configuration."
-            "the IsConvertToGreyscales() error!"),
+            "the IsConvertToGreyscales() error!")),
             0);
     }
 }

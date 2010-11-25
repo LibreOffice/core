@@ -71,14 +71,14 @@ SVL_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo (
         Reference< css::registry::XRegistryKey > xNewKey;
 
         xNewKey = xRegistryKey->createKey (
-            OUString::createFromAscii(
-                "/com.sun.star.uno.util.numbers.SvNumberFormatsSupplierServiceObject/UNO/SERVICES" ) );
+            OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "/com.sun.star.uno.util.numbers.SvNumberFormatsSupplierServiceObject/UNO/SERVICES" )) );
         xNewKey->createKey (
             OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.NumberFormatsSupplier")) );
 
         xNewKey = xRegistryKey->createKey (
-            OUString::createFromAscii(
-                "/com.sun.star.uno.util.numbers.SvNumberFormatterServiceObject/UNO/SERVICES" ) );
+            OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "/com.sun.star.uno.util.numbers.SvNumberFormatterServiceObject/UNO/SERVICES" )) );
         xNewKey->createKey (
             OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.NumberFormatter")) );
 

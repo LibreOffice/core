@@ -39,8 +39,8 @@ SysCredentialsConfigItem::SysCredentialsConfigItem(
   m_pOwner( pOwner )
 {
     uno::Sequence< ::rtl::OUString > aNode( 1 );
-    aNode[ 0 ] = rtl::OUString::createFromAscii(
-        "Office.Common/Passwords/AuthenticateUsingSystemCredentials" );
+    aNode[ 0 ] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+        "Office.Common/Passwords/AuthenticateUsingSystemCredentials" ));
     EnableNotification( aNode );
 }
 
@@ -70,8 +70,8 @@ SysCredentialsConfigItem::getSystemCredentialsURLs()
     {
         // read config item
         uno::Sequence< ::rtl::OUString > aPropNames( 1 );
-        aPropNames[ 0 ] = rtl::OUString::createFromAscii(
-            "AuthenticateUsingSystemCredentials" );
+        aPropNames[ 0 ] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "AuthenticateUsingSystemCredentials" ));
         uno::Sequence< uno::Any > aAnyValues(
             utl::ConfigItem::GetProperties( aPropNames ) );
 
@@ -100,8 +100,8 @@ void SysCredentialsConfigItem::setSystemCredentialsURLs(
     uno::Sequence< rtl::OUString > aPropNames( 1 );
     uno::Sequence< uno::Any > aPropValues( 1 );
     aPropNames[ 0 ]
-        = ::rtl::OUString::createFromAscii(
-            "AuthenticateUsingSystemCredentials" );
+        = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "AuthenticateUsingSystemCredentials" ));
     aPropValues[ 0 ] <<= seqURLList;
 
     utl::ConfigItem::SetModified();
