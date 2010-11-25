@@ -104,14 +104,14 @@ namespace svt
     //--------------------------------------------------------------------
     OUString SAL_CALL OProductRegistration::getImplementationName_Static( )
     {
-        return OUString::createFromAscii( PRODREG_IMPLNAME );
+        return OUString(RTL_CONSTASCII_USTRINGPARAM( PRODREG_IMPLNAME ));
     }
 
     //--------------------------------------------------------------------
     Sequence< OUString > SAL_CALL OProductRegistration::getSupportedServiceNames_Static(  ) throw (RuntimeException)
     {
         Sequence< OUString > aServiceNames( 1 );
-        aServiceNames[ 0 ] = OUString::createFromAscii( PRODREG_SERVNAME );
+        aServiceNames[ 0 ] = OUString(RTL_CONSTASCII_USTRINGPARAM( PRODREG_SERVNAME ));
         return aServiceNames;
     }
 
@@ -472,7 +472,7 @@ SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo (
         xNewKey = xRegistryKey->createKey(
             OUString( RTL_CONSTASCII_USTRINGPARAM( "/" PRODREG_IMPLNAME "/UNO/SERVICES" )));
         xNewKey->createKey(
-            OUString::createFromAscii( PRODREG_SERVNAME ));
+            OUString(RTL_CONSTASCII_USTRINGPARAM( PRODREG_SERVNAME )));
 
         return sal_True;
     }

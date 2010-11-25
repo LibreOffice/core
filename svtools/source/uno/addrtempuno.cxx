@@ -113,7 +113,7 @@ namespace svt
     OAddressBookSourceDialogUno::OAddressBookSourceDialogUno(const Reference< XMultiServiceFactory >& _rxORB)
         :OGenericUnoDialog(_rxORB)
     {
-        registerProperty(::rtl::OUString::createFromAscii(UNODIALOG_PROPERTY_ALIASES), UNODIALOG_PROPERTY_ID_ALIASES, PropertyAttribute::READONLY,
+        registerProperty(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UNODIALOG_PROPERTY_ALIASES)), UNODIALOG_PROPERTY_ID_ALIASES, PropertyAttribute::READONLY,
             &m_aAliases, getCppuType(&m_aAliases));
     }
 
