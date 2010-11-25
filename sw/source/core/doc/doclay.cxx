@@ -200,7 +200,6 @@ SwFrmFmt *SwDoc::MakeLayoutFmt( RndStdIds eRequest, const SfxItemSet* pSet )
 
             if (GetIDocumentUndoRedo().DoesUndo())
             {
-                GetIDocumentUndoRedo().ClearRedo();
                 GetIDocumentUndoRedo().AppendUndo(
                     new SwUndoInsLayFmt(pFmt, 0, 0));
             }
@@ -300,7 +299,6 @@ void SwDoc::DelLayoutFmt( SwFrmFmt *pFmt )
     if (GetIDocumentUndoRedo().DoesUndo() &&
         (RES_FLYFRMFMT == nWh || RES_DRAWFRMFMT == nWh))
     {
-        GetIDocumentUndoRedo().ClearRedo();
         GetIDocumentUndoRedo().AppendUndo( new SwUndoDelLayFmt( pFmt ));
     }
     else
@@ -498,7 +496,6 @@ SwFrmFmt *SwDoc::CopyLayoutFmt( const SwFrmFmt& rSource,
 
         if (GetIDocumentUndoRedo().DoesUndo())
         {
-            GetIDocumentUndoRedo().ClearRedo();
             GetIDocumentUndoRedo().AppendUndo(new SwUndoInsLayFmt(pDest,0,0));
         }
 
@@ -540,7 +537,6 @@ SwFrmFmt *SwDoc::CopyLayoutFmt( const SwFrmFmt& rSource,
 
         if (GetIDocumentUndoRedo().DoesUndo())
         {
-            GetIDocumentUndoRedo().ClearRedo();
             GetIDocumentUndoRedo().AppendUndo(new SwUndoInsLayFmt(pDest,0,0));
         }
     }
@@ -733,7 +729,6 @@ SwFlyFrmFmt* SwDoc::_MakeFlySection( const SwPosition& rAnchPos,
 
     if (GetIDocumentUndoRedo().DoesUndo())
     {
-        GetIDocumentUndoRedo().ClearRedo();
         ULONG nNodeIdx = rAnchPos.nNode.GetIndex();
         xub_StrLen nCntIdx = rAnchPos.nContent.GetIndex();
         GetIDocumentUndoRedo().AppendUndo(
@@ -1025,7 +1020,6 @@ SwDrawFrmFmt* SwDoc::Insert( const SwPaM &rRg,
 
     if (GetIDocumentUndoRedo().DoesUndo())
     {
-        GetIDocumentUndoRedo().ClearRedo();
         GetIDocumentUndoRedo().AppendUndo( new SwUndoInsLayFmt(pFmt, 0, 0) );
     }
 
@@ -1242,7 +1236,6 @@ SwFlyFrmFmt* SwDoc::InsertLabel( const SwLabelType eType, const String &rTxt, co
     SwUndoInsertLabel* pUndo = 0;
     if( bWasUndo )
     {
-        GetIDocumentUndoRedo().ClearRedo();
         pUndo = new SwUndoInsertLabel( eType, rTxt, rSeparator, rNumberingSeparator,
                                        bBefore, nId, rCharacterStyle, bCpyBrd );
         GetIDocumentUndoRedo().DoUndo(false);

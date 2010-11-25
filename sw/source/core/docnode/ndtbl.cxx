@@ -388,7 +388,6 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
 
     if( GetIDocumentUndoRedo().DoesUndo() )
     {
-        GetIDocumentUndoRedo().ClearRedo();
         GetIDocumentUndoRedo().AppendUndo(
             new SwUndoInsTbl( rPos, nCols, nRows, static_cast<USHORT>(eAdjust),
                                       rInsTblOpts, pTAFmt, pColArr,
@@ -1828,7 +1827,6 @@ BOOL SwDoc::InsertCol( const SwSelBoxes& rBoxes, USHORT nCnt, BOOL bBehind )
         GetIDocumentUndoRedo().DoUndo(bUndo);
         if( bRet )
         {
-            GetIDocumentUndoRedo().ClearRedo();
             pUndo->SaveNewBoxes( *pTblNd, aTmpLst );
             GetIDocumentUndoRedo().AppendUndo( pUndo );
         }
@@ -1894,7 +1892,6 @@ BOOL SwDoc::InsertRow( const SwSelBoxes& rBoxes, USHORT nCnt, BOOL bBehind )
         GetIDocumentUndoRedo().DoUndo(bUndo);
         if( bRet )
         {
-            GetIDocumentUndoRedo().ClearRedo();
             pUndo->SaveNewBoxes( *pTblNd, aTmpLst );
             GetIDocumentUndoRedo().AppendUndo( pUndo );
         }
@@ -2246,7 +2243,6 @@ BOOL SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn )
         GetIDocumentUndoRedo().DoUndo(bUndo);
         if( bRet )
         {
-            GetIDocumentUndoRedo().ClearRedo();
             GetIDocumentUndoRedo().AppendUndo( pUndo );
         }
         else
@@ -2319,7 +2315,6 @@ BOOL SwDoc::SplitTbl( const SwSelBoxes& rBoxes, sal_Bool bVert, USHORT nCnt,
     {
         if( bRet )
         {
-            GetIDocumentUndoRedo().ClearRedo();
             if( bVert )
                 pUndo->SaveNewBoxes( *pTblNd, aTmpLst );
             else
@@ -3031,7 +3026,6 @@ void SwDoc::SetTabCols(SwTable& rTab, const SwTabCols &rNew, const SwTabCols &rO
 {
     if (GetIDocumentUndoRedo().DoesUndo())
     {
-        GetIDocumentUndoRedo().ClearRedo();
         GetIDocumentUndoRedo().AppendUndo(
             new SwUndoAttrTbl( *rTab.GetTableNode(), TRUE ));
     }
@@ -3047,7 +3041,6 @@ void SwDoc::SetRowsToRepeat( SwTable &rTable, USHORT nSet )
 
     if (GetIDocumentUndoRedo().DoesUndo())
     {
-        GetIDocumentUndoRedo().ClearRedo();
         GetIDocumentUndoRedo().AppendUndo(
             new SwUndoTblHeadline(rTable, rTable.GetRowsToRepeat(), nSet) );
     }
@@ -3299,7 +3292,6 @@ BOOL SwDoc::SplitTable( const SwPosition& rPos, USHORT eHdlnMode,
         SwUndoSplitTbl* pUndo = 0;
         if (GetIDocumentUndoRedo().DoesUndo())
         {
-            GetIDocumentUndoRedo().ClearRedo();
             pUndo = new SwUndoSplitTbl(
                         *pNew, pSaveRowSp, eHdlnMode, bCalcNewSize);
             GetIDocumentUndoRedo().AppendUndo(pUndo);
@@ -3626,7 +3618,6 @@ BOOL SwDoc::MergeTable( const SwPosition& rPos, BOOL bWithPrev, USHORT nMode )
     SwHistory* pHistory = 0;
     if (GetIDocumentUndoRedo().DoesUndo())
     {
-        GetIDocumentUndoRedo().ClearRedo();
         pUndo = new SwUndoMergeTbl( *pTblNd, *pDelTblNd, bWithPrev, nMode );
         GetIDocumentUndoRedo().AppendUndo(pUndo);
         pHistory = new SwHistory;
@@ -3888,7 +3879,6 @@ BOOL SwDoc::SetTableAutoFmt( const SwSelBoxes& rBoxes, const SwTableAutoFmt& rNe
     bool const bUndo(GetIDocumentUndoRedo().DoesUndo());
     if (bUndo)
     {
-        GetIDocumentUndoRedo().ClearRedo();
         pUndo = new SwUndoTblAutoFmt( *pTblNd, rNew );
         GetIDocumentUndoRedo().AppendUndo(pUndo);
         GetIDocumentUndoRedo().DoUndo(false);
@@ -4104,7 +4094,6 @@ BOOL SwDoc::SetColRowWidthHeight( SwTableBox& rAktBox, USHORT eType,
 
     if( pUndo )
     {
-        GetIDocumentUndoRedo().ClearRedo();
         GetIDocumentUndoRedo().AppendUndo( pUndo );
         GetIDocumentUndoRedo().DoUndo(bUndo); // SetColWidth can turn it off
     }
@@ -4271,7 +4260,6 @@ void SwDoc::SetTblBoxFormulaAttrs( SwTableBox& rBox, const SfxItemSet& rSet )
 {
     if (GetIDocumentUndoRedo().DoesUndo())
     {
-        GetIDocumentUndoRedo().ClearRedo();
         GetIDocumentUndoRedo().AppendUndo( new SwUndoTblNumFmt(rBox, &rSet) );
     }
 
@@ -4310,7 +4298,6 @@ void SwDoc::ClearBoxNumAttrs( const SwNodeIndex& rNode )
         {
             if (GetIDocumentUndoRedo().DoesUndo())
             {
-                GetIDocumentUndoRedo().ClearRedo();
                 GetIDocumentUndoRedo().AppendUndo(new SwUndoTblNumFmt(*pBox));
             }
 
@@ -4519,7 +4506,6 @@ BOOL SwDoc::_UnProtectTblCells( SwTable& rTbl )
     {
         if( bChgd )
         {
-            GetIDocumentUndoRedo().ClearRedo();
             GetIDocumentUndoRedo().AppendUndo( pUndo );
         }
         else
@@ -4577,7 +4563,6 @@ BOOL SwDoc::UnProtectCells( const SwSelBoxes& rBoxes )
         {
             if( bChgd )
             {
-                GetIDocumentUndoRedo().ClearRedo();
                 GetIDocumentUndoRedo().AppendUndo( pUndo );
             }
             else

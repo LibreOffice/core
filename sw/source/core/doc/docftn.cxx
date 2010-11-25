@@ -262,7 +262,6 @@ void SwDoc::SetFtnInfo(const SwFtnInfo& rInfo)
 
         if (GetIDocumentUndoRedo().DoesUndo())
         {
-            GetIDocumentUndoRedo().ClearRedo();
             GetIDocumentUndoRedo().AppendUndo( new SwUndoFootNoteInfo(rOld) );
         }
 
@@ -329,7 +328,6 @@ void SwDoc::SetEndNoteInfo(const SwEndNoteInfo& rInfo)
     {
         if(GetIDocumentUndoRedo().DoesUndo())
         {
-            GetIDocumentUndoRedo().ClearRedo();
             SwUndo *const pUndo( new SwUndoEndNoteInfo( GetEndNoteInfo() ) );
             GetIDocumentUndoRedo().AppendUndo(pUndo);
         }
@@ -407,7 +405,7 @@ bool SwDoc::SetCurFtn( const SwPaM& rPam, const String& rNumStr,
     SwUndoChangeFootNote* pUndo = 0;
     if (GetIDocumentUndoRedo().DoesUndo())
     {
-        GetIDocumentUndoRedo().ClearRedo();
+        GetIDocumentUndoRedo().ClearRedo(); // AppendUndo far below, so leave it
         pUndo = new SwUndoChangeFootNote( rPam, rNumStr, nNumber, bIsEndNote );
     }
 
@@ -481,7 +479,6 @@ bool SwDoc::SetCurFtn( const SwPaM& rPam, const String& rNumStr,
     {
         if( pUndo )
         {
-            GetIDocumentUndoRedo().ClearRedo();
             GetIDocumentUndoRedo().AppendUndo(pUndo);
         }
 

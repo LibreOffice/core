@@ -812,7 +812,6 @@ bool SwDoc::AppendTxtNode( SwPosition& rPos )
 
     if (GetIDocumentUndoRedo().DoesUndo())
     {
-        GetIDocumentUndoRedo().ClearRedo();
         GetIDocumentUndoRedo().AppendUndo( new SwUndoInsert( rPos.nNode ) );
     }
 
@@ -836,7 +835,7 @@ bool SwDoc::InsertString( const SwPaM &rRg, const String &rStr,
 {
     if (GetIDocumentUndoRedo().DoesUndo())
     {
-        GetIDocumentUndoRedo().ClearRedo();
+        GetIDocumentUndoRedo().ClearRedo(); // AppendUndo not always called!
     }
 
     const SwPosition& rPos = *rRg.GetPoint();
@@ -2019,7 +2018,6 @@ void SwDoc::ReRead( SwPaM& rPam, const String& rGrfName,
     {
         if (GetIDocumentUndoRedo().DoesUndo())
         {
-            GetIDocumentUndoRedo().ClearRedo();
             GetIDocumentUndoRedo().AppendUndo(new SwUndoReRead(rPam, *pGrfNd));
         }
 

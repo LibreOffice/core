@@ -890,7 +890,6 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
 
     if (pDoc->GetIDocumentUndoRedo().DoesUndo())
     {
-        pDoc->GetIDocumentUndoRedo().ClearRedo();
         pUndo = new SwUndoCpyDoc( aCpyPam );
         pDoc->GetIDocumentUndoRedo().AppendUndo( pUndo );
     }

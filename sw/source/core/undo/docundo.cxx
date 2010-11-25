@@ -231,11 +231,11 @@ void UndoManager::AppendUndo( SwUndo* pUndo )
                             // kein break !!!
     default:
         if( pUndos->Count() != nUndoPos && UNDO_END != pUndo->GetId() )
+        {
             ClearRedo();
-        else {
-            ASSERT( pUndos->Count() == nUndoPos || UNDO_END == pUndo->GetId(),
-                    "Redo history not deleted!" );
         }
+        OSL_ENSURE( pUndos->Count() == nUndoPos || UNDO_END == pUndo->GetId(),
+                    "Redo history not deleted!" );
         if( !nUndoSttEnd )
             ++nUndoCnt;
         break;
@@ -300,7 +300,7 @@ void UndoManager::AppendUndo( SwUndo* pUndo )
 
 void UndoManager::ClearRedo()
 {
-    if( DoesUndo() && nUndoPos != pUndos->Count() )
+    if (nUndoPos != pUndos->Count())
     {
 //?? why ??     if( !nUndoSttEnd )
         {

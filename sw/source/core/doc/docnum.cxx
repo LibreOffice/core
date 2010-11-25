@@ -373,7 +373,6 @@ BOOL SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
     /* <-- #i13747 # */
     if (GetIDocumentUndoRedo().DoesUndo())
     {
-        GetIDocumentUndoRedo().ClearRedo();
         GetIDocumentUndoRedo().StartUndo(UNDO_OUTLINE_LR, NULL);
         SwUndo *const pUndoOLR( new SwUndoOutlineLeftRight( rPam, nOffset ) );
         GetIDocumentUndoRedo().AppendUndo(pUndoOLR);
@@ -981,7 +980,6 @@ void SwDoc::SetNumRule( const SwPaM& rPam,
     SwUndoInsNum * pUndo = NULL;
     if (GetIDocumentUndoRedo().DoesUndo())
     {
-        GetIDocumentUndoRedo().ClearRedo();
         // Start/End for attributes!
         GetIDocumentUndoRedo().StartUndo( UNDO_INSNUM, NULL );
         pUndo = new SwUndoInsNum( rPam, rRule );
@@ -1167,7 +1165,6 @@ void SwDoc::SetNumRuleStart( const SwPosition& rPos, BOOL bFlag )
         {
             if (GetIDocumentUndoRedo().DoesUndo())
             {
-                GetIDocumentUndoRedo().ClearRedo();
                 SwUndo *const pUndo( new SwUndoNumRuleStart(rPos, bFlag) );
                 GetIDocumentUndoRedo().AppendUndo(pUndo);
             }
@@ -1203,7 +1200,6 @@ void SwDoc::SetNodeNumStart( const SwPosition& rPos, USHORT nStt )
         {
             if (GetIDocumentUndoRedo().DoesUndo())
             {
-                GetIDocumentUndoRedo().ClearRedo();
                 SwUndo *const pUndo( new SwUndoNumRuleStart(rPos, nStt) );
                 GetIDocumentUndoRedo().AppendUndo(pUndo);
             }
@@ -1289,7 +1285,6 @@ void SwDoc::ChgNumRuleFmts( const SwNumRule& rRule, const String * pName )
         SwUndoInsNum* pUndo = 0;
         if (GetIDocumentUndoRedo().DoesUndo())
         {
-            GetIDocumentUndoRedo().ClearRedo();
             pUndo = new SwUndoInsNum( *pRule, rRule );
             pUndo->GetHistory();
             GetIDocumentUndoRedo().AppendUndo( pUndo );
@@ -1399,7 +1394,6 @@ BOOL SwDoc::ReplaceNumRule( const SwPosition& rPos,
         SwUndoInsNum* pUndo = 0;
         if (GetIDocumentUndoRedo().DoesUndo())
         {
-            GetIDocumentUndoRedo().ClearRedo();
             // Start/End for attributes!
             GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
             pUndo = new SwUndoInsNum( rPos, *pNewRule, rOldRule );
@@ -1626,7 +1620,6 @@ void SwDoc::DelNumRules( const SwPaM& rPam )
     SwUndoDelNum* pUndo;
     if (GetIDocumentUndoRedo().DoesUndo())
     {
-        GetIDocumentUndoRedo().ClearRedo();
         pUndo = new SwUndoDelNum( rPam );
         GetIDocumentUndoRedo().AppendUndo(pUndo);
     }
@@ -2015,7 +2008,6 @@ BOOL SwDoc::NumUpDown( const SwPaM& rPam, BOOL bDown )
             /* <-- #i24560# */
             if (GetIDocumentUndoRedo().DoesUndo())
             {
-                GetIDocumentUndoRedo().ClearRedo();
                 SwUndo *const pUndo( new SwUndoNumUpDown(rPam, nDiff) );
                 GetIDocumentUndoRedo().AppendUndo(pUndo);
             }
@@ -2374,7 +2366,6 @@ SetRedlineMode( eOld );
 
     if( pUndo )
     {
-        GetIDocumentUndoRedo().ClearRedo();
         // i57907: Under circumstances (sections at the end of a chapter)
         // the rPam.Start() is not moved to the new position.
         // But aIdx should be at the new end position and as long as the number of moved paragraphs

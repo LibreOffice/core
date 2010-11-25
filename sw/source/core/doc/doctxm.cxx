@@ -192,7 +192,6 @@ void SwDoc::DeleteTOXMark( const SwTOXMark* pTOXMark )
     if (GetIDocumentUndoRedo().DoesUndo())
     {
         // save attributes for Undo
-        GetIDocumentUndoRedo().ClearRedo();
         SwUndoResetAttr* pUndo = new SwUndoResetAttr(
             SwPosition( rTxtNd, SwIndex( &rTxtNd, *pTxtTOXMark->GetStart() ) ),
             RES_TXTATR_TOXMARK );

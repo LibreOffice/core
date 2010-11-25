@@ -399,7 +399,7 @@ BOOL SwDoc::SetFlyFrmAttr( SwFrmFmt& rFlyFmt, SfxItemSet& rSet )
 
     if (GetIDocumentUndoRedo().DoesUndo())
     {
-        GetIDocumentUndoRedo().ClearRedo();
+        GetIDocumentUndoRedo().ClearRedo(); // AppendUndo far below, so leave it
         pSaveUndo.reset( new SwUndoFmtAttrHelper( rFlyFmt ) );
         // --> FME 2004-10-13 #i32968#
         // Inserting columns in the frame causes MakeFrmFmt to put two
@@ -485,7 +485,6 @@ void SwDoc::SetFlyFrmTitle( SwFlyFrmFmt& rFlyFrmFmt,
 
     if (GetIDocumentUndoRedo().DoesUndo())
     {
-        GetIDocumentUndoRedo().ClearRedo();
         GetIDocumentUndoRedo().AppendUndo( new SwUndoFlyStrAttr( rFlyFrmFmt,
                                           UNDO_FLYFRMFMT_TITLE,
                                           rFlyFrmFmt.GetObjTitle(),
@@ -512,7 +511,6 @@ void SwDoc::SetFlyFrmDescription( SwFlyFrmFmt& rFlyFrmFmt,
 
     if (GetIDocumentUndoRedo().DoesUndo())
     {
-        GetIDocumentUndoRedo().ClearRedo();
         GetIDocumentUndoRedo().AppendUndo( new SwUndoFlyStrAttr( rFlyFrmFmt,
                                           UNDO_FLYFRMFMT_DESCRIPTION,
                                           rFlyFrmFmt.GetObjDescription(),
@@ -547,7 +545,6 @@ BOOL SwDoc::SetFrmFmtToFly( SwFrmFmt& rFmt, SwFrmFmt& rNewFmt,
     bool const bUndo = GetIDocumentUndoRedo().DoesUndo();
     if (bUndo)
     {
-        GetIDocumentUndoRedo().ClearRedo();
         pUndo = new SwUndoSetFlyFmt( rFmt, rNewFmt );
         GetIDocumentUndoRedo().AppendUndo(pUndo);
         // --> FME 2004-10-13 #i32968#

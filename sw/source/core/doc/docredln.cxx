@@ -1402,7 +1402,6 @@ bool SwDoc::DeleteRedline( const SwPaM& rRange, bool bSaveInUndo,
         SwUndoRedline* pUndo = new SwUndoRedline( UNDO_REDLINE, rRange );
         if( pUndo->GetRedlSaveCount() )
         {
-            GetIDocumentUndoRedo().ClearRedo();
             GetIDocumentUndoRedo().AppendUndo(pUndo);
         }
         else

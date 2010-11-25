@@ -589,7 +589,6 @@ BOOL SwDoc::SortTbl(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
     SwUndoSort* pUndoSort = 0;
     if(bUndo)
     {
-        GetIDocumentUndoRedo().ClearRedo();
         pUndoSort = new SwUndoSort( rBoxes[0]->GetSttIdx(),
                                     rBoxes[rBoxes.Count()-1]->GetSttIdx(),
                                    *pTblNd, rOpt, aFlatBox.HasItemSets() );

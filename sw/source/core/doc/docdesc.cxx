@@ -430,7 +430,6 @@ void SwDoc::ChgPageDesc( USHORT i, const SwPageDesc &rChged )
     // #i46909# no undo if header or footer changed
     if( bHeaderFooterChanged )
     {
-        GetIDocumentUndoRedo().ClearRedo();
         GetIDocumentUndoRedo().DelAllUndoObj();
     }
 }

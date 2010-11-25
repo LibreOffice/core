@@ -305,7 +305,6 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
         if( pUndo )
         {
             pUndo->SetGroupFmt( pFmt );
-            GetIDocumentUndoRedo().ClearRedo();
             GetIDocumentUndoRedo().AppendUndo( pUndo );
         }
     }

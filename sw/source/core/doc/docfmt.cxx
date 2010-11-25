@@ -360,7 +360,6 @@ void SwDoc::RstTxtAttrs(const SwPaM &rRg, BOOL bInclRefToxMark )
     SwDataChanged aTmp( rRg, 0 );
     if (GetIDocumentUndoRedo().DoesUndo())
     {
-        GetIDocumentUndoRedo().ClearRedo();
         SwUndoResetAttr* pUndo = new SwUndoResetAttr( rRg, RES_CHRFMT );
         pHst = &pUndo->GetHistory();
         GetIDocumentUndoRedo().AppendUndo(pUndo);
@@ -444,7 +443,6 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
     SwHistory* pHst = 0;
     if (GetIDocumentUndoRedo().DoesUndo())
     {
-        GetIDocumentUndoRedo().ClearRedo();
         SwUndoResetAttr* pUndo = new SwUndoResetAttr( rRg,
             static_cast<USHORT>(bTxtAttr ? RES_CONDTXTFMTCOLL : RES_TXTFMTCOLL ));
         if( pAttrs && pAttrs->Count() )
@@ -1186,12 +1184,15 @@ void SwDoc::SetAttr( const SfxItemSet& rSet, SwFmt& rFmt )
 {
     if (GetIDocumentUndoRedo().DoesUndo())
     {
-        GetIDocumentUndoRedo().ClearRedo();
         SwUndoFmtAttrHelper aTmp( rFmt );
         rFmt.SetFmtAttr( rSet );
         if ( aTmp.GetUndo() )
         {
             GetIDocumentUndoRedo().AppendUndo( aTmp.ReleaseUndo() );
+        }
+        else
+        {
+            GetIDocumentUndoRedo().ClearRedo();
         }
     }
     else
@@ -1335,7 +1336,6 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
     {
         if (GetIDocumentUndoRedo().DoesUndo())
         {
-            GetIDocumentUndoRedo().ClearRedo();
             GetIDocumentUndoRedo().AppendUndo( new SwUndoDefaultAttr( aOld ) );
         }
 
@@ -1816,7 +1816,6 @@ BOOL SwDoc::SetTxtFmtColl( const SwPaM &rRg,
 
     if (GetIDocumentUndoRedo().DoesUndo())
     {
-        GetIDocumentUndoRedo().ClearRedo();
         // --> OD 2008-04-15 #refactorlists#
         SwUndoFmtColl* pUndo = new SwUndoFmtColl( rRg, pFmt,
                                                   bReset,
@@ -2323,7 +2322,6 @@ void SwDoc::ReplaceStyles( SwDoc& rSource )
     if( bIsUndo )
     {
         // nodes array was modified!
-        GetIDocumentUndoRedo().ClearRedo();
         GetIDocumentUndoRedo().DelAllUndoObj();
     }
 
@@ -2352,7 +2350,6 @@ void SwDoc::MoveLeftMargin( const SwPaM& rPam, BOOL bRight, BOOL bModulus )
     SwHistory* pHistory = 0;
     if (GetIDocumentUndoRedo().DoesUndo())
     {
-        GetIDocumentUndoRedo().ClearRedo();
         SwUndoMoveLeftMargin* pUndo = new SwUndoMoveLeftMargin( rPam, bRight,
                                                                 bModulus );
         pHistory = &pUndo->GetHistory();
@@ -2418,7 +2415,6 @@ BOOL SwDoc::DontExpandFmt( const SwPosition& rPos, BOOL bFlag )
         bRet = pTxtNd->DontExpandFmt( rPos.nContent, bFlag );
         if( bRet && GetIDocumentUndoRedo().DoesUndo() )
         {
-            GetIDocumentUndoRedo().ClearRedo();
             GetIDocumentUndoRedo().AppendUndo( new SwUndoDontExpandFmt(rPos) );
         }
     }

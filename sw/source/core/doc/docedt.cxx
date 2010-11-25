@@ -776,7 +776,7 @@ bool SwDoc::Overwrite( const SwPaM &rRg, const String &rStr )
 
     if (GetIDocumentUndoRedo().DoesUndo())
     {
-        GetIDocumentUndoRedo().ClearRedo();
+        GetIDocumentUndoRedo().ClearRedo(); // AppendUndo not always called
     }
 
     sal_uInt16 nOldAttrCnt = pNode->GetpSwpHints()
@@ -1260,7 +1260,6 @@ bool SwDoc::MoveNodeRange( SwNodeRange& rRange, SwNodeIndex& rPos,
 
     if( pUndo )
     {
-        GetIDocumentUndoRedo().ClearRedo();
         pUndo->SetDestRange( aIdx, rPos, *pSaveInsPos );
         GetIDocumentUndoRedo().AppendUndo(pUndo);
     }
@@ -1572,7 +1571,6 @@ bool SwDoc::DeleteAndJoinWithRedlineImpl( SwPaM & rPam, const bool )
         checkRedlining(eOld);
         if (GetIDocumentUndoRedo().DoesUndo())
         {
-            GetIDocumentUndoRedo().ClearRedo();
 
     //JP 06.01.98: MUSS noch optimiert werden!!!
     SetRedlineMode(
@@ -2764,7 +2762,6 @@ void SwDoc::TransliterateText(
     {
         if( pUndo->HasData() )
         {
-            GetIDocumentUndoRedo().ClearRedo();
             GetIDocumentUndoRedo().AppendUndo(pUndo);
         }
         else

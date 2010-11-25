@@ -336,7 +336,6 @@ void SwDoc::SetRowSplit( const SwCursor& rCursor, const SwFmtRowSplit &rNew )
         {
             if (GetIDocumentUndoRedo().DoesUndo())
             {
-                GetIDocumentUndoRedo().ClearRedo();
                 GetIDocumentUndoRedo().AppendUndo(new SwUndoAttrTbl(*pTblNd));
             }
 
@@ -397,7 +396,6 @@ void SwDoc::SetRowHeight( const SwCursor& rCursor, const SwFmtFrmSize &rNew )
         {
             if (GetIDocumentUndoRedo().DoesUndo())
             {
-                GetIDocumentUndoRedo().ClearRedo();
                 GetIDocumentUndoRedo().AppendUndo(new SwUndoAttrTbl(*pTblNd));
             }
 
@@ -471,7 +469,6 @@ BOOL SwDoc::BalanceRowHeight( const SwCursor& rCursor, BOOL bTstOnly )
 
                 if (GetIDocumentUndoRedo().DoesUndo())
                 {
-                    GetIDocumentUndoRedo().ClearRedo();
                     GetIDocumentUndoRedo().AppendUndo(
                             new SwUndoAttrTbl(*pTblNd));
                 }
@@ -504,7 +501,6 @@ void SwDoc::SetRowBackground( const SwCursor& rCursor, const SvxBrushItem &rNew 
         {
             if (GetIDocumentUndoRedo().DoesUndo())
             {
-                GetIDocumentUndoRedo().ClearRedo();
                 GetIDocumentUndoRedo().AppendUndo(new SwUndoAttrTbl(*pTblNd));
             }
 
@@ -600,7 +596,6 @@ void SwDoc::SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet )
         SwTable& rTable = pTblNd->GetTable();
         if (GetIDocumentUndoRedo().DoesUndo())
         {
-            GetIDocumentUndoRedo().ClearRedo();
             GetIDocumentUndoRedo().AppendUndo( new SwUndoAttrTbl(*pTblNd) );
         }
 
@@ -849,7 +844,6 @@ void SwDoc::SetTabLineStyle( const SwCursor& rCursor,
         SwTable& rTable = pTblNd->GetTable();
         if (GetIDocumentUndoRedo().DoesUndo())
         {
-            GetIDocumentUndoRedo().ClearRedo();
             GetIDocumentUndoRedo().AppendUndo(new SwUndoAttrTbl(*pTblNd));
         }
 
@@ -1132,7 +1126,6 @@ void SwDoc::SetBoxAttr( const SwCursor& rCursor, const SfxPoolItem &rNew )
         SwTable& rTable = pTblNd->GetTable();
         if (GetIDocumentUndoRedo().DoesUndo())
         {
-            GetIDocumentUndoRedo().ClearRedo();
             GetIDocumentUndoRedo().AppendUndo( new SwUndoAttrTbl(*pTblNd) );
         }
 

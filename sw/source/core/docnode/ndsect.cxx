@@ -190,7 +190,6 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
     bool const bUndo(GetIDocumentUndoRedo().DoesUndo());
     if (bUndo)
     {
-        GetIDocumentUndoRedo().ClearRedo();
         pUndoInsSect = new SwUndoInsSection(rRange, rNewData, pAttr, pTOXBase);
         GetIDocumentUndoRedo().AppendUndo( pUndoInsSect );
         GetIDocumentUndoRedo().DoUndo(false);
@@ -543,12 +542,10 @@ void SwDoc::DelSectionFmt( SwSectionFmt *pFmt, BOOL bDelNodes )
 
         if( GetIDocumentUndoRedo().DoesUndo() )
         {
-            GetIDocumentUndoRedo().ClearRedo();
             if( bDelNodes && pIdx && &GetNodes() == &pIdx->GetNodes() &&
                 0 != (pSectNd = pIdx->GetNode().GetSectionNode() ))
             {
                 SwNodeIndex aUpdIdx( *pIdx );
-                GetIDocumentUndoRedo().ClearRedo();
                 SwPaM aPaM( *pSectNd->EndOfSectionNode(), *pSectNd );
                 GetIDocumentUndoRedo().AppendUndo( new SwUndoDelete( aPaM ));
                 if( pFtnEndAtTxtEnd )
@@ -654,7 +651,6 @@ void SwDoc::UpdateSection(sal_uInt16 const nPos, SwSectionData & rNewData,
             bool const bDoesUndo = GetIDocumentUndoRedo().DoesUndo();
             if (bDoesUndo)
             {
-                GetIDocumentUndoRedo().ClearRedo();
                 GetIDocumentUndoRedo().AppendUndo(
                     MakeUndoUpdateSection( *pFmt, true ) );
                 // --> FME 2004-10-13 #i32968#
@@ -696,7 +692,6 @@ void SwDoc::UpdateSection(sal_uInt16 const nPos, SwSectionData & rNewData,
     bool const bDoesUndo = GetIDocumentUndoRedo().DoesUndo();
     if (bDoesUndo)
     {
-        GetIDocumentUndoRedo().ClearRedo();
         GetIDocumentUndoRedo().AppendUndo(MakeUndoUpdateSection(*pFmt, false));
         // --> FME 2004-10-13 #i32968#
         // Inserting columns in the section causes MakeFrmFmt to put two

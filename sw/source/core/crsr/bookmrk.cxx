@@ -234,7 +234,6 @@ namespace sw { namespace mark
     {
         if (io_pDoc->GetIDocumentUndoRedo().DoesUndo())
         {
-            io_pDoc->GetIDocumentUndoRedo().ClearRedo();
             io_pDoc->GetIDocumentUndoRedo().AppendUndo(
                     new SwUndoInsBookmark(*this));
         }
