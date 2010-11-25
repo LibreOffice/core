@@ -34,7 +34,9 @@
 
 
 class SwUndos;
-class SwDoc;
+class IDocumentDrawModelAccess;
+class IDocumentRedlineAccess;
+class IDocumentState;
 
 
 namespace sw {
@@ -44,7 +46,10 @@ class UndoManager
 {
 public:
 
-    UndoManager(SwDoc & rDoc);
+    UndoManager(::std::auto_ptr<SwNodes> pUndoNodes,
+        IDocumentDrawModelAccess & rDrawModelAccess,
+        IDocumentRedlineAccess & rRedlineAccess,
+        IDocumentState & rState);
 
     /** IDocumentUndoRedo */
     virtual void DoUndo(bool const bDoUndo);
@@ -83,7 +88,9 @@ public:
     SwNodes      & GetUndoNodes();
 
 private:
-    SwDoc & m_rDoc;
+    IDocumentDrawModelAccess & m_rDrawModelAccess;
+    IDocumentRedlineAccess & m_rRedlineAccess;
+    IDocumentState & m_rState;
 
     /// Undo nodes array: content not currently in document
     ::std::auto_ptr<SwNodes> m_pUndoNodes;

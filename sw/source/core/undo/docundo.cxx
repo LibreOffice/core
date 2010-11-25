@@ -105,9 +105,14 @@ void UndoArrStatus::Paint( const Rectangle& )
 
 namespace sw {
 
-UndoManager::UndoManager(SwDoc & rDoc)
-    :   m_rDoc(rDoc)
-    ,   m_pUndoNodes( new SwNodes(&rDoc) )
+UndoManager::UndoManager(::std::auto_ptr<SwNodes> pUndoNodes,
+            IDocumentDrawModelAccess & rDrawModelAccess,
+            IDocumentRedlineAccess & rRedlineAccess,
+            IDocumentState & rState)
+    :   m_rDrawModelAccess(rDrawModelAccess)
+    ,   m_rRedlineAccess(rRedlineAccess)
+    ,   m_rState(rState)
+    ,   m_pUndoNodes(pUndoNodes)
     ,   pUndos( new SwUndos( 0, 20 ) )
     ,   nUndoPos(0)
     ,   nUndoSavePos(0)
@@ -139,7 +144,7 @@ void UndoManager::DoUndo(bool const bDoUndo)
 {
     mbUndo = bDoUndo;
 
-    SdrModel *const pSdrModel = m_rDoc.GetDrawModel();
+    SdrModel *const pSdrModel = m_rDrawModelAccess.GetDrawModel();
     if( pSdrModel )
     {
         pSdrModel->EnableUndo(bDoUndo);
@@ -214,7 +219,7 @@ void UndoManager::AppendUndo(SwUndo *const pUndo)
 {
     if( nsRedlineMode_t::REDLINE_NONE == pUndo->GetRedlineMode() )
     {
-        pUndo->SetRedlineMode( m_rDoc.GetRedlineMode() );
+        pUndo->SetRedlineMode( m_rRedlineAccess.GetRedlineMode() );
     }
 
     // Unfortunately, the silly SvPtrArr can only store a little less than
@@ -431,14 +436,14 @@ bool UndoManager::Undo( SwUndoIter& rUndoIter )
 
     SwUndo *pUndo = (*pUndos)[ --nUndoPos ];
 
-    RedlineMode_t const eOld = m_rDoc.GetRedlineMode();
+    RedlineMode_t const eOld = m_rRedlineAccess.GetRedlineMode();
     RedlineMode_t eTmpMode = (RedlineMode_t)pUndo->GetRedlineMode();
     if( (nsRedlineMode_t::REDLINE_SHOW_MASK & eTmpMode) != (nsRedlineMode_t::REDLINE_SHOW_MASK & eOld) &&
         UNDO_START != pUndo->GetId() && UNDO_END != pUndo->GetId() )
     {
-        m_rDoc.SetRedlineMode( eTmpMode );
+        m_rRedlineAccess.SetRedlineMode( eTmpMode );
     }
-    m_rDoc.SetRedlineMode_intern(
+    m_rRedlineAccess.SetRedlineMode_intern(
         static_cast<RedlineMode_t>(eTmpMode | nsRedlineMode_t::REDLINE_IGNORE));
     // Undo ausfuehren
 
@@ -459,7 +464,7 @@ bool UndoManager::Undo( SwUndoIter& rUndoIter )
 
     pUndo->Undo( rUndoIter );
 
-    m_rDoc.SetRedlineMode( eOld );
+    m_rRedlineAccess.SetRedlineMode( eOld );
 
     // Besonderheit von Undo-Replace (interne History)
     if( UNDO_REPLACE == nAktId && ((SwUndoReplace*)pUndo)->nAktPos )
@@ -478,14 +483,14 @@ bool UndoManager::Undo( SwUndoIter& rUndoIter )
     //              bei der Autokorrektur
     if( UNDO_START != nAktId && UNDO_END != nAktId )
     {
-        m_rDoc.SetModified(); // default: always set, can be reset
+        m_rState.SetModified(); // default: always set, can be reset
     }
 
     // ist die History leer und wurde nicht wegen Speichermangel
     // verworfen, so kann das Dokument als unveraendert gelten
     if( nUndoSavePos == nUndoPos )
     {
-        m_rDoc.ResetModified();
+        m_rState.ResetModified();
     }
 
     return TRUE;
@@ -852,14 +857,14 @@ bool UndoManager::Redo(SwUndoIter & rUndoIter)
 
     SwUndo *pUndo = (*pUndos)[ nUndoPos++ ];
 
-    RedlineMode_t const eOld = m_rDoc.GetRedlineMode();
+    RedlineMode_t const eOld = m_rRedlineAccess.GetRedlineMode();
     RedlineMode_t eTmpMode = (RedlineMode_t)pUndo->GetRedlineMode();
     if( (nsRedlineMode_t::REDLINE_SHOW_MASK & eTmpMode) != (nsRedlineMode_t::REDLINE_SHOW_MASK & eOld) &&
         UNDO_START != pUndo->GetId() && UNDO_END != pUndo->GetId() )
     {
-        m_rDoc.SetRedlineMode( eTmpMode );
+        m_rRedlineAccess.SetRedlineMode(eTmpMode);
     }
-    m_rDoc.SetRedlineMode_intern(
+    m_rRedlineAccess.SetRedlineMode_intern(
         static_cast<RedlineMode_t>(eTmpMode | nsRedlineMode_t::REDLINE_IGNORE));
 
     //JP 11.05.98: FlyFormate ueber die EditShell selektieren, nicht aus dem
@@ -869,7 +874,7 @@ bool UndoManager::Redo(SwUndoIter & rUndoIter)
 
     pUndo->Redo( rUndoIter );
 
-    m_rDoc.SetRedlineMode( eOld );
+    m_rRedlineAccess.SetRedlineMode(eOld);
 
     // Besonderheit von Undo-Replace (interne History)
     if( UNDO_REPLACE == pUndo->GetId() &&
@@ -886,11 +891,11 @@ bool UndoManager::Redo(SwUndoIter & rUndoIter)
     // verworfen, so kann das Dokument als unveraendert gelten
     if( nUndoSavePos == nUndoPos )
     {
-        m_rDoc.ResetModified();
+        m_rState.ResetModified();
     }
     else
     {
-        m_rDoc.SetModified();
+        m_rState.SetModified();
     }
     return TRUE;
 }
