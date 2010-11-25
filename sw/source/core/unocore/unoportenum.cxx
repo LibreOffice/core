@@ -112,7 +112,7 @@ namespace
     struct BookmarkCompareStruct
     {
         bool operator () ( const SwXBookmarkPortion_ImplSharedPtr &r1,
-                           const SwXBookmarkPortion_ImplSharedPtr &r2 )
+                           const SwXBookmarkPortion_ImplSharedPtr &r2 ) const
         {
             // #i16896# for bookmark portions at the same position, the start should
             // always precede the end. Hence compare positions, and use bookmark type
