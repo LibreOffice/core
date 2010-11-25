@@ -734,7 +734,7 @@ ULONG PictReader::ReadAndDrawText()
     while ( nLen > 0 && ( (unsigned char)sText[ nLen - 1 ] ) < 32 )
             nLen--;
     sText[ nLen ] = 0;
-    String aString( (const sal_Char*)&sText, aActFont.GetCharSet());// OSNOLA: gsl_getSystemTextEncoding() );
+    String aString( (const sal_Char*)&sText, aActFont.GetCharSet());
     pVirDev->DrawText( Point( aTextPosition.X(), aTextPosition.Y() ), aString );
     return nDataLen;
 }
@@ -1111,108 +1111,133 @@ ULONG PictReader::ReadPixMapEtc( Bitmap &rBitmap, BOOL bBaseAddr, BOOL bColorTab
 
 void PictReader::ReadHeader()
 {
-    char nC;
     short y1,x1,y2,x2;
 
-    sal_Char    sBuf[ 3 ];
-    pPict->SeekRel( 10 );
-    pPict->Read( sBuf, 3 );
-    if ( sBuf[ 0 ] == 0x00 && sBuf[ 1 ] == 0x11 && ( sBuf[ 2 ] == 0x01 || sBuf[ 2 ] == 0x02 ) )
-        pPict->SeekRel( -13 );      // this maybe a pict from a ms document
-    else
-        pPict->SeekRel( 512 - 13 ); // 512 Bytes Muell am Anfang
+    sal_Char    sBuf[ 2 ];
+    // previous code considers pPict->Tell() as the normal starting position,
+    // can we have nStartPos != 0 ?
+    ULONG   nStartPos = pPict->Tell();
+    // Standard:
+    // a picture file begins by 512 bytes (reserved to the application) followed by the picture data
+    // while clipboard, pictures stored in a document often contain only the picture data.
 
-    pPict->SeekRel(2);              // Lo-16-bits von "picture size"
-    *pPict >> y1 >> x1 >> y2 >> x2; // Rahmen-Rechteck des Bildes
-    aBoundingRect=Rectangle( x1,y1, --x2, --y2 );
+    // Special cases:
+    // - some Pict v.1 use 0x00 0x11 0x01 ( instead of 0x11 0x01) to store the version op
+    //    (we consider here this as another standard for Pict. v.1 )
+    // - some files seem to contain extra garbage data at the beginning
+    // - some picture data seem to contain extra NOP opcode(0x00) between the bounding box and the version opcode
 
-    // Jetzt kommen x-beliebig viele Nullen
-    // (in manchen Dateien tatsaechlich mehr als eine):
-    do { *pPict >> nC; } while (nC==0 && pPict->IsEof()==FALSE);
+    // This code looks hard to find a picture header, ie. it looks at positions
+    //   - nStartPos+0, nStartPos+512 with potential extra NOP codes between bdbox and version (at most 9 extra NOP)
+    //   - 512..1024 with more strict bdbox checking and no extra NOP codes
 
-    // dann sollte der Versions-Opcode 0x11 folgen, dann die Versionsnummer:
-    if (nC==0x11)
-    {
-        *pPict >> nC;
-        if ( nC == 0x01 )
-            IsVersion2 = FALSE;         // Version 1
-        else                            // Version 2 oder hoeher
-        {
-            short   nExtVer;
-            // 3 Bytes ueberspringen, um auf
-            // ExtVersion2 oder Version2 zu kommen
-            pPict->SeekRel( 3 );
-            *pPict >> nExtVer;
-
-            // nachsehen, ob wir einen Extended-Version2-Header (==-2) haben
-            // oder einen einfachen Version2-Header (==-1);
-            // dementsprechend Aufloesung einlesen oder nicht
-            if ( nExtVer == -2 )
-            {
-                sal_Int16 nReserved;
-                sal_Int32 nHResFixed, nVResFixed;
-                *pPict >> nReserved >> nHResFixed >> nVResFixed;
-                double fHRes = nHResFixed;
-                fHRes /= 65536;
-                double fVRes = nVResFixed;
-                fVRes /= 65536;
-                aHRes /= fHRes;
-                aVRes /= fVRes;
-                *pPict >> y1 >> x1 >> y2 >> x2;     // reading the optimal bounding rect
-                aBoundingRect=Rectangle( x1,y1, --x2, --y2 );
-                pPict->SeekRel( -22 );
-            }
-            else
-            {
-                pPict->SeekRel( -4 );
-            }
-            IsVersion2=TRUE;
+    // Notes:
+    // - if the header can begin at nStartPos+0 and at nStartPos+512, we try to choose the more
+    //       <<probable>> ( using the variable confidence)
+    // - svtools/source/filter.vcl/filter/{filter.cxx,filter2.cxx} only check for standard Pict,
+    //       this may cause future problems
+    int st;
+    sal_uInt32 nOffset;
+    int confidence[2] = { 0, 0};
+    for ( st = 0; st < 3 + 513; st++ )
+      {
+        int actualConfid = 20; // the actual confidence
+        pPict->ResetError();
+        if (st < 2) nOffset = nStartPos+st*512;
+        else if (st == 2) {
+          // choose nStartPos+0 or nStartPos+512 even if there are a little dubious
+          int actPos = -1, actConf=0;
+          if (confidence[0] > 0) { actPos = 0; actConf =  confidence[0]; }
+          if (confidence[1] > 0 && confidence[1] >= actConf) actPos = 1;
+          if (actPos < 0) continue;
+          nOffset = nStartPos+actPos*512;
         }
-    }
-    else {
-        // Eigentlich ist dies wohl kein Pict-File, aber es gibt tatsaechlich
-        // Dateien, bei denen mehr als 512 Bytes "Muell" am Anfang stehen.
-        // Somit koennte es theoretisch folgende Art von Header geben:
-        // <beliebig viele Bytes Muell> <Picture-Size (Lo-Bytes)> <BoundingRect>
-        // <beliebig viele Nullen> <0x11> ..
-        // Da aber in so einem Fall die Position von <BoundingRect> kaum auszumachen ist,
-        // gehen wir nun davon aus, dass in einer Datei immer entweder genau 512 Bytes Muell
-        // am Anfang sind (wie oben versucht), oder (wie normalerweise ueblich) genau eine 0 zwischen
-        // Bounding-Rectangle und 0x11. Des weiteren mag es hoechstens 1024 Bytes Muell geben,
-        // und das Ganze nur fuer Version 1 oder 2.
-        // Somit suchen wir nun nach der Folge 0x00,0x11,0x01 oder 0x00,0x11,0x02 innerhalb der
-        // "zweiten" 512 Bytes, und nehmen an, dass davor das Bounding-Rect steht, und hoffen
-        // dass das alles so seine Richtigkeit hat.
-        BYTE n1,n2,n3;
-        USHORT i,Found;
-        pPict->Seek(522);
-        Found=0;
-        *pPict >> n1 >> n2 >> n3;
-        for (i=0; i<512; i++) {
-            if (n1==0x00 && n2==0x11 && (n3==0x01 || n3==0x02)) { Found=1; break; }
-            n1=n2; n2=n3; *pPict >> n3;
+        else {
+          nOffset = 509+st; // illogical : more logical will be nStartPos+509+st or to consider that nStartPos=0
+          // a small test to check if versionOp code exists after the bdbox ( with no extra NOP codes)
+          pPict->Seek(nOffset+10);
+          pPict->Read( sBuf, 2 );
+          if (pPict->IsEof() || pPict->GetError()) break;
+          if (sBuf[0] == 0x11 || (sBuf[0] == 0x00 && sBuf[1] == 0x11)) ; // maybe ok
+          else continue;
         }
-        if (Found!=0) {
-            pPict->SeekRel(-11);
-            *pPict >> y1 >> x1 >> y2 >> x2;
-            // Lieber nochmal nachsehen, ob das Bounding-Rectangle gut zu sein scheint:
-            if (x1+10<x2 && y1+10<y2 && y1>=-2048 && x1>=-2048 && x2<=2048 && y2<=2048) {
-                aBoundingRect=Rectangle( x1, y1, --x2, --y2 );
-                if (n3==0x01) {
-                    pPict->SeekRel(3);
-                    IsVersion2=FALSE;
-                }
-                else {
-                    pPict->SeekRel(4);
-                    IsVersion2=TRUE;
-                }
-            }
-            else pPict->SetError(SVSTREAM_FILEFORMAT_ERROR);
+        pPict->Seek(nOffset);
+
+        // 2 bytes to store size ( version 1 ) ignored
+        pPict->SeekRel( 2 );
+        *pPict >> y1 >> x1 >> y2 >> x2; // Rahmen-Rechteck des Bildes
+        if (x1 > x2 || y1 > y2) continue; // bad bdbox
+        if (x1 < -2048 || x2 > 2048 || y1 < -2048 || y2 > 2048 || // origin|dest is very small|large
+        (x1 == x2 && y1 == y2) ) // 1 pixel pict is dubious
+          actualConfid-=3;
+        else if (x2 < x1+8 || y2 < y1+8) // a little dubious
+          actualConfid-=1;
+        if (st >= 3 && actualConfid != 20) continue;
+        aBoundingRect=Rectangle( x1,y1, x2, y2 );
+
+        if (pPict->IsEof() || pPict->GetError()) continue;
+        // read version
+        pPict->Read( sBuf, 2 );
+        // version 1 file
+        if ( sBuf[ 0 ] == 0x11 && sBuf[ 1 ] == 0x01 ) {
+          // pict v1 must be rare and we do only few tests
+          if (st < 2) { confidence[st] = --actualConfid; continue; }
+          IsVersion2 = FALSE; return;
         }
-        else pPict->SetError(SVSTREAM_FILEFORMAT_ERROR);
-    }
+        if (sBuf[0] != 0x00) continue; // unrecovable error
+        int numZero = 0;
+        do
+          {
+        numZero++;
+        pPict->SeekRel(-1);
+        pPict->Read( sBuf, 2 );
+          }
+        while ( sBuf[0] == 0x00 && numZero < 10);
+        actualConfid -= (numZero-1); // extra nop are dubious
+        if (pPict->IsEof() || pPict->GetError()) continue;
+        if (sBuf[0] != 0x11) continue; // not a version opcode
+        // abnormal version 1 file
+        if (sBuf[1] == 0x01 ) {
+          // pict v1 must be rare and we do only few tests
+          if (st < 2) { confidence[st] = --actualConfid; continue; }
+          IsVersion2 = FALSE; return;
+        }
+        if (sBuf[1] != 0x02 ) continue; // not a version 2 file
+
+        IsVersion2=TRUE;
+        short   nExtVer, nReserved;
+        // 3 Bytes ignored : end of version arg 0x02FF (ie: 0xFF), HeaderOp : 0x0C00
+        pPict->SeekRel( 3 );
+        *pPict >> nExtVer >> nReserved;
+        if (pPict->IsEof() || pPict->GetError()) continue;
+
+        if ( nExtVer == -2 ) // extended version 2 picture
+          {
+        sal_Int32 nHResFixed, nVResFixed;
+        *pPict >> nHResFixed >> nVResFixed;
+        *pPict >> y1 >> x1 >> y2 >> x2; // reading the optimal bounding rect
+        if (x1 > x2 || y1 > y2) continue; // bad bdbox
+        if (st < 2 && actualConfid != 20) { confidence[st] = actualConfid; continue; }
+
+        double fHRes = nHResFixed;
+        fHRes /= 65536;
+        double fVRes = nVResFixed;
+        fVRes /= 65536;
+        aHRes /= fHRes;
+        aVRes /= fVRes;
+        aBoundingRect=Rectangle( x1,y1, x2, y2 );
+        pPict->SeekRel( 4 ); // 4 bytes reserved
+        return;
+          }
+        else if (nExtVer == -1 ) { // basic version 2 picture
+          if (st < 2 && actualConfid != 20) { confidence[st] = actualConfid; continue; }
+          pPict->SeekRel( 16); // bdbox(4 fixed number)
+          pPict->SeekRel(4); // 4 bytes reserved
+          return;
+        }
+      }
+    pPict->SetError(SVSTREAM_FILEFORMAT_ERROR);
 }
-
 
 ULONG PictReader::ReadData(USHORT nOpcode)
 {
