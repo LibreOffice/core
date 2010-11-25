@@ -36,6 +36,7 @@
 #include <svx/ruler.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/stritem.hxx>
+#include <unotools/undoopt.hxx>
 
 #include "swtypes.hxx"
 #include "cmdid.h"
@@ -74,9 +75,13 @@ SwInputWindow::SwInputWindow( Window* pParent, SfxBindings* pBind )
     pView(0),
     pBindings(pBind),
     aAktTableName(aEmptyStr)
+    , m_nActionCount(0)
+    , m_bDoesUndo(true)
+    , m_bResetUndo(false)
+    , m_bCallUndo(false)
 {
-    bFirst = bDoesUndo = TRUE;
-    bActive = bIsTable = bDelSel = bResetUndo = bCallUndo = FALSE;
+    bFirst = TRUE;
+    bActive = bIsTable = bDelSel = FALSE;
 
     FreeResource();
 
@@ -143,15 +148,26 @@ __EXPORT SwInputWindow::~SwInputWindow()
     if(pWrtShell)
         pWrtShell->EndSelTblCells();
 
-    if( bResetUndo )
+    CleanupUglyHackWithUndo();
+}
+
+void SwInputWindow::CleanupUglyHackWithUndo()
+{
+    if (m_bResetUndo)
     {
         DelBoxCntnt();
-        pWrtShell->DoUndo( bDoesUndo );
-        if(bCallUndo)
+        pWrtShell->DoUndo(m_bDoesUndo);
+        if (m_bCallUndo)
+        {
             pWrtShell->Undo();
-        SwEditShell::SetUndoActionCount( nActionCnt );
+        }
+        if (0 == m_nActionCount)
+        {
+            SW_MOD()->GetUndoOptions().SetUndoCount(0);
+        }
     }
 }
+
 
 //==================================================================
 
@@ -233,13 +249,17 @@ void SwInputWindow::ShowWin()
         {
             if( bIsTable )
             {
-                bResetUndo = TRUE;
-                nActionCnt = SwEditShell::GetUndoActionCount();
-                SwEditShell::SetUndoActionCount( nActionCnt + 1 );
+                m_bResetUndo = true;
+                m_nActionCount = SW_MOD()->GetUndoOptions().GetUndoCount();
+                if (0 == m_nActionCount) { // deactivated? turn it on...
+                    SW_MOD()->GetUndoOptions().SetUndoCount(1);
+                }
 
-                bDoesUndo = pWrtShell->DoesUndo();
-                if( !bDoesUndo )
-                    pWrtShell->DoUndo( TRUE );
+                m_bDoesUndo = pWrtShell->DoesUndo();
+                if (!m_bDoesUndo)
+                {
+                    pWrtShell->DoUndo(true);
+                }
 
                 if( !pWrtShell->SwCrsrShell::HasSelection() )
                 {
@@ -252,9 +272,11 @@ void SwInputWindow::ShowWin()
                     pWrtShell->StartUndo( UNDO_DELETE );
                     pWrtShell->Delete();
                     if( 0 != pWrtShell->EndUndo( UNDO_DELETE ))
-                        bCallUndo = TRUE;
+                    {
+                        m_bCallUndo = true;
+                    }
                 }
-                pWrtShell->DoUndo( FALSE );
+                pWrtShell->DoUndo(false);
 
                 SfxItemSet aSet( pWrtShell->GetAttrPool(), RES_BOXATR_FORMULA, RES_BOXATR_FORMULA );
                 if( pWrtShell->GetTblBoxFormulaAttrs( aSet ))
@@ -376,15 +398,7 @@ void  SwInputWindow::ApplyFormula()
 {
     pView->GetViewFrame()->GetDispatcher()->Lock(FALSE);
     pView->GetEditWin().LockKeyInput(FALSE);
-    if( bResetUndo )
-    {
-        DelBoxCntnt();
-        pWrtShell->DoUndo( bDoesUndo );
-        SwEditShell::SetUndoActionCount( nActionCnt );
-        if( bCallUndo )
-            pWrtShell->Undo();
-        bResetUndo = FALSE;
-    }
+    CleanupUglyHackWithUndo();
     pWrtShell->Pop( FALSE );
 
     // JP 13.01.97: Formel soll immer mit einem "=" beginnen, hier
@@ -411,15 +425,7 @@ void  SwInputWindow::CancelFormula()
     {
         pView->GetViewFrame()->GetDispatcher()->Lock( FALSE );
         pView->GetEditWin().LockKeyInput(FALSE);
-        if( bResetUndo )
-        {
-            DelBoxCntnt();
-            pWrtShell->DoUndo( bDoesUndo );
-            SwEditShell::SetUndoActionCount( nActionCnt );
-            if( bCallUndo )
-                pWrtShell->Undo();
-            bResetUndo = FALSE;
-        }
+        CleanupUglyHackWithUndo();
         pWrtShell->Pop( FALSE );
 
         if( bDelSel )
@@ -496,7 +502,7 @@ void SwInputWindow::SetFormula( const String& rFormula, BOOL bDelFlag )
 
 IMPL_LINK( SwInputWindow, ModifyHdl, InputEdit*, EMPTYARG )
 {
-    if( bIsTable && bResetUndo )
+    if (bIsTable && m_bResetUndo)
     {
         pWrtShell->StartAllAction();
         DelBoxCntnt();
@@ -669,26 +675,4 @@ SfxChildWinInfo __EXPORT SwInputChild::GetInfo() const
     SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();     \
     return aInfo;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

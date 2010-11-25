@@ -974,9 +974,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
         !pDocSh->GetVisArea(ASPECT_CONTENT).IsEmpty() )
         SetVisArea( pDocSh->GetVisArea(ASPECT_CONTENT),sal_False);
 
-    SwEditShell::SetUndoActionCount(
-        static_cast< USHORT >( SW_MOD()->GetUndoOptions().GetUndoCount() ) );
-    pWrtShell->DoUndo( 0 != SwEditShell::GetUndoActionCount() );
+    pWrtShell->DoUndo( 0 != SW_MOD()->GetUndoOptions().GetUndoCount() );
 
     const BOOL bBrowse = pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
     SetNewWindowAllowed(!bBrowse);

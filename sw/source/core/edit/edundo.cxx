@@ -240,21 +240,6 @@ USHORT SwEditShell::Repeat( USHORT nCount )
     return bRet;
 }
 
-        // abfragen/setzen der Anzahl von wiederherstellbaren Undo-Actions
-
-USHORT SwEditShell::GetUndoActionCount()
-{
-    return SwDoc::GetUndoActionCount();
-}
-
-
-void SwEditShell::SetUndoActionCount( USHORT nNew )
-{
-    SwDoc::SetUndoActionCount( nNew );
-}
-
-
-
 
 void lcl_SelectSdrMarkList( SwEditShell* pShell,
                             const SdrMarkList* pSdrMarkList )

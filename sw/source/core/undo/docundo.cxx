@@ -30,10 +30,13 @@
 
 #include <UndoManager.hxx>
 
+#include <unotools/undoopt.hxx>
+
 #include <vcl/wrkwin.hxx>
 
 #include <svx/svdmodel.hxx>
 
+#include <swmodule.hxx>
 #include <doc.hxx>
 #include <ndarr.hxx>
 #include <pam.hxx>
@@ -47,9 +50,6 @@
 
 using namespace ::com::sun::star;
 
-
-/// max number of Undo actions
-static USHORT g_nUndoActions = UNDO_ACTION_COUNT;
 
 // the undo array should never grow beyond this limit:
 #define UNDO_ACTION_LIMIT (USHRT_MAX - 1000)
@@ -102,16 +102,6 @@ void UndoArrStatus::Paint( const Rectangle& )
 
 // SwDoc methods /////////////////////////////////////////////////////////
 
-sal_uInt16 SwDoc::GetUndoActionCount()
-{
-    return ::sw::UndoManager::GetUndoActionCount();
-}
-
-void SwDoc::SetUndoActionCount( sal_uInt16 nNew )
-{
-    ::sw::UndoManager::SetUndoActionCount(nNew);
-}
-
 sal_Bool SwDoc::RestoreInvisibleContent()
 {
     return GetUndoManager().RestoreInvisibleContent();
@@ -120,16 +110,6 @@ sal_Bool SwDoc::RestoreInvisibleContent()
 // UndoManager ///////////////////////////////////////////////////////////
 
 namespace sw {
-
-sal_uInt16 UndoManager::GetUndoActionCount()
-{
-    return g_nUndoActions;
-}
-
-void UndoManager::SetUndoActionCount( sal_uInt16 nNew )
-{
-    g_nUndoActions = nNew;
-}
 
 UndoManager::UndoManager(SwDoc & rDoc)
     :   m_rDoc(rDoc)
@@ -310,12 +290,13 @@ void UndoManager::AppendUndo(SwUndo *const pUndo)
 }
 #endif
 
-    if (GetUndoActionCount() < nUndoCnt)
+    sal_Int32 const nActions(SW_MOD()->GetUndoOptions().GetUndoCount());
+    if (nActions < nUndoCnt)
     {
         // immer 1/10 loeschen
         //JP 23.09.95: oder wenn neu eingestellt wurde um die Differenz
         //JP 29.5.2001: Task #83891#: remove only the overlapping actions
-        DelUndoObj( nUndoCnt - GetUndoActionCount() );
+        DelUndoObj( nUndoCnt - nActions );
     }
     else
     {
@@ -611,12 +592,13 @@ UndoManager::EndUndo(SwUndoId const i_eUndoId, SwRewriter const*const pRewriter)
         if( !--nUndoSttEnd )
         {
             ++nUndoCnt;
-            if (GetUndoActionCount() < nUndoCnt)
+            sal_Int32 const nActions(SW_MOD()->GetUndoOptions().GetUndoCount());
+            if (nActions < nUndoCnt)
             {
                 // immer 1/10 loeschen
                 //JP 23.09.95: oder wenn neu eingestellt wurde um die Differenz
                 //JP 29.5.2001: Task #83891#: remove only the overlapping actions
-                DelUndoObj( nUndoCnt - GetUndoActionCount() );
+                DelUndoObj( nUndoCnt - nActions );
             }
             else
             {

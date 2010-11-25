@@ -800,22 +800,18 @@ void SwModule::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdCst, sal
     }
     else if( pBrdCst == pUndoOptions )
     {
-        const int nNew = GetUndoOptions().GetUndoCount();
-        const int nOld = SwEditShell::GetUndoActionCount();
-        if(!nNew || !nOld)
+        sal_Int32 const nNew = GetUndoOptions().GetUndoCount();
+        bool const bUndo = (nNew != 0);
+        // switch Undo for all DocShells
+        TypeId aType(TYPE(SwDocShell));
+        SwDocShell * pDocShell =
+            static_cast<SwDocShell *>(SfxObjectShell::GetFirst(&aType));
+        while (pDocShell)
         {
-            sal_Bool bUndo = nNew != 0;
-            //ueber DocShells iterieren und Undo umschalten
-
-            TypeId aType(TYPE(SwDocShell));
-            SwDocShell* pDocShell = (SwDocShell*)SfxObjectShell::GetFirst(&aType);
-            while( pDocShell )
-            {
-                pDocShell->GetDoc()->GetIDocumentUndoRedo().DoUndo(bUndo);
-                pDocShell = (SwDocShell*)SfxObjectShell::GetNext(*pDocShell, &aType);
-            }
+            pDocShell->GetDoc()->GetIDocumentUndoRedo().DoUndo(bUndo);
+            pDocShell = static_cast<SwDocShell *>(
+                    SfxObjectShell::GetNext(*pDocShell, &aType));
         }
-        SwEditShell::SetUndoActionCount( static_cast< USHORT >(nNew));
     }
     else if ( pBrdCst == pColorConfig || pBrdCst == pAccessibilityOptions )
     {

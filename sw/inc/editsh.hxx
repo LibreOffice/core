@@ -535,10 +535,6 @@ public:
     SwUndoId EndUndo( SwUndoId eUndoId = UNDO_EMPTY, const SwRewriter * pRewriter = 0 );
     SwUndoId GetUndoIds( String* pUndoStr = 0, SwUndoIds *pUndoIds = 0) const;
 
-        // abfragen/setzen der Anzahl von wiederherstellbaren Undo-Actions
-    static USHORT GetUndoActionCount();
-    static void SetUndoActionCount( USHORT nNew );
-
     // Redo
     SwUndoId GetRedoIds( String* pRedoStr = 0, SwUndoIds *pRedoIds = 0) const;
 

@@ -43,9 +43,6 @@ class UndoManager
     : public IDocumentUndoRedo
 {
 public:
-    /// max number of undo actions
-    static sal_uInt16 GetUndoActionCount();
-    static void SetUndoActionCount(sal_uInt16 nNew);
 
     UndoManager(SwDoc & rDoc);
 
@@ -110,8 +107,6 @@ private:
         with the given Id as UserId?
     */
     bool HasUndoId(SwUndoId const eId) const;
-    /// max number of Undo actions
-//    static sal_uInt16 nUndoActions;
 };
 
 } // namespace sw

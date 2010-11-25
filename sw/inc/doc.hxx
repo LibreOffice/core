@@ -798,10 +798,6 @@ public:
     IDocumentUndoRedo      & GetIDocumentUndoRedo();
     IDocumentUndoRedo const& GetIDocumentUndoRedo() const;
 
-    /** abfragen/setzen der Anzahl von wiederherstellbaren Undo-Actions */
-    static sal_uInt16 GetUndoActionCount();
-    static void SetUndoActionCount(sal_uInt16 nNew);
-
     /** IDocumentLinksAdministration
     */
     virtual bool IsVisibleLinks() const;
