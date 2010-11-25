@@ -1740,12 +1740,18 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode& rGrfNode, const Size
 
     m_pSerializer->startElementNS( XML_w, XML_drawing,
             FSEND );
-    sal_Int32 anchorOrInline = rGrfNode.GetFlyFmt()->GetAnchor().GetAnchorId() == FLY_AS_CHAR ? XML_inline : XML_anchor;
-    m_pSerializer->startElementNS( XML_wp, anchorOrInline,
-            XML_distT, "0", XML_distB, "0", XML_distL, "0", XML_distR, "0", XML_simplePos, "0",
-            FSEND );
+    bool isAnchor = rGrfNode.GetFlyFmt()->GetAnchor().GetAnchorId() != FLY_AS_CHAR;
+    if( isAnchor )
+        m_pSerializer->startElementNS( XML_wp, XML_anchor,
+                XML_distT, "0", XML_distB, "0", XML_distL, "0", XML_distR, "0", XML_simplePos, "0",
+                FSEND );
+    else
+        m_pSerializer->startElementNS( XML_wp, XML_inline,
+                XML_distT, "0", XML_distB, "0", XML_distL, "0", XML_distR, "0",
+                FSEND );
 
-    m_pSerializer->singleElementNS( XML_wp, XML_simplePos, XML_x, "0", XML_y, "0", FSEND );
+    if( isAnchor )
+        m_pSerializer->singleElementNS( XML_wp, XML_simplePos, XML_x, "0", XML_y, "0", FSEND );
     // extent of the image
     OString aWidth( OString::valueOf( TwipsToEMU( rSize.Width() ) ) );
     OString aHeight( OString::valueOf( TwipsToEMU( rSize.Height() ) ) );
@@ -1871,7 +1877,7 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode& rGrfNode, const Size
 
     m_pSerializer->endElementNS( XML_a, XML_graphicData );
     m_pSerializer->endElementNS( XML_a, XML_graphic );
-    m_pSerializer->endElementNS( XML_wp, anchorOrInline );
+    m_pSerializer->endElementNS( XML_wp, isAnchor ? XML_anchor : XML_inline );
 
     m_pSerializer->endElementNS( XML_w, XML_drawing );
 }
