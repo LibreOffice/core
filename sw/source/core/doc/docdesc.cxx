@@ -201,12 +201,11 @@ void SwDoc::ChgPageDesc( USHORT i, const SwPageDesc &rChged )
 
     SwPageDesc *pDesc = aPageDescs[i];
 
-    bool const bDoesUndo = GetIDocumentUndoRedo().DoesUndo();
-    if (bDoesUndo)
+    ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
+    if (undoGuard.UndoWasEnabled())
     {
         SwUndo *const pUndo(new SwUndoPageDesc(*pDesc, rChged, this));
         GetIDocumentUndoRedo().AppendUndo(pUndo);
-        GetIDocumentUndoRedo().DoUndo(false);
     }
 
     //Als erstes wird ggf. gespiegelt.
@@ -246,7 +245,7 @@ void SwDoc::ChgPageDesc( USHORT i, const SwPageDesc &rChged )
 
     //Header abgleichen.
     const SwFmtHeader &rHead = rChged.GetMaster().GetHeader();
-    if( bDoesUndo )
+    if (undoGuard.UndoWasEnabled())
     {
         // #i46909# no undo if header or footer changed
         // hat sich an den Nodes etwas veraendert ?
@@ -310,7 +309,7 @@ void SwDoc::ChgPageDesc( USHORT i, const SwPageDesc &rChged )
 
     //Footer abgleichen.
     const SwFmtFooter &rFoot = rChged.GetMaster().GetFooter();
-    if( bDoesUndo )
+    if (undoGuard.UndoWasEnabled())
     {
         // #i46909# no undo if header or footer changed
         // hat sich an den Nodes etwas veraendert ?
@@ -424,8 +423,6 @@ void SwDoc::ChgPageDesc( USHORT i, const SwPageDesc &rChged )
         }
     }
     SetModified();
-
-    GetIDocumentUndoRedo().DoUndo(bDoesUndo);
 
     // #i46909# no undo if header or footer changed
     if( bHeaderFooterChanged )

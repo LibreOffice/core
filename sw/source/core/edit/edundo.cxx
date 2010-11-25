@@ -54,10 +54,9 @@ BOOL SwEditShell::Undo( SwUndoId nUndoId, USHORT nCnt )
     SET_CURR_SHELL( this );
 
     // #105332# current undo state was not saved
+    ::sw::UndoGuard const undoGuard(GetDoc()->GetIDocumentUndoRedo());
     BOOL bRet = FALSE;
-    bool const bSaveDoesUndo = GetDoc()->GetIDocumentUndoRedo().DoesUndo();
 
-    GetDoc()->GetIDocumentUndoRedo().DoUndo(false);
     StartAllAction();
     {
         // eigentlich muesste ja nur der aktuelle Cursor berarbeitet
@@ -137,8 +136,6 @@ BOOL SwEditShell::Undo( SwUndoId nUndoId, USHORT nCnt )
     }
     EndAllAction();
 
-    // #105332# undo state was not restored but set to FALSE everytime
-    GetDoc()->GetIDocumentUndoRedo().DoUndo(bSaveDoesUndo);
     return bRet;
 }
 
@@ -149,9 +146,8 @@ USHORT SwEditShell::Redo( USHORT nCnt )
     BOOL bRet = FALSE;
 
     // #105332# undo state was not saved
-    bool const bSaveDoesUndo = GetDoc()->GetIDocumentUndoRedo().DoesUndo();
+    ::sw::UndoGuard const undoGuard(GetDoc()->GetIDocumentUndoRedo());
 
-    GetDoc()->GetIDocumentUndoRedo().DoUndo(false);
     StartAllAction();
 
     {
@@ -225,8 +221,6 @@ USHORT SwEditShell::Redo( USHORT nCnt )
 
     EndAllAction();
 
-    // #105332# undo state was not restored but set FALSE everytime
-    GetDoc()->GetIDocumentUndoRedo().DoUndo(bSaveDoesUndo);
     return bRet;
 }
 

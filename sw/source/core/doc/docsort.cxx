@@ -584,16 +584,14 @@ BOOL SwDoc::SortTbl(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
     pTblNd->DelFrms();
     // ? TL_CHART2: ?
 
-    // Redo loeschen bevor Undo
-    bool const bUndo = GetIDocumentUndoRedo().DoesUndo();
     SwUndoSort* pUndoSort = 0;
-    if(bUndo)
+    ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
+    if (undoGuard.UndoWasEnabled())
     {
         pUndoSort = new SwUndoSort( rBoxes[0]->GetSttIdx(),
                                     rBoxes[rBoxes.Count()-1]->GetSttIdx(),
                                    *pTblNd, rOpt, aFlatBox.HasItemSets() );
         GetIDocumentUndoRedo().AppendUndo(pUndoSort);
-        GetIDocumentUndoRedo().DoUndo(false);
     }
 
     // SchluesselElemente einsortieren
@@ -638,8 +636,6 @@ BOOL SwDoc::SortTbl(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
     // Alle Elemente aus dem SortArray loeschen
     aSortList.DeleteAndDestroy( 0, aSortList.Count() );
     SwSortElement::Finit();
-
-    GetIDocumentUndoRedo().DoUndo(bUndo);
 
     SetModified();
     return TRUE;

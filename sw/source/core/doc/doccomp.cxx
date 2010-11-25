@@ -1217,14 +1217,12 @@ BOOL SwCompareLine::ChangesInLine( const SwCompareLine& rLine,
             if( nStt != nSEnd )
             {
                 {
-                    bool const bUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
-                    pDoc->GetIDocumentUndoRedo().DoUndo(false);
+                    ::sw::UndoGuard const ug(pDoc->GetIDocumentUndoRedo());
                     SwPaM aCpyPam( rSrcNd, nStt );
                     aCpyPam.SetMark();
                     aCpyPam.GetPoint()->nContent = nSEnd;
                     aCpyPam.GetDoc()->CopyRange( aCpyPam, *aPam.GetPoint(),
                             false );
-                    pDoc->GetIDocumentUndoRedo().DoUndo(bUndo);
                 }
 
                 SwPaM* pTmp = new SwPaM( *aPam.GetPoint(), rpDelRing );
@@ -1668,8 +1666,7 @@ USHORT _SaveMergeRedlines::InsertRedline()
     if( nsRedlineType_t::REDLINE_INSERT == pDestRedl->GetType() )
     {
         // der Teil wurde eingefuegt, also kopiere ihn aus dem SourceDoc
-        bool const bUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
-        pDoc->GetIDocumentUndoRedo().DoUndo(false);
+        ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
 
         SwNodeIndex aSaveNd( pDestRedl->GetPoint()->nNode, -1 );
         xub_StrLen nSaveCnt = pDestRedl->GetPoint()->nContent.GetIndex();
@@ -1682,7 +1679,6 @@ USHORT _SaveMergeRedlines::InsertRedline()
                 *pDestRedl->GetPoint(), false );
 
         pDoc->SetRedlineMode_intern( eOld );
-        pDoc->GetIDocumentUndoRedo().DoUndo(bUndo);
 
         pDestRedl->SetMark();
         aSaveNd++;

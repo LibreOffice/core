@@ -919,15 +919,13 @@ bool SwDoc::MoveRange( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
         //          in a particular order, and presence of bookmarks
         //          will change this order. Hence, we delete bookmarks
         //          here without undo.
-        bool const bDoesUndo = GetIDocumentUndoRedo().DoesUndo();
-        GetIDocumentUndoRedo().DoUndo(false);
+        ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
         _DelBookmarks(
             pStt->nNode,
             pEnd->nNode,
             NULL,
             &pStt->nContent,
             &pEnd->nContent);
-        GetIDocumentUndoRedo().DoUndo(bDoesUndo);
     }
 
 
@@ -1372,8 +1370,7 @@ void lcl_JoinText( SwPaM& rPam, sal_Bool bJoinPrev )
                 // falls PageBreaks geloescht / gesetzt werden, darf das
                 // nicht in die Undo-History aufgenommen werden !!
                 // (das loeschen vom Node geht auch am Undo vorbei !!!)
-                bool const bDoUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
-                pDoc->GetIDocumentUndoRedo().DoUndo(false);
+                ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
 
                 /* PageBreaks, PageDesc, ColumnBreaks */
                 // Sollte an der Logik zum Kopieren der PageBreak's ...
@@ -1424,8 +1421,6 @@ void lcl_JoinText( SwPaM& rPam, sal_Bool bJoinPrev )
                 // verschiebe noch alle Bookmarks/TOXMarks
                 if( aBkmkArr.Count() )
                     ::_RestoreCntntIdx( pDoc, aBkmkArr, aIdx.GetIndex() );
-
-                pDoc->GetIDocumentUndoRedo().DoUndo(bDoUndo);
 
                 // falls der uebergebene PaM nicht im Crsr-Ring steht,
                 // gesondert behandeln (z.B. Aufruf aus dem Auto-Format)
@@ -1603,15 +1598,13 @@ bool SwDoc::DeleteAndJoinWithRedlineImpl( SwPaM & rPam, const bool )
                             ->CanGrouping( *pUndo );
                     if (bMerged)
                     {
-                        bool const bUndo( GetIDocumentUndoRedo().DoesUndo() );
-                        GetIDocumentUndoRedo().DoUndo(false);
+                        ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
                         SwUndo const*const pDeleted =
                             GetUndoManager().RemoveLastUndo(UNDO_REDLINE);
                         OSL_ENSURE(pDeleted == pUndo,
                             "DeleteAndJoinWithRedlineImpl: "
                             "undo removed is not undo inserted?");
                         delete pDeleted;
-                        GetIDocumentUndoRedo().DoUndo(bUndo);
                     }
                 }
             }

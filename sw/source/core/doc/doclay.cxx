@@ -1232,13 +1232,12 @@ SwFlyFrmFmt* SwDoc::InsertLabel( const SwLabelType eType, const String &rTxt, co
             const String& rCharacterStyle,
             const sal_Bool bCpyBrd )
 {
-    bool const bWasUndo = GetIDocumentUndoRedo().DoesUndo();
+    ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
     SwUndoInsertLabel* pUndo = 0;
-    if( bWasUndo )
+    if (undoGuard.UndoWasEnabled())
     {
         pUndo = new SwUndoInsertLabel( eType, rTxt, rSeparator, rNumberingSeparator,
                                        bBefore, nId, rCharacterStyle, bCpyBrd );
-        GetIDocumentUndoRedo().DoUndo(false);
     }
 
     sal_Bool bTable = sal_False;    //Um etwas Code zu sparen.
@@ -1536,7 +1535,6 @@ SwFlyFrmFmt* SwDoc::InsertLabel( const SwLabelType eType, const String &rTxt, co
     {
         GetIDocumentUndoRedo().DelAllUndoObj();
     }
-    GetIDocumentUndoRedo().DoUndo(bWasUndo);
 
     return pNewFmt;
 }
@@ -1568,15 +1566,14 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
     if( !pOldFmt )
         return 0;
 
-    bool const bWasUndo = GetIDocumentUndoRedo().DoesUndo();
+    ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
     sal_Bool bWasNoDrawUndo = IsNoDrawUndoObj();
     SwUndoInsertLabel* pUndo = 0;
-    if( bWasUndo )
+    if (undoGuard.UndoWasEnabled())
     {
         GetIDocumentUndoRedo().ClearRedo();
         pUndo = new SwUndoInsertLabel(
             LTYPE_DRAW, rTxt, rSeparator, rNumberSeparator, sal_False, nId, rCharacterStyle, sal_False );
-        GetIDocumentUndoRedo().DoUndo(false);
         SetNoDrawUndoObj( sal_True );
     }
 
@@ -1811,7 +1808,6 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
     {
         GetIDocumentUndoRedo().DelAllUndoObj();
     }
-    GetIDocumentUndoRedo().DoUndo(bWasUndo);
 
     return pNewFmt;
 }

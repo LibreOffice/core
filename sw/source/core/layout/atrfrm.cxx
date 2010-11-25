@@ -243,16 +243,10 @@ void DelHFFormat( SwClient *pToRemove, SwFrmFmt *pFmt )
 
             // beim Loeschen von Header/Footer-Formaten IMMER das Undo
             // abschalten! (Bug 31069)
-            bool const bDoesUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
-            pDoc->GetIDocumentUndoRedo().DoUndo(false);
+            ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
 
             ASSERT( pNode, "Ein grosses Problem." );
             pDoc->DeleteSection( pNode );
-
-            if( bDoesUndo )
-            {
-                pDoc->GetIDocumentUndoRedo().DoUndo(true);
-            }
         }
         delete pFmt;
     }

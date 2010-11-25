@@ -275,10 +275,8 @@ SwSection::~SwSection()
         {
             // Bug: 28191 - nicht ins Undo aufnehmen, sollte schon vorher
             //          geschehen sein!!
-            bool const bUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
-            pDoc->GetIDocumentUndoRedo().DoUndo(false);
+            ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
             pDoc->DelSectionFmt( pFmt );    // und loeschen
-            pDoc->GetIDocumentUndoRedo().DoUndo(bUndo);
         }
     }
     if (m_RefObj.Is())

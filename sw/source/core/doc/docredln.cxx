@@ -3156,8 +3156,7 @@ void SwRedline::Show( USHORT nLoop )
         SwDoc* pDoc = GetDoc();
         RedlineMode_t eOld = pDoc->GetRedlineMode();
         pDoc->SetRedlineMode_intern((RedlineMode_t)(eOld | nsRedlineMode_t::REDLINE_IGNORE));
-        bool const bUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
-        pDoc->GetIDocumentUndoRedo().DoUndo(false);
+        ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
 
         switch( GetType() )
         {
@@ -3179,7 +3178,6 @@ void SwRedline::Show( USHORT nLoop )
             break;
         }
         pDoc->SetRedlineMode_intern( eOld );
-        pDoc->GetIDocumentUndoRedo().DoUndo(bUndo);
     }
 }
 
@@ -3188,8 +3186,7 @@ void SwRedline::Hide( USHORT nLoop )
     SwDoc* pDoc = GetDoc();
     RedlineMode_t eOld = pDoc->GetRedlineMode();
     pDoc->SetRedlineMode_intern((RedlineMode_t)(eOld | nsRedlineMode_t::REDLINE_IGNORE));
-    bool const bUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
-    pDoc->GetIDocumentUndoRedo().DoUndo(false);
+    ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
 
     switch( GetType() )
     {
@@ -3218,7 +3215,6 @@ void SwRedline::Hide( USHORT nLoop )
         break;
     }
     pDoc->SetRedlineMode_intern( eOld );
-    pDoc->GetIDocumentUndoRedo().DoUndo(bUndo);
 }
 
 void SwRedline::ShowOriginal( USHORT nLoop )
@@ -3228,8 +3224,7 @@ void SwRedline::ShowOriginal( USHORT nLoop )
     SwRedlineData* pCur;
 
     pDoc->SetRedlineMode_intern((RedlineMode_t)(eOld | nsRedlineMode_t::REDLINE_IGNORE));
-    bool const bUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
-    pDoc->GetIDocumentUndoRedo().DoUndo(false);
+    ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
 
     // bestimme den Type, ist der erste auf Stack
     for( pCur = pRedlineData; pCur->pNext; )
@@ -3262,7 +3257,6 @@ void SwRedline::ShowOriginal( USHORT nLoop )
         break;
     }
     pDoc->SetRedlineMode_intern( eOld );
-    pDoc->GetIDocumentUndoRedo().DoUndo(bUndo);
 }
 
 

@@ -788,9 +788,8 @@ SfxObjectShell* SwDoc::GetPersist() const
 
 void SwDoc::ClearDoc()
 {
-    bool const bOldUndo = GetIDocumentUndoRedo().DoesUndo();
     GetIDocumentUndoRedo().DelAllUndoObj();
-    GetIDocumentUndoRedo().DoUndo(false);
+    ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
 
     // Undo-Benachrichtigung vom Draw abschalten
     if( pDrawModel )
@@ -901,8 +900,6 @@ void SwDoc::ClearDoc()
     pFirstNd->ResetAllAttr();
     // delete now the dummy pagedesc
     DelPageDesc( nDummyPgDsc );
-
-    GetIDocumentUndoRedo().DoUndo(bOldUndo);
 }
 
 void SwDoc::SetPreViewPrtData( const SwPagePreViewPrtData* pNew )

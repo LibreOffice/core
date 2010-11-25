@@ -648,23 +648,18 @@ void SwDoc::UpdateSection(sal_uInt16 const nPos, SwSectionData & rNewData,
 
         if( bOnlyAttrChg )
         {
-            bool const bDoesUndo = GetIDocumentUndoRedo().DoesUndo();
-            if (bDoesUndo)
+            // #i32968# Inserting columns in the section causes MakeFrmFmt
+            // to put two  objects of type SwUndoFrmFmt on the undo stack.
+            // We don't want them.
+            ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
+
+            if (undoGuard.UndoWasEnabled())
             {
                 GetIDocumentUndoRedo().AppendUndo(
                     MakeUndoUpdateSection( *pFmt, true ) );
-                // --> FME 2004-10-13 #i32968#
-                // Inserting columns in the section causes MakeFrmFmt to put two
-                // objects of type SwUndoFrmFmt on the undo stack. We don't want them.
-                GetIDocumentUndoRedo().DoUndo(false);
-                // <--
             }
             pFmt->SetFmtAttr( *pAttr );
             SetModified();
-
-            // --> FME 2004-10-13 #i32968#
-            GetIDocumentUndoRedo().DoUndo( bDoesUndo );
-            // <--
         }
         return;
     }
@@ -689,15 +684,12 @@ void SwDoc::UpdateSection(sal_uInt16 const nPos, SwSectionData & rNewData,
         }
     }
 
-    bool const bDoesUndo = GetIDocumentUndoRedo().DoesUndo();
-    if (bDoesUndo)
+    // #i32968# Inserting columns in the section causes MakeFrmFmt to put two
+    // objects of type SwUndoFrmFmt on the undo stack. We don't want them.
+    ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
+    if (undoGuard.UndoWasEnabled())
     {
         GetIDocumentUndoRedo().AppendUndo(MakeUndoUpdateSection(*pFmt, false));
-        // --> FME 2004-10-13 #i32968#
-        // Inserting columns in the section causes MakeFrmFmt to put two
-        // objects of type SwUndoFrmFmt on the undo stack. We don't want them.
-        GetIDocumentUndoRedo().DoUndo(false);
-        // <--
     }
 
     // #56167# Der LinkFileName koennte auch nur aus Separatoren bestehen
@@ -766,10 +758,6 @@ void SwDoc::UpdateSection(sal_uInt16 const nPos, SwSectionData & rNewData,
     }
 
     SetModified();
-
-    // --> FME 2004-10-13 #i32968#
-    GetIDocumentUndoRedo().DoUndo(bDoesUndo);
-    // <--
 }
 
 /* -----------------19.02.99 09:31-------------------

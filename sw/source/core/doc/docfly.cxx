@@ -395,17 +395,15 @@ BOOL SwDoc::SetFlyFrmAttr( SwFrmFmt& rFlyFmt, SfxItemSet& rSet )
         return FALSE;
 
     ::std::auto_ptr<SwUndoFmtAttrHelper> pSaveUndo;
-    bool const bDoesUndo = GetIDocumentUndoRedo().DoesUndo();
 
-    if (GetIDocumentUndoRedo().DoesUndo())
+    // #i32968# Inserting columns in the frame causes MakeFrmFmt to put two
+    // objects of type SwUndoFrmFmt on the undo stack. We don't want them.
+    ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
+
+    if (undoGuard.UndoWasEnabled())
     {
         GetIDocumentUndoRedo().ClearRedo(); // AppendUndo far below, so leave it
         pSaveUndo.reset( new SwUndoFmtAttrHelper( rFlyFmt ) );
-        // --> FME 2004-10-13 #i32968#
-        // Inserting columns in the frame causes MakeFrmFmt to put two
-        // objects of type SwUndoFrmFmt on the undo stack. We don't want them.
-        GetIDocumentUndoRedo().DoUndo(false);
-        // <--
     }
 
     //Ist das Ankerattribut dabei? Falls ja ueberlassen wir die Verarbeitung
@@ -456,10 +454,6 @@ BOOL SwDoc::SetFlyFrmAttr( SwFrmFmt& rFlyFmt, SfxItemSet& rSet )
 
     if ( pSaveUndo.get() )
     {
-        // --> FME 2004-10-13 #i32968#
-        GetIDocumentUndoRedo().DoUndo(bDoesUndo);
-        // <--
-
         if ( pSaveUndo->GetUndo() )
         {
             GetIDocumentUndoRedo().AppendUndo( pSaveUndo->ReleaseUndo() );

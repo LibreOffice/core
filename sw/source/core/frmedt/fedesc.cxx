@@ -146,11 +146,11 @@ void SwFEShell::ChgPageDesc( USHORT i, const SwPageDesc &rChged )
     SET_CURR_SHELL( this );
     //Fix i64842: because Undo has a very special way to handle header/footer content
     // we have to copy the page descriptor before calling ChgPageDesc.
-    bool const bDoesUndo( GetDoc()->GetIDocumentUndoRedo().DoesUndo() );
     SwPageDesc aDesc( rChged );
-    GetDoc()->GetIDocumentUndoRedo().DoUndo(false);
-    GetDoc()->CopyPageDesc(rChged, aDesc);
-    GetDoc()->GetIDocumentUndoRedo().DoUndo(bDoesUndo);
+    {
+        ::sw::UndoGuard const undoGuard(GetDoc()->GetIDocumentUndoRedo());
+        GetDoc()->CopyPageDesc(rChged, aDesc);
+    }
     GetDoc()->ChgPageDesc( i, aDesc );
     EndAllActionAndCall();
 }

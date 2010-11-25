@@ -1164,23 +1164,20 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId )
     {
         BOOL bIsModified = IsModified();
 
-        bool const bDoesUndo = GetIDocumentUndoRedo().DoesUndo();
-        GetIDocumentUndoRedo().DoUndo(false);
-        switch (nId & (COLL_GET_RANGE_BITS + POOLGRP_NOCOLLID) )
         {
-        case POOLGRP_CHARFMT:
-            pNewFmt = _MakeCharFmt( aNm, pDeriveFmt, FALSE, TRUE );
-
-            break;
-        case POOLGRP_FRAMEFMT:
-            pNewFmt = _MakeFrmFmt(aNm, pDeriveFmt, FALSE, TRUE );
-
-            break;
-        default:
-            break;
+            ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
+            switch (nId & (COLL_GET_RANGE_BITS + POOLGRP_NOCOLLID) )
+            {
+                case POOLGRP_CHARFMT:
+                    pNewFmt = _MakeCharFmt(aNm, pDeriveFmt, FALSE, TRUE);
+                break;
+                case POOLGRP_FRAMEFMT:
+                    pNewFmt = _MakeFrmFmt(aNm, pDeriveFmt, FALSE, TRUE);
+                break;
+                default:
+                break;
+            }
         }
-
-        GetIDocumentUndoRedo().DoUndo(bDoesUndo);
 
         if( !bIsModified )
             ResetModified();
@@ -1486,10 +1483,10 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
     {
         BOOL bIsModified = IsModified();
 
-        bool const bDoesUndo = GetIDocumentUndoRedo().DoesUndo();
-        GetIDocumentUndoRedo().DoUndo(false);
-        n = MakePageDesc( aNm, 0, bRegardLanguage );
-        GetIDocumentUndoRedo().DoUndo(bDoesUndo);
+        {
+            ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
+            n = MakePageDesc( aNm, 0, bRegardLanguage );
+        }
 
         pNewPgDsc = aPageDescs[ n ];
         pNewPgDsc->SetPoolFmtId( nId );

@@ -1801,10 +1801,9 @@ BOOL SwDoc::InsertCol( const SwSelBoxes& rBoxes, USHORT nCnt, BOOL bBehind )
 
     SwTableSortBoxes aTmpLst( 0, 5 );
     SwUndoTblNdsChg* pUndo = 0;
-    bool const bUndo(GetIDocumentUndoRedo().DoesUndo());
-    if (bUndo)
+    ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
+    if (undoGuard.UndoWasEnabled())
     {
-        GetIDocumentUndoRedo().DoUndo(false);
         pUndo = new SwUndoTblNdsChg( UNDO_TABLE_INSCOL, rBoxes, *pTblNd,
                                      0, 0, nCnt, bBehind, FALSE );
         aTmpLst.Insert( &rTbl.GetTabSortBoxes(), 0, rTbl.GetTabSortBoxes().Count() );
@@ -1824,7 +1823,6 @@ BOOL SwDoc::InsertCol( const SwSelBoxes& rBoxes, USHORT nCnt, BOOL bBehind )
 
     if( pUndo )
     {
-        GetIDocumentUndoRedo().DoUndo(bUndo);
         if( bRet )
         {
             pUndo->SaveNewBoxes( *pTblNd, aTmpLst );
@@ -1866,10 +1864,9 @@ BOOL SwDoc::InsertRow( const SwSelBoxes& rBoxes, USHORT nCnt, BOOL bBehind )
 
     SwTableSortBoxes aTmpLst( 0, 5 );
     SwUndoTblNdsChg* pUndo = 0;
-    bool const bUndo(GetIDocumentUndoRedo().DoesUndo());
-    if (bUndo)
+    ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
+    if (undoGuard.UndoWasEnabled())
     {
-        GetIDocumentUndoRedo().DoUndo(false);
         pUndo = new SwUndoTblNdsChg( UNDO_TABLE_INSROW,rBoxes, *pTblNd,
                                      0, 0, nCnt, bBehind, FALSE );
         aTmpLst.Insert( &rTbl.GetTabSortBoxes(), 0, rTbl.GetTabSortBoxes().Count() );
@@ -1889,7 +1886,6 @@ BOOL SwDoc::InsertRow( const SwSelBoxes& rBoxes, USHORT nCnt, BOOL bBehind )
 
     if( pUndo )
     {
-        GetIDocumentUndoRedo().DoUndo(bUndo);
         if( bRet )
         {
             pUndo->SaveNewBoxes( *pTblNd, aTmpLst );
@@ -2211,10 +2207,9 @@ BOOL SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn )
     }
 
     SwUndoTblNdsChg* pUndo = 0;
-    bool const bUndo(GetIDocumentUndoRedo().DoesUndo());
-    if (bUndo)
+    ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
+    if (undoGuard.UndoWasEnabled())
     {
-        GetIDocumentUndoRedo().DoUndo(false);
         pUndo = new SwUndoTblNdsChg( UNDO_TABLE_DELBOX, aSelBoxes, *pTblNd,
                                      nMin, nMax, 0, FALSE, FALSE );
     }
@@ -2240,7 +2235,6 @@ BOOL SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn )
 
     if( pUndo )
     {
-        GetIDocumentUndoRedo().DoUndo(bUndo);
         if( bRet )
         {
             GetIDocumentUndoRedo().AppendUndo( pUndo );
@@ -2275,10 +2269,9 @@ BOOL SwDoc::SplitTbl( const SwSelBoxes& rBoxes, sal_Bool bVert, USHORT nCnt,
     SvULongs aNdsCnts;
     SwTableSortBoxes aTmpLst( 0, 5 );
     SwUndoTblNdsChg* pUndo = 0;
-    bool const bDoUndo = GetIDocumentUndoRedo().DoesUndo();
-    if( bDoUndo )
+    ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
+    if (undoGuard.UndoWasEnabled())
     {
-        GetIDocumentUndoRedo().DoUndo(false);
         pUndo = new SwUndoTblNdsChg( UNDO_TABLE_SPLIT, rBoxes, *pTblNd, 0, 0,
                                      nCnt, bVert, bSameHeight );
 
@@ -2310,7 +2303,6 @@ BOOL SwDoc::SplitTbl( const SwSelBoxes& rBoxes, sal_Bool bVert, USHORT nCnt,
         SetFieldsDirty( true, NULL, 0 );
     }
 
-    GetIDocumentUndoRedo().DoUndo( bDoUndo );
     if( pUndo )
     {
         if( bRet )

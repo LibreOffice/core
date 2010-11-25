@@ -1843,10 +1843,8 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
             if( rNodes.IsDocNodes() )
             {
                 SwDoc* const pInsDoc = pDestNd->GetDoc();
-                bool const bIsUndo(pInsDoc->GetIDocumentUndoRedo().DoesUndo());
-                pInsDoc->GetIDocumentUndoRedo().DoUndo(false);
+                ::sw::UndoGuard const ug(pInsDoc->GetIDocumentUndoRedo());
                 pInsDoc->SplitNode( rPos, false );
-                pInsDoc->GetIDocumentUndoRedo().DoUndo(bIsUndo);
             }
             else
             {
@@ -1874,10 +1872,8 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
         if( bCopyCollFmt )
         {
             SwDoc* const pInsDoc = pDestNd->GetDoc();
-            bool const bIsUndo( pInsDoc->GetIDocumentUndoRedo().DoesUndo() );
-            pInsDoc->GetIDocumentUndoRedo().DoUndo(false);
+            ::sw::UndoGuard const undoGuard(pInsDoc->GetIDocumentUndoRedo());
             pSrcNd->CopyCollFmt( *pDestNd );
-            pInsDoc->GetIDocumentUndoRedo().DoUndo(bIsUndo);
             bCopyCollFmt = FALSE;
         }
 
@@ -1913,11 +1909,8 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
                 if( rNodes.IsDocNodes() )
                 {
                     SwDoc* const pInsDoc = pDestNd->GetDoc();
-                    bool const bIsUndo =
-                        pInsDoc->GetIDocumentUndoRedo().DoesUndo();
-                    pInsDoc->GetIDocumentUndoRedo().DoUndo(false);
+                    ::sw::UndoGuard const ug(pInsDoc->GetIDocumentUndoRedo());
                     pInsDoc->SplitNode( rPos, false );
-                    pInsDoc->GetIDocumentUndoRedo().DoUndo(bIsUndo);
                 }
                 else
                 {
@@ -1969,10 +1962,8 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
             if( bCopyCollFmt )
             {
                 SwDoc* const pInsDoc = pDestNd->GetDoc();
-                bool const bIsUndo(pInsDoc->GetIDocumentUndoRedo().DoesUndo());
-                pInsDoc->GetIDocumentUndoRedo().DoUndo(false);
+                ::sw::UndoGuard const ug(pInsDoc->GetIDocumentUndoRedo());
                 pEndSrcNd->CopyCollFmt( *pDestNd );
-                pInsDoc->GetIDocumentUndoRedo().DoUndo(bIsUndo);
             }
         }
     }

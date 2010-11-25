@@ -2592,8 +2592,7 @@ bool SwDoc::EmbedAllLinks()
     const ::sfx2::SvBaseLinks& rLinks = rLnkMgr.GetLinks();
     if( rLinks.Count() )
     {
-        bool const bDoesUndo = GetIDocumentUndoRedo().DoesUndo();
-        GetIDocumentUndoRedo().DoUndo(false);
+        ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
 
         ::sfx2::SvBaseLink* pLnk = 0;
         while( 0 != (pLnk = lcl_FindNextRemovableLink( rLinks, rLnkMgr ) ) )
@@ -2610,7 +2609,6 @@ bool SwDoc::EmbedAllLinks()
         }
 
         GetIDocumentUndoRedo().DelAllUndoObj();
-        GetIDocumentUndoRedo().DoUndo(bDoesUndo);
         SetModified();
     }
     return bRet;

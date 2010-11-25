@@ -2267,8 +2267,7 @@ void SwDoc::CopyPageDesc( const SwPageDesc& rSrcDesc, SwPageDesc& rDstDesc,
 
 void SwDoc::ReplaceStyles( SwDoc& rSource )
 {
-    bool const bIsUndo = GetIDocumentUndoRedo().DoesUndo();
-    GetIDocumentUndoRedo().DoUndo(false);
+    ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
 
     CopyFmtArr( *rSource.pCharFmtTbl, *pCharFmtTbl,
                 &SwDoc::_MakeCharFmt, *pDfltCharFmt );
@@ -2319,14 +2318,13 @@ void SwDoc::ReplaceStyles( SwDoc& rSource )
         }
     }
 
-    if( bIsUndo )
+    if (undoGuard.UndoWasEnabled())
     {
         // nodes array was modified!
         GetIDocumentUndoRedo().DelAllUndoObj();
     }
 
     SetModified();
-    GetIDocumentUndoRedo().DoUndo(bIsUndo);
 }
 
 SwFmt* SwDoc::FindFmtByName( const SvPtrarr& rFmtArr,

@@ -559,9 +559,8 @@ void lcl_CpyBox( const SwTable& rCpyTbl, const SwTableBox* pCpyBox,
     if( pUndo )
         pUndo->AddBoxBefore( *pDstBox, bDelCntnt );
 
-    bool const bUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
     bool bUndoRedline = pUndo && pDoc->IsRedlineOn();
-    pDoc->GetIDocumentUndoRedo().DoUndo(false);
+    ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
 
     SwNodeIndex aSavePos( aInsIdx, -1 );
     if( pRg.get() )
@@ -686,8 +685,6 @@ void lcl_CpyBox( const SwTable& rCpyTbl, const SwTableBox* pCpyBox,
             }
         }
     }
-
-    pDoc->GetIDocumentUndoRedo().DoUndo(bUndo);
 }
 
 BOOL SwTable::InsNewTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
