@@ -102,7 +102,7 @@ struct IMPL_THistoryItem
         sPassword = sNewPassword ;
     }
 
-    sal_Bool operator==( const OUString& sSearchedURL )
+    sal_Bool operator==( const OUString& sSearchedURL ) const
     {
         return( sURL == sSearchedURL );
     }
