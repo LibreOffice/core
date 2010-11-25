@@ -1742,9 +1742,10 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode& rGrfNode, const Size
             FSEND );
     sal_Int32 anchorOrInline = rGrfNode.GetFlyFmt()->GetAnchor().GetAnchorId() == FLY_AS_CHAR ? XML_inline : XML_anchor;
     m_pSerializer->startElementNS( XML_wp, anchorOrInline,
-            XML_distT, "0", XML_distB, "0", XML_distL, "0", XML_distR, "0",
+            XML_distT, "0", XML_distB, "0", XML_distL, "0", XML_distR, "0", XML_simplePos, "0",
             FSEND );
 
+    m_pSerializer->singleElementNS( XML_wp, XML_simplePos, XML_x, "0", XML_y, "0", FSEND );
     // extent of the image
     OString aWidth( OString::valueOf( TwipsToEMU( rSize.Width() ) ) );
     OString aHeight( OString::valueOf( TwipsToEMU( rSize.Height() ) ) );
