@@ -53,7 +53,7 @@ Image IMG_TYPE_XY
 };
 Image IMG_TYPE_AREA
 {
-    ImageBitmap = Bitmap { File = " " ; };
+    ImageBitmap = Bitmap { File = "typearea_16.png" ; };
     MaskColor = STD_MASKCOLOR;
 };
 Image IMG_TYPE_NET
@@ -113,7 +113,7 @@ Bitmap BMP_BARS_2D_2
 {
     File = "barstack_52x60.png" ;
 };
-Bitmap
+Bitmap BMP_BARS_2D_3
 {
     File = "barpercent_52x60.png" ;
 };
