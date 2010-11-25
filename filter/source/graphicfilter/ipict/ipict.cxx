@@ -165,7 +165,7 @@ private:
     Pattern       eActPenPattern;
     Pattern       eActFillPattern;
     Pattern       eActBackPattern;
-    USHORT        nActPenSize;
+    Size          nActPenSize;
  // Note: Postscript mode is stored by setting eActRop to ROP_1
     RasterOp      eActROP;
     PictDrawingMethod eActMethod;
@@ -220,6 +220,12 @@ private:
     ULONG ReadAndDrawRgn(PictDrawingMethod eMethod);
     ULONG ReadAndDrawSameRgn(PictDrawingMethod eMethod);
 
+        // returns true, if we do not need to print the shape/text/frame
+        bool IsInvisible(PictDrawingMethod eMethod) const {
+      if (eActROP == ROP_1) return true;
+      if (eMethod==PDM_FRAME && (nActPenSize.Width() == 0 || nActPenSize.Height() == 0)) return true;
+      return false;
+    }
     void DrawingMethod(PictDrawingMethod eMethod);
 
     ULONG ReadAndDrawText();
@@ -510,6 +516,8 @@ ULONG PictReader::ReadPixPattern(PictReader::Pattern &pattern)
 ULONG PictReader::ReadAndDrawRect(PictDrawingMethod eMethod)
 {
     ReadRectangle(aLastRect);
+
+    if (IsInvisible(eMethod)) return 8;
     DrawingMethod(eMethod);
     pVirDev->DrawRect(aLastRect);
     return 8;
@@ -517,6 +525,7 @@ ULONG PictReader::ReadAndDrawRect(PictDrawingMethod eMethod)
 
 ULONG PictReader::ReadAndDrawSameRect(PictDrawingMethod eMethod)
 {
+    if (IsInvisible(eMethod)) return 0;
     DrawingMethod(eMethod);
     pVirDev->DrawRect(aLastRect);
     return 0;
@@ -525,6 +534,8 @@ ULONG PictReader::ReadAndDrawSameRect(PictDrawingMethod eMethod)
 ULONG PictReader::ReadAndDrawRoundRect(PictDrawingMethod eMethod)
 {
     ReadRectangle(aLastRoundRect);
+
+    if (IsInvisible(eMethod)) return 8;
     DrawingMethod(eMethod);
     // Osnola: the corner's size is equal to aActOvalSize/2, see Quickdraw Drawing Reference 3-63
     pVirDev->DrawRect(aLastRoundRect,(aActOvalSize.Width()+1)/2,(aActOvalSize.Height()+1)/2);
@@ -533,6 +544,7 @@ ULONG PictReader::ReadAndDrawRoundRect(PictDrawingMethod eMethod)
 
 ULONG PictReader::ReadAndDrawSameRoundRect(PictDrawingMethod eMethod)
 {
+    if (IsInvisible(eMethod)) return 0;
     DrawingMethod(eMethod);
     pVirDev->DrawRect(aLastRoundRect,(aActOvalSize.Width()+1)/2,(aActOvalSize.Height()+1)/2);
     return 0;
@@ -541,6 +553,8 @@ ULONG PictReader::ReadAndDrawSameRoundRect(PictDrawingMethod eMethod)
 ULONG PictReader::ReadAndDrawOval(PictDrawingMethod eMethod)
 {
     ReadRectangle(aLastOval);
+
+    if (IsInvisible(eMethod)) return 8;
     DrawingMethod(eMethod);
     pVirDev->DrawEllipse(aLastOval);
     return 8;
@@ -548,6 +562,7 @@ ULONG PictReader::ReadAndDrawOval(PictDrawingMethod eMethod)
 
 ULONG PictReader::ReadAndDrawSameOval(PictDrawingMethod eMethod)
 {
+    if (IsInvisible(eMethod)) return 0;
     DrawingMethod(eMethod);
     pVirDev->DrawEllipse(aLastOval);
     return 0;
@@ -556,8 +571,9 @@ ULONG PictReader::ReadAndDrawSameOval(PictDrawingMethod eMethod)
 ULONG PictReader::ReadAndDrawPolygon(PictDrawingMethod eMethod)
 {
     ULONG nDataSize;
-
     nDataSize=ReadPolygon(aLastPolygon);
+
+    if (IsInvisible(eMethod)) return nDataSize;
     DrawingMethod(eMethod);
     if (eMethod==PDM_FRAME) pVirDev->DrawPolyLine(aLastPolygon);
     else pVirDev->DrawPolygon(aLastPolygon);
@@ -566,6 +582,7 @@ ULONG PictReader::ReadAndDrawPolygon(PictDrawingMethod eMethod)
 
 ULONG PictReader::ReadAndDrawSamePolygon(PictDrawingMethod eMethod)
 {
+    if (IsInvisible(eMethod)) return 0;
     DrawingMethod(eMethod);
     if (eMethod==PDM_FRAME) pVirDev->DrawPolyLine(aLastPolygon);
     else pVirDev->DrawPolygon(aLastPolygon);
@@ -585,6 +602,9 @@ ULONG PictReader::ReadAndDrawArc(PictDrawingMethod eMethod)
         nstartAngle = nstartAngle + narcAngle;
         narcAngle=-narcAngle;
     }
+
+    if (IsInvisible(eMethod)) return 12;
+    DrawingMethod(eMethod);
     fAng1=((double)nstartAngle)/180.0*3.14159265359;
     fAng2=((double)(nstartAngle+narcAngle))/180.0*3.14159265359;
     aCenter=Point((aLastArcRect.Left()+aLastArcRect.Right())/2,
@@ -593,7 +613,6 @@ ULONG PictReader::ReadAndDrawArc(PictDrawingMethod eMethod)
                    aCenter.Y()+(long)(-cos(fAng2)*256.0));
     aEndPt=  Point(aCenter.X()+(long)( sin(fAng1)*256.0),
                    aCenter.Y()+(long)(-cos(fAng1)*256.0));
-    DrawingMethod(eMethod);
     if (eMethod==PDM_FRAME) pVirDev->DrawArc(aLastArcRect,aStartPt,aEndPt);
     else pVirDev->DrawPie(aLastArcRect,aStartPt,aEndPt);
     return 12;
@@ -610,6 +629,8 @@ ULONG PictReader::ReadAndDrawSameArc(PictDrawingMethod eMethod)
         nstartAngle = nstartAngle + narcAngle;
         narcAngle=-narcAngle;
     }
+    if (IsInvisible(eMethod)) return 4;
+    DrawingMethod(eMethod);
     fAng1=((double)nstartAngle)/180.0*3.14159265359;
     fAng2=((double)(nstartAngle+narcAngle))/180.0*3.14159265359;
     aCenter=Point((aLastArcRect.Left()+aLastArcRect.Right())/2,
@@ -618,7 +639,6 @@ ULONG PictReader::ReadAndDrawSameArc(PictDrawingMethod eMethod)
                    aCenter.Y()+(long)(-cos(fAng2)*256.0));
     aEndPt=  Point(aCenter.X()+(long)( sin(fAng1)*256.0),
                    aCenter.Y()+(long)(-cos(fAng1)*256.0));
-        DrawingMethod(eMethod);
     if (eMethod==PDM_FRAME) pVirDev->DrawArc(aLastArcRect,aStartPt,aEndPt);
     else pVirDev->DrawPie(aLastArcRect,aStartPt,aEndPt);
     return 4;
@@ -628,15 +648,17 @@ ULONG PictReader::ReadAndDrawRgn(PictDrawingMethod eMethod)
 {
     USHORT nSize;
 
-        DrawingMethod(eMethod);
     *pPict >> nSize;
+    if (IsInvisible(eMethod)) return (ULONG)nSize;
+    DrawingMethod(eMethod);
     // ...???...
     return (ULONG)nSize;
 }
 
 ULONG PictReader::ReadAndDrawSameRgn(PictDrawingMethod eMethod)
 {
-        DrawingMethod(eMethod);
+    if (IsInvisible(eMethod)) return 0;
+    DrawingMethod(eMethod);
     // ...???...
     return 0;
 }
@@ -644,26 +666,12 @@ ULONG PictReader::ReadAndDrawSameRgn(PictDrawingMethod eMethod)
 void PictReader::DrawingMethod(PictDrawingMethod eMethod)
 {
     if( eActMethod==eMethod ) return;
-    if (eActROP == ROP_1) {
-      // Osnola: ignore postscript command
-      if (eMethod == PDM_TEXT) {
-        Font invisibleFont;
-        invisibleFont.SetColor(Color(COL_TRANSPARENT));
-        invisibleFont.SetFillColor(Color(COL_TRANSPARENT));
-        invisibleFont.SetTransparent(TRUE);
-        pVirDev->SetFont(invisibleFont);
-      }
-      else {
-        SetLineColor( Color(COL_TRANSPARENT) );
-        SetFillColor( Color(COL_TRANSPARENT) );
-      }
-      pVirDev->SetRasterOp(ROP_OVERPAINT);
-      eActMethod=eMethod;
-      return;
-    }
     switch (eMethod) {
         case PDM_FRAME:
-            SetLineColor( aActForeColor );
+                if (eActPenPattern.isDefault())
+              SetLineColor( aActForeColor );
+            else
+              SetLineColor(eActPenPattern.getColor(aActBackColor, aActForeColor));
             SetFillColor( Color(COL_TRANSPARENT) );
             pVirDev->SetRasterOp(eActROP);
             break;
@@ -715,10 +723,12 @@ ULONG PictReader::ReadAndDrawText()
     sal_uInt32  nLen, nDataLen;
     sal_Char    sText[256];
 
-    DrawingMethod(PDM_TEXT);
     *pPict >> nByteLen; nLen=((ULONG)nByteLen)&0x000000ff;
     nDataLen = nLen + 1;
     pPict->Read( &sText, nLen );
+
+    if (IsInvisible(PDM_TEXT)) return nDataLen;
+    DrawingMethod(PDM_TEXT);
 
     // Stoerende Steuerzeuichen wegnehmen:
     while ( nLen > 0 && ( (unsigned char)sText[ nLen - 1 ] ) < 32 )
@@ -1269,9 +1279,7 @@ ULONG PictReader::ReadData(USHORT nOpcode)
         break;
 
     case 0x0007: { // PnSize
-        Size aSize;
-        aSize=ReadSize();
-        nActPenSize=(USHORT)((aSize.Width()+aSize.Height())/2);
+        nActPenSize=ReadSize();
         eActMethod=PDM_UNDEFINED;
         nDataSize=4;
         break;
@@ -1402,34 +1410,42 @@ ULONG PictReader::ReadData(USHORT nOpcode)
 
     case 0x0020:   // Line
         aPoint=ReadPoint(); aPenPosition=ReadPoint();
+        nDataSize=8;
+
+        if (IsInvisible(PDM_FRAME)) break;
         DrawingMethod(PDM_FRAME);
         pVirDev->DrawLine(aPoint,aPenPosition);
-        nDataSize=8;
         break;
 
     case 0x0021:   // LineFrom
         aPoint=aPenPosition; aPenPosition=ReadPoint();
+        nDataSize=4;
+
+        if (IsInvisible(PDM_FRAME)) break;
         DrawingMethod(PDM_FRAME);
         pVirDev->DrawLine(aPoint,aPenPosition);
-        nDataSize=4;
         break;
 
     case 0x0022:   // ShortLine
         aPoint=ReadPoint();
         aPenPosition=ReadDeltaH(aPoint);
         aPenPosition=ReadDeltaV(aPenPosition);
+        nDataSize=6;
+
+        if (IsInvisible(PDM_FRAME)) break;
         DrawingMethod(PDM_FRAME);
         pVirDev->DrawLine(aPoint,aPenPosition);
-        nDataSize=6;
         break;
 
     case 0x0023:   // ShortLineFrom
         aPoint=aPenPosition;
         aPenPosition=ReadDeltaH(aPoint);
         aPenPosition=ReadDeltaV(aPenPosition);
+        nDataSize=2;
+
+        if (IsInvisible(PDM_FRAME)) break;
         DrawingMethod(PDM_FRAME);
         pVirDev->DrawLine(aPoint,aPenPosition);
-        nDataSize=2;
         break;
 
     case 0x0024:   // Reserved (n Bytes)
@@ -1914,7 +1930,7 @@ void PictReader::ReadPict( SvStream & rStreamPict, GDIMetaFile & rGDIMetaFile )
 
     aActForeColor       = Color(COL_BLACK);
     aActBackColor       = Color(COL_WHITE);
-    nActPenSize         = 1;
+    nActPenSize         = Size(1,1);
     eActROP             = ROP_OVERPAINT;
     eActMethod          = PDM_UNDEFINED;
     aActOvalSize        = Size(1,1);
