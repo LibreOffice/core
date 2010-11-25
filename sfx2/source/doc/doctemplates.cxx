@@ -375,8 +375,8 @@ public:
     void                setHierarchyURL( const OUString& rURL ) { maHierarchyURL = rURL; }
     void                setTargetURL( const OUString& rURL ) { maTargetURL = rURL; }
 
-    sal_Bool            getInUse() { return mbInUse; }
-    sal_Bool            getInHierarchy() { return mbInHierarchy; }
+    sal_Bool            getInUse() const { return mbInUse; }
+    sal_Bool            getInHierarchy() const { return mbInHierarchy; }
     const OUString&     getHierarchyURL() const { return maHierarchyURL; }
     const OUString&     getTargetURL() const { return maTargetURL; }
     const OUString&     getTitle() const { return maTitle; }

@@ -182,6 +182,9 @@ bool ShutdownIcon::LoadModule( osl::Module **pModule,
     return true;
 }
 
+// These two timeouts are necessary to avoid there being
+// plugin frames still on the stack, after unloading that
+// code, causing a crash during disabling / termination.
 class IdleUnloader : Timer
 {
     ::osl::Module *m_pModule;
@@ -195,6 +198,22 @@ public:
     virtual void Timeout()
     {
         delete m_pModule;
+        delete this;
+    }
+};
+
+class IdleTerminate : Timer
+{
+    Reference< XDesktop > m_xDesktop;
+public:
+    IdleTerminate (Reference< XDesktop > xDesktop)
+    {
+        m_xDesktop = xDesktop;
+        Start();
+    }
+    virtual void Timeout()
+    {
+        m_xDesktop->terminate();
         delete this;
     }
 };
@@ -576,11 +595,8 @@ void ShutdownIcon::terminateDesktop()
     if ( xSupplier.is() )
     {
         Reference< XIndexAccess > xTasks ( xSupplier->getFrames(), UNO_QUERY );
-        if( xTasks.is() )
-        {
-            if( xTasks->getCount() < 1 )
-                xDesktop->terminate();
-        }
+        if( xTasks.is() && xTasks->getCount() < 1 )
+            new IdleTerminate( xDesktop );
     }
 
     // remove the instance pointer

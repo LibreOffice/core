@@ -146,7 +146,7 @@ void ImplEncirclementOverlay::SetSecondPosition(const basegfx::B2DPoint& rNewPos
 
 SdrPaintWindow* SdrPaintView::FindPaintWindow(const OutputDevice& rOut) const
 {
-    for(SdrPaintWindowVector::const_iterator a = maPaintWindows.begin(); a != maPaintWindows.end(); a++)
+    for(SdrPaintWindowVector::const_iterator a = maPaintWindows.begin(); a != maPaintWindows.end(); ++a)
     {
         if(&((*a)->GetOutputDevice()) == &rOut)
         {

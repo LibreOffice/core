@@ -29,11 +29,17 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_desktop.hxx"
 
+#include "com/sun/star/uno/XComponentContext.hpp"
+#include "com/sun/star/ucb/XCommandEnvironment.hpp"
+
 #include "dp_script.hrc"
 #include "dp_resource.h"
 #include "dp_xml.h"
 #include "dp_lib_container.h"
+
+#include "rtl/ustring.hxx"
 #include "ucbhelper/content.hxx"
+#include "xmlscript/xmllib_imexp.hxx"
 
 
 using namespace ::dp_misc;

@@ -1518,7 +1518,7 @@ public:
     Reference< io::XInputStream > getInputStreamForSection( sal_Int32 nSize );
 
     void seek( sal_Int32 nPos );
-    sal_Int32 getPosition( void )
+    sal_Int32 getPosition( void ) const
         { return m_nCurPos; }
 
     sal_Int16 readInt16( void );
