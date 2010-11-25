@@ -41,7 +41,6 @@
 #include "svl/inettype.hxx"
 #include "com/sun/star/util/XUpdatable.hpp"
 #include "com/sun/star/script/XLibraryContainer3.hpp"
-#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
 #include <memory>
@@ -62,7 +61,6 @@ namespace {
 typedef ::cppu::ImplInheritanceHelper1<
     ::dp_registry::backend::PackageRegistryBackend, util::XUpdatable > t_helper;
 
-//==============================================================================
 class BackendImpl : public t_helper
 {
     class PackageImpl : public ::dp_registry::backend::Package
@@ -104,11 +102,6 @@ class BackendImpl : public t_helper
     void addDataToDb(OUString const & url);
     void deleteDataFromDb(OUString const & url);
     bool isRegisteredInDb(OUString const & url);
-
-
-
-//     Reference< ucb::XSimpleFileAccess > getFileAccess( void );
-//  Reference< ucb::XSimpleFileAccess > m_xSFA;
 
     const Reference<deployment::XPackageTypeInfo> m_xBasicLibTypeInfo;
     const Reference<deployment::XPackageTypeInfo> m_xDialogLibTypeInfo;
@@ -310,7 +303,7 @@ BackendImpl * BackendImpl::PackageImpl::getMyBackend() const
     }
     return pBackend;
 }
-//______________________________________________________________________________
+
 beans::Optional< beans::Ambiguous<sal_Bool> >
 BackendImpl::PackageImpl::isRegistered_(
     ::osl::ResettableMutexGuard &,
