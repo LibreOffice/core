@@ -360,85 +360,27 @@
 
 -(NSApplicationTerminateReply)applicationShouldTerminate: (NSApplication *) app
 {
-    bool bCallDeInit = false;
     NSApplicationTerminateReply aReply = NSTerminateNow;
     {
         YIELD_GUARD;
         
         SalData* pSalData = GetSalData();
-        #if 0 // currently do some really bad hack
         if( ! pSalData->maFrames.empty() )
         {
-            /* #i92766# something really weird is going on with the retain count of
-            our windows; sometimes we get a duplicate free before exit on one of our
-            NSWindows. The reason is unclear; to avoid this currently we retain them once more
-            
-            FIXME: this is a really bad hack, relying on the system to catch the leaked
-            resources. Find out what really goes on here and fix it !
-            */
-            std::vector< NSWindow* > aHackRetainedWindows;
-            for( std::list< AquaSalFrame* >::iterator it = pSalData->maFrames.begin();
-                it != pSalData->maFrames.end(); ++it )
-            {
-                #if OSL_DEBUG_LEVEL > 1
-                Window* pWin = (*it)->GetWindow();
-                String aTitle = pWin->GetText();
-                Window* pClient = pWin->ImplGetClientWindow();
-                fprintf( stderr, "retaining %p (old count %d) windowtype=%s clienttyp=%s title=%s\n",
-                        (*it)->mpWindow, [(*it)->mpWindow retainCount],
-                        typeid(*pWin).name(), pClient ? typeid(*pClient).name() : "<nil>",
-                        rtl::OUStringToOString( aTitle, RTL_TEXTENCODING_UTF8 ).getStr()
-                        );
-                #endif
-                [(*it)->mpWindow retain];
-                aHackRetainedWindows.push_back( (*it)->mpWindow ); 
-            }
-            if( pSalData->maFrames.front()->CallCallback( SALEVENT_SHUTDOWN, NULL ) )
-            {
-                for( std::vector< NSWindow* >::iterator it = aHackRetainedWindows.begin();
-                    it != aHackRetainedWindows.end(); ++it )
-                {
-                    // clean up the retaing count again from the shutdown workaround
-                    #if OSL_DEBUG_LEVEL > 1
-                    fprintf( stderr, "releasing %p\n", (*it) );
-                    #endif
-                    [(*it) release];
-                }
-                aReply = NSTerminateCancel;
-            }
-            #if OSL_DEBUG_LEVEL > 1
-            for( std::list< AquaSalFrame* >::iterator it = pSalData->maFrames.begin();
-                it != pSalData->maFrames.end(); ++it )
-            {
-                Window* pWin = (*it)->GetWindow();
-                String aTitle = pWin->GetText();
-                Window* pClient = pWin->ImplGetClientWindow();
-                fprintf( stderr, "frame still alive: NSWindow %p windowtype=%s clienttyp=%s title=%s\n",
-                        (*it)->mpWindow, typeid(*pWin).name(), pClient ? typeid(*pClient).name() : "<nil>",
-                        rtl::OUStringToOString( aTitle, RTL_TEXTENCODING_UTF8 ).getStr()
-                        );
-            }
-            #endif
-        }
-        #else // the clean version follows
-        if( ! pSalData->maFrames.empty() )
-            aReply = pSalData->maFrames.front()->CallCallback( SALEVENT_SHUTDOWN, NULL ) ? NSTerminateCancel : NSTerminateNow;
-        #endif
-        
-        if( aReply != NSTerminateNow )
+            // the following QueryExit will likely present a message box, activate application
             [NSApp activateIgnoringOtherApps: YES];
-        else
+            aReply = pSalData->maFrames.front()->CallCallback( SALEVENT_SHUTDOWN, NULL ) ? NSTerminateCancel : NSTerminateNow;
+        }
+        
+        if( aReply == NSTerminateNow )
         {
             ApplicationEvent aEv( String(), ApplicationAddress(), ByteString( "PRIVATE:DOSHUTDOWN" ), String() );
             GetpApp()->AppEvent( aEv );
-            // call DeInitVCL only after our YIELD_GUARD has expired,
-            // else its Mutex will be alredy destroyed when it runs out of scope !
             ImplImageTreeSingletonRef()->shutDown();
-            bCallDeInit = true;
+            // DeInitVCL should be called in ImplSVMain - unless someon _exits first which
+            // can occur in Desktop::doShutdown for example
         }
     }
-    if( bCallDeInit )
-        DeInitVCL();
     
     return aReply;
 }
