@@ -167,6 +167,7 @@ using namespace xmloff::token;
 using ::std::vector;
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
+using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY;
 
 //----------------------------------------------------------------------------
@@ -2231,11 +2232,11 @@ void ScXMLExport::_ExportAutoStyles()
     if (!GetModel().is())
         return;
 
-    uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( GetModel(), uno::UNO_QUERY );
+    Reference <sheet::XSpreadsheetDocument> xSpreadDoc( GetModel(), uno::UNO_QUERY );
     if (!xSpreadDoc.is())
         return;
 
-    uno::Reference<container::XIndexAccess> xIndex( xSpreadDoc->getSheets(), uno::UNO_QUERY );
+    Reference<container::XIndexAccess> xIndex( xSpreadDoc->getSheets(), uno::UNO_QUERY );
     if (!xIndex.is())
         return;
 
@@ -2272,8 +2273,8 @@ void ScXMLExport::_ExportAutoStyles()
                 bool bCopySheet = pDoc->IsStreamValid( static_cast<SCTAB>(nTable) );
                 if (bCopySheet)
                 {
-                    uno::Reference <sheet::XSpreadsheet> xTable(xIndex->getByIndex(nTable), uno::UNO_QUERY);
-                    uno::Reference <beans::XPropertySet> xProperties(
+                    Reference <sheet::XSpreadsheet> xTable(xIndex->getByIndex(nTable), uno::UNO_QUERY);
+                    Reference <beans::XPropertySet> xProperties(
                         xTable->getCellByPosition( aPos.Col(), aPos.Row() ), uno::UNO_QUERY );
 
                     AddStyleFromCells(xProperties, xTable, nTable, &aCellIter->maName);
@@ -2292,9 +2293,9 @@ void ScXMLExport::_ExportAutoStyles()
                 bool bCopySheet = pDoc->IsStreamValid( static_cast<SCTAB>(nTable) );
                 if (bCopySheet)
                 {
-                    uno::Reference<table::XColumnRowRange> xColumnRowRange(xIndex->getByIndex(nTable), uno::UNO_QUERY);
-                    uno::Reference<table::XTableColumns> xTableColumns(xColumnRowRange->getColumns());
-                    uno::Reference<beans::XPropertySet> xColumnProperties(xTableColumns->getByIndex( aPos.Col() ), uno::UNO_QUERY);
+                    Reference<table::XColumnRowRange> xColumnRowRange(xIndex->getByIndex(nTable), uno::UNO_QUERY);
+                    Reference<table::XTableColumns> xTableColumns(xColumnRowRange->getColumns());
+                    Reference<beans::XPropertySet> xColumnProperties(xTableColumns->getByIndex( aPos.Col() ), uno::UNO_QUERY);
 
                     sal_Int32 nIndex(-1);
                     sal_Bool bIsVisible(sal_True);
@@ -2314,9 +2315,9 @@ void ScXMLExport::_ExportAutoStyles()
                 bool bCopySheet = pDoc->IsStreamValid( static_cast<SCTAB>(nTable) );
                 if (bCopySheet)
                 {
-                    uno::Reference<table::XColumnRowRange> xColumnRowRange(xIndex->getByIndex(nTable), uno::UNO_QUERY);
-                    uno::Reference<table::XTableRows> xTableRows(xColumnRowRange->getRows());
-                    uno::Reference<beans::XPropertySet> xRowProperties(xTableRows->getByIndex( aPos.Row() ), uno::UNO_QUERY);
+                    Reference<table::XColumnRowRange> xColumnRowRange(xIndex->getByIndex(nTable), uno::UNO_QUERY);
+                    Reference<table::XTableRows> xTableRows(xColumnRowRange->getRows());
+                    Reference<beans::XPropertySet> xRowProperties(xTableRows->getByIndex( aPos.Row() ), uno::UNO_QUERY);
 
                     sal_Int32 nIndex(-1);
                     AddStyleFromRow( xRowProperties, &aRowIter->maName, nIndex );
@@ -2336,7 +2337,7 @@ void ScXMLExport::_ExportAutoStyles()
                 if (bCopySheet)
                 {
                     //! separate method AddStyleFromTable needed?
-                    uno::Reference<beans::XPropertySet> xTableProperties(xIndex->getByIndex(nTable), uno::UNO_QUERY);
+                    Reference<beans::XPropertySet> xTableProperties(xIndex->getByIndex(nTable), uno::UNO_QUERY);
                     if (xTableProperties.is())
                     {
                         std::vector<XMLPropertyState> xPropStates(xTableStylesExportPropertySetMapper->Filter(xTableProperties));
@@ -2372,7 +2373,7 @@ void ScXMLExport::_ExportAutoStyles()
                     {
                         SdrCaptionObj* pDrawObj = pNote->GetOrCreateCaption( aPos );
                         // all uno shapes are created anyway in CollectSharedData
-                        uno::Reference<beans::XPropertySet> xShapeProperties( pDrawObj->getUnoShape(), uno::UNO_QUERY );
+                        Reference<beans::XPropertySet> xShapeProperties( pDrawObj->getUnoShape(), uno::UNO_QUERY );
                         if (xShapeProperties.is())
                         {
                             if ( aNoteIter->maStyleName.getLength() )
@@ -2417,8 +2418,8 @@ void ScXMLExport::_ExportAutoStyles()
                     if (pNote)
                     {
                         SdrCaptionObj* pDrawObj = pNote->GetOrCreateCaption( aPos );
-                        uno::Reference<container::XEnumerationAccess> xCellText(pDrawObj->getUnoShape(), uno::UNO_QUERY);
-                        uno::Reference<beans::XPropertySet> xParaProp(
+                        Reference<container::XEnumerationAccess> xCellText(pDrawObj->getUnoShape(), uno::UNO_QUERY);
+                        Reference<beans::XPropertySet> xParaProp(
                             lcl_GetEnumerated( xCellText, aNoteParaIter->maSelection.nStartPara ), uno::UNO_QUERY );
                         if ( xParaProp.is() )
                         {
@@ -2452,8 +2453,8 @@ void ScXMLExport::_ExportAutoStyles()
                     if (pNote)
                     {
                         SdrCaptionObj* pDrawObj = pNote->GetOrCreateCaption( aPos );
-                        uno::Reference<text::XSimpleText> xCellText(pDrawObj->getUnoShape(), uno::UNO_QUERY);
-                        uno::Reference<beans::XPropertySet> xCursorProp(xCellText->createTextCursor(), uno::UNO_QUERY);
+                        Reference<text::XSimpleText> xCellText(pDrawObj->getUnoShape(), uno::UNO_QUERY);
+                        Reference<beans::XPropertySet> xCursorProp(xCellText->createTextCursor(), uno::UNO_QUERY);
                         ScDrawTextCursor* pCursor = ScDrawTextCursor::getImplementation( xCursorProp );
                         if (pCursor)
                         {
@@ -2485,9 +2486,9 @@ void ScXMLExport::_ExportAutoStyles()
                     //! separate method AddStyleFromText needed?
                     //! cache sheet object
 
-                    uno::Reference<table::XCellRange> xCellRange(xIndex->getByIndex(nTable), uno::UNO_QUERY);
-                    uno::Reference<text::XSimpleText> xCellText(xCellRange->getCellByPosition(aPos.Col(), aPos.Row()), uno::UNO_QUERY);
-                    uno::Reference<beans::XPropertySet> xCursorProp(xCellText->createTextCursor(), uno::UNO_QUERY);
+                    Reference<table::XCellRange> xCellRange(xIndex->getByIndex(nTable), uno::UNO_QUERY);
+                    Reference<text::XSimpleText> xCellText(xCellRange->getCellByPosition(aPos.Col(), aPos.Row()), uno::UNO_QUERY);
+                    Reference<beans::XPropertySet> xCursorProp(xCellText->createTextCursor(), uno::UNO_QUERY);
                     ScCellTextCursor* pCursor = ScCellTextCursor::getImplementation( xCursorProp );
                     if (pCursor)
                     {
@@ -2521,12 +2522,12 @@ void ScXMLExport::_ExportAutoStyles()
             bool bUseStream = pSheetData && pDoc && pDoc->IsStreamValid((SCTAB)nTable) &&
                               pSheetData->HasStreamPos(nTable) && xSourceStream.is();
 
-            uno::Reference <sheet::XSpreadsheet> xTable(xIndex->getByIndex(nTable), uno::UNO_QUERY);
+            Reference <sheet::XSpreadsheet> xTable(xIndex->getByIndex(nTable), uno::UNO_QUERY);
             if (!xTable.is())
                 continue;
 
             // table styles array must be complete, including copied tables - Add should find the stored style
-            uno::Reference<beans::XPropertySet> xTableProperties(xTable, uno::UNO_QUERY);
+            Reference<beans::XPropertySet> xTableProperties(xTable, uno::UNO_QUERY);
             if (xTableProperties.is())
             {
                 std::vector<XMLPropertyState> xPropStates(xTableStylesExportPropertySetMapper->Filter(xTableProperties));
@@ -2543,20 +2544,20 @@ void ScXMLExport::_ExportAutoStyles()
                 continue;
 
             // collect other auto-styles only for non-copied sheets
-            uno::Reference<sheet::XUniqueCellFormatRangesSupplier> xCellFormatRanges ( xTable, uno::UNO_QUERY );
+            Reference<sheet::XUniqueCellFormatRangesSupplier> xCellFormatRanges ( xTable, uno::UNO_QUERY );
             if ( xCellFormatRanges.is() )
             {
-                uno::Reference<container::XIndexAccess> xFormatRangesIndex(xCellFormatRanges->getUniqueCellFormatRanges());
+                Reference<container::XIndexAccess> xFormatRangesIndex(xCellFormatRanges->getUniqueCellFormatRanges());
                 if (xFormatRangesIndex.is())
                 {
                     sal_Int32 nFormatRangesCount(xFormatRangesIndex->getCount());
                     GetProgressBarHelper()->ChangeReference(GetProgressBarHelper()->GetReference() + nFormatRangesCount);
                     for (sal_Int32 nFormatRange = 0; nFormatRange < nFormatRangesCount; ++nFormatRange)
                     {
-                        uno::Reference< sheet::XSheetCellRanges> xCellRanges(xFormatRangesIndex->getByIndex(nFormatRange), uno::UNO_QUERY);
+                        Reference< sheet::XSheetCellRanges> xCellRanges(xFormatRangesIndex->getByIndex(nFormatRange), uno::UNO_QUERY);
                         if (xCellRanges.is())
                         {
-                            uno::Reference <beans::XPropertySet> xProperties (xCellRanges, uno::UNO_QUERY);
+                            Reference <beans::XPropertySet> xProperties (xCellRanges, uno::UNO_QUERY);
                             if (xProperties.is())
                             {
                                 AddStyleFromCells(xProperties, xTable, nTable, NULL);
@@ -2566,13 +2567,13 @@ void ScXMLExport::_ExportAutoStyles()
                     }
                 }
             }
-            uno::Reference<table::XColumnRowRange> xColumnRowRange (xTable, uno::UNO_QUERY);
+            Reference<table::XColumnRowRange> xColumnRowRange (xTable, uno::UNO_QUERY);
             if (xColumnRowRange.is())
             {
                 if (pDoc)
                 {
                     pDoc->SyncColRowFlags();
-                    uno::Reference<table::XTableColumns> xTableColumns(xColumnRowRange->getColumns());
+                    Reference<table::XTableColumns> xTableColumns(xColumnRowRange->getColumns());
                     if (xTableColumns.is())
                     {
                         sal_Int32 nColumns(pDoc->GetLastChangedCol(sal::static_int_cast<SCTAB>(nTable)));
@@ -2590,7 +2591,7 @@ void ScXMLExport::_ExportAutoStyles()
                         {
                             sal_Int32 nIndex(-1);
                             sal_Bool bIsVisible(sal_True);
-                            uno::Reference <beans::XPropertySet> xColumnProperties(xTableColumns->getByIndex(nColumn), uno::UNO_QUERY);
+                            Reference <beans::XPropertySet> xColumnProperties(xTableColumns->getByIndex(nColumn), uno::UNO_QUERY);
                             if (xColumnProperties.is())
                             {
                                 AddStyleFromColumn( xColumnProperties, NULL, nIndex, bIsVisible );
@@ -2609,7 +2610,7 @@ void ScXMLExport::_ExportAutoStyles()
                                 pColumnStyles->AddFieldStyleName(nTable, i, nIndex, bIsVisible);
                         }
                     }
-                    uno::Reference<table::XTableRows> xTableRows(xColumnRowRange->getRows());
+                    Reference<table::XTableRows> xTableRows(xColumnRowRange->getRows());
                     if (xTableRows.is())
                     {
                         sal_Int32 nRows(pDoc->GetLastChangedRow(sal::static_int_cast<SCTAB>(nTable)));
@@ -2626,7 +2627,7 @@ void ScXMLExport::_ExportAutoStyles()
                         while (nRow <= nRows && nRow <= MAXROW)
                         {
                             sal_Int32 nIndex = 0;
-                            uno::Reference <beans::XPropertySet> xRowProperties(xTableRows->getByIndex(nRow), uno::UNO_QUERY);
+                            Reference <beans::XPropertySet> xRowProperties(xTableRows->getByIndex(nRow), uno::UNO_QUERY);
                             if(xRowProperties.is())
                             {
                                 AddStyleFromRow( xRowProperties, NULL, nIndex );
@@ -2645,25 +2646,25 @@ void ScXMLExport::_ExportAutoStyles()
                     }
                 }
             }
-            uno::Reference<sheet::XCellRangesQuery> xCellRangesQuery (xTable, uno::UNO_QUERY);
+            Reference<sheet::XCellRangesQuery> xCellRangesQuery (xTable, uno::UNO_QUERY);
             if (xCellRangesQuery.is())
             {
-                uno::Reference<sheet::XSheetCellRanges> xSheetCellRanges(xCellRangesQuery->queryContentCells(sheet::CellFlags::FORMATTED));
-                uno::Reference<sheet::XSheetOperation> xSheetOperation(xSheetCellRanges, uno::UNO_QUERY);
+                Reference<sheet::XSheetCellRanges> xSheetCellRanges(xCellRangesQuery->queryContentCells(sheet::CellFlags::FORMATTED));
+                Reference<sheet::XSheetOperation> xSheetOperation(xSheetCellRanges, uno::UNO_QUERY);
                 if (xSheetCellRanges.is() && xSheetOperation.is())
                 {
                     sal_uInt32 nCount(sal_uInt32(xSheetOperation->computeFunction(sheet::GeneralFunction_COUNT)));
-                    uno::Reference<container::XEnumerationAccess> xCellsAccess(xSheetCellRanges->getCells());
+                    Reference<container::XEnumerationAccess> xCellsAccess(xSheetCellRanges->getCells());
                     if (xCellsAccess.is())
                     {
                         GetProgressBarHelper()->ChangeReference(GetProgressBarHelper()->GetReference() + nCount);
-                        uno::Reference<container::XEnumeration> xCells(xCellsAccess->createEnumeration());
+                        Reference<container::XEnumeration> xCells(xCellsAccess->createEnumeration());
                         if (xCells.is())
                         {
                             sal_uInt32 nCount2(0);
                             while (xCells->hasMoreElements())
                             {
-                                uno::Reference<text::XText> xText(xCells->nextElement(), uno::UNO_QUERY);
+                                Reference<text::XText> xText(xCells->nextElement(), uno::UNO_QUERY);
                                 if (xText.is())
                                     GetTextParagraphExport()->collectTextAutoStyles(xText, sal_False, sal_False);
                                 ++nCount2;
