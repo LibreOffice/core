@@ -699,7 +699,6 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
                 if(m_bGraphicalDesign)
                     InvalidateFeature(ID_BROWSER_ADDTABLE);
             }
-            //  InvalidateFeature(ID_BROWSER_QUERY_EXECUTE);
             break;
         case SID_QUERY_VIEW_FUNCTIONS:
         case SID_QUERY_VIEW_TABLES:
@@ -739,15 +738,10 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
             break;
         case ID_QUERY_ZOOM_IN:
             {
-//              m_aZoom *= Fraction(1,10);
-//              static_cast<OQueryViewSwitch*>(getView())->zoomTableView(m_aZoom);
             }
             break;
         case ID_QUERY_ZOOM_OUT:
             {
-//              if(m_aZoom != Fraction(1,1))
-//                  m_aZoom /= Fraction(1,10);
-//              static_cast<OQueryViewSwitch*>(getView())->zoomTableView(m_aZoom);
             }
             break;
 #if OSL_DEBUG_LEVEL > 1
@@ -784,11 +778,10 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
                                 pNodeTmp = pTemp->getChild(1);
                                 OSQLParseNode::compress(pNodeTmp);
                                 pNodeTmp = pTemp->getChild(1);
-                            } // if ( pCondition ) // no where clause
+                            }
                             ::rtl::OUString sTemp;
                             pNode->parseNodeToStr(sTemp,getConnection());
                             getContainer()->setStatement(sTemp);
-
                         }
                     }
 
@@ -1170,7 +1163,7 @@ void SAL_CALL OQueryController::disposing( const EventObject& Source ) throw(Run
     if ( getContainer() && Source.Source.is() )
     {
         if ( Source.Source == m_aCurrentFrame.getFrame() )
-        {   // our frame is beeing disposed -> close the preview window (if we have one)
+        {   // our frame is being disposed -> close the preview window (if we have one)
             Reference< XFrame > xPreviewFrame( getContainer()->getPreviewFrame() );
             ::comphelper::disposeComponent( xPreviewFrame );
         }
@@ -1387,7 +1380,6 @@ sal_Bool OQueryController::askForNewName(const Reference<XNameAccess>& _xElement
         {
             String sName = String( ModuleRes( editingView() ? STR_VIEW_TITLE : STR_QRY_TITLE ) );
             aDefaultName = sName.GetToken(0,' ');
-            //aDefaultName = getPrivateTitle( );
             aDefaultName = ::dbtools::createUniqueName(_xElements,aDefaultName);
         }
 
@@ -1553,7 +1545,7 @@ bool OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
 
                 // now check if our datasource has set a tablefilter and if so, append the new table name to it
                 ::dbaui::appendToFilter( getConnection(), m_sName, getORB(), getView() );
-            } // if ( editingView() )
+            }
             Reference< XTitleChangeListener> xEventListener(impl_getTitleHelper_throw(),UNO_QUERY);
             if ( xEventListener.is() )
             {

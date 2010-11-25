@@ -320,8 +320,6 @@ TTableConnectionData::value_type DlgQryJoin::getConnectionData() const
 // -----------------------------------------------------------------------------
 void DlgQryJoin::setValid(sal_Bool _bValid)
 {
-    //LBChangeHdl(&aLB_JoinType);
-
     aPB_OK.Enable(_bValid || eJoinType == CROSS_JOIN );
 }
 // -----------------------------------------------------------------------------

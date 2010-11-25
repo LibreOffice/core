@@ -832,8 +832,6 @@ void OQueryTableView::GetConnection(OQueryTableConnection* pConn)
     // bei mir und dem Dokument einfuegen
 
     addConnection( pConn );
-    // invalidieren (damit es neu gezeichnet wird)
-    //  pConn->Invalidate();
 }
 
 //------------------------------------------------------------------------
@@ -963,9 +961,6 @@ sal_Bool OQueryTableView::ShowTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUn
             for(;aIter != aEnd;++aIter)
                 addConnection(*aIter); // add all connections from the undo action
 
-            // each connection should invalidated inside addConnection so we don't need this here any longer
-//          if ( !pOwnList->empty() )
-//              InvalidateConnections();
             pTableCon->clear();
 
             // und die Daten des Fensters ebenfalls in Liste (des Docs)

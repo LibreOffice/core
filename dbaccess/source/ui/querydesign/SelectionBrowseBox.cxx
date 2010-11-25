@@ -136,7 +136,6 @@ OSelectionBrowseBox::OSelectionBrowseBox( Window* pParent )
                 |   BROWSER_HEADERBAR_NEW   ;
 
     m_pTextCell     = new Edit(&GetDataWindow(), 0);
-    //  m_pTextCell->EnableSpecialCheck(sal_False);
     m_pVisibleCell  = new CheckBoxControl(&GetDataWindow());
     m_pTableCell    = new ListBoxControl(&GetDataWindow());     m_pTableCell->SetDropDownLineCount( 20 );
     m_pFieldCell    = new ComboBoxControl(&GetDataWindow());    m_pFieldCell->SetDropDownLineCount( 20 );
@@ -152,9 +151,6 @@ OSelectionBrowseBox::OSelectionBrowseBox( Window* pParent )
     //////////////////////////////////////////////////////////////////////
     // TriState der ::com::sun::star::form::CheckBox abschalten
     m_pVisibleCell->GetBox().EnableTriState( sal_False );
-
-//  m_pEmptyEntry = new OTableFieldDesc();
-//  m_pEmptyEntry->SetColWidth(DEFAULT_SIZE);
 
     Font aTitleFont = OutputDevice::GetDefaultFont( DEFAULTFONT_SANS_UNICODE,Window::GetSettings().GetLanguage(),DEFAULTFONT_FLAGS_ONLYONE);
     aTitleFont.SetSize(Size(0, 6));
@@ -217,7 +213,7 @@ void OSelectionBrowseBox::initialize()
             m_aFunctionStrings += String(RTL_CONSTASCII_USTRINGPARAM(";"));
             m_aFunctionStrings += String(ByteString(rContext.getIntlKeywordAscii(eFunctions[i])),RTL_TEXTENCODING_UTF8);
 
-        } // for (sal_Int32 i = 0; i < SAL_N_ELEMENTS(eFunctions) ; ++i)
+        }
         m_aFunctionStrings += String(RTL_CONSTASCII_USTRINGPARAM(";"));
         m_aFunctionStrings += sGroup;
 
@@ -336,7 +332,7 @@ void OSelectionBrowseBox::ColumnMoved( USHORT nColId,BOOL _bCreateUndo )
                 pUndoAct->SetTabFieldDescr(pOldEntry);
 
                 getDesignView()->getController().addUndoActionAndInvalidate(pUndoAct);
-            } // if ( !m_bInUndoMode && _bCreateUndo )
+            }
         }
     }
     else
@@ -367,7 +363,7 @@ void OSelectionBrowseBox::Init()
         const Size aTemp( pControls[i]->GetOptimalSize(WINDOWSIZE_PREFERRED) );
         if ( aTemp.Height() > aHeight.Height() )
             aHeight.Height() = aTemp.Height();
-    } // for(int i= 0; i < SAL_N_ELEMENTS(pControls);++i
+    }
     SetDataRowHeight(aHeight.Height());
     SetTitleLines(1);
     // Anzahl der sichtbaren Zeilen ermitteln
@@ -1194,7 +1190,6 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                             bError = sal_True;
                         }
                     }
-                    //  }
                 }
                 strOldCellContents = pEntry->GetCriteria(nIdx);
                 pEntry->SetCriteria(nIdx, aCrit);
@@ -1798,8 +1793,8 @@ void OSelectionBrowseBox::DuplicateConditionLevel( const sal_uInt16 nLevel)
                 ++m_nVisibleCount;
             }
             m_bVisibleRow[BROW_CRIT1_ROW + nNewLevel] = sal_True;
-        } // if (!pEntry->GetCriteria(nLevel).getLength() )
-    } // for(;aIter != getFields().end();++aIter)
+        }
+    }
 }
 //------------------------------------------------------------------------------
 void OSelectionBrowseBox::AddCondition( const OTableFieldDescRef& rInfo, const String& rValue, const sal_uInt16 nLevel,bool _bAddOrOnOneLine )
@@ -1833,7 +1828,6 @@ void OSelectionBrowseBox::AddCondition( const OTableFieldDescRef& rInfo, const S
                 pEntry->SetGroupBy(sal_False);
             else
             {
-//              pEntry->SetGroupBy(rInfo->IsGroupBy());
                 if(!m_bGroupByUnRelated && pEntry->IsGroupBy())
                     pEntry->SetVisible(sal_True);
             }
@@ -1848,13 +1842,13 @@ void OSelectionBrowseBox::AddCondition( const OTableFieldDescRef& rInfo, const S
                 }
                 m_bVisibleRow[BROW_CRIT1_ROW + nLevel] = sal_True;
                 break;
-            } // if (!pEntry->GetCriteria(nLevel).getLength() )
+            }
             if ( _bAddOrOnOneLine )
             {
                 pLastEntry = pEntry;
             }
         }
-    } // for(;aIter != getFields().end();++aIter)
+    }
     if ( pLastEntry.is() )
     {
         String sCriteria = rValue;
@@ -2339,7 +2333,6 @@ sal_Bool OSelectionBrowseBox::GetFunctionName(sal_uInt32 _nFunctionTokenId,Strin
 String OSelectionBrowseBox::GetCellContents(sal_Int32 nCellIndex, USHORT nColId)
 {
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
-    //  DBG_ASSERT(nCellIndex < (GetRowCount()-1),"CellIndex ist zu gross");
     if ( GetCurColumnId() == nColId && !m_bInUndoMode )
         SaveModified();
 

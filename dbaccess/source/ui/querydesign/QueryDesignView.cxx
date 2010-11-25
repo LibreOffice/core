@@ -481,8 +481,6 @@ namespace
         if ( pEntryConnData->GetJoinType() == INNER_JOIN && !pEntryConnData->isNatural() )
             return;
 
-        //  Reference< XConnection> xConnection = static_cast<OQueryController&>(_pView->getController()).getConnection();
-
         if(!aJoin.getLength())
         {
             OQueryTableWindow* pEntryTabFrom = static_cast<OQueryTableWindow*>(pEntryConn->GetSourceWin());
@@ -580,7 +578,6 @@ namespace
             if ( pLeftTable )
             {
                 OQueryTableWindow*  pLeftWindow = static_cast<OQueryTableView*>(_pView->getTableView())->FindTable( getTableRange(_pView,pLeftTable->getByRule(OSQLParseNode::table_ref) ));
-                // OQueryTableWindow*   pRightWindow = static_cast<OQueryTableView*>(_pView->getTableView())->FindTable( getTableRange(_pView,pRightTable->getByRule(OSQLParseNode::table_ref) ));
                 if ( pLeftWindow == aDragLeft->GetTabWindow() )
                     insertConnection(_pView,_eJoinType,aDragLeft,aDragRight);
                 else
@@ -1549,13 +1546,6 @@ namespace
                                         &rController.getParser().getContext(),
                                         sal_True,
                                         sal_True); // quote is to true because we need quoted elements inside the function
-            // i75557
-            //pFunction->parseNodeToPredicateStr(aColumnName,
-            //                                  xConnection,
-            //                                  rController.getNumberFormatter(),
-            //                                  _pView->getLocale(),
-            //                                  static_cast<sal_Char>(_pView->getDecimalSeparator().toChar()),
-            //                                  &rController.getParser().getContext());
             // don't display the column name
             aCondition = aCondition.copy(aColumnName.getLength());
             aCondition = aCondition.trim();
@@ -2205,11 +2195,6 @@ namespace
                                                             _pView->getLocale(),
                                                             static_cast<sal_Char>(_pView->getDecimalSeparator().toChar()),
                                                             &rController.getParser().getContext());
-                        //pColumnRef->parseNodeToStr(   aColumns,
-                        //                          xConnection,
-                        //                          &rController.getParser().getContext(),
-                        //                          sal_True,
-                        //                          sal_True); // quote is to true because we need quoted elements inside the function
 
                         sal_Int32 nFunctionType = FKT_NONE;
                         ::connectivity::OSQLParseNode* pParamRef = NULL;
@@ -2279,7 +2264,7 @@ namespace
                         eErrorCode = _pView->InsertField(aInfo, sal_True, bFirstField);
                         bFirstField = sal_False;
                     }
-                    else //if(SQL_ISRULE(pColumnRef,num_value_exp)  || SQL_ISRULE(pColumnRef,term))
+                    else
                     {
                         ::rtl::OUString aColumns;
                         pColumnRef->parseNodeToStr( aColumns,
@@ -2839,7 +2824,7 @@ sal_Bool OQueryDesignView::checkStatement()
 {
     sal_Bool bRet = sal_True;
     if ( m_pSelectionBox )
-        bRet = m_pSelectionBox->Save(); // a error occured so we return no
+        bRet = m_pSelectionBox->Save(); // an error occured so we return no
     return bRet;
 }
 //-------------------------------------------------------------------------------
@@ -3029,7 +3014,6 @@ void OQueryDesignView::SaveUIConfig()
 {
     OQueryController& rCtrl = static_cast<OQueryController&>(getController());
     rCtrl.SaveTabWinsPosSize( m_pTableView->GetTabWinMap(), m_pScrollWindow->GetHScrollBar()->GetThumbPos(), m_pScrollWindow->GetVScrollBar()->GetThumbPos() );
-    //  rCtrl.SaveTabFieldsWidth( m_pSelectionBox );
     rCtrl.setVisibleRows( m_pSelectionBox->GetNoneVisibleRows() );
     if ( m_aSplitter.GetSplitPosPixel() != 0 )
         rCtrl.setSplitPos( m_aSplitter.GetSplitPosPixel() );

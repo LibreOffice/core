@@ -95,7 +95,6 @@ void OJoinDesignView::Construct()
 // -----------------------------------------------------------------------------
 void OJoinDesignView::initialize()
 {
-    //  getAddTableDialog()->Update();
 }
 // -------------------------------------------------------------------------
 void OJoinDesignView::resizeDocumentView(Rectangle& _rPlayground)

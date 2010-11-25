@@ -86,12 +86,11 @@ namespace dbaui
             m_xBeamer = NULL;
             if(xCloseable.is())
                 xCloseable->close(sal_False); // false - holds the owner ship of this frame
-            //  m_xBeamer->setComponent(NULL,NULL);
         }
-        {
-            ::std::auto_ptr<Window> aTemp(m_pSplitter);
-            m_pSplitter = NULL;
-        }
+
+        ::std::auto_ptr<Window> aTemp(m_pSplitter);
+        m_pSplitter = NULL;
+
     }
     // -----------------------------------------------------------------------------
     bool OQueryContainerWindow::switchView( ::dbtools::SQLExceptionInfo* _pErrorInfo )

@@ -62,7 +62,6 @@ OQueryTextView::OQueryTextView(OQueryContainerWindow* _pParent)
     m_pEdit->SaveValue();
     m_pEdit->SetPosPixel( Point( 0, 0 ) );
     m_pEdit->Show();
-    //  m_pEdit->GrabFocus();
 }
 // -----------------------------------------------------------------------------
 OQueryTextView::~OQueryTextView()

@@ -120,11 +120,10 @@ sal_Bool OQueryTableWindow::Init()
     sAliasName = String(sAliasName).EraseAllChars('"');
     SetAliasName(sAliasName);
         // SetAliasName reicht das als WinName weiter, dadurch benutzt es die Basisklasse
-    // reset the titel
+    // reset the title
     m_aTitle.SetText( pWinData->GetWinName() );
     m_aTitle.Show();
 
-    //  sal_Bool bSuccess(sal_True);
     if (!bSuccess)
     {   // es soll nur ein Dummy-Window aufgemacht werden ...
         DBG_ASSERT(GetAliasName().getLength(), "OQueryTableWindow::Init : kein Alias- UND kein Tabellenname geht nicht !");
@@ -238,7 +237,5 @@ void OQueryTableWindow::KeyInput( const KeyEvent& rEvt )
     OTableWindow::KeyInput( rEvt );
 }
 // -----------------------------------------------------------------------------
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
