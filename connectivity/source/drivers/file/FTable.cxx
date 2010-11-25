@@ -50,7 +50,7 @@ using namespace ::com::sun::star::container;
 
 DBG_NAME( file_OFileTable )
 OFileTable::OFileTable(sdbcx::OCollection* _pTables,OConnection* _pConnection)
-: OTable_TYPEDEF(_pTables,_pConnection->getMetaData()->storesMixedCaseQuotedIdentifiers())
+: OTable_TYPEDEF(_pTables,_pConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers())
                 ,m_pConnection(_pConnection)
                 ,m_pFileStream(NULL)
                 ,m_nFilePos(0)
@@ -72,7 +72,7 @@ OFileTable::OFileTable( sdbcx::OCollection* _pTables,OConnection* _pConnection,
                     const ::rtl::OUString& _Description ,
                     const ::rtl::OUString& _SchemaName,
                     const ::rtl::OUString& _CatalogName
-                ) : OTable_TYPEDEF(_pTables,_pConnection->getMetaData()->storesMixedCaseQuotedIdentifiers(),
+                ) : OTable_TYPEDEF(_pTables,_pConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers(),
                                   _Name,
                                   _Type,
                                   _Description,

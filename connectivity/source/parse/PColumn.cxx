@@ -153,7 +153,7 @@ OParseColumn* OParseColumn::createColumnForResultSet( const Reference< XResultSe
         _rxResMetaData->getColumnType( _nColumnPos ),
         _rxResMetaData->isAutoIncrement( _nColumnPos ),
         _rxResMetaData->isCurrency( _nColumnPos ),
-        _rxDBMetaData->storesMixedCaseQuotedIdentifiers()
+        _rxDBMetaData->supportsMixedCaseQuotedIdentifiers()
     );
     pColumn->setTableName(  ::dbtools::composeTableName( _rxDBMetaData,
         _rxResMetaData->getCatalogName( _nColumnPos ),

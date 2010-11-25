@@ -75,6 +75,11 @@
             <value>false</value>
           </prop>
         </node>
+        <node oor:name="MaxRowScan" oor:op="replace">
+          <prop oor:name="Value" oor:type="xs:int">
+            <value>100</value>
+          </prop>
+        </node>
       </node>
       <node oor:name="Features">
         <node oor:name="UseSQL92NamingConstraints" oor:op="replace">
