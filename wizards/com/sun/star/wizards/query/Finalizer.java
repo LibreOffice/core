@@ -33,6 +33,7 @@ import com.sun.star.sdb.CommandType;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.wizards.common.HelpIds;
 import com.sun.star.wizards.common.Helper;
+import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.ui.UIConsts;
 import com.sun.star.wizards.ui.UnoDialog;
 import java.util.logging.Level;
