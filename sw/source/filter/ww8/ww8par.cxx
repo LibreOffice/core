@@ -5222,7 +5222,14 @@ ULONG WW8Reader::Read(SwDoc &rDoc, const String& rBaseURL, SwPaM &rPam, const St
         }
         SwWW8ImplReader* pRdr = new SwWW8ImplReader(nVersion, pStg, pIn, rDoc,
             rBaseURL, bNew);
-        nRet = pRdr->LoadDoc( rPam );
+        try
+        {
+            nRet = pRdr->LoadDoc( rPam );
+        }
+        catch( const std::exception& )
+        {
+            nRet = ERR_WW8_NO_WW8_FILE_ERR;
+        }
         delete pRdr;
 
         if( refStrm.Is() )

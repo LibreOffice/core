@@ -897,11 +897,18 @@ void WW8SprmIter::SetSprms(const BYTE* pSprms_, long nLen_)
 
 const BYTE* WW8SprmIter::operator ++( int )
 {
-    if (nRemLen > 0)
+    if (nRemLen > 0 )
     {
-        pSprms += nAktSize;
-        nRemLen -= nAktSize;
-        UpdateMyMembers();
+        if( nRemLen >= nAktSize )
+        {
+            pSprms += nAktSize;
+            nRemLen -= nAktSize;
+            UpdateMyMembers();
+        }
+        else
+        {
+            throw( ::std::exception() );
+        }
     }
     return pSprms;
 }
@@ -3252,6 +3259,8 @@ void WW8PLCFx_Cp_FKP::GetSprms(WW8PLCFxDesc* p)
         Otherwise our cool fastsave algorithm can be brought to bear on the
         problem.
         */
+        if( !pPieceIter )
+            return;
         ULONG nOldPos = pPieceIter->GetIdx();
         bool bOk = pPieceIter->SeekPos(nOrigCp);
         pPieceIter->SetIdx( nOldPos );
