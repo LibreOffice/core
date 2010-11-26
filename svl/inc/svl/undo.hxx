@@ -34,6 +34,8 @@
 
 #include <boost/scoped_ptr.hpp>
 
+#include <vector>
+
 //====================================================================
 
 class SVL_DLLPUBLIC SfxRepeatTarget
@@ -62,8 +64,8 @@ public:
 
     virtual BOOL            Merge( SfxUndoAction *pNextAction );
 
-    virtual UniString           GetComment() const;
-    virtual UniString           GetRepeatComment(SfxRepeatTarget&) const;
+    virtual UniString       GetComment() const;
+    virtual UniString       GetRepeatComment(SfxRepeatTarget&) const;
     virtual USHORT          GetId() const;
 
 private:
@@ -72,11 +74,59 @@ private:
 
 //========================================================================
 
-SV_DECL_PTRARR( SfxUndoActions, SfxUndoAction*, 20, 8 )
+/// is a mark on the Undo stack
+typedef sal_Int32 UndoStackMark;
+#define MARK_INVALID    ::std::numeric_limits< UndoStackMark >::max()
+
+//========================================================================
+
+struct MarkedUndoAction
+{
+    SfxUndoAction*                  pAction;
+    ::std::vector< UndoStackMark >  aMarks;
+
+    MarkedUndoAction( SfxUndoAction* i_action )
+        :pAction( i_action )
+        ,aMarks()
+    {
+    }
+};
+
+class SfxUndoActions
+{
+private:
+    ::std::vector< MarkedUndoAction > m_aActions;
+
+public:
+    SfxUndoActions()
+    {
+    }
+
+    bool    empty() const { return m_aActions.empty(); }
+    size_t  size() const { return m_aActions.size(); }
+
+    const MarkedUndoAction& operator[]( size_t i ) const { return m_aActions[i]; }
+          MarkedUndoAction& operator[]( size_t i )       { return m_aActions[i]; }
+
+    void    Remove( size_t i_pos )
+    {
+        m_aActions.erase( m_aActions.begin() + i_pos );
+    }
+
+    void    Remove( size_t i_pos, size_t i_count )
+    {
+        m_aActions.erase( m_aActions.begin() + i_pos, m_aActions.begin() + i_pos + i_count );
+    }
+
+    void    Insert( SfxUndoAction* i_action, USHORT i_pos )
+    {
+        m_aActions.insert( m_aActions.begin() + i_pos, MarkedUndoAction( i_action ) );
+    }
+};
 
 //====================================================================
 
-/** do not make use of this implementation details, unless you
+/** do not make use of these implementation details, unless you
     really really have to! */
 struct SVL_DLLPUBLIC SfxUndoArray
 {
@@ -92,7 +142,7 @@ struct SVL_DLLPUBLIC SfxUndoArray
 
 //=========================================================================
 
-/** do not make use of this implementation details, unless you
+/** do not make use of these implementation details, unless you
     really really have to! */
 class SVL_DLLPUBLIC SfxListUndoAction : public SfxUndoAction, public SfxUndoArray
 
@@ -128,7 +178,8 @@ class SVL_DLLPUBLIC SfxListUndoAction : public SfxUndoAction, public SfxUndoArra
     private:
 
     USHORT                  nId;
-    UniString                   aComment, aRepeatComment;
+    UniString               aComment;
+    UniString               aRepeatComment;
 
 };
 
@@ -312,6 +363,20 @@ public:
     virtual bool            IsUndoEnabled() const;
     virtual void            AddUndoListener( SfxUndoListener& i_listener );
     virtual void            RemoveUndoListener( SfxUndoListener& i_listener );
+
+    /** marks the current top-level element of the Undo stack, and returns a unique ID for it
+    */
+    UndoStackMark   MarkTopUndoAction();
+
+    /** removes a mark given by its ID.
+
+        After the call, the mark ID is invalid.
+    */
+    void            RemoveMark( UndoStackMark const i_mark );
+
+    /** determines whether the top action on the Undo stack has a given mark
+    */
+    bool            HasTopUndoActionMark( UndoStackMark const i_mark );
 
 private:
     USHORT  ImplLeaveListAction( const bool i_merge, ::svl::undo::impl::UndoManagerGuard& i_guard );
