@@ -917,7 +917,7 @@ uno::Sequence<rtl::OUString> SAL_CALL SalGtkFilePicker::getSelectedFiles() throw
                               ++aListIter
                         )
                         {
-                            if( aListIter->getFilter().indexOf( aStarDot+sExtension ) >= 0 )
+                            if( aListIter->getFilter().equalsIgnoreAsciiCase( aStarDot+sExtension ) )
                             {
                                 if( !aNewFilter.getLength() )
                                     aNewFilter = aListIter->getTitle();
