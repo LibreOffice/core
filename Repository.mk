@@ -29,13 +29,13 @@ $(eval $(call gb_Helper_register_repository,SRCDIR))
 
 
 $(eval $(call gb_Helper_register_executables,NONE, \
+    bmp \
+    bmpsum \
+    g2g \
     mkunroll \
     rscdep \
     so_checksum \
     sspretty \
-    bmp \
-    bmpsum \
-    g2g \
 ))
 
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
@@ -43,13 +43,13 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     basegfx \
     cui \
     drawinglayer \
+    editeng \
     eggtray \
     fwe \
     fwi \
     fwk \
     fwl \
     fwm \
-    editeng \
     lng \
     msfilter \
     msword \
@@ -71,9 +71,9 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     utl \
     vbahelper \
     vcl \
+    xcr \
     xo \
     xof \
-    xcr \
 ))
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
