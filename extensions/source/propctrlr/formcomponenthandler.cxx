@@ -1342,7 +1342,7 @@ namespace pcr
 
                 if ( nPropId == PROPERTY_ID_MAXTEXTLEN )
                     aMinValue.Value = -1;
-                else if ( ( nPropId == PROPERTY_ID_BOUNDCOLUMN ) || ( nPropId == PROPERTY_ID_VISIBLESIZE ) )
+                else if ( nPropId == PROPERTY_ID_VISIBLESIZE )
                     aMinValue.Value = 1;
                 else
                     aMinValue.Value = 0;

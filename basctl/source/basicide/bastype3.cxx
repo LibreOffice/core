@@ -42,14 +42,13 @@
 #include <basdoc.hxx>
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
+#include <deque>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 
 
-SV_DECL_VARARR( EntryArray, SvLBoxEntry*, 4, 4 )
-
-SV_IMPL_VARARR( EntryArray, SvLBoxEntry*);
+typedef std::deque< SvLBoxEntry* > EntryArray;
 
 
 void __EXPORT BasicTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )
@@ -196,7 +195,7 @@ SbxVariable* BasicTreeListBox::FindVariable( SvLBoxEntry* pEntry )
             case 2:
             case 1:
             {
-                aEntries.C40_INSERT( SvLBoxEntry, pEntry, 0 );
+                aEntries.push_front( pEntry );
             }
             break;
             case 0:
@@ -210,14 +209,14 @@ SbxVariable* BasicTreeListBox::FindVariable( SvLBoxEntry* pEntry )
 
     SbxVariable* pVar = 0;
     bool bDocumentObjects = false;
-    if ( aEntries.Count() )
+    if ( !aEntries.empty() )
     {
-        for ( USHORT n = 0; n < aEntries.Count(); n++ )
+        for ( size_t n = 0; n < aEntries.size(); n++ )
         {
             SvLBoxEntry* pLE = aEntries[n];
-            DBG_ASSERT( pLE, "Entrie im Array nicht gefunden" );
+            DBG_ASSERT( pLE, "Can not find entry in array" );
             BasicEntry* pBE = (BasicEntry*)pLE->GetUserData();
-            DBG_ASSERT( pBE, "Keine Daten im Eintrag gefunden!" );
+            DBG_ASSERT( pBE, "The data in the entry not found!" );
             String aName( GetEntryText( pLE ) );
 
             switch ( pBE->GetType() )
@@ -301,7 +300,7 @@ BasicEntryDescriptor BasicTreeListBox::GetEntryDescriptor( SvLBoxEntry* pEntry )
             case 2:
             case 1:
             {
-                aEntries.C40_INSERT( SvLBoxEntry, pEntry, 0 );
+                aEntries.push_front( pEntry );
             }
             break;
             case 0:
@@ -319,9 +318,9 @@ BasicEntryDescriptor BasicTreeListBox::GetEntryDescriptor( SvLBoxEntry* pEntry )
         pEntry = GetParent( pEntry );
     }
 
-    if ( aEntries.Count() )
+    if ( !aEntries.empty() )
     {
-        for ( USHORT n = 0; n < aEntries.Count(); n++ )
+        for ( size_t n = 0; n < aEntries.size(); n++ )
         {
             SvLBoxEntry* pLE = aEntries[n];
             DBG_ASSERT( pLE, "Entrie im Array nicht gefunden" );

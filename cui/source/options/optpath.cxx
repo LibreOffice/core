@@ -253,7 +253,6 @@ SvxPathTabPage::SvxPathTabPage( Window* pParent, const SfxItemSet& rSet ) :
     WinBits nBits = WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP;
     pPathBox = new svx::OptHeaderTabListBox( &aPathCtrl, nBits );
     aPathCtrl.SetFocusControl( pPathBox );
-    pPathBox->SetWindowBits( nBits );
     pPathBox->SetDoubleClickHdl( aLink );
     pPathBox->SetSelectHdl( LINK( this, SvxPathTabPage, PathSelect_Impl ) );
     pPathBox->SetSelectionMode( MULTIPLE_SELECTION );
