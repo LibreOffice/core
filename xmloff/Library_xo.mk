@@ -179,6 +179,7 @@ $(eval $(call gb_Library_add_exception_objects,xo,\
     xmloff/source/forms/officeforms \
     xmloff/source/forms/propertyexport \
     xmloff/source/forms/propertyimport \
+    xmloff/source/forms/property_meta_data \
     xmloff/source/forms/strings \
     xmloff/source/forms/valueproperties \
     xmloff/source/meta/MetaExportComponent \
