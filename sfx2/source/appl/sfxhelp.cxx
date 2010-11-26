@@ -49,6 +49,8 @@
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/system/XSystemShellExecute.hpp>
+#include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <unotools/configmgr.hxx>
 #include <unotools/configitem.hxx>
 #include <svtools/helpopt.hxx>
@@ -84,6 +86,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::system;
 
 #define ERROR_TAG   String( DEFINE_CONST_UNICODE("Error: ") )
 #define PATH_TAG    String( DEFINE_CONST_UNICODE("\nPath: ") )
@@ -742,25 +745,58 @@ SfxHelpWindow_Impl* impl_createHelp(Reference< XFrame >& rHelpTask   ,
     return pHelpWindow;
 }
 
+static bool impl_showOnlineHelp( const String& rURL )
+{
+    String aInternal( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.help:/" ) );
+    if ( rURL.Len() < aInternal.Len() || rURL.Copy( 0, aInternal.Len() ) != aInternal )
+        return false;
+
+    rtl::OUString aHelpLink( RTL_CONSTASCII_USTRINGPARAM( "http://help.libreoffice.org" ) );
+    aHelpLink += rURL.Copy( aInternal.Len() );
+    try
+    {
+        Reference< XSystemShellExecute > xSystemShell(
+                ::comphelper::getProcessServiceFactory()->createInstance(
+                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.system.SystemShellExecute" ) ) ),
+                UNO_QUERY );
+
+        if ( xSystemShell.is() )
+        {
+            xSystemShell->execute( aHelpLink, rtl::OUString(), SystemShellExecuteFlags::DEFAULTS );
+            return true;
+        }
+    }
+    catch( const Exception& )
+    {
+    }
+    return false;
+}
+
 BOOL SfxHelp::Start( const String& rURL, const Window* pWindow )
 {
+    String aHelpURL( rURL );
+    INetURLObject aParser( aHelpURL );
+    INetProtocol nProtocol = aParser.GetProtocol();
+
     // check if help is available
     String aHelpRootURL( DEFINE_CONST_OUSTRING("vnd.sun.star.help://") );
     AppendConfigToken_Impl( aHelpRootURL, sal_True );
     Sequence< ::rtl::OUString > aFactories = SfxContentHelper::GetResultSet( aHelpRootURL );
     if ( 0 == aFactories.getLength() )
     {
-        // no factories -> no help -> error message and return
-        NoHelpErrorBox aErrBox( const_cast< Window* >( pWindow ) );
-        aErrBox.Execute();
-        return FALSE;
+        // no factories -> no help -> try online
+        if ( nProtocol == INET_PROT_VND_SUN_STAR_HELP && impl_showOnlineHelp( rURL ) )
+            return TRUE;
+        else
+        {
+            NoHelpErrorBox aErrBox( const_cast< Window* >( pWindow ) );
+            aErrBox.Execute();
+            return FALSE;
+        }
     }
 
     // check if it's an URL or a jump mark!
-    String          aHelpURL(rURL    );
-    INetURLObject   aParser (aHelpURL);
     ::rtl::OUString sKeyword;
-    INetProtocol nProtocol = aParser.GetProtocol();
     if ( nProtocol != INET_PROT_VND_SUN_STAR_HELP )
     {
         // #i90162 Accept anything that is not invalid as help id, as both
