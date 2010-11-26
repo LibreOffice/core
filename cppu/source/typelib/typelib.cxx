@@ -281,7 +281,7 @@ TypeDescriptor_Init_Impl::~TypeDescriptor_Init_Impl() SAL_THROW( () )
         while( aIt != pCache->end() )
         {
             typelib_typedescription_release( (*aIt) );
-            aIt++;
+            ++aIt;
         }
         delete pCache;
         pCache = 0;
