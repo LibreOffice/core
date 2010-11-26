@@ -308,7 +308,7 @@ void UndoManager::AppendUndo(SwUndo *const pUndo)
         // immer 1/10 loeschen
         //JP 23.09.95: oder wenn neu eingestellt wurde um die Differenz
         //JP 29.5.2001: Task #83891#: remove only the overlapping actions
-        DelUndoObj( m_nUndoActions - nActions );
+        DelUndoObj( sal_uInt16( m_nUndoActions - nActions ) );
     }
     else
     {
@@ -640,7 +640,7 @@ UndoManager::EndUndo(SwUndoId const i_eUndoId, SwRewriter const*const pRewriter)
                 // immer 1/10 loeschen
                 //JP 23.09.95: oder wenn neu eingestellt wurde um die Differenz
                 //JP 29.5.2001: Task #83891#: remove only the overlapping actions
-                DelUndoObj( m_nUndoActions - nActions );
+                DelUndoObj( sal_uInt16( m_nUndoActions - nActions ) );
             }
             else
             {
