@@ -129,7 +129,7 @@
        @returns
        the current PrintData
      */
-    virtual SwPrintData* getPrintData() const = 0;
+    virtual const SwPrintData & getPrintData() const = 0;
 
     /** Sets the PrintData
 

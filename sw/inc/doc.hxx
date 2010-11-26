@@ -770,7 +770,7 @@ public:
     virtual void setReferenceDeviceType(/*[in]*/ bool bNewVirtual,/*[in]*/ bool bNewHiRes );
     virtual const JobSetup* getJobsetup() const;
     virtual void setJobsetup(/*[in]*/ const JobSetup& rJobSetup );
-    virtual SwPrintData* getPrintData() const;
+    virtual const SwPrintData & getPrintData() const;
     virtual void setPrintData(/*[in]*/ const SwPrintData& rPrtData);
 
     /** IDocumentMarkAccess

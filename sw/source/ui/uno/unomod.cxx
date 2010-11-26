@@ -340,13 +340,7 @@ void SwXPrintSettings::_preSetValues ()
         {
             if (!mpDoc)
                 throw IllegalArgumentException ();
-            if ( !mpDoc->getPrintData() )
-            {
-                mpPrtOpt = new SwPrintData;
-                mpDoc->setPrintData ( *mpPrtOpt );
-                delete mpPrtOpt;
-            }
-            mpPrtOpt = mpDoc->getPrintData();
+            mpPrtOpt = const_cast< SwPrintData * >(&mpDoc->getPrintData());
         }
         break;
     }
@@ -502,13 +496,7 @@ void SwXPrintSettings::_preGetValues ()
         {
             if (!mpDoc)
                 throw IllegalArgumentException ();
-            if ( !mpDoc->getPrintData() )
-            {
-                mpPrtOpt = new SwPrintData;
-                mpDoc->setPrintData ( *mpPrtOpt );
-                delete mpPrtOpt;
-            }
-            mpPrtOpt = mpDoc->getPrintData();
+            mpPrtOpt = const_cast< SwPrintData * >(&mpDoc->getPrintData());
         }
         break;
     }

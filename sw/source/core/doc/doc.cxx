@@ -112,15 +112,15 @@
 #include <viewsh.hxx>
 #include <shellres.hxx>
 #include <txtfrm.hxx>
+#include <wdocsh.hxx>           // SwWebDocShell
+#include <prtopt.hxx>           // SwPrintOptions
 
 #include <vector>
 #include <map>
 
 #include <osl/diagnose.h>
 #include <osl/interlck.h>
-#ifdef FUTURE_VBA
 #include <vbahelper/vbaaccesshelper.hxx>
-#endif
 
 /* @@@MAINTAINABILITY-HORROR@@@
    Probably unwanted dependency on SwDocShell
@@ -628,11 +628,23 @@ void SwDoc::setJobsetup(/*[in]*/ const JobSetup &rJobSetup )
         PrtDataChanged();
 }
 
-SwPrintData* SwDoc::getPrintData() const
+const SwPrintData & SwDoc::getPrintData() const
 {
     if(!pPrtData)
-        ((SwDoc*)this)->pPrtData = new SwPrintData;
-    return pPrtData;
+    {
+        SwPrintData *pThisPrtData = const_cast< SwDoc * >(this)->pPrtData;
+        pThisPrtData = new SwPrintData;
+
+        // SwPrintData should be initialized from the configuration,
+        // the respective config item is implememted by SwPrintOptions which
+        // is also derived from SwPrintData
+        const SwDocShell *pDocSh = GetDocShell();
+        DBG_ASSERT( pDocSh, "pDocSh is 0, can't determine if this is a WebDoc or not" );
+        bool bWeb = 0 != dynamic_cast< const SwWebDocShell * >(pDocSh);
+        SwPrintOptions aPrintOptions( bWeb );
+        *pThisPrtData = aPrintOptions;
+    }
+    return *pPrtData;
 }
 
 void SwDoc::setPrintData(/*[in]*/ const SwPrintData& rPrtData )
