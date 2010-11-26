@@ -172,7 +172,7 @@ using ::com::sun::star::uno::UNO_QUERY;
 
 #include <stdio.h>
 #include <string>
-#include <sys/time.h>
+#include <osl/time.h>
 
 namespace {
 
@@ -201,9 +201,8 @@ public:
 private:
     double getTime() const
     {
-        timeval tv;
-        gettimeofday(&tv, NULL);
-        return tv.tv_sec + tv.tv_usec / 1000000.0;
+        TimeValue tv; osl_getSystemTime(&tv);
+        return tv.Seconds + tv.Nanosec / 1000000000.0;
     }
 
     ::std::string msMsg;
