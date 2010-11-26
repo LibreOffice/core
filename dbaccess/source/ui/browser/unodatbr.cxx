@@ -67,6 +67,7 @@
 #include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/form/XGridColumnFactory.hpp>
 #include <com/sun/star/form/XLoadable.hpp>
+#include <com/sun/star/form/XReset.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -735,6 +736,7 @@ sal_Bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::
 
                 ::std::vector< NamedValue > aInitialValues;
                 ::std::vector< ::rtl::OUString > aCopyProperties;
+                Any aDefault;
 
                 switch(nType)
                 {
@@ -751,6 +753,8 @@ sal_Bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::
                             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TriState" ) ),
                             makeAny( sal_Bool( ColumnValue::NO_NULLS != nNullable ) )
                         ) );
+                        if ( ColumnValue::NO_NULLS == nNullable )
+                            aDefault <<= (sal_Int16)STATE_NOCHECK;
                     }
                     break;
 
@@ -792,18 +796,17 @@ sal_Bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::
                 Reference< XPropertySetInfo > xGridColPSI( xGridCol->getPropertySetInfo(), UNO_SET_THROW );
 
                 // calculate the default
-                Any aDefault;
                 if ( xGridColPSI->hasPropertyByName( PROPERTY_CONTROLDEFAULT ) )
-                    aDefault = xColumn->getPropertyValue( PROPERTY_CONTROLDEFAULT );
-
-                // default value
-                if ( nType == DataType::BIT || nType == DataType::BOOLEAN )
                 {
-                    if ( aDefault.hasValue() )
-                        aDefault <<= (comphelper::getString(aDefault).toInt32() == 0) ? (sal_Int16)STATE_NOCHECK : (sal_Int16)STATE_CHECK;
-                    else
-                        aDefault <<= ((sal_Int16)STATE_DONTKNOW);
-
+                    aDefault = xColumn->getPropertyValue( PROPERTY_CONTROLDEFAULT );
+                    // default value
+                    if ( nType == DataType::BIT || nType == DataType::BOOLEAN )
+                    {
+                        if ( aDefault.hasValue() )
+                            aDefault <<= (comphelper::getString(aDefault).toInt32() == 0) ? (sal_Int16)STATE_NOCHECK : (sal_Int16)STATE_CHECK;
+                        else
+                            aDefault <<= ((sal_Int16)STATE_DONTKNOW);
+                    }
                 }
 
                 if ( aDefault.hasValue() )
@@ -2466,6 +2469,14 @@ sal_Bool SbaTableQueryBrowser::implLoadAnything(const ::rtl::OUString& _rDataSou
 
             // initialize the model
             InitializeGridModel(getFormComponent());
+
+            Any aVal = xProp->getPropertyValue(PROPERTY_ISNEW);
+            if (aVal.hasValue() && ::comphelper::getBOOL(aVal))
+            {
+                // then set the default values and the parameters given from the parent
+                Reference< XReset> xReset(xProp, UNO_QUERY);
+                xReset->reset();
+            }
 
             if ( m_bPreview )
                 initializePreviewMode();
