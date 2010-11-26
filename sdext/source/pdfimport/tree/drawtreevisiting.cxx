@@ -98,7 +98,7 @@ void DrawXmlEmitter::visit( HyperlinkElement& elem, const std::list< Element* >:
     while( this_it !=elem.Children.end() && *this_it != &elem )
     {
         (*this_it)->visitedBy( *this, this_it );
-        this_it++;
+        ++this_it;
     }
     m_rEmitContext.rEmitter.endTag( pType );
 }
@@ -149,7 +149,7 @@ void DrawXmlEmitter::visit( TextElement& elem, const std::list< Element* >::cons
     while( this_it !=elem.Children.end() && *this_it != &elem )
     {
         (*this_it)->visitedBy( *this, this_it );
-        this_it++;
+        ++this_it;
     }
 
     m_rEmitContext.rEmitter.endTag( "text:span" );
@@ -171,7 +171,7 @@ void DrawXmlEmitter::visit( ParagraphElement& elem, const std::list< Element* >:
     while( this_it !=elem.Children.end() && *this_it != &elem )
     {
         (*this_it)->visitedBy( *this, this_it );
-        this_it++;
+        ++this_it;
     }
 
     m_rEmitContext.rEmitter.endTag( pTagType );
@@ -256,7 +256,7 @@ void DrawXmlEmitter::visit( FrameElement& elem, const std::list< Element* >::con
     while( this_it !=elem.Children.end() && *this_it != &elem )
     {
         (*this_it)->visitedBy( *this, this_it );
-        this_it++;
+        ++this_it;
     }
 
     if( bTextBox )
@@ -354,7 +354,7 @@ void DrawXmlEmitter::visit( PageElement& elem, const std::list< Element* >::cons
     while( this_it !=elem.Children.end() && *this_it != &elem )
     {
         (*this_it)->visitedBy( *this, this_it );
-        this_it++;
+        ++this_it;
     }
 
     m_rEmitContext.rEmitter.endTag("draw:page");
@@ -370,7 +370,7 @@ void DrawXmlEmitter::visit( DocumentElement& elem, const std::list< Element* >::
     while( this_it !=elem.Children.end() && *this_it != &elem )
     {
         (*this_it)->visitedBy( *this, this_it );
-        this_it++;
+        ++this_it;
     }
 
     m_rEmitContext.rEmitter.endTag( m_bWriteDrawDocument ? "office:drawing" : "office:presentation" );
