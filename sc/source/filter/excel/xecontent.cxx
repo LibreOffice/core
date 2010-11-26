@@ -410,11 +410,19 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
     }
 
     // file link or URL
-    if( eProtocol == INET_PROT_FILE )
+    if( eProtocol == INET_PROT_FILE || eProtocol == INET_PROT_SMB )
     {
         sal_uInt16 nLevel;
         bool bRel;
         String aFileName( BuildFileName( nLevel, bRel, rUrl, rRoot ) );
+
+        if( eProtocol == INET_PROT_SMB )
+        {
+            // #n382718# (and #n261623#) Convert smb notation to '\\'
+            aFileName = aUrlObj.GetMainURL( INetURLObject::NO_DECODE );
+            aFileName = String( aFileName.GetBuffer() + 4 ); // skip the 'smb:' part
+            aFileName.SearchAndReplaceAll( '/', '\\' );
+        }
 
         if( !bRel )
             mnFlags |= EXC_HLINK_ABS;
