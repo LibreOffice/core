@@ -474,7 +474,6 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
             stopTableListening();
             m_xTable = NULL;
         }
-        //  reload(); // a error occured so we have to reload
     }
     return ! (aInfo.isValid() || bError);
 }

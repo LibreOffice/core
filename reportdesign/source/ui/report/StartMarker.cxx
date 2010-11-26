@@ -92,7 +92,7 @@ OStartMarker::~OStartMarker()
     {
         DELETEZ(s_pDefCollapsed);
         DELETEZ(s_pDefExpanded);
-    } // if ( osl_decrementInterlockedCount(&s_nImageRefCount) == 0 )
+    }
 }
 // -----------------------------------------------------------------------------
 sal_Int32 OStartMarker::getMinHeight() const
@@ -105,7 +105,6 @@ sal_Int32 OStartMarker::getMinHeight() const
 void OStartMarker::Paint( const Rectangle& rRect )
 {
     Window::Paint( rRect );
-    //SetUpdateMode(FALSE);
     Size aSize = GetOutputSizePixel();
     long nSize = aSize.Width();
     const long nCornerWidth = long(CORNER_SPACE * (double)GetMapMode().GetScaleX());
@@ -113,10 +112,10 @@ void OStartMarker::Paint( const Rectangle& rRect )
     if ( !isCollapsed() )
     {
         const long nVRulerWidth = m_aVRuler.GetSizePixel().Width();
-        nSize = aSize.Width() - nVRulerWidth/* - m_nCornerSize*/;
+        nSize = aSize.Width() - nVRulerWidth;
         SetClipRegion(Region(PixelToLogic(Rectangle(Point(),Size( nSize,aSize.Height())))));
         aSize.Width() += nCornerWidth;
-    } // if ( !isCollapsed() )
+    }
     else
         SetClipRegion();
 
@@ -209,7 +208,6 @@ void OStartMarker::initDefaultNodeImages()
 // -----------------------------------------------------------------------
 void OStartMarker::ImplInitSettings()
 {
-    // SetBackground( Wallpaper( COL_YELLOW ));
     SetBackground( );
     SetFillColor( Application::GetSettings().GetStyleSettings().GetDialogColor() );
     setColor();
@@ -255,7 +253,6 @@ void OStartMarker::Notify(SfxBroadcaster & rBc, SfxHint const & rHint)
             == SFX_HINT_COLORS_CHANGED))
     {
         setColor();
-        //m_aText.Invalidate();
         Invalidate(INVALIDATE_CHILDREN);
     }
 }
@@ -272,7 +269,6 @@ void OStartMarker::RequestHelp( const HelpEvent& rHEvt )
     {
         // Hilfe anzeigen
         Rectangle aItemRect(rHEvt.GetMousePosPixel(),Size(GetSizePixel().Width(),getMinHeight()));
-        //aItemRect = LogicToPixel( aItemRect );
         Point aPt = OutputToScreenPixel( aItemRect.TopLeft() );
         aItemRect.Left()   = aPt.X();
         aItemRect.Top()    = aPt.Y();

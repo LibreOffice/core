@@ -96,7 +96,6 @@ void DlgEdFunc::ForceScroll( const Point& rPos )
 
     Rectangle aOutRect( pScrollWindow->getThumbPos(), aOut );
     aOutRect = m_pParent->PixelToLogic( aOutRect );
-    //Rectangle aWorkArea = m_pParent->getView()->GetWorkArea();
     Point aGcc3WorkaroundTemporary;
     Rectangle aWorkArea(aGcc3WorkaroundTemporary,pScrollWindow->getTotalSize());
     aWorkArea.Right() -= (long)aStartWidth;
@@ -134,7 +133,6 @@ DlgEdFunc::DlgEdFunc( OReportSection* _pParent )
  m_bUiActive(false),
  m_bShowPropertyBrowser(false)
 {
-    // m_pParent = _pParent;
     aScrollTimer.SetTimeoutHdl( LINK( this, DlgEdFunc, ScrollTimeout ) );
     m_rView.SetActualWin( m_pParent);
     aScrollTimer.SetTimeout( SELENG_AUTOREPEAT_INTERVAL );
@@ -152,14 +150,7 @@ sal_Int32 lcl_setColorOfObject(uno::Reference< uno::XInterface > _xObj, long _nC
     try
     {
         uno::Reference<report::XReportComponent> xComponent(_xObj, uno::UNO_QUERY_THROW);
-        // NOT NEED if UNO_QUERY_THROW:
-        // if (xComponent.is())
-        // {
         uno::Reference< beans::XPropertySet > xProp(xComponent, uno::UNO_QUERY_THROW);
-        // if (xProp.is())
-        // {
-        // ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ControlBackground"))
-        // is PROPERTY_CONTROLBACKGROUND
         uno::Any aAny = xProp->getPropertyValue(PROPERTY_CONTROLBACKGROUND);
         if (aAny.hasValue())
         {
@@ -168,12 +159,9 @@ sal_Int32 lcl_setColorOfObject(uno::Reference< uno::XInterface > _xObj, long _nC
             uno::Any aBlackColorAny = uno::makeAny(_nColorTRGB);
             xProp->setPropertyValue(PROPERTY_CONTROLBACKGROUND, aBlackColorAny);
         }
-        // aCopies.push_back(xComponent->createClone());
     }
     catch(uno::Exception&)
     {
-        // bit my shiny metal as!
-        // OSL_ENSURE(0,"Can't copy report elements!");
     }
     return nBackColor;
 }
@@ -214,7 +202,6 @@ BOOL DlgEdFunc::MouseButtonDown( const MouseEvent& rMEvt )
         else
         {
             SdrHdl* pHdl = m_rView.PickHandle(m_aMDPos);
-            //m_pParent->getSectionWindow()->getViewsWindow()->unmarkAllObjects(m_pView);
 
             // if selected object was hit, drag object
             if ( pHdl!=NULL || m_rView.IsMarkedHit(m_aMDPos) )
@@ -269,8 +256,8 @@ void DlgEdFunc::checkTwoCklicks(const MouseEvent& rMEvt)
                 const SdrMark* pMark = rMarkList.GetMark(0);
                 SdrObject* pObj = pMark->GetMarkedSdrObj();
                 activateOle(pObj);
-            } // if (rMarkList.GetMarkCount() == 1)
-        } // if ( pView->AreObjectsMarked() )
+            }
+        }
     }
 }
 // -----------------------------------------------------------------------------
@@ -319,7 +306,6 @@ sal_Bool DlgEdFunc::handleKeyEvent(const KeyEvent& _rEvent)
                         ((SdrHdlList&)rHdlList).ResetFocusHdl();
                     else
                         m_pParent->getSectionWindow()->getViewsWindow()->unmarkAllObjects(NULL);
-                        //m_rView.UnmarkAll();
 
                     deactivateOle(true);
                     bReturn = FALSE;
@@ -391,7 +377,7 @@ sal_Bool DlgEdFunc::handleKeyEvent(const KeyEvent& _rEvent)
                 {
                     bReturn = TRUE;
                     break;
-                } // if ( !rCode.IsMod1() && !rCode.IsMod2() )
+                }
                 // run through
             default:
             {
@@ -445,8 +431,8 @@ void DlgEdFunc::activateOle(SdrObject* _pObj)
                     }
                 }
             }
-        } // if (nSdrObjKind == OBJ_OLE2)
-    } // if ( _pObj )
+        }
+    }
 }
 // -----------------------------------------------------------------------------
 void DlgEdFunc::deactivateOle(bool _bSelect)
@@ -474,9 +460,9 @@ void DlgEdFunc::deactivateOle(bool _bSelect)
                     SdrPageView* pPV = m_rView.GetSdrPageView();
                     m_rView.MarkObj(pObj, pPV);
                 }
-            } // if ( xObj.is() && xObj->getCurrentState() == embed::EmbedStates::UI_ACTIVE )
+            }
         }
-    } // for(ULONG i = 0 ; i< nCount;++i)
+    }
 }
 // -----------------------------------------------------------------------------
 void DlgEdFunc::colorizeOverlappedObject(SdrObject* _pOverlappedObj)
@@ -584,7 +570,6 @@ bool DlgEdFunc::isOnlyCustomShapeMarked()
     for (sal_uInt32 i =  0; i < rMarkList.GetMarkCount();++i )
     {
         SdrMark* pMark = rMarkList.GetMark(i);
-        // bCheck = dynamic_cast<OUnoObject*>(pMark->GetMarkedSdrObj()) != NULL;
         SdrObject* pObj = pMark->GetMarkedSdrObj();
         if (pObj->GetObjIdentifier() != OBJ_CUSTOMSHAPE)
         {
@@ -609,7 +594,6 @@ bool DlgEdFunc::isRectangleHit(const MouseEvent& rMEvt)
     if ( !bIsSetPoint )
     {
         // no drag rect, we have to check every single select rect
-        //const Rectangle& rRect = m_rView.GetDragStat().GetActionRect();
         const SdrDragStat& rDragStat = m_rView.GetDragStat();
         if (rDragStat.GetDragMethod() != NULL)
         {
@@ -702,9 +686,6 @@ BOOL DlgEdFuncInsert::MouseButtonDown( const MouseEvent& rMEvt )
         nId != OBJ_CUSTOMSHAPE)
     {
         // there is an object under the mouse cursor, but not a customshape
-        // rtl::OUString suWasN = m_rView.getInsertObjString();
-        // rtl::OUString suWasN2 = m_pParent->getSectionWindow()->getViewsWindow()->GetInsertObjString();
-
         m_pParent->getSectionWindow()->getViewsWindow()->BrkAction();
         return FALSE;
     }
@@ -770,7 +751,6 @@ BOOL DlgEdFuncInsert::MouseButtonUp( const MouseEvent& rMEvt )
             for (sal_uInt32 i =  0; i < rMarkList.GetMarkCount();++i )
             {
                 SdrMark* pMark = rMarkList.GetMark(i);
-                // bCheck = dynamic_cast<OUnoObject*>(pMark->GetMarkedSdrObj()) != NULL;
                 OOle2Obj* pObj = dynamic_cast<OOle2Obj*>(pMark->GetMarkedSdrObj());
                 if ( pObj && !pObj->IsEmpty() )
                 {
@@ -791,7 +771,7 @@ BOOL DlgEdFuncInsert::MouseButtonUp( const MouseEvent& rMEvt )
         SdrViewEvent aVEvt;
         m_rView.PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
         m_rView.MarkObj(aVEvt.pRootObj, pPV);
-    } // ift() && !rMEvt.IsMod2() )
+    }
     checkTwoCklicks(rMEvt);
     m_pParent->getSectionWindow()->getViewsWindow()->getView()->getReportView()->UpdatePropertyBrowserDelayed(m_rView);
     return bReturn;
@@ -827,9 +807,6 @@ BOOL DlgEdFuncInsert::MouseMove( const MouseEvent& rMEvt )
         m_pParent->getSectionWindow()->getViewsWindow()->MovAction(aPos,&m_rView, m_rView.GetDragMethod() == NULL, false);
     }
 
-    //if ( isOver(m_rView.GetCreateObj(),*m_pParent->getPage(),*m_pView) )
-    //    m_pParent->SetPointer( Pointer(POINTER_NOTALLOWED));
-    //else
     if ( !bIsSetPoint )
         m_pParent->SetPointer( m_rView.GetPreferedPointer( aPos, m_pParent) );
 
@@ -880,7 +857,6 @@ BOOL DlgEdFuncSelect::MouseButtonDown( const MouseEvent& rMEvt )
     {
         if( !rMEvt.IsShift() )
             m_pParent->getSectionWindow()->getViewsWindow()->unmarkAllObjects(NULL);
-            //m_rView.UnmarkAll();
 
         if ( rMEvt.GetClicks() == 1 )
         {
@@ -948,15 +924,6 @@ BOOL DlgEdFuncSelect::MouseMove( const MouseEvent& rMEvt )
                 {
                     aPnt.Y() = 0;
                 }
-                // grow section if it is under the current section
-//                else
-//                {
-//                    const Size& aSectionSize = m_rView->GetSizePixel();
-//                    if ( aPnt.Y() > aSectionSize.Height() )
-//                    {
-//                        aPnt.Y() = aSectionSize.Height();
-//                    }
-//                }
             }
             // drag or resize an object
             bool bControlKey = rMEvt.IsMod1();
@@ -974,147 +941,6 @@ BOOL DlgEdFuncSelect::MouseMove( const MouseEvent& rMEvt )
 
     return TRUE;
 }
-// -----------------------------------------------------------------------------
-//void DlgEdFuncSelect::SetInEditMode(SdrTextObj* _pTextObj,const MouseEvent& rMEvt, BOOL bQuickDrag)
-//{
-//
-//  SdrPageView* pPV = m_rView.GetSdrPageView();
-//  if( _pTextObj && _pTextObj->GetPage() == pPV->GetPage() )
-//  {
-//      m_rView.SetCurrentObj(OBJ_TEXT);
-//      m_rView.SetEditMode(SDREDITMODE_EDIT);
-//
-//      BOOL bEmptyOutliner = FALSE;
-//
-//      if (!_pTextObj->GetOutlinerParaObject() && m_rView.GetTextEditOutliner())
-//      {
-//          ::SdrOutliner* pOutl = m_rView.GetTextEditOutliner();
-//          ULONG nParaAnz = pOutl->GetParagraphCount();
-//          Paragraph* p1stPara = pOutl->GetParagraph( 0 );
-//
-//          if (nParaAnz==1 && p1stPara)
-//          {
-//              // Bei nur einem Pararaph
-//              if (pOutl->GetText(p1stPara).Len() == 0)
-//              {
-//                  bEmptyOutliner = TRUE;
-//              }
-//          }
-//      }
-//
-//      if (_pTextObj != m_rView.GetTextEditObject() || bEmptyOutliner)
-//      {
-//          UINT32 nInv = _pTextObj->GetObjInventor();
-//          UINT16 nSdrObjKind = _pTextObj->GetObjIdentifier();
-//
-//          if (nInv == SdrInventor && _pTextObj->HasTextEdit() &&
-//              (nSdrObjKind == OBJ_TEXT ||
-//              nSdrObjKind == OBJ_TITLETEXT ||
-//              nSdrObjKind == OBJ_OUTLINETEXT ||
-//              (_pTextObj->ISA(SdrTextObj) && !_pTextObj->IsEmptyPresObj())))
-//          {
-//              // Neuen Outliner machen (gehoert der SdrObjEditView)
-//                SdrModel* pModel = _pTextObj->GetModel();
-//                SdrOutliner* pOutl = SdrMakeOutliner( OUTLINERMODE_OUTLINEOBJECT, pModel );
-//              pOutl->SetMinDepth(0);
-//              pOutl->SetStyleSheetPool((SfxStyleSheetPool*) pModel->GetStyleSheetPool());
-//              //pOutl->SetCalcFieldValueHdl(LINK(SD_MOD(), SdModule, CalcFieldValueHdl));
-//              ULONG nCntrl = pOutl->GetControlWord();
-//              nCntrl |= EE_CNTRL_ALLOWBIGOBJS;
-//              nCntrl |= EE_CNTRL_URLSFXEXECUTE;
-//              nCntrl |= EE_CNTRL_MARKFIELDS;
-//              nCntrl |= EE_CNTRL_AUTOCORRECT;
-//
-//              nCntrl &= ~EE_CNTRL_ULSPACESUMMATION;
-//              //if ( pModel->IsSummationOfParagraphs() )
-//              //    nCntrl |= EE_CNTRL_ULSPACESUMMATION;
-//
-//              //SetSpellOptions( nCntrl );
-//
-//              pOutl->SetControlWord(nCntrl);
-//
-//                uno::Reference< linguistic2::XSpellChecker1 > xSpellChecker( LinguMgr::GetSpellChecker() );
-//              if ( xSpellChecker.is() )
-//                  pOutl->SetSpeller( xSpellChecker );
-//
-//                uno::Reference< linguistic2::XHyphenator > xHyphenator( LinguMgr::GetHyphenator() );
-//              if( xHyphenator.is() )
-//                  pOutl->SetHyphenator( xHyphenator );
-//
-//              pOutl->SetDefaultLanguage( Application::GetSettings().GetLanguage() );
-//
-//              // in einem Gliederungstext darf nicht auf die 0-te
-//              // Ebene ausgerueckt werden
-//              if (_pTextObj->GetObjInventor() == SdrInventor &&
-//                  _pTextObj->GetObjIdentifier() == OBJ_OUTLINETEXT)
-//              {
-//                  pOutl->SetMinDepth(1);
-//              }
-//
-//              if (bEmptyOutliner)
-//              {
-//                  m_rView.SdrEndTextEdit(sal_True);
-//              }
-//
-//              if( _pTextObj )
-//              {
-//                  OutlinerParaObject* pOPO = _pTextObj->GetOutlinerParaObject();
-//                  if( ( pOPO && pOPO->IsVertical() ) /*||
-//                      nSlotId == SID_ATTR_CHAR_VERTICAL ||
-//                      nSlotId == SID_TEXT_FITTOSIZE_VERTICAL */)
-//                      pOutl->SetVertical( TRUE );
-//
-//
-//                  if (m_rView.SdrBeginTextEdit(_pTextObj, pPV, pParent, sal_True, pOutl) && _pTextObj->GetObjInventor() == SdrInventor)
-//                  {
-//                      //bFirstObjCreated = TRUE;
-//                      //DeleteDefaultText();
-//
-//                      OutlinerView* pOLV = m_rView.GetTextEditOutlinerView();
-//
-//                      nSdrObjKind = _pTextObj->GetObjIdentifier();
-//
-//                      SdrViewEvent aVEvt;
-//                      SdrHitKind eHit = m_rView.PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
-//
-//                      if (eHit == SDRHIT_TEXTEDIT)
-//                      {
-//                          // Text getroffen
-//                          if (nSdrObjKind == OBJ_TEXT ||
-//                              nSdrObjKind == OBJ_TITLETEXT ||
-//                              nSdrObjKind == OBJ_OUTLINETEXT ||
-//                              //nSlotId == SID_TEXTEDIT ||
-//                              !bQuickDrag)
-//                          {
-//                              pOLV->MouseButtonDown(rMEvt);
-//                              pOLV->MouseMove(rMEvt);
-//                              pOLV->MouseButtonUp(rMEvt);
-//                          }
-//
-//                          if ( bQuickDrag && _pTextObj->GetOutlinerParaObject())
-//                          {
-//                              pOLV->MouseButtonDown(rMEvt);
-//                          }
-//                      }
-//                      else
-//                      {
-//                          // #98198# Move cursor to end of text
-//                          ESelection aNewSelection(EE_PARA_NOT_FOUND, EE_INDEX_NOT_FOUND, EE_PARA_NOT_FOUND, EE_INDEX_NOT_FOUND);
-//                          pOLV->SetSelection(aNewSelection);
-//                      }
-//                  }
-//                  else
-//                  {
-//                      //RestoreDefaultText();
-//                  }
-//              }
-//          }
-//      }
-//  }
-//  else
-//      _pTextObj = NULL;
-//}
-
 
 //----------------------------------------------------------------------------
 }

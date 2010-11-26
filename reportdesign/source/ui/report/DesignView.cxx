@@ -171,14 +171,11 @@ ODesignView::ODesignView(   Window* pParent,
 
     // now create the task pane on the right side :-)
     m_pTaskPane = new OTaskWindow(this);
-    //m_pTaskPane->Show();
 
     m_aSplitWin.InsertItem( COLSET_ID,100,SPLITWINDOW_APPEND, 0, SWIB_PERCENTSIZE | SWIB_COLSET );
-    m_aSplitWin.InsertItem( REPORT_ID, &m_aScrollWindow, 100/*m_aScrollWindow.getMaxMarkerWidth(sal_False)*/, SPLITWINDOW_APPEND, COLSET_ID, SWIB_PERCENTSIZE  /*SWIB_COLSET*/);
-    //m_aSplitWin.InsertItem( TASKPANE_ID, m_pTaskPane, 50, SPLITWINDOW_APPEND, 0, SWIB_PERCENTSIZE );
+    m_aSplitWin.InsertItem( REPORT_ID, &m_aScrollWindow, 100, SPLITWINDOW_APPEND, COLSET_ID, SWIB_PERCENTSIZE);
 
     // Splitter einrichten
-    //m_aSplitter.SetSplitHdl(LINK(this, ODesignView,SplitHdl));
     m_aSplitWin.SetSplitHdl(LINK(this, ODesignView,SplitHdl));
     m_aSplitWin.ShowAutoHideButton();
     m_aSplitWin.SetAlign(WINDOWALIGN_LEFT);
@@ -249,7 +246,6 @@ long ODesignView::PreNotify( NotifyEvent& rNEvt )
     switch(rNEvt.GetType())
     {
         case EVENT_KEYINPUT:
-            //if ( nRet != 1L )
             {
                 const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
                 if ( handleKeyEvent(*pKeyEvent) )
@@ -291,7 +287,7 @@ void ODesignView::resizeDocumentView(Rectangle& _rPlayground)
                 nSplitPos = static_cast<sal_Int32>(_rPlayground.Right() - nMinWidth);
                 getController().setSplitPos(nSplitPos);
             }
-        } // if ( 0 != _rPlaygroundSize.Width() )
+        }
 
         Size aReportWindowSize(aPlaygroundSize);
         if ( m_aSplitWin.IsItemValid(TASKPANE_ID) )
@@ -530,12 +526,10 @@ void ODesignView::togglePropertyBrowser(sal_Bool _bToogleOn)
         m_pTaskPane->Invalidate();
 
         if ( bWillBeVisible )
-            m_aSplitWin.InsertItem( TASKPANE_ID, m_pTaskPane,START_SIZE_TASKPANE, SPLITWINDOW_APPEND, COLSET_ID, SWIB_PERCENTSIZE/*|SWIB_COLSET */);
+            m_aSplitWin.InsertItem( TASKPANE_ID, m_pTaskPane,START_SIZE_TASKPANE, SPLITWINDOW_APPEND, COLSET_ID, SWIB_PERCENTSIZE);
         else
             m_aSplitWin.RemoveItem(TASKPANE_ID);
 
-        // TRY
-        // Invalidate(/*INVALIDATE_NOCHILDREN|INVALIDATE_NOERASE*/);
         if ( bWillBeVisible )
             m_aMarkTimer.Start();
     }
@@ -619,12 +613,6 @@ uno::Reference< report::XSection > ODesignView::getCurrentSection() const
     if ( m_pCurrentView )
         xSection = m_pCurrentView->getReportSection()->getSection();
 
-    // why do we need the code below?
-    //else
- //   {
- //       OReportController& rReportController = getController();
- //       xSection = rReportController.getReportDefinition()->getDetail();
- //   }
     return xSection;
 }
 // -----------------------------------------------------------------------------

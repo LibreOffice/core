@@ -69,69 +69,6 @@ namespace rptui
     }
 
     //--------------------------------------------------------------------
-    // sal_Int32 FixedTextColor::getTextColor()
-    // {
-    //     const StyleSettings& aStyleSettings = Application::GetSettings().GetStyleSettings();
-    //     BOOL bHighContrast = aStyleSettings.GetHighContrastMode();
-    //
-    //     Color aGetFaceColor = aStyleSettings.GetFaceColor();
-    //     Color aGetCheckedColor = aStyleSettings.GetCheckedColor();
-    //     Color aGetLightColor = aStyleSettings.GetLightColor();
-    //     Color aGetLightBorderColor = aStyleSettings.GetLightBorderColor();
-    //     Color aGetShadowColor = aStyleSettings.GetShadowColor();
-    //     Color aGetDarkShadowColor = aStyleSettings.GetDarkShadowColor();
-    //     Color aGetButtonTextColor = aStyleSettings.GetButtonTextColor();
-    //     Color aGetButtonRolloverTextColor = aStyleSettings.GetButtonRolloverTextColor();
-    //     Color aGetRadioCheckTextColor = aStyleSettings.GetRadioCheckTextColor();
-    //     Color aGetGroupTextColor = aStyleSettings.GetGroupTextColor();
-    //     Color aGetLabelTextColor = aStyleSettings.GetLabelTextColor();
-    //     Color aGetInfoTextColor = aStyleSettings.GetInfoTextColor();
-    //     Color aGetWindowColor = aStyleSettings.GetWindowColor();
-    //     Color aGetWindowTextColor = aStyleSettings.GetWindowTextColor();
-    //     Color aGetDialogColor = aStyleSettings.GetDialogColor();
-    //     Color aGetDialogTextColor = aStyleSettings.GetDialogTextColor();
-    //     Color aGetWorkspaceColor = aStyleSettings.GetWorkspaceColor();
-    //     Color aGetFieldColor = aStyleSettings.GetFieldColor();
-    //     Color aGetFieldTextColor = aStyleSettings.GetFieldTextColor();
-    //     Color aGetFieldRolloverTextColor = aStyleSettings.GetFieldRolloverTextColor();
-    //     Color aGetActiveColor = aStyleSettings.GetActiveColor();
-    //     Color aGetActiveColor2 = aStyleSettings.GetActiveColor2();
-    //     Color aGetActiveTextColor = aStyleSettings.GetActiveTextColor();
-    //     Color aGetActiveBorderColor = aStyleSettings.GetActiveBorderColor();
-    //     Color aGetDeactiveColor = aStyleSettings.GetDeactiveColor();
-    //     Color aGetDeactiveColor2 = aStyleSettings.GetDeactiveColor2();
-    //     Color aGetDeactiveTextColor = aStyleSettings.GetDeactiveTextColor();
-    //     Color aGetDeactiveBorderColor = aStyleSettings.GetDeactiveBorderColor();
-    //     Color aGetHighlightColor = aStyleSettings.GetHighlightColor();
-    //     Color aGetHighlightTextColor = aStyleSettings.GetHighlightTextColor();
-    //     Color aGetDisableColor = aStyleSettings.GetDisableColor();
-    //     Color aGetHelpColor = aStyleSettings.GetHelpColor();
-    //     Color aGetHelpTextColor = aStyleSettings.GetHelpTextColor();
-    //     Color aGetMenuColor = aStyleSettings.GetMenuColor();
-    //     Color aGetMenuBarColor = aStyleSettings.GetMenuBarColor();
-    //     Color aGetMenuBorderColor = aStyleSettings.GetMenuBorderColor();
-    //     Color aGetMenuTextColor = aStyleSettings.GetMenuTextColor();
-    //     Color aGetMenuHighlightColor = aStyleSettings.GetMenuHighlightColor();
-    //     Color aGetMenuHighlightTextColor = aStyleSettings.GetMenuHighlightTextColor();
-    //     Color aGetLinkColor = aStyleSettings.GetLinkColor();
-    //     Color aGetVisitedLinkColor = aStyleSettings.GetVisitedLinkColor();
-    //     Color aGetHighlightLinkColor = aStyleSettings.GetHighlightLinkColor();
-    //     Color aGetMonoColor = aStyleSettings.GetMonoColor();
-    //     Color aGetActiveTabColor = aStyleSettings.GetActiveTabColor();
-    //     Color aGetInactiveTabColor = aStyleSettings.GetInactiveTabColor();
-    //
-    //     Color aWindowColor = aStyleSettings.GetWindowColor();
-    //     Color aLabelColor  = aStyleSettings.GetLabelTextColor();
-    //
-    //     // if (m_nTextColor == -1)
-    //     // {
-    //     //    svtools::ExtendedColorConfig aConfig;
-    //     //    m_nTextColor = aConfig.GetColorValue(CFG_REPORTDESIGNER, DBTEXTBOXBOUNDCONTENT).getColor();
-    //     // }
-    //     return aLabelColor.GetColor();
-    // }
-
-    //--------------------------------------------------------------------
     FixedTextColor::~FixedTextColor()
     {
         DBG_DTOR(rpt_FixedTextColor,NULL);
@@ -140,7 +77,6 @@ namespace rptui
 
     void FixedTextColor::notifyPropertyChange( const beans::PropertyChangeEvent& _rEvent )
     {
-        // (void)_rEvent;
         uno::Reference< report::XFixedText > xFixedText( _rEvent.Source, uno::UNO_QUERY );
         if ( ! xFixedText.is() )
         {
@@ -151,9 +87,6 @@ namespace rptui
         {
             uno::Reference< lang::XComponent > xComponent( xFixedText, uno::UNO_QUERY_THROW );
             handle(xComponent);
-            // uno::Reference<awt::XVclWindowPeer> xVclWindowPeer = getVclWindowPeer(xComponent);
-
-            //     setPropertyTextColor(xVclWindowPeer, getTextColor());
         }
         catch (uno::Exception e)
         {
@@ -176,7 +109,6 @@ namespace rptui
 // -----------------------------------------------------------------------------
     void FixedTextColor::handle( const uno::Reference< uno::XInterface >& _rxElement )
     {
-        // (void) _rxElement;
         uno::Reference< report::XFixedText > xFixedText( _rxElement, uno::UNO_QUERY );
         if ( ! xFixedText.is() )
         {

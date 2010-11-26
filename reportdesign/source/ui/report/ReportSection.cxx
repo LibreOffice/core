@@ -122,7 +122,6 @@ OReportSection::~OReportSection()
 {
     DBG_DTOR( rpt_OReportSection,NULL);
     m_pPage = NULL;
-    //m_pModel->GetUndoEnv().RemoveSection(m_xSection.get());
     if ( m_pMulti.is() )
         m_pMulti->dispose();
 
@@ -136,7 +135,6 @@ OReportSection::~OReportSection()
             m_pView->EndListening( *m_pModel );
         m_pView = NULL;
     }
-    /*m_pModel->DeletePage(m_pPage->GetPageNum());*/
 }
 //------------------------------------------------------------------------------
 void OReportSection::Paint( const Rectangle& rRect )
@@ -247,7 +245,6 @@ void OReportSection::fill()
     m_pView->SetDesignMode( TRUE );
 
     m_pView->StartListening( *m_pModel  );
-    /*Resize();*/
     if ( m_xSection.is() && m_pPage && m_pView )
     {
         uno::Reference<report::XReportDefinition> xReportDefinition = m_xSection->getReportDefinition();
@@ -256,9 +253,7 @@ void OReportSection::fill()
         const sal_Int32 nWorkAreaLeftMargin = getStyleProperty<sal_Int32>(xReportDefinition,PROPERTY_LEFTMARGIN);
         const sal_Int32 nWorkAreaRightMargin = getStyleProperty<sal_Int32>(xReportDefinition,PROPERTY_RIGHTMARGIN);
         m_pView->SetWorkArea( Rectangle( Point( nWorkAreaLeftMargin, 0), Size(aPageSize.Width() - nWorkAreaLeftMargin - nWorkAreaRightMargin,aPageSize.Height()) ) );
-    } // if ( m_xSection.is() && m_pPage && m_pView )
-
-    //SetBackground( Wallpaper( COL_BLUE ));
+    }
 }
 // -----------------------------------------------------------------------------
 void OReportSection::Paste(const uno::Sequence< beans::NamedValue >& _aAllreadyCopiedObjects,bool _bForce)
@@ -309,7 +304,6 @@ void OReportSection::Paste(const uno::Sequence< beans::NamedValue >& _aAllreadyC
                                 {
                                     aRet.Move(0,aRet.getHeight()+1);
                                     pNeuObj->SetLogicRect(aRet);
-                                    //(*pCopiesIter)->setPositionY(aRet.Top());
                                 }
                             }
                             m_pView->AddUndo( m_pView->GetModel()->GetSdrUndoFactory().CreateUndoNewObject( *pNeuObj ) );
@@ -368,9 +362,6 @@ void OReportSection::Copy(uno::Sequence< beans::NamedValue >& _rAllreadyCopiedOb
     if( !m_pView->AreObjectsMarked() || !m_xSection.is() )
         return;
 
-    // stop all drawing actions
-    //m_pView->BrkAction();
-
     // insert control models of marked objects into clipboard dialog model
     const SdrMarkList& rMarkedList = m_pView->GetMarkedObjectList();
     const ULONG nMark = rMarkedList.GetMarkCount();
@@ -403,7 +394,7 @@ void OReportSection::Copy(uno::Sequence< beans::NamedValue >& _rAllreadyCopiedOb
                 OSL_ENSURE(0,"Can't copy report elements!");
             }
         }
-    } // for( ULONG i = 0; i < nMark; i++ )
+    }
 
     if ( !aCopies.empty() )
     {
@@ -496,7 +487,7 @@ void lcl_insertMenuItemImages(
             rContextMenu.CheckItem(nId,rController.isCommandChecked(nId));
             rContextMenu.EnableItem(nId,rController.isCommandEnabled(nId));
         }
-    } // for (USHORT i = 0; i < nCount; ++i)
+    }
 }
 //----------------------------------------------------------------------------
 void OReportSection::Command( const CommandEvent& _rCEvt )
@@ -609,7 +600,7 @@ void OReportSection::_propertyChanged(const beans::PropertyChangeEvent& _rEvent)
                         }
                         pBase->StartListening();
                     }
-                } // for (sal_Int32 i = 0; i < nCount; ++i)
+                }
             }
             catch(uno::Exception)
             {
@@ -634,7 +625,7 @@ void OReportSection::deactivateOle()
 // -----------------------------------------------------------------------------
 void OReportSection::createDefault(const ::rtl::OUString& _sType)
 {
-    SdrObject* pObj = m_pView->GetCreateObj();//rMarkList.GetMark(0)->GetObj();
+    SdrObject* pObj = m_pView->GetCreateObj();
     if ( !pObj )
         return;
     createDefault(_sType,pObj);
@@ -809,8 +800,7 @@ sal_Int8 OReportSection::ExecuteDrop( const ExecuteDropEvent& _rEvt )
         nDropOption = DND_ACTION_COPYMOVE;
         m_pParent->getViewsWindow()->BrkAction();
         m_pParent->getViewsWindow()->unmarkAllObjects(m_pView);
-        //m_pParent->getViewsWindow()->getView()->setMarked(m_pView,sal_True);
-    } // if ( OReportExchange::canExtract(rFlavors) )
+    }
     else if ( bMultipleFormat
         || ::svx::OColumnTransferable::canExtractColumnDescriptor(rFlavors, CTF_FIELD_DESCRIPTOR | CTF_CONTROL_EXCHANGE | CTF_COLUMN_DESCRIPTOR) )
     {
@@ -832,7 +822,7 @@ sal_Int8 OReportSection::ExecuteDrop( const ExecuteDropEvent& _rEvt )
 
             aValues.realloc(1);
             aValues[0].Value <<= aDescriptor.createPropertyValueSequence();
-        } // if ( !bMultipleFormat )
+        }
         else
             aValues = ::svx::OMultiColumnTransferable::extractDescriptor(aDropped);
 

@@ -141,9 +141,6 @@ PropBrw::PropBrw(const Reference< XMultiServiceFactory >&   _xORB,Window* pParen
                 xFactoryProperties->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ) ) ),
                 UNO_QUERY_THROW );
 
-            /*uno::Reference< XComponent> xModel = new OContextHelper(m_xORB,uno::Reference< XComponent>(m_pDesignView->getController().getModel(),uno::UNO_QUERY) );
-            uno::Reference< XComponent> xDialogParentWindow = new OContextHelper(m_xORB,uno::Reference< XComponent>(VCLUnoHelper::GetInterface ( this ),uno::UNO_QUERY) );
-            uno::Reference< XComponent> xConnection = new OContextHelper(m_xORB,uno::Reference< XComponent>(m_pDesignView->getController().getConnection(),uno::UNO_QUERY) );*/
             // a ComponentContext for the
             ::cppu::ContextEntry_Init aHandlerContextInfo[] =
             {
@@ -351,8 +348,6 @@ void PropBrw::implSetNewObject( const uno::Sequence< Reference<uno::XInterface> 
         {
             OSL_ENSURE( sal_False, "FmPropBrw::StateChanged: caught an exception while setting the initial page!" );
         }
-
-        //Resize();
     }
     SetText( GetHeadlineName(_aObjects) );
 }
@@ -582,7 +577,7 @@ void PropBrw::Update( const uno::Reference< uno::XInterface>& _xReportComponent)
             {
                 EndListening( *(m_pView->GetModel()) );
                 m_pView = NULL;
-            } // if ( m_pView )
+            }
 
             uno::Reference< uno::XInterface> xTemp(CreateComponentPair(_xReportComponent,_xReportComponent));
             implSetNewObject( uno::Sequence< uno::Reference< uno::XInterface> >(&xTemp,1) );
