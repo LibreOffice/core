@@ -47,16 +47,11 @@ $(eval $(call gb_SrsTarget_set_include,sfx/res,\
 
 $(eval $(call gb_SrsTarget_add_files,sfx/res,\
     sfx2/source/appl/app.src \
-    sfx2/source/appl/newhelp.src \
     sfx2/source/appl/dde.src \
+    sfx2/source/appl/newhelp.src \
     sfx2/source/appl/sfx.src \
-    sfx2/source/doc/doc.src \
-    sfx2/source/doc/new.src \
-    sfx2/source/doc/doctdlg.src \
-    sfx2/source/doc/doctempl.src \
-    sfx2/source/doc/graphhelp.src \
-    sfx2/source/menu/menu.src \
-    sfx2/source/view/view.src \
+    sfx2/source/bastyp/bastyp.src \
+    sfx2/source/bastyp/fltfnc.src \
     sfx2/source/dialog/alienwarn.src \
     sfx2/source/dialog/dialog.src \
     sfx2/source/dialog/dinfdlg.src \
@@ -71,8 +66,13 @@ $(eval $(call gb_SrsTarget_add_files,sfx/res,\
     sfx2/source/dialog/srchdlg.src \
     sfx2/source/dialog/templdlg.src \
     sfx2/source/dialog/versdlg.src \
-    sfx2/source/bastyp/bastyp.src \
-    sfx2/source/bastyp/fltfnc.src \
+    sfx2/source/doc/doc.src \
+    sfx2/source/doc/doctdlg.src \
+    sfx2/source/doc/doctempl.src \
+    sfx2/source/doc/graphhelp.src \
+    sfx2/source/doc/new.src \
+    sfx2/source/menu/menu.src \
+    sfx2/source/view/view.src \
 ))
 
 

@@ -58,7 +58,6 @@ $(eval $(call gb_Library_add_linked_libs,qstart_gtk,\
     comphelper \
     cppu \
     cppuhelper \
-    eggtray \
     fwe \
     i18nisolang1 \
     sal \
@@ -75,12 +74,13 @@ $(eval $(call gb_Library_add_linked_libs,qstart_gtk,\
     vcl \
     vos3 \
     xml2 \
+    eggtray \
     sfx \
 ))
 
 $(eval $(call gb_Library_add_linked_system_libs,qstart_gtk,\
-    icuuc \
     dl \
+    icuuc \
     m \
     pthread \
 ))

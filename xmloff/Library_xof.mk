@@ -50,45 +50,45 @@ $(eval $(call gb_Library_add_linked_libs,xof,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,xof,\
-    xmloff/source/transform/OOo2Oasis \
-    xmloff/source/transform/StyleOOoTContext \
-    xmloff/source/transform/EventOOoTContext \
-    xmloff/source/transform/DocumentTContext \
-    xmloff/source/transform/NotesTContext \
-    xmloff/source/transform/Oasis2OOo \
-    xmloff/source/transform/TransformerContext \
     xmloff/source/transform/ChartOASISTContext \
-    xmloff/source/transform/PropertyActionsOASIS \
+    xmloff/source/transform/ChartOOoTContext \
+    xmloff/source/transform/ChartPlotAreaOASISTContext \
+    xmloff/source/transform/ChartPlotAreaOOoTContext \
+    xmloff/source/transform/ControlOASISTContext \
+    xmloff/source/transform/ControlOOoTContext \
+    xmloff/source/transform/CreateElemTContext \
     xmloff/source/transform/DeepTContext \
     xmloff/source/transform/DlgOASISTContext \
-    xmloff/source/transform/FormPropOOoTContext \
-    xmloff/source/transform/TransformerBase \
-    xmloff/source/transform/FormPropOASISTContext \
-    xmloff/source/transform/RenameElemTContext \
-    xmloff/source/transform/ControlOOoTContext \
-    xmloff/source/transform/FrameOASISTContext \
-    xmloff/source/transform/EventOASISTContext \
-    xmloff/source/transform/TransformerTokenMap \
-    xmloff/source/transform/PersMixedContentTContext \
-    xmloff/source/transform/ProcAttrTContext \
-    xmloff/source/transform/MetaTContext \
-    xmloff/source/transform/TransformerActions \
-    xmloff/source/transform/ControlOASISTContext \
-    xmloff/source/transform/ChartPlotAreaOOoTContext \
-    xmloff/source/transform/MutableAttrList \
-    xmloff/source/transform/PropertyActionsOOo \
-    xmloff/source/transform/ChartOOoTContext \
+    xmloff/source/transform/DocumentTContext \
     xmloff/source/transform/EventMap \
+    xmloff/source/transform/EventOASISTContext \
+    xmloff/source/transform/EventOOoTContext \
     xmloff/source/transform/FlatTContext \
-    xmloff/source/transform/CreateElemTContext \
-    xmloff/source/transform/ProcAddAttrTContext \
-    xmloff/source/transform/XMLFilterRegistration \
-    xmloff/source/transform/MergeElemTContext \
-    xmloff/source/transform/PersAttrListTContext \
+    xmloff/source/transform/FormPropOASISTContext \
+    xmloff/source/transform/FormPropOOoTContext \
+    xmloff/source/transform/FrameOASISTContext \
     xmloff/source/transform/FrameOOoTContext \
-    xmloff/source/transform/ChartPlotAreaOASISTContext \
-    xmloff/source/transform/StyleOASISTContext \
     xmloff/source/transform/IgnoreTContext \
+    xmloff/source/transform/MergeElemTContext \
+    xmloff/source/transform/MetaTContext \
+    xmloff/source/transform/MutableAttrList \
+    xmloff/source/transform/NotesTContext \
+    xmloff/source/transform/OOo2Oasis \
+    xmloff/source/transform/Oasis2OOo \
+    xmloff/source/transform/PersAttrListTContext \
+    xmloff/source/transform/PersMixedContentTContext \
+    xmloff/source/transform/ProcAddAttrTContext \
+    xmloff/source/transform/ProcAttrTContext \
+    xmloff/source/transform/PropertyActionsOASIS \
+    xmloff/source/transform/PropertyActionsOOo \
+    xmloff/source/transform/RenameElemTContext \
+    xmloff/source/transform/StyleOASISTContext \
+    xmloff/source/transform/StyleOOoTContext \
+    xmloff/source/transform/TransformerActions \
+    xmloff/source/transform/TransformerBase \
+    xmloff/source/transform/TransformerContext \
+    xmloff/source/transform/TransformerTokenMap \
+    xmloff/source/transform/XMLFilterRegistration \
 ))
 
 ifeq ($(OS),LINUX)

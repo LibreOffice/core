@@ -41,17 +41,17 @@ $(eval $(call gb_Library_set_include,fwl,\
 
 $(eval $(call gb_Library_add_linked_libs,fwl,\
     comphelper \
+    cppu \
+    cppuhelper \
     fwe \
     fwi \
     i18nisolang1 \
+    sal \
     stl \
     svl \
     svt \
     tk \
     tl \
-    cppu \
-    cppuhelper \
-    sal \
     utl \
     vcl \
 ))

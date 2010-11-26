@@ -41,15 +41,15 @@ $(eval $(call gb_Library_set_include,fwm,\
 
 $(eval $(call gb_Library_add_linked_libs,fwm,\
     comphelper \
+    cppu \
+    cppuhelper \
     fwi \
+    sal \
     stl \
     svl \
     svt \
     tk \
     tl \
-    cppu \
-    cppuhelper \
-    sal \
     utl \
     vcl \
     vos3 \
