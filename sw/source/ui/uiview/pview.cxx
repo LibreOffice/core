@@ -28,8 +28,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-
 #include <sfx2/objface.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/field.hxx>
@@ -54,10 +52,7 @@
 #include <svx/svdview.hxx>
 #include <svx/dlgutil.hxx>
 #include <svx/zoomslideritem.hxx>
-#ifndef _SVX_SVXIDS_HRC //autogen
 #include <svx/svxids.hrc>
-#endif
-
 
 #include <swwait.hxx>
 #include <globdoc.hxx>
@@ -73,27 +68,16 @@
 #include <view.hxx>
 #include <textsh.hxx>
 #include <scroll.hxx>
-#include <swprtopt.hxx>
+#include <prtopt.hxx>
 #include <docstat.hxx>
 #include <usrpref.hxx>
 #include <viewfunc.hxx>
 
-
-#ifndef _HELPID_H
 #include <helpid.h>
-#endif
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
-#ifndef _POPUP_HRC
 #include <popup.hrc>
-#endif
-#ifndef _PVIEW_HRC
 #include <pview.hrc>
-#endif
 
 #define SwPagePreView
 #include <sfx2/msg.hxx>
@@ -104,6 +88,7 @@
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 #include <vos/mutex.hxx>
+
 
 using namespace ::com::sun::star;
 
@@ -1291,8 +1276,7 @@ void SwPagePreView::Init(const SwViewOption * pPrefs)
     GetViewShell()->ApplyAccessiblityOptions(SW_MOD()->GetAccessibilityOptions());
 
     // OD 09.01.2003 #i6467# - adjust view shell option to the same as for print
-    SwPrtOptions aPrintOptions( GetViewFrame()->GetObjectShell()->GetTitle(0) );
-    aPrintOptions.MakeOptions( false );
+    SwPrintData const aPrintOptions = *SW_MOD()->GetPrtOptions(false);
     GetViewShell()->AdjustOptionsForPagePreview( aPrintOptions );
 
     IDocumentSettingAccess* pIDSA = pESh->getIDocumentSettingAccess();

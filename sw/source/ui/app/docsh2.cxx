@@ -1209,7 +1209,19 @@ void SwDocShell::Execute(SfxRequest& rReq)
             }
             break;
 
-        case SID_MAIL_EXPORT_FINISHED:
+        case SID_MAIL_PREPAREEXPORT:
+        {
+            //pWrtShell is not set in page preview
+            if(pWrtShell)
+                pWrtShell->StartAllAction();
+            pDoc->UpdateFlds( NULL, false );
+            pDoc->EmbedAllLinks();
+            pDoc->RemoveInvisibleContent();
+            if(pWrtShell)
+                pWrtShell->EndAllAction();
+        }
+        break;
+          case SID_MAIL_EXPORT_FINISHED:
         {
                 if(pWrtShell)
                     pWrtShell->StartAllAction();
