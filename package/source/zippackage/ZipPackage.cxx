@@ -1017,7 +1017,7 @@ void ZipPackage::WriteManifest( ZipOutputStream& aZipOut, const vector< Sequence
         Sequence < PropertyValue > * pSequence = aManifestSequence.getArray();
         for (vector < Sequence < PropertyValue > >::const_iterator aIter = aManList.begin(), aEnd = aManList.end();
              aIter != aEnd;
-             aIter++, pSequence++)
+             ++aIter, ++pSequence)
             *pSequence= (*aIter);
         xWriter->writeManifestSequence ( xManOutStream,  aManifestSequence );
 
@@ -1063,7 +1063,7 @@ void ZipPackage::WriteContentTypes( ZipOutputStream& aZipOut, const vector< Sequ
     for ( vector< uno::Sequence< beans::PropertyValue > >::const_iterator aIter = aManList.begin(),
             aEnd = aManList.end();
          aIter != aEnd;
-         aIter++)
+         ++aIter)
     {
         ::rtl::OUString aPath;
         ::rtl::OUString aType;
