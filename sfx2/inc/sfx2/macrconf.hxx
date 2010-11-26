@@ -56,8 +56,6 @@ class SFX2_DLLPUBLIC SfxMacroInfo
 {
 friend class SfxMacroConfig;
 friend class SfxEventConfiguration;
-friend SvStream& operator >> (SvStream& rStream, SfxMacroInfo& rInfo);
-friend SvStream& operator << (SvStream& rStream, const SfxMacroInfo& rInfo);
 
     String*                 pHelpText;
     sal_uInt16                  nRefCnt;
@@ -77,7 +75,6 @@ public:
                     const String& rModuleName, const String& rMethodName);
     ~SfxMacroInfo();
     sal_Bool operator==(const SfxMacroInfo& rOther) const;
-    int Load (SvStream&);
     String              GetMacroName() const;
     String              GetQualifiedName() const;
     String              GetFullQualifiedName() const;
