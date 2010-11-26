@@ -700,7 +700,7 @@ BOOL SvxAutoCorrect::FnAddNonBrkSpace(
                     bRunNext = true;
             }
         }
-        else if (cChar == '/' && nEndPos >= 2)
+        else if ( cChar == '/' && nEndPos > 1 && rTxt.Len() > (nEndPos - 1) )
         {
             // Remove the hardspace right before to avoid formatting URLs
             sal_Unicode cPrevChar = rTxt.GetChar( nEndPos - 1 );
