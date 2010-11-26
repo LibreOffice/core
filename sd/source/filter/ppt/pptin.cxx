@@ -430,6 +430,11 @@ sal_Bool ImplSdPPTImport::Import()
                                         aPropItem >> pHyperlink->nInfo;
                                         if ( !aPropItem.Read( pHyperlink->aTarget, VT_EMPTY ) )
                                             break;
+
+                                        // #n382718# (and #n261623#) Convert '\\' notation to 'smb://'
+                                        INetURLObject aUrl( pHyperlink->aTarget, INET_PROT_FILE );
+                                        pHyperlink->aTarget = aUrl.GetMainURL( INetURLObject::NO_DECODE );
+
                                         if ( !aPropItem.Read( pHyperlink->aSubAdress, VT_EMPTY ) )
                                             break;
                                         pHyperlink->nStartPos = pHyperlink->nEndPos = -1;

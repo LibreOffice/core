@@ -1229,9 +1229,18 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
                             String aPageUrl;
                             String aEmpty;
                             String aFile( pFieldEntry->aFieldUrl );
+                            String aTarget( pFieldEntry->aFieldUrl );
                             INetURLObject aUrl( pFieldEntry->aFieldUrl );
                             if ( INET_PROT_FILE == aUrl.GetProtocol() )
                                 aFile = aUrl.PathToFileName();
+                            else if ( INET_PROT_SMB == aUrl.GetProtocol() )
+                            {
+                                // #n382718# (and #n261623#) Convert smb notation to '\\'
+                                aFile = aUrl.GetMainURL( INetURLObject::NO_DECODE );
+                                aFile = String( aFile.GetBuffer() + 4 ); // skip the 'smb:' part
+                                aFile.SearchAndReplaceAll( '/', '\\' );
+                                aTarget = aFile;
+                            }
                             else if ( pFieldEntry->aFieldUrl.GetChar( 0 ) == '#' )
                             {
                                 String aPage( INetURLObject::decode( pFieldEntry->aFieldUrl, '%', INetURLObject::DECODE_WITH_CHARSET ) );
@@ -1252,7 +1261,7 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
                             if ( aPageUrl.Len() )
                                 nHyperId = ImplInsertBookmarkURL( aPageUrl, 1 | ( nPageIndex << 8 ) | ( 1 << 31 ), pFieldEntry->aRepresentation, aEmpty, aEmpty, aPageUrl );
                             else
-                                nHyperId = ImplInsertBookmarkURL( pFieldEntry->aFieldUrl, 2 | ( nHyperId << 8 ), aFile, pFieldEntry->aFieldUrl, aEmpty, aEmpty );
+                                nHyperId = ImplInsertBookmarkURL( pFieldEntry->aFieldUrl, 2 | ( nHyperId << 8 ), aFile, aTarget, aEmpty, aEmpty );
 
                             rOut << (sal_uInt32)( ( EPP_InteractiveInfo << 16 ) | 0xf ) << (sal_uInt32)24
                                  << (sal_uInt32)( EPP_InteractiveInfoAtom << 16 ) << (sal_uInt32)16
