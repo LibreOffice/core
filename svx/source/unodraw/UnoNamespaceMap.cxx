@@ -118,8 +118,8 @@ namespace svx
 
         sal_uInt16* mpWhichId;
 
-        sal_uInt16 mnItemCount;
-        sal_uInt16 mnItem;
+        sal_uInt32 mnItemCount;
+        sal_uInt32 mnItem;
 
         const SvXMLAttrContainerItem* mpCurrentAttr;
         sal_uInt16 mnCurrentAttr;
@@ -145,7 +145,7 @@ NamespaceIteratorImpl::NamespaceIteratorImpl( sal_uInt16* pWhichIds, SfxItemPool
     mpWhichId = pWhichIds;
 
     mnItem = 0;
-    mnItemCount = (mpWhichId && (0 != *mpWhichId) && mpPool) ? mpPool->GetItemCount( *mpWhichId ) : 0;
+    mnItemCount = (mpWhichId && (0 != *mpWhichId) && mpPool) ? mpPool->GetItemCount2( *mpWhichId ) : 0;
 }
 
 sal_Bool NamespaceIteratorImpl::next( ::rtl::OUString& rPrefix, ::rtl::OUString& rURL )
@@ -165,7 +165,7 @@ sal_Bool NamespaceIteratorImpl::next( ::rtl::OUString& rPrefix, ::rtl::OUString&
 
     const SfxPoolItem* pItem = 0;
     // look for the next available item in the current pool
-    while( (mnItem < mnItemCount) && ( NULL == (pItem = mpPool->GetItem( *mpWhichId, mnItem ) ) ) )
+    while( (mnItem < mnItemCount) && ( NULL == (pItem = mpPool->GetItem2( *mpWhichId, mnItem ) ) ) )
         mnItem++;
 
     // are we finished with the current whichid?
@@ -177,7 +177,7 @@ sal_Bool NamespaceIteratorImpl::next( ::rtl::OUString& rPrefix, ::rtl::OUString&
         if( 0 != *mpWhichId )
         {
             mnItem = 0;
-            mnItemCount = (mpWhichId && (0 != *mpWhichId) && mpPool) ? mpPool->GetItemCount( *mpWhichId ) : 0;
+            mnItemCount = (mpWhichId && (0 != *mpWhichId) && mpPool) ? mpPool->GetItemCount2( *mpWhichId ) : 0;
             return next( rPrefix, rURL );
         }
 

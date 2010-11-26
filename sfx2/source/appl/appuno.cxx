@@ -141,53 +141,56 @@ using namespace ::com::sun::star::io;
 #define FRAMELOADER_SERVICENAME         "com.sun.star.frame.FrameLoader"
 #define PROTOCOLHANDLER_SERVICENAME     "com.sun.star.frame.ProtocolHandler"
 
-static const String sTemplateRegionName         = String::CreateFromAscii( "TemplateRegionName"         );
-static const String sTemplateName               = String::CreateFromAscii( "TemplateName"               );
-static const String sAsTemplate                 = String::CreateFromAscii( "AsTemplate"                 );
-static const String sOpenNewView                = String::CreateFromAscii( "OpenNewView"                );
-static const String sViewId                     = String::CreateFromAscii( "ViewId"                     );
-static const String sPluginMode                 = String::CreateFromAscii( "PluginMode"                 );
-static const String sReadOnly                   = String::CreateFromAscii( "ReadOnly"                   );
-static const String sStartPresentation          = String::CreateFromAscii( "StartPresentation"          );
-static const String sFrameName                  = String::CreateFromAscii( "FrameName"                  );
-static const String sMediaType                  = String::CreateFromAscii( "MediaType"                  );
-static const String sPostData                   = String::CreateFromAscii( "PostData"                   );
-static const String sCharacterSet               = String::CreateFromAscii( "CharacterSet"               );
-static const String sInputStream                = String::CreateFromAscii( "InputStream"                );
-static const String sStream                     = String::CreateFromAscii( "Stream"                     );
-static const String sOutputStream               = String::CreateFromAscii( "OutputStream"               );
-static const String sHidden                     = String::CreateFromAscii( "Hidden"                     );
-static const String sPreview                    = String::CreateFromAscii( "Preview"                    );
-static const String sViewOnly                   = String::CreateFromAscii( "ViewOnly"                   );
-static const String sDontEdit                   = String::CreateFromAscii( "DontEdit"                   );
-static const String sSilent                     = String::CreateFromAscii( "Silent"                     );
-static const String sJumpMark                   = String::CreateFromAscii( "JumpMark"                   );
-static const String sFileName                   = String::CreateFromAscii( "FileName"                   );
-static const String sSalvageURL                 = String::CreateFromAscii( "SalvagedFile"               );
-static const String sStatusInd                  = String::CreateFromAscii( "StatusIndicator"            );
-static const String sModel                      = String::CreateFromAscii( "Model"                      );
-static const String sFrame                      = String::CreateFromAscii( "Frame"                      );
-static const String sViewData                   = String::CreateFromAscii( "ViewData"                   );
-static const String sFilterData                 = String::CreateFromAscii( "FilterData"                 );
-static const String sSelectionOnly              = String::CreateFromAscii( "SelectionOnly"              );
-static const String sFilterFlags                = String::CreateFromAscii( "FilterFlags"                );
-static const String sMacroExecMode              = String::CreateFromAscii( "MacroExecutionMode"         );
-static const String sUpdateDocMode              = String::CreateFromAscii( "UpdateDocMode"              );
-static const String sMinimized                  = String::CreateFromAscii( "Minimized"                  );
-static const String sInteractionHdl             = String::CreateFromAscii( "InteractionHandler"         );
-static const String sUCBContent                 = String::CreateFromAscii( "UCBContent"                 );
-static const String sRepairPackage              = String::CreateFromAscii( "RepairPackage"              );
-static const String sDocumentTitle              = String::CreateFromAscii( "DocumentTitle"              );
-static const String sComponentData              = String::CreateFromAscii( "ComponentData"              );
-static const String sComponentContext           = String::CreateFromAscii( "ComponentContext"           );
-static const String sDocumentBaseURL            = String::CreateFromAscii( "DocumentBaseURL"            );
-static const String sHierarchicalDocumentName   = String::CreateFromAscii( "HierarchicalDocumentName"   );
-static const String sCopyStreamIfPossible       = String::CreateFromAscii( "CopyStreamIfPossible"       );
-static const String sNoAutoSave                 = String::CreateFromAscii( "NoAutoSave"                 );
-static const String sFolderName                 = String::CreateFromAscii( "FolderName"                 );
-static const String sUseSystemDialog            = String::CreateFromAscii( "UseSystemDialog"            );
-static const String sStandardDir                = String::CreateFromAscii( "StandardDir"                );
-static const String sBlackList                  = String::CreateFromAscii( "BlackList"                  );
+static char const sTemplateRegionName[] = "TemplateRegionName";
+static char const sTemplateName[] = "TemplateName";
+static char const sAsTemplate[] = "AsTemplate";
+static char const sOpenNewView[] = "OpenNewView";
+static char const sViewId[] = "ViewId";
+static char const sPluginMode[] = "PluginMode";
+static char const sReadOnly[] = "ReadOnly";
+static char const sStartPresentation[] = "StartPresentation";
+static char const sFrameName[] = "FrameName";
+static char const sMediaType[] = "MediaType";
+static char const sPostData[] = "PostData";
+static char const sCharacterSet[] = "CharacterSet";
+static char const sInputStream[] = "InputStream";
+static char const sStream[] = "Stream";
+static char const sOutputStream[] = "OutputStream";
+static char const sHidden[] = "Hidden";
+static char const sPreview[] = "Preview";
+static char const sViewOnly[] = "ViewOnly";
+static char const sDontEdit[] = "DontEdit";
+static char const sSilent[] = "Silent";
+static char const sJumpMark[] = "JumpMark";
+static char const sFileName[] = "FileName";
+static char const sSalvagedFile[] = "SalvagedFile";
+static char const sStatusInd[] = "StatusIndicator";
+static char const sModel[] = "Model";
+static char const sFrame[] = "Frame";
+static char const sViewData[] = "ViewData";
+static char const sFilterData[] = "FilterData";
+static char const sSelectionOnly[] = "SelectionOnly";
+static char const sFilterFlags[] = "FilterFlags";
+static char const sMacroExecMode[] = "MacroExecutionMode";
+static char const sUpdateDocMode[] = "UpdateDocMode";
+static char const sMinimized[] = "Minimized";
+static char const sInteractionHdl[] = "InteractionHandler";
+static char const sUCBContent[] = "UCBContent";
+static char const sRepairPackage[] = "RepairPackage";
+static char const sDocumentTitle[] = "DocumentTitle";
+static char const sComponentData[] = "ComponentData";
+static char const sComponentContext[] = "ComponentContext";
+static char const sDocumentBaseURL[] = "DocumentBaseURL";
+static char const sHierarchicalDocumentName[] = "HierarchicalDocumentName";
+static char const sCopyStreamIfPossible[] = "CopyStreamIfPossible";
+static char const sNoAutoSave[] = "NoAutoSave";
+static char const sFolderName[] = "FolderName";
+static char const sUseSystemDialog[] = "UseSystemDialog";
+static char const sStandardDir[] = "StandardDir";
+static char const sBlackList[] = "BlackList";
+static char const sModifyPasswordInfo[] = "ModifyPasswordInfo";
+static char const sSuggestedSaveAsDir[] = "SuggestedSaveAsDir";
+static char const sSuggestedSaveAsName[] = "SuggestedSaveAsName";
 
 void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rArgs, SfxAllItemSet& rSet, const SfxSlot* pSlot )
 {
@@ -516,9 +519,9 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 }
                 else if ( aName == sViewData )
                     rSet.Put( SfxUnoAnyItem( SID_VIEW_DATA, rProp.Value ) );
-                else if ( aName == sFilterData )
+                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sFilterData)) )
                     rSet.Put( SfxUnoAnyItem( SID_FILTER_DATA, rProp.Value ) );
-                else if ( aName == sInputStream )
+                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sInputStream)) )
                 {
                     Reference< XInputStream > xVal;
                     sal_Bool bOK = ((rProp.Value >>= xVal) && xVal.is());
@@ -678,15 +681,15 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     if (bOK)
                         rSet.Put( SfxBoolItem( SID_FILE_DIALOG, bVal ) );
                 }
-                else if ( aName == sStandardDir )
+                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sStandardDir)) )
                 {
                     ::rtl::OUString sVal;
                     sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
-                    DBG_ASSERT( bOK, "invalid type or value for StanadardDir" );
+                    DBG_ASSERT( bOK, "invalid type or value for StandardDir" );
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_STANDARD_DIR, sVal ) );
                 }
-                else if ( aName == sBlackList )
+                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sBlackList)) )
                 {
                     ::com::sun::star::uno::Sequence< ::rtl::OUString > xVal;
                     sal_Bool bOK = (rProp.Value >>= xVal);
@@ -706,11 +709,11 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_FILE_NAME, sVal ) );
                 }
-                else if ( aName == sSalvageURL )
+                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sSalvagedFile)) )
                 {
                     ::rtl::OUString sVal;
                     sal_Bool bOK = (rProp.Value >>= sVal);
-                    DBG_ASSERT( bOK, "invalid type or value for SalvageURL" );
+                    DBG_ASSERT( bOK, "invalid type or value for SalvagedFile" );
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_DOC_SALVAGE, sVal ) );
                 }
@@ -718,7 +721,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 {
                     ::rtl::OUString sVal;
                     sal_Bool bOK = (rProp.Value >>= sVal);
-                    DBG_ASSERT( bOK, "invalid type or value for SalvageURL" );
+                    DBG_ASSERT( bOK, "invalid type or value for FolderName" );
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_PATH, sVal ) );
                 }
@@ -786,7 +789,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     if (bOK)
                         rSet.Put( SfxUInt16Item( SID_MACROEXECMODE, nVal ) );
                 }
-                else if ( aName == sUpdateDocMode )
+                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sUpdateDocMode)) )
                 {
                     sal_Int16 nVal =-1;
                     sal_Bool bOK = ((rProp.Value >>= nVal) && (nVal != -1));
@@ -794,7 +797,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     if (bOK)
                         rSet.Put( SfxUInt16Item( SID_UPDATEDOCMODE, nVal ) );
                 }
-                else if ( aName == sRepairPackage )
+                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sRepairPackage)) )
                 {
                     sal_Bool bVal = sal_False;
                     sal_Bool bOK = (rProp.Value >>= bVal);
@@ -842,6 +845,26 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     DBG_ASSERT( bOK, "invalid type for NoAutoSave" );
                     if (bOK)
                         rSet.Put( SfxBoolItem( SID_NOAUTOSAVE, bVal ) );
+                }
+                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sModifyPasswordInfo)) )
+                {
+                    rSet.Put( SfxUnoAnyItem( SID_MODIFYPASSWORDINFO, rProp.Value ) );
+                }
+                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sSuggestedSaveAsDir)) )
+                {
+                    ::rtl::OUString sVal;
+                    sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
+                    DBG_ASSERT( bOK, "invalid type or value for SuggestedSaveAsDir" );
+                    if (bOK)
+                        rSet.Put( SfxStringItem( SID_SUGGESTEDSAVEASDIR, sVal ) );
+                }
+                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sSuggestedSaveAsName)) )
+                {
+                    ::rtl::OUString sVal;
+                    sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
+                    DBG_ASSERT( bOK, "invalid type or value for SuggestedSaveAsName" );
+                    if (bOK)
+                        rSet.Put( SfxStringItem( SID_SUGGESTEDSAVEASNAME, sVal ) );
                 }
 #ifdef DBG_UTIL
                 else
@@ -1055,6 +1078,12 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 nAdditional++;
             if ( rSet.GetItemState( SID_NOAUTOSAVE ) == SFX_ITEM_SET )
                 nAdditional++;
+            if ( rSet.GetItemState( SID_MODIFYPASSWORDINFO ) == SFX_ITEM_SET )
+                nAdditional++;
+           if ( rSet.GetItemState( SID_SUGGESTEDSAVEASDIR ) == SFX_ITEM_SET )
+                nAdditional++;
+           if ( rSet.GetItemState( SID_SUGGESTEDSAVEASNAME ) == SFX_ITEM_SET )
+                nAdditional++;
 
             // consider additional arguments
             nProps += nAdditional;
@@ -1194,7 +1223,13 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                     // used only internally
                     if ( nId == SID_SAVETO )
                         continue;
-                }
+                    if ( nId == SID_MODIFYPASSWORDINFO )
+                        continue;
+                    if ( nId == SID_SUGGESTEDSAVEASDIR )
+                        continue;
+                    if ( nId == SID_SUGGESTEDSAVEASNAME )
+                        continue;
+               }
 
                 ByteString aDbg( "Unknown item detected: ");
                 aDbg += ByteString::CreateFromInt32( nId );
@@ -1465,7 +1500,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             }
             if ( rSet.GetItemState( SID_BLACK_LIST, sal_False, &pItem ) == SFX_ITEM_SET )
             {
-                pValue[nActProp].Name = sBlackList;
+                pValue[nActProp].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sBlackList));
 
                 com::sun::star::uno::Sequence< rtl::OUString > aList;
                 ((SfxStringListItem*)pItem)->GetStringList( aList );
@@ -1478,7 +1513,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             }
             if ( rSet.GetItemState( SID_DOC_SALVAGE, sal_False, &pItem ) == SFX_ITEM_SET )
             {
-                pValue[nActProp].Name = sSalvageURL;
+                pValue[nActProp].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sSalvagedFile));
                 pValue[nActProp++].Value <<= (  ::rtl::OUString(((SfxStringItem*)pItem)->GetValue()) );
             }
             if ( rSet.GetItemState( SID_PATH, sal_False, &pItem ) == SFX_ITEM_SET )
@@ -1552,7 +1587,21 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 pValue[nActProp].Name = sNoAutoSave;
                 pValue[nActProp++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
             }
-
+            if ( rSet.GetItemState( SID_MODIFYPASSWORDINFO, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                pValue[nActProp].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sModifyPasswordInfo));
+                pValue[nActProp++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
+            }
+            if ( rSet.GetItemState( SID_SUGGESTEDSAVEASDIR, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                pValue[nActProp].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sSuggestedSaveAsDir));
+                pValue[nActProp++].Value <<= ( ::rtl::OUString(((SfxStringItem*)pItem)->GetValue()) );
+            }
+            if ( rSet.GetItemState( SID_SUGGESTEDSAVEASNAME, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                pValue[nActProp].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sSuggestedSaveAsName));
+                pValue[nActProp++].Value <<= ( ::rtl::OUString(((SfxStringItem*)pItem)->GetValue()) );
+            }
         }
     }
 
@@ -1858,8 +1907,8 @@ ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL, com::sun::star::
                 }
 
                 if ( pSh && pSh->GetModel().is() )
-                       // remove flag for modal mode
-                       pSh->SetMacroMode_Impl( FALSE );
+                        // remove flag for modal mode
+                        pSh->SetMacroMode_Impl( FALSE );
             }
             else
                 nErr = ERRCODE_BASIC_PROC_UNDEFINED;
@@ -2201,18 +2250,18 @@ RequestFilterOptions::RequestFilterOptions( ::com::sun::star::uno::Reference< ::
     ::rtl::OUString temp;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > temp2;
     ::com::sun::star::document::FilterOptionsRequest aOptionsRequest( temp,
-                                                                         temp2,
+                                                                          temp2,
                                                                       rModel,
                                                                       rProperties );
 
-       m_aRequest <<= aOptionsRequest;
+        m_aRequest <<= aOptionsRequest;
 
-    m_pAbort  = new comphelper::OInteractionAbort;
-       m_pOptions = new FilterOptionsContinuation;
+        m_pAbort  = new ContinuationAbort;
+        m_pOptions = new FilterOptionsContinuation;
 
-       m_lContinuations.realloc( 2 );
-       m_lContinuations[0] = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >( m_pAbort  );
-       m_lContinuations[1] = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >( m_pOptions );
+        m_lContinuations.realloc( 2 );
+        m_lContinuations[0] = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >( m_pAbort  );
+        m_lContinuations[1] = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >( m_pOptions );
 }
 
 ::com::sun::star::uno::Any SAL_CALL RequestFilterOptions::getRequest()
@@ -2229,139 +2278,108 @@ RequestFilterOptions::RequestFilterOptions( ::com::sun::star::uno::Reference< ::
 }
 
 //=========================================================================
-class RequestPackageReparation_Impl : public ::cppu::WeakImplHelper1< ::com::sun::star::task::XInteractionRequest >
-{
-    ::com::sun::star::uno::Any m_aRequest;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > > m_lContinuations;
-    comphelper::OInteractionApprove* m_pApprove;
-    comphelper::OInteractionDisapprove*  m_pDisapprove;
-
-public:
-    RequestPackageReparation_Impl( ::rtl::OUString aName );
-    sal_Bool    isApproved();
-    virtual ::com::sun::star::uno::Any SAL_CALL getRequest() throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > > SAL_CALL getContinuations()
-        throw( ::com::sun::star::uno::RuntimeException );
-};
-
-RequestPackageReparation_Impl::RequestPackageReparation_Impl( ::rtl::OUString aName )
-{
-    ::rtl::OUString temp;
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > temp2;
-    ::com::sun::star::document::BrokenPackageRequest aBrokenPackageRequest( temp,
-                                                                                 temp2,
-                                                                              aName );
-       m_aRequest <<= aBrokenPackageRequest;
-    m_pApprove = new comphelper::OInteractionApprove;
-    m_pDisapprove = new comphelper::OInteractionDisapprove;
-       m_lContinuations.realloc( 2 );
-       m_lContinuations[0] = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >( m_pApprove );
-       m_lContinuations[1] = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >( m_pDisapprove );
-}
-
-sal_Bool RequestPackageReparation_Impl::isApproved()
-{
-    return m_pApprove->wasSelected();
-}
-
-::com::sun::star::uno::Any SAL_CALL RequestPackageReparation_Impl::getRequest()
-        throw( ::com::sun::star::uno::RuntimeException )
-{
-    return m_aRequest;
-}
-
-::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > >
-    SAL_CALL RequestPackageReparation_Impl::getContinuations()
-        throw( ::com::sun::star::uno::RuntimeException )
-{
-    return m_lContinuations;
-}
+//=========================================================================
 
 RequestPackageReparation::RequestPackageReparation( ::rtl::OUString aName )
 {
-    pImp = new RequestPackageReparation_Impl( aName );
-    pImp->acquire();
-}
-
-RequestPackageReparation::~RequestPackageReparation()
-{
-    pImp->release();
-}
-
-sal_Bool RequestPackageReparation::isApproved()
-{
-    return pImp->isApproved();
-}
-
-com::sun::star::uno::Reference < ::com::sun::star::task::XInteractionRequest > RequestPackageReparation::GetRequest()
-{
-    return com::sun::star::uno::Reference < ::com::sun::star::task::XInteractionRequest >(pImp);
-}
-
-//=========================================================================
-class NotifyBrokenPackage_Impl : public ::cppu::WeakImplHelper1< ::com::sun::star::task::XInteractionRequest >
-{
-    ::com::sun::star::uno::Any m_aRequest;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > > m_lContinuations;
-    comphelper::OInteractionAbort*  m_pAbort;
-
-public:
-    NotifyBrokenPackage_Impl( ::rtl::OUString aName );
-    sal_Bool    isAborted();
-    virtual ::com::sun::star::uno::Any SAL_CALL getRequest() throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > > SAL_CALL getContinuations()
-        throw( ::com::sun::star::uno::RuntimeException );
-};
-
-NotifyBrokenPackage_Impl::NotifyBrokenPackage_Impl( ::rtl::OUString aName )
-{
     ::rtl::OUString temp;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > temp2;
     ::com::sun::star::document::BrokenPackageRequest aBrokenPackageRequest( temp,
-                                                                                 temp2,
-                                                                              aName );
-       m_aRequest <<= aBrokenPackageRequest;
-    m_pAbort  = new comphelper::OInteractionAbort;
-       m_lContinuations.realloc( 1 );
-       m_lContinuations[0] = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >( m_pAbort  );
+                                                                                temp2,
+                                                                            aName );
+
+        m_aRequest <<= aBrokenPackageRequest;
+
+        m_pApprove = new ContinuationApprove;
+        m_pDisapprove = new ContinuationDisapprove;
+
+        m_lContinuations.realloc( 2 );
+        m_lContinuations[0] = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >( m_pApprove );
+        m_lContinuations[1] = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >( m_pDisapprove );
 }
 
-sal_Bool NotifyBrokenPackage_Impl::isAborted()
+/*uno::*/Any SAL_CALL RequestPackageReparation::queryInterface( const /*uno::*/Type& rType ) throw (RuntimeException)
 {
-    return m_pAbort->wasSelected();
+    return ::cppu::queryInterface ( rType,
+            // OWeakObject interfaces
+            dynamic_cast< XInterface* > ( (XInteractionRequest *) this ),
+            static_cast< XWeak* > ( this ),
+            // my own interfaces
+            static_cast< XInteractionRequest*  > ( this ) );
 }
 
-::com::sun::star::uno::Any SAL_CALL NotifyBrokenPackage_Impl::getRequest()
+void SAL_CALL RequestPackageReparation::acquire(  ) throw ()
+{
+    OWeakObject::acquire();
+}
+
+void SAL_CALL RequestPackageReparation::release(  ) throw ()
+{
+    OWeakObject::release();
+}
+
+::com::sun::star::uno::Any SAL_CALL RequestPackageReparation::getRequest()
         throw( ::com::sun::star::uno::RuntimeException )
 {
     return m_aRequest;
 }
 
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > >
-    SAL_CALL NotifyBrokenPackage_Impl::getContinuations()
+    SAL_CALL RequestPackageReparation::getContinuations()
         throw( ::com::sun::star::uno::RuntimeException )
 {
     return m_lContinuations;
 }
 
+//=========================================================================
+
 NotifyBrokenPackage::NotifyBrokenPackage( ::rtl::OUString aName )
 {
-    pImp = new NotifyBrokenPackage_Impl( aName );
-    pImp->acquire();
+    ::rtl::OUString temp;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > temp2;
+    ::com::sun::star::document::BrokenPackageRequest aBrokenPackageRequest( temp,
+                                                                                temp2,
+                                                                            aName );
+
+        m_aRequest <<= aBrokenPackageRequest;
+
+        m_pAbort  = new ContinuationAbort;
+
+        m_lContinuations.realloc( 1 );
+        m_lContinuations[0] = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >( m_pAbort  );
 }
 
-NotifyBrokenPackage::~NotifyBrokenPackage()
+/*uno::*/Any SAL_CALL NotifyBrokenPackage::queryInterface( const /*uno::*/Type& rType ) throw (RuntimeException)
 {
-    pImp->release();
+    return ::cppu::queryInterface ( rType,
+            // OWeakObject interfaces
+            dynamic_cast< XInterface* > ( (XInteractionRequest *) this ),
+            static_cast< XWeak* > ( this ),
+            // my own interfaces
+            static_cast< XInteractionRequest*  > ( this ) );
 }
 
-sal_Bool NotifyBrokenPackage::isAborted()
+void SAL_CALL NotifyBrokenPackage::acquire(  ) throw ()
 {
-    return pImp->isAborted();
+    OWeakObject::acquire();
 }
 
-com::sun::star::uno::Reference < ::com::sun::star::task::XInteractionRequest > NotifyBrokenPackage::GetRequest()
+void SAL_CALL NotifyBrokenPackage::release(  ) throw ()
 {
-    return com::sun::star::uno::Reference < ::com::sun::star::task::XInteractionRequest >(pImp);
+    OWeakObject::release();
 }
+
+::com::sun::star::uno::Any SAL_CALL NotifyBrokenPackage::getRequest()
+        throw( ::com::sun::star::uno::RuntimeException )
+{
+    return m_aRequest;
+}
+
+::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > >
+    SAL_CALL NotifyBrokenPackage::getContinuations()
+        throw( ::com::sun::star::uno::RuntimeException )
+{
+    return m_lContinuations;
+}
+
 

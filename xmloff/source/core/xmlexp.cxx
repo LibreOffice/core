@@ -752,7 +752,7 @@ void SAL_CALL SvXMLExport::setSourceDocument( const uno::Reference< lang::XCompo
                     sal_Int32 nIndex;
                     OUString aURL;
 
-                    for( nIndex = 0; nIndex < nCount; nIndex++, *pPrefix++ )
+                    for( nIndex = 0; nIndex < nCount; ++nIndex, ++pPrefix )
                     {
                         if( xNamespaceMap->getByName( *pPrefix ) >>= aURL )
                             _GetNamespaceMap().Add( *pPrefix, aURL, XML_NAMESPACE_UNKNOWN );

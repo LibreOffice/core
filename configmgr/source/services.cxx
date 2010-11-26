@@ -32,6 +32,7 @@
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/uno/XInterface.hpp"
+#include "cppuhelper/factory.hxx"
 #include "cppuhelper/implementationentry.hxx"
 #include "osl/diagnose.h"
 #include "uno/lbnames.h"
@@ -58,15 +59,17 @@ static cppu::ImplementationEntry const services[] = {
     { &dummy, &configmgr::configuration_provider::getImplementationName,
       &configmgr::configuration_provider::getSupportedServiceNames,
       &configmgr::configuration_provider::createFactory, 0, 0 },
-    { &dummy, &configmgr::default_provider::getImplementationName,
+    { &configmgr::default_provider::create,
+      &configmgr::default_provider::getImplementationName,
       &configmgr::default_provider::getSupportedServiceNames,
-      &configmgr::default_provider::createFactory, 0, 0 },
-    { &dummy, &configmgr::configuration_registry::getImplementationName,
+      &cppu::createSingleComponentFactory, 0, 0 },
+    { &configmgr::configuration_registry::create,
+      &configmgr::configuration_registry::getImplementationName,
       &configmgr::configuration_registry::getSupportedServiceNames,
-      &configmgr::configuration_registry::createFactory, 0, 0 },
-    { &dummy, &configmgr::update::getImplementationName,
+      &cppu::createSingleComponentFactory, 0, 0 },
+    { &configmgr::update::create, &configmgr::update::getImplementationName,
       &configmgr::update::getSupportedServiceNames,
-      &configmgr::update::createFactory, 0, 0 },
+      &cppu::createSingleComponentFactory, 0, 0 },
     { 0, 0, 0, 0, 0, 0 }
 };
 

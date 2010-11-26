@@ -218,7 +218,7 @@ void XMLShapeExport::ImpExport3DShape(
                 drawing::DoubleSequence* pInnerSequenceY = xPolyPolygon3D.SequenceY.getArray();
 
                 sal_Int32 a;
-                for( a= 0L; a < nOuterSequenceCount; a++)
+                for (a = 0; a < nOuterSequenceCount; a++)
                 {
                     sal_Int32 nInnerSequenceCount(pInnerSequenceX->getLength());
                     double* pArrayX = pInnerSequenceX->getArray();
@@ -268,7 +268,7 @@ void XMLShapeExport::ImpExport3DShape(
                 pInnerSequenceX = xPolyPolygon3D.SequenceX.getArray();
                 pInnerSequenceY = xPolyPolygon3D.SequenceY.getArray();
 
-                for(a = 0L; a < nOuterSequenceCount; a++)
+                for (a = 0; a < nOuterSequenceCount; a++)
                 {
                     sal_Int32 nInnerSequenceCount(pInnerSequenceX->getLength());
                     double* pArrayX = pInnerSequenceX->getArray();

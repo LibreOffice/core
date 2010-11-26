@@ -212,7 +212,7 @@ sal_Bool XMLMarkerStyleExport::exportXML(
             sal_Int32 a, b;
             sal_Bool bClosed(sal_False);
 
-            for(a = 0L; a < nOuterCnt; a++)
+            for (a = 0; a < nOuterCnt; a++)
             {
                 drawing::PointSequence* pSequence = pOuterSequence++;
                 const awt::Point *pPoints = pSequence->getConstArray();
@@ -229,7 +229,7 @@ sal_Bool XMLMarkerStyleExport::exportXML(
                     }
                 }
 
-                for(b = 0L; b < nPointCount; b++)
+                for (b = 0; b < nPointCount; b++)
                 {
                     const awt::Point aPoint = pPoints[b];
 
@@ -259,7 +259,7 @@ sal_Bool XMLMarkerStyleExport::exportXML(
             drawing::FlagSequence*  pOuterFlags = aBezier.Flags.getArray();
             SdXMLImExSvgDElement aSvgDElement(aViewBox);
 
-            for(a = 0L; a < nOuterCnt; a++)
+            for (a = 0; a < nOuterCnt; a++)
             {
                 drawing::PointSequence* pSequence = pOuterSequence++;
                 drawing::FlagSequence* pFlags = pOuterFlags++;
