@@ -99,10 +99,6 @@ public:
     String              GetURL() const;
 };
 
-//ASDBG obsolete >= 582
-//ASDBG class ::com::sun::star::uno::Reference< ::com::sun::star::script::XEngine > ;
-//ASDBG class ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > ;
-
 class SFX2_DLLPUBLIC SfxMacroConfig
 {
 friend class SfxEventConfiguration;
@@ -123,9 +119,6 @@ public:
     static sal_Bool             IsBasic( SbxObject*, const String&, BasicManager* );
     static ErrCode          Call( SbxObject*, const String&, BasicManager*,
                                 SbxArray *pArgs=NULL, SbxValue *pRet=NULL );
-//ASDBG obsolete >= 582
-//ASDBG     static void CallStarScript( const ::com::sun::star::uno::Reference< ::com::sun::star::script::XEngine > & rxEngine, const String & rCode,
-//ASDBG     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & rSource, void *pArgs, void *pRet );
     static SbMethod*        GetMethod_Impl( const String&, BasicManager* );
 
     sal_uInt16                  GetSlotId(SfxMacroInfoPtr);

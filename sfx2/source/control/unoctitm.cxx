@@ -340,28 +340,6 @@ sal_Int64 SAL_CALL SfxOfficeDispatch::getSomething( const ::com::sun::star::uno:
         return 0;
 }
 
-/* ASDBG
-void* SfxOfficeDispatch::getImplementation(Reflection *p)
-{
-    if( p == ::getCppuType((const SfxOfficeDispatch*)0) )
-        return this;
-    else
-        return ::cppu::OWeakObject::getImplementation(p);
-
-}
-
-Reflection* ::getCppuType((const SfxOfficeDispatch*)0)
-{
-    static StandardClassReflection aRefl(
-        0,
-        createStandardClass(
-            "SfxOfficeDispatch", ::cppu::OWeakObject::get::cppu::OWeakObjectIdlClass(),
-            1,
-            ::getCppuType((const ::com::sun::star::frame::XDispatch*)0) ) );
-    return &aRefl;
-}
-*/
-
 SfxOfficeDispatch::SfxOfficeDispatch( SfxBindings& rBindings, SfxDispatcher* pDispat, const SfxSlot* pSlot, const ::com::sun::star::util::URL& rURL )
 {
 //    nOfficeDispatchCount++;

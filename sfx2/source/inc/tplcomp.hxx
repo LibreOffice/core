@@ -30,9 +30,6 @@
 #define _TPLCOMP_HXX
 
 #include <osl/mutex.hxx>
-//ASDBG #include <usr/uno.hxx>
-//ASDBG #include <usr/iterhlp.hxx>
-//ASDBG #include <usr/services.hxx>
 #include <com/sun/star/chaos/XCommandExecutor.hpp>
 #include <com/sun/star/chaos/XStatusCallback.hpp>
 #include <com/sun/star/chaos/UnknownCommandException.hpp>
