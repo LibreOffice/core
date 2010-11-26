@@ -158,7 +158,6 @@ struct SfxDispatcher_Impl
     SfxObjectBars_Impl      aObjBars[SFX_OBJECTBAR_MAX];
     SfxObjectBars_Impl      aFixedObjBars[SFX_OBJECTBAR_MAX];
     SvULongs                aChildWins;
-    sal_uInt16                  nActionLevel;       // in EnterAction
     sal_uInt32                  nEventId;           // EventId UserEvent
     sal_Bool                    bUILocked;          // Update abgeklemmt (!zappeln)
     sal_Bool                    bNoUI;              // UI nur vom Parent Dispatcher
@@ -366,7 +365,6 @@ void SfxDispatcher::Construct_Impl( SfxDispatcher* pParent )
     pImp->pParent = pParent;
 
     pImp->bInvalidateOnUnlock = sal_False;
-    pImp->nActionLevel = 0;
 
     for (sal_uInt16 n=0; n<SFX_OBJECTBAR_MAX; n++)
         pImp->aObjBars[n].nResId = 0;
@@ -487,9 +485,6 @@ void SfxDispatcher::Pop
     DBG_MEMTEST();
     DBG_ASSERT( rShell.GetInterface(),
                 "pushing SfxShell without previous RegisterInterface()" );
-    DBG_ASSERT( pImp->nActionLevel == 0, "Push or Pop within Action" );
-//  DBG_ASSERT( SFX_APP()->IsInAsynchronCall_Impl(),
-//                "Dispatcher Push/Pop in synchron-call-stack" );
 
     bool bDelete = (nMode & SFX_SHELL_POP_DELETE) == SFX_SHELL_POP_DELETE;
     bool bUntil = (nMode & SFX_SHELL_POP_UNTIL) == SFX_SHELL_POP_UNTIL;
@@ -1612,38 +1607,6 @@ IMPL_LINK( SfxDispatcher, PostMsgHandler, SfxRequest*, pReq )
     delete pReq;
     return 0;
 }
-//--------------------------------------------------------------------
-void SfxDispatcher::EnterAction( const String& rName )
-
-// marks the beginning of a block of actions
-
-{
-    DBG_MEMTEST();
-    Flush();
-    DBG_ASSERT( pImp->aStack.Count() > 0, "EnterAction on empty dispatcher stack" );
-    if ( ++pImp->nActionLevel == 1 )
-    {
-        ::svl::IUndoManager *pUndoMgr = GetShell(0)->GetUndoManager();
-        if ( pUndoMgr )
-            pUndoMgr->EnterListAction( rName, rName HACK(RepeatComment), 0 HACK(ID) );
-    }
-}
-//--------------------------------------------------------------------
-void SfxDispatcher::LeaveAction()
-
-// marks the end of a block of actions
-
-{
-    DBG_MEMTEST();
-    DBG_ASSERT( pImp->nActionLevel > 0, "EnterAction without LeaveAction" );
-    if ( --pImp->nActionLevel == 0 )
-    {
-        ::svl::IUndoManager *pUndoMgr = GetShell(0)->GetUndoManager();
-        if ( pUndoMgr )
-            pUndoMgr->LeaveListAction();
-    }
-}
-
 //--------------------------------------------------------------------
 void SfxDispatcher::SetMenu_Impl()
 {
