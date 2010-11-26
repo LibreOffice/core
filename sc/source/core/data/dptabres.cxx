@@ -4050,7 +4050,7 @@ ResultMembers::ResultMembers():
 }
 ResultMembers::~ResultMembers()
 {
-    for ( DimMemberHash::const_iterator iter = maMemberHash.begin(); iter != maMemberHash.end(); iter++ )
+    for ( DimMemberHash::const_iterator iter = maMemberHash.begin(); iter != maMemberHash.end(); ++iter )
         delete iter->second;
 }
 // -----------------------------------------------------------------------
