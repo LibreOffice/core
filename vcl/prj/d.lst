@@ -77,6 +77,7 @@ mkdir: %_DEST%\inc%_EXT%\vcl
 ..\inc\vcl\metric.hxx %_DEST%\inc%_EXT%\vcl\metric.hxx
 ..\inc\vcl\mnemonic.hxx %_DEST%\inc%_EXT%\vcl\mnemonic.hxx
 ..\inc\vcl\mnemonicengine.hxx %_DEST%\inc%_EXT%\vcl\mnemonicengine.hxx
+..\inc\vcl\quickselectionengine.hxx %_DEST%\inc%_EXT%\vcl\quickselectionengine.hxx
 ..\inc\vcl\morebtn.hxx %_DEST%\inc%_EXT%\vcl\morebtn.hxx
 ..\inc\vcl\msgbox.hxx %_DEST%\inc%_EXT%\vcl\msgbox.hxx
 ..\inc\vcl\octree.hxx %_DEST%\inc%_EXT%\vcl\octree.hxx

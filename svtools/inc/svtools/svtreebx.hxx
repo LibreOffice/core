@@ -39,11 +39,6 @@ class TabBar;
 
 #define SV_TAB_BORDER 8
 
-#define WB_HASBUTTONSATROOT       ((WinBits)0x0800)
-#define WB_NOINITIALSELECTION       WB_DROPDOWN
-#define WB_HIDESELECTION            WB_NOHIDESELECTION
-#define WB_FORCE_MAKEVISIBLE        WB_SPIN
-
 #define SV_LISTBOX_ID_TREEBOX 1   // fuer SvLBox::IsA()
 #define SV_ENTRYHEIGHTOFFS_PIXEL 2
 
@@ -97,9 +92,11 @@ class SVT_DLLPUBLIC SvTreeListBox : public SvLBox
                                 USHORT nTabFlagMask=0xffff,
                                 BOOL bHasClipRegion=FALSE );
 
-    SVT_DLLPRIVATE void         InitTreeView( WinBits nWinStyle );
+    SVT_DLLPRIVATE void         InitTreeView();
     SVT_DLLPRIVATE SvLBoxItem*      GetItem_Impl( SvLBoxEntry*, long nX, SvLBoxTab** ppTab,
                         USHORT nEmptyWidth );
+    SVT_DLLPRIVATE void         ImplInitStyle();
+
 #endif
 
 protected:
@@ -317,9 +314,6 @@ public:
     SvLBoxEntry*    GetEntry( const Point& rPos, BOOL bHit = FALSE ) const;
     SvLBoxEntry*    GetEntry( SvLBoxEntry* pParent, ULONG nPos ) const { return SvLBox::GetEntry(pParent,nPos); }
     SvLBoxEntry*    GetEntry( ULONG nRootPos ) const { return SvLBox::GetEntry(nRootPos);}
-
-    void            SetWindowBits( WinBits nWinStyle );
-    WinBits         GetWindowBits() const { return nWindowStyle; }
 
     void            PaintEntry( SvLBoxEntry* );
     long            PaintEntry( SvLBoxEntry*, long nLine,

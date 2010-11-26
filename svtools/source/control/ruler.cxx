@@ -467,6 +467,7 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter )
     BOOL    bNoTicks = FALSE;
 
     // Groessenvorberechnung
+    // Sizes calculation
     BOOL bVertRight = FALSE;
     if ( mnWinStyle & WB_HORZ )
         nTickWidth = aPixSize.Width();
@@ -485,19 +486,21 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter )
     }
     long nMaxWidth = maVirDev.PixelToLogic( Size( mpData->nPageWidth, 0 ), maMapMode ).Width();
     if ( nMaxWidth < 0 )
-        nMaxWidth *= -1;
+        nMaxWidth = -nMaxWidth;
     nMaxWidth /= aImplRulerUnitTab[mnUnitIndex].nTickUnit;
     UniString aNumStr( UniString::CreateFromInt32( nMaxWidth ) );
     long nTxtWidth = GetTextWidth( aNumStr );
-    if ( (nTxtWidth*2) > nTickWidth )
+
+    const long nTextOff   = 4;
+    if ( nTickWidth < nTxtWidth+nTextOff )
     {
+        // Calculate the scale of the ruler
         long nMulti     = 1;
         long nOrgTick3  = nTick3;
-        long nTextOff   = 2;
         while ( nTickWidth < nTxtWidth+nTextOff )
         {
             long nOldMulti = nMulti;
-            if ( !nTickWidth )
+            if ( !nTickWidth ) //If nTickWidth equals 0
                 nMulti *= 10;
             else if ( nMulti < 10 )
                 nMulti++;
@@ -515,8 +518,7 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter )
                 bNoTicks = TRUE;
                 break;
             }
-            if ( nMulti >= 100 )
-                nTextOff = 4;
+
             nTick3 = nOrgTick3 * nMulti;
             aPixSize = maVirDev.LogicToPixel( Size( nTick3, nTick3 ), maMapMode );
             if ( mnWinStyle & WB_HORZ )
@@ -540,7 +542,7 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter )
             {
                 if ( nStart > nMin )
                 {
-                    // Nur 0 malen, wenn Margin1 nicht gleich dem NullPunkt ist
+                    // 0 is only painted when Margin1 is not equal to zero
                     if ( (mpData->nMargin1Style & RULER_STYLE_INVISIBLE) || (mpData->nMargin1 != 0) )
                     {
                         aNumStr = (sal_Unicode)'0';
@@ -563,7 +565,7 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter )
                 else
                     n = aPixSize.Height();
 
-                // Tick3 - Ausgabe (Text)
+                // Tick3 - Output (Text)
                 if ( !(nTick % nTick3) )
                 {
                     aNumStr = UniString::CreateFromInt32( nTick / aImplRulerUnitTab[mnUnitIndex].nTickUnit );
@@ -572,7 +574,9 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter )
                     nX = nStart+n;
                     //different orientation needs a different starting position
                     nY = bVertRight ? nCenter+nTxtHeight2 : nCenter-nTxtHeight2;
-                    if ( nX < nMax )
+
+                    // Check if we can display full number
+                    if ( nX < (nMax-nTxtWidth2) )
                     {
                         if ( mnWinStyle & WB_HORZ )
                             nX -= nTxtWidth2;
@@ -581,7 +585,7 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter )
                         ImplVDrawText( nX, nY, aNumStr );
                     }
                     nX = nStart-n;
-                    if ( nX > nMin )
+                    if ( nX > (nMin+nTxtWidth2) )
                     {
                         if ( mnWinStyle & WB_HORZ )
                             nX -= nTxtWidth2;
@@ -590,7 +594,7 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter )
                         ImplVDrawText( nX, nY, aNumStr );
                     }
                 }
-                // Tick/Tick2 - Ausgabe (Striche)
+                // Tick/Tick2 - Output (Strokes)
                 else
                 {
                     if ( !(nTick % aImplRulerUnitTab[mnUnitIndex].nTick2) )
@@ -1257,7 +1261,7 @@ void Ruler::ImplFormat()
     Size    aVirDevSize;
     BOOL    b3DLook = !(rStyleSettings.GetOptions() & STYLE_OPTION_MONO);
 
-    // VirtualDevice initialisieren
+    // VirtualDevice initialize
     if ( mnWinStyle & WB_HORZ )
     {
         aVirDevSize.Width() = mnVirWidth;
@@ -1386,15 +1390,15 @@ void Ruler::ImplFormat()
         if ( nP2 < nVirRight )
             nMax--;
 
-        // Beschriftung ausgeben
+        // Draw captions
         ImplDrawTicks( nMin, nMax, nStart, nCenter );
     }
 
-    // Spalten ausgeben
+    // Draw borders
     if ( mpData->pBorders )
         ImplDrawBorders( nVirLeft, nP2, nVirTop, nVirBottom );
 
-    // Einzuege ausgeben
+    // Draw indents
     if ( mpData->pIndents )
         ImplDrawIndents( nVirLeft, nP2, nVirTop-1, nVirBottom+1 );
 
@@ -2887,7 +2891,7 @@ void Ruler::SetMargin2( long nPos, USHORT nMarginStyle )
 
 void Ruler::SetLines( USHORT n, const RulerLine* pLineAry )
 {
-    // Testen, ob sich was geaendert hat
+    // To determine if what has changed
     if ( mpData->nLines == n )
     {
         USHORT           i = n;
@@ -2906,18 +2910,18 @@ void Ruler::SetLines( USHORT n, const RulerLine* pLineAry )
             return;
     }
 
-    // Neue Werte setzen und neu ausgeben
+    // New values and new share issue
     BOOL bMustUpdate;
     if ( IsReallyVisible() && IsUpdateMode() )
         bMustUpdate = TRUE;
     else
         bMustUpdate = FALSE;
 
-    // Alte Linien loeschen
+    // Delete old lines
     if ( bMustUpdate )
         ImplInvertLines();
 
-    // Neue Daten setzen
+    // New data set
     if ( !n || !pLineAry )
     {
         if ( !mpData->pLines )

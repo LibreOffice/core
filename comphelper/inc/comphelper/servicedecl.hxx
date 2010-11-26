@@ -67,7 +67,7 @@ typedef ::boost::function3<
     The declaration can be done in various ways, the (simplest) form is
 
     <pre>
-    class MyClass : cppu::WeakImplHelper2<XInterface1, XInterface2> {
+    class MyClass : public cppu::WeakImplHelper2<XInterface1, XInterface2> {
     public:
         MyClass( uno::Reference<uno::XComponentContext> const& xContext )
         [...]
@@ -85,7 +85,7 @@ typedef ::boost::function3<
     context:
 
     <pre>
-    class MyClass : cppu::WeakImplHelper2<XInterface1, XInterface2> {
+    class MyClass : public cppu::WeakImplHelper2<XInterface1, XInterface2> {
     public:
         MyClass( uno::Sequence<uno::Any> const& args,
                  uno::Reference<uno:XComponentContext> const& xContext )
