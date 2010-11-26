@@ -563,7 +563,7 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
         case SID_EXPAND_SECTION:
         case SID_NEXT_MARK:
         case SID_PREV_MARK:
-            aReturn.bEnabled = isEditable();
+            aReturn.bEnabled = isEditable() && !getDesignView()->isHandleEvent(_nId);
             break;
         case SID_SELECT:
         case SID_SELECT_REPORT:
