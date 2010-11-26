@@ -1162,7 +1162,7 @@ sal_Bool DAVResourceAccess::detectRedirectCycle(
         if ( aUri == (*it) )
             return sal_True;
 
-        it++;
+        ++it;
     }
 
     return sal_False;
