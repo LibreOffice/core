@@ -36,7 +36,7 @@
 #include "conflictsdlg.hrc"
 #include "scresid.hxx"
 #include "viewdata.hxx"
-#include "tabview.hxx"
+#include "dbfunc.hxx"
 
 
 //=============================================================================
@@ -514,7 +514,7 @@ ScConflictsDlg::ScConflictsDlg( Window* pParent, ScViewData* pViewData, ScDocume
     aHeader += maStrTitleDate;
     maLbConflicts.InsertHeaderEntry( aHeader, HEADERBAR_APPEND, HIB_LEFT | HIB_LEFTIMAGE | HIB_VCENTER );
 
-    maLbConflicts.SetWindowBits( WB_HASLINES | WB_CLIPCHILDREN | WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HSCROLL );
+    maLbConflicts.SetStyle( maLbConflicts.GetStyle() | WB_HASLINES | WB_CLIPCHILDREN | WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HSCROLL );
     maLbConflicts.SetSelectionMode( MULTIPLE_SELECTION );
     maLbConflicts.SetHighlightRange();
 
@@ -660,7 +660,7 @@ IMPL_LINK( ScConflictsDlg, UpdateSelectionHdl, Timer*, EMPTYARG )
         return 0;
     }
 
-    ScTabView* pTabView = reinterpret_cast< ScTabView* >( mpViewData->GetView() );
+    ScTabView* pTabView = mpViewData->GetView();
     pTabView->DoneBlockMode();
     BOOL bContMark = FALSE;
     SvLBoxEntry* pEntry = maLbConflicts.FirstSelected();
