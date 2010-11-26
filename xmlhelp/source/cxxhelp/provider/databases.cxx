@@ -31,6 +31,7 @@
 #include "db.hxx"
 #include <osl/diagnose.h>
 #include <osl/thread.h>
+#include <osl/process.h>
 #include <rtl/uri.hxx>
 #include <osl/file.hxx>
 #include <rtl/memory.h>
@@ -237,17 +238,21 @@ static bool impl_getZipFile(
         const rtl::OUString & rZipName,
         rtl::OUString & rFileName )
 {
+    rtl::OUString aWorkingDir;
+    osl_getProcessWorkingDir( &aWorkingDir.pData );
     const rtl::OUString *pPathArray = rImagesZipPaths.getArray();
     for ( int i = 0; i < rImagesZipPaths.getLength(); ++i )
     {
-        rFileName = pPathArray[ i ];
-        if ( rFileName.getLength() )
+        rtl::OUString aFileName = pPathArray[ i ];
+        if ( aFileName.getLength() )
         {
-            if ( 1 + rFileName.lastIndexOf( '/' ) != rFileName.getLength() )
+            if ( 1 + aFileName.lastIndexOf( '/' ) != aFileName.getLength() )
             {
-                rFileName += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/" ));
+                aFileName += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/" ));
             }
-            rFileName += rZipName;
+            aFileName += rZipName;
+            // the icons are not read when the URL is a symlink
+            osl::File::getAbsoluteFileURL( aWorkingDir, aFileName, rFileName );
 
             // test existence
             osl::DirectoryItem aDirItem;
@@ -1327,7 +1332,9 @@ void Databases::cascadingStylesheet( const rtl::OUString& Language,
                 osl::FileBase::E_None == aFile.open( OpenFlag_Read )                 &&
                 osl::FileBase::E_None == aDirItem.getFileStatus( aStatus ) )
             {
-                m_nCustomCSSDocLength = int( aStatus.getFileSize() );
+                sal_uInt64 nSize;
+                aFile.getSize( nSize );
+                m_nCustomCSSDocLength = (int)nSize;
                 m_pCustomCSSDoc = new char[ 1 + m_nCustomCSSDocLength ];
                 m_pCustomCSSDoc[ m_nCustomCSSDocLength ] = 0;
                 sal_uInt64 a = m_nCustomCSSDocLength,b = m_nCustomCSSDocLength;

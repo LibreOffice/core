@@ -780,9 +780,15 @@ ConfigData TVChildTarget::init( const Reference< XMultiServiceFactory >& xSMgr )
                 rtl::OUString baseName = aFileName.copy(0,idx_).toAsciiLowerCase();
                 if(! showBasic && baseName.compareToAscii("sbasic") == 0 )
                   continue;
-
-                configData.vFileLen.push_back( aFileStatus.getFileSize() );
-                configData.vFileURL.push_back( aFileUrl );
+                osl::File aFile( aFileUrl );
+                if( osl::FileBase::E_None == aFile.open( OpenFlag_Read ) )
+                {
+                    sal_uInt64 nSize;
+                    aFile.getSize( nSize );
+                    configData.vFileLen.push_back( aFileStatus.getFileSize() );
+                    configData.vFileURL.push_back( aFileUrl );
+                    aFile.close();
+                }
               }
           }
         aDirectory.close();
