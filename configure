@@ -12353,9 +12353,7 @@ if test -n "$with_system_cppunit" -o -n "$with_system_libs" && \
     { $as_echo "$as_me:${as_lineno-$LINENO}: result: external" >&5
 $as_echo "external" >&6; }
     SYSTEM_CPPUNIT=YES
-    # might work for earlier, too but go sure. We didn't have
-    # a system-cppunit before the first version using a proper cppunit
-    # (and that being 1.12.1) anyway
+    # might work for earlier, too but go sure:
 
   succeeded=no
 
@@ -12411,23 +12409,23 @@ fi
   else
      PKG_CONFIG_MIN_VERSION=0.9.0
      if $PKG_CONFIG --atleast-pkgconfig-version $PKG_CONFIG_MIN_VERSION; then
-        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for cppunit >= 1.12.1 " >&5
-$as_echo_n "checking for cppunit >= 1.12.1 ... " >&6; }
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for cppunit >= 1.12.0 " >&5
+$as_echo_n "checking for cppunit >= 1.12.0 ... " >&6; }
 
-        if $PKG_CONFIG --exists "cppunit >= 1.12.1 " ; then
+        if $PKG_CONFIG --exists "cppunit >= 1.12.0 " ; then
             { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
             succeeded=yes
 
             { $as_echo "$as_me:${as_lineno-$LINENO}: checking CPPUNIT_CFLAGS" >&5
 $as_echo_n "checking CPPUNIT_CFLAGS... " >&6; }
-            CPPUNIT_CFLAGS=`$PKG_CONFIG --cflags "cppunit >= 1.12.1 "`
+            CPPUNIT_CFLAGS=`$PKG_CONFIG --cflags "cppunit >= 1.12.0 "`
             { $as_echo "$as_me:${as_lineno-$LINENO}: result: $CPPUNIT_CFLAGS" >&5
 $as_echo "$CPPUNIT_CFLAGS" >&6; }
 
             { $as_echo "$as_me:${as_lineno-$LINENO}: checking CPPUNIT_LIBS" >&5
 $as_echo_n "checking CPPUNIT_LIBS... " >&6; }
-            CPPUNIT_LIBS=`$PKG_CONFIG --libs "cppunit >= 1.12.1 "`
+            CPPUNIT_LIBS=`$PKG_CONFIG --libs "cppunit >= 1.12.0 "`
             { $as_echo "$as_me:${as_lineno-$LINENO}: result: $CPPUNIT_LIBS" >&5
 $as_echo "$CPPUNIT_LIBS" >&6; }
         else
@@ -12435,7 +12433,7 @@ $as_echo "$CPPUNIT_LIBS" >&6; }
             CPPUNIT_LIBS=""
             ## If we have a custom action on failure, don't print errors, but
             ## do set a variable so people can do so.
-            CPPUNIT_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "cppunit >= 1.12.1 "`
+            CPPUNIT_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "cppunit >= 1.12.0 "`
             echo $CPPUNIT_PKG_ERRORS
         fi
 
@@ -12450,7 +12448,7 @@ $as_echo "$CPPUNIT_LIBS" >&6; }
   if test $succeeded = yes; then
      :
   else
-     as_fn_error "Library requirements (cppunit >= 1.12.1 ) not met; consider adjusting the PKG_CONFIG_PATH environment variable if your libraries are in a nonstandard prefix so pkg-config can find them." "$LINENO" 5
+     as_fn_error "Library requirements (cppunit >= 1.12.0 ) not met; consider adjusting the PKG_CONFIG_PATH environment variable if your libraries are in a nonstandard prefix so pkg-config can find them." "$LINENO" 5
   fi
 
 else
@@ -17720,23 +17718,23 @@ fi
   else
      PKG_CONFIG_MIN_VERSION=0.9.0
      if $PKG_CONFIG --atleast-pkgconfig-version $PKG_CONFIG_MIN_VERSION; then
-        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for neon >= 0.24.0" >&5
-$as_echo_n "checking for neon >= 0.24.0... " >&6; }
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for neon >= 0.26.0" >&5
+$as_echo_n "checking for neon >= 0.26.0... " >&6; }
 
-        if $PKG_CONFIG --exists "neon >= 0.24.0" ; then
+        if $PKG_CONFIG --exists "neon >= 0.26.0" ; then
             { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
             succeeded=yes
 
             { $as_echo "$as_me:${as_lineno-$LINENO}: checking NEON_CFLAGS" >&5
 $as_echo_n "checking NEON_CFLAGS... " >&6; }
-            NEON_CFLAGS=`$PKG_CONFIG --cflags "neon >= 0.24.0"`
+            NEON_CFLAGS=`$PKG_CONFIG --cflags "neon >= 0.26.0"`
             { $as_echo "$as_me:${as_lineno-$LINENO}: result: $NEON_CFLAGS" >&5
 $as_echo "$NEON_CFLAGS" >&6; }
 
             { $as_echo "$as_me:${as_lineno-$LINENO}: checking NEON_LIBS" >&5
 $as_echo_n "checking NEON_LIBS... " >&6; }
-            NEON_LIBS=`$PKG_CONFIG --libs "neon >= 0.24.0"`
+            NEON_LIBS=`$PKG_CONFIG --libs "neon >= 0.26.0"`
             { $as_echo "$as_me:${as_lineno-$LINENO}: result: $NEON_LIBS" >&5
 $as_echo "$NEON_LIBS" >&6; }
         else
@@ -17744,7 +17742,7 @@ $as_echo "$NEON_LIBS" >&6; }
             NEON_LIBS=""
             ## If we have a custom action on failure, don't print errors, but
             ## do set a variable so people can do so.
-            NEON_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "neon >= 0.24.0"`
+            NEON_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "neon >= 0.26.0"`
 
         fi
 
@@ -17759,7 +17757,7 @@ $as_echo "$NEON_LIBS" >&6; }
   if test $succeeded = yes; then
      :
   else
-     as_fn_error "you need neon >= 0.24.x for system-neon" "$LINENO" 5
+     as_fn_error "you need neon >= 0.26.x for system-neon" "$LINENO" 5
   fi
 
         NEON_VERSION="`$PKG_CONFIG --modversion neon | $SED 's/\.//g'`"
@@ -18163,6 +18161,7 @@ $as_echo "internal" >&6; }
 	BUILD_TYPE="$BUILD_TYPE REDLAND"
 	SYSTEM_REDLAND=NO
 fi
+
 
 
 

@@ -1022,9 +1022,9 @@ LNTFLAGSOUTOBJ=-os
 .IF "$(OOO_LIBRARY_PATH_VAR)" != ""
 # Add SOLARLIBDIR at the begin of a (potentially previously undefined) library
 # path (LD_LIBRARY_PATH, PATH, etc.; prepending avoids fetching libraries from
-# an existing office/URE installation ; the ": &&" in the bash case enables this to
-# work at the start of a recipe line that is not prefixed by "+" as well as in
-# the middle of an existing && chain:
+# an existing office/URE installation; the ": &&" enables this to work at the
+# start of a recipe line that is not prefixed by "+" as well as in the middle of
+# an existing && chain:
 AUGMENT_LIBRARY_PATH = : && \
     $(OOO_LIBRARY_PATH_VAR)=$(normpath, $(SOLARSHAREDBIN))$${{$(OOO_LIBRARY_PATH_VAR):+:$${{$(OOO_LIBRARY_PATH_VAR)}}}}
 AUGMENT_LIBRARY_PATH_LOCAL = : && \
