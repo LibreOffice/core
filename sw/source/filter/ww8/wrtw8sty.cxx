@@ -966,7 +966,8 @@ WW8_WrPlcSepx::WW8_WrPlcSepx( MSWordExportBase& rExport )
     : MSWordSections( rExport ),
       aCps( 4, 4 ),
       pAttrs( 0 ),
-      pTxtPos( 0 )
+      pTxtPos( 0 ),
+      bNoMoreSections( false )
 {
     // to be in sync with the AppendSection() call in the MSWordSections
     // constructor
@@ -1042,9 +1043,12 @@ void MSWordSections::AppendSection( const SwPageDesc* pPd,
 void WW8_WrPlcSepx::AppendSep( WW8_CP nStartCp, const SwPageDesc* pPd,
     const SwSectionFmt* pSectionFmt, ULONG nLnNumRestartNo )
 {
-    aCps.Insert( nStartCp, aCps.Count() );
+    if ( !bNoMoreSections )
+    {
+        aCps.Insert( nStartCp, aCps.Count() );
 
-    AppendSection( pPd, pSectionFmt, nLnNumRestartNo );
+        AppendSection( pPd, pSectionFmt, nLnNumRestartNo );
+    }
 }
 
 void MSWordSections::AppendSection( const SwFmtPageDesc& rPD,
@@ -1059,9 +1063,12 @@ void MSWordSections::AppendSection( const SwFmtPageDesc& rPD,
 void WW8_WrPlcSepx::AppendSep( WW8_CP nStartCp, const SwFmtPageDesc& rPD,
     const SwNode& rNd, const SwSectionFmt* pSectionFmt, ULONG nLnNumRestartNo )
 {
-    aCps.Insert(nStartCp, aCps.Count());
+    if ( !bNoMoreSections )
+    {
+        aCps.Insert(nStartCp, aCps.Count());
 
-    AppendSection( rPD, rNd, pSectionFmt, nLnNumRestartNo );
+        AppendSection( rPD, rNd, pSectionFmt, nLnNumRestartNo );
+    }
 }
 
 // MSWordSections::SetNum() setzt in jeder Section beim 1. Aufruf den
@@ -1746,6 +1753,8 @@ bool WW8_WrPlcSepx::WriteKFTxt( WW8Export& rWrt )
 
         WW8_SepInfo& rSepInfo = aSects[i];
         rWrt.SectionProperties( rSepInfo, pA );
+
+        bNoMoreSections = true;
     }
     rWrt.SetHdFtIndex( nOldIndex ); //0
 

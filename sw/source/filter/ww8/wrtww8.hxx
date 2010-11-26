@@ -228,6 +228,7 @@ class WW8_WrPlcSepx : public MSWordSections
     SvULongs aCps;              // PTRARR von CPs
     WW8_PdAttrDesc* pAttrs;
     WW8_WrPlc0* pTxtPos;        // Pos der einzelnen Header / Footer
+    bool bNoMoreSections;
 
     // No copy, no assign
     WW8_WrPlcSepx( const WW8_WrPlcSepx& );
