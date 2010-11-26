@@ -1304,8 +1304,8 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                         ::comphelper::NamedValueCollection aCreationArgs;
                         aCreationArgs.put( (::rtl::OUString)PROPERTY_GRAPHICAL_DESIGN, ID_NEW_VIEW_DESIGN == _nId );
 
-                        Reference< XDataSource > xDataSource( m_xDataSource, UNO_QUERY );
-                        Reference< XComponent > xComponent( aDesigner.createNew( xDataSource, aCreationArgs ), UNO_QUERY );
+                        const Reference< XDataSource > xDataSource( m_xDataSource, UNO_QUERY );
+                        const Reference< XComponent > xComponent( aDesigner.createNew( xDataSource, aCreationArgs ), UNO_QUERY );
                         onDocumentOpened( ::rtl::OUString(), E_QUERY, E_OPEN_DESIGN, xComponent, NULL );
                     }
                 }
@@ -1356,8 +1356,8 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                     {
                         RelationDesigner aDesigner( getORB(), this, m_aCurrentFrame.getFrame() );
 
-                        Reference< XDataSource > xDataSource( m_xDataSource, UNO_QUERY );
-                        Reference< XComponent > xComponent( aDesigner.createNew( xDataSource ), UNO_QUERY );
+                        const Reference< XDataSource > xDataSource( m_xDataSource, UNO_QUERY );
+                        const Reference< XComponent > xComponent( aDesigner.createNew( xDataSource ), UNO_QUERY );
                         onDocumentOpened( ::rtl::OUString(), SID_DB_APP_DSRELDESIGN, E_OPEN_DESIGN, xComponent, NULL );
                     }
                 }
