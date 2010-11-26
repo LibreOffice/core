@@ -134,7 +134,7 @@ namespace XPath
             p = (xmlChar*)oprefix.getStr();
             u = (xmlChar*)ouri.getStr();
             xmlXPathRegisterNs(ctx, p, u);
-            i++;
+            ++i;
         }
     }
 
@@ -185,7 +185,7 @@ namespace XPath
                     reinterpret_cast<void*>(
                         sal::static_int_cast<sal_IntPtr>(aHandle.variableData)));
             }
-            i++;
+            ++i;
         }
     }
 

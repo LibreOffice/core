@@ -263,10 +263,8 @@ namespace DOM
             attr_qname = a->first;
             attr_value = a->second;
             idx = attr_qname.indexOf(':');
-            if(idx != -1)
-            {
+            if (idx != -1)
                 aPrefix = attr_qname.copy(0, idx);
-            }
             else
                 aPrefix = OUString();
 
@@ -275,11 +273,13 @@ namespace DOM
             {
                 // set attribute with namespace
                 aElement->setAttributeNS(result->second, attr_qname, attr_value);
-            } else {
+            }
+            else
+            {
                 // set attribute without namespace
                 aElement->setAttribute(attr_qname, attr_value);
-           }
-            a++;
+            }
+            ++a;
         }
         m_aNSStack.push(aNSMap);
     }
