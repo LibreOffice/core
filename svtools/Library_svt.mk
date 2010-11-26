@@ -178,10 +178,10 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/edit/textwindowpeer \
     svtools/source/edit/txtattr \
     svtools/source/edit/xtextedt \
-    svtools/source/filter.vcl/filter/exportdialog \
     svtools/source/filter.vcl/filter/FilterConfigCache \
     svtools/source/filter.vcl/filter/FilterConfigItem \
     svtools/source/filter.vcl/filter/SvFilterOptionsDialog \
+    svtools/source/filter.vcl/filter/exportdialog \
     svtools/source/filter.vcl/filter/filter \
     svtools/source/filter.vcl/filter/filter2 \
     svtools/source/filter.vcl/filter/sgfbram \

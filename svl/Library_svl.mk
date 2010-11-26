@@ -67,8 +67,8 @@ $(eval $(call gb_Library_add_linked_libs,svl,\
 ))
 
 $(eval $(call gb_Library_add_linked_system_libs,svl,\
-    icuuc \
     dl \
+    icuuc \
     m \
     pthread \
 ))

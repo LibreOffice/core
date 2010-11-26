@@ -53,17 +53,17 @@ $(eval $(call gb_Executable_add_exception_objects,so_checksum,\
 ifeq ($(OS),WNT)
 $(eval $(call gb_Executable_add_linked_libs,so_checksum,\
     kernel32 \
-    user32 \
     msvcrt \
     oldnames \
+    user32 \
     uwinapi \
 ))
 endif
 
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Executable_add_linked_libs,so_checksum,\
-    pthread \
     dl \
+    pthread \
 ))
 endif
 # vim: set noet sw=4 ts=4:

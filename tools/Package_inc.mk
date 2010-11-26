@@ -26,6 +26,7 @@
 #*************************************************************************
 
 $(eval $(call gb_Package_Package,tools_inc,$(SRCDIR)/tools/inc))
+$(eval $(call gb_Package_add_file,tools_inc,inc/tools/StringListResource.hxx,tools/StringListResource.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/appendunixshellword.hxx,tools/appendunixshellword.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/b3dtrans.hxx,tools/b3dtrans.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/bigint.hxx,tools/bigint.hxx))
@@ -87,7 +88,6 @@ $(eval $(call gb_Package_add_file,tools_inc,inc/tools/solarmutex.hxx,tools/solar
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/stack.hxx,tools/stack.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/stream.hxx,tools/stream.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/string.hxx,tools/string.hxx))
-$(eval $(call gb_Package_add_file,tools_inc,inc/tools/StringListResource.hxx,tools/StringListResource.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/svborder.hxx,tools/svborder.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/svlibrary.hxx,tools/svlibrary.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/svwin.h,tools/svwin.h))
@@ -96,8 +96,8 @@ $(eval $(call gb_Package_add_file,tools_inc,inc/tools/tempfile.hxx,tools/tempfil
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/tenccvt.hxx,tools/tenccvt.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/testtoolloader.hxx,tools/testtoolloader.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/time.hxx,tools/time.hxx))
-$(eval $(call gb_Package_add_file,tools_inc,inc/tools/toolsdllapi.h,tools/toolsdllapi.h))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/tools.h,tools/tools.h))
+$(eval $(call gb_Package_add_file,tools_inc,inc/tools/toolsdllapi.h,tools/toolsdllapi.h))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/unqid.hxx,tools/unqid.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/unqidx.hxx,tools/unqidx.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/urlobj.hxx,tools/urlobj.hxx))

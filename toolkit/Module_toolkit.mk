@@ -28,11 +28,11 @@
 $(eval $(call gb_Module_Module,toolkit))
 
 $(eval $(call gb_Module_add_targets,toolkit,\
+    AllLangResTarget_tk \
     Library_tk \
     Package_inc \
     Package_source \
     Package_util \
-    AllLangResTarget_tk \
 ))
 
 # vim: set noet sw=4 ts=4:

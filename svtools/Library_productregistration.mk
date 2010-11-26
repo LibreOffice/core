@@ -41,13 +41,13 @@ $(eval $(call gb_Library_set_include,productregistration,\
 ))
 
 $(eval $(call gb_Library_add_linked_libs,productregistration,\
-    svl \
-    tk \
-    tl \
     cppu \
     cppuhelper \
     sal \
     stl \
+    svl \
+    tk \
+    tl \
     utl \
     vcl \
 ))

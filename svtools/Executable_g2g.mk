@@ -38,12 +38,12 @@ $(eval $(call gb_Executable_set_include,g2g,\
 
 $(eval $(call gb_Executable_add_linked_libs,g2g,\
     jvmfwk \
-    stl \
-    vcl \
-    tl \
-    vos3 \
-    svt \
     sal \
+    stl \
+    svt \
+    tl \
+    vcl \
+    vos3 \
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,g2g,\

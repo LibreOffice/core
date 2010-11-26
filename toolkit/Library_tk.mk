@@ -50,17 +50,18 @@ $(eval $(call gb_Library_set_defs,tk,\
 
 $(eval $(call gb_Library_add_linked_libs,tk,\
     comphelper \
-    stl \
-    tl \
     cppu \
     cppuhelper \
     sal \
+    stl \
+    tl \
     utl \
     vcl \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,tk,\
     toolkit/source/awt/asynccallback \
+    toolkit/source/awt/stylesettings \
     toolkit/source/awt/vclxaccessiblecomponent \
     toolkit/source/awt/vclxbitmap \
     toolkit/source/awt/vclxbutton \
@@ -86,7 +87,6 @@ $(eval $(call gb_Library_add_exception_objects,tk,\
     toolkit/source/awt/vclxwindow \
     toolkit/source/awt/vclxwindow1 \
     toolkit/source/awt/vclxwindows \
-    toolkit/source/awt/stylesettings \
     toolkit/source/awt/xsimpleanimation \
     toolkit/source/awt/xthrobber \
     toolkit/source/controls/accessiblecontrolcontext \

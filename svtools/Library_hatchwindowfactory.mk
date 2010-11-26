@@ -41,19 +41,19 @@ $(eval $(call gb_Library_set_include,hatchwindowfactory,\
 ))
 
 $(eval $(call gb_Library_add_linked_libs,hatchwindowfactory,\
-    tk \
-    tl \
     cppu \
     cppuhelper \
     sal \
+    tk \
+    tl \
     vcl \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,hatchwindowfactory,\
-    svtools/source/hatchwindow/hatchwindowfactory \
     svtools/source/hatchwindow/documentcloser \
-    svtools/source/hatchwindow/ipwin \
     svtools/source/hatchwindow/hatchwindow \
+    svtools/source/hatchwindow/hatchwindowfactory \
+    svtools/source/hatchwindow/ipwin \
 ))
 
 ifeq ($(OS),LINUX)

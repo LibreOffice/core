@@ -40,11 +40,11 @@ $(eval $(call gb_Executable_set_include,bmp,\
 ))
 
 $(eval $(call gb_Executable_add_linked_libs,bmp,\
-    stl \
-    vcl \
-    tl \
-    vos3 \
     sal \
+    stl \
+    tl \
+    vcl \
+    vos3 \
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,bmp,\
@@ -64,8 +64,8 @@ endif
 
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Executable_add_linked_libs,bmp,\
-   pthread \
    dl \
+   pthread \
 ))
 endif
 # vim: set noet sw=4 ts=4:

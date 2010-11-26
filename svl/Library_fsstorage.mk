@@ -53,8 +53,8 @@ $(eval $(call gb_Library_add_linked_libs,fsstorage,\
 ))
 
 $(eval $(call gb_Library_add_linked_system_libs,fsstorage,\
-    icuuc \
     dl \
+    icuuc \
     m \
     pthread \
 ))

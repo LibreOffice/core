@@ -26,7 +26,6 @@
 #*************************************************************************
 
 $(eval $(call gb_Package_Package,toolkit_source,$(SRCDIR)/toolkit/source))
-$(eval $(call gb_Package_add_file,toolkit_source,inc/toolkit/awt/vclxdialog.hxx,awt/vclxdialog.hxx))
 $(eval $(call gb_Package_add_file,toolkit_source,inc/layout/core/bin.hxx,layout/core/bin.hxx))
 $(eval $(call gb_Package_add_file,toolkit_source,inc/layout/core/box-base.hxx,layout/core/box-base.hxx))
 $(eval $(call gb_Package_add_file,toolkit_source,inc/layout/core/box.hxx,layout/core/box.hxx))
@@ -45,3 +44,4 @@ $(eval $(call gb_Package_add_file,toolkit_source,inc/layout/core/timer.hxx,layou
 $(eval $(call gb_Package_add_file,toolkit_source,inc/layout/core/translate.hxx,layout/core/translate.hxx))
 $(eval $(call gb_Package_add_file,toolkit_source,inc/layout/core/vcl.hxx,layout/core/vcl.hxx))
 $(eval $(call gb_Package_add_file,toolkit_source,inc/layout/vcl/wrapper.hxx,layout/vcl/wrapper.hxx))
+$(eval $(call gb_Package_add_file,toolkit_source,inc/toolkit/awt/vclxdialog.hxx,awt/vclxdialog.hxx))

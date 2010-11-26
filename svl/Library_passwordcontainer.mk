@@ -42,12 +42,12 @@ $(eval $(call gb_Library_set_include,passwordcontainer,\
 ))
 
 $(eval $(call gb_Library_add_linked_libs,passwordcontainer,\
-    utl \
-    ucbhelper \
-    cppuhelper \
     cppu \
+    cppuhelper \
     sal \
     stl \
+    ucbhelper \
+    utl \
 ))
 
 $(eval $(call gb_Library_add_linked_system_libs,passwordcontainer,\
