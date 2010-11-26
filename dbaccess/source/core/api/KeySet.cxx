@@ -200,7 +200,8 @@ void OKeySet::initColumns()
 void OKeySet::findTableColumnsMatching_throw(   const Any& i_aTable,
                                                 const ::rtl::OUString& i_rUpdateTableName,
                                                 const Reference<XDatabaseMetaData>& i_xMeta,
-                                                const Reference<XNameAccess>& i_xQueryColumns)
+                                                const Reference<XNameAccess>& i_xQueryColumns,
+                                                ::std::auto_ptr<SelectColumnsMetaData>& o_pKeyColumnNames)
 {
     // first ask the database itself for the best columns which can be used
     Sequence< ::rtl::OUString> aBestColumnNames;
@@ -242,17 +243,17 @@ void OKeySet::findTableColumnsMatching_throw(   const Any& i_aTable,
         sUpdateTableName = dbtools::composeTableName( i_xMeta, sCatalog, sSchema, sTable, sal_False, ::dbtools::eInDataManipulation );
     }
 
-    ::dbaccess::getColumnPositions(i_xQueryColumns,aBestColumnNames,sUpdateTableName,(*m_pKeyColumnNames),true);
+    ::dbaccess::getColumnPositions(i_xQueryColumns,aBestColumnNames,sUpdateTableName,(*o_pKeyColumnNames),true);
     ::dbaccess::getColumnPositions(i_xQueryColumns,xTblColumns->getElementNames(),sUpdateTableName,(*m_pColumnNames),true);
     ::dbaccess::getColumnPositions(i_xQueryColumns,aParameterColumns,sUpdateTableName,(*m_pParameterNames),true);
 
-    if ( m_pKeyColumnNames->empty() )
+    if ( o_pKeyColumnNames->empty() )
     {
         ::dbtools::throwGenericSQLException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Could not find any key column." ) ), *this );
     }
 
-    for (   SelectColumnsMetaData::const_iterator keyColumn = m_pKeyColumnNames->begin();
-            keyColumn != m_pKeyColumnNames->end();
+    for (   SelectColumnsMetaData::const_iterator keyColumn = o_pKeyColumnNames->begin();
+            keyColumn != o_pKeyColumnNames->end();
             ++keyColumn
         )
     {
@@ -298,7 +299,7 @@ void OKeySet::construct(const Reference< XResultSet>& _xDriverSet,const ::rtl::O
     Reference<XDatabaseMetaData> xMeta = m_xConnection->getMetaData();
     Reference<XColumnsSupplier> xQueryColSup(m_xComposer,UNO_QUERY);
     const Reference<XNameAccess> xQueryColumns = xQueryColSup->getColumns();
-    findTableColumnsMatching_throw(makeAny(m_xTable),m_sUpdateTableName,xMeta,xQueryColumns);
+    findTableColumnsMatching_throw(makeAny(m_xTable),m_sUpdateTableName,xMeta,xQueryColumns,m_pKeyColumnNames);
 
     // the first row is empty because it's now easier for us to distinguish when we are beforefirst or first
     // without extra varaible to be set
