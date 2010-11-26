@@ -3771,7 +3771,7 @@ void AnimationImporter::dump( const PropertySet& rSet )
             fprintf( mpFile, "\"" );
         }
 
-        aIter++;
+        ++aIter;
     }
 }
 
