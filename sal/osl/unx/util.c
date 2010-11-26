@@ -40,7 +40,7 @@
 #endif
 
 #include "osl/util.h"
-
+#include "osl/diagnose.h"
 
 
 /*****************************************************************************/
@@ -57,12 +57,16 @@ static int   osl_checkAddr(const char* addr);
 
 sal_Bool SAL_CALL osl_getEthernetAddress( sal_uInt8 * pAddr )
 {
-    struct ifconf ifc;
-
 #ifdef SOLARIS
     /** algorithm doesn't work on solaris */
     return sal_False;
 #else
+    char buff[1024];
+    char hard_addr[64];
+    struct ifconf ifc;
+    struct ifreq *ifr;
+    int i;
+    int so;
 
     if ( pAddr == 0 )
     {
@@ -191,8 +195,6 @@ static int osl_getHWAddr(const char *ifname, char* hard_addr)
         OSL_TRACE( "SIOCGIFADDR got '00:00:00:00:00:00'\n" );
         return ret;
     }
-
-       OSL_TRACE( "interface: %s -- HWaddr : %s\n", ifname, print_ether(hard_addr) );
 
     return 1;
 }
