@@ -126,7 +126,7 @@
 #define SID_HELP_HELPFILEBOX                (SID_SFX_START + 419)
 #define SID_HELP_HELPFILEBOX_SELECTED       (SID_SFX_START + 420)
 #define SID_SHOW_LICENSE                    (SID_SFX_START + 1683)
-#define SID_SHOW_CREDITS                    (SID_SFX_START + 1684)
+#define SID_SHOW_CREDITS                    (SID_SFX_START + 1711)
 #define SID_HELP_TUTORIALS                  (SID_SFX_START + 1695)
 
 // default-ids for document
