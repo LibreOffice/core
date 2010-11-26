@@ -2242,8 +2242,6 @@ void ScXMLExport::_ExportAutoStyles()
 
     if (getExportFlags() & EXPORT_CONTENT)
     {
-        StackPrinter __stack_printer__("ScXMLExport::_ExportAutoStyles");
-
         //  re-create automatic styles with old names from stored data
         ScSheetSaveData* pSheetData = ScModelObj::getImplementation(xSpreadDoc)->GetSheetSaveData();
         if (pSheetData && pDoc)
