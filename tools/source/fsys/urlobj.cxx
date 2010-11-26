@@ -1444,7 +1444,45 @@ bool INetURLObject::setAbsURIRef(rtl::OUString const & rTheAbsURIRef,
 
     m_aAbsURIRef = aSynAbsURIRef;
 
+    // At this point references of type "\\server\paths" have
+    // been converted to file:://server/path".
+#ifdef LINUX
+    if (m_eScheme==INET_PROT_FILE && !m_aHost.isEmpty()) {
+        // Change "file:://server/path" URIs to "smb:://server/path" on
+        // Linux
+        // Leave "file::path" URIs unchanged.
+        changeScheme(INET_PROT_SMB);
+    }
+#endif
+
+#ifdef WIN
+    if (m_eScheme==INET_PROT_SMB) {
+        // Change "smb://server/path" URIs to "file://server/path"
+        // URIs on Windows, since Windows doesn't understand the
+        // SMB scheme.
+        changeScheme(INET_PROT_FILE);
+    }
+#endif
+
     return true;
+}
+
+//============================================================================
+void INetURLObject::changeScheme(INetProtocol eTargetScheme) {
+    ::rtl::OUString aTmpStr=m_aAbsURIRef.makeStringAndClear();
+    int oldSchemeLen=strlen(getSchemeInfo().m_pScheme);
+    m_eScheme=eTargetScheme;
+    int newSchemeLen=strlen(getSchemeInfo().m_pScheme);
+    m_aAbsURIRef.appendAscii(getSchemeInfo().m_pScheme);
+    m_aAbsURIRef.append(aTmpStr.getStr()+oldSchemeLen);
+    int delta=newSchemeLen-oldSchemeLen;
+    m_aUser+=delta;
+    m_aAuth+=delta;
+    m_aHost+=delta;
+    m_aPort+=delta;
+    m_aPath+=delta;
+    m_aQuery+=delta;
+    m_aFragment+=delta;
 }
 
 //============================================================================
