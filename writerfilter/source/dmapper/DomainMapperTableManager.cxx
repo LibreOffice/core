@@ -269,6 +269,44 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
             case NS_ooxml::LN_CT_TblPrBase_tblLook:
                 /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
                 break; //todo: table look specifier
+            case NS_ooxml::LN_CT_TcPrBase_textDirection:
+            {
+                TablePropertyMapPtr pPropMap( new TablePropertyMap );
+                const sal_Int16 HORI_LEFT_TOP = 0;
+                /*const sal_Int16 HORI_RIGHT_TOP = 1;*/ // currently not used below
+                const sal_Int16 VERT_TOP_RIGHT = 2;
+                bool bInsertCellProps = true;
+                switch ( nIntValue )
+                {
+                    case 1:  // tbRl
+                    // Binary filter takes BiDirection into account ( but I have no idea about that here )
+                    // or even what it is. But... here's where to handle it if it becomes an issue
+                        pPropMap->Insert( PROP_FRM_DIRECTION, false, uno::makeAny( VERT_TOP_RIGHT ));
+                        OSL_TRACE("Have inserted textDirection %d", nIntValue );
+                        break;
+                    case 3:  // btLr
+                        // We have to fake this text direction
+                         pPropMap->Insert( PROP_FRM_DIRECTION, false, uno::makeAny( HORI_LEFT_TOP ));
+                         pPropMap->Insert( PROP_CHAR_ROTATION, false, uno::makeAny( sal_Int16( 900 ) ));
+                        OSL_TRACE("Have inserted textDirection %d", nIntValue );
+                        break;
+                    case 4: // lrTbV
+                        pPropMap->Insert( PROP_FRM_DIRECTION, false, uno::makeAny( HORI_LEFT_TOP ));
+                        break;
+                    case 5: // tbRlV
+                        pPropMap->Insert( PROP_FRM_DIRECTION, false, uno::makeAny( VERT_TOP_RIGHT ));
+                        break;
+                    case 0: // lrTb
+                    case NS_ooxml::LN_Value_ST_TextDirection_tbLrV:
+                    default:
+                       // Ignore - we can't handle these
+                       bInsertCellProps = false;
+                       break;
+                }
+                if ( bInsertCellProps )
+                    cellProps( pPropMap );
+                break;
+            }
             case NS_ooxml::LN_CT_TcPrBase_tcW:
                 /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
                 break; //fixed column width is not supported
