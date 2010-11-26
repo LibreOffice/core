@@ -73,13 +73,16 @@ $(eval $(call gb_Library_add_linked_libs,msword,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,msword,\
-    sw/source/filter/rtf/rtfatr \
     sw/source/filter/rtf/rtffld \
     sw/source/filter/rtf/rtffly \
     sw/source/filter/rtf/rtfnum \
     sw/source/filter/rtf/rtftbl \
     sw/source/filter/rtf/swparrtf \
-    sw/source/filter/rtf/wrtrtf \
+    sw/source/filter/ww8/rtfattributeoutput \
+    sw/source/filter/ww8/rtfexport \
+    sw/source/filter/ww8/rtfexportfilter \
+    sw/source/filter/ww8/rtfimportfilter \
+    sw/source/filter/ww8/rtfsdrexport \
     sw/source/filter/ww8/WW8FFData \
     sw/source/filter/ww8/WW8FibData \
     sw/source/filter/ww8/WW8Sttbf \
