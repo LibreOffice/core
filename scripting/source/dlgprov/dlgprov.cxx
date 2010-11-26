@@ -530,7 +530,7 @@ static ::rtl::OUString aResourceResolverPropName(RTL_CONSTASCII_USTRINGPARAM("Re
         const Reference< XControl >& rxControl,
         const Reference< XInterface >& rxHandler,
         const Reference< XIntrospectionAccess >& rxIntrospectionAccess,
-        bool bDialogProviderMode, const rtl::OUString& sDialogLibName )
+        bool bDialogProviderMode )
     {
         if ( rxControl.is() )
         {
@@ -744,7 +744,7 @@ static ::rtl::OUString aResourceResolverPropName(RTL_CONSTASCII_USTRINGPARAM("Re
             {
                 //xDialog = Reference< XDialog >( xCtrl, UNO_QUERY );
                 Reference< XIntrospectionAccess > xIntrospectionAccess = inspectHandler( xHandler );
-                attachControlEvents( xCtrl, xHandler, xIntrospectionAccess, bDialogProviderMode, msDialogLibName );
+                attachControlEvents( xCtrl, xHandler, xIntrospectionAccess, bDialogProviderMode );
             }
         }
 

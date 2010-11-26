@@ -92,7 +92,7 @@ namespace dlgprov
         void attachControlEvents( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& rxControlContainer,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxHandler,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XIntrospectionAccess >& rxIntrospectionAccess,
-            bool bDialogProviderMode, const rtl::OUString& );
+            bool bDialogProviderMode );
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XIntrospectionAccess > inspectHandler(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxHandler );
     // helper methods
