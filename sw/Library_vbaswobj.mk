@@ -55,6 +55,7 @@ $(eval $(call gb_Library_add_linked_libs,vbaswobj,\
     sal \
     sb \
     sfx \
+    stl \
     svl \
     svt \
     svx \
@@ -65,7 +66,6 @@ $(eval $(call gb_Library_add_linked_libs,vbaswobj,\
     utl \
     vbahelper \
     vcl \
-    stl \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,vbaswobj,\

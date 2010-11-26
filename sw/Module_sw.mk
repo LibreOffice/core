@@ -28,15 +28,15 @@
 $(eval $(call gb_Module_Module,sw))
 
 $(eval $(call gb_Module_add_targets,sw,\
+    AllLangResTarget_sw \
+    Library_msword \
     Library_sw \
     Library_swd \
     Library_swui \
-    Library_msword \
     Library_vbaswobj \
     Package_misc \
     Package_uiconfig \
     Package_xml \
-    AllLangResTarget_sw \
 ))
 
 # vim: set noet ts=4 sw=4:

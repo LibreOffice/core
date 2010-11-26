@@ -49,15 +49,15 @@ $(eval $(call gb_Library_set_defs,swd,\
 
 $(eval $(call gb_Library_add_linked_libs,swd,\
     comphelper \
+    cppu \
+    cppuhelper \
+    sal \
     sfx \
     sot \
     svl \
     svt \
     tl \
     ucbhelper \
-    cppu \
-    cppuhelper \
-    sal \
     utl \
     vcl \
 ))
