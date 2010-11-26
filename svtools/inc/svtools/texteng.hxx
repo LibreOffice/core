@@ -286,8 +286,8 @@ public:
     BOOL                HasUndoManager() const { return mpUndoManager ? TRUE : FALSE; }
     ::svl::IUndoManager&
                         GetUndoManager();
-    void                UndoActionStart( USHORT nId );
-    void                UndoActionEnd( USHORT nId );
+    void                UndoActionStart( USHORT nId = 0 );
+    void                UndoActionEnd();
     void                InsertUndo( TextUndo* pUndo, BOOL bTryMerge = FALSE );
     BOOL                IsInUndo()                  { return mbIsInUndo; }
     void                SetIsInUndo( BOOL bInUndo ) { mbIsInUndo = bInUndo; }
