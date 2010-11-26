@@ -3159,6 +3159,20 @@ void OutputDevice::DrawPolyLine(
 
 // -----------------------------------------------------------------------
 
+sal_uInt32 OutputDevice::GetGCStackDepth() const
+{
+    const ImplObjStack* pData = mpObjStack;
+    sal_uInt32 nDepth = 0;
+    while( pData )
+    {
+        nDepth++;
+        pData = pData->mpPrev;
+    }
+    return nDepth;
+}
+
+// -----------------------------------------------------------------------
+
 void OutputDevice::Push( USHORT nFlags )
 {
     DBG_TRACE( "OutputDevice::Push()" );

@@ -854,13 +854,12 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
             ++nActionNum;
         }
 
-        ConnectedComponentsList aCCList; // list containing distinct sets of connected components as elements.
+        // clean up aMapModeVDev
+        sal_uInt32 nCount = aMapModeVDev.GetGCStackDepth();
+        while( nCount-- )
+            aMapModeVDev.Pop();
 
-        // create an OutputDevice to record mapmode changes and the like
-        VirtualDevice aMapModeVDev2;
-        aMapModeVDev2.mnDPIX = mnDPIX;
-        aMapModeVDev2.mnDPIY = mnDPIY;
-        aMapModeVDev2.EnableOutput(FALSE);
+        ConnectedComponentsList aCCList; // list containing distinct sets of connected components as elements.
 
         // fast-forward until one after the last background action
         // (need to reconstruct map mode vdev state)
@@ -875,7 +874,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                     pCurrAct, nActionNum) );
 
             // execute action to get correct MapModes etc.
-            pCurrAct->Execute( &aMapModeVDev2 );
+            pCurrAct->Execute( &aMapModeVDev );
             pCurrAct=const_cast<GDIMetaFile&>(rInMtf).NextAction();
             ++nActionNum;
         }
@@ -892,10 +891,10 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
              pCurrAct=const_cast<GDIMetaFile&>(rInMtf).NextAction(), ++nActionNum )
         {
             // execute action to get correct MapModes etc.
-            pCurrAct->Execute( &aMapModeVDev2 );
+            pCurrAct->Execute( &aMapModeVDev );
 
             // cache bounds of current action
-            const Rectangle aBBCurrAct( ImplCalcActionBounds(*pCurrAct, aMapModeVDev2) );
+            const Rectangle aBBCurrAct( ImplCalcActionBounds(*pCurrAct, aMapModeVDev) );
 
             // accumulate collected bounds here, initialize with current action
             Rectangle                               aTotalBounds( aBBCurrAct ); // thus,
@@ -924,7 +923,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
             // not be considered for connected components,
             // too. Just put each of them into a separate
             // component.
-            aTotalComponents.bIsFullyTransparent = !ImplIsNotTransparent(*pCurrAct, aMapModeVDev2);
+            aTotalComponents.bIsFullyTransparent = !ImplIsNotTransparent(*pCurrAct, aMapModeVDev);
 
             if( !aBBCurrAct.IsEmpty() &&
                 !aTotalComponents.bIsFullyTransparent )
@@ -1310,17 +1309,15 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
             }
         }
 
+        // clean up aMapModeVDev
+        nCount = aMapModeVDev.GetGCStackDepth();
+        while( nCount-- )
+            aMapModeVDev.Pop();
+
         //
         //  STAGE 4: Copy actions to output metafile
         //  ========================================
         //
-
-        // create an OutputDevice to record color settings, mapmode
-        // changes and the like
-        VirtualDevice aMapModeVDev3;
-        aMapModeVDev3.mnDPIX = mnDPIX;
-        aMapModeVDev3.mnDPIY = mnDPIY;
-        aMapModeVDev3.EnableOutput(FALSE);
 
         // iterate over all actions and duplicate the ones not in a
         // special aCCList member into rOutMtf
@@ -1349,7 +1346,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                     // given background color
                     ImplConvertTransparentAction(rOutMtf,
                                                  *pCurrAct,
-                                                 aMapModeVDev3,
+                                                 aMapModeVDev,
                                                  aBackgroundComponent.aBgColor);
                 }
                 else
@@ -1358,7 +1355,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                     rOutMtf.AddAction( ( pCurrAct->Duplicate(), pCurrAct ) );
                 }
 
-                pCurrAct->Execute(&aMapModeVDev3);
+                pCurrAct->Execute(&aMapModeVDev);
             }
         }
 
