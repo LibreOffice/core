@@ -88,7 +88,7 @@ namespace rptui
             uno::Reference< lang::XComponent > xComponent( xFixedText, uno::UNO_QUERY_THROW );
             handle(xComponent);
         }
-        catch (uno::Exception e)
+        catch (uno::Exception const&)
         {
             DBG_UNHANDLED_EXCEPTION();
         }
