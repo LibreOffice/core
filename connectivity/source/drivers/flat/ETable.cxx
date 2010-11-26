@@ -227,9 +227,15 @@ void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine,x
                     bNumeric = TRUE;
                     xub_StrLen nDot = 0;
                     xub_StrLen nDecimalDelCount = 0;
+                    xub_StrLen nSpaceCount = 0;
                     for (xub_StrLen j = 0; j < aField2.Len(); j++)
                     {
                         const sal_Unicode c = aField2.GetChar(j);
+                        if ( j == nSpaceCount && m_cFieldDelimiter != 32 && c == 32 )
+                        {
+                            ++nSpaceCount;
+                            continue;
+                        }
                         // nur Ziffern und Dezimalpunkt und Tausender-Trennzeichen?
                         if ( ( !cDecimalDelimiter  || c != cDecimalDelimiter )  &&
                              ( !cThousandDelimiter || c != cThousandDelimiter ) &&
@@ -372,6 +378,25 @@ void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine,x
                     }
             };
             nFlags |= ColumnSearch::CHAR;
+        }
+    }
+    else
+    {
+        String aField;
+        aFirstLine.GetTokenSpecial(aField,nStartPosFirstLine,m_cFieldDelimiter,'\0');
+        if (aField.Len() == 0 ||
+                (m_cStringDelimiter && m_cStringDelimiter == aField.GetChar(0)))
+        {
+            if ( m_cStringDelimiter != '\0' )
+                aFirstLine.GetTokenSpecial(aField,nStartPosFirstLine2,m_cFieldDelimiter,m_cStringDelimiter);
+            else
+                nStartPosFirstLine2 = nStartPosFirstLine;
+        }
+        else
+        {
+            String aField2;
+            if ( m_cStringDelimiter != '\0' )
+                aFirstLine.GetTokenSpecial(aField2,nStartPosFirstLine2,m_cFieldDelimiter,m_cStringDelimiter);
         }
     }
 }
