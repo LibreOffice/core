@@ -3401,7 +3401,7 @@ void MainSequence::reset()
     EffectSequenceHelper::reset();
 
     InteractiveSequenceList::iterator aIter;
-    for( aIter = maInteractiveSequenceList.begin(); aIter != maInteractiveSequenceList.end(); aIter++ )
+    for( aIter = maInteractiveSequenceList.begin(); aIter != maInteractiveSequenceList.end(); ++aIter )
         (*aIter)->reset();
     maInteractiveSequenceList.clear();
 
@@ -3454,7 +3454,7 @@ CustomAnimationEffectPtr MainSequence::findEffect( const ::com::sun::star::uno::
     if( pEffect.get() == 0 )
     {
         InteractiveSequenceList::const_iterator aIter;
-        for( aIter = maInteractiveSequenceList.begin(); (aIter != maInteractiveSequenceList.end()) && (pEffect.get() == 0); aIter++ )
+        for( aIter = maInteractiveSequenceList.begin(); (aIter != maInteractiveSequenceList.end()) && (pEffect.get() == 0); ++aIter )
         {
             pEffect = (*aIter)->findEffect( xNode );
         }
@@ -3474,7 +3474,7 @@ sal_Int32 MainSequence::getOffsetFromEffect( const CustomAnimationEffectPtr& pEf
     nOffset = EffectSequenceHelper::getCount();
 
     InteractiveSequenceList::const_iterator aIter;
-    for( aIter = maInteractiveSequenceList.begin(); aIter != maInteractiveSequenceList.end(); aIter++ )
+    for( aIter = maInteractiveSequenceList.begin(); aIter != maInteractiveSequenceList.end(); ++aIter )
     {
         sal_Int32 nTemp = (*aIter)->getOffsetFromEffect( pEffect );
         if( nTemp != -1 )
@@ -3563,7 +3563,7 @@ void MainSequence::insertTextRange( const com::sun::star::uno::Any& aTarget )
     EffectSequenceHelper::insertTextRange( aTarget );
 
     InteractiveSequenceList::iterator aIter;
-    for( aIter = maInteractiveSequenceList.begin(); aIter != maInteractiveSequenceList.end(); aIter++ )
+    for( aIter = maInteractiveSequenceList.begin(); aIter != maInteractiveSequenceList.end(); ++aIter )
     {
         (*aIter)->insertTextRange( aTarget );
     }
@@ -3575,7 +3575,7 @@ void MainSequence::disposeTextRange( const com::sun::star::uno::Any& aTarget )
     EffectSequenceHelper::disposeTextRange( aTarget );
 
     InteractiveSequenceList::iterator aIter;
-    for( aIter = maInteractiveSequenceList.begin(); aIter != maInteractiveSequenceList.end(); aIter++ )
+    for( aIter = maInteractiveSequenceList.begin(); aIter != maInteractiveSequenceList.end(); ++aIter )
     {
         (*aIter)->disposeTextRange( aTarget );
     }
@@ -3589,7 +3589,7 @@ void MainSequence::onTextChanged( const Reference< XShape >& xShape )
     EffectSequenceHelper::onTextChanged( xShape );
 
     InteractiveSequenceList::iterator aIter;
-    for( aIter = maInteractiveSequenceList.begin(); aIter != maInteractiveSequenceList.end(); aIter++ )
+    for( aIter = maInteractiveSequenceList.begin(); aIter != maInteractiveSequenceList.end(); ++aIter )
     {
         (*aIter)->onTextChanged( xShape );
     }
@@ -3602,7 +3602,7 @@ void EffectSequenceHelper::onTextChanged( const Reference< XShape >& xShape )
     bool bChanges = false;
 
     EffectSequence::iterator aIter;
-    for( aIter = maEffects.begin(); aIter != maEffects.end(); aIter++ )
+    for( aIter = maEffects.begin(); aIter != maEffects.end(); ++aIter )
     {
         if( (*aIter)->getTargetShape() == xShape )
             bChanges |= (*aIter)->checkForText();
