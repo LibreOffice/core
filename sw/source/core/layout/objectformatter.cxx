@@ -118,7 +118,7 @@ class SwPageNumAndTypeOfAnchors
             return bRetObj;
         }
 
-        inline sal_uInt32 GetPageNum( sal_uInt32 _nIndex )
+        inline sal_uInt32 GetPageNum( sal_uInt32 _nIndex ) const
         {
             sal_uInt32 nRetPgNum = 0L;
 
