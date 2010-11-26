@@ -110,10 +110,8 @@ $(MISC)/$(TARGET)/services.rdb .ERRREMOVE : $(MISC)/$(TARGET)/udkapi.rdb
         -c $(DLLPRE)fwk$(DLLPOSTFIX)$(DLLPOST)
 
 #Tweak things so that we use the .res files in the solver
-STAR_RESOURCEPATH:=$(PWD)/$(BIN):$(SOLARBINDIR)
+STAR_RESOURCEPATH:=$(PWD)/$(BIN)$(PATH_SEPERATOR)$(SOLARBINDIR)
 .EXPORT : STAR_RESOURCEPATH
-
-.IF "$(OS)" == "LINUX"
 
 test .PHONY: $(SHL1TARGETN) $(MISC)/$(TARGET)/services.rdb $(MISC)$/$(TARGET)$/types.rdb $(MISC)/$(TARGET)/udkapi.rdb
     @echo ----------------------------------------------------------
@@ -125,13 +123,3 @@ test .PHONY: $(SHL1TARGETN) $(MISC)/$(TARGET)/services.rdb $(MISC)$/$(TARGET)$/t
         -env:OOO_BASE_DIR="$(my_file)$(PWD)/$(MISC)/$(TARGET)" \
         -env:BRAND_BASE_DIR="$(my_file)$(PWD)/$(MISC)/$(TARGET)" \
         -env:UNO_USER_PACKAGES_CACHE="$(my_file)$(PWD)/$(MISC)/$(TARGET)"
-
-.ELSE
-
-test .PHONY: $(SHL1TARGETN)
-    @echo ----------------------------------------------------------
-    @echo - WARNING!!, test disabled on your platform
-    @echo - Please test manually, and enable if it works
-    @echo ----------------------------------------------------------
-
-.ENDIF
