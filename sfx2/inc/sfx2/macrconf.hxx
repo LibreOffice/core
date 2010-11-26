@@ -78,7 +78,6 @@ public:
     ~SfxMacroInfo();
     sal_Bool operator==(const SfxMacroInfo& rOther) const;
     int Load (SvStream&);
-    int Store (SvStream&);
     String              GetMacroName() const;
     String              GetQualifiedName() const;
     String              GetFullQualifiedName() const;
