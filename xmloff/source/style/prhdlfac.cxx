@@ -113,7 +113,7 @@ SvXMLEnumMapEntry __READONLY_DATA aXML_WritingDirection_Enum[] =
 //
 XMLPropertyHandlerFactory::~XMLPropertyHandlerFactory()
 {
-    for( CacheMap::iterator pPos = maHandlerCache.begin(); pPos != maHandlerCache.end(); pPos++ )
+    for( CacheMap::iterator pPos = maHandlerCache.begin(); pPos != maHandlerCache.end(); ++pPos )
         delete pPos->second;
 }
 
