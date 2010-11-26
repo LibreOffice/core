@@ -923,7 +923,7 @@ bool WW8AttributeOutput::StartURL( const String &rUrl, const String &rTarget )
     SwWW8Writer::WriteLong( *m_rWW8Export.pDataStrm, nFlag );
 
     INetProtocol eProto = aURL.GetProtocol();
-    if ( eProto == INET_PROT_FILE )
+    if ( eProto == INET_PROT_FILE || eProto == INET_PROT_SMB )
     {
         // version 1 (for a document)
 
@@ -941,7 +941,7 @@ bool WW8AttributeOutput::StartURL( const String &rUrl, const String &rTarget )
 
         // save the links to files as relative
         sURL = URIHelper::simpleNormalizedMakeRelative( m_rWW8Export.GetWriter().GetBaseURL(), sURL );
-        if ( sURL.EqualsAscii( "/", 0, 1 ) )
+        if ( eProto == INET_PROT_FILE && sURL.EqualsAscii( "/", 0, 1 ) )
             sURL = aURL.PathToFileName();
 
         // special case for the absolute windows names
@@ -952,6 +952,15 @@ bool WW8AttributeOutput::StartURL( const String &rUrl, const String &rTarget )
              sURL.EqualsAscii( ":", 2, 1 ) )
         {
             sURL.Erase( 0, 1 );
+            sURL.SearchAndReplaceAll( '/', '\\' );
+        }
+
+        // n#261623 convert smb notation to '\\'
+        const char pSmb[] = "smb://";
+        if ( eProto == INET_PROT_SMB &&
+             sURL.EqualsAscii( pSmb, 0, sizeof( pSmb ) - 1 ) )
+        {
+            sURL.Erase( 0, sizeof( pSmb ) - 3 );
             sURL.SearchAndReplaceAll( '/', '\\' );
         }
 
