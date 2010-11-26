@@ -378,6 +378,10 @@ public:
     */
     bool            HasTopUndoActionMark( UndoStackMark const i_mark );
 
+    /** removes the oldest Undo actions from the stack
+    */
+    void            RemoveOldestUndoActions( USHORT const i_count );
+
 private:
     USHORT  ImplLeaveListAction( const bool i_merge, ::svl::undo::impl::UndoManagerGuard& i_guard );
     bool    ImplAddUndoAction_NoNotify( SfxUndoAction* pAction, BOOL bTryMerge, ::svl::undo::impl::UndoManagerGuard& i_guard );

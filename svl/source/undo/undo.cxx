@@ -607,8 +607,7 @@ bool SfxUndoManager::ImplAddUndoAction_NoNotify( SfxUndoAction *pAction, BOOL bT
     }
 
     // append new action
-    SfxUndoAction* pMakeCompilerHappy = pAction;
-    m_pData->pActUndoArray->aUndoActions.Insert( pMakeCompilerHappy, m_pData->pActUndoArray->nCurUndoAction++ );
+    m_pData->pActUndoArray->aUndoActions.Insert( pAction, m_pData->pActUndoArray->nCurUndoAction++ );
     return true;
 }
 
@@ -1133,6 +1132,30 @@ bool SfxUndoManager::HasTopUndoActionMark( UndoStackMark const i_mark )
     }
 
     return false;
+}
+
+//------------------------------------------------------------------------
+
+void SfxUndoManager::RemoveOldestUndoActions( USHORT const i_count )
+{
+    UndoManagerGuard aGuard( *m_pData );
+
+    size_t nActionsToRemove = i_count;
+    while ( nActionsToRemove )
+    {
+        SfxUndoAction* pActionToRemove = m_pData->pUndoArray->aUndoActions[0].pAction;
+
+        if ( IsInListAction() && ( m_pData->pUndoArray->nCurUndoAction == 1 ) )
+        {
+            OSL_ENSURE( false, "SfxUndoManager::RemoveOldestUndoActions: cannot remove a not-yet-closed list action!" );
+            return;
+        }
+
+        aGuard.markForDeletion( pActionToRemove );
+        m_pData->pUndoArray->aUndoActions.Remove( 0 );
+        --m_pData->pUndoArray->nCurUndoAction;
+        --nActionsToRemove;
+    }
 }
 
 //------------------------------------------------------------------------
