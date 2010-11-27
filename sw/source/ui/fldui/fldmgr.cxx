@@ -1336,11 +1336,6 @@ BOOL SwFldMgr::InsertFld(  const SwInsertFld_Data& rData )
                 pCurShell->EndAllAction();
                 return TRUE;
 
-/*              // In der Tabelle Tabellenformeln einfuegen
-                SwTblFieldType* pTyp = (SwTblFieldType*)pCurShell->GetFldType(
-                                                        0, RES_TABLEFLD);
-                pFld = new SwTblField(pTyp, rData.sPar2, nsSwGetSetExpType::GSE_EXPR, nFormatId);
-                bTbl = TRUE;*/
             }
             else
             {

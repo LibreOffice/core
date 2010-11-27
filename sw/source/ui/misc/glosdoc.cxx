@@ -262,7 +262,6 @@ sal_Bool    SwGlossaries::RenameGroupDoc(
                 String sNewFilePath(*(*m_pPathArr)[nNewPath]);
                 String sNewFileName = lcl_CheckFileName(
                                     sNewFilePath, rNewGroup.GetToken(0, GLOS_DELIM));
-                //String aTmp( rNewGroup.GetToken(0, GLOS_DELIM));
                 const sal_uInt16 nFileNameLen = sNewFileName.Len();
                 sNewFileName += SwGlossaries::GetExtension();
                 String sTempNewFilePath(sNewFilePath);

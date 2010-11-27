@@ -308,8 +308,6 @@ IMPL_LINK( SwFldRefPage, TypeHdl, ListBox *, EMPTYARG )
                 case REF_BOOKMARK:
                 {
                     // --> OD 2007-11-14 #i83479#
-//                    sName = sBookmarkTxt;
-//                    nFlag = REFFLDFLAG_BOOKMARK;
                     SwGetRefField* pRefFld = dynamic_cast<SwGetRefField*>(GetCurField());
                     if ( pRefFld &&
                          pRefFld->IsRefToHeadingCrossRefBookmark() )
@@ -730,9 +728,7 @@ USHORT SwFldRefPage::FillFormatLB(USHORT nTypeId)
 
         default:
             // --> OD 2007-11-16 #i83479#
-//            nSize = GetFldMgr().GetFormatCount( (REFFLDFLAG & nTypeId)
-//                                                    ? (USHORT)TYP_GETREFFLD : nTypeId,
-//                                                FALSE, IsFldDlgHtmlMode() );
+
             if ( REFFLDFLAG & nTypeId )
             {
                 nSize = FMT_REF_ONLYSEQNO - FMT_REF_BEGIN + 1;
@@ -832,7 +828,6 @@ BOOL SwFldRefPage::FillItemSet(SfxItemSet& )
     switch(nTypeId)
     {
         case TYP_GETREFFLD:
-            // aName = aSelectionLB.GetSelectEntry();
             nSubType = REF_SETREFATTR;
             break;
 

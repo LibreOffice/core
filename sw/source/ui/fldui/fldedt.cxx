@@ -192,14 +192,6 @@ SfxTabPage* SwFldEditDlg::CreatePage(USHORT nGroup)
                 uno::Reference< beans::XPropertySet > xUDProps(
                     xDocProps->getUserDefinedProperties(),
                     uno::UNO_QUERY_THROW);
-//                uno::Reference< beans::XPropertySetInfo > xSetInfo
-//                    = xUDProps->getPropertySetInfo();
-//                const uno::Sequence< beans::Property > props
-//                    = xSetInfo->getProperties();
-//                uno::Sequence< ::rtl::OUString > names(props.getLength());
-//                for (sal_Int32 i = 0; i < props.getLength(); ++i) {
-//                    names[i] = props[i].Name;
-//                }
                 pSet->Put( SfxUnoAnyItem( SID_DOCINFO, uno::makeAny(xUDProps) ) );
                 pTabPage = SwFldDokInfPage::Create(this, *pSet);
                 nHelpId = HID_EDIT_FLD_DOKINF;

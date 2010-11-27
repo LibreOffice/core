@@ -189,7 +189,7 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet& )
             aPageTemplLbl.Enable(FALSE);
             aPageTemplBox.Enable(FALSE);
         }
-        else // if ( rInf.ePos == FTNPOS_CHAPTER )
+        else
         {
             aPosChapterBox.Check();
             aNumCountBox.RemoveEntry(aNumPage);

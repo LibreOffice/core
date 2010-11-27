@@ -71,7 +71,7 @@ SwFldPage::SwFldPage( Window *pParent, const ResId &rId,
     m_bRefresh          (FALSE),
     m_bFirstHTMLInit    (TRUE)
 {
-//  FreeResource();
+
 }
 
 SwFldPage::~SwFldPage()

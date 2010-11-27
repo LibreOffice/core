@@ -145,22 +145,9 @@ void __EXPORT SwLineNumberingPage::Reset( const SfxItemSet&  )
     }
 
     // Format
-//  SwFldMgr aMgr( pSh );
     USHORT nSelFmt = rInf.GetNumType().GetNumberingType();
-//  USHORT nCnt = aMgr.GetFormatCount( TYP_SEQFLD, FALSE );
 
-//  for( USHORT i = 0; i < nCnt; i++)
-//  {
-//      aFormatLB.InsertEntry(aMgr.GetFormatStr( TYP_SEQFLD, i));
-//      USHORT nFmtId = aMgr.GetFormatId( TYP_SEQFLD, i );
-//      aFormatLB.SetEntryData( i, (void*)nFmtId );
-//      if( nFmtId == nSelFmt )
-//          aFormatLB.SelectEntryPos( i );
-//  }
     aFormatLB.SelectNumberingType(nSelFmt);
-
-//  if ( !aFormatLB.GetSelectEntryCount() )
-//      aFormatLB.SelectEntryPos(aFormatLB.GetEntryCount() - 1);
 
     // Position
     aPosLB.SelectEntryPos((USHORT)rInf.GetPos());

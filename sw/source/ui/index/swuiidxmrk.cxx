@@ -198,7 +198,6 @@ SwIndexMarkDlg::SwIndexMarkDlg(Window *pParent,
     aPrevSameBT.SetClickHdl(LINK(this,SwIndexMarkDlg,   PrevSameHdl));
     aNextBT.SetClickHdl(LINK(this,SwIndexMarkDlg,       NextHdl));
     aNextSameBT.SetClickHdl(LINK(this,SwIndexMarkDlg,   NextSameHdl));
-    //aTypeDCB.SetModifyHdl(LINK(this,SwIndexMarkDlg,   ModifyHdl));
     aTypeDCB.SetSelectHdl(LINK(this,SwIndexMarkDlg,     ModifyHdl));
     aKeyDCB.SetModifyHdl(LINK(this,SwIndexMarkDlg,      KeyDCBModifyHdl));
     aKey2DCB.SetModifyHdl(LINK(this,SwIndexMarkDlg,     KeyDCBModifyHdl));
@@ -1710,7 +1709,6 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(Window* pParent,
     long nHeightDiff = - aFLSz.Height();
     aFLSz.Height() = aTL1.Y();
     nHeightDiff += aFLSz.Height();
-//    aEntriesFL.SetSizePixel(aFLSz);
     Size aDlgSize(GetSizePixel());
     aDlgSize.Height() += nHeightDiff;
     SetSizePixel(aDlgSize);

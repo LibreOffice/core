@@ -132,7 +132,7 @@ SwFldInputDlg::SwFldInputDlg( Window *pParent, SwWrtShell &rS,
     // JP 31.3.00: Inputfields in readonly regions must be allowed to
     //              input any content. - 74639
     BOOL bEnable = !rSh.IsCrsrReadonly();
-                    /*!rSh.IsReadOnlyAvailable() || !rSh.HasReadonlySel()*/;
+
     aOKBT.Enable( bEnable );
     aEditED.SetReadOnly( !bEnable );
 

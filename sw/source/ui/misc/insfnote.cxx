@@ -93,27 +93,7 @@ void __EXPORT SwInsFootNoteDlg::Apply()
     }
     else
     {
-/*
-        rSh.StartUndo( UNDO_UI_INSERT_FOOTNOTE );
-        rSh.InsertFootnote( aStr, aEndNoteBtn.IsChecked(), !bExtCharAvailable );
 
-        if ( bExtCharAvailable )
-        {
-            rSh.Left( CRSR_SKIP_CHARS, TRUE, 1, FALSE );
-            SfxItemSet aSet( rSh.GetAttrPool(), RES_CHRATR_FONT, RES_CHRATR_FONT );
-            rSh.GetAttr( aSet );
-            SvxFontItem &rFont = (SvxFontItem &) aSet.Get( RES_CHRATR_FONT );
-            SvxFontItem aFont( rFont.GetFamily(), aFontName,
-                               rFont.GetStyleName(), rFont.GetPitch(),
-                               eCharSet );
-            aSet.Put( aFont );
-            rSh.SetAttr( aSet, SETATTR_DONTEXPAND );
-            // zur Bearbeitung des Fussnotentextes
-            rSh.ResetSelect(0, FALSE);
-            rSh.GotoFtnTxt();
-        }
-        rSh.EndUndo( UNDO_UI_INSERT_FOOTNOTE );
-*/
     }
 
     bFootnote = aFtnBtn.IsChecked();

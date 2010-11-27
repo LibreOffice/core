@@ -153,11 +153,7 @@ void __EXPORT SwFldDokInfPage::Reset(const SfxItemSet& )
                 {
                     uno::Reference< beans::XPropertySetInfo > xSetInfo = xCustomPropertySet->getPropertySetInfo();
                     const uno::Sequence< beans::Property > rProperties = xSetInfo->getProperties();
-//                    uno::Sequence< ::rtl::OUString > aPropertyNames(rProperties.getLength());
-//                    for (sal_Int32 i = 0; i < rProperties.getLength(); ++i) {
-//                        aPropertyNames[i] = rProperties[i].Name;
-//                    }
-                    //if ( !IsFldEdit() )
+
                     if( rProperties.getLength() )
                     {
                         pInfo = aTypeTLB.InsertEntry( String(SW_RES( STR_CUSTOM )) );
