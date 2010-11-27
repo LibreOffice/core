@@ -88,7 +88,7 @@ PresStyleMap& SdStyleFamilyImpl::getStyleSheets()
             maStyleSheets.clear();
 
             const SfxStyles& rStyles = mxPool->GetStyles();
-            for( SfxStyles::const_iterator iter( rStyles.begin() ); iter != rStyles.end(); iter++ )
+            for( SfxStyles::const_iterator iter( rStyles.begin() ); iter != rStyles.end(); ++iter )
             {
                 SdStyleSheet* pStyle = static_cast< SdStyleSheet* >( (*iter).get() );
                 if( pStyle && (pStyle->GetFamily() == SD_STYLE_FAMILY_MASTERPAGE) && (pStyle->GetName().Equals( aLayoutName, 0, nLen )) )
@@ -166,7 +166,7 @@ SdStyleSheet* SdStyleFamily::GetSheetByName( const OUString& rName ) throw(NoSuc
         else
         {
             const SfxStyles& rStyles = mxPool->GetStyles();
-            for( SfxStyles::const_iterator iter( rStyles.begin() ); iter != rStyles.end(); iter++ )
+            for( SfxStyles::const_iterator iter( rStyles.begin() ); iter != rStyles.end(); ++iter )
             {
                 SdStyleSheet* pStyle = static_cast< SdStyleSheet* >( (*iter).get() );
                 if( pStyle && (pStyle->GetFamily() == mnFamily) && (pStyle->GetApiName() == rName) )
@@ -286,7 +286,7 @@ Sequence< OUString > SAL_CALL SdStyleFamily::getElementNames() throw(RuntimeExce
     {
         std::vector< OUString > aNames;
         const SfxStyles& rStyles = mxPool->GetStyles();
-        for( SfxStyles::const_iterator iter( rStyles.begin() ); iter != rStyles.end(); iter++ )
+        for( SfxStyles::const_iterator iter( rStyles.begin() ); iter != rStyles.end(); ++iter )
         {
             SdStyleSheet* pStyle = static_cast< SdStyleSheet* >( (*iter).get() );
             if( pStyle && (pStyle->GetFamily() == mnFamily) )
@@ -314,7 +314,7 @@ sal_Bool SAL_CALL SdStyleFamily::hasByName( const OUString& aName ) throw(Runtim
         else
         {
             const SfxStyles& rStyles = mxPool->GetStyles();
-            for( SfxStyles::const_iterator iter( rStyles.begin() ); iter != rStyles.end(); iter++ )
+            for( SfxStyles::const_iterator iter( rStyles.begin() ); iter != rStyles.end(); ++iter )
             {
                 SdStyleSheet* pStyle = static_cast< SdStyleSheet* >( (*iter).get() );
                 if( pStyle && (pStyle->GetFamily() == mnFamily) && ( pStyle->GetApiName() == aName ) )
@@ -349,7 +349,7 @@ sal_Bool SAL_CALL SdStyleFamily::hasElements() throw(RuntimeException)
     else
     {
         const SfxStyles& rStyles = mxPool->GetStyles();
-        for( SfxStyles::const_iterator iter( rStyles.begin() ); iter != rStyles.end(); iter++ )
+        for( SfxStyles::const_iterator iter( rStyles.begin() ); iter != rStyles.end(); ++iter )
         {
             SdStyleSheet* pStyle = static_cast< SdStyleSheet* >( (*iter).get() );
             if( pStyle && (pStyle->GetFamily() == mnFamily) )
@@ -377,7 +377,7 @@ sal_Int32 SAL_CALL SdStyleFamily::getCount() throw(RuntimeException)
     else
     {
         const SfxStyles& rStyles = mxPool->GetStyles();
-        for( SfxStyles::const_iterator iter( rStyles.begin() ); iter != rStyles.end(); iter++ )
+        for( SfxStyles::const_iterator iter( rStyles.begin() ); iter != rStyles.end(); ++iter )
         {
             SdStyleSheet* pStyle = static_cast< SdStyleSheet* >( (*iter).get() );
             if( pStyle && (pStyle->GetFamily() == mnFamily) )
@@ -404,7 +404,7 @@ Any SAL_CALL SdStyleFamily::getByIndex( sal_Int32 Index ) throw(IndexOutOfBounds
             {
                 PresStyleMap::iterator iter( rStyleSheets.begin() );
                 while( Index-- && (iter != rStyleSheets.end()) )
-                    iter++;
+                    ++iter;
 
                 if( (Index==-1) && (iter != rStyleSheets.end()) )
                     return Any( Reference< XStyle >( (*iter).second.get() ) );
@@ -413,7 +413,7 @@ Any SAL_CALL SdStyleFamily::getByIndex( sal_Int32 Index ) throw(IndexOutOfBounds
         else
         {
             const SfxStyles& rStyles = mxPool->GetStyles();
-            for( SfxStyles::const_iterator iter( rStyles.begin() ); iter != rStyles.end(); iter++ )
+            for( SfxStyles::const_iterator iter( rStyles.begin() ); iter != rStyles.end(); ++iter )
             {
                 SdStyleSheet* pStyle = static_cast< SdStyleSheet* >( (*iter).get() );
                 if( pStyle && (pStyle->GetFamily() == mnFamily) )
