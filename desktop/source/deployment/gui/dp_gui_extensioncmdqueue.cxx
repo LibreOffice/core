@@ -1019,7 +1019,7 @@ void ExtensionCmdQueue::Thread::_checkForUpdates(
         int countWebsiteDownload = 0;
         typedef std::vector< dp_gui::UpdateData >::const_iterator cit;
 
-        for ( cit i = vData.begin(); i < vData.end(); i++ )
+        for ( cit i = vData.begin(); i < vData.end(); ++i )
         {
             if ( i->sWebsiteURL.getLength() > 0 )
                 countWebsiteDownload ++;
@@ -1039,7 +1039,7 @@ void ExtensionCmdQueue::Thread::_checkForUpdates(
         //Now start the webbrowser and navigate to the websites where we get the updates
         if ( RET_OK == nDialogResult )
         {
-            for ( cit i = vData.begin(); i < vData.end(); i++ )
+            for ( cit i = vData.begin(); i < vData.end(); ++i )
             {
                 if ( m_pDialogHelper && ( i->sWebsiteURL.getLength() > 0 ) )
                     m_pDialogHelper->openWebBrowser( i->sWebsiteURL, m_pDialogHelper->getWindow()->GetText() );
