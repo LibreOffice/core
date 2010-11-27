@@ -139,7 +139,7 @@ void SettingsConfigItem::getValues()
     for( int j = 0; j < aNames.getLength(); j++ )
     {
 #if OSL_DEBUG_LEVEL > 2
-        fprintf( stderr, "found settings data for \"%s\"\n",
+        OSL_TRACE( "found settings data for \"%s\"\n",
                  OUStringToOString( aNames.getConstArray()[j], RTL_TEXTENCODING_ASCII_US ).getStr()
                  );
 #endif
@@ -165,7 +165,7 @@ void SettingsConfigItem::getValues()
                 if( pLine->getLength() )
                     m_aSettings[ aKeyName ][ pFrom[i] ] = *pLine;
 #if OSL_DEBUG_LEVEL > 2
-                fprintf( stderr, "   \"%s\"=\"%.30s\"\n",
+                OSL_TRACE( "   \"%s\"=\"%.30s\"\n",
                          OUStringToOString( aKeys.getConstArray()[i], RTL_TEXTENCODING_ASCII_US ).getStr(),
                          OUStringToOString( *pLine, RTL_TEXTENCODING_ASCII_US ).getStr()
                          );
