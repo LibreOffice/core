@@ -797,7 +797,7 @@ Image ImageList::GetImage( USHORT nId ) const
     {
         std::vector<ImageAryData *>::iterator aIter;
         for( aIter = mpImplData->maImages.begin();
-             aIter != mpImplData->maImages.end(); aIter++)
+             aIter != mpImplData->maImages.end(); ++aIter)
         {
             if ((*aIter)->mnId == nId)
             {
