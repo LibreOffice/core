@@ -750,9 +750,8 @@ PPDParser::PPDParser( const String& rFile ) :
             case PPDKey::AnySetup:          pSetupType = "AnySetup";break;
             default: break;
         };
-        fprintf( stderr, "\t\"%s\" (\"%s\") (%d values) OrderDependency: %d %s\n",
+        fprintf( stderr, "\t\"%s\" (%d values) OrderDependency: %d %s\n",
                  BSTRING( pKey->getKey() ).GetBuffer(),
-                 BSTRING( pKey->m_aUITranslation ).GetBuffer(),
                  pKey->countValues(),
                  pKey->m_nOrderDependency,
                  pSetupType );
@@ -772,12 +771,10 @@ PPDParser::PPDParser( const String& rFile ) :
                 case eNo:               pVType = "no";break;
                 default: break;
             };
-            fprintf( stderr, "option: \"%s\" (\"%s\"), value: type %s \"%s\" (\"%s\")\n",
+            fprintf( stderr, "option: \"%s\", value: type %s \"%s\"\n",
                      BSTRING( pValue->m_aOption ).GetBuffer(),
-                     BSTRING( pValue->m_aOptionTranslation ).GetBuffer(),
                      pVType,
-                     BSTRING( pValue->m_aValue ).GetBuffer(),
-                     BSTRING( pValue->m_aValueTranslation ).GetBuffer() );
+                     BSTRING( pValue->m_aValue ).GetBuffer() );
         }
     }
     fprintf( stderr, "constraints: (%d found)\n", m_aConstraints.size() );
