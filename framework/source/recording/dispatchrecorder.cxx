@@ -202,7 +202,7 @@ void SAL_CALL DispatchRecorder::endRecording() throw( css::uno::RuntimeException
     aScriptBuffer.appendAscii("dispatcher = createUnoService(\"com.sun.star.frame.DispatchHelper\")\n\n");
 
     std::vector< com::sun::star::frame::DispatchStatement>::iterator p;
-    for ( p = m_aStatements.begin(); p != m_aStatements.end(); p++ )
+    for ( p = m_aStatements.begin(); p != m_aStatements.end(); ++p )
         implts_recordMacro( p->aCommand, p->aArgs, p->bIsComment, aScriptBuffer );
     ::rtl::OUString sScript = aScriptBuffer.makeStringAndClear();
     return sScript;
