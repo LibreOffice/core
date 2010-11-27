@@ -22,6 +22,13 @@ fi
 
 touch ChangeLog
 
+if test "z$ACLOCAL_FLAGS" = "z" -a "z`uname -s`" = "zDarwin" ; then
+    ACLOCAL_FLAGS="-I ./m4/mac"
+fi
+if test "z`uname -s`" != "zDarwin" ; then
+    AUTOMAKE_EXTRA_FLAGS=--warnings=no-portability
+fi
+
 aclocal $ACLOCAL_FLAGS || exit 1;
 #automake --gnu --add-missing --copy || exit 1;
 #intltoolize --copy --force --automake
