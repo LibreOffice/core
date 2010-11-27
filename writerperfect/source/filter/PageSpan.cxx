@@ -268,7 +268,7 @@ void PageSpan::_writeHeaderFooter(const char *headerFooterTagName,
     headerFooterOpen.write(pHandler);
     for (std::vector<DocumentElement *>::const_iterator iter = headerFooterContent.begin();
          iter != headerFooterContent.end();
-         iter++) {
+         ++iter) {
         (*iter)->write(pHandler);
     }
 }
