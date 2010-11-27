@@ -939,9 +939,7 @@ void ScInterpreter::ScMatInv()
                     {
                         ScMatrix* pR = xR;
                         lcl_MFastMult( pMat, pY, pR, nR, nR, nR);
-#if OSL_DEBUG_LEVEL > 1
                         fprintf( stderr, "\n%s\n", "ScMatInv(): mult-identity");
-#endif
                         for (SCSIZE i=0; i < nR; ++i)
                         {
                             for (SCSIZE j=0; j < nR; ++j)
