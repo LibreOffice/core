@@ -2048,7 +2048,7 @@ void ScDocument::DecSizeRecalcLevel( SCTAB nTab, bool bUpdateNoteCaptionPos )
 // DataPilot Migration - Cache&&Performance
 ScDPTableDataCache* ScDocument::GetDPObjectCache( long nID )
 {
-    for ( std::list<ScDPTableDataCache*>::iterator iter = m_listDPObjectsCaches.begin(); iter!=m_listDPObjectsCaches.end(); iter++ )
+    for ( std::list<ScDPTableDataCache*>::iterator iter = m_listDPObjectsCaches.begin(); iter!=m_listDPObjectsCaches.end(); ++iter )
     { //
         if ( nID == (*iter)->GetId() )
             return *iter;
@@ -2092,7 +2092,7 @@ long ScDocument::GetNewDPObjectCacheId()
     bool bFound = false;
     std::list<ScDPTableDataCache*>::iterator iter;
     do {
-        for ( iter = m_listDPObjectsCaches.begin(); iter!=m_listDPObjectsCaches.end(); iter++ )
+        for ( iter = m_listDPObjectsCaches.begin(); iter!=m_listDPObjectsCaches.end(); ++iter )
         { //Get a new Id
             if ( nID == (*iter)->GetId() )
             {
@@ -2110,7 +2110,7 @@ long ScDocument::GetNewDPObjectCacheId()
 
 void ScDocument::RemoveDPObjectCache( long nID )
 {
-    for ( std::list<ScDPTableDataCache*>::iterator iter = m_listDPObjectsCaches.begin(); iter!=m_listDPObjectsCaches.end(); iter++ )
+    for ( std::list<ScDPTableDataCache*>::iterator iter = m_listDPObjectsCaches.begin(); iter!=m_listDPObjectsCaches.end(); ++iter )
     {
         if ( nID == (*iter)->GetId() )
         {
@@ -2125,7 +2125,7 @@ void ScDocument::RemoveDPObjectCache( long nID )
 
 void ScDocument::RemoveUnusedDPObjectCaches()
 {
-    for ( std::list<ScDPTableDataCache*>::iterator iter = m_listDPObjectsCaches.begin(); iter!=m_listDPObjectsCaches.end(); iter++ )
+    for ( std::list<ScDPTableDataCache*>::iterator iter = m_listDPObjectsCaches.begin(); iter!=m_listDPObjectsCaches.end(); ++iter )
     {
         long  nID = (*iter)->GetId();
         USHORT nCount = GetDPCollection()->GetCount();
@@ -2147,7 +2147,7 @@ void ScDocument::RemoveUnusedDPObjectCaches()
 
 void ScDocument::GetUsedDPObjectCache( std::list<ScDPTableDataCache*>& usedlist )
 {
-    for ( std::list<ScDPTableDataCache*>::iterator iter = m_listDPObjectsCaches.begin(); iter!=m_listDPObjectsCaches.end(); iter++ )
+    for ( std::list<ScDPTableDataCache*>::iterator iter = m_listDPObjectsCaches.begin(); iter!=m_listDPObjectsCaches.end(); ++iter )
     {
         long  nID = (*iter)->GetId();
         USHORT nCount = GetDPCollection()->GetCount();
