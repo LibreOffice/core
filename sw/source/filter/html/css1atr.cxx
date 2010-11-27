@@ -879,7 +879,7 @@ USHORT SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, ByteString& rToken,
 
             // Wenn eine PoolId gesetzt ist, entspricht der Name der
             // Vorlage dem szugehoerigen Token
-            OSL_ENSURE( rRefPoolId != 0 == rToken.Len() > 0,
+            OSL_ENSURE( (rRefPoolId != 0) == (rToken.Len() > 0),
                     "Token missing" );
         }
         else
