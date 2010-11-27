@@ -1353,14 +1353,16 @@ BOOL GraphicManager::ImplCreateRotatedScaled( const BitmapEx& rBmpEx,
     // create horizontal mapping table
     for( nX = 0L, nTmpX = aNewBound.Left() + nStartX; nX < nDstW; nX++ )
     {
-        pCosX[ nX ] = FRound( fCosAngle * ( fTmp = nTmpX++ << 8 ) );
+        fTmp = nTmpX++ << 8;
+        pCosX[ nX ] = FRound( fCosAngle * fTmp );
         pSinX[ nX ] = FRound( fSinAngle * fTmp );
     }
 
     // create vertical mapping table
     for( nY = 0L, nTmpY = aNewBound.Top() + nStartY; nY < nDstH; nY++ )
     {
-        pCosY[ nY ] = FRound( fCosAngle * ( fTmp = nTmpY++ << 8 ) );
+        fTmp = nTmpY++ << 8;
+        pCosY[ nY ] = FRound( fCosAngle * fTmp );
         pSinY[ nY ] = FRound( fSinAngle * fTmp );
     }
 
