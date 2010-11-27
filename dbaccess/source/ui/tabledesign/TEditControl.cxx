@@ -1781,7 +1781,6 @@ void OTableEditorCtrl::SetPrimaryKey( sal_Bool bSet )
     // Evtl. vorhandene Primary Keys loeschen
     MultiSelection aDeletedPrimKeys;
     aDeletedPrimKeys.SetTotalRange( Range(0,GetRowCount()) );
-    long nIndex = 0;
 
     ::std::vector< ::boost::shared_ptr<OTableRow> >::const_iterator aIter = m_pRowList->begin();
     ::std::vector< ::boost::shared_ptr<OTableRow> >::const_iterator aEnd = m_pRowList->end();
@@ -1800,7 +1799,7 @@ void OTableEditorCtrl::SetPrimaryKey( sal_Bool bSet )
     aInsertedPrimKeys.SetTotalRange( Range(0,GetRowCount()) );
     if( bSet )
     {
-        nIndex = FirstSelectedRow();
+        long nIndex = FirstSelectedRow();
         while( nIndex >= 0 && nIndex < static_cast<long>(m_pRowList->size()) )
         {
             //////////////////////////////////////////////////////////////////////

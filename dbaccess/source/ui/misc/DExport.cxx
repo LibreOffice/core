@@ -330,13 +330,13 @@ void ODatabaseExport::insertValueIntoColumn()
                         m_pUpdateHelper->updateNull(nPos,pField->GetType());
                     else
                     {
-                        sal_Int32 nNumberFormat = 0;
-                        double fOutNumber = 0.0;
                         OSL_ENSURE((nNewPos) < static_cast<sal_Int32>(m_vColumnTypes.size()),"Illegal index for vector");
                         if (m_vColumnTypes[nNewPos] != DataType::VARCHAR && m_vColumnTypes[nNewPos] != DataType::CHAR && m_vColumnTypes[nNewPos] != DataType::LONGVARCHAR )
                         {
                             RTL_LOGFILE_CONTEXT_TRACE( aLogger, "ODatabaseExport::insertValueIntoColumn != DataType::VARCHAR" );
                             ensureFormatter();
+                            sal_Int32 nNumberFormat = 0;
+                            double fOutNumber = 0.0;
                             bool bNumberFormatError = false;
                             if ( m_pFormatter && m_sNumToken.Len() )
                             {

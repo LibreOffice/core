@@ -1005,13 +1005,13 @@ void OHTMLImportExport::WriteCell( sal_Int32 nFormat,sal_Int32 nWidthPixel,sal_I
     aStrTD = aStrTD + "=";
     aStrTD = aStrTD + pChar;
 
-    double fVal = 0.0;
-
     Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier = m_xFormatter->getNumberFormatsSupplier();
     SvNumberFormatsSupplierObj* pSupplierImpl = SvNumberFormatsSupplierObj::getImplementation( xSupplier );
     SvNumberFormatter* pFormatter = pSupplierImpl ? pSupplierImpl->GetNumberFormatter() : NULL;
     if(pFormatter)
     {
+        double fVal = 0.0;
+
         try
         {
             fVal = m_xFormatter->convertStringToNumber(nFormat,rValue);
