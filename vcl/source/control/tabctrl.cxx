@@ -1217,7 +1217,6 @@ void TabControl::ImplPaint( const Rectangle& rRect, bool bLayout )
     // Draw the TabPage border
     const StyleSettings&    rStyleSettings  = GetSettings().GetStyleSettings();
     Rectangle               aCurRect;
-    long                    nTopOff = 1;
     aRect.Left()   -= TAB_OFFSET;
     aRect.Top()    -= TAB_OFFSET;
     aRect.Right()  += TAB_OFFSET;
@@ -1259,6 +1258,7 @@ void TabControl::ImplPaint( const Rectangle& rRect, bool bLayout )
     }
     else
     {
+        long nTopOff = 1;
         if ( !(rStyleSettings.GetOptions() & STYLE_OPTION_MONO) )
             SetLineColor( rStyleSettings.GetLightColor() );
         else
