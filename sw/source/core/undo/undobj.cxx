@@ -1197,10 +1197,12 @@ void SwUndo::SetSaveData( SwDoc& rDoc, const SwRedlineSaveDatas& rSData )
     for( USHORT n = rSData.Count(); n; )
         rSData[ --n ]->RedlineToDoc( aPam );
 
+#if OSL_DEBUG_LEVEL > 1
     // check redline count against count saved in RedlineSaveData object
-    DBG_ASSERT( (rSData.Count() == 0) ||
+    OSL_ENSURE( (rSData.Count() == 0) ||
                 (rSData[0]->nRedlineCount == rDoc.GetRedlineTbl().Count()),
                 "redline count not restored properly" );
+#endif
 
     rDoc.SetRedlineMode_intern( eOld );
 }
