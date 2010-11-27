@@ -69,7 +69,9 @@ protected:
 
 public:
     MSWorksImportFilter( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > &rxMSF)
-        : mxMSF( rxMSF ) {}
+        : mxMSF( rxMSF )
+        , meType( FILTER_IMPORT )
+         {}
     virtual ~MSWorksImportFilter() {}
 
     // XFilter
