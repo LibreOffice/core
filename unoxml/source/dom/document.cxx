@@ -142,7 +142,7 @@ namespace DOM
         while (iter1 != m_streamListeners.end()) {
             Reference< XStreamListener > aListener = *iter1;
             aListener->started();
-            iter1++;
+            ++iter1;
         }
 
         // setup libxml IO and write data to output stream
@@ -156,7 +156,7 @@ namespace DOM
         while (iter2 != m_streamListeners.end()) {
             Reference< XStreamListener > aListener = *iter2;
             aListener->closed();
-            iter2++;
+            ++iter2;
         }
 
     }
