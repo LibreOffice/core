@@ -100,6 +100,28 @@ const double fInvEpsilon = 1.0E-7;
         }
     };
 
+namespace
+{
+
+// Multiply n x m Mat A with m x l Mat B to n x l Mat R
+void lcl_MFastMult(ScMatrixRef pA, ScMatrixRef pB, ScMatrixRef pR,
+                   SCSIZE n, SCSIZE m, SCSIZE l)
+{
+    double sum;
+    for (SCSIZE row = 0; row < n; row++)
+    {
+        for (SCSIZE col = 0; col < l; col++)
+        {   // result element(col, row) =sum[ (row of A) * (column of B)]
+            sum = 0.0;
+            for (SCSIZE k = 0; k < m; k++)
+                sum += pA->GetDouble(k,row) * pB->GetDouble(col,k);
+            pR->PutDouble(sum, col, row);
+        }
+    }
+}
+
+}
+
 double ScInterpreter::ScGetGCD(double fx, double fy)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::div" );
@@ -1851,23 +1873,6 @@ namespace {
 // where Y (=observed values) is given as row.
 // Remember, ScMatrix matrices are zero based, index access (column,row).
 // -----------------------------------------------------------------------------
-
-// Multiply n x m Mat A with m x l Mat B to n x l Mat R
-void lcl_MFastMult(ScMatrixRef pA, ScMatrixRef pB, ScMatrixRef pR,
-                   SCSIZE n, SCSIZE m, SCSIZE l)
-{
-    double sum;
-    for (SCSIZE row = 0; row < n; row++)
-    {
-        for (SCSIZE col = 0; col < l; col++)
-        {   // result element(col, row) =sum[ (row of A) * (column of B)]
-            sum = 0.0;
-            for (SCSIZE k = 0; k < m; k++)
-                sum += pA->GetDouble(k,row) * pB->GetDouble(col,k);
-            pR->PutDouble(sum, col, row);
-        }
-    }
-}
 
 // <A;B> over all elements; uses the matrices as vectors of length M
 double lcl_GetSumProduct(ScMatrixRef pMatA, ScMatrixRef pMatB, SCSIZE nM)
