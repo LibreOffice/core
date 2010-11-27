@@ -185,7 +185,7 @@ namespace sdr
                 while(aIter != aEnd)
                 {
                     PostItemChange(*aIter);
-                    aIter++;
+                    ++aIter;
                 }
 
                 ItemSetChanged(aSet);
