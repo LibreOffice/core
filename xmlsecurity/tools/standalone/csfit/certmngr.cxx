@@ -106,7 +106,7 @@ int SAL_CALL main( int argc, char **argv )
         Reference< XMultiComponentFactory > xManager = NULL ;
         Reference< XComponentContext > xContext = NULL ;
 
-        xManager = serviceManager( xContext , OUString::createFromAscii( "local" ), OUString::createFromAscii( argv[2] ) ) ;
+        xManager = serviceManager( xContext , OUString(RTL_CONSTASCII_USTRINGPARAM("local")), OUString::createFromAscii( argv[2] ) ) ;
         OSL_ENSURE( xManager.is() ,
             "ServicesManager - "
             "Cannot get service manager" ) ;
@@ -114,7 +114,7 @@ int SAL_CALL main( int argc, char **argv )
         //Create security environment
         //Build Security Environment
         Reference< XInterface > xsecenv =
-            xManager->createInstanceWithContext( OUString::createFromAscii("com.sun.star.xml.security.bridge.xmlsec.SecurityEnvironment_NssImpl"), xContext ) ;
+            xManager->createInstanceWithContext( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.security.bridge.xmlsec.SecurityEnvironment_NssImpl")), xContext ) ;
         OSL_ENSURE( xsecenv.is() ,
             "Signer - "
             "Cannot get service instance of \"xsec.SecurityEnvironment\"" ) ;

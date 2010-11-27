@@ -211,7 +211,7 @@ rtl::OUString UpdateCheckConfig::getDesktopDirectory()
     // This should become a desktop specific setting in some system backend ..
     rtl::OUString aHomeDir;
     osl::Security().getHomeDir( aHomeDir );
-    aRet = aHomeDir + rtl::OUString::createFromAscii("/Desktop");
+    aRet = aHomeDir + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/Desktop"));
 
     // Set path to home directory when there is no /Desktop directory
     osl::Directory aDocumentsDir( aRet );

@@ -43,32 +43,32 @@ namespace
 {
     using namespace oooimprovement;
 
-    static const OUString CFG_COUNTERS = OUString::createFromAscii("Counters");
-    static const OUString CFG_ENABLINGALLOWED = OUString::createFromAscii("EnablingAllowed");
-    static const OUString CFG_EVENTSCOUNT = OUString::createFromAscii("LoggedEvents");
-    static const OUString CFG_EXTENSION = OUString::createFromAscii("ooSetupExtension");
-    static const OUString CFG_FAILEDATTEMPTS = OUString::createFromAscii("FailedAttempts");
-    static const OUString CFG_INVACCEPT = OUString::createFromAscii("InvitationAccepted");
-    static const OUString CFG_L10N = OUString::createFromAscii("L10N");
-    static const OUString CFG_LOCALE = OUString::createFromAscii("ooLocale");
-    static const OUString CFG_LOGGING = OUString::createFromAscii("/org.openoffice.Office.Logging");
-    static const OUString CFG_LOGPATH = OUString::createFromAscii("LogPath");
-    static const OUString CFG_NAME = OUString::createFromAscii("ooName");
-    static const OUString CFG_OFFICESTARTCOUNTDOWN = OUString::createFromAscii("OfficeStartCounterdown");
-    static const OUString CFG_OOOIMPROVEMENT = OUString::createFromAscii("OOoImprovement");
-    static const OUString CFG_OOOIMPROVEMENTPACK = OUString::createFromAscii("/org.openoffice.Office.OOoImprovement.Settings");
-    static const OUString CFG_PARTICIPATION = OUString::createFromAscii("Participation");
-    static const OUString CFG_PRODUCT = OUString::createFromAscii("Product");
-    static const OUString CFG_REPORTCOUNT = OUString::createFromAscii("UploadedReports");
-    static const OUString CFG_REPORTEREMAIL = OUString::createFromAscii("ReporterEmail");
-    static const OUString CFG_SETUP = OUString::createFromAscii("/org.openoffice.Setup");
-    static const OUString CFG_SHOWEDINV = OUString::createFromAscii("ShowedInvitation");
-    static const OUString CFG_SOAPIDADD = OUString::createFromAscii("SoapIdAdditions");
-    static const OUString CFG_SOAPURL = OUString::createFromAscii("SoapUrl");
-    static const OUString CFG_UPLOAD = OUString::createFromAscii("Upload");
-    static const OUString CFG_VERSION = OUString::createFromAscii("ooSetupVersion");
+    static const OUString CFG_COUNTERS(RTL_CONSTASCII_USTRINGPARAM("Counters"));
+    static const OUString CFG_ENABLINGALLOWED(RTL_CONSTASCII_USTRINGPARAM("EnablingAllowed"));
+    static const OUString CFG_EVENTSCOUNT(RTL_CONSTASCII_USTRINGPARAM("LoggedEvents"));
+    static const OUString CFG_EXTENSION(RTL_CONSTASCII_USTRINGPARAM("ooSetupExtension"));
+    static const OUString CFG_FAILEDATTEMPTS(RTL_CONSTASCII_USTRINGPARAM("FailedAttempts"));
+    static const OUString CFG_INVACCEPT(RTL_CONSTASCII_USTRINGPARAM("InvitationAccepted"));
+    static const OUString CFG_L10N(RTL_CONSTASCII_USTRINGPARAM("L10N"));
+    static const OUString CFG_LOCALE(RTL_CONSTASCII_USTRINGPARAM("ooLocale"));
+    static const OUString CFG_LOGGING(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.Logging"));
+    static const OUString CFG_LOGPATH(RTL_CONSTASCII_USTRINGPARAM("LogPath"));
+    static const OUString CFG_NAME(RTL_CONSTASCII_USTRINGPARAM("ooName"));
+    static const OUString CFG_OFFICESTARTCOUNTDOWN(RTL_CONSTASCII_USTRINGPARAM("OfficeStartCounterdown"));
+    static const OUString CFG_OOOIMPROVEMENT(RTL_CONSTASCII_USTRINGPARAM("OOoImprovement"));
+    static const OUString CFG_OOOIMPROVEMENTPACK(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.OOoImprovement.Settings"));
+    static const OUString CFG_PARTICIPATION(RTL_CONSTASCII_USTRINGPARAM("Participation"));
+    static const OUString CFG_PRODUCT(RTL_CONSTASCII_USTRINGPARAM("Product"));
+    static const OUString CFG_REPORTCOUNT(RTL_CONSTASCII_USTRINGPARAM("UploadedReports"));
+    static const OUString CFG_REPORTEREMAIL(RTL_CONSTASCII_USTRINGPARAM("ReporterEmail"));
+    static const OUString CFG_SETUP(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Setup"));
+    static const OUString CFG_SHOWEDINV(RTL_CONSTASCII_USTRINGPARAM("ShowedInvitation"));
+    static const OUString CFG_SOAPIDADD(RTL_CONSTASCII_USTRINGPARAM("SoapIdAdditions"));
+    static const OUString CFG_SOAPURL(RTL_CONSTASCII_USTRINGPARAM("SoapUrl"));
+    static const OUString CFG_UPLOAD(RTL_CONSTASCII_USTRINGPARAM("Upload"));
+    static const OUString CFG_VERSION(RTL_CONSTASCII_USTRINGPARAM("ooSetupVersion"));
 
-    static const OUString SOAPID = OUString::createFromAscii("OpenOffice.org Improvement Report - Version 1\n");
+    static const OUString SOAPID(RTL_CONSTASCII_USTRINGPARAM("OpenOffice.org Improvement Report - Version 1\n"));
 
     static sal_Int32 incrementCfgValue(
         const Reference<XMultiServiceFactory> sm,
@@ -183,14 +183,14 @@ namespace oooimprovement
             MyConfigurationHelper::E_READONLY) >>= value;
         result.append(value);
 
-        value = OUString::createFromAscii("");
+        value = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
         MyConfigurationHelper::readDirectKey(
             m_ServiceFactory,
             CFG_SETUP, CFG_PRODUCT, CFG_VERSION,
             MyConfigurationHelper::E_READONLY) >>= value;
         if(value.getLength()) result.appendAscii(" ").append(value);
 
-        value = OUString::createFromAscii("");
+        value = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
         MyConfigurationHelper::readDirectKey(
             m_ServiceFactory,
             CFG_SETUP, CFG_PRODUCT, CFG_EXTENSION,
