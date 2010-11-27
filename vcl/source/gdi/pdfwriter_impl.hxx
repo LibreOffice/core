@@ -228,7 +228,7 @@ public:
         sal_Int32           m_nObject;
         bool                m_bTrueColor;
 
-        JPGEmit() : m_pStream( NULL ) {}
+        JPGEmit() : m_pStream( NULL ), m_bTrueColor( false ) {}
         ~JPGEmit() { delete m_pStream; }
     };
 
