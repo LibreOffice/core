@@ -12,6 +12,7 @@
 /*/wntmsci??.pro
 /*/unxmac??
 /*/unxmac??.pro
+/solver/*
 
 # autoconf generated stuff
 /aclocal.m4
@@ -26,6 +27,13 @@
 /makefile.mk
 /set_soenv
 /visibility.cxx
+
+# misc
+/set_soenv.last
+/set_soenv.stamp
+/warn
+/build.log
+
 
 /*.Set.sh
 
