@@ -930,7 +930,7 @@ sal_Int32 ZipFile::recover()
                     aMemGrabber >> nCompressedSize;
                     aMemGrabber >> nSize;
 
-                    for( EntryHash::iterator aIter = aEntries.begin(); aIter != aEntries.end(); aIter++ )
+                    for( EntryHash::iterator aIter = aEntries.begin(); aIter != aEntries.end(); ++aIter )
                     {
                         ZipEntry aTmp = (*aIter).second;
 
