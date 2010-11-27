@@ -274,6 +274,7 @@ struct HelpProcessingException
     HelpProcessingException( HelpProcessingErrorClass eErrorClass, const std::string& aErrorMsg )
         : m_eErrorClass( eErrorClass )
         , m_aErrorMsg( aErrorMsg )
+        , m_nXMLParsingLine( 0 )
     {}
     HelpProcessingException( const std::string& aErrorMsg, const std::string& aXMLParsingFile, int nXMLParsingLine )
         : m_eErrorClass( HELPPROCESSING_XMLPARSING_ERROR )
