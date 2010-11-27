@@ -439,7 +439,7 @@ ListDef::~ListDef( )
 
 OUString ListDef::GetStyleName( sal_Int32 nId )
 {
-    OUString sStyleName( RTL_CONSTASCII_USTRINGPARAM("WWNum") );
+    OUString sStyleName( OUString::createFromAscii( "WWNum" ) );
     sStyleName += OUString::valueOf( nId );
 
     return sStyleName;
@@ -476,7 +476,7 @@ uno::Reference< container::XNameContainer > lcl_getUnoNumberingStyles(
     try
     {
         uno::Reference< style::XStyleFamiliesSupplier > xFamilies( xFactory, uno::UNO_QUERY_THROW );
-        uno::Any oFamily = xFamilies->getStyleFamilies( )->getByName( OUString(RTL_CONSTASCII_USTRINGPARAM("NumberingStyles")) );
+        uno::Any oFamily = xFamilies->getStyleFamilies( )->getByName( OUString::createFromAscii( "NumberingStyles" ) );
 
         oFamily >>= xStyles;
     }
@@ -501,7 +501,7 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
             // Create the numbering style
             uno::Reference< beans::XPropertySet > xStyle (
                 xFactory->createInstance(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.style.NumberingStyle"))),
+                    OUString::createFromAscii("com.sun.star.style.NumberingStyle")),
                 uno::UNO_QUERY_THROW );
 
             rtl::OUString sStyleName = GetStyleName( GetId( ) );

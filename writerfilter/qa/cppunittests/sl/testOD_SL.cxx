@@ -75,7 +75,7 @@ OString getTempFileName(const OUString& fileName)
   OUString ousTmpUrl;
   FileBase::getTempDirURL(ousTmpUrl);
   if (!ousTmpUrl.endsWithIgnoreAsciiCaseAsciiL("/", 1))
-    ousTmpUrl += OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+    ousTmpUrl += OUString::createFromAscii("/");
   ousTmpUrl += fileName;
 
   OUString sysTmpPath;
@@ -94,12 +94,12 @@ public:
         std::auto_ptr<xxml::XXmlReader> reader=xxml::XXmlReader::createXXmlReader(*handler);
         reader->read("helloworld.odt.flat.xml");
 
-        OString tmpFileName = getTempFileName(OUString(RTL_CONSTASCII_USTRINGPARAM("dumpSlPool_int.dot")));
+        OString tmpFileName = getTempFileName(OUString::createFromAscii("dumpSlPool_int.dot"));
         printf("Pool dump: %s\n", tmpFileName.getStr());
         FileLoggerImpl fl(tmpFileName.getStr());
         propertyPool->dump(&fl);
 
-        OString tmpFileName2 = getTempFileName(OUString(RTL_CONSTASCII_USTRINGPARAM("dumpSlPool_ext.dot")));
+        OString tmpFileName2 = getTempFileName(OUString::createFromAscii("dumpSlPool_ext.dot"));
         printf("Pool dump: %s\n", tmpFileName2.getStr());
         ExternalViewLoggerImpl evl(tmpFileName2.getStr());
         propertyPool->dump(&evl);

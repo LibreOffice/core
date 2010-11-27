@@ -4314,7 +4314,7 @@ void DomainMapper::startParagraphGroup()
 
     m_pImpl->getTableManager().startParagraphGroup();
     m_pImpl->PushProperties(CONTEXT_PARAGRAPH);
-    static ::rtl::OUString sDefault(RTL_CONSTASCII_USTRINGPARAM("Standard") );
+    static ::rtl::OUString sDefault( ::rtl::OUString::createFromAscii("Standard") );
     if (m_pImpl->GetTopContext())
     {
         m_pImpl->GetTopContext()->Insert( PROP_PARA_STYLE_NAME, true, uno::makeAny( sDefault ) );

@@ -49,7 +49,7 @@ OString getTempFileName(const OUString& fileName)
   OUString ousTmpUrl;
   FileBase::getTempDirURL(ousTmpUrl);
   if (!ousTmpUrl.endsWithIgnoreAsciiCaseAsciiL("/", 1))
-    ousTmpUrl += OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+    ousTmpUrl += OUString::createFromAscii("/");
   ousTmpUrl += fileName;
 
   OUString sysTmpPath;
@@ -273,12 +273,12 @@ public:
 
         pool->insert(ps4);
 
-        OString tmpFileName = getTempFileName(OUString(RTL_CONSTASCII_USTRINGPARAM("testPropertyPool_int.dot")));
+        OString tmpFileName = getTempFileName(OUString::createFromAscii("testPropertyPool_int.dot"));
         printf("Pool dump: %s\n", tmpFileName.getStr());
         FileLoggerImpl fl(tmpFileName.getStr());
         pool->dump(&fl);
 
-        OString tmpFileName2 = getTempFileName(OUString(RTL_CONSTASCII_USTRINGPARAM("testPropertyPool_ext.dot")));
+        OString tmpFileName2 = getTempFileName(OUString::createFromAscii("testPropertyPool_ext.dot"));
         printf("Pool dump: %s\n", tmpFileName2.getStr());
         ExternalViewLoggerImpl evl(tmpFileName2.getStr());
         pool->dump(&evl);
@@ -373,12 +373,12 @@ public:
 
         CPPUNIT_ASSERT_MESSAGE("paraProps == failed failed", paraProps == paragraphProps);
 
-        OString tmpFileName = getTempFileName(OUString(RTL_CONSTASCII_USTRINGPARAM("testComplexParaProps_int.dot")));
+        OString tmpFileName = getTempFileName(OUString::createFromAscii("testComplexParaProps_int.dot"));
         printf("Pool dump: %s\n", tmpFileName.getStr());
         FileLoggerImpl fl(tmpFileName.getStr());
         pool->dump(&fl);
 
-        OString tmpFileName2 = getTempFileName(OUString(RTL_CONSTASCII_USTRINGPARAM("testComplexParaProps_ext.dot")));
+        OString tmpFileName2 = getTempFileName(OUString::createFromAscii("testComplexParaProps_ext.dot"));
         printf("Pool dump: %s\n", tmpFileName2.getStr());
         ExternalViewLoggerImpl evl(tmpFileName2.getStr());
         pool->dump(&evl);
@@ -505,21 +505,21 @@ public:
             pb2->insert(createStringProperty(NS_style::LN_font_face, "Roman"));
             PropertyPoolHandle_Pointer_t ph2 = pool->insert(pb2);
 
-            OString tmpFileName = getTempFileName(OUString(RTL_CONSTASCII_USTRINGPARAM("testPropPoolGarbageColl_1.dot")));
+            OString tmpFileName = getTempFileName(OUString::createFromAscii("testPropPoolGarbageColl_1.dot"));
             printf("Pool dump: %s\n", tmpFileName.getStr());
             FileLoggerImpl fl(tmpFileName.getStr());
             pool->dump(&fl);
 
         }
 
-        OString tmpFileName = getTempFileName(OUString(RTL_CONSTASCII_USTRINGPARAM("testPropPoolGarbageColl_2.dot")));
+        OString tmpFileName = getTempFileName(OUString::createFromAscii("testPropPoolGarbageColl_2.dot"));
         printf("Pool dump: %s\n", tmpFileName.getStr());
         FileLoggerImpl fl(tmpFileName.getStr());
         pool->dump(&fl);
 
         pool->garbageCollection();
 
-        OString tmpFileName2 = getTempFileName(OUString(RTL_CONSTASCII_USTRINGPARAM("testPropPoolGarbageColl_after.dot")));
+        OString tmpFileName2 = getTempFileName(OUString::createFromAscii("testPropPoolGarbageColl_after.dot"));
         printf("Pool dump: %s\n", tmpFileName2.getStr());
         FileLoggerImpl fl2(tmpFileName2.getStr());
         pool->dump(&fl2);

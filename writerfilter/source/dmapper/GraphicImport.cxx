@@ -1055,10 +1055,10 @@ void GraphicImport::attribute(Id nName, Value & val)
                             ( xShape, uno::UNO_QUERY_THROW );
 
                         rtl::OUString sUrl;
-                        xShapeProps->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicURL")) ) >>= sUrl;
+                        xShapeProps->getPropertyValue( rtl::OUString::createFromAscii( "GraphicURL" ) ) >>= sUrl;
 
                         ::com::sun::star::beans::PropertyValues aMediaProperties( 1 );
-                        aMediaProperties[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL"));
+                        aMediaProperties[0].Name = rtl::OUString::createFromAscii( "URL" );
                         aMediaProperties[0].Value <<= sUrl;
 
                         m_xGraphicObject = createGraphicObject( aMediaProperties );
@@ -1071,9 +1071,9 @@ void GraphicImport::attribute(Id nName, Value & val)
                             uno::Reference< beans::XPropertySet > xGraphProps( m_xGraphicObject,
                                     uno::UNO_QUERY );
                             awt::Size aSize = xShape->getSize( );
-                            xGraphProps->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Height")),
+                            xGraphProps->setPropertyValue( rtl::OUString::createFromAscii( "Height" ),
                                    uno::makeAny( aSize.Height ) );
-                            xGraphProps->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Width")),
+                            xGraphProps->setPropertyValue( rtl::OUString::createFromAscii( "Width" ),
                                    uno::makeAny( aSize.Width ) );
                         }
                     }
