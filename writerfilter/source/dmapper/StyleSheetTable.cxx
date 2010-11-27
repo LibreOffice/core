@@ -926,7 +926,7 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                             {
                                 aPropValues.realloc( aPropValues.getLength( ) + 1 );
                                 beans::PropertyValue aStyleVal( rPropNameSupplier.GetName( PROP_NUMBERING_STYLE_NAME ), 0,
-                                        uno::makeAny( rtl::OUString::createFromAscii( "" ) ),
+                                        uno::makeAny( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")) ),
                                         beans::PropertyState_DIRECT_VALUE );
                                 aPropValues[ aPropValues.getLength( ) - 1 ] = aStyleVal;
                             }

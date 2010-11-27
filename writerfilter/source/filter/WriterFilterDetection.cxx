@@ -97,10 +97,10 @@ OUString WriterFilterDetection::detect( uno::Sequence< beans::PropertyValue >& r
             {
                 SotStorageRef xStg = new SotStorage( pStream, FALSE );
 
-                bool bTable2 = xStg->IsContained( rtl::OUString::createFromAscii("1Table" ));
+                bool bTable2 = xStg->IsContained( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("1Table")));
                 SotStorageStreamRef xRef =
 
-                    xStg->OpenSotStream(rtl::OUString::createFromAscii("WordDocument"),
+                    xStg->OpenSotStream(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WordDocument")),
 
                             STREAM_STD_READ | STREAM_NOCREATE );
 
