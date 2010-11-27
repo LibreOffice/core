@@ -262,7 +262,7 @@ CustomAnimationPane::~CustomAnimationPane()
     MotionPathTagVector aTags;
     aTags.swap( maMotionPathTags );
     MotionPathTagVector::iterator aIter;
-    for( aIter = aTags.begin(); aIter != aTags.end(); aIter++ )
+    for( aIter = aTags.begin(); aIter != aTags.end(); ++aIter )
         (*aIter)->Dispose();
 
     delete mpFLModify;
@@ -958,7 +958,7 @@ static bool updateMotionPathImpl( CustomAnimationPane& rPane, ::sd::View& rView,
             rtl::Reference< MotionPathTag > xMotionPathTag;
             // first try to find if there is already a tag for this
             MotionPathTagVector::iterator aMIter( rOldTags.begin() );
-            for( ; aMIter != rOldTags.end(); aMIter++ )
+            for( ; aMIter != rOldTags.end(); ++aMIter )
             {
                 rtl::Reference< MotionPathTag > xTag( (*aMIter) );
                 if( xTag->getEffect() == pEffect )
@@ -1896,7 +1896,7 @@ void CustomAnimationPane::onChange( bool bCreate )
                 aParaTarget.Shape = xShape;
 
                 std::list< sal_Int16 >::iterator aIter( aParaList.begin() );
-                for( ; aIter != aParaList.end(); aIter++ )
+                for( ; aIter != aParaList.end(); ++aIter )
                 {
                     aParaTarget.Paragraph = (*aIter);
                     aTargets.push_back( makeAny( aParaTarget ) );
@@ -1945,7 +1945,7 @@ void CustomAnimationPane::onChange( bool bCreate )
                 std::vector< Any >::iterator aIter( aTargets.begin() );
                 const std::vector< Any >::iterator aEnd( aTargets.end() );
                 bool bFirst = true;
-                for( ; aIter != aEnd; aIter++ )
+                for( ; aIter != aEnd; ++aIter )
                 {
                     CustomAnimationEffectPtr pCreated = mpMainSequence->append( pDescriptor, (*aIter), fDuration );
 
@@ -2270,9 +2270,9 @@ void CustomAnimationPane::moveSelection( bool bUp )
 
                 if( aInsertPos != rEffectSequence.begin() )
                 {
-                    aInsertPos--;
+                    --aInsertPos;
                     while( (aInsertPos != rEffectSequence.begin()) && !mpCustomAnimationList->isExpanded(*aInsertPos))
-                        aInsertPos--;
+                        --aInsertPos;
 
                     rEffectSequence.insert( aInsertPos, pEffect );
                 }
@@ -2300,9 +2300,9 @@ void CustomAnimationPane::moveSelection( bool bUp )
 
                 if( aInsertPos != rEffectSequence.end() )
                 {
-                    aInsertPos++;
+                    ++aInsertPos;
                     while( (aInsertPos != rEffectSequence.end()) && !mpCustomAnimationList->isExpanded(*aInsertPos))
-                        aInsertPos++;
+                        ++aInsertPos;
 
                     rEffectSequence.insert( aInsertPos, pEffect );
                 }
@@ -2332,7 +2332,7 @@ void CustomAnimationPane::onPreview( bool bForcePreview )
     {
         rtl::Reference< MotionPathTag > xMotionPathTag;
         MotionPathTagVector::iterator aIter;
-        for( aIter = maMotionPathTags.begin(); aIter != maMotionPathTags.end(); aIter++ )
+        for( aIter = maMotionPathTags.begin(); aIter != maMotionPathTags.end(); ++aIter )
         {
             if( (*aIter)->isSelected() )
             {
