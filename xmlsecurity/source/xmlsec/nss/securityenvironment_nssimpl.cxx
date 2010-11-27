@@ -99,7 +99,7 @@ char* GetPasswordFunction( PK11SlotInfo* pSlot, PRBool bRetry, void* /*arg*/ )
     if ( xMSF.is() )
     {
         uno::Reference < task::XInteractionHandler > xInteractionHandler(
-            xMSF->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.task.InteractionHandler")) ), uno::UNO_QUERY );
+            xMSF->createInstance( rtl::OUString::createFromAscii("com.sun.star.task.InteractionHandler") ), uno::UNO_QUERY );
 
         if ( xInteractionHandler.is() )
         {
@@ -191,12 +191,12 @@ Sequence< OUString > SAL_CALL SecurityEnvironment_NssImpl :: getSupportedService
 Sequence< OUString > SecurityEnvironment_NssImpl :: impl_getSupportedServiceNames() {
     ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() ) ;
     Sequence< OUString > seqServiceNames( 1 ) ;
-    seqServiceNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.crypto.SecurityEnvironment")) ;
+    seqServiceNames.getArray()[0] = OUString::createFromAscii( "com.sun.star.xml.crypto.SecurityEnvironment" ) ;
     return seqServiceNames ;
 }
 
 OUString SecurityEnvironment_NssImpl :: impl_getImplementationName() throw( RuntimeException ) {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.security.bridge.xmlsec.SecurityEnvironment_NssImpl")) ;
+    return OUString::createFromAscii( "com.sun.star.xml.security.bridge.xmlsec.SecurityEnvironment_NssImpl" ) ;
 }
 
 //Helper for registry

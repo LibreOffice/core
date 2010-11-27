@@ -383,8 +383,8 @@ namespace pcr
                     // StringItemList?
                     else if( eType == TypeClass_SEQUENCE )
                     {
-                        static ::rtl::OUString aDot(RTL_CONSTASCII_USTRINGPARAM("."));
-                        static ::rtl::OUString aEsc(RTL_CONSTASCII_USTRINGPARAM("&"));
+                        static ::rtl::OUString aDot = ::rtl::OUString::createFromAscii( "." );
+                        static ::rtl::OUString aEsc = ::rtl::OUString::createFromAscii( "&" );
 
                         // Put strings into resource using new ids
                         Sequence< ::rtl::OUString > aNewStrings;

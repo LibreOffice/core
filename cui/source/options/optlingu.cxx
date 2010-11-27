@@ -190,7 +190,7 @@ sal_Bool KillFile_Impl( const String& rURL )
     try
     {
         Content aCnt( rURL, uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
-        aCnt.executeCommand( OUString(RTL_CONSTASCII_USTRINGPARAM("delete")), makeAny( sal_Bool( sal_True ) ) );
+        aCnt.executeCommand( OUString::createFromAscii( "delete" ), makeAny( sal_Bool( sal_True ) ) );
     }
     catch( ::com::sun::star::ucb::CommandAbortedException& )
     {

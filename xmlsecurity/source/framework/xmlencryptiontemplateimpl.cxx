@@ -121,12 +121,12 @@ Sequence< OUString > SAL_CALL XMLEncryptionTemplateImpl :: getSupportedServiceNa
 Sequence< OUString > XMLEncryptionTemplateImpl :: impl_getSupportedServiceNames() {
     ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() ) ;
     Sequence< OUString > seqServiceNames( 1 ) ;
-    seqServiceNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.crypto.XMLEncryptionTemplate")) ;
+    seqServiceNames.getArray()[0] = OUString::createFromAscii( "com.sun.star.xml.crypto.XMLEncryptionTemplate" ) ;
     return seqServiceNames ;
 }
 
 OUString XMLEncryptionTemplateImpl :: impl_getImplementationName() throw( RuntimeException ) {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.security.framework.XMLEncryptionTemplateImpl")) ;
+    return OUString::createFromAscii( "com.sun.star.xml.security.framework.XMLEncryptionTemplateImpl" ) ;
 }
 
 //Helper for registry

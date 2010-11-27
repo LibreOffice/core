@@ -579,7 +579,7 @@ uno::Reference< frame::XFrame > ImpTwain::ImplGetActiveFrame()
         {
             // query desktop instance
             uno::Reference< frame::XDesktop > xDesktop( xMgr->createInstance(
-                                                            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ), uno::UNO_QUERY );
+                                                            OUString::createFromAscii( "com.sun.star.frame.Desktop" ) ), uno::UNO_QUERY );
 
             if( xDesktop.is() )
             {
@@ -593,7 +593,7 @@ uno::Reference< frame::XFrame > ImpTwain::ImplGetActiveFrame()
                     try
                     {
                         aActiveFrame = xDesktopProps->getPropertyValue(
-                            OUString(RTL_CONSTASCII_USTRINGPARAM("ActiveFrame")) );
+                            OUString::createFromAscii( "ActiveFrame" ) );
                     }
                     catch( const beans::UnknownPropertyException& )
                     {

@@ -71,7 +71,7 @@ sal_Bool SAL_CALL component_writeInfo(
             sal_Int32 nPos = 0;
             Reference< XRegistryKey > xNewKey(
                 reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( DecryptorImpl_getImplementationName() ) );
-            xNewKey = xNewKey->createKey( OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES")) );
+            xNewKey = xNewKey->createKey( OUString::createFromAscii( "/UNO/SERVICES" ) );
 
             const Sequence< OUString > & rSNL = DecryptorImpl_getSupportedServiceNames();
             const OUString * pArray = rSNL.getConstArray();
@@ -80,7 +80,7 @@ sal_Bool SAL_CALL component_writeInfo(
 
             //Encryptor
             xNewKey = reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( EncryptorImpl_getImplementationName() );
-            xNewKey = xNewKey->createKey( OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES")) );
+            xNewKey = xNewKey->createKey( OUString::createFromAscii( "/UNO/SERVICES" ) );
             const Sequence< OUString > & rSNL2 = EncryptorImpl_getSupportedServiceNames();
             pArray = rSNL2.getConstArray();
             for ( nPos = rSNL2.getLength(); nPos--; )
@@ -88,7 +88,7 @@ sal_Bool SAL_CALL component_writeInfo(
 
             //SignatureCreator
             xNewKey = reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( SignatureCreatorImpl_getImplementationName() );
-            xNewKey = xNewKey->createKey( OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES")) );
+            xNewKey = xNewKey->createKey( OUString::createFromAscii( "/UNO/SERVICES" ) );
             const Sequence< OUString > & rSNL3 = SignatureCreatorImpl_getSupportedServiceNames();
             pArray = rSNL3.getConstArray();
             for ( nPos = rSNL3.getLength(); nPos--; )
@@ -96,7 +96,7 @@ sal_Bool SAL_CALL component_writeInfo(
 
             //SignatureVerifier
             xNewKey = reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( SignatureVerifierImpl_getImplementationName() );
-            xNewKey = xNewKey->createKey( OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES")) );
+            xNewKey = xNewKey->createKey( OUString::createFromAscii( "/UNO/SERVICES" ) );
             const Sequence< OUString > & rSNL4 = SignatureVerifierImpl_getSupportedServiceNames();
             pArray = rSNL4.getConstArray();
             for ( nPos = rSNL4.getLength(); nPos--; )
@@ -104,7 +104,7 @@ sal_Bool SAL_CALL component_writeInfo(
 
             //SAXEventKeeper
             xNewKey = reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( SAXEventKeeperImpl_getImplementationName() );
-            xNewKey = xNewKey->createKey( OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES")) );
+            xNewKey = xNewKey->createKey( OUString::createFromAscii( "/UNO/SERVICES" ) );
             const Sequence< OUString > & rSNL5 = SAXEventKeeperImpl_getSupportedServiceNames();
             pArray = rSNL5.getConstArray();
             for ( nPos = rSNL5.getLength(); nPos--; )
@@ -112,7 +112,7 @@ sal_Bool SAL_CALL component_writeInfo(
 
             //XMLSignatureTemplateImpl
             xNewKey = reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( XMLSignatureTemplateImpl::impl_getImplementationName() );
-            xNewKey = xNewKey->createKey( OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES")) );
+            xNewKey = xNewKey->createKey( OUString::createFromAscii( "/UNO/SERVICES" ) );
             const Sequence< OUString > & rSNL6 = XMLSignatureTemplateImpl::impl_getSupportedServiceNames();
             pArray = rSNL6.getConstArray();
             for ( nPos = rSNL6.getLength(); nPos--; )
@@ -120,7 +120,7 @@ sal_Bool SAL_CALL component_writeInfo(
 
             // XMLEncryptionTemplateImpl
             xNewKey = reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( XMLEncryptionTemplateImpl::impl_getImplementationName() );
-            xNewKey = xNewKey->createKey( OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES")) );
+            xNewKey = xNewKey->createKey( OUString::createFromAscii( "/UNO/SERVICES" ) );
             const Sequence< OUString > & rSNL7 = XMLEncryptionTemplateImpl::impl_getSupportedServiceNames();
             pArray = rSNL7.getConstArray();
             for ( nPos = rSNL7.getLength(); nPos--; )

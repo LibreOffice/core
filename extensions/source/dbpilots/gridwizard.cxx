@@ -111,10 +111,10 @@ namespace dbp
         if (!xColumnFactory.is() || !xColumnContainer.is())
             return;
 
-        static const ::rtl::OUString s_sDataFieldProperty   (RTL_CONSTASCII_USTRINGPARAM("DataField"));
-        static const ::rtl::OUString s_sLabelProperty       (RTL_CONSTASCII_USTRINGPARAM("Label"));
-        static const ::rtl::OUString s_sWidthProperty       (RTL_CONSTASCII_USTRINGPARAM("Width"));
-        static const ::rtl::OUString s_sMouseWheelBehavior (RTL_CONSTASCII_USTRINGPARAM("MouseWheelBehavior"));
+        static const ::rtl::OUString s_sDataFieldProperty   = ::rtl::OUString::createFromAscii("DataField");
+        static const ::rtl::OUString s_sLabelProperty       = ::rtl::OUString::createFromAscii("Label");
+        static const ::rtl::OUString s_sWidthProperty       = ::rtl::OUString::createFromAscii("Width");
+        static const ::rtl::OUString s_sMouseWheelBehavior  = ::rtl::OUString::createFromAscii("MouseWheelBehavior");
         static const ::rtl::OUString s_sEmptyString;
 
         // collect "descriptors" for the to-be-created (grid)columns
@@ -143,14 +143,14 @@ namespace dbp
             {
                 case DataType::BIT:
                 case DataType::BOOLEAN:
-                    aColumnServiceNames.push_back(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CheckBox")));
+                    aColumnServiceNames.push_back(::rtl::OUString::createFromAscii("CheckBox"));
                     aColumnLabelPostfixes.push_back(s_sEmptyString);
                     break;
 
                 case DataType::TINYINT:
                 case DataType::SMALLINT:
                 case DataType::INTEGER:
-                    aColumnServiceNames.push_back(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NumericField")));
+                    aColumnServiceNames.push_back(::rtl::OUString::createFromAscii("NumericField"));
                     aColumnLabelPostfixes.push_back(s_sEmptyString);
                     break;
 
@@ -159,31 +159,31 @@ namespace dbp
                 case DataType::DOUBLE:
                 case DataType::NUMERIC:
                 case DataType::DECIMAL:
-                    aColumnServiceNames.push_back(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FormattedField")));
+                    aColumnServiceNames.push_back(::rtl::OUString::createFromAscii("FormattedField"));
                     aColumnLabelPostfixes.push_back(s_sEmptyString);
                     break;
 
                 case DataType::DATE:
-                    aColumnServiceNames.push_back(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DateField")));
+                    aColumnServiceNames.push_back(::rtl::OUString::createFromAscii("DateField"));
                     aColumnLabelPostfixes.push_back(s_sEmptyString);
                     break;
 
                 case DataType::TIME:
-                    aColumnServiceNames.push_back(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TimeField")));
+                    aColumnServiceNames.push_back(::rtl::OUString::createFromAscii("TimeField"));
                     aColumnLabelPostfixes.push_back(s_sEmptyString);
                     break;
 
                 case DataType::TIMESTAMP:
-                    aColumnServiceNames.push_back(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DateField")));
+                    aColumnServiceNames.push_back(::rtl::OUString::createFromAscii("DateField"));
                     aColumnLabelPostfixes.push_back(String(ModuleRes(RID_STR_DATEPOSTFIX)));
 
                     aFormFieldNames.push_back(*pSelectedFields);
-                    aColumnServiceNames.push_back(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TimeField")));
+                    aColumnServiceNames.push_back(::rtl::OUString::createFromAscii("TimeField"));
                     aColumnLabelPostfixes.push_back(String(ModuleRes(RID_STR_TIMEPOSTFIX)));
                     break;
 
                 default:
-                    aColumnServiceNames.push_back(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TextField")));
+                    aColumnServiceNames.push_back(::rtl::OUString::createFromAscii("TextField"));
                     aColumnLabelPostfixes.push_back(s_sEmptyString);
             }
         }

@@ -172,7 +172,7 @@ Reference< XInvocation > ResourceService::getDefaultInvocation() const
     /* f�hrt zur Zeit noch zu einer rekursion
     if( xSMgr.is() )
     {
-        Reference< XSingleServiceFactory > xFact( xSMgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.Invocation")) ), UNO_QUERY );
+        Reference< XSingleServiceFactory > xFact( xSMgr->createInstance( OUString::createFromAscii("com.sun.star.script.Invocation") ), UNO_QUERY );
         if( xFact.is() )
         {
             Sequence< Any > aArgs( 1 );

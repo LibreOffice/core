@@ -842,19 +842,19 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
         {
             String aTransform;
 
-            aTransform = NMSP_RTL::OUString(RTL_CONSTASCII_USTRINGPARAM("translate"));
+            aTransform = NMSP_RTL::OUString::createFromAscii( "translate" );
             aTransform += '(';
             aTransform += String( GetValueString( aPt.X(), mbDoublePoints ) );
             aTransform += ',';
             aTransform += String( GetValueString( aPt.Y(), mbDoublePoints ) );
             aTransform += ')';
 
-            aTransform += String( NMSP_RTL::OUString(RTL_CONSTASCII_USTRINGPARAM(" rotate")) );
+            aTransform += String( NMSP_RTL::OUString::createFromAscii( " rotate" ) );
             aTransform += '(';
             aTransform += String( NMSP_RTL::OUString::valueOf( rFont.GetOrientation() * -0.1 ) );
             aTransform += ')';
 
-            aTransform += String( NMSP_RTL::OUString(RTL_CONSTASCII_USTRINGPARAM(" translate")) );
+            aTransform += String( NMSP_RTL::OUString::createFromAscii( " translate" ) );
             aTransform += '(';
             aTransform += String( GetValueString( -aPt.X(), mbDoublePoints ) );
             aTransform += ',';

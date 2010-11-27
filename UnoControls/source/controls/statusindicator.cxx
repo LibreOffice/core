@@ -459,7 +459,7 @@ WindowDescriptor* StatusIndicator::impl_getWindowDescriptor( const Reference< XW
     WindowDescriptor* pDescriptor = new WindowDescriptor ;
 
     pDescriptor->Type               =   WindowClass_SIMPLE                              ;
-    pDescriptor->WindowServiceName  =   OUString(RTL_CONSTASCII_USTRINGPARAM("floatingwindow")) ;
+    pDescriptor->WindowServiceName  =   OUString::createFromAscii( "floatingwindow" )   ;
     pDescriptor->ParentIndex        =   -1                                              ;
     pDescriptor->Parent             =   xParentPeer                                     ;
     pDescriptor->Bounds             =   getPosSize ()                                   ;

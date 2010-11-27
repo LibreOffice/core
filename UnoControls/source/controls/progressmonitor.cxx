@@ -897,9 +897,9 @@ void ProgressMonitor::impl_rebuildFixedText ()
         {
             IMPL_TextlistItem* pSearchItem = m_pTextlist_Top->GetObject (n) ;
             aCollectString  +=  pSearchItem->sTopic ;
-            aCollectString  +=  OUString(RTL_CONSTASCII_USTRINGPARAM("\n"))             ;
+            aCollectString  +=  OUString::createFromAscii("\n")             ;
         }
-        aCollectString  +=  OUString(RTL_CONSTASCII_USTRINGPARAM("\0")) ;   // It's better :-)
+        aCollectString  +=  OUString::createFromAscii("\0") ;   // It's better :-)
 
         m_xTopic_Top->setText ( aCollectString ) ;
     }
@@ -915,9 +915,9 @@ void ProgressMonitor::impl_rebuildFixedText ()
         {
             IMPL_TextlistItem* pSearchItem = m_pTextlist_Top->GetObject (n) ;
             aCollectString  +=  pSearchItem->sText ;
-            aCollectString  +=  OUString(RTL_CONSTASCII_USTRINGPARAM("\n"))            ;
+            aCollectString  +=  OUString::createFromAscii("\n")            ;
         }
-        aCollectString  +=  OUString(RTL_CONSTASCII_USTRINGPARAM("\0")) ;   // It's better :-)
+        aCollectString  +=  OUString::createFromAscii("\0") ;   // It's better :-)
 
         m_xText_Top->setText ( aCollectString ) ;
     }
@@ -935,9 +935,9 @@ void ProgressMonitor::impl_rebuildFixedText ()
         {
             IMPL_TextlistItem* pSearchItem = m_pTextlist_Bottom->GetObject (n) ;
             aCollectString  +=  pSearchItem->sTopic ;
-            aCollectString  +=  OUString(RTL_CONSTASCII_USTRINGPARAM("\n"))             ;
+            aCollectString  +=  OUString::createFromAscii("\n")             ;
         }
-        aCollectString  +=  OUString(RTL_CONSTASCII_USTRINGPARAM("\0")) ;   // It's better :-)
+        aCollectString  +=  OUString::createFromAscii("\0") ;   // It's better :-)
 
         m_xTopic_Bottom->setText ( aCollectString ) ;
     }
@@ -953,9 +953,9 @@ void ProgressMonitor::impl_rebuildFixedText ()
         {
             IMPL_TextlistItem* pSearchItem = m_pTextlist_Bottom->GetObject (n) ;
             aCollectString  +=  pSearchItem->sText ;
-            aCollectString  +=  OUString(RTL_CONSTASCII_USTRINGPARAM("\n"))            ;
+            aCollectString  +=  OUString::createFromAscii("\n")            ;
         }
-        aCollectString  +=  OUString(RTL_CONSTASCII_USTRINGPARAM("\0")) ;   // It's better :-)
+        aCollectString  +=  OUString::createFromAscii("\0") ;   // It's better :-)
 
         m_xText_Bottom->setText ( aCollectString ) ;
     }

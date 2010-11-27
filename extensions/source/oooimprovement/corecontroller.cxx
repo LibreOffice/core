@@ -76,12 +76,12 @@ namespace oooimprovement
     { return getSupportedServiceNames_static(); }
 
     OUString SAL_CALL CoreController::getImplementationName_static()
-    { return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.extensions.oooimprovement.CoreController")); }
+    { return OUString::createFromAscii("com.sun.star.comp.extensions.oooimprovement.CoreController"); }
 
     Sequence<OUString> SAL_CALL CoreController::getSupportedServiceNames_static()
     {
         Sequence<OUString> aServiceNames(1);
-        aServiceNames[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.oooimprovement.CoreController"));
+        aServiceNames[0] = OUString::createFromAscii("com.sun.star.oooimprovement.CoreController");
         return aServiceNames;
     }
 
