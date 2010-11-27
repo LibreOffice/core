@@ -131,7 +131,7 @@ css::uno::Any SAL_CALL MyListener::execute(const css::uno::Sequence< css::beans:
 ::rtl::OUString SAL_CALL MyListener::getImplementationName()
     throw (css::uno::RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii(MYLISTENER_IMPLEMENTATIONNAME);
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(MYLISTENER_IMPLEMENTATIONNAME));
 }
 
 /*-----------------------------------------------------
@@ -141,7 +141,7 @@ css::uno::Sequence< ::rtl::OUString > SAL_CALL MyListener::getSupportedServiceNa
     throw (css::uno::RuntimeException)
 {
     css::uno::Sequence< ::rtl::OUString > lNames(1);
-    lNames[0] = ::rtl::OUString::createFromAscii(MYLISTENER_SERVICENAME);
+    lNames[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(MYLISTENER_SERVICENAME));
     return lNames;
 }
 

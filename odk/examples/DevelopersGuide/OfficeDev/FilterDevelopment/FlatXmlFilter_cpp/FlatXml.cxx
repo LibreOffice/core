@@ -303,8 +303,8 @@ Sequence< OUString > getSupportedServiceNames()
         if( !pNames )
         {
             static Sequence< OUString > seqNames(1);
-            seqNames.getArray()[0] = OUString::createFromAscii(
-                "devguide.officedev.samples.filter.FlatXmlCpp");
+            seqNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "devguide.officedev.samples.filter.FlatXmlCpp"));
             pNames = &seqNames;
         }
     }
@@ -333,7 +333,7 @@ sal_Bool SAL_CALL component_writeInfo(void * pServiceManager, void * pRegistryKe
         {
             Reference< XRegistryKey > xNewKey(
                 reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
-                    OUString::createFromAscii( "/" IMPLEMENTATION_NAME "/UNO/SERVICES" ) ) );
+                    OUString(RTL_CONSTASCII_USTRINGPARAM( "/" IMPLEMENTATION_NAME "/UNO/SERVICES" )) ) );
 
             const Sequence< OUString > & rSNL = getSupportedServiceNames();
             const OUString * pArray = rSNL.getConstArray();

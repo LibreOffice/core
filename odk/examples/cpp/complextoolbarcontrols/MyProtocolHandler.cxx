@@ -206,7 +206,7 @@ Sequence < Reference< XDispatch > > SAL_CALL MyProtocolHandler::queryDispatches(
 ::rtl::OUString MyProtocolHandler_getImplementationName ()
     throw (RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii(MYPROTOCOLHANDLER_IMPLEMENTATIONNAME);
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(MYPROTOCOLHANDLER_IMPLEMENTATIONNAME));
 }
 
 sal_Bool SAL_CALL MyProtocolHandler_supportsService( const ::rtl::OUString& ServiceName )
@@ -222,7 +222,7 @@ Sequence< ::rtl::OUString > SAL_CALL MyProtocolHandler_getSupportedServiceNames(
     throw (RuntimeException)
 {
     Sequence < ::rtl::OUString > aRet(1);
-    aRet[0] = ::rtl::OUString::createFromAscii(MYPROTOCOLHANDLER_SERVICENAME);
+    aRet[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(MYPROTOCOLHANDLER_SERVICENAME));
     return aRet;
 }
 

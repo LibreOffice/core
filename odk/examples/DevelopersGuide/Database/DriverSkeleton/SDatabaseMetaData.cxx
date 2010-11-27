@@ -213,7 +213,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsNonNullableColumns(  ) throw(SQLExc
 ::rtl::OUString SAL_CALL ODatabaseMetaData::getIdentifierQuoteString(  ) throw(SQLException, RuntimeException)
 {
     // normally this is "
-    ::rtl::OUString aVal = ::rtl::OUString::createFromAscii("\"");
+    ::rtl::OUString aVal(RTL_CONSTASCII_USTRINGPARAM("\""));
     return aVal;
 }
 // -------------------------------------------------------------------------

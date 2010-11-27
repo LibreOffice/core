@@ -75,8 +75,8 @@ SAL_IMPLEMENT_MAIN()
     try
     {
         // resolve the uno-url
-        rInstance = rResolver->resolve( OUString::createFromAscii(
-            "uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager" ) );
+        rInstance = rResolver->resolve( OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager" )) );
 
         if( ! rInstance.is() )
         {

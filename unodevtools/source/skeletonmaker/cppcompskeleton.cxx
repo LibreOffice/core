@@ -536,13 +536,13 @@ void generateAddinConstructorAndHelper(std::ostream& o,
             "            RTL_CONSTASCII_USTRINGPARAM(\n"
             "                \"com.sun.star.configuration.ConfigurationAccess\"));\n\n";
 
-        o << "        ::rtl::OUStringBuffer sPath(::rtl::OUString::createFromAscii(\n"
-            "             \"/org.openoffice.Office.CalcAddIns/AddInInfo/\"));\n"
+        o << "        ::rtl::OUStringBuffer sPath(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(\n"
+            "             \"/org.openoffice.Office.CalcAddIns/AddInInfo/\")));\n"
             "        sPath.appendAscii(sADDIN_SERVICENAME);\n"
             "        sPath.appendAscii(\"/AddInFunctions\");\n\n"
             "        // create arguments: nodepath\n"
             "        css::beans::PropertyValue aArgument;\n"
-            "        aArgument.Name = ::rtl::OUString::createFromAscii(\"nodepath\");\n"
+            "        aArgument.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(\"nodepath\"));\n"
             "        aArgument.Value <<= sPath.makeStringAndClear();\n\n"
             "        css::uno::Sequence< css::uno::Any > aArguments(1);\n"
             "        aArguments[0] <<= aArgument;\n\n";
@@ -557,8 +557,8 @@ void generateAddinConstructorAndHelper(std::ostream& o,
 
         o << "        // extend arguments to create a view for all locales to get "
             "simple\n        // access to the compatibilityname property\n"
-            "        aArgument.Name = ::rtl::OUString::createFromAscii(\"locale\");\n"
-            "        aArgument.Value <<= ::rtl::OUString::createFromAscii(\"*\");\n"
+            "        aArgument.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(\"locale\"));\n"
+            "        aArgument.Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(\"*\"));\n"
             "        aArguments.realloc(2);\n"
             "        aArguments[1] <<= aArgument;\n\n"
             "        // create view for all locales\n"
@@ -582,7 +582,7 @@ void generateAddinConstructorAndHelper(std::ostream& o,
             "            m_xHAccess->getByHierarchicalName(\n"
             "                buf.makeStringAndClear()), css::uno::UNO_QUERY);\n"
             "        xPropSet->getPropertyValue(\n            "
-            "::rtl::OUString::createFromAscii(propName)) >>= ret;\n    }\n"
+            "::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(propName))) >>= ret;\n    }\n"
             "     catch ( css::uno::RuntimeException & e ) {\n        throw e;\n    }\n"
             "     catch ( css::uno::Exception & ) {\n    }\n    return ret;\n";
     }

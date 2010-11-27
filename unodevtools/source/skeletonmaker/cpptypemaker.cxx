@@ -420,8 +420,8 @@ void printMethods(std::ostream & o,
             o << "// ::com::sun::star::lang::XServiceName:\n"
                 "::rtl::OUString SAL_CALL " << classname << "getServiceName() "
                 "throw (css::uno::RuntimeException)\n{\n    "
-                "return ::rtl::OUString::createFromAscii("
-                "sADDIN_SERVICENAME);\n}\n";
+                "return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("
+                "sADDIN_SERVICENAME));\n}\n";
             generated.add(type);
             return;
         } else if (type.equals("com/sun/star/sheet/XAddIn")) {

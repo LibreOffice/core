@@ -669,9 +669,9 @@ void generateFunctionParamterMap(std::ostream& o,
         for ( sal_uInt16 p = 0; p < reader.getMethodParameterCount(m); ++p ) {
             if ( options.language == 2 ) {
                 o << "        fpm[" << p
-                  << "] = ::rtl::OUString::createFromAscii(\""
+                  << "] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(\""
                   << codemaker::convertString(reader.getMethodParameterName(m, p))
-                  << "\");\n";
+                  << "\"));\n";
             }
             else {
                 if ( options.java5 )
@@ -688,8 +688,8 @@ void generateFunctionParamterMap(std::ostream& o,
         }
 
         if ( options.language == 2 ) {
-            o << "        m_functionMap[::rtl::OUString::createFromAscii(\""
-              << sMethod << "\")] = fpm;\n\n";
+            o << "        m_functionMap[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(\""
+              << sMethod << "\"))] = fpm;\n\n";
         }
         else {
             o << "        m_functionMap.put(\"" << sMethod << "\", fpm);\n\n";
