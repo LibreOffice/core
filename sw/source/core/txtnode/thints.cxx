@@ -2103,7 +2103,7 @@ struct RemovePresentAttrs
         const SwTxtAttr* const pAutoStyle(i_rAttrSpan.second);
         SfxItemIter aIter(m_rAttrSet);
         const SfxPoolItem* pItem(aIter.GetCurItem());
-        while (true)
+        while (pItem)
         {
             const USHORT nWhich(pItem->Which());
             if (CharFmt::IsItemIncluded(nWhich, pAutoStyle))
@@ -2171,7 +2171,7 @@ lcl_FillWhichIds(const SfxItemSet& i_rAttrSet, std::vector<USHORT>& o_rClearIds)
     o_rClearIds.reserve(i_rAttrSet.Count());
     SfxItemIter aIter(i_rAttrSet);
     const SfxPoolItem* pItem(aIter.GetCurItem());
-    while (true)
+    while (pItem)
     {
         o_rClearIds.push_back(pItem->Which());
 
