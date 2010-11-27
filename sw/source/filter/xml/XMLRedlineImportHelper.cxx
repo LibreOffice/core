@@ -71,20 +71,20 @@ using ::com::sun::star::beans::XPropertySetInfo;
 SwDoc* lcl_GetDocViaTunnel( Reference<XTextCursor> & rCursor )
 {
     Reference<XUnoTunnel> xTunnel( rCursor, UNO_QUERY);
-    DBG_ASSERT( xTunnel.is(), "missing XUnoTunnel for Cursor" );
+    OSL_ENSURE( xTunnel.is(), "missing XUnoTunnel for Cursor" );
     OTextCursorHelper* pSwXCursor = reinterpret_cast< OTextCursorHelper * >(
             sal::static_int_cast< sal_IntPtr >(xTunnel->getSomething(OTextCursorHelper::getUnoTunnelId())) );
-    DBG_ASSERT( NULL != pSwXCursor, "OTextCursorHelper missing" );
+    OSL_ENSURE( NULL != pSwXCursor, "OTextCursorHelper missing" );
     return pSwXCursor->GetDoc();
 }
 
 SwDoc* lcl_GetDocViaTunnel( Reference<XTextRange> & rRange )
 {
     Reference<XUnoTunnel> xTunnel(rRange, UNO_QUERY);
-    DBG_ASSERT(xTunnel.is(), "Can't tunnel XTextRange");
+    OSL_ENSURE(xTunnel.is(), "Can't tunnel XTextRange");
     SwXTextRange *pRange = reinterpret_cast< SwXTextRange *>(
             sal::static_int_cast< sal_IntPtr >(xTunnel->getSomething(SwXTextRange::getUnoTunnelId())) );
-    DBG_ASSERT( NULL != pRange, "SwXTextRange missing" );
+    OSL_ENSURE( NULL != pRange, "SwXTextRange missing" );
     return pRange->GetDoc();
 }
 
@@ -157,11 +157,11 @@ void XTextRangeOrNodeIndexPosition::SetAsNodeIndex(
 
     // SwXTextRange -> PaM
     SwUnoInternalPaM aPaM(*pDoc);
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     sal_Bool bSuccess =
 #endif
         ::sw::XTextRangeToSwPaM(aPaM, rRange);
-    DBG_ASSERT(bSuccess, "illegal range");
+    OSL_ENSURE(bSuccess, "illegal range");
 
     // PaM -> Index
     Set(aPaM.GetPoint()->nNode);
@@ -169,17 +169,17 @@ void XTextRangeOrNodeIndexPosition::SetAsNodeIndex(
 
 void XTextRangeOrNodeIndexPosition::CopyPositionInto(SwPosition& rPos)
 {
-    DBG_ASSERT(IsValid(), "Can't get Position");
+    OSL_ENSURE(IsValid(), "Can't get Position");
 
     // create PAM from start cursor (if no node index is present)
     if (NULL == pIndex)
     {
         SwUnoInternalPaM aUnoPaM(*GetDoc());
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
         sal_Bool bSuccess =
 #endif
             ::sw::XTextRangeToSwPaM(aUnoPaM, xRange);
-        DBG_ASSERT(bSuccess, "illegal range");
+        OSL_ENSURE(bSuccess, "illegal range");
 
         rPos = *aUnoPaM.GetPoint();
     }
@@ -193,7 +193,7 @@ void XTextRangeOrNodeIndexPosition::CopyPositionInto(SwPosition& rPos)
 
 SwDoc* XTextRangeOrNodeIndexPosition::GetDoc()
 {
-    DBG_ASSERT(IsValid(), "Can't get Doc");
+    OSL_ENSURE(IsValid(), "Can't get Doc");
 
     return (NULL != pIndex) ? pIndex->GetNodes().GetDoc() : lcl_GetDocViaTunnel(xRange);
 }
@@ -332,7 +332,7 @@ XMLRedlineImportHelper::~XMLRedlineImportHelper()
         // and delete the incomplete ones. Finally, delete it.
         if( IsReady(pInfo) )
         {
-            DBG_ERROR("forgotten RedlineInfo; now inserted");
+            OSL_ENSURE(false, "forgotten RedlineInfo; now inserted");
             InsertIntoDocument( pInfo );
         }
         else
@@ -341,7 +341,7 @@ XMLRedlineImportHelper::~XMLRedlineImportHelper()
             pInfo->bNeedsAdjustment = sal_False;
             if( IsReady(pInfo) )
             {
-                DBG_ERROR("RedlineInfo without adjustment; now inserted");
+                OSL_ENSURE(false, "RedlineInfo without adjustment; now inserted");
                 InsertIntoDocument( pInfo );
             }
             else
@@ -350,7 +350,7 @@ XMLRedlineImportHelper::~XMLRedlineImportHelper()
                 // (i.e. end without start, or start without
                 // end). This may well be a problem in the file,
                 // rather than the code.
-                DBG_ERROR("incomplete redline (maybe file was corrupt); "
+                OSL_ENSURE(false, "incomplete redline (maybe file was corrupt); "
                           "now deleted");
             }
         }
@@ -599,8 +599,8 @@ inline sal_Bool XMLRedlineImportHelper::IsReady(RedlineInfo* pRedline)
 
 void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
 {
-    DBG_ASSERT(NULL != pRedlineInfo, "need redline info");
-    DBG_ASSERT(IsReady(pRedlineInfo), "redline info not complete yet!");
+    OSL_ENSURE(NULL != pRedlineInfo, "need redline info");
+    OSL_ENSURE(IsReady(pRedlineInfo), "redline info not complete yet!");
 
     // this method will modify the document directly -> lock SolarMutex
     SolarMutexGuard aGuard;
