@@ -398,7 +398,7 @@ void AnnotationManagerImpl::InsertAnnotation()
                 Rectangle aNewRect( x, y, x + width - 1, y + height - 1 );
                    bool bFree = true;
 
-                   for( AnnotationVector::iterator iter = aAnnotations.begin(); iter != aAnnotations.end(); iter++ )
+                   for( AnnotationVector::iterator iter = aAnnotations.begin(); iter != aAnnotations.end(); ++iter )
                    {
                        RealPoint2D aPoint( (*iter)->getPosition() );
                        aTagRect.nLeft   = sal::static_int_cast< long >( aPoint.X * 100.0 );
@@ -554,7 +554,7 @@ void AnnotationManagerImpl::DeleteAnnotationsByAuthor( const rtl::OUString& sAut
         if( pPage && !pPage->getAnnotations().empty() )
         {
             AnnotationVector aAnnotations( pPage->getAnnotations() );
-            for( AnnotationVector::iterator iter = aAnnotations.begin(); iter != aAnnotations.end(); iter++ )
+            for( AnnotationVector::iterator iter = aAnnotations.begin(); iter != aAnnotations.end(); ++iter )
             {
                 Reference< XAnnotation > xAnnotation( *iter );
                 if( xAnnotation->getAuthor() == sAuthor )
@@ -585,7 +585,7 @@ void AnnotationManagerImpl::DeleteAllAnnotations()
         {
 
             AnnotationVector aAnnotations( pPage->getAnnotations() );
-            for( AnnotationVector::iterator iter = aAnnotations.begin(); iter != aAnnotations.end(); iter++ )
+            for( AnnotationVector::iterator iter = aAnnotations.begin(); iter != aAnnotations.end(); ++iter )
             {
                 pPage->removeAnnotation( (*iter) );
             }
@@ -663,11 +663,11 @@ void AnnotationManagerImpl::SelectNextAnnotation(bool bForeward)
     {
         if( xCurrent.is() )
         {
-               for( AnnotationVector::iterator iter = aAnnotations.begin(); iter != aAnnotations.end(); iter++ )
+               for( AnnotationVector::iterator iter = aAnnotations.begin(); iter != aAnnotations.end(); ++iter )
                {
                    if( (*iter) == xCurrent )
                    {
-                       iter++;
+                       ++iter;
                        if( iter != aAnnotations.end() )
                        {
                            SelectAnnotation( (*iter) );
@@ -687,20 +687,19 @@ void AnnotationManagerImpl::SelectNextAnnotation(bool bForeward)
     {
         if( xCurrent.is() )
         {
-               for( AnnotationVector::iterator iter = aAnnotations.begin(); iter != aAnnotations.end(); iter++ )
-               {
-                   if( (*iter) == xCurrent )
-                   {
-                       if( iter != aAnnotations.begin() )
-                       {
-                           iter--;
+            for( AnnotationVector::iterator iter = aAnnotations.begin(); iter != aAnnotations.end(); ++iter )
+            {
+                if( (*iter) == xCurrent )
+                {
+                    if( iter != aAnnotations.begin() )
+                    {
+                        --iter;
                         SelectAnnotation( (*iter) );
                         return;
-
-                       }
-                       break;
-                   }
-               }
+                    }
+                    break;
+                }
+            }
         }
         else if( !aAnnotations.empty() )
         {
