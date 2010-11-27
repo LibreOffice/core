@@ -104,7 +104,7 @@
  *
  * --------------------------------------------------*/
 
-#if !defined(OSL_DEBUG_LEVEL) || OSL_DEBUG_LEVEL == 0
+#if !defined(OSL_DEBUG_LEVEL) || OSL_DEBUG_LEVEL <= 1
 #error Who broken the makefiles?
 #endif
 
