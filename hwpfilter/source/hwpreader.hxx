@@ -259,11 +259,11 @@ HwpImportFilter::HwpImportFilter( const Reference< XMultiServiceFactory > xFact 
         p->setDocumentHandler( xHandler );
 
           Sequence< Any > aArgs( 2 );
-          aArgs[0] <<= OUString::createFromAscii( "Local" );
-          aArgs[1] <<= OUString::createFromAscii( "Office" );
+          aArgs[0] <<= OUString(RTL_CONSTASCII_USTRINGPARAM("Local"));
+          aArgs[1] <<= OUString(RTL_CONSTASCII_USTRINGPARAM("Office"));
           Reference< XInterface > xUCB
               ( xFact->createInstanceWithArguments
-                 (OUString::createFromAscii("com.sun.star.ucb.UniversalContentBroker"),
+                 (OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.UniversalContentBroker")),
                   aArgs));
           p->setUCB( xUCB );
 

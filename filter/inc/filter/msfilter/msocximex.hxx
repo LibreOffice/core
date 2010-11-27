@@ -721,7 +721,7 @@ public:
     OCX_OptionButton() : OCX_ModernControl(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OptionButton" )))
     {
         msFormType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.component.RadioButton" ));
-        //msDialogType = rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlRadioButtonModel");
+        //msDialogType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlRadioButtonModel"));
         msDialogType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.component.RadioButton" ));
         mnBackColor = 0x80000005L;
         mnForeColor = 0x80000008L;
@@ -848,7 +848,7 @@ class OCX_ListBox : public OCX_ModernControl
 public:
     OCX_ListBox() : OCX_ModernControl(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ListBox" ))){
         msFormType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.component.ListBox" ));
-        //msDialogType = rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlListBoxModel");
+        //msDialogType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlListBoxModel"));
         msDialogType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.component.ListBox" ));
         mnBackColor = 0x80000005;
         mnForeColor = 0x80000008;
