@@ -30,7 +30,7 @@ if [ ! -d clone ] ; then
     ./g clone
 fi
 if [ -z "$TARFILE_LOCATION" ]; then
-    . ./*.Set.sh
+    . ./*[Ee]nv.[Ss]et.sh
 fi
 
 if [ ! -d "$TARFILE_LOCATION" ]; then
@@ -155,6 +155,10 @@ for i in $filelist ; do
 done
 rm $TARFILE_LOCATION/tmp/*-*
 cd $start_dir
+
+if [ -e post_download ] ; then
+    ./post_download
+fi
 
 if [ ! -z "$failed" ]; then
     echo
