@@ -560,7 +560,7 @@ void ORowSet::freeResources( bool _bComplete )
 
     // free all clones
     connectivity::OWeakRefArray::iterator aEnd = m_aClones.end();
-    for (connectivity::OWeakRefArray::iterator i = m_aClones.begin(); aEnd != i; i++)
+    for (connectivity::OWeakRefArray::iterator i = m_aClones.begin(); aEnd != i; ++i)
     {
         Reference< XComponent > xComp(i->get(), UNO_QUERY);
         if (xComp.is())
@@ -2118,7 +2118,7 @@ void ORowSet::notifyRowSetAndClonesRowDelete( const Any& _rBookmark )
     onDeleteRow( _rBookmark );
     // notify the clones
     connectivity::OWeakRefArray::iterator aEnd = m_aClones.end();
-    for (connectivity::OWeakRefArray::iterator i = m_aClones.begin(); aEnd != i; i++)
+    for (connectivity::OWeakRefArray::iterator i = m_aClones.begin(); aEnd != i; ++i)
     {
         Reference< XUnoTunnel > xTunnel(i->get(),UNO_QUERY);
         if(xTunnel.is())
@@ -2136,7 +2136,7 @@ void ORowSet::notifyRowSetAndClonesRowDeleted( const Any& _rBookmark, sal_Int32 
     onDeletedRow( _rBookmark, _nPos );
     // notify the clones
     connectivity::OWeakRefArray::iterator aEnd = m_aClones.end();
-    for (connectivity::OWeakRefArray::iterator i = m_aClones.begin(); aEnd != i; i++)
+    for (connectivity::OWeakRefArray::iterator i = m_aClones.begin(); aEnd != i; ++i)
     {
         Reference< XUnoTunnel > xTunnel(i->get(),UNO_QUERY);
         if(xTunnel.is())
