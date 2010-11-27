@@ -211,7 +211,7 @@ void Comment::finalizeImport()
             Reference< XShape > xAnnoShape( xAnnoShapeSupp->getAnnotationShape(), UNO_SET_THROW );
             Reference <XText> xText( xAnnoShape, UNO_QUERY_THROW );
             Reference <XTextRange> xTextRange( xText, UNO_QUERY_THROW );
-            xTextRange->setString( OUString(RTL_CONSTASCII_USTRINGPARAM("")) ); // Clear contents
+            xTextRange->setString( OUString::createFromAscii("") ); // Clear contents
             maModel.mxText->convert( xText, -1 );
 
             // Add shape formatting properties (autoFill, colHidden and rowHidden are dropped)

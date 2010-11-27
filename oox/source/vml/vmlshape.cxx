@@ -171,22 +171,22 @@ void lclSetXShapeRect( const Reference< XShape >& rxShape, const Rectangle& rSha
             try
             {
                 // The size
-                xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("SizeType")), Any( SizeType::FIX ) );
-                xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsAutomaticHeight")), Any( sal_False ) );
-                xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("Height")), Any( rShapeRect.Height ) );
-                xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("Width")), Any( rShapeRect.Width ) );
+                xProps->setPropertyValue( OUString::createFromAscii( "SizeType" ), Any( SizeType::FIX ) );
+                xProps->setPropertyValue( OUString::createFromAscii( "FrameIsAutomaticHeight" ), Any( sal_False ) );
+                xProps->setPropertyValue( OUString::createFromAscii( "Height" ), Any( rShapeRect.Height ) );
+                xProps->setPropertyValue( OUString::createFromAscii( "Width" ), Any( rShapeRect.Width ) );
 
                 // The position
-                xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("HoriOrientPosition")), Any( rShapeRect.X ) );
-                xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("HoriOrientRelation")),
+                xProps->setPropertyValue( OUString::createFromAscii( "HoriOrientPosition" ), Any( rShapeRect.X ) );
+                xProps->setPropertyValue( OUString::createFromAscii( "HoriOrientRelation" ),
                         Any( RelOrientation::FRAME ) );
-                xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("HoriOrient")),
+                xProps->setPropertyValue( OUString::createFromAscii( "HoriOrient" ),
                         Any( HoriOrientation::NONE ) );
 
-                xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("VertOrientPosition")), Any( rShapeRect.Y ) );
-                xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("VertOrientRelation")),
+                xProps->setPropertyValue( OUString::createFromAscii( "VertOrientPosition" ), Any( rShapeRect.Y ) );
+                xProps->setPropertyValue( OUString::createFromAscii( "VertOrientRelation" ),
                         Any( RelOrientation::FRAME ) );
-                xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("VertOrient")),
+                xProps->setPropertyValue( OUString::createFromAscii( "VertOrient" ),
                         Any( VertOrientation::NONE ) );
             }
             catch ( Exception& )

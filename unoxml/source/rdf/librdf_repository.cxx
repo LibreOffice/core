@@ -1382,10 +1382,14 @@ void SAL_CALL librdf_Repository::setStatementRDFa(
 throw (uno::RuntimeException, lang::IllegalArgumentException,
     rdf::RepositoryException)
 {
-    static const ::rtl::OUString s_cell(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.table.Cell"));
-    static const ::rtl::OUString s_cellprops(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.CellProperties")); // for writer
-    static const ::rtl::OUString s_paragraph(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.Paragraph"));
-    static const ::rtl::OUString s_bookmark(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.Bookmark"));
+    static const ::rtl::OUString s_cell(
+        ::rtl::OUString::createFromAscii("com.sun.star.table.Cell"));
+    static const ::rtl::OUString s_cellprops( // for writer
+        ::rtl::OUString::createFromAscii("com.sun.star.text.CellProperties"));
+    static const ::rtl::OUString s_paragraph(
+        ::rtl::OUString::createFromAscii("com.sun.star.text.Paragraph"));
+    static const ::rtl::OUString s_bookmark(
+        ::rtl::OUString::createFromAscii("com.sun.star.text.Bookmark"));
     static const ::rtl::OUString s_meta( ::rtl::OUString::createFromAscii(
         "com.sun.star.text.InContentMetadata"));
 
@@ -1440,7 +1444,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
                 "ensureMetadataReference did not"), *this);
     }
     ::rtl::OUString const sXmlId(mdref.First +
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#")) + mdref.Second);
+            ::rtl::OUString::createFromAscii("#") + mdref.Second);
     uno::Reference<rdf::XURI> xXmlId;
     try {
         xXmlId.set( rdf::URI::create(m_xContext,
@@ -1504,7 +1508,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     try {
         xXmlId.set( rdf::URI::create(m_xContext,
                 ::rtl::OUString::createFromAscii(s_nsOOo)
-                + mdref.First + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#"))
+                + mdref.First + ::rtl::OUString::createFromAscii("#")
                 + mdref.Second),
             uno::UNO_QUERY_THROW);
     } catch (lang::IllegalArgumentException & iae) {
@@ -1532,7 +1536,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
         return beans::Pair< uno::Sequence<rdf::Statement>, sal_Bool >();
     }
     ::rtl::OUString const sXmlId(mdref.First +
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#")) + mdref.Second);
+            ::rtl::OUString::createFromAscii("#") + mdref.Second);
     uno::Reference<rdf::XURI> xXmlId;
     try {
         xXmlId.set( rdf::URI::create(m_xContext,

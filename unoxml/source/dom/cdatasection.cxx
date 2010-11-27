@@ -51,7 +51,7 @@ namespace DOM
 
     OUString SAL_CALL CCDATASection::getNodeName()throw (RuntimeException)
     {
-        return OUString(RTL_CONSTASCII_USTRINGPARAM("#cdata-section"));
+        return OUString::createFromAscii("#cdata-section");
     }
 
     OUString SAL_CALL CCDATASection::getNodeValue() throw (RuntimeException)

@@ -504,7 +504,7 @@ namespace DOM
             {
 
                 if (aNsPrefix.getLength() > 0)
-                    aQName = aNsPrefix + OUString(RTL_CONSTASCII_USTRINGPARAM(":")) + aQName;
+                    aQName = aNsPrefix + OUString::createFromAscii(":") + aQName;
                 newElement = createElementNS(aNsUri, aQName);
             }
             else
@@ -524,7 +524,7 @@ namespace DOM
                     if (aAttrUri.getLength() > 0)
                     {
                         if (aAttrPrefix.getLength() > 0)
-                            aAttrName = aAttrPrefix + OUString(RTL_CONSTASCII_USTRINGPARAM(":")) + aAttrName;
+                            aAttrName = aAttrPrefix + OUString::createFromAscii(":") + aAttrName;
                         newElement->setAttributeNS(aAttrUri, aAttrName, curAttr->getValue());
                     }
                     else
@@ -590,8 +590,8 @@ namespace DOM
         {
             Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
             Reference< XMutationEvent > event(docevent->createEvent(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("DOMNodeInsertedIntoDocument"))), UNO_QUERY);
-            event->initMutationEvent(OUString(RTL_CONSTASCII_USTRINGPARAM("DOMNodeInsertedIntoDocument"))
+                OUString::createFromAscii("DOMNodeInsertedIntoDocument")), UNO_QUERY);
+            event->initMutationEvent(OUString::createFromAscii("DOMNodeInsertedIntoDocument")
                 , sal_True, sal_False, Reference< XNode >(),
                 OUString(), OUString(), OUString(), (AttrChangeType)0 );
             dispatchEvent(Reference< XEvent >(event, UNO_QUERY));
@@ -601,7 +601,7 @@ namespace DOM
     }
     OUString SAL_CALL CDocument::getNodeName()throw (RuntimeException)
     {
-        return OUString(RTL_CONSTASCII_USTRINGPARAM("#document"));
+        return OUString::createFromAscii("#document");
     }
     OUString SAL_CALL CDocument::getNodeValue() throw (RuntimeException)
     {

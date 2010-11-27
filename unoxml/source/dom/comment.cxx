@@ -49,7 +49,7 @@ namespace DOM
 
     OUString SAL_CALL CComment::getNodeName()throw (RuntimeException)
     {
-        return OUString(RTL_CONSTASCII_USTRINGPARAM("#comment"));
+        return OUString::createFromAscii("#comment");
     }
 
     OUString SAL_CALL CComment::getNodeValue() throw (RuntimeException)
