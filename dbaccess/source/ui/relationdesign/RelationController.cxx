@@ -365,12 +365,10 @@ namespace
         Reference<XPropertySet> xTableProp(_aTable,UNO_QUERY);
         const ::rtl::OUString sSourceName = ::dbtools::composeTableName( m_xMetaData, xTableProp, ::dbtools::eInTableDefinitions, false, false, false );
         TTableDataHelper::iterator aFind = m_aTableData.find(sSourceName);
-        bool bNotFound = true, bAdded = false;
         if ( aFind == m_aTableData.end() )
         {
             aFind = m_aTableData.insert(TTableDataHelper::value_type(sSourceName,::boost::shared_ptr<OTableWindowData>(new OTableWindowData(xTableProp,sSourceName, sSourceName)))).first;
             aFind->second->ShowAll(FALSE);
-            bAdded = true;
         }
         TTableWindowData::value_type pReferencingTable = aFind->second;
         Reference<XIndexAccess> xKeys = pReferencingTable->getKeys();
@@ -392,7 +390,6 @@ namespace
                 xKey->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
                 if ( KeyType::FOREIGN == nKeyType )
                 {
-                    bNotFound = false;
                     ::rtl::OUString sReferencedTable;
                     xKey->getPropertyValue(PROPERTY_REFERENCEDTABLE) >>= sReferencedTable;
                     //////////////////////////////////////////////////////////////////////
