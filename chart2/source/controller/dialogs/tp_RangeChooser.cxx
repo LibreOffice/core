@@ -186,9 +186,7 @@ void RangeChooserTabPage::initControlsFromModel()
     m_nChangingControlCalls++;
 
     if(m_pTemplateProvider)
-    {
         m_xCurrentChartTypeTemplate = m_pTemplateProvider->getCurrentTemplate();
-    }
 
     bool bUseColumns = ! m_aRB_Rows.IsChecked();
     bool bFirstCellAsLabel = bUseColumns ? m_aCB_FirstRowAsLabel.IsChecked() : m_aCB_FirstColumnAsLabel.IsChecked();
