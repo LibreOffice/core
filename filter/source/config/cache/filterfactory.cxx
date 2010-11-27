@@ -301,7 +301,7 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL FilterFactory::crea
             //-------------------------------------------
             // 1) getDefaultFilterForType=<internal_typename>
 
-            pIt = lTokens.find(::rtl::OUString::createFromAscii("getDefaultFilterForType"));
+            pIt = lTokens.find(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("getDefaultFilterForType")));
             if (pIt != lTokens.end())
             {
                 // SAFE ->

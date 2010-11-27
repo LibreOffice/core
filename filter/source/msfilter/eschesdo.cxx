@@ -223,7 +223,7 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             rObj.GetType().EqualsAscii( "drawing.Measure" ) || rObj.GetType().EqualsAscii( "drawing.Caption" ) )
         {
 /*
-            if( rObj.ImplGetPropertyValue( ::rtl::OUString::createFromAscii("BoundRect") ) )
+            if( rObj.ImplGetPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BoundRect")) ) )
             {
                 ::com::sun::star::awt::Rectangle aRect( *(::com::sun::star::awt::Rectangle*)rObj.GetUsrAny().getValue() );
                 rObj.SetRect( ImplMapPoint( Point( aRect.X, aRect.Y ) ),

@@ -191,7 +191,7 @@ Reference< com::sun::star::frame::XModel > xModel;
         }
         if(sTypeName.equalsAscii(""))
         {
-            //sTypeName=::rtl::OUString::createFromAscii("writer_Flat_XML_File");
+            //sTypeName=::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_Flat_XML_File"));
         }
         else
         {

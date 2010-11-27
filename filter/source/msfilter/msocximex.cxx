@@ -4482,7 +4482,7 @@ sal_Bool SvxMSConvertOCXControls::WriteOCXStream( SvStorageRef& rSrc1,
 
 #if 0
     uno::Any aTmp = xPropSet->getPropertyValue(
-        OUString::createFromAscii("ClassId"));
+        OUString(RTL_CONSTASCII_USTRINGPARAM("ClassId")));
     sal_Int16 nClassId = *(sal_Int16*) aTmp.getValue();
 #endif
 

@@ -580,7 +580,7 @@ void EscherPropertyContainer::CreateTextProperties(
 
 /*
     if ( rObj.ImplGetPropertyValue(
-        ::rtl::OUString::createFromAscii("TextWritingMode") ) )
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TextWritingMode")) ) )
     {
         ::com::sun::star::text::WritingMode eMode;
         rObj.GetUsrAny() >>= eMode;
