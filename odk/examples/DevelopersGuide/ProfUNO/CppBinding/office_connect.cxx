@@ -61,7 +61,7 @@ SAL_IMPLEMENT_MAIN()
     // instantiate a sample service with the servicemanager.
     Reference< XInterface > rInstance =
         rServiceManager->createInstanceWithContext(
-            OUString::createFromAscii("com.sun.star.bridge.UnoUrlResolver" ),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.bridge.UnoUrlResolver")),
             rComponentContext );
 
     // Query for the XUnoUrlResolver interface

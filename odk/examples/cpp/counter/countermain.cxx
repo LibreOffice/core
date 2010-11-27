@@ -72,7 +72,7 @@ SAL_IMPLEMENT_MAIN()
     Reference< XSimpleRegistry > xReg = createSimpleRegistry();
     OSL_ENSURE( xReg.is(), "### cannot get service instance of \"com.sun.star.regiystry.SimpleRegistry\"!" );
 
-    xReg->open(OUString::createFromAscii("counter.uno.rdb"), sal_False, sal_False);
+    xReg->open(OUString(RTL_CONSTASCII_USTRINGPARAM("counter.uno.rdb")), sal_False, sal_False);
     OSL_ENSURE( xReg->isValid(), "### cannot open test registry \"counter.uno.rdb\"!" );
 
     Reference< XComponentContext > xContext = bootstrap_InitialComponentContext(xReg);
@@ -83,21 +83,21 @@ SAL_IMPLEMENT_MAIN()
 
     // register my counter component
     Reference< XImplementationRegistration > xImplReg(
-        xMgr->createInstanceWithContext(OUString::createFromAscii("com.sun.star.registry.ImplementationRegistration"), xContext), UNO_QUERY);
+        xMgr->createInstanceWithContext(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.registry.ImplementationRegistration")), xContext), UNO_QUERY);
     OSL_ENSURE( xImplReg.is(), "### cannot get service instance of \"com.sun.star.registry.ImplementationRegistration\"!" );
 
     if (xImplReg.is())
     {
         xImplReg->registerImplementation(
-            OUString::createFromAscii("com.sun.star.loader.SharedLibrary"), // loader for component
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary")), // loader for component
 #ifdef UNX
 #ifdef MACOSX
-            OUString::createFromAscii("counter.uno.dylib"),     // component location
+            OUString(RTL_CONSTASCII_USTRINGPARAM("counter.uno.dylib")),     // component location
 #else
-            OUString::createFromAscii("counter.uno.so"),        // component location
+            OUString(RTL_CONSTASCII_USTRINGPARAM("counter.uno.so")),        // component location
 #endif
 #else
-            OUString::createFromAscii("counter.uno.dll"),       // component location
+            OUString(RTL_CONSTASCII_USTRINGPARAM("counter.uno.dll")),       // component location
 #endif
             Reference< XSimpleRegistry >()   // registry omitted,
                                              // defaulting to service manager registry used
@@ -105,7 +105,7 @@ SAL_IMPLEMENT_MAIN()
 
         // get a counter instance
         Reference< XInterface > xx ;
-        xx = xMgr->createInstanceWithContext(OUString::createFromAscii("foo.Counter"), xContext);
+        xx = xMgr->createInstanceWithContext(OUString(RTL_CONSTASCII_USTRINGPARAM("foo.Counter")), xContext);
         Reference< XCountable > xCount( xx, UNO_QUERY );
         OSL_ENSURE( xCount.is(), "### cannot get service instance of \"foo.Counter\"!" );
 

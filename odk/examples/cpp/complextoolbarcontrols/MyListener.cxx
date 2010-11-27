@@ -98,11 +98,11 @@ css::uno::Any SAL_CALL MyListener::execute(const css::uno::Sequence< css::beans:
         return css::uno::Any();
 
     css::uno::Reference< css::lang::XServiceInfo > xInfo(xModel, css::uno::UNO_QUERY);
-    sal_Bool bCalc   = xInfo->supportsService(::rtl::OUString::createFromAscii("com.sun.star.sheet.SpreadsheetDocument"));
+    sal_Bool bCalc   = xInfo->supportsService(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.SpreadsheetDocument")));
     sal_Bool bWriter = (
-                         xInfo->supportsService(::rtl::OUString::createFromAscii("com.sun.star.text.TextDocument"  )) &&
-                        !xInfo->supportsService(::rtl::OUString::createFromAscii("com.sun.star.text.WebDocument"   )) &&
-                        !xInfo->supportsService(::rtl::OUString::createFromAscii("com.sun.star.text.GlobalDocument"))
+                         xInfo->supportsService(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextDocument"))) &&
+                        !xInfo->supportsService(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.WebDocument"))) &&
+                        !xInfo->supportsService(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.GlobalDocument")))
                        );
 
     // Wir interessieren uns nur für Writer und Calc. Werden hier aber für

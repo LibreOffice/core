@@ -148,7 +148,7 @@ sal_Int32 PipeClientMain::run( const Sequence< OUString > & aArguments ) throw (
     {
         try {
             Reference < XInterface > r =
-                m_xSMgr->createInstance( OUString::createFromAscii( "com.sun.star.bridge.UnoUrlResolver" ) );
+                m_xSMgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.bridge.UnoUrlResolver")) );
             Reference < XUnoUrlResolver > rResolver( r , UNO_QUERY );
 
             // connect to the remote process and retrieve the initial object
@@ -212,7 +212,7 @@ Sequence< OUString > getSupportedServiceNames()
         if( !pNames )
         {
             static Sequence< OUString > seqNames(1);
-            seqNames.getArray()[0] = OUString::createFromAscii( "com.sun.star.bridge.example.RemoteClientSample" );
+            seqNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.bridge.example.RemoteClientSample"));
             pNames = &seqNames;
         }
     }

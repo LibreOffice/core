@@ -96,7 +96,7 @@ OUString SAL_CALL FilterDetect::detect(Sequence< PropertyValue >& aArguments )
     {
         // open the stream if it was not suplied by the framework
         Reference< XSimpleFileAccess > xSFI(mxMSF->createInstance(
-            OUString::createFromAscii("com.sun.star.ucb.SimpleFileAccess" )), UNO_QUERY);
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess"))), UNO_QUERY);
         if (sURL.getLength() > 0 && xSFI.is())
         {
             try
@@ -151,25 +151,25 @@ OUString SAL_CALL FilterDetect::detect(Sequence< PropertyValue >& aArguments )
             // return type for class found
             if      (aMimeType.equals("application/x-vnd.oasis.opendocument.text") ||
                        aMimeType.equals("application/vnd.oasis.opendocument.text"))
-                sTypeName = OUString::createFromAscii("devguide_FlatXMLType_Cpp_writer");
+                sTypeName = OUString(RTL_CONSTASCII_USTRINGPARAM("devguide_FlatXMLType_Cpp_writer"));
             else if (aMimeType.equals("application/x-vnd.oasis.opendocument.text-master") ||
                        aMimeType.equals("application/vnd.oasis.opendocument.text-master"))
-                sTypeName = OUString::createFromAscii("devguide_FlatXMLType_Cpp_master");
+                sTypeName = OUString(RTL_CONSTASCII_USTRINGPARAM("devguide_FlatXMLType_Cpp_master"));
            else if (aMimeType.equals("application/x-vnd.oasis.openoffice.text-global") ||
                       aMimeType.equals("application/vnd.oasis.openoffice.text-global"))
-                sTypeName = OUString::createFromAscii("devguide_FlatXMLType_Cpp_master");
+                sTypeName = OUString(RTL_CONSTASCII_USTRINGPARAM("devguide_FlatXMLType_Cpp_master"));
            else if (aMimeType.equals("application/x-vnd.oasis.opendocument.spreadsheet") ||
                        aMimeType.equals("application/vnd.oasis.opendocument.spreadsheet"))
-                sTypeName = OUString::createFromAscii("devguide_FlatXMLType_Cpp_calc");
+                sTypeName = OUString(RTL_CONSTASCII_USTRINGPARAM("devguide_FlatXMLType_Cpp_calc"));
             else if (aMimeType.equals("application/x-vnd.oasis.opendocument.drawing") ||
                        aMimeType.equals("application/vnd.oasis.opendocument.drawing"))
-                sTypeName = OUString::createFromAscii("devguide_FlatXMLType_Cpp_draw");
+                sTypeName = OUString(RTL_CONSTASCII_USTRINGPARAM("devguide_FlatXMLType_Cpp_draw"));
             else if (aMimeType.equals("application/x-vnd.oasis.opendocument.presentation") ||
                        aMimeType.equals("application/vnd.oasis.opendocument.presentation"))
-                sTypeName = OUString::createFromAscii("devguide_FlatXMLType_Cpp_impress");
+                sTypeName = OUString(RTL_CONSTASCII_USTRINGPARAM("devguide_FlatXMLType_Cpp_impress"));
             else if (aMimeType.equals("application/x-vnd.oasis.opendocument.presentation") ||
                        aMimeType.equals("application/vnd.oasis.opendocument.presentation"))
-                sTypeName = OUString::createFromAscii("devguide_FlatXMLType_Cpp_impress");
+                sTypeName = OUString(RTL_CONSTASCII_USTRINGPARAM("devguide_FlatXMLType_Cpp_impress"));
         }
     }
     return sTypeName;
