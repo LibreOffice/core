@@ -477,7 +477,8 @@ void UnoControlModel::ImplRegisterProperty( sal_uInt16 nPropId )
 void UnoControlModel::ImplRegisterProperties( const std::list< sal_uInt16 > &rIds )
 {
     std::list< sal_uInt16 >::const_iterator iter;
-    for( iter = rIds.begin(); iter != rIds.end(); iter++) {
+    for( iter = rIds.begin(); iter != rIds.end(); ++iter)
+    {
         if( !ImplHasProperty( *iter ) )
             ImplRegisterProperty( *iter, ImplGetDefaultValue( *iter ) );
     }
