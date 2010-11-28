@@ -582,11 +582,11 @@ void SvxJavaOptionsPage::HandleCheckEntry( SvLBoxEntry* _pEntry )
 void SvxJavaOptionsPage::AddFolder( const ::rtl::OUString& _rFolder )
 {
     bool bStartAgain = true;
-    sal_Int32 nPos = 0;
     JavaInfo* pInfo = NULL;
     javaFrameworkError eErr = jfw_getJavaInfoByPath( _rFolder.pData, &pInfo );
     if ( JFW_E_NONE == eErr && pInfo )
     {
+        sal_Int32 nPos = 0;
         bool bFound = false;
         JavaInfo** parInfo = m_parJavaInfo;
         for ( sal_Int32 i = 0; i < m_nInfoSize; ++i )
