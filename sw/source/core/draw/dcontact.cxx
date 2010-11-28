@@ -1278,7 +1278,7 @@ class NestedUserCallHdl
             mpDrawContact = 0;
         }
 
-        bool IsNestedUserCall()
+        bool IsNestedUserCall() const
         {
             return mbParentUserCallActive;
         }
