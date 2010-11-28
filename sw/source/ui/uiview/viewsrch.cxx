@@ -286,6 +286,10 @@ void SwView::ExecSearch(SfxRequest& rReq, BOOL bNoMessage)
                 {
                     SwSearchOptions aOpts( pWrtShell, pSrchItem->GetBackward() );
 
+                    // Fix for i#8288: "Replace all" should leave the cursor at the place it was
+                    // before executing the command, rather than at the site of the final replacement.
+                    // To do this take note of the current cursor position before replace all begins:
+                    SwPosition TmpPointPos = *pWrtShell->GetSwCrsr()->GetPoint();
 
                     if( !pSrchItem->GetSelection() )
                     {
@@ -305,8 +309,13 @@ void SwView::ExecSearch(SfxRequest& rReq, BOOL bNoMessage)
                         SwWait aWait( *GetDocShell(), TRUE );
                         pWrtShell->StartAllAction();
                         nFound = FUNC_Search( aOpts );
+
+                        // i#8288: Now that everything has been replaced, restore the original cursor position.
+                        *(pWrtShell->GetSwCrsr()->GetPoint()) = TmpPointPos;
+
                         pWrtShell->EndAllAction();
                     }
+
                     rReq.SetReturnValue(SfxBoolItem(nSlot, nFound != 0 && ULONG_MAX != nFound));
                     if( !nFound )
                     {
