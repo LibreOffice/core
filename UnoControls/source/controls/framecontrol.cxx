@@ -509,7 +509,7 @@ void FrameControl::impl_createFrame(    const   Reference< XWindowPeer >&   xPee
         xOldFrame = m_xFrame ;
     }
 
-    xNewFrame = Reference< XFrame >  ( impl_getMultiServiceFactory()->createInstance ( OUString::createFromAscii( "com.sun.star.frame.Frame" ) ), UNO_QUERY ) ;
+    xNewFrame = Reference< XFrame >  ( impl_getMultiServiceFactory()->createInstance ( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Frame")) ), UNO_QUERY ) ;
     Reference< XDispatchProvider >  xDSP ( xNewFrame, UNO_QUERY ) ;
 
     if (xDSP.is())
@@ -520,7 +520,7 @@ void FrameControl::impl_createFrame(    const   Reference< XWindowPeer >&   xPee
         //  option
         //xFrame->setName( "WhatYouWant" );
 
-        Reference< XURLTransformer >  xTrans ( impl_getMultiServiceFactory()->createInstance ( OUString::createFromAscii( "com.sun.star.util.URLTransformer" ) ), UNO_QUERY ) ;
+        Reference< XURLTransformer >  xTrans ( impl_getMultiServiceFactory()->createInstance ( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer")) ), UNO_QUERY ) ;
         if(xTrans.is())
         {
             // load file

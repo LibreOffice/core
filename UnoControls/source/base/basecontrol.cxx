@@ -934,7 +934,7 @@ WindowDescriptor* BaseControl::impl_getWindowDescriptor( const Reference< XWindo
     WindowDescriptor* pDescriptor = new WindowDescriptor ;
 
     pDescriptor->Type               = WindowClass_SIMPLE                    ;
-    pDescriptor->WindowServiceName  = OUString::createFromAscii( "window" ) ;
+    pDescriptor->WindowServiceName  = OUString(RTL_CONSTASCII_USTRINGPARAM("window"))   ;
     pDescriptor->ParentIndex        = -1                                    ;
     pDescriptor->Parent             = xParentPeer                           ;
     pDescriptor->Bounds             = getPosSize ()                         ;

@@ -69,14 +69,14 @@ extern "C" {
             {
                 Reference< ::com::sun::star::registry::XRegistryKey > xKey( reinterpret_cast< ::com::sun::star::registry::XRegistryKey* >( pXUnoKey ) );
 
-                ::rtl::OUString aImplName = ::rtl::OUString::createFromAscii( "/" );
+                ::rtl::OUString aImplName (RTL_CONSTASCII_USTRINGPARAM("/"));
                 aImplName += XPluginManager_Impl::getImplementationName_Static();
-                aImplName += ::rtl::OUString::createFromAscii( "/UNO/SERVICES/com.sun.star.plugin.PluginManager" );
+                aImplName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES/com.sun.star.plugin.PluginManager"));
                 xKey->createKey( aImplName );
 
-                aImplName = ::rtl::OUString::createFromAscii( "/" );
+                aImplName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
                 aImplName += PluginModel::getImplementationName_Static();
-                aImplName += ::rtl::OUString::createFromAscii( "/UNO/SERVICES/com.sun.star.plugin.PluginModel" );
+                aImplName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES/com.sun.star.plugin.PluginModel"));
                 xKey->createKey( aImplName );
 
                 return sal_True;

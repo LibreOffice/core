@@ -145,14 +145,14 @@ namespace pcr
     //------------------------------------------------------------------------
     ::rtl::OUString FormController::getImplementationName_static(  ) throw(RuntimeException)
     {
-        return ::rtl::OUString::createFromAscii("org.openoffice.comp.extensions.FormController");
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.extensions.FormController"));
     }
 
     //------------------------------------------------------------------------
     Sequence< ::rtl::OUString > FormController::getSupportedServiceNames_static(  ) throw(RuntimeException)
     {
         Sequence< ::rtl::OUString > aSupported(1);
-        aSupported[0] = ::rtl::OUString::createFromAscii( "com.sun.star.form.PropertyBrowserController" );
+        aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.PropertyBrowserController"));
         return aSupported;
     }
 
@@ -273,14 +273,14 @@ namespace pcr
     //------------------------------------------------------------------------
     ::rtl::OUString DialogController::getImplementationName_static(  ) throw(RuntimeException)
     {
-        return ::rtl::OUString::createFromAscii("org.openoffice.comp.extensions.DialogController");
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.extensions.DialogController"));
     }
 
     //------------------------------------------------------------------------
     Sequence< ::rtl::OUString > DialogController::getSupportedServiceNames_static(  ) throw(RuntimeException)
     {
         Sequence< ::rtl::OUString > aSupported(1);
-        aSupported[0] = ::rtl::OUString::createFromAscii( "com.sun.star.awt.PropertyBrowserController" );
+        aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.PropertyBrowserController"));
         return aSupported;
     }
 

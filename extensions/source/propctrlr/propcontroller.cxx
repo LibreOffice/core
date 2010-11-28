@@ -375,7 +375,7 @@ namespace pcr
         ::osl::MutexGuard aGuard( m_aMutex );
 
         if (_rxFrame.is() && haveView())
-            throw RuntimeException(::rtl::OUString::createFromAscii("Unable to attach to a second frame."),*this);
+            throw RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unable to attach to a second frame.")),*this);
 
         // revoke as focus listener from the old container window
         stopContainerWindowListening();
@@ -391,7 +391,7 @@ namespace pcr
         VCLXWindow* pContainerWindow = VCLXWindow::GetImplementation(xContainerWindow);
         Window* pParentWin = pContainerWindow ? pContainerWindow->GetWindow() : NULL;
         if (!pParentWin)
-            throw RuntimeException(::rtl::OUString::createFromAscii("The frame is invalid. Unable to extract the container window."),*this);
+            throw RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("The frame is invalid. Unable to extract the container window.")),*this);
 
         if ( Construct( pParentWin ) )
         {
@@ -597,14 +597,14 @@ namespace pcr
     //------------------------------------------------------------------------
     ::rtl::OUString OPropertyBrowserController::getImplementationName_static(  ) throw(RuntimeException)
     {
-        return ::rtl::OUString::createFromAscii("org.openoffice.comp.extensions.ObjectInspector");
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.extensions.ObjectInspector"));
     }
 
     //------------------------------------------------------------------------
     Sequence< ::rtl::OUString > OPropertyBrowserController::getSupportedServiceNames_static(  ) throw(RuntimeException)
     {
         Sequence< ::rtl::OUString > aSupported(1);
-        aSupported[0] = ::rtl::OUString::createFromAscii( "com.sun.star.inspection.ObjectInspector" );
+        aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.inspection.ObjectInspector"));
         return aSupported;
     }
 

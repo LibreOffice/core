@@ -107,9 +107,9 @@ using namespace ::com::sun::star::registry                      ;
         {                                                                                                               \
             AS_DBG_OUT ( "\tCOMPONENT_INFO():\t\txkey is valid ...\n" )                                                 \
             /* Build new keyname */                                                                                     \
-            sKeyName     =  OUString::createFromAscii( "/" )            ;                                               \
+            sKeyName     =  OUString(RTL_CONSTASCII_USTRINGPARAM("/"))          ;                                               \
             sKeyName    +=  CLASS::impl_getStaticImplementationName()   ;                                               \
-            sKeyName    +=  OUString::createFromAscii( "/UNO/SERVICES" );                                               \
+            sKeyName    +=  OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));                                             \
                                                                                                                         \
             /* Create new key with new name. */                                                                         \
             xNewKey = xKey->createKey( sKeyName );                                                                      \

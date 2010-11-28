@@ -74,7 +74,7 @@ namespace
         {
             Config config(sf);
             Reference<XSimpleFileAccess> file_access(
-                sf->createInstance(OUString::createFromAscii("com.sun.star.ucb.SimpleFileAccess")),
+                sf->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess"))),
                 UNO_QUERY_THROW);
             SoapSender sender(sf, config.getSoapUrl());
             OUString soap_id = config.getSoapId();
@@ -148,7 +148,7 @@ namespace oooimprovement
     OnLogRotateJob::OnLogRotateJob(const Reference<XComponentContext>& context)
         : m_ServiceFactory(Reference<XMultiServiceFactory>(
             context->getServiceManager()->createInstanceWithContext(
-                OUString::createFromAscii("com.sun.star.lang.XMultiServiceFactory"), context),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.lang.XMultiServiceFactory")), context),
             UNO_QUERY))
     { }
 
@@ -186,12 +186,12 @@ namespace oooimprovement
     { return getSupportedServiceNames_static(); }
 
     OUString SAL_CALL OnLogRotateJob::getImplementationName_static()
-    { return OUString::createFromAscii("com.sun.star.comp.extensions.oooimprovement.OnLogRotateJob"); }
+    { return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.extensions.oooimprovement.OnLogRotateJob")); }
 
     Sequence<OUString> SAL_CALL OnLogRotateJob::getSupportedServiceNames_static()
     {
         Sequence<OUString> aServiceNames(1);
-        aServiceNames[0] = OUString::createFromAscii("com.sun.star.task.XAsyncJob");
+        aServiceNames[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.task.XAsyncJob"));
         return aServiceNames;
     }
 

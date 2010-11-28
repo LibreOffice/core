@@ -431,7 +431,7 @@ Sequence< PluginDescription > XPluginManager_Impl::impl_getPluginDescriptions(vo
                             {
                             case ',':
                             case ';':
-                                aExtensions += OUString::createFromAscii( ";*." );
+                                aExtensions += OUString(RTL_CONSTASCII_USTRINGPARAM(";*."));
                             case ' ':
                                 break;
                             case '*':

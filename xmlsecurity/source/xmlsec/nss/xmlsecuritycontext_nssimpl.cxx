@@ -179,12 +179,12 @@ Sequence< OUString > SAL_CALL XMLSecurityContext_NssImpl :: getSupportedServiceN
 Sequence< OUString > XMLSecurityContext_NssImpl :: impl_getSupportedServiceNames() {
     ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() ) ;
     Sequence< OUString > seqServiceNames( 1 ) ;
-    seqServiceNames.getArray()[0] = OUString::createFromAscii( "com.sun.star.xml.crypto.XMLSecurityContext" ) ;
+    seqServiceNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.crypto.XMLSecurityContext")) ;
     return seqServiceNames ;
 }
 
 OUString XMLSecurityContext_NssImpl :: impl_getImplementationName() throw( RuntimeException ) {
-    return OUString::createFromAscii( "com.sun.star.xml.security.bridge.xmlsec.XMLSecurityContext_NssImpl" ) ;
+    return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.security.bridge.xmlsec.XMLSecurityContext_NssImpl")) ;
 }
 
 //Helper for registry

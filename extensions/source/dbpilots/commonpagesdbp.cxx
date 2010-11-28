@@ -120,7 +120,7 @@ namespace dbp
         try
         {
             ::rtl::OUString sDataSourceName;
-            rContext.xForm->getPropertyValue(::rtl::OUString::createFromAscii("DataSourceName")) >>= sDataSourceName;
+            rContext.xForm->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataSourceName"))) >>= sDataSourceName;
 
             Reference< XConnection > xConnection;
             bool bEmbedded = ::dbtools::isEmbeddedInDatabase( rContext.xForm, xConnection );
@@ -138,9 +138,9 @@ namespace dbp
             implFillTables(xConnection);
 
             ::rtl::OUString sCommand;
-            OSL_VERIFY( rContext.xForm->getPropertyValue( ::rtl::OUString::createFromAscii("Command") ) >>= sCommand );
+            OSL_VERIFY( rContext.xForm->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Command")) ) >>= sCommand );
             sal_Int32 nCommandType = CommandType::TABLE;
-            OSL_VERIFY( rContext.xForm->getPropertyValue( ::rtl::OUString::createFromAscii("CommandType") ) >>= nCommandType );
+            OSL_VERIFY( rContext.xForm->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CommandType")) ) >>= nCommandType );
 
             // search the entry of the given type with the given name
             XubString sLookup( sCommand );
@@ -175,13 +175,13 @@ namespace dbp
                 xOldConn = getFormConnection();
 
                 ::rtl::OUString sDataSource = m_aDatasource.GetSelectEntry();
-                rContext.xForm->setPropertyValue( ::rtl::OUString::createFromAscii("DataSourceName"), makeAny( sDataSource ) );
+                rContext.xForm->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataSourceName")), makeAny( sDataSource ) );
             }
             ::rtl::OUString sCommand = m_aTable.GetSelectEntry();
             sal_Int32 nCommandType = reinterpret_cast< sal_IntPtr >( m_aTable.GetEntryData( m_aTable.GetSelectEntryPos() ) );
 
-            rContext.xForm->setPropertyValue( ::rtl::OUString::createFromAscii("Command"), makeAny( sCommand ) );
-            rContext.xForm->setPropertyValue( ::rtl::OUString::createFromAscii("CommandType"), makeAny( nCommandType ) );
+            rContext.xForm->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Command")), makeAny( sCommand ) );
+            rContext.xForm->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CommandType")), makeAny( nCommandType ) );
 
             if ( !rContext.bEmbedded )
                 setFormConnection( xOldConn, sal_False );

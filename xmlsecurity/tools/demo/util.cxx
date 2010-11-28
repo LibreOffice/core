@@ -61,7 +61,7 @@ cssu::Reference< cssl::XMultiServiceFactory > CreateDemoServiceFactory()
             "serviceManager - "
             "Cannot create simple registry" ) ;
 
-        xSimpleRegistry->open(rtl::OUString::createFromAscii( "demo.rdb" ), sal_True, sal_False);
+        xSimpleRegistry->open(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("demo.rdb")), sal_True, sal_False);
         OSL_ENSURE( xSimpleRegistry->isValid() ,
             "serviceManager - "
             "Cannot open xml security registry rdb" ) ;
