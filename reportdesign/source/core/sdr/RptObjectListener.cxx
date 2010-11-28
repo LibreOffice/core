@@ -56,13 +56,6 @@ OObjectListener::~OObjectListener()
 
 void SAL_CALL OObjectListener::disposing( const  ::com::sun::star::lang::EventObject& ) throw( ::com::sun::star::uno::RuntimeException)
 {
-    /*
-    // disconnect the listener
-    if (m_pObject)
-    {
-        (m_pObject->m_xPropertyChangeListener).clear();
-    }
-    */
 }
 
 // XPropertyChangeListener

@@ -96,7 +96,6 @@ SdrUndoAction* OReportUndoFactory::CreateUndoInsertObject( SdrObject& rObject, b
 SdrUndoAction* OReportUndoFactory::CreateUndoDeleteObject( SdrObject& rObject, bool /*bOrdNumDirect*/ )
 {
     return lcl_createUndo(rObject,rptui::Removed,RID_STR_UNDO_DELETE_CONTROL);
-    //return m_pUndoFactory->CreateUndoDeleteObject( rObject, bOrdNumDirect ? TRUE : FALSE );
 }
 
 SdrUndoAction* OReportUndoFactory::CreateUndoNewObject( SdrObject& rObject, bool /*bOrdNumDirect*/ )
