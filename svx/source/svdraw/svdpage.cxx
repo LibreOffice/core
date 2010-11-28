@@ -981,8 +981,6 @@ void SdrObjList::ClearObjectNavigationOrder (void)
 
 bool SdrObjList::RecalcNavigationPositions (void)
 {
-    bool bUpToDate (false);
-
     if (mbIsNavigationOrderDirty)
     {
         if (mpNavigationOrder.get() != NULL)
@@ -994,8 +992,6 @@ bool SdrObjList::RecalcNavigationPositions (void)
             sal_uInt32 nIndex (0);
             for (iObject=mpNavigationOrder->begin(); iObject!=iEnd; ++iObject,++nIndex)
                 (*iObject)->SetNavigationPosition(nIndex);
-
-            bUpToDate = true;
         }
     }
 
