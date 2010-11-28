@@ -2110,11 +2110,11 @@ void XMLTextParagraphExport::exportParagraph(
                                  ("NumberingStartValue"));
 
 
-                            sal_Int32 nStartValue = 0;
-
                             if (xPropSetInfo->
                                 hasPropertyByName(sNumberingStartValue))
                             {
+                                sal_Int32 nStartValue = 0;
+
                                 xPropSet->getPropertyValue(sNumberingStartValue)
                                     >>= nStartValue;
 
