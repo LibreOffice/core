@@ -184,7 +184,7 @@ uno::Reference< container::XNameContainer >    DomainMapper_Impl::GetPageStyles(
     if(!m_xPageStyles.is())
     {
         uno::Reference< style::XStyleFamiliesSupplier > xSupplier( m_xTextDocument, uno::UNO_QUERY );
-        xSupplier->getStyleFamilies()->getByName(::rtl::OUString::createFromAscii("PageStyles")) >>= m_xPageStyles;
+        xSupplier->getStyleFamilies()->getByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PageStyles"))) >>= m_xPageStyles;
     }
     return m_xPageStyles;
 }
@@ -1469,7 +1469,7 @@ extract a parameter (with or without quotes) between the command and the followi
     }
     else
     {
-        nEndIndex = rCommand.indexOf( ::rtl::OUString::createFromAscii(" \\"), nStartIndex);
+        nEndIndex = rCommand.indexOf( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" \\")), nStartIndex);
     }
     ::rtl::OUString sRet;
     if( nEndIndex > nStartIndex + 1 )
@@ -2640,7 +2640,7 @@ void DomainMapper_Impl::handleAuthor
         {
             //create a custom property field
             sServiceName +=
-                ::rtl::OUString::createFromAscii("DocInfo.Custom");
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DocInfo.Custom"));
             bIsCustomField = true;
         }
         else
