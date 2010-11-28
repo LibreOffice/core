@@ -26,7 +26,10 @@
 #
 #*************************************************************************
 
-if [ ! -d clone ] ; then
+# we want to clone if we are in the bootstrap git repo and clone does not exist yet
+# we need to test for a .git in order not to clone after rsync if we are called in
+# the inner autogen of the buid-repo based build
+if [ ! -d clone -a -d .git ] ; then
     ./g clone
 fi
 if [ -z "$TARFILE_LOCATION" ]; then
