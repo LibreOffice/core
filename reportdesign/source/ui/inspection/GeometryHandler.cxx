@@ -137,7 +137,7 @@ struct PropertyCompare : public ::std::binary_function< beans::Property, ::rtl::
     }
     bool operator() (const ::rtl::OUString& x,const beans::Property& y) const
     {
-        return x.equals(y.Name);/
+        return x.equals(y.Name);
     }
 };
 
