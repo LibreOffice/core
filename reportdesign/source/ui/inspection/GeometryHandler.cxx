@@ -133,11 +133,11 @@ struct PropertyCompare : public ::std::binary_function< beans::Property, ::rtl::
 {
     bool operator() (const beans::Property& x, const ::rtl::OUString& y) const
     {
-        return x.Name.equals(y);// ? true : false;
+        return x.Name.equals(y);
     }
     bool operator() (const ::rtl::OUString& x,const beans::Property& y) const
     {
-        return x.equals(y.Name);// ? true : false;
+        return x.equals(y.Name);/
     }
 };
 
