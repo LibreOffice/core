@@ -245,8 +245,7 @@ ConfigItem::ConfigItem(utl::ConfigManager&  rManager, const rtl::OUString rSubTr
     pImpl->nMode = CONFIG_MODE_IMMEDIATE_UPDATE; // does not allow exceptions
     m_xHierarchyAccess = pImpl->pManager->AddConfigItem(*this);
 }
-//---------------------------------------------------------------------
-//--- 02.08.2002 16:33:23 -----------------------------------------------
+
 sal_Bool ConfigItem::IsValidConfigMgr() const
 {
     return ( pImpl->pManager && pImpl->pManager->GetConfigurationProvider().is() );
