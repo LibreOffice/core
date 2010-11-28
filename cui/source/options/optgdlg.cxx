@@ -868,7 +868,6 @@ OfaViewTabPage::~OfaViewTabPage()
 }
 
 #if defined( UNX )
-//--- 20.08.01 10:16:12 ---------------------------------------------------
 IMPL_LINK( OfaViewTabPage, OnAntialiasingToggled, void*, NOTINTERESTEDIN )
 {
     (void)NOTINTERESTEDIN;
