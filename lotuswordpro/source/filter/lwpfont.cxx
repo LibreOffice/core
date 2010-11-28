@@ -269,7 +269,7 @@ OUString LwpFontTable::GetFaceName(sal_uInt16 index) //index: start from 1
 {
     assert(index>0);
     if (index < 1)//add by , for fix crash,2005/12/20
-        return OUString::createFromAscii("");//add end
+        return OUString();//add end
     return m_pFontEntries[index-1].GetFaceName();
 }
 

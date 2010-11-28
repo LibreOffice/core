@@ -103,21 +103,21 @@ rtl::OUString LwpBulletStyleMgr::RegisterBulletStyle(LwpPara* pPara, LwpBulletOv
     if(!pPara || !pIndent || !pBullOver)
     {
 //      assert(false);
-        return rtl::OUString::createFromAscii("");
+        return rtl::OUString();
     }
 
     LwpSilverBullet* pSilverBullet = pPara->GetSilverBullet();
     if (!pSilverBullet)
     {
         assert(false);
-        return rtl::OUString::createFromAscii("");
+        return rtl::OUString();
     }
 
     LwpPara* pBulletPara = pSilverBullet->GetBulletPara();
     if (!pBulletPara)
     {
         assert(false);
-        return rtl::OUString::createFromAscii("");
+        return rtl::OUString();
     }
 
     LwpParaProperty* pProp = pPara->GetProperty(PP_LOCAL_INDENT);
@@ -185,7 +185,7 @@ rtl::OUString LwpBulletStyleMgr::RegisterBulletStyle(LwpPara* pPara, LwpBulletOv
     }
     else
     {
-        rtl::OUString aPrefix = rtl::OUString::createFromAscii("");
+        rtl::OUString aPrefix = rtl::OUString();
 
         LwpFrib* pFrib = pBulletParaFribs->HasFrib(FRIB_TAG_DOCVAR);
         LwpFribDocVar* pDocVarFrib = NULL;
@@ -210,7 +210,7 @@ rtl::OUString LwpBulletStyleMgr::RegisterBulletStyle(LwpPara* pPara, LwpBulletOv
         {
             for (sal_uInt8 nPos = 1; nPos < 10; nPos++)
             {
-                aPrefix = rtl::OUString::createFromAscii("");
+                aPrefix = rtl::OUString();
                 if (pParaNumber->GetStyleID() != NUMCHAR_other)
                 {
                     XFNumFmt aFmt;
@@ -223,7 +223,7 @@ rtl::OUString LwpBulletStyleMgr::RegisterBulletStyle(LwpPara* pPara, LwpBulletOv
                     rtl::OUString aNumber = LwpSilverBullet::GetNumCharByStyleID(pParaNumber);
                     if (pParaNumber->GetStyleID() == NUMCHAR_01 || pParaNumber->GetStyleID() == NUMCHAR_Chinese4)
                     {
-                        aPrefix += rtl::OUString::createFromAscii("0");
+                        aPrefix += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0"));
                     }
                     aFmt.SetPrefix(aPrefix);
 
@@ -251,7 +251,7 @@ rtl::OUString LwpBulletStyleMgr::RegisterBulletStyle(LwpPara* pPara, LwpBulletOv
                     }
 
                     pListStyle->SetListBullet(nPos, LwpSilverBullet::GetNumCharByStyleID(pParaNumber).toChar(),
-                        rtl::OUString::createFromAscii("Times New Roman"), aPrefix, aSuffix);
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Times New Roman")), aPrefix, aSuffix);
                 }
 
                 pListStyle->SetListPosition(nPos, 0.0, 0.635, 0.0);
@@ -281,7 +281,7 @@ rtl::OUString LwpBulletStyleMgr::RegisterBulletStyle(LwpPara* pPara, LwpBulletOv
 
     if (!m_pFoundry)
     {
-        return rtl::OUString::createFromAscii("");
+        return rtl::OUString();
     }
     LwpFontManager* pFontMgr = m_pFoundry->GetFontManger();
 
@@ -293,7 +293,7 @@ rtl::OUString LwpBulletStyleMgr::RegisterBulletStyle(LwpPara* pPara, LwpBulletOv
 
     for (sal_uInt8 nC = 1; nC < 11; nC++)
     {
-        pListStyle->SetListBullet(nC, cBulletChar, aFontName, rtl::OUString::createFromAscii(""), aSuffix);
+        pListStyle->SetListBullet(nC, cBulletChar, aFontName, rtl::OUString(), aSuffix);
 
         if (pIndent->GetMRest() > 0.001)
         {
@@ -555,10 +555,10 @@ rtl::OUString LwpBulletStyleMgr::GetDivisionName()
 {
     if (!m_pFoundry)
     {
-        return rtl::OUString::createFromAscii("");
+        return rtl::OUString();
     }
 
-    rtl::OUString aRet = rtl::OUString::createFromAscii("");
+    rtl::OUString aRet = rtl::OUString();
 
     LwpDocument* pDoc = m_pFoundry->GetDocument();
     if (pDoc)
@@ -578,13 +578,13 @@ rtl::OUString LwpBulletStyleMgr::GetSectionName(LwpPara* pPara)
     LwpObjectID* pStoryID = pPara->GetStoryID();
     if (pStoryID->IsNull())
     {
-        return rtl::OUString::createFromAscii("");
+        return rtl::OUString();
     }
 
     LwpStory* pStory = static_cast<LwpStory*>(pStoryID->obj(VO_STORY));
     if (!pStory)
     {
-        return rtl::OUString::createFromAscii("");
+        return rtl::OUString();
     }
 
     return pStory->GetSectionName();

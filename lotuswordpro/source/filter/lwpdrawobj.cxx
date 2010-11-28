@@ -340,31 +340,31 @@ rtl::OUString LwpDrawObj::GetArrowName(sal_uInt8 nArrowStyle)
     {
     default:
     case AH_ARROW_FULLARROW:
-        aArrowName = rtl::OUString::createFromAscii("Symmetric arrow");
+        aArrowName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Symmetric arrow"));
         break;
     case AH_ARROW_HALFARROW:
-        aArrowName = rtl::OUString::createFromAscii("Arrow concave");
+        aArrowName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Arrow concave"));
         break;
     case AH_ARROW_LINEARROW:
-        aArrowName = rtl::OUString::createFromAscii("arrow100");
+        aArrowName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("arrow100"));
         break;
     case AH_ARROW_INVFULLARROW:
-        aArrowName = rtl::OUString::createFromAscii("reverse arrow");
+        aArrowName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("reverse arrow"));
         break;
     case AH_ARROW_INVHALFARROW:
-        aArrowName = rtl::OUString::createFromAscii("reverse concave arrow");
+        aArrowName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("reverse concave arrow"));
         break;
     case AH_ARROW_INVLINEARROW:
-        aArrowName = rtl::OUString::createFromAscii("reverse line arrow");
+        aArrowName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("reverse line arrow"));
         break;
     case AH_ARROW_TEE:
-        aArrowName = rtl::OUString::createFromAscii("Dimension lines");
+        aArrowName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Dimension lines"));
         break;
     case AH_ARROW_SQUARE:
-        aArrowName = rtl::OUString::createFromAscii("Square");
+        aArrowName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Square"));
         break;
     case AH_ARROW_CIRCLE:
-        aArrowName = rtl::OUString::createFromAscii("Circle");
+        aArrowName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Circle"));
         break;
     }
 

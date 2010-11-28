@@ -117,9 +117,9 @@ sal_Bool LWPFilterReader::filter( const Sequence< PropertyValue >& aDescriptor )
     ::rtl::OUString sURL;
     for( sal_Int32 i = 0; i < aDescriptor.getLength(); i++ )
     {
-        if( aDescriptor[i].Name == OUString::createFromAscii( "InputStream" ) )
+        if( aDescriptor[i].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("InputStream")) )
             aDescriptor[i].Value >>= xInputStream;
-        if( aDescriptor[i].Name == OUString::createFromAscii( "URL" ) )
+        if( aDescriptor[i].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("URL")) )
             aDescriptor[i].Value >>= sURL;
     }
 
@@ -261,7 +261,7 @@ Sequence< OUString> LWPFilterImportFilter::getSupportedServiceNames( void ) thro
     {
         OUString strTemp;
         aDescriptor[i].Value >>= strTemp;
-        if( aDescriptor[i].Name == OUString::createFromAscii( "InputStream" ) )
+        if( aDescriptor[i].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("InputStream")) )
         {
             uno::Reference< XInputStream> rInputStream;
             aDescriptor[i].Value >>= rInputStream;
@@ -276,19 +276,19 @@ Sequence< OUString> LWPFilterImportFilter::getSupportedServiceNames( void ) thro
                     if(!bOpenAsTemplate)
                     {
                         aDescriptor.realloc( nPropertyCount + 1 );
-                        aDescriptor[nPropertyCount].Name = ::rtl::OUString::createFromAscii("AsTemplate");
+                        aDescriptor[nPropertyCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AsTemplate"));
                         aDescriptor[nPropertyCount].Value <<= sal_True;
                     }
-                    return OUString::createFromAscii("wordpro_template");
+                    return OUString(RTL_CONSTASCII_USTRINGPARAM("wordpro_template"));
                 }
                 else
                 {
-                    return OUString::createFromAscii("wordpro");
+                    return OUString(RTL_CONSTASCII_USTRINGPARAM("wordpro"));
                 }
             }
             return ret;
         }
-        else if( aDescriptor[i].Name == OUString::createFromAscii( "URL" ) )
+        else if( aDescriptor[i].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("URL")) )
         {
                     OUString        sURL;
             OUString        sFileName;
@@ -311,14 +311,14 @@ Sequence< OUString> LWPFilterImportFilter::getSupportedServiceNames( void ) thro
                     if(!bOpenAsTemplate)
                     {
                         aDescriptor.realloc( nPropertyCount + 1 );
-                        aDescriptor[nPropertyCount].Name = ::rtl::OUString::createFromAscii("AsTemplate");
+                        aDescriptor[nPropertyCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AsTemplate"));
                         aDescriptor[nPropertyCount].Value <<= sal_True;
                     }
-                    return OUString::createFromAscii("wordpro_template");
+                    return OUString(RTL_CONSTASCII_USTRINGPARAM("wordpro_template"));
                 }
                 else
                 {
-                    return OUString::createFromAscii("wordpro");
+                    return OUString(RTL_CONSTASCII_USTRINGPARAM("wordpro"));
                 }
             }
             return ret;

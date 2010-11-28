@@ -290,7 +290,7 @@ sal_Int32 SchXMLWrapper::Import()
 
     // get the sax parser component
     uno::Reference< xml::sax::XParser > xXMLParser(
-        xServiceFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.xml.sax.Parser" )),
+        xServiceFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser"))),
         uno::UNO_QUERY );
 
     if( ! xXMLParser.is() )
