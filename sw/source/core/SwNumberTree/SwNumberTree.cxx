@@ -298,7 +298,7 @@ void SwNumberTreeNode::ValidateContinuous(const SwNumberTreeNode * pNode) const
             nTmpNumber = GetStartValue();
         }
         else
-            aIt++;
+            ++aIt;
 
         if (aIt != mChildren.end())
         {
@@ -371,7 +371,7 @@ void SwNumberTreeNode::ValidateTree()
         {
             tSwNumberTreeChildren::iterator aIt;
 
-            for (aIt = mChildren.begin(); aIt != mChildren.end(); aIt++)
+            for (aIt = mChildren.begin(); aIt != mChildren.end(); ++aIt)
                 (*aIt)->ValidateTree();
         }
     }
@@ -429,7 +429,7 @@ void SwNumberTreeNode::MoveGreaterChildren( SwNumberTreeNode& _rCompareNode,
     if (aItUpper != mChildren.end())
     {
         tSwNumberTreeChildren::iterator aIt;
-        for (aIt = aItUpper; aIt != mChildren.end(); aIt++)
+        for (aIt = aItUpper; aIt != mChildren.end(); ++aIt)
             (*aIt)->mpParent = &_rDestNode;
 
         _rDestNode.mChildren.insert(aItUpper, mChildren.end());
@@ -489,7 +489,7 @@ void SwNumberTreeNode::MoveChildren(SwNumberTreeNode * pDest)
         }
 
         tSwNumberTreeChildren::iterator aIt;
-        for (aIt = mChildren.begin(); aIt != mChildren.end(); aIt++)
+        for (aIt = mChildren.begin(); aIt != mChildren.end(); ++aIt)
             (*aIt)->mpParent = pDest;
 
         pDest->mChildren.insert(mChildren.begin(), mChildren.end());
@@ -571,7 +571,7 @@ void SwNumberTreeNode::AddChild( SwNumberTreeNode * pChild,
         }
         else
         {
-            aInsertDeepIt--;
+            --aInsertDeepIt;
             (*aInsertDeepIt)->AddChild(pChild, nDepth - 1);
         }
 
@@ -593,7 +593,7 @@ void SwNumberTreeNode::AddChild( SwNumberTreeNode * pChild,
             if (aInsertedIt != mChildren.begin())
             {
                 tSwNumberTreeChildren::iterator aPredIt = aInsertedIt;
-                aPredIt--;
+                --aPredIt;
 
                 // --> OD 2005-10-14 #125991#
                 // Move greater children of previous node to new child.
@@ -711,8 +711,7 @@ void SwNumberTreeNode::RemoveChild(SwNumberTreeNode * pChild)
         else
         {
             aItPred = aRemoveIt;
-
-            aItPred--;
+            --aItPred;
         }
 
         if (! pRemove->mChildren.empty())
@@ -884,7 +883,7 @@ bool SwNumberTreeNode::IsFirst(const SwNumberTreeNode * pNode) const
     tSwNumberTreeChildren::iterator aIt = mChildren.begin();
 
     if ((*aIt)->IsPhantom())
-        aIt++;
+        ++aIt;
 
     return *aIt == pNode;
 }
@@ -1003,7 +1002,7 @@ bool SwNumberTreeNode::IsSane(bool bRecursive,
     rParents.push_back(this);
 
     bool bFirst = true;
-    for (aIt = mChildren.begin(); aIt != mChildren.end(); aIt++)
+    for (aIt = mChildren.begin(); aIt != mChildren.end(); ++aIt)
     {
         if (*aIt)
         {
@@ -1157,7 +1156,7 @@ SwNumberTreeNode * SwNumberTreeNode::GetPred(bool bSibling) const
         }
         else
         {
-            aIt--;
+            --aIt;
 
             if ( !bSibling )
                 pResult = (*aIt)->GetLastDescendant();
@@ -1212,7 +1211,7 @@ void SwNumberTreeNode::SetLastValid
             tSwNumberTreeChildren::iterator aIt = mItLastValid;
 
             if (aIt != mChildren.end())
-                aIt++;
+                ++aIt;
             else
                 aIt = mChildren.begin();
 
@@ -1220,7 +1219,7 @@ void SwNumberTreeNode::SetLastValid
             {
                 (*aIt)->InvalidateTree();
 
-                aIt++;
+                ++aIt;
             }
 
             SetLastValid(bValidating);
@@ -1245,7 +1244,7 @@ void SwNumberTreeNode::InvalidateTree() const
 
     tSwNumberTreeChildren::iterator aIt;
 
-    for (aIt = mChildren.begin(); aIt != mChildren.end(); aIt++)
+    for (aIt = mChildren.begin(); aIt != mChildren.end(); ++aIt)
         (*aIt)->InvalidateTree();
 }
 
@@ -1256,7 +1255,7 @@ void SwNumberTreeNode::Invalidate(SwNumberTreeNode * pChild)
         tSwNumberTreeChildren::iterator aIt = GetIterator(pChild);
 
         if (aIt != mChildren.begin())
-            aIt--;
+            --aIt;
         else
             aIt = mChildren.end();
 
@@ -1286,7 +1285,7 @@ void SwNumberTreeNode::Notify()
 
         tSwNumberTreeChildren::iterator aIt;
 
-        for (aIt = mChildren.begin(); aIt != mChildren.end(); aIt++)
+        for (aIt = mChildren.begin(); aIt != mChildren.end(); ++aIt)
             (*aIt)->Notify();
     }
 }
@@ -1300,13 +1299,13 @@ void SwNumberTreeNode::NotifyInvalidChildren()
         if (aIt == mChildren.end())
             aIt = mChildren.begin();
         else
-            aIt++;
+            ++aIt;
 
         while (aIt != mChildren.end())
         {
             (*aIt)->Notify();
 
-            aIt++;
+            ++aIt;
         }
         // --> OD 2005-10-19 #126009# - notification of next not counted node
         // is also needed.
