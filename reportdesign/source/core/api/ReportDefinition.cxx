@@ -725,7 +725,6 @@ OReportDefinition::~OReportDefinition()
 }
 // -----------------------------------------------------------------------------
 IMPLEMENT_FORWARD_REFCOUNT( OReportDefinition, ReportDefinitionBase )
-//IMPLEMENT_FORWARD_XINTERFACE2(OReportDefinition,ReportDefinitionBase,ReportDefinitionPropertySet)
 void OReportDefinition::init()
 {
     try
@@ -743,7 +742,7 @@ void OReportDefinition::init()
                 pCreatorThread->createSuspended();
                 pCreatorThread->setPriority(osl_Thread_PriorityBelowNormal);
                 pCreatorThread->resume();
-            } // for ( ; pIter != pEnd; ++pIter )
+            }
         }
 
         m_pImpl->m_pReportModel.reset(new OReportModel(this));
@@ -804,11 +803,6 @@ void SAL_CALL OReportDefinition::disposing()
     m_pImpl->m_xPageHeader.clear();
     m_pImpl->m_xPageFooter.clear();
     m_pImpl->m_xDetail.clear();
-    //::comphelper::disposeComponent(m_pImpl->m_xReportHeader);
-    //::comphelper::disposeComponent(m_pImpl->m_xReportFooter);
-    //::comphelper::disposeComponent(m_pImpl->m_xPageHeader);
-    //::comphelper::disposeComponent(m_pImpl->m_xPageFooter);
-    //::comphelper::disposeComponent(m_pImpl->m_xDetail);
     ::comphelper::disposeComponent(m_pImpl->m_xFunctions);
 
     //::comphelper::disposeComponent(m_pImpl->m_xStorage);

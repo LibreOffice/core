@@ -198,7 +198,7 @@ void SAL_CALL OReportEngineJFree::setStatusIndicator( const uno::Reference< task
             {
                 xStorageProp->setPropertyValue( s_sMediaType, uno::makeAny(sMimeType));
             }
-            m_xReport->storeToStorage(xTemp,aEmpty); // store to temp file because it may contain information which aren't in the database yet.
+            m_xReport->storeToStorage(xTemp,aEmpty); // store to temp file because it may contain information which isn't in the database yet.
 
             uno::Sequence< beans::NamedValue > aConvertedProperties(8);
             sal_Int32 nPos = 0;
@@ -262,7 +262,6 @@ void SAL_CALL OReportEngineJFree::setStatusIndicator( const uno::Reference< task
                 xJob->execute(aConvertedProperties);
                 if ( xStorageProp.is() )
                 {
-                    //xStorageProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL"))) >>= sOutputName;
                     sOutputName = sFileURL;
                 }
             }
@@ -333,7 +332,6 @@ uno::Reference< frame::XModel > SAL_CALL OReportEngineJFree::createDocumentAlive
             }
 
             uno::Reference< lang::XMultiServiceFactory > xFac(m_xContext->getServiceManager(),uno::UNO_QUERY);
-            /*::comphelper::MimeConfigurationHelper aHelper(xFac);*/
             xModel.set( xFrameLoad->loadComponentFromURL(
                 sOutputName,
                 ::rtl::OUString(), // empty frame name

@@ -115,7 +115,6 @@ OFormatProperties::OFormatProperties()
     }
     aFontDescriptor.Weight = awt::FontWeight::NORMAL;
     aFontDescriptor.CharacterWidth = awt::FontWidth::NORMAL;
-    // aCharLocale = SvtSysLocale().GetLocaleData().getLocale();
 }
 // -----------------------------------------------------------------------------
 void OReportComponentProperties::setShape(uno::Reference< drawing::XShape >& _xShape,const uno::Reference< report::XReportComponent>& _xTunnel,oslInterlockedCount& _rRefCount)

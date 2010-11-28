@@ -76,13 +76,13 @@ void OGroup::copyGroup(const uno::Reference< report::XGroup >& _xSource)
     {
         setHeaderOn(sal_True);
         OSection::lcl_copySection(_xSource->getHeader(),m_xHeader);
-    } // if ( _xSource->getHeaderOn() )
+    }
 
     if ( _xSource->getFooterOn() )
     {
         setFooterOn(sal_True);
         OSection::lcl_copySection(_xSource->getFooter(),m_xFooter);
-    } // if ( _xSource->getFooterOn() )
+    }
 }
 //--------------------------------------------------------------------------
 IMPLEMENT_FORWARD_XINTERFACE2(OGroup,GroupBase,GroupPropertySet)
@@ -121,8 +121,6 @@ void SAL_CALL OGroup::disposing()
 {
     m_xHeader.clear();
     m_xFooter.clear();
-    //::comphelper::disposeComponent(m_xHeader);
-    //::comphelper::disposeComponent(m_xFooter);
     ::comphelper::disposeComponent(m_xFunctions);
     m_xContext.clear();
 }
@@ -150,8 +148,6 @@ void SAL_CALL OGroup::setHeaderOn( ::sal_Bool _headeron ) throw (uno::RuntimeExc
     if ( _headeron != m_xHeader.is() )
     {
         ::rtl::OUString sName(RPT_RESSTRING(RID_STR_GROUP_HEADER,m_xContext->getServiceManager()));
-        /*const ::rtl::OUString sPlaceHolder(RTL_CONSTASCII_USTRINGPARAM("%1"));
-        sName = sName.replaceAt(sName.indexOf(sPlaceHolder),sPlaceHolder.getLength(),m_aProps.m_sExpression);*/
         setSection(PROPERTY_HEADERON,_headeron,sName,m_xHeader);
     }
 }
@@ -167,8 +163,6 @@ void SAL_CALL OGroup::setFooterOn( ::sal_Bool _footeron ) throw (uno::RuntimeExc
     if ( _footeron != m_xFooter.is() )
     {
         ::rtl::OUString sName(RPT_RESSTRING(RID_STR_GROUP_FOOTER,m_xContext->getServiceManager()));
-        /*const ::rtl::OUString sPlaceHolder(RTL_CONSTASCII_USTRINGPARAM("%1"));
-        sName = sName.replaceAt(sName.indexOf(sPlaceHolder),sPlaceHolder.getLength(),m_aProps.m_sExpression);*/
         setSection(PROPERTY_FOOTERON,_footeron,sName,m_xFooter);
     }
 }
@@ -294,7 +288,6 @@ void SAL_CALL OGroup::setParent( const uno::Reference< uno::XInterface >& /*Pare
 // -----------------------------------------------------------------------------
 uno::Reference< beans::XPropertySetInfo > SAL_CALL OGroup::getPropertySetInfo(  ) throw(uno::RuntimeException)
 {
-    //  return uno::Reference< beans::XPropertySetInfo >();
     return GroupPropertySet::getPropertySetInfo();
 }
 // -----------------------------------------------------------------------------
