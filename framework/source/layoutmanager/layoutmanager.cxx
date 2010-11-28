@@ -764,7 +764,7 @@ void LayoutManager::implts_destroyElements()
     aWriteLock.unlock();
 
     UIElementVector::iterator pIter;
-    for ( pIter = aUIElementVector.begin(); pIter != aUIElementVector.end(); pIter++ )
+    for ( pIter = aUIElementVector.begin(); pIter != aUIElementVector.end(); ++pIter )
     {
         Reference< XComponent > xComponent( pIter->m_xUIElement, UNO_QUERY );
         if ( xComponent.is() )
@@ -1111,7 +1111,7 @@ void LayoutManager::implts_toggleFloatingUIElementsVisibility( sal_Bool bActive 
     UIElementVector::iterator pIter;
 
     ReadGuard aReadLock( m_aLock );
-    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
+    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); ++pIter )
     {
         if ( pIter->m_xUIElement.is() )
         {
@@ -1183,7 +1183,7 @@ sal_Bool LayoutManager::implts_findElement( const rtl::OUString& aName, rtl::OUS
             UIElementVector::const_iterator pIter;
 
             ReadGuard aReadLock( m_aLock );
-            for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
+            for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); ++pIter )
             {
                 if ( pIter->m_aName == aName )
                 {
@@ -1202,7 +1202,7 @@ sal_Bool LayoutManager::implts_findElement( const Reference< XInterface >& xUIEl
     UIElementVector::const_iterator pIter;
 
     ReadGuard aReadLock( m_aLock );
-    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
+    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); ++pIter )
     {
         if ( pIter->m_xUIElement.is() )
         {
@@ -1223,7 +1223,7 @@ sal_Bool LayoutManager::implts_findElement( const rtl::OUString& aName, UIElemen
     UIElementVector::const_iterator pIter;
 
     ReadGuard aReadLock( m_aLock );
-    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
+    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); ++pIter )
     {
         if ( pIter->m_aName == aName )
         {
@@ -1242,7 +1242,7 @@ LayoutManager::UIElement& LayoutManager::impl_findElement( const rtl::OUString& 
     UIElementVector::iterator pIter;
 
     ReadGuard aReadLock( m_aLock );
-    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
+    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); ++pIter )
     {
         if ( pIter->m_aName == aName )
             return *pIter;
@@ -1330,7 +1330,7 @@ void LayoutManager::implts_refreshContextToolbarsVisibility()
     UIElementVisibility aUIElementVisible;
 
     UIElementVector::iterator pIter;
-    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
+    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); ++pIter )
     {
         if ( pIter->m_aType.equalsAsciiL( "toolbar", 7 ))
         {
@@ -1767,7 +1767,7 @@ void LayoutManager::implts_setElementData( UIElement& rElement, const Reference<
 
     // Try to find a cascaded position for the new floating window
     UIElementVector::const_iterator pIter;
-    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
+    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); ++pIter )
     {
         if ( pIter->m_xUIElement.is() )
         {
@@ -1973,7 +1973,7 @@ void LayoutManager::implts_sortUIElements()
 
     // We have to reset our temporary flags.
     UIElementVector::iterator pIter;
-    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
+    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); ++pIter )
     {
         // why check, just set it to false
         //if ( pIter->m_bUserActive )
@@ -2001,7 +2001,7 @@ void LayoutManager::implts_getDockingAreaElementInfos( DockingArea eDockingArea,
     aWindowVector.reserve(m_aUIElements.size());
     xDockAreaWindow = m_xDockAreaWindows[eDockingArea];
     UIElementVector::iterator   pIter;
-    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
+    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); ++pIter )
     {
         if ( pIter->m_aDockedData.m_nDockedArea == eDockingArea && pIter->m_bVisible && !pIter->m_bFloating )
         {
@@ -2187,7 +2187,7 @@ void LayoutManager::implts_getDockingAreaElementInfoOnSingleRowCol( DockingArea 
     ReadGuard aReadLock( m_aLock );
     UIElementVector::iterator   pIter;
     UIElementVector::iterator   pEnd = m_aUIElements.end();
-    for ( pIter = m_aUIElements.begin(); pIter != pEnd; pIter++ )
+    for ( pIter = m_aUIElements.begin(); pIter != pEnd; ++pIter )
     {
         if ( pIter->m_aDockedData.m_nDockedArea == eDockingArea )
         {
@@ -2938,7 +2938,7 @@ void LayoutManager::implts_renumberRowColumnData(
 
     WriteGuard aWriteLock( m_aLock );
     UIElementVector::iterator pIter;
-    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
+    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); ++pIter )
     {
         if (( pIter->m_aDockedData.m_nDockedArea == sal_Int16( eDockingArea )) &&
             ( pIter->m_aName != rUIElement.m_aName ))
@@ -3085,7 +3085,7 @@ void LayoutManager::implts_setVisibleState( sal_Bool bShow )
      /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     WriteGuard aWriteLock( m_aLock );
     UIElementVector::iterator pIter;
-    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
+    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); ++pIter )
         pIter->m_bMasterHide = !bShow;
     m_aStatusBarElement.m_bMasterHide = !bShow;
     aWriteLock.unlock();
@@ -3115,7 +3115,7 @@ void LayoutManager::implts_updateUIElementsVisibleState( sal_Bool bSetVisible )
     ReadGuard aReadLock( m_aLock );
     aWinVector.reserve(m_aUIElements.size());
     UIElementVector::iterator pIter;
-    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
+    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); ++pIter )
     {
         if ( pIter->m_xUIElement.is() )
         {
@@ -3244,7 +3244,7 @@ void LayoutManager::implts_setCurrentUIVisibility( sal_Bool bShow )
      /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     WriteGuard aWriteLock( m_aLock );
     UIElementVector::iterator pIter;
-    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
+    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); ++pIter )
     {
         if ( !bShow && pIter->m_bVisible && pIter->m_xUIElement.is() )
             pIter->m_bMasterHide = true;
@@ -3930,7 +3930,7 @@ void LayoutManager::implts_reparentChildWindows()
     if ( pContainerWindow )
     {
         UIElementVector::iterator pIter;
-        for ( pIter = aUIElementVector.begin(); pIter != aUIElementVector.end(); pIter++ )
+        for ( pIter = aUIElementVector.begin(); pIter != aUIElementVector.end(); ++pIter )
         {
             Reference< XUIElement > xUIElement( pIter->m_xUIElement );
             if ( xUIElement.is() )
@@ -4020,7 +4020,7 @@ IMPL_LINK( LayoutManager, WindowEventListener, VclSimpleEvent*, pEvent )
                 std::vector< css::uno::Reference< css::ui::XUIFunctionListener > > aListenerArray;
                 UIElementVector::iterator pIter;
 
-                for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
+                for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); ++pIter )
                 {
                     if ( pIter->m_aType.equalsAscii( "toolbar" ) &&
                         pIter->m_xUIElement.is() )
@@ -4308,7 +4308,7 @@ throw (RuntimeException)
         {
             UIElementVector::iterator pIter;
 
-            for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
+            for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); ++pIter )
             {
                 if ( pIter->m_aName == aName )
                 {
@@ -4460,7 +4460,7 @@ throw (::com::sun::star::uno::RuntimeException)
                 bool bFound( false );
                 bool bShowElement( false );
 
-                for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
+                for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); ++pIter )
                 {
                     if ( pIter->m_aName == ResourceURL )
                     {
@@ -4587,7 +4587,7 @@ throw (::com::sun::star::uno::RuntimeException)
 
     sal_Int32 nIndex = 0;
     UIElementVector::const_iterator pIter;
-    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
+    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); ++pIter )
     {
         if ( pIter->m_xUIElement.is() )
             aSeq[nIndex++] = pIter->m_xUIElement;
@@ -4655,7 +4655,7 @@ throw (RuntimeException)
             UIElementVector::iterator pIter;
 
             WriteGuard aWriteLock( m_aLock );
-            for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
+            for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); ++pIter )
             {
                 if ( pIter->m_aName == aName && pIter->m_xUIElement.is() )
                 {
@@ -4788,7 +4788,7 @@ throw (RuntimeException)
             UIElementVector::iterator pIter;
 
             WriteGuard aWriteLock( m_aLock );
-            for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
+            for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); ++pIter )
             {
                 if ( pIter->m_aName == aName && pIter->m_xUIElement.is() )
                 {
@@ -4943,7 +4943,7 @@ throw (RuntimeException)
         {
             ReadGuard aReadLock( m_aLock );
             UIElementVector::iterator pIter;
-            for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
+            for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); ++pIter )
             {
                 if ( pIter->m_aType.equalsAscii( "toolbar" ) &&
                      pIter->m_xUIElement.is() &&
@@ -5265,7 +5265,7 @@ throw (RuntimeException)
             UIElementVector::const_iterator pIter;
 
             ReadGuard aReadLock( m_aLock );
-            for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
+            for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); ++pIter )
             {
                 if ( pIter->m_aName == aName && pIter->m_xUIElement.is() )
                 {
@@ -5297,7 +5297,7 @@ throw (RuntimeException)
     UIElementVector::const_iterator pIter;
 
     ReadGuard aReadLock( m_aLock );
-    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
+    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); ++pIter )
     {
         if ( pIter->m_aName == aName && pIter->m_xUIElement.is() )
         {
@@ -5315,7 +5315,7 @@ throw (RuntimeException)
     UIElementVector::const_iterator pIter;
 
     ReadGuard aReadLock( m_aLock );
-    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
+    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); ++pIter )
     {
         if ( pIter->m_aName == aName && pIter->m_xUIElement.is() )
         {
@@ -5333,7 +5333,7 @@ throw (::com::sun::star::uno::RuntimeException)
     UIElementVector::const_iterator pIter;
 
     ReadGuard aReadLock( m_aLock );
-    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
+    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); ++pIter )
     {
         if (( pIter->m_aName == ResourceURL ) && ( pIter->m_xUIElement.is() ))
         {
@@ -5942,7 +5942,7 @@ css::awt::Rectangle LayoutManager::implts_calcDockingAreaSizes()
         aRowColumnSizes[nCurrDockingArea].clear();
         aRowColumnSizes[nCurrDockingArea].push_back( 0 );
 
-        for ( pConstIter = aWindowVector.begin(); pConstIter != aWindowVector.end(); pConstIter++ )
+        for ( pConstIter = aWindowVector.begin(); pConstIter != aWindowVector.end(); ++pConstIter )
         {
             Reference< XUIElement > xUIElement( pConstIter->m_xUIElement, UNO_QUERY );
             if ( xUIElement.is() )
@@ -6257,7 +6257,7 @@ IMPL_LINK( LayoutManager, OptionsChanged, void*, EMPTYARG )
         aReadLock.lock();
         {
             UIElementVector::iterator pIter;
-            for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
+            for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); ++pIter )
             {
                 if ( pIter->m_xUIElement.is() )
                     aToolBarVector.push_back( Reference< XUpdatable >( pIter->m_xUIElement, UNO_QUERY ));
@@ -6268,7 +6268,7 @@ IMPL_LINK( LayoutManager, OptionsChanged, void*, EMPTYARG )
         lock();
         {
             std::vector< Reference< XUpdatable > >::iterator pIter;
-            for ( pIter = aToolBarVector.begin(); pIter != aToolBarVector.end(); pIter++ )
+            for ( pIter = aToolBarVector.begin(); pIter != aToolBarVector.end(); ++pIter )
             {
                 if ( (*pIter).is() )
                     (*pIter)->update();
@@ -6422,7 +6422,6 @@ throw (::com::sun::star::uno::RuntimeException)
             ::Rectangle aHotZoneRightDockRect( implts_calcHotZoneRect( aRightDockRect, nMagneticZone ));
 
             Window* pContainerWindow( VCLUnoHelper::GetWindow( xContainerWindow ) );
-            Window* pDockingAreaWindow( 0 );
             ::Point aMousePos( pContainerWindow->ScreenToOutputPixel( ::Point( e.MousePos.X, e.MousePos.Y )));
 
             if ( aHotZoneTopDockRect.IsInside( aMousePos ))
@@ -6456,25 +6455,25 @@ throw (::com::sun::star::uno::RuntimeException)
                 {
                     aUIDockingElement.m_aDockedData.m_nDockedArea = DockingArea_DOCKINGAREA_TOP;
                     aUIDockingElement.m_bFloating = sal_False;
-                    pDockingAreaWindow = VCLUnoHelper::GetWindow( xTopDockingWindow );
+                    VCLUnoHelper::GetWindow( xTopDockingWindow );
                 }
                 else if ( eDockingArea == DockingArea_DOCKINGAREA_BOTTOM )
                 {
                     aUIDockingElement.m_aDockedData.m_nDockedArea = DockingArea_DOCKINGAREA_BOTTOM;
                     aUIDockingElement.m_bFloating = sal_False;
-                    pDockingAreaWindow = VCLUnoHelper::GetWindow( xBottomDockingWindow );
+                    VCLUnoHelper::GetWindow( xBottomDockingWindow );
                 }
                 else if ( eDockingArea == DockingArea_DOCKINGAREA_LEFT )
                 {
                     aUIDockingElement.m_aDockedData.m_nDockedArea = DockingArea_DOCKINGAREA_LEFT;
                     aUIDockingElement.m_bFloating = sal_False;
-                    pDockingAreaWindow = VCLUnoHelper::GetWindow( xLeftDockingWindow );
+                    VCLUnoHelper::GetWindow( xLeftDockingWindow );
                 }
                 else if ( eDockingArea == DockingArea_DOCKINGAREA_RIGHT )
                 {
                     aUIDockingElement.m_aDockedData.m_nDockedArea = DockingArea_DOCKINGAREA_RIGHT;
                     aUIDockingElement.m_bFloating = sal_False;
-                    pDockingAreaWindow = VCLUnoHelper::GetWindow( xRightDockingWindow );
+                    VCLUnoHelper::GetWindow( xRightDockingWindow );
                 }
 
                 ::Point aOutputPos = pContainerWindow->ScreenToOutputPixel( aTrackingRect.TopLeft() );
