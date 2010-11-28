@@ -287,7 +287,6 @@ ReadState XBMReader::ReadXBM( Graphic& rGraphic )
     if ( rIStm.GetError() != ERRCODE_IO_PENDING )
     {
         ByteString  aLine;
-        int         nValue;
 
         rIStm.Seek( nLastPos );
         bStatus = FALSE;
@@ -295,6 +294,7 @@ ReadState XBMReader::ReadXBM( Graphic& rGraphic )
 
         if ( bStatus )
         {
+            int nValue;
             if ( ( nValue = (int) ParseDefine( aLine.GetBuffer() ) ) > 0 )
             {
                 nWidth = nValue;
