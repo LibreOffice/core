@@ -179,7 +179,6 @@ const XMLPropertyMapEntry* OXMLHelper::GetTableStyleProps()
     {
         MAP_CONST_T(  PROPERTY_BACKCOLOR,      FO,     BACKGROUND_COLOR,        XML_TYPE_COLORTRANSPARENT|MID_FLAG_MULTI_PROPERTY, 0 ),
         MAP_CONST_T(  PROPERTY_BACKTRANSPARENT,FO,     BACKGROUND_COLOR,        XML_TYPE_ISTRANSPARENT | MID_FLAG_MERGE_ATTRIBUTE, 0 ),
-        // MAP_CONST_T(  PROPERTY_KEEPTOGETHER,   STYLE,  MAY_BREAK_BETWEEN_ROWS,  XML_TYPE_BOOL     , 0 ),
         MAP_END()
     };
     return aXMLTableStylesProperties;
@@ -199,10 +198,7 @@ const XMLPropertyMapEntry* OXMLHelper::GetColumnStyleProps()
 {
     static const XMLPropertyMapEntry aXMLColumnStylesProperties[] =
     {
-        //MAP( "IsManualPageBreak", XML_NAMESPACE_FO, XML_BREAK_BEFORE, XML_TYPE_PROP_TABLE_COLUMN|XML_SC_TYPE_BREAKBEFORE, 0),
-        //MAP( "IsVisible", XML_NAMESPACE_TABLE, XML_DISPLAY, XML_TYPE_PROP_TABLE_COLUMN|XML_SC_TYPE_EQUAL|MID_FLAG_SPECIAL_ITEM, CTF_SC_ISVISIBLE ),
         MAP_CONST_S(    "Width",                 STYLE,     COLUMN_WIDTH,           XML_TYPE_PROP_TABLE_COLUMN|XML_TYPE_MEASURE, 0 ),
-    //  MAP( "OptimalWidth", XML_NAMESPACE_STYLE, XML_USE_OPTIMAL_COLUMN_WIDTH, XML_TYPE_PROP_TABLE_COLUMN|XML_TYPE_BOOL, 0),
         MAP_END()
     };
     return aXMLColumnStylesProperties;
@@ -212,7 +208,6 @@ const SvXMLEnumMapEntry* OXMLHelper::GetReportPrintOptions()
 {
     static SvXMLEnumMapEntry s_aXML_EnumMap[] =
     {
-         // { XML_ALL_PAGES,                            report::ReportPrintOption::ALL_PAGES }, // default
         { XML_NOT_WITH_REPORT_HEADER,               report::ReportPrintOption::NOT_WITH_REPORT_HEADER },
         { XML_NOT_WITH_REPORT_FOOTER,               report::ReportPrintOption::NOT_WITH_REPORT_FOOTER },
         { XML_NOT_WITH_REPORT_HEADER_NOR_FOOTER,    report::ReportPrintOption::NOT_WITH_REPORT_HEADER_FOOTER },
@@ -225,7 +220,6 @@ const SvXMLEnumMapEntry* OXMLHelper::GetForceNewPageOptions()
 {
     static SvXMLEnumMapEntry s_aXML_EnumMap[] =
     {
-        // { XML_NONE,                  report::ForceNewPage::NONE }, // default
         { XML_BEFORE_SECTION,       report::ForceNewPage::BEFORE_SECTION },
         { XML_AFTER_SECTION,        report::ForceNewPage::AFTER_SECTION },
         { XML_BEFORE_AFTER_SECTION, report::ForceNewPage::BEFORE_AFTER_SECTION },
@@ -238,7 +232,6 @@ const SvXMLEnumMapEntry* OXMLHelper::GetKeepTogetherOptions()
 {
     static SvXMLEnumMapEntry s_aXML_EnumMap[] =
     {
-        // { XML_NO,                    report::KeepTogether::NO }, // default
         { XML_WHOLE_GROUP,          report::KeepTogether::WHOLE_GROUP },
         { XML_WITH_FIRST_DETAIL,    report::KeepTogether::WITH_FIRST_DETAIL },
         { XML_TOKEN_INVALID, 0 }
@@ -252,7 +245,6 @@ const SvXMLEnumMapEntry* OXMLHelper::GetCommandTypeOptions()
     {
         { XML_TABLE, CommandType::TABLE },
         { XML_QUERY, CommandType::QUERY },
-        // { XML_COMMAND, CommandType::COMMAND }, // default
         { XML_TOKEN_INVALID, 0 }
     };
     return s_aXML_EnumMap;
@@ -300,13 +292,6 @@ void OXMLHelper::copyStyleElements(const bool _bOld,const ::rtl::OUString& _sSty
             {PROPERTY_FONTKERNING,      static_cast<sal_uInt16>(PROPERTY_FONTKERNING.length),       PROPERTY_ID_FONTKERNING,        &::getCppuType(&aFont.Kerning)      ,PropertyAttribute::BOUND,0},
             {PROPERTY_CHARWORDMODE,     static_cast<sal_uInt16>(PROPERTY_CHARWORDMODE.length),      PROPERTY_ID_FONTWORDLINEMODE,   &::getCppuType(&aFont.WordLineMode) ,PropertyAttribute::BOUND,0},
             {PROPERTY_FONTTYPE,         static_cast<sal_uInt16>(PROPERTY_FONTTYPE.length),          PROPERTY_ID_FONTTYPE,           &::getCppuType(&aFont.Type)         ,PropertyAttribute::BOUND,0},
-            //{PROPERTY_BACKGROUNDCOLOR,    static_cast<sal_uInt16>(PROPERTY_BACKGROUNDCOLOR.length),   PROPERTY_ID_BACKGROUNDCOLOR,    &::getCppuType(&nBackgroundColor)   ,PropertyAttribute::BOUND,0},,
-            //{PROPERTY_PARAADJUST,         static_cast<sal_uInt16>(PROPERTY_PARAADJUST.length),                PROPERTY_ID_ALIGN,              &::getCppuType(&nAlign)             ,PropertyAttribute::BOUND,0},,
-            //{PROPERTY_CONTROLBORDER,          static_cast<sal_uInt16>(PROPERTY_CONTROLBORDER.length),         PROPERTY_ID_BORDER,             &::getCppuType(&aFont.Type)         ,PropertyAttribute::BOUND,0},,
-            //{PROPERTY_CONTROLBORDERCOLOR,     static_cast<sal_uInt16>(PROPERTY_CONTROLBORDERCOLOR.length),        PROPERTY_ID_BORDERCOLOR,        &::getCppuType(&aFont.Type)         ,PropertyAttribute::BOUND,0},,
-            //{PROPERTY_CHARCOLOR,      static_cast<sal_uInt16>(PROPERTY_TEXTCOLOR.length),         PROPERTY_ID_TEXTCOLOR,          &::getCppuType(&aFont.Type)         ,PropertyAttribute::BOUND,0},,
-            //{PROPERTY_FORMATKEY,      static_cast<sal_uInt16>(PROPERTY_FORMATKEY.length),         PROPERTY_ID_FORMATKEY,          &::getCppuType(&aFont.Type)         ,PropertyAttribute::BOUND,0},,
-            //{PROPERTY_CHARUNDERLINECOLOR, static_cast<sal_uInt16>(PROPERTY_CHARUNDERLINECOLOR.length),        PROPERTY_ID_TEXTLINECOLOR,      &::getCppuType(&aFont.Type)         ,PropertyAttribute::BOUND,0},,
             { NULL, 0, 0, NULL, 0, 0 }
         };
         try
@@ -406,7 +391,6 @@ const SvXMLEnumMapEntry* OXMLHelper::GetImageScaleOptions()
 {
        static SvXMLEnumMapEntry s_aXML_EnumMap[] =
        {
-               // { XML_NONE,          awt::ImageScaleMode::None }, // default
                { XML_ISOTROPIC,        awt::ImageScaleMode::Isotropic },
                { XML_ANISOTROPIC,      awt::ImageScaleMode::Anisotropic },
                { XML_TOKEN_INVALID, 0 }

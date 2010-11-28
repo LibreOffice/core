@@ -192,7 +192,7 @@ void OXMLTable::EndElement()
                         pAutoStyle->FillPropertySet(m_xSection.get());
                     }
                 }
-            } // if ( m_sStyleName.getLength() )
+            }
             // set height
             ::std::vector<sal_Int32>::iterator aIter = m_aHeight.begin();
             ::std::vector<sal_Int32>::iterator aEnd = m_aHeight.end();
@@ -278,7 +278,7 @@ void OXMLTable::EndElement()
                 }
                 nPosY += m_aHeight[i];
             }
-        } // if ( m_xComponent.is() )
+        }
     }
     catch(Exception&)
     {

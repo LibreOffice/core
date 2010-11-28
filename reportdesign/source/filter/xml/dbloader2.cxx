@@ -77,7 +77,7 @@ ORptTypeDetection::ORptTypeDetection(Reference< XComponentContext > const & xCon
                     if ( sMediaType.equalsAscii(MIMETYPE_OASIS_OPENDOCUMENT_REPORT_ASCII) )
                         return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StarBaseReport"));
                     ::comphelper::disposeComponent(xProp);
-                } // if ( xProp.is() )
+                }
             }
             catch(Exception&)
             {

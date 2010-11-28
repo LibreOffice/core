@@ -284,7 +284,6 @@ ORptExport::ORptExport(const Reference< XMultiServiceFactory >& _rxMSF,sal_uInt1
     xTableStylesPropertySetMapper1->AddMapperEntry(xTableStylesPropertySetMapper2);
 
     m_xTableStylesExportPropertySetMapper = new SvXMLExportPropertyMapper(xTableStylesPropertySetMapper1);
-    //m_xTableStylesExportPropertySetMapper->ChainExportMapper(xTableStylesPropertySetMapper2);
 
     m_xCellStylesPropertySetMapper = OXMLHelper::GetCellStylePropertyMap();
     m_xCellStylesExportPropertySetMapper = new OSpecialHanldeXMLExportPropertyMapper(m_xCellStylesPropertySetMapper);
@@ -298,7 +297,6 @@ ORptExport::ORptExport(const Reference< XMultiServiceFactory >& _rxMSF,sal_uInt1
 
     UniReference < XMLPropertySetMapper > xPropMapper(new XMLTextPropertySetMapper( TEXT_PROP_MAP_PARA ));
     m_xParaPropMapper = new OSpecialHanldeXMLExportPropertyMapper( xPropMapper);
-    // m_xParaPropMapper->ChainExportMapper(XMLTextParagraphExport::CreateParaExtPropMapper(*this));
 
     ::rtl::OUString sFamily( GetXMLToken(XML_PARAGRAPH) );
     ::rtl::OUString aPrefix( String( 'P' ) );
@@ -405,13 +403,12 @@ void ORptExport::exportReport(const Reference<XReportDefinition>& _xReportDefini
     {
         exportFunctions(_xReportDefinition->getFunctions().get());
         exportGroupsExpressionAsFunction(_xReportDefinition->getGroups());
-        //exportMasterDetailFields(_xReportDefinition.get());
 
         if ( _xReportDefinition->getReportHeaderOn() )
         {
             SvXMLElementExport aGroupSection(*this,XML_NAMESPACE_REPORT, XML_REPORT_HEADER, sal_True, sal_True);
             exportSection(_xReportDefinition->getReportHeader());
-        } // if ( _xReportDefinition->getReportHeaderOn() )
+        }
         if ( _xReportDefinition->getPageHeaderOn() )
         {
             ::rtl::OUStringBuffer sValue;
@@ -422,7 +419,7 @@ void ORptExport::exportReport(const Reference<XReportDefinition>& _xReportDefini
 
             SvXMLElementExport aGroupSection(*this,XML_NAMESPACE_REPORT, XML_PAGE_HEADER, sal_True, sal_True);
             exportSection(_xReportDefinition->getPageHeader(),true);
-        } // if ( _xReportDefinition->getPageHeaderOn() )
+        }
 
         exportGroup(_xReportDefinition,0);
 
@@ -435,12 +432,12 @@ void ORptExport::exportReport(const Reference<XReportDefinition>& _xReportDefini
                 AddAttribute(XML_NAMESPACE_REPORT, XML_PAGE_PRINT_OPTION,sValue.makeStringAndClear());
             SvXMLElementExport aGroupSection(*this,XML_NAMESPACE_REPORT, XML_PAGE_FOOTER, sal_True, sal_True);
             exportSection(_xReportDefinition->getPageFooter(),true);
-        } // if ( _xReportDefinition->getPageFooterOn() )
+        }
         if ( _xReportDefinition->getReportFooterOn() )
         {
             SvXMLElementExport aGroupSection(*this,XML_NAMESPACE_REPORT, XML_REPORT_FOOTER, sal_True, sal_True);
             exportSection(_xReportDefinition->getReportFooter());
-        } // if ( _xReportDefinition->getReportFooterOn() )
+        }
     }
 }
 // -----------------------------------------------------------------------------
@@ -472,7 +469,7 @@ void ORptExport::exportFormatConditions(const Reference<XReportControlModel>& _x
 
             exportStyleName(xCond.get(),GetAttrList(),m_sCellStyle);
             SvXMLElementExport aElem(*this,XML_NAMESPACE_REPORT, XML_FORMAT_CONDITION, sal_True, sal_True);
-        } // for (sal_Int32 i = 0; i < nCount ; ++i)
+        }
     }
     catch(uno::Exception&)
     {
@@ -500,7 +497,7 @@ void ORptExport::exportReportElement(const Reference<XReportControlModel>& _xRep
     {
         exportFormula(XML_FORMULA,sExpr);
         SvXMLElementExport aPrintExpr(*this,XML_NAMESPACE_REPORT, XML_CONDITIONAL_PRINT_EXPRESSION, sal_True, sal_True);
-    } // if ( sExpr.getLength() )
+    }
 
     // only export when parent exists
     uno::Reference< report::XSection> xParent(_xReportElement->getParent(),uno::UNO_QUERY);
@@ -719,7 +716,7 @@ void ORptExport::exportReportComponentAutoStyles(const Reference<XSection>& _xPr
                     {
                         uno::Reference< report::XFormatCondition > xCond(xFormattedField->getByIndex(j),uno::UNO_QUERY);
                         exportAutoStyle(xCond.get(),xFormattedField);
-                    } // for (sal_Int32 j = 0; j < nCount ; ++j)
+                    }
                 }
                 catch(uno::Exception&)
                 {
@@ -971,7 +968,7 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
                                     exportSection(xSection);
                             }
                         }
-                    } // if ( aColIter->xElement.is() )
+                    }
                     else if ( !bShapeHandled )
                     {
                         bShapeHandled = true;
@@ -989,7 +986,7 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
                     }
 
                 }
-            } // for (sal_Int32 i = 0 ; i< nCount ; ++i)
+            }
             if ( nEmptyCellColSpan )
             {
                 {
@@ -1037,21 +1034,6 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
     ::rtl::OUString sFormula = _sFormula;
     if ( _sFormula.equalsAsciiL("rpt:",4) )
         sFormula = ::rtl::OUString();
-    //sal_Int32 nLength = _sFormula.getLength();
-    //if ( nLength )
-    //{
-    //    sal_Int32 nPos = 0;
-    //    if ( _sFormula.matchAsciiL("=",1) != 0 )
-    //    {
-    //        nPos = 1;
-    //        --nLength;
-    //    }
-    //    bool bFormula = _sFormula.indexOf('[') != -1 || _sFormula.indexOf('(') != -1;
-    //    if ( bFormula )
-    //        sFormula = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:")) + _sFormula.copy(nPos,nLength);
-    //    else
-    //        sFormula = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("field:[")) + _sFormula.copy(nPos,nLength) + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("]"));;
-    //}
     return sFormula;
 }
 // -----------------------------------------------------------------------------
@@ -1157,7 +1139,7 @@ sal_Bool ORptExport::exportGroup(const Reference<XReportDefinition>& _xReportDef
                             AddAttribute(XML_NAMESPACE_REPORT, XML_REPEAT_SECTION,XML_TRUE );
                         SvXMLElementExport aGroupSection(*this,XML_NAMESPACE_REPORT, XML_GROUP_FOOTER, sal_True, sal_True);
                         exportSection(xSection);
-                    } // if ( xGroup->getFooterOn() )
+                    }
                 }
             }
             else if ( _bExportAutoStyle )
@@ -1259,37 +1241,6 @@ void ORptExport::exportAutoStyle(XPropertySet* _xProp,const Reference<XFormatted
     }
     else
     {
-        //sal_Int32 nTextAlignIndex = m_xCellStylesExportPropertySetMapper->getPropertySetMapper()->FindEntryIndex( CTF_SD_SHAPE_PARA_ADJUST );
-        //if ( nTextAlignIndex != -1 )
-        //{
-        //    ::std::vector< XMLPropertyState >::iterator aIter = aPropertyStates.begin();
-        //    ::std::vector< XMLPropertyState >::iterator aEnd = aPropertyStates.end();
-        //    for (; aIter != aEnd; ++aIter)
-        //    {
-        //        if ( aIter->mnIndex == nTextAlignIndex )
-        //        {
-        //            sal_Int16 nTextAlign = 0;
-        //            aIter->maValue >>= nTextAlign;
-        //            switch(nTextAlign)
-        //            {
-        //                case awt::TextAlign::LEFT:
-        //                    nTextAlign = style::ParagraphAdjust_LEFT;
-        //                    break;
-        //                case awt::TextAlign::CENTER:
-        //                    nTextAlign = style::ParagraphAdjust_CENTER;
-        //                    break;
-        //                case awt::TextAlign::RIGHT:
-        //                    nTextAlign = style::ParagraphAdjust_RIGHT;
-        //                    break;
-        //                default:
-        //                    OSL_ENSURE(0,"Illegal text alignment value!");
-        //                    break;
-        //            }
-        //            aIter->maValue <<= nTextAlign;
-        //            break;
-        //        }
-        //    }
-        //}
         const Reference<XFormattedField> xFormattedField(_xProp,uno::UNO_QUERY);
         if ( (_xParentFormattedField.is() || xFormattedField.is()) && !aPropertyStates.empty() )
         {
@@ -1306,7 +1257,6 @@ void ORptExport::exportAutoStyle(XPropertySet* _xProp,const Reference<XFormatted
             }
         }
     }
-
 
     if ( !aPropertyStates.empty() )
         m_aAutoStyleNames.insert( TPropertyStyleMap::value_type(_xProp,GetAutoStylePool()->Add( XML_STYLE_FAMILY_TABLE_CELL, aPropertyStates )));
@@ -1422,12 +1372,6 @@ void ORptExport::_ExportAutoStyles()
                                         ,GetNamespaceMap()
         );
 
-
-        /*GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_REPORT_ID
-                                        ,GetDocHandler()
-                                        ,GetMM100UnitConverter()
-                                        ,GetNamespaceMap()
-        );*/
         exportDataStyles();
         GetShapeExport()->exportAutoStyles();
     }

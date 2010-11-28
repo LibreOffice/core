@@ -516,13 +516,12 @@ sal_Bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
             try
             {
                 xStorage = pMedium->GetStorage();
-                //  nError = pMedium->GetError();
             }
             catch(const Exception&)
             {
             }
-        } // if( pMedium )
-    } // if ( bRet = (sFileName.getLength() != 0) )
+        }
+    }
     sal_Bool bRet = xStorage.is();
     if ( bRet )
     {
@@ -745,17 +744,13 @@ const SvXMLTokenMap& ORptFilter::GetDocElemTokenMap() const
         static __FAR_DATA SvXMLTokenMapEntry aElemTokenMap[]=
         {
             { XML_NAMESPACE_OFFICE, XML_SETTINGS,           XML_TOK_DOC_SETTINGS    },
-            //{ XML_NAMESPACE_OOO,    XML_SETTINGS,         XML_TOK_DOC_SETTINGS    },
             { XML_NAMESPACE_OFFICE, XML_STYLES,             XML_TOK_DOC_STYLES      },
-            //{ XML_NAMESPACE_OOO,    XML_STYLES,               XML_TOK_DOC_STYLES      },
             { XML_NAMESPACE_OFFICE, XML_AUTOMATIC_STYLES,   XML_TOK_DOC_AUTOSTYLES  },
-            //{ XML_NAMESPACE_OOO,    XML_AUTOMATIC_STYLES, XML_TOK_DOC_AUTOSTYLES  },
             { XML_NAMESPACE_OFFICE, XML_REPORT,             XML_TOK_DOC_REPORT      },
             { XML_NAMESPACE_OOO,    XML_REPORT,             XML_TOK_DOC_REPORT      },
             { XML_NAMESPACE_OFFICE, XML_FONT_FACE_DECLS,    XML_TOK_DOC_FONTDECLS   },
             { XML_NAMESPACE_OFFICE, XML_MASTER_STYLES,      XML_TOK_DOC_MASTERSTYLES    },
             { XML_NAMESPACE_OFFICE, XML_DOCUMENT_META,      XML_TOK_DOC_META        },
-            //{ XML_NAMESPACE_OOO,    XML_FONT_FACE_DECLS,  XML_TOK_DOC_FONTDECLS   },
             XML_TOKEN_MAP_END
         };
         m_pDocElemTokenMap.reset(new SvXMLTokenMap( aElemTokenMap ));
@@ -801,9 +796,9 @@ const SvXMLTokenMap& ORptFilter::GetFormatElemTokenMap() const
     {
         static __FAR_DATA SvXMLTokenMapEntry aElemTokenMap[]=
         {
-            { XML_NAMESPACE_REPORT, XML_ENABLED                     ,   XML_TOK_ENABLED                     },
-            { XML_NAMESPACE_REPORT, XML_FORMULA                     ,   XML_TOK_FORMULA                     },
-            { XML_NAMESPACE_REPORT, XML_STYLE_NAME                  ,   XML_TOK_FORMAT_STYLE_NAME           },
+            { XML_NAMESPACE_REPORT, XML_ENABLED     , XML_TOK_ENABLED           },
+            { XML_NAMESPACE_REPORT, XML_FORMULA     , XML_TOK_FORMULA           },
+            { XML_NAMESPACE_REPORT, XML_STYLE_NAME  , XML_TOK_FORMAT_STYLE_NAME },
             XML_TOKEN_MAP_END
         };
         m_pFormatElemTokenMap.reset(new SvXMLTokenMap( aElemTokenMap ));
@@ -829,7 +824,6 @@ const SvXMLTokenMap& ORptFilter::GetGroupElemTokenMap() const
             { XML_NAMESPACE_REPORT, XML_SORT_ASCENDING              ,   XML_TOK_SORT_ASCENDING              },
             { XML_NAMESPACE_REPORT, XML_KEEP_TOGETHER               ,   XML_TOK_GROUP_KEEP_TOGETHER         },
             { XML_NAMESPACE_REPORT, XML_FUNCTION                    ,   XML_TOK_GROUP_FUNCTION              },
-            //{ XML_NAMESPACE_REPORT,   XML_            ,   XML_TOK_            },
             XML_TOKEN_MAP_END
         };
         m_pGroupElemTokenMap.reset(new SvXMLTokenMap( aElemTokenMap ));
@@ -995,10 +989,8 @@ SvXMLImportContext* ORptFilter::CreateStylesContext(const ::rtl::OUString& rLoca
     {
         pContext = new OReportStylesContext(*this, XML_NAMESPACE_OFFICE, rLocalName, xAttrList, bIsAutoStyle);
         if (bIsAutoStyle)
-            //xAutoStyles = pContext;
             SetAutoStyles((SvXMLStylesContext*)pContext);
         else
-            //xStyles = pContext;
             SetStyles((SvXMLStylesContext*)pContext);
     }
     return pContext;
@@ -1042,20 +1034,6 @@ void ORptFilter::FinishStyles()
 // -----------------------------------------------------------------------------
 ::rtl::OUString ORptFilter::convertFormula(const ::rtl::OUString& _sFormula)
 {
-    //sal_Int32 nLen = _sFormula.getLength();
-    //if ( nLen )
-    //{
-    //    const static ::rtl::OUString s_sField(RTL_CONSTASCII_USTRINGPARAM("field:["));
-    //    sal_Int32 nPos = _sFormula.indexOf(s_sField);
-    //    if ( nPos == -1 )
-    //        nPos = 4; // "rpt:"
-    //    else
-    //    {
-    //        nPos = s_sField.getLength();
-    //        --nLen; // eat "]"
-    //    }
-    //    return _sFormula.copy(nPos,nLen-nPos);
-    //}
     return _sFormula;
 }
 // -----------------------------------------------------------------------------
@@ -1129,7 +1107,7 @@ sal_Bool ORptFilter::isOldFormat() const
         {
             xProp->getPropertyValue(s_sOld) >>= bOldFormat;
         }
-    } // if ( xProp.is() )
+    }
     return bOldFormat;
 }
 

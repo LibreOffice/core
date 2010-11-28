@@ -257,7 +257,6 @@ UniReference < SvXMLImportPropertyMapper >
                 {
                     UniReference < XMLPropertyHandlerFactory> xFac = new ::xmloff::OControlPropertyHandlerFactory();
                     m_xTableImpPropMapper = new SvXMLImportPropertyMapper( new XMLPropertySetMapper(OXMLHelper::GetTableStyleProps(), xFac), m_rImport );
-                    //m_xTableImpPropMapper = new SvXMLImportPropertyMapper( rImport.GetTableStylesPropertySetMapper(), m_rImport );
                 }
                 xMapper = m_xTableImpPropMapper;
             }
