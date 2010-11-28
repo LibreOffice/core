@@ -362,7 +362,7 @@ struct Component
     sal_Unicode const * pBegin;
     sal_Unicode const * pEnd;
 
-    inline Component(): pBegin(0) {}
+    inline Component(): pBegin(0), pEnd(0) {}
 
     inline bool isPresent() const { return pBegin != 0; }
 
