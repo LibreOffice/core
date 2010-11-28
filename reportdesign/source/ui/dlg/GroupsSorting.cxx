@@ -341,11 +341,11 @@ void OFieldExpressionControl::moveGroups(const uno::Sequence<uno::Any>& _aGroups
                     m_pParent->m_pController->executeChecked(SID_GROUP_APPEND,aArgs);
                     ++nRow;
                 }
-            } // for(;pIter != pEnd;++pIter)
+            }
         }
         m_bIgnoreEvent = false;
         Invalidate();
-    } // if ( _aGroups.getLength() )
+    }
 }
 // -----------------------------------------------------------------------------
 void OFieldExpressionControl::fillColumns(const uno::Reference< container::XNameAccess>& _xColumns)
@@ -547,7 +547,7 @@ String OFieldExpressionControl::GetCellText( long nRow, USHORT /*nColId*/ ) cons
         {
             OSL_ENSURE(0,"Exception caught while getting expression value from the group");
         }
-    } // if ( nRow != BROWSER_ENDOFSELECTION && nRow < m_pParent->getGroups()->getCount() )
+    }
     return sText;
 }
 
@@ -773,7 +773,7 @@ void OFieldExpressionControl::Command(const CommandEvent& rEvt)
                     default:
                         break;
                 }
-            } // if ( nColId == HANDLE_ID )
+            }
             // run through
         }
         default:
@@ -827,7 +827,7 @@ void OFieldExpressionControl::DeleteRows()
                     --*aFind;
         }
         nIndex = NextSelectedRow();
-    } // while( nIndex >= 0 )
+    }
 
     if ( !bFirstTime )
         m_pParent->m_pController->getUndoMgr()->LeaveListAction();
@@ -1203,7 +1203,6 @@ IMPL_LINK(OGroupsSortingDialog, OnControlFocusLost, Control*, pControl )
 }
 // -----------------------------------------------------------------------------
 IMPL_LINK( OGroupsSortingDialog, OnFormatAction, ToolBox*, /*NOTINTERESTEDIN*/ )
-// IMPL_LINK( OGroupsSortingDialog, ClickHdl, ImageButton*, _pButton )
 {
     DBG_CHKTHIS( rpt_OGroupsSortingDialog,NULL);
 
@@ -1219,17 +1218,14 @@ IMPL_LINK( OGroupsSortingDialog, OnFormatAction, ToolBox*, /*NOTINTERESTEDIN*/ )
             aClipboardList.realloc(1);
             aClipboardList[0] = m_xGroups->getByIndex(nGroupPos);
         }
-        //BTN if ( _pButton == &m_aPB_Up )
         if ( nCommand == SID_RPT_GROUPSORT_MOVE_UP )
         {
             --nIndex;
         }
-        //BTN if ( _pButton == &m_aPB_Down )
         if ( nCommand == SID_RPT_GROUPSORT_MOVE_DOWN )
         {
             ++nIndex;
         }
-        //BTN if ( _pButton == &m_aPB_Delete )
         if ( nCommand == SID_RPT_GROUPSORT_DELETE )
         {
             Application::PostUserEvent( LINK(m_pFieldExpression, OFieldExpressionControl, DelayedDelete) );
@@ -1412,7 +1408,6 @@ void OGroupsSortingDialog::Resize()
         nMaxTextWidth = ::std::max<sal_Int32>(static_cast<sal_Int32>(GetTextWidth(pControls[i]->GetText())),nMaxTextWidth);
     }
 
-    // aTotalOutputSize.Width() - m_aHeaderLst.GetSizePixel().Width() - 3*aSpace.Width()
     for (size_t i = 0; i < SAL_N_ELEMENTS(pControls); ++i)
     {
         pControls[i]->SetSizePixel(Size(nMaxTextWidth,pControls[i]->GetSizePixel().Height()));

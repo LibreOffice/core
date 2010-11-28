@@ -327,7 +327,7 @@ void NavigatorTree::Command( const CommandEvent& rEvt )
                     else
                         aContextMenu.EnableItem(nId,bEnabled);
                 }
-            } // for (USHORT i = 0; i < nCount; ++i)
+            }
             USHORT nId = aContextMenu.Execute(this, aWhere);
             if ( nId )
             {

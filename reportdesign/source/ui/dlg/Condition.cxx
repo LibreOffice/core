@@ -106,7 +106,7 @@ IMPL_LINK( ConditionField, OnFormula, Button*, /*_pClickedButton*/ )
     {
         ReportFormula aFormula( sFormula );
         sFormula = aFormula.getCompleteFormula();
-    } // if ( nLen )
+    }
     uno::Reference< awt::XWindow> xInspectorWindow = VCLUnoHelper::GetInterface(this);
     uno::Reference< beans::XPropertySet> xProp(m_pParent->getController().getRowSet(),uno::UNO_QUERY);
     if ( rptui::openDialogFormula_nothrow( sFormula, m_pParent->getController().getContext(),xInspectorWindow,xProp ) )
@@ -212,7 +212,7 @@ void OColorPopup::SetSlotId(USHORT _nSlotId)
     {
         m_aColorSet.SetStyle( m_aColorSet.GetStyle() | WB_NONEFIELD );
         m_aColorSet.SetText( String(ModuleRes( STR_TRANSPARENT )) );
-    } // if ( SID_ATTR_CHAR_COLOR_BACKGROUND == theSlotId || SID_BACKGROUND_COLOR == theSlotId )
+    }
 }
 // -----------------------------------------------------------------------------
 IMPL_LINK( OColorPopup, SelectHdl, void *, EMPTYARG )
@@ -343,7 +343,7 @@ IMPL_LINK( Condition, DropdownClick, ToolBox*, /*pToolBar*/ )
             break;
         default:
             break;
-    } // switch(nId)
+    }
     if ( nTextId )
         m_pColorFloat->SetText(String(ModuleRes(nTextId)));
     m_pColorFloat->SetSlotId(nId);
@@ -427,7 +427,6 @@ void Condition::StateChanged( StateChangedType nType )
     {
         // The physical toolbar changed its outlook and shows another logical toolbar!
         // We have to set the correct high contrast mode on the new tbx manager.
-        //  pMgr->SetHiContrast( IsHiContrastMode() );
         checkImageList();
     }
 }
