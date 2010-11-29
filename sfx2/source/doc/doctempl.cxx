@@ -121,8 +121,6 @@ using namespace ::ucbhelper;
 
 #define SERVICENAME_TYPEDETECTION       "com.sun.star.document.TypeDetection"
 #define TYPEDETECTION_PARAMETER         "FileName"
-//#define SERVICENAME_OLD_TYPEDETECTION   "com.sun.star.frame.FrameLoaderFactory"
-//#define PARAMETER_OLD_TYPEDETECTION     "DeepDetection"
 #define SERVICENAME_DOCINFO             "com.sun.star.document.DocumentProperties"
 #define SERVICENAME_DOCTEMPLATES        "com.sun.star.frame.DocumentTemplates"
 #define SERVICENAME_DESKTOP             "com.sun.star.frame.Desktop"
