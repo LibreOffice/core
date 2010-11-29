@@ -41,13 +41,8 @@
 #include <rtl/instance.hxx>
 #include <svtools/svtdata.hxx>
 #include <tools/wintypes.hxx>
-#ifndef _SVTOOLS_HRC
 #include <svtools/svtools.hrc>
-
-// #102891# --------------------
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
-#endif
 
 #define NODE_BMP_TABDIST_NOTVALID   -2000000
 #define FIRST_ENTRY_TAB             1
