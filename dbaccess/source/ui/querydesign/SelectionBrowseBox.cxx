@@ -1588,7 +1588,7 @@ void OSelectionBrowseBox::InsertColumn(OTableFieldDescRef pEntry, USHORT& _nColu
             getFields()[nOldPosition - 1] = pEntry;
 
         ColumnMoved(pEntry->GetColumnId(),FALSE);
-    } // if ( pEntry->GetColumnId() != nColumnId )
+    }
 
     if ( pEntry->GetFunctionType() & (FKT_AGGREGATE) )
     {

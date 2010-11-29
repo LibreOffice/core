@@ -207,7 +207,7 @@ namespace
                     default:
                         OSL_ENSURE(0,"Illegal text alignment value!");
                         break;
-                } // switch(nTextAlign)
+                }
                 aRet <<= (style::ParagraphAdjust)nTextAlign;
             }
             else
@@ -951,7 +951,7 @@ SdrObject* OUnoObject::Clone() const
         Reference<XPropertySet> xDest(pClone->getUnoShape(),uno::UNO_QUERY);
         if ( xSource.is() && xDest.is() )
             comphelper::copyProperties(xSource.get(),xDest.get());
-    } // if ( pClone )
+    }
     return pClone;
 }
 //----------------------------------------------------------------------------

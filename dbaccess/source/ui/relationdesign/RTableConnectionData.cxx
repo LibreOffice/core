@@ -416,7 +416,7 @@ xKey.clear();
             }
         }
     xKey.clear();
-    } // for(sal_Int32 i=0;i<xKeys->getCount();++i)
+    }
     if ( bDropRelation )
     {
         DropRelation();

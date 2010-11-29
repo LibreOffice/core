@@ -70,7 +70,7 @@ namespace
                 _xSection->remove(xShape);
                 --nCount;
             }
-        } // if ( _xSection.is() )
+        }
     }
     //----------------------------------------------------------------------------
     void lcl_insertElements(const uno::Reference< report::XSection >& _xSection,const ::std::vector< uno::Reference< drawing::XShape> >& _aControls)

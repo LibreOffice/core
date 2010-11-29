@@ -58,7 +58,7 @@ sal_Unicode FunctionManager::getSingleToken(const formula::IFunctionManager::ETo
             return sal_Unicode('{');
         case eArrayClose:
             return sal_Unicode('}');
-    } // switch(_eToken)
+    }
     return 0;
 }
 // -----------------------------------------------------------------------------
@@ -118,9 +118,9 @@ void FunctionManager::fillLastRecentlyUsedFunctions(::std::vector< const formula
                 m_aCategoryIndex.push_back( aCategoryFind );
             }
             aFunctionFind = m_aFunctions.insert(TFunctionsMap::value_type(sFunctionName,::boost::shared_ptr<FunctionDescription>(new FunctionDescription(aCategoryFind->second.get(),_xFunctionDescription)))).first;
-        } // if ( aFind == m_aFunctions.end() )
+        }
         pDesc = aFunctionFind->second;
-    } // if ( _xFunctionDescription.is() )
+    }
     return pDesc;
 }
 // -----------------------------------------------------------------------------

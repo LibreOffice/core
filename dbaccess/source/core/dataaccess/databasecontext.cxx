@@ -160,7 +160,7 @@ namespace dbaccess
                     {
                         Reference<util::XCloseable> xCloseable(xModel,UNO_QUERY_THROW);
                         xCloseable->close(sal_False);
-                    } // if ( !xModel->getControllers()->hasMoreElements() )
+                    }
                 }
                 catch(const CloseVetoException&)
                 {

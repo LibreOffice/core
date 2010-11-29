@@ -175,14 +175,14 @@ void adjustSectionName(const uno::Reference< report::XGroup >& _xGroup,sal_Int32
         ::rtl::OUString sName = String(ModuleRes(RID_STR_GROUPHEADER));
         sName += ::rtl::OUString::valueOf(_nPos);
         _xGroup->getHeader()->setName(sName);
-    } // if ( _xGroup->getHeaderOn() )
+    }
 
     if ( _xGroup->getFooterOn() && !_xGroup->getFooter()->getName().getLength()  )
     {
         ::rtl::OUString sName = String(ModuleRes(RID_STR_GROUPFOOTER));
         sName += ::rtl::OUString::valueOf(_nPos);
         _xGroup->getFooter()->setName(sName);
-    } // if ( _xGroup->getHeaderOn() )
+    }
 }
 // -----------------------------------------------------------------------------
 ::rtl::Reference< comphelper::OPropertyChangeMultiplexer> addStyleListener(const uno::Reference< report::XReportDefinition >& _xReportDefinition,::comphelper::OPropertyChangeListener* _pListener)
@@ -261,7 +261,7 @@ namespace
             case COMPLEX:
                 aLocale = _rxReportControlFormat->getCharLocaleComplex();
                 break;
-        } // switch(_nWhich)
+        }
 
         _rItemSet.Put(SvxLanguageItem(MsLangId::convertLocaleToLanguageWithFallback(aLocale),_nLanguage));
 
@@ -288,7 +288,7 @@ namespace
                     pClone->PutValue(_xShape->getPropertyValue(aIt->sName), aIt->nMemberId);
                     _rItemSet.Put(*pClone, aIt->nWID);
                 }
-            } // if ( xInfo->hasPropertyByName(sPropertyName) )
+            }
             ++aIt;
         }
     }
@@ -319,11 +319,11 @@ namespace
                         catch(uno::Exception&)
                         { // shapes have a bug so we ignore this one.
                         }
-                    } // if ( pItem )
+                    }
                 }
             }
             ++aIt;
-        } // while ( pPropertyMap->pName )
+        }
     }
     // -------------------------------------------------------------------------
     void lcl_CharPropertiesToItems( const uno::Reference<report::XReportControlFormat >& _rxReportControlFormat,
@@ -398,7 +398,7 @@ namespace
             aNewFont.SetFamily(pFontItem->GetFamily());
             aNewFont.SetPitch(pFontItem->GetPitch());
             aNewFont.SetCharSet(pFontItem->GetCharSet());
-        } // if ( SFX_ITEM_SET == _rItemSet.GetItemState( ITEMID_FONT,sal_True,&pItem) && pItem->ISA(SvxFontItem))
+        }
         if ( SFX_ITEM_SET == _rItemSet.GetItemState( _nFontHeight,sal_True,&pItem) && pItem->ISA(SvxFontHeightItem))
         {
             const SvxFontHeightItem* pFontItem = static_cast<const SvxFontHeightItem*>(pItem);
@@ -544,7 +544,7 @@ namespace
         {
             const SvxCaseMapItem* pFontItem = static_cast<const SvxCaseMapItem*>(pItem);
             lcl_pushBack( _out_rProperties, PROPERTY_CHARCASEMAP, uno::makeAny( pFontItem->GetValue() ) );
-        } // if ( SFX_ITEM_SET == _rItemSet.GetItemState( ITEMID_CASEMAP,sal_True,&pItem) && pItem->ISA(SvxCaseMapItem))
+        }
         struct Items {
                 USHORT nWhich;
                 ::rtl::OUString sPropertyName;
@@ -561,7 +561,7 @@ namespace
                 lang::Locale aCharLocale;
                 MsLangId::convertLanguageToLocale( pFontItem->GetLanguage(), aCharLocale );
                 lcl_pushBack( _out_rProperties, pItems[k].sPropertyName, uno::makeAny( aCharLocale ) );
-            } // if ( SFX_ITEM_SET == _rItemSet.GetItemState( ITEMID_LANGUAGE,sal_True,&pItem) && pItem->ISA(SvxLanguageItem))
+            }
         }
         if ( SFX_ITEM_SET == _rItemSet.GetItemState( ITEMID_ESCAPEMENT,sal_True,&pItem) && pItem->ISA(SvxEscapementItem))
         {
@@ -813,14 +813,14 @@ void applyCharacterSettings( const uno::Reference< report::XReportControlFormat 
             aAwtFont.Name = ::rtl::OUString(); // hack to
             _rxReportControlFormat->setFontDescriptor( aAwtFont );
             _rxReportControlFormat->setCharFontName( sTemp );
-        } // if ( aSettings.get( "Font" ) >>= aAwtFont )
+        }
         if ( aSettings.get( "FontAsian" ) >>= aAwtFont )
         {
             ::rtl::OUString sTemp = aAwtFont.Name;
             aAwtFont.Name = ::rtl::OUString(); // hack to
             _rxReportControlFormat->setFontDescriptorAsian( aAwtFont );
             _rxReportControlFormat->setCharFontNameAsian( sTemp );
-        } // if ( aSettings.get( "Font" ) >>= aAwtFont )
+        }
         if ( aSettings.get( "FontComplex" ) >>= aAwtFont )
         {
             ::rtl::OUString sTemp = aAwtFont.Name;

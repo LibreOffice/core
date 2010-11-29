@@ -1481,7 +1481,7 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
                     {
                         const String sUndoAction(ModuleRes(RID_STR_UNDO_CHANGEFONT));
                         pListAction.reset(new UndoManagerListAction(m_aUndoManager,sUndoAction));
-                    } // if ( !pListAction.get() )
+                    }
                     uno::Reference< report::XReportControlFormat> xReportControlFormat(*aIter,uno::UNO_QUERY);
                     lcl_setFontWPU_nothrow(xReportControlFormat,_nId);
                 }

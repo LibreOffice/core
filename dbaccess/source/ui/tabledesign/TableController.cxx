@@ -1205,7 +1205,7 @@ void OTableController::alterColumns()
         }
         else
             bReload = sal_True;
-    } // for(sal_Int32 nPos = 0;aIter != aEnd;++aIter,++nPos)
+    }
     // alter column settings
     aIter = m_vRowList.begin();
 
@@ -1236,7 +1236,7 @@ void OTableController::alterColumns()
                 xColumn->setPropertyValue(PROPERTY_FORMATKEY,makeAny(pField->GetFormatKey()));
             if(xInfo->hasPropertyByName(PROPERTY_ALIGN))
                 xColumn->setPropertyValue(PROPERTY_ALIGN,makeAny(dbaui::mapTextAllign(pField->GetHorJustify())));
-        } // if ( xColumns->hasByName(pField->GetName()) )
+        }
     }
     // second drop all columns which could be found by name
     Reference<XNameAccess> xKeyColumns  = getKeyColumns();

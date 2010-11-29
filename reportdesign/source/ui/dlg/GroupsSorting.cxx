@@ -248,7 +248,7 @@ uno::Sequence<uno::Any> OFieldExpressionControl::fillSelectedGroups()
         }
         if ( !vClipboardList.empty() )
             aList = uno::Sequence< uno::Any >(&vClipboardList[0], vClipboardList.size());
-    } // if ( nCount > 1 )
+    }
     return aList;
 }
 //------------------------------------------------------------------------------
@@ -264,7 +264,7 @@ void OFieldExpressionControl::StartDrag( sal_Int8 /*_nAction*/ , const Point& /*
             OGroupExchange* pData = new OGroupExchange(aClipboardList);
             uno::Reference< ::com::sun::star::datatransfer::XTransferable> xRef = pData;
             pData->StartDrag(this, DND_ACTION_MOVE );
-        } // if(!vClipboardList.empty())
+        }
     }
 }
 //------------------------------------------------------------------------------

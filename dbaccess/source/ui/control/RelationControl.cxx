@@ -134,7 +134,7 @@ namespace dbaui
     DBG_NAME(ORelationControl)
     //------------------------------------------------------------------------
     ORelationControl::ORelationControl( OTableListBoxControl* pParent ,const OJoinTableView::OTableWindowMap* _pTableMap)
-        :EditBrowseBox( pParent, EBBF_SMART_TAB_TRAVEL | EBBF_NOROWPICTURE, WB_TABSTOP | /*WB_3DLOOK | */WB_BORDER | BROWSER_AUTOSIZE_LASTCOL)
+        :EditBrowseBox( pParent, EBBF_SMART_TAB_TRAVEL | EBBF_NOROWPICTURE, WB_TABSTOP | WB_BORDER | BROWSER_AUTOSIZE_LASTCOL)
         ,m_pTableMap(_pTableMap)
         ,m_pBoxControl(pParent)
         ,m_xSourceDef( NULL )
@@ -518,7 +518,7 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
                 pInitialRight = aIter->second;
                 m_strCurrentRight = aIter->first;
             }
-        } // for(;aIter != m_pTableMap->end();++aIter)
+        }
 
         if ( !pInitialRight )
         {
@@ -668,7 +668,6 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
         {
             _pTableSeparator->SetZOrder(&m_lmbRightTable, WINDOW_ZORDER_BEHIND);
             m_pRC_Tables->SetZOrder(_pTableSeparator, WINDOW_ZORDER_BEHIND);
-            //aDlgPoint = m_pTableSeparator->GetPosPixel() + Point(0,aSize.Height()) + LogicToPixel( Point(0,6), MAP_APPFONT );
             _pTableSeparator->SetPosPixel(Point(0,m_aFL_InvolvedFields.GetPosPixel().Y()));
             const Size aSize = _pTableSeparator->GetSizePixel();
             aDlgPoint.Y() = _pTableSeparator->GetPosPixel().Y() + aSize.Height();
