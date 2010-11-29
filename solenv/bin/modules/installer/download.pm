@@ -1781,7 +1781,7 @@ sub call_nsis
 
     if( $^O =~ /cygwin/i ) { $nsifile =~ s/\\/\//g; }
 
-    my $systemcall = "$makensisexe $nsifile |";
+    my $systemcall = "$makensisexe /V4 /DMUI_VERBOSE=4 $nsifile |";
 
     my $infoline = "Systemcall: $systemcall\n";
     push( @installer::globals::logfileinfo, $infoline);
