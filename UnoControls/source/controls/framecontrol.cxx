@@ -311,7 +311,7 @@ const Sequence< OUString > FrameControl::impl_getStaticSupportedServiceNames()
 {
     MutexGuard aGuard( Mutex::getGlobalMutex() );
     Sequence< OUString > seqServiceNames( 1 );
-    seqServiceNames.getArray() [0] = OUString::createFromAscii( SERVICENAME_FRAMECONTROL );
+    seqServiceNames.getArray() [0] = OUString(RTL_CONSTASCII_USTRINGPARAM( SERVICENAME_FRAMECONTROL ));
     return seqServiceNames ;
 }
 
@@ -321,7 +321,7 @@ const Sequence< OUString > FrameControl::impl_getStaticSupportedServiceNames()
 
 const OUString FrameControl::impl_getStaticImplementationName()
 {
-    return OUString::createFromAscii( IMPLEMENTATIONNAME_FRAMECONTROL );
+    return OUString(RTL_CONSTASCII_USTRINGPARAM( IMPLEMENTATIONNAME_FRAMECONTROL ));
 }
 
 //____________________________________________________________________________________________________________
@@ -592,9 +592,9 @@ const Sequence< Property > FrameControl::impl_getStaticPropertyDescriptor()
     // All Properties of this implementation. The array must be sorted!
     static const Property pPropertys[PROPERTY_COUNT] =
     {
-        Property( OUString::createFromAscii( PROPERTYNAME_COMPONENTURL      ), PROPERTYHANDLE_COMPONENTURL      , ::getCppuType((const OUString*)0)                 , PropertyAttribute::BOUND | PropertyAttribute::CONSTRAINED ),
-        Property( OUString::createFromAscii( PROPERTYNAME_FRAME             ), PROPERTYHANDLE_FRAME             , ::getCppuType((const Reference< XFrame >*)0)      , PropertyAttribute::BOUND | PropertyAttribute::TRANSIENT   ),
-        Property( OUString::createFromAscii( PROPERTYNAME_LOADERARGUMENTS   ), PROPERTYHANDLE_LOADERARGUMENTS   , ::getCppuType((const Sequence< PropertyValue >*)0), PropertyAttribute::BOUND | PropertyAttribute::CONSTRAINED )
+        Property( OUString(RTL_CONSTASCII_USTRINGPARAM( PROPERTYNAME_COMPONENTURL       )), PROPERTYHANDLE_COMPONENTURL     , ::getCppuType((const OUString*)0)                 , PropertyAttribute::BOUND | PropertyAttribute::CONSTRAINED ),
+        Property( OUString(RTL_CONSTASCII_USTRINGPARAM( PROPERTYNAME_FRAME              )), PROPERTYHANDLE_FRAME                , ::getCppuType((const Reference< XFrame >*)0)      , PropertyAttribute::BOUND | PropertyAttribute::TRANSIENT   ),
+        Property( OUString(RTL_CONSTASCII_USTRINGPARAM( PROPERTYNAME_LOADERARGUMENTS    )), PROPERTYHANDLE_LOADERARGUMENTS  , ::getCppuType((const Sequence< PropertyValue >*)0), PropertyAttribute::BOUND | PropertyAttribute::CONSTRAINED )
     };
 
     static const Sequence< Property > seqPropertys( pPropertys, PROPERTY_COUNT );

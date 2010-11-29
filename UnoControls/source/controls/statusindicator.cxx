@@ -71,23 +71,23 @@ StatusIndicator::StatusIndicator( const Reference< XMultiServiceFactory >& xFact
     ++m_refCount ;
 
     // Create instances for fixedtext and progress ...
-    m_xText         = Reference< XFixedText >   ( xFactory->createInstance( OUString::createFromAscii( FIXEDTEXT_SERVICENAME    ) ), UNO_QUERY );
-    m_xProgressBar  = Reference< XProgressBar > ( xFactory->createInstance( OUString::createFromAscii( SERVICENAME_PROGRESSBAR  ) ), UNO_QUERY );
+    m_xText         = Reference< XFixedText >   ( xFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM( FIXEDTEXT_SERVICENAME )) ), UNO_QUERY );
+    m_xProgressBar  = Reference< XProgressBar > ( xFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM( SERVICENAME_PROGRESSBAR   )) ), UNO_QUERY );
     // ... cast controls to Reference< XControl > and set model ...
     // ( ProgressBar has no model !!! )
     Reference< XControl > xTextControl      ( m_xText       , UNO_QUERY );
     Reference< XControl > xProgressControl  ( m_xProgressBar, UNO_QUERY );
-    xTextControl->setModel( Reference< XControlModel >( xFactory->createInstance( OUString::createFromAscii( FIXEDTEXT_MODELNAME ) ), UNO_QUERY ) );
+    xTextControl->setModel( Reference< XControlModel >( xFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM( FIXEDTEXT_MODELNAME )) ), UNO_QUERY ) );
     // ... and add controls to basecontainercontrol!
-    addControl( OUString::createFromAscii( CONTROLNAME_TEXT         ), xTextControl     );
-    addControl( OUString::createFromAscii( CONTROLNAME_PROGRESSBAR  ), xProgressControl );
+    addControl( OUString(RTL_CONSTASCII_USTRINGPARAM( CONTROLNAME_TEXT          )), xTextControl    );
+    addControl( OUString(RTL_CONSTASCII_USTRINGPARAM( CONTROLNAME_PROGRESSBAR   )), xProgressControl    );
     // FixedText make it automaticly visible by himself ... but not the progressbar !!!
     // it must be set explicitly
     Reference< XWindow > xProgressWindow( m_xProgressBar, UNO_QUERY );
     xProgressWindow->setVisible( sal_True );
     // Reset to defaults !!!
     // (progressbar take automaticly its own defaults)
-    m_xText->setText( OUString::createFromAscii( STATUSINDICATOR_DEFAULT_TEXT ) );
+    m_xText->setText( OUString(RTL_CONSTASCII_USTRINGPARAM( STATUSINDICATOR_DEFAULT_TEXT )) );
 
     --m_refCount ;
 }
@@ -433,7 +433,7 @@ const Sequence< OUString > StatusIndicator::impl_getStaticSupportedServiceNames(
 {
     MutexGuard aGuard( Mutex::getGlobalMutex() );
     Sequence< OUString > seqServiceNames( 1 );
-    seqServiceNames.getArray() [0] = OUString::createFromAscii( SERVICENAME_STATUSINDICATOR );
+    seqServiceNames.getArray() [0] = OUString(RTL_CONSTASCII_USTRINGPARAM( SERVICENAME_STATUSINDICATOR ));
     return seqServiceNames ;
 }
 
@@ -443,7 +443,7 @@ const Sequence< OUString > StatusIndicator::impl_getStaticSupportedServiceNames(
 
 const OUString StatusIndicator::impl_getStaticImplementationName()
 {
-    return OUString::createFromAscii( IMPLEMENTATIONNAME_STATUSINDICATOR );
+    return OUString(RTL_CONSTASCII_USTRINGPARAM( IMPLEMENTATIONNAME_STATUSINDICATOR ));
 }
 
 //____________________________________________________________________________________________________________

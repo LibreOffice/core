@@ -368,7 +368,7 @@ void SAL_CALL BaseControl::createPeer(  const   Reference< XToolkit >&      xToo
         if ( xLocalToolkit.is() == sal_False )
         {
             // but first create wellknown toolkit, if it not exist
-            xLocalToolkit = Reference< XToolkit > ( m_xFactory->createInstance( OUString::createFromAscii( SERVICE_VCLTOOLKIT ) ), UNO_QUERY );
+            xLocalToolkit = Reference< XToolkit > ( m_xFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM( SERVICE_VCLTOOLKIT )) ), UNO_QUERY );
         }
         m_xPeer         = xLocalToolkit->createWindow( *pDescriptor );
         m_xPeerWindow   = Reference< XWindow >( m_xPeer, UNO_QUERY );
