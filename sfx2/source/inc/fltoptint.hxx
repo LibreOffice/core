@@ -24,6 +24,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+#ifndef SFX2_FLTOPTINT_HXX
+#define SFX2_FLTOPTINT_HXX
 
 #include <com/sun/star/document/FilterOptionsRequest.hpp>
 #include <com/sun/star/document/XInteractionFilterOptions.hpp>
@@ -73,3 +75,4 @@ public:
         throw( ::com::sun::star::uno::RuntimeException );
 };
 
+#endif
