@@ -36,6 +36,8 @@
 #include <svtools/fltcall.hxx>
 #include <math.h>
 
+#include "shape.hxx"
+
 namespace PictReaderInternal {
   //! utilitary class to store a pattern, ...
   class Pattern {
@@ -461,8 +463,6 @@ void PictReader::ReadRectangle(Rectangle & rRect)
 
     aTopLeft=ReadPoint();
     aBottomRight=ReadPoint();
-    aBottomRight.X() -= 1;
-    aBottomRight.Y() -= 1;
     rRect=Rectangle(aTopLeft,aBottomRight);
 }
 
@@ -516,10 +516,7 @@ ULONG PictReader::ReadPixPattern(PictReader::Pattern &pattern)
 ULONG PictReader::ReadAndDrawRect(PictDrawingMethod eMethod)
 {
     ReadRectangle(aLastRect);
-
-    if (IsInvisible(eMethod)) return 8;
-    DrawingMethod(eMethod);
-    pVirDev->DrawRect(aLastRect);
+    ReadAndDrawSameRect(eMethod);
     return 8;
 }
 
@@ -527,18 +524,14 @@ ULONG PictReader::ReadAndDrawSameRect(PictDrawingMethod eMethod)
 {
     if (IsInvisible(eMethod)) return 0;
     DrawingMethod(eMethod);
-    pVirDev->DrawRect(aLastRect);
+    PictReaderShape::drawRectangle(pVirDev, eMethod==PDM_FRAME, aLastRect, nActPenSize);
     return 0;
 }
 
 ULONG PictReader::ReadAndDrawRoundRect(PictDrawingMethod eMethod)
 {
     ReadRectangle(aLastRoundRect);
-
-    if (IsInvisible(eMethod)) return 8;
-    DrawingMethod(eMethod);
-    // Osnola: the corner's size is equal to aActOvalSize/2, see Quickdraw Drawing Reference 3-63
-    pVirDev->DrawRect(aLastRoundRect,(aActOvalSize.Width()+1)/2,(aActOvalSize.Height()+1)/2);
+    ReadAndDrawSameRoundRect(eMethod);
     return 8;
 }
 
@@ -546,17 +539,14 @@ ULONG PictReader::ReadAndDrawSameRoundRect(PictDrawingMethod eMethod)
 {
     if (IsInvisible(eMethod)) return 0;
     DrawingMethod(eMethod);
-    pVirDev->DrawRect(aLastRoundRect,(aActOvalSize.Width()+1)/2,(aActOvalSize.Height()+1)/2);
+    PictReaderShape::drawRoundRectangle(pVirDev, eMethod==PDM_FRAME, aLastRoundRect, aActOvalSize, nActPenSize);
     return 0;
 }
 
 ULONG PictReader::ReadAndDrawOval(PictDrawingMethod eMethod)
 {
     ReadRectangle(aLastOval);
-
-    if (IsInvisible(eMethod)) return 8;
-    DrawingMethod(eMethod);
-    pVirDev->DrawEllipse(aLastOval);
+    ReadAndDrawSameOval(eMethod);
     return 8;
 }
 
@@ -564,7 +554,7 @@ ULONG PictReader::ReadAndDrawSameOval(PictDrawingMethod eMethod)
 {
     if (IsInvisible(eMethod)) return 0;
     DrawingMethod(eMethod);
-    pVirDev->DrawEllipse(aLastOval);
+    PictReaderShape::drawEllipse(pVirDev, eMethod==PDM_FRAME, aLastOval, nActPenSize);
     return 0;
 }
 
@@ -572,11 +562,7 @@ ULONG PictReader::ReadAndDrawPolygon(PictDrawingMethod eMethod)
 {
     ULONG nDataSize;
     nDataSize=ReadPolygon(aLastPolygon);
-
-    if (IsInvisible(eMethod)) return nDataSize;
-    DrawingMethod(eMethod);
-    if (eMethod==PDM_FRAME) pVirDev->DrawPolyLine(aLastPolygon);
-    else pVirDev->DrawPolygon(aLastPolygon);
+    ReadAndDrawSamePolygon(eMethod);
     return nDataSize;
 }
 
@@ -584,37 +570,15 @@ ULONG PictReader::ReadAndDrawSamePolygon(PictDrawingMethod eMethod)
 {
     if (IsInvisible(eMethod)) return 0;
     DrawingMethod(eMethod);
-    if (eMethod==PDM_FRAME) pVirDev->DrawPolyLine(aLastPolygon);
-    else pVirDev->DrawPolygon(aLastPolygon);
+    PictReaderShape::drawPolygon(pVirDev, eMethod==PDM_FRAME, aLastPolygon, nActPenSize);
     return 0;
 }
 
 
 ULONG PictReader::ReadAndDrawArc(PictDrawingMethod eMethod)
 {
-    short nstartAngle, narcAngle;
-    double fAng1, fAng2;
-    Point aStartPt, aEndPt, aCenter;
-
     ReadRectangle(aLastArcRect);
-    *pPict >> nstartAngle >> narcAngle;
-    if (narcAngle<0) {
-        nstartAngle = nstartAngle + narcAngle;
-        narcAngle=-narcAngle;
-    }
-
-    if (IsInvisible(eMethod)) return 12;
-    DrawingMethod(eMethod);
-    fAng1=((double)nstartAngle)/180.0*3.14159265359;
-    fAng2=((double)(nstartAngle+narcAngle))/180.0*3.14159265359;
-    aCenter=Point((aLastArcRect.Left()+aLastArcRect.Right())/2,
-                  (aLastArcRect.Top()+aLastArcRect.Bottom())/2);
-    aStartPt=Point(aCenter.X()+(long)( sin(fAng2)*256.0),
-                   aCenter.Y()+(long)(-cos(fAng2)*256.0));
-    aEndPt=  Point(aCenter.X()+(long)( sin(fAng1)*256.0),
-                   aCenter.Y()+(long)(-cos(fAng1)*256.0));
-    if (eMethod==PDM_FRAME) pVirDev->DrawArc(aLastArcRect,aStartPt,aEndPt);
-    else pVirDev->DrawPie(aLastArcRect,aStartPt,aEndPt);
+    ReadAndDrawSameArc(eMethod);
     return 12;
 }
 
@@ -622,25 +586,18 @@ ULONG PictReader::ReadAndDrawSameArc(PictDrawingMethod eMethod)
 {
     short nstartAngle, narcAngle;
     double fAng1, fAng2;
-    Point aStartPt, aEndPt, aCenter;
 
     *pPict >> nstartAngle >> narcAngle;
+    if (IsInvisible(eMethod)) return 4;
+    DrawingMethod(eMethod);
+
     if (narcAngle<0) {
         nstartAngle = nstartAngle + narcAngle;
         narcAngle=-narcAngle;
     }
-    if (IsInvisible(eMethod)) return 4;
-    DrawingMethod(eMethod);
     fAng1=((double)nstartAngle)/180.0*3.14159265359;
     fAng2=((double)(nstartAngle+narcAngle))/180.0*3.14159265359;
-    aCenter=Point((aLastArcRect.Left()+aLastArcRect.Right())/2,
-                  (aLastArcRect.Top()+aLastArcRect.Bottom())/2);
-    aStartPt=Point(aCenter.X()+(long)( sin(fAng2)*256.0),
-                   aCenter.Y()+(long)(-cos(fAng2)*256.0));
-    aEndPt=  Point(aCenter.X()+(long)( sin(fAng1)*256.0),
-                   aCenter.Y()+(long)(-cos(fAng1)*256.0));
-    if (eMethod==PDM_FRAME) pVirDev->DrawArc(aLastArcRect,aStartPt,aEndPt);
-    else pVirDev->DrawPie(aLastArcRect,aStartPt,aEndPt);
+    PictReaderShape::drawArc(pVirDev, eMethod==PDM_FRAME, aLastArcRect,fAng1,fAng2, nActPenSize);
     return 4;
 }
 
@@ -649,9 +606,21 @@ ULONG PictReader::ReadAndDrawRgn(PictDrawingMethod eMethod)
     USHORT nSize;
 
     *pPict >> nSize;
-    if (IsInvisible(eMethod)) return (ULONG)nSize;
-    DrawingMethod(eMethod);
-    // ...???...
+    // read the DATA
+    //
+    // a region data is a mask and is probably coded as
+    // - the first 8 bytes: bdbox ( which can be read by ReadRectangle )
+    // - then a list of line modifiers: y_i, a_0, b_0, a_1, b_1, ..., a_{n_i}, b_{n_i}, 0x7fff
+    // - 0x7fff
+    // where y_i is the increasing sequences of line coordinates
+    // and on each line: a0 < b0 < a1 < b1 < ... < a_{n_i} < b_{n_i}
+
+    // it can be probably decoded as :
+    // M=an empty mask: ie. (0, 0, ... ) with (left_box-right_box+1) zeroes
+    // then for each line (y_i):
+    //   - takes M and inverts all values in [a_0,b_0-1], in [a_1,b_1-1] ...
+    //   - sets M = new y_i line mask
+    ReadAndDrawSameRgn(eMethod);
     return (ULONG)nSize;
 }
 
@@ -659,7 +628,7 @@ ULONG PictReader::ReadAndDrawSameRgn(PictDrawingMethod eMethod)
 {
     if (IsInvisible(eMethod)) return 0;
     DrawingMethod(eMethod);
-    // ...???...
+    // DISPLAY: ...???...
     return 0;
 }
 
@@ -1265,6 +1234,13 @@ ULONG PictReader::ReadData(USHORT nOpcode)
         *pPict >> nUSHORT;
         nDataSize=nUSHORT;
         ReadRectangle(aRect);
+        // checkme: do we really want to extend the rectangle here ?
+        // I do that because the clipping is often used to clean a region,
+        //   before drawing some text and also to draw this text.
+        // So using a too small region can lead to clip the end of the text ;
+               //     but this can be discutable...
+                aRect.setWidth(aRect.getWidth()+1);
+        aRect.setHeight(aRect.getHeight()+1);
         pVirDev->SetClipRegion( Region( aRect ) );
         break;
     }
@@ -1448,7 +1424,7 @@ ULONG PictReader::ReadData(USHORT nOpcode)
 
         if (IsInvisible(PDM_FRAME)) break;
         DrawingMethod(PDM_FRAME);
-        pVirDev->DrawLine(aPoint,aPenPosition);
+        PictReaderShape::drawLine(pVirDev, aPoint,aPenPosition, nActPenSize);
         break;
 
     case 0x0021:   // LineFrom
@@ -1457,7 +1433,7 @@ ULONG PictReader::ReadData(USHORT nOpcode)
 
         if (IsInvisible(PDM_FRAME)) break;
         DrawingMethod(PDM_FRAME);
-        pVirDev->DrawLine(aPoint,aPenPosition);
+        PictReaderShape::drawLine(pVirDev, aPoint,aPenPosition, nActPenSize);
         break;
 
     case 0x0022:   // ShortLine
@@ -1468,7 +1444,7 @@ ULONG PictReader::ReadData(USHORT nOpcode)
 
         if (IsInvisible(PDM_FRAME)) break;
         DrawingMethod(PDM_FRAME);
-        pVirDev->DrawLine(aPoint,aPenPosition);
+        PictReaderShape::drawLine(pVirDev, aPoint,aPenPosition, nActPenSize);
         break;
 
     case 0x0023:   // ShortLineFrom
@@ -1479,7 +1455,7 @@ ULONG PictReader::ReadData(USHORT nOpcode)
 
         if (IsInvisible(PDM_FRAME)) break;
         DrawingMethod(PDM_FRAME);
-        pVirDev->DrawLine(aPoint,aPenPosition);
+        PictReaderShape::drawLine(pVirDev, aPoint,aPenPosition, nActPenSize);
         break;
 
     case 0x0024:   // Reserved (n Bytes)
@@ -1790,7 +1766,9 @@ ULONG PictReader::ReadData(USHORT nOpcode)
         if      (nOpcode<=0x00af) { *pPict >> nUSHORT; nDataSize=2+nUSHORT; }
         else if (nOpcode<=0x00cf) { nDataSize=0; }
         else if (nOpcode<=0x00fe) { sal_uInt32 nTemp; *pPict >> nTemp ; nDataSize = nTemp; nDataSize+=4; }
-        else if (nOpcode==0x00ff) { nDataSize=2; } // OpEndPic
+        // Osnola: checkme: in the Quickdraw Ref examples ( for pict v2)
+        //         0x00ff(EndOfPict) is also not followed by any data...
+        else if (nOpcode==0x00ff) { nDataSize=IsVersion2 ? 2 : 0; } // OpEndPic
         else if (nOpcode<=0x01ff) { nDataSize=2; }
         else if (nOpcode<=0x0bfe) { nDataSize=4; }
         else if (nOpcode<=0x0bff) { nDataSize=22; }
