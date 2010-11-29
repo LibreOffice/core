@@ -24,61 +24,27 @@
  *
  ************************************************************************/
 
-#ifndef XMLOFF_PROPERTY_HANDLER_HXX
-#define XMLOFF_PROPERTY_HANDLER_HXX
+#ifndef XMLOFF_FORM_HANDLER_FACTORY_HXX
+#define XMLOFF_FORM_HANDLER_FACTORY_HXX
 
-#include "property_ids.hxx"
-
-#include <com/sun/star/uno/Any.hxx>
-
-#include <rtl/ref.hxx>
-
-#include <map>
-#include <vector>
+#include "forms/property_handler.hxx"
 
 //......................................................................................................................
 namespace xmloff
 {
 //......................................................................................................................
 
-    typedef ::std::map< PropertyId, ::com::sun::star::uno::Any >    PropertyValues;
-
     //==================================================================================================================
-    //= IPropertyHandler
+    //= FormHandlerFactory
     //==================================================================================================================
-    class IPropertyHandler : public ::rtl::IReference
+    class FormHandlerFactory
     {
     public:
-        /** retrieves the XML attribute value for the given property values
-        */
-        virtual ::rtl::OUString
-            getAttributeValue( const PropertyValues& i_propertyValues ) const = 0;
-
-        /** is a convenience method for XML attributes whose value comprises of only one UNO API property
-        */
-        virtual ::rtl::OUString
-            getAttributeValue( const ::com::sun::star::uno::Any& i_propertyValue ) const = 0;
-
-        /** retrieves the values of the properties controlled by an XML attributed, described by a given attribute value
-        */
-        virtual bool
-            getPropertyValues( const ::rtl::OUString i_attributeValue, PropertyValues& o_propertyValues ) const = 0;
-
-        virtual ~IPropertyHandler() { }
+        static PPropertyHandler getFormPropertyHandler( const PropertyId i_propertyId );
     };
-
-    //==================================================================================================================
-    //= PPropertyHandler
-    //==================================================================================================================
-    typedef ::rtl::Reference< IPropertyHandler >    PPropertyHandler;
-
-    //==================================================================================================================
-    //= PropertyHandlerFactory
-    //==================================================================================================================
-    typedef PPropertyHandler (*PropertyHandlerFactory)( const PropertyId i_propertyId );
 
 //......................................................................................................................
 } // namespace xmloff
 //......................................................................................................................
 
-#endif // XMLOFF_PROPERTY_HANDLER_HXX
+#endif // XMLOFF_FORM_HANDLER_FACTORY_HXX

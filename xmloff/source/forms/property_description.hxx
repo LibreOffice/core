@@ -27,7 +27,7 @@
 #ifndef XMLOFF_PROPERTY_DESCRIPTION_HXX
 #define XMLOFF_PROPERTY_DESCRIPTION_HXX
 
-#include "property_handler.hxx"
+#include "forms/property_handler.hxx"
 #include "property_group.hxx"
 
 #include "xmloff/xmltoken.hxx"

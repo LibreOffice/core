@@ -27,7 +27,7 @@
 #include "precompiled_xmloff.hxx"
 
 #include "property_description.hxx"
-#include "form_handler_factory.hxx"
+#include "forms/form_handler_factory.hxx"
 #include "strings.hxx"
 #include "xmloff/xmltoken.hxx"
 #include "xmloff/xmlnmspe.hxx"
