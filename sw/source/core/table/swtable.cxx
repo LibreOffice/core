@@ -983,7 +983,7 @@ void SwTable::SetTabCols( const SwTabCols &rNew, const SwTabCols &rOld,
                 else if(!bLeftDist && rNew.GetRight() + nShRight < rNew.GetRightMax())
                     aOri.SetHoriOrient( text::HoriOrientation::LEFT );
                 else
-                    aOri.SetHoriOrient( text::HoriOrientation::NONE );
+                    aOri.SetHoriOrient( text::HoriOrientation::LEFT_AND_WIDTH );
             }
             pFmt->SetFmtAttr( aOri );
         }
