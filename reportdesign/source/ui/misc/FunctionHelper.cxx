@@ -93,11 +93,6 @@ const formula::IFunctionDescription* FunctionManager::getFunctionByName(const ::
 // -----------------------------------------------------------------------------
 void FunctionManager::fillLastRecentlyUsedFunctions(::std::vector< const formula::IFunctionDescription*>& /*_rLastRUFunctions*/) const
 {
-    //const sal_uInt32 nCount = getCount();
-    //for(sal_uInt32 i = 0 ; i < nCount ; ++i)
-    //{
-    //    const formula::IFunctionCategory* pCategory = getCategory(
-    //}
 }
 // -----------------------------------------------------------------------------
 ::boost::shared_ptr< FunctionDescription > FunctionManager::get(const uno::Reference< report::meta::XFunctionDescription>& _xFunctionDescription) const
