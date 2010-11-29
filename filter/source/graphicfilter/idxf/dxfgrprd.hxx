@@ -93,7 +93,6 @@ private:
     void   ReadS(char * ptgt);
 
     SvStream & rIS;
-    char sIBuff[1024];
     USHORT nIBuffSize,nIBuffPos;
     BOOL bStatus;
     USHORT nLastG;
