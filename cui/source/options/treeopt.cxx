@@ -1423,7 +1423,7 @@ BOOL EnableSSO( void )
     rtl::OUString theIniFile;
     osl_getExecutableFile( &theIniFile.pData );
     theIniFile = theIniFile.copy( 0, theIniFile.lastIndexOf( '/' ) + 1 ) +
-                 rtl::OUString::createFromAscii( SAL_CONFIGFILE( "configmgr" ) );
+                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SAL_CONFIGFILE( "configmgr" )) );
     ::rtl::Bootstrap theBootstrap( theIniFile );
 
     rtl::OUString theOfflineValue;

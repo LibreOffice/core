@@ -303,8 +303,8 @@ OUString
 generateCustomURL(
     SvxEntries* entries )
 {
-    OUString url = OUString::createFromAscii( ITEM_TOOLBAR_URL );
-    url += OUString::createFromAscii( CUSTOM_TOOLBAR_STR );
+    OUString url = OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_TOOLBAR_URL ));
+    url += OUString(RTL_CONSTASCII_USTRINGPARAM( CUSTOM_TOOLBAR_STR ));
 
     // use a random number to minimize possible clash with existing custom toolbars
     url += OUString::valueOf( sal_Int64( generateRandomValue() ), 16 );
@@ -338,7 +338,7 @@ generateCustomMenuURL(
     SvxEntries* entries,
     sal_Int32 suffix = 1 )
 {
-    OUString url = OUString::createFromAscii( CUSTOM_MENU_STR );
+    OUString url(RTL_CONSTASCII_USTRINGPARAM( CUSTOM_MENU_STR ));
     url += OUString::valueOf( suffix );
 
     // now check is there is an already existing entry with this url
@@ -846,7 +846,7 @@ SvxConfigDialog::SvxConfigDialog(
     {
         OUString text = ((const SfxStringItem*)pItem)->GetValue();
 
-        if (text.indexOf(OUString::createFromAscii(ITEM_TOOLBAR_URL)) == 0)
+        if (text.indexOf(OUString(RTL_CONSTASCII_USTRINGPARAM(ITEM_TOOLBAR_URL))) == 0)
         {
             SetCurPageId( RID_SVXPAGE_TOOLBARS );
         }
@@ -3348,7 +3348,7 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(
 
     // default toolbar to select is standardbar unless a different one
     // has been passed in
-    m_aURLToSelect = OUString::createFromAscii( ITEM_TOOLBAR_URL );
+    m_aURLToSelect = OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_TOOLBAR_URL ));
     m_aURLToSelect += OUString(RTL_CONSTASCII_USTRINGPARAM( "standardbar" ));
 
     const SfxPoolItem* pItem =
@@ -3357,7 +3357,7 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(
     if ( pItem )
     {
         OUString text = ((const SfxStringItem*)pItem)->GetValue();
-        if (text.indexOf(OUString::createFromAscii(ITEM_TOOLBAR_URL)) == 0)
+        if (text.indexOf(OUString(RTL_CONSTASCII_USTRINGPARAM(ITEM_TOOLBAR_URL))) == 0)
         {
             m_aURLToSelect = text.copy( 0 );
         }
@@ -3899,7 +3899,7 @@ void SvxToolbarConfigPage::Init()
         }
 
         // in future select the default toolbar: Standard
-        m_aURLToSelect = OUString::createFromAscii( ITEM_TOOLBAR_URL );
+        m_aURLToSelect = OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_TOOLBAR_URL ));
         m_aURLToSelect += OUString(RTL_CONSTASCII_USTRINGPARAM( "standardbar" ));
     }
 
@@ -4205,7 +4205,7 @@ SvxEntries* ToolbarSaveInData::GetEntries()
                 // insert into hash_map to filter duplicates from the parent
                 aToolbarInfo.insert( ToolbarInfo::value_type( systemname, true ));
 
-                OUString custom = OUString::createFromAscii(CUSTOM_TOOLBAR_STR);
+                OUString custom(RTL_CONSTASCII_USTRINGPARAM(CUSTOM_TOOLBAR_STR));
                 if ( systemname.indexOf( custom ) == 0 )
                 {
                     pEntry->SetUserDefined( TRUE );
@@ -4257,7 +4257,7 @@ SvxEntries* ToolbarSaveInData::GetEntries()
                 }
 
                 // custom toolbars of the parent are not visible in the document layer
-                OUString custom = OUString::createFromAscii(CUSTOM_TOOLBAR_STR);
+                OUString custom(RTL_CONSTASCII_USTRINGPARAM(CUSTOM_TOOLBAR_STR));
                 if ( systemname.indexOf( custom ) == 0 )
                     continue;
 
@@ -4476,7 +4476,7 @@ void ToolbarSaveInData::ApplyToolbar( SvxConfigEntry* pToolbar )
     if ( pToolbar->IsUserDefined() )
     {
         xProps->setPropertyValue(
-            OUString::createFromAscii( ITEM_DESCRIPTOR_UINAME ),
+            OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_UINAME )),
             uno::makeAny( OUString( pToolbar->GetName() ) ) );
     }
 
@@ -4524,7 +4524,7 @@ void ToolbarSaveInData::CreateToolbar( SvxConfigEntry* pToolbar )
         xPropertySet( xSettings, uno::UNO_QUERY );
 
     xPropertySet->setPropertyValue(
-        OUString::createFromAscii( ITEM_DESCRIPTOR_UINAME ),
+        OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_UINAME )),
             uno::makeAny( pToolbar->GetName() ) );
 
     try
