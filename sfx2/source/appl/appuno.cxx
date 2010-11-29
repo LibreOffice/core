@@ -136,7 +136,6 @@ using namespace ::com::sun::star::io;
 #include "SfxDocumentMetaData.hxx"
 
 
-#define FRAMELOADER_SERVICENAME         "com.sun.star.frame.FrameLoader"
 #define PROTOCOLHANDLER_SERVICENAME     "com.sun.star.frame.ProtocolHandler"
 
 static char const sTemplateRegionName[] = "TemplateRegionName";
