@@ -49,6 +49,7 @@ sub new
     my $relworkdir;
     my $self = {};
     my @basedirs;
+    my @repos;
 
     if (!defined ($solarversion)) {
         $solarversion = $ENV{SOLARVERSION};
@@ -74,7 +75,12 @@ sub new
         exit (2);
     }
     my $SourceConfigObj = SourceConfig->new();
-    @basedirs = $SourceConfigObj->get_repositories();
+    @repos = $SourceConfigObj->get_repositories();
+    if ( defined $ENV{UPDMINOREXT} ) {
+        foreach my $onedir ( @repos ) {
+            push( @basedirs, $onedir.$ENV{UPDMINOREXT} );
+        }
+    }
     # basdirs is repositories (dmake) + workdir (gnu make)
     push(@basedirs, $relworkdir);
     if (!scalar @basedirs) {
