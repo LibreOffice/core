@@ -182,6 +182,10 @@ $(eval $(call gb_Library_add_exception_objects,xo,\
     xmloff/source/forms/property_meta_data \
     xmloff/source/forms/strings \
     xmloff/source/forms/valueproperties \
+    xmloff/source/forms/handler/form_handler_factory \
+    xmloff/source/forms/handler/property_handler_base \
+    xmloff/source/forms/handler/vcl_date_handler \
+    xmloff/source/forms/handler/vcl_time_handler \
     xmloff/source/meta/MetaExportComponent \
     xmloff/source/meta/MetaImportComponent \
     xmloff/source/meta/xmlmetae \

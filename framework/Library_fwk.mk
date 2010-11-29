@@ -71,6 +71,7 @@ $(eval $(call gb_Library_add_exception_objects,fwk,\
     framework/source/accelerators/storageholder \
     framework/source/classes/droptargetlistener \
     framework/source/classes/framecontainer \
+    framework/source/classes/fwktabwindow \
     framework/source/classes/menumanager \
     framework/source/classes/taskcreator \
     framework/source/constant/containerquery \

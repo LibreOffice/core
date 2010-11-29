@@ -65,7 +65,6 @@
 #include <uielement/simpletextstatusbarcontroller.hxx>
 #include <uielement/logoimagestatusbarcontroller.hxx>
 #include <uielement/logotextstatusbarcontroller.hxx>
-#include <services/tabwindowservice.hxx>
 #include <uielement/fontmenucontroller.hxx>
 #include <uielement/fontsizemenucontroller.hxx>
 #include <uielement/footermenucontroller.hxx>
@@ -86,7 +85,6 @@ COMPONENTGETFACTORY (   IFFACTORY( ::framework::MediaTypeDetectionHelper        
                         IFFACTORY( ::framework::License                                 )   else
                         IFFACTORY( ::framework::PopupMenuDispatcher                     )   else
                         IFFACTORY( ::framework::DispatchHelper                          )   else
-                        IFFACTORY( ::framework::TabWindowService                        )   else
                         IFFACTORY( ::framework::DispatchRecorder                        )   else
                         IFFACTORY( ::framework::DispatchRecorderSupplier                )   else
                         IFFACTORY( ::framework::SimpleTextStatusbarController           )   else

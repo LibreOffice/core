@@ -57,7 +57,6 @@ $(eval $(call gb_Library_add_linked_libs,fwl,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,fwl,\
-    framework/source/classes/fwktabwindow \
     framework/source/classes/fwlresid \
     framework/source/dispatch/mailtodispatcher \
     framework/source/dispatch/oxt_handler \
@@ -69,7 +68,6 @@ $(eval $(call gb_Library_add_exception_objects,fwl,\
     framework/source/services/dispatchhelper \
     framework/source/services/license \
     framework/source/services/mediatypedetectionhelper \
-    framework/source/services/tabwindowservice \
     framework/source/services/uriabbreviation \
     framework/source/uielement/fontmenucontroller \
     framework/source/uielement/fontsizemenucontroller \

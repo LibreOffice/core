@@ -39,7 +39,7 @@
 #include <services.h>
 
 #include <framework/sfxhelperfunctions.hxx>
-#include <classes/sfxhelperfunctions.hxx>
+#include <framework/sfxhelperfunctions.hxx>
 #include <uielement/menubarwrapper.hxx>
 #include <framework/addonsoptions.hxx>
 #include <uiconfiguration/windowstateconfiguration.hxx>

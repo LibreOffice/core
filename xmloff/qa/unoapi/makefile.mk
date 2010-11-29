@@ -1,7 +1,6 @@
 #*************************************************************************
-#
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -22,34 +21,28 @@
 # version 3 along with OpenOffice.org.  If not, see
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
-#
-#*************************************************************************
+#***********************************************************************/
 
-PRJ=../../..
+.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
+nothing .PHONY:
+.ELSE
 
-PRJNAME=xmloff
-TARGET=form_handlers
+PRJ = ../..
+PRJNAME = xmloff
+TARGET = qa_unoapi
 
-INCEXT=..
+.IF "$(OOO_JUNIT_JAR)" != ""
+PACKAGE = org/openoffice/xmloff/qa/unoapi
+JAVATESTFILES = Test.java
+JAVAFILES = $(JAVATESTFILES)
+JARFILES = OOoRunner.jar ridl.jar test.jar
+EXTRAJARFILES = $(OOO_JUNIT_JAR)
+.END
 
-ENABLE_EXCEPTIONS=TRUE
+.INCLUDE: settings.mk
+.INCLUDE: target.mk
+.INCLUDE: installationtest.mk
 
-# --- Settings -----------------------------------------------------
+ALLTAR : javatest
 
-.INCLUDE :  settings.mk
-.INCLUDE: $(PRJ)/util/makefile.pmk
-
-# --- Files --------------------------------------------------------
-
-SLOFILES =	\
-    $(SLO)/form_handler_factory.obj \
-    $(SLO)/property_handler_base.obj \
-    $(SLO)/vcl_date_handler.obj \
-    $(SLO)/vcl_time_handler.obj
-
-# --- Tagets -------------------------------------------------------
-
-.INCLUDE :  target.mk
-
-test:
-    echo $(INCLUDE)
+.END
