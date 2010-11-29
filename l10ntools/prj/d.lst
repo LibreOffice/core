@@ -47,15 +47,20 @@ mkdir: %_DEST%\bin%_EXT%\help\com\sun\star\help
 ..\scripts\localize %_DEST%\bin%_EXT%\localize
 ..\scripts\fast_merge.pl %_DEST%\bin%_EXT%\fast_merge.pl
 ..\scripts\keyidGen.pl %_DEST%\bin%_EXT%\keyidGen.pl
-..\scripts\tool\const.py %_DEST%\bin%_EXT%\const.py
-..\scripts\tool\l10ntool.py %_DEST%\bin%_EXT%\l10ntool.py
-..\scripts\tool\xtxex.py  %_DEST%\bin%_EXT%\xtxex.py
-..\scripts\tool\sdf.py %_DEST%\bin%_EXT%\sdf.py
-..\scripts\tool\xhtex.py %_DEST%\bin%_EXT%\xhtex.py
-..\scripts\tool\pseudo.py %_DEST%\bin%_EXT%\pseudo.py
 ..\scripts\xtxex %_DEST%\bin%_EXT%\xtxex
 ..\scripts\xhtex %_DEST%\bin%_EXT%\xhtex
-
+..\%__SRC%\bin\const.py %_DEST%\bin%_EXT%\const.py
+..\%__SRC%\bin\l10ntool.py %_DEST%\bin%_EXT%\l10ntool.py
+..\%__SRC%\bin\pseudo.py %_DEST%\bin%_EXT%\pseudo.py
+..\%__SRC%\bin\sdf.py %_DEST%\bin%_EXT%\sdf.py
+..\%__SRC%\bin\const.pyc %_DEST%\bin%_EXT%\const.pyc
+..\%__SRC%\bin\l10ntool.pyc %_DEST%\bin%_EXT%\l10ntool.pyc
+..\%__SRC%\bin\pseudo.pyc %_DEST%\bin%_EXT%\pseudo.pyc
+..\%__SRC%\bin\sdf.pyc %_DEST%\bin%_EXT%\sdf.pyc
+..\%__SRC%\bin\xhtex.py %_DEST%\bin%_EXT%\xhtex.py
+..\%__SRC%\bin\xtxex.py %_DEST%\bin%_EXT%\xtxex.py
+..\%__SRC%\bin\xhtex.pyc %_DEST%\bin%_EXT%\xhtex.pyc
+..\%__SRC%\bin\xtxex.pyc %_DEST%\bin%_EXT%\xtxex.pyc
 ..\inc\export.hxx %_DEST%\inc%_EXT%\l10ntools\export.hxx
 ..\inc\l10ntools\directory.hxx %_DEST%\inc%_EXT%\l10ntools\directory.hxx
 ..\inc\l10ntools\file.hxx %_DEST%\inc%_EXT%\l10ntools\file.hxx

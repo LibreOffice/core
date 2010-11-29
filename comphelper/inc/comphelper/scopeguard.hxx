@@ -33,6 +33,7 @@
 #endif
 #include "boost/function.hpp"
 #include "boost/noncopyable.hpp"
+#include "boost/bind.hpp"
 
 namespace comphelper {
 
@@ -64,6 +65,21 @@ public:
 private:
     ::boost::function0<void> m_func; // preferring portable syntax
     exc_handling const m_excHandling;
+};
+
+class COMPHELPER_DLLPUBLIC FlagGuard : ScopeGuard
+{
+public:
+    explicit FlagGuard( bool& i_flagRef, exc_handling i_excHandling = IGNORE_EXCEPTIONS )
+        :ScopeGuard( ::boost::bind( ResetFlag, ::boost::ref( i_flagRef ) ), i_excHandling )
+    {
+    }
+
+private:
+    static void ResetFlag( bool& i_flagRef )
+    {
+        i_flagRef = false;
+    }
 };
 
 } // namespace comphelper

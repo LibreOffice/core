@@ -17,6 +17,7 @@ mkdir: %_DEST%\inc%_EXT%\vcl
 ..\inc\vcl\alpha.hxx %_DEST%\inc%_EXT%\vcl\alpha.hxx
 ..\inc\vcl\animate.hxx %_DEST%\inc%_EXT%\vcl\animate.hxx
 ..\inc\vcl\apptypes.hxx %_DEST%\inc%_EXT%\vcl\apptypes.hxx
+..\inc\vcl\arrange.hxx %_DEST%\inc%_EXT%\vcl\arrange.hxx
 ..\inc\vcl\bitmap.hxx %_DEST%\inc%_EXT%\vcl\bitmap.hxx
 ..\inc\vcl\bitmapex.hxx %_DEST%\inc%_EXT%\vcl\bitmapex.hxx
 ..\inc\vcl\bmpacc.hxx %_DEST%\inc%_EXT%\vcl\bmpacc.hxx
@@ -77,6 +78,7 @@ mkdir: %_DEST%\inc%_EXT%\vcl
 ..\inc\vcl\metric.hxx %_DEST%\inc%_EXT%\vcl\metric.hxx
 ..\inc\vcl\mnemonic.hxx %_DEST%\inc%_EXT%\vcl\mnemonic.hxx
 ..\inc\vcl\mnemonicengine.hxx %_DEST%\inc%_EXT%\vcl\mnemonicengine.hxx
+..\inc\vcl\quickselectionengine.hxx %_DEST%\inc%_EXT%\vcl\quickselectionengine.hxx
 ..\inc\vcl\morebtn.hxx %_DEST%\inc%_EXT%\vcl\morebtn.hxx
 ..\inc\vcl\msgbox.hxx %_DEST%\inc%_EXT%\vcl\msgbox.hxx
 ..\inc\vcl\octree.hxx %_DEST%\inc%_EXT%\vcl\octree.hxx
@@ -143,7 +145,6 @@ mkdir: %_DEST%\inc%_EXT%\vcl
 ..\inc\vcl\pdfextoutdevdata.hxx %_DEST%\inc%_EXT%\vcl\pdfextoutdevdata.hxx
 ..\inc\vcl\pngread.hxx %_DEST%\inc%_EXT%\vcl\pngread.hxx
 ..\inc\vcl\pngwrite.hxx %_DEST%\inc%_EXT%\vcl\pngwrite.hxx
-..\inc\vcl\smartid.hxx %_DEST%\inc%_EXT%\vcl\smartid.hxx
 ..\inc\vcl\configsettings.hxx %_DEST%\inc%_EXT%\vcl\configsettings.hxx
 ..\inc\vcl\ImageListProvider.hxx %_DEST%\inc%_EXT%\vcl\ImageListProvider.hxx
 ..\inc\vcl\fontmanager.hxx %_DEST%\inc%_EXT%\vcl\fontmanager.hxx
@@ -153,3 +154,4 @@ mkdir: %_DEST%\inc%_EXT%\vcl
 ..\inc\vcl\helper.hxx %_DEST%\inc%_EXT%\vcl\helper.hxx
 ..\inc\vcl\strhelper.hxx %_DEST%\inc%_EXT%\vcl\strhelper.hxx
 ..\inc\vcl\lazydelete.hxx %_DEST%\inc%_EXT%\vcl\lazydelete.hxx
+..\%__SRC%\misc\vcl.component %_DEST%\xml%_EXT%\vcl.component

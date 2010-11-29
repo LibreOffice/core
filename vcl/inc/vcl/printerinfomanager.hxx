@@ -157,6 +157,8 @@ public:
 
     // there can only be one
     static PrinterInfoManager& get();
+    // only called by SalData destructor, frees the global instance
+    static void release();
 
     // get PrinterInfoManager type
     Type getType() const { return m_eType; }
@@ -217,8 +219,10 @@ public:
     // this may either be a regular file or the result of popen()
     virtual FILE* startSpool( const rtl::OUString& rPrinterName, bool bQuickCommand );
     // close the FILE* returned by startSpool and does the actual spooling
+    // set bBanner to "false" will attempt to suppress banner printing
+    // set bBanner to "true" will rely on the system default
     // returns a numerical job id
-    virtual int endSpool( const rtl::OUString& rPrinterName, const rtl::OUString& rJobTitle, FILE* pFile, const JobData& rDocumentJobData );
+    virtual int endSpool( const rtl::OUString& rPrinterName, const rtl::OUString& rJobTitle, FILE* pFile, const JobData& rDocumentJobData, bool bBanner );
 
     // for spadmin: whether adding or removing a printer is possible
     virtual bool addOrRemovePossible() const;

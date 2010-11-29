@@ -67,7 +67,7 @@
 #include <comphelper/asyncnotification.hxx>
 #include <toolkit/helper/solarrelease.hxx>
 #include "stylesettings.hxx"
-
+#include <tools/urlobj.hxx>
 #include <toolkit/helper/unopropertyarrayhelper.hxx>
 
 #include <boost/bind.hpp>
@@ -92,6 +92,7 @@ using ::com::sun::star::style::VerticalAlignment_MAKE_FIXED_SIZE;
 namespace WritingMode2 = ::com::sun::star::text::WritingMode2;
 namespace MouseWheelBehavior = ::com::sun::star::awt::MouseWheelBehavior;
 
+using ::toolkit::ReleaseSolarMutex;
 
 //====================================================================
 //= misc helpers
@@ -339,7 +340,7 @@ IMPL_LINK( VCLXWindowImpl, OnProcessCallbacks, void*, EMPTYARG )
     }
 
     {
-        ::toolkit::ReleaseSolarMutex aReleaseSolar;
+        ReleaseSolarMutex aReleaseSolar( ReleaseSolarMutex::RescheduleDuringAcquire );
         for (   CallbackArray::const_iterator loop = aCallbacksCopy.begin();
                 loop != aCallbacksCopy.end();
                 ++loop
@@ -1599,17 +1600,11 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
             ::rtl::OUString aURL;
             if ( Value >>= aURL )
             {
-                String aHelpURL(  aURL );
-                String aPattern( RTL_CONSTASCII_USTRINGPARAM( "HID:" ) );
-                if ( aHelpURL.CompareIgnoreCaseToAscii( aPattern, aPattern.Len() ) == COMPARE_EQUAL )
-                {
-                    String aID = aHelpURL.Copy( aPattern.Len() );
-                    pWindow->SetHelpId( aID.ToInt32() );
-                }
+                INetURLObject aHelpURL( aURL );
+                if ( aHelpURL.GetProtocol() == INET_PROT_HID )
+                    pWindow->SetHelpId( rtl::OUStringToOString( aHelpURL.GetURLPath(), RTL_TEXTENCODING_UTF8 ) );
                 else
-                {
-                    pWindow->SetSmartHelpId( SmartId( aHelpURL ) );
-                }
+                    pWindow->SetHelpId( rtl::OUStringToOString( aURL, RTL_TEXTENCODING_UTF8 ) );
             }
         }
         break;
@@ -2080,19 +2075,8 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
             break;
             case BASEPROPERTY_HELPURL:
             {
-                SmartId aSmartId = GetWindow()->GetSmartHelpId();
-                if( aSmartId.HasString() )
-                {
-                    String aStrHelpId = aSmartId.GetStr();
-                    aProp <<= ::rtl::OUString( aStrHelpId );
-                }
-                else
-                {
-                    ::rtl::OUStringBuffer aURL;
-                    aURL.appendAscii( "HID:" );
-                    aURL.append( (sal_Int32) GetWindow()->GetHelpId() );
-                    aProp <<= aURL.makeStringAndClear();
-                }
+                rtl::OUString aHelpId( rtl::OStringToOUString( GetWindow()->GetHelpId(), RTL_TEXTENCODING_UTF8 ) );
+                aProp <<= ::rtl::OUString( aHelpId );
             }
             break;
             case BASEPROPERTY_FONTDESCRIPTOR:

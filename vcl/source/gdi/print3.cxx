@@ -175,6 +175,7 @@ public:
     // if set, pages are centered and trimmed onto the fixed page
     Size                                                        maFixedPageSize;
     sal_Int32                                                   mnDefaultPaperBin;
+    sal_Int32                                                   mnFixedPaperBin;
 
     ImplPrinterControllerData() :
         mbFirstPage( sal_True ),
@@ -182,7 +183,8 @@ public:
         mbReversePageOrder( sal_False ),
         meJobState( view::PrintableState_JOB_STARTED ),
         mpProgress( NULL ),
-        mnDefaultPaperBin( -1 )
+        mnDefaultPaperBin( -1 ),
+        mnFixedPaperBin( -1 )
     {}
     ~ImplPrinterControllerData() { delete mpProgress; }
 
@@ -556,7 +558,7 @@ bool Printer::StartJob( const rtl::OUString& i_rJobName, boost::shared_ptr<vcl::
     mnCurPage               = 1;
     mnCurPrintPage          = 1;
     mbPrinting              = TRUE;
-    if( ImplGetSVData()->maGDIData.mbPrinterPullModel )
+    if( GetCapabilities( PRINTER_CAPABILITIES_USEPULLMODEL ) )
     {
         mbJobActive             = TRUE;
         // sallayer does all necessary page printing
@@ -728,6 +730,7 @@ void PrinterController::setPrinter( const boost::shared_ptr<Printer>& i_rPrinter
     setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Name" ) ),
               makeAny( rtl::OUString( i_rPrinter->GetName() ) ) );
     mpImplData->mnDefaultPaperBin = mpImplData->mpPrinter->GetPaperBin();
+    mpImplData->mnFixedPaperBin = -1;
 }
 
 bool PrinterController::setupPrinter( Window* i_pParent )
@@ -735,15 +738,20 @@ bool PrinterController::setupPrinter( Window* i_pParent )
     bool bRet = false;
     if( mpImplData->mpPrinter.get() )
     {
+        // get old data
         Size aPaperSize( mpImplData->mpPrinter->PixelToLogic(
             mpImplData->mpPrinter->GetPaperSizePixel(), MapMode( MAP_100TH_MM ) ) );
+        USHORT nPaperBin = mpImplData->mpPrinter->GetPaperBin();
+
+        // call driver setup
         bRet = mpImplData->mpPrinter->Setup( i_pParent );
         if( bRet )
         {
-            // was the papersize overridden ? if so we need to take action
+            // was papersize or bin  overridden ? if so we need to take action
             Size aNewPaperSize( mpImplData->mpPrinter->PixelToLogic(
                 mpImplData->mpPrinter->GetPaperSizePixel(), MapMode( MAP_100TH_MM ) ) );
-            if( aNewPaperSize != aPaperSize )
+            USHORT nNewPaperBin = mpImplData->mpPrinter->GetPaperBin();
+            if( aNewPaperSize != aPaperSize || nNewPaperBin != nPaperBin )
             {
                 mpImplData->maFixedPageSize = aNewPaperSize;
                 mpImplData->maPageCache.invalidate();
@@ -752,6 +760,7 @@ bool PrinterController::setupPrinter( Window* i_pParent )
                 aOverrideSize.Height = aNewPaperSize.Height();
                 setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OverridePageSize" ) ),
                           makeAny( aOverrideSize ) );
+                mpImplData->mnFixedPaperBin = nNewPaperBin;
             }
         }
     }
@@ -1022,6 +1031,14 @@ PrinterController::PageSize PrinterController::getFilteredPageFile( int i_nFilte
                     nCellX = (nSubPage / rMPS.nRows);
                     nCellY = (nSubPage % rMPS.nRows);
                     break;
+                case PrinterController::RLTB:
+                    nCellX = rMPS.nColumns - 1 - (nSubPage % rMPS.nColumns);
+                    nCellY = (nSubPage / rMPS.nColumns);
+                    break;
+                case PrinterController::TBRL:
+                    nCellX = rMPS.nColumns - 1 - (nSubPage / rMPS.nRows);
+                    nCellY = (nSubPage % rMPS.nRows);
+                    break;
                 }
                 // scale the metafile down to a sub page size
                 double fScaleX = double(aSubPageSize.Width())/double(aPageSize.aSize.Width());
@@ -1149,8 +1166,13 @@ void PrinterController::printFilteredPage( int i_nPage )
     mpImplData->mpPrinter->SetMapMode( MAP_100TH_MM );
     // aPageSize was filtered through mpImplData->getRealPaperSize already by getFilteredPageFile()
     mpImplData->mpPrinter->SetPaperSizeUser( aPageSize.aSize, ! mpImplData->isFixedPageSize() );
+    if( mpImplData->mnFixedPaperBin != -1 &&
+        mpImplData->mpPrinter->GetPaperBin() != mpImplData->mnFixedPaperBin )
+    {
+        mpImplData->mpPrinter->SetPaperBin( mpImplData->mnFixedPaperBin );
+    }
 
-    // if full paper are is meant, move the output to accomodate for pageoffset
+    // if full paper is meant to be used, move the output to accomodate for pageoffset
     if( aPageSize.bFullPaper )
     {
         Point aPageOffset( mpImplData->mpPrinter->GetPageOffset() );
