@@ -8056,6 +8056,14 @@ AC_SUBST(BUILD_TYPE)
 # make sure config.guess is +x; we execute config.guess, so it has to be so;
 chmod +x ./config.guess
 
+dnl Setting up the post_download check script
+dnl Using autoconf here, so that the migration from the previous state
+dnl (checks for the additional Windows downloads were directly in
+dnl configure.in) is as easy as possible
+echo "setting up the post_download check script"
+autoconf post_download.in > post_download
+chmod +x post_download
+
 # Generate a configuration timestamp we can use for deps
 if test -f set_soenv; then
    mv -f set_soenv set_soenv.last
@@ -8096,8 +8104,3 @@ else
    fi
    echo
 fi
-
-dnl Setting up the post_download check script
-echo "setting up the post_download check script"
-autoconf post_download.in > post_download
-chmod +x post_download
