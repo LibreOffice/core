@@ -97,6 +97,7 @@ RootData::~RootData()
 XclImpOutlineBuffer::XclImpOutlineBuffer( SCSIZE nNewSize ) :
     maLevels(0, nNewSize, 0),
     mpOutlineArray(NULL),
+    mnEndPos(nNewSize),
     mnMaxLevel(0),
     mbButtonAfter(true)
 {
@@ -125,12 +126,18 @@ void XclImpOutlineBuffer::MakeScOutline()
     if (!mpOutlineArray)
         return;
 
-    ::std::vector<sal_uInt8> aOutlineStack;
+    ::std::vector<SCSIZE> aOutlineStack;
     aOutlineStack.reserve(mnMaxLevel);
-    OutlineLevels::const_iterator itr = maLevels.begin(), itr_end = maLevels.end();
-    for (; itr != itr_end; ++itr)
+    OutlineLevels::const_iterator itr = maLevels.begin(), itrEnd = maLevels.end();
+    for (; itr != itrEnd; ++itr)
     {
         SCSIZE nPos = itr->first;
+        if (nPos >= mnEndPos)
+        {
+            // Don't go beyond the max allowed position.
+            DBG_ASSERT(aOutlineStack.empty(), "XclImpOutlineBuffer::MakeScOutline: outline stack not empty but expected to be.");
+            break;
+        }
         sal_uInt8 nLevel = itr->second;
         sal_uInt8 nCurLevel = static_cast<sal_uInt8>(aOutlineStack.size());
         if (nLevel > nCurLevel)
