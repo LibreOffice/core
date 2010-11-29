@@ -67,7 +67,7 @@ SHL1STDLIBS= \
         $(SALHELPERLIB)     \
         $(CPPUHELPERLIB)
 
-SHL1VERSIONMAP=$(SOLARSRC)/solenv/src/component.map
+SHL1VERSIONMAP=$(SOLARSRC)/solenv/src/reg-component.map
 SHL1LIBS=	$(LIB1TARGET)
 SHL1DEF=	$(MISC)/$(SHL1TARGET).def
 SHL1RPATH=  OXT

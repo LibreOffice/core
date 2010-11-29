@@ -127,3 +127,11 @@ DEF1EXPORTFILE=	exports.dxp
 .INCLUDE : $(PRJ)$/target.pmk
 
 
+
+ALLTAR : $(MISC)/dbase.component
+
+$(MISC)/dbase.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        dbase.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt dbase.component

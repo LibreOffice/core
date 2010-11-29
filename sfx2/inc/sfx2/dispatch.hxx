@@ -122,7 +122,7 @@ friend class SfxViewFrame;
     DECL_DLLPRIVATE_LINK( PostMsgHandler, SfxRequest * );
 
     SAL_DLLPRIVATE int Call_Impl( SfxShell& rShell, const SfxSlot &rSlot, SfxRequest &rReq, BOOL bRecord );
-    SAL_DLLPRIVATE sal_uInt32 _Update_Impl( BOOL,BOOL,BOOL,SfxWorkWindow*);
+    SAL_DLLPRIVATE void _Update_Impl( BOOL,BOOL,BOOL,SfxWorkWindow*);
     SAL_DLLPRIVATE void CollectTools_Impl(SfxWorkWindow*);
 
 protected:
@@ -237,7 +237,7 @@ public:
 //#if 0 // _SOLAR__PRIVATE
     SAL_DLLPRIVATE BOOL HasSlot_Impl( USHORT );
     SAL_DLLPRIVATE void SetMenu_Impl();
-    SAL_DLLPRIVATE long Update_Impl( BOOL bForce = FALSE ); // ObjectBars etc.
+    SAL_DLLPRIVATE void Update_Impl( BOOL bForce = FALSE ); // ObjectBars etc.
     SAL_DLLPRIVATE BOOL IsUpdated_Impl() const;
     SAL_DLLPRIVATE void DebugOutput_Impl() const;
     SAL_DLLPRIVATE void ResetObjectBars_Impl();

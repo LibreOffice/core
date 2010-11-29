@@ -363,26 +363,28 @@ bool ExtBoxWithBtns_Impl::HandleTabKey( bool bReverse )
 // -----------------------------------------------------------------------
 MENU_COMMAND ExtBoxWithBtns_Impl::ShowPopupMenu( const Point & rPos, const long nPos )
 {
-    if ( nPos >= (long) getItemCount() )
-        return CMD_NONE;
-
-    PopupMenu aPopup;
-
-    aPopup.InsertItem( CMD_UPDATE, DialogHelper::getResourceString( RID_CTX_ITEM_CHECK_UPDATE ) );
-
-    if ( ! GetEntryData( nPos )->m_bLocked )
+    if ( ( nPos >= 0 ) && ( nPos < (long) getItemCount() ) )
     {
-        if ( GetEntryData( nPos )->m_bUser )
+        if ( ! GetEntryData( nPos )->m_bLocked )
         {
-            if ( GetEntryData( nPos )->m_eState == REGISTERED )
-                aPopup.InsertItem( CMD_DISABLE, DialogHelper::getResourceString( RID_CTX_ITEM_DISABLE ) );
-            else if ( GetEntryData( nPos )->m_eState != NOT_AVAILABLE )
-                aPopup.InsertItem( CMD_ENABLE, DialogHelper::getResourceString( RID_CTX_ITEM_ENABLE ) );
-        }
-        aPopup.InsertItem( CMD_REMOVE, DialogHelper::getResourceString( RID_CTX_ITEM_REMOVE ) );
-    }
+            PopupMenu aPopup;
 
-    return (MENU_COMMAND) aPopup.Execute( this, rPos );
+            aPopup.InsertItem( CMD_UPDATE, DialogHelper::getResourceString( RID_CTX_ITEM_CHECK_UPDATE ) );
+
+            if ( GetEntryData( nPos )->m_bUser )
+            {
+                if ( GetEntryData( nPos )->m_eState == REGISTERED )
+                    aPopup.InsertItem( CMD_DISABLE, DialogHelper::getResourceString( RID_CTX_ITEM_DISABLE ) );
+                else if ( GetEntryData( nPos )->m_eState != NOT_AVAILABLE )
+                    aPopup.InsertItem( CMD_ENABLE, DialogHelper::getResourceString( RID_CTX_ITEM_ENABLE ) );
+            }
+
+            aPopup.InsertItem( CMD_REMOVE, DialogHelper::getResourceString( RID_CTX_ITEM_REMOVE ) );
+
+            return (MENU_COMMAND) aPopup.Execute( this, rPos );
+        }
+    }
+    return CMD_NONE;
 }
 
 //------------------------------------------------------------------------------

@@ -67,17 +67,17 @@ case $sd_platform in
     ;;
 
   Darwin)
-    DYLD_LIBRARY_PATH=${sd_prog}${DYLD_LIBRARY_PATH+:${DYLD_LIBRARY_PATH}}
+    DYLD_LIBRARY_PATH=${sd_prog}${DYLD_LIBRARY_PATH:+:${DYLD_LIBRARY_PATH}}
     export DYLD_LIBRARY_PATH
     ;;
 
   HP-UX)
-    SHLIB_PATH=${sd_prog}:/usr/openwin/lib${SHLIB_PATH+:${SHLIB_PATH}}
+    SHLIB_PATH=${sd_prog}:/usr/openwin/lib${SHLIB_PATH:+:${SHLIB_PATH}}
     export SHLIB_PATH
     ;;
 
   *)
-    LD_LIBRARY_PATH=${sd_prog}${LD_LIBRARY_PATH+:${LD_LIBRARY_PATH}}
+    LD_LIBRARY_PATH=${sd_prog}${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
     export LD_LIBRARY_PATH
     ;;
 esac

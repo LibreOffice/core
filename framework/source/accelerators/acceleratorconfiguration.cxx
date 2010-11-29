@@ -1248,11 +1248,12 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::changesOccurred(const css::util:
     if (! xHAccess.is ())
         return;
 
-    const sal_Int32 c = aEvent.Changes.getLength();
+    css::util::ChangesEvent aReceivedEvents( aEvent );
+    const sal_Int32 c = aReceivedEvents.Changes.getLength();
           sal_Int32 i = 0;
     for (i=0; i<c; ++i)
     {
-        const css::util::ElementChange& aChange  =   aEvent.Changes[i];
+        const css::util::ElementChange& aChange  =   aReceivedEvents.Changes[i];
 
         // Only path of form "PrimaryKeys/Modules/Module['<module_name>']/Key['<command_url>']/Command[<locale>]" will
         // be interesting for use. Sometimes short path values are given also by the broadcaster ... but they must be ignored :-)

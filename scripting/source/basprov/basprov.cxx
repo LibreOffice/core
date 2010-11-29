@@ -412,7 +412,7 @@ namespace basprov
                         if ( pMethods )
                         {
                             SbMethod* pMethod = static_cast< SbMethod* >( pMethods->Find( aMethod, SbxCLASS_METHOD ) );
-                            if ( pMethod )
+                            if ( pMethod && !pMethod->IsHidden() )
                             {
                                 if ( m_pDocBasicManager == pBasicMgr )
                                     xScript = new BasicScriptImpl( aDescription, pMethod, *m_pDocBasicManager, m_xInvocationContext );
@@ -587,13 +587,6 @@ extern "C"
         (void)ppEnv;
 
         *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-    }
-
-    SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(
-        lang::XMultiServiceFactory * pServiceManager, registry::XRegistryKey * pRegistryKey )
-    {
-        return ::cppu::component_writeInfoHelper(
-            pServiceManager, pRegistryKey, ::basprov::s_component_entries );
     }
 
     SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(

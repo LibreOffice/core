@@ -798,13 +798,22 @@ void Access::initBroadcasterAndChanges(
                                 css::uno::Any(), css::uno::Any()));
                             //TODO: non-void ReplacedElement
                     }
-                    //TODO: if (allChanges != 0) {
-                    //  allChanges->push_back(
-                    //      css::util::ElementChange(
-                    //          css::uno::makeAny(...),
-                    //          css::uno::Any(), css::uno::Any()));
-                    //      //TODO: non-void ReplacedElement
-                    //}
+                    if (allChanges != 0) {
+                        rtl::OUStringBuffer path(
+                            getRelativePathRepresentation());
+                        if (path.getLength() != 0) {
+                            path.append(sal_Unicode('/'));
+                        }
+                        path.append(
+                            Data::createSegment(
+                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*")),
+                                i->first));
+                        allChanges->push_back(
+                            css::util::ElementChange(
+                                css::uno::makeAny(path.makeStringAndClear()),
+                                css::uno::Any(), css::uno::Any()));
+                            //TODO: non-void ReplacedElement
+                    }
                 }
                 // else: spurious Modifications::Node not representing a change
                 break;
@@ -900,11 +909,8 @@ rtl::OUString Access::getImplementationName() throw (css::uno::RuntimeException)
     OSL_ASSERT(thisIs(IS_ANY));
     osl::MutexGuard g(lock);
     checkLocalizedPropertyAccess();
-    throw css::uno::RuntimeException(
-        rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM(
-                "configmgr Access has no service implementation name")),
-        static_cast< cppu::OWeakObject * >(this));
+    return rtl::OUString(
+        RTL_CONSTASCII_USTRINGPARAM("org.openoffice-configmgr::Access"));
 }
 
 sal_Bool Access::supportsService(rtl::OUString const & ServiceName)
@@ -2083,7 +2089,8 @@ css::beans::Property Access::asProperty() {
     default:
         type = cppu::UnoType< css::uno::XInterface >::get(); //TODO: correct?
         nillable = false;
-        removable = getParentNode()->kind() == Node::KIND_SET;
+        rtl::Reference< Node > parent(getParentNode());
+        removable = parent.is() && parent->kind() == Node::KIND_SET;
         break;
     }
     return css::beans::Property(

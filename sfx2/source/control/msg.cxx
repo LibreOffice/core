@@ -29,9 +29,6 @@
 #include "precompiled_sfx2.hxx"
 #include <svl/itempool.hxx>
 #include <svl/eitem.hxx>
-#ifndef GCC
-#endif
-
 #include <sfx2/msg.hxx>
 
 //====================================================================
@@ -63,4 +60,16 @@ USHORT SfxSlot::GetWhich( const SfxItemPool &rPool ) const
     return nMasterSlotId;
 }
 
+::rtl::OString SfxSlot::GetCommand() const
+{
+    rtl::OString sRet(".uno:");
+    sRet += pUnoName;
+    return sRet;
+}
+
+::rtl::OUString SfxSlot::GetCommandString() const
+{
+    rtl::OString aCmd(GetCommand());
+    return rtl::OUString( aCmd, aCmd.getLength(), RTL_TEXTENCODING_UTF8 );
+}
 

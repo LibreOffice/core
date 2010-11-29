@@ -338,15 +338,6 @@ SbiExprNode* SbiExpression::Term( const KeywordSymbolInfo* pKeywordSymbolInfo )
                 // damit erwischen wir n% = 5 : print n
                 eType = eDefType;
         }
-        // Funktion?
-        if( pDef->GetProcDef() )
-        {
-            SbiProcDef* pProc = pDef->GetProcDef();
-            if( pPar && pProc->GetLib().Len() )     // DECLARE benutzt?
-                pPar->SetProc( pProc );
-            // Wenn keine Pars, vorerst nichts machen
-            // Pruefung auf Typ-Anzahl waere denkbar
-        }
         // Typcheck bei Variablen:
         // ist explizit im Scanner etwas anderes angegeben?
         // Bei Methoden ist dies OK!
@@ -868,7 +859,6 @@ SbiExprList::SbiExprList( SbiParser* p )
 {
     pParser = p;
     pFirst = NULL;
-    pProc = NULL;
     nExpr  =
     nDim   = 0;
     bError =

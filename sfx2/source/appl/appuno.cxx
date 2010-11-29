@@ -134,7 +134,6 @@ using namespace ::com::sun::star::io;
 #include "brokenpackageint.hxx"
 #include "eventsupplier.hxx"
 #include "xpackcreator.hxx"
-// #include "applet.hxx"
 #include "plugin.hxx"
 #include "iframe.hxx"
 #include <ownsubfilterservice.hxx>
@@ -166,7 +165,7 @@ static char const sDontEdit[] = "DontEdit";
 static char const sSilent[] = "Silent";
 static char const sJumpMark[] = "JumpMark";
 static char const sFileName[] = "FileName";
-static char const sSalvageURL[] = "SalvagedFile";
+static char const sSalvagedFile[] = "SalvagedFile";
 static char const sStatusInd[] = "StatusIndicator";
 static char const sModel[] = "Model";
 static char const sFrame[] = "Frame";
@@ -192,6 +191,8 @@ static char const sUseSystemDialog[] = "UseSystemDialog";
 static char const sStandardDir[] = "StandardDir";
 static char const sBlackList[] = "BlackList";
 static char const sModifyPasswordInfo[] = "ModifyPasswordInfo";
+static char const sSuggestedSaveAsDir[] = "SuggestedSaveAsDir";
+static char const sSuggestedSaveAsName[] = "SuggestedSaveAsName";
 
 void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rArgs, SfxAllItemSet& rSet, const SfxSlot* pSlot )
 {
@@ -686,7 +687,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 {
                     ::rtl::OUString sVal;
                     sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
-                    DBG_ASSERT( bOK, "invalid type or value for StanadardDir" );
+                    DBG_ASSERT( bOK, "invalid type or value for StandardDir" );
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_STANDARD_DIR, sVal ) );
                 }
@@ -710,11 +711,11 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_FILE_NAME, sVal ) );
                 }
-                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sSalvageURL)) )
+                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sSalvagedFile)) )
                 {
                     ::rtl::OUString sVal;
                     sal_Bool bOK = (rProp.Value >>= sVal);
-                    DBG_ASSERT( bOK, "invalid type or value for SalvageURL" );
+                    DBG_ASSERT( bOK, "invalid type or value for SalvagedFile" );
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_DOC_SALVAGE, sVal ) );
                 }
@@ -722,7 +723,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 {
                     ::rtl::OUString sVal;
                     sal_Bool bOK = (rProp.Value >>= sVal);
-                    DBG_ASSERT( bOK, "invalid type or value for SalvageURL" );
+                    DBG_ASSERT( bOK, "invalid type or value for FolderName" );
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_PATH, sVal ) );
                 }
@@ -850,6 +851,22 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sModifyPasswordInfo)) )
                 {
                     rSet.Put( SfxUnoAnyItem( SID_MODIFYPASSWORDINFO, rProp.Value ) );
+                }
+                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sSuggestedSaveAsDir)) )
+                {
+                    ::rtl::OUString sVal;
+                    sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
+                    DBG_ASSERT( bOK, "invalid type or value for SuggestedSaveAsDir" );
+                    if (bOK)
+                        rSet.Put( SfxStringItem( SID_SUGGESTEDSAVEASDIR, sVal ) );
+                }
+                else if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sSuggestedSaveAsName)) )
+                {
+                    ::rtl::OUString sVal;
+                    sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
+                    DBG_ASSERT( bOK, "invalid type or value for SuggestedSaveAsName" );
+                    if (bOK)
+                        rSet.Put( SfxStringItem( SID_SUGGESTEDSAVEASNAME, sVal ) );
                 }
 #ifdef DBG_UTIL
                 else
@@ -1065,6 +1082,10 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 nAdditional++;
             if ( rSet.GetItemState( SID_MODIFYPASSWORDINFO ) == SFX_ITEM_SET )
                 nAdditional++;
+           if ( rSet.GetItemState( SID_SUGGESTEDSAVEASDIR ) == SFX_ITEM_SET )
+                nAdditional++;
+           if ( rSet.GetItemState( SID_SUGGESTEDSAVEASNAME ) == SFX_ITEM_SET )
+                nAdditional++;
 
             // consider additional arguments
             nProps += nAdditional;
@@ -1205,6 +1226,10 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                     if ( nId == SID_SAVETO )
                         continue;
                      if ( nId == SID_MODIFYPASSWORDINFO )
+                        continue;
+                     if ( nId == SID_SUGGESTEDSAVEASDIR )
+                        continue;
+                     if ( nId == SID_SUGGESTEDSAVEASNAME )
                         continue;
                }
 
@@ -1490,7 +1515,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             }
             if ( rSet.GetItemState( SID_DOC_SALVAGE, sal_False, &pItem ) == SFX_ITEM_SET )
             {
-                pValue[nActProp].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sSalvageURL));
+                pValue[nActProp].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sSalvagedFile));
                 pValue[nActProp++].Value <<= (  ::rtl::OUString(((SfxStringItem*)pItem)->GetValue()) );
             }
             if ( rSet.GetItemState( SID_PATH, sal_False, &pItem ) == SFX_ITEM_SET )
@@ -1568,6 +1593,16 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             {
                 pValue[nActProp].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sModifyPasswordInfo));
                 pValue[nActProp++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
+            }
+            if ( rSet.GetItemState( SID_SUGGESTEDSAVEASDIR, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                pValue[nActProp].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sSuggestedSaveAsDir));
+                pValue[nActProp++].Value <<= ( ::rtl::OUString(((SfxStringItem*)pItem)->GetValue()) );
+            }
+            if ( rSet.GetItemState( SID_SUGGESTEDSAVEASNAME, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                pValue[nActProp].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sSuggestedSaveAsName));
+                pValue[nActProp++].Value <<= ( ::rtl::OUString(((SfxStringItem*)pItem)->GetValue()) );
             }
         }
     }
@@ -1874,8 +1909,8 @@ ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL, com::sun::star::
                 }
 
                 if ( pSh && pSh->GetModel().is() )
-                       // remove flag for modal mode
-                       pSh->SetMacroMode_Impl( FALSE );
+                        // remove flag for modal mode
+                        pSh->SetMacroMode_Impl( FALSE );
             }
             else
                 nErr = ERRCODE_BASIC_PROC_UNDEFINED;
@@ -2124,166 +2159,6 @@ SFX2_DLLPUBLIC void SAL_CALL component_getImplementationEnvironment(
     *ppEnvironmentTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME ;
 }
 
-SFX2_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo(
-    void*                  ,
-    void*   pRegistryKey    )
-{
-    ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >        xKey( reinterpret_cast< ::com::sun::star::registry::XRegistryKey* >( pRegistryKey ) )   ;
-
-    // register actual implementations and their services
-    ::rtl::OUString aImpl;
-    ::rtl::OUString aTempStr;
-    ::rtl::OUString aKeyStr;
-    Reference< XRegistryKey > xNewKey;
-    Reference< XRegistryKey > xLoaderKey;
-
-    // PluginObject
-    aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
-    aImpl += ::sfx2::PluginObject::impl_getStaticImplementationName();
-
-    aTempStr = aImpl;
-    aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
-    xNewKey = xKey->createKey( aTempStr );
-    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.frame.SpecialEmbeddedObject") );
-
-    #if 0
-    // AppletObject
-    aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
-    aImpl += ::sfx2::AppletObject::impl_getStaticImplementationName();
-
-    aTempStr = aImpl;
-    aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
-    xNewKey = xKey->createKey( aTempStr );
-    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.frame.SpecialEmbeddedObject") );
-    #endif
-
-    // IFrameObject
-    aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
-    aImpl += ::sfx2::IFrameObject::impl_getStaticImplementationName();
-
-    aTempStr = aImpl;
-    aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
-    xNewKey = xKey->createKey( aTempStr );
-    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.frame.SpecialEmbeddedObject") );
-
-    // global app event broadcaster
-    aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
-    aImpl += SfxGlobalEvents_Impl::impl_getStaticImplementationName();
-
-    aTempStr = aImpl;
-    aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
-    xNewKey = xKey->createKey( aTempStr );
-    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.frame.GlobalEventBroadcaster") );
-
-    // global app dispatcher
-    aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
-    aImpl += SfxAppDispatchProvider::impl_getStaticImplementationName();
-
-    aTempStr = aImpl;
-    aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
-    xNewKey = xKey->createKey( aTempStr );
-    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.frame.ProtocolHandler") );
-
-    // standalone document info
-    aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
-    aImpl += SfxStandaloneDocumentInfoObject::impl_getStaticImplementationName();
-
-    aTempStr = aImpl;
-    aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
-    xNewKey = xKey->createKey( aTempStr );
-    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.document.StandaloneDocumentInfo") );
-
-    // frame loader
-    aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
-    aImpl += SfxFrameLoader_Impl::impl_getStaticImplementationName();
-
-    aTempStr = aImpl;
-    aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
-    xNewKey = xKey->createKey( aTempStr );
-    Sequence < ::rtl::OUString > aServices = SfxFrameLoader_Impl::impl_getStaticSupportedServiceNames();
-    sal_Int32 nCount = aServices.getLength();
-    for ( sal_Int16 i=0; i<nCount; i++ )
-        xNewKey->createKey( aServices.getConstArray()[i] );
-
-    // macro loader
-    aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
-    aImpl += SfxMacroLoader::impl_getStaticImplementationName();
-
-    aTempStr = aImpl;
-    aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
-    xNewKey = xKey->createKey( aTempStr );
-    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.frame.ProtocolHandler") );
-
-    // - sfx document templates
-    aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
-    aImpl += SfxDocTplService::impl_getStaticImplementationName();
-
-    aTempStr = aImpl;
-    aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
-    xNewKey = xKey->createKey( aTempStr );
-    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.frame.DocumentTemplates") );
-
-    // quickstart wrapper service
-    aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
-    aImpl += ShutdownIcon::impl_getStaticImplementationName();
-
-    aTempStr = aImpl;
-    aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
-    xNewKey = xKey->createKey( aTempStr );
-    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.office.Quickstart") );
-
-    // application script library container service
-    aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
-    aImpl += SfxApplicationScriptLibraryContainer::impl_getStaticImplementationName();
-
-    aTempStr = aImpl;
-    aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
-    xNewKey = xKey->createKey( aTempStr );
-    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.script.ApplicationScriptLibraryContainer") );
-
-    // application dialog library container service
-    aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
-    aImpl += SfxApplicationDialogLibraryContainer::impl_getStaticImplementationName();
-
-    aTempStr = aImpl;
-    aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
-    xNewKey = xKey->createKey( aTempStr );
-    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.script.ApplicationDialogLibraryContainer") );
-
-    // converter of fs folders to packages
-    aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
-    aImpl += OPackageStructureCreator::impl_getStaticImplementationName();
-
-    aTempStr = aImpl;
-    aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
-    xNewKey = xKey->createKey( aTempStr );
-    Sequence< ::rtl::OUString > rServices = OPackageStructureCreator::impl_getStaticSupportedServiceNames();
-    for( sal_Int32 ind = 0; ind < rServices.getLength(); ind++ )
-        xNewKey->createKey( rServices.getConstArray()[ind] );
-
-    // subfilter to parse a stream in OASIS format generated by the filter
-    aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
-    aImpl += ::sfx2::OwnSubFilterService::impl_getStaticImplementationName();
-
-    aTempStr = aImpl;
-    aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
-    xNewKey = xKey->createKey( aTempStr );
-    rServices = ::sfx2::OwnSubFilterService::impl_getStaticSupportedServiceNames();
-    for( sal_Int32 ind = 0; ind < rServices.getLength(); ind++ )
-        xNewKey->createKey( rServices.getConstArray()[ind] );
-
-    // document meta data
-    aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
-    aImpl += comp_SfxDocumentMetaData::_getImplementationName();
-
-    aTempStr = aImpl;
-    aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
-    xNewKey = xKey->createKey( aTempStr );
-    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.document.DocumentProperties") );
-
-    return sal_True;
-}
-
 SFX2_DLLPUBLIC void* SAL_CALL component_getFactory(
     const sal_Char* pImplementationName ,
     void*           pServiceManager     ,
@@ -2377,18 +2252,18 @@ RequestFilterOptions::RequestFilterOptions( ::com::sun::star::uno::Reference< ::
     ::rtl::OUString temp;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > temp2;
     ::com::sun::star::document::FilterOptionsRequest aOptionsRequest( temp,
-                                                                         temp2,
+                                                                          temp2,
                                                                       rModel,
                                                                       rProperties );
 
-       m_aRequest <<= aOptionsRequest;
+        m_aRequest <<= aOptionsRequest;
 
-       m_pAbort  = new ContinuationAbort;
-       m_pOptions = new FilterOptionsContinuation;
+        m_pAbort  = new ContinuationAbort;
+        m_pOptions = new FilterOptionsContinuation;
 
-       m_lContinuations.realloc( 2 );
-       m_lContinuations[0] = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >( m_pAbort  );
-       m_lContinuations[1] = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >( m_pOptions );
+        m_lContinuations.realloc( 2 );
+        m_lContinuations[0] = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >( m_pAbort  );
+        m_lContinuations[1] = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >( m_pOptions );
 }
 
 ::com::sun::star::uno::Any SAL_CALL RequestFilterOptions::getRequest()
@@ -2411,17 +2286,17 @@ RequestPackageReparation::RequestPackageReparation( ::rtl::OUString aName )
     ::rtl::OUString temp;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > temp2;
     ::com::sun::star::document::BrokenPackageRequest aBrokenPackageRequest( temp,
-                                                                                 temp2,
-                                                                              aName );
+                                                                                temp2,
+                                                                            aName );
 
-       m_aRequest <<= aBrokenPackageRequest;
+        m_aRequest <<= aBrokenPackageRequest;
 
-       m_pApprove = new ContinuationApprove;
-       m_pDisapprove = new ContinuationDisapprove;
+        m_pApprove = new ContinuationApprove;
+        m_pDisapprove = new ContinuationDisapprove;
 
-       m_lContinuations.realloc( 2 );
-       m_lContinuations[0] = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >( m_pApprove );
-       m_lContinuations[1] = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >( m_pDisapprove );
+        m_lContinuations.realloc( 2 );
+        m_lContinuations[0] = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >( m_pApprove );
+        m_lContinuations[1] = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >( m_pDisapprove );
 }
 
 /*uno::*/Any SAL_CALL RequestPackageReparation::queryInterface( const /*uno::*/Type& rType ) throw (RuntimeException)
@@ -2464,15 +2339,15 @@ NotifyBrokenPackage::NotifyBrokenPackage( ::rtl::OUString aName )
     ::rtl::OUString temp;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > temp2;
     ::com::sun::star::document::BrokenPackageRequest aBrokenPackageRequest( temp,
-                                                                                 temp2,
-                                                                              aName );
+                                                                                temp2,
+                                                                            aName );
 
-       m_aRequest <<= aBrokenPackageRequest;
+        m_aRequest <<= aBrokenPackageRequest;
 
-       m_pAbort  = new ContinuationAbort;
+        m_pAbort  = new ContinuationAbort;
 
-       m_lContinuations.realloc( 1 );
-       m_lContinuations[0] = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >( m_pAbort  );
+        m_lContinuations.realloc( 1 );
+        m_lContinuations[0] = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >( m_pAbort  );
 }
 
 /*uno::*/Any SAL_CALL NotifyBrokenPackage::queryInterface( const /*uno::*/Type& rType ) throw (RuntimeException)
