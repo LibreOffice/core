@@ -91,6 +91,7 @@
 #include <editeng/frmdiritem.hxx>
 #include <editeng/blnkitem.hxx>
 #include <editeng/charhiddenitem.hxx>
+#include <editeng/opaqitem.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdobj.hxx>
 
@@ -1742,16 +1743,49 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode& rGrfNode, const Size
             FSEND );
     bool isAnchor = rGrfNode.GetFlyFmt()->GetAnchor().GetAnchorId() != FLY_AS_CHAR;
     if( isAnchor )
+    {
         m_pSerializer->startElementNS( XML_wp, XML_anchor,
                 XML_distT, "0", XML_distB, "0", XML_distL, "0", XML_distR, "0", XML_simplePos, "0",
+                XML_relativeHeight, "0", // TODO
+                XML_behindDoc, rGrfNode.GetFlyFmt()->GetOpaque().GetValue() ? "0" : "1",
+                XML_locked, "0", XML_layoutInCell, "1", XML_allowOverlap, "1", // TODO
                 FSEND );
+        m_pSerializer->singleElementNS( XML_wp, XML_simplePos, XML_x, "0", XML_y, "0", FSEND );
+        const char* relativeFromH;
+        const char* relativeFromV;
+        switch( rGrfNode.GetFlyFmt()->GetAnchor().GetAnchorId())
+        {
+            case FLY_AT_PAGE:
+                relativeFromV = relativeFromH = "page";
+                break;
+            case FLY_AT_PARA:
+                relativeFromH = "column";
+                relativeFromV = "paragraph";
+                break;
+            case FLY_AT_CHAR:
+            default:
+                relativeFromH = "character";
+                relativeFromV = "line";
+                break;
+        };
+        m_pSerializer->startElementNS( XML_wp, XML_positionH, XML_relativeFrom, relativeFromH, FSEND );
+        m_pSerializer->startElementNS( XML_wp, XML_align, FSEND );
+        m_pSerializer->write( "left" ); // TODO
+        m_pSerializer->endElementNS( XML_wp, XML_align );
+        m_pSerializer->endElementNS( XML_wp, XML_positionH );
+        m_pSerializer->startElementNS( XML_wp, XML_positionV, XML_relativeFrom, relativeFromV, FSEND );
+        m_pSerializer->startElementNS( XML_wp, XML_align, FSEND );
+        m_pSerializer->write( "top" ); // TODO
+        m_pSerializer->endElementNS( XML_wp, XML_align );
+        m_pSerializer->endElementNS( XML_wp, XML_positionV );
+    }
     else
+    {
         m_pSerializer->startElementNS( XML_wp, XML_inline,
                 XML_distT, "0", XML_distB, "0", XML_distL, "0", XML_distR, "0",
                 FSEND );
-
-    if( isAnchor )
-        m_pSerializer->singleElementNS( XML_wp, XML_simplePos, XML_x, "0", XML_y, "0", FSEND );
+    }
+    // now the common parts
     // extent of the image
     OString aWidth( OString::valueOf( TwipsToEMU( rSize.Width() ) ) );
     OString aHeight( OString::valueOf( TwipsToEMU( rSize.Height() ) ) );
@@ -1764,6 +1798,27 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode& rGrfNode, const Size
             XML_l, "0", XML_t, "0", XML_r, "0", XML_b, "0",
             FSEND );
 
+    if( isAnchor )
+    {
+        switch( rGrfNode.GetFlyFmt()->GetSurround().GetValue())
+        {
+            case SURROUND_NONE:
+                m_pSerializer->singleElementNS( XML_wp, XML_wrapTopAndBottom, FSEND );
+                break;
+            case SURROUND_THROUGHT:
+                m_pSerializer->singleElementNS( XML_wp, XML_wrapNone, FSEND );
+                break;
+            case SURROUND_PARALLEL:
+                m_pSerializer->singleElementNS( XML_wp, XML_wrapSquare,
+                    XML_wrapText, "bothSides", FSEND );
+                break;
+            case SURROUND_IDEAL:
+            default:
+                m_pSerializer->singleElementNS( XML_wp, XML_wrapSquare,
+                    XML_wrapText, "largest", FSEND );
+                break;
+        }
+    }
     // picture description
     // TODO the right image description
     m_pSerializer->startElementNS( XML_wp, XML_docPr,
