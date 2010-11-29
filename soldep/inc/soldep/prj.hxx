@@ -55,11 +55,6 @@
 class SByteStringList;
 class GenericInformationList;
 
-/*
-// Pfade auf Konfigurationsdateien des Build-Servers
-
-#define REQUEST_DIR         \\src\data4\source\b_server\server\newjob
-*/
 /*********************************************************************
 *
 *   Die Klasse CommandData haelte alle Informationen, die fuer die
@@ -84,55 +79,54 @@ class CommandData
     ByteString      sClientRestriction;
     SByteStringList *pDepList;
     SByteStringList *pCommandList;
-    USHORT      nOSType;
-    USHORT      nCommand;
-
-    ULONG       nDepth;             // Tiefe der Abhaenigkeit
+    USHORT          nOSType;
+    USHORT          nCommand;
+    ULONG           nDepth;             // Tiefe der Abhaenigkeit
 
 public:
-                CommandData();
-                ~CommandData();
+                    CommandData();
+                    ~CommandData();
     ByteString      GetProjectName(){return aPrj;}
-    void        SetProjectName( ByteString aName ){aPrj = aName;}
+    void            SetProjectName( ByteString aName ){aPrj = aName;}
     ByteString      GetLogFile(){return aLogFileName;}
-    void        SetLogFile( ByteString aName ){aLogFileName = aName;}
+    void            SetLogFile( ByteString aName ){aLogFileName = aName;}
     ByteString      GetInpath(){return aInpath;}
-    void        SetInpath( ByteString aName ){aInpath = aName;}
+    void            SetInpath( ByteString aName ){aInpath = aName;}
     ByteString      GetUpd(){return aUpd;}
-    void        SetUpd( ByteString aName ){aUpd = aName;}
+    void            SetUpd( ByteString aName ){aUpd = aName;}
     ByteString      GetUpdMinor(){return aUpdMinor;}
-    void        SetUpdMinor( ByteString aName ){aUpdMinor = aName;}
+    void            SetUpdMinor( ByteString aName ){aUpdMinor = aName;}
     ByteString      GetProduct(){return aProduct;}
-    void        SetProduct( ByteString aName ){aProduct = aName;}
+    void            SetProduct( ByteString aName ){aProduct = aName;}
     ByteString      GetCommand(){return aCommand;}
-    void        SetCommand ( ByteString aName ){aCommand = aName;}
+    void            SetCommand ( ByteString aName ){aCommand = aName;}
     ByteString      GetCommandPara(){return aCommandPara;}
-    void        SetCommandPara ( ByteString aName ){aCommandPara = aName;}
+    void            SetCommandPara ( ByteString aName ){aCommandPara = aName;}
     ByteString      GetComment(){return aComment;}
-    void        SetComment ( ByteString aCommentString ){aComment = aCommentString;}
+    void            SetComment ( ByteString aCommentString ){aComment = aCommentString;}
     ByteString      GetPath(){return aPath;}
-    void        SetPath( ByteString aName ){aPath = aName;}
+    void            SetPath( ByteString aName ){aPath = aName;}
     ByteString      GetPrePath(){return aPrePath;}
-    void        SetPrePath( ByteString aName ){aPrePath = aName;}
-    USHORT      GetOSType(){return nOSType;}
+    void            SetPrePath( ByteString aName ){aPrePath = aName;}
+    USHORT          GetOSType(){return nOSType;}
     ByteString      GetOSTypeString();
-    void        SetOSType( USHORT nType ){nOSType = nType;}
-    USHORT      GetCommandType(){return nCommand;}
+    void            SetOSType( USHORT nType ){nOSType = nType;}
+    USHORT          GetCommandType(){return nCommand;}
     ByteString      GetCommandTypeString();
-    void        SetCommandType( USHORT nCommandType ){nCommand = nCommandType;}
-    SByteStringList* GetDependencies(){return pDepList;}
-    void        SetDependencies( SByteStringList *pList ){pDepList = pList;}
+    void            SetCommandType( USHORT nCommandType ){nCommand = nCommandType;}
+    SByteStringList*    GetDependencies(){return pDepList;}
+    void            SetDependencies( SByteStringList *pList ){pDepList = pList;}
     ByteString      GetClientRestriction() { return sClientRestriction; }
-    void        SetClientRestriction( ByteString sRestriction ) { sClientRestriction = sRestriction; }
+    void            SetClientRestriction( ByteString sRestriction ) { sClientRestriction = sRestriction; }
 
-    void        AddDepth(){nDepth++;}
-    ULONG       GetDepth(){return nDepth;}
+    void            AddDepth(){nDepth++;}
+    ULONG           GetDepth(){return nDepth;}
 
-    void AddCommand(ByteString* pCommand);
-    SByteStringList* GetCommandList() {return pCommandList;}
+    void            AddCommand(ByteString* pCommand);
+    SByteStringList*    GetCommandList() {return pCommandList;}
 
-    CommandData& operator<<  ( SvStream& rStream );
-    CommandData& operator>>  ( SvStream& rStream );
+    CommandData&    operator<<  ( SvStream& rStream );
+    CommandData&    operator>>  ( SvStream& rStream );
 };
 
 /*********************************************************************
@@ -147,16 +141,16 @@ class SimpleConfig
     long            nLine;
     String          aFileName;
     SvFileStream    aFileStream;
-    ByteString          aTmpStr;
-    ByteString          aStringBuffer;
+    ByteString      aTmpStr;
+    ByteString      aStringBuffer;
+    ByteString      GetNextLine();
 
-    ByteString          GetNextLine();
 public:
                     SimpleConfig(String aSimpleConfigFileName);
                     SimpleConfig(DirEntry& rDirEntry);
                     ~SimpleConfig();
-    ByteString          GetNext();
-    ByteString          GetCleanedNextLine( BOOL bReadComments = FALSE );
+    ByteString      GetNext();
+    ByteString      GetCleanedNextLine( BOOL bReadComments = FALSE );
 };
 
 #define ENV_GUI     0x00000000
@@ -287,16 +281,15 @@ private:
     PrjList*        pTempCommandDataList;
     BOOL            bTempCommandDataListPermanent;
     BOOL            bError;
+
 public:
                     Prj();
                     Prj( ByteString aName );
                     ~Prj();
     void            SetPreFix( ByteString aPre ){aProjectPrefix = aPre;}
-    ByteString          GetPreFix(){return aProjectPrefix;}
-    ByteString          GetProjectName()
-                            {return aProjectName;}
-    void            SetProjectName(ByteString aName)
-                            {aProjectName = aName;}
+    ByteString      GetPreFix(){return aProjectPrefix;}
+    ByteString      GetProjectName() { return aProjectName; }
+    void            SetProjectName(ByteString aName) { aProjectName = aName; }
     BOOL            InsertDirectory( ByteString aDirName , USHORT aWhat,
                                     USHORT aWhatOS, ByteString aLogFileName,
                                     const ByteString &rClientRestriction );
@@ -371,7 +364,6 @@ public:
 DECLARE_LIST( StarFileList, StarFile * )
 
 #define STAR_MODE_SINGLE_PARSE          0x0000
-//#define STAR_MODE_RECURSIVE_PARSE     0x0001      it dosen't work anymore
 #define STAR_MODE_MULTIPLE_PARSE        0x0002
 
 class Star : public StarList
@@ -416,7 +408,6 @@ public:
     ByteString      GetName(){ return aStarName; }; // dummy function of VG
     void            Read( String &rFileName );
     void            Read( SolarFileList *pSOlarFiles );
-//  void            ReadXmlBuildList(const ByteString& sBuildLstPath);
 
 
     BOOL            HasProject( ByteString aProjectName );
@@ -472,7 +463,7 @@ public:
     Prj*            RemoveProject ( ByteString aProjectName );
 
     USHORT          Read( String aFileName, BOOL bReadComments = FALSE, USHORT nMode = STAR_MODE_SINGLE_PARSE  );
-       USHORT           Read( SolarFileList *pSolarFiles, BOOL bReadComments = FALSE );
+    USHORT          Read( SolarFileList *pSolarFiles, BOOL bReadComments = FALSE );
     USHORT          Write( String aFileName );
     USHORT          WriteMultiple( String rSourceRoot );
 
