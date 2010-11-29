@@ -747,11 +747,11 @@ SfxHelpWindow_Impl* impl_createHelp(Reference< XFrame >& rHelpTask   ,
 
 static bool impl_showOnlineHelp( const String& rURL )
 {
-    String aInternal( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.help:/" ) );
-    if ( rURL.Len() < aInternal.Len() || rURL.Copy( 0, aInternal.Len() ) != aInternal )
+    String aInternal( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.help://" ) );
+    if ( rURL.Len() <= aInternal.Len() || rURL.Copy( 0, aInternal.Len() ) != aInternal )
         return false;
 
-    rtl::OUString aHelpLink( RTL_CONSTASCII_USTRINGPARAM( "http://help.libreoffice.org" ) );
+    rtl::OUString aHelpLink( RTL_CONSTASCII_USTRINGPARAM( "http://help.libreoffice.org/" ) );
     aHelpLink += rURL.Copy( aInternal.Len() );
     try
     {
