@@ -267,7 +267,7 @@ void WW8AttributeOutput::NumberingLevel( BYTE /*nLevel*/,
             m_rWW8Export.InsUInt16( nFontID );
         }
 
-        m_rWW8Export.OutputItemSet( *pOutSet, false, true, i18n::ScriptType::LATIN );
+        m_rWW8Export.OutputItemSet( *pOutSet, false, true, i18n::ScriptType::LATIN, m_rWW8Export.mbExportModeRTF );
 
         m_rWW8Export.pO = pOldpO;
     }

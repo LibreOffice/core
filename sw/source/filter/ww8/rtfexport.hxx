@@ -82,7 +82,7 @@ public:
     virtual RtfSdrExport& SdrExporter() const;
 
     /// Hack, unfortunately necessary at some places for now.
-    virtual bool HackIsWW8OrHigher() const { return true; }
+    virtual bool HackIsWW8OrHigher() const { return false; }
 
     /// Guess the script (asian/western).
     virtual bool CollapseScriptsforWordOk( USHORT nScript, USHORT nWhich );
@@ -172,9 +172,9 @@ public:
     SvStream& OutLong( long nVal );
     void OutUnicode(const sal_Char *pToken, const String &rContent);
     void OutDateTime(const sal_Char* pStr, const util::DateTime& rDT );
-    rtl::OString OutChar(sal_Unicode c, int *pUCMode, rtl_TextEncoding eDestEnc);
-    rtl::OString OutString(const String &rStr, rtl_TextEncoding eDestEnc);
-    rtl::OString OutHex(ULONG nHex, BYTE nLen);
+    static rtl::OString OutChar(sal_Unicode c, int *pUCMode, rtl_TextEncoding eDestEnc);
+    static rtl::OString OutString(const String &rStr, rtl_TextEncoding eDestEnc);
+    static rtl::OString OutHex(ULONG nHex, BYTE nLen);
     void OutPageDescription( const SwPageDesc& rPgDsc, BOOL bWriteReset, BOOL bCheckForFirstPage );
 
     USHORT GetColor( const Color& rColor ) const;

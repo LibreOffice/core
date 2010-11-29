@@ -2374,7 +2374,7 @@ void DocxAttributeOutput::NumberingLevel( BYTE nLevel,
                     FSNS( XML_w, XML_hint ), "default",
                     FSEND );
         }
-        m_rExport.OutputItemSet( *pOutSet, false, true, i18n::ScriptType::LATIN );
+        m_rExport.OutputItemSet( *pOutSet, false, true, i18n::ScriptType::LATIN, m_rExport.mbExportModeRTF );
 
         m_pSerializer->endElementNS( XML_w, XML_rPr );
     }

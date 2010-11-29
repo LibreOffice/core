@@ -589,7 +589,7 @@ namespace sw
             @author
             <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
-        void GetPoolItems(const SfxItemSet &rSet, PoolItems &rItems);
+        void GetPoolItems(const SfxItemSet &rSet, PoolItems &rItems, bool bExportParentItemSet );
 
         const SfxPoolItem *SearchPoolItems(const PoolItems &rItems,
             sal_uInt16 eType);
