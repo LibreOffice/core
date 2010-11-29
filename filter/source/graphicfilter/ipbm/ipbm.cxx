@@ -39,7 +39,7 @@ class PBMReader {
 
 private:
 
-    SvStream*           mpPBM;          // Die einzulesende PBM-Datei
+    SvStream&           mrPBM;          // Die einzulesende PBM-Datei
 
     BOOL                mbStatus;
     BOOL                mbRemark;       // FALSE wenn sich stream in einem Kommentar befindet
@@ -55,18 +55,19 @@ private:
     BOOL                ImplReadHeader();
 
 public:
-                        PBMReader();
+                        PBMReader(SvStream & rPBM);
                         ~PBMReader();
-    BOOL                ReadPBM( SvStream & rPBM, Graphic & rGraphic );
+    BOOL                ReadPBM(Graphic & rGraphic );
 };
 
 //=================== Methoden von PBMReader ==============================
 
-PBMReader::PBMReader() :
-    mbStatus    ( TRUE ),
-    mbRemark    ( FALSE ),
-    mbRaw       ( TRUE ),
-    mpAcc       ( NULL )
+PBMReader::PBMReader(SvStream & rPBM)
+    : mrPBM( rPBM )
+    , mbStatus( TRUE )
+    , mbRemark( FALSE )
+    , mbRaw( TRUE )
+    , mpAcc( NULL )
 {
 }
 
@@ -81,7 +82,7 @@ BOOL PBMReader::ImplCallback( USHORT /*nPercent*/ )
     {
         if ( ( (*pCallback)( pCallerData, nPercent ) ) == TRUE )
         {
-            mpPBM->SetError( SVSTREAM_FILEFORMAT_ERROR );
+            mrPBM.SetError( SVSTREAM_FILEFORMAT_ERROR );
             return TRUE;
         }
     }
@@ -89,15 +90,14 @@ BOOL PBMReader::ImplCallback( USHORT /*nPercent*/ )
     return FALSE;
 }
 
-BOOL PBMReader::ReadPBM( SvStream & rPBM, Graphic & rGraphic )
+BOOL PBMReader::ReadPBM(Graphic & rGraphic )
 {
     USHORT i;
 
-    if ( rPBM.GetError() )
+    if ( mrPBM.GetError() )
         return FALSE;
 
-    mpPBM = &rPBM;
-    mpPBM->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+    mrPBM.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 
     // Kopf einlesen:
 
@@ -167,7 +167,7 @@ BOOL PBMReader::ImplReadHeader()
     BYTE    nMax, nCount = 0;
     BOOL    bFinished = FALSE;
 
-    *mpPBM >> nID[ 0 ] >> nID[ 1 ];
+    mrPBM >> nID[ 0 ] >> nID[ 1 ];
     if ( nID[ 0 ] != 'P' )
         return FALSE;
     mnMaxVal = mnWidth = mnHeight = 0;
@@ -197,10 +197,10 @@ BOOL PBMReader::ImplReadHeader()
     }
     while ( bFinished == FALSE )
     {
-        if ( mpPBM->GetError() )
+        if ( mrPBM.GetError() )
             return FALSE;
 
-        *mpPBM >> nDat;
+        mrPBM >> nDat;
 
         if ( nDat == '#' )
         {
@@ -262,10 +262,10 @@ BOOL PBMReader::ImplReadBody()
     ULONG   nGrey, nRGB[3];
     ULONG   nWidth = 0;
     ULONG   nHeight = 0;
-    signed char nShift = 0;
 
     if ( mbRaw )
     {
+        signed char nShift = 0;
         switch ( mnMode )
         {
 
@@ -273,12 +273,12 @@ BOOL PBMReader::ImplReadBody()
             case 0 :
                 while ( nHeight != mnHeight )
                 {
-                    if ( mpPBM->IsEof() || mpPBM->GetError() )
+                    if ( mrPBM.IsEof() || mrPBM.GetError() )
                         return FALSE;
 
                     if ( --nShift < 0 )
                     {
-                        *mpPBM >> nDat;
+                        mrPBM >> nDat;
                         nShift = 7;
                     }
                     mpAcc->SetPixel( nHeight, nWidth, nDat >> nShift );
@@ -296,10 +296,10 @@ BOOL PBMReader::ImplReadBody()
             case 1 :
                 while ( nHeight != mnHeight )
                 {
-                    if ( mpPBM->IsEof() || mpPBM->GetError() )
+                    if ( mrPBM.IsEof() || mrPBM.GetError() )
                         return FALSE;
 
-                    *mpPBM >> nDat;
+                    mrPBM >> nDat;
                     mpAcc->SetPixel( nHeight, nWidth++, nDat);
 
                     if ( nWidth == mnWidth )
@@ -315,12 +315,12 @@ BOOL PBMReader::ImplReadBody()
             case 2 :
                 while ( nHeight != mnHeight )
                 {
-                    if ( mpPBM->IsEof() || mpPBM->GetError() )
+                    if ( mrPBM.IsEof() || mrPBM.GetError() )
                         return FALSE;
 
                     BYTE    nR, nG, nB;
                     ULONG   nRed, nGreen, nBlue;
-                    *mpPBM >> nR >> nG >> nB;
+                    mrPBM >> nR >> nG >> nB;
                     nRed = 255 * nR / mnMaxVal;
                     nGreen = 255 * nG / mnMaxVal;
                     nBlue = 255 * nB / mnMaxVal;
@@ -341,10 +341,10 @@ BOOL PBMReader::ImplReadBody()
         case 0 :
             while ( bFinished == FALSE )
             {
-                if ( mpPBM->IsEof() || mpPBM->GetError() )
+                if ( mrPBM.IsEof() || mrPBM.GetError() )
                     return FALSE;
 
-                *mpPBM >> nDat;
+                mrPBM >> nDat;
 
                 if ( nDat == '#' )
                 {
@@ -402,10 +402,10 @@ BOOL PBMReader::ImplReadBody()
                     continue;
                 }
 
-                if ( mpPBM->IsEof() || mpPBM->GetError() )
+                if ( mrPBM.IsEof() || mrPBM.GetError() )
                     return FALSE;
 
-                *mpPBM >> nDat;
+                mrPBM >> nDat;
 
                 if ( nDat == '#' )
                 {
@@ -478,10 +478,10 @@ BOOL PBMReader::ImplReadBody()
                     continue;
                 }
 
-                if ( mpPBM->IsEof() || mpPBM->GetError() )
+                if ( mrPBM.IsEof() || mrPBM.GetError() )
                     return FALSE;
 
-                *mpPBM >> nDat;
+                mrPBM >> nDat;
 
                 if ( nDat == '#' )
                 {
@@ -532,9 +532,9 @@ BOOL PBMReader::ImplReadBody()
 
 extern "C" BOOL __LOADONCALLAPI GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, BOOL )
 {
-    PBMReader aPBMReader;
+    PBMReader aPBMReader(rStream);
 
-    return aPBMReader.ReadPBM( rStream, rGraphic );
+    return aPBMReader.ReadPBM(rGraphic );
 }
 
 //================== ein bischen Muell fuer Windows ==========================
