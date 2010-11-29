@@ -10,8 +10,7 @@ echo "********************************************************************"
 dnl ===================================================================
 dnl The following is a list of supported systems.
 dnl ===================================================================
-#defaults unless the os test overrides this:
-
+AC_CANONICAL_SYSTEM
 case "$build_os" in
     solaris*)
         _os=SunOS

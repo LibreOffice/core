@@ -159,10 +159,6 @@ done
 rm $TARFILE_LOCATION/tmp/*-*
 cd $start_dir
 
-if [ -e post_download ] ; then
-    ./post_download
-fi
-
 if [ ! -z "$failed" ]; then
     echo
     echo ERROR: failed on:
@@ -172,3 +168,6 @@ if [ ! -z "$failed" ]; then
     exit 1
 fi
 
+[ -x "post_download" ] || { echo "'post_download' script not found, run ./autogen.sh." ; exit 1 ; }
+
+./post_download || exit 1
