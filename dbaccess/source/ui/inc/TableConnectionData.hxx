@@ -37,7 +37,6 @@
 
 namespace dbaui
 {
-#define MAX_CONN_COUNT 2
     //==================================================================
     // ConnData     ---------->*    ConnLineData
     //    ^1                            ^1
