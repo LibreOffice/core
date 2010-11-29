@@ -80,5 +80,8 @@ $(MISC)$/$(TARGET)_resort : manifest.xml $(JARTARGETN) $(MISC)$/$(ZIP1TARGET).cr
     $(COPY)  description.xml $(MISC)$/$(TARGET)$/description.xml	
     $(TOUCH) $@
 
+.IF "$(ZIP1TARGETN)"!=""
 $(ZIP1TARGETN) : $(MISC)$/$(TARGET)_resort $(MISC)$/$(ZIP1TARGET).createdir
+
+.ENDIF          # "$(ZIP1TARGETN)"!=""
 
