@@ -1424,7 +1424,7 @@ namespace pcr
             aDescriptor.HasSecondaryButton = sal_True;
 
         bool bIsDataProperty = ( nPropertyUIFlags & PROP_FLAG_DATA_PROPERTY ) != 0;
-        aDescriptor.Category = ::rtl::OUString::createFromAscii( bIsDataProperty ? "Data" : "General" );
+        aDescriptor.Category = bIsDataProperty ? ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Data")) : ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("General"));
         return aDescriptor;
     }
 
