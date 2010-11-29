@@ -9,14 +9,19 @@ if test "z$1" = "z--clean"; then
     exit 1;
 fi
 
-requote_args ()
+function requote
 {
-    sed -r -e 's/.*configure //' -e 's/(["'"'"'])/\\\1/g' -e 's/=(([^"'"'"'-]|-[^-]| )*)( |$)/="\1" /g'
+        local q=\'
+        set -- "${@//\'/$q\'$q}"        # quote inner instances of '
+        set -- "${@/#/$q}"              # add ' to start of each param
+        set -- "${@/%/$q}"              # add ' to end of each param
+        echo "$*"
 }
 
+
 old_args=""
-if test $# -eq 0 && test -f config.log; then
-    old_args=`grep '\$ ./configure' config.log | requote_args`
+if test $# -eq 0 && test -f autogen.lastrun; then
+    old_args=$(cat autogen.lastrun)
     echo "re-using arguments from last configure: $old_args";
 fi
 
@@ -37,6 +42,7 @@ if test "x$NOCONFIGURE" = "x"; then
     if test -n "$old_args" ; then
         eval `echo ./configure $old_args`
     else
+        echo "$(requote "$@")" > autogen.lastrun
         ./configure "$@"
     fi
 else
