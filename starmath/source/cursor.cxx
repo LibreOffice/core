@@ -29,6 +29,7 @@
 #include "visitors.hxx"
 #include "document.hxx"
 #include "view.hxx"
+#include "accessibility.hxx"
 
 void SmCursor::Move(OutputDevice* pDev, SmMovementDirection direction, bool bMoveAnchor){
     SmCaretPosGraphEntry* NewPos = NULL;

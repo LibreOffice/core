@@ -112,6 +112,8 @@ $(MISC)/$(TARGET)/services.rdb .ERRREMOVE : $(MISC)/$(TARGET)/udkapi.rdb
     $(MKDIRHIER) $(@:d)
     $(REGCOMP) -register -br $(MISC)/$(TARGET)/udkapi.rdb -r $@ -wop \
         -c $(DLLPRE)fwk$(DLLPOSTFIX)$(DLLPOST) \
+        -c $(DLLPRE)tk$(DLLPOSTFIX)$(DLLPOST) \
+        -c $(DLLPRE)sfx$(DLLPOSTFIX)$(DLLPOST) \
         -c i18npool.uno$(DLLPOST)
 
 #Tweak things so that we use the .res files in the solver

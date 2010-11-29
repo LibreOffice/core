@@ -64,6 +64,7 @@
 #include "view.hxx"
 #include "document.hxx"
 #include "config.hxx"
+#include "accessibility.hxx"
 
 #define SCROLL_LINE         24
 

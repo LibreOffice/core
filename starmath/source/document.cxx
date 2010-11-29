@@ -99,6 +99,7 @@
 #include <svx/svxids.hrc>
 #include "cursor.hxx"
 #include "visitors.hxx"
+#include "accessibility.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;

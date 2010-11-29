@@ -7,13 +7,17 @@
 
 #include <cppuhelper/bootstrap.hxx>
 #include <comphelper/processfactory.hxx>
+#include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/frame/XDesktop.hpp>
 
 #include <vcl/svapp.hxx>
 #include <smdll.hxx>
 #include <document.hxx>
+#include <view.hxx>
 
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
+#include <sfx2/dispatch.hxx>
 
 #include <svl/stritem.hxx>
 
@@ -45,21 +49,23 @@ public:
     void createDocument();
     void tmEditUndoRedo(SmDocShellRef &rDocShRef);
     void tmEditFailure(SmDocShellRef &rDocShRef);
+    void tmEditMarker(SfxViewFrame &rViewShell);
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(createDocument);
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    uno::Reference< uno::XComponentContext > m_context;
+    uno::Reference<uno::XComponentContext> m_xContext;
+    uno::Reference<lang::XMultiComponentFactory> m_xFactory;
 };
 
 void Test::setUp()
 {
-    m_context = cppu::defaultBootstrap_InitialComponentContext();
+    m_xContext = cppu::defaultBootstrap_InitialComponentContext();
+    m_xFactory = m_xContext->getServiceManager();
 
-    uno::Reference<lang::XMultiComponentFactory> xFactory(m_context->getServiceManager());
-    uno::Reference<lang::XMultiServiceFactory> xSM(xFactory, uno::UNO_QUERY_THROW);
+    uno::Reference<lang::XMultiServiceFactory> xSM(m_xFactory, uno::UNO_QUERY_THROW);
 
     //Without this we're crashing because callees are using
     //getProcessServiceFactory.  In general those should be removed in favour
@@ -73,7 +79,46 @@ void Test::setUp()
 
 void Test::tearDown()
 {
-    uno::Reference< lang::XComponent >(m_context, uno::UNO_QUERY_THROW)->dispose();
+    uno::Reference< lang::XComponent >(m_xContext, uno::UNO_QUERY_THROW)->dispose();
+}
+
+void Test::tmEditMarker(SfxViewFrame &rViewFrame)
+{
+    SfxBindings aBindings;
+    SfxDispatcher aDispatcher(&rViewFrame);
+    aBindings.SetDispatcher(&aDispatcher);
+    SmCmdBoxWindow aSmCmdBoxWindow(&aBindings, NULL, NULL);
+    SmEditWindow aEditWindow(aSmCmdBoxWindow);
+    aEditWindow.Flush();
+
+    {
+        rtl::OUString sMarkedText(RTL_CONSTASCII_USTRINGPARAM("<?> under <?> under <?>"));
+        aEditWindow.SetText(sMarkedText);
+        aEditWindow.Flush();
+        rtl::OUString sFinalText = aEditWindow.GetText();
+        CPPUNIT_ASSERT_MESSAGE("Should be equal text", sFinalText == sMarkedText);
+    }
+
+    {
+        rtl::OUString sTargetText(RTL_CONSTASCII_USTRINGPARAM("a under b under c"));
+
+        aEditWindow.SelNextMark();
+        aEditWindow.Cut();
+        aEditWindow.InsertText(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("a")));
+
+        aEditWindow.SelNextMark();
+        aEditWindow.SelNextMark();
+        aEditWindow.Cut();
+        aEditWindow.InsertText(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("c")));
+
+        aEditWindow.SelPrevMark();
+        aEditWindow.Cut();
+        aEditWindow.InsertText(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("b")));
+
+        aEditWindow.Flush();
+        rtl::OUString sFinalText = aEditWindow.GetText();
+        CPPUNIT_ASSERT_MESSAGE("Should be a under b under c", sFinalText == sTargetText);
+    }
 }
 
 void Test::tmEditFailure(SmDocShellRef &rDocShRef)
@@ -152,6 +197,16 @@ void Test::tmEditUndoRedo(SmDocShellRef &rDocShRef)
 void Test::createDocument()
 {
     SmDocShellRef xDocShRef = new SmDocShell(SFXOBJECTSHELL_STD_NORMAL);
+    xDocShRef->DoInitNew(0);
+
+    uno::Reference< frame::XFrame > xDesktop
+        (m_xFactory->createInstanceWithContext(
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")), m_xContext),
+        uno::UNO_QUERY_THROW );
+
+    SfxViewFrame *pViewFrame = SfxViewFrame::LoadHiddenDocument(*xDocShRef, 0);
+
+    CPPUNIT_ASSERT_MESSAGE("Should have SfxViewFrame", pViewFrame);
 
     EditEngine &rEditEngine = xDocShRef->GetEditEngine();
     Window aFoo(NULL, 0);
@@ -160,6 +215,7 @@ void Test::createDocument()
 
     tmEditUndoRedo(xDocShRef);
     tmEditFailure(xDocShRef);
+    tmEditMarker(*pViewFrame);
 
     xDocShRef.Clear();
 }

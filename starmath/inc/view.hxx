@@ -39,7 +39,6 @@
 #include <svtools/colorcfg.hxx>
 #include "edit.hxx"
 #include "node.hxx"
-#include "accessibility.hxx"
 
 class Menu;
 class DataChangedEvent;
@@ -47,6 +46,7 @@ class SmClipboardChangeListener;
 class SmDocShell;
 class SmViewShell;
 class SmPrintUIOptions;
+class SmGraphicAccessible;
 
 /**************************************************************************/
 

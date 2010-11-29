@@ -78,6 +78,7 @@
 #include "toolbox.hxx"
 #include "mathmlimport.hxx"
 #include "cursor.hxx"
+#include "accessibility.hxx"
 
 #define MINWIDTH        200
 #define MINHEIGHT       200
@@ -211,10 +212,7 @@ void SmGraphicWindow::MouseButtonDown(const MouseEvent& rMEvt)
 
 bool SmGraphicWindow::IsInlineEditEnabled() const
 {
-    //Avoid crash on startup (happens when starmath is selected from splash screen)
-    if(pViewShell->GetEditWindow())
-        return pViewShell->GetEditWindow()->IsInlineEditEnabled();
-    return false;
+    return pViewShell->IsInlineEditEnabled();
 }
 
 void SmGraphicWindow::GetFocus()
@@ -704,7 +702,8 @@ SmCmdBoxWindow::~SmCmdBoxWindow ()
 
 SmViewShell * SmCmdBoxWindow::GetView()
 {
-    SfxViewShell *pView = GetBindings().GetDispatcher()->GetFrame()->GetViewShell();
+    SfxDispatcher *pDispatcher = GetBindings().GetDispatcher();
+    SfxViewShell *pView = pDispatcher ? pDispatcher->GetFrame()->GetViewShell() : NULL;
     return PTR_CAST(SmViewShell, pView);
 }
 
