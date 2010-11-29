@@ -466,7 +466,7 @@
             </node>
             <node oor:name=".uno:ClearContents" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Delete Contents</value>
+                    <value xml:lang="en-US">Clear Contents</value>
                 </prop>
             </node>
             <node oor:name=".uno:AutoFill" oor:op="replace">
