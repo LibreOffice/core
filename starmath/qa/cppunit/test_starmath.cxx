@@ -48,8 +48,9 @@ public:
     // tests
     void createDocument();
     void tmEditUndoRedo(SmDocShellRef &rDocShRef);
+    void tmEditAllClipboard(SmEditWindow &rEditWindow);
+    void tmEditMarker(SmEditWindow &rEditWindow);
     void tmEditFailure(SmDocShellRef &rDocShRef);
-    void tmEditMarker(SfxViewFrame &rViewShell);
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(createDocument);
@@ -82,42 +83,87 @@ void Test::tearDown()
     uno::Reference< lang::XComponent >(m_xContext, uno::UNO_QUERY_THROW)->dispose();
 }
 
-void Test::tmEditMarker(SfxViewFrame &rViewFrame)
+void Test::tmEditMarker(SmEditWindow &rEditWindow)
 {
-    SfxBindings aBindings;
-    SfxDispatcher aDispatcher(&rViewFrame);
-    aBindings.SetDispatcher(&aDispatcher);
-    SmCmdBoxWindow aSmCmdBoxWindow(&aBindings, NULL, NULL);
-    SmEditWindow aEditWindow(aSmCmdBoxWindow);
-    aEditWindow.Flush();
-
     {
         rtl::OUString sMarkedText(RTL_CONSTASCII_USTRINGPARAM("<?> under <?> under <?>"));
-        aEditWindow.SetText(sMarkedText);
-        aEditWindow.Flush();
-        rtl::OUString sFinalText = aEditWindow.GetText();
+        rEditWindow.SetText(sMarkedText);
+        rEditWindow.Flush();
+        rtl::OUString sFinalText = rEditWindow.GetText();
         CPPUNIT_ASSERT_MESSAGE("Should be equal text", sFinalText == sMarkedText);
     }
 
     {
         rtl::OUString sTargetText(RTL_CONSTASCII_USTRINGPARAM("a under b under c"));
 
-        aEditWindow.SelNextMark();
-        aEditWindow.Cut();
-        aEditWindow.InsertText(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("a")));
+        rEditWindow.SelNextMark();
+        rEditWindow.Cut();
+        rEditWindow.InsertText(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("a")));
 
-        aEditWindow.SelNextMark();
-        aEditWindow.SelNextMark();
-        aEditWindow.Cut();
-        aEditWindow.InsertText(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("c")));
+        rEditWindow.SelNextMark();
+        rEditWindow.SelNextMark();
+        rEditWindow.Cut();
+        rEditWindow.InsertText(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("c")));
 
-        aEditWindow.SelPrevMark();
-        aEditWindow.Cut();
-        aEditWindow.InsertText(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("b")));
+        rEditWindow.SelPrevMark();
+        rEditWindow.Cut();
+        rEditWindow.InsertText(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("b")));
 
-        aEditWindow.Flush();
-        rtl::OUString sFinalText = aEditWindow.GetText();
+        rEditWindow.Flush();
+        rtl::OUString sFinalText = rEditWindow.GetText();
         CPPUNIT_ASSERT_MESSAGE("Should be a under b under c", sFinalText == sTargetText);
+    }
+
+    {
+        rEditWindow.SetText(rtl::OUString());
+        rEditWindow.Flush();
+    }
+}
+
+void Test::tmEditAllClipboard(SmEditWindow &rEditWindow)
+{
+    rtl::OUString sOriginalText(RTL_CONSTASCII_USTRINGPARAM("a over b"));
+
+    {
+        rEditWindow.SetText(sOriginalText);
+        rEditWindow.Flush();
+        rtl::OUString sFinalText = rEditWindow.GetText();
+        CPPUNIT_ASSERT_MESSAGE("Should be equal text", sFinalText == sOriginalText);
+    }
+
+    {
+        rEditWindow.SelectAll();
+        rEditWindow.Cut();
+        rEditWindow.Flush();
+        rtl::OUString sFinalText = rEditWindow.GetText();
+        CPPUNIT_ASSERT_MESSAGE("Should be empty", !sFinalText.getLength());
+    }
+
+    {
+        rEditWindow.Paste();
+        rEditWindow.Flush();
+        rtl::OUString sFinalText = rEditWindow.GetText();
+        CPPUNIT_ASSERT_MESSAGE("Should be equal text", sFinalText == sOriginalText);
+    }
+
+    {
+        rEditWindow.SelectAll();
+        rEditWindow.Copy();
+    }
+
+    {
+        rtl::OUString sExpectedText(RTL_CONSTASCII_USTRINGPARAM("a over ba over b"));
+
+        rEditWindow.Paste();
+        rEditWindow.Paste();
+        rEditWindow.Flush();
+        rtl::OUString sFinalText = rEditWindow.GetText();
+        CPPUNIT_ASSERT_MESSAGE("Should be equal text", sFinalText == sExpectedText);
+    }
+
+    {
+        rEditWindow.SetText(rtl::OUString());
+        rEditWindow.Flush();
     }
 }
 
@@ -215,7 +261,16 @@ void Test::createDocument()
 
     tmEditUndoRedo(xDocShRef);
     tmEditFailure(xDocShRef);
-    tmEditMarker(*pViewFrame);
+
+    SfxBindings aBindings;
+    SfxDispatcher aDispatcher(pViewFrame);
+    aBindings.SetDispatcher(&aDispatcher);
+    SmCmdBoxWindow aSmCmdBoxWindow(&aBindings, NULL, NULL);
+    SmEditWindow aEditWindow(aSmCmdBoxWindow);
+    aEditWindow.Flush();
+
+    tmEditMarker(aEditWindow);
+    tmEditAllClipboard(aEditWindow);
 
     xDocShRef.Clear();
 }
