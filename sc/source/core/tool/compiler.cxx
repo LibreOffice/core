@@ -632,7 +632,7 @@ static bool lcl_parseExternalName(
 
             if (c == '\'')
             {
-                // Move to the next chart and loop until the second single
+                // Move to the next char and loop until the second single
                 // quote.
                 cPrev = c;
                 ++i; ++p;
@@ -649,8 +649,8 @@ static bool lcl_parseExternalName(
 
                         if (cPrev == '\'')
                         {
-                            // two consecutive quotes equals a single
-                            // quote in the file name.
+                            // two consecutive quotes equal a single quote in
+                            // the file name.
                             aTmpFile.Append(c);
                             cPrev = 'a';
                         }
@@ -662,12 +662,14 @@ static bool lcl_parseExternalName(
 
                     if (cPrev == '\'' && j != i)
                     {
-                        // this is not a quote but the previous one
-                        // is.  This ends the parsing of the quoted
-                        // segment.
+                        // this is not a quote but the previous one is.  This
+                        // ends the parsing of the quoted segment.  At this
+                        // point, the current char must equal the separator
+                        // char.
 
                         i = j;
                         bInName = true;
+                        aTmpName.Append(c); // Keep the separator as part of the name.
                         break;
                     }
                     aTmpFile.Append(c);
@@ -705,6 +707,7 @@ static bool lcl_parseExternalName(
             if (c == cSep)
             {
                 bInName = true;
+                aTmpName.Append(c); // Keep the separator as part of the name.
             }
             else
             {
@@ -746,8 +749,29 @@ static bool lcl_parseExternalName(
         return false;
     }
 
+    xub_StrLen nNameLen = aTmpName.Len();
+    if (nNameLen < 2)
+    {
+        // Name must be at least 2-char long (separator plus name).
+        return false;
+    }
+
+    if (aTmpName.GetChar(0) != cSep)
+    {
+        // 1st char of the name must equal the separator.
+        return false;
+    }
+
+    sal_Unicode cLast = aTmpName.GetChar(nNameLen-1);
+    if (cLast == sal_Unicode('!'))
+    {
+        // Check against #REF!.
+        if (aTmpName.EqualsAscii("#REF!"))
+            return false;
+    }
+
     rFile = aTmpFile;
-    rName = aTmpName;
+    rName = aTmpName.Copy(1); // Skip the first char as it is always the separator.
     return true;
 }
 
