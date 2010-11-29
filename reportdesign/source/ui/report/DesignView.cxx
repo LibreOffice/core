@@ -466,11 +466,7 @@ void ODesignView::GetFocus()
 // -----------------------------------------------------------------------------
 void ODesignView::ImplInitSettings()
 {
-//#if OSL_DEBUG_LEVEL > 0
-//    SetBackground( Wallpaper( COL_RED ));
-//#else
     SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetFaceColor() ));
-//#endif
     SetFillColor( Application::GetSettings().GetStyleSettings().GetFaceColor() );
     SetTextFillColor( Application::GetSettings().GetStyleSettings().GetFaceColor() );
 }

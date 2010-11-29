@@ -680,8 +680,6 @@ BOOL DlgEdFuncInsert::MouseButtonDown( const MouseEvent& rMEvt )
 
     const SdrHitKind eHit = m_rView.PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
 
-// eHit == SDRHIT_UNMARKEDOBJECT under the mouse cursor is a unmarked object
-
     if (eHit == SDRHIT_UNMARKEDOBJECT &&
         nId != OBJ_CUSTOMSHAPE)
     {
