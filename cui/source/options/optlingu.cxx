@@ -172,9 +172,6 @@ static void lcl_OpenURL( ::rtl::OUString sURL )
     }
 }
 
-/*--------------------------------------------------
---------------------------------------------------*/
-
 static const sal_uInt16 nNameLen = 8;
 
 static sal_uInt16 pRanges[] =
@@ -243,8 +240,6 @@ public:
 
 };
 
-/*--------------------------------------------------
---------------------------------------------------*/
 //
 // User for user-dictionaries (XDictionary interface)
 //
@@ -333,10 +328,6 @@ void BrwStringDic_Impl::Paint( const Point& rPos, SvLBox& rDev, USHORT,
     rDev.DrawText( aPos, GetText() );
     rDev.SetFont( aOldFont );
 }
-
-
-/*--------------------------------------------------
---------------------------------------------------*/
 
 class OptionsBreakSet : public ModalDialog
 {
@@ -2009,8 +2000,6 @@ void SvxLinguTabPage::HideGroups( sal_uInt16 nGrp )
         }
     }
 }
-/*--------------------------------------------------
---------------------------------------------------*/
 
 SvxEditModulesDlg::SvxEditModulesDlg(Window* pParent, SvxLinguData_Impl& rData) :
     ModalDialog( pParent, CUI_RES(RID_SVXDLG_EDIT_MODULES ) ),
@@ -2120,9 +2109,6 @@ SvLBoxEntry* SvxEditModulesDlg::CreateEntry( String& rTxt, USHORT nCol )
     return pEntry;
 }
 
-/* ---------------------------------------------------------------------------
-
- ---------------------------------------------------------------------------*/
 IMPL_LINK( SvxEditModulesDlg, SelectHdl_Impl, SvxCheckListBox *, pBox )
 {
     if (&aModulesCLB == pBox)
@@ -2493,9 +2479,7 @@ IMPL_LINK( SvxEditModulesDlg, UpDownHdl_Impl, PushButton *, pBtn )
     }
     return 0;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK( SvxEditModulesDlg, ClickHdl_Impl, PushButton *, pBtn )
 {
     if (&aClosePB == pBtn)

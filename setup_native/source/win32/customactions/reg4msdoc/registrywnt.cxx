@@ -26,10 +26,6 @@
  *
  ************************************************************************/
 
-//---------------------------------------
-//
-//---------------------------------------
-
 #ifdef _MSC_VER
 #pragma warning(push, 1) /* disable warnings within system headers */
 #endif
@@ -48,10 +44,6 @@
 #ifdef _MSC_VER
 #pragma warning(disable : 4786 4350)
 #endif
-
-//---------------------------------------
-//
-//---------------------------------------
 
 const size_t MAX_TMP_BUFF_SIZE = 1024 * sizeof(wchar_t);
 
@@ -143,9 +135,6 @@ size_t RegistryKeyImplWinNT::GetSubKeyCount() const
     return nSubKeys;
 }
 
-//-----------------------------------------------------
-/**
-*/
 StringListPtr RegistryKeyImplWinNT::GetSubKeyNames() const
 {
     assert(IsOpen());
@@ -185,9 +174,6 @@ StringListPtr RegistryKeyImplWinNT::GetSubKeyNames() const
 #endif
 }
 
-//-----------------------------------------------------
-/**
-*/
 StringListPtr RegistryKeyImplWinNT::GetSubValueNames() const
 {
     assert(IsOpen());
