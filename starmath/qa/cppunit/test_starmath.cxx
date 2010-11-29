@@ -238,6 +238,15 @@ void Test::tmEditUndoRedo(SmDocShellRef &rDocShRef)
         rtl::OUString sFinalText = rDocShRef->GetText();
         CPPUNIT_ASSERT_MESSAGE("Strings much match", sStringOne == sFinalText);
     }
+
+    {
+        rEditEngine.SetText(0, rtl::OUString());
+        rDocShRef->UpdateText();
+        rEditEngine.ClearModifyFlag();
+        rtl::OUString sFinalText = rDocShRef->GetText();
+        CPPUNIT_ASSERT_MESSAGE("Must be empty", !sFinalText.getLength());
+    }
+
 }
 
 void Test::createDocument()
@@ -252,25 +261,18 @@ void Test::createDocument()
 
     SfxViewFrame *pViewFrame = SfxViewFrame::LoadHiddenDocument(*xDocShRef, 0);
 
-    CPPUNIT_ASSERT_MESSAGE("Should have SfxViewFrame", pViewFrame);
-
-    EditEngine &rEditEngine = xDocShRef->GetEditEngine();
-    Window aFoo(NULL, 0);
-    EditView aEditView(&rEditEngine, &aFoo);
-    rEditEngine.SetActiveView(&aEditView);
-
-    tmEditUndoRedo(xDocShRef);
-    tmEditFailure(xDocShRef);
+    CPPUNIT_ASSERT_MESSAGE("Should have a SfxViewFrame", pViewFrame);
 
     SfxBindings aBindings;
     SfxDispatcher aDispatcher(pViewFrame);
     aBindings.SetDispatcher(&aDispatcher);
     SmCmdBoxWindow aSmCmdBoxWindow(&aBindings, NULL, NULL);
     SmEditWindow aEditWindow(aSmCmdBoxWindow);
-    aEditWindow.Flush();
 
-    tmEditMarker(aEditWindow);
+    tmEditUndoRedo(xDocShRef);
     tmEditAllClipboard(aEditWindow);
+    tmEditMarker(aEditWindow);
+    tmEditFailure(xDocShRef);
 
     xDocShRef.Clear();
 }
