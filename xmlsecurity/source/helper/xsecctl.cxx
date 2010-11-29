@@ -348,9 +348,9 @@ void XSecController::createXSecComponent( )
  *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
-    rtl::OUString sSAXEventKeeper(rtl::OUString::createFromAscii( SAXEVENTKEEPER_COMPONENT ));
-    rtl::OUString sXMLSignature(rtl::OUString::createFromAscii( XMLSIGNATURE_COMPONENT ));
-    rtl::OUString sXMLDocument(rtl::OUString::createFromAscii( XMLDOCUMENTWRAPPER_COMPONENT ));
+    rtl::OUString sSAXEventKeeper(RTL_CONSTASCII_USTRINGPARAM( SAXEVENTKEEPER_COMPONENT ));
+    rtl::OUString sXMLSignature(RTL_CONSTASCII_USTRINGPARAM( XMLSIGNATURE_COMPONENT ));
+    rtl::OUString sXMLDocument(RTL_CONSTASCII_USTRINGPARAM( XMLDOCUMENTWRAPPER_COMPONENT ));
 
     /*
      * marks all security components are not available.

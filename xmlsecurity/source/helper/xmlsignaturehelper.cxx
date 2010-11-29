@@ -89,7 +89,7 @@ bool XMLSignatureHelper::Init( const rtl::OUString& rTokenPath )
 
 void XMLSignatureHelper::ImplCreateSEInitializer()
 {
-    rtl::OUString sSEInitializer(rtl::OUString::createFromAscii( SEINITIALIZER_COMPONENT ));
+    rtl::OUString sSEInitializer(RTL_CONSTASCII_USTRINGPARAM( SEINITIALIZER_COMPONENT ));
     uno::Reference< lang::XMultiComponentFactory > xMCF( mxCtx->getServiceManager() );
     mxSEInitializer = uno::Reference< com::sun::star::xml::crypto::XSEInitializer > (
         xMCF->createInstanceWithContext( sSEInitializer,  mxCtx ), uno::UNO_QUERY );
@@ -195,8 +195,8 @@ uno::Reference<xml::sax::XDocumentHandler> XMLSignatureHelper::CreateDocumentHan
      */
     uno::Reference< lang::XMultiComponentFactory > xMCF( mxCtx->getServiceManager() );
     uno::Reference< io::XActiveDataSource > xSaxWriter(
-        xMCF->createInstanceWithContext(rtl::OUString::createFromAscii(
-            "com.sun.star.xml.sax.Writer"), mxCtx ), uno::UNO_QUERY );
+        xMCF->createInstanceWithContext(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "com.sun.star.xml.sax.Writer")), mxCtx ), uno::UNO_QUERY );
 
     DBG_ASSERT( xSaxWriter.is(), "can't instantiate XML writer" );
 

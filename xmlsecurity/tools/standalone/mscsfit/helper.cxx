@@ -105,8 +105,8 @@ Reference< XMultiComponentFactory > serviceManager( Reference< XComponentContext
                 "Cannot get multi-service factory" ) ;
 
             Sequence< Any > args( 2 ) ;
-            args[ 0 ] <<= OUString::createFromAscii( UCB_CONFIGURATION_KEY1_LOCAL ) ;
-            args[ 1 ] <<= OUString::createFromAscii( UCB_CONFIGURATION_KEY2_OFFICE ) ;
+            args[ 0 ] <<= OUString(RTL_CONSTASCII_USTRINGPARAM( UCB_CONFIGURATION_KEY1_LOCAL )) ;
+            args[ 1 ] <<= OUString(RTL_CONSTASCII_USTRINGPARAM( UCB_CONFIGURATION_KEY2_OFFICE )) ;
             if( ! ::ucb::ContentBroker::initialize( xSvmg , args ) ) {
                 throw RuntimeException( OUString(RTL_CONSTASCII_USTRINGPARAM("Cannot inlitialize ContentBroker")) , Reference< XInterface >() , Any() ) ;
             }

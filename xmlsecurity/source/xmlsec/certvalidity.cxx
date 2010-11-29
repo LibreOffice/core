@@ -57,41 +57,41 @@ rtl::OUString certificateValidityToOUString( ::sal_Int32 certValidity ) {
     OUString aValidity ;
 
     if( (certValidity & CertificateValidity::VALID) == CertificateValidity::VALID ) {
-        aValidity = OUString::createFromAscii( ( const char* )VALID_STR ) ;
+        aValidity = OUString(RTL_CONSTASCII_USTRINGPARAM(VALID_STR )) ;
     } else if( ( certValidity & CertificateValidity::INVALID ) == CertificateValidity::INVALID ) {
-         aValidity = OUString::createFromAscii( ( const char* )INVALID_STR ) ;
+         aValidity = OUString(RTL_CONSTASCII_USTRINGPARAM(INVALID_STR )) ;
     } else if( ( certValidity &  CertificateValidity::UNTRUSTED ) ==  CertificateValidity::UNTRUSTED ) {
-         aValidity = OUString::createFromAscii( ( const char* )UNTRUSTED_STR ) ;
+         aValidity = OUString(RTL_CONSTASCII_USTRINGPARAM(UNTRUSTED_STR )) ;
     } else if( ( certValidity & CertificateValidity::TIME_INVALID ) == CertificateValidity::TIME_INVALID ) {
-         aValidity = OUString::createFromAscii( ( const char* )TIME_INVALID_STR ) ;
+         aValidity = OUString(RTL_CONSTASCII_USTRINGPARAM(TIME_INVALID_STR )) ;
     } else if( ( certValidity & CertificateValidity::NOT_TIME_NESTED ) == CertificateValidity::NOT_TIME_NESTED ) {
-         aValidity = OUString::createFromAscii( ( const char* )NOT_NESTED_TIME_STR ) ;
+         aValidity = OUString(RTL_CONSTASCII_USTRINGPARAM(NOT_NESTED_TIME_STR )) ;
     } else if( ( certValidity & CertificateValidity::REVOKED ) == CertificateValidity::REVOKED ) {
-         aValidity = OUString::createFromAscii( ( const char* )REVOKED_STR ) ;
+         aValidity = OUString(RTL_CONSTASCII_USTRINGPARAM(REVOKED_STR )) ;
     } else if( ( certValidity &  CertificateValidity::UNKNOWN_REVOKATION ) == CertificateValidity::UNKNOWN_REVOKATION ) {
-         aValidity = OUString::createFromAscii( ( const char* )UNKNOWN_REVOKATION_STR ) ;
+         aValidity = OUString(RTL_CONSTASCII_USTRINGPARAM(UNKNOWN_REVOKATION_STR )) ;
     } else if( ( certValidity &  CertificateValidity::SIGNATURE_INVALID ) == CertificateValidity::SIGNATURE_INVALID ) {
-         aValidity = OUString::createFromAscii( ( const char* )SIGNATURE_INVALID_STR ) ;
+         aValidity = OUString(RTL_CONSTASCII_USTRINGPARAM(SIGNATURE_INVALID_STR )) ;
     } else if( ( certValidity &  CertificateValidity::EXTENSION_INVALID ) == CertificateValidity::EXTENSION_INVALID ) {
-         aValidity = OUString::createFromAscii( ( const char* )EXTENSION_INVALID_STR ) ;
+         aValidity = OUString(RTL_CONSTASCII_USTRINGPARAM(EXTENSION_INVALID_STR )) ;
     } else if( ( certValidity &  CertificateValidity::EXTENSION_UNKNOWN ) == CertificateValidity::EXTENSION_UNKNOWN ) {
-         aValidity = OUString::createFromAscii( ( const char* )EXTENSION_UNKNOWN_STR ) ;
+         aValidity = OUString(RTL_CONSTASCII_USTRINGPARAM(EXTENSION_UNKNOWN_STR )) ;
     } else if( ( certValidity &  CertificateValidity::ISSUER_UNKNOWN ) == CertificateValidity::ISSUER_UNKNOWN ) {
-         aValidity = OUString::createFromAscii( ( const char* )ISSUER_UNKNOWN_STR ) ;
+         aValidity = OUString(RTL_CONSTASCII_USTRINGPARAM(ISSUER_UNKNOWN_STR )) ;
     } else if( ( certValidity &  CertificateValidity::ISSUER_UNTRUSTED ) == CertificateValidity::ISSUER_UNTRUSTED ) {
-         aValidity = OUString::createFromAscii( ( const char* )ISSUER_UNTRUSTED_STR ) ;
+         aValidity = OUString(RTL_CONSTASCII_USTRINGPARAM(ISSUER_UNTRUSTED_STR )) ;
     } else if( ( certValidity &  CertificateValidity::ISSUER_INVALID ) == CertificateValidity::ISSUER_INVALID ) {
-         aValidity = OUString::createFromAscii( ( const char* )ISSUER_INVALID_STR ) ;
+         aValidity = OUString(RTL_CONSTASCII_USTRINGPARAM(ISSUER_INVALID_STR )) ;
     } else if( ( certValidity &  CertificateValidity::ROOT_UNKNOWN ) == CertificateValidity::ROOT_UNKNOWN ) {
-         aValidity = OUString::createFromAscii( ( const char* )ROOT_UNKNOWN_STR ) ;
+         aValidity = OUString(RTL_CONSTASCII_USTRINGPARAM(ROOT_UNKNOWN_STR )) ;
     } else if( ( certValidity &  CertificateValidity::ROOT_UNTRUSTED ) == CertificateValidity::ROOT_UNTRUSTED ) {
-         aValidity = OUString::createFromAscii( ( const char* )ROOT_UNTRUSTED_STR ) ;
+         aValidity = OUString(RTL_CONSTASCII_USTRINGPARAM(ROOT_UNTRUSTED_STR )) ;
     } else if( ( certValidity &  CertificateValidity::ROOT_INVALID ) == CertificateValidity::ROOT_INVALID ) {
-         aValidity = OUString::createFromAscii( ( const char* )ROOT_INVALID_STR ) ;
+         aValidity = OUString(RTL_CONSTASCII_USTRINGPARAM(ROOT_INVALID_STR )) ;
     } else if( ( certValidity &  CertificateValidity::CHAIN_INCOMPLETE ) == CertificateValidity::CHAIN_INCOMPLETE ) {
-         aValidity = OUString::createFromAscii( ( const char* )CHAIN_INCOMPLETE_STR ) ;
+         aValidity = OUString(RTL_CONSTASCII_USTRINGPARAM(CHAIN_INCOMPLETE_STR )) ;
     } else {
-         aValidity = OUString::createFromAscii( ( const char* )INVALID_STR ) ;
+         aValidity = OUString(RTL_CONSTASCII_USTRINGPARAM(INVALID_STR )) ;
     }
 
     return aValidity ;

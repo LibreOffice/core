@@ -469,16 +469,16 @@ rtl::OUString XSecTester::parseFile(
 
         if (bIsJavaBased)
         {
-            SEInitializer_comp = rtl::OUString::createFromAscii( SEINITIALIZER_JAVA_COMPONENT );
-            XMLSignature_comp = rtl::OUString::createFromAscii( XMLSIGNATURE_JAVA_COMPONENT);
-            m_ouXMLDocumentWrapperComponentName = rtl::OUString::createFromAscii( XMLDOCUMENTWRAPPER_JAVA_COMPONENT );
+            SEInitializer_comp = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SEINITIALIZER_JAVA_COMPONENT ));
+            XMLSignature_comp = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XMLSIGNATURE_JAVA_COMPONENT));
+            m_ouXMLDocumentWrapperComponentName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XMLDOCUMENTWRAPPER_JAVA_COMPONENT ));
             tokenPath = m_ouJavaCryptokenDir;
         }
         else
         {
-            SEInitializer_comp = rtl::OUString::createFromAscii( SEINITIALIZER_C_COMPONENT );
-            XMLSignature_comp = rtl::OUString::createFromAscii( XMLSIGNATURE_C_COMPONENT);
-            m_ouXMLDocumentWrapperComponentName = rtl::OUString::createFromAscii( XMLDOCUMENT_C_COMPONENT );
+            SEInitializer_comp = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SEINITIALIZER_C_COMPONENT ));
+            XMLSignature_comp = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XMLSIGNATURE_C_COMPONENT));
+            m_ouXMLDocumentWrapperComponentName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XMLDOCUMENT_C_COMPONENT ));
             tokenPath = m_ouCCryptokenDir;
         }
 
@@ -890,7 +890,7 @@ SignatureEntity::SignatureEntity(
         m_xSAXEventKeeper->setSecurityId(m_nSignatureElementCollectorId, m_nSecurityId);
 
         m_xReferenceListener = cssu::Reference< cssxc::sax::XReferenceResolvedListener >(
-            mxMSF->createInstance( rtl::OUString::createFromAscii( SIGNATURECREATOR_COMPONENT )),
+            mxMSF->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SIGNATURECREATOR_COMPONENT ))),
             cssu::UNO_QUERY);
 
         cssu::Reference<cssl::XInitialization> xInitialization(m_xReferenceListener, cssu::UNO_QUERY);
@@ -929,7 +929,7 @@ SignatureEntity::SignatureEntity(
         m_xSAXEventKeeper->setSecurityId(m_nSignatureElementCollectorId, m_nSecurityId);
 
         m_xReferenceListener = cssu::Reference< cssxc::sax::XReferenceResolvedListener >(
-            mxMSF->createInstance( rtl::OUString::createFromAscii( SIGNATUREVERIFIER_COMPONENT )),
+            mxMSF->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SIGNATUREVERIFIER_COMPONENT ))),
             cssu::UNO_QUERY);
 
         cssu::Reference<cssl::XInitialization> xInitialization(m_xReferenceListener, cssu::UNO_QUERY);
@@ -1186,7 +1186,7 @@ bool XSecTester::foundSecurityRelated()
              cssu::UNO_QUERY);
 
         m_xSAXEventKeeper = cssu::Reference< cssxc::sax::XSecuritySAXEventKeeper >
-            (mxMSF->createInstance( rtl::OUString::createFromAscii( SAXEVENTKEEPER_COMPONENT )),
+            (mxMSF->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SAXEVENTKEEPER_COMPONENT ))),
              cssu::UNO_QUERY);
 
         cssu::Reference<cssl::XInitialization> xInitialization(m_xSAXEventKeeper,  cssu::UNO_QUERY);
