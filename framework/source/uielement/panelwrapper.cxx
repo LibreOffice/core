@@ -8,7 +8,6 @@
 #include <services.h>
 #include <uielement/panelwrapper.hxx>
 #include <threadhelp/resetableguard.hxx>
-#include <helper/actiontriggerhelper.hxx>
 #include <uielement/constitemcontainer.hxx>
 #include <uielement/rootitemcontainer.hxx>
 #include <uielement/panelwindow.hxx>
