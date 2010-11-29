@@ -932,7 +932,7 @@ throw ( RuntimeException )
         MutexGuard guard( Mutex::getGlobalMutex() );
         if( !pNames ) {
             static Sequence< OUString > seqNames(2);
-            seqNames.getArray()[0] = OUString::createFromAscii(IMPLEMENTATION_NAME);
+            seqNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM(IMPLEMENTATION_NAME));
             pNames = &seqNames;
         }
     }

@@ -2008,31 +2008,31 @@ void ChartExport::InitPlotArea( )
     if (xServiceInfo.is())
     {
         if (xServiceInfo->supportsService(
-            OUString::createFromAscii ("com.sun.star.chart.ChartAxisXSupplier")))
+            OUString(RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.chart.ChartAxisXSupplier"))))
         {
             xDiagramProperties->getPropertyValue(
                 OUString(RTL_CONSTASCII_USTRINGPARAM("HasXAxis"))) >>= mbHasXAxis;
         }
         if (xServiceInfo->supportsService(
-            OUString::createFromAscii ("com.sun.star.chart.ChartAxisYSupplier")))
+            OUString(RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.chart.ChartAxisYSupplier"))))
         {
             xDiagramProperties->getPropertyValue(
                 OUString(RTL_CONSTASCII_USTRINGPARAM("HasYAxis"))) >>= mbHasYAxis;
         }
         if (xServiceInfo->supportsService(
-            OUString::createFromAscii ("com.sun.star.chart.ChartAxisZSupplier")))
+            OUString(RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.chart.ChartAxisZSupplier"))))
         {
             xDiagramProperties->getPropertyValue(
                 OUString(RTL_CONSTASCII_USTRINGPARAM("HasZAxis"))) >>= mbHasZAxis;
         }
         if (xServiceInfo->supportsService(
-            OUString::createFromAscii ("com.sun.star.chart.ChartTwoAxisXSupplier")))
+            OUString(RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.chart.ChartTwoAxisXSupplier"))))
         {
             xDiagramProperties->getPropertyValue(
                 OUString(RTL_CONSTASCII_USTRINGPARAM("HasSecondaryXAxis"))) >>= mbHasSecondaryXAxis;
         }
         if (xServiceInfo->supportsService(
-            OUString::createFromAscii ("com.sun.star.chart.ChartTwoAxisYSupplier")))
+            OUString(RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.chart.ChartTwoAxisYSupplier"))))
         {
             xDiagramProperties->getPropertyValue(
                 OUString(RTL_CONSTASCII_USTRINGPARAM("HasSecondaryYAxis"))) >>= mbHasSecondaryYAxis;
