@@ -81,7 +81,7 @@ class FlatFileDatabase extends AbstractDatabase
         final File documentFile = File.createTempFile( m_urlSubScheme, ".odb" );
         if ( documentFile.exists() )
             documentFile.delete();
-        m_tableFileLocation = new File(documentFile.getParent() + File.separator + m_urlSubScheme + File.separator );
+        m_tableFileLocation = new File(documentFile.getParent() + File.separator + documentFile.getName().replace(".odb", "") + File.separator );
         m_tableFileLocation.mkdir();
         //subPath.deleteOnExit();
         m_databaseDocumentFile = URLHelper.getFileURLFromSystemPath(documentFile);
