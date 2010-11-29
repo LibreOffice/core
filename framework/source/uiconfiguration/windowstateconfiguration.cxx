@@ -1374,7 +1374,14 @@ WindowStateConfiguration::WindowStateConfiguration( const Reference< XMultiServi
                                                     UNO_QUERY );
     Reference< XNameAccess > xEmptyNameAccess;
     Reference< XNameAccess > xNameAccess( m_xModuleManager, UNO_QUERY_THROW );
-    Sequence< rtl::OUString > aElementNames = xNameAccess->getElementNames();
+    Sequence< rtl::OUString > aElementNames;
+    try
+    {
+        aElementNames = xNameAccess->getElementNames();
+    }
+    catch (::com::sun::star::uno::RuntimeException &)
+    {
+    }
     Sequence< PropertyValue > aSeq;
     ::rtl::OUString                  aModuleIdentifier;
 
