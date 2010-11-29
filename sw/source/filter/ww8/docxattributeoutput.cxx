@@ -2523,19 +2523,6 @@ void DocxAttributeOutput::NumberingLevel( BYTE nLevel,
                 FSNS( XML_w, XML_val ), aFmt.getStr(),
                 FSEND );
 
-    // justification
-    const char *pJc;
-    bool ecmaDialect = ( m_rExport.GetFilter().getVersion() == oox::core::ECMA_DIALECT );
-    switch ( eAdjust )
-    {
-        case SVX_ADJUST_CENTER: pJc = "center"; break;
-        case SVX_ADJUST_RIGHT:  pJc = !ecmaDialect ? "end" : "right";  break;
-        default:                pJc = !ecmaDialect ? "start" : "left";   break;
-    }
-    m_pSerializer->singleElementNS( XML_w, XML_lvlJc,
-            FSNS( XML_w, XML_val ), pJc,
-            FSEND );
-
     // suffix
     const char *pSuffix = NULL;
     switch ( nFollow )
@@ -2575,6 +2562,19 @@ void DocxAttributeOutput::NumberingLevel( BYTE nLevel,
 
     m_pSerializer->singleElementNS( XML_w, XML_lvlText,
             FSNS( XML_w, XML_val ), OUStringToOString( aBuffer.makeStringAndClear(), RTL_TEXTENCODING_UTF8 ).getStr(),
+            FSEND );
+
+    // justification
+    const char *pJc;
+    bool ecmaDialect = ( m_rExport.GetFilter().getVersion() == oox::core::ECMA_DIALECT );
+    switch ( eAdjust )
+    {
+        case SVX_ADJUST_CENTER: pJc = "center"; break;
+        case SVX_ADJUST_RIGHT:  pJc = !ecmaDialect ? "end" : "right";  break;
+        default:                pJc = !ecmaDialect ? "start" : "left";   break;
+    }
+    m_pSerializer->singleElementNS( XML_w, XML_lvlJc,
+            FSNS( XML_w, XML_val ), pJc,
             FSEND );
 
     // indentation
