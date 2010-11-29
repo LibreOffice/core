@@ -38,18 +38,6 @@
 using namespace com::sun::star;
 using namespace ooo::vba;
 
-
-sal_Int32 pt2mm( double pt ) //1/100mm
-{
-    return static_cast<sal_Int32>(pt * 0.352778);
-}
-
-double mm2pt( sal_Int32 mm )
-{
-    return mm * 2.8345;
-}
-
-
 ScVbaOLEObject::ScVbaOLEObject( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext,
             css::uno::Reference< css::drawing::XControlShape > xControlShape )
 : OLEObjectImpl_BASE( xParent, xContext ), m_xControlShape( xControlShape )
