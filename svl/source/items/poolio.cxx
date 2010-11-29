@@ -241,7 +241,7 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
                         const SfxPoolItem *pItem = (*pArr)->operator[](j);
                         if ( pItem && pItem->GetRefCount() ) //! siehe anderes MI-REF
                         {
-                            aItemsRec.NewContent(j, 'X' );
+                            aItemsRec.NewContent((USHORT)j, 'X' );
 
                             if ( pItem->GetRefCount() == SFX_ITEMS_SPECIAL )
                                 rStream << (USHORT) pItem->GetKind();
