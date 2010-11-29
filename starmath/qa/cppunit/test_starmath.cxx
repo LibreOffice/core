@@ -47,10 +47,13 @@ public:
 
     // tests
     void createDocument();
+
     void tmEditUndoRedo(SmDocShellRef &rDocShRef);
     void tmEditAllClipboard(SmEditWindow &rEditWindow);
     void tmEditMarker(SmEditWindow &rEditWindow);
     void tmEditFailure(SmDocShellRef &rDocShRef);
+
+    void tViewZoom(SmViewShell &rViewShell);
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(createDocument);
@@ -249,6 +252,28 @@ void Test::tmEditUndoRedo(SmDocShellRef &rDocShRef)
 
 }
 
+void Test::tViewZoom(SmViewShell &rViewShell)
+{
+    sal_uInt16 nOrigZoom, nNextZoom, nFinalZoom;
+
+    SmGraphicWindow &rGraphicWindow = rViewShell.GetGraphicWindow();
+    nOrigZoom = rGraphicWindow.GetZoom();
+
+    {
+        SfxRequest aZoomIn(SID_ZOOMIN, SFX_CALLMODE_SYNCHRON, rViewShell.GetPool());
+        rViewShell.Execute(aZoomIn);
+        nNextZoom = rGraphicWindow.GetZoom();
+        CPPUNIT_ASSERT_MESSAGE("Should be bigger", nNextZoom > nOrigZoom);
+    }
+
+    {
+        SfxRequest aZoomOut(SID_ZOOMOUT, SFX_CALLMODE_SYNCHRON, rViewShell.GetPool());
+        rViewShell.Execute(aZoomOut);
+        nFinalZoom = rGraphicWindow.GetZoom();
+        CPPUNIT_ASSERT_MESSAGE("Should be equal", nFinalZoom == nOrigZoom);
+    }
+}
+
 void Test::createDocument()
 {
     SmDocShellRef xDocShRef = new SmDocShell(SFXOBJECTSHELL_STD_NORMAL);
@@ -268,11 +293,15 @@ void Test::createDocument()
     aBindings.SetDispatcher(&aDispatcher);
     SmCmdBoxWindow aSmCmdBoxWindow(&aBindings, NULL, NULL);
     SmEditWindow aEditWindow(aSmCmdBoxWindow);
+    SmViewShell *pViewShell = aEditWindow.GetView();
+    CPPUNIT_ASSERT_MESSAGE("Should have a SmViewShell", pViewShell);
 
     tmEditUndoRedo(xDocShRef);
     tmEditAllClipboard(aEditWindow);
     tmEditMarker(aEditWindow);
     tmEditFailure(xDocShRef);
+
+    tViewZoom(*pViewShell);
 
     xDocShRef.Clear();
 }
