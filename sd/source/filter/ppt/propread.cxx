@@ -29,6 +29,7 @@
 #include "precompiled_sd.hxx"
 #include <propread.hxx>
 #include <tools/bigint.hxx>
+#include "tools/debug.hxx"
 #include "rtl/tencinfo.h"
 #include "rtl/textenc.h"
 
@@ -90,6 +91,17 @@ void PropItem::Clear()
 
 //  -----------------------------------------------------------------------
 
+static xub_StrLen lcl_getMaxSafeStrLen(sal_uInt32 nSize)
+{
+    nSize -= 1; //Drop NULL terminator
+
+    //If it won't fit in a string, clip it to the max size that does
+    if (nSize > STRING_MAXLEN)
+        nSize = STRING_MAXLEN;
+
+    return xub_StrLen( nSize );
+}
+
 BOOL PropItem::Read( String& rString, sal_uInt32 nStringType, sal_Bool bAlign )
 {
     sal_uInt32  i, nItemSize, nType, nItemPos;
@@ -108,36 +120,43 @@ BOOL PropItem::Read( String& rString, sal_uInt32 nStringType, sal_Bool bAlign )
     {
         case VT_LPSTR :
         {
-            if ( (sal_uInt16)nItemSize )
+            if ( nItemSize )
             {
-                sal_Char* pString = new sal_Char[ (sal_uInt16)nItemSize ];
-                if ( mnTextEnc == RTL_TEXTENCODING_UCS2 )
+                try
                 {
-                    nItemSize >>= 1;
-                    if ( (sal_uInt16)nItemSize > 1 )
+                    sal_Char* pString = new sal_Char[ nItemSize ];
+                    if ( mnTextEnc == RTL_TEXTENCODING_UCS2 )
                     {
-                        sal_Unicode* pWString = (sal_Unicode*)pString;
-                        for ( i = 0; i < (sal_uInt16)nItemSize; i++ )
-                            *this >> pWString[ i ];
-                        rString = String( pWString, (sal_uInt16)nItemSize - 1 );
-                    }
-                    else
-                        rString = String();
-                    bRetValue = sal_True;
-                }
-                else
-                {
-                    SvMemoryStream::Read( pString, (sal_uInt16)nItemSize );
-                    if ( pString[ (sal_uInt16)nItemSize - 1 ] == 0 )
-                    {
-                        if ( (sal_uInt16)nItemSize > 1 )
-                            rString = String( ByteString( pString ), mnTextEnc );
+                        nItemSize >>= 1;
+                        if ( nItemSize > 1 )
+                        {
+                            sal_Unicode* pWString = (sal_Unicode*)pString;
+                            for ( i = 0; i < nItemSize; i++ )
+                                *this >> pWString[ i ];
+                            rString = String( pWString, lcl_getMaxSafeStrLen(nItemSize) );
+                        }
                         else
                             rString = String();
                         bRetValue = sal_True;
                     }
+                    else
+                    {
+                        SvMemoryStream::Read( pString, nItemSize );
+                        if ( pString[ nItemSize - 1 ] == 0 )
+                        {
+                            if ( nItemSize > 1 )
+                                rString = String( ByteString( pString ), mnTextEnc );
+                            else
+                                rString = String();
+                            bRetValue = sal_True;
+                        }
+                    }
+                    delete[] pString;
                 }
-                delete[] pString;
+                catch( const std::bad_alloc& )
+                {
+                    DBG_ERROR( "sd PropItem::Read bad alloc" );
+                }
             }
             if ( bAlign )
                 SeekRel( ( 4 - ( nItemSize & 3 ) ) & 3 );       // dword align
@@ -148,18 +167,25 @@ BOOL PropItem::Read( String& rString, sal_uInt32 nStringType, sal_Bool bAlign )
         {
             if ( nItemSize )
             {
-                sal_Unicode* pString = new sal_Unicode[ (sal_uInt16)nItemSize ];
-                for ( i = 0; i < (sal_uInt16)nItemSize; i++ )
-                    *this >> pString[ i ];
-                if ( pString[ i - 1 ] == 0 )
+                try
                 {
-                    if ( (sal_uInt16)nItemSize > 1 )
-                        rString = String( pString, (sal_uInt16)nItemSize - 1 );
-                    else
-                        rString = String();
-                    bRetValue = sal_True;
+                    sal_Unicode* pString = new sal_Unicode[ nItemSize ];
+                    for ( i = 0; i < nItemSize; i++ )
+                        *this >> pString[ i ];
+                    if ( pString[ i - 1 ] == 0 )
+                    {
+                        if ( (sal_uInt16)nItemSize > 1 )
+                            rString = String( pString, lcl_getMaxSafeStrLen(nItemSize) );
+                        else
+                            rString = String();
+                        bRetValue = sal_True;
+                    }
+                    delete[] pString;
                 }
-                delete[] pString;
+                catch( const std::bad_alloc& )
+                {
+                    DBG_ERROR( "sd PropItem::Read bad alloc" );
+                }
             }
             if ( bAlign && ( nItemSize & 1 ) )
                 SeekRel( 2 );                           // dword align
@@ -349,24 +375,31 @@ sal_Bool Section::GetDictionary( Dictionary& rDict )
         for ( sal_uInt32 i = 0; i < nDictCount; i++ )
         {
             aStream >> nId >> nSize;
-            if ( (sal_uInt16)nSize )
+            if ( nSize )
             {
                 String aString;
                 nPos = aStream.Tell();
-                sal_Char* pString = new sal_Char[ (sal_uInt16)nSize ];
-                aStream.Read( pString, (sal_uInt16)nSize );
-                if ( mnTextEnc == RTL_TEXTENCODING_UCS2 )
+                try
                 {
-                    nSize >>= 1;
-                    aStream.Seek( nPos );
-                    sal_Unicode* pWString = (sal_Unicode*)pString;
-                    for ( i = 0; i < (sal_uInt16)nSize; i++ )
-                        aStream >> pWString[ i ];
-                    aString = String( pWString, (sal_uInt16)nSize - 1 );
+                    sal_Char* pString = new sal_Char[ nSize ];
+                    aStream.Read( pString, nSize );
+                    if ( mnTextEnc == RTL_TEXTENCODING_UCS2 )
+                    {
+                        nSize >>= 1;
+                        aStream.Seek( nPos );
+                        sal_Unicode* pWString = (sal_Unicode*)pString;
+                        for ( i = 0; i < nSize; i++ )
+                            aStream >> pWString[ i ];
+                        aString = String( pWString, lcl_getMaxSafeStrLen(nSize) );
+                    }
+                    else
+                        aString = String( ByteString( pString, lcl_getMaxSafeStrLen(nSize) ), mnTextEnc );
+                    delete[] pString;
                 }
-                else
-                    aString = String( ByteString( pString, (sal_uInt16)nSize - 1 ), mnTextEnc );
-                delete[] pString;
+                catch( const std::bad_alloc& )
+                {
+                    DBG_ERROR( "sd Section::GetDictionary bad alloc" );
+                }
                 if ( !aString.Len() )
                     break;
                 aDict.AddProperty( nId, aString );
@@ -500,6 +533,11 @@ void Section::Read( SvStorageStream *pStrm )
             }
             if ( nPropSize )
             {
+                if ( nPropSize > nStrmSize )
+                {
+                    nPropCount = 0;
+                    break;
+                }
                 pStrm->Seek( nPropOfs + nSecOfs );
                 sal_uInt8* pBuf = new sal_uInt8[ nPropSize ];
                 pStrm->Read( pBuf, nPropSize );

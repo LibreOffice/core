@@ -55,3 +55,5 @@ mkdir: %_DEST%\inc%_EXT%\sd
 ..\uiconfig\sdraw\statusbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\sdraw\statusbar\*.xml
 ..\uiconfig\simpress\statusbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\simpress\statusbar\*.xml
 
+..\%__SRC%\misc\sd.component %_DEST%\xml%_EXT%\sd.component
+..\%__SRC%\misc\sdd.component %_DEST%\xml%_EXT%\sdd.component
