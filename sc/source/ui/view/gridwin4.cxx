@@ -432,32 +432,26 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
 
     DBG_ASSERT( ValidCol(nX2) && ValidRow(nY2), "GridWin Draw Bereich zu gross" );
 
-    SCCOL nPosX = pViewData->GetPosX( eHWhich );
-    SCROW nPosY = pViewData->GetPosY( eVWhich );
-    if (nX2 < nPosX || nY2 < nPosY)
-        return;                                         // unsichtbar
-    if (nX1 < nPosX) nX1 = nPosX;
-    if (nY1 < nPosY) nY1 = nPosY;
+    UpdateVisibleRange();
 
-    SCCOL nXRight = nPosX + pViewData->VisibleCellsX(eHWhich);
-    if (nXRight > MAXCOL) nXRight = MAXCOL;
-    SCROW nYBottom = nPosY + pViewData->VisibleCellsY(eVWhich);
-    if (nYBottom > MAXROW) nYBottom = MAXROW;
+    if (nX2 < maVisibleRange.mnCol1 || nY2 < maVisibleRange.mnRow1)
+        return;
+                    // unsichtbar
+    if (nX1 < maVisibleRange.mnCol1)
+        nX1 = maVisibleRange.mnCol1;
+    if (nY1 < maVisibleRange.mnRow1)
+        nY1 = maVisibleRange.mnRow1;
 
-    // Store the current visible range.
-    maVisibleRange.mnCol1 = nPosX;
-    maVisibleRange.mnCol2 = nXRight;
-    maVisibleRange.mnRow1 = nPosY;
-    maVisibleRange.mnRow2 = nYBottom;
+    if (nX1 > maVisibleRange.mnCol2 || nY1 > maVisibleRange.mnRow2)
+        return;
 
-    if (nX1 > nXRight || nY1 > nYBottom)
-        return;                                         // unsichtbar
-    if (nX2 > nXRight) nX2 = nXRight;
-    if (nY2 > nYBottom) nY2 = nYBottom;
+    if (nX2 > maVisibleRange.mnCol2)
+        nX2 = maVisibleRange.mnCol2;
+    if (nY2 > maVisibleRange.mnRow2)
+        nY2 = maVisibleRange.mnRow2;
 
-    if ( eMode != SC_UPDATE_MARKS )
-        if (nX2 < nXRight)
-            nX2 = nXRight;                              // zum Weiterzeichnen
+    if ( eMode != SC_UPDATE_MARKS && nX2 < maVisibleRange.mnCol2)
+        nX2 = maVisibleRange.mnCol2;                                // zum Weiterzeichnen
 
         //  ab hier kein return mehr
 
@@ -475,7 +469,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     long nLayoutSign = bLayoutRTL ? -1 : 1;
     if ( bLayoutRTL )
     {
-        long nEndPixel = pViewData->GetScrPos( nX2+1, nPosY, eWhich ).X();
+        long nEndPixel = pViewData->GetScrPos( nX2+1, maVisibleRange.mnRow1, eWhich ).X();
         nMirrorWidth = aScrPos.X() - nEndPixel;
         aScrPos.X() = nEndPixel + 1;
     }

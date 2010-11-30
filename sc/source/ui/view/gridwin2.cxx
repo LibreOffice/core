@@ -594,6 +594,22 @@ void ScGridWindow::UpdateDPFromFieldPopupMenu()
     aFunc.DataPilotUpdate(pDPObj, &aNewDPObj, true, false);
 }
 
+void ScGridWindow::UpdateVisibleRange()
+{
+    SCCOL nPosX = pViewData->GetPosX(eHWhich);
+    SCROW nPosY = pViewData->GetPosY(eVWhich);
+    SCCOL nXRight = nPosX + pViewData->VisibleCellsX(eHWhich);
+    if (nXRight > MAXCOL) nXRight = MAXCOL;
+    SCROW nYBottom = nPosY + pViewData->VisibleCellsY(eVWhich);
+    if (nYBottom > MAXROW) nYBottom = MAXROW;
+
+    // Store the current visible range.
+    maVisibleRange.mnCol1 = nPosX;
+    maVisibleRange.mnCol2 = nXRight;
+    maVisibleRange.mnRow1 = nPosY;
+    maVisibleRange.mnRow2 = nYBottom;
+}
+
 void ScGridWindow::DPMouseMove( const MouseEvent& rMEvt )
 {
     DPTestMouse( rMEvt, TRUE );

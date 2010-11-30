@@ -1638,13 +1638,13 @@ void ScTabView::SetTabNo( SCTAB nTab, BOOL bNew, BOOL bExtendSelection )
 
         if ( bRefMode )     // hide EditView if necessary (after aViewData.SetTabNo !)
         {
-            for ( USHORT i=0; i<4; i++ )
-                if ( pGridWin[i] )
-                    if ( pGridWin[i]->IsVisible() )
-                        pGridWin[i]->UpdateEditViewPos();
+            for (USHORT i = 0; i < 4; ++i)
+                if (pGridWin[i] && pGridWin[i]->IsVisible())
+                    pGridWin[i]->UpdateEditViewPos();
         }
 
         TabChanged();                                       // DrawView
+        UpdateVisibleRange();
 
         aViewData.GetViewShell()->WindowChanged();          // falls das aktive Fenster anders ist
         if ( !bUnoRefDialog )
