@@ -38,7 +38,7 @@ JAVA_LIBRARY_PATH= -Djava.library.path=$(SOLARSHAREDBIN)
 .ENDIF
 
 #aux_alllangiso*:=$(foreach,i,$(alllangiso) $(foreach,j,$(aux_langdirs) $(eq,$i,$j  $i $(NULL))))
-aux_alllangiso*:=$(alllangiso)
+aux_alllangiso*:=en-US
 
 #########################################################
 
