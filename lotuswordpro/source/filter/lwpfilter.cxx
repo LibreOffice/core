@@ -165,7 +165,7 @@ LWPFilterImportFilter::LWPFilterImportFilter( const uno::Reference< XMultiServic
 
     try
     {
-        uno::Reference< XDocumentHandler > xDoc( xFact->createInstance( OUString::createFromAscii( STR_WRITER_IMPORTER_NAME ) ), UNO_QUERY );
+        uno::Reference< XDocumentHandler > xDoc( xFact->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM( STR_WRITER_IMPORTER_NAME )) ), UNO_QUERY );
 
         LWPFilterReader *p = new LWPFilterReader;
         p->setDocumentHandler( xDoc );
@@ -206,12 +206,12 @@ void LWPFilterImportFilter::setTargetDocument( const uno::Reference< XComponent 
 
 OUString LWPFilterImportFilter::getImplementationName_Static() throw()
 {
-    return OUString::createFromAscii( STR_IMPLEMENTATION_NAME );
+    return OUString(RTL_CONSTASCII_USTRINGPARAM( STR_IMPLEMENTATION_NAME ));
 }
 
 OUString LWPFilterImportFilter::getImplementationName() throw()
 {
-    return OUString::createFromAscii( STR_IMPLEMENTATION_NAME );
+    return OUString(RTL_CONSTASCII_USTRINGPARAM( STR_IMPLEMENTATION_NAME ));
 }
 
 sal_Bool LWPFilterImportFilter::supportsService( const OUString& ServiceName ) throw()
@@ -230,7 +230,7 @@ sal_Bool LWPFilterImportFilter::supportsService( const OUString& ServiceName ) t
 Sequence< OUString> LWPFilterImportFilter::getSupportedServiceNames( void ) throw()
 {
     Sequence< OUString > seq(1);
-    seq.getArray()[0] = OUString::createFromAscii( STR_SERVICE_NAME );
+    seq.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( STR_SERVICE_NAME ));
     return seq;
 }
 
