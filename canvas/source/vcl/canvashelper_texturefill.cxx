@@ -211,6 +211,8 @@ namespace vclcanvas
             if( (rColors.size() % 2) != (nStepCount % 2) )
                 ++nStepCount;
 
+            rOutDev.SetLineColor();
+
             basegfx::tools::KeyStopLerp aLerper(rValues.maStops);
 
             // only iterate nStepCount-1 steps, as the last strip is
@@ -365,6 +367,8 @@ namespace vclcanvas
             // zero-area polygons typically don't display perceivable
             // color).
             ++nStepCount;
+
+            rOutDev.SetLineColor();
 
             basegfx::tools::KeyStopLerp aLerper(rValues.maStops);
 
