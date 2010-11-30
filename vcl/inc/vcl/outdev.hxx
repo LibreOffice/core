@@ -1108,6 +1108,10 @@ public:
 
     void                Push( USHORT nFlags = PUSH_ALL );
     void                Pop();
+    // returns the curren stack depth; that is the number of Push() calls minus the number of Pop() calls
+    // this should not normally be used since Push and Pop must always be used symmetrically
+    // however this may be e.g. a help when debugging code in which this somehow is not the case
+    sal_uInt32          GetGCStackDepth() const;
 
     /** Query availability of alpha channel
 
