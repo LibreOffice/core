@@ -424,7 +424,7 @@ CSS1Token CSS1Parser::GetNextToken()
 
                         // Ist es eine Einheit?
                         const sal_Char *pCmp1 = 0, *pCmp2 = 0, *pCmp3 = 0;
-                        double nScale1 = 1., nScale2 = 1., nScale3 = 1.;
+                        double nScale1 = 1., nScale2 = 1.;
                         CSS1Token nToken1 = CSS1_LENGTH,
                                   nToken2 = CSS1_LENGTH,
                                   nToken3 = CSS1_LENGTH;
@@ -482,7 +482,7 @@ CSS1Token CSS1Parser::GetNextToken()
                         else if( pCmp3 &&
                                  aIdent.EqualsIgnoreCaseAscii(pCmp3) )
                         {
-                            nScale = nScale3;
+                            nScale =  1.; // nScale3
                             nRet = nToken3;
                         }
                         else
