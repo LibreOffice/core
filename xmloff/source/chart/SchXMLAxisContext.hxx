@@ -63,8 +63,12 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::chart::XDiagram > m_xDiagram;
     SchXMLAxis m_aCurrentAxis;
     std::vector< SchXMLAxis >& m_rAxes;
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > m_xAxisProps;
     rtl::OUString m_aAutoStyleName;
     rtl::OUString& m_rCategoriesAddress;
+    sal_Int32 m_nAxisType;//::com::sun::star::chart::ChartAxisType
+    bool m_bAxisTypeImported;
+    bool m_bDateScaleImported;
     bool m_bAddMissingXAxisForNetCharts; //to correct errors from older versions
     bool m_bAdaptWrongPercentScaleValues; //to correct errors from older versions
     bool m_bAdaptXAxisOrientationForOld2DBarCharts; //to correct different behaviour from older versions

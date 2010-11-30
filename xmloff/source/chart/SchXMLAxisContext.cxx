@@ -43,6 +43,10 @@
 #include <com/sun/star/chart/ChartAxisLabelPosition.hpp>
 #include <com/sun/star/chart/ChartAxisMarkPosition.hpp>
 #include <com/sun/star/chart/ChartAxisPosition.hpp>
+#include <com/sun/star/chart/ChartAxisType.hpp>
+#include <com/sun/star/chart/TimeIncrement.hpp>
+#include <com/sun/star/chart/TimeInterval.hpp>
+#include <com/sun/star/chart/TimeUnit.hpp>
 #include <com/sun/star/chart/XTwoAxisXSupplier.hpp>
 #include <com/sun/star/chart/XTwoAxisYSupplier.hpp>
 #include <com/sun/star/chart/XAxisZSupplier.hpp>
@@ -63,11 +67,19 @@ using com::sun::star::uno::Reference;
 //----------------------------------------
 //----------------------------------------
 
-static __FAR_DATA SvXMLEnumMapEntry aXMLAxisDimensionMap[] =
+static SvXMLEnumMapEntry aXMLAxisDimensionMap[] =
 {
     { XML_X,  SCH_XML_AXIS_X  },
     { XML_Y,  SCH_XML_AXIS_Y  },
     { XML_Z,  SCH_XML_AXIS_Z  },
+    { XML_TOKEN_INVALID, 0 }
+};
+
+static SvXMLEnumMapEntry aXMLAxisTypeMap[] =
+{
+    { XML_AUTO,  ::com::sun::star::chart::ChartAxisType::AUTOMATIC },
+    { XML_TEXT,  ::com::sun::star::chart::ChartAxisType::CATEGORY },
+    { XML_DATE,  ::com::sun::star::chart::ChartAxisType::DATE },
     { XML_TOKEN_INVALID, 0 }
 };
 
@@ -93,6 +105,26 @@ public:
 //----------------------------------------
 //----------------------------------------
 
+
+class DateScaleContext : public SvXMLImportContext
+{
+public:
+    DateScaleContext( SchXMLImportHelper& rImpHelper, SvXMLImport& rImport,
+                        sal_uInt16 nPrefix, const OUString& rLocalName,
+                        const Reference< beans::XPropertySet > xAxisProps );
+
+    virtual ~DateScaleContext();
+    virtual void StartElement( const Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
+
+private:
+    SchXMLImportHelper& m_rImportHelper;
+    Reference< beans::XPropertySet > m_xAxisProps;
+};
+
+
+//----------------------------------------
+//----------------------------------------
+
 SchXMLAxisContext::SchXMLAxisContext( SchXMLImportHelper& rImpHelper,
                                       SvXMLImport& rImport, const OUString& rLocalName,
                                       Reference< chart::XDiagram > xDiagram,
@@ -107,6 +139,9 @@ SchXMLAxisContext::SchXMLAxisContext( SchXMLImportHelper& rImpHelper,
         m_xDiagram( xDiagram ),
         m_rAxes( rAxes ),
         m_rCategoriesAddress( rCategoriesAddress ),
+        m_nAxisType(chart::ChartAxisType::AUTOMATIC),
+        m_bAxisTypeImported(false),
+        m_bDateScaleImported(false),
         m_bAddMissingXAxisForNetCharts( bAddMissingXAxisForNetCharts ),
         m_bAdaptWrongPercentScaleValues( bAdaptWrongPercentScaleValues ),
         m_bAdaptXAxisOrientationForOld2DBarCharts( bAdaptXAxisOrientationForOld2DBarCharts ),
@@ -296,14 +331,18 @@ enum AxisAttributeTokens
 {
     XML_TOK_AXIS_DIMENSION,
     XML_TOK_AXIS_NAME,
-    XML_TOK_AXIS_STYLE_NAME
+    XML_TOK_AXIS_STYLE_NAME,
+    XML_TOK_AXIS_TYPE,
+    XML_TOK_AXIS_TYPE_EXT
 };
 
 SvXMLTokenMapEntry aAxisAttributeTokenMap[] =
 {
-    { XML_NAMESPACE_CHART,  XML_DIMENSION,              XML_TOK_AXIS_DIMENSION      },
-    { XML_NAMESPACE_CHART,  XML_NAME,                   XML_TOK_AXIS_NAME           },
-    { XML_NAMESPACE_CHART,  XML_STYLE_NAME,             XML_TOK_AXIS_STYLE_NAME     },
+    { XML_NAMESPACE_CHART,      XML_DIMENSION,  XML_TOK_AXIS_DIMENSION      },
+    { XML_NAMESPACE_CHART,      XML_NAME,       XML_TOK_AXIS_NAME           },
+    { XML_NAMESPACE_CHART,      XML_STYLE_NAME, XML_TOK_AXIS_STYLE_NAME     },
+    { XML_NAMESPACE_CHART,      XML_AXIS_TYPE,  XML_TOK_AXIS_TYPE           },
+    { XML_NAMESPACE_CHART_EXT,  XML_AXIS_TYPE,  XML_TOK_AXIS_TYPE_EXT       },
     XML_TOKEN_MAP_END
 };
 
@@ -343,6 +382,15 @@ void SchXMLAxisContext::StartElement( const Reference< xml::sax::XAttributeList 
                 break;
             case XML_TOK_AXIS_NAME:
                 m_aCurrentAxis.aName = aValue;
+                break;
+            case XML_TOK_AXIS_TYPE:
+            case XML_TOK_AXIS_TYPE_EXT:
+                USHORT nEnumVal;
+                if( rImport.GetMM100UnitConverter().convertEnum( nEnumVal, aValue, aXMLAxisTypeMap ))
+                {
+                    m_nAxisType = nEnumVal;
+                    m_bAxisTypeImported = true;
+                }
                 break;
             case XML_TOK_AXIS_STYLE_NAME:
                 m_aAutoStyleName = aValue;
@@ -429,7 +477,6 @@ void SchXMLAxisContext::CreateAxis()
 
     // set axis at chart
     Reference< beans::XPropertySet > xDiaProp( m_xDiagram, uno::UNO_QUERY );
-    Reference< beans::XPropertySet > xProp;
     uno::Any aTrueBool;
     aTrueBool <<= (sal_Bool)(sal_True);
     uno::Any aFalseBool;
@@ -452,7 +499,7 @@ void SchXMLAxisContext::CreateAxis()
                 }
                 Reference< chart::XAxisXSupplier > xSuppl( m_xDiagram, uno::UNO_QUERY );
                 if( xSuppl.is())
-                    xProp = xSuppl->getXAxis();
+                    m_xAxisProps = xSuppl->getXAxis();
             }
             else
             {
@@ -467,7 +514,7 @@ void SchXMLAxisContext::CreateAxis()
                 }
                 Reference< chart::XTwoAxisXSupplier > xSuppl( m_xDiagram, uno::UNO_QUERY );
                 if( xSuppl.is())
-                    xProp = xSuppl->getSecondaryXAxis();
+                    m_xAxisProps = xSuppl->getSecondaryXAxis();
             }
             break;
 
@@ -485,7 +532,7 @@ void SchXMLAxisContext::CreateAxis()
                 }
                 Reference< chart::XAxisYSupplier > xSuppl( m_xDiagram, uno::UNO_QUERY );
                 if( xSuppl.is())
-                    xProp = xSuppl->getYAxis();
+                    m_xAxisProps = xSuppl->getYAxis();
 
 
                 if( m_bAddMissingXAxisForNetCharts )
@@ -517,7 +564,7 @@ void SchXMLAxisContext::CreateAxis()
                 }
                 Reference< chart::XTwoAxisYSupplier > xSuppl( m_xDiagram, uno::UNO_QUERY );
                 if( xSuppl.is())
-                    xProp = xSuppl->getSecondaryYAxis();
+                    m_xAxisProps = xSuppl->getSecondaryYAxis();
             }
             break;
 
@@ -538,7 +585,7 @@ void SchXMLAxisContext::CreateAxis()
                 {
                     Reference< chart::XAxisZSupplier > xSuppl( m_xDiagram, uno::UNO_QUERY );
                     if( xSuppl.is())
-                        xProp = xSuppl->getZAxis();
+                        m_xAxisProps = xSuppl->getZAxis();
                 }
             }
             break;
@@ -548,16 +595,19 @@ void SchXMLAxisContext::CreateAxis()
     }
 
     // set properties
-    if( xProp.is())
+    if( m_xAxisProps.is())
     {
         // #i109879# the line color is black as default, in the model it is a light gray
-        xProp->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "LineColor" )),
+        m_xAxisProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "LineColor" )),
                                      uno::makeAny( COL_BLACK ));
 
-        xProp->setPropertyValue( OUString::createFromAscii( "DisplayLabels" ), aFalseBool );
+        m_xAxisProps->setPropertyValue( OUString::createFromAscii( "DisplayLabels" ), aFalseBool );
 
         // #88077# AutoOrigin 'on' is default
-        xProp->setPropertyValue( OUString::createFromAscii( "AutoOrigin" ), aTrueBool );
+        m_xAxisProps->setPropertyValue( OUString::createFromAscii( "AutoOrigin" ), aTrueBool );
+
+        if( m_bAxisTypeImported )
+            m_xAxisProps->setPropertyValue( OUString::createFromAscii( "AxisType" ), uno::makeAny(m_nAxisType) );
 
         if( m_aAutoStyleName.getLength())
         {
@@ -572,13 +622,13 @@ void SchXMLAxisContext::CreateAxis()
                     // note: SvXMLStyleContext::FillPropertySet is not const
                     XMLPropStyleContext * pPropStyleContext = const_cast< XMLPropStyleContext * >( dynamic_cast< const XMLPropStyleContext * >( pStyle ));
                     if( pPropStyleContext )
-                        pPropStyleContext->FillPropertySet( xProp );
+                        pPropStyleContext->FillPropertySet( m_xAxisProps );
 
                     if( m_bAdaptWrongPercentScaleValues && m_aCurrentAxis.eDimension==SCH_XML_AXIS_Y )
                     {
                         //set scale data of added x axis back to default
                         Reference< chart2::XAxis > xAxis( lcl_getAxis( GetImport().GetModel(),
-                                            1 /*nDimensionIndex*/, m_aCurrentAxis.nAxisIndex /*nAxisIndex*/ ) );
+                                            m_aCurrentAxis.eDimension, m_aCurrentAxis.nAxisIndex ) );
                         if( xAxis.is() )
                         {
                             chart2::ScaleData aScaleData( xAxis->getScaleData());
@@ -797,14 +847,18 @@ enum AxisChildTokens
 {
     XML_TOK_AXIS_TITLE,
     XML_TOK_AXIS_CATEGORIES,
-    XML_TOK_AXIS_GRID
+    XML_TOK_AXIS_GRID,
+    XML_TOK_AXIS_DATE_SCALE,
+    XML_TOK_AXIS_DATE_SCALE_EXT
 };
 
 SvXMLTokenMapEntry aAxisChildTokenMap[] =
 {
-    { XML_NAMESPACE_CHART,  XML_TITLE,                  XML_TOK_AXIS_TITLE      },
-    { XML_NAMESPACE_CHART,  XML_CATEGORIES,             XML_TOK_AXIS_CATEGORIES },
-    { XML_NAMESPACE_CHART,  XML_GRID,                   XML_TOK_AXIS_GRID       },
+    { XML_NAMESPACE_CHART,      XML_TITLE,              XML_TOK_AXIS_TITLE          },
+    { XML_NAMESPACE_CHART,      XML_CATEGORIES,         XML_TOK_AXIS_CATEGORIES     },
+    { XML_NAMESPACE_CHART,      XML_GRID,               XML_TOK_AXIS_GRID           },
+    { XML_NAMESPACE_CHART,      XML_DATE_SCALE,         XML_TOK_AXIS_DATE_SCALE     },
+    { XML_NAMESPACE_CHART_EXT,  XML_DATE_SCALE,         XML_TOK_AXIS_DATE_SCALE_EXT },
     XML_TOKEN_MAP_END
 };
 
@@ -843,6 +897,13 @@ SvXMLImportContext* SchXMLAxisContext::CreateChildContext(
                                                           p_nPrefix, rLocalName,
                                                           m_rCategoriesAddress );
             m_aCurrentAxis.bHasCategories = true;
+            break;
+
+        case XML_TOK_AXIS_DATE_SCALE:
+        case XML_TOK_AXIS_DATE_SCALE_EXT:
+            pContext = new DateScaleContext( m_rImportHelper, GetImport(),
+                            p_nPrefix, rLocalName, m_xAxisProps );
+            m_bDateScaleImported = true;
             break;
 
         case XML_TOK_AXIS_GRID:
@@ -886,6 +947,17 @@ SvXMLImportContext* SchXMLAxisContext::CreateChildContext(
 
 void SchXMLAxisContext::EndElement()
 {
+    if( !m_bDateScaleImported && m_nAxisType==chart::ChartAxisType::AUTOMATIC )
+    {
+        Reference< chart2::XAxis > xAxis( lcl_getAxis( GetImport().GetModel(), m_aCurrentAxis.eDimension, m_aCurrentAxis.nAxisIndex ) );
+        if( xAxis.is() )
+        {
+            chart2::ScaleData aScaleData( xAxis->getScaleData());
+            aScaleData.AutoDateAxis = false;//different default for older documents
+            xAxis->setScaleData( aScaleData );
+        }
+    }
+
     SetAxisTitle();
 }
 
@@ -1064,6 +1136,140 @@ void SchXMLCategoriesContext::StartElement( const Reference< xml::sax::XAttribut
             mrAddress = xAttrList->getValueByIndex( i );
         }
     }
+}
+
+// ========================================
+
+DateScaleContext::DateScaleContext(
+    SchXMLImportHelper& rImpHelper,
+    SvXMLImport& rImport,
+    sal_uInt16 nPrefix,
+    const OUString& rLocalName,
+    const Reference< beans::XPropertySet > xAxisProps ) :
+        SvXMLImportContext( rImport, nPrefix, rLocalName ),
+        m_rImportHelper( rImpHelper ),
+        m_xAxisProps( xAxisProps )
+{
+}
+
+DateScaleContext::~DateScaleContext()
+{
+}
+
+namespace
+{
+enum DateScaleAttributeTokens
+{
+    XML_TOK_DATESCALE_BASE_TIME_UNIT,
+    XML_TOK_DATESCALE_MAJOR_INTERVAL_VALUE,
+    XML_TOK_DATESCALE_MAJOR_INTERVAL_UNIT,
+    XML_TOK_DATESCALE_MINOR_INTERVAL_VALUE,
+    XML_TOK_DATESCALE_MINOR_INTERVAL_UNIT
+};
+
+SvXMLTokenMapEntry aDateScaleAttributeTokenMap[] =
+{
+    { XML_NAMESPACE_CHART,  XML_BASE_TIME_UNIT,         XML_TOK_DATESCALE_BASE_TIME_UNIT  },
+    { XML_NAMESPACE_CHART,  XML_MAJOR_INTERVAL_VALUE,   XML_TOK_DATESCALE_MAJOR_INTERVAL_VALUE  },
+    { XML_NAMESPACE_CHART,  XML_MAJOR_INTERVAL_UNIT,    XML_TOK_DATESCALE_MAJOR_INTERVAL_UNIT  },
+    { XML_NAMESPACE_CHART,  XML_MINOR_INTERVAL_VALUE,   XML_TOK_DATESCALE_MINOR_INTERVAL_VALUE  },
+    { XML_NAMESPACE_CHART,  XML_MINOR_INTERVAL_UNIT,    XML_TOK_DATESCALE_MINOR_INTERVAL_UNIT  },
+    XML_TOKEN_MAP_END
+};
+
+class DateScaleAttributeTokenMap : public SvXMLTokenMap
+{
+public:
+    DateScaleAttributeTokenMap(): SvXMLTokenMap( aDateScaleAttributeTokenMap ) {}
+    virtual ~DateScaleAttributeTokenMap() {}
+};
+
+struct theDateScaleAttributeTokenMap : public rtl::Static< DateScaleAttributeTokenMap, theDateScaleAttributeTokenMap > {};
+
+sal_Int32 lcl_getTimeUnit( const OUString& rValue )
+{
+    sal_Int32 nTimeUnit = ::com::sun::star::chart::TimeUnit::DAY;
+    if( IsXMLToken( rValue, XML_DAYS ) )
+        nTimeUnit = ::com::sun::star::chart::TimeUnit::DAY;
+    else if( IsXMLToken( rValue, XML_MONTHS ) )
+        nTimeUnit = ::com::sun::star::chart::TimeUnit::MONTH;
+    else if( IsXMLToken( rValue, XML_YEARS ) )
+        nTimeUnit = ::com::sun::star::chart::TimeUnit::YEAR;
+    return nTimeUnit;
+}
+
+}
+
+void DateScaleContext::StartElement( const Reference< xml::sax::XAttributeList >& xAttrList )
+{
+    if( !m_xAxisProps.is() )
+        return;
+
+    // parse attributes
+    sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
+    SchXMLImport& rImport = ( SchXMLImport& )GetImport();
+    const SvXMLTokenMap& rAttrTokenMap = theDateScaleAttributeTokenMap::get();
+
+    bool bSetNewIncrement=false;
+    chart::TimeIncrement aIncrement;
+    m_xAxisProps->getPropertyValue( OUString::createFromAscii( "TimeIncrement" )) >>= aIncrement;
+
+    for( sal_Int16 i = 0; i < nAttrCount; i++ )
+    {
+        OUString sAttrName = xAttrList->getNameByIndex( i );
+        OUString aLocalName;
+        OUString aValue = xAttrList->getValueByIndex( i );
+        USHORT nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+
+        switch( rAttrTokenMap.Get( nPrefix, aLocalName ))
+        {
+            case XML_TOK_DATESCALE_BASE_TIME_UNIT:
+                {
+                    aIncrement.TimeResolution = uno::makeAny( lcl_getTimeUnit(aValue) );
+                    bSetNewIncrement = true;
+                }
+                break;
+            case XML_TOK_DATESCALE_MAJOR_INTERVAL_VALUE:
+                {
+                    chart::TimeInterval aInterval(1,0);
+                    aIncrement.MajorTimeInterval >>= aInterval;
+                    SvXMLUnitConverter::convertNumber( aInterval.Number, aValue );
+                    aIncrement.MajorTimeInterval = uno::makeAny(aInterval);
+                    bSetNewIncrement = true;
+                }
+                break;
+            case XML_TOK_DATESCALE_MAJOR_INTERVAL_UNIT:
+                {
+                    chart::TimeInterval aInterval(1,0);
+                    aIncrement.MajorTimeInterval >>= aInterval;
+                    aInterval.TimeUnit = lcl_getTimeUnit(aValue);
+                    aIncrement.MajorTimeInterval = uno::makeAny(aInterval);
+                    bSetNewIncrement = true;
+                }
+                break;
+            case XML_TOK_DATESCALE_MINOR_INTERVAL_VALUE:
+                {
+                    chart::TimeInterval aInterval(1,0);
+                    aIncrement.MinorTimeInterval >>= aInterval;
+                    SvXMLUnitConverter::convertNumber( aInterval.Number, aValue );
+                    aIncrement.MinorTimeInterval = uno::makeAny(aInterval);
+                    bSetNewIncrement = true;
+                }
+                break;
+            case XML_TOK_DATESCALE_MINOR_INTERVAL_UNIT:
+                {
+                    chart::TimeInterval aInterval(1,0);
+                    aIncrement.MinorTimeInterval >>= aInterval;
+                    aInterval.TimeUnit = lcl_getTimeUnit(aValue);
+                    aIncrement.MinorTimeInterval = uno::makeAny(aInterval);
+                    bSetNewIncrement = true;
+                }
+                break;
+        }
+    }
+
+    if( bSetNewIncrement )
+        m_xAxisProps->setPropertyValue( OUString::createFromAscii( "TimeIncrement" ), uno::makeAny( aIncrement ) );
 }
 
 // ========================================
