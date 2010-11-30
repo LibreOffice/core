@@ -24,8 +24,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef com_sun_star_chart2_AxisType_idl
-#define com_sun_star_chart2_AxisType_idl
+#ifndef com_sun_star_chart_ChartAxisType_idl
+#define com_sun_star_chart_ChartAxisType_idl
 
 module com
 {
@@ -33,31 +33,25 @@ module sun
 {
 module star
 {
-module chart2
+module chart
 {
+/** @since OOo 3.4
+*/
+published constants ChartAxisType
+{
+    /** the type of the axis is choosen automatically dependent on the chart type, the dimension and the underlying data
+     */
+    const long AUTOMATIC = 0;
 
-constants AxisType
-{
-    /** the axis represent real numbers
+    /** the axis represent discrete category texts if chart type and the dimension allows
      */
-    const long REALNUMBER = 0;
-    /** the axis represent real numbers in percent
+    const long CATEGORY = 1;
+
+    /** the axis shows dates if the given data and chart type and the dimension allows
      */
-    const long PERCENT = 1;
-    /** the axis represent discrete categories
-     */
-    const long CATEGORY = 2;
-    /** the axis shows the series names (z axis)
-     */
-    const long SERIES = 3;
-    /** the axis shows dates
-     */
-    const long DATE = 4;
+    const long DATE = 2;
 };
 
-} ; // chart2
-} ; // com
-} ; // sun
-} ; // star
+}; }; }; };
 
 #endif

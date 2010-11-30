@@ -55,6 +55,14 @@
 #include <com/sun/star/chart/ChartAxisMarkPosition.idl>
 #endif
 
+#ifndef __com_sun_star_chart_ChartAxisType_idl__
+#include <com/sun/star/chart/ChartAxisType.idl>
+#endif
+
+#ifndef __com_sun_star_chart_TimeIncrement_idl__
+#include <com/sun/star/chart/TimeIncrement.idl>
+#endif
+
 #ifndef _com_sun_star_xml_UserDefinedAttributeSupplier_idl_
 #include <com/sun/star/xml/UserDefinedAttributeSupplier.idl>
 #endif
@@ -166,6 +174,20 @@ published service ChartAxis
         not (linear).
      */
     [optional, property] boolean Logarithmic;
+
+    //-------------------------------------------------------------------------
+
+    /** determines which type of axis this is, e.g. a date-axis or a category-axis @see ChartAxisType
+        @since OOo 3.4
+     */
+    [optional, property] long AxisType;
+
+    //-------------------------------------------------------------------------
+
+    /** if the current axis is a date-time the intervals are choosen as given with TimeIncrement
+        @since OOo 3.4
+     */
+    [optional, maybevoid, property] TimeIncrement TimeIncrement;
 
     //-------------------------------------------------------------------------
 

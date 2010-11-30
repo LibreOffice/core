@@ -24,40 +24,34 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef com_sun_star_chart2_AxisType_idl
-#define com_sun_star_chart2_AxisType_idl
+#ifndef com_sun_star_chart_TimeInterval_idl
+#define com_sun_star_chart_TimeInterval_idl
 
-module com
-{
-module sun
-{
-module star
-{
-module chart2
-{
+#include <com/sun/star/chart/TimeUnit.idl>
 
-constants AxisType
+//=============================================================================
+
+module com {  module sun {  module star {  module chart {
+
+//=============================================================================
+
+/** Describes an interval on a date-time axis
+@since OOo 3.4
+*/
+published struct TimeInterval
 {
-    /** the axis represent real numbers
-     */
-    const long REALNUMBER = 0;
-    /** the axis represent real numbers in percent
-     */
-    const long PERCENT = 1;
-    /** the axis represent discrete categories
-     */
-    const long CATEGORY = 2;
-    /** the axis shows the series names (z axis)
-     */
-    const long SERIES = 3;
-    /** the axis shows dates
-     */
-    const long DATE = 4;
+    /** specifies the number of units
+    */
+    long    Number;
+
+    /** specifies a unit for the interval
+        <p>is a value out of the constant group <type>::com::sun::star::chart::TimeUnit</type>.</p>
+    */
+    long    TimeUnit;
 };
 
-} ; // chart2
-} ; // com
-} ; // sun
-} ; // star
+//=============================================================================
+
+}; }; }; };
 
 #endif
