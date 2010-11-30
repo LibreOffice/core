@@ -163,7 +163,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     String   aNullStr;
 
     ::basegfx::B2DPolyPolygon aNullPolyPolygon;
-    Color    aNullCol(RGB_Color(COL_BLACK));
+    Color    aNullCol(RGB_Color(COL_DEFAULT_SHAPE_STROKE));
 
     XDash     aNullDash;
     XGradient aNullGrad(aNullCol,RGB_Color(COL_WHITE));
@@ -173,20 +173,20 @@ void SdDrawDocument::CreateLayoutTemplates()
 
                     // Linienattribute (Extended OutputDevice)
     rISet.Put(XLineStyleItem(XLINE_SOLID));
-    rISet.Put(XLineColorItem(String(), RGB_Color(COL_BLACK)));
+    rISet.Put(XLineColorItem(String(), RGB_Color(COL_DEFAULT_SHAPE_STROKE)));
     rISet.Put(XLineWidthItem(0));
     rISet.Put(XLineDashItem(pPool,aNullDash));
     rISet.Put(XLineStartItem(pPool,aNullPolyPolygon));
     rISet.Put(XLineEndItem(pPool,aNullPolyPolygon));
-    rISet.Put(XLineStartWidthItem(300));
-    rISet.Put(XLineEndWidthItem(300));
+    rISet.Put(XLineStartWidthItem(200));
+    rISet.Put(XLineEndWidthItem(200));
     rISet.Put(XLineStartCenterItem());
     rISet.Put(XLineEndCenterItem());
     rISet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_BLOCK));
 
                     // Fuellattribute (Extended OutputDevice)
     rISet.Put(XFillStyleItem(XFILL_SOLID));
-    rISet.Put(XFillColorItem(String(), RGB_Color(COL_DEFAULT_SHAPE_FILLING))); // "Blue 8"
+    rISet.Put(XFillColorItem(String(), RGB_Color(COL_DEFAULT_SHAPE_FILLING)));
 
     rISet.Put(XFillGradientItem(pPool,aNullGrad));
     rISet.Put(XFillHatchItem(pPool,aNullHatch));
@@ -199,8 +199,8 @@ void SdDrawDocument::CreateLayoutTemplates()
                     // Schattenattribute (Drawing Engine)
     rISet.Put(SdrShadowItem(FALSE));
     rISet.Put(SdrShadowColorItem(aNullStr, RGB_Color(COL_GRAY)));
-    rISet.Put(SdrShadowXDistItem(300));         // 3 mm Schattendistanz
-    rISet.Put(SdrShadowYDistItem(300));
+    rISet.Put(SdrShadowXDistItem(200));         // 3 mm Schattendistanz
+    rISet.Put(SdrShadowYDistItem(200));
 
     Font aLatinFont, aCJKFont, aCTLFont;
 
@@ -311,8 +311,8 @@ void SdDrawDocument::CreateLayoutTemplates()
 
     pISet->Put(SdrShadowItem(TRUE));
     pISet->Put(SdrShadowColorItem(aNullStr, RGB_Color(COL_GRAY)));
-    pISet->Put(SdrShadowXDistItem(300));        // 3 mm Schattendistanz
-    pISet->Put(SdrShadowYDistItem(300));
+    pISet->Put(SdrShadowXDistItem(200));        // 3 mm Schattendistanz
+    pISet->Put(SdrShadowYDistItem(200));
 
     // ---- Objekt ohne Fllung -------------------------------------------
 
@@ -323,6 +323,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet = &pSheet->GetItemSet();
 
     pISet->Put(XFillStyleItem(XFILL_NONE));
+    pISet->Put(XLineColorItem(String(), RGB_Color(COL_BLACK)));
 
     // ---- Text ----------------------------------------------------------
 
@@ -514,6 +515,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet = &pSheet->GetItemSet();
 
     pISet->Put(XFillStyleItem(XFILL_NONE));
+    pISet->Put(XLineColorItem(String(), RGB_Color(COL_BLACK)));
 
     pISet->Put(SvxFontHeightItem(423, 100, EE_CHAR_FONTHEIGHT ));         // 12 pt
 
