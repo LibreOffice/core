@@ -184,7 +184,7 @@ published service ChartAxis
 
     //-------------------------------------------------------------------------
 
-    /** if the current axis is a date-time the intervals are choosen as given with TimeIncrement
+    /** if the current axis is a date-axis the intervals are choosen as given with TimeIncrement
         @since OOo 3.4
      */
     [optional, maybevoid, property] TimeIncrement TimeIncrement;
