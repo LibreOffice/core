@@ -40,6 +40,8 @@
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
 
+#include <limits>
+
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::graphic::XGraphic;
