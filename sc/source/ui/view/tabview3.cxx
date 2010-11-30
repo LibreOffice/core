@@ -984,88 +984,10 @@ void ScTabView::MoveCursorRel( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode,
     aViewData.ResetOldCursor();
 
     if (nMovX != 0 && VALIDCOLROW(nCurX,nCurY))
-    {
-        BOOL bHFlip = FALSE;
-        do
-        {
-            SCCOL nLastCol = -1;
-            bSkipCell = pDoc->ColHidden(nCurX, nTab, nLastCol) || pDoc->IsHorOverlapped( nCurX, nCurY, nTab );
-            if (bSkipProtected && !bSkipCell)
-                bSkipCell = pDoc->HasAttrib(nCurX, nCurY, nTab, nCurX, nCurY, nTab, HASATTR_PROTECTED);
-            if (bSkipUnprotected && !bSkipCell)
-                bSkipCell = !pDoc->HasAttrib(nCurX, nCurY, nTab, nCurX, nCurY, nTab, HASATTR_PROTECTED);
-
-            if (bSkipCell)
-            {
-                if ( nCurX<=0 || nCurX>=MAXCOL )
-                {
-                    if (bHFlip)
-                    {
-                        nCurX = nOldX;
-                        bSkipCell = FALSE;
-                    }
-                    else
-                    {
-                        nMovX = -nMovX;
-                        if (nMovX > 0) ++nCurX; else --nCurX;       // zuruecknehmen
-                        bHFlip = TRUE;
-                    }
-                }
-                else
-                    if (nMovX > 0) ++nCurX; else --nCurX;
-            }
-        }
-        while (bSkipCell);
-
-        if (pDoc->IsVerOverlapped( nCurX, nCurY, nTab ))
-        {
-            aViewData.SetOldCursor( nCurX,nCurY );
-            while (pDoc->IsVerOverlapped( nCurX, nCurY, nTab ))
-                --nCurY;
-        }
-    }
+        SkipCursorHorizontal(nCurX, nCurY, nOldX, nOldY, nMovX);
 
     if (nMovY != 0 && VALIDCOLROW(nCurX,nCurY))
-    {
-        BOOL bVFlip = FALSE;
-        do
-        {
-            SCROW nLastRow = -1;
-            bSkipCell = pDoc->RowHidden(nCurY, nTab, nLastRow) || pDoc->IsVerOverlapped( nCurX, nCurY, nTab );
-            if (bSkipProtected && !bSkipCell)
-                bSkipCell = pDoc->HasAttrib(nCurX, nCurY, nTab, nCurX, nCurY, nTab, HASATTR_PROTECTED);
-            if (bSkipUnprotected && !bSkipCell)
-                bSkipCell = !pDoc->HasAttrib(nCurX, nCurY, nTab, nCurX, nCurY, nTab, HASATTR_PROTECTED);
-
-            if (bSkipCell)
-            {
-                if ( nCurY<=0 || nCurY>=MAXROW )
-                {
-                    if (bVFlip)
-                    {
-                        nCurY = nOldY;
-                        bSkipCell = FALSE;
-                    }
-                    else
-                    {
-                        nMovY = -nMovY;
-                        if (nMovY > 0) ++nCurY; else --nCurY;       // zuruecknehmen
-                        bVFlip = TRUE;
-                    }
-                }
-                else
-                    if (nMovY > 0) ++nCurY; else --nCurY;
-            }
-        }
-        while (bSkipCell);
-
-        if (pDoc->IsHorOverlapped( nCurX, nCurY, nTab ))
-        {
-            aViewData.SetOldCursor( nCurX,nCurY );
-            while (pDoc->IsHorOverlapped( nCurX, nCurY, nTab ))
-                --nCurX;
-        }
-    }
+        SkipCursorVertical(nCurX, nCurY, nOldX, nOldY, nMovY);
 
     MoveCursorAbs( nCurX, nCurY, eMode, bShift, FALSE, TRUE, bKeepSel );
 }
