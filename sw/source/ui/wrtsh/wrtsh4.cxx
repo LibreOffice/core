@@ -248,16 +248,6 @@ BOOL SwWrtShell::_FwdPara()
 {
     Push();
     ClearMark();
-    // --> OD 2009-01-06 #i81824#
-    // going right and back again left not needed and causes too much
-    // accessibility events due to the cursor movements.
-//    if(!SwCrsrShell::Right(1,CRSR_SKIP_CHARS))
-//    {
-//        Pop(FALSE);
-//        return 0;
-//    }
-//    SwCrsrShell::Left(1,CRSR_SKIP_CHARS);
-    // <--
     BOOL bRet = SwCrsrShell::MovePara(fnParaNext, fnParaStart);
 
     ClearMark();
@@ -270,22 +260,7 @@ BOOL SwWrtShell::_BwdPara()
 {
     Push();
     ClearMark();
-    // --> OD 2009-01-06 #i81824#
-    // going left and back again right not needed and causes too much
-    // accessibility events due to the cursor movements.
-//    if(!SwCrsrShell::Left(1,CRSR_SKIP_CHARS))
-//    {
-//        Pop(FALSE);
-//        return 0;
-//    }
-//    SwCrsrShell::Right(1,CRSR_SKIP_CHARS);
-    // <--
-    // --> OD 2009-01-06 #i81824#
-    // going to start of paragraph only needed, if move to previous paragraph
-    // does not happen. Otherwise, useless accessibility events are triggered
-    // due to cursor movements.
-//    if(!IsSttOfPara())
-//        SttPara();
+
     BOOL bRet = SwCrsrShell::MovePara(fnParaPrev, fnParaStart);
     if ( !bRet && !IsSttOfPara() )
     {

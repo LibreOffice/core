@@ -126,13 +126,11 @@ _ReadFieldParams::_ReadFieldParams( const String& _rData )
     nFnd      = nNext;
     nSavPtr   = nNext;
     aFieldName = aData.Copy( 0, nFnd );
-//  cLastChar = aData.GetChar( nSavPtr );
 }
 
 
 _ReadFieldParams::~_ReadFieldParams()
 {
-//  aData.SetChar( nSavPtr, cLastChar );
 }
 
 

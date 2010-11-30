@@ -182,12 +182,9 @@ SfxTabPage* __EXPORT SwView::CreatePrintOptionsPage(Window* pParent,
 PrintDialog* CreatePrintDialog( Window* pParent, USHORT nPg, SwWrtShell* pSh )
 {
     PrintDialog *pDlg = new PrintDialog( pParent, false );
-//  pDlg->ChangeFirstPage( 1 );
 
     if ( !nPg )
         nPg = 1;
-//  pDlg->ChangeLastPage( nPg );
-//  pDlg->ChangeMaxPage( 9999 );
     pDlg->EnableRange( PRINTDIALOG_FROMTO );
 
     if (pSh && (pSh->IsSelection() || pSh->IsFrmSelected() || pSh->IsObjSelected()))

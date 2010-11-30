@@ -173,9 +173,6 @@ void SwInsertChart(Window* pParent, SfxBindings* pBindings )
         {
             SwFrmFmt* pTblFmt = rWrtShell.GetTableFmt();
             String aCurrentTblName = pTblFmt->GetName();
-//             String aText( String::CreateFromAscii("<.>") );   // was used for UI
-//             aText.Insert( rWrtShell.GetBoxNms(), 2);
-//             aText.Insert( aCurrentTblName, 1 );
             aRangeString = aCurrentTblName;
             aRangeString += OUString::valueOf( sal_Unicode('.') );
             aRangeString += rWrtShell.GetBoxNms();

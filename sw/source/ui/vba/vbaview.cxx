@@ -130,9 +130,6 @@ SwVbaView::setSeekView( ::sal_Int32 _seekview ) throw (css::uno::RuntimeExceptio
     // document, so we can jump back to this position, if the macro sets
     // the ViewMode back to wdSeekMainDocument
 
-    // if( _seekview == getSeekView() )
-    //    return;
-
     word::gotoSelectedObjectAnchor( mxModel );
     switch( _seekview )
     {

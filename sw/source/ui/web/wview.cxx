@@ -145,8 +145,6 @@ void SwWebView::SelectShell()
     }
     else
     {
-
-    //  DELETEZ(pxSelectionObj); //Selektionsobjekt loeschen
         SfxDispatcher &rDispatcher = *GetViewFrame()->GetDispatcher();
         SwToolbarConfigItem *pBarCfg = SW_MOD()->GetWebToolbarConfig();
 

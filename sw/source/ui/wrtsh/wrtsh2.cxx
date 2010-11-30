@@ -149,9 +149,6 @@ void SwWrtShell::UpdateInputFlds( SwInputFieldList* pLst, BOOL bOnlyInSel )
 BOOL SwWrtShell::StartInputFldDlg( SwField* pFld, BOOL bNextButton,
                                     Window* pParentWin, ByteString* pWindowState )
 {
-//JP 14.08.96: Bug 30332 - nach Umbau der modularietaet im SFX, muss jetzt
-//              das TopWindow der Application benutzt werden.
-//  SwFldInputDlg* pDlg = new SwFldInputDlg( GetWin(), *this, pFld );
 
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "Dialogdiet fail!");
@@ -258,7 +255,6 @@ void SwWrtShell::ClickToField( const SwField& rFld )
             case JE_FMT_GRAPHIC:    nSlotId = SID_INSERT_GRAPHIC;       break;
             case JE_FMT_OLE:        nSlotId = SID_INSERT_OBJECT;        break;
 
-//          case JE_FMT_TEXT:
             }
 
             Right( CRSR_SKIP_CHARS, TRUE, 1, FALSE );       // Feld selektieren
@@ -415,7 +411,6 @@ void LoadURL( const String& rURL, ViewShell* pVSh, USHORT nFilter,
 
     SfxBoolItem aNewView( SID_OPEN_NEW_VIEW, FALSE );
     //#39076# Silent kann lt. SFX entfernt werden.
-//  SfxBoolItem aSilent( SID_SILENT, TRUE );
     SfxBoolItem aBrowse( SID_BROWSE, TRUE );
 
     if( nFilter & URLLOAD_NEWVIEW )

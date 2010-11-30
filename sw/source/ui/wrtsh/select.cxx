@@ -620,7 +620,6 @@ long SwWrtShell::SttLeaveSelect(const Point *, BOOL )
     if(SwCrsrShell::HasSelection() && !IsSelTblCells() && bClearMark) {
         return 0;
     }
-//  if( IsSelTblCells() ) aSelTblLink.Call(this);
     ClearMark();
     return 1;
 }

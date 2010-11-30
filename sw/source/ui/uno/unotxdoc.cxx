@@ -1370,11 +1370,6 @@ Reference< drawing::XDrawPage >  SwXTextDocument::getDrawPage(void) throw( Runti
         // for the case that it did something by purpose
         ((SwXTextDocument*)this)->pDrawPage = new SwXDrawPage(pDocShell->GetDoc());
         ((SwXTextDocument*)this)->pxXDrawPage = new Reference< drawing::XDrawPage >(pDrawPage);
-
-        //((SwXTextDocument*)this)->pxXDrawPage = new Reference< drawing::XDrawPage > ;
-        //((SwXTextDocument*)this)->pDrawPage = new SwXDrawPage(pDocShell->GetDoc());
-        //Reference< drawing::XShapes >  xTmp = pDrawPage;
-        //*pxXDrawPage = Reference< drawing::XDrawPage>(xTmp, UNO_QUERY);
     }
     return *pxXDrawPage;
 }
@@ -2507,7 +2502,6 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
     if (!m_pPrintUIOptions)
         m_pPrintUIOptions = lcl_GetPrintUIOptions( pDocShell, pView );
     bool bFormat = m_pPrintUIOptions->processPropertiesAndCheckFormat( rxOptions );
-    // const bool bIsSkipEmptyPages    = !m_pPrintUIOptions->IsPrintEmptyPages( bIsPDFExport );
 
     SwDoc *pDoc = GetRenderDoc( pView, rSelection, bIsPDFExport );
     OSL_ENSURE( pDoc && pView, "doc or view shell missing!" );
@@ -2819,9 +2813,6 @@ SfxViewShell * SwXTextDocument::GuessViewShell(
     if (pView)
         rbIsSwSrcView = pSwSrcView != 0;
     return pView;
-//    return pSwView ? dynamic_cast< SfxViewShell * >(pSwView) :
-//            (pSwSrcView ? dynamic_cast< SfxViewShell * >(pSwSrcView) :
-//                          dynamic_cast< SfxViewShell * >(pSwPagePreView) );
 }
 
 void SAL_CALL SwXTextDocument::render(
@@ -3266,14 +3257,6 @@ Any SwXLinkTargetSupplier::getByName(const OUString& rName)
         Reference< XPropertySet >  xRet(xTbls, UNO_QUERY);
         aRet.setValue(&xRet, ::getCppuType((Reference< XPropertySet>*)0));
     }
-/*  else if(sToCompare == )
-    {
-        sSuffix += UniString::CreateFromAscii(pMarkToText);
-        Reference< XNameAccess >  xTbls = new SwXLinkNameAccessWrapper(
-                                        pxDoc->, sSuffix );
-        Reference< XPropertySet >  xRet(xTbls, UNO_QUERY);
-        aRet.setValue(&xRet, ::getCppuType((const XPropertySet*)0));
-    }*/
     else if(sToCompare == sGraphics)
     {
         sSuffix += UniString::CreateFromAscii(pMarkToGraphic);
@@ -3579,8 +3562,6 @@ Any lcl_GetDisplayBitmap(String sLinkSuffix)
         nImgId = CONTENT_TYPE_FRAME;
     else if(COMPARE_EQUAL  == sLinkSuffix.CompareToAscii(pMarkToGraphic))
         nImgId = CONTENT_TYPE_GRAPHIC;
-//  else if(== sLinkSuffix)
-//      nImgId = CONTENT_TYPE_BOOKMARK;
     else if(COMPARE_EQUAL  == sLinkSuffix.CompareToAscii(pMarkToRegion))
         nImgId = CONTENT_TYPE_REGION;
     else if(COMPARE_EQUAL == sLinkSuffix.CompareToAscii(pMarkToOLE))

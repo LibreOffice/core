@@ -66,7 +66,6 @@ void SwScrollbar::DocSzChgd( const Size &rSize )
     SetRange( Range( 0, bHori ? rSize.Width() : rSize.Height()) );
     const ULONG nVisSize = GetVisibleSize();
     SetLineSize( SCROLL_LINE_SIZE );
-//    SetLineSize( nVisSize * 10 / 100 );
     SetPageSize( nVisSize * 77 / 100 );
 }
 

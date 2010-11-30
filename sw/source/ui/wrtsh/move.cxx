@@ -522,7 +522,6 @@ BOOL SwWrtShell::PushCrsr(SwTwips lOffset, BOOL bSelect)
 
         if( bIsFrmSel )
         {
-//          CallChgLnk();
             // bei Frames immer nur die obere Ecke nehmen, damit dieser
             // wieder selektiert werden kann
             aOldRect.SSize( 5, 5 );

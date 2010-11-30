@@ -335,7 +335,6 @@ void NumFormatListBox::SetDefFormat(const ULONG nDefFmt)
     while ((ULONG)GetEntryData(nPos) == ULONG_MAX)
         nPos++;
 
-//
     ULONG nSysNumFmt = pFormatter->GetFormatIndex( NF_NUMBER_SYSTEM, eCurLanguage);
     ULONG nSysShortDateFmt = pFormatter->GetFormatIndex( NF_DATE_SYSTEM_SHORT, eCurLanguage);
     ULONG nSysLongDateFmt = pFormatter->GetFormatIndex( NF_DATE_SYSTEM_LONG, eCurLanguage);
@@ -471,12 +470,6 @@ double NumFormatListBox::GetDefValue(const short nFormatType) const
         case NUMBERFORMAT_TIME:
             fDefValue = SVX_NUMVAL_TIME;
             break;
-/*      {
-            String sValue("31.8.1997 16:57:34");
-            ULONG nFormat = pFormatter->GetStandardFormat(nFormatType, LANGUAGE_GERMAN);
-            pFormatter->IsNumberFormat( sValue, nFormat, fDefValue );
-        }
-        break;*/
 
         case NUMBERFORMAT_TEXT:
         case NUMBERFORMAT_UNDEFINED:

@@ -170,9 +170,7 @@ SwFilterDetect::~SwFilterDetect()
             nIndexOfDocumentTitle = nProperty;
     }
 
-    // can't check the type for external filters, so set the "dont" flag accordingly
     SolarMutexGuard aGuard;
-    //SfxFilterFlags nMust = SFX_FILTER_IMPORT, nDont = SFX_FILTER_NOTINSTALLED;
 
     SfxApplication* pApp = SFX_APP();
     SfxAllItemSet *pSet = new SfxAllItemSet( pApp->GetPool() );
@@ -190,7 +188,6 @@ SwFilterDetect::~SwFilterDetect()
             String aPattern( aPrefix );
             aPattern += String::CreateFromAscii("swriter");
             if ( aURL.Match( aPattern ) >= aPattern.Len() )
-                //pFilter = SfxFilter::GetDefaultFilterFromFactory( aURL );
                 return aTypeName;
         }
     }

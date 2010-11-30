@@ -764,38 +764,6 @@ void SwView::StateSearch(SfxItemSet &rSet)
                 rSet.Put( *pSrchItem );
             }
             break;
-
-/*          case SID_SEARCH_REPLACESET:
-            case SID_SEARCH_SEARCHSET:
-            {
-                static USHORT __READONLY_DATA aSearchAttrRange[] =
-                {
-                        RES_CHRATR_CASEMAP,     RES_CHRATR_POSTURE,
-                        RES_CHRATR_SHADOWED,    RES_CHRATR_WORDLINEMODE,
-                        RES_PARATR_LINESPACING, RES_PARATR_HYPHENZONE,
-                        RES_LR_SPACE,           RES_UL_SPACE,
-                        SID_ATTR_PARA_MODEL,    SID_ATTR_PARA_KEEP,
-                        0
-                };
-
-                SfxItemSet aSet(pWrtShell->GetAttrPool(), aSearchAttrRange );
-                if( SID_SEARCH_REPLACESET==nWhich )
-                {
-                    if( pReplList )
-                    {
-                        pReplList->Get( aSet );
-                        DELETEZ( pReplList );
-                    }
-                }
-                else if( pSrchList )
-                {
-                    pSrchList->Get( aSet );
-                    DELETEZ( pSrchList );
-                }
-                rSet.Put( SvxSetItem( nWhich, aSet ));
-            }
-            break;
-*/
         }
         nWhich = aIter.NextWhich();
     }

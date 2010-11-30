@@ -821,7 +821,6 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         break;
         case HANDLE_IS_KERN_ASIAN_PUNCTUATION:
         {
-            //sal_Bool bParaSpace = mpDoc->IsKernAsianPunctuation();
             sal_Bool bParaSpace = mpDoc->get(IDocumentSettingAccess::KERN_ASIAN_PUNCTUATION);
             rValue.setValue(&bParaSpace, ::getBooleanCppuType());
         }

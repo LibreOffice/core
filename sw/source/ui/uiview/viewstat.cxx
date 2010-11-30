@@ -331,7 +331,6 @@ void SwView::GetState(SfxItemSet &rSet)
             case SID_DOCUMENT_COMPARE:
             case SID_DOCUMENT_MERGE:
                 if( GetDocShell()->IsA( SwGlobalDocShell::StaticType() ) ||
-//                  pWrtShell->IsAnySectionInDoc( sal_True, sal_True, sal_True )||
                     (SID_DOCUMENT_MERGE == nWhich && pWrtShell->getIDocumentRedlineAccess()->GetRedlinePassword().getLength()))
                     rSet.DisableItem(nWhich);
             break;
@@ -459,7 +458,6 @@ void SwView::GetDrawState(SfxItemSet &rSet)
         case SID_SHOW_HIDDEN:
         case SID_SHOW_FORMS:
             rSet.DisableItem( nWhich );
-            // rSet.Put( SfxBoolItem(nWhich,sal_True ));
             break;
 
         case SID_DRAW_TEXT_MARQUEE:

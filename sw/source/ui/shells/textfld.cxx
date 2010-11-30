@@ -640,12 +640,6 @@ void SwTextShell::StateField( SfxItemSet &rSet )
             break;
             case FN_EDIT_FIELD:
             {
-                /* #108536# Fields can be selected, too now. Removed
-
-                if( rSh.HasSelection() )
-                     rSet.DisableItem(nWhich);
-                else ...
-                */
 
                 if( !bGetField )
                 {

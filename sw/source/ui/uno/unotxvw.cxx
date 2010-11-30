@@ -167,7 +167,6 @@ void SwXTextView::Invalidate()
 
 Sequence< uno::Type > SAL_CALL SwXTextView::getTypes(  ) throw(uno::RuntimeException)
 {
-//  uno::Sequence< uno::Type > aViewTypes = SwXTextViewBaseClass::getTypes();
     uno::Sequence< uno::Type > aBaseTypes = SfxBaseController::getTypes();
 
     long nIndex = aBaseTypes.getLength();
@@ -454,7 +453,6 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface) throw( lang::IllegalArg
                     SdrObject *pObj = pSvxShape->GetSdrObject();
                     if (pObj)
                     {
-//                      lcl_ShowObject( *m_pViewSh, *pDrawView, pObj );
                         SdrPageView* pPV = pDrawView->GetSdrPageView();
                         if ( pPV && pObj->GetPage() == pPV->GetPage() )
                         {
@@ -487,7 +485,6 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface) throw( lang::IllegalArg
                                 {
                                     if (!pPV)               // erstes Objekt
                                     {
-//                                      lcl_ShowObject( *m_pViewSh, *pDrawView, pObj );
                                         pPV = pDrawView->GetSdrPageView();
                                     }
                                     if ( pPV && pObj->GetPage() == pPV->GetPage() )

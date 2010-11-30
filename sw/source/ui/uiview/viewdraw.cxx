@@ -496,7 +496,6 @@ sal_Bool SwView::EnterDrawTextMode(const Point& aDocPos)
 
         // #108784#
         // To allow SwDrawVirtObj text objects to be activated, allow their type, too.
-        //pObj->ISA( SdrTextObj ) &&
         ( pObj->ISA( SdrTextObj ) ||
           ( pObj->ISA(SwDrawVirtObj) &&
             ((SwDrawVirtObj*)pObj)->GetReferencedObj().ISA(SdrTextObj) ) ) &&
@@ -552,10 +551,6 @@ sal_Bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin,
         if( bIsNewObj )
             pOutliner->SetVertical( SID_DRAW_TEXT_VERTICAL == nDrawSfxId ||
                                     SID_DRAW_CAPTION_VERTICAL == nDrawSfxId );
-        // #i7672#
-        // No longer necessary, see text below
-        // Color aBackground(pSh->GetShapeBackgrd());
-        // pOutliner->SetBackgroundColor(aBackground);
 
         // OD 09.12.2002 #103045# - set default horizontal text direction at outliner
         EEHorizontalTextDirection aDefHoriTextDir =

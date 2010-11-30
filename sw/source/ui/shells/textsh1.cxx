@@ -425,7 +425,6 @@ void SwTextShell::Execute(SfxRequest &rReq)
         {
             String aStr;
             SFX_REQUEST_ARG( rReq, pFont, SfxStringItem, FN_PARAM_1 , sal_False );
-//            SFX_REQUEST_ARG( rReq, pCharset, SfxInt16Item, FN_PARAM_2 , sal_False );
             SFX_REQUEST_ARG( rReq, pNameItem, SfxStringItem, nSlot , sal_False );
             if ( pNameItem )
                 aStr = pNameItem->GetValue();
@@ -440,7 +439,6 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 SvxFontItem &rFont = (SvxFontItem &) aSet.Get( RES_CHRATR_FONT );
                 SvxFontItem aFont( rFont.GetFamily(), pFont->GetValue(),
                                     rFont.GetStyleName(), rFont.GetPitch(), RTL_TEXTENCODING_DONTKNOW, RES_CHRATR_FONT );
-                                    //pCharset ? (CharSet) pCharset->GetValue() : RTL_TEXTENCODING_DONTKNOW );
                 rWrtSh.SetAttr( aSet, nsSetAttrMode::SETATTR_DONTEXPAND );
                 rWrtSh.ResetSelect(0, FALSE);
                 rWrtSh.EndSelect();
@@ -466,7 +464,6 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     aReq.AppendItem( SfxStringItem( nId, pDlg->GetStr() ) );
                 if ( pDlg->GetFontName().Len() )
                     aReq.AppendItem( SfxStringItem( FN_PARAM_1, pDlg->GetFontName() ) );
-                //aReq.AppendItem( SfxStringItem( FN_PARAM_2, pDlg->GetCharSet() ) );
                 ExecuteSlot( aReq );
             }
 
@@ -933,12 +930,8 @@ void SwTextShell::Execute(SfxRequest &rReq)
             {
                 SfxBoolItem aStart( FN_NUMBER_NEWSTART, rWrtSh.IsNumRuleStart() );
                 aCoreSet.Put(aStart);
-                // --> OD 2008-02-29 #refactorlists#
-//                SfxUInt16Item aStartAt(FN_NUMBER_NEWSTART_AT,
-//                                                rWrtSh.IsNodeNumStart());
                 SfxUInt16Item aStartAt( FN_NUMBER_NEWSTART_AT,
                                         rWrtSh.GetNodeNumStart() );
-                // <--
                 aCoreSet.Put(aStartAt);
             }
             SfxAbstractTabDialog* pDlg = NULL;
@@ -1004,14 +997,12 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 if( pSet->Count() )
                 {
                     rWrtSh.StartAction();
-//                    rWrtSh.StartUndo( UNDO_START );
                     if ( SFX_ITEM_SET == pSet->GetItemState(FN_DROP_TEXT, FALSE, &pItem) )
                     {
                         if ( ((SfxStringItem*)pItem)->GetValue().Len() )
                             rWrtSh.ReplaceDropTxt(((SfxStringItem*)pItem)->GetValue());
                     }
                     rWrtSh.SetAttr( *pSet );
-//                    rWrtSh.EndUndo( UNDO_END );
                     rWrtSh.EndAction();
                     SwTxtFmtColl* pColl = rWrtSh.GetCurTxtFmtColl();
                     if(pColl && pColl->IsAutoUpdateFmt())
@@ -1148,15 +1139,6 @@ void SwTextShell::Execute(SfxRequest &rReq)
 
             rReq.Done();
 
-/*          OS 22.02.97 18:40 Das alte Verhalten ist unerwuenscht
-            if(!pApply || pApply->nColor != SID_ATTR_CHAR_COLOR_BACKGROUND_EXT)
-            {
-                Brush aBrush(pItem ? BRUSH_SOLID : BRUSH_NULL);
-                if(pItem)
-                    aBrush.SetColor( aSet );
-                GetShell().SetAttr( SvxBrushItem(aBrush, RES_CHRATR_BACKGROUND) );
-            }
-*/
         }
         break;
         case SID_ATTR_CHAR_COLOR_BACKGROUND_EXT:
@@ -1673,13 +1655,6 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             break;
             case FN_NUM_CONTINUE:
             {
-                // --> OD 2009-08-26 #i86492#
-                // Allow continuation of previous list, even if at current cursor
-                // a list is active.
-//                if ( rSh.GetCurNumRule() )
-//                    rSet.DisableItem(nWhich);
-//                else
-                // <--
                 {
                     // --> OD 2009-08-26 #i86492#
                     // Search also for bullet list

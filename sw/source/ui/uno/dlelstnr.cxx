@@ -165,7 +165,6 @@ void SAL_CALL SwLinguServiceEventListener::queryTermination(
             const EventObject& /*rEventObj*/ )
         throw(TerminationVetoException, RuntimeException)
 {
-    //SolarMutexGuard aGuard;
 }
 
 void SAL_CALL SwLinguServiceEventListener::notifyTermination(

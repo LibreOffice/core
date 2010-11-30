@@ -902,7 +902,6 @@ void SwAnnotationShell::StateClpbrd(SfxItemSet &rSet)
                         SvxClipboardFmtItem aFormats( SID_CLIPBOARD_FORMAT_ITEMS );
                         if ( aDataHelper.HasFormat( SOT_FORMAT_RTF ) )
                             aFormats.AddClipbrdFormat( SOT_FORMAT_RTF );
-                        //if ( aDataHelper.HasFormat( SOT_FORMAT_STRING ) )
                             aFormats.AddClipbrdFormat( SOT_FORMAT_STRING );
                         rSet.Put( aFormats );
                     }
@@ -1024,15 +1023,6 @@ void SwAnnotationShell::NoteExec(SfxRequest &rReq)
             break;
         }
         case FN_HIDE_NOTE:
-            /*
-            if ( Mgr()->GetActiveSidebarWin() == this )
-            {
-                Mgr()->SetActivePostIt(0);
-                // put the cursor back into the document
-                SwitchToFieldPos();
-            }
-            Mgr()->Hide(mpFld);
-            */
             break;
         case FN_HIDE_ALL_NOTES:
             pPostItMgr->Hide();

@@ -865,12 +865,10 @@ public:
 
 protected:
     virtual void LoseFocus() {
-//  printf("ListBox: lose focus!!\n");
     ListBox::LoseFocus();
     }
 
     virtual void Select() {
-//  printf("SELECT!!! IsTravelSelect=%i\n", IsTravelSelect());
     ListBox::Select();
     }
 };
@@ -915,21 +913,12 @@ public:
     aText.SetPosPixel(Point(0, lbSize.Height()));
     aText.Show();
     SetSizePixel(Size(lbSize.Width(), lbSize.Height()+tSize.Height()));
-//  SetSizePixel(Size(200, 200));
     }
 
     int getSelection() {
     return selection;
     }
 protected:
-    /*
-    virtual void LoseFocus() {
-    printf("lose focus!!\n");
-    Dialog::LoseFocus();
-    printf("close:\n");
-    EndDialog(8);
-    }
-    */
 
     virtual long PreNotify( NotifyEvent& rNEvt ) {
     if (rNEvt.GetType() == EVENT_LOSEFOCUS && aListBox.GetImplWin()==rNEvt.GetWindow()) {
@@ -937,7 +926,6 @@ protected:
         return 1;
     }
     if (rNEvt.GetType() == EVENT_KEYINPUT) {
-//      printf("PreNotify::KEYINPUT\n");
     }
     return Dialog::PreNotify(rNEvt);
     }

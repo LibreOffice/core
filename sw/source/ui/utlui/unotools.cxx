@@ -308,7 +308,6 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
         if( aInitializedLink.IsSet() )
         {
             rWindow.Enable(sal_False, sal_True);
-            //rWindow.Enable(sal_True, sal_False);
                aInitializedLink.Call(this);
         }
 

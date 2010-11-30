@@ -150,7 +150,7 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
                 nFac = Min( nFac, nVisPercent );
             }
         }
-        else /*if( SVX_ZOOM_PAGEWIDTH_NOBORDER == eZoomType )*/
+        else
         {
             const long nTmpWidth = bAutomaticViewLayout ? aPageSize.Width() : aRootSize.Width();
             nFac = aWindowSize.Width() * 100 / nTmpWidth;
@@ -222,15 +222,6 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
     pWrtShell->UnlockPaint();
     if( bUnLockView )
         pWrtShell->LockView( FALSE );
-
-//    if ( mpPostItMgr )
-//    {
-//        mpPostItMgr->Rescale();
-//        mpPostItMgr->CalcRects();
-//        mpPostItMgr->LayoutPostIts();
-//    }
-
-//  eZoom = eZoomType;
 }
 
 void SwView::SetViewLayout( USHORT nColumns, bool bBookMode, BOOL bViewOnly )

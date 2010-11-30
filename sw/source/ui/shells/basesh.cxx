@@ -229,10 +229,6 @@ void SwBaseShell::ExecDelete(SfxRequest &rReq)
                 BOOL bLeft = rSh.Left( CRSR_SKIP_CHARS, TRUE, 1, FALSE  );
                 if( bLeft )
                 {
-                    // JP 28.03.96: ein Backspace im Absatz ohne Nummer wird zum Delete
-                    //rSh.SwapPam();
-                    //rSh.DelRight( FALSE );
-
                     rSh.DelLeft();
                 }
                 else
@@ -749,22 +745,6 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 {
                     const SfxStringItem aMediaURLItem( SID_INSERT_AVMEDIA, pGal->GetURL().GetMainURL( INetURLObject::NO_DECODE ) );
                        GetView().GetViewFrame()->GetDispatcher()->Execute( SID_INSERT_AVMEDIA, SFX_CALLMODE_SYNCHRON, &aMediaURLItem, 0L );
-/*
-                    String sURL( pGal->GetURL().GetMainURL( INetURLObject::NO_DECODE ) );
-                    String sLabel( pGal->GetURL().getBase() );
-                    String sTarget; // empty string!
-
-                    bool bIsHTMLMode =
-                        0 == ( HTMLMODE_ON &
-                               ::GetHtmlMode( GetView().GetDocShell() ) );
-
-                    // in Writer, we insert a button which plays the
-                    // sound. In Writer/Web, we just insert a (text) link.
-                    if( bIsHTMLMode )
-                        InsertURLButton( sURL, sTarget, sLabel );
-                    else
-                        rSh.InsertURL( SwFmtINetFmt( sURL, sTarget ), sLabel );
-*/
                 }
             }
         }
@@ -2192,7 +2172,6 @@ void SwBaseShell::GetBckColState(SfxItemSet &rSet)
     USHORT nWhich = aIter.FirstWhich();
     int nSelType = rSh.GetSelectionType();
 
-//  if ( nSelType & nsSelectionType::SEL_GRF ||
     if( nSelType & nsSelectionType::SEL_OLE )
     {
         rSet.DisableItem( SID_BACKGROUND_COLOR );
@@ -2272,8 +2251,6 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
         aBrushItem = (const SvxBrushItem&)aCoreSet.Get(RES_BACKGROUND);
     }
 
-//  BOOL bMsgOk = FALSE;
-
     switch (nSlot)
     {
         // RES_BACKGROUND (=SID_ATTR_BRUSH) muss ueber zwei IDs
@@ -2282,7 +2259,6 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
             {
                 aBrushItem.SetGraphicPos(GPOS_NONE);
 
-                //Brush &rBrush = aBrushItem.GetBrush();
                 if(pArgs)
                 {
                     const SvxColorItem& rNewColorItem = (const SvxColorItem&)
@@ -2308,7 +2284,6 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
         }
         break;
         default:
-//          bMsgOk = FALSE;
             rReq.Ignore();
             OSL_ENSURE(false, "unknown message in ExecuteAttr!" );
             return;
@@ -2509,7 +2484,6 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 aSet.Put( aBrush );
                 if ( pDlg->Execute() == RET_OK )
                 {
-                    //aBrush = (SvxBrushItem) pDlg->GetOutputItemSet()->Get( RES_BACKGROUND );
 
                     rSh.SetBoxBackground( (SvxBrushItem&)
                         pDlg->GetOutputItemSet()->Get( RES_BACKGROUND ));

@@ -115,9 +115,6 @@ void SwViewLayoutControl::Paint( const UserDrawEvent& rUsrEvt )
     Color               aOldLineColor = pDev->GetLineColor();
     Color               aOldFillColor = pDev->GetFillColor();
 
-    //pDev->SetLineColor();
-    //pDev->SetFillColor( pDev->GetBackground().GetColor() );
-
     const bool bSingleColumn    = 0 == mpImpl->mnState;
     const bool bAutomatic       = 1 == mpImpl->mnState;
     const bool bBookMode        = 2 == mpImpl->mnState;
@@ -138,17 +135,6 @@ void SwViewLayoutControl::Paint( const UserDrawEvent& rUsrEvt )
     // draw bookmode image:
     aRect.Left() += nImageWidthAuto;
     pDev->DrawImage( aRect.TopLeft(), bBookMode ? mpImpl->maImageBookMode_Active         : mpImpl->maImageBookMode );
-
-    // draw separators
-    //aRect = rUsrEvt.GetRect();
-    //aRect.Left() += nImageWidth;
-    //aRect.setWidth( 1 );
-    //pDev->DrawRect( aRect );
-    //aRect.Left() += nImageWidth;
-    //pDev->DrawRect( aRect );
-
-    //pDev->SetLineColor( aOldLineColor );
-    //pDev->SetFillColor( aOldFillColor );
 }
 
 BOOL SwViewLayoutControl::MouseButtonDown( const MouseEvent & rEvt )

@@ -82,8 +82,6 @@ SwVbaParagraph::getServiceNames()
     return aServiceNames;
 }
 
-
-//typedef ::cppu::WeakImplHelper1< container::XEnumeration > ParagraphEnumeration_BASE;
 typedef ::cppu::WeakImplHelper2< container::XIndexAccess, container::XEnumerationAccess > ParagraphCollectionHelper_BASE;
 
 class ParagraphCollectionHelper : public ParagraphCollectionHelper_BASE

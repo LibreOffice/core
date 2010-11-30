@@ -326,7 +326,6 @@ SwVbaStyles::Item( const uno::Any& Index1, const uno::Any& Index2 ) throw (uno::
                 rtl::OUString aStyleName = rtl::OUString::createFromAscii( pTable->pOOoStyleName );
                 if( aStyleName.getLength() > 0 )
                 {
-                    //rtl::OUString aStyleType = SwVbaStyle::getOOoStyleTypeFromMSWord( pTable->wdStyleType );
                     rtl::OUString aStyleType;
                     switch( pTable->wdStyleType )
                     {

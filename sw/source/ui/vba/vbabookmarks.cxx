@@ -118,8 +118,6 @@ SwVbaBookmarks::SwVbaBookmarks( const uno::Reference< XHelperInterface >& xParen
 {
     mxBookmarksSupplier.set( mxModel, uno::UNO_QUERY_THROW );
     uno::Reference< text::XTextDocument > xDocument( mxModel, uno::UNO_QUERY_THROW );
-    // use view cursor to insert bookmark, or it will fail if insert bookmark in table
-    //mxText = word::getXTextViewCursor( mxModel )->getText();
 }
 // XEnumerationAccess
 uno::Type
@@ -175,7 +173,6 @@ SwVbaBookmarks::Add( const rtl::OUString& rName, const uno::Any& rRange ) throw 
     }
 
     // remove the exist bookmark
-    // rtl::OUString aName = rName.toAsciiLowerCase();
     rtl::OUString aName = rName;
     if( m_xNameAccess->hasByName( aName ) )
         removeBookmarkByName( aName );

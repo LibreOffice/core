@@ -111,15 +111,6 @@ void SwVbaColumn::calculateRelativeColumnWidth( const double* pAbsWidth, double*
 sal_Int32 SAL_CALL
 SwVbaColumn::getWidth( ) throw ( css::uno::RuntimeException )
 {
-   /* uno::Reference< beans::XPropertySet > xTableProps( mxTextTable, uno::UNO_QUERY_THROW );
-    uno::Sequence< text::TableColumnSeparator > aSeparators;
-    xTableProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("TableColumnSeparators") ) ) >>= aSeparators;
-    sal_Int32 nTableWidth = SwVbaTable::getTableWidth( xTableProps );
-    sal_Int32 nColCont = aSeparators.getLength() + 1;
-    double dAbsColWidth[ nColCont ];
-    calculateAbsoluteColumnWidth( nTableWidth, aSeparators, dAbsColWidth );
-    return Millimeter::getInPoints( (sal_Int32)( dAbsColWidth[ mnIndex ] ) );
-   */
     SwVbaTableHelper aTableHelper( mxTextTable );
     return aTableHelper.GetColWidth( mnIndex );
 }
@@ -127,32 +118,6 @@ SwVbaColumn::getWidth( ) throw ( css::uno::RuntimeException )
 void SAL_CALL
 SwVbaColumn::setWidth( sal_Int32 _width ) throw ( css::uno::RuntimeException )
 {
-/*    uno::Reference< beans::XPropertySet > xTableProps( mxTextTable, uno::UNO_QUERY_THROW );
-    uno::Sequence< text::TableColumnSeparator > aSeparators;
-    xTableProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("TableColumnSeparators") ) ) >>= aSeparators;
-    sal_Int32 nTableWidth = SwVbaTable::getTableWidth( xTableProps );
-    sal_Int32 nColCont = aSeparators.getLength() + 1;
-    double dAbsColWidth[ nColCont ];
-    calculateAbsoluteColumnWidth( nTableWidth, aSeparators, dAbsColWidth );
-    dAbsColWidth[ mnIndex ] = Millimeter::getInHundredthsOfOneMillimeter( _width );
-    double tableWidth = 0.0;
-    for( sal_Int32 i = 0; i < nColCont; i++ )
-    {
-        tableWidth += dAbsColWidth[i];
-    }
-
-    double dRelColWidth[ nColCont ];
-    calculateRelativeColumnWidth( dAbsColWidth, dRelColWidth, nColCont);
-
-    text::TableColumnSeparator* pArray = aSeparators.getArray();
-    for( sal_Int32 i = 0; i < nColCont - 1; i++ )
-    {
-        pArray[i].Position = (sal_Int16)(dRelColWidth[i]);
-    }
-
-    xTableProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("TableColumnSeparators") ), uno::makeAny( aSeparators ) );
-    SwVbaTable::setTableWidth( xTableProps, (sal_Int32)( tableWidth ) );
-    */
 
     SwVbaTableHelper aTableHelper( mxTextTable );
     aTableHelper.SetColWidth( _width, mnIndex );

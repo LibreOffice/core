@@ -318,9 +318,7 @@ IMPL_LINK( SwFormatTablePage, RightModifyHdl, MetricField *, EMPTYARG )
     if(aFreeBtn.IsChecked())
     {
         BOOL bEnable = aRightMF.GetValue() == 0;
-//      aWidthMF.Enable(bEnable);
         aRelWidthCB.Enable(bEnable);
-//      aWidthFT.Enable(bEnable);
         if ( !bEnable )
         {
             aRelWidthCB.Check(FALSE);
@@ -785,8 +783,6 @@ int  SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
                 pTblData->SetAlign(nAlign);
             }
 
-
-    //      if(  text::HoriOrientation::CENTER && lWidth != (SwTwips)aWidthMF.GetSavedValue())
             if(pTblData->GetWidth() != lWidth )
             {
                 pTblData->SetWidthChanged();
@@ -1165,29 +1161,6 @@ void   SwTableColumnPage::UpdateCols( USHORT nAktPos )
 
             }
         nTableWidth += nAdd;
-
-    }
-    else
-    {
-//      Die Differenz wird gleichmaessig auf alle anderen Spalten aufgeteilt
-//      die Tabellenbreite bleibt konstant
-/*
-        SwTwips nDiffn = nDiff/(nNoOfVisibleCols - 1);
-        if(nDiff < 0 && (nNoOfVisibleCols - 1) * nDiffn != nDiff)
-            nDiffn-- ;
-        USHORT nStart = nAktPos++;
-        if(nAktPos == nNoOfVisibleCols)
-            nStart = 0;
-        for(USHORT i = 0; i < nNoOfVisibleCols; i++ )
-        {
-            if((nVisWidth = GetVisibleWidth(i)) + nDiff < MINLAY)
-            {
-                nAdd += nVisWidth - MINLAY;
-                SetVisibleWidth(i, MINLAY);
-            }
-        }
-*/
-
     }
 
 #ifdef DEBUG_TBLDLG
@@ -1246,10 +1219,6 @@ void    SwTableColumnPage::ActivatePage( const SfxItemSet& )
     aModifyTableCB.Enable( !bPercentMode && bModifyTbl );
     aProportionalCB.Enable(!bPercentMode && bModifyTbl );
 
-/*  if(pTblData->IsLineSelected() && pTblData->IsComplex())
-    {
-
-    }*/
     aSpaceED.SetValue(aSpaceED.Normalize(
                 pTblData->GetSpace() - nTableWidth) , FUNIT_TWIP);
 
@@ -1339,7 +1308,6 @@ SwTwips  SwTableColumnPage::GetVisibleWidth(USHORT nPos)
     while(!pTblData->GetColumns()[i].bVisible && (i + 1) < nNoOfCols)
         nReturn += pTblData->GetColumns()[++i].nWidth;
 
-//  return (*ppTableColumns)[i].nWidth;
     return nReturn;
 }
 

@@ -95,10 +95,6 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
     break;
     case FN_NUMBER_BULLETS:
     {
-        // --> OD 2008-02-29 #refactorlists#
-//        // per default TRUE, damit die Schleife im Dialog richtig arbeitet!
-//        BOOL bHasChild = TRUE;
-        // <--
         SfxItemSet aSet(GetPool(),
                 SID_HTML_MODE, SID_HTML_MODE,
                 SID_ATTR_NUMBERING_RULE, SID_PARAM_CUR_NUM_LEVEL,
