@@ -201,8 +201,8 @@ private:
     void            GetAreaMoveEndPosition(SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode,
                                            SCsCOL& rAreaX, SCsROW& rAreaY, ScFollowMode& rMode);
 
-    void            SkipCursorHorizontal(SCsCOL& rCurX, SCsROW& rCurY, SCsCOL nOldX, SCsROW nOldY, SCsROW nMovX);
-    void            SkipCursorVertical(SCsCOL& rCurX, SCsROW& rCurY, SCsCOL nOldX, SCsROW nOldY, SCsROW nMovY);
+    void            SkipCursorHorizontal(SCsCOL& rCurX, SCsROW& rCurY, SCsCOL nOldX, SCsROW nMovX);
+    void            SkipCursorVertical(SCsCOL& rCurX, SCsROW& rCurY, SCsROW nOldY, SCsROW nMovY);
 
 protected:
     void            UpdateHeaderWidth( const ScVSplitPos* pWhich = NULL,

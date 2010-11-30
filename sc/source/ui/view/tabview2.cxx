@@ -504,7 +504,7 @@ void ScTabView::GetAreaMoveEndPosition(SCsCOL nMovX, SCsROW nMovY, ScFollowMode 
     rMode = eMode;
 }
 
-void ScTabView::SkipCursorHorizontal(SCsCOL& rCurX, SCsROW& rCurY, SCsCOL nOldX, SCsROW nOldY, SCsROW nMovX)
+void ScTabView::SkipCursorHorizontal(SCsCOL& rCurX, SCsROW& rCurY, SCsCOL nOldX, SCsROW nMovX)
 {
     ScDocument* pDoc = aViewData.GetDocument();
     SCTAB nTab = aViewData.GetTabNo();
@@ -564,7 +564,7 @@ void ScTabView::SkipCursorHorizontal(SCsCOL& rCurX, SCsROW& rCurY, SCsCOL nOldX,
     }
 }
 
-void ScTabView::SkipCursorVertical(SCsCOL& rCurX, SCsROW& rCurY, SCsCOL nOldX, SCsROW nOldY, SCsROW nMovY)
+void ScTabView::SkipCursorVertical(SCsCOL& rCurX, SCsROW& rCurY, SCsROW nOldY, SCsROW nMovY)
 {
     ScDocument* pDoc = aViewData.GetDocument();
     SCTAB nTab = aViewData.GetTabNo();
@@ -640,6 +640,32 @@ bool lcl_isCellQualified(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab, b
     return true;
 }
 
+void skipHiddenRows(ScDocument* pDoc, SCTAB nTab, SCROW& rRow, bool bForward)
+{
+    SCROW nFirst, nLast;
+    if (!pDoc->RowHidden(rRow, nTab, &nFirst, &nLast))
+        // This row is visible.  Nothing to do.
+        return;
+
+    if (bForward)
+        rRow = nLast < MAXROW ? nLast + 1 : MAXROW;
+    else
+        rRow = nFirst > 0 ? nFirst - 1 : 0;
+}
+
+void skipHiddenCols(ScDocument* pDoc, SCTAB nTab, SCCOL& rCol, bool bForward)
+{
+    SCCOL nFirst, nLast;
+    if (!pDoc->ColHidden(rCol, nTab, &nFirst, &nLast))
+        // This row is visible.  Nothing to do.
+        return;
+
+    if (bForward)
+        rCol = nLast < MAXCOL ? nLast + 1 : MAXCOL;
+    else
+        rCol = nFirst > 0 ? nFirst - 1 : 0;
+}
+
 void lcl_moveCursorByProtRule(
     SCCOL& rCol, SCROW& rRow, SCsCOL nMovX, SCsROW nMovY, SCTAB nTab, ScDocument* pDoc)
 {
@@ -661,6 +687,7 @@ void lcl_moveCursorByProtRule(
                 if (!lcl_isCellQualified(pDoc, rCol+1, rRow, nTab, bSelectLocked, bSelectUnlocked))
                     break;
                 ++rCol;
+                skipHiddenCols(pDoc, nTab, rCol, true);
             }
         }
     }
@@ -674,6 +701,7 @@ void lcl_moveCursorByProtRule(
                 if (!lcl_isCellQualified(pDoc, rCol-1, rRow, nTab, bSelectLocked, bSelectUnlocked))
                     break;
                 --rCol;
+                skipHiddenCols(pDoc, nTab, rCol, false);
             }
         }
     }
@@ -687,6 +715,7 @@ void lcl_moveCursorByProtRule(
                 if (!lcl_isCellQualified(pDoc, rCol, rRow+1, nTab, bSelectLocked, bSelectUnlocked))
                     break;
                 ++rRow;
+                skipHiddenRows(pDoc, nTab, rRow, true);
             }
         }
     }
@@ -700,6 +729,7 @@ void lcl_moveCursorByProtRule(
                 if (!lcl_isCellQualified(pDoc, rCol, rRow-1, nTab, bSelectLocked, bSelectUnlocked))
                     break;
                 --rRow;
+                skipHiddenRows(pDoc, nTab, rRow, false);
             }
         }
     }
