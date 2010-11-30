@@ -18,15 +18,14 @@
 	<body>
 		<div id="Intro">
 			<h1 id="Welcome" xml:lang="en-US">${PRODUCTNAME} ${PRODUCTVERSION} ReadMe</h1>
-			<p id="LatestUpdates" xml:lang="en-US">For latest updates to this readme file, see <a href="http://www.libreoffice.org/welcome/readme/">http://www.libreoffice.org/welcome/readme/</a></p>
-			<p id="A6" xml:lang="en-US">This file contains important information about this program. Please read this information very carefully before starting work.</p>
-			<p id="A7" xml:lang="en-US">The LibreOffice Community, responsible for the development of this product, would like to invite you to participate as a community member. As a new user, you can check out the ${PRODUCTNAME} site with helpful user information at <a href="http://www.libreoffice.org/welcome/introduction/">http://www.libreoffice.org/welcome/introduction/</a></p>
-			<p id="A9" xml:lang="en-US">Also read the sections below about getting involved in the LibreOffice project.</p>
-			<h3 id="A10" xml:lang="en-US">Is ${PRODUCTNAME} really free for any user? </h3>
-			<p id="A11" xml:lang="en-US">${PRODUCTNAME} is free for use by everybody. You may take this copy of ${PRODUCTNAME} and install it on as many computers as you like, and use it for any purpose you like (including commercial, government, public administration and educational use). For further details see the license text delivered together with ${PRODUCTNAME} or <a href="http://www.libreoffice.org/license/">http://www.libreoffice.org/license/</a></p>
-			<h3 id="A12" xml:lang="en-US">Why is ${PRODUCTNAME} free for any user?</h3>
-			<p id="A13" xml:lang="en-US">You can use this copy of ${PRODUCTNAME} today free of charge because individual contributors and corporate sponsors have designed, developed, tested, translated, documented, supported, marketed, and helped in many other ways to make ${PRODUCTNAME} what it is today - the world's leading open-source office software.</p>
-			<p id="A13b" xml:lang="en-US">If you appreciate their efforts, and would like to ensure LibreOffice continues into the future, please consider contributing to the project - see <a href="http://www.libreoffice.org/contribution/">http://www.libreoffice.org/contribution/</a> for details. Everyone has a contribution to make.</p>
+			<p id="LatestUpdates" xml:lang="en-US">For latest updates to this readme file, see <a href="http://www.libreoffice.org/welcome/readme.html">http://www.libreoffice.org/welcome/readme.html</a></p>
+			<p id="A6" xml:lang="en-US">This file contains important information about the ${PRODUCTNAME} software. You are recommended to read this information very carefully before starting installation.</p>
+			<p id="A7" xml:lang="en-US">The ${PRODUCTNAME} community is responsible for the development of this product, and invites you to consider participating as a community member. If you are a new user, you can visit the ${PRODUCTNAME} site, where you will find lots of information about the ${PRODUCTNAME} project and the communities that exist around it. Go to <a href="http://www.libreoffice.org/">http://www.libreoffice.org/</a>.</p>
+			<h3 id="A10" xml:lang="en-US">Is ${PRODUCTNAME} Really Free for Any User?</h3>
+			<p id="A11" xml:lang="en-US">${PRODUCTNAME} is free for use by everybody. You may take this copy of ${PRODUCTNAME} and install it on as many computers as you like, and use it for any purpose you like (including commercial, government, public administration and educational use). For further details see the license text packaged with this ${PRODUCTNAME} download.</p>
+			<h3 id="A12" xml:lang="en-US">Why is ${PRODUCTNAME} Free for Any User?</h3>
+			<p id="A13" xml:lang="en-US">You can use this copy of ${PRODUCTNAME} free of charge because individual contributors and corporate sponsors have designed, developed, tested, translated, documented, supported, marketed, and helped in many other ways to make ${PRODUCTNAME} what it is today - the world's leading Open Source productivity software for home and office.</p>
+			<p id="A13b" xml:lang="en-US">If you appreciate their efforts, and would like to ensure that ${PRODUCTNAME} continues to be available far into the future, please consider contributing to the project - see <a href="http://www.documentfoundation.org/contribution/">http://www.documentfoundation.org/contribution/</a> for details. Everyone can make a contribution of some kind.</p>
 		</div>
 
 		<div id="Installation">
@@ -91,61 +90,8 @@
 				<p id="DLLA1" xml:lang="en-US">If you perform an administrative installation using setup /a, you need to make sure that the file msvc90.dll is installed on the system. This file is required for ${PRODUCTNAME} to start after an administrative installation. You can get the file from <a href="http://www.microsoft.com/downloads/details.aspx?familyid=9B2DA534-3E03-4391-8A4D-074B9F2BC1BF">http://www.microsoft.com/downloads/details.aspx?familyid=9B2DA534-3E03-4391-8A4D-074B9F2BC1BF</a></p>
 				<p class="note" id="AdminNeeded" xml:lang="en-US">Please be aware that administrator rights are needed for the installation process.</p>
 			</div>
-			<div class="SOLSPARC" id="Sols2">
-				<ul>
-					<li>
-						<p id="s2335" xml:lang="en-US">Solaris 10 operating system (SPARC platform) or higher</p>
-					</li>
-
-					<li>
-						<p id="s253" xml:lang="en-US">256 MB RAM (512 MB RAM recommended)</p>
-					</li>
-
-					<li>
-						<p id="s23seg" xml:lang="en-US">Up to 1.55 GB available hard disk space</p>
-					</li>
-
-					<li>
-						<p id="s2s43gfe" xml:lang="en-US">X Server with 1024x768 resolution (higher resolution recommended), with at least 256 colors</p>
-					</li>
-
-					<li>
-						<p id="n4234rw" xml:lang="en-US">Window Manager</p>
-					</li>
-
-					<li>
-						<p id="wd2dff2" xml:lang="en-US">Gnome 2.6 or higher, with the gail 1.8.6 and the at-spi 1.7 packages, required for support of assistive technology tools (AT tools)</p>
-					</li>
-				</ul>
-			</div>
-			<div class="SOLX86" id="Solia2">
-				<ul>
-					<li>
-						<p id="s23h" xml:lang="en-US">Solaris 10 operating system (x86 platform) or higher</p>
-					</li>
-
-					<li>
-						<p id="s24f" xml:lang="en-US">256 MB RAM (512 MB RAM recommended)</p>
-					</li>
-
-					<li>
-						<p id="fgheg" xml:lang="en-US">Up to 1.55 GB available hard disk space</p>
-					</li>
-
-					<li>
-						<p id="fghfgh" xml:lang="en-US">X Server with 1024x768 resolution (higher resolution recommended), with at least 256 colors</p>
-					</li>
-
-					<li>
-						<p id="mgjfg" xml:lang="en-US">Window Manager</p>
-					</li>
-
-					<li>
-						<p id="wd2dff1" xml:lang="en-US">Gnome 2.6 or higher, with the gail 1.8.6 and the at-spi 1.7 packages, required for support of assistive technology tools (AT tools)</p>
-					</li>
-				</ul>
-			</div>
 			<div class="LINUX" id="Linuxi2">
+			    <p id="s2we10"> xml:lang="en-US">As a general rule, you are recommended to install ${PRODUCTNAME} via the installation methods recommended by your particular Linux distribution (such as the Ubuntu Software Center, in the case of Ubuntu Linux). This is because it is usually the simplest way to obtain an installation that is optimally integrated into your system. Indeed, ${PRODUCTNAME} may well be already installed by default when you originally install your Linux operating system.</p>
 				<ul>
 					<li>
 						<p id="s2we35" xml:lang="en-US">Linux Kernel version 2.6.18 or higher</p>
