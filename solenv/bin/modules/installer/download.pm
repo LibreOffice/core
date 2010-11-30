@@ -971,15 +971,16 @@ sub put_windows_productname_into_template
 }
 
 ##################################################################
-# Windows: Including the path to the banner.bmp into nsi template
+# Windows: Substituting the path to a file into the nsi template
 ##################################################################
 
-sub put_banner_bmp_into_template
+sub substitute_path_into_template
 {
-    my ($templatefile, $includepatharrayref, $allvariables) = @_;
+    my ($templatefile, $includepatharrayref, $allvariables, $var, $subst) = @_;
 
-    if ( ! $allvariables->{'DOWNLOADBANNER'} ) { installer::exiter::exit_program("ERROR: DOWNLOADBANNER not defined in product definition!", "put_banner_bmp_into_template"); }
-    my $filename = $allvariables->{'DOWNLOADBANNER'};
+    if ( ! $allvariables->{$var} ) { $var =~ s/_.*$//; } # _BR suffix ?
+    if ( ! $allvariables->{$var} ) { installer::exiter::exit_program("ERROR: $var not defined in product definition!", "substitute_path_into_template"); }
+    my $filename = $allvariables->{$var};
 
     my $completefilenameref = "";
 
@@ -992,123 +993,24 @@ sub put_banner_bmp_into_template
         $completefilenameref = installer::scriptitems::get_sourcepath_from_filename_and_includepath_classic(\$filename, $includepatharrayref, 0);
     }
 
-    if ($$completefilenameref eq "") { installer::exiter::exit_program("ERROR: Could not find download file $filename!", "put_banner_bmp_into_template"); }
+    if ($$completefilenameref eq "") { installer::exiter::exit_program("ERROR: Could not find download file $filename!", "substitute_path_into_template"); }
 
     if ( $^O =~ /cygwin/i ) { $$completefilenameref =~ s/\//\\/g; }
 
-    replace_one_variable($templatefile, "BANNERBMPPLACEHOLDER", $$completefilenameref);
+    replace_one_variable($templatefile, $subst, $$completefilenameref);
 }
 
 ##################################################################
-# Windows: Including the path to the welcome.bmp into nsi template
+# Windows: substitute a variable into the nsi template
 ##################################################################
-
-sub put_welcome_bmp_into_template
+sub substitute_variable_into_template($$$$)
 {
-    my ($templatefile, $includepatharrayref, $allvariables) = @_;
+    my ($templatefile, $variableshashref, $varname, $subst) = @_;
 
-    if ( ! $allvariables->{'DOWNLOADBITMAP'} ) { installer::exiter::exit_program("ERROR: DOWNLOADBITMAP not defined in product definition!", "put_welcome_bmp_into_template"); }
-    my $filename = $allvariables->{'DOWNLOADBITMAP'};
+    my $var = "";
+    if ( $variableshashref->{$varname} ) { $var = $variableshashref->{$varname}; }
 
-    my $completefilenameref = "";
-
-    if ( $installer::globals::include_pathes_read )
-    {
-        $completefilenameref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$filename, $includepatharrayref, 0);
-    }
-    else
-    {
-        $completefilenameref = installer::scriptitems::get_sourcepath_from_filename_and_includepath_classic(\$filename, $includepatharrayref, 0);
-    }
-
-    if ($$completefilenameref eq "") { installer::exiter::exit_program("ERROR: Could not find download file $filename!", "put_welcome_bmp_into_template"); }
-
-    if ( $^O =~ /cygwin/i ) { $$completefilenameref =~ s/\//\\/g; }
-
-    replace_one_variable($templatefile, "WELCOMEBMPPLACEHOLDER", $$completefilenameref);
-}
-
-##################################################################
-# Windows: Including the path to the setup.ico into nsi template
-##################################################################
-
-sub put_setup_ico_into_template
-{
-    my ($templatefile, $includepatharrayref, $allvariables) = @_;
-
-    if ( ! $allvariables->{'DOWNLOADSETUPICO'} ) { installer::exiter::exit_program("ERROR: DOWNLOADSETUPICO not defined in product definition!", "put_setup_ico_into_template"); }
-    my $filename = $allvariables->{'DOWNLOADSETUPICO'};
-
-    my $completefilenameref = "";
-
-    if ( $installer::globals::include_pathes_read )
-    {
-        $completefilenameref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$filename, $includepatharrayref, 0);
-    }
-    else
-    {
-        $completefilenameref = installer::scriptitems::get_sourcepath_from_filename_and_includepath_classic(\$filename, $includepatharrayref, 0);
-    }
-
-    if ($$completefilenameref eq "") { installer::exiter::exit_program("ERROR: Could not find download file $filename!", "put_setup_ico_into_template"); }
-
-    if ( $^O =~ /cygwin/i ) { $$completefilenameref =~ s/\//\\/g; }
-
-    replace_one_variable($templatefile, "SETUPICOPLACEHOLDER", $$completefilenameref);
-}
-
-##################################################################
-# Windows: Including the publisher into nsi template
-##################################################################
-
-sub put_publisher_into_template
-{
-    my ($templatefile) = @_;
-
-    my $publisher = "Sun Microsystems, Inc.";
-
-    replace_one_variable($templatefile, "PUBLISHERPLACEHOLDER", $publisher);
-}
-
-##################################################################
-# Windows: Including the web site into nsi template
-##################################################################
-
-sub put_website_into_template
-{
-    my ($templatefile) = @_;
-
-    my $website = "http\:\/\/www\.sun\.com\/staroffice";
-
-    replace_one_variable($templatefile, "WEBSITEPLACEHOLDER", $website);
-}
-
-##################################################################
-# Windows: Including the Java file name into nsi template
-##################################################################
-
-sub put_javafilename_into_template
-{
-    my ($templatefile, $variableshashref) = @_;
-
-    my $javaversion = "";
-
-    if ( $variableshashref->{'WINDOWSJAVAFILENAME'} ) { $javaversion = $variableshashref->{'WINDOWSJAVAFILENAME'}; }
-
-    replace_one_variable($templatefile, "WINDOWSJAVAFILENAMEPLACEHOLDER", $javaversion);
-}
-
-##################################################################
-# Windows: Including the product version into nsi template
-##################################################################
-
-sub put_windows_productversion_into_template
-{
-    my ($templatefile, $variableshashref) = @_;
-
-    my $productversion = $variableshashref->{'PRODUCTVERSION'};
-
-    replace_one_variable($templatefile, "PRODUCTVERSIONPLACEHOLDER", $productversion);
+    replace_one_variable($templatefile, $subst, $var);
 }
 
 ##################################################################
@@ -2046,13 +1948,29 @@ sub create_download_sets
 
         # add product name into script template
         put_windows_productname_into_template($templatefile, $allvariableshashref);
-        put_banner_bmp_into_template($templatefile, $includepatharrayref, $allvariableshashref);
-        put_welcome_bmp_into_template($templatefile, $includepatharrayref, $allvariableshashref);
-        put_setup_ico_into_template($templatefile, $includepatharrayref, $allvariableshashref);
-        put_publisher_into_template($templatefile);
-        put_website_into_template($templatefile);
-        put_javafilename_into_template($templatefile, $allvariableshashref);
-        put_windows_productversion_into_template($templatefile, $allvariableshashref);
+        @path_substs = (
+            'DOWNLOADBANNER_BR' => 'BANNERBMPPLACEHOLDER_BR',
+            'DOWNLOADBITMAP_BR' => 'WELCOMEBMPPLACEHOLDER_BR',
+            'DOWNLOADBANNER' => 'BANNERBMPPLACEHOLDER',
+            'DOWNLOADBITMAP' => 'WELCOMEBMPPLACEHOLDER',
+            'DOWNLOADSETUPICO' => 'SETUPICOPLACEHOLDER'
+        );
+        while (@path_substs) {
+            my $var= shift @path_substs;
+            my $val = shift @path_substs;
+            substitute_path_into_template($templatefile, $includepatharrayref,
+                                          $allvariableshashref, $var, $val);
+        }
+        %var_substs = (
+            'OOOVENDOR' => 'PUBLISHERPLACEHOLDER',
+            'STARTCENTER_INFO_URL' => 'WEBSITEPLACEHOLDER',
+            'WINDOWSJAVAFILENAME' => 'WINDOWSJAVAFILENAMEPLACEHOLDER',
+            'PRODUCTVERSION' => 'PRODUCTVERSIONPLACEHOLDER'
+        );
+        for $var (keys %var_substs) {
+            substitute_variable_into_template($templatefile, $allvariableshashref,
+                                              $var, $var_substs{$var});
+        }
         put_windows_productpath_into_template($templatefile, $allvariableshashref, $languagestringref, $localnsisdir);
         put_outputfilename_into_template($templatefile, $downloadname);
         put_filelist_into_template($templatefile, $installationdir);
