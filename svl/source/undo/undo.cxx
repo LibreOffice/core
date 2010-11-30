@@ -61,6 +61,12 @@ SfxRepeatTarget::~SfxRepeatTarget()
 
 //------------------------------------------------------------------------
 
+SfxUndoContext::~SfxUndoContext()
+{
+}
+
+//------------------------------------------------------------------------
+
 BOOL SfxUndoAction::IsLinked()
 {
     return bLinked;
@@ -123,7 +129,6 @@ XubString SfxUndoAction::GetRepeatComment(SfxRepeatTarget&) const
 
 //------------------------------------------------------------------------
 
-
 void SfxUndoAction::Undo()
 {
     // die sind nur konzeptuell pure virtual
@@ -132,10 +137,26 @@ void SfxUndoAction::Undo()
 
 //------------------------------------------------------------------------
 
+void SfxUndoAction::UndoWithContext( SfxUndoContext& i_context )
+{
+    (void)i_context;
+    Undo();
+}
+
+//------------------------------------------------------------------------
+
 void SfxUndoAction::Redo()
 {
     // die sind nur konzeptuell pure virtual
     DBG_ERROR( "pure virtual function called: SfxUndoAction::Redo()" );
+}
+
+//------------------------------------------------------------------------
+
+void SfxUndoAction::RedoWithContext( SfxUndoContext& i_context )
+{
+    (void)i_context;
+    Redo();
 }
 
 //------------------------------------------------------------------------
@@ -730,10 +751,14 @@ BOOL SfxUndoManager::Undo()
     const String sActionComment = pAction->GetComment();
     try
     {
-        // clear the guard/mutex before calling into the SfxUndoAction - this can be a extension-implemented UNO component
+        ::std::auto_ptr< SfxUndoContext > pUndoContext( GetUndoContext() );
+        // clear the guard/mutex before calling into the SfxUndoAction - this can be an extension-implemented UNO component
         // nowadays ...
         aGuard.clear();
-        pAction->Undo();
+        if ( pUndoContext.get() != NULL )
+            pAction->UndoWithContext( *pUndoContext );
+        else
+            pAction->Undo();
         aGuard.reset();
     }
     catch( ... )
@@ -813,10 +838,14 @@ BOOL SfxUndoManager::Redo()
     const String sActionComment = pAction->GetComment();
     try
     {
+        ::std::auto_ptr< SfxUndoContext > pUndoContext( GetUndoContext() );
         // clear the guard/mutex before calling into the SfxUndoAction - this can be a extension-implemented UNO component
         // nowadays ...
         aGuard.clear();
-        pAction->Redo();
+        if ( pUndoContext.get() != NULL )
+            pAction->RedoWithContext( *pUndoContext );
+        else
+            pAction->Redo();
         aGuard.reset();
     }
     catch( ... )
@@ -1160,6 +1189,13 @@ void SfxUndoManager::RemoveOldestUndoActions( USHORT const i_count )
 
 //------------------------------------------------------------------------
 
+::std::auto_ptr< SfxUndoContext > SfxUndoManager::GetUndoContext()
+{
+    return ::std::auto_ptr< SfxUndoContext >();
+}
+
+//------------------------------------------------------------------------
+
 USHORT SfxListUndoAction::GetId() const
 {
     return nId;
@@ -1213,10 +1249,28 @@ void SfxListUndoAction::Undo()
 
 //------------------------------------------------------------------------
 
+void SfxListUndoAction::UndoWithContext( SfxUndoContext& i_context )
+{
+    for(INT16 i=nCurUndoAction-1;i>=0;i--)
+        aUndoActions[i].pAction->UndoWithContext( i_context );
+    nCurUndoAction=0;
+}
+
+//------------------------------------------------------------------------
+
 void SfxListUndoAction::Redo()
 {
     for(USHORT i=nCurUndoAction;i<aUndoActions.size();i++)
         aUndoActions[i].pAction->Redo();
+    nCurUndoAction = USHORT( aUndoActions.size() );
+}
+
+//------------------------------------------------------------------------
+
+void SfxListUndoAction::RedoWithContext( SfxUndoContext& i_context )
+{
+    for(USHORT i=nCurUndoAction;i<aUndoActions.size();i++)
+        aUndoActions[i].pAction->RedoWithContext( i_context );
     nCurUndoAction = USHORT( aUndoActions.size() );
 }
 

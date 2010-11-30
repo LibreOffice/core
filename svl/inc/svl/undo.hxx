@@ -35,6 +35,7 @@
 #include <boost/scoped_ptr.hpp>
 
 #include <vector>
+#include <memory>
 
 //====================================================================
 
@@ -43,6 +44,14 @@ class SVL_DLLPUBLIC SfxRepeatTarget
 public:
                         TYPEINFO();
     virtual             ~SfxRepeatTarget() = 0;
+};
+
+//====================================================================
+
+class SVL_DLLPUBLIC SfxUndoContext
+{
+public:
+    virtual             ~SfxUndoContext() = 0;
 };
 
 //====================================================================
@@ -58,7 +67,9 @@ public:
     virtual BOOL            IsLinked();
     virtual void            SetLinked( BOOL bIsLinked = TRUE );
     virtual void            Undo();
+    virtual void            UndoWithContext( SfxUndoContext& i_context );
     virtual void            Redo();
+    virtual void            RedoWithContext( SfxUndoContext& i_context );
     virtual void            Repeat(SfxRepeatTarget&);
     virtual BOOL            CanRepeat(SfxRepeatTarget&) const;
 
@@ -163,7 +174,9 @@ class SVL_DLLPUBLIC SfxListUndoAction : public SfxUndoAction, public SfxUndoArra
                             SfxListUndoAction( const UniString &rComment,
                                 const UniString rRepeatComment, USHORT Id, SfxUndoArray *pFather);
     virtual void            Undo();
+    virtual void            UndoWithContext( SfxUndoContext& i_context );
     virtual void            Redo();
+    virtual void            RedoWithContext( SfxUndoContext& i_context );
     virtual void            Repeat(SfxRepeatTarget&);
     virtual BOOL            CanRepeat(SfxRepeatTarget&) const;
 
@@ -381,6 +394,20 @@ public:
     /** removes the oldest Undo actions from the stack
     */
     void            RemoveOldestUndoActions( USHORT const i_count );
+
+protected:
+    /** retrieve the context for a to-be-executed Undo or Redo operation
+
+        This method is called immediately before an SfxUndoAction is undo or redone. If a derived class provides a non-<NULL/>
+        context here, it is passed to SfxUndoAction's UndoWithContext resp. RedoWithContext. If no context is provided,
+        the SfxUndoAction's normal Undo/Redo is called.
+
+        The method is called with the UndoManager's mutex locked.
+
+        The default implementation of the method returns a <NULL/> context.
+    */
+    virtual ::std::auto_ptr< SfxUndoContext >
+                    GetUndoContext();
 
 private:
     USHORT  ImplLeaveListAction( const bool i_merge, ::svl::undo::impl::UndoManagerGuard& i_guard );
