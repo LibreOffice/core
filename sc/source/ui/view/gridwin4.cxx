@@ -596,12 +596,6 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
             aOutputData.SetEditCell( nEditCol, nEditRow );
         else
             bEditMode = FALSE;
-
-        //  nur Edit-Area zu zeichnen?
-        //! dann muss trotzdem noch der Rand / das Gitter gemalt werden!
-
-//      if ( nEditCol <= nX1 && nEditEndCol >= nX2 && nEditRow <= nY1 && nEditEndRow >= nY2 )
-//          bOnlyEdit = TRUE;
     }
 
     // define drawing layer map mode and paint rectangle
