@@ -632,8 +632,8 @@ const SwPrintData & SwDoc::getPrintData() const
 {
     if(!pPrtData)
     {
-        SwPrintData *pThisPrtData = const_cast< SwDoc * >(this)->pPrtData;
-        pThisPrtData = new SwPrintData;
+        SwDoc * pThis = const_cast< SwDoc * >(this);
+        pThis->pPrtData = new SwPrintData;
 
         // SwPrintData should be initialized from the configuration,
         // the respective config item is implememted by SwPrintOptions which
@@ -642,7 +642,7 @@ const SwPrintData & SwDoc::getPrintData() const
         DBG_ASSERT( pDocSh, "pDocSh is 0, can't determine if this is a WebDoc or not" );
         bool bWeb = 0 != dynamic_cast< const SwWebDocShell * >(pDocSh);
         SwPrintOptions aPrintOptions( bWeb );
-        *pThisPrtData = aPrintOptions;
+        *pThis->pPrtData = aPrintOptions;
     }
     return *pPrtData;
 }
