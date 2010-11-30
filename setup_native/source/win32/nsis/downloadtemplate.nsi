@@ -5,12 +5,13 @@
 
 SetCompressor lzma
 ; SetCompressor zlib
+; Helpful for debugging, disable for products
+; RequestExecutionLevel user
 
 ; MUI 1.67 compatible ------
 !include "MUI.nsh"
 
 Function .onInit
-
   Call GetParameters
   Pop $1
   ;MessageBox MB_OK "$1"
@@ -206,6 +207,8 @@ FunctionEnd
 !define MUI_WELCOMEPAGE_TITLE_3LINES
 !define MUI_ABORTWARNING
 !define MUI_ICON "SETUPICOPLACEHOLDER"
+!define MUI_CUSTOMFUNCTION_GUIINIT     SetupBranding
+!define MUI_CUSTOMFUNCTION_UNGUIINIT   SetupBranding
 
 ; Welcome page
 !insertmacro MUI_PAGE_WELCOME
@@ -269,6 +272,29 @@ FunctionEnd
 ; Language files
 ALLLANGUAGESPLACEHOLDER
 
+Function SetupBranding
+	File "/oname=$PLUGINSDIR\modern-header.bmp" BANNERBMPPLACEHOLDER
+	File "/oname=$PLUGINSDIR\modern-header-br.bmp" BANNERBMPPLACEHOLDER_BR
+	File "/oname=$PLUGINSDIR\modern-wizard.bmp" WELCOMEBMPPLACEHOLDER
+	File "/oname=$PLUGINSDIR\modern-wizard-br.bmp" WELCOMEBMPPLACEHOLDER_BR
+
+	; use broffice specific branding if executable name begins BrOffice
+	StrCpy $0 $EXEFILE 8
+;	messageBox MB_OK "ExeName: $0 - chopped $EXEFILE"
+	StrCmp $0 "BrOffice" BrOfficeSplash DefaultSplash
+	DefaultSplash:
+;		messageBox MB_OK "LibreOffice"
+		SetBrandingImage /IMGID=1046 "$PLUGINSDIR\modern-header.bmp"
+		!insertmacro INSTALLOPTIONS_WRITE "ioSpecial.ini" "Field 1" "Text" "$PLUGINSDIR\modern-wizard.bmp"
+		GoTo atEnd
+	BrOfficeSplash:
+;		messageBox MB_OK "BrOffice"
+		SetBrandingImage /IMGID=1046 "$PLUGINSDIR\modern-header-br.bmp"
+		!insertmacro INSTALLOPTIONS_WRITE "ioSpecial.ini" "Field 1" "Text" "$PLUGINSDIR\modern-wizard-br.bmp"
+		GoTo atEnd
+	atEnd:
+FunctionEnd
+
 ; Reserve files
 ;!insertmacro MUI_RESERVEFILE_INSTALLOPTIONS
 
@@ -278,7 +304,6 @@ Name "PRODUCTNAMEPLACEHOLDER PRODUCTVERSIONPLACEHOLDER"
 OutFile "OUTPUTDIRPLACEHOLDER\DOWNLOADNAMEPLACEHOLDER"
 ; InstallDir "$DESKTOP\PRODUCTNAMEPLACEHOLDER PRODUCTVERSIONPLACEHOLDER Installation Files"
 ; ShowInstDetails show
-
 Section "MainSection" SEC01
 ALLFILESPLACEHOLDER
 SectionEnd
