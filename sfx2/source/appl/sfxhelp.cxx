@@ -643,28 +643,7 @@ String  SfxHelp::CreateHelpURL_Impl( const String& aCommandURL, const String& rM
 
     String aModuleName( rModuleName );
     if ( aModuleName.Len() == 0 )
-    {
-        // no active module (quicklaunch?) -> detect default module
-        SvtModuleOptions aModOpt;
-        if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
-            aModuleName = DEFINE_CONST_UNICODE("swriter");
-        else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SCALC ) )
-            aModuleName = DEFINE_CONST_UNICODE("scalc");
-        else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS ) )
-            aModuleName = DEFINE_CONST_UNICODE("simpress");
-        else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SDRAW ) )
-            aModuleName = DEFINE_CONST_UNICODE("sdraw");
-        else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SMATH ) )
-            aModuleName = DEFINE_CONST_UNICODE("smath");
-        else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SCHART ) )
-            aModuleName = DEFINE_CONST_UNICODE("schart");
-        else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SBASIC ) )
-            aModuleName = DEFINE_CONST_UNICODE("sbasic");
-        else
-        {
-            DBG_ERRORFILE( "no installed module found" );
-        }
-    }
+        aModuleName = getDefaultModule_Impl();
 
     aHelpURL = String::CreateFromAscii("vnd.sun.star.help://");
     aHelpURL += aModuleName;
