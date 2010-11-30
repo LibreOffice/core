@@ -226,7 +226,7 @@ public class UIControlArranger
             for (int m = 0; m < curFormDocument.oControlForms.size(); m++)
             {
                 FormDocument.ControlForm curControlForm = (FormDocument.ControlForm) curFormDocument.oControlForms.get(m);
-                if (curControlForm.getArrangemode() == FormWizard.SOCOLUMNARLEFT)
+                if (curControlForm.getArrangemode() == FormWizard.COLUMNAR_LEFT)
                 {
                     Control[] LabelControls = curControlForm.getLabelControls();
                     for (int n = 0; n < LabelControls.length; n++)
@@ -421,7 +421,7 @@ public class UIControlArranger
 
             m_aButtonList.setListModel(model);
             m_aButtonList.create(CurUnoDialog);
-            m_aButtonList.setSelected(FormWizard.SOGRID - 1);
+            m_aButtonList.setSelected(FormWizard.AS_GRID - 1);
             m_aButtonList.addItemListener(this);
         }
 
@@ -450,13 +450,13 @@ public class UIControlArranger
                         final int nSelected0 = (m_aArrangeList[0].m_aButtonList.getSelected() + 1);
                         final int nSelected1 = (m_aArrangeList[1].m_aButtonList.getSelected() + 1);
 
-                        bEnableAlignControlGroup = ((nSelected0 == FormWizard.SOCOLUMNARLEFT) ||
-                                                    (nSelected1 == FormWizard.SOCOLUMNARLEFT));
+                        bEnableAlignControlGroup = ((nSelected0 == FormWizard.COLUMNAR_LEFT) ||
+                                                    (nSelected1 == FormWizard.COLUMNAR_LEFT));
                     }
                     else
                     {
                         final int nSelected0 = (m_aArrangeList[0].m_aButtonList.getSelected() + 1);
-                        bEnableAlignControlGroup = (nSelected0 == FormWizard.SOCOLUMNARLEFT);
+                        bEnableAlignControlGroup = (nSelected0 == FormWizard.COLUMNAR_LEFT);
                     }
                     enableAlignControlGroup(bEnableAlignControlGroup);
                     final Short nBorderType = CurUnoDialog.getBorderType();

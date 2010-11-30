@@ -198,7 +198,7 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID
         Helper.setUnoPropertyValues(xDialogModel,
                 new String[]
                 {
-                    "Closeable", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, "Moveable", PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, "Title", PropertyNames.PROPERTY_WIDTH
+                    "Closeable", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, "Moveable", PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_TITLE, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -573,7 +573,7 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID
      * I get a ucb content.
      * I list the files in this content.
      * I call the ucb "open" command.
-     * I get the "Title" property of this content.
+     * I get the PropertyNames.PROPERTY_TITLE property of this content.
      * @param acountUrl
      * @throws Exception
      */
@@ -592,7 +592,7 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID
         ucb.executeCommand(content, "open", aArg);
 
         //get the title property of the content.
-        Object obj = ucb.getContentProperty(content, "Title", String.class);
+        Object obj = ucb.getContentProperty(content, PropertyNames.PROPERTY_TITLE, String.class);
 
     }
 

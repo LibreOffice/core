@@ -133,7 +133,7 @@ public abstract class ImageListDialog extends UnoDialog2 implements UIConsts
         Helper.setUnoPropertyValues(xDialogModel,
                 new String[]
                 {
-                    "Closeable", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, "Moveable", PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, "Title", PropertyNames.PROPERTY_WIDTH
+                    "Closeable", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, "Moveable", PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TITLE, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {

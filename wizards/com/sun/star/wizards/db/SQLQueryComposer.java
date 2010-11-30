@@ -415,7 +415,7 @@ public class SQLQueryComposer
             XInitialization xInitialize = (XInitialization) UnoRuntime.queryInterface(XInitialization.class, oErrorDialog);
             XExecutableDialog xExecute = (XExecutableDialog) UnoRuntime.queryInterface(XExecutableDialog.class, oErrorDialog);
             PropertyValue[] rDispatchArguments = new PropertyValue[3];
-            rDispatchArguments[0] = Properties.createProperty("Title", Configuration.getProductName(CurDBMetaData.xMSF) + " Base");
+            rDispatchArguments[0] = Properties.createProperty(PropertyNames.PROPERTY_TITLE, Configuration.getProductName(CurDBMetaData.xMSF) + " Base");
             rDispatchArguments[1] = Properties.createProperty("ParentWindow", _xParentWindow);
             rDispatchArguments[2] = Properties.createProperty("SQLException", _exception);
             xInitialize.initialize(rDispatchArguments);

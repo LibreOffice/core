@@ -281,7 +281,7 @@ public class StyleApplier
             for (int m = 0; m < curFormDocument.oControlForms.size(); m++)
             {
                 FormDocument.ControlForm curControlForm = ((FormDocument.ControlForm) curFormDocument.oControlForms.get(m));
-                if (curControlForm.getArrangemode() == FormWizard.SOGRID)
+                if (curControlForm.getArrangemode() == FormWizard.AS_GRID)
                 {
                     GridControl oGridControl = curControlForm.getGridControl();
                     oGridControl.xPropertySet.setPropertyValue("Border", IBorderValue);
@@ -439,7 +439,7 @@ public class StyleApplier
             for (int m = 0; m < curFormDocument.oControlForms.size(); m++)
             {
                 FormDocument.ControlForm curControlForm = ((FormDocument.ControlForm) curFormDocument.oControlForms.get(m));
-                if (curControlForm.getArrangemode() == FormWizard.SOGRID)
+                if (curControlForm.getArrangemode() == FormWizard.AS_GRID)
                 {
                     if (_iStyleColors[SOLABELTEXTCOLOR] > -1)
                     {

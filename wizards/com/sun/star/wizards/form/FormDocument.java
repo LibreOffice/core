@@ -152,7 +152,7 @@ public class FormDocument extends TextDocument
         {
             if (oControlForms.size() == 0)
             {
-                final ControlForm aMainControlForm = new ControlForm(this, SOMAINFORM, aMainFormPoint, getMainFormSize(FormWizard.SOGRID));
+                final ControlForm aMainControlForm = new ControlForm(this, SOMAINFORM, aMainFormPoint, getMainFormSize(FormWizard.AS_GRID));
                 oControlForms.addElement(aMainControlForm);
             }
             else
@@ -213,7 +213,7 @@ public class FormDocument extends TextDocument
         int nMainFormHeight = nFormHeight;
         if (bhasSubForm)
         {
-            if (_curArrangement == FormWizard.SOGRID)
+            if (_curArrangement == FormWizard.AS_GRID)
             {
                 nMainFormHeight = (int) ((double) (nFormHeight - SOFORMGAP) / 2);
             }
@@ -248,7 +248,7 @@ public class FormDocument extends TextDocument
     {
         ControlForm oMainControlForm = (ControlForm) oControlForms.get(0);
         oMainControlForm.setFormSize(getMainFormSize(oMainControlForm.curArrangement));
-        if (oMainControlForm.curArrangement == FormWizard.SOGRID)
+        if (oMainControlForm.curArrangement == FormWizard.AS_GRID)
         {
             oMainControlForm.oGridControl.setSize(oMainControlForm.getFormSize());
         }
@@ -266,7 +266,7 @@ public class FormDocument extends TextDocument
         ControlForm oMainControlForm = (ControlForm) oControlForms.get(0);
         ControlForm oSubControlForm = (ControlForm) oControlForms.get(1);
         oSubControlForm.setFormSize(new Size(nFormWidth, (int) nFormHeight - oMainControlForm.getFormSize().Height));
-        if (oSubControlForm.curArrangement == FormWizard.SOGRID)
+        if (oSubControlForm.curArrangement == FormWizard.AS_GRID)
         {
             Point aPoint = oSubControlForm.oGridControl.getPosition();
             int idiffheight = oSubControlForm.getEntryPointY() - oMainControlForm.getActualFormHeight() - oMainControlForm.aStartPoint.Y - SOFORMGAP;
@@ -404,13 +404,13 @@ public class FormDocument extends TextDocument
             }
             else
             {
-                if (curArrangement == FormWizard.SOGRID)
+                if (curArrangement == FormWizard.AS_GRID)
                 {
                     oFormHandler.moveShapesToNirwana(getLabelControls());
                     oFormHandler.moveShapesToNirwana(getDatabaseControls());
                 }
             }
-            if (curArrangement == FormWizard.SOGRID)
+            if (curArrangement == FormWizard.AS_GRID)
             {
                 insertGridControl(_NBorderType);
                 badaptControlStyles = true;
@@ -483,7 +483,7 @@ public class FormDocument extends TextDocument
 
         private int getActualFormHeight()
         {
-            if (curArrangement == FormWizard.SOGRID)
+            if (curArrangement == FormWizard.AS_GRID)
             {
                 return oGridControl.xShape.getSize().Height;
             }
@@ -495,7 +495,7 @@ public class FormDocument extends TextDocument
 
         private int getEntryPointY()
         {
-            if (curArrangement == FormWizard.SOGRID)
+            if (curArrangement == FormWizard.AS_GRID)
             {
                 return oGridControl.xShape.getPosition().Y;
             }
@@ -549,10 +549,10 @@ public class FormDocument extends TextDocument
         {
             try
             {
-                curArrangement = FormWizard.SOGRID;
+                curArrangement = FormWizard.AS_GRID;
                 if (Name.equals(SOMAINFORM))
                 {
-                    oGridControl = new GridControl(xMSF, Name + "_Grid", oFormHandler, xFormContainer, oDBMetaData.FieldColumns, aStartPoint, getMainFormSize(FormWizard.SOGRID));
+                    oGridControl = new GridControl(xMSF, Name + "_Grid", oFormHandler, xFormContainer, oDBMetaData.FieldColumns, aStartPoint, getMainFormSize(FormWizard.AS_GRID));
                 }
                 else
                 {
@@ -574,7 +574,7 @@ public class FormDocument extends TextDocument
             {
                 for (int i = 0; i < getLabelControls().length; i++)
                 {
-                    if (curArrangement == FormWizard.SOGRID)
+                    if (curArrangement == FormWizard.AS_GRID)
                     {
                         if ((oLabelControls[i] != null) && (oDBControls[i] != null))
                         {

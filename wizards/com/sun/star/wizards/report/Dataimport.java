@@ -119,7 +119,7 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
             Helper.setUnoPropertyValues(xDialogModel,
                     new String[]
                     {
-                        PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_STEP, "Title", PropertyNames.PROPERTY_WIDTH
+                        PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TITLE, PropertyNames.PROPERTY_WIDTH
                     },
                     new Object[]
                     {

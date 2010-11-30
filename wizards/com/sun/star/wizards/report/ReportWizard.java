@@ -115,7 +115,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener,
                         PropertyNames.PROPERTY_POSITION_Y,
                         PropertyNames.PROPERTY_STEP,
                         PropertyNames.PROPERTY_TABINDEX,
-                        "Title",
+                        PropertyNames.PROPERTY_TITLE,
                         PropertyNames.PROPERTY_WIDTH
                     },
                     new Object[]

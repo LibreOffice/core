@@ -134,7 +134,7 @@ public abstract class AgendaWizardDialog  extends WizardDialog implements Agenda
 
     //set dialog properties...
     Helper.setUnoPropertyValues(xDialogModel,
-      new String[] { "Closeable",PropertyNames.PROPERTY_HEIGHT,"Moveable",PropertyNames.PROPERTY_POSITION_X,PropertyNames.PROPERTY_POSITION_Y,PropertyNames.PROPERTY_STEP,PropertyNames.PROPERTY_TABINDEX,"Title",PropertyNames.PROPERTY_WIDTH},
+      new String[] { "Closeable",PropertyNames.PROPERTY_HEIGHT,"Moveable",PropertyNames.PROPERTY_POSITION_X,PropertyNames.PROPERTY_POSITION_Y,PropertyNames.PROPERTY_STEP,PropertyNames.PROPERTY_TABINDEX,PropertyNames.PROPERTY_TITLE,PropertyNames.PROPERTY_WIDTH},
       new Object[] { Boolean.TRUE,new Integer(210),Boolean.TRUE,new Integer(200),new Integer(52),INTEGERS[1],new Short((short)1),resources.resAgendaWizardDialog_title,new Integer(310)}
     );
 

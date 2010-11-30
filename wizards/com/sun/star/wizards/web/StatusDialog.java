@@ -84,7 +84,7 @@ public class StatusDialog extends UnoDialog2 implements TaskListener
         Helper.setUnoPropertyValues(xDialogModel,
                 new String[]
                 {
-                    "Closeable", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, "Moveable", PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, "Title", PropertyNames.PROPERTY_WIDTH
+                    "Closeable", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, "Moveable", PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TITLE, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -245,7 +245,7 @@ public class StatusDialog extends UnoDialog2 implements TaskListener
         try
         {
             this.parent = parent_;
-            Helper.setUnoPropertyValue(this.xDialogModel, "Title", title);
+            Helper.setUnoPropertyValue(this.xDialogModel, PropertyNames.PROPERTY_TITLE, title);
             try
             {
                 //TODO change this to another execute dialog method.
