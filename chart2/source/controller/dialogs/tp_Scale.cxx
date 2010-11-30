@@ -460,6 +460,12 @@ void ScaleTabPage::Reset(const SfxItemSet& rInAttrs)
             nPos=TYPE_TEXT;
         m_aLB_AxisType.SelectEntryPos( nPos );
     }
+
+    if( m_bAllowDateAxis )
+        aCbxReverse.SetHelpId("chart2:CheckBox:TP_SCALE:CBX_REVERSE:MayBeDateAxis");
+    else if( m_nAxisType==chart2::AxisType::CATEGORY || m_nAxisType==chart2::AxisType::SERIES )
+        aCbxReverse.SetHelpId("chart2:CheckBox:TP_SCALE:CBX_REVERSE:Category");
+
     PlaceIntervalControlsAccordingToAxisType();
 
     aCbxAutoMin.Check( true );

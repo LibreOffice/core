@@ -70,7 +70,7 @@ TabPage TP_SCALE
     //---------------------------
     CheckBox CBX_REVERSE
     {
-        HelpID = "chart2:CheckBox:TP_SCALE:CBX_REVERSE";
+        HelpID = "chart2:CheckBox:TP_SCALE:CBX_REVERSE:ValueAxis";
         Pos = MAP_APPFONT ( X2 , Y1  ) ;
         Size = MAP_APPFONT ( 244 , 10 ) ;
         TabStop = TRUE ;
