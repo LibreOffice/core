@@ -1161,10 +1161,11 @@ void Font::writeToPropertyMap( PropertyMap& rPropMap, FontPropertyType ePropType
     if( maUsedFlags.mbShadowUsed )
         rPropMap[ PROP_CharShadowed ] <<= maApiData.mbShadow;
     // escapement
-    if( maUsedFlags.mbEscapementUsed && (ePropType == FONT_PROPTYPE_TEXT) )
+    if( maUsedFlags.mbEscapementUsed )
     {
         rPropMap[ PROP_CharEscapement ] <<= maApiData.mnEscapement;
-        rPropMap[ PROP_CharEscapementHeight ] <<= maApiData.mnEscapeHeight;
+        if( ePropType == FONT_PROPTYPE_TEXT )
+            rPropMap[ PROP_CharEscapementHeight ] <<= maApiData.mnEscapeHeight;
     }
 }
 
