@@ -183,7 +183,6 @@ AxisProperties::AxisProperties( const uno::Reference< XAxis >& xAxisModel
     , m_pfExrtaLinePositionAtOtherAxis(NULL)
     , m_bCrossingAxisHasReverseDirection(false)
     , m_bCrossingAxisIsCategoryAxes(false)
-    , m_bAxisBetweenCategories(false)
     , m_fLabelDirectionSign(1.0)
     , m_fInnerDirectionSign(1.0)
     , m_aLabelAlignment(LABEL_ALIGN_RIGHT_TOP)
@@ -213,7 +212,6 @@ AxisProperties::AxisProperties( const AxisProperties& rAxisProperties )
     , m_pfExrtaLinePositionAtOtherAxis( NULL )
     , m_bCrossingAxisHasReverseDirection( rAxisProperties.m_bCrossingAxisHasReverseDirection )
     , m_bCrossingAxisIsCategoryAxes( rAxisProperties.m_bCrossingAxisIsCategoryAxes )
-    , m_bAxisBetweenCategories( rAxisProperties.m_bAxisBetweenCategories )
     , m_fLabelDirectionSign( rAxisProperties.m_fLabelDirectionSign )
     , m_fInnerDirectionSign( rAxisProperties.m_fInnerDirectionSign )
     , m_aLabelAlignment( rAxisProperties.m_aLabelAlignment )
@@ -280,11 +278,7 @@ void AxisProperties::initAxisPositioning( const uno::Reference< beans::XProperty
                 xAxisProp->getPropertyValue(C2U( "CrossoverValue" )) >>= fValue;
 
                 if( m_bCrossingAxisIsCategoryAxes )
-                {
                     fValue = ::rtl::math::round(fValue);
-                    if( m_bAxisBetweenCategories )
-                        fValue-=0.5;
-                }
                 m_pfMainLinePositionAtOtherAxis = new double(fValue);
             }
             else if( ::com::sun::star::chart::ChartAxisPosition_ZERO == m_eCrossoverType )
@@ -318,8 +312,17 @@ void AxisProperties::init( bool bCartesian )
     if( m_nDimensionIndex<2 )
         initAxisPositioning( xProp );
 
+    ScaleData aScaleData = m_xAxisModel->getScaleData();
+    if( m_nDimensionIndex==0 )
+        AxisHelper::checkDateAxis( aScaleData, m_pExplicitCategoriesProvider, bCartesian );
+    m_nAxisType = aScaleData.AxisType;
+
     if( bCartesian )
     {
+        if( m_nDimensionIndex == 0 && m_nAxisType == AxisType::CATEGORY
+                && m_pExplicitCategoriesProvider && m_pExplicitCategoriesProvider->hasComplexCategories() )
+            m_bComplexCategories = true;
+
         if( ::com::sun::star::chart::ChartAxisPosition_END == m_eCrossoverType )
             m_fInnerDirectionSign = m_bCrossingAxisHasReverseDirection ? 1 : -1;
         else
@@ -360,10 +363,6 @@ void AxisProperties::init( bool bCartesian )
 
         //init display labels
         xProp->getPropertyValue( C2U( "DisplayLabels" ) ) >>= m_bDisplayLabels;
-
-        //init categories
-        ScaleData aScaleData = m_xAxisModel->getScaleData();
-        m_nAxisType = aScaleData.AxisType;
 
         //init TickmarkProperties
         xProp->getPropertyValue( C2U( "MajorTickmarks" ) ) >>= m_nMajorTickmarks;

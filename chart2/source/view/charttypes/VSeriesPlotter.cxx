@@ -52,6 +52,7 @@
 #include "ResId.hxx"
 #include "Strings.hrc"
 #include "RelativePositionHelper.hxx"
+#include "DateHelper.hxx"
 
 //only for creation: @todo remove if all plotter are uno components and instanciated via servicefactory
 #include "BarChart.hxx"
@@ -62,6 +63,7 @@
 //
 
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
+#include <com/sun/star/chart/TimeUnit.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
@@ -155,6 +157,8 @@ VSeriesPlotter::VSeriesPlotter( const uno::Reference<XChartType>& xChartTypeMode
         , m_xChartTypeModelProps( uno::Reference< beans::XPropertySet >::query( xChartTypeModel ))
         , m_aZSlots()
         , m_bCategoryXAxis(bCategoryXAxis)
+        , m_nTimeResolution(::com::sun::star::chart::TimeUnit::DAY)
+        , m_aNullDate(30,12,1899)
         , m_xColorScheme()
         , m_pExplicitCategoriesProvider(0)
         , m_bPointsWereSkipped(false)
@@ -201,7 +205,17 @@ void VSeriesPlotter::addSeries( VDataSeries* pSeries, sal_Int32 zSlot, sal_Int32
         return;
 
     if(m_bCategoryXAxis)
-        pSeries->setCategoryXAxis();
+    {
+        if( m_pExplicitCategoriesProvider && m_pExplicitCategoriesProvider->isDateAxis() )
+            pSeries->setXValues( m_pExplicitCategoriesProvider->getOriginalCategories() );
+        else
+            pSeries->setCategoryXAxis();
+    }
+    else
+    {
+        if( m_pExplicitCategoriesProvider )
+            pSeries->setXValuesIfNone( m_pExplicitCategoriesProvider->getOriginalCategories() );
+    }
 
     if(zSlot<0 || zSlot>=static_cast<sal_Int32>(m_aZSlots.size()))
     {
@@ -936,13 +950,13 @@ void VSeriesPlotter::createRegressionCurvesShapes( VDataSeries& rVDataSeries
         aRegressionPoly.SequenceZ[0].realloc(nRegressionPointCount);
         sal_Int32 nRealPointCount=0;
 
-        uno::Sequence< chart2::ExplicitScaleData > aScaleDataSeq( m_pPosHelper->getScales());
+        std::vector< ExplicitScaleData > aScales( m_pPosHelper->getScales());
         uno::Reference< chart2::XScaling > xScalingX;
         uno::Reference< chart2::XScaling > xScalingY;
-        if( aScaleDataSeq.getLength() >= 2 )
+        if( aScales.size() >= 2 )
         {
-            xScalingX.set( aScaleDataSeq[0].Scaling );
-            xScalingY.set( aScaleDataSeq[1].Scaling );
+            xScalingX.set( aScales[0].Scaling );
+            xScalingY.set( aScales[1].Scaling );
         }
 
         uno::Sequence< geometry::RealPoint2D > aCalculatedPoints(
@@ -1126,19 +1140,71 @@ void VSeriesPlotter::setMappedProperties(
     PropertyMapper::setMappedProperties(xTargetProp,xSource,rMap,pOverwriteMap);
 }
 
+void VSeriesPlotter::setTimeResolutionOnXAxis( long TimeResolution, const Date& rNullDate )
+{
+    m_nTimeResolution = TimeResolution;
+    m_aNullDate = rNullDate;
+}
+
 //-------------------------------------------------------------------------
 // MinimumAndMaximumSupplier
 //-------------------------------------------------------------------------
-
+long VSeriesPlotter::calculateTimeResolutionOnXAxis()
+{
+    long nRet = ::com::sun::star::chart::TimeUnit::YEAR;
+    if( m_pExplicitCategoriesProvider )
+    {
+        const std::vector< DatePlusIndex >&  rDateCategories = m_pExplicitCategoriesProvider->getDateCategories();
+        std::vector< DatePlusIndex >::const_iterator aIt = rDateCategories.begin(), aEnd = rDateCategories.end();
+        Date aNullDate(30,12,1899);
+        if( m_apNumberFormatterWrapper.get() )
+            aNullDate = m_apNumberFormatterWrapper->getNullDate();
+        if( aIt!=aEnd )
+        {
+            Date aPrevious(aNullDate); aPrevious+=rtl::math::approxFloor(aIt->fValue);
+            ++aIt;
+            for(;aIt!=aEnd;++aIt)
+            {
+                Date aCurrent(aNullDate); aCurrent+=rtl::math::approxFloor(aIt->fValue);
+                if( ::com::sun::star::chart::TimeUnit::YEAR == nRet )
+                {
+                    if( DateHelper::IsInSameYear( aPrevious, aCurrent ) )
+                        nRet = ::com::sun::star::chart::TimeUnit::MONTH;
+                }
+                if( ::com::sun::star::chart::TimeUnit::MONTH == nRet )
+                {
+                    if( DateHelper::IsInSameMonth( aPrevious, aCurrent ) )
+                        nRet = ::com::sun::star::chart::TimeUnit::DAY;
+                }
+                if( ::com::sun::star::chart::TimeUnit::DAY == nRet )
+                    break;
+                aPrevious=aCurrent;
+            }
+        }
+    }
+    return nRet;
+}
 double VSeriesPlotter::getMinimumX()
 {
+    /*
     if( m_bCategoryXAxis )
     {
-        double fRet = 1.0;//first category (index 0) matches with real number 1.0
+        double fRet = 1.0;//first text category (index 0) matches with real number 1.0
         if( m_pExplicitCategoriesProvider && m_pExplicitCategoriesProvider->hasComplexCategories() )
             fRet -= 0.5;
+        else if( m_pExplicitCategoriesProvider && m_pExplicitCategoriesProvider->isDateAxis() )
+        {
+            const std::vector< DatePlusIndex >& rDateCategories( m_pExplicitCategoriesProvider->getDateCategories() );
+            DBG_ASSERT(!rDateCategories.empty(),"need date values");
+            if(!rDateCategories.empty())
+            {
+                DatePlusIndex aFirst = rDateCategories.front();
+                fRet = aFirst.fValue;
+            }
+        }
         return fRet;
     }
+    */
 
     double fMinimum, fMaximum;
     this->getMinimumAndMaximiumX( fMinimum, fMaximum );
@@ -1146,14 +1212,26 @@ double VSeriesPlotter::getMinimumX()
 }
 double VSeriesPlotter::getMaximumX()
 {
+    /*
     if( m_bCategoryXAxis )
     {
-        //return category count
+        //return category count for pure text axis
         double fRet = getPointCount();//first category (index 0) matches with real number 1.0
         if( m_pExplicitCategoriesProvider && m_pExplicitCategoriesProvider->hasComplexCategories() )
             fRet += 0.5;
+        else if( m_pExplicitCategoriesProvider && m_pExplicitCategoriesProvider->isDateAxis() )
+        {
+            const std::vector< DatePlusIndex >& rDateCategories( m_pExplicitCategoriesProvider->getDateCategories() );
+            DBG_ASSERT(!rDateCategories.empty(),"need date values");
+            if(!rDateCategories.empty())
+            {
+                DatePlusIndex aLast = rDateCategories.back();
+                fRet = aLast.fValue;
+            }
+        }
         return fRet;
     }
+    */
 
     double fMinimum, fMaximum;
     this->getMinimumAndMaximiumX( fMinimum, fMaximum );
@@ -1162,7 +1240,7 @@ double VSeriesPlotter::getMaximumX()
 
 double VSeriesPlotter::getMinimumYInRange( double fMinimumX, double fMaximumX, sal_Int32 nAxisIndex )
 {
-    if( !m_bCategoryXAxis )
+    if( !m_bCategoryXAxis || ( m_pExplicitCategoriesProvider && m_pExplicitCategoriesProvider->isDateAxis() ) )
     {
         double fMinY, fMaxY;
         this->getMinimumAndMaximiumYInContinuousXRange( fMinY, fMaxY, fMinimumX, fMaximumX, nAxisIndex );
@@ -1196,7 +1274,7 @@ double VSeriesPlotter::getMinimumYInRange( double fMinimumX, double fMaximumX, s
 
 double VSeriesPlotter::getMaximumYInRange( double fMinimumX, double fMaximumX, sal_Int32 nAxisIndex )
 {
-    if( !m_bCategoryXAxis )
+    if( !m_bCategoryXAxis || ( m_pExplicitCategoriesProvider && m_pExplicitCategoriesProvider->isDateAxis() ) )
     {
         double fMinY, fMaxY;
         this->getMinimumAndMaximiumYInContinuousXRange( fMinY, fMaxY, fMinimumX, fMaximumX, nAxisIndex );
@@ -1603,7 +1681,7 @@ double VSeriesPlotter::getTransformedDepth() const
     return FIXED_SIZE_FOR_3D_CHART_VOLUME/(MaxZ-MinZ);
 }
 
-void SAL_CALL VSeriesPlotter::addSecondaryValueScale( const ExplicitScaleData& rScale, sal_Int32 nAxisIndex )
+void VSeriesPlotter::addSecondaryValueScale( const ExplicitScaleData& rScale, sal_Int32 nAxisIndex )
                 throw (uno::RuntimeException)
 {
     if( nAxisIndex<1 )
@@ -1633,9 +1711,9 @@ PlottingPositionHelper& VSeriesPlotter::getPlottingPositionHelper( sal_Int32 nAx
         }
     }
     if( !pRet )
-    {
         pRet = m_pMainPosHelper;
-    }
+    if(pRet)
+        pRet->setTimeResolution( m_nTimeResolution, m_aNullDate );
     return *pRet;
 }
 

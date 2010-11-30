@@ -44,8 +44,9 @@ public:
     CategoryPositionHelper( const CategoryPositionHelper& rSource );
     virtual ~CategoryPositionHelper();
 
-    double getSlotWidth() const;
-    double getSlotPos( double fCategoryX, double fSeriesNumber ) const;
+    double getScaledSlotWidth() const;
+    virtual double getScaledSlotPos( double fCategoryX, double fSeriesNumber ) const;
+    virtual void setCategoryWidth( double fCategoryWidth );
 
     //Distance between two neighboring bars in same category, seen relative to width of the bar
     void setInnerDistance( double fInnerDistance );

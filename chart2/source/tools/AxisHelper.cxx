@@ -38,7 +38,9 @@
 #include "servicenames_coosystems.hxx"
 #include "DataSeriesHelper.hxx"
 #include "Scaling.hxx"
+#include "ChartModelHelper.hxx"
 
+#include <tools/debug.hxx>
 #include <unotools/saveopt.hxx>
 
 #include <com/sun/star/chart/ChartAxisPosition.hpp>
@@ -81,6 +83,8 @@ ScaleData AxisHelper::createDefaultScale()
 {
     ScaleData aScaleData;
     aScaleData.AxisType = chart2::AxisType::REALNUMBER;
+    aScaleData.AutoDateAxis = true;
+    aScaleData.ShiftedCategoryPosition = false;//this is adapted in the view code currently
     Sequence< SubIncrement > aSubIncrements(1);
     aSubIncrements[0] = SubIncrement();
     aScaleData.IncrementData.SubIncrements = aSubIncrements;
@@ -93,6 +97,9 @@ void AxisHelper::removeExplicitScaling( ScaleData& rScaleData )
     uno::Any aEmpty;
     rScaleData.Minimum = rScaleData.Maximum = rScaleData.Origin = aEmpty;
     rScaleData.Scaling = 0;
+    ScaleData aDefaultScale( createDefaultScale() );
+    rScaleData.IncrementData = aDefaultScale.IncrementData;
+    rScaleData.TimeIncrement = aDefaultScale.TimeIncrement;
 }
 
 //static
@@ -103,6 +110,39 @@ bool AxisHelper::isLogarithmic( const Reference< XScaling >& xScaling )
     bReturn =( xServiceName.is() && (xServiceName->getServiceName()).equals(
               C2U( "com.sun.star.chart2.LogarithmicScaling" )));
     return bReturn;
+}
+
+chart2::ScaleData AxisHelper::getDateCheckedScale( const Reference< chart2::XAxis >& xAxis, const Reference< frame::XModel >& xChartModel )
+{
+    DBG_ASSERT(xChartModel.is(),"missing chart model");
+    ScaleData aScale = xAxis->getScaleData();
+    Reference< chart2::XCoordinateSystem > xCooSys( ChartModelHelper::getFirstCoordinateSystem( xChartModel ) );
+    if( aScale.AutoDateAxis && aScale.AxisType == AxisType::CATEGORY )
+    {
+        sal_Int32 nDimensionIndex=0; sal_Int32 nAxisIndex=0;
+        AxisHelper::getIndicesForAxis(xAxis, xCooSys, nDimensionIndex, nAxisIndex );
+        bool bChartTypeAllowsDateAxis = ChartTypeHelper::isSupportingDateAxis( AxisHelper::getChartTypeByIndex( xCooSys, 0 ), 2, nDimensionIndex );
+        if( bChartTypeAllowsDateAxis )
+            aScale.AxisType = AxisType::DATE;
+    }
+    if( aScale.AxisType == AxisType::DATE )
+    {
+        ExplicitCategoriesProvider aExplicitCategoriesProvider( xCooSys,xChartModel );
+        if( !aExplicitCategoriesProvider.isDateAxis() )
+            aScale.AxisType = AxisType::CATEGORY;
+    }
+    return aScale;
+}
+
+void AxisHelper::checkDateAxis( chart2::ScaleData& rScale, ExplicitCategoriesProvider* pExplicitCategoriesProvider, bool bChartTypeAllowsDateAxis )
+{
+    if( rScale.AutoDateAxis && rScale.AxisType == AxisType::CATEGORY && bChartTypeAllowsDateAxis )
+        rScale.AxisType = AxisType::DATE;
+    if( rScale.AxisType == AxisType::DATE && (!pExplicitCategoriesProvider || !pExplicitCategoriesProvider->isDateAxis()) )
+    {
+        rScale.AxisType = AxisType::CATEGORY;
+        removeExplicitScaling( rScale );
+    }
 }
 
 //static
@@ -137,6 +177,7 @@ Reference< XAxis > AxisHelper::createAxis(
                 ScaleData aMainScale = xMainAxis->getScaleData();
 
                 aScale.AxisType = aMainScale.AxisType;
+                aScale.AutoDateAxis = aMainScale.AutoDateAxis;
                 aScale.Categories = aMainScale.Categories;
                 aScale.Orientation = aMainScale.Orientation;
 

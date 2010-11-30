@@ -141,13 +141,13 @@ BOOL SchAxisLabelTabPage::FillItemSet( SfxItemSet& rOutAttrs )
             bRadioButtonChecked = false;
 
         if( bRadioButtonChecked )
-            rOutAttrs.Put( SvxChartTextOrderItem( eOrder, SCHATTR_TEXT_ORDER ));
+            rOutAttrs.Put( SvxChartTextOrderItem( eOrder, SCHATTR_AXIS_LABEL_ORDER ));
     }
 
     if( aCbTextOverlap.GetState() != STATE_DONTKNOW )
-        rOutAttrs.Put( SfxBoolItem( SCHATTR_TEXT_OVERLAP, aCbTextOverlap.IsChecked() ) );
+        rOutAttrs.Put( SfxBoolItem( SCHATTR_AXIS_LABEL_OVERLAP, aCbTextOverlap.IsChecked() ) );
     if( aCbTextBreak.GetState() != STATE_DONTKNOW )
-        rOutAttrs.Put( SfxBoolItem( SCHATTR_TEXTBREAK, aCbTextBreak.IsChecked() ) );
+        rOutAttrs.Put( SfxBoolItem( SCHATTR_AXIS_LABEL_BREAK, aCbTextBreak.IsChecked() ) );
     if( aCbShowDescription.GetState() != STATE_DONTKNOW )
         rOutAttrs.Put( SfxBoolItem( SCHATTR_AXIS_SHOWDESCR, aCbShowDescription.IsChecked() ) );
 
@@ -211,7 +211,7 @@ void SchAxisLabelTabPage::Reset( const SfxItemSet& rInAttrs )
         m_aLbTextDirection.SelectEntryValue( SvxFrameDirection(((const SvxFrameDirectionItem*)pPoolItem)->GetValue()) );
 
     // Text overlap ----------
-    aState = rInAttrs.GetItemState( SCHATTR_TEXT_OVERLAP, FALSE, &pPoolItem );
+    aState = rInAttrs.GetItemState( SCHATTR_AXIS_LABEL_OVERLAP, FALSE, &pPoolItem );
     if( aState == SFX_ITEM_DONTCARE )
     {
         aCbTextOverlap.EnableTriState( TRUE );
@@ -230,7 +230,7 @@ void SchAxisLabelTabPage::Reset( const SfxItemSet& rInAttrs )
     }
 
     // text break ----------
-    aState = rInAttrs.GetItemState( SCHATTR_TEXTBREAK, FALSE, &pPoolItem );
+    aState = rInAttrs.GetItemState( SCHATTR_AXIS_LABEL_BREAK, FALSE, &pPoolItem );
     if( aState == SFX_ITEM_DONTCARE )
     {
         aCbTextBreak.EnableTriState( TRUE );
@@ -255,7 +255,7 @@ void SchAxisLabelTabPage::Reset( const SfxItemSet& rInAttrs )
     // text order ----------
     if( m_bShowStaggeringControls )
     {
-        aState = rInAttrs.GetItemState( SCHATTR_TEXT_ORDER, FALSE, &pPoolItem );
+        aState = rInAttrs.GetItemState( SCHATTR_AXIS_LABEL_ORDER, FALSE, &pPoolItem );
         if( aState == SFX_ITEM_SET )
         {
             SvxChartTextOrder eOrder = static_cast< const SvxChartTextOrderItem * >( pPoolItem )->GetValue();

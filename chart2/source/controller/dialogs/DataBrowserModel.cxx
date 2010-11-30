@@ -568,6 +568,12 @@ void DataBrowserModel::removeDataPointForAllSeries( sal_Int32 nAtIndex )
     // unlockControllers
 }
 
+void DataBrowserModel::toggleDateCategories()
+{
+    DiagramHelper::toggleDateCategories( Reference<chart2::XChartDocument>( m_apDialogModel->getChartModel(), uno::UNO_QUERY ) );
+    updateFromModel();
+}
+
 DataBrowserModel::tDataHeader DataBrowserModel::getHeaderForSeries(
     const Reference< chart2::XDataSeries > & xSeries ) const
 {
@@ -589,7 +595,7 @@ Reference< chart2::XDataSeries >
     return 0;
 }
 
-DataBrowserModel::eCellType DataBrowserModel::getCellType( sal_Int32 nAtColumn, sal_Int32 /* nAtRow */ )
+DataBrowserModel::eCellType DataBrowserModel::getCellType( sal_Int32 nAtColumn, sal_Int32 /* nAtRow */ ) const
 {
     eCellType eResult = TEXT;
     tDataColumnVector::size_type nIndex( nAtColumn );
@@ -755,6 +761,12 @@ sal_Int32 DataBrowserModel::getCategoryColumnCount()
     }
     return nLastTextColumnIndex+1;
 }
+bool DataBrowserModel::hasDateCategories() const
+{
+    if( NUMBER == getCellType( 0, 0 ) )
+        return true;
+    return false;
+}
 
 const DataBrowserModel::tDataHeaderVector& DataBrowserModel::getDataHeaders() const
 {
@@ -771,6 +783,10 @@ void DataBrowserModel::updateFromModel()
     Reference< chart2::XDiagram > xDiagram( ChartModelHelper::findDiagram( m_xChartDocument ));
     if( !xDiagram.is())
         return;
+    Reference< chart2::XCoordinateSystemContainer > xCooSysCnt( xDiagram, uno::UNO_QUERY );
+    if( !xCooSysCnt.is())
+        return;
+    Sequence< Reference< chart2::XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems());
 
     // set template at DialogModel
     uno::Reference< lang::XMultiServiceFactory > xFact( m_xChartDocument->getChartTypeManager(), uno::UNO_QUERY );
@@ -785,6 +801,10 @@ void DataBrowserModel::updateFromModel()
     {
         Reference< frame::XModel > xChartModel( m_xChartDocument, uno::UNO_QUERY );
         ExplicitCategoriesProvider aExplicitCategoriesProvider( ChartModelHelper::getFirstCoordinateSystem(xChartModel), xChartModel );
+        bool bIsDateAxis = aExplicitCategoriesProvider.isDateAxis();
+        sal_Int32 nDateCategoriesNumberFormat = 0;
+        if( bIsDateAxis && aCooSysSeq.getLength() )
+            nDateCategoriesNumberFormat = DataSeriesHelper::getNumberFormatKeyFromAxis( 0, aCooSysSeq[0], 0, 0 );
 
         const Sequence< Reference< chart2::data::XLabeledDataSequence> >& rSplitCategoriesList( aExplicitCategoriesProvider.getSplitCategoriesList() );
         sal_Int32 nLevelCount = rSplitCategoriesList.getLength();
@@ -798,18 +818,24 @@ void DataBrowserModel::updateFromModel()
             aCategories.m_xLabeledDataSequence.set( xCategories );
             if( lcl_ShowCategoriesAsDataLabel( xDiagram ))
                 aCategories.m_aUIRoleName = DialogModel::GetRoleDataLabel();
+            else if( bIsDateAxis )
+                aCategories.m_aUIRoleName = DialogModel::GetRoleDates();
             else
                 aCategories.m_aUIRoleName = lcl_getUIRoleName( xCategories );
-            aCategories.m_eCellType = TEXT;
+            if( bIsDateAxis )
+            {
+                aCategories.m_eCellType = NUMBER;
+                aCategories.m_nNumberFormatKey = nDateCategoriesNumberFormat;
+            }
+            else
+            {
+                aCategories.m_eCellType = TEXT;
+            }
             m_aColumns.push_back( aCategories );
             ++nHeaderStart;
         }
     }
 
-    Reference< chart2::XCoordinateSystemContainer > xCooSysCnt( xDiagram, uno::UNO_QUERY );
-    if( !xCooSysCnt.is())
-        return;
-    Sequence< Reference< chart2::XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems());
     for( sal_Int32 nCooSysIdx=0; nCooSysIdx<aCooSysSeq.getLength(); ++nCooSysIdx )
     {
         Reference< chart2::XChartTypeContainer > xCTCnt( aCooSysSeq[nCooSysIdx], uno::UNO_QUERY_THROW );

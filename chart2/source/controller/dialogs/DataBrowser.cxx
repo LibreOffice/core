@@ -517,6 +517,20 @@ DataBrowser::~DataBrowser()
 {
 }
 
+bool DataBrowser::HasDateCategories() const
+{
+    if( m_apDataBrowserModel.get() )
+        return m_apDataBrowserModel->hasDateCategories();
+    return false;
+}
+
+bool DataBrowser::MayToggleDateCategories() const
+{
+    return ! IsReadOnly()
+        && DiagramHelper::mayToggleDateCategories( m_xChartDoc );
+    return true;
+}
+
 bool DataBrowser::MayInsertRow() const
 {
     return ! IsReadOnly()
@@ -989,6 +1003,19 @@ void DataBrowser::SwapRow()
         {
             Dispatch( BROWSER_CURSORDOWN );
         }
+        RenewTable();
+    }
+}
+
+void DataBrowser::ToggleDateCategories()
+{
+    if( m_apDataBrowserModel.get() )
+    {
+        // save changes made to edit-field
+        if( IsModified() )
+            SaveModified();
+
+        m_apDataBrowserModel->toggleDateCategories();
         RenewTable();
     }
 }

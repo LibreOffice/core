@@ -174,8 +174,7 @@ public:
     )
     */
 
-    virtual void SAL_CALL addSecondaryValueScale( const
-            ::com::sun::star::chart2::ExplicitScaleData& rScale, sal_Int32 nAxisIndex )
+    virtual void addSecondaryValueScale( const ExplicitScaleData& rScale, sal_Int32 nAxisIndex )
                 throw (::com::sun::star::uno::RuntimeException);
 
     //-------------------------------------------------------------------------
@@ -196,6 +195,9 @@ public:
     virtual bool isExpandWideValuesToZero( sal_Int32 nDimensionIndex );
     virtual bool isExpandNarrowValuesTowardZero( sal_Int32 nDimensionIndex );
     virtual bool isSeperateStackingForDifferentSigns( sal_Int32 nDimensionIndex );
+
+    virtual long calculateTimeResolutionOnXAxis();
+    virtual void setTimeResolutionOnXAxis( long nTimeResolution, const Date& rNullDate );
 
     //------
 
@@ -425,6 +427,8 @@ protected: //member
     ::std::vector< ::std::vector< VDataSeriesGroup > >  m_aZSlots;
 
     bool                                m_bCategoryXAxis;//true->xvalues are indices (this would not be necessary if series for category chart wouldn't have x-values)
+    long m_nTimeResolution;
+    Date m_aNullDate;
 
     ::std::auto_ptr< NumberFormatterWrapper > m_apNumberFormatterWrapper;
     AxesNumberFormats                         m_aAxesNumberFormats;//direct numberformats on axes, if empty ask the data series instead
@@ -439,7 +443,7 @@ protected: //member
     bool m_bPointsWereSkipped;
 
 private: //member
-    typedef std::map< sal_Int32 , ::com::sun::star::chart2::ExplicitScaleData > tSecondaryValueScales;
+    typedef std::map< sal_Int32 , ExplicitScaleData > tSecondaryValueScales;
     tSecondaryValueScales   m_aSecondaryValueScales;
 
     typedef std::map< sal_Int32 , PlottingPositionHelper* > tSecondaryPosHelperMap;

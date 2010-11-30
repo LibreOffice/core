@@ -548,6 +548,10 @@ String STR_DATA_ROLE_CATEGORIES
 {
     Text [ en-US ] = "Categories";
 };
+String STR_DATA_DATE_CATEGORIES
+{
+    Text [ en-US ] = "Dates";
+};
 
 String STR_DATA_UNNAMED_SERIES
 {

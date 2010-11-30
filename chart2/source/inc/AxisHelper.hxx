@@ -29,6 +29,7 @@
 
 #include "charttoolsdllapi.hxx"
 #include "ReferenceSizeProvider.hxx"
+#include "ExplicitCategoriesProvider.hxx"
 #include <com/sun/star/chart2/XChartType.hpp>
 #include <com/sun/star/chart2/XCoordinateSystem.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
@@ -57,6 +58,9 @@ public:
 
     static bool isLogarithmic( const ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XScaling >& xScaling );
+
+    static void checkDateAxis( ::com::sun::star::chart2::ScaleData& rScale, ExplicitCategoriesProvider* pExplicitCategoriesProvider, bool bChartTypeAllowsDateAxis );
+    static ::com::sun::star::chart2::ScaleData getDateCheckedScale( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis >& xAxis, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel );
 
     static ::com::sun::star::uno::Reference<
            ::com::sun::star::chart2::XAxis >

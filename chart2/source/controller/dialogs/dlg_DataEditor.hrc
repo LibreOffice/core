@@ -41,6 +41,7 @@
 #define TBI_DATA_SWAP_COL 5
 #define TBI_DATA_SWAP_ROW 6
 #define TBI_DATA_INSERT_TEXT_COL 7
+#define TBI_DATA_TOGGLE_DATE_CATEGOGRIES 8
 
 // image lists (normal and high-contrast) for toolbox
 #define IL_DIAGRAM_DATA     1

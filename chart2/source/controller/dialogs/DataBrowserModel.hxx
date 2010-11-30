@@ -78,13 +78,15 @@ public:
     void insertDataPointForAllSeries( sal_Int32 nAfterIndex );
     void removeDataPointForAllSeries( sal_Int32 nAtIndex );
 
+    void toggleDateCategories();
+
     enum eCellType
     {
         NUMBER,
         TEXT
     };
 
-    eCellType getCellType( sal_Int32 nAtColumn, sal_Int32 nAtRow );
+    eCellType getCellType( sal_Int32 nAtColumn, sal_Int32 nAtRow ) const;
     /// If getCellType( nAtColumn, nAtRow ) returns TEXT, the result will be Nan
     double getCellNumber( sal_Int32 nAtColumn, sal_Int32 nAtRow );
     ::rtl::OUString getCellText( sal_Int32 nAtColumn, sal_Int32 nAtRow );
@@ -102,6 +104,8 @@ public:
     // returns the UI string of the corresponding role
     ::rtl::OUString getRoleOfColumn( sal_Int32 nColumnIndex ) const;
     bool isCategoriesColumn( sal_Int32 nColumnIndex ) const;
+
+    bool hasDateCategories() const;
 
     struct tDataHeader
     {

@@ -65,7 +65,7 @@ VTitle::~VTitle()
 {
 }
 
-void SAL_CALL VTitle::init(
+void VTitle::init(
               const uno::Reference< drawing::XShapes >& xTargetPage
             , const uno::Reference< lang::XMultiServiceFactory >& xFactory
             , const rtl::OUString& rCID )

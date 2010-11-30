@@ -82,6 +82,8 @@ enum
     PROP_AXIS_AUTO_MIN,
     PROP_AXIS_AUTO_STEPMAIN,
     PROP_AXIS_AUTO_STEPHELP,
+    PROP_AXIS_TYPE,
+    PROP_AXIS_TIME_INCREMENT,
     PROP_AXIS_LOGARITHMIC,
     PROP_AXIS_REVERSEDIRECTION,
     PROP_AXIS_VISIBLE,
@@ -172,6 +174,20 @@ void lcl_AddPropertiesToVector(
                   ::getBooleanCppuType(),
                   //#i111967# no PropertyChangeEvent is fired on change so far
                   beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( C2U( "AxisType" ),
+                  PROP_AXIS_TYPE,
+                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)), //type com::sun::star::chart::ChartAxisType
+                  //#i111967# no PropertyChangeEvent is fired on change so far
+                  beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( C2U( "TimeIncrement" ),
+                  PROP_AXIS_TIME_INCREMENT,
+                  ::getCppuType( reinterpret_cast< const ::com::sun::star::chart::TimeIncrement * >(0)),
+                  //#i111967# no PropertyChangeEvent is fired on change so far
+                  beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
         Property( C2U( "Logarithmic" ),

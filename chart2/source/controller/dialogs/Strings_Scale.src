@@ -42,3 +42,11 @@ String STR_MIN_GREATER_MAX
 {
     Text [ en-US ] = "The minimum must be lower than the maximum. Check your input." ;
 };
+String STR_INVALID_INTERVALS
+{
+    Text [ en-US ] = "The major interval needs to be greater than the minor interval. Check your input." ;
+};
+String STR_INVALID_TIME_UNIT
+{
+    Text [ en-US ] = "The major and minor interval need to be greater or equal to the resolution. Check your input." ;
+};

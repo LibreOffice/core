@@ -116,6 +116,12 @@ ModalDialog DLG_DIAGRAM_DATA
             {
                 Type = TOOLBOXITEM_SEPARATOR ;
             };
+            ToolBoxItem
+            {
+                HelpID = HID_SCH_TBI_DATA_TOGGLE_DATE_CATEGOGRIES ;
+                Identifier = TBI_DATA_TOGGLE_DATE_CATEGOGRIES ;
+                Text [ en-US ] = "Categories: Date/Text" ;
+            };
         };
     };
 
@@ -129,8 +135,9 @@ ModalDialog DLG_DIAGRAM_DATA
         TBI_DATA_DELETE_COL;         \
         TBI_DATA_SWAP_COL;           \
         TBI_DATA_SWAP_ROW;           \
+        TBI_DATA_TOGGLE_DATE_CATEGOGRIES; \
     };                               \
-    IdCount = { 7; }
+    IdCount = { 8; }
 
     ImageList IL_DIAGRAM_DATA
     {

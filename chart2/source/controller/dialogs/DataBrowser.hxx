@@ -113,6 +113,9 @@ public:
     // predicates to determine what actions are possible at the current cursor
     // position.  This depends on the implementation of the according mutators
     // below.  (They are used for enabling toolbar icons)
+    bool HasDateCategories() const;
+    bool MayToggleDateCategories() const;
+
     bool MayInsertRow() const;
     bool MayInsertColumn() const;
     bool MayDeleteRow() const;
@@ -130,6 +133,8 @@ public:
 
     using BrowseBox::RemoveColumn;
     using BrowseBox::MouseButtonDown;
+
+    void ToggleDateCategories();
 
     void SwapRow();
     void SwapColumn();

@@ -179,7 +179,7 @@ void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel 
                 ScaleData aData( xAxis->getScaleData() );
                 if( chart2::AxisType::SERIES == aData.AxisType )
                     m_bHasScaleProperties = false;
-                if( chart2::AxisType::REALNUMBER == aData.AxisType || chart2::AxisType::PERCENT == aData.AxisType )
+                if( chart2::AxisType::SERIES != aData.AxisType )
                     m_bHasNumberProperties = true;
 
                 sal_Int32 nCooSysIndex=0;

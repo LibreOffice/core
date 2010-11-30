@@ -46,6 +46,7 @@
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/chart/XDiagramPositioning.hpp>
+#include <com/sun/star/chart2/XAnyDescriptionAccess.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XChartTypeTemplate.hpp>
@@ -57,10 +58,15 @@
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/RelativeSize.hpp>
 
+#include <com/sun/star/util/NumberFormat.hpp>
+#include <com/sun/star/util/XModifiable.hpp>
+#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
+
 #include <unotools/saveopt.hxx>
 #include <rtl/math.hxx>
 
-#include <com/sun/star/util/XModifiable.hpp>
+// header for class Application
+#include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
@@ -68,7 +74,9 @@ using namespace ::std;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::uno::Any;
 using ::rtl::OUString;
+using ::com::sun::star::chart2::XAnyDescriptionAccess;
 
 namespace chart
 {
@@ -880,7 +888,7 @@ bool DiagramHelper::isCategoryDiagram(
                     if( xAxis.is())
                     {
                         ScaleData aScaleData = xAxis->getScaleData();
-                        if( aScaleData.AxisType == AxisType::CATEGORY )
+                        if( aScaleData.AxisType == AxisType::CATEGORY || aScaleData.AxisType == AxisType::DATE )
                             return true;
                     }
                 }
@@ -919,7 +927,7 @@ void DiagramHelper::setCategoriesToDiagram(
             {
                 if( bCategoryAxis )
                     aScaleData.AxisType = AxisType::CATEGORY;
-                else if( aScaleData.AxisType == AxisType::CATEGORY )
+                else if( aScaleData.AxisType == AxisType::CATEGORY || aScaleData.AxisType == AxisType::DATE )
                     aScaleData.AxisType = AxisType::REALNUMBER;
             }
             xCatAxis->setScaleData( aScaleData );
@@ -1035,6 +1043,186 @@ Sequence< rtl::OUString > DiagramHelper::getExplicitSimpleCategories(
         aRet = aExplicitCategoriesProvider.getSimpleCategories();
     }
     return aRet;
+}
+
+bool DiagramHelper::mayToggleDateCategories( const Reference< XChartDocument >& xChartDoc )
+{
+    Reference< frame::XModel > xChartModel( xChartDoc, uno::UNO_QUERY );
+    if(xChartModel.is())
+    {
+        Reference< chart2::XCoordinateSystem > xCooSys( ChartModelHelper::getFirstCoordinateSystem( xChartModel ) );
+        if( xCooSys.is() )
+        {
+            Reference< XAxis > xAxis( xCooSys->getAxisByDimension(0,0) );
+            if( xAxis.is() )
+            {
+                ScaleData aScale( xAxis->getScaleData() );
+                if( aScale.AxisType == chart2::AxisType::DATE || aScale.AxisType == chart2::AxisType::CATEGORY )
+                    return true;
+            }
+        }
+    }
+    return false;
+}
+
+namespace
+{
+void lcl_switchToDateCategories( const Reference< XChartDocument >& xChartDoc, const Reference< XAxis >& xAxis )
+{
+    if( !xAxis.is() )
+        return;
+    if( !xChartDoc.is() )
+        return;
+
+    ScaleData aScale( xAxis->getScaleData() );
+    if( xChartDoc->hasInternalDataProvider() )
+    {
+        //remove all content the is not of type double and remove multiple level
+        Reference< XAnyDescriptionAccess > xDataAccess( xChartDoc->getDataProvider(), uno::UNO_QUERY );
+        if( xDataAccess.is() )
+        {
+            Sequence< Sequence< Any > > aAnyCategories( xDataAccess->getAnyRowDescriptions() );
+            double fTest = 0.0;
+            double fNan = 0.0;
+            ::rtl::math::setNan( & fNan );
+            sal_Int32 nN = aAnyCategories.getLength();
+            for( ; nN--; )
+            {
+                Sequence< Any >& rCat = aAnyCategories[nN];
+                if( rCat.getLength() > 1 )
+                    rCat.realloc(1);
+                if( rCat.getLength() == 1 )
+                {
+                    Any& rAny = rCat[0];
+                    if( !(rAny>>=fTest) )
+                    {
+                        rAny = uno::makeAny(fNan);
+                    }
+                }
+            }
+            xDataAccess->setAnyRowDescriptions( aAnyCategories );
+        }
+        //check the numberformat at the axis
+        Reference< beans::XPropertySet > xAxisProps( xAxis, uno::UNO_QUERY );
+        Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( xChartDoc, uno::UNO_QUERY );
+        if( xAxisProps.is() && xNumberFormatsSupplier.is() )
+        {
+            sal_Int32 nNumberFormat = -1;
+            xAxisProps->getPropertyValue( C2U("NumberFormat") ) >>= nNumberFormat;
+
+            Reference< util::XNumberFormats > xNumberFormats = Reference< util::XNumberFormats >( xNumberFormatsSupplier->getNumberFormats() );
+            if( xNumberFormats.is() )
+            {
+                Reference< beans::XPropertySet > xKeyProps;
+                try
+                {
+                    xKeyProps = xNumberFormats->getByKey( nNumberFormat );
+                }
+                catch( uno::Exception & ex )
+                {
+                    ASSERT_EXCEPTION( ex );
+                }
+                sal_Int32 nType = util::NumberFormat::UNDEFINED;
+                if( xKeyProps.is() )
+                    xKeyProps->getPropertyValue( C2U("Type") ) >>= nType;
+                if( nType!=util::NumberFormat::DATE && nType!=util::NumberFormat::DATETIME )
+                {
+                    //set a date format to the axis
+                    sal_Bool bCreate = sal_True;
+                    const LocaleDataWrapper& rLocaleDataWrapper = Application::GetSettings().GetLocaleDataWrapper();
+                    Sequence<sal_Int32> aKeySeq = xNumberFormats->queryKeys( util::NumberFormat::DATE,  rLocaleDataWrapper.getLocale(), bCreate );
+                    if( aKeySeq.getLength() )
+                    {
+                        xAxisProps->setPropertyValue( C2U("NumberFormat"), uno::makeAny(aKeySeq[0]) );
+                    }
+                }
+            }
+        }
+    }
+    if( aScale.AxisType != chart2::AxisType::DATE )
+        AxisHelper::removeExplicitScaling( aScale );
+    aScale.AxisType = chart2::AxisType::DATE;
+    xAxis->setScaleData( aScale );
+}
+
+void lcl_switchToTextCategories( const Reference< XChartDocument >& xChartDoc, const Reference< XAxis >& xAxis )
+{
+    if( !xAxis.is() )
+        return;
+    if( !xChartDoc.is() )
+        return;
+    ScaleData aScale( xAxis->getScaleData() );
+    if( aScale.AxisType != chart2::AxisType::CATEGORY )
+        AxisHelper::removeExplicitScaling( aScale );
+    //todo migrate dates to text?
+    aScale.AxisType = chart2::AxisType::CATEGORY;
+    aScale.AutoDateAxis = false;
+    xAxis->setScaleData( aScale );
+}
+
+}
+
+void DiagramHelper::switchToDateCategories( const Reference< XChartDocument >& xChartDoc )
+{
+    Reference< frame::XModel > xChartModel( xChartDoc, uno::UNO_QUERY );
+    if(xChartModel.is())
+    {
+        ControllerLockGuard aCtrlLockGuard( xChartModel );
+
+        Reference< chart2::XCoordinateSystem > xCooSys( ChartModelHelper::getFirstCoordinateSystem( xChartModel ) );
+        if( xCooSys.is() )
+        {
+            Reference< XAxis > xAxis( xCooSys->getAxisByDimension(0,0) );
+            lcl_switchToDateCategories( xChartDoc, xAxis );
+        }
+    }
+}
+
+void DiagramHelper::switchToTextCategories( const Reference< XChartDocument >& xChartDoc )
+{
+    Reference< frame::XModel > xChartModel( xChartDoc, uno::UNO_QUERY );
+    if(xChartModel.is())
+    {
+        ControllerLockGuard aCtrlLockGuard( xChartModel );
+
+        Reference< chart2::XCoordinateSystem > xCooSys( ChartModelHelper::getFirstCoordinateSystem( xChartModel ) );
+        if( xCooSys.is() )
+        {
+            Reference< XAxis > xAxis( xCooSys->getAxisByDimension(0,0) );
+            lcl_switchToTextCategories( xChartDoc, xAxis );
+        }
+    }
+}
+
+void DiagramHelper::toggleDateCategories( const Reference< XChartDocument >& xChartDoc )
+{
+    Reference< frame::XModel > xChartModel( xChartDoc, uno::UNO_QUERY );
+    if(xChartModel.is())
+    {
+        ControllerLockGuard aCtrlLockGuard( xChartModel );
+
+        Reference< chart2::XCoordinateSystem > xCooSys( ChartModelHelper::getFirstCoordinateSystem( xChartModel ) );
+        if( xCooSys.is() )
+        {
+            Reference< XAxis > xAxis( xCooSys->getAxisByDimension(0,0) );
+            if( xAxis.is() )
+            {
+                ScaleData aScale( xAxis->getScaleData() );
+                if( aScale.AxisType == chart2::AxisType::DATE )
+                {
+                    lcl_switchToTextCategories( xChartDoc, xAxis );
+                }
+                else if( aScale.AxisType == chart2::AxisType::CATEGORY )
+                {
+                    lcl_switchToDateCategories( xChartDoc, xAxis );
+                }
+                else
+                {
+                    DBG_ERROR("Cannot toggle Date Categories for this axis type");
+                }
+            }
+        }
+    }
 }
 
 // static

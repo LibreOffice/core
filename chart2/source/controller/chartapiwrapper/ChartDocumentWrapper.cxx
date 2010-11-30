@@ -60,7 +60,6 @@
 #include <com/sun/star/chart2/XTitled.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
-#include <com/sun/star/chart/XComplexDescriptionAccess.hpp>
 #include <comphelper/InlineContainer.hxx>
 // header for function SvxShapeCollection_NewInstance
 #include <svx/unoshcol.hxx>
@@ -81,7 +80,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart;
 
-using ::com::sun::star::chart::XComplexDescriptionAccess;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;

@@ -29,12 +29,13 @@
 #include "precompiled_chart2.hxx"
 #include "VPolarGrid.hxx"
 #include "VCartesianGrid.hxx"
-#include "TickmarkHelper.hxx"
+#include "Tickmarks.hxx"
 #include "PlottingPositionHelper.hxx"
 #include "ShapeFactory.hxx"
 #include "ObjectIdentifier.hxx"
 #include "macros.hxx"
 #include "CommonConverters.hxx"
+#include "Tickmarks_Equidistant.hxx"
 #include <com/sun/star/drawing/LineStyle.hpp>
 
 #include <vector>
@@ -64,16 +65,16 @@ VPolarGrid::~VPolarGrid()
     m_pPosHelper = NULL;
 }
 
-void VPolarGrid::setIncrements( const uno::Sequence< ExplicitIncrementData >& rIncrements )
+void VPolarGrid::setIncrements( const std::vector< ExplicitIncrementData >& rIncrements )
 {
     m_aIncrements = rIncrements;
 }
 
 void VPolarGrid::getAllTickInfos( sal_Int32 nDimensionIndex, ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos ) const
 {
-    TickmarkHelper aTickmarkHelper(
+    TickFactory aTickFactory(
             m_pPosHelper->getScales()[nDimensionIndex], m_aIncrements[nDimensionIndex] );
-    aTickmarkHelper.getAllTicks( rAllTickInfos );
+    aTickFactory.getAllTicks( rAllTickInfos );
 }
 
 //static
@@ -98,8 +99,8 @@ void VPolarGrid::createLinePointSequence_ForAngleAxis(
         if(nTick>=rPoints[0].getLength())
             rPoints[0].realloc(rPoints[0].getLength()+30);
 
-        pTickInfo->updateUnscaledValue( xInverseScaling );
-        double fLogicAngle = pTickInfo->fUnscaledTickValue;
+        //xxxxx pTickInfo->updateUnscaledValue( xInverseScaling );
+        double fLogicAngle = pTickInfo->getUnscaledTickValue();
 
         drawing::Position3D aScenePosition3D( pPosHelper->transformAngleRadiusToScene( fLogicAngle, fLogicRadius, fLogicZ ) );
         rPoints[0][nTick].X = static_cast<sal_Int32>(aScenePosition3D.PositionX);
@@ -153,8 +154,8 @@ void VPolarGrid::create2DAngleGrid( const Reference< drawing::XShapes >& xLogicT
             if( !rTickInfo.bPaintIt )
                 continue;
 
-            rTickInfo.updateUnscaledValue( xInverseScaling );
-            double fLogicAngle = rTickInfo.fUnscaledTickValue;
+            //xxxxx rTickInfo.updateUnscaledValue( xInverseScaling );
+            double fLogicAngle = rTickInfo.getUnscaledTickValue();
 
             drawing::PointSequenceSequence aPoints(1);
             aPoints[0].realloc(2);
@@ -220,8 +221,8 @@ void VPolarGrid::create2DRadiusGrid( const Reference< drawing::XShapes >& xLogic
             if( !rTickInfo.bPaintIt )
                 continue;
 
-            rTickInfo.updateUnscaledValue( xInverseRadiusScaling );
-            double fLogicRadius = rTickInfo.fUnscaledTickValue;
+            //xxxxx rTickInfo.updateUnscaledValue( xInverseRadiusScaling );
+            double fLogicRadius = rTickInfo.getUnscaledTickValue();
             double fLogicZ      = -0.5;//as defined
 
             drawing::PointSequenceSequence aPoints(1);
@@ -238,7 +239,7 @@ void VPolarGrid::create2DRadiusGrid( const Reference< drawing::XShapes >& xLogic
     }
 }
 
-void SAL_CALL VPolarGrid::createShapes()
+void VPolarGrid::createShapes()
 {
     DBG_ASSERT(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is(),"Axis is not proper initialized");
     if(!(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is()))

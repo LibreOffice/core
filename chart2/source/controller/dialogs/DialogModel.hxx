@@ -152,6 +152,7 @@ public:
 
     static ::rtl::OUString ConvertRoleFromInternalToUI( const ::rtl::OUString & rRoleString );
     static ::rtl::OUString GetRoleDataLabel();
+    static ::rtl::OUString GetRoleDates();
 
     // pass a role string (not translated) and get an index that serves for
     // relative ordering, to get e.g. x-values and y-values in the right order

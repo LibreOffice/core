@@ -27,28 +27,18 @@
 #ifndef _CHART2_PLOTTERBASE_HXX
 #define _CHART2_PLOTTERBASE_HXX
 
+#include "chartview/ExplicitScaleValues.hxx"
+
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/drawing/Position3D.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-/*
-#include <com/sun/star/lang/XComponent.hpp>
-*/
-
-//----
-#include <vector>
-
-//---- chart2
-#include <com/sun/star/chart2/ExplicitScaleData.hpp>
 #include <com/sun/star/chart2/XTransformation.hpp>
-/*
-#include <com/sun/star/chart2/XPlotter.hpp>
-*/
 
-//----
 #include <cppuhelper/implbase1.hxx>
+#include <vector>
 
 //.............................................................................
 namespace chart
@@ -64,8 +54,7 @@ public:
     PlotterBase( sal_Int32 nDimension );
     virtual ~PlotterBase();
 
-    // ___chart2::XPlotter___
-    virtual void SAL_CALL initPlotter(
+    virtual void initPlotter(
           const ::com::sun::star::uno::Reference<
                 ::com::sun::star::drawing::XShapes >& xLogicTarget
         , const ::com::sun::star::uno::Reference<
@@ -75,21 +64,13 @@ public:
         , const rtl::OUString& rCID
                 ) throw (::com::sun::star::uno::RuntimeException );
 
-    virtual void SAL_CALL setScales(
-          const ::com::sun::star::uno::Sequence<
-            ::com::sun::star::chart2::ExplicitScaleData >& rScales
-            , sal_Bool bSwapXAndYAxis )
-                throw (::com::sun::star::uno::RuntimeException);
+    virtual void setScales( const ::std::vector< ExplicitScaleData >& rScales, bool bSwapXAndYAxis );
 
     virtual void setTransformationSceneToScreen( const ::com::sun::star::drawing::HomogenMatrix& rMatrix );
 
-    virtual void SAL_CALL createShapes() = 0;
+    virtual void createShapes() = 0;
 
     static bool isValidPosition( const ::com::sun::star::drawing::Position3D& rPos );
-    /*
-    virtual ::rtl::OUString SAL_CALL getCoordinateSystemTypeID(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setTransformation( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTransformation >& xTransformationToLogicTarget, const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTransformation >& xTransformationToFinalPage ) throw (::com::sun::star::uno::RuntimeException);
-    */
 
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------

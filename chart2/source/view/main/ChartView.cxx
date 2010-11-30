@@ -31,6 +31,7 @@
 
 #include "ChartView.hxx"
 #include "chartview/DrawModelWrapper.hxx"
+#include "chartview/NumberFormatterWrapper.hxx"
 #include "ViewDefines.hxx"
 #include "VDiagram.hxx"
 #include "VTitle.hxx"
@@ -56,6 +57,7 @@
 #include "ControllerLockGuard.hxx"
 #include "BaseGFXHelper.hxx"
 #include "DataSeriesHelper.hxx"
+#include "DateHelper.hxx"
 
 #include <comphelper/scopeguard.hxx>
 #include <boost/bind.hpp>
@@ -78,7 +80,6 @@
 #include <com/sun/star/chart/ChartAxisPosition.hpp>
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
-#include <com/sun/star/chart2/ExplicitSubIncrement.hpp>
 #include <com/sun/star/chart2/StackingDirection.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
@@ -474,7 +475,7 @@ private:
 };
 
 AxisUsage::AxisUsage()
-    : aScaleAutomatism(AxisHelper::createDefaultScale())
+    : aScaleAutomatism(AxisHelper::createDefaultScale(),Date())
 {
 }
 
@@ -565,7 +566,7 @@ public:
     ~SeriesPlotterContainer();
 
     void initializeCooSysAndSeriesPlotter( const uno::Reference< frame::XModel >& xChartModel );
-    void initAxisUsageList();
+    void initAxisUsageList(const Date& rNullDate);
     void doAutoScaling( const uno::Reference< frame::XModel >& xChartModel );
     void updateScalesAndIncrementsOnAxes();
     void setScalesFromCooSysToPlotter();
@@ -583,13 +584,13 @@ private:
     std::vector< VCoordinateSystem* >& m_rVCooSysList;
     ::std::map< uno::Reference< XAxis >, AxisUsage > m_aAxisUsageList;
     sal_Int32 m_nMaxAxisIndex;
-    bool m_bChartTypeUsesShiftedXAxisTicksPerDefault;
+    bool m_bChartTypeUsesShiftedCategoryPositionPerDefault;
 };
 
 SeriesPlotterContainer::SeriesPlotterContainer( std::vector< VCoordinateSystem* >& rVCooSysList )
         : m_rVCooSysList( rVCooSysList )
         , m_nMaxAxisIndex(0)
-        , m_bChartTypeUsesShiftedXAxisTicksPerDefault(false)
+        , m_bChartTypeUsesShiftedCategoryPositionPerDefault(false)
 {
 }
 
@@ -684,7 +685,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
             uno::Reference< XChartType > xChartType( aChartTypeList[nT] );
 
             if(nT==0)
-                m_bChartTypeUsesShiftedXAxisTicksPerDefault = ChartTypeHelper::shiftTicksAtXAxisPerDefault( xChartType );
+                m_bChartTypeUsesShiftedCategoryPositionPerDefault = ChartTypeHelper::shiftCategoryPosAtXAxisPerDefault( xChartType );
 
             bool bExcludingPositioning = DiagramPositioningMode_EXCLUDING == DiagramHelper::getDiagramPositioningMode( xDiagram );
             VSeriesPlotter* pPlotter = VSeriesPlotter::createSeriesPlotter( xChartType, nDimensionCount, bExcludingPositioning );
@@ -795,7 +796,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
     }
 }
 
-void SeriesPlotterContainer::initAxisUsageList()
+void SeriesPlotterContainer::initAxisUsageList(const Date& rNullDate)
 {
     m_aAxisUsageList.clear();
     size_t nC;
@@ -805,8 +806,10 @@ void SeriesPlotterContainer::initAxisUsageList()
         for(sal_Int32 nDimensionIndex=0; nDimensionIndex<3; nDimensionIndex++)
         {
             uno::Reference< XCoordinateSystem > xCooSys = pVCooSys->getModel();
-            if( nDimensionIndex >= xCooSys->getDimension() )
+            sal_Int32 nDimensionCount = xCooSys->getDimension();
+            if( nDimensionIndex >= nDimensionCount )
                 continue;
+            bool bChartTypeAllowsDateAxis = ChartTypeHelper::isSupportingDateAxis(  AxisHelper::getChartTypeByIndex( xCooSys, 0 ), nDimensionCount, nDimensionIndex );
             const sal_Int32 nMaximumAxisIndex = xCooSys->getMaximumAxisIndexByDimension(nDimensionIndex);
             for(sal_Int32 nAxisIndex=0; nAxisIndex<=nMaximumAxisIndex; ++nAxisIndex)
             {
@@ -815,7 +818,20 @@ void SeriesPlotterContainer::initAxisUsageList()
                 if( xAxis.is())
                 {
                     if(m_aAxisUsageList.find(xAxis)==m_aAxisUsageList.end())
-                        m_aAxisUsageList[xAxis].aScaleAutomatism = ScaleAutomatism(xAxis->getScaleData());
+                    {
+                        chart2::ScaleData aSourceScale = xAxis->getScaleData();
+                        ExplicitCategoriesProvider* pExplicitCategoriesProvider = pVCooSys->getExplicitCategoriesProvider();
+                        if( nDimensionIndex==0 )
+                            AxisHelper::checkDateAxis( aSourceScale, pExplicitCategoriesProvider, bChartTypeAllowsDateAxis );
+                        if( (aSourceScale.AxisType == AxisType::CATEGORY && m_bChartTypeUsesShiftedCategoryPositionPerDefault)
+                            || (aSourceScale.AxisType==AxisType::CATEGORY && pExplicitCategoriesProvider && pExplicitCategoriesProvider->hasComplexCategories() )
+                            || aSourceScale.AxisType == AxisType::DATE
+                            || aSourceScale.AxisType == AxisType::SERIES )
+                            aSourceScale.ShiftedCategoryPosition = true;
+                        else
+                            aSourceScale.ShiftedCategoryPosition = false;
+                        m_aAxisUsageList[xAxis].aScaleAutomatism = ScaleAutomatism(aSourceScale,rNullDate);
+                    }
                     AxisUsage& rAxisUsage = m_aAxisUsageList[xAxis];
                     rAxisUsage.addCoordinateSystem(pVCooSys,nDimensionIndex,nAxisIndex);
                 }
@@ -938,13 +954,7 @@ void SeriesPlotterContainer::doAutoScaling( const uno::Reference< frame::XModel 
             rAxisUsage.aScaleAutomatism.calculateExplicitScaleAndIncrement( aExplicitScale, aExplicitIncrement );
 
             for( nC=0; nC < aVCooSysList_X.size(); nC++)
-            {
-                ExplicitCategoriesProvider* pExplicitCategoriesProvider = aVCooSysList_X[nC]->getExplicitCategoriesProvider();
-
-                if( m_bChartTypeUsesShiftedXAxisTicksPerDefault || (aExplicitScale.AxisType==AxisType::CATEGORY && pExplicitCategoriesProvider && pExplicitCategoriesProvider->hasComplexCategories() ) )
-                    aExplicitIncrement.ShiftedPosition = true;
                 aVCooSysList_X[nC]->setExplicitScaleAndIncrement( 0, nAxisIndex, aExplicitScale, aExplicitIncrement );
-            }
             for( nC=0; nC < aVCooSysList_Z.size(); nC++)
                 aVCooSysList_Z[nC]->setExplicitScaleAndIncrement( 2, nAxisIndex, aExplicitScale, aExplicitIncrement );
         }
@@ -1029,7 +1039,6 @@ void SeriesPlotterContainer::AdaptScaleOfYAxisWithoutAttachedSeries( const uno::
 
                         aExplicitScaleDest.Orientation = aExplicitScaleSource.Orientation;
                         aExplicitScaleDest.Scaling = aExplicitScaleSource.Scaling;
-                        aExplicitScaleDest.Breaks = aExplicitScaleSource.Breaks;
                         aExplicitScaleDest.AxisType = aExplicitScaleSource.AxisType;
 
                         aExplicitIncrementDest.BaseValue = aExplicitIncrementSource.BaseValue;
@@ -1067,7 +1076,7 @@ void SeriesPlotterContainer::AdaptScaleOfYAxisWithoutAttachedSeries( const uno::
                             bAutoMinorInterval = !( aScale.IncrementData.SubIncrements[0].IntervalCount.hasValue() );
                         if( bAutoMinorInterval )
                         {
-                            if( aExplicitIncrementDest.SubIncrements.getLength() && aExplicitIncrementSource.SubIncrements.getLength() )
+                            if( !aExplicitIncrementDest.SubIncrements.empty() && !aExplicitIncrementSource.SubIncrements.empty() )
                                 aExplicitIncrementDest.SubIncrements[0].IntervalCount =
                                     aExplicitIncrementSource.SubIncrements[0].IntervalCount;
                         }
@@ -1382,7 +1391,8 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& 
 
 
     // - prepare list of all axis and how they are used
-    rSeriesPlotterContainer.initAxisUsageList();
+    Date aNullDate = NumberFormatterWrapper( uno::Reference< util::XNumberFormatsSupplier >( m_xChartModel, uno::UNO_QUERY ) ).getNullDate();
+    rSeriesPlotterContainer.initAxisUsageList(aNullDate);
     rSeriesPlotterContainer.doAutoScaling( m_xChartModel );
     rSeriesPlotterContainer.setScalesFromCooSysToPlotter();
     rSeriesPlotterContainer.setNumberFormatsFromAxes();
@@ -1665,6 +1675,29 @@ sal_Bool ChartView::getExplicitValuesForAxis(
     {
         rExplicitScale = pVCooSys->getExplicitScale(nDimensionIndex,nAxisIndex);
         rExplicitIncrement = pVCooSys->getExplicitIncrement(nDimensionIndex,nAxisIndex);
+        if( rExplicitScale.ShiftedCategoryPosition )
+        {
+            //remove 'one' from max
+            if( rExplicitScale.AxisType == ::com::sun::star::chart2::AxisType::DATE )
+            {
+                Date aMaxDate(rExplicitScale.NullDate); aMaxDate += static_cast<long>(::rtl::math::approxFloor(rExplicitScale.Maximum));
+                //for explicit scales with shifted categories we need one interval more
+                switch( rExplicitScale.TimeResolution )
+                {
+                case ::com::sun::star::chart::TimeUnit::DAY:
+                    aMaxDate--;break;
+                case ::com::sun::star::chart::TimeUnit::MONTH:
+                    aMaxDate = DateHelper::GetDateSomeMonthsAway(aMaxDate,-1);
+                    break;
+                case ::com::sun::star::chart::TimeUnit::YEAR:
+                    aMaxDate = DateHelper::GetDateSomeYearsAway(aMaxDate,-1);
+                    break;
+                }
+                rExplicitScale.Maximum = aMaxDate - rExplicitScale.NullDate;
+            }
+            else if( rExplicitScale.AxisType == ::com::sun::star::chart2::AxisType::CATEGORY )
+                rExplicitScale.Maximum -= 1.0;
+        }
         return sal_True;
     }
     return sal_False;
@@ -1793,6 +1826,24 @@ bool lcl_getPropertySwapXAndYAxis( const uno::Reference< XDiagram >& xDiagram )
 
 }
 
+sal_Int32 lcl_getDateNumberFormat( const Reference< util::XNumberFormatsSupplier >& xNumberFormatsSupplier )
+{
+    sal_Int32 nRet=-1;
+    Reference< util::XNumberFormats > xNumberFormats( xNumberFormatsSupplier->getNumberFormats() );
+    if( xNumberFormats.is() )
+    {
+        sal_Bool bCreate = sal_True;
+        const LocaleDataWrapper& rLocaleDataWrapper = Application::GetSettings().GetLocaleDataWrapper();
+        Sequence<sal_Int32> aKeySeq = xNumberFormats->queryKeys( util::NumberFormat::DATE,
+            rLocaleDataWrapper.getLocale(), bCreate );
+        if( aKeySeq.getLength() )
+        {
+            nRet = aKeySeq[0];
+        }
+    }
+    return nRet;
+}
+
 sal_Int32 lcl_getExplicitNumberFormatKeyForAxis(
                   const Reference< chart2::XAxis >& xAxis
                 , const Reference< chart2::XCoordinateSystem > & xCorrespondingCoordinateSystem
@@ -1803,23 +1854,35 @@ sal_Int32 lcl_getExplicitNumberFormatKeyForAxis(
     Reference< beans::XPropertySet > xProp( xAxis, uno::UNO_QUERY );
     if( xProp.is() && !( xProp->getPropertyValue( C2U( "NumberFormat" ) ) >>= nNumberFormatKey ) )
     {
-        bool bPercentFormatSet = false;
+        bool bFormatSet = false;
         //check wether we have a percent scale -> use percent format
         if( xNumberFormatsSupplier.is() )
         {
-            ScaleData aData = xAxis->getScaleData();
+            ScaleData aData = AxisHelper::getDateCheckedScale( xAxis, Reference< frame::XModel >( xNumberFormatsSupplier, uno::UNO_QUERY ) );
             if( aData.AxisType==AxisType::PERCENT )
             {
                 sal_Int32 nPercentFormat = ExplicitValueProvider::getPercentNumberFormat( xNumberFormatsSupplier );
                 if( nPercentFormat != -1 )
                 {
                     nNumberFormatKey = nPercentFormat;
-                    bPercentFormatSet = true;
+                    bFormatSet = true;
+                }
+            }
+            else if( aData.AxisType==AxisType::DATE )
+            {
+                if( aData.Categories.is() )
+                {
+                    Reference< data::XDataSequence > xSeq( aData.Categories->getValues());
+                    if( xSeq.is() )
+                        nNumberFormatKey = xSeq->getNumberFormatKeyByIndex( -1 );
+                    else
+                        nNumberFormatKey = lcl_getDateNumberFormat( xNumberFormatsSupplier );
+                    bFormatSet = true;
                 }
             }
         }
 
-        if( !bPercentFormatSet )
+        if( !bFormatSet )
         {
             typedef ::std::map< sal_Int32, sal_Int32 > tNumberformatFrequency;
             tNumberformatFrequency aKeyMap;
@@ -1857,22 +1920,20 @@ sal_Int32 lcl_getExplicitNumberFormatKeyForAxis(
                                     continue;
                             }
 
-                            Sequence< Reference< data::XLabeledDataSequence > > aLabeledSeq( xSource->getDataSequences());
-                            for( sal_Int32 nLSeqIdx=0; nLSeqIdx<aLabeledSeq.getLength(); ++nLSeqIdx )
-                            {
-                                if(!aLabeledSeq[nLSeqIdx].is())
-                                    continue;
-                                Reference< data::XDataSequence > xSeq( aLabeledSeq[nLSeqIdx]->getValues());
-                                if(!xSeq.is())
-                                    continue;
-                                Reference< beans::XPropertySet > xSeqProp( xSeq, uno::UNO_QUERY );
-                                ::rtl::OUString aRole;
-                                bool bTakeIntoAccount =
-                                    ( xSeqProp.is() && (aRoleToMatch.getLength() > 0) &&
-                                    (xSeqProp->getPropertyValue(C2U("Role")) >>= aRole ) &&
-                                    aRole.equals( aRoleToMatch ));
+                            Reference< data::XLabeledDataSequence > xLabeledSeq(
+                                DataSeriesHelper::getDataSequenceByRole( xSource, aRoleToMatch ) );
 
-                                if( bTakeIntoAccount )
+                            if( !xLabeledSeq.is() && nDimensionIndex==0 )
+                            {
+                                ScaleData aData = xAxis->getScaleData();
+                                if( aData.AxisType==AxisType::REALNUMBER )
+                                    xLabeledSeq = aData.Categories;
+                            }
+
+                            if( xLabeledSeq.is() )
+                            {
+                                Reference< data::XDataSequence > xSeq( xLabeledSeq->getValues());
+                                if( xSeq.is() )
                                 {
                                     sal_Int32 nKey = xSeq->getNumberFormatKeyByIndex( -1 );
                                     // initialize the value
@@ -1953,7 +2014,6 @@ sal_Int32 ExplicitValueProvider::getPercentNumberFormat( const Reference< util::
     }
     return nRet;
 }
-
 
 sal_Int32 ExplicitValueProvider::getExplicitNumberFormatKeyForDataLabel(
         const uno::Reference< beans::XPropertySet >& xSeriesOrPointProp,

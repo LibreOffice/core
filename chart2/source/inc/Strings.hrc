@@ -30,8 +30,7 @@
 // this includes no link dependency
 #include <svl/solar.hrc>
 
-//next free is 291
-//single free is: 134
+//next free is 294
 
 //#define RID_APP_START 30000
 ////#define STR_NULL                            (RID_APP_START +  1)
@@ -165,6 +164,8 @@
 #define STR_STEP_GT_ZERO                    (RID_APP_START + 102)
 #define STR_BAD_LOGARITHM                   (RID_APP_START + 111)
 #define STR_MIN_GREATER_MAX                 (RID_APP_START + 101)
+#define STR_INVALID_INTERVALS               (RID_APP_START + 291)
+#define STR_INVALID_TIME_UNIT               (RID_APP_START + 292)
 
 //-----------------------------------------------------------------------------
 //for range didalog
@@ -192,6 +193,8 @@
 #define STR_DATA_SELECT_RANGE_FOR_DATALABELS (RID_APP_START + 195)
 #define STR_DATA_SELECT_RANGE_FOR_POSITIVE_ERRORBARS (RID_APP_START + 21)
 #define STR_DATA_SELECT_RANGE_FOR_NEGATIVE_ERRORBARS (RID_APP_START + 267)
+
+#define STR_DATA_DATE_CATEGORIES             (RID_APP_START + 293)
 
 //-----------------------------------------------------------------------------
 //chart objects

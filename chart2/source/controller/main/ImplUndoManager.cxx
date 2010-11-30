@@ -36,7 +36,7 @@
 #include "DataSourceHelper.hxx"
 #include "ChartModelHelper.hxx"
 
-#include <com/sun/star/chart/XComplexDescriptionAccess.hpp>
+#include <com/sun/star/chart2/XAnyDescriptionAccess.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XInternalDataProvider.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
@@ -52,7 +52,7 @@ using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::rtl::OUString;
-using ::com::sun::star::chart::XComplexDescriptionAccess;
+using ::com::sun::star::chart2::XAnyDescriptionAccess;
 
 namespace chart
 {
@@ -69,13 +69,13 @@ void ImplApplyDataToModel(
     // copy data from stored internal data provider
     if( xDoc.is() && xDoc->hasInternalDataProvider())
     {
-        Reference< XComplexDescriptionAccess > xCurrentData( xDoc->getDataProvider(), uno::UNO_QUERY );
-        Reference< XComplexDescriptionAccess > xSavedData( xData, uno::UNO_QUERY );
+        Reference< XAnyDescriptionAccess > xCurrentData( xDoc->getDataProvider(), uno::UNO_QUERY );
+        Reference< XAnyDescriptionAccess > xSavedData( xData, uno::UNO_QUERY );
         if( xCurrentData.is() && xSavedData.is())
         {
             xCurrentData->setData( xSavedData->getData());
-            xCurrentData->setComplexRowDescriptions( xSavedData->getComplexRowDescriptions());
-            xCurrentData->setComplexColumnDescriptions( xSavedData->getComplexColumnDescriptions());
+            xCurrentData->setAnyRowDescriptions( xSavedData->getAnyRowDescriptions());
+            xCurrentData->setAnyColumnDescriptions( xSavedData->getAnyColumnDescriptions());
         }
     }
 }

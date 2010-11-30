@@ -103,8 +103,8 @@ public:
     // ___ExplicitValueProvider___
     virtual sal_Bool getExplicitValuesForAxis(
         ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis > xAxis
-        , ::com::sun::star::chart2::ExplicitScaleData&  rExplicitScale
-        , ::com::sun::star::chart2::ExplicitIncrementData& rExplicitIncrement );
+        , ExplicitScaleData&  rExplicitScale
+        , ExplicitIncrementData& rExplicitIncrement );
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
         getShapeForCID( const rtl::OUString& rObjectCID );
 

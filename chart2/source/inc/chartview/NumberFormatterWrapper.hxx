@@ -52,6 +52,7 @@ public:
                 getNumberFormatsSupplier() { return m_xNumberFormatsSupplier; };
 
     rtl::OUString getFormattedString( sal_Int32 nNumberFormatKey, double fValue, sal_Int32& rLabelColor, bool& rbColorChanged ) const;
+    Date    getNullDate() const;
 
 private: //private member
     ::com::sun::star::uno::Reference< com::sun::star::util::XNumberFormatsSupplier >

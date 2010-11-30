@@ -107,7 +107,7 @@ VDiagram::~VDiagram()
     delete m_pShapeFactory;
 }
 
-void SAL_CALL VDiagram::init(
+void VDiagram::init(
                 const uno::Reference< drawing::XShapes >& xLogicTarget
               , const uno::Reference< drawing::XShapes >& xFinalTarget
               , const uno::Reference< lang::XMultiServiceFactory >& xFactory )

@@ -31,7 +31,7 @@
 #include "VAxisBase.hxx"
 #include "ShapeFactory.hxx"
 #include "CommonConverters.hxx"
-#include "TickmarkHelper.hxx"
+#include "Tickmarks.hxx"
 #include "macros.hxx"
 
 // header for define DBG_ASSERT
@@ -70,7 +70,7 @@ sal_Int32 VAxisBase::getDimensionCount()
     return m_nDimension;
 }
 
-void SAL_CALL VAxisBase::initAxisLabelProperties( const ::com::sun::star::awt::Size& rFontReferenceSize
+void VAxisBase::initAxisLabelProperties( const ::com::sun::star::awt::Size& rFontReferenceSize
                   , const ::com::sun::star::awt::Rectangle& rMaximumSpaceForLabels )
 {
     m_aAxisLabelProperties.m_aFontReferenceSize = rFontReferenceSize;
@@ -106,6 +106,15 @@ void SAL_CALL VAxisBase::initAxisLabelProperties( const ::com::sun::star::awt::S
         m_aAxisLabelProperties.eStaggering = SIDE_BY_SIDE;
 }
 
+bool VAxisBase::isDateAxis() const
+{
+    return AxisType::DATE == m_aScale.AxisType;
+}
+bool VAxisBase::isComplexCategoryAxis() const
+{
+    return m_aAxisProperties.m_bComplexCategories && m_bUseTextLabels;
+}
+
 void VAxisBase::recordMaximumTextSize( const Reference< drawing::XShape >& xShape, double fRotationAngleDegree )
 {
     if( m_bRecordMaximumTextSize && xShape.is() )
@@ -130,7 +139,7 @@ void VAxisBase::setExrtaLinePositionAtOtherAxis( const double& fCrossingAt )
     m_aAxisProperties.m_pfExrtaLinePositionAtOtherAxis = new double(fCrossingAt);
 }
 
-sal_Bool SAL_CALL VAxisBase::isAnythingToDraw()
+sal_Bool VAxisBase::isAnythingToDraw()
 {
     if( !m_aAxisProperties.m_xAxisModel.is() )
         return false;
@@ -150,7 +159,7 @@ sal_Bool SAL_CALL VAxisBase::isAnythingToDraw()
     return true;
 }
 
-void SAL_CALL VAxisBase::setExplicitScaleAndIncrement(
+void VAxisBase::setExplicitScaleAndIncrement(
               const ExplicitScaleData& rScale
             , const ExplicitIncrementData& rIncrement )
             throw (uno::RuntimeException)
@@ -162,8 +171,11 @@ void SAL_CALL VAxisBase::setExplicitScaleAndIncrement(
 
 void VAxisBase::createAllTickInfos( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos )
 {
-    std::auto_ptr< TickmarkHelper > apTickmarkHelper( this->createTickmarkHelper() );
-    apTickmarkHelper->getAllTicks( rAllTickInfos );
+    std::auto_ptr< TickFactory > apTickFactory( this->createTickFactory() );
+    if( m_aScale.ShiftedCategoryPosition )
+        apTickFactory->getAllTicksShifted( rAllTickInfos );
+    else
+        apTickFactory->getAllTicks( rAllTickInfos );
 }
 
 bool VAxisBase::prepareShapeCreation()
@@ -244,7 +256,7 @@ void VAxisBase::updateUnscaledValuesAtTicks( TickIter& rIter )
     for( TickInfo* pTickInfo = rIter.firstInfo()
         ; pTickInfo; pTickInfo = rIter.nextInfo() )
     {
-        pTickInfo->updateUnscaledValue( xInverseScaling );
+        //xxxxx pTickInfo->updateUnscaledValue( xInverseScaling );
     }
 }
 

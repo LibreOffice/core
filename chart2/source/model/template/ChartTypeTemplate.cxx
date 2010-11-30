@@ -651,9 +651,18 @@ void ChartTypeTemplate::adaptScales(
                     {
                         ScaleData aData( xAxis->getScaleData() );
                         aData.Categories = xCategories;
-                        aData.AxisType = bSupportsCategories ? AxisType::CATEGORY : AxisType::REALNUMBER;
-                        if( bSupportsCategories )
-                            AxisHelper::removeExplicitScaling( aData );
+                        if(bSupportsCategories)
+                        {
+                            if( aData.AxisType != AxisType::CATEGORY && aData.AxisType != AxisType::DATE )
+                            {
+                                aData.AxisType = AxisType::CATEGORY;
+                                aData.AutoDateAxis = true;
+                                AxisHelper::removeExplicitScaling( aData );
+                            }
+                        }
+                        else
+                            aData.AxisType = AxisType::REALNUMBER;
+
                         xAxis->setScaleData( aData );
                     }
                 }

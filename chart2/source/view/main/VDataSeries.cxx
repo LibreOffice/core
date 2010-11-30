@@ -352,6 +352,22 @@ void VDataSeries::setCategoryXAxis()
     m_bAllowPercentValueInDataLabel = true;
 }
 
+void VDataSeries::setXValues( const Reference< chart2::data::XDataSequence >& xValues )
+{
+    m_aValues_X.clear();
+    m_aValues_X.init( xValues );
+    m_bAllowPercentValueInDataLabel = true;
+}
+
+void VDataSeries::setXValuesIfNone( const Reference< chart2::data::XDataSequence >& xValues )
+{
+    if( m_aValues_X.is() )
+        return;
+
+    m_aValues_X.init( xValues );
+    lcl_clearIfNoValuesButTextIsContained( m_aValues_X, xValues );
+}
+
 void VDataSeries::setGlobalSeriesIndex( sal_Int32 nGlobalSeriesIndex )
 {
     m_nGlobalSeriesIndex = nGlobalSeriesIndex;

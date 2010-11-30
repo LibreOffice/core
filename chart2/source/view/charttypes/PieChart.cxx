@@ -159,11 +159,9 @@ PieChart::~PieChart()
 
 //-----------------------------------------------------------------
 
-void SAL_CALL PieChart::setScales( const uno::Sequence< ExplicitScaleData >& rScales
-                                     , sal_Bool /* bSwapXAndYAxis */ )
-                            throw (uno::RuntimeException)
+void PieChart::setScales( const std::vector< ExplicitScaleData >& rScales, bool /* bSwapXAndYAxis */ )
 {
-    DBG_ASSERT(m_nDimension<=rScales.getLength(),"Dimension of Plotter does not fit two dimension of given scale sequence");
+    DBG_ASSERT(m_nDimension<=static_cast<sal_Int32>(rScales.size()),"Dimension of Plotter does not fit two dimension of given scale sequence");
     m_pPosHelper->setScales( rScales, true );
 }
 
