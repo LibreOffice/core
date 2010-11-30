@@ -48,6 +48,7 @@ struct ScCellMergeOption
     bool mbCenter;
 
     explicit ScCellMergeOption();
+    explicit ScCellMergeOption(const ScRange& rRange);
     explicit ScCellMergeOption(SCCOL nStartCol, SCROW nStartRow,
                                SCCOL nEndCol, SCROW nEndRow,
                                bool bCenter = false);

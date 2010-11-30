@@ -2200,9 +2200,7 @@ BOOL ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
 
         if( !pDoc->HasAttrib( aRange, HASATTR_OVERLAPPED | HASATTR_MERGED ) )
         {
-            ScCellMergeOption aMergeOption(
-                aRange.aStart.Col(), aRange.aStart.Row(),
-                aRange.aEnd.Col(), aRange.aEnd.Row() );
+            ScCellMergeOption aMergeOption(aRange);
             MergeCells( aMergeOption, FALSE, TRUE, TRUE );
         }
         qDecreaseRange.pop_back();

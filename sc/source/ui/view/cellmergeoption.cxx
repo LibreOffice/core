@@ -41,6 +41,19 @@ ScCellMergeOption::ScCellMergeOption() :
 {
 }
 
+ScCellMergeOption::ScCellMergeOption(const ScRange& rRange) :
+    mnStartCol(rRange.aStart.Col()),
+    mnStartRow(rRange.aStart.Row()),
+    mnEndCol(rRange.aEnd.Col()),
+    mnEndRow(rRange.aEnd.Row()),
+    mbCenter(false)
+{
+    SCTAB nTab1 = rRange.aStart.Tab();
+    SCTAB nTab2 = rRange.aEnd.Tab();
+    for (SCTAB i = nTab1; i <= nTab2; ++i)
+        maTabs.insert(i);
+}
+
 ScCellMergeOption::ScCellMergeOption(SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, bool bCenter) :
     mnStartCol(nStartCol),
     mnStartRow(nStartRow),
