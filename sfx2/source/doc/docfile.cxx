@@ -1012,225 +1012,232 @@ sal_Bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
     // returns true if the document can be opened for editing ( even if it should be a copy )
     // otherwise the document should be opened readonly
     // if user cancel the loading the ERROR_ABORT is set
+    sal_Bool bResult = sal_False;
 
-    if ( pImp->m_bLocked && bLoading && ::utl::LocalFileHelper::IsLocalFile( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) ) )
+    if ( !GetURLObject().HasError() ) try
     {
-        // if the document is already locked the system locking might be temporarely off after storing
-        // check whether the system file locking should be taken again
-        GetLockingStream_Impl();
-    }
-
-    sal_Bool bResult = pImp->m_bLocked;
-
-    if ( !bResult )
-    {
-        // no read-write access is necessary on loading if the document is explicitly opened as copy
-        SFX_ITEMSET_ARG( GetItemSet(), pTemplateItem, SfxBoolItem, SID_TEMPLATE, sal_False);
-        bResult = ( bLoading && pTemplateItem && pTemplateItem->GetValue() );
-    }
-
-    if ( !bResult && !IsReadOnly() )
-    {
-        sal_Bool bContentReadonly = sal_False;
-        if ( bLoading && ::utl::LocalFileHelper::IsLocalFile( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) ) )
+        if ( pImp->m_bLocked && bLoading && ::utl::LocalFileHelper::IsLocalFile( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) ) )
         {
-            // let the original document be opened to check the possibility to open it for editing
-            // and to let the writable stream stay open to hold the lock on the document
+            // if the document is already locked the system locking might be temporarely off after storing
+            // check whether the system file locking should be taken again
             GetLockingStream_Impl();
         }
 
-        // "IsReadOnly" property does not allow to detect whether the file is readonly always
-        // so we try always to open the file for editing
-        // the file is readonly only in case the read-write stream can not be opened
-        if ( bLoading && !pImp->m_xLockingStream.is() )
+        sal_Bool bResult = pImp->m_bLocked;
+
+        if ( !bResult )
         {
-            try
+            // no read-write access is necessary on loading if the document is explicitly opened as copy
+            SFX_ITEMSET_ARG( GetItemSet(), pTemplateItem, SfxBoolItem, SID_TEMPLATE, sal_False);
+            bResult = ( bLoading && pTemplateItem && pTemplateItem->GetValue() );
+        }
+
+        if ( !bResult && !IsReadOnly() )
+        {
+            sal_Bool bContentReadonly = sal_False;
+            if ( bLoading && ::utl::LocalFileHelper::IsLocalFile( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) ) )
             {
-                // MediaDescriptor does this check also, the duplication should be avoided in future
-                Reference< ::com::sun::star::ucb::XCommandEnvironment > xDummyEnv;
-                ::ucbhelper::Content aContent( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ), xDummyEnv );
-                aContent.getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsReadOnly" ) ) ) >>= bContentReadonly;
+                // let the original document be opened to check the possibility to open it for editing
+                // and to let the writable stream stay open to hold the lock on the document
+                GetLockingStream_Impl();
             }
-            catch( uno::Exception )
-            {}
+
+            // "IsReadOnly" property does not allow to detect whether the file is readonly always
+            // so we try always to open the file for editing
+            // the file is readonly only in case the read-write stream can not be opened
+            if ( bLoading && !pImp->m_xLockingStream.is() )
+            {
+                try
+                {
+                    // MediaDescriptor does this check also, the duplication should be avoided in future
+                    Reference< ::com::sun::star::ucb::XCommandEnvironment > xDummyEnv;
+                    ::ucbhelper::Content aContent( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ), xDummyEnv );
+                    aContent.getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsReadOnly" ) ) ) >>= bContentReadonly;
+                }
+                catch( uno::Exception )
+                {}
 
 #if EXTRA_ACL_CHECK
-            // This block was introduced as a fix to i#102464, but removing
-            // this does not make the problem re-appear.  But leaving this
-            // part would interfere with documents saved in samba share.  This
-            // affects Windows only.
+                // This block was introduced as a fix to i#102464, but removing
+                // this does not make the problem re-appear.  But leaving this
+                // part would interfere with documents saved in samba share.  This
+                // affects Windows only.
+                if ( !bContentReadonly )
+                {
+                    // the file is not readonly, check the ACL
+
+                    String aPhysPath;
+                    if ( ::utl::LocalFileHelper::ConvertURLToPhysicalName( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ), aPhysPath ) )
+                        bContentReadonly = IsReadonlyAccordingACL( aPhysPath.GetBuffer() );
+                }
+#endif
+            }
+
+            // do further checks only if the file not readonly in fs
             if ( !bContentReadonly )
             {
-                // the file is not readonly, check the ACL
-
-                String aPhysPath;
-                if ( ::utl::LocalFileHelper::ConvertURLToPhysicalName( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ), aPhysPath ) )
-                    bContentReadonly = IsReadonlyAccordingACL( aPhysPath.GetBuffer() );
-            }
-#endif
-        }
-
-        // do further checks only if the file not readonly in fs
-        if ( !bContentReadonly )
-        {
-            // the special file locking should be used only for file URLs
-            if ( ::utl::LocalFileHelper::IsLocalFile( aLogicName ) )
-            {
-
-                // in case of storing the document should request the output before locking
-                if ( bLoading )
+                // the special file locking should be used only for file URLs
+                if ( ::utl::LocalFileHelper::IsLocalFile( aLogicName ) )
                 {
-                    // let the stream be opened to check the system file locking
-                    GetMedium_Impl();
-                }
 
-                sal_Int8 bUIStatus = LOCK_UI_NOLOCK;
-
-                // check whether system file locking has been used, the default value is false
-                sal_Bool bUseSystemLock = IsSystemFileLockingUsed();
-
-                // TODO/LATER: This implementation does not allow to detect the system lock on saving here, actually this is no big problem
-                // if system lock is used the writeable stream should be available
-                sal_Bool bHandleSysLocked = ( bLoading && bUseSystemLock && !pImp->xStream.is() && !pOutStream );
-
-                do
-                {
-                    try
+                    // in case of storing the document should request the output before locking
+                    if ( bLoading )
                     {
-                        ::svt::DocumentLockFile aLockFile( aLogicName );
-                        if ( !bHandleSysLocked )
+                        // let the stream be opened to check the system file locking
+                        GetMedium_Impl();
+                    }
+
+                    sal_Int8 bUIStatus = LOCK_UI_NOLOCK;
+
+                    // check whether system file locking has been used, the default value is false
+                    sal_Bool bUseSystemLock = IsSystemFileLockingUsed();
+
+                    // TODO/LATER: This implementation does not allow to detect the system lock on saving here, actually this is no big problem
+                    // if system lock is used the writeable stream should be available
+                    sal_Bool bHandleSysLocked = ( bLoading && bUseSystemLock && !pImp->xStream.is() && !pOutStream );
+
+                    do
+                    {
+                        try
                         {
-                            try
-                            {
-                                bResult = aLockFile.CreateOwnLockFile();
-                            }
-                            catch ( ucb::InteractiveIOException& e )
-                            {
-                                // exception means that the lock file can not be successfuly accessed
-                                // in this case it should be ignored if system file locking is anyway active
-                                if ( bUseSystemLock || !IsOOoLockFileUsed() )
-                                {
-                                    bResult = sal_True;
-                                    // take the ownership over the lock file
-                                    aLockFile.OverwriteOwnLockFile();
-                                }
-                                else if ( e.Code == IOErrorCode_INVALID_PARAMETER )
-                                {
-                                    // system file locking is not active, ask user whether he wants to open the document without any locking
-                                    uno::Reference< task::XInteractionHandler > xHandler = GetInteractionHandler();
-
-                                    if ( xHandler.is() )
-                                    {
-                                        ::rtl::Reference< ::ucbhelper::InteractionRequest > xIgnoreRequestImpl
-                                            = new ::ucbhelper::InteractionRequest( uno::makeAny( document::LockFileIgnoreRequest() ) );
-
-                                        uno::Sequence< uno::Reference< task::XInteractionContinuation > > aContinuations( 2 );
-                                        aContinuations[0] = new ::ucbhelper::InteractionAbort( xIgnoreRequestImpl.get() );
-                                        aContinuations[1] = new ::ucbhelper::InteractionApprove( xIgnoreRequestImpl.get() );
-                                        xIgnoreRequestImpl->setContinuations( aContinuations );
-
-                                        xHandler->handle( xIgnoreRequestImpl.get() );
-
-                                        ::rtl::Reference< ::ucbhelper::InteractionContinuation > xSelected = xIgnoreRequestImpl->getSelection();
-                                        bResult = (  uno::Reference< task::XInteractionApprove >( xSelected.get(), uno::UNO_QUERY ).is() );
-                                    }
-                                }
-                            }
-                            catch ( uno::Exception& )
-                            {
-                                // exception means that the lock file can not be successfuly accessed
-                                // in this case it should be ignored if system file locking is anyway active
-                                if ( bUseSystemLock || !IsOOoLockFileUsed() )
-                                {
-                                    bResult = sal_True;
-                                    // take the ownership over the lock file
-                                    aLockFile.OverwriteOwnLockFile();
-                                }
-                            }
-
-                            // in case OOo locking is turned off the lock file is still written if possible
-                            // but it is ignored while deciding whether the document should be opened for editing or not
-                            if ( !bResult && !IsOOoLockFileUsed() )
-                            {
-                                bResult = sal_True;
-                                // take the ownership over the lock file
-                                aLockFile.OverwriteOwnLockFile();
-                            }
-                        }
-
-
-                        if ( !bResult )
-                        {
-                            uno::Sequence< ::rtl::OUString > aData;
-                            try
-                            {
-                                // impossibility to get data is no real problem
-                                aData = aLockFile.GetLockData();
-                            }
-                            catch( uno::Exception ) {}
-
-                            sal_Bool bOwnLock = sal_False;
-
+                            ::svt::DocumentLockFile aLockFile( aLogicName );
                             if ( !bHandleSysLocked )
                             {
-                                uno::Sequence< ::rtl::OUString > aOwnData = aLockFile.GenerateOwnEntry();
-                                bOwnLock = ( aData.getLength() > LOCKFILE_USERURL_ID
-                                          && aOwnData.getLength() > LOCKFILE_USERURL_ID
-                                          && aOwnData[LOCKFILE_SYSUSERNAME_ID].equals( aData[LOCKFILE_SYSUSERNAME_ID] ) );
-
-                                if ( bOwnLock
-                                  && aOwnData[LOCKFILE_LOCALHOST_ID].equals( aData[LOCKFILE_LOCALHOST_ID] )
-                                  && aOwnData[LOCKFILE_USERURL_ID].equals( aData[LOCKFILE_USERURL_ID] ) )
+                                try
                                 {
-                                    // this is own lock from the same installation, it could remain because of crash
+                                    bResult = aLockFile.CreateOwnLockFile();
+                                }
+                                catch ( ucb::InteractiveIOException& e )
+                                {
+                                    // exception means that the lock file can not be successfuly accessed
+                                    // in this case it should be ignored if system file locking is anyway active
+                                    if ( bUseSystemLock || !IsOOoLockFileUsed() )
+                                    {
+                                        bResult = sal_True;
+                                        // take the ownership over the lock file
+                                        aLockFile.OverwriteOwnLockFile();
+                                    }
+                                    else if ( e.Code == IOErrorCode_INVALID_PARAMETER )
+                                    {
+                                        // system file locking is not active, ask user whether he wants to open the document without any locking
+                                        uno::Reference< task::XInteractionHandler > xHandler = GetInteractionHandler();
+
+                                        if ( xHandler.is() )
+                                        {
+                                            ::rtl::Reference< ::ucbhelper::InteractionRequest > xIgnoreRequestImpl
+                                                = new ::ucbhelper::InteractionRequest( uno::makeAny( document::LockFileIgnoreRequest() ) );
+
+                                            uno::Sequence< uno::Reference< task::XInteractionContinuation > > aContinuations( 2 );
+                                            aContinuations[0] = new ::ucbhelper::InteractionAbort( xIgnoreRequestImpl.get() );
+                                            aContinuations[1] = new ::ucbhelper::InteractionApprove( xIgnoreRequestImpl.get() );
+                                            xIgnoreRequestImpl->setContinuations( aContinuations );
+
+                                            xHandler->handle( xIgnoreRequestImpl.get() );
+
+                                            ::rtl::Reference< ::ucbhelper::InteractionContinuation > xSelected = xIgnoreRequestImpl->getSelection();
+                                            bResult = (  uno::Reference< task::XInteractionApprove >( xSelected.get(), uno::UNO_QUERY ).is() );
+                                        }
+                                    }
+                                }
+                                catch ( uno::Exception& )
+                                {
+                                    // exception means that the lock file can not be successfuly accessed
+                                    // in this case it should be ignored if system file locking is anyway active
+                                    if ( bUseSystemLock || !IsOOoLockFileUsed() )
+                                    {
+                                        bResult = sal_True;
+                                        // take the ownership over the lock file
+                                        aLockFile.OverwriteOwnLockFile();
+                                    }
+                                }
+
+                                // in case OOo locking is turned off the lock file is still written if possible
+                                // but it is ignored while deciding whether the document should be opened for editing or not
+                                if ( !bResult && !IsOOoLockFileUsed() )
+                                {
                                     bResult = sal_True;
-                                }
-                            }
-
-                            if ( !bResult && !bNoUI )
-                            {
-                                bUIStatus = ShowLockedDocumentDialog( aData, bLoading, bOwnLock );
-                                if ( bUIStatus == LOCK_UI_SUCCEEDED )
-                                {
                                     // take the ownership over the lock file
-                                    bResult = aLockFile.OverwriteOwnLockFile();
+                                    aLockFile.OverwriteOwnLockFile();
                                 }
                             }
 
-                            bHandleSysLocked = sal_False;
-                        }
-                    }
-                    catch( uno::Exception& )
-                    {
-                    }
-                } while( !bResult && bUIStatus == LOCK_UI_TRY );
 
-                pImp->m_bLocked = bResult;
-            }
-            else
-            {
-                // this is no file URL, check whether the file is readonly
-                bResult = !bContentReadonly;
+                            if ( !bResult )
+                            {
+                                uno::Sequence< ::rtl::OUString > aData;
+                                try
+                                {
+                                    // impossibility to get data is no real problem
+                                    aData = aLockFile.GetLockData();
+                                }
+                                catch( uno::Exception ) {}
+
+                                sal_Bool bOwnLock = sal_False;
+
+                                if ( !bHandleSysLocked )
+                                {
+                                    uno::Sequence< ::rtl::OUString > aOwnData = aLockFile.GenerateOwnEntry();
+                                    bOwnLock = ( aData.getLength() > LOCKFILE_USERURL_ID
+                                              && aOwnData.getLength() > LOCKFILE_USERURL_ID
+                                              && aOwnData[LOCKFILE_SYSUSERNAME_ID].equals( aData[LOCKFILE_SYSUSERNAME_ID] ) );
+
+                                    if ( bOwnLock
+                                      && aOwnData[LOCKFILE_LOCALHOST_ID].equals( aData[LOCKFILE_LOCALHOST_ID] )
+                                      && aOwnData[LOCKFILE_USERURL_ID].equals( aData[LOCKFILE_USERURL_ID] ) )
+                                    {
+                                        // this is own lock from the same installation, it could remain because of crash
+                                        bResult = sal_True;
+                                    }
+                                }
+
+                                if ( !bResult && !bNoUI )
+                                {
+                                    bUIStatus = ShowLockedDocumentDialog( aData, bLoading, bOwnLock );
+                                    if ( bUIStatus == LOCK_UI_SUCCEEDED )
+                                    {
+                                        // take the ownership over the lock file
+                                        bResult = aLockFile.OverwriteOwnLockFile();
+                                    }
+                                }
+
+                                bHandleSysLocked = sal_False;
+                            }
+                        }
+                        catch( uno::Exception& )
+                        {
+                        }
+                    } while( !bResult && bUIStatus == LOCK_UI_TRY );
+
+                    pImp->m_bLocked = bResult;
+                }
+                else
+                {
+                    // this is no file URL, check whether the file is readonly
+                    bResult = !bContentReadonly;
+                }
             }
         }
-    }
 
-    if ( !bResult && GetError() == ERRCODE_NONE )
+        if ( !bResult && GetError() == ERRCODE_NONE )
+        {
+            // the error should be set in case it is storing process
+            // or the document has been opened for editing explicitly
+
+            SFX_ITEMSET_ARG( pSet, pReadOnlyItem, SfxBoolItem, SID_DOC_READONLY, FALSE );
+            if ( !bLoading || (pReadOnlyItem && !pReadOnlyItem->GetValue()) )
+                SetError( ERRCODE_IO_ACCESSDENIED, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
+            else
+                GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, sal_True ) );
+        }
+
+        // when the file is locked, get the current file date
+        if ( bResult && DocNeedsFileDateCheck() )
+            GetInitFileDate( sal_True );
+    }
+    catch( uno::Exception& )
     {
-        // the error should be set in case it is storing process
-        // or the document has been opened for editing explicitly
-
-        SFX_ITEMSET_ARG( pSet, pReadOnlyItem, SfxBoolItem, SID_DOC_READONLY, FALSE );
-        if ( !bLoading || (pReadOnlyItem && !pReadOnlyItem->GetValue()) )
-            SetError( ERRCODE_IO_ACCESSDENIED, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
-        else
-            GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, sal_True ) );
+        OSL_ENSURE( sal_False, "Unexpected problem by locking, high probability, that the content could not be created" );
     }
-
-    // when the file is locked, get the current file date
-    if ( bResult && DocNeedsFileDateCheck() )
-        GetInitFileDate( sal_True );
-
     return bResult;
 }
 
