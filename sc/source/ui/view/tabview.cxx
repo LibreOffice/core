@@ -1695,7 +1695,7 @@ void ScTabView::UpdateVisibleRange()
 {
     for (int i = 0; i < 4; ++i)
     {
-        if (!pGridWin[i])
+        if (!pGridWin[i] || !pGridWin[i]->IsVisible())
             continue;
 
         pGridWin[i]->UpdateVisibleRange();
