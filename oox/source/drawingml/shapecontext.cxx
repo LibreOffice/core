@@ -41,6 +41,7 @@
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "oox/drawingml/customshapegeometry.hxx"
 #include "oox/drawingml/textbodycontext.hxx"
+#include "hyperlinkcontext.hxx"
 #include "tokens.hxx"
 
 using rtl::OUString;
@@ -94,6 +95,10 @@ Reference< XFastContextHandler > ShapeContext::createFastChildContext( sal_Int32
         mpShapePtr->setName( xAttribs->getOptionalValue( XML_name ) );
         break;
     }
+    case XML_hlinkMouseOver:
+    case XML_hlinkClick:
+        xRet = new HyperLinkContext( *this, xAttribs,  getShape()->getShapeProperties() );
+        break;
     case XML_ph:
         mpShapePtr->setSubType( xAttribs->getOptionalValueToken( XML_type, XML_obj ) );
         if( xAttribs->hasAttribute( XML_idx ) )
