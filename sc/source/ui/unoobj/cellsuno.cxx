@@ -29,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
 #include <svx/svdpool.hxx>
@@ -126,13 +125,13 @@
 #include "formula/errorcodes.hxx"
 #include "unoreflist.hxx"
 #include "formula/grammar.hxx"
+#include "editeng/escpitem.hxx"
 
 #include <list>
 
 using namespace com::sun::star;
 
 //------------------------------------------------------------------------
-
 
 class ScNamedEntry
 {
@@ -146,7 +145,6 @@ public:
     const String&   GetName() const     { return aName; }
     const ScRange&  GetRange() const    { return aRange; }
 };
-
 
 //------------------------------------------------------------------------
 
@@ -456,6 +454,7 @@ const SfxItemPropertySet* lcl_GetCellPropertySet()
         {MAP_CHAR_LEN(SC_UNONAME_CELLVJUS), ATTR_VER_JUSTIFY,   &getCppuType((sal_Int32*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLVJUS_METHOD), ATTR_VER_JUSTIFY_METHOD, &::getCppuType((const sal_Int32*)0),   0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_WRITING),  ATTR_WRITINGDIR,    &getCppuType((sal_Int16*)0),            0, 0 },
+        {MAP_CHAR_LEN(UNO_NAME_EDIT_CHAR_ESCAPEMENT),   EE_CHAR_ESCAPEMENT, &getCppuType((sal_Int32*)0),            0, 0 },
         {0,0,0,0,0,0}
     };
     static SfxItemPropertySet aCellPropertySet( aCellPropertyMap_Impl );
@@ -812,7 +811,6 @@ const SvxItemPropertySet* lcl_GetEditPropertySet()
     static SvxItemPropertySet aEditPropertySet( lcl_GetEditPropertyMap(), SdrObject::GetGlobalDrawObjectItemPool() );
     return &aEditPropertySet;
 }
-
 
 //------------------------------------------------------------------------
 
@@ -2090,7 +2088,6 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScCellRangesBase::getPropertySe
     return aRef;
 }
 
-
 void lcl_SetCellProperty( const SfxItemPropertySimpleEntry& rEntry, const uno::Any& rValue,
                             ScPatternAttr& rPattern, ScDocument* pDoc,
                             USHORT& rFirstItemId, USHORT& rSecondItemId )
@@ -2256,6 +2253,40 @@ void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
         else        // implemented here
             switch ( pEntry->nWID )
             {
+                case EE_CHAR_ESCAPEMENT:    // Specifically for xlsx import
+                    {
+                        int nValue;
+                        aValue >>= nValue;
+                        if( nValue )
+                        {
+                            int n = aRanges.Count();
+                            for(int i=0; i<n; i++ )
+                            {
+                                ScRange aRange( *aRanges.GetObject(i) );
+                                /* TODO: Iterate through the range */
+                                ScAddress  aAddr = aRange.aStart;
+                                ScDocument *pDoc = pDocShell->GetDocument();
+                                ScBaseCell *pCell = pDoc->GetCell( aAddr );
+                                String aStr( pCell->GetStringData() );
+                                EditEngine aEngine( pDoc->GetEnginePool() );
+                                /* EE_CHAR_ESCAPEMENT seems to be set on the cell _only_ when
+                                 * there are no other attribs for the cell.
+                                 * So, it is safe to overwrite the complete attribute set.
+                                 * If there is a need - getting CellType and processing
+                                 * the attributes could be considered.
+                                 */
+                                SfxItemSet aAttr = aEngine.GetEmptyItemSet();
+                                aEngine.SetText( aStr );
+                                if( nValue < 0 )    // Subscript
+                                    aAttr.Put( SvxEscapementItem( SVX_ESCAPEMENT_SUBSCRIPT, EE_CHAR_ESCAPEMENT ) );
+                                else                // Superscript
+                                    aAttr.Put( SvxEscapementItem( SVX_ESCAPEMENT_SUPERSCRIPT, EE_CHAR_ESCAPEMENT ) );
+                                aEngine.QuickSetAttribs( aAttr, ESelection( 0, 0, 0, aStr.Len()));
+                                pDoc->PutCell( (aRanges.GetObject(0))->aStart, new ScEditCell( aEngine.CreateTextObject(), pDoc, NULL ) );
+                            }
+                        }
+                    }
+                    break;
                 case SC_WID_UNO_CHCOLHDR:
                     // chart header flags are set for this object, not stored with document
                     bChartColAsHdr = ScUnoHelpFunctions::GetBoolFromAny( aValue );
@@ -4360,7 +4391,6 @@ void SAL_CALL ScCellRangesObj::removeRangeAddresses( const uno::Sequence<table::
     // with this implementation not needed
 //  SolarMutexGuard aGuard;
 
-
     // use sometimes a better/faster implementation
     sal_uInt32 nCount(rRangeSeq.getLength());
     if (nCount)
@@ -4929,7 +4959,6 @@ uno::Reference<table::XCellRange> SAL_CALL ScCellRangeObj::getCellRangeByPositio
     throw lang::IndexOutOfBoundsException();
 //    return NULL;
 }
-
 
 uno::Reference<table::XCellRange> SAL_CALL ScCellRangeObj::getCellRangeByName(
                         const rtl::OUString& aName ) throw(uno::RuntimeException)
@@ -9849,6 +9878,5 @@ uno::Any SAL_CALL ScUniqueCellFormatsEnumeration::nextElement() throw(container:
 
     return uno::makeAny(uno::Reference<sheet::XSheetCellRangeContainer>(new ScCellRangesObj(pDocShell, aRangeLists[nCurrentPosition++])));
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
