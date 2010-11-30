@@ -202,9 +202,9 @@ private: //methods
     LabelIterator();
 
 private: //member
+    PureTickIter m_aPureTickIter;
     const AxisLabelStaggering   m_eAxisLabelStaggering;
     bool m_bInnerLine;
-    PureTickIter m_aPureTickIter;
 };
 
 LabelIterator::LabelIterator( ::std::vector< TickInfo >& rTickInfoVector
@@ -360,7 +360,7 @@ MaxLabelTickIter::~MaxLabelTickIter()
 TickInfo* MaxLabelTickIter::firstInfo()
 {
     m_nCurrentIndex = 0;
-    if( m_nCurrentIndex < m_rTickInfoVector.size() )
+    if( m_nCurrentIndex < static_cast<sal_Int32>(m_rTickInfoVector.size()) )
         return &m_rTickInfoVector[m_nCurrentIndex];
     return 0;
 }
@@ -387,7 +387,7 @@ TickInfo* MaxLabelTickIter::nextInfo()
     else
         m_nCurrentIndex=nMaxIndex+1;
 
-    if( m_nCurrentIndex>=0 && m_nCurrentIndex<m_rTickInfoVector.size() )
+    if( m_nCurrentIndex>=0 && m_nCurrentIndex<static_cast<sal_Int32>(m_rTickInfoVector.size()) )
         return &m_rTickInfoVector[m_nCurrentIndex];
     return 0;
 }

@@ -75,9 +75,9 @@ PlottingPositionHelper::PlottingPositionHelper( const PlottingPositionHelper& rS
         , m_nYResolution( rSource.m_nYResolution )
         , m_nZResolution( rSource.m_nZResolution )
         , m_bMaySkipPointsInRegressionCalculation( rSource.m_bMaySkipPointsInRegressionCalculation )
+        , m_bDateAxis( rSource.m_bDateAxis )
         , m_nTimeResolution( rSource.m_nTimeResolution )
         , m_aNullDate( rSource.m_aNullDate )
-        , m_bDateAxis( rSource.m_bDateAxis )
         , m_fScaledCategoryWidth( rSource.m_fScaledCategoryWidth )
         , m_DoShiftCategoryXIfShiftIsIndicated( rSource.m_DoShiftCategoryXIfShiftIsIndicated )
 {

@@ -45,9 +45,9 @@ using namespace ::rtl::math;
 using ::basegfx::B2DVector;
 
 TickInfo::TickInfo( const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::chart2::XScaling >& xInverseScaling )
+                    ::com::sun::star::chart2::XScaling >& xInverse )
 : fScaledTickValue( 0.0 )
-, xInverseScaling( xInverseScaling )
+, xInverseScaling( xInverse )
 , aTickScreenPosition(0.0,0.0)
 , bPaintIt( true )
 , xTextShape( NULL )

@@ -528,7 +528,6 @@ bool DataBrowser::MayToggleDateCategories() const
 {
     return ! IsReadOnly()
         && DiagramHelper::mayToggleDateCategories( m_xChartDoc );
-    return true;
 }
 
 bool DataBrowser::MayInsertRow() const
