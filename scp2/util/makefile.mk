@@ -86,6 +86,28 @@ SCP1FILES  = installation_ooo.par          \
              module_python_mailmerge.par   \
              file_python.par               \
              profileitem_python.par        \
+             module_accessories.par
+.IF "$(WITH_EXTRA_GALLERY)" != ""
+SCP1FILES +=                               \
+             module_gallery_accessories.par   \
+             file_gallery_accessories.par
+.ENDIF
+.IF "$(WITH_EXTRA_SAMPLE)" != ""
+SCP1FILES +=                               \
+             module_samples_accessories.par   \
+             file_samples_accessories.par
+.ENDIF
+.IF "$(WITH_EXTRA_TEMPLATE)" != ""
+SCP1FILES +=                               \
+             module_templates_accessories.par \
+             file_templates_accessories.par
+.ENDIF
+.IF "$(WITH_EXTRA_FONT)" != ""
+SCP1FILES +=                               \
+             module_font_accessories.par      \
+             file_font_accessories.par
+.ENDIF
+SCP1FILES +=                               \
              ure_into_ooo.par              \
              ure.par                       \
              module_improvement.par        \
@@ -96,7 +118,7 @@ SCP1FILES  = installation_ooo.par          \
 
 .IF "$(OS)"=="MACOSX" 
 SCP1FILES +=                               \
-             directory_ooo_macosx.par      
+             directory_ooo_macosx.par
 .ENDIF
  
 .IF "$(WITH_BINFILTER)" != "NO"
@@ -249,6 +271,28 @@ SCP2FILES  = installation_ooo.par          \
              module_python_mailmerge.par   \
              file_python.par               \
              profileitem_python.par        \
+             module_accessories.par
+.IF "$(WITH_EXTRA_GALLERY)" != ""
+SCP2FILES +=                               \
+             module_gallery_accessories.par   \
+             file_gallery_accessories.par
+.ENDIF
+.IF "$(WITH_EXTRA_SAMPLE)" != ""
+SCP2FILES +=                               \
+             module_samples_accessories.par   \
+             file_samples_accessories.par
+.ENDIF
+.IF "$(WITH_EXTRA_TEMPLATE)" != ""
+SCP2FILES +=                               \
+             module_templates_accessories.par \
+             file_templates_accessories.par
+.ENDIF
+.IF "$(WITH_EXTRA_FONT)" != ""
+SCP2FILES +=                               \
+             module_font_accessories.par      \
+             file_font_accessories.par
+.ENDIF
+SCP2FILES +=                           \
              ure_into_ooo.par              \
              ure.par                       \
              module_improvement.par        \

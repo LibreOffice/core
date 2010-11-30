@@ -369,9 +369,92 @@ AC_ARG_ENABLE(icecream,
 ],,)
 
 AC_ARG_ENABLE(zenity,
-[  --enable-zenity         Display a icon in the notification area during
-                          build.
-],,)
+    AS_HELP_STRING([--enable-zenity],
+        [Display a icon in the notification area during build.]),
+,)
+
+AC_ARG_ENABLE(cl-x64,
+    AS_HELP_STRING([--enable-cl-x64],
+        [Use the Microsoft C/C++ x64 compiler instead of the default x86 one.]),
+,)
+
+AC_ARG_ENABLE(extra-gallery,
+    AS_HELP_STRING([--enable-extra-gallery],
+	[Add extra gallery content.]),
+,)
+
+AC_ARG_ENABLE(extra-template,
+    AS_HELP_STRING([--enable-extra-template],
+	[Add extra temaplte content.]),
+,)
+
+AC_ARG_ENABLE(extra-sample,
+    AS_HELP_STRING([--enable-extra-sample],
+	[Add extra sample content.]),
+,)
+
+AC_ARG_ENABLE(extra-font,
+    AS_HELP_STRING([--enable-extra-font],
+	[Add extra font content.]),
+,)
+
+dnl ---------- Deprecated since 2010-11-05 ----------
+
+AC_ARG_ENABLE(mysql-connector,
+    AS_HELP_STRING([--enable-mysql-connector],
+        [Deprecated: use --enable-ext-mysql-connector instead.]),
+    if test -z "$enable_ext_mysql_connector"; then
+        enable_ext_mysql_connector=$enable_mysql_connector;
+    fi ,
+)
+
+AC_ARG_ENABLE(presenter-extra-ui,
+    AS_HELP_STRING([--enable-presenter-extra-ui],
+        [Deprecated: use --enable-ext-presenter-ui instead.]),
+    if test -z "$enable_ext_presenter_ui"; then
+        enable_ext_presenter_ui=$enable_presenter_extra_ui;
+    fi ,
+)
+
+AC_ARG_ENABLE(minimizer,
+    AS_HELP_STRING([--enable-minimizer],
+        [Deprecated: use --enable-ext-presenter-minimizer instead.]),
+    if test -z "$enable_ext_presenter_minimizer"; then
+        enable_ext_presenter_minimizer=$enable_minimizer;
+    fi ,
+)
+
+AC_ARG_ENABLE(presenter-console,
+    AS_HELP_STRING([--enable-presenter-console],
+        [Deprecated: use --enable-ext-presenter-console instead.]),
+    if test -z "$enable_ext_presenter_console"; then
+        enable_ext_presenter_console=$enable_presenter_console;
+    fi ,
+)
+
+AC_ARG_ENABLE(pdfimport,
+    AS_HELP_STRING([--enable-pdfimport],
+        [Deprecated: use --enable-ext-pdfimport instead.]),
+    if test -z "$enable_ext_pdfimport"; then
+        enable_ext_pdfimport=$enable_pdfimport;
+    fi ,
+)
+
+AC_ARG_ENABLE(wiki-publisher,
+    AS_HELP_STRING([--enable-wiki-publisher],
+        [Deprecated: use --enable-ext-wiki-publisher instead.]),
+    if test -z "$enable_ext_wiki_publisher"; then
+        enable_ext_wiki_publisher=$enable_wiki_publisher;
+    fi ,
+)
+
+AC_ARG_ENABLE(report-builder,
+    AS_HELP_STRING([--enable-report-builder],
+        [Deprecated: use --enable-ext-report-builder instead.]),
+    if test -z "$enable_ext_report_builder"; then
+        enable_ext_report_builder=$enable_report_builder;
+    fi ,
+)
 
 dnl ===================================================================
 dnl Optional Packages (--with/without-)
@@ -7233,6 +7316,66 @@ else
   SCPDEFS="$SCPDEFS -DWITHOUT_AFMS"
 fi
 AC_SUBST(WITHOUT_AFMS)
+
+dnl ===================================================================
+dnl Test whether to include extra galleries
+dnl ===================================================================
+AC_MSG_CHECKING([whether to include extra galleries])
+if test "z$enable_extra_gallery" = "z" -o "z$enable_extra_gallery" = "zno" ; then
+  AC_MSG_RESULT([no])
+  WITH_EXTRA_GALLERY=NO
+else
+  AC_MSG_RESULT([yes])
+  WITH_EXTRA_GALLERY=YES
+  BUILD_TYPE="$BUILD_TYPE EXTRA_GALLERY"
+  SCPDEFS="$SCPDEFS -DWITH_EXTRA_GALLERY"  
+fi
+AC_SUBST(WITH_EXTRA_GALLERY)
+
+dnl ===================================================================
+dnl Test whether to include extra templates
+dnl ===================================================================
+AC_MSG_CHECKING([whether to include extra templates])
+if test "z$enable_extra_template" = "z" -o "z$enable_extra_template" = "zno" ; then
+  AC_MSG_RESULT([no])
+  WITH_EXTRA_TEMPLATE=NO
+else
+  AC_MSG_RESULT([yes])
+  WITH_EXTRA_TEMPLATE=YES
+  BUILD_TYPE="$BUILD_TYPE EXTRA_TEMPLATE"
+  SCPDEFS="$SCPDEFS -DWITH_EXTRA_TEMPLATE"
+fi
+AC_SUBST(WITH_EXTRA_TEMPLATE)
+
+dnl ===================================================================
+dnl Test whether to include extra samples
+dnl ===================================================================
+AC_MSG_CHECKING([whether to include extra samples])
+if test "z$enable_extra_sample" = "z" -o "z$enable_extra_sample" = "zno" ; then
+  AC_MSG_RESULT([no])
+  WITH_EXTRA_SAMPLE=NO
+else
+  AC_MSG_RESULT([yes])
+  WITH_EXTRA_SAMPLE=YES
+  BUILD_TYPE="$BUILD_TYPE EXTRA_SAMPLE"
+  SCPDEFS="$SCPDEFS -DWITH_EXTRA_SAMPLE"
+fi
+AC_SUBST(WITH_EXTRA_SAMPLE)
+
+dnl ===================================================================
+dnl Test whether to include extra fonts
+dnl ===================================================================
+AC_MSG_CHECKING([whether to include extra fonts])
+if test "z$enable_extra_font" = "z" -o "z$enable_extra_font" = "zno" ; then
+  AC_MSG_RESULT([no])
+  WITH_EXTRA_FONT=NO
+else
+  AC_MSG_RESULT([yes])
+  WITH_EXTRA_FONT=YES
+  BUILD_TYPE="$BUILD_TYPE EXTRA_FONT"
+  SCPDEFS="$SCPDEFS -DWITH_EXTRA_FONT"
+fi
+AC_SUBST(WITH_EXTRA_FONT)
 
 AC_SUBST(SCPDEFS)
 

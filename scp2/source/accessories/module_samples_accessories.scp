@@ -1,0 +1,98 @@
+/*
+ * Version: MPL 1.1 / GPLv3+ / LGPLv3+
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * The Initial Developer of the Original Code is
+ *       Kálmán Szalai - KAMI <kami911@gmail.com>
+ * Portions created by the Initial Developer are Copyright (C) 2010 the
+ * Initial Developer. All Rights Reserved.
+ *
+ * Contributor(s): Kálmán Szalai - KAMI <kami911@gmail.com>
+ *
+ *
+ * Alternatively, the contents of this file may be used under the terms of
+ * either the GNU General Public License Version 3 or later (the "GPLv3+"), or
+ * the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
+ * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
+ * instead of those above.
+ */
+
+#include "macros.inc"
+
+#ifdef WITH_EXTRA_SAMPLE
+
+Module gid_Module_Optional_Accessories_Advertisement
+    MOD_NAME_DESC(MODULE_OPTIONAL_ACCESSORIES_ADVERTISEMENT);
+    ParentID = gid_Module_Optional_Accessories;
+    Minimal = NO;
+    Default = YES;
+    Styles = ( );
+End
+
+Module gid_Module_Optional_Accessories_Documentations
+    MOD_NAME_DESC(MODULE_OPTIONAL_ACCESSORIES_DOCUMENTATIONS);
+    ParentID = gid_Module_Optional_Accessories;
+    Minimal = NO;
+    Default = YES;
+    Styles = ( );
+End
+
+Module gid_Module_Optional_Accessories_Samples
+    MOD_NAME_DESC(MODULE_OPTIONAL_ACCESSORIES_SAMPLES);
+    ParentID = gid_Module_Optional_Accessories;
+    Minimal = NO;
+    Default = YES;
+    Styles = ( );
+End
+
+#include "alllangmodules_accessories_samples_root.inc"
+
+Module gid_Module_Optional_Accessories_Adv_Template
+    ParentID = gid_Module_Optional_Accessories_Advertisement;
+    Name = "gid_Module_Optional_Accessories_Adv_Template";
+    Description = "gid_Module_Optional_Accessories_Adv_Template";
+    Styles = (TEMPLATEMODULE);
+    Files = (
+        gid_File_Extra_Samples_Advertisement_Accessories,
+        gid_File_Extra_Samples_NONFREE_Advertisement_Accessories );
+    Minimal = NO;
+    Default = YES;
+End
+
+Module gid_Module_Optional_Accessories_Doc_Template
+    ParentID = gid_Module_Optional_Accessories_Documentations;
+    Name = "gid_Module_Optional_Accessories_Doc_Template";
+    Description = "gid_Module_Optional_Accessories_Doc_Template";
+    Styles = (TEMPLATEMODULE);
+    Files = (
+        gid_File_Extra_Samples_Documentations_Accessories,
+        gid_File_Extra_Samples_NONFREE_Documentations_Accessories );
+    Minimal = YES;
+    Default = YES;
+End
+
+Module gid_Module_Optional_Accessories_Sam_Template
+    ParentID = gid_Module_Optional_Accessories_Samples;
+    Name = "gid_Module_Optional_Accessories_Sam_Template";
+    Description = "gid_Module_Optional_Accessories_Sam_Template";
+    Styles = (TEMPLATEMODULE);
+    Files = (
+        gid_File_Extra_Samples_Accessories,
+        gid_File_Extra_Samples_NONFREE_Accessories  );
+    Minimal = NO;
+    Default = YES;
+End
+
+#include "alllangmodules_accessories_samples.inc"
+
+#endif
+
