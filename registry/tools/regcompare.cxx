@@ -1410,16 +1410,16 @@ static sal_uInt32 checkValueDifference(
         if ( bEqual)
         {
             std::vector< sal_uInt8 > value1(size1);
-            key1.getValue(tmpName, value1.data());
+            key1.getValue(tmpName, &value1[0]);
 
             std::vector< sal_uInt8 > value2(size2);
-            key2.getValue(tmpName, value2.data());
+            key2.getValue(tmpName, &value2[0]);
 
-            bEqual = (rtl_compareMemory(value1.data(), value2.data(), value1.size()) == 0 );
+            bEqual = (rtl_compareMemory(&value1[0], &value2[0], value1.size()) == 0 );
             if ( !bEqual && valueType1 == RG_VALUETYPE_BINARY && valueType2 == RG_VALUETYPE_BINARY )
             {
-                typereg::Reader reader1(value1.data(), value1.size(), false, TYPEREG_VERSION_1);
-                typereg::Reader reader2(value2.data(), value2.size(), false, TYPEREG_VERSION_1);
+                typereg::Reader reader1(&value1[0], value1.size(), false, TYPEREG_VERSION_1);
+                typereg::Reader reader2(&value2[0], value2.size(), false, TYPEREG_VERSION_1);
                 if ( reader1.isValid() && reader2.isValid() )
                 {
                     return checkBlob(options, key1.getName(), reader1, size1, reader2, size2);
@@ -1450,33 +1450,33 @@ static sal_uInt32 checkValueDifference(
         case RG_VALUETYPE_LONG:
             {
                 std::vector< sal_uInt8 > value1(size1);
-                key1.getValue(tmpName, value1.data());
+                key1.getValue(tmpName, &value1[0]);
 
                 fprintf(stdout, "    Registry 1: Value: Type = RG_VALUETYPE_LONG\n");
                 fprintf(
                     stdout, "                       Size = %lu\n",
                     sal::static_int_cast< unsigned long >(size1));
-                fprintf(stdout, "                       Data = %p\n", value1.data());
+                fprintf(stdout, "                       Data = %p\n", &value1[0]);
             }
             break;
         case RG_VALUETYPE_STRING:
             {
                 std::vector< sal_uInt8 > value1(size1);
-                key1.getValue(tmpName, value1.data());
+                key1.getValue(tmpName, &value1[0]);
 
                 fprintf(stdout, "    Registry 1: Value: Type = RG_VALUETYPE_STRING\n");
                 fprintf(
                     stdout, "                       Size = %lu\n",
                     sal::static_int_cast< unsigned long >(size1));
-                fprintf(stdout, "                       Data = \"%s\"\n", reinterpret_cast<char const*>(value1.data()));
+                fprintf(stdout, "                       Data = \"%s\"\n", reinterpret_cast<char const*>(&value1[0]));
             }
             break;
         case RG_VALUETYPE_UNICODE:
             {
                 std::vector< sal_uInt8 > value1(size1);
-                key1.getValue(tmpName, value1.data());
+                key1.getValue(tmpName, &value1[0]);
 
-                OUString uStrValue(reinterpret_cast<sal_Unicode const*>(value1.data()));
+                OUString uStrValue(reinterpret_cast<sal_Unicode const*>(&value1[0]));
                 fprintf(stdout, "    Registry 1: Value: Type = RG_VALUETYPE_UNICODE\n");
                 fprintf(
                     stdout, "                       Size = %lu\n",
@@ -1552,33 +1552,33 @@ static sal_uInt32 checkValueDifference(
         case RG_VALUETYPE_LONG:
             {
                 std::vector< sal_uInt8 > value2(size2);
-                key2.getValue(tmpName, value2.data());
+                key2.getValue(tmpName, &value2[0]);
 
                 fprintf(stdout, "    Registry 2: Value: Type = RG_VALUETYPE_LONG\n");
                 fprintf(
                     stdout, "                       Size = %lu\n",
                     sal::static_int_cast< unsigned long >(size2));
-                fprintf(stdout, "                       Data = %p\n", value2.data());
+                fprintf(stdout, "                       Data = %p\n", &value2[0]);
             }
             break;
         case RG_VALUETYPE_STRING:
             {
                 std::vector< sal_uInt8 > value2(size2);
-                key2.getValue(tmpName, value2.data());
+                key2.getValue(tmpName, &value2[0]);
 
                 fprintf(stdout, "    Registry 2: Value: Type = RG_VALUETYPE_STRING\n");
                 fprintf(
                     stdout, "                       Size = %lu\n",
                     sal::static_int_cast< unsigned long >(size2));
-                fprintf(stdout, "                       Data = \"%s\"\n", reinterpret_cast<char const*>(value2.data()));
+                fprintf(stdout, "                       Data = \"%s\"\n", reinterpret_cast<char const*>(&value2[0]));
             }
             break;
         case RG_VALUETYPE_UNICODE:
             {
                 std::vector< sal_uInt8 > value2(size2);
-                key2.getValue(tmpName, value2.data());
+                key2.getValue(tmpName, &value2[0]);
 
-                OUString uStrValue(reinterpret_cast<sal_Unicode const*>(value2.data()));
+                OUString uStrValue(reinterpret_cast<sal_Unicode const*>(&value2[0]));
                 fprintf(stdout, "    Registry 2: Value: Type = RG_VALUETYPE_UNICODE\n");
                 fprintf(
                     stdout, "                       Size = %lu\n",
@@ -1692,7 +1692,7 @@ static bool hasPublishedChildren(Options_Impl const & options, RegistryKey & key
                 {
                     bool published = false;
                     std::vector< sal_uInt8 > value(size);
-                    if (subKey.getValue(rtl::OUString(), value.data()) != REG_NO_ERROR)
+                    if (subKey.getValue(rtl::OUString(), &value[0]) != REG_NO_ERROR)
                     {
                         if (options.forceOutput())
                         {
@@ -1706,7 +1706,7 @@ static bool hasPublishedChildren(Options_Impl const & options, RegistryKey & key
                     }
                     else
                     {
-                        published = typereg::Reader(value.data(), value.size(), false, TYPEREG_VERSION_1).isPublished();
+                        published = typereg::Reader(&value[0], value.size(), false, TYPEREG_VERSION_1).isPublished();
                     }
                     if (published)
                     {
@@ -1793,7 +1793,7 @@ static sal_uInt32 checkDifferences(
                         else if (type == RG_VALUETYPE_BINARY)
                         {
                             std::vector< sal_uInt8 > value(size);
-                            if (subKey.getValue(rtl::OUString(), value.data()) != REG_NO_ERROR)
+                            if (subKey.getValue(rtl::OUString(), &value[0]) != REG_NO_ERROR)
                             {
                                 if (options.forceOutput())
                                 {
@@ -1808,7 +1808,7 @@ static sal_uInt32 checkDifferences(
                             }
                             else
                             {
-                                typereg::Reader reader(value.data(), value.size(), false, TYPEREG_VERSION_1);
+                                typereg::Reader reader(&value[0], value.size(), false, TYPEREG_VERSION_1);
                                 if (reader.getTypeClass() == RT_TYPE_MODULE)
                                 {
                                     if (options.checkUnpublished() || hasPublishedChildren(options, subKey))
