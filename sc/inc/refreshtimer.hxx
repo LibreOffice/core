@@ -44,7 +44,8 @@ private:
 public:
     ScRefreshTimerControl() : nBlockRefresh(0) {}
 
-    void SetAllowRefresh( BOOL b ) {
+    void SetAllowRefresh( BOOL b )
+    {
         if ( b && nBlockRefresh )
             --nBlockRefresh;
         else if ( !b && nBlockRefresh < (USHORT)(~0) )
@@ -63,13 +64,14 @@ private:
     ScRefreshTimerControl * const * ppControl;
 
 public:
-    ScRefreshTimerProtector( ScRefreshTimerControl * const *     pp );
+    ScRefreshTimerProtector( ScRefreshTimerControl * const * pp );
 
-    ~ScRefreshTimerProtector() {
+    ~ScRefreshTimerProtector()
+    {
         if ( ppControl && *ppControl )
             (*ppControl)->SetAllowRefresh( TRUE );
     }
-}
+};
 
 
 //=============================================================================
@@ -78,13 +80,12 @@ class ScRefreshTimer : public AutoTimer
 private:
     ScRefreshTimerControl * const * ppControl;
 
-    void AppendToControl() {
-    }
+    void AppendToControl() {}
 
-    void RemoveFromControl() {
-    }
+    void RemoveFromControl() {}
 
-    void Start() {
+    void Start()
+    {
         if ( GetTimeout() )
             AutoTimer::Start();
     }
@@ -92,7 +93,8 @@ private:
 public:
     ScRefreshTimer() : ppControl(0) { SetTimeout( 0 ); }
 
-    ScRefreshTimer( ULONG nSeconds ) : ppControl(0) {
+    ScRefreshTimer( ULONG nSeconds ) : ppControl(0)
+    {
         SetTimeout( nSeconds * 1000 );
         Start();
     }
@@ -101,7 +103,8 @@ public:
 
     virtual ~ScRefreshTimer();
 
-    ScRefreshTimer& operator=( const ScRefreshTimer& r ) {
+    ScRefreshTimer& operator=( const ScRefreshTimer& r )
+    {
         SetRefreshControl(0);
         AutoTimer::operator=( r );
         return *this;
@@ -115,7 +118,8 @@ public:
 
     void StartRefreshTimer() { Start(); }
 
-    void SetRefreshControl( ScRefreshTimerControl * const * pp ) {
+    void SetRefreshControl( ScRefreshTimerControl * const * pp )
+    {
         RemoveFromControl();
         ppControl = pp;
         AppendToControl();
@@ -131,7 +135,6 @@ public:
 
     SC_DLLPUBLIC virtual void Timeout();
 };
-
 
 #endif // SC_REFRESHTIMER_HXX
 
