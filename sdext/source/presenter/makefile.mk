@@ -252,7 +252,7 @@ PLATFORMID:=$(RTL_OS:l)_$(RTL_ARCH:l)
 
 COMPONENT_HELP= 								\
     $(ZIP1DIR)$/help/component.txt				\
-    $(foreach,l,$(alllangiso) $(ZIP1DIR)$/help$/$l$/com.sun.PresenterScreen-$(PLATFORMID)$/presenter.xhp)
+    $(ZIP1DIR)$/help$/en-US$/com.sun.PresenterScreen-$(PLATFORMID)$/presenter.xhp
 
 ZIP1DEPS=					\
     $(DESCRIPTION)			\
