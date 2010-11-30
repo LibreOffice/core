@@ -1708,7 +1708,8 @@ sub replace_variables
 {
     my ($translationfile, $variableshashref) = @_;
 
-    foreach $key (keys %{$variableshashref})
+    # we want to substitute FOO_BR before FOO to avoid floating _BR suffixes
+    foreach $key (sort { length ($b) <=> length ($a) } keys %{$variableshashref})
     {
         my $value = $variableshashref->{$key};
 
