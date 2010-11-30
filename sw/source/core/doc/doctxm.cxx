@@ -1246,8 +1246,7 @@ void SwTOXBaseSection::UpdateOutline( const SwTxtNode* pOwnChapterNode )
         ::SetProgressState( 0, pDoc->GetDocShell() );
         SwTxtNode* pTxtNd = rOutlNds[ n ]->GetTxtNode();
         if( pTxtNd && pTxtNd->Len() && pTxtNd->GetDepends() &&
-            //USHORT(pTxtNd->GetTxtColl()->GetOutlineLevel()+1) <= GetLevel() &&    //#outline level,zhaojianwei
-            USHORT( pTxtNd->GetAttrOutlineLevel()) <= GetLevel() && //<-end,zhaojianwei
+            USHORT( pTxtNd->GetAttrOutlineLevel()) <= GetLevel() &&
             pTxtNd->GetFrm() &&
            !pTxtNd->HasHiddenParaField() &&
            !pTxtNd->HasHiddenCharAttribute( true ) &&
@@ -1279,8 +1278,7 @@ void SwTOXBaseSection::UpdateTemplate( const SwTxtNode* pOwnChapterNode )
             if( !pColl ||
                 ( TOX_CONTENT == SwTOXBase::GetType() &&
                   GetCreateType() & nsSwTOXElement::TOX_OUTLINELEVEL &&
-                  //NO_NUMBERING != pColl->GetOutlineLevel() ) )//#outline level,zhaojianwei
-                    pColl->IsAssignedToListLevelOfOutlineStyle()) )//<-end,zhaojianwei
+                    pColl->IsAssignedToListLevelOfOutlineStyle()) )
                   continue;
 
             SwClientIter aIter( *pColl );

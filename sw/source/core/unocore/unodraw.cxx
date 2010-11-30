@@ -202,11 +202,11 @@ public:
     {
         return xTextRange;
     }
-    sal_Bool    IsOpaque()
+    sal_Bool    IsOpaque() const
         {
             return bOpaque;
         }
-    const sal_Bool&    GetOpaque()
+    const sal_Bool&    GetOpaque() const
         {
             return bOpaque;
         }
